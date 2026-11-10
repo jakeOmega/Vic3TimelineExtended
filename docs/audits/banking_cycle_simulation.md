@@ -24,7 +24,7 @@ it still holds (`--tune pre_hold`). §19 (2026-10-05) makes the Bank Holiday sto
 momentum bounce (`--holiday`, `--tune pre_holiday`). §20 (2026-10-05) traces §18's gold capital-controls
 crashes to cells no AI runs and leaves the AI's weights alone (`--tune cc_cost=0`, `cc_damp=1`, `cc_weak=0`).
 §21 (2026-10-05) measures Cooperative Ownership for the first time, with an interim arm posted on #720, and
-retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). §24 (2026-10-05) measures the gold peg's deep-slump drain and ports `te_peg.1` (`--peg-slump`). §25 (2026-10-07) bounds the Emergency Liquidity Program to its crisis and ports its announcement (`--tune pre_eliq_bounds`, `--player-eliq`). Every table states which script it measured.
+retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). §24 (2026-10-05) measures the gold peg's deep-slump drain and ports `te_peg.1` (`--peg-slump`). §25 (2026-10-07) bounds the Emergency Liquidity Program to its crisis and ports its announcement (`--tune pre_eliq_bounds`, `--player-eliq`). §28 (2026-11-10) makes Open-Market Operations grow with the shortfall under target, for a fiat deflation trap (`--tune pre_omo_scale`). Every table states which script it measured.
 
 ---
 
@@ -2484,3 +2484,61 @@ economy, crashes a century:
   times the untooled ones. A player who manages the cycle feels the line most.
 - **Fiat with no monetary policy at all is saturated** (about 34 crashes a century, under every bubble term), and no
   country runs it in game.
+
+## 28. Open-Market Operations grows with the shortfall (2026-11-10)
+
+**Question.** A player's independent **Fiat** country sat in a Panic for five years on the −10% clamp, with its rate
+on 0%, Open-Market Operations and the expanded deposit guarantee on, and the bank's own purchases (§15, design §0.12)
+at their cap. Is that the model, and what gets it out?
+
+**The port reproduces it.** `banking_deflation_trap.py --fiat-only` seeds the screenshot's state (cycle 2, momentum −2,
+headline −10, expectations −9.5, the virtual rate at the purchases' cap, a strong currency importing a point) and runs
+the cycle. Under the flat point the cycle sits at 0 with momentum between −1 and −3 for years, as in the game. The
+forces on prices: purchases +6 (OMO 1, the bank 5), the Panic −4, the stance about −2.8 (0% against −10% headline is
+a gap of about 7 at r* near 3), the currency about −1: net about −1, and expectations twelve points off target
+(`c_eff` = 0) follow headline. On the cycle, the stance at its +4 clamp (−0.5 momentum a month) and the Deflation band
+(−0.2) outweigh the Panic's +0.2 momentum and +1 value. Digital escapes the same trap (§15's playtest) because its
+floor is three points lower, which is the whole of the stance difference.
+
+**What shipped.** `te_mon_pressure_qe` = `te_mon_qe_pressure` (1) + `te_mon_qe_pressure_per_pp` (0.5) × (anchor − last
+month's headline, when positive), capped at `te_mon_qe_pressure_cap` (5). `--tune pre_omo_scale` is the flat point;
+`omo_per_pp=` and `omo_cap=` size it.
+
+**The fiat trap**, 60 seeds, medians (a "leaves Panic" median counts only the runs that left; ten years):
+
+| Mandate, OMO | leaves Panic | leaves −10% | reaches 0% | peak after |
+|---|---:|---:|---:|---:|
+| Dual Mandate, flat point | 50 (8/60) | 43 (57/60) | 86 (2/60) | 5.8 |
+| Dual Mandate, shipped | 30 (60/60) | 1 (60/60) | 32 (60/60) | 5.5 |
+| Inflation Targeting, flat point | 50 (8/60) | 43 (57/60) | 84 (2/60) | 5.6 |
+| Inflation Targeting, shipped | 30 (60/60) | 1 (60/60) | 32 (60/60) | 4.9 |
+| Growth, flat point | 50 (8/60) | 43 (57/60) | 86 (2/60) | 5.8 |
+| Growth, shipped | 30 (60/60) | 1 (60/60) | 32 (60/60) | 5.6 |
+
+Sizes measured on the Dual Mandate before the choice (months to leave the Panic, how many of 60 did, median peak):
+flat 2, 93 (31); flat 2.5, 66 (56), peak 7.2; flat 3, 51 (59), peak 7.6; flat 4, 37 (60), peak 8.6; 0.25 a point capped at 3,
+52 (59); 0.25 capped at 4, 43 (60); 0.5 capped at 4, 37 (60); 0.5 capped at 5, 30 (60), peak 5.5; the bank's own cap
+raised to 7.5 instead, 44 (60), peak 6.5. A bigger flat point gets out too, but it overshoots: it stays whole once
+inflation is back on target. The shortfall term falls away as headline climbs, so it gets out fastest with the lowest
+peak.
+
+**The digital playtest of §15** (`--playtest-only`, as shipped): leaves the clamp in 2 months rather than 4 and
+reaches 0% in 21 rather than 32.5; peak and years 8–10 unchanged within noise.
+
+**Ordinary centuries: unchanged.** 150 centuries a cell, 8 points, +0.5pp wage pressure, AI tools, fiat and digital
+under independence (Dual Mandate, Inflation Targeting) and delegation (Dual Mandate, Growth): crashes, recession
+months, mean and peak inflation and months below 0% are identical before and after to two decimals. The AI never
+held Open-Market Operations in them: the rate sat on its floor in 0.03 to 0.16% of months. The term only acts in a
+slump at the floor, which is where the trap is.
+
+**What it does not fix.** From the bottom of the trap it still takes two and a half years: expectations twelve
+points off target climb about a twelfth of the pressure a month, and the cycle cannot rise until headline is back
+above about −7%, where the stance leaves its clamp. A player who switches the tool on as soon as the rate reaches the
+floor should not get that deep. The stance term reading the real policy rate rather than a shadow rate that counts
+the purchases was considered and left alone: the purchases already enter as pressure (design §0.12), and counting
+them in the stance too would charge them twice.
+
+```
+.venv/bin/python scripts/analysis/banking_deflation_trap.py --fiat-only [--fiat-runs 60]
+.venv/bin/python scripts/analysis/banking_deflation_trap.py --playtest-only
+```

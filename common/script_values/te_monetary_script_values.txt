@@ -1579,7 +1579,9 @@ te_mon_monetisation_bankruptcy_weeks = {
 }
 
 # Quantitative easing, in pp of pressure while open-market operations are
-# active (§11). Flat, not scaled: the tool is already gated to the rate floor.
+# active (§11): this much always, plus te_mon_qe_pressure_per_pp for every
+# point last month's headline sat under te_mon_inflation_anchor, the whole
+# capped at te_mon_qe_pressure_cap. te_mon_pressure_qe assembles it.
 #
 # RETUNING THIS ALSO MEANS EDITING THE DISPLAY MODIFIER banking_monthly_open_market_ops
 # (extra_modifiers.txt), whose field the tool's tooltips print as a modifier
@@ -1587,6 +1589,43 @@ te_mon_monetisation_bankruptcy_weeks = {
 # the two together.
 te_mon_qe_pressure = {
 	value = 1.0
+}
+
+# WHY THE PROGRAMME GROWS WITH THE SHORTFALL (2026-11-10). A flat point did
+# nothing for a deep deflation. A playtest's independent Fiat country in a
+# Panic sat on the -10% clamp for five years with the rate on 0%, this tool on
+# and the bank's own purchases at their cap: at the fiat floor -10% headline is
+# a real rate of +10%, so the stance alone took 2.8 points and the Panic 4,
+# against 1 + 5 of purchases, and expectations twelve points off target
+# followed headline down (c_eff is 0 past te_mon_deanchor_span). In the
+# simulator only 8 of 60 such countries left the Panic within ten years
+# (docs/audits/banking_cycle_simulation.md §28). Digital escaped where fiat did
+# not because its floor is three points lower, which is the whole of the
+# stance difference.
+#
+# Sized as real programmes were: QE1 to QE3, and the Bank of Japan's 2013
+# programme, were scaled to how far prices sat from target, and a central bank
+# that creates its own money can always create more. At 0.5 a point and a cap
+# of 5 the cap is reached at -6% under a 2% target; at 0% it is 2, and at
+# the target and above it is the flat point it always was, so the tool is
+# unchanged wherever inflation is on target. From the trap all 60 leave the
+# Panic, in a median 30 months, and inflation peaks no higher afterwards
+# (5.5% against 5.8%) because the scaling falls away as headline climbs.
+#
+# LAST MONTH'S HEADLINE, like te_mon_pressure_wage_spiral: step 6b sums the
+# pressure before it writes this month's. It is continuous in headline and has
+# no gate on the rate, so it never switches on or off in one step (the flaw
+# te_mon_pressure_bank_qe's first version had). Headline and the anchor are
+# both printed on the dashboard, so the term is printable (ruling P7).
+#
+# STATED IN WORDS by banking_nonmod_open_market_ops_tt ("0.5", "5%");
+# test_banking_external_tools.NonModifierTooltipTest holds them to these.
+te_mon_qe_pressure_per_pp = {
+	value = 0.5
+}
+
+te_mon_qe_pressure_cap = {
+	value = 5
 }
 
 # The bank's OWN asset purchases (§0.12), in pp of pressure per point that its
@@ -2455,15 +2494,30 @@ te_mon_pressure_monetisation = {
 	multiply = te_mon_monetisation_pressure
 }
 
-# Quantitative easing: a flat +1.0pp while open-market operations are running
-# (§9.1, §11). banking_tool_omo_active is the shipped read of the JE modifier
-# (common/scripted_triggers/market_triggers.txt) and is guarded with `?=`, so a
-# country without the journal entry answers no.
+# Quantitative easing while open-market operations are running (§9.1, §11):
+# te_mon_qe_pressure, plus te_mon_qe_pressure_per_pp for every point last
+# month's headline sat under the anchor, capped at te_mon_qe_pressure_cap
+# (see te_mon_qe_pressure_per_pp for why it scales). banking_tool_omo_active is
+# the shipped read of the JE modifier (common/scripted_triggers/market_triggers.txt)
+# and is guarded with `?=`, so a country without the journal entry answers no.
+# The cap is the `max` inside the branch, after the shortfall is added.
 te_mon_pressure_qe = {
 	value = 0
 	if = {
 		limit = { banking_tool_omo_active = yes }
 		add = te_mon_qe_pressure
+		if = {
+			limit = {
+				has_variable = te_inflation
+				var:te_inflation < te_mon_inflation_anchor
+			}
+			add = {
+				value = te_mon_inflation_anchor
+				subtract = var:te_inflation
+				multiply = te_mon_qe_pressure_per_pp
+			}
+		}
+		max = te_mon_qe_pressure_cap
 	}
 }
 

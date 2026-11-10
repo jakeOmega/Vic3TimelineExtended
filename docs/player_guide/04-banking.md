@@ -406,7 +406,7 @@ Globalization and the deposit guarantee Consumer Credit.
 | Asset Relief Program | +0.3 cycle value a month. | 5 points; 2.5% of GDP at once; −5% tax collection and −5% bureaucracy; 3% of pops radicalize. |
 | Bail-in Regime | +0.15 cycle value and −0.3 bubble pressure a month. | 3 points and nothing from the treasury: the banks' creditors take the losses. +0.1 point of risk premium, and 3% of upper-strata pops radicalize. |
 | Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 3% radicalize when you withdraw it. |
-| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.5% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, about a point of inflation pressure. |
+| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.5% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, 1 point of inflation pressure, more while inflation is under target. |
 
 A Bank Holiday is the first answer to a Panic: it stops the fall at once, holds
 it while the banks are shut and keeps a trading partner's crash out, but you get
@@ -426,9 +426,11 @@ the cycle twice as fast, at 2.5% of GDP and a standing cost in tax and
 bureaucracy; a bail-in costs the treasury nothing and angers the upper strata
 instead. Open-Market Operations is what is left when you can't cut any further:
 under the full Banking System it needs Fiat Money or Digital Currency with your
-policy rate at its floor. A bank running its mandate also buys assets itself at
-the floor (see [When the bank cannot cut](#when-the-bank-cannot-cut)); that adds
-to this tool rather than replacing it.
+policy rate at its floor. Its inflation pressure grows with the shortfall: 1
+point with inflation on its 2% target or above, half a point more for each point
+below, up to 5 points from −6% down. A bank running its mandate also buys assets
+itself at the floor (see [When the bank cannot cut](#when-the-bank-cannot-cut));
+that adds to this tool rather than replacing it.
 
 The AI declares a Bank Holiday and opens Emergency Liquidity in a Panic, or in a
 Downturn that is still falling fast. It expands the deposit guarantee in a
@@ -679,8 +681,11 @@ are always delegated, so they get the purchases too.
 
 Under Central Bank Independence you can't print for the treasury, so a long
 deflation leaves you the bank's purchases, Open-Market Operations and a budget
-deficit above 1% of GDP, which adds a little pressure of its own. Recovery from
-a deep deflation can still take years. Leaving independence for Monetize Deficit is
+deficit above 1% of GDP, which adds a little pressure of its own. Together the
+two purchases can add up to 10 points of pressure in a deep deflation. Switch
+Open-Market Operations on as soon as the rate reaches its floor: under Fiat
+Money a Panic with prices falling 10% a year holds the real rate near +10%, and
+climbing out of it still takes two to three years. Leaving independence for Monetize Deficit is
 possible but costly: you lose its credit-standing bonus and some of the
 intervention budget.
 
