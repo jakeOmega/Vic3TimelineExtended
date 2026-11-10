@@ -12,7 +12,14 @@ with the commit that fixed it.
 - **Where to look.** The banner at the top of a state's panel. The picture can't be logged, so these are looks, not
   log reads. Nothing shows before its technology: in a new game, `research art_deco_architecture` and
   `research modern_tools` in the console as the country that owns the state (`tag GBR`).
-- **Logs.** `debug.log` for `TE_SELF_CHECK`, `error.log` for `terrain.cpp`.
+- **No waiting a year.** The size a picture follows is stored by a yearly pass. From the console:
+  - `event te_debug_state_picture.1` runs the pass at once in every state and logs a `TE_STATE_PICTURE debug:` line
+    for each of your states: `size=` (1 town, 2 city, 3 metropolis, 4 megacity, 0 no walk yet) and `city_people=`,
+    the largest-city figure it came from.
+  - `event te_debug_state_picture.2` makes your capital read as a metropolis whatever its people, so the metropolis
+    painting and a weight's read of the variable can be checked without a city over the floor. The next pass (yearly,
+    or `.1`) puts the size back.
+- **Logs.** `debug.log` for `TE_SELF_CHECK` and `TE_STATE_PICTURE debug:`, `error.log` for `terrain.cpp`.
 
 ## Self-checks
 
@@ -28,7 +35,7 @@ Four pictures. The engine facts under them were read in game the same day
 | Check | Expect | If it fails |
 |---|---|---|
 | **A compressed picture.** After the two technologies, open Home Counties, a British port state (one whose banner was the steamship) and a mining state (one whose banner was the pit head). | The new city, port and mine paintings, sharp, with no blocky edges or color banding beside vanilla's uncompressed ones. | A blank or garbled banner: BC7 isn't accepted there. Re-export uncompressed (texconv `-f B8G8R8A8_UNORM_SRGB`, 2.7 MB each) in `convert_state_picture.py`. |
-| **A weight reading a state variable.** A year after the technology (the pass is yearly), compare Home Counties with a smaller European city state such as Brandenburg or Austria. | Home Counties shows the metropolis painting, the smaller state the city painting. The line's `city_people=` is the figure the size came from. | Both show the city painting though `TE_SELF_CHECK OK state_picture_size` is in `debug.log`: a weight can't read `var:`. Put the size's own test in the weight (`te_state_picture_city_people >= te_state_picture_k_metropolis` under `scope:state`), which gives up the margin that keeps a size from flickering. |
+| **A weight reading a state variable.** After the technology and `event te_debug_state_picture.2` as Great Britain (or a year later, if Home Counties' `city_people=` clears 1,000,000), compare Home Counties with a smaller European city state such as Brandenburg or Austria. | Home Counties shows the metropolis painting, the smaller state the city painting. The line's `city_people=` is the figure the size came from. | Both show the city painting though `TE_SELF_CHECK OK state_picture_size` is in `debug.log`: a weight can't read `var:`. Put the size's own test in the weight (`te_state_picture_city_people >= te_state_picture_k_metropolis` under `scope:state`), which gives up the margin that keeps a size from flickering. |
 | **Vanilla's overlays on new paintings.** Watch each of the four banners for a few seconds. | Birds, mist and drifting smoke that sit plausibly on the painting. | Smoke rising from the middle of the street or a similar mismatch: change that picture's `effect` in the registry to the port's overlay (birds, light rays, mist), or define an empty entity for it (the mod has no entity files yet, so that needs its own look). |
 | **Before the technology.** A new game, any state. | Vanilla's picture, as before the mod. | A mod painting in 1836: a weight applies without its technology. |
 | **Outside Europe.** After the technologies, a city state in Asia or the Americas. | Vanilla's city picture: the pilot's city paintings are European only. The port and mine paintings show everywhere. | |

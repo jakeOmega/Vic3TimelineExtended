@@ -21,6 +21,7 @@ GENERATED = ROOT / "common" / "terrain" / "te_state_pictures_generated.txt"
 VALUES = ROOT / "common" / "script_values" / "te_state_picture_values.txt"
 EFFECTS = ROOT / "common" / "scripted_effects" / "te_state_picture_effects.txt"
 ON_ACTIONS = ROOT / "common" / "on_actions" / "te_state_picture_on_actions.txt"
+DEBUG_EVENTS = ROOT / "events" / "te_debug_state_picture_events.txt"
 VANILLA_TERRAINS = ROOT / "vanilla_parsed" / "common" / "terrains.json"
 VANILLA_TECHS = ROOT / "vanilla_parsed" / "common" / "technologies.json"
 
@@ -193,6 +194,21 @@ class TestYearlyPass(unittest.TestCase):
         text = ON_ACTIONS.read_text(encoding="utf-8-sig")
         self.assertRegex(text, r"on_yearly_pulse_state = \{\s*on_actions = \{\s*te_state_picture_yearly_on_action")
         self.assertRegex(text, r"te_state_picture_yearly_on_action = \{\s*effect = \{\s*te_state_picture_refresh = yes")
+
+    def test_the_console_events_run_the_pass_and_force_a_metropolis(self):
+        text = DEBUG_EVENTS.read_text(encoding="utf-8-sig")
+        events = dict(re.findall(r"^(te_debug_state_picture\.\d+) = \{.*?\n(.*?)^\}", text, re.M | re.S))
+        self.assertEqual(sorted(events), ["te_debug_state_picture.1", "te_debug_state_picture.2"])
+        for body in events.values():
+            self.assertIn("hidden = yes", body)
+        # .1: the same pass the yearly pulse runs, in every state, not a copy of its logic
+        self.assertRegex(events["te_debug_state_picture.1"], r"every_state = \{\s*te_state_picture_refresh = yes\s*\}")
+        # .2: the capital at the metropolis picture's own floor (SIZES: var:te_sp_size >= 3)
+        self.assertRegex(events["te_debug_state_picture.2"],
+                         r"capital = \{\s*set_variable = \{ name = te_sp_size value = 3 \}")
+        self.assertEqual(registry.SIZES["metropolis"][0][1], "var:te_sp_size >= 3")
+        # a forced size is undone by the next pass: 200,000 people make a city, not a metropolis
+        self.assertEqual(self.refresh(400_000, share=50, size=3), 2)
 
     def test_the_self_check_can_fail(self):
         # OK only where the largest city fits inside its state; a size of 3 already means a metropolis's people
