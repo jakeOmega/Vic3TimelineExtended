@@ -24,6 +24,13 @@ Fields:
            signature or a stray object at an edge; close to 2.04 : 1
   prompt   the subject; STYLE is appended
 
+Writing a prompt: a picture stands for every state of its region, so it must not
+read as one city. A generic building draws the most famous one of its kind ("a
+domed civic building" drew the United States Capitol in a European street four
+times out of four). Describe a landmark by features that belong to the region and
+to no one building, or leave it out; shop fronts draw lettered signs, so ask for
+plain awnings. The design's section 10 has the review checks.
+
 The renders are made outside the repo (FLUX.1-schnell at 1536 x 752, seeds
 1000 + seed as the icon pipeline's are); a pick is converted with
 scripts/image_pipeline/convert_state_picture.py, which crops it, gives it a
@@ -76,8 +83,8 @@ PICTURES = {
             "A European city street in the early 1930s: five-storey stone apartment buildings "
             "with plain striped awnings framing both sides, an electric tram on rails in the "
             "middle distance under overhead wires, a few rounded 1930s automobiles, pedestrians "
-            "in coats and hats on the pavements, iron street lamps, a domed civic building hazy "
-            "at the end of the street"
+            "in coats and hats on the pavements, iron street lamps, a baroque church with a green "
+            "copper dome and twin bell towers hazy at the end of the street"
         ),
     },
     "urban_european_1_metropolis": {

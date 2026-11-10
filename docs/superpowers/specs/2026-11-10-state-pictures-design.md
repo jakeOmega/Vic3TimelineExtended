@@ -222,6 +222,16 @@ upkeep limited to rungs 2 to 4.
   the quay), so a state's banner reads as the same place later.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
+- **No recognizable landmarks.** A picture stands for every state of its region, so it must not read as one
+  city. A generic description of a building draws the most famous building of that kind: the pilot's "a
+  domed civic building at the end of the street" drew the United States Capitol in all four candidates, in
+  the picture meant for London, Paris and Berlin (owner, 2026-11-10). So a prompt describes a landmark by
+  features that belong to the region and to no one building ("a baroque church with a green copper dome and
+  twin bell towers"), or leaves it out, and never asks for a civic building, tower, bridge, palace or
+  skyline without them. Review checks every pick for a silhouette a player would name: the Capitol, the
+  Eiffel Tower, Big Ben, a famous bridge, a known skyline. The risk grows with the metropolis and megacity
+  pictures, whose subject is a skyline. A candidate that reads as a real place is rejected like one with
+  lettering.
 
 ## 11. The pilot
 
