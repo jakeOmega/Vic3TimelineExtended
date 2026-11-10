@@ -5,6 +5,7 @@ Layout under the backup root:
     store/<sha256[:2]>/<sha256>     one copy of each distinct file content, shared by every snapshot
     snapshots/<id>/manifest.json    the files taken (size, mtime, hash) and the listing of the folders
     snapshots/<id>/journal.jsonl    what the run did: started, heartbeat, game_exited, restored, held
+    snapshots/<id>/.clock           a marker whose modification time is the drive's clock (journal times)
 
 A snapshot is complete once its manifest exists. The manifest is written last, by rename from a
 temp name, so a half-written snapshot has no manifest and never loads. The store is only ever
@@ -46,6 +47,7 @@ FREE_SPACE_MARGIN = 1024**3
 MANIFEST_VERSION = 1
 MANIFEST_NAME = "manifest.json"
 JOURNAL_NAME = "journal.jsonl"
+CLOCK_MARKER = ".clock"  # rewritten by record() to read the drive's clock; not part of a snapshot's content
 
 _ID_PATTERN = re.compile(r"^(\d{8}T\d{6}Z)(?:-(\d+))?$")
 _SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
@@ -326,11 +328,25 @@ def all_snapshots(backup_root: Path) -> list[Snapshot]:
     return [snap for _, snap in found]
 
 
+def _drive_clock(folder: Path) -> datetime:
+    """The time on the clock of the drive `folder` lives on, read by writing a marker file there and
+    taking its modification time. WSL's own clock drifts after the host sleeps; the file times the hold
+    rule compares journal times with are stamped by the drive, so the journal uses the same clock."""
+    marker = folder / CLOCK_MARKER
+    with open(marker, "wb") as handle:
+        handle.write(b"clock")  # a write, so that the filesystem stamps its own time
+    return datetime.fromtimestamp(os.stat(marker).st_mtime, timezone.utc)
+
+
 def record(snap: Snapshot, event: str, now: datetime | None = None, **fields) -> None:
-    """Append one event to the snapshot's journal, with `at` set to the UTC time as ISO-8601."""
+    """Append one event to the snapshot's journal, with `at` set to the UTC time as ISO-8601.
+
+    Without `now`, `at` is the backup drive's own clock (see `_drive_clock`), not the machine's.
+    """
     if "at" in fields:
         raise ValueError("'at' is the timestamp; name the field something else")
-    entry = {"event": event, "at": _utc(now).strftime("%Y-%m-%dT%H:%M:%SZ"), **fields}
+    at = _utc(now) if now is not None else _drive_clock(snap.dir)
+    entry = {"event": event, "at": at.strftime("%Y-%m-%dT%H:%M:%SZ"), **fields}
     data = (json.dumps(entry) + "\n").encode("ascii")
     fd = os.open(snap.dir / JOURNAL_NAME, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
     try:

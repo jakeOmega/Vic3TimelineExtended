@@ -440,6 +440,38 @@ class JournalTests(SnapshotTestCase):
         self.assertLessEqual(before, at)
         self.assertLessEqual(at, datetime.now(timezone.utc))
 
+    def test_the_default_time_is_the_backup_drives_own_clock(self):
+        # WSL's clock drifts after the host sleeps; file times on the drive do not, and the hold rule compares them
+        snap = snapshot.take(self.user, self.backups)
+        drive_time = datetime(2031, 1, 2, 3, 4, 5, tzinfo=timezone.utc)
+        with mock.patch.object(snapshot, "_drive_clock", return_value=drive_time) as clock:
+            snapshot.record(snap, "heartbeat")
+        clock.assert_called_once_with(snap.dir)
+        self.assertEqual(snapshot.journal(snap)[0]["at"], "2031-01-02T03:04:05Z")
+
+    def test_the_drive_clock_is_the_mtime_of_a_marker_file_in_the_snapshot_folder(self):
+        snap = snapshot.take(self.user, self.backups)
+        snapshot.record(snap, "heartbeat")
+        marker = snap.dir / snapshot.CLOCK_MARKER
+        stamped = datetime.fromtimestamp(marker.stat().st_mtime, timezone.utc)
+        self.assertEqual(snapshot.journal(snap)[0]["at"], stamped.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        self.assertEqual(snapshot._drive_clock(snap.dir), datetime.fromtimestamp(marker.stat().st_mtime, timezone.utc))
+
+    def test_the_marker_is_stamped_afresh_each_time(self):
+        snap = snapshot.take(self.user, self.backups)
+        marker = snap.dir / snapshot.CLOCK_MARKER
+        snapshot.record(snap, "heartbeat")
+        os.utime(marker, (1_000_000_000, 1_000_000_000))  # an old stamp that must not be reused
+        snapshot.record(snap, "heartbeat")
+        self.assertGreater(marker.stat().st_mtime, 1_000_000_000)
+        self.assertGreater(snapshot.journal(snap)[1]["at"], "2001-09-09T01:46:40Z")
+
+    def test_a_given_time_does_not_touch_the_drive_clock(self):
+        snap = snapshot.take(self.user, self.backups)
+        with mock.patch.object(snapshot, "_drive_clock", side_effect=AssertionError("asked")):
+            snapshot.record(snap, "started", now=self.NOW)
+        self.assertFalse((snap.dir / snapshot.CLOCK_MARKER).exists())
+
     def test_fields_may_not_overwrite_the_timestamp(self):
         snap = snapshot.take(self.user, self.backups)
         with self.assertRaises(ValueError):

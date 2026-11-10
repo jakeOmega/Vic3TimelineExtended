@@ -5,6 +5,8 @@ No game and no Windows program is needed: every test builds its folders in a tem
 played by the test itself: it edits files between `run_started` and `finish`.
 """
 
+import hashlib
+import math
 import os
 import tempfile
 import time
@@ -22,11 +24,15 @@ NOW = datetime(2026, 11, 10, 12, 0, 0, tzinfo=timezone.utc)
 def finish(snap, at=None):
     """Record that the run's game exited.
 
-    Journal times have one-second resolution, so by default the exit is stamped at the next whole second:
-    it is then never earlier than a file the test wrote a moment ago.
+    Journal times have one-second resolution, so by default the exit is stamped at the next whole second at or
+    after both the clock and the newest file in the test's user-data folder (a sibling of the backup root): it
+    is then never earlier than a file the test wrote a moment ago, even if the machine's clock has been stepped
+    back since (WSL's is, by several seconds, now and then).
     """
     if at is None:
-        at = datetime.now(timezone.utc).replace(microsecond=0) + timedelta(seconds=1)
+        user_data = snap.dir.parents[2] / "user data"
+        newest = max((p.stat().st_mtime for p in user_data.rglob("*") if p.is_file()), default=0.0)
+        at = datetime.fromtimestamp(math.ceil(max(newest, time.time())), timezone.utc)
     snapshot.record(snap, "game_exited", now=at)
 
 
@@ -52,6 +58,13 @@ def blob(backups: Path, entry: snapshot.Entry) -> Path:
     return backups / "store" / entry.sha256[:2] / entry.sha256
 
 
+def age_store(backups: Path, days: float = 2.0) -> None:
+    """Make every stored blob old enough for the sweep (it spares anything younger than a day)."""
+    when = time.time() - days * 86400
+    for path in (backups / "store").glob("??/*"):
+        os.utime(path, (when, when))
+
+
 class RestoreTestCase(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
@@ -60,8 +73,21 @@ class RestoreTestCase(unittest.TestCase):
         self.user = self.tmp / "user data"
         make_user_data(self.user)
         self.backups = self.tmp / "backups"
+        self.ticks = 0
+        self.start = datetime.now(timezone.utc).replace(microsecond=0)
+
+    def next_time(self):
+        """A snapshot time one second after the last one this test used. Snapshot ids sort by their time, and
+        this machine's clock is stepped back now and then (WSL), which would put a later snapshot first."""
+        self.ticks += 1
+        return self.start + timedelta(seconds=self.ticks)
+
+    def take(self):
+        """A snapshot with no journal: taken, never launched."""
+        return snapshot.take(self.user, self.backups, now=self.next_time())
 
     def run_started(self, at=None, extra=(), pid=4242):
+        at = at if at is not None else self.next_time()
         snap = snapshot.take(self.user, self.backups, extra=extra, now=at)
         snapshot.record(snap, "started", now=at, pid=pid, created="2026-11-10T12:00:00Z")
         return snap
@@ -123,6 +149,24 @@ class CompareTests(RestoreTestCase):
         diff = restore.compare(snap, self.user)
         self.assertEqual(diff.added_in_set, ["logs/game.log", "save games/autosave_2.v3"])
         self.assertEqual(diff.created, [])
+
+    def test_only_rotation_names_count_as_autosaves_the_run_pushed_in(self):
+        # OneDrive makes conflict copies such as autosave-Manfred.v3; they match autosave*.v3 and are the owner's
+        snap = self.run_started()
+        for name in ("autosave_3.v3", "autosave_12.v3", "autosave_exit.v3", "autosave-Manfred.v3",
+                     "autosave_1-Manfred.v3", "autosave_.v3", "autosave_exit_2.v3", "autosave 2.v3"):
+            (self.user / "save games" / name).write_bytes(b"x")
+        diff = restore.compare(snap, self.user)
+        self.assertEqual(
+            diff.added_in_set,
+            ["save games/autosave_12.v3", "save games/autosave_3.v3", "save games/autosave_exit.v3"],
+        )
+
+    def test_a_leftover_restore_temp_is_neither_added_nor_created(self):
+        snap = self.run_started()
+        (self.user / "logs/debug.log.te_qa_restore.tmp").write_bytes(b"x")
+        (self.user / "save games/te_qa_x.v3.te_qa_restore.tmp").write_bytes(b"x")
+        self.assertEqual(restore.compare(snap, self.user), restore.Diff([], [], [], []))
 
     def test_created_is_the_harness_names_that_were_not_there_and_are_not_kept(self):
         (self.user / "save games/te_qa_before.v3").write_bytes(b"there before the run")
@@ -236,6 +280,64 @@ class RestoreTests(RestoreTestCase):
         self.assertEqual(sorted(p.name for p in (self.tmp / "runlogs").iterdir()), ["debug.log", "error.log", "game.log"])
         self.assertFalse((self.user / "logs/game.log").exists())
 
+    def test_without_a_given_folder_the_run_logs_go_beside_the_journal(self):
+        snap = self.run_started()
+        (self.user / "logs/debug.log").write_text("the run's log\n")
+        (self.user / "logs/game.log").write_text("a log the run created")
+        finish(snap)
+        restore.restore(snap, self.user, other_game_running=False)
+        run_logs = snap.dir / "run_logs"
+        self.assertEqual(sorted(p.name for p in run_logs.iterdir()), ["debug.log", "error.log", "game.log"])
+        self.assertEqual((run_logs / "debug.log").read_text(), "the run's log\n")
+
+    def test_no_folder_is_made_for_run_logs_when_there_are_none(self):
+        for p in (self.user / "logs").iterdir():
+            p.unlink()
+        snap = self.run_started()
+        finish(snap)
+        restore.restore(snap, self.user, other_game_running=False)
+        self.assertFalse((snap.dir / "run_logs").exists())
+
+    def test_a_second_restore_keeps_the_run_logs_from_the_first(self):
+        snap = self.run_started()
+        (self.user / "logs/debug.log").write_text("the run's log\n")
+        finish(snap)
+        restore.restore(snap, self.user, other_game_running=False)
+        restore.restore(snap, self.user, other_game_running=False)  # the logs are the owner's again by now
+        self.assertEqual((snap.dir / "run_logs/debug.log").read_text(), "the run's log\n")
+
+    def test_a_run_log_is_copied_again_over_a_stale_copy(self):
+        snap = self.run_started()
+        (self.user / "logs/debug.log").write_text("the run's log\n")
+        finish(snap)
+        (snap.dir / "run_logs").mkdir()
+        (snap.dir / "run_logs/debug.log").write_text("left over from an earlier attempt")
+        restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((snap.dir / "run_logs/debug.log").read_text(), "the run's log\n")
+
+    def test_the_owners_conflict_copies_of_an_autosave_survive(self):
+        snap = self.run_started()
+        for name in ("autosave-Manfred.v3", "autosave_1-Manfred.v3"):
+            (self.user / "save games" / name).write_bytes(b"made by OneDrive during the run")
+        (self.user / "save games/autosave_3.v3").write_bytes(b"pushed in by the run")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.removed, ["save games/autosave_3.v3"])
+        self.assertTrue((self.user / "save games/autosave-Manfred.v3").exists())
+        self.assertTrue((self.user / "save games/autosave_1-Manfred.v3").exists())
+
+    def test_leftover_restore_temps_are_cleared_in_every_folder(self):
+        snap = self.run_started()
+        stale = ["continue_game.json.te_qa_restore.tmp", "save games/autosave.v3.te_qa_restore.tmp",
+                 "logs/debug.log.te_qa_restore.tmp"]
+        for name in stale:
+            (self.user / name).write_bytes(b"half a file from a killed restore")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.restored, out.removed), ([], []))
+        self.assertFalse([name for name in stale if (self.user / name).exists()])
+        self.assertFalse((snap.dir / "run_logs/debug.log.te_qa_restore.tmp").exists())
+
     def test_a_missing_file_comes_back_with_its_recorded_time_and_alone_causes_no_hold(self):
         snap = self.run_started(at=NOW)
         finish(snap, at=NOW)  # long before every real file time, but a missing file has no time
@@ -348,6 +450,29 @@ class FailureTests(RestoreTestCase):
         self.assertEqual(events(snap), ["started", "game_exited"])
         self.assertFalse([p for p in self.user.rglob("*") if "te_qa_restore" in p.name])
 
+    def test_a_retry_finishes_a_restore_whose_second_rename_failed(self):
+        snap = self.run_that_changed_two_files()
+        real_replace, targets = os.replace, []
+
+        def flaky(source, target):
+            targets.append(Path(target).name)
+            if len(targets) == 2:
+                raise OSError("disk fell off")
+            real_replace(source, target)
+
+        with mock.patch("os.replace", flaky):
+            with self.assertRaises(OSError):
+                restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(targets, ["console_history.txt", "continue_game.json"])
+        self.assertEqual((self.user / "console_history.txt").read_bytes(), b"set_variable x\n")  # already back
+        self.assertEqual((self.user / "continue_game.json").read_text(), "{}")  # still the run's
+        self.assertEqual(events(snap), ["started", "game_exited"])
+        self.assertFalse([p for p in self.user.rglob("*") if "te_qa_restore" in p.name])
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.restored, out.removed), (False, ["continue_game.json"], ["tests.txt"]))
+        self.assertEqual(restore.compare(snap, self.user), restore.Diff([], [], [], []))
+        self.assertEqual(events(snap)[-1], "restored")
+
 
 class HoldTests(RestoreTestCase):
     def test_other_game_running_holds(self):
@@ -377,11 +502,15 @@ class HoldTests(RestoreTestCase):
         p = self.user / "continue_game.json"
         p.write_text("{}")
         set_mtime(p, NOW, 600)
+        (self.user / "logs/debug.log.te_qa_restore.tmp").write_bytes(b"not ours to clear while holding")
         before = tree(self.user)
         out = restore.restore(snap, self.user, other_game_running=False, run_logs_dir=self.tmp / "runlogs")
         self.assertEqual((out.held, out.restored, out.removed), (True, [], []))
         self.assertEqual(tree(self.user), before)
         self.assertFalse((self.tmp / "runlogs").exists())
+        restore.restore(snap, self.user, other_game_running=False)  # again, with the default folder
+        self.assertEqual(tree(self.user), before)
+        self.assertFalse((snap.dir / "run_logs").exists())
 
     def test_the_held_entry_gives_the_reason_and_the_files(self):
         out = self.edit_after_exit(600)
@@ -391,6 +520,112 @@ class HoldTests(RestoreTestCase):
             entry,
             {"event": "held", "at": entry["at"], "reason": "modified_after_exit", "files": ["continue_game.json"]},
         )
+
+    def test_another_game_running_holds_before_anything_is_read(self):
+        snap = self.run_started()
+        finish(snap)
+        with mock.patch.object(restore, "_sha256", side_effect=PermissionError("locked by the running game")):
+            out = restore.restore(snap, self.user, other_game_running=True)
+        self.assertEqual((out.held, out.reason), (True, "other_game_running"))
+        self.assertEqual(snapshot.journal(snap)[-1]["reason"], "other_game_running")
+
+    def test_logs_never_cause_a_hold(self):
+        snap = self.run_started(at=NOW)
+        finish(snap, at=NOW)
+        for name in ("debug.log", "game.log"):  # one the run changed, one it created
+            (self.user / "logs" / name).write_text("written after the exit")
+            set_mtime(self.user / "logs" / name, NOW, 600)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.restored, out.removed), (False, "", ["logs/debug.log"], ["logs/game.log"]))
+
+    def test_a_late_log_does_not_excuse_a_late_save(self):
+        snap = self.run_started(at=NOW)
+        finish(snap, at=NOW)
+        for name in ("logs/debug.log", "save games/autosave.v3"):
+            (self.user / name).write_text("written after the exit")
+            set_mtime(self.user / name, NOW, 600)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "modified_after_exit"))
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], ["save games/autosave.v3"])
+
+    def test_without_a_reference_time_a_file_to_judge_holds_and_nothing_changes(self):
+        snap = snapshot.take(self.user, self.backups, now=NOW)  # no journal at all
+        (self.user / "continue_game.json").write_text("{}")
+        before = tree(self.user)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.restored, out.removed), (True, "no_reference_time", [], []))
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual(snapshot.journal(snap)[-1]["reason"], "no_reference_time")
+
+    def test_without_a_reference_time_a_created_file_holds_too(self):
+        snap = snapshot.take(self.user, self.backups, now=NOW)
+        (self.user / "tests.txt").write_text("Tests:\n")
+        self.assertEqual(restore.restore(snap, self.user, other_game_running=False).reason, "no_reference_time")
+        self.assertTrue((self.user / "tests.txt").exists())
+
+    def test_a_target_changed_since_the_comparison_is_not_overwritten(self):
+        snap = self.run_started()
+        (self.user / "console_history.txt").write_text("event x\n")
+        (self.user / "continue_game.json").write_text("{}")
+        finish(snap)
+        out = self.restore_while(snap, lambda: (self.user / "console_history.txt").write_text("the owner typed this"))
+        self.assertEqual((out.held, out.reason, out.restored, out.removed), (True, "modified_during_restore", [], []))
+        self.assertEqual((self.user / "console_history.txt").read_text(), "the owner typed this")
+        self.assertEqual((self.user / "continue_game.json").read_text(), "{}")  # nothing further was restored
+        entry = snapshot.journal(snap)[-1]
+        self.assertEqual((entry["event"], entry["reason"], entry["files"]), ("held", "modified_during_restore", ["console_history.txt"]))
+        self.assertFalse([p for p in self.user.rglob("*") if "te_qa_restore" in p.name])
+
+    def test_a_missing_target_that_has_appeared_is_not_overwritten(self):
+        snap = self.run_started()
+        (self.user / "console_history.txt").unlink()
+        finish(snap)
+        out = self.restore_while(snap, lambda: (self.user / "console_history.txt").write_text("a new game wrote this"))
+        self.assertEqual((out.held, out.reason), (True, "modified_during_restore"))
+        self.assertEqual((self.user / "console_history.txt").read_text(), "a new game wrote this")
+
+    def test_files_already_put_back_stay_when_a_later_target_has_changed(self):
+        snap = self.run_started()
+        (self.user / "console_history.txt").write_text("event x\n")
+        (self.user / "continue_game.json").write_text("{}")
+        finish(snap)
+        real_replace, renamed = os.replace, []
+
+        def replace_then_interfere(source, target):
+            real_replace(source, target)
+            renamed.append(Path(target).name)
+            if len(renamed) == 1:
+                (self.user / "continue_game.json").write_text("the owner played")
+
+        with mock.patch("os.replace", replace_then_interfere):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.restored), (True, "modified_during_restore", ["console_history.txt"]))
+        self.assertEqual((self.user / "console_history.txt").read_bytes(), b"set_variable x\n")
+        self.assertEqual((self.user / "continue_game.json").read_text(), "the owner played")
+        entry = snapshot.journal(snap)[-1]
+        self.assertEqual((entry["restored"], entry["files"]), (["console_history.txt"], ["continue_game.json"]))
+        self.assertFalse([p for p in self.user.rglob("*") if "te_qa_restore" in p.name])
+
+    def test_a_file_to_remove_that_has_changed_since_the_comparison_is_kept(self):
+        snap = self.run_started()
+        (self.user / "tests.txt").write_text("Tests:\n")
+        (self.user / "logs/game.log").write_text("created by the run")
+        finish(snap)
+        out = self.restore_while(snap, lambda: (self.user / "tests.txt").write_text("Tests: and the owner's notes\n"))
+        self.assertEqual((out.held, out.reason), (True, "modified_during_restore"))
+        self.assertEqual((self.user / "tests.txt").read_text(), "Tests: and the owner's notes\n")
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], ["tests.txt"])
+
+    def restore_while(self, snap, interfere):
+        """Restore, with `interfere()` run after the comparison and before the first change to the folder."""
+        real = restore._copy_logs_out
+
+        def interfering(*args, **kwargs):
+            real(*args, **kwargs)
+            interfere()
+
+        with mock.patch.object(restore, "_copy_logs_out", interfering):
+            return restore.restore(snap, self.user, other_game_running=False)
 
     def test_another_game_running_is_the_reason_given_first(self):
         snap = self.run_started(at=NOW)
@@ -496,17 +731,30 @@ class ReferenceTimeTests(RestoreTestCase):
         self.edit_at(snap, 1)
         self.assertFalse(restore.restore(snap, self.user, other_game_running=False).held)
 
-    def test_a_snapshot_with_no_journal_falls_back_to_the_time_it_was_taken(self):
+    def test_a_snapshot_with_no_journal_has_no_reference_time_and_does_not_borrow_one(self):
+        # the time in the snapshot's id is the WSL clock's; the hold rule compares only the drive's times
         snap = snapshot.take(self.user, self.backups, now=NOW)
-        self.edit_at(snap, 600)
+        self.edit_at(snap, 1)
         out = restore.restore(snap, self.user, other_game_running=False)
-        self.assertEqual((out.held, out.reason), (True, "modified_after_exit"))
+        self.assertEqual((out.held, out.reason), (True, "no_reference_time"))
 
-    def test_a_snapshot_with_no_journal_and_nothing_to_check_restores(self):
+    def test_a_snapshot_with_no_journal_and_nothing_to_judge_restores(self):
         snap = snapshot.take(self.user, self.backups, now=NOW)
-        (self.user / "console_history.txt").unlink()
+        (self.user / "console_history.txt").unlink()  # missing: no time
+        (self.user / "logs/debug.log").write_text("the run's log\n")  # a log: never judged
+        (self.user / "logs/game.log").write_text("created by the run")
         out = restore.restore(snap, self.user, other_game_running=False)
-        self.assertEqual((out.held, out.restored), (False, ["console_history.txt"]))
+        self.assertEqual((out.held, out.restored, out.removed), (False, ["console_history.txt", "logs/debug.log"], ["logs/game.log"]))
+
+    def test_a_snapshot_with_no_journal_restores_into_an_empty_folder(self):
+        # what the command line's self-test does
+        snap = snapshot.take(self.user, self.backups, now=NOW)
+        empty = self.tmp / "empty"
+        empty.mkdir()
+        out = restore.restore(snap, empty, other_game_running=False)
+        self.assertEqual((out.held, sorted(out.restored)), (False, sorted(snap.files)))
+        self.assertEqual({rel: (empty / rel).read_bytes() for rel in snap.files},
+                         {rel: (self.user / rel).read_bytes() for rel in snap.files})
 
     def test_times_are_utc_whatever_the_machine_zone(self):
         # a journal time parsed as local time is off by the zone's offset; CI runs in UTC and never sees it
@@ -546,7 +794,16 @@ class RecoverTests(RestoreTestCase):
         self.assertEqual(out, [(snap.id, restore.Outcome([], [], False, "game_still_up"))])
         self.assertEqual(snapshot.journal(snap), before)
 
-    def test_recover_hands_each_started_entry_to_own_game_up_oldest_first(self):
+    def dead_run(self, at, content, pid):
+        """A run snapshotted at `at` that replaced continue_game.json 10 s later and died 30 s after that."""
+        snap = self.run_started(at=at, pid=pid)
+        path = self.user / "continue_game.json"
+        path.write_text(content)
+        set_mtime(path, at, 10)
+        snapshot.record(snap, "heartbeat", now=at + timedelta(seconds=40))
+        return snap
+
+    def test_recover_hands_each_started_entry_to_own_game_up_newest_first(self):
         first = self.run_started(pid=11)
         second = self.run_started(pid=22)
         seen = []
@@ -556,17 +813,73 @@ class RecoverTests(RestoreTestCase):
             return False
 
         out = restore.recover(self.backups, self.user, False, own_game_up=own_game_up)
-        self.assertEqual(seen, [("started", 11, "2026-11-10T12:00:00Z"), ("started", 22, "2026-11-10T12:00:00Z")])
-        self.assertEqual([snap_id for snap_id, _ in out], [first.id, second.id])
+        self.assertEqual(sorted(seen), [("started", 11, "2026-11-10T12:00:00Z"), ("started", 22, "2026-11-10T12:00:00Z")])
+        self.assertEqual([snap_id for snap_id, _ in out], [second.id, first.id])
         self.assertEqual(events(first)[-1], "restored")
         self.assertEqual(events(second)[-1], "restored")
 
-    def test_recover_goes_on_past_a_run_whose_game_is_still_up(self):
-        first = self.run_started(pid=11)
-        second = self.run_started(pid=22)
+    def test_nested_unfinished_runs_unwind_newest_first_to_the_owners_own_bytes(self):
+        # run A dies with the owner's file replaced; B is snapshotted over A's leftovers and dies too.
+        # Oldest first would end in A's leftovers (B's manifest holds them) with both journals "restored".
+        path = self.user / "continue_game.json"
+        original = path.read_bytes()
+        original_mtime = path.stat().st_mtime_ns
+        first = self.dead_run(NOW, "A's leftover", pid=11)
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: False)
+        self.assertEqual(
+            [(snap_id, o.held, o.reason, o.restored) for snap_id, o in out],
+            [(second.id, False, "", ["continue_game.json"]), (first.id, False, "", ["continue_game.json"])],
+        )
+        self.assertEqual((path.read_bytes(), path.stat().st_mtime_ns), (original, original_mtime))
+        self.assertEqual(restore.unfinished(self.backups), [])
+
+    def test_nothing_is_restored_while_any_unfinished_runs_game_is_still_up(self):
+        first = self.dead_run(NOW, "A's leftover", pid=11)
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        before, journals = tree(self.user), [snapshot.journal(first), snapshot.journal(second)]
         out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: started["pid"] == 11)
-        self.assertEqual([(snap_id, o.reason) for snap_id, o in out], [(first.id, "game_still_up"), (second.id, "")])
+        self.assertEqual(
+            out,
+            [(second.id, restore.Outcome([], [], False, "game_still_up")),
+             (first.id, restore.Outcome([], [], False, "game_still_up"))],
+        )
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual([snapshot.journal(first), snapshot.journal(second)], journals)
+        self.assertEqual([s.id for s in restore.unfinished(self.backups)], [first.id, second.id])
+
+    def test_an_error_is_reported_for_its_snapshot_and_stops_the_unwinding(self):
+        first = self.dead_run(NOW, "A's leftover", pid=11)
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        blob(self.backups, second.files["continue_game.json"]).unlink()  # what B would put back
+        before, journals = tree(self.user), [snapshot.journal(first), snapshot.journal(second)]
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: False)
+        self.assertEqual([snap_id for snap_id, _ in out], [second.id])
+        outcome = out[0][1]
+        self.assertEqual((outcome.restored, outcome.removed, outcome.held), ([], [], False))
+        self.assertTrue(outcome.reason.startswith("error: "), outcome.reason)
+        self.assertIn("continue_game.json", outcome.reason)
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual([snapshot.journal(first), snapshot.journal(second)], journals)
+
+    def test_results_already_gathered_survive_an_error_further_down(self):
+        first = self.dead_run(NOW, "A's leftover", pid=11)
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        blob(self.backups, first.files["continue_game.json"]).unlink()  # what A would put back
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: False)
+        self.assertEqual([snap_id for snap_id, _ in out], [second.id, first.id])
+        self.assertEqual(events(second)[-1], "restored")
+        self.assertTrue(out[1][1].reason.startswith("error: "))
         self.assertEqual([s.id for s in restore.unfinished(self.backups)], [first.id])
+
+    def test_a_dead_runs_logs_are_kept_beside_its_journal(self):
+        snap = self.run_started(at=NOW)
+        (self.user / "logs/debug.log").write_text("the dead run's log\n")
+        snapshot.record(snap, "heartbeat", now=NOW + timedelta(seconds=40))
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: False)
+        self.assertFalse(out[0][1].held)
+        self.assertEqual((snap.dir / "run_logs/debug.log").read_text(), "the dead run's log\n")
+        self.assertNotEqual((self.user / "logs/debug.log").read_text(), "the dead run's log\n")
 
     def test_recover_holds_while_another_game_is_running(self):
         snap = self.run_started()
@@ -587,7 +900,7 @@ class RecoverTests(RestoreTestCase):
         done = self.finished_run()
         held_one = self.held_run()
         open_one = self.run_started()
-        snapshot.take(self.user, self.backups)  # taken, never started
+        self.take()  # taken, never started
         self.assertEqual([s.id for s in restore.unfinished(self.backups)], [open_one.id])
         self.assertEqual([s.id for s in restore.held(self.backups)], [held_one.id])
         self.assertNotIn(done.id, [s.id for s in restore.unfinished(self.backups) + restore.held(self.backups)])
@@ -620,15 +933,26 @@ class PruneTests(RestoreTestCase):
         (self.user / "continue_game.json").write_text("v2")
         for _ in range(6):
             self.finished_run()
+        age_store(self.backups)
         restore.prune(self.backups, keep=5)
-        for snap in snapshot.all_snapshots(self.backups):
+        kept = snapshot.all_snapshots(self.backups)
+        self.assertEqual(len(kept), 5)
+        for snap in kept:
             for entry in snap.files.values():
                 self.assertTrue((self.backups / "store" / entry.sha256[:2] / entry.sha256).is_file())
+            # and the whole snapshot comes back out of the store, byte for byte, with its recorded times
+            target = self.tmp / ("restored " + snap.id)
+            target.mkdir()
+            out = restore.restore(snap, target, other_game_running=False)
+            self.assertEqual((out.held, sorted(out.restored)), (False, sorted(snap.files)))
+            for rel, entry in snap.files.items():
+                self.assertEqual(hashlib.sha256((target / rel).read_bytes()).hexdigest(), entry.sha256, rel)
+                self.assertEqual((target / rel).stat().st_mtime_ns, entry.mtime_ns, rel)
 
     def test_current_takes_a_slot_even_when_it_has_not_finished(self):
         # the real caller passes the snapshot it has just taken: no journal at all yet
         done = [self.finished_run() for _ in range(7)]
-        current = snapshot.take(self.user, self.backups)
+        current = self.take()
         removed = restore.prune(self.backups, keep=5, current=current.id)
         self.assertEqual(removed, [s.id for s in done[:3]])  # 4 restored + current = 5
         self.assertTrue(current.dir.exists())
@@ -653,6 +977,7 @@ class PruneTests(RestoreTestCase):
         gone_sha = snapshot.all_snapshots(self.backups)[0].files["continue_game.json"].sha256
         for _ in range(6):
             self.finished_run()
+        age_store(self.backups)
         removed = restore.prune(self.backups, keep=5)
         self.assertEqual(len(removed), 2)
         store = self.backups / "store"
@@ -669,6 +994,8 @@ class PruneTests(RestoreTestCase):
         (store / "ab" / orphan_sha).write_bytes(b"nobody names me")
         (store / "ab" / "notes.txt").write_text("not a blob")
         (store / ".incoming-abc123").write_bytes(b"a copy in progress")
+        age_store(self.backups)
+        os.utime(store / ".incoming-abc123", (0, 0))
         restore.prune(self.backups)
         self.assertFalse((store / "ab" / orphan_sha).exists())
         self.assertTrue((store / "ab" / "notes.txt").exists())
@@ -682,6 +1009,7 @@ class PruneTests(RestoreTestCase):
         (self.user / "pdx_settings.json").write_text("everyone else")
         for _ in range(3):
             self.finished_run()
+        age_store(self.backups)
         removed = restore.prune(self.backups, keep=1)
         self.assertEqual(len(removed), 2)
         for snap in (held_one, open_one):
@@ -697,6 +1025,7 @@ class PruneTests(RestoreTestCase):
         orphan = self.backups / "store" / "cd" / ("cd" * 32)
         orphan.parent.mkdir()
         orphan.write_bytes(b"maybe the broken manifest names me")
+        age_store(self.backups)
         restore.prune(self.backups)
         self.assertTrue(orphan.exists())
         self.assertTrue(bad.exists())
@@ -708,6 +1037,70 @@ class PruneTests(RestoreTestCase):
         (half / "manifest.json.tmp").write_text("{")
         self.assertEqual(restore.prune(self.backups, keep=5), [done[0].id])
         self.assertTrue((half / "manifest.json.tmp").exists())
+
+    def test_a_store_file_younger_than_a_day_survives_the_sweep(self):
+        # a take in another session copies its files before its manifest names them
+        self.finished_run()
+        age_store(self.backups)
+        orphan = self.backups / "store" / "ab" / ("ab" * 32)
+        orphan.parent.mkdir(exist_ok=True)
+        orphan.write_bytes(b"a take is writing its manifest")
+        restore.prune(self.backups)
+        self.assertTrue(orphan.exists())
+        day = restore.SWEEP_MIN_AGE_SECONDS
+        self.assertEqual(day, 24 * 60 * 60)
+        for age, swept in ((day - 600, False), (day + 600, True)):
+            with self.subTest(age_seconds=age):
+                orphan.write_bytes(b"a take is writing its manifest")
+                when = time.time() - age
+                os.utime(orphan, (when, when))
+                restore.prune(self.backups)
+                self.assertEqual(orphan.exists(), not swept)
+
+    def test_the_same_blob_two_days_old_is_swept(self):
+        self.finished_run()
+        orphan = self.backups / "store" / "ab" / ("ab" * 32)
+        orphan.parent.mkdir(exist_ok=True)
+        orphan.write_bytes(b"nobody names me")
+        restore.prune(self.backups)
+        self.assertTrue(orphan.exists())  # fresh
+        when = time.time() - 2 * 86400
+        os.utime(orphan, (when, when))
+        restore.prune(self.backups)
+        self.assertFalse(orphan.exists())  # two days back
+
+    def test_snapshots_with_no_journal_or_an_empty_one_count_as_finished(self):
+        # taken and never launched, or self-tests: nothing will ever restore them
+        idle = [self.take() for _ in range(2)]
+        (idle[1].dir / "journal.jsonl").write_bytes(b"")
+        done = [self.finished_run() for _ in range(5)]
+        current = self.finished_run()
+        removed = restore.prune(self.backups, keep=5, current=current.id)
+        self.assertEqual(removed, [s.id for s in idle + done[:1]])  # 2 + 5 + current = 8; keep 5 incl. current
+        self.assertEqual(restore.unfinished(self.backups), [])
+        self.assertEqual(restore.held(self.backups), [])
+
+    def test_a_journal_that_exists_but_does_not_parse_is_never_pruned_or_recovered(self):
+        torn = self.take()
+        (torn.dir / "journal.jsonl").write_bytes(b'{"event": "star')  # the machine died mid-write
+        for _ in range(3):
+            self.finished_run()
+        (self.user / "continue_game.json").write_text("changed since")
+        finished = [s.id for s in snapshot.all_snapshots(self.backups) if s.id != torn.id]
+        self.assertEqual(restore.prune(self.backups, keep=0), finished)
+        self.assertTrue(torn.dir.exists())
+        self.assertEqual(restore.unfinished(self.backups), [])
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: self.fail("asked"))
+        self.assertEqual(out, [])
+        self.assertEqual((self.user / "continue_game.json").read_text(), "changed since")
+
+    def test_a_journal_with_events_but_no_start_is_never_pruned(self):
+        odd = self.take()
+        snapshot.record(odd, "heartbeat")
+        for _ in range(3):
+            self.finished_run()
+        restore.prune(self.backups, keep=0)
+        self.assertTrue(odd.dir.exists())
 
     def test_a_pruned_snapshot_is_gone_whole(self):
         first = self.finished_run()
