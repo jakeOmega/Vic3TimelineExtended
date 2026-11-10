@@ -1415,10 +1415,12 @@ def _write_dead_primary_triggers(out: "_Script", merges: tuple[cfg.Merge, ...], 
             with out.block("OR"):
                 if hold.cases:
                     out.line("game_date < %s # %s" % (ledger.WINDOW_END, ", ".join(hold.cases)))
-                elif hold.unformed or hold.on_offer:
+                elif hold.unformed or hold.on_offer or hold.conditional:
                     with out.block("AND"):
                         out.line("game_date < %s" % ledger.WINDOW_END)
                         with out.block("OR"):
+                            for case in hold.conditional:
+                                out.line("%s # %s" % (ledger.CASES[case].condition, case))
                             for tag in hold.unformed:
                                 out.line("NOT = { exists = c:%s }" % tag)
                             if hold.on_offer:

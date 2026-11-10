@@ -14849,7 +14849,13 @@ te_cmg_part_held_serb = {
 
 te_cmg_part_held_croat = {
 	OR = {
-		game_date < 1936.1.1 # decisions
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				c:AUS ?= { country_has_monarchy_law = yes NOT = { has_variable = aus_organised_trialism } any_subject_or_below = { any_scope_state = { state_region = s:STATE_CROATIA } } } # trialism
+				NOT = { exists = c:YUG }
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_balkan_national_awakenings
@@ -15432,7 +15438,7 @@ te_cmg_part_held_xhosa = {
 
 te_cmg_part_held_french = {
 	OR = {
-		game_date < 1936.1.1 # decisions, laws
+		game_date < 1936.1.1 # laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_belle_epoque
@@ -15448,7 +15454,7 @@ te_cmg_part_held_cm_italian = {
 
 te_cmg_part_held_spanish = {
 	OR = {
-		game_date < 1936.1.1 # decisions, historical_characters, laws
+		game_date < 1936.1.1 # historical_characters, laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_filipino_ethnogenesis
@@ -15462,7 +15468,7 @@ te_cmg_part_held_spanish = {
 
 te_cmg_part_held_portuguese = {
 	OR = {
-		game_date < 1936.1.1 # decisions, historical_characters, laws
+		game_date < 1936.1.1 # historical_characters, laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_iberia

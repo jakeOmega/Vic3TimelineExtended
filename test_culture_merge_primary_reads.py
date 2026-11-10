@@ -172,8 +172,13 @@ class LedgerTest(unittest.TestCase):
         # ("Holding for just these two means the hold is way too strict"); the others hold, and none past 1936.
         self.assertEqual(
             {name for name, case in ledger.CASES.items() if case.hold},
-            {"historical_characters", "laws", "siberian_exile", "decisions"},
+            {"historical_characters", "laws", "siberian_exile", "trialism"},
         )
+        # Deposing a dynasty is lost with the Latin merge (owner: "doesn't seem like a big deal to me"); Trialism
+        # holds Croat only while Austria could still propose it.
+        self.assertFalse(ledger.CASES["depose_dynasty"].hold)
+        self.assertIn("aus_organised_trialism", ledger.CASES["trialism"].condition)
+        self.assertEqual([name for name, case in ledger.CASES.items() if case.condition], ["trialism"])
         self.assertEqual(ledger.WINDOW_END, "1936.1.1")
         kinds = {}
         for row in self.inventory["reads"]:
@@ -239,7 +244,10 @@ class LedgerTest(unittest.TestCase):
         self.assertIn("je_risorgimento", self.holds["north_italian"].entries)
         for part in ("swedish", "australian", "afro_american", "uzbek", "paulista"):
             self.assertEqual(self.holds[part].cases, (), part)
-        self.assertEqual(self.holds["croat"].cases, ("decisions",))  # Austria's Trialism
+        self.assertEqual(self.holds["croat"].cases, ())
+        self.assertEqual(self.holds["croat"].conditional, ("trialism",))
+        for part in ("french", "spanish", "portuguese"):
+            self.assertNotIn("depose_dynasty", self.holds[part].cases)
         # A journal entry's events, buttons and helpers hold through the entry.
         self.assertIn("je_belle_epoque", self.holds["french"].entries)
         self.assertIn("je_danubian_federation", self.holds["czech"].entries)
@@ -315,16 +323,26 @@ class HoldTriggerTest(unittest.TestCase):
                 self.assertIn("game_date < 1936.1.1 ", body, culture)
                 self.assertNotIn("has_inactive_journal_entry", body, culture)
                 self.assertNotIn("exists = c:", body, culture)
-            elif hold.unformed or hold.on_offer:
+            elif hold.unformed or hold.on_offer or hold.conditional:
                 self.assertIn("AND = { game_date < 1936.1.1 OR = { ", body, culture)
             else:
                 self.assertNotIn("game_date", body, culture)
             outside = re.sub(r"AND = \{ game_date < 1936\.1\.1 OR = \{.*?\} \} (?=any_country|\}$)", "", body)
             outside = outside.replace("game_date < 1936.1.1 ", "")
+            self.assertNotIn("c:AUS", outside, culture)  # a conditional case sits inside the window too
             for word in re.findall(r"[a-z_]+(?= = )", outside):
                 self.assertIn(word, ("any_country", "has_journal_entry"), "%s: %s" % (culture, word))
             for entry in hold.entries:
                 self.assertEqual(body.count("has_journal_entry = %s" % entry), 1, (culture, entry))
+
+    def test_trialism_holds_croat_only_while_austria_could_propose_it(self):
+        body = self.body("croat")
+        self.assertIn(
+            "AND = { game_date < 1936.1.1 OR = { c:AUS ?= { country_has_monarchy_law = yes "
+            "NOT = { has_variable = aus_organised_trialism } "
+            "any_subject_or_below = { any_scope_state = { state_region = s:STATE_CROATIA } } } ",
+            body,
+        )
 
     def test_a_merge_that_never_began(self):
         for merge in cfg.MERGES:

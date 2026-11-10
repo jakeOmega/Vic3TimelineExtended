@@ -43,7 +43,8 @@ Dispositions:
 ``unformed``   a formable's own trigger requires the part: held until
                ``WINDOW_END`` while the tag does not exist.
 ``case``       one of ``CASES``: holds the part until ``WINDOW_END`` if the
-               case's ruling is to hold, and not at all otherwise.
+               case's ruling is to hold (only while its ``condition`` is true,
+               where it has one), and not at all otherwise.
 
 A formable whose **definition** lists a part is not a row here: the inventory's
 ``formables`` section covers it. A tag that owns no state at the 1836 start gets
@@ -134,6 +135,9 @@ class Case:
     what: str
     hold: bool
     ruled: str = ""
+    # For a held case, a one-line trigger (any scope) that says the content can still matter: the case then holds only
+    # while it is true, still no later than WINDOW_END. "" holds through the whole window.
+    condition: str = ""
 
 
 CASES: dict[str, Case] = {
@@ -189,12 +193,26 @@ CASES: dict[str, Case] = {
         hold=False,
         ruled="2026-11-09",
     ),
-    "decisions": Case(
-        "Decisions",
-        "Something the player presses: Austria's Trialism (Croat) with its two events, and deposing a ruling dynasty "
-        "(French, Spanish, Portuguese) with the trigger it reads.",
+    "depose_dynasty": Case(
+        "Deposing a ruling dynasty",
+        "A French, Spanish or Portuguese monarchy can back a disloyal commander of a rival house (Legitimist, Orleanist, "
+        "Bonapartist, Carlist, Miguelist) in a coup. The decision is shown by culture. The owner: \"if Latin has formed, "
+        "the politics of the region have changed enough that I don't know that those ideologies make sense anymore, so "
+        "having that be lost doesn't seem like a big deal to me.\"",
+        hold=False,
+        ruled="2026-11-09",
+    ),
+    "trialism": Case(
+        "Austria's Trialism",
+        "Austria, in the dual monarchy, can propose a third crown when a subject that is NOT Croat owns part of Croatia. "
+        "The read is a negation on the subject, so removing Croat from a Yugoslav subject that owns Croatia would let "
+        "Austria propose Trialism against the very people it is for (the owner: \"this is not great\", and a Yugoslav "
+        "merge under Austria \"isn't that hard to occur\"). Held only while that can happen, which is the designer's "
+        "narrowing: Austria exists, is a monarchy, has not organised Trialism, and a subject of its owns part of Croatia.",
         hold=True,
         ruled="2026-11-09",
+        condition="c:AUS ?= { country_has_monarchy_law = yes NOT = { has_variable = aus_organised_trialism } "
+                  "any_subject_or_below = { any_scope_state = { state_region = s:STATE_CROATIA } } }",
     ),
 }
 
@@ -280,11 +298,11 @@ _ENTITIES: dict[str, Disposition] = {
     "on_secession_start_polish_rebellion_effect": Disposition(CASE, case="one_off_events"),
     "culture_is_intuitive_slave_revolt_culture": Disposition(CASE, case="one_off_events"),
     # decisions
-    "aus_organise_trialism": Disposition(CASE, case="decisions"),
-    "austria_trialism.2": Disposition(CASE, case="decisions"),
-    "austria_trialism.3": Disposition(CASE, case="decisions"),
-    "decision_depose_ruling_dynasty": Disposition(CASE, case="decisions"),
-    "character_has_ideology_conflicting_with_ruling_dynasty": Disposition(CASE, case="decisions"),
+    "aus_organise_trialism": Disposition(CASE, case="trialism"),
+    "austria_trialism.2": Disposition(CASE, case="trialism"),
+    "austria_trialism.3": Disposition(CASE, case="trialism"),
+    "decision_depose_ruling_dynasty": Disposition(CASE, case="depose_dynasty"),
+    "character_has_ideology_conflicting_with_ruling_dynasty": Disposition(CASE, case="depose_dynasty"),
 }
 # One entity, different answers by culture: vanilla's on_secession_start fires the Risorgimento's events for an Italian
 # secession (and asks for that entry) and the Polish rebellion for a Polish one.
@@ -363,10 +381,11 @@ class Holds:
     on_offer: tuple[str, ...] = ()  # until WINDOW_END, while any country has one on offer: entries in ON_OFFER_HOLDS
     unformed: tuple[str, ...] = ()  # until WINDOW_END, while one of these tags does not exist
     cases: tuple[str, ...] = ()  # until WINDOW_END: cases ruled to hold, or not ruled yet
+    conditional: tuple[str, ...] = ()  # until WINDOW_END, while the case's `condition` holds
 
     @property
     def any(self) -> bool:
-        return bool(self.entries or self.on_offer or self.unformed or self.cases)
+        return bool(self.entries or self.on_offer or self.unformed or self.cases or self.conditional)
 
 
 def part_holds(inventory: dict | None = None) -> dict[str, Holds]:
@@ -400,7 +419,8 @@ def part_holds(inventory: dict | None = None) -> dict[str, Holds]:
             tuple(sorted(entries.get(part, ()))),
             tuple(sorted(e for e in entries.get(part, ()) if e in ON_OFFER_HOLDS)),
             tuple(sorted(unformed.get(part, ()))),
-            tuple(sorted(cases.get(part, ()))),
+            tuple(sorted(c for c in cases.get(part, ()) if not CASES[c].condition)),
+            tuple(sorted(c for c in cases.get(part, ()) if CASES[c].condition)),
         )
         for part in inventory["parts"]
     }
@@ -427,6 +447,8 @@ def main() -> int:
             bits = []
             if hold.cases:
                 bits.append("until %s: %s" % (WINDOW_END, ", ".join(hold.cases)))
+            if hold.conditional:
+                bits.append("until %s while it can matter: %s" % (WINDOW_END, ", ".join(hold.conditional)))
             if hold.unformed:
                 bits.append("while unformed: " + " ".join(hold.unformed))
             if hold.entries:
