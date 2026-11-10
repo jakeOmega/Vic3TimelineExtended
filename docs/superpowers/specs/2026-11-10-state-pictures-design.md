@@ -20,9 +20,14 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
    has it.
 4. **Prosperity needs a careful definition.** The owner's question: is it the absolute standard of living
    or a relative one? Amenities fit the first; litter in the street may fit the second. § 6 is this
-   design's answer, two axes, and is a proposal the owner has not yet confirmed.
+   design's answer, two axes. Asked on the pilot what "relative" should be measured against, the owner
+   answered "prosperity being relative makes sense to me". That settles § 6's relative measure as written
+   (a state's standard of living against what its own people expect). The owner's words don't name the
+   measure or the absolute axis; that the answer covers both as § 6 has them is this design's reading.
 5. **Housing-block cities follow the Command Economy law,** not a region.
 6. **Ambitious set, in waves.** It can be cut back; § 9 gives the order of cuts.
+7. **The painted look stands** ("I like the style"): the converter's filter of § 10 is the look of the whole
+   set. The four pilot picks stand too.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -94,10 +99,30 @@ easier to read. It can be added to a family as one more condition if the play-te
 
 ## 5. Regions and city size
 
-**Regions** are vanilla's seven city families, by the same triggers vanilla uses (European, Latin American by
-`is_subtropic_farmland`, East Asian, Japanese, South Asian, Middle Eastern and Central Asian, African), plus
-North American, which vanilla folds into European. Farmland keeps vanilla's four families (generic, Arabic,
-Asian, subtropic). Ports, mines, forestry and energy are painted once for every region.
+**Regions** are vanilla's seven city families (European, Latin American, East Asian, Japanese, South Asian,
+Middle Eastern and Central Asian, African), plus North American, which vanilla folds into European. Farmland
+keeps vanilla's four families (generic, Arabic, Asian, subtropic). Ports, mines, forestry and energy are
+painted once for every region.
+
+The city families use vanilla's own region triggers, with three changes. They are this design's calls, each
+one line in the registry's `REGIONS`, and the state counts are from 1.15's region files:
+
+| Family | States | Trigger | Against vanilla |
+|---|---|---|---|
+| European | 217 | `geographic_region_europe` (Russia west of Siberia included), and every state of no family | the same; the states of no family are Tibet and the Himalayas (5) and the Pacific islands (11) |
+| North American | 71 | `geographic_region_north_america`, `geographic_region_australasia` | new. Vanilla shows these the European picture. Australia and New Zealand (9) join because a grid of brick blocks and glass towers is nearer Sydney than a stone boulevard is |
+| Latin American | 83 | `geographic_region_latin_america` | vanilla's `is_subtropic_farmland` holds 61 of these and leaves out Mexico and the Caribbean (22), which it shows the European picture; it lists Central America three times, so the gap reads as an oversight |
+| African | 93 | `geographic_region_africa` | the same. It includes North Africa: Cairo is in this family, not the Middle Eastern |
+| South Asian | 28 | `geographic_region_india` | the same |
+| Middle Eastern | 69 | `geographic_region_middle_east`, `geographic_region_central_asia_old` | the same |
+| East Asian | 102 | `geographic_region_east_asia`, `geographic_region_south_east_asia` (Siberia included) | the same |
+| Japanese | 12 | `geographic_region_japan` | the same |
+
+Two pairs overlap, so each family has its own digit in the weight and the higher one wins: Japanese over
+East Asian (Japan lies inside East Asia, and vanilla ranks it the same way), and Middle Eastern over South
+Asian for Baluchistan, Pashtunistan and Quetta, which vanilla leaves a tie. Until a family's picture on a
+rung is painted, its states keep the family's earlier picture or vanilla's; the European picture doesn't
+stand in for a named family.
 
 **City size** is the number of people in the state's largest city: the Demographics walk's urban people
 (`te_dg_urban`, written every year whatever the Demographics rule) times the metropolitan share (`te_dg_mt`;
@@ -185,7 +210,9 @@ would be over 1 GB.
 2. **Calibration, then the city tier of the core grid (40).** An observer game's figures (largest-city
    people, `average_sol` and the expectations gap by year and by rung) fix the floors of §§ 5 and 6. Then 8
    regions × 5 rungs of the middle picture. After this wave every city past rung 1 has a picture of its
-   time, and these stay the fallback for every size and level of prosperity.
+   time, and these stay the fallback for every size and level of prosperity. The 39 prompts beside the
+   pilot's are in the registry (`CITY_STREETS`), unrendered: the renders wait on the owner's look at the
+   pilot in game, which may change how a picture is composed for the panel.
 3. **Worked land (about 60):** ports, mines and oil, farmland, forestry, energy.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
@@ -222,6 +249,11 @@ upkeep limited to rungs 2 to 4.
   the quay), so a state's banner reads as the same place later.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
+- **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
+  through all five rungs (the registry's `CITY_LANDMARK`: the European church, a North American courthouse
+  with a clock tower, a Japanese castle keep, and so on), so the street changes around a fixed point and a
+  state's banner reads as the same place a century on. The renders won't repeat the building exactly; the
+  kind and the place in the frame are what carry over.
 - **No recognizable landmarks.** A picture stands for every state of its region, so it must not read as one
   city. A generic description of a building draws the most famous building of that kind: the pilot's "a
   domed civic building at the end of the street" drew the United States Capitol in all four candidates, in
@@ -231,7 +263,9 @@ upkeep limited to rungs 2 to 4.
   skyline without them. Review checks every pick for a silhouette a player would name: the Capitol, the
   Eiffel Tower, Big Ben, a famous bridge, a known skyline. The risk grows with the metropolis and megacity
   pictures, whose subject is a skyline. A candidate that reads as a real place is rejected like one with
-  lettering.
+  lettering. The registry's `PROMPT_AVOID` holds the words that have drawn lettering or a famous place
+  (shop, sign, banner, flag, skyline, civic, …), and `test_state_pictures.py` fails on a prompt that uses
+  one.
 
 ## 11. The pilot
 
@@ -252,10 +286,9 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 
 ## 12. Open questions
 
-- § 6's reading of prosperity, above all its measure of "relative": the state's standard of living against
-  what its own people expect. The alternatives are against the country's average or against the world's.
-- Whether the painted look the converter gives a render (§ 10) is close enough to vanilla's brushwork. It is
-  a call for the whole set, so it should be settled on the pilot.
+- § 5's three changes to vanilla's city families: Australia and New Zealand with North America, Mexico and
+  the Caribbean with Latin America, and Middle Eastern over South Asian on the north-west frontier. Also
+  whether Tibet and the Pacific islands should leave the European fallback for a family.
 - The floors of §§ 5 and 6, until wave 2's observer game.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
   pictures exist.

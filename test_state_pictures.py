@@ -77,13 +77,58 @@ class TestRegistry(unittest.TestCase):
                     self.assertIn("has_building = building_port", generator.conditions(key))
 
     def test_no_two_pictures_of_a_terrain_can_tie(self):
-        # the highest weight wins; two pictures that can both apply must not weigh the same
+        # the highest weight wins; two families can hold the same state (Japan lies inside East Asia), so no two
+        # pictures of a terrain may weigh the same, whatever their regions
         seen = {}
         for key, p in registry.PICTURES.items():
             for terrain in p["terrain"]:
-                spot = (terrain, registry.weight(key), p["region"])
+                spot = (terrain, registry.weight(key))
                 self.assertNotIn(spot, seen, f"{key} and {seen.get(spot)} weigh the same in {terrain}")
                 seen[spot] = key
+
+    def test_every_region_family_has_its_own_digit(self):
+        digits = [digit for _lines, digit in registry.REGIONS.values()]
+        self.assertEqual(len(set(digits)), len(digits))
+        self.assertTrue(all(1 <= d <= 9 for d in digits))
+        for name, (lines, _digit) in registry.REGIONS.items():
+            with self.subTest(name):
+                self.assertTrue(lines)
+                for line in lines:
+                    self.assertRegex(line, r"^is_in_geographic_region = geographic_region_[a-z_]+$")
+        # vanilla ranks Japan over the East Asia that contains it
+        self.assertGreater(registry.REGIONS["japanese"][1], registry.REGIONS["east_asian"][1])
+
+    def test_the_fallback_family_takes_the_states_of_no_family(self):
+        fallback = registry.FALLBACK_REGION
+        lines = registry.region_conditions(fallback)
+        self.assertEqual(lines[0], "OR = {")
+        self.assertIn("\tAND = {", lines)
+        self.assertEqual("".join(lines).count("{"), "".join(lines).count("}"))
+        for name, (own, _digit) in registry.REGIONS.items():
+            for line in own:
+                negated = "\t\t" + line.replace("is_in_geographic_region", "is_not_in_geographic_region")
+                with self.subTest(name, line=line):
+                    self.assertEqual(negated in lines, name != fallback)
+        # every other family is its own triggers, any one of them
+        self.assertEqual(registry.region_conditions("japanese"), registry.REGIONS["japanese"][0])
+        self.assertEqual(registry.region_conditions("east_asian")[0], "OR = {")
+
+    def test_no_prompt_uses_a_word_that_draws_lettering_or_a_landmark(self):
+        avoid = re.compile(r"\b(" + "|".join(map(re.escape, registry.PROMPT_AVOID)) + r")\b", re.I)
+        for key, p in registry.PICTURES.items():
+            with self.subTest(key):
+                self.assertIsNone(avoid.search(p["prompt"]))
+                # the second text encoder reads 256 tokens; a longer prompt loses its end, where the "no text" tail is
+                self.assertLessEqual(len(registry.full_prompt(key).split()), 140)
+
+    def test_the_city_tier_is_whole(self):
+        # wave 2: every region family on every rung of the city ladder, each on its rung's technology
+        for region in registry.REGIONS:
+            for rung, (tech, _when) in registry.CITY_LADDER.items():
+                with self.subTest(region=region, rung=rung):
+                    p = registry.PICTURES[f"urban_{region}_{rung}"]
+                    self.assertEqual((p["tech"], p["rung"], p["region"], p["size"]), (tech, rung, region, None))
+                    self.assertIn(registry.CITY_LANDMARK[region], p["prompt"])
 
     def test_every_weight_outranks_vanilla(self):
         for key in registry.PICTURES:
@@ -92,8 +137,9 @@ class TestRegistry(unittest.TestCase):
     def test_a_larger_size_outranks_a_smaller_and_a_rung_outranks_a_size(self):
         digits = sorted(d for _lines, d in registry.SIZES.values())
         self.assertEqual(len(set(digits)), len(digits))
-        self.assertGreater(registry.W_RUNG, registry.W_SIZE * max(digits) + registry.W_REGION)
-        self.assertGreater(registry.W_SIZE, registry.W_REGION)
+        top_region = registry.W_REGION * max(d for _lines, d in registry.REGIONS.values())
+        self.assertGreater(registry.W_RUNG, registry.W_SIZE * max(digits) + top_region)
+        self.assertGreater(registry.W_SIZE, top_region)
 
     def test_the_size_conditions_read_the_pass_variable(self):
         effects = EFFECTS.read_text(encoding="utf-8-sig")

@@ -34,11 +34,11 @@ def picture_path(key):
 
 
 def conditions(key):
-    """The state triggers a picture needs, one a line."""
+    """The state triggers a picture needs, one a line; a nested line starts with its own tabs."""
     p = registry.PICTURES[key]
     lines = [f"owner = {{ has_technology_researched = {p['tech']} }}"]
     if p["region"]:
-        lines += registry.REGIONS[p["region"]]
+        lines += registry.region_conditions(p["region"])
     if p["size"]:
         lines += registry.SIZES[p["size"]][0]
     lines += p.get("where", [])
