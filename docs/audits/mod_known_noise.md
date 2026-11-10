@@ -236,3 +236,13 @@ Variable 'te_cm_wait_years_anglophone' is used but is never set
 ```
 
 Twenty-eight lines once per launch, from the culture merges (#1509). Eleven merges absorb their parts into an existing culture (Hungarian, Han, Japanese ...), and that culture is the merge's first core slot, held and acceptance-tested but never joined, converted or switched (see the culture merges system file). The generator writes its slot's triggers and the census helper's call like any other part's, so its joined, switched and result-pop reads name variables nothing sets; Anglophone's wait counter is read by its optional parts' waits and only a core wait adds to it, as documented. The reads sit behind `has_global_variable` or `?=` and read false, as they should. Each signature names its own variable, so a new never-set culture-merge name still shows. The 2026-11-08 triage removed the other 129 such names (results no wider merge takes, and the console dump). Tracked at `docs/audits/open_issues.md#l30-culture-merges-absorb-results-generic-gate-reads-flagged-never-set`.
+
+### `gamedatabase.h:378` — culture merges: the restated vanilla trigger drops vanilla's copy
+- source: `gamedatabase.h:378`
+- tracked: `docs/audits/open_issues.md#l31-culture-merges-the-restated-vanilla-trigger-logs-a-duplicated-key`
+
+```
+Duplicated key has_indian_primary_culture will not be created from file: common/scripted_triggers/00_scripted_triggers.txt
+```
+
+One line per launch, and it is the override working: `00_a_te_culture_merge_vanilla_triggers.txt` sorts before vanilla's file, the first bare definition of a scripted trigger wins, and the engine names the copy it dropped, vanilla's. The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.

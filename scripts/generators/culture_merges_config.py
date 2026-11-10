@@ -127,6 +127,25 @@ def _new(name: str, r: int, g: int, b: int) -> NewCulture:
 NO_FERVOR_COPY: tuple[str, ...] = ("ukrainian", "byelorussian")
 
 
+# Traditions a merged culture takes from its parts (owner, 2026-11-09: once a switched part is no longer a primary
+# culture, "give the result the component culture's traditions where it makes sense"). A primary culture's traits
+# count for acceptance whether or not it has people, so removing Russian from an East Slavic Russia would end the
+# acceptance its Russosphere tradition gave Tatars and Bashkirs. The rule: a **core** part's traditions pass to the
+# result when the part switches, an optional part's do not (Alemannic's Helvetic tradition says nothing about
+# Germans), and these core parts are left out by hand.
+TRADITIONS_NOT_CARRIED: dict[tuple[str, str], str] = {
+    ("japanese", "ryukyuan"): "the Sinosphere tradition of one prefecture would raise Japan's acceptance of every "
+                              "Sinosphere culture",
+}
+
+
+def carries_traditions(merge: "Merge", culture: str) -> bool:
+    """Does ``culture``, switching into ``merge``'s result, pass its traditions on?"""
+    if (merge.key, culture) in TRADITIONS_NOT_CARRIED:
+        return False
+    return any(culture in part.cultures for part in merge.core)
+
+
 # The bespoke gates (owner, 2026-11-09): what history says had to be settled before a set of peoples became one. Each
 # trigger is hand-written in common/scripted_triggers/te_culture_merge_gate_triggers.txt, with its reasoning there. A
 # formation gate names every tag that stands for the union, vanilla's and the mod's. The texts are player-facing:
@@ -438,11 +457,14 @@ def successors_of(culture: str) -> set[str]:
     This is the whole chain on purpose. A pop-level read (``has_pop_culture``)
     follows the pops, and they change culture at every link, so the test must
     name every result that can hold them. A country-level read
-    (``country_has_primary_culture``) loses nothing, because a part stays a
-    primary culture of every country that had it (spec section 7), so the later
-    links there are a judgment call about flavor, and
-    ``test_culture_merge_mod_refs`` lets a line decline them with a ``REVIEWED``
-    comment and a reason.
+    (``country_has_primary_culture``) follows the primary cultures, and a
+    switched part leaves those once nothing is tied to it (owner, 2026-11-09;
+    ``culture_merge_primary_ledger``), so it needs the results as well, unless
+    it is flavor that should not pass to the wider people:
+    ``test_culture_merge_mod_refs`` lets a line decline a result with a
+    ``REVIEWED`` comment and a reason, and that name then goes dark with the
+    part. The formables' definition lists and the restated vanilla triggers
+    are built from this chain too.
     """
     found: set[str] = set()
     frontier = [culture]

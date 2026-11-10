@@ -409,6 +409,29 @@ and Yugoslav national movements can still form. Ukrainian and Byelorussian are
 the exception: their fervor fades once they switch, so their Cultural
 Renaissances don't open for a people who have become East Slavic.
 
+Once a culture has switched it also leaves your primary cultures, and those of
+every country that had it, as soon as nothing in the base game still depends on
+it. A base-game journal entry that reads the culture keeps it while any country
+has that entry running. Until 1936 it also stays while a country that needs it
+to form (Italy, Scandinavia) doesn't exist, and for the base game's historical
+characters and laws that ask for it. From 1936 only a running journal entry
+keeps it.
+Rulers and generals of the old culture take the merged one when it goes. A
+ruler's title that belonged to all of the merged people stays: a German empire
+keeps its Kaiser, and the United States its own forms of government. A title
+or a party name that belonged to one of several nations, such as the French
+republics after a Latin merge, falls back to the general one. Companies the
+mod adds for a culture stay open to the culture it merged into; the base
+game's own companies for it do not.
+
+You can still form the countries the old cultures could: the merged culture
+counts for every formable that listed one of them, so a Germany that is only
+German can form the European Union. A formable that asks for a share of its
+cultures' homelands counts the merged culture's homelands too, which after a
+wide merge such as Latin is far more land. The merged culture also takes the
+traditions of the core cultures that switched into it, so East Slavic keeps
+the acceptance Russian's Russosphere tradition gave.
+
 ### How fast a merge converts
 
 When you start a merge, its culture becomes one of your primary cultures. Each
