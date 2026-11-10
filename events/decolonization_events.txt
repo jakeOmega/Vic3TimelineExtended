@@ -1378,6 +1378,9 @@ decolonization_events.12 = {
 		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = gp_supports_colonialism_modifier }
 		has_technology_researched = decolonization
+		# The text offers a patron. The world's first power has none to look
+		# up to (owner report, 2026-11-10).
+		global_country_ranking > 1
 		any_scope_state = {
 			is_overseas_colonial_state = yes
 		}
@@ -3022,6 +3025,11 @@ decolonization_events.21 = {
 		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
+		# The event is about great powers courting a young nation. A former
+		# colony that is a great power itself is one of the powers doing the
+		# courting, and answers The Colonial Question (.14) with a stance of
+		# its own (owner report, 2026-11-10).
+		country_rank < rank_value:great_power
 		NOR = {
 			has_modifier = non_aligned_movement_modifier
 			has_modifier = superpower_aligned_modifier

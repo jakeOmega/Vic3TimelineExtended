@@ -2332,6 +2332,8 @@ decolonization_events_on_action = {
 				# Great Power Supports Colonial Regime
 				10 = {
 					trigger = {
+						# Not the world's first power: the event's own gate.
+						global_country_ranking > 1
 						any_scope_state = {
 							is_overseas_colonial_state = yes
 						}
@@ -2467,6 +2469,8 @@ decolonization_events_on_action = {
 					trigger = {
 						has_variable = recently_decolonized
 						is_subject = no
+						# Not a great power itself: the event's own gate.
+						country_rank < rank_value:great_power
 						any_country = {
 							NOT = { this = root }
 							country_rank >= rank_value:great_power

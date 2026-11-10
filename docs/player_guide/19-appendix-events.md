@@ -155,7 +155,7 @@ trade privilege in the new country, whose upkeep you pay.
 | Declaration in (the territory) | Below 40 stability, a colony with severely unaccepted people declares independence; also each declaration of a collapse. See [Wars of independence](12-decolonization.md#wars-of-independence). |
 | The Captains' Revolt, The Republic in Danger | A war of independence has run four years with your war support in it at 25 or below for a year. |
 | Judged by New Standards | An anti-colonial great power condemns you in international forums. |
-| Powerful Friends | A pro-colonial great power offers its backing. |
+| Powerful Friends | A pro-colonial great power offers its backing. The top-ranked country is never offered it. |
 | These Dark Satanic Mills of Empire, The Intelligentsia Petition | An Anti-Colonialist leads the Intelligentsia. |
 | The Treasury Says No | Your debt is high while you hold colonies. |
 | Conscription Crisis | You are fighting a war of independence (against a colony's rebels, a rebelling colonial subject or a colony's secessionists), or are at war while Colonial Crackdown runs. |
@@ -183,7 +183,7 @@ need the technology itself.
 | The Partition Question | A former colony bordering a newly freed country of shared heritage, or a colonial power that rules people of its heritage | Press territorial claims, propose a fraternal federation (the neighbor may accept a five-year truce in A Fraternal Proposal), or accept the borders |
 | Whose Country Is This? | A former colony bordering another newly freed country | Demand new borders (a claim on the neighbor's border state, and a lasting dispute), ask for mediation (the mediators may find for us, for the neighbor, or split the difference; the higher-ranked country is favored), or recognize the border and offer a five-year truce (the rewards come only if the neighbor accepts in The Line on the Map) |
 | The Strongman's Promise | A former colony with a revolutionary movement, primary cultures below half its population, or radical soldiers | Military rule, democracy or a one-party state |
-| The Non-Aligned Path | A former colony while one great power condemns colonialism and another backs it | Non-alignment, or side with either power |
+| The Non-Aligned Path | A former colony below great power rank while one great power condemns colonialism and another backs it | Non-alignment, or side with either power |
 | Whose Language Do We Dream In? | A former colony with no homeland of its own cultures, whose capital is the homeland of a culture living there | Make the capital's native cultures your primary cultures, or keep the colonial-era identity |
 
 The Nationalization Question reaches every country formed by a release or a
