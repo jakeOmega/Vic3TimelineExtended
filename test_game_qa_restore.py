@@ -77,8 +77,8 @@ class RestoreTestCase(unittest.TestCase):
         self.start = datetime.now(timezone.utc).replace(microsecond=0)
 
     def next_time(self):
-        """A snapshot time one second after the last one this test used. Snapshot ids sort by their time, and
-        this machine's clock is stepped back now and then (WSL), which would put a later snapshot first."""
+        """A snapshot time one second after the last one this test used, so that ids and `started` times are the
+        same on every run whatever this machine's clock (WSL's is stepped by several seconds now and then) does."""
         self.ticks += 1
         return self.start + timedelta(seconds=self.ticks)
 

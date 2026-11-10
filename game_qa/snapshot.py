@@ -6,6 +6,7 @@ Layout under the backup root:
     snapshots/<id>/manifest.json    the files taken (size, mtime, hash) and the listing of the folders
     snapshots/<id>/journal.jsonl    what the run did: started, heartbeat, game_exited, restored, held
     snapshots/<id>/.clock           a marker whose modification time is the drive's clock (journal times)
+    snapshots/.clock                the same, for the id of a new snapshot
 
 A snapshot is complete once its manifest exists. The manifest is written last, by rename from a
 temp name, so a half-written snapshot has no manifest and never loads. The store is only ever
@@ -170,9 +171,9 @@ def _store_file(path: Path, store: Path) -> Entry:
     raise OSError(f"{path} kept changing while it was being read")
 
 
-def _new_snapshot_dir(snapshots: Path, base_id: str) -> tuple[str, Path]:
-    """Create the first free `<base_id>`, `<base_id>-2`, `<base_id>-3`, ... folder."""
-    number = 1
+def _new_snapshot_dir(snapshots: Path, base_id: str, first_number: int = 1) -> tuple[str, Path]:
+    """Create the first free `<base_id>`, `<base_id>-2`, `<base_id>-3`, ... folder, from number `first_number` on."""
+    number = first_number
     while True:
         snapshot_id = base_id if number == 1 else f"{base_id}-{number}"
         folder = snapshots / snapshot_id
@@ -182,6 +183,18 @@ def _new_snapshot_dir(snapshots: Path, base_id: str) -> tuple[str, Path]:
             number += 1
             continue
         return snapshot_id, folder
+
+
+def _ordered_id(taken: datetime, previous: Sequence[Snapshot]) -> tuple[str, int]:
+    """The id's time part and the number to start numbering from, so that the new id sorts after every
+    existing snapshot's. If `taken` is not later than the newest one's time (a clock that stands still or
+    was stepped back), the newest one's time is used again with the next number."""
+    base_id = taken.strftime("%Y%m%dT%H%M%SZ")
+    if previous:
+        match = _ID_PATTERN.match(previous[-1].id)
+        if match and base_id <= match.group(1):
+            return match.group(1), int(match.group(2) or 1) + 1
+    return base_id, 1
 
 
 def _write_manifest(folder: Path, taken: datetime, files: dict[str, Entry], listing: frozenset[str]) -> None:
@@ -223,9 +236,13 @@ def take(
     still in the store, keeps that entry's hash without being read. Every other file is hashed.
     The free-space check counts the whole size of every file that will be read, which is an upper
     bound on the bytes copied, since a file whose content is already stored is not copied.
+
+    The id is the UTC second of `now`, or without `now` of the backup drive's clock (see `_drive_clock`;
+    the machine's own clock drifts and steps). It always sorts after the id of every existing loadable
+    snapshot: if the time is not later than the newest one's, that one's time is used again with the
+    next `-N` suffix. So `all_snapshots` order is the order of taking, whatever a clock does.
     """
     user_data, backup_root = Path(user_data), Path(backup_root)
-    taken = _utc(now)
     if not user_data.is_dir():
         raise FileNotFoundError(f"the user-data folder does not exist: {user_data}")
     _check_backup_root(user_data, backup_root)
@@ -272,7 +289,9 @@ def take(
         files[rel] = _store_file(user_data / rel, store)
     files = {rel: files[rel] for rel in sorted(files)}
 
-    snapshot_id, folder = _new_snapshot_dir(snapshots, taken.strftime("%Y%m%dT%H%M%SZ"))
+    taken = _utc(now) if now is not None else _drive_clock(snapshots)
+    base_id, first_number = _ordered_id(taken, previous)
+    snapshot_id, folder = _new_snapshot_dir(snapshots, base_id, first_number)
     try:
         _write_manifest(folder, taken, files, listing)
     except BaseException:

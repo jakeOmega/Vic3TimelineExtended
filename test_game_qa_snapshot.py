@@ -6,6 +6,7 @@ No game and no Windows program is needed: every test builds a user-data folder i
 import hashlib
 import json
 import os
+import shutil
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -337,6 +338,70 @@ class IdAndOrderTests(SnapshotTestCase):
         self.assertEqual(listed[9], "20261110T204035Z-10")
         self.assertEqual(listed[-1], "20261110T204535Z")
 
+    # --- ids from the backup drive's clock, never out of order ---------------------------------
+
+    def take_at(self, *times):
+        """Take one snapshot per time, with the backup drive's clock reading those times in turn."""
+        with mock.patch.object(snapshot, "_drive_clock", side_effect=list(times)) as clock:
+            snaps = [snapshot.take(self.user, self.backups) for _ in times]
+        self.assertEqual([call.args for call in clock.call_args_list], [(self.backups / "snapshots",)] * len(times))
+        return snaps
+
+    def test_without_a_time_the_id_is_the_backup_drives_clock(self):
+        # the machine's own clock drifts and is stepped; the drive's is the one file times come from
+        (snap,) = self.take_at(self.NOW)
+        self.assertEqual(snap.id, "20261110T204035Z")
+        manifest = json.loads((snap.dir / "manifest.json").read_text())
+        self.assertEqual(manifest["created"], "2026-11-10T20:40:35Z")
+
+    def test_the_real_drive_clock_is_a_marker_in_the_snapshots_folder(self):
+        snap = snapshot.take(self.user, self.backups)
+        marker = self.backups / "snapshots" / snapshot.CLOCK_MARKER
+        stamped = datetime.fromtimestamp(marker.stat().st_mtime, timezone.utc)
+        self.assertEqual(snap.id, stamped.strftime("%Y%m%dT%H%M%SZ"))
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [snap.id])  # the marker is no snapshot
+
+    def test_a_given_time_does_not_ask_the_drive_clock(self):
+        with mock.patch.object(snapshot, "_drive_clock", side_effect=AssertionError("asked")):
+            snap = snapshot.take(self.user, self.backups, now=self.NOW)
+        self.assertEqual(snap.id, "20261110T204035Z")
+        self.assertFalse((self.backups / "snapshots" / snapshot.CLOCK_MARKER).exists())
+
+    def test_a_clock_stepping_back_never_puts_a_snapshot_before_an_earlier_one(self):
+        times = [self.NOW, self.NOW - timedelta(seconds=5), self.NOW - timedelta(seconds=10), self.NOW + timedelta(seconds=1)]
+        snaps = self.take_at(*times)
+        self.assertEqual(
+            [s.id for s in snaps], ["20261110T204035Z", "20261110T204035Z-2", "20261110T204035Z-3", "20261110T204036Z"]
+        )
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [s.id for s in snaps])
+
+    def test_a_clock_that_stays_put_gives_the_next_suffix(self):
+        snaps = self.take_at(self.NOW, self.NOW, self.NOW)
+        self.assertEqual([s.id for s in snaps], ["20261110T204035Z", "20261110T204035Z-2", "20261110T204035Z-3"])
+
+    def test_the_suffix_goes_on_after_the_newest_even_when_an_older_one_was_removed(self):
+        for step_back in (5, 0):  # the clock stepped back, and the clock stood still
+            with self.subTest(step_back=step_back):
+                shutil.rmtree(self.backups, ignore_errors=True)
+                first, second, third = self.take_at(self.NOW, self.NOW, self.NOW)
+                shutil.rmtree(second.dir)  # as prune does
+                (fourth,) = self.take_at(self.NOW - timedelta(seconds=step_back))
+                self.assertEqual(fourth.id, "20261110T204035Z-4")  # not -2, which would sort before the third
+                self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [first.id, third.id, fourth.id])
+
+    def test_a_given_time_in_the_past_also_sorts_after_what_is_there(self):
+        first = snapshot.take(self.user, self.backups, now=self.NOW)
+        second = snapshot.take(self.user, self.backups, now=self.NOW - timedelta(hours=1))
+        self.assertEqual(second.id, "20261110T204035Z-2")
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [first.id, second.id])
+
+    def test_a_folder_that_did_not_finish_does_not_decide_the_order(self):
+        # only loadable snapshots count: this one is skipped by all_snapshots whatever its name
+        half = self.backups / "snapshots" / "20270101T000000Z"
+        half.mkdir(parents=True)
+        (snap,) = self.take_at(self.NOW)
+        self.assertEqual(snap.id, "20261110T204035Z")
+
     def test_all_snapshots_without_a_backup_root_is_empty(self):
         self.assertEqual(snapshot.all_snapshots(self.base / "nothing here"), [])
         self.assertEqual(snapshot.all_snapshots(self.backups), [])
@@ -389,7 +454,8 @@ class IdAndOrderTests(SnapshotTestCase):
         with mock.patch("os.replace", side_effect=OSError("disk fell off")):
             with self.assertRaises(OSError):
                 snapshot.take(self.user, self.backups, now=self.NOW)
-        self.assertEqual(sorted(p.name for p in (self.backups / "snapshots").iterdir()), [snap.id])
+        folders = [p.name for p in (self.backups / "snapshots").iterdir() if p.name != snapshot.CLOCK_MARKER]
+        self.assertEqual(sorted(folders), [snap.id])
         self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [snap.id])
 
     def test_a_failure_after_the_manifest_is_in_place_keeps_the_snapshot(self):
