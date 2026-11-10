@@ -71,6 +71,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | Doc | Status | What's left |
 |-----|--------|-------------|
 | [specs/2026-11-10-in-game-qa-harness-design.md](specs/2026-11-10-in-game-qa-harness-design.md): a harness with which a Claude session launches Victoria 3, plays as a chosen country, runs prepared effects, fires events, picks their options from the console and reads triggers and values back, with the owner's saves and logs snapshotted and restored around every run and a permission-and-GPU gate before every launch | Design approved by the owner (2026-11-10), nothing built: the engine facts of § 3 were probed on the owner's machine | Everything: § 7's six assumptions, the plan, the build |
+| [plans/2026-11-10-in-game-qa-harness-part1.md](plans/2026-11-10-in-game-qa-harness-part1.md): part 1 of the build, nine tasks in three PRs: the path constants, snapshot and restore of the owner's files, the launch gate, the Windows helper, log following, the console round trip and the debugger client, all tested without a game, then one permitted live session that settles the spec's six assumptions | Not started (2026-11-10) | All nine tasks; part 2's plan (overlay, fixture, session, the verbs, the report, the skill) is written after Task 9 |
 
 ## Archived — `archive/`
 
