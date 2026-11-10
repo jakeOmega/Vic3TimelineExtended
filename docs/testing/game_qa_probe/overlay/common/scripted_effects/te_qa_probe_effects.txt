@@ -1,0 +1,3 @@
+﻿te_qa_probe_mailbox = {
+	debug_log = "TE_QA_PROBE mailbox version=1 country=[THIS.GetCountry.GetTagName]"
+}

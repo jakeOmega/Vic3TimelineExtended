@@ -234,12 +234,19 @@ Before every launch the driver takes a **snapshot** into the backup root (defaul
 - `save games/autosave*.v3`, `continue_game.json`, `console_history.txt`,
   `pdx_settings.json`, `content_load.json`;
 - any save the run will load;
-- the game logs, through `scripts/analysis/log_triage.py`'s `snapshot()`.
+- every file in the game's `logs/` folder (a whole copy: `log_triage.py`'s `snapshot()`
+  takes seven families and skips empty files, which is not enough to put the folder
+  back).
 
 After the game exits, by any route, the driver **compares and restores**: an owner file
 that changed is put back (the autosave rotation as a set, the Continue pointer, the
-console history, the playset file), and the files the run created are removed (saves it
-named, any `TEST_FAIL_*` it caused, `tests.txt`). The report says what was restored.
+console history, the playset file, the logs folder), and the files the run created are
+removed (saves it named, any `TEST_FAIL_*` it caused, `tests.txt`). The run's own logs
+live in its report. The report says what was restored.
+
+Between the snapshot and the exit of the harness's own game, nothing else may have
+written these files (the gate refuses to start beside another game), so that restore is a
+plain compare and copy.
 
 Rules that come straight from § 3.7:
 
@@ -247,9 +254,13 @@ Rules that come straight from § 3.7:
   at the start of a later run, and only after that run's own snapshot is complete.
 - A file unchanged since the previous snapshot is not copied again, but every snapshot
   kept must stay restorable on its own after others are pruned.
-- A run records "started" before launching and "restored" after. A driver that starts and
-  finds a run without "restored" (the session died, the machine rebooted) finishes that
-  restore before doing anything else.
+- A run records "started" before launching, a heartbeat while its game is up, and
+  "restored" after. A driver that starts and finds a run without "restored" (the session
+  died, the machine rebooted) looks at the files first. If none was modified after that
+  run's last heartbeat, it finishes the restore. If any was, the owner has played since:
+  it restores nothing, marks that snapshot **held** (never pruned, named in every later
+  report until the owner says what to do with it) and carries on with the new run. A held
+  snapshot does not block later runs.
 - Every unattended launch carries `-run_until`.
 - Saves the harness makes are named `te_qa_*`.
 
@@ -274,6 +285,11 @@ the owner had enabled. The report lists what was enabled either way.
   scratch file, copied into the overlay by the driver, one named effect each. They put a
   country in the state a check needs (variables, modifiers, laws, saved scopes) and, for
   an event that reads scopes its caller saved, end with `trigger_event` (assumption A1).
+  `trigger_event` checks the receiving event's `trigger` and `cooldown` and fails silently
+  (`docs/guides/scripting_best_practices.md` § "A Flag the Sender Sets Before
+  `trigger_event` Must Not Gate the Event It Fires"), so a setup that fires an event this
+  way must first make its trigger true. Whether console `event` checks either is
+  assumption A6.
 - **Hot reload is not part of an automated run.** Everything a run needs is in the
   overlay before launch. A session exploring by hand may still edit and wait the 40
   seconds; the driver then refuses console input until the reload's log burst has ended.
@@ -299,8 +315,13 @@ Whether time can then advance without clicking Start is assumption A2.
 
 All input is console text. For each command the driver:
 
-1. checks that the foreground window is the game's own handle, and stops the run if it
-   is not and cannot be made so (a locked desktop, or the owner using another window);
+1. checks that the foreground window is the game's own handle. If it is not, the helper
+   may take the foreground back, with one exception: if there has been keyboard or mouse
+   input that the helper did not send within the last 30 seconds, someone is at the
+   machine, and it waits instead, retrying for up to two minutes. If the game still is not
+   in front (a locked desktop, the owner at work in another window), the step fails: the
+   game is left running and paused, nothing is typed, and the session asks the owner or
+   calls `stop`;
 2. types the command and Enter;
 3. waits for it in `console_history.txt` (arrival), then for its `console_success` or
    `console_failure` line in `debug.log` (result), forcing the log out as in § 5.7.
@@ -352,6 +373,14 @@ that needs a clean game asks for `--fresh`, which relaunches from the fixture. T
 each option on a different country (`--as` per option) isolates them at no cost where the
 event allows it.
 
+Most of the mod's events carry a `cooldown` and many a once-only variable, so firing one
+a second time on the same country may do nothing. If A6 holds (console `event` ignores
+`trigger` and `cooldown`), `try-event` fires with console `event` and the shared game
+stands. If it does not, `try-event`'s default becomes a different country per option
+where the session names enough of them, and a relaunch per option otherwise; either way
+it confirms before each pick that the event is pending and reports "did not fire" as a
+result of its own, never as a pass.
+
 ### 5.9 The report
 
 One folder per run under the backup root, with a short text summary a session reads
@@ -364,8 +393,12 @@ copy, and what the restore did. The driver prints the summary's path when it sto
 
 "Fire `decolonization_events.17` as France, pick each option, confirm the effects."
 
-1. The session writes a setup effect that saves `scope:border_rival` and triggers the
-   event, and lists what to read: `has_modifier = border_dispute_resolved_modifier`,
+1. The session reads the event. It saves its own scopes in `immediate`, from a
+   neighbouring country that holds `recently_decolonized`; its `trigger` also wants that
+   variable on France, and it has a `cooldown` and a once-only variable. So the setup
+   effect sets `recently_decolonized` on France and on one neighbour, and clears the
+   once-only variable and the two border-dispute modifiers so the event can fire again.
+   The session lists what to read: `has_modifier = border_dispute_resolved_modifier`,
    `c:FRA.infamy`, a relations value.
 2. `try-event decolonization_events.17 --as FRA --setup border_dispute --read …`.
 3. The driver passes the gate, snapshots, generates the overlay, makes or reuses the
@@ -375,10 +408,13 @@ copy, and what the restore did. The driver prints the summary's path when it sto
 5. `stop`: the game closes, the owner's files are compared and restored, and the report
    has one row per option with the before and after of each read.
 
+This event is a hard case on purpose. The acceptance test of version 1 (§ 8) may use a
+simpler one if A6 fails.
+
 ## 7. Assumptions to settle first
 
-The plan's first task is one permitted session of about three launches that settles
-these. None may be settled by launching outside the rule in § 5.2.
+The plan's first task is one permitted session of a few launches that settles these and
+records the captures § 11 says are missing. None may be settled by launching outside the rule in § 5.2.
 
 | # | Assumed | If false |
 |---|---|---|
@@ -387,6 +423,7 @@ these. None may be settled by launching outside the rule in § 5.2.
 | A3 | A second mod folder added to `content_load.json` loads on a direct launch, including its events and its `tools/scripted_tests/` | Generate the overlay into the deploy folder under `te_qa_*` names and exclude those names from `deploy.sh`'s `--delete` |
 | A4 | The debugger evaluates named mod script values and variables through `c:TAG.` (verified only for `c:FRA.gdp` and for triggers) | The overlay generates one readout line per value (`debug_log` with `ScriptValue(...)`), read from the log after a flush |
 | A5 | About 4 KB of `debug_log` padding from the carrier flushes the log as the console's help listing does | Keep the help listing |
+| A6 | Console `event <id>` fires an event whatever its `trigger` and `cooldown` say (the probe event had neither) | The setup effect makes the trigger true and clears what the last firing left; where a cooldown still blocks it, one country or one relaunch per option (§ 5.8) |
 
 ## 8. Phases
 
@@ -411,6 +448,12 @@ these. None may be settled by launching outside the rule in § 5.2.
 - **Reads go through the debugger**, with generated log readouts as the fallback.
 - **Shared state between checks by default**, `--fresh` on request.
 - **The Windows helper is Python**, not the PowerShell the probes used.
+- **The helper takes the keyboard back for the game** unless someone has typed or moved
+  the mouse in the last 30 seconds; then it waits, and fails the step after two minutes.
+- **The owner's logs are put back** after a run, so their next log triage sees their own
+  last session; the run's logs are in its report.
+- **A dead run's restore is abandoned, not forced**, once the owner has played since; its
+  snapshot is held.
 
 ## 10. Left to the builder
 
@@ -425,7 +468,9 @@ triage registries are imported or their output parsed.
 - Unit tests for every part against fakes: a fake helper, recorded log files including a
   rotation and a buffered tail, a fake debugger socket, a temporary user-data folder for
   snapshot, restore and the unfinished-run recovery. Live tests exist but run only when
-  asked for by name on a machine with the game.
+  asked for by name on a machine with the game. The probe scripts, the probe's mod files
+  and three captures (a debugger session, the console's command list, the console lines of
+  a session) are in `docs/testing/game_qa_probe/`; its README lists what was not captured.
 - `.claude/skills/game-qa/SKILL.md`, a row in `CLAUDE.md`'s rules table, and the tool's
   entry in `docs/guides/python_tools.md`, replacing the stopgap section "Driving the game
   from a session" that this design adds there for sessions working by hand.
