@@ -98,6 +98,17 @@ class TestRegistry(unittest.TestCase):
         # vanilla ranks Japan over the East Asia that contains it
         self.assertGreater(registry.REGIONS["japanese"][1], registry.REGIONS["east_asian"][1])
 
+    def test_an_overlapped_family_is_wired_with_the_family_it_overlaps(self):
+        # a rung outranks a family's digit: East Asian rung 2 without Japanese rung 2 would show in Tokyo
+        wired = registry.wired()
+        spots = {(tuple(p["terrain"]), p["rung"], p["size"], p["region"]) for p in wired.values()}
+        for winner, other in registry.REGION_OVERLAPS:
+            self.assertGreater(registry.REGIONS[winner][1], registry.REGIONS[other][1])
+            for terrain, rung, size, region in spots:
+                if region == other:
+                    with self.subTest(winner=winner, rung=rung, size=size):
+                        self.assertIn((terrain, rung, size, winner), spots)
+
     def test_the_fallback_family_takes_the_states_of_no_family(self):
         fallback = registry.FALLBACK_REGION
         lines = registry.region_conditions(fallback)

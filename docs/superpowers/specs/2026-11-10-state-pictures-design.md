@@ -27,7 +27,7 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
 5. **Housing-block cities follow the Command Economy law,** not a region.
 6. **Ambitious set, in waves.** It can be cut back; § 9 gives the order of cuts.
 7. **The painted look stands** ("I like the style"): the converter's filter of § 10 is the look of the whole
-   set. The four pilot picks stand too.
+   set. On the pilot's picks, with the replacement European city: "I'm fine with the pick".
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -122,7 +122,9 @@ Two pairs overlap, so each family has its own digit in the weight and the higher
 East Asian (Japan lies inside East Asia, and vanilla ranks it the same way), and Middle Eastern over South
 Asian for Baluchistan, Pashtunistan and Quetta, which vanilla leaves a tie. Until a family's picture on a
 rung is painted, its states keep the family's earlier picture or vanilla's; the European picture doesn't
-stand in for a named family.
+stand in for a named family. The overlaps are the exception, because a rung outranks a family's digit: an
+East Asian picture of rung 2 wired alone would show in Tokyo over Japan's rung 1. So the two families of an
+overlap are wired together on a rung (the registry's `REGION_OVERLAPS`, held by a test).
 
 **City size** is the number of people in the state's largest city: the Demographics walk's urban people
 (`te_dg_urban`, written every year whatever the Demographics rule) times the metropolitan share (`te_dg_mt`;
@@ -263,9 +265,9 @@ upkeep limited to rungs 2 to 4.
   skyline without them. Review checks every pick for a silhouette a player would name: the Capitol, the
   Eiffel Tower, Big Ben, a famous bridge, a known skyline. The risk grows with the metropolis and megacity
   pictures, whose subject is a skyline. A candidate that reads as a real place is rejected like one with
-  lettering. The registry's `PROMPT_AVOID` holds the words that have drawn lettering or a famous place
-  (shop, sign, banner, flag, skyline, civic, …), and `test_state_pictures.py` fails on a prompt that uses
-  one.
+  lettering. The registry's `PROMPT_AVOID` holds the two words the pilot learned this from (shop, civic)
+  and others likely to do the same (sign, banner, flag, skyline, …), and `test_state_pictures.py` fails on
+  a prompt that uses one.
 
 ## 11. The pilot
 

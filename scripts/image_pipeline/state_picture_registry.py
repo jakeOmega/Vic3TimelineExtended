@@ -30,9 +30,9 @@ read as one city. A generic building draws the most famous one of its kind ("a
 domed civic building" drew the United States Capitol in a European street four
 times out of four). Describe a landmark by features that belong to the region and
 to no one building, or leave it out; shop fronts draw lettered signs, so ask for
-plain awnings. PROMPT_AVOID lists the words that have drawn lettering or a famous
-place, and test_state_pictures.py fails on a prompt that uses one. The design's
-section 10 has the review checks.
+plain awnings. PROMPT_AVOID lists those two and the words likely to do the same,
+and test_state_pictures.py fails on a prompt that uses one. The design's section
+10 has the review checks.
 
 The renders are made outside the repo (FLUX.1-schnell at 1536 x 752, seeds
 1000 + seed as the icon pipeline's are); a pick is converted with
@@ -49,9 +49,10 @@ STYLE = (
 )
 TAIL = ", no text, no writing, no lettering on signs, no watermark, no signature"
 
-# Words a prompt must not use. Each drew lettering or a recognizable place in a render, or will:
-# shops, signs, banners and flags come out lettered or as a real country's; "a domed civic
-# building" drew the United States Capitol and a skyline draws a known one.
+# Words a prompt must not use. Two are from the pilot's renders: shop fronts came out with
+# lettered signs, and "a domed civic building" drew the United States Capitol. The rest are
+# precautions of the same kind, not yet seen: signs, banners and posters invite lettering, a flag
+# a real country's, a skyline a known one.
 PROMPT_AVOID = (
     "shop", "shops", "shopfront", "shopfronts", "sign", "signs", "signboard", "signboards", "neon",
     "billboard", "billboards", "banner", "banners", "flag", "flags", "poster", "posters", "skyline",
@@ -87,6 +88,10 @@ REGIONS = {
 # The family whose pictures also show in the states of no family (in 1.15: Tibet and the
 # Himalayas, and the Pacific islands), as vanilla's European city picture does.
 FALLBACK_REGION = "european"
+# (the family that wins, the family it overlaps). A rung outranks a family's digit, so the winner
+# needs its own picture wherever the other has one: an East Asian picture of rung 2 wired without
+# the Japanese one would show in Tokyo over Japan's rung 1. The test holds a wave to that.
+REGION_OVERLAPS = (("japanese", "east_asian"), ("middle_eastern", "south_asian"))
 
 # City sizes, from the yearly pass's state variable te_sp_size (1 town, 2 city,
 # 3 metropolis, 4 megacity; common/scripted_effects/te_state_picture_effects.txt).
@@ -432,8 +437,8 @@ CITY_STREETS = {
     ("japanese", 3): (
         "A Japanese city street {when}: tile-clad and glass office towers of twenty to thirty "
         "storeys, two elevated expressways stacked above the street, compact boxy cars and taxis, "
-        "a crowd crossing a broad striped pedestrian crossing, utility poles and wires, a "
-        "monorail in the middle distance"
+        "office workers with umbrellas on narrow pavements, utility poles and wires, a monorail "
+        "on a single concrete beam in the middle distance"
     ),
     ("japanese", 4): (
         "A Japanese city street {when}: slender glass towers with timber lattice facades and "
