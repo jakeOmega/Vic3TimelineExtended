@@ -457,11 +457,14 @@ def successors_of(culture: str) -> set[str]:
     This is the whole chain on purpose. A pop-level read (``has_pop_culture``)
     follows the pops, and they change culture at every link, so the test must
     name every result that can hold them. A country-level read
-    (``country_has_primary_culture``) loses nothing, because a part stays a
-    primary culture of every country that had it (spec section 7), so the later
-    links there are a judgment call about flavor, and
-    ``test_culture_merge_mod_refs`` lets a line decline them with a ``REVIEWED``
-    comment and a reason.
+    (``country_has_primary_culture``) follows the primary cultures, and a
+    switched part leaves those once nothing is tied to it (owner, 2026-11-09;
+    ``culture_merge_primary_ledger``), so it needs the results as well, unless
+    it is flavor that should not pass to the wider people:
+    ``test_culture_merge_mod_refs`` lets a line decline a result with a
+    ``REVIEWED`` comment and a reason, and that name then goes dark with the
+    part. The formables' definition lists and the restated vanilla triggers
+    are built from this chain too.
     """
     found: set[str] = set()
     frontier = [culture]

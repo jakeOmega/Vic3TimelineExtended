@@ -103,6 +103,18 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   row before the slots and, for a standing gate, a ``paused`` row and a whole-merge stall of joining and conversion; a
   milestone is latched in ``te_cm_gate_met_<m>`` by the census and the start. An optional part's own gate joins its
   ``can_join`` and its conversion.
+* A switched part leaves the primary cultures once nothing is tied to it (owner, 2026-11-09). The triggers file gains
+  ``te_cmg_part_held_<c>`` per culture that can switch (from ``culture_merge_primary_ledger.part_holds``: the ledger of
+  vanilla's reads of a part as a primary culture, scanned into ``culture_merge_primary_reads.json``) and
+  ``te_cmg_<m>_untouched`` per merge that makes a culture; the effects file ``te_cmg_resolve_switched_result`` (the end
+  of a chain of switches), ``te_cmg_strip_untouched_results`` and ``te_cmg_carry_traditions`` (``carried_traditions``).
+  ``is_candidate`` and ``can_start`` accept the merge's result beside its core cultures (``_primary_cultures``).
+* ``common/country_definitions/zz_te_culture_merge_definitions.txt``: an ``INJECT`` per vanilla formable that lists a
+  part and owns no state in 1836, restating its ``cultures`` list with the merged cultures added
+  (``definition_additions``), so a country whose parts are gone can still form it. The mod's own formables are
+  hand-written; ``mod_definition_gaps`` says what they lack.
+* ``common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt``: bare copies of the vanilla triggers in
+  ``ledger.TRIGGER_OVERRIDES`` with the merged cultures added (``trigger_override_additions``).
 * The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
   complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
   starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
@@ -113,8 +125,9 @@ optional fields a vanilla culture may carry (``taboos``, ``assimilation_rate``)
 come from the first core part when it has them. ``CARRIED_FIELDS`` names every
 field the generator knows; a test fails if a vanilla patch adds one it doesn't.
 
-Vanilla comes from the committed ``vanilla_parsed/`` snapshot, never from the
-live ModState: that one also holds the ``cm_`` cultures this script writes, so
+Vanilla comes from the committed ``vanilla_parsed/`` snapshot (and, for what the
+snapshot doesn't hold, the committed ``culture_merge_primary_reads.json``), never
+from the live ModState: that one also holds the ``cm_`` cultures this script writes, so
 the roster's validation would call them "already defined", and the output
 would depend on which vanilla version the machine has installed.
 

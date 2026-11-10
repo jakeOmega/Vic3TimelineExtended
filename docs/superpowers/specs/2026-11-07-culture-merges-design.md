@@ -355,6 +355,10 @@ none *(designer's call)*.
 
 ## 7. Keeping vanilla and the mod working
 
+> **Superseded in part (owner, 2026-11-09).** The parts no longer stay primary cultures forever: a switched part
+> leaves a country's primary cultures once nothing is tied to it, and the formables' definitions list the merged
+> cultures. `docs/systems/mod_systems/culture_merges.md` § Leaving the Primary Cultures describes what was built.
+
 The parts remain **primary cultures** of every country that had them, forever
 (the reference mod does the same). A primary culture with no pops is harmless,
 and it keeps working every vanilla and mod check of the form
