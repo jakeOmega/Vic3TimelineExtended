@@ -5532,3 +5532,11 @@ Seen in game on 2026-11-05:
 - **`alpha` binds on a side panel's root** (`journal_entry_panel`): the see-through page fades (2026-11-06).
 
 The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.
+
+## An Effect That Changes Another Country Tells That Country
+
+An option, a pulse or a helper that changes the laws of a country other than the one clicking, or gives it a modifier lasting a year or more, also sends that country an event or a `post_notification` naming who did it and what it gained. The tooltip the acting country reads does not reach the receiving one, and `activate_law` and `add_modifier` on a foreign scope post nothing themselves. A country `create_dynamic_country` forms has no option of its own at all: its starting laws and legacy went unreported until `decolonization_events.22` (2026-11-10), and the same sweep found the same gap in a dozen other systems. Save the acting country as a scope before the post, so the notice can name it.
+
+## A Law Script Replaces Is Marked With `te_law_sweep_replacing`, So the Player Is Told
+
+A law swap the player did not enact used to be silent. Now any script that replaces a law because it can no longer stand sets `te_law_sweep_replacing` on the country, calls `activate_law`, and removes the variable on the next line. `activate_law` fires `on_law_activated` at once with the new law as ROOT; `te_law_sweep_notice_from_law_scope` (first in that list, `extra_on_actions.txt`) sees the mark and posts `te_law_replaced_notice`, which names the new law, then clears the mark. It posts nothing before 1836.3.1, when the first monthly sweep is settling what history left. The consistency sweep (`gen_law_consistency.py` emits the three lines), `fix_incompatible_laws`, the Frontier AI fixes and Command Economy's State-Owned Banking cascade all do this; `test_gen_law_consistency.py` fails on an unmarked one. Don't mark a law an event option sets where the player chose it: the option's tooltip already says so. A country with no consistent landing spot is bounced every month and will get the notice every month.

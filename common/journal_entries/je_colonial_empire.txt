@@ -380,8 +380,11 @@
 			# first (ten years, up to two months, some 34 months at the drift
 			# cap), and a same-name add_modifier stacks, so a subject through two
 			# collapses would carry the 20-year aftershock twice.
+			# The subject is told why (decol_collapse_aftershock_notice names us).
+			save_scope_as = decol_colonial_power
 			every_subject_or_below = {
 				limit = { is_qualifying_colonial_subject = yes }
+				post_notification = decol_collapse_aftershock_notice
 				remove_modifier_if_exists_effect = { MODIFIER = colonial_collapse_subject_unrest_modifier }
 				add_modifier = {
 					name = colonial_collapse_subject_unrest_modifier

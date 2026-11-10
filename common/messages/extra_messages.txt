@@ -2090,6 +2090,47 @@ colonial_territory_collapsed_notice = {
 	color = neutral
 }
 
+# A law script replaced because it could no longer stand with the country's
+# other laws or its technology (te_law_sweep_notice_from_law_scope,
+# extra_on_actions.txt). scope:te_law_sweep_new_law is the law now in force.
+te_law_replaced_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# A party that had something done to it by another country's choice, and was
+# not told (2026-11-10): the subject of a collapsed empire, another empire when
+# a colony goes free, and the two sides of a military intervention (.19 / .20).
+decol_collapse_aftershock_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_liberation_contagion_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+gp_intervention_target_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+gp_intervention_condemned_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
 nationalization_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"

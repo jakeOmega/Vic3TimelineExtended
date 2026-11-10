@@ -74,3 +74,16 @@ has happened (a declaration fought, talks concluded), so OK cannot be a false pa
 | Check | Expected | If not |
 |---|---|---|
 | **The conscription crisis in a war with a colony.** A colonial empire at war with its own colonial subject, or with rebels it has a war of independence on record with, and no crackdown running. | `.51` (the conscription crisis) can fire, and `error.log` has no `is_subject_of trigger [ Invalid Country! ]` from `colonial_empire_triggers.txt`. | Until 2026-10-25 `decol_fighting_colonial_war` saved its scope with `save_scope_as`, an effect the trigger parser drops, so only a running crackdown counted. |
+
+## From the 2026-11-10 legacy notice
+
+| Check | Expected | If not |
+|---|---|---|
+| **A new country hears of its legacy.** Release a territory after more than two years of one program, switch to the new country (or observe it) and open its events. Repeat for a lost war of independence. | What the Empire Left (`.22`) a day after it forms, with the text for its legacy (the bloody one after a lost war); the option's tooltip lists the legacy modifier and the starting laws and changes nothing when taken. | No event: the modifier was not yet on the country a day later, so send it from a variable set beside the modifier. Laws in the tooltip the country does not hold: the law-consistency sweep replaced them. The former ruler's name blank: `scope:decolonizing_parent` did not reach the event. |
+| **The four notices.** As a colonial subject, let the overlord's bar reach 0; as an empire, watch another empire free a colony; as a former colony, nationalize and draw an intervention (`.19.a`); as the intervener, be condemned (`.20.a`). | A feed notice each time, naming the other country and the modifier: Our Overlord's Empire Collapses, Independence Spreads (once a year at most), Foreign Troops Land, Our Intervention Condemned. | A blank country name: the saved scope did not reach the notice (`decol_colonial_power`, `decolonized_new_country`, `intervening_power`, `decol_condemning_power`). |
+
+## From the 2026-11-10 law-replaced notice
+
+| Check | Expected | If not |
+|---|---|---|
+| **A replaced law is reported.** Enact Command Economy without State-Owned Banking; or hold a law another law bars and enact the barring one. | A feed notice, A Law Replaced, naming the law now in force, on the day of the change. None in January or February 1836. | No notice: the nested `on_law_activated` did not see `te_law_sweep_replacing` (not run at once), so post from the caller with the law read by `random_active_law`. A blank law name: `SCOPE.sLaw` did not get ROOT. The same notice every month: the country has no consistent landing spot; give the notice a cooldown variable. `error.log` lines about removing `te_law_sweep_replacing`: guard the callers' `remove_variable` with `has_variable`. |

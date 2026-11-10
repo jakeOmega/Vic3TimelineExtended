@@ -243,7 +243,7 @@ A pressed empire still meets the cap: five condemning peers' -4.5 is three times
 
 **Design intent:** A typical GP with 5 colonies nets roughly -0.5 to -1.0/month even with programmes active. Only great powers with few, well-integrated colonies and little GP condemnation can stabilize. The era techs make holding colonies nearly impossible late.
 
-### Events (1-21)
+### Events (1-22)
 
 Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, GP stances, cultural identity, post-independence economics, nationalization.
 
@@ -254,6 +254,8 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Event 19 "The Crisis" (Suez model)** — GP reacts when a former colony nationalizes assets. Options: military intervention (infamy 15, **triggers Event 20** for all other GPs), economic sanctions (infamy 5), accept outcome. This is the flagship "interactive" GP event.
 - **Event 20 "Gunboats in the Harbor"** — Other GPs respond to military intervention. Options: condemn (+moral authority, relations penalties to intervener), support intervention, stay neutral. **Not in on_actions** — triggered directly by Event 19 option A.
 - **Event 21 "The Non-Aligned Path"** — New nations choose between competing superpowers or non-alignment.
+- **Event 22 "What the Empire Left"** — Tells a new country its legacy (2026-11-10). `decol_path_legacy` and `decol_iw_aftermath_bloody` set the legacy modifier and the starting laws directly, on a country nobody held a moment before, so nothing said why its laws had changed. Each now sends `.22` a day later (so `has_modifier` picks the text); its one option changes nothing and lists the modifier and laws with `show_as_tooltip`. No legacy (no programme over 24 months), no event. The three legacy modifiers have descriptions that give the same reason. **Rule for this system:** an effect that changes another country's laws or gives it a lasting modifier also tells that country, by an event or a notice.
+- **Four notices for what another country's choice did to us (2026-11-10).** `decol_collapse_aftershock_notice` (a colonial subject, when its overlord's entry fails: the 20-year aftershock and −50 relations), `decol_liberation_contagion_notice` (another empire, with each Colonial Crisis copy `decol_path_contagion` adds, so one a year at most), `gp_intervention_target_notice` (the former colony `.19.a` intervenes against) and `gp_intervention_condemned_notice` (the intervener, once per great power that takes `.20.a`). All in `extra_messages.txt`. `.20.a`'s Intervention Condemned still stacks a copy per condemning power; whether that is meant is open.
 
 **Choices made by the other party (2026-09, event-agency work, #427):**
 - **Former colonies choose first.** The overlord's pool slots that used to fire `.5` (closer ties) and `.6` (reparations) now fire precursors on the former colony: **`.60`** (propose ties) and **`.61`** (demand reparations). The overlord hears only if the colony asked.

@@ -58,7 +58,8 @@ apply_decolonization_path = {
 }
 
 # apply_decolonization_path's legacy: the former-colony mark, the programme's
-# legacy, and the relations by policy and release type. Scope: the new
+# legacy, and the relations by policy and release type; a country given a
+# legacy hears of it in decolonization_events.22. Scope: the new
 # country (scope:decolonized_new_country); scope:decolonizing_parent.
 decol_path_legacy = {
 	# The parent is our former overlord, as for a country released by the
@@ -99,6 +100,8 @@ decol_path_legacy = {
 			activate_law = law_type:law_autocracy
 			activate_law = law_type:law_outlawed_dissent
 			activate_law = law_type:law_minority_rights_discrimination
+			# Tell the new country what it starts with (.22).
+			trigger_event = { id = decolonization_events.22 days = 1 }
 		}
 		# Commonwealth legacy — parent leaned hardest on investment
 		else_if = {
@@ -121,6 +124,8 @@ decol_path_legacy = {
 			activate_law = law_type:law_parliamentary_republic
 			activate_law = law_type:law_protected_speech
 			activate_law = law_type:law_minority_rights_indifference
+			# Tell the new country what it starts with (.22).
+			trigger_event = { id = decolonization_events.22 days = 1 }
 		}
 		# Quiet Assimilation legacy — parent leaned hardest on assimilation
 		else_if = {
@@ -143,6 +148,8 @@ decol_path_legacy = {
 			# civilizing mission left a thin elite that runs the new state
 			activate_law = law_type:law_cultural_exclusion
 			activate_law = law_type:law_minority_rights_indifference
+			# Tell the new country what it starts with (.22).
+			trigger_event = { id = decolonization_events.22 days = 1 }
 		}
 	}
 
@@ -200,6 +207,12 @@ decol_path_contagion = {
 			NOT = { has_variable = decol_liberation_contagion }
 		}
 		set_variable = { name = decol_liberation_contagion months = 12 }
+		# One notice per copy, so one a year at most; it names the new
+		# country and the empire it left.
+		if = {
+			limit = { exists = scope:decolonizing_parent }
+			post_notification = decol_liberation_contagion_notice
+		}
 		add_modifier = {
 			name = colonial_stability_negative_event
 			months = 12

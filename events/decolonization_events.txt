@@ -2694,7 +2694,11 @@ decolonization_events.19 = {
 		# scopes travel with the trigger_event, so .20 names the real
 		# intervener and its real target instead of re-picking them.
 		save_scope_as = intervening_power
-		scope:nationalizing_country = { save_scope_as = intervention_victim }
+		scope:nationalizing_country = {
+			save_scope_as = intervention_victim
+			# The target hears who did this to it.
+			post_notification = gp_intervention_target_notice
+		}
 		custom_tooltip = {
 			text = GP_MILITARY_INTERVENTION_NOTIFY_TT
 			every_country = {
@@ -2830,8 +2834,11 @@ decolonization_events.20 = {
 				country = scope:intervening_power
 				value = -40
 			}
-			# The condemning power's moral authority
+			# The condemning power's moral authority; the intervener hears who
+			# condemned it.
+			save_scope_as = decol_condemning_power
 			scope:intervening_power = {
+				post_notification = gp_intervention_condemned_notice
 				add_modifier = {
 					name = gp_intervention_condemned_modifier
 					days = normal_modifier_time
@@ -3045,6 +3052,112 @@ decolonization_events.21 = {
 		add_radicals = { value = small_radicals strata = lower }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 22: What the Empire Left. Tells a new country which legacy it starts
+# with: the modifier and the laws decol_path_legacy (decolonization.txt) or
+# decol_iw_aftermath_bloody (decolonization_war_effects.txt) gave it. Both set
+# them directly on a country the player did not hold a moment before, so
+# without this nothing said why the laws had changed (owner report,
+# 2026-11-10). Fired a day later by those two effects only, so the modifier
+# its text is chosen by is in place. The option changes nothing: it lists what
+# is already in force.
+# Scope: the new country; scope:decolonizing_parent is the former ruler.
+decolonization_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colonial_departure.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = decolonization_events.22.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.22.d_bloody
+				trigger = { has_modifier = bloody_decolonization_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.d_commonwealth
+				trigger = { has_modifier = commonwealth_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.d_assimilation
+				trigger = { always = yes }
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.22.f_bloody
+				trigger = { has_modifier = bloody_decolonization_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.f_commonwealth
+				trigger = { has_modifier = commonwealth_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.f_assimilation
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	duration = 3
+
+	trigger = {
+		exists = scope:decolonizing_parent
+		OR = {
+			has_modifier = bloody_decolonization_legacy_modifier
+			has_modifier = commonwealth_legacy_modifier
+			has_modifier = assimilation_legacy_modifier
+		}
+	}
+
+	option = {
+		name = decolonization_events.22.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = decolonization_events.22.a_tt }
+		# The same lines the two effects ran, shown and not run again.
+		show_as_tooltip = {
+			if = {
+				limit = { has_modifier = bloody_decolonization_legacy_modifier }
+				add_modifier = {
+					name = bloody_decolonization_legacy_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				activate_law = law_type:law_autocracy
+				activate_law = law_type:law_outlawed_dissent
+				activate_law = law_type:law_minority_rights_discrimination
+			}
+			else_if = {
+				limit = { has_modifier = commonwealth_legacy_modifier }
+				add_modifier = {
+					name = commonwealth_legacy_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				activate_law = law_type:law_parliamentary_republic
+				activate_law = law_type:law_protected_speech
+				activate_law = law_type:law_minority_rights_indifference
+			}
+			else = {
+				add_modifier = {
+					name = assimilation_legacy_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				activate_law = law_type:law_cultural_exclusion
+				activate_law = law_type:law_minority_rights_indifference
+			}
+		}
 	}
 }
 
