@@ -116,6 +116,11 @@ NOT_COPIED = {
     # te_mandate.1's asked flag (#799), 120 days, on te_peg.3's reasoning: the
     # winner is asked for its own act if its law needs one.
     "te_mon_mandate_asked",
+    # What two reports print (#1556): te_union.2's leader, 30 days and removed
+    # by the event, and the sum of the last swap-line settlement, read only by
+    # the two notices posted in the same effect. Each describes something the
+    # loser was told.
+    "te_union_exit_from", "te_mon_swap_settled_amount",
 }
 
 # Written by the effect other than through a copy, each for a stated reason:

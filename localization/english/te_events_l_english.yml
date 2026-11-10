@@ -2211,6 +2211,18 @@
  irredentism.11.d:0 "[SCOPE.sCountry('irr_bloc_leader').GetName] has refused to bless our claim against [SCOPE.sCountry('target_country').GetName]. Our [Concept('concept_power_bloc_leader', 'bloc leader')] says the timing is wrong; our nationalists say a patron that will not stand by its own people's cause is no patron at all."
  irredentism.11.f:0 "\"They thanked us for our patience.\"\n\n\"We have been patient for forty years.\""
  irredentism.11.t:0 "[SCOPE.sCountry('irr_bloc_leader').GetName] Withholds Its Blessing"
+ irredentism.12.a:0 "Then the talks can go on."
+ irredentism.12.a.tt:0 "For #v 5 years#!, the [concept_power_bloc] of [SCOPE.sCountry('irr_proposed_target').GetName] will not stand in the way of a voluntary union between [SCOPE.sCountry('irr_proposed_target').GetName] and [SCOPE.sCountry('irr_unifier').GetName]. Every other requirement of the union still applies."
+ irredentism.12.d_target:0 "[SCOPE.sCountry('irr_bloc_leader').GetName], our [Concept('concept_power_bloc_leader', 'bloc leader')], has given its blessing to a voluntary union between us and [SCOPE.sCountry('irr_unifier').GetName]. For the next five years our [concept_power_bloc] will not stand in the way if we accept the proposal. Whether we accept is ours to decide."
+ irredentism.12.d_unifier:0 "[SCOPE.sCountry('irr_bloc_leader').GetName], which leads the [concept_power_bloc] of [SCOPE.sCountry('irr_proposed_target').GetName], has given its blessing to the voluntary union we proposed. For the next five years that bloc will not stand in the way if [SCOPE.sCountry('irr_proposed_target').GetName] accepts."
+ irredentism.12.f:0 "To the governments of [SCOPE.sCountry('irr_proposed_target').GetName] and [SCOPE.sCountry('irr_unifier').GetName], from the government of [SCOPE.sCountry('irr_bloc_leader').GetName]. We have read the proposal of union between you and heard the envoys of both on it. We raise no objection. What [SCOPE.sCountry('irr_proposed_target').GetName] has undertaken as a member of our bloc is for the two of you to settle before any union is concluded, and we ask to be told how it will be met. This assurance stands for five years."
+ irredentism.12.t:0 "[SCOPE.sCountry('irr_bloc_leader').GetName] Blesses the Union"
+ irredentism.13.a:0 "So be it, for now."
+ irredentism.13.a.tt:0 "For #v 5 years#!, [SCOPE.sCountry('irr_proposed_target').GetName] cannot ask its [Concept('concept_power_bloc_leader', 'bloc leader')] again, and cannot accept a voluntary union with [SCOPE.sCountry('irr_unifier').GetName] while it stays in the bloc."
+ irredentism.13.d_target:0 "[SCOPE.sCountry('irr_bloc_leader').GetName], our [Concept('concept_power_bloc_leader', 'bloc leader')], has forbidden a voluntary union between us and [SCOPE.sCountry('irr_unifier').GetName]. For the next five years we cannot accept the proposal while we remain in the bloc."
+ irredentism.13.d_unifier:0 "[SCOPE.sCountry('irr_bloc_leader').GetName], which leads the [concept_power_bloc] of [SCOPE.sCountry('irr_proposed_target').GetName], has forbidden the voluntary union we proposed. For the next five years [SCOPE.sCountry('irr_proposed_target').GetName] cannot accept while it remains in that bloc."
+ irredentism.13.f:0 "The envoy of [SCOPE.sCountry('irr_bloc_leader').GetName] read the reply to both delegations in the same room: \"My government has considered the proposal and cannot agree to it. [SCOPE.sCountry('irr_proposed_target').GetName] is a member of our bloc, and a member does not leave it by becoming part of another country. We do not question the kinship between your peoples. We ask both governments to let the matter rest, and we are willing to hear it again in five years.\""
+ irredentism.13.t:0 "[SCOPE.sCountry('irr_bloc_leader').GetName] Forbids the Union"
  irredentism.2.a:0 "Refuse — they will have to take it by force"
  irredentism.2.a.tt:0 "[SCOPE.sCountry('irr_unifier').GetName] will open a diplomatic play to seize [SCOPE.sState('irr_demanded_state').GetName] by force"
  irredentism.2.b:0 "Cede [SCOPE.sState('irr_demanded_state').GetName] peacefully"
@@ -2593,6 +2605,10 @@
 #
 # MINOR_EVENTS_TIMELINEEXTENDED
 #
+ minor_events_timelineextended.10.a:0 "We govern what is left."
+ minor_events_timelineextended.10.d:0 "Our people's average [concept_sol] has stayed below #v 4#! for a year, and the state has stopped working. Every institution and ministry we kept is abolished. Whatever barracks, naval bases, ports, railways, universities and government offices stood in our states are abandoned and lost. If living standards stay this low, it will happen again in a year."
+ minor_events_timelineextended.10.f:0 "The clerk came in at the usual hour and found the office door standing open. The lamps were gone and the desks had been carried off. The registers lay on the floor where the shelves had been. She gathered the ones that were whole, tied them with cord, and took them home under her arm. At the end of the street the post where the watchman stood was empty, as it had been all week."
+ minor_events_timelineextended.10.t:0 "The State Collapses"
  minor_events_timelineextended.2.a:0 "Allow the legislative process to proceed naturally"
  minor_events_timelineextended.2.b:0 "Expedite the process with minimal intervention"
  minor_events_timelineextended.2.c:0 "Push the law forward decisively"
@@ -3960,6 +3976,13 @@
  nuclear_weapon_events.31.d_leadership:0 "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the capital of [SCOPE.sCountry('nd_salvo_victim').GetName]. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled."
  nuclear_weapon_events.31.f:0 "\"Authentication confirmed. Awaiting your order.\""
  nuclear_weapon_events.31.t:0 "Launch Order"
+ nuclear_weapon_events.33.a_paid:0 "Accept the payment."
+ nuclear_weapon_events.33.a_refused:0 "We will not forget this."
+ nuclear_weapon_events.33.d_paid:0 "[SCOPE.sCountry('nd_loose_payer').GetName] has paid the reparations we demanded for the strike it says was never ordered: @money!#v [ROOT.GetCountry.MakeScope.Var('nd_claim_paid').GetValue|D]#!. With the payment the strike is settled between us."
+ nuclear_weapon_events.33.d_refused:0 "[SCOPE.sCountry('nd_loose_payer').GetName] has refused to pay reparations for the strike it says was never ordered. We held back our answer when we accepted its word, and it has given nothing in return."
+ nuclear_weapon_events.33.f:0 "The claim we sent to [SCOPE.sCountry('nd_loose_payer').GetName], as the office that drew it up set it out:\n\nThe dead, by district, with a name wherever a name could be found.\nThe harvest of the land downwind, for every year it cannot be eaten.\nThe houses, counted from the tax rolls because the streets cannot be walked.\nThe waterworks and the hospital, at the cost of building them again."
+ nuclear_weapon_events.33.settled_tt:0 "The strike is settled: we can no longer open a nuclear crisis over it."
+ nuclear_weapon_events.33.t:0 "An Answer on Reparations"
  nuclear_weapon_events.4.a:0 "We must strengthen our resolve and prepare for what comes next."
  nuclear_weapon_events.4.d:0 "Our nuclear forces attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack."
  nuclear_weapon_events.4.f:0 "In a moment fraught with tension, our missiles soared towards their target, only to be intercepted by the enemy’s defenses. The strike that was meant to cripple their resolve has failed, leaving us vulnerable to their retaliation. Our plans have been thwarted, and the opportunity to deal a decisive blow has slipped through our fingers. The silence after the explosion of hopes is deafening, but we must brace for the storm that may soon follow."
@@ -6234,6 +6257,11 @@
  te_inflation.1.d:0 "Prices in [ROOT.GetCountry.GetName] are rewritten by the hour, and the government's own notes are refused across the counter as often as they are taken. Wages are spent the day they are paid, because a day is long enough to lose their value. What is left to decide is not whether the currency has failed, but what is to stand in its place."
  te_inflation.1.f:0 "\"Three times today. Three times, and it is not yet noon.\"\n\nThe baker does not look up. There is a stub of chalk in his fist and a board where the painted price used to be, and he has stopped troubling to wipe the old numbers off — they are crossed through instead, one under the next, a little column of the morning.\n\n\"My boy brings the money from the works at eleven. My wife spends it by twelve. If she is slow, we eat less that evening. That is the whole of it, sir. That is the whole of the economy, and you are welcome to write it down.\""
  te_inflation.1.t:0 "Not Worth the Paper"
+ te_inflation.2.a:0 "This one we will keep sound."
+ te_inflation.2.a.tt:0 "Dollarization ends, and the income from minting is ours again from next month's accounts. Where the new money is nobody's promise but ours, inflation and what people expect of it start near #b 5%#!, as after a currency reform."
+ te_inflation.2.d:0 "The new monetary law is in force, and with it we issue money of our own again. The foreign currency our people have used since the hyperinflation gives way to it. Lenders remember how our last currency ended, and they will charge us more to borrow for the next ten years."
+ te_inflation.2.f:0 "\"I keep a shop, and I will take the new money, because the law says I must and the tax office wants it. I will give change in it too. But the foreign notes in the box under my counter stay where they are, and when a customer offers me the choice I know which I will ask for. My prices stay written in both until I am told otherwise.\""
+ te_inflation.2.t:0 "A Currency of Our Own"
 
 #
 # TE_JUDICIARY_EVENTS
@@ -6370,6 +6398,10 @@
  te_orbital_debris.1.d:0 "A fragment no bigger than a bolt, one of the thousands now crossing the elevator's altitude every day, has cut through part of the tether. Nothing has fallen and the climbers are still running, on the undamaged strands and at half their rate. Our engineers can re-lay the damaged section from the ground station over the next six months, or we can pay to splice it from both ends at once and have the elevator back at full rate in two."
  te_orbital_debris.1.f:0 "\"We built it to survive a hurricane. Nobody asked what it would do against a bolt at eight kilometers a second.\""
  te_orbital_debris.1.t:0 "Ribbon Strike"
+ te_orbital_debris.2.a:0 "Get replacements onto the pad."
+ te_orbital_debris.2.d:0 "[SCOPE.sCountry('te_asat_striker').GetName] has destroyed our satellites with interceptor missiles. Our forces have lost their reconnaissance and their links, and our space program its tracking network, until replacements are launched. The wreckage stays in orbit, a hazard to every country's spacecraft, theirs and ours included."
+ te_orbital_debris.2.f:0 "The officer on watch at the tracking station saw the first satellite drop off the board a little after her shift began. She marked the time and logged it as a fault. The second went four minutes later, on the far side of the world from the first, and she stopped writing and picked up the direct line. By the time it was answered there were six gaps on the board, and the screens that showed the front were showing the last picture they had been sent."
+ te_orbital_debris.2.t:0 "Our Satellites Destroyed"
 
 #
 # TE_PB_SUMMIT
@@ -6399,6 +6431,15 @@
  te_pb_summit.1.n:0 "Celebrate the culture we share."
  te_pb_summit.1.o:0 "Convene a conference of ambassadors."
  te_pb_summit.1.t:0 "A Summit of the Bloc"
+ te_pb_summit.2.a:0 "Our delegation signed with the rest."
+ te_pb_summit.2.d_ambassadors:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a conference of ambassadors. For ten years every member's diplomats, ours included, coordinate their work with the others'. The delegations left on better terms with one another than they arrived."
+ te_pb_summit.2.d_congress:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a congress of the movement that governs its members. The congress agreed a common program, and for ten years every member, ours included, has endorsed the reforms in it."
+ te_pb_summit.2.d_council:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and called a council of the bloc's faith. The council set out a common teaching, which goes out in every member, ours included, for ten years."
+ te_pb_summit.2.d_culture:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a congress of the letters and arts its members share. Its program of exhibitions and exchanges runs in every member, ours included, for ten years. The delegations left on better terms with one another than they arrived."
+ te_pb_summit.2.d_customs_members:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and had the members bring their tariffs and customs procedures into line. For ten years our customs houses follow the bloc's common code, as every member's do."
+ te_pb_summit.2.d_drills:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and put joint exercises first on its agenda. For ten years every member's army, ours included, will train beside the others under a common program. The delegations left on better terms with one another than they arrived."
+ te_pb_summit.2.f:0 "From our delegation at the summit, to the government. The host set the agenda before we arrived, and the draft communiqué was on the table at the first session. We secured two changes of wording in the third paragraph and none of substance. Every delegation has signed. The text follows by the next courier, with our notes on what it commits us to and from what date."
+ te_pb_summit.2.t:0 "The Summit's Communiqué"
 
 #
 # TE_PEG
@@ -6461,6 +6502,13 @@
  te_union.1.d:0 "[SCOPE.sCountry('te_union_leader').GetName] has stopped hinting. Its envoys arrive with charts: the bloc's trade, the cost of changing money at every border, the rate at which our bonds sell beside theirs. The cooperation between our central banks, they add, is naturally under review while the question is open. They do not mention that a single currency means a single interest rate, and that it will be set in their capital for their economy. They do not have to. Everybody in the room knows."
  te_union.1.f:0 "\"You may have any monetary policy you like, as long as it is ours.\""
  te_union.1.t:0 "The Question of the Common Currency"
+ te_union.2.a:0 "Then we print our own again."
+ te_union.2.a.tt:0 "We did not choose this, and it costs what leaving by choice costs. Our exchange rate has fallen to where it would have floated. We lost #v 2%#! of GDP from the investment pool, or all of the pool if it held less, and #R 5%#! of our people turned radical. We cannot adopt a common currency again for #b ten years#!."
+ te_union.2.d:0 "The common currency we adopted has ended. Our money is our own again from today, and its exchange rate has fallen at once to where it would have floated. Lenders who held our debt in the old currency will be repaid in the new one, and they have marked us down for it."
+ te_union.2.d_ended:0 "The common currency we shared with [ROOT.GetCountry.MakeScope.Var('te_union_exit_from').GetCountry.GetName] has ended: the bloc no longer keeps one, or [ROOT.GetCountry.MakeScope.Var('te_union_exit_from').GetCountry.GetName] can no longer run it. Our money is our own again from today, and its exchange rate has fallen at once to where it would have floated. Lenders who held our debt in the old currency will be repaid in the new one, and they have marked us down for it."
+ te_union.2.d_left_bloc:0 "We are no longer in the power bloc of [ROOT.GetCountry.MakeScope.Var('te_union_exit_from').GetCountry.GetName], and its common currency went with our membership. Our money is our own again from today, and its exchange rate has fallen at once to where it would have floated. Lenders who held our debt in the old currency will be repaid in the new one, and they have marked us down for it."
+ te_union.2.f:0 "Notice to depositors, posted at the counters this morning. Accounts held in the common currency are converted today into our own, at the rate printed below. Whatever you hold in the common currency outside this bank can be exchanged here until the end of the month and not after. Foreign bills falling due are payable in the currency they name. Tomorrow's rate will be posted when the exchange opens."
+ te_union.2.t:0 "Out of the Common Currency"
 
 #
 # TREATY_ARTICLE_EVENTS
@@ -7136,6 +7184,17 @@
  un_vote.3.d_failed:0 "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #R failed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against."
  un_vote.3.d_passed:0 "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #G passed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against."
  un_vote.3.t:0 "General Assembly Vote Results"
+ un_vote.8.a:0 "We will remember who voted for this."
+ un_vote.8.d_condemned:0 "The [concept_un_general_assembly] has condemned us. The resolution was tabled by [SCOPE.sCountry('un_vote_proposer').GetName] and carried by #v [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0]#! votes to #v [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]#!. The condemnation stands in the Assembly's record for ten years, fading as it ages, and it weighs on our standing abroad for as long."
+ un_vote.8.d_expulsion:0 "The [concept_un_general_assembly] has voted away our permanent seat on the [concept_un_security_council]. The motion was tabled by [SCOPE.sCountry('un_vote_proposer').GetName] and carried by #v [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0]#! votes to #v [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]#!, the two-thirds majority it needed. We keep our place in the Assembly, but we no longer hold a [concept_un_veto]."
+ un_vote.8.d_rebuke:0 "The [concept_un_general_assembly] voted to condemn us, by #v [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0]#! votes to #v [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]#!, on a resolution tabled by [SCOPE.sCountry('un_vote_proposer').GetName]. A [concept_un_veto] in the [concept_un_security_council] kept it from binding anyone. What is left is a rebuke: a lighter mark on our record, which fades over five years."
+ un_vote.8.d_sanctions:0 "The [concept_un_general_assembly] has placed us under [concept_un_sanctions]. The resolution was tabled by [SCOPE.sCountry('un_vote_proposer').GetName], which now enforces them, and carried by #v [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0]#! votes to #v [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]#!. The sanctions stand until [SCOPE.sCountry('un_vote_proposer').GetName] lifts them or the Assembly votes to lift them."
+ un_vote.8.d_voluntary:0 "The [concept_un_general_assembly] voted to place us under [concept_un_sanctions], by #v [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0]#! votes to #v [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]#!, on a resolution tabled by [SCOPE.sCountry('un_vote_proposer').GetName]. A [concept_un_veto] in the [concept_un_security_council] kept it from binding anyone. Members may still apply measures of their own, and those weigh on our trade and standing for five years, fading."
+ un_vote.8.embargo_all_tt:0 "At the Supranational tier, sanctions are also a universal embargo: every member of [concept_major_power] rank with [concept_diplomatic_relevancy] to us, however it voted, #R sees its relations with us fall by 30, and places an [concept_embargo] on us#! wherever relations are then Poor or worse."
+ un_vote.8.embargo_voters_tt:0 "At the Strong tier, sanctions are also an embargo: every member of [concept_major_power] rank that voted for them and has [concept_diplomatic_relevancy] to us #R sees its relations with us fall by 30, and places an [concept_embargo] on us#! wherever relations are then Poor or worse."
+ un_vote.8.f:0 "From our envoy at the United Nations, to the government. I was in the hall for the count. When the result was read the delegates nearest me gathered their papers and moved away, and nobody spoke to me on the way out. I have asked for the full record of who voted and how, and I will send it as soon as it is printed. I ask the government not to answer in public until it has read the names."
+ un_vote.8.seat_lost_tt:0 "We lose our permanent seat on the [concept_un_security_council], and the [concept_un_veto] that goes with it."
+ un_vote.8.t:0 "The Assembly Rules Against Us"
 
 #
 # WONDER_EVENTS

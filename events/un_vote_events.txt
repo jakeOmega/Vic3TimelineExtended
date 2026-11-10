@@ -1445,6 +1445,9 @@ un_vote.2 = {
 							days = normal_modifier_time
 							is_decaying = yes
 						}
+						# Each colonial power hears of it, member or not: this
+						# block is hidden, and un_vote.3 reaches members only.
+						post_notification = un_decolonization_pressure_notice
 					}
 				}
 			}
@@ -2000,14 +2003,32 @@ un_vote.2 = {
 		# ---- Notify all other UN members of the result ----
 		# Not a member whose representation is suspended (§0.8): complying or
 		# ratifying is foreign policy, which its overlord conducts.
+		# The country a verdict was passed on hears it in un_vote.8 instead,
+		# member or not (un_resolution_tells_target): un_vote.3 would only
+		# tell it that a resolution had carried.
 		hidden_effect = {
 			every_country = {
 				limit = {
 					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { un_representation_suspended = yes }
 					NOT = { THIS = ROOT }
+					NOT = {
+						AND = {
+							scope:un_resolution ?= { un_resolution_tells_target = yes }
+							exists = scope:un_vote_target
+							THIS = scope:un_vote_target
+						}
+					}
 				}
 				trigger_event = { id = un_vote.3 }
+			}
+			if = {
+				limit = {
+					scope:un_resolution ?= { un_resolution_tells_target = yes }
+					exists = scope:un_vote_target
+					NOT = { scope:un_vote_target = ROOT }
+				}
+				scope:un_vote_target = { trigger_event = { id = un_vote.8 } }
 			}
 		}
 
@@ -2475,6 +2496,168 @@ un_vote.3 = {
 					un_regime_cultural_hegemon = yes
 				}
 				add = 50
+			}
+		}
+	}
+}
+
+# ---- The verdict, told to the country it was passed on (#1555) ----
+# Fired by un_vote.2's option on scope:un_vote_target when a condemnation,
+# sanctions or the motion to strip a permanent seat carried and the target had
+# not accepted it (un_resolution_tells_target), whatever the target's
+# membership: a non-member or a member whose representation is suspended is
+# reached too. It replaces un_vote.3 for the target. The option changes
+# nothing: every line in it mirrors what un_vote.2's option has already done,
+# shown and not run again. Keep the two in step.
+# Scope: the target. scope:un_resolution, scope:un_vote_proposer and
+# scope:un_vote_target come from un_vote.2.
+un_vote.8 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_vote.8.t
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+				desc = un_vote.8.d_expulsion
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn has_tag = un_res_vetoed } }
+				desc = un_vote.8.d_rebuke
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
+				desc = un_vote.8.d_condemned
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_sanctions has_tag = un_res_vetoed } }
+				desc = un_vote.8.d_voluntary
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = un_vote.8.d_sanctions
+			}
+		}
+	}
+	flavor = un_vote.8.f
+
+	duration = 3
+
+	trigger = {
+		scope:un_resolution ?= { un_resolution_tells_target = yes }
+		exists = scope:un_vote_proposer
+	}
+
+	immediate = {
+		# Vote counts as country vars for loc display (loc has no accessor
+		# for a script container held in a saved scope)
+		set_variable = {
+			name = un_display_support
+			value = scope:un_resolution.var:un_res_support
+		}
+		set_variable = {
+			name = un_display_oppose
+			value = scope:un_resolution.var:un_res_oppose
+		}
+	}
+
+	option = {
+		name = un_vote.8.a
+		default_option = yes
+		ai_chance = { base = 1 }
+
+		show_as_tooltip = {
+			# ---- The permanent seat voted away ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+				custom_tooltip = un_vote.8.seat_lost_tt
+				add_modifier = {
+					name = un_withdrawal_penalty_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				custom_tooltip = un_standing_seat_stripped_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -25 }
+				}
+			}
+			# ---- Condemned ----
+			else_if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+				}
+				add_modifier = {
+					name = un_condemned_modifier
+					multiplier = un_enforcement
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				un_teeth_condemn_by_tier = yes
+				custom_tooltip = un_standing_censured_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -30 }
+				}
+			}
+			# ---- Condemned, but vetoed: the non-binding rebuke ----
+			else_if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
+				add_modifier = {
+					name = un_non_binding_rebuke_modifier
+					multiplier = un_enforcement
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				custom_tooltip = un_standing_rebuked_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -10 }
+				}
+			}
+			# ---- Sanctions ----
+			else_if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+				}
+				je:je_united_nations ?= { add_modifier = { name = un_sanctions_target_modifier multiplier = un_enforcement } }
+				if = {
+					limit = { un_tier_is_supranational = yes }
+					custom_tooltip = un_vote.8.embargo_all_tt
+				}
+				else_if = {
+					limit = { un_tier_at_least_strong = yes }
+					custom_tooltip = un_vote.8.embargo_voters_tt
+				}
+				custom_tooltip = un_standing_sanctioned_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -30 }
+				}
+			}
+			# ---- Sanctions, but vetoed: voluntary measures ----
+			else = {
+				add_modifier = {
+					name = un_sanctions_voluntary_target_modifier
+					multiplier = un_enforcement
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				custom_tooltip = un_standing_sanctioned_partial_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -10 }
+				}
 			}
 		}
 	}

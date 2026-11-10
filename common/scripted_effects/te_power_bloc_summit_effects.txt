@@ -51,7 +51,12 @@ te_pb_summit_grant_bloc_initiative = {
 # Country scope, the bloc leader: grant an initiative to every member, the
 # leader included, for ten years. A country that joins later doesn't get it;
 # one that leaves keeps what it has until it runs out.
+# Every other member hears of it (#1558): only the leader sees te_pb_summit.1,
+# so te_pb_summit.2 names the leader and the initiative to each of them. The
+# member carries $MODIFIER$_told for a month, which picks the event's text and
+# the modifier its option lists; the event removes it.
 te_pb_summit_grant_member_initiative = {
+	save_scope_as = te_pb_summit_leader
 	power_bloc = {
 		every_power_bloc_member = {
 			hidden_effect = {
@@ -63,6 +68,13 @@ te_pb_summit_grant_member_initiative = {
 			add_modifier = {
 				name = $MODIFIER$
 				days = long_modifier_time
+			}
+			hidden_effect = {
+				if = {
+					limit = { NOT = { this = scope:te_pb_summit_leader } }
+					set_variable = { name = $MODIFIER$_told days = 30 }
+					trigger_event = { id = te_pb_summit.2 days = 1 }
+				}
 			}
 		}
 	}

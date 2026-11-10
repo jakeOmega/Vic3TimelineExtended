@@ -1421,6 +1421,9 @@ state_collapse_remove_infrastructure = {
 
 # Reset all institutions and ministries to their "none" law (country scope).
 # Used during state collapse / total failure events.
+# Not marked with te_law_sweep_replacing, on purpose: that would post one
+# A Law Replaced notice per law. The caller reports the whole step once
+# (je_state_collapse sends minor_events_timelineextended.10).
 reset_all_institutions_and_ministries = {
 	activate_law = law_type:law_no_schools
 	activate_law = law_type:law_no_health_system

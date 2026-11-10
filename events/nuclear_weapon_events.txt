@@ -2914,6 +2914,10 @@ nuclear_weapon_events.27 = {
 					limit = { var:nd_peacetime_struck_by ?= ROOT }
 					remove_variable = nd_peacetime_struck_by
 				}
+				# The claimant hears the answer (#1559), with the sum as paid.
+				set_variable = { name = nd_claim_answer value = 1 days = 60 }
+				set_variable = { name = nd_claim_paid value = nd_loose_compensation_value days = 60 }
+				trigger_event = { id = nuclear_weapon_events.33 popup = yes }
 			}
 		}
 		ai_chance = {
@@ -2935,6 +2939,10 @@ nuclear_weapon_events.27 = {
 		name = nuclear_weapon_events.27.b
 		scope:nd_claim_victim = {
 			change_relations = { country = ROOT value = -30 }
+			hidden_effect = {
+				set_variable = { name = nd_claim_answer value = 2 days = 60 }
+				trigger_event = { id = nuclear_weapon_events.33 popup = yes }
+			}
 		}
 		ai_chance = {
 			base = 2
@@ -2943,6 +2951,78 @@ nuclear_weapon_events.27 = {
 				add = 3
 			}
 		}
+	}
+}
+
+# The answer to a demand for reparations, told to the country that made it
+# (#1559): nuclear_weapon_events.27's two options fire it on
+# scope:nd_claim_victim, which until now heard neither the payment nor the
+# refusal. nd_claim_answer is 1 paid, 2 refused; nd_claim_paid is the sum.
+# scope:nd_loose_payer, saved by .27, is the country that answered. The option
+# changes nothing: it shows what the answer already did. nuclear_loose.8 is the
+# same pattern for a loose warhead.
+nuclear_weapon_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.33.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_weapon_events.33.d_paid
+				trigger = { var:nd_claim_answer = 1 }
+			}
+			triggered_desc = {
+				desc = nuclear_weapon_events.33.d_refused
+				trigger = { always = yes }
+			}
+		}
+	}
+	flavor = nuclear_weapon_events.33.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_claim_answer
+		exists = scope:nd_loose_payer
+	}
+
+	option = {
+		name = {
+			trigger = { var:nd_claim_answer = 1 }
+			text = nuclear_weapon_events.33.a_paid
+		}
+		name = {
+			trigger = { NOT = { var:nd_claim_answer = 1 } }
+			text = nuclear_weapon_events.33.a_refused
+		}
+		default_option = yes
+		ai_chance = { base = 1 }
+		show_as_tooltip = {
+			if = {
+				limit = {
+					var:nd_claim_answer = 1
+					has_variable = nd_claim_paid
+				}
+				add_treasury = var:nd_claim_paid
+				change_relations = { country = scope:nd_loose_payer value = 20 }
+				custom_tooltip = nuclear_weapon_events.33.settled_tt
+			}
+			else = {
+				change_relations = { country = scope:nd_loose_payer value = -30 }
+			}
+		}
+	}
+
+	after = {
+		remove_variable = nd_claim_answer
+		remove_variable = nd_claim_paid
 	}
 }
 

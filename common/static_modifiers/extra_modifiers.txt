@@ -3641,6 +3641,9 @@ un_refused_aid_penalty_modifier = {
 	country_improve_relations_speed_mult = -0.10
 }
 
+# Two causes, and its name and description cover both: walking out of the UN
+# (un_leave_button, five years) and having a permanent seat voted away
+# (un_vote.2, ten years). It bars rejoining and being seated again.
 un_withdrawal_penalty_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_improve_relations_speed_mult = -0.25

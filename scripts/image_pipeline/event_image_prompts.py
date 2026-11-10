@@ -143,6 +143,7 @@ IMAGES = {
             "banking_cycle_events.36", "banking_cycle_events.40",
             "banking_cycle_events.48", "banking_cycle_events.68", "te_lolr.1",
             "te_lolr.2", "te_union.1", "un_events.35",
+            "te_union.2",
         ],
     },
     "central_bank_policy": {
@@ -218,6 +219,7 @@ IMAGES = {
         "events": [
             "banking_cycle_events.55", "banking_cycle_events.110",
             "banking_cycle_events.115", "banking_cycle_events.117",
+            "te_inflation.2",
         ],
     },
 
@@ -381,7 +383,7 @@ IMAGES = {
     "failed_state_aftermath": {
         "prompt": "A struggling post-colonial nation's empty market stalls.",
         "style": "oil painting, social realism, warm golden light",
-        "events": ["decolonization_events.201"],
+        "events": ["decolonization_events.201", "minor_events_timelineextended.10"],
     },
 
     # =========================================================================
@@ -1036,6 +1038,7 @@ IMAGES = {
             "nuclear_loose.8", "nuclear_weapon_events.11", "nuclear_weapon_events.12",
             "nuclear_weapon_events.19", "nuclear_weapon_events.21",
             "amendment_petition_events.10",
+            "nuclear_weapon_events.33",
         ],
     },
     "nuclear_defense_shield": {
@@ -1140,7 +1143,7 @@ IMAGES = {
     "space_debris_collision": {
         "prompt": "A satellite colliding with space debris, fragmenting in orbit.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["repeatable_events.50"],
+        "events": ["repeatable_events.50", "te_orbital_debris.2"],
     },
     "quantum_materials_lab": {
         "prompt": "Researchers examining a levitating quantum sample in a lab.",
@@ -2009,6 +2012,7 @@ IMAGES = {
             "un_events.2", "un_events.6", "un_events.11", "un_events.12",
             "un_events.20", "un_mandate.1", "un_mandate.2", "un_vote.1", "un_vote.2",
             "un_vote.3", "nuclear_taboo.2",
+            "un_vote.8",
         ],
     },
     "human_rights_declaration": {

@@ -444,7 +444,8 @@ one mandate and lasts ten years; adjourning costs nothing.
 
 Each bloc identity adds one initiative of its own. Those marked "members" go to
 every country in the bloc at the time of the summit, you included; a country
-that joins later doesn't get them.
+that joins later doesn't get them. When another country leads your bloc, an
+event, The Summit's Communiqué, tells you which of these its summit gave you.
 
 | Identity | Initiative | What it gives |
 |---|---|---|

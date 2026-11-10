@@ -2260,6 +2260,30 @@ covert_exposure_response_apply = {
 	}
 }
 
+# The public backlash, told to the defender where covert_warfare.2 is not
+# shown (#1559): covert_backlash_public has just put
+# covert_foreign_ties_discredited on the interest groups of the lobby that
+# favours the attacker, and set iw_last_exposed_public when it hit anyone.
+# Scope: the defender; ROOT = the operator, covert_warfare.1 still open
+covert_exposure_tell_public = {
+	if = {
+		limit = { has_variable = iw_last_exposed_public }
+		ROOT = { save_scope_as = iw_exposed_by }
+		post_notification = covert_backlash_public_notice
+	}
+}
+
+# An exposure inside covert_warfare.2's 24-month cooldown, with no response
+# ordered at the catch: the defender used to hear nothing. The notice names
+# the attacker and the operation (the defender's exposure record, which
+# covert_op_burn has just written), then the backlash notice follows.
+# Scope: the defender; ROOT = the operator, covert_warfare.1 still open
+covert_exposure_tell_repeat = {
+	ROOT = { save_scope_as = iw_exposed_by }
+	post_notification = covert_exposure_repeat_notice
+	covert_exposure_tell_public = yes
+}
+
 # An AI target's decision at the catch: watch the operation with
 # covert_ai_watch_chance, else leave it to the roll, which exposes it when it
 # finds no iw_known afterwards. The chance reads three values staged here on

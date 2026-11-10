@@ -348,6 +348,12 @@ te_asat_strike_effect = {
 			set_variable = { name = te_asat_disrupted_factor value = te_asat_battlestation_factor }
 		}
 	}
+	# The struck country hears who did it and for how long (#1559). The
+	# action's own message may reach it too (should_notify_third_parties), but
+	# that names neither the modifier nor its length, and whether the engine
+	# sends it to the target is unverified (global-commons-playtest.md).
+	save_scope_as = te_asat_striker
+	scope:te_asat_target = { trigger_event = { id = te_orbital_debris.2 popup = yes } }
 	# The striker's costs: the UN case and every other user of orbit. The
 	# infamy (te_asat_infamy) is the action's own visible effect.
 	un_dossier_record = { RECORD = asat POINTS = te_asat_case_points }

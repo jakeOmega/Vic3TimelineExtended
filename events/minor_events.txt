@@ -274,6 +274,48 @@ minor_events_timelineextended.3 = {
 }
 
 
+# State Collapse: the report of a collapse. je_state_collapse's weekly pulse
+# (common/journal_entries/timeline_extended_journal_entries.txt) fires it in
+# the same step that refreshes Failed State, deletes the buildings
+# (state_collapse_remove_infrastructure) and sets every institution and
+# ministry law to its "none" law (reset_all_institutions_and_ministries). The
+# entry's own outcome never fires, so until this event nothing told the
+# country what the step had taken (#1554). The option changes nothing: it
+# lists what was done.
+# Scope: the collapsed country.
+minor_events_timelineextended.10 = {
+	type = country_event
+	placement = ROOT
+
+	title = minor_events_timelineextended.10.t
+	desc = minor_events_timelineextended.10.d
+	flavor = minor_events_timelineextended.10.f
+
+	event_image = { texture = "gfx/event_pictures/failed_state_aftermath.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	duration = 3
+	is_popup = yes
+
+	option = {
+		name = minor_events_timelineextended.10.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = state_collapse_buildings_lost_tt }
+		custom_tooltip = { text = state_collapse_institutions_reset_tt }
+		# The line the pulse ran, shown and not run again.
+		show_as_tooltip = {
+			add_modifier = {
+				name = failed_state_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+
 minor_events_timelineextended.6 = {
 	type = country_event
 	placement = root
