@@ -20,6 +20,14 @@ When the message is generic and mod script can reach the vanilla file too (an AI
 
 It also settles a helper anchor for the mod's script calls, whose errors carry the calling file in their stack; `helper_anchor_mod_calls` still counts a mod `.gui` that reads the helper, since a GUI read leaves no frame. It protects only when no other entry on the same anchor can match the message, since the first match tags the line; the loader warns when one can. Nor can it see a mod cause with no mod frame, such as vanilla code iterating mod content (the ship-transfer entry's mutual articles). Leave it off when the message itself pins vanilla's bug: STATE_HAWAII's `Invalid right side during comparison 's'` is vanilla's typo whatever sets off the AI evaluation, so a UN ballot's stack doesn't make it the mod's.
 
+Some entries tag lines with a mod file in their stack on purpose: the mod's override of a vanilla GUI file that keeps vanilla's faulty block, the mod's own `replace/` loc file. `scripts/analysis/log_triage.py` lists a vanilla entry's mod-framed lines under "Hidden by a vanilla entry, with a mod file in the stack", marked NOT REVIEWED, since that is also how a hidden mod error looks (#873, #1194). Once you have read them, say why they are vanilla's:
+
+```
+- reviewed: mod frame, <why the mod file in the stack is not the cause>
+```
+
+A message both sides can cause, with nothing in the line to tell which, goes on the watch list at the end of this file instead of in a section that hides it.
+
 > **Re-verify pass due (2026-07-03, 1.13.9 migration):** vanilla 1.13.6–1.13.9 modified 24 of the files tracked below (notably `movement_events.txt`, `agitators_events/coup_events.txt`, `treaty_articles/31_ship_transfer.txt`, `journal_entries/07_hokkaido.txt`, `laws/00_distribution_of_power.txt`, `ideologies/01_character_ideologies.txt`, `scripted_effects/00_victoria_ip4_scripted_effects.txt`). Spot-diffs were inconclusive — line numbers have shifted and some flagged regions were rewritten. On the next `log-triage` run against a 1.13.9 session, retire any entry whose error no longer appears rather than trusting the stale line numbers here.
 
 ## Vanilla bugs the mod fixes
@@ -680,9 +688,12 @@ has_claim_by trigger [ Wrong scope for trigger: none, expected state ]
 is_land_adjacent_to_state trigger [ Invalid target state ]
 has_strategic_region_interest_tier trigger [ Invalid Country or StrategicRegion! ]
 Event target link 'root' returned an invalid object
+Scoped object of type 'state' is not valid (State NULL_STATE
 ```
 
 Downstream cascade of the `14_treaty_port.txt:425` entry above: `state_infamy_value` is a state-scoped script value, so every state trigger inside it errors once per render frame when the treaty designer evaluates the article without a chosen state. Eight distinct trigger errors per frame, ~7,800 lines in one six-generation rotation (2026-09-20). Same root cause, same verdict — register and skip.
+
+2026-11-09 (1.15): the war-goal half of the same cascade words it differently when the target state's handle is null, where before the scope was unset: `<trigger> trigger [ Scoped object of type 'state' is not valid (State NULL_STATE (x000000)) ]` at fourteen lines of this file (`event_target_comparison_trigger`, `is_incorporated`, `is_homeland_of_country_cultures`, `any_scope_culture`, `or`, `root`), once each in the second after a save load, followed by the Conquer State entry's `scope:target_country` lines below. The AI was weighing a Conquer State goal whose state had gone.
 
 ### `common/naval_battle_conditions/00_naval_battle_conditions.txt:210` — `range` directive used inside a trigger
 
@@ -903,7 +914,38 @@ The engine tries to replace the retired leaders while the country has no culture
 
 After this, the groups keep a leader id that names no character in the save, so the engine never generates a new one. In the France game, 7 of the 8 groups of the rebels, who won and took the Bengal tag, still pointed at deleted characters nine years later. They were the only 7 among the save's 2,503 groups. Every `leader` read on them logs the pair in the `leader = { ... }` entry above. To read a group's leader id from a save, see the BINARY LAYOUT in `scripts/analysis/save_country_probe.py`.
 
+### `common/character_interactions/01_additional_interactions.txt:1007, 1302, 1312` — character interactions read the ruler of a country that has none
+- stack: vanilla only
+
+```
+Event target link 'ruler' returned an invalid object
+Invalid right side during comparison 'ideology'
+```
+
+The AI weights of vanilla's character interactions read the ruler with no guard: `this.ideology = owner.ruler.ideology` (line 1007) and `scope:actor ?= { ruler = { has_trait = cruel } }` (lines 1302 and 1312; the `?=` guards the actor, not its ruler). A country with no ruler logs the set. 2026-11-09: six lines in one second from the East India Liberal Revolt, twenty seconds after the Indian-revolution hack above had retired its characters (twelve `Invalid Culture scope when creating Character` lines, on the watch list below) and in the same second as its `Could not get leader of interest group` lines. Every line is at vanilla's file; an error in the mod's extra_interactions.txt would name that file.
+
+### `common/journal_entries/00_grand_exhibition.txt:50, 56, 63, 70, 116` — the Grand Exhibition entry reads its points before they are set
+- stack: vanilla only
+
+```
+Failed to fetch variable for 'grand_exhibition_points_var' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+Value of wrong type in 'common/journal_entries/00_grand_exhibition.txt
+```
+
+`je_grand_exhibition` sets `grand_exhibition_points_var` in its `immediate` and reads `root.var:grand_exhibition_points_var` with no `has_variable` in the four `status_desc` triggers and in `current_value`. One set of thirteen lines in one second (2026-11-09, May 1878): each of the four triggers logs the first three messages, and `current_value` the fourth, which also reaches debug.log. The mod has no copy of the file and no script that names the entry or its variable. Which country held the entry without the variable isn't known; a revolt country, which is given its parent's entries without their `immediate` having run for it, is the likely one.
+
+### `events/japan_events/ep2_meiji_restoration.txt:914` — the Taikunate option lengthens a career the shogun doesn't have
+
+```
+does not have role character_role_politician
+```
+
+Option a of `ep2_meiji.7` runs `scope:shogun_scope ?= { add_career_length = { role = character_role_politician … } }`. `add_career_length` needs the character to hold the role it names. The shogun is whoever was `ruler` when the chain began, and a ruler need not be a politician: Tokugawa Iemochi was not. One line when the option is taken (2026-11-09, an observer game in November 1865). The mod has no Meiji event, never reads `scope:shogun_scope`, and its script neither adds nor removes a character role.
+
 ### `gui/right_click_menu.gui` — the unassigned-commanders header sets margins on a plain `widget`
+- reviewed: mod frame, the mod overrides this file and keeps vanilla's block as it is (compare the logged line with vanilla's copy before reading a new message here as vanilla's)
 
 ```
 Property 'margin_top'(816) not handled
@@ -1482,6 +1524,7 @@ religion_percent_state trigger [ Invalid target religion for
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
 
 ### `localization/english/replace/*.yml` — intentional vanilla loc overrides
+- reviewed: mod frame, the line reports the mod's own override file
 
 ```
 'localization/english/replace/
@@ -1506,6 +1549,17 @@ gui/00_GDPPP_
 
 Workshop mod 3190466673 ("GDP Growth Rate Improved" / GDPPP) registers GUI templates that collide with vanilla, emitting `Template 'X' already registered` and `Type 'X' already registered` warnings. Third-party mod, not ours — skip. Both basenames are also in `EXTERNAL_MOD_SOURCE_FILES` so error/debug triage drops them via the lower-level filter; the registry entry exists so they're tagged in gui.log too (where `include_external` defaults to `true`).
 
+### `pdx_gui_factory.cpp:1293` — a vanilla GUI type or template the mod defines first
+- source: `pdx_gui_factory.cpp:1293`
+- source: `pdx_gui_factory.cpp:1445`
+- reviewed: mod frame, the line names the mod file whose definition was kept
+
+```
+already registered at 'gui/00_te_
+```
+
+The mod replaces some vanilla GUI types and templates by defining them in a `00_te_*.gui` file, which the engine reads before vanilla's. It keeps the first definition of a name and logs each later one, here vanilla's: `gui/country_panel.gui:379 - Type 'country_panel_information_content' already registered at 'gui/00_te_country_panel_information.gui:19'` (gui_modding_guide.md, gotcha #30). Eight lines a launch on 2026-11-09 (three templates of 00_te_fullscreen_hide, four types of 00_te_law_effects, one of 00_te_country_panel_information), in gui.log only. The signature is the kept file's prefix, so the reverse stays visible: a line that starts with a `00_te_` file and ends `already registered at 'gui/<a vanilla file>'` means vanilla's was read first and the mod's override was dropped.
+
 ## Engine noise (source-anchored)
 
 These entries are filtered via the `- source: \`<cpp_file:line>\`` registry mechanism. The parser indexes them by `entry.source` (the cpp emit point reported by the engine) instead of script-file basename, so messages that have no `entry.files` still get tagged. Each entry's signature substring narrows the filter to the specific message — different errors from the same cpp:line still surface.
@@ -1519,6 +1573,8 @@ in file: "" near line
 ```
 
 Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data references keys that don't resolve in the current entity state — observed for `headlines_all_minor_events` and `superpower`. Save-migration noise from older-version or cross-mod-state saves; the engine falls back gracefully. Not a current-content bug. (`headlines_*` is the vanilla headlines system; `superpower` is a stale serialized reference.)
+
+Most of these lines are one per concluded journal entry (2026-11-09, 1.15). A save keeps a record of each journal entry a country has finished, and every record carries a key field (binary token `0x551f`) that the engine writes empty; reading it back logs `Failed to read key reference: : , near line: 1" in file: "" near line: 1` to error.log and debug.log. A save with 897 such records logged 897 lines at its load, and the same game logged 201 and 847 at earlier loads. The records are nearly all vanilla's (254 `je_government_petition`, 214 `je_krakatoa`, since each revolt country copies its parent's entries; 22 of the 897 were the mod's `je_grand_monuments`), so the count grows with the game's length, not with anything the mod does. Each record also logs three lines of the PostInitAndValidate entry below. To count them in a save: `re.findall(rb"\x1f\x55\x01\x00\x0f\x00\x00\x00", gamestate)`, with `read_gamestate` of check_save_history_order.py.
 
 The signature names the file a save load reports (a save, or none), not the message. The same source and message report a script file's literal-key field given something it can't read at load, and those are real. Until 2026-10-27 the signature was `Failed to read key reference`, which tagged `create_pop`'s `culture = scope:sr_evac_culture` in sr_colony_autonomy_effects.txt as save noise (#1194 found it through its PostValidate line instead).
 
@@ -2189,7 +2245,7 @@ Adding trigger after PostInitAndValidate
 Adding effect after PostInitAndValidate
 ```
 
-Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05). It is not once a launch: a save load logs a burst within one second, 996 lines at 16:13:25 and 2,415 at 17:48:52 on 2026-11-06 (805 trigger lines and 1,610 effect lines, exactly two per trigger), and 2,604 a file in the 2026-10-11 observer run, with a few single lines at other times (filewatcher reloads while the deploy watcher syncs). The vanilla attribution is unchecked: no mod-off save load has been read for it, so a burst of this size could be mod content built at load. A mod-off load would settle it.
+Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05). It is not once a launch: a save load logs a burst within one second, 996 lines at 16:13:25 and 2,415 at 17:48:52 on 2026-11-06 (805 trigger lines and 1,610 effect lines, exactly two per trigger), and 2,604 a file in the 2026-10-11 observer run, with a few single lines at other times (filewatcher reloads while the deploy watcher syncs). 2026-11-09: the burst is the save's concluded journal entries. A load of a save with 897 concluded-entry records (see the stale key references entry above for the count) logged exactly 897 trigger lines and 1,794 effect lines in its second, and the 2026-11-06 load's 805 and 1,610 fit the same three lines a record. Those records are nearly all vanilla journal entries (875 of the 897), so the burst is vanilla's and grows by three lines for each entry any country concludes.
 
 ### `power_bloc_statue_hero_type.cpp:141` / `power_bloc_statue_pedestal_type.cpp:62` — no default statue hero/pedestal for `identity_diplomatic`
 - source: `power_bloc_statue_hero_type.cpp:141`
@@ -2433,6 +2489,42 @@ Attempted to create relations between a country and itself
 ```
 
 The assert behind `events/brazil/peru_bolivia.txt`'s same-country `change_relations` (above). Once in the first 1.15 observer game (2026-11-05).
+
+## Watch list (tagged, never hidden)
+
+A message that is usually vanilla's and can also be the mod's, with nothing in the line to tell which: an assert with no script frame, a character or country the engine could not build. Registering it above would hide the mod's case. Leaving it bare makes each triage work out again why it is there. An entry here tags the line and leaves it in every view (`/logs` keeps it under `vanilla_bugs=hide`; `scripts/analysis/log_triage.py` prints it in its own section), and its `- check:` line, which is required, says what settles the question. Give the check the mod's case as well as vanilla's.
+
+When a check has come out the same way often enough that the line no longer needs a look, move the entry up to a section that hides it, with the signature or stack line that keeps the mod's case out. When a line here turns out to be the mod's, fix the cause and write the tell into the check.
+
+### `character_templates_utils.cpp:40` — `Invalid Culture scope when creating Character`
+- source: `character_templates_utils.cpp:40`
+- check: vanilla's when a revolution against the East India Company began in that second (tag BIC, which may be named Dominion of India): debug.log has `TE_CIVIL_WAR: <country> faces an uprising` and an `East India … Revolt` line beside it, and the Indian-revolution hack entry explains it. Otherwise the mod's until shown: a character made for a country whose culture is gone, as after a culture merge on a save older than the culture (scripting_best_practices.md, "loading a save adds none for a culture defined since").
+
+```
+Invalid Culture scope when creating Character
+```
+
+One line per character the engine tried to make for a country with no valid culture. The message names neither the country nor a file. 2026-10-07: the East India Company's rebels after vanilla's Indian-revolution hack stripped their cultures, in a game that ended with a country whose interest groups pointed at deleted leaders for nine years. 2026-11-09: twelve lines in the second a liberal revolution began against the Dominion of India (September 1871), the same hack; seven more the evening before stood beside a revolution event's errors in game.log, with the debug.log that would have named the country already rotated out.
+
+### `pdx_assert.cpp:641` — occupation data removed with a state
+- source: `pdx_assert.cpp:641`
+- check: read the debug.log trace lines and error.log of the same second for what took the state from its owner. A mod effect that moves land (`set_owner_of_provinces` in Seize Strait, `set_state_owner`, `create_dynamic_country` in decolonization, an annexation the mod scripts) makes it the mod's: move the transfer to after the occupation ends, or return the provinces first. With none, it is the engine's own release or peace deal.
+
+```
+Trying to remove occupation data without returning the occupied provinces to the owner of the removed state
+```
+
+Seen once, 2026-11-09 (July 1876 of an observer game): Goa, one of the mod's city-states, became a country in that second while Portugal, which holds it at the start, was at war, and no mod trace line or script error stood beside the assert. The mod only lists Goa as releasable (its country_creation file, through vanilla's release mechanism) and scripts nothing that releases it, so this one reads as the engine releasing a country out of an occupied state.
+
+### `pdx_assert.cpp:641` — relations created for invalid countries
+- source: `pdx_assert.cpp:641`
+- check: read error.log at the same second. A `has_attitude trigger [ Invalid Country! ]`, or any script error with a mod file, makes it the mod's (international_relations_events.5 was, 2026-10-17). Vanilla's `create_political_lobby … targeting null country` in that second makes it vanilla's. The assert does not log every time its cause runs, so its count is a floor.
+
+```
+Attempted to create relations for invalid countries!
+```
+
+Four occurrences across the archives by 2026-10-17: three followed a mod trigger reading the attitude of a country that no longer existed (fixed), one followed vanilla's lobby effect.
 
 ## How to triage a new error-log entry
 
