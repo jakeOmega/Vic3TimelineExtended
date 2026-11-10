@@ -298,3 +298,26 @@ level 5 Urban Center), use a tool, then set the rule to Disabled from the screen
    start test begins a fresh cycle at 50 (Stable). If the entry never returns, `add_journal_entry` doesn't re-add a
    type the country concluded: give `te_banking_entry_net` a different route back, or say in the rule's text that
    switching it off is for good.
+
+## Open-Market Operations grows with the shortfall (2026-11-10)
+
+A player's independent Fiat country sat in a Panic for five years with prices falling 10% a year, its rate on 0%,
+Open-Market Operations and the expanded deposit guarantee on. Open-Market Operations now adds 1 point of inflation
+pressure plus half a point for each point last month's inflation sat under the 2% target, up to 5
+(`banking_cycle_simulation.md` §28). Put a Fiat or Digital country with a dial on its floor into deflation (a crash
+in a Panic, or `te_debug_monetary` to seed headline).
+
+1. **The row follows inflation.** With Open-Market Operations on, the Asset Purchases tooltip's Open-Market Operations
+   line reads 1 + 0.5 × (2 − inflation), between +1% and +5%: about +3% at −2%, +5% at −6% and below. With inflation
+   at 2% or above it reads +1%, as before. It changes month to month with inflation, never by more than half a point
+   for each point inflation moved.
+2. **The card says so.** The Open-Market Operations button and dashboard row show, under *Each month:*, the +1.0%
+   line and then "Plus 0.5% for each point Inflation runs below its target, up to 5% in all: 3% with prices 4 points
+   under target", with Inflation a working concept link.
+3. **A deep fiat deflation ends.** An independent Fiat country on the −10% clamp in a Panic, with Open-Market
+   Operations on and the bank's own purchases at +5%: Inflation on the History chart leaves −10% within a few months
+   and reaches 0% within about three years, and the cycle leaves the Panic about then. Before the change it stayed
+   on the clamp for years.
+4. **No overshoot to speak of.** Once inflation passes 2% the programme is back to its +1%. If inflation runs past
+   6% after a recovery with the tool still on, note how far: the simulator puts the median peak at 5.5%, against
+   5.8% with the flat point.

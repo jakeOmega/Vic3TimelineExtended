@@ -2035,7 +2035,7 @@
  banking_nonmod_fx_surrender_tt:0 "$banking_nonmod_monthly_label$\n[GetStaticModifier('banking_monthly_fx_surrender').GetDesc]\nScaled by how much the market exports, and never more than the cash in hand or the room left in the vault. None of it counts as [concept_banking_borrowed_gold]. Paid once a month, not weekly: the treasury pays the same day, and the same sum, as the vault receives."
  banking_nonmod_lifted_label:0 "#title After lifting:#!"
  banking_nonmod_monthly_label:0 "#title Each month:#!"
- banking_nonmod_open_market_ops_tt:0 "$banking_nonmod_monthly_label$\n[GetStaticModifier('banking_monthly_open_market_ops').GetDesc]"
+ banking_nonmod_open_market_ops_tt:0 "$banking_nonmod_monthly_label$\n[GetStaticModifier('banking_monthly_open_market_ops').GetDesc]\nPlus #v 0.5%#! for each point [concept_banking_inflation] runs below its target, up to #v 5%#! in all: #v 3%#! with prices 4 points under target."
  banking_nonmod_restrict_inflows_tt:0 "$banking_nonmod_monthly_label$\n[GetStaticModifier('banking_monthly_restrict_inflows').GetDesc]"
  banking_nonmod_sterilize_inflows_tt:0 "$banking_nonmod_monthly_label$\n[GetStaticModifier('banking_monthly_sterilize_inflows').GetDesc]\nIts bill, #v 0.01%#! of annual GDP a month, is charged as a weekly government expense, a quarter of it a week. Operations stop if the treasury cannot pay a month of it."
  banking_nonmod_war_end_label:0 "#title When the war ends:#!"

@@ -694,6 +694,12 @@ PRE_RATE_REACH = {
     "stance_pressure_tight": 4.0,
 }
 PRE_1084 = {**PRE_DEFICIT_CAP, **PRE_RATE_REACH}
+# Open-Market Operations before §28 (2026-11-10): a flat te_mon_qe_pressure,
+# whatever inflation was doing. `--tune pre_omo_scale`; `--tune omo_per_pp=X`
+# and `omo_cap=X` measure other sizes of the shortfall term.
+PRE_OMO_SCALE = {
+    "omo_per_pp": 0.0,
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -707,6 +713,7 @@ PRESETS = {
     "pre_deficit_cap": PRE_DEFICIT_CAP,
     "pre_rate_reach": PRE_RATE_REACH,
     "pre_1084": PRE_1084,
+    "pre_omo_scale": PRE_OMO_SCALE,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -1628,6 +1635,24 @@ def bank_qe_pressure(cfg: Config, state: State, world_rate: float) -> float:
     return pressure * tuned("bank_qe", 1.0)
 
 
+def omo_pressure(cfg: Config, state: State) -> float:
+    """te_mon_pressure_qe — Open-Market Operations' pressure while the tool runs (§28).
+
+    te_mon_qe_pressure, plus te_mon_qe_pressure_per_pp for every point last
+    month's headline (`state.inflation`, not yet overwritten when step 6 sums the
+    pressure) sits under the anchor, capped at te_mon_qe_pressure_cap. The tool
+    needs unbacked money, so the anchor is never metal's 0 here. `--tune
+    pre_omo_scale` is the flat point it was before.
+    """
+    if "omo" not in state.tools:
+        return 0.0
+    base = K.sv("te_mon_qe_pressure")
+    anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
+    shortfall = max(0.0, anchor - state.inflation)
+    pressure = base + tuned("omo_per_pp", K.sv("te_mon_qe_pressure_per_pp")) * shortfall
+    return min(tuned("omo_cap", K.sv("te_mon_qe_pressure_cap")), pressure)
+
+
 def deficit_pressure(state: State) -> float:
     """te_mon_pressure_deficit — min(cap, 0.3 x max(0, deficit - 1)), x2 at war.
 
@@ -1678,8 +1703,7 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     total += deficit_pressure(state)
 
     # QE, while open market operations are running
-    if "omo" in state.tools:
-        total += K.sv("te_mon_qe_pressure")
+    total += omo_pressure(cfg, state)
 
     # the bank's own purchases at the floor (te_mon_pressure_bank_qe, §0.12)
     total += bank_qe_pressure(cfg, state, world_rate)
@@ -3927,7 +3951,8 @@ def main() -> int:
                          "--tune pre_eliq_bounds for the Emergency Liquidity Program before §25, or "
                          "--tune pre_deficit_cap for the uncapped deficit term before #1084, or "
                          "--tune pre_rate_reach for the 25 ceiling, flat drift and shared stance clamp "
-                         "before #1084, or --tune pre_1084 for both.")
+                         "before #1084, or --tune pre_1084 for both, or --tune pre_omo_scale "
+                         "for Open-Market Operations' flat point before §28.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
