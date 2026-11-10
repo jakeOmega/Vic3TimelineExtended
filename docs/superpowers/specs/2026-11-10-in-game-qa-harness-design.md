@@ -1,6 +1,6 @@
 # In-game QA harness: a Claude session drives Victoria 3 (2026-11-10)
 
-> **Status: design, nothing built.** Written against `main` at `d37b8be` and the game at
+> **Status: design approved by the owner 2026-11-10, nothing built.** Written against `main` at `d37b8be` and the game at
 > 1.15.0 (Ivan-Chai, build `6338547985`). Every engine fact below is tagged **verified**
 > (seen in a probe launch on the owner's machine on 2026-11-10) or **assumed** (§ 7 lists
 > the assumptions, each with a fallback; settling them is the plan's first task).
