@@ -123,6 +123,8 @@ te_construction_market_on_released_independent = {
 			# on_country_formed so formable-country formation (EU, Pan-Africa Union)
 			# doesn't masquerade as decolonization.
 			set_variable = { name = recently_decolonized days = 7300 }
+			# Freed again: its young-state events may each fire once more.
+			decol_young_state_reset = yes
 			trigger_event = {
 				id = te_construction_market_recalc_events.1
 			}

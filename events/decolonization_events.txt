@@ -576,6 +576,8 @@ decolonization_events.4 = {
 		# cultures" alone also reached long-established countries (owner ruling,
 		# 2026-09-26).
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_4 }
 		NOT = {
 			any_scope_state = {
 				is_homeland_of_country_cultures = ROOT
@@ -590,6 +592,7 @@ decolonization_events.4 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 4 }
 	}
 
 	# Option A: Embrace indigenous culture
@@ -831,9 +834,12 @@ decolonization_events.7 = {
 		decol_era_begun = yes
 		country_rank <= rank_value:minor_power
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_7 }
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 7 }
 		# Read the variable directly, and only while that country lives: a
 		# random_country limit comparing every country with a former overlord
 		# that has since died logged "Event target link 'var' returned an
@@ -1378,6 +1384,9 @@ decolonization_events.12 = {
 		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = gp_supports_colonialism_modifier }
 		has_technology_researched = decolonization
+		# The text offers a patron. The world's first power has none to look
+		# up to (owner report, 2026-11-10).
+		global_country_ranking > 1
 		any_scope_state = {
 			is_overseas_colonial_state = yes
 		}
@@ -2135,6 +2144,8 @@ decolonization_events.16 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_16 }
 		is_subject = no
 		NOT = { has_modifier = partition_territorial_claims_modifier }
 		NOT = { has_modifier = partition_accepted_borders_modifier }
@@ -2169,6 +2180,7 @@ decolonization_events.16 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 16 }
 		# Find a neighboring country with shared heritage
 		random_scope_state = {
 			limit = {
@@ -2327,6 +2339,8 @@ decolonization_events.17 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_17 }
 		is_subject = no
 		NOT = { has_modifier = border_dispute_active_modifier }
 		NOT = { has_modifier = border_dispute_resolved_modifier }
@@ -2344,6 +2358,7 @@ decolonization_events.17 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 17 }
 		# Named for the notices the neighbour gets.
 		save_scope_as = border_claimant
 		random_scope_state = {
@@ -2566,6 +2581,8 @@ decolonization_events.18 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_18 }
 		is_subject = no
 		NOR = {
 			has_modifier = military_strongman_modifier
@@ -2592,6 +2609,7 @@ decolonization_events.18 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 18 }
 	}
 
 	# Option A: Military takeover: the general promises order
@@ -3021,7 +3039,14 @@ decolonization_events.21 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_21 }
 		is_subject = no
+		# The event is about great powers courting a young nation. A former
+		# colony that is a great power itself is one of the powers doing the
+		# courting, and answers The Colonial Question (.14) with a stance of
+		# its own (owner report, 2026-11-10).
+		country_rank < rank_value:great_power
 		NOR = {
 			has_modifier = non_aligned_movement_modifier
 			has_modifier = superpower_aligned_modifier
@@ -3040,6 +3065,7 @@ decolonization_events.21 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 21 }
 		random_country = {
 			limit = {
 				NOT = { this = root }
