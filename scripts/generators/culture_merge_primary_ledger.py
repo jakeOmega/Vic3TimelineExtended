@@ -14,7 +14,13 @@ The rulings are the owner's (2026-11-09):
 * "if other stuff would need holds, let me know and we can decide case by
   case": such reads are grouped into ``CASES``, each with the owner's ruling;
 * of the cases that hold, "none should hold past 1936 - vanilla's end date"
-  (``WINDOW_END``);
+  (``WINDOW_END``). The owner said it of the cases. Applying the same date to
+  a journal entry that is only on offer and to an unformed country is the
+  designer's call, made so that the rule is one sentence ("after 1936 only a
+  running journal entry holds a part"); it also bounds the hold the owner
+  approved for a dead start tag ("hold the part only while that tag is dead"),
+  which would otherwise keep North German for good once Prussia has become
+  Germany;
 * a small helper can be overridden ("is it not possible to override something
   like 'Is Indian' though? That seems small, unlike replacing a whole JE"):
   ``TRIGGER_OVERRIDES``.
@@ -68,8 +74,8 @@ import culture_merges_config as cfg  # noqa: E402
 COSMETIC, COMPANY, MOOT, MIRRORED, ENTRIES, UNFORMED, CASE = (
     "cosmetic", "company", "moot", "mirrored", "entries", "unformed", "case",
 )
-# Vanilla's end date (owner, 2026-11-09: "none should hold past 1936"). A hold that is not a running journal entry or
-# an unformed country ends on this day.
+# Vanilla's end date (owner, 2026-11-09, of the cases: "none should hold past 1936"). Every hold but a running journal
+# entry ends on this day; for an entry on offer and an unformed country that is the designer's call (module docstring).
 WINDOW_END = "1936.1.1"
 # Vanilla scripted triggers the mod restates, the merged cultures added beside the parts they list: a trigger that is
 # nothing but a list of cultures, so the copy is small and a vanilla patch to it shows as a changed list in the

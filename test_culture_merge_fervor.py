@@ -144,7 +144,7 @@ class CopyTest(unittest.TestCase):
         self.assertEqual(
             squash(block(text, "te_cm_fervor_on_action")),
             "effect = { te_cm_chk_fervor_monthly = yes te_cmg_copy_fervor_all = yes te_cmg_carry_traditions = yes "
-            "te_cm_chk_dead_primary_monthly = yes te_cm_chk_definition_inject = yes }",
+            "te_cm_chk_dead_primary_monthly = yes te_cm_chk_strip_monthly = yes te_cm_chk_definition_inject = yes }",
         )
         # Once a month for the world, so no lock: the country pulse keeps only the rule's upkeep.
         self.assertEqual(

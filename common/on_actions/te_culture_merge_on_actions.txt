@@ -102,8 +102,10 @@ te_cm_fervor_on_action = {
 		# A merged culture takes the traditions of the core parts that have switched into it (owner, 2026-11-09). Like the
 		# fervor copy it serves parts that already switched, so it has no rule gate either.
 		te_cmg_carry_traditions = yes
-		# TEMPORARY self-checks cm_dead_primary_removed and cm_definition_inject (the same file; delete with it).
+		# TEMPORARY self-checks cm_dead_primary_removed, cm_untouched_stripped and cm_definition_inject (the same file;
+		# delete with it).
 		te_cm_chk_dead_primary_monthly = yes
+		te_cm_chk_strip_monthly = yes
 		te_cm_chk_definition_inject = yes
 	}
 }

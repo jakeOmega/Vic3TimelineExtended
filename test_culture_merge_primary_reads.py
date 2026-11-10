@@ -308,8 +308,9 @@ class EffectTest(unittest.TestCase):
         for merge in cfg.MERGES:
             line = (
                 "if = { limit = { exists = cu:%s country_has_primary_culture = cu:%s te_cmg_%s_untouched = yes "
-                "any_primary_culture = { NOT = { this = cu:%s } } } remove_primary_culture = cu:%s }"
-                % (merge.result, merge.result, merge.key, merge.result, merge.result)
+                "any_primary_culture = { NOT = { this = cu:%s } } } remove_primary_culture = cu:%s "
+                "te_cm_chk_strip = { CULTURE = %s } }"
+                % (merge.result, merge.result, merge.key, merge.result, merge.result, merge.result)
             )
             self.assertEqual(body.count(line), int(merge.new is not None), merge.key)
         self.assertEqual(body.count("remove_primary_culture"), len(new_results()))

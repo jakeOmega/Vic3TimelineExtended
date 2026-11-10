@@ -14656,9 +14656,10 @@ te_cmg_east_african_untouched = {
 # it is, te_cm_monthly_switched_culture leaves the switched culture among a country's primary cultures. From the
 # ledger of vanilla's reads (scripts/generators/culture_merge_primary_ledger.py): a vanilla journal entry that
 # tests the culture and that some country has active holds it whenever; until 1936.1.1, vanilla's end date
-# (owner: "none should hold past 1936"), so do such an entry on offer, a formable that needs the culture and does not
-# exist, and the reads the owner ruled to keep (historical characters, flavor events, laws, Siberian exile). Any
-# country, not this one: an entry also tests its targets' and its overlord's cultures.
+# so do the reads the owner ruled to keep (historical characters, flavor events, laws, Siberian exile; "none should
+# hold past 1936") and, by the designer's extension of that date, such an entry on offer and a formable that needs
+# the culture and does not exist. Any country, not this one: an entry also tests its targets' and its overlord's
+# cultures.
 
 te_cmg_part_held_north_german = {
 	OR = {
