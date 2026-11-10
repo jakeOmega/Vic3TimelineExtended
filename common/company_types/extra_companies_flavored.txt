@@ -4842,7 +4842,7 @@ company_sibur = {
 				level >= 5
 			}
 		}
-		country_has_primary_culture = cu:russian # REVIEWED 2026-11-07 (culture_merge_ref): Sibur is a Russian state-linked complex; Russia keeps russian as a primary culture, and cm_east_slavic or cm_pan_slavic would also open it to Ukrainian and Belarusian states
+		country_has_primary_culture = cu:russian # REVIEWED 2026-11-09 (culture_merge_ref): Sibur is a Russian state-linked complex, and cm_east_slavic or cm_pan_slavic would also open it to Ukrainian and Belarusian states. Russian leaves Russia's primary cultures once it has switched and nothing holds it (te_cmg_part_held_russian), and the company closes to Russia then: a company's eligibility holds no part (owner, 2026-11-09)
 	}
 	prosperity_modifier = {
 		country_production_tech_research_speed_mult = 0.10
