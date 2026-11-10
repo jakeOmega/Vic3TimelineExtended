@@ -483,19 +483,16 @@ WHEN = {  # a technology's date in a prompt, by its era
     "modern_tools": "in the 1930s", "modern_chemical_processes": "in the 1930s",
     "rural_electrification": "in the 1930s",
     "integrated_circuits": "around 1960", "green_revolution": "around 1960",
-    "nuclear_energy": "around 1960",
     "containerization": "around 1980", "robotics": "around 1980", "microprocessor": "around 1980",
     "supply_chain_management": "around 2000", "hydraulic_fracturing": "around 2000",
-    "clean_energy_technologies": "around 2000",
     "internet_of_things": "in the 2020s",
     "autonomous_vehicles": "in the 2040s", "synthetic_biology": "in the 2040s",
-    "fusion_power": "in the 2040s",
     **{tech: when for tech, when in CITY_LADDER.values()},
 }
 
 FARMLAND = ["farmland_rye", "farmland_rice", "farmland_millet", "farmland_wheat", "farmland_maize"]
-# Oil fields and power landscapes have no terrain of their own: the engine picks a state's
-# terrain before any picture is weighed, so these join the lists of the land they stand on.
+# Oil fields have no terrain of their own: the engine picks a state's terrain before any picture
+# is weighed, so their pictures join the lists of the land they stand on.
 OPEN_LAND = ["plains", "desert", "savanna", "tundra", "hills", *FARMLAND, "pasture"]
 
 
@@ -789,41 +786,6 @@ DRAFTS = {
         "Newly cleared land {when}: forest pushed down by bulldozers into long burning windrows, "
         "a new straight gravel road, cattle grazing among charred stumps, a prefabricated "
         "farmhouse, the standing wall of forest behind"),
-
-    # Power landscapes. No terrain of their own. The design's ladder starts at the nuclear plant;
-    # the coal station and the dam are added here as its first rung, on Modern Tools for want of a
-    # technology of their own, which is a proposal.
-    "energy_thermal_1": _draft(
-        "energy", OPEN_LAND, "plains", "modern_tools", 1, "Power Plants dominate the state",
-        "A large coal-fired power station {when} in open country: a long brick turbine hall "
-        "with a row of six tall steel chimneys, a coal heap fed by a conveyor, squat wooden "
-        "cooling towers steaming, lattice pylons marching away across fields, a railway siding "
-        "of coal wagons"),
-    "energy_hydro_1": _draft(
-        "energy", ["hills", "mountain", "forest", *FARMLAND], "hills", "modern_tools", 1, "Hydro Plants dominate the state",
-        "A hydroelectric dam {when}: a long straight concrete dam across a broad river valley "
-        "with white water pouring down its spillways, a powerhouse at its foot, lattice pylons "
-        "climbing the hillside, a wide reservoir behind, forested hills"),
-    "energy_nuclear_2": _draft(
-        "energy", OPEN_LAND, "plains", "nuclear_energy", 2, "Nuclear Plants dominate the state",
-        "A nuclear power station {when} in open country: two domed concrete reactor buildings, a "
-        "long turbine hall, two wide hyperbolic cooling towers with steam plumes, a switchyard "
-        "and lines of pylons crossing farmland, a river in the foreground"),
-    "energy_wind_3": _draft(
-        "energy", OPEN_LAND, "plains", "clean_energy_technologies", 3, "Renewable Energy Plants dominate the state",
-        "A wind farm {when}: ranks of tall white three-bladed turbines along a ridge and across "
-        "rolling farmland, a gravel service track, a small substation, pylons, cattle grazing "
-        "beneath, a big windy sky"),
-    "energy_solar_3": _draft(
-        "energy", ["desert", "savanna", "plains"], "desert", "clean_energy_technologies", 3, "Renewable Energy Plants dominate a dry state",
-        "A solar farm in dry country {when}: fields of dark blue panels in rows to the horizon, "
-        "a white tower glowing at its top inside a ring of mirrors, a substation, pylons, a "
-        "straight service road, bare hills in the heat haze"),
-    "energy_fusion_4": _draft(
-        "energy", OPEN_LAND, "plains", "fusion_power", 4, "Fusion Plants dominate the state",
-        "A fusion power plant {when} in open country: a vast white reactor hall with a low "
-        "ring-shaped building around it, cylindrical cryogenic tanks trailing vapor, a hall of "
-        "heavy transformers, lines of pylons, landscaped grounds, a few small figures"),
 
     # ---- Wave 6: character, function and condition pictures of cities (design section 7) --------
     # For any region, so none names a region's buildings. Each is on a rung of the city ladder.

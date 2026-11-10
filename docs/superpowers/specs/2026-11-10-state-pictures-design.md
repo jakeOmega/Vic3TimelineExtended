@@ -28,6 +28,13 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
 6. **Ambitious set, in waves.** It can be cut back; § 9 gives the order of cuts.
 7. **The painted look stands** ("I like the style"): the converter's filter of § 10 is the look of the whole
    set. On the pilot's picks, with the replacement European city: "I'm fine with the pick".
+8. **A picture stands for a whole region.** "The images are supposed to reflect the overall region": "on the
+   small end, think Rhode Island, on the large end, Alaska or Texas". "A mining or oil drilling region makes
+   sense, but does a power plant region make sense?" It doesn't: the mod's power plants are city buildings
+   built where the demand is, and no region reads as a power station. The power-landscape family (six
+   pictures and a ladder of its own) was cut on this rule. Pylons, turbines and cooling towers stay where
+   they are part of another picture's landscape. The test for any picture: would a traveler crossing the
+   state call this what the place is like, or is it one site in it?
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -86,7 +93,6 @@ One ladder a family. A rung's picture shows what its technology puts in the stre
 | Oil field | Modern Chemical Processes (6): derrick fields | Integrated Circuits (7): directional rigs, offshore platforms | Hydraulic Fracturing (9): pad wells | | |
 | Farmland, plantation, ranch | Rural Electrification (6): tractors, power lines | Green Revolution (7): combines, silos, irrigation | Microprocessor (8): center pivots, large machines | Autonomous Vehicles (11): crewless harvesters | Synthetic Biology (11): designed crops, glasshouse towers |
 | Forestry | Modern Tools (6): chainsaws, log trucks | Industrial Robotics (8): harvesters, managed stands | | | |
-| Energy landscape | Modern Tools (6): the coal station, the dam (added with wave 3's drafts; a proposal) | Nuclear Energy (7): the plant | Clean Energy Technologies (9): wind and solar fields | Fusion Power (11) | |
 
 The city ladder's rungs also carry the skyline pictures: a metropolis needs Modern Skyscrapers as well from
 rung 1, and a megacity exists from rung 3. The housing-block city needs Prefabricated Construction (the
@@ -101,7 +107,7 @@ easier to read. It can be added to a family as one more condition if the play-te
 
 **Regions** are vanilla's seven city families (European, Latin American, East Asian, Japanese, South Asian,
 Middle Eastern and Central Asian, African), plus North American, which vanilla folds into European. Farmland
-keeps vanilla's four families (generic, Arabic, Asian, subtropic). Ports, mines, forestry and energy are
+keeps vanilla's four families (generic, Arabic, Asian, subtropic). Ports, mines and forestry are
 painted once for every region.
 
 The city families use vanilla's own region triggers, with three changes. They are this design's calls, each
@@ -200,10 +206,9 @@ each gets one when its picture is painted.
 | Mines and oil | about 12 | |
 | Farmland, plantation, ranch | about 24 | four farm families × four rung groups, plus plantation and ranch |
 | Forestry and cleared land | about 6 | |
-| Energy landscapes | about 6 | joins the farmland and natural lists for states dominated by power buildings |
 | Natural terrain | about 15 | optional late variants: a highway through the mountains, a pipeline in the tundra |
 
-About 380 pictures. At BC7 (0.7 MB each) that is about 270 MB of `gfx/`; in vanilla's uncompressed format it
+About 375 pictures. At BC7 (0.7 MB each) that is about 270 MB of `gfx/`; in vanilla's uncompressed format it
 would be over 1 GB.
 
 ## 9. Waves
@@ -215,13 +220,12 @@ would be over 1 GB.
    time, and these stay the fallback for every size and level of prosperity. The 39 prompts beside the
    pilot's are in the registry (`CITY_STREETS`), unrendered: the renders wait on the owner's look at the
    pilot in game, which may change how a picture is composed for the panel.
-3. **Worked land (about 60):** ports, mines and oil, farmland, forestry, energy. Its 58 prompts are drafted
+3. **Worked land (about 55):** ports, mines and oil, farmland, forestry. Its 52 prompts are drafted
    in the registry's `DRAFTS`, outside the wired list: each has its technology and, in plain words, when it
    should show, and none has a condition or a place in the weight yet. What this wave still has to design:
    the Port level that divides a harbor from a major port; what stands for a naval base now that 1.15 has
-   no Naval Base building; when coal makes a mine a colliery; and how an oil field or a power landscape
-   takes over the picture of the land it stands on (they have no terrain of their own, § 12), which needs a
-   place in the weight above the rung.
+   no Naval Base building; when coal makes a mine a colliery; and how an oil field takes over the picture of
+   the land it stands on (vanilla has no terrain for it), which needs a place in the weight above the rung.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
 6. **Character, function, conditions (about 40),** with theirs. Its 39 prompts are drafted in `DRAFTS`
@@ -303,5 +307,3 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 - The floors of §§ 5 and 6, until wave 2's observer game.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
   pictures exist.
-- Whether the energy landscape pictures need their own prevailing-terrain rule, since the engine picks the
-  terrain before any picture is weighed.
