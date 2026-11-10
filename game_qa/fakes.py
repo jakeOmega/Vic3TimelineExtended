@@ -17,6 +17,7 @@ from game_qa.helper import HelperError, Window
 
 SCAN_ENTER = 0x1C
 SCAN_CONSOLE = 0x29
+SCAN_BACKSPACE = 0x0E
 FLUSH_COMMAND = "help ndefines.ngui"        # the command whose long output pushes the game's buffered log out
 _HELP_LINES = 500                           # what it prints, about
 _HELD_BACK = 120                            # the last of it that the game is still holding when the file is written
@@ -203,6 +204,11 @@ class FakeHelper:
     `unwritten` until a `help ndefines.ngui` is entered, which writes them all,
     its own line and most of its long output too (the tail stays buffered).
     `now` is a fake clock for code under test: `sleep` moves it, nothing else does.
+
+    A stalled game (a monthly pulse can hold it for seconds) is `latency`: each key the
+    helper sends is taken by the game that many fake seconds later, in order, and
+    until then the history and the log show nothing of it. With `busy_while_late` the
+    window also reports not responding while any key is waiting, as Windows does.
     """
 
     def __init__(self, history: Path | None = None, log: Path | None = None) -> None:
@@ -222,6 +228,9 @@ class FakeHelper:
         self.history_skips_repeats = False      # a command already in the history file is not written to it again
         self.exit_after_steps: int | None = None        # the game ends once this many steps have been sent in all
         self.on_step = None                     # called with the steps sent so far, before each step is tried
+        self.latency = 0.0                      # seconds from a key being sent to the game taking it
+        self.busy_while_late = False            # the window does not respond while a key is waiting
+        self._inbox: list[tuple[float, dict]] = []      # keys sent and not yet taken: (due time, step)
         self.typed = ""                         # text typed since the last Enter
         self.steps: list[dict] = []             # every step sent, as given
         self.now = 0.0
@@ -240,6 +249,7 @@ class FakeHelper:
 
     def sleep(self, seconds: float) -> None:
         self.now += seconds
+        self._deliver()
 
     def on(self, text: str, success: Sequence[str] = (), failure: Sequence[str] = (),
            script: Sequence[str] = ()) -> None:
@@ -258,7 +268,8 @@ class FakeHelper:
     def window(self, pid: int) -> Window:
         if not self.exists:
             return Window(False, False, False, "", (0, 0, 0, 0))
-        return Window(True, self.foreground, self.responding, self.title, self.client)
+        responding = self.responding and not (self.busy_while_late and self._inbox)
+        return Window(True, self.foreground, responding, self.title, self.client)
 
     def idle_ms(self) -> int:
         return self.idle
@@ -283,14 +294,23 @@ class FakeHelper:
                                   reply={"steps_done": done, "chars_sent": 0})
             self.steps.append(dict(step))
             done += 1
+            self._inbox.append((self.now + self.latency, dict(step)))
+            self._deliver()
+            if self.exit_after_steps is not None and len(self.steps) >= self.exit_after_steps:
+                self.exists = False
+
+    def _deliver(self) -> None:
+        """The game takes the keys that are due, in the order they were sent."""
+        while self._inbox and self._inbox[0][0] <= self.now:
+            _due, step = self._inbox.pop(0)
             if "text" in step:
                 self.typed += step["text"]
             elif step.get("scan") == SCAN_ENTER:
                 self._enter()
             elif step.get("scan") == SCAN_CONSOLE and not self.console_never_opens:
                 self.console_open = not self.console_open
-            if self.exit_after_steps is not None and len(self.steps) >= self.exit_after_steps:
-                self.exists = False
+            elif step.get("scan") == SCAN_BACKSPACE:
+                self.typed = self.typed[:-1]
 
     def _enter(self) -> None:
         text, self.typed = self.typed, ""

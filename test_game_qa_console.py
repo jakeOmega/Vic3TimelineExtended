@@ -329,12 +329,25 @@ class ArrivalTest(ConsoleTestCase):
         self.assertNotIn(CONSOLE_KEY, self.game.steps)
         self.assertLess(self.game.clock(), console.ARRIVAL_S)       # a repeat is not waited for as a new text is
 
-    def test_lines_before_the_start_never_pair_with_a_later_flush(self):
+    def test_a_flush_only_vouches_for_the_command_typed_right_before_it(self):
         parsed = [logtail.parse("[12:00:00][console.cpp:1175]: Running console command: " + text)
-                  for text in ("tag FRA", console.FLUSH_COMMAND)]
+                  for text in ("tag FRA", console.PROBE_COMMAND, console.FLUSH_COMMAND)]
         self.console._seen = parsed
-        self.assertEqual(self.console._find_reply("tag FRA"), [])
-        self.assertIsNone(self.console._find_reply("tag FRA", start=1))
+        self.assertIsNone(self.console._find_reply("tag FRA", adjacent=True))
+        self.assertEqual(self.console._find_reply("tag FRA"), [])       # a command known to have run: any later flush
+        self.assertEqual(self.console._find_reply(console.PROBE_COMMAND, adjacent=True), [])
+
+    def test_an_older_line_of_the_same_text_is_not_this_commands_proof(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.console.ensure_open()                      # the probe is in the history now, so it will be a repeat
+        self.game.on("tag FRA", success=["old"])
+        self.console.run("tag FRA", reply=False)        # its lines wait in the game's buffer
+        self.game.console_open = False
+        self.game.on("tag FRA", success=["new"])
+        r = self.console.run("tag FRA")                 # lost in the closed console; the probe's flush must not
+        self.assertEqual(r.lines, ["new"])              # pair with the old line
+        self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
 
     def test_a_repeat_into_a_closed_console_opens_it_and_goes_again(self):
         self.game.console_open = True
@@ -352,6 +365,13 @@ class ArrivalTest(ConsoleTestCase):
         self.game.console_open = False
         self.game.console_never_opens = True
         self.assertEqual(self.fail_code("tag FRA", reply=False), "no_ack")
+
+    def test_a_typing_counts_as_landed_even_when_a_later_one_landed_after_it(self):
+        self.history.write_text("tag FRA\nselect_event_option list\n", encoding="utf-8")
+        self.assertTrue(self.console._landed(console._Typed("tag FRA", [], False)))
+        # a repeat: only the lines gained since the snapshot count
+        self.assertFalse(self.console._landed(console._Typed("tag FRA", ["tag FRA"], True)))
+        self.assertTrue(self.console._landed(console._Typed("select_event_option list", ["tag FRA"], False)))
 
     def test_a_history_file_that_does_not_exist_yet_is_empty(self):
         self.assertFalse(self.history.exists())
@@ -397,7 +417,7 @@ class EnsureOpenTest(ConsoleTestCase):
         self.assertGreaterEqual(self.game.clock(), 30.0)
         self.assertLess(self.game.clock(), 60.0)
 
-    def test_the_probe_is_a_harmless_listing(self):
+    def test_the_names_and_numbers_the_spec_fixes(self):
         self.assertEqual(console.PROBE_COMMAND, "select_event_option list")
         self.assertEqual(console.FLUSH_COMMAND, "help ndefines.ngui")
         self.assertEqual((console.SCAN_CONSOLE, console.SCAN_ENTER), (0x29, 0x1C))
@@ -468,11 +488,327 @@ class FakeGameTest(ConsoleTestCase):
             self.type_command("tag FRA")
         self.assertEqual(e.exception.reply, {"steps_done": 0, "chars_sent": 0})
 
+    def test_latency_delays_the_history_and_a_busy_game_does_not_respond(self):
+        self.game.console_open = True
+        self.game.latency = 3.0
+        self.game.busy_while_late = True
+        self.type_command("tag FRA")
+        self.assertFalse(self.history.exists())
+        self.assertFalse(self.game.window(7).responding)
+        self.game.sleep(2.9)
+        self.assertFalse(self.history.exists())
+        self.game.sleep(0.2)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\n")
+        self.assertTrue(self.game.window(7).responding)
+
+    def test_a_game_with_latency_still_responds_when_it_is_not_busy(self):
+        self.game.latency = 3.0
+        self.type_command("tag FRA")
+        self.assertTrue(self.game.window(7).responding)
+
+    def test_a_late_game_takes_its_input_in_order(self):
+        self.game.latency = 2.0
+        self.game.keys(7, [CONSOLE_KEY])                # opens the console, but 2 s from now
+        self.type_command("tag FRA")                    # so this is typed into a closed one, as far as the sender knows
+        self.game.sleep(2.0)
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\n")
+
+    def test_backspace_takes_a_typed_character_back(self):
+        self.game.keys(7, [{"text": "tag"}, {"scan": 0x0E}])
+        self.assertEqual(self.game.typed, "ta")
+
     def test_one_clock_serves_sleep_and_clock(self):
         self.assertEqual(self.game.clock(), 0.0)
         self.game.sleep(2.5)
         self.game.sleep(1.0)
         self.assertEqual(self.game.clock(), 3.5)
+
+
+class LateArrivalTest(ConsoleTestCase):
+    """A game stalled by a monthly pulse takes the Enter seconds late; the command must still run once."""
+
+    def history_lines(self):
+        return self.history.read_text(encoding="utf-8").splitlines() if self.history.exists() else []
+
+    def assert_ran_once_on_an_open_console(self):
+        self.assertEqual(self.history_lines().count("tag FRA"), 1)
+        self.assertEqual(self.game.steps.count(TEXT), 1)
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+        self.assertTrue(self.game.console_open)
+
+    def test_an_enter_2_seconds_late_is_seen_in_the_first_wait(self):
+        self.game.console_open = True
+        self.game.latency = 2.0
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assert_ran_once_on_an_open_console()
+
+    def test_an_enter_6_seconds_late_is_not_retyped_and_the_console_key_stays_unpressed(self):
+        self.game.console_open = True
+        self.game.latency = 6.0
+        self.console.run("tag FRA", reply=False)
+        self.assert_ran_once_on_an_open_console()
+
+    def test_an_enter_6_seconds_late_still_gets_its_reply(self):
+        self.game.console_open = True
+        self.game.latency = 6.0
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        r = self.console.run("tag FRA")
+        self.assertEqual((r.ok, r.lines), (True, ["Now Playing - France"]))
+        self.assert_ran_once_on_an_open_console()
+
+    def test_an_enter_6_seconds_late_in_a_window_that_stops_responding_is_waited_for(self):
+        self.game.console_open = True
+        self.game.latency = 6.0
+        self.game.busy_while_late = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assert_ran_once_on_an_open_console()
+
+    def test_an_enter_8_seconds_late_in_a_window_that_stops_responding_is_waited_for(self):
+        self.game.console_open = True
+        self.game.latency = 8.0
+        self.game.busy_while_late = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])        # no probe: the first wait simply held its clock
+        self.assert_ran_once_on_an_open_console()
+
+    def test_an_enter_8_seconds_late_in_a_busy_window_still_gets_its_reply(self):
+        self.game.console_open = True
+        self.game.latency = 8.0
+        self.game.busy_while_late = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        r = self.console.run("tag FRA")
+        self.assertEqual((r.ok, r.lines), (True, ["Now Playing - France"]))
+        self.assert_ran_once_on_an_open_console()
+
+    def test_the_wait_holds_its_clock_only_up_to_ten_seconds_of_not_responding(self):
+        self.game.console_open = True
+        self.game.latency = 12.0
+        self.game.busy_while_late = True
+        self.assertEqual(self.fail_code("tag FRA", reply=False), "game_gone")
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assertGreaterEqual(self.game.clock(), 10.0)
+        self.assertLess(self.game.clock(), 12.0)
+
+    def test_a_late_probe_in_a_busy_window_leaves_an_open_console_alone(self):
+        self.game.console_open = True
+        self.game.latency = 8.0
+        self.game.busy_while_late = True
+        self.console.ensure_open()
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+        self.assertTrue(self.game.console_open)
+
+    def test_a_late_repeat_is_found_by_the_log_and_not_retyped(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.console.run("tag FRA", reply=False)
+        self.game.latency = 6.0
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps.count(TEXT), 2)        # once a run
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+        self.assertTrue(self.game.console_open)
+
+    def test_a_late_command_next_to_a_probe_before_its_flush_still_gets_its_own_reply(self):
+        self.game.console_open = True
+        self.game.latency = 6.0
+        self.game.on("tag FRA", success=["mine"])
+        self.assertEqual(self.console.run("tag FRA").lines, ["mine"])
+
+
+class StrandedTextTest(ConsoleTestCase):
+    def strand(self):
+        """Text goes in, Enter is refused: the console keeps half a command."""
+        self.game.console_open = True
+        self.lose_foreground_before_step(1, once=True)
+        self.assertEqual(self.fail_code("event france.1", reply=False), "not_foreground")
+        self.game.foreground = True
+        self.game.steps.clear()
+
+    def test_the_next_call_refuses_rather_than_glue_onto_the_half_command(self):
+        self.strand()
+        self.assertEqual(self.fail_code("tag GBR", reply=False), "stranded_text")
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.ensure_open()
+        self.assertEqual(e.exception.code, "stranded_text")
+        self.assertEqual(self.game.steps, [])
+        self.assertFalse(self.history.exists())
+
+    def test_clear_line_empties_the_line_and_lets_the_next_call_through(self):
+        self.strand()
+        self.assertEqual(self.game.typed, "event france.1")
+        self.console.clear_line()
+        self.assertEqual(self.game.steps, [{"scan": 0x0E}] * 64)
+        self.assertEqual(self.game.typed, "")
+        self.console.run("tag GBR", reply=False)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag GBR\n")
+
+    def test_nothing_clears_the_line_by_itself(self):
+        self.strand()
+        self.assertEqual(self.fail_code("tag GBR"), "stranded_text")
+        self.assertNotIn({"scan": 0x0E}, self.game.steps)
+        self.assertEqual(self.game.typed, "event france.1")
+
+    def test_clear_line_checks_the_foreground_first(self):
+        self.strand()
+        self.game.foreground = False
+        self.game.idle = 2_000
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.clear_line()
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertEqual(self.game.steps, [])
+        self.assertEqual(self.fail_code("tag GBR"), "stranded_text")      # still not cleared
+
+    def test_a_refusal_that_sent_nothing_does_not_strand(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(0, once=True)
+        self.console.run("tag FRA", reply=False)
+        self.console.run("tag GBR", reply=False)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\ntag GBR\n")
+
+
+class EnteredFlagTest(ConsoleTestCase):
+    def test_it_defaults_to_false(self):
+        self.assertIs(console.ConsoleError("no_ack").entered, False)
+
+    def test_a_command_that_never_arrived_is_not_entered(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("no_ack", False))
+
+    def test_refusing_bad_text_is_not_entered(self):
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("a\nb")
+        self.assertIs(e.exception.entered, False)
+
+    def test_no_reply_is_entered(self):
+        self.game.console_open = True
+        self.game.log = None
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("no_reply", True))
+
+    def test_a_refusal_during_the_flush_is_entered(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(3)             # the flush's text is in; its Enter is refused
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("not_foreground", True))
+
+    def test_the_game_leaving_while_waiting_for_the_reply_is_entered(self):
+        self.game.console_open = True
+        self.game.log = None
+        self.game.exit_after_steps = 4
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("game_gone", True))
+
+    def test_a_refusal_after_the_text_but_before_it_arrived_is_not_entered(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(1)
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertIs(e.exception.entered, False)
+
+
+class FlakyPath:
+    """Stands in for the history path: the numbered reads fail the way a file held open by the game can."""
+
+    def __init__(self, path, fail_reads):
+        self.path, self.fail_reads, self.reads = Path(path), set(fail_reads), 0
+
+    def read_bytes(self):
+        self.reads += 1
+        if self.reads in self.fail_reads:
+            raise PermissionError("sharing violation")
+        return self.path.read_bytes()
+
+
+class HistoryReadTest(ConsoleTestCase):
+    def test_a_history_that_cannot_be_read_is_not_an_empty_one(self):
+        self.console._history_path = FlakyPath(self.history, range(1, 100))
+        self.game.console_open = True
+        self.assertEqual(self.fail_code("tag FRA"), "history_unreadable")
+        self.assertEqual(self.game.steps, [])
+
+    def test_the_read_is_tried_again_a_few_times_with_the_injected_sleep(self):
+        flaky = FlakyPath(self.history, [1, 2])
+        self.console._history_path = flaky
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assertGreater(self.game.clock(), 0.0)
+        self.assertLess(self.game.clock(), 1.0)
+
+    def test_a_failed_read_while_waiting_for_the_arrival_is_not_an_arrival_or_an_error(self):
+        flaky = FlakyPath(self.history, [2, 3])          # read 1 is the snapshot before typing
+        self.console._history_path = flaky
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+
+    def test_a_history_that_does_not_exist_yet_is_still_empty(self):
+        self.console._history_path = FlakyPath(self.history, [])
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\n")
+
+
+class LogGapTest(ConsoleTestCase):
+    def test_lost_log_lines_during_the_reply_wait_are_log_gap_not_a_reply(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+
+        def lose_lines_before_the_flush(sent):
+            if sent == 2:
+                with open(self.log, "a", encoding="utf-8") as f:
+                    f.write(logtail.GAP_MARKER + "\n")
+                self.game.on_step = None
+        self.game.on_step = lose_lines_before_the_flush
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("log_gap", True))
+
+    def test_a_gap_from_before_the_call_is_no_gap(self):
+        self.game.console_open = True
+        self.log.write_text(logtail.GAP_MARKER + "\n", encoding="utf-8")
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        self.assertEqual(self.console.run("tag FRA").lines, ["Now Playing - France"])
+
+
+class HelperErrorTest(ConsoleTestCase):
+    def boom(self, *args, **kwargs):
+        raise console.HelperError("helper_gone", "the helper has ended")
+
+    def assert_wrapped(self, call):
+        with self.assertRaises(console.ConsoleError) as e:
+            call()
+        self.assertEqual(e.exception.code, "helper: helper_gone")
+        self.assertIsInstance(e.exception.__cause__, console.HelperError)
+
+    def test_keys(self):
+        self.game.keys = self.boom
+        self.assert_wrapped(lambda: self.console.run("tag FRA"))
+
+    def test_window(self):
+        self.game.window = self.boom
+        self.assert_wrapped(lambda: self.console.run("tag FRA"))
+
+    def test_idle_and_focus(self):
+        self.game.foreground = False
+        self.game.idle_ms = self.boom
+        self.assert_wrapped(lambda: self.console.run("tag FRA"))
+        self.game.idle_ms = lambda: 45_000
+        self.game.focus = self.boom
+        self.assert_wrapped(lambda: self.console.run("tag FRA"))
+
+    def test_clear_line_and_ensure_open(self):
+        self.game.keys = self.boom
+        self.assert_wrapped(self.console.clear_line)
+        self.assert_wrapped(self.console.ensure_open)
 
 
 if __name__ == "__main__":
