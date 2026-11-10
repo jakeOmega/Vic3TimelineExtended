@@ -177,8 +177,8 @@ CASES: dict[str, Case] = {
         "Events and decisions outside any journal entry",
         "Events that fire from a yearly or monthly pulse, an on-action or a decision: the historical agitators "
         "(British, French, North German), the Emu War, Sweden's monarchy events, Austria's Trialism decision (Croat), "
-        "deposing a ruling dynasty (French, Spanish, Portuguese), the Polish rebellion and independence, a freed "
-        "people's country (Afro-American, Afro-Brazilian) and the German Confederation's member list.",
+        "deposing a ruling dynasty (French, Spanish, Portuguese), the Polish rebellion and independence, a small "
+        "German state asking to join a unifier, and a freed people's country (Afro-American, Afro-Brazilian).",
         hold=True,
         ruled="2026-11-09",
     ),
@@ -225,6 +225,10 @@ _ENTITIES: dict[str, Disposition] = {
     "eastern_question_russia.1": Disposition(ENTRIES, entries=("je_eastern_question_russia",)),
     "kazakhstan_events.2": Disposition(ENTRIES, entries=("je_pacify_the_steppes",)),
     "utilitarian.8": Disposition(ENTRIES, entries=("je_imperialism_of_promise",)),
+    # Rebuilt every month from an on-action, so the trace sees no journal entry; its list (the German Confederation's
+    # countries with North or South German as a primary culture) is read only by the Gründerzeit entry: the share of
+    # them with Mutual Funds and a railway opens it, and their GDP is summed while it runs.
+    "assemble_german_confederation_list_effect": Disposition(ENTRIES, entries=("je_grunderzeit",)),
     # politics
     "country_has_german_national_movement": Disposition(CASE, case="politics"),
     "country_has_italian_national_movement": Disposition(CASE, case="politics"),
@@ -236,7 +240,6 @@ _ENTITIES: dict[str, Disposition] = {
     # outside any journal entry
     "character_has_ideology_conflicting_with_ruling_dynasty": Disposition(CASE, case="standalone"),
     "culture_is_intuitive_slave_revolt_culture": Disposition(CASE, case="standalone"),
-    "assemble_german_confederation_list_effect": Disposition(CASE, case="standalone"),
     "on_become_independent_poland_effect": Disposition(CASE, case="standalone"),
     "on_monthly_pulse_country_spanish_monarchs_effect": Disposition(CASE, case="standalone"),
     "on_secession_start_polish_rebellion_effect": Disposition(CASE, case="standalone"),
