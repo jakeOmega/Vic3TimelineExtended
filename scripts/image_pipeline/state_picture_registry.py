@@ -57,6 +57,7 @@ TAIL = ", no text, no writing, no lettering on signs, no watermark, no signature
 PROMPT_AVOID = (
     "shop", "shops", "shopfront", "shopfronts", "sign", "signs", "signboard", "signboards", "neon",
     "billboard", "billboards", "banner", "banners", "flag", "flags", "poster", "posters", "skyline",
+    "shopping", "filling station", "motel", "diner",
     "civic", "capitol",
 )
 
@@ -489,6 +490,7 @@ WHEN = {  # a technology's date in a prompt, by its era
     "internet_of_things": "in the 2020s",
     "autonomous_vehicles": "in the 2040s", "synthetic_biology": "in the 2040s",
     "fusion_power": "in the 2040s",
+    **{tech: when for tech, when in CITY_LADDER.values()},
 }
 
 FARMLAND = ["farmland_rye", "farmland_rice", "farmland_millet", "farmland_wheat", "farmland_maize"]
@@ -822,6 +824,300 @@ DRAFTS = {
         "A fusion power plant {when} in open country: a vast white reactor hall with a low "
         "ring-shaped building around it, cylindrical cryogenic tanks trailing vapor, a hall of "
         "heavy transformers, lines of pylons, landscaped grounds, a few small figures"),
+
+    # ---- Wave 6: character, function and condition pictures of cities (design section 7) --------
+    # For any region, so none names a region's buildings. Each is on a rung of the city ladder.
+    "housing_blocks_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "Command Economy and Prefabricated Construction",
+        "A planned city district {when}: long identical five-storey prefabricated concrete "
+        "apartment blocks in parallel rows, a wide empty avenue with a few small cars, trams and "
+        "a queue at a tram stop, a bare square with one large bronze statue of a worker, tower "
+        "cranes raising more blocks, a factory's chimneys behind"),
+    "housing_blocks_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "Command Economy and Prefabricated Construction",
+        "A planned city district {when}: ranks of identical sixteen-storey grey concrete panel "
+        "tower blocks to the horizon, weathered and stained, a broad avenue with trolleybuses and "
+        "boxy cars, heating pipes on trestles crossing a muddy yard, playgrounds between the "
+        "blocks, washing on the balconies"),
+    "housing_blocks_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "Command Economy and Prefabricated Construction",
+        "A planned city district {when}: endless identical thirty-storey modular apartment "
+        "towers in a strict grid, each with the same balconies, a broad avenue of identical "
+        "electric buses, an elevated railway, a vast paved square with a single monumental "
+        "sculpture, few trees, cameras on tall poles"),
+    "boomtown_1": _draft(
+        "character", ["urban"], "urban_european", "art_deco_architecture", 1, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: steel frames of new buildings rising everywhere behind "
+        "wooden scaffolding, derrick cranes, a street half paved and half mud, trucks of bricks "
+        "and timber, crowds of newly arrived workers with suitcases, raw new brick blocks beside "
+        "tents and shacks, smoke and dust"),
+    "boomtown_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: a dozen tower cranes over half-built concrete apartment "
+        "blocks, a new road being laid by bulldozers and steamrollers, cement trucks, prefabricated "
+        "panels stacked on site, families moving in with furniture on handcarts, fields at the "
+        "edge already staked out"),
+    "boomtown_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: a forest of tower cranes over unfinished glass and concrete "
+        "towers wrapped in green netting, a new flyover on bare columns, excavators in deep pits, "
+        "streams of workers in hard hats, the last old low houses being pulled down, dust haze"),
+    "boomtown_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: slender towers rising under robotic climbing cranes, whole "
+        "prefabricated floors lifted into place, a new elevated railway on fresh concrete piers, "
+        "driverless construction machines, raw earth and young trees, a row of finished towers "
+        "gleaming behind"),
+    "declining_1": _draft(
+        "character", ["urban"], "urban_european", "art_deco_architecture", 1, "the state's people are falling",
+        "A declining industrial city {when}: a silent factory with cold chimneys and broken "
+        "windows, a long queue of men in caps and worn coats outside a soup kitchen, shuttered "
+        "fronts, an empty tram, weeds between the cobbles, a few thin children, a grey sky"),
+    "declining_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "the state's people are falling",
+        "A declining industrial city {when}: closed mills with boarded windows along a canal, "
+        "rows of emptied brick houses, some half demolished, a rusting gasholder, a few old cars, "
+        "an empty bus, a lone figure on the pavement, washing in one yard, a grey sky"),
+    "declining_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "the state's people are falling",
+        "A declining industrial city {when}: a vast abandoned steelworks rusting behind a chain-"
+        "link fence, empty lots where houses stood, boarded-up brick buildings, a cracked road "
+        "with one old car, leaning utility poles, saplings growing from a roof, a grey sky"),
+    "declining_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the state's people are falling",
+        "A shrinking city {when}: empty glass office towers with dark windows and missing panels, "
+        "a deserted street of blank shuttered fronts, grass growing through a wide "
+        "road, a single driverless bus, an abandoned elevated railway, young woodland taking a "
+        "whole district back"),
+    "divided_2": _draft(
+        "character", ["urban"], "urban_latin_american", "modern_urban_planning", 2, "a large city with high inequality",
+        "A divided city {when}: white modern apartment blocks and villas with gardens and "
+        "swimming pools behind high walls on a hill, and below them a dense hillside of shacks "
+        "of scrap wood and tin, mud lanes, washing lines, children, a few big cars on the "
+        "boulevard between"),
+    "divided_3": _draft(
+        "character", ["urban"], "urban_latin_american", "computer_aided_design", 3, "a large city with high inequality",
+        "A divided city {when}: gleaming glass towers and a walled compound of luxury flats with "
+        "a tennis court, pressed against a sea of bare brick and corrugated-iron shanties "
+        "crowding up to the wall, tangled wires, water tanks on roofs, a helicopter above the "
+        "towers"),
+    "divided_4": _draft(
+        "character", ["urban"], "urban_latin_american", "advanced_structural_engineering", 4, "a large city with high inequality",
+        "A divided city {when}: slender luxury towers with sky gardens and private landing pads "
+        "behind a high security wall, and outside it dense self-built brick housing stacked five "
+        "storeys high over narrow lanes, solar panels and water tanks on every roof, drones over "
+        "the wall"),
+    "smog_1": _draft(
+        "character", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy pollution",
+        "A city under coal smoke {when}: a street of soot-blackened brick buildings dim at "
+        "midday, a thousand chimneys pouring smoke into a yellow-brown fog, a tram with its lamps "
+        "lit, hunched pedestrians with scarves over their mouths, gas lamps glowing, factory "
+        "stacks fading into the murk"),
+    "smog_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "heavy pollution",
+        "A city under smog {when}: a wide avenue of traffic with headlamps lit in a brown haze "
+        "at midday, concrete blocks fading to silhouettes within a few streets, a power station's "
+        "stacks pouring smoke, soot-streaked walls, pedestrians holding handkerchiefs to their "
+        "faces, a dull orange sun"),
+    "smog_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "heavy pollution",
+        "A city under smog {when}: glass towers reduced to grey ghosts in thick yellow haze, a "
+        "jammed multi-lane expressway of cars and trucks trailing exhaust, pedestrians and "
+        "cyclists in white face masks, a dull red sun, chimneys and cooling towers faint at the "
+        "edge of sight"),
+    "smog_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "heavy pollution",
+        "A city under smog {when}: supertall towers vanishing into a brown haze a few floors up, "
+        "electric traffic crawling below, every pedestrian in a filter mask, tall air-cleaning "
+        "towers in a square, the windows of the blocks sealed, a dull red sun"),
+    "finance_1": _draft(
+        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "a high Financial District",
+        "A financial district {when}: a narrow street like a canyon between tall stone and art "
+        "deco bank buildings with bronze doors and columns, crowds of men in dark suits and hats, "
+        "messenger boys running, black motor cars and taxis, ticker tape drifting down from the "
+        "windows"),
+    "finance_3": _draft(
+        "function", ["urban"], "urban_european", "computer_aided_design", 3, "a high Financial District",
+        "A financial district {when}: a tight cluster of mirrored glass bank towers of forty "
+        "storeys around a paved plaza with an abstract steel sculpture, crowds of office workers "
+        "in suits with briefcases, black cars and taxis, a glass atrium, satellite dishes on the "
+        "roofs"),
+    "finance_4": _draft(
+        "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "a high Financial District",
+        "A financial district {when}: twisting and tapering supertall glass towers linked by "
+        "sky bridges around a plaza of trees and water, crowds of office workers, silent electric "
+        "cars, a glass trading hall lit from within, a helicopter pad high above"),
+    "industry_1": _draft(
+        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "most building levels are heavy industry",
+        "A heavy-industry city {when}: blast furnaces and a great steelworks glowing orange "
+        "beside rows of workers' brick houses, dozens of smoking chimneys, gasholders, cranes "
+        "over a canal of coal barges, a goods train crossing an iron bridge, a red-lit smoky sky"),
+    "industry_2": _draft(
+        "function", ["urban"], "urban_european", "modern_urban_planning", 2, "most building levels are heavy industry",
+        "A heavy-industry city {when}: a vast integrated steelworks and chemical plant of "
+        "towers, pipes and spherical tanks along a river, cooling towers steaming, long concrete "
+        "factory halls with saw-tooth roofs, workers streaming out at a gate on bicycles, blocks "
+        "of flats behind"),
+    "industry_3": _draft(
+        "function", ["urban"], "urban_european", "computer_aided_design", 3, "most building levels are heavy industry",
+        "A heavy-industry city {when}: an enormous refinery and petrochemical complex of silver "
+        "columns, flare stacks and pipe racks beside a car plant's long white halls, a yard of "
+        "thousands of new cars, freight trains, a motorway of trucks, tower blocks in the haze"),
+    "spaceport_2": _draft(
+        "function", ["urban"], "plains_arid", "modern_urban_planning", 2, "a launch site",
+        "A rocket launch site {when} on a flat coast: a tall white rocket standing beside a red "
+        "steel service tower, venting vapor, a huge boxy assembly building, concrete blockhouses, "
+        "tracking dishes, a crawler track, trucks, a town of low white houses in the distance"),
+    "spaceport_4": _draft(
+        "function", ["urban"], "plains_arid", "advanced_structural_engineering", 4, "a launch site",
+        "A spaceport {when} on a flat coast: three slender reusable rockets standing on pads, "
+        "one landing upright on a column of flame, tall lattice catch towers, white propellant "
+        "spheres, a glass control center, a road of electric trucks, a growing city behind"),
+    "spaceport_5": _draft(
+        "function", ["urban"], "plains_arid", "vactrains", 5, "a launch site",
+        "A spaceport {when}: a long electromagnetic launch track rising up a mountainside, wide "
+        "delta-winged spaceplanes at glass terminals, fat cargo rockets on a row of pads, a "
+        "vacuum-train tube arriving on pylons, a city of garden towers behind"),
+    "resort_1": _draft(
+        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "tourism dominates",
+        "A seaside resort {when}: a curving promenade with white art deco hotels and a domed "
+        "pavilion on an iron pier, striped bathing tents and deck chairs on the beach, holiday "
+        "crowds in summer whites, open motor cars, palm trees in tubs, sailing boats on a bright "
+        "sea"),
+    "resort_2": _draft(
+        "function", ["urban"], "urban_european", "modern_urban_planning", 2, "tourism dominates",
+        "A beach resort {when}: a row of white concrete hotel slabs of twelve storeys with "
+        "balconies along a sandy bay, plain striped parasols in ranks, swimming pools, a coast "
+        "road of small cars and coaches, a jet airliner low overhead, palm trees, a bright sea"),
+    "resort_4": _draft(
+        "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "tourism dominates",
+        "A beach resort {when}: terraced hotel towers stepped like hillsides and covered in "
+        "gardens, lagoon pools, an artificial island with villas, sleek electric ferries and a "
+        "white cruise ship, crowds on a palm-lined boardwalk, a bright sea"),
+    "capital_1": _draft(
+        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "the national capital, at metropolis size",
+        "A government quarter {when}: long colonnaded ministry buildings in pale stone around a "
+        "formal square with fountains and clipped trees, a wide ceremonial avenue, black official "
+        "motor cars, a mounted guard, clerks in dark suits, an equestrian statue"),
+    "capital_3": _draft(
+        "function", ["urban"], "urban_european", "computer_aided_design", 3, "the national capital, at metropolis size",
+        "A government quarter {when}: severe modern ministry slabs of concrete and dark glass "
+        "beside older colonnaded stone buildings around a formal square, a wide ceremonial "
+        "avenue, a motorcade of black cars with police motorcycles, broadcast vans with dishes, "
+        "clipped trees"),
+    "capital_4": _draft(
+        "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the national capital, at metropolis size",
+        "A government quarter {when}: a great transparent assembly hall with a broad glass roof "
+        "beside preserved colonnaded stone ministries, a formal square of fountains and trees "
+        "closed to traffic, a line of silent black cars, crowds of visitors, security drones"),
+    "devastated_early": _draft(
+        "condition", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy devastation, on the first two rungs",
+        "A city ruined by war {when}: roofless brick and stone buildings with empty window "
+        "holes, streets choked with rubble, a burnt-out tram on twisted rails, craters, smoke "
+        "rising from several fires, a few people pulling a handcart of belongings, a broken "
+        "bridge"),
+    "devastated_late": _draft(
+        "condition", ["urban"], "urban_european", "computer_aided_design", 3, "heavy devastation, from the third rung",
+        "A city ruined by war {when}: concrete tower blocks with whole faces sheared away and "
+        "floors hanging, a collapsed flyover, burnt-out cars and buses, shattered glass towers, "
+        "smoke columns, craters in a wide road, a few people picking through the rubble"),
+    "nuclear_strike_early": _draft(
+        "condition", ["urban"], "urban_european", "modern_urban_planning", 2, "a nuclear strike on the state, on the first three rungs",
+        "A city after an atomic bomb {when}: a flat grey plain of ash and rubble to the horizon, "
+        "a few twisted steel frames and scorched concrete shells standing, charred tree trunks, "
+        "a melted tram, drifting smoke under a dark yellow sky, no living thing in sight"),
+    "nuclear_strike_late": _draft(
+        "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "a nuclear strike on the state, from the fourth rung",
+        "A city after a nuclear strike {when}: the stumps of supertall towers snapped off and "
+        "blackened, a field of fused glass and rubble to the horizon, a collapsed elevated "
+        "railway, drifting ash under a dark yellow sky, no living thing in sight"),
+    "flooded_coast_4": _draft(
+        "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the warming system's sea-level stage, in a coastal state",
+        "A coastal city flooded by the risen sea {when}: streets turned to canals of brown water "
+        "between office blocks, small boats and rafts, sandbag walls, a half-drowned bus, people "
+        "on rooftops and footbridges of planks, a new concrete sea wall being built by cranes"),
+    "flooded_coast_5": _draft(
+        "condition", ["urban"], "urban_european", "vactrains", 5, "the warming system's sea-level stage, in a coastal state",
+        "A coastal city drowned by the risen sea {when}: the lower floors of old towers standing "
+        "abandoned in open water, green with weed, and behind a great curved sea wall a new city "
+        "of garden towers on raised ground, boats crossing between, sea birds"),
+
+    # ---- Wave 7: natural terrain in the motor age (optional) ------------------------------------
+    "mountains_road": _draft(
+        "nature", ["mountain"], "mountains", "modern_urban_planning", 1, "vanilla's generic mountains",
+        "High mountains {when}: a motorway carried on tall concrete viaducts along a valley side "
+        "and into a tunnel mouth, small cars and trucks, a cable car climbing to a station on a "
+        "ridge, a line of pylons over a pass, dark pine forest, snowy peaks"),
+    "mountains_northamerica_road": _draft(
+        "nature", ["mountain"], "mountains_northamerica", "modern_urban_planning", 1, "the Americas",
+        "Rocky mountains {when}: a two-lane highway winding beside a rushing river, a very long "
+        "freight train on the far bank, a steel truss bridge, big trucks, pylons striding up a "
+        "valley, pine forest, bare grey peaks with snow"),
+    "mountains_arid_road": _draft(
+        "nature", ["mountain"], "mountains_arid", "modern_urban_planning", 1, "an arid region",
+        "Bare arid mountains {when}: a paved road climbing in switchbacks across a dry rocky "
+        "slope, a convoy of trucks, a line of pylons crossing a ridge, a small roadside "
+        "settlement of flat roofs by a green patch of trees, sharp brown peaks in the haze"),
+    "hills_road": _draft(
+        "nature", ["hills"], "hills", "modern_urban_planning", 1, "vanilla's generic hills",
+        "Rolling green hills {when}: a new motorway curving through a deep cutting and over a "
+        "long bridge, small cars and trucks, a line of pylons, a tall lattice radio mast on the "
+        "highest summit, hedged pastures with sheep, a village in a fold of the land"),
+    "hills_jungle_road": _draft(
+        "nature", ["hills"], "hills_jungle", "modern_urban_planning", 1, "jungle hills",
+        "Jungle-covered hills {when}: a paved road cut into a steep green hillside, a concrete "
+        "bridge over a river gorge, loaded trucks and a bus, a landslide scar of red earth, a "
+        "line of pylons, low cloud caught in the trees"),
+    "hills_subtropic_road": _draft(
+        "nature", ["hills"], "hills_subtropic", "modern_urban_planning", 1, "Latin America",
+        "Green subtropical hills {when}: a winding paved highway with brightly painted buses and "
+        "trucks, terraced coffee bushes on the slopes, a small white town with red tile roofs on "
+        "a ridge, a line of pylons, banana plants, mist in the valleys"),
+    "plains_road": _draft(
+        "nature", ["plains"], "plains", "modern_urban_planning", 1, "vanilla's generic plains",
+        "A wide green plain {when}: a new motorway running straight to the horizon with a "
+        "cloverleaf junction, small cars and trucks, an electric railway alongside, rows of "
+        "pylons, large fields, a river with poplars, a distant town with a water tower"),
+    "plains_northamerica_road": _draft(
+        "nature", ["plains"], "plains_northamerica", "modern_urban_planning", 1, "the Americas",
+        "Open prairie {when}: an arrow-straight four-lane highway to the horizon, big trucks, a "
+        "freight train a mile long on a parallel track, a tall white grain elevator beside the "
+        "rails, a row of pylons, wind in the grass, an enormous sky"),
+    "plains_arid_road": _draft(
+        "nature", ["plains"], "plains_arid", "modern_urban_planning", 1, "an arid region",
+        "A dry plain of thorn scrub {when}: a straight tarred road with a convoy of trucks "
+        "trailing dust, a line of pylons, a railway with a diesel train, a roadside settlement "
+        "of tin roofs under a few trees, flat-topped hills on the horizon"),
+    "desert_road": _draft(
+        "nature", ["desert"], "desert", "modern_urban_planning", 1, "outside the Americas",
+        "A sand desert {when}: a black asphalt highway running between dunes, a convoy of "
+        "trucks, a steel pipeline beside the road, a line of pylons, a small pumping station "
+        "with silver tanks, a few camels, heat haze"),
+    "desert_northamerica_road": _draft(
+        "nature", ["desert"], "desert_northamerica", "modern_urban_planning", 1, "the Americas",
+        "A red rock desert {when}: a two-lane highway running straight across sagebrush flats "
+        "toward red sandstone cliffs, a few long cars and a big truck, a line of wooden utility "
+        "poles, a lone wind pump and water tank beside a cattle grid, tall cactus, heat haze"),
+    "tundra_pipeline": _draft(
+        "nature", ["tundra"], "tundra", "integrated_circuits", 1, "",
+        "Open tundra {when}: a silver pipeline on steel stilts zigzagging to the horizon, a "
+        "gravel service road with a truck, a small pumping station of metal sheds, a herd of "
+        "reindeer crossing under the pipe, patches of snow, low bare hills"),
+    "forest_road": _draft(
+        "nature", ["forest"], "forest", "modern_urban_planning", 1, "",
+        "A great conifer forest {when}: a two-lane asphalt road running through tall dark "
+        "trees, a log truck, a line of pylons in a cleared strip, a wooden fire-watch tower on "
+        "a rise, a lake between the trees, misty ridges"),
+    "jungle_road": _draft(
+        "nature", ["jungle"], "jungle", "modern_urban_planning", 1, "",
+        "Dense rainforest {when}: a long steel and concrete bridge carrying a highway across a "
+        "wide brown river, trucks and a bus, a tall lattice mast above the canopy, a river boat, "
+        "a small landing of tin roofs, low cloud over the trees"),
+    "wetland_road": _draft(
+        "nature", ["wetland"], "wetland", "modern_urban_planning", 1, "",
+        "A broad marsh {when}: a road on a low concrete causeway crossing reed beds and open "
+        "water, a few cars and a truck, a line of pylons on concrete footings, a pumping station "
+        "on a dike, white egrets, a flat-bottomed boat"),
 }
 
 

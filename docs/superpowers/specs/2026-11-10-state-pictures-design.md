@@ -224,8 +224,11 @@ would be over 1 GB.
    place in the weight above the rung.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
-6. **Character, function, conditions (about 40),** with theirs.
-7. **Natural terrain (about 15).**
+6. **Character, function, conditions (about 40),** with theirs. Its 39 prompts are drafted in `DRAFTS`
+   (18 character, 15 function, 6 condition), for any region and on the rungs where each fits.
+7. **Natural terrain (about 15).** Its 15 prompts are drafted in `DRAFTS`: each of vanilla's natural
+   pictures with the motor age in it (a motorway, pylons, a pipeline), on Modern Urban Planning for want of
+   a ladder of its own.
 
 If the set is cut: natural terrain first, then megacities merged into four broad families, then means and
 upkeep limited to rungs 2 to 4.
