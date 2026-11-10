@@ -295,9 +295,9 @@ class OpeningTest(unittest.TestCase):
         self.assertIn("te_frontier_ai_fix_law = yes", _strip_comments(_block(_read(EXTRA_EFFECTS), "fix_incompatible_laws")))
         body = _strip_comments(_block(_read(EFFECTS), "te_frontier_ai_fix_law"))
         self.assertRegex(body, r"has_law = law_type:law_no_frontier_ai_policy\s+has_technology_researched = ai_agents"
-                         r"\s+\}\s+activate_law = law_type:law_private_ai_labs")
+                         r"\s+\}\s+set_variable = te_law_sweep_replacing\s+activate_law = law_type:law_private_ai_labs")
         self.assertRegex(body, r"has_law = law_type:law_international_ai_oversight\s+NOT = \{ te_frontier_ai_un_member = yes \}"
-                         r"\s+\}\s+activate_law = law_type:law_national_ai_licensing")
+                         r"\s+\}\s+set_variable = te_law_sweep_replacing\s+activate_law = law_type:law_national_ai_licensing")
 
     def test_leaving_the_un_drops_oversight_and_says_so(self):
         ladder = _strip_comments(_read(UN_LADDER))
