@@ -86,6 +86,7 @@ VOTE_EVENTS = _path("events", "un_vote_events.txt")
 VOTE_EFFECTS = _path("common", "scripted_effects", "un_vote_effects.txt")
 CAST_EFFECTS = _path("common", "scripted_effects", "un_vote_cast_effects.txt")
 RESOLUTION_TRIGGERS = _path("common", "scripted_triggers", "un_resolution_triggers.txt")
+STANDING_VALUES = _path("common", "script_values", "un_standing_values.txt")
 MISSION_TRIGGERS = _path("common", "scripted_triggers", "un_mission_triggers.txt")
 COVERT_EFFECTS = _path("common", "scripted_effects", "covert_warfare_effects.txt")
 MODIFIERS = _path("common", "static_modifiers", "extra_modifiers.txt")
@@ -208,6 +209,67 @@ class SanctionsEnforcerTests(unittest.TestCase):
         self.assertEqual(len(guards), 1)
         self.assertIn("exists = scope:un_vote_target", guards[0])
         self.assertIn("NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }", _squash(guards[0]))
+
+
+class RefusalMeansSomethingTests(unittest.TestCase):
+    """un_vote.3 offers a refusal only where refusing changes something
+    (owner, 2026-11-10): a convention, a request that would bill the member,
+    or a decision accusing another country, which the refuser stands with."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _read(RESOLUTION_TRIGGERS)
+        cls.event = _block(_read(VOTE_EVENTS), "un_vote.3")
+        cls.options = _children(cls.event, "option")
+
+    def test_the_three_cases(self):
+        body = _squash(_block(self.triggers, "un_vote_3_can_refuse"))
+        self.assertIn("has_tag = un_res_passed", body)
+        self.assertIn("un_resolution_has_vote = { LIST = un_res_no }", body)
+        for case in ("scope:un_resolution ?= { un_resolution_is_convention = yes }",
+                     "un_vote_3_pledge_bills_us = yes",
+                     "un_vote_3_can_stand_with_target = yes"):
+            with self.subTest(case=case):
+                self.assertIn(case, body)
+
+    def test_a_pledge_counts_only_when_it_bills(self):
+        body = _squash(_block(self.triggers, "un_vote_3_pledge_bills_us"))
+        self.assertIn("country_rank >= rank_value:major_power", body)
+        self.assertIn("has_tag = un_topic_aid_request", body)
+        self.assertIn("un_resolution_peacekeeping_full = yes", body)
+
+    def test_standing_with_needs_another_country_accused(self):
+        body = _squash(_block(self.triggers, "un_vote_3_can_stand_with_target"))
+        self.assertIn("un_resolution_accuses_target = yes", body)
+        self.assertIn("NOT = { un_resolution_is_convention = yes }", body)
+        self.assertIn("var:un_res_target ?= { is_country_alive = yes NOT = { this = root } }", body)
+
+    def test_options_split_on_it(self):
+        acknowledge, accept, refuse = (_squash(o) for o in self.options)
+        self.assertIn("trigger = { NOT = { un_vote_3_can_refuse = yes } }", acknowledge)
+        self.assertIn("trigger = { un_vote_3_can_refuse = yes }", accept)
+        self.assertIn("trigger = { un_vote_3_can_refuse = yes }", refuse)
+
+    def test_denouncing_a_decision_pays_relations_with_the_accused(self):
+        refuse = self.options[2]
+        gains = [lim for lim, body in _ifs(refuse)
+                 if "country = scope:un_vote_target value = un_vote_3_stand_with_target_relations" in _squash(body)]
+        self.assertEqual(len(gains), 1)
+        self.assertIn("un_resolution_kind_is_decision = yes", gains[0])
+        self.assertIn("un_vote_3_can_stand_with_target = yes", gains[0])
+        self.assertNotIn("un_vote_3_stand_with_target_relations", self.options[1])
+        value = re.search(r"^un_vote_3_stand_with_target_relations = (\d+)", _read(STANDING_VALUES), re.M)
+        # More than the ballot against earned, or the second statement buys nothing new.
+        self.assertGreater(int(value.group(1)), 15)
+
+    def test_the_event_says_when_there_is_no_choice(self):
+        self.assertIn("desc = un_vote.3.d_choice_none", self.event)
+        loc = _loc_keys()
+        self.assertIn("un_vote.3.d_choice_none", loc)
+        for key in ("un_vote.3.c_decision", "un_vote.3.c_decision_tt", "un_vote.3.c_vetoed_tt",
+                    "un_vote.3.d_choice_decision", "un_vote.3.d_choice_vetoed"):
+            with self.subTest(key=key):
+                self.assertIn("[SCOPE.sCountry('un_vote_target').GetName]", loc[key])
 
 
 class TargetAcceptanceTests(unittest.TestCase):
