@@ -185,20 +185,20 @@
 		Unlocking Technologies:
 			Atmospheric Engine
 		Unlocks Ship Modifications: $ship_mod_barque_rig_compound_engine$, $ship_mod_full_sail_rig_compound_engine$
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 18 (listed under their buildings in buildings.txt)
 	Atmospheric Engine - The Atmospheric Engine is the first steam engine that has an actual practical application.
 		Unlocking Technologies:
 			Shaft Mining
 		Unlocks Buildings: Motor Industries
 		Unlocks Ship Modifications: $ship_mod_full_sail_rig_single_expansion_engine$
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Railways - The first steam locomotive railways were built to transport passengers, only later being used for industrial purposes. The efficient and rapid method of travel quickly rendered canal systems obsolete, sometimes just years after the canals had been completed at great expense.
 		Unlocking Technologies:
 			Mechanical Tools
 			Atmospheric Engine
 		Unlocks Buildings: Railway
 		Unlocks Mobilization Options: Rail Transport
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
 	Chemical Bleaching - Through the addition of certain salts, minerals, or chemicals to the raw materials, the visual qualities of manufactured goods can be greatly increased.
 		Unlocking Technologies:
 			Crystal Glass
@@ -207,7 +207,7 @@
 		Unlocking Technologies:
 			Intensive Agriculture
 			Prospecting
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Bessemer Process - The Bessemer process is a technique for the mass production of steel from pig iron.
 		Unlocking Technologies:
 			Steelworking
@@ -342,11 +342,11 @@
 	Steam Donkey - By applying steam power to a winch system it is possible to achieve similar levels of power without the same amount of labor.
 		Unlocking Technologies:
 			Intensive Agriculture
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Dynamite - By applying a stabilizing agent to nitroglycerin it is possible to make a much safer and more reliable explosive.
 		Unlocking Technologies:
 			Nitroglycerin
-		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 19 (listed under their buildings in buildings.txt)
 	Rubber Mastication - Natural rubber is a strange, viscous thing that needs heavy working in order to create a suitable material for industrial use.
 		Unlocking Technologies:
 			Fractional Distillation
@@ -718,7 +718,7 @@
 	Compression Ignition - A compression ignition engine ignites the fuel by compressing air and has the highest thermal efficiency of any engine.
 		Unlocking Technologies:
 			Combustion Engine
-		Unlocks PMs: 15 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 25 (listed under their buildings in buildings.txt)
 	Destroyer - Lighter vessels, equipped with torpedoes and smaller guns, are just as important in modern navies as capital ships.
 		Unlocking Technologies:
 			$ship_type_modern_ironclad$
@@ -859,12 +859,12 @@
 		Unlocking Technologies:
 			Arc Welding
 		Unlocks Buildings: Nickel and Cobalt Mine
-		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 21 (listed under their buildings in buildings.txt)
 	Modern Tools - Tools like forklifts have made our workplaces more efficient and safer. They've improved productivity and reduced the number of accidents, which is good for everyone.
 		Unlocking Technologies:
 			Modern Materials
 		Unlocks Buildings: Manganese Mine
-		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 20 (listed under their buildings in buildings.txt)
 	Modern Skyscrapers - Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.
 		Unlocking Technologies:
 			Modern Materials
@@ -925,7 +925,7 @@
 			Nitrogen Fixation
 			Isoprene
 		Unlocks Buildings: Lithium Mine
-		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 23 (listed under their buildings in buildings.txt)
 	Aluminum Mass Production - We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.
 		Unlocking Technologies:
 			Arc Welding
@@ -991,7 +991,7 @@
 		Unlocking Technologies:
 			Modern Tools
 		Unlocks Buildings: Berlin TV Tower, Electronic Components and Semiconductor Industry
-		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 21 (listed under their buildings in buildings.txt)
 	Nuclear Energy - By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.
 		Unlocking Technologies:
 			Nuclear Weapons
@@ -1059,7 +1059,7 @@
 		Unlocking Technologies:
 			Transistor Technology
 		Unlocks Buildings: Moscow State University
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
 	Integrated Circuits - By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.
 		Unlocking Technologies:
 			Transistor Technology
@@ -1178,7 +1178,7 @@
 			Computer Networks
 			Advanced Assembly Lines
 		Unlocks Buildings: Itaipu Dam, Robotics Industry
-		Unlocks PMs: 15 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 25 (listed under their buildings in buildings.txt)
 	Supersonic Aircraft - Aircraft that can travel faster than the speed of sound. They've made air travel faster and have enhanced our military aviation capabilities.
 		Unlocking Technologies:
 			Inertial Navigation Systems
@@ -1220,7 +1220,7 @@
 			Barcodes and Scanners
 		Unlocks Buildings: Petronas Towers
 		Unlocks Mobilization Options: Home Communications
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
 	Barcodes and Scanners - Those little black and white lines have changed the face of retail and logistics. Now we can track products and sales with a simple scan, making everything much more efficient.
 		Unlocking Technologies:
 			Laser Technology
@@ -1278,7 +1278,7 @@
 		Unlocking Technologies:
 			Personal Computers
 		Unlocks Buildings: Gardens by the Bay, HVDC Undersea Interconnector, Renewable Energy Plant, Three Gorges Dam
-		Unlocks PMs: 121 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 160 (listed under their buildings in buildings.txt)
 	Supply Chain Management - By using technology and data to optimize our supply chains, we can make them more efficient and less costly. It's all about getting the right things to the right place at the right time.
 		Unlocking Technologies:
 			Computer Networks
@@ -1389,7 +1389,7 @@
 			Clean Energy Technologies
 		Unlocks Buildings: Carbon Conversion Works
 		Unlocks Laws: Managed Fossil Phaseout
-		Unlocks PMs: 120 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 159 (listed under their buildings in buildings.txt)
 	Machine Learning - We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful.
 		Unlocking Technologies:
 			Cloud Computing
@@ -1421,7 +1421,7 @@
 		Unlocking Technologies:
 			Wireless Internet (Wi-Fi)
 			Cloud Computing
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
 	mRNA Therapeutics - Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.
 		Unlocking Technologies:
 			Modern Pharmaceuticals
@@ -1434,7 +1434,7 @@
 		Unlocking Technologies:
 			Reusable Rocketry
 		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
-	In-Situ Resource Utilization - Every kilogram lifted from Earth is dear. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there.
+	In-Situ Resource Utilization - Every kilogram lifted from Earth is expensive. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there.
 		Unlocking Technologies:
 			Reusable Rocketry
 		Unlocks Buildings: Extraplanetary Base
@@ -1496,7 +1496,7 @@
 			Additive Manufacturing
 		Unlocks Buildings: Advanced Material Fabricator
 		Unlocks Ship Modifications: Composite Armor Plating
-		Unlocks PMs: 140 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 189 (listed under their buildings in buildings.txt)
 	Abyssal Plain Mining - By mining the deep ocean floor, we can access valuable minerals and resources that are otherwise out of reach. This could be a game-changer for industries like electronics and renewable energy.
 		Unlocking Technologies:
 			Additive Manufacturing
@@ -1548,7 +1548,7 @@
 			Directed Energy Defenses
 		Unlocks Ship Types: Pulsed Laser Escort
 		Unlocks Ship Modifications: DEW Point Defense
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 22 (listed under their buildings in buildings.txt)
 	Space Militarization - As space becomes more important strategically, we're seeing a push to develop and deploy military capabilities there. This raises concerns about the weaponization of space and the need for new rules of engagement.
 		Unlocking Technologies:
 			Reusable Rocketry
