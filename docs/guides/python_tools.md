@@ -1128,3 +1128,13 @@ A full-file override whose vanilla base is committed as
 unresolved loc key on a line that file also holds is vanilla's reference and
 warns (`VANILLAS_DETAIL`): `pop_browser_panel.gui`'s `text = "STATE"`, which
 vanilla's English loc has only as `state`. A key the mod adds still errors.
+
+## Driving the game from a session (probed 2026-11-10, no tool yet)
+
+No harness exists yet; the design is `docs/superpowers/specs/2026-11-10-in-game-qa-harness-design.md`, and § 3 of it lists what was verified on the owner's machine. What a session needs to know before touching a running game by hand:
+
+- **Ask the owner before launching the game** unless they granted launches for the session, and read `nvidia-smi` first even then.
+- **Back up `save games/autosave*.v3`, `continue_game.json`, `console_history.txt` and the logs before a launch, and keep the backup until the comparison afterwards has been read.** A launch rotates the logs, and a run that crosses an autosave date pushes the owner's oldest autosaves out.
+- **`debug.log` is block-buffered, about 4 KB at a time**: a `debug_log` or console line can sit unwritten for over a minute. Anything that writes another 4 KB pushes it out (the console's `help ndefines.ngui` does). `log_triage.py` after the game has closed is unaffected.
+- **The game is started from WSL** with `powershell.exe Start-Process` on `binaries/victoria3.exe`, with Steam running; it then uses the playset in the user-data folder's `content_load.json` and whatever is in `mod_deploy_target`. End only the process you started, by its id.
+- **Keys reach the game through `SendInput` from a Windows-side process**, and only while its window is the foreground one on an unlocked desktop. The debugger socket (`-script_debugger`, `127.0.0.1:6111`) is reachable from the Windows side, not from WSL's default network.

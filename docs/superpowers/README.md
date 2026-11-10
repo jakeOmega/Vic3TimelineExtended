@@ -66,6 +66,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [specs/2026-11-02-charts-help-national-info-design.md](specs/2026-11-02-charts-help-national-info-design.md): extends the wide-mode work with a full-screen viewer for the 33 history charts, a Help popup per system in place of each collapsed "How X Works" section, and other countries' public panels in the Census Data window renamed ("National Info"), with every body bound to a `Country` and the controls shown only for the player's country | Scoping, nothing built (2026-11-02) | All of it: its § 10 build order (Help, the chart registry and viewer, then the binding rule, National Info and the systems a few at a time), and the owner's calls in its § 11 |
 | [plans/2026-11-02-charts-help-national-info.md](plans/2026-11-02-charts-help-national-info.md): nine PRs in three tracks: H1–H2 the Help popups (each "How X Works" section left as a link to its page, a "?" in each tab header), C1–C2 the chart registry and generator (two wrapper types a chart) and the viewer popups, F0 every mount supplying a `Country` with the own-country guard and tests (no visible change), F1 National Info, F2–F5 the public systems bound a few per PR | Not started (2026-11-02) | All of it; the owner's calls in the spec's § 11, each defaulted in the plan |
 
+### Tooling
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-11-10-in-game-qa-harness-design.md](specs/2026-11-10-in-game-qa-harness-design.md): a harness with which a Claude session launches Victoria 3, plays as a chosen country, runs prepared effects, fires events, picks their options from the console and reads triggers and values back, with the owner's saves and logs snapshotted and restored around every run and a permission-and-GPU gate before every launch | Design only (2026-11-10): the engine facts of § 3 were probed on the owner's machine | Everything: the owner's approval, § 7's five assumptions, then the plan |
+
 ## Archived — `archive/`
 
 Everything below has shipped. PR numbers are the main build first, then follow-ups.
