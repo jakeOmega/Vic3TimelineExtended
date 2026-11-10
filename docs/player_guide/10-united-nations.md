@@ -422,20 +422,25 @@ carry the random −20 to +20, so a close vote can turn on the day it is cast.
 
 ### Complying with a UN resolution
 
-When a resolution carries, every member that voted against it may accept it or
-refuse. Refusing a convention (Refuse to ratify it) keeps you outside it, with
-neither its party terms nor its benefits, though any term that reaches every
-country still reaches you. Refusing an aid or peacekeeping
-request (Refuse to take part) means you contribute nothing. Refusing anything
-else (Denounce the decision) is a statement on the record that changes nothing.
+When a resolution carries, a member that voted against it may accept it or
+refuse, wherever refusing would change something. Refusing a convention (Refuse
+to ratify it) keeps you outside it, with neither its party terms nor its
+benefits, though any term that reaches every country still reaches you.
+Refusing an aid request or a full peacekeeping deployment (Refuse to take part)
+means you contribute nothing; only major powers and above are asked. Refusing a
+decision that accuses another country, such as a condemnation, sanctions or a
+military mandate (Denounce it and stand with the accused), doesn't stop the
+decision but earns you 25 relations with that country. Anything else you only
+acknowledge: a charter reform, a request that asks nothing of your rank, or a
+verdict on yourself, which your ballot already answered.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
-you opposed earns 2 standing, except a peacekeeping request, whose contribution
-is its own reward. A resolution that a veto blocked or softened binds no one, so
-accepting or refusing it moves no standing or case strength. A referral to the World Court and a supervised referendum
-bind only the country they name, which answers in its own event, and a petition
-to lift sanctions asks nothing of the members, so accepting or refusing these
-moves no standing or case strength. A member that voted in favor,
+you could have refused earns 2 standing, except a peacekeeping request, whose
+contribution is its own reward. A resolution that a veto blocked or softened
+binds no one, so accepting or refusing it moves no standing or case strength. A
+referral to the World Court and a supervised referendum bind only the country
+they name, which answers in its own event, so accepting or refusing these moves
+no standing or case strength either. A member that voted in favor,
 or did not vote, ratifies a carried convention without being asked, except that
 a member holding warheads that did not vote stays outside the nuclear ban.
 

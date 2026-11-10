@@ -2044,13 +2044,22 @@ un_vote.3 = {
 		# that held has blocked it or left only a form that binds no one, so
 		# answering it is a statement only (options B and C).
 		first_valid = {
+			# ...and when no answer of ours would change anything, there is
+			# no choice to describe (un_vote_3_can_refuse).
 			triggered_desc = {
 				trigger = {
 					scope:un_resolution ?= {
 						has_tag = un_res_passed
-						has_tag = un_res_vetoed
 						un_resolution_has_vote = { LIST = un_res_no }
 					}
+					NOT = { un_vote_3_can_refuse = yes }
+				}
+				desc = un_vote.3.d_choice_none
+			}
+			triggered_desc = {
+				trigger = {
+					un_vote_3_can_refuse = yes
+					scope:un_resolution ?= { has_tag = un_res_vetoed }
 				}
 				desc = un_vote.3.d_choice_vetoed
 			}
@@ -2097,9 +2106,13 @@ un_vote.3 = {
 		}
 	}
 
-	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, or you
+	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, you
 	# cast no ballot (joined the UN after vote.1 fired, or lost the vote under
-	# Article 19). In the last case the country is still bound by a passed
+	# Article 19), or you voted no and refusing would change nothing
+	# (un_vote_3_can_refuse: an answer that only costs is not offered). A
+	# no-voter here takes what accepting gave it before, less the compliance
+	# standing: it was asked for nothing, so it complied with nothing. In the
+	# no-ballot case the country is still bound by a passed
 	# convention (default acceptance), since the apply blocks below gate on
 	# the passed tag; but what only a ballot commits a member to — a great
 	# power's anti-colonial stance, a pledge of peacekeepers or aid — is
@@ -2108,10 +2121,7 @@ un_vote.3 = {
 		name = un_vote.3.a
 		default_option = yes
 		trigger = {
-			OR = {
-				NOT = { scope:un_resolution ?= { has_tag = un_res_passed } }
-				NOT = { scope:un_resolution ?= { un_resolution_has_vote = { LIST = un_res_no } } }
-			}
+			NOT = { un_vote_3_can_refuse = yes }
 		}
 
 		# Apply the persistent treaty/declaration modifier directly in the
@@ -2138,12 +2148,7 @@ un_vote.3 = {
 			trigger = { always = yes }
 			text = un_vote.3.b
 		}
-		trigger = {
-			scope:un_resolution ?= {
-				has_tag = un_res_passed
-				un_resolution_has_vote = { LIST = un_res_no }
-			}
-		}
+		trigger = { un_vote_3_can_refuse = yes }
 
 		# Same effects as yes voters - you accept the majority decision
 		un_vote_apply_treaty_modifier = yes
@@ -2237,13 +2242,14 @@ un_vote.3 = {
 		}
 	}
 
-	# Option C: Vote passed AND you voted no - refuse to comply. What that
-	# means depends on the resolution, and the name and first tooltip line say
-	# which: stay outside a convention, take no part in a request for aid or
-	# peacekeepers, or — for every decision of the whole Assembly (a mandate,
-	# sanctions, a condemnation, an expulsion, a reform) — denounce it on the
-	# record. Refusing never stops or weakens the resolution itself; the
-	# effects below are the whole of it.
+	# Option C: Vote passed AND you voted no - refuse to comply. Offered only
+	# where refusing changes something (un_vote_3_can_refuse), and the name
+	# and first tooltip line say what: stay outside a convention, take no part
+	# in a request for aid or peacekeepers that would bill us, or — for a
+	# decision of the whole Assembly that accuses another country (a mandate,
+	# sanctions, a condemnation, an expulsion) — denounce it and stand with
+	# the accused, which earns its goodwill. Refusing never stops or weakens
+	# the resolution itself; the effects below are the whole of it.
 	option = {
 		name = {
 			trigger = { scope:un_resolution ?= { un_resolution_is_convention = yes } }
@@ -2257,12 +2263,7 @@ un_vote.3 = {
 			trigger = { always = yes }
 			text = un_vote.3.c_decision
 		}
-		trigger = {
-			scope:un_resolution ?= {
-				has_tag = un_res_passed
-				un_resolution_has_vote = { LIST = un_res_no }
-			}
-		}
+		trigger = { un_vote_3_can_refuse = yes }
 
 		if = {
 			limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
@@ -2287,6 +2288,18 @@ un_vote.3 = {
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
 		change_infamy = 3
+
+		# Standing with the accused: what denouncing a decision buys. The
+		# ballot against it already earned 15 (un_vote_cast_no); saying so
+		# again once it has carried, at the price above, earns more.
+		if = {
+			limit = {
+				scope:un_resolution ?= { un_resolution_kind_is_decision = yes }
+				un_vote_3_can_stand_with_target = yes
+			}
+			change_relations = { country = scope:un_vote_target value = un_vote_3_stand_with_target_relations }
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
+		}
 
 		# International standing: openly refusing a BINDING decision is the
 		# defiance the brief asks to punish. Refusing a recommendatory one is
@@ -2349,6 +2362,27 @@ un_vote.3 = {
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 20
+			}
+			# Standing with the accused: a friend of the target does, and
+			# nobody takes the costs to side with a rival or a country it is
+			# cold towards.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { un_resolution_kind_is_decision = yes }
+					scope:un_vote_target ?= { relations:root >= relations_threshold:cordial }
+				}
+				add = 30
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { un_resolution_kind_is_decision = yes }
+					exists = scope:un_vote_target
+					OR = {
+						has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
+						scope:un_vote_target ?= { relations:root <= relations_threshold:poor }
+					}
+				}
+				factor = 0
 			}
 			# NPT: nuclear powers refuse rather than disarm
 			modifier = {

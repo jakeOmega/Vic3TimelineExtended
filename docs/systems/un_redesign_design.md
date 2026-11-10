@@ -508,9 +508,9 @@ the two decisions is **(proposed)**: a first shape to tune. Not yet seen in a ru
   votes against at most **(owner, 2026-10-16)**. An enforcer that is still the petitioner's rival
   takes the rivalry, the relations and its own term together, which puts it well past the veto
   line, so one with a seat vetoes, at the veto's usual cost.
-- **Members who voted against.** In `un_vote.3` accepting earns no compliance standing and
-  denouncing books no defiance: the lift asks nothing of them. Refusing still costs the relations
-  and infamy it costs on every resolution.
+- **Members who voted against.** The lift asks nothing of them, so since 2026-11-10 `un_vote.3`
+  gives them only the acknowledgement (`un_vote_3_can_refuse`): no compliance standing, and no
+  refusal to pay relations and infamy for.
 
 ### The lean (`un_lean_interests_lift_sanctions`)
 
@@ -841,7 +841,7 @@ hidden until Reform I carries (`un_charter_reform_ii_in_view`, through
 still ask `un_charter_has_reform`. The resolution triggers sort the topics as the table above
 says; `un_resolution_veto_blocks` names the four with no graduated form, and
 `un_resolution_asks_pledges` keeps an observer request out of `un_vote.3`'s pledge wording
-(the UN's budget pays the observers, so refusing it only denounces it). `un_vote.3` books no
+(the UN's budget pays the observers, so there is nothing to refuse and a no-voter only acknowledges it). `un_vote.3` books no
 standing or defiance for accepting or denouncing a court referral or a supervised referendum:
 only the country each names answers for it, in its own event (`un_court.2`, `un_referendum.1`). The Standing Force and
 the Fund each take a share of the budget (`un_force_budget_share` 0.1,
