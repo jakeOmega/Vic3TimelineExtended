@@ -208,6 +208,21 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((code, out["refused"]), (2, "game_still_up"))
         self.assertNotIn("game_exited", [e["event"] for e in snapshot.journal(snap)])
 
+    def test_snapshot_refuses_while_a_run_is_unfinished(self):
+        taken, _ = self.run_cli("snapshot")
+        snap = snapshot.all_snapshots(self.backups)[0]
+        snapshot.record(snap, "started", pid=MINE.pid, created=MINE.created)
+        out, code = self.run_cli("snapshot")
+        self.assertEqual((code, out["refused"], out["unfinished"]), (2, "unfinished_run", [taken["id"]]))
+        self.assertEqual(len(snapshot.all_snapshots(self.backups)), 1)
+        snapshot.record(snap, "game_exited")
+        self.run_cli("recover")
+        self.assertEqual(self.run_cli("snapshot")[1], 0)
+
+    def test_selftest_restore_leaves_no_scratch_folder_behind(self):
+        self.run_cli("selftest-restore")
+        self.assertEqual([p.name for p in self.backups.iterdir() if p.name.startswith("selftest_")], [])
+
     def test_selftest_restore_matches_and_changes_nothing(self):
         before = self.tree()
         out, code = self.run_cli("selftest-restore")

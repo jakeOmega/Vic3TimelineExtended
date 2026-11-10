@@ -75,6 +75,11 @@ def cmd_gate(args) -> tuple[dict, int]:
 
 def cmd_snapshot(args) -> tuple[dict, int]:
     user, backups = _paths()
+    open_runs = restore.unfinished(backups) if backups.is_dir() else []
+    if open_runs:
+        # Snapshots must never nest: one taken over a dead run's leftovers records them as the owner's files.
+        return {"refused": "unfinished_run", "unfinished": [s.id for s in open_runs],
+                "detail": "an earlier run was never restored: close its game and run `recover` first"}, 2
     extra = ["save games/" + (name if name.endswith(".v3") else name + ".v3") for name in args.save]
     snap = snapshot.take(user, backups, extra=extra)
     pruned = restore.prune(backups, keep=KEEP_SNAPSHOTS, current=snap.id)
@@ -122,12 +127,14 @@ def cmd_held(args) -> tuple[dict, int]:
 
 def cmd_selftest_restore(args) -> tuple[dict, int]:
     """Snapshot the real user-data folder, restore it into an empty temp
-    folder, and compare every file's hash with its manifest entry. Reads the
-    user-data folder; writes only to the backup root and the temp folder."""
+    folder, and compare every file's hash and time with its manifest entry.
+    Reads the user-data folder; writes only under the backup root, where the
+    temp folder also sits, so the check runs on the backup drive's own
+    filesystem (a Windows drive keeps times differently from /tmp)."""
     user, backups = _paths()
     snap = snapshot.take(user, backups)
     mismatched = []
-    with tempfile.TemporaryDirectory(prefix="game_qa_selftest_") as tmp:
+    with tempfile.TemporaryDirectory(prefix="selftest_", dir=backups) as tmp:
         target = Path(tmp)
         for rel in snap.files:
             (target / rel).parent.mkdir(parents=True, exist_ok=True)
