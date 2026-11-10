@@ -56,8 +56,8 @@ dues](#un-dues-and-article-19).
 
 Leave the UN, which asks you to confirm, ends your membership, seat, programs
 and conventions.
-It costs 5 [standing](#international-standing) and gives UN Withdrawal
-Consequences for five years (−25% relations improvement speed, −5% prestige),
+It costs 5 [standing](#international-standing) and gives Estranged from the
+United Nations for five years (−25% relations improvement speed, −5% prestige),
 during which you cannot rejoin. Sanctions against you stay in force, and so do
 unpaid dues. Sanctions you enforce lapse the month after you leave. A permanent
 member walking out knocks authority down at once (4 points for a typical great
@@ -261,8 +261,8 @@ infamy when it blocks a condemnation, the ICC or a peacekeeping request. At
 Moribund it costs only the relations. While you carry the isolation, any member
 may table a Motion to Expel a Permanent Member against you: it needs two thirds
 of the members with a vote and cannot be vetoed. If it carries you lose the seat
-and 5 standing, stay a member, carry UN Withdrawal Consequences for ten years,
-and lose your standing benefits for five.
+and 5 standing, stay a member, carry Estranged from the United Nations for ten
+years, and lose your standing benefits for five.
 
 Each veto outside Moribund also adds 5 to your **veto record**, which fades by 5% a year. A
 motion to expel is weighed on its own case, not the case that decides

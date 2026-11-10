@@ -216,6 +216,14 @@ class UnitedNations(unittest.TestCase):
         self.assertIn("un_teeth_condemn_by_tier = yes", shown)
         self.assertIn("name = un_sanctions_target_modifier multiplier = un_enforcement", shown)
 
+    def test_the_seat_losers_modifier_does_not_say_it_withdrew(self):
+        """One modifier marks a country that walked out and one whose seat
+        was voted away, so its name and description must be true of both."""
+        self.assertNotIn("Withdrawal", KEYS["un_withdrawal_penalty_modifier"])
+        desc = KEYS["un_withdrawal_penalty_modifier_desc"]
+        self.assertIn("walked out", desc)
+        self.assertIn("permanent seat", desc)
+
     def test_the_decolonization_declaration_tells_each_colonial_power(self):
         self.assertRegex(self.vote2, r"name = un_decolonization_pressure_modifier[^}]*\}\s*"
                                      r"post_notification = un_decolonization_pressure_notice")

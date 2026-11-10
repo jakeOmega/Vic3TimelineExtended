@@ -3317,7 +3317,7 @@
  un_walkout_condemn_modifier_desc:0 "This country condemned a bloc walkout at the General Assembly and rallied the remaining members."
  un_walkout_join_modifier_desc:0 "This country joined a bloc walkout at the General Assembly, rejecting the institution's authority."
  un_walkout_mediator_modifier_desc:0 "This country attempted to mediate after a dramatic walkout at the General Assembly."
- un_withdrawal_penalty_modifier_desc:0 "Having withdrawn from the United Nations, this country faces a temporary reduction in diplomatic reputation and [concept_prestige]."
+ un_withdrawal_penalty_modifier_desc:0 "This country walked out of the United Nations, or the [concept_un_general_assembly] voted its permanent seat away. While this lasts it cannot rejoin, and cannot be seated on the [concept_un_security_council] again."
  united_nations:0 "United Nations"
  use_one_nuke_desc:0 "Use one nuclear weapon from our stockpile."
  veteran_advisory_modifier:0 "Veteran Advisory Board"
