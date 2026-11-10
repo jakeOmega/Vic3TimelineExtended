@@ -73,7 +73,9 @@ class Outcome:
     removed: list[str]
     held: bool  # True only if this call recorded the snapshot as held
     # "" | "other_game_running" | "modified_after_exit" | "no_reference_time" | "modified_during_restore"
-    # recover() adds "game_still_up" (left alone, nothing recorded) and "error: <message>" (restore raised).
+    # | "already_restored" (another game is running and the journal already ends in `restored`: left as it is,
+    # nothing recorded, held False). recover() adds "game_still_up" (left alone, nothing recorded) and
+    # "error: <message>" (restore, or own_game_up, raised).
     reason: str
 
 
@@ -394,6 +396,9 @@ def restore(
 ) -> Outcome:
     """Put `user_data` back as `snap` found it, or hold.
 
+    A snapshot whose journal already ends in `restored` is left as it is while another game is running:
+    `Outcome([], [], False, "already_restored")`, nothing recorded (it must not turn up as held).
+
     Holds, changing nothing, if another game is running (checked before any file is read) or a changed,
     added or created file, logs excepted, was modified more than SLACK_SECONDS after the run's end, or such a
     file exists and the journal gives no end at all (reasons `other_game_running`, `modified_after_exit`,
@@ -412,6 +417,8 @@ def restore(
     """
     user_data = Path(user_data)
     if other_game_running:
+        if _state(snap) == "restored":
+            return Outcome([], [], False, "already_restored")  # finished: another game does not make it held
         return _hold(snap, "other_game_running", now)
     diff, seen = _compare(snap, user_data)
     reason, late = _hold_reason(snap, user_data, diff)
@@ -459,16 +466,27 @@ def recover(
     newest first removes one layer at a time and ends in the oldest snapshot's files. Oldest first would end
     in the leftovers.
 
-    `own_game_up` is given each snapshot's `started` journal entry (with the game's pid and creation time).
-    If it says any run's game is still up, nothing is restored: every unfinished snapshot is reported with
-    reason "game_still_up" and held False, and nothing is recorded. If `restore` raises for a snapshot, that
-    snapshot is reported with held False and reason "error: <message>", its journal untouched, and the
-    unwinding stops there; the results gathered before it are kept.
+    `own_game_up` is asked about every unfinished snapshot first, with that snapshot's last `started` journal
+    entry (the game's pid and creation time). If it says any run's game is still up, nothing is restored:
+    every unfinished snapshot is reported with reason "game_still_up" and held False, and nothing is recorded.
+    If it raises for a snapshot (a `started` entry it cannot read), nothing is restored either, since that
+    run's game cannot be ruled out: the result is that snapshot alone, with reason "error: <message>".
+
+    Then the snapshots are restored one by one, and the unwinding stops at the first that does not finish:
+    - a hold: the snapshot is reported (held True, with its reason) and the older ones stay unfinished for a
+      later call;
+    - an error from `restore`: the snapshot is reported with held False and reason "error: <message>", its
+      journal untouched, and the older ones stay unfinished.
+    The results gathered before the stop are kept.
     """
     runs = []
     for snap in reversed(unfinished(backup_root)):
         started = [entry for entry in snapshot.journal(snap) if entry.get("event") == "started"][-1]
-        runs.append((snap, own_game_up(started)))
+        try:
+            up = own_game_up(started)
+        except Exception as error:
+            return [(snap.id, Outcome([], [], False, f"error: {error}"))]
+        runs.append((snap, up))
     if any(up for _, up in runs):
         return [(snap.id, Outcome([], [], False, "game_still_up")) for snap, _ in runs]
     results = []
@@ -479,6 +497,8 @@ def recover(
             results.append((snap.id, Outcome([], [], False, f"error: {error}")))
             break
         results.append((snap.id, outcome))
+        if outcome.held:
+            break
     return results
 
 

@@ -529,6 +529,36 @@ class HoldTests(RestoreTestCase):
         self.assertEqual((out.held, out.reason), (True, "other_game_running"))
         self.assertEqual(snapshot.journal(snap)[-1]["reason"], "other_game_running")
 
+    def test_a_restored_snapshot_is_not_held_because_another_game_is_running(self):
+        snap = self.finished_run()
+        journal = snapshot.journal(snap)
+        out = restore.restore(snap, self.user, other_game_running=True)
+        self.assertEqual(out, restore.Outcome([], [], False, "already_restored"))
+        self.assertEqual(snapshot.journal(snap), journal)
+        self.assertEqual(restore.held(self.backups), [])
+
+    def test_a_held_snapshot_is_held_again_while_another_game_is_running(self):
+        snap = self.held_run()
+        out = restore.restore(snap, self.user, other_game_running=True)
+        self.assertEqual((out.held, out.reason), (True, "other_game_running"))
+        self.assertEqual(events(snap)[-2:], ["held", "held"])
+
+    def test_a_snapshot_restored_after_a_hold_is_not_held_by_another_game_either(self):
+        snap = self.held_run()
+        restore.restore(snap, self.user, other_game_running=False)
+        out = restore.restore(snap, self.user, other_game_running=True)
+        self.assertEqual((out.held, out.reason), (False, "already_restored"))
+        self.assertEqual(restore.held(self.backups), [])
+
+    def test_restoring_a_restored_snapshot_again_with_no_other_game_still_runs(self):
+        snap = self.run_started()
+        (self.user / "continue_game.json").write_text("{}")
+        finish(snap)
+        restore.restore(snap, self.user, other_game_running=False)
+        (self.user / "continue_game.json").write_text("{}")  # the run's file is back, say, from a stray process
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.restored), (False, ["continue_game.json"]))
+
     def test_logs_never_cause_a_hold(self):
         snap = self.run_started(at=NOW)
         finish(snap, at=NOW)
@@ -861,6 +891,47 @@ class RecoverTests(RestoreTestCase):
         self.assertIn("continue_game.json", outcome.reason)
         self.assertEqual(tree(self.user), before)
         self.assertEqual([snapshot.journal(first), snapshot.journal(second)], journals)
+
+    def test_the_unwinding_stops_at_the_first_hold(self):
+        # a stack: what is under a held layer is not touched until the owner has dealt with it
+        first = self.dead_run(NOW, "A's leftover", pid=11)
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        before, first_journal = tree(self.user), snapshot.journal(first)
+        out = restore.recover(self.backups, self.user, True, own_game_up=lambda started: False)
+        self.assertEqual(out, [(second.id, restore.Outcome([], [], True, "other_game_running"))])
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual(snapshot.journal(first), first_journal)
+        self.assertEqual([s.id for s in restore.unfinished(self.backups)], [first.id])
+        self.assertEqual([s.id for s in restore.held(self.backups)], [second.id])
+
+    def test_the_unwinding_stops_at_a_hold_for_a_late_file_too(self):
+        first = self.dead_run(NOW, "A's leftover", pid=11)
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        set_mtime(self.user / "continue_game.json", NOW, 3600)  # someone used the folder after B died
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: False)
+        self.assertEqual([(snap_id, o.held, o.reason) for snap_id, o in out], [(second.id, True, "modified_after_exit")])
+        self.assertEqual([s.id for s in restore.unfinished(self.backups)], [first.id])
+
+    def test_a_bad_started_entry_is_an_error_for_its_snapshot_and_nothing_is_restored(self):
+        first = self.dead_run(NOW, "A's leftover", pid="not a number")
+        second = self.dead_run(NOW + timedelta(seconds=120), "B's leftover", pid=22)
+        before, journals = tree(self.user), [snapshot.journal(first), snapshot.journal(second)]
+        out = restore.recover(self.backups, self.user, False, own_game_up=lambda started: int(started["pid"]) < 0)
+        self.assertEqual([snap_id for snap_id, _ in out], [first.id])
+        outcome = out[0][1]
+        self.assertEqual((outcome.restored, outcome.removed, outcome.held), ([], [], False))
+        self.assertTrue(outcome.reason.startswith("error: "), outcome.reason)
+        self.assertIn("not a number", outcome.reason)
+        self.assertEqual(tree(self.user), before)  # even the newer, sound one waits: the older one's game is unknown
+        self.assertEqual([snapshot.journal(first), snapshot.journal(second)], journals)
+        self.assertEqual([s.id for s in restore.unfinished(self.backups)], [first.id, second.id])
+
+    def test_the_last_started_entry_is_the_one_own_game_up_is_asked_about(self):
+        snap = self.run_started(pid=11)
+        snapshot.record(snap, "started", pid=22, created="2026-11-10T13:00:00Z")  # a relaunch
+        seen = []
+        restore.recover(self.backups, self.user, False, own_game_up=lambda started: seen.append(started) or False)
+        self.assertEqual([(e["pid"], e["created"]) for e in seen], [(22, "2026-11-10T13:00:00Z")])
 
     def test_results_already_gathered_survive_an_error_further_down(self):
         first = self.dead_run(NOW, "A's leftover", pid=11)
