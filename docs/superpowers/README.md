@@ -70,7 +70,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 
 | Doc | Status | What's left |
 |-----|--------|-------------|
-| [specs/2026-11-10-in-game-qa-harness-design.md](specs/2026-11-10-in-game-qa-harness-design.md): a harness with which a Claude session launches Victoria 3, plays as a chosen country, runs prepared effects, fires events, picks their options from the console and reads triggers and values back, with the owner's saves and logs snapshotted and restored around every run and a permission-and-GPU gate before every launch | Design only (2026-11-10): the engine facts of § 3 were probed on the owner's machine | Everything: the owner's approval, § 7's five assumptions, then the plan |
+| [specs/2026-11-10-in-game-qa-harness-design.md](specs/2026-11-10-in-game-qa-harness-design.md): a harness with which a Claude session launches Victoria 3, plays as a chosen country, runs prepared effects, fires events, picks their options from the console and reads triggers and values back, with the owner's saves and logs snapshotted and restored around every run and a permission-and-GPU gate before every launch | Design only (2026-11-10): the engine facts of § 3 were probed on the owner's machine | Everything: the owner's approval, § 7's six assumptions, then the plan |
 
 ## Archived — `archive/`
 

@@ -27,8 +27,12 @@ The owner, 2026-11-10:
   double check with me. If not, it is almost certainly fine (worst case is I am about to
   launch the game or similar and lose a few minutes)."
 - **Backups.** "Maybe we should auto-backup the auto saves and any saves that will be used
-  in the future?" The owner then agreed ("Sounds good!") to the proposal in § 5.3,
-  including its two defaults: keep the last five backups, and store them on `D:`.
+  in the future?" The owner then agreed ("Sounds good!") to the proposal as it stood in
+  the conversation: back up the autosaves, the Continue pointer, the console history and
+  any save a run loads before every launch; compare and put back afterwards; never delete
+  a backup in the run that made it; skip unchanged files; an end date on every unattended
+  run; `te_qa_` names; keep the last five; store them on `D:`. What § 5.3 adds beyond
+  that (the logs, two settings files, the held snapshot) is the designer's.
 
 Everything else in this document is the designer's call (§ 9 lists the ones worth
 checking) or is left to the builder (§ 10).
@@ -65,10 +69,10 @@ way (**verified**, `session.getenableddlcs`).
 | `load`, `save` | Refused: "Command available only for developers" | verified |
 | `run <file>`, `effect` | Do not exist | verified (`help run` lists only `debug_supply_runs`) |
 
-**Under `-handsoff` option selection is not usable** (verified): the console printed
-"Selected option", nothing ran until the next tick, and then other options ran than the
-ones chosen, because the AI plays every country. Event checks need a game entered with
-`-loadsave`.
+**Under `-handsoff` option selection did not work** (verified, one run, with a country
+switch in the middle): the console printed "Selected option", nothing ran until the next
+tick, and then other options ran than the ones chosen. The likely cause, not checked, is
+that the AI plays every country there. Event checks use a game entered with `-loadsave`.
 
 ### 3.3 Running script without a `run` command
 
@@ -244,9 +248,10 @@ console history, the playset file, the logs folder), and the files the run creat
 removed (saves it named, any `TEST_FAIL_*` it caused, `tests.txt`). The run's own logs
 live in its report. The report says what was restored.
 
-Between the snapshot and the exit of the harness's own game, nothing else may have
-written these files (the gate refuses to start beside another game), so that restore is a
-plain compare and copy.
+The gate refuses to start beside another game, but the owner may start one around a run.
+So every restore, not only a dead run's, first checks two things: that no other
+`victoria3.exe` is running, and that no file in the set was modified after the harness's
+own game exited. If either fails, it restores nothing and holds the snapshot, as below.
 
 Rules that come straight from § 3.7:
 
