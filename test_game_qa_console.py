@@ -1,0 +1,479 @@
+"""game_qa/console.py: a console command as a confirmed round trip.
+
+Everything runs against `fakes.FakeHelper`, which imitates what was seen of the
+real game: the console key toggles the console, a command entered while it is
+open goes into `console_history.txt` at once, and its `debug.log` lines stay in
+the game's buffer until a `help ndefines.ngui` pushes them out. The fake's one
+clock serves `Console` for both `sleep` and `clock`, so no test really waits.
+"""
+import tempfile
+import unittest
+from pathlib import Path
+
+from game_qa import console, fakes, logtail
+
+TEXT = {"text": "tag FRA"}
+ENTER = {"scan": 0x1C}
+CONSOLE_KEY = {"scan": 0x29}
+FLUSH = {"text": "help ndefines.ngui"}
+
+
+class ConsoleTestCase(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.history = Path(self.tmp.name) / "console_history.txt"
+        self.log = Path(self.tmp.name) / "debug.log"
+        self.game = fakes.FakeHelper(history=self.history, log=self.log)
+        self.console = console.Console(self.game, self.game.proc, self.history, logtail.LogFollower(self.log),
+                                       sleep=self.game.sleep, clock=self.game.clock)
+
+    def lose_foreground_before_step(self, count, once=False):
+        """The game drops to the back just before the step after `count` steps have been sent."""
+        def hook(sent):
+            if sent == count:
+                self.game.foreground = False
+                if once:
+                    self.game.on_step = None
+        self.game.on_step = hook
+
+    def fail_code(self, *args, **kwargs):
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run(*args, **kwargs)
+        return e.exception.code
+
+
+class RoundTripTest(ConsoleTestCase):
+    def test_round_trip_returns_the_reply(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        r = self.console.run("tag FRA")
+        self.assertEqual((r.ok, r.lines), (True, ["Now Playing - France"]))
+
+    def test_failure_reply(self):
+        self.game.console_open = True
+        self.game.on("save x", failure=["Command available only for developers."])
+        self.assertIs(self.console.run("save x").ok, False)
+
+    def test_newline_is_refused_before_any_key(self):
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("event a\nevent b")
+        self.assertEqual(e.exception.code, "bad_text")
+        self.assertEqual(self.game.steps, [])
+
+    def test_quotes_and_non_ascii_are_typed_verbatim(self):
+        self.game.console_open = True
+        self.console.run('event "é".1', reply=False)
+        self.assertIn({"text": 'event "é".1'}, self.game.steps)
+
+    def test_game_exit_mid_command_raises_game_gone(self):
+        self.game.console_open = True
+        self.game.exit_after_steps = 1
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual(e.exception.code, "game_gone")
+        self.assertLess(self.game.clock(), 30.0)
+
+    def test_repeated_command_acks_from_the_log(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.game.on("select_event_option list", success=["No pending events"])
+        first = self.console.run("select_event_option list")
+        second = self.console.run("select_event_option list")
+        self.assertEqual((first.ok, second.ok), (True, True))
+        self.assertEqual(second.lines, ["No pending events"])
+
+    def test_blank_and_carriage_return_texts_are_refused_before_any_key(self):
+        for text in ("", "   ", "tag\rFRA", "\n"):
+            self.assertEqual(self.fail_code(text), "bad_text", repr(text))
+        self.assertEqual(self.game.steps, [])
+
+    def test_every_reply_line_comes_back_in_order(self):
+        self.game.console_open = True
+        self.game.on("event a.1", success=["first", "second"])
+        r = self.console.run("event a.1")
+        self.assertEqual((r.command, r.ok, r.lines), ("event a.1", True, ["first", "second"]))
+
+    def test_one_failure_among_successes_is_a_failure(self):
+        self.game.console_open = True
+        self.game.on("event a.1", success=["fine"], failure=["not fine"])
+        r = self.console.run("event a.1")
+        self.assertIs(r.ok, False)
+        self.assertCountEqual(r.lines, ["fine", "not fine"])
+
+    def test_a_command_with_no_reply_line_has_no_verdict(self):
+        self.game.console_open = True
+        r = self.console.run("tag FRA")
+        self.assertEqual((r.ok, r.lines), (None, []))
+
+    def test_without_a_reply_nothing_is_flushed_and_there_is_no_verdict(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        r = self.console.run("tag FRA", reply=False)
+        self.assertEqual((r.ok, r.lines), (None, []))
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+
+    def test_the_flush_follows_the_command_when_a_reply_is_wanted(self):
+        self.game.console_open = True
+        self.console.run("tag FRA")
+        self.assertEqual(self.game.steps, [TEXT, ENTER, FLUSH, ENTER])
+
+    def test_the_tail_of_the_last_flush_is_not_the_next_reply(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        self.game.on("tag GBR", failure=["no such tag"])
+        self.assertEqual(self.console.run("tag FRA").lines, ["Now Playing - France"])
+        r = self.console.run("tag GBR")
+        self.assertEqual((r.ok, r.lines), (False, ["no such tag"]))
+
+    def test_the_newest_run_of_the_same_text_is_the_one_answered(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["old"])
+        self.console.run("tag FRA")
+        self.game.on("tag FRA", success=["new"])
+        self.assertEqual(self.console.run("tag FRA").lines, ["new"])
+
+    def test_lines_of_an_unflushed_command_are_not_the_next_reply(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["from the first run"])
+        self.console.run("tag FRA", reply=False)
+        self.game.on("tag FRA", success=["from the second run"])
+        self.assertEqual(self.console.run("tag FRA").lines, ["from the second run"])
+
+    def test_script_debug_lines_between_command_and_flush_are_not_reply_lines(self):
+        self.game.console_open = True
+        self.game.on("event a.1", success=['Executed "a.1"'], script=["events/a.txt:3: TE_QA_PROBE x"])
+        self.assertEqual(self.console.run("event a.1").lines, ['Executed "a.1"'])
+
+    def test_no_reply_when_the_log_never_shows_it(self):
+        self.game.console_open = True
+        self.game.log = None
+        self.assertEqual(self.fail_code("tag FRA"), "no_reply")
+        self.assertGreaterEqual(self.game.clock(), 30.0)
+
+    def test_the_reply_wait_follows_the_given_timeout(self):
+        self.game.console_open = True
+        self.game.log = None
+        self.assertEqual(self.fail_code("tag FRA", timeout=8.0), "no_reply")
+        self.assertLess(self.game.clock(), 20.0)
+
+    def test_game_exit_while_waiting_for_the_reply_raises_game_gone(self):
+        self.game.console_open = True
+        self.game.log = None
+        self.game.exit_after_steps = 4          # the text, Enter, the flush, Enter
+        self.assertEqual(self.fail_code("tag FRA"), "game_gone")
+        self.assertLess(self.game.clock(), 30.0)
+
+    def test_the_flush_command_itself_is_just_run(self):
+        self.game.console_open = True
+        r = self.console.run(console.FLUSH_COMMAND)
+        self.assertEqual((r.ok, r.lines), (None, []))
+        self.assertEqual(self.game.steps, [FLUSH, ENTER])
+
+
+class ForegroundTest(ConsoleTestCase):
+    def test_person_at_the_machine_makes_it_wait_then_fail(self):
+        self.game.foreground = False
+        self.game.idle = 2_000                  # stays 2 s: someone keeps typing
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertEqual(self.game.steps, [])
+        self.assertEqual(self.game.focus_calls, 0)
+        self.assertGreaterEqual(self.game.clock(), 120.0)
+
+    def test_nobody_at_the_machine_takes_the_foreground_back(self):
+        self.game.foreground = False
+        self.game.idle = 45_000
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+
+    def test_a_person_who_stops_typing_lets_it_through_after_the_wait(self):
+        self.game.foreground = False
+        self.game.idle = 2_000
+        self.game.console_open = True
+        gone_quiet = []
+
+        def sleep(seconds):
+            self.game.sleep(seconds)
+            if self.game.clock() >= 40.0:
+                self.game.idle = 31_000
+                gone_quiet.append(True)
+        cons = console.Console(self.game, self.game.proc, self.history, logtail.LogFollower(self.log),
+                               sleep=sleep, clock=self.game.clock)
+        cons.run("tag FRA", reply=False)
+        self.assertTrue(gone_quiet)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertGreaterEqual(self.game.clock(), 40.0)
+        self.assertLess(self.game.clock(), 60.0)
+
+    def test_a_focus_the_system_refuses_is_not_foreground(self):
+        self.game.foreground = False
+        self.game.idle = 45_000
+        self.game.focus_succeeds = False
+        self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
+        self.assertEqual((self.game.steps, self.game.focus_calls), ([], 1))
+
+    def test_the_console_key_is_not_sent_to_a_window_behind_a_person(self):
+        self.game.foreground = False
+        self.game.idle = 2_000
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.ensure_open()
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertEqual(self.game.steps, [])
+
+    def test_a_missing_window_is_game_gone_at_once(self):
+        self.game.exists = False
+        self.assertEqual(self.fail_code("tag FRA"), "game_gone")
+        self.assertEqual((self.game.steps, self.game.clock()), ([], 0.0))
+
+    def test_a_window_that_stays_unresponsive_is_game_gone_after_ten_seconds(self):
+        self.game.responding = False
+        self.assertEqual(self.fail_code("tag FRA"), "game_gone")
+        self.assertEqual(self.game.steps, [])
+        self.assertGreaterEqual(self.game.clock(), 10.0)
+        self.assertLess(self.game.clock(), 15.0)
+
+    def test_a_window_that_recovers_in_time_gets_the_command(self):
+        self.game.responding = False
+        self.game.console_open = True
+
+        def sleep(seconds):
+            self.game.sleep(seconds)
+            if self.game.clock() >= 4.0:
+                self.game.responding = True
+        cons = console.Console(self.game, self.game.proc, self.history, logtail.LogFollower(self.log),
+                               sleep=sleep, clock=self.game.clock)
+        cons.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+
+    def test_losing_the_front_after_the_text_is_not_retyped(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(1)     # the text went in; Enter is refused
+        self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
+        self.assertEqual(self.game.steps, [TEXT])
+        self.assertEqual(self.game.focus_calls, 0)
+
+    def test_losing_the_front_before_any_key_goes_back_through_the_wait_once(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(0, once=True)
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assertEqual(self.game.focus_calls, 1)
+
+    def test_losing_the_front_again_on_the_retry_is_not_foreground(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(0)
+        self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
+        self.assertEqual(self.game.steps, [])
+
+
+class ArrivalTest(ConsoleTestCase):
+    def test_closed_console_is_opened_and_the_command_retyped(self):
+        self.game.console_open = False
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        self.assertTrue(self.console.run("tag FRA").ok)
+        self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
+
+    def test_no_ack_after_one_retry(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        self.assertEqual(self.fail_code("tag FRA"), "no_ack")
+
+    def test_a_console_that_will_not_open_is_not_typed_into_again(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        self.fail_code("tag FRA")
+        self.assertEqual(self.game.steps.count(TEXT), 1)
+
+    def test_the_command_is_typed_again_only_once(self):
+        self.game.console_open = False
+
+        def shut_after_the_probe(sent):
+            if sent == 7:                       # text+Enter, probe+Enter, key, probe+Enter: now the retyped text
+                self.game.console_open = False
+        self.game.on_step = shut_after_the_probe
+        self.assertEqual(self.fail_code("tag FRA"), "no_ack")
+        self.assertEqual(self.game.steps.count(TEXT), 2)
+
+    def test_a_command_that_did_arrive_is_not_typed_twice_when_only_the_flush_fails(self):
+        self.game.console_open = True
+
+        def close_after_the_text(sent):
+            if sent == 2:                       # the text and Enter are in; the console shuts before the flush
+                self.game.console_open = False
+                self.game.on_step = None
+        self.game.on_step = close_after_the_text
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        r = self.console.run("tag FRA")
+        self.assertTrue(r.ok)
+        self.assertEqual(self.game.steps.count(TEXT), 1)
+
+    def test_a_repeat_the_history_does_write_is_acked_by_it_and_typed_once(self):
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps, [TEXT, ENTER, TEXT, ENTER])
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\ntag FRA\n")
+
+    def test_a_repeat_the_history_will_not_show_is_acked_by_the_log(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        self.console.run("tag FRA", reply=False)
+        self.assertNotIn(FLUSH, self.game.steps)        # a new text needs no flush when no reply is wanted
+        r = self.console.run("tag FRA", reply=False)
+        self.assertEqual((r.ok, r.lines), (None, []))
+        self.assertIn(FLUSH, self.game.steps)           # the repeat did
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+        self.assertLess(self.game.clock(), console.ARRIVAL_S)       # a repeat is not waited for as a new text is
+
+    def test_lines_before_the_start_never_pair_with_a_later_flush(self):
+        parsed = [logtail.parse("[12:00:00][console.cpp:1175]: Running console command: " + text)
+                  for text in ("tag FRA", console.FLUSH_COMMAND)]
+        self.console._seen = parsed
+        self.assertEqual(self.console._find_reply("tag FRA"), [])
+        self.assertIsNone(self.console._find_reply("tag FRA", start=1))
+
+    def test_a_repeat_into_a_closed_console_opens_it_and_goes_again(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.console.run("tag FRA", reply=False)
+        self.game.console_open = False
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
+        self.assertTrue(self.game.console_open)
+
+    def test_a_repeat_that_never_arrives_is_no_ack(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.console.run("tag FRA", reply=False)
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        self.assertEqual(self.fail_code("tag FRA", reply=False), "no_ack")
+
+    def test_a_history_file_that_does_not_exist_yet_is_empty(self):
+        self.assertFalse(self.history.exists())
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\n")
+
+    def test_the_game_leaving_during_the_arrival_wait_is_game_gone(self):
+        self.game.console_open = False
+        self.game.exit_after_steps = 2
+        self.assertEqual(self.fail_code("tag FRA", reply=False), "game_gone")
+        self.assertLess(self.game.clock(), 30.0)
+
+
+class EnsureOpenTest(ConsoleTestCase):
+    def test_open_console_is_never_toggled(self):
+        self.game.console_open = True
+        self.console.ensure_open()
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+
+    def test_a_closed_console_is_toggled_once_and_the_probe_typed_again(self):
+        self.game.console_open = False
+        self.console.ensure_open()
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
+        self.assertEqual(self.game.steps.count({"text": console.PROBE_COMMAND}), 2)
+
+    def test_an_open_console_stays_open_when_the_history_hides_a_repeated_probe(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.console.ensure_open()
+        self.console.ensure_open()
+        self.console.ensure_open()
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+        self.assertTrue(self.game.console_open)
+
+    def test_a_console_that_will_not_open_is_no_ack_after_the_timeout(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.ensure_open()
+        self.assertEqual(e.exception.code, "no_ack")
+        self.assertGreaterEqual(self.game.clock(), 30.0)
+        self.assertLess(self.game.clock(), 60.0)
+
+    def test_the_probe_is_a_harmless_listing(self):
+        self.assertEqual(console.PROBE_COMMAND, "select_event_option list")
+        self.assertEqual(console.FLUSH_COMMAND, "help ndefines.ngui")
+        self.assertEqual((console.SCAN_CONSOLE, console.SCAN_ENTER), (0x29, 0x1C))
+        self.assertEqual((console.PERSON_IDLE_MS, console.FOREGROUND_WAIT_S), (30_000, 120.0))
+
+
+class FakeGameTest(ConsoleTestCase):
+    """The fake has to behave like the game, or the tests above prove nothing."""
+
+    def type_command(self, text):
+        self.game.keys(7, [{"text": text}, ENTER])
+
+    def test_the_log_lines_stay_in_the_buffer_until_a_flush(self):
+        self.game.console_open = True
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        self.type_command("tag FRA")
+        self.assertFalse(self.log.exists() and self.log.read_text(encoding="utf-8"))
+        self.type_command(console.FLUSH_COMMAND)
+        written = self.log.read_text(encoding="utf-8")
+        self.assertIn("[console.cpp:1175]: Running console command: tag FRA\n", written)
+        self.assertIn("[console.cpp:1203]: console_success: Now Playing - France\n", written)
+        self.assertIn("[console.cpp:1175]: Running console command: help ndefines.ngui\n", written)
+
+    def test_the_tail_of_the_flushs_own_output_stays_in_the_buffer(self):
+        self.game.console_open = True
+        self.type_command(console.FLUSH_COMMAND)
+        self.assertTrue(self.game.unwritten)
+        in_file = len(self.log.read_text(encoding="utf-8").splitlines())
+        self.assertGreater(in_file, 100)
+
+    def test_the_console_key_toggles_and_a_closed_console_does_nothing(self):
+        self.type_command("tag FRA")
+        self.assertFalse(self.history.exists())
+        self.game.keys(7, [CONSOLE_KEY])
+        self.assertTrue(self.game.console_open)
+        self.type_command("tag FRA")
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\n")
+        self.game.keys(7, [CONSOLE_KEY])
+        self.assertFalse(self.game.console_open)
+
+    def test_a_console_that_never_opens_ignores_the_key(self):
+        self.game.console_never_opens = True
+        self.game.keys(7, [CONSOLE_KEY])
+        self.assertFalse(self.game.console_open)
+
+    def test_the_history_can_skip_a_repeat_but_the_game_still_runs_it(self):
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.type_command("tag FRA")
+        self.type_command("tag GBR")
+        self.type_command("tag FRA")
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\ntag GBR\n")
+        self.type_command(console.FLUSH_COMMAND)
+        written = self.log.read_text(encoding="utf-8")
+        self.assertEqual(written.count("Running console command: tag FRA\n"), 2)
+
+    def test_the_window_goes_after_the_given_number_of_steps(self):
+        self.game.exit_after_steps = 1
+        with self.assertRaises(fakes.HelperError) as e:
+            self.type_command("tag FRA")
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertEqual(e.exception.reply, {"steps_done": 1, "chars_sent": 0})
+        self.assertFalse(self.game.window(7).exists)
+
+    def test_a_refusal_before_the_first_step_says_nothing_was_sent(self):
+        self.game.foreground = False
+        with self.assertRaises(fakes.HelperError) as e:
+            self.type_command("tag FRA")
+        self.assertEqual(e.exception.reply, {"steps_done": 0, "chars_sent": 0})
+
+    def test_one_clock_serves_sleep_and_clock(self):
+        self.assertEqual(self.game.clock(), 0.0)
+        self.game.sleep(2.5)
+        self.game.sleep(1.0)
+        self.assertEqual(self.game.clock(), 3.5)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -16,6 +16,10 @@ from game_qa.gate import ProcId
 from game_qa.helper import HelperError, Window
 
 SCAN_ENTER = 0x1C
+SCAN_CONSOLE = 0x29
+FLUSH_COMMAND = "help ndefines.ngui"        # the command whose long output pushes the game's buffered log out
+_HELP_LINES = 500                           # what it prints, about
+_HELD_BACK = 120                            # the last of it that the game is still holding when the file is written
 
 
 class FakeSocket:
@@ -190,10 +194,20 @@ class FakeHelper:
 
     It refuses what the real helper refuses (keys while the game is not in
     front, typed text with a line break), so code under test meets the same errors.
+
+    It also imitates the console as seen in the real game. The console key
+    (scancode 0x29) toggles `console_open`; typed text plus Enter is a command
+    only while it is open, and then goes into the history file at once. Each
+    command the game runs is logged as a `Running console command:` line and
+    the lines given to `on`, but `debug.log` is block-buffered: the lines wait in
+    `unwritten` until a `help ndefines.ngui` is entered, which writes them all,
+    its own line and most of its long output too (the tail stays buffered).
+    `now` is a fake clock for code under test: `sleep` moves it, nothing else does.
     """
 
-    def __init__(self, history: Path | None = None) -> None:
+    def __init__(self, history: Path | None = None, log: Path | None = None) -> None:
         self.history = Path(history) if history is not None else None
+        self.log = Path(log) if log is not None else None
         self.proc = ProcId(7, "2026-11-10T14:00:00.0000000Z")
         self.exists = True
         self.foreground = True
@@ -203,9 +217,16 @@ class FakeHelper:
         self.idle = 600_000                     # what idle_ms reports
         self.focus_succeeds = True
         self.focus_calls = 0
-        self.console_open = False               # Enter appends the typed text to the history while this is set
+        self.console_open = False               # Enter runs the typed text while this is set
+        self.console_never_opens = False        # the console key does nothing
+        self.history_skips_repeats = False      # a command already in the history file is not written to it again
+        self.exit_after_steps: int | None = None        # the game ends once this many steps have been sent in all
+        self.on_step = None                     # called with the steps sent so far, before each step is tried
         self.typed = ""                         # text typed since the last Enter
         self.steps: list[dict] = []             # every step sent, as given
+        self.now = 0.0
+        self.replies: dict[str, tuple[list[str], list[str], list[str]]] = {}
+        self.unwritten: list[str] = []          # log lines the game has made but not yet written to the file
         self.launched: list[tuple[str, list, str]] = []
         self.adopted: list[ProcId] = []
         self.killed: list[ProcId] = []
@@ -213,6 +234,18 @@ class FakeHelper:
         self.tcp_port: int | None = None
         self.tcp_in: deque[bytes] = deque()     # what tcp_recv hands out, one chunk a call
         self.tcp_sent: list[bytes] = []
+
+    def clock(self) -> float:
+        return self.now
+
+    def sleep(self, seconds: float) -> None:
+        self.now += seconds
+
+    def on(self, text: str, success: Sequence[str] = (), failure: Sequence[str] = (),
+           script: Sequence[str] = ()) -> None:
+        """What the game answers when `text` is entered: console_success lines, console_failure lines, and
+        `debug_log` effect lines from the script it ran (which follow the replies in the log)."""
+        self.replies[text] = (list(success), list(failure), list(script))
 
     def launch(self, exe: str, args: Sequence[str], cwd: str) -> ProcId:
         self.launched.append((exe, list(args), cwd))
@@ -240,21 +273,60 @@ class FakeHelper:
         for step in steps:
             if "\n" in step.get("text", "") or "\r" in step.get("text", ""):
                 raise HelperError("bad_text", "typed text must not hold a line break")
+        done = 0
         for step in steps:
+            if self.on_step is not None:
+                self.on_step(len(self.steps))
             if not (self.exists and self.foreground):
-                raise HelperError("not_foreground", "the game's window is not in front")
+                # The real refusal says how far it got, so the caller knows whether a half command is typed.
+                raise HelperError("not_foreground", "the game's window is not in front",
+                                  reply={"steps_done": done, "chars_sent": 0})
             self.steps.append(dict(step))
+            done += 1
             if "text" in step:
                 self.typed += step["text"]
             elif step.get("scan") == SCAN_ENTER:
                 self._enter()
+            elif step.get("scan") == SCAN_CONSOLE and not self.console_never_opens:
+                self.console_open = not self.console_open
+            if self.exit_after_steps is not None and len(self.steps) >= self.exit_after_steps:
+                self.exists = False
 
     def _enter(self) -> None:
-        if self.console_open and self.typed and self.history is not None:
+        text, self.typed = self.typed, ""
+        if not (self.console_open and text):
+            return
+        if self.history is not None:
             self.history.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.history, "a", encoding="utf-8") as f:
-                f.write(self.typed + "\n")
-        self.typed = ""
+            known = self.history.read_text(encoding="utf-8").split("\n") if self.history.exists() else []
+            if not (self.history_skips_repeats and text in known):
+                with open(self.history, "a", encoding="utf-8") as f:
+                    f.write(text + "\n")
+        self._run(text)
+
+    def _logged(self, source: str, message: str) -> None:
+        clock = int(self.now)
+        self.unwritten.append("[%02d:%02d:%02d][%s]: %s" % (12 + clock // 3600 % 12, clock // 60 % 60, clock % 60,
+                                                          source, message))
+
+    def _run(self, text: str) -> None:
+        """The game runs a command: its lines go to the buffer, and a flush writes the buffer out."""
+        success, failure, script = self.replies.get(text, ([], [], []))
+        self._logged("console.cpp:1175", "Running console command: " + text)
+        for line in success:
+            self._logged("console.cpp:1203", "console_success: " + line)
+        for line in failure:
+            self._logged("console.cpp:1203", "console_failure: " + line)
+        for line in script:
+            self._logged("jomini_effect_impl.cpp:459", line)
+        if text != FLUSH_COMMAND:
+            return
+        for n in range(_HELP_LINES):
+            self._logged("console.cpp:1203", "console_success: ndefines.ngui option %d" % n)
+        out, self.unwritten = self.unwritten[:-_HELD_BACK], self.unwritten[-_HELD_BACK:]
+        if self.log is not None:
+            with open(self.log, "a", encoding="utf-8", newline="\n") as f:
+                f.write("".join(line + "\n" for line in out))
 
     def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path:
         path = Path(path)
