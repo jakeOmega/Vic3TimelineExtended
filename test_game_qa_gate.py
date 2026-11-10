@@ -3,6 +3,7 @@
 Nothing here runs nvidia-smi or PowerShell: both are passed in as fakes.
 """
 import contextlib
+import datetime as dt
 import io
 import json
 import os
@@ -163,13 +164,26 @@ class CommandLineTest(unittest.TestCase):
         (self.user / "console_history.txt").write_text("money 1000\n")
         (self.user / "logs" / "debug.log").write_text("the owner's log\n")
         self.backups = root / "backups"
+        self.games = []          # what gate.list_games() returns: a list, or a queue of lists
         env = {"VIC3_USER_DATA": str(self.user), "VIC3_QA_BACKUPS": str(self.backups)}
         patches = [mock.patch.dict(os.environ, env),
-                   mock.patch.object(gate, "list_games", return_value=[]),
-                   mock.patch.object(gate, "sample_gpu", return_value=IDLE)]
+                   mock.patch.object(gate, "list_games", side_effect=self._list_games),
+                   mock.patch.object(gate, "sample_gpu", return_value=IDLE),
+                   mock.patch.object(cli, "_sleep", lambda seconds: None)]
         for p in patches:
             p.start()
             self.addCleanup(p.stop)
+
+    def _list_games(self, *a, **k):
+        if self.games and isinstance(self.games[0], list):
+            return self.games.pop(0) if len(self.games) > 1 else self.games[0]
+        return list(self.games)
+
+    @staticmethod
+    def game(pid=4242, seconds_from_now=60):
+        """A game process created that many seconds from now (after a snapshot taken now, or before it)."""
+        when = dt.datetime.now(dt.timezone.utc) + dt.timedelta(seconds=seconds_from_now)
+        return gate.ProcId(pid, when.strftime("%Y-%m-%dT%H:%M:%S.0000000Z"))
 
     def run_cli(self, *argv):
         out = io.StringIO()
@@ -181,43 +195,147 @@ class CommandLineTest(unittest.TestCase):
         return sorted((str(p.relative_to(self.user)), p.stat().st_mtime_ns, p.read_bytes())
                       for p in self.user.rglob("*") if p.is_file())
 
-    def test_snapshot_then_restore_puts_a_changed_file_back(self):
-        before = self.tree()
+    def the_snapshot(self):
+        return snapshot.all_snapshots(self.backups)[-1]
+
+    def events(self):
+        return [e["event"] for e in snapshot.journal(self.the_snapshot())]
+
+    def watched_run(self, during=lambda: None):
+        """snapshot, then `watch` over a game that is seen twice and then gone; `during` runs while it is up."""
         taken, code = self.run_cli("snapshot", "--save", "new york_1940_07_29")
         self.assertEqual(code, 0)
-        self.assertIn("save games/new york_1940_07_29.v3", snapshot.all_snapshots(self.backups)[0].files)
-        (self.user / "continue_game.json").write_text('{"title": "autosave"}')
-        (self.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"x")
-        out, code = self.run_cli("restore", taken["id"], "--game-just-closed")
+        game = self.game()
+        during()
+        self.games = [[game], [game], []]
+        out, code = self.run_cli("watch", taken["id"])
+        self.assertEqual((code, out["exited"], out["pid"]), (0, True, game.pid))
+        self.games = []
+        return taken["id"]
+
+    # -- snapshot, watch, restore -------------------------------------------
+
+    def test_snapshot_watch_restore_puts_a_changed_file_back(self):
+        before = self.tree()
+
+        def the_run():
+            (self.user / "continue_game.json").write_text('{"title": "autosave"}')
+            (self.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"x")
+
+        snap_id = self.watched_run(the_run)
+        self.assertIn("save games/new york_1940_07_29.v3", self.the_snapshot().files)
+        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "game_exited"])
+        out, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, out["held"]), (0, False))
         self.assertEqual(self.tree(), before)
 
-    def test_restore_without_an_end_of_run_is_refused(self):
+    def test_restore_writes_no_time_into_the_journal(self):
         taken, _ = self.run_cli("snapshot")
         (self.user / "continue_game.json").write_text("{}")
         out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["refused"]), (2, "no_reference_time"))
+        # nothing recorded when the run ended, and a non-log file changed: held, the file untouched
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "no_reference_time"))
         self.assertEqual((self.user / "continue_game.json").read_text(), "{}")
+        self.assertNotIn("game_exited", self.events())
+
+    def test_restore_with_nothing_to_judge_needs_no_record(self):
+        taken, _ = self.run_cli("snapshot")
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"]), (0, False))
+        self.assertEqual(self.events()[-1], "restored")
+
+    def test_a_restore_called_after_the_owner_played_holds_and_keeps_their_save(self):
+        # The loss the 2026-11-10 review reproduced against the old --game-just-closed flag.
+        snap_id = self.watched_run()
+        theirs = self.user / "save games" / "autosave.v3"
+        theirs.write_bytes(b"the owner played for an hour after the run")
+        later = dt.datetime.now().timestamp() + 3600
+        os.utime(theirs, (later, later))
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "modified_after_exit"))
+        self.assertEqual(theirs.read_bytes(), b"the owner played for an hour after the run")
+        self.assertEqual(self.run_cli("held")[0], {"held": [snap_id]})
+
+    def test_a_restore_beside_the_owners_game_holds_and_a_retry_still_keeps_their_save(self):
+        snap_id = self.watched_run()
+        self.games = [self.game(pid=99, seconds_from_now=120)]      # the owner started their own game
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["reason"]), (2, "other_game_running"))
+        theirs = self.user / "save games" / "autosave.v3"
+        theirs.write_bytes(b"their session's autosave")
+        later = dt.datetime.now().timestamp() + 3600
+        os.utime(theirs, (later, later))
+        self.games = []
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (2, True))
+        self.assertEqual(theirs.read_bytes(), b"their session's autosave")
 
     def test_restore_is_refused_while_the_runs_own_game_is_up(self):
         taken, _ = self.run_cli("snapshot")
-        snap = snapshot.all_snapshots(self.backups)[0]
-        snapshot.record(snap, "started", pid=MINE.pid, created=MINE.created)
-        gate.list_games.return_value = [MINE]
-        out, code = self.run_cli("restore", taken["id"], "--game-just-closed")
+        snapshot.record(self.the_snapshot(), "started", pid=MINE.pid, created=MINE.created)
+        self.games = [MINE]
+        out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["refused"]), (2, "game_still_up"))
-        self.assertNotIn("game_exited", [e["event"] for e in snapshot.journal(snap)])
+        self.assertNotIn("game_exited", self.events())
 
-    def test_snapshot_refuses_while_a_run_is_unfinished(self):
+    def test_restore_reports_a_damaged_store_instead_of_a_traceback(self):
+        snap_id = self.watched_run(lambda: (self.user / "continue_game.json").write_text("{}"))
+        entry = self.the_snapshot().files["continue_game.json"]
+        blob = self.backups / "store" / entry.sha256[:2] / entry.sha256
+        blob.write_bytes(bytes(b ^ 1 for b in blob.read_bytes()))
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["refused"]), (2, "error"))
+        self.assertEqual((self.user / "continue_game.json").read_text(), "{}")
+
+    # -- watch ----------------------------------------------------------------
+
+    def test_watch_does_not_adopt_a_game_older_than_the_snapshot(self):
         taken, _ = self.run_cli("snapshot")
-        snap = snapshot.all_snapshots(self.backups)[0]
-        snapshot.record(snap, "started", pid=MINE.pid, created=MINE.created)
+        self.games = [self.game(pid=7, seconds_from_now=-3600)]     # the owner's game, running since before
+        out, code = self.run_cli("watch", taken["id"], "--wait", "0")
+        self.assertEqual((code, out["refused"], out["games_older_than_snapshot"]), (2, "no_game", 1))
+        self.assertEqual(self.events(), ["armed"])
+
+    def test_watch_refuses_two_new_games(self):
+        taken, _ = self.run_cli("snapshot")
+        self.games = [self.game(pid=1), self.game(pid=2)]
+        out, code = self.run_cli("watch", taken["id"], "--wait", "0")
+        self.assertEqual((code, out["refused"]), (2, "several_games"))
+        self.assertEqual(self.events(), ["armed"])
+
+    def test_watch_waits_for_the_game_to_appear(self):
+        taken, _ = self.run_cli("snapshot")
+        game = self.game()
+        self.games = [[], [], [game], [game], []]
+        out, code = self.run_cli("watch", taken["id"])
+        self.assertEqual((code, out["heartbeats"]), (0, 1))
+        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "game_exited"])
+
+    def test_watch_refuses_a_finished_snapshot_and_one_not_taken_for_a_run(self):
+        snap_id = self.watched_run()
+        self.run_cli("restore", snap_id)
+        self.assertEqual(self.run_cli("watch", snap_id)[0]["refused"], "already_finished")
+        selftest, _ = self.run_cli("selftest-restore")
+        self.assertEqual(self.run_cli("watch", selftest["id"])[0]["refused"], "already_finished")
+
+    # -- nesting ----------------------------------------------------------------
+
+    def test_snapshot_refuses_while_an_earlier_one_is_unrestored(self):
+        taken, _ = self.run_cli("snapshot")
         out, code = self.run_cli("snapshot")
         self.assertEqual((code, out["refused"], out["unfinished"]), (2, "unfinished_run", [taken["id"]]))
         self.assertEqual(len(snapshot.all_snapshots(self.backups)), 1)
-        snapshot.record(snap, "game_exited")
-        self.run_cli("recover")
+        self.run_cli("restore", taken["id"])
         self.assertEqual(self.run_cli("snapshot")[1], 0)
+
+    def test_a_held_snapshot_does_not_block_the_next_one(self):
+        taken, _ = self.run_cli("snapshot")
+        (self.user / "continue_game.json").write_text("{}")
+        self.assertTrue(self.run_cli("restore", taken["id"])[0]["held"])
+        out, code = self.run_cli("snapshot")
+        self.assertEqual((code, out["held"]), (0, [taken["id"]]))
+
+    # -- self-test, gate, listings ---------------------------------------------
 
     def test_selftest_restore_leaves_no_scratch_folder_behind(self):
         self.run_cli("selftest-restore")
@@ -262,7 +380,7 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((code, out["ok"], out["permission"]), (0, True, "asked 12:40"))
 
     def test_gate_refuses_beside_another_game(self):
-        gate.list_games.return_value = [gate.ProcId(9, "x")]
+        self.games = [gate.ProcId(9, "x")]
         out, code = self.run_cli("gate", "--permission", "session grant", "--owner-confirmed-busy")
         self.assertEqual((code, out["reason"]), (2, "other_game"))
 
