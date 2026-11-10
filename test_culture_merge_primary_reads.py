@@ -25,6 +25,7 @@ GEN_TRIGGERS = ROOT / gen.TRIGGERS_GEN_OUT
 GEN_EFFECTS = ROOT / gen.EFFECTS_GEN_OUT
 DEFINITIONS = ROOT / gen.DEFINITIONS_OUT
 VANILLA_TRIGGERS = ROOT / gen.VANILLA_TRIGGERS_OUT
+GOVERNMENT_TYPES = ROOT / gen.GOVERNMENT_TYPES_OUT
 ON_ACTIONS = ROOT / "common/on_actions/te_culture_merge_on_actions.txt"
 
 
@@ -170,8 +171,10 @@ class LedgerTest(unittest.TestCase):
             kinds.setdefault(row["file"].split("/")[1] if row["file"].startswith("common/") else "events", set()).add(
                 ledger.classify(row).kind
             )
-        for folder in ("government_types", "parties", "interest_groups", "flag_definitions", "power_bloc_names"):
+        for folder in ("parties", "interest_groups", "flag_definitions", "power_bloc_names"):
             self.assertEqual(kinds[folder], {ledger.COSMETIC}, folder)
+        # A ruler's title is cosmetic too, and holds nothing; the ones that belonged to a whole merged people are restated.
+        self.assertEqual(kinds["government_types"], {ledger.COSMETIC, ledger.MIRRORED})
         self.assertEqual(kinds["company_types"], {ledger.COMPANY})
         self.assertEqual(kinds["journal_entries"], {ledger.ENTRIES})
 
@@ -441,6 +444,94 @@ class VanillaTriggerTest(unittest.TestCase):
 
     def test_the_file_holds_nothing_else(self):
         self.assertEqual(sorted(re.findall(r"^(\w+) = \{", self.text, re.M)), sorted(ledger.TRIGGER_OVERRIDES))
+
+
+class GovernmentTypeTest(unittest.TestCase):
+    """Ruler titles (owner, 2026-11-09): a vanilla government type that names every core culture of a merge is
+    restated with the merged culture, so a German empire keeps its Kaiser once North and South German have gone."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inventory = reads.load()
+        cls.text = text_of(GOVERNMENT_TYPES)
+        cls.restated = ledger.restated_government_types(cls.inventory)
+
+    def test_which_types_are_restated(self):
+        self.assertEqual(
+            self.restated,
+            {
+                "gov_kaiser": ["cm_german"],
+                "gov_regency_kaiser": ["cm_german"],
+                "gov_social_monarchy_kaiser": ["cm_german"],
+                "gov_social_monarchy_kaiser_absolutist": ["cm_german"],
+                "gov_social_monarchy_kaiser_fascist": ["cm_german"],
+                "gov_fascist_corporate_state": ["cm_german"],
+                "gov_volksgemeinschaft": ["cm_german"],
+                "gov_american_parliamentary": ["cm_american"],
+                "gov_american_parliamentary_dictator": ["cm_american"],
+                "gov_american_theocracy_democratic": ["cm_american"],
+                "gov_american_theocracy_dictatorial": ["cm_american"],
+            },
+        )
+        # One nation's title is not handed to the others: French alone of Latin's core cultures, Swedish alone of
+        # Scandinavian's, Swahili alone of East African's.
+        for name in ("gov_french_3rd_republic_presidential", "gov_folkhemmet", "gov_swahili_sultanate"):
+            self.assertIn(name, self.inventory["government_types"])
+            self.assertNotIn(name, self.restated)
+
+    def test_the_file_replaces_exactly_those(self):
+        self.assertEqual(re.findall(r"^REPLACE:(\w+) = \{", self.text, re.M), list(self.restated))
+        self.assertNotRegex(self.text, r"(?m)^gov_\w+ = \{")  # no bare copy: it would be dropped, or take vanilla's place
+
+    def test_each_copy_is_vanillas_text_plus_the_guarded_merged_culture(self):
+        for name, results in self.restated.items():
+            vanilla = self.inventory["government_types"][name]["text"].split("\n")
+            start = self.text.index("REPLACE:%s = {" % name)
+            end = self.text.index("\n}\n", start) + 2
+            ours = self.text[start:end].split("\n")
+            self.assertEqual(ours[0], "REPLACE:%s = {" % name)
+            added = [line for line in ours[1:] if line not in vanilla]
+            self.assertEqual(
+                {line.strip() for line in added},
+                {"AND = { exists = cu:%s country_has_primary_culture = cu:%s }" % (r, r) for r in results},
+                name,
+            )
+            self.assertEqual([line for line in ours[1:] if line in vanilla], vanilla[1:], name)
+            # Each added line follows a list of the merge's cultures, inside an OR.
+            for index, line in enumerate(ours):
+                if line in added:
+                    self.assertRegex(ours[index - 1], r"^\t+country_has_primary_culture = cu:\w+$", name)
+                    self.assertEqual(ours[index - 1].count("\t"), line.count("\t"), name)
+
+    def test_a_list_outside_an_or_or_short_of_the_core_is_refused(self):
+        german = "gov_x = {\n\tpossible = {\n\t\tOR = {\n\t\t\tcountry_has_primary_culture = cu:north_german\n\t\t\tcountry_has_primary_culture = cu:south_german\n\t\t}\n\t}\n}"
+        self.assertIn("exists = cu:cm_german", gen.restate_with_result("gov_x", german, "cm_german"))
+        for bad in (
+            german.replace("\t\t\tcountry_has_primary_culture = cu:south_german\n", ""),  # one core culture only
+            german.replace("OR = {", "NOR = {"),
+            "gov_x = {\n\tpossible = {\n\t\tcountry_has_primary_culture = cu:north_german\n\t\tcountry_has_primary_culture = cu:south_german\n\t}\n}",
+            "gov_x = {\n\tpossible = {\n\t\thas_law = law_type:law_monarchy\n\t}\n}",
+        ):
+            with self.assertRaises(ValueError):
+                gen.restate_with_result("gov_x", bad, "cm_german")
+
+    def test_no_mod_file_injects_into_a_restated_type(self):
+        # Every INJECT on a key applies before a plain REPLACE, so it would be lost.
+        for path in (ROOT / "common" / "government_types").glob("*.txt"):
+            for name in self.restated:
+                self.assertNotRegex(text_of(path), r"(?m)^(TRY_)?INJECT(_OR_CREATE)?:%s\b" % name, path.name)
+
+
+class ModCompanyTest(unittest.TestCase):
+    def test_a_company_the_mod_keys_on_a_part_names_what_it_merges_into(self):
+        # Owner, 2026-11-09: "I think they should also be available to the merged culture."
+        text = text_of(ROOT / "common/company_types/extra_companies_flavored.txt")
+        parts = set(reads.part_cultures())
+        named = set(re.findall(r"country_has_primary_culture = cu:(\w+)", text))
+        for culture in named & parts:
+            for successor in cfg.successors_of(culture):
+                self.assertIn(successor, named, "%s without %s" % (culture, successor))
+        self.assertNotIn("culture_merge_ref", text)  # no company declines a merged culture
 
 
 class CandidateTest(unittest.TestCase):

@@ -30,8 +30,10 @@ Dispositions:
 ``cosmetic``   names, titles, flags, graphics. No hold.
 ``company``    a company's eligibility. No hold.
 ``moot``       can't matter once the part has switched; ``why`` says why. No hold.
-``mirrored``   the mod restates the vanilla trigger with the merged cultures
-               beside the parts (``TRIGGER_OVERRIDES``). No hold.
+``mirrored``   the mod restates the vanilla entity with the merged cultures
+               beside the parts: a trigger in ``TRIGGER_OVERRIDES``, or a
+               government type whose title belonged to the whole merged people
+               (``restated_government_types``). No hold.
 ``entries``    belongs to journal entries: the part is held while **any** country
                has one of them active, and, until ``WINDOW_END``, while any
                country has one on offer (inactive, waiting on its ``possible``).
@@ -81,6 +83,33 @@ WINDOW_END = "1936.1.1"
 # nothing but a list of cultures, so the copy is small and a vanilla patch to it shows as a changed list in the
 # inventory (``trigger_lists``). gen_culture_merges writes the copies.
 TRIGGER_OVERRIDES: tuple[str, ...] = ("has_indian_primary_culture",)
+
+
+def restated_government_types(inventory: dict | None = None) -> dict[str, list[str]]:
+    """Vanilla government type -> the merged cultures added to its culture test (owner, 2026-11-09: ruler titles are
+    worth keeping). Only where the type names **every core culture** of the merge: then its title already belonged
+    to the whole merged people (Kaiser names North and South German, so a German country keeps it), and no country
+    gains a title that was another nation's. The French republics name French alone of Latin's core cultures, the
+    Swahili sultanates Swahili alone of East African's, Folkhemmet Swedish alone of Scandinavian's: a Latin Spain
+    would become a French Third Republic, so those are left to vanilla and fall back with the part. Only a merge's
+    own new culture, never one further up the chain (Anglophone for the American types), for the same reason."""
+    inventory = reads.load() if inventory is None else inventory
+    named: dict[str, set[str]] = {}
+    for row in inventory["reads"]:
+        if row["file"].startswith("common/government_types/"):
+            named.setdefault(row["entity"], set()).add(row["part"])
+    found: dict[str, list[str]] = {}
+    for name in inventory.get("government_types", {}):
+        results = [
+            merge.result for merge in cfg.MERGES
+            if merge.new is not None and all(any(c in named[name] for c in slot.cultures) for slot in merge.core)
+        ]
+        if results:
+            found[name] = results
+    return found
+
+
+_RESTATED_TYPES: dict[str, list[str]] | None = None
 
 
 @dataclass(frozen=True)
@@ -223,7 +252,13 @@ def _prefix(table: dict[str, str], file: str) -> str | None:
 
 def classify(row: dict) -> Disposition | None:
     """The disposition of one inventory row, or None when no rule covers it."""
+    global _RESTATED_TYPES
     file, entity = row["file"], row["entity"]
+    if file.startswith("common/government_types/"):
+        if _RESTATED_TYPES is None:
+            _RESTATED_TYPES = restated_government_types()
+        if entity in _RESTATED_TYPES:
+            return Disposition(MIRRORED, why="restated with the merged culture")
     why = _prefix(_COSMETIC_DIRS, file)
     if why:
         return Disposition(COSMETIC, why=why)

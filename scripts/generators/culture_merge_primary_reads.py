@@ -33,6 +33,11 @@ trigger the mod restates (``culture_merge_primary_ledger.TRIGGER_OVERRIDES``):
 a trigger that is one ``OR`` of ``country_has_primary_culture`` lines and
 nothing else, which the scan checks.
 
+A fourth, ``government_types``, holds the text of every vanilla government
+type that tests a part, as vanilla wrote it: the generator restates the ones
+whose title belonged to a whole merged people (``Kaiser``) with the merged
+culture added, and a ``REPLACE`` needs the whole entity.
+
 The scan reads the installed game, which CI and a cloud container don't have,
 so its result is committed as ``culture_merge_primary_reads.json`` beside this
 file, stamped with the game version. ``gen_culture_merges`` and the tests read
@@ -299,6 +304,23 @@ def scan_trigger_lists(game: Path, names: tuple[str, ...]) -> dict[str, dict]:
     return found
 
 
+def scan_government_types(game: Path, rows: list[dict]) -> dict[str, dict]:
+    """name -> {file, text} for every vanilla government type a read row names: its block exactly as the file has it,
+    from ``name = {`` to the closing brace in the first column."""
+    wanted: dict[str, set[str]] = {}
+    for row in rows:
+        if row["file"].startswith("common/government_types/"):
+            wanted.setdefault(row["file"], set()).add(row["entity"])
+    found: dict[str, dict] = {}
+    for file, names in sorted(wanted.items()):
+        lines = _read(game / file).split("\n")
+        for name in sorted(names):
+            start = next(i for i, line in enumerate(lines) if re.match(r"%s\s*=\s*\{" % re.escape(name), line))
+            end = next(i for i in range(start + 1, len(lines)) if lines[i].startswith("}"))
+            found[name] = {"file": file, "text": "\n".join(line.rstrip() for line in lines[start:end + 1])}
+    return found
+
+
 def game_version(root: Path = ROOT) -> str:
     return json.loads((root / "vanilla_parsed" / "manifest.json").read_text(encoding="utf-8"))["game_version"]
 
@@ -307,12 +329,14 @@ def scan(game: Path, root: Path = ROOT) -> dict:
     import culture_merge_primary_ledger as ledger  # here, not at the top: the ledger imports this module
 
     parts = part_cultures()
+    rows = scan_reads(game, parts)
     return {
         "game_version": game_version(root),
         "parts": parts,
-        "reads": scan_reads(game, parts),
+        "reads": rows,
         "formables": scan_formables(game, parts),
         "trigger_lists": scan_trigger_lists(game, ledger.TRIGGER_OVERRIDES),
+        "government_types": scan_government_types(game, rows),
     }
 
 
@@ -330,7 +354,12 @@ def render(inventory: dict) -> str:
     for index, (tag, entry) in enumerate(formables):
         lines.append("  %s: %s%s" % (json.dumps(tag), json.dumps(entry), "," if index + 1 < len(formables) else ""))
     lines.append(" },")
-    lines.append(' "trigger_lists": %s' % json.dumps(inventory["trigger_lists"]))
+    lines.append(' "trigger_lists": %s,' % json.dumps(inventory["trigger_lists"]))
+    lines.append(' "government_types": {')
+    types = list(inventory["government_types"].items())
+    for index, (name, entry) in enumerate(types):
+        lines.append("  %s: %s%s" % (json.dumps(name), json.dumps(entry), "," if index + 1 < len(types) else ""))
+    lines.append(" }")
     lines.append("}")
     return "\n".join(lines) + "\n"
 

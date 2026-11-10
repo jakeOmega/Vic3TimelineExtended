@@ -129,6 +129,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/te_culture_merges_generated_values.txt",
     "common/country_definitions/zz_te_culture_merge_definitions.txt",
     "common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt",
+    "common/government_types/zz_te_culture_merge_government_types.txt",
     "scripts/generators/culture_merge_primary_reads.json",
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",

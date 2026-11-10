@@ -115,6 +115,9 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   hand-written; ``mod_definition_gaps`` says what they lack.
 * ``common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt``: bare copies of the vanilla triggers in
   ``ledger.TRIGGER_OVERRIDES`` with the merged cultures added (``trigger_override_additions``).
+* ``common/government_types/zz_te_culture_merge_government_types.txt``: ``REPLACE`` copies of the vanilla government
+  types whose culture test names every core culture of a merge (``ledger.restated_government_types``: the Kaiser
+  family, the American forms), the merged culture added (``restate_with_result``), so the ruler keeps the title.
 * The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
   complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
   starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
@@ -174,6 +177,7 @@ DEFINITIONS_OUT = Path("common/country_definitions/zz_te_culture_merge_definitio
 # Sorts before vanilla's 00_scripted_triggers.txt: the first bare definition of a scripted trigger wins
 # (scripting_best_practices.md, Load Order, fact 3).
 VANILLA_TRIGGERS_OUT = Path("common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt")
+GOVERNMENT_TYPES_OUT = Path("common/government_types/zz_te_culture_merge_government_types.txt")
 LOC_CATEGORY = "CULTURE_MERGES_GENERATED"
 
 SNAPSHOT_DIR = "vanilla_parsed"
@@ -2238,6 +2242,75 @@ def render_vanilla_triggers(inventory: dict | None = None) -> str:
     return out.text()
 
 
+_PRIMARY_LINE = re.compile(r"^(\t+)country_has_primary_culture = cu:(\w+)\s*(?:#.*)?$")
+
+
+def restate_with_result(name: str, text: str, result: str, merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """Vanilla's text of one entity with ``result`` added to every list of primary-culture tests that names the
+    merge's core cultures: one line after the list's last, guarded by ``exists`` (in a game begun before the culture
+    was added, ``country_has_primary_culture = cu:<it>`` holds for every country). Raises unless each such list sits
+    directly in an ``OR`` and names every core slot of the merge: anywhere else the added line would change what the
+    block means."""
+    merges = cfg.MERGES if merges is None else merges
+    merge = next(m for m in merges if m.result == result)
+    core = [set(slot.cultures) for slot in merge.core]
+    mine = {c for slot in merge.core + merge.optional for c in slot.cultures}
+    lines = text.split("\n")
+    out: list[str] = []
+    added = 0
+    index = 0
+    while index < len(lines):
+        match = _PRIMARY_LINE.match(lines[index])
+        if not match:
+            out.append(lines[index])
+            index += 1
+            continue
+        end = index
+        cultures = []
+        while end < len(lines) and _PRIMARY_LINE.match(lines[end]):
+            cultures.append(_PRIMARY_LINE.match(lines[end]).group(2))
+            end += 1
+        out.extend(lines[index:end])
+        if mine.intersection(cultures):
+            indent = match.group(1)
+            opener = next(line for line in reversed(lines[:index]) if line.strip() and not line.startswith(indent))
+            if opener.strip() != "OR = {" or not all(slot.intersection(cultures) for slot in core):
+                raise ValueError("%s tests %s outside a plain OR of the %s merge's core cultures" % (name, cultures, merge.key))
+            out.append("%sAND = { exists = cu:%s country_has_primary_culture = cu:%s }" % (indent, result, result))
+            added += 1
+        index = end
+    if not added:
+        raise ValueError("%s names no culture of the %s merge" % (name, merge.key))
+    return "\n".join(out)
+
+
+def render_government_types(inventory: dict | None = None) -> str:
+    """``REPLACE`` copies of the vanilla government types in ``ledger.restated_government_types``."""
+    inventory = primary_reads.load() if inventory is None else inventory
+    out = [HEADER, "#"]
+    out += [
+        "# VANILLA OVERRIDE. A government type carries the ruler's title, and vanilla keys some on a culture: a German",
+        "# empire's monarch is a Kaiser because North or South German is a primary culture. Those cultures leave the primary",
+        "# cultures once they have switched into the merged one (te_cm_monthly_switched_culture), so each type here is",
+        "# vanilla's own, restated with the merged culture beside the parts (owner, 2026-11-09). Only types that name every",
+        "# core culture of a merge (culture_merge_primary_ledger.restated_government_types): the title then belonged to the",
+        "# whole merged people already. A REPLACE, not a sibling type: the engine takes the first type whose `possible` holds,",
+        "# and vanilla lists the dual monarchy and the crown lands before gov_kaiser, so a copy in a file of its own would",
+        "# take them. A REPLACE keeps vanilla's place. Vanilla's text is read from culture_merge_primary_reads.json; another",
+        "# mod's INJECT into one of these types is lost (every INJECT applies before a plain REPLACE).",
+    ]
+    for name, results in ledger.restated_government_types(inventory).items():
+        entry = inventory["government_types"][name]
+        text = entry["text"]
+        for result in results:
+            text = restate_with_result(name, text, result)
+        head, rest = text.split("\n", 1)
+        if not re.fullmatch(r"%s\s*=\s*\{" % re.escape(name), head.strip()):
+            raise ValueError("%s does not open as `%s = {`" % (name, name))
+        out += ["", "# vanilla: %s" % entry["file"], "REPLACE:%s = {" % name, rest]
+    return "\n".join(out) + "\n"
+
+
 # ---------------------------------------------------------------------------
 # Starting a merge: values, bars, buttons, journal entries and their loc
 # ---------------------------------------------------------------------------
@@ -2859,6 +2932,7 @@ def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
         VALUES_OUT: render_values(),
         DEFINITIONS_OUT: render_definitions(),
         VANILLA_TRIGGERS_OUT: render_vanilla_triggers(),
+        GOVERNMENT_TYPES_OUT: render_government_types(),
     }
 
 

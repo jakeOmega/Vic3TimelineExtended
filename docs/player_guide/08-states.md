@@ -416,9 +416,13 @@ has that entry running. Until 1936 it also stays while such an entry is still on
 offer, while a country that needs it to form (Italy, Scandinavia, or a fallen
 Russia or Prussia) doesn't exist, and for the base game's historical characters,
 laws and events that ask for it. From 1936 only a running journal entry keeps it.
-Rulers and generals of the old culture take the merged one when it goes. The
-names the base game ties to the old culture go with it: ruler titles and party
-names fall back to the general ones.
+Rulers and generals of the old culture take the merged one when it goes. A
+ruler's title that belonged to all of the merged people stays: a German empire
+keeps its Kaiser, and the United States its own forms of government. A title
+or a party name that belonged to one of several nations, such as the French
+republics after a Latin merge, falls back to the general one. Companies the
+mod adds for a culture stay open to the culture it merged into; the base
+game's own companies for it do not.
 
 You can still form the countries the old cultures could: the merged culture
 counts for every formable that listed one of them, so a Germany that is only
