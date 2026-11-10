@@ -396,6 +396,9 @@ _REVIEWED_REF_RE = re.compile(r"^\s*-\s*reviewed:\s*(.+?)\s*$")
 # catalyst, a vanilla on_action) otherwise tags the mod's errors through it.
 _STACK_REF_RE = re.compile(r"^\s*-\s*stack:\s*(.+?)\s*$")
 STACK_VANILLA_ONLY = "vanilla only"
+# `- check: <what to look at>`: the one line a watch-list entry prints beside
+# the log line it tags (see WATCH_KIND).
+_CHECK_REF_RE = re.compile(r"^\s*-\s*check:\s*(.+?)\s*$")
 # A signature line that is only a file path (`common/x/y.txt:12`, `y.txt:12`,
 # `Script location: common/x/y.txt`) matches every error whose message names
 # that file at ANY line, once _normalize_for_signature_match folds `:NNN`.
@@ -416,17 +419,29 @@ _SECTION_KIND_RULES: tuple[tuple[str, str], ...] = (
     ("engine noise", "vanilla_noise"),
     ("mod-side", "mod_low_priority"),
     ("mod side", "mod_low_priority"),
+    ("watch list", "watch"),
 )
+
+# A watch-list entry tags a line and never hides it. It is for a message that
+# is usually vanilla's and can also be the mod's, with nothing in the line to
+# tell which (a frameless assert, `Invalid Culture scope when creating
+# Character`): registering it would hide the mod's case, and leaving it bare
+# makes every triage work out again why it is there. The entry's `- check:`
+# line says what settles it, and triage prints that beside the line.
+WATCH_KIND = "watch"
+# The kinds `?vanilla_bugs=hide` drops and `?mod_only=unknown` reads as vanilla.
+VANILLA_KINDS = ("vanilla", "vanilla_noise")
+MOD_NOISE_KIND = "mod_low_priority"
 
 
 class VanillaBugRef:
     __slots__ = ("title", "file_basenames", "source_anchors", "signatures", "anchor", "kind",
-                 "tracked_issue", "reviewed", "vanilla_stack_only")
+                 "tracked_issue", "reviewed", "vanilla_stack_only", "check")
 
     def __init__(self, title: str, file_basenames: list[str], source_anchors: list[str],
                  signatures: list[str], anchor: str, kind: str = "vanilla",
                  tracked_issue: str | None = None, reviewed: list[str] | None = None,
-                 vanilla_stack_only: bool = False):
+                 vanilla_stack_only: bool = False, check: str | None = None):
         self.title = title
         self.file_basenames = file_basenames
         # Exact-match against entry.source. Empty for legacy path-anchored entries.
@@ -443,6 +458,8 @@ class VanillaBugRef:
         self.reviewed = list(reviewed or [])
         # `- stack: vanilla only` (see _STACK_REF_RE): skip errors with a mod frame.
         self.vanilla_stack_only = vanilla_stack_only
+        # `- check:` (see _CHECK_REF_RE): what to look at, for a watch-list entry.
+        self.check = check
 
     def to_dict(self) -> dict:
         d: dict = {
@@ -454,6 +471,8 @@ class VanillaBugRef:
             d["tracked_issue"] = self.tracked_issue
         if self.vanilla_stack_only:
             d["stack"] = STACK_VANILLA_ONLY
+        if self.check:
+            d["check"] = self.check
         return d
 
 
@@ -556,6 +575,11 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
                 "mod-caused ones included; match the message text instead (the heading's path "
                 "already restricts the file) (#873)"
             )
+    if ref.kind == WATCH_KIND and not ref.check:
+        warnings.append(
+            f"vanilla_known_bugs.md: '{ref.title}' is on the watch list but has no `- check:` "
+            "line saying what tells a mod cause from vanilla's"
+        )
     if ref.kind == "mod_low_priority":
         if not ref.tracked_issue:
             warnings.append(
@@ -682,6 +706,7 @@ def load_vanilla_bug_registry(
         tracked_issue: str | None = None
         reviewed: list[str] = []
         stack_only = False
+        check: str | None = None
         captured_block = False
         j = i + 1
         while j < len(lines):
@@ -730,6 +755,14 @@ def load_vanilla_bug_registry(
                     )
                 j += 1
                 continue
+            ck = _CHECK_REF_RE.match(nxt)
+            if ck:
+                # Not scanned for paths: a check may name the file to look in
+                # without that file becoming an anchor.
+                if check is None:
+                    check = ck.group(1)
+                j += 1
+                continue
             body_paths.extend(_PATH_REF_RE.findall(nxt))
             j += 1
         all_paths = paths + body_paths
@@ -744,6 +777,7 @@ def load_vanilla_bug_registry(
             tracked_issue=tracked_issue,
             reviewed=reviewed,
             vanilla_stack_only=stack_only,
+            check=check,
         )
         ref_warnings = _validate_ref(ref, known_anchors)
         if ref_warnings:
@@ -826,6 +860,11 @@ def load_mod_noise_registry(doc_path: str) -> tuple[
 HELPER_ANCHOR_REVIEWED = "helper anchor"
 # `- reviewed: mod anchor, <why>` clears mod_only_anchor_warnings (#873).
 MOD_ANCHOR_REVIEWED = "mod anchor"
+# `- reviewed: mod frame, <why>`: the entry's lines carry a mod file in their
+# stack by design (the mod's override of a vanilla file that keeps vanilla's
+# bug, the mod's own replace/ loc file). scripts/analysis/log_triage.py lists
+# a vanilla entry's mod-framed lines as a possible hidden mod error without it.
+MOD_FRAME_REVIEWED = "mod frame"
 HELPER_ANCHOR_ADVICE = (
     "anchor on the vanilla caller (bottom of the stack), narrow the signature to "
     "the vanilla case, or add `- stack: vanilla only`; if it already cannot match a "
@@ -1211,6 +1250,33 @@ def tag_gui_injected_scopes(entries: list[LogEntry], names: frozenset[str]) -> N
         m = _NEVER_SET_EVENT_TARGET_RE.match(e.message)
         if m and m.group(1) in names:
             e.vanilla_bug_ref = dict(ref)
+
+
+def apply_known_noise_modes(entries: list[LogEntry], vanilla_mode: str = "show",
+                            mod_noise_mode: str = "show") -> list[LogEntry]:
+    """Apply `?vanilla_bugs=` and `?mod_noise=` (each show|hide|only) to
+    entries already tagged by tag_vanilla_bugs / tag_gui_injected_scopes.
+
+    `hide` drops the entries of that kind; `only` on either keeps just the
+    entries of the kinds asked for. A watch-list entry (WATCH_KIND) is neither:
+    it stays under `hide` and is left out by `only`.
+    """
+    def is_vanilla(e: LogEntry) -> bool:
+        return e.vanilla_bug_ref is not None and e.vanilla_bug_ref.get("kind") in VANILLA_KINDS
+
+    def is_mod_noise(e: LogEntry) -> bool:
+        return e.vanilla_bug_ref is not None and e.vanilla_bug_ref.get("kind") == MOD_NOISE_KIND
+
+    only = vanilla_mode == "only" or mod_noise_mode == "only"
+    out = []
+    for e in entries:
+        v, m = is_vanilla(e), is_mod_noise(e)
+        if (vanilla_mode == "hide" and v) or (mod_noise_mode == "hide" and m):
+            continue
+        if only and not ((vanilla_mode == "only" and v) or (mod_noise_mode == "only" and m)):
+            continue
+        out.append(e)
+    return out
 
 
 def filter_entries(
