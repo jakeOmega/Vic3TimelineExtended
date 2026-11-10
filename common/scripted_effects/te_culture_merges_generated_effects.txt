@@ -14562,8 +14562,9 @@ te_cmg_dominance_all = {
 }
 
 # Country scope. Run monthly (on_monthly_pulse_country, behind the rule) and by te_cmg_formed_country: for every
-# culture that has switched, the result becomes a primary culture where the part is one, and pops of the part that
-# came back convert (te_cm_monthly_switched_culture). One variable check per culture while nothing has switched.
+# culture that has switched, the culture its people ended up in becomes a primary culture where the part is one, pops
+# of the part that came back convert, and the part leaves the primary cultures once nothing is tied to it
+# (te_cm_monthly_switched_culture). One variable check per culture while nothing has switched.
 te_cmg_monthly_country = {
 	if = {
 		limit = { has_global_variable = te_cm_switched_north_german }
@@ -15045,6 +15046,391 @@ te_cmg_monthly_country = {
 		limit = { has_global_variable = te_cm_switched_kikuyu }
 		te_cm_monthly_switched_culture = { CULTURE = kikuyu }
 	}
+}
+
+# Any scope; scope:te_cm_switched_result = the culture a part switched into. Follows the chain to the culture
+# its people are in now: North Italian switched into cm_italian, and cm_italian into cm_latin, so the answer is
+# cm_latin. The lowest result first, so one pass reaches the end. Without it the monthly upkeep would give a
+# country cm_italian back each month after removing it.
+te_cmg_resolve_switched_result = {
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_filipino
+			scope:te_cm_switched_result ?= cu:filipino
+		}
+		global_var:te_cm_switched_filipino = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_indonesian
+			scope:te_cm_switched_result ?= cu:cm_indonesian
+		}
+		global_var:te_cm_switched_cm_indonesian = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_oghuz_turkic
+			scope:te_cm_switched_result ?= cu:cm_oghuz_turkic
+		}
+		global_var:te_cm_switched_cm_oghuz_turkic = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_yugoslav
+			scope:te_cm_switched_result ?= cu:cm_yugoslav
+		}
+		global_var:te_cm_switched_cm_yugoslav = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_czechoslovak
+			scope:te_cm_switched_result ?= cu:cm_czechoslovak
+		}
+		global_var:te_cm_switched_cm_czechoslovak = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_east_slavic
+			scope:te_cm_switched_result ?= cu:cm_east_slavic
+		}
+		global_var:te_cm_switched_cm_east_slavic = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_platine
+			scope:te_cm_switched_result ?= cu:cm_platine
+		}
+		global_var:te_cm_switched_cm_platine = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_italian
+			scope:te_cm_switched_result ?= cu:cm_italian
+		}
+		global_var:te_cm_switched_cm_italian = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_french
+			scope:te_cm_switched_result ?= cu:french
+		}
+		global_var:te_cm_switched_french = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_american
+			scope:te_cm_switched_result ?= cu:cm_american
+		}
+		global_var:te_cm_switched_cm_american = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_british
+			scope:te_cm_switched_result ?= cu:british
+		}
+		global_var:te_cm_switched_british = { save_temporary_scope_as = te_cm_switched_result }
+	}
+}
+
+# Country scope. Monthly and on formation, with no rule gate (te_cm_strip_on_action). A formable's definition lists
+# the merged cultures beside their parts, so that a country whose parts are gone can still form it, and forming a
+# tag adds every culture its definition lists. A merged culture whose merge never began has no people: it is taken
+# off again here, unless it is the country's only primary culture.
+te_cmg_strip_untouched_results = {
+	if = {
+		limit = {
+			exists = cu:cm_german
+			country_has_primary_culture = cu:cm_german
+			te_cmg_german_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_german } }
+		}
+		remove_primary_culture = cu:cm_german
+	}
+	if = {
+		limit = {
+			exists = cu:cm_italian
+			country_has_primary_culture = cu:cm_italian
+			te_cmg_italian_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_italian } }
+		}
+		remove_primary_culture = cu:cm_italian
+	}
+	if = {
+		limit = {
+			exists = cu:cm_scandinavian
+			country_has_primary_culture = cu:cm_scandinavian
+			te_cmg_scandinavian_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_scandinavian } }
+		}
+		remove_primary_culture = cu:cm_scandinavian
+	}
+	if = {
+		limit = {
+			exists = cu:cm_east_slavic
+			country_has_primary_culture = cu:cm_east_slavic
+			te_cmg_east_slavic_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_east_slavic } }
+		}
+		remove_primary_culture = cu:cm_east_slavic
+	}
+	if = {
+		limit = {
+			exists = cu:cm_yugoslav
+			country_has_primary_culture = cu:cm_yugoslav
+			te_cmg_yugoslav_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_yugoslav } }
+		}
+		remove_primary_culture = cu:cm_yugoslav
+	}
+	if = {
+		limit = {
+			exists = cu:cm_czechoslovak
+			country_has_primary_culture = cu:cm_czechoslovak
+			te_cmg_czechoslovak_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_czechoslovak } }
+		}
+		remove_primary_culture = cu:cm_czechoslovak
+	}
+	if = {
+		limit = {
+			exists = cu:cm_american
+			country_has_primary_culture = cu:cm_american
+			te_cmg_american_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_american } }
+		}
+		remove_primary_culture = cu:cm_american
+	}
+	if = {
+		limit = {
+			exists = cu:cm_anglophone
+			country_has_primary_culture = cu:cm_anglophone
+			te_cmg_anglophone_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_anglophone } }
+		}
+		remove_primary_culture = cu:cm_anglophone
+	}
+	if = {
+		limit = {
+			exists = cu:cm_platine
+			country_has_primary_culture = cu:cm_platine
+			te_cmg_platine_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_platine } }
+		}
+		remove_primary_culture = cu:cm_platine
+	}
+	if = {
+		limit = {
+			exists = cu:cm_andean
+			country_has_primary_culture = cu:cm_andean
+			te_cmg_andean_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_andean } }
+		}
+		remove_primary_culture = cu:cm_andean
+	}
+	if = {
+		limit = {
+			exists = cu:cm_gran_colombian
+			country_has_primary_culture = cu:cm_gran_colombian
+			te_cmg_gran_colombian_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_gran_colombian } }
+		}
+		remove_primary_culture = cu:cm_gran_colombian
+	}
+	if = {
+		limit = {
+			exists = cu:cm_arab
+			country_has_primary_culture = cu:cm_arab
+			te_cmg_arab_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_arab } }
+		}
+		remove_primary_culture = cu:cm_arab
+	}
+	if = {
+		limit = {
+			exists = cu:cm_oghuz_turkic
+			country_has_primary_culture = cu:cm_oghuz_turkic
+			te_cmg_oghuz_turkic_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_oghuz_turkic } }
+		}
+		remove_primary_culture = cu:cm_oghuz_turkic
+	}
+	if = {
+		limit = {
+			exists = cu:cm_dravidian
+			country_has_primary_culture = cu:cm_dravidian
+			te_cmg_dravidian_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_dravidian } }
+		}
+		remove_primary_culture = cu:cm_dravidian
+	}
+	if = {
+		limit = {
+			exists = cu:cm_indonesian
+			country_has_primary_culture = cu:cm_indonesian
+			te_cmg_indonesian_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_indonesian } }
+		}
+		remove_primary_culture = cu:cm_indonesian
+	}
+	if = {
+		limit = {
+			exists = cu:cm_nguni
+			country_has_primary_culture = cu:cm_nguni
+			te_cmg_nguni_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_nguni } }
+		}
+		remove_primary_culture = cu:cm_nguni
+	}
+	if = {
+		limit = {
+			exists = cu:cm_latin
+			country_has_primary_culture = cu:cm_latin
+			te_cmg_latin_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_latin } }
+		}
+		remove_primary_culture = cu:cm_latin
+	}
+	if = {
+		limit = {
+			exists = cu:cm_pan_slavic
+			country_has_primary_culture = cu:cm_pan_slavic
+			te_cmg_pan_slavic_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_pan_slavic } }
+		}
+		remove_primary_culture = cu:cm_pan_slavic
+	}
+	if = {
+		limit = {
+			exists = cu:cm_pan_turkic
+			country_has_primary_culture = cu:cm_pan_turkic
+			te_cmg_pan_turkic_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_pan_turkic } }
+		}
+		remove_primary_culture = cu:cm_pan_turkic
+	}
+	if = {
+		limit = {
+			exists = cu:cm_pan_malay
+			country_has_primary_culture = cu:cm_pan_malay
+			te_cmg_pan_malay_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_pan_malay } }
+		}
+		remove_primary_culture = cu:cm_pan_malay
+	}
+	if = {
+		limit = {
+			exists = cu:cm_east_african
+			country_has_primary_culture = cu:cm_east_african
+			te_cmg_east_african_untouched = yes
+			any_primary_culture = { NOT = { this = cu:cm_east_african } }
+		}
+		remove_primary_culture = cu:cm_east_african
+	}
+}
+
+# Any scope. Once a month, with no rule gate (te_cm_fervor_on_action): a merged culture takes the traditions of the
+# core parts that have switched into it (owner, 2026-11-09), so the acceptance a part's tradition gave other
+# cultures doesn't end when the part leaves the primary cultures. Not an optional part's, nor the pairs in
+# culture_merges_config.TRADITIONS_NOT_CARRIED. A result that is itself a part passes on what it took. Guarded,
+# so it adds each tradition once; te_cm_chk_traditions is the TEMPORARY self-check cm_tradition_carried.
+te_cmg_carry_traditions = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_russian ?= cu:cm_east_slavic
+			cu:cm_east_slavic = { NOT = { has_discrimination_trait = tradition_russosphere } }
+		}
+		cu:cm_east_slavic = { add_tradition_trait = tradition_russosphere }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_bosniak ?= cu:cm_yugoslav
+			cu:cm_yugoslav = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_yugoslav = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_turkish ?= cu:cm_oghuz_turkic
+			cu:cm_oghuz_turkic = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_oghuz_turkic = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_azerbaijani ?= cu:cm_oghuz_turkic
+			cu:cm_oghuz_turkic = { NOT = { has_discrimination_trait = tradition_caucasian } }
+		}
+		cu:cm_oghuz_turkic = { add_tradition_trait = tradition_caucasian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_azerbaijani ?= cu:cm_oghuz_turkic
+			cu:cm_oghuz_turkic = { NOT = { has_discrimination_trait = tradition_persianate } }
+		}
+		cu:cm_oghuz_turkic = { add_tradition_trait = tradition_persianate }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_east_slavic ?= cu:cm_pan_slavic
+			cu:cm_pan_slavic = { NOT = { has_discrimination_trait = tradition_russosphere } }
+		}
+		cu:cm_pan_slavic = { add_tradition_trait = tradition_russosphere }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_yugoslav ?= cu:cm_pan_slavic
+			cu:cm_pan_slavic = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_pan_slavic = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_oghuz_turkic ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_oghuz_turkic ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_caucasian } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_caucasian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_oghuz_turkic ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_persianate } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_persianate }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_uzbek ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_persianate } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_persianate }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_tatar ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_russosphere } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_russosphere }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	te_cm_chk_traditions = yes
 }
 
 # Any scope. Once a month, with no rule gate (te_cm_fervor_on_action, on the global on_monthly_pulse): every culture that has

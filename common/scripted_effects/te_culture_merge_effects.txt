@@ -750,14 +750,22 @@ te_cm_switch_part = {
 	}
 }
 
-# Country scope. The monthly upkeep of a part that has switched: $CULTURE$ = the part. The parts stay
-# primary cultures of every country that had them (spec 7), so a country that has the part as a
-# primary culture and the result not gets the result as well: Austria at the switch, a country
-# released or formed from a definition that lists only the parts. Pops of the part that reappear
-# (a vanilla event converting into it, an emigrant) convert whole, behind the culture_percent_country
-# prefilter so a country without any costs one check.
+# Country scope. The monthly upkeep of a part that has switched: $CULTURE$ = the part.
+# 1. scope:te_cm_switched_result is the culture the part's people are in now: the one it switched into, followed up
+#    the chain (te_cmg_resolve_switched_result: North Italian into cm_italian into cm_latin).
+# 2. A country that has the part as a primary culture and that culture not gets it as well: Austria at the switch, a
+#    country released or formed from a definition that lists only the parts.
+# 3. Pops of the part that reappear (a vanilla event converting into it, an emigrant) convert whole, behind the
+#    culture_percent_country prefilter so a country without any costs one check.
+# 4. The part leaves the primary cultures (owner, 2026-11-09, in place of spec 7's "parts stay for good") once nothing
+#    is tied to it: te_cmg_part_held_<c>, from the ledger of vanilla's reads
+#    (scripts/generators/culture_merge_primary_ledger.py). Only where the successor is a primary culture, so a country
+#    never loses its last one; the country's characters of the part take the successor's culture in the same step, so
+#    no ruler or general is left with a culture his country no longer has. A formation that brings the part back
+#    (its definition still lists it) loses it again on the next pass.
 te_cm_monthly_switched_culture = {
 	global_var:te_cm_switched_$CULTURE$ = { save_temporary_scope_as = te_cm_switched_result }
+	te_cmg_resolve_switched_result = yes
 	if = {
 		limit = {
 			country_has_primary_culture = cu:$CULTURE$
@@ -771,6 +779,20 @@ te_cm_monthly_switched_culture = {
 			limit = { culture = cu:$CULTURE$ }
 			change_pop_culture = { target = scope:te_cm_switched_result value = 1 }
 		}
+	}
+	if = {
+		limit = {
+			country_has_primary_culture = cu:$CULTURE$
+			country_has_primary_culture = scope:te_cm_switched_result
+			NOT = { te_cmg_part_held_$CULTURE$ = yes }
+		}
+		every_scope_character = {
+			limit = { culture = cu:$CULTURE$ }
+			change_character_culture = scope:te_cm_switched_result
+		}
+		remove_primary_culture = cu:$CULTURE$
+		# TEMPORARY self-check cm_dead_primary_removed (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
+		te_cm_chk_dead_primary = { CULTURE = $CULTURE$ }
 	}
 }
 

@@ -52,11 +52,23 @@ te_cm_yearly_on_action = {
 	}
 }
 
-# Country scope, the monthly pulse. The parts that have switched stay primary cultures for good (spec 7), so
-# a country that has one as primary gets the result too, and pops of a switched part that reappear are
-# converted. Paused with the rule, resumed with it.
+# Country scope, the monthly pulse. A country that has a switched part as a primary culture gets the culture its
+# people became, pops of a switched part that reappear are converted, and the part leaves the primary cultures once
+# nothing is tied to it (owner, 2026-11-09; te_cm_monthly_switched_culture). Paused with the rule, resumed with it.
 on_monthly_pulse_country = {
-	on_actions = { te_cm_monthly_on_action }
+	on_actions = { te_cm_monthly_on_action te_cm_strip_on_action }
+}
+
+# Country scope, monthly and on formation, with no rule gate: a merged culture whose merge never began is taken off a
+# country's primary cultures. The formables' definitions list the merged cultures whatever the rule says
+# (zz_te_culture_merge_definitions.txt), and forming or releasing a tag adds every culture its definition lists.
+te_cm_strip_on_action = {
+	effect = {
+		if = {
+			limit = { any_scope_state = { always = yes } }
+			te_cmg_strip_untouched_results = yes
+		}
+	}
 }
 
 te_cm_monthly_on_action = {
@@ -75,7 +87,8 @@ te_cm_monthly_on_action = {
 
 # No root scope: the global monthly pulse, once a month for the world. Every switched culture takes the fervor of
 # the culture it switched into (te_cmg_copy_fervor_all), so vanilla's reads of a merged-away culture's fervor read
-# the merged culture's. Nothing here reads ROOT. No rule gate: the pops it serves stay switched with the rule off.
+# the merged culture's, and a merged culture takes its switched core parts' traditions (te_cmg_carry_traditions).
+# Nothing here reads ROOT. No rule gate: the pops it serves stay switched with the rule off.
 on_monthly_pulse = {
 	on_actions = { te_cm_fervor_on_action }
 }
@@ -86,6 +99,12 @@ te_cm_fervor_on_action = {
 		# Reads last month's copy before this month's.
 		te_cm_chk_fervor_monthly = yes
 		te_cmg_copy_fervor_all = yes
+		# A merged culture takes the traditions of the core parts that have switched into it (owner, 2026-11-09). Like the
+		# fervor copy it serves parts that already switched, so it has no rule gate either.
+		te_cmg_carry_traditions = yes
+		# TEMPORARY self-checks cm_dead_primary_removed and cm_definition_inject (the same file; delete with it).
+		te_cm_chk_dead_primary_monthly = yes
+		te_cm_chk_definition_inject = yes
 	}
 }
 
@@ -93,7 +112,7 @@ te_cm_fervor_on_action = {
 # country formed or released from a definition that lists only the parts gets the result at once, not within a
 # month, and a sphere country that was already converting gets the result back.
 on_country_formed = {
-	on_actions = { te_cm_formed_on_action }
+	on_actions = { te_cm_formed_on_action te_cm_strip_on_action }
 }
 
 te_cm_formed_on_action = {

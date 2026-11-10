@@ -138,6 +138,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import culture_merge_primary_ledger as ledger  # noqa: E402
+import culture_merge_primary_reads as primary_reads  # noqa: E402
 import culture_merges_config as cfg  # noqa: E402
 from culture_merges_config import culture_traits, trait_group, unwrap  # noqa: E402
 from organize_loc import _render_loc_file, section_label  # noqa: E402
@@ -155,6 +157,10 @@ JE_OUT = Path("common/journal_entries/te_culture_merges_generated.txt")
 BUTTONS_OUT = Path("common/scripted_buttons/te_culture_merges_generated_buttons.txt")
 BARS_OUT = Path("common/scripted_progress_bars/te_culture_merges_generated_bars.txt")
 VALUES_OUT = Path("common/script_values/te_culture_merges_generated_values.txt")
+DEFINITIONS_OUT = Path("common/country_definitions/zz_te_culture_merge_definitions.txt")
+# Sorts before vanilla's 00_scripted_triggers.txt: the first bare definition of a scripted trigger wins
+# (scripting_best_practices.md, Load Order, fact 3).
+VANILLA_TRIGGERS_OUT = Path("common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt")
 LOC_CATEGORY = "CULTURE_MERGES_GENERATED"
 
 SNAPSHOT_DIR = "vanilla_parsed"
@@ -693,6 +699,15 @@ def _core_cultures(merge: cfg.Merge) -> list[str]:
     return [c for part in merge.core for c in part.cultures]
 
 
+def _primary_cultures(merge: cfg.Merge) -> list[str]:
+    """The cultures that make a country a candidate for the merge when one is primary: its core cultures, and its
+    result. A core part that has switched is removed from the primary cultures (te_cm_monthly_switched_culture), so
+    after a merge returned to idle with its starter gone, the result is all a country may have left of them. No
+    country has an untouched merge's result (te_cmg_strip_untouched_results), so the result opens nothing early."""
+    cultures = _core_cultures(merge)
+    return cultures if merge.result in cultures else cultures + [merge.result]
+
+
 def _is_absorb_result(merge: cfg.Merge, culture: str) -> bool:
     """An absorb merge's result culture: held and acceptance-tested only, never joined or switched."""
     return merge.new is None and culture == merge.result
@@ -1051,7 +1066,7 @@ def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[
     with out.block("custom_tooltip"):
         out.line("text = te_cmg_%s_primary_tt" % key)
         with out.block("OR"):
-            for culture in _core_cultures(merge):
+            for culture in _primary_cultures(merge):
                 out.line("country_has_primary_culture = cu:%s" % culture)
     with out.block("custom_tooltip"):
         out.line("text = te_cm_tt_tech_%d" % tier)
@@ -1095,7 +1110,8 @@ def _write_wait_items(out: "_Script", merge: cfg.Merge) -> None:
                 _wait_cap_reached(out, key)
 
 
-def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
+def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None,
+                    holds: dict[str, ledger.Holds] | None = None) -> str:
     """The per-merge scripted triggers.
 
     Per merge: ``result_switched``, ``core_left`` (where another merge can take a core part),
@@ -1104,8 +1120,11 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
     vanilla entry). Per slot culture: ``available``, ``measured`` (passing its gates now and
     not switched), ``years_met`` (tiers 2 and 3), ``switched_in`` (joined to this merge and
     switched: met for good), ``can_join`` and, where its part waits on a vanilla entry,
-    ``waiting``.
+    ``waiting``. ``holds`` is the ledger's hold per switchable culture (the real roster's by default; none for a test
+    roster).
     """
+    if holds is None:
+        holds = ledger.part_holds() if merges is None else {}
     merges = cfg.MERGES if merges is None else merges
     out = _Script()
     out.line(HEADER)
@@ -1132,7 +1151,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             if merge.new is not None:
                 out.line(_result_exists(merge))
             with out.block("OR"):
-                for culture in _core_cultures(merge):
+                for culture in _primary_cultures(merge):
                     out.line("country_has_primary_culture = cu:%s" % culture)
             out.line("te_cm_tier_tech = { TIER = %d }" % tier)
             out.line("NOT = { global_var:te_cm_state_%s ?= 2 }" % key)
@@ -1337,7 +1356,63 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     out.line("has_global_variable = te_cm_switched_%s" % culture)
                     out.line("this = cu:%s" % culture)
                     out.line("ROOT.state_region = { is_homeland = global_var:te_cm_switched_%s }" % culture)
+    _write_dead_primary_triggers(out, merges, holds)
     return out.text()
+
+
+def _write_dead_primary_triggers(out: "_Script", merges: tuple[cfg.Merge, ...], holds: dict[str, ledger.Holds]) -> None:
+    """``te_cmg_<m>_untouched`` per merge that makes a culture, and ``te_cmg_part_held_<c>`` per culture that can
+    switch (owner, 2026-11-09: a switched part leaves the primary cultures once nothing is tied to it)."""
+    out.line()
+    out.line("# ---- Dead primary cultures ----")
+    for merge in merges:
+        if merge.new is None:
+            continue
+        key = merge.key
+        out.line()
+        out.line("# Any scope. The %s merge never began: it is idle and no part has joined it (a merge returned to idle" % key)
+        out.line("# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:")
+        out.line("# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.")
+        with out.block("te_cmg_%s_untouched" % key):
+            with out.block("NOR"):
+                out.line("global_var:te_cm_state_%s ?= 1" % key)
+                out.line("global_var:te_cm_state_%s ?= 2" % key)
+                for culture in _joinable_slot_cultures(merge):
+                    out.line("has_global_variable = te_cm_joined_%s_%s" % (key, culture))
+    out.line()
+    out.line("# Any scope, one per culture that can switch. Is anything still tied to this culture being a primary culture? While")
+    out.line("# it is, te_cm_monthly_switched_culture leaves the switched culture among a country's primary cultures. From the")
+    out.line("# ledger of vanilla's reads (scripts/generators/culture_merge_primary_ledger.py): a vanilla journal entry that")
+    out.line("# tests the culture and that some country has active holds it whenever; until %s, vanilla's end date" % ledger.WINDOW_END)
+    out.line("# (owner: \"none should hold past 1936\"), so do such an entry on offer, a formable that needs the culture and does not")
+    out.line("# exist, and the reads the owner ruled to keep (historical characters, flavor events, laws, Siberian exile). Any")
+    out.line("# country, not this one: an entry also tests its targets' and its overlord's cultures.")
+    for culture in switchable_cultures(merges):
+        hold = holds.get(culture, ledger.Holds())
+        out.line()
+        with out.block("te_cmg_part_held_%s" % culture):
+            if not hold.any:
+                out.line("always = no")
+                continue
+            with out.block("OR"):
+                if hold.cases:
+                    out.line("game_date < %s # %s" % (ledger.WINDOW_END, ", ".join(hold.cases)))
+                elif hold.unformed or hold.entries:
+                    with out.block("AND"):
+                        out.line("game_date < %s" % ledger.WINDOW_END)
+                        with out.block("OR"):
+                            for tag in hold.unformed:
+                                out.line("NOT = { exists = c:%s }" % tag)
+                            if hold.entries:
+                                with out.block("any_country"):
+                                    with out.block("OR"):
+                                        for entry in hold.entries:
+                                            out.line("has_inactive_journal_entry = %s" % entry)
+                if hold.entries:
+                    with out.block("any_country"):
+                        with out.block("OR"):
+                            for entry in hold.entries:
+                                out.line("has_journal_entry = %s" % entry)
 
 
 def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> None:
@@ -1794,13 +1869,15 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
     # ---- the monthly upkeep ----
     out.line()
     out.line("# Country scope. Run monthly (on_monthly_pulse_country, behind the rule) and by te_cmg_formed_country: for every")
-    out.line("# culture that has switched, the result becomes a primary culture where the part is one, and pops of the part that")
-    out.line("# came back convert (te_cm_monthly_switched_culture). One variable check per culture while nothing has switched.")
+    out.line("# culture that has switched, the culture its people ended up in becomes a primary culture where the part is one, pops")
+    out.line("# of the part that came back convert, and the part leaves the primary cultures once nothing is tied to it")
+    out.line("# (te_cm_monthly_switched_culture). One variable check per culture while nothing has switched.")
     with out.block("te_cmg_monthly_country"):
         for culture in cultures:
             with out.block("if"):
                 out.line("limit = { has_global_variable = te_cm_switched_%s }" % culture)
                 out.line("te_cm_monthly_switched_culture = { CULTURE = %s }" % culture)
+    _write_dead_primary_effects(out, vanilla, merges)
 
     # ---- the fervor copy ----
     out.line()
@@ -1904,6 +1981,245 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                     out.line("remove_homeland = cu:%s" % part)
                     if part in parts_of:
                         out.line("te_cmg_remove_parts_of_%s = yes" % part)
+
+
+def _chain_order(merges: tuple[cfg.Merge, ...]) -> list[str]:
+    """The results that can themselves switch, the lowest in a chain first (cm_italian before cm_latin), so one pass
+    over them follows a chain to its end."""
+    results = {merge.result for merge in merges}
+    return [culture for culture in reversed(fervor_copy_order(merges)) if culture in results]
+
+
+def own_traditions(culture: str, vanilla: dict, merges: tuple[cfg.Merge, ...]) -> list[str]:
+    """The traditions a culture is defined with: vanilla's, or for a new result the ones every core part shares."""
+    for merge in merges:
+        if merge.new is not None and merge.result == culture:
+            shared = own_traditions(merge.core[0].cultures[0], vanilla, merges)
+            for part in merge.core[1:]:
+                have = own_traditions(part.cultures[0], vanilla, merges)
+                shared = [t for t in shared if t in have]
+            return shared
+    body = vanilla.get(culture)
+    return _list(_fields(body), "traditions") if body is not None else []
+
+
+def carried_traditions(vanilla: dict, merges: tuple[cfg.Merge, ...]) -> dict[tuple[str, str], list[str]]:
+    """(merge key, part) -> the traditions the part gives the merge's result when it switches: its own and the ones it
+    took from its own parts (cm_east_slavic passes Russian's on into Pan-Slavic), less what the result is defined
+    with. Only the parts ``cfg.carries_traditions`` names; a pair with nothing to give is left out."""
+
+    def all_of(culture: str, seen: tuple[str, ...] = ()) -> list[str]:
+        found = list(own_traditions(culture, vanilla, merges))
+        if culture in seen:
+            return found
+        for merge in merges:
+            if merge.result != culture:
+                continue
+            for part in _joinable_slot_cultures(merge):
+                if cfg.carries_traditions(merge, part):
+                    found.extend(t for t in all_of(part, seen + (culture,)) if t not in found)
+        return found
+
+    carried: dict[tuple[str, str], list[str]] = {}
+    for merge in merges:
+        have = own_traditions(merge.result, vanilla, merges)
+        for part in _joinable_slot_cultures(merge):
+            if cfg.carries_traditions(merge, part):
+                gives = [t for t in all_of(part) if t not in have]
+                if gives:
+                    carried[(merge.key, part)] = gives
+    return carried
+
+
+def _write_dead_primary_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.Merge, ...]) -> None:
+    """The effects behind removing a switched part from the primary cultures (owner, 2026-11-09):
+    ``te_cmg_resolve_switched_result``, ``te_cmg_strip_untouched_results`` and ``te_cmg_carry_traditions``."""
+    out.line()
+    out.line("# Any scope; scope:te_cm_switched_result = the culture a part switched into. Follows the chain to the culture")
+    out.line("# its people are in now: North Italian switched into cm_italian, and cm_italian into cm_latin, so the answer is")
+    out.line("# cm_latin. The lowest result first, so one pass reaches the end. Without it the monthly upkeep would give a")
+    out.line("# country cm_italian back each month after removing it.")
+    with out.block("te_cmg_resolve_switched_result"):
+        chain = _chain_order(merges)
+        if not chain:
+            out.line("# no result of this roster is a part of another merge")
+        for culture in chain:
+            with out.block("if"):
+                with out.block("limit"):
+                    out.line("has_global_variable = te_cm_switched_%s" % culture)
+                    out.line("scope:te_cm_switched_result ?= cu:%s" % culture)
+                out.line("global_var:te_cm_switched_%s = { save_temporary_scope_as = te_cm_switched_result }" % culture)
+
+    out.line()
+    out.line("# Country scope. Monthly and on formation, with no rule gate (te_cm_strip_on_action). A formable's definition lists")
+    out.line("# the merged cultures beside their parts, so that a country whose parts are gone can still form it, and forming a")
+    out.line("# tag adds every culture its definition lists. A merged culture whose merge never began has no people: it is taken")
+    out.line("# off again here, unless it is the country's only primary culture.")
+    with out.block("te_cmg_strip_untouched_results"):
+        for merge in merges:
+            if merge.new is None:
+                continue
+            with out.block("if"):
+                with out.block("limit"):
+                    out.line(_result_exists(merge))
+                    out.line("country_has_primary_culture = cu:%s" % merge.result)
+                    out.line("te_cmg_%s_untouched = yes" % merge.key)
+                    out.line("any_primary_culture = { NOT = { this = cu:%s } }" % merge.result)
+                out.line("remove_primary_culture = cu:%s" % merge.result)
+
+    carried = carried_traditions(vanilla, merges)
+    out.line()
+    out.line("# Any scope. Once a month, with no rule gate (te_cm_fervor_on_action): a merged culture takes the traditions of the")
+    out.line("# core parts that have switched into it (owner, 2026-11-09), so the acceptance a part's tradition gave other")
+    out.line("# cultures doesn't end when the part leaves the primary cultures. Not an optional part's, nor the pairs in")
+    out.line("# culture_merges_config.TRADITIONS_NOT_CARRIED. A result that is itself a part passes on what it took. Guarded,")
+    out.line("# so it adds each tradition once; te_cm_chk_traditions is the TEMPORARY self-check cm_tradition_carried.")
+    with out.block("te_cmg_carry_traditions"):
+        for (key, part), traditions in carried.items():
+            result = merge_by_key_in(merges, key).result
+            for tradition in traditions:
+                with out.block("if"):
+                    with out.block("limit"):
+                        out.line("global_var:te_cm_switched_%s ?= cu:%s" % (part, result))
+                        out.line("cu:%s = { NOT = { has_discrimination_trait = %s } }" % (result, tradition))
+                    out.line("cu:%s = { add_tradition_trait = %s }" % (result, tradition))
+                    out.line("set_local_variable = { name = te_cm_trad_added value = 1 }")
+        out.line("te_cm_chk_traditions = yes")
+
+
+def merge_by_key_in(merges: tuple[cfg.Merge, ...], key: str) -> cfg.Merge:
+    for merge in merges:
+        if merge.key == key:
+            return merge
+    raise KeyError(key)
+
+
+def definition_additions(inventory: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dict[str, list[str]]:
+    """Vanilla formable tag -> the merged cultures its definition gains, for each tag that owns no state at the 1836
+    start and lists a part. A part's new results all the way up its chain (North Italian: cm_italian and cm_latin); an
+    absorb merge's result is a vanilla culture with people of its own, never added (forming the tag would hand it out)."""
+    merges = cfg.MERGES if merges is None else merges
+    new_results = {merge.result for merge in merges if merge.new is not None}
+    parts = set(inventory["parts"])
+    additions: dict[str, list[str]] = {}
+    for tag, formable in inventory["formables"].items():
+        if formable["exists_at_start"]:
+            continue
+        gains: list[str] = []
+        for culture in formable["cultures"]:
+            if culture not in parts:
+                continue
+            for successor in sorted(cfg.successors_of(culture)):
+                if successor in new_results and successor not in formable["cultures"] and successor not in gains:
+                    gains.append(successor)
+        if gains:
+            additions[tag] = gains
+    return additions
+
+
+MOD_DEFINITIONS = Path("common/country_definitions/te_formable_countries.txt")
+MOD_FORMATIONS = Path("common/country_formation/te_formable_countries.txt")
+
+
+def mod_formable_definitions(root: Path = ROOT) -> dict[str, list[str]]:
+    """The mod's own formables (bare entries of its country_formation file) -> their definition's ``cultures`` list.
+    The definitions are hand-written; ``mod_definition_gaps`` says what they lack."""
+    formables = [
+        tag for tag, _tokens in primary_reads._top_blocks((root / MOD_FORMATIONS).read_text(encoding="utf-8-sig"))
+        if re.fullmatch(r"[A-Z0-9]{3}", tag)
+    ]
+    definitions = {
+        tag: primary_reads._list_field(tokens, "cultures") or []
+        for tag, tokens in primary_reads._top_blocks((root / MOD_DEFINITIONS).read_text(encoding="utf-8-sig"))
+    }
+    return {tag: definitions[tag] for tag in formables if tag in definitions}
+
+
+def mod_definition_gaps(root: Path = ROOT, merges: tuple[cfg.Merge, ...] | None = None) -> dict[str, list[str]]:
+    """Mod formable tag -> the merged cultures its definition should list and does not: every new result a listed
+    part can become, as ``definition_additions`` gives vanilla's tags. Empty when the file is right."""
+    merges = cfg.MERGES if merges is None else merges
+    new_results = {merge.result for merge in merges if merge.new is not None}
+    parts = set(primary_reads.part_cultures(merges))
+    gaps: dict[str, list[str]] = {}
+    for tag, cultures in mod_formable_definitions(root).items():
+        missing: list[str] = []
+        for culture in cultures:
+            if culture in parts:
+                missing.extend(
+                    s for s in sorted(cfg.successors_of(culture))
+                    if s in new_results and s not in cultures and s not in missing
+                )
+        if missing:
+            gaps[tag] = missing
+    return gaps
+
+
+def render_definitions(inventory: dict | None = None) -> str:
+    """``INJECT`` blocks that restate each vanilla formable's ``cultures`` list with the merged cultures added."""
+    inventory = primary_reads.load() if inventory is None else inventory
+    out = _Script()
+    out.line(HEADER)
+    out.line("#")
+    out.line("# Forming a country needs a primary culture from its definition's list, and vanilla's lists name the parts of the")
+    out.line("# culture merges. A part that has switched leaves a country's primary cultures (te_cm_monthly_switched_culture), so")
+    out.line("# each list gains the merged cultures its parts become (owner, 2026-11-09): a Germany that is only German can still")
+    out.line("# form the Holy Roman Empire. Only tags that own no state at the 1836 start, so no country begins with a merged")
+    out.line("# culture that has no people; a start tag (RUS, PRU, GBR) holds its parts while it is dead instead")
+    out.line("# (te_cmg_part_held_<c>). Each block restates vanilla's whole list (from culture_merge_primary_reads.json), so the")
+    out.line("# result is right whether the engine appends an injected list to vanilla's or puts it in its place; the self-check")
+    out.line("# cm_definition_inject reads one tag. Forming adds every listed culture, so te_cmg_strip_untouched_results takes a")
+    out.line("# merged culture whose merge never began off again.")
+    for tag, gains in definition_additions(inventory).items():
+        out.line()
+        with out.block("INJECT:%s" % tag):
+            out.line("cultures = { %s }" % " ".join(inventory["formables"][tag]["cultures"] + gains))
+    return out.text()
+
+
+def trigger_override_additions(inventory: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dict[str, list[str]]:
+    """Restated vanilla trigger -> the cultures added to its list: every culture a listed part can become."""
+    merges = cfg.MERGES if merges is None else merges
+    parts = set(inventory["parts"])
+    additions: dict[str, list[str]] = {}
+    for name in ledger.TRIGGER_OVERRIDES:
+        listed = inventory["trigger_lists"][name]["cultures"]
+        gains: list[str] = []
+        for culture in listed:
+            if culture in parts:
+                gains.extend(c for c in sorted(cfg.successors_of(culture)) if c not in listed and c not in gains)
+        additions[name] = gains
+    return additions
+
+
+def render_vanilla_triggers(inventory: dict | None = None) -> str:
+    """Bare copies of the vanilla triggers in ``ledger.TRIGGER_OVERRIDES``, the merged cultures added."""
+    inventory = primary_reads.load() if inventory is None else inventory
+    new_results = {merge.result for merge in cfg.MERGES if merge.new is not None}
+    out = _Script()
+    out.line(HEADER)
+    out.line("#")
+    out.line("# VANILLA OVERRIDE. Each trigger here is vanilla's own, restated with the merged cultures beside the parts it")
+    out.line("# lists (owner, 2026-11-09: a small helper is worth overriding, a whole journal entry is not), so a country whose")
+    out.line("# parts have left its primary cultures still passes. This file sorts before vanilla's, and the first bare")
+    out.line("# definition of a scripted trigger wins (scripting_best_practices.md, Load Order, fact 3); the engine logs one")
+    out.line("# `Duplicated key` line per trigger at load, naming vanilla's copy. Vanilla's list is read from")
+    out.line("# culture_merge_primary_reads.json, whose scan fails if the trigger becomes anything but a plain list.")
+    for name, gains in trigger_override_additions(inventory).items():
+        entry = inventory["trigger_lists"][name]
+        out.line()
+        out.line("# vanilla: %s" % entry["file"])
+        with out.block(name):
+            with out.block("OR"):
+                for culture in entry["cultures"]:
+                    out.line("country_has_primary_culture = cu:%s" % culture)
+                for culture in gains:
+                    if culture in new_results:
+                        # A game begun before the culture was added has no object for it (te_cmg_<m>_is_candidate).
+                        out.line("AND = { exists = cu:%s country_has_primary_culture = cu:%s }" % (culture, culture))
+                    else:
+                        out.line("country_has_primary_culture = cu:%s" % culture)
+    return out.text()
 
 
 # ---------------------------------------------------------------------------
@@ -2469,7 +2785,7 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             "assimilate into it."
             % (result, "" if merge.new is not None else " if it isn't one already")
         )
-        out["te_cmg_%s_primary_tt" % key] = "A core culture of the merge is a primary culture here: %s." % _either(_core_cultures(merge))
+        out["te_cmg_%s_primary_tt" % key] = "A core culture of the merge, or its result, is a primary culture here: %s." % _either(_primary_cultures(merge))
         start = max(tiers[p.cultures[0]] for p in merge.core)
         for index, part in enumerate(merge.core, start=1):
             tier = tiers[part.cultures[0]]
@@ -2525,6 +2841,8 @@ def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
         BUTTONS_OUT: render_buttons(),
         BARS_OUT: render_bars(),
         VALUES_OUT: render_values(),
+        DEFINITIONS_OUT: render_definitions(),
+        VANILLA_TRIGGERS_OUT: render_vanilla_triggers(),
     }
 
 

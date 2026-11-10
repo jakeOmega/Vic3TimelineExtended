@@ -27,6 +27,7 @@ te_cmg_german_is_candidate = {
 	OR = {
 		country_has_primary_culture = cu:north_german
 		country_has_primary_culture = cu:south_german
+		country_has_primary_culture = cu:cm_german
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_german ?= 2 }
@@ -326,6 +327,7 @@ te_cmg_german_can_start = {
 		OR = {
 			country_has_primary_culture = cu:north_german
 			country_has_primary_culture = cu:south_german
+			country_has_primary_culture = cu:cm_german
 		}
 	}
 	custom_tooltip = {
@@ -392,6 +394,7 @@ te_cmg_italian_is_candidate = {
 	OR = {
 		country_has_primary_culture = cu:north_italian
 		country_has_primary_culture = cu:south_italian
+		country_has_primary_culture = cu:cm_italian
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_italian ?= 2 }
@@ -663,6 +666,7 @@ te_cmg_italian_can_start = {
 		OR = {
 			country_has_primary_culture = cu:north_italian
 			country_has_primary_culture = cu:south_italian
+			country_has_primary_culture = cu:cm_italian
 		}
 	}
 	custom_tooltip = {
@@ -730,6 +734,7 @@ te_cmg_scandinavian_is_candidate = {
 		country_has_primary_culture = cu:swedish
 		country_has_primary_culture = cu:danish
 		country_has_primary_culture = cu:norwegian
+		country_has_primary_culture = cu:cm_scandinavian
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_scandinavian ?= 2 }
@@ -1041,6 +1046,7 @@ te_cmg_scandinavian_can_start = {
 			country_has_primary_culture = cu:swedish
 			country_has_primary_culture = cu:danish
 			country_has_primary_culture = cu:norwegian
+			country_has_primary_culture = cu:cm_scandinavian
 		}
 	}
 	custom_tooltip = {
@@ -1106,6 +1112,7 @@ te_cmg_east_slavic_is_candidate = {
 		country_has_primary_culture = cu:russian
 		country_has_primary_culture = cu:ukrainian
 		country_has_primary_culture = cu:byelorussian
+		country_has_primary_culture = cu:cm_east_slavic
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_east_slavic ?= 2 }
@@ -1415,6 +1422,7 @@ te_cmg_east_slavic_start_basics = {
 			country_has_primary_culture = cu:russian
 			country_has_primary_culture = cu:ukrainian
 			country_has_primary_culture = cu:byelorussian
+			country_has_primary_culture = cu:cm_east_slavic
 		}
 	}
 	custom_tooltip = {
@@ -1521,6 +1529,7 @@ te_cmg_yugoslav_is_candidate = {
 		country_has_primary_culture = cu:serb
 		country_has_primary_culture = cu:croat
 		country_has_primary_culture = cu:bosniak
+		country_has_primary_culture = cu:cm_yugoslav
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_yugoslav ?= 2 }
@@ -1900,6 +1909,7 @@ te_cmg_yugoslav_can_start = {
 			country_has_primary_culture = cu:serb
 			country_has_primary_culture = cu:croat
 			country_has_primary_culture = cu:bosniak
+			country_has_primary_culture = cu:cm_yugoslav
 		}
 	}
 	custom_tooltip = {
@@ -1973,6 +1983,7 @@ te_cmg_czechoslovak_is_candidate = {
 	OR = {
 		country_has_primary_culture = cu:czech
 		country_has_primary_culture = cu:slovak
+		country_has_primary_culture = cu:cm_czechoslovak
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_czechoslovak ?= 2 }
@@ -2244,6 +2255,7 @@ te_cmg_czechoslovak_can_start = {
 		OR = {
 			country_has_primary_culture = cu:czech
 			country_has_primary_culture = cu:slovak
+			country_has_primary_culture = cu:cm_czechoslovak
 		}
 	}
 	custom_tooltip = {
@@ -3659,6 +3671,7 @@ te_cmg_american_is_candidate = {
 	OR = {
 		country_has_primary_culture = cu:yankee
 		country_has_primary_culture = cu:dixie
+		country_has_primary_culture = cu:cm_american
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_american ?= 2 }
@@ -3965,6 +3978,7 @@ te_cmg_american_start_basics = {
 		OR = {
 			country_has_primary_culture = cu:yankee
 			country_has_primary_culture = cu:dixie
+			country_has_primary_culture = cu:cm_american
 		}
 	}
 	custom_tooltip = {
@@ -4051,6 +4065,7 @@ te_cmg_anglophone_is_candidate = {
 		country_has_primary_culture = cu:british
 		country_has_primary_culture = cu:yankee
 		country_has_primary_culture = cu:cm_american
+		country_has_primary_culture = cu:cm_anglophone
 	}
 	te_cm_tier_tech = { TIER = 2 }
 	NOT = { global_var:te_cm_state_anglophone ?= 2 }
@@ -4600,6 +4615,7 @@ te_cmg_anglophone_can_start = {
 			country_has_primary_culture = cu:british
 			country_has_primary_culture = cu:yankee
 			country_has_primary_culture = cu:cm_american
+			country_has_primary_culture = cu:cm_anglophone
 		}
 	}
 	custom_tooltip = {
@@ -5202,6 +5218,7 @@ te_cmg_platine_is_candidate = {
 		country_has_primary_culture = cu:argentine
 		country_has_primary_culture = cu:uruguayan
 		country_has_primary_culture = cu:paraguayan
+		country_has_primary_culture = cu:cm_platine
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_platine ?= 2 }
@@ -5539,6 +5556,7 @@ te_cmg_platine_can_start = {
 			country_has_primary_culture = cu:argentine
 			country_has_primary_culture = cu:uruguayan
 			country_has_primary_culture = cu:paraguayan
+			country_has_primary_culture = cu:cm_platine
 		}
 	}
 	custom_tooltip = {
@@ -5621,6 +5639,7 @@ te_cmg_andean_is_candidate = {
 		country_has_primary_culture = cu:south_andean
 		country_has_primary_culture = cu:peruvian
 		country_has_primary_culture = cu:bolivian
+		country_has_primary_culture = cu:cm_andean
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_andean ?= 2 }
@@ -5944,6 +5963,7 @@ te_cmg_andean_can_start = {
 			country_has_primary_culture = cu:south_andean
 			country_has_primary_culture = cu:peruvian
 			country_has_primary_culture = cu:bolivian
+			country_has_primary_culture = cu:cm_andean
 		}
 	}
 	custom_tooltip = {
@@ -6025,6 +6045,7 @@ te_cmg_gran_colombian_is_candidate = {
 		country_has_primary_culture = cu:colombian
 		country_has_primary_culture = cu:venezuelan
 		country_has_primary_culture = cu:ecuadorian
+		country_has_primary_culture = cu:cm_gran_colombian
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_gran_colombian ?= 2 }
@@ -6297,6 +6318,7 @@ te_cmg_gran_colombian_can_start = {
 			country_has_primary_culture = cu:colombian
 			country_has_primary_culture = cu:venezuelan
 			country_has_primary_culture = cu:ecuadorian
+			country_has_primary_culture = cu:cm_gran_colombian
 		}
 	}
 	custom_tooltip = {
@@ -6995,6 +7017,7 @@ te_cmg_arab_is_candidate = {
 		country_has_primary_culture = cu:mashriqi
 		country_has_primary_culture = cu:bedouin
 		country_has_primary_culture = cu:yemenite
+		country_has_primary_culture = cu:cm_arab
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_arab ?= 2 }
@@ -7507,6 +7530,7 @@ te_cmg_arab_can_start = {
 			country_has_primary_culture = cu:mashriqi
 			country_has_primary_culture = cu:bedouin
 			country_has_primary_culture = cu:yemenite
+			country_has_primary_culture = cu:cm_arab
 		}
 	}
 	custom_tooltip = {
@@ -7997,6 +8021,7 @@ te_cmg_oghuz_turkic_is_candidate = {
 	OR = {
 		country_has_primary_culture = cu:turkish
 		country_has_primary_culture = cu:azerbaijani
+		country_has_primary_culture = cu:cm_oghuz_turkic
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_oghuz_turkic ?= 2 }
@@ -8275,6 +8300,7 @@ te_cmg_oghuz_turkic_can_start = {
 		OR = {
 			country_has_primary_culture = cu:turkish
 			country_has_primary_culture = cu:azerbaijani
+			country_has_primary_culture = cu:cm_oghuz_turkic
 		}
 	}
 	custom_tooltip = {
@@ -8767,6 +8793,7 @@ te_cmg_dravidian_is_candidate = {
 		country_has_primary_culture = cu:tamil
 		country_has_primary_culture = cu:kannada
 		country_has_primary_culture = cu:malayalam
+		country_has_primary_culture = cu:cm_dravidian
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_dravidian ?= 2 }
@@ -9085,6 +9112,7 @@ te_cmg_dravidian_can_start = {
 			country_has_primary_culture = cu:tamil
 			country_has_primary_culture = cu:kannada
 			country_has_primary_culture = cu:malayalam
+			country_has_primary_culture = cu:cm_dravidian
 		}
 	}
 	custom_tooltip = {
@@ -9160,6 +9188,7 @@ te_cmg_indonesian_is_candidate = {
 		country_has_primary_culture = cu:malay
 		country_has_primary_culture = cu:sumatran
 		country_has_primary_culture = cu:bornean
+		country_has_primary_culture = cu:cm_indonesian
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_indonesian ?= 2 }
@@ -9537,6 +9566,7 @@ te_cmg_indonesian_can_start = {
 			country_has_primary_culture = cu:malay
 			country_has_primary_culture = cu:sumatran
 			country_has_primary_culture = cu:bornean
+			country_has_primary_culture = cu:cm_indonesian
 		}
 	}
 	custom_tooltip = {
@@ -9992,6 +10022,7 @@ te_cmg_nguni_is_candidate = {
 		country_has_primary_culture = cu:nguni
 		country_has_primary_culture = cu:zulu
 		country_has_primary_culture = cu:xhosa
+		country_has_primary_culture = cu:cm_nguni
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_nguni ?= 2 }
@@ -10264,6 +10295,7 @@ te_cmg_nguni_can_start = {
 			country_has_primary_culture = cu:nguni
 			country_has_primary_culture = cu:zulu
 			country_has_primary_culture = cu:xhosa
+			country_has_primary_culture = cu:cm_nguni
 		}
 	}
 	custom_tooltip = {
@@ -10326,6 +10358,7 @@ te_cmg_latin_is_candidate = {
 		country_has_primary_culture = cu:cm_italian
 		country_has_primary_culture = cu:spanish
 		country_has_primary_culture = cu:portuguese
+		country_has_primary_culture = cu:cm_latin
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_latin ?= 2 }
@@ -10997,6 +11030,7 @@ te_cmg_latin_can_start = {
 			country_has_primary_culture = cu:cm_italian
 			country_has_primary_culture = cu:spanish
 			country_has_primary_culture = cu:portuguese
+			country_has_primary_culture = cu:cm_latin
 		}
 	}
 	custom_tooltip = {
@@ -11085,6 +11119,7 @@ te_cmg_pan_slavic_is_candidate = {
 		country_has_primary_culture = cu:cm_east_slavic
 		country_has_primary_culture = cu:cm_czechoslovak
 		country_has_primary_culture = cu:cm_yugoslav
+		country_has_primary_culture = cu:cm_pan_slavic
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_pan_slavic ?= 2 }
@@ -11550,6 +11585,7 @@ te_cmg_pan_slavic_can_start = {
 			country_has_primary_culture = cu:cm_east_slavic
 			country_has_primary_culture = cu:cm_czechoslovak
 			country_has_primary_culture = cu:cm_yugoslav
+			country_has_primary_culture = cu:cm_pan_slavic
 		}
 	}
 	custom_tooltip = {
@@ -11634,6 +11670,7 @@ te_cmg_pan_turkic_is_candidate = {
 		country_has_primary_culture = cu:kazak
 		country_has_primary_culture = cu:tatar
 		country_has_primary_culture = cu:kirgiz
+		country_has_primary_culture = cu:cm_pan_turkic
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_pan_turkic ?= 2 }
@@ -12225,6 +12262,7 @@ te_cmg_pan_turkic_can_start = {
 			country_has_primary_culture = cu:kazak
 			country_has_primary_culture = cu:tatar
 			country_has_primary_culture = cu:kirgiz
+			country_has_primary_culture = cu:cm_pan_turkic
 		}
 	}
 	custom_tooltip = {
@@ -12319,6 +12357,7 @@ te_cmg_pan_malay_is_candidate = {
 	OR = {
 		country_has_primary_culture = cu:cm_indonesian
 		country_has_primary_culture = cu:filipino
+		country_has_primary_culture = cu:cm_pan_malay
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_pan_malay ?= 2 }
@@ -12583,6 +12622,7 @@ te_cmg_pan_malay_can_start = {
 		OR = {
 			country_has_primary_culture = cu:cm_indonesian
 			country_has_primary_culture = cu:filipino
+			country_has_primary_culture = cu:cm_pan_malay
 		}
 	}
 	custom_tooltip = {
@@ -12657,6 +12697,7 @@ te_cmg_east_african_is_candidate = {
 		country_has_primary_culture = cu:swahili
 		country_has_primary_culture = cu:nyamwezi
 		country_has_primary_culture = cu:sukuma
+		country_has_primary_culture = cu:cm_east_african
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_east_african ?= 2 }
@@ -13143,6 +13184,7 @@ te_cmg_east_african_can_start = {
 			country_has_primary_culture = cu:swahili
 			country_has_primary_culture = cu:nyamwezi
 			country_has_primary_culture = cu:sukuma
+			country_has_primary_culture = cu:cm_east_african
 		}
 	}
 	custom_tooltip = {
@@ -14295,4 +14337,1661 @@ te_cmg_switched_part_kept = {
 			ROOT.state_region = { is_homeland = global_var:te_cm_switched_kikuyu }
 		}
 	}
+}
+
+# ---- Dead primary cultures ----
+
+# Any scope. The german merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_german_untouched = {
+	NOR = {
+		global_var:te_cm_state_german ?= 1
+		global_var:te_cm_state_german ?= 2
+		has_global_variable = te_cm_joined_german_north_german
+		has_global_variable = te_cm_joined_german_south_german
+		has_global_variable = te_cm_joined_german_alemannic
+		has_global_variable = te_cm_joined_german_east_german
+	}
+}
+
+# Any scope. The italian merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_italian_untouched = {
+	NOR = {
+		global_var:te_cm_state_italian ?= 1
+		global_var:te_cm_state_italian ?= 2
+		has_global_variable = te_cm_joined_italian_north_italian
+		has_global_variable = te_cm_joined_italian_south_italian
+		has_global_variable = te_cm_joined_italian_corsican
+	}
+}
+
+# Any scope. The scandinavian merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_scandinavian_untouched = {
+	NOR = {
+		global_var:te_cm_state_scandinavian ?= 1
+		global_var:te_cm_state_scandinavian ?= 2
+		has_global_variable = te_cm_joined_scandinavian_swedish
+		has_global_variable = te_cm_joined_scandinavian_danish
+		has_global_variable = te_cm_joined_scandinavian_norwegian
+		has_global_variable = te_cm_joined_scandinavian_icelandic
+	}
+}
+
+# Any scope. The east_slavic merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_east_slavic_untouched = {
+	NOR = {
+		global_var:te_cm_state_east_slavic ?= 1
+		global_var:te_cm_state_east_slavic ?= 2
+		has_global_variable = te_cm_joined_east_slavic_russian
+		has_global_variable = te_cm_joined_east_slavic_ukrainian
+		has_global_variable = te_cm_joined_east_slavic_byelorussian
+	}
+}
+
+# Any scope. The yugoslav merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_yugoslav_untouched = {
+	NOR = {
+		global_var:te_cm_state_yugoslav ?= 1
+		global_var:te_cm_state_yugoslav ?= 2
+		has_global_variable = te_cm_joined_yugoslav_serb
+		has_global_variable = te_cm_joined_yugoslav_croat
+		has_global_variable = te_cm_joined_yugoslav_bosniak
+		has_global_variable = te_cm_joined_yugoslav_slovene
+		has_global_variable = te_cm_joined_yugoslav_bulgarian
+	}
+}
+
+# Any scope. The czechoslovak merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_czechoslovak_untouched = {
+	NOR = {
+		global_var:te_cm_state_czechoslovak ?= 1
+		global_var:te_cm_state_czechoslovak ?= 2
+		has_global_variable = te_cm_joined_czechoslovak_czech
+		has_global_variable = te_cm_joined_czechoslovak_slovak
+		has_global_variable = te_cm_joined_czechoslovak_sorb
+	}
+}
+
+# Any scope. The american merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_american_untouched = {
+	NOR = {
+		global_var:te_cm_state_american ?= 1
+		global_var:te_cm_state_american ?= 2
+		has_global_variable = te_cm_joined_american_yankee
+		has_global_variable = te_cm_joined_american_dixie
+		has_global_variable = te_cm_joined_american_afro_american
+	}
+}
+
+# Any scope. The anglophone merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_anglophone_untouched = {
+	NOR = {
+		global_var:te_cm_state_anglophone ?= 1
+		global_var:te_cm_state_anglophone ?= 2
+		has_global_variable = te_cm_joined_anglophone_british
+		has_global_variable = te_cm_joined_anglophone_yankee
+		has_global_variable = te_cm_joined_anglophone_cm_american
+		has_global_variable = te_cm_joined_anglophone_anglo_canadian
+		has_global_variable = te_cm_joined_anglophone_australian
+		has_global_variable = te_cm_joined_anglophone_scottish
+		has_global_variable = te_cm_joined_anglophone_dixie
+		has_global_variable = te_cm_joined_anglophone_afro_american
+	}
+}
+
+# Any scope. The platine merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_platine_untouched = {
+	NOR = {
+		global_var:te_cm_state_platine ?= 1
+		global_var:te_cm_state_platine ?= 2
+		has_global_variable = te_cm_joined_platine_platinean
+		has_global_variable = te_cm_joined_platine_argentine
+		has_global_variable = te_cm_joined_platine_uruguayan
+		has_global_variable = te_cm_joined_platine_paraguayan
+	}
+}
+
+# Any scope. The andean merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_andean_untouched = {
+	NOR = {
+		global_var:te_cm_state_andean ?= 1
+		global_var:te_cm_state_andean ?= 2
+		has_global_variable = te_cm_joined_andean_north_andean
+		has_global_variable = te_cm_joined_andean_south_andean
+		has_global_variable = te_cm_joined_andean_peruvian
+		has_global_variable = te_cm_joined_andean_bolivian
+	}
+}
+
+# Any scope. The gran_colombian merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_gran_colombian_untouched = {
+	NOR = {
+		global_var:te_cm_state_gran_colombian ?= 1
+		global_var:te_cm_state_gran_colombian ?= 2
+		has_global_variable = te_cm_joined_gran_colombian_colombian
+		has_global_variable = te_cm_joined_gran_colombian_venezuelan
+		has_global_variable = te_cm_joined_gran_colombian_ecuadorian
+	}
+}
+
+# Any scope. The arab merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_arab_untouched = {
+	NOR = {
+		global_var:te_cm_state_arab ?= 1
+		global_var:te_cm_state_arab ?= 2
+		has_global_variable = te_cm_joined_arab_maghrebi
+		has_global_variable = te_cm_joined_arab_misri
+		has_global_variable = te_cm_joined_arab_mashriqi
+		has_global_variable = te_cm_joined_arab_bedouin
+		has_global_variable = te_cm_joined_arab_yemenite
+		has_global_variable = te_cm_joined_arab_sudanese
+		has_global_variable = te_cm_joined_arab_haratin
+		has_global_variable = te_cm_joined_arab_bidan
+	}
+}
+
+# Any scope. The oghuz_turkic merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_oghuz_turkic_untouched = {
+	NOR = {
+		global_var:te_cm_state_oghuz_turkic ?= 1
+		global_var:te_cm_state_oghuz_turkic ?= 2
+		has_global_variable = te_cm_joined_oghuz_turkic_turkish
+		has_global_variable = te_cm_joined_oghuz_turkic_azerbaijani
+		has_global_variable = te_cm_joined_oghuz_turkic_turkmen
+	}
+}
+
+# Any scope. The dravidian merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_dravidian_untouched = {
+	NOR = {
+		global_var:te_cm_state_dravidian ?= 1
+		global_var:te_cm_state_dravidian ?= 2
+		has_global_variable = te_cm_joined_dravidian_tamil
+		has_global_variable = te_cm_joined_dravidian_kannada
+		has_global_variable = te_cm_joined_dravidian_malayalam
+		has_global_variable = te_cm_joined_dravidian_telegu
+	}
+}
+
+# Any scope. The indonesian merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_indonesian_untouched = {
+	NOR = {
+		global_var:te_cm_state_indonesian ?= 1
+		global_var:te_cm_state_indonesian ?= 2
+		has_global_variable = te_cm_joined_indonesian_javan
+		has_global_variable = te_cm_joined_indonesian_malay
+		has_global_variable = te_cm_joined_indonesian_sumatran
+		has_global_variable = te_cm_joined_indonesian_bornean
+		has_global_variable = te_cm_joined_indonesian_balinese
+	}
+}
+
+# Any scope. The nguni merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_nguni_untouched = {
+	NOR = {
+		global_var:te_cm_state_nguni ?= 1
+		global_var:te_cm_state_nguni ?= 2
+		has_global_variable = te_cm_joined_nguni_nguni
+		has_global_variable = te_cm_joined_nguni_zulu
+		has_global_variable = te_cm_joined_nguni_xhosa
+	}
+}
+
+# Any scope. The latin merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_latin_untouched = {
+	NOR = {
+		global_var:te_cm_state_latin ?= 1
+		global_var:te_cm_state_latin ?= 2
+		has_global_variable = te_cm_joined_latin_french
+		has_global_variable = te_cm_joined_latin_cm_italian
+		has_global_variable = te_cm_joined_latin_spanish
+		has_global_variable = te_cm_joined_latin_portuguese
+		has_global_variable = te_cm_joined_latin_romanian
+		has_global_variable = te_cm_joined_latin_platinean
+		has_global_variable = te_cm_joined_latin_cm_platine
+		has_global_variable = te_cm_joined_latin_argentine
+		has_global_variable = te_cm_joined_latin_uruguayan
+		has_global_variable = te_cm_joined_latin_chilean
+	}
+}
+
+# Any scope. The pan_slavic merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_pan_slavic_untouched = {
+	NOR = {
+		global_var:te_cm_state_pan_slavic ?= 1
+		global_var:te_cm_state_pan_slavic ?= 2
+		has_global_variable = te_cm_joined_pan_slavic_cm_east_slavic
+		has_global_variable = te_cm_joined_pan_slavic_cm_czechoslovak
+		has_global_variable = te_cm_joined_pan_slavic_cm_yugoslav
+		has_global_variable = te_cm_joined_pan_slavic_polish
+		has_global_variable = te_cm_joined_pan_slavic_slovene
+		has_global_variable = te_cm_joined_pan_slavic_bulgarian
+	}
+}
+
+# Any scope. The pan_turkic merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_pan_turkic_untouched = {
+	NOR = {
+		global_var:te_cm_state_pan_turkic ?= 1
+		global_var:te_cm_state_pan_turkic ?= 2
+		has_global_variable = te_cm_joined_pan_turkic_cm_oghuz_turkic
+		has_global_variable = te_cm_joined_pan_turkic_uzbek
+		has_global_variable = te_cm_joined_pan_turkic_kazak
+		has_global_variable = te_cm_joined_pan_turkic_tatar
+		has_global_variable = te_cm_joined_pan_turkic_kirgiz
+		has_global_variable = te_cm_joined_pan_turkic_bashkir
+		has_global_variable = te_cm_joined_pan_turkic_crimean_tatar
+		has_global_variable = te_cm_joined_pan_turkic_caucasian_turk
+		has_global_variable = te_cm_joined_pan_turkic_uighur
+	}
+}
+
+# Any scope. The pan_malay merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_pan_malay_untouched = {
+	NOR = {
+		global_var:te_cm_state_pan_malay ?= 1
+		global_var:te_cm_state_pan_malay ?= 2
+		has_global_variable = te_cm_joined_pan_malay_cm_indonesian
+		has_global_variable = te_cm_joined_pan_malay_filipino
+	}
+}
+
+# Any scope. The east_african merge never began: it is idle and no part has joined it (a merge returned to idle
+# keeps its joined parts). Its result then has no people, and no country should have it as a primary culture:
+# a formable's definition lists it (zz_te_culture_merge_definitions.txt), and forming adds every culture listed.
+te_cmg_east_african_untouched = {
+	NOR = {
+		global_var:te_cm_state_east_african ?= 1
+		global_var:te_cm_state_east_african ?= 2
+		has_global_variable = te_cm_joined_east_african_swahili
+		has_global_variable = te_cm_joined_east_african_nyamwezi
+		has_global_variable = te_cm_joined_east_african_sukuma
+		has_global_variable = te_cm_joined_east_african_yao
+		has_global_variable = te_cm_joined_east_african_makua
+		has_global_variable = te_cm_joined_east_african_lacustrine_bantu
+		has_global_variable = te_cm_joined_east_african_kikuyu
+	}
+}
+
+# Any scope, one per culture that can switch. Is anything still tied to this culture being a primary culture? While
+# it is, te_cm_monthly_switched_culture leaves the switched culture among a country's primary cultures. From the
+# ledger of vanilla's reads (scripts/generators/culture_merge_primary_ledger.py): a vanilla journal entry that
+# tests the culture and that some country has active holds it whenever; until 1936.1.1, vanilla's end date
+# (owner: "none should hold past 1936"), so do such an entry on offer, a formable that needs the culture and does not
+# exist, and the reads the owner ruled to keep (historical characters, flavor events, laws, Siberian exile). Any
+# country, not this one: an entry also tests its targets' and its overlord's cultures.
+
+te_cmg_part_held_north_german = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_confederation_of_the_rhine
+				has_journal_entry = je_german_unification_idea
+				has_journal_entry = je_grunderzeit
+				has_journal_entry = je_nihilist_movement
+				has_journal_entry = je_north_german_unification
+				has_journal_entry = je_schleswig_holstein_question
+				has_journal_entry = je_south_german_unification
+				has_journal_entry = je_springtime_of_the_peoples
+			}
+		}
+	}
+}
+
+te_cmg_part_held_south_german = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_confederation_of_the_rhine
+				has_journal_entry = je_german_unification_idea
+				has_journal_entry = je_grunderzeit
+				has_journal_entry = je_nihilist_movement
+				has_journal_entry = je_north_german_unification
+				has_journal_entry = je_schleswig_holstein_question
+				has_journal_entry = je_south_german_unification
+				has_journal_entry = je_springtime_of_the_peoples
+			}
+		}
+	}
+}
+
+te_cmg_part_held_alemannic = {
+	always = no
+}
+
+te_cmg_part_held_east_german = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_north_italian = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_risorgimento
+				has_journal_entry = je_springtime_of_the_peoples
+			}
+		}
+	}
+}
+
+te_cmg_part_held_south_italian = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_risorgimento
+				has_journal_entry = je_springtime_of_the_peoples
+			}
+		}
+	}
+}
+
+te_cmg_part_held_corsican = {
+	always = no
+}
+
+te_cmg_part_held_swedish = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_danish = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:SCA }
+			}
+		}
+	}
+}
+
+te_cmg_part_held_norwegian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:SCA }
+			}
+		}
+	}
+}
+
+te_cmg_part_held_icelandic = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:SCA }
+			}
+		}
+	}
+}
+
+te_cmg_part_held_russian = {
+	OR = {
+		game_date < 1936.1.1 # laws, siberian_exile, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_congress_poland
+				has_journal_entry = je_king_in_parliament
+				has_journal_entry = je_russia_civil_war
+			}
+		}
+	}
+}
+
+te_cmg_part_held_ukrainian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_danubian_federation
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_byelorussian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_serb = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:YUG }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_balkan_national_awakenings
+						has_inactive_journal_entry = je_danubian_federation
+						has_inactive_journal_entry = je_yugoslavia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_balkan_national_awakenings
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_yugoslavia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_croat = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_balkan_national_awakenings
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_yugoslavia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_bosniak = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_balkan_national_awakenings
+						has_inactive_journal_entry = je_yugoslavia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_balkan_national_awakenings
+				has_journal_entry = je_yugoslavia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_slovene = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:YUG }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_balkan_national_awakenings
+						has_inactive_journal_entry = je_danubian_federation
+						has_inactive_journal_entry = je_yugoslavia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_balkan_national_awakenings
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_yugoslavia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_bulgarian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_balkan_national_awakenings
+						has_inactive_journal_entry = je_eastern_question_russia
+						has_inactive_journal_entry = je_yugoslavia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_balkan_national_awakenings
+				has_journal_entry = je_eastern_question_russia
+				has_journal_entry = je_yugoslavia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_czech = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_danubian_federation
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_danubian_federation
+			}
+		}
+	}
+}
+
+te_cmg_part_held_slovak = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_danubian_federation
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_danubian_federation
+			}
+		}
+	}
+}
+
+te_cmg_part_held_sorb = {
+	always = no
+}
+
+te_cmg_part_held_szekely = {
+	always = no
+}
+
+te_cmg_part_held_flemish = {
+	always = no
+}
+
+te_cmg_part_held_karelian = {
+	always = no
+}
+
+te_cmg_part_held_occitan = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_vernacular_policy
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_vernacular_policy
+			}
+		}
+	}
+}
+
+te_cmg_part_held_wallonian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:HRE }
+				NOT = { exists = c:UNL }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_vernacular_policy
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_vernacular_policy
+			}
+		}
+	}
+}
+
+te_cmg_part_held_catalan = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters
+		any_country = {
+			OR = {
+				has_journal_entry = je_vernacular_policy
+			}
+		}
+	}
+}
+
+te_cmg_part_held_scottish = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:GBR }
+			}
+		}
+	}
+}
+
+te_cmg_part_held_yankee = {
+	OR = {
+		game_date < 1936.1.1 # laws, standalone
+	}
+}
+
+te_cmg_part_held_dixie = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters, laws, standalone
+	}
+}
+
+te_cmg_part_held_afro_american = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_british = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_imperialism_of_promise
+				has_journal_entry = je_mughal_hindustan
+				has_journal_entry = je_victoria_terminus
+			}
+		}
+	}
+}
+
+te_cmg_part_held_cm_american = {
+	always = no
+}
+
+te_cmg_part_held_anglo_canadian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_canada
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_canada
+			}
+		}
+	}
+}
+
+te_cmg_part_held_australian = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_nordestino = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_paulista = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_amazonic = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_sulista = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_afro_brazilian = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+	}
+}
+
+te_cmg_part_held_platinean = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_andean_federation
+						has_inactive_journal_entry = je_la_plata
+						has_inactive_journal_entry = je_patagonia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_andean_federation
+				has_journal_entry = je_la_plata
+				has_journal_entry = je_patagonia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_argentine = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_la_plata
+						has_inactive_journal_entry = je_patagonia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_la_plata
+				has_journal_entry = je_patagonia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_uruguayan = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_la_plata
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_la_plata
+			}
+		}
+	}
+}
+
+te_cmg_part_held_paraguayan = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_la_plata
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_la_plata
+			}
+		}
+	}
+}
+
+te_cmg_part_held_north_andean = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:CLM }
+				NOT = { exists = c:FND }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_andean_federation
+						has_inactive_journal_entry = je_gran_colombia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_andean_federation
+				has_journal_entry = je_gran_colombia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_south_andean = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters
+		any_country = {
+			OR = {
+				has_journal_entry = je_andean_federation
+				has_journal_entry = je_fascism_1
+				has_journal_entry = je_patagonia
+				has_journal_entry = je_peru_bolivia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_peruvian = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters
+		any_country = {
+			OR = {
+				has_journal_entry = je_peru_bolivia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_bolivian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:FND }
+			}
+		}
+	}
+}
+
+te_cmg_part_held_colombian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_gran_colombia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_gran_colombia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_venezuelan = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:FND }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_gran_colombia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_gran_colombia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_ecuadorian = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:FND }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_gran_colombia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_gran_colombia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_yue = {
+	always = no
+}
+
+te_cmg_part_held_min = {
+	always = no
+}
+
+te_cmg_part_held_hakka = {
+	always = no
+}
+
+te_cmg_part_held_ryukyuan = {
+	always = no
+}
+
+te_cmg_part_held_maghrebi = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_conquest_of_tetouan
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_conquest_of_tetouan
+			}
+		}
+	}
+}
+
+te_cmg_part_held_misri = {
+	always = no
+}
+
+te_cmg_part_held_mashriqi = {
+	always = no
+}
+
+te_cmg_part_held_bedouin = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_lion_of_the_zanj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_yemenite = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:YEM }
+			}
+		}
+	}
+}
+
+te_cmg_part_held_sudanese = {
+	always = no
+}
+
+te_cmg_part_held_haratin = {
+	always = no
+}
+
+te_cmg_part_held_bidan = {
+	always = no
+}
+
+te_cmg_part_held_luri = {
+	always = no
+}
+
+te_cmg_part_held_tajik = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:AFG }
+				NOT = { exists = c:TJI }
+				NOT = { exists = c:TRH }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_eastern_frontier
+						has_inactive_journal_entry = je_maintain_afghan_protectorate
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+						has_inactive_journal_entry = je_unify_afghanistan
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_eastern_frontier
+				has_journal_entry = je_maintain_afghan_protectorate
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+				has_journal_entry = je_unify_afghanistan
+			}
+		}
+	}
+}
+
+te_cmg_part_held_hazara = {
+	always = no
+}
+
+te_cmg_part_held_mazanderani = {
+	always = no
+}
+
+te_cmg_part_held_baluchi = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:BHT }
+				NOT = { exists = c:BLH }
+				NOT = { exists = c:PAK }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_uneasy_raj
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_uneasy_raj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_turkish = {
+	always = no
+}
+
+te_cmg_part_held_azerbaijani = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_turkmen = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_pacify_the_steppes
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_pacify_the_steppes
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_avadhi = {
+	always = no
+}
+
+te_cmg_part_held_bundeli = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_uneasy_raj
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_uneasy_raj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_chhattisgarhi = {
+	always = no
+}
+
+te_cmg_part_held_bageli = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_uneasy_raj
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_uneasy_raj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_tamil = {
+	always = no
+}
+
+te_cmg_part_held_kannada = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_uneasy_raj
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_uneasy_raj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_malayalam = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_uneasy_raj
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_uneasy_raj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_telegu = {
+	always = no
+}
+
+te_cmg_part_held_javan = {
+	always = no
+}
+
+te_cmg_part_held_malay = {
+	always = no
+}
+
+te_cmg_part_held_sumatran = {
+	always = no
+}
+
+te_cmg_part_held_bornean = {
+	always = no
+}
+
+te_cmg_part_held_balinese = {
+	always = no
+}
+
+te_cmg_part_held_visayan = {
+	always = no
+}
+
+te_cmg_part_held_tagalog = {
+	always = no
+}
+
+te_cmg_part_held_ilocano = {
+	always = no
+}
+
+te_cmg_part_held_nguni = {
+	always = no
+}
+
+te_cmg_part_held_zulu = {
+	always = no
+}
+
+te_cmg_part_held_xhosa = {
+	always = no
+}
+
+te_cmg_part_held_french = {
+	OR = {
+		game_date < 1936.1.1 # laws, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_belle_epoque
+				has_journal_entry = je_confederation_of_the_rhine
+			}
+		}
+	}
+}
+
+te_cmg_part_held_cm_italian = {
+	always = no
+}
+
+te_cmg_part_held_spanish = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters, laws, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_filipino_ethnogenesis
+				has_journal_entry = je_iberia
+				has_journal_entry = je_spanish_anarchism
+				has_journal_entry = je_the_first_carlist_war
+			}
+		}
+	}
+}
+
+te_cmg_part_held_portuguese = {
+	OR = {
+		game_date < 1936.1.1 # historical_characters, laws, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_iberia
+				has_journal_entry = je_portuguese_colonialism
+			}
+		}
+	}
+}
+
+te_cmg_part_held_romanian = {
+	OR = {
+		game_date < 1936.1.1 # laws, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_all_for_one
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_unite_the_principalities
+			}
+		}
+	}
+}
+
+te_cmg_part_held_cm_platine = {
+	always = no
+}
+
+te_cmg_part_held_chilean = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:FND }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_patagonia
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_patagonia
+			}
+		}
+	}
+}
+
+te_cmg_part_held_cm_east_slavic = {
+	always = no
+}
+
+te_cmg_part_held_cm_czechoslovak = {
+	always = no
+}
+
+te_cmg_part_held_cm_yugoslav = {
+	always = no
+}
+
+te_cmg_part_held_polish = {
+	OR = {
+		game_date < 1936.1.1 # laws, standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_christ_of_nations
+				has_journal_entry = je_congress_poland
+				has_journal_entry = je_danubian_federation
+				has_journal_entry = je_poland_lithuania
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_cm_oghuz_turkic = {
+	always = no
+}
+
+te_cmg_part_held_uzbek = {
+	OR = {
+		game_date < 1936.1.1 # standalone
+		any_country = {
+			OR = {
+				has_journal_entry = je_pacify_the_steppes
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_kazak = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_pacify_the_steppes
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+						has_inactive_journal_entry = je_the_last_kazakh_khan
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_pacify_the_steppes
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+				has_journal_entry = je_the_last_kazakh_khan
+			}
+		}
+	}
+}
+
+te_cmg_part_held_tatar = {
+	always = no
+}
+
+te_cmg_part_held_kirgiz = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_pacify_the_steppes
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+						has_inactive_journal_entry = je_the_eastern_border
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_pacify_the_steppes
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+				has_journal_entry = je_the_eastern_border
+			}
+		}
+	}
+}
+
+te_cmg_part_held_bashkir = {
+	always = no
+}
+
+te_cmg_part_held_crimean_tatar = {
+	always = no
+}
+
+te_cmg_part_held_caucasian_turk = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_caucasian_war
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_caucasian_war
+			}
+		}
+	}
+}
+
+te_cmg_part_held_uighur = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_pacify_the_steppes
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_pacify_the_steppes
+				has_journal_entry = je_russia_civil_war
+				has_journal_entry = je_russia_provisional_government
+			}
+		}
+	}
+}
+
+te_cmg_part_held_cm_indonesian = {
+	always = no
+}
+
+te_cmg_part_held_filipino = {
+	always = no
+}
+
+te_cmg_part_held_swahili = {
+	OR = {
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_lion_of_the_zanj
+					}
+				}
+			}
+		}
+		any_country = {
+			OR = {
+				has_journal_entry = je_lion_of_the_zanj
+			}
+		}
+	}
+}
+
+te_cmg_part_held_nyamwezi = {
+	always = no
+}
+
+te_cmg_part_held_sukuma = {
+	always = no
+}
+
+te_cmg_part_held_yao = {
+	always = no
+}
+
+te_cmg_part_held_makua = {
+	always = no
+}
+
+te_cmg_part_held_lacustrine_bantu = {
+	always = no
+}
+
+te_cmg_part_held_kikuyu = {
+	always = no
 }

@@ -3,14 +3,14 @@
 # (docs/testing/culture-merges-playtest.md, "Self-checks"; the on_actions file of the same name
 # lists the hooks and the rows)
 # ============================================================================
-# Nine engine facts the culture merges rest on that nobody has verified. Each check logs
+# Twelve engine facts the culture merges rest on that nobody has verified. Each check logs
 # `TE_SELF_CHECK OK|BROKEN <name>` with its numbers, once a game, behind a latch global
 # (te_cm_chk_<name without cm_>_done), and leaves out inputs that would make OK a false pass.
 # Every value it prints is copied into a te_cm_chk_* global first and read back with
 # GetGlobalVariable (a $X$ inside a [..] accessor is unproven), then removed.
 # Checks 1-7 read merge state and wait for the rule (te_cm_system_enabled), so none fires in a game with no merges;
 # cm_russification_outcome reads the INJECTed outcome of a vanilla entry, which has no rule gate, and no merge variable;
-# cm_fervor_copy rides the fervor copy, which has no rule gate either.
+# cm_fervor_copy rides the fervor copy, which has no rule gate either, and so do the last three, on the same pulse.
 #
 #   cm_census_sane                te_cm_chk_census           the first candidate's census of a part it holds
 #   cm_acceptance_scale           te_cm_chk_census           the first candidate with a primary core culture
@@ -26,6 +26,10 @@
 #   cm_russification_outcome      te_cm_chk_russification_monthly
 #   cm_fervor_copy                te_cm_chk_fervor           the first copy whose source has fervor 5 or more, read
 #                                 te_cm_chk_fervor_monthly   on the global pulse before the next month's copy
+#   cm_dead_primary_removed       te_cm_chk_dead_primary     the first part taken off a country's primary cultures,
+#                                 te_cm_chk_dead_primary_monthly   read on the global pulse 20 days on
+#   cm_tradition_carried          te_cm_chk_traditions       the monthly passes of te_cmg_carry_traditions
+#   cm_definition_inject          te_cm_chk_definition_inject   GER's definition, at the first global pulse
 #
 # No verdict is delayed with a state event (a delayed state event never runs): a check that needs settled state
 # stores what it saw, sets a timed global, and the monthly pulse reads the rest once the global has run out.
@@ -630,5 +634,134 @@ te_cm_chk_fervor_monthly = {
 		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_low }
 		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_high }
 		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_wait }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_dead_primary_removed, cm_tradition_carried, cm_definition_inject: the removal of a switched part (owner, 2026-11-09)
+# ----------------------------------------------------------------------------
+
+# Country scope, right after te_cm_monthly_switched_culture's remove_primary_culture. $CULTURE$ = the part;
+# scope:te_cm_switched_result = the culture the country keeps. Stores the three and a 20-day wait, once a game.
+#
+# cm_dead_primary_removed, read by te_cm_chk_dead_primary_monthly on the first global pulse after the wait:
+#   OK      the country no longer has the part as a primary culture and still has the successor.
+#   BROKEN  the part is still primary (remove_primary_culture did nothing here: the fallback is to leave the parts,
+#           an `always = yes` in every te_cmg_part_held_<c>), or the successor is gone (the remove took the wrong one).
+#           A formation in those 20 days brings the part back for a month and reads as BROKEN too: check the date.
+#   no line a year after a switch: the country it armed on died before the read, or nothing was ever unheld.
+te_cm_chk_dead_primary = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_dead_primary_removed_done }
+			NOT = { has_global_variable = te_cm_chk_dp_country }
+		}
+		set_global_variable = { name = te_cm_chk_dp_country value = this }
+		set_global_variable = { name = te_cm_chk_dp_part value = cu:$CULTURE$ }
+		set_global_variable = { name = te_cm_chk_dp_result value = scope:te_cm_switched_result }
+		set_global_variable = { name = te_cm_chk_dp_wait value = yes days = 20 }
+	}
+}
+
+# No root scope: the global monthly pulse (te_cm_fervor_on_action).
+te_cm_chk_dead_primary_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_dead_primary_removed_done }
+			has_global_variable = te_cm_chk_dp_country
+			NOT = { has_global_variable = te_cm_chk_dp_wait }
+		}
+		if = {
+			limit = { exists = global_var:te_cm_chk_dp_country }
+			set_global_variable = { name = te_cm_chk_dead_primary_removed_done value = yes }
+			global_var:te_cm_chk_dp_part = { save_temporary_scope_as = te_cm_chk_dp_part_s }
+			global_var:te_cm_chk_dp_result = { save_temporary_scope_as = te_cm_chk_dp_result_s }
+			global_var:te_cm_chk_dp_country = {
+				if = {
+					limit = {
+						NOT = { country_has_primary_culture = scope:te_cm_chk_dp_part_s }
+						country_has_primary_culture = scope:te_cm_chk_dp_result_s
+					}
+					debug_log = "TE_SELF_CHECK OK cm_dead_primary_removed date=[TimeKeeper.GetCurrentDate.GetString] (a switched part left a country's primary cultures and its successor stayed)"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN cm_dead_primary_removed date=[TimeKeeper.GetCurrentDate.GetString] (20 days after remove_primary_culture the part is still primary, or the successor is not; unless the country formed a tag in between)"
+				}
+			}
+		}
+		te_cm_chk_remove_global = { NAME = te_cm_chk_dp_country }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_dp_part }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_dp_result }
+	}
+}
+
+# Any scope, at the end of te_cmg_carry_traditions; local te_cm_trad_added is set when that pass added a tradition.
+#
+# cm_tradition_carried: add_tradition_trait is guarded by NOT has_discrimination_trait, so a pass that follows an
+# adding pass adds nothing if the trait took.
+#   OK      a pass that added a tradition was followed by one that added none.
+#   BROKEN  three passes in a row each added one: the add does not take, or has_discrimination_trait does not read a
+#           tradition. The fallback is the tradition in the result culture's definition (gen_culture_merges
+#           own_traditions), which reaches only the new cultures.
+te_cm_chk_traditions = {
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_chk_tradition_carried_done } }
+		if = {
+			limit = { has_local_variable = te_cm_trad_added }
+			if = {
+				limit = { has_global_variable = te_cm_chk_trad_passes }
+				change_global_variable = { name = te_cm_chk_trad_passes add = 1 }
+			}
+			else = {
+				set_global_variable = { name = te_cm_chk_trad_passes value = 1 }
+			}
+			if = {
+				limit = { global_var:te_cm_chk_trad_passes >= 3 }
+				set_global_variable = { name = te_cm_chk_tradition_carried_done value = yes }
+				debug_log = "TE_SELF_CHECK BROKEN cm_tradition_carried passes=[GetGlobalVariable('te_cm_chk_trad_passes').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (three monthly passes in a row each added a tradition to a merged culture: the add does not take)"
+				remove_global_variable = te_cm_chk_trad_passes
+			}
+		}
+		else_if = {
+			limit = { has_global_variable = te_cm_chk_trad_passes }
+			set_global_variable = { name = te_cm_chk_tradition_carried_done value = yes }
+			debug_log = "TE_SELF_CHECK OK cm_tradition_carried passes=[GetGlobalVariable('te_cm_chk_trad_passes').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (a merged culture took a switched part's tradition and kept it)"
+			remove_global_variable = te_cm_chk_trad_passes
+		}
+	}
+}
+
+# No root scope: the global monthly pulse, once a game, at its first pass. No rule gate: the definitions are
+# injected whatever the rule says.
+#
+# cm_definition_inject: zz_te_culture_merge_definitions.txt restates Germany's `cultures` list with cm_german added.
+#   OK       GER's definition lists North German (vanilla's entry survived) and cm_german (the injection applied).
+#   BROKEN   one is missing. `vanilla=no`: the INJECT emptied vanilla's list. `merged=no`: country definitions take no
+#            INJECT, and a country whose parts were removed can't form a tag that lists only them; the fallback is a
+#            hold on every part a formable lists (Holds.unformed for every tag, not only the start tags).
+#   No line: a game begun before the merged cultures existed (cu:cm_german is empty there).
+te_cm_chk_definition_inject = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_definition_inject_done }
+			exists = cu:cm_german
+		}
+		set_global_variable = { name = te_cm_chk_definition_inject_done value = yes }
+		if = {
+			limit = {
+				cd:GER = {
+					any_primary_culture = { this = cu:north_german }
+					any_primary_culture = { this = cu:cm_german }
+				}
+			}
+			debug_log = "TE_SELF_CHECK OK cm_definition_inject date=[TimeKeeper.GetCurrentDate.GetString] (GER's definition lists North German and cm_german)"
+		}
+		else_if = {
+			limit = { cd:GER = { any_primary_culture = { this = cu:cm_german } } }
+			debug_log = "TE_SELF_CHECK BROKEN cm_definition_inject vanilla=no merged=yes date=[TimeKeeper.GetCurrentDate.GetString] (the INJECT put its list in place of vanilla's and lost North German)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_definition_inject merged=no date=[TimeKeeper.GetCurrentDate.GetString] (GER's definition does not list cm_german: the INJECT did not apply)"
+		}
 	}
 }

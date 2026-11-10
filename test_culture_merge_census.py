@@ -683,10 +683,15 @@ class TriggerShapeTest(unittest.TestCase):
             body,
             "te_cm_system_enabled = yes "
             "exists = cu:cm_german "
-            "OR = { country_has_primary_culture = cu:north_german country_has_primary_culture = cu:south_german } "
+            "OR = { country_has_primary_culture = cu:north_german country_has_primary_culture = cu:south_german "
+            "country_has_primary_culture = cu:cm_german } "
             "te_cm_tier_tech = { TIER = 1 } "
             "NOT = { global_var:te_cm_state_german ?= 2 }",
         )
+        # The result counts beside the core cultures (2026-11-09): a switched part leaves the primary cultures, so after
+        # a merge returned to idle the result is all a country may have left of them. An absorb merge's result is
+        # already one of its core cultures, so it is named once.
+        self.assertEqual(self.trig("te_cmg_hungarian_is_candidate").count("country_has_primary_culture = cu:hungarian"), 1)
         # A new result culture must exist: a game begun before it was added has none (2026-11-08). An absorbing merge's
         # result is a vanilla culture, so it isn't asked.
         self.assertNotIn("exists = cu:", self.trig("te_cmg_hungarian_is_candidate"))
@@ -890,6 +895,9 @@ class TriggerShapeTest(unittest.TestCase):
                     expected.add("te_cmg_%s_%s_switched_in" % (merge.key, culture))
         # Task 6: the two culture-scope triggers over every culture that can switch, one each.
         expected.update(("te_cmg_is_switched_part", "te_cmg_switched_part_kept"))
+        # Dead primary cultures (2026-11-09): a hold per culture that can switch, and "never began" per new culture.
+        expected.update("te_cmg_part_held_%s" % culture for culture in gen.switchable_cultures(cfg.MERGES))
+        expected.update("te_cmg_%s_untouched" % merge.key for merge in cfg.MERGES if merge.new is not None)
         self.assertEqual(names, expected)
 
     def test_no_two_merges_name_the_same_variable(self):
