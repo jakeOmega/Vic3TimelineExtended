@@ -545,26 +545,6 @@ DRAFTS = {
         "wing sails at the quay, slender robotic cranes working without drivers, driverless "
         "electric trucks in convoy, blocks of plain colored steel boxes, no people anywhere, "
         "offshore wind turbines on the horizon"),
-    "naval_1": _draft(
-        "port", ["docks"], "docks", "modern_tools", 1, "a naval base larger than the Port",
-        "A naval base {when}: grey battleships and destroyers with tripod masts and heavy gun "
-        "turrets moored in line, a cruiser in a dry dock, hammerhead cranes, round oil tanks, "
-        "sailors in white on the quay, a seaplane on a slipway, funnel smoke drifting"),
-    "naval_2": _draft(
-        "port", ["docks"], "docks", "containerization", 2, "a naval base larger than the Port",
-        "A naval base {when}: grey missile destroyers with lattice radar masts at a long pier, an "
-        "aircraft carrier with an angled flight deck and jets parked on it, a black submarine "
-        "alongside, helicopters, dockyard cranes, round oil tanks"),
-    "naval_3": _draft(
-        "port", ["docks"], "docks", "supply_chain_management", 3, "a naval base larger than the Port",
-        "A naval base {when}: angular grey frigates with enclosed masts and flat slab sides at a "
-        "pier, a large flat-decked carrier, a black submarine entering a covered pen, white radar "
-        "domes on a headland, helicopters, dockyard cranes"),
-    "naval_4": _draft(
-        "port", ["docks"], "docks", "autonomous_vehicles", 4, "a naval base larger than the Port",
-        "A naval base {when}: sleek crewless warships with knife-like bows and no masts or "
-        "windows moored in line, long torpedo-shaped uncrewed submarines on cradles, a flat-decked "
-        "carrier launching pilotless aircraft, robotic cranes, white radar domes on a headland"),
 
     # Mines. mining_1 (the pilot) is the open pit of rung 1.
     "mining_2": _draft(
@@ -611,16 +591,6 @@ DRAFTS = {
         "A shale oil field {when}: square gravel well pads dotted across a rolling plain, each "
         "with a slim drilling rig, ranks of pump trucks and water tanks, pumpjacks, small gas "
         "flares, a grid of dirt roads and a buried pipeline's scar running to the horizon"),
-    "oil_offshore_2": _draft(
-        "oil", ["docks"], "docks", "integrated_circuits", 2, "Oil Rigs dominate a coastal state",
-        "Offshore oil platforms {when}: steel drilling platforms on lattice legs in a grey sea, "
-        "a flare boom burning, a supply boat alongside, a helicopter landing, a tanker moored at "
-        "a loading buoy, a low coast in the distance"),
-    "oil_offshore_3": _draft(
-        "oil", ["docks"], "docks", "hydraulic_fracturing", 3, "Oil Rigs dominate a coastal state",
-        "A deep-water oil field {when}: a giant floating production platform on four columns, a "
-        "drillship with a tall central derrick, a gas tanker with a row of white domes, a "
-        "helicopter, a long flare, a heavy blue swell"),
 
     # Farmland: vanilla's four families.
     "farmland_generic_1": _draft(
@@ -789,6 +759,9 @@ DRAFTS = {
 
     # ---- Wave 6: character, function and condition pictures of cities (design section 7) --------
     # For any region, so none names a region's buildings. Each is on a rung of the city ladder.
+    # A picture stands for a whole region (design section 1), so the pictures of one site or one
+    # district were cut: naval bases, offshore platforms, spaceports, financial districts and
+    # government quarters.
     "housing_blocks_2": _draft(
         "character", ["urban"], "urban_european", "modern_urban_planning", 2, "Command Economy and Prefabricated Construction",
         "A planned city district {when}: long identical five-storey prefabricated concrete "
@@ -892,23 +865,6 @@ DRAFTS = {
         "A city under smog {when}: supertall towers vanishing into a brown haze a few floors up, "
         "electric traffic crawling below, every pedestrian in a filter mask, tall air-cleaning "
         "towers in a square, the windows of the blocks sealed, a dull red sun"),
-    "finance_1": _draft(
-        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "a high Financial District",
-        "A financial district {when}: a narrow street like a canyon between tall stone and art "
-        "deco bank buildings with bronze doors and columns, crowds of men in dark suits and hats, "
-        "messenger boys running, black motor cars and taxis, ticker tape drifting down from the "
-        "windows"),
-    "finance_3": _draft(
-        "function", ["urban"], "urban_european", "computer_aided_design", 3, "a high Financial District",
-        "A financial district {when}: a tight cluster of mirrored glass bank towers of forty "
-        "storeys around a paved plaza with an abstract steel sculpture, crowds of office workers "
-        "in suits with briefcases, black cars and taxis, a glass atrium, satellite dishes on the "
-        "roofs"),
-    "finance_4": _draft(
-        "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "a high Financial District",
-        "A financial district {when}: twisting and tapering supertall glass towers linked by "
-        "sky bridges around a plaza of trees and water, crowds of office workers, silent electric "
-        "cars, a glass trading hall lit from within, a helicopter pad high above"),
     "industry_1": _draft(
         "function", ["urban"], "urban_european", "art_deco_architecture", 1, "most building levels are heavy industry",
         "A heavy-industry city {when}: blast furnaces and a great steelworks glowing orange "
@@ -925,21 +881,6 @@ DRAFTS = {
         "A heavy-industry city {when}: an enormous refinery and petrochemical complex of silver "
         "columns, flare stacks and pipe racks beside a car plant's long white halls, a yard of "
         "thousands of new cars, freight trains, a motorway of trucks, tower blocks in the haze"),
-    "spaceport_2": _draft(
-        "function", ["urban"], "plains_arid", "modern_urban_planning", 2, "a launch site",
-        "A rocket launch site {when} on a flat coast: a tall white rocket standing beside a red "
-        "steel service tower, venting vapor, a huge boxy assembly building, concrete blockhouses, "
-        "tracking dishes, a crawler track, trucks, a town of low white houses in the distance"),
-    "spaceport_4": _draft(
-        "function", ["urban"], "plains_arid", "advanced_structural_engineering", 4, "a launch site",
-        "A spaceport {when} on a flat coast: three slender reusable rockets standing on pads, "
-        "one landing upright on a column of flame, tall lattice catch towers, white propellant "
-        "spheres, a glass control center, a road of electric trucks, a growing city behind"),
-    "spaceport_5": _draft(
-        "function", ["urban"], "plains_arid", "vactrains", 5, "a launch site",
-        "A spaceport {when}: a long electromagnetic launch track rising up a mountainside, wide "
-        "delta-winged spaceplanes at glass terminals, fat cargo rockets on a row of pads, a "
-        "vacuum-train tube arriving on pylons, a city of garden towers behind"),
     "resort_1": _draft(
         "function", ["urban"], "urban_european", "art_deco_architecture", 1, "tourism dominates",
         "A seaside resort {when}: a curving promenade with white art deco hotels and a domed "
@@ -956,22 +897,6 @@ DRAFTS = {
         "A beach resort {when}: terraced hotel towers stepped like hillsides and covered in "
         "gardens, lagoon pools, an artificial island with villas, sleek electric ferries and a "
         "white cruise ship, crowds on a palm-lined boardwalk, a bright sea"),
-    "capital_1": _draft(
-        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "the national capital, at metropolis size",
-        "A government quarter {when}: long colonnaded ministry buildings in pale stone around a "
-        "formal square with fountains and clipped trees, a wide ceremonial avenue, black official "
-        "motor cars, a mounted guard, clerks in dark suits, an equestrian statue"),
-    "capital_3": _draft(
-        "function", ["urban"], "urban_european", "computer_aided_design", 3, "the national capital, at metropolis size",
-        "A government quarter {when}: severe modern ministry slabs of concrete and dark glass "
-        "beside older colonnaded stone buildings around a formal square, a wide ceremonial "
-        "avenue, a motorcade of black cars with police motorcycles, broadcast vans with dishes, "
-        "clipped trees"),
-    "capital_4": _draft(
-        "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the national capital, at metropolis size",
-        "A government quarter {when}: a great transparent assembly hall with a broad glass roof "
-        "beside preserved colonnaded stone ministries, a formal square of fountains and trees "
-        "closed to traffic, a line of silent black cars, crowds of visitors, security drones"),
     "devastated_early": _draft(
         "condition", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy devastation, on the first two rungs",
         "A city ruined by war {when}: roofless brick and stone buildings with empty window "

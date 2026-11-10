@@ -4,7 +4,7 @@ Drafted 2026-11-10 with the owner. The banner at the top of the state panel show
 paintings (a city, a port, a mine, farmland, a landscape), chosen by the state's terrain and region. They are
 all nineteenth-century scenes. This design replaces them, once a country reaches the technologies of era 6
 and later, with pictures that follow the owner's technology, the size of the city, how well its people live
-and, where the mod has the figures, what kind of place it is. It lists the whole intended set (about 380
+and, where the mod has the figures, what kind of place it is. It lists the whole intended set (about 360
 pictures, painted in waves) so that no early picture is wasted, and describes the pilot of four that ships
 with it. There is no separate plan for the pilot; each later wave gets its own pull request.
 
@@ -34,7 +34,10 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
    built where the demand is, and no region reads as a power station. The power-landscape family (six
    pictures and a ladder of its own) was cut on this rule. Pylons, turbines and cooling towers stay where
    they are part of another picture's landscape. The test for any picture: would a traveler crossing the
-   state call this what the place is like, or is it one site in it?
+   state call this what the place is like, or is it one site in it? Five more groups failed it and were
+   cut the same day (15 pictures): naval bases, offshore oil platforms, spaceports, financial districts
+   and government quarters, each one installation or one district of a city. Ports, mines, onshore oil,
+   farms, forestry, the heavy-industry city, the resort and the conditions of a region's cities passed.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -90,7 +93,7 @@ One ladder a family. A rung's picture shows what its technology puts in the stre
 | City | Art Deco Architecture (era 6): trams, early motor cars, stone and deco fronts | Modern Urban Planning (7): concrete and glass slabs, wide roads, mass motoring | Computer-Aided Design (8): curtain-wall towers, expressways | Advanced Structural Engineering (10): supertall towers, electric traffic | Vactrains (12): transit tubes, arcologies |
 | Port | Modern Tools (6): liners, steel cranes on rails | Containerization (8): gantries, stacked boxes | Supply Chain Management (9): the automated terminal | Autonomous Vehicles (11): crewless ships and yards | |
 | Mine | Modern Tools (6): draglines, the open pit | Industrial Robotics (8): giant haul trucks, sorting plants | Internet of Things (10): remote-run pits | | |
-| Oil field | Modern Chemical Processes (6): derrick fields | Integrated Circuits (7): directional rigs, offshore platforms | Hydraulic Fracturing (9): pad wells | | |
+| Oil field | Modern Chemical Processes (6): derrick fields | Integrated Circuits (7): directional rigs, a small refinery | Hydraulic Fracturing (9): pad wells | | |
 | Farmland, plantation, ranch | Rural Electrification (6): tractors, power lines | Green Revolution (7): combines, silos, irrigation | Microprocessor (8): center pivots, large machines | Autonomous Vehicles (11): crewless harvesters | Synthetic Biology (11): designed crops, glasshouse towers |
 | Forestry | Modern Tools (6): chainsaws, log trucks | Industrial Robotics (8): harvesters, managed stands | | | |
 
@@ -180,11 +183,8 @@ the pass picks the first that holds, in the order below.
 | Declining city, empty works | the state's people are falling | the same |
 | Divided city, shacks under towers | a large city with high inequality | `te_dg_gini` |
 | Smog city | heavy pollution | `pollution_generation` |
-| Financial center | a high Financial District | building level |
 | Heavy-industry city | most levels are heavy industry | building levels |
-| Spaceport | a launch site | the Space Race site buildings |
 | Resort | tourism dominates | the tourism buildings |
-| Government quarter | the national capital, at metropolis size | `is_capital` |
 
 Conditions outrank everything and are painted for two or three spans of the city ladder: a devastated city
 (`devastation`), a city after a nuclear strike (the nuclear system's strike marker) and a flooded coast (the
@@ -200,15 +200,15 @@ each gets one when its picture is painted.
 | Means | 80 | a poor and an affluent picture a region a rung |
 | Upkeep | 40 | a run-down picture a region a rung |
 | Character | about 20 | § 7's first five, on the rungs where they fit |
-| Function | about 15 | § 7's last five |
+| Function | about 6 | § 7's last two |
 | Conditions | about 6 | |
-| Ports | about 13 | a small harbor and a major port a rung, a naval base |
-| Mines and oil | about 12 | |
+| Ports | about 8 | a small harbor and a major port a rung |
+| Mines and oil | about 9 | open pits, collieries, onshore oil fields |
 | Farmland, plantation, ranch | about 24 | four farm families × four rung groups, plus plantation and ranch |
 | Forestry and cleared land | about 6 | |
 | Natural terrain | about 15 | optional late variants: a highway through the mountains, a pipeline in the tundra |
 
-About 375 pictures. At BC7 (0.7 MB each) that is about 270 MB of `gfx/`; in vanilla's uncompressed format it
+About 360 pictures. At BC7 (0.7 MB each) that is about 250 MB of `gfx/`; in vanilla's uncompressed format it
 would be over 1 GB.
 
 ## 9. Waves
@@ -220,16 +220,15 @@ would be over 1 GB.
    time, and these stay the fallback for every size and level of prosperity. The 39 prompts beside the
    pilot's are in the registry (`CITY_STREETS`), unrendered: the renders wait on the owner's look at the
    pilot in game, which may change how a picture is composed for the panel.
-3. **Worked land (about 55):** ports, mines and oil, farmland, forestry. Its 52 prompts are drafted
+3. **Worked land (about 50):** ports, mines and oil, farmland, forestry. Its 46 prompts are drafted
    in the registry's `DRAFTS`, outside the wired list: each has its technology and, in plain words, when it
    should show, and none has a condition or a place in the weight yet. What this wave still has to design:
-   the Port level that divides a harbor from a major port; what stands for a naval base now that 1.15 has
-   no Naval Base building; when coal makes a mine a colliery; and how an oil field takes over the picture of
+   the Port level that divides a harbor from a major port; when coal makes a mine a colliery; and how an oil field takes over the picture of
    the land it stands on (vanilla has no terrain for it), which needs a place in the weight above the rung.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
-6. **Character, function, conditions (about 40),** with theirs. Its 39 prompts are drafted in `DRAFTS`
-   (18 character, 15 function, 6 condition), for any region and on the rungs where each fits.
+6. **Character, function, conditions (about 30),** with theirs. Its 30 prompts are drafted in `DRAFTS`
+   (18 character, 6 function, 6 condition), for any region and on the rungs where each fits.
 7. **Natural terrain (about 15).** Its 15 prompts are drafted in `DRAFTS`: each of vanilla's natural
    pictures with the motor age in it (a motorway, pylons, a pipeline), on Modern Urban Planning for want of
    a ladder of its own.
