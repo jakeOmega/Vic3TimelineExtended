@@ -124,9 +124,27 @@ class TestRegistry(unittest.TestCase):
         self.assertEqual(registry.region_conditions("japanese"), registry.REGIONS["japanese"][0])
         self.assertEqual(registry.region_conditions("east_asian")[0], "OR = {")
 
+    def test_every_draft_names_real_things_and_none_is_wired(self):
+        terrains, techs = _vanilla_terrains(), _mod_techs()
+        vanilla_pictures = set(re.findall(r"gfx/state_pictures/(\w+)\.dds", VANILLA_TERRAINS.read_text(encoding="utf-8")))
+        generated = GENERATED.read_text(encoding="utf-8-sig")
+        self.assertFalse(set(registry.DRAFTS) & set(registry.PICTURES), "a draft moves to PICTURES, it isn't copied")
+        for key, d in registry.DRAFTS.items():
+            with self.subTest(key):
+                self.assertRegex(key, r"^[a-z0-9_]+$")
+                self.assertTrue(d["terrain"])
+                for terrain in d["terrain"]:
+                    self.assertIn(terrain, terrains)
+                self.assertIn(d["tech"], techs)
+                self.assertIn(d["tech"], registry.WHEN)
+                self.assertIn(registry.WHEN[d["tech"]], d["prompt"])
+                self.assertIn(d["rung"], range(1, 10))
+                self.assertIn(d["like"], vanilla_pictures)
+                self.assertNotIn(generator.picture_path(key), generated)
+
     def test_no_prompt_uses_a_word_that_draws_lettering_or_a_landmark(self):
         avoid = re.compile(r"\b(" + "|".join(map(re.escape, registry.PROMPT_AVOID)) + r")\b", re.I)
-        for key, p in registry.PICTURES.items():
+        for key, p in {**registry.PICTURES, **registry.DRAFTS}.items():
             with self.subTest(key):
                 self.assertIsNone(avoid.search(p["prompt"]))
                 # the second text encoder reads 256 tokens; a longer prompt loses its end, where the "no text" tail is

@@ -6,7 +6,8 @@ here is one picture, `gfx/state_pictures/te_<key>.dds` (1020 x 500), and says
 when it applies. `scripts/generators/gen_state_pictures.py` writes
 `common/terrain/te_state_pictures_generated.txt` from the entries whose `seed`
 is set (a picked, committed picture); an entry with `seed: None` is planned art
-and wires nothing. The design, the axes and the full planned set:
+and wires nothing. DRAFTS holds the prompts of the waves whose conditions aren't
+designed yet. The design, the axes and the full planned set:
 docs/superpowers/specs/2026-11-10-state-pictures-design.md.
 
 Fields:
@@ -308,7 +309,7 @@ CITY_STREETS = {
     ("african", 1): (
         "A city street in colonial-era Africa {when}: whitewashed two-storey arcaded buildings "
         "with verandas and corrugated iron roofs, a busy open-air market under plain cloth "
-        "awnings, bicycles, a few 1930s lorries and motor cars, people in flowing robes and in "
+        "awnings, bicycles, a few 1930s trucks and motor cars, people in flowing robes and in "
         "light suits, palm and acacia trees, red earth at the roadside"
     ),
     ("african", 2): (
@@ -403,7 +404,7 @@ CITY_STREETS = {
     ),
     ("east_asian", 2): (
         "An East Asian city avenue {when}: plain brick and concrete blocks of four to six storeys "
-        "along a wide avenue with rows of plane trees, a great many bicycles, a few lorries and "
+        "along a wide avenue with rows of plane trees, a great many bicycles, a few trucks and "
         "buses and a trolleybus under overhead wires, people in plain work clothes, factory "
         "chimneys in the distance"
     ),
@@ -467,9 +468,366 @@ for (_region, _rung), _street in CITY_STREETS.items():
         "prompt": f"{_street.format(when=_when)}, {CITY_LANDMARK[_region]} hazy at the end of the street",
     }
 
+# --- Drafts for the later waves (design section 9). A draft is a prompt with the technology
+# and rung it belongs to and, in plain words, when it should show. It is not in PICTURES, so it
+# wires nothing and takes no place in the weights; its conditions and its place in the weight are
+# settled when its wave is built, and the entry moves to PICTURES then. full_prompt() reads both,
+# so a draft can be rendered and reviewed before that.
+#   family   the group it is reviewed with
+#   terrain  the vanilla terrains whose lists it is meant to join
+#   like     vanilla's picture of the same subject, for the review sheet
+#   shows    when it should show, beyond its technology (plain words, not script)
+
+WHEN = {  # a technology's date in a prompt, by its era
+    "modern_tools": "in the 1930s", "modern_chemical_processes": "in the 1930s",
+    "rural_electrification": "in the 1930s",
+    "integrated_circuits": "around 1960", "green_revolution": "around 1960",
+    "nuclear_energy": "around 1960",
+    "containerization": "around 1980", "robotics": "around 1980", "microprocessor": "around 1980",
+    "supply_chain_management": "around 2000", "hydraulic_fracturing": "around 2000",
+    "clean_energy_technologies": "around 2000",
+    "internet_of_things": "in the 2020s",
+    "autonomous_vehicles": "in the 2040s", "synthetic_biology": "in the 2040s",
+    "fusion_power": "in the 2040s",
+}
+
+FARMLAND = ["farmland_rye", "farmland_rice", "farmland_millet", "farmland_wheat", "farmland_maize"]
+# Oil fields and power landscapes have no terrain of their own: the engine picks a state's
+# terrain before any picture is weighed, so these join the lists of the land they stand on.
+OPEN_LAND = ["plains", "desert", "savanna", "tundra", "hills", *FARMLAND, "pasture"]
+
+
+def _draft(family, terrain, like, tech, rung, shows, prompt):
+    return {"family": family, "terrain": terrain, "like": like, "tech": tech, "rung": rung,
+            "shows": shows, "prompt": prompt.format(when=WHEN[tech])}
+
+
+DRAFTS = {
+    # ---- Wave 3: worked land ------------------------------------------------------------------
+    # Ports. docks_1 (the pilot) is the major port of rung 1.
+    "docks_harbor_1": _draft(
+        "port", ["docks"], "docks", "modern_tools", 1, "a Port below the major port's level",
+        "A small fishing and coasting harbor {when}: a stone breakwater and a short quay, steam "
+        "trawlers and wooden fishing boats, a small coastal steamer unloading under a single hand "
+        "crane, nets drying on poles, stacked fish crates, low stone warehouses and cottages "
+        "behind, gulls, a small white lighthouse at the end of the breakwater"),
+    "docks_harbor_2": _draft(
+        "port", ["docks"], "docks", "containerization", 2, "a Port below the major port's level",
+        "A small harbor {when}: steel trawlers and a small coastal freighter at a concrete quay, "
+        "a mobile crane on tyres, a few plain steel shipping containers stacked two high, a cold-"
+        "store shed, round fuel tanks, trucks, a breakwater with a small white lighthouse, gulls"),
+    "docks_harbor_3": _draft(
+        "port", ["docks"], "docks", "supply_chain_management", 3, "a Port below the major port's level",
+        "A small harbor {when}: a roll-on roll-off ferry with its bow ramp down and trucks "
+        "driving off, a marina of white yachts, a few steel trawlers, one harbor crane, a low "
+        "glass terminal building, plain steel containers in a small stack, a breakwater with a "
+        "small white lighthouse"),
+    "docks_harbor_4": _draft(
+        "port", ["docks"], "docks", "autonomous_vehicles", 4, "a Port below the major port's level",
+        "A small harbor {when}: low crewless electric cargo boats with no wheelhouse gliding to a "
+        "quay, a single robotic crane, sheds roofed with solar panels, rows of seaweed-farm buoys "
+        "in the bay, white offshore wind turbines on the horizon, a breakwater with a small white "
+        "lighthouse"),
+    "docks_2": _draft(
+        "port", ["docks"], "docks", "containerization", 2, "a major Port",
+        "A large container port {when}: a container ship stacked with plain unmarked steel boxes "
+        "in rust red, blue and green at a long concrete quay, tall gantry cranes lifting boxes, "
+        "straddle carriers, long rows of stacked containers, railway tracks and trucks, an oil "
+        "tanker waiting offshore, haze over the water"),
+    "docks_3": _draft(
+        "port", ["docks"], "docks", "supply_chain_management", 3, "a major Port",
+        "A vast container terminal {when}: two enormous container ships under a long row of giant "
+        "gantry cranes, unmanned stacking cranes straddling endless blocks of plain colored steel "
+        "boxes, driverless carriers on marked lanes, double-stacked container trains, warehouses "
+        "reaching to the horizon"),
+    "docks_4": _draft(
+        "port", ["docks"], "docks", "autonomous_vehicles", 4, "a major Port",
+        "An automated port {when}: long crewless container ships with no bridge and tall rigid "
+        "wing sails at the quay, slender robotic cranes working without drivers, driverless "
+        "electric trucks in convoy, blocks of plain colored steel boxes, no people anywhere, "
+        "offshore wind turbines on the horizon"),
+    "naval_1": _draft(
+        "port", ["docks"], "docks", "modern_tools", 1, "a naval base larger than the Port",
+        "A naval base {when}: grey battleships and destroyers with tripod masts and heavy gun "
+        "turrets moored in line, a cruiser in a dry dock, hammerhead cranes, round oil tanks, "
+        "sailors in white on the quay, a seaplane on a slipway, funnel smoke drifting"),
+    "naval_2": _draft(
+        "port", ["docks"], "docks", "containerization", 2, "a naval base larger than the Port",
+        "A naval base {when}: grey missile destroyers with lattice radar masts at a long pier, an "
+        "aircraft carrier with an angled flight deck and jets parked on it, a black submarine "
+        "alongside, helicopters, dockyard cranes, round oil tanks"),
+    "naval_3": _draft(
+        "port", ["docks"], "docks", "supply_chain_management", 3, "a naval base larger than the Port",
+        "A naval base {when}: angular grey frigates with enclosed masts and flat slab sides at a "
+        "pier, a large flat-decked carrier, a black submarine entering a covered pen, white radar "
+        "domes on a headland, helicopters, dockyard cranes"),
+    "naval_4": _draft(
+        "port", ["docks"], "docks", "autonomous_vehicles", 4, "a naval base larger than the Port",
+        "A naval base {when}: sleek crewless warships with knife-like bows and no masts or "
+        "windows moored in line, long torpedo-shaped uncrewed submarines on cradles, a flat-decked "
+        "carrier launching pilotless aircraft, robotic cranes, white radar domes on a headland"),
+
+    # Mines. mining_1 (the pilot) is the open pit of rung 1.
+    "mining_2": _draft(
+        "mine", ["mining"], "mining", "robotics", 2, "",
+        "A huge open-pit mine {when}: terraced benches spiralling down into the earth, giant "
+        "yellow haul trucks with wheels taller than a man, electric rope shovels, a concrete "
+        "crushing and sorting plant fed by long covered conveyors, grey spoil heaps, dust in the "
+        "air, hazy hills behind"),
+    "mining_3": _draft(
+        "mine", ["mining"], "mining", "internet_of_things", 3, "",
+        "A remote-run open-pit mine {when}: a convoy of huge driverless haul trucks with no cabs "
+        "on the haul road, autonomous drill rigs on the benches, sensor masts and antenna towers "
+        "on the rim, a low white control building beside a field of solar panels, covered "
+        "conveyors, no people in sight"),
+    "mining_deep_1": _draft(
+        "mine", ["mining"], "mining", "modern_tools", 1, "coal mines are the larger part of the state's mines",
+        "A coal mining town {when}: steel headframes with spoked winding wheels over the shafts, "
+        "brick engine houses, tall chimneys pouring smoke, conical black slag heaps, long rows of "
+        "loaded coal wagons, terraces of miners' houses under a sooty sky"),
+    "mining_deep_2": _draft(
+        "mine", ["mining"], "mining", "robotics", 2, "coal mines are the larger part of the state's mines",
+        "A modern colliery {when}: square concrete winding towers, a coal washing plant with "
+        "covered conveyors running between its buildings, a long coal train loading under a "
+        "bunker, half-grassed slag heaps, the cooling towers of a power station in the haze"),
+    "mining_deep_3": _draft(
+        "mine", ["mining"], "mining", "internet_of_things", 3, "coal mines are the larger part of the state's mines",
+        "A deep mine {when}: one sleek enclosed shaft tower, an electric freight train loading "
+        "automatically under a silo, old spoil heaps reclaimed with young trees and fields of "
+        "solar panels, sensor masts, a few workers in bright jackets"),
+
+    # Oil fields. No terrain of their own.
+    "oil_1": _draft(
+        "oil", OPEN_LAND, "plains_arid", "modern_chemical_processes", 1, "Oil Rigs dominate the state",
+        "An oil field {when}: a forest of wooden and steel lattice derricks crowded across a "
+        "dusty plain, nodding pumpjacks, riveted storage tanks, pipelines on trestles, a gas "
+        "flare, tank wagons on a rail siding, pools of black mud, workers' shacks, dark smoke"),
+    "oil_2": _draft(
+        "oil", OPEN_LAND, "plains_arid", "integrated_circuits", 2, "Oil Rigs dominate the state",
+        "An oil field {when}: tall steel drilling rigs spaced across a dry plain, rows of "
+        "pumpjacks, silver spherical and cylindrical tanks, a small refinery with distillation "
+        "columns and a burning flare stack, pipelines running to the horizon, tanker trucks"),
+    "oil_3": _draft(
+        "oil", OPEN_LAND, "plains_arid", "hydraulic_fracturing", 3, "Oil Rigs dominate the state",
+        "A shale oil field {when}: square gravel well pads dotted across a rolling plain, each "
+        "with a slim drilling rig, ranks of pump trucks and water tanks, pumpjacks, small gas "
+        "flares, a grid of dirt roads and a buried pipeline's scar running to the horizon"),
+    "oil_offshore_2": _draft(
+        "oil", ["docks"], "docks", "integrated_circuits", 2, "Oil Rigs dominate a coastal state",
+        "Offshore oil platforms {when}: steel drilling platforms on lattice legs in a grey sea, "
+        "a flare boom burning, a supply boat alongside, a helicopter landing, a tanker moored at "
+        "a loading buoy, a low coast in the distance"),
+    "oil_offshore_3": _draft(
+        "oil", ["docks"], "docks", "hydraulic_fracturing", 3, "Oil Rigs dominate a coastal state",
+        "A deep-water oil field {when}: a giant floating production platform on four columns, a "
+        "drillship with a tall central derrick, a gas tanker with a row of white domes, a "
+        "helicopter, a long flare, a heavy blue swell"),
+
+    # Farmland: vanilla's four families.
+    "farmland_generic_1": _draft(
+        "farm", FARMLAND, "farmland_generic", "rural_electrification", 1, "vanilla's generic farmland family",
+        "Temperate farmland {when}: a patchwork of wheat fields and hedgerows, a small grey "
+        "tractor pulling a reaper-binder while a team of horses works the next field, a "
+        "farmstead with a barn, a new line of wooden electricity poles along the lane, "
+        "haystacks, a wind pump, a village steeple far off"),
+    "farmland_generic_2": _draft(
+        "farm", FARMLAND, "farmland_generic", "green_revolution", 2, "vanilla's generic farmland family",
+        "Temperate farmland {when}: broad hedgeless fields of golden wheat, a row of red combine "
+        "harvesters unloading into trucks, tall cylindrical grain silos beside the farmstead, "
+        "irrigation sprinklers on a green field, a small biplane spraying low over the crop"),
+    "farmland_generic_3": _draft(
+        "farm", FARMLAND, "farmland_generic", "microprocessor", 3, "vanilla's generic farmland family",
+        "Temperate farmland {when}: enormous fields to the horizon, huge articulated tractors "
+        "drawing wide implements, a long center-pivot irrigation arm on wheels, clusters of big "
+        "steel grain bins, long low livestock sheds, a line of pylons crossing the land"),
+    "farmland_generic_4": _draft(
+        "farm", FARMLAND, "farmland_generic", "autonomous_vehicles", 4, "vanilla's generic farmland family",
+        "Temperate farmland {when}: cabless autonomous harvesters and swarms of small field "
+        "robots working strips of different crops, drones overhead, tall wind turbines, solar "
+        "panels raised over a field of vegetables, a small barn with a mast of antennas"),
+    "farmland_arabic_1": _draft(
+        "farm", FARMLAND, "farmland_arabic", "rural_electrification", 1, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Irrigated farmland in a hot dry country {when}: small plots of wheat and cotton between "
+        "mud-walled water channels, date palms, a diesel pump house beside an old wooden water "
+        "wheel, an early tractor and a pair of oxen ploughing, a flat-roofed mud-brick village, "
+        "donkeys, bare hills behind"),
+    "farmland_arabic_2": _draft(
+        "farm", FARMLAND, "farmland_arabic", "green_revolution", 2, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Irrigated farmland in a hot dry country {when}: long straight concrete canals with "
+        "sluice gates, large green fields of cotton and wheat against tawny desert, tractors, "
+        "sprinklers, a village with a concrete water tower and grain silos, groves of date palms"),
+    "farmland_arabic_3": _draft(
+        "farm", FARMLAND, "farmland_arabic", "microprocessor", 3, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Desert farmland {when} seen from a rise: great green circles of center-pivot fields on "
+        "tawny sand, long rows of plastic greenhouses, date palms planted in grids, pump "
+        "stations and pipelines, trucks on a straight road, bare hills in the heat haze"),
+    "farmland_arabic_4": _draft(
+        "farm", FARMLAND, "farmland_arabic", "autonomous_vehicles", 4, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Desert farmland {when}: canals roofed with solar panels, drip-irrigated fields tended "
+        "by cabless autonomous tractors, white shade-net houses, a desalination plant with "
+        "pipelines, groves of date palms, drones overhead, bare hills in the heat haze"),
+    "farmland_asian_1": _draft(
+        "farm", FARMLAND, "farmland_asian", "rural_electrification", 1, "vanilla's Asian farmland family",
+        "Rice paddies {when}: flooded fields between narrow earth dikes, farmers in conical hats "
+        "transplanting seedlings by hand, water buffalo, a small diesel pump, a new line of "
+        "electricity poles along a dike, a village of tiled and thatched roofs in a bamboo grove, "
+        "misty hills"),
+    "farmland_asian_2": _draft(
+        "farm", FARMLAND, "farmland_asian", "green_revolution", 2, "vanilla's Asian farmland family",
+        "Rice paddies {when}: wide regular fields of bright green rice, farmers in conical hats "
+        "behind two-wheeled walking tractors, concrete irrigation canals with sluice gates, "
+        "threshing machines on a drying yard, a village of tin and tile roofs, misty hills"),
+    "farmland_asian_3": _draft(
+        "farm", FARMLAND, "farmland_asian", "microprocessor", 3, "vanilla's Asian farmland family",
+        "Rice paddies {when}: small rice combine harvesters and mechanical transplanters at work "
+        "in regular fields, concrete-lined canals, rows of plastic greenhouses, fish ponds, a "
+        "village of concrete houses, a line of pylons, misty hills"),
+    "farmland_asian_4": _draft(
+        "farm", FARMLAND, "farmland_asian", "autonomous_vehicles", 4, "vanilla's Asian farmland family",
+        "Rice paddies {when}: drones flying in formation low over bright green fields, small "
+        "autonomous transplanters with no drivers, solar panels floating on a pond, a glass "
+        "vertical-farm building beside a neat village, misty hills"),
+    "farmland_subtropic_1": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "rural_electrification", 1, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: fields of maize and sugar cane on red "
+        "earth, a whitewashed estate house with red tile roofs, ox carts and one early tractor, "
+        "workers in straw hats, palm trees, a new line of electricity poles, green mountains"),
+    "farmland_subtropic_2": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "green_revolution", 2, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: wide fields of maize and soybeans newly "
+        "cut from the forest, tractors, a small plane spraying, round grain silos, trucks on a "
+        "red dirt road, a whitewashed estate house, green mountains"),
+    "farmland_subtropic_3": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "microprocessor", 3, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: immense soybean fields to the horizon, a "
+        "line of green combine harvesters working abreast in a cloud of dust, grain trucks "
+        "alongside, tall silos, strips of remaining forest, a red dirt road"),
+    "farmland_subtropic_4": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "autonomous_vehicles", 4, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: cabless autonomous harvesters working "
+        "abreast, drones overhead, belts of replanted trees between the fields, solar panels "
+        "beside tall silos, a red dirt road, green mountains"),
+    "farmland_5": _draft(
+        "farm", FARMLAND, "farmland_generic", "synthetic_biology", 5, "any farmland",
+        "Farmland {when}: tall glass vertical-farm towers glowing violet among fields of "
+        "engineered crops in blue-green and deep purple, rows of steel bioreactor tanks, a few "
+        "autonomous machines, broad belts of restored woodland and meadow"),
+
+    # Plantations and ranches, on the farm ladder.
+    "plantation_1": _draft(
+        "farm", ["plantation"], "plantation", "rural_electrification", 1, "",
+        "A tropical plantation {when}: long rows of banana plants and coffee bushes on red "
+        "earth, a planter's bungalow with a wide veranda, a processing shed with a chimney, a "
+        "narrow-gauge railway with loaded wagons, workers carrying baskets, palm trees"),
+    "plantation_2": _draft(
+        "farm", ["plantation"], "plantation", "green_revolution", 2, "",
+        "A tropical plantation {when}: straight rows of banana plants to the horizon, a small "
+        "plane spraying low, tractors with trailers of green fruit, a packing plant under "
+        "corrugated roofs, trucks, rows of workers' houses, palm trees"),
+    "plantation_3": _draft(
+        "farm", ["plantation"], "plantation", "microprocessor", 3, "",
+        "A tropical plantation {when}: endless regular rows of oil palms over low hills, a "
+        "palm-oil mill with a smoking stack and round tanks, trucks heaped with red fruit "
+        "bunches, straight red dirt roads, a wall of rainforest at the edge"),
+    "plantation_4": _draft(
+        "farm", ["plantation"], "plantation", "autonomous_vehicles", 4, "",
+        "A tropical plantation {when}: robotic harvesters with long arms working among rows of "
+        "oil palms grown under taller shade trees, drones overhead, a clean white mill with "
+        "solar roofs, electric trucks, a broad belt of rainforest kept at the edge"),
+    "pasture_1": _draft(
+        "farm", ["pasture"], "pasture", "rural_electrification", 1, "",
+        "Ranch land {when}: wide fenced pasture with a herd of cattle, riders on horseback, a "
+        "wind pump and a round water tank, wooden corrals, a ranch house and barn with a new "
+        "electricity line, one pickup truck, dust, distant hills"),
+    "pasture_2": _draft(
+        "farm", ["pasture"], "pasture", "green_revolution", 2, "",
+        "Ranch land {when}: cattle in fenced paddocks and long feeding pens, cattle trucks at a "
+        "loading ramp, tractors stacking hay bales, feed silos, an irrigated green field of "
+        "fodder beside dry pasture, a wind pump, distant hills"),
+    "pasture_3": _draft(
+        "farm", ["pasture"], "pasture", "microprocessor", 3, "",
+        "Ranch land {when}: a vast feedlot of thousands of cattle in square pens, a feed mill "
+        "with tall towers, feed trucks, a helicopter mustering a herd on the open range "
+        "beyond, a center-pivot field of green fodder, distant hills"),
+    "pasture_4": _draft(
+        "farm", ["pasture"], "pasture", "autonomous_vehicles", 4, "",
+        "Ranch land {when}: cattle wearing small solar collars grazing open pasture with no "
+        "fences, drones herding them, a driverless feed wagon, tall wind turbines and fields of "
+        "solar panels on the range, a low ranch house, distant hills"),
+
+    # Forestry and cleared land.
+    "forestry_1": _draft(
+        "forest", ["forestry"], "forestry", "modern_tools", 1, "",
+        "A logging camp in a conifer forest {when}: lumberjacks with early chainsaws and axes "
+        "among huge felled trunks, a crawler tractor dragging logs, a loaded log truck, a river "
+        "full of floating logs, a sawmill with a tall smoking burner, stumps, misty mountains"),
+    "forestry_2": _draft(
+        "forest", ["forestry"], "forestry", "robotics", 2, "",
+        "A managed forest {when}: a wheeled harvesting machine with a felling arm stripping a "
+        "trunk, a forwarder stacked with logs, even blocks of planted spruce, a cleared strip "
+        "replanted with seedlings, log trucks on a gravel road, the steam plume of a pulp mill "
+        "far off"),
+    "forestry_tropical_1": _draft(
+        "forest", ["forestry"], "forestry", "modern_tools", 1, "a jungle state",
+        "Tropical logging {when}: giant buttressed hardwood trunks felled in rainforest, a "
+        "crawler tractor and teams of men hauling logs to a muddy river, rafts of logs afloat, "
+        "a sawmill on stilts with a tin roof, smoke, a wall of jungle behind"),
+    "forestry_tropical_2": _draft(
+        "forest", ["forestry"], "forestry", "robotics", 2, "a jungle state",
+        "Tropical logging {when}: a red earth road cut through rainforest, yellow bulldozers and "
+        "skidders, trucks each carrying three huge logs, a log yard, a cleared hillside with "
+        "smoke rising, a wall of jungle behind"),
+    "cleared_land_1": _draft(
+        "forest", ["cleared_land"], "cleared_land", "modern_tools", 1, "",
+        "Newly cleared land {when}: a field of tree stumps, piles of brush burning, settlers' "
+        "wooden cabins, a tractor pulling out a stump with a chain, the first fenced fields, "
+        "stacks of sawn timber, the dark edge of the forest behind"),
+    "cleared_land_2": _draft(
+        "forest", ["cleared_land"], "cleared_land", "robotics", 2, "",
+        "Newly cleared land {when}: forest pushed down by bulldozers into long burning windrows, "
+        "a new straight gravel road, cattle grazing among charred stumps, a prefabricated "
+        "farmhouse, the standing wall of forest behind"),
+
+    # Power landscapes. No terrain of their own. The design's ladder starts at the nuclear plant;
+    # the coal station and the dam are added here as its first rung, on Modern Tools for want of a
+    # technology of their own, which is a proposal.
+    "energy_thermal_1": _draft(
+        "energy", OPEN_LAND, "plains", "modern_tools", 1, "Power Plants dominate the state",
+        "A large coal-fired power station {when} in open country: a long brick turbine hall "
+        "with a row of six tall steel chimneys, a coal heap fed by a conveyor, squat wooden "
+        "cooling towers steaming, lattice pylons marching away across fields, a railway siding "
+        "of coal wagons"),
+    "energy_hydro_1": _draft(
+        "energy", ["hills", "mountain", "forest", *FARMLAND], "hills", "modern_tools", 1, "Hydro Plants dominate the state",
+        "A hydroelectric dam {when}: a long straight concrete dam across a broad river valley "
+        "with white water pouring down its spillways, a powerhouse at its foot, lattice pylons "
+        "climbing the hillside, a wide reservoir behind, forested hills"),
+    "energy_nuclear_2": _draft(
+        "energy", OPEN_LAND, "plains", "nuclear_energy", 2, "Nuclear Plants dominate the state",
+        "A nuclear power station {when} in open country: two domed concrete reactor buildings, a "
+        "long turbine hall, two wide hyperbolic cooling towers with steam plumes, a switchyard "
+        "and lines of pylons crossing farmland, a river in the foreground"),
+    "energy_wind_3": _draft(
+        "energy", OPEN_LAND, "plains", "clean_energy_technologies", 3, "Renewable Energy Plants dominate the state",
+        "A wind farm {when}: ranks of tall white three-bladed turbines along a ridge and across "
+        "rolling farmland, a gravel service track, a small substation, pylons, cattle grazing "
+        "beneath, a big windy sky"),
+    "energy_solar_3": _draft(
+        "energy", ["desert", "savanna", "plains"], "desert", "clean_energy_technologies", 3, "Renewable Energy Plants dominate a dry state",
+        "A solar farm in dry country {when}: fields of dark blue panels in rows to the horizon, "
+        "a white tower glowing at its top inside a ring of mirrors, a substation, pylons, a "
+        "straight service road, bare hills in the heat haze"),
+    "energy_fusion_4": _draft(
+        "energy", OPEN_LAND, "plains", "fusion_power", 4, "Fusion Plants dominate the state",
+        "A fusion power plant {when} in open country: a vast white reactor hall with a low "
+        "ring-shaped building around it, cylindrical cryogenic tanks trailing vapor, a hall of "
+        "heavy transformers, lines of pylons, landscaped grounds, a few small figures"),
+}
+
 
 def full_prompt(key: str) -> str:
-    return f"{STYLE}. {PICTURES[key]['prompt']}{TAIL}"
+    entry = PICTURES[key] if key in PICTURES else DRAFTS[key]
+    return f"{STYLE}. {entry['prompt']}{TAIL}"
 
 
 def weight(key: str) -> int:

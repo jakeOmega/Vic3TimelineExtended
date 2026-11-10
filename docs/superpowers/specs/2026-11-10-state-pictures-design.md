@@ -86,7 +86,7 @@ One ladder a family. A rung's picture shows what its technology puts in the stre
 | Oil field | Modern Chemical Processes (6): derrick fields | Integrated Circuits (7): directional rigs, offshore platforms | Hydraulic Fracturing (9): pad wells | | |
 | Farmland, plantation, ranch | Rural Electrification (6): tractors, power lines | Green Revolution (7): combines, silos, irrigation | Microprocessor (8): center pivots, large machines | Autonomous Vehicles (11): crewless harvesters | Synthetic Biology (11): designed crops, glasshouse towers |
 | Forestry | Modern Tools (6): chainsaws, log trucks | Industrial Robotics (8): harvesters, managed stands | | | |
-| Energy landscape | Nuclear Energy (7): the plant | Clean Energy Technologies (9): wind and solar fields | Fusion Power (11) | | |
+| Energy landscape | Modern Tools (6): the coal station, the dam (added with wave 3's drafts; a proposal) | Nuclear Energy (7): the plant | Clean Energy Technologies (9): wind and solar fields | Fusion Power (11) | |
 
 The city ladder's rungs also carry the skyline pictures: a metropolis needs Modern Skyscrapers as well from
 rung 1, and a megacity exists from rung 3. The housing-block city needs Prefabricated Construction (the
@@ -215,7 +215,13 @@ would be over 1 GB.
    time, and these stay the fallback for every size and level of prosperity. The 39 prompts beside the
    pilot's are in the registry (`CITY_STREETS`), unrendered: the renders wait on the owner's look at the
    pilot in game, which may change how a picture is composed for the panel.
-3. **Worked land (about 60):** ports, mines and oil, farmland, forestry, energy.
+3. **Worked land (about 60):** ports, mines and oil, farmland, forestry, energy. Its 58 prompts are drafted
+   in the registry's `DRAFTS`, outside the wired list: each has its technology and, in plain words, when it
+   should show, and none has a condition or a place in the weight yet. What this wave still has to design:
+   the Port level that divides a harbor from a major port; what stands for a naval base now that 1.15 has
+   no Naval Base building; when coal makes a mine a colliery; and how an oil field or a power landscape
+   takes over the picture of the land it stands on (they have no terrain of their own, § 12), which needs a
+   place in the weight above the rung.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
 6. **Character, function, conditions (about 40),** with theirs.
