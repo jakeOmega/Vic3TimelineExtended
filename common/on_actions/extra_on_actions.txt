@@ -568,6 +568,7 @@ on_law_enactment_started = {
 
 on_law_activated = {
 	on_actions = {
+		te_law_sweep_notice_from_law_scope
 		fix_incompatible_laws_from_law_scope
 		te_fix_inconsistent_laws_from_law_scope
 		te_collective_governance_from_law_scope
@@ -576,6 +577,31 @@ on_law_activated = {
 		radical_law_backlash_on_action
 		banking_law_cascade_on_law_activated
 		te_banking_economy_law_cleanup
+	}
+}
+
+# A law script put in place because the one before it could no longer stand
+# (owner, 2026-11-10: such a swap was never reported). The consistency sweep
+# (gen_law_consistency.py), fix_incompatible_laws, te_frontier_ai_fix_law and
+# banking_law_cascade_on_law_activated each set te_law_sweep_replacing on the
+# country around their activate_law; that activate_law fires this hook at
+# once, with the new law as ROOT, and te_law_replaced_notice names it. First
+# in the list, so it runs before a hook that changes another law. Nothing is
+# posted in the game's first two months: the first monthly sweep settles what
+# history left (the skip in te_fix_inconsistent_laws_from_law_scope), and the
+# monthly pulse may reach a country on any day of the first month.
+# ROOT = law scope; owner = country.
+te_law_sweep_notice_from_law_scope = {
+	effect = {
+		if = {
+			limit = { owner = { has_variable = te_law_sweep_replacing } }
+			if = {
+				limit = { game_date > 1836.3.1 }
+				save_scope_as = te_law_sweep_new_law
+				owner = { post_notification = te_law_replaced_notice }
+			}
+			owner = { remove_variable = te_law_sweep_replacing }
+		}
 	}
 }
 
@@ -633,7 +659,9 @@ banking_law_cascade_on_law_activated = {
 				}
 			}
 			owner = {
+				set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 				activate_law = law_type:law_state_owned_banking
+				remove_variable = te_law_sweep_replacing
 			}
 		}
 	}

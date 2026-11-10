@@ -372,5 +372,58 @@ class StartDateGateTest(unittest.TestCase):
         self.assertLess(gate, body.find("te_fix_inconsistent_laws = yes"))
 
 
+class ReplacementNoticeTest(unittest.TestCase):
+    """Every law script puts in place is marked, so the player hears of it.
+
+    te_law_sweep_notice_from_law_scope (on_law_activated) posts
+    te_law_replaced_notice for a law activated while the country carries the
+    mark; a replacement without it is silent (owner, 2026-11-10).
+    """
+
+    MARK = "te_law_sweep_replacing"
+
+    def _unmarked(self, text):
+        lines = [ln.split("#")[0].strip() for ln in text.splitlines()]
+        return [
+            i + 1 for i, ln in enumerate(lines)
+            if ln.startswith("activate_law = ")
+            and not (lines[i - 1] == f"set_variable = {self.MARK}"
+                     and lines[i + 1] == f"remove_variable = {self.MARK}")
+        ]
+
+    def test_generated_replacements_are_marked(self):
+        with open(GENERATED, encoding="utf-8-sig") as fh:
+            text = fh.read()
+        self.assertIn("activate_law = ", text)
+        self.assertEqual(self._unmarked(text), [])
+
+    def test_hand_written_replacements_are_marked(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        blocks = [
+            ("common/scripted_effects/extra_effects.txt", "fix_incompatible_laws = {"),
+            ("common/scripted_effects/te_frontier_ai_effects.txt", "te_frontier_ai_fix_law = {"),
+            ("common/scripted_effects/te_frontier_ai_effects.txt", "te_frontier_ai_on_un_membership_end = {"),
+            ("common/on_actions/extra_on_actions.txt", "banking_law_cascade_on_law_activated = {"),
+        ]
+        for path, start in blocks:
+            with open(os.path.join(root, path), encoding="utf-8-sig") as fh:
+                text = fh.read()
+            block = text[text.index("\n" + start):]
+            block = block[:block.index("\n}\n") + 3]
+            self.assertIn("activate_law = ", block, start)
+            self.assertEqual(self._unmarked(block), [], start)
+
+    def test_hook_is_first_and_skips_the_opening_months(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(root, "common/on_actions/extra_on_actions.txt"), encoding="utf-8-sig") as fh:
+            text = fh.read()
+        hooks = text[text.index("\non_law_activated = {"):].split("}")[0].split()
+        self.assertEqual(hooks[hooks.index("{", 3) + 1], "te_law_sweep_notice_from_law_scope")
+        hook = text[text.index("\nte_law_sweep_notice_from_law_scope = {"):]
+        hook = hook[:hook.index("\n}\n")]
+        self.assertIn("game_date > 1836.3.1", hook)
+        self.assertIn("post_notification = te_law_replaced_notice", hook)
+
+
 if __name__ == "__main__":
     unittest.main()

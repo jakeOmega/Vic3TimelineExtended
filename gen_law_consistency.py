@@ -718,6 +718,23 @@ def _validity_clause(law_id, law, indent):
     return "\n".join(lines)
 
 
+# Set on the country around each replacement, so the on_law_activated hook
+# te_law_sweep_notice_from_law_scope (common/on_actions/extra_on_actions.txt)
+# can tell a law this sweep put in place from one the country enacted, and
+# post te_law_replaced_notice naming it. The hook clears it; the line after
+# the activate_law clears it when the engine refused the law and no hook ran.
+SWEEP_MARK = "te_law_sweep_replacing"
+
+
+def _replacement_lines(cand_id):
+    """The lines that put `cand_id` in place and mark it as the sweep's doing."""
+    return [
+        f"\t\t\tset_variable = {SWEEP_MARK}",
+        f"\t\t\tactivate_law = law_type:{cand_id}",
+        f"\t\t\tremove_variable = {SWEEP_MARK}",
+    ]
+
+
 def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
     """Build the `te_fix_inconsistent_lawgroup_<group> = { ... }` block."""
     name = f"te_fix_inconsistent_lawgroup_{group_id[len('lawgroup_'):]}"
@@ -757,13 +774,13 @@ def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
                 out.append("\t\t\tlimit = {")
                 out.append(validity)
                 out.append("\t\t\t}")
-                out.append(f"\t\t\tactivate_law = law_type:{cand_id}")
+                out.extend(_replacement_lines(cand_id))
                 out.append("\t\t}")
             else:
                 # Unconditionally valid candidate — terminal in cascade.
                 out.append(f"\t\t{kw} = {{")
                 out.append("\t\t\tlimit = { always = yes }")
-                out.append(f"\t\t\tactivate_law = law_type:{cand_id}")
+                out.extend(_replacement_lines(cand_id))
                 out.append("\t\t}")
                 # Once we hit an unconditionally-valid candidate, no later
                 # candidate can ever be reached, so stop emitting.

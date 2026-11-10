@@ -1259,14 +1259,18 @@ fix_incompatible_laws = {
 			}
 			has_law = law_type:law_no_campaign_finance_laws
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_unregulated_donations
+		remove_variable = te_law_sweep_replacing
 	}
 	if = {
 		limit = {
 			has_law = law_type:law_no_internet_policy
 			has_technology_researched = world_wide_web
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_unregulated_internet
+		remove_variable = te_law_sweep_replacing
 	}
 	# Frontier AI Control opens with AI Agents, and International Oversight
 	# needs UN membership while held (te_frontier_ai_effects.txt).
@@ -1280,7 +1284,9 @@ fix_incompatible_laws = {
 			}
 
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_universal_basic_income
+		remove_variable = te_law_sweep_replacing
 	}
 	if = {
 		limit = {
@@ -1294,7 +1300,9 @@ fix_incompatible_laws = {
 				}
 			}
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_wage_subsidies
+		remove_variable = te_law_sweep_replacing
 	}
 }
 
