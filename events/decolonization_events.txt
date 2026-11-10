@@ -2344,6 +2344,8 @@ decolonization_events.17 = {
 	}
 
 	immediate = {
+		# Named for the notices the neighbour gets.
+		save_scope_as = border_claimant
 		random_scope_state = {
 			limit = {
 				any_neighbouring_state = {
@@ -2410,6 +2412,12 @@ decolonization_events.17 = {
 				state_region = { add_claim = root }
 			}
 		}
+		if = {
+			limit = { exists = scope:border_rival }
+			scope:border_rival = {
+				post_notification = decol_border_claim_pressed_notice
+			}
+		}
 		change_infamy = 3
 		add_radicals = { value = small_radicals }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
@@ -2452,6 +2460,9 @@ decolonization_events.17 = {
 						country = scope:border_rival
 						value = -10
 					}
+					scope:border_rival = {
+						post_notification = decol_border_mediation_lost_notice
+					}
 				}
 				add_loyalists = { value = small_radicals }
 			}
@@ -2468,6 +2479,9 @@ decolonization_events.17 = {
 					change_relations = {
 						country = scope:border_rival
 						value = 10
+					}
+					scope:border_rival = {
+						post_notification = decol_border_mediation_split_notice
 					}
 				}
 				add_loyalists = { value = small_radicals }
@@ -2486,6 +2500,9 @@ decolonization_events.17 = {
 					limit = { exists = scope:border_rival }
 					scope:disputed_state = {
 						state_region = { add_claim = scope:border_rival }
+					}
+					scope:border_rival = {
+						post_notification = decol_border_mediation_won_notice
 					}
 				}
 				add_radicals = { value = small_radicals }

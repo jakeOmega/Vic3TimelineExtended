@@ -19,3 +19,34 @@ decol_truce_proposal_declined_notice = {
 	notification_type = feed
 	color = bad
 }
+
+# The neighbour in decolonization_events.17 (scope:border_rival) hears what the
+# other country's choice did to the border: a claim pressed, or the mediators'
+# ruling. An option that changes another country's claims always tells it.
+decol_border_claim_pressed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_border_mediation_lost_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_border_mediation_split_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+decol_border_mediation_won_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
