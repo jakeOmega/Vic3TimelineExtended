@@ -413,9 +413,9 @@ Once a culture has switched it also leaves your primary cultures, and those of
 every country that had it, as soon as nothing in the base game still depends on
 it. A base-game journal entry that reads the culture keeps it while any country
 has that entry running. Until 1936 it also stays while such an entry is still on
-offer, while a country that needs it to form (Italy, Scandinavia, or a fallen
-Russia or Prussia) doesn't exist, and for the base game's historical characters,
-laws and events that ask for it. From 1936 only a running journal entry keeps it.
+offer, while a country that needs it to form (Italy, Scandinavia) doesn't
+exist, and for the base game's historical characters, laws and decisions that
+ask for it. From 1936 only a running journal entry keeps it.
 Rulers and generals of the old culture take the merged one when it goes. A
 ruler's title that belonged to all of the merged people stays: a German empire
 keeps its Kaiser, and the United States its own forms of government. A title

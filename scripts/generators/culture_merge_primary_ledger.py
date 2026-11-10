@@ -17,10 +17,7 @@ The rulings are the owner's (2026-11-09):
   (``WINDOW_END``). The owner said it of the cases. Applying the same date to
   a journal entry that is only on offer and to an unformed country is the
   designer's call, made so that the rule is one sentence ("after 1936 only a
-  running journal entry holds a part"); it also bounds the hold the owner
-  approved for a dead start tag ("hold the part only while that tag is dead"),
-  which would otherwise keep North German for good once Prussia has become
-  Germany;
+  running journal entry holds a part");
 * a small helper can be overridden ("is it not possible to override something
   like 'Is Indian' though? That seems small, unlike replacing a whole JE"):
   ``TRIGGER_OVERRIDES``.
@@ -50,13 +47,17 @@ Dispositions:
 
 A formable whose **definition** lists a part is not a row here: the inventory's
 ``formables`` section covers it. A tag that owns no state at the 1836 start gets
-the part's merged cultures added to its definition; a start tag (Russia,
-Prussia) holds the part while it is dead, since listing a merged culture there
-would start that country with an empty culture. Only a merge's **new** culture
+the part's merged cultures added to its definition. A start tag (Russia,
+Prussia) does not, since its country would begin the game with an empty
+culture, and it holds nothing either: the first build held the part while the
+tag was dead, so that a country could re-form it, and the owner's point about
+Prussia ended that (2026-11-09: the German merge follows Germany's formation,
+and Germany, an empire, cannot form a kingdom). So a country that has only the
+merged culture cannot re-form a dead start tag. Only a merge's **new** culture
 is added. An absorb merge's result is a vanilla culture with people of its own
 (Dutch, for Flemish), and a definition that listed it would hand it to whoever
 forms the tag; where vanilla's list lacks it, the part is held while the tag
-does not exist, like a start tag's.
+does not exist.
 
 ``test_culture_merge_primary_reads.py`` fails on a row no rule covers, so a
 vanilla patch that adds a read has to be classified here before it lands.
@@ -173,12 +174,22 @@ CASES: dict[str, Case] = {
         hold=True,
         ruled="2026-11-09",
     ),
-    "standalone": Case(
-        "Events and decisions outside any journal entry",
-        "Events that fire from a yearly or monthly pulse, an on-action or a decision: the historical agitators "
-        "(British, French, North German), the Emu War, Sweden's monarchy events, Austria's Trialism decision (Croat), "
-        "deposing a ruling dynasty (French, Spanish, Portuguese), the Polish rebellion and independence, a small "
-        "German state asking to join a unifier, and a freed people's country (Afro-American, Afro-Brazilian).",
+    "one_off_events": Case(
+        "Single flavor events",
+        "One-off events that fire from a yearly or monthly pulse or an on-action, each for one culture: four historical "
+        "agitators (Lassalle for North German, Dickens and two more for British), the Emu War (Australian), Sweden's "
+        "two Bernadotte events, the Halloween event (Romanian), Zanzibar's change of ruler (Bedouin), Spain's monarchs, "
+        "the Polish rebellion and independence, and the trigger that pairs a slave-holding people with the enslaved "
+        "(Yankee and Dixie with Afro-American, Uzbek with Persian). The owner, shown that North German was held for an "
+        "agitator event and one other read: \"Holding for just these two means the hold is way too strict.\" The "
+        "rest of the list is filed by the same reasoning, which is the designer's reading.",
+        hold=False,
+        ruled="2026-11-09",
+    ),
+    "decisions": Case(
+        "Decisions",
+        "Something the player presses: Austria's Trialism (Croat) with its two events, and deposing a ruling dynasty "
+        "(French, Spanish, Portuguese) with the trigger it reads.",
         hold=True,
         ruled="2026-11-09",
     ),
@@ -211,8 +222,6 @@ _CASE_DIRS = {
     "common/laws/": "laws",
     "common/amendments/": "laws",
     "common/regional_exile_pools/": "siberian_exile",
-    "common/on_actions/": "standalone",
-    "common/decisions/": "standalone",
 }
 
 # Rows the folder rules and the trace don't settle, by entity. A helper trigger or effect takes the disposition of
@@ -237,14 +246,50 @@ _ENTITIES: dict[str, Disposition] = {
     # laws
     "second_amendment_add_obsessions_effect": Disposition(CASE, case="laws"),
     "second_amendment_remove_obsessions_effect": Disposition(CASE, case="laws"),
-    # outside any journal entry
-    "character_has_ideology_conflicting_with_ruling_dynasty": Disposition(CASE, case="standalone"),
-    "culture_is_intuitive_slave_revolt_culture": Disposition(CASE, case="standalone"),
-    "on_become_independent_poland_effect": Disposition(CASE, case="standalone"),
-    "on_monthly_pulse_country_spanish_monarchs_effect": Disposition(CASE, case="standalone"),
-    "on_secession_start_polish_rebellion_effect": Disposition(CASE, case="standalone"),
+    # a journal entry's after all: the on-action that fires them asks for the entry
+    "italian_unification.7": Disposition(ENTRIES, entries=("je_risorgimento",)),
+    "italian_unification.8": Disposition(ENTRIES, entries=("je_risorgimento",)),
+    # can't matter once the part has switched
+    "german_unification.6": Disposition(
+        MOOT, why="a small German state asks to join a unification candidate for Germany, and there is none once "
+                  "Germany exists: the German merge starts only after Germany has formed, and the mod's voluntary union "
+                  "covers the case after (owner, 2026-11-09)"),
+    "culture_brazil.1": Disposition(
+        MOOT, why="needs Colossus of the South's nation-building entry, and under that content the Brazilian merge "
+                  "does not run (skip_if_dlc)"),
+    "on_country_released_as_independent": Disposition(
+        MOOT, why="read at the moment a country is released, when it has the cultures its definition lists"),
+    "slave_revolt_events.1": Disposition(
+        MOOT, why="fired when a country is created, when it has the cultures its definition lists"),
+    # single flavor events
+    "historical_agitators.4": Disposition(CASE, case="one_off_events"),
+    "historical_agitators.14": Disposition(CASE, case="one_off_events"),
+    "historical_agitators.18": Disposition(CASE, case="one_off_events"),
+    "historical_agitators.22": Disposition(CASE, case="one_off_events"),
+    "emu_war.1": Disposition(CASE, case="one_off_events"),
+    "sweden_monarchy.2": Disposition(CASE, case="one_off_events"),
+    "sweden_monarchy.3": Disposition(CASE, case="one_off_events"),
+    "spooky_halloween_events.1": Disposition(CASE, case="one_off_events"),
+    "on_new_ruler": Disposition(CASE, case="one_off_events"),
+    "on_monthly_pulse_country_spain": Disposition(CASE, case="one_off_events"),
+    "on_monthly_pulse_country_spanish_monarchs_effect": Disposition(CASE, case="one_off_events"),
+    "on_become_independent_poland_effect": Disposition(CASE, case="one_off_events"),
+    "on_secession_start_polish_rebellion_effect": Disposition(CASE, case="one_off_events"),
+    "culture_is_intuitive_slave_revolt_culture": Disposition(CASE, case="one_off_events"),
+    # decisions
+    "aus_organise_trialism": Disposition(CASE, case="decisions"),
+    "austria_trialism.2": Disposition(CASE, case="decisions"),
+    "austria_trialism.3": Disposition(CASE, case="decisions"),
+    "decision_depose_ruling_dynasty": Disposition(CASE, case="decisions"),
+    "character_has_ideology_conflicting_with_ruling_dynasty": Disposition(CASE, case="decisions"),
 }
-_STANDALONE_EVENT_FILES = ("events/",)
+# One entity, different answers by culture: vanilla's on_secession_start fires the Risorgimento's events for an Italian
+# secession (and asks for that entry) and the Polish rebellion for a Polish one.
+_ENTITY_PARTS: dict[tuple[str, str], Disposition] = {
+    ("on_secession_start", "north_italian"): Disposition(ENTRIES, entries=("je_risorgimento",)),
+    ("on_secession_start", "south_italian"): Disposition(ENTRIES, entries=("je_risorgimento",)),
+    ("on_secession_start", "polish"): Disposition(CASE, case="one_off_events"),
+}
 
 
 def _prefix(table: dict[str, str], file: str) -> str | None:
@@ -295,6 +340,8 @@ def classify(row: dict) -> Disposition | None:
         return Disposition(UNFORMED, tag=entity)
     if entity in TRIGGER_OVERRIDES:
         return Disposition(MIRRORED, why="restated with the merged cultures")
+    if (entity, row["part"]) in _ENTITY_PARTS:
+        return _ENTITY_PARTS[(entity, row["part"])]
     if entity in _ENTITIES:
         return _ENTITIES[entity]
     case = _prefix(_CASE_DIRS, file)
@@ -302,9 +349,7 @@ def classify(row: dict) -> Disposition | None:
         return Disposition(CASE, case=case)
     if row.get("entries"):
         return Disposition(ENTRIES, entries=tuple(row["entries"]))
-    if file.startswith(_STANDALONE_EVENT_FILES):
-        return Disposition(CASE, case="standalone")
-    return None
+    return None  # an event, on-action or decision no journal entry reaches: it needs a line above, and maybe a ruling
 
 
 @dataclass(frozen=True)
@@ -344,7 +389,7 @@ def part_holds(inventory: dict | None = None) -> dict[str, Holds]:
             if culture not in inventory["parts"]:
                 continue
             unlisted_absorb = any(s not in new_results and s not in listed for s in cfg.successors_of(culture))
-            if formable["exists_at_start"] or unlisted_absorb:
+            if unlisted_absorb and not formable["exists_at_start"]:
                 unformed.setdefault(culture, set()).add(tag)
     return {
         part: Holds(

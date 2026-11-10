@@ -168,11 +168,11 @@ class LedgerTest(unittest.TestCase):
             self.assertTrue(case.ruled, "%s waits for the owner's ruling" % name)
 
     def test_the_owners_rulings(self):
-        # 2026-11-09: no hold for cosmetic reads, company eligibility, AI weights or movements; the others hold, and
-        # none past 1936.
+        # 2026-11-09: no hold for cosmetic reads, company eligibility, AI weights, movements or a single flavor event
+        # ("Holding for just these two means the hold is way too strict"); the others hold, and none past 1936.
         self.assertEqual(
             {name for name, case in ledger.CASES.items() if case.hold},
-            {"historical_characters", "laws", "siberian_exile", "standalone"},
+            {"historical_characters", "laws", "siberian_exile", "decisions"},
         )
         self.assertEqual(ledger.WINDOW_END, "1936.1.1")
         kinds = {}
@@ -226,13 +226,20 @@ class LedgerTest(unittest.TestCase):
         self.assertFalse(self.holds["corsican"].any)
         self.assertFalse(self.holds["karelian"].any)
         russian = self.holds["russian"]
-        self.assertEqual(russian.cases, ("laws", "siberian_exile", "standalone"))
-        self.assertIn("RUS", russian.unformed)  # a start tag: Russian is held while Russia is dead
+        self.assertEqual(russian.cases, ("laws", "siberian_exile"))
         self.assertIn("je_russia_civil_war", russian.entries)
+        # North German: its journal entries and nothing else. Not the Lassalle agitator event, not the small state
+        # asking to join a unifier (none exists once Germany does), and not a dead Prussia (owner, 2026-11-09:
+        # Germany, an empire, cannot form a kingdom).
         german = self.holds["north_german"]
+        self.assertEqual(german.cases, ())
+        self.assertEqual(german.unformed, ())
         self.assertIn("je_german_unification_idea", german.entries)
-        self.assertIn("PRU", german.unformed)
-        self.assertNotIn("GER", german.unformed)  # mirrored: GER's definition gains cm_german
+        self.assertIn("je_grunderzeit", german.entries)  # the German Confederation's member list is that entry's
+        self.assertIn("je_risorgimento", self.holds["north_italian"].entries)
+        for part in ("swedish", "australian", "afro_american", "uzbek", "paulista"):
+            self.assertEqual(self.holds[part].cases, (), part)
+        self.assertEqual(self.holds["croat"].cases, ("decisions",))  # Austria's Trialism
         # A journal entry's events, buttons and helpers hold through the entry.
         self.assertIn("je_belle_epoque", self.holds["french"].entries)
         self.assertIn("je_danubian_federation", self.holds["czech"].entries)
@@ -251,9 +258,11 @@ class LedgerTest(unittest.TestCase):
                 if culture not in self.holds:
                     continue
                 lacking = any(s not in new and s not in listed for s in cfg.successors_of(culture))
+                # A start tag's definition is left alone and holds nothing: its parts go, and a country that has
+                # only the merged culture cannot re-form it.
                 self.assertEqual(
                     tag in self.holds[culture].unformed,
-                    bool(lacking or formable["exists_at_start"] or (tag, culture) in by_trigger),
+                    bool((lacking and not formable["exists_at_start"]) or (tag, culture) in by_trigger),
                     (tag, culture),
                 )
 

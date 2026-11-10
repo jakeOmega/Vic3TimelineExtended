@@ -4,8 +4,8 @@
 # culture merges. A part that has switched leaves a country's primary cultures (te_cm_monthly_switched_culture), so
 # each list gains the merged cultures its parts become (owner, 2026-11-09): a Germany that is only German can still
 # form the Holy Roman Empire. Only tags that own no state at the 1836 start, so no country begins with a merged
-# culture that has no people; a start tag (RUS, PRU, GBR) holds its parts while it is dead instead
-# (te_cmg_part_held_<c>). Each block restates vanilla's whole list (from culture_merge_primary_reads.json), so the
+# culture that has no people; a start tag (RUS, PRU, GBR) is left as vanilla has it, so a country that has only
+# the merged culture cannot re-form one. Each block restates vanilla's whole list (from culture_merge_primary_reads.json), so the
 # result is right whether the engine appends an injected list to vanilla's or puts it in its place; the self-check
 # cm_definition_inject reads one tag. Forming adds every listed culture, so te_cmg_strip_untouched_results takes a
 # merged culture whose merge never began off again.

@@ -14656,14 +14656,30 @@ te_cmg_east_african_untouched = {
 # it is, te_cm_monthly_switched_culture leaves the switched culture among a country's primary cultures. From the
 # ledger of vanilla's reads (scripts/generators/culture_merge_primary_ledger.py): a vanilla journal entry that
 # tests the culture and that some country has active holds it whenever; until 1936.1.1, vanilla's end date
-# so do the reads the owner ruled to keep (historical characters, flavor events, laws, Siberian exile; "none should
+# so do the reads the owner ruled to keep (historical characters, decisions, laws, Siberian exile; "none should
 # hold past 1936") and, by the designer's extension of that date, such an entry on offer and a formable that needs
 # the culture and does not exist. Any country, not this one: an entry also tests its targets' and its overlord's
 # cultures.
 
 te_cmg_part_held_north_german = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_confederation_of_the_rhine
+						has_inactive_journal_entry = je_german_unification_idea
+						has_inactive_journal_entry = je_grunderzeit
+						has_inactive_journal_entry = je_nihilist_movement
+						has_inactive_journal_entry = je_north_german_unification
+						has_inactive_journal_entry = je_schleswig_holstein_question
+						has_inactive_journal_entry = je_south_german_unification
+						has_inactive_journal_entry = je_springtime_of_the_peoples
+					}
+				}
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_confederation_of_the_rhine
@@ -14681,7 +14697,23 @@ te_cmg_part_held_north_german = {
 
 te_cmg_part_held_south_german = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_confederation_of_the_rhine
+						has_inactive_journal_entry = je_german_unification_idea
+						has_inactive_journal_entry = je_grunderzeit
+						has_inactive_journal_entry = je_nihilist_movement
+						has_inactive_journal_entry = je_north_german_unification
+						has_inactive_journal_entry = je_schleswig_holstein_question
+						has_inactive_journal_entry = je_south_german_unification
+						has_inactive_journal_entry = je_springtime_of_the_peoples
+					}
+				}
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_confederation_of_the_rhine
@@ -14725,7 +14757,19 @@ te_cmg_part_held_east_german = {
 
 te_cmg_part_held_north_italian = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:ITA }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_danubian_federation
+						has_inactive_journal_entry = je_risorgimento
+						has_inactive_journal_entry = je_springtime_of_the_peoples
+					}
+				}
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_danubian_federation
@@ -14738,7 +14782,18 @@ te_cmg_part_held_north_italian = {
 
 te_cmg_part_held_south_italian = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:ITA }
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_risorgimento
+						has_inactive_journal_entry = je_springtime_of_the_peoples
+					}
+				}
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_risorgimento
@@ -14754,7 +14809,12 @@ te_cmg_part_held_corsican = {
 
 te_cmg_part_held_swedish = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				NOT = { exists = c:SCA }
+			}
+		}
 	}
 }
 
@@ -14793,7 +14853,7 @@ te_cmg_part_held_icelandic = {
 
 te_cmg_part_held_russian = {
 	OR = {
-		game_date < 1936.1.1 # laws, siberian_exile, standalone
+		game_date < 1936.1.1 # laws, siberian_exile
 		any_country = {
 			OR = {
 				has_journal_entry = je_congress_poland
@@ -14877,7 +14937,7 @@ te_cmg_part_held_serb = {
 
 te_cmg_part_held_croat = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		game_date < 1936.1.1 # decisions
 		any_country = {
 			OR = {
 				has_journal_entry = je_balkan_national_awakenings
@@ -15069,37 +15129,39 @@ te_cmg_part_held_catalan = {
 }
 
 te_cmg_part_held_scottish = {
-	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				NOT = { exists = c:GBR }
-			}
-		}
-	}
+	always = no
 }
 
 te_cmg_part_held_yankee = {
 	OR = {
-		game_date < 1936.1.1 # laws, standalone
+		game_date < 1936.1.1 # laws
 	}
 }
 
 te_cmg_part_held_dixie = {
 	OR = {
-		game_date < 1936.1.1 # historical_characters, laws, standalone
+		game_date < 1936.1.1 # historical_characters, laws
 	}
 }
 
 te_cmg_part_held_afro_american = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_british = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_imperialism_of_promise
+						has_inactive_journal_entry = je_mughal_hindustan
+						has_inactive_journal_entry = je_victoria_terminus
+					}
+				}
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_imperialism_of_promise
@@ -15135,39 +15197,27 @@ te_cmg_part_held_anglo_canadian = {
 }
 
 te_cmg_part_held_australian = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_nordestino = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_paulista = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_amazonic = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_sulista = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_afro_brazilian = {
-	OR = {
-		game_date < 1936.1.1 # standalone
-	}
+	always = no
 }
 
 te_cmg_part_held_platinean = {
@@ -15261,7 +15311,6 @@ te_cmg_part_held_north_andean = {
 		AND = {
 			game_date < 1936.1.1
 			OR = {
-				NOT = { exists = c:CLM }
 				NOT = { exists = c:FND }
 				any_country = {
 					OR = {
@@ -15424,7 +15473,7 @@ te_cmg_part_held_mashriqi = {
 
 te_cmg_part_held_bedouin = {
 	OR = {
-		game_date < 1936.1.1 # historical_characters, standalone
+		game_date < 1936.1.1 # historical_characters
 		any_country = {
 			OR = {
 				has_journal_entry = je_lion_of_the_zanj
@@ -15714,7 +15763,7 @@ te_cmg_part_held_xhosa = {
 
 te_cmg_part_held_french = {
 	OR = {
-		game_date < 1936.1.1 # laws, standalone
+		game_date < 1936.1.1 # decisions, laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_belle_epoque
@@ -15730,7 +15779,7 @@ te_cmg_part_held_cm_italian = {
 
 te_cmg_part_held_spanish = {
 	OR = {
-		game_date < 1936.1.1 # historical_characters, laws, standalone
+		game_date < 1936.1.1 # decisions, historical_characters, laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_filipino_ethnogenesis
@@ -15744,7 +15793,7 @@ te_cmg_part_held_spanish = {
 
 te_cmg_part_held_portuguese = {
 	OR = {
-		game_date < 1936.1.1 # historical_characters, laws, standalone
+		game_date < 1936.1.1 # decisions, historical_characters, laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_iberia
@@ -15756,7 +15805,7 @@ te_cmg_part_held_portuguese = {
 
 te_cmg_part_held_romanian = {
 	OR = {
-		game_date < 1936.1.1 # laws, standalone
+		game_date < 1936.1.1 # laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_all_for_one
@@ -15806,7 +15855,7 @@ te_cmg_part_held_cm_yugoslav = {
 
 te_cmg_part_held_polish = {
 	OR = {
-		game_date < 1936.1.1 # laws, standalone
+		game_date < 1936.1.1 # laws
 		any_country = {
 			OR = {
 				has_journal_entry = je_christ_of_nations
@@ -15826,7 +15875,18 @@ te_cmg_part_held_cm_oghuz_turkic = {
 
 te_cmg_part_held_uzbek = {
 	OR = {
-		game_date < 1936.1.1 # standalone
+		AND = {
+			game_date < 1936.1.1
+			OR = {
+				any_country = {
+					OR = {
+						has_inactive_journal_entry = je_pacify_the_steppes
+						has_inactive_journal_entry = je_russia_civil_war
+						has_inactive_journal_entry = je_russia_provisional_government
+					}
+				}
+			}
+		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_pacify_the_steppes
