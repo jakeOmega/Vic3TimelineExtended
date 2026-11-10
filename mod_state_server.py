@@ -6515,7 +6515,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
             issues filtered for triage cleanliness but cross-linked to
             docs/audits/open_issues.md so they remain actionable).
             Tagged entries get a `vanilla_bug_ref: {title, section, kind}`
-            field; `kind` is "vanilla", "vanilla_noise", or "mod_low_priority".
+            field; `kind` is "vanilla", "vanilla_noise", "mod_low_priority"
+            or "watch". A watch-list entry (the registry's "Watch list"
+            section) is tagged and never hidden: its ref carries a `check`
+            line saying what tells a mod cause from vanilla's.
             Use `?vanilla_bugs=hide&mod_noise=hide` for a fully-clean triage
             view, or `?mod_only=unknown` to surface uncategorized engine
             entries that the canonical filters hide.
@@ -6530,7 +6533,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             filter_debug_log,
             dedupe, summarize, diff_against_backup, cluster_sessions,
             load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
-            gui_injected_scope_names, tag_gui_injected_scopes,
+            gui_injected_scope_names, tag_gui_injected_scopes, apply_known_noise_modes,
         )
 
         vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
@@ -6588,31 +6591,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 os.path.join(mod_path, "localization", "english"),
             ]))
 
-            def _matches_vanilla(e):
-                ref = e.vanilla_bug_ref
-                return ref is not None and ref.get("kind") != "mod_low_priority"
-
-            def _matches_mod(e):
-                ref = e.vanilla_bug_ref
-                return ref is not None and ref.get("kind") == "mod_low_priority"
-
-            filtered = []
-            for e in entries:
-                v_match = _matches_vanilla(e)
-                m_match = _matches_mod(e)
-                if vanilla_mode == "hide" and v_match:
-                    continue
-                if mod_noise_mode == "hide" and m_match:
-                    continue
-                if vanilla_mode == "only" or mod_noise_mode == "only":
-                    keep = (
-                        (vanilla_mode == "only" and v_match)
-                        or (mod_noise_mode == "only" and m_match)
-                    )
-                    if not keep:
-                        continue
-                filtered.append(e)
-            return filtered
+            return apply_known_noise_modes(entries, vanilla_mode, mod_noise_mode)
 
         if not parts:
             include_mp = (params.get("mp_sessions") or ["false"])[0].lower() == "true"

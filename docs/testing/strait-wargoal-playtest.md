@@ -33,3 +33,15 @@ with the commit that fixed it.
 | **People and buildings.** Read the self-check line, then the two states. | How many people moved, and which buildings went with the shore. Record it here; nothing in the base game documents the split. A built canal's building stays in the state that keeps it. | A shore that takes no people at all, or all of them, is worth a note for the price. |
 | **Conflicts.** Add Seize Strait and Conquer State on the same state. | The game refuses the second. | Both allowed: the conflict settings don't reach a custom goal. |
 | **AI.** In an observer run, grep `TE_SELF_CHECK OK te_seize_strait` for `ai=1`. | Whether the AI ever uses it. It has no weight of its own. | Never by 2000 is acceptable; record it. |
+
+## Readings
+
+**2026-11-09: the first enforcement read OK.** A 1.15 game, August 1872 (launch of 17:34, `debug.log`):
+
+```
+TE_SELF_CHECK OK te_seize_strait holder=Singapore ai=0 shores=0->1 holder_pop=0->59588 target_pop=596306->536274 date=August 25, 1872
+```
+
+- **Self-check and Transfer.** One shore province changed hands (`shores=0->1`) and the rest of the state stayed with its owner, who kept 536,274 people in the region: `set_owner_of_provinces` takes effect inside the effect block, so the after-reading needs no delay.
+- **People.** 59,588 of the region's 596,306 went with the one province, 10.0%; the two sides sum to 444 fewer than before (0.07%). The holder had nobody in the region before, so the engine does split a state's pops when provinces leave it. Which strait and state region this was the line doesn't say, so the share can't yet be set against the region's province count; the next reading should note the state from the map or a save, and the buildings.
+- **AI.** `ai=0` is right: the owner was playing Singapore (owner, 2026-11-09), so `is_ai` reads correctly in the line. The AI row is still open.

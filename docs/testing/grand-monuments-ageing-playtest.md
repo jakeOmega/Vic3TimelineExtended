@@ -111,6 +111,8 @@ Ten are nowhere, on no state and in no container:
 
 None of `gm_state_tear_down`, `gm_mon_tear_down_one` (a monument beside another) or `gm_state_tr_take` (a carry-off) logged anything, so a teardown or a carry-off looked like a loss. They now log `TE_MONUMENTS: torn down`, `pulled down beside another monument` and `carried off`. For the next run's census, `scripts/analysis/gm_landmark_census.py <save> --placed <the session's debug logs>` lists every landmark as `own`, `beside`, `trophy` or `nowhere`.
 
+**2026-11-09: the first OK.** `monument_merge_kept` read OK in May 1866 of a 1.15 game: "a monument whose state merged into another part of its region stands again from its shadow: 5 levels recorded, 1 finished buildings in the region; it is great_zimbabwe in Zambezi". The three readings above were all BROKEN, and Great Zimbabwe was one of the five monuments the stray pass removed in the 2026-11-06 game. One case, in another game: the other four listed there still wait for theirs.
+
 ## Dedicate (owner, 2026-10-18)
 
 | Check | Expect | If it fails |

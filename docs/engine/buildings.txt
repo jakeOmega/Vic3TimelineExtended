@@ -1772,18 +1772,18 @@ Power Plants (bg_power):
 		Partial Carbon Capture (20 Oil)
 		Carbon Capture and Storage (20 Oil)
 		Advanced Carbon Capture (20 Oil)
-		Partial Carbon Capture (28 Oil)
-		Carbon Capture and Storage (28 Oil)
-		Advanced Carbon Capture (28 Oil)
+		Partial Carbon Capture (30 Oil)
+		Carbon Capture and Storage (30 Oil)
+		Advanced Carbon Capture (30 Oil)
 		Partial Carbon Capture (5 Coal)
 		Carbon Capture and Storage (5 Coal)
 		Advanced Carbon Capture (5 Coal)
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-		Partial Carbon Capture (19 Coal)
-		Carbon Capture and Storage (19 Coal)
-		Advanced Carbon Capture (19 Coal)
+		Partial Carbon Capture (20 Coal)
+		Carbon Capture and Storage (20 Coal)
+		Advanced Carbon Capture (20 Coal)
 
 Government Administration (bg_bureaucracy):
 	Unlocking Technology: Bureaucracy
@@ -2894,43 +2894,43 @@ Aerospace Industry (bg_high_tech):
 
 Manganese Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Tools
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+	$pmg_mining_equipment_building_iron_mine$:
+		$pm_picks_and_shovels_building_iron_mine$
+		$pm_atmospheric_engine_pump_building_iron_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_iron_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_iron_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_iron_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_iron_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_iron_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_iron_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_iron_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_iron_mine$
 			Monthly Pollution: 5
-	$pmg_steam_automation$:
+	$pmg_steam_automation_building_iron_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_iron_mine$
 			Monthly Pollution: 5
-		Large Scale Earth Movers
+		$pm_large_scale_earth_movers_iron_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_iron_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_iron_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_iron_mine$
 			Monthly Pollution: 5
 	$pmg_train_automation$:
 		Road Carts
@@ -2949,7 +2949,7 @@ Manganese Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_manganese_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -2964,7 +2964,7 @@ Manganese Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+	Carbon Capture ($pmg_steam_automation_building_manganese_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -2973,43 +2973,43 @@ Manganese Mine (bg_discoverable_mining):
 
 Chromium Mine (bg_discoverable_mining):
 	Unlocking Technology: Stainless Steel Mass Production
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+	$pmg_mining_equipment_building_iron_mine$:
+		$pm_picks_and_shovels_building_iron_mine$
+		$pm_atmospheric_engine_pump_building_iron_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_iron_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_iron_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_iron_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_iron_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_iron_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_iron_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_iron_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_iron_mine$
 			Monthly Pollution: 5
-	$pmg_steam_automation$:
+	$pmg_steam_automation_building_iron_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_iron_mine$
 			Monthly Pollution: 5
-		Large Scale Earth Movers
+		$pm_large_scale_earth_movers_iron_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_iron_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_iron_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_iron_mine$
 			Monthly Pollution: 5
 	$pmg_train_automation$:
 		Road Carts
@@ -3028,7 +3028,7 @@ Chromium Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_chromium_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3043,7 +3043,7 @@ Chromium Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+	Carbon Capture ($pmg_steam_automation_building_chromium_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3052,43 +3052,43 @@ Chromium Mine (bg_discoverable_mining):
 
 Specialty Alloy Metal Mine (bg_discoverable_mining):
 	Unlocking Technology: Jet Engine Technology
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+	$pmg_mining_equipment_building_iron_mine$:
+		$pm_picks_and_shovels_building_iron_mine$
+		$pm_atmospheric_engine_pump_building_iron_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_iron_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_iron_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_iron_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_iron_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_iron_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_iron_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_iron_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_iron_mine$
 			Monthly Pollution: 5
-	$pmg_steam_automation$:
+	$pmg_steam_automation_building_iron_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_iron_mine$
 			Monthly Pollution: 5
-		Large Scale Earth Movers
+		$pm_large_scale_earth_movers_iron_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_iron_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_iron_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_iron_mine$
 			Monthly Pollution: 5
 	$pmg_train_automation$:
 		Road Carts
@@ -3107,7 +3107,7 @@ Specialty Alloy Metal Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_specialty_alloy_metal_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3122,7 +3122,7 @@ Specialty Alloy Metal Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+	Carbon Capture ($pmg_steam_automation_building_specialty_alloy_metal_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3131,43 +3131,43 @@ Specialty Alloy Metal Mine (bg_discoverable_mining):
 
 Bauxite Mine (bg_discoverable_mining):
 	Unlocking Technology: Aluminum Mass Production
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+	$pmg_mining_equipment_building_iron_mine$:
+		$pm_picks_and_shovels_building_iron_mine$
+		$pm_atmospheric_engine_pump_building_iron_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_iron_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_iron_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_iron_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_iron_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_iron_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_iron_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_iron_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_iron_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_iron_mine$
 			Monthly Pollution: 5
-	$pmg_steam_automation$:
+	$pmg_steam_automation_building_iron_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_iron_mine$
 			Monthly Pollution: 5
-		Large Scale Earth Movers
+		$pm_large_scale_earth_movers_iron_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_iron_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_iron_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_iron_mine$
 			Monthly Pollution: 5
 	$pmg_train_automation$:
 		Road Carts
@@ -3186,7 +3186,7 @@ Bauxite Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_bauxite_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3201,7 +3201,7 @@ Bauxite Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+	Carbon Capture ($pmg_steam_automation_building_bauxite_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3210,43 +3210,43 @@ Bauxite Mine (bg_discoverable_mining):
 
 Precious and Minor Base Metal Mine (bg_discoverable_mining):
 	Unlocking Technology: Advanced Automotive Production Techniques
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+	$pmg_mining_equipment_building_lead_mine$:
+		$pm_picks_and_shovels_building_lead_mine$
+		$pm_atmospheric_engine_pump_building_lead_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_lead_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_lead_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_lead_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_lead_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_lead_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_lead_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_lead_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_lead_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_lead_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_lead_mine$
 			Monthly Pollution: 5
-	$pmg_steam_automation$:
+	$pmg_steam_automation_building_lead_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_lead_mine$
 			Monthly Pollution: 5
-		Large Scale Earth Movers
+		$pm_large_scale_earth_movers_lead_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_lead_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_lead_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_lead_mine$
 			Monthly Pollution: 5
 	$pmg_train_automation$:
 		Road Carts
@@ -3265,7 +3265,7 @@ Precious and Minor Base Metal Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_lead_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_precious_minor_base_metal_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3280,7 +3280,7 @@ Precious and Minor Base Metal Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_lead_mine$):
+	Carbon Capture ($pmg_steam_automation_building_precious_minor_base_metal_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3289,38 +3289,38 @@ Precious and Minor Base Metal Mine (bg_discoverable_mining):
 
 Nickel and Cobalt Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Materials
-	Mining Equipment:
-		Condensing Engine Pump
+	$pmg_mining_equipment_building_tech_metals_mine$:
+		$pm_condensing_engine_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_tech_metals_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_tech_metals_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_tech_metals_mine$:
 		Manual Drilling
-		Dynamite
+		$pm_dynamite_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_tech_metals_mine$
 			Monthly Pollution: 5
-	Automation:
+	$pmg_steam_automation_building_tech_metals_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_tech_metals_mine$
 			Monthly Pollution: 5
-		Large-Scale Earth Movers
+		$pm_large_scale_earth_movers_tech_metals_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_tech_metals_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_tech_metals_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_tech_metals_mine$
 			Monthly Pollution: 5
 	Transportation:
 		Road Carts
@@ -3338,7 +3338,7 @@ Nickel and Cobalt Mine (bg_discoverable_mining):
 	Maintenance:
 		Light Maintenance
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_nickel_cobalt_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3347,7 +3347,7 @@ Nickel and Cobalt Mine (bg_discoverable_mining):
 		Partial Carbon Capture (10 Oil)
 		Carbon Capture and Storage (10 Oil)
 		Advanced Carbon Capture (10 Oil)
-	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+	Carbon Capture ($pmg_steam_automation_building_nickel_cobalt_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3356,38 +3356,38 @@ Nickel and Cobalt Mine (bg_discoverable_mining):
 
 Lithium Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Chemical Processes
-	Mining Equipment:
-		Condensing Engine Pump
+	$pmg_mining_equipment_building_tech_metals_mine$:
+		$pm_condensing_engine_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_tech_metals_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_tech_metals_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_tech_metals_mine$:
 		Manual Drilling
-		Dynamite
+		$pm_dynamite_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_tech_metals_mine$
 			Monthly Pollution: 5
-	Automation:
+	$pmg_steam_automation_building_tech_metals_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_tech_metals_mine$
 			Monthly Pollution: 5
-		Large-Scale Earth Movers
+		$pm_large_scale_earth_movers_tech_metals_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_tech_metals_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_tech_metals_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_tech_metals_mine$
 			Monthly Pollution: 5
 	Transportation:
 		Road Carts
@@ -3405,7 +3405,7 @@ Lithium Mine (bg_discoverable_mining):
 	Maintenance:
 		Light Maintenance
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_lithium_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3414,7 +3414,7 @@ Lithium Mine (bg_discoverable_mining):
 		Partial Carbon Capture (10 Oil)
 		Carbon Capture and Storage (10 Oil)
 		Advanced Carbon Capture (10 Oil)
-	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+	Carbon Capture ($pmg_steam_automation_building_lithium_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3423,38 +3423,38 @@ Lithium Mine (bg_discoverable_mining):
 
 Rare Earth Metals Mine (bg_discoverable_mining):
 	Unlocking Technology: Laser Technology
-	Mining Equipment:
-		Condensing Engine Pump
+	$pmg_mining_equipment_building_tech_metals_mine$:
+		$pm_condensing_engine_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_tech_metals_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_tech_metals_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_tech_metals_mine$:
 		Manual Drilling
-		Dynamite
+		$pm_dynamite_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_tech_metals_mine$
 			Monthly Pollution: 5
-	Automation:
+	$pmg_steam_automation_building_tech_metals_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_tech_metals_mine$
 			Monthly Pollution: 5
-		Large-Scale Earth Movers
+		$pm_large_scale_earth_movers_tech_metals_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_tech_metals_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_tech_metals_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_tech_metals_mine$
 			Monthly Pollution: 5
 	Transportation:
 		Road Carts
@@ -3472,7 +3472,7 @@ Rare Earth Metals Mine (bg_discoverable_mining):
 	Maintenance:
 		Light Maintenance
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_rare_earth_metals_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3481,7 +3481,7 @@ Rare Earth Metals Mine (bg_discoverable_mining):
 		Partial Carbon Capture (10 Oil)
 		Carbon Capture and Storage (10 Oil)
 		Advanced Carbon Capture (10 Oil)
-	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+	Carbon Capture ($pmg_steam_automation_building_rare_earth_metals_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3490,38 +3490,38 @@ Rare Earth Metals Mine (bg_discoverable_mining):
 
 Platinum Group Metals Mine (bg_discoverable_mining):
 	Unlocking Technology: Pollution Control
-	Mining Equipment:
-		Condensing Engine Pump
+	$pmg_mining_equipment_building_tech_metals_mine$:
+		$pm_condensing_engine_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_tech_metals_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_tech_metals_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_tech_metals_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_tech_metals_mine$:
 		Manual Drilling
-		Dynamite
+		$pm_dynamite_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_tech_metals_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_tech_metals_mine$
 			Monthly Pollution: 5
-	Automation:
+	$pmg_steam_automation_building_tech_metals_mine$:
 		Hand Cranked Crane
 		Steam Donkey
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_tech_metals_mine$
 			Monthly Pollution: 5
-		Large-Scale Earth Movers
+		$pm_large_scale_earth_movers_tech_metals_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_tech_metals_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_tech_metals_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_tech_metals_mine$
 			Monthly Pollution: 5
 	Transportation:
 		Road Carts
@@ -3539,7 +3539,7 @@ Platinum Group Metals Mine (bg_discoverable_mining):
 	Maintenance:
 		Light Maintenance
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_platinum_group_metals_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3548,7 +3548,7 @@ Platinum Group Metals Mine (bg_discoverable_mining):
 		Partial Carbon Capture (10 Oil)
 		Carbon Capture and Storage (10 Oil)
 		Advanced Carbon Capture (10 Oil)
-	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+	Carbon Capture ($pmg_steam_automation_building_platinum_group_metals_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -3557,43 +3557,43 @@ Platinum Group Metals Mine (bg_discoverable_mining):
 
 Graphite Mine (bg_discoverable_mining):
 	Unlocking Technology: Nuclear Energy
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+	$pmg_mining_equipment_building_coal_mine$:
+		$pm_picks_and_shovels_building_coal_mine$
+		$pm_atmospheric_engine_pump_building_coal_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_coal_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_coal_mine$
 			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
+		$pm_high_pressure_hydraulic_pump_building_coal_mine$
 			Monthly Pollution: 15
-		Continuous Miners
+		$pm_continuous_miners_building_coal_mine$
 			Monthly Pollution: 15
-		Smart Miners
+		$pm_smart_miners_building_coal_mine$
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_coal_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_coal_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_coal_mine$
 			Monthly Pollution: 10
-		Ammonium Nitrate
+		$pm_ammonium_nitrate_building_coal_mine$
 			Monthly Pollution: 10
-		Metamaterial Explosives
+		$pm_metamaterial_explosives_building_coal_mine$
 			Monthly Pollution: 5
-	$pmg_steam_automation$:
+	$pmg_steam_automation_building_coal_mine$:
 		Hand Cranked Crane
-		Steam Donkey
+		$pm_steam_donkey_building_coal_mine$
 			Monthly Pollution: 5
-		Dragline Excavators
+		$pm_dragline_excavators_coal_mine$
 			Monthly Pollution: 5
-		Large Scale Earth Movers
+		$pm_large_scale_earth_movers_coal_mine$
 			Monthly Pollution: 5
-		Geophysical Survey Techniques
+		$pm_geophysical_survey_techniques_coal_mine$
 			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
+		$pm_ore_sorting_and_separation_technology_coal_mine$
 			Monthly Pollution: 5
-		Laser Excavation Technology
+		$pm_laser_excavation_technology_coal_mine$
 			Monthly Pollution: 5
 	$pmg_train_automation$:
 		Road Carts
@@ -3612,7 +3612,7 @@ Graphite Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_coal_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_graphite_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -3627,7 +3627,7 @@ Graphite Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_coal_mine$):
+	Carbon Capture ($pmg_steam_automation_building_graphite_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (3 Coal)
@@ -3991,7 +3991,7 @@ Fusion Plant (bg_clean_power):
 		No Maintenance
 
 Grid Transfer Station (bg_private_infrastructure):
-	Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid moves $electricity$ from states where it is cheap to states where it is dear, until it sells at one price where it is sent and at that price over the #b Grid Transmission Efficiency#! where it is received. A station that sends $electricity$ is paid for it in @grid_power! $grid_power$ and one that receives pays in $grid_power$, each at the grid's price, so a station about covers what its goods cost. Some power is lost on the way. A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.
+	Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid moves $electricity$ from states where it is cheap to states where it is expensive, until it sells at one price where it is sent and at that price over the #b Grid Transmission Efficiency#! where it is received. A station that sends $electricity$ is paid for it in @grid_power! $grid_power$ and one that receives pays in $grid_power$, each at the grid's price, so a station about covers what its goods cost. Some power is lost on the way. A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.
 	Unlocking Technology: Electrical Capacitors
 	Grid Transfer:
 		Substation

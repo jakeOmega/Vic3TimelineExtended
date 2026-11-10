@@ -33,6 +33,8 @@ from game_log_reader import (
     mod_frame_test,
     mod_only_anchor_warnings,
     mod_uses,
+    apply_known_noise_modes,
+    WATCH_KIND,
 )
 
 
@@ -1176,7 +1178,7 @@ Error
         for r in reviewed:
             for note in r.reviewed:
                 self.assertTrue(note.startswith(("helper anchor, signature cannot match a mod call (",
-                                                 "mod anchor, ")), note)
+                                                 "mod anchor, ", "mod frame, ")), note)
 
 
 class LiveRegistryKeyReferenceTests(unittest.TestCase):
@@ -1208,6 +1210,94 @@ class LiveRegistryKeyReferenceTests(unittest.TestCase):
             'Error: "Failed to read key reference: scope:sr_evac_culture: scope:sr_evac_culture, near line: 295\n'
             'Failed to read key reference: scope:sr_evac_religion: scope:sr_evac_religion, near line: 296" '
             'in file: "common/scripted_effects/sr_colony_autonomy_effects.txt" near line: 298'))
+
+
+class WatchListTests(unittest.TestCase):
+    """A `## Watch list` entry tags a line and never hides it: for a message
+    that is usually vanilla's and can be the mod's, with nothing in the line
+    to tell which. Its `- check:` line says what settles it."""
+
+    DOC = (
+        "## Engine noise (source-anchored)\n\n"
+        "### `pdx_assert.cpp:641` — dead formation\n- source: `pdx_assert.cpp:641`\n\n"
+        "```\nTrying to reposition a dead formation\n```\n\n"
+        "## Watch list (tagged, never hidden)\n\n"
+        "### `pdx_assert.cpp:641` — occupation data removed with a state\n"
+        "- source: `pdx_assert.cpp:641`\n"
+        "- check: read the same second for a mod effect in `common/scripted_effects/te_x.txt`\n\n"
+        "```\nTrying to remove occupation data\n```\n"
+    )
+
+    def _load(self, tmp, doc=None):
+        os.makedirs(os.path.join(tmp, "audits"), exist_ok=True)
+        open(os.path.join(tmp, "audits", "open_issues.md"), "w", encoding="utf-8").close()
+        os.makedirs(os.path.join(tmp, "vanilla"), exist_ok=True)
+        path = os.path.join(tmp, "vanilla", "vanilla_known_bugs.md")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(self.DOC if doc is None else doc)
+        _vanilla_bug_cache.clear()
+        return load_vanilla_bug_registry(path)
+
+    def _entries(self):
+        return [
+            LogEntry("18:21:24", "pdx_assert.cpp:641", "Assertion failed: Trying to reposition a dead formation"),
+            LogEntry("18:21:29", "pdx_assert.cpp:641",
+                     "Assertion failed: Trying to remove occupation data without returning the occupied provinces"),
+            LogEntry("18:21:30", "pdx_assert.cpp:641", "Assertion failed: something new"),
+        ]
+
+    def test_a_watch_entry_tags_with_its_check(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, by_basename, by_source, warnings = self._load(tmp)
+            self.assertEqual(warnings, [])
+            watch = [r for r in refs if r.kind == WATCH_KIND]
+            self.assertEqual([r.title for r in watch], ["occupation data removed with a state"])
+            # The path named in the check is advice, not an anchor.
+            self.assertEqual(watch[0].file_basenames, [])
+            entries = self._entries()
+            tag_vanilla_bugs(entries, by_basename, by_source)
+            self.assertEqual(entries[0].vanilla_bug_ref["kind"], "vanilla_noise")
+            self.assertEqual(entries[1].vanilla_bug_ref["kind"], WATCH_KIND)
+            self.assertIn("read the same second", entries[1].vanilla_bug_ref["check"])
+            self.assertIsNone(entries[2].vanilla_bug_ref)
+
+    def test_hide_keeps_a_watched_line_and_only_leaves_it_out(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, by_basename, by_source, _ = self._load(tmp)
+            entries = self._entries()
+            tag_vanilla_bugs(entries, by_basename, by_source)
+            hidden = apply_known_noise_modes(entries, "hide", "hide")
+            self.assertEqual([e.time for e in hidden], ["18:21:29", "18:21:30"])
+            only = apply_known_noise_modes(entries, "only", "show")
+            self.assertEqual([e.time for e in only], ["18:21:24"])
+            self.assertEqual(len(apply_known_noise_modes(entries, "show", "show")), 3)
+
+    def test_a_watch_entry_needs_a_check(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            doc = self.DOC.replace(
+                "- check: read the same second for a mod effect in `common/scripted_effects/te_x.txt`\n", "")
+            _, _, _, warnings = self._load(tmp, doc)
+            self.assertTrue(any("no `- check:` line" in w for w in warnings), warnings)
+
+    def test_mod_noise_modes_are_unchanged(self):
+        e = LogEntry("00:00:01", "x.cpp:1", "tracked")
+        e.vanilla_bug_ref = {"title": "t", "kind": "mod_low_priority"}
+        plain = LogEntry("00:00:02", "x.cpp:1", "new")
+        self.assertEqual(apply_known_noise_modes([e, plain], "hide", "show"), [e, plain])
+        self.assertEqual(apply_known_noise_modes([e, plain], "hide", "hide"), [plain])
+        self.assertEqual(apply_known_noise_modes([e, plain], "show", "only"), [e])
+
+    def test_the_live_watch_list_parses(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        _vanilla_bug_cache.clear()
+        refs, _, _, warnings = load_vanilla_bug_registry(
+            os.path.join(root, "docs", "vanilla", "vanilla_known_bugs.md"))
+        watch = [r for r in refs if r.kind == WATCH_KIND]
+        self.assertGreaterEqual(len(watch), 3)
+        for ref in watch:
+            self.assertTrue(ref.check, ref.title)
+            self.assertTrue(ref.signatures, ref.title)
+        self.assertFalse([w for w in warnings if "watch list" in w], warnings)
 
 
 if __name__ == "__main__":

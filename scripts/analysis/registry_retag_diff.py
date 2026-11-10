@@ -89,14 +89,16 @@ def load_corpus(path: str) -> list[dict]:
 def tag(rows: list[dict], docs_root: str, mod_root: str) -> list[dict | None]:
     """Each row's `vanilla_bug_ref` under the registries in `docs_root`
     (a directory holding docs/vanilla/... and docs/audits/...), as /logs
-    tags them."""
+    tags them. A watch-list entry hides nothing, so its lines count as
+    untagged here."""
     glr._vanilla_bug_cache.clear()
     _, vb, vs, _ = glr.load_vanilla_bug_registry(os.path.join(docs_root, VANILLA_DOC))
     _, mb, ms, _ = glr.load_mod_noise_registry(os.path.join(docs_root, MOD_NOISE_DOC))
     entries = [glr.LogEntry("00:00:00", r["source"], r["message"]) for r in rows]
     glr.tag_vanilla_bugs(entries, vb, vs, mod_root=mod_root)
     glr.tag_vanilla_bugs(entries, mb, ms, mod_root=mod_root)
-    return [e.vanilla_bug_ref for e in entries]
+    return [None if (e.vanilla_bug_ref or {}).get("kind") == glr.WATCH_KIND else e.vanilla_bug_ref
+            for e in entries]
 
 
 def export_registries(ref: str, out_root: str) -> None:
