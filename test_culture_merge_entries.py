@@ -737,9 +737,11 @@ class ButtonTest(unittest.TestCase):
             body = squash(block(on_actions, name))
             if name.startswith("on_"):
                 self.assertIn("on_actions = {", body, name)  # a hook: the rule is tested by the action it calls
-            elif name == "te_cm_fervor_on_action":
+            elif name in ("te_cm_fervor_on_action", "te_cm_strip_on_action"):
                 # R41: the fervor copy serves pops that already switched, which stay switched with the rule off, so it
-                # runs either way (as the Russification outcome does); test_culture_merge_fervor pins its body.
+                # runs either way (as the Russification outcome does); test_culture_merge_fervor pins its body. The
+                # strip of a never-begun merge's culture (2026-11-09) undoes what a formable's definition adds, and
+                # the definitions list the merged cultures whatever the rule says.
                 self.assertNotIn("te_cm_system_enabled", body, name)
             else:
                 self.assertIn("te_cm_system_enabled = yes", body, name)

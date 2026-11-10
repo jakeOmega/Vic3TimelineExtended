@@ -71,6 +71,16 @@ GENERATED_RESTATEMENTS = {
         "vanilla's; the Spain and Portugal two-party term, French legitimism and the antebellum "
         "Northern and Southern interests are vanilla's"
     ),
+    "common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt": (
+        "gen_culture_merges restates vanilla's has_indian_primary_culture, a plain list of cultures, with every "
+        "culture a listed part can become added to it (test_culture_merge_primary_reads holds the copy to vanilla's "
+        "list and to successors_of)"
+    ),
+    "common/government_types/zz_te_culture_merge_government_types.txt": (
+        "gen_culture_merges restates eleven vanilla government types (the Kaiser family, the American forms) with the "
+        "merged culture added beside the cultures vanilla names, so the ruler keeps the title; "
+        "test_culture_merge_primary_reads holds each copy to vanilla's text plus that one line"
+    ),
     "common/scripted_effects/extra_law_consistency_generated.txt": (
         "gen_law_consistency restates the conditions vanilla's own laws carry (Manorialism and "
         "Organic Regulation test Romanian); widening the copy would make its walk disagree with the "

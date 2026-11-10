@@ -139,10 +139,12 @@ class CopyTest(unittest.TestCase):
     def test_the_global_monthly_pulse_runs_the_copy_outside_the_rule_gate(self):
         text = text_of(ON_ACTIONS)
         self.assertEqual(squash(block(text, "on_monthly_pulse")), "on_actions = { te_cm_fervor_on_action }")
-        # The self-check reads last month's copy before this month's overwrites it; nothing else, and no rule gate.
+        # The self-check reads last month's copy before this month's overwrites it. No rule gate. The same pulse carries
+        # the tradition carry-over and the definitions' self-check (2026-11-09; test_culture_merge_primary_reads.py).
         self.assertEqual(
             squash(block(text, "te_cm_fervor_on_action")),
-            "effect = { te_cm_chk_fervor_monthly = yes te_cmg_copy_fervor_all = yes }",
+            "effect = { te_cm_chk_fervor_monthly = yes te_cmg_copy_fervor_all = yes te_cmg_carry_traditions = yes "
+            "te_cm_chk_definition_inject = yes }",
         )
         # Once a month for the world, so no lock: the country pulse keeps only the rule's upkeep.
         self.assertEqual(

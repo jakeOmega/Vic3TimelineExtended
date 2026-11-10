@@ -14562,8 +14562,9 @@ te_cmg_dominance_all = {
 }
 
 # Country scope. Run monthly (on_monthly_pulse_country, behind the rule) and by te_cmg_formed_country: for every
-# culture that has switched, the result becomes a primary culture where the part is one, and pops of the part that
-# came back convert (te_cm_monthly_switched_culture). One variable check per culture while nothing has switched.
+# culture that has switched, the culture its people ended up in becomes a primary culture where the part is one, pops
+# of the part that came back convert, and the part leaves the primary cultures once nothing is tied to it
+# (te_cm_monthly_switched_culture). One variable check per culture while nothing has switched.
 te_cmg_monthly_country = {
 	if = {
 		limit = { has_global_variable = te_cm_switched_north_german }
@@ -15045,6 +15046,1080 @@ te_cmg_monthly_country = {
 		limit = { has_global_variable = te_cm_switched_kikuyu }
 		te_cm_monthly_switched_culture = { CULTURE = kikuyu }
 	}
+}
+
+# Any scope; scope:te_cm_switched_result = the culture a part switched into. Follows the chain to the culture
+# its people are in now: North Italian switched into cm_italian, and cm_italian into cm_latin, so the answer is
+# cm_latin. The lowest result first, so one pass reaches the end. Without it the monthly upkeep would give a
+# country cm_italian back each month after removing it.
+te_cmg_resolve_switched_result = {
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_filipino
+			scope:te_cm_switched_result ?= cu:filipino
+		}
+		global_var:te_cm_switched_filipino = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_indonesian
+			scope:te_cm_switched_result ?= cu:cm_indonesian
+		}
+		global_var:te_cm_switched_cm_indonesian = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_oghuz_turkic
+			scope:te_cm_switched_result ?= cu:cm_oghuz_turkic
+		}
+		global_var:te_cm_switched_cm_oghuz_turkic = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_yugoslav
+			scope:te_cm_switched_result ?= cu:cm_yugoslav
+		}
+		global_var:te_cm_switched_cm_yugoslav = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_czechoslovak
+			scope:te_cm_switched_result ?= cu:cm_czechoslovak
+		}
+		global_var:te_cm_switched_cm_czechoslovak = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_east_slavic
+			scope:te_cm_switched_result ?= cu:cm_east_slavic
+		}
+		global_var:te_cm_switched_cm_east_slavic = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_platine
+			scope:te_cm_switched_result ?= cu:cm_platine
+		}
+		global_var:te_cm_switched_cm_platine = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_italian
+			scope:te_cm_switched_result ?= cu:cm_italian
+		}
+		global_var:te_cm_switched_cm_italian = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_french
+			scope:te_cm_switched_result ?= cu:french
+		}
+		global_var:te_cm_switched_french = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_cm_american
+			scope:te_cm_switched_result ?= cu:cm_american
+		}
+		global_var:te_cm_switched_cm_american = { save_temporary_scope_as = te_cm_switched_result }
+	}
+	if = {
+		limit = {
+			has_global_variable = te_cm_switched_british
+			scope:te_cm_switched_result ?= cu:british
+		}
+		global_var:te_cm_switched_british = { save_temporary_scope_as = te_cm_switched_result }
+	}
+}
+
+# Country scope. Monthly and on formation, with no rule gate (te_cm_strip_on_action). A formable's definition lists
+# the merged cultures beside their parts, so that a country whose parts are gone can still form it, and forming a
+# tag adds every culture its definition lists. So a country can be handed a merged culture it has no claim to, and
+# it is taken off again here, unless it is the country's only primary culture:
+#   - the merge never began (te_cmg_<m>_untouched): the culture has no people anywhere;
+#   - or the merge did begin, but this country is not its starter, has never converted for it (te_cm_converted_<m>,
+#     set where te_cm_convert_part gives the culture: R34), has no pops of the culture, and has none of the switched
+#     cultures that end in it as a primary culture (Romania, formed while France runs the Latin merge and Romanian
+#     has not joined: review, 2026-11-09). The last test is the monthly upkeep's own reason to give the culture, so
+#     the two never undo each other; once that part has left, a culture with no people here goes too.
+# te_cm_chk_strip_verify and te_cm_chk_strip are the TEMPORARY self-check cm_untouched_stripped: the verdict on the
+# country's next pass, before anything is taken off again.
+te_cmg_strip_untouched_results = {
+	te_cm_chk_strip_verify = yes
+	if = {
+		limit = {
+			exists = cu:cm_german
+			country_has_primary_culture = cu:cm_german
+			OR = {
+				te_cmg_german_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_german
+					has_variable = te_cm_converted_german
+					culture_percent_country = { target = cu:cm_german value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_north_german
+						country_has_primary_culture = cu:north_german
+					}
+					AND = {
+						has_global_variable = te_cm_switched_south_german
+						country_has_primary_culture = cu:south_german
+					}
+					AND = {
+						has_global_variable = te_cm_switched_alemannic
+						country_has_primary_culture = cu:alemannic
+					}
+					AND = {
+						has_global_variable = te_cm_switched_east_german
+						country_has_primary_culture = cu:east_german
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_german } }
+		}
+		remove_primary_culture = cu:cm_german
+		te_cm_chk_strip = { CULTURE = cm_german }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_italian
+			country_has_primary_culture = cu:cm_italian
+			OR = {
+				te_cmg_italian_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_italian
+					has_variable = te_cm_converted_italian
+					culture_percent_country = { target = cu:cm_italian value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_north_italian
+						country_has_primary_culture = cu:north_italian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_south_italian
+						country_has_primary_culture = cu:south_italian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_corsican
+						country_has_primary_culture = cu:corsican
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_italian } }
+		}
+		remove_primary_culture = cu:cm_italian
+		te_cm_chk_strip = { CULTURE = cm_italian }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_scandinavian
+			country_has_primary_culture = cu:cm_scandinavian
+			OR = {
+				te_cmg_scandinavian_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_scandinavian
+					has_variable = te_cm_converted_scandinavian
+					culture_percent_country = { target = cu:cm_scandinavian value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_swedish
+						country_has_primary_culture = cu:swedish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_danish
+						country_has_primary_culture = cu:danish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_norwegian
+						country_has_primary_culture = cu:norwegian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_icelandic
+						country_has_primary_culture = cu:icelandic
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_scandinavian } }
+		}
+		remove_primary_culture = cu:cm_scandinavian
+		te_cm_chk_strip = { CULTURE = cm_scandinavian }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_east_slavic
+			country_has_primary_culture = cu:cm_east_slavic
+			OR = {
+				te_cmg_east_slavic_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_east_slavic
+					has_variable = te_cm_converted_east_slavic
+					culture_percent_country = { target = cu:cm_east_slavic value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_russian
+						country_has_primary_culture = cu:russian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_ukrainian
+						country_has_primary_culture = cu:ukrainian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_byelorussian
+						country_has_primary_culture = cu:byelorussian
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_east_slavic } }
+		}
+		remove_primary_culture = cu:cm_east_slavic
+		te_cm_chk_strip = { CULTURE = cm_east_slavic }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_yugoslav
+			country_has_primary_culture = cu:cm_yugoslav
+			OR = {
+				te_cmg_yugoslav_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_yugoslav
+					has_variable = te_cm_converted_yugoslav
+					culture_percent_country = { target = cu:cm_yugoslav value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_serb
+						country_has_primary_culture = cu:serb
+					}
+					AND = {
+						has_global_variable = te_cm_switched_croat
+						country_has_primary_culture = cu:croat
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bosniak
+						country_has_primary_culture = cu:bosniak
+					}
+					AND = {
+						has_global_variable = te_cm_switched_slovene
+						country_has_primary_culture = cu:slovene
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bulgarian
+						country_has_primary_culture = cu:bulgarian
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_yugoslav } }
+		}
+		remove_primary_culture = cu:cm_yugoslav
+		te_cm_chk_strip = { CULTURE = cm_yugoslav }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_czechoslovak
+			country_has_primary_culture = cu:cm_czechoslovak
+			OR = {
+				te_cmg_czechoslovak_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_czechoslovak
+					has_variable = te_cm_converted_czechoslovak
+					culture_percent_country = { target = cu:cm_czechoslovak value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_czech
+						country_has_primary_culture = cu:czech
+					}
+					AND = {
+						has_global_variable = te_cm_switched_slovak
+						country_has_primary_culture = cu:slovak
+					}
+					AND = {
+						has_global_variable = te_cm_switched_sorb
+						country_has_primary_culture = cu:sorb
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_czechoslovak } }
+		}
+		remove_primary_culture = cu:cm_czechoslovak
+		te_cm_chk_strip = { CULTURE = cm_czechoslovak }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_american
+			country_has_primary_culture = cu:cm_american
+			OR = {
+				te_cmg_american_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_american
+					has_variable = te_cm_converted_american
+					culture_percent_country = { target = cu:cm_american value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_yankee
+						country_has_primary_culture = cu:yankee
+					}
+					AND = {
+						has_global_variable = te_cm_switched_dixie
+						country_has_primary_culture = cu:dixie
+					}
+					AND = {
+						has_global_variable = te_cm_switched_afro_american
+						country_has_primary_culture = cu:afro_american
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_american } }
+		}
+		remove_primary_culture = cu:cm_american
+		te_cm_chk_strip = { CULTURE = cm_american }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_anglophone
+			country_has_primary_culture = cu:cm_anglophone
+			OR = {
+				te_cmg_anglophone_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_anglophone
+					has_variable = te_cm_converted_anglophone
+					culture_percent_country = { target = cu:cm_anglophone value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_british
+						country_has_primary_culture = cu:british
+					}
+					AND = {
+						has_global_variable = te_cm_switched_yankee
+						country_has_primary_culture = cu:yankee
+					}
+					AND = {
+						has_global_variable = te_cm_switched_cm_american
+						country_has_primary_culture = cu:cm_american
+					}
+					AND = {
+						has_global_variable = te_cm_switched_anglo_canadian
+						country_has_primary_culture = cu:anglo_canadian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_australian
+						country_has_primary_culture = cu:australian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_scottish
+						country_has_primary_culture = cu:scottish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_dixie
+						country_has_primary_culture = cu:dixie
+					}
+					AND = {
+						has_global_variable = te_cm_switched_afro_american
+						country_has_primary_culture = cu:afro_american
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_anglophone } }
+		}
+		remove_primary_culture = cu:cm_anglophone
+		te_cm_chk_strip = { CULTURE = cm_anglophone }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_platine
+			country_has_primary_culture = cu:cm_platine
+			OR = {
+				te_cmg_platine_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_platine
+					has_variable = te_cm_converted_platine
+					culture_percent_country = { target = cu:cm_platine value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_platinean
+						country_has_primary_culture = cu:platinean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_argentine
+						country_has_primary_culture = cu:argentine
+					}
+					AND = {
+						has_global_variable = te_cm_switched_uruguayan
+						country_has_primary_culture = cu:uruguayan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_paraguayan
+						country_has_primary_culture = cu:paraguayan
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_platine } }
+		}
+		remove_primary_culture = cu:cm_platine
+		te_cm_chk_strip = { CULTURE = cm_platine }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_andean
+			country_has_primary_culture = cu:cm_andean
+			OR = {
+				te_cmg_andean_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_andean
+					has_variable = te_cm_converted_andean
+					culture_percent_country = { target = cu:cm_andean value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_north_andean
+						country_has_primary_culture = cu:north_andean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_south_andean
+						country_has_primary_culture = cu:south_andean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_peruvian
+						country_has_primary_culture = cu:peruvian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bolivian
+						country_has_primary_culture = cu:bolivian
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_andean } }
+		}
+		remove_primary_culture = cu:cm_andean
+		te_cm_chk_strip = { CULTURE = cm_andean }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_gran_colombian
+			country_has_primary_culture = cu:cm_gran_colombian
+			OR = {
+				te_cmg_gran_colombian_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_gran_colombian
+					has_variable = te_cm_converted_gran_colombian
+					culture_percent_country = { target = cu:cm_gran_colombian value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_colombian
+						country_has_primary_culture = cu:colombian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_venezuelan
+						country_has_primary_culture = cu:venezuelan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_ecuadorian
+						country_has_primary_culture = cu:ecuadorian
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_gran_colombian } }
+		}
+		remove_primary_culture = cu:cm_gran_colombian
+		te_cm_chk_strip = { CULTURE = cm_gran_colombian }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_arab
+			country_has_primary_culture = cu:cm_arab
+			OR = {
+				te_cmg_arab_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_arab
+					has_variable = te_cm_converted_arab
+					culture_percent_country = { target = cu:cm_arab value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_maghrebi
+						country_has_primary_culture = cu:maghrebi
+					}
+					AND = {
+						has_global_variable = te_cm_switched_misri
+						country_has_primary_culture = cu:misri
+					}
+					AND = {
+						has_global_variable = te_cm_switched_mashriqi
+						country_has_primary_culture = cu:mashriqi
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bedouin
+						country_has_primary_culture = cu:bedouin
+					}
+					AND = {
+						has_global_variable = te_cm_switched_yemenite
+						country_has_primary_culture = cu:yemenite
+					}
+					AND = {
+						has_global_variable = te_cm_switched_sudanese
+						country_has_primary_culture = cu:sudanese
+					}
+					AND = {
+						has_global_variable = te_cm_switched_haratin
+						country_has_primary_culture = cu:haratin
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bidan
+						country_has_primary_culture = cu:bidan
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_arab } }
+		}
+		remove_primary_culture = cu:cm_arab
+		te_cm_chk_strip = { CULTURE = cm_arab }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_oghuz_turkic
+			country_has_primary_culture = cu:cm_oghuz_turkic
+			OR = {
+				te_cmg_oghuz_turkic_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_oghuz_turkic
+					has_variable = te_cm_converted_oghuz_turkic
+					culture_percent_country = { target = cu:cm_oghuz_turkic value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_turkish
+						country_has_primary_culture = cu:turkish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_azerbaijani
+						country_has_primary_culture = cu:azerbaijani
+					}
+					AND = {
+						has_global_variable = te_cm_switched_turkmen
+						country_has_primary_culture = cu:turkmen
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_oghuz_turkic } }
+		}
+		remove_primary_culture = cu:cm_oghuz_turkic
+		te_cm_chk_strip = { CULTURE = cm_oghuz_turkic }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_dravidian
+			country_has_primary_culture = cu:cm_dravidian
+			OR = {
+				te_cmg_dravidian_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_dravidian
+					has_variable = te_cm_converted_dravidian
+					culture_percent_country = { target = cu:cm_dravidian value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_tamil
+						country_has_primary_culture = cu:tamil
+					}
+					AND = {
+						has_global_variable = te_cm_switched_kannada
+						country_has_primary_culture = cu:kannada
+					}
+					AND = {
+						has_global_variable = te_cm_switched_malayalam
+						country_has_primary_culture = cu:malayalam
+					}
+					AND = {
+						has_global_variable = te_cm_switched_telegu
+						country_has_primary_culture = cu:telegu
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_dravidian } }
+		}
+		remove_primary_culture = cu:cm_dravidian
+		te_cm_chk_strip = { CULTURE = cm_dravidian }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_indonesian
+			country_has_primary_culture = cu:cm_indonesian
+			OR = {
+				te_cmg_indonesian_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_indonesian
+					has_variable = te_cm_converted_indonesian
+					culture_percent_country = { target = cu:cm_indonesian value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_javan
+						country_has_primary_culture = cu:javan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_malay
+						country_has_primary_culture = cu:malay
+					}
+					AND = {
+						has_global_variable = te_cm_switched_sumatran
+						country_has_primary_culture = cu:sumatran
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bornean
+						country_has_primary_culture = cu:bornean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_balinese
+						country_has_primary_culture = cu:balinese
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_indonesian } }
+		}
+		remove_primary_culture = cu:cm_indonesian
+		te_cm_chk_strip = { CULTURE = cm_indonesian }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_nguni
+			country_has_primary_culture = cu:cm_nguni
+			OR = {
+				te_cmg_nguni_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_nguni
+					has_variable = te_cm_converted_nguni
+					culture_percent_country = { target = cu:cm_nguni value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_nguni
+						country_has_primary_culture = cu:nguni
+					}
+					AND = {
+						has_global_variable = te_cm_switched_zulu
+						country_has_primary_culture = cu:zulu
+					}
+					AND = {
+						has_global_variable = te_cm_switched_xhosa
+						country_has_primary_culture = cu:xhosa
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_nguni } }
+		}
+		remove_primary_culture = cu:cm_nguni
+		te_cm_chk_strip = { CULTURE = cm_nguni }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_latin
+			country_has_primary_culture = cu:cm_latin
+			OR = {
+				te_cmg_latin_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_latin
+					has_variable = te_cm_converted_latin
+					culture_percent_country = { target = cu:cm_latin value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_french
+						country_has_primary_culture = cu:french
+					}
+					AND = {
+						has_global_variable = te_cm_switched_cm_italian
+						country_has_primary_culture = cu:cm_italian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_spanish
+						country_has_primary_culture = cu:spanish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_portuguese
+						country_has_primary_culture = cu:portuguese
+					}
+					AND = {
+						has_global_variable = te_cm_switched_romanian
+						country_has_primary_culture = cu:romanian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_platinean
+						country_has_primary_culture = cu:platinean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_cm_platine
+						country_has_primary_culture = cu:cm_platine
+					}
+					AND = {
+						has_global_variable = te_cm_switched_argentine
+						country_has_primary_culture = cu:argentine
+					}
+					AND = {
+						has_global_variable = te_cm_switched_uruguayan
+						country_has_primary_culture = cu:uruguayan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_chilean
+						country_has_primary_culture = cu:chilean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_occitan
+						country_has_primary_culture = cu:occitan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_wallonian
+						country_has_primary_culture = cu:wallonian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_catalan
+						country_has_primary_culture = cu:catalan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_north_italian
+						country_has_primary_culture = cu:north_italian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_south_italian
+						country_has_primary_culture = cu:south_italian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_corsican
+						country_has_primary_culture = cu:corsican
+					}
+					AND = {
+						has_global_variable = te_cm_switched_paraguayan
+						country_has_primary_culture = cu:paraguayan
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_latin } }
+		}
+		remove_primary_culture = cu:cm_latin
+		te_cm_chk_strip = { CULTURE = cm_latin }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_pan_slavic
+			country_has_primary_culture = cu:cm_pan_slavic
+			OR = {
+				te_cmg_pan_slavic_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_pan_slavic
+					has_variable = te_cm_converted_pan_slavic
+					culture_percent_country = { target = cu:cm_pan_slavic value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_cm_east_slavic
+						country_has_primary_culture = cu:cm_east_slavic
+					}
+					AND = {
+						has_global_variable = te_cm_switched_cm_czechoslovak
+						country_has_primary_culture = cu:cm_czechoslovak
+					}
+					AND = {
+						has_global_variable = te_cm_switched_cm_yugoslav
+						country_has_primary_culture = cu:cm_yugoslav
+					}
+					AND = {
+						has_global_variable = te_cm_switched_polish
+						country_has_primary_culture = cu:polish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_slovene
+						country_has_primary_culture = cu:slovene
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bulgarian
+						country_has_primary_culture = cu:bulgarian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_russian
+						country_has_primary_culture = cu:russian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_ukrainian
+						country_has_primary_culture = cu:ukrainian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_byelorussian
+						country_has_primary_culture = cu:byelorussian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_czech
+						country_has_primary_culture = cu:czech
+					}
+					AND = {
+						has_global_variable = te_cm_switched_slovak
+						country_has_primary_culture = cu:slovak
+					}
+					AND = {
+						has_global_variable = te_cm_switched_sorb
+						country_has_primary_culture = cu:sorb
+					}
+					AND = {
+						has_global_variable = te_cm_switched_serb
+						country_has_primary_culture = cu:serb
+					}
+					AND = {
+						has_global_variable = te_cm_switched_croat
+						country_has_primary_culture = cu:croat
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bosniak
+						country_has_primary_culture = cu:bosniak
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_pan_slavic } }
+		}
+		remove_primary_culture = cu:cm_pan_slavic
+		te_cm_chk_strip = { CULTURE = cm_pan_slavic }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_pan_turkic
+			country_has_primary_culture = cu:cm_pan_turkic
+			OR = {
+				te_cmg_pan_turkic_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_pan_turkic
+					has_variable = te_cm_converted_pan_turkic
+					culture_percent_country = { target = cu:cm_pan_turkic value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_cm_oghuz_turkic
+						country_has_primary_culture = cu:cm_oghuz_turkic
+					}
+					AND = {
+						has_global_variable = te_cm_switched_uzbek
+						country_has_primary_culture = cu:uzbek
+					}
+					AND = {
+						has_global_variable = te_cm_switched_kazak
+						country_has_primary_culture = cu:kazak
+					}
+					AND = {
+						has_global_variable = te_cm_switched_tatar
+						country_has_primary_culture = cu:tatar
+					}
+					AND = {
+						has_global_variable = te_cm_switched_kirgiz
+						country_has_primary_culture = cu:kirgiz
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bashkir
+						country_has_primary_culture = cu:bashkir
+					}
+					AND = {
+						has_global_variable = te_cm_switched_crimean_tatar
+						country_has_primary_culture = cu:crimean_tatar
+					}
+					AND = {
+						has_global_variable = te_cm_switched_caucasian_turk
+						country_has_primary_culture = cu:caucasian_turk
+					}
+					AND = {
+						has_global_variable = te_cm_switched_uighur
+						country_has_primary_culture = cu:uighur
+					}
+					AND = {
+						has_global_variable = te_cm_switched_turkish
+						country_has_primary_culture = cu:turkish
+					}
+					AND = {
+						has_global_variable = te_cm_switched_azerbaijani
+						country_has_primary_culture = cu:azerbaijani
+					}
+					AND = {
+						has_global_variable = te_cm_switched_turkmen
+						country_has_primary_culture = cu:turkmen
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_pan_turkic } }
+		}
+		remove_primary_culture = cu:cm_pan_turkic
+		te_cm_chk_strip = { CULTURE = cm_pan_turkic }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_pan_malay
+			country_has_primary_culture = cu:cm_pan_malay
+			OR = {
+				te_cmg_pan_malay_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_pan_malay
+					has_variable = te_cm_converted_pan_malay
+					culture_percent_country = { target = cu:cm_pan_malay value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_cm_indonesian
+						country_has_primary_culture = cu:cm_indonesian
+					}
+					AND = {
+						has_global_variable = te_cm_switched_filipino
+						country_has_primary_culture = cu:filipino
+					}
+					AND = {
+						has_global_variable = te_cm_switched_javan
+						country_has_primary_culture = cu:javan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_malay
+						country_has_primary_culture = cu:malay
+					}
+					AND = {
+						has_global_variable = te_cm_switched_sumatran
+						country_has_primary_culture = cu:sumatran
+					}
+					AND = {
+						has_global_variable = te_cm_switched_bornean
+						country_has_primary_culture = cu:bornean
+					}
+					AND = {
+						has_global_variable = te_cm_switched_balinese
+						country_has_primary_culture = cu:balinese
+					}
+					AND = {
+						has_global_variable = te_cm_switched_visayan
+						country_has_primary_culture = cu:visayan
+					}
+					AND = {
+						has_global_variable = te_cm_switched_tagalog
+						country_has_primary_culture = cu:tagalog
+					}
+					AND = {
+						has_global_variable = te_cm_switched_ilocano
+						country_has_primary_culture = cu:ilocano
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_pan_malay } }
+		}
+		remove_primary_culture = cu:cm_pan_malay
+		te_cm_chk_strip = { CULTURE = cm_pan_malay }
+	}
+	if = {
+		limit = {
+			exists = cu:cm_east_african
+			country_has_primary_culture = cu:cm_east_african
+			OR = {
+				te_cmg_east_african_untouched = yes
+				NOR = {
+					has_variable = te_cm_started_east_african
+					has_variable = te_cm_converted_east_african
+					culture_percent_country = { target = cu:cm_east_african value > 0 }
+					AND = {
+						has_global_variable = te_cm_switched_swahili
+						country_has_primary_culture = cu:swahili
+					}
+					AND = {
+						has_global_variable = te_cm_switched_nyamwezi
+						country_has_primary_culture = cu:nyamwezi
+					}
+					AND = {
+						has_global_variable = te_cm_switched_sukuma
+						country_has_primary_culture = cu:sukuma
+					}
+					AND = {
+						has_global_variable = te_cm_switched_yao
+						country_has_primary_culture = cu:yao
+					}
+					AND = {
+						has_global_variable = te_cm_switched_makua
+						country_has_primary_culture = cu:makua
+					}
+					AND = {
+						has_global_variable = te_cm_switched_lacustrine_bantu
+						country_has_primary_culture = cu:lacustrine_bantu
+					}
+					AND = {
+						has_global_variable = te_cm_switched_kikuyu
+						country_has_primary_culture = cu:kikuyu
+					}
+				}
+			}
+			any_primary_culture = { NOT = { this = cu:cm_east_african } }
+		}
+		remove_primary_culture = cu:cm_east_african
+		te_cm_chk_strip = { CULTURE = cm_east_african }
+	}
+}
+
+# Any scope. Once a month, with no rule gate (te_cm_fervor_on_action): a merged culture takes the traditions of the
+# core parts that have switched into it (owner, 2026-11-09), so the acceptance a part's tradition gave other
+# cultures doesn't end when the part leaves the primary cultures. Not an optional part's, nor the pairs in
+# culture_merges_config.TRADITIONS_NOT_CARRIED. A result that is itself a part passes on what it took. Guarded,
+# so it adds each tradition once; te_cm_chk_traditions is the TEMPORARY self-check cm_tradition_carried.
+te_cmg_carry_traditions = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_russian ?= cu:cm_east_slavic
+			cu:cm_east_slavic = { NOT = { has_discrimination_trait = tradition_russosphere } }
+		}
+		cu:cm_east_slavic = { add_tradition_trait = tradition_russosphere }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_bosniak ?= cu:cm_yugoslav
+			cu:cm_yugoslav = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_yugoslav = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_turkish ?= cu:cm_oghuz_turkic
+			cu:cm_oghuz_turkic = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_oghuz_turkic = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_azerbaijani ?= cu:cm_oghuz_turkic
+			cu:cm_oghuz_turkic = { NOT = { has_discrimination_trait = tradition_caucasian } }
+		}
+		cu:cm_oghuz_turkic = { add_tradition_trait = tradition_caucasian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_azerbaijani ?= cu:cm_oghuz_turkic
+			cu:cm_oghuz_turkic = { NOT = { has_discrimination_trait = tradition_persianate } }
+		}
+		cu:cm_oghuz_turkic = { add_tradition_trait = tradition_persianate }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_east_slavic ?= cu:cm_pan_slavic
+			cu:cm_pan_slavic = { NOT = { has_discrimination_trait = tradition_russosphere } }
+		}
+		cu:cm_pan_slavic = { add_tradition_trait = tradition_russosphere }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_yugoslav ?= cu:cm_pan_slavic
+			cu:cm_pan_slavic = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_pan_slavic = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_oghuz_turkic ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_rumelian } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_rumelian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_oghuz_turkic ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_caucasian } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_caucasian }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_cm_oghuz_turkic ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_persianate } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_persianate }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_uzbek ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_persianate } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_persianate }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_tatar ?= cu:cm_pan_turkic
+			cu:cm_pan_turkic = { NOT = { has_discrimination_trait = tradition_russosphere } }
+		}
+		cu:cm_pan_turkic = { add_tradition_trait = tradition_russosphere }
+		set_local_variable = { name = te_cm_trad_added value = 1 }
+	}
+	te_cm_chk_traditions = yes
 }
 
 # Any scope. Once a month, with no rule gate (te_cm_fervor_on_action, on the global on_monthly_pulse): every culture that has

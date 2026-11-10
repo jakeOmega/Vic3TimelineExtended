@@ -634,10 +634,10 @@ class PrimaryUpkeepTest(unittest.TestCase):
 
     def test_primary_refresh_is_wired(self):
         monthly = squash(block(self.on_actions, "on_monthly_pulse_country"))
-        self.assertEqual(monthly, "on_actions = { te_cm_monthly_on_action }")
+        self.assertEqual(monthly, "on_actions = { te_cm_monthly_on_action te_cm_strip_on_action }")
         self.assertIn("te_cmg_monthly_country = yes", squash(block(self.on_actions, "te_cm_monthly_on_action")))
         formed = squash(block(self.on_actions, "on_country_formed"))
-        self.assertEqual(formed, "on_actions = { te_cm_formed_on_action }")
+        self.assertEqual(formed, "on_actions = { te_cm_formed_on_action te_cm_strip_on_action }")
         self.assertIn("te_cmg_formed_country = yes", squash(block(self.on_actions, "te_cm_formed_on_action")))
 
     def test_the_monthly_and_formation_hooks_pause_with_the_rule(self):
@@ -670,7 +670,24 @@ class PrimaryUpkeepTest(unittest.TestCase):
             "change_pop_culture = { target = scope:te_cm_switched_result value = 1 } } }",
             body,
         )
-        self.assertNotIn("remove_primary_culture", body)  # the parts stay primary cultures for good
+        # The successor is the end of the chain, resolved before anything reads it (2026-11-09).
+        self.assertLess(body.index("te_cmg_resolve_switched_result = yes"), body.index("add_primary_culture"))
+
+    def test_the_monthly_effect_removes_the_part_once_nothing_holds_it(self):
+        # Owner, 2026-11-09, in place of spec 7's "the parts stay primary cultures for good". Never the last primary
+        # culture: the successor must be one. The country's characters of the part follow in the same step.
+        body = squash(block(self.text, "te_cm_monthly_switched_culture"))
+        self.assertIn(
+            "if = { limit = { country_has_primary_culture = cu:$CULTURE$ "
+            "country_has_primary_culture = scope:te_cm_switched_result "
+            "NOT = { te_cmg_part_held_$CULTURE$ = yes } } "
+            "every_scope_character = { limit = { culture = cu:$CULTURE$ } "
+            "change_character_culture = scope:te_cm_switched_result } "
+            "remove_primary_culture = cu:$CULTURE$ ",
+            body,
+        )
+        self.assertEqual(body.count("remove_primary_culture"), 1)
+        self.assertLess(body.index("add_primary_culture"), body.index("remove_primary_culture"))
 
     def test_the_monthly_country_effect_visits_every_switched_culture(self):
         body = squash(block(self.effects, "te_cmg_monthly_country"))
