@@ -2416,37 +2416,90 @@ decolonization_events.17 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option B: Seek international mediation
+	# Option B: Seek international mediation. The mediators may find for either
+	# side, and the stronger country more often gets its way.
 	option = {
 		name = decolonization_events.17.b
 		ai_chance = {
 			base = 3
 		}
-		add_modifier = {
-			name = border_dispute_resolved_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		if = {
-			limit = { exists = scope:border_rival }
-			change_relations = {
-				country = scope:border_rival
-				value = 10
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		random_list = {
+			# They find for us: the claim, without the infamy of pressing it.
+			30 = {
+				modifier = {
+					trigger = {
+						exists = scope:border_rival
+						country_rank > scope:border_rival.country_rank
+					}
+					add = 15
+				}
+				custom_tooltip = decolonization_events.17.b_favor_tt
+				add_modifier = {
+					name = border_dispute_resolved_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				if = {
+					limit = { exists = scope:rival_border_state }
+					scope:rival_border_state = {
+						state_region = { add_claim = root }
+					}
+				}
+				if = {
+					limit = { exists = scope:border_rival }
+					change_relations = {
+						country = scope:border_rival
+						value = -10
+					}
+				}
+				add_loyalists = { value = small_radicals }
+			}
+			# They split the difference.
+			40 = {
+				custom_tooltip = decolonization_events.17.b_split_tt
+				add_modifier = {
+					name = border_dispute_resolved_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				if = {
+					limit = { exists = scope:border_rival }
+					change_relations = {
+						country = scope:border_rival
+						value = 10
+					}
+				}
+				add_loyalists = { value = small_radicals }
+			}
+			# They find for the neighbour, who now holds a claim on our land.
+			30 = {
+				modifier = {
+					trigger = {
+						exists = scope:border_rival
+						country_rank < scope:border_rival.country_rank
+					}
+					add = 15
+				}
+				custom_tooltip = decolonization_events.17.b_against_tt
+				if = {
+					limit = { exists = scope:border_rival }
+					scope:disputed_state = {
+						state_region = { add_claim = scope:border_rival }
+					}
+				}
+				add_radicals = { value = small_radicals }
+				ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 			}
 		}
-		add_loyalists = { value = small_radicals }
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
-	# Option C: Accept the borders and build from within
+	# Option C: Accept the borders and build from within. The price is paid now;
+	# the settlement's rewards come only if the neighbour takes the truce
+	# (decolonization_events.63).
 	option = {
 		name = decolonization_events.17.c
 		ai_chance = { base = 3 }
-		add_modifier = {
-			name = border_dispute_resolved_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
 		if = {
 			limit = { exists = scope:border_rival }
 			change_relations = {
@@ -2461,10 +2514,8 @@ decolonization_events.17 = {
 				trigger_event = { id = decolonization_events.63 days = 3 }
 			}
 		}
-		add_loyalists = { value = medium_radicals }
 		# Nationalists see this as capitulation
 		add_radicals = { value = small_radicals strata = lower }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
@@ -4150,7 +4201,7 @@ decolonization_events.63 = {
 		name = decolonization_events.63.a
 		default_option = yes
 		ai_chance = {
-			base = 4
+			base = 3
 			modifier = {
 				trigger = {
 					scope:truce_proposer = { relations:root >= relations_threshold:cordial }
@@ -4162,8 +4213,16 @@ decolonization_events.63 = {
 			country = scope:truce_proposer
 			months = 60
 		}
+		# The proposer's settlement pays off only here.
 		scope:truce_proposer = {
 			post_notification = decol_truce_proposal_accepted_notice
+			add_modifier = {
+				name = border_dispute_resolved_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			add_loyalists = { value = medium_radicals }
+			ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -4177,13 +4236,21 @@ decolonization_events.63 = {
 				trigger = { has_modifier = border_dispute_active_modifier }
 				add = 4
 			}
+			modifier = {
+				trigger = {
+					scope:truce_proposer = { relations:root <= relations_threshold:poor }
+				}
+				add = 1
+			}
 		}
 		change_relations = {
 			country = scope:truce_proposer
 			value = -10
 		}
+		# The proposer gave ground and has nothing to show for it.
 		scope:truce_proposer = {
 			post_notification = decol_truce_proposal_declined_notice
+			add_radicals = { value = small_radicals }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
