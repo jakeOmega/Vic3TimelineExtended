@@ -165,7 +165,13 @@ re_quantum_subsidy = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_electronic_components_and_semiconductor_industry_throughput_add = 0.08
 	building_advanced_material_fabricator_throughput_add = 0.08
-	country_government_wages_mult = 0.03
+}
+# The subsidy's weekly bill, applied beside re_quantum_subsidy with
+# multiplier = sv_money_flow_event_tiny, so it holds no other field.
+re_quantum_subsidy_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_energy_industry_add = 1
 }
 re_quantum_patent_pool = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -182,8 +188,14 @@ re_quantum_rationing = {
 # ======= Space-based solar power
 re_sbsp_reserves = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_government_wages_mult = 0.05
 	country_sol_expectations_shift_min_add = 0.25
+}
+# What the reserve power costs each week, applied beside re_sbsp_reserves
+# with multiplier = sv_money_flow_event_modest, so it holds no other field.
+re_sbsp_reserves_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_energy_industry_add = 1
 }
 re_sbsp_blackouts = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
@@ -232,6 +244,10 @@ ste_women_workforce_blocked = {
 	country_legitimacy_base_add = 5
 	country_tech_research_speed_mult = -0.03
 }
+# The wage line is meant literally: the state is an employer too, and equal
+# pay raises what it pays its own staff. A cost that is not pay is a
+# country_expenses_add modifier (scripting_best_practices.md § "A Treasury
+# Cost Is `country_expenses_add`").
 ste_equal_pay_reform = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_loyalists_from_legitimacy_mult = 0.05
@@ -342,6 +358,8 @@ ste_outsourcing_protect = {
 	country_sol_expectations_shift_min_add = 0.5
 	country_sol_expectations_lower_offset_add = 0.25
 }
+# The wage line is meant literally, as in ste_equal_pay_reform: the labor
+# standards conceded bind the state as an employer.
 ste_antiglobal_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_loyalists_from_legitimacy_mult = 0.05
@@ -471,7 +489,13 @@ ste_space_colony_national = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.10
 	country_tech_research_speed_mult = 0.05
-	country_government_wages_mult = 0.03
+}
+# The colony's weekly upkeep, applied beside ste_space_colony_national with
+# multiplier = sv_money_flow_event_tiny, so it holds no other field.
+ste_space_colony_national_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_space_add = 1
 }
 ste_space_colony_international = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
@@ -532,8 +556,14 @@ ste_reactor_leak_shutdown = {
 }
 ste_meltdown_evacuate = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_government_wages_mult = 0.05
 	goods_output_electricity_mult = -0.15
+}
+# The evacuation's weekly bill, applied beside ste_meltdown_evacuate with
+# multiplier = sv_money_flow_event_modest, so it holds no other field.
+ste_meltdown_evacuate_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_nuclear_taboo_add = 1
 }
 ste_meltdown_contain = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
@@ -720,9 +750,16 @@ ste_reactor_leak_audit = {
 ste_meltdown_institutional_response = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	goods_output_electricity_mult = -0.05
-	country_government_wages_mult = 0.03
 	country_legitimacy_base_add = -5
 	country_sol_expectation_adaptation_rate_mult = 0.1
+}
+# The ministry's weekly bill, applied beside
+# ste_meltdown_institutional_response with
+# multiplier = sv_money_flow_event_tiny, so it holds no other field.
+ste_meltdown_institutional_response_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_nuclear_taboo_add = 1
 }
 
 # AV - ministry-led safety investigation (balanced resolution)
@@ -868,8 +905,14 @@ we_sc_surplus_export = {
 }
 we_sc_postscarcity_subsidize = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_government_wages_mult = 0.05
 	country_loyalists_from_legitimacy_mult = 0.1
+}
+# The subsidy's weekly bill, applied beside we_sc_postscarcity_subsidize
+# with multiplier = sv_money_flow_event_modest, so it holds no other field.
+we_sc_postscarcity_subsidize_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_energy_industry_add = 1
 }
 we_sc_postscarcity_research = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds

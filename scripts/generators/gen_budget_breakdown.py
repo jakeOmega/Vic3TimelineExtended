@@ -46,12 +46,16 @@ SOURCES = {
             "te_seabed_holding_fee_modifier",
         )),
         "nuclear": ("Nuclear Program", ("nd_upkeep_cost", "nd_exercise_cost")),
-        "nuclear_taboo": ("Nuclear Civil Defense", ("nd_taboo_civil_defence",)),
+        # The two meltdown bills (society_technology_events.23) are civil
+        # defense against a reactor rather than a warhead.
+        "nuclear_taboo": ("Nuclear Civil Defense", (
+            "nd_taboo_civil_defence", "ste_meltdown_evacuate_cost", "ste_meltdown_institutional_response_cost",
+        )),
         # The Antarctic research station needs Space Exploration; its upkeep
         # is listed with the space programmes rather than in a category of
         # its own (a new category needs a pie colour model and regenerates
         # the charts).
-        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep")),
+        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep", "ste_space_colony_national_cost")),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
         "family": ("Family Policy", (
             "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing_cost", "te_demog_ms_parental_leave_cost",
@@ -60,6 +64,10 @@ SOURCES = {
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
         "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
         "climate": ("Climate Policy", ("renewable_investment_cost_modifier", "aerosol_injection_cost_modifier")),
+        # Event programs that pay for power or for an industry's output.
+        "energy_industry": ("Energy and Industry Programs", (
+            "re_quantum_subsidy_cost", "re_sbsp_reserves_cost", "we_sc_postscarcity_subsidize_cost",
+        )),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),

@@ -1711,6 +1711,12 @@ society_technology_events.18 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_space_colony_national_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_tiny
+		}
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
@@ -2151,6 +2157,12 @@ society_technology_events.23 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_meltdown_evacuate_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_modest
+		}
 		add_radicals = { value = large_radicals strata = lower }
 		add_radicals = { value = medium_radicals strata = upper }
 	}
@@ -2184,6 +2196,12 @@ society_technology_events.23 = {
 			name = ste_meltdown_institutional_response
 			days = long_modifier_time
 			is_decaying = yes
+		}
+		add_modifier = {
+			name = ste_meltdown_institutional_response_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_tiny
 		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals pop_type = academics }

@@ -569,6 +569,12 @@ wonder_events.13 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = we_sc_postscarcity_subsidize_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_modest
+		}
 		add_loyalists = { value = medium_radicals strata = lower }
 	}
 
