@@ -14,14 +14,20 @@ What the game shows of a command (verified on 2026-11-10):
     command is typed first, and only if it does not arrive is the key pressed.
   * Each command entered is added to `console_history.txt` at once. That is
     its *arrival*: the file changes and the text is among the lines it gained.
-    Whether the history also writes a command it already holds is not known yet
-    (the harness's first live run settles it), so for a text it already holds, a
-    short wait that sees no change is "cannot tell", and the log answers.
+    But (verified live on 2026-11-10) the file does not gain a line when the
+    same command is entered twice running. So for a text the history already
+    holds, a short wait that sees no change is "cannot tell", and the proof
+    that it arrived has to come from the log: the log proof for repeats is
+    required, not optional. (Whether a repeat that is not the last entry is
+    written is not known; the code needs no answer to that.)
   * `debug.log` gets `Running console command:` and one `console_success:` or
     `console_failure:` line per reply line, but block-buffered: they are not in
     the file until about 4 KB more has been logged. `help ndefines.ngui` prints
     about 500 lines, so typing it after a command pushes the command's lines
     out (the flush's own `Running console command:` line comes out with them).
+    A debugger trigger evaluation floods `debug.log` across several of its
+    generations (verified live on 2026-11-10), so lines can be lost while a
+    reply is awaited: `logtail` marks the loss and `run` raises `log_gap`.
   * A game stalled by a heavy pulse takes keys seconds late, in order. Giving up
     on a typing and typing again would run the command twice, and pressing the
     console key would close a console that was open all along. So the waits
@@ -51,9 +57,11 @@ PERSON_IDLE_MS, FOREGROUND_WAIT_S = 30_000, 120.0
 
 UNRESPONSIVE_S = 10.0           # a window that does not respond this long is a game that is gone
 ARRIVAL_S = 5.0                 # how long a command gets to show up in the history
-PROBE_ARRIVAL_S = 3.0           # the same for the probe that asks whether the console is open
+PROBE_ARRIVAL_S = 6.0           # the same for the probe that asks whether the console is open. Longer than the
+                                # ~5 s after which Windows reports a window as not responding (the waits then hold
+                                # their clock), so a slow game is never taken for a closed console and toggled shut
 REPEAT_ARRIVAL_S = 1.5          # the same for a text the history already holds: a write is at once, so no
-                                # change by now may be a history that does not repeat entries
+                                # change by now is a history that does not repeat entries
 CONSOLE_SETTLE_S = 0.5          # after the console key, before typing into it (unverified: a guess at the animation)
 POLL_S = 0.2                    # between looks at the history and the log
 FOREGROUND_POLL_S = 1.0         # between looks at who has the foreground

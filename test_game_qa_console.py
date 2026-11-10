@@ -600,6 +600,18 @@ class LateArrivalTest(ConsoleTestCase):
         self.assertNotIn(CONSOLE_KEY, self.game.steps)
         self.assertTrue(self.game.console_open)
 
+    def test_a_probe_4_or_5_and_a_half_seconds_late_in_a_responsive_window_leaves_an_open_console_alone(self):
+        for latency in (4.0, 5.5):
+            with self.subTest(latency=latency):
+                self.history.unlink(missing_ok=True)
+                self.game.steps.clear()
+                self.game.console_open = True
+                self.game.latency = latency
+                self.console.ensure_open()
+                self.assertEqual(self.game.steps, [{"text": console.PROBE_COMMAND}, ENTER])
+                self.assertEqual(self.history_lines(), [console.PROBE_COMMAND])
+                self.assertTrue(self.game.console_open)
+
     def test_a_late_repeat_is_found_by_the_log_and_not_retyped(self):
         self.game.console_open = True
         self.game.history_skips_repeats = True
