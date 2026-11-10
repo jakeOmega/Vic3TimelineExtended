@@ -2351,6 +2351,7 @@ decolonization_events.17 = {
 						NOT = { this = root }
 						has_variable = recently_decolonized
 						is_subject = no
+						NOT = { is_country_type = decentralized }
 					}
 				}
 			}
@@ -2361,8 +2362,11 @@ decolonization_events.17 = {
 						NOT = { this = root }
 						has_variable = recently_decolonized
 						is_subject = no
+						NOT = { is_country_type = decentralized }
 					}
 				}
+				# The land option A lays claim to.
+				save_scope_as = rival_border_state
 				owner = {
 					save_scope_as = border_rival
 				}
@@ -2370,7 +2374,8 @@ decolonization_events.17 = {
 		}
 	}
 
-	# Option A: Press our claims: the borders must be redrawn
+	# Option A: Press our claims: the borders must be redrawn. Takes a claim on
+	# the neighbour's border state, at the price of the dispute.
 	option = {
 		name = decolonization_events.17.a
 		default_option = yes
@@ -2395,6 +2400,14 @@ decolonization_events.17 = {
 			change_relations = {
 				country = scope:border_rival
 				value = -40
+			}
+		}
+		# What pressing the claim buys: without it this option was every cost
+		# and no gain, and nobody's best choice.
+		if = {
+			limit = { exists = scope:rival_border_state }
+			scope:rival_border_state = {
+				state_region = { add_claim = root }
 			}
 		}
 		change_infamy = 3
