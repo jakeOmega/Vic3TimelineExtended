@@ -159,6 +159,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/static_modifiers/te_tax_light_generated_modifiers.txt",
     "common/scripted_guis/te_tax_light_generated_sguis.txt",
     "common/customizable_localization/te_tax_light_generated_custom_loc.txt",
+    # The state panel's later banner pictures (gen_state_pictures.py).
+    "common/terrain/te_state_pictures_generated.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
 ]
