@@ -53,8 +53,8 @@ SOURCES = {
         )),
         # The Antarctic research station needs Space Exploration; its upkeep
         # is listed with the space programmes rather than in a category of
-        # its own (a new category needs a pie colour model and regenerates
-        # the charts).
+        # its own (a new category adds a row to every Breakdown and
+        # regenerates the charts).
         "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep", "ste_space_colony_national_cost")),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
         "family": ("Family Policy", (
