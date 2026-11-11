@@ -56,11 +56,13 @@ STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
 ENTER_TIMEOUT_S = 600.0
 LONG_TIMEOUT_S = 900.0                  # advance and try-event
-# The worst cases, from the waits the session and the fixture allow themselves (the report sums them):
-#   start: the fixture's run (FIXTURE_LIMIT_S 900, then its restore's retries, up to 30 + 60 s, and the
-#   verbs around them, about 160 s), the session's own snapshot and launch (minutes), the window (300 s), the
-#   console's first answer (180 s), and a stop when any of it fails (about 380 s): about 1810 s, under 2400.
-#   stop: a kill, watch (60 s), restore's retries (30 + 60 + 95 s), the restore itself: about 380 s, under 600.
+# The worst cases, from the waits the session and the fixture allow themselves:
+#   stop: kill and adopt (about 10 s, twice with a fresh helper), watch (WATCH_WAIT_S 60), restore's retries
+#   (30 + 60 + 95 s), the restore itself and the closes (about 35 s): about 300 s, under STOP_TIMEOUT_S.
+#   start: the fixture's run (FIXTURE_LIMIT_S 900, its restore's retries 30 + 60 s, and its snapshot, launch,
+#   restore and rename, about 160 s: 1150 s), the session's snapshot and launch (about 120 s), the window
+#   (WINDOW_WAIT_S 300), the console's first answer (CONSOLE_READY_S 180), the debugger (about 30 s), and the
+#   stop a failure runs (300 s): about 2080 s, under START_TIMEOUT_S.
 START_TIMEOUT_S = 2400.0
 STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
