@@ -1,0 +1,778 @@
+"""game_qa/session.py: one game's life, from start to restore.
+
+No game and no Windows program is needed. `Game` is `fakes.FakeHelper` plus the parts of the game the session
+drives: the read event stopping at the debugger's breakpoint and logging the date once resumed, `tag`, the
+country-select screen and its two clicks, the pause key, and time passing while unpaused. `Adapter` is the
+game's side of the debugger, reached through the helper's relay as in the real harness. `Cli` stands in for
+`python3 -m game_qa` and `Watch` for the `watch` subprocess. Every wait runs on the fake's one clock, except
+the debugger client's own, which the fakes answer at once.
+"""
+import datetime as dt
+import json
+import subprocess
+import tempfile
+import unittest
+from pathlib import Path
+from unittest import mock
+
+from game_qa import dap, fakes, fixture, logtail, overlay, session
+from game_qa.console import ConsoleError
+from game_qa.helper import HelperError
+
+SNAP = "20261110T150000Z"
+FIXTURE_SNAP = "20261110T145500Z"
+PID, CREATED = 7, "2026-11-10T14:00:00.0000000Z"
+OVERLAY_WIN = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\te_qa_overlay"
+EVENTS_WIN = OVERLAY_WIN + r"\events\te_qa_events.txt"
+PERMISSION = "the owner granted launches for this session"
+SPACE = 0x39
+START_DATE = dt.date(1836, 1, 11)
+MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+          "November", "December")
+STOPPED = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
+RESTORED = ({"restored": ["content_load.json", "console_history.txt"], "removed": [], "held": False, "reason": ""}, 0)
+HELD = ({"restored": [], "removed": [], "held": True, "reason": "other_game_ran"}, 2)
+
+
+class Adapter:
+    """The game's debug adapter: it answers the session's requests, and the game calls `stop` when it passes the
+    breakpoint. A `continue` lets the game finish the read event (`Game.finish_read`)."""
+
+    def __init__(self, game):
+        self.game = game
+        self.requests: list[dict] = []
+        self.breakpoints: dict[str, list[int]] = {}
+        self.verified = True
+        self.values: dict[str, str] = {}
+        self.stopped = False
+        self._decoder = dap.Decoder()
+        self._out = b""
+        self._seq = 0
+
+    @property
+    def commands(self) -> list[str]:
+        return [r["command"] for r in self.requests]
+
+    def send(self, data: bytes) -> None:
+        for req in self._decoder.feed(data):
+            self.requests.append(req)
+            self._answer(req)
+
+    def recv(self, timeout: float) -> bytes:
+        data, self._out = self._out, b""
+        return data
+
+    def push(self, msg: dict) -> None:
+        self._seq += 1
+        self._out += dap.encode(dict(msg, seq=self._seq))
+
+    def stop(self) -> None:
+        self.stopped = True
+        self.push(STOPPED)
+
+    def _answer(self, req: dict) -> None:
+        command, args = req["command"], req.get("arguments") or {}
+        success, body, message, resumed = True, {}, "", False
+        if command == "setBreakpoints":
+            lines = [b["line"] for b in args["breakpoints"]]
+            self.breakpoints[args["source"]["path"]] = lines
+            body = {"breakpoints": [{"verified": self.verified, "line": n} for n in lines]}
+        elif command == "evaluate":
+            expr = args["expression"]
+            if not self.stopped:
+                success, message = False, "not stopped"
+            elif expr in self.values:
+                body = {"result": self.values[expr]}
+            else:
+                success, message = False, "not a valid trigger or script value"
+        elif command == "continue":
+            if self.stopped:
+                self.stopped, resumed = False, True
+            else:
+                success, message = False, "not stopped"
+        reply = {"type": "response", "request_seq": req["seq"], "command": command, "success": success, "body": body}
+        if message:
+            reply["message"] = message
+        self.push(reply)
+        if resumed:
+            self.push({"type": "event", "event": "continued", "body": {"threadId": 1}})
+            self.game.finish_read()
+
+
+class Game(fakes.FakeHelper):
+    """`FakeHelper` with the game behind it. `order` is the shared log of what happened, for the order tests."""
+
+    def __init__(self, user_data: Path, order: list):
+        logs = user_data / "logs"
+        logs.mkdir(parents=True, exist_ok=True)
+        super().__init__(history=user_data / "console_history.txt", log=logs / "debug.log")
+        self.order = order
+        self.adapter = Adapter(self)
+        self.played: str | None = None
+        self.selected = False                   # a country is selected on the country-select screen
+        self.entered = False                    # Start was pressed: time can pass
+        self.paused = True
+        self.clicks_work = True
+        self.days_per_second = 1.5
+        self.elapsed = 0.0                      # game days since START_DATE
+        self.stops = True                       # the read event stops at a breakpoint set on its line
+        self.exited = False                     # the game ended by itself
+        self.tcp_error: Exception | None = None
+        self.closed = False
+        self.setups: dict[str, tuple[str, list[str]]] = {}     # setup event -> (its name, the lines its body logs)
+        self.on("tag FRA", success=["Now Playing - France"])
+
+    @property
+    def date(self) -> dt.date:
+        return START_DATE + dt.timedelta(days=int(self.elapsed))
+
+    def sleep(self, seconds: float) -> None:
+        if self.entered and not self.paused:
+            self.elapsed += seconds * self.days_per_second
+        super().sleep(seconds)
+
+    def keys(self, pid, steps):
+        super().keys(pid, steps)
+        for step in steps:
+            if step.get("scan") == SPACE:
+                self.order.append("space")
+                if not self.console_open:
+                    self.paused = not self.paused
+
+    def click(self, pid, x, y):
+        super().click(pid, x, y)
+        self.order.append("click")
+        if not self.clicks_work:
+            return
+        _left, _top, width, height = self.client
+        if abs(x - width * 0.492) < 2 and abs(y - height * 0.656) < 2 and self.played:
+            self.selected = True
+        elif abs(x - width * 0.9216) < 2 and abs(y - height * 0.975) < 2 and self.selected:
+            self.entered = True
+
+    def adopt(self, proc):
+        super().adopt(proc)
+        self.order.append("adopt")
+
+    def kill(self, proc):
+        self.order.append("kill")
+        return super().kill(proc)
+
+    def tcp_open(self, port):
+        super().tcp_open(port)
+        self.order.append("tcp_open %d" % port)
+
+    def tcp_send(self, data):
+        if self.tcp_error is not None:
+            raise self.tcp_error
+        self.adapter.send(data)
+
+    def tcp_recv(self, timeout):
+        if self.tcp_error is not None:
+            raise self.tcp_error
+        return self.adapter.recv(timeout)
+
+    def tcp_close(self):
+        super().tcp_close()
+        self.order.append("tcp_close")
+
+    def close(self):
+        self.closed = True
+        self.order.append("helper_close")
+
+    def _run(self, text):
+        super()._run(text)
+        if text.startswith("tag "):
+            self.played = text[4:].strip()
+        if text == "event " + overlay.READ_EVENT:
+            if self.stops and EVENTS_WIN in self.adapter.breakpoints:
+                self.adapter.stop()
+            else:
+                self.finish_read()
+        elif text.startswith("event ") and text[6:] in self.setups:
+            name, lines = self.setups[text[6:]]
+            self.script("TE_QA setup %s start" % name, *lines, "TE_QA setup %s done" % name)
+            self.pad()
+
+    def script(self, *lines: str) -> None:
+        for line in lines:
+            self._logged("jomini_effect_impl.cpp:459", "events/te_qa_events.txt:12: " + line)
+
+    def finish_read(self) -> None:
+        """The rest of the read event: its debug_log line, then the padding that flushes the log."""
+        when = self.date
+        self.script("TE_QA read country=%s date=%s %d, %d" % (self.played or "", MONTHS[when.month - 1], when.day,
+                                                             when.year))
+        self.pad()
+
+    def pad(self) -> None:
+        for _ in range(overlay.PAD_LINES):
+            self._logged("jomini_effect_impl.cpp:459", "common/scripted_effects/te_qa_effects.txt:5: TE_QA PAD x")
+        out, self.unwritten = self.unwritten[:-5], self.unwritten[-5:]
+        with open(self.log, "a", encoding="utf-8", newline="\n") as f:
+            f.write("".join(line + "\n" for line in out))
+
+
+class Watch:
+    """The `watch` subprocess: it returns once the game is gone (ended by the helper, or exited), unless it hangs."""
+
+    def __init__(self, game: Game, order: list):
+        self.game, self.order = game, order
+        self.hangs = False
+        self.returned = False
+
+    def poll(self):
+        if self.hangs or not (self.game.killed or self.game.exited):
+            return None
+        if not self.returned:
+            self.returned = True
+            self.order.append("watch_returned")
+        return 0
+
+    def wait(self, timeout):
+        code = self.poll()
+        if code is None:
+            raise subprocess.TimeoutExpired("watch", timeout)
+        return code
+
+
+class Cli:
+    """`python3 -m game_qa <argv>`: records each call and answers from what the test queued, then the defaults.
+
+    `watch` (only the fixture's run calls it through here) writes the run's save; `restore` removes the saves a
+    run made, as the real one does, and notes whether the overlay was still there."""
+
+    def __init__(self, test):
+        self.test = test
+        self.calls: list[list[str]] = []
+        self.queued: dict[str, list[tuple[dict, int]]] = {}
+        self.raise_on: str | None = None
+        self.overlay_at_restore: list[bool] = []
+        self.clock_at: dict[str, float] = {}
+
+    @property
+    def verbs(self) -> list[str]:
+        return [c[0] for c in self.calls]
+
+    def queue(self, verb: str, reply: dict, code: int) -> None:
+        self.queued.setdefault(verb, []).append((reply, code))
+
+    def __call__(self, argv):
+        argv = list(argv)
+        verb = argv[0]
+        self.calls.append(argv)
+        self.test.order.append("cli " + verb)
+        self.clock_at[verb] = self.test.game.now
+        if verb == self.raise_on:
+            raise OSError("python3 could not be started")
+        saves = self.test.user / "save games"
+        if verb == "watch":
+            (saves / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"a fresh game")
+        if verb == "restore":
+            self.overlay_at_restore.append(self.test.paths.overlay_dir.exists())
+            for path in saves.glob("TEST_FAIL_*.v3"):
+                path.unlink()
+        queued = self.queued.get(verb)
+        if queued:
+            return queued.pop(0)
+        return {
+            "held": ({"held": []}, 0),
+            "snapshot": ({"id": SNAP, "files": 12, "pruned": [], "held": []}, 0),
+            "launch": ({"id": SNAP, "pid": PID, "created": CREATED, "args": []}, 0),
+            "watch": ({"id": FIXTURE_SNAP, "exited": True}, 0),
+            "restore": RESTORED,
+        }[verb]
+
+
+class SessionTestCase(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        base = Path(tmp.name)
+        self.user = base / "user data"
+        (self.user / "mod").mkdir(parents=True)
+        (self.user / "save games").mkdir()
+        deploy = base / "deploy"
+        (deploy / "events").mkdir(parents=True)
+        (deploy / "events" / "te_events.txt").write_text("namespace = te\n", encoding="utf-8")
+        (base / "backups").mkdir()
+        self.windows_paths_asked: list[Path] = []
+        self.paths = session.Paths(
+            user_data=self.user, backup_root=base / "backups", deploy_dir=deploy, base_game=base / "game",
+            overlay_windows_path=OVERLAY_WIN, events_file_windows_path=self.windows_path, game_version="1.15.0",
+            enabled_mods=[r"C:\Users\someone\mod\Vic3TimelineExtended", OVERLAY_WIN])
+        self.key = fixture.key(self.paths.game_version, self.paths.enabled_mods, deploy)
+        self.fixture_save = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key)
+        self.fixture_save.write_bytes(b"a fresh game")
+        self.order: list[str] = []
+        self.game = Game(self.user, self.order)
+        self.cli = Cli(self)
+        self.watches: list[Watch] = []
+        self.spawn_error: Exception | None = None
+        self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
+                                       sleep=self.game.sleep, clock=self.game.clock)
+
+    def windows_path(self, path: Path) -> str:
+        self.windows_paths_asked.append(Path(path))
+        return EVENTS_WIN
+
+    def spawn_watch(self, snapshot_id: str) -> Watch:
+        self.order.append("spawn_watch " + snapshot_id)
+        self.spawned_at = self.game.now
+        if self.spawn_error is not None:
+            raise self.spawn_error
+        watch = Watch(self.game, self.order)
+        self.watches.append(watch)
+        return watch
+
+    def start(self, **kwargs) -> dict:
+        kwargs.setdefault("as_tag", "FRA")
+        return self.session.start(PERMISSION, **kwargs)
+
+    def started(self, **kwargs) -> dict:
+        """A started session, with the order log and the calls cleared."""
+        reply = self.start(**kwargs)
+        self.order.clear()
+        self.cli.calls.clear()
+        return reply
+
+    def typed(self) -> list[str]:
+        return [step["text"] for step in self.game.steps if "text" in step]
+
+    def session_error(self, fn, *args, **kwargs) -> session.SessionError:
+        with self.assertRaises(session.SessionError) as caught:
+            fn(*args, **kwargs)
+        return caught.exception
+
+
+class StartTest(SessionTestCase):
+    def test_start_runs_the_verbs_in_order_and_watch_at_once(self):
+        reply = self.start()
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+        save = "te_qa_fixture_" + self.key
+        self.assertEqual(self.cli.calls[1], ["snapshot", "--save", save])
+        self.assertEqual(self.cli.calls[2], [
+            "launch", SNAP, "--permission", PERMISSION, "--playset", "mod_only", "--add-mod", OVERLAY_WIN,
+            "--", "-gdpr-compliant", "-debug_mode", "-script_debugger", "-loadsave=" + save])
+        # watch is spawned the moment launch returns, before the helper is asked anything
+        self.assertEqual(self.order[:5], ["cli held", "cli snapshot", "cli launch", "spawn_watch " + SNAP, "adopt"])
+        self.assertEqual(self.spawned_at, self.cli.clock_at["launch"])
+        self.assertEqual(self.game.adopted, [self.game.proc])
+        self.assertIn("tcp_open 6111", self.order)
+        # the overlay was there before the snapshot, so the run's playset can name it
+        self.assertTrue((self.paths.overlay_dir / ".metadata" / "metadata.json").is_file())
+        # the console was opened and the country tagged before the debugger was attached
+        self.assertIn("tag FRA", self.typed())
+        self.assertEqual(self.game.played, "FRA")
+        self.assertEqual(self.game.adapter.commands, ["initialize", "launch", "setBreakpoints", "configurationDone"])
+        read_line = reply["overlay"]["read_line"]
+        self.assertEqual(self.game.adapter.breakpoints, {EVENTS_WIN: [read_line]})
+        self.assertEqual(self.windows_paths_asked, [self.paths.overlay_dir / "events" / "te_qa_events.txt"])
+        events = (self.paths.overlay_dir / "events" / "te_qa_events.txt").read_text("utf-8-sig").split("\n")
+        self.assertIn("TE_QA read", events[read_line - 1])
+        self.assertEqual(reply["snapshot"], SNAP)
+        self.assertEqual((reply["pid"], reply["created"], reply["save"]), (PID, CREATED, save))
+        self.assertEqual((reply["fixture_made"], reply["country"]), (False, "FRA"))
+        self.assertEqual(Path(reply["run_dir"]), self.paths.backup_root / "runs" / SNAP)
+        self.assertTrue((Path(reply["run_dir"]) / "steps.jsonl").is_file())
+
+    def test_start_makes_the_fixture_when_there_is_none(self):
+        self.fixture_save.unlink()
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start()
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "watch", "restore", "snapshot", "launch"])
+        self.assertEqual(self.cli.calls[2][-6:], ["--", *fixture.FIXTURE_ARGS])
+        self.assertTrue(reply["fixture_made"])
+        self.assertTrue(self.fixture_save.is_file())
+        self.assertEqual(self.cli.calls[6][-1], "-loadsave=te_qa_fixture_" + self.key)
+
+    def test_start_with_a_named_save_loads_it_and_snapshots_it(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        reply = self.start(save="france_1850.v3")
+        self.assertEqual(self.cli.calls[1], ["snapshot", "--save", "france_1850"])
+        self.assertEqual(self.cli.calls[2][-1], "-loadsave=france_1850")
+        self.assertEqual((reply["save"], reply["fixture_made"]), ("france_1850", False))
+
+    def test_a_save_that_is_not_there_is_refused_before_anything(self):
+        error = self.session_error(self.start, save="nowhere")
+        self.assertEqual(error.code, "no_save")
+        self.assertEqual(self.cli.verbs, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_start_refuses_while_a_snapshot_is_held_and_leaves_its_overlay(self):
+        earlier = overlay.build(self.paths.overlay_dir, {}, "1.15.0")     # a held run's playset still names it
+        self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "held_snapshot")
+        self.assertIn("20261109T100000Z", error.detail)
+        self.assertEqual(self.cli.verbs, ["held"])
+        self.assertTrue(earlier.events_file.is_file())
+        self.cli.calls.clear()                  # the owner resolves the hold; the same session may start then
+        self.assertEqual(self.start()["snapshot"], SNAP)
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+
+    def test_stop_after_a_held_refusal_leaves_an_earlier_overlay_alone(self):
+        earlier = overlay.build(self.paths.overlay_dir, {}, "1.15.0")
+        self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
+        self.session_error(self.start)
+        self.session.stop()
+        self.assertTrue(earlier.events_file.is_file())
+        self.assertEqual(self.cli.verbs, ["held"])
+
+    def test_a_held_list_that_cannot_be_read_is_refused_too(self):
+        self.cli.queue("held", {"refused": "BackupRootError", "detail": "no backup root"}, 2)
+        self.assertEqual(self.session_error(self.start).code, "held_unknown")
+        self.assertEqual(self.cli.verbs, ["held"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_refused_snapshot_starts_nothing_and_removes_the_overlay(self):
+        self.cli.queue("snapshot", {"refused": "unfinished_run", "unfinished": ["X"]}, 2)
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "snapshot_refused")
+        self.assertEqual(error.info["reply"]["refused"], "unfinished_run")
+        self.assertEqual(self.cli.verbs, ["held", "snapshot"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_refused_launch_starts_nothing_else(self):
+        self.cli.queue("launch", {"refused": "gpu_busy", "id": SNAP, "detail": "the GPU is at 80% load"}, 2)
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "launch_refused")
+        self.assertEqual(error.info["reply"]["refused"], "gpu_busy")
+        self.assertEqual(self.watches, [])
+        self.assertEqual((self.game.adopted, self.game.killed, self.game.steps), ([], [], []))
+        self.assertIsNone(self.game.tcp_port)
+        self.assertEqual(self.game.adapter.requests, [])
+        # the armed snapshot is finished (it would block every later one) and the overlay goes
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "restore"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_a_failure_after_launch_still_stops_and_restores(self):
+        self.game.exists = False                # the window never appears
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "no_window")
+        self.assertGreaterEqual(self.game.now, session.WINDOW_WAIT_S)
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "restore"])
+        self.assertEqual(self.cli.overlay_at_restore, [True])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+        self.assertEqual(self.session.stop(), error.info["stop"])
+        self.assertEqual(self.session_error(self.start).code, "already_started")
+
+    def test_a_console_error_after_launch_stops_too(self):
+        self.game.console_never_opens = True
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "no_ack")
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.cli.verbs[-1], "restore")
+
+    def test_an_unverified_breakpoint_fails_the_start(self):
+        self.game.adapter.verified = False
+        self.assertEqual(self.session_error(self.start).code, "breakpoint_unverified")
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.cli.verbs[-1], "restore")
+
+    def test_a_launch_reply_without_a_start_time_still_gets_its_watch_then_stops(self):
+        self.cli.queue("launch", {"id": SNAP, "pid": PID, "created": "unknown"}, 0)
+        self.assertEqual(self.session_error(self.start).code, "unknown_start")
+        self.assertEqual(len(self.watches), 1)
+        self.assertEqual(self.cli.verbs[-1], "restore")
+
+    def test_a_watch_that_cannot_be_spawned_still_ends_the_game(self):
+        self.spawn_error = OSError("python3 could not be started")
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "OSError")
+        self.assertEqual(self.game.killed, [self.game.proc])         # adopted by launch's record, then ended
+        self.assertEqual(self.cli.verbs[-1], "restore")
+        self.assertIn("no watch was running", error.info["stop"]["notes"])
+
+    def test_a_session_starts_once(self):
+        self.started()
+        self.assertEqual(self.session_error(self.start).code, "already_started")
+        self.assertEqual(self.cli.calls, [])
+
+
+class ReadTest(SessionTestCase):
+    def test_read_evaluates_at_the_breakpoint_and_resumes(self):
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "22625834.0308", "is_player = yes": "yes - Yes: "}
+        reads = self.session.read(["c:FRA.gdp", "is_player = yes", "gdp"])
+        self.assertEqual([(r.expr, r.ok, r.value) for r in reads],
+                         [("c:FRA.gdp", True, 22625834.0308), ("is_player = yes", True, True), ("gdp", False, None)])
+        self.assertEqual(reads[2].raw, "not a valid trigger or script value")
+        self.assertEqual(self.game.adapter.commands[-4:], ["evaluate", "evaluate", "evaluate", "continue"])
+        self.assertFalse(self.game.adapter.stopped)
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+
+    def test_read_without_a_stop_resumes_and_raises(self):
+        self.started()
+        self.game.stops = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual(error.code, "no_stop")
+        self.assertEqual(self.game.adapter.commands[-1], "continue")
+        self.assertNotIn("evaluate", self.game.adapter.commands)
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+
+    def test_a_closed_relay_is_an_error_of_the_verb_not_a_crash(self):
+        self.started()
+        self.game.tcp_error = HelperError("tcp_closed", "the peer closed the connection")
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "debugger")
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
+    def test_a_read_that_may_have_been_entered_is_not_typed_again_and_its_stop_is_released(self):
+        self.started()
+        keys = self.game.keys
+
+        def keys_then_fail(pid, steps):
+            keys(pid, steps)                    # the keys went out, the game ran the command and stopped...
+            if {"text": "event te_qa.1"} in steps:
+                raise HelperError("helper_gone", "the pipe broke")      # ...but the helper could not say so
+        self.game.keys = keys_then_fail
+        with self.assertRaises(ConsoleError) as caught:
+            self.session.read(["c:FRA.gdp"])
+        self.assertIsNone(caught.exception.entered)
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        self.assertFalse(self.game.adapter.stopped)
+        self.assertEqual(self.game.adapter.commands[-1], "continue")
+
+    def test_the_console_verb_refuses_the_read_event(self):
+        self.started()
+        self.assertEqual(self.session_error(self.session.console, "event te_qa.1").code, "use_read")
+        self.assertNotIn("event te_qa.1", self.typed())
+
+    def test_run_setup_returns_the_lines_between_its_markers(self):
+        reply = self.started(setups={"border": "set_variable = te_x"})
+        event = reply["overlay"]["setup_events"]["border"]
+        self.game.setups = {event: ("border", ["first line", "second line"])}
+        self.assertEqual(self.session.run_setup("border"), ["first line", "second line"])
+        self.assertEqual(self.session_error(self.session.run_setup, "nothing").code, "unknown_setup")
+
+
+class PickTest(SessionTestCase):
+    def test_pick_always_passes_the_numeric_id(self):
+        self.started()
+        self.game.on("select_event_option list", success=["10 te_qa_probe.2 options=3"])
+        self.game.on("select_event_option 2 10", success=["Selected option 2 of te_qa_probe.2"])
+        self.game.on("select_event_option 1 10", success=["Selected option 1 of te_qa_probe.2"])
+        first = self.session.pick(2)
+        second = self.session.pick(1, "te_qa_probe.2")
+        self.assertIn("select_event_option 2 10", self.typed())
+        self.assertIn("select_event_option 1 10", self.typed())
+        self.assertEqual((first["numeric_id"], first["event"], first["ambiguous"]), (10, "te_qa_probe.2", False))
+        self.assertEqual(second["index"], 1)
+        self.assertEqual(self.session.events(), [logtail.Pending(10, "te_qa_probe.2", 3)])
+
+    def test_pick_by_name_with_two_pending_takes_the_oldest_and_says_so(self):
+        self.started()
+        self.game.on("select_event_option list", success=["12 x.1 options=2", "11 x.1 options=2", "13 y.1 options=1"])
+        self.game.on("select_event_option 0 11", success=["Selected option 0 of x.1"])
+        result = self.session.pick(0, "x.1")
+        self.assertEqual((result["numeric_id"], result["ambiguous"]), (11, True))
+        self.assertIn("select_event_option 0 11", self.typed())
+        self.assertNotIn("select_event_option 0 12", self.typed())
+
+    def test_pick_with_nothing_pending_is_an_error(self):
+        self.started()
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.session_error(self.session.pick, 0).code, "nothing_pending")
+        self.assertEqual(self.session_error(self.session.pick, 0, "x.1").code, "nothing_pending")
+        self.game.on("select_event_option list", success=["10 x.1 options=2"])
+        self.assertEqual(self.session_error(self.session.pick, 0, "y.1").code, "nothing_pending")
+        self.assertEqual(self.session_error(self.session.pick, 2, "x.1").code, "bad_index")
+        self.assertEqual(self.session_error(self.session.pick, -1).code, "bad_index")
+        self.assertFalse([t for t in self.typed() if t.startswith("select_event_option ") and t[20:21].isdigit()])
+
+    def test_a_pick_the_game_did_not_confirm_is_an_error(self):
+        self.started()
+        self.game.on("select_event_option list", success=["10 x.1 options=2"])
+        self.assertEqual(self.session_error(self.session.pick, 1).code, "not_selected")
+        self.assertEqual(self.typed().count("select_event_option 1 10"), 1)
+
+    def test_a_reply_that_is_not_a_list_is_not_taken_for_nothing_pending(self):
+        self.started()
+        self.game.on("select_event_option list", failure=["Unknown command"])
+        self.assertEqual(self.session_error(self.session.events).code, "bad_reply")
+
+
+class EnterGameTest(SessionTestCase):
+    def test_enter_game_clicks_the_two_points_of_the_client_area(self):
+        for client, country, start in (((0, 0, 3840, 2160), (1889, 1417), (3539, 2106)),
+                                       ((40, 30, 1920, 1080), (945, 708), (1769, 1053))):
+            with self.subTest(client=client):
+                self.setUp()
+                self.game.client = client
+                self.started()
+                result = self.session.enter_game()
+                self.assertEqual(self.game.clicks, [country, start])
+                self.assertTrue(result["entered"])
+                self.assertEqual(result["before"], (1836, 1, 11))
+                self.assertEqual(result["after"], (1836, 1, 15))        # 3 s at 1.5 days a second
+                self.assertTrue(self.game.paused)
+                self.assertEqual(self.order.count("space"), 2)
+
+    def test_enter_game_that_does_not_move_the_date_raises_with_a_screenshot(self):
+        self.started()
+        self.game.clicks_work = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "not_entered")
+        shot = Path(error.info["screenshot"])
+        self.assertTrue(shot.is_file())
+        self.assertEqual(shot.parent, self.paths.backup_root / "runs" / SNAP)
+        self.assertEqual(len(self.game.clicks), 2)
+
+    def test_a_click_waits_for_the_presence_rule_and_never_focuses_on_its_own(self):
+        self.started()
+        self.game.foreground = False
+
+        def someone_moves_the_mouse(reading):
+            self.game.cursor = (10 * reading, 5 * reading)
+        self.game.on_presence = someone_moves_the_mouse
+        with self.assertRaises(ConsoleError) as caught:
+            self.session.enter_game()
+        self.assertEqual(caught.exception.code, "not_foreground")
+        self.assertEqual((self.game.clicks, self.game.focus_calls), ([], 0))
+
+    def test_enter_game_needs_a_country(self):
+        self.started(as_tag=None)
+        self.assertEqual(self.session_error(self.session.enter_game).code, "no_country")
+        self.assertEqual(self.game.clicks, [])
+
+
+class AdvanceTest(SessionTestCase):
+    def test_advance_reaches_at_least_the_days_asked(self):
+        self.started()
+        self.game.days_per_second = 1.0         # slower than the first guess: the second wait is sized from it
+        reached = self.session.advance(30)
+        entered_at = dt.date(1836, 1, 14)       # the 3 s that proved the game was entered
+        self.assertGreaterEqual(dt.date(*reached), entered_at + dt.timedelta(days=30))
+        self.assertEqual(dt.date(*reached), self.game.date)
+        self.assertEqual(self.order.count("space"), 2 + 4)     # enter_game's proof, then two rounds
+        self.assertTrue(self.game.paused)
+
+    def test_advance_across_29_february_counts_the_days_the_game_has(self):
+        # The game's year is 365 days with no leap day; datetime's 1836 has one.
+        self.started()
+        self.session.enter_game()
+        # From 20 February the first round's 10 calendar days end on 1 March: 9 of the game's days.
+        self.game.elapsed = (dt.date(1836, 2, 20) - START_DATE).days + 0.5
+        reached = self.session.advance(10)
+        self.assertGreaterEqual(dt.date(*reached), dt.date(1836, 3, 2))
+
+    def test_advance_gives_up_after_twenty_rounds(self):
+        self.started()
+        self.session.enter_game()
+        self.game.days_per_second = 0.0
+        self.assertEqual(self.session_error(self.session.advance, 5).code, "stalled")
+        self.assertEqual(self.order.count("space"), 2 + 2 * session.MAX_ROUNDS)
+        self.assertTrue(self.game.paused)
+
+    def test_a_bad_day_count_is_refused_before_any_key(self):
+        self.started()
+        steps = len(self.game.steps)
+        for days in (0, -3, 2.5, True):
+            self.assertEqual(self.session_error(self.session.advance, days).code, "bad_days")
+        self.assertEqual(len(self.game.steps), steps)
+
+
+class StopTest(SessionTestCase):
+    def test_stop_kills_waits_for_watch_restores_and_removes_the_overlay_in_that_order(self):
+        self.started()
+        reply = self.session.stop()
+        self.assertEqual(self.order, ["kill", "watch_returned", "cli restore", "tcp_close", "helper_close"])
+        self.assertEqual(self.cli.calls, [["restore", SNAP]])
+        self.assertEqual(self.cli.overlay_at_restore, [True])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(reply["restored"], RESTORED[0]["restored"])
+        self.assertEqual((reply["outcome"], reply["snapshot"], reply["overlay_removed"]), ("restored", SNAP, True))
+        summary = Path(reply["report"])
+        self.assertEqual(summary, self.paths.backup_root / "runs" / SNAP / "summary.md")
+        self.assertTrue(summary.read_text("utf-8").startswith("Restore: restored"))
+
+    def test_stop_reports_a_hold_and_does_not_raise(self):
+        self.started()
+        self.cli.queue("restore", *HELD)
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["held"], reply["reason"]), ("held", True, "other_game_ran"))
+        first = Path(reply["report"]).read_text("utf-8").split("\n")[0]
+        self.assertIn("HELD", first)
+        self.assertIn("other_game_ran", first)
+
+    def test_stop_twice_is_harmless(self):
+        self.started()
+        first = self.session.stop()
+        second = self.session.stop()
+        self.assertEqual(first, second)
+        self.assertEqual(self.cli.calls, [["restore", SNAP]])
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.session_error(self.session.read, []).code, "stopped")
+
+    def test_stop_retries_restore_while_watch_is_still_recording(self):
+        self.started()
+        still = {"held": False, "refused": "watch_still_recording", "id": SNAP}
+        self.cli.queue("restore", still, 2)
+        self.cli.queue("restore", still, 2)
+        now = self.game.now
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+        self.assertEqual(self.cli.verbs, ["restore"] * 3)
+        self.assertEqual(self.game.now - now, 2 * session.RESTORE_RETRY_S)
+
+    def test_a_refused_restore_is_reported_not_retried(self):
+        self.started()
+        self.cli.queue("restore", {"held": False, "refused": "game_still_up", "id": SNAP}, 2)
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["refused"]), ("refused", "game_still_up"))
+        self.assertEqual(self.cli.verbs, ["restore"])
+        self.assertIn("REFUSED", Path(reply["report"]).read_text("utf-8").split("\n")[0])
+
+    def test_a_watch_that_does_not_return_is_noted_and_restore_still_runs(self):
+        self.started()
+        self.watches[0].hangs = True
+        now = self.game.now
+        reply = self.session.stop()
+        self.assertGreaterEqual(self.game.now - now, session.WATCH_WAIT_S)
+        self.assertTrue(any("watch" in note for note in reply["notes"]))
+        self.assertEqual(self.cli.verbs, ["restore"])
+
+    def test_a_kill_that_fails_is_noted_and_the_rest_still_runs(self):
+        self.started()
+
+        def kill(proc):
+            raise HelperError("helper_gone", "the helper has ended")
+        self.game.kill = kill
+        self.game.exited = True                 # the game went by itself all the same
+        reply = self.session.stop()
+        self.assertTrue(any("helper_gone" in note for note in reply["notes"]))
+        self.assertEqual(self.cli.verbs, ["restore"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_restore_that_raises_is_a_refusal_and_stop_does_not_raise(self):
+        self.started()
+        self.cli.raise_on = "restore"
+        reply = self.session.stop()
+        self.assertEqual(reply["outcome"], "refused")
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_stop_before_start_does_nothing(self):
+        reply = self.session.stop()
+        self.assertEqual(self.cli.calls, [])
+        self.assertIsNone(reply["snapshot"])
+        self.assertIsNone(reply["report"])
+
+    def test_the_report_has_a_line_per_step(self):
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "1"}
+        self.session.read(["c:FRA.gdp"])
+        report = Path(self.session.stop()["report"])
+        steps = [json.loads(line) for line in (report.parent / "steps.jsonl").read_text("utf-8").splitlines()]
+        verbs = [s["verb"] for s in steps]
+        for verb in ("held", "fixture", "snapshot", "launch", "tag", "start", "read", "restore", "stop"):
+            self.assertIn(verb, verbs)
+        self.assertLess(verbs.index("snapshot"), verbs.index("read"))
+        self.assertIn("| read | ok |", report.read_text("utf-8"))
+
+
+if __name__ == "__main__":
+    unittest.main()
