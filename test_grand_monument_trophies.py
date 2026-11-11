@@ -157,6 +157,43 @@ class ShareTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_tr_cooldown days = 3650 }", piece)
 
 
+class LootedOnceTests(unittest.TestCase):
+    """A monument is looted once until what was taken comes home (owner, 2026-11-11): the grave goods of one tomb
+    stood in three capitals at once, a tenth carried off each time the ten-year spell ran out. Every way to carry a
+    monument off asks whether a piece of it is still abroad, read live from the trophies by the identity a return
+    rejoins by (gm_state_stands_for_moving)."""
+
+    def test_the_primary_is_spared_while_a_piece_is_abroad(self):
+        self.assertIn("gm_state_tr_piece_abroad = no", squash(block(read(TR_TRIGGERS), "gm_state_tr_takeable")))
+
+    def test_a_piece_abroad_is_a_trophy_not_taken_whole_from_this_monument(self):
+        piece = squash(block(read(TR_TRIGGERS), "gm_tr_is_piece_from"))
+        self.assertEqual(piece, "has_variable = gm_tr_share NOT = { var:gm_tr_share = flag:whole } "
+                                "var:gm_tr_origin ?= { this = $HOME$ }")
+        primary = squash(block(read(TR_TRIGGERS), "gm_state_tr_piece_abroad"))
+        self.assertIn("any_in_global_list = { variable = gm_trophies "
+                      "gm_tr_is_piece_from = { HOME = scope:gm_tmp_tr_home }", primary)
+        # the same landmark, or neither naming one: a return's identity (gm_state_stands_for_moving)
+        self.assertIn("var:gm_tr_landmark = scope:gm_tmp_tr_home.var:gm_landmark", primary)
+        self.assertIn("AND = { NOT = { has_variable = gm_tr_landmark } "
+                      "scope:gm_tmp_tr_home = { NOT = { has_variable = gm_landmark } } }", primary)
+        secondary = squash(block(read(TR_TRIGGERS), "gm_mon_tr_piece_abroad"))
+        self.assertIn("NOT = { this = scope:gm_tmp_tr_mon }", secondary, "a secondary that was a piece isn't its own")
+        self.assertIn("var:gm_tr_landmark = scope:gm_tmp_tr_mon.var:gm_tr_landmark", secondary)
+
+    def test_every_secondary_route_asks_its_own_monument(self):
+        mon = read(MON_TRIGGERS)
+        self.assertIn("any_in_list = { variable = gm_monuments_here gm_mon_tr_piece_abroad = no }",
+                      squash(block(mon, "gm_state_tr_takeable_secondary")))
+        self.assertIn("gm_mon_tr_piece_abroad = no", squash(block(mon, "gm_mon_tr_can_take")))
+        self.assertIn("gm_mon_tr_piece_abroad = no", squash(block(mon, "gm_mon_tr_can_take_tt")))
+
+    def test_the_reasons_say_so(self):
+        loc = read("localization/english/te_miscellaneous_l_english.yml")
+        self.assertRegex(loc, r'gm_tr_sgui_takeable_tt:0 "[^"]*still abroad')
+        self.assertRegex(loc, r'gm_mon_sgui_takeable_tt:0 "[^"]*still abroad')
+
+
 class RouteTests(unittest.TestCase):
     def test_occupation_reads_the_provinces(self):
         body = squash(block(read(TR_TRIGGERS), "gm_state_tr_occupied_by"))
@@ -1073,12 +1110,13 @@ class LootingASecondaryTests(unittest.TestCase):
         self.assertNotIn("gm_state_is_dedicated", body)
         can = squash(block(read(MON_TRIGGERS), "gm_mon_tr_can_take"))
         self.assertIn("var:gm_tr_origin ?= { gm_state_tr_takeable_secondary = yes "
-                      "gm_state_tr_occupied_by = { WHO = $WHO$ } }", can)
+                      "gm_state_tr_occupied_by = { WHO = $WHO$ } } gm_mon_tr_piece_abroad = no", can)
 
     def test_the_hidden_event_gates_the_target_by_its_own_rule_and_forgets_it(self):
         ev = squash(raw_block_at(strip_comments(read(TR_EVENTS)), r"(?m)^monument_trophy_events\.10\s*=\s*\{"))
         self.assertIn("OR = { AND = { NOT = { has_variable = gm_tr_take_target } gm_state_tr_takeable = yes } "
-                      "AND = { has_variable = gm_tr_take_target gm_state_tr_takeable_secondary = yes } }", ev)
+                      "AND = { has_variable = gm_tr_take_target gm_state_tr_takeable_secondary = yes "
+                      "var:gm_tr_take_target ?= { gm_mon_tr_piece_abroad = no } } }", ev)
         self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_target }", ev)
 
     def test_a_taking_branches_on_its_target(self):
@@ -1128,10 +1166,13 @@ class LootingASecondaryTests(unittest.TestCase):
         self.assertIn("limit = { gm_state_has_secondary = yes gm_state_tr_takeable_secondary = yes }", pick)
         # A primary that cannot go leaves the roll to the secondaries (review
         # 2026-10-16, finding 2); otherwise every monument is as likely.
+        # A secondary with a piece of it abroad is never the pick (looted once, 2026-11-11).
         self.assertIn("if = { limit = { gm_state_tr_takeable = no } "
-                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } } "
+                      "random_in_list = { variable = gm_monuments_here limit = { gm_mon_tr_piece_abroad = no } "
+                      "save_scope_as = gm_mon_pick } } "
                       "else = { random = { chance = gm_state_tr_ai_secondary_chance "
-                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } } } "
+                      "random_in_list = { variable = gm_monuments_here limit = { gm_mon_tr_piece_abroad = no } "
+                      "save_scope_as = gm_mon_pick } } } "
                       "if = { limit = { exists = scope:gm_mon_pick } "
                       "set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick } }", pick)
         monthly = squash(block(read(TR_EFFECTS), "gm_state_tr_monthly"))
