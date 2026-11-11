@@ -51,7 +51,7 @@ python3 -m game_qa stop                         # always, even after a failure
 - `no_answer`: the verb in front may still be running. `status`, wait, never start a second session.
 - `watch_ended`: the game has gone or could not be proved to be the harness's own. Nothing more is typed. `stop`.
 - `session_running`, `overlay_left`, `playset_not_restored`, an unfinished run in `doctor`: an earlier session did not finish. `stop` if its server answers; otherwise, once no Victoria 3 process runs, `recover`, then `remove-overlay`, then `doctor`.
-- The session's server died: the game's watcher keeps recording by itself. Same path: no game running, `recover`, `remove-overlay`.
+- The session's server died: the game's watcher keeps recording by itself. Same path: no game running, `recover`, `remove-overlay`. If the game is still up, no verb ends it: ask the owner to close it, and run nothing until they have. This path has only been tested against fakes, so read each reply before the next step.
 - Anything the verbs cannot finish: stop, leave the files alone, and tell the owner what `doctor` and `held` print.
 
 ## What to tell the owner afterwards

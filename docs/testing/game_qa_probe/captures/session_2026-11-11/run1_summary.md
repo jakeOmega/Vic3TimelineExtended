@@ -1,6 +1,6 @@
 Restore: restored (51 files put back, 0 removed).
 
-- Permission: owner in the conversation, ~03:40 MST 2026-11-11: 'Game is closed now - feel free to launch when ready'
+- Permission: (the owner's go-ahead, given in the conversation; their words are not kept here)
 - Snapshot: 20261111T104103Z
 - Save: te_qa_fixture_ee2c4bd30adc
 - Country: FRA

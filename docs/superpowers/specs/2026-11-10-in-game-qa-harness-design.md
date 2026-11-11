@@ -589,8 +589,10 @@ entries) was compared: no entry was ever missing and no content ever differed.
 - **Clicks**: four points outside the window were refused `bad_point` without the cursor
   moving; a click on Credits opened it and scancode Esc closed it; the game window is one
   3840x2160 client area and the cursor had been on a second monitor.
-- **The game rewrites `pdx_settings.json` at launch and `tutorial.txt` on entering a game, with
-  the same bytes.** `restore` leaves a file whose content matches, so its time stays the run's.
+- **The game rewrites `pdx_settings.json` at launch with the same bytes** (all three runs).
+  `restore` leaves a file whose content matches, so its time stays the run's. In the first
+  session `tutorial.txt`, which is outside the snapshot's set, also came out with the same bytes
+  and a new time; in the second it did not, and what wrote it was not established.
 - **The fixture stays** in `save games/` as `te_qa_fixture_<key>.v3`, by design, and shows in the
   owner's load list.
 - **A session's `debug.log` copy is large** (19 MB for the first session): every debugger
@@ -602,7 +604,9 @@ entries) was compared: no entry was ever missing and no content ever differed.
 The console taking the foreground back when another window is in front (the game was always in
 front); a fixture made under `--playset current`; an argument with a space; a failed process
 lookup on a live game; a game left stopped at the breakpoint by a late stop; whether state a
-setup wrote on the country-select screen survives entering the game. The three
+setup wrote on the country-select screen survives entering the game; a session whose server
+died with the game up (`watch` recording on by itself, then `recover` and `remove-overlay`:
+tested only against fakes and constructed journals). The three
 hardenings the last review left are issue #1588.
 
 ### 13.4 What changes in the design

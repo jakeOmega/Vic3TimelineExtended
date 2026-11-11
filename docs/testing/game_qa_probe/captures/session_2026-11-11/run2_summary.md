@@ -1,6 +1,6 @@
 Restore: restored (51 files put back, 0 removed).
 
-- Permission: owner in the conversation 2026-11-11: 'You can launch anytime after I leave'; ~03:40 MST 'feel free to launch when ready', then 'I'm going to bed now'
+- Permission: (the owner's go-ahead, given in the conversation; their words are not kept here)
 - Snapshot: 20261111T112216Z
 - Save: te_qa_fixture_ee2c4bd30adc
 - Country: FRA
