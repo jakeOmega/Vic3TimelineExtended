@@ -9,7 +9,8 @@ two commits.
 
 The engine surface barely moved: one new trigger (`num_building_assets_of_group`), two new modifier types
 (`country_cannot_decrease_autonomy_bool`, `state_disable_disband_prestige_penalty_bool`), two new custom loc entries,
-nothing removed or renamed (`vanilla_patch_diff.py docs` between the two dumps). No vanilla entity was removed, and
+nothing removed or renamed, and no section changed in place (`vanilla_patch_diff.py docs --show-changed` between
+the two dumps). No vanilla entity was removed, and
 the mod sets no field vanilla dropped (`vanilla_patch_diff.py parsed --mod-uses`).
 
 ## What changed under the mod, and what was done
@@ -68,7 +69,8 @@ Vanilla changed 21 GUI files, nine of which the mod overrides by path. All nine 
   16 px trim doesn't apply. `texticons.gui` and `goods_texticons.gui` were reformatted (one new icon,
   `admiral_defeated`); the mod's 15 goods text icons need nothing.
 
-**Verified clean.** No top-level collision between the mod and anything the hotfix added (13 map mode defaults, 8
+**Verified clean.** The mod defines no map mode, map-mode list or lens tab, so the new `common/map_mode_defaults/`
+(every list needs exactly one default) asks nothing of it; its maps are journal entry map modes. No top-level collision between the mod and anything the hotfix added (13 map mode defaults, 8
 static modifiers, 2 modifier types, the `favorites` events, a message, 111 loc keys). Of the 8 loc keys vanilla
 removed the mod used one, in the market panel (see GUI). Every `define:` the mod reads exists, and the mod overrides no
 define vanilla dropped (`MANPOWER_RATIO_REQUIRED_TO_CLEAR_DEFEATED_ADMIRALS`,
@@ -81,9 +83,13 @@ term) and four technologies (`ai_weight` only). The on-actions vanilla edited ar
 event redefines an event the hotfix changed. The runbook's § 6b mirrors are untouched: no rank, law, subject type,
 scripted rule, power bloc name or principle file changed, and the finance techs and `base_values` kept their
 interest lines. `/validate/engine-coverage` lists no vanilla breakage (14 unknowns, all mod script tokens, as on
-1.15.0). The full suite passes with the real game paths (13,806 tests), which is where the snapshot-driven
-detectors run: the moved engine lines, the `VANILLA FIX` tests, the state-region sync and the install-only texture
-checks.
+1.15.0). `scripts/preflight.py` passes in full, and the suite passes on the machine with the game (13,806 tests, 58
+skipped for a server or `gfx/`), which is where the snapshot-driven detectors run: the moved engine lines, the
+`VANILLA FIX` tests, the state-region sync against the install and the install-only texture checks.
+`test_seize_strait_wargoal.py` and `test_tax_code_migration.py` skip unless `VIC3_BASE_GAME` is set; run with it, they
+pass. A full `POST /reload` on a worktree server wrote nothing outside the audit reports, and its three warnings
+are on `main` already (#1423, #1593, and `gui_reference_audit`'s standing count with the game configured). Nothing
+was run in the game.
 
 ## What reaches the mod without a file of its own changing
 
