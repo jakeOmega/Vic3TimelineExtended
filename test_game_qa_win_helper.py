@@ -106,6 +106,13 @@ class RefusalTest(BackendCase):
         self.assertEqual(self.backend.terminated, []); self.assertEqual(self.state.ours, {})
         self.assertEqual(self.call("kill", pid=pid)["error"], "not_ours")       # and is no longer one it may end
 
+    def test_kill_of_an_exited_process_lets_the_backend_let_go_of_its_handle(self):
+        # The real backend keeps a Popen (a handle) for each child it started, to pin the pid.
+        pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
+        del self.backend.creation[pid]
+        self.call("kill", pid=pid)
+        self.assertEqual(self.backend.forgotten, [pid])
+
     def test_a_kill_that_ends_the_process_does_not_say_it_had_exited(self):
         pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
         self.assertNotIn("already_exited", self.call("kill", pid=pid))
@@ -809,10 +816,16 @@ class ProcessHelperTest(unittest.TestCase):
             reply_line(idle_ms=61_000), reply_line(), reply_line())
         self.assertEqual(ph.window(7), helper.Window(True, False, True, "Victoria 3", (1, 2, 3, 4)))
         self.assertEqual(ph.idle_ms(), 61_000)
-        ph.adopt(ProcId(7, "T")); ph.kill(ProcId(7, "T"))
+        ph.adopt(ProcId(7, "T")); self.assertIs(ph.kill(ProcId(7, "T")), False)
         sent = self.sent()
         self.assertEqual([s["op"] for s in sent], ["window", "idle_ms", "adopt", "kill"])
         self.assertEqual((sent[2]["pid"], sent[2]["created"]), (7, "T")); self.assertEqual(sent[3]["pid"], 7)
+
+    def test_kill_says_whether_the_process_had_already_exited(self):
+        ph = self.make(reply_line(already_exited=True), reply_line(already_exited=False), reply_line())
+        self.assertIs(ph.kill(ProcId(7, "T")), True)
+        self.assertIs(ph.kill(ProcId(7, "T")), False)
+        self.assertIs(ph.kill(ProcId(7, "T")), False)
 
     def test_screenshot_converts_the_folder_and_asks_for_the_width(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -939,7 +952,7 @@ class RealPipeTest(unittest.TestCase):
             ph.kill(ProcId(4242, "T"))
         self.assertEqual(ctx.exception.code, "not_ours")
         proc = ph.launch("victoria3.exe", ["-debug_mode"], "C:\\g")
-        ph.kill(proc)
+        self.assertIs(ph.kill(proc), False)
 
     def test_a_helper_that_exits_is_helper_gone(self):
         ph = self.helper_for("pass\n")
@@ -1013,10 +1026,11 @@ class FakeHelperTest(unittest.TestCase):
     def test_launch_adopt_kill(self):
         proc = self.game.launch("victoria3.exe", ["-a"], "C:\\g")
         self.assertIsInstance(proc, ProcId)
-        self.game.adopt(proc); self.game.kill(proc)
+        self.game.adopt(proc); self.assertIs(self.game.kill(proc), False)
         self.assertEqual((self.game.launched, self.game.adopted, self.game.killed),
                          ([("victoria3.exe", ["-a"], "C:\\g")], [proc], [proc]))
         self.assertFalse(self.game.window(proc.pid).exists)
+        self.assertIs(self.game.kill(proc), True)               # and once it is gone, killing it says so
 
     def test_screenshot_writes_a_png(self):
         path = Path(self.tmp.name) / "s" / "a.png"

@@ -89,6 +89,7 @@ class FakeBackend:
         self.during_focus_wait = None           # called while the helper waits after a tap, for a person to "type"
         self.on_foreground_check = None         # called whenever the foreground window is looked at
         self.terminated: list[int] = []
+        self.forgotten: list[int] = []          # children whose handle the helper let go of after they exited
         self.terminate_args: list[tuple[int, str]] = []
         self.terminate_result = True
         self.captured: list[tuple[int, int, int, int]] = []
@@ -110,6 +111,9 @@ class FakeBackend:
 
     def creation_time(self, pid: int) -> str | None:
         return self.creation.get(pid)
+
+    def forget_child(self, pid: int) -> None:
+        self.forgotten.append(pid)
 
     def terminate(self, pid: int, created: str) -> bool:
         self.terminate_args.append((pid, created))
@@ -355,9 +359,11 @@ class FakeHelper:
         self.screenshots.append((pid, path, max_width))
         return path
 
-    def kill(self, proc: ProcId) -> None:
+    def kill(self, proc: ProcId) -> bool:
+        already_gone = not self.exists
         self.killed.append(proc)
         self.exists = False
+        return already_gone
 
     def tcp_open(self, port: int) -> None:
         self.tcp_port = port

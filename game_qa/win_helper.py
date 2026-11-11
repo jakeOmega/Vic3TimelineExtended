@@ -441,6 +441,7 @@ def _op_kill(req, backend, state):
     created = backend.creation_time(pid)
     if created is None:
         del state.ours[pid]         # it ended on its own: nothing to end, and its id may be reused from now on
+        backend.forget_child(pid)   # so the handle that pinned the id can go too
         return {"already_exited": True}
     if created != recorded:
         raise _Refusal("not_ours", "process %d is not the one this helper started (its id was reused)" % pid)
@@ -662,6 +663,10 @@ class WindowsBackend:
             return self._created_of(handle)
         finally:
             self._kernel32.CloseHandle(handle)
+
+    def forget_child(self, pid: int) -> None:
+        """Let go of the Popen (and its handle) kept for a child that has exited."""
+        self._children.pop(pid, None)
 
     def terminate(self, pid: int, created: str) -> bool:
         """End `pid` only if the process behind the handle opened here was created at `created`."""
