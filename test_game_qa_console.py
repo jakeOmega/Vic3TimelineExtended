@@ -61,10 +61,17 @@ class RoundTripTest(ConsoleTestCase):
         self.assertEqual(e.exception.code, "bad_text")
         self.assertEqual(self.game.steps, [])
 
-    def test_quotes_and_non_ascii_are_typed_verbatim(self):
+    def test_quotes_are_typed_verbatim(self):
         self.game.console_open = True
-        self.console.run('event "é".1', reply=False)
-        self.assertIn({"text": 'event "é".1'}, self.game.steps)
+        self.console.run('event "x".1', reply=False)
+        self.assertIn({"text": 'event "x".1'}, self.game.steps)
+
+    def test_a_text_with_a_non_ascii_character_is_refused_before_any_key(self):
+        # The encodings the game uses for console_history.txt and for debug.log are unverified. If neither echoes
+        # the text the way it was typed, nothing can prove that it arrived, and it would be typed twice.
+        for text in ('event "\u00e9".1', "tag FRA \u2013", "\u65e5\u672c"):
+            self.assertEqual(self.fail_code(text), "bad_text", repr(text))
+        self.assertEqual(self.game.steps, [])
 
     def test_a_text_longer_than_clear_line_can_clear_is_refused_before_any_key(self):
         self.game.console_open = True
@@ -355,22 +362,6 @@ class ArrivalTest(ConsoleTestCase):
         r = self.console.run("tag FRA")                 # lost in the closed console; the probe's flush must not
         self.assertEqual(r.lines, ["new"])              # pair with the old line
         self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
-
-    def test_a_text_with_non_ascii_characters_is_proved_by_the_log_when_the_history_does_not_show_it(self):
-        # The history file's encoding is unverified: if the game writes it in another one the text never turns up
-        # there, which must not read as "did not arrive" (that retypes it, and runs it twice).
-        self.game.console_open = True
-        self.game.history_encoding = "cp1252"
-        self.game.on('event "\u00e9".1', success=["Executed"])
-        r = self.console.run('event "\u00e9".1')
-        self.assertEqual((r.ok, r.lines), (True, ["Executed"]))
-        self.assertEqual(self.game.steps.count({"text": 'event "\u00e9".1'}), 1)
-        self.assertNotIn(CONSOLE_KEY, self.game.steps)
-
-    def test_a_text_with_non_ascii_characters_that_the_history_does_show_needs_no_flush(self):
-        self.game.console_open = True
-        self.console.run('event "\u00e9".1', reply=False)
-        self.assertEqual(self.game.steps, [{"text": 'event "\u00e9".1'}, ENTER])
 
     def test_a_repeat_into_a_closed_console_opens_it_and_goes_again(self):
         self.game.console_open = True
@@ -695,6 +686,23 @@ class StrandedTextTest(ConsoleTestCase):
         self.assertEqual(self.game.steps, [])
         self.assertEqual(self.fail_code("tag GBR"), "stranded_text")      # still not cleared
 
+    def test_a_failed_window_lookup_after_a_partial_refusal_still_strands(self):
+        self.game.console_open = True
+        self.lose_foreground_before_step(1, once=True)      # the text went in; Enter is refused
+        real_window, looks = self.game.window, []
+
+        def window(pid):
+            looks.append(pid)
+            if len(looks) == 2:                              # the first look is _front's; this one follows the refusal
+                raise console.HelperError("backend_error", "boom")
+            return real_window(pid)
+        self.game.window = window
+        self.assertEqual(self.fail_code("event france.1", reply=False), "helper: backend_error")
+        self.game.window = real_window
+        self.game.foreground = True
+        self.assertEqual(self.game.typed, "event france.1")
+        self.assertEqual(self.fail_code("tag GBR", reply=False), "stranded_text")
+
     def test_a_refusal_that_sent_nothing_does_not_strand(self):
         self.game.console_open = True
         self.lose_foreground_before_step(0, once=True)
@@ -785,6 +793,56 @@ class EnteredFlagTest(ConsoleTestCase):
         with self.assertRaises(console.ConsoleError) as e:
             self.console.run("tag FRA")
         self.assertEqual((e.exception.code, e.exception.entered), ("game_gone", True))
+
+    def test_a_failure_while_the_console_is_sorted_out_after_a_late_command_is_unknown(self):
+        # The command's Enter went out, the history showed nothing for 5 s (the game is 6 s slow), and the probe
+        # that asks whether the console is open is refused: the command may still land.
+        self.game.console_open = True
+        self.game.latency = 6.0
+
+        def window_goes_behind_a_person_before_the_probe(sent):
+            if sent == 2:
+                self.game.foreground = False
+                self.game.idle = 2_000
+        self.game.on_step = window_goes_behind_a_person_before_the_probe
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertIsNone(e.exception.entered)
+
+    def test_the_game_leaving_after_the_enter_went_out_is_unknown(self):
+        self.game.console_open = False
+        self.game.exit_after_steps = 2                  # the text and the Enter are sent, then the window is gone
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA", reply=False)
+        self.assertEqual(e.exception.code, "game_gone")
+        self.assertIsNone(e.exception.entered)
+
+    def test_a_refusal_of_the_retyped_enter_is_still_unknown_because_the_first_enter_went_out(self):
+        self.game.console_open = False
+        self.lose_foreground_before_step(8)             # text+Enter, probe+Enter, key, probe+Enter, retyped text
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA")
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertIsNone(e.exception.entered)
+
+    def test_a_helper_error_that_does_not_say_how_far_it_got_leaves_the_enter_unknown(self):
+        self.game.console_open = True
+
+        def keys(pid, steps):
+            self.game.steps.extend(steps)
+            raise console.HelperError("backend_error", "OSError('SendInput sent 0 of 1 events')")
+        self.game.keys = keys
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA", reply=False)
+        self.assertEqual(e.exception.code, "helper: backend_error")
+        self.assertIsNone(e.exception.entered)
+
+    def test_a_helper_error_before_any_enter_could_go_out_is_not_entered(self):
+        self.game.window = lambda pid: (_ for _ in ()).throw(console.HelperError("backend_error", "boom"))
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA", reply=False)
+        self.assertIs(e.exception.entered, False)
 
     def test_a_refusal_after_the_text_but_before_it_arrived_is_not_entered(self):
         self.game.console_open = True
