@@ -1363,6 +1363,24 @@ WAVE6_PICKS = {
     "devastated_late": {"seed": 5, "crop": (0, 0, 1432, 702)},
     "nuclear_strike_early": {"seed": 3, "crop": (62, 60, 1474, 752)},
     "nuclear_strike_late": {"seed": 4},
+    # the pictures that read the yearly pass's tags (resort_3 is not rendered yet)
+    "boomtown_1": {"seed": 1, "smudge": [(1135, 676, 1192, 692)]},
+    "boomtown_2": {"seed": 1},
+    "boomtown_3": {"seed": 3},
+    "boomtown_4": {"seed": 1},
+    "declining_1": {"seed": 2, "crop": (22, 0, 1515, 732)},
+    "declining_2": {"seed": 1},
+    "declining_3": {"seed": 3, "smudge": [(884, 610, 912, 634), (1046, 420, 1092, 434)]},
+    "declining_4": {"seed": 1, "smudge": [(1236, 530, 1270, 572)]},
+    "divided_2": {"seed": 1, "smudge": [(664, 366, 698, 388)]},
+    "divided_3": {"seed": 1},
+    "divided_4": {"seed": 3},
+    "industry_1": {"seed": 1, "smudge": [(468, 520, 498, 534)]},
+    "industry_2": {"seed": 1, "smudge": [(376, 570, 402, 586), (1294, 660, 1314, 696)]},
+    "industry_3": {"seed": 0, "smudge": [(165, 722, 250, 752), (678, 694, 712, 714)]},
+    "resort_1": {"seed": 3},
+    "resort_2": {"seed": 0, "smudge": [(986, 118, 1018, 152)]},
+    "resort_4": {"seed": 0},
 }
 
 for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):

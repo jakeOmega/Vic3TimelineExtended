@@ -2906,6 +2906,38 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = art_deco_architecture }
+							has_variable = te_sp_resort
+						}
+					}
+					add = 110000
+				}
+			}
+			path = "gfx/state_pictures/te_resort_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							has_variable = te_sp_industry
+						}
+					}
+					add = 120000
+				}
+			}
+			path = "gfx/state_pictures/te_industry_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
 							state_region = { pollution_amount >= 150 }
 						}
 					}
@@ -2913,6 +2945,38 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_smog_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							has_variable = te_sp_decline
+						}
+					}
+					add = 150000
+				}
+			}
+			path = "gfx/state_pictures/te_declining_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							has_variable = te_sp_boom
+						}
+					}
+					add = 160000
+				}
+			}
+			path = "gfx/state_pictures/te_boomtown_1.dds"
 			effect = "vfx_entity_ui_state_docks"
 		}
 		{
@@ -3073,6 +3137,38 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_urban_planning }
+							has_variable = te_sp_resort
+						}
+					}
+					add = 210000
+				}
+			}
+			path = "gfx/state_pictures/te_resort_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							has_variable = te_sp_industry
+						}
+					}
+					add = 220000
+				}
+			}
+			path = "gfx/state_pictures/te_industry_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
 							state_region = { pollution_amount >= 150 }
 						}
 					}
@@ -3080,6 +3176,54 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_smog_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							has_variable = te_sp_divided
+						}
+					}
+					add = 240000
+				}
+			}
+			path = "gfx/state_pictures/te_divided_2.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							has_variable = te_sp_decline
+						}
+					}
+					add = 250000
+				}
+			}
+			path = "gfx/state_pictures/te_declining_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							has_variable = te_sp_boom
+						}
+					}
+					add = 260000
+				}
+			}
+			path = "gfx/state_pictures/te_boomtown_2.dds"
 			effect = "vfx_entity_ui_state_docks"
 		}
 		{
@@ -3256,6 +3400,22 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = computer_aided_design }
+							has_variable = te_sp_industry
+						}
+					}
+					add = 320000
+				}
+			}
+			path = "gfx/state_pictures/te_industry_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
 							state_region = { pollution_amount >= 150 }
 						}
 					}
@@ -3263,6 +3423,54 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_smog_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							has_variable = te_sp_divided
+						}
+					}
+					add = 340000
+				}
+			}
+			path = "gfx/state_pictures/te_divided_3.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							has_variable = te_sp_decline
+						}
+					}
+					add = 350000
+				}
+			}
+			path = "gfx/state_pictures/te_declining_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							has_variable = te_sp_boom
+						}
+					}
+					add = 360000
+				}
+			}
+			path = "gfx/state_pictures/te_boomtown_3.dds"
 			effect = "vfx_entity_ui_state_docks"
 		}
 		{
@@ -3439,6 +3647,22 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = advanced_structural_engineering }
+							has_variable = te_sp_resort
+						}
+					}
+					add = 410000
+				}
+			}
+			path = "gfx/state_pictures/te_resort_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
 							state_region = { pollution_amount >= 150 }
 						}
 					}
@@ -3446,6 +3670,54 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_smog_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							has_variable = te_sp_divided
+						}
+					}
+					add = 440000
+				}
+			}
+			path = "gfx/state_pictures/te_divided_4.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							has_variable = te_sp_decline
+						}
+					}
+					add = 450000
+				}
+			}
+			path = "gfx/state_pictures/te_declining_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							has_variable = te_sp_boom
+						}
+					}
+					add = 460000
+				}
+			}
+			path = "gfx/state_pictures/te_boomtown_4.dds"
 			effect = "vfx_entity_ui_state_docks"
 		}
 		{
