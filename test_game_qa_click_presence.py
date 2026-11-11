@@ -134,11 +134,69 @@ class ClickTest(BackendCase):
         self.assertEqual(self.state.helper_cursor, (110, 70))
 
     def test_what_is_remembered_is_where_the_cursor_ended_up_not_where_it_was_sent(self):
-        # Windows clamps SetCursorPos to the screen, and the presence rule compares exactly.
+        # Windows clamps SetCursorPos to the screen, and the presence rule compares exactly. A click whose cursor
+        # did not land on its point is refused, but the cursor was moved, so where it went is still remembered.
         self.backend.cursor_clamp = (1000, 1000)
-        self.click(1500, 900)
+        out = self.click(1500, 900)
+        self.assertEqual(out["error"], "cursor_misplaced")
         self.assertEqual(self.backend.cursor, (999, 900))
         self.assertEqual(self.state.helper_cursor, (999, 900))
+        self.assertNotIn("button", [event[0] for event in self.backend.mouse])
+
+    def test_a_cursor_moved_by_a_person_while_it_settled_is_cursor_misplaced_and_nothing_is_pressed(self):
+        self.backend.on_sleep = lambda ms: setattr(self.backend, "cursor", (1, 1))
+        out = self.click(300, 200)
+        self.assertEqual((out["ok"], out["error"]), (False, "cursor_misplaced"))
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])
+
+    def test_a_window_that_moved_while_the_cursor_settled_is_bad_point_and_nothing_is_pressed(self):
+        def moves(ms):
+            self.backend.windows[7]["client"] = (200, 100, 1920, 1080)
+        self.backend.on_sleep = moves
+        out = self.click(300, 200)
+        self.assertEqual((out["ok"], out["error"]), (False, "bad_point"))
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])
+
+    def test_a_window_that_shrank_below_the_point_while_the_cursor_settled_is_bad_point(self):
+        def shrinks(ms):
+            self.backend.windows[7]["client"] = (0, 0, 200, 200)
+        self.backend.on_sleep = shrinks
+        self.assertEqual(self.click(300, 200)["error"], "bad_point")
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])
+
+    def test_a_window_covering_the_point_is_covered_and_nothing_is_pressed(self):
+        self.backend.covered_by = 999                           # another top-level window is under the cursor
+        out = self.click(300, 200)
+        self.assertEqual((out["ok"], out["error"]), (False, "covered"))
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])
+        self.assertEqual(self.state.helper_cursor, (300, 200))
+
+    def test_a_window_with_nothing_under_the_point_is_covered(self):
+        self.backend.covered_by = 0
+        self.assertEqual(self.click(300, 200)["error"], "covered")
+
+    def test_the_games_own_window_under_the_point_is_not_covered(self):
+        self.assertTrue(self.click(300, 200)["ok"])
+
+    def test_the_window_under_the_point_is_asked_about_at_the_screen_point(self):
+        asked = []
+        real = self.backend.window_at
+        self.backend.windows[7]["client"] = (100, 50, 800, 600)
+        self.backend.window_at = lambda x, y: asked.append((x, y)) or real(x, y)
+        self.click(10, 20)
+        self.assertEqual(asked, [(110, 70)])
+
+    def test_a_client_area_left_of_the_primary_screen_has_negative_screen_pixels(self):
+        # The owner's desktop starts at x = -3072.
+        self.backend.windows[7]["client"] = (-3072, 0, 3072, 1728)
+        self.assertTrue(self.click(10, 20)["ok"])
+        self.assertEqual(self.backend.mouse[0], ("move", -3062, 20))
+        out = self.call("presence")
+        self.assertEqual((out["cursor"], out["helper_cursor"]), ([-3062, 20], [-3062, 20]))
+        self.assertEqual(self.click(3072, 0)["error"], "bad_point")
+        self.assertEqual(self.click(-1, 0)["error"], "bad_point")
+        self.assertTrue(self.click(3071, 1727)["ok"])
+        self.assertEqual(self.backend.cursor, (-1, 1727))
 
     def test_the_cursor_is_remembered_even_when_the_press_fails(self):
         self.backend.fail_mouse_on = DOWN
@@ -185,6 +243,10 @@ class PresenceTest(BackendCase):
     def test_a_locked_desktop_has_no_foreground_window(self):
         self.backend.foreground = 0
         self.assertEqual(self.call("presence")["foreground"], 0)
+
+    def test_a_cursor_left_of_the_primary_screen_reads_as_negative(self):
+        self.backend.cursor = (-2000, 300)
+        self.assertEqual(self.call("presence")["cursor"], [-2000, 300])
 
     def test_presence_needs_no_window_and_no_pid(self):
         self.backend.windows.clear()
@@ -263,6 +325,10 @@ class ProcessHelperTest(unittest.TestCase):
         self.assertEqual(ph.presence(), helper.Presence((10, 20), 70, (3, 4)))
         self.assertEqual(self.sent()[0], {"id": 1, "op": "presence"})
 
+    def test_a_presence_with_negative_coordinates_is_read_as_given(self):
+        ph = self.make(reply_line(cursor=[-3062, 20], foreground=70, helper_cursor=[-3062, 20]))
+        self.assertEqual(ph.presence(), helper.Presence((-3062, 20), 70, (-3062, 20)))
+
     def test_a_presence_can_be_compared_and_hashed(self):
         a = helper.Presence((1, 2), 3, None)
         self.assertEqual(a, helper.Presence((1, 2), 3, None))
@@ -286,6 +352,11 @@ class FakeHelperTest(unittest.TestCase):
         self.assertEqual(ctx.exception.code, "not_foreground")
         self.assertEqual((self.game.clicks, self.game.cursor, self.game.helper_cursor),
                          ([], (640, 360), None))
+
+    def test_a_click_in_a_client_area_with_a_negative_origin_moves_the_cursor_there(self):
+        self.game.client = (-3072, 0, 3072, 1728)
+        self.game.click(7, 10, 20)
+        self.assertEqual((self.game.cursor, self.game.helper_cursor), ((-3062, 20), (-3062, 20)))
 
     def test_a_click_outside_the_client_area_is_bad_point(self):
         for x, y in ((-1, 0), (0, 1080), (1920, 5)):
@@ -363,7 +434,7 @@ class BackendParityTest(unittest.TestCase):
                 self.assertEqual(list(real[name].parameters), list(sig.parameters))
 
     def test_the_new_calls_are_among_them(self):
-        for name in ("set_cursor", "cursor_pos", "send_mouse"):
+        for name in ("set_cursor", "cursor_pos", "send_mouse", "window_at"):
             self.assertIn(name, self.public(win_helper.WindowsBackend))
             self.assertIn(name, self.public(fakes.FakeBackend))
 

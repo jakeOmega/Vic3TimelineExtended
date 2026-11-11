@@ -29,8 +29,11 @@ helper remembers when it sent its own and discounts input at that moment.
 the console decides whether someone is at the machine from `presence` instead.)
 
 `click` moves the cursor to a point of the game's client area and presses the
-left button there, under the same rule as `keys` (the game's window in front,
-looked at again after the cursor has settled and before the press). `presence`
+left button there, under the same rule as `keys` (the game's window in front),
+and presses only if, after the cursor has settled, the window is still in front
+and has not moved, the cursor is exactly on the point, and the game's own window
+is the one under it. Otherwise nothing is pressed: `not_foreground`, `bad_point`,
+`cursor_misplaced` or `covered`. `presence`
 reports where the cursor and the foreground window are, and where the helper
 last put the cursor, so that a caller comparing two readings can tell its
 own move from a person's.
@@ -448,12 +451,20 @@ def _op_click(req, backend, state):
     left, top, width, height = _front_window(backend, state, pid)["client"]
     if not (0 <= x < width and 0 <= y < height):
         raise _Refusal("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height))
+    target = (left + x, top + y)
     try:
-        backend.set_cursor(left + x, top + y)
+        backend.set_cursor(*target)
         state.helper_cursor = backend.cursor_pos()      # where it is, not where it was sent: Windows may clamp it
         state.last_sent_tick = backend.tick()           # whether or not a cursor move counts as input, it was ours
         backend.sleep(CLICK_SETTLE_MS)
-        _front_window(backend, state, pid)              # a window may have taken the front while the cursor settled
+        # Everything can have changed while the cursor settled, so the press waits on a second look at all of it.
+        win = _front_window(backend, state, pid)        # a window may have taken the front
+        if tuple(win["client"]) != (left, top, width, height):
+            raise _Refusal("bad_point", "the window moved or was resized while the cursor settled")
+        if backend.cursor_pos() != target:              # clamped by the screen, or a person's hand
+            raise _Refusal("cursor_misplaced", "the cursor is not at %s" % (target,))
+        if backend.window_at(*target) != win["hwnd"]:   # another window, or none, is under the point
+            raise _Refusal("covered", "the game's window is not the one under %s" % (target,))
         tap_button(backend.send_mouse, backend.sleep, CLICK_HOLD_MS)
     finally:
         state.last_sent_tick = backend.tick()           # after the button-up, which lands later than the call starts
@@ -633,6 +644,7 @@ class WindowsBackend:
     PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
     STILL_ACTIVE = 259
     GW_OWNER = 4
+    GA_ROOT = 2
     SW_RESTORE = 9
     VK_MENU = 0x12
     SRCCOPY = 0x00CC0020
@@ -673,6 +685,8 @@ class WindowsBackend:
         sig(u.keybd_event, None, c.c_ubyte, c.c_ubyte, u32, c.c_size_t)
         sig(u.SetCursorPos, i32, i32, i32)
         sig(u.GetCursorPos, i32, c.POINTER(POINT))
+        sig(u.WindowFromPoint, ptr, POINT)
+        sig(u.GetAncestor, ptr, ptr, uint)
         sig(u.GetLastInputInfo, i32, c.POINTER(LASTINPUTINFO))
         sig(u.GetDC, ptr, ptr)
         sig(u.ReleaseDC, i32, ptr, ptr)
@@ -830,6 +844,13 @@ class WindowsBackend:
         if not self._user32.GetCursorPos(ctypes.byref(point)):
             raise OSError("GetCursorPos failed (error %d)" % ctypes.get_last_error())
         return (point.x, point.y)
+
+    def window_at(self, x: int, y: int) -> int:
+        """The top-level window under the screen point (x, y): its handle, 0 if there is none."""
+        child = self._user32.WindowFromPoint(POINT(x, y))
+        if not child:
+            return 0
+        return int(self._user32.GetAncestor(child, self.GA_ROOT) or 0)
 
     def send_mouse(self, flags: int) -> None:
         """One mouse event (a MOUSEEVENTF_* button flag) at the cursor, where it is."""

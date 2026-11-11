@@ -84,6 +84,7 @@ class FakeBackend:
         self.cursor = (640, 360)
         self.cursor_clamp: tuple[int, int] | None = None        # the screen's size: a cursor move is clamped to it
         self.fail_move = False                  # the cursor move fails
+        self.covered_by: int | None = None      # the window under every point, if not whichever window holds it
         self.fail_mouse_on: int | None = None   # a mouse event with these flags raises, as a refused SendInput does
         self.mouse: list[tuple] = []
         self.slept: list[int] = []
@@ -184,6 +185,16 @@ class FakeBackend:
 
     def cursor_pos(self) -> tuple[int, int]:
         return self.cursor
+
+    def window_at(self, x: int, y: int) -> int:
+        """The top-level window under the point: `covered_by` if set, else the first whose client area holds it."""
+        if self.covered_by is not None:
+            return self.covered_by
+        for win in self.windows.values():
+            left, top, width, height = win["client"]
+            if left <= x < left + width and top <= y < top + height:
+                return win["hwnd"]
+        return 0
 
     def send_mouse(self, flags: int) -> None:
         if flags == self.fail_mouse_on:

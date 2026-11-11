@@ -5,7 +5,8 @@ an answer. Two rules come before everything else: never send a key unless the
 game's window is in front (`_front`), and never take the foreground from a
 person who is using the machine (someone is, if the cursor moved or the
 foreground window changed between two presence readings `PRESENCE_GAP_S` apart;
-the helper's own cursor move is not a person).
+the helper's own cursor move is not a person; the foreground is taken back only
+after `QUIET_GAPS` such gaps in a row show no change).
 
 What the game shows of a command (verified on 2026-11-10):
 
@@ -42,10 +43,13 @@ What the game shows of a command (verified on 2026-11-10):
 Windows' idle time says nothing here: with a remote-desktop session connected it reads 0 to 31 ms
 continuously (measured on the owner's machine, 2026-11-10), so a rule on it never lets the console
 take the foreground back. Presence is read from the cursor and the foreground window instead: a
-machine is still if two readings a gap apart show the same foreground window and a cursor that did
-not move, or sits exactly where the helper last put it (a click). A person who keeps the cursor
-moving or the windows changing is waited for, up to `FOREGROUND_WAIT_S`, and then the step fails with
-`not_foreground`, nothing typed.
+gap is quiet if two readings a gap apart show the same foreground window and a cursor that did not
+move, or sits exactly where the helper last put it (a click); after `QUIET_GAPS` quiet gaps in a row
+(about 6 s) the foreground is taken back, and any change restarts the count. A person who keeps the
+cursor moving or the windows changing is waited for, up to `FOREGROUND_WAIT_S`, and then the step fails
+with `not_foreground`, nothing typed. The rule's known limit: someone using the keyboard alone, or
+reading, with the mouse still and the same window in front, changes neither signal, so after those
+two gaps they are read as nobody and the game's window is brought forward over them.
 
 The console is known to be open after a round trip and known to be closed after `close()`; `run` and
 `send` open one that is known closed, `send` also one that is not known to be open (it has no retry
@@ -71,6 +75,7 @@ FLUSH_COMMAND = "help ndefines.ngui"
 PROBE_COMMAND = "select_event_option list"
 FOREGROUND_WAIT_S = 120.0
 PRESENCE_GAP_S = 3.0            # between the two readings that say whether someone is at the machine
+QUIET_GAPS = 2                  # quiet gaps in a row before the foreground is taken back
 
 UNRESPONSIVE_S = 10.0           # a window that does not respond this long is a game that is gone
 ARRIVAL_S = 5.0                 # how long a command gets to show up in the history
@@ -163,7 +168,8 @@ class Console:
         and return without waiting: `arrived(text)` says later whether the history gained it. It never types a
         text again. A console that is not known to be open is opened first, since a send that is lost to a closed
         console cannot be told from one the game has not got to yet. A send that fails has `entered` None when an
-        Enter may have gone out and False otherwise."""
+        Enter may have gone out and False otherwise. Sending proves nothing about the console afterwards: the
+        belief is what the check before typing left, and neither a send nor `arrived` changes it."""
         self._check_text(text)
         self._refuse_if_stranded()
         if self._open is not True:
@@ -181,7 +187,8 @@ class Console:
         """Whether the history has gained `text` since `send` typed it (the latest send of that text). False
         before the game has taken it, for a text `send` has not typed, and also for a text the history already
         held when it was sent and does not write again (verified live: the same command twice running adds no
-        line), so False never proves that it did not run. `run` has the log's proof for those."""
+        line), so False never proves that it did not run. `run` has the log's proof for those. It only reads:
+        a text that arrived says the console took it then, and a `close()` since may have shut it."""
         typed = self._sent.get(text.strip())
         return typed is not None and self._landed(typed)
 
@@ -200,10 +207,12 @@ class Console:
                 self._open = True
             raise
         self._open = False
+        self._sleep(CONSOLE_SETTLE_S)           # let it finish closing before the game gets another key
 
     def hotkey(self, scan: int) -> None:
         """Press one key (a scancode) in the game itself, with the usual checks. With the console open the key
         would go into its input line, so this is refused unless the console is known to be closed."""
+        self._refuse_if_stranded()
         if self._open is not False:
             raise ConsoleError("console_open", "the console is not known to be closed: close() it first")
         self._keys([{"scan": scan}])
@@ -244,9 +253,10 @@ class Console:
                 return False
             return self._landed(text_t) or self._pair(text, adjacent=True) is not None
 
+        if self._open is False:
+            self._open_console()                # known shut: typing now would be lost
+            self._enter_unknown = False         # the probe's Enter says nothing of this text, which is not typed yet
         try:
-            if self._open is False:
-                self._open_console()            # known shut: typing now would be lost
             for attempt in (1, 2):
                 ok = True
                 if text_t is not None and not proved and found is None:
@@ -326,18 +336,19 @@ class Console:
         """Return only with the game's window responding and in front.
 
         Someone at the machine is waited for (up to `FOREGROUND_WAIT_S`) rather than interrupted: the window
-        is brought forward only when two presence readings a gap apart show nobody there. The first reading
-        of a call is taken afresh, and one from before the window stopped responding is dropped, so a pair
-        is always a whole gap apart.
+        is brought forward only after `QUIET_GAPS` gaps in a row between presence readings show nobody there.
+        The first reading of a call is taken afresh, and one from before the window stopped responding is
+        dropped with the count, so a pair is always a whole gap apart.
         """
         started = self._clock()
         stuck_since: float | None = None
         previous: Presence | None = None
+        quiet = 0                               # quiet gaps in a row
         while True:
             win = self._require_window()
             now = self._clock()
             if not win.responding:
-                previous = None
+                previous, quiet = None, 0
                 stuck_since = now if stuck_since is None else stuck_since
                 if now - stuck_since >= UNRESPONSIVE_S:
                     raise ConsoleError("game_gone", "the game has not responded for %g s" % UNRESPONSIVE_S)
@@ -347,7 +358,9 @@ class Console:
             if win.foreground:
                 return
             reading = self._call(self._helper.presence)
-            if previous is not None and not _someone_between(previous, reading):
+            if previous is not None:
+                quiet = 0 if _someone_between(previous, reading) else quiet + 1
+            if quiet >= QUIET_GAPS:
                 if self._call(self._helper.focus, self._proc.pid):
                     return
                 raise ConsoleError("not_foreground", "the game's window would not come to the front")
@@ -541,11 +554,14 @@ class Console:
 
         end = self._clock() + timeout
         while True:
-            if landed_late() or self._console_answers(probes) or landed_late():
+            if landed_late():
+                self._open = True
+                return
+            self._open = None                   # until a probe arrives, whatever was believed before is not known
+            if self._console_answers(probes) or landed_late():
                 self._open = True
                 return
             if self._clock() >= end:
                 raise ConsoleError("no_ack", "the console took no command within %g s" % timeout)
-            self._open = None                   # the key is about to toggle it
             self._keys([{"scan": SCAN_CONSOLE}])
             self._sleep(CONSOLE_SETTLE_S)
