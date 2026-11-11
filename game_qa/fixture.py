@@ -302,7 +302,8 @@ def _run(run_cli: RunCli, launch: list[str], snapshot: str, saves: Path, target:
     try:
         reply, ok = _call(run_cli, launch)
     except Exception as error:
-        reply, ok = {"refused": "no_reply", "detail": f"launch could not be run, or its reply was lost: {error!r}"}, False
+        reply = {"refused": "no_reply", "detail": f"launch could not be run, or its reply was lost: {error!r}"}
+        ok = False
     failure = None if ok else _failure("launch", reply, snapshot)
     if not ok and no_game(reply):
         return _Run(failure)

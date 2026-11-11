@@ -7,8 +7,12 @@
 other verb is a thin client of it (`game_qa/client.py`). The server binds 127.0.0.1 only, answers one request at
 a time, and holds exactly one `Session`. While it listens, `<backup root>/session.json` names it: `port`, `pid`,
 `started`, then `snapshot` once the session has started, and `token`, which every request must carry, so that no
-other program on the machine (a web page in a browser included) can type into the game. The server removes the
-file when it exits by any route it controls, and never removes one another server wrote.
+other program on the machine (a web page in a browser included) can type into the game. The file is its owner's
+alone to read (0600), and the server removes it when it exits by any route it controls, never one another server
+wrote. Every request also carries its client's expiry (`X-Game-QA-Expires`, epoch seconds: when the client stops
+waiting); the server never begins a request whose expiry has passed (`expired`), so a verb whose client gave up
+behind a long one is not run later, out of its sight. A connection that sends nothing is dropped after
+HANDLER_TIMEOUT_S, so it cannot keep `stop` waiting.
 
 The server never touches the owner's files itself: only the `Session` does, through part 1's verbs. If the
 server is killed outright nothing here restores anything. `watch`, its own process, still records the game's
@@ -16,26 +20,31 @@ exit, and the next `start` is refused: the dead run's overlay is still there (`o
 refuses while that run is unfinished. `recover` finishes it, and then the folder is removed by hand (spec § 5.2,
 Review Focus 1).
 
-    start      the session's start. Any error stops the session and ends the server; a second `start` is
-               refused `session_running`, touching nothing
-    stop       the session's stop: the server answers with its reply, then exits
+    start      the session's start. Any error stops the session; the server then ends as after `stop`. A second
+               `start` is refused `session_running`, touching nothing
+    stop       the session's stop. The server answers with its reply, then exits, unless the stop can be run again
+               to effect (`final_stop`: a refused restore, a game left up that is known by pid and start time):
+               then it serves on, and `stop` again runs the stop again
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, try-event
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
 
-SIGTERM and SIGINT stop the session, then remove the file. A signal while a verb runs is noted and acted on once
-that verb has answered: a verb is never cut short, since it may be typing into the game, waiting on the helper's
-pipe (whose lock `stop` would then wait on for ever) or running a protective verb (which a cut would leave
-holding the backup root's lock).
+SIGTERM and SIGINT stop the session (again, when the last stop can be run again), then remove the file. A signal
+while a verb runs is noted and acted on once that verb has answered: a verb is never cut short, since it may be
+typing into the game, waiting on the helper's pipe (whose lock `stop` would then wait on for ever) or running a
+protective verb (which a cut would leave holding the backup root's lock).
 """
 from __future__ import annotations
 
+import hmac
 import json
+import math
 import os
 import signal
 import socketserver
+import time
 import traceback
 from dataclasses import asdict
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -54,6 +63,9 @@ HOST = "127.0.0.1"
 PORT = 8951
 SESSION_FILE = "session.json"
 TOKEN_HEADER = "X-Game-QA-Token"
+EXPIRES_HEADER = "X-Game-QA-Expires"    # epoch seconds: the client has stopped waiting by then
+HANDLER_TIMEOUT_S = 30.0                # a connection that sends nothing for that long is dropped
+RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
 START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy")
 
@@ -109,15 +121,29 @@ def clean_stop(reply: dict) -> bool:
             and not reply.get("overlay_kept") and not reply.get("snapshot_unknown"))
 
 
-class SessionServer:
-    """Serves one `Session` (or anything with its public methods) on HOST until `stop`, a failed `start` or a
-    signal; `serve` returns what it did. `log` gets one line per request and per event, or nothing when None."""
+def final_stop(reply: Any) -> bool:
+    """Whether a stop's reply ends the server: running the stop again cannot change it. The session says so in
+    `stop_again`; a reply without it is judged by its outcome (RETRYABLE). Anything that is not a reply is final."""
+    if not isinstance(reply, dict):
+        return True
+    again = reply.get("stop_again")
+    if isinstance(again, bool):
+        return not again
+    return reply.get("outcome") not in RETRYABLE
 
-    def __init__(self, session, backup_root: Path, port: int = PORT, log: TextIO | None = None) -> None:
+
+class SessionServer:
+    """Serves one `Session` (or anything with its public methods) on HOST until a final stop (from `stop` or a
+    failed `start`) or a signal; `serve` returns what it did. `log` gets one line per request and per event, or
+    nothing when None. `now` is the clock a request's expiry is judged by (epoch seconds)."""
+
+    def __init__(self, session, backup_root: Path, port: int = PORT, log: TextIO | None = None,
+                 now: Callable[[], float] = time.time) -> None:
         self._session = session
         self._backup_root = Path(backup_root)
         self._port = port
         self._log = log
+        self._now = now
         self.token = os.urandom(16).hex()
         self.address: tuple[str, int] | None = None
         self._started = stamp(utc_now())
@@ -126,7 +152,7 @@ class SessionServer:
         self._busy = False                  # a request is being answered: a signal waits for it
         self._signalled: int | None = None
         self._start_posted = False
-        self._stop_reply: dict | None = None    # a stop's reply, from the `stop` verb or a failed start: final
+        self._stop_reply: dict | None = None    # the last stop's reply, from the `stop` verb or a failed start
         self._served = 0
         self._verbs: dict[str, Callable[[dict], tuple[dict, int]]] = {
             "console": self._console, "run-setup": self._run_setup, "events": self._events, "pick": self._pick,
@@ -142,8 +168,9 @@ class SessionServer:
 
     def serve(self, signals: bool = False) -> dict:
         """Listen, claim session.json, answer requests one at a time until the session is over, then stop the
-        session unless a `stop` verb or a failed start already has (that reply is final: `Session.stop` would run
-        a refused stop again, out of the caller's sight) and remove the file.
+        session unless a `stop` verb or a failed start already has, and remove the file. After a signal a stop
+        whose reply can change when run again (not `final_stop`) is run once more; otherwise the last stop's reply
+        stands, since `Session.stop` would run a refused stop again, out of the caller's sight.
         With `signals` (the real server, in its main thread), SIGTERM and SIGINT end it the same way."""
         httpd = _HTTPServer((HOST, self._port), _Handler)
         httpd.game_qa = self
@@ -168,7 +195,10 @@ class SessionServer:
                     self._busy = True       # from here a signal is only noted: nothing may cut the stop short
                     if self._signalled is not None:
                         self._note("signal %d: stopping the session" % self._signalled)
-                    stopped = self._stop_reply if self._stop_reply is not None else self._stop_session()
+                    if self._stop_reply is None or (self._signalled is not None and not final_stop(self._stop_reply)):
+                        stopped = self._stop_session()
+                    else:
+                        stopped = self._stop_reply
                     self._release()
             finally:
                 for signum, handler in previous.items():
@@ -204,8 +234,10 @@ class SessionServer:
         if verb == "start":
             return self._start(body)
         if verb == "stop":
-            self._done = True
             reply = self._stop_reply = self._stop_session()
+            self._done = final_stop(reply)
+            if not self._done:
+                self._note("the stop ended %s and can be run again: serving on" % reply.get("outcome"))
             return reply, 0 if clean_stop(reply) else 2
         run = self._verbs.get(verb)
         if run is None:
@@ -233,7 +265,7 @@ class SessionServer:
             if "stop" not in out:               # not setdefault: its argument, a stop, would run every time
                 out["stop"] = self._stop_session()
             self._stop_reply = out["stop"] if isinstance(out["stop"], dict) else None
-            self._done = True
+            self._done = final_stop(out["stop"])     # a stop that can be run again leaves the server for `stop`
             return out, 2
         if isinstance(reply, dict) and reply.get("snapshot"):
             self._update_info(snapshot=reply["snapshot"])
@@ -313,7 +345,15 @@ class SessionServer:
         self._info.update(fields)
         temp = self.path.with_name("%s.%d.tmp" % (SESSION_FILE, os.getpid()))
         try:
-            temp.write_text(json.dumps(self._info) + "\n", encoding="utf-8")
+            # 0600 like the claim: the file holds the token. fchmod too, for a temp file an earlier server of this
+            # pid left with other bits (O_CREAT's mode applies only to a file it creates).
+            fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+            try:
+                os.fchmod(fd, 0o600)
+                os.write(fd, (json.dumps(self._info) + "\n").encode("utf-8"))
+                os.fsync(fd)
+            finally:
+                os.close(fd)
             os.replace(temp, self.path)
         except OSError as e:
             self._note("session.json could not be updated: %s" % e)
@@ -360,11 +400,13 @@ class _HTTPServer(HTTPServer):
 
 class _Handler(BaseHTTPRequestHandler):
     server_version = "game_qa"
+    timeout = HANDLER_TIMEOUT_S             # each read and write of a connection: a silent one cannot stall the loop
 
     def do_POST(self) -> None:
         owner = self.server.game_qa
         owner._busy = True
-        if self.headers.get(TOKEN_HEADER) != owner.token:
+        given = (self.headers.get(TOKEN_HEADER) or "").encode("utf-8", "replace")
+        if not hmac.compare_digest(given, owner.token.encode("ascii")):
             self._answer(403, {"refused": "forbidden", "detail": "the request did not carry this server's token "
                                                                  "(session.json)"}, 2)
             return
@@ -378,7 +420,24 @@ class _Handler(BaseHTTPRequestHandler):
         except ValueError as e:             # UnicodeDecodeError and JSONDecodeError are ValueErrors
             self._answer(400, {"refused": "bad_request", "detail": str(e)}, 2)
             return
-        reply, code = owner.handle(self.path.lstrip("/"), body)
+        try:
+            expires = float(self.headers.get(EXPIRES_HEADER) or "")
+            if not math.isfinite(expires):
+                raise ValueError(expires)
+        except ValueError:
+            self._answer(400, {"refused": "bad_request", "detail": "the request carries no expiry (%s: epoch seconds)"
+                                                                   % EXPIRES_HEADER}, 2)
+            return
+        verb = self.path.lstrip("/")
+        late = owner._now() - expires
+        if late >= 0:
+            # Its client has stopped waiting (it queued behind a long verb): it is never begun, so nothing it does
+            # happens out of its caller's sight.
+            owner._note("verb %s not run: its client stopped waiting %.1f s ago" % (verb, late))
+            self._answer(200, {"refused": "expired", "detail": "%s was not run: its client had stopped waiting %.1f s "
+                                                               "before the server could begin it" % (verb, late)}, 2)
+            return
+        reply, code = owner.handle(verb, body)
         self._answer(200, reply, code)
 
     def do_GET(self) -> None:

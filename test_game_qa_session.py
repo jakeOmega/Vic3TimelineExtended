@@ -1091,7 +1091,8 @@ class StopTest(SessionTestCase):
         self.assertEqual(reply["outcome"], "game_left_up")
         self.assertTrue(any("not_ours" in note for note in reply["notes"]))
         self.assertEqual(self.cli.verbs, [])                   # beside a game that may be the run's: no restore
-        self.assertIn("restore %s" % SNAP, reply["next"])
+        self.assertIn("`python3 -m game_qa stop` again", reply["next"])         # it is known: a later stop can end it
+        self.assertIn(SNAP, reply["next"])
         self.assertTrue(reply["overlay_kept"])
         self.assertTrue(self.paths.overlay_dir.exists())
         self.assertEqual(self.order, ["kill", "tcp_close", "helper_close"])   # nothing of the session's own left
@@ -1392,6 +1393,62 @@ class GameLeftUpTest(SessionTestCase):
         self.assertNotIn("stop` again", stop["next"])
 
 
+class StopAgainTest(SessionTestCase):
+    """R7, N3, N12: `stop_again` says whether a later stop can change anything, `next` names a verb that can work
+    then, and a stop run again keeps what the one before found."""
+
+    def failing_kill(self, proc):
+        raise HelperError("not_ours", "process 7 changed under its id before it could be ended")
+
+    def test_each_outcome_says_whether_a_later_stop_can_change_it(self):
+        self.started()
+        self.assertFalse(self.session.stop()["stop_again"])                 # restored: final
+        self.setUp()
+        self.started()
+        self.cli.queue("restore", {"held": False, "refused": "game_still_up", "id": SNAP}, 2)
+        refused = self.session.stop()
+        self.assertEqual(refused["outcome"], "refused")
+        self.assertTrue(refused["stop_again"])
+        self.assertIn("`python3 -m game_qa stop` again", refused["next"])
+        self.setUp()
+        self.started()
+        self.game.kill = self.failing_kill
+        left_up = self.session.stop()
+        self.assertEqual(left_up["outcome"], "game_left_up")
+        self.assertTrue(left_up["stop_again"])                              # known by pid and start time
+        self.assertIn("`python3 -m game_qa stop` again", left_up["next"])
+        self.assertIn(SNAP, left_up["next"])
+
+    def test_a_game_nothing_can_end_is_final_and_names_what_works_instead(self):
+        for launch in ({"id": SNAP, "pid": PID, "created": "unknown"}, {"refused": "start_unconfirmed", "id": SNAP}):
+            with self.subTest(launch=launch):
+                self.setUp()
+                self.cli.queue("launch", launch, 0 if "pid" in launch else 2)
+                stop = self.session_error(self.start).info["stop"]
+                self.assertEqual(stop["outcome"], "game_left_up")
+                self.assertFalse(stop["stop_again"])
+                self.assertNotIn("stop` again", stop["next"])
+                self.assertIn("once no victoria 3 process runs", stop["next"].lower())
+
+    def test_a_stop_run_again_keeps_the_notes_of_the_one_before(self):
+        self.started()
+        self.game.kill = self.failing_kill
+        first = self.session.stop()
+        self.assertTrue(any("not_ours" in note for note in first["notes"]))
+        del self.game.kill
+        second = self.session.stop()
+        self.assertEqual(second["outcome"], "restored")
+        self.assertFalse(second["stop_again"])
+        for note in first["notes"]:
+            self.assertIn(note, second["notes"])
+        self.assertTrue(any(note.startswith("stop was run again at ") and "game_left_up" in note
+                            for note in second["notes"]))
+        summary = Path(second["report"]).read_text("utf-8")
+        self.assertIn("not_ours", summary)
+        self.assertIn("stop was run again", summary)
+        self.assertEqual(self.session.stop(), second)                       # final: not run a third time
+
+
 class OverlayVerdictTest(SessionTestCase):
     """I2: the overlay goes only once the game is known ended and the owner's playset is known back."""
 
@@ -1431,7 +1488,8 @@ class OverlayVerdictTest(SessionTestCase):
                 error = self.session_error(self.start)
                 self.assertEqual(error.code, "fixture_failed")
                 self.assertEqual(self.paths.overlay_dir.exists(), not removed)
-                self.assertEqual((error.info["stop"]["outcome"], error.info["stop"]["snapshot"]), (outcome, FIXTURE_SNAP))
+                stop = error.info["stop"]
+                self.assertEqual((stop["outcome"], stop["snapshot"]), (outcome, FIXTURE_SNAP))
                 self.assertEqual(server.clean_stop(error.info["stop"]), outcome == "restored")
 
 

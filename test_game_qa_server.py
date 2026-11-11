@@ -9,6 +9,7 @@ Windows program and no PowerShell is started; every path is a temp folder.
 """
 import contextlib
 import datetime as dt
+import http.client
 import io
 import json
 import os
@@ -116,6 +117,27 @@ class FakeSession:
             self.stops += 1
             self._stopped = dict(self.stop_reply)
         return self._stopped
+
+
+class Retrying(FakeSession):
+    """`Session.stop` as it is: a stop that ended refused or game_left_up runs again at the next call; each run
+    answers the next of `replies`."""
+
+    def __init__(self, replies):
+        super().__init__()
+        self.replies = list(replies)
+
+    def stop(self):
+        self._call("stop")
+        if self._stopped is None or self._stopped.get("outcome") in ("refused", "game_left_up"):
+            self.stops += 1
+            self._stopped = dict(self.replies.pop(0))
+        return self._stopped
+
+
+LEFT_UP = {"outcome": "game_left_up", "snapshot": SNAP, "stop_again": True, "overlay_kept": True,
+           "next": "`python3 -m game_qa stop` again tries again to end it"}
+BUSY = {"held": False, "refused": "busy", "outcome": "refused", "snapshot": SNAP, "stop_again": True}
 
 
 class Handle:
@@ -323,6 +345,95 @@ class VerbTest(ServerTestCase):
         self.assertEqual(fake.stops, 0)
 
 
+class ExpiryTest(ServerTestCase):
+    """R1: every request carries its client's expiry; the server never begins one whose time is up."""
+
+    def test_a_request_whose_client_gave_up_never_runs(self):
+        fake, _thread = self.serve()
+        fake.release.clear()
+        busy = threading.Thread(target=client.call, args=(self.backups, "advance", {"days": 5}, 10))
+        busy.start()
+        self.wait_for(lambda: ("advance", 5) in fake.calls, "the advance under way")
+        reply, code = client.call(self.backups, "console", {"text": "money 1000"}, timeout=0.3)
+        self.assertEqual((reply["refused"], code), ("no_answer", 2))
+        self.assertIn("will not run later", reply["detail"])
+        self.assertNotIn("Nothing was ended", reply["detail"])
+        fake.release.set()
+        busy.join(10)
+        self.wait_for(lambda: client.call(self.backups, "status", {}, timeout=2)[1] == 0, "an answer to status")
+        self.assertNotIn(("console", "money 1000"), fake.calls)
+
+    def test_a_stop_whose_client_gave_up_never_runs(self):
+        fake, thread = self.serve()
+        fake.release.clear()
+        busy = threading.Thread(target=client.call, args=(self.backups, "advance", {"days": 5}, 10))
+        busy.start()
+        self.wait_for(lambda: ("advance", 5) in fake.calls, "the advance under way")
+        self.assertEqual(client.call(self.backups, "stop", {}, timeout=0.3)[0]["refused"], "no_answer")
+        fake.release.set()
+        busy.join(10)
+        self.wait_for(lambda: client.call(self.backups, "status", {}, timeout=2)[1] == 0, "an answer to status")
+        self.assertEqual(fake.stops, 0)
+        self.assertTrue(thread.is_alive())
+
+    def test_a_request_without_an_expiry_is_refused_unrun(self):
+        fake, _thread = self.serve()
+        info = server.read_info(self.backups)
+        for headers in ({}, {server.EXPIRES_HEADER: "soon"}):
+            with self.subTest(headers=headers):
+                conn = http.client.HTTPConnection(server.HOST, info["port"], timeout=5)
+                conn.request("POST", "/events", body=b"{}", headers={server.TOKEN_HEADER: info["token"], **headers})
+                response = conn.getresponse()
+                answer = json.loads(response.read())
+                conn.close()
+                self.assertEqual((response.status, answer["reply"]["refused"]), (400, "bad_request"))
+        self.assertNotIn(("events",), fake.calls)
+
+    def test_expiry_is_judged_by_the_servers_clock(self):
+        fake = FakeSession()
+        srv = server.SessionServer(fake, self.backups, port=0, now=lambda: time.time() + 3600)
+        thread = threading.Thread(target=srv.serve, daemon=True)
+        thread.start()
+        self.threads.append(thread)
+        self.wait_for(lambda: server.read_info(self.backups) is not None, "the server's session.json")
+        reply, code = client._post(server.read_info(self.backups), "events", {}, timeout=5)
+        self.assertEqual((reply["refused"], code), ("expired", 2))
+        self.assertNotIn(("events",), fake.calls)
+        srv._now = time.time
+        self.assertEqual(client.call(self.backups, "stop", {}, timeout=5)[1], 0)
+
+
+class HardeningTest(ServerTestCase):
+    def test_session_json_stays_readable_by_its_owner_only(self):
+        self.serve()
+        self.assertEqual(self.info_path.stat().st_mode & 0o777, 0o600)
+        self.assertEqual(client.call(self.backups, "start", {"permission": PERMISSION})[1], 0)
+        self.assertEqual(server.read_info(self.backups)["snapshot"], SNAP)          # rewritten with the snapshot
+        self.assertEqual(self.info_path.stat().st_mode & 0o777, 0o600)
+
+    def test_a_token_of_any_text_is_refused_not_a_crash(self):
+        fake, thread = self.serve()
+        info = server.read_info(self.backups)
+        for token in ("é" * 32, "", info["token"][:-1]):
+            with self.subTest(token=token):
+                reply, code = client._post(dict(info, token=token), "events", {}, timeout=5)
+                self.assertEqual((reply["refused"], code), ("forbidden", 2))
+        self.assertNotIn(("events",), fake.calls)
+        self.assertTrue(thread.is_alive())
+
+    def test_a_connection_that_sends_nothing_does_not_stall_stop(self):
+        self.assertIsNotNone(server._Handler.timeout)              # the real server's, not only this test's
+        self.assertLessEqual(server._Handler.timeout, 60)
+        with mock.patch.object(server._Handler, "timeout", 0.5):
+            fake, thread = self.serve()
+            silent = socket.create_connection(("127.0.0.1", server.read_info(self.backups)["port"]))
+            self.addCleanup(silent.close)
+            time.sleep(0.1)
+            self.assertEqual(client.call(self.backups, "stop", {}, timeout=5), (RESTORED, 0))
+            thread.join(10)
+        self.assertEqual(fake.stops, 1)
+
+
 class CleanStopTest(unittest.TestCase):
     def test_a_clean_stop_leaves_nothing_of_the_run(self):
         self.assertTrue(server.clean_stop(RESTORED))
@@ -349,33 +460,43 @@ class StopTest(ServerTestCase):
         self.assertEqual(fake.stops, 1)
         self.assertEqual(self.run_cli("status")[0]["refused"], "no_session")
 
-    def test_a_stop_that_held_or_failed_exits_2(self):
+    def test_a_final_stop_that_held_or_failed_exits_2_and_ends_the_server(self):
         for stop_reply in ({"restored": [], "removed": [], "held": True, "reason": "other_game_ran", "outcome": "held"},
-                           {"held": False, "refused": "game_still_up", "outcome": "refused"},
-                           {"snapshot": SNAP, "outcome": "error", "notes": ["stop failed: OSError()"]}):
+                           {"snapshot": SNAP, "outcome": "error", "notes": ["stop failed: OSError()"]},
+                           dict(LEFT_UP, stop_again=False, next="once no Victoria 3 process runs: `recover`")):
             with self.subTest(outcome=stop_reply["outcome"]):
                 fake = FakeSession()
                 fake.stop_reply = stop_reply
                 _fake, thread = self.serve(fake)
                 self.assertEqual(self.run_cli("stop"), (stop_reply, 2))
                 thread.join(10)
+                self.assertFalse(thread.is_alive())
                 self.assertFalse(self.info_path.exists())
 
-    def test_the_stop_verbs_reply_is_final_and_the_session_is_not_stopped_again(self):
-        # Session.stop runs again after a refusal or game_left_up; the client has its answer by then, so the
-        # server must not start another round of retries out of its sight.
-        class Counting(FakeSession):
-            def stop(self):
-                self._call("stop")
-                self.stops += 1
-                return dict(self.stop_reply)
-        fake = Counting()
-        fake.stop_reply = {"held": False, "refused": "busy", "outcome": "refused"}
+    def test_a_stop_that_can_be_retried_keeps_the_server_and_stop_again_runs_it_again(self):
+        # R7, B3: `next` says "`stop` again", so the server must still be there to run it.
+        fake = Retrying([LEFT_UP, BUSY, RESTORED])
         _fake, thread = self.serve(fake)
-        self.assertEqual(self.run_cli("stop"), (fake.stop_reply, 2))
+        self.assertEqual(self.run_cli("stop"), (LEFT_UP, 2))
+        self.assertTrue(thread.is_alive())
+        self.assertEqual(self.run_cli("status")[1], 0)
+        self.assertEqual(self.run_cli("stop"), (BUSY, 2))
+        self.assertTrue(thread.is_alive())
+        self.assertEqual(self.run_cli("stop"), (RESTORED, 0))
         thread.join(10)
         self.assertFalse(thread.is_alive())
-        self.assertEqual(fake.stops, 1)
+        self.assertFalse(self.info_path.exists())
+        self.assertEqual(fake.stops, 3)
+
+    def test_a_signal_after_a_stop_that_can_be_retried_runs_the_stop_once_more(self):
+        fake = Retrying([LEFT_UP, RESTORED])
+        _fake, thread, srv = self.serve_with_server(fake)
+        self.assertEqual(self.run_cli("stop"), (LEFT_UP, 2))
+        srv._signalled = signal.SIGTERM         # as if noted during a verb: the loop ends at its next turn
+        client.call(self.backups, "status", {}, timeout=5)      # wakes the loop, if it is waiting for a request
+        thread.join(10)
+        self.assertFalse(thread.is_alive())
+        self.assertEqual(fake.stops, 2)
 
     def test_a_server_never_removes_a_file_it_did_not_write(self):
         _fake, thread = self.serve()
@@ -448,6 +569,22 @@ class StartTest(ServerTestCase):
         self.assertEqual((reply["refused"], code), ("session_running", 2))
         self.assertEqual(spawn.handles, [])
         self.assertEqual(self.info_path.read_bytes().decode("utf-8").count('"port"'), 1)
+
+    def test_a_failed_start_whose_stop_can_be_retried_keeps_the_server_for_stop(self):
+        fake = Retrying([RESTORED])
+        fake.raises["start"] = session.SessionError("fixture_failed", "the fixture's run may have left its game up",
+                                                    stop=LEFT_UP)
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn), mock.patch.object(client, "EXIT_WAIT_S", 0.5):
+            reply, code = self.run_cli("start", "--permission", PERMISSION)
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual((reply["refused"], code), ("fixture_failed", 2))
+        self.assertEqual(reply["next"], LEFT_UP["next"])           # the stop's own next, at the top
+        self.assertNotIn("server_still_running", reply)            # it was not waited for: it serves on
+        self.assertTrue(spawn.handles[0].thread.is_alive())
+        self.assertEqual(self.run_cli("stop"), (RESTORED, 0))
+        spawn.handles[0].thread.join(10)
+        self.assertFalse(self.info_path.exists())
 
     def test_a_failed_start_runs_stop(self):
         for error, stops_itself in ((session.SessionError("no_permission", "say where the go-ahead came from"), False),

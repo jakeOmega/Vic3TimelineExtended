@@ -81,7 +81,7 @@ WATCH_WAIT_S = 60.0                     # stop: for `watch` to see the game gone
 WATCH_POLL_S = 1.0
 RESTORE_RETRY_S = fixture.RESTORE_RETRY_S                 # stop: while `restore` refuses one of the reasons below
 RESTORE_RETRY_TOTAL_S = fixture.RESTORE_RETRY_TOTAL_S     # for watch_still_recording
-BUSY_RETRY_TOTAL_S = fixture.BUSY_RETRY_TOTAL_S           # for busy: another session's verb holds the backup root's lock
+BUSY_RETRY_TOTAL_S = fixture.BUSY_RETRY_TOTAL_S   # for busy: another session's verb holds the backup root's lock
 LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the claim (__main__.LAUNCH_IN_FLIGHT_S); only
                                         # once the game is ended here, which the fixture cannot do
 DRAIN_S = 0.5                           # before a read: a stop left over from an earlier one (real seconds: dap's clock)
@@ -750,9 +750,13 @@ class Session:
 
         The reply is restore's reply plus `outcome` (restored, held, refused, game_left_up, or None with no
         snapshot), `snapshot`, `overlay_removed`, `overlay_kept`, `report` (the summary's path) and any `notes`.
+        `stop_again` says whether a later call can change anything: true after a refused restore, and after a game
+        left up whose pid and start time are known (a later call may end it, or find it gone); false otherwise,
+        since a process nothing can name is never ended here, and the caller is then told what to do instead.
         A later call returns that reply again, unless it ended refused or game_left_up: then it is run again,
-        from ending the game if that was not done. Called while `start` runs, it answers `deferred_to_start` and
-        `start` stops the session itself; called inside a stop under way, it answers `in_progress`."""
+        from ending the game if that was not done, keeping the notes of the stop before (with a note that it ran
+        again). Called while `start` runs, it answers `deferred_to_start` and `start` stops the session itself;
+        called inside a stop under way, it answers `in_progress`."""
         if self._stopping:
             return {"outcome": "in_progress", "snapshot": self._snapshot, "detail": "a stop is under way"}
         if self._starting:
@@ -764,16 +768,23 @@ class Session:
         if self._stopped is not None and self._stopped.get("outcome") not in _RETRIED:
             return self._stopped
         self._stopping = True
+        previous = self._stopped
         try:
-            self._stopped = self._stop()
+            self._stopped = self._stop(previous)
         except Exception as e:      # a backstop: each stage below already catches its own failures
-            self._stopped = {"snapshot": self._snapshot, "outcome": "error", "notes": ["stop failed: %r" % e]}
+            self._stopped = {"snapshot": self._snapshot, "outcome": "error", "stop_again": False,
+                             "notes": [*((previous or {}).get("notes") or []), "stop failed: %r" % e]}
         finally:
             self._stopping = False
         return self._stopped
 
-    def _stop(self) -> dict:
+    def _stop(self, previous: dict | None = None) -> dict:
         notes = list(self._notes)
+        if previous is not None:            # N12: what the stop before found stays in the reply and the report
+            kept = [n for n in previous.get("notes") or () if isinstance(n, str)]
+            notes = kept + [n for n in notes if n not in kept]
+            notes.append("stop was run again at %s: the stop before ended %s" % (stamp(utc_now()),
+                                                                                 previous.get("outcome")))
         if self._launched and not self._game_ended:
             self._end_game(notes)
         left_up = self._launched and not self._game_ended
@@ -800,12 +811,14 @@ class Session:
             reply["overlay_kept"] = kept is not None
         if kept is not None:
             reply["overlay_kept_because"] = kept
+        reply["stop_again"] = outcome == "refused"
         if left_up:
             reply["game_unwatched"] = self._watch is None or self._watch_returned()
-            reply["next"] = self._left_up_next()
+            reply["next"], reply["stop_again"] = self._left_up_next()
         elif outcome == "refused":
-            reply["next"] = ("once no Victoria 3 process runs, run `python3 -m game_qa restore %s`, then remove %s"
-                             % (self._snapshot, self._paths.overlay_dir))
+            reply["next"] = ("`python3 -m game_qa stop` again runs `restore %s` again, once what refused it is "
+                             "cleared (a Victoria 3 process running, another verb in the backup root): the server "
+                             "answers until a stop ends restored or held" % self._snapshot)
         if self._snapshot_unknown:
             reply["snapshot_unknown"] = True
             notes.append("a snapshot's reply was lost, so a snapshot may have been taken and left armed")
@@ -817,21 +830,22 @@ class Session:
             reply["notes"] = notes
         return reply
 
-    def _left_up_next(self) -> str:
-        """What to do about a game left up, by what is known of its process."""
+    def _left_up_next(self) -> tuple[str, bool]:
+        """What to do about a game left up, by what is known of its process, and whether `stop` again can help:
+        only a process named by pid and start time can be ended, or found gone, by a later stop."""
         proc = self._proc or _named_proc(self._launch_reply) or self._journaled_proc(self._snapshot)
         if proc is None:
             return ("a game of this run may still be up, and neither launch's reply nor the snapshot's journal names "
                     "its process, so nothing here can end it or tell when it has gone. Once no Victoria 3 process "
                     "runs: `python3 -m game_qa recover` (it finishes snapshot %s), then remove %s"
-                    % (self._snapshot, self._paths.overlay_dir))
+                    % (self._snapshot, self._paths.overlay_dir)), False
         if proc.created == UNKNOWN_START:
             return ("the harness's game (pid %d) may still be up, and its start time is not known, so it was not "
                     "ended: a pid alone may be another game's. Once no Victoria 3 process runs: `python3 -m game_qa "
-                    "restore %s`, then remove %s" % (proc.pid, self._snapshot, self._paths.overlay_dir))
-        return ("the harness's game (pid %d, started %s) may still be up: ending it failed. Close it, or ask the "
-                "owner; once no Victoria 3 process runs: `python3 -m game_qa restore %s`, then remove %s"
-                % (proc.pid, proc.created, self._snapshot, self._paths.overlay_dir))
+                    "restore %s`, then remove %s" % (proc.pid, self._snapshot, self._paths.overlay_dir)), False
+        return ("the harness's game (pid %d, started %s) may still be up: ending it failed. `python3 -m game_qa stop` "
+                "again tries again to end it by its pid and start time (or finds it gone), then restores snapshot %s; "
+                "if it keeps failing, ask the owner to close the game" % (proc.pid, proc.created, self._snapshot)), True
 
     def _end_game(self, notes: list[str]) -> None:
         """End the game, setting `_game_ended` once it is known to be over; any doubt leaves it up, noted."""

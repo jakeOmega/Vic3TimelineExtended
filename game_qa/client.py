@@ -24,8 +24,10 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 (nothing listens on its port and its process is gone) and says so, spawns `python3 -m game_qa session-serve`
 detached (its own session and process group, stdin closed, its output to `<backup root>/runs/session-serve-*.log`),
 waits for it to listen, and posts `start`. Every other verb posts to the port in session.json: no file, or nothing
-listening there, is `no_session`; no answer in time is `no_answer`, and nothing is ended for it. Each verb prints
-one JSON object and exits 0, or 2 for a refusal, a hold or an error.
+listening there, is `no_session`; no answer in time is `no_answer`, and nothing is ended for it. Every request
+carries its expiry, the moment this client stops waiting: the server never begins it after that (`expired`), so a
+verb given up on is never run later. Each verb prints one JSON object and exits 0, or 2 for a refusal, a hold or an
+error.
 """
 from __future__ import annotations
 
@@ -53,8 +55,13 @@ STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
 ENTER_TIMEOUT_S = 600.0
 LONG_TIMEOUT_S = 900.0                  # advance and try-event
-START_TIMEOUT_S = 1800.0                # a start can take six minutes: a fixture run, then a load
-STOP_TIMEOUT_S = 600.0                  # kill, up to 60 s for watch, restore and its retries
+# The worst cases, from the waits the session and the fixture allow themselves (the report sums them):
+#   start: the fixture's run (FIXTURE_LIMIT_S 900, then its restore's retries, up to 30 + 60 s, and the
+#   verbs around them, about 160 s), the session's own snapshot and launch (minutes), the window (300 s), the
+#   console's first answer (180 s), and a stop when any of it fails (about 380 s): about 1810 s, under 2400.
+#   stop: a kill, watch (60 s), restore's retries (30 + 60 + 95 s), the restore itself: about 380 s, under 600.
+START_TIMEOUT_S = 2400.0
+STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
 MIN_FREE_BYTES = 2 * 1024**3            # what `snapshot` wants free under the backup root
 PATH_NAMES = ("game_user_data_path", "game_qa_backup_path", "mod_deploy_target", "base_game_path")
@@ -86,9 +93,12 @@ def call(backup_root: Path, verb: str, body: Mapping | None = None, timeout: flo
     except ConnectionRefusedError:
         return {"refused": "no_session", "detail": DEAD_SERVER % (path, info["pid"], info["port"])}, 2
     except TimeoutError:
-        return {"refused": "no_answer", "detail": "the session server did not answer %s within %g s. Nothing was "
-                                                  "ended, and the verb may still be running: `status` answers once "
-                                                  "the server is free again" % (verb, timeout)}, 2
+        return {"refused": "no_answer", "detail": "the session server did not answer %s within %g s. It may have "
+                                                  "begun %s, which may still be running, or a verb in front of it is: "
+                                                  "the server never begins a request after its client stops "
+                                                  "waiting, so this one will not run later. `status` answers once "
+                                                  "the server is free; look at it before running %s again"
+                                                  % (verb, timeout, verb, verb)}, 2
     except (OSError, http.client.HTTPException, ValueError) as e:
         return {"refused": "no_answer", "detail": "the session server's answer to %s was lost (%s: %s): it may have "
                                                   "stopped. `status` says" % (verb, type(e).__name__, e)}, 2
@@ -98,9 +108,11 @@ def _post(info: Mapping, verb: str, body: Mapping, timeout: float) -> tuple[dict
     """One request. Raises OSError (ConnectionRefusedError: nothing listens; TimeoutError: no answer in time),
     http.client.HTTPException, or ValueError for an answer that is not the server's."""
     conn = http.client.HTTPConnection(server.HOST, int(info["port"]), timeout=timeout)
+    expires = time.time() + timeout         # when this client stops waiting: the server never begins it after
     try:
         conn.request("POST", "/" + verb, body=json.dumps(body).encode("utf-8"),
-                     headers={"Content-Type": "application/json", server.TOKEN_HEADER: str(info.get("token", ""))})
+                     headers={"Content-Type": "application/json", server.TOKEN_HEADER: str(info.get("token", "")),
+                              server.EXPIRES_HEADER: "%.3f" % expires})
         data = conn.getresponse().read()
     finally:
         conn.close()
@@ -140,7 +152,8 @@ def _serving(pid: Any) -> bool:
 def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path], Any],
                   sleep=time.sleep, clock=time.monotonic) -> tuple[dict, int]:
     """Spawn a server (`spawn(backup_root, log)`, returning a process handle), wait for it to listen, post `start`.
-    A failed start's server has stopped the session before it answered; this waits for it to exit."""
+    A failed start's server has stopped the session before it answered; this waits for it to exit, unless that
+    stop can be run again (`server.final_stop`): then the server serves on for `stop`, and `next` says so."""
     backup_root = Path(backup_root)
     notes: dict = {}
     path = backup_root / server.SESSION_FILE
@@ -172,7 +185,7 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
         return {**info, **notes, "server": where}, 2
     where["port"] = info["port"]
     reply, code = call(backup_root, "start", body, START_TIMEOUT_S)
-    if code != 0 and reply.get("refused") != "no_answer":
+    if code != 0 and reply.get("refused") != "no_answer" and server.final_stop(reply.get("stop")):
         try:
             handle.wait(timeout=EXIT_WAIT_S)
         except subprocess.TimeoutExpired:
@@ -188,6 +201,8 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
     elif reply.get("refused") == "no_answer":
         out["next"] = ("the start may still be running: `status` answers once it is done. Do not run `recover` "
                        "meanwhile: it would finish this start's own snapshot")
+    elif isinstance(reply.get("stop"), dict) and reply["stop"].get("next") and "next" not in out:
+        out["next"] = reply["stop"]["next"]          # what the failed start's stop left to do, where it is read
     return out, code
 
 
@@ -479,8 +494,8 @@ def cmd_stop(args) -> tuple[dict, int]:
     backups = _backup_root()
     before = server.read_info(backups)
     reply, code = call(backups, "stop", {}, STOP_TIMEOUT_S)
-    if before is not None and reply.get("refused") not in ("no_session", "no_answer"):
-        deadline = time.monotonic() + EXIT_WAIT_S       # the server exits once it has answered
+    if before is not None and "outcome" in reply and server.final_stop(reply):
+        deadline = time.monotonic() + EXIT_WAIT_S       # the server exits once it has answered a final stop
         while (server.read_info(backups) or {}).get("pid") == before["pid"]:
             if time.monotonic() > deadline:
                 reply = dict(reply, server_still_running="the server had not exited %g s after it answered"
