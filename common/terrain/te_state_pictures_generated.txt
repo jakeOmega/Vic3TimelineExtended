@@ -3400,6 +3400,22 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = computer_aided_design }
+							has_variable = te_sp_resort
+						}
+					}
+					add = 310000
+				}
+			}
+			path = "gfx/state_pictures/te_resort_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
 							has_variable = te_sp_industry
 						}
 					}

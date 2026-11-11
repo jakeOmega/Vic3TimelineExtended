@@ -1363,7 +1363,7 @@ WAVE6_PICKS = {
     "devastated_late": {"seed": 5, "crop": (0, 0, 1432, 702)},
     "nuclear_strike_early": {"seed": 3, "crop": (62, 60, 1474, 752)},
     "nuclear_strike_late": {"seed": 4},
-    # the pictures that read the yearly pass's tags (resort_3 is not rendered yet)
+    # the pictures that read the yearly pass's tags
     "boomtown_1": {"seed": 1, "smudge": [(1135, 676, 1192, 692)]},
     "boomtown_2": {"seed": 1},
     "boomtown_3": {"seed": 3},
@@ -1380,6 +1380,7 @@ WAVE6_PICKS = {
     "industry_3": {"seed": 0, "smudge": [(165, 722, 250, 752), (678, 694, 712, 714)]},
     "resort_1": {"seed": 3},
     "resort_2": {"seed": 0, "smudge": [(986, 118, 1018, 152)]},
+    "resort_3": {"seed": 0, "smudge": [(1100, 112, 1146, 150)]},
     "resort_4": {"seed": 0},
 }
 

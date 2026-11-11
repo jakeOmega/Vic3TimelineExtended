@@ -258,12 +258,12 @@ order below shows (each has its own digit in the character place of the weight).
 | Picture | Shows when | Signal | Read |
 |---|---|---|---|
 | Housing blocks | Command Economy and Prefabricated Construction | the owner's law and technology | live |
-| Boomtown, cranes everywhere | the state's people have grown fast for several years | `te_dg_walk_pop` against the year before | the yearly pass |
-| Declining city, empty works | the state's people are falling | the same | the yearly pass |
-| Divided city, shacks under towers | a large city with high inequality | `te_dg_gini` | the yearly pass |
+| Boomtown, cranes everywhere | a city (100,000 or more) whose people have grown 3% a year, smoothed | the pass's `te_sp_boom`: `te_dg_walk_pop` against the year before, held within a tenth either way and smoothed (a fifth of each year's rate), so 5% a year makes a boomtown in its fifth year. A year in which the state's province count changed is left out | the yearly pass |
+| Declining city, empty works | a city whose people have fallen 1% a year, smoothed | `te_sp_decline`, the same figure: 2% a year makes one in its fourth year | the yearly pass |
+| Divided city, shacks under towers | a metropolis with a Gini of 0.85 or more | `te_sp_divided`: `te_dg_gini` (in a 1940 save the metropolises' median is 0.78 and a quarter are at 0.85) | the yearly pass |
 | Smog city | heavy pollution | the state region's `pollution_amount` at 150 or more of 255 (vanilla's pollution map mode is at full color from 153) | live |
-| Heavy-industry city | most levels are heavy industry | building levels | the yearly pass |
-| Resort | tourism dominates | the tourism buildings | the yearly pass |
+| Heavy-industry city | heavy industry (`bg_heavy_industry`) holds a quarter of the state's building levels, and at least 30 | `te_sp_industry`, a share as oil is (32 of 335 city states in the 1940 save) | the yearly pass |
+| Resort | the Tourism Industry holds 2% of the state's building levels, and at least 10 | `te_sp_resort` (13 states in the save; tourism is never above 8% of a state) | the yearly pass |
 
 A character sits under the rung, so it is painted on each rung where it fits: a smog city of 1960 gives way
 to the city of 1990 unless 1990's smog city is painted too. After the last painted rung the region's own
@@ -315,12 +315,12 @@ would be over 1 GB.
    forestry families of § 5, and the three provisional levels there.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
-6. **Character, function, conditions (30).** All 30 are rendered. **Painted and wired 2026-11-10:** the 11
-   a weight reads live (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two
-   spans each; § 7). The other 19 stay in `DRAFTS` with their candidates on disk: boomtown, declining,
-   divided, heavy industry and resort (17) need the yearly pass to store a trend or a share, which is the
-   next piece of work now that a weight is known to read a stored tag; the flooded coast (2) waits for
-   the warming system.
+6. **Character, function, conditions (31). Painted and wired:** on 2026-11-10 the 11 a weight reads live
+   (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two spans each; § 7); on
+   2026-11-11 the 18 that read the yearly pass's tags (boomtown and declining on four rungs, divided on
+   three, heavy industry on three, resort on four: the resort of about 1990 was added, since a character
+   sits under the rung and a gap in its ladder sends the state back to its region's street). The flooded
+   coast (2) stays in `DRAFTS` until the warming system has local effects.
 7. **Natural terrain (15). Painted and wired 2026-11-10:** each of vanilla's natural pictures with the
    motor age in it (a motorway, pylons, a pipeline), in vanilla's own families (§ 5), on Modern Urban
    Planning for want of a ladder of its own (the tundra's pipeline on Integrated Circuits).
@@ -452,6 +452,9 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 - Whether oil's share of levels tracks its share of GDP closely enough. If a building's earnings turn out
   to read as a value, the pass can weigh the levels by them.
 - The regions that count as tropical for forestry.
+- The pass's seven figures for boomtown, declining, divided, heavy industry and resort (§ 7): this
+  design's, from one 1940 save, to be checked against the calibration game's lines.
+- The resort is a beach whatever the state; an inland state with a large tourism industry shows one too.
 - The flooded coast waits for the warming system to have local effects (the owner: "we can wire it up
   later"); its two pictures are painted and unwired.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
