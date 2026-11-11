@@ -238,12 +238,19 @@ class Session:
             raise SessionError("overlay_refused", str(e)) from e
         if save is not None:
             save = self._check_save(save)
-        self._refuse_if_held()
+        self._starting = True                   # from `held` on, a stop() is left to this
+        try:
+            self._refuse_if_held()
+        except BaseException:
+            # Nothing was begun, so a stop asked meanwhile has nothing to stop: it is forgotten with the start.
+            self._starting = self._abort = False
+            raise
         self._began = True
-        self._starting = True
         self._permission = permission
         try:
-            return self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy)
+            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy)
+            self._check_abort()
+            return result
         except BaseException as e:
             self._starting = False
             stopped = self.stop()
@@ -259,6 +266,7 @@ class Session:
 
     def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
                busy: bool) -> dict:
+        self._check_abort()
         try:
             self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version)
         except overlay.OverlayError as e:
@@ -727,9 +735,11 @@ class Session:
         if kept is not None:
             reply["overlay_kept_because"] = kept
         if left_up:
+            proc = self._proc or _named_proc(self._launch_reply)
+            again = (" (or `stop` again, which first tries to end the game by its pid and start time)"
+                     if proc is not None and proc.created != UNKNOWN_START else "")
             reply["next"] = ("the game may still be up: once no game is running, run `python3 -m game_qa restore "
-                             "%s` (or `stop` again, which first tries to end the game), then remove %s"
-                             % (self._snapshot, self._paths.overlay_dir))
+                             "%s`%s, then remove %s" % (self._snapshot, again, self._paths.overlay_dir))
         elif outcome == "refused":
             reply["next"] = ("`stop` again runs restore again; or run `python3 -m game_qa restore %s`, then remove %s"
                              % (self._snapshot, self._paths.overlay_dir))
@@ -753,7 +763,7 @@ class Session:
                          "another game's" % proc.pid)
             return
         try:
-            self._kill(proc)
+            self._kill(proc, notes)
             return
         except HelperError as e:
             if e.code != "helper_gone" or self._helper_factory is None:
@@ -765,13 +775,24 @@ class Session:
             return
         try:
             self._new_helper()
-            self._kill(proc)
+            self._kill(proc, notes)
         except Exception as e:
             self._kill_failed(notes, e)
 
-    def _kill(self, proc: ProcId) -> None:
+    def _kill(self, proc: ProcId, notes: list[str]) -> None:
         if not self._adopted:
-            self._helper.adopt(proc)
+            try:
+                self._helper.adopt(proc)
+            except HelperError as e:
+                if e.code != "not_ours":
+                    raise
+                # No live process has that pid and start time (win_helper._op_adopt): the game has ended. Part 1's
+                # restore still looks for a running game itself.
+                self._game_ended = True
+                notes.append("the helper finds no live process %d started at %s (%s): the game has ended"
+                             % (proc.pid, proc.created, e.detail))
+                self._record("kill", outcome="already_exited", detail="adopt: " + _describe(e))
+                return
             self._adopted = True
         gone = self._helper.kill(proc)
         self._game_ended = True

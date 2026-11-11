@@ -1176,6 +1176,22 @@ class StopDuringStartTest(SessionTestCase):
         self.assertEqual(self.session.stop(), error.info["stop"])
         self.assertFalse(self.paths.overlay_dir.exists())
 
+    def test_a_stop_during_held_starts_nothing(self):
+        inner = self.stop_inside("held")
+        error = self.session_error(self.start)
+        self.assertEqual((error.code, inner[0]["outcome"]), ("stopped", "deferred_to_start"))
+        self.assertEqual(self.cli.verbs, ["held"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(self.watches, [])
+
+    def test_a_stop_during_a_held_that_refuses_is_forgotten_with_it(self):
+        inner = self.stop_inside("held")
+        self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
+        self.assertEqual(self.session_error(self.start).code, "held_snapshot")
+        self.assertEqual(inner[0]["outcome"], "deferred_to_start")
+        self.cli.on_call = None                 # nothing was begun, so the stop asked has nothing left to stop
+        self.assertEqual(self.start()["snapshot"], SNAP)
+
     def test_a_stop_during_the_snapshot_launches_nothing(self):
         inner = self.stop_inside("snapshot")
         error = self.session_error(self.start)
@@ -1288,6 +1304,33 @@ class GameLeftUpTest(SessionTestCase):
         self.assertFalse(self.paths.overlay_dir.exists())
         self.assertEqual(self.session.stop(), second)
         self.assertTrue(Path(second["report"]).read_text("utf-8").startswith("Restore: restored"))
+
+
+    def test_a_later_stop_finds_through_a_fresh_helper_that_the_game_has_ended(self):
+        # The real helper is closed by the first stop, so a later one goes through a fresh helper, whose adopt
+        # refuses a process that is no longer alive (win_helper._op_adopt): that is the game known ended.
+        self.started()
+        self.game.kill = self.gone
+        self.assertEqual(self.session.stop()["outcome"], "game_left_up")
+        self.game.exited = True                 # it ended by itself since
+        fresh = fakes.FakeHelper()
+
+        def adopt(proc):
+            raise HelperError("not_ours", "no live process %d was created at %s" % (proc.pid, proc.created))
+        fresh.adopt = adopt
+        self.fresh_helper = fresh
+        second = self.session.stop()
+        self.assertEqual(second["outcome"], "restored")
+        self.assertEqual((fresh.killed, self.cli.verbs), ([], ["restore"]))
+        self.assertTrue(any("no live process" in note for note in second["notes"]))
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_with_no_process_to_end_the_next_step_does_not_promise_a_later_stop(self):
+        self.cli.queue("launch", {"refused": "start_unconfirmed", "id": SNAP}, 2)
+        stop = self.session_error(self.start).info["stop"]
+        self.assertEqual(stop["outcome"], "game_left_up")
+        self.assertIn("restore %s" % SNAP, stop["next"])
+        self.assertNotIn("stop` again", stop["next"])
 
 
 class OverlayVerdictTest(SessionTestCase):

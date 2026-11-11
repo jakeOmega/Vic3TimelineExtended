@@ -124,6 +124,7 @@ class SessionServer:
         self._busy = False                  # a request is being answered: a signal waits for it
         self._signalled: int | None = None
         self._start_posted = False
+        self._stop_reply: dict | None = None    # a stop's reply, from the `stop` verb or a failed start: final
         self._served = 0
         self._verbs: dict[str, Callable[[dict], tuple[dict, int]]] = {
             "console": self._console, "run-setup": self._run_setup, "events": self._events, "pick": self._pick,
@@ -139,7 +140,8 @@ class SessionServer:
 
     def serve(self, signals: bool = False) -> dict:
         """Listen, claim session.json, answer requests one at a time until the session is over, then stop the
-        session (`stop` is idempotent: after a `stop` verb it returns that reply again) and remove the file.
+        session unless a `stop` verb or a failed start already has (that reply is final: `Session.stop` would run
+        a refused stop again, out of the caller's sight) and remove the file.
         With `signals` (the real server, in its main thread), SIGTERM and SIGINT end it the same way."""
         httpd = _HTTPServer((HOST, self._port), _Handler)
         httpd.game_qa = self
@@ -164,7 +166,7 @@ class SessionServer:
                     self._busy = True       # from here a signal is only noted: nothing may cut the stop short
                     if self._signalled is not None:
                         self._note("signal %d: stopping the session" % self._signalled)
-                    stopped = self._stop_session()
+                    stopped = self._stop_reply if self._stop_reply is not None else self._stop_session()
                     self._release()
             finally:
                 for signum, handler in previous.items():
@@ -201,7 +203,7 @@ class SessionServer:
             return self._start(body)
         if verb == "stop":
             self._done = True
-            reply = self._stop_session()
+            reply = self._stop_reply = self._stop_session()
             return reply, 0 if clean_stop(reply) else 2
         run = self._verbs.get(verb)
         if run is None:
@@ -226,7 +228,9 @@ class SessionServer:
             reply = self._session.start(**{k: body[k] for k in START_ARGS if k in body})
         except Exception as e:
             out = {"refused": "bad_argument", "detail": str(e)} if isinstance(e, _BadBody) else refusal(e)
-            out.setdefault("stop", self._stop_session())
+            if "stop" not in out:               # not setdefault: its argument, a stop, would run every time
+                out["stop"] = self._stop_session()
+            self._stop_reply = out["stop"] if isinstance(out["stop"], dict) else None
             self._done = True
             return out, 2
         if isinstance(reply, dict) and reply.get("snapshot"):

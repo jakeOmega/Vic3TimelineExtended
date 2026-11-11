@@ -349,6 +349,22 @@ class StopTest(ServerTestCase):
                 thread.join(10)
                 self.assertFalse(self.info_path.exists())
 
+    def test_the_stop_verbs_reply_is_final_and_the_session_is_not_stopped_again(self):
+        # Session.stop runs again after a refusal or game_left_up; the client has its answer by then, so the
+        # server must not start another round of retries out of its sight.
+        class Counting(FakeSession):
+            def stop(self):
+                self._call("stop")
+                self.stops += 1
+                return dict(self.stop_reply)
+        fake = Counting()
+        fake.stop_reply = {"held": False, "refused": "busy", "outcome": "refused"}
+        _fake, thread = self.serve(fake)
+        self.assertEqual(self.run_cli("stop"), (fake.stop_reply, 2))
+        thread.join(10)
+        self.assertFalse(thread.is_alive())
+        self.assertEqual(fake.stops, 1)
+
     def test_a_server_never_removes_a_file_it_did_not_write(self):
         _fake, thread = self.serve()
         own = server.read_info(self.backups)
@@ -432,7 +448,8 @@ class StartTest(ServerTestCase):
                 with mock.patch.object(client, "spawn_server", spawn):
                     reply, code = self.run_cli("start", "--permission", PERMISSION, "--as", "FRA")
                 self.assertEqual((reply["refused"], code), (error.code, 2))
-                self.assertEqual(fake.stops, 1)                         # the server stopped the session itself
+                # once: by the session's own start when it says so (its reply is final), else by the server
+                self.assertEqual(fake.stops, 0 if stops_itself else 1)
                 self.assertIn("stop", reply)
                 if stops_itself:
                     self.assertEqual(reply["reply"], {"refused": "gpu_busy"})
