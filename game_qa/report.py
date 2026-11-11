@@ -101,15 +101,21 @@ def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | 
     if restore is None or outcome is None:
         return "Restore: not run. No snapshot was taken, so there was nothing of the owner's to put back."
     if outcome == "held":
+        # A hold can come after some files were put back (part 1 lists them in `restored` and `removed`), and
+        # restore puts the owner's playset back even when it holds the rest (`playset_restored`): say what was.
         reason = _text(restore.get("reason") or "no reason given")
+        restored, removed = restore.get("restored") or [], restore.get("removed") or []
         if restore.get("playset_restored") is True:
-            # restore puts the owner's playset back even when it holds the rest (part 1, `playset_restored`)
-            return ("Restore: HELD (%s). content_load.json was put back, so the game starts with the owner's "
+            done = " (%d files put back and %d removed in all)" % (len(restored), len(removed)) if (
+                len(restored) > 1 or removed) else ""
+            return ("Restore: HELD (%s). content_load.json was put back%s, so the game starts with the owner's "
                     "playset again; the rest of the snapshot waits: only the owner resolves a hold "
-                    "(`python3 -m game_qa held` lists it)." % reason)
+                    "(`python3 -m game_qa held` lists it)." % (reason, done))
         left = " The run's playset is still in place." if restore.get("playset_left") else ""
-        return ("Restore: HELD (%s). Nothing was put back: only the owner resolves a hold "
-                "(`python3 -m game_qa held` lists it).%s" % (reason, left))
+        done = ("%d files were put back and %d removed before the hold; the rest waits" % (len(restored), len(removed))
+                if restored or removed else "Nothing was put back")
+        return ("Restore: HELD (%s). %s: only the owner resolves a hold (`python3 -m game_qa held` lists it).%s"
+                % (reason, done, left))
     if outcome == "refused":
         detail = restore.get("detail")
         return "Restore: REFUSED (%s). The snapshot is not finished.%s" % (
@@ -129,7 +135,8 @@ def _try_event_table(record: Mapping) -> list[str]:
            "the trigger and the cooldown." % (", the setup re-run first" if setup else ""), "",
            "| Option | Fired | Before | After | Picked | New errors |", "|---|---|---|---|---|---|"]
     for row in rows:
-        fired = "yes" if row.get("fired") else "did not fire" if row.get("did_not_fire") else "no"
+        fired = ("yes" if row.get("fired") else "ran, not pending" if row.get("ran_not_pending") else
+                 "did not fire" if row.get("did_not_fire") else "no")
         picked = row.get("picked")
         out.append("| %s | %s | %s | %s | %s | %d |" % (
             _cell(row.get("index")), fired, _cell(_reads(row.get("before"))), _cell(_reads(row.get("after"))),
@@ -146,14 +153,16 @@ def _reads(reads) -> str:
 
 
 def _read_value(read: Mapping) -> str:
+    """A read as the game gave it: a number is its raw text (the first line), never a rounding of it, so a change
+    in any digit shows (`%g` printed 21570770 and 21570790 alike); a trigger's answer is yes or no."""
     raw = str(read.get("raw") or "").split("\n")[0].strip()
     if not read.get("ok"):
         return "refused (%s)" % raw
     value = read.get("value")
     if isinstance(value, bool):
         return "yes" if value else "no"
-    if isinstance(value, (int, float)):
-        return "%g" % value
+    if isinstance(value, (int, float)) and not raw:
+        return repr(value)
     return raw
 
 
@@ -167,6 +176,11 @@ def _verdict(record: Mapping, rows) -> str:
     did_not = [str(row.get("index")) for row in rows if row.get("did_not_fire")]
     if did_not:
         return "Not a pass: option %s did not fire." % ", ".join(did_not)
+    ran = [str(row.get("index")) for row in rows if row.get("ran_not_pending")]
+    if ran:
+        return ("Not a pass: option %s ran (the console says Executed) but was never pending, so nothing was "
+                "picked: a hidden event, or one that resolved at once. Its effects are not checked here."
+                % ", ".join(ran))
     return "Not a pass: not every option fired and was picked."
 
 

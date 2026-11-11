@@ -67,6 +67,21 @@ class ReportTest(unittest.TestCase):
         self.assertIn("Nothing was put back", first)
         self.assertIn("run's playset is still in place", first)
 
+    def test_a_hold_that_put_files_back_never_says_nothing_was(self):
+        # N8: part 1 can put files back and then hold for the rest
+        partial = {"restored": ["continue_game.json", "pdx_settings.json"], "removed": ["save games/autosave.v3"],
+                   "held": True, "reason": "file_changed", "playset_left": True}
+        first = self.report.close(self.summary(partial, "held")).read_text("utf-8").split("\n")[0]
+        self.assertTrue(first.startswith("Restore: HELD (file_changed)"), first)
+        self.assertNotIn("Nothing was put back", first)
+        self.assertIn("2 files were put back and 1 removed before the hold", first)
+        self.assertIn("run's playset is still in place", first)
+        both = dict(partial, playset_restored=True, playset_left=False,
+                    restored=["content_load.json", "continue_game.json"])
+        first = self.report.close(self.summary(both, "held")).read_text("utf-8").split("\n")[0]
+        self.assertIn("content_load.json was put back", first)
+        self.assertIn("2 files put back and 1 removed in all", first)
+
     def test_a_game_left_up_says_restore_was_not_run_and_how_to_finish(self):
         summary = dict(self.summary(None, "game_left_up"), overlay_removed=False,
                        overlay_kept="the game may still be up, and the run's playset names the overlay")
@@ -100,6 +115,33 @@ class ReportTest(unittest.TestCase):
                       "c:FRA.infamy = 10.5; gdp = refused (not a valid trigger or script value) | option 0 | 2 |", text)
         self.assertIn("| 1 | did not fire |  |  |  | 0 |", text)
         self.assertIn("Not a pass: option 1 did not fire", text)
+
+    def test_a_value_is_printed_as_the_game_gave_it(self):
+        # R2: %g printed 21570770 and 21570790 both as 2.15708e+07, so a change of 20 read as no change
+        def read(raw, value):
+            return {"expr": "c:FRA.gdp", "ok": True, "raw": raw, "value": value}
+        rows = [{"index": 0, "fired": True, "fired_by": "console", "pending_options": 1,
+                 "before": [read("21570770", 21570770.0), read("0.000012345678", 0.000012345678)],
+                 "after": [read("21570790\nmore text", 21570790.0), read("", 1234567.25)],
+                 "picked": {"index": 0, "numeric_id": 10, "event": "x.1"}, "new_errors": [], "did_not_fire": False}]
+        self.report.step("try_event", outcome="ok", event="x.1", setup=None, option_count=1, complete=True,
+                         shared_state=True, options=rows)
+        text = self.report.close(self.summary(None, None)).read_text("utf-8")
+        self.assertIn("| 0 | yes | c:FRA.gdp = 21570770; c:FRA.gdp = 0.000012345678 | "
+                      "c:FRA.gdp = 21570790; c:FRA.gdp = 1234567.25 | option 0 | 0 |", text)
+        self.assertNotIn("e+07", text)
+
+    def test_an_event_that_ran_but_was_never_pending_is_not_called_unfired(self):
+        # A hidden event (or one resolved at once) runs and is never pending: the console's reply says it ran.
+        rows = [{"index": 0, "fired": False, "fired_by": "console", "pending_options": None, "before": [],
+                 "after": [], "picked": None, "new_errors": [], "did_not_fire": False, "ran_not_pending": True}]
+        self.report.step("try_event", outcome="ok", event="x.1", setup=None, option_count=None, complete=False,
+                         shared_state=True, options=rows)
+        text = self.report.close(self.summary(None, None)).read_text("utf-8")
+        self.assertIn("| 0 | ran, not pending |  |  |  | 0 |", text)
+        self.assertNotIn("did not fire", text)
+        self.assertIn("Not a pass: option 0 ran (the console says Executed) but was never pending", text)
+        self.assertIn("hidden", text)
 
     def test_a_try_event_that_ended_on_an_error_says_so(self):
         self.report.step("try_event", outcome="not_selected", detail="select_event_option 1 11 answered nothing",

@@ -632,8 +632,9 @@ class Session:
         Before anything else, `event` must not be pending already: a firing that did nothing would then look like
         one that worked. Then for option 0, 1, …: run `setup` when given; fire the event with console `event <id>`,
         unless the setup's own log lines name it (the setup fired it); list the pending events; if `event` is not
-        pending the row says `did_not_fire` and the loop stops, which is never a pass; else read `reads`, pick the
-        option, read them again. The number of options is the first `events` reply's for `event`.
+        pending the loop stops, which is never a pass, and the row says `ran_not_pending` when the console's reply
+        says it ran (`Executed "<id>"`: a hidden event, or one that resolved at once, whose options cannot be
+        picked), else `did_not_fire`; else read `reads`, pick the option, read them again. The number of options is the first `events` reply's for `event`.
 
         The options share one game: each runs on the state the one before left, re-running the setup first
         (console `event` ignores the trigger and the cooldown, spec § 12.1 A6), and the reply says so
@@ -668,10 +669,11 @@ class Session:
             try:
                 while count is None or len(rows) < count:
                     row = {"index": len(rows), "fired": False, "fired_by": None, "pending_options": None,
-                           "before": [], "after": [], "picked": None, "new_errors": [], "did_not_fire": False}
+                           "before": [], "after": [], "picked": None, "new_errors": [], "did_not_fire": False,
+                           "ran_not_pending": False}
                     rows.append(row)
                     self._try_option(event, setup, reads, row)
-                    if row["did_not_fire"]:
+                    if row["did_not_fire"] or row["ran_not_pending"]:
                         break
                     if count is None:
                         count = row["pending_options"]
@@ -695,12 +697,14 @@ class Session:
         self._errors_seen = []
         try:
             fired_by_setup = setup is not None and any(_names_event(line, event) for line in self.run_setup(setup))
+            ran = False
             if not fired_by_setup:
-                self.console(FIRE_COMMAND % event)
+                executed = 'Executed "%s"' % event
+                ran = any(line.strip() == executed for line in self.console(FIRE_COMMAND % event).lines)
             row["fired_by"] = "setup" if fired_by_setup else "console"
             mine = [p for p in self.events() if p.event_id == event]
             if not mine:
-                row["did_not_fire"] = True
+                row["ran_not_pending" if ran else "did_not_fire"] = True
                 return
             row["fired"] = True
             row["pending_options"] = min(mine, key=lambda p: p.numeric_id).options

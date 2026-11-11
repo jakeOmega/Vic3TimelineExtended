@@ -821,7 +821,8 @@ class AdvanceTest(SessionTestCase):
 
 class Events:
     """The game's pending events, for try-event. `event <id>` fires one instance (while `fires`; `fires_left`
-    counts down for an event that fires only so often), and so does a setup event in `fired_by`.
+    counts down for an event that fires only so often), and so does a setup event in `fired_by`; the console
+    answers `Executed "<id>"` only when it fired. A `hidden` event runs (Executed) but is never pending.
     `select_event_option list` lists the pending ones; `select_event_option <i> <n>` picks one and runs
     `effects[i]`."""
 
@@ -831,22 +832,25 @@ class Events:
         self.next_id = 10
         self.fires = True
         self.fires_left: int | None = None
+        self.hidden = False
         self.fired_by: set[str] = set()
         self.effects: dict = {}
         game.on_command = self.command
 
-    def fire(self) -> None:
+    def fire(self) -> bool:
         if not self.fires or self.fires_left == 0:
-            return
+            return False
         if self.fires_left is not None:
             self.fires_left -= 1
-        self.pending.append(self.next_id)
-        self.next_id += 1
+        if not self.hidden:
+            self.pending.append(self.next_id)
+            self.next_id += 1
+        return True
 
     def command(self, text: str) -> None:
         if text == "event " + self.event:
-            self.game.on(text, success=['Executed "%s"' % self.event])
-            self.fire()
+            fired = self.fire()
+            self.game.on(text, success=['Executed "%s"' % self.event] if fired else [])
         elif text.startswith("event ") and text[6:] in self.fired_by:
             self.fire()
         elif text == "select_event_option list":
@@ -947,7 +951,7 @@ class TryEventTest(SessionTestCase):
         self.assertEqual((reply["complete"], reply["option_count"]), (False, None))
         self.assertEqual(reply["options"], [{
             "index": 0, "fired": False, "fired_by": "console", "pending_options": None, "before": [], "after": [],
-            "picked": None, "new_errors": [], "did_not_fire": True}])
+            "picked": None, "new_errors": [], "did_not_fire": True, "ran_not_pending": False}])
         self.assertEqual(self.commands(), ["select_event_option list", "event x.1", "select_event_option list"])
         # An event that fires once only: its first option is picked, and the second did not fire.
         self.events.fires, self.events.fires_left = True, 1
@@ -956,6 +960,20 @@ class TryEventTest(SessionTestCase):
         self.assertEqual([(r["fired"], r["did_not_fire"], r["picked"] is not None) for r in reply["options"]],
                          [(True, False, True), (False, True, False)])
         self.assertEqual([s["complete"] for s in self.try_event_steps()], [False, False])
+
+    def test_a_hidden_event_that_ran_is_not_called_unfired_and_is_never_a_pass(self):
+        # It runs (the console answers Executed) but is never pending, so there is no option to pick.
+        self.started()
+        self.events.hidden = True
+        reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
+        self.assertEqual((reply["complete"], reply["option_count"]), (False, None))
+        [row] = reply["options"]
+        self.assertEqual((row["fired"], row["did_not_fire"], row["ran_not_pending"], row["picked"]),
+                         (False, False, True, None))
+        self.assertEqual(self.commands(), ["select_event_option list", "event x.1", "select_event_option list"])
+        summary = Path(self.session.stop()["report"]).read_text("utf-8")
+        self.assertIn("ran, not pending", summary)
+        self.assertNotIn("did not fire", summary)
 
     def test_an_event_already_pending_is_refused_before_anything(self):
         self.started()
