@@ -41,8 +41,9 @@ gm_state_tr_form_is_piece = {
 
 # State scope. A monument that can be carried off at all: dedicated, not a
 # Grand Shrine (v1: a conquered shrine becomes heritage), not while its
-# dedication is being put back or a ceremony is asking, not already gone, and
-# not within ten years of losing a piece (gm_tr_cooldown).
+# dedication is being put back or a ceremony is asking, not already gone, not
+# within ten years of losing a piece (gm_tr_cooldown), and not while a piece of
+# it is still abroad (gm_state_tr_piece_abroad).
 gm_state_tr_takeable = {
 	gm_system_enabled = yes
 	gm_state_is_dedicated = yes
@@ -52,6 +53,73 @@ gm_state_tr_takeable = {
 	NOT = { has_variable = gm_gift }
 	NOT = { has_variable = gm_carried_off }
 	NOT = { has_variable = gm_tr_cooldown }
+	gm_state_tr_piece_abroad = no
+}
+
+# ---- Looted once (owner, 2026-11-11) --------------------------------------------
+# A monument is looted once until what was taken comes home: the grave goods
+# of one tomb stood in three capitals at once, a tenth carried off each time
+# the ten-year spell (gm_tr_cooldown) ran out. A piece or a token of it abroad
+# is a trophy, not taken whole, from this state and of this monument, by the
+# rule a return rejoins it by (gm_state_stands_for_moving): the same landmark,
+# or with neither naming one, a monument of the same unnamed make. Read live
+# from the trophies (gm_trophies), so the trophies of 1836 (the Parthenon's
+# marbles in London) and an older save's count with no record to migrate. A
+# whole monument's trophy blocks nothing: what it was taken from is gone.
+# State scope: the state's own (primary) monument.
+gm_state_tr_piece_abroad = {
+	save_temporary_scope_as = gm_tmp_tr_home
+	has_global_variable_list = gm_trophies
+	any_in_global_list = {
+		variable = gm_trophies
+		gm_tr_is_piece_from = { HOME = scope:gm_tmp_tr_home }
+		OR = {
+			AND = {
+				has_variable = gm_tr_landmark
+				scope:gm_tmp_tr_home = { has_variable = gm_landmark }
+				var:gm_tr_landmark = scope:gm_tmp_tr_home.var:gm_landmark
+			}
+			AND = {
+				NOT = { has_variable = gm_tr_landmark }
+				scope:gm_tmp_tr_home = { NOT = { has_variable = gm_landmark } }
+			}
+		}
+	}
+}
+
+# Container scope: a monument standing beside another (its records are gm_tr_*,
+# gm_tr_origin its state). The same test on its own landmark. A secondary with
+# none is matched by a piece with none, as the primary is: a return reads both
+# as the same unnamed make.
+gm_mon_tr_piece_abroad = {
+	save_temporary_scope_as = gm_tmp_tr_mon
+	has_variable = gm_tr_origin
+	var:gm_tr_origin ?= { save_temporary_scope_as = gm_tmp_tr_home }
+	has_global_variable_list = gm_trophies
+	any_in_global_list = {
+		variable = gm_trophies
+		NOT = { this = scope:gm_tmp_tr_mon }
+		gm_tr_is_piece_from = { HOME = scope:gm_tmp_tr_home }
+		OR = {
+			AND = {
+				has_variable = gm_tr_landmark
+				scope:gm_tmp_tr_mon = { has_variable = gm_tr_landmark }
+				var:gm_tr_landmark = scope:gm_tmp_tr_mon.var:gm_tr_landmark
+			}
+			AND = {
+				NOT = { has_variable = gm_tr_landmark }
+				scope:gm_tmp_tr_mon = { NOT = { has_variable = gm_tr_landmark } }
+			}
+		}
+	}
+}
+
+# Container scope, a trophy: a piece or a token (not taken whole) whose origin
+# is $HOME$ (a state).
+gm_tr_is_piece_from = {
+	has_variable = gm_tr_share
+	NOT = { var:gm_tr_share = flag:whole }
+	var:gm_tr_origin ?= { this = $HOME$ }
 }
 
 # Country scope. Owns a state whose monument can be carried off: a state Surrender

@@ -138,6 +138,21 @@ colors = {
 	te_jmap_own_self_pale = hsv360 { 138 20 92 }
 	te_jmap_own_ctry = hsv360 { 355 72 66 }
 	te_jmap_own_ctry_pale = hsv360 { 355 18 95 }
+	# je_te_map_room: the classes (2026-11-11), each one's share of the people, few to many: Capitalists gold, Aristocrats
+	# violet, Clergymen slate blue, Academics teal.
+	te_jmap_capitalists_low = hsv360 { 48 12 94 }
+	te_jmap_capitalists_high = hsv360 { 38 92 62 }
+	te_jmap_aristocrats_low = hsv360 { 290 10 94 }
+	te_jmap_aristocrats_high = hsv360 { 278 72 46 }
+	te_jmap_clergy_low = hsv360 { 220 10 94 }
+	te_jmap_clergy_high = hsv360 { 226 64 40 }
+	te_jmap_academics_low = hsv360 { 172 12 94 }
+	te_jmap_academics_high = hsv360 { 182 82 42 }
+	# je_te_map_room: Trade Volume, the owner's trade with the world market a doubling at a time (pale sand to deep sea
+	# green); a country with none is te_jmap_none. Its stripes: a state with a Trade Center.
+	te_jmap_trade_low = hsv360 { 52 16 92 }
+	te_jmap_trade_high = hsv360 { 168 84 38 }
+	te_jmap_trade_center = hsv360 { 30 88 92 }
 	# je_te_map_room: Population Growth per 1,000, diverging at none: shrinking magenta, cream at none, growing teal.
 	te_jmap_growth_low = hsv360 { 305 45 52 }
 	te_jmap_growth_mid = hsv360 { 50 6 92 }

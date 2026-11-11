@@ -22,6 +22,76 @@ te_state_picture_k_megacity_keep = {
 	value = te_state_picture_k_megacity
 	multiply = te_state_picture_k_keep
 }
+# Oil country: Oil Rigs hold at least this share of the state's building levels (subsistence
+# buildings left out) and at least this many levels. Provisional, from a 1940 save: 24 of 109 oil
+# states pass, and a state of 100 rig levels among 4,499 doesn't. Oil rigs earn more a level than
+# most buildings, so 5% of levels stands for about a tenth of the state's GDP (owner, 2026-11-10).
+te_state_picture_k_oil_share = { value = 0.05 }
+te_state_picture_k_oil_levels = { value = 10 }
+te_state_picture_k_oil_levels_keep = {
+	value = te_state_picture_k_oil_levels
+	multiply = te_state_picture_k_keep
+}
+# A colliery: Coal Mines hold at least this share of the state's mine levels and at least this many
+# levels. Provisional, from the same save: 44 of 139 coal states pass.
+te_state_picture_k_coal_share = { value = 0.5 }
+te_state_picture_k_coal_levels = { value = 10 }
+te_state_picture_k_coal_levels_keep = {
+	value = te_state_picture_k_coal_levels
+	multiply = te_state_picture_k_keep
+}
+
+# A heavy-industry city: heavy industry (bg_heavy_industry) holds at least this share of the
+# state's building levels and at least this many. Provisional, from a 1940 save: 32 of 335 states
+# with a city of 100,000 pass.
+te_state_picture_k_industry_share = { value = 0.25 }
+te_state_picture_k_industry_levels = { value = 30 }
+te_state_picture_k_industry_levels_keep = {
+	value = te_state_picture_k_industry_levels
+	multiply = te_state_picture_k_keep
+}
+# A resort: the Tourism Industry holds at least this share of the state's building levels and at
+# least this many. Provisional, from the same save: 13 states pass (tourism is never above 8%).
+te_state_picture_k_resort_share = { value = 0.02 }
+te_state_picture_k_resort_levels = { value = 10 }
+te_state_picture_k_resort_levels_keep = {
+	value = te_state_picture_k_resort_levels
+	multiply = te_state_picture_k_keep
+}
+# Growth: the state's people against a year before, as a rate, held within a tenth either way
+# (a conquest or a migration wave is not a trend) and smoothed: each year's rate counts for
+# te_state_picture_k_growth_new of the stored figure, so growth of 5% a year makes a boomtown in
+# its fifth year and a fall of 2% a year a declining city in its fourth. A boomtown is a city whose smoothed rate is at least
+# te_state_picture_k_boom a year, a declining city one at te_state_picture_k_decline or below.
+# Provisional: in the 1940 save 54 of 346 cities grew 3% in the one year and 73 fell 1%; the
+# smoothed figure will pass fewer.
+te_state_picture_k_growth_new = { value = 0.2 }
+te_state_picture_k_growth_cap = { value = 0.1 }
+te_state_picture_k_boom = { value = 0.03 }
+te_state_picture_k_boom_keep = { value = 0.025 }
+te_state_picture_k_decline = { value = -0.01 }
+te_state_picture_k_decline_keep = { value = -0.005 }
+# A divided city: a metropolis with a Gini of at least this. Provisional: in the 1940 save the
+# metropolises' median is 0.78 and a quarter are at 0.85 or more.
+te_state_picture_k_divided = { value = 0.85 }
+te_state_picture_k_divided_keep = { value = 0.83 }
+
+# This year's growth rate (state scope; only where te_state_picture_growth_known holds) ...
+te_state_picture_growth_rate = {
+	value = var:te_dg_walk_pop
+	divide = var:te_dg_walk_pop_prev
+	subtract = 1
+	min = { value = te_state_picture_k_growth_cap multiply = -1 }
+	max = te_state_picture_k_growth_cap
+}
+# ... and the stored figure moved toward it.
+te_state_picture_growth_smoothed = {
+	value = te_state_picture_growth_rate
+	subtract = var:te_sp_growth
+	multiply = te_state_picture_k_growth_new
+	add = var:te_sp_growth
+}
+
 # The largest city's share of the state's urban people where the census keeps none (Demographics
 # disabled, or under 5,000 urban people): te_demog_k_mt_base as a fraction.
 te_state_picture_k_share = { value = 0.4 }
@@ -82,6 +152,56 @@ te_state_picture_size_down = {
 
 # The state's whole population, for the self-check: its largest city can't hold more.
 te_state_picture_state_people = { value = state_population }
+
+# The oil and coal tags, for a log line: 1 where the state carries the tag.
+te_state_picture_oil_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_oil }
+		value = 1
+	}
+}
+te_state_picture_coal_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_coal }
+		value = 1
+	}
+}
+
+# The city's stored character, for a log line: the highest of 6 boomtown, 5 declining, 4 divided,
+# 2 heavy industry, 1 resort; 0 with none. The digits are the pictures' own in the weight.
+te_state_picture_character_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_boom }
+		value = 6
+	}
+	else_if = {
+		limit = { has_variable = te_sp_decline }
+		value = 5
+	}
+	else_if = {
+		limit = { has_variable = te_sp_divided }
+		value = 4
+	}
+	else_if = {
+		limit = { has_variable = te_sp_industry }
+		value = 2
+	}
+	else_if = {
+		limit = { has_variable = te_sp_resort }
+		value = 1
+	}
+}
+te_state_picture_growth_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_growth }
+		value = var:te_sp_growth
+		multiply = 100
+	}
+}
 
 # The stored size, for a log line: 0 with none.
 te_state_picture_size_shown = {

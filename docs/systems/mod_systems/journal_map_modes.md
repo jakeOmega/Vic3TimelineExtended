@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Ninth pass, 2026-11-08 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Tenth pass, 2026-11-11 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -14,7 +14,8 @@ five maps to the Map Room alone: Tourism Appeal, Base and Current Comfort, GDP p
 The eighth (2026-11-07) fits nearly every map's colors to the world's range as it stands, adds a Power Grids map, and
 lengthens the repaint's two waits. The ninth (2026-11-08, the owner's ask) adds nine: City Rank, Company HQs (with
 stripes for regional headquarters), Armed Forces and War Dead, then Ownership, Population Growth, Family Planning,
-Health Care and Fighting-Age Men.
+Health Care and Fighting-Age Men. The tenth (2026-11-11, the owner's ask) adds five, Capitalists, Aristocrats, Clergymen,
+Academics and Trade Volume, and puts the picks in seven collapsible categories (§ Buttons).
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -79,8 +80,8 @@ times it). Each fitted pick's tooltip prints its range now (`GetPlayer.MakeScope
 Comfort's two maps share Base Comfort's range (`range_of`), so they still compare. Four stay fixed: Agent Networks
 (0–100, its tiers at 50 and 75 are what it shows), the paleness of the leading cause and of Ownership's leading holder
 (a share on a categorical map) and City Rank (a rank is already a place in the world, and its first 20 are tourism's
-Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs
-and War Dead take GDP per capita's doubling scale, since their counts run over orders of magnitude.
+Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs,
+War Dead and Trade Volume take GDP per capita's doubling scale, since their counts run over orders of magnitude.
 Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
@@ -196,6 +197,19 @@ entry, in no country's journal.
   **Fighting-Age Men**, the conscription pool (`te_dg_fam`, men of calendar age 20 or more and biological age 39 or
   less) over the people (`te_demog_fam_share`, what the conscription term reads), the hover adding its share of the
   men.
+- **The tenth pass's five** (2026-11-11, the owner's ask). 41 **Capitalists**, 42 **Aristocrats**, 43 **Clergymen**
+  and 44 **Academics**: each class's share of the state's people (`te_jmap_<class>_share`), from counts the yearly walk
+  stores whatever the Demographics rule (`te_dg_capitalists`, `te_dg_aristocrats`, `te_dg_clergy`, `te_dg_academics`),
+  as Armed Forces' soldiers. They are counted by three calls of the Map Room's own in the walk (`te_jmap_class_walk_init`,
+  `_pop`, `_store`, `te_journal_map_effects.txt`), not in the census's helpers, which set nothing outside the census
+  (`test_demographics_registry.py`, `TestWorkWalk`); `test_demographics_golden.py` leaves the three lines out of the
+  walk it pins. Capitalists and Academics gather in a few great cities, so half their color goes by a fifth of the
+  world's range; Aristocrats and Clergymen run straight. 45 **Trade Volume**: the state's owner's trade with the world
+  market (`te_jmap_trade_value`, `total_trade_value`, the figure vanilla's Free Trade entry `je_liberalism_2` reads), a
+  doubling at a time, a country that trades nothing pale. Script has no state's share of its owner's trade, so every
+  state of a country paints alike; a state with a Trade Center stripes orange (the Map Room's fourth `map_color_second`
+  branch, `has_building = building_trade_center`, a plain type unlike the headquarters), and its hover gives the
+  Trade Center's levels (`te_jmap_trade_center_levels`).
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui` (`common/scripted_guis/te_journal_map_sguis.txt`)
@@ -314,12 +328,17 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
   The close comes last, in case a button whose window hides mid-click loses the lines after it.
 
 Every map button clears the see-through flag before it opens a page.
-- `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three (Turmoil, Devastation,
-  Urban People), wealth (GDP per Capita, Gini, Dynastic Wealth), migration attraction (Base Comfort, Current Comfort,
-  Crowding Penalty), the cities (Tourism Appeal, City Rank), ownership (Ownership, Company HQs) and the armies (Armed
-  Forces, and Fighting-Age Men and War Dead while the census runs), the systems' nine in rows of three (Grandeur,
-  Colonies and Power Grids last), then the census's maps three to a row, Population Growth (the walk's) beside Net
-  Migration and a last row of Health Care and Family Planning.
+- `te_jmap_pick_row`: the Map Room's picks on its page, in seven categories (2026-11-11, the owner's ask), each a
+  collapsible section: a header (`te_jmap_category_header`, the Demographics tab's `section_header_button` at 470 wide)
+  over its rows (`te_jmap_category`), shown while the category's client-side flag `te_jmap_cat_<key>_open` is set. Every
+  category starts collapsed, a long list (`gui_style_guide.md` § Sections), and the flags outlive a pick's reopen, as the
+  see-through flag does, so a category opened stays open from map to map. Society (Turmoil, Devastation, Urban People);
+  Classes (Aristocrats, Clergymen; Capitalists, Academics); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership,
+  Company HQs, Trade Volume); Migration and Cities (Base Comfort, Current Comfort, Crowding Penalty; Tourism Appeal, City
+  Rank); Military (Armed Forces, and Fighting-Age Men and War Dead while the census runs); Systems (the systems' nine in
+  rows of three, Grandeur, Colonies and Power Grids last); Census (its maps three to a row, Population Growth, the walk's,
+  beside Net Migration, and a last row of Health Care and Family Planning). `test_journal_map_modes.py`'s
+  `CategoriesTest` holds every pick to one category.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).
@@ -334,7 +353,7 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    effect, the dispatcher's branch and the trees come with it), give its pick's tooltip the range
    (`te_jmap_<map>_lo` / `_hi`), and mark it `entry` if a system's own entry draws it.
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
-   pick scripted GUI and its `te_jmap_pick_button` in `te_jmap_pick_row`, and loc for both. A map that reads a stored
+   pick scripted GUI and its `te_jmap_pick_button` in one of `te_jmap_pick_row`'s categories, and loc for both. A map that reads a stored
    figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A
    figure behind a long `state_region` chain is stored by the refresh that already computes it, not read live
    (tourism's and Local Climate's are the pattern).
