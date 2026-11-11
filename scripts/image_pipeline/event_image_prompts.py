@@ -38,8 +38,11 @@ DO:
     the right half of the picture, so a centered subject is half hidden and
     one on the right is not seen at all (docs/guides/event_creation_guide.md;
     owner, 2026-11-11). FLUX may ignore the placement: review every render
-    with `contact_sheet.py --window` and render again if the subject sits in
-    the middle or on the right
+    with `contact_sheet.py --window`, and if the subject sits in the middle
+    or on the right, move it with `reframe_event_image.py` (`--mirror` for a
+    subject on the right, `--shift 0.2` for a centered one) or render again.
+    A picture that will be mirrored must hold nothing that reads wrong
+    reversed, which the rules below about lettering and flags already ask
   - Describe posture and body language instead of facial expressions
   - Use "oil painting" styles — they produce the most consistent results
   - Anchor scenes with concrete architectural details (marble columns, brick walls)

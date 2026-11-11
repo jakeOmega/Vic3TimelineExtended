@@ -40,6 +40,7 @@ delete any bad ones (.dds and PNG) and regenerate them, then run
 `--phase update`. FLUX drifts toward real flags, landmarks and politicians'
 faces even when the prompt names none, and it may center a subject the prompt
 put on the left: the window's text panel covers the right half of the picture.
+`reframe_event_image.py` mirrors or shifts a picture whose subject is hidden.
 """
 
 from __future__ import annotations
