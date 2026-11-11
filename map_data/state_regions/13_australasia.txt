@@ -30,8 +30,8 @@
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 278
-        discovered_amount = 7
+        undiscovered_amount = 276
+        discovered_amount = 9
     }
 
     resource = {
@@ -98,7 +98,7 @@ STATE_TASMANIA = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 6
     }
     naval_exit_id = 3122
     min_cold_effect = 0.00
@@ -134,7 +134,7 @@ STATE_QUEENSLAND = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 7
+        discovered_amount = 9
     }
     naval_exit_id = 3129
     min_cold_effect = 0.00
@@ -165,8 +165,8 @@ STATE_SOUTH_AUSTRALIA = {
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 601
-        discovered_amount = 14
+        undiscovered_amount = 600
+        discovered_amount = 15
     }
     naval_exit_id = 3121
     blockade_locator = {
