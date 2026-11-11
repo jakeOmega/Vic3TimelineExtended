@@ -938,6 +938,23 @@ class RemoveOverlayTest(ServerTestCase):
                 self.assertEqual(tree(self.user), before)
                 self.assertTrue(temp.is_dir())
 
+    def test_it_refuses_when_the_backup_root_cannot_be_seen(self):
+        # X2: with the backup root's drive not mounted, the unfinished run whose playset names the overlay (and any
+        # server's session.json) cannot be seen, so nothing may be removed
+        self.run_snapshot("armed", "started", "playset")
+        overlay.build(self.dest, {}, "1.15.0")
+        self.assertEqual(self.remove()[0]["refused"], "unfinished_run")        # seen while the root is there
+        before = tree(self.user)
+        for root in (self.root / "not mounted" / "backups", self.root / "no backups here"):
+            with self.subTest(root=root):
+                reply, code = client.remove_overlay(self.user, root, self.list_games, sleep=lambda s: None)
+                self.assertEqual((reply["refused"], code, reply["removed"]), ("backup_root", 2, []))
+                self.assertIn(str(root if root.parent.is_dir() else root.parent), reply["detail"])
+                self.assertEqual(tree(self.user), before)
+        reply, _code = client.remove_overlay(self.user, self.root / "not mounted" / "backups", self.list_games,
+                                             sleep=lambda s: None)
+        self.assertIn("the backup root's folder %s does not exist" % (self.root / "not mounted"), reply["detail"])
+
     def test_it_refuses_while_a_session_server_answers_or_may(self):
         self.serve()
         overlay.build(self.dest, {}, "1.15.0")

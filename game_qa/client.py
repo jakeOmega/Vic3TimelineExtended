@@ -377,7 +377,8 @@ def remove_overlay(user_data: Path, backup_root: Path, list_games: Callable[[], 
     """`remove-overlay`: delete the overlay folder (`mod/te_qa_overlay`) an earlier run left, and any temp folder
     a cut-short `build` left beside it, only through `overlay.remove` and `overlay.remove_build` (the exact name,
     the harness's marker, no symlink followed). Refused, with nothing removed, while anything may still use it:
-    a session server that answers or may (`session_running`), a Victoria 3 process, or a process listing that
+    a backup root that cannot be seen (`backup_root`: an unmounted drive hides the runs), a session server that
+    answers or may (`session_running`), a Victoria 3 process, or a process listing that
     did not finish (`game_running`, `cannot_list_games`), an unfinished run (`unfinished_run`: its game may be
     up, and `recover` finishes it), or a held snapshot whose run's playset was never put back (`playset_held`:
     the launcher may still name the overlay, and only the owner resolves a hold). A folder of that name that is
@@ -425,6 +426,13 @@ def remove_overlay(user_data: Path, backup_root: Path, list_games: Callable[[], 
 def _overlay_in_use(backups: Path, list_games: Callable[[], Sequence], sleep) -> dict | None:
     """Why the overlay may still be used (a refusal: `refused`, `detail`, and `next` where there is one), or
     None when nothing can use it."""
+    if not backups.is_dir():
+        # X2: an unmounted drive hides the journals (an unfinished run whose playset names the overlay) and any
+        # server's session.json. The wording is part 1's for an unusable backup root (`__main__._backup_error`).
+        where = ("the backup root's folder %s does not exist" % backups.parent if not backups.parent.is_dir() else
+                 "the backup root %s does not exist" % backups)
+        return {"refused": "backup_root", "detail": "%s, so a run whose playset names the overlay cannot be ruled "
+                                                    "out: once it is there again, run this again" % where}
     info = _server_named(backups, sleep)
     if info is not None:
         return {"refused": "session_running", "session": _public(info),
