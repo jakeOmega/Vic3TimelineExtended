@@ -44,3 +44,9 @@ game can show. Strike a fixed item through with the commit that fixed it.
 | **The breakdown (CH-1, CH-3).** With Prestige and a Pull Multiplier, as a major power below the world average standard of living. | The Pull Multiplier closes the components ("+25%", green), then the rule, then Raw Score alone. The Standard of Living row shows a red negative value, and its hover says "Counted at ×0.50 for our rank". | |
 | **The funding level (CH-4).** Hover "2 / 5" beside Program Funding. | Funding Level, the maximum, the Ministry of Culture institution and the two technologies that raise it, and the breakdown of where the cap comes from now. | A blank breakdown: `GetValueWithBreakdownFor` failed here; the sentence above it still says how to raise it. |
 | **The history legend (CH-12).** Look under the History chart. | Two columns of short names ("Mixed", "Theocratic"), each with its full name and laws on hover, as in the models legend above. | |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`ch_board_rows` OK (`ranked=70`).

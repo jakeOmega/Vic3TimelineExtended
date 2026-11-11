@@ -127,3 +127,9 @@ Spec § 14. Built before phase 1's play-test, so read phase 1's items first: the
     from an event option: fall back to an enactment success bonus for Statutory Courts
     (`country_enactment_success_chance_law_statutory_courts_add`, which needs registering in
     `mod_entity_modifier_types.txt`) and say so in the option's tooltip.
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+Item 2 (February scores: Britain 70, Prussia 35, Persia and the Ottoman Empire 10 of 20) OK. Item 30 OK: `start_enactment` works from an event option. Self-check `judiciary_enacting_law_scope` OK. Item 6 is BROKEN: Court Overhaul never arrives, because its delayed event's trigger is false when queued (#1596); fired by hand, the event and Lawyers in the Streets (third answer, +10) work.

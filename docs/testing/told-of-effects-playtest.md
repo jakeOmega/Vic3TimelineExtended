@@ -42,3 +42,9 @@ variable their sender sets, so reach them through the real action where the tabl
 | **Cultural Ties Funded** | Be the neighbor a same-culture country funds ties with (`irredentism.1.b`). | A notice naming the funder, relations +15 and the modifier. | |
 | **Another Operation Exposed**, **Anger at Foreign Friends** | Have two operations against us exposed within two years; and order a response at the catch against a country a lobby of ours favors. | The second exposure posts Another Operation Exposed in place of the event; Anger at Foreign Friends follows whenever our lobby's interest groups took Foreign Ties Discredited and the event was not shown. | The operation's name blank: the exposure record was read before `covert_op_burn` wrote it. |
 | **A colonial subject's liberty-desire modifiers** | As a colonial subject of an empire whose Colonial Stability is below 65, hover Restless Colonial Subject (or its two stronger forms) in our modifier list. | The description names the empire's Colonial Stability and the threshold. | |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+The State Collapses: taking the option adds no Failed State (read before and after). The window, picture and names were not looked at.

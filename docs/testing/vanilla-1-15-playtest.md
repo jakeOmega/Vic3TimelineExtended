@@ -339,3 +339,9 @@ unless a line names a save.
     vanilla's.
   - *Treaty panel*: the binding-period box, and a law commitment's icon opening the law group. *Right-click on a
     state*: the world market hub entry. *Building details* on a hub's state: the second go-to button.
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+1.15.1 hotfix, "Ports and railways": no country starts with a subsidized port or railway. `decentralized_law_baseline` OK again.
