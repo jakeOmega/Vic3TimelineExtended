@@ -100,6 +100,12 @@ class FakeSession:
         self._call("shot")
         return Path("/backups/runs/%s/shot_01.png" % SNAP)
 
+    def try_event(self, event, setup, reads):
+        self._call("try_event", event, setup, list(reads))
+        return dict(self.try_event_reply, event=event, setup=setup)
+
+    try_event_reply = {"shared_state": True, "option_count": 2, "complete": True, "options": []}
+
     def status(self):
         self._call("status")
         return {"started": True, "stopped": self._stopped is not None, "snapshot": SNAP}
@@ -258,7 +264,7 @@ class VerbTest(ServerTestCase):
         self.assertNotIn(("events",), fake.calls)
 
     def test_no_session_is_refused(self):
-        for argv in (("events",), ("read", "c:FRA.gdp"), ("stop",), ("status",)):
+        for argv in (("events",), ("read", "c:FRA.gdp"), ("stop",), ("status",), ("try-event", "x.1", "--read", "a")):
             with self.subTest(argv=argv):
                 reply, code = self.run_cli(*argv)
                 self.assertEqual((reply["refused"], code), ("no_session", 2))
@@ -294,6 +300,17 @@ class VerbTest(ServerTestCase):
         self.assertEqual(self.run_cli("events")[1], 0)
         self.assertTrue(thread.is_alive())
         self.assertEqual(fake.stops, 0)
+
+    def test_try_event_exits_0_only_when_every_option_was_picked(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("try-event", "x.1", "--setup", "border", "--read", "c:FRA.infamy", "--read", "a = b")
+        self.assertEqual((reply["complete"], code), (True, 0))
+        self.assertEqual(fake.calls[-1], ("try_event", "x.1", "border", ["c:FRA.infamy", "a = b"]))
+        fake.try_event_reply = dict(FakeSession.try_event_reply, complete=False,
+                                    options=[{"index": 0, "fired": False, "did_not_fire": True}])
+        reply, code = self.run_cli("try-event", "x.1", "--read", "c:FRA.infamy")
+        self.assertEqual((reply["options"][0]["did_not_fire"], code), (True, 2))
+        self.assertEqual(fake.calls[-1], ("try_event", "x.1", None, ["c:FRA.infamy"]))
 
     def test_a_verb_that_outlasts_its_timeout_is_no_answer_and_ends_nothing(self):
         fake, thread = self.serve()

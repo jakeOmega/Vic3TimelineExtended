@@ -55,6 +55,37 @@ class ReportTest(unittest.TestCase):
                 first = self.report.close(self.summary(restore, outcome)).read_text("utf-8").split("\n")[0]
                 self.assertTrue(first.startswith(start), first)
 
+    def test_a_try_event_step_is_a_table_of_its_options(self):
+        rows = [
+            {"index": 0, "fired": True, "fired_by": "console", "pending_options": 2,
+             "before": [{"expr": "c:FRA.infamy", "ok": True, "raw": "5", "value": 5.0},
+                        {"expr": "is_player = yes", "ok": True, "raw": "yes - Yes: \nYes: is_player", "value": True}],
+             "after": [{"expr": "c:FRA.infamy", "ok": True, "raw": "10.5", "value": 10.5},
+                       {"expr": "gdp", "ok": False, "raw": "not a valid trigger or script value", "value": None}],
+             "picked": {"index": 0, "numeric_id": 10, "event": "x.1"},
+             "new_errors": ["[12:00:00][jomini_script_system.cpp:247]: Script system error!", "  Error: x"],
+             "did_not_fire": False},
+            {"index": 1, "fired": False, "fired_by": "console", "pending_options": None, "before": [], "after": [],
+             "picked": None, "new_errors": [], "did_not_fire": True},
+        ]
+        self.report.step("try_event", outcome="ok", event="x.1", setup="border", option_count=2, complete=False,
+                         shared_state=True, options=rows)
+        text = self.report.close(self.summary(None, None)).read_text("utf-8")
+        self.assertIn("## try-event x.1 (setup border)", text)
+        self.assertIn("State is shared between options", text)
+        self.assertIn("| Option | Fired | Before | After | Picked | New errors |", text)
+        self.assertIn("| 0 | yes | c:FRA.infamy = 5; is_player = yes = yes | "
+                      "c:FRA.infamy = 10.5; gdp = refused (not a valid trigger or script value) | option 0 | 2 |", text)
+        self.assertIn("| 1 | did not fire |  |  |  | 0 |", text)
+        self.assertIn("Not a pass: option 1 did not fire", text)
+
+    def test_a_try_event_that_ended_on_an_error_says_so(self):
+        self.report.step("try_event", outcome="not_selected", detail="select_event_option 1 11 answered nothing",
+                         event="x.1", setup=None, options=[])
+        text = self.report.close(self.summary(None, None)).read_text("utf-8")
+        self.assertIn("## try-event x.1\n", text)
+        self.assertIn("Not a pass: it ended on not_selected (select_event_option 1 11 answered nothing)", text)
+
     def test_a_pipe_or_a_line_break_in_a_step_does_not_break_the_table(self):
         self.report.step("console", outcome="a | b\nc")
         text = self.report.close(self.summary(None, None)).read_text("utf-8")

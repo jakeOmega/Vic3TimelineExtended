@@ -1,7 +1,8 @@
 """The run folder's record: one JSON line per step, and a summary a session reads first.
 
     <backup root>/runs/<snapshot id>/steps.jsonl   one object per step: its UTC time, the verb, what it found
-    <backup root>/runs/<snapshot id>/summary.md    the restore's outcome first, then the run, then a table of the steps
+    <backup root>/runs/<snapshot id>/summary.md    the restore's outcome first, then the run, then a table of the steps,
+                                                   then one table per try-event check, a row per option
 
 Nothing here touches the owner's files: the folder is the harness's own, under the backup root.
 """
@@ -60,7 +61,8 @@ class Report:
         """Write summary.md and return its path. Its first line is the restore's outcome, from `summary["outcome"]`
         ("restored", "held" or "refused"; worked out from `summary["restore"]`, the restore's reply, when absent),
         so a reader learns first whether the owner's files are back. Then the permission, the snapshot, the save,
-        the country and any notes; then one table row per step (verb, outcome)."""
+        the country and any notes; then one table row per step (verb, outcome); then, for each `try_event` step,
+        its options' table and whether every option fired and was picked."""
         lines = [_restore_line(summary.get("restore"), summary.get("outcome")), ""]
         for label, key in (("Permission", "permission"), ("Snapshot", "snapshot"), ("Save", "save"),
                            ("Country", "country"), ("Overlay removed", "overlay_removed")):
@@ -68,9 +70,13 @@ class Report:
             lines.append("- %s: %s" % (label, _text(value) if value not in (None, "") else "(none)"))
         for note in summary.get("notes") or ():
             lines.append("- Note: " + _text(note))
+        steps = self.steps()
         lines += ["", "| # | Verb | Outcome |", "|---|---|---|"]
-        for n, record in enumerate(self.steps(), start=1):
+        for n, record in enumerate(steps, start=1):
             lines.append("| %d | %s | %s |" % (n, _cell(record.get("verb")), _cell(record.get("outcome", ""))))
+        for record in steps:
+            if record.get("verb") == "try_event":
+                lines += ["", *_try_event_table(record)]
         self.summary_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
         return self.summary_path
 
@@ -98,6 +104,56 @@ def _restore_line(restore: Mapping | None, outcome: str | None) -> str:
     reason = restore.get("reason")
     return "Restore: restored (%d files put back, %d removed)%s." % (
         len(restored), len(removed), "; " + _text(reason) if reason else "")
+
+
+def _try_event_table(record: Mapping) -> list[str]:
+    """A try-event check: its heading, that the options share one game, a row per option, and the verdict."""
+    setup = record.get("setup")
+    rows = record.get("options") or []
+    out = ["## try-event %s%s" % (_text(record.get("event")), " (setup %s)" % _text(setup) if setup else ""), "",
+           "State is shared between options: each ran on the game the one before left%s; console `event` ignores "
+           "the trigger and the cooldown." % (", the setup re-run first" if setup else ""), "",
+           "| Option | Fired | Before | After | Picked | New errors |", "|---|---|---|---|---|---|"]
+    for row in rows:
+        fired = "yes" if row.get("fired") else "did not fire" if row.get("did_not_fire") else "no"
+        picked = row.get("picked")
+        out.append("| %s | %s | %s | %s | %s | %d |" % (
+            _cell(row.get("index")), fired, _cell(_reads(row.get("before"))), _cell(_reads(row.get("after"))),
+            "option %s" % _cell(picked.get("index")) if isinstance(picked, Mapping) else "",
+            len(row.get("new_errors") or [])))
+    out += ["", _verdict(record, rows)]
+    if any(row.get("new_errors") for row in rows):
+        out.append("The new errors' lines are in %s (the try_event step's `options`)." % STEPS_FILE)
+    return out
+
+
+def _reads(reads) -> str:
+    return "; ".join("%s = %s" % (_text(r.get("expr")), _read_value(r)) for r in reads or () if isinstance(r, Mapping))
+
+
+def _read_value(read: Mapping) -> str:
+    raw = str(read.get("raw") or "").split("\n")[0].strip()
+    if not read.get("ok"):
+        return "refused (%s)" % raw
+    value = read.get("value")
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if isinstance(value, (int, float)):
+        return "%g" % value
+    return raw
+
+
+def _verdict(record: Mapping, rows) -> str:
+    outcome = record.get("outcome", "ok")
+    if outcome != "ok":
+        detail = record.get("detail")
+        return "Not a pass: it ended on %s%s." % (_text(outcome), " (%s)" % _text(detail) if detail else "")
+    if record.get("complete") is True:
+        return "Every option fired and was picked."
+    did_not = [str(row.get("index")) for row in rows if row.get("did_not_fire")]
+    if did_not:
+        return "Not a pass: option %s did not fire." % ", ".join(did_not)
+    return "Not a pass: not every option fired and was picked."
 
 
 def _text(value) -> str:

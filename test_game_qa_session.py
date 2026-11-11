@@ -9,6 +9,7 @@ the debugger client's own, which the fakes answer at once.
 """
 import datetime as dt
 import json
+import re
 import subprocess
 import tempfile
 import unittest
@@ -45,6 +46,10 @@ class Adapter:
         self.verified = True
         self.values: dict[str, str] = {}
         self.stopped = False
+        self.burst: list[str] = []              # what each evaluation makes the validator write ({n}: its number)
+        self.burst_lag = False                  # error.log gets each burst only at the next evaluation
+        self._evaluations = 0
+        self._late: list[str] = []
         self._decoder = dap.Decoder()
         self._out = b""
         self._seq = 0
@@ -70,6 +75,10 @@ class Adapter:
         self.stopped = True
         self.push(STOPPED)
 
+    def output(self, text: str) -> None:
+        """An error-log line streamed to the debugger, as the bare message (debugger_transcript.txt:51-53)."""
+        self.push({"type": "event", "event": "output", "body": {"category": "stderr", "output": text + "\n"}})
+
     def _answer(self, req: dict) -> None:
         command, args = req["command"], req.get("arguments") or {}
         success, body, message, resumed = True, {}, "", False
@@ -79,6 +88,14 @@ class Adapter:
             body = {"breakpoints": [{"verified": self.verified, "line": n} for n in lines]}
         elif command == "evaluate":
             expr = args["expression"]
+            if self.stopped:                    # streamed before the answer, as live; written to error.log too
+                lines = [line.format(n=self._evaluations) for line in self.burst]
+                self._evaluations += 1
+                for line in lines:
+                    self.output(line)
+                late, self._late = self._late, lines
+                for line in late if self.burst_lag else lines:
+                    self.game.error(line)
             if not self.stopped:
                 success, message = False, "not stopped"
             elif expr in self.values:
@@ -120,7 +137,20 @@ class Game(fakes.FakeHelper):
         self.tcp_error: Exception | None = None
         self.closed = False
         self.setups: dict[str, tuple[str, list[str]]] = {}     # setup event -> (its name, the lines its body logs)
+        self.on_command = None                  # called with each command the game runs, before it answers
+        self.error_log = logs / "error.log"
         self.on("tag FRA", success=["Now Playing - France"])
+
+    def error(self, message: str, streamed: bool = False) -> None:
+        """An error the game writes to error.log (each line of `message`; the first with the log's prefix) and,
+        when `streamed`, sends the debugger too, as it does every error-log line (spec § 3.5)."""
+        first, *rest = message.split("\n")
+        clock = int(self.now)
+        with open(self.error_log, "a", encoding="utf-8", newline="\n") as f:
+            f.write("[%02d:%02d:%02d][jomini_script_system.cpp:247]: %s\n" % (12, clock // 60 % 60, clock % 60, first))
+            f.write("".join(line + "\n" for line in rest))
+        if streamed:
+            self.adapter.output(message)
 
     @property
     def date(self) -> dt.date:
@@ -181,6 +211,8 @@ class Game(fakes.FakeHelper):
         self.order.append("helper_close")
 
     def _run(self, text):
+        if self.on_command is not None:
+            self.on_command(text)
         super()._run(text)
         if text.startswith("tag "):
             self.played = text[4:].strip()
@@ -692,6 +724,207 @@ class AdvanceTest(SessionTestCase):
         for days in (0, -3, 2.5, True):
             self.assertEqual(self.session_error(self.session.advance, days).code, "bad_days")
         self.assertEqual(len(self.game.steps), steps)
+
+
+class Events:
+    """The game's pending events, for try-event. `event <id>` fires one instance (while `fires`; `fires_left`
+    counts down for an event that fires only so often), and so does a setup event in `fired_by`.
+    `select_event_option list` lists the pending ones; `select_event_option <i> <n>` picks one and runs
+    `effects[i]`."""
+
+    def __init__(self, game: Game, event: str = "x.1", options: int = 3):
+        self.game, self.event, self.options = game, event, options
+        self.pending: list[int] = []
+        self.next_id = 10
+        self.fires = True
+        self.fires_left: int | None = None
+        self.fired_by: set[str] = set()
+        self.effects: dict = {}
+        game.on_command = self.command
+
+    def fire(self) -> None:
+        if not self.fires or self.fires_left == 0:
+            return
+        if self.fires_left is not None:
+            self.fires_left -= 1
+        self.pending.append(self.next_id)
+        self.next_id += 1
+
+    def command(self, text: str) -> None:
+        if text == "event " + self.event:
+            self.game.on(text, success=['Executed "%s"' % self.event])
+            self.fire()
+        elif text.startswith("event ") and text[6:] in self.fired_by:
+            self.fire()
+        elif text == "select_event_option list":
+            self.game.on(text, success=["%d %s options=%d" % (n, self.event, self.options) for n in self.pending]
+                         or ["No pending events"])
+        else:
+            m = re.fullmatch(r"select_event_option (\d+) (\d+)", text)
+            if m and int(m.group(2)) in self.pending:
+                index = int(m.group(1))
+                self.pending.remove(int(m.group(2)))
+                self.game.on(text, success=["Selected option %d of %s" % (index, self.event)])
+                if index in self.effects:
+                    self.effects[index]()
+
+
+class TryEventTest(SessionTestCase):
+    def setUp(self):
+        super().setUp()
+        self.events = Events(self.game)
+        self.game.adapter.values = {"c:FRA.infamy": "5", "is_player = yes": "yes - Yes: "}
+
+        def option(i):
+            def effect():
+                self.game.adapter.values["c:FRA.infamy"] = str(10 * (i + 1))
+            return effect
+        self.events.effects = {i: option(i) for i in range(3)}
+
+    def started(self, **kwargs) -> dict:
+        reply = super().started(**kwargs)
+        self.game.steps.clear()                 # the console's own probe at start is `select_event_option list` too
+        return reply
+
+    def commands(self) -> list[str]:
+        """The event and option commands typed since the start, in order (not the console's own flushes)."""
+        return [t for t in self.typed() if t.startswith(("event ", "select_event_option"))]
+
+    def try_event_steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [step for step in map(json.loads, lines) if step["verb"] == "try_event"]
+
+    def test_each_option_is_fired_read_picked_and_read_again(self):
+        self.started()
+        reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
+        self.assertEqual((reply["event"], reply["option_count"], reply["shared_state"], reply["complete"]),
+                         ("x.1", 3, True, True))
+        rows = reply["options"]
+        self.assertEqual([r["index"] for r in rows], [0, 1, 2])
+        for row in rows:
+            self.assertEqual((row["fired"], row["did_not_fire"], row["fired_by"], row["pending_options"]),
+                             (True, False, "console", 3))
+        # the reads before and after each pick; each option runs on the state the one before left
+        self.assertEqual([(r["before"][0]["raw"], r["after"][0]["raw"]) for r in rows],
+                         [("5", "10"), ("10", "20"), ("20", "30")])
+        self.assertEqual(rows[0]["before"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "5", "value": 5.0}])
+        self.assertEqual([(r["picked"]["index"], r["picked"]["numeric_id"]) for r in rows], [(0, 10), (1, 11), (2, 12)])
+
+        def option(i, n):
+            return ["event x.1", "select_event_option list", "event te_qa.1",
+                    "select_event_option list", "select_event_option %d %d" % (i, n), "event te_qa.1"]
+        # one look before the first firing (nothing of x.1 may be pending), then each option in turn
+        self.assertEqual(self.commands(), ["select_event_option list", *option(0, 10), *option(1, 11), *option(2, 12)])
+        self.assertEqual(self.events.pending, [])
+        # the run folder's record holds the rows, and its summary the table
+        [step] = self.try_event_steps()
+        self.assertEqual((step["outcome"], step["complete"]), ("ok", True))
+        self.assertEqual(step["options"], json.loads(json.dumps(rows)))
+        summary = Path(self.session.stop()["report"]).read_text("utf-8")
+        self.assertIn("## try-event x.1", summary)
+        self.assertIn("| 1 | yes | c:FRA.infamy = 10 | c:FRA.infamy = 20 | option 1 | 0 |", summary)
+
+    def test_the_setup_runs_before_each_option(self):
+        reply = self.started(setups={"border": "set_variable = te_x"})
+        setup_event = reply["overlay"]["setup_events"]["border"]
+        self.game.setups = {setup_event: ("border", ["x.17 is not this event", "nor is x.1.2"])}
+        result = self.session.try_event("x.1", "border", ["c:FRA.infamy"])
+        self.assertTrue(result["complete"])
+        commands = self.commands()
+        setups = [i for i, c in enumerate(commands) if c == "event " + setup_event]
+        firings = [i for i, c in enumerate(commands) if c == "event x.1"]
+        self.assertEqual(len(setups), 3)
+        self.assertEqual([i + 1 for i in setups], firings)     # each option: its setup, then the firing
+        self.assertEqual([r["fired_by"] for r in result["options"]], ["console"] * 3)
+
+    def test_a_setup_that_fires_the_event_itself_is_not_followed_by_a_firing(self):
+        reply = self.started(setups={"border": "trigger_event = x.1"})
+        setup_event = reply["overlay"]["setup_events"]["border"]
+        self.game.setups = {setup_event: ("border", ["fired x.1."])}
+        self.events.fired_by = {setup_event}
+        result = self.session.try_event("x.1", "border", ["c:FRA.infamy"])
+        self.assertTrue(result["complete"])
+        self.assertNotIn("event x.1", self.commands())
+        self.assertEqual([r["fired_by"] for r in result["options"]], ["setup"] * 3)
+
+    def test_an_event_that_does_not_fire_is_reported_and_never_a_pass(self):
+        self.started()
+        self.events.fires = False
+        reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
+        self.assertEqual((reply["complete"], reply["option_count"]), (False, None))
+        self.assertEqual(reply["options"], [{
+            "index": 0, "fired": False, "fired_by": "console", "pending_options": None, "before": [], "after": [],
+            "picked": None, "new_errors": [], "did_not_fire": True}])
+        self.assertEqual(self.commands(), ["select_event_option list", "event x.1", "select_event_option list"])
+        # An event that fires once only: its first option is picked, and the second did not fire.
+        self.events.fires, self.events.fires_left = True, 1
+        reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
+        self.assertEqual((reply["complete"], reply["option_count"]), (False, 3))
+        self.assertEqual([(r["fired"], r["did_not_fire"], r["picked"] is not None) for r in reply["options"]],
+                         [(True, False, True), (False, True, False)])
+        self.assertEqual([s["complete"] for s in self.try_event_steps()], [False, False])
+
+    def test_an_event_already_pending_is_refused_before_anything(self):
+        self.started()
+        self.events.fire()                      # pending already: a firing that did nothing would look like one
+        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
+        self.assertEqual(error.code, "already_pending")
+        self.assertEqual(self.commands(), ["select_event_option list"])
+
+    def test_bad_arguments_are_refused_before_anything_is_typed(self):
+        self.started()
+        for args, code in ((("x.1", "nothing", ["a"]), "unknown_setup"), (("te_qa.1", None, ["a"]), "use_read"),
+                           (("x.1", None, "c:FRA.gdp"), "bad_argument"), (("x 1", None, ["a"]), "bad_argument"),
+                           (("x." + "1" * 60, None, ["a"]), "bad_argument")):
+            with self.subTest(args=args):
+                self.assertEqual(self.session_error(self.session.try_event, *args).code, code)
+        self.assertEqual(self.commands(), [])
+
+    def test_an_error_on_the_way_keeps_the_rows_so_far_and_types_nothing_again(self):
+        self.started()
+        self.events.options = 2
+        command = self.events.command
+
+        def second_pick_unconfirmed(text):
+            command(text)
+            if text == "select_event_option 1 11":
+                self.game.on(text, success=["Something else happened"])
+        self.game.on_command = second_pick_unconfirmed
+        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
+        self.assertEqual(error.code, "not_selected")
+        rows = error.info["options"]
+        self.assertEqual([(r["index"], r["fired"], r["picked"] is not None) for r in rows], [(0, True, True), (1, True, False)])
+        self.assertEqual(self.commands().count("select_event_option 1 11"), 1)
+        [step] = self.try_event_steps()
+        self.assertEqual((step["outcome"], len(step["options"])), ("not_selected", 2))
+
+    def test_new_errors_leave_out_the_debuggers_own_burst(self):
+        self.started()
+        self.events.options = 2
+        # Each evaluation makes the validator write its burst. The debugger streams it at once; error.log gets each
+        # one a read late, so the last option's log also holds the burst of the option before it.
+        self.game.adapter.burst = ["Flag 'K{n}' is set but is never used. Note that use in localization doesn't count"]
+        self.game.adapter.burst_lag = True
+        genuine = "Script system error!\n  Error: x.1 option %d divided by zero\n  Script location: events/x.txt:12\n"
+
+        def option(i):
+            def effect():                       # in the log, and streamed to the debugger before the next stop
+                self.game.error(genuine % i, streamed=True)
+            return effect
+        self.events.effects = {0: option(0), 1: option(1)}
+        self.game.error("an error from before the check")
+        reply = self.session.try_event("x.1", None, ["is_player = yes"])
+        self.assertTrue(reply["complete"])
+        for i, row in enumerate(reply["options"]):
+            with self.subTest(option=i):
+                self.assertEqual([logtail.parse(line).text for line in row["new_errors"]],
+                                 ["Script system error!", "  Error: x.1 option %d divided by zero" % i,
+                                  "  Script location: events/x.txt:12"])
+        # the burst was there to be left out: in error.log, and in the run folder's copy of it
+        for log in (self.game.error_log, self.paths.backup_root / "runs" / SNAP / "error.log"):
+            text = log.read_text("utf-8")
+            self.assertIn("Flag 'K0'", text)
+            self.assertIn("Flag 'K2'", text)
 
 
 class StopTest(SessionTestCase):

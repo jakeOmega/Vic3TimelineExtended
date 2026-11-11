@@ -13,6 +13,9 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa enter-game            # the two clicks past the country-select screen, proven
     python3 -m game_qa advance DAYS          # let at least DAYS game days pass
     python3 -m game_qa shot                  # a screenshot of the game's window, into the run folder
+    python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
+                                             # each option of EVENT: setup, fire, read, pick, read; exit 0 only
+                                             # when every option fired and was picked
     python3 -m game_qa stop                  # end the game, put the owner's files back, end the server
     python3 -m game_qa status                # the server and its session
     python3 -m game_qa doctor                # is this machine ready for a session? (starts nothing)
@@ -516,6 +519,11 @@ def cmd_shot(args) -> tuple[dict, int]:
     return call(_backup_root(), "shot")
 
 
+def cmd_try_event(args) -> tuple[dict, int]:
+    return call(_backup_root(), "try-event", {"event": args.event, "setup": args.setup, "reads": args.reads},
+                LONG_TIMEOUT_S)
+
+
 def cmd_status(args) -> tuple[dict, int]:
     return call(_backup_root(), "status", timeout=STATUS_TIMEOUT_S)
 
@@ -570,8 +578,15 @@ def add_verbs(sub) -> None:
     p = sub.add_parser("advance", help="let at least DAYS game days pass (entering the game first if need be)")
     p.add_argument("days", type=int)
     p.set_defaults(run=cmd_advance)
-    for name, fn, text in (("shot", cmd_shot, "a screenshot of the game's window, into the run folder"),
-                           ("stop", cmd_stop, "end the game, put the owner's files back, end the session server"),
+    sub.add_parser("shot", help="a screenshot of the game's window, into the run folder").set_defaults(run=cmd_shot)
+    p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
+                                         "the event, read, pick that option, read again; one table in the report")
+    p.add_argument("event")
+    p.add_argument("--setup", metavar="NAME", help="a setup given at start, run before each option")
+    p.add_argument("--read", dest="reads", action="append", required=True, metavar="EXPR",
+                   help="a trigger or value read before and after each pick (repeatable)")
+    p.set_defaults(run=cmd_try_event)
+    for name, fn, text in (("stop", cmd_stop, "end the game, put the owner's files back, end the session server"),
                            ("status", cmd_status, "the session server and its session"),
                            ("doctor", cmd_doctor, "is this machine ready for a session? (starts nothing, changes "
                                                   "nothing)")):

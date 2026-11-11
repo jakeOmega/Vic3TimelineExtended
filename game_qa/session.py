@@ -33,7 +33,7 @@ from pathlib import Path
 from typing import Any
 
 from game_qa import fixture, overlay
-from game_qa.console import Console, ConsoleError, Reply
+from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
 from game_qa.gate import UNKNOWN_START, ProcId
@@ -48,6 +48,7 @@ DEBUGGER_PORT = 6111
 SESSION_ARGS = ("-gdpr-compliant", "-debug_mode", "-script_debugger")
 PLAYSETS = ("current", "mod_only")
 READ_COMMAND = "event " + overlay.READ_EVENT
+FIRE_COMMAND = "event %s"               # console `event` fires whatever the trigger and cooldown say (spec § 12.1 A6)
 READ_PREFIX = "TE_QA read "
 PENDING_COMMAND = "select_event_option list"
 NO_PENDING = "No pending events"
@@ -73,6 +74,7 @@ RESTORE_RETRY_S = 5.0                   # stop: while `restore` refuses watch_st
 RESTORE_RETRY_TOTAL_S = 30.0
 
 _TAG = re.compile(r"[A-Za-z0-9_]{1,16}")
+_EVENT = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.]*")
 _DAYS_BEFORE = (0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334)
 
 
@@ -84,8 +86,9 @@ class SessionError(Exception):
     overlay_refused, fixture_failed, snapshot_refused, launch_refused, bad_launch_reply, unknown_start, game_gone,
     no_window, breakpoint_unverified, debugger, no_stop, no_date, bad_date, tag_failed, use_read, unknown_setup,
     setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country, click_refused, not_entered,
-    left_running, bad_days, stalled, not_started, stopped, watch_ended; after `launch`, a console error that ended
-    `start` keeps its own code (no_ack, not_foreground, …) and `entered`."""
+    left_running, bad_days, stalled, not_started, stopped, watch_ended, already_pending; after `launch`, a console
+    error that ended `start` keeps its own code (no_ack, not_foreground, …) and `entered`, as does one that ended
+    `try_event` (whose error also carries the rows so far, `options`)."""
 
     def __init__(self, code: str, detail: str = "", **info: Any) -> None:
         super().__init__("%s: %s" % (code, detail) if detail else code)
@@ -156,6 +159,8 @@ class Session:
         self._entered = False
         self._shots = 0
         self._stopped: dict | None = None
+        self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
+        self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
 
     # ---- start
 
@@ -438,6 +443,97 @@ class Session:
             out["path"] = str(path)
         return path
 
+    def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:
+        """The owner's first check: each option of `event` in turn, fired, read, picked and read again.
+
+        Before anything else, `event` must not be pending already: a firing that did nothing would then look like
+        one that worked. Then for option 0, 1, …: run `setup` when given; fire the event with console `event <id>`,
+        unless the setup's own log lines name it (the setup fired it); list the pending events; if `event` is not
+        pending the row says `did_not_fire` and the loop stops, which is never a pass; else read `reads`, pick the
+        option, read them again. The number of options is the first `events` reply's for `event`.
+
+        The options share one game: each runs on the state the one before left, re-running the setup first
+        (console `event` ignores the trigger and the cooldown, spec § 12.1 A6), and the reply says so
+        (`shared_state`). A row's `new_errors` are the error-log lines seen during that option, less blank lines
+        and less what the debugger reported as its own output while stopped for this call's reads (the
+        validator burst each trigger evaluation causes): its file lags its stream, so a burst may land in the
+        next option's lines. An error in a step raises like any verb's, carrying the rows so far (`options`),
+        and nothing is typed again. `complete` is true only when every option fired and was picked."""
+        self._require_game()
+        if isinstance(reads, str) or not all(isinstance(r, str) for r in reads):
+            raise SessionError("bad_argument", "reads is a list of expressions, not %r" % (reads,))
+        reads = list(reads)
+        if (not isinstance(event, str) or _EVENT.fullmatch(event) is None
+                or len(FIRE_COMMAND % event) > CLEAR_BACKSPACES):
+            raise SessionError("bad_argument", "an event id is letters, digits, _ and ., such as x.1, and short "
+                               "enough to type into the console, not %r" % (event,))
+        if event == overlay.READ_EVENT:
+            raise SessionError("use_read", "%s is the read event: `read` is its verb" % event)
+        if setup is not None and setup not in self._overlay.setup_events:
+            raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
+                               % (setup, sorted(self._overlay.setup_events) or "none"))
+        rows: list[dict] = []
+        with self._step("try_event", event=event, setup=setup, reads=reads) as out:
+            out.update(shared_state=True, options=rows)
+            already = [p for p in self._pending() if p.event_id == event]
+            if already:
+                raise SessionError("already_pending", "%s is pending already (%s): pick it first, or a firing that "
+                                   "did nothing would look like one that worked"
+                                   % (event, ", ".join(str(p.numeric_id) for p in already)))
+            count = None
+            self._burst = []
+            try:
+                while count is None or len(rows) < count:
+                    row = {"index": len(rows), "fired": False, "fired_by": None, "pending_options": None,
+                           "before": [], "after": [], "picked": None, "new_errors": [], "did_not_fire": False}
+                    rows.append(row)
+                    self._try_option(event, setup, reads, row)
+                    if row["did_not_fire"]:
+                        break
+                    if count is None:
+                        count = row["pending_options"]
+            except SessionError as e:
+                e.info["options"] = rows
+                raise
+            except (ConsoleError, DebuggerError, HelperError) as e:
+                extra = {"entered": e.entered} if isinstance(e, ConsoleError) else {}
+                raise SessionError(_code_of(e), str(e), options=rows, **extra) from e
+            finally:
+                self._burst = None
+            complete = (count is not None and len(rows) == count
+                        and all(r["fired"] and r["picked"] is not None for r in rows))
+            out.update(option_count=count, complete=complete)
+        return {"event": event, "setup": setup, "shared_state": True, "option_count": count, "complete": complete,
+                "options": rows}
+
+    def _try_option(self, event: str, setup: str | None, reads: list[str], row: dict) -> None:
+        """One option of `try_event`, filling `row`; its new errors are filled in however it ends."""
+        self._new_lines()                       # what the logs held before is not this option's
+        self._errors_seen = []
+        try:
+            fired_by_setup = setup is not None and any(_names_event(line, event) for line in self.run_setup(setup))
+            if not fired_by_setup:
+                self.console(FIRE_COMMAND % event)
+            row["fired_by"] = "setup" if fired_by_setup else "console"
+            mine = [p for p in self.events() if p.event_id == event]
+            if not mine:
+                row["did_not_fire"] = True
+                return
+            row["fired"] = True
+            row["pending_options"] = min(mine, key=lambda p: p.numeric_id).options
+            if reads:
+                row["before"] = [asdict(r) for r in self.read(reads)]
+            row["picked"] = self.pick(row["index"], event)
+            if reads:
+                row["after"] = [asdict(r) for r in self.read(reads)]
+        finally:
+            try:
+                self._new_lines()               # the option's last lines
+            except Exception:
+                pass                            # an error of its own must not hide the one that ended the option
+            seen, self._errors_seen = self._errors_seen, None
+            row["new_errors"] = _new_errors(seen, self._burst or [])
+
     def status(self) -> dict:
         """How far this session is, from what it holds: nothing is asked of the game or of a verb."""
         proc = self._proc
@@ -595,20 +691,26 @@ class Session:
                 raise SessionError("no_stop", "the game did not stop at the read event within %g s" % STOP_WAIT_S,
                                    arrived=self._console.arrived(READ_COMMAND))
             owed = True
+            # Streamed before the stop: error-log lines of the game's own (the debugger streams every one), which
+            # the log follower yields too. From the stop to the resume the game is frozen, so what streams then is
+            # the validator burst the evaluations cause.
+            stray = dbg.errors()
             reads = []
             for expr in exprs:
                 got = dbg.evaluate(expr)
                 reads.append(Read(expr, got.ok, got.raw, got.value))
             owed = False
             dbg.resume()
-            errors = dbg.errors()
+            burst = dbg.errors()
         except DebuggerError as e:
             raise SessionError("debugger", str(e)) from e
         finally:
             if owed:
                 self._try_resume(dbg)
+        if self._burst is not None:
+            self._burst.extend(burst)
         # The stop proved the command ran; a history that did not gain it (it skips a repeat) is only noted.
-        return reads, {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(errors)}
+        return reads, {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(stray) + len(burst)}
 
     @staticmethod
     def _try_resume(dbg: Debugger) -> None:
@@ -651,7 +753,10 @@ class Session:
         """The debug.log lines since the last call; both logs' new lines are copied into the run folder."""
         lines = self._debug_log.poll()
         self._copy("debug.log", lines)
-        self._copy("error.log", self._error_log.poll())
+        errors = self._error_log.poll()
+        self._copy("error.log", errors)
+        if self._errors_seen is not None:
+            self._errors_seen.extend(errors)
         return lines
 
     def _copy(self, name: str, lines: list[str]) -> None:
@@ -817,6 +922,19 @@ class Session:
 
     def _watch_returned(self) -> bool:
         return self._watch is not None and self._watch.poll() is not None
+
+
+def _names_event(text: str, event: str) -> bool:
+    """Whether `text` names `event` as a whole id: x.1 is not named by x.17, x.1.2 or y.x.1 (a full stop after
+    it, ending a sentence, still names it)."""
+    return re.search(r"(?<![\w.])%s(?!\w|\.\w)" % re.escape(event), text) is not None
+
+
+def _new_errors(lines: list[str], burst: list[str]) -> list[str]:
+    """`lines` (error.log's) less blank ones and those whose message the debugger reported in `burst`. A burst
+    line is the bare message; the log's first line of an entry carries a `[time][file.cpp:n]: ` prefix."""
+    own = {piece.strip() for text in burst for piece in text.split("\n")} - {""}
+    return [line for line in lines if line.strip() and parse(line).text.strip() not in own]
 
 
 def _check_tag(tag: str) -> None:

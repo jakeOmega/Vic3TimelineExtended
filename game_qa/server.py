@@ -19,7 +19,7 @@ finishes it (spec § 5.2, Review Focus 1).
                refused `session_running`, touching nothing
     stop       the session's stop: the server answers with its reply, then exits
     status     the server and the session, answered here without asking the game anything
-    the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot
+    the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, try-event
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -127,7 +127,7 @@ class SessionServer:
         self._verbs: dict[str, Callable[[dict], tuple[dict, int]]] = {
             "console": self._console, "run-setup": self._run_setup, "events": self._events, "pick": self._pick,
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
-            "shot": self._shot,
+            "shot": self._shot, "try-event": self._try_event,
         }
 
     @property
@@ -277,6 +277,10 @@ class SessionServer:
 
     def _shot(self, body: dict) -> tuple[dict, int]:
         return {"path": str(self._session.shot())}, 0
+
+    def _try_event(self, body: dict) -> tuple[dict, int]:
+        reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))
+        return reply, 0 if reply.get("complete") is True else 2         # a did-not-fire is never a pass
 
     # ---- session.json
 
