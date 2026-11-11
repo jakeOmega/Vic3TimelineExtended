@@ -33,7 +33,9 @@ SOURCES = {
             # Two external tools' bills, weekly since 2026-10-27 (BNK-14).
             "banking_external_sterilization_charge", "banking_external_import_charge",
         )),
-        "covert": ("Covert Actions", ("covert_operation_funding_cost",)),
+        # The security state built after a terrorist attack
+        # (society_technology_events.11) is the intelligence ministry's work.
+        "covert": ("Covert Actions", ("covert_operation_funding_cost", "ste_terror_security_state_cost")),
         "culture": ("Cultural Hegemony", ("ch_cultural_program_funding_cost", "ch_world_exposition_cost")),
         "colonial": ("Colonial Development", ("colonial_development_investment_expense_modifier",)),
         "un": ("United Nations", (
@@ -55,7 +57,8 @@ SOURCES = {
         # is listed with the space programmes rather than in a category of
         # its own (a new category adds a row to every Breakdown and
         # regenerates the charts).
-        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep", "ste_space_colony_national_cost")),
+        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep", "ste_space_colony_national_cost",
+                            "re_orbit_laser_sweep_cost")),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
         "family": ("Family Policy", (
             "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing_cost", "te_demog_ms_parental_leave_cost",
@@ -64,9 +67,12 @@ SOURCES = {
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
         "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
         "climate": ("Climate Policy", ("renewable_investment_cost_modifier", "aerosol_injection_cost_modifier")),
-        # Event programs that pay for power or for an industry's output.
+        # Event programs that pay for power, for an industry's output, or for
+        # the labor standards conceded to anti-globalization protesters
+        # (society_technology_events.10).
         "energy_industry": ("Energy and Industry Programs", (
             "re_quantum_subsidy_cost", "re_sbsp_reserves_cost", "we_sc_postscarcity_subsidize_cost",
+            "ste_antiglobal_concession_cost",
         )),
     },
     "income": {
