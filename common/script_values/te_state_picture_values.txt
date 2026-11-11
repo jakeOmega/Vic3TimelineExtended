@@ -102,6 +102,22 @@ te_state_picture_size_down = {
 # The state's whole population, for the self-check: its largest city can't hold more.
 te_state_picture_state_people = { value = state_population }
 
+# The oil and coal tags, for a log line: 1 where the state carries the tag.
+te_state_picture_oil_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_oil }
+		value = 1
+	}
+}
+te_state_picture_coal_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_coal }
+		value = 1
+	}
+}
+
 # The stored size, for a log line: 0 with none.
 te_state_picture_size_shown = {
 	value = 0

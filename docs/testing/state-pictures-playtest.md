@@ -12,7 +12,15 @@ with the commit that fixed it.
 - **Where to look.** The banner at the top of a state's panel. The picture can't be logged, so these are looks, not
   log reads. Nothing shows before its technology: in a new game, `research art_deco_architecture` and
   `research modern_tools` in the console as the country that owns the state (`tag GBR`).
-- **Logs.** `debug.log` for `TE_SELF_CHECK`, `error.log` for `terrain.cpp`.
+- **No waiting a year.** The size a picture follows is stored by a yearly pass. From the console:
+  - `event te_debug_state_picture.1` runs the pass at once in every state and logs a `TE_STATE_PICTURE debug:` line
+    for each of your states: `size=` (1 town, 2 city, 3 metropolis, 4 megacity, 0 no walk yet), `city_people=`,
+    the largest-city figure it came from, and `oil=` and `coal=` (1 where the state is tagged oil country or a
+    colliery).
+  - `event te_debug_state_picture.2` makes your capital read as a metropolis whatever its people, so the metropolis
+    painting and a weight's read of the variable can be checked without a city over the floor. The next pass (yearly,
+    or `.1`) puts the size back.
+- **Logs.** `debug.log` for `TE_SELF_CHECK` and `TE_STATE_PICTURE debug:`, `error.log` for `terrain.cpp`.
 
 ## Self-checks
 
@@ -64,7 +72,7 @@ A new game with `research` shows the technology side only: building levels are 1
 a Port of level 20 (Guangdong's is 15), Lancashire and Yorkshire have Coal Mines of 25 and 20, and none has
 an Oil Rig. So these rows want a save from the 1930s on. The oil and coal tags are stored by the yearly
 pass: after loading, wait a year, or run `event te_debug_state_picture.1`, which runs the whole pass in
-every state at once.
+every state at once and logs each of your states' `oil=` and `coal=` tags.
 
 | Check | Expect | If it fails |
 |---|---|---|
