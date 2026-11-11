@@ -643,6 +643,21 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((self.starts, self.events()), ([], ["armed"]))
         self.assertEqual(self.tree(), before)
 
+    def test_launch_refuses_a_snapshot_whose_logs_the_owner_has_written_since(self):
+        # Break-it replay 2026-11-10, s1_orders "logs_only": the owner opened the game after a dead session's
+        # snapshot and quit without saving. `launch` passed, since the check skipped logs/; the run's game then
+        # wrote over their debug.log, and `recover` put the snapshot's older copy back.
+        snap, _owner = self.run_an_hour_ago(started=False)
+        self.owner_writes("logs/debug.log", b"the owner's session log, at exit\n", minutes_ago=30)
+        before = self.tree()
+        self.start_result = self.game()
+        out, code = self.launch(snap.id, "-debug_mode")
+        self.assertEqual((code, out["refused"], out["files"]), (2, "stale_snapshot", ["logs/debug.log"]))
+        self.assertEqual((self.starts, self.events()), ([], ["armed"]))
+        out, code = self.run_cli("recover")                         # the remedy the refusal names
+        self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]), (0, [(snap.id, False, "")]))
+        self.assertEqual(self.tree(), before)
+
     def test_launch_refuses_when_the_game_is_not_where_base_game_path_says(self):
         taken, _ = self.run_cli("snapshot")
         self.start_result = self.game()
@@ -665,12 +680,6 @@ class CommandLineTest(unittest.TestCase):
             out, code = self.launch(taken["id"], "-debug_mode")
         self.assertEqual((code, out["refused"], out["pid"], out["id"]), (2, "not_recorded", game.pid, taken["id"]))
         self.assertIn(f"only while the game listing shows pid {game.pid} with start time {game.created}", out["detail"])
-
-    def test_launch_does_not_count_logs_written_since_the_snapshot(self):
-        taken, _ = self.run_cli("snapshot")
-        (self.user / "logs" / "debug.log").write_text("written since\n")
-        self.start_result = self.game()
-        self.assertEqual(self.launch(taken["id"], "-debug_mode")[1], 0)
 
     def test_launch_after_another_session_recovered_the_snapshot_refuses_and_starts_nothing(self):
         taken, _ = self.run_cli("snapshot")

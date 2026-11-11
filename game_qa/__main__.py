@@ -195,7 +195,7 @@ def cmd_launch(args) -> tuple[dict, int]:
     (`_check_arguments`); an unattended run (`handsoff` in any spelling) carries `-run_until=<y.m.d>`; the
     gate's checks pass (a stated permission, a usable backup root, no game this harness
     did not start, the GPU unless the owner confirmed); no Victoria 3 process at all is running (one
-    snapshot, one game); and no file outside `logs/` has changed since the snapshot. That last one means
+    snapshot, one game); and no file, logs included, has changed since the snapshot. That last one means
     someone has used the folder since: a start recorded now would date their writes before the run, and
     restore would put the old copies back over them. The folder, the journal and the processes are looked
     at again last; then the launch claims the snapshot (LAUNCH_CLAIM, created with O_EXCL, so of two
@@ -255,7 +255,8 @@ def cmd_launch(args) -> tuple[dict, int]:
     if proc.created == gate.UNKNOWN_START:
         result["detail"] = (f"the game's start time could not be read, so it is recorded as unknown: `watch` "
                             f"cannot tell pid {proc.pid} from another game and will refuse `unknown_start`. Once "
-                            f"the game has closed, `restore {snap.id}` holds anything it wrote")
+                            f"the game has closed, `restore {snap.id}` judges the files against the start and "
+                            "holds any written after it")
     return result, 0
 
 
@@ -323,16 +324,17 @@ def _check_end_date(game_args: list[str]) -> None:
 
 
 def _check_unchanged(snap: snapshot.Snapshot, user: Path) -> None:
-    """Raise _Refused if a file outside `logs/` no longer matches the snapshot."""
+    """Raise _Refused if a file, logs included, no longer matches the snapshot. Nothing but a game writes the
+    logs, so a changed log means someone played since; the run's game would write over it, and restore would
+    put the snapshot's older copy back."""
     diff = restore.compare(snap, user)
-    files = sorted(name for name in {*diff.changed, *diff.missing, *diff.added_in_set, *diff.created}
-                   if not name.startswith("logs/"))
+    files = sorted({*diff.changed, *diff.missing, *diff.added_in_set, *diff.created})
     if files:
         raise _Refused("stale_snapshot", "the folder has changed since the snapshot was taken, so someone has used "
                                          "it since: a run started now would make restore put the old copies back "
                                          "over theirs. Run `recover`: it judges this snapshot and holds it, unless "
-                                         "the only change is a missing file, which it puts back. Then take a new "
-                                         "snapshot", files=files)
+                                         "the only change is a missing file, which it puts back, or is in `logs/`, "
+                                         "which it leaves alone. Then take a new snapshot", files=files)
 
 
 def cmd_watch(args) -> tuple[dict, int]:
@@ -386,7 +388,8 @@ def cmd_watch(args) -> tuple[dict, int]:
         if proc.created == gate.UNKNOWN_START:
             raise _Refused("unknown_start", f"`launch` could not read the start time of pid {proc.pid}, so it "
                                             "cannot be told from another game: nothing is recorded, and once the "
-                                            f"game has closed `restore {snap.id}` holds anything it wrote")
+                                            f"game has closed `restore {snap.id}` judges the files against the "
+                                            "start and holds any written after it")
         seen = {(str(e.get("pid")), str(e.get("created"))) for e in journal if e.get("event") == "other_game"}
         _first_look(snap, proc, seen)
         beats = _follow(snap, proc, args.interval, seen)
