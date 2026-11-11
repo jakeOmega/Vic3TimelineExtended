@@ -145,3 +145,9 @@ Each merge's own condition (`common/scripted_triggers/te_culture_merge_gate_trig
 ## A full German merge in an observer game
 
 Start 1836, observe, speed up. See, in order: Prussia becomes a candidate once Pan-Nationalism is known, and can start once it has formed Germany and its sphere holds both core parts; an AI press starts the merge (or the player's, with the button); Alemannic and Eastern German join when they qualify; North and South German pops convert a few percent a year in Prussia and its subjects; the entry's bar climbs; at 60% of the pops in a part's homeland states that part switches and its diaspora converts in every country; the merge turns complete once both core parts have switched; the entry concludes; Austria, which has German pops, gets the result as a primary culture within a month. Take option D at the start, the switch and the end, and keep the `TE_SELF_CHECK` lines. Expected span with developed-state conversion: about 20 years from the start if Prussia's sphere holds all of each part's homeland, longer for a smaller hold (about 31 years at 80%).
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`cm_definition_inject` OK, by a direct read of Germany's definition on 2 January and by its line on 1 February.

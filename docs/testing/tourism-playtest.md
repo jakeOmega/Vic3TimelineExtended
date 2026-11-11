@@ -79,3 +79,9 @@ default; the AI plays Open beside a Tourism Industry.
 | **Hampi.** Kurnool and Mysore. | Hampi's site lists under Kurnool (Bellary); Kurnool's Base Appeal reads +50% until it is dug, Mysore's +75%. | — |
 | **An older save.** Load a save from before this change. | No new landmarks, and their states keep their Base Appeal (Lower Egypt +100%). The To History sites appear from the first monthly pass (seed round 4), and their states' Base Appeal drops by their points at once. `event te_debug_monuments.5`, option a, places the landmarks and sets the flag. | Lower Egypt below +100% without Giza: the landmark gate isn't reading `gm_landmarks_seeded_2`. |
 | **Pictures.** Look at a few rows of new landmarks. | Each shows its own picture with its grandeur frame, none a draped placeholder or a stand-in; a trophy carried off from one shows its own trophy picture. | The draped picture means its code in `gm_state_picture_landmarks` has no icon in the `gm_picture` widget. |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+Agra OK: the Taj Mahal's state reads +0.4 from `tourism_bonus_from_monuments`, so `is_building_type` matches inside `every_scope_building`.

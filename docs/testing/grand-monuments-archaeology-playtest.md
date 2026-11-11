@@ -121,3 +121,9 @@ site did not seed).
 
 - A split state is dug by any of its owners, or anyone holding an article on a part of it; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
 - No console harness signs a treaty: test digging abroad through the treaty screen.
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`archaeology_site_region` OK on the first monthly pass.

@@ -603,11 +603,14 @@ entries) was compared: no entry was ever missing and no content ever differed.
 
 The console taking the foreground back when another window is in front (the game was always in
 front); a fixture made under `--playset current`; an argument with a space; a failed process
-lookup on a live game; a game left stopped at the breakpoint by a late stop; whether state a
-setup wrote on the country-select screen survives entering the game; a session whose server
+lookup on a live game; a game left stopped at the breakpoint by a late stop; a session whose server
 died with the game up (`watch` recording on by itself, then `recover` and `remove-overlay`:
 tested only against fakes and constructed journals). The three
 hardenings the last review left are issue #1588.
+
+Settled on 2026-11-11 by the first play-test runs (`docs/testing/game-qa-results-2026-11-11.md`): a variable a
+setup set on the country-select screen survives entering the game (laws and modifiers changed there were not
+read afterwards). Those runs' gaps are #1598 to #1602.
 
 ### 13.4 What changes in the design
 

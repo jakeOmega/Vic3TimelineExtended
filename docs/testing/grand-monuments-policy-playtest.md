@@ -53,3 +53,9 @@ Timeline Extended window, which compose the same types.
 | **Held Abroad rows** (GM-10). Hover "Held by" on a trophy taken from us, at war with its holder and at peace. | At war: occupy its state and carry it off. At peace: the Return Cultural Property article, or wait. | The hover always says peace: `Country.IsAtWarWith( GetPlayer.Self )` does not resolve on `Var('gm_tr_site').GetState.GetOwner`; drop the line and keep the section's own hover. |
 | **Carry It Off's infamy** (GM-11) on a trophy on display and on a monument beside another. | The figure on hover matches the infamy gained. | Off by the form's share on a secondary: `gm_mon_disp_take_infamy` reads `gm_mon_tr_start` and `gm_mon_tr_age`. |
 | **Archaeology** (GM-14). | Digs Under Way and Open Sites as headings over their rows; an abroad line's hover names its treaty article, the permit's with Foreign Scholarship's lines; How Grand Monuments Work has an Archaeology topic. | — |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`gm_education_reaches_states` OK (education access rose by 0.017, the steps give 0.017).

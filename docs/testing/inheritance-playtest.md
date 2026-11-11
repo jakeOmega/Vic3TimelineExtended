@@ -18,3 +18,9 @@ unverified engine fact, so there is no self-check.
 | 2 | The Empty Holding | Under Possession by Use. The commune's answer shows Repartitioned Holdings (agriculture −3%), the family's Holdings Kept in the Family (+5%) and displeases anarchist-led groups. | |
 | 3 | The First Cohort | Five years after the Birthright Endowment is attached (`te_inh_endowment_years` counts the years). It comes once; repeal the Endowment and attach it again, and after five more years it can come again. | It comes twice in one tenure: `te_inh_first_cohort_paid` didn't hold. |
 | 4 | Tooltips | Every answer that moves Dynastic Wealth says by how much; no line shows a raw key. | |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+Item 1's effects OK (Estate Audits and −3, Hidden Estates and +5, on the capital's and the national Dynastic Wealth). The 20-year timing was not run.
