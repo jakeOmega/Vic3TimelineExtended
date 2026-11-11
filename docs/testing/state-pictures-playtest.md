@@ -108,3 +108,19 @@ natural terrain with a road, pylons or a pipeline in it. Technologies: the city 
 | **Overlays on natural terrain.** Watch a plain, a hill and a mountain road for a few seconds. Vanilla's overlays for these carry blowing grass (plains, American plains, arid mountains, hills) and a glow (hills, arid plain, American desert), judged from their texture names only. | Grass and light that sit on the land, not on the asphalt. | Grass waving across a motorway: add the overlay to `PLACED_OVERLAYS` and give the picture `NEUTRAL_OVERLAY`. |
 | **Lettering and flags.** Look closely at the vehicles, the factory fronts and the ruins. | Nothing that reads as writing, no real flag. | A `smudge` box in `WAVE6_PICKS` or `WAVE7_PICKS`, and reconvert. |
 
+## The pass's city tags (2026-11-11)
+
+Eighteen more city paintings for any region: boomtown, declining, divided, heavy industry, resort. All
+read tags the yearly pass stores, so load a save from the 1930s on, research the city ladder as the
+owner and run `event te_debug_state_picture.1` (or wait a year; growth needs several).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Heavy industry.** A city state where heavy industry is a quarter of the building levels. | Furnaces and chimneys in the rung's period, not the region's street. | The street: the tag isn't stored (the walk's `bg_heavy_industry` test), or 25% is too high for your games. |
+| **Resort.** A state with a large Tourism Industry (2% of its levels, 10 or more). | A beach resort. It is a seaside picture whatever the state: an inland resort state will show a beach. | A beach in a state where tourism is a sideline: raise the share. An inland beach that grates: the picture wants a coast condition. |
+| **Boomtown and declining.** After several game years, compare a fast-growing city state (heavy immigration) with one losing people. | Cranes and half-built blocks in the first; shut works and empty streets in the second. Neither after a single year's jump or a conquest. | Boomtowns everywhere, or none: the 3% and −1% are provisional. A boomtown right after a border change: the province check. |
+| **Divided.** A metropolis with very high inequality (Gini 0.85 on the Demographics map mode). | Shacks under towers behind a wall. | Most metropolises divided: raise the floor. |
+| **Two at once.** A smog-bound boomtown; a declining heavy-industry city. | The boomtown; the declining city (the higher digit). | |
+| **The debug event's line.** `event te_debug_state_picture.1`, then `debug.log`. | Each of your states' lines ends with `character=` (6 boomtown, 5 declining, 4 divided, 2 heavy industry, 1 resort, 0 none) and `growth=` (the smoothed yearly rate, in percent). | |
+| **Lettering.** Trucks, hoardings, the airliners over the resorts. | Nothing that reads as writing. | A `smudge` box in `WAVE6_PICKS`, and reconvert. |
+

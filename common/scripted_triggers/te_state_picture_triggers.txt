@@ -1,0 +1,10 @@
+﻿# STATE PICTURES - the yearly pass's triggers (common/scripted_effects/te_state_picture_effects.txt).
+
+# State scope: the Demographics walk has this year's people and last year's, and the province
+# count they were taken at, so a growth rate can be read.
+te_state_picture_growth_known = {
+	has_variable = te_dg_walk_pop
+	has_variable = te_dg_walk_pop_prev
+	has_variable = te_dg_provinces
+	var:te_dg_walk_pop_prev > 0
+}

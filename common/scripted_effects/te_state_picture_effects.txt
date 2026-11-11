@@ -8,6 +8,12 @@
 #   te_sp_size   1 town, 2 city, 3 metropolis, 4 megacity; absent before the state's first walk
 #   te_sp_oil    present while oil is a major part of the state's economy (the oil-field pictures)
 #   te_sp_coal   present while coal is the larger part of the state's mines (the colliery pictures)
+#   te_sp_industry, te_sp_resort   present while heavy industry, or tourism, is a large part of
+#                the state's building levels (the heavy-industry city, the resort)
+#   te_sp_boom, te_sp_decline   present while the state's people have grown fast, or fallen, for
+#                several years (te_sp_growth, a smoothed yearly rate; te_sp_prov, the province
+#                count it was last taken at)
+#   te_sp_divided   present while a metropolis is very unequal
 # A picture can therefore lag a change by up to a year.
 # ============================================================================
 
@@ -33,6 +39,7 @@ te_state_picture_refresh = {
 		set_variable = { name = te_sp_size value = te_state_picture_size_down }
 	}
 	te_state_picture_refresh_land = yes
+	te_state_picture_refresh_city = yes
 	te_state_picture_selfcheck = yes
 }
 
@@ -54,6 +61,8 @@ te_state_picture_land_sums = {
 	set_local_variable = { name = te_sp_oil_lv value = 0 }
 	set_local_variable = { name = te_sp_mine value = 0 }
 	set_local_variable = { name = te_sp_coal_lv value = 0 }
+	set_local_variable = { name = te_sp_heavy_lv value = 0 }
+	set_local_variable = { name = te_sp_tour_lv value = 0 }
 	every_scope_building = {
 		limit = { is_subsistence_building = no }
 		change_local_variable = { name = te_sp_all add = level }
@@ -68,6 +77,14 @@ te_state_picture_land_sums = {
 		if = {
 			limit = { is_building_type = building_coal_mine }
 			change_local_variable = { name = te_sp_coal_lv add = level }
+		}
+		if = {
+			limit = { is_building_group = bg_heavy_industry }
+			change_local_variable = { name = te_sp_heavy_lv add = level }
+		}
+		if = {
+			limit = { is_building_type = building_tourism_industry }
+			change_local_variable = { name = te_sp_tour_lv add = level }
 		}
 	}
 }
@@ -113,6 +130,136 @@ te_state_picture_land_tags = {
 			}
 		}
 		remove_variable = te_sp_coal
+	}
+}
+
+# What a city is known for, beyond its region and size (design section 7). Called after
+# te_state_picture_refresh_land, with its walk's locals still set.
+te_state_picture_refresh_city = {
+	# heavy industry and tourism: a share of the state's levels and a least number, as oil is
+	set_local_variable = { name = te_sp_floor value = { value = local_var:te_sp_all multiply = te_state_picture_k_industry_share } }
+	set_local_variable = { name = te_sp_keep value = { value = local_var:te_sp_floor multiply = te_state_picture_k_keep } }
+	if = {
+		limit = {
+			local_var:te_sp_heavy_lv >= te_state_picture_k_industry_levels
+			local_var:te_sp_heavy_lv >= local_var:te_sp_floor
+		}
+		set_variable = { name = te_sp_industry value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_industry
+			OR = {
+				local_var:te_sp_heavy_lv < te_state_picture_k_industry_levels_keep
+				local_var:te_sp_heavy_lv < local_var:te_sp_keep
+			}
+		}
+		remove_variable = te_sp_industry
+	}
+	set_local_variable = { name = te_sp_floor value = { value = local_var:te_sp_all multiply = te_state_picture_k_resort_share } }
+	set_local_variable = { name = te_sp_keep value = { value = local_var:te_sp_floor multiply = te_state_picture_k_keep } }
+	if = {
+		limit = {
+			local_var:te_sp_tour_lv >= te_state_picture_k_resort_levels
+			local_var:te_sp_tour_lv >= local_var:te_sp_floor
+		}
+		set_variable = { name = te_sp_resort value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_resort
+			OR = {
+				local_var:te_sp_tour_lv < te_state_picture_k_resort_levels_keep
+				local_var:te_sp_tour_lv < local_var:te_sp_keep
+			}
+		}
+		remove_variable = te_sp_resort
+	}
+
+	# growth: the Demographics walk's people against the walk before's, smoothed over several
+	# years. A year in which the state gained or lost provinces is left out, as is a ratio the
+	# walk can't give.
+	if = {
+		limit = { te_state_picture_growth_known = yes }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = te_sp_prov }
+					var:te_sp_prov = var:te_dg_provinces
+				}
+			}
+			if = {
+				limit = { NOT = { has_variable = te_sp_growth } }
+				set_variable = { name = te_sp_growth value = 0 }
+			}
+			set_variable = { name = te_sp_growth value = te_state_picture_growth_smoothed }
+		}
+		set_variable = { name = te_sp_prov value = var:te_dg_provinces }
+	}
+	if = {
+		limit = {
+			has_variable = te_sp_growth
+			has_variable = te_sp_size
+			var:te_sp_size >= 2
+			var:te_sp_growth >= te_state_picture_k_boom
+		}
+		set_variable = { name = te_sp_boom value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_boom
+			OR = {
+				NOT = { has_variable = te_sp_growth }
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < 2
+				var:te_sp_growth < te_state_picture_k_boom_keep
+			}
+		}
+		remove_variable = te_sp_boom
+	}
+	if = {
+		limit = {
+			has_variable = te_sp_growth
+			has_variable = te_sp_size
+			var:te_sp_size >= 2
+			var:te_sp_growth <= te_state_picture_k_decline
+		}
+		set_variable = { name = te_sp_decline value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_decline
+			OR = {
+				NOT = { has_variable = te_sp_growth }
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < 2
+				var:te_sp_growth > te_state_picture_k_decline_keep
+			}
+		}
+		remove_variable = te_sp_decline
+	}
+
+	# divided: a metropolis whose Gini (the Demographics walk's te_dg_gini) is very high
+	if = {
+		limit = {
+			has_variable = te_sp_size
+			var:te_sp_size >= 3
+			has_variable = te_dg_gini
+			var:te_dg_gini >= te_state_picture_k_divided
+		}
+		set_variable = { name = te_sp_divided value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_divided
+			OR = {
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < 3
+				NOT = { has_variable = te_dg_gini }
+				var:te_dg_gini < te_state_picture_k_divided_keep
+			}
+		}
+		remove_variable = te_sp_divided
 	}
 }
 
