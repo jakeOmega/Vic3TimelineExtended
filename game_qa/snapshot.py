@@ -4,8 +4,9 @@ Layout under the backup root:
 
     store/<sha256[:2]>/<sha256>     one copy of each distinct file content, shared by every snapshot
     snapshots/<id>/manifest.json    the files taken (size, mtime, hash) and the listing of the folders
-    snapshots/<id>/journal.jsonl    what the run did: armed, started, watching, watch_resumed, heartbeat,
-                                    look_failed, other_game, game_exited, restored, held
+    snapshots/<id>/journal.jsonl    what the run did: armed, playset, playset_written, started, watching,
+                                    watch_resumed, heartbeat, look_failed, other_game, game_exited,
+                                    playset_restored, restored, held
     snapshots/<id>/.clock           a marker whose modification time is the drive's clock (journal times)
     snapshots/.clock                the same, for the id of a new snapshot
 

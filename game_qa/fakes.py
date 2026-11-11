@@ -13,8 +13,9 @@ from typing import Sequence
 
 from game_qa import win_helper
 from game_qa.gate import ProcId
-from game_qa.helper import HelperError, Window
+from game_qa.helper import HelperError, Presence, Window
 
+GAME_HWND = 70                              # the handle of the game's window in both fakes
 SCAN_ENTER = 0x1C
 SCAN_CONSOLE = 0x29
 SCAN_BACKSPACE = 0x0E
@@ -62,22 +63,30 @@ class FakeBackend:
 
     Times are milliseconds on one clock, `now`; `last_input` is when the system
     last saw any input, which the fake sets to `now` whenever the helper sends a
-    key (or taps ALT to take the foreground), as Windows would.
+    key or a mouse button (or taps ALT to take the foreground), as Windows would.
+    The cursor is `cursor`; `mouse` is the log of what the helper did with it:
+    ("move", x, y) as asked, and ("button", flags), in order.
     """
 
     def __init__(self) -> None:
         self.now = 1_000_000
         self.last_input = 900_000
-        self.foreground = 70                    # the foreground window's handle
+        self.foreground = GAME_HWND             # the foreground window's handle
         self.other_window = 999                 # where the foreground goes when the game loses it
         self.windows: dict[int, dict] = {
-            7: {"hwnd": 70, "title": "Victoria 3", "responding": True, "client": (0, 0, 1920, 1080)},
+            7: {"hwnd": GAME_HWND, "title": "Victoria 3", "responding": True, "client": (0, 0, 1920, 1080)},
         }
         self.creation: dict[int, str] = {}      # live processes: pid -> creation time
         self.next_pid = 1000
         self.launched: list[tuple[str, list, str]] = []
         self.vanish_on_launch = False
         self.sent: list[tuple[str, object]] = []        # ("scan", n) and ("text", s), in order
+        self.cursor = (640, 360)
+        self.cursor_clamp: tuple[int, int] | None = None        # the screen's size: a cursor move is clamped to it
+        self.fail_move = False                  # the cursor move fails
+        self.covered_by: int | None = None      # the window under every point, if not whichever window holds it
+        self.fail_mouse_on: int | None = None   # a mouse event with these flags raises, as a refused SendInput does
+        self.mouse: list[tuple] = []
         self.slept: list[int] = []
         self.on_sleep = None                    # called with the milliseconds after each sleep
         self.lose_focus_after: int | None = None        # the game loses the foreground after this many keys
@@ -166,6 +175,33 @@ class FakeBackend:
     def send_text(self, text: str) -> None:
         self._key("text", text)
 
+    def set_cursor(self, x: int, y: int) -> None:
+        if self.fail_move:
+            raise OSError("SetCursorPos failed")
+        self.mouse.append(("move", x, y))
+        if self.cursor_clamp is not None:
+            x, y = max(0, min(x, self.cursor_clamp[0] - 1)), max(0, min(y, self.cursor_clamp[1] - 1))
+        self.cursor = (x, y)
+
+    def cursor_pos(self) -> tuple[int, int]:
+        return self.cursor
+
+    def window_at(self, x: int, y: int) -> int:
+        """The top-level window under the point: `covered_by` if set, else the first whose client area holds it."""
+        if self.covered_by is not None:
+            return self.covered_by
+        for win in self.windows.values():
+            left, top, width, height = win["client"]
+            if left <= x < left + width and top <= y < top + height:
+                return win["hwnd"]
+        return 0
+
+    def send_mouse(self, flags: int) -> None:
+        if flags == self.fail_mouse_on:
+            raise OSError("SendInput sent 0 of 1 mouse events")
+        self.mouse.append(("button", flags))
+        self.last_input = self.now
+
     def tick(self) -> int:
         return self.now
 
@@ -209,6 +245,12 @@ class FakeHelper:
     its own line and most of its long output too (the tail stays buffered).
     `now` is a fake clock for code under test: `sleep` moves it, nothing else does.
 
+    Where the cursor is and which window is in front are what `presence` reports: `cursor`
+    (moved by `click`, which sets `helper_cursor` too), and the game's window when `foreground`
+    is set, else `other_hwnd`. A test makes a person by giving `cursor_script` and
+    `other_hwnd_script` (one value for each reading, then the last one holds) or by setting
+    `on_presence`, which is called with the reading's number before each reading is made.
+
     A stalled game (a monthly pulse can hold it for seconds) is `latency`: each key the
     helper sends is taken by the game that many fake seconds later, in order, and
     until then the history and the log show nothing of it. With `busy_while_late` the
@@ -225,6 +267,14 @@ class FakeHelper:
         self.title = "Victoria 3"
         self.client = (0, 0, 1920, 1080)
         self.idle = 600_000                     # what idle_ms reports
+        self.cursor = (640, 360)                # where the cursor is, in screen pixels
+        self.helper_cursor: tuple[int, int] | None = None       # where the last click put it
+        self.other_hwnd = 999                   # the window in front when the game is not
+        self.cursor_script: deque[tuple[int, int]] = deque()
+        self.other_hwnd_script: deque[int] = deque()
+        self.on_presence = None                 # called with the number of the reading, before it is made
+        self.presence_calls = 0
+        self.clicks: list[tuple[int, int]] = []         # client pixels, as given
         self.focus_succeeds = True
         self.focus_calls = 0
         self.console_open = False               # Enter runs the typed text while this is set
@@ -302,6 +352,26 @@ class FakeHelper:
             self._deliver()
             if self.exit_after_steps is not None and len(self.steps) >= self.exit_after_steps:
                 self.exists = False
+
+    def click(self, pid: int, x: int, y: int) -> None:
+        if not (self.exists and self.foreground):
+            raise HelperError("not_foreground", "the game's window is not in front")
+        left, top, width, height = self.client
+        if not (0 <= x < width and 0 <= y < height):
+            raise HelperError("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height))
+        self.clicks.append((x, y))
+        self.cursor = self.helper_cursor = (left + x, top + y)
+
+    def presence(self) -> Presence:
+        self.presence_calls += 1
+        if self.on_presence is not None:
+            self.on_presence(self.presence_calls)
+        if self.cursor_script:
+            self.cursor = self.cursor_script.popleft()
+        if self.other_hwnd_script:
+            self.other_hwnd = self.other_hwnd_script.popleft()
+        front = GAME_HWND if self.exists and self.foreground else self.other_hwnd
+        return Presence(self.cursor, front, self.helper_cursor)
 
     def _deliver(self) -> None:
         """The game takes the keys that are due, in the order they were sent."""

@@ -3,8 +3,10 @@
 The helper can press keys; this module decides when it may and what counts as
 an answer. Two rules come before everything else: never send a key unless the
 game's window is in front (`_front`), and never take the foreground from a
-person who is using the machine (someone is, if there was input the helper did
-not send within `PERSON_IDLE_MS`).
+person who is using the machine (someone is, if the cursor moved or the
+foreground window changed between two presence readings `PRESENCE_GAP_S` apart;
+the helper's own cursor move is not a person; the foreground is taken back only
+after `QUIET_GAPS` such gaps in a row show no change).
 
 What the game shows of a command (verified on 2026-11-10):
 
@@ -38,11 +40,20 @@ What the game shows of a command (verified on 2026-11-10):
     retyping and before the console key, the history (or the log) is looked at
     once more for the first typing.
 
-Taking the foreground back needs `helper.idle_ms()` to read 30 s or more. On a machine where
-that reading is always small (measured on the owner's machine with a remote-desktop session
-connected: 0 to 31 ms continuously) the console never takes the foreground back, so the game
-must already be in front or the command fails with `not_foreground` after 120 s, with nothing
-typed.
+Windows' idle time says nothing here: with a remote-desktop session connected it reads 0 to 31 ms
+continuously (measured on the owner's machine, 2026-11-10), so a rule on it never lets the console
+take the foreground back. Presence is read from the cursor and the foreground window instead: a
+gap is quiet if two readings a gap apart show the same foreground window and a cursor that did not
+move, or sits exactly where the helper last put it (a click); after `QUIET_GAPS` quiet gaps in a row
+(about 6 s) the foreground is taken back, and any change restarts the count. A person who keeps the
+cursor moving or the windows changing is waited for, up to `FOREGROUND_WAIT_S`, and then the step fails
+with `not_foreground`, nothing typed. The rule's known limit: someone using the keyboard alone, or
+reading, with the mouse still and the same window in front, changes neither signal, so after those
+two gaps they are read as nobody and the game's window is brought forward over them.
+
+The console is known to be open after a round trip and known to be closed after `close()`; `run` and
+`send` open one that is known closed, `send` also one that is not known to be open (it has no retry
+of its own), and `close()` and `hotkey()` act only on what is known.
 
 `Console` consumes the `LogFollower` it is given: a line it has polled is not
 returned to anyone else who polls the same follower.
@@ -55,14 +66,16 @@ from pathlib import Path
 from typing import Callable
 
 from game_qa.gate import ProcId
-from game_qa.helper import Helper, HelperError, Window
+from game_qa.helper import Helper, HelperError, Presence, Window
 from game_qa.logtail import GAP_MARKER, LogFollower, Parsed, parse
 
 SCAN_CONSOLE, SCAN_ENTER = 0x29, 0x1C
 SCAN_BACKSPACE = 0x0E
 FLUSH_COMMAND = "help ndefines.ngui"
 PROBE_COMMAND = "select_event_option list"
-PERSON_IDLE_MS, FOREGROUND_WAIT_S = 30_000, 120.0
+FOREGROUND_WAIT_S = 120.0
+PRESENCE_GAP_S = 3.0            # between the two readings that say whether someone is at the machine
+QUIET_GAPS = 2                  # quiet gaps in a row before the foreground is taken back
 
 UNRESPONSIVE_S = 10.0           # a window that does not respond this long is a game that is gone
 ARRIVAL_S = 5.0                 # how long a command gets to show up in the history
@@ -73,7 +86,7 @@ REPEAT_ARRIVAL_S = 1.5          # the same for a text the history already holds:
                                 # change by now is a history that does not repeat entries
 CONSOLE_SETTLE_S = 0.5          # after the console key, before typing into it (unverified: a guess at the animation)
 POLL_S = 0.2                    # between looks at the history and the log
-FOREGROUND_POLL_S = 1.0         # between looks at who has the foreground
+FOREGROUND_POLL_S = 1.0         # between looks at a window that does not respond
 HISTORY_TRIES = 4               # reads of the history file before it counts as unreadable
 HISTORY_RETRY_S = 0.1           # between those reads
 CLEAR_BACKSPACES = 64           # more than any command typed here is long
@@ -81,7 +94,9 @@ CLEAR_BACKSPACES = 64           # more than any command typed here is long
 
 class ConsoleError(Exception):
     """`code` is one of bad_text, not_foreground, no_ack, no_reply, game_gone, stranded_text,
-    history_unreadable, log_gap, or `helper: <code>` for an error of the helper itself.
+    history_unreadable, log_gap, console_open (`hotkey` while the console is not known to be closed),
+    console_not_open (`close` while it is not known to be open), or `helper: <code>` for an error of the
+    helper itself.
 
     `entered` says whether the command was entered, and only False allows a caller to run it again:
 
@@ -113,6 +128,14 @@ class _Typed:
     repeat: bool                    # the history already held the text
 
 
+def _someone_between(before: Presence, after: Presence) -> bool:
+    """Whether two readings show that a person was at the machine in between: the foreground window changed, or
+    the cursor moved to somewhere other than where the helper put it (the later reading says where that is)."""
+    if after.foreground != before.foreground:
+        return True
+    return after.cursor != before.cursor and after.cursor != after.helper_cursor
+
+
 class Console:
     def __init__(self, helper: Helper, proc: ProcId, history: Path, log: LogFollower,
                  sleep=time.sleep, clock=time.monotonic) -> None:
@@ -122,6 +145,8 @@ class Console:
         self._gap = False                   # the log lost lines since the current call began
         self._stranded = False              # text went out without its Enter: the input line holds half a command
         self._enter_unknown = False         # a helper error left it unknown whether an Enter went out (since run began)
+        self._open: bool | None = None      # the console: True after a round trip, False after close(), None unknown
+        self._sent: dict[str, _Typed] = {}  # for `arrived`: each text `send` typed, as the history stood just before
 
     # ---- public
 
@@ -137,6 +162,60 @@ class Console:
         again after a `stranded_text`. Nothing calls this by itself: whether to is the caller's decision."""
         self._keys([{"scan": SCAN_BACKSPACE} for _ in range(CLEAR_BACKSPACES)])
         self._stranded = False
+
+    def send(self, text: str) -> None:
+        """Type `text` and Enter once, after the usual checks of `run` (the text, a stranded line, the foreground),
+        and return without waiting: `arrived(text)` says later whether the history gained it. It never types a
+        text again. A console that is not known to be open is opened first, since a send that is lost to a closed
+        console cannot be told from one the game has not got to yet. A send that fails has `entered` None when an
+        Enter may have gone out and False otherwise. Sending proves nothing about the console afterwards: the
+        belief is what the check before typing left, and neither a send nor `arrived` changes it."""
+        self._check_text(text)
+        self._refuse_if_stranded()
+        if self._open is not True:
+            self._drop_log()
+            self._open_console()
+        self._enter_unknown = False             # only this typing's Enter counts, not a probe's
+        try:
+            self._sent[text.strip()] = self._type(text)
+        except ConsoleError as e:
+            if self._enter_unknown:
+                e.entered = None
+            raise
+
+    def arrived(self, text: str) -> bool:
+        """Whether the history has gained `text` since `send` typed it (the latest send of that text). False
+        before the game has taken it, for a text `send` has not typed, and also for a text the history already
+        held when it was sent and does not write again (verified live: the same command twice running adds no
+        line), so False never proves that it did not run. `run` has the log's proof for those. It only reads:
+        a text that arrived says the console took it then, and a `close()` since may have shut it."""
+        typed = self._sent.get(text.strip())
+        return typed is not None and self._landed(typed)
+
+    def close(self) -> None:
+        """Press the console key once, with the usual checks, to close a console known to be open (after a round
+        trip). The closing is not proved: a later `run`, `send` or `ensure_open` finds out the state again."""
+        self._refuse_if_stranded()
+        if self._open is not True:
+            raise ConsoleError("console_not_open", "the console is not known to be open: a command that arrived "
+                                                   "or ensure_open() says so")
+        self._open = None                   # until the key press is known to have gone out
+        try:
+            self._keys([{"scan": SCAN_CONSOLE}])
+        except ConsoleError as e:
+            if e.code == "not_foreground":  # refused before the key: nothing changed
+                self._open = True
+            raise
+        self._open = False
+        self._sleep(CONSOLE_SETTLE_S)           # let it finish closing before the game gets another key
+
+    def hotkey(self, scan: int) -> None:
+        """Press one key (a scancode) in the game itself, with the usual checks. With the console open the key
+        would go into its input line, so this is refused unless the console is known to be closed."""
+        self._refuse_if_stranded()
+        if self._open is not False:
+            raise ConsoleError("console_open", "the console is not known to be closed: close() it first")
+        self._keys([{"scan": scan}])
 
     def run(self, text: str, reply: bool = True, timeout: float = 30.0) -> Reply:
         """Enter `text` as a console command and confirm that it arrived; with `reply`, also return what the
@@ -158,14 +237,7 @@ class Console:
 
         A text is one non-blank line of at most `CLEAR_BACKSPACES` ASCII characters.
         """
-        if not text.strip() or "\n" in text or "\r" in text:
-            raise ConsoleError("bad_text", "a console command is one non-blank line")
-        if not text.isascii():
-            raise ConsoleError("bad_text", "a console command is ASCII: the encodings of the game's history and "
-                                           "log are unverified, so a command could not be proved to have arrived")
-        if len(text) > CLEAR_BACKSPACES:
-            raise ConsoleError("bad_text", "a console command is at most %d characters, so that clear_line() "
-                                           "can always empty what was typed" % CLEAR_BACKSPACES)
+        self._check_text(text)
         self._refuse_if_stranded()
         self._enter_unknown = False
         is_flush = text.strip() == FLUSH_COMMAND
@@ -181,6 +253,9 @@ class Console:
                 return False
             return self._landed(text_t) or self._pair(text, adjacent=True) is not None
 
+        if self._open is False:
+            self._open_console()                # known shut: typing now would be lost
+            self._enter_unknown = False         # the probe's Enter says nothing of this text, which is not typed yet
         try:
             for attempt in (1, 2):
                 ok = True
@@ -206,6 +281,7 @@ class Console:
                     self._open_console(already=landed_late)
             else:
                 raise ConsoleError("no_ack", "%r did not reach the console" % text)
+            self._open = True
             if not reply:
                 return Reply(text, None, [])
             if found is None:
@@ -214,8 +290,11 @@ class Console:
                 raise ConsoleError("no_reply", "no answer to %r in the log within %g s" % (text, timeout))
         except ConsoleError as e:
             if proved or found is not None:
+                self._open = True               # it arrived, so the console took it
                 e.entered = True
-            elif e.code != "no_ack" and (text_t is not None or self._enter_unknown):
+            elif e.code == "no_ack":
+                self._open = None               # a probe may have got through, but neither typing did: not known
+            elif text_t is not None or self._enter_unknown:
                 e.entered = None                # an Enter went out and nothing proves it either way: do not retry
             raise
         lines = [p.text for p in found]
@@ -237,6 +316,17 @@ class Console:
             raise ConsoleError("game_gone", "the game's window is gone")
         return win
 
+    def _check_text(self, text: str) -> None:
+        """A text is one non-blank line of at most `CLEAR_BACKSPACES` ASCII characters."""
+        if not text.strip() or "\n" in text or "\r" in text:
+            raise ConsoleError("bad_text", "a console command is one non-blank line")
+        if not text.isascii():
+            raise ConsoleError("bad_text", "a console command is ASCII: the encodings of the game's history and "
+                                           "log are unverified, so a command could not be proved to have arrived")
+        if len(text) > CLEAR_BACKSPACES:
+            raise ConsoleError("bad_text", "a console command is at most %d characters, so that clear_line() "
+                                           "can always empty what was typed" % CLEAR_BACKSPACES)
+
     def _refuse_if_stranded(self) -> None:
         if self._stranded:
             raise ConsoleError("stranded_text", "half a command is still in the console's input line; "
@@ -245,29 +335,39 @@ class Console:
     def _front(self) -> None:
         """Return only with the game's window responding and in front.
 
-        Someone at the machine is waited for (up to `FOREGROUND_WAIT_S`) rather than interrupted; with
-        nobody there the window is brought forward.
+        Someone at the machine is waited for (up to `FOREGROUND_WAIT_S`) rather than interrupted: the window
+        is brought forward only after `QUIET_GAPS` gaps in a row between presence readings show nobody there.
+        The first reading of a call is taken afresh, and one from before the window stopped responding is
+        dropped with the count, so a pair is always a whole gap apart.
         """
         started = self._clock()
         stuck_since: float | None = None
+        previous: Presence | None = None
+        quiet = 0                               # quiet gaps in a row
         while True:
             win = self._require_window()
             now = self._clock()
             if not win.responding:
+                previous, quiet = None, 0
                 stuck_since = now if stuck_since is None else stuck_since
                 if now - stuck_since >= UNRESPONSIVE_S:
                     raise ConsoleError("game_gone", "the game has not responded for %g s" % UNRESPONSIVE_S)
-            else:
-                stuck_since = None
-                if win.foreground:
+                self._sleep(FOREGROUND_POLL_S)
+                continue
+            stuck_since = None
+            if win.foreground:
+                return
+            reading = self._call(self._helper.presence)
+            if previous is not None:
+                quiet = 0 if _someone_between(previous, reading) else quiet + 1
+            if quiet >= QUIET_GAPS:
+                if self._call(self._helper.focus, self._proc.pid):
                     return
-                if self._call(self._helper.idle_ms) >= PERSON_IDLE_MS:
-                    if self._call(self._helper.focus, self._proc.pid):
-                        return
-                    raise ConsoleError("not_foreground", "the game's window would not come to the front")
-                if now - started >= FOREGROUND_WAIT_S:
-                    raise ConsoleError("not_foreground", "someone has used the machine for %g s" % FOREGROUND_WAIT_S)
-            self._sleep(FOREGROUND_POLL_S)
+                raise ConsoleError("not_foreground", "the game's window would not come to the front")
+            if now - started >= FOREGROUND_WAIT_S:
+                raise ConsoleError("not_foreground", "someone has used the machine for %g s" % FOREGROUND_WAIT_S)
+            previous = reading
+            self._sleep(PRESENCE_GAP_S)
 
     def _keys(self, steps: list[dict]) -> None:
         """Send `steps` with the game in front; the one place that calls `helper.keys`.
@@ -454,7 +554,12 @@ class Console:
 
         end = self._clock() + timeout
         while True:
-            if landed_late() or self._console_answers(probes) or landed_late():
+            if landed_late():
+                self._open = True
+                return
+            self._open = None                   # until a probe arrives, whatever was believed before is not known
+            if self._console_answers(probes) or landed_late():
+                self._open = True
                 return
             if self._clock() >= end:
                 raise ConsoleError("no_ack", "the console took no command within %g s" % timeout)

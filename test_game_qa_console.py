@@ -42,6 +42,14 @@ class ConsoleTestCase(unittest.TestCase):
             self.console.run(*args, **kwargs)
         return e.exception.code
 
+    def a_person_moves_the_mouse(self, until=None):
+        """Every presence reading finds the cursor somewhere new, until the fake clock reaches `until` (never, if
+        None): someone is at the machine."""
+        def hook(reading):
+            if until is None or self.game.clock() < until:
+                self.game.cursor = (10 * reading, 5 * reading)
+        self.game.on_presence = hook
+
 
 class RoundTripTest(ConsoleTestCase):
     def test_round_trip_returns_the_reply(self):
@@ -188,7 +196,7 @@ class RoundTripTest(ConsoleTestCase):
 class ForegroundTest(ConsoleTestCase):
     def test_person_at_the_machine_makes_it_wait_then_fail(self):
         self.game.foreground = False
-        self.game.idle = 2_000                  # stays 2 s: someone keeps typing
+        self.a_person_moves_the_mouse()         # someone keeps using the machine
         with self.assertRaises(console.ConsoleError) as e:
             self.console.run("tag FRA")
         self.assertEqual(e.exception.code, "not_foreground")
@@ -198,40 +206,28 @@ class ForegroundTest(ConsoleTestCase):
 
     def test_nobody_at_the_machine_takes_the_foreground_back(self):
         self.game.foreground = False
-        self.game.idle = 45_000
         self.game.console_open = True
         self.console.run("tag FRA", reply=False)
         self.assertEqual(self.game.focus_calls, 1)
 
-    def test_a_person_who_stops_typing_lets_it_through_after_the_wait(self):
+    def test_a_person_who_stops_using_the_machine_lets_it_through_after_two_quiet_gaps(self):
         self.game.foreground = False
-        self.game.idle = 2_000
         self.game.console_open = True
-        gone_quiet = []
-
-        def sleep(seconds):
-            self.game.sleep(seconds)
-            if self.game.clock() >= 40.0:
-                self.game.idle = 31_000
-                gone_quiet.append(True)
-        cons = console.Console(self.game, self.game.proc, self.history, logtail.LogFollower(self.log),
-                               sleep=sleep, clock=self.game.clock)
-        cons.run("tag FRA", reply=False)
-        self.assertTrue(gone_quiet)
+        self.a_person_moves_the_mouse(until=40.0)
+        self.console.run("tag FRA", reply=False)
         self.assertEqual(self.game.focus_calls, 1)
         self.assertGreaterEqual(self.game.clock(), 40.0)
-        self.assertLess(self.game.clock(), 60.0)
+        self.assertLess(self.game.clock(), 40.0 + 3 * console.PRESENCE_GAP_S)
 
     def test_a_focus_the_system_refuses_is_not_foreground(self):
         self.game.foreground = False
-        self.game.idle = 45_000
         self.game.focus_succeeds = False
         self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
         self.assertEqual((self.game.steps, self.game.focus_calls), ([], 1))
 
     def test_the_console_key_is_not_sent_to_a_window_behind_a_person(self):
         self.game.foreground = False
-        self.game.idle = 2_000
+        self.a_person_moves_the_mouse()
         with self.assertRaises(console.ConsoleError) as e:
             self.console.ensure_open()
         self.assertEqual(e.exception.code, "not_foreground")
@@ -435,7 +431,7 @@ class EnsureOpenTest(ConsoleTestCase):
         self.assertEqual(console.PROBE_COMMAND, "select_event_option list")
         self.assertEqual(console.FLUSH_COMMAND, "help ndefines.ngui")
         self.assertEqual((console.SCAN_CONSOLE, console.SCAN_ENTER), (0x29, 0x1C))
-        self.assertEqual((console.PERSON_IDLE_MS, console.FOREGROUND_WAIT_S), (30_000, 120.0))
+        self.assertEqual((console.PRESENCE_GAP_S, console.QUIET_GAPS, console.FOREGROUND_WAIT_S), (3.0, 2, 120.0))
 
 
 class FakeGameTest(ConsoleTestCase):
@@ -679,7 +675,7 @@ class StrandedTextTest(ConsoleTestCase):
     def test_clear_line_checks_the_foreground_first(self):
         self.strand()
         self.game.foreground = False
-        self.game.idle = 2_000
+        self.a_person_moves_the_mouse()
         with self.assertRaises(console.ConsoleError) as e:
             self.console.clear_line()
         self.assertEqual(e.exception.code, "not_foreground")
@@ -803,7 +799,7 @@ class EnteredFlagTest(ConsoleTestCase):
         def window_goes_behind_a_person_before_the_probe(sent):
             if sent == 2:
                 self.game.foreground = False
-                self.game.idle = 2_000
+                self.a_person_moves_the_mouse()
         self.game.on_step = window_goes_behind_a_person_before_the_probe
         with self.assertRaises(console.ConsoleError) as e:
             self.console.run("tag FRA")
@@ -971,11 +967,11 @@ class HelperErrorTest(ConsoleTestCase):
         self.game.window = self.boom
         self.assert_wrapped(lambda: self.console.run("tag FRA"))
 
-    def test_idle_and_focus(self):
+    def test_presence_and_focus(self):
         self.game.foreground = False
-        self.game.idle_ms = self.boom
+        self.game.presence = self.boom
         self.assert_wrapped(lambda: self.console.run("tag FRA"))
-        self.game.idle_ms = lambda: 45_000
+        del self.game.presence
         self.game.focus = self.boom
         self.assert_wrapped(lambda: self.console.run("tag FRA"))
 
@@ -983,6 +979,571 @@ class HelperErrorTest(ConsoleTestCase):
         self.game.keys = self.boom
         self.assert_wrapped(self.console.clear_line)
         self.assert_wrapped(self.console.ensure_open)
+
+
+class PresenceTest(ConsoleTestCase):
+    """Someone is at the machine if the cursor moved or the foreground window changed between two readings a gap
+    apart (the helper's own cursor move does not count); Windows' idle time is not consulted."""
+
+    def readings_at(self):
+        """The fake clock at each presence reading."""
+        times = []
+        self.game.on_presence = lambda n: times.append(self.game.clock())
+        return times
+
+    def test_a_moving_cursor_keeps_the_console_waiting_and_never_focuses(self):
+        self.game.foreground = False
+        self.a_person_moves_the_mouse()
+        self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
+        self.assertGreaterEqual(self.game.clock(), console.FOREGROUND_WAIT_S)
+        self.assertEqual(self.game.focus_calls, 0)
+        self.assertEqual(self.game.steps, [])
+
+    def test_a_still_machine_gets_the_foreground_back_after_two_quiet_gaps(self):
+        self.game.foreground = False
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assertAlmostEqual(self.game.clock(), console.QUIET_GAPS * console.PRESENCE_GAP_S, delta=1.0)
+
+    def test_the_helpers_own_cursor_move_is_not_a_person(self):
+        # The cursor was somewhere, then the helper's click put it at (900, 500) and it stayed: nobody moved it.
+        self.game.foreground = False
+        self.game.console_open = True
+        self.game.helper_cursor = (900, 500)
+        self.game.cursor_script.extend([(100, 100), (900, 500)])
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertLess(self.game.clock(), 3 * console.PRESENCE_GAP_S)
+
+    def test_a_cursor_that_moved_to_somewhere_other_than_the_helpers_spot_is_a_person(self):
+        self.game.foreground = False
+        self.game.helper_cursor = (900, 500)
+        self.game.cursor_script.extend([(100, 100), (901, 500)] + [(n, n) for n in range(2, 80)])
+        self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
+        self.assertEqual(self.game.focus_calls, 0)
+
+    def test_the_helpers_own_spot_is_compared_exactly_and_on_the_later_reading(self):
+        # A click between the two readings sets the helper's spot as the second is taken: it is that one that counts.
+        self.game.foreground = False
+        self.game.console_open = True
+        self.game.cursor_script.extend([(100, 100), (900, 500)])
+
+        def helper_clicks_before_the_second_reading(n):
+            if n == 2:
+                self.game.helper_cursor = (900, 500)
+        self.game.on_presence = helper_clicks_before_the_second_reading
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+
+    def test_one_quiet_gap_is_not_enough_and_any_change_starts_the_count_again(self):
+        # Readings: A, B (quiet), C (the cursor moved: the count restarts), D, E (two quiet gaps): focus at 12 s,
+        # where a rule of one gap would have acted at 3 s.
+        self.game.foreground = False
+        self.game.console_open = True
+        self.game.cursor_script.extend([(1, 1), (1, 1), (2, 2), (2, 2), (2, 2)])
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertAlmostEqual(self.game.clock(), 4 * console.PRESENCE_GAP_S, delta=1.0)
+        self.assertEqual(self.game.presence_calls, 5)
+
+    def test_a_keyboard_only_person_is_read_as_nobody_after_two_gaps(self):
+        # The rule's known limit: someone typing or reading with the mouse still and the same window in front
+        # shows no change, so after two quiet gaps (about 6 s) the console takes the foreground back. The
+        # presence signals are the cursor and the foreground window; a keyboard-only person shows neither.
+        self.game.foreground = False
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertLess(self.game.clock(), 3 * console.PRESENCE_GAP_S)
+
+    def test_a_changed_foreground_window_is_a_person(self):
+        self.game.foreground = False
+        self.game.other_hwnd_script.extend([500, 600] + [700 + n for n in range(80)])
+        self.assertEqual(self.fail_code("tag FRA"), "not_foreground")
+        self.assertEqual(self.game.focus_calls, 0)
+        self.assertEqual(self.game.steps, [])
+
+    def test_a_person_who_alt_tabs_and_then_stays_put_lets_it_through_after_two_quiet_gaps(self):
+        self.game.foreground = False
+        self.game.console_open = True
+        self.game.other_hwnd_script.extend([500, 600])
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertGreaterEqual(self.game.clock(), 3 * console.PRESENCE_GAP_S)        # the change, then two quiet gaps
+        self.assertLess(self.game.clock(), 4 * console.PRESENCE_GAP_S + 1)
+
+    def test_every_pair_of_readings_is_a_full_gap_apart(self):
+        self.game.foreground = False
+        times = []
+        self.a_person_moves_the_mouse(until=20.0)
+        mover = self.game.on_presence
+        self.game.on_presence = lambda n: (times.append(self.game.clock()), mover(n))
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        gaps = [b - a for a, b in zip(times, times[1:])]
+        self.assertGreater(len(gaps), 3)
+        self.assertTrue(all(gap >= console.PRESENCE_GAP_S for gap in gaps), gaps)
+
+    def test_a_window_that_stops_responding_between_readings_drops_the_first_reading(self):
+        # The first reading is from before the stall; the pair that decides must be a whole gap apart.
+        self.game.foreground = False
+        self.game.console_open = True
+        times = self.readings_at()
+        state = {"calls": 0}
+        real_window = self.game.window
+
+        def window(pid):
+            state["calls"] += 1
+            win = real_window(pid)
+            if state["calls"] == 2:                  # the look just after the first reading
+                win.responding = False
+            return win
+        self.game.window = window
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+        self.assertEqual(len(times), 4)                 # before the stall, then three after it
+        self.assertGreaterEqual(times[2] - times[1], console.PRESENCE_GAP_S)
+
+    def test_a_game_that_comes_forward_by_itself_is_not_taken_back(self):
+        self.game.foreground = False
+        self.game.console_open = True
+
+        def comes_forward(n):
+            self.game.foreground = True
+        self.game.on_presence = comes_forward
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 0)
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+
+    def test_windows_idle_time_is_not_consulted(self):
+        self.game.foreground = False
+        self.game.console_open = True
+
+        def boom():
+            raise AssertionError("idle_ms was read")
+        self.game.idle_ms = boom
+        self.game.idle = 0                                  # what a remote-desktop session reads, continuously
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.focus_calls, 1)
+
+    def test_no_presence_is_read_while_the_game_is_in_front(self):
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.assertEqual(self.game.presence_calls, 0)
+
+    def test_the_wait_is_not_remembered_for_the_next_call(self):
+        self.game.foreground = False
+        self.game.console_open = True
+        self.a_person_moves_the_mouse(until=10.0)
+        self.console.run("tag FRA", reply=False)
+        before = self.game.presence_calls
+        self.game.foreground = False
+        self.console.run("tag GBR", reply=False)             # nobody is there now: three readings, from scratch
+        self.assertEqual(self.game.presence_calls - before, console.QUIET_GAPS + 1)
+
+
+class SendTest(ConsoleTestCase):
+    def open(self):
+        self.game.console_open = True
+        self.console.ensure_open()
+        self.game.steps.clear()
+
+    def test_send_types_once_and_does_not_wait(self):
+        self.open()
+        self.game.latency = 30.0                            # the game is slow: a waiting send would show it
+        started = self.game.clock()
+        self.console.send("tag FRA")
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assertEqual(self.game.clock(), started)
+
+    def test_arrived_is_true_once_the_history_gains_the_text(self):
+        self.open()
+        self.console.send("tag FRA")
+        self.assertTrue(self.console.arrived("tag FRA"))
+
+    def test_arrived_is_false_until_the_game_takes_the_key(self):
+        self.open()
+        self.game.latency = 3.0
+        self.console.send("tag FRA")
+        self.assertFalse(self.console.arrived("tag FRA"))
+        self.game.sleep(3.0)
+        self.assertTrue(self.console.arrived("tag FRA"))
+
+    def test_arrived_is_false_for_a_text_that_was_not_sent(self):
+        self.open()
+        self.assertFalse(self.console.arrived("tag FRA"))
+        self.console.send("tag FRA")
+        self.assertFalse(self.console.arrived("tag GBR"))
+
+    def test_arrived_compares_the_stripped_text_like_run_does(self):
+        self.open()
+        self.console.send("tag FRA ")
+        self.assertTrue(self.console.arrived("tag FRA"))
+
+    def test_each_text_keeps_its_own_snapshot(self):
+        self.open()
+        self.console.send("tag FRA")
+        self.console.send("tag GBR")
+        self.assertTrue(self.console.arrived("tag FRA"))
+        self.assertTrue(self.console.arrived("tag GBR"))
+
+    def test_the_same_text_sent_again_is_judged_from_the_new_send(self):
+        self.open()
+        self.console.send("tag FRA")
+        self.game.latency = 3.0
+        self.console.send("tag FRA")
+        self.assertFalse(self.console.arrived("tag FRA"))   # the first one's line does not count for the second
+        self.game.sleep(3.0)
+        self.assertTrue(self.console.arrived("tag FRA"))
+
+    def test_send_never_retypes_a_text_that_did_not_arrive(self):
+        self.open()
+        self.game.console_open = False                      # shut behind the console's back
+        self.console.send("tag FRA")
+        self.assertFalse(self.console.arrived("tag FRA"))
+        self.assertEqual(self.game.steps, [TEXT, ENTER])
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+
+    def test_a_repeat_the_history_does_not_write_cannot_be_proved_by_arrived(self):
+        self.open()
+        self.game.history_skips_repeats = True
+        self.console.send("tag FRA")
+        self.assertTrue(self.console.arrived("tag FRA"))
+        self.console.send("tag FRA")
+        self.assertFalse(self.console.arrived("tag FRA"))   # False proves nothing here; the log does (run)
+
+    def test_send_refuses_what_run_refuses_before_any_key(self):
+        self.open()
+        for text in ("", "   ", "a\nb", "a\rb", "\u00e9", "x" * (console.CLEAR_BACKSPACES + 1)):
+            with self.subTest(text=text), self.assertRaises(console.ConsoleError) as e:
+                self.console.send(text)
+            self.assertEqual(e.exception.code, "bad_text")
+        self.assertEqual(self.game.steps, [])
+
+    def test_send_is_refused_while_half_a_command_is_in_the_line(self):
+        self.open()
+        self.game.foreground = True
+        self.lose_foreground_before_step(1, once=True)
+        with self.assertRaises(console.ConsoleError):
+            self.console.send("event france.1")
+        self.game.foreground = True
+        self.game.steps.clear()
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.send("tag GBR")
+        self.assertEqual(e.exception.code, "stranded_text")
+        self.assertEqual(self.game.steps, [])
+
+    def test_send_checks_the_foreground_like_run(self):
+        self.open()
+        self.game.foreground = False
+        self.a_person_moves_the_mouse()
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.send("tag FRA")
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertEqual((self.game.steps, self.game.focus_calls), ([], 0))
+
+    def test_send_takes_the_foreground_back_from_a_still_machine(self):
+        self.open()
+        self.game.foreground = False
+        self.console.send("tag FRA")
+        self.assertEqual((self.game.focus_calls, self.game.steps), (1, [TEXT, ENTER]))
+
+    def test_send_into_a_console_not_known_to_be_open_probes_first_and_leaves_an_open_one_alone(self):
+        # send has no retry of its own, so a console not known to be open is checked (and opened) first.
+        self.game.console_open = True
+        self.console.send("tag FRA")
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+        self.assertEqual(self.game.steps.count(TEXT), 1)
+        self.assertIn({"text": console.PROBE_COMMAND}, self.game.steps)
+        self.assertTrue(self.console.arrived("tag FRA"))
+
+    def test_send_opens_a_console_that_is_not_known_to_be_open(self):
+        self.game.console_open = False
+        self.console.send("tag FRA")
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
+        self.assertEqual(self.game.steps.count(TEXT), 1)
+        self.assertTrue(self.console.arrived("tag FRA"))
+
+    def test_send_that_cannot_open_the_console_types_nothing(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.send("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("no_ack", False))
+        self.assertEqual(self.game.steps.count(TEXT), 0)
+
+    def test_send_after_a_round_trip_does_not_probe(self):
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.game.steps.clear()
+        self.console.send("tag GBR")
+        self.assertEqual(self.game.steps, [{"text": "tag GBR"}, ENTER])
+
+    def test_a_helper_error_after_the_enter_may_have_gone_out_leaves_it_unknown(self):
+        self.open()
+
+        def keys(pid, steps):
+            self.game.steps.extend(steps)
+            raise console.HelperError("backend_error", "OSError('SendInput sent 0 of 1 events')")
+        self.game.keys = keys
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.send("tag FRA")
+        self.assertEqual(e.exception.code, "helper: backend_error")
+        self.assertIsNone(e.exception.entered)
+
+    def test_an_earlier_calls_unknown_enter_does_not_taint_a_send_that_typed_nothing(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        self.game.keys = lambda pid, steps: (_ for _ in ()).throw(console.HelperError("backend_error", "boom"))
+        self.assertEqual(self.fail_code("tag GBR", reply=False), "helper: backend_error")     # an Enter may have gone out
+        del self.game.keys
+        self.console.clear_line()
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.send("tag FRA")
+        self.assertEqual((e.exception.code, e.exception.entered), ("no_ack", False))
+
+    def test_a_refusal_before_the_enter_is_not_entered(self):
+        self.open()
+        self.lose_foreground_before_step(0)
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.send("tag FRA")
+        self.assertEqual(e.exception.code, "not_foreground")
+        self.assertIs(e.exception.entered, False)
+
+
+class OpenStateTest(ConsoleTestCase):
+    """close() and hotkey() act on what is known about the console: open after a round trip, closed after close()."""
+
+    def open(self):
+        self.game.console_open = True
+        self.console.ensure_open()
+        self.game.steps.clear()
+
+    def raised(self, call, *args):
+        with self.assertRaises(console.ConsoleError) as e:
+            call(*args)
+        return e.exception
+
+    def test_close_presses_the_console_key_once_after_a_round_trip(self):
+        self.game.console_open = True
+        self.console.run("tag FRA", reply=False)
+        self.game.steps.clear()
+        self.console.close()
+        self.assertEqual(self.game.steps, [CONSOLE_KEY])
+        self.assertFalse(self.game.console_open)
+
+    def test_close_is_allowed_after_ensure_open(self):
+        self.open()
+        self.console.close()
+        self.assertEqual(self.game.steps, [CONSOLE_KEY])
+
+    def test_close_before_any_round_trip_is_refused(self):
+        self.game.console_open = True
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.assertEqual(self.game.steps, [])
+        self.assertTrue(self.game.console_open)
+
+    def test_close_twice_is_refused_the_second_time(self):
+        self.open()
+        self.console.close()
+        self.game.steps.clear()
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.assertEqual(self.game.steps, [])
+
+    def test_close_after_a_command_that_never_arrived_is_refused(self):
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        self.assertEqual(self.fail_code("tag FRA"), "no_ack")
+        self.game.steps.clear()
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.assertEqual(self.game.steps, [])
+
+    def test_a_command_that_never_arrived_leaves_the_console_unknown_even_after_a_probe_got_through(self):
+        # The first typing was lost, the probe proved the console open, and then the retyped command was lost too:
+        # the console is in a state nobody knows, and close() must not press its key on the strength of the probe.
+        self.game.console_open = False
+
+        def shut_after_the_probe(sent):
+            if sent == 7:                       # text+Enter, probe+Enter, key, probe+Enter: now the retyped text
+                self.game.console_open = False
+        self.game.on_step = shut_after_the_probe
+        self.assertEqual(self.fail_code("tag FRA"), "no_ack")
+        self.game.on_step = None
+        self.game.steps.clear()
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "console_open")
+        self.assertEqual(self.game.steps, [])
+
+    def test_a_probe_that_does_not_arrive_leaves_the_console_unknown(self):
+        # After one proof the console is shut behind the Console's back; the next ensure_open runs out of time.
+        # close() must not press the key on the strength of the first proof: it would open the console.
+        self.open()
+        self.game.console_open = False
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.ensure_open(timeout=0)
+        self.assertEqual(e.exception.code, "no_ack")
+        self.game.steps.clear()
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "console_open")
+        self.assertEqual(self.game.steps, [])
+
+    def test_close_waits_for_the_console_to_finish_closing(self):
+        self.open()
+        before = self.game.clock()
+        self.console.close()
+        self.assertAlmostEqual(self.game.clock() - before, console.CONSOLE_SETTLE_S)
+
+    def test_a_helper_error_on_the_pre_open_probe_is_not_an_unknown_enter_for_a_text_never_typed(self):
+        self.open()
+        self.console.close()
+        self.game.keys = lambda pid, steps: (_ for _ in ()).throw(console.HelperError("backend_error", "boom"))
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag GBR", reply=False)
+        self.assertEqual(e.exception.code, "helper: backend_error")
+        self.assertIs(e.exception.entered, False)
+        self.assertNotIn({"text": "tag GBR"}, self.game.steps)
+
+    def test_hotkey_is_refused_while_half_a_command_is_in_the_line(self):
+        self.open()
+        self.lose_foreground_before_step(1, once=True)
+        self.assertEqual(self.fail_code("event france.1", reply=False), "not_foreground")
+        self.game.foreground = True
+        self.game.steps.clear()
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "stranded_text")
+        self.assertEqual(self.game.steps, [])
+
+    def test_an_arrival_seen_after_the_console_was_closed_does_not_make_it_open_again(self):
+        # `arrived` says the text got in when it was sent, not what the console is now.
+        self.open()
+        self.console.send("tag FRA")
+        self.assertTrue(self.console.arrived("tag FRA"))
+        self.console.close()
+        self.game.steps.clear()
+        self.assertTrue(self.console.arrived("tag FRA"))
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.console.hotkey(0x39)
+        self.assertEqual(self.game.steps, [{"scan": 0x39}])
+
+    def test_close_is_refused_while_half_a_command_is_in_the_line(self):
+        self.open()
+        self.lose_foreground_before_step(1, once=True)
+        self.assertEqual(self.fail_code("event france.1", reply=False), "not_foreground")
+        self.game.foreground = True
+        self.game.steps.clear()
+        self.assertEqual(self.raised(self.console.close).code, "stranded_text")
+        self.assertEqual(self.game.steps, [])
+
+    def test_close_checks_the_foreground_and_stays_allowed_when_refused_for_it(self):
+        self.open()
+        self.game.foreground = False
+        self.a_person_moves_the_mouse(until=130.0)
+        self.assertEqual(self.raised(self.console.close).code, "not_foreground")
+        self.assertEqual(self.game.steps, [])
+        self.game.foreground = True
+        self.console.close()                                # nothing was sent, so the console is still known open
+        self.assertEqual(self.game.steps, [CONSOLE_KEY])
+
+    def test_a_close_whose_key_press_failed_halfway_leaves_the_state_unknown(self):
+        self.open()
+        self.game.keys = lambda pid, steps: (_ for _ in ()).throw(console.HelperError("backend_error", "boom"))
+        self.assertEqual(self.raised(self.console.close).code, "helper: backend_error")
+        del self.game.keys
+        self.assertEqual(self.raised(self.console.close).code, "console_not_open")
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "console_open")
+
+    def test_hotkey_refuses_while_the_console_is_open(self):
+        self.open()
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "console_open")
+        self.assertEqual(self.game.steps, [])
+
+    def test_hotkey_refuses_while_the_console_state_is_unknown(self):
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "console_open")
+        self.assertEqual(self.game.steps, [])
+
+    def test_hotkey_after_close_sends_one_scancode_to_the_game(self):
+        self.open()
+        self.console.close()
+        self.game.steps.clear()
+        self.console.hotkey(0x39)
+        self.assertEqual(self.game.steps, [{"scan": 0x39}])
+
+    def test_hotkey_checks_the_foreground(self):
+        self.open()
+        self.console.close()
+        self.game.steps.clear()
+        self.game.foreground = False
+        self.a_person_moves_the_mouse()
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "not_foreground")
+        self.assertEqual((self.game.steps, self.game.focus_calls), ([], 0))
+
+    def test_hotkey_takes_the_foreground_back_from_a_still_machine(self):
+        self.open()
+        self.console.close()
+        self.game.steps.clear()
+        self.game.foreground = False
+        self.console.hotkey(0x39)
+        self.assertEqual((self.game.focus_calls, self.game.steps), (1, [{"scan": 0x39}]))
+
+    def test_hotkey_that_the_helper_refuses_is_a_console_error(self):
+        self.open()
+        self.console.close()
+        self.game.keys = lambda pid, steps: (_ for _ in ()).throw(console.HelperError("bad_request", "scan"))
+        self.assertEqual(self.raised(self.console.hotkey, 0).code, "helper: bad_request")
+
+    def test_close_then_hotkey_then_run_reopens_the_console(self):
+        self.game.console_open = True
+        self.game.on("tag GBR", success=["Now Playing - Great Britain"])
+        self.console.run("tag FRA", reply=False)
+        self.console.close()
+        self.console.hotkey(0x39)
+        self.assertFalse(self.game.console_open)
+        r = self.console.run("tag GBR")
+        self.assertEqual((r.ok, r.lines), (True, ["Now Playing - Great Britain"]))
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.game.steps.count(CONSOLE_KEY), 2)             # one to close it, one to reopen it
+        self.assertEqual(self.game.steps.count({"text": "tag GBR"}), 1)
+        self.assertEqual(self.history.read_text(encoding="utf-8").splitlines().count("tag GBR"), 1)
+
+    def test_a_run_into_a_console_known_closed_does_not_type_the_command_until_it_is_open(self):
+        self.open()
+        self.console.close()
+        self.game.steps.clear()
+        self.console.run("tag GBR", reply=False)
+        key_at = self.game.steps.index(CONSOLE_KEY)
+        self.assertNotIn({"text": "tag GBR"}, self.game.steps[:key_at])
+        self.assertEqual(self.game.steps.count({"text": "tag GBR"}), 1)
+
+    def test_ensure_open_after_close_reopens_it(self):
+        self.open()
+        self.console.close()
+        self.console.ensure_open()
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.raised(self.console.hotkey, 0x39).code, "console_open")
+
+    def test_after_the_reopen_close_is_allowed_again(self):
+        self.open()
+        self.console.close()
+        self.console.run("tag GBR", reply=False)
+        self.game.steps.clear()
+        self.console.close()
+        self.assertEqual(self.game.steps, [CONSOLE_KEY])
+
+    def test_ensure_open_never_trusts_a_console_it_thinks_is_open(self):
+        self.open()
+        self.game.console_open = False                      # shut behind its back
+        self.console.ensure_open()
+        self.assertTrue(self.game.console_open)
+
+    def test_a_run_that_proved_arrival_before_failing_keeps_the_console_known_open(self):
+        self.game.console_open = True
+        self.game.log = None
+        self.assertEqual(self.fail_code("tag FRA"), "no_reply")      # arrived, but no log to answer it
+        self.game.steps.clear()
+        self.console.close()
+        self.assertEqual(self.game.steps, [CONSOLE_KEY])
 
 
 if __name__ == "__main__":
