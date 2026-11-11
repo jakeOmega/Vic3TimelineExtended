@@ -88,7 +88,7 @@ LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the cl
                                         # once the game is ended here, which the fixture cannot do
 DRAIN_S = 0.5                           # before a read: a stop left over from an earlier one (real seconds: dap's clock)
 PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
-WATCH_RESPAWNS = 3                      # a watch that returns while the game's window is up is run again, this often
+WATCH_RESPAWNS = 3                      # a watch that failed while the game is proved alive is run again, this often
 
 _RETRIED = ("refused", "game_left_up")  # a stop that ended so is run again by the next stop()
 # restore's refusals that waiting, or the game's end, can clear: only these leave `stop` worth running again. A
@@ -1418,8 +1418,8 @@ class Session:
             self._watch_ended = why
             raise SessionError("watch_ended", why)
         self._watch_respawns += 1
-        self._notes.append("watch returned at %s while the game's window was still up, and was run again at once"
-                           % stamp(utc_now()))
+        self._notes.append("watch returned at %s without recording an exit, with the game proved alive by its pid "
+                           "and start time, and was run again at once" % stamp(utc_now()))
         self._record("watch_respawned", outcome="ok", respawns=self._watch_respawns)
 
     def _cli(self, argv: list[str]) -> tuple[dict, int]:

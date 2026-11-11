@@ -1444,7 +1444,7 @@ class StopAgainTest(SessionTestCase):
         # refused however often `stop` runs it again: the server must not keep serving for ever.
         for reply in ({"held": False, "refused": "error", "detail": "a copy in the store is damaged"},
                       "Traceback (most recent call last): ...",
-                      {"refused": "BackupRootError", "detail": "the folder that should hold the backups does not exist"}):
+                      {"refused": "BackupRootError", "detail": "the backups' folder does not exist"}):
             with self.subTest(reply=reply):
                 self.setUp()
                 self.started()
