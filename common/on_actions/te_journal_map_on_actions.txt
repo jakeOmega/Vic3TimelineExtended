@@ -16,6 +16,8 @@ te_jmap_monthly_ranges = {
 	effect = {
 		# The Company Headquarters map's state figures, before the ranges that read them (te_journal_map_effects.txt).
 		te_jmap_store_hqs = yes
+		# The Investment map's, while it is the pick, and its once-a-game check.
+		te_jmap_monthly_invest = yes
 		te_jmap_refresh_range = yes
 		te_jmap_refresh_entry_ranges = yes
 		# Once a game each: whether the store finds the headquarters, and whether their profit read is live.

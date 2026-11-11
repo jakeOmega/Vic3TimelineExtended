@@ -15,7 +15,8 @@
 # headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 36 ownership (the walk's), 37
 # population growth (the walk's), 38 family planning, 39 health care, 40 fighting-age men (the census's; 2026-11-08,
 # second round); 41 capitalists, 42 aristocrats, 43 clergy, 44 academics (each class's share of the people, the
-# walk's), 45 trade volume (the owner's trade with the world market; 2026-11-11); 0 none. 2 was literacy, retired because
+# walk's), 45 trade capacity (the state's own, its Trade Center's; 2026-11-11), 46 investment (what the state's owners
+# pay into the Investment Pool, estimated; 2026-11-11); 0 none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -384,9 +385,25 @@ te_jmap_academics_share = {
 	max = 1
 }
 
-# Trade Volume (45, 2026-11-11): the state's owner's trade with the world market, the total value of what it buys and
-# sells there (total_trade_value, the figure vanilla's Free Trade entry je_liberalism_2 counts), so every state of a
-# country paints alike: script has no state's own share of it. 0 for a state with no owner.
+# Trade Capacity (45; Trade Volume until 2026-11-11, when it painted the owner's trade and every state of a country
+# alike): the state's own Trade Capacity, what its Trade Center gives it (pm_trade_center's workforce-scaled
+# state_trade_capacity_add, 10 a level fully staffed, with a company flagship's or a treaty port's on top) times its
+# multipliers (state_trade_capacity_mult: the trade laws, principles and companies; a country's lines flow down to its
+# states). Read live: two modifier reads, no walk. Whether the read carries what the building's throughput adds is
+# unverified (docs/testing/journal-map-modes-playtest.md, check 28).
+te_jmap_trade_capacity = {
+	value = modifier:state_trade_capacity_add
+	multiply = {
+		value = 1
+		add = modifier:state_trade_capacity_mult
+		min = 0
+	}
+	min = 0
+}
+
+# The owner's trade with the world market, the total value of what it buys and sells there (total_trade_value, the
+# figure vanilla's Free Trade entry je_liberalism_2 counts): the hover's second line, for scale. Script has no state's
+# own share of it. 0 for a state with no owner.
 te_jmap_trade_value = {
 	value = 0
 	if = {
@@ -398,13 +415,109 @@ te_jmap_trade_value = {
 	min = 0
 }
 
-# The state's Trade Center levels, where its owner's trade goes through (the map's stripes and hover); 0 with none.
+# The state's Trade Center levels (the hover's); 0 with none.
 te_jmap_trade_center_levels = {
 	value = 0
 	if = {
 		limit = { has_building = building_trade_center }
 		value = b:building_trade_center.level
 	}
+}
+
+# Investment (46, 2026-11-11): what the state's owners pay into their country's Investment Pool each week, estimated.
+# The engine takes a share of the dividends a state's owners are paid (state_<pop type>_investment_pool_contribution_
+# add, raised by _efficiency_mult), and script reads neither a pop's dividends nor a building's shares, so the estimate
+# is the weekly profit of the buildings the owners sit in, which is what the levels they own pay them less the
+# building's own wages (the Company Headquarters map's read, te_jmap_hq_selfcheck), times the share their leading
+# owners reinvest: capitalists' for Financial Districts and company headquarters, aristocrats' for Manor Houses. Left
+# out: levels their own workers own and the government's reinvested dividends, whose shares script can't split, the
+# clergy's and bureaucrats' Manor Houses (counted at the aristocrats' share) and a regional headquarters, which pays
+# its company's home. A building at a loss pays nothing.
+#
+# The map reads state variables a store writes (te_jmap_store_invest, te_journal_map_effects.txt) at a pick of the map
+# and each month while it is the pick, as Company Headquarters reads its store's: the paint walks no buildings.
+
+# The walks, state scope: the store's input only.
+te_jmap_invest_walk_cap_profit = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			OR = {
+				is_building_group = bg_financial_districts
+				is_building_group = bg_company_headquarter
+			}
+			weekly_profit > 0
+		}
+		add = weekly_profit
+	}
+}
+
+te_jmap_invest_walk_ari_profit = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			is_building_group = bg_manor_houses
+			weekly_profit > 0
+		}
+		add = weekly_profit
+	}
+}
+
+# The share of their dividends the state's capitalists and aristocrats pay in, with what efficiency adds: 0-1 times
+# 1 + efficiency. The base (0.30, 0.20) is the country's, flowing down; whether the state's read carries it is
+# TE_SELF_CHECK invest_rate (te_jmap_invest_selfcheck).
+te_jmap_invest_rate_cap = {
+	value = modifier:state_capitalists_investment_pool_contribution_add
+	min = 0
+	max = 1
+	multiply = {
+		value = 1
+		add = modifier:state_capitalists_investment_pool_efficiency_mult
+		min = 0
+	}
+}
+
+te_jmap_invest_rate_ari = {
+	value = modifier:state_aristocrats_investment_pool_contribution_add
+	min = 0
+	max = 1
+	multiply = {
+		value = 1
+		add = modifier:state_aristocrats_investment_pool_efficiency_mult
+		min = 0
+	}
+}
+
+te_jmap_invest_walk_cap = {
+	value = te_jmap_invest_walk_cap_profit
+	multiply = te_jmap_invest_rate_cap
+}
+
+te_jmap_invest_walk_ari = {
+	value = te_jmap_invest_walk_ari_profit
+	multiply = te_jmap_invest_rate_ari
+}
+
+# The stored figures, state scope, 0 where unset: the two sides (the hover's) and their sum (the map's input).
+te_jmap_invest_cap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_inv_cap }
+		value = var:te_jmap_inv_cap
+	}
+}
+
+te_jmap_invest_ari = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_inv_ari }
+		value = var:te_jmap_inv_ari
+	}
+}
+
+te_jmap_invest_value = {
+	value = te_jmap_invest_cap
+	add = te_jmap_invest_ari
 }
 
 # ---------------------------------------------------------------------------
