@@ -90,16 +90,20 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 | 1 | Condition | devastated, nuclear aftermath, flooded | the state, live |
 | 2 | Takeover | an oil field, on the open land it stands on | the yearly pass |
 | 3 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
-| 4 | Character or function | boomtown, declining, divided, smog, housing blocks; financial center, industry, spaceport, resort, government quarter | the yearly pass |
+| 4 | Character or function | housing blocks, smog; boomtown, declining, divided, heavy industry, resort | the owner's law and the state region's pollution, live; the yearly pass for the rest |
 | 5 | Upkeep | run-down | the yearly pass |
 | 6 | Means | poor, affluent | the yearly pass |
 | 7 | Size, or scale | town, metropolis, megacity; a major port, a colliery | the yearly pass; for a major port a building's level, live |
 | 8 | Region | a family of the picture's group: eight for cities, four for farmland, one for forestry | geography, live |
 
 So the right technology beats the right size, and a devastated city beats everything. The weight is a number
-in place value (a takeover 10,000,000, rung × 100,000, size or scale × 10, a named region its family's digit;
-the places between are reserved), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
-any mod picture that applies wins.
+in place value (a takeover 10,000,000, and a condition its digit × 1,000,000 on top of that; rung × 100,000;
+a character its digit × 10,000; size or scale × 10; a named region its family's digit; 1,000 and 100 are
+reserved for upkeep and means), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
+any mod picture that applies wins. Conditions and takeovers share the place above the rung without meeting:
+a condition is a city picture and a takeover stands on open land. That keeps the largest weight (13,400,000
+so far) under 16,777,216, the last whole number a 32-bit float holds exactly, in case the engine keeps a
+weight in one; a test holds the places apart and under that ceiling.
 
 A **takeover** is a picture with no terrain of its own. Vanilla has no oil-field terrain, so an oil state
 shows the plain, desert or farmland the rigs stand on. The oil pictures join those terrains' lists and
@@ -209,6 +213,17 @@ great port is one by its size, whatever else the state does. All four figures ar
 `te_state_picture_values.txt` (the port's level in the registry). The oil caps in `map_data/state_regions`
 bound what can ever pass: 150 states have oil, half of them a cap of 20 or less.
 
+**Natural terrain** (wave 7) keeps vanilla's own families, by the triggers vanilla's entries use (the
+registry's `LAND_REGIONS`, `DESERT_REGIONS`, `HILL_REGIONS`). None overlap in 1.15's region files.
+
+| Terrain | Families | Notes |
+|---|---|---|
+| Plains, mountains | American (`geographic_region_americas`: 145 states, South America included), arid (`is_arid_region`: 162, Africa, the Middle East and Oceania), generic (neither) | |
+| Savanna | none: the arid plain's picture in every state | as vanilla, which has no savanna picture. The registry's `any_region` lists a terrain a picture joins without its region |
+| Desert | American, generic | |
+| Hills | jungle (`is_jungle_hills`: Indochina and South China), subtropic (`is_subtropic_farmland`: Latin America), generic | |
+| Tundra, forest, jungle, wetland | one picture each | |
+
 A rung outranks a scale or a region, so the plain and the special picture of a rung are wired together (the
 registry's `WIRED_TOGETHER`, held by a test, as `REGION_OVERLAPS` is for cities): a rung 2 harbor wired
 alone would show in a great port over rung 1's major port.
@@ -237,23 +252,33 @@ all three. A run-down picture at each level of means is a later refinement, not 
 
 ## 7. Character, function and conditions
 
-Pictures for any region unless noted, on the city rungs where they fit. One character or function at most;
-the pass picks the first that holds, in the order below.
+Pictures for any region unless noted, on the city rungs where they fit. Where two hold, the first in the
+order below shows (each has its own digit in the character place of the weight).
+
+| Picture | Shows when | Signal | Read |
+|---|---|---|---|
+| Housing blocks | Command Economy and Prefabricated Construction | the owner's law and technology | live |
+| Boomtown, cranes everywhere | the state's people have grown fast for several years | `te_dg_walk_pop` against the year before | the yearly pass |
+| Declining city, empty works | the state's people are falling | the same | the yearly pass |
+| Divided city, shacks under towers | a large city with high inequality | `te_dg_gini` | the yearly pass |
+| Smog city | heavy pollution | the state region's `pollution_amount` at 150 or more of 255 (vanilla's pollution map mode is at full color from 153) | live |
+| Heavy-industry city | most levels are heavy industry | building levels | the yearly pass |
+| Resort | tourism dominates | the tourism buildings | the yearly pass |
+
+A character sits under the rung, so it is painted on each rung where it fits: a smog city of 1960 gives way
+to the city of 1990 unless 1990's smog city is painted too. After the last painted rung the region's own
+picture returns.
+
+Conditions outrank every rung and are painted for two spans of the city ladder each:
 
 | Picture | Shows when | Signal |
 |---|---|---|
-| Housing blocks | Command Economy and Prefabricated Construction | the owner's law and technology |
-| Boomtown, cranes everywhere | the state's people have grown fast for several years | `te_dg_walk_pop` against the year before |
-| Declining city, empty works | the state's people are falling | the same |
-| Divided city, shacks under towers | a large city with high inequality | `te_dg_gini` |
-| Smog city | heavy pollution | `pollution_generation` |
-| Heavy-industry city | most levels are heavy industry | building levels |
-| Resort | tourism dominates | the tourism buildings |
+| A city after a nuclear strike | the state carries the strategic or the tactical strike's aftermath | `nuclear_strike_aftermath`, `tactical_nuke_aftermath` (state modifiers that decay) |
+| A devastated city | devastation of one half or more | `devastation >= 0.5` (in 1.15 only battles raise it, and a nuclear strike sets it to the full) |
+| A flooded coast | not wired | the warming system's coastal flooding is a modifier on the country, from an event, which would flood every coastal city the country has. The picture waits for a marker on the state |
 
-Conditions outrank everything and are painted for two or three spans of the city ladder: a devastated city
-(`devastation`), a city after a nuclear strike (the nuclear system's strike marker) and a flooded coast (the
-warming system's sea-level stage). The last two need a marker their systems don't keep on the state yet;
-each gets one when its picture is painted.
+A struck city shows the strike while the aftermath lasts, then the ruins while its devastation is still
+high, then its own picture again.
 
 ## 8. The set
 
@@ -290,11 +315,15 @@ would be over 1 GB.
    forestry families of § 5, and the three provisional levels there.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
-6. **Character, function, conditions (about 30),** with theirs. Its 30 prompts are drafted in `DRAFTS`
-   (18 character, 6 function, 6 condition), for any region and on the rungs where each fits.
-7. **Natural terrain (about 15).** Its 15 prompts are drafted in `DRAFTS`: each of vanilla's natural
-   pictures with the motor age in it (a motorway, pylons, a pipeline), on Modern Urban Planning for want of
-   a ladder of its own.
+6. **Character, function, conditions (30).** All 30 are rendered. **Painted and wired 2026-11-10:** the 11
+   a weight reads live (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two
+   spans each; § 7). The other 19 stay in `DRAFTS` with their candidates on disk: boomtown, declining,
+   divided, heavy industry and resort (17) need the yearly pass to store a trend or a share, which is the
+   next piece of work now that a weight is known to read a stored tag; the flooded coast (2) waits for
+   the warming system.
+7. **Natural terrain (15). Painted and wired 2026-11-10:** each of vanilla's natural pictures with the
+   motor age in it (a motorway, pylons, a pipeline), in vanilla's own families (§ 5), on Modern Urban
+   Planning for want of a ladder of its own (the tundra's pipeline on Integrated Circuits).
 
 If the set is cut: natural terrain first, then megacities merged into four broad families, then means and
 upkeep limited to rungs 2 to 4.
@@ -362,6 +391,17 @@ upkeep limited to rungs 2 to 4.
   - *The dark strip* was on 6 of this wave's 46 renders of that seed; none was picked.
   - *Later rungs of a ladder drift toward one look* (drones, wind turbines, solar panels on every roof).
     It reads as its time, but the farm families' fourth rungs are closer to one another than their first.
+- **What waves 6 and 7 taught** (2026-11-10, 180 renders for 45 pictures, none rerun):
+  - *A dated vehicle in the prompt works for cars and buses, less for trucks.* "Rounded 1950s cars" gave
+    1950s cars; "1950s trucks" on an empty highway still gave today's long-haul rigs in about half the
+    candidates. The natural-terrain pictures have one rung and show from 1960 to the end of the game, so a
+    later truck was let pass where the rest of the picture was best.
+  - *A famous landscape is a landmark too.* "A red rock desert" drew Monument Valley's two buttes in one
+    candidate; the pick has plain mesa cliffs.
+  - *Destruction renders mild.* The ruins and the struck city of the later rungs came out as a damaged,
+    hazy city with traffic still moving, not the flattened one the prompts describe; the 1960 strike (an
+    ash plain) is the only one that reads at a glance. A second set with the damage named first would
+    help if the play-test finds them too gentle.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
@@ -407,5 +447,7 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 - Whether oil's share of levels tracks its share of GDP closely enough. If a building's earnings turn out
   to read as a value, the pass can weigh the levels by them.
 - The regions that count as tropical for forestry.
+- The flooded coast waits for the warming system to have local effects (the owner: "we can wire it up
+  later"); its two pictures are painted and unwired.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
   pictures exist.

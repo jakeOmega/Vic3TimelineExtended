@@ -33,16 +33,23 @@ def picture_path(key):
     return f"gfx/state_pictures/te_{key}.dds"
 
 
-def conditions(key):
-    """The state triggers a picture needs, one a line; a nested line starts with its own tabs."""
+def conditions(key, terrain=None):
+    """The state triggers a picture needs, one a line; a nested line starts with its own tabs.
+
+    In a terrain of the picture's `any_region` list its region isn't asked for.
+    """
     p = registry.PICTURES[key]
     lines = [f"owner = {{ has_technology_researched = {p['tech']} }}"]
-    if p["region"]:
+    if p["region"] and terrain not in p.get("any_region", ()):
         lines += registry.region_conditions(p["region"])
     if p["size"]:
         lines += registry.SIZES[p["size"]][0]
     if p.get("scale"):
         lines += registry.SCALES[p["scale"]][0]
+    if p.get("character"):
+        lines += registry.CHARACTERS[p["character"]][0]
+    if p.get("condition"):
+        lines += registry.CONDITIONS[p["condition"]][0]
     lines += p.get("where", [])
     return lines
 
@@ -77,7 +84,7 @@ def render(pictures=None):
                 "\t\t\t\t\tlimit = {",
                 "\t\t\t\t\t\tscope:state = {",
             ]
-            lines += [f"\t\t\t\t\t\t\t{c}" for c in conditions(key)]
+            lines += [f"\t\t\t\t\t\t\t{c}" for c in conditions(key, terrain)]
             lines += [
                 "\t\t\t\t\t\t}",
                 "\t\t\t\t\t}",

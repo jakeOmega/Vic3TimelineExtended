@@ -124,9 +124,30 @@ FOREST_REGIONS = {
         "is_jungle_hills = yes",
     ], 1),
 }
+# Natural terrain: vanilla's own families, by the triggers its entries use. Plains and mountains
+# have an American and an arid picture (vanilla's "northamerica" pictures show in all the
+# Americas; its arid regions are Africa, the Middle East and Oceania), the desert an American
+# one, the hills a jungle and a subtropic one. None of them overlap in 1.15's region files.
+_AMERICAS = "is_in_geographic_region = geographic_region_americas"
+LAND_REGIONS = {
+    "land_generic": ([], 1),
+    "land_arid": (["is_arid_region = yes"], 2),
+    "land_americas": ([_AMERICAS], 3),
+}
+DESERT_REGIONS = {
+    "desert_generic": ([], 1),
+    "desert_americas": ([_AMERICAS], 2),
+}
+HILL_REGIONS = {
+    "hills_generic": ([], 1),
+    "hills_subtropic": (["is_subtropic_farmland = yes"], 2),
+    "hills_jungle": (["is_jungle_hills = yes"], 3),
+}
 # Every region family by its group; a group's fallback family also takes the states of no family.
-REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS}
-GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic"}
+REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS,
+                 "land": LAND_REGIONS, "desert": DESERT_REGIONS, "hills": HILL_REGIONS}
+GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic",
+                  "land": "land_generic", "desert": "desert_generic", "hills": "hills_generic"}
 
 
 def region_group(region: str) -> str:
@@ -168,6 +189,35 @@ W_REGION = 1  # times the family's digit, 1 to 8
 # A picture that takes over another family's terrain (an oil field on farmland) outranks every
 # rung of that terrain's own pictures: "over" in its entry.
 W_OVER = 10000000
+# A city's character (housing blocks, smog) sits between the rung and the size: the right
+# technology still comes first, but a smog-bound metropolis shows the smog.
+W_CHAR = 10000  # times the character's digit
+# A condition (ruins, a nuclear strike) outranks every rung, like a takeover, and the conditions
+# rank among themselves by their digit. Conditions are city pictures and takeovers stand on open
+# land, so they share the place above the rung without meeting. The largest weight stays under
+# 16,777,216, the last whole number a 32-bit float holds exactly, in case the engine keeps a
+# weight in one.
+W_COND = 1000000  # times the condition's digit, on top of W_OVER
+
+# Characters and conditions a weight can read live, off the state or its owner.
+# (state trigger lines, the digit in the weight)
+SMOG_POLLUTION = 150  # of 255; vanilla's pollution map mode is at full color from 153
+RUINS_DEVASTATION = 0.5  # the trigger reads 0 to 1
+CHARACTERS = {
+    "housing_blocks": ([
+        "owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }",
+    ], 7),
+    "smog": ([f"state_region = {{ pollution_amount >= {SMOG_POLLUTION} }}"], 3),  # a state region's figure
+}
+CONDITIONS = {
+    "nuclear": ([
+        "OR = {",
+        "\thas_modifier = nuclear_strike_aftermath",
+        "\thas_modifier = tactical_nuke_aftermath",
+        "}",
+    ], 3),
+    "devastated": ([f"devastation >= {RUINS_DEVASTATION}"], 2),
+}
 
 PICTURES = {
     "urban_european_1": {
@@ -1030,25 +1080,32 @@ DRAFTS = {
         "white cruise ship, crowds on a palm-lined boardwalk, a bright sea"),
     "devastated_early": _draft(
         "condition", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy devastation, on the first two rungs",
-        "A city ruined by war {when}: roofless brick and stone buildings with empty window "
-        "holes, streets choked with rubble, a burnt-out tram on twisted rails, craters, smoke "
-        "rising from several fires, a few people pulling a handcart of belongings, a broken "
-        "bridge"),
+        "A city bombed flat {when}: a sea of rubble where the streets were, two thirds of the "
+        "brick and stone buildings collapsed into heaps, the rest roofless burnt shells with "
+        "empty window holes and no floors, lone chimney stacks and jagged fragments of wall "
+        "standing, a burnt-out tram on twisted rails, bomb craters, black smoke rising from many "
+        "fires, a few people pulling a handcart through the ruins"),
     "devastated_late": _draft(
         "condition", ["urban"], "urban_european", "computer_aided_design", 3, "heavy devastation, from the third rung",
-        "A city ruined by war {when}: concrete tower blocks with whole faces sheared away and "
-        "floors hanging, a collapsed flyover, burnt-out boxy 1980s cars and buses, shattered glass towers, "
-        "smoke columns, craters in a wide road, a few people picking through the rubble"),
+        "A modern city destroyed by war {when}: most of the concrete tower blocks collapsed into "
+        "mountains of broken slabs, the few still standing burnt-out skeletons with whole faces "
+        "sheared away and floors hanging, a fallen flyover lying across a cratered road, wrecked "
+        "and burnt boxy 1980s cars and buses, nothing moving, columns of black smoke from many "
+        "fires, a few people picking through the rubble"),
     "nuclear_strike_early": _draft(
         "condition", ["urban"], "urban_european", "modern_urban_planning", 2, "a nuclear strike on the state, on the first three rungs",
-        "A city after an atomic bomb {when}: a flat grey plain of ash and rubble to the horizon, "
-        "a few twisted steel frames and scorched concrete shells standing, charred tree trunks, "
-        "a melted tram, drifting smoke under a dark yellow sky, no living thing in sight"),
+        "A city erased by an atomic bomb {when}: a flat scorched plain of grey ash and rubble "
+        "from edge to edge, nothing standing but a few twisted steel frames and one scorched "
+        "concrete shell, charred leafless tree trunks, a melted tram, small fires, a towering "
+        "mushroom cloud rising on the horizon under a dark orange sky, no intact building "
+        "anywhere, no living thing in sight"),
     "nuclear_strike_late": _draft(
         "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "a nuclear strike on the state, from the fourth rung",
-        "A city after a nuclear strike {when}: the stumps of supertall towers snapped off and "
-        "blackened, a field of fused glass and rubble to the horizon, a collapsed elevated "
-        "railway, drifting ash under a dark yellow sky, no living thing in sight"),
+        "A city erased by a nuclear strike {when}: a flat scorched plain of ash, fused glass and "
+        "rubble from edge to edge, only the blackened snapped-off stumps of a few supertall "
+        "towers standing a few floors high, a collapsed elevated railway lying in pieces, "
+        "burnt-out vehicles, small fires, a towering mushroom cloud rising on the horizon under "
+        "a dark orange sky, no intact building anywhere, no living thing in sight"),
     "flooded_coast_4": _draft(
         "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the warming system's sea-level stage, in a coastal state",
         "A coastal city flooded by the risen sea {when}: streets turned to canals of brown water "
@@ -1219,20 +1276,94 @@ WAVE3_PICKS = {
     "cleared_land_2": {"seed": 3},
 }
 
-for _key, _pick in WAVE3_PICKS.items():
-    _draft_entry = DRAFTS.pop(_key)
-    _wiring = WAVE3_WIRING[_key]
-    PICTURES[_key] = {
-        "terrain": _draft_entry["terrain"],
-        "tech": _draft_entry["tech"],
-        "rung": _draft_entry["rung"],
-        "region": _wiring.get("region"),
-        "size": None,
-        **{k: v for k, v in _wiring.items() if k != "region"},
-        "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
-        "prompt": _draft_entry["prompt"],
-        **_pick,
-    }
+
+# --- Wave 7: natural terrain with the motor age in it. One rung, on vanilla's own families.
+# `any_region` lists terrains the picture also joins without its region: vanilla shows the arid
+# plain in every savanna state, whatever its region.
+WAVE7_WIRING = {
+    "mountains_road": {"region": "land_generic"},
+    "mountains_arid_road": {"region": "land_arid"},
+    "mountains_northamerica_road": {"region": "land_americas"},
+    "plains_road": {"region": "land_generic"},
+    "plains_arid_road": {"region": "land_arid", "any_region": ["savanna"]},
+    "plains_northamerica_road": {"region": "land_americas"},
+    "desert_road": {"region": "desert_generic"},
+    "desert_northamerica_road": {"region": "desert_americas"},
+    "hills_road": {"region": "hills_generic"},
+    "hills_subtropic_road": {"region": "hills_subtropic"},
+    "hills_jungle_road": {"region": "hills_jungle"},
+    "tundra_pipeline": {},
+    "forest_road": {},
+    "jungle_road": {},
+    "wetland_road": {},
+}
+# The picked render of each wave 7 picture.
+WAVE7_PICKS = {
+    "mountains_road": {"seed": 0},
+    "mountains_northamerica_road": {"seed": 1},
+    "mountains_arid_road": {"seed": 0},
+    "hills_road": {"seed": 0},
+    "hills_jungle_road": {"seed": 0},
+    "hills_subtropic_road": {"seed": 0},
+    "plains_road": {"seed": 0},
+    "plains_northamerica_road": {"seed": 1, "smudge": [(765, 383, 805, 400)]},
+    "plains_arid_road": {"seed": 2},
+    "desert_road": {"seed": 0},
+    "desert_northamerica_road": {"seed": 2, "smudge": [(545, 513, 600, 530), (1028, 538, 1060, 562)]},
+    "tundra_pipeline": {"seed": 0},
+    "forest_road": {"seed": 3},
+    "jungle_road": {"seed": 0},
+    "wetland_road": {"seed": 0},
+}
+
+
+# --- Wave 6, first part: the special city pictures a weight can read live. The others wait:
+# boomtown, declining, divided, heavy industry and resort need the yearly pass to store a trend or
+# a share (WAVE6_NEEDS_THE_PASS), and the flooded coast needs a marker on the state (the warming
+# system's coastal flooding is a country modifier, which would flood every port a country has).
+WAVE6_WIRING = {
+    **{f"housing_blocks_{n}": {"character": "housing_blocks"} for n in (2, 3, 4)},
+    **{f"smog_{n}": {"character": "smog"} for n in (1, 2, 3, 4)},
+    **{f"devastated_{span}": {"condition": "devastated"} for span in ("early", "late")},
+    **{f"nuclear_strike_{span}": {"condition": "nuclear"} for span in ("early", "late")},
+}
+WAVE6_NEEDS_THE_PASS = ("boomtown", "declining", "divided", "industry", "resort")
+WAVE6_NEEDS_A_MARKER = ("flooded_coast",)
+# The picked render of each of these.
+WAVE6_PICKS = {
+    "housing_blocks_2": {"seed": 2},
+    "housing_blocks_3": {"seed": 0},
+    "housing_blocks_4": {"seed": 1},
+    "smog_1": {"seed": 0, "smudge": [(0, 440, 150, 505), (412, 508, 474, 536), (95, 574, 195, 596),
+                                     (1480, 503, 1536, 540), (764, 566, 806, 584), (1225, 378, 1335, 422)]},
+    "smog_2": {"seed": 2, "smudge": [(1320, 556, 1415, 584), (420, 694, 465, 714), (1145, 506, 1180, 528)]},
+    "smog_3": {"seed": 0, "smudge": [(405, 508, 494, 547)]},
+    "smog_4": {"seed": 1, "smudge": [(920, 645, 965, 695), (806, 552, 834, 642)]},
+    "devastated_early": {"seed": 1, "smudge": [(648, 544, 722, 568), (655, 482, 705, 500)]},
+    "devastated_late": {"seed": 0, "crop": (0, 0, 1485, 727),
+                        "smudge": [(1295, 370, 1350, 408), (1420, 360, 1490, 398), (425, 512, 475, 544),
+                                   (146, 556, 194, 588)]},
+    "nuclear_strike_early": {"seed": 0},
+    "nuclear_strike_late": {"seed": 0},
+}
+
+for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
+    for _key, _pick in _picks.items():
+        _draft_entry = DRAFTS.pop(_key)
+        _wiring = _table[_key]
+        PICTURES[_key] = {
+            "terrain": [*_draft_entry["terrain"], *_wiring.get("any_region", [])],
+            "tech": _draft_entry["tech"],
+            "rung": _draft_entry["rung"],
+            "region": _wiring.get("region"),
+            "size": None,
+            **{k: v for k, v in _wiring.items() if k != "region"},
+            "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
+            "prompt": _draft_entry["prompt"],
+            **_pick,
+        }
+        if PICTURES[_key]["effect"] in PLACED_OVERLAYS:  # a city picture like vanilla's European one
+            PICTURES[_key]["effect"] = NEUTRAL_OVERLAY
 if "docks_harbor_1" in PICTURES:
     PICTURES["docks_1"]["scale"] = "major_port"  # the pilot's port is rung 1's major port
 
@@ -1253,6 +1384,10 @@ def weight(key: str) -> int:
         w += W_REGION * region_digit(p["region"])
     if p.get("over"):
         w += W_OVER
+    if p.get("character"):
+        w += W_CHAR * CHARACTERS[p["character"]][1]
+    if p.get("condition"):
+        w += W_OVER + W_COND * CONDITIONS[p["condition"]][1]
     return w
 
 
