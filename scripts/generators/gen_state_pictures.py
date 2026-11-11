@@ -46,6 +46,10 @@ def conditions(key, terrain=None):
         lines += registry.SIZES[p["size"]][0]
     if p.get("scale"):
         lines += registry.SCALES[p["scale"]][0]
+    if p.get("character"):
+        lines += registry.CHARACTERS[p["character"]][0]
+    if p.get("condition"):
+        lines += registry.CONDITIONS[p["condition"]][0]
     lines += p.get("where", [])
     return lines
 

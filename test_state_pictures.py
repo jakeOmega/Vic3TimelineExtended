@@ -159,6 +159,34 @@ class TestRegistry(unittest.TestCase):
             with self.subTest(key):
                 self.assertIsNotNone(pick.get("seed"))
 
+    def test_wave_6_wiring_covers_what_a_weight_can_read_live(self):
+        city = {k for k, d in registry.DRAFTS.items() if d["family"] in ("character", "function", "condition")}
+        waiting = {k for k in city if k.startswith(registry.WAVE6_NEEDS_THE_PASS + registry.WAVE6_NEEDS_A_MARKER)}
+        self.assertEqual((city - waiting) | set(registry.WAVE6_PICKS), set(registry.WAVE6_WIRING))
+        self.assertFalse(waiting & set(registry.WAVE6_WIRING))
+        for key, wiring in registry.WAVE6_WIRING.items():
+            with self.subTest(key):
+                self.assertEqual(len(wiring), 1)
+                (axis, name), = wiring.items()
+                self.assertIn(name, {"character": registry.CHARACTERS, "condition": registry.CONDITIONS}[axis])
+        for table in (registry.CHARACTERS, registry.CONDITIONS):
+            digits = [digit for _lines, digit in table.values()]
+            self.assertEqual(len(set(digits)), len(digits))
+            self.assertTrue(all(1 <= d <= 9 for d in digits))
+
+    def test_the_weight_places_keep_their_order(self):
+        # region < size or scale < character < rung < takeover or condition, each place wide enough
+        # for nine of the one below; and no weight outgrows a 32-bit float's whole numbers
+        r = registry
+        self.assertLess(9 * r.W_REGION, r.W_SIZE)
+        self.assertLess(9 * r.W_SIZE + 9 * r.W_REGION, r.W_CHAR)
+        self.assertLess(9 * r.W_CHAR + 9 * r.W_SIZE + 9 * r.W_REGION, r.W_RUNG)
+        self.assertLess(9 * r.W_RUNG + 9 * r.W_CHAR + 9 * r.W_SIZE + 9 * r.W_REGION, r.W_COND)
+        top = r.W_OVER + r.W_COND * max(d for _l, d in r.CONDITIONS.values()) + 9 * r.W_RUNG + 9 * r.W_CHAR + 99
+        self.assertLess(top, 2 ** 24)
+        for key in r.PICTURES:
+            self.assertLess(r.weight(key), 2 ** 24, key)
+
     def test_wave_7_wiring_covers_its_drafts(self):
         nature = {k for k, d in registry.DRAFTS.items() if d["family"] == "nature"}
         self.assertEqual(nature | set(registry.WAVE7_PICKS), set(registry.WAVE7_WIRING))

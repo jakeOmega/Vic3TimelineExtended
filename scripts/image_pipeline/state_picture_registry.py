@@ -191,6 +191,35 @@ W_REGION = 1  # times the family's digit, 1 to 8
 # A picture that takes over another family's terrain (an oil field on farmland) outranks every
 # rung of that terrain's own pictures: "over" in its entry.
 W_OVER = 10000000
+# A city's character (housing blocks, smog) sits between the rung and the size: the right
+# technology still comes first, but a smog-bound metropolis shows the smog.
+W_CHAR = 10000  # times the character's digit
+# A condition (ruins, a nuclear strike) outranks every rung, like a takeover, and the conditions
+# rank among themselves by their digit. Conditions are city pictures and takeovers stand on open
+# land, so they share the place above the rung without meeting. The largest weight stays under
+# 16,777,216, the last whole number a 32-bit float holds exactly, in case the engine keeps a
+# weight in one.
+W_COND = 1000000  # times the condition's digit, on top of W_OVER
+
+# Characters and conditions a weight can read live, off the state or its owner.
+# (state trigger lines, the digit in the weight)
+SMOG_POLLUTION = 150  # of 255; vanilla's pollution map mode is at full color from 153
+RUINS_DEVASTATION = 0.5  # the trigger reads 0 to 1
+CHARACTERS = {
+    "housing_blocks": ([
+        "owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }",
+    ], 7),
+    "smog": ([f"state_region = {{ pollution_amount >= {SMOG_POLLUTION} }}"], 3),  # a state region's figure
+}
+CONDITIONS = {
+    "nuclear": ([
+        "OR = {",
+        "\thas_modifier = nuclear_strike_aftermath",
+        "\thas_modifier = tactical_nuke_aftermath",
+        "}",
+    ], 3),
+    "devastated": ([f"devastation >= {RUINS_DEVASTATION}"], 2),
+}
 
 PICTURES = {
     "urban_european_1": {
@@ -1259,7 +1288,24 @@ WAVE7_WIRING = {
 WAVE7_PICKS = {
 }
 
-for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
+
+# --- Wave 6, first part: the special city pictures a weight can read live. The others wait:
+# boomtown, declining, divided, heavy industry and resort need the yearly pass to store a trend or
+# a share (WAVE6_NEEDS_THE_PASS), and the flooded coast needs a marker on the state (the warming
+# system's coastal flooding is a country modifier, which would flood every port a country has).
+WAVE6_WIRING = {
+    **{f"housing_blocks_{n}": {"character": "housing_blocks"} for n in (2, 3, 4)},
+    **{f"smog_{n}": {"character": "smog"} for n in (1, 2, 3, 4)},
+    **{f"devastated_{span}": {"condition": "devastated"} for span in ("early", "late")},
+    **{f"nuclear_strike_{span}": {"condition": "nuclear"} for span in ("early", "late")},
+}
+WAVE6_NEEDS_THE_PASS = ("boomtown", "declining", "divided", "industry", "resort")
+WAVE6_NEEDS_A_MARKER = ("flooded_coast",)
+# The picked render of each of these.
+WAVE6_PICKS = {
+}
+
+for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
     for _key, _pick in _picks.items():
         _draft_entry = DRAFTS.pop(_key)
         _wiring = _table[_key]
@@ -1294,6 +1340,10 @@ def weight(key: str) -> int:
         w += W_REGION * region_digit(p["region"])
     if p.get("over"):
         w += W_OVER
+    if p.get("character"):
+        w += W_CHAR * CHARACTERS[p["character"]][1]
+    if p.get("condition"):
+        w += W_OVER + W_COND * CONDITIONS[p["condition"]][1]
     return w
 
 
