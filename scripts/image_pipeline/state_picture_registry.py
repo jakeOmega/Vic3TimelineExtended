@@ -208,6 +208,14 @@ CHARACTERS = {
         "owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }",
     ], 7),
     "smog": ([f"state_region = {{ pollution_amount >= {SMOG_POLLUTION} }}"], 3),  # a state region's figure
+    # the yearly pass's tags (common/scripted_effects/te_state_picture_effects.txt), in the design's
+    # order of precedence (section 7): a boomtown over a declining city over a divided one over smog
+    # over heavy industry over a resort
+    "boomtown": (["has_variable = te_sp_boom"], 6),
+    "declining": (["has_variable = te_sp_decline"], 5),
+    "divided": (["has_variable = te_sp_divided"], 4),
+    "industry": (["has_variable = te_sp_industry"], 2),
+    "resort": (["has_variable = te_sp_resort"], 1),
 }
 CONDITIONS = {
     "nuclear": ([
@@ -1073,6 +1081,12 @@ DRAFTS = {
         "A beach resort {when}: a row of white concrete hotel slabs of twelve storeys with "
         "balconies along a sandy bay, plain striped parasols in ranks, swimming pools, a coast "
         "road of small rounded 1950s cars and coaches, a jet airliner low overhead, palm trees, a bright sea"),
+    "resort_3": _draft(
+        "function", ["urban"], "urban_european", "computer_aided_design", 3, "tourism dominates",
+        "A beach resort {when}: a long curve of glass and concrete hotel towers of twenty-five "
+        "storeys behind a crowded sandy beach, ranks of plain parasols and sun loungers, water "
+        "slides and blue pools, a marina of white yachts, a coast road of boxy 1980s cars and "
+        "coaches, a wide-body jet airliner low overhead, palm trees, a bright sea"),
     "resort_4": _draft(
         "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "tourism dominates",
         "A beach resort {when}: terraced hotel towers stepped like hillsides and covered in "
@@ -1317,17 +1331,22 @@ WAVE7_PICKS = {
 }
 
 
-# --- Wave 6, first part: the special city pictures a weight can read live. The others wait:
-# boomtown, declining, divided, heavy industry and resort need the yearly pass to store a trend or
-# a share (WAVE6_NEEDS_THE_PASS), and the flooded coast needs a marker on the state (the warming
-# system's coastal flooding is a country modifier, which would flood every port a country has).
+# --- Wave 6: the special city pictures. Housing blocks, smog, ruins and the nuclear strike are
+# read live; boomtown, declining, divided, heavy industry and resort off the yearly pass's tags.
+# The flooded coast waits for a marker on the state (the warming system's coastal flooding is a
+# country modifier, which would flood every port a country has).
 WAVE6_WIRING = {
     **{f"housing_blocks_{n}": {"character": "housing_blocks"} for n in (2, 3, 4)},
     **{f"smog_{n}": {"character": "smog"} for n in (1, 2, 3, 4)},
     **{f"devastated_{span}": {"condition": "devastated"} for span in ("early", "late")},
     **{f"nuclear_strike_{span}": {"condition": "nuclear"} for span in ("early", "late")},
+    **{f"boomtown_{n}": {"character": "boomtown"} for n in (1, 2, 3, 4)},
+    **{f"declining_{n}": {"character": "declining"} for n in (1, 2, 3, 4)},
+    **{f"divided_{n}": {"character": "divided"} for n in (2, 3, 4)},
+    **{f"industry_{n}": {"character": "industry"} for n in (1, 2, 3)},
+    **{f"resort_{n}": {"character": "resort"} for n in (1, 2, 3, 4)},
 }
-WAVE6_NEEDS_THE_PASS = ("boomtown", "declining", "divided", "industry", "resort")
+WAVE6_NEEDS_THE_PASS = ()
 WAVE6_NEEDS_A_MARKER = ("flooded_coast",)
 # The picked render of each of these.
 WAVE6_PICKS = {
