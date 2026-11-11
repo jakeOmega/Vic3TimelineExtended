@@ -1193,6 +1193,98 @@ DRAFTS = {
 }
 
 
+# --- Waves 4 and 5, a pilot (2026-11-11): the size and the prosperity variants of two regional
+# streets on one rung, to settle how such a prompt is written before the other 212 are. Each
+# leads with its verdict ("a small provincial town", "a poor, shabby quarter"), as the ruins
+# had to, and keeps the family's landmark so the variant reads as the same place.
+def _variant(region, rung, variant, shows, prompt):
+    tech, _when = CITY_LADDER[rung]
+    return _draft("variant", ["urban"], "urban_european", tech, rung, shows,
+                  prompt.replace("{landmark}", CITY_LANDMARK[region]))
+
+
+DRAFTS.update({
+    "urban_european_3_town": _variant(
+        "european", 3, "town", "the largest city under 100,000 people",
+        "A small European provincial town {when}: a quiet main street of two- and three-storey "
+        "plastered houses with steep tiled roofs, a few boxy 1980s cars parked at the kerb, a "
+        "country bus, a small paved square with a fountain and young trees, a few people, "
+        "{landmark} at the end of the street, wooded hills beyond the roofs"),
+    "urban_european_3_metropolis": _variant(
+        "european", 3, "metropolis", "the largest city over 1,000,000 people",
+        "The center of a great European metropolis {when}, seen from above a wide boulevard: a "
+        "dense cluster of mirrored glass skyscrapers of forty to sixty storeys rising over older "
+        "stone blocks with mansard roofs, a multi-lane avenue packed with boxy 1980s cars and "
+        "articulated buses, an elevated expressway, crowds, {landmark} small among the towers"),
+    "urban_european_3_megacity": _variant(
+        "european", 3, "megacity", "the largest city over 10,000,000 people",
+        "An endless European megacity {when}, seen from a high rooftop: glass skyscrapers and "
+        "dense city blocks stretching to the horizon in every direction under a haze, stacked "
+        "expressway interchanges full of boxy 1980s cars, elevated railway lines, older stone "
+        "blocks with mansard roofs below, {landmark} tiny in the foreground"),
+    "urban_european_3_poor": _variant(
+        "european", 3, "poor", "a low standard of living",
+        "A poor, shabby quarter of a European city {when}: grimy stone apartment buildings with "
+        "cracked plaster and patched windows, washing hung on balconies, a potholed street with "
+        "a few rusty boxy 1980s cars and an old bus, tangled overhead wires, handcarts, street "
+        "vendors with crates, people in worn coats, mirrored office towers far in the "
+        "background, {landmark} hazy at the end of the street"),
+    "urban_european_3_affluent": _variant(
+        "european", 3, "affluent", "a high standard of living",
+        "A wealthy, immaculate quarter of a European city {when}: restored stone apartment "
+        "buildings with gilded balconies and flower boxes below gleaming mirrored towers, a "
+        "spotless tree-lined boulevard, a fountain, expensive polished boxy 1980s limousines and "
+        "sports cars, terraces under plain parasols, elegantly dressed people, {landmark} hazy "
+        "at the end of the street"),
+    "urban_european_3_rundown": _variant(
+        "european", 3, "rundown", "a standard of living well under what its people expect",
+        "A neglected, decaying quarter of a European city in hard times {when}: stone apartment "
+        "buildings with peeling paint, broken and boarded-up windows and shuttered ground "
+        "floors, litter and overflowing bins along the kerb, a burnt-out boxy 1980s car, weeds "
+        "in the cracked pavement, a queue of idle people in drab coats, dull mirrored towers "
+        "behind, {landmark} hazy at the end of the street"),
+    "urban_south_asian_3_town": _variant(
+        "south_asian", 3, "town", "the largest city under 100,000 people",
+        "A small South Asian provincial town {when}: a dusty main street of two-storey "
+        "whitewashed brick houses with flat roofs and wooden balconies, a few auto rickshaws and "
+        "motor scooters, an old country bus, stalls under plain parasols, cattle wandering, a "
+        "banyan tree, {landmark} at the end of the street, palm groves and fields beyond the "
+        "roofs"),
+    "urban_south_asian_3_metropolis": _variant(
+        "south_asian", 3, "metropolis", "the largest city over 1,000,000 people",
+        "The center of a great South Asian metropolis {when}, seen from above a wide avenue: a "
+        "dense cluster of concrete and glass towers of thirty to fifty storeys rising over old "
+        "red sandstone arcades, a multi-lane road packed with boxy 1980s cars, auto rickshaws "
+        "and crowded buses, a concrete flyover, dense crowds in bright clothes, {landmark} small "
+        "among the towers"),
+    "urban_south_asian_3_megacity": _variant(
+        "south_asian", 3, "megacity", "the largest city over 10,000,000 people",
+        "An endless South Asian megacity {when}, seen from a high rooftop: concrete towers and "
+        "dense low blocks stretching to the horizon in every direction under a haze, flyovers "
+        "jammed with boxy 1980s cars, buses and auto rickshaws, elevated railway lines, water "
+        "tanks and washing on a sea of flat roofs, {landmark} tiny in the foreground"),
+    "urban_south_asian_3_poor": _variant(
+        "south_asian", 3, "poor", "a low standard of living",
+        "A poor, makeshift quarter of a South Asian city {when}: crumbling brick tenements "
+        "patched with corrugated iron and tarpaulin, an unpaved lane with open drains, "
+        "handcarts, bicycles and one battered auto rickshaw, washing strung across the street, a "
+        "tangle of overhead cables, barefoot children, a dense crowd in faded clothes, concrete "
+        "towers far in the background, {landmark} hazy at the end of the street"),
+    "urban_south_asian_3_affluent": _variant(
+        "south_asian", 3, "affluent", "a high standard of living",
+        "A wealthy, immaculate quarter of a South Asian city {when}: white villas and "
+        "marble-fronted apartment blocks with deep verandas behind garden walls, a spotless "
+        "avenue of flowering trees, a fountain, polished boxy 1980s limousines with drivers, "
+        "well-dressed people in silk, new glass office towers behind, {landmark} hazy at the end "
+        "of the street"),
+    "urban_south_asian_3_rundown": _variant(
+        "south_asian", 3, "rundown", "a standard of living well under what its people expect",
+        "A neglected, decaying quarter of a South Asian city in hard times {when}: concrete "
+        "blocks streaked black with damp, broken windows and shuttered ground floors, heaps of "
+        "rubbish in the street, a stripped abandoned bus, stray dogs, a long queue of idle men, "
+        "a tangle of dead overhead cables, {landmark} hazy at the end of the street"),
+})
+
 # --- Wave 3: worked land. A draft becomes a picture here once it has a picked render: its
 # prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
 # picture it is like, and this table adds what decides between it and its neighbors.
