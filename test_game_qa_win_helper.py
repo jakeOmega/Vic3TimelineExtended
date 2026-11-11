@@ -98,10 +98,17 @@ class RefusalTest(BackendCase):
         self.call("kill", pid=pid)
         self.assertEqual(self.backend.terminated, []); self.assertEqual(self.backend.terminate_args, [])
 
-    def test_kill_refuses_a_process_that_is_gone(self):
+    def test_kill_of_a_process_it_started_that_has_already_exited_is_ok_and_forgets_it(self):
         pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
-        del self.backend.creation[pid]
-        self.assertEqual(self.call("kill", pid=pid)["error"], "not_ours"); self.assertEqual(self.backend.terminated, [])
+        del self.backend.creation[pid]                  # it ended on its own
+        out = self.call("kill", pid=pid)
+        self.assertTrue(out["ok"]); self.assertIs(out["already_exited"], True)
+        self.assertEqual(self.backend.terminated, []); self.assertEqual(self.state.ours, {})
+        self.assertEqual(self.call("kill", pid=pid)["error"], "not_ours")       # and is no longer one it may end
+
+    def test_a_kill_that_ends_the_process_does_not_say_it_had_exited(self):
+        pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
+        self.assertNotIn("already_exited", self.call("kill", pid=pid))
 
     def test_kill_ends_what_it_started_and_forgets_it(self):
         pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
@@ -227,36 +234,36 @@ class KeysTest(BackendCase):
     def test_steps_run_in_order_while_the_game_is_in_front(self):
         out = self.call("keys", pid=7, steps=[{"scan": 0x29}, {"text": "event é1"}, {"wait_ms": 250}, {"scan": 0x1C}])
         self.assertTrue(out["ok"]); self.assertEqual(out["steps_done"], 4)
-        self.assertEqual(self.backend.sent, [("scan", 0x29), ("text", "event é1"), ("scan", 0x1C)])
+        self.assertEqual(self.backend.sent, [("scan", 0x29), *[("text", c) for c in "event é1"], ("scan", 0x1C)])
         self.assertEqual(self.backend.slept, [250])
 
     def test_an_empty_list_of_steps_is_fine(self):
         self.assertTrue(self.call("keys", pid=7, steps=[])["ok"]); self.assertEqual(self.backend.sent, [])
 
-    def test_long_text_goes_out_in_chunks_of_at_most_eight_characters(self):
+    def test_text_goes_out_one_character_at_a_time(self):
         self.call("keys", pid=7, steps=[{"text": "0123456789abcdefghij"}])
-        self.assertEqual(self.backend.sent, [("text", "01234567"), ("text", "89abcdef"), ("text", "ghij")])
+        self.assertEqual(self.backend.sent, [("text", c) for c in "0123456789abcdefghij"])
 
-    def test_eight_characters_are_one_chunk(self):
-        self.call("keys", pid=7, steps=[{"text": "01234567"}])
-        self.assertEqual(self.backend.sent, [("text", "01234567")])
+    def test_one_character_is_one_chunk(self):
+        self.call("keys", pid=7, steps=[{"text": "a"}])
+        self.assertEqual(self.backend.sent, [("text", "a")])
 
     def test_chunks_never_split_a_character(self):
-        self.call("keys", pid=7, steps=[{"text": "abcdefg\U0001F600h"}])
-        self.assertEqual(self.backend.sent, [("text", "abcdefg\U0001F600"), ("text", "h")])
+        self.call("keys", pid=7, steps=[{"text": "a\U0001F600b"}])
+        self.assertEqual(self.backend.sent, [("text", "a"), ("text", "\U0001F600"), ("text", "b")])
 
-    def test_the_foreground_is_checked_before_each_chunk(self):
+    def test_the_foreground_is_checked_before_every_character(self):
         looked = []
         self.backend.on_foreground_check = lambda: looked.append(1)
         self.call("keys", pid=7, steps=[{"text": "0123456789abcdefghij"}])
-        self.assertEqual(len(looked), 3)
+        self.assertEqual(len(looked), 20)
 
     def test_focus_lost_mid_string_stops_the_rest_and_says_how_much_went_out(self):
         self.backend.lose_focus_after = 3
         out = self.call("keys", pid=7, steps=[{"scan": 1}, {"text": "0123456789abcdefghij"}, {"scan": 2}])
         self.assertEqual(out["error"], "not_foreground")
-        self.assertEqual((out["steps_done"], out["chars_sent"]), (1, 16))
-        self.assertEqual(self.backend.sent, [("scan", 1), ("text", "01234567"), ("text", "89abcdef")])
+        self.assertEqual((out["steps_done"], out["chars_sent"]), (1, 2))
+        self.assertEqual(self.backend.sent, [("scan", 1), ("text", "0"), ("text", "1")])
 
     def test_a_refusal_before_the_first_character_says_zero_went_out(self):
         self.backend.foreground = 999
@@ -531,8 +538,9 @@ class PureFunctionTest(unittest.TestCase):
 
     def test_text_chunks(self):
         self.assertEqual(win_helper.text_chunks(""), [""])
-        self.assertEqual(win_helper.text_chunks("abc"), ["abc"])
-        self.assertEqual(win_helper.text_chunks("a" * 17), ["a" * 8, "a" * 8, "a"])
+        self.assertEqual(win_helper.text_chunks("abc"), ["a", "b", "c"])
+        self.assertEqual(win_helper.text_chunks("a\U0001F600b"), ["a", "\U0001F600", "b"])
+        self.assertEqual(win_helper.text_chunks("a" * 17, 8), ["a" * 8, "a" * 8, "a"])
         self.assertEqual(win_helper.text_chunks("abcdef", 4), ["abcd", "ef"])
 
     def test_a_key_is_released_after_it_is_pressed(self):

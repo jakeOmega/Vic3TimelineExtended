@@ -15,11 +15,11 @@ What the helper refuses, because a wrong key in the owner's session is worse
 than a failed step:
 
   * keys go only to the process's own window while that window is in front,
-    checked again before every step and before every 8-character chunk of
-    typed text;
+    checked again before every step and before every character of typed text;
   * a process is ended only if this helper started it (or was told its
     creation time) and the live process still has that creation time: a
-    process id is reused, the pair is not;
+    process id is reused, the pair is not. One it started that has already
+    exited is answered `ok` with `already_exited`, and forgotten;
   * the TCP relay connects to 127.0.0.1 and nowhere else.
 
 `idle_ms` is the time since the latest keyboard or mouse input that the helper
@@ -49,7 +49,8 @@ DEFAULT_MAX_WIDTH = 1600
 DEFAULT_RECV_TIMEOUT_MS = 1000
 RECV_BYTES = 65536
 SEND_TIMEOUT_S = 5.0          # a send never inherits the 1 ms a poll-style tcp_recv left on the socket
-TEXT_CHUNK_CHARS = 8          # typed text goes out this many characters at a time, the foreground checked between
+TEXT_CHUNK_CHARS = 1          # typed text goes out this many characters at a time, the foreground checked before each:
+                              # one, so a window that takes the front mid-text gets at most the character on its way
 KEY_HOLD_S = 0.04             # between key down and key up; the game ignores a shorter press
 CHAR_GAP_S = 0.008
 
@@ -400,7 +401,7 @@ def _op_keys(req, backend, state):
             _send_key(backend, state, backend.send_scan, value)
         else:
             # A string takes about 10 ms a character and an Alt-Tab mid-string would type the rest into the
-            # new window, so it goes in short chunks with the foreground checked before each.
+            # new window, so it goes a character at a time with the foreground checked before each.
             sent = 0
             for chunk in text_chunks(value):
                 _clear_to_send(backend, state, pid, done, chars_sent=sent)
@@ -435,8 +436,14 @@ def _op_screenshot(req, backend, state):
 def _op_kill(req, backend, state):
     pid = _pid(req)
     recorded = state.ours.get(pid)
-    if recorded is None or backend.creation_time(pid) != recorded:
-        raise _Refusal("not_ours", "process %d was not started by this helper, or is not the one it started" % pid)
+    if recorded is None:
+        raise _Refusal("not_ours", "process %d was not started by this helper" % pid)
+    created = backend.creation_time(pid)
+    if created is None:
+        del state.ours[pid]         # it ended on its own: nothing to end, and its id may be reused from now on
+        return {"already_exited": True}
+    if created != recorded:
+        raise _Refusal("not_ours", "process %d is not the one this helper started (its id was reused)" % pid)
     # The backend checks the creation time again through the handle it ends: no pid-reuse window.
     if not backend.terminate(pid, recorded):
         raise _Refusal("not_ours", "process %d changed under its id before it could be ended" % pid)
