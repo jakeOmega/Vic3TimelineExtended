@@ -84,9 +84,46 @@ class FramingTest(unittest.TestCase):
         self.assertEqual(d.feed(data[:10]), [])
         self.assertEqual(d.feed(data[10:]), [{"a": 1}, {"b": "é"}])
 
-    def test_garbage_header_raises(self):
-        with self.assertRaises(dap.DebuggerError):
-            dap.Decoder().feed(b"Hello\r\n\r\n{}")
+    def raw(self, body: bytes) -> bytes:
+        return b"Content-Length: %d\r\n\r\n" % len(body) + body
+
+    def test_a_header_block_without_a_length_is_dropped_and_the_stream_goes_on(self):
+        d = dap.Decoder()
+        self.assertEqual(d.feed(b"Hello\r\n\r\n" + dap.encode({"a": 1}) + b"X-Other: 1\r\n\r\n" + dap.encode({"b": 2})),
+                         [{"a": 1}, {"b": 2}])
+        self.assertEqual(d.skipped, 2)
+        self.assertEqual(d.feed(dap.encode({"c": 3})), [{"c": 3}])
+
+    def test_a_body_that_is_not_json_is_skipped_and_the_messages_around_it_are_returned(self):
+        d = dap.Decoder()
+        data = dap.encode({"a": 1}) + self.raw(b"{not json") + dap.encode({"b": 2})
+        self.assertEqual(d.feed(data), [{"a": 1}, {"b": 2}])
+        self.assertEqual(d.skipped, 1)
+        self.assertEqual(d.feed(dap.encode({"c": 3})), [{"c": 3}])         # not wedged on the same bytes
+        self.assertEqual(d.skipped, 1)
+
+    def test_a_body_that_is_not_utf8_is_read_with_replacement_characters(self):
+        d = dap.Decoder()
+        data = self.raw(b'{"event":"output","body":{"output":"caf\xe9"}}') + dap.encode({"b": 2})
+        self.assertEqual(d.feed(data), [{"event": "output", "body": {"output": "caf\ufffd"}}, {"b": 2}])
+        self.assertEqual(d.skipped, 0)
+
+    def test_bytes_that_are_neither_utf8_nor_json_are_skipped_not_raised(self):
+        d = dap.Decoder()
+        self.assertEqual(d.feed(self.raw(b"\xff\xfe\x00") + dap.encode({"b": 2})), [{"b": 2}])
+        self.assertEqual(d.skipped, 1)
+
+    def test_json_that_is_not_an_object_is_skipped(self):
+        d = dap.Decoder()
+        self.assertEqual(d.feed(self.raw(b"[1, 2]") + self.raw(b"7") + dap.encode({"b": 2})), [{"b": 2}])
+        self.assertEqual(d.skipped, 2)
+
+    def test_a_skipped_message_split_across_feeds_is_still_skipped_once(self):
+        d = dap.Decoder()
+        data = self.raw(b"{not json") + dap.encode({"b": 2})
+        self.assertEqual(d.feed(data[:20]), [])
+        self.assertEqual(d.feed(data[20:]), [{"b": 2}])
+        self.assertEqual(d.skipped, 1)
 
 
 class DebuggerTest(unittest.TestCase):
@@ -154,6 +191,68 @@ class DebuggerTest(unittest.TestCase):
         self.server.push({"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}})
         self.assertTrue(self.dbg.wait_stopped(1.0))
         self.assertFalse(self.dbg.wait_stopped(0.01))
+
+    def test_a_stop_seen_before_a_resume_does_not_satisfy_the_next_wait(self):
+        stopped = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
+        self.server.push(stopped)
+        self.server.reply("evaluate", {"result": "1"})
+        self.dbg.evaluate("x")                      # reads the stop on the way to its own reply
+        self.server.reply("continue")
+        self.dbg.resume()
+        self.assertFalse(self.dbg.wait_stopped(0.01))
+        self.server.push(stopped)                   # the next real one still counts
+        self.assertTrue(self.dbg.wait_stopped(1.0))
+
+    def test_a_stop_that_arrives_ahead_of_the_continue_reply_is_not_the_next_one_either(self):
+        stopped = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
+        self.server.before_next_reply([stopped])
+        self.server.reply("continue")
+        self.dbg.resume()
+        self.assertFalse(self.dbg.wait_stopped(0.01))
+
+    def test_a_refused_resume_forgets_the_stops_too(self):
+        stopped = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
+        self.server.before_next_reply([stopped])
+        self.server.reply("continue", success=False, message="not stopped")
+        with self.assertRaises(dap.DebuggerError):
+            self.dbg.resume()
+        self.assertFalse(self.dbg.wait_stopped(0.01))
+
+    def test_every_stopped_event_is_a_stop(self):
+        for reason in ("breakpoint", "step", "pause"):
+            self.server.push({"type": "event", "event": "stopped", "body": {"reason": reason, "threadId": 1}})
+        self.assertEqual([self.dbg.wait_stopped(1.0) for _ in range(4)], [True, True, True, False])
+
+    def test_a_bad_message_among_the_replies_does_not_wedge_the_client(self):
+        self.server._out += b"Content-Length: 9\r\n\r\n{not json"
+        self.server._out += b"Content-Length: 2\r\n\r\n\xff\xfe"
+        self.server.reply("evaluate", {"result": "yes - Yes"})
+        self.assertIs(self.dbg.evaluate("is_player = yes").value, True)
+        self.server.reply("evaluate", {"result": "no - No"})
+        self.assertIs(self.dbg.evaluate("is_player = yes").value, False)
+
+    def test_an_error_of_the_send_callable_is_a_debugger_error(self):
+        boom = OSError("tcp_closed")
+
+        def send(data):
+            raise boom
+        dbg = dap.Debugger(send, self.server.recv)
+        with self.assertRaises(dap.DebuggerError) as e:
+            dbg.evaluate("x")
+        self.assertIs(e.exception.__cause__, boom)
+
+    def test_an_error_of_the_recv_callable_is_a_debugger_error(self):
+        boom = ConnectionResetError("the peer closed the connection")
+
+        def recv(timeout):
+            raise boom
+        dbg = dap.Debugger(self.server.send, recv)
+        with self.assertRaises(dap.DebuggerError) as e:
+            dbg.wait_stopped(0.5)
+        self.assertIs(e.exception.__cause__, boom)
+        with self.assertRaises(dap.DebuggerError) as e:
+            dbg.evaluate("x")
+        self.assertIs(e.exception.__cause__, boom)
 
     def test_scopes(self):
         self.server.reply("scopes", recorded("scopes")[0]["body"])

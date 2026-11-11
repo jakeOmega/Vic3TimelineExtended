@@ -7,7 +7,9 @@ is how the harness reads game state without a reload or a log flush.
 
 The client takes `send(bytes)` and `recv(timeout_seconds) -> bytes` (empty on
 timeout), so it runs over the Windows helper's TCP relay and over a fake in
-tests.
+tests. Either callable may raise (the relay does when the connection ends):
+the client turns that into a `DebuggerError` that keeps the original as its
+`__cause__`.
 """
 from __future__ import annotations
 
@@ -30,10 +32,16 @@ def encode(msg: dict) -> bytes:
 
 class Decoder:
     """Feed it bytes as they arrive; it returns the whole messages so far and
-    keeps a partial one for the next call."""
+    keeps a partial one for the next call.
+
+    One bad message never costs the others: a message is taken out of the
+    buffer before it is read, a body that is not UTF-8 is read with replacement
+    characters, and a body that is not a JSON object, or a header block with no
+    `Content-Length`, is dropped. `skipped` counts what was dropped."""
 
     def __init__(self) -> None:
         self._buf = b""
+        self.skipped = 0
 
     def feed(self, data: bytes) -> list[dict]:
         self._buf += data
@@ -43,14 +51,23 @@ class Decoder:
             if end < 0:
                 return out
             m = _LENGTH.search(self._buf[:end])
-            if not m:
-                raise DebuggerError("message without a Content-Length header")
             start = end + len(_HEADER_END)
+            if not m:
+                self._buf = self._buf[start:]       # not a message: drop the block, go on with what follows
+                self.skipped += 1
+                continue
             length = int(m.group(1))
             if len(self._buf) < start + length:
                 return out
-            out.append(json.loads(self._buf[start:start + length].decode("utf-8")))
-            self._buf = self._buf[start + length:]
+            body, self._buf = self._buf[start:start + length], self._buf[start + length:]
+            try:
+                msg = json.loads(body.decode("utf-8", errors="replace"))
+            except ValueError:
+                msg = None
+            if isinstance(msg, dict):
+                out.append(msg)
+            else:
+                self.skipped += 1
 
 
 class DebuggerError(Exception):
@@ -87,10 +104,18 @@ class Debugger:
 
     # -- plumbing -----------------------------------------------------------
 
+    @staticmethod
+    def _through(fn: Callable, what: str, *args):
+        """Call the transport; whatever it raises is a `DebuggerError` (the original is its `__cause__`)."""
+        try:
+            return fn(*args)
+        except Exception as e:
+            raise DebuggerError(f"{what} failed: {e!r}") from e
+
     def _pump(self, timeout: float) -> None:
         """Read once and file what arrived: replies by request, error-log
         output, stops."""
-        for msg in self._decoder.feed(self._recv(timeout)):
+        for msg in self._decoder.feed(self._through(self._recv, "recv", timeout)):
             kind = msg.get("type")
             if kind == "response":
                 self._replies[msg.get("request_seq")] = msg
@@ -109,7 +134,7 @@ class Debugger:
         msg: dict = {"seq": seq, "type": "request", "command": command}
         if arguments is not None:
             msg["arguments"] = arguments
-        self._send(encode(msg))
+        self._through(self._send, "send", encode(msg))
         deadline = time.monotonic() + timeout
         while seq not in self._replies:
             left = deadline - time.monotonic()
@@ -142,7 +167,8 @@ class Debugger:
         return verified
 
     def wait_stopped(self, timeout: float) -> bool:
-        """True once per stop at a breakpoint."""
+        """True once per `stopped` event the game has sent, whatever its reason (a breakpoint, a step, a
+        pause), within `timeout` seconds. `resume()` forgets the stops not yet taken."""
         deadline = time.monotonic() + timeout
         while not self._stops:
             left = deadline - time.monotonic()
@@ -171,7 +197,12 @@ class Debugger:
         return out
 
     def resume(self) -> None:
-        self._must("continue", {"threadId": GAME_THREAD})
+        """Let the game run on. Every stop seen up to the game's answer is the old one, not the next: it is
+        forgotten, so it cannot satisfy the next `wait_stopped`, whether the game accepts the request or not."""
+        try:
+            self._must("continue", {"threadId": GAME_THREAD})
+        finally:
+            self._stops = 0
 
     def errors(self) -> list[str]:
         """The error-log lines the game has streamed since the last call."""
