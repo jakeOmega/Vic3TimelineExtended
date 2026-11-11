@@ -1,0 +1,28 @@
+# Live session of 2026-11-10, launch 2, 16:10-16:11: the debug.log lines for the first questions.
+# Copied from the session's terminal output. The log generations that held them had rotated out
+# (a debugger trigger evaluation flooded debug.log at 16:11:37) before the later capture in
+# live_session_lines.txt was taken.
+[16:10:23][console.cpp:1175]: Running console command: tag FRA
+[16:10:23][console.cpp:1203]: console_success: Now Playing - France
+[16:10:25][console.cpp:1175]: Running console command: event te_qa_probe.3
+[16:10:25][jomini_effect_impl.cpp:459]: events/te_qa_probe_assumptions_events.txt:8: TE_QA_PROBE A6 false_trigger_fired
+[16:10:25][console.cpp:1203]: console_success: Executed "te_qa_probe.3"
+[16:10:25][console.cpp:1203]: console_success: indent_newline:0 !indent_newline:6 simple_box! Never!
+[16:10:26][console.cpp:1175]: Running console command: event te_qa_probe.4
+[16:10:26][jomini_effect_impl.cpp:459]: events/te_qa_probe_assumptions_events.txt:15: TE_QA_PROBE A6 cooldown_fired
+[16:10:26][console.cpp:1203]: console_success: Executed "te_qa_probe.4"
+[16:10:26][console.cpp:1175]: Running console command: event te_qa_probe.4
+[16:10:26][jomini_effect_impl.cpp:459]: events/te_qa_probe_assumptions_events.txt:15: TE_QA_PROBE A6 cooldown_fired
+[16:10:26][console.cpp:1203]: console_success: Executed "te_qa_probe.4"
+[16:10:27][console.cpp:1175]: Running console command: event te_qa_probe.6
+[16:10:27][jomini_effect_impl.cpp:459]: events/te_qa_probe_assumptions_events.txt:28: TE_QA_PROBE A1 opened rival=GBR
+[16:10:27][jomini_effect_impl.cpp:459]: events/te_qa_probe_assumptions_events.txt:40: TE_QA_PROBE A1 carrier_done date=January 2, 1836
+[16:10:27][console.cpp:1203]: console_success: Executed "te_qa_probe.6"
+[16:10:29][console.cpp:1175]: Running console command: select_event_option list
+[16:10:29][console.cpp:1203]: console_success: 10 te_qa_probe.5 options=2
+[16:10:30][console.cpp:1175]: Running console command: select_event_option list
+[16:10:30][console.cpp:1203]: console_success: 10 te_qa_probe.5 options=2
+[16:10:55][console.cpp:1203]: console_success: Selected option 1 of te_qa_probe.5
+[16:10:55][jomini_effect_impl.cpp:459]: events/te_qa_probe_assumptions_events.txt:30: TE_QA_PROBE A1 option=B
+# console_history.txt gained six lines for those eight commands (265 -> 271): the second
+# `event te_qa_probe.4` and the second `select_event_option list` added none.
