@@ -17,7 +17,7 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import gate, snapshot
+from game_qa import gate, restore, snapshot
 
 IDLE = [gate.GpuSample(14, 1607, 10240)] * 5
 UTC = dt.timezone.utc
@@ -37,6 +37,10 @@ def sha256(data: bytes) -> str:
 
 class UnexpectedStart(BaseException):
     """A test started a game it did not ask for. A BaseException, so `main` cannot turn it into JSON."""
+
+
+class Killed(BaseException):
+    """The process dying at that point: no `except Exception` catches it."""
 
 
 class PlaysetTest(unittest.TestCase):
@@ -177,7 +181,7 @@ class PlaysetTest(unittest.TestCase):
         self.assertIn(f"the playset this wrote into {PLAYSET} stays the run's until", out["detail"])
         self.start_result = None
         self.assertIn(OVERLAY, self.enabled())                  # the file stays as written
-        self.assertEqual(self.events(), ["armed", "playset"])
+        self.assertEqual(self.events(), ["armed", "playset", "playset_written"])
         self.assertTrue(self.claim().exists())                  # and the snapshot stays claimed
         return snap_id
 
@@ -285,10 +289,12 @@ class PlaysetTest(unittest.TestCase):
         self.start_result = game
         out, code = self.launch(snap_id, "--playset", "mod_only", "--add-mod", OVERLAY)
         self.assertEqual(code, 0, out)
-        self.assertEqual(self.events(), ["armed", "playset", "started"])
-        entry = self.journal()[1]
+        self.assertEqual(self.events(), ["armed", "playset", "playset_written", "started"])
+        entry, written = self.journal()[1:3]
         self.assertEqual((entry["mode"], entry["enabled"], entry["sha256"]),
                          ("mod_only", [self.this_mod, OVERLAY], sha256(self.playset.read_bytes())))
+        st = self.playset.stat()                                # as read back right after the rename
+        self.assertEqual((written["size"], written["mtime_ns"]), (st.st_size, st.st_mtime_ns))
         self.assertEqual(out["playset"], {"mode": "mod_only", "enabled": [self.this_mod, OVERLAY], "written": True})
 
     # -- the owner's playset put back ------------------------------------------------
@@ -321,13 +327,13 @@ class PlaysetTest(unittest.TestCase):
                 argv = (verb,) if verb == "recover" else (verb, snap_id)
                 out, code = self.run_cli(*argv)                 # within the launch's window: no verdict
                 self.assertEqual(code, 2)
-                self.assertEqual(self.events(), ["armed", "playset"])
+                self.assertEqual(self.events(), ["armed", "playset", "playset_written"])
                 self.age_the_claim()
                 out, code = self.run_cli(*argv)
                 result = out["runs"][0] if verb == "recover" else out
                 self.assertEqual((code, result["held"], result["reason"], result["restored"]),
                                  (0, False, "", [PLAYSET]))
-                self.assertEqual(self.events(), ["armed", "playset", "playset_restored", "restored"])
+                self.assertEqual(self.events(), ["armed", "playset", "playset_written", "playset_restored", "restored"])
                 self.assertEqual(self.playset.read_bytes(), self.playset_bytes)
                 self.assertEqual(self.tree(), before)
 
@@ -351,7 +357,7 @@ class PlaysetTest(unittest.TestCase):
                                  (2, True, "no_reference_time", True))
                 self.assertTrue(self.is_the_owners_playset())
                 self.assertEqual(self.without_the_playset(self.tree()), self.without_the_playset(before))
-                self.assertEqual(self.events(), ["armed", "playset", "playset_restored", "held"])
+                self.assertEqual(self.events(), ["armed", "playset", "playset_written", "playset_restored", "held"])
                 self.take_snapshot()                                        # the next snapshot is not refused
                 self.assertEqual(self.run_cli("recover")[1], 0)
 
@@ -392,7 +398,7 @@ class PlaysetTest(unittest.TestCase):
         self.assertEqual((code, out["runs"][0]["held"], out["runs"][0]["restored"]), (0, False, [PLAYSET]))
         self.assertEqual(self.playset.read_bytes(), self.playset_bytes)
         self.assertEqual(sorted((p.name, p.read_bytes()) for p in (self.user / "logs").iterdir()), logs_before)
-        self.assertEqual(self.events(), ["armed", "playset", "playset_restored", "restored"])
+        self.assertEqual(self.events(), ["armed", "playset", "playset_written", "playset_restored", "restored"])
         self.assertFalse((self.the_snapshot().dir / "run_logs").exists())
 
     def test_a_playset_changed_since_the_failed_start_is_held(self):
@@ -417,11 +423,11 @@ class PlaysetTest(unittest.TestCase):
         self.assertEqual((code, out["held"], out["reason"], out["playset_left"]), (2, True, "other_game_running", True))
         self.assertIn(f"restore {snap_id}", out["playset_detail"])
         self.assertEqual(self.tree(), before)
-        self.assertEqual(self.events(), ["armed", "playset", "held"])
+        self.assertEqual(self.events(), ["armed", "playset", "playset_written", "held"])
         self.games = []
         out, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, out["held"], out["restored"], out["playset_restored"]), (0, False, [PLAYSET], True))
-        self.assertEqual(self.events(), ["armed", "playset", "held", "playset_restored", "restored"])
+        self.assertEqual(self.events(), ["armed", "playset", "playset_written", "held", "playset_restored", "restored"])
         self.assertEqual(self.tree(), original)
 
     def test_a_playset_left_beside_a_game_blocks_the_next_snapshot_and_launch_until_restore(self):
@@ -564,22 +570,118 @@ class PlaysetTest(unittest.TestCase):
         self.assertEqual(code, 0, out)
         self.assertEqual(self.playset.read_bytes(), launchs)
 
-    def test_a_held_snapshot_whose_entry_is_unanswered_still_blocks(self):
-        # The other side of that ruling: a held snapshot has no `restored` after its entry, so the same bytes
-        # still make `snapshot` and `launch` refuse.
+    def test_a_held_snapshot_blocks_while_launchs_own_write_is_live(self):
+        # The other side of that ruling: a held snapshot has no `restored` after its entry, so while `launch`'s
+        # write is still in the folder (its bytes, size and time as read back), `snapshot` and `launch` refuse.
         snap_id = self.take_snapshot()
-        launchs = self.launcher_rewrites_during_the_run(snap_id)
+        self.started_run(snap_id, "--add-mod", OVERLAY)
         self.games = [self.game(pid=5555)]
         out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_running"))
+        self.assertEqual((code, out["reason"], out["playset_left"]), (2, "other_game_running", True))
         self.games = []
-        self.the_owner_chooses(launchs)
         out, code = self.run_cli("snapshot")
         self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
         laundered = self.armed_snapshot()
         self.start_result = self.game()
         out, code = self.launch(laundered.id)
         self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
+
+    def same_bytes_saved_again_on_a_held_snapshot(self, launchs_bytes) -> str:
+        """Hold the run beside a game, then the owner's launcher saves `launchs_bytes()`'s bytes an hour later."""
+        snap_id = self.take_snapshot()
+        launchs = launchs_bytes(snap_id)
+        self.games = [self.game(pid=5555)]
+        self.assertEqual(self.run_cli("restore", snap_id)[0]["reason"], "other_game_running")
+        self.games = []
+        self.the_owner_chooses(launchs)
+        return snap_id
+
+    def assert_the_owners_now(self, snap_id):
+        """The live playset, whatever its bytes, is the owner's: nothing refuses and nothing puts it back."""
+        theirs = self.playset.read_bytes()
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], "playset_restored" in out), (2, True, False))
+        self.assertEqual(self.playset.read_bytes(), theirs)
+        taken, code = self.run_cli("snapshot")
+        self.assertEqual(code, 0, taken)
+        self.start_result = self.game()
+        out, code = self.launch(taken["id"])
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.playset.read_bytes(), theirs)
+
+    def launchs_own_write(self, snap_id) -> bytes:
+        self.started_run(snap_id, "--add-mod", OVERLAY)
+        return self.playset.read_bytes()
+
+    def test_launchs_write_saved_again_by_the_owner_is_theirs(self):
+        # Re-review hardening 2: a held, unanswered entry matched any later write of identical bytes, naming the
+        # snapshot for good, and once newer snapshots were pruned its copy could go back over the owner's choice.
+        # The size and time `launch` read back right after its rename are journaled; the same bytes saved again
+        # carry a new time, and are the owner's.
+        self.assert_the_owners_now(self.same_bytes_saved_again_on_a_held_snapshot(self.launchs_own_write))
+
+    def test_a_later_playset_equal_to_launchs_bytes_is_the_owners_on_a_held_snapshot(self):
+        # The launcher rewrote the playset during the run, the run held, and the owner later chose `launch`'s bytes.
+        self.assert_the_owners_now(self.same_bytes_saved_again_on_a_held_snapshot(self.launcher_rewrites_during_the_run))
+
+    def test_a_write_whose_size_and_time_were_never_journaled_falls_back_to_its_hash(self):
+        # A kill between the rename and the read-back's journal line leaves no `playset_written`: the hash decides.
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+        with mock.patch.object(cli, "_record_written", side_effect=Killed()), self.assertRaises(Killed):
+            self.launch(snap_id, "--add-mod", OVERLAY)
+        self.assertEqual((self.starts, self.events()), ([], ["armed", "playset"]))
+        self.assertIn(OVERLAY, self.enabled())
+        self.age_the_claim()
+        other = self.armed_snapshot()
+        out, code = self.launch(other.id)
+        self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
+        snapshot.record(other, "restored")
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["restored"], out["playset_restored"]), (0, False, [PLAYSET], True))
+        self.assertTrue(self.is_the_owners_playset())
+
+    def test_a_written_playset_the_journal_cannot_describe_refuses_before_the_start(self):
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+        record = snapshot.record
+
+        def failing(snap, event, *a, **k):
+            if event == "playset_written":
+                raise OSError(28, "No space left on device")
+            return record(snap, event, *a, **k)
+
+        with mock.patch.object(snapshot, "record", side_effect=failing):
+            out, code = self.launch(snap_id, "--add-mod", OVERLAY)
+        self.assertEqual((code, out["refused"], self.starts), (2, "playset_unwritable", []))
+        self.assertIn("stays claimed", out["detail"])
+        self.age_the_claim()
+        out, code = self.run_cli("restore", snap_id)               # by its hash alone
+        self.assertEqual((code, out["playset_restored"]), (0, True))
+        self.assertTrue(self.is_the_owners_playset())
+
+    def test_a_playset_changed_just_before_the_put_back_is_left(self):
+        # Re-review hardening 1: the last look before the put-back's rename compared size and time only, so a
+        # same-size write that kept the old time was overwritten. The file is hashed again just before the rename.
+        snap_id = self.failed_start_after_the_write()
+        self.age_the_claim()
+        stage = restore._stage
+        sneaked = {}
+
+        def stage_then_the_launcher_writes(source, entry, target):
+            temp = stage(source, entry, target)
+            st = target.stat()
+            sneaked["bytes"] = target.read_bytes().replace(b"te_qa_overlay", b"te_qa_overlaz")   # same size
+            target.write_bytes(sneaked["bytes"])
+            os.utime(target, ns=(st.st_atime_ns, st.st_mtime_ns))                              # same time
+            return temp
+
+        with mock.patch.object(restore, "_stage", side_effect=stage_then_the_launcher_writes):
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["reason"], "playset_restored" in out),
+                         (2, True, "no_reference_time", False))
+        self.assertEqual(self.playset.read_bytes(), sneaked["bytes"])
+        self.assertEqual([p.name for p in self.user.iterdir() if p.name.endswith(".tmp")], [])
 
     def test_a_hold_after_a_killed_write_sweeps_its_temp(self):
         # A `launch` killed between its temp write and the rename leaves the temp, which is the harness's own.

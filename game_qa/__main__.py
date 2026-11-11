@@ -417,7 +417,7 @@ def cmd_launch(args) -> tuple[dict, int]:
         if playset is not None:
             _record_playset(snap, playset)
             if playset.data is not None:
-                _write_playset(snap, user, playset.data)
+                _record_written(snap, _write_playset(snap, user, playset.data))
     except _Refused as refused:
         return dict(refused.result, id=snap.id), 2
     written = playset is not None and playset.data is not None
@@ -547,24 +547,58 @@ def _answered(journal: list[dict], index: int) -> bool:
     return any(later.get("event") in ("playset_restored", "restored") for later in journal[index + 1:])
 
 
-def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> snapshot.Snapshot | None:
-    """The newest snapshot (other than `exclude`) with an unanswered (`_answered`) `playset` entry that the live
-    `content_load.json` hashes to: that run's playset write is still in the folder, never put back. None when
-    there is none, or no regular playset file. `snapshot` and `launch` refuse beside one: the owner never chose
-    that playset."""
+def _written_signature(journal: list[dict], index: int) -> tuple[int, int] | None:
+    """The (size, mtime_ns) `launch` journaled in `playset_written` for the `playset` entry at `index`, or None
+    if none was (a kill between the rename and the read-back, or a write that never happened)."""
+    for later in journal[index + 1:]:
+        if later.get("event") == "playset":
+            return None
+        if later.get("event") == "playset_written":
+            size, mtime_ns = later.get("size"), later.get("mtime_ns")
+            if all(isinstance(v, int) and not isinstance(v, bool) for v in (size, mtime_ns)):
+                return size, mtime_ns
+            return None
+    return None
+
+
+def _is_launchs_write(journal: list[dict], index: int, live_sha: str, live: tuple[int, int]) -> bool:
+    """Whether the live playset file (its SHA-256 and (size, mtime_ns)) is the write of the `playset` entry at
+    `index`: the same bytes, and, when `playset_written` was journaled, the same size and time as read back
+    right after the rename. The same bytes written again later (the owner's launcher saving that playset)
+    carry another time, and are the owner's. With nothing journaled, the hash alone decides."""
+    if journal[index].get("sha256") != live_sha:
+        return False
+    written = _written_signature(journal, index)
+    return written is None or written == live
+
+
+def _live_playset(user: Path) -> tuple[str, tuple[int, int]] | None:
+    """The live playset file's SHA-256 and (size, mtime_ns), or None when it is not a regular file. The put-back
+    looks at the file again, time and bytes, just before its rename."""
     path = user / PLAYSET_FILE
     try:
-        if not stat.S_ISREG(os.lstat(path).st_mode):
+        st = os.lstat(path)
+        if not stat.S_ISREG(st.st_mode):
             return None
-        live = _sha256(path)
+        return _sha256(path), (st.st_size, st.st_mtime_ns)
     except FileNotFoundError:
+        return None
+
+
+def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> snapshot.Snapshot | None:
+    """The newest snapshot (other than `exclude`) with an unanswered (`_answered`) `playset` entry whose write
+    the live `content_load.json` still is (`_is_launchs_write`): that run's playset is still in the folder, never
+    put back. None when there is none, or no regular playset file. `snapshot` and `launch` refuse beside one: the
+    owner never chose that playset."""
+    live = _live_playset(user)
+    if live is None:
         return None
     for snap in reversed(snapshot.all_snapshots(backups)):
         if snap.id == exclude:
             continue
         journal = snapshot.journal(snap)
         for i, entry in enumerate(journal):
-            if entry.get("event") == "playset" and entry.get("sha256") == live and not _answered(journal, i):
+            if entry.get("event") == "playset" and _is_launchs_write(journal, i, *live) and not _answered(journal, i):
                 return snap
     return None
 
@@ -572,8 +606,10 @@ def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> 
 def _playset_not_restored(snap_id: str, why: str) -> _Refused:
     return _Refused("playset_not_restored", f"{PLAYSET_FILE} still holds the playset `launch` wrote for snapshot "
                                             f"{snap_id}'s run, never put back: {why}. Run `restore {snap_id}` with no "
-                                            "game running: it puts the owner's playset back, and holds again for "
-                                            "anything else that needs the owner", snapshot=snap_id)
+                                            "game running: it puts the owner's playset back when this is the newest "
+                                            "snapshot with a playset entry, and holds again for anything else that "
+                                            "needs the owner. Otherwise the owner saving their playset again in the "
+                                            "launcher clears it", snapshot=snap_id)
 
 
 def _deployed_mod() -> str:
@@ -679,10 +715,11 @@ def _record_playset(snap: snapshot.Snapshot, playset: _Playset) -> None:
                                              f"was not written. {_CLAIM_STAYS}") from None
 
 
-def _write_playset(snap: snapshot.Snapshot, user: Path, data: bytes) -> None:
-    """Write `data` over the owner's playset file by temp name and rename, or raise _Refused, leaving it as it
-    is. Right before the rename the file must still be the snapshot's: the owner's launcher may have written it
-    since it was read. The temp name is restore's own, which `compare` skips and the next `restore` sweeps."""
+def _write_playset(snap: snapshot.Snapshot, user: Path, data: bytes) -> tuple[int, int]:
+    """Write `data` over the owner's playset file by temp name and rename, and return the file's (size,
+    mtime_ns) as read back right after the rename; or raise _Refused, leaving it as it is. Right before the
+    rename the file must still be the snapshot's: the owner's launcher may have written it since it was read.
+    The temp name is restore's own, which `compare` skips and the next `restore` sweeps."""
     target = user / PLAYSET_FILE
     temp = user / _PLAYSET_TEMP
     try:
@@ -700,6 +737,26 @@ def _write_playset(snap: snapshot.Snapshot, user: Path, data: bytes) -> None:
     finally:
         with contextlib.suppress(FileNotFoundError):
             os.unlink(temp)
+    try:
+        st = os.lstat(target)
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"{target} was written but could not be read back ({exc}); the "
+                                             "owner's playset goes back when the snapshot is finished. "
+                                             f"{_CLAIM_STAYS}") from None
+    return st.st_size, st.st_mtime_ns
+
+
+def _record_written(snap: snapshot.Snapshot, written: tuple[int, int]) -> None:
+    """Journal `playset_written`: the size and mtime_ns of the file `launch` just wrote, as read back. With them,
+    the same bytes written again later (by the owner's launcher) carry another time and are not taken for
+    `launch`'s write (`_is_launchs_write`). Raises _Refused if the journal cannot take it: a journal that fails
+    here would fail the game's `started` too, so nothing starts."""
+    try:
+        snapshot.record(snap, "playset_written", size=written[0], mtime_ns=written[1])
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"{PLAYSET_FILE} was written, but the journal could not take its size "
+                                             f"and time ({exc}); the owner's playset goes back, known by its hash, "
+                                             f"when the snapshot is finished. {_CLAIM_STAYS}") from None
 
 
 def cmd_watch(args) -> tuple[dict, int]:
@@ -935,7 +992,7 @@ def _settle_playset(snap: snapshot.Snapshot, user: Path, game_running: bool, not
     record it as their playset and the next `launch` would run with it.
 
     With no game running: a temp a killed write left is swept, the owner's copy goes back from the store (its
-    hash checked against the manifest, the file looked at again just before the rename, as `restore` does),
+    hash checked against the manifest; the file's size, time and bytes looked at again just before the rename),
     `playset_restored` is journaled, and `notes` gets `playset_restored`. A game running may be anyone's, so the
     file is left as it is, and `notes` gets `playset_left` and the remedy. `notes` is filled before the journal
     write, so a caller reporting a failure can still say the playset went back. Raises OSError as restore does
@@ -958,10 +1015,23 @@ def _settle_playset(snap: snapshot.Snapshot, user: Path, game_running: bool, not
     sha, seen = live
     backup_root = restore._backup_root(snap)
     restore._check_store(backup_root, snap, [PLAYSET_FILE])
-    done, _changed = restore._put_back(backup_root, snap, [PLAYSET_FILE], user, {PLAYSET_FILE: seen})
-    if done:
-        notes["playset_restored"] = True
-        snapshot.record(snap, "playset_restored", sha256=sha)
+    entry, target = snap.files[PLAYSET_FILE], user / PLAYSET_FILE
+    temp = restore._stage(restore._store_blob(backup_root, entry.sha256), entry, target)  # hash-checked, its time
+    try:
+        # The last look, right before the rename: the same size and time, and the same bytes (a write that kept
+        # the size and the time would pass the first alone). If it is no longer `launch`'s write, leave it.
+        try:
+            still = restore._signature(target, follow=False) == seen and _sha256(target) == sha
+        except FileNotFoundError:
+            still = False
+        if not still:
+            return
+        os.replace(temp, target)
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(temp)
+    notes["playset_restored"] = True
+    snapshot.record(snap, "playset_restored", sha256=sha)
 
 
 def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple[int, int]] | None:
@@ -969,8 +1039,8 @@ def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple
     back, else None: the journal's last `playset` entry carries a SHA-256 and is unanswered (`_answered`);
     this is the newest snapshot with a `playset` entry at all (an older one's write can coincide byte for byte
     with a newer one's, with `mod_only` even after the owner changed their other mods, and its copy would then
-    go back over the owner's current playset); the snapshot holds the file; and the file is a regular file with
-    exactly those bytes."""
+    go back over the owner's current playset); the snapshot holds the file; and the file is still that write
+    (`_is_launchs_write`: its bytes, and its size and time when `launch` journaled them)."""
     journal = snapshot.journal(snap)
     entries = [i for i, e in enumerate(journal) if e.get("event") == "playset"]
     if not entries or PLAYSET_FILE not in snap.files:
@@ -986,14 +1056,10 @@ def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple
         return None
     if any(e.get("event") == "playset" for s in every[ids.index(snap.id) + 1:] for e in snapshot.journal(s)):
         return None
-    path = user / PLAYSET_FILE
-    try:
-        st = os.lstat(path)
-        if not stat.S_ISREG(st.st_mode) or _sha256(path) != sha:
-            return None
-    except FileNotFoundError:
+    live = _live_playset(user)
+    if live is None or not _is_launchs_write(journal, entries[-1], *live):
         return None
-    return sha, (st.st_size, st.st_mtime_ns)
+    return live
 
 
 def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
