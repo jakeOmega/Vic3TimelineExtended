@@ -33,17 +33,27 @@ GPU_INTERVAL_S = 1.0
 GPU_BUSY_UTIL_PCT = 50.0
 GPU_BUSY_MEMORY_SHARE = 0.5
 
+# One line per game, `<pid> <creation time>`, then LIST_END. Probed with powershell.exe (2026-11-10):
+# without Stop, a statement that fails is skipped and the rest still runs (exit 0), so LIST_END would be
+# printed after a listing that failed; with it, nothing after a failure runs. A StartTime the session may not
+# read (Idle, System) throws inside the try, and the game is listed with UNKNOWN_START.
+LIST_END = "te_qa_end"
+UNKNOWN_START = "unknown"
 LIST_GAMES = (
     "powershell.exe",
     "-NoProfile",
     "-Command",
-    "Get-Process victoria3 -ErrorAction SilentlyContinue | "
-    "ForEach-Object { '{0} {1}' -f $_.Id, $_.StartTime.ToUniversalTime().ToString('o') }",
+    "$ErrorActionPreference = 'Stop'; "
+    "foreach ($p in @(Get-Process -Name victoria3 -ErrorAction SilentlyContinue)) { "
+    "try { '{0} {1}' -f $p.Id, $p.StartTime.ToUniversalTime().ToString('o') } "
+    "catch { '{0} unknown' -f $p.Id } }; "
+    "'te_qa_end'",
 )
 
 
 class GateError(Exception):
-    """The gate could not look (PowerShell would not run): nothing may launch."""
+    """The gate could not look (PowerShell would not run, or its listing did not finish): nothing may launch,
+    and nothing may be read as "no game"."""
 
 
 @dataclass(frozen=True)
@@ -56,7 +66,9 @@ class GpuSample:
 @dataclass(frozen=True)
 class ProcId:
     pid: int
-    created: str  # creation time, UTC ISO-8601, as Windows reports it
+    # Creation time, UTC ISO-8601, as Windows reports it; UNKNOWN_START when the session may not read it.
+    # Such a process never equals a recorded one, so it is never this harness's own.
+    created: str
 
 
 @dataclass
@@ -109,16 +121,26 @@ def gpu_busy(samples: Sequence[GpuSample]) -> bool:
 
 
 def list_games(run=subprocess.run) -> list[ProcId]:
-    """Every running victoria3.exe, by process id and creation time."""
+    """Every running victoria3.exe, by process id and creation time.
+
+    Raises GateError unless the listing ran to its end: LIST_END must be the last non-empty line, and every
+    line before it must read as a game (a line skipped could be one). The exit code is not used: Get-Process
+    with no match may leave a non-zero one.
+    """
     try:
         out = run(list(LIST_GAMES), capture_output=True, text=True, timeout=30, check=False)
     except (OSError, subprocess.SubprocessError) as exc:
         raise GateError(f"could not list game processes: {exc!r}") from exc
+    lines = [line.strip() for line in (out.stdout or "").splitlines() if line.strip()]
+    if not lines or lines[-1] != LIST_END:
+        raise GateError(f"the game process listing did not finish (exit {out.returncode}): "
+                        f"{(out.stderr or '').strip()[:300]!r}")
     games = []
-    for line in out.stdout.splitlines():
+    for line in lines[:-1]:
         parts = line.split()
-        if len(parts) == 2 and parts[0].isdigit():
-            games.append(ProcId(int(parts[0]), parts[1]))
+        if len(parts) != 2 or not parts[0].isdigit():
+            raise GateError(f"a line of the game process listing does not read as a game: {line!r}")
+        games.append(ProcId(int(parts[0]), parts[1]))
     return games
 
 
