@@ -268,8 +268,8 @@ PICTURES = {
         "rung": 1,
         "region": None,
         "size": None,
-        # the docks terrain also prevails in any one-province state, port or not, where vanilla
-        # shows its dry plain: the port picture asks for a port, as vanilla's does
+        # vanilla's docks weight is a flat 1 in a one-province state, port or not, and its picture
+        # there is the dry plain: the port picture asks for a port, as vanilla's does
         "where": ["has_building = building_port"],
         "effect": "vfx_entity_ui_state_docks",
         "seed": 3,
