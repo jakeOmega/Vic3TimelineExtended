@@ -29,6 +29,8 @@ LAZY_NAMES = (
     "game_logs_path",
     "vic3_modding_digests_path",
     "vanilla_snapshot_docs_path_default",
+    "game_user_data_path",
+    "game_qa_backup_path",
 )
 
 
@@ -70,6 +72,36 @@ class EagerConstantsTest(unittest.TestCase):
         )
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(proc.stdout.strip(), str(REPO_ROOT))
+
+
+class GameQaPathsTest(unittest.TestCase):
+    """The two paths the in-game QA harness adds (game_qa/)."""
+
+    def test_user_data_defaults_to_the_logs_parent(self):
+        with isolated({"VIC3_GAME_LOGS": "/x/Victoria 3/logs"}):
+            self.assertEqual(pc.game_user_data_path, "/x/Victoria 3")
+
+    def test_user_data_env_wins(self):
+        with isolated({"VIC3_GAME_LOGS": "/x/Victoria 3/logs", "VIC3_USER_DATA": "/y"}):
+            self.assertEqual(pc.game_user_data_path, "/y")
+
+    def test_backup_root_default_and_env(self):
+        with isolated({}):
+            self.assertEqual(pc.game_qa_backup_path, "/mnt/d/vic3_qa_backups")
+        with isolated({"VIC3_QA_BACKUPS": "/b"}):
+            self.assertEqual(pc.game_qa_backup_path, "/b")
+
+    def test_both_resolve_under_the_dummy_paths_ci_sets(self):
+        dummies = {
+            "VIC3_BASE_GAME": "/nonexistent/game",
+            "VIC3_MOD_DEPLOY_TARGET": "/nonexistent/deploy",
+            "VIC3_VANILLA_REPO": "/nonexistent/vic3",
+            "VIC3_VANILLA_DOCS_RUNTIME": "/nonexistent/docs",
+            "VIC3_GAME_LOGS": "/nonexistent/logs",
+        }
+        with isolated(dummies):
+            self.assertEqual(pc.game_user_data_path, "/nonexistent")
+            self.assertEqual(pc.game_qa_backup_path, "/mnt/d/vic3_qa_backups")
 
 
 class LazyResolutionTest(unittest.TestCase):
