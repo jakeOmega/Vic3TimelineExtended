@@ -41,6 +41,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from game_qa import gate, restore, snapshot
+from game_qa import client
 
 MIN_FREE_BYTES = 2 * 1024**3
 KEEP_SNAPSHOTS = 5
@@ -1318,6 +1319,7 @@ def main(argv=None) -> int:
                            ("selftest-restore", cmd_selftest_restore,
                             "prove a snapshot of the real folder restores, changing nothing in it")):
         sub.add_parser(name, help=text).set_defaults(run=fn)
+    client.add_verbs(sub)
 
     argv = list(sys.argv[1:] if argv is None else argv)
     game_args: list[str] = []

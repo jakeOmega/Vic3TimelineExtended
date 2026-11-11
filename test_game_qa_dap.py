@@ -200,6 +200,17 @@ class DebuggerTest(unittest.TestCase):
         self.assertTrue(self.dbg.wait_stopped(1.0))
         self.assertFalse(self.dbg.wait_stopped(0.01))
 
+    def test_poll_stopped_reads_what_has_arrived_without_waiting(self):
+        waits = []
+        recv = self.server.recv
+        dbg = dap.Debugger(self.server.send, lambda timeout: (waits.append(timeout), recv(timeout))[1])
+        self.assertFalse(dbg.poll_stopped())
+        self.server.push({"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}})
+        self.assertTrue(dbg.poll_stopped())
+        self.assertEqual(dbg.last_stop_reason, "breakpoint")
+        self.assertFalse(dbg.poll_stopped())
+        self.assertEqual(waits, [0, 0, 0])                  # one look each, and none of them waits
+
     def test_a_stop_seen_before_a_resume_does_not_satisfy_the_next_wait(self):
         stopped = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
         self.server.push(stopped)
@@ -265,6 +276,22 @@ class DebuggerTest(unittest.TestCase):
         for reason in ("breakpoint", "step", "pause"):
             self.server.push({"type": "event", "event": "stopped", "body": {"reason": reason, "threadId": 1}})
         self.assertEqual([self.dbg.wait_stopped(1.0) for _ in range(4)], [True, True, True, False])
+
+    def test_the_reason_of_the_stop_last_taken_is_kept(self):
+        self.assertIsNone(self.dbg.last_stop_reason)
+        for reason in ("pause", "breakpoint"):
+            self.server.push({"type": "event", "event": "stopped", "body": {"reason": reason, "threadId": 1}})
+        taken = []
+        while self.dbg.wait_stopped(0.01):
+            taken.append(self.dbg.last_stop_reason)
+        self.assertEqual(taken, ["pause", "breakpoint"])         # each stop's own, in order, not the latest seen
+        self.server.push({"type": "event", "event": "stopped", "body": {"threadId": 1}})
+        self.assertTrue(self.dbg.wait_stopped(0.01))
+        self.assertIsNone(self.dbg.last_stop_reason)              # a stop that gave no reason
+        self.server.push(STOPPED)
+        self.server.reply("continue")
+        self.dbg.resume()                                          # the stops forgotten: no reason is left over
+        self.assertIsNone(self.dbg.last_stop_reason)
 
     def test_a_bad_message_among_the_replies_does_not_wedge_the_client(self):
         self.server._out += b"Content-Length: 9\r\n\r\n{not json"
