@@ -61,11 +61,13 @@ class Report:
         """Write summary.md and return its path. Its first line is the restore's outcome, from `summary["outcome"]`
         ("restored", "held", "refused", or "game_left_up" when restore was not run because the game may still be
         up; worked out from `summary["restore"]`, the restore's reply, when absent), so a reader learns first
-        whether the owner's files are back. Then the permission, the snapshot, the save, the country, whether the
+        whether the owner's files are back; when the stop's reply says what to do next (`summary["next"]`), that
+        line says it, word for word. Then the permission, the snapshot, the save, the country, whether the
         overlay was removed (and, when `summary["overlay_kept"]` gives a reason, why it was kept) and any notes;
         then one table row per step (verb, outcome); then, for each `try_event` step, its options' table and
         whether every option fired and was picked."""
-        lines = [_restore_line(summary.get("restore"), summary.get("outcome"), summary.get("snapshot")), ""]
+        lines = [_restore_line(summary.get("restore"), summary.get("outcome"), summary.get("snapshot"),
+                               summary.get("next")), ""]
         for label, key in (("Permission", "permission"), ("Snapshot", "snapshot"), ("Save", "save"),
                            ("Country", "country"), ("Overlay removed", "overlay_removed")):
             value = summary.get(key)
@@ -93,10 +95,12 @@ def _outcome(restore: Mapping | None) -> str | None:
     return "refused" if restore.get("refused") else "restored"
 
 
-def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | None = None) -> str:
+def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | None = None,
+                  next_step: str | None = None) -> str:
     if outcome == "game_left_up":
         return ("Restore: NOT RUN: the game may still be up, and a restore beside it would hold. Nothing was put "
-                "back; run `python3 -m game_qa restore %s` once no game is running." % _text(snapshot or "<id>"))
+                "back. Next: %s" % (_text(next_step) if next_step else "run `python3 -m game_qa restore %s` once no "
+                                    "game is running." % _text(snapshot or "<id>")))
     outcome = outcome or _outcome(restore)
     if restore is None or outcome is None:
         return "Restore: not run. No snapshot was taken, so there was nothing of the owner's to put back."
@@ -118,8 +122,9 @@ def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | 
                 % (reason, done, left))
     if outcome == "refused":
         detail = restore.get("detail")
-        return "Restore: REFUSED (%s). The snapshot is not finished.%s" % (
-            _text(restore.get("refused") or "no reason given"), " " + _text(detail) if detail else "")
+        return "Restore: REFUSED (%s). The snapshot is not finished.%s%s" % (
+            _text(restore.get("refused") or "no reason given"), " " + _text(detail) if detail else "",
+            " Next: " + _text(next_step) if next_step else "")
     restored, removed = restore.get("restored") or [], restore.get("removed") or []
     reason = restore.get("reason")
     return "Restore: restored (%d files put back, %d removed)%s." % (

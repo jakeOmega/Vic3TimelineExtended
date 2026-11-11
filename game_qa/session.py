@@ -10,8 +10,9 @@ reported, never worked around. Under the user-data folder the session itself wri
             tag  debugger
     stop    kill  wait for watch  restore  overlay.remove  close the relay and the helper  close the report
 
-A game that may still be up is never restored beside (part 1 would hold): `stop` then ends `game_left_up` and
-says to run `restore <id>` once no game is running. The overlay goes only once the game is known ended and the
+A game that may still be up is never restored beside (part 1 would hold): `stop` then ends `game_left_up`, and
+its `next` says what can work: `stop` again for a game known by pid and start time, else `restore <id>` or
+`recover` once no game is running. The overlay goes only once the game is known ended and the
 owner's playset is known back; otherwise it stays, and the next `start` refuses (`overlay_left`) until that run
 is finished and `python3 -m game_qa remove-overlay` has removed the folder. A `stop` that ended refused or
 game_left_up is run again by the next `stop`.
@@ -750,7 +751,8 @@ class Session:
         reply was lost is reported (`snapshot_unknown`, and `next`: `recover`), never taken for none.
 
         A game that may still be up (no start time to end it by, a kill refused, the helper gone) is not
-        restored beside: `outcome` is game_left_up and `next` says to run `restore <id>` once no game is running.
+        restored beside: `outcome` is game_left_up and `next` says what can work (`stop` again for a game known
+        by pid and start time; else `restore <id>`, or `recover` when no process is known, once no game runs).
         The overlay is removed only once the game is known ended and restore put the owner's playset back
         (`restored`, or `held` with `playset_restored`); otherwise `overlay_kept` is true and
         `overlay_kept_because` says why.
@@ -832,7 +834,7 @@ class Session:
             reply["next"] = ("a snapshot may have been taken (its reply was lost) and left armed: `start` refuses "
                              "(unfinished_run) until `python3 -m game_qa recover` finishes it, once no Victoria 3 "
                              "process runs")
-        reply["report"] = self._close_report(restore, outcome, removed, kept, notes)
+        reply["report"] = self._close_report(restore, outcome, removed, kept, notes, reply.get("next"))
         if notes:
             reply["notes"] = notes
         return reply
@@ -998,7 +1000,7 @@ class Session:
             notes.append("closing the helper failed: %s" % e)
 
     def _close_report(self, restore: dict | None, outcome: str | None, removed: bool, kept: str | None,
-                      notes: list[str]) -> str | None:
+                      notes: list[str], next_step: str | None = None) -> str | None:
         if self._report is None:
             return None
         try:
@@ -1006,7 +1008,8 @@ class Session:
                          notes=list(notes))
             path = self._report.close({"restore": restore, "outcome": outcome, "permission": self._permission,
                                        "snapshot": self._snapshot, "save": self._save, "country": self._country,
-                                       "overlay_removed": removed, "overlay_kept": kept, "notes": notes})
+                                       "overlay_removed": removed, "overlay_kept": kept, "notes": notes,
+                                       "next": next_step})
             return str(path)
         except Exception as e:
             notes.append("writing the report failed: %s" % e)

@@ -1117,7 +1117,8 @@ class StopTest(SessionTestCase):
         self.assertEqual(self.order, ["kill", "tcp_close", "helper_close"])   # nothing of the session's own left
         first = Path(reply["report"]).read_text("utf-8").split("\n")[0]
         self.assertIn("NOT RUN", first)
-        self.assertIn("restore %s" % SNAP, first)
+        self.assertIn("Next: " + reply["next"], first)                      # the reply's own next, not another
+        self.assertIn("`python3 -m game_qa stop` again", first)
 
     def test_a_restore_that_raises_is_a_refusal_and_stop_does_not_raise(self):
         self.started()

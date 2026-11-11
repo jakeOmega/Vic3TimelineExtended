@@ -16,7 +16,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
-    python3 -m game_qa stop                  # end the game, put the owner's files back, end the server
+    python3 -m game_qa stop                  # end the game, put the owner's files back, end the server (it
+                                             # serves on when the stop can be run again: `stop` again)
     python3 -m game_qa status                # the server and its session
     python3 -m game_qa doctor                # is this machine ready for a session? (starts nothing)
     python3 -m game_qa remove-overlay        # the overlay folder an earlier run left, once nothing can use it
@@ -735,7 +736,8 @@ def add_verbs(sub) -> None:
     p.add_argument("--read", dest="reads", action="append", required=True, metavar="EXPR",
                    help="a trigger or value read before and after each pick (repeatable)")
     p.set_defaults(run=cmd_try_event)
-    for name, fn, text in (("stop", cmd_stop, "end the game, put the owner's files back, end the session server"),
+    for name, fn, text in (("stop", cmd_stop, "end the game, put the owner's files back, end the session server "
+                                              "(unless the stop can be run again: then `stop` again runs it)"),
                            ("status", cmd_status, "the session server and its session"),
                            ("doctor", cmd_doctor, "is this machine ready for a session? (starts nothing, changes "
                                                   "nothing)"),

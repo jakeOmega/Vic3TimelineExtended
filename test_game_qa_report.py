@@ -91,6 +91,14 @@ class ReportTest(unittest.TestCase):
         self.assertIn("python3 -m game_qa restore 20261110T150000Z", first)
         self.assertIn("once no game is running", first)
         self.assertIn("- Overlay kept: the game may still be up", text)
+        # the stop's own `next`, when it gives one, is what the line says (recover, `stop` again, ...)
+        told = "once no Victoria 3 process runs: `python3 -m game_qa recover`, then `python3 -m game_qa remove-overlay`"
+        first = self.report.close(dict(summary, next=told)).read_text("utf-8").split("\n")[0]
+        self.assertTrue(first.endswith("Next: " + told), first)
+        self.assertNotIn("restore 20261110T150000Z", first)
+        refused = self.report.close(dict(self.summary({"held": False, "refused": "game_still_up"}, "refused"),
+                                         next="`python3 -m game_qa stop` again")).read_text("utf-8")
+        self.assertIn("Next: `python3 -m game_qa stop` again", refused.split("\n")[0])
 
     def test_a_try_event_step_is_a_table_of_its_options(self):
         rows = [
