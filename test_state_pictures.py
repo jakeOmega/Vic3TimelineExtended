@@ -79,6 +79,16 @@ class TestRegistry(unittest.TestCase):
                 self.assertIn(p["effect"], effects)
                 self.assertTrue(p["prompt"].strip())
 
+    def test_every_pick_names_boxes_inside_the_render(self):
+        for key, p in registry.PICTURES.items():
+            for left, top, right, bottom in ([p["crop"]] if p.get("crop") else []) + list(p.get("smudge", [])):
+                with self.subTest(key):
+                    self.assertTrue(0 <= left < right <= 1536 and 0 <= top < bottom <= 752)
+            if p.get("crop"):
+                left, top, right, bottom = p["crop"]
+                with self.subTest(key, crop=p["crop"]):
+                    self.assertAlmostEqual((right - left) / (bottom - top), 1020 / 500, delta=0.03)
+
     def test_the_port_picture_needs_a_port(self):
         # vanilla's docks terrain prevails in every one-province state and shows its dry plain where there is no port
         for key, p in registry.PICTURES.items():
@@ -261,16 +271,6 @@ class TestConverter(unittest.TestCase):
         self.assertLess(after[inside].std(), before[inside].std() / 3)     # the strokes are gone
         self.assertTrue((after[:40] == before[:40]).all())                 # far from the box, nothing moved
         self.assertTrue((after[:, :40] == before[:, :40]).all())
-
-    def test_every_pick_names_boxes_inside_the_render(self):
-        for key, p in registry.PICTURES.items():
-            for left, top, right, bottom in ([p["crop"]] if p.get("crop") else []) + list(p.get("smudge", [])):
-                with self.subTest(key):
-                    self.assertTrue(0 <= left < right <= 1536 and 0 <= top < bottom <= 752)
-            if p.get("crop"):
-                left, top, right, bottom = p["crop"]
-                with self.subTest(key, crop=p["crop"]):
-                    self.assertAlmostEqual((right - left) / (bottom - top), 1020 / 500, delta=0.03)
 
 
 class TestYearlyPass(unittest.TestCase):

@@ -516,7 +516,7 @@ CITY_PICKS = {
     "urban_european_5": {"seed": 0},
     "urban_north_american_5": {"seed": 0, "smudge": [(40, 446, 150, 468)]},
     "urban_latin_american_5": {"seed": 0},
-    "urban_african_5": {"seed": 3},
+    "urban_african_5": {"seed": 3, "crop": (110, 0, 1536, 698)},  # drops a big wheel's arc at the left edge
     "urban_south_asian_5": {"seed": 0},
     "urban_middle_eastern_5": {"seed": 3},
     "urban_east_asian_5": {"seed": 0},
