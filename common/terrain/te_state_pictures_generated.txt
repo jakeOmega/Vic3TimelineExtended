@@ -4,6 +4,94 @@
 # Each INJECT adds its pictures to the terrain's own list; the highest weight that
 # applies is the state's banner. Vanilla's weights are 1 and 2.
 
+INJECT:cleared_land = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_tools }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_cleared_land_1.dds"
+			effect = "vfx_entity_ui_state_cleared_land"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = robotics }
+						}
+					}
+					add = 200000
+				}
+			}
+			path = "gfx/state_pictures/te_cleared_land_2.dds"
+			effect = "vfx_entity_ui_state_cleared_land"
+		}
+	}
+}
+
+INJECT:desert = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
 INJECT:docks = {
 	textures = {
 		{
@@ -19,8 +107,1920 @@ INJECT:docks = {
 					add = 100000
 				}
 			}
+			path = "gfx/state_pictures/te_docks_harbor_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_tools }
+							any_scope_building = { is_building_type = building_port level >= 10 }
+							has_building = building_port
+						}
+					}
+					add = 100020
+				}
+			}
 			path = "gfx/state_pictures/te_docks_1.dds"
 			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = containerization }
+							has_building = building_port
+						}
+					}
+					add = 200000
+				}
+			}
+			path = "gfx/state_pictures/te_docks_harbor_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = containerization }
+							any_scope_building = { is_building_type = building_port level >= 10 }
+							has_building = building_port
+						}
+					}
+					add = 200020
+				}
+			}
+			path = "gfx/state_pictures/te_docks_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = supply_chain_management }
+							has_building = building_port
+						}
+					}
+					add = 300000
+				}
+			}
+			path = "gfx/state_pictures/te_docks_harbor_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = supply_chain_management }
+							any_scope_building = { is_building_type = building_port level >= 10 }
+							has_building = building_port
+						}
+					}
+					add = 300020
+				}
+			}
+			path = "gfx/state_pictures/te_docks_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							has_building = building_port
+						}
+					}
+					add = 400000
+				}
+			}
+			path = "gfx/state_pictures/te_docks_harbor_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							any_scope_building = { is_building_type = building_port level >= 10 }
+							has_building = building_port
+						}
+					}
+					add = 400020
+				}
+			}
+			path = "gfx/state_pictures/te_docks_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+	}
+}
+
+INJECT:farmland_maize = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_asian_farmland = yes
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_1.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 100004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 200002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_asian_farmland = yes
+						}
+					}
+					add = 200003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_2.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 200004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 300001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 300002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_asian_farmland = yes
+						}
+					}
+					add = 300003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_3.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 300004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 400001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 400002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_asian_farmland = yes
+						}
+					}
+					add = 400003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_4.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 400004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = synthetic_biology }
+						}
+					}
+					add = 500000
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_5.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:farmland_millet = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_asian_farmland = yes
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_1.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 100004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 200002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_asian_farmland = yes
+						}
+					}
+					add = 200003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_2.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 200004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 300001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 300002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_asian_farmland = yes
+						}
+					}
+					add = 300003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_3.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 300004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 400001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 400002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_asian_farmland = yes
+						}
+					}
+					add = 400003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_4.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 400004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = synthetic_biology }
+						}
+					}
+					add = 500000
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_5.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:farmland_rice = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_asian_farmland = yes
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_1.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 100004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 200002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_asian_farmland = yes
+						}
+					}
+					add = 200003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_2.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 200004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 300001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 300002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_asian_farmland = yes
+						}
+					}
+					add = 300003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_3.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 300004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 400001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 400002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_asian_farmland = yes
+						}
+					}
+					add = 400003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_4.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 400004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = synthetic_biology }
+						}
+					}
+					add = 500000
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_5.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:farmland_rye = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_asian_farmland = yes
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_1.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 100004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 200002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_asian_farmland = yes
+						}
+					}
+					add = 200003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_2.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 200004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 300001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 300002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_asian_farmland = yes
+						}
+					}
+					add = 300003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_3.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 300004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 400001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 400002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_asian_farmland = yes
+						}
+					}
+					add = 400003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_4.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 400004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = synthetic_biology }
+						}
+					}
+					add = 500000
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_5.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:farmland_wheat = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_asian_farmland = yes
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_1.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 100004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_1.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 200002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_asian_farmland = yes
+						}
+					}
+					add = 200003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_2.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 200004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_2.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 300001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 300002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_asian_farmland = yes
+						}
+					}
+					add = 300003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_3.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 300004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_3.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = no
+							is_asian_farmland = no
+							is_subtropic_farmland = no
+						}
+					}
+					add = 400001
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_generic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_arabic_farmland = yes
+						}
+					}
+					add = 400002
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_arabic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_asian_farmland = yes
+						}
+					}
+					add = 400003
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_asian_4.dds"
+			effect = "vfx_entity_ui_state_farmland_asian"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 400004
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_subtropic_4.dds"
+			effect = "vfx_entity_ui_state_farmland_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = synthetic_biology }
+						}
+					}
+					add = 500000
+				}
+			}
+			path = "gfx/state_pictures/te_farmland_5.dds"
+			effect = "vfx_entity_ui_state_farmland_generic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:forestry = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_tools }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_forestry_1.dds"
+			effect = "vfx_entity_ui_state_forestry"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_tools }
+							OR = {
+								is_in_geographic_region = geographic_region_south_east_asia
+								is_in_geographic_region = geographic_region_equatorial_africa
+								is_in_geographic_region = geographic_region_west_africa
+								is_in_geographic_region = geographic_region_central_america
+								is_in_geographic_region = geographic_region_gran_colombia
+								is_in_geographic_region = geographic_region_brazil
+								is_jungle_hills = yes
+							}
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_forestry_tropical_1.dds"
+			effect = "vfx_entity_ui_state_forestry"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = robotics }
+						}
+					}
+					add = 200000
+				}
+			}
+			path = "gfx/state_pictures/te_forestry_2.dds"
+			effect = "vfx_entity_ui_state_forestry"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = robotics }
+							OR = {
+								is_in_geographic_region = geographic_region_south_east_asia
+								is_in_geographic_region = geographic_region_equatorial_africa
+								is_in_geographic_region = geographic_region_west_africa
+								is_in_geographic_region = geographic_region_central_america
+								is_in_geographic_region = geographic_region_gran_colombia
+								is_in_geographic_region = geographic_region_brazil
+								is_jungle_hills = yes
+							}
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_forestry_tropical_2.dds"
+			effect = "vfx_entity_ui_state_forestry"
+		}
+	}
+}
+
+INJECT:hills = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
 		}
 	}
 }
@@ -41,6 +2041,421 @@ INJECT:mining = {
 			}
 			path = "gfx/state_pictures/te_mining_1.dds"
 			effect = "vfx_entity_ui_state_mining"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_tools }
+							any_scope_building = { is_building_type = building_coal_mine level >= 10 }
+						}
+					}
+					add = 100010
+				}
+			}
+			path = "gfx/state_pictures/te_mining_deep_1.dds"
+			effect = "vfx_entity_ui_state_mining"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = robotics }
+						}
+					}
+					add = 200000
+				}
+			}
+			path = "gfx/state_pictures/te_mining_2.dds"
+			effect = "vfx_entity_ui_state_mining"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = robotics }
+							any_scope_building = { is_building_type = building_coal_mine level >= 10 }
+						}
+					}
+					add = 200010
+				}
+			}
+			path = "gfx/state_pictures/te_mining_deep_2.dds"
+			effect = "vfx_entity_ui_state_mining"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = internet_of_things }
+						}
+					}
+					add = 300000
+				}
+			}
+			path = "gfx/state_pictures/te_mining_3.dds"
+			effect = "vfx_entity_ui_state_mining"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = internet_of_things }
+							any_scope_building = { is_building_type = building_coal_mine level >= 10 }
+						}
+					}
+					add = 300010
+				}
+			}
+			path = "gfx/state_pictures/te_mining_deep_3.dds"
+			effect = "vfx_entity_ui_state_mining"
+		}
+	}
+}
+
+INJECT:pasture = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_pasture_1.dds"
+			effect = "vfx_entity_ui_state_pasture"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+						}
+					}
+					add = 200000
+				}
+			}
+			path = "gfx/state_pictures/te_pasture_2.dds"
+			effect = "vfx_entity_ui_state_pasture"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+						}
+					}
+					add = 300000
+				}
+			}
+			path = "gfx/state_pictures/te_pasture_3.dds"
+			effect = "vfx_entity_ui_state_pasture"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+						}
+					}
+					add = 400000
+				}
+			}
+			path = "gfx/state_pictures/te_pasture_4.dds"
+			effect = "vfx_entity_ui_state_pasture"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:plains = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:plantation = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = rural_electrification }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_plantation_1.dds"
+			effect = "vfx_entity_ui_state_plantation"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = green_revolution }
+						}
+					}
+					add = 200000
+				}
+			}
+			path = "gfx/state_pictures/te_plantation_2.dds"
+			effect = "vfx_entity_ui_state_plantation"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = microprocessor }
+						}
+					}
+					add = 300000
+				}
+			}
+			path = "gfx/state_pictures/te_plantation_3.dds"
+			effect = "vfx_entity_ui_state_plantation"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = autonomous_vehicles }
+						}
+					}
+					add = 400000
+				}
+			}
+			path = "gfx/state_pictures/te_plantation_4.dds"
+			effect = "vfx_entity_ui_state_plantation"
+		}
+	}
+}
+
+INJECT:savanna = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:tundra = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_chemical_processes }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10100000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_1.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10200000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_2.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = hydraulic_fracturing }
+							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+						}
+					}
+					add = 10300000
+				}
+			}
+			path = "gfx/state_pictures/te_oil_3.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
 		}
 	}
 }
