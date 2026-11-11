@@ -1,0 +1,46 @@
+﻿namespace = te_qa_probe
+
+# Hidden carrier: runs whatever the mailbox effect currently holds.
+te_qa_probe.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		debug_log = "TE_QA_PROBE carrier fired country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+		te_qa_probe_mailbox = yes
+	}
+}
+
+# Visible event with three options, each logging its own line.
+te_qa_probe.2 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "africa_desert_expedition" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_qa_probe.2.t
+	desc = te_qa_probe.2.d
+	flavor = te_qa_probe.2.f
+
+	duration = 3
+
+	immediate = {
+		debug_log = "TE_QA_PROBE visible event opened country=[THIS.GetCountry.GetTagName]"
+	}
+
+	option = {
+		name = te_qa_probe.2.a
+		default_option = yes
+		debug_log = "TE_QA_PROBE option=A country=[THIS.GetCountry.GetTagName]"
+	}
+	option = {
+		name = te_qa_probe.2.b
+		debug_log = "TE_QA_PROBE option=B country=[THIS.GetCountry.GetTagName]"
+	}
+	option = {
+		name = te_qa_probe.2.c
+		debug_log = "TE_QA_PROBE option=C country=[THIS.GetCountry.GetTagName]"
+	}
+}

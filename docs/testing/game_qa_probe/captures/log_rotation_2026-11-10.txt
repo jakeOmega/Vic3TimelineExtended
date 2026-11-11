@@ -1,0 +1,16 @@
+# How the game rotates debug.log, seen from WSL (inode, size, first bytes), live session 2026-11-10 16:14.
+# Two `help` listings were entered between the two readings.
+== before
+debug.log   ino=177329235327750533 size=48079  head=[16:11:37][jomini_effect.cpp:1144]: Even
+debug.1.log ino=108649341010345499 size=524262 head=[16:11:37][jomini_effect.cpp:160]: Addin
+debug.2.log ino=395190867301762791 size=524133 head=[16:11:37][jomini_effect.cpp:1140]: Vari
+debug.3.log ino=264867953084761565 size=524145 head=[16:11:37][jomini_effect.cpp:160]: Addin
+== after
+debug.log   ino=386183668047021000 size=397312 head=[16:14:13][console.cpp:1203]: console_su
+debug.1.log ino=177329235327750533 size=524275 head=[16:11:37][jomini_effect.cpp:1144]: Even
+debug.2.log ino=108649341010345499 size=524262 head=[16:11:37][jomini_effect.cpp:160]: Addin
+debug.3.log ino=395190867301762791 size=524133 head=[16:11:37][jomini_effect.cpp:1140]: Vari
+# The live file was renamed debug.1.log and kept its inode; each older generation moved up one.
+# Three generations start in the same second (16:11:37): a debugger trigger evaluation had flooded the log.
+# Padding flush, 16:11:00: `event te_qa_probe.7` (60 debug_log lines, about 9 KB) grew debug.log from 473736 to
+# 481928 bytes (two 4096-byte blocks) within one second, with the earlier carrier line in the file.

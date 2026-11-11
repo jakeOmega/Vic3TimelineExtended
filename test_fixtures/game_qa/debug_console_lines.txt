@@ -1,0 +1,29 @@
+[12:51:23][console.cpp:1175]: Running console command: tag FRA
+[12:51:23][console.cpp:1203]: console_success: Now Playing - France
+[12:51:40][console.cpp:1175]: Running console command: event te_qa_probe.2
+[12:51:40][console.cpp:1203]: console_success: Executed "te_qa_probe.2"
+[12:51:40][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:30: TE_QA_PROBE visible event opened country=FRA
+[12:51:41][console.cpp:1175]: Running console command: select_event_option list
+[12:51:41][console.cpp:1203]: console_success: 10 te_qa_probe.2 options=3
+[12:51:42][console.cpp:1175]: Running console command: select_event_option 2
+[12:51:42][console.cpp:1203]: console_success: Selected option 2 of te_qa_probe.2
+[12:51:42][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:44: TE_QA_PROBE option=C country=FRA
+[12:51:43][console.cpp:1175]: Running console command: select_event_option list
+[12:51:43][console.cpp:1203]: console_success: No pending events
+[12:51:44][console.cpp:1175]: Running console command: help ndefines.ngui
+[12:52:01][console.cpp:1175]: Running console command: tag GBR
+[12:52:01][console.cpp:1203]: console_success: Now Playing - Great Britain
+[12:52:03][console.cpp:1175]: Running console command: event te_qa_probe.2
+[12:52:03][console.cpp:1203]: console_success: Executed "te_qa_probe.2"
+[12:52:03][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:30: TE_QA_PROBE visible event opened country=GBR
+[12:52:04][console.cpp:1175]: Running console command: select_event_option 1
+[12:52:04][console.cpp:1203]: console_success: Selected option 1 of te_qa_probe.2
+[12:52:04][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:40: TE_QA_PROBE option=B country=GBR
+[12:52:05][console.cpp:1175]: Running console command: event te_qa_probe.1
+[12:52:05][console.cpp:1203]: console_success: Executed "te_qa_probe.1"
+[12:52:05][jomini_effect_impl.cpp:459]: common/scripted_effects/te_qa_probe_effects.txt:2: TE_QA_PROBE mailbox version=1 country=GBR
+[12:52:05][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:9: TE_QA_PROBE carrier fired country=GBR date=January 2, 1836
+[12:52:06][console.cpp:1175]: Running console command: select_event_option list
+[12:52:06][console.cpp:1203]: console_success: No pending events
+[12:52:07][console.cpp:1175]: Running console command: help ndefines.ngui
+[12:52:07][console.cpp:1203]: con[12:49:24][pdx_steam.cpp:192]: Failed to initialize Steam so skipping getting of Steam-specific command line parameters
