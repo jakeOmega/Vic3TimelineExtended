@@ -91,6 +91,10 @@ PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far
 WATCH_RESPAWNS = 3                      # a watch that returns while the game's window is up is run again, this often
 
 _RETRIED = ("refused", "game_left_up")  # a stop that ended so is run again by the next stop()
+# restore's refusals that waiting, or the game's end, can clear: only these leave `stop` worth running again. A
+# damaged or missing stored file (`error`), a reply that was no JSON (`bad_reply`) or an unreachable backup root
+# stays refused however often it is run.
+RESTORE_WAITS = ("busy", "watch_still_recording", "launch_in_flight", "game_still_up", "GateError")
 
 _TAG = re.compile(r"[A-Za-z0-9_]{1,16}")
 _EVENT = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.]*")
@@ -846,14 +850,23 @@ class Session:
             reply["overlay_kept"] = kept is not None
         if kept is not None:
             reply["overlay_kept_because"] = kept
-        reply["stop_again"] = outcome == "refused"
+        reply["stop_again"] = outcome == "refused" and _clears_by_waiting(restore)
         if left_up:
             reply["game_unwatched"] = self._watch is None or self._watch_returned()
             reply["next"], reply["stop_again"] = self._left_up_next()
-        elif outcome == "refused":
+        elif outcome == "refused" and reply["stop_again"]:
             reply["next"] = ("`python3 -m game_qa stop` again runs `restore %s` again, once what refused it is "
                              "cleared (a Victoria 3 process running, another verb in the backup root): the server "
                              "answers until a stop ends restored or held" % self._snapshot)
+        elif outcome == "refused":
+            reply["next"] = ("restore refused %s, which no wait clears, so the server ends here: once its cause is "
+                             "fixed (the detail says what; the owner may need to look), and no Victoria 3 process "
+                             "runs, `python3 -m game_qa recover` finishes snapshot %s, then `python3 -m game_qa "
+                             "remove-overlay`" % (_text((restore or {}).get("refused") or "?"), self._snapshot))
+        elif kept is not None and self._keep_overlay(restore, outcome) is None:
+            # X3: nothing may name the overlay any more, but removing it failed (a file held open, say)
+            reply["next"] = ("the overlay was kept (%s): `python3 -m game_qa remove-overlay` removes it once "
+                             "nothing holds a file in it" % kept)
         if self._snapshot_unknown:
             reply["snapshot_unknown"] = True
             notes.append("a snapshot's reply was lost, so a snapshot may have been taken and left armed")
@@ -1489,6 +1502,11 @@ def _reply_lost(reply: dict | None, code: int | None) -> bool:
     if not isinstance(reply, dict) or reply.get("refused") == "bad_reply":
         return True
     return code == 0 and not reply.get("id")
+
+
+def _clears_by_waiting(restore: Mapping | None) -> bool:
+    """Whether a refused restore can end otherwise when run again later (RESTORE_WAITS)."""
+    return isinstance(restore, Mapping) and restore.get("refused") in RESTORE_WAITS
 
 
 def _describe(e: BaseException) -> str:

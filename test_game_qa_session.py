@@ -1439,6 +1439,38 @@ class StopAgainTest(SessionTestCase):
         self.assertIn("`python3 -m game_qa stop` again", left_up["next"])
         self.assertIn(SNAP, left_up["next"])
 
+    def test_a_refusal_waiting_cannot_clear_is_final_and_names_recover(self):
+        # X5: a damaged or missing stored file (`error`), or a restore that printed no JSON (`bad_reply`), stays
+        # refused however often `stop` runs it again: the server must not keep serving for ever.
+        for reply in ({"held": False, "refused": "error", "detail": "a copy in the store is damaged"},
+                      "Traceback (most recent call last): ...",
+                      {"refused": "BackupRootError", "detail": "the folder that should hold the backups does not exist"}):
+            with self.subTest(reply=reply):
+                self.setUp()
+                self.started()
+                self.cli.queue("restore", reply, 2)
+                stop = self.session.stop()
+                self.assertEqual(stop["outcome"], "refused")
+                self.assertFalse(stop["stop_again"])
+                self.assertTrue(server.final_stop(stop))
+                self.assertNotIn("stop` again", stop["next"])
+                self.assertIn("`python3 -m game_qa recover`", stop["next"])
+                self.assertIn("`python3 -m game_qa remove-overlay`", stop["next"])
+                self.assertIn(SNAP, stop["next"])
+        for code in ("busy", "watch_still_recording", "launch_in_flight", "game_still_up", "GateError"):
+            with self.subTest(clears_by_waiting=code):
+                self.assertTrue(session._clears_by_waiting({"held": False, "refused": code}))
+
+    def test_a_restored_stop_that_could_not_remove_the_overlay_says_what_to_run(self):
+        # X3: restore put everything back, but a file in the overlay was held open
+        self.started()
+        with mock.patch.object(overlay, "remove", side_effect=PermissionError("a file is held open")):
+            stop = self.session.stop()
+        self.assertEqual((stop["outcome"], stop["overlay_kept"], stop["stop_again"]), ("restored", True, False))
+        self.assertFalse(server.clean_stop(stop))
+        self.assertIn("`python3 -m game_qa remove-overlay`", stop["next"])
+        self.assertTrue(self.paths.overlay_dir.exists())
+
     def test_a_game_nothing_can_end_is_final_and_names_what_works_instead(self):
         for launch in ({"id": SNAP, "pid": PID, "created": "unknown"}, {"refused": "start_unconfirmed", "id": SNAP}):
             with self.subTest(launch=launch):
