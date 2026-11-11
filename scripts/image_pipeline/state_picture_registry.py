@@ -221,6 +221,12 @@ CITY_LANDMARK = {
     "japanese": "a white-walled castle keep with grey tiled roofs on a stone base",
 }
 
+# The last rung is era 12 (general AI, nanofabrication, orbital industry, the vactrain), and the
+# owner asked that it look it (2026-11-10: "the far future could look more futuristic, given the
+# technologies in the last couple eras"). Its streets lead with the megastructures, flying craft and
+# robots, keep the family's old quarter and landmark small beneath them, and end with this.
+CITY_FAR_FUTURE_SKY = ", a spacecraft climbing on a thin white trail in the far sky"
+
 # {(region, rung): the street, without its date and landmark}. "{when}" is the rung's date.
 CITY_STREETS = {
     ("european", 2): (
@@ -242,10 +248,11 @@ CITY_STREETS = {
         "panels on the roofs"
     ),
     ("european", 5): (
-        "A European city {when}: enormous terraced arcology buildings covered in hanging gardens "
-        "rising behind preserved old stone apartment buildings, a transparent vacuum-train tube "
-        "on slender white pylons curving above a car-free street of trees and strolling people, "
-        "small rounded pod vehicles"
+        "A far-future European city {when}: colossal smooth white arcology towers a kilometre "
+        "high, joined by sky bridges and wrapped in hanging gardens, rising behind preserved "
+        "old stone apartment buildings, flying passenger craft crossing between the towers, a "
+        "transparent vacuum-train tube on slender pylons, humanoid robots and people strolling "
+        "a car-free street of trees, small pod vehicles"
     ),
     ("north_american", 1): (
         "A North American city main street {when}: brick and limestone commercial buildings of "
@@ -272,10 +279,11 @@ CITY_STREETS = {
         "a traffic lane was, solar arrays on the rooftops"
     ),
     ("north_american", 5): (
-        "A North American city {when}: vast stepped arcology towers with forested setbacks rising "
-        "over a grid of old brick blocks kept as a historic district, a transparent vacuum-train "
-        "tube on tall pylons following the line of a former freeway, a car-free street of trees, "
-        "walkers and small pod vehicles"
+        "A far-future North American city {when}: a wall of kilometre-high stepped arcology "
+        "towers with forested setbacks and landing decks, swarms of small flying craft between "
+        "them, a transparent vacuum-train tube on tall pylons along the line of a former "
+        "freeway, old brick blocks kept as a historic district, humanoid robots and people on a "
+        "car-free street of trees, small pod vehicles"
     ),
     ("latin_american", 1): (
         "A Latin American city street {when}: two- and three-storey colonial houses in ochre, "
@@ -302,10 +310,11 @@ CITY_STREETS = {
         "trees, cyclists and walkers"
     ),
     ("latin_american", 5): (
-        "A Latin American city {when}: huge terraced arcology buildings overgrown with tropical "
-        "gardens rising behind preserved colonial houses with red tile roofs, a transparent "
-        "vacuum-train tube on white pylons crossing the valley, a car-free street of palms, "
-        "walkers and small pod vehicles, green hills behind"
+        "A far-future Latin American city {when}: gigantic terraced arcology towers overgrown "
+        "with tropical gardens and waterfalls rising a kilometre from the valley, flying "
+        "passenger craft between them, a transparent vacuum-train tube crossing on white "
+        "pylons, preserved colonial houses with red tile roofs, humanoid robots and people on a "
+        "car-free street of palms, small pod vehicles, green hills behind"
     ),
     ("african", 1): (
         "A city street in colonial-era Africa {when}: whitewashed two-storey arcaded buildings "
@@ -332,10 +341,11 @@ CITY_STREETS = {
         "bright printed cloth"
     ),
     ("african", 5): (
-        "An African city {when}: great terraced arcology buildings of pale concrete and glass "
-        "patterned like woven cloth and hung with gardens, a transparent vacuum-train tube on "
-        "slender pylons above a car-free market street of acacia trees, bright stalls, walkers "
-        "and small pod vehicles"
+        "A far-future African city {when}: soaring kilometre-high arcology towers of pale "
+        "concrete and glass patterned like woven cloth and hung with gardens, flying passenger "
+        "craft between them, a transparent vacuum-train tube on slender pylons, a car-free "
+        "market street of acacia trees and bright stalls, humanoid robots carrying goods among "
+        "the crowd, small pod vehicles"
     ),
     ("south_asian", 1): (
         "A South Asian city bazaar street {when}: three-storey buildings with carved wooden "
@@ -362,10 +372,11 @@ CITY_STREETS = {
         "crowd in bright clothes"
     ),
     ("south_asian", 5): (
-        "A South Asian city {when}: immense terraced arcology buildings with carved stone "
-        "screens and hanging gardens rising above an old bazaar quarter, a transparent vacuum-"
-        "train tube on tall pylons, a car-free street of banyan trees, bright stalls, a dense "
-        "crowd and small pod vehicles"
+        "A far-future South Asian city {when}: immense kilometre-high arcology towers faced "
+        "with carved stone lattice and hanging gardens rising above a preserved old bazaar "
+        "quarter, swarms of small flying craft, a transparent vacuum-train tube on tall pylons, "
+        "a car-free street of banyan trees and bright stalls, humanoid robots among a dense "
+        "crowd, small pod vehicles"
     ),
     ("middle_eastern", 1): (
         "A Middle Eastern city street {when}: flat-roofed stone and plaster buildings of two and "
@@ -392,10 +403,10 @@ CITY_STREETS = {
         "behind"
     ),
     ("middle_eastern", 5): (
-        "A Middle Eastern city {when}: vast sand-colored terraced arcology buildings with shaded "
-        "courtyards, wind towers and hanging gardens, a transparent vacuum-train tube on slender "
-        "pylons crossing above a car-free street of date palms, water channels, walkers and "
-        "small pod vehicles"
+        "A far-future Middle Eastern city {when}: vast sand-colored arcology towers a kilometre "
+        "high with shaded courtyards, wind towers and hanging gardens, flying passenger craft "
+        "between them, a transparent vacuum-train tube on slender pylons, a car-free street of "
+        "date palms and water channels, humanoid robots and people in robes, small pod vehicles"
     ),
     ("east_asian", 1): (
         "An East Asian city street {when}: two- and three-storey arcaded row houses with grey "
@@ -420,9 +431,10 @@ CITY_STREETS = {
         "middle distance, electric scooters and cars, rows of ginkgo trees"
     ),
     ("east_asian", 5): (
-        "An East Asian city {when}: colossal terraced arcology towers with sweeping tiled eaves "
-        "and hanging gardens rising in ranks into the haze, a transparent vacuum-train tube on "
-        "tall pylons, a car-free street of ginkgo trees, walkers and small pod vehicles"
+        "A far-future East Asian city {when}: colossal kilometre-high arcology towers with "
+        "sweeping tiled eaves and hanging gardens rising in ranks into the haze, streams of "
+        "small flying craft between them, a transparent vacuum-train tube on tall pylons, a "
+        "car-free street of ginkgo trees, humanoid robots and people, small pod vehicles"
     ),
     ("japanese", 1): (
         "A Japanese city street {when}: two-storey wooden town houses with grey tiled roofs and "
@@ -449,9 +461,10 @@ CITY_STREETS = {
         "kept between the towers, maple trees"
     ),
     ("japanese", 5): (
-        "A Japanese city {when}: immense timber-latticed arcology towers with tiled eaves and "
-        "terraced gardens of pine and maple, a transparent vacuum-train tube on slender pylons, "
-        "a car-free street of low tiled houses kept at the towers' feet, walkers and small pod "
+        "A far-future Japanese city {when}: immense kilometre-high timber-latticed arcology "
+        "towers with tiled eaves and terraced gardens of pine and maple, small flying craft "
+        "between them, a transparent vacuum-train tube on slender pylons, a car-free street of "
+        "low tiled houses kept at the towers' feet, humanoid robots and people, small pod "
         "vehicles"
     ),
 }
@@ -466,7 +479,8 @@ for (_region, _rung), _street in CITY_STREETS.items():
         "size": None,
         "effect": CITY_EFFECT[_region],
         "seed": None,
-        "prompt": f"{_street.format(when=_when)}, {CITY_LANDMARK[_region]} hazy at the end of the street",
+        "prompt": (f"{_street.format(when=_when)}, {CITY_LANDMARK[_region]} hazy at the end of the street"
+                   + (CITY_FAR_FUTURE_SKY if _rung == 5 else "")),
     }
 
 # --- Drafts for the later waves (design section 9). A draft is a prompt with the technology
