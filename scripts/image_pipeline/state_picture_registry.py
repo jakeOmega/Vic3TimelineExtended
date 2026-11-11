@@ -1080,25 +1080,32 @@ DRAFTS = {
         "white cruise ship, crowds on a palm-lined boardwalk, a bright sea"),
     "devastated_early": _draft(
         "condition", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy devastation, on the first two rungs",
-        "A city ruined by war {when}: roofless brick and stone buildings with empty window "
-        "holes, streets choked with rubble, a burnt-out tram on twisted rails, craters, smoke "
-        "rising from several fires, a few people pulling a handcart of belongings, a broken "
-        "bridge"),
+        "A city bombed flat {when}: a sea of rubble where the streets were, two thirds of the "
+        "brick and stone buildings collapsed into heaps, the rest roofless burnt shells with "
+        "empty window holes and no floors, lone chimney stacks and jagged fragments of wall "
+        "standing, a burnt-out tram on twisted rails, bomb craters, black smoke rising from many "
+        "fires, a few people pulling a handcart through the ruins"),
     "devastated_late": _draft(
         "condition", ["urban"], "urban_european", "computer_aided_design", 3, "heavy devastation, from the third rung",
-        "A city ruined by war {when}: concrete tower blocks with whole faces sheared away and "
-        "floors hanging, a collapsed flyover, burnt-out boxy 1980s cars and buses, shattered glass towers, "
-        "smoke columns, craters in a wide road, a few people picking through the rubble"),
+        "A modern city destroyed by war {when}: most of the concrete tower blocks collapsed into "
+        "mountains of broken slabs, the few still standing burnt-out skeletons with whole faces "
+        "sheared away and floors hanging, a fallen flyover lying across a cratered road, wrecked "
+        "and burnt boxy 1980s cars and buses, nothing moving, columns of black smoke from many "
+        "fires, a few people picking through the rubble"),
     "nuclear_strike_early": _draft(
         "condition", ["urban"], "urban_european", "modern_urban_planning", 2, "a nuclear strike on the state, on the first three rungs",
-        "A city after an atomic bomb {when}: a flat grey plain of ash and rubble to the horizon, "
-        "a few twisted steel frames and scorched concrete shells standing, charred tree trunks, "
-        "a melted tram, drifting smoke under a dark yellow sky, no living thing in sight"),
+        "A city erased by an atomic bomb {when}: a flat scorched plain of grey ash and rubble "
+        "from edge to edge, nothing standing but a few twisted steel frames and one scorched "
+        "concrete shell, charred leafless tree trunks, a melted tram, small fires, a towering "
+        "mushroom cloud rising on the horizon under a dark orange sky, no intact building "
+        "anywhere, no living thing in sight"),
     "nuclear_strike_late": _draft(
         "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "a nuclear strike on the state, from the fourth rung",
-        "A city after a nuclear strike {when}: the stumps of supertall towers snapped off and "
-        "blackened, a field of fused glass and rubble to the horizon, a collapsed elevated "
-        "railway, drifting ash under a dark yellow sky, no living thing in sight"),
+        "A city erased by a nuclear strike {when}: a flat scorched plain of ash, fused glass and "
+        "rubble from edge to edge, only the blackened snapped-off stumps of a few supertall "
+        "towers standing a few floors high, a collapsed elevated railway lying in pieces, "
+        "burnt-out vehicles, small fires, a towering mushroom cloud rising on the horizon under "
+        "a dark orange sky, no intact building anywhere, no living thing in sight"),
     "flooded_coast_4": _draft(
         "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the warming system's sea-level stage, in a coastal state",
         "A coastal city flooded by the risen sea {when}: streets turned to canals of brown water "

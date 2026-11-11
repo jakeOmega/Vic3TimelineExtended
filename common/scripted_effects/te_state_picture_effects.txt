@@ -120,22 +120,27 @@ te_state_picture_land_tags = {
 # rests on `level` reading a building's levels inside every_scope_building and on the locals
 # carrying out of it; OK when the oil levels are at least the floor of levels and no more than
 # the state's whole. Only a tagged state prints, so an empty walk can't pass. Called with the
-# walk's locals still set.
+# walk's locals still set. The line also prints the state's mine and Coal Mine levels, which the
+# colliery tag rests on: mine_levels counts every building under bg_mining (the mod's mines sit
+# in bg_discoverable_mining, a child group), so in a state with coal it should be at least
+# coal_levels; a mine_levels of 0 beside coal means the group test doesn't reach child groups.
 te_state_picture_land_selfcheck = {
 	if = {
 		limit = { NOT = { has_global_variable = te_sp_land_selfcheck_done } }
 		set_global_variable = { name = te_sp_land_selfcheck_done value = yes }
 		set_global_variable = { name = te_sp_chk_oil value = local_var:te_sp_oil_lv }
 		set_global_variable = { name = te_sp_chk_all value = local_var:te_sp_all }
+		set_global_variable = { name = te_sp_chk_mine value = local_var:te_sp_mine }
+		set_global_variable = { name = te_sp_chk_coal value = local_var:te_sp_coal_lv }
 		if = {
 			limit = {
 				local_var:te_sp_oil_lv >= te_state_picture_k_oil_levels
 				local_var:te_sp_oil_lv <= local_var:te_sp_all
 			}
-			debug_log = "TE_SELF_CHECK OK state_picture_oil state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] oil_levels=[GetGlobalVariable('te_sp_chk_oil').GetValue|0] all_levels=[GetGlobalVariable('te_sp_chk_all').GetValue|0]"
+			debug_log = "TE_SELF_CHECK OK state_picture_oil state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] oil_levels=[GetGlobalVariable('te_sp_chk_oil').GetValue|0] all_levels=[GetGlobalVariable('te_sp_chk_all').GetValue|0] mine_levels=[GetGlobalVariable('te_sp_chk_mine').GetValue|0] coal_levels=[GetGlobalVariable('te_sp_chk_coal').GetValue|0]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN state_picture_oil state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] oil_levels=[GetGlobalVariable('te_sp_chk_oil').GetValue|0] all_levels=[GetGlobalVariable('te_sp_chk_all').GetValue|0] (the walk's sums don't hold together: `level` or the locals don't read as the pass takes them)"
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_oil state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] oil_levels=[GetGlobalVariable('te_sp_chk_oil').GetValue|0] all_levels=[GetGlobalVariable('te_sp_chk_all').GetValue|0] mine_levels=[GetGlobalVariable('te_sp_chk_mine').GetValue|0] coal_levels=[GetGlobalVariable('te_sp_chk_coal').GetValue|0] (the walk's sums don't hold together: `level` or the locals don't read as the pass takes them)"
 		}
 	}
 }
