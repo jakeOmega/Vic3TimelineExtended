@@ -17,8 +17,8 @@ HANDLER_TIMEOUT_S, so it cannot keep `stop` waiting.
 The server never touches the owner's files itself: only the `Session` does, through part 1's verbs. If the
 server is killed outright nothing here restores anything. `watch`, its own process, still records the game's
 exit, and the next `start` is refused: the dead run's overlay is still there (`overlay_left`), and `snapshot`
-refuses while that run is unfinished. `recover` finishes it, and then the folder is removed by hand (spec § 5.2,
-Review Focus 1).
+refuses while that run is unfinished. `recover` finishes it, and then `python3 -m game_qa remove-overlay`
+removes the folder (spec § 5.2, Review Focus 1).
 
     start      the session's start. Any error stops the session; the server then ends as after `stop`. A second
                `start` is refused `session_running`, touching nothing

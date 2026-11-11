@@ -13,7 +13,8 @@ reported, never worked around. Under the user-data folder the session itself wri
 A game that may still be up is never restored beside (part 1 would hold): `stop` then ends `game_left_up` and
 says to run `restore <id>` once no game is running. The overlay goes only once the game is known ended and the
 owner's playset is known back; otherwise it stays, and the next `start` refuses (`overlay_left`) until that run
-is finished and the folder removed. A `stop` that ended refused or game_left_up is run again by the next `stop`.
+is finished and `python3 -m game_qa remove-overlay` has removed the folder. A `stop` that ended refused or
+game_left_up is run again by the next `stop`.
 
 Keys and clicks go out only through `Console` and the helper, which check that the game is in front; a click
 is preceded by a console call that needs the game in front, so the presence rule decides whether the foreground
@@ -222,7 +223,8 @@ class Session:
         if os.path.lexists(self._paths.overlay_dir):
             raise SessionError("overlay_left", "%s is there already, left by an earlier run whose playset may still "
                                "name it: finish that run (`python3 -m game_qa recover`, or `restore <id>` once no "
-                               "game is running), then remove the folder. Nothing was done" % self._paths.overlay_dir)
+                               "game is running), then run `python3 -m game_qa remove-overlay`. Nothing was done"
+                               % self._paths.overlay_dir)
         if not isinstance(permission, str) or not permission.strip():
             raise SessionError("no_permission", "say where the go-ahead to launch came from")
         if playset not in PLAYSETS:
@@ -837,12 +839,12 @@ class Session:
         if proc is None:
             return ("a game of this run may still be up, and neither launch's reply nor the snapshot's journal names "
                     "its process, so nothing here can end it or tell when it has gone. Once no Victoria 3 process "
-                    "runs: `python3 -m game_qa recover` (it finishes snapshot %s), then remove %s"
-                    % (self._snapshot, self._paths.overlay_dir)), False
+                    "runs: `python3 -m game_qa recover` (it finishes snapshot %s), then `python3 -m game_qa "
+                    "remove-overlay`" % self._snapshot), False
         if proc.created == UNKNOWN_START:
             return ("the harness's game (pid %d) may still be up, and its start time is not known, so it was not "
                     "ended: a pid alone may be another game's. Once no Victoria 3 process runs: `python3 -m game_qa "
-                    "restore %s`, then remove %s" % (proc.pid, self._snapshot, self._paths.overlay_dir)), False
+                    "restore %s`, then `python3 -m game_qa remove-overlay`" % (proc.pid, self._snapshot)), False
         return ("the harness's game (pid %d, started %s) may still be up: ending it failed. `python3 -m game_qa stop` "
                 "again tries again to end it by its pid and start time (or finds it gone), then restores snapshot %s; "
                 "if it keeps failing, ask the owner to close the game" % (proc.pid, proc.created, self._snapshot)), True

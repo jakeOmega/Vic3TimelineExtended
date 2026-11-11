@@ -788,10 +788,12 @@ class DeadServerTest(ChildServerTestCase):
             reply, code = self.run_cli("start", "--permission", PERMISSION, "--save", "owner_save", "--playset", "current")
 
         # refused before anything, because the dead run's overlay is there (its playset may still name it); the
-        # caller is told to run `recover`, then remove the folder
+        # caller is told to run `recover`, then `remove-overlay`
         self.assertEqual((reply["refused"], code), ("overlay_left", 2), reply)
         self.assertIn("recover", reply["detail"])
         self.assertIn("recover", reply["next"])
+        for text in (reply["detail"], reply["next"]):
+            self.assertIn("`python3 -m game_qa remove-overlay`", text)
         self.assertEqual(reply["stale_session"]["pid"], child.pid)
         self.assertIn("recover", reply["stale_session"]["detail"])
         # the new server is gone, and so is its file
@@ -805,6 +807,14 @@ class DeadServerTest(ChildServerTestCase):
         self.assertIn("started", events)
         self.assertFalse({"restored", "held"} & set(events))
         self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [dead_run])
+
+        # R4: `remove-overlay` refuses while that run is unfinished (its game may be up, and its playset names the
+        # overlay), and says to `recover` it first (RemoveOverlayTest has the rest)
+        with mock.patch.object(gate, "list_games", return_value=[]):
+            refused, code = self.run_cli("remove-overlay")
+        self.assertEqual((refused["refused"], code), ("unfinished_run", 2), refused)
+        self.assertIn("recover", refused["next"])
+        self.assertEqual(tree(self.user), before)
 
 
 class SignalTest(ChildServerTestCase):
@@ -831,6 +841,130 @@ class SignalTest(ChildServerTestCase):
         self.assertEqual(self.marked(), ["serving", "advance began", "advance done", "stop",
                                          "exited after signal %d" % signal.SIGTERM])
         self.assertFalse(self.info_path.exists())
+
+
+class RemoveOverlayTest(ServerTestCase):
+    """R4: `remove-overlay` removes the overlay an earlier run left, and a cut-short build's temp folder, only
+    through overlay.remove's checks, and only once no server, game, unfinished run or held playset can use it."""
+
+    def setUp(self):
+        super().setUp()
+        self.user = self.root / "Victoria 3"
+        self.mod = self.user / "mod"
+        self.mod.mkdir(parents=True)
+        (self.mod / "Vic3TimelineExtended").mkdir()
+        (self.mod / "Vic3TimelineExtended" / "descriptor.txt").write_bytes(b"the owner's mod")
+        self.dest = self.mod / overlay.OVERLAY_NAME
+        self.games: list = []
+        patch = mock.patch.dict(os.environ, {"VIC3_USER_DATA": str(self.user)})
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def list_games(self):
+        if isinstance(self.games, Exception):
+            raise self.games
+        return list(self.games)
+
+    def remove(self):
+        return client.remove_overlay(self.user, self.backups, self.list_games, sleep=lambda s: None)
+
+    def build_temp(self, name=".te_qa_overlay.tmp-k3j_9x2a") -> Path:
+        """What a build killed between its first write and its rename leaves: a marked overlay under the temp name."""
+        overlay.build(self.mod / overlay.OVERLAY_NAME, {}, "1.15.0").dir.rename(self.mod / name)
+        return self.mod / name
+
+    def run_snapshot(self, *events):
+        snap = snapshot.take(self.user, self.backups)
+        for event in events:
+            snapshot.record(snap, event, **({"pid": 4242, "created": "c"} if event == "started" else {}))
+        return snap.id
+
+    def owner_files(self):
+        ours = ("mod/" + overlay.OVERLAY_NAME, "mod/." + overlay.OVERLAY_NAME)
+        return [(p, d) for p, _t, d in tree(self.user) if not p.startswith(ours)]
+
+    def test_it_removes_the_overlay_and_a_marked_build_folder_and_nothing_else(self):
+        temp = self.build_temp()
+        overlay.build(self.dest, {"a": "set_variable = x"}, "1.15.0")
+        self.run_snapshot("armed", "started", "playset", "playset_restored", "held")    # its playset is back
+        self.run_snapshot("armed", "started", "playset", "restored")
+        before = self.owner_files()
+        reply, code = self.remove()
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(sorted(reply["removed"]), sorted([str(self.dest), str(temp)]))
+        self.assertFalse(os.path.lexists(self.dest))
+        self.assertFalse(os.path.lexists(temp))
+        self.assertEqual(self.owner_files(), before)
+        self.assertEqual(sorted(os.listdir(self.mod)), ["Vic3TimelineExtended"])
+
+    def test_with_nothing_there_it_says_so(self):
+        self.assertEqual(self.remove()[1], 0)
+        self.assertEqual(self.remove()[0]["removed"], [])
+
+    def test_it_refuses_while_anything_may_still_use_the_overlay(self):
+        cases = (
+            ("game_running", lambda: setattr(self, "games", [gate.ProcId(4242, "2026-11-10T14:00:00.0000000Z")])),
+            ("cannot_list_games", lambda: setattr(self, "games", gate.GateError("the listing did not finish"))),
+            ("unfinished_run", lambda: self.run_snapshot("armed", "started")),
+            ("playset_held", lambda: self.run_snapshot("armed", "started", "playset", "held")),
+            ("playset_held", lambda: self.run_snapshot("armed", "started", "playset", "playset_written", "held")),
+        )
+        for code_name, arrange in cases:
+            with self.subTest(refused=code_name):
+                self.setUp()
+                temp = self.build_temp()
+                overlay.build(self.dest, {}, "1.15.0")
+                arrange()
+                before = tree(self.user)
+                reply, code = self.remove()
+                self.assertEqual((reply["refused"], code, reply["removed"]), (code_name, 2, []), reply)
+                self.assertEqual(tree(self.user), before)
+                self.assertTrue(temp.is_dir())
+
+    def test_it_refuses_while_a_session_server_answers_or_may(self):
+        self.serve()
+        overlay.build(self.dest, {}, "1.15.0")
+        reply, code = self.remove()
+        self.assertEqual((reply["refused"], code), ("session_running", 2))
+        self.assertTrue(self.dest.is_dir())
+        client.call(self.backups, "stop", {}, timeout=10)
+        self.threads[0].join(10)
+        self.info_path.write_text("{ half written", encoding="utf-8")          # what a server writes in one call
+        self.assertEqual(self.remove()[0]["refused"], "session_running")
+        self.assertTrue(self.dest.is_dir())
+        self.info_path.unlink()
+        self.write_info(free_port(), os.getpid())        # a dead server's file (this pid is no session-serve)
+        self.assertEqual(self.remove()[1], 0)
+        self.assertFalse(self.dest.exists())
+
+    def test_a_folder_that_is_not_provably_the_harnesss_is_left(self):
+        self.dest.mkdir()
+        (self.dest / "notes.txt").write_bytes(b"someone else's")
+        unmarked = self.mod / ".te_qa_overlay.tmp-zz9"
+        unmarked.mkdir()                                      # a build killed before its first write
+        before = tree(self.user)
+        reply, code = self.remove()
+        self.assertEqual((reply["refused"], code, reply["removed"]), ("not_ours", 2, []))
+        self.assertEqual(sorted(entry["path"] for entry in reply["left"]), sorted([str(self.dest), str(unmarked)]))
+        self.assertEqual(tree(self.user), before)
+        self.assertTrue(unmarked.is_dir())
+
+    def test_the_verb_runs_through_the_command_line_with_the_process_listing(self):
+        overlay.build(self.dest, {}, "1.15.0")
+        with mock.patch.object(gate, "list_games", return_value=[gate.ProcId(7, "c")]):
+            reply, code = self.run_cli("remove-overlay")
+        self.assertEqual((reply["refused"], code), ("game_running", 2))
+        with mock.patch.object(gate, "list_games", return_value=[]):
+            reply, code = self.run_cli("remove-overlay")
+        self.assertEqual((reply["removed"], code), ([str(self.dest)], 0))
+        self.assertFalse(self.dest.exists())
+
+    def test_no_hint_says_to_remove_a_folder_by_hand(self):
+        for text in (client.OVERLAY_LEFT_HINT, client.RECOVER_HINT, server.__doc__, session.__doc__):
+            self.assertNotIn("by hand", text)
+            self.assertNotIn("remove the folder", text)
+        for hint in (client.OVERLAY_LEFT_HINT, client.RECOVER_HINT):
+            self.assertIn("`python3 -m game_qa remove-overlay`", hint)
 
 
 class DoctorTest(ServerTestCase):

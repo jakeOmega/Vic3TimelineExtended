@@ -410,6 +410,71 @@ class RemoveTest(OverlayTestCase):
         self.assertIs(overlay.remove(self.dest), True)
 
 
+class LeftoverBuildTest(OverlayTestCase):
+    """R4: a build killed between its mkdtemp and its rename leaves a temp folder; `remove_build` deletes it under
+    `remove`'s checks."""
+
+    def killed_build(self, name=".te_qa_overlay.tmp-k3j_9x2a") -> Path:
+        """What a build killed after its first write leaves: build's files under build's temp name."""
+        self.build({"alpha": SETUP_A}).dir.rename(self.mods / name)
+        return self.mods / name
+
+    def test_a_marked_temp_folder_is_listed_and_removed(self):
+        temp = self.killed_build()
+        (self.mods / "owner_mod").mkdir()
+        self.assertEqual(overlay.leftover_builds(self.mods), [temp])
+        self.assertIs(overlay.remove_build(temp), True)
+        self.assertFalse(os.path.lexists(temp))
+        self.assertEqual(sorted(os.listdir(self.mods)), ["owner_mod"])
+        self.assertEqual(overlay.leftover_builds(self.base / "no such folder"), [])
+
+    def test_a_real_build_cut_short_leaves_a_folder_that_is_listed(self):
+        def killed(*args):
+            raise KeyboardInterrupt
+        with mock.patch.object(overlay.shutil, "rmtree"), mock.patch.object(overlay.os, "rename", killed):
+            with self.assertRaises(KeyboardInterrupt):
+                self.build({"alpha": SETUP_A})
+        [temp] = overlay.leftover_builds(self.mods)
+        self.assertIs(overlay.remove_build(temp), True)
+        self.assertEqual(os.listdir(self.mods), [])
+
+    def test_an_unmarked_or_misnamed_folder_is_left(self):
+        unmarked = self.mods / ".te_qa_overlay.tmp-zz9"
+        unmarked.mkdir()
+        (unmarked / "notes.txt").write_bytes(b"keep me")
+        misnamed = self.killed_build(".te_qa_overlay.tmp-abc.bak")
+        self.assertEqual(overlay.leftover_builds(self.mods), [unmarked])
+        self.assertIs(overlay.remove_build(unmarked), False)
+        self.assertIs(overlay.remove_build(misnamed), False)
+        self.assertIs(overlay.remove_build(self.build().dir), False)      # the overlay itself: `remove`'s job
+        self.assert_files_untouched(unmarked, {"notes.txt": b"keep me"})
+        self.assertTrue((misnamed / overlay.METADATA_FILE).is_file())
+
+    def test_a_marker_reached_through_a_symlink_lets_nothing_be_deleted(self):
+        real = self.base / "real" / overlay.OVERLAY_NAME
+        real.parent.mkdir()
+        self.build(dest=real)
+        for folder in (self.dest, self.mods / ".te_qa_overlay.tmp-sym1"):
+            for label, link in (("the .metadata folder", ".metadata"), ("metadata.json", overlay.METADATA_FILE)):
+                with self.subTest(folder=folder.name, link=label):
+                    folder.mkdir()
+                    (folder / "notes.txt").write_bytes(b"keep me")
+                    target = real / link
+                    (folder / link).parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        (folder / link).symlink_to(target, target_is_directory=target.is_dir())
+                    except OSError:
+                        self.skipTest("no symlinks here")
+                    remove = overlay.remove if folder == self.dest else overlay.remove_build
+                    self.assertIs(remove(folder), False)
+                    self.assertEqual((folder / "notes.txt").read_bytes(), b"keep me")
+                    self.assertTrue((real / overlay.METADATA_FILE).is_file())
+                    (folder / link).unlink()
+                    for path in sorted(folder.rglob("*"), reverse=True):
+                        path.unlink() if path.is_file() else path.rmdir()
+                    folder.rmdir()
+
+
 class RefuseOverwriteTest(OverlayTestCase):
     def test_build_refuses_to_overwrite_a_folder_that_is_not_an_overlay(self):
         self.dest.mkdir(parents=True)

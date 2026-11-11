@@ -19,6 +19,7 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa stop                  # end the game, put the owner's files back, end the server
     python3 -m game_qa status                # the server and its session
     python3 -m game_qa doctor                # is this machine ready for a session? (starts nothing)
+    python3 -m game_qa remove-overlay        # the overlay folder an earlier run left, once nothing can use it
 
 `start` refuses `session_running` while `<backup root>/session.json` names a server that is up, removes a stale one
 (nothing listens on its port and its process is gone) and says so, spawns `python3 -m game_qa session-serve`
@@ -70,11 +71,13 @@ LAUNCHER_SETTINGS = Path("launcher") / "launcher-settings.json"
 
 RECOVER_HINT = ("a run is unfinished: its session ended without `stop` (its server died, or was killed). If its game "
                 "is still up, its `watch` still records it. Once no game of that run is running and its `watch` has "
-                "returned, run `python3 -m game_qa recover`, which finishes the run, then `start` again")
+                "returned, run `python3 -m game_qa recover`, which finishes the run, then `python3 -m game_qa "
+                "remove-overlay` (the run's overlay folder), then `start` again")
 OVERLAY_LEFT_HINT = ("the overlay folder is an earlier run's, and that run's playset may still name it, so `start` "
                      "neither replaces nor removes it. Once no game of that run is running, finish the run "
                      "(`python3 -m game_qa recover`, or `restore <id>` for a run whose stop ended game_left_up or "
-                     "refused), then remove the folder and `start` again")
+                     "refused), then run `python3 -m game_qa remove-overlay`, which removes the folder once nothing "
+                     "can still use it, and `start` again")
 DEAD_SERVER = ("%s names a session server (pid %s, port %s) that nothing answers for: it has died. " + RECOVER_HINT
                + ". `doctor` says what is left")
 
@@ -364,6 +367,123 @@ def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: C
     return {"ok": ok, "checks": lines, "problems": problems}, 0 if ok else 2
 
 
+# ---- remove-overlay
+
+def remove_overlay(user_data: Path, backup_root: Path, list_games: Callable[[], Sequence],
+                   sleep=time.sleep) -> tuple[dict, int]:
+    """`remove-overlay`: delete the overlay folder (`mod/te_qa_overlay`) an earlier run left, and any temp folder
+    a cut-short `build` left beside it, only through `overlay.remove` and `overlay.remove_build` (the exact name,
+    the harness's marker, no symlink followed). Refused, with nothing removed, while anything may still use it:
+    a session server that answers or may (`session_running`), a Victoria 3 process, or a process listing that
+    did not finish (`game_running`, `cannot_list_games`), an unfinished run (`unfinished_run`: its game may be
+    up, and `recover` finishes it), or a held snapshot whose run's playset was never put back (`playset_held`:
+    the launcher may still name the overlay, and only the owner resolves a hold). A folder of that name that is
+    not the harness's is left (`not_ours`). Exit 0 only when nothing of the overlay, nor any build folder, is
+    left."""
+    mod = Path(user_data) / "mod"
+    dest = mod / overlay.OVERLAY_NAME
+    builds = overlay.leftover_builds(mod)
+    if not os.path.lexists(dest) and not builds:
+        return {"ok": True, "removed": [], "detail": "there is no overlay folder at %s, nor a build's temp folder "
+                                                     "beside it: nothing to remove" % dest}, 0
+    refused = _overlay_in_use(Path(backup_root), list_games, sleep)
+    if refused is not None:
+        return dict(refused, ok=False, removed=[], overlay=str(dest)), 2
+    if _server_named(Path(backup_root), sleep) is not None:     # one started meanwhile: it may be building its own
+        return {"ok": False, "refused": "session_running", "removed": [], "overlay": str(dest),
+                "detail": "a session server started while this looked: its run builds this overlay. Nothing was "
+                          "removed"}, 2
+    removed, left = [], []
+    try:
+        if os.path.lexists(dest):
+            if overlay.remove(dest):
+                removed.append(str(dest))
+            else:
+                left.append({"path": str(dest), "why": "not_ours: it is not a real folder carrying the harness's "
+                                                       "marker (%s), so it is the owner's to judge" % overlay.MARKER})
+        for build in builds:
+            if overlay.remove_build(build):
+                removed.append(str(build))
+            else:
+                left.append({"path": str(build), "why": "not_ours: a build's temp folder by its name, but it carries "
+                                                        "no marker of the harness's (a build killed before its first "
+                                                        "write, or not a build's at all): the owner's to judge"})
+    except OSError as e:
+        # The marker is deleted last, so a folder cut short here still reads as the harness's: run it again.
+        return {"ok": False, "refused": "remove_failed", "removed": removed, "left": left, "overlay": str(dest),
+                "detail": "removing failed partway (%s: %s), with the marker kept: run `remove-overlay` again once "
+                          "nothing holds a file in it" % (type(e).__name__, e)}, 2
+    out = {"ok": not left, "removed": removed, "overlay": str(dest)}
+    if left:
+        out.update(refused="not_ours", left=left, detail="nothing that is not provably the harness's was removed")
+    return out, 0 if not left else 2
+
+
+def _overlay_in_use(backups: Path, list_games: Callable[[], Sequence], sleep) -> dict | None:
+    """Why the overlay may still be used (a refusal: `refused`, `detail`, and `next` where there is one), or
+    None when nothing can use it."""
+    info = _server_named(backups, sleep)
+    if info is not None:
+        return {"refused": "session_running", "session": _public(info),
+                "detail": "a session server (pid %s, port %s) is up: its run may be using the overlay. `stop` it "
+                          "(or let it finish), then run this again" % (info.get("pid"), info.get("port"))}
+    try:
+        games = list(list_games())
+    except gate.GateError as e:
+        return {"refused": "cannot_list_games", "detail": "the Victoria 3 processes could not be listed (%s), so a "
+                                                          "game that loaded the overlay cannot be ruled out" % e}
+    if games:
+        return {"refused": "game_running", "games": [{"pid": g.pid, "created": g.created} for g in games],
+                "detail": "a Victoria 3 process is running, and it may have loaded the overlay: once none runs, "
+                          "run this again"}
+    try:
+        unfinished = _open_runs(backups)
+        held = restore.held(backups) if backups.is_dir() else []
+        unanswered = [snap.id for snap in held if _playset_unanswered(snapshot.journal(snap))]
+    except Exception as e:
+        return {"refused": "cannot_read_runs", "detail": "the snapshots' journals could not be read (%s: %s), so a "
+                                                         "run that still names the overlay cannot be ruled out"
+                                                         % (type(e).__name__, e)}
+    if unfinished:
+        return {"refused": "unfinished_run", "unfinished": unfinished, "next": RECOVER_HINT,
+                "detail": "%s: taken for a run and neither restored nor held; that run's game may be up, and its "
+                          "playset names the overlay" % ", ".join(unfinished)}
+    if unanswered:
+        return {"refused": "playset_held", "held": unanswered,
+                "detail": "%s: held for the owner with the run's playset never put back, so the launcher may still "
+                          "name the overlay. Only the owner resolves a hold; this can run once they have"
+                          % ", ".join(unanswered)}
+    return None
+
+
+def _server_named(backups: Path, sleep) -> dict | None:
+    """What session.json says when it names a server that is up or may be (`server_state` live or busy), else
+    None. A file that does not read is looked at again after a second (a server writes it in one call), and is
+    taken for a server while it stays unreadable: only `start` judges and removes such a file."""
+    path = backups / server.SESSION_FILE
+    if not os.path.lexists(path):
+        return None
+    info = server.read_info(backups)
+    if info is None:
+        sleep(1.0)
+        if not os.path.lexists(path):
+            return None
+        info = server.read_info(backups)
+        if info is None:
+            return {"pid": None, "port": None, "detail": "%s does not read as a server's" % path}
+    return info if server_state(info) != "stale" else None
+
+
+def _playset_unanswered(journal: list[dict]) -> bool:
+    """Whether a `playset` entry has no `playset_restored` or `restored` after it (the rule of part 1's
+    `_answered`): the run's playset, which names the overlay, may never have been put back."""
+    for i, entry in enumerate(journal):
+        if entry.get("event") == "playset" and not any(
+                later.get("event") in ("playset_restored", "restored") for later in journal[i + 1:]):
+            return True
+    return False
+
+
 def _backup_root_problem(path: Path) -> str | None:
     folder = path if path.is_dir() else path.parent
     if not folder.is_dir():
@@ -554,6 +674,10 @@ def cmd_doctor(args) -> tuple[dict, int]:
     return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1))
 
 
+def cmd_remove_overlay(args) -> tuple[dict, int]:
+    return remove_overlay(_resolve("game_user_data_path"), _backup_root(), gate.list_games)
+
+
 def cmd_session_serve(args) -> tuple[dict, int]:
     paths = real_paths()
     sess = session.Session(ProcessHelper(), run_cli, lambda snapshot_id: spawn_watch(snapshot_id, paths.run_root), paths,
@@ -612,7 +736,10 @@ def add_verbs(sub) -> None:
     for name, fn, text in (("stop", cmd_stop, "end the game, put the owner's files back, end the session server"),
                            ("status", cmd_status, "the session server and its session"),
                            ("doctor", cmd_doctor, "is this machine ready for a session? (starts nothing, changes "
-                                                  "nothing)")):
+                                                  "nothing)"),
+                           ("remove-overlay", cmd_remove_overlay, "remove the overlay folder an earlier run left, "
+                                                                  "once no server, game, unfinished run or held "
+                                                                  "playset can still use it")):
         sub.add_parser(name, help=text).set_defaults(run=fn)
     p = sub.add_parser("session-serve", help="the session server (`start` runs it detached; not for direct use)")
     p.add_argument("--port", type=int, default=server.PORT)

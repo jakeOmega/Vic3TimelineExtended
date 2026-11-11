@@ -7,7 +7,8 @@
 
 Nothing here touches anything but that one folder, by its exact path, and a sibling temp folder
 made for one build. `build` writes the new overlay beside the old one and swaps it in, so a failed
-build leaves no half overlay. The shapes follow the probe files that ran against the real game on
+build leaves no half overlay; one cut short by a kill can leave its temp folder, which `remove_build`
+deletes under the same checks as `remove` (`python3 -m game_qa remove-overlay` runs both). The shapes follow the probe files that ran against the real game on
 2026-11-10 (docs/testing/game_qa_probe/overlay/). The `.txt` files start with one UTF-8 BOM and
 are indented with tabs; `metadata.json` has no BOM, as the mod's own has none.
 """
@@ -30,6 +31,7 @@ READ_EVENT = "te_qa.1"
 PAD_EVENT = "te_qa.2"
 FIXTURE_TEST = "te_qa_fixture"
 FIRST_SETUP_EVENT = 10  # setup events are te_qa.10, te_qa.11, ... in the sorted order of the setup names
+_BUILD_TEMP = re.compile(r"\.%s\.tmp-[A-Za-z0-9_]+" % OVERLAY_NAME)  # the temp folders `build` makes (mkdtemp)
 
 EVENTS_FILE = "events/te_qa_events.txt"
 EFFECTS_FILE = "common/scripted_effects/te_qa_effects.txt"
@@ -116,6 +118,34 @@ def remove(dest: Path) -> bool:
     dest = Path(dest)
     if not _is_overlay(dest):
         return False
+    _delete(dest)
+    return True
+
+
+def leftover_builds(mod_dir: Path) -> list[Path]:
+    """The folders in `mod_dir` named as `build` names its temp folders, marked or not: what a build cut short
+    (killed between its mkdtemp and its rename) left. Only `remove_build` deletes one, and only a marked one."""
+    try:
+        names = os.listdir(mod_dir)
+    except (FileNotFoundError, NotADirectoryError):
+        return []
+    return sorted(Path(mod_dir) / name for name in names if _BUILD_TEMP.fullmatch(name))
+
+
+def remove_build(temp: Path) -> bool:
+    """Delete a temp folder a cut-short `build` left, under `remove`'s checks: only a real folder named as
+    `build` names them whose metadata.json carries MARKER (`build` writes it first). Anything else, an unmarked
+    one included (killed before its first write: nothing proves it is the harness's), is left, and the answer
+    is False."""
+    temp = Path(temp)
+    if _BUILD_TEMP.fullmatch(temp.name) is None or not _is_marked(temp):
+        return False
+    _delete(temp)
+    return True
+
+
+def _delete(dest: Path) -> None:
+    """Delete a folder `_is_marked` vouched for, never following a symlink inside it."""
     # The marker goes last: if a delete fails midway (a file the game still holds), the folder still reads as
     # ours and the next `remove` finishes the job, where a folder with no marker would be refused for good.
     marker = dest / METADATA_FILE
@@ -133,7 +163,6 @@ def remove(dest: Path) -> bool:
     marker.unlink()
     marker.parent.rmdir()
     dest.rmdir()
-    return True
 
 
 def parse_date(line_text: str) -> tuple[int, int, int] | None:
@@ -150,7 +179,14 @@ def parse_date(line_text: str) -> tuple[int, int, int] | None:
 
 def _is_overlay(folder: Path) -> bool:
     """A real folder (not a symlink) named OVERLAY_NAME whose metadata.json says MARKER."""
-    if folder.name != OVERLAY_NAME or folder.is_symlink() or not folder.is_dir():
+    return folder.name == OVERLAY_NAME and _is_marked(folder)
+
+
+def _is_marked(folder: Path) -> bool:
+    """A real folder (not a symlink) whose metadata.json says MARKER, read through no symlink: the marker is
+    what lets a delete begin, so it must be the folder's own."""
+    marker = folder / METADATA_FILE
+    if any(path.is_symlink() for path in (folder, marker.parent, marker)) or not folder.is_dir():
         return False
     try:
         meta = json.loads((folder / METADATA_FILE).read_bytes().decode("utf-8-sig"))

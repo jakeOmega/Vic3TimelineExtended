@@ -525,6 +525,7 @@ class StartTest(SessionTestCase):
         error = self.session_error(self.start)
         self.assertEqual(error.code, "overlay_left")
         self.assertIn("recover", error.detail)
+        self.assertIn("`python3 -m game_qa remove-overlay`", error.detail)      # R4: a verb, never "by hand"
         self.assertEqual(self.cli.calls, [])
         self.session.stop()
         self.assertEqual(sorted(p.relative_to(earlier.dir).as_posix() for p in earlier.dir.rglob("*")), before)
@@ -1429,6 +1430,8 @@ class StopAgainTest(SessionTestCase):
                 self.assertFalse(stop["stop_again"])
                 self.assertNotIn("stop` again", stop["next"])
                 self.assertIn("once no victoria 3 process runs", stop["next"].lower())
+                self.assertIn("`python3 -m game_qa remove-overlay`", stop["next"])
+                self.assertNotIn(str(self.paths.overlay_dir), stop["next"])
 
     def test_a_stop_run_again_keeps_the_notes_of_the_one_before(self):
         self.started()
