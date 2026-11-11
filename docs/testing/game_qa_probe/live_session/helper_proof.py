@@ -1,6 +1,6 @@
-import sys, time, json
+import sys, time
 from pathlib import Path
-sys.path.insert(0, "/home/<winuser>/src/vic3te-game-qa-part2")
+sys.path.insert(0, "/home/<user>/src/vic3te-game-qa-part2")
 from game_qa import gate, dap
 from game_qa.helper import ProcessHelper, HelperError
 

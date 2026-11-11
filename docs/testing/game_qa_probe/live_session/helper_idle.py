@@ -1,5 +1,5 @@
 import sys, time
-sys.path.insert(0, "/home/<winuser>/src/vic3te-game-qa-part2")
+sys.path.insert(0, "/home/<user>/src/vic3te-game-qa-part2")
 from game_qa import gate
 from game_qa.helper import ProcessHelper
 game = gate.list_games()[0]
