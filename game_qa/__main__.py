@@ -254,7 +254,8 @@ def cmd_launch(args) -> tuple[dict, int]:
                 "detail": f"{exc}. Nothing was recorded: a game this started would count as another game "
                           "everywhere (`gate` and `launch` refuse beside it, `restore` and `recover` hold). The "
                           f"snapshot stays claimed, so `launch` refuses it: once no game runs, `restore {snap.id}` "
-                          "finishes it, holding anything that changed"}, 2
+                          f"finishes it, {LAUNCH_IN_FLIGHT_S:g} s after the claim: it holds a changed file outside "
+                          "`logs/` and leaves `logs/` as it is"}, 2
     try:
         snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args)
     except OSError as exc:
