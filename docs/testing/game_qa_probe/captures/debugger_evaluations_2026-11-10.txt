@@ -1,0 +1,20 @@
+# Debugger evaluations at a breakpoint on the carrier event's debug_log line (events/te_qa_probe_events.txt:9),
+# playing France on 2 January 1836, after the carrier te_qa_probe.6 had set te_qa_probe_var = 42 on France.
+# te_qa_probe_value is the probe's script value: 7 + var:te_qa_probe_var. Live session, 2026-11-10 16:11.
+# expression | success | result (first line)
+
+c:FRA.te_qa_probe_value | True | 49
+c:FRA.var:te_qa_probe_var | True | 42
+has_variable = te_qa_probe_var | True | yes - Yes: 
+var:te_qa_probe_var | False | not a valid trigger or script value
+te_qa_probe_value | True | 49
+root.te_qa_probe_value | True | 49
+this.te_qa_probe_value | True | 49
+root.var:te_qa_probe_var | True | 42
+c:FRA.gdp | True | 22625834.0308
+root.gdp | True | 22625834.0308
+c:GBR.country_rank | True | 7
+game_date >= 1836.1.2 | True | yes - Yes: 
+game_date >= 1836.1.3 | True | no - No: 
+c:FRA.var:te_qa_probe_var >= 42 | True | yes - Yes: 
+c:FRA = { has_variable = te_qa_probe_var } | True | yes - Yes: 

@@ -1,6 +1,10 @@
 # In-game QA harness: a Claude session drives Victoria 3 (2026-11-10)
 
-> **Status: design approved by the owner 2026-11-10, nothing built.** Written against `main` at `d37b8be` and the game at
+> **Status: design approved by the owner 2026-11-10. Part 1 built the same day (the
+> protection of the owner's files, the launch gate, the Windows helper, the log, console and
+> debugger layers) and § 7's assumptions settled in a live session: § 12 has the results and
+> what they change. Part 2 (overlay, fixture, session, the verbs, the report, the skill) is
+> not built.** Written against `main` at `d37b8be` and the game at
 > 1.15.0 (Ivan-Chai, build `6338547985`). Every engine fact below is tagged **verified**
 > (seen in a probe launch on the owner's machine on 2026-11-10) or **assumed** (§ 7 lists
 > the assumptions, each with a fallback; settling them is the plan's first task).
@@ -484,3 +488,56 @@ triage registries are imported or their output parsed.
   switch country; it cannot run a script file or save".
 
 Player guide: no player-facing change.
+
+## 12. Results of the live session (2026-11-10, 16:06–16:16) and what they change
+
+Two launches on the owner's machine, with their go-ahead, after a dry run of snapshot and
+restore on the real folder. Evidence: `docs/testing/game_qa_probe/captures/` (the files named
+below) and the probe's overlay in `docs/testing/game_qa_probe/overlay/`.
+
+### 12.1 The six assumptions
+
+| # | Result | Evidence |
+|---|---|---|
+| A1 | **Holds.** The carrier `te_qa_probe.6` saved a scope and called `trigger_event`; the event was pending at once, paused, with the scope (`rival=GBR`), and `select_event_option 1 10` ran option B | `live_session_early_lines.txt`, 16:10:27–16:10:55 |
+| A2 | **False.** On the loaded fixture's country-select screen the date did not move in 8 s unpaused. Start is disabled ("No country selected") until a country is clicked on the map. After `tag FRA` the camera is on France: a click at the client's centre-left (1890, 1418 of 3840x2160) selected it, a click on Start (3539, 2106) entered the game, and 6 s unpaused then moved the date from 2 to 11 January | `live_session_lines.txt`, 16:12:11–16:13:49 |
+| A3 | **Holds.** The overlay as a fifth entry in `content_load.json` loaded on a direct launch: its events parsed, and its scripted test made the fixture save in 94 s | `content_load_with_overlay.json` |
+| A4 | **Holds.** At a breakpoint on the carrier: `c:FRA.te_qa_probe_value` gave 49, `c:FRA.var:te_qa_probe_var` 42, the script value's bare name 49, `root.` and `this.` chains the same, and triggers (`has_variable`, `game_date >= 1836.1.3`, a variable comparison, a scoped block) yes or no. A bare `var:x` is refused | `debugger_evaluations_2026-11-10.txt` |
+| A5 | **Holds.** Sixty padding `debug_log` lines (about 9 KB) grew `debug.log` by two 4,096-byte blocks within a second, with the earlier line in the file | `log_rotation_2026-11-10.txt` |
+| A6 | **Holds.** Console `event` fired an event whose trigger is `always = no` (printing the trigger's tooltip as an extra reply line), and fired a 365-day-cooldown event twice running | `live_session_early_lines.txt`, 16:10:25–16:10:26 |
+
+### 12.2 Other facts the session and the build established
+
+- **The Windows helper works live**: Windows Python 3.11 ran `win_helper.py` from its WSL path
+  and kept its pipes; it recognized the game by process id and creation time (the string equals
+  PowerShell's) and refused a wrong time; focus, keys, a correct screenshot and the debugger
+  through its TCP relay all worked; it refused to end a process it had not adopted, then ended
+  the game.
+- **Windows' idle time is useless on the owner's machine.** `GetLastInputInfo` read 0–31 ms
+  continuously, from the helper and from PowerShell alike, with a Chrome Remote Desktop session
+  connected. It cannot tell a person from the session.
+- **`console_history.txt` gains no line for a command entered twice running** (eight commands,
+  six new lines). Arrival of a repeat has to be proved from the log.
+- **The game rotates its logs by rename, and WSL sees the same inode afterwards.** A debugger
+  trigger evaluation floods `debug.log` as well as `error.log`: three generations began in the
+  same second.
+- **A file time set from WSL on a Windows drive keeps whole seconds**, on `C:` and `D:` alike, so
+  a file restored from WSL gets its original time cut to the second.
+- **The WSL clock steps**, by about ±5 s every 30 s when measured. Times compared with Windows
+  file times are read off the Windows drive (touch a file, read its time).
+- **The restore worked on the real folder**: the playset file, the console history and 49 logs
+  were put back, the run's timing log removed, and an independent copy of the four autosaves,
+  the Continue pointer, the console history, the playset and the settings matched byte for byte.
+
+### 12.3 What changes in the design
+
+| § | As designed | Now |
+|---|---|---|
+| 5.2, 5.5 | The driver launches the game and records it | The tool launches the game itself, in every flow: `python3 -m game_qa launch` runs the gate, starts the game and records its process id and creation time in one step. Two reviews found that any scheme that works out afterwards which game was the run's (a time written at restore, or the game's creation time) can take a game the owner started for the run's and then overwrite their saves |
+| 5.3 | Restore puts files back as they were | To the second: times cannot be set finer from WSL. `launch` refuses when a non-log file no longer matches the snapshot, so the driver adds its overlay to `content_load.json` through `launch`, not by editing the file after the snapshot. Logs never cause a hold and the run's logs are always copied out first. Unfinished runs are unwound newest first. Only exact autosave rotation names may be removed (OneDrive conflict copies such as `autosave-<PC>.v3` match `autosave*.v3`). Journal times come from the backup drive |
+| 5.5 | Ready after `tag` | After `tag`, two clicks enter the game: the country at the camera's centre, then Start. Version 1 needs the click step the non-goals wanted to avoid; it is fixed-position and confirmed by a screenshot. Reads and option picks work before it; `advance` needs it |
+| 5.6 | Someone is at the machine if there was input in the last 30 s | That reading is always "yes" on the owner's machine, so the console never takes the foreground back there and a command fails after 120 s when the game is not in front. Part 2 picks another signal (the cursor having moved, or the foreground having changed, since the helper last looked) |
+| 5.6 | Arrival is the history file growing | For a repeated command, the log line. A command with a non-ASCII character is refused: the encodings of the history and the log are unverified |
+| 5.7 | Flush with `help ndefines.ngui` or padding | Padding from the carrier (A5) |
+| 5.8 | `try-event` isolates options by setup, country or relaunch | Console `event` ignores trigger and cooldown (A6), so the shared game with the setup re-run per option stands as the default |
+

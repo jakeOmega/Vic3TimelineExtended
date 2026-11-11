@@ -3,9 +3,10 @@ param([string]$Seq, [switch]$NoFocus)
 . "$PSScriptRoot\lib.ps1"
 $g = Get-Game; if (-not $g) { "no game window"; exit 1 }
 $prev = [U]::GetForegroundWindow()
-if (-not $NoFocus) { $ok = [U]::Focus($g.MainWindowHandle); "focus=$ok" }
+if (-not $NoFocus) { $ok = [U]::Focus($g.MainWindowHandle); "focus=$ok"; if (-not $ok) { "ABORT: the game window is not in front; nothing typed"; exit 3 } }
 $c = Get-ClientRect $g.MainWindowHandle
 foreach ($s in $Seq.Split('|')) {
+  if ([U]::GetForegroundWindow() -ne $g.MainWindowHandle) { "ABORT: lost the foreground before step '$s'; stopped"; exit 3 }
   switch -Regex ($s) {
     '^sc:(.+)$'  { [U]::Tap([Convert]::ToUInt16($Matches[1],16), $false) }
     '^t:(.*)$'   { [U]::Type($Matches[1]) }
