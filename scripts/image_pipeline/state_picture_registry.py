@@ -214,8 +214,9 @@ PICTURES = {
         # shows its dry plain: the port picture asks for a port, as vanilla's does
         "where": ["has_building = building_port"],
         "effect": "vfx_entity_ui_state_docks",
-        "seed": 1,
-        "crop": (43, 0, 1493, 711),
+        "seed": 3,
+        "crop": (0, 0, 1510, 740),
+        "smudge": [(1066, 526, 1102, 562)],
         "prompt": (
             "A large seaport in the 1930s: a black-hulled ocean liner with two funnels moored "
             "at a concrete quay, a row of tall steel dockside cranes on rails, brick "
