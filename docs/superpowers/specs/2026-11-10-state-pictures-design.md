@@ -68,16 +68,24 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 | Place | Axis | Values | Read from |
 |---|---|---|---|
 | 1 | Condition | devastated, nuclear aftermath, flooded | the state, live |
-| 2 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
-| 3 | Character or function | boomtown, declining, divided, smog, housing blocks; financial center, industry, spaceport, resort, government quarter | the yearly pass |
-| 4 | Upkeep | run-down | the yearly pass |
-| 5 | Means | poor, affluent | the yearly pass |
-| 6 | Size | town, metropolis, megacity | the yearly pass |
-| 7 | Region | one of eight families | geography, live |
+| 2 | Takeover | an oil field, on the open land it stands on | a building's level, live |
+| 3 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
+| 4 | Character or function | boomtown, declining, divided, smog, housing blocks; financial center, industry, spaceport, resort, government quarter | the yearly pass |
+| 5 | Upkeep | run-down | the yearly pass |
+| 6 | Means | poor, affluent | the yearly pass |
+| 7 | Size, or scale | town, metropolis, megacity; a major port, a colliery | the yearly pass; a building's level, live |
+| 8 | Region | a family of the picture's group: eight for cities, four for farmland, one for forestry | geography, live |
 
 So the right technology beats the right size, and a devastated city beats everything. The weight is a number
-in place value (rung × 100,000, size × 10, a named region 1; the places between are reserved), which also
-keeps two pictures from tying. Vanilla's weights are 1 and 2, so any mod picture that applies wins.
+in place value (a takeover 10,000,000, rung × 100,000, size or scale × 10, a named region its family's digit;
+the places between are reserved), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
+any mod picture that applies wins.
+
+A **takeover** is a picture with no terrain of its own. Vanilla has no oil-field terrain, so an oil state
+shows the plain, desert or farmland the rigs stand on. The oil pictures join those terrains' lists and
+outrank every rung there, so that a later farm technology doesn't put the wheat back over the derricks. A
+**scale** is the worked-land counterpart of a city's size: the larger or the special kind of a picture, by a
+building's level (§ 5).
 
 **The yearly pass.** The engine may evaluate a weight every frame, so a weight reads only the owner's
 technology, vanilla's region triggers and a few state variables. A yearly state pulse computes those
@@ -110,8 +118,9 @@ easier to read. It can be added to a family as one more condition if the play-te
 
 **Regions** are vanilla's seven city families (European, Latin American, East Asian, Japanese, South Asian,
 Middle Eastern and Central Asian, African), plus North American, which vanilla folds into European. Farmland
-keeps vanilla's four families (generic, Arabic, Asian, subtropic). Ports, mines and forestry are
-painted once for every region.
+keeps vanilla's four families (generic, Arabic, Asian, subtropic); forestry has a tropical picture beside
+the conifer one. Ports, mines, oil fields, plantations, pasture and cleared land are painted once for every
+region. The farmland and forestry families are under "Worked land" below.
 
 The city families use vanilla's own region triggers, with three changes. They are this design's calls, each
 one line in the registry's `REGIONS`, and the state counts are from 1.15's region files:
@@ -148,6 +157,31 @@ where the census keeps none, the base share of 40%).
 
 A size is left only a tenth below its floor. The floors are provisional: § 9 sets them against an observer
 game before the size pictures are painted in number.
+
+**Worked land** (wave 3). The registry's `FARM_REGIONS`, `FOREST_REGIONS` and `SCALES`.
+
+| Family or scale | States | Trigger | Notes |
+|---|---|---|---|
+| Arabic farmland | 157 | vanilla's `is_arabic_farmland` | the Middle East and most of Africa: irrigated plots, date palms, later center pivots in the desert |
+| Asian farmland | 68 | vanilla's `is_asian_farmland` | rice paddies |
+| Subtropic farmland | 61 | vanilla's `is_subtropic_farmland` | Latin America: red earth, maize and cane |
+| Generic farmland | 390 | none of the three | wheat country, and every state of no other family. India and Oceania are here, as in vanilla |
+| Tropical forestry | | South-East Asia, Equatorial and West Africa, Central America, Gran Colombia, Brazil, and vanilla's `is_jungle_hills` | rainforest logging; the conifer picture stands everywhere else |
+| Major port | | a Port of level 10 or more | below it, the harbor picture: fishing boats, a ferry, a small quay |
+| Colliery | | a Coal Mine of level 10 or more | below it, or with other ore, the open pit |
+| Oil field | | an Oil Rig of level 10 or more | takes over open land (plains, desert, savanna, tundra, hills, the five farmlands, pasture), not a city, port, mine or forest |
+
+The three farm families don't overlap, so their digits only keep the weights apart. The three levels are
+provisional, like the size floors: in 1836 the median Port is level 1 and five states have one of 5 or more,
+and Lancashire's coal mines are level 25, so 10 is a guess at "this is what the state is known for" that the
+observer game should check against the late game, where building levels run far higher. A level is absolute:
+a state of 200 farm levels and one level-10 Oil Rig shows the oil field. A share of the state's levels would
+be the better test and is too dear for a weight; if the play-test finds oil fields in farm country, the
+yearly pass can store it as a variable.
+
+A rung outranks a scale or a region, so the plain and the special picture of a rung are wired together (the
+registry's `WIRED_TOGETHER`, held by a test, as `REGION_OVERLAPS` is for cities): a rung 2 harbor wired
+alone would show in a great port over rung 1's major port.
 
 ## 6. Prosperity: means and upkeep
 
@@ -202,10 +236,10 @@ each gets one when its picture is painted.
 | Character | about 20 | § 7's first five, on the rungs where they fit |
 | Function | about 6 | § 7's last two |
 | Conditions | about 6 | |
-| Ports | about 8 | a small harbor and a major port a rung |
-| Mines and oil | about 9 | open pits, collieries, onshore oil fields |
-| Farmland, plantation, ranch | about 24 | four farm families × four rung groups, plus plantation and ranch |
-| Forestry and cleared land | about 6 | |
+| Ports | 8 | a small harbor and a major port a rung |
+| Mines and oil | 9 | open pits, collieries, onshore oil fields |
+| Farmland, plantation, ranch | 25 | four farm families × four rungs, one designed-crop picture for all, plantation and ranch × four |
+| Forestry and cleared land | 6 | conifer and tropical forestry, cleared land, × two rungs |
 | Natural terrain | about 15 | optional late variants: a highway through the mountains, a pipeline in the tundra |
 
 About 360 pictures. At BC7 (0.7 MB each) that is about 250 MB of `gfx/`; in vanilla's uncompressed format it
@@ -220,11 +254,10 @@ would be over 1 GB.
    time, and these stay the fallback for every size and level of prosperity. **Painted and wired 2026-11-10:** all 39 beside the pilot's, picked from four candidates each (the last
    rung from a second set, below). The calibration game is still to run, so the size floors stay
    provisional; the city tier doesn't read them.
-3. **Worked land (about 50):** ports, mines and oil, farmland, forestry. Its 46 prompts are drafted
-   in the registry's `DRAFTS`, outside the wired list: each has its technology and, in plain words, when it
-   should show, and none has a condition or a place in the weight yet. What this wave still has to design:
-   the Port level that divides a harbor from a major port; when coal makes a mine a colliery; and how an oil field takes over the picture of
-   the land it stands on (vanilla has no terrain for it), which needs a place in the weight above the rung.
+3. **Worked land (46):** ports, mines and oil, farmland, forestry. **Painted and wired 2026-11-10:** all
+   46, each picked from four candidates with no second set. With the pilot's port and mine that is every
+   worked-land picture of § 8. What it designed: the scales and the takeover of § 3, the farmland and
+   forestry families of § 5, and the three provisional levels there.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
 6. **Character, function, conditions (about 30),** with theirs. Its 30 prompts are drafted in `DRAFTS`
@@ -280,6 +313,15 @@ upkeep limited to rungs 2 to 4.
   - *Budget:* 28 s a render held. Ten of the 39 pictures were rendered twice: the eight of the last rung
     for the bolder prompt and the two 1960 streets for their cars. The other 29 were picked from their
     first four candidates.
+- **What the worked-land wave taught** (2026-11-10, 184 renders for 46 pictures, none rerun):
+  - *A landscape is easier than a street.* No candidate set failed its period; naming the machines of
+    the time in the prompt (the tractor, the combine, the well pad) was enough.
+  - *Lettering moves to the machines.* Fields carry none, but hulls, truck doors, a tractor's hood and a
+    mill's name board do, and a painter's signature turned up in a bottom corner of four candidates. Thirteen picks
+    carry `smudge` boxes. One candidate flew a real national flag: rejected like a landmark.
+  - *The dark strip* was on 6 of this wave's 46 renders of that seed; none was picked.
+  - *Later rungs of a ladder drift toward one look* (drones, wind turbines, solar panels on every roof).
+    It reads as its time, but the farm families' fourth rungs are closer to one another than their first.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
@@ -322,6 +364,11 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 - § 5's three changes to vanilla's city families: Australia and New Zealand with North America, Mexico and
   the Caribbean with Latin America, and Middle Eastern over South Asian on the north-west frontier. Also
   whether Tibet and the Pacific islands should leave the European fallback for a family.
-- The floors of §§ 5 and 6, until wave 2's observer game.
+- The floors of §§ 5 and 6, until wave 2's observer game. The same game should set § 5's three building
+  levels (major port, colliery, oil field), and say whether the oil field needs a share of the state's
+  levels instead of a level.
+- § 5's worked-land calls, all this design's: India's farmland in the generic family (vanilla's choice,
+  though a rice or millet picture would suit it better), the regions that count as tropical for forestry,
+  and an oil field taking over farmland and pasture as well as bare land.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
   pictures exist.

@@ -49,3 +49,25 @@ technology as the state's owner: `art_deco_architecture`, `modern_urban_planning
 | **No family.** Lhasa, or a Pacific island, where the city terrain prevails at all. | The European street, as vanilla's European picture shows there. | |
 | **Overlays on the new families.** Watch a city of each family for a few seconds. | Vanilla's birds, mist and smoke for that family, sitting plausibly. | A mismatch: change the family's `CITY_EFFECT` in the registry. |
 | **Lettering.** Look closely at each painting once. | Nothing that reads as writing. Signs in the renders were cropped or blurred before the filter. | A legible word: add a `smudge` box for it in `CITY_PICKS` and reconvert. |
+
+## Wave 3: worked land (2026-11-10)
+
+Forty-six paintings of ports, mines, oil fields, farmland, plantations, pasture, forestry and cleared land.
+The technologies, by ladder: ports `modern_tools`, `containerization`, `supply_chain_management`,
+`autonomous_vehicles`; mines and forestry `modern_tools`, `robotics`, and mines `internet_of_things`; oil
+`modern_chemical_processes`, `integrated_circuits`, `hydraulic_fracturing`; farmland, plantation and
+pasture `rural_electrification`, `green_revolution`, `microprocessor`, `autonomous_vehicles`, and farmland
+`synthetic_biology`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **An oil field takes over.** After Modern Chemical Processes, a state with an Oil Rig of level 10 or more whose banner is a plain, a desert or farmland (Texas, Baku, later the Gulf). | The derrick field, not the land. It stays through later farm technologies. | The land's picture: a weight of 10,000,000 doesn't outrank, or the `INJECT` into that terrain didn't take (`error.log`, `terrain.cpp`). |
+| **Too many oil fields.** In a game past 1950, look at farm states with a modest oil industry. | Wheat or rice, where oil is a sideline. | Derricks over a farm state: the level of 10 is too low, or the test needs to be a share of the state's levels (spec § 5), stored by the yearly pass. |
+| **Harbor and major port.** After Modern Tools, a state with a small Port and one with a Port of level 10 or more (London, Guangdong). | The fishing harbor in the first, the liner quay in the second. On the later rungs: a ferry harbor and a container terminal. | Both the same: the scale isn't read. Too many or too few major ports late on: the level is provisional. |
+| **Pit and colliery.** After Modern Tools, a mining state without coal (the Urals' iron) and one with Coal Mines of level 10 or more (Lancashire, the Ruhr). | The open pit; the pit head with its winding wheel. | |
+| **The farm families.** After Rural Electrification: a farm state in France or the Midwest, in Egypt, in South China, in Brazil, and in India. | Wheat with a tractor and horses; irrigated plots with date palms; rice paddies; red earth and maize; India the wheat picture (it is generic in vanilla too). | A wheat field on the Nile: the family's vanilla trigger doesn't hold in the mod's entry, or the generic family's "none of the others" doesn't. |
+| **The fifth farm rung.** After Synthetic Biology, any farm state. | One picture for every family: purple and gold fields under glowing growth towers. | A family's fourth picture still showing: the rung isn't outranking the region digit. |
+| **Tropical forestry.** After Modern Tools, a logging state in Sweden or Canada and one in Borneo or the Congo. | Conifers and a sawmill; a river landing under rainforest. | Conifers in the Congo: the family's region list. |
+| **Plantation, pasture, cleared land.** After Rural Electrification (Modern Tools for cleared land), a state of each. | The new painting, the same everywhere. | |
+| **Overlays on worked land.** Watch one of each for a few seconds. | Vanilla's birds and mist for that terrain. The oil field carries the arid plain's. | A mismatch: the picture's overlay is its draft's `like` in the registry. |
+| **Lettering.** Look closely at the ports and the trucks. | Nothing that reads as writing. | A legible word: add a `smudge` box in `WAVE3_PICKS` and reconvert. |
