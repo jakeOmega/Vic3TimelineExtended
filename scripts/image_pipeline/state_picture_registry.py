@@ -124,9 +124,30 @@ FOREST_REGIONS = {
         "is_jungle_hills = yes",
     ], 1),
 }
+# Natural terrain: vanilla's own families, by the triggers its entries use. Plains and mountains
+# have an American and an arid picture (vanilla's "northamerica" pictures show in all the
+# Americas; its arid regions are Africa, the Middle East and Oceania), the desert an American
+# one, the hills a jungle and a subtropic one. None of them overlap in 1.15's region files.
+_AMERICAS = "is_in_geographic_region = geographic_region_americas"
+LAND_REGIONS = {
+    "land_generic": ([], 1),
+    "land_arid": (["is_arid_region = yes"], 2),
+    "land_americas": ([_AMERICAS], 3),
+}
+DESERT_REGIONS = {
+    "desert_generic": ([], 1),
+    "desert_americas": ([_AMERICAS], 2),
+}
+HILL_REGIONS = {
+    "hills_generic": ([], 1),
+    "hills_subtropic": (["is_subtropic_farmland = yes"], 2),
+    "hills_jungle": (["is_jungle_hills = yes"], 3),
+}
 # Every region family by its group; a group's fallback family also takes the states of no family.
-REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS}
-GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic"}
+REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS,
+                 "land": LAND_REGIONS, "desert": DESERT_REGIONS, "hills": HILL_REGIONS}
+GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic",
+                  "land": "land_generic", "desert": "desert_generic", "hills": "hills_generic"}
 
 
 def region_group(region: str) -> str:
@@ -1213,20 +1234,46 @@ WAVE3_PICKS = {
     "cleared_land_2": {"seed": 3},
 }
 
-for _key, _pick in WAVE3_PICKS.items():
-    _draft_entry = DRAFTS.pop(_key)
-    _wiring = WAVE3_WIRING[_key]
-    PICTURES[_key] = {
-        "terrain": _draft_entry["terrain"],
-        "tech": _draft_entry["tech"],
-        "rung": _draft_entry["rung"],
-        "region": _wiring.get("region"),
-        "size": None,
-        **{k: v for k, v in _wiring.items() if k != "region"},
-        "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
-        "prompt": _draft_entry["prompt"],
-        **_pick,
-    }
+
+# --- Wave 7: natural terrain with the motor age in it. One rung, on vanilla's own families.
+# `any_region` lists terrains the picture also joins without its region: vanilla shows the arid
+# plain in every savanna state, whatever its region.
+WAVE7_WIRING = {
+    "mountains_road": {"region": "land_generic"},
+    "mountains_arid_road": {"region": "land_arid"},
+    "mountains_northamerica_road": {"region": "land_americas"},
+    "plains_road": {"region": "land_generic"},
+    "plains_arid_road": {"region": "land_arid", "any_region": ["savanna"]},
+    "plains_northamerica_road": {"region": "land_americas"},
+    "desert_road": {"region": "desert_generic"},
+    "desert_northamerica_road": {"region": "desert_americas"},
+    "hills_road": {"region": "hills_generic"},
+    "hills_subtropic_road": {"region": "hills_subtropic"},
+    "hills_jungle_road": {"region": "hills_jungle"},
+    "tundra_pipeline": {},
+    "forest_road": {},
+    "jungle_road": {},
+    "wetland_road": {},
+}
+# The picked render of each wave 7 picture.
+WAVE7_PICKS = {
+}
+
+for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
+    for _key, _pick in _picks.items():
+        _draft_entry = DRAFTS.pop(_key)
+        _wiring = _table[_key]
+        PICTURES[_key] = {
+            "terrain": [*_draft_entry["terrain"], *_wiring.get("any_region", [])],
+            "tech": _draft_entry["tech"],
+            "rung": _draft_entry["rung"],
+            "region": _wiring.get("region"),
+            "size": None,
+            **{k: v for k, v in _wiring.items() if k != "region"},
+            "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
+            "prompt": _draft_entry["prompt"],
+            **_pick,
+        }
 if "docks_harbor_1" in PICTURES:
     PICTURES["docks_1"]["scale"] = "major_port"  # the pilot's port is rung 1's major port
 

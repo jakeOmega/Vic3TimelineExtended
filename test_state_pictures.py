@@ -159,6 +159,36 @@ class TestRegistry(unittest.TestCase):
             with self.subTest(key):
                 self.assertIsNotNone(pick.get("seed"))
 
+    def test_wave_7_wiring_covers_its_drafts(self):
+        nature = {k for k, d in registry.DRAFTS.items() if d["family"] == "nature"}
+        self.assertEqual(nature | set(registry.WAVE7_PICKS), set(registry.WAVE7_WIRING))
+        terrains = _vanilla_terrains()
+        for key, wiring in registry.WAVE7_WIRING.items():
+            with self.subTest(key):
+                self.assertLessEqual(set(wiring), {"region", "any_region"})
+                if wiring.get("region"):
+                    self.assertIn(registry.region_group(wiring["region"]), ("land", "desert", "hills"))
+                for terrain in wiring.get("any_region", []):
+                    self.assertIn(terrain, terrains)
+        # a group's families are wired together: one rung, so a family wired alone would leave its
+        # neighbors on vanilla's picture beside it, and the fallback's "none of the others" assumes them
+        for group in ("land", "desert", "hills"):
+            keys = [k for k, w in registry.WAVE7_WIRING.items()
+                    if w.get("region") and registry.region_group(w["region"]) == group]
+            for terrain in {t for k in keys for t in (registry.PICTURES.get(k) or registry.DRAFTS[k])["terrain"]
+                            if t not in registry.WAVE7_WIRING[k].get("any_region", [])}:
+                here = [k for k in keys if terrain in (registry.PICTURES.get(k) or registry.DRAFTS[k])["terrain"]]
+                with self.subTest(group=group, terrain=terrain):
+                    self.assertEqual(len({k in registry.WAVE7_PICKS for k in here}), 1, f"wire {here} together")
+
+    def test_a_picture_asks_for_no_region_in_its_any_region_terrains(self):
+        for key, p in registry.wired().items():
+            for terrain in p.get("any_region", []):
+                with self.subTest(key, terrain=terrain):
+                    self.assertIn(terrain, p["terrain"])
+                    self.assertFalse(set(registry.region_conditions(p["region"])) & set(generator.conditions(key, terrain)))
+                    self.assertTrue(set(registry.region_conditions(p["region"])) <= set(generator.conditions(key)))
+
     def test_the_fallback_family_takes_the_states_of_no_family(self):
         fallback = registry.FALLBACK_REGION
         lines = registry.region_conditions(fallback)
