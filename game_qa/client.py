@@ -446,13 +446,13 @@ def enabled_mods(user_data: Path) -> list[str]:
 
 
 def real_paths() -> session.Paths:
-    user, base = _resolve("game_user_data_path"), _resolve("base_game_path")
+    user, base, deploy = _resolve("game_user_data_path"), _resolve("base_game_path"), _resolve("mod_deploy_target")
     # wslpath can fail on a path that does not exist yet: the overlay's folder is made at `start`.
     overlay_windows = to_windows_path(user / "mod").rstrip("\\") + "\\" + overlay.OVERLAY_NAME
-    return session.Paths(user_data=user, backup_root=_backup_root(), deploy_dir=_resolve("mod_deploy_target"),
+    return session.Paths(user_data=user, backup_root=_backup_root(), deploy_dir=deploy,
                          base_game=base, overlay_windows_path=overlay_windows,
                          events_file_windows_path=to_windows_path, game_version=game_version(base),
-                         enabled_mods=enabled_mods(user))
+                         enabled_mods=enabled_mods(user), deployed_mod_windows_path=to_windows_path(deploy))
 
 
 def _ping_windows_python() -> str:

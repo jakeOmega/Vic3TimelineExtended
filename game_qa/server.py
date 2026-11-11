@@ -103,8 +103,10 @@ def refusal(error: Exception) -> dict:
 
 
 def clean_stop(reply: dict) -> bool:
-    """Whether a stop's reply says the owner's files are back (or that no snapshot was ever taken)."""
-    return reply.get("held") is not True and not reply.get("refused") and reply.get("outcome") in ("restored", None)
+    """Whether a stop's reply says the owner's files are back (or that no snapshot was ever taken) and nothing of
+    the run is left: not an overlay kept, nor a snapshot that may have been taken when its reply was lost."""
+    return (reply.get("held") is not True and not reply.get("refused") and reply.get("outcome") in ("restored", None)
+            and not reply.get("overlay_kept") and not reply.get("snapshot_unknown"))
 
 
 class SessionServer:

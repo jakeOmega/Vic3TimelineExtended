@@ -41,7 +41,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, overlay
+from game_qa import fixture, overlay, snapshot
 from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -79,22 +79,15 @@ MAX_WAIT_S = 20.0
 MAX_ROUNDS = 20
 WATCH_WAIT_S = 60.0                     # stop: for `watch` to see the game gone and return
 WATCH_POLL_S = 1.0
-RESTORE_RETRY_S = 5.0                   # stop: while `restore` refuses watch_still_recording or busy
-RESTORE_RETRY_TOTAL_S = 30.0            # for watch_still_recording
-BUSY_RETRY_TOTAL_S = 60.0               # for busy: another session's protective verb holds the backup root's lock
-LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the claim (__main__.LAUNCH_IN_FLIGHT_S)
+RESTORE_RETRY_S = fixture.RESTORE_RETRY_S                 # stop: while `restore` refuses one of the reasons below
+RESTORE_RETRY_TOTAL_S = fixture.RESTORE_RETRY_TOTAL_S     # for watch_still_recording
+BUSY_RETRY_TOTAL_S = fixture.BUSY_RETRY_TOTAL_S           # for busy: another session's verb holds the backup root's lock
+LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the claim (__main__.LAUNCH_IN_FLIGHT_S); only
+                                        # once the game is ended here, which the fixture cannot do
 DRAIN_S = 0.5                           # before a read: a stop left over from an earlier one (real seconds: dap's clock)
 PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
 WATCH_RESPAWNS = 3                      # a watch that returns while the game's window is up is run again, this often
 
-# `launch` refusals given before it claims the snapshot: no game was started (game_qa/__main__.py). Any other
-# reply that is not a success (not_recorded, start_unconfirmed, a refusal after the claim, a name not known here,
-# a lost or unreadable reply) may come with a game up.
-NO_GAME_REFUSALS = frozenset({
-    "already_finished", "already_started", "not_armed", "no_end_date", "bad_argument", "no_permission",
-    "backup_root", "other_game", "gpu_busy", "game_running", "stale_snapshot", "no_game_binary",
-    "mod_not_in_playset", "playset_not_restored", "busy"})
-_CLAIMED = "stays claimed"              # said by every refusal after the claim (__main__._CLAIM_STAYS)
 _RETRIED = ("refused", "game_left_up")  # a stop that ended so is run again by the next stop()
 
 _TAG = re.compile(r"[A-Za-z0-9_]{1,16}")
@@ -141,7 +134,8 @@ class Paths:
     overlay_windows_path: str                       # the overlay folder as Windows names it, for `launch --add-mod`
     events_file_windows_path: Callable[[Path], str]  # a file of the overlay as Windows names it: the breakpoint's path
     game_version: str
-    enabled_mods: Sequence[str]                     # the run's playset, in order: part of the fixture's key
+    enabled_mods: Sequence[str]                     # the owner's playset (content_load.json), in order
+    deployed_mod_windows_path: str                  # the deployed mod's folder as Windows names it: what mod_only keeps
 
     @property
     def overlay_dir(self) -> Path:
@@ -161,6 +155,10 @@ class Paths:
 
 
 class Session:
+    """One game's session. Single-threaded by contract: one call at a time, as the session server makes them (a
+    plain HTTPServer, one request at a time in its main thread). The `_starting`, `_abort` and `_stopping` flags
+    only answer a `stop()` made from inside a running verb (a signal handler's, a test's); nothing here locks."""
+
     def __init__(self, helper: Helper, run_cli: RunCli, spawn_watch: Callable[[str], Any], paths: Paths,
                  sleep=time.sleep, clock=time.monotonic, helper_factory: Callable[[], Helper] | None = None) -> None:
         """`helper_factory` makes a new helper when the one in use has ended (`helper_gone`) as `stop` ends the
@@ -183,7 +181,8 @@ class Session:
         self._launch_reply: dict = {}
         self._game_ended = False            # the launched game is known to be over: ended here, or gone already
         self._fixture_loaded = False        # the save is the fixture, which opens on the country-select screen
-        self._fixture_left: str | None = None    # why the fixture's own run may have left a game or its playset
+        self._verdict: tuple[dict, int] | None = None    # the fixture's own restore's verdict, for stop to report
+        self._snapshot_unknown = False      # a snapshot's reply was lost: one may have been taken and left armed
         self._watch: Any = None
         self._proc: ProcId | None = None
         self._adopted = False
@@ -276,9 +275,14 @@ class Session:
         save, made, pruned = self._the_save(save, permission, playset, busy)
         self._save = save
         self._check_abort()
-        reply, code = self._cli(["snapshot", "--save", save])
+        try:
+            reply, code = self._cli(["snapshot", "--save", save])
+        except BaseException:
+            self._snapshot_unknown = True       # it may have been taken, and armed, before the reply was lost
+            raise
         snap = reply.get("id")
         if code != 0 or not isinstance(snap, str) or not snap:
+            self._snapshot_unknown = _reply_lost(reply, code)
             self._record("snapshot", outcome="refused", reply=reply)
             raise SessionError("snapshot_refused", _why(reply), reply=reply)
         self._snapshot = snap
@@ -304,7 +308,7 @@ class Session:
             except Exception:
                 pass
             raise
-        if code != 0 and _no_game(reply):
+        if code != 0 and fixture.no_game(reply):
             self._record("launch", outcome="refused", reply=reply)
             raise SessionError("launch_refused", _why(reply), reply=reply)
         # From here a game of this run may be up, whatever the reply says: it is watched, and stop ends it by
@@ -384,12 +388,15 @@ class Session:
             return save, False, []
         self._fixture_loaded = True
         user = Path(self._paths.user_data)
-        key = fixture.key(self._paths.game_version, self._paths.enabled_mods, self._paths.deploy_dir)
+        loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
+                            self._paths.overlay_windows_path)
+        key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset)
         found = fixture.find(user, key)
         if found is not None:
             self._record("fixture", outcome="found", save=found.stem)
             return found.stem, False, []
         calls: list[tuple[str, dict | None, int | None]] = []      # the fixture's own verbs, as they answered
+        watches: list[Any] = []                                     # the watch it spawned
 
         def run_cli(argv):
             try:
@@ -399,15 +406,28 @@ class Session:
                 raise
             calls.append((argv[0], reply if isinstance(reply, dict) else None, code))
             return reply, code
+
+        def spawn_watch(snapshot_id):
+            watch = self._spawn_watch(snapshot_id)
+            watches.append(watch)
+            return watch
         try:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
-                                owner_confirmed_busy=busy, sleep=self._sleep)
+                                owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
+                                clock=self._clock, started=self._journaled_proc)
         except fixture.FixtureError as e:
-            self._fixture_left = _fixture_left(calls, e.snapshot)
-            self._record("fixture", outcome="failed", step=e.step, reply=e.reply, snapshot=e.snapshot)
-            raise SessionError("fixture_failed", str(e), step=e.step, reply=e.reply, snapshot=e.snapshot) from e
+            up = e.code == fixture.GAME_MAY_BE_UP
+            self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
+            self._record("fixture", outcome="failed", step=e.step, code=e.code, reply=e.reply, snapshot=e.snapshot)
+            info: dict[str, Any] = {"step": e.step, "reply": e.reply, "snapshot": e.snapshot}
+            if up:
+                info.update(game_may_be_up=True,
+                            game={"pid": e.proc.pid, "created": e.proc.created} if e.proc is not None else None)
+            raise SessionError("fixture_failed", str(e), **info) from e
         except BaseException:
-            self._fixture_left = _fixture_left(calls, None)
+            launches = [reply for verb, reply, _code in calls if verb == "launch"]
+            self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
+                                   if launches else None, watches[-1] if watches else None, None, calls)
             raise
         try:
             pruned = fixture.prune(user, keep=FIXTURES_KEPT)
@@ -416,6 +436,44 @@ class Session:
             self._record("fixture_prune", outcome="failed", detail=str(e))
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
+
+    def _take_fixture_run(self, snap: str | None, may_be_up: bool, proc: ProcId | None, watch: Any,
+                          restore: tuple[dict, int] | None, calls: list[tuple[str, dict | None, int | None]]) -> None:
+        """After the fixture's run failed, the session takes its snapshot as the one to finish, and a game the run
+        may have left up as its own launched game: `stop` then ends that game by its pid and start time (from
+        launch's reply, else the snapshot's journal), waits for the fixture's watch, and restores that snapshot
+        before any overlay rule applies. A verdict the fixture's own restore gave (restored, held) is reported,
+        not asked for again. The run's folder is that snapshot's."""
+        if snap is None:
+            snaps = [(reply, code) for verb, reply, code in calls if verb == "snapshot"]
+            self._snapshot_unknown = bool(snaps) and _reply_lost(*snaps[-1])
+            return
+        self._snapshot = snap
+        try:
+            self._open_report(snap)
+        except OSError:
+            pass                                # the record is a convenience: stop still finishes the snapshot
+        if may_be_up:
+            self._launched = True
+            self._launch_reply = {"pid": proc.pid, "created": proc.created} if proc is not None else {}
+            self._watch = watch
+        elif restore is not None and (restore[1] == 0 or restore[0].get("held") is True):
+            self._verdict = restore
+
+    def _journaled_proc(self, snap_id: str | None) -> ProcId | None:
+        """The game process the snapshot's journal last records as `started` (launch writes it the moment the game
+        exists), or None: no such snapshot, no `started`, or one that cannot be read. A start time recorded as
+        unknown comes back as such, and nothing is ended by it."""
+        if not snap_id:
+            return None
+        try:
+            for snap in snapshot.all_snapshots(self._paths.backup_root):
+                if snap.id == snap_id:
+                    starts = [e for e in snapshot.journal(snap) if e.get("event") == "started"]
+                    return _named_proc(starts[-1]) if starts else None
+        except OSError:
+            pass
+        return None
 
     def _await_window(self) -> None:
         deadline = self._clock() + WINDOW_WAIT_S
@@ -680,7 +738,9 @@ class Session:
         recorded leaves for 90 s after its claim, up to LAUNCH_IN_FLIGHT_RETRY_TOTAL_S: by now the launch call
         has returned), remove the overlay this session built, close
         the debugger's relay and the helper, close the report. With no launch, a snapshot taken is still
-        restored: an armed one blocks every later one.
+        restored: an armed one blocks every later one. After a failed fixture run its snapshot is the one
+        finished, and a game it may have left up is this session's own (`_take_fixture_run`). A snapshot whose
+        reply was lost is reported (`snapshot_unknown`, and `next`: `recover`), never taken for none.
 
         A game that may still be up (no start time to end it by, a kill refused, the helper gone) is not
         restored beside: `outcome` is game_left_up and `next` says to run `restore <id>` once no game is running.
@@ -724,8 +784,13 @@ class Session:
         else:
             if self._launched:
                 self._await_watch(notes)
-            if self._snapshot is not None:
+            if self._snapshot is not None and self._verdict is not None:
+                restore, outcome = self._fixture_verdict()
+            elif self._snapshot is not None:
                 restore, outcome = self._restore(notes)
+        if left_up and (self._watch is None or self._watch_returned()):
+            notes.append("no `watch` follows that game: its exit will not be recorded, so a restore of snapshot %s "
+                         "will likely be held for the owner" % self._snapshot)
         removed, kept = self._settle_overlay(restore, outcome, notes)
         self._close_relay(notes)
         self._close_helper(notes)
@@ -736,27 +801,47 @@ class Session:
         if kept is not None:
             reply["overlay_kept_because"] = kept
         if left_up:
-            proc = self._proc or _named_proc(self._launch_reply)
-            again = (" (or `stop` again, which first tries to end the game by its pid and start time)"
-                     if proc is not None and proc.created != UNKNOWN_START else "")
-            reply["next"] = ("the game may still be up: once no game is running, run `python3 -m game_qa restore "
-                             "%s`%s, then remove %s" % (self._snapshot, again, self._paths.overlay_dir))
+            reply["game_unwatched"] = self._watch is None or self._watch_returned()
+            reply["next"] = self._left_up_next()
         elif outcome == "refused":
-            reply["next"] = ("`stop` again runs restore again; or run `python3 -m game_qa restore %s`, then remove %s"
+            reply["next"] = ("once no Victoria 3 process runs, run `python3 -m game_qa restore %s`, then remove %s"
                              % (self._snapshot, self._paths.overlay_dir))
+        if self._snapshot_unknown:
+            reply["snapshot_unknown"] = True
+            notes.append("a snapshot's reply was lost, so a snapshot may have been taken and left armed")
+            reply["next"] = ("a snapshot may have been taken (its reply was lost) and left armed: `start` refuses "
+                             "(unfinished_run) until `python3 -m game_qa recover` finishes it, once no Victoria 3 "
+                             "process runs")
         reply["report"] = self._close_report(restore, outcome, removed, kept, notes)
         if notes:
             reply["notes"] = notes
         return reply
 
+    def _left_up_next(self) -> str:
+        """What to do about a game left up, by what is known of its process."""
+        proc = self._proc or _named_proc(self._launch_reply) or self._journaled_proc(self._snapshot)
+        if proc is None:
+            return ("a game of this run may still be up, and neither launch's reply nor the snapshot's journal names "
+                    "its process, so nothing here can end it or tell when it has gone. Once no Victoria 3 process "
+                    "runs: `python3 -m game_qa recover` (it finishes snapshot %s), then remove %s"
+                    % (self._snapshot, self._paths.overlay_dir))
+        if proc.created == UNKNOWN_START:
+            return ("the harness's game (pid %d) may still be up, and its start time is not known, so it was not "
+                    "ended: a pid alone may be another game's. Once no Victoria 3 process runs: `python3 -m game_qa "
+                    "restore %s`, then remove %s" % (proc.pid, self._snapshot, self._paths.overlay_dir))
+        return ("the harness's game (pid %d, started %s) may still be up: ending it failed. Close it, or ask the "
+                "owner; once no Victoria 3 process runs: `python3 -m game_qa restore %s`, then remove %s"
+                % (proc.pid, proc.created, self._snapshot, self._paths.overlay_dir))
+
     def _end_game(self, notes: list[str]) -> None:
         """End the game, setting `_game_ended` once it is known to be over; any doubt leaves it up, noted."""
-        # `launch`'s own record of the game, if the failure came before it was taken as `_proc`: the helper
-        # adopts a process only when its creation time matches (win_helper._op_adopt).
-        proc = self._proc or _named_proc(self._launch_reply)
+        # `launch`'s own record of the game, if the failure came before it was taken as `_proc`: its reply, else
+        # (a reply lost after the start was journaled) the snapshot's journal. The helper adopts a process only
+        # when its creation time matches (win_helper._op_adopt).
+        proc = self._proc or _named_proc(self._launch_reply) or self._journaled_proc(self._snapshot)
         if proc is None:
-            notes.append("the game's process is not known (launch's reply did not name it), so it was not ended "
-                         "and may still be up")
+            notes.append("the game's process is not known (neither launch's reply nor the snapshot's journal names "
+                         "it), so it was not ended and may still be up")
             return
         if proc.created == UNKNOWN_START:
             # A pid alone may be another game's by now: wait for no game at all, then restore (part 1's rule).
@@ -831,22 +916,19 @@ class Session:
             notes.append("looking at watch failed: %s" % e)
 
     def _restore(self, notes: list[str]) -> tuple[dict, str]:
-        budgets = {"watch_still_recording": RESTORE_RETRY_TOTAL_S, "busy": BUSY_RETRY_TOTAL_S,
+        # launch_in_flight is waited out too: by now the game launch may have started is known ended here.
+        retries = {"watch_still_recording": RESTORE_RETRY_TOTAL_S, "busy": BUSY_RETRY_TOTAL_S,
                    "launch_in_flight": LAUNCH_IN_FLIGHT_RETRY_TOTAL_S}
-        waited = dict.fromkeys(budgets, 0.0)
-        while True:
-            try:
-                reply, code = self._cli(["restore", self._snapshot])
-            except Exception as e:
-                reply, code = {"held": False, "refused": "error", "detail": "restore could not be run: %r" % e}, 2
-            refused = reply.get("refused") if code != 0 else None
-            if not isinstance(refused, str) or refused not in budgets or waited[refused] >= budgets[refused]:
-                break
-            self._sleep(RESTORE_RETRY_S)
-            waited[refused] += RESTORE_RETRY_S
+        reply, code = fixture.restore_retried(self._cli, self._snapshot, self._sleep, retries)
         outcome = "held" if reply.get("held") is True else ("restored" if code == 0 else "refused")
         self._record("restore", outcome=outcome, reply=reply)
         return reply, outcome
+
+    def _fixture_verdict(self) -> tuple[dict, str]:
+        reply, code = self._verdict
+        outcome = "held" if reply.get("held") is True else "restored"
+        self._record("restore", outcome=outcome, reply=reply, by="the fixture's run")
+        return dict(reply), outcome
 
     def _settle_overlay(self, restore: dict | None, outcome: str | None, notes: list[str]) -> tuple[bool, str | None]:
         """(removed, why it was kept). The overlay goes only when nothing may still name it."""
@@ -863,8 +945,6 @@ class Session:
 
     def _keep_overlay(self, restore: dict | None, outcome: str | None) -> str | None:
         """Why the overlay must stay (a running game or a playset may still name it), or None."""
-        if self._fixture_left:
-            return self._fixture_left
         if self._launched and not self._game_ended:
             return "the game may still be up, and the run's playset names the overlay"
         if restore is None or outcome == "restored":
@@ -1315,36 +1395,37 @@ def _new_errors(lines: list[str], burst: list[str]) -> list[str]:
     return [line for line in lines if line.strip() and parse(line).text.strip() not in own]
 
 
-def _no_game(reply: dict) -> bool:
-    """Whether a launch refusal came before the claim, so that no game was started."""
-    refused = reply.get("refused")
-    if refused in NO_GAME_REFUSALS:
+def run_playset(mode: str, owner_mods: Sequence[str], deployed_mod: str, overlay_path: str) -> list[str]:
+    """The mod folders a run loads, in order, as `launch --playset <mode> --add-mod <overlay_path>` writes them
+    (game_qa/__main__.py `_plan_playset`, which cannot be imported from here): the owner's enabled mods (with
+    mod_only, only those at the deployed mod's folder), then the overlay unless it is among them already.
+    Folders are compared as launch compares them (`_folder_key`)."""
+    kept = [m for m in owner_mods if mode != "mod_only" or _folder_key(m) == _folder_key(deployed_mod)]
+    if all(_folder_key(m) != _folder_key(overlay_path) for m in kept):
+        kept.append(overlay_path)
+    return kept
+
+
+def _folder_key(path: str) -> str:
+    """A Windows folder path as `launch` compares it (__main__._folder_key): in any case, with either separator,
+    with or without a trailing one."""
+    return path.replace("/", "\\").rstrip("\\").lower()
+
+
+def _fixture_snapshot(calls: list[tuple[str, dict | None, int | None]]) -> str | None:
+    """The snapshot the fixture's run took, from its `snapshot` call's reply, or None."""
+    for verb, reply, code in calls:
+        if verb == "snapshot" and code == 0 and isinstance(reply, dict) and isinstance(reply.get("id"), str):
+            return reply["id"] or None
+    return None
+
+
+def _reply_lost(reply: dict | None, code: int | None) -> bool:
+    """Whether a `snapshot` reply was lost or unreadable, so that a snapshot may have been taken (and armed) all
+    the same: the call raised, or printed no JSON object, or said 0 without an id."""
+    if not isinstance(reply, dict) or reply.get("refused") == "bad_reply":
         return True
-    detail = str(reply.get("detail") or "")
-    return refused == "playset_unwritable" and "Nothing was written" in detail and _CLAIMED not in detail
-
-
-def _fixture_left(calls: list[tuple[str, dict | None, int | None]], snapshot: str | None) -> str | None:
-    """Why the fixture's own run, from its verbs' answers, may have left a game up or its playset in place (so
-    the overlay must stay), or None."""
-    launches = [(reply, code) for verb, reply, code in calls if verb == "launch"]
-    if not launches:
-        return None
-    named = " (snapshot %s)" % snapshot if snapshot else ""
-    reply, code = launches[-1]
-    if code == 0:
-        watches = [(r, c) for verb, r, c in calls if verb == "watch"]
-        up = not watches or watches[-1][1] != 0
-    else:
-        up = reply is None or not _no_game(reply)
-    if up:
-        return "the fixture's run%s may have left its game up, and its playset names the overlay" % named
-    restores = [(r, c) for verb, r, c in calls if verb == "restore"]
-    if restores:
-        reply, code = restores[-1]
-        if code == 0 or (reply is not None and reply.get("held") is True and reply.get("playset_restored") is True):
-            return None
-    return "the fixture's run%s may have left its playset, which names the overlay, in place" % named
+    return code == 0 and not reply.get("id")
 
 
 def _describe(e: BaseException) -> str:

@@ -1,10 +1,11 @@
 """Tests for game_qa.fixture: a fresh save made by an unattended run of the game, and kept by a key.
 
 No game and no Windows program is needed. `FakeCli` stands in for `python3 -m game_qa`: it records every call
-and plays the side effects on the user-data folder that matter here. The game's run writes
-`save games/TEST_FAIL_te_qa_fixture_2 January, 1836.v3` while `watch` is waiting; `restore`, like the real
-one, removes the saves a run created (`TEST_FAIL_*` and `te_qa_*`, never `te_qa_fixture_*`), so a test that
-passes with the rename and the restore in the wrong order cannot happen.
+and plays the side effects on the user-data folder that matter here, and its `spawn_watch` stands in for the
+`watch` subprocess. The game's run writes `save games/TEST_FAIL_te_qa_fixture_2 January, 1836.v3` while `watch`
+follows it; `restore`, like the real one, removes the saves a run created (`TEST_FAIL_*` and `te_qa_*`, never
+`te_qa_fixture_*`), so a test that passes with the rename and the restore in the wrong order cannot happen.
+Every wait runs on the test's own clock.
 """
 
 import fnmatch
@@ -14,6 +15,7 @@ import unittest
 from pathlib import Path
 
 from game_qa import fixture
+from game_qa.gate import ProcId
 
 KEY = "0123456789ab"
 SNAPSHOT = "20261110T120000Z"
@@ -21,16 +23,41 @@ OVERLAY = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\te_qa_
 PERMISSION = "the owner said go in this session"
 GAME_SAVE = "TEST_FAIL_te_qa_fixture_2 January, 1836.v3"
 GAME_SAVE_BYTES = b"a fresh game"
+CREATED = "2026-11-10T12:00:05.0000000Z"
+GAME = ProcId(4242, CREATED)
 REFUSED = {"held": False, "refused": "gpu_busy", "detail": "the GPU is at 80% load"}
 HELD = {"held": True, "reason": "other_game_ran", "id": SNAPSHOT}
+UNCONFIRMED = {"held": False, "refused": "start_unconfirmed", "detail": "PowerShell's reply was lost"}
+
+
+class FakeWatch:
+    """The `watch` subprocess `spawn_watch` started: `poll()` is None while it follows the game, then its exit
+    code. By default the game writes its save and quits by itself at once, and watch returns 0 (it recorded the
+    exit); `code` 2 is a watch that stopped without recording one (it refused, as for a launch that recorded no
+    `started`); `hangs` follows a game that never quits."""
+
+    def __init__(self, cli: "FakeCli"):
+        self.cli = cli
+        self.code = cli.watch_code
+        self.hangs = cli.watch_hangs
+        self.polls = 0
+
+    def poll(self):
+        self.polls += 1
+        if self.hangs:
+            return None
+        if self.code == 0 and self.polls == 1:
+            self.cli.write_saves()
+        return self.code
 
 
 class FakeCli:
     """`python3 -m game_qa <argv>` as `fixture.make` calls it: returns (reply, exit code).
 
     `replies[verb]` is a list of (reply, exit code) pairs, played in order before the defaults.
-    `saves` are the names the game writes during `watch`; `save_at_launch` makes a refused-looking
-    `launch` leave one behind as well, as a game that started but could not be confirmed would."""
+    `saves` are the names the game writes while `watch` follows it; `save_at_launch` makes a refused-looking
+    `launch` leave one behind as well, as a game that started but could not be confirmed would. `order` is
+    every verb and `spawn_watch` in turn."""
 
     def __init__(self, user_data: Path, replies=None, saves=(GAME_SAVE,), save_at_launch=False):
         self.save_dir = user_data / "save games"
@@ -38,30 +65,41 @@ class FakeCli:
         self.saves = tuple(saves)
         self.save_at_launch = save_at_launch
         self.calls: list[list[str]] = []
+        self.order: list[str] = []
         self.saves_at_restore: list[list[str]] = []
         self.raise_on: str | None = None
+        self.watch_code = 0
+        self.watch_hangs = False
+        self.spawn_error: Exception | None = None
+        self.watches: list[FakeWatch] = []
 
     @property
     def verbs(self) -> list[str]:
         return [call[0] for call in self.calls]
 
+    def spawn_watch(self, snapshot_id: str) -> FakeWatch:
+        self.order.append("spawn_watch " + snapshot_id)
+        if self.spawn_error is not None:
+            raise self.spawn_error
+        watch = FakeWatch(self)
+        self.watches.append(watch)
+        return watch
+
     def __call__(self, argv):
         argv = list(argv)
         self.calls.append(argv)
         verb = argv[0]
+        self.order.append(verb)
         if verb == self.raise_on:
             raise RuntimeError(f"{verb} blew up")
         default = {
             "snapshot": ({"id": SNAPSHOT}, 0),
-            "launch": ({"id": SNAPSHOT, "pid": 4242}, 0),
-            "watch": ({"id": SNAPSHOT, "heartbeats": 18}, 0),
+            "launch": ({"id": SNAPSHOT, "pid": GAME.pid, "created": GAME.created}, 0),
             "restore": ({"id": SNAPSHOT, "held": False}, 0),
         }[verb]
         played = self.replies.get(verb)
         reply, code = played.pop(0) if played else default
         if verb == "launch" and self.save_at_launch:
-            self.write_saves()
-        if verb == "watch":
             self.write_saves()
         if verb == "restore":
             self.saves_at_restore.append(sorted(os.listdir(self.save_dir)))
@@ -95,6 +133,12 @@ class FixtureTestCase(unittest.TestCase):
             (self.save_dir / name).write_bytes(data)
         self.target = self.save_dir / f"te_qa_fixture_{KEY}.v3"
         self.sleeps: list[float] = []
+        self.now = 0.0
+        self.journaled: dict[str, ProcId] = {}     # what `started` finds in a snapshot's journal
+
+    def sleep(self, seconds: float) -> None:
+        self.sleeps.append(seconds)
+        self.now += seconds
 
     def cli(self, **kwargs) -> FakeCli:
         self.fake = FakeCli(self.user, **kwargs)
@@ -102,7 +146,8 @@ class FixtureTestCase(unittest.TestCase):
 
     def make(self, fake=None, **kwargs):
         return fixture.make(
-            fake or self.fake, self.user, KEY, OVERLAY, PERMISSION, "mod_only", sleep=self.sleeps.append, **kwargs
+            fake or self.fake, self.user, KEY, OVERLAY, PERMISSION, "mod_only", sleep=self.sleep,
+            spawn_watch=self.fake.spawn_watch, clock=lambda: self.now, started=self.journaled.get, **kwargs
         )
 
     def assert_owner_files_untouched(self):
@@ -127,8 +172,8 @@ class KeyTest(unittest.TestCase):
             path.write_text(name, encoding="utf-8")
         self.mods = [r"C:\mods\Vic3TimelineExtended", r"C:\mods\other"]
 
-    def key(self, version="1.15.0", mods=None):
-        return fixture.key(version, self.mods if mods is None else mods, self.deploy)
+    def key(self, version="1.15.0", mods=None, playset="current"):
+        return fixture.key(version, self.mods if mods is None else mods, self.deploy, playset=playset)
 
     def test_key_is_twelve_hex_digits_and_stable(self):
         key = self.key()
@@ -143,6 +188,7 @@ class KeyTest(unittest.TestCase):
             "a mod removed": self.key(mods=self.mods[:1]),
             "mod order": self.key(mods=list(reversed(self.mods))),
             "a mod path": self.key(mods=[self.mods[0], r"C:\mods\Other"]),
+            "the playset mode": self.key(playset="mod_only"),
         }
         (self.deploy / "common/laws/b.txt").write_text("a longer file than before", encoding="utf-8")
         keys["a script file grew"] = self.key()
@@ -187,15 +233,17 @@ class KeyTest(unittest.TestCase):
         short = self.key()
         self.assertRegex(short, r"^[0-9a-f]{12}$")
         self.assertNotEqual(short, full)
-        self.assertRegex(fixture.key("1.15.0", [], self.deploy / "nothing here"), r"^[0-9a-f]{12}$")
+        self.assertRegex(fixture.key("1.15.0", [], self.deploy / "nothing here", playset="mod_only"), r"^[0-9a-f]{12}$")
 
     def test_key_is_not_fooled_by_where_a_boundary_falls(self):
         self.assertNotEqual(self.key(mods=["ab", "c"]), self.key(mods=["a", "bc"]))
         self.assertNotEqual(self.key(mods=["a", "b"]), self.key(mods=["a\nmod\u0000b"]))
 
-    def test_key_wants_a_list_of_mods_not_one_path(self):
+    def test_key_wants_a_list_of_mods_not_one_path_and_the_playset_by_name(self):
         with self.assertRaises(TypeError):
-            fixture.key("1.15.0", r"C:\mods\one", self.deploy)
+            fixture.key("1.15.0", r"C:\mods\one", self.deploy, playset="current")
+        with self.assertRaises(TypeError):
+            fixture.key("1.15.0", self.mods, self.deploy)          # the playset mode is not optional
 
 
 class FindTest(FixtureTestCase):
@@ -216,7 +264,8 @@ class FindTest(FixtureTestCase):
                     fixture.find(self.user, bad)
                 fake = self.cli()
                 with self.assertRaises(ValueError):
-                    fixture.make(fake, self.user, bad, OVERLAY, PERMISSION, "mod_only", sleep=self.sleeps.append)
+                    fixture.make(fake, self.user, bad, OVERLAY, PERMISSION, "mod_only", sleep=self.sleeps.append,
+                                 spawn_watch=fake.spawn_watch)
                 self.assertEqual(fake.calls, [], "no verb ran")
 
 
@@ -248,14 +297,22 @@ class MakeTest(FixtureTestCase):
                     "--add-mod", OVERLAY, "--",
                     "-gdpr-compliant", "-debug_mode", "-handsoff", "-scripted_tests", "-run_until=1836.1.4",
                 ],
-                ["watch", SNAPSHOT],
                 ["restore", SNAPSHOT],
             ],
         )
+        # watch is started the moment launch returns, and followed to the game's exit before restore
+        self.assertEqual(fake.order, ["snapshot", "launch", "spawn_watch " + SNAPSHOT, "restore"])
         self.assertEqual(
             fixture.FIXTURE_ARGS,
             ("-gdpr-compliant", "-debug_mode", "-handsoff", "-scripted_tests", "-run_until=1836.1.4"),
         )
+
+    def test_the_fixtures_launch_uses_the_runs_playset(self):
+        fake = self.cli()
+        fixture.make(fake, self.user, KEY, OVERLAY, PERMISSION, "current", sleep=self.sleep,
+                     spawn_watch=fake.spawn_watch, clock=lambda: self.now)
+        launch = fake.calls[1]
+        self.assertEqual(launch[launch.index("--playset") + 1], "current")
 
     def test_owner_confirmed_busy_is_passed_to_launch_before_the_game_arguments(self):
         fake = self.cli()
@@ -275,30 +332,98 @@ class MakeTest(FixtureTestCase):
         self.assertIn("game_running", str(error))
         self.assertEqual(fake.verbs, ["snapshot"])
 
-    def test_a_refused_launch_is_a_fixture_error_and_nothing_is_renamed(self):
+    def test_a_launch_refused_before_its_claim_is_restored_at_once_and_not_watched(self):
         fake = self.cli(replies={"launch": [(REFUSED, 2)]})
         error = self.assert_fixture_error("launch")
         self.assertEqual(error.reply, REFUSED)
         self.assertEqual(error.snapshot, SNAPSHOT)
+        self.assertIsNone(error.code)
         self.assertIn("gpu_busy", str(error))
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"], "the armed snapshot is finished, no watch")
+        self.assertEqual(fake.order, ["snapshot", "launch", "restore"], "the armed snapshot is finished, no watch")
+        self.assertEqual(error.restore, ({"id": SNAPSHOT, "held": False}, 0))
         self.assertFalse(self.target.exists())
         self.assert_owner_files_untouched()
 
-    def test_a_launch_that_may_have_started_a_game_renames_nothing(self):
-        unconfirmed = {"held": False, "refused": "start_unconfirmed", "detail": "PowerShell's reply was lost"}
-        fake = self.cli(replies={"launch": [(unconfirmed, 2)]}, save_at_launch=True)
-        self.assert_fixture_error("launch")
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
+    def test_a_launch_that_may_have_started_a_game_is_watched_and_never_restored_beside_it(self):
+        # start_unconfirmed and not_recorded come after the claim; watch refuses at once (no `started`)
+        not_recorded = {"held": False, "refused": "not_recorded", "id": SNAPSHOT, "pid": GAME.pid,
+                        "created": GAME.created, "detail": "the game started but its start could not be recorded"}
+        for reply, proc in ((UNCONFIRMED, None), (not_recorded, GAME)):
+            with self.subTest(refused=reply["refused"]):
+                fake = self.cli(replies={"launch": [(reply, 2)]}, save_at_launch=True)
+                fake.watch_code = 2
+                error = self.assert_fixture_error("launch")
+                self.assertEqual(error.code, fixture.GAME_MAY_BE_UP)
+                self.assertEqual((error.snapshot, error.proc, error.restore), (SNAPSHOT, proc, None))
+                self.assertIs(error.watch, fake.watches[0])
+                self.assertEqual(fake.order, ["snapshot", "launch", "spawn_watch " + SNAPSHOT], "no restore")
+                self.assertFalse(self.target.exists())
+                self.assertIn(SNAPSHOT, str(error))
+                (self.save_dir / GAME_SAVE).unlink()
+
+    def test_a_launch_whose_reply_was_lost_is_watched_and_restored_once_the_game_has_quit(self):
+        fake = self.cli()
+        fake.raise_on = "launch"
+        error = self.assert_fixture_error("launch")
+        self.assertIsNone(error.code)
+        self.assertIn("blew up", str(error))
+        self.assertEqual(fake.order, ["snapshot", "launch", "spawn_watch " + SNAPSHOT, "restore"])
+        self.assertFalse(self.target.exists(), "a launch that did not answer is not trusted for the fixture")
+
+    def test_a_lost_launch_reply_takes_the_game_from_the_journal_when_it_may_still_be_up(self):
+        fake = self.cli()
+        fake.raise_on = "launch"
+        fake.watch_code = 2
+        self.journaled[SNAPSHOT] = GAME
+        error = self.assert_fixture_error("launch")
+        self.assertEqual((error.code, error.proc), (fixture.GAME_MAY_BE_UP, GAME))
+        self.assertNotIn("restore", fake.verbs)
+
+    def test_a_watch_that_returns_without_recording_the_exit_leaves_the_game_to_the_caller(self):
+        fake = self.cli()
+        fake.watch_code = 2
+        error = self.assert_fixture_error("watch")
+        self.assertEqual((error.code, error.snapshot, error.proc), (fixture.GAME_MAY_BE_UP, SNAPSHOT, GAME))
+        self.assertIs(error.watch, fake.watches[0])
+        self.assertNotIn("restore", fake.verbs)
         self.assertFalse(self.target.exists())
-        self.assertEqual(fake.saves_at_restore, [sorted([*self.owner_files, GAME_SAVE])], "left for restore to judge")
+
+    def test_a_watch_that_cannot_be_started_leaves_the_game_to_the_caller(self):
+        fake = self.cli()
+        fake.spawn_error = OSError("python3 could not be started")
+        error = self.assert_fixture_error("watch")
+        self.assertEqual((error.code, error.proc, error.watch), (fixture.GAME_MAY_BE_UP, GAME, None))
+        self.assertIn("python3 could not be started", str(error))
+        self.assertNotIn("restore", fake.verbs)
+
+    def test_the_run_has_a_time_limit(self):
+        fake = self.cli()
+        fake.watch_hangs = True                 # the game never quits by itself
+        error = self.assert_fixture_error("watch")
+        self.assertEqual((error.code, error.proc), (fixture.GAME_MAY_BE_UP, GAME))
+        self.assertIsNone(error.watch.poll(), "the watch is left following the game")
+        self.assertGreaterEqual(self.now, fixture.FIXTURE_LIMIT_S)
+        self.assertLess(self.now, fixture.FIXTURE_LIMIT_S + fixture.WATCH_POLL_S + 1)
+        self.assertIn("%g s" % fixture.FIXTURE_LIMIT_S, str(error))
+        self.assertNotIn("restore", fake.verbs)
+
+    def test_an_interrupt_while_the_game_runs_restores_nothing(self):
+        fake = self.cli()
+        fake.watch_hangs = True
+
+        def interrupted(seconds):
+            raise KeyboardInterrupt
+        with self.assertRaises(KeyboardInterrupt):
+            fixture.make(fake, self.user, KEY, OVERLAY, PERMISSION, "mod_only", sleep=interrupted,
+                         spawn_watch=fake.spawn_watch, clock=lambda: self.now)
+        self.assertNotIn("restore", fake.verbs)
 
     def test_restore_is_still_called_when_no_save_appeared(self):
         fake = self.cli(saves=())
         error = self.assert_fixture_error("save")
         self.assertEqual(error.snapshot, SNAPSHOT)
         self.assertEqual(error.reply, {})
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "watch", "restore"])
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
         self.assertFalse(self.target.exists())
         self.assert_owner_files_untouched()
 
@@ -322,68 +447,58 @@ class MakeTest(FixtureTestCase):
         error = self.assert_fixture_error("restore")
         self.assertEqual(error.reply, HELD)
         self.assertEqual(error.snapshot, SNAPSHOT)
+        self.assertEqual(error.restore, (HELD, 2))
         self.assertIn(SNAPSHOT, str(error))
         self.assertIn("other_game_ran", str(error))
         self.assertEqual(fake.verbs.count("restore"), 1, "a hold is not retried")
         self.assertEqual(self.target.read_bytes(), GAME_SAVE_BYTES, "the save was kept before the hold")
 
-    def test_a_refused_watch_still_keeps_the_save_and_restores(self):
-        unrecorded = {"held": False, "refused": "game_gone_unrecorded", "detail": "nobody saw it exit"}
-        fake = self.cli(replies={"watch": [(unrecorded, 2)]})
-        error = self.assert_fixture_error("watch")
-        self.assertEqual(error.reply, unrecorded)
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "watch", "restore"])
-        self.assertEqual(self.target.read_bytes(), GAME_SAVE_BYTES)
-        self.assertEqual(fake.saves_at_restore, [sorted([*self.owner_files, self.target.name])])
-
-    def test_a_refused_watch_with_no_save_still_raises_the_watch_refusal(self):
-        unrecorded = {"held": False, "refused": "game_gone_unrecorded", "detail": "nobody saw it exit"}
-        fake = self.cli(replies={"watch": [(unrecorded, 2)]}, saves=())
-        error = self.assert_fixture_error("watch")
-        self.assertEqual(error.reply, unrecorded)
-        self.assertEqual(error.snapshot, SNAPSHOT)
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "watch", "restore"])
-        self.assertFalse(self.target.exists())
-
     def test_the_first_failure_is_the_one_raised_and_a_later_one_is_added_to_the_message(self):
-        unrecorded = {"held": False, "refused": "game_gone_unrecorded"}
-        fake = self.cli(replies={"watch": [(unrecorded, 2)], "restore": [(HELD, 2)]})
-        error = self.assert_fixture_error("watch")
-        self.assertEqual(error.reply, unrecorded)
+        fake = self.cli(saves=(), replies={"restore": [(HELD, 2)]})
+        error = self.assert_fixture_error("save")
         self.assertEqual(error.snapshot, SNAPSHOT)
-        self.assertIn("game_gone_unrecorded", str(error))
+        self.assertEqual(error.restore, (HELD, 2))
+        self.assertIn("left no", str(error))
         self.assertIn("other_game_ran", str(error))
         self.assertEqual(fake.verbs[-1], "restore")
 
-    def test_restore_is_retried_while_watch_is_still_recording(self):
+    def test_restore_is_retried_while_watch_is_still_recording_or_busy(self):
         recording = {"held": False, "refused": "watch_still_recording", "id": SNAPSHOT}
-        fake = self.cli(replies={"restore": [(recording, 2), (recording, 2)]})
+        busy = {"held": False, "refused": "busy", "detail": "another session is in `snapshot`"}
+        fake = self.cli(replies={"restore": [(recording, 2), (busy, 2), (recording, 2)]})
         self.assertEqual(self.make(), self.target)
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "watch", "restore", "restore", "restore"])
-        self.assertEqual(self.sleeps, [5, 5])
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore", "restore", "restore", "restore"])
+        self.assertEqual(self.sleeps, [5, 5, 5])
 
-    def test_restore_retries_stop_after_thirty_seconds(self):
-        recording = {"held": False, "refused": "watch_still_recording", "id": SNAPSHOT}
-        fake = self.cli(replies={"restore": [(recording, 2)] * 20})
-        error = self.assert_fixture_error("restore")
-        self.assertEqual(error.reply, recording)
-        self.assertEqual(self.sleeps, [5] * 6)
-        self.assertEqual(fake.verbs.count("restore"), 7)
+    def test_restore_retries_stop_after_their_time(self):
+        for refused, total in (("watch_still_recording", 30), ("busy", 60)):
+            with self.subTest(refused=refused):
+                self.sleeps.clear()
+                reply = {"held": False, "refused": refused, "id": SNAPSHOT}
+                fake = self.cli(replies={"restore": [(reply, 2)] * 20})
+                error = self.assert_fixture_error("restore")
+                self.assertEqual(error.reply, reply)
+                self.assertEqual(self.sleeps, [5] * (total // 5))
+                self.assertEqual(fake.verbs.count("restore"), total // 5 + 1)
+                self.target.unlink()
 
-    def test_another_restore_refusal_is_not_retried(self):
-        still_up = {"held": False, "refused": "game_still_up", "id": SNAPSHOT}
-        fake = self.cli(replies={"restore": [(still_up, 2)]})
-        self.assert_fixture_error("restore")
-        self.assertEqual(fake.verbs.count("restore"), 1)
-        self.assertEqual(self.sleeps, [])
+    def test_launch_in_flight_and_other_refusals_are_not_retried(self):
+        # The fixture cannot end its game: waiting out launch_in_flight would end in a hold beside it.
+        for refused in ("launch_in_flight", "game_still_up"):
+            with self.subTest(refused=refused):
+                self.sleeps.clear()
+                fake = self.cli(replies={"restore": [({"held": False, "refused": refused, "id": SNAPSHOT}, 2)]})
+                self.assert_fixture_error("restore")
+                self.assertEqual(fake.verbs.count("restore"), 1)
+                self.assertEqual(self.sleeps, [])
+                self.target.unlink()
 
-    def test_restore_is_attempted_when_a_verb_raises(self):
+    def test_a_restore_that_raises_is_a_refusal(self):
         fake = self.cli()
-        fake.raise_on = "watch"
-        with self.assertRaises(RuntimeError):
-            self.make()
-        self.assertEqual(fake.verbs, ["snapshot", "launch", "watch", "restore"])
-        self.assertFalse(self.target.exists())
+        fake.raise_on = "restore"
+        error = self.assert_fixture_error("restore")
+        self.assertEqual(error.reply["refused"], "error")
+        self.assertIn("blew up", error.reply["detail"])
 
     def test_a_reply_that_is_not_an_object_is_a_refusal(self):
         fake = self.cli(replies={"snapshot": [("Traceback: boom", 1)]})
@@ -395,6 +510,18 @@ class MakeTest(FixtureTestCase):
         fake = self.cli(replies={"snapshot": [({"files": 3}, 0)]})
         self.assert_fixture_error("snapshot")
         self.assertEqual(fake.verbs, ["snapshot"])
+
+    def test_which_launch_refusals_mean_that_no_game_started(self):
+        claimed = ("x could not be written (e), so it is as it was. Nothing was started. The snapshot stays claimed, "
+                   "so `launch` refuses it: `restore <id>` or `recover` finishes it 90 s after the claim")
+        cases = (({"refused": "gpu_busy"}, True), ({"refused": "busy"}, True), ({"refused": "stale_snapshot"}, True),
+                 ({"refused": "playset_unwritable", "detail": "could not be read (e). Nothing was written"}, True),
+                 ({"refused": "playset_unwritable", "detail": claimed}, False), ({"refused": "not_recorded"}, False),
+                 ({"refused": "start_unconfirmed"}, False), ({"refused": "a_name_not_known_here"}, False),
+                 ({"error": "not a JSON object"}, False))
+        for reply, no_game in cases:
+            with self.subTest(reply=reply):
+                self.assertIs(fixture.no_game(reply), no_game)
 
 
 class BeforeAnythingRunsTest(FixtureTestCase):
@@ -422,7 +549,7 @@ class BeforeAnythingRunsTest(FixtureTestCase):
 
         def appears(argv):
             reply = original(argv)
-            if argv[0] == "watch":
+            if argv[0] == "launch":         # while the game runs
                 self.target.write_bytes(b"someone else made it")
             return reply
 

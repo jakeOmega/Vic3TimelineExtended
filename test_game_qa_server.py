@@ -323,6 +323,18 @@ class VerbTest(ServerTestCase):
         self.assertEqual(fake.stops, 0)
 
 
+class CleanStopTest(unittest.TestCase):
+    def test_a_clean_stop_leaves_nothing_of_the_run(self):
+        self.assertTrue(server.clean_stop(RESTORED))
+        self.assertTrue(server.clean_stop({"outcome": None, "snapshot": None, "overlay_removed": True}))
+        for reply in (dict(RESTORED, overlay_kept=True, overlay_kept_because="removing it failed"),
+                      {"outcome": None, "snapshot": None, "snapshot_unknown": True, "overlay_removed": True},
+                      {"outcome": "game_left_up", "snapshot": SNAP}, dict(RESTORED, held=True, outcome="held"),
+                      {"outcome": "refused", "refused": "busy"}):
+            with self.subTest(reply=reply):
+                self.assertFalse(server.clean_stop(reply))
+
+
 class StopTest(ServerTestCase):
     def test_stop_answers_then_the_server_exits_and_removes_its_file(self):
         fake, thread = self.serve()
@@ -607,7 +619,7 @@ class DeadServerTest(ChildServerTestCase):
         paths = session.Paths(
             user_data=self.user, backup_root=self.backups, deploy_dir=self.deploy, base_game=self.base_game,
             overlay_windows_path=OVERLAY_WIN, events_file_windows_path=lambda path: "W:" + str(path),
-            game_version="1.15.0", enabled_mods=[OWNER_MOD, OVERLAY_WIN])
+            game_version="1.15.0", enabled_mods=[OWNER_MOD, OVERLAY_WIN], deployed_mod_windows_path=OWNER_MOD)
 
         def no_watch(snapshot_id):
             raise AssertionError("watch spawned for %s: nothing may be launched" % snapshot_id)

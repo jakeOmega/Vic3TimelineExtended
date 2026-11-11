@@ -7,8 +7,11 @@ game's side of the debugger, reached through the helper's relay as in the real h
 `python3 -m game_qa` and `Watch` for the `watch` subprocess. Every wait runs on the fake's one clock, except
 the debugger client's own, which the fakes answer at once.
 """
+import contextlib
 import datetime as dt
+import io
 import json
+import os
 import re
 import subprocess
 import tempfile
@@ -16,14 +19,20 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from game_qa import dap, fakes, fixture, logtail, overlay, session
+from game_qa import __main__ as cli
+from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
+from game_qa.client import enabled_mods
 from game_qa.console import ConsoleError
+from game_qa.gate import ProcId
 from game_qa.helper import HelperError
 
 SNAP = "20261110T150000Z"
 FIXTURE_SNAP = "20261110T145500Z"
 PID, CREATED = 7, "2026-11-10T14:00:00.0000000Z"
 OVERLAY_WIN = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\te_qa_overlay"
+DEPLOYED_WIN = r"C:\Users\someone\mod\Vic3TimelineExtended"
+OTHER_MOD_WIN = r"C:\Users\someone\mod\SomeoneElsesMod"
+FIXTURE_GAME = ProcId(9, "2026-11-10T14:55:05.0000000Z")
 EVENTS_WIN = OVERLAY_WIN + r"\events\te_qa_events.txt"
 PERMISSION = "the owner granted launches for this session"
 SPACE = 0x39
@@ -262,6 +271,26 @@ class Game(fakes.FakeHelper):
             f.write("".join(line + "\n" for line in out))
 
 
+class FixtureWatch:
+    """The fixture run's `watch`: the unattended game writes its save and quits by itself (-run_until), so by
+    default it returns 0 at its first look. With `code` 2 it stopped without recording the exit (as for a launch
+    that recorded no `started`); with `hangs` it follows a game that never quits, until that game is ended."""
+
+    def __init__(self, test):
+        self.test = test
+        self.code = test.fixture_watch_code
+        self.hangs = test.fixture_watch_hangs
+        self.polls = 0
+
+    def poll(self):
+        self.polls += 1
+        if self.hangs:
+            return 0 if self.test.game.killed else None
+        if self.code == 0 and self.polls == 1:
+            (self.test.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"a fresh game")
+        return self.code
+
+
 class Watch:
     """The `watch` subprocess: it returns once the game is gone (ended by the helper, or exited), unless it hangs."""
 
@@ -291,8 +320,8 @@ class Watch:
 class Cli:
     """`python3 -m game_qa <argv>`: records each call and answers from what the test queued, then the defaults.
 
-    `watch` (only the fixture's run calls it through here) writes the run's save; `restore` removes the saves a
-    run made, as the real one does, and notes whether the overlay was still there."""
+    `restore` removes the saves a run made, as the real one does, and notes whether the overlay was still there.
+    (`watch` is never called through here: the session and the fixture both spawn it.)"""
 
     def __init__(self, test):
         self.test = test
@@ -321,8 +350,6 @@ class Cli:
         if verb == self.raise_on:
             raise OSError("python3 could not be started")
         saves = self.test.user / "save games"
-        if verb == "watch":
-            (saves / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"a fresh game")
         if verb == "restore":
             self.overlay_at_restore.append(self.test.paths.overlay_dir.exists())
             for path in saves.glob("TEST_FAIL_*.v3"):
@@ -334,7 +361,6 @@ class Cli:
             "held": ({"held": []}, 0),
             "snapshot": ({"id": SNAP, "files": 12, "pruned": [], "held": []}, 0),
             "launch": ({"id": SNAP, "pid": PID, "created": CREATED, "args": []}, 0),
-            "watch": ({"id": FIXTURE_SNAP, "exited": True}, 0),
             "restore": RESTORED,
         }[verb]
 
@@ -355,14 +381,19 @@ class SessionTestCase(unittest.TestCase):
         self.paths = session.Paths(
             user_data=self.user, backup_root=base / "backups", deploy_dir=deploy, base_game=base / "game",
             overlay_windows_path=OVERLAY_WIN, events_file_windows_path=self.windows_path, game_version="1.15.0",
-            enabled_mods=[r"C:\Users\someone\mod\Vic3TimelineExtended", OVERLAY_WIN])
-        self.key = fixture.key(self.paths.game_version, self.paths.enabled_mods, deploy)
+            enabled_mods=[DEPLOYED_WIN, OTHER_MOD_WIN], deployed_mod_windows_path=DEPLOYED_WIN)
+        # mod_only: the deployed mod alone, then the overlay (what `launch --playset mod_only --add-mod` writes)
+        self.key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], deploy, playset="mod_only")
         self.fixture_save = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key)
         self.fixture_save.write_bytes(b"a fresh game")
         self.order: list[str] = []
         self.game = Game(self.user, self.order)
         self.cli = Cli(self)
         self.watches: list[Watch] = []
+        self.fixture_watches: list[FixtureWatch] = []
+        self.fixture_snaps = {FIXTURE_SNAP}     # the snapshots the fixture's run takes: its watch is a FixtureWatch
+        self.fixture_watch_code = 0
+        self.fixture_watch_hangs = False
         self.spawn_error: Exception | None = None
         self.fresh_helper: fakes.FakeHelper | None = None     # what the helper factory hands out, if anything
         # The drain before each read waits on the debugger client's own clock (real seconds): keep it short here.
@@ -386,6 +417,10 @@ class SessionTestCase(unittest.TestCase):
         self.spawned_at = self.game.now
         if self.spawn_error is not None:
             raise self.spawn_error
+        if snapshot_id in self.fixture_snaps:
+            fixture_watch = FixtureWatch(self)
+            self.fixture_watches.append(fixture_watch)
+            return fixture_watch
         watch = Watch(self.game, self.order)
         self.watches.append(watch)
         return watch
@@ -403,6 +438,13 @@ class SessionTestCase(unittest.TestCase):
 
     def typed(self) -> list[str]:
         return [step["text"] for step in self.game.steps if "text" in step]
+
+    def journal_a_start(self, proc: ProcId) -> str:
+        """A real snapshot under the backup root whose journal records `proc` as started; its id."""
+        snap = snapshot.take(self.user, self.paths.backup_root)
+        snapshot.record(snap, "armed")
+        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=[])
+        return snap.id
 
     def session_error(self, fn, *args, **kwargs) -> session.SessionError:
         with self.assertRaises(session.SessionError) as caught:
@@ -445,11 +487,12 @@ class StartTest(SessionTestCase):
         self.fixture_save.unlink()
         self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
         reply = self.start()
-        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "watch", "restore", "snapshot", "launch"])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "restore", "snapshot", "launch"])
+        self.assertEqual(self.order[2:5], ["cli launch", "spawn_watch " + FIXTURE_SNAP, "cli restore"])
         self.assertEqual(self.cli.calls[2][-6:], ["--", *fixture.FIXTURE_ARGS])
         self.assertTrue(reply["fixture_made"])
         self.assertTrue(self.fixture_save.is_file())
-        self.assertEqual(self.cli.calls[6][-1], "-loadsave=te_qa_fixture_" + self.key)
+        self.assertEqual(self.cli.calls[5][-1], "-loadsave=te_qa_fixture_" + self.key)
 
     def test_start_with_a_named_save_loads_it_and_snapshots_it(self):
         (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
@@ -1138,6 +1181,18 @@ class LaunchOutcomeTest(SessionTestCase):
                 self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
                 self.assertTrue(self.paths.overlay_dir.exists())
 
+    def test_a_lost_launch_reply_of_the_sessions_own_ends_the_game_its_journal_names(self):
+        # N7: the session's own launch, its reply lost after `started` was journaled
+        snap = self.journal_a_start(ProcId(PID, CREATED))
+        self.cli.queue("snapshot", {"id": snap}, 0)
+        self.cli.raise_on = "launch"
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "launch_refused")
+        self.assertEqual(self.game.killed, [ProcId(PID, CREATED)])
+        stop = error.info["stop"]
+        self.assertEqual(stop["outcome"], "restored")
+        self.assertFalse(self.paths.overlay_dir.exists())
+
     def test_which_launch_refusals_mean_that_no_game_started(self):
         claimed = ("x could not be written (e), so it is as it was. Nothing was started. The snapshot stays claimed, "
                    "so `launch` refuses it: `restore <id>` or `recover` finishes it 90 s after the claim")
@@ -1332,7 +1387,8 @@ class GameLeftUpTest(SessionTestCase):
         self.cli.queue("launch", {"refused": "start_unconfirmed", "id": SNAP}, 2)
         stop = self.session_error(self.start).info["stop"]
         self.assertEqual(stop["outcome"], "game_left_up")
-        self.assertIn("restore %s" % SNAP, stop["next"])
+        self.assertIn("recover", stop["next"])
+        self.assertIn(SNAP, stop["next"])
         self.assertNotIn("stop` again", stop["next"])
 
 
@@ -1359,17 +1415,234 @@ class OverlayVerdictTest(SessionTestCase):
                     self.assertTrue(reply["overlay_kept_because"])
 
     def test_a_fixture_run_that_may_have_left_its_playset_keeps_the_overlay(self):
-        cases = ((("launch", {"refused": "gpu_busy", "id": FIXTURE_SNAP}, 2), True),
-                 (("restore", {"held": True, "reason": "unwatched_stretch", "restored": [], "removed": []}, 2), False),
-                 (("launch", {"refused": "not_recorded", "id": FIXTURE_SNAP, "pid": 9, "created": CREATED}, 2), False))
-        for (verb, reply, code), removed in cases:
+        held = {"held": True, "reason": "unwatched_stretch", "restored": [], "removed": []}
+        cases = ((("launch", {"refused": "gpu_busy", "id": FIXTURE_SNAP}, 2), True, "restored"),
+                 (("restore", held, 2), False, "held"),
+                 # its game is ended by pid and start time, then the snapshot restored: the playset is back
+                 (("launch", {"refused": "not_recorded", "id": FIXTURE_SNAP, "pid": FIXTURE_GAME.pid,
+                              "created": FIXTURE_GAME.created}, 2), True, "restored"))
+        for (verb, reply, code), removed, outcome in cases:
             with self.subTest(verb=verb, reply=reply):
                 self.setUp()
                 self.fixture_save.unlink()
+                self.fixture_watch_code = 2         # for not_recorded: watch finds no `started`
                 self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
                 self.cli.queue(verb, reply, code)
-                self.assertEqual(self.session_error(self.start).code, "fixture_failed")
+                error = self.session_error(self.start)
+                self.assertEqual(error.code, "fixture_failed")
                 self.assertEqual(self.paths.overlay_dir.exists(), not removed)
+                self.assertEqual((error.info["stop"]["outcome"], error.info["stop"]["snapshot"]), (outcome, FIXTURE_SNAP))
+                self.assertEqual(server.clean_stop(error.info["stop"]), outcome == "restored")
+
+
+class FixtureGameTest(SessionTestCase):
+    """R6, N2, N7, R5: a game the fixture's own launch may have started is treated as the session's own: ended by
+    its pid and start time, its watch waited for, its snapshot restored, and only then the overlay rules; with no
+    process known, it is left up, and the stop reply never reads as clean."""
+
+    def setUp(self):
+        super().setUp()
+        self.fixture_save.unlink()
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+
+    def test_a_fixture_launch_not_recorded_is_ended_by_its_pid_and_start_time_then_restored(self):
+        # B2, not_recorded: launch's reply names the game; watch finds no `started` and returns at once
+        self.cli.queue("launch", {"refused": "not_recorded", "id": FIXTURE_SNAP, "pid": FIXTURE_GAME.pid,
+                                  "created": FIXTURE_GAME.created, "detail": "the game started but ..."}, 2)
+        self.fixture_watch_code = 2
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "fixture_failed")
+        self.assertTrue(error.info["game_may_be_up"])
+        self.assertEqual(error.info["game"], {"pid": FIXTURE_GAME.pid, "created": FIXTURE_GAME.created})
+        self.assertEqual(len(self.fixture_watches), 1)                 # watched at once
+        self.assertEqual((self.game.adopted, self.game.killed), ([FIXTURE_GAME], [FIXTURE_GAME]))
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "restore"])
+        self.assertEqual(self.cli.calls[-1], ["restore", FIXTURE_SNAP])
+        self.assertLess(self.order.index("kill"), self.order.index("cli restore"))    # never restored beside it
+        stop = error.info["stop"]
+        self.assertEqual((stop["outcome"], stop["snapshot"]), ("restored", FIXTURE_SNAP))
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertTrue((self.paths.run_root / FIXTURE_SNAP / "summary.md").is_file())
+
+    def test_a_fixture_game_whose_process_is_not_known_is_left_up_and_the_stop_says_so(self):
+        # B2, start_unconfirmed or a lost reply with nothing journaled: no pid and start time to end it by
+        for how in ("start_unconfirmed", "lost"):
+            with self.subTest(how=how):
+                self.setUp()
+                if how == "lost":
+                    self.cli.raise_on = "launch"
+                else:
+                    self.cli.queue("launch", {"refused": "start_unconfirmed", "id": FIXTURE_SNAP}, 2)
+                self.fixture_watch_code = 2
+                error = self.session_error(self.start)
+                stop = error.info["stop"]
+                self.assertEqual((stop["outcome"], stop["snapshot"]), ("game_left_up", FIXTURE_SNAP))
+                self.assertFalse(server.clean_stop(stop))
+                self.assertIn(FIXTURE_SNAP, stop["next"])
+                self.assertIn("recover", stop["next"])
+                self.assertTrue(stop["game_unwatched"])         # N10: its watch has returned, recording no exit
+                self.assertTrue(any("no `watch` follows" in note for note in stop["notes"]))
+                self.assertNotIn("restore", self.cli.verbs)
+                self.assertEqual(self.game.killed, [])
+                self.assertTrue(self.paths.overlay_dir.exists())
+
+    def test_a_fixture_game_that_outlasts_the_time_limit_is_ended_and_its_watch_waited_for(self):
+        self.cli.queue("launch", {"id": FIXTURE_SNAP, "pid": FIXTURE_GAME.pid, "created": FIXTURE_GAME.created}, 0)
+        self.fixture_watch_hangs = True         # the game never quits by itself
+        error = self.session_error(self.start)
+        self.assertGreaterEqual(self.game.now, fixture.FIXTURE_LIMIT_S)
+        self.assertEqual(self.game.killed, [FIXTURE_GAME])
+        stop = error.info["stop"]
+        self.assertEqual(stop["outcome"], "restored")
+        self.assertNotIn("watch had not returned", " ".join(stop.get("notes", [])))   # it recorded the exit
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_lost_fixture_launch_reply_ends_the_game_its_journal_names(self):
+        # N7 for the fixture: the reply was lost after launch journaled `started`
+        snap = self.journal_a_start(FIXTURE_GAME)
+        self.cli.queued["snapshot"] = [({"id": snap}, 0)]
+        self.fixture_snaps.add(snap)
+        self.cli.raise_on = "launch"
+        self.fixture_watch_code = 2
+        error = self.session_error(self.start)
+        self.assertEqual(error.info["game"], {"pid": FIXTURE_GAME.pid, "created": FIXTURE_GAME.created})
+        self.assertEqual(self.game.killed, [FIXTURE_GAME])
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+        self.assertEqual(self.cli.calls[-1], ["restore", snap])
+
+    def test_a_fixture_run_interrupted_while_its_game_runs_leaves_it_to_the_stop(self):
+        self.cli.queue("launch", {"id": FIXTURE_SNAP, "pid": FIXTURE_GAME.pid, "created": FIXTURE_GAME.created}, 0)
+        self.fixture_watch_hangs = True
+
+        def on_sleep(_seconds):
+            if self.game.now > 10:
+                raise KeyboardInterrupt
+        self.game.on_sleep = on_sleep
+        with self.assertRaises(KeyboardInterrupt):
+            self.start()
+        self.game.on_sleep = None
+        self.assertEqual(self.game.killed, [FIXTURE_GAME])              # the stop start ran ended it
+        self.assertEqual(self.cli.verbs.count("restore"), 1)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
+class LostSnapshotReplyTest(SessionTestCase):
+    """B7, N14: a snapshot whose reply was lost may have been taken and left armed; the stop says so and how to
+    finish it, and does not read as clean."""
+
+    def test_a_lost_snapshot_reply_says_a_snapshot_may_have_been_taken(self):
+        for how in ("raised", "not_json", "fixture_raised"):
+            with self.subTest(how=how):
+                self.setUp()
+                if how == "raised":
+                    self.cli.raise_on = "snapshot"
+                elif how == "not_json":
+                    self.cli.queue("snapshot", "Traceback ... (the id was printed to nobody)", 0)
+                else:
+                    self.fixture_save.unlink()
+                    self.cli.raise_on = "snapshot"
+                with self.assertRaises(Exception) as caught:
+                    self.start()
+                stop = caught.exception.info["stop"] if isinstance(caught.exception, session.SessionError) else \
+                    self.session.stop()
+                self.assertTrue(stop["snapshot_unknown"])
+                self.assertIn("recover", stop["next"])
+                self.assertFalse(server.clean_stop(stop))
+                self.assertNotIn("restore", self.cli.verbs)
+                self.assertFalse(self.paths.overlay_dir.exists())     # no launch ran: nothing names it
+
+    def test_a_refused_snapshot_is_not_taken_for_a_lost_one(self):
+        self.cli.queue("snapshot", {"refused": "unfinished_run", "unfinished": ["X"]}, 2)
+        stop = self.session_error(self.start).info["stop"]
+        self.assertNotIn("snapshot_unknown", stop)
+        self.assertTrue(server.clean_stop(stop))
+
+
+class FixtureKeyTest(SessionTestCase):
+    """R3: the fixture's key covers the run's playset, its mode and the mods it loads, and the fixture's own
+    launch uses that playset."""
+
+    def key_for(self, playset, mods=None):
+        loads = session.run_playset(playset, mods or self.paths.enabled_mods, DEPLOYED_WIN, OVERLAY_WIN)
+        return fixture.key("1.15.0", loads, self.paths.deploy_dir, playset=playset)
+
+    def test_a_fixture_made_for_one_playset_is_not_used_for_another(self):
+        self.assertEqual(self.key_for("mod_only"), self.key)
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start(playset="current")           # the mod_only fixture is there: not this run's
+        self.assertTrue(reply["fixture_made"])
+        launch = self.cli.calls[2]
+        self.assertEqual(launch[launch.index("--playset") + 1], "current")
+        self.assertTrue((self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key_for("current"))).is_file())
+
+    def test_mod_only_leaves_out_the_owners_other_mods_and_current_does_not(self):
+        more = [*self.paths.enabled_mods, r"C:\Users\someone\mod\AThirdMod"]
+        self.assertEqual(self.key_for("mod_only", more), self.key_for("mod_only"))
+        self.assertNotEqual(self.key_for("current", more), self.key_for("current"))
+        self.assertNotEqual(self.key_for("current"), self.key_for("mod_only"))
+
+    def test_the_run_playset_is_what_launch_writes(self):
+        self.assertEqual(session.run_playset("mod_only", [OTHER_MOD_WIN, DEPLOYED_WIN.lower() + "\\"], DEPLOYED_WIN,
+                                             OVERLAY_WIN), [DEPLOYED_WIN.lower() + "\\", OVERLAY_WIN])
+        self.assertEqual(session.run_playset("current", [OTHER_MOD_WIN, OVERLAY_WIN.upper()], DEPLOYED_WIN,
+                                             OVERLAY_WIN), [OTHER_MOD_WIN, OVERLAY_WIN.upper()])
+
+
+class RunPlaysetPinTest(unittest.TestCase):
+    """`session.run_playset` copies `launch`'s rule (`__main__._plan_playset`, which the session cannot import):
+    pinned against the `enabled` list a real in-process `launch` journals, so a drift fails here. gate's
+    list_games, start_game, windows_path and sample_gpu are fakes: nothing is started."""
+
+    WORKSHOP = "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\529340\\"
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        root = Path(tmp.name)
+        self.user, self.backups, base_game = root / "Victoria 3", root / "backups", root / "game"
+        (self.user / "save games").mkdir(parents=True)
+        self.deploy = self.user / "mod" / "Vic3TimelineExtended"
+        self.deploy.mkdir(parents=True)
+        (base_game / "binaries").mkdir(parents=True)
+        (base_game / "binaries" / "victoria3.exe").write_bytes(b"MZ")
+        self.this_mod = self.windows(self.deploy)
+        env = {"VIC3_USER_DATA": str(self.user), "VIC3_QA_BACKUPS": str(self.backups),
+               "VIC3_BASE_GAME": str(base_game), "VIC3_MOD_DEPLOY_TARGET": str(self.deploy)}
+        started = ProcId(4242, "2026-11-10T14:00:00.0000000Z")
+        for patch in (mock.patch.dict("os.environ", env), mock.patch.object(gate, "list_games", return_value=[]),
+                      mock.patch.object(gate, "sample_gpu", return_value=[gate.GpuSample(14, 1607, 10240)] * 5),
+                      mock.patch.object(gate, "start_game", return_value=started),
+                      mock.patch.object(gate, "windows_path", side_effect=lambda path, *a, **k: self.windows(path))):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    @staticmethod
+    def windows(path) -> str:
+        return "W:" + str(path).replace("/", "\\")
+
+    def cli(self, *argv) -> tuple[dict, int]:
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = cli.main(list(argv))
+        return json.loads(out.getvalue()), code
+
+    def test_the_run_playset_is_the_list_launch_writes(self):
+        cases = {"the owner's mods, this one among them": [self.WORKSHOP + "1", self.WORKSHOP + "2", self.this_mod],
+                 "this mod spelled otherwise": [self.WORKSHOP + "1", self.this_mod.lower() + "\\"],
+                 "the overlay enabled already": [self.this_mod, OVERLAY_WIN.upper()]}
+        runs = [(label, owner, mode) for label, owner in cases.items() for mode in session.PLAYSETS]
+        for n, (label, owner, mode) in enumerate(runs):
+            with self.subTest(owners=label, mode=mode):
+                os.environ["VIC3_QA_BACKUPS"] = str(self.backups) + str(n)      # one run each: nothing to finish
+                (self.user / "content_load.json").write_text(
+                    "\ufeff" + json.dumps({"enabledMods": [{"path": m} for m in owner], "disabledDLC": []}),
+                    encoding="utf-8")
+                snap, code = self.cli("snapshot")
+                self.assertEqual(code, 0, snap)
+                launched, code = self.cli("launch", snap["id"], "--permission", PERMISSION, "--playset", mode,
+                                          "--add-mod", OVERLAY_WIN, "--", "-gdpr-compliant")
+                self.assertEqual(code, 0, launched)
+                self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod,
+                                                     OVERLAY_WIN), launched["playset"]["enabled"])
 
 
 class StopsTest(SessionTestCase):

@@ -9,6 +9,14 @@ it reaches only through the `run_cli` it is given, so there is one implementatio
 name, `te_qa_fixture_<key>.v3` (which `restore` never removes), before it restores. Nothing else under the
 user-data folder is touched here: `make` renames only a new `TEST_FAIL_te_qa_fixture_*.v3`, and `prune`
 removes only files named `te_qa_fixture_*.v3`.
+
+A launch that may have started a game (anything but a refusal given before the launch claimed the snapshot) is
+followed by `watch` at once, for at most FIXTURE_LIMIT_S. The fixture cannot end a game, so when `watch` has not
+recorded the game's exit `make` never restores beside it: it raises `game_may_be_up` with what the caller needs
+to end that game and finish the snapshot (the session does both, as for its own game).
+
+Shared with the session: which launch refusals mean no game was started (`no_game`), and `restore` retried while
+it refuses for a reason that passes (`restore_retried`).
 """
 
 from __future__ import annotations
@@ -18,22 +26,45 @@ import json
 import os
 import re
 import time
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
+
+from game_qa.gate import ProcId
 
 FIXTURE_ARGS = ("-gdpr-compliant", "-debug_mode", "-handsoff", "-scripted_tests", "-run_until=1836.1.4")
 
 # What `python3 -m game_qa <argv>` printed (one JSON object) and its exit code: 0 is success, anything
 # else is a refusal, a hold or an error whose reply says which (`refused`, or `held` and `reason`).
 RunCli = Callable[[Sequence[str]], tuple[dict, int]]
+# Starts `python3 -m game_qa watch <id>` in the background: a handle whose `poll()` is None until it returns,
+# then its exit code (0: it recorded the game's exit).
+SpawnWatch = Callable[[str], Any]
 
 SAVE_FOLDER = "save games"
 FIXTURE_PREFIX = "te_qa_fixture_"
 FIXTURE_GLOB = f"{FIXTURE_PREFIX}*.v3"
 RUN_SAVE_GLOB = "TEST_FAIL_te_qa_fixture_*.v3"
 KEY_FOLDERS = ("common", "events", "map_data")  # the folders of the deployed mod that shape a new game
+FIXTURE_LIMIT_S = 900.0     # from the launch's return to watch's: the run itself takes two or three minutes
+WATCH_POLL_S = 2.0
 RESTORE_RETRY_S = 5
-RESTORE_RETRY_TOTAL_S = 30
+RESTORE_RETRY_TOTAL_S = 30  # while restore refuses watch_still_recording
+BUSY_RETRY_TOTAL_S = 60     # while it refuses busy: another session's protective verb holds the backup root's lock
+# Not launch_in_flight: the fixture cannot end its game, and a restore after the claim's 90 s, beside a game
+# still loading, would hold the run for good (other_game_running) with its playset left in place.
+RESTORE_RETRIES = {"watch_still_recording": RESTORE_RETRY_TOTAL_S, "busy": BUSY_RETRY_TOTAL_S}
+GAME_MAY_BE_UP = "game_may_be_up"
+
+# `launch` refusals given before it claims the snapshot: no game was started (game_qa/__main__.py). Any other
+# reply that is not a success (not_recorded, start_unconfirmed, a refusal after the claim, a name not known here,
+# a lost or unreadable reply) may come with a game up.
+NO_GAME_REFUSALS = frozenset({
+    "already_finished", "already_started", "not_armed", "no_end_date", "bad_argument", "no_permission",
+    "backup_root", "other_game", "gpu_busy", "game_running", "stale_snapshot", "no_game_binary",
+    "mod_not_in_playset", "playset_not_restored", "busy"})
+_CLAIMED = "stays claimed"              # said by every refusal after the claim (__main__._CLAIM_STAYS)
 
 _KEY = re.compile(r"[A-Za-z0-9_]{1,64}")
 
@@ -43,23 +74,75 @@ class FixtureError(Exception):
 
     `step` is the verb that refused (`snapshot`, `launch`, `watch`, `restore`) or the part of `make` that
     failed (`check` before anything ran, `save` when the run left no single save, `rename`); `reply` is the
-    verb's reply, `{}` when no verb is to blame; `snapshot` is the snapshot's id once one was taken."""
+    verb's reply, `{}` when no verb is to blame; `snapshot` is the snapshot's id once one was taken.
 
-    def __init__(self, message: str, step: str, reply: dict | None = None, snapshot: str | None = None):
+    `code` is GAME_MAY_BE_UP when a game of the run may still be up: the snapshot was then NOT restored, and the
+    caller ends that game (`proc`, its pid and start time, when known) and finishes the snapshot; `watch` is the
+    handle of the `watch` following it (None when none could be started), which may still be running. `restore`
+    is the (reply, exit code) of the fixture's own restore, None when it was not run."""
+
+    def __init__(self, message: str, step: str, reply: dict | None = None, snapshot: str | None = None, *,
+                 code: str | None = None, proc: ProcId | None = None, watch: Any = None,
+                 restore: tuple[dict, int] | None = None):
         super().__init__(message)
         self.step = step
         self.reply = reply if reply is not None else {}
         self.snapshot = snapshot
+        self.code = code
+        self.proc = proc
+        self.watch = watch
+        self.restore = restore
 
 
-def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path) -> str:
-    """12 hex digits naming the game a fixture was made for: the game version, the enabled mod paths in
-    order, and the relative path, size and modification time of every file under the deployed mod's
-    `common/`, `events/` and `map_data/` (a folder that is missing is skipped)."""
+@dataclass
+class _Run:
+    """How `_run` ended: its first failure, and `up` (why) when a game of the run may still be up."""
+    failure: FixtureError | None = None
+    up: str | None = None
+    proc: ProcId | None = None
+    watch: Any = None
+
+
+def no_game(reply: dict) -> bool:
+    """Whether a `launch` reply is a refusal given before the launch claimed the snapshot, so that no game was
+    started. A refusal after the claim says the snapshot stays claimed (`_CLAIMED`), and may have come with a game
+    up as far as this can tell; so may a reply that is not a refusal at all."""
+    refused = reply.get("refused")
+    if refused in NO_GAME_REFUSALS:
+        return True
+    detail = str(reply.get("detail") or "")
+    return refused == "playset_unwritable" and "Nothing was written" in detail and _CLAIMED not in detail
+
+
+def restore_retried(run_cli: RunCli, snapshot_id: str, sleep, retries: Mapping[str, float]) -> tuple[dict, int]:
+    """`restore <id>`, run again every RESTORE_RETRY_S while it refuses for a reason in `retries`, for up to that
+    reason's seconds in all; then its last (reply, exit code). A call that raises, or a reply that is not an
+    object, is a refusal that is not retried (`error`, `bad_reply`)."""
+    waited = dict.fromkeys(retries, 0.0)
+    while True:
+        try:
+            reply, code = run_cli(["restore", snapshot_id])
+        except Exception as error:
+            return {"held": False, "refused": "error", "detail": f"restore could not be run: {error!r}"}, 2
+        if not isinstance(reply, dict):
+            return {"held": False, "refused": "bad_reply", "detail": repr(reply)[:300]}, 2
+        refused = reply.get("refused") if code != 0 else None
+        if not isinstance(refused, str) or refused not in retries or waited[refused] >= retries[refused]:
+            return reply, code
+        sleep(RESTORE_RETRY_S)
+        waited[refused] += RESTORE_RETRY_S
+
+
+def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str) -> str:
+    """12 hex digits naming the game a fixture was made for: the game version, the run's playset (its mode,
+    `playset`, and `enabled_mods`, the mod paths the run loads, in order), and the relative path, size and
+    modification time of every file under the deployed mod's `common/`, `events/` and `map_data/` (a folder that
+    is missing is skipped). A fixture made under another playset is another world."""
     if isinstance(enabled_mods, str):
         raise TypeError("enabled_mods is a list of paths, not one path")
     digest = hashlib.sha256()
     _feed(digest, "version", game_version)
+    _feed(digest, "playset", playset)
     for mod in enabled_mods:
         _feed(digest, "mod", mod)
     root = Path(deploy_dir)
@@ -94,14 +177,27 @@ def make(
     playset: str,
     owner_confirmed_busy: bool = False,
     sleep=time.sleep,
+    *,
+    spawn_watch: SpawnWatch,
+    clock=time.monotonic,
+    started: Callable[[str], ProcId | None] | None = None,
 ) -> Path:
-    """Make the fixture for `key` with one unattended run of the game, and return its save.
+    """Make the fixture for `key` with one unattended run of the game, and return its save. `playset` is the
+    run's (`launch --playset`), so the fixture is made in the world the run will load.
 
-    The order is `snapshot`, `launch`, `watch` (which returns once the game has quit by itself), the rename
-    of the run's save, and `restore`. Once a snapshot exists `restore` is called whatever happened (an armed
-    snapshot blocks every later one, and `restore` holds by itself when something needs judging). Nothing is
-    started when `save games/` already holds the fixture or a `TEST_FAIL_te_qa_fixture_*` save: the second
-    would be taken for this run's. A refused or held verb raises FixtureError carrying its reply; when
+    The order is `snapshot`, `launch`, `watch` (spawned the moment launch returns, and followed until it has
+    recorded the game's exit, which `-run_until` brings), the rename of the run's save, and `restore` (retried
+    as RESTORE_RETRIES say). A launch refused before its claim started nothing: it is restored at once.
+
+    A launch that may have started a game (not_recorded, start_unconfirmed, a refusal after the claim, a lost
+    or unreadable reply) is watched too. When `watch` has not recorded the game's exit (it returned anything
+    else, could not be started, or the game outlasted FIXTURE_LIMIT_S) nothing is restored beside the game:
+    FixtureError `game_may_be_up` is raised with the snapshot, the game's pid and start time when known (from
+    launch's reply, else from `started`, the snapshot journal's `started` entry), and the watch, for the caller
+    to end the game and finish the snapshot. An interrupt (KeyboardInterrupt, SystemExit) restores nothing either.
+
+    Nothing is started when `save games/` already holds the fixture or a `TEST_FAIL_te_qa_fixture_*` save: the
+    second would be taken for this run's. A refused or held verb raises FixtureError carrying its reply; when
     several steps fail the first is raised and the later ones are added to its message."""
     _check_key(key)
     saves = Path(user_data) / SAVE_FOLDER
@@ -126,16 +222,21 @@ def make(
         launch.append("--owner-confirmed-busy")
     launch += ["--", *FIXTURE_ARGS]
 
-    failure = None
-    try:
-        failure = _run(run_cli, launch, snapshot, saves, target)
-    finally:
-        restore_failure = _restore(run_cli, snapshot, sleep)
+    run = _run(run_cli, launch, snapshot, saves, target, spawn_watch, sleep, clock, started)
+    if run.up is not None:
+        failure = run.failure
+        raise FixtureError(f"the fixture's run (snapshot {snapshot}) may have left its game up: {run.up}, so it was "
+                           f"not restored. {failure}", failure.step, failure.reply, snapshot, code=GAME_MAY_BE_UP,
+                           proc=run.proc, watch=run.watch)
+    restored = restore_retried(run_cli, snapshot, sleep, RESTORE_RETRIES)
+    restore_failure = None if restored[1] == 0 else _failure("restore", restored[0], snapshot)
+    failure = run.failure
     if failure is None:
         failure = restore_failure
     elif restore_failure is not None:
         failure = FixtureError(f"{failure}. Then {restore_failure}", failure.step, failure.reply, snapshot)
     if failure is not None:
+        failure.restore = restored
         raise failure
     return target
 
@@ -195,21 +296,55 @@ def _failure(step: str, reply: dict, snapshot: str) -> FixtureError:
     return FixtureError(_message(step, reply, snapshot), step, reply, snapshot)
 
 
-def _run(run_cli: RunCli, launch: list[str], snapshot: str, saves: Path, target: Path) -> FixtureError | None:
-    """Launch, watch and keep the run's save. The first failure, or None."""
-    reply, ok = _call(run_cli, launch)
-    if not ok:
-        return _failure("launch", reply, snapshot)  # a game may still have started: restore judges that
-    failure = None
-    reply, ok = _call(run_cli, ["watch", snapshot])
-    if not ok:
-        failure = _failure("watch", reply, snapshot)  # the save may be there all the same: keep it
+def _run(run_cli: RunCli, launch: list[str], snapshot: str, saves: Path, target: Path, spawn_watch: SpawnWatch,
+         sleep, clock, started) -> _Run:
+    """Launch, follow the game with `watch` until it has quit, and keep the run's save."""
+    try:
+        reply, ok = _call(run_cli, launch)
+    except Exception as error:
+        reply, ok = {"refused": "no_reply", "detail": f"launch could not be run, or its reply was lost: {error!r}"}, False
+    failure = None if ok else _failure("launch", reply, snapshot)
+    if not ok and no_game(reply):
+        return _Run(failure)
+    # From here a game of this run may be up, whatever the reply says: it is watched before anything else.
+    proc = _named_proc(reply)
+    if proc is None and started is not None:
+        proc = started(snapshot)
+    try:
+        watch = spawn_watch(snapshot)
+    except Exception as error:
+        why = f"`watch` could not be started ({error!r}), so nothing records the game"
+        return _Run(failure or _failure("watch", {"refused": "not_spawned", "detail": why}, snapshot), why, proc)
+    deadline = clock() + FIXTURE_LIMIT_S
+    try:
+        while (code := watch.poll()) is None:
+            if clock() >= deadline:
+                why = f"the game had not quit {FIXTURE_LIMIT_S:g} s after its launch (its `watch` still follows it)"
+                return _Run(failure or _failure("watch", {"refused": "time_limit", "detail": why}, snapshot), why,
+                            proc, watch)
+            sleep(WATCH_POLL_S)
+    except Exception as error:
+        why = f"looking at `watch` failed ({error!r})"
+        return _Run(failure or _failure("watch", {"refused": "error", "detail": why}, snapshot), why, proc, watch)
+    if code != 0:
+        why = f"`watch` returned {code} without recording the game's exit (its reply is in the run folder's watch.log)"
+        return _Run(failure or _failure("watch", {"refused": "no_exit_recorded", "exit": code, "detail": why},
+                                        snapshot), why, proc, watch)
+    if failure is not None:
+        return _Run(failure)        # the game launch started has quit and watch recorded it: restore judges the rest
     try:
         _keep_the_save(saves, target)
     except FixtureError as error:
         error.snapshot = snapshot
-        failure = failure or error
-    return failure
+        return _Run(error)
+    return _Run()
+
+
+def _named_proc(reply: dict) -> ProcId | None:
+    try:
+        return ProcId(int(reply["pid"]), str(reply["created"]))
+    except (KeyError, TypeError, ValueError):
+        return None
 
 
 def _keep_the_save(saves: Path, target: Path) -> None:
@@ -227,16 +362,3 @@ def _keep_the_save(saves: Path, target: Path) -> None:
     except OSError as error:
         raise FixtureError(f"{made[0].name} could not be renamed to {target.name}: {error}", "rename", {"error": str(error)}) from error
 
-
-def _restore(run_cli: RunCli, snapshot: str, sleep) -> FixtureError | None:
-    """`restore`, retried while `watch` is still recording, for RESTORE_RETRY_TOTAL_S seconds at most."""
-    waited = 0
-    while True:
-        reply, ok = _call(run_cli, ["restore", snapshot])
-        if ok:
-            return None
-        if reply.get("refused") == "watch_still_recording" and waited < RESTORE_RETRY_TOTAL_S:
-            sleep(RESTORE_RETRY_S)
-            waited += RESTORE_RETRY_S
-            continue
-        return _failure("restore", reply, snapshot)
