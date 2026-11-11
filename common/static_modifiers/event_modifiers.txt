@@ -150,9 +150,15 @@ re_orbit_avoid = {
 }
 re_orbit_laser_sweep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_military_wages_mult = 0.05
 	goods_output_launch_capacity_mult = 0.05
 	country_legitimacy_base_add = 5
+}
+# What the sweeps cost each week, applied beside re_orbit_laser_sweep with
+# multiplier = sv_money_flow_event_modest, so it holds no other field.
+re_orbit_laser_sweep_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_space_add = 1
 }
 re_orbit_press_on = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
@@ -358,13 +364,17 @@ ste_outsourcing_protect = {
 	country_sol_expectations_shift_min_add = 0.5
 	country_sol_expectations_lower_offset_add = 0.25
 }
-# The wage line is meant literally, as in ste_equal_pay_reform: the labor
-# standards conceded bind the state as an employer.
 ste_antiglobal_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_loyalists_from_legitimacy_mult = 0.05
-	country_government_wages_mult = 0.02
 	country_sol_expectations_lower_offset_add = 0.25
+}
+# The concessions' weekly bill, applied beside ste_antiglobal_concession with
+# multiplier = sv_money_flow_event_tiny, so it holds no other field.
+ste_antiglobal_concession_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_energy_industry_add = 1
 }
 ste_antiglobal_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -376,11 +386,18 @@ ste_antiglobal_crackdown = {
 # ======= Terrorism
 ste_terror_security_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_military_wages_mult = 0.05
 	country_legitimacy_base_add = -5
 	country_institution_cost_institution_ministry_of_intelligence_and_security_mult = -0.1
 	country_institution_impact_institution_ministry_of_intelligence_and_security_mult = 0.1
 	country_sol_expectations_shift_max_add = -1
+}
+# The expanded apparatus's weekly bill, applied beside
+# ste_terror_security_state with multiplier = sv_money_flow_event_modest, so
+# it holds no other field.
+ste_terror_security_state_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_covert_add = 1
 }
 ste_terror_unity_resilience = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
