@@ -199,6 +199,7 @@ class Session:
         self._maybe_stopped = False         # the game may be stopped at the breakpoint: the next verb releases it
         self._left_running = False          # a round may have left the game unpaused: no more time until stop
         self._watch_respawns = 0
+        self._watch_ended: str | None = None     # why the verbs ended for good: watch saw the exit, or a doubt
         self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
@@ -1207,17 +1208,39 @@ class Session:
             self._drain()
 
     def _check_watch(self) -> None:
-        """A `watch` that has returned while the game's window is still up is run again at once (up to
-        WATCH_RESPAWNS times), and noted; with the window gone the game has ended."""
-        if self._watch is None or self._watch.poll() is None:
+        """`watch` must still be following the game before any key or click goes out.
+
+        A watch that returned 0 recorded the game's exit: the verbs end (`watch_ended`), for good, whatever
+        window now has the game's pid. One that returned anything else stopped without recording an exit (a
+        failed look, a journal it could not write): it is run again at once (up to WATCH_RESPAWNS times), and
+        noted, but only once the helper has proved the game alive by its pid and start time (`adopt` compares
+        the creation time, win_helper._op_adopt). Any doubt there (refused `not_ours`, a helper error) ends the
+        verbs for good too: a pid alone may be another program's by now."""
+        if self._watch_ended is not None:
+            raise SessionError("watch_ended", self._watch_ended)
+        code = self._watch.poll() if self._watch is not None else None
+        if code is None:
             return
-        try:
-            up = self._helper.window(self._proc.pid).exists
-        except Exception:
-            up = False
-        if not up or self._watch_respawns >= WATCH_RESPAWNS:
-            raise SessionError("watch_ended", "`watch` has returned, so the game has ended (or watch failed): stop")
-        self._watch = self._spawn_watch(self._snapshot)
+        why = None
+        if code == 0:
+            why = "`watch` has recorded the game's exit: the game has ended. Stop the session"
+        elif self._watch_respawns >= WATCH_RESPAWNS:
+            why = ("`watch` stopped (exit %s) without recording an exit, %d times now: stop the session"
+                   % (code, self._watch_respawns + 1))
+        else:
+            try:
+                self._helper.adopt(self._proc)
+            except Exception as e:
+                why = ("`watch` stopped (exit %s) without recording an exit, and the game could not be proved alive "
+                       "by its pid and start time (%s): stop the session" % (code, _describe(e)))
+        if why is None:
+            try:
+                self._watch = self._spawn_watch(self._snapshot)
+            except Exception as e:
+                why = "`watch` stopped (exit %s) and could not be run again (%s): stop the session" % (code, e)
+        if why is not None:
+            self._watch_ended = why
+            raise SessionError("watch_ended", why)
         self._watch_respawns += 1
         self._notes.append("watch returned at %s while the game's window was still up, and was run again at once"
                            % stamp(utc_now()))

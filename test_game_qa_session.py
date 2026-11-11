@@ -139,6 +139,7 @@ class Game(fakes.FakeHelper):
         self.elapsed = 0.0                      # game days since START_DATE
         self.stops = True                       # the read event stops at a breakpoint set on its line
         self.exited = False                     # the game ended by itself
+        self.process_gone = False               # no live process has the game's pid and start time: adopt refuses
         self.tcp_error: Exception | None = None
         self.closed = False
         self.setups: dict[str, tuple[str, list[str]]] = {}     # setup event -> (its name, the lines its body logs)
@@ -194,6 +195,8 @@ class Game(fakes.FakeHelper):
             self.entered = True
 
     def adopt(self, proc):
+        if self.process_gone:                   # as win_helper._op_adopt: the creation time is compared
+            raise HelperError("not_ours", "no live process %d was created at %s" % (proc.pid, proc.created))
         super().adopt(proc)
         self.order.append("adopt")
 
@@ -1429,6 +1432,71 @@ class StopsTest(SessionTestCase):
         self.assertEqual(len(self.game.steps), steps)
 
 
+class WatchCheckTest(SessionTestCase):
+    """N1: before any key or click, `watch` must still be following the game. A watch that recorded the exit ends
+    the verbs for good; one that stopped without recording it is run again only once the game is proved alive by
+    its pid and start time (never by a window that has its pid: a pid may be another program's by now)."""
+
+    def typed_by(self, verb) -> int:
+        before = len(self.game.steps)
+        self.assertEqual(self.session_error(verb).code, "watch_ended")
+        return len(self.game.steps) - before
+
+    def test_a_watch_that_recorded_the_exit_ends_the_verbs_for_good(self):
+        # B1: the game exited (watch returned 0) and another program with a window took its pid
+        self.started()
+        self.game.exited = True
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.typed_by(self.session.events), 0)
+        self.assertEqual(len(self.watches), 1)                  # never run again
+        self.assertEqual(self.game.adopted, [self.game.proc])   # nor adopted again: there is nothing to prove
+        for _ in range(session.WATCH_RESPAWNS + 1):
+            self.assertEqual(self.typed_by(self.session.events), 0)
+        self.assertEqual(len(self.watches), 1)
+
+    def test_a_watch_that_failed_beside_the_game_is_run_again_once_the_game_is_proved_alive(self):
+        self.started()
+        self.watches[0].dies = True                             # exit 1: it stopped without recording an exit
+        self.game.adapter.values = {"c:FRA.gdp": "1"}
+        self.session.read(["c:FRA.gdp"])
+        self.assertEqual(len(self.watches), 2)
+        self.assertEqual(self.game.adopted, [self.game.proc] * 2)       # proved by pid and start time first
+        self.assertEqual(self.session.status()["watch_respawns"], 1)
+        reply = self.session.stop()
+        self.assertTrue(any("run again" in note for note in reply["notes"]))
+        self.assertIn("watch_respawned", Path(reply["report"]).read_text("utf-8"))
+
+    def test_a_watch_that_failed_with_the_game_gone_ends_the_verbs(self):
+        self.started()
+        self.watches[0].dies = True
+        self.game.process_gone = True                           # the window may still answer for the pid
+        self.assertEqual(self.typed_by(lambda: self.session.read(["c:FRA.gdp"])), 0)
+        self.assertEqual(len(self.watches), 1)
+        self.game.process_gone = False                          # a later look proves nothing: it stays ended
+        self.assertEqual(self.typed_by(lambda: self.session.read(["c:FRA.gdp"])), 0)
+        self.assertEqual(len(self.watches), 1)
+
+    def test_any_doubt_about_the_game_ends_the_verbs(self):
+        self.started()
+        self.watches[0].dies = True
+
+        def adopt(proc):
+            raise HelperError("helper_gone", "the helper has ended")
+        self.game.adopt = adopt
+        self.assertEqual(self.typed_by(self.session.events), 0)
+        self.assertEqual(len(self.watches), 1)
+
+    def test_a_watch_that_keeps_failing_is_run_again_only_so_often(self):
+        self.started()
+        self.game.on("select_event_option list", success=["No pending events"])
+        for n in range(session.WATCH_RESPAWNS):
+            self.watches[-1].dies = True
+            self.assertEqual(self.session.events(), [])
+        self.watches[-1].dies = True
+        self.assertEqual(self.typed_by(self.session.events), 0)
+        self.assertEqual(len(self.watches), 1 + session.WATCH_RESPAWNS)
+
+
 class PauseTest(SessionTestCase):
     """I4: a round that may have left the game running says so and refuses more time; the pause is proved."""
 
@@ -1523,24 +1591,6 @@ class MinorsTest(SessionTestCase):
         self.assertEqual(self.cli.calls, [])
         self.assertFalse(self.paths.overlay_dir.exists())
         self.assertEqual(self.start(setups={"border": "set_variable = x"})["snapshot"], SNAP)
-
-    def test_a_watch_that_ends_while_the_game_is_up_is_run_again(self):
-        self.started()
-        self.watches[0].dies = True
-        self.game.adapter.values = {"c:FRA.gdp": "1"}
-        self.session.read(["c:FRA.gdp"])
-        self.assertEqual(len(self.watches), 2)
-        self.assertEqual(self.session.status()["watch_respawns"], 1)
-        reply = self.session.stop()
-        self.assertTrue(any("run again" in note for note in reply["notes"]))
-        self.assertIn("watch_respawned", Path(reply["report"]).read_text("utf-8"))
-
-    def test_a_watch_that_returned_with_the_game_gone_ends_the_verbs(self):
-        self.started()
-        self.watches[0].dies = True
-        self.game.exists = False
-        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "watch_ended")
-        self.assertEqual(len(self.watches), 1)
 
     def test_with_an_owners_save_there_is_no_country_select_to_click(self):
         (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
