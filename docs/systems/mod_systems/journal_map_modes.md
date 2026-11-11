@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Tenth pass, 2026-11-11 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Eleventh pass, 2026-11-11 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -15,7 +15,8 @@ The eighth (2026-11-07) fits nearly every map's colors to the world's range as i
 lengthens the repaint's two waits. The ninth (2026-11-08, the owner's ask) adds nine: City Rank, Company HQs (with
 stripes for regional headquarters), Armed Forces and War Dead, then Ownership, Population Growth, Family Planning,
 Health Care and Fighting-Age Men. The tenth (2026-11-11, the owner's ask) adds five, Capitalists, Aristocrats, Clergymen,
-Academics and Trade Volume, and puts the picks in seven collapsible categories (§ Buttons).
+Academics and Trade Volume, and puts the picks in seven collapsible categories (§ Buttons). The eleventh (the same
+day, the owner's ask) turns Trade Volume into Trade Capacity, each state's own, and adds Investment.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -81,7 +82,7 @@ Comfort's two maps share Base Comfort's range (`range_of`), so they still compar
 (0–100, its tiers at 50 and 75 are what it shows), the paleness of the leading cause and of Ownership's leading holder
 (a share on a categorical map) and City Rank (a rank is already a place in the world, and its first 20 are tourism's
 Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs,
-War Dead and Trade Volume take GDP per capita's doubling scale, since their counts run over orders of magnitude.
+War Dead, Trade Capacity and Investment take GDP per capita's doubling scale, since their counts run over orders of magnitude.
 Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
@@ -204,12 +205,35 @@ entry, in no country's journal.
   `_pop`, `_store`, `te_journal_map_effects.txt`), not in the census's helpers, which set nothing outside the census
   (`test_demographics_registry.py`, `TestWorkWalk`); `test_demographics_golden.py` leaves the three lines out of the
   walk it pins. Capitalists and Academics gather in a few great cities, so half their color goes by a fifth of the
-  world's range; Aristocrats and Clergymen run straight. 45 **Trade Volume**: the state's owner's trade with the world
-  market (`te_jmap_trade_value`, `total_trade_value`, the figure vanilla's Free Trade entry `je_liberalism_2` reads), a
-  doubling at a time, a country that trades nothing pale. Script has no state's share of its owner's trade, so every
-  state of a country paints alike; a state with a Trade Center stripes orange (the Map Room's fourth `map_color_second`
-  branch, `has_building = building_trade_center`, a plain type unlike the headquarters), and its hover gives the
-  Trade Center's levels (`te_jmap_trade_center_levels`).
+  world's range; Aristocrats and Clergymen run straight.
+- **The eleventh pass's two** (2026-11-11, the owner's ask). 45 **Trade Capacity**: the state's own Trade Capacity
+  (`te_jmap_trade_capacity`: `modifier:state_trade_capacity_add`, which a Trade Center's `pm_trade_center` gives its
+  state, 10 a level fully staffed, with a company flagship's or a treaty port's on top, times 1 plus
+  `modifier:state_trade_capacity_mult`, the trade laws', principles' and companies'), read live, a doubling at a time, a
+  state with none pale. The tenth pass's Trade Volume painted the owner's `total_trade_value` here, every state of a
+  country alike, and striped the Trade Centers; the owner asked for the state's Trade Center instead, so the stripes
+  are gone and the owner's trade is the hover's second line (`te_jmap_trade_value`), its third the Trade Center's
+  levels (`te_jmap_trade_center_levels`, `has_building = building_trade_center`, a plain type unlike the
+  headquarters). A state's trade itself isn't readable cheaply: `state_trade` compares one good's units at a time.
+  Unverified (play-test check 28): that the state's read of the multiplier carries its country's lines, and that it
+  carries what the building's throughput adds. 46 **Investment**: what the state's owners pay into their country's
+  Investment Pool a week, estimated (`te_jmap_invest_value`). The engine takes a share of the dividends the state's
+  owners are paid (`state_<pop type>_investment_pool_contribution_add`, raised by `_efficiency_mult`); script reads
+  neither a pop's dividends nor a building's shares, so the estimate is the weekly profit of the buildings the owners
+  sit in, in profit only, found by building group as the headquarters are, times the share their leading owners
+  reinvest, read in the state: capitalists' for Financial Districts and company headquarters
+  (`bg_financial_districts`, `bg_company_headquarter`; `te_jmap_invest_rate_cap`), aristocrats' for Manor Houses
+  (`bg_manor_houses`; `te_jmap_invest_rate_ari`). Left out, and said in the pick's tooltip: levels their own workers
+  own and the government's reinvested dividends, whose shares script can't split; the clergy's and bureaucrats' Manor
+  Houses count at the aristocrats' share, and a regional headquarters pays its company's home. A doubling at a time, a
+  state that pays nothing pale. `te_jmap_store_invest` stores the two sides as state variables (`te_jmap_inv_cap`,
+  `te_jmap_inv_ari`, removed where both are 0) at a pick of the map and from the global monthly pulse while it is the
+  pick (`te_jmap_monthly_invest`), so the world's buildings aren't walked for a map nobody is looking at; the paint,
+  the hover and the range read them through `te_jmap_invest_cap`, `_ari` and `_value`. One once-a-game check after
+  the monthly store: `TE_SELF_CHECK OK|BROKEN invest_rate` (`te_jmap_invest_selfcheck`, once three states hold an
+  owners' building in profit: BROKEN when none stores a contribution, so the state's read of the reinvested share
+  doesn't carry its country's base). It rests on the Company HQs map's unverified fact too, that an owners' building
+  books its dividends as `weekly_profit` (`hq_profit`). Play-test check 28 names the fallbacks.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui` (`common/scripted_guis/te_journal_map_sguis.txt`)
@@ -334,7 +358,7 @@ Every map button clears the see-through flag before it opens a page.
   category starts collapsed, a long list (`gui_style_guide.md` § Sections), and the flags outlive a pick's reopen, as the
   see-through flag does, so a category opened stays open from map to map. Society (Turmoil, Devastation, Urban People);
   Classes (Aristocrats, Clergymen; Capitalists, Academics); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership,
-  Company HQs, Trade Volume); Migration and Cities (Base Comfort, Current Comfort, Crowding Penalty; Tourism Appeal, City
+  Company HQs; Investment, Trade Capacity); Migration and Cities (Base Comfort, Current Comfort, Crowding Penalty; Tourism Appeal, City
   Rank); Military (Armed Forces, and Fighting-Age Men and War Dead while the census runs); Systems (the systems' nine in
   rows of three, Grandeur, Colonies and Power Grids last); Census (its maps three to a row, Population Growth, the walk's,
   beside Net Migration, and a last row of Health Care and Family Planning). `test_journal_map_modes.py`'s

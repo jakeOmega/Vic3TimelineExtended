@@ -206,8 +206,8 @@ te_jmap_pick_fighting_age_men_sgui = {
 	}
 }
 
-# The classes (41-44) and Trade Volume (45), 2026-11-11: the yearly walk's counts and an engine figure, whatever the
-# Demographics rule.
+# The classes (41-44), Trade Capacity (45) and Investment (46), 2026-11-11: the yearly walk's counts, an engine figure
+# and the Map Room's own store, whatever the Demographics rule.
 te_jmap_pick_capitalists_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
@@ -248,13 +248,23 @@ te_jmap_pick_academics_sgui = {
 	}
 }
 
-te_jmap_pick_trade_volume_sgui = {
+te_jmap_pick_trade_capacity_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
 	ai_is_valid = { always = no }
 	is_valid = { NOT = { te_jmap_selector = 45 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 45 }
+	}
+}
+
+te_jmap_pick_investment_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 46 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 46 }
 	}
 }
 

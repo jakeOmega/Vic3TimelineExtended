@@ -33,15 +33,16 @@ closed, and one you open stays open as you switch maps.
 |---|---|
 | Society | Turmoil, Devastation, Urban People |
 | Classes | Aristocrats, Clergymen, Capitalists, Academics: each class's share of the state's people |
-| Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Trade Volume |
+| Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity |
 | Migration and Cities | Base Comfort, Current Comfort, Crowding Penalty, Tourism Appeal, City Rank |
 | Military | Armed Forces, Fighting-Age Men, War Dead |
 | Systems | A map for each of nine systems: Emissions, Nuclear Weapons, Agent Networks, United Nations, Political Models, Ocean Basins, Grandeur, Colonies, Power Grids |
 | Census | Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance, Net Migration, Population Growth, Health Care, Family Planning |
 
-Hover a state for its figure. Trade Volume colors every state of a country by
-the country's trade with the world market, and stripes the states with a
-Trade Center, where that trade goes through.
+Hover a state for its figure. Trade Capacity colors each state by its own
+Trade Capacity, what its Trade Center can carry. Investment colors it by what
+its owners pay into the Investment Pool each week, an estimate from the
+profit of its financial districts, manor houses and company headquarters.
 
 A map of figures shows how states differ now, not how the world has moved: its
 colors run from the fifth lowest state in the world to the fifth highest, the

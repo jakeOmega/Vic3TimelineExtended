@@ -408,8 +408,8 @@ types te_map_widgets
 			}
 		}
 
-		# Economy: wealth (GDP per capita, then the walk's Gini and Dynastic Wealth), then who owns the economy, where the companies keep
-			# their headquarters and how much each country trades.
+		# Economy: wealth (GDP per capita, then the walk's Gini and Dynastic Wealth), then who owns the economy and where the
+			# companies keep their headquarters, then what each state's owners pay into the Investment Pool and its Trade Capacity.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_economy"
@@ -484,13 +484,29 @@ types te_map_widgets
 					onclick = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
 				te_jmap_pick_button = {
-					text = "te_jmap_pick_trade_volume"
-					tooltip = "te_jmap_pick_trade_volume_desc"
-					visible = "[GetScriptedGui('te_jmap_pick_trade_volume_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					down = "[Not( GetScriptedGui('te_jmap_pick_trade_volume_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-					onclick = "[GetScriptedGui('te_jmap_pick_trade_volume_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					text = "te_jmap_pick_investment"
+					tooltip = "te_jmap_pick_investment_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_investment_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_investment_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_investment_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_trade_capacity"
+					tooltip = "te_jmap_pick_trade_capacity_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_trade_capacity_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_trade_capacity_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_trade_capacity_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}

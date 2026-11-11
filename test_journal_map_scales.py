@@ -286,7 +286,7 @@ class ScalesTest(unittest.TestCase):
 
     def test_a_doubling_scale_gives_each_doubling_the_same_color(self):
         doubled = [s for s in FITTED if s["world"]["kind"] == "doubling"]
-        self.assertEqual([s["name"] for s in doubled], ["gdppc", "soldiers", "hq", "war_dead", "trade"])
+        self.assertEqual([s["name"] for s in doubled], ["gdppc", "soldiers", "hq", "war_dead", "trade", "invest"])
         for scale in doubled:
             floor = scale["world"]["floor"]
             for lo, hi in ((floor * 50, floor * 6400), (floor * 200, floor * 4000)):
