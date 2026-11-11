@@ -137,17 +137,15 @@ def region_digit(region: str) -> int:
     return REGION_GROUPS[region_group(region)][region][1]
 
 
-# Scales: the larger or the special kind of a worked-land picture, by a building's level, in the
-# size place of the weight (a picture has a size or a scale, never both). The levels are
-# provisional, like the size floors, until an observer game's figures: in 1836 the median Port is
-# level 1, four states have one of 5 or more and only Guangdong one of 10; Lancashire's coal
-# mines are level 25.
-PORT_MAJOR_LEVEL = 10
-COAL_LEVEL = 10
-OIL_LEVEL = 10
+# Scales: the larger or the special kind of a worked-land picture, in the size place of the weight
+# (a picture has a size or a scale, never both). A major port is a Port's level, read live:
+# provisional, from a 1940 save, where 44 of 405 port states have a Port of 20 or more (in 1836
+# the largest is Guangdong's, 15). A colliery is the yearly pass's tag (te_sp_coal: coal is the
+# larger part of the state's mines; common/scripted_effects/te_state_picture_effects.txt).
+PORT_MAJOR_LEVEL = 20
 SCALES = {
     "major_port": ([f"any_scope_building = {{ is_building_type = building_port level >= {PORT_MAJOR_LEVEL} }}"], 2),
-    "colliery": ([f"any_scope_building = {{ is_building_type = building_coal_mine level >= {COAL_LEVEL} }}"], 1),
+    "colliery": (["has_variable = te_sp_coal"], 1),
 }
 
 # City sizes, from the yearly pass's state variable te_sp_size (1 town, 2 city,
@@ -1134,7 +1132,7 @@ DRAFTS = {
 # prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
 # picture it is like, and this table adds what decides between it and its neighbors.
 _HAS_PORT = ["has_building = building_port"]
-_OIL_FIELD = [f"any_scope_building = {{ is_building_type = building_oil_rig level >= {OIL_LEVEL} }}"]
+_OIL_FIELD = ["has_variable = te_sp_oil"]  # the yearly pass's tag: oil is a major part of the state's economy
 WAVE3_WIRING = {
     # a harbor is any Port; the major port asks for the level (the pilot's docks_1 is rung 1's)
     **{f"docks_harbor_{n}": {"where": _HAS_PORT} for n in (1, 2, 3, 4)},
