@@ -15,8 +15,12 @@ Fields:
   tech     the owner's technology that unlocks it (a live check in the weight)
   rung     its place on its family's technology ladder, 1-9: among the pictures
            that apply, a higher rung beats everything but a condition
-  region   a key of REGIONS, or None for any region; FALLBACK_REGION's pictures also
-           show in the states of no family, as vanilla's European city picture does
+  region   a family of REGION_GROUPS (city, farm or forest), or None for any region; a
+           group's fallback family also shows in the states of no family, as vanilla's
+           European city picture and its generic farmland do
+  scale    optional key of SCALES: a major port, a colliery (a building's level)
+  over     optional True: the picture takes over another family's terrain (an oil
+           field on farmland) and outranks every rung of that terrain's own pictures
   size     a key of SIZES, or None for any size (the family's middle picture,
            which stays the fallback for the sizes not painted yet)
   where    optional extra state triggers, one a line
@@ -97,6 +101,54 @@ FALLBACK_REGION = "european"
 # the Japanese one would show in Tokyo over Japan's rung 1. The test holds a wave to that.
 REGION_OVERLAPS = (("japanese", "east_asian"), ("middle_eastern", "south_asian"))
 
+# Farmland families: vanilla's four, by vanilla's own scripted triggers. They don't overlap (1.15:
+# 157 Arabic states, which is the Middle East and most of Africa; 68 Asian; 61 subtropic, which is
+# Latin America; 390 generic, India and Oceania among them). The generic family is the states of
+# no other, as in vanilla.
+FARM_REGIONS = {
+    "farm_generic": ([], 1),
+    "farm_arabic": (["is_arabic_farmland = yes"], 2),
+    "farm_asian": (["is_asian_farmland = yes"], 3),
+    "farm_subtropic": (["is_subtropic_farmland = yes"], 4),
+}
+# Forestry: the tropical picture, where the forest is rainforest. No fallback: the conifer picture
+# has no region and stands everywhere else.
+FOREST_REGIONS = {
+    "forest_tropical": ([
+        "is_in_geographic_region = geographic_region_south_east_asia",
+        "is_in_geographic_region = geographic_region_equatorial_africa",
+        "is_in_geographic_region = geographic_region_west_africa",
+        "is_in_geographic_region = geographic_region_central_america",
+        "is_in_geographic_region = geographic_region_gran_colombia",
+        "is_in_geographic_region = geographic_region_brazil",
+        "is_jungle_hills = yes",
+    ], 1),
+}
+# Every region family by its group; a group's fallback family also takes the states of no family.
+REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS}
+GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic"}
+
+
+def region_group(region: str) -> str:
+    return next(group for group, families in REGION_GROUPS.items() if region in families)
+
+
+def region_digit(region: str) -> int:
+    return REGION_GROUPS[region_group(region)][region][1]
+
+
+# Scales: the larger or the special kind of a worked-land picture, by a building's level, in the
+# size place of the weight (a picture has a size or a scale, never both). The levels are
+# provisional, like the size floors, until an observer game's figures: in 1836 the median Port is
+# level 1 and five states have one of 5 or more; Lancashire's coal mines are level 25.
+PORT_MAJOR_LEVEL = 10
+COAL_LEVEL = 10
+OIL_LEVEL = 10
+SCALES = {
+    "major_port": ([f"any_scope_building = {{ is_building_type = building_port level >= {PORT_MAJOR_LEVEL} }}"], 2),
+    "colliery": ([f"any_scope_building = {{ is_building_type = building_coal_mine level >= {COAL_LEVEL} }}"], 1),
+}
+
 # City sizes, from the yearly pass's state variable te_sp_size (1 town, 2 city,
 # 3 metropolis, 4 megacity; common/scripted_effects/te_state_picture_effects.txt).
 # (trigger lines, the size's digit in the weight)
@@ -114,6 +166,9 @@ SIZES = {
 W_RUNG = 100000
 W_SIZE = 10
 W_REGION = 1  # times the family's digit, 1 to 8
+# A picture that takes over another family's terrain (an oil field on farmland) outranks every
+# rung of that terrain's own pictures: "over" in its entry.
+W_OVER = 10000000
 
 PICTURES = {
     "urban_european_1": {
@@ -1087,19 +1142,33 @@ def weight(key: str) -> int:
     w = W_RUNG * p["rung"]
     if p["size"]:
         w += W_SIZE * SIZES[p["size"]][1]
+    if p.get("scale"):
+        w += W_SIZE * SCALES[p["scale"]][1]
     if p["region"]:
-        w += W_REGION * REGIONS[p["region"]][1]
+        w += W_REGION * region_digit(p["region"])
+    if p.get("over"):
+        w += W_OVER
     return w
+
+
+def _negated(line: str) -> str:
+    if line.startswith("is_in_geographic_region"):
+        return line.replace("is_in_geographic_region", "is_not_in_geographic_region", 1)
+    assert line.endswith(" = yes"), line
+    return line[:-len("yes")] + "no"
 
 
 def region_conditions(region: str) -> list:
     """The state triggers of a region family, one a line, nested lines tab-indented."""
-    lines = REGIONS[region][0]
-    if region != FALLBACK_REGION:
+    group = region_group(region)
+    lines = REGION_GROUPS[group][region][0]
+    if region != GROUP_FALLBACK.get(group):
         return list(lines) if len(lines) == 1 else ["OR = {", *("\t" + line for line in lines), "}"]
     # the states of no family, in the form vanilla's own fallback entry uses
-    others = [line.replace("is_in_geographic_region", "is_not_in_geographic_region")
-              for key, (other, _digit) in REGIONS.items() if key != region for line in other]
+    others = [_negated(line) for key, (other, _digit) in REGION_GROUPS[group].items() if key != region
+              for line in other]
+    if not lines:
+        return others
     return ["OR = {", *("\t" + line for line in lines),
             "\tAND = {", *("\t\t" + line for line in others), "\t}", "}"]
 

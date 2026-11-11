@@ -73,8 +73,10 @@ class TestRegistry(unittest.TestCase):
                     self.assertIn(terrain, terrains)
                 self.assertIn(p["tech"], techs)
                 self.assertIn(p["rung"], range(1, 10))
-                self.assertTrue(p["region"] is None or p["region"] in registry.REGIONS)
+                self.assertTrue(p["region"] is None or any(p["region"] in g for g in registry.REGION_GROUPS.values()))
                 self.assertTrue(p["size"] is None or p["size"] in registry.SIZES)
+                self.assertTrue(p.get("scale") is None or p["scale"] in registry.SCALES)
+                self.assertFalse(p["size"] and p.get("scale"), "a size and a scale share one place in the weight")
                 # the engine rejects an entry without an effect; a vanilla entity is known to exist
                 self.assertIn(p["effect"], effects)
                 self.assertTrue(p["prompt"].strip())
@@ -108,14 +110,21 @@ class TestRegistry(unittest.TestCase):
                 seen[spot] = key
 
     def test_every_region_family_has_its_own_digit(self):
-        digits = [digit for _lines, digit in registry.REGIONS.values()]
-        self.assertEqual(len(set(digits)), len(digits))
-        self.assertTrue(all(1 <= d <= 9 for d in digits))
+        names = [name for families in registry.REGION_GROUPS.values() for name in families]
+        self.assertEqual(len(set(names)), len(names), "a family belongs to one group")
+        for group, families in registry.REGION_GROUPS.items():
+            digits = [digit for _lines, digit in families.values()]
+            self.assertEqual(len(set(digits)), len(digits), group)
+            self.assertTrue(all(1 <= d <= 9 for d in digits))
+            for name, (lines, _digit) in families.items():
+                with self.subTest(name):
+                    # only a group's fallback family may have no trigger of its own
+                    self.assertTrue(lines or registry.GROUP_FALLBACK.get(group) == name)
+                    for line in lines:
+                        self.assertRegex(line, r"^(is_in_geographic_region = geographic_region_[a-z_]+|is_[a-z_]+ = yes)$")
         for name, (lines, _digit) in registry.REGIONS.items():
-            with self.subTest(name):
-                self.assertTrue(lines)
-                for line in lines:
-                    self.assertRegex(line, r"^is_in_geographic_region = geographic_region_[a-z_]+$")
+            for line in lines:
+                self.assertRegex(line, r"^is_in_geographic_region = geographic_region_[a-z_]+$")
         # vanilla ranks Japan over the East Asia that contains it
         self.assertGreater(registry.REGIONS["japanese"][1], registry.REGIONS["east_asian"][1])
 
@@ -162,6 +171,28 @@ class TestRegistry(unittest.TestCase):
                 self.assertIn(d["rung"], range(1, 10))
                 self.assertIn(d["like"], vanilla_pictures)
                 self.assertNotIn(generator.picture_path(key), generated)
+
+    def test_the_generic_farmland_is_the_states_of_no_other_family(self):
+        self.assertEqual(registry.region_conditions("farm_generic"),
+                         ["is_arabic_farmland = no", "is_asian_farmland = no", "is_subtropic_farmland = no"])
+        self.assertEqual(registry.region_conditions("farm_asian"), ["is_asian_farmland = yes"])
+        # a family of several triggers is any one of them, and a group without a fallback negates nothing
+        tropical = registry.region_conditions("forest_tropical")
+        self.assertEqual((tropical[0], tropical[-1]), ("OR = {", "}"))
+        self.assertNotIn("is_not_in_geographic_region", "".join(tropical))
+
+    def test_a_scale_is_a_building_level_check(self):
+        digits = [digit for _lines, digit in registry.SCALES.values()]
+        self.assertTrue(all(1 <= d <= 9 for d in digits))
+        for name, (lines, _digit) in registry.SCALES.items():
+            with self.subTest(name):
+                for line in lines:
+                    # the form read in game on 2026-11-10 (scripting_best_practices.md, "State pictures")
+                    self.assertRegex(line, r"^any_scope_building = \{ is_building_type = building_[a-z_]+ level >= \d+ \}$")
+
+    def test_a_takeover_outranks_every_rung(self):
+        top = registry.W_RUNG * 9 + registry.W_SIZE * 9 + registry.W_REGION * 9
+        self.assertGreater(registry.W_OVER, top)
 
     def test_no_prompt_uses_a_word_that_draws_lettering_or_a_landmark(self):
         avoid = re.compile(r"\b(" + "|".join(map(re.escape, registry.PROMPT_AVOID)) + r")\b", re.I)
