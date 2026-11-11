@@ -876,7 +876,7 @@ def cmd_restore(args) -> tuple[dict, int]:
     when the run ended is what `launch` and `watch` recorded while it
     happened. With no such record, anything that would need judging is held.
     A run during which `watch` saw another game is held (`other_game_ran`),
-    changing nothing, as is one it lost sight of (`unwatched_stretch`). With
+    changing nothing else, as is one it lost sight of (`unwatched_stretch`). With
     no `started` nothing was launched, so `logs/` is whoever played since, and
     is left alone. A snapshot a `launch` may still be on its way to recording
     a start for gets no verdict (`launch_in_flight`). Before judging, the
