@@ -8,9 +8,10 @@
 Nothing here touches anything but that one folder, by its exact path, and a sibling temp folder
 made for one build. `build` writes the new overlay beside the old one and swaps it in, so a failed
 build leaves no half overlay; one cut short by a kill can leave its temp folder, which `remove_build`
-deletes under the same checks as `remove` (`python3 -m game_qa remove-overlay` runs both). The shapes follow the probe files that ran against the real game on
-2026-11-10 (docs/testing/game_qa_probe/overlay/). The `.txt` files start with one UTF-8 BOM and
-are indented with tabs; `metadata.json` has no BOM, as the mod's own has none.
+deletes under the same checks as `remove` (`python3 -m game_qa remove-overlay` runs both). The shapes
+follow the probe files that ran against the real game on 2026-11-10 (docs/testing/game_qa_probe/overlay/).
+The `.txt` files start with one UTF-8 BOM and are indented with tabs; `metadata.json` has no BOM, as the
+mod's own has none.
 """
 
 from __future__ import annotations

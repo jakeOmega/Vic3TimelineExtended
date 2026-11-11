@@ -440,8 +440,9 @@ class _Handler(BaseHTTPRequestHandler):
             if not math.isfinite(expires):
                 raise ValueError(expires)
         except ValueError:
-            self._answer(400, {"refused": "bad_request", "detail": "the request carries no expiry (%s: seconds of "
-                                                                   "the machine's monotonic clock)" % EXPIRES_HEADER}, 2)
+            self._answer(400, {"refused": "bad_request",
+                               "detail": "the request carries no expiry (%s: seconds of the machine's monotonic clock)"
+                                         % EXPIRES_HEADER}, 2)
             return
         verb = self.path.lstrip("/")
         late = owner._now() - expires

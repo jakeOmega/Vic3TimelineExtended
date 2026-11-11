@@ -634,7 +634,8 @@ class Session:
         unless the setup's own log lines name it (the setup fired it); list the pending events; if `event` is not
         pending the loop stops, which is never a pass, and the row says `ran_not_pending` when the console's reply
         says it ran (`Executed "<id>"`: a hidden event, or one that resolved at once, whose options cannot be
-        picked), else `did_not_fire`; else read `reads`, pick the option, read them again. The number of options is the first `events` reply's for `event`.
+        picked), else `did_not_fire`; else read `reads`, pick the option, read them again. The number of options
+        is the first `events` reply's for `event`.
 
         The options share one game: each runs on the state the one before left, re-running the setup first
         (console `event` ignores the trigger and the cooldown, spec § 12.1 A6), and the reply says so
