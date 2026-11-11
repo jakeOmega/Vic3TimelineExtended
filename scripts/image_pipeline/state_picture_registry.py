@@ -1292,6 +1292,21 @@ WAVE7_WIRING = {
 }
 # The picked render of each wave 7 picture.
 WAVE7_PICKS = {
+    "mountains_road": {"seed": 0},
+    "mountains_northamerica_road": {"seed": 1},
+    "mountains_arid_road": {"seed": 0},
+    "hills_road": {"seed": 0},
+    "hills_jungle_road": {"seed": 0},
+    "hills_subtropic_road": {"seed": 0},
+    "plains_road": {"seed": 0},
+    "plains_northamerica_road": {"seed": 1, "smudge": [(765, 383, 805, 400)]},
+    "plains_arid_road": {"seed": 2},
+    "desert_road": {"seed": 0},
+    "desert_northamerica_road": {"seed": 2, "smudge": [(545, 513, 600, 530), (1028, 538, 1060, 562)]},
+    "tundra_pipeline": {"seed": 0},
+    "forest_road": {"seed": 3},
+    "jungle_road": {"seed": 0},
+    "wetland_road": {"seed": 0},
 }
 
 
@@ -1309,6 +1324,20 @@ WAVE6_NEEDS_THE_PASS = ("boomtown", "declining", "divided", "industry", "resort"
 WAVE6_NEEDS_A_MARKER = ("flooded_coast",)
 # The picked render of each of these.
 WAVE6_PICKS = {
+    "housing_blocks_2": {"seed": 2},
+    "housing_blocks_3": {"seed": 0},
+    "housing_blocks_4": {"seed": 1},
+    "smog_1": {"seed": 0, "smudge": [(0, 440, 150, 505), (412, 508, 474, 536), (95, 574, 195, 596),
+                                     (1480, 503, 1536, 540), (764, 566, 806, 584), (1225, 378, 1335, 422)]},
+    "smog_2": {"seed": 2, "smudge": [(1320, 556, 1415, 584), (420, 694, 465, 714), (1145, 506, 1180, 528)]},
+    "smog_3": {"seed": 0, "smudge": [(405, 508, 494, 547)]},
+    "smog_4": {"seed": 1, "smudge": [(920, 645, 965, 695), (806, 552, 834, 642)]},
+    "devastated_early": {"seed": 1, "smudge": [(648, 544, 722, 568), (655, 482, 705, 500)]},
+    "devastated_late": {"seed": 0, "crop": (0, 0, 1485, 727),
+                        "smudge": [(1295, 370, 1350, 408), (1420, 360, 1490, 398), (425, 512, 475, 544),
+                                   (146, 556, 194, 588)]},
+    "nuclear_strike_early": {"seed": 0},
+    "nuclear_strike_late": {"seed": 0},
 }
 
 for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
@@ -1326,6 +1355,8 @@ for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS),
             "prompt": _draft_entry["prompt"],
             **_pick,
         }
+        if PICTURES[_key]["effect"] in PLACED_OVERLAYS:  # a city picture like vanilla's European one
+            PICTURES[_key]["effect"] = NEUTRAL_OVERLAY
 if "docks_harbor_1" in PICTURES:
     PICTURES["docks_1"]["scale"] = "major_port"  # the pilot's port is rung 1's major port
 

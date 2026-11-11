@@ -47,6 +47,38 @@ INJECT:desert = {
 				if = {
 					limit = {
 						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_not_in_geographic_region = geographic_region_americas
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_desert_road.dds"
+			effect = "vfx_entity_ui_state_desert"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_americas
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_desert_northamerica_road.dds"
+			effect = "vfx_entity_ui_state_desert_northamerica"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
 							has_variable = te_sp_oil
 						}
@@ -1889,6 +1921,26 @@ INJECT:farmland_wheat = {
 	}
 }
 
+INJECT:forest = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_forest_road.dds"
+			effect = "vfx_entity_ui_state_forest"
+		}
+	}
+}
+
 INJECT:forestry = {
 	textures = {
 		{
@@ -1980,6 +2032,55 @@ INJECT:hills = {
 				if = {
 					limit = {
 						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_subtropic_farmland = no
+							is_jungle_hills = no
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_hills_road.dds"
+			effect = "vfx_entity_ui_state_hills"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_subtropic_farmland = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_hills_subtropic_road.dds"
+			effect = "vfx_entity_ui_state_hills_subtropic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_jungle_hills = yes
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_hills_jungle_road.dds"
+			effect = "vfx_entity_ui_state_hills_jungle"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
 							has_variable = te_sp_oil
 						}
@@ -2021,6 +2122,26 @@ INJECT:hills = {
 			}
 			path = "gfx/state_pictures/te_oil_3.dds"
 			effect = "vfx_entity_ui_state_plains_arid"
+		}
+	}
+}
+
+INJECT:jungle = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_jungle_road.dds"
+			effect = "vfx_entity_ui_state_jungle"
 		}
 	}
 }
@@ -2119,6 +2240,60 @@ INJECT:mining = {
 			}
 			path = "gfx/state_pictures/te_mining_deep_3.dds"
 			effect = "vfx_entity_ui_state_mining"
+		}
+	}
+}
+
+INJECT:mountain = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_arid_region = no
+							is_not_in_geographic_region = geographic_region_americas
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_mountains_road.dds"
+			effect = "vfx_entity_ui_state_mountains"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_arid_region = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_mountains_arid_road.dds"
+			effect = "vfx_entity_ui_state_mountains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_americas
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_mountains_northamerica_road.dds"
+			effect = "vfx_entity_ui_state_mountains_northamerica"
 		}
 	}
 }
@@ -2244,6 +2419,55 @@ INJECT:plains = {
 				if = {
 					limit = {
 						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_arid_region = no
+							is_not_in_geographic_region = geographic_region_americas
+						}
+					}
+					add = 100001
+				}
+			}
+			path = "gfx/state_pictures/te_plains_road.dds"
+			effect = "vfx_entity_ui_state_plains"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_arid_region = yes
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_plains_arid_road.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_americas
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_plains_northamerica_road.dds"
+			effect = "vfx_entity_ui_state_plains_northamerica"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
 							has_variable = te_sp_oil
 						}
@@ -2362,6 +2586,21 @@ INJECT:savanna = {
 				if = {
 					limit = {
 						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_plains_arid_road.dds"
+			effect = "vfx_entity_ui_state_plains_arid"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
 							has_variable = te_sp_oil
 						}
@@ -2409,6 +2648,21 @@ INJECT:savanna = {
 
 INJECT:tundra = {
 	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = integrated_circuits }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_tundra_pipeline.dds"
+			effect = "vfx_entity_ui_state_tundra"
+		}
 		{
 			weight = {
 				value = 0
@@ -2651,6 +2905,22 @@ INJECT:urban = {
 				if = {
 					limit = {
 						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							state_region = { pollution_amount >= 150 }
+						}
+					}
+					add = 130000
+				}
+			}
+			path = "gfx/state_pictures/te_smog_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
 							owner = { has_technology_researched = modern_urban_planning }
 							OR = {
 								is_in_geographic_region = geographic_region_europe
@@ -2794,6 +3064,38 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							state_region = { pollution_amount >= 150 }
+						}
+					}
+					add = 230000
+				}
+			}
+			path = "gfx/state_pictures/te_smog_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }
+						}
+					}
+					add = 270000
+				}
+			}
+			path = "gfx/state_pictures/te_housing_blocks_2.dds"
 			effect = "vfx_entity_ui_state_docks"
 		}
 		{
@@ -2953,6 +3255,38 @@ INJECT:urban = {
 				if = {
 					limit = {
 						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							state_region = { pollution_amount >= 150 }
+						}
+					}
+					add = 330000
+				}
+			}
+			path = "gfx/state_pictures/te_smog_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }
+						}
+					}
+					add = 370000
+				}
+			}
+			path = "gfx/state_pictures/te_housing_blocks_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
 							owner = { has_technology_researched = advanced_structural_engineering }
 							OR = {
 								is_in_geographic_region = geographic_region_europe
@@ -3096,6 +3430,38 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							state_region = { pollution_amount >= 150 }
+						}
+					}
+					add = 430000
+				}
+			}
+			path = "gfx/state_pictures/te_smog_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }
+						}
+					}
+					add = 470000
+				}
+			}
+			path = "gfx/state_pictures/te_housing_blocks_4.dds"
 			effect = "vfx_entity_ui_state_docks"
 		}
 		{
@@ -3248,6 +3614,96 @@ INJECT:urban = {
 			}
 			path = "gfx/state_pictures/te_urban_japanese_5.dds"
 			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							devastation >= 0.5
+						}
+					}
+					add = 12100000
+				}
+			}
+			path = "gfx/state_pictures/te_devastated_early.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							devastation >= 0.5
+						}
+					}
+					add = 12300000
+				}
+			}
+			path = "gfx/state_pictures/te_devastated_late.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							OR = {
+								has_modifier = nuclear_strike_aftermath
+								has_modifier = tactical_nuke_aftermath
+							}
+						}
+					}
+					add = 13200000
+				}
+			}
+			path = "gfx/state_pictures/te_nuclear_strike_early.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							OR = {
+								has_modifier = nuclear_strike_aftermath
+								has_modifier = tactical_nuke_aftermath
+							}
+						}
+					}
+					add = 13400000
+				}
+			}
+			path = "gfx/state_pictures/te_nuclear_strike_late.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+	}
+}
+
+INJECT:wetland = {
+	textures = {
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+						}
+					}
+					add = 100000
+				}
+			}
+			path = "gfx/state_pictures/te_wetland_road.dds"
+			effect = "vfx_entity_ui_state_wetland"
 		}
 	}
 }
