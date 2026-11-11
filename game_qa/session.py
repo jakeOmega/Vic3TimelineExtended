@@ -791,7 +791,8 @@ class Session:
 
         The reply is restore's reply plus `outcome` (restored, held, refused, game_left_up, or None with no
         snapshot), `snapshot`, `overlay_removed`, `overlay_kept`, `report` (the summary's path) and any `notes`.
-        `stop_again` says whether a later call can change anything: true after a refused restore, and after a game
+        `stop_again` says whether a later call can change anything: true after a restore refused for a reason that
+        waiting or the game's end can clear (RESTORE_WAITS; any other refusal names `recover`), and after a game
         left up whose pid and start time are known (a later call may end it, or find it gone); false otherwise,
         since a process nothing can name is never ended here, and the caller is then told what to do instead.
         A later call returns that reply again, unless it ended refused or game_left_up: then it is run again,

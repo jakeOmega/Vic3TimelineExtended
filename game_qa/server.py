@@ -23,8 +23,8 @@ removes the folder (spec § 5.2, Review Focus 1).
     start      the session's start. Any error stops the session; the server then ends as after `stop`. A second
                `start` is refused `session_running`, touching nothing
     stop       the session's stop. The server answers with its reply, then exits, unless the stop can be run again
-               to effect (`final_stop`: a refused restore, a game left up that is known by pid and start time):
-               then it serves on, and `stop` again runs the stop again
+               to effect (`final_stop`: a restore refused for a reason waiting can clear, a game left up that is
+               known by pid and start time): then it serves on, and `stop` again runs the stop again
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, try-event
 

@@ -1968,6 +1968,18 @@ class SendGuardTest(SessionTestCase):
                 self.assertEqual(self.session_error(self.session.console, "money 1000").code, "watch_ended")
                 self.assertEqual(len(self.game.steps), steps)
 
+    def test_focus_is_proved_too(self):
+        self.started()
+        focus_calls = self.game.focus_calls
+        self.game.process_gone = True
+        with self.assertRaises(session.SessionError) as caught:
+            self.session._sends.focus(self.game.proc.pid)
+        self.assertEqual(caught.exception.code, "watch_ended")
+        self.assertEqual(self.game.focus_calls, focus_calls)              # the helper's focus was never reached
+        self.game.process_gone = False
+        self.assertEqual(self.session_error(self.session._sends.focus, self.game.proc.pid).code, "watch_ended")
+        self.assertEqual(self.game.focus_calls, focus_calls)
+
     def test_the_console_and_the_clicks_send_through_the_proof(self):
         self.started()
         self.assertIsInstance(self.session._console._helper, session._ProvedHelper)
