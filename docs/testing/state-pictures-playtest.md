@@ -18,6 +18,7 @@ with the commit that fixed it.
 
 | Line | Says | Fallback if BROKEN |
 |---|---|---|
+| `TE_SELF_CHECK OK state_picture_oil` | once a game: the first state the yearly pass tagged oil country, with `oil_levels=` (its Oil Rig levels, 10 or more) no larger than `all_levels=` (all its levels but subsistence) and at least a twentieth of it | The walk takes `level` for a building's levels inside `every_scope_building` and its locals for sums that outlive the walk. BROKEN means one doesn't: read the oil field off the rigs' level in the weight (`any_scope_building = { is_building_type = building_oil_rig level >= 40 }`), which gives up the share |
 | `TE_SELF_CHECK OK state_picture_size` | once a game: the first state the yearly pass stored at metropolis or larger, with `city_people=` (its largest city) no larger than `state_people=` (the state) | The pass takes `te_dg_urban` for a head count on `state_population`'s scale. BROKEN means it isn't: rescale the floors in `te_state_picture_values.txt` by the two figures' ratio, or read the size from `state_population` and `te_dg_urban_share` instead |
 
 ## The pilot (2026-11-10)
@@ -59,16 +60,18 @@ The technologies, by ladder: ports `modern_tools`, `containerization`, `supply_c
 pasture `rural_electrification`, `green_revolution`, `microprocessor`, `autonomous_vehicles`, and farmland
 `synthetic_biology`.
 
-A new game with `research` shows the technology side only: building levels are 1836's, where one state has
-a Port of level 10 (Guangdong, 15), two have Coal Mines of level 10 (Lancashire 25, Yorkshire 20) and none
-has an Oil Rig. The rows that need a level say how to get one; a save from the 1930s on is the easier way.
+A new game with `research` shows the technology side only: building levels are 1836's, where no state has
+a Port of level 20 (Guangdong's is 15), Lancashire and Yorkshire have Coal Mines of 25 and 20, and none has
+an Oil Rig. So these rows want a save from the 1930s on. The oil and coal tags are stored by the yearly
+pass: after loading, wait a year, or run `event te_debug_state_picture.1`, which runs the whole pass in
+every state at once.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **An oil field takes over.** A save with oil, or a new game where a state whose banner is a plain, a desert or farmland has been given an Oil Rig of level 10 (build it, or raise it in the console). After Modern Chemical Processes, open that state. | The derrick field, not the land. It stays through later farm technologies. Below level 10, the land. | The land's picture: a weight of 10,000,000 doesn't outrank, or the `INJECT` into that terrain didn't take (`error.log`, `terrain.cpp`). |
-| **Too many oil fields.** In a game past 1950, look at farm states with a modest oil industry. | Wheat or rice, where oil is a sideline. | Derricks over a farm state: the level of 10 is too low, or the test needs to be a share of the state's levels (spec § 5), stored by the yearly pass. |
-| **Harbor and major port.** After Modern Tools, as the owner of each: a port state whose Port is under level 10 (in a new game, every one but Guangdong; a banner that was the steamship), and Guangdong. | The fishing harbor in the first, the liner quay in Guangdong. On the later rungs: a ferry harbor and a container terminal. The pilot showed the liner quay in every port state; it now needs the level. | Both the same: the scale isn't read. In a late save, too many or too few major ports: the level is provisional. |
-| **Pit and colliery.** After Modern Tools, a state whose banner is the pit head and whose Coal Mines are under level 10 or absent, and Lancashire or Yorkshire if the mining picture prevails there. | The open pit; the colliery with its winding wheel and spoil heaps. | |
+| **An oil field takes over.** A save with oil. After Modern Chemical Processes and a year, open a plain, desert or farm state where Oil Rigs are a twentieth or more of the building levels (in the 1940 save, 24 states). | The derrick field, not the land. It stays through later farm technologies. | The land's picture: a weight of 10,000,000 doesn't outrank, or the `INJECT` into that terrain didn't take (`error.log`, `terrain.cpp`). |
+| **Oil beside a great economy.** The state with the most Oil Rigs in a late save, if it also holds a great city and its factories (the owner's Texas). | Its own picture, not the oil field: rigs are a few percent of its levels. | The oil field: the share isn't what the tag reads. An oil field where oil is a sideline, or none where it plainly is the economy: the 5% is off; it is provisional. |
+| **Harbor and major port.** After Modern Tools, as the owner of each: a port state whose Port is under level 20 (in a new game, every one; a banner that was the steamship), and in a later save one of 20 or more. | The fishing harbor in the first, the liner quay in the second. On the later rungs: a ferry harbor and a container terminal. The pilot showed the liner quay in every port state; it now needs the level. | Both the same: the scale isn't read. In a late save, too many or too few major ports: the level is provisional. |
+| **Pit and colliery.** After Modern Tools and a year, a state whose banner is the pit head and whose mines are mostly other than coal, and one where Coal Mines are half or more of the mine levels and at least 10 (Lancashire or Yorkshire in a new game, if the mining picture prevails there). | The open pit; the colliery with its winding wheel and spoil heaps. | The open pit in coal country: the tag isn't stored (`debug.log`, `TE_SELF_CHECK state_picture_oil` says whether the walk reads) or a weight can't read it. |
 | **The farm families.** After Rural Electrification: a farm state in France or the Midwest, in Egypt, in South China, in Brazil, and in India. | Wheat with a tractor and horses; irrigated plots with date palms; rice paddies; red earth and maize; India the wheat picture (it is generic in vanilla too). | A wheat field on the Nile: the family's vanilla trigger doesn't hold in the mod's entry, or the generic family's "none of the others" doesn't. |
 | **The fifth farm rung.** After Synthetic Biology, any farm state. | One picture for every family: purple and gold fields under glowing growth towers. | A family's fourth picture still showing: the rung isn't outranking the region digit. |
 | **Tropical forestry.** After Modern Tools, a logging state in Sweden or Canada and one in Borneo or the Congo. | Conifers and a sawmill; a river landing under rainforest. | Conifers in the Congo: the family's region list. |

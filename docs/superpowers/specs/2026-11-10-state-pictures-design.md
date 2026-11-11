@@ -38,6 +38,19 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
    cut the same day (15 pictures): naval bases, offshore oil platforms, spaceports, financial districts
    and government quarters, each one installation or one district of a city. Ports, mines, onshore oil,
    farms, forestry, the heavy-industry city, the resort and the conditions of a region's cities passed.
+9. **An oil state is one where oil is a major part of the economy,** not one with many rigs. "If more than,
+   say, 10% of state GDP is from oil, it is an oil state", so that a Texas with "a megalopolis with
+   factories, urban centers, etc. so that oil is just 3% of state GDP" isn't shown as one; the measure can be
+   stored yearly ("can't we store it as a variable yearly or something?"). § 5's oil and coal tags follow
+   it. Script can't read one building's share of GDP, so the share is of the state's building levels: that
+   stand-in, its 5% and the rule for a colliery are this design's.
+10. **The region and worked-land calls stand** ("Sounds good!"): Australia and New Zealand with North
+    America, Mexico and the Caribbean with Latin America, Middle Eastern over South Asian where they
+    overlap, India's farmland generic, an oil field taking over farmland and pasture. The harbor replacing
+    the pilot's liner quay in lesser ports is "fine - a new game is going to be way less developed than the
+    world by the time we get to the new eras". The flooded coast stays unwired until the warming system has
+    local effects ("we can wire it up later"). Natural terrain on Modern Urban Planning, smog from 150 of
+    255 and ruins from one half devastation stand until a test game says otherwise.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -68,12 +81,12 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 | Place | Axis | Values | Read from |
 |---|---|---|---|
 | 1 | Condition | devastated, nuclear aftermath, flooded | the state, live |
-| 2 | Takeover | an oil field, on the open land it stands on | a building's level, live |
+| 2 | Takeover | an oil field, on the open land it stands on | the yearly pass |
 | 3 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
 | 4 | Character or function | housing blocks, smog; boomtown, declining, divided, heavy industry, resort | the owner's law and the state region's pollution, live; the yearly pass for the rest |
 | 5 | Upkeep | run-down | the yearly pass |
 | 6 | Means | poor, affluent | the yearly pass |
-| 7 | Size, or scale | town, metropolis, megacity; a major port, a colliery | the yearly pass; a building's level, live |
+| 7 | Size, or scale | town, metropolis, megacity; a major port, a colliery | the yearly pass; for a major port a building's level, live |
 | 8 | Region | a family of the picture's group: eight for cities, four for farmland, one for forestry | geography, live |
 
 So the right technology beats the right size, and a devastated city beats everything. The weight is a number
@@ -88,8 +101,8 @@ weight in one; a test holds the places apart and under that ceiling.
 A **takeover** is a picture with no terrain of its own. Vanilla has no oil-field terrain, so an oil state
 shows the plain, desert or farmland the rigs stand on. The oil pictures join those terrains' lists and
 outrank every rung there, so that a later farm technology doesn't put the wheat back over the derricks. A
-**scale** is the worked-land counterpart of a city's size: the larger or the special kind of a picture, by a
-building's level (§ 5).
+**scale** is the worked-land counterpart of a city's size: the larger or the special kind of a picture
+(§ 5).
 
 **The yearly pass.** The engine may evaluate a weight every frame, so a weight reads only the owner's
 technology, vanilla's region triggers and a few state variables. A yearly state pulse computes those
@@ -171,17 +184,27 @@ game before the size pictures are painted in number.
 | Subtropic farmland | 61 | vanilla's `is_subtropic_farmland` | Latin America: red earth, maize and cane |
 | Generic farmland | 390 | none of the three | wheat country, and every state of no other family. India and Oceania are here, as in vanilla |
 | Tropical forestry | | South-East Asia, Equatorial and West Africa, Central America, Gran Colombia, Brazil, and vanilla's `is_jungle_hills` | rainforest logging; the conifer picture stands everywhere else |
-| Major port | | a Port of level 10 or more | below it, the harbor picture: fishing boats, a ferry, a small quay |
-| Colliery | | a Coal Mine of level 10 or more | below it, or with other ore, the open pit |
-| Oil field | | an Oil Rig of level 10 or more | takes over open land (plains, desert, savanna, tundra, hills, the five farmlands, pasture), not a city, port, mine or forest |
+| Major port | 44 of 405 port states in a 1940 save | a Port of level 20 or more, read live | below it, the harbor picture: fishing boats, a ferry, a small quay |
+| Colliery | 44 of 139 coal states | the pass's `te_sp_coal`: Coal Mines are half or more of the state's mine levels, and 10 levels or more | otherwise the open pit |
+| Oil field | 24 of 109 oil states | the pass's `te_sp_oil`: Oil Rigs are 5% or more of the state's building levels, and 10 levels or more | takes over open land (plains, desert, savanna, tundra, hills, the five farmlands, pasture), not a city, port, mine or forest |
 
-The three farm families don't overlap, so their digits only keep the weights apart. The three levels are
-provisional, like the size floors: in 1836 the median Port is level 1, four states have one of 5 or more and
-only Guangdong one of 10, and Lancashire's and Yorkshire's coal mines are level 25 and 20, so 10 is a guess at "this is what the state is known for" that the
-observer game should check against the late game, where building levels run far higher. A level is absolute:
-a state of 200 farm levels and one level-10 Oil Rig shows the oil field. A share of the state's levels would
-be the better test and is too dear for a weight; if the play-test finds oil fields in farm country, the
-yearly pass can store it as a variable.
+The three farm families don't overlap, so their digits only keep the weights apart.
+
+**What a state's worked land is known for** is a share, not a count (the owner's call, § 1 item 9). The
+yearly pass walks the state's buildings once, subsistence buildings left out, and tags the state:
+
+- *Oil country* (`te_sp_oil`) while Oil Rigs hold 5% or more of its building levels and at least 10. A
+  building's share of the state's GDP can't be read in script; levels are the stand-in, and since an oil rig
+  earns more a level than most buildings, 5% of levels is taken for about a tenth of GDP. In a 1940 save
+  the state with the most rigs, 100 levels among 4,499, holds 2% and stays a city or a plain; 24 of the 109
+  states with oil pass, among them every one where rigs are a tenth of the levels.
+- *A colliery* (`te_sp_coal`) while Coal Mines hold half or more of its mine levels (`bg_mining`) and at
+  least 10.
+
+A tag is kept until its figure falls a tenth under the floor, as a size is. A major port stays a count: a
+great port is one by its size, whatever else the state does. All four figures are provisional and sit in
+`te_state_picture_values.txt` (the port's level in the registry). The oil caps in `map_data/state_regions`
+bound what can ever pass: 150 states have oil, half of them a cap of 20 or less.
 
 **Natural terrain** (wave 7) keeps vanilla's own families, by the triggers vanilla's entries use (the
 registry's `LAND_REGIONS`, `DESERT_REGIONS`, `HILL_REGIONS`). None overlap in 1.15's region files.
@@ -392,17 +415,13 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 
 ## 12. Open questions
 
-- § 5's three changes to vanilla's city families: Australia and New Zealand with North America, Mexico and
-  the Caribbean with Latin America, and Middle Eastern over South Asian on the north-west frontier. Also
-  whether Tibet and the Pacific islands should leave the European fallback for a family.
-- The floors of §§ 5 and 6, until wave 2's observer game. The same game should set § 5's three building
-  levels (major port, colliery, oil field), and say whether the oil field needs a share of the state's
-  levels instead of a level.
-- § 5's worked-land calls, all this design's: India's farmland in the generic family (vanilla's choice,
-  though a rice or millet picture would suit it better), the regions that count as tropical for forestry,
-  and an oil field taking over farmland and pasture as well as bare land.
-- § 7's two provisional figures, both this design's: smog from 150 of 255, ruins from one half devastation.
-- Whether the flooded coast should get a state marker from the warming system (a sea-level stage on coastal
-  states), which is a change to that system and not to this one.
+- Whether Tibet and the Pacific islands should leave the European fallback for a family.
+- The floors of §§ 5 and 6, until wave 2's observer game. The same game can check § 5's four worked-land
+  figures (the port's level, oil's share, coal's share, the least levels) against more than one save.
+- Whether oil's share of levels tracks its share of GDP closely enough. If a building's earnings turn out
+  to read as a value, the pass can weigh the levels by them.
+- The regions that count as tropical for forestry.
+- The flooded coast waits for the warming system to have local effects (the owner: "we can wire it up
+  later"); its two pictures are painted and unwired.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
   pictures exist.

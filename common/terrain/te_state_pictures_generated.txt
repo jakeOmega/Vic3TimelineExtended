@@ -48,7 +48,7 @@ INJECT:desert = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -64,7 +64,7 @@ INJECT:desert = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -80,7 +80,7 @@ INJECT:desert = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -117,7 +117,7 @@ INJECT:docks = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_tools }
-							any_scope_building = { is_building_type = building_port level >= 10 }
+							any_scope_building = { is_building_type = building_port level >= 20 }
 							has_building = building_port
 						}
 					}
@@ -150,7 +150,7 @@ INJECT:docks = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = containerization }
-							any_scope_building = { is_building_type = building_port level >= 10 }
+							any_scope_building = { is_building_type = building_port level >= 20 }
 							has_building = building_port
 						}
 					}
@@ -183,7 +183,7 @@ INJECT:docks = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = supply_chain_management }
-							any_scope_building = { is_building_type = building_port level >= 10 }
+							any_scope_building = { is_building_type = building_port level >= 20 }
 							has_building = building_port
 						}
 					}
@@ -216,7 +216,7 @@ INJECT:docks = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = autonomous_vehicles }
-							any_scope_building = { is_building_type = building_port level >= 10 }
+							any_scope_building = { is_building_type = building_port level >= 20 }
 							has_building = building_port
 						}
 					}
@@ -517,7 +517,7 @@ INJECT:farmland_maize = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -533,7 +533,7 @@ INJECT:farmland_maize = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -549,7 +549,7 @@ INJECT:farmland_maize = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -849,7 +849,7 @@ INJECT:farmland_millet = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -865,7 +865,7 @@ INJECT:farmland_millet = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -881,7 +881,7 @@ INJECT:farmland_millet = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -1181,7 +1181,7 @@ INJECT:farmland_rice = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -1197,7 +1197,7 @@ INJECT:farmland_rice = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -1213,7 +1213,7 @@ INJECT:farmland_rice = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -1513,7 +1513,7 @@ INJECT:farmland_rye = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -1529,7 +1529,7 @@ INJECT:farmland_rye = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -1545,7 +1545,7 @@ INJECT:farmland_rye = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -1845,7 +1845,7 @@ INJECT:farmland_wheat = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -1861,7 +1861,7 @@ INJECT:farmland_wheat = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -1877,7 +1877,7 @@ INJECT:farmland_wheat = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -1981,7 +1981,7 @@ INJECT:hills = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -1997,7 +1997,7 @@ INJECT:hills = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -2013,7 +2013,7 @@ INJECT:hills = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -2049,7 +2049,7 @@ INJECT:mining = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_tools }
-							any_scope_building = { is_building_type = building_coal_mine level >= 10 }
+							has_variable = te_sp_coal
 						}
 					}
 					add = 100010
@@ -2080,7 +2080,7 @@ INJECT:mining = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = robotics }
-							any_scope_building = { is_building_type = building_coal_mine level >= 10 }
+							has_variable = te_sp_coal
 						}
 					}
 					add = 200010
@@ -2111,7 +2111,7 @@ INJECT:mining = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = internet_of_things }
-							any_scope_building = { is_building_type = building_coal_mine level >= 10 }
+							has_variable = te_sp_coal
 						}
 					}
 					add = 300010
@@ -2192,7 +2192,7 @@ INJECT:pasture = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -2208,7 +2208,7 @@ INJECT:pasture = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -2224,7 +2224,7 @@ INJECT:pasture = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -2245,7 +2245,7 @@ INJECT:plains = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -2261,7 +2261,7 @@ INJECT:plains = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -2277,7 +2277,7 @@ INJECT:plains = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -2363,7 +2363,7 @@ INJECT:savanna = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -2379,7 +2379,7 @@ INJECT:savanna = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -2395,7 +2395,7 @@ INJECT:savanna = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000
@@ -2416,7 +2416,7 @@ INJECT:tundra = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = modern_chemical_processes }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10100000
@@ -2432,7 +2432,7 @@ INJECT:tundra = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = integrated_circuits }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10200000
@@ -2448,7 +2448,7 @@ INJECT:tundra = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = hydraulic_fracturing }
-							any_scope_building = { is_building_type = building_oil_rig level >= 10 }
+							has_variable = te_sp_oil
 						}
 					}
 					add = 10300000

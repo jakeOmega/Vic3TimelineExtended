@@ -259,14 +259,16 @@ class TestRegistry(unittest.TestCase):
         self.assertEqual((tropical[0], tropical[-1]), ("OR = {", "}"))
         self.assertNotIn("is_not_in_geographic_region", "".join(tropical))
 
-    def test_a_scale_is_a_building_level_check(self):
+    def test_a_scale_is_a_building_level_check_or_a_tag_of_the_pass(self):
         digits = [digit for _lines, digit in registry.SCALES.values()]
         self.assertTrue(all(1 <= d <= 9 for d in digits))
         for name, (lines, _digit) in registry.SCALES.items():
             with self.subTest(name):
                 for line in lines:
-                    # the form read in game on 2026-11-10 (scripting_best_practices.md, "State pictures")
-                    self.assertRegex(line, r"^any_scope_building = \{ is_building_type = building_[a-z_]+ level >= \d+ \}$")
+                    # a level check in the form read in game on 2026-11-10 (scripting_best_practices.md,
+                    # "State pictures"), or a tag the yearly pass stores on the state
+                    self.assertRegex(line, r"^(any_scope_building = \{ is_building_type = building_[a-z_]+ level >= \d+ \}"
+                                           r"|has_variable = te_sp_[a-z]+)$")
 
     def test_a_takeover_outranks_every_rung(self):
         top = registry.W_RUNG * 9 + registry.W_SIZE * 9 + registry.W_REGION * 9
@@ -386,7 +388,8 @@ class TestYearlyPass(unittest.TestCase):
     """te_state_picture_refresh: the size its people make a state, kept until it falls a tenth below the floor."""
 
     def refresh(self, urban, share=None, size=None):
-        eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_selfcheck": ""})
+        eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_selfcheck": "",
+                                   "te_state_picture_refresh_land": ""})
         eng.values.update(_raw_blocks([VALUES]))
         if urban is not None:
             eng.vars["te_dg_urban"] = float(urban)
@@ -421,6 +424,62 @@ class TestYearlyPass(unittest.TestCase):
     def test_a_size_can_move_more_than_one_step(self):
         self.assertEqual(self.refresh(30_000_000, share=50, size=1), 4)
         self.assertEqual(self.refresh(100_000, share=50, size=4), 1)
+
+    def land(self, levels, oil=0, mines=0, coal=0, tagged=()):
+        """The tags after a pass over a state of that many levels: the walk's sums stubbed in."""
+        sums = {"te_sp_all": levels, "te_sp_oil_lv": oil, "te_sp_mine": mines, "te_sp_coal_lv": coal}
+        stub = "\n".join(f"set_local_variable = {{ name = {k} value = {v} }}" for k, v in sums.items())
+        eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_land_sums": stub,
+                                   "te_state_picture_land_selfcheck": ""})
+        eng.values.update(_raw_blocks([VALUES]))
+        for name in tagged:
+            eng.vars[name] = 1.0
+        eng.call("te_state_picture_refresh_land")
+        return {name for name in ("te_sp_oil", "te_sp_coal") if name in eng.vars}
+
+    def test_oil_country_is_a_share_of_the_states_levels(self):
+        # the owner's case: many rigs beside a great city is not an oil state
+        self.assertEqual(self.land(4499, oil=100), set())
+        self.assertEqual(self.land(265, oil=60), {"te_sp_oil"})
+        self.assertEqual(self.land(200, oil=10), {"te_sp_oil"})        # 5%, ten levels: just in
+        self.assertEqual(self.land(100, oil=9), set())                 # a share, but under ten levels
+        self.assertEqual(self.land(1000, oil=49), set())               # ten levels, but under the share
+
+    def test_a_tag_is_kept_until_a_tenth_below_its_floor(self):
+        self.assertEqual(self.land(1000, oil=46, tagged=["te_sp_oil"]), {"te_sp_oil"})   # floor 50, kept to 45
+        self.assertEqual(self.land(1000, oil=44, tagged=["te_sp_oil"]), set())
+        self.assertEqual(self.land(100, oil=9, tagged=["te_sp_oil"]), {"te_sp_oil"})     # nine levels keeps it
+        self.assertEqual(self.land(100, oil=8, tagged=["te_sp_oil"]), set())
+        self.assertEqual(self.land(100, mines=40, coal=19, tagged=["te_sp_coal"]), {"te_sp_coal"})  # floor 20, kept to 18
+        self.assertEqual(self.land(100, mines=40, coal=17, tagged=["te_sp_coal"]), set())
+
+    def test_a_colliery_is_coal_as_the_larger_part_of_the_mines(self):
+        self.assertEqual(self.land(300, mines=40, coal=25), {"te_sp_coal"})
+        self.assertEqual(self.land(300, mines=60, coal=25), set())     # more iron than coal
+        self.assertEqual(self.land(300, mines=9, coal=9), set())       # all coal, but under ten levels
+        self.assertEqual(self.land(300, oil=30, mines=40, coal=25), {"te_sp_oil", "te_sp_coal"})
+
+    def test_the_walk_counts_every_building_but_subsistence_once(self):
+        body = _raw_blocks([EFFECTS])["te_state_picture_land_sums"]
+        self.assertEqual(body.count("every_scope_building"), 1)
+        self.assertIn("limit = { is_subsistence_building = no }", body)
+        for line in ("change_local_variable = { name = te_sp_all add = level }",
+                     "limit = { is_building_type = building_oil_rig }",
+                     "limit = { is_building_group = bg_mining }",
+                     "limit = { is_building_type = building_coal_mine }"):
+            self.assertIn(line, body)
+
+    def test_the_pictures_read_the_tags_the_pass_stores(self):
+        effects = EFFECTS.read_text(encoding="utf-8-sig")
+        for tag in ("te_sp_oil", "te_sp_coal"):
+            self.assertIn(f"set_variable = {{ name = {tag} value = 1 }}", effects)
+            self.assertIn(f"remove_variable = {tag}", effects)
+        self.assertEqual(registry.WAVE3_WIRING["oil_1"]["where"], ["has_variable = te_sp_oil"])
+        self.assertEqual(registry.SCALES["colliery"][0], ["has_variable = te_sp_coal"])
+        generated = GENERATED.read_text(encoding="utf-8-sig")
+        self.assertIn("has_variable = te_sp_oil", generated)
+        self.assertIn("has_variable = te_sp_coal", generated)
+        self.assertNotIn("building_oil_rig", generated)
 
     def test_the_pass_is_on_the_yearly_state_pulse(self):
         text = ON_ACTIONS.read_text(encoding="utf-8-sig")
