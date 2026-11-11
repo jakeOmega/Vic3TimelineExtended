@@ -20,6 +20,7 @@ GENERATOR_PATH = ROOT / "scripts" / "generators" / "gen_state_pictures.py"
 GENERATED = ROOT / "common" / "terrain" / "te_state_pictures_generated.txt"
 VALUES = ROOT / "common" / "script_values" / "te_state_picture_values.txt"
 EFFECTS = ROOT / "common" / "scripted_effects" / "te_state_picture_effects.txt"
+TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_state_picture_triggers.txt"
 ON_ACTIONS = ROOT / "common" / "on_actions" / "te_state_picture_on_actions.txt"
 DEBUG_EVENTS = ROOT / "events" / "te_debug_state_picture_events.txt"
 VANILLA_TERRAINS = ROOT / "vanilla_parsed" / "common" / "terrains.json"
@@ -397,7 +398,7 @@ class TestYearlyPass(unittest.TestCase):
 
     def refresh(self, urban, share=None, size=None):
         eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_selfcheck": "",
-                                   "te_state_picture_refresh_land": ""})
+                                   "te_state_picture_refresh_land": "", "te_state_picture_refresh_city": ""})
         eng.values.update(_raw_blocks([VALUES]))
         if urban is not None:
             eng.vars["te_dg_urban"] = float(urban)
@@ -435,7 +436,8 @@ class TestYearlyPass(unittest.TestCase):
 
     def land(self, levels, oil=0, mines=0, coal=0, tagged=()):
         """The tags after a pass over a state of that many levels: the walk's sums stubbed in."""
-        sums = {"te_sp_all": levels, "te_sp_oil_lv": oil, "te_sp_mine": mines, "te_sp_coal_lv": coal}
+        sums = {"te_sp_all": levels, "te_sp_oil_lv": oil, "te_sp_mine": mines, "te_sp_coal_lv": coal,
+                "te_sp_heavy_lv": 0, "te_sp_tour_lv": 0}
         stub = "\n".join(f"set_local_variable = {{ name = {k} value = {v} }}" for k, v in sums.items())
         eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_land_sums": stub,
                                    "te_state_picture_land_selfcheck": ""})
@@ -444,6 +446,98 @@ class TestYearlyPass(unittest.TestCase):
             eng.vars[name] = 1.0
         eng.call("te_state_picture_refresh_land")
         return {name for name in ("te_sp_oil", "te_sp_coal") if name in eng.vars}
+
+    def city(self, size=2, levels=1000, heavy=0, tour=0, walk=None, prev=None, prov=10, gini=None, state=None):
+        """The state's variables after a pass: the walk's sums stubbed in, the Demographics walk's figures as given,
+        and `state` the variables it carried in (tags, te_sp_growth, te_sp_prov)."""
+        sums = {"te_sp_all": levels, "te_sp_oil_lv": 0, "te_sp_mine": 0, "te_sp_coal_lv": 0,
+                "te_sp_heavy_lv": heavy, "te_sp_tour_lv": tour}
+        stub = "\n".join(f"set_local_variable = {{ name = {k} value = {v} }}" for k, v in sums.items())
+        eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_land_sums": stub,
+                                   "te_state_picture_land_selfcheck": ""})
+        eng.values.update(_raw_blocks([VALUES]))
+        eng.triggers.update(_raw_blocks([TRIGGERS]))
+        eng.vars.update({"te_sp_size": float(size), **{k: float(v) for k, v in (state or {}).items()}})
+        if walk is not None:
+            eng.vars.update({"te_dg_walk_pop": float(walk), "te_dg_walk_pop_prev": float(prev),
+                             "te_dg_provinces": float(prov)})
+        if gini is not None:
+            eng.vars["te_dg_gini"] = gini
+        eng.call("te_state_picture_refresh_land")
+        eng.call("te_state_picture_refresh_city")
+        return eng.vars
+
+    def years(self, rates, **kw):
+        """The state after a run of yearly growth rates, each pass carrying the last one's variables."""
+        state, people = {}, 1_000_000.0
+        for rate in rates:
+            new = people * (1 + rate)
+            out = self.city(walk=new, prev=people, state=state, **kw)
+            state = {k: v for k, v in out.items() if k.startswith("te_sp_") and k != "te_sp_size"}
+            people = new
+        return state
+
+    def test_a_heavy_industry_city_and_a_resort_are_shares_of_the_states_levels(self):
+        self.assertIn("te_sp_industry", self.city(levels=1000, heavy=250))
+        self.assertNotIn("te_sp_industry", self.city(levels=1000, heavy=240))      # under a quarter
+        self.assertNotIn("te_sp_industry", self.city(levels=100, heavy=29))        # a share, but under 30 levels
+        self.assertIn("te_sp_industry", self.city(levels=1000, heavy=226, state={"te_sp_industry": 1}))   # kept to 225
+        self.assertNotIn("te_sp_industry", self.city(levels=1000, heavy=224, state={"te_sp_industry": 1}))
+        self.assertIn("te_sp_resort", self.city(levels=1000, tour=20))
+        self.assertNotIn("te_sp_resort", self.city(levels=1000, tour=19))
+        self.assertNotIn("te_sp_resort", self.city(levels=100, tour=9))            # under ten levels
+        self.assertNotIn("te_sp_resort", self.city(levels=1000, tour=17, state={"te_sp_resort": 1}))
+
+    def test_a_boomtown_needs_several_years_of_growth(self):
+        self.assertNotIn("te_sp_boom", self.years([0.06]))                 # one good year: 1.2% smoothed
+        self.assertNotIn("te_sp_boom", self.years([0.06] * 3))             # three: 2.9%
+        self.assertNotIn("te_sp_boom", self.years([0.05] * 4))             # 5% a year: 2.95% after four
+        self.assertIn("te_sp_boom", self.years([0.05] * 5))                # and 3.4% after five
+        self.assertNotIn("te_sp_boom", self.years([0.02] * 20))            # steady 2% never gets there
+        # a single year's leap counts as a tenth at most: a migration wave is not a trend
+        self.assertAlmostEqual(self.years([3.0])["te_sp_growth"], 0.02, places=4)
+        # a town is no boomtown however it grows
+        self.assertNotIn("te_sp_boom", self.years([0.05] * 6, size=1))
+
+    def test_a_boomtown_cools_and_a_city_declines(self):
+        boom = self.years([0.05] * 6)
+        self.assertIn("te_sp_boom", boom)
+        self.assertNotIn("te_sp_boom", self.years([0.05] * 6 + [0.0] * 3))
+        self.assertIn("te_sp_decline", self.years([-0.02] * 4))
+        self.assertNotIn("te_sp_decline", self.years([-0.005] * 20))
+        self.assertNotIn("te_sp_decline", self.years([-0.02] * 4 + [0.01] * 3))
+        both = self.years([0.05] * 6 + [-0.03] * 8)
+        self.assertEqual({"te_sp_boom" in both, "te_sp_decline" in both}, {False, True})
+
+    def test_a_year_of_border_changes_is_left_out_of_the_growth(self):
+        before = self.city(walk=1_020_000, prev=1_000_000, prov=10)
+        after = self.city(walk=2_000_000, prev=1_020_000, prov=14,
+                          state={"te_sp_growth": before["te_sp_growth"], "te_sp_prov": before["te_sp_prov"]})
+        self.assertEqual(after["te_sp_growth"], before["te_sp_growth"])
+        self.assertEqual(after["te_sp_prov"], 14)
+        # and with no walk there is no growth at all
+        self.assertNotIn("te_sp_growth", self.city())
+
+    def test_a_divided_city_is_a_very_unequal_metropolis(self):
+        self.assertIn("te_sp_divided", self.city(size=3, gini=0.86))
+        self.assertNotIn("te_sp_divided", self.city(size=3, gini=0.84))
+        self.assertNotIn("te_sp_divided", self.city(size=2, gini=0.95))
+        self.assertNotIn("te_sp_divided", self.city(size=3))               # no census figure, no tag
+        self.assertIn("te_sp_divided", self.city(size=3, gini=0.84, state={"te_sp_divided": 1}))
+        self.assertNotIn("te_sp_divided", self.city(size=3, gini=0.82, state={"te_sp_divided": 1}))
+        self.assertNotIn("te_sp_divided", self.city(size=2, gini=0.9, state={"te_sp_divided": 1}))
+
+    def test_the_city_pictures_read_the_tags_the_pass_stores(self):
+        effects = EFFECTS.read_text(encoding="utf-8-sig")
+        for name in ("boomtown", "declining", "divided", "industry", "resort"):
+            (line,), _digit = registry.CHARACTERS[name]
+            tag = line.removeprefix("has_variable = ")
+            self.assertIn(f"set_variable = {{ name = {tag} value = 1 }}", effects)
+            self.assertIn(f"remove_variable = {tag}", effects)
+        # the design's order of precedence (section 7)
+        order = ["housing_blocks", "boomtown", "declining", "divided", "smog", "industry", "resort"]
+        digits = [registry.CHARACTERS[name][1] for name in order]
+        self.assertEqual(digits, sorted(digits, reverse=True))
 
     def test_oil_country_is_a_share_of_the_states_levels(self):
         # the owner's case: many rigs beside a great city is not an oil state
