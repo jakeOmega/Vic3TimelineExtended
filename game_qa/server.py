@@ -64,7 +64,8 @@ PORT = 8951
 SESSION_FILE = "session.json"
 TOKEN_HEADER = "X-Game-QA-Token"
 EXPIRES_HEADER = "X-Game-QA-Expires"    # machine_clock seconds: the client has stopped waiting by then
-HANDLER_TIMEOUT_S = 30.0                # a connection that sends nothing for that long is dropped
+HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for that long is dropped: well inside the
+                                        # client's STATUS_TIMEOUT_S, so `status` and `stop` answer past one
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
 START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy")

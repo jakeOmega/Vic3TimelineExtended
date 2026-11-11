@@ -423,7 +423,7 @@ class HardeningTest(ServerTestCase):
 
     def test_a_connection_that_sends_nothing_does_not_stall_stop(self):
         self.assertIsNotNone(server._Handler.timeout)              # the real server's, not only this test's
-        self.assertLessEqual(server._Handler.timeout, 60)
+        self.assertLess(server._Handler.timeout, client.STATUS_TIMEOUT_S / 1.5)   # status answers past one
         with mock.patch.object(server._Handler, "timeout", 0.5):
             fake, thread = self.serve()
             silent = socket.create_connection(("127.0.0.1", server.read_info(self.backups)["port"]))
