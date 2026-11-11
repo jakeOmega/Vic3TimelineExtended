@@ -133,11 +133,15 @@ def restore_retried(run_cli: RunCli, snapshot_id: str, sleep, retries: Mapping[s
         waited[refused] += RESTORE_RETRY_S
 
 
-def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str) -> str:
+def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str,
+        disabled_dlc: Sequence = ()) -> str:
     """12 hex digits naming the game a fixture was made for: the game version, the run's playset (its mode,
-    `playset`, and `enabled_mods`, the mod paths the run loads, in order), and the relative path, size and
+    `playset`, `enabled_mods`, the mod paths the run loads, in order, and `disabled_dlc`, the DLC the run's
+    playset switches off, as a set: launch keeps the owner's `disabledDLC`), and the relative path, size and
     modification time of every file under the deployed mod's `common/`, `events/` and `map_data/` (a folder that
-    is missing is skipped). A fixture made under another playset is another world."""
+    is missing is skipped). A fixture made under another playset, or another DLC set, is another world: a DLC
+    changes what a new game sets up even where the script folders loaded are the same. Not covered: for
+    `current`, the other mods' contents (only their paths are hashed), so an update of one keeps the key."""
     if isinstance(enabled_mods, str):
         raise TypeError("enabled_mods is a list of paths, not one path")
     digest = hashlib.sha256()
@@ -145,6 +149,8 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
     _feed(digest, "playset", playset)
     for mod in enabled_mods:
         _feed(digest, "mod", mod)
+    for dlc in sorted(json.dumps(entry, sort_keys=True) for entry in disabled_dlc):
+        _feed(digest, "dlc_off", dlc)
     root = Path(deploy_dir)
     for folder in KEY_FOLDERS:
         records = []

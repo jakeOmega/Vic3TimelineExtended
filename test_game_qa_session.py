@@ -1768,6 +1768,18 @@ class FixtureKeyTest(SessionTestCase):
         self.assertNotEqual(self.key_for("current", more), self.key_for("current"))
         self.assertNotEqual(self.key_for("current"), self.key_for("mod_only"))
 
+    def test_a_dlc_switched_off_in_the_owners_playset_makes_another_fixture(self):
+        # X4: launch keeps the owner's disabledDLC, and a DLC changes what a new game sets up
+        self.paths.disabled_dlc = [{"paradoxAppId": "dlc_voice_of_the_people"}]
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start()                                # the fixture made with every DLC on is not this run's
+        self.assertTrue(reply["fixture_made"])
+        loads = session.run_playset("mod_only", self.paths.enabled_mods, DEPLOYED_WIN, OVERLAY_WIN)
+        dlc_key = fixture.key("1.15.0", loads, self.paths.deploy_dir, playset="mod_only",
+                              disabled_dlc=self.paths.disabled_dlc)
+        self.assertNotEqual(dlc_key, self.key)
+        self.assertTrue((self.user / "save games" / ("te_qa_fixture_%s.v3" % dlc_key)).is_file())
+
     def test_the_run_playset_is_what_launch_writes(self):
         self.assertEqual(session.run_playset("mod_only", [OTHER_MOD_WIN, DEPLOYED_WIN.lower() + "\\"], DEPLOYED_WIN,
                                              OVERLAY_WIN), [DEPLOYED_WIN.lower() + "\\", OVERLAY_WIN])

@@ -591,6 +591,17 @@ def enabled_mods(user_data: Path) -> list[str]:
     return [m["path"] for m in mods or [] if isinstance(m, dict) and isinstance(m.get("path"), str)]
 
 
+def disabled_dlc(user_data: Path) -> list:
+    """The DLC the owner's playset switches off (`content_load.json`'s `disabledDLC`, which `launch` keeps as it
+    is), each entry as the file gives it; [] when it cannot be read."""
+    try:
+        data = json.loads((Path(user_data) / "content_load.json").read_text("utf-8-sig"))
+    except (OSError, ValueError):
+        return []
+    dlc = data.get("disabledDLC") if isinstance(data, dict) else None
+    return list(dlc) if isinstance(dlc, list) else []
+
+
 def real_paths() -> session.Paths:
     user, base, deploy = _resolve("game_user_data_path"), _resolve("base_game_path"), _resolve("mod_deploy_target")
     # wslpath can fail on a path that does not exist yet: the overlay's folder is made at `start`.
@@ -598,7 +609,8 @@ def real_paths() -> session.Paths:
     return session.Paths(user_data=user, backup_root=_backup_root(), deploy_dir=deploy,
                          base_game=base, overlay_windows_path=overlay_windows,
                          events_file_windows_path=to_windows_path, game_version=game_version(base),
-                         enabled_mods=enabled_mods(user), deployed_mod_windows_path=to_windows_path(deploy))
+                         enabled_mods=enabled_mods(user), deployed_mod_windows_path=to_windows_path(deploy),
+                         disabled_dlc=disabled_dlc(user))
 
 
 def _ping_windows_python() -> str:

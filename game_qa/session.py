@@ -142,6 +142,7 @@ class Paths:
     game_version: str
     enabled_mods: Sequence[str]                     # the owner's playset (content_load.json), in order
     deployed_mod_windows_path: str                  # the deployed mod's folder as Windows names it: what mod_only keeps
+    disabled_dlc: Sequence = ()                     # the owner's playset's disabledDLC, which launch keeps as it is
 
     @property
     def overlay_dir(self) -> Path:
@@ -423,7 +424,8 @@ class Session:
         user = Path(self._paths.user_data)
         loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
                             self._paths.overlay_windows_path)
-        key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset)
+        key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
+                          disabled_dlc=self._paths.disabled_dlc)
         found = fixture.find(user, key)
         if found is not None:
             self._record("fixture", outcome="found", save=found.stem)

@@ -1001,6 +1001,18 @@ class RemoveOverlayTest(ServerTestCase):
             self.assertIn("`python3 -m game_qa remove-overlay`", hint)
 
 
+class PlaysetReadTest(unittest.TestCase):
+    def test_the_owners_disabled_dlc_is_read_as_launch_keeps_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            user = Path(tmp)
+            self.assertEqual(client.disabled_dlc(user), [])                   # no playset file
+            (user / "content_load.json").write_text(json.dumps(
+                {"enabledMods": [], "disabledDLC": [{"paradoxAppId": "x"}, "y"]}), encoding="utf-8")
+            self.assertEqual(client.disabled_dlc(user), [{"paradoxAppId": "x"}, "y"])
+            (user / "content_load.json").write_text('{"disabledDLC": 5}', encoding="utf-8")
+            self.assertEqual(client.disabled_dlc(user), [])
+
+
 class DoctorTest(ServerTestCase):
     def setUp(self):
         super().setUp()

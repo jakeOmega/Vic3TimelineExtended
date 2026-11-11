@@ -172,8 +172,9 @@ class KeyTest(unittest.TestCase):
             path.write_text(name, encoding="utf-8")
         self.mods = [r"C:\mods\Vic3TimelineExtended", r"C:\mods\other"]
 
-    def key(self, version="1.15.0", mods=None, playset="current"):
-        return fixture.key(version, self.mods if mods is None else mods, self.deploy, playset=playset)
+    def key(self, version="1.15.0", mods=None, playset="current", dlc=()):
+        return fixture.key(version, self.mods if mods is None else mods, self.deploy, playset=playset,
+                           disabled_dlc=dlc)
 
     def test_key_is_twelve_hex_digits_and_stable(self):
         key = self.key()
@@ -189,6 +190,7 @@ class KeyTest(unittest.TestCase):
             "mod order": self.key(mods=list(reversed(self.mods))),
             "a mod path": self.key(mods=[self.mods[0], r"C:\mods\Other"]),
             "the playset mode": self.key(playset="mod_only"),
+            "a DLC switched off": self.key(dlc=[{"paradoxAppId": "dlc_voice_of_the_people"}]),   # X4
         }
         (self.deploy / "common/laws/b.txt").write_text("a longer file than before", encoding="utf-8")
         keys["a script file grew"] = self.key()
@@ -196,6 +198,12 @@ class KeyTest(unittest.TestCase):
             with self.subTest(change=label):
                 self.assertNotEqual(other, base)
         self.assertEqual(len(set(keys.values())), len(keys), "each change gives its own key")
+
+    def test_the_dlc_set_counts_as_a_set(self):
+        one, two = {"paradoxAppId": "a"}, {"paradoxAppId": "b"}
+        self.assertEqual(self.key(dlc=[one, two]), self.key(dlc=[two, one]))
+        self.assertNotEqual(self.key(dlc=[one]), self.key(dlc=[two]))
+        self.assertEqual(self.key(dlc=[]), self.key())
 
     def test_key_changes_with_a_files_modification_time_alone(self):
         base = self.key()
