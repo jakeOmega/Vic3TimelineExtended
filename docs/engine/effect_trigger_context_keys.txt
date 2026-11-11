@@ -5,7 +5,7 @@
 # less every LHS keyword vanilla's common/ and events/ use in trigger context.
 # [trigger_only]: the mirror image, for effect context.
 # Regenerate on a vanilla bump: python3 effect_trigger_validity_audit.py bootstrap-context
-# Sizes: 4821 effect-only, 3041 trigger-only.
+# Sizes: 4823 effect-only, 3043 trigger-only.
 # Left out of [effect_only], used by vanilla in the other context: none
 # Left out of [trigger_only], used by vanilla in the other context: age, escalation, literacy_rate, lobby_formation_reason, strata
 [effect_only]
@@ -292,6 +292,7 @@ clear_populism_vars
 clear_pro_lobby_vars
 clear_saved_scope
 clear_scaled_debt
+clear_springtime_revolution_variables
 clear_tags
 clear_variable_list
 clear_variable_map
@@ -2033,6 +2034,7 @@ je_tsarpoints_cleanup_favourite_variables
 je_tsarpoints_cleanup_gendarme_of_europe_variables
 je_tsarpoints_cleanup_great_reform_variables
 je_tsarpoints_cleanup_heir_of_alexander_variables
+je_tsarpoints_cleanup_master_modifiers
 je_tsarpoints_cleanup_master_variables
 je_tsarpoints_cleanup_mission_variables
 je_tsarpoints_cleanup_unshakable_autocracy_variables
@@ -6275,6 +6277,7 @@ cold_clothes_pop_trigger
 cold_effect
 commander_is_available
 commander_rank
+common_child_outfit_trigger
 communist_clothes_trigger
 company_employed_levels
 company_global_productivity_comparison
@@ -7436,6 +7439,7 @@ nihilist_successor_socialist
 nor
 nordic_clothes_pop_trigger
 not
+num_building_assets_of_group
 num_building_assets_of_type
 num_casualties
 num_companies

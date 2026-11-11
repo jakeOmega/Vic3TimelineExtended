@@ -2168,6 +2168,52 @@
      ]
     }
    ],
+   "subject_join_initiator_trigger": [
+    "=",
+    {
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_congress_poland"
+         ],
+         "scope:initiator": [
+          "=",
+          {
+           "country_has_primary_culture": [
+            "=",
+            "cu:polish"
+           ]
+          }
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "poland_events.5.e.whites_tt"
+         ],
+         "NOT": [
+          "=",
+          {
+           "poland_whites_strong_trigger": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
    "ai_acceptance_max": [
     "=",
     "75"

@@ -11934,46 +11934,90 @@
       }
      ],
      "trigger_if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "owner": [
-          "?=",
-          {
-           "has_variable": [
-            "=",
-            "rasputin1_active_var"
-           ]
-          }
-         ]
-        }
-       ],
-       "custom_tooltip": [
-        "=",
-        {
-         "text": [
-          "=",
-          "rasputin1_active_tt"
-         ],
-         "NOT": [
-          "=",
-          {
-           "owner": [
-            "?=",
-            {
-             "has_variable": [
-              "=",
-              "rasputin1_active_var"
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_variable": [
+             "=",
+             "rasputin1_active_var"
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "rasputin1_active_tt"
+          ],
+          "NOT": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_variable": [
+               "=",
+               "rasputin1_active_var"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_variable": [
+             "=",
+             "favorite_event_active_var"
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "favorite_event_active_tt"
+          ],
+          "NOT": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_variable": [
+               "=",
+               "favorite_event_active_var"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -12252,7 +12296,7 @@
     {
      "days": [
       "=",
-      "normal_modifier_time"
+      "180"
      ]
     }
    ],
@@ -12749,46 +12793,90 @@
       }
      ],
      "trigger_if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "owner": [
-          "?=",
-          {
-           "has_variable": [
-            "=",
-            "rasputin1_active_var"
-           ]
-          }
-         ]
-        }
-       ],
-       "custom_tooltip": [
-        "=",
-        {
-         "text": [
-          "=",
-          "rasputin1_active_tt"
-         ],
-         "NOT": [
-          "=",
-          {
-           "owner": [
-            "?=",
-            {
-             "has_variable": [
-              "=",
-              "rasputin1_active_var"
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_variable": [
+             "=",
+             "rasputin1_active_var"
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "rasputin1_active_tt"
+          ],
+          "NOT": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_variable": [
+               "=",
+               "rasputin1_active_var"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_variable": [
+             "=",
+             "favorite_event_active_var"
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "favorite_event_active_tt"
+          ],
+          "NOT": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_variable": [
+               "=",
+               "favorite_event_active_var"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -12798,6 +12886,15 @@
      "revoke_favorite_effect": [
       "=",
       "yes"
+     ]
+    }
+   ],
+   "cooldown": [
+    "=",
+    {
+     "days": [
+      "=",
+      "normal_modifier_time"
      ]
     }
    ],

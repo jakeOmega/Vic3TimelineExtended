@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log (engine docs 1.15.0) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.15.1) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 
@@ -115,7 +115,7 @@ _Per-culture migration pull modifier; instantiated for every culture used in mod
 
 - Placeholder: `culture` (vocab: `culture`)
 - Members in engine docs: **0**
-- Vocab size: 322; missing entries: 322
+- Vocab size: 343; missing entries: 343
 
 ### `goods_input_{good}_add`
 
@@ -849,7 +849,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_fervor_target_{culture}_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **321**
+- Members: **342**
   - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `country_institution_cost_{institution}_mult`
@@ -867,14 +867,14 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_st_res_{good}_capacity_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **8**
-  - Examples: `aeroplanes`, `ammunition`, `artillery`, `fertilizer`, `grain`, `oil`
+- Members: **9**
+  - Examples: `aeroplanes`, `ammunition`, `artillery`, `copper`, `fertilizer`, `grain`
 
 ### `country_st_res_{good}_decay_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **8**
-  - Examples: `aeroplanes`, `ammunition`, `artillery`, `fertilizer`, `grain`, `oil`
+- Members: **9**
+  - Examples: `aeroplanes`, `ammunition`, `artillery`, `copper`, `fertilizer`, `grain`
 
 ### `country_{bg}_goods_cost_mult`
 
@@ -897,7 +897,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_{culture}_cultural_acceptance_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **321**
+- Members: **342**
   - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `country_{good}_export_tariffs_rate_add`
@@ -969,7 +969,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `interest_group_{ideology}_leader_chance_mult`
 
 - Placeholder: `ideology` (vocab: `ideology`)
-- Members: **47**
+- Members: **48**
   - Examples: `ideology_abolitionist`, `ideology_anarchist`, `ideology_authoritarian`, `ideology_bonapartist`, `ideology_carlist`, `ideology_carlist_2`
 
 ### `power_bloc_invite_acceptance_{country_rank}_add`
@@ -1029,7 +1029,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_{culture}_standard_of_living_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **321**
+- Members: **342**
   - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `state_{poptype}_dependent_wage_mult`

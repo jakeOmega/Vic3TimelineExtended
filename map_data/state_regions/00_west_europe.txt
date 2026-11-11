@@ -19,7 +19,7 @@
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 9
     }
     naval_exit_id = 3000
     min_cold_effect = 0.04
@@ -205,7 +205,7 @@ STATE_NORTHERN_NORWAY = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 9
     }
     naval_exit_id = 3020
     blockade_locator = {
@@ -349,7 +349,7 @@ STATE_LANCASHIRE = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3030
     min_cold_effect = 0.00
@@ -1663,7 +1663,7 @@ STATE_HESSE = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 

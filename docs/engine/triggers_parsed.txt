@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 ## active_lens
@@ -10633,6 +10633,12 @@ a negated OR trigger
 Scopes: none
 
 negates content of trigger
+
+## num_building_assets_of_group
+Scopes: building
+
+Checks the number of building levels of a given building group the scoped building own.
+ num_building_assets_of_group = { type = bg_military_industry value >= 3 }
 
 ## num_building_assets_of_type
 Scopes: building

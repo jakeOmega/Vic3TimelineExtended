@@ -69,6 +69,11 @@ STATE_SICHUAN = {
         type = "building_industrial_mineral_salt_mine"
         undiscovered_amount = 115
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 5
+    }
 }
 
 STATE_YUNNAN = {
@@ -97,7 +102,7 @@ STATE_YUNNAN = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 10
     }
 }
 
@@ -680,6 +685,11 @@ STATE_JIANGXI = {
         type = "building_rare_earth_metals_mine"
         undiscovered_amount = 50
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 5
+    }
 }
 
 STATE_SOUTHERN_ANHUI = {
@@ -699,6 +709,11 @@ STATE_SOUTHERN_ANHUI = {
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.10
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 5
+    }
 }
 
 STATE_NORTHERN_ANHUI = {
@@ -1165,7 +1180,7 @@ STATE_HOKKAIDO = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3059
     min_cold_effect = 0.00
@@ -1326,7 +1341,7 @@ STATE_KANSAI = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3086
     blockade_locator = {
@@ -1386,7 +1401,7 @@ STATE_KYUSHU = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3058
     min_cold_effect = 0.00

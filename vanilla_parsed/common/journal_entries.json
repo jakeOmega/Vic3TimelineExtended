@@ -10858,11 +10858,11 @@
      "random_events": [
       "=",
       {
-       "200": [
+       "29": [
         "=",
         "0"
        ],
-       "5": [
+       "1": [
         "=",
         "communism.7"
        ]
@@ -11399,7 +11399,7 @@
    ],
    "timeout": [
     "=",
-    "1095"
+    "1825"
    ],
    "should_be_pinned_by_default_uninvolved_or_context": [
     "=",
@@ -41989,7 +41989,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "context": [
     "=",
@@ -43003,9 +43006,19 @@
             "any_country_in_caucasus_old": [
              "=",
              {
-              "count": [
+              "filter": [
                "=",
-               "all"
+               {
+                "NOT": [
+                 "=",
+                 {
+                  "is_country_type": [
+                   "=",
+                   "decentralized"
+                  ]
+                 }
+                ]
+               }
               ],
               "OR": [
                "=",
@@ -43031,15 +43044,29 @@
                  ]
                 ]
                }
+              ],
+              "count": [
+               "=",
+               "all"
               ]
              }
             ],
             "any_country_in_central_asia": [
              "=",
              {
-              "count": [
+              "filter": [
                "=",
-               "all"
+               {
+                "NOT": [
+                 "=",
+                 {
+                  "is_country_type": [
+                   "=",
+                   "decentralized"
+                  ]
+                 }
+                ]
+               }
               ],
               "OR": [
                "=",
@@ -43065,15 +43092,29 @@
                  ]
                 ]
                }
+              ],
+              "count": [
+               "=",
+               "all"
               ]
              }
             ],
             "any_country_in_greater_persia": [
              "=",
              {
-              "count": [
+              "filter": [
                "=",
-               "all"
+               {
+                "NOT": [
+                 "=",
+                 {
+                  "is_country_type": [
+                   "=",
+                   "decentralized"
+                  ]
+                 }
+                ]
+               }
               ],
               "OR": [
                "=",
@@ -43099,6 +43140,10 @@
                  ]
                 ]
                }
+              ],
+              "count": [
+               "=",
+               "all"
               ]
              }
             ]
@@ -44228,7 +44273,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -44548,7 +44596,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -44840,7 +44891,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -45082,7 +45136,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -45372,7 +45429,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -45708,7 +45768,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -46089,7 +46152,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -47008,7 +47074,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -47728,7 +47797,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -47922,7 +47994,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -96144,7 +96219,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -99905,7 +99983,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -103624,7 +103705,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -105933,7 +106017,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "context": [
     "=",
@@ -106823,7 +106910,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -107079,7 +107169,10 @@
    ],
    "dlc": [
     "=",
-    "dlc010"
+    [
+     "dlc010",
+     "dlc019"
+    ]
    ],
    "activation_description": [
     "=",
@@ -179904,16 +179997,52 @@
    "immediate_all_involved": [
     "=",
     {
-     "trigger_event": [
+     "if": [
       "=",
       {
-       "id": [
+       "limit": [
         "=",
-        "congress_poland.5"
+        {
+         "c:POL": [
+          "?=",
+          "this"
+         ]
+        }
        ],
-       "popup": [
+       "trigger_event": [
         "=",
-        "yes"
+        {
+         "id": [
+          "=",
+          "congress_poland.5"
+         ],
+         "popup": [
+          "=",
+          "yes"
+         ]
+        }
+       ]
+      }
+     ],
+     "else": [
+      "=",
+      {
+       "trigger_event": [
+        "=",
+        {
+         "id": [
+          "=",
+          "congress_poland.5"
+         ],
+         "popup": [
+          "=",
+          "yes"
+         ],
+         "days": [
+          "=",
+          "7"
+         ]
+        }
        ]
       }
      ]
@@ -180294,6 +180423,19 @@
           "change_subject_type": [
            "=",
            "subject_type_personal_union"
+          ],
+          "add_modifier": [
+           "=",
+           {
+            "name": [
+             "=",
+             "congress_poland_white_guarantee"
+            ],
+            "days": [
+             "=",
+             "long_modifier_time"
+            ]
+           }
           ],
           "remove_primary_culture": [
            "=",
@@ -186657,6 +186799,10 @@
        "je_tsarpoints_cleanup_master_variables": [
         "=",
         "yes"
+       ],
+       "je_tsarpoints_cleanup_master_modifiers": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -186702,16 +186848,48 @@
         "effect": [
          "=",
          {
-          "add_radicals": [
+          "every_interest_group": [
            "=",
            {
-            "value": [
+            "limit": [
              "=",
-             "medium_radicals"
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_anti_clerical"
+              ]
+             }
             ],
-            "pop_type": [
+            "add_modifier": [
              "=",
-             "aristocrats"
+             {
+              "name": [
+               "=",
+               "modifier_dirge_of_third_rome_bonus"
+              ],
+              "days": [
+               "=",
+               "normal_modifier_time"
+              ]
+             }
+            ]
+           }
+          ],
+          "ig:ig_devout": [
+           "?=",
+           {
+            "add_modifier": [
+             "=",
+             {
+              "name": [
+               "=",
+               "modifier_dirge_of_third_rome_penalty"
+              ],
+              "days": [
+               "=",
+               "normal_modifier_time"
+              ]
+             }
             ]
            }
           ],

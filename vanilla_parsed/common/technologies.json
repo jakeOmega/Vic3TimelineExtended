@@ -1311,33 +1311,143 @@
       "1"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_strategy": [
-            [
-             "=",
-             "ai_strategy_industrial_expansion"
-            ],
-            [
-             "=",
-             "ai_strategy_resource_expansion"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "2"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_rank": [
+           ">=",
+           "rank_value:unrecognized_major_power"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "battleship_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "destroyer"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "submarine"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -1570,36 +1680,56 @@
     {
      "value": [
       "=",
-      "1"
+      "2"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_strategy": [
-            [
-             "=",
-             "ai_strategy_industrial_expansion"
-            ],
-            [
-             "=",
-             "ai_strategy_resource_expansion"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "2"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_rank": [
+           ">=",
+           "rank_value:unrecognized_major_power"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -1888,33 +2018,71 @@
       "1"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_strategy": [
-            [
-             "=",
-             "ai_strategy_industrial_expansion"
-            ],
-            [
-             "=",
-             "ai_strategy_resource_expansion"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "1"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -2186,6 +2354,98 @@
      "value": [
       "=",
       "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "nco_training"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "defense_in_depth"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "battleship_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -2218,7 +2478,99 @@
     {
      "value": [
       "=",
-      "1"
+      "3"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "nco_training"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "defense_in_depth"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "battleship_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -2315,6 +2667,24 @@
      "value": [
       "=",
       "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "country_rank": [
+          ">=",
+          "rank_value:unrecognized_major_power"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
      ]
     }
    ]
@@ -3146,6 +3516,44 @@
      "value": [
       "=",
       "2"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "general_staff"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "power_of_the_purse"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ]
      ]
     }
    ]

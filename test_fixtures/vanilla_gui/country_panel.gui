@@ -3446,19 +3446,27 @@ types country_panel_treaties_types
 			visible = "[Article.HasType('law_commitment')]"
 
 			blockoverride "article_icon" {
-				icon = {
+				button_icon_round = {
 					visible = "[Not(ObjectsEqual(Article.GetLaw, Country.GetLawBeingEnacted.GetLawType))]"
-					parentanchor = center
 					size = { 40 40 }
-					texture = "[Article.GetLaw.GetTexture]"
+					parentanchor = center
+					onclick = "[InformationPanelBar.OpenChangeLaw(Article.GetLaw.GetGroup)]"
+
+					blockoverride "icon" {
+						texture = "[Article.GetLaw.GetTexture]"
+					}
+
+					blockoverride "icon_size" {
+						size = { 75% 75% }
+					}
 				}
 
-				icon = {
+				button_icon_round = {
 					visible = "[ObjectsEqual(Article.GetLaw, Country.GetLawBeingEnacted.GetLawType)]"
 					size = { 40 40 }
-					texture = "gfx/interface/backgrounds/round_button_bg.dds"
 					parentanchor = center
 					datacontext = "[Country.GetLawBeingEnacted]"
+					onclick = "[InformationPanelBar.OpenChangeLaw(Article.GetLaw.GetGroup)]"
 
 					round_progress_default = {
 						visible = "[Country.HasProgressingLawEnactment]"

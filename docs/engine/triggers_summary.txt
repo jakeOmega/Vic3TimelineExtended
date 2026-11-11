@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 none|active_lens|Checks if the specified lens is open
@@ -1799,6 +1799,7 @@ country|net_total_income|Does the country have this amount of income after expen
 none|night_value|Night value
 none|nor|a negated OR trigger
 none|not|negates content of trigger
+building|num_building_assets_of_group|Checks the number of building levels of a given building group the scoped building own.
 building|num_building_assets_of_type|Checks the number of building levels of a given type the scoped building own.
 war|num_casualties|Checks the number of total casualties in the scoped war
 country|num_companies|How many companies the scoped country has

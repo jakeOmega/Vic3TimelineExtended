@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_support_change: Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays

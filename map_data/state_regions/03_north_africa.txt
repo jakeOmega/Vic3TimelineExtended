@@ -312,7 +312,7 @@ STATE_INNER_MOROCCO = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 6
     }
     naval_exit_id = 3089
     min_cold_effect = 0.00

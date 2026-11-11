@@ -224,29 +224,344 @@ types market_panel
 				direction = vertical
 
 				flowcontainer = {
+					visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
 					direction = vertical
 					parentanchor = hcenter
-					visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
+					spacing = 5
+					margin = { 10 5 }
 
-					textbox = {
-						datacontext = "[GetMetaPlayer.GetPlayedOrObservedCountry]"
-						visible = "[GreaterThan_int32(Market.GetCountryTradeCapacity(Country.Self), '(int32)0')]"
-						text = "MARKET_COUNTRY_TRADE_CAPACITY"
-						tooltip = "[Market.GetCountryTradeCapacityDesc(Country.Self)]"
-						margin = { 10 10 }
-						margin_bottom = 5
-						autoresize = yes
-						align = nobaseline
-						parentanchor = hcenter
-						maximumsize = { @panel_width -1 }
-						multiline = yes
+					container = {
+						visible = "[Not(MarketPanel.HasSelectedWorldMarketHub)]"
+						minimumsize = { 540 -1 }
+						tooltip = "[MarketPanel.GetMarket.GetTradeCapacityDesc]"
+
+						background = {
+							using = entry_bg
+						}
+
+						flowcontainer = {
+							parentanchor = center
+							spacing = 7
+							margin = { 10 10 }
+
+							textbox = {
+								parentanchor = vcenter
+								max_width = 250
+								autoresize = yes
+								align = nobaseline
+								using = elide_fontsize_min
+								text = "MARKET_PANEL_TRADE_CAPACITY"
+							}
+
+							textbox = {
+								parentanchor = vcenter
+								max_width = 250
+								autoresize = yes
+								align = nobaseline
+								using = elide_fontsize_min
+								using = fontsize_large
+								text = "MARKET_TRADE_CAPACITY"
+							}
+						}
+					}
+
+					flowcontainer = {
+						visible = "[MarketPanel.HasSelectedWorldMarketHub]"
+						datacontext = "[MarketPanel.GetSelectedWorldMarketHub]"
+						spacing = 5
+
+						flowcontainer = {
+							direction = vertical
+							minimumsize = { 260 -1 }
+							margin = { 10 10 }
+							tooltip = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityDesc(State.Self)]"
+
+							background = {
+								using = entry_bg
+							}
+
+							textbox = {
+								max_width = 260
+								autoresize = yes
+								align = nobaseline
+								using = elide_fontsize_min
+								text = "MARKET_PANEL_TRADE_CAPACITY"
+							}
+
+							textbox = {
+								max_width = 260
+								autoresize = yes
+								align = nobaseline
+								using = elide_fontsize_min
+								using = fontsize_large
+								text = "MARKET_WORLD_MARKET_HUB_TRADE_CAPACITY"
+							}
+						}
+
+						flowcontainer = {
+							direction = vertical
+							minimumsize = { 260 -1 }
+							margin = { 10 10 }
+							tooltip = "STATE_WORLD_MARKET_ACCESS_DESC"
+
+							background = {
+								using = entry_bg
+							}
+
+							textbox = {
+								max_width = 260
+								autoresize = yes
+								align = nobaseline
+								using = elide_fontsize_min
+								text = "WORLD_MARKET_ACCESS"
+							}
+
+							textbox = {
+								max_width = 260
+								autoresize = yes
+								align = nobaseline
+								using = elide_fontsize_min
+								using = fontsize_large
+								text = "MARKET_WORLD_MARKET_HUB_ACCESS"
+							}
+						}
+					}
+				}
+
+				flowcontainer = {
+					direction = vertical
+					using = default_list_position
+
+					background = {
+						margin = { 0 -2 }
+						using = dropdown_background
 					}
 
 					section_header_button = {					
 						blockoverride "left_text" {
-							text = "CHARTS"
-							fontsize_min = 12
 							elide = right
+							fontsize_min = 12
+							text = "FILTERS"
+						}
+
+						blockoverride "right_text" {
+							section_header_right_text = {
+								text = "MARKET_CURRENT_FILTERS"
+							}
+						}
+
+						blockoverride "onclick" {
+							onclick = "[GetVariableSystem.Toggle( 'market_filters' )]"
+						}
+	
+						blockoverride "onclick_showmore" {
+							visible = "[GetVariableSystem.Exists( 'market_filters' )]" # Flipped to show by Default
+						}
+
+						blockoverride "onclick_showless" {
+							visible = "[Not(GetVariableSystem.Exists( 'market_filters' ))]" # Flipped to show by Default
+						}
+					}
+
+					flowcontainer = {
+						visible = "[Not(GetVariableSystem.Exists( 'market_filters' ))]" # Flipped to show by Default
+						direction = vertical
+						minimumsize = { @panel_width_plus_14 -1 }
+						parentanchor = hcenter
+						margin_top = 5
+						margin_bottom = 10
+
+						### SEARCH
+						search_bar = {
+							size = { 520 40 }
+							parentanchor = hcenter
+							datacontext = "[MarketPanel.GetSearchBar]"
+						}
+
+						flowcontainer = {
+							minimumsize = { @panel_width 75 }
+							parentanchor = hcenter
+							spacing = 2
+							margin = { 2 0 }
+
+							textbox = {
+								size = { 132 75 }
+								margin = { 8 8 }
+								align = nobaseline
+								alpha = 0.5
+								using = elide_fontsize_min
+								text = "GOODS_CATEGORY"
+							}
+
+							goods_filters = {}
+						}
+
+						building_browser_filter_line = {
+							visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
+							parentanchor = hcenter
+
+							blockoverride "line_background" {}
+
+							blockoverride "line_size" {
+								size = { @panel_width 38 }
+							}
+
+							blockoverride "filter_line_label" {
+								text = "SHOW_ZERO_TRADE"
+							}
+
+							blockoverride "filter_line_buttons" {
+								building_browser_filter_line_button = {
+									align = hcenter|nobaseline
+									text = "TARIFFS_SHOW_ONLY_TRADED"
+
+									blockoverride "line_button_tooltip" {
+										tooltip = "TARIFFS_SHOW_ONLY_TRADED_TT"
+									}
+
+									blockoverride "line_button_onclick" {
+										onclick = "[GetVariableSystem.Clear('tariffs_show_all')]"
+									}
+
+									blockoverride "line_button_icon_texture" {
+										visible = no
+									}
+
+									blockoverride "line_button_selected" {
+										visible = "[Not(GetVariableSystem.Exists( 'tariffs_show_all' ))]"
+									}
+								}
+
+								building_browser_filter_line_button = {
+									align = hcenter|nobaseline
+									text = "TARIFFS_SHOW_ALL"
+
+									blockoverride "line_button_tooltip" {
+										tooltip = "TARIFFS_SHOW_ALL_TT"
+									}
+
+									blockoverride "line_button_onclick" {
+										onclick = "[GetVariableSystem.Set( 'tariffs_show_all', 'true' )]"
+									}
+
+									blockoverride "line_button_icon_texture" {
+										visible = no
+									}
+
+									blockoverride "line_button_selected" {
+										visible = "[GetVariableSystem.Exists( 'tariffs_show_all' )]"
+									}
+								}
+							}
+						}
+
+						building_browser_filter_line = {
+							visible = "[And(InformationPanel.IsTabSelected('default'), HasDlcFeature('mp1_prestige_goods'))]"
+							parentanchor = hcenter
+
+							blockoverride "line_background" {}
+
+							blockoverride "line_size" {
+								size = { @panel_width 38 }
+							}
+
+							blockoverride "filter_line_label" {
+								text = "concept_prestige_goods"
+							}
+
+							blockoverride "filter_line_buttons" {
+								building_browser_filter_line_button = {
+									align = hcenter|nobaseline
+									text = "SHOW"
+
+									blockoverride "line_button_tooltip" {}
+
+									blockoverride "line_button_onclick" {
+										onclick = "[GetVariableSystem.Clear('hide_prestige_goods')]"
+									}
+
+									blockoverride "line_button_icon_texture" {
+										visible = no
+									}
+
+									blockoverride "line_button_selected" {
+										visible = "[Not(GetVariableSystem.Exists( 'hide_prestige_goods' ))]"
+									}
+								}
+
+								building_browser_filter_line_button = {
+									align = hcenter|nobaseline
+									text = "HIDE"
+
+									blockoverride "line_button_tooltip" {}
+
+									blockoverride "line_button_onclick" {
+										onclick = "[GetVariableSystem.Set( 'hide_prestige_goods', 'true' )]"
+									}
+
+									blockoverride "line_button_icon_texture" {
+										visible = no
+									}
+
+									blockoverride "line_button_selected" {
+										visible = "[GetVariableSystem.Exists( 'hide_prestige_goods' )]"
+									}
+								}
+							}
+						}
+
+						flowcontainer = {
+							visible = "[And(InformationPanel.IsTabSelected('world_market_trade'), GreaterThan_int32(GetDataModelSize(MarketPanel.AccessWorldMarketHubs), '(int32)0'))]"
+							minimumsize = { @panel_width 38 }
+							parentanchor = hcenter
+							spacing = 2
+							margin = { 2 0 }
+
+							textbox = {
+								size = { 132 38 }
+								margin = { 8 8 }
+								align = nobaseline
+								alpha = 0.5
+								using = elide_fontsize_min
+								text = "concept_world_market_hub"
+							}
+
+							button = {
+								size = { 402 38 }
+								parentanchor = vcenter
+								onclick = "[MarketPanel.ToggleWorldMarketHubFilter(PdxGuiWidget.AccessSelf)]"
+								using = default_button
+								using = tooltip_ne
+								tooltip = "MARKET_WORLD_MARKET_HUB_FILTER_TOOLTIP"
+
+								textbox = {
+									size = { 100% 100% }
+									margin = { 20 0 }
+									align = hcenter|nobaseline
+									using = elide_fontsize_min
+									text = "MARKET_WORLD_MARKET_HUB_FILTER_LABEL"
+								}
+
+								action_selection_number = {
+									blockoverride "text" {
+										text = "[GetDataModelSize(MarketPanel.AccessWorldMarketHubs)|+]"
+									}
+								}
+							}
+						}
+					}
+				}
+
+				flowcontainer = {
+					visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
+					direction = vertical
+					parentanchor = hcenter
+					margin_bottom = 10
+
+					section_header_button = {					
+						blockoverride "left_text" {
+							using = elide_fontsize_min
+							text = "CHARTS"
 						}
 
 						blockoverride "onclick" {
@@ -264,15 +579,13 @@ types market_panel
 
 					flowcontainer = {
 						visible = "[Not(GetVariableSystem.Exists( 'market_world_market_charts' ))]" # Flipped to show by Default
-						
-						spacing = 10
-						margin_bottom = 10
-						margin_top = 10
 						parentanchor = hcenter
+						spacing = 5
+						margin_top = 5
 
 						compact_chart = {
 							blockoverride "datamodel" {
-								datamodel = "[Market.AccessMarketGoodsSortedOnExports( MarketPanel.GetFilters )]"
+								datamodel = "[MarketPanel.AccessGoodsSortedOnExports]"
 							}
 
 							blockoverride "show_more_button_visibility" {
@@ -287,12 +600,28 @@ types market_panel
 								tooltip = "WORLD_MARKET_GOODS_EXPORT_TOOLTIP"
 
 								tooltipwidget = {
-									RegularTooltip_MarketWorldMarketExportsTo = {}
+									RegularTooltip_MarketWorldMarketExportsTo = {
+										blockoverride "partners" {
+											datamodel = "[MarketPanel.AccessImportersFromMarket(Goods.Self)]"
+										}
+
+										blockoverride "partner_amount" {
+											text = "[MarketPanel.GetExportedAmountToPartner(Market.Self, Goods.Self)|v1]"
+										}
+
+										blockoverride "partner_trade_values" {
+											text = "MARKET_PANEL_PARTNER_TRADE_VALUES"
+										}
+
+										blockoverride "additional_trade_visibility" {
+											visible = "[And(Not(MarketPanel.HasSelectedWorldMarketHub), GreaterThan_CFixedPoint(Goods.GetWorldMarketAdditionalExportsFromMarket, '(CFixedPoint)0'))]"
+										}
+									}
 								}
 							}
 
 							blockoverride "pieslice" {
-								value = "[Market.GetExportedAmount(Goods.Self)]"
+								value = "[MarketPanel.GetExportedAmount(Goods.Self)]"
 							}
 
 							blockoverride "color" {
@@ -301,9 +630,9 @@ types market_panel
 							
 							blockoverride "pie_item_goto_button" {
 								button = {
-									using = clean_button
 									size = { 100% 100% }
 									onclick = "[InformationPanelBar.OpenGoodsPanel(Market.Self, Goods.Self)]"
+									using = clean_button
 								}
 							}
 
@@ -312,7 +641,7 @@ types market_panel
 							}
 
 							blockoverride "rightside1_info" {
-								text = "[Goods.GetTextIcon] [Market.GetExportedAmount(Goods.Self)|vD]"
+								text = "[Goods.GetTextIcon] [MarketPanel.GetExportedAmount(Goods.Self)|vD]"
 							}
 
 							blockoverride "rightside2_info" {
@@ -322,7 +651,7 @@ types market_panel
 
 						compact_chart = {
 							blockoverride "datamodel" {
-								datamodel = "[Market.AccessMarketGoodsSortedOnImports( MarketPanel.GetFilters )]"
+								datamodel = "[MarketPanel.AccessGoodsSortedOnImports]"
 							}
 
 							blockoverride "show_more_button_visibility" {
@@ -337,12 +666,28 @@ types market_panel
 								tooltip = "WORLD_MARKET_GOODS_IMPORT_TOOLTIP"
 
 								tooltipwidget = {
-									RegularTooltip_MarketWorldMarketImportsFrom = {}
+									RegularTooltip_MarketWorldMarketImportsFrom = {
+										blockoverride "partners" {
+											datamodel = "[MarketPanel.AccessExportersToMarket(Goods.Self)]"
+										}
+
+										blockoverride "partner_amount" {
+											text = "[MarketPanel.GetImportedAmountFromPartner(Market.Self, Goods.Self)|v1]"
+										}
+
+										blockoverride "partner_trade_values" {
+											text = "MARKET_PANEL_PARTNER_TRADE_VALUES"
+										}
+
+										blockoverride "additional_trade_visibility" {
+											visible = "[And(Not(MarketPanel.HasSelectedWorldMarketHub), GreaterThan_CFixedPoint(Goods.GetWorldMarketAdditionalImportsToMarket, '(CFixedPoint)0'))]"
+										}
+									}
 								}
 							}
 
 							blockoverride "pieslice" {
-								value = "[Market.GetImportedAmount(Goods.Self)]"
+								value = "[MarketPanel.GetImportedAmount(Goods.Self)]"
 							}
 
 							blockoverride "color" {
@@ -351,9 +696,9 @@ types market_panel
 							
 							blockoverride "pie_item_goto_button" {
 								button = {
-									using = clean_button
 									size = { 100% 100% }
 									onclick = "[InformationPanelBar.OpenGoodsPanel(Market.Self, Goods.Self)]"
+									using = clean_button
 								}
 							}
 
@@ -362,7 +707,7 @@ types market_panel
 							}
 
 							blockoverride "rightside1_info" {
-								text = "[Goods.GetTextIcon] [Market.GetImportedAmount(Goods.Self)|vD]"
+								text = "[Goods.GetTextIcon] [MarketPanel.GetImportedAmount(Goods.Self)|vD]"
 							}
 
 							blockoverride "rightside2_info" {
@@ -728,195 +1073,6 @@ types market_panel
 						}
 					}
 				}
-
-				section_header_button = {					
-					blockoverride "left_text" {
-						text = "FILTERS"
-						fontsize_min = 12
-						elide = right
-					}
-
-					blockoverride "right_text" {
-						section_header_right_text = {
-							text = "CURRENT_GOODS_FILTERS"
-						}
-					}
-
-					blockoverride "onclick" {
-						onclick = "[GetVariableSystem.Toggle( 'market_filters' )]"
-					}
-					
-					blockoverride "onclick_showmore" {
-						visible = "[GetVariableSystem.Exists( 'market_filters' )]" # Flipped to show by Default
-					}
-
-					blockoverride "onclick_showless" {
-						visible = "[Not(GetVariableSystem.Exists( 'market_filters' ))]" # Flipped to show by Default
-					}
-				}
-
-				### SEARCH
-				search_bar = {
-					parentanchor = hcenter
-					datacontext = "[MarketPanel.GetSearchBar]"
-				}
-
-				flowcontainer = {
-					visible = "[Not(GetVariableSystem.Exists( 'market_filters' ))]" # Flipped to show by Default
-					minimumsize = { @panel_width_plus_14 -1 }
-					using = default_list_position
-					margin_bottom = 10
-					margin_top = 5
-					spacing = 10
-
-					background = {
-						using = dark_area
-					}
-
-					### LIST
-					flowcontainer = {
-						direction = vertical
-
-						textbox = {
-							text = "GOODS_CATEGORY"
-							multiline = yes
-							size = { 95 75 }
-							align = right|nobaseline
-							margin_right = 10
-							margin_left = 10
-							using = elide_fontsize_min
-						}
-
-						textbox = {
-							text = "SHOW_ZERO_TRADE"
-							visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
-							size = { 95 60 }
-							align = right|nobaseline
-							margin_right = 10
-							margin_left = 10
-							using = elide_fontsize_min
-							multiline = yes
-						}
-
-						textbox = {
-							text = "concept_prestige_goods"
-							visible = "[And(InformationPanel.IsTabSelected('default'), HasDlcFeature('mp1_prestige_goods'))]"
-							size = { 95 60 }
-							align = right|nobaseline
-							margin_right = 10
-							margin_left = 10
-							using = elide_fontsize_min
-							multiline = yes
-						}
-					}
-
-					vertical_divider = {}
-
-					flowcontainer = {
-						margin_left = 10
-						direction = vertical
-
-						goods_filters = {}
-
-						flowcontainer = {
-							visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
-							spacing = 5
-							margin_top = 13
-
-							filter_button = {
-								visible = "[GetVariableSystem.Exists( 'tariffs_show_all' )]"
-								tooltip = "TARIFFS_SHOW_ONLY_TRADED_TT"
-
-								blockoverride "text" {
-									text = "TARIFFS_SHOW_ONLY_TRADED"
-								}
-
-								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle( 'tariffs_show_all' )]"
-								}
-							}
-
-							filter_background_selected = {
-								visible = "[Not(GetVariableSystem.Exists( 'tariffs_show_all' ))]"
-								tooltip = "TARIFFS_SHOW_ONLY_TRADED_TT"
-
-								blockoverride "text" {
-									text = "TARIFFS_SHOW_ONLY_TRADED"
-								}
-							}
-
-							filter_button = {
-								visible = "[Not(GetVariableSystem.Exists( 'tariffs_show_all' ))]"
-								tooltip = "TARIFFS_SHOW_ALL_TT"
-							
-								blockoverride "text" {
-									text = "TARIFFS_SHOW_ALL"
-								}
-
-								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle( 'tariffs_show_all' )]"
-								}
-							}
-
-							filter_background_selected = {
-								visible = "[GetVariableSystem.Exists( 'tariffs_show_all' )]" 
-								tooltip = "TARIFFS_SHOW_ALL_TT"
-
-								blockoverride "text" {
-									text = "TARIFFS_SHOW_ALL"
-								}
-							}
-						}
-
-						flowcontainer = {
-							visible = "[And(InformationPanel.IsTabSelected('default'), HasDlcFeature('mp1_prestige_goods'))]"
-							spacing = 5
-							margin_top = 13
-
-
-							filter_button = {
-								visible = "[GetVariableSystem.Exists( 'hide_prestige_goods' )]"
-
-								blockoverride "text" {
-									text = "SHOW"
-								}
-
-								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle( 'hide_prestige_goods' )]"
-								}
-							}
-
-							filter_background_selected = {
-								visible = "[Not(GetVariableSystem.Exists( 'hide_prestige_goods' ))]"
-
-								blockoverride "text" {
-									text = "SHOW"
-								}
-							}
-
-							filter_button = {
-								visible = "[Not(GetVariableSystem.Exists( 'hide_prestige_goods' ))]"
-							
-								blockoverride "text" {
-									text = "HIDE"
-								}
-
-								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle( 'hide_prestige_goods' )]"
-								}
-							}
-
-							filter_background_selected = {
-								visible = "[GetVariableSystem.Exists( 'hide_prestige_goods' )]" 
-
-								blockoverride "text" {
-									text = "HIDE"
-								}
-							}
-
-						}
-					}
-				}
 			}
 
 			flowcontainer = {
@@ -1157,7 +1313,7 @@ types market_panel
 						direction = vertical
 						parentanchor = hcenter
 						spacing = 8
-						margin_top = 8
+						margin_top = 2
 						margin_bottom = 4
 						
 						item = {
@@ -1187,7 +1343,7 @@ types market_panel
 						item = {
 							market_world_market_goods_list_item = {
 								blockoverride "market_world_market_goods_list_item_visibility" {
-									visible = "[And(IsZero_CFixedPoint(Market.GetImportedAmount(Goods.Self)), IsZero_CFixedPoint(Market.GetExportedAmount(Goods.Self)))]"
+									visible = "[And(IsZero_CFixedPoint(MarketPanel.GetImportedAmount(Goods.Self)), IsZero_CFixedPoint(MarketPanel.GetExportedAmount(Goods.Self)))]"
 								}
 							}
 						}
@@ -2643,7 +2799,7 @@ types market_panel
 		
 
 		block "market_world_market_goods_list_item_visibility" {
-			visible = "[Or(NotZero_CFixedPoint(Market.GetImportedAmount(Goods.Self)), NotZero_CFixedPoint(Market.GetExportedAmount(Goods.Self)))]"
+			visible = "[Or(NotZero_CFixedPoint(MarketPanel.GetImportedAmount(Goods.Self)), NotZero_CFixedPoint(MarketPanel.GetExportedAmount(Goods.Self)))]"
 		}
 
 		tooltipwidget = {
@@ -2651,7 +2807,8 @@ types market_panel
 		}
 
 		background = {
-			using = entry_bg_simple
+			alpha = 0.6
+			using = entry_bg_fancy_dark
 		}
 
 		flowcontainer = {
@@ -2670,9 +2827,9 @@ types market_panel
 					resizeparent = yes
 
 					icon = {
-						texture = "gfx/interface/market_view/trade_good_list_bg.dds"
 						size = { @panel_width 30 }
 						color = "[Goods.GetCategoryColor]"
+						texture = "gfx/interface/market_view/trade_good_list_bg.dds"
 					}
 
 					flowcontainer = {
@@ -2688,24 +2845,24 @@ types market_panel
 							size = { 30 30 }
 
 							icon = {
-								texture = "gfx/interface/market_view/trade_good_icon_bg.dds"
-								color = "[Goods.GetCategoryColor]"
 								size = { 36 36 }
 								parentanchor = center
 								position = { 0 -1 }
+								color = "[Goods.GetCategoryColor]"
+								texture = "gfx/interface/market_view/trade_good_icon_bg.dds"
 								
 								icon = {
-									texture = "[Goods.GetTexture]"
 									size = { 25 25 }
 									parentanchor = center
+									texture = "[Goods.GetTexture]"
 								}
 
 								icon = {
 									visible = "[Goods.HasGoodsShortage]"
-									tooltip = "GOODS_SHORTAGE_TOOLTIP"	
 									size = { 20 20 }
-									texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
 									parentanchor = bottom|right
+									tooltip = "GOODS_SHORTAGE_TOOLTIP"
+									texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
 								}
 							}
 						}
@@ -2714,45 +2871,44 @@ types market_panel
 							margin_top = 2
 
 							textbox = {
-								text = "[Goods.GetNameNoFormatting]"
-								align = nobaseline
-								autoresize = yes
-								margin_left = 5
 								minimumsize = { 130 -1 }
 								maximumsize = { 130 -1 }
-								elide = right
-								margin_right = 5
+								margin = { 5 0 }
+								align = nobaseline
+								autoresize = yes
+								using = elide_fontsize_min
+								text = "[Goods.GetNameNoFormatting]"
 							}
 
 							textbox = {
-								raw_text = "[Goods.GetMarket.GetOwner.GetFlagTextIcon] @money![Goods.GetMarketPrice|v1] [Goods.GetCompareIconAgainstBasePriceNoFormatting(Goods.GetMarketPrice)]"
-								align = nobaseline
-								autoresize = yes
 								minimumsize = { 130 -1 }
 								maximumsize = { 130 -1 }
+								align = nobaseline
+								autoresize = yes
+								raw_text = "[Goods.GetMarket.GetOwner.GetFlagTextIcon] @money![Goods.GetMarketPrice|v1] [Goods.GetCompareIconAgainstBasePriceNoFormatting(Goods.GetMarketPrice)]"
 							}
 
 							flowcontainer = {
 								icon = { 
-									texture = "gfx/interface/icons/generic_icons/world_market.dds"
 									size = { 23 23 }
+									texture = "gfx/interface/icons/generic_icons/world_market.dds"
 								}
 
 								textbox = {
-									raw_text = "@money![Goods.GetWorldMarketBasePrice|1v] [Goods.GetCompareIconAgainstBasePriceNoFormatting(Goods.GetWorldMarketBasePrice)]"
-									align = nobaseline
-									autoresize = yes
 									minimumsize = { 107 -1 }
 									maximumsize = { 107 -1 }
+									align = nobaseline
+									autoresize = yes
+									raw_text = "@money![Goods.GetWorldMarketBasePrice|1v] [Goods.GetCompareIconAgainstBasePriceNoFormatting(Goods.GetWorldMarketBasePrice)]"
 								}
 							}
 
 							textbox = {
-								text = "TOTAL_TARIFFS_SUBVENTIONS_MONEY_MARKET_BALANCE_FOR_GOODS"
-								align = nobaseline|right
-								autoresize = yes
 								minimumsize = { 110 -1 }
 								maximumsize = { 110 -1 }
+								align = nobaseline|right
+								autoresize = yes
+								text = "TOTAL_TARIFFS_SUBVENTIONS_MONEY_MARKET_BALANCE_FOR_GOODS"
 							}
 						}
 					}
@@ -2765,7 +2921,7 @@ types market_panel
 				spacing = 5
 
 				flowcontainer = {
-					visible = "[Or( NotZero_CFixedPoint(Market.GetImportedAmount(Goods.Self)), GetVariableSystem.Exists( 'tariffs_show_all' ))]"
+					visible = "[Or( NotZero_CFixedPoint(MarketPanel.GetImportedAmount(Goods.Self)), GetVariableSystem.Exists( 'tariffs_show_all' ))]"
 					spacing = 5
 					margin_left = 10
 
@@ -2776,25 +2932,38 @@ types market_panel
 					}
 
 					textbox = {
-						text = "[Market.GetImportedAmount(Goods.Self)|vD]"
-						alpha = "[TransparentIfZero(Market.GetImportedAmount(Goods.Self))]"
-						autoresize = yes
-						align = nobaseline
 						minimumsize = { 60 -1 }
 						maximumsize = { 60 -1 }
-						fontsize_min = 12
 						parentanchor = vcenter
+						fontsize_min = 12
+						autoresize = yes
+						align = nobaseline
+						alpha = "[TransparentIfZero(MarketPanel.GetImportedAmount(Goods.Self))]"
+						tooltip = "[MarketPanel.GetWorldMarketHubImportsDesc(Goods.Self)]"
+						text = "[MarketPanel.GetImportedAmount(Goods.Self)|vD]"
 					}
 
 					overlappingitembox = {
-						datamodel = "[Goods.GetExportersToMarket]"
 						size = { 160 18 }
 						parentanchor = vcenter
 						spacing = 5
+						datamodel = "[MarketPanel.AccessExportersToMarket(Goods.Self)]"
 
 						item = {
 							small_market_flag = {
 								parentanchor = vcenter
+
+								blockoverride "small_market_flag_tooltip" {
+									tooltipwidget = {
+										FancyTooltip_Market = {
+											blockoverride "tooltip_content_before" {
+												custom_tooltip_textbox = {
+													text = "MARKET_PANEL_PARTNER_TRADE_VALUES"
+												}
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -2807,7 +2976,7 @@ types market_panel
 				}
 
 				flowcontainer = {
-					visible = "[Or( NotZero_CFixedPoint(Market.GetExportedAmount(Goods.Self)), GetVariableSystem.Exists( 'tariffs_show_all' ))]"
+					visible = "[Or( NotZero_CFixedPoint(MarketPanel.GetExportedAmount(Goods.Self)), GetVariableSystem.Exists( 'tariffs_show_all' ))]"
 					spacing = 5
 					margin_left = 10
 
@@ -2818,25 +2987,38 @@ types market_panel
 					}
 					
 					textbox = {
-						text = "[Market.GetExportedAmount(Goods.Self)|vD]"
-						alpha = "[TransparentIfZero(Market.GetExportedAmount(Goods.Self))]"
-						autoresize = yes
-						align = nobaseline
 						minimumsize = { 60 -1 }
 						maximumsize = { 60 -1 }
-						fontsize_min = 12
 						parentanchor = vcenter
+						fontsize_min = 12
+						autoresize = yes
+						align = nobaseline
+						alpha = "[TransparentIfZero(MarketPanel.GetExportedAmount(Goods.Self))]"
+						tooltip = "[MarketPanel.GetWorldMarketHubExportsDesc(Goods.Self)]"
+						text = "[MarketPanel.GetExportedAmount(Goods.Self)|vD]"
 					}
 
 					overlappingitembox = {
-						datamodel = "[Goods.GetImportersFromMarket]"
 						size = { 160 18 }
 						parentanchor = vcenter
 						spacing = 5
+						datamodel = "[MarketPanel.AccessImportersFromMarket(Goods.Self)]"
 
 						item = {
 							small_market_flag = {
 								parentanchor = vcenter
+
+								blockoverride "small_market_flag_tooltip" {
+									tooltipwidget = {
+										FancyTooltip_Market = {
+											blockoverride "tooltip_content_before" {
+												custom_tooltip_textbox = {
+													text = "MARKET_PANEL_PARTNER_TRADE_VALUES"
+												}
+											}
+										}
+									}
+								}
 							}
 						}
 					}

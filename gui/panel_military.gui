@@ -1,4 +1,4 @@
-﻿# TE override of vanilla panel_military.gui (1.15.0): vanilla's file plus the Nuclear and Covert tabs
+﻿# TE override of vanilla panel_military.gui (1.15.1): vanilla's file plus the Nuclear and Covert tabs
 # (### MOD blocks) and the mobilization option groups one a row (datamodel_wrap = 1, commented there).
 # Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
 # COPY-PASTED FOR NOW
@@ -1390,7 +1390,7 @@ types mobilization_options {
 				}
 
 				textbox = {
-					maximumsize = { 200 -1 }
+					maximumsize = { 250 -1 }
 					parentanchor = vcenter
 					multiline = yes
 					autoresize = yes
@@ -1475,127 +1475,124 @@ types mobilization_options {
 			}
 		}
 
-		widget = { size = { 5 5 }}
-		divider_clean = {
-			parentanchor = hcenter
-			size = { 520 2 }
-		}
-		widget = { size = { 5 5 }}
+		widget = { size = { 8 8 }}
 
 		flowcontainer = {
+			direction = vertical
 			parentanchor = hcenter
-			spacing = 10
-
-			### UNIT NUMBERS AND MANPOWER
-			flowcontainer = {
-				parentanchor = vcenter
-				spacing = 5
-				tooltip = "MILITARY_FORMATION_TOTAL_NUMBER_OF_UNITS_TOOLTIP"
-				minimumsize = { 120 -1 }
-				margin_left = 5
-
-				### ARMY ICON
-				icon = {
-					visible = "[MilitaryFormation.IsArmy]"
-					size = { 23 23 }
-					parentanchor = vcenter
-					texture = "gfx/interface/icons/generic_icons/battalions.dds"
-				}
-
-				### FLEET ICON
-				icon = {
-					visible = "[MilitaryFormation.IsFleet]"
-					size = { 23 23 }
-					parentanchor = vcenter
-					texture = "gfx/interface/icons/generic_icons/flotillas.dds"
-				}
-
-				### ARMY - NUMBER OF UNITS
-				textbox = {
-					parentanchor = vcenter
-					autoresize = yes
-					align = nobaseline
-					text = "MILITARY_FORMATION_TOTAL_NUMBER_OF_UNITS"
-					using = fontsize_large
-					maximumsize = { 90 -1 }
-					fontsize_min = 12
-				}
-
-				widget = { size = { 1 1 }}
-
-				manpower_bar = {}
-			}
+			spacing = 2
 
 			flowcontainer = {
-				minimumsize = { 80 -1 }
-				spacing = 10
-				tooltip = "MILITARY_FORMATION_MORALE_TOOLTIP"
-				parentanchor = vcenter
+				parentanchor = hcenter
+				spacing = 40
 
-				### MORALE VALUE
-				textbox = {
+				### UNIT NUMBERS AND MANPOWER
+				flowcontainer = {
 					parentanchor = vcenter
-					autoresize = yes
-					align = right|nobaseline
+					spacing = 5
+					tooltip = "MILITARY_FORMATION_TOTAL_NUMBER_OF_UNITS_TOOLTIP"
+					minimumsize = { 120 -1 }
+					margin_left = 5
 
-					text = "MILITARY_FORMATION_MORALE"
-					minimumsize = { 70 -1 }
+					### ARMY ICON
+					icon = {
+						visible = "[MilitaryFormation.IsArmy]"
+						size = { 23 23 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/generic_icons/battalions.dds"
+					}
+
+					### FLEET ICON
+					icon = {
+						visible = "[MilitaryFormation.IsFleet]"
+						size = { 23 23 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/generic_icons/flotillas.dds"
+					}
+
+					### ARMY - NUMBER OF UNITS
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						align = nobaseline
+						text = "MILITARY_FORMATION_TOTAL_NUMBER_OF_UNITS"
+						maximumsize = { 180 -1 }
+						fontsize_min = 12
+					}
+
+					widget = { size = { 1 1 }}
+
+					manpower_bar = {}
 				}
 
-				### MORALE BAR
-				morale_bar = {
-					size = { 6 24 }
+				flowcontainer = {
+					minimumsize = { 80 -1 }
+					spacing = 10
+					tooltip = "MILITARY_FORMATION_MORALE_TOOLTIP"
 					parentanchor = vcenter
 
-					blockoverride "morale_value" {
-						value = "[FixedPointToFloat( MilitaryFormation.GetMorale )]"
+					### MORALE VALUE
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						align = right|nobaseline
+
+						text = "MILITARY_FORMATION_MORALE"
+						minimumsize = { 70 -1 }
 					}
-					blockoverride "morale_color" {
-						color = "[GetMoraleColorVec( MilitaryFormation.GetMorale )]"
+
+					### MORALE BAR
+					morale_bar = {
+						size = { 6 24 }
+						parentanchor = vcenter
+
+						blockoverride "morale_value" {
+							value = "[FixedPointToFloat( MilitaryFormation.GetMorale )]"
+						}
+						blockoverride "morale_color" {
+							color = "[GetMoraleColorVec( MilitaryFormation.GetMorale )]"
+						}
+					}
+				}
+
+				flowcontainer = {
+					tooltip = "MILITARY_FORMATION_ORGANIZATION_TOOLTIP"
+					spacing = 10
+					parentanchor = vcenter
+
+					### ORGANIZATION
+					textbox = {
+						raw_text = "@organization! [MilitaryFormation.GetOrganizationPercentage|%v0]"
+						parentanchor = vcenter
+						align = right|nobaseline
+						minimumsize = { 70 -1 }
+					}
+
+					### ORGANIZATION BAR
+					organization_bar = {
+						size = { 6 24 }
+						parentanchor = vcenter
+
+						blockoverride "organization_value" {
+							value = "[FixedPointToFloat( MilitaryFormation.GetOrganizationPercentage )]"
+						}
+						blockoverride "organization_color" {
+							color = "[GetOrganizationColorVec( MilitaryFormation.GetOrganizationPercentage )]"
+						}
 					}
 				}
 			}
-
-			flowcontainer = {
-				tooltip = "MILITARY_FORMATION_ORGANIZATION_TOOLTIP"
-				spacing = 10
-				parentanchor = vcenter
-
-				### ORGANIZATION
-				textbox = {
-					raw_text = "@organization! [MilitaryFormation.GetOrganizationPercentage|%v0]"
-					parentanchor = vcenter
-					align = right|nobaseline
-					minimumsize = { 70 -1 }
-				}
-
-				### ORGANIZATION BAR
-				organization_bar = {
-					size = { 6 24 }
-					parentanchor = vcenter
-
-					blockoverride "organization_value" {
-						value = "[FixedPointToFloat( MilitaryFormation.GetOrganizationPercentage )]"
-					}
-					blockoverride "organization_color" {
-						color = "[GetOrganizationColorVec( MilitaryFormation.GetOrganizationPercentage )]"
-					}
-				}
-			}
-
-			widget = { size = { 1 1 }}
-			vertical_divider = {}
 
 			military_formation_mobilize_button = {
-				parentanchor = vcenter
+				parentanchor = center
 				visible = "[MilitaryFormation.IsArmy]"
 
 				blockoverride "size" {
-					size = { 180 50 }
+					size = { 520 50 }
 				}
 
 				blockoverride "button_size" {
-					size = { 160 75% }
+					size = { 500 75% }
 				}
 
 				blockoverride "fontsize" {}
@@ -1603,7 +1600,13 @@ types mobilization_options {
 				blockoverride "mobilization_icon_size" {
 					size = { 50 50 }
 				}
+
+				blockoverride "text_margin" {
+					margin_left = 30
+					margin_right = 8
+				}
 			}
 		}
+
 	}
 }

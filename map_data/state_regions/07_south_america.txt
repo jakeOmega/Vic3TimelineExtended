@@ -344,8 +344,8 @@ STATE_ANTOFAGASTA = {
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 770
-        discovered_amount = 30
+        undiscovered_amount = 764
+        discovered_amount = 36
     }
 
     resource = {
@@ -896,7 +896,7 @@ STATE_SANTIAGO = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 15
     }
     naval_exit_id = 3152
     min_cold_effect = 0.00
@@ -923,6 +923,11 @@ STATE_LOS_RIOS = {
         building_logging_camp = 20
         building_whaling_station = 3
         building_fishing_wharf = 10
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3152
 }

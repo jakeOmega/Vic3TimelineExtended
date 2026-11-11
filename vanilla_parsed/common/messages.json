@@ -8494,6 +8494,23 @@
    ]
   }
  ],
+ "russia_non_russian_nationality_independence": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
  "paris_commune_automation_pulse_1_a": [
   "=",
   {

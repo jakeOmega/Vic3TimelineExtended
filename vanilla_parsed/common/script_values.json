@@ -47034,6 +47034,40 @@
         "has_journal_entry": [
          "=",
          "je_the_first_carlist_war"
+        ],
+        "exists": [
+         [
+          "=",
+          "c:SPA"
+         ],
+         [
+          "=",
+          "c:SPC"
+         ]
+        ],
+        "scope:war": [
+         "=",
+         {
+          "is_war_participant": [
+           [
+            "=",
+            "c:SPA"
+           ],
+           [
+            "=",
+            "c:SPC"
+           ]
+          ]
+         }
+        ],
+        "c:SPA": [
+         "=",
+         {
+          "is_diplomatic_play_enemy_of": [
+           "=",
+           "c:SPC"
+          ]
+         }
         ]
        }
       ],
