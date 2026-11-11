@@ -25,6 +25,15 @@ than a failed step:
 `idle_ms` is the time since the latest keyboard or mouse input that the helper
 did not send itself: the system reports the latest input of any kind, so the
 helper remembers when it sent its own and discounts input at that moment.
+(Over a remote-desktop session it reads 0 to 31 ms continuously, which is why
+the console decides whether someone is at the machine from `presence` instead.)
+
+`click` moves the cursor to a point of the game's client area and presses the
+left button there, under the same rule as `keys` (the game's window in front,
+looked at again after the cursor has settled and before the press). `presence`
+reports where the cursor and the foreground window are, and where the helper
+last put the cursor, so that a caller comparing two readings can tell its
+own move from a person's.
 """
 from __future__ import annotations
 
@@ -53,8 +62,13 @@ TEXT_CHUNK_CHARS = 1          # typed text goes out this many characters at a ti
                               # one, so a window that takes the front mid-text gets at most the character on its way
 KEY_HOLD_S = 0.04             # between key down and key up; the game ignores a shorter press
 CHAR_GAP_S = 0.008
+CLICK_SETTLE_MS = 120         # from the cursor moving to the button going down, as in the probe: the game's hover catches up
+CLICK_HOLD_MS = 60            # between the button going down and up
 
+INPUT_MOUSE = 0
 INPUT_KEYBOARD = 1
+MOUSEEVENTF_LEFTDOWN = 0x0002     # not the keyboard flags below, whose values these share
+MOUSEEVENTF_LEFTUP = 0x0004
 KEYEVENTF_KEYUP = 0x0002
 KEYEVENTF_UNICODE = 0x0004
 KEYEVENTF_SCANCODE = 0x0008
@@ -213,6 +227,16 @@ def tap_key(send, sleep, code: int, flags: int, hold_s: float) -> None:
         send(code, flags | KEYEVENTF_KEYUP)
 
 
+def tap_button(send, sleep, hold_ms: int) -> None:
+    """Press then release the left mouse button through `send(flags)`. The release is always attempted once the
+    press has begun, even if the press or the wait after it fails: a button left held drags whatever is under it."""
+    try:
+        send(MOUSEEVENTF_LEFTDOWN)
+        sleep(hold_ms)
+    finally:
+        send(MOUSEEVENTF_LEFTUP)
+
+
 # --- The request handler.
 
 class State:
@@ -222,6 +246,7 @@ class State:
         self.ours: dict[int, str] = {}              # pid -> creation time, for the processes it may end
         self.last_sent_tick: int | None = None      # tick at which it last sent a key (None: never)
         self.last_foreign_tick: int | None = None   # tick of the latest input it did not send
+        self.helper_cursor: tuple[int, int] | None = None     # where its last click left the cursor, in screen pixels
         self.sock = None                            # the TCP relay's connection, if open
 
 
@@ -373,12 +398,18 @@ def _steps(req: dict) -> list[tuple[str, object]]:
     return checked
 
 
-def _clear_to_send(backend, state: State, pid: int, done: int, chars_sent: int = 0) -> None:
-    """The game's window must be in front; then look at the system's latest input, as close to the send as
+def _front_window(backend, state: State, pid: int, **fields) -> dict:
+    """The game's window, which must be in front; then look at the system's latest input, as close to the send as
     possible, so a person's key in the gap is seen and not written over by ours."""
-    if not _in_front(backend, pid):
-        raise _Refusal("not_foreground", "the game's window is not in front", steps_done=done, chars_sent=chars_sent)
+    win = _window(backend, pid)
+    if win is None or backend.foreground_hwnd() != win["hwnd"]:
+        raise _Refusal("not_foreground", "the game's window is not in front", **fields)
     _observe(backend, state)
+    return win
+
+
+def _clear_to_send(backend, state: State, pid: int, done: int, chars_sent: int = 0) -> None:
+    _front_window(backend, state, pid, steps_done=done, chars_sent=chars_sent)
 
 
 def _send_key(backend, state: State, send, argument) -> None:
@@ -410,6 +441,30 @@ def _op_keys(req, backend, state):
                 sent += len(chunk)
         done += 1
     return {"steps_done": done}
+
+
+def _op_click(req, backend, state):
+    pid, x, y = _pid(req), _int(req, "x"), _int(req, "y")
+    left, top, width, height = _front_window(backend, state, pid)["client"]
+    if not (0 <= x < width and 0 <= y < height):
+        raise _Refusal("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height))
+    try:
+        backend.set_cursor(left + x, top + y)
+        state.helper_cursor = backend.cursor_pos()      # where it is, not where it was sent: Windows may clamp it
+        state.last_sent_tick = backend.tick()           # whether or not a cursor move counts as input, it was ours
+        backend.sleep(CLICK_SETTLE_MS)
+        _front_window(backend, state, pid)              # a window may have taken the front while the cursor settled
+        tap_button(backend.send_mouse, backend.sleep, CLICK_HOLD_MS)
+    finally:
+        state.last_sent_tick = backend.tick()           # after the button-up, which lands later than the call starts
+    return {}
+
+
+def _op_presence(req, backend, state):
+    cursor = backend.cursor_pos()
+    mine = state.helper_cursor
+    return {"cursor": list(cursor), "foreground": backend.foreground_hwnd(),
+            "helper_cursor": None if mine is None else list(mine)}
 
 
 def _op_screenshot(req, backend, state):
@@ -502,9 +557,9 @@ def _op_tcp_close(req, backend, state):
 
 _OPS = {
     "ping": _op_ping, "launch": _op_launch, "adopt": _op_adopt, "window": _op_window,
-    "idle_ms": _op_idle_ms, "focus": _op_focus, "keys": _op_keys, "screenshot": _op_screenshot,
-    "kill": _op_kill, "tcp_open": _op_tcp_open, "tcp_send": _op_tcp_send, "tcp_recv": _op_tcp_recv,
-    "tcp_close": _op_tcp_close,
+    "idle_ms": _op_idle_ms, "focus": _op_focus, "keys": _op_keys, "click": _op_click, "presence": _op_presence,
+    "screenshot": _op_screenshot, "kill": _op_kill, "tcp_open": _op_tcp_open, "tcp_send": _op_tcp_send,
+    "tcp_recv": _op_tcp_recv, "tcp_close": _op_tcp_close,
 }
 
 
@@ -616,6 +671,8 @@ class WindowsBackend:
         sig(u.IsIconic, i32, ptr)
         sig(u.SendInput, uint, uint, c.POINTER(INPUT), i32)
         sig(u.keybd_event, None, c.c_ubyte, c.c_ubyte, u32, c.c_size_t)
+        sig(u.SetCursorPos, i32, i32, i32)
+        sig(u.GetCursorPos, i32, c.POINTER(POINT))
         sig(u.GetLastInputInfo, i32, c.POINTER(LASTINPUTINFO))
         sig(u.GetDC, ptr, ptr)
         sig(u.ReleaseDC, i32, ptr, ptr)
@@ -762,6 +819,27 @@ class WindowsBackend:
         for unit in utf16_units(text):
             tap_key(self._send, time.sleep, unit, KEYEVENTF_UNICODE, 0)       # the probe sent down and up back to back
             time.sleep(CHAR_GAP_S)
+
+    def set_cursor(self, x: int, y: int) -> None:
+        """Move the cursor to the screen point (x, y), in physical pixels (the process is DPI-aware)."""
+        if not self._user32.SetCursorPos(x, y):
+            raise OSError("SetCursorPos(%d, %d) failed (error %d)" % (x, y, ctypes.get_last_error()))
+
+    def cursor_pos(self) -> tuple[int, int]:
+        point = POINT()
+        if not self._user32.GetCursorPos(ctypes.byref(point)):
+            raise OSError("GetCursorPos failed (error %d)" % ctypes.get_last_error())
+        return (point.x, point.y)
+
+    def send_mouse(self, flags: int) -> None:
+        """One mouse event (a MOUSEEVENTF_* button flag) at the cursor, where it is."""
+        item = INPUT()
+        item.type = INPUT_MOUSE
+        item.mi.dwFlags = flags
+        sent = self._user32.SendInput(1, ctypes.byref(item), ctypes.sizeof(INPUT))
+        if sent != 1:
+            raise OSError("SendInput sent %d of 1 mouse events (error %d): is another window's input blocking it?"
+                          % (sent, ctypes.get_last_error()))
 
     def tick(self) -> int:
         return int(self._kernel32.GetTickCount64())
