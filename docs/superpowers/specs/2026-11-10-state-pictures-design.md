@@ -51,6 +51,11 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
     world by the time we get to the new eras". The flooded coast stays unwired until the warming system has
     local effects ("we can wire it up later"). Natural terrain on Modern Urban Planning, smog from 150 of
     255 and ruins from one half devastation stand until a test game says otherwise.
+11. **The plantation and cleared-land pictures stay though they may never show** ("let's leave them for
+    now"). Nothing in vanilla 1.15's files makes a province either terrain: plantation buildings set no
+    terrain manipulator and none creates cleared land (`docs/guides/scripting_best_practices.md`, § "State
+    pictures"). The six pictures are wired and harmless; giving plantations the manipulator would show
+    them and would also change the map, which is a separate decision.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
