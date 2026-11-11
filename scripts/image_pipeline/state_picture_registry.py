@@ -176,7 +176,7 @@ PICTURES = {
         "rung": 1,
         "region": "european",
         "size": None,
-        "effect": "vfx_entity_ui_state_urban_european",
+        "effect": "vfx_entity_ui_state_docks",  # NEUTRAL_OVERLAY: birds and mist
         "seed": 3,
         "crop": (0, 60, 1410, 751),
         "prompt": (
@@ -193,7 +193,7 @@ PICTURES = {
         "rung": 1,
         "region": "european",
         "size": "metropolis",
-        "effect": "vfx_entity_ui_state_urban_european",
+        "effect": "vfx_entity_ui_state_docks",  # NEUTRAL_OVERLAY: birds and mist
         "seed": 3,
         "crop": (146, 60, 1390, 670),
         "prompt": (
@@ -252,16 +252,23 @@ CITY_LADDER = {
     5: ("vactrains", "in the late twenty-first century"),
 }
 
-# Vanilla's overlay for the family's own city picture (North American shares the European one).
+# The animated overlay of each family's city pictures. Two of vanilla's city overlays carry
+# effects placed for vanilla's own painting: the European one two smoke plumes over its chimneys,
+# the Asian one two lines of surf on its shore. On another painting they sit in mid-air (the
+# owner, in game, 2026-11-10: "the smoke effect is in the wrong place"), so those families take
+# the port's overlay, which is birds and drifting mist and fits any picture. The Latin American,
+# African and Arabic overlays are leaves, mist, dust and heat shimmer, and stay.
+NEUTRAL_OVERLAY = "vfx_entity_ui_state_docks"
+PLACED_OVERLAYS = ("vfx_entity_ui_state_urban_european", "vfx_entity_ui_state_urban_asian")
 CITY_EFFECT = {
-    "european": "vfx_entity_ui_state_urban_european",
-    "north_american": "vfx_entity_ui_state_urban_european",
+    "european": NEUTRAL_OVERLAY,
+    "north_american": NEUTRAL_OVERLAY,
     "latin_american": "vfx_entity_ui_state_urban_latin_american",
     "african": "vfx_entity_ui_state_urban_african",
     "south_asian": "vfx_entity_ui_state_urban_arabic",
     "middle_eastern": "vfx_entity_ui_state_urban_arabic",
-    "east_asian": "vfx_entity_ui_state_urban_asian",
-    "japanese": "vfx_entity_ui_state_urban_asian",
+    "east_asian": NEUTRAL_OVERLAY,
+    "japanese": NEUTRAL_OVERLAY,
 }
 
 # One landmark a family, at the end of the street on every rung, so a state's banner reads as the
