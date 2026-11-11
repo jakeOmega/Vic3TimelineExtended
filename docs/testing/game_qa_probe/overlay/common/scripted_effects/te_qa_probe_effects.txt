@@ -1,0 +1,10 @@
+﻿te_qa_probe_mailbox = {
+	debug_log = "TE_QA_PROBE mailbox version=1 country=[THIS.GetCountry.GetTagName]"
+}
+
+te_qa_probe_pad = {
+	while = {
+		count = 60
+		debug_log = "TE_QA_PROBE PAD 0123456789012345678901234567890123456789012345678901234567890123456789"
+	}
+}

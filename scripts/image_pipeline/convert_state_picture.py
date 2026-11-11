@@ -3,8 +3,9 @@
 
     python3 scripts/image_pipeline/convert_state_picture.py <key>=<png> [<key>=<png> ...]
 
-The render is cropped to the registry entry's `crop` box (to drop a signature or
-a stray object at an edge), fitted to 1530 x 750, run through a Kuwahara filter
+The entry's `smudge` boxes are blurred first (a lettered sign in the middle of
+the picture, where a crop can't reach). The render is then cropped to the entry's
+`crop` box (to drop a signature or a stray object at an edge), fitted to 1530 x 750, run through a Kuwahara filter
 and scaled to 1020 x 500. The filter gives each pixel the mean of whichever of
 its four quadrant windows varies least: flat dabs of color with kept edges, like
 a loaded brush; a fifth of the unfiltered picture is blended back. FLUX's renders are closer to a photograph than vanilla's
@@ -83,14 +84,52 @@ def kuwahara(img, radius=PAINT_RADIUS):
     return Image.fromarray(np.clip(out + 0.5, 0, 255).astype(np.uint8))
 
 
+def smudge(img, boxes):
+    """Blur each (left, top, right, bottom) box until its lettering is a dab of paint.
+
+    The blur's reach follows the box's shorter side, so a sign keeps its place and its
+    colors and loses its strokes; the edge of the box is feathered into the picture.
+    """
+    from PIL import Image, ImageDraw, ImageFilter
+
+    for left, top, right, bottom in boxes:
+        reach = max(4, min(right - left, bottom - top) // 3)
+        pad = 2 * reach
+        area = (max(0, left - pad), max(0, top - pad), min(img.width, right + pad), min(img.height, bottom + pad))
+        patch = img.crop(area)
+        blurred = patch.filter(ImageFilter.GaussianBlur(reach))
+        mask = Image.new("L", patch.size, 0)
+        ImageDraw.Draw(mask).rectangle((left - area[0], top - area[1], right - area[0], bottom - area[1]), fill=255)
+        mask = mask.filter(ImageFilter.GaussianBlur(max(2, reach // 2)))
+        img.paste(Image.composite(blurred, patch, mask), area[:2])
+    return img
+
+
+def dark_edge(img, rows=3, floor=12):
+    """'top' or 'bottom' if the picture's outermost rows are near black (a letterbox strip some
+    renders carry), else None."""
+    import numpy as np
+
+    lum = np.asarray(img.convert("L"), dtype=float).mean(axis=1)
+    if lum[-rows:].mean() < floor:
+        return "bottom"
+    if lum[:rows].mean() < floor:
+        return "top"
+    return None
+
+
 def paint(source: Path, key: str):
     """The picture as it is committed, before compression: a 1020 x 500 RGB image."""
     from PIL import Image
 
     img = Image.open(source).convert("RGB")
+    img = smudge(img, registry.PICTURES[key].get("smudge", []))
     crop = registry.PICTURES[key].get("crop")
     if crop:
         img = img.crop(crop)
+    edge = dark_edge(img)
+    if edge:
+        raise ValueError(f"{key}: a dark strip along the {edge} of the render; give the entry a crop that drops it")
     img = fit(img, round(WIDTH * WORK_SCALE), round(HEIGHT * WORK_SCALE))
     img = Image.blend(img, kuwahara(img), PAINT_BLEND)
     return img.resize((WIDTH, HEIGHT), Image.LANCZOS)
