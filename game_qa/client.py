@@ -746,7 +746,10 @@ def add_verbs(sub) -> None:
     p.add_argument("index", type=int)
     p.add_argument("event", nargs="?", help="an event id (its oldest pending instance) or a numeric id")
     p.set_defaults(run=cmd_pick)
-    p = sub.add_parser("read", help="evaluate triggers and values at the debugger's breakpoint")
+    p = sub.add_parser("read", help="evaluate triggers and values at the debugger's breakpoint, for the played "
+                                    "country: a trigger is written bare (has_technology_researched = railways; "
+                                    "c:TAG.<trigger> = x answers \"Unknown trigger type\"), and a variable that is "
+                                    "not set reads 0")
     p.add_argument("exprs", nargs="+", metavar="EXPR")
     p.set_defaults(run=cmd_read)
     p = sub.add_parser("tag", help="play another country")

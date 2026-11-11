@@ -638,7 +638,11 @@ class Session:
         return result
 
     def read(self, exprs: Sequence[str]) -> list[Read]:
-        """Each trigger or value evaluated at the read event's breakpoint, in the played country's scope."""
+        """Each trigger or value evaluated at the read event's breakpoint, in the played country's scope. A
+        trigger is written bare and is checked for the played country (`tag` another to read it):
+        `has_technology_researched = railways` works, while `c:FRA.has_technology_researched = railways` answers
+        "Unknown trigger type". A variable that is not set reads 0, not an error (`c:FRA.var:x` gave "0", live
+        2026-11-11), so a 0 does not prove the variable set."""
         self._require_game()
         if isinstance(exprs, str):
             raise SessionError("bad_argument", "read takes a list of expressions, not one string")
