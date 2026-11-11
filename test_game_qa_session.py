@@ -158,6 +158,7 @@ class Game(fakes.FakeHelper):
         self.exited = False                     # the game ended by itself
         self.process_gone = False               # no live process has the game's pid and start time: adopt refuses
         self.tcp_error: Exception | None = None
+        self.tcp_open_refusal: HelperError | None = None       # what tcp_open raises, while set
         self.closed = False
         self.setups: dict[str, tuple[str, list[str]]] = {}     # setup event -> (its name, the lines its body logs)
         self.on_command = None                  # called with each command the game runs, before it answers
@@ -227,6 +228,9 @@ class Game(fakes.FakeHelper):
         return super().kill(proc)
 
     def tcp_open(self, port):
+        if self.tcp_open_refusal is not None:   # as win_helper._op_tcp_open: the old connection is closed first
+            super().tcp_close()
+            raise self.tcp_open_refusal
         super().tcp_open(port)
         self.adapter.reset_connection()         # win_helper._op_tcp_open closes any connection first
         self.order.append("tcp_open %d" % port)
@@ -833,14 +837,15 @@ class EnterGameTest(SessionTestCase):
         status = self.session.status()
         self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (True, False, False))
 
-    def assert_left_after_start(self, error, code: str) -> None:
+    def assert_left_after_start(self, error, code: str, again: str = "left_running") -> None:
+        """`again`: what enter_game and advance answer afterwards (refused either way, before any click)."""
         self.assertEqual(error.code, code)
         self.assertEqual(error.info["clicks"], [list(c) for c in self.game.clicks])
         self.assertEqual(len(self.game.clicks), 2)
         status = self.session.status()
         self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, True, True))
-        self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
-        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+        self.assertEqual(self.session_error(self.session.enter_game).code, again)
+        self.assertEqual(self.session_error(self.session.advance, 3).code, again)
         self.assertEqual(len(self.game.clicks), 2)            # nothing is clicked again
 
     def test_a_breakpoint_not_verified_again_is_left_running_with_the_clicks(self):
@@ -943,6 +948,44 @@ class EnterGameTest(SessionTestCase):
         commands = self.game.adapter.commands
         self.assertEqual(commands[4:6], ["continue", "initialize"])     # released on the old connection, then anew
         self.assertFalse(self.session.status()["maybe_stopped"])
+
+    def test_a_second_connection_the_relay_refuses_is_not_entered_and_the_verbs_that_need_it_refuse(self):
+        self.started()
+        self.game.tcp_open_refusal = HelperError("connect_failed", "ConnectionRefusedError(10061)")
+        error = self.session_error(self.session.enter_game)
+        steps = len(self.game.steps)
+        # The old client is left on a closed relay: every verb that looks for a stop refuses `debugger` first,
+        # enter_game and advance too, and nothing is typed or clicked.
+        self.assert_left_after_start(error, "not_entered", again="debugger")
+        self.assertEqual(error.info["cause"], "helper: connect_failed")
+        self.assertEqual([step["outcome"] for step in self.steps() if step["verb"] == "reattach"],
+                         ["helper: connect_failed"])
+        self.assertEqual(self.session_error(self.session.console, "money 1000").code, "debugger")
+        self.assertEqual(self.session_error(self.session.shot).code, "debugger")      # maybe_stopped is set now
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
+    def test_a_window_that_stops_responding_while_the_game_loads_is_waited_for(self):
+        self.started()
+        loading = {}
+
+        def load(seconds):
+            if self.game.entered and "until" not in loading:
+                loading["until"] = self.game.now + session.ENTER_SETTLE_S + 10      # past UNRESPONSIVE_S, once
+            self.game.responding = "until" not in loading or self.game.now >= loading["until"]
+        self.game.on_sleep = load
+        result = self.session.enter_game()
+        self.game.on_sleep = None
+        self.assertTrue(result["entered"])
+        tried = next(step for step in self.steps() if step["verb"] == "console_after_start")
+        self.assertEqual((tried["outcome"], tried["tries"]), ("ok", 2))
+
+    def test_a_proof_that_cannot_pause_the_game_is_left_running_with_the_clicks(self):
+        self.started()
+        self.game.dropped_pauses = 99
+        error = self.session_error(self.session.enter_game)
+        self.assert_left_after_start(error, "left_running")
+        self.assertIn("still moved after a second pause key", error.detail)     # _run_for's own words
 
 
 class AdvanceTest(SessionTestCase):
