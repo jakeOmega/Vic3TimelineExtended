@@ -886,18 +886,19 @@ def _put_back_launchs_playset(snap: snapshot.Snapshot, user: Path) -> list[str]:
     A start that failed after `launch` wrote the playset (`start_unconfirmed`, `not_recorded`) leaves a snapshot
     with no `started`, so no reference time: `restore.restore` would hold the changed playset
     (`no_reference_time`), and the owner's would stay altered until they resolved the hold. The file is known to
-    be `launch`'s write when the journal has no `started` and no verdict, its last `playset` entry carries a
-    SHA-256, and the file is a regular file with exactly those bytes. It is put back from the store (its hash
-    checked against the manifest, and the file looked at again just before the rename, as `restore` does), and
-    `playset_restored` journaled, only when outside `logs/` no other file has changed, been added or been created;
-    else everything, this file included, is left to `restore.restore` to judge as before, and a hold changes
-    nothing. A missing file does not count: restore puts one back without judging it. The caller has ruled out a
-    running game, a launch still in flight and a run nothing vouches for."""
+    be `launch`'s write when the journal has no `started`, its last `playset` entry carries a SHA-256, and the
+    file is a regular file with exactly those bytes. An earlier verdict does not matter, as `restore` re-judges
+    a held snapshot: one held beside a running game (perhaps the unrecorded start's own) gets its playset back
+    once none runs; after `restored` the file is the snapshot's again, so nothing matches. It is put back from
+    the store (its hash checked against the manifest, and the file looked at again just before the rename, as
+    `restore` does), and `playset_restored` journaled, only when outside `logs/` no other file has changed, been
+    added or been created; else everything, this file included, is left to `restore.restore` to judge as
+    before, and a hold changes nothing. A missing file does not count: restore puts one back without judging
+    it. The caller has ruled out a running game, a launch still in flight and a run nothing vouches for."""
     journal = snapshot.journal(snap)
     events = [e.get("event") for e in journal]
     hashes = [e.get("sha256") for e in journal if e.get("event") == "playset"]
-    if ("started" in events or any(v in events for v in _VERDICTS) or not hashes
-            or not isinstance(hashes[-1], str) or not _SHA256_HEX.fullmatch(hashes[-1])
+    if ("started" in events or not hashes or not isinstance(hashes[-1], str) or not _SHA256_HEX.fullmatch(hashes[-1])
             or PLAYSET_FILE not in snap.files):
         return []
     path = user / PLAYSET_FILE

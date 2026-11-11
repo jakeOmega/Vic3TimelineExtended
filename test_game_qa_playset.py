@@ -318,11 +318,11 @@ class PlaysetTest(unittest.TestCase):
     def test_a_failed_start_with_another_change_since_holds_and_changes_nothing(self):
         # The owner played meanwhile: the autosave is theirs, and with no start recorded nothing can be judged.
         # Even the playset `launch` wrote is left as it is: a hold changes nothing.
-        for verb in ("recover", "restore"):
-            with self.subTest(verb=verb):
+        for verb, autosave in (("recover", "autosave.v3"), ("restore", "autosave.v3"), ("recover", "autosave_1.v3")):
+            with self.subTest(verb=verb, autosave=autosave):      # a changed autosave, then a new one
                 self.write_the_owners_files()
                 snap_id = self.failed_start_after_the_write()
-                (self.user / "save games" / "autosave.v3").write_bytes(b"the owner played since")
+                (self.user / "save games" / autosave).write_bytes(b"the owner played since")
                 self.age_the_claim()
                 before = self.tree()
                 out, code = self.run_cli(*((verb,) if verb == "recover" else (verb, snap_id)))
@@ -330,6 +330,23 @@ class PlaysetTest(unittest.TestCase):
                 self.assertEqual((code, result["held"], result["reason"]), (2, True, "no_reference_time"))
                 self.assertEqual(self.tree(), before)
                 self.assertEqual(self.events(), ["armed", "playset", "held"])
+
+    def test_a_failed_start_whose_game_wrote_only_logs_gets_its_playset_back_and_keeps_the_logs(self):
+        # The reply was lost, the game ran unrecorded and quit at the menu: only `logs/` and the playset changed.
+        # With no start recorded the logs are whoever's, and are left as they are; the playset goes back.
+        snap_id = self.failed_start_after_the_write()
+        (self.user / "logs" / "debug.log").write_text("the unrecorded game's log\n")
+        self.assertEqual(self.run_cli("recover")[0]["runs"], [{"restored": [], "removed": [], "held": False,
+                                                              "reason": "launch_in_flight", "id": snap_id}])
+        (self.user / "logs" / "error.log").write_text("its new error log\n")
+        self.age_the_claim()
+        logs_before = sorted((p.name, p.read_bytes()) for p in (self.user / "logs").iterdir())
+        out, code = self.run_cli("recover")
+        self.assertEqual((code, out["runs"][0]["held"], out["runs"][0]["restored"]), (0, False, [PLAYSET]))
+        self.assertEqual(self.playset.read_bytes(), self.playset_bytes)
+        self.assertEqual(sorted((p.name, p.read_bytes()) for p in (self.user / "logs").iterdir()), logs_before)
+        self.assertEqual(self.events(), ["armed", "playset", "playset_restored", "restored"])
+        self.assertFalse((self.the_snapshot().dir / "run_logs").exists())
 
     def test_a_playset_changed_since_the_failed_start_is_held(self):
         # The owner's launcher wrote their playset again after the failed start: those bytes are not `launch`'s.
@@ -341,8 +358,10 @@ class PlaysetTest(unittest.TestCase):
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "no_reference_time"))
         self.assertEqual(self.tree(), before)
 
-    def test_a_failed_start_whose_game_is_running_holds_and_changes_nothing(self):
-        # The start's reply was lost but the game did start: it may be anyone's now, so nothing is put back.
+    def test_a_failed_start_held_beside_a_running_game_gets_its_playset_back_once_none_runs(self):
+        # The start's reply was lost but the game did start: it may be anyone's now, so nothing is put back. Once
+        # no game runs, `restore` judges the held snapshot again, and the playset is still `launch`'s own write.
+        original = self.tree()
         snap_id = self.failed_start_after_the_write()
         self.age_the_claim()
         self.games = [self.game(pid=5555)]
@@ -350,7 +369,12 @@ class PlaysetTest(unittest.TestCase):
         out, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_running"))
         self.assertEqual(self.tree(), before)
-        self.assertNotIn("playset_restored", self.events())
+        self.assertEqual(self.events(), ["armed", "playset", "held"])
+        self.games = []
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["restored"]), (0, False, [PLAYSET]))
+        self.assertEqual(self.events(), ["armed", "playset", "held", "playset_restored", "restored"])
+        self.assertEqual(self.tree(), original)
 
     # -- refusals ---------------------------------------------------------------------
 
