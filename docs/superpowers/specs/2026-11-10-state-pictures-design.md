@@ -172,8 +172,8 @@ game before the size pictures are painted in number.
 | Oil field | | an Oil Rig of level 10 or more | takes over open land (plains, desert, savanna, tundra, hills, the five farmlands, pasture), not a city, port, mine or forest |
 
 The three farm families don't overlap, so their digits only keep the weights apart. The three levels are
-provisional, like the size floors: in 1836 the median Port is level 1 and five states have one of 5 or more,
-and Lancashire's coal mines are level 25, so 10 is a guess at "this is what the state is known for" that the
+provisional, like the size floors: in 1836 the median Port is level 1, four states have one of 5 or more and
+only Guangdong one of 10, and Lancashire's and Yorkshire's coal mines are level 25 and 20, so 10 is a guess at "this is what the state is known for" that the
 observer game should check against the late game, where building levels run far higher. A level is absolute:
 a state of 200 farm levels and one level-10 Oil Rig shows the oil field. A share of the state's levels would
 be the better test and is too dear for a weight; if the play-test finds oil fields in farm country, the
@@ -255,7 +255,7 @@ would be over 1 GB.
    rung from a second set, below). The calibration game is still to run, so the size floors stay
    provisional; the city tier doesn't read them.
 3. **Worked land (46):** ports, mines and oil, farmland, forestry. **Painted and wired 2026-11-10:** all
-   46, each picked from four candidates with no second set. With the pilot's port and mine that is every
+   46, each picked from four candidates (the two port pictures of the 2040s from a later set, § 10). With the pilot's port and mine that is every
    worked-land picture of § 8. What it designed: the scales and the takeover of § 3, the farmland and
    forestry families of § 5, and the three provisional levels there.
 4. **Town, metropolis, megacity (104).**
@@ -313,11 +313,17 @@ upkeep limited to rungs 2 to 4.
   - *Budget:* 28 s a render held. Ten of the 39 pictures were rendered twice: the eight of the last rung
     for the bolder prompt and the two 1960 streets for their cars. The other 29 were picked from their
     first four candidates.
-- **What the worked-land wave taught** (2026-11-10, 184 renders for 46 pictures, none rerun):
-  - *A landscape is easier than a street.* No candidate set failed its period; naming the machines of
-    the time in the prompt (the tractor, the combine, the well pad) was enough.
+- **What the worked-land wave taught** (2026-11-10, 196 renders for 46 pictures):
+  - *A landscape is easier than a street,* up to the present day. Naming the machines of the time in the
+    prompt (the tractor, the combine, the well pad) put 44 sets in period at the first try.
+  - *The future again has to be asked for by name.* The two port pictures of the 2040s ("crewless electric
+    cargo boats", "robotic cranes") came out as a harbor of today with wind turbines behind it, older in
+    look than their own rung before. They were reworded to lead with "a futuristic harbor" and
+    rendered again. The words for the future matter as much: "sleek white hulls" turned the container
+    ships into cruise liners, and the major port took a third set that names what the ship lacks ("no
+    bridge and no funnel") and carries ("four tall rigid white wing sails").
   - *Lettering moves to the machines.* Fields carry none, but hulls, truck doors, a tractor's hood and a
-    mill's name board do, and a painter's signature turned up in a bottom corner of four candidates. Thirteen picks
+    mill's name board do, and a painter's signature turned up in a bottom corner of four candidates. Twelve picks
     carry `smudge` boxes. One candidate flew a real national flag: rejected like a landmark.
   - *The dark strip* was on 6 of this wave's 46 renders of that seed; none was picked.
   - *Later rungs of a ladder drift toward one look* (drones, wind turbines, solar panels on every roof).

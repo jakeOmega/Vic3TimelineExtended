@@ -140,7 +140,8 @@ def region_digit(region: str) -> int:
 # Scales: the larger or the special kind of a worked-land picture, by a building's level, in the
 # size place of the weight (a picture has a size or a scale, never both). The levels are
 # provisional, like the size floors, until an observer game's figures: in 1836 the median Port is
-# level 1 and five states have one of 5 or more; Lancashire's coal mines are level 25.
+# level 1, four states have one of 5 or more and only Guangdong one of 10; Lancashire's coal
+# mines are level 25.
 PORT_MAJOR_LEVEL = 10
 COAL_LEVEL = 10
 OIL_LEVEL = 10
@@ -647,9 +648,11 @@ DRAFTS = {
         "small white lighthouse"),
     "docks_harbor_4": _draft(
         "port", ["docks"], "docks", "autonomous_vehicles", 4, "a Port below the major port's level",
-        "A small harbor {when}: low crewless electric cargo boats with no wheelhouse gliding to a "
-        "quay, a single robotic crane, sheds roofed with solar panels, rows of seaweed-farm buoys "
-        "in the bay, white offshore wind turbines on the horizon, a breakwater with a small white "
+        "A futuristic small harbor {when}: sleek white autonomous cargo vessels with smooth "
+        "windowless hulls, no masts and no wheelhouse, gliding to a quay, a hydrofoil passenger "
+        "ferry riding above the water, a slender white robotic crane arm, curved harbor sheds "
+        "roofed in dark solar glass, small cargo drones overhead, rows of seaweed-farm buoys in "
+        "the bay, white offshore wind turbines on the horizon, a breakwater with a small white "
         "lighthouse"),
     "docks_2": _draft(
         "port", ["docks"], "docks", "containerization", 2, "a major Port",
@@ -665,10 +668,11 @@ DRAFTS = {
         "reaching to the horizon"),
     "docks_4": _draft(
         "port", ["docks"], "docks", "autonomous_vehicles", 4, "a major Port",
-        "An automated port {when}: long crewless container ships with no bridge and tall rigid "
-        "wing sails at the quay, slender robotic cranes working without drivers, driverless "
-        "electric trucks in convoy, blocks of plain colored steel boxes, no people anywhere, "
-        "offshore wind turbines on the horizon"),
+        "A futuristic automated container port {when}: a huge low cargo ship stacked high with "
+        "plain colored steel boxes, with no bridge and no funnel and four tall rigid white wing "
+        "sails standing along its deck, rows of slender white robotic gantry cranes with no cabs "
+        "lifting boxes, flat driverless electric carriers in convoy, cargo drones overhead, long "
+        "blocks of stacked steel boxes, no people anywhere, offshore wind turbines on the horizon"),
 
     # Mines. mining_1 (the pilot) is the open pit of rung 1.
     "mining_2": _draft(
@@ -1170,15 +1174,15 @@ WAVE3_PICKS = {
     "docks_harbor_2": {"seed": 0, "smudge": [(1300, 448, 1536, 472), (880, 560, 915, 590)]},
     "docks_harbor_3": {"seed": 0, "smudge": [(440, 462, 500, 488), (298, 388, 326, 412), (1150, 428, 1450, 450),
                                              (1380, 512, 1435, 534), (0, 626, 40, 650)]},
-    "docks_harbor_4": {"seed": 1, "smudge": [(1335, 540, 1395, 562)]},
+    "docks_harbor_4": {"seed": 1},
     "docks_2": {"seed": 0, "smudge": [(1110, 640, 1165, 672), (355, 398, 410, 418)]},
     "docks_3": {"seed": 3},
-    "docks_4": {"seed": 1, "smudge": [(660, 542, 710, 564), (812, 592, 836, 616)]},
+    "docks_4": {"seed": 3, "smudge": [(140, 458, 200, 480)]},
     "mining_2": {"seed": 1},
     "mining_3": {"seed": 3},
     "mining_deep_1": {"seed": 1},
     "mining_deep_2": {"seed": 3},
-    "mining_deep_3": {"seed": 1, "smudge": [(765, 390, 790, 408)]},
+    "mining_deep_3": {"seed": 0, "smudge": [(672, 432, 694, 450)]},
     "oil_1": {"seed": 0},
     "oil_2": {"seed": 0},
     "oil_3": {"seed": 1},
