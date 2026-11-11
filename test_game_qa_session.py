@@ -69,6 +69,13 @@ class Adapter:
     def commands(self) -> list[str]:
         return [r["command"] for r in self.requests]
 
+    def reset_connection(self) -> None:
+        """The relay was closed: what the old connection had not delivered is gone, and the next one starts afresh
+        (a new client numbers its requests from 1 again)."""
+        self._decoder = dap.Decoder()
+        self._out = b""
+        self._seq = 0
+
     def send(self, data: bytes) -> None:
         for req in self._decoder.feed(data):
             self.requests.append(req)
@@ -140,7 +147,8 @@ class Game(fakes.FakeHelper):
         self.order = order
         self.adapter = Adapter(self)
         self.played: str | None = None
-        self.selected = False                   # a country is selected on the country-select screen
+        self.camera = "DEN"                     # the country the country click lands on, whatever was tagged (live)
+        self.selected: str | None = None        # the country selected on the country-select screen
         self.entered = False                    # Start was pressed: time can pass
         self.paused = True
         self.clicks_work = True
@@ -198,10 +206,15 @@ class Game(fakes.FakeHelper):
         if not self.clicks_work:
             return
         _left, _top, width, height = self.client
-        if abs(x - width * 0.492) < 2 and abs(y - height * 0.656) < 2 and self.played:
-            self.selected = True
+        if abs(x - width * 0.492) < 2 and abs(y - height * 0.656) < 2:
+            self.selected = self.camera
         elif abs(x - width * 0.9216) < 2 and abs(y - height * 0.975) < 2 and self.selected:
+            # As live (2026-11-11): the game is the selected country's, the script reloads and drops the
+            # debugger's breakpoint, and the console is shut while the game loads.
             self.entered = True
+            self.played = self.selected
+            self.adapter.breakpoints.clear()
+            self.console_open = False
 
     def adopt(self, proc):
         if self.process_gone:                   # as win_helper._op_adopt: the creation time is compared
@@ -215,20 +228,28 @@ class Game(fakes.FakeHelper):
 
     def tcp_open(self, port):
         super().tcp_open(port)
+        self.adapter.reset_connection()         # win_helper._op_tcp_open closes any connection first
         self.order.append("tcp_open %d" % port)
 
     def tcp_send(self, data):
         if self.tcp_error is not None:
             raise self.tcp_error
+        self._relay()
         self.adapter.send(data)
 
     def tcp_recv(self, timeout):
         if self.tcp_error is not None:
             raise self.tcp_error
+        self._relay()
         return self.adapter.recv(timeout)
+
+    def _relay(self) -> None:
+        if self.tcp_port is None:               # as win_helper._open_socket
+            raise HelperError("not_open", "no TCP connection is open")
 
     def tcp_close(self):
         super().tcp_close()
+        self.adapter.reset_connection()
         self.order.append("tcp_close")
 
     def close(self):
@@ -619,8 +640,8 @@ class StartTest(SessionTestCase):
     def test_status_says_how_far_the_session_is(self):
         self.assertEqual(self.session.status(), {
             "started": False, "stopped": False, "snapshot": None, "save": None, "country": None, "entered": False,
-            "game": None, "watch_returned": False, "run_dir": None, "maybe_stopped": False, "left_running": False,
-            "watch_respawns": 0})
+            "entered_unproved": False, "game": None, "watch_returned": False, "run_dir": None, "maybe_stopped": False,
+            "left_running": False, "watch_respawns": 0})
         self.started()
         status = self.session.status()
         self.assertEqual((status["started"], status["snapshot"], status["country"]), (True, SNAP, "FRA"))
@@ -750,6 +771,7 @@ class EnterGameTest(SessionTestCase):
                 result = self.session.enter_game()
                 self.assertEqual(self.game.clicks, [country, start])
                 self.assertTrue(result["entered"])
+                self.assertEqual(self.game.played, "FRA")
                 self.assertEqual(result["before"], (1836, 1, 11))
                 self.assertEqual(result["after"], (1836, 1, 15))        # 3 s at 1.5 days a second
                 self.assertTrue(self.game.paused)
@@ -781,6 +803,146 @@ class EnterGameTest(SessionTestCase):
         self.started(as_tag=None)
         self.assertEqual(self.session_error(self.session.enter_game).code, "no_country")
         self.assertEqual(self.game.clicks, [])
+
+    # After live session 2 (2026-11-11): the clicks entered the game as the country the camera was on, not the
+    # tagged one, and no read stopped at the breakpoint after them, though the console answered.
+
+    def steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [json.loads(line) for line in lines]
+
+    def after_start(self) -> list[str]:
+        """The order log from the Start click on."""
+        return self.order[[i for i, what in enumerate(self.order) if what == "click"][1] + 1:]
+
+    def test_entering_attaches_the_debugger_again_and_tags_the_country_again(self):
+        reply = self.started()
+        self.assertFalse(self.session.status()["entered_unproved"])
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(self.game.played, "FRA")              # the click entered DEN; the tag after it plays FRA
+        self.assertEqual(self.game.adapter.breakpoints, {EVENTS_WIN: [reply["overlay"]["read_line"]]})
+        self.assertEqual([what for what in self.after_start() if what.startswith("tcp")], ["tcp_close", "tcp_open 6111"])
+        attach = ["initialize", "launch", "setBreakpoints", "configurationDone"]
+        self.assertEqual(self.game.adapter.commands[:8], attach + attach)     # start's, then the new connection's
+        self.assertEqual(self.typed().count("tag FRA"), 2)
+        verbs = [step["verb"] for step in self.steps()]
+        self.assertEqual(verbs[verbs.index("start") + 1:], ["console_after_start", "reattach", "tag", "enter_game"])
+        reattach = next(step for step in self.steps() if step["verb"] == "reattach")
+        self.assertEqual((reattach["outcome"], reattach["verified"]), ("ok", [True]))
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (True, False, False))
+
+    def assert_left_after_start(self, error, code: str) -> None:
+        self.assertEqual(error.code, code)
+        self.assertEqual(error.info["clicks"], [list(c) for c in self.game.clicks])
+        self.assertEqual(len(self.game.clicks), 2)
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, True, True))
+        self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+        self.assertEqual(len(self.game.clicks), 2)            # nothing is clicked again
+
+    def test_a_breakpoint_not_verified_again_is_left_running_with_the_clicks(self):
+        self.started()
+        self.game.adapter.verified = False                    # only the second setBreakpoints is answered so
+        error = self.session_error(self.session.enter_game)
+        self.assert_left_after_start(error, "breakpoint_unverified")
+        self.assertEqual([step["outcome"] for step in self.steps() if step["verb"] == "reattach"],
+                         ["breakpoint_unverified"])
+
+    def test_a_console_that_does_not_answer_after_start_is_not_entered_once_the_wait_is_over(self):
+        self.started()
+
+        def load(seconds):
+            if self.game.entered:
+                self.game.console_never_opens = True
+        self.game.on_sleep = load
+        began = self.game.now
+        error = self.session_error(self.session.enter_game)
+        self.game.on_sleep = None
+        self.assert_left_after_start(error, "not_entered")
+        self.assertEqual(error.info["cause"], "no_ack")
+        waited = self.game.now - began
+        self.assertGreaterEqual(waited, session.CLICK_SETTLE_S + session.ENTER_SETTLE_S + session.ENTER_WAIT_S)
+        self.assertLess(waited, session.CLICK_SETTLE_S + session.ENTER_SETTLE_S + session.ENTER_WAIT_S + 60)
+        self.assertNotIn("tcp_close", self.after_start())     # neither re-attached nor tagged: the console never came
+        self.assertEqual(self.typed().count("tag FRA"), 1)
+        tried = next(step for step in self.steps() if step["verb"] == "console_after_start")
+        self.assertEqual(tried["outcome"], "no_ack")
+        self.assertGreaterEqual(tried["tries"], 2)
+
+    def test_a_console_refusal_a_load_cannot_cause_is_not_tried_again(self):
+        self.started()
+
+        def load(seconds):
+            if self.game.entered:
+                self.game.foreground = False                  # and the window will not come to the front
+        self.game.on_sleep = load
+        self.game.focus_succeeds = False
+        error = self.session_error(self.session.enter_game)
+        self.game.on_sleep = None
+        self.assert_left_after_start(error, "not_entered")
+        self.assertEqual(error.info["cause"], "not_foreground")
+        tried = next(step for step in self.steps() if step["verb"] == "console_after_start")
+        self.assertEqual((tried["outcome"], tried["tries"]), ("not_foreground", 1))
+
+    def test_a_console_that_answers_late_after_start_is_waited_for(self):
+        self.started()
+        loading = {}
+
+        def load(seconds):
+            if self.game.entered and "until" not in loading:
+                loading["until"] = self.game.now + 50       # past one ensure_open's 30 s, within ENTER_WAIT_S
+            self.game.console_never_opens = "until" in loading and self.game.now < loading["until"]
+        self.game.on_sleep = load
+        result = self.session.enter_game()
+        self.game.on_sleep = None
+        self.assertTrue(result["entered"])
+        self.assertEqual(self.game.played, "FRA")
+        tried = next(step for step in self.steps() if step["verb"] == "console_after_start")
+        self.assertGreaterEqual(tried["tries"], 2)
+
+    def test_a_game_that_exits_while_the_console_is_awaited_types_nothing_more(self):
+        self.started()
+        marks = {}
+
+        def gone(seconds):
+            if self.game.entered and "steps" not in marks:
+                self.game.exited = True                       # watch records it at its next look
+                marks["steps"], marks["at"] = len(self.game.steps), self.game.now
+        self.game.on_sleep = gone
+        error = self.session_error(self.session.enter_game)
+        self.game.on_sleep = None
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(error.info["clicks"], [list(c) for c in self.game.clicks])
+        self.assertEqual(len(self.game.steps), marks["steps"])
+        self.assertLess(self.game.now - marks["at"], session.ENTER_SETTLE_S + session.ENTER_RETRY_S)  # no 90 s
+
+    def test_a_tag_refused_after_start_is_tag_failed_and_left_running(self):
+        self.started()
+
+        def on_command(text):
+            if text == "tag FRA" and self.game.entered:
+                self.game.on("tag FRA", failure=["Unknown country tag"])
+        self.game.on_command = on_command
+        error = self.session_error(self.session.enter_game)
+        self.game.on_command = None
+        self.assert_left_after_start(error, "tag_failed")
+        self.assertEqual([step["outcome"] for step in self.steps() if step["verb"] == "tag"], ["ok", "tag_failed"])
+
+    def test_a_stop_pending_when_the_debugger_is_attached_again_is_released_before_the_relay_closes(self):
+        self.started()
+
+        def stops(seconds):
+            if self.game.entered and not self.game.adapter.stopped and "continue" not in self.game.adapter.commands:
+                self.game.adapter.stop()                       # the game passed the breakpoint by itself
+        self.game.on_sleep = stops
+        self.session.enter_game()
+        self.game.on_sleep = None
+        commands = self.game.adapter.commands
+        self.assertEqual(commands[4:6], ["continue", "initialize"])     # released on the old connection, then anew
+        self.assertFalse(self.session.status()["maybe_stopped"])
 
 
 class AdvanceTest(SessionTestCase):

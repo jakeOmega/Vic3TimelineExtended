@@ -26,10 +26,13 @@ at once, the debugger stops on its `debug_log` line, and each expression is eval
 event logs `TE_QA read country=FRA date=January 11, 1836` and its padding flushes the log. That line is how the
 session reads the date (`enter_game`, `advance`). Before each read a stop left over from an earlier one is
 released, and only a stop whose reason is "breakpoint" is evaluated at. Facts from the live session of
-2026-11-10 (spec § 12): the fixture opens on the country-select screen, where time does not advance; after `tag`
-the camera is on that country, and a click at COUNTRY_CLICK then START_CLICK (fractions of the client area)
-enters the game; the game is paused when a save loads, and space toggles the pause only with the console closed.
-Each round of time ends by proving the pause: two date reads PROOF_PAUSE_S apart must agree.
+2026-11-10 (spec § 12): the fixture opens on the country-select screen, where time does not advance; a click at
+COUNTRY_CLICK then START_CLICK (fractions of the client area) enters the game; the game is paused when a save
+loads, and space toggles the pause only with the console closed. From the live session of 2026-11-11: the click
+selects the country the camera is on, which need not be the tagged one (FRA was tagged, the game began as DEN),
+and no read stopped at the breakpoint after Start, so `enter_game` attaches the debugger again and tags the
+country again before its proof. Each round of time ends by proving the pause: two date reads PROOF_PAUSE_S apart
+must agree.
 """
 from __future__ import annotations
 
@@ -52,7 +55,7 @@ from game_qa.helper import Helper, HelperError
 from game_qa.logtail import GAP_MARKER, LogFollower, Pending, parse, pending_events
 from game_qa.report import Report, stamp, utc_now
 
-COUNTRY_CLICK = (0.492, 0.656)          # the country the camera is on after `tag` (3840x2160 measured, spec § 12.1 A2)
+COUNTRY_CLICK = (0.492, 0.656)          # the country the camera is on, tagged or not (3840x2160, spec § 12.1 A2)
 START_CLICK = (0.9216, 0.975)           # the country-select screen's Start button
 SCAN_SPACE = 0x39                       # toggles the pause, with the console closed
 DEBUGGER_PORT = 6111
@@ -73,7 +76,17 @@ DATE_WAIT_S = 5.0                       # from the resume to the read event's li
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
 LOG_POLL_S = 0.2
 CLICK_SETTLE_S = 1.0                    # after the country click, before Start (unverified)
-ENTER_SETTLE_S = 2.0                    # after Start, before the first read (unverified)
+ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
+                                        # 2026-11-11 the console answered after Start, how soon is unmeasured)
+ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
+ENTER_RETRY_S = 5.0                     # between its tries
+# The console's refusals a game still loading after Start can cause, retried within ENTER_WAIT_S: no command taken
+# (no_ack), and a window that stopped responding for UNRESPONSIVE_S (game_gone). Each key of a try is still proved
+# the game's (`_prove_game`), so a game that really ended stops the tries at its next key (watch_ended), and any
+# other refusal (not_foreground after FOREGROUND_WAIT_S of someone at the machine, stranded_text) is not retried.
+ENTER_RETRIED = ("no_ack", "game_gone")
+# The errors after Start whose own code `enter_game` keeps (with the clicks added): they say more than not_entered.
+ENTER_KEPT = ("breakpoint_unverified", "tag_failed", "debugger", "watch_ended", "left_running")
 PROOF_S = 3.0                           # unpaused, to prove the game was entered
 FIRST_RATE = 1.5                        # game days a second at the speed the game loads with (live, 2026-11-10)
 MIN_WAIT_S = 1.0
@@ -225,6 +238,7 @@ class Session:
         self._debugger: Debugger | None = None
         self._country: str | None = None
         self._entered = False
+        self._entered_unproved = False      # Start was clicked and a failure came before the proof: maybe in play
         self._shots = 0
         self._stopped: dict | None = None
         self._maybe_stopped = False         # the game may be stopped at the breakpoint: the next verb releases it
@@ -524,13 +538,30 @@ class Session:
                 raise SessionError("no_window", "no responding window within %g s of the launch" % WINDOW_WAIT_S)
             self._sleep(WINDOW_POLL_S)
 
-    def _attach(self) -> None:
-        self._helper.tcp_open(DEBUGGER_PORT)
-        self._relay_open = True
-        # dap turns whatever the relay raises (a HelperError on a closed peer) into a DebuggerError.
-        self._debugger = Debugger(self._helper.tcp_send, self._helper.tcp_recv)
+    def _attach(self, step: str = "debugger") -> None:
+        """Open the debugger's relay and attach with the read event's breakpoint, which the game must verify
+        (`breakpoint_unverified` otherwise), recorded as the step `step`, a failure too. `start` attaches once;
+        `_enter` attaches again once Start is pressed (`reattach`): live (2026-11-11) no read stopped at the
+        breakpoint after entering from the country-select screen, though the console answered and events ran,
+        which a reload of the script dropping the breakpoint would explain (unverified). A connection already open
+        is closed first, once any stop it holds is released (`_drain`, or `_release_pending`, as `_require_game`
+        does: N5), since a game left stopped behind a closed connection has nobody to resume it. A close that fails
+        is noted and not fatal: `tcp_open` closes the old connection itself (win_helper._op_tcp_open)."""
         path = self._paths.events_file_windows_path(self._overlay.events_file)
-        with self._step("debugger", breakpoint=path, line=self._overlay.read_line) as out:
+        with self._step(step, breakpoint=path, line=self._overlay.read_line) as out:
+            if self._relay_open:
+                if self._maybe_stopped:
+                    self._drain()
+                else:
+                    self._release_pending()
+                notes: list[str] = []
+                self._close_relay(notes)
+                if notes:
+                    out["notes"] = notes
+            self._helper.tcp_open(DEBUGGER_PORT)
+            self._relay_open = True
+            # dap turns whatever the relay raises (a HelperError on a closed peer) into a DebuggerError.
+            self._debugger = Debugger(self._helper.tcp_send, self._helper.tcp_recv)
             try:
                 verified = self._debugger.attach({path: [self._overlay.read_line]})
             except DebuggerError as e:
@@ -626,7 +657,15 @@ class Session:
     def enter_game(self) -> dict:
         """Click the country the camera is on, then Start, and prove it by the date moving while unpaused. Only
         the fixture opens on the country-select screen: with an owner's save it is refused
-        (`not_on_country_select`), and `advance` needs no entering."""
+        (`not_on_country_select`), and `advance` needs no entering.
+
+        After Start (live, 2026-11-11, the clicks entered the game as the country the camera was on, and no read
+        stopped at the breakpoint after them): wait ENTER_SETTLE_S, wait for the console (`_console_after_start`,
+        up to ENTER_WAIT_S), attach the debugger again on a new connection (`reattach`), tag the session's country
+        again (`tag`), and only then read the date and run the unpaused proof. Any failure from the Start click on
+        sets `left_running` and `entered_unproved`, clicks nothing more, and carries the clicks: its own code for
+        breakpoint_unverified, tag_failed, debugger, watch_ended or left_running, else not_entered with the code as
+        `cause`."""
         self._require_game()
         self._refuse_if_left_running()
         if not self._fixture_loaded:
@@ -756,10 +795,13 @@ class Session:
             row["new_errors"] = _new_errors(seen, self._burst or [])
 
     def status(self) -> dict:
-        """How far this session is, from what it holds: nothing is asked of the game or of a verb."""
+        """How far this session is, from what it holds: nothing is asked of the game or of a verb. `entered` is
+        true once `enter_game` proved the game in play; `entered_unproved` once Start was clicked and a failure
+        came before that proof, so the game may be in play though `entered` is false (`left_running` is set too)."""
         proc = self._proc
         return {"started": self._ready, "stopped": self._stopped is not None, "snapshot": self._snapshot,
                 "save": self._save, "country": self._country, "entered": self._entered,
+                "entered_unproved": self._entered_unproved,
                 "game": {"pid": proc.pid, "created": proc.created} if proc is not None else None,
                 "watch_returned": self._watch_returned(),
                 "run_dir": str(self._report.dir) if self._report is not None else None,
@@ -1238,9 +1280,12 @@ class Session:
         if self._entered:
             return {"entered": True, "already": True}
         if self._country is None:
-            raise SessionError("no_country", "tag a country first: the click selects the one the camera is on")
+            raise SessionError("no_country", "tag a country first: the click enters whichever country the camera is "
+                               "on, and the tagged one is tagged again once the game is entered")
         clicks: list[list[int]] = []
-        for where, settle in ((COUNTRY_CLICK, CLICK_SETTLE_S), (START_CLICK, ENTER_SETTLE_S)):
+        for n, where in enumerate((COUNTRY_CLICK, START_CLICK)):
+            if n:
+                self._sleep(CLICK_SETTLE_S)
             # The console's own front check, so the presence rule decides whether the foreground may be taken.
             self._console.ensure_open()
             x, y = self._point(where)
@@ -1249,16 +1294,21 @@ class Session:
             except HelperError as e:        # refused before the button went down: nothing was pressed
                 raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
             clicks.append([x, y])
-            self._sleep(settle)
+        # Start may have been pressed: from here on the game may be entered, and running. Nothing is clicked again.
         try:
+            self._sleep(ENTER_SETTLE_S)
+            self._console_after_start()
+            self._attach("reattach")
+            with self._step("tag", tag=self._country):
+                self._tag(self._country)    # the click entered the country the camera was on (live: DEN, not FRA)
             before = self._date()
-        except Exception as e:
-            # Start may have been pressed: the game may be entered, and running. Nothing is clicked again.
+            after = self._run_for(PROOF_S)
+        except BaseException as e:
             self._left_running = True
-            raise SessionError("not_entered", "the clicks went out but the date could not be read after them (%s): "
-                               "the game may be entered and running unpaused; enter_game and advance are refused "
-                               "until stop" % _describe(e), clicks=clicks) from e
-        after = self._run_for(PROOF_S)
+            self._entered_unproved = True
+            if not isinstance(e, Exception):
+                raise
+            raise self._after_start_error(e, clicks) from e
         if _game_day(after) <= _game_day(before):
             try:
                 shot = str(self._shot())
@@ -1268,6 +1318,43 @@ class Session:
                                screenshot=shot, before=before, after=after, clicks=clicks)
         self._entered = True
         return {"entered": True, "clicks": clicks, "before": before, "after": after}
+
+    def _console_after_start(self) -> None:
+        """Wait for the console to take commands again once Start is pressed: `ensure_open` is tried every
+        ENTER_RETRY_S while it refuses for a reason in ENTER_RETRIED, until ENTER_WAIT_S has passed; any other
+        error is raised at once, and `watch` is looked at before each retry, so a game that ended stops the tries.
+        Recorded as the step `console_after_start`, with the tries made."""
+        deadline = self._clock() + ENTER_WAIT_S
+        with self._step("console_after_start") as out:
+            tries = 0
+            while True:
+                tries += 1
+                out["tries"] = tries
+                try:
+                    self._console.ensure_open()
+                    return
+                except ConsoleError as e:
+                    if e.code not in ENTER_RETRIED or self._clock() + ENTER_RETRY_S > deadline:
+                        raise
+                self._sleep(ENTER_RETRY_S)
+                self._check_watch()
+
+    def _after_start_error(self, e: Exception, clicks: list[list[int]]) -> SessionError:
+        """What a failure after the Start click raises: its own code when it says more (ENTER_KEPT), else
+        not_entered with the code as `cause`; with the clicks, and the warning that nothing proved the game in
+        play or not."""
+        code = _code_of(e)
+        info = dict(e.info) if isinstance(e, SessionError) else {}
+        info["clicks"] = clicks
+        if isinstance(e, ConsoleError):
+            info["entered"] = e.entered
+        warning = ("Start was clicked before this, so the game may be entered and running unpaused (nothing proved "
+                   "it either way); enter_game and advance are refused until stop")
+        if isinstance(e, SessionError) and code in ENTER_KEPT:
+            detail = e.detail if code == "left_running" else "%s. %s" % (e.detail, warning)
+            return SessionError(code, detail, **info)       # left_running keeps the `cause` _run_for gave it
+        info["cause"] = code
+        return SessionError("not_entered", "after the clicks, %s. %s" % (_describe(e), warning), **info)
 
     def _point(self, fraction: tuple[float, float]) -> tuple[int, int]:
         """A point of the client area, in client pixels, from fractions of its width and height."""
