@@ -1299,6 +1299,196 @@ DRAFTS.update({
         "a tangle of dead overhead cables, {landmark} hazy at the end of the street"),
 })
 
+
+# --- Waves 4 and 5 in full: the size and prosperity variants of every regional street, written
+# from tables the way the pilot's twelve were by hand (which stay as they are). A variant leads
+# with its verdict, takes its houses from the region and its vehicles and towers from the rung,
+# and keeps the family's landmark. Megacities exist from rung 3; the European metropolis of
+# rung 1 is the pilot's own picture.
+VARIANT_ADJ = {
+    "european": "European", "north_american": "North American", "latin_american": "Latin American",
+    "african": "African", "south_asian": "South Asian", "middle_eastern": "Middle Eastern",
+    "east_asian": "East Asian", "japanese": "Japanese",
+}
+# (the low houses of a small town; what lies beyond it; the old quarter seen from above; a street
+#  detail of the region; the houses of the poor; of the rich; the ordinary street's buildings)
+VARIANT_REGION = {
+    "european": (
+        "two- and three-storey plastered houses with steep tiled roofs",
+        "wooded hills beyond the roofs",
+        "older stone blocks with mansard roofs",
+        "iron street lamps",
+        "grimy stone apartment buildings with cracked plaster and patched windows",
+        "restored stone apartment buildings with gilded balconies and flower boxes",
+        "stone apartment buildings"),
+    "north_american": (
+        "two-storey brick and clapboard buildings with flat roofs and wooden porches",
+        "a grain elevator and open prairie beyond the roofs",
+        "old brick blocks with water tanks on their roofs",
+        "wooden utility poles",
+        "run-down brick tenements with rusty fire escapes beside weedy empty lots",
+        "elegant limestone and brick apartment houses with plain striped awnings and doormen",
+        "brick commercial blocks with iron fire escapes"),
+    "latin_american": (
+        "one- and two-storey colonial houses in ochre, pink and white with red tile roofs",
+        "green hills behind",
+        "old colonial fronts with red tile roofs",
+        "palm trees",
+        "unplastered brick houses with tin roofs stacked up a steep hillside",
+        "white villas and balconied mansions behind garden walls hung with bougainvillea",
+        "colonial fronts and plain concrete apartment blocks"),
+    "african": (
+        "single-storey whitewashed houses with verandas and corrugated iron roofs",
+        "acacia trees and red earth beyond",
+        "older whitewashed arcaded buildings with iron roofs",
+        "flame trees",
+        "tin-roofed shacks and half-built concrete-block houses",
+        "white villas with deep verandas in walled gardens of flame trees",
+        "arcaded buildings and weathered concrete blocks"),
+    "south_asian": (
+        "two-storey whitewashed brick houses with flat roofs and wooden balconies",
+        "palm groves and fields beyond the roofs",
+        "old red sandstone arcades and carved balconies",
+        "a spreading banyan tree",
+        "crumbling brick tenements patched with corrugated iron and tarpaulin",
+        "white villas and marble-fronted apartment blocks with deep verandas behind garden walls",
+        "concrete blocks and old houses with carved balconies"),
+    "middle_eastern": (
+        "flat-roofed two-storey stone and plaster houses with wooden lattice windows",
+        "date palms and dry hills behind",
+        "the flat roofs and courtyards of the old quarter",
+        "date palms",
+        "crumbling mud-brick and bare concrete-block houses with flat roofs",
+        "pale stone villas with arched loggias in walled gardens of date palms",
+        "sand-colored apartment blocks with deep balconies"),
+    "east_asian": (
+        "two-storey arcaded row houses with grey tiled roofs",
+        "rice fields and misty hills beyond the roofs",
+        "old tiled-roof row houses and courtyards",
+        "streams of bicycles",
+        "crowded old tiled-roof row houses with makeshift brick lean-tos",
+        "courtyard mansions with glazed tile roofs and round moon gates behind high walls",
+        "plain brick and concrete blocks and old tiled row houses"),
+    "japanese": (
+        "two-storey wooden town houses with grey tiled roofs",
+        "wooded mountains beyond the roofs",
+        "low tiled wooden houses in narrow lanes",
+        "utility poles strung with many wires",
+        "cramped weathered wooden row houses with patched tiled roofs",
+        "large walled wooden villas with tiled gates and pine gardens",
+        "plain concrete buildings and wooden town houses"),
+}
+# By rung: (what the time puts in a small town; ordinary vehicles; the poor's; the rich's; the
+#  towers of a great city; what carries its traffic; the same for a megacity; towers seen far
+#  off from a poor street; behind a rich one; a wreck at the kerb of a neglected one)
+VARIANT_RUNG = {
+    1: ("an old 1920s bus, a horse cart",
+        "a few rounded 1930s automobiles",
+        "handcarts, bicycles and one old 1920s truck",
+        "polished 1930s limousines with chauffeurs",
+        "a dense cluster of stepped stone and art deco towers of twenty to thirty storeys",
+        "trams, double-deck buses and rounded 1930s automobiles on a wide boulevard, an iron "
+        "railway viaduct",
+        "",
+        "factory chimneys far in the background",
+        "an art deco apartment tower behind",
+        "a broken-down 1920s truck"),
+    2: ("a rounded 1950s country bus, telephone poles, one new plain concrete building",
+        "a few small rounded 1950s cars",
+        "handcarts, bicycles and a battered rounded 1950s bus",
+        "gleaming finned 1950s limousines and convertibles",
+        "a dense cluster of flat-topped glass and steel slab towers of twenty to thirty storeys",
+        "a wide avenue packed with rounded 1950s cars and buses, an elevated concrete expressway",
+        "",
+        "new concrete slab towers far in the background",
+        "new glass slab towers behind",
+        "a rounded 1950s car without wheels"),
+    3: ("a country bus, one concrete block of four storeys, young trees",
+        "a few boxy 1980s cars",
+        "a few rusty boxy 1980s cars and an old bus",
+        "polished boxy 1980s limousines and sports cars",
+        "a dense cluster of flat-topped mirrored glass towers of forty to sixty storeys",
+        "a multi-lane avenue packed with boxy 1980s cars and articulated buses, an elevated "
+        "expressway",
+        "stacked expressway interchanges full of boxy 1980s cars, elevated railway lines",
+        "mirrored towers far in the background",
+        "gleaming mirrored towers behind",
+        "a burnt-out boxy 1980s car"),
+    4: ("solar panels on every roof, a small electric bus, wind turbines on the heights",
+        "a few smooth electric cars",
+        "worn electric scooters, cargo bicycles and a patched old electric bus",
+        "sleek silent electric limousines and driverless shuttles",
+        "a dense cluster of slender supertall glass towers with planted terraces, some over a "
+        "hundred storeys",
+        "sleek trains on elevated viaducts, avenues of smooth electric cars, green roofs",
+        "elevated train viaducts crossing in layers, roads of smooth electric cars, green roofs",
+        "slender supertall towers far in the background",
+        "slender supertall towers with sky gardens behind",
+        "a stripped electric car on blocks"),
+    5: ("a small transparent vacuum-train stop on slender pylons, two garden towers of twenty "
+        "storeys, a flying craft overhead",
+        "small pod vehicles and humanoid robots",
+        "battered old pod vehicles and patched-up robots",
+        "gleaming private flying craft and attendant humanoid robots",
+        "colossal kilometre-high arcology towers joined by sky bridges and hung with gardens",
+        "streams of flying craft between the towers, transparent vacuum-train tubes on tall pylons",
+        "swarms of flying craft, transparent vacuum-train tubes crossing on tall pylons",
+        "colossal kilometre-high arcology towers far above in the background",
+        "kilometre-high garden towers behind",
+        "a dead humanoid robot slumped beside a grounded pod vehicle"),
+}
+VARIANT_SHOWS = {
+    "town": "the largest city under 100,000 people",
+    "metropolis": "the largest city over 1,000,000 people",
+    "megacity": "the largest city over 10,000,000 people",
+    "poor": "a low standard of living",
+    "affluent": "a high standard of living",
+    "rundown": "a standard of living well under what its people expect",
+}
+
+
+def variant_prompt(region: str, rung: int, variant: str) -> str:
+    adj = VARIANT_ADJ[region]
+    low, beyond, old, detail, poor, rich, plain = VARIANT_REGION[region]
+    town, cars, poor_cars, rich_cars, towers, traffic, mega_traffic, far, behind, wreck = VARIANT_RUNG[rung]
+    future = "far-future " if rung == 5 else ""
+    a = "an" if (future or adj)[0] in "AEIOU" else "a"      # "an African city", "a far-future African city"
+    end = "{landmark} hazy at the end of the street"
+    if variant == "town":
+        return (f"A small {future}{adj} provincial town {{when}}: a quiet main street of {low}, {town}, "
+                f"{cars}, {detail}, a few people, {{landmark}} at the end of the street, {beyond}")
+    if variant == "metropolis":
+        return (f"The center of a great {future}{adj} metropolis {{when}}, seen from above a wide avenue: "
+                f"{towers}, rising over {old}, {traffic}, crowds, {{landmark}} small among the towers")
+    if variant == "megacity":
+        return (f"An endless {future}{adj} megacity {{when}}, seen from a high rooftop: {towers} and dense "
+                f"city blocks stretching to the horizon in every direction under a haze, {mega_traffic}, "
+                f"{old} below, {{landmark}} small in the foreground")
+    if variant == "poor":
+        return (f"A poor, shabby quarter of {a} {future}{adj} city {{when}}: {poor}, washing hung across a "
+                f"potholed unpaved lane, {poor_cars}, tangled overhead wires, {detail}, street vendors with "
+                f"crates, people in worn clothes, {far}, {end}")
+    if variant == "affluent":
+        return (f"A wealthy, immaculate quarter of {a} {future}{adj} city {{when}}: {rich}, a spotless "
+                f"tree-lined boulevard, a fountain, {rich_cars}, terraces under plain parasols, elegantly "
+                f"dressed people, {behind}, {end}")
+    assert variant == "rundown", variant
+    return (f"A neglected, decaying quarter of {a} {future}{adj} city in hard times {{when}}: {plain} with "
+            f"peeling paint, broken and boarded-up windows and shuttered ground floors, litter and "
+            f"overflowing bins, {wreck}, weeds in the cracked pavement, a queue of idle people in drab "
+            f"clothes, {far}, {end}")
+
+
+for _region in REGIONS:
+    for _rung in CITY_LADDER:
+        for _name in VARIANT_SHOWS:
+            _key = f"urban_{_region}_{_rung}_{_name}"
+            if _key in DRAFTS or _key in PICTURES or (_name == "megacity" and _rung < 3):
+                continue
+            DRAFTS[_key] = _variant(_region, _rung, _name, VARIANT_SHOWS[_name],
+                                    variant_prompt(_region, _rung, _name))
+
+
 # --- Wave 3: worked land. A draft becomes a picture here once it has a picked render: its
 # prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
 # picture it is like, and this table adds what decides between it and its neighbors.
