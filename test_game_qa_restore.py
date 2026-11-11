@@ -290,6 +290,29 @@ class RestoreTests(RestoreTestCase):
         self.assertEqual(sorted(p.name for p in run_logs.iterdir()), ["debug.log", "error.log", "game.log"])
         self.assertEqual((run_logs / "debug.log").read_text(), "the run's log\n")
 
+    def test_told_to_leave_the_logs_alone_it_copies_puts_back_and_removes_none(self):
+        # The command line passes logs=False for a snapshot nothing was launched under: its logs are whoever
+        # played since, not a run's.
+        snap = self.take()
+        (self.user / "logs/debug.log").write_text("a later session's log\n")      # changed
+        (self.user / "logs/error.log").unlink()                                  # in the manifest, gone now
+        (self.user / "logs/game.log").write_text("a log added since")             # new
+        before = tree(self.user)
+        out = restore.restore(snap, self.user, other_game_running=False, run_logs_dir=self.tmp / "runlogs",
+                              logs=False)
+        self.assertEqual((out.held, out.restored, out.removed), (False, [], []))
+        self.assertEqual(tree(self.user), before)
+        self.assertFalse((self.tmp / "runlogs").exists())
+        self.assertEqual(events(snap), ["restored"])
+
+    def test_told_to_leave_the_logs_alone_it_still_puts_the_other_files_back(self):
+        snap = self.take()
+        (self.user / "logs/debug.log").write_text("a later session's log\n")
+        (self.user / "pdx_settings.json").unlink()
+        out = restore.restore(snap, self.user, other_game_running=False, logs=False)
+        self.assertEqual((out.held, out.restored), (False, ["pdx_settings.json"]))
+        self.assertEqual((self.user / "logs/debug.log").read_text(), "a later session's log\n")
+
     def test_no_folder_is_made_for_run_logs_when_there_are_none(self):
         for p in (self.user / "logs").iterdir():
             p.unlink()

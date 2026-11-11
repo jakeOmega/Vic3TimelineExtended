@@ -393,6 +393,7 @@ def restore(
     other_game_running: bool,
     run_logs_dir: Path | None = None,
     now: datetime | None = None,
+    logs: bool = True,
 ) -> Outcome:
     """Put `user_data` back as `snap` found it, or hold.
 
@@ -414,6 +415,7 @@ def restore(
 
     Raises, recording neither `restored` nor `held`, if the folder is missing or a stored file is missing,
     the wrong size or damaged. The store is checked before the first change. `now` stamps the journal entry.
+    With `logs` False, `logs/` is left alone entirely: nothing is copied out, put back or removed there.
     """
     user_data = Path(user_data)
     if other_game_running:
@@ -421,6 +423,8 @@ def restore(
             return Outcome([], [], False, "already_restored")  # finished: another game does not make it held
         return _hold(snap, "other_game_running", now)
     diff, seen = _compare(snap, user_data)
+    if not logs:
+        diff = Diff(*([n for n in part if not n.startswith("logs/")] for part in vars(diff).values()))
     reason, late = _hold_reason(snap, user_data, diff)
     if reason:
         return _hold(snap, reason, now, files=late)
@@ -430,7 +434,8 @@ def restore(
     to_remove = sorted([*diff.added_in_set, *diff.created])
     backup_root = _backup_root(snap)
     _check_store(backup_root, snap, to_restore)
-    _copy_logs_out(snap, user_data, Path(run_logs_dir) if run_logs_dir is not None else snap.dir / RUN_LOGS_NAME)
+    if logs:
+        _copy_logs_out(snap, user_data, Path(run_logs_dir) if run_logs_dir is not None else snap.dir / RUN_LOGS_NAME)
     restored, changed_file = _put_back(backup_root, snap, to_restore, user_data, seen)
     removed: list[str] = []
     if changed_file is None:
