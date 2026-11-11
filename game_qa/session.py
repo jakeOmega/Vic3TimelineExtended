@@ -474,10 +474,15 @@ class Session:
 
     def _end_game(self, notes: list[str]) -> None:
         # `launch`'s own record of the game, if the failure came before it was taken as `_proc`: the helper
-        # adopts a process only when its creation time matches, so a wrong or unknown time ends nothing.
+        # adopts a process only when its creation time matches (win_helper._op_adopt).
         proc = self._proc or _named_proc(self._launch_reply)
         if proc is None:
             notes.append("the game's process is not known (launch's reply did not name it), so it was not ended")
+            return
+        if proc.created == UNKNOWN_START:
+            # A pid alone may be another game's by now: wait for no game at all, then restore (part 1's rule).
+            notes.append("launch recorded no start time for pid %d, so it was not ended: a pid alone may be "
+                         "another game's" % proc.pid)
             return
         if not self._adopted:
             try:

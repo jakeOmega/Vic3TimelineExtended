@@ -475,8 +475,12 @@ class StartTest(SessionTestCase):
 
     def test_a_launch_reply_without_a_start_time_still_gets_its_watch_then_stops(self):
         self.cli.queue("launch", {"id": SNAP, "pid": PID, "created": "unknown"}, 0)
-        self.assertEqual(self.session_error(self.start).code, "unknown_start")
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "unknown_start")
         self.assertEqual(len(self.watches), 1)
+        # a pid alone may be another game's: nothing is adopted or ended by it
+        self.assertEqual((self.game.adopted, self.game.killed), ([], []))
+        self.assertTrue(any("no start time" in note for note in error.info["stop"]["notes"]))
         self.assertEqual(self.cli.verbs[-1], "restore")
 
     def test_a_watch_that_cannot_be_spawned_still_ends_the_game(self):
