@@ -391,17 +391,22 @@ upkeep limited to rungs 2 to 4.
   - *The dark strip* was on 6 of this wave's 46 renders of that seed; none was picked.
   - *Later rungs of a ladder drift toward one look* (drones, wind turbines, solar panels on every roof).
     It reads as its time, but the farm families' fourth rungs are closer to one another than their first.
-- **What waves 6 and 7 taught** (2026-11-10, 180 renders for 45 pictures, none rerun):
+- **What waves 6 and 7 taught** (2026-11-10, 204 renders for 45 pictures; the four ruins and strikes rendered twice):
   - *A dated vehicle in the prompt works for cars and buses, less for trucks.* "Rounded 1950s cars" gave
     1950s cars; "1950s trucks" on an empty highway still gave today's long-haul rigs in about half the
     candidates. The natural-terrain pictures have one rung and show from 1960 to the end of the game, so a
     later truck was let pass where the rest of the picture was best.
   - *A famous landscape is a landmark too.* "A red rock desert" drew Monument Valley's two buttes in one
     candidate; the pick has plain mesa cliffs.
-  - *Destruction renders mild.* The ruins and the struck city of the later rungs came out as a damaged,
-    hazy city with traffic still moving, not the flattened one the prompts describe; the 1960 strike (an
-    ash plain) is the only one that reads at a glance. A second set with the damage named first would
-    help if the play-test finds them too gentle.
+  - *Destruction renders mild unless it leads the prompt.* "A city ruined by war: roofless buildings,
+    streets choked with rubble" gave a street with a few damaged houses and traffic still moving, and "a
+    city after a nuclear strike" a hazy city with one snapped tower. The owner: the ruins showed about a
+    tenth of the buildings damaged where one to two thirds should be, and "I want it to be very obvious that
+    these are not normal states". The second set opens with the verdict ("a city bombed flat", "a city
+    erased by an atomic bomb"), gives the share ("two thirds of the buildings collapsed into heaps", "no
+    intact building anywhere") and, for the strike, the one object nothing else has: a mushroom cloud on
+    the horizon. All 24 candidates read as destroyed. Towers still stand in the later ruins and the later
+    strike: FLUX won't draw a skyline of stumps.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one

@@ -1339,12 +1339,11 @@ WAVE6_PICKS = {
     "smog_2": {"seed": 2, "smudge": [(1320, 556, 1415, 584), (420, 694, 465, 714), (1145, 506, 1180, 528)]},
     "smog_3": {"seed": 0, "smudge": [(405, 508, 494, 547)]},
     "smog_4": {"seed": 1, "smudge": [(920, 645, 965, 695), (806, 552, 834, 642)]},
-    "devastated_early": {"seed": 1, "smudge": [(648, 544, 722, 568), (655, 482, 705, 500)]},
-    "devastated_late": {"seed": 0, "crop": (0, 0, 1485, 727),
-                        "smudge": [(1295, 370, 1350, 408), (1420, 360, 1490, 398), (425, 512, 475, 544),
-                                   (146, 556, 194, 588)]},
-    "nuclear_strike_early": {"seed": 0},
-    "nuclear_strike_late": {"seed": 0},
+    # the second set: the first showed a damaged city where a destroyed one was wanted (the owner)
+    "devastated_early": {"seed": 3, "crop": (62, 60, 1474, 752)},
+    "devastated_late": {"seed": 5, "crop": (0, 0, 1432, 702)},
+    "nuclear_strike_early": {"seed": 3, "crop": (62, 60, 1474, 752)},
+    "nuclear_strike_late": {"seed": 4},
 }
 
 for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
