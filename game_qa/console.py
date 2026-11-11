@@ -19,7 +19,9 @@ What the game shows of a command (verified on 2026-11-10):
     holds, a short wait that sees no change is "cannot tell", and the proof
     that it arrived has to come from the log: the log proof for repeats is
     required, not optional. (Whether a repeat that is not the last entry is
-    written is not known; the code needs no answer to that.)
+    written is not known; the code needs no answer to that.) The file's encoding is not
+    verified either, so a text with a non-ASCII character is treated like a repeat: a
+    short wait, and if the history has not shown it by then, the log decides.
   * `debug.log` gets `Running console command:` and one `console_success:` or
     `console_failure:` line per reply line, but block-buffered: they are not in
     the file until about 4 KB more has been logged. `help ndefines.ngui` prints
@@ -34,6 +36,12 @@ What the game shows of a command (verified on 2026-11-10):
     hold their clock while the window is not responding, and before any
     retyping and before the console key, the history (or the log) is looked at
     once more for the first typing.
+
+Taking the foreground back needs `helper.idle_ms()` to read 30 s or more. On a machine where
+that reading is always small (measured on the owner's machine with a remote-desktop session
+connected: 0 to 31 ms continuously) the console never takes the foreground back, so the game
+must already be in front or the command fails with `not_foreground` after 120 s, with nothing
+typed.
 
 `Console` consumes the `LogFollower` it is given: a line it has polled is not
 returned to anyone else who polls the same follower.
@@ -74,11 +82,15 @@ class ConsoleError(Exception):
     """`code` is one of bad_text, not_foreground, no_ack, no_reply, game_gone, stranded_text,
     history_unreadable, log_gap, or `helper: <code>` for an error of the helper itself.
 
-    `entered` is True when the command is known to have been entered (its arrival was seen) before the
-    error: a caller must not run it again.
+    `entered` says whether the command ran:
+
+      * True: its arrival was seen before the error. A caller must not run it again.
+      * False: its arrival was not seen.
+      * None: it was typed, and the log lines that would have shown whether it ran are lost (`log_gap`).
+        It may have run: a caller that retries on False must not retry on None.
     """
 
-    def __init__(self, code: str, detail: str = "", entered: bool = False) -> None:
+    def __init__(self, code: str, detail: str = "", entered: bool | None = False) -> None:
         super().__init__("%s: %s" % (code, detail) if detail else code)
         self.code, self.detail, self.entered = code, detail, entered
 
@@ -95,7 +107,8 @@ class _Typed:
     """One typing of a command: what the history held just before, to tell what it gained since."""
     key: str                        # the text, stripped
     before: list[str]
-    repeat: bool                    # the history already held the text
+    repeat: bool                    # the history cannot be counted on to show it: it already held the text, or the
+                                    # text is not ASCII (the history file's encoding is unverified)
 
 
 class Console:
@@ -138,9 +151,13 @@ class Console:
             the window is not responding    the wait's clock is held (for 10 s, then game_gone)
             gained the text later           (checked before the console key and before any retype) arrived
             Enter refused with text typed   stranded_text until `clear_line()`
+            log lines lost while waiting    log_gap (`entered` None unless the arrival was seen)
         """
         if not text.strip() or "\n" in text or "\r" in text:
             raise ConsoleError("bad_text", "a console command is one non-blank line")
+        if len(text) > CLEAR_BACKSPACES:
+            raise ConsoleError("bad_text", "a console command is at most %d characters, so that clear_line() "
+                                           "can always empty what was typed" % CLEAR_BACKSPACES)
         self._refuse_if_stranded()
         is_flush = text.strip() == FLUSH_COMMAND
         reply = reply and not is_flush
@@ -189,6 +206,8 @@ class Console:
         except ConsoleError as e:
             if proved or found is not None:
                 e.entered = True
+            elif e.code == "log_gap" and text_t is not None:
+                e.entered = None                # typed, and the proof was in the lines lost: unknown, do not retry
             raise
         lines = [p.text for p in found]
         verdict = False if any(p.kind == "failure" for p in found) else (True if lines else None)
@@ -257,6 +276,8 @@ class Console:
                 if e.code == "bad_text":
                     raise ConsoleError("bad_text", e.detail) from e
                 if e.code != "not_foreground":
+                    if any("text" in step for step in steps):
+                        self._stranded = True   # it failed partway, and nothing says how far: the line may hold text
                     raise ConsoleError("helper: " + e.code, e.detail) from e
                 self._require_window()          # a window that is gone is game_gone, whatever was typed
                 nothing_sent = e.reply.get("steps_done") == 0 and not e.reply.get("chars_sent")
@@ -330,8 +351,10 @@ class Console:
         return seen[newest + 1:commands[0]]
 
     def _pair(self, text: str, adjacent: bool = False) -> list[Parsed] | None:
-        """One look at the log for `text` and its flush."""
+        """One look at the log for `text` and its flush. A reply read across a gap is not a reply."""
         self._read_log()
+        if self._gap:
+            raise ConsoleError("log_gap", "the log lost lines while looking for the answer to %r" % text)
         return self._find_reply(text, adjacent)
 
     def _await_reply(self, text: str, seconds: float, adjacent: bool = False) -> list[Parsed] | None:
@@ -376,7 +399,7 @@ class Console:
         """Type `text` and Enter. The history is read first, and a history that cannot be read stops it here."""
         before = self._history()
         key = text.strip()
-        typed = _Typed(key, before, key in [line.strip() for line in before])
+        typed = _Typed(key, before, not key.isascii() or key in [line.strip() for line in before])
         self._keys([{"text": text}, {"scan": SCAN_ENTER}])
         return typed
 
@@ -390,9 +413,10 @@ class Console:
         return any(line.strip() == typed.key for line in gained)
 
     def _watch(self, typed: _Typed, wait: float) -> bool | None:
-        """True if the typing lands within `wait` seconds. If not: None when the history already held the
-        text (it may not write a repeat, so this proves nothing about the console), False when it did not (the
-        text did not arrive)."""
+        """True if the typing lands within `wait` seconds. If not: None when the history cannot be counted on
+        to show it (it already held the text and may not write a repeat, or the text is not ASCII and may be
+        written in another encoding: this proves nothing about the console), False when it can (the text did
+        not arrive)."""
         if self._wait(lambda: self._landed(typed), min(wait, REPEAT_ARRIVAL_S) if typed.repeat else wait):
             return True
         return None if typed.repeat else False

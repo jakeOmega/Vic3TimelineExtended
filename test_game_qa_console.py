@@ -66,13 +66,20 @@ class RoundTripTest(ConsoleTestCase):
         self.console.run('event "é".1', reply=False)
         self.assertIn({"text": 'event "é".1'}, self.game.steps)
 
+    def test_a_text_longer_than_clear_line_can_clear_is_refused_before_any_key(self):
+        self.game.console_open = True
+        self.assertEqual(self.fail_code("x" * (console.CLEAR_BACKSPACES + 1)), "bad_text")
+        self.assertEqual(self.game.steps, [])
+        self.console.run("x" * console.CLEAR_BACKSPACES, reply=False)           # the longest that is allowed
+        self.assertEqual(self.game.steps, [{"text": "x" * console.CLEAR_BACKSPACES}, ENTER])
+
     def test_game_exit_mid_command_raises_game_gone(self):
         self.game.console_open = True
         self.game.exit_after_steps = 1
         with self.assertRaises(console.ConsoleError) as e:
             self.console.run("tag FRA")
         self.assertEqual(e.exception.code, "game_gone")
-        self.assertLess(self.game.clock(), 30.0)
+        self.assertEqual(self.game.clock(), 0.0)            # a window that is gone ends everything at once
 
     def test_repeated_command_acks_from_the_log(self):
         self.game.console_open = True
@@ -155,14 +162,14 @@ class RoundTripTest(ConsoleTestCase):
         self.game.console_open = True
         self.game.log = None
         self.assertEqual(self.fail_code("tag FRA", timeout=8.0), "no_reply")
-        self.assertLess(self.game.clock(), 20.0)
+        self.assertAlmostEqual(self.game.clock(), 8.0, delta=console.POLL_S)
 
     def test_game_exit_while_waiting_for_the_reply_raises_game_gone(self):
         self.game.console_open = True
         self.game.log = None
         self.game.exit_after_steps = 4          # the text, Enter, the flush, Enter
         self.assertEqual(self.fail_code("tag FRA"), "game_gone")
-        self.assertLess(self.game.clock(), 30.0)
+        self.assertEqual(self.game.clock(), 0.0)
 
     def test_the_flush_command_itself_is_just_run(self):
         self.game.console_open = True
@@ -349,6 +356,22 @@ class ArrivalTest(ConsoleTestCase):
         self.assertEqual(r.lines, ["new"])              # pair with the old line
         self.assertEqual(self.game.steps.count(CONSOLE_KEY), 1)
 
+    def test_a_text_with_non_ascii_characters_is_proved_by_the_log_when_the_history_does_not_show_it(self):
+        # The history file's encoding is unverified: if the game writes it in another one the text never turns up
+        # there, which must not read as "did not arrive" (that retypes it, and runs it twice).
+        self.game.console_open = True
+        self.game.history_encoding = "cp1252"
+        self.game.on('event "\u00e9".1', success=["Executed"])
+        r = self.console.run('event "\u00e9".1')
+        self.assertEqual((r.ok, r.lines), (True, ["Executed"]))
+        self.assertEqual(self.game.steps.count({"text": 'event "\u00e9".1'}), 1)
+        self.assertNotIn(CONSOLE_KEY, self.game.steps)
+
+    def test_a_text_with_non_ascii_characters_that_the_history_does_show_needs_no_flush(self):
+        self.game.console_open = True
+        self.console.run('event "\u00e9".1', reply=False)
+        self.assertEqual(self.game.steps, [{"text": 'event "\u00e9".1'}, ENTER])
+
     def test_a_repeat_into_a_closed_console_opens_it_and_goes_again(self):
         self.game.console_open = True
         self.game.history_skips_repeats = True
@@ -383,7 +406,7 @@ class ArrivalTest(ConsoleTestCase):
         self.game.console_open = False
         self.game.exit_after_steps = 2
         self.assertEqual(self.fail_code("tag FRA", reply=False), "game_gone")
-        self.assertLess(self.game.clock(), 30.0)
+        self.assertEqual(self.game.clock(), 0.0)
 
 
 class EnsureOpenTest(ConsoleTestCase):
@@ -680,9 +703,54 @@ class StrandedTextTest(ConsoleTestCase):
         self.assertEqual(self.history.read_text(encoding="utf-8"), "tag FRA\ntag GBR\n")
 
 
+class HelperErrorMidTextTest(ConsoleTestCase):
+    """A helper error that is not a refusal to start: some of the text may be in the line."""
+
+    def fail_after_three_characters(self, code="backend_error"):
+        def keys(pid, steps):
+            self.game.steps.append(steps[0])
+            self.game.typed += steps[0].get("text", "")[:3]
+            raise console.HelperError(code, "OSError('SendInput sent 0 of 1 events')")
+        self.game.keys = keys
+
+    def test_a_backend_error_after_some_of_the_text_strands_it(self):
+        self.game.console_open = True
+        self.fail_after_three_characters()
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("event france.1", reply=False)
+        self.assertEqual(e.exception.code, "helper: backend_error")
+        self.assertEqual(self.game.typed, "eve")
+        del self.game.keys                              # the helper works again
+        self.assertEqual(self.fail_code("tag GBR", reply=False), "stranded_text")
+        self.assertFalse(self.history.exists())         # not "evetag GBR"
+        self.console.clear_line()
+        self.assertEqual(self.game.typed, "")
+        self.console.run("tag GBR", reply=False)
+        self.assertEqual(self.history.read_text(encoding="utf-8"), "tag GBR\n")
+
+    def test_a_refusal_of_the_text_itself_strands_nothing(self):
+        self.game.console_open = True
+        self.fail_after_three_characters("bad_text")
+        self.assertEqual(self.fail_code("tag FRA", reply=False), "bad_text")
+        del self.game.keys
+        self.console.run("tag GBR", reply=False)
+
+    def test_a_backend_error_in_a_key_press_strands_nothing(self):
+        # Only text can leave half a command in the line.
+        self.game.console_open = True
+        self.game.keys = lambda pid, steps: (_ for _ in ()).throw(console.HelperError("backend_error", "boom"))
+        with self.assertRaises(console.ConsoleError):
+            self.console.clear_line()
+        del self.game.keys
+        self.console.run("tag GBR", reply=False)
+
+
 class EnteredFlagTest(ConsoleTestCase):
     def test_it_defaults_to_false(self):
         self.assertIs(console.ConsoleError("no_ack").entered, False)
+
+    def test_it_can_be_unknown(self):
+        self.assertIsNone(console.ConsoleError("log_gap", entered=None).entered)
 
     def test_a_command_that_never_arrived_is_not_entered(self):
         self.game.console_open = False
@@ -783,6 +851,42 @@ class LogGapTest(ConsoleTestCase):
         with self.assertRaises(console.ConsoleError) as e:
             self.console.run("tag FRA")
         self.assertEqual((e.exception.code, e.exception.entered), ("log_gap", True))
+
+    def test_lost_lines_seen_while_looking_for_a_late_reply_are_log_gap_not_a_reply(self):
+        # A text the history will not show again, in a game 6 s slow: the reply is found by the late-arrival check.
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.game.on("event x.1", success=["first line"], failure=["the failure that gets lost"])
+        self.console.run("event x.1", reply=False)
+        real_run = self.game._run
+
+        def run_and_lose_a_line(text):
+            real_run(text)
+            if text == "event x.1":                 # the command, its first reply line, the loss, the rest
+                at = max(i for i, line in enumerate(self.game.unwritten) if line.endswith("command: event x.1"))
+                self.game.unwritten[at + 2:at + 3] = [logtail.GAP_MARKER]
+        self.game._run = run_and_lose_a_line
+        self.game.latency = 6.0
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("event x.1")
+        self.assertEqual(e.exception.code, "log_gap")
+
+    def test_lost_lines_before_the_command_has_any_proof_leave_it_unknown_whether_it_was_entered(self):
+        # entered=False would invite a retry of a command that may have run; None says: do not.
+        self.game.console_open = True
+        self.game.history_skips_repeats = True
+        self.console.run("tag FRA", reply=False)
+
+        def lose_lines_after_the_second_typing(sent):
+            if sent == 4:
+                with open(self.log, "a", encoding="utf-8") as f:
+                    f.write(logtail.GAP_MARKER + "\n")
+                self.game.on_step = None
+        self.game.on_step = lose_lines_after_the_second_typing
+        with self.assertRaises(console.ConsoleError) as e:
+            self.console.run("tag FRA", reply=False)
+        self.assertEqual(e.exception.code, "log_gap")
+        self.assertIsNone(e.exception.entered)
 
     def test_a_gap_from_before_the_call_is_no_gap(self):
         self.game.console_open = True

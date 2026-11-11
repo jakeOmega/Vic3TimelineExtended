@@ -226,6 +226,7 @@ class FakeHelper:
         self.console_open = False               # Enter runs the typed text while this is set
         self.console_never_opens = False        # the console key does nothing
         self.history_skips_repeats = False      # a command already in the history file is not written to it again
+        self.history_encoding = "utf-8"         # what the game writes the history file in (unverified for the real one)
         self.exit_after_steps: int | None = None        # the game ends once this many steps have been sent in all
         self.on_step = None                     # called with the steps sent so far, before each step is tried
         self.latency = 0.0                      # seconds from a key being sent to the game taking it
@@ -318,9 +319,9 @@ class FakeHelper:
             return
         if self.history is not None:
             self.history.parent.mkdir(parents=True, exist_ok=True)
-            known = self.history.read_text(encoding="utf-8").split("\n") if self.history.exists() else []
+            known = self.history.read_text(encoding=self.history_encoding).split("\n") if self.history.exists() else []
             if not (self.history_skips_repeats and text in known):
-                with open(self.history, "a", encoding="utf-8") as f:
+                with open(self.history, "a", encoding=self.history_encoding) as f:
                     f.write(text + "\n")
         self._run(text)
 
