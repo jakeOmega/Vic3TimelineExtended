@@ -249,9 +249,11 @@ class CauseColorsTest(unittest.TestCase):
                              short)
         cause_stripes = [body for limit, body in branches_of(stripes) if re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(len(cause_stripes), len(self.CAUSES), "a stripe that isn't a cause's")
-        # the only other stripes: Power Grids' hubs and Company Headquarters' regional headquarters
+        # the only other stripes: Power Grids' hubs, Trade Volume's Trade Centers and Company Headquarters' regional
+        # headquarters
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_grid_hub = yes",
+                                  "te_jmap_selector = 45 has_building = building_trade_center",
                                   "te_jmap_selector = 34 has_variable = te_jmap_rhq_n"])
 
     def test_the_census_stores_the_runner_up(self):
@@ -287,7 +289,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 41)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 46)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -856,10 +858,118 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
             inner = enclosing_span(row, at)[0] - 1
             return re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner))
 
-        self.assertEqual(row_of("ownership"), ["ownership", "company_hqs"])
+        self.assertEqual(row_of("ownership"), ["ownership", "company_hqs", "trade_volume"])
         self.assertEqual(row_of("armed_forces"), ["armed_forces", "fighting_age_men", "war_dead"])
         self.assertEqual(row_of("population_growth"), ["sex_balance", "net_migration", "population_growth"])
         self.assertEqual(row_of("health_care"), ["health_care", "family_planning"])
+
+
+class ClassesAndTradeMapsTest(_RoomBranches, unittest.TestCase):
+    """The four classes and Trade Volume (selectors 41-45; owner's ask, 2026-11-11)."""
+
+    CLASSES = (("capitalists", 41, "capitalists"), ("aristocrats", 42, "aristocrats"), ("clergy", 43, "clergymen"),
+               ("academics", 44, "academics"))
+
+    def test_each_class_paints_its_share_of_the_people(self):
+        for key, sel, _pop_type in self.CLASSES:
+            with self.subTest(map=key):
+                colors = self.of(self.colors, sel)
+                gate = (f"te_jmap_selector = {sel} has_variable = te_dg_{key} has_variable = te_dg_walk_pop "
+                        "var:te_dg_walk_pop > 0")
+                self.assertEqual(colors, [(gate, f'lerp = {{ min_color = "te_jmap_{key}_low" max_color = '
+                                                 f'"te_jmap_{key}_high" factor = te_jmap_{key}_factor }}')])
+                self.assertEqual([limit for limit, _ in self.of(self.hover, sel)], [gate])
+                share = block(code(VALUES), f"te_jmap_{key}_share")
+                self.assertIn(f"value = var:te_dg_{key}", share)
+                self.assertIn("divide = { value = var:te_dg_walk_pop min = 1 }", " ".join(share.split()))
+                # the yearly walk's, whatever the Demographics rule
+                self.assertEqual(block(block(code(SGUIS), f"te_jmap_pick_{key}_sgui"), "is_shown").split(),
+                                 ["is_player", "=", "yes"])
+
+    def test_the_walk_counts_the_classes_in_calls_of_its_own(self):
+        walk = block(code("common/scripted_effects/te_demog_effects.txt"), "te_demog_walks")
+        pops = walk.index("every_scope_pop = {")
+        self.assertLess(walk.index("te_jmap_class_walk_init = yes"), pops)
+        self.assertGreater(walk.index("te_jmap_class_walk_pop = yes"), pops)
+        self.assertGreater(walk.index("te_jmap_class_walk_store = yes"), walk.index("te_demog_work_walk_store = yes"))
+        effects = code(EFFECTS)
+        pop = " ".join(block(effects, "te_jmap_class_walk_pop").split())
+        store = " ".join(block(effects, "te_jmap_class_walk_store").split())
+        locals_ = {"capitalists": "cap", "aristocrats": "ari", "clergy": "cle", "academics": "aca"}
+        for key, _sel, pop_type in self.CLASSES:
+            self.assertIn(f"limit = {{ is_pop_type = {pop_type} }} change_local_variable = {{ name = "
+                          f"te_jmap_w_{locals_[key]} add = total_size }}", pop)
+            self.assertIn(f"set_variable = {{ name = te_dg_{key} value = local_var:te_jmap_w_{locals_[key]} }}", store)
+        # no census gate: the counts are the walk's, as Armed Forces' soldiers
+        self.assertNotIn("te_demog_cohorts_run", block(effects, "te_jmap_class_walk_store"))
+
+    def test_trade_volume_is_the_owner_s_trade_with_the_world(self):
+        colors = self.of(self.colors, 45)
+        self.assertEqual([limit for limit, _ in colors],
+                         ["te_jmap_selector = 45 te_jmap_trade_value > 0", "te_jmap_selector = 45"])
+        self.assertIn("factor = te_jmap_trade_factor", colors[0][1])
+        self.assertEqual(colors[1][1], 'value = "te_jmap_none"', "a country that doesn't trade is pale")
+        # the map's two lines, then the stripes' Trade Center line
+        self.assertEqual([limit for limit, _ in self.of(self.hover, 45)],
+                         [limit for limit, _ in colors] + ["te_jmap_selector = 45 has_building = building_trade_center"])
+        value = " ".join(block(code(VALUES), "te_jmap_trade_value").split())
+        # the figure vanilla's Free Trade entry (je_liberalism_2) counts
+        self.assertIn("limit = { exists = owner } owner = { add = total_trade_value }", value)
+        stripes = branches_of(block(self.room, "map_color_second"))
+        self.assertIn(("te_jmap_selector = 45 has_building = building_trade_center", 'value = "te_jmap_trade_center"'),
+                      stripes)
+        self.assertIn("value = b:building_trade_center.level", block(code(VALUES), "te_jmap_trade_center_levels"))
+
+
+class CategoriesTest(unittest.TestCase):
+    """The Map Room's picks in seven collapsible categories (owner's ask, 2026-11-11)."""
+
+    CATEGORIES = ("society", "classes", "economy", "migration", "military", "systems", "census")
+
+    def setUp(self):
+        self.row = block(code(WIDGETS), "te_jmap_pick_row")
+
+    def headers(self):
+        return [enclosing(self.row, m.end()) for m in re.finditer(r"\bte_jmap_category_header\s*=\s*\{", self.row)]
+
+    def bodies(self):
+        return [enclosing(self.row, m.end()) for m in re.finditer(r"\bte_jmap_category\s*=\s*\{", self.row)]
+
+    def test_each_category_has_a_header_and_rows(self):
+        headers, bodies = self.headers(), self.bodies()
+        self.assertEqual([re.search(r'text = "te_jmap_cat_(\w+)"', h).group(1) for h in headers],
+                         list(self.CATEGORIES))
+        self.assertEqual(len(bodies), len(self.CATEGORIES))
+        keys = loc_keys()
+        for cat, header, body in zip(self.CATEGORIES, headers, bodies):
+            flag = f"te_jmap_cat_{cat}_open"
+            with self.subTest(category=cat):
+                self.assertIn(f"te_jmap_cat_{cat}", keys)
+                # _open: it starts collapsed (gui_style_guide.md, Sections)
+                self.assertIn(f"onclick = \"[GetVariableSystem.Toggle('{flag}')]\"", header)
+                self.assertIn(f"visible = \"[Not(GetVariableSystem.Exists('{flag}'))]\"",
+                              override(header, "onclick_showmore"))
+                self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", override(header, "onclick_showless"))
+                self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", body)
+                self.assertIn("te_jmap_pick_button = {", body)
+
+    def test_every_pick_sits_in_one_category(self):
+        seen = []
+        for body in self.bodies():
+            seen += re.findall(r'text = "te_jmap_pick_(\w+)"', body)
+        everything = re.findall(r'text = "te_jmap_pick_(\w+)"', self.row)
+        self.assertEqual(sorted(seen), sorted(everything), "a pick outside every category")
+        self.assertEqual(len(seen), len(set(seen)), "a pick in two categories")
+
+    def test_the_census_maps_are_together(self):
+        census = self.bodies()[self.CATEGORIES.index("census")]
+        for key in ("life_expectancy", "infant_mortality", "leading_cause", "birth_rate", "death_rate",
+                    "natural_change", "fertility", "median_age", "old_share", "sex_balance", "net_migration",
+                    "health_care", "family_planning"):
+            self.assertIn(f'text = "te_jmap_pick_{key}"', census, key)
+        classes = self.bodies()[self.CATEGORIES.index("classes")]
+        for key in ("capitalists", "aristocrats", "clergy", "academics"):
+            self.assertIn(f'text = "te_jmap_pick_{key}"', classes, key)
 
 
 class WindowButtonTest(unittest.TestCase):

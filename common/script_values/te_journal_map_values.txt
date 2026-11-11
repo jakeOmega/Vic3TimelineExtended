@@ -14,7 +14,8 @@
 # 2026-11-07); 32 city rank (tourism's), 33 armed forces (Soldiers and Officers, the yearly walk's), 34 company
 # headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 36 ownership (the walk's), 37
 # population growth (the walk's), 38 family planning, 39 health care, 40 fighting-age men (the census's; 2026-11-08,
-# second round); 0 none. 2 was literacy, retired because
+# second round); 41 capitalists, 42 aristocrats, 43 clergy, 44 academics (each class's share of the people, the
+# walk's), 45 trade volume (the owner's trade with the world market; 2026-11-11); 0 none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -310,6 +311,100 @@ te_jmap_soldiers_share = {
 	}
 	min = 0
 	max = 1
+}
+
+# The classes (41-44, 2026-11-11): a class's people over the state's, 0-1, both the yearly walk's (te_dg_capitalists,
+# te_dg_aristocrats, te_dg_clergy, te_dg_academics from te_demog_work_walk_pop; te_dg_walk_pop), whatever the
+# Demographics rule. Each map's input and its hover's figure.
+te_jmap_capitalists_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_capitalists
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_capitalists
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+te_jmap_aristocrats_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_aristocrats
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_aristocrats
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+te_jmap_clergy_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_clergy
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_clergy
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+te_jmap_academics_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_academics
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_academics
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Trade Volume (45, 2026-11-11): the state's owner's trade with the world market, the total value of what it buys and
+# sells there (total_trade_value, the figure vanilla's Free Trade entry je_liberalism_2 counts), so every state of a
+# country paints alike: script has no state's own share of it. 0 for a state with no owner.
+te_jmap_trade_value = {
+	value = 0
+	if = {
+		limit = { exists = owner }
+		owner = {
+			add = total_trade_value
+		}
+	}
+	min = 0
+}
+
+# The state's Trade Center levels, where its owner's trade goes through (the map's stripes and hover); 0 with none.
+te_jmap_trade_center_levels = {
+	value = 0
+	if = {
+		limit = { has_building = building_trade_center }
+		value = b:building_trade_center.level
+	}
 }
 
 # ---------------------------------------------------------------------------

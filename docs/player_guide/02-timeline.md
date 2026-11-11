@@ -1232,8 +1232,10 @@ three ways:
 - By treaty, with the Surrender a Monument article, which a war can enforce (see
   [treaty articles by purpose](09-diplomacy.md#treaty-articles-by-purpose)).
 
-What goes depends on the monument's form. A Grand Shrine is never taken, and a
-monument that loses a piece is spared for ten years.
+What goes depends on the monument's form. A Grand Shrine is never taken. A
+monument that loses a piece can't be looted again while that piece is abroad,
+nor within ten years of the taking, so one tomb's grave goods are never in two
+capitals at once.
 
 | Form | What is carried off |
 |---|---|

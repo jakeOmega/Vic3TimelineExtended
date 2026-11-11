@@ -204,7 +204,9 @@ escalation about once a week from the countries in the play, each for its own
 role as initiator, target or committed participant. No country adds more than 10
 a week, each country's weekly figure is rounded to a whole point, and nothing
 slows a play below the base rate: laws and seats that slow plays only cancel
-extra escalation.
+extra escalation. The extra stops while the play's escalation is paused: a week
+paused after demands or sways adds none of it, and a week paused for three days
+adds four-sevenths.
 
 | Source | Effect |
 |---|---|
