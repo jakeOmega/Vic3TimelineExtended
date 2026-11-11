@@ -1451,6 +1451,29 @@ class StopAgainTest(SessionTestCase):
                 self.assertIn("`python3 -m game_qa remove-overlay`", stop["next"])
                 self.assertNotIn(str(self.paths.overlay_dir), stop["next"])
 
+    def test_no_verb_reaches_the_game_after_a_stop_that_can_be_run_again(self):
+        # The server now serves on after such a stop, so verbs can arrive: each is refused before any key, watch,
+        # adopt or debugger call (the helper and the relay are closed, and the pid may be another program's).
+        verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("events", ()), ("pick", (0,)),
+                 ("read", (["c:FRA.gdp"],)), ("tag", ("GBR",)), ("enter_game", ()), ("advance", (5,)), ("shot", ()),
+                 ("try_event", ("x.1", None, ["c:FRA.gdp"])))
+        for state in ("game_left_up", "refused"):
+            with self.subTest(state=state):
+                self.setUp()
+                self.started()
+                if state == "game_left_up":
+                    self.game.kill = self.failing_kill
+                else:
+                    self.cli.queue("restore", {"held": False, "refused": "game_still_up", "id": SNAP}, 2)
+                stop = self.session.stop()
+                self.assertEqual((stop["outcome"], stop["stop_again"]), (state, True))
+                before = (len(self.game.steps), len(self.watches), list(self.game.adopted), list(self.game.killed),
+                          list(self.cli.verbs), list(self.game.order))
+                for name, args in verbs:
+                    self.assertEqual(self.session_error(getattr(self.session, name), *args).code, "stopped", name)
+                self.assertEqual((len(self.game.steps), len(self.watches), list(self.game.adopted),
+                                  list(self.game.killed), list(self.cli.verbs), list(self.game.order)), before)
+
     def test_a_stop_run_again_keeps_the_notes_of_the_one_before(self):
         self.started()
         self.game.kill = self.failing_kill
