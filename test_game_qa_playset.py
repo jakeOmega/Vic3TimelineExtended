@@ -525,6 +525,62 @@ class PlaysetTest(unittest.TestCase):
         self.start_result = self.game()
         self.assertEqual(self.launch(snap_id)[1], 0)
 
+    def launcher_rewrites_during_the_run(self, snap_id) -> bytes:
+        """A run with --add-mod during which the owner's launcher writes the playset again; returns `launch`'s
+        bytes. Restore then finds the launcher's bytes, not `launch`'s, and puts no playset back of its own."""
+        launchs = {}
+
+        def the_launcher_writes():
+            launchs["bytes"] = self.playset.read_bytes()
+            self.playset.write_bytes(json.dumps({"enabledMods": [{"path": WORKSHOP + "1"}]}).encode("utf-8"))
+
+        self.started_run(snap_id, "--add-mod", OVERLAY, during=the_launcher_writes)
+        return launchs["bytes"]
+
+    def the_owner_chooses(self, data: bytes):
+        """The owner's launcher writes `data`, an hour after the run."""
+        self.playset.write_bytes(data)
+        later = time.time() + 3600
+        os.utime(self.playset, (later, later))
+
+    def test_a_restored_snapshot_no_longer_vouches_for_launchs_bytes(self):
+        # Ruling on round 1's concern 1: the launcher rewrote the playset during the run, so `restore` put the
+        # snapshot's copy back with no `playset_restored`. The owner later chooses a playset that is byte for byte
+        # `launch`'s write. `restored` answers the entry: nothing refuses, and `restore <id>` leaves their choice.
+        snap_id = self.take_snapshot()
+        launchs = self.launcher_rewrites_during_the_run(snap_id)
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], "playset_restored" in out), (0, False, False))
+        self.assertTrue(self.is_the_owners_playset())
+        self.the_owner_chooses(launchs)
+        out, code = self.run_cli("restore", snap_id)            # judged again: their later write is held, kept
+        self.assertEqual((code, out["held"], out["reason"], "playset_restored" in out),
+                         (2, True, "modified_after_exit", False))
+        self.assertEqual(self.playset.read_bytes(), launchs)
+        taken, code = self.run_cli("snapshot")
+        self.assertEqual(code, 0, taken)
+        self.start_result = self.game()
+        out, code = self.launch(taken["id"])
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.playset.read_bytes(), launchs)
+
+    def test_a_held_snapshot_whose_entry_is_unanswered_still_blocks(self):
+        # The other side of that ruling: a held snapshot has no `restored` after its entry, so the same bytes
+        # still make `snapshot` and `launch` refuse.
+        snap_id = self.take_snapshot()
+        launchs = self.launcher_rewrites_during_the_run(snap_id)
+        self.games = [self.game(pid=5555)]
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_running"))
+        self.games = []
+        self.the_owner_chooses(launchs)
+        out, code = self.run_cli("snapshot")
+        self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
+        laundered = self.armed_snapshot()
+        self.start_result = self.game()
+        out, code = self.launch(laundered.id)
+        self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
+
     def test_a_hold_after_a_killed_write_sweeps_its_temp(self):
         # A `launch` killed between its temp write and the rename leaves the temp, which is the harness's own.
         snap_id = self.take_snapshot()

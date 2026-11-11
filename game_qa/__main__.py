@@ -539,11 +539,19 @@ _CLAIM_STAYS = ("Nothing was started. The snapshot stays claimed, so `launch` re
                 f"finishes it {LAUNCH_IN_FLIGHT_S:g} s after the claim; then take a new snapshot")
 
 
+def _answered(journal: list[dict], index: int) -> bool:
+    """Whether the `playset` entry at `index` is answered: a `playset_restored` or a `restored` follows it. A
+    restored folder equals the snapshot, so after `restored` the entry vouches for nothing: bytes equal to that
+    write later are the owner's choice (their launcher's), and are neither refused nor put back. A held snapshot
+    leaves its entry unanswered."""
+    return any(later.get("event") in ("playset_restored", "restored") for later in journal[index + 1:])
+
+
 def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> snapshot.Snapshot | None:
-    """The newest snapshot (other than `exclude`) with a `playset` entry that the live `content_load.json` hashes
-    to and no `playset_restored` after it: that run's playset write is still in the folder, never put back. None
-    when there is none, or no regular playset file. `snapshot` and `launch` refuse beside one: the owner never
-    chose that playset."""
+    """The newest snapshot (other than `exclude`) with an unanswered (`_answered`) `playset` entry that the live
+    `content_load.json` hashes to: that run's playset write is still in the folder, never put back. None when
+    there is none, or no regular playset file. `snapshot` and `launch` refuse beside one: the owner never chose
+    that playset."""
     path = user / PLAYSET_FILE
     try:
         if not stat.S_ISREG(os.lstat(path).st_mode):
@@ -556,8 +564,7 @@ def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> 
             continue
         journal = snapshot.journal(snap)
         for i, entry in enumerate(journal):
-            if (entry.get("event") == "playset" and entry.get("sha256") == live
-                    and not any(later.get("event") == "playset_restored" for later in journal[i + 1:])):
+            if entry.get("event") == "playset" and entry.get("sha256") == live and not _answered(journal, i):
                 return snap
     return None
 
@@ -959,7 +966,7 @@ def _settle_playset(snap: snapshot.Snapshot, user: Path, game_running: bool, not
 
 def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple[int, int]] | None:
     """The SHA-256 and (size, mtime_ns) of the live playset file when it is this snapshot's run's write to put
-    back, else None: the journal's last `playset` entry carries a SHA-256 with no `playset_restored` after it;
+    back, else None: the journal's last `playset` entry carries a SHA-256 and is unanswered (`_answered`);
     this is the newest snapshot with a `playset` entry at all (an older one's write can coincide byte for byte
     with a newer one's, with `mod_only` even after the owner changed their other mods, and its copy would then
     go back over the owner's current playset); the snapshot holds the file; and the file is a regular file with
@@ -971,7 +978,7 @@ def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple
     sha = journal[entries[-1]].get("sha256")
     if not isinstance(sha, str) or not _SHA256_HEX.fullmatch(sha):
         return None
-    if any(e.get("event") == "playset_restored" for e in journal[entries[-1] + 1:]):
+    if _answered(journal, entries[-1]):
         return None
     every = snapshot.all_snapshots(restore._backup_root(snap))
     ids = [s.id for s in every]
