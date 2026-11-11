@@ -4,7 +4,7 @@ Drafted 2026-11-10 with the owner. The banner at the top of the state panel show
 paintings (a city, a port, a mine, farmland, a landscape), chosen by the state's terrain and region. They are
 all nineteenth-century scenes. This design replaces them, once a country reaches the technologies of era 6
 and later, with pictures that follow the owner's technology, the size of the city, how well its people live
-and, where the mod has the figures, what kind of place it is. It lists the whole intended set (about 380
+and, where the mod has the figures, what kind of place it is. It lists the whole intended set (about 360
 pictures, painted in waves) so that no early picture is wasted, and describes the pilot of four that ships
 with it. There is no separate plan for the pilot; each later wave gets its own pull request.
 
@@ -20,9 +20,24 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
    has it.
 4. **Prosperity needs a careful definition.** The owner's question: is it the absolute standard of living
    or a relative one? Amenities fit the first; litter in the street may fit the second. § 6 is this
-   design's answer, two axes, and is a proposal the owner has not yet confirmed.
+   design's answer, two axes. Asked on the pilot what "relative" should be measured against, the owner
+   answered "prosperity being relative makes sense to me". That settles § 6's relative measure as written
+   (a state's standard of living against what its own people expect). The owner's words don't name the
+   measure or the absolute axis; that the answer covers both as § 6 has them is this design's reading.
 5. **Housing-block cities follow the Command Economy law,** not a region.
 6. **Ambitious set, in waves.** It can be cut back; § 9 gives the order of cuts.
+7. **The painted look stands** ("I like the style"): the converter's filter of § 10 is the look of the whole
+   set. On the pilot's picks, with the replacement European city: "I'm fine with the pick".
+8. **A picture stands for a whole region.** "The images are supposed to reflect the overall region": "on the
+   small end, think Rhode Island, on the large end, Alaska or Texas". "A mining or oil drilling region makes
+   sense, but does a power plant region make sense?" It doesn't: the mod's power plants are city buildings
+   built where the demand is, and no region reads as a power station. The power-landscape family (six
+   pictures and a ladder of its own) was cut on this rule. Pylons, turbines and cooling towers stay where
+   they are part of another picture's landscape. The test for any picture: would a traveler crossing the
+   state call this what the place is like, or is it one site in it? Five more groups failed it and were
+   cut the same day (15 pictures): naval bases, offshore oil platforms, spaceports, financial districts
+   and government quarters, each one installation or one district of a city. Ports, mines, onshore oil,
+   farms, forestry, the heavy-industry city, the resort and the conditions of a region's cities passed.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -41,8 +56,10 @@ The same picture shows in the state tooltip, pop details, the invasion and battl
 region panel. The mod does not change which terrain prevails: vanilla's mine weighting counts only coal, iron,
 lead, sulfur and gold mines, and that stays as it is in this design.
 
-Still unread, and on the play-test list: a weight reading a state variable, a BC7-compressed picture, and
-how a vanilla overlay sits on a new painting.
+Read in game the same evening, from the owner's look at Home Counties as a metropolis: a weight reads a
+state variable, and a BC7-compressed picture shows sharp. The third question, how a vanilla overlay sits on
+a new painting, got its answer too: the European city overlay's smoke was "in the wrong place" (§ 10,
+Overlays).
 
 ## 3. How a picture is chosen
 
@@ -78,10 +95,9 @@ One ladder a family. A rung's picture shows what its technology puts in the stre
 | City | Art Deco Architecture (era 6): trams, early motor cars, stone and deco fronts | Modern Urban Planning (7): concrete and glass slabs, wide roads, mass motoring | Computer-Aided Design (8): curtain-wall towers, expressways | Advanced Structural Engineering (10): supertall towers, electric traffic | Vactrains (12): transit tubes, arcologies |
 | Port | Modern Tools (6): liners, steel cranes on rails | Containerization (8): gantries, stacked boxes | Supply Chain Management (9): the automated terminal | Autonomous Vehicles (11): crewless ships and yards | |
 | Mine | Modern Tools (6): draglines, the open pit | Industrial Robotics (8): giant haul trucks, sorting plants | Internet of Things (10): remote-run pits | | |
-| Oil field | Modern Chemical Processes (6): derrick fields | Integrated Circuits (7): directional rigs, offshore platforms | Hydraulic Fracturing (9): pad wells | | |
+| Oil field | Modern Chemical Processes (6): derrick fields | Integrated Circuits (7): directional rigs, a small refinery | Hydraulic Fracturing (9): pad wells | | |
 | Farmland, plantation, ranch | Rural Electrification (6): tractors, power lines | Green Revolution (7): combines, silos, irrigation | Microprocessor (8): center pivots, large machines | Autonomous Vehicles (11): crewless harvesters | Synthetic Biology (11): designed crops, glasshouse towers |
 | Forestry | Modern Tools (6): chainsaws, log trucks | Industrial Robotics (8): harvesters, managed stands | | | |
-| Energy landscape | Nuclear Energy (7): the plant | Clean Energy Technologies (9): wind and solar fields | Fusion Power (11) | | |
 
 The city ladder's rungs also carry the skyline pictures: a metropolis needs Modern Skyscrapers as well from
 rung 1, and a megacity exists from rung 3. The housing-block city needs Prefabricated Construction (the
@@ -94,10 +110,32 @@ easier to read. It can be added to a family as one more condition if the play-te
 
 ## 5. Regions and city size
 
-**Regions** are vanilla's seven city families, by the same triggers vanilla uses (European, Latin American by
-`is_subtropic_farmland`, East Asian, Japanese, South Asian, Middle Eastern and Central Asian, African), plus
-North American, which vanilla folds into European. Farmland keeps vanilla's four families (generic, Arabic,
-Asian, subtropic). Ports, mines, forestry and energy are painted once for every region.
+**Regions** are vanilla's seven city families (European, Latin American, East Asian, Japanese, South Asian,
+Middle Eastern and Central Asian, African), plus North American, which vanilla folds into European. Farmland
+keeps vanilla's four families (generic, Arabic, Asian, subtropic). Ports, mines and forestry are
+painted once for every region.
+
+The city families use vanilla's own region triggers, with three changes. They are this design's calls, each
+one line in the registry's `REGIONS`, and the state counts are from 1.15's region files:
+
+| Family | States | Trigger | Against vanilla |
+|---|---|---|---|
+| European | 217 | `geographic_region_europe` (Russia west of Siberia included), and every state of no family | the same; the states of no family are Tibet and the Himalayas (5) and the Pacific islands (11) |
+| North American | 71 | `geographic_region_north_america`, `geographic_region_australasia` | new. Vanilla shows these the European picture. Australia and New Zealand (9) join because a grid of brick blocks and glass towers is nearer Sydney than a stone boulevard is |
+| Latin American | 83 | `geographic_region_latin_america` | vanilla's `is_subtropic_farmland` holds 61 of these and leaves out Mexico and the Caribbean (22), which it shows the European picture; it lists Central America three times, so the gap reads as an oversight |
+| African | 93 | `geographic_region_africa` | the same. It includes North Africa: Cairo is in this family, not the Middle Eastern |
+| South Asian | 28 | `geographic_region_india` | the same |
+| Middle Eastern | 69 | `geographic_region_middle_east`, `geographic_region_central_asia_old` | the same |
+| East Asian | 102 | `geographic_region_east_asia`, `geographic_region_south_east_asia` (Siberia included) | the same |
+| Japanese | 12 | `geographic_region_japan` | the same |
+
+Two pairs overlap, so each family has its own digit in the weight and the higher one wins: Japanese over
+East Asian (Japan lies inside East Asia, and vanilla ranks it the same way), and Middle Eastern over South
+Asian for Baluchistan, Pashtunistan and Quetta, which vanilla leaves a tie. Until a family's picture on a
+rung is painted, its states keep the family's earlier picture or vanilla's; the European picture doesn't
+stand in for a named family. The overlaps are the exception, because a rung outranks a family's digit: an
+East Asian picture of rung 2 wired alone would show in Tokyo over Japan's rung 1. So the two families of an
+overlap are wired together on a rung (the registry's `REGION_OVERLAPS`, held by a test).
 
 **City size** is the number of people in the state's largest city: the Demographics walk's urban people
 (`te_dg_urban`, written every year whatever the Demographics rule) times the metropolitan share (`te_dg_mt`;
@@ -147,11 +185,8 @@ the pass picks the first that holds, in the order below.
 | Declining city, empty works | the state's people are falling | the same |
 | Divided city, shacks under towers | a large city with high inequality | `te_dg_gini` |
 | Smog city | heavy pollution | `pollution_generation` |
-| Financial center | a high Financial District | building level |
 | Heavy-industry city | most levels are heavy industry | building levels |
-| Spaceport | a launch site | the Space Race site buildings |
 | Resort | tourism dominates | the tourism buildings |
-| Government quarter | the national capital, at metropolis size | `is_capital` |
 
 Conditions outrank everything and are painted for two or three spans of the city ladder: a devastated city
 (`devastation`), a city after a nuclear strike (the nuclear system's strike marker) and a flooded coast (the
@@ -167,16 +202,15 @@ each gets one when its picture is painted.
 | Means | 80 | a poor and an affluent picture a region a rung |
 | Upkeep | 40 | a run-down picture a region a rung |
 | Character | about 20 | § 7's first five, on the rungs where they fit |
-| Function | about 15 | § 7's last five |
+| Function | about 6 | § 7's last two |
 | Conditions | about 6 | |
-| Ports | about 13 | a small harbor and a major port a rung, a naval base |
-| Mines and oil | about 12 | |
+| Ports | about 8 | a small harbor and a major port a rung |
+| Mines and oil | about 9 | open pits, collieries, onshore oil fields |
 | Farmland, plantation, ranch | about 24 | four farm families × four rung groups, plus plantation and ranch |
 | Forestry and cleared land | about 6 | |
-| Energy landscapes | about 6 | joins the farmland and natural lists for states dominated by power buildings |
 | Natural terrain | about 15 | optional late variants: a highway through the mountains, a pipeline in the tundra |
 
-About 380 pictures. At BC7 (0.7 MB each) that is about 270 MB of `gfx/`; in vanilla's uncompressed format it
+About 360 pictures. At BC7 (0.7 MB each) that is about 250 MB of `gfx/`; in vanilla's uncompressed format it
 would be over 1 GB.
 
 ## 9. Waves
@@ -185,12 +219,21 @@ would be over 1 GB.
 2. **Calibration, then the city tier of the core grid (40).** An observer game's figures (largest-city
    people, `average_sol` and the expectations gap by year and by rung) fix the floors of §§ 5 and 6. Then 8
    regions × 5 rungs of the middle picture. After this wave every city past rung 1 has a picture of its
-   time, and these stay the fallback for every size and level of prosperity.
-3. **Worked land (about 60):** ports, mines and oil, farmland, forestry, energy.
+   time, and these stay the fallback for every size and level of prosperity. **Painted and wired 2026-11-10:** all 39 beside the pilot's, picked from four candidates each (the last
+   rung from a second set, below). The calibration game is still to run, so the size floors stay
+   provisional; the city tier doesn't read them.
+3. **Worked land (about 50):** ports, mines and oil, farmland, forestry. Its 46 prompts are drafted
+   in the registry's `DRAFTS`, outside the wired list: each has its technology and, in plain words, when it
+   should show, and none has a condition or a place in the weight yet. What this wave still has to design:
+   the Port level that divides a harbor from a major port; when coal makes a mine a colliery; and how an oil field takes over the picture of
+   the land it stands on (vanilla has no terrain for it), which needs a place in the weight above the rung.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
-6. **Character, function, conditions (about 40),** with theirs.
-7. **Natural terrain (about 15).**
+6. **Character, function, conditions (about 30),** with theirs. Its 30 prompts are drafted in `DRAFTS`
+   (18 character, 6 function, 6 condition), for any region and on the rungs where each fits.
+7. **Natural terrain (about 15).** Its 15 prompts are drafted in `DRAFTS`: each of vanilla's natural
+   pictures with the motor age in it (a motorway, pylons, a pipeline), on Modern Urban Planning for want of
+   a ladder of its own.
 
 If the set is cut: natural terrain first, then megacities merged into four broad families, then means and
 upkeep limited to rungs 2 to 4.
@@ -206,10 +249,14 @@ upkeep limited to rungs 2 to 4.
 - **The yearly pass,** `te_state_picture_refresh` on `on_yearly_pulse_state`
   (`common/scripted_effects/te_state_picture_effects.txt`). The pilot stores the size, `te_sp_size`; later
   waves add means, upkeep and character the same way.
-- **Overlays.** Every entry reuses a vanilla overlay whose content suits any painting of its kind: the port
-  one (birds, light rays, mist), the mine one (clouds, mist), the European city one (birds, mist, two
-  smokes). A mod-defined empty overlay is the fallback if a vanilla one sits badly; the mod has no entity
-  files yet, so that is unread.
+- **Overlays.** Every entry reuses a vanilla overlay, and only one whose effects aren't placed for
+  vanilla's own painting. Vanilla's European city overlay has two smoke plumes over its painting's chimneys
+  and its Asian one two lines of surf on its shore; on the pilot's metropolis the smoke rose from mid-air
+  (the owner, in game). So the European, North American, East Asian and Japanese city pictures take the
+  port's overlay (birds and drifting mist, the registry's `NEUTRAL_OVERLAY`), and a test keeps the two
+  placed ones (`PLACED_OVERLAYS`) off every picture. The other families' overlays are leaves, mist, dust
+  and shimmer and stay. A mod-defined overlay of its own (smoke where a painting has chimneys) is possible
+  later; the mod has no entity files yet.
 - **Pictures.** FLUX.1-schnell at 1536 × 752, with the style ahead of the subject in the prompt (the text
   encoder that sets the look reads only the first 77 tokens). The pick is converted by
   `scripts/image_pipeline/convert_state_picture.py`: cropped where an edge carries a signature or a stray
@@ -220,8 +267,32 @@ upkeep limited to rungs 2 to 4.
   and the flag bottom left, and a second widget shows the picture at 260 × 145. Where vanilla has a picture
   of the same subject, the new one keeps its composition (the street with the dome at its end, the ship at
   the quay), so a state's banner reads as the same place later.
+- **What the first wave taught** (2026-11-10, 196 renders for 39 pictures):
+  - *Vehicles need their own decade.* "A street around 1960" dates the buildings and leaves the cars in
+    the 2000s. "Rounded 1950s cars", "boxy 1980s cars" render in period. The two 1960 streets without it
+    had modern cars in all four candidates and were reworded and rerun.
+  - *The far future has to be asked for by name.* The last rung's first prompts ("terraced arcology
+    buildings, a vacuum-train tube") came out as a present-day street with one odd building; the owner:
+    "the far future could look more futuristic, given the technologies in the last couple eras". Leading
+    with "a far-future city", kilometre-high towers, flying craft, humanoid robots and a spacecraft's
+    trail gave megastructures in every candidate, with the family's landmark still in place.
+  - *The landmark carries.* The same kind of building closed the street on all five rungs of every
+    family, without naming a real one.
+  - *Lettering comes in small.* About a third of candidates carry a sign or a plate. A crop drops one at
+    an edge; for one in the middle the registry's `smudge` boxes blur it to a dab before the filter.
+    At 1020 x 500 after the filter nothing in the picked set reads as writing.
+  - *One seed leaves a dark strip* of 9 to 25 pixels along the bottom of about half its renders; the
+    converter refuses a picture with one, and the picks crop it.
+  - *Budget:* 28 s a render held. Ten of the 39 pictures were rendered twice: the eight of the last rung
+    for the bolder prompt and the two 1960 streets for their cars. The other 29 were picked from their
+    first four candidates.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
+- **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
+  through all five rungs (the registry's `CITY_LANDMARK`: the European church, a North American courthouse
+  with a clock tower, a Japanese castle keep, and so on), so the street changes around a fixed point and a
+  state's banner reads as the same place a century on. The renders won't repeat the building exactly; the
+  kind and the place in the frame are what carry over.
 - **No recognizable landmarks.** A picture stands for every state of its region, so it must not read as one
   city. A generic description of a building draws the most famous building of that kind: the pilot's "a
   domed civic building at the end of the street" drew the United States Capitol in all four candidates, in
@@ -231,7 +302,9 @@ upkeep limited to rungs 2 to 4.
   skyline without them. Review checks every pick for a silhouette a player would name: the Capitol, the
   Eiffel Tower, Big Ben, a famous bridge, a known skyline. The risk grows with the metropolis and megacity
   pictures, whose subject is a skyline. A candidate that reads as a real place is rejected like one with
-  lettering.
+  lettering. The registry's `PROMPT_AVOID` holds the two words the pilot learned this from (shop, civic)
+  and others likely to do the same (sign, banner, flag, skyline, …), and `test_state_pictures.py` fails on
+  a prompt that uses one.
 
 ## 11. The pilot
 
@@ -252,12 +325,9 @@ overlays on new paintings. Those three engine questions are on the play-test lis
 
 ## 12. Open questions
 
-- § 6's reading of prosperity, above all its measure of "relative": the state's standard of living against
-  what its own people expect. The alternatives are against the country's average or against the world's.
-- Whether the painted look the converter gives a render (§ 10) is close enough to vanilla's brushwork. It is
-  a call for the whole set, so it should be settled on the pilot.
+- § 5's three changes to vanilla's city families: Australia and New Zealand with North America, Mexico and
+  the Caribbean with Latin America, and Middle Eastern over South Asian on the north-west frontier. Also
+  whether Tibet and the Pacific islands should leave the European fallback for a family.
 - The floors of §§ 5 and 6, until wave 2's observer game.
 - Whether the city ladder should split at era 9 (a "global city" rung on Globalization) once rung 3's
   pictures exist.
-- Whether the energy landscape pictures need their own prevailing-terrain rule, since the engine picks the
-  terrain before any picture is weighed.

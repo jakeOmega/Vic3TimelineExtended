@@ -54,14 +54,28 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = art_deco_architecture }
-							is_in_geographic_region = geographic_region_europe
+							OR = {
+								is_in_geographic_region = geographic_region_europe
+								AND = {
+									is_not_in_geographic_region = geographic_region_north_america
+									is_not_in_geographic_region = geographic_region_australasia
+									is_not_in_geographic_region = geographic_region_latin_america
+									is_not_in_geographic_region = geographic_region_africa
+									is_not_in_geographic_region = geographic_region_india
+									is_not_in_geographic_region = geographic_region_middle_east
+									is_not_in_geographic_region = geographic_region_central_asia_old
+									is_not_in_geographic_region = geographic_region_east_asia
+									is_not_in_geographic_region = geographic_region_south_east_asia
+									is_not_in_geographic_region = geographic_region_japan
+								}
+							}
 						}
 					}
 					add = 100001
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_1.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -70,7 +84,142 @@ INJECT:urban = {
 					limit = {
 						scope:state = {
 							owner = { has_technology_researched = art_deco_architecture }
-							is_in_geographic_region = geographic_region_europe
+							OR = {
+								is_in_geographic_region = geographic_region_north_america
+								is_in_geographic_region = geographic_region_australasia
+							}
+						}
+					}
+					add = 100002
+				}
+			}
+			path = "gfx/state_pictures/te_urban_north_american_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							is_in_geographic_region = geographic_region_latin_america
+						}
+					}
+					add = 100003
+				}
+			}
+			path = "gfx/state_pictures/te_urban_latin_american_1.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							is_in_geographic_region = geographic_region_africa
+						}
+					}
+					add = 100004
+				}
+			}
+			path = "gfx/state_pictures/te_urban_african_1.dds"
+			effect = "vfx_entity_ui_state_urban_african"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							is_in_geographic_region = geographic_region_india
+						}
+					}
+					add = 100005
+				}
+			}
+			path = "gfx/state_pictures/te_urban_south_asian_1.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							OR = {
+								is_in_geographic_region = geographic_region_middle_east
+								is_in_geographic_region = geographic_region_central_asia_old
+							}
+						}
+					}
+					add = 100006
+				}
+			}
+			path = "gfx/state_pictures/te_urban_middle_eastern_1.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							OR = {
+								is_in_geographic_region = geographic_region_east_asia
+								is_in_geographic_region = geographic_region_south_east_asia
+							}
+						}
+					}
+					add = 100007
+				}
+			}
+			path = "gfx/state_pictures/te_urban_east_asian_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							is_in_geographic_region = geographic_region_japan
+						}
+					}
+					add = 100008
+				}
+			}
+			path = "gfx/state_pictures/te_urban_japanese_1.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = art_deco_architecture }
+							OR = {
+								is_in_geographic_region = geographic_region_europe
+								AND = {
+									is_not_in_geographic_region = geographic_region_north_america
+									is_not_in_geographic_region = geographic_region_australasia
+									is_not_in_geographic_region = geographic_region_latin_america
+									is_not_in_geographic_region = geographic_region_africa
+									is_not_in_geographic_region = geographic_region_india
+									is_not_in_geographic_region = geographic_region_middle_east
+									is_not_in_geographic_region = geographic_region_central_asia_old
+									is_not_in_geographic_region = geographic_region_east_asia
+									is_not_in_geographic_region = geographic_region_south_east_asia
+									is_not_in_geographic_region = geographic_region_japan
+								}
+							}
 							has_variable = te_sp_size
 							var:te_sp_size >= 3
 						}
@@ -79,7 +228,611 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_1_metropolis.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							OR = {
+								is_in_geographic_region = geographic_region_europe
+								AND = {
+									is_not_in_geographic_region = geographic_region_north_america
+									is_not_in_geographic_region = geographic_region_australasia
+									is_not_in_geographic_region = geographic_region_latin_america
+									is_not_in_geographic_region = geographic_region_africa
+									is_not_in_geographic_region = geographic_region_india
+									is_not_in_geographic_region = geographic_region_middle_east
+									is_not_in_geographic_region = geographic_region_central_asia_old
+									is_not_in_geographic_region = geographic_region_east_asia
+									is_not_in_geographic_region = geographic_region_south_east_asia
+									is_not_in_geographic_region = geographic_region_japan
+								}
+							}
+						}
+					}
+					add = 200001
+				}
+			}
+			path = "gfx/state_pictures/te_urban_european_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							OR = {
+								is_in_geographic_region = geographic_region_north_america
+								is_in_geographic_region = geographic_region_australasia
+							}
+						}
+					}
+					add = 200002
+				}
+			}
+			path = "gfx/state_pictures/te_urban_north_american_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_latin_america
+						}
+					}
+					add = 200003
+				}
+			}
+			path = "gfx/state_pictures/te_urban_latin_american_2.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_africa
+						}
+					}
+					add = 200004
+				}
+			}
+			path = "gfx/state_pictures/te_urban_african_2.dds"
+			effect = "vfx_entity_ui_state_urban_african"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_india
+						}
+					}
+					add = 200005
+				}
+			}
+			path = "gfx/state_pictures/te_urban_south_asian_2.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							OR = {
+								is_in_geographic_region = geographic_region_middle_east
+								is_in_geographic_region = geographic_region_central_asia_old
+							}
+						}
+					}
+					add = 200006
+				}
+			}
+			path = "gfx/state_pictures/te_urban_middle_eastern_2.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							OR = {
+								is_in_geographic_region = geographic_region_east_asia
+								is_in_geographic_region = geographic_region_south_east_asia
+							}
+						}
+					}
+					add = 200007
+				}
+			}
+			path = "gfx/state_pictures/te_urban_east_asian_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = modern_urban_planning }
+							is_in_geographic_region = geographic_region_japan
+						}
+					}
+					add = 200008
+				}
+			}
+			path = "gfx/state_pictures/te_urban_japanese_2.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							OR = {
+								is_in_geographic_region = geographic_region_europe
+								AND = {
+									is_not_in_geographic_region = geographic_region_north_america
+									is_not_in_geographic_region = geographic_region_australasia
+									is_not_in_geographic_region = geographic_region_latin_america
+									is_not_in_geographic_region = geographic_region_africa
+									is_not_in_geographic_region = geographic_region_india
+									is_not_in_geographic_region = geographic_region_middle_east
+									is_not_in_geographic_region = geographic_region_central_asia_old
+									is_not_in_geographic_region = geographic_region_east_asia
+									is_not_in_geographic_region = geographic_region_south_east_asia
+									is_not_in_geographic_region = geographic_region_japan
+								}
+							}
+						}
+					}
+					add = 300001
+				}
+			}
+			path = "gfx/state_pictures/te_urban_european_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							OR = {
+								is_in_geographic_region = geographic_region_north_america
+								is_in_geographic_region = geographic_region_australasia
+							}
+						}
+					}
+					add = 300002
+				}
+			}
+			path = "gfx/state_pictures/te_urban_north_american_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							is_in_geographic_region = geographic_region_latin_america
+						}
+					}
+					add = 300003
+				}
+			}
+			path = "gfx/state_pictures/te_urban_latin_american_3.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							is_in_geographic_region = geographic_region_africa
+						}
+					}
+					add = 300004
+				}
+			}
+			path = "gfx/state_pictures/te_urban_african_3.dds"
+			effect = "vfx_entity_ui_state_urban_african"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							is_in_geographic_region = geographic_region_india
+						}
+					}
+					add = 300005
+				}
+			}
+			path = "gfx/state_pictures/te_urban_south_asian_3.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							OR = {
+								is_in_geographic_region = geographic_region_middle_east
+								is_in_geographic_region = geographic_region_central_asia_old
+							}
+						}
+					}
+					add = 300006
+				}
+			}
+			path = "gfx/state_pictures/te_urban_middle_eastern_3.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							OR = {
+								is_in_geographic_region = geographic_region_east_asia
+								is_in_geographic_region = geographic_region_south_east_asia
+							}
+						}
+					}
+					add = 300007
+				}
+			}
+			path = "gfx/state_pictures/te_urban_east_asian_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = computer_aided_design }
+							is_in_geographic_region = geographic_region_japan
+						}
+					}
+					add = 300008
+				}
+			}
+			path = "gfx/state_pictures/te_urban_japanese_3.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							OR = {
+								is_in_geographic_region = geographic_region_europe
+								AND = {
+									is_not_in_geographic_region = geographic_region_north_america
+									is_not_in_geographic_region = geographic_region_australasia
+									is_not_in_geographic_region = geographic_region_latin_america
+									is_not_in_geographic_region = geographic_region_africa
+									is_not_in_geographic_region = geographic_region_india
+									is_not_in_geographic_region = geographic_region_middle_east
+									is_not_in_geographic_region = geographic_region_central_asia_old
+									is_not_in_geographic_region = geographic_region_east_asia
+									is_not_in_geographic_region = geographic_region_south_east_asia
+									is_not_in_geographic_region = geographic_region_japan
+								}
+							}
+						}
+					}
+					add = 400001
+				}
+			}
+			path = "gfx/state_pictures/te_urban_european_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							OR = {
+								is_in_geographic_region = geographic_region_north_america
+								is_in_geographic_region = geographic_region_australasia
+							}
+						}
+					}
+					add = 400002
+				}
+			}
+			path = "gfx/state_pictures/te_urban_north_american_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							is_in_geographic_region = geographic_region_latin_america
+						}
+					}
+					add = 400003
+				}
+			}
+			path = "gfx/state_pictures/te_urban_latin_american_4.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							is_in_geographic_region = geographic_region_africa
+						}
+					}
+					add = 400004
+				}
+			}
+			path = "gfx/state_pictures/te_urban_african_4.dds"
+			effect = "vfx_entity_ui_state_urban_african"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							is_in_geographic_region = geographic_region_india
+						}
+					}
+					add = 400005
+				}
+			}
+			path = "gfx/state_pictures/te_urban_south_asian_4.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							OR = {
+								is_in_geographic_region = geographic_region_middle_east
+								is_in_geographic_region = geographic_region_central_asia_old
+							}
+						}
+					}
+					add = 400006
+				}
+			}
+			path = "gfx/state_pictures/te_urban_middle_eastern_4.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							OR = {
+								is_in_geographic_region = geographic_region_east_asia
+								is_in_geographic_region = geographic_region_south_east_asia
+							}
+						}
+					}
+					add = 400007
+				}
+			}
+			path = "gfx/state_pictures/te_urban_east_asian_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = advanced_structural_engineering }
+							is_in_geographic_region = geographic_region_japan
+						}
+					}
+					add = 400008
+				}
+			}
+			path = "gfx/state_pictures/te_urban_japanese_4.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							OR = {
+								is_in_geographic_region = geographic_region_europe
+								AND = {
+									is_not_in_geographic_region = geographic_region_north_america
+									is_not_in_geographic_region = geographic_region_australasia
+									is_not_in_geographic_region = geographic_region_latin_america
+									is_not_in_geographic_region = geographic_region_africa
+									is_not_in_geographic_region = geographic_region_india
+									is_not_in_geographic_region = geographic_region_middle_east
+									is_not_in_geographic_region = geographic_region_central_asia_old
+									is_not_in_geographic_region = geographic_region_east_asia
+									is_not_in_geographic_region = geographic_region_south_east_asia
+									is_not_in_geographic_region = geographic_region_japan
+								}
+							}
+						}
+					}
+					add = 500001
+				}
+			}
+			path = "gfx/state_pictures/te_urban_european_5.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							OR = {
+								is_in_geographic_region = geographic_region_north_america
+								is_in_geographic_region = geographic_region_australasia
+							}
+						}
+					}
+					add = 500002
+				}
+			}
+			path = "gfx/state_pictures/te_urban_north_american_5.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							is_in_geographic_region = geographic_region_latin_america
+						}
+					}
+					add = 500003
+				}
+			}
+			path = "gfx/state_pictures/te_urban_latin_american_5.dds"
+			effect = "vfx_entity_ui_state_urban_latin_american"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							is_in_geographic_region = geographic_region_africa
+						}
+					}
+					add = 500004
+				}
+			}
+			path = "gfx/state_pictures/te_urban_african_5.dds"
+			effect = "vfx_entity_ui_state_urban_african"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							is_in_geographic_region = geographic_region_india
+						}
+					}
+					add = 500005
+				}
+			}
+			path = "gfx/state_pictures/te_urban_south_asian_5.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							OR = {
+								is_in_geographic_region = geographic_region_middle_east
+								is_in_geographic_region = geographic_region_central_asia_old
+							}
+						}
+					}
+					add = 500006
+				}
+			}
+			path = "gfx/state_pictures/te_urban_middle_eastern_5.dds"
+			effect = "vfx_entity_ui_state_urban_arabic"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							OR = {
+								is_in_geographic_region = geographic_region_east_asia
+								is_in_geographic_region = geographic_region_south_east_asia
+							}
+						}
+					}
+					add = 500007
+				}
+			}
+			path = "gfx/state_pictures/te_urban_east_asian_5.dds"
+			effect = "vfx_entity_ui_state_docks"
+		}
+		{
+			weight = {
+				value = 0
+				if = {
+					limit = {
+						scope:state = {
+							owner = { has_technology_researched = vactrains }
+							is_in_geographic_region = geographic_region_japan
+						}
+					}
+					add = 500008
+				}
+			}
+			path = "gfx/state_pictures/te_urban_japanese_5.dds"
+			effect = "vfx_entity_ui_state_docks"
 		}
 	}
 }

@@ -35,6 +35,17 @@ def _load(name, path):
 registry = _load("state_picture_registry", REGISTRY_PATH)
 generator = _load("gen_state_pictures", GENERATOR_PATH)
 
+try:
+    import sys
+
+    import numpy as np
+    from PIL import Image
+
+    sys.path.insert(0, str(REGISTRY_PATH.parent))
+    import convert_state_picture as converter
+except ImportError:  # CI installs numpy but not Pillow
+    converter = None
+
 
 def _vanilla_terrains():
     return json.loads(VANILLA_TERRAINS.read_text(encoding="utf-8"))
@@ -68,6 +79,16 @@ class TestRegistry(unittest.TestCase):
                 self.assertIn(p["effect"], effects)
                 self.assertTrue(p["prompt"].strip())
 
+    def test_every_pick_names_boxes_inside_the_render(self):
+        for key, p in registry.PICTURES.items():
+            for left, top, right, bottom in ([p["crop"]] if p.get("crop") else []) + list(p.get("smudge", [])):
+                with self.subTest(key):
+                    self.assertTrue(0 <= left < right <= 1536 and 0 <= top < bottom <= 752)
+            if p.get("crop"):
+                left, top, right, bottom = p["crop"]
+                with self.subTest(key, crop=p["crop"]):
+                    self.assertAlmostEqual((right - left) / (bottom - top), 1020 / 500, delta=0.03)
+
     def test_the_port_picture_needs_a_port(self):
         # vanilla's docks terrain prevails in every one-province state and shows its dry plain where there is no port
         for key, p in registry.PICTURES.items():
@@ -76,14 +97,95 @@ class TestRegistry(unittest.TestCase):
                     self.assertIn("has_building = building_port", p.get("where", []))
                     self.assertIn("has_building = building_port", generator.conditions(key))
 
+    def test_no_picture_takes_an_overlay_placed_for_vanillas_painting(self):
+        # vanilla's European city overlay has smoke over its own chimneys, its Asian one surf on its own shore
+        self.assertEqual(registry.NEUTRAL_OVERLAY, "vfx_entity_ui_state_docks")
+        for key, p in {**registry.PICTURES, **{k: d for k, d in registry.DRAFTS.items() if "effect" in d}}.items():
+            with self.subTest(key):
+                self.assertNotIn(p["effect"], registry.PLACED_OVERLAYS)
+
     def test_no_two_pictures_of_a_terrain_can_tie(self):
-        # the highest weight wins; two pictures that can both apply must not weigh the same
+        # the highest weight wins; two families can hold the same state (Japan lies inside East Asia), so no two
+        # pictures of a terrain may weigh the same, whatever their regions
         seen = {}
         for key, p in registry.PICTURES.items():
             for terrain in p["terrain"]:
-                spot = (terrain, registry.weight(key), p["region"])
+                spot = (terrain, registry.weight(key))
                 self.assertNotIn(spot, seen, f"{key} and {seen.get(spot)} weigh the same in {terrain}")
                 seen[spot] = key
+
+    def test_every_region_family_has_its_own_digit(self):
+        digits = [digit for _lines, digit in registry.REGIONS.values()]
+        self.assertEqual(len(set(digits)), len(digits))
+        self.assertTrue(all(1 <= d <= 9 for d in digits))
+        for name, (lines, _digit) in registry.REGIONS.items():
+            with self.subTest(name):
+                self.assertTrue(lines)
+                for line in lines:
+                    self.assertRegex(line, r"^is_in_geographic_region = geographic_region_[a-z_]+$")
+        # vanilla ranks Japan over the East Asia that contains it
+        self.assertGreater(registry.REGIONS["japanese"][1], registry.REGIONS["east_asian"][1])
+
+    def test_an_overlapped_family_is_wired_with_the_family_it_overlaps(self):
+        # a rung outranks a family's digit: East Asian rung 2 without Japanese rung 2 would show in Tokyo
+        wired = registry.wired()
+        spots = {(tuple(p["terrain"]), p["rung"], p["size"], p["region"]) for p in wired.values()}
+        for winner, other in registry.REGION_OVERLAPS:
+            self.assertGreater(registry.REGIONS[winner][1], registry.REGIONS[other][1])
+            for terrain, rung, size, region in spots:
+                if region == other:
+                    with self.subTest(winner=winner, rung=rung, size=size):
+                        self.assertIn((terrain, rung, size, winner), spots)
+
+    def test_the_fallback_family_takes_the_states_of_no_family(self):
+        fallback = registry.FALLBACK_REGION
+        lines = registry.region_conditions(fallback)
+        self.assertEqual(lines[0], "OR = {")
+        self.assertIn("\tAND = {", lines)
+        self.assertEqual("".join(lines).count("{"), "".join(lines).count("}"))
+        for name, (own, _digit) in registry.REGIONS.items():
+            for line in own:
+                negated = "\t\t" + line.replace("is_in_geographic_region", "is_not_in_geographic_region")
+                with self.subTest(name, line=line):
+                    self.assertEqual(negated in lines, name != fallback)
+        # every other family is its own triggers, any one of them
+        self.assertEqual(registry.region_conditions("japanese"), registry.REGIONS["japanese"][0])
+        self.assertEqual(registry.region_conditions("east_asian")[0], "OR = {")
+
+    def test_every_draft_names_real_things_and_none_is_wired(self):
+        terrains, techs = _vanilla_terrains(), _mod_techs()
+        vanilla_pictures = set(re.findall(r"gfx/state_pictures/(\w+)\.dds", VANILLA_TERRAINS.read_text(encoding="utf-8")))
+        generated = GENERATED.read_text(encoding="utf-8-sig")
+        self.assertFalse(set(registry.DRAFTS) & set(registry.PICTURES), "a draft moves to PICTURES, it isn't copied")
+        for key, d in registry.DRAFTS.items():
+            with self.subTest(key):
+                self.assertRegex(key, r"^[a-z0-9_]+$")
+                self.assertTrue(d["terrain"])
+                for terrain in d["terrain"]:
+                    self.assertIn(terrain, terrains)
+                self.assertIn(d["tech"], techs)
+                self.assertIn(d["tech"], registry.WHEN)
+                self.assertIn(registry.WHEN[d["tech"]], d["prompt"])
+                self.assertIn(d["rung"], range(1, 10))
+                self.assertIn(d["like"], vanilla_pictures)
+                self.assertNotIn(generator.picture_path(key), generated)
+
+    def test_no_prompt_uses_a_word_that_draws_lettering_or_a_landmark(self):
+        avoid = re.compile(r"\b(" + "|".join(map(re.escape, registry.PROMPT_AVOID)) + r")\b", re.I)
+        for key, p in {**registry.PICTURES, **registry.DRAFTS}.items():
+            with self.subTest(key):
+                self.assertIsNone(avoid.search(p["prompt"]))
+                # the second text encoder reads 256 tokens; a longer prompt loses its end, where the "no text" tail is
+                self.assertLessEqual(len(registry.full_prompt(key).split()), 140)
+
+    def test_the_city_tier_is_whole(self):
+        # wave 2: every region family on every rung of the city ladder, each on its rung's technology
+        for region in registry.REGIONS:
+            for rung, (tech, _when) in registry.CITY_LADDER.items():
+                with self.subTest(region=region, rung=rung):
+                    p = registry.PICTURES[f"urban_{region}_{rung}"]
+                    self.assertEqual((p["tech"], p["rung"], p["region"], p["size"]), (tech, rung, region, None))
+                    self.assertIn(registry.CITY_LANDMARK[region], p["prompt"])
 
     def test_every_weight_outranks_vanilla(self):
         for key in registry.PICTURES:
@@ -92,8 +194,9 @@ class TestRegistry(unittest.TestCase):
     def test_a_larger_size_outranks_a_smaller_and_a_rung_outranks_a_size(self):
         digits = sorted(d for _lines, d in registry.SIZES.values())
         self.assertEqual(len(set(digits)), len(digits))
-        self.assertGreater(registry.W_RUNG, registry.W_SIZE * max(digits) + registry.W_REGION)
-        self.assertGreater(registry.W_SIZE, registry.W_REGION)
+        top_region = registry.W_REGION * max(d for _lines, d in registry.REGIONS.values())
+        self.assertGreater(registry.W_RUNG, registry.W_SIZE * max(digits) + top_region)
+        self.assertGreater(registry.W_SIZE, top_region)
 
     def test_the_size_conditions_read_the_pass_variable(self):
         effects = EFFECTS.read_text(encoding="utf-8-sig")
@@ -147,6 +250,34 @@ class TestGeneratedFile(unittest.TestCase):
                     header = on_disk.read_bytes()[:20]
                     height, width = struct.unpack("<II", header[12:20])
                     self.assertEqual((width, height), (1020, 500))
+
+
+@unittest.skipIf(converter is None, "needs Pillow")
+class TestConverter(unittest.TestCase):
+    def test_a_dark_strip_along_an_edge_is_found(self):
+        # one seed's renders often end in 9 to 25 near-black rows; such a picture must be cropped, not shipped
+        clean = Image.new("RGB", (200, 100), (120, 140, 160))
+        self.assertIsNone(converter.dark_edge(clean))
+        banded = clean.copy()
+        banded.paste((2, 2, 2), (0, 90, 200, 100))
+        self.assertEqual(converter.dark_edge(banded), "bottom")
+        banded = clean.copy()
+        banded.paste((2, 2, 2), (0, 0, 200, 10))
+        self.assertEqual(converter.dark_edge(banded), "top")
+        # a dark picture is not a strip: night streets and smoke stay
+        self.assertIsNone(converter.dark_edge(Image.new("RGB", (200, 100), (30, 30, 34))))
+
+    def test_a_smudge_blurs_its_box_and_leaves_the_rest(self):
+        img = Image.new("RGB", (300, 200), (200, 200, 200))
+        for x in range(100, 160, 6):                        # a "sign": black strokes on white
+            img.paste((0, 0, 0), (x, 80, x + 3, 110))
+        before = np.asarray(img, dtype=float)
+        after = np.asarray(converter.smudge(img.copy(), [(96, 76, 164, 114)]), dtype=float)
+        self.assertEqual(before.shape, after.shape)
+        inside = (slice(84, 106), slice(104, 156))
+        self.assertLess(after[inside].std(), before[inside].std() / 3)     # the strokes are gone
+        self.assertTrue((after[:40] == before[:40]).all())                 # far from the box, nothing moved
+        self.assertTrue((after[:, :40] == before[:, :40]).all())
 
 
 class TestYearlyPass(unittest.TestCase):
