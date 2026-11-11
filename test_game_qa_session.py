@@ -464,7 +464,7 @@ class StartTest(SessionTestCase):
         # watch is spawned the moment launch returns, before the helper is asked anything
         self.assertEqual(self.order[:5], ["cli held", "cli snapshot", "cli launch", "spawn_watch " + SNAP, "adopt"])
         self.assertEqual(self.spawned_at, self.cli.clock_at["launch"])
-        self.assertEqual(self.game.adopted, [self.game.proc])
+        self.assertEqual(set(self.game.adopted), {self.game.proc})       # and again before each key (X1)
         self.assertIn("tcp_open 6111", self.order)
         # the overlay was there before the snapshot, so the run's playset can name it
         self.assertTrue((self.paths.overlay_dir / ".metadata" / "metadata.json").is_file())
@@ -1808,6 +1808,88 @@ class StopsTest(SessionTestCase):
         self.assertEqual(len(self.game.steps), steps)
 
 
+class SendGuardTest(SessionTestCase):
+    """X1: inside one call too (start's console-ready loop, advance's rounds, enter_game's clicks), no key, focus or
+    click goes out once `watch` has recorded the game's exit, or once the helper cannot prove the process is the
+    game by its pid and start time: the helper itself sends by pid alone, and a pid may be another program's."""
+
+    def test_start_types_nothing_once_the_watch_has_recorded_the_exit(self):
+        self.game.console_never_opens = True        # the probes never land: the loop would run its whole 180 s
+        marks = {}
+
+        def on_sleep(seconds):
+            # The game dies as its save loads, while the console waits for its first probe; watch records it
+            # (exit 0), and the fake's window still answers for the pid, as a reused pid's program's would.
+            if self.game.steps and "exit_at" not in marks:
+                self.game.exited = True
+                marks["exit_at"] = len(self.game.steps)
+        self.game.on_sleep = on_sleep
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(self.watches[0].poll(), 0)
+        self.assertEqual(len(self.game.steps), marks["exit_at"])      # not one key more (83 before the guard)
+        self.assertEqual(self.cli.verbs[-1], "restore")                # start failed into its normal stop
+        self.assertEqual(self.session_error(self.session.events).code, "stopped")
+
+    def test_advance_types_nothing_once_the_watch_has_recorded_the_exit(self):
+        self.started()
+        self.session.enter_game()
+        self.game.days_per_second = 0.5             # several rounds
+        marks = {}
+
+        def on_sleep(seconds):
+            # During the first unpaused wait the game exits, and watch records it (poll() -> 0); the fake's window
+            # still answers for the pid, as one a reused pid's program has would.
+            if not self.game.paused and "exit_at" not in marks:
+                self.game.exited = True
+                marks["exit_at"] = len(self.game.steps)
+        self.game.on_sleep = on_sleep
+        error = self.session_error(self.session.advance, 30)
+        self.game.on_sleep = None
+        self.assertEqual(self.watches[0].poll(), 0)
+        self.assertEqual(len(self.game.steps), marks["exit_at"])
+        self.assertIn(error.code, ("watch_ended", "left_running"))     # it may have been left unpaused
+        self.assertEqual(self.session_error(self.session.events).code, "watch_ended")
+
+    def test_enter_game_clicks_nothing_once_the_game_cannot_be_proved(self):
+        for how in ("exited", "process_gone"):
+            with self.subTest(how=how):
+                self.setUp()
+                self.started()
+                clicks = self.game.order.count("click")
+
+                def on_command(text, how=how):
+                    # the console's own front check before the first click: then the game is gone
+                    setattr(self.game, how, True)
+                self.game.on_command = on_command
+                error = self.session_error(self.session.enter_game)
+                self.game.on_command = None
+                self.assertEqual(error.code, "watch_ended")
+                self.assertEqual(self.game.order.count("click"), clicks)
+                steps = len(self.game.steps)
+                self.assertEqual(self.session_error(self.session.console, "money 1000").code, "watch_ended")
+                self.assertEqual(len(self.game.steps), steps)
+
+    def test_the_console_and_the_clicks_send_through_the_proof(self):
+        self.started()
+        self.assertIsInstance(self.session._console._helper, session._ProvedHelper)
+        self.assertIs(self.session._sends._session, self.session)
+
+    def test_a_pid_whose_start_time_no_longer_matches_gets_no_key_though_watch_still_runs(self):
+        self.started()
+        steps = len(self.game.steps)
+        self.game.process_gone = True               # watch has not looked yet; the helper's adopt refuses not_ours
+        self.assertIsNone(self.watches[0].poll())
+        error = self.session_error(self.session.console, "money 1000")
+        self.assertEqual(error.code, "watch_ended")
+        self.assertIn("not_ours", error.detail)
+        self.assertEqual(len(self.game.steps), steps)
+        self.game.process_gone = False              # latched: a later verb types nothing either
+        self.assertEqual(self.session_error(self.session.events).code, "watch_ended")
+        self.assertEqual(len(self.game.steps), steps)
+
+
 class WatchCheckTest(SessionTestCase):
     """N1: before any key or click, `watch` must still be following the game. A watch that recorded the exit ends
     the verbs for good; one that stopped without recording it is run again only once the game is proved alive by
@@ -1821,11 +1903,12 @@ class WatchCheckTest(SessionTestCase):
     def test_a_watch_that_recorded_the_exit_ends_the_verbs_for_good(self):
         # B1: the game exited (watch returned 0) and another program with a window took its pid
         self.started()
+        adopted = len(self.game.adopted)
         self.game.exited = True
         self.game.on("select_event_option list", success=["No pending events"])
         self.assertEqual(self.typed_by(self.session.events), 0)
         self.assertEqual(len(self.watches), 1)                  # never run again
-        self.assertEqual(self.game.adopted, [self.game.proc])   # nor adopted again: there is nothing to prove
+        self.assertEqual(len(self.game.adopted), adopted)       # nor adopted again: there is nothing to prove
         for _ in range(session.WATCH_RESPAWNS + 1):
             self.assertEqual(self.typed_by(self.session.events), 0)
         self.assertEqual(len(self.watches), 1)
@@ -1834,9 +1917,11 @@ class WatchCheckTest(SessionTestCase):
         self.started()
         self.watches[0].dies = True                             # exit 1: it stopped without recording an exit
         self.game.adapter.values = {"c:FRA.gdp": "1"}
+        mark = len(self.order)
         self.session.read(["c:FRA.gdp"])
         self.assertEqual(len(self.watches), 2)
-        self.assertEqual(self.game.adopted, [self.game.proc] * 2)       # proved by pid and start time first
+        later = self.order[mark:]
+        self.assertEqual(later[:2], ["adopt", "spawn_watch " + SNAP])     # proved by pid and start time first
         self.assertEqual(self.session.status()["watch_respawns"], 1)
         reply = self.session.stop()
         self.assertTrue(any("run again" in note for note in reply["notes"]))

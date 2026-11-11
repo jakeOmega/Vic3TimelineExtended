@@ -156,6 +156,31 @@ class Paths:
         return Path(self.user_data) / "logs"
 
 
+class _ProvedHelper:
+    """The helper as everything that sends input sees it (X1): `keys`, `focus` and `click` go out only once
+    `Session._prove_game` has passed, just before each one, since the helper sends by pid alone and a pid may be
+    another program's once the game has died. Every other call goes to the session's current helper (a fresh one
+    from `_new_helper` too)."""
+
+    def __init__(self, session: Session) -> None:
+        self._session = session
+
+    def __getattr__(self, name: str):
+        return getattr(self._session._helper, name)
+
+    def keys(self, pid: int, steps: Sequence[dict]) -> None:
+        self._session._prove_game()
+        return self._session._helper.keys(pid, steps)
+
+    def focus(self, pid: int) -> bool:
+        self._session._prove_game()
+        return self._session._helper.focus(pid)
+
+    def click(self, pid: int, x: int, y: int) -> None:
+        self._session._prove_game()
+        return self._session._helper.click(pid, x, y)
+
+
 class Session:
     """One game's session. Single-threaded by contract: one call at a time, as the session server makes them (a
     plain HTTPServer, one request at a time in its main thread). The `_starting`, `_abort` and `_stopping` flags
@@ -201,6 +226,7 @@ class Session:
         self._left_running = False          # a round may have left the game unpaused: no more time until stop
         self._watch_respawns = 0
         self._watch_ended: str | None = None     # why the verbs ended for good: watch saw the exit, or a doubt
+        self._sends = _ProvedHelper(self)       # the only way a key, focus or click goes out (`_prove_game`)
         self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
@@ -333,7 +359,7 @@ class Session:
 
         self._debug_log = LogFollower(self._paths.logs / "debug.log")
         self._error_log = LogFollower(self._paths.logs / "error.log")
-        self._console = Console(self._helper, self._proc, self._paths.history,
+        self._console = Console(self._sends, self._proc, self._paths.history,
                                 LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock)
         with self._step("console_ready"):
             self._console.ensure_open(CONSOLE_READY_S)
@@ -1203,7 +1229,7 @@ class Session:
             self._console.ensure_open()
             x, y = self._point(where)
             try:
-                self._helper.click(self._proc.pid, x, y)
+                self._sends.click(self._proc.pid, x, y)
             except HelperError as e:        # refused before the button went down: nothing was pressed
                 raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
             clicks.append([x, y])
@@ -1328,6 +1354,19 @@ class Session:
             self._maybe_stopped = True
             raise SessionError("maybe_stopped", "the game is stopped at the read event's breakpoint, and did not take "
                                "a resume, twice: nothing was typed", maybe_stopped=True)
+
+    def _prove_game(self) -> None:
+        """Just before each key, focus or click, inside a verb as between them: `watch` has not recorded the game's
+        exit (`_check_watch`), and the helper proves the process is the game by its pid and start time (`adopt`,
+        win_helper._op_adopt). Any doubt latches `watch_ended`, so nothing more goes out in any verb, and is
+        raised before the send."""
+        self._check_watch()
+        try:
+            self._helper.adopt(self._proc)
+        except Exception as e:
+            self._watch_ended = ("the game could not be proved alive by its pid and start time before a key or click "
+                                 "(%s): stop the session" % _describe(e))
+            raise SessionError("watch_ended", self._watch_ended) from e
 
     def _check_watch(self) -> None:
         """`watch` must still be following the game before any key or click goes out.
