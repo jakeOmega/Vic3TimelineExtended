@@ -560,7 +560,7 @@ class Session:
         return reached
 
     def shot(self) -> Path:
-        self._require_game()
+        self._require_game(types=False)
         with self._step("shot") as out:
             path = self._shot()
             out["path"] = str(path)
@@ -1196,9 +1196,12 @@ class Session:
 
     # ---- plumbing
 
-    def _require_game(self) -> None:
+    def _require_game(self, types: bool = True) -> None:
         """Before any verb: the session is running and watched, and the game is not left stopped at the
-        breakpoint (released first when it may be)."""
+        breakpoint. When it may be (`_maybe_stopped`) the stop is drained first; otherwise a verb that `types`
+        (or clicks) still takes one look, without waiting, for a stop the game made since the last verb (a read's
+        own command run once the game was resumed) and releases it: a frozen game takes no key, and the keys
+        would run later."""
         if self._stopped is not None or self._stopping:
             raise SessionError("stopped", "this session's game has been stopped")
         if not self._ready:
@@ -1206,6 +1209,21 @@ class Session:
         self._check_watch()
         if self._maybe_stopped:
             self._drain()
+        elif types:
+            self._release_pending()
+
+    def _release_pending(self) -> None:
+        dbg = self._debugger
+        try:
+            stopped = dbg.poll_stopped()
+        except DebuggerError as e:
+            self._maybe_stopped = True
+            raise SessionError("debugger", "%s (looking for a stop left pending; nothing was typed)" % e,
+                               maybe_stopped=True) from e
+        if stopped and not self._resume(dbg):
+            self._maybe_stopped = True
+            raise SessionError("maybe_stopped", "the game is stopped at the read event's breakpoint, and did not take "
+                               "a resume, twice: nothing was typed", maybe_stopped=True)
 
     def _check_watch(self) -> None:
         """`watch` must still be following the game before any key or click goes out.

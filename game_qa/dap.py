@@ -214,6 +214,16 @@ class Debugger:
             if left <= 0:
                 return False
             self._pump(min(left, 0.5))
+        return self._take_stop()
+
+    def poll_stopped(self) -> bool:
+        """`wait_stopped` without the wait: one look at what has arrived (`recv(0)`, which the helper turns into
+        a 1 ms poll), then True once per stop not yet taken. `wait_stopped(0)` would not look at all."""
+        if not self._stops:
+            self._pump(0)
+        return self._take_stop() if self._stops else False
+
+    def _take_stop(self) -> bool:
         self._stops -= 1
         self.last_stop_reason = self._reasons.pop(0) if self._reasons else None
         return True

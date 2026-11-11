@@ -1497,6 +1497,77 @@ class WatchCheckTest(SessionTestCase):
         self.assertEqual(len(self.watches), 1 + session.WATCH_RESPAWNS)
 
 
+class FrozenGame(Game):
+    """While the debugger has the game stopped, a read command typed into it waits; it runs (and stops at the
+    breakpoint) once the game is resumed (seen live: the answer to `continue`, then `continued`, then `stopped`)."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.waiting: list[str] = []
+
+    def _run(self, text):
+        if text == "event " + overlay.READ_EVENT and self.adapter.stopped:
+            self.waiting.append(text)
+            return
+        super()._run(text)
+
+
+class LateStopTest(SessionTestCase):
+    """N5 (B6): a stop that comes after its read gave up is taken by the next read, whose own command then runs
+    once the game is resumed, and stops it again. The next verb that types releases that stop first, without
+    waiting for one."""
+
+    def setUp(self):
+        super().setUp()
+        self.game = FrozenGame(self.user, self.order)
+        self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
+                                       sleep=self.game.sleep, clock=self.game.clock, helper_factory=self.new_helper)
+        adapter, answer = self.game.adapter, self.game.adapter._answer
+
+        def _answer(req):
+            was_stopped = adapter.stopped
+            answer(req)
+            if req["command"] == "continue" and was_stopped and self.game.waiting:
+                self.game.waiting.clear()       # resumed: the read command typed while frozen runs, and stops
+                adapter.stop()
+        adapter._answer = _answer
+
+    def test_the_next_verb_releases_a_stop_left_by_a_late_one_before_any_key(self):
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.stops = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "no_stop")
+        self.game.stops = True
+        armed = [True]
+
+        def late(_n):
+            if armed[0]:                        # read #1's stop lands as read #2's command is being typed
+                armed[0] = False
+                self.game.adapter.stop()
+        self.game.on_step = late
+        self.assertEqual([r.value for r in self.session.read(["c:FRA.gdp"])], [7.0])
+        self.game.on_step = None
+        self.assertTrue(self.game.adapter.stopped)              # frozen at read #2's own breakpoint
+        frozen_at_key = []
+        self.game.on_step = lambda _n: frozen_at_key.append(self.game.adapter.stopped)
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.session.events(), [])
+        self.assertTrue(frozen_at_key)
+        self.assertFalse(any(frozen_at_key))                    # released before the first key
+        self.assertFalse(self.game.adapter.stopped)
+
+    def test_a_stop_that_cannot_be_released_types_nothing(self):
+        self.started()
+        self.game.adapter.stop()                                # a stop nobody has taken
+        self.game.adapter.failing_continues = 4
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.events)
+        self.assertEqual(error.code, "maybe_stopped")
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+
 class PauseTest(SessionTestCase):
     """I4: a round that may have left the game running says so and refuses more time; the pause is proved."""
 

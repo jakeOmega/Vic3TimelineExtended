@@ -200,6 +200,17 @@ class DebuggerTest(unittest.TestCase):
         self.assertTrue(self.dbg.wait_stopped(1.0))
         self.assertFalse(self.dbg.wait_stopped(0.01))
 
+    def test_poll_stopped_reads_what_has_arrived_without_waiting(self):
+        waits = []
+        recv = self.server.recv
+        dbg = dap.Debugger(self.server.send, lambda timeout: (waits.append(timeout), recv(timeout))[1])
+        self.assertFalse(dbg.poll_stopped())
+        self.server.push({"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}})
+        self.assertTrue(dbg.poll_stopped())
+        self.assertEqual(dbg.last_stop_reason, "breakpoint")
+        self.assertFalse(dbg.poll_stopped())
+        self.assertEqual(waits, [0, 0, 0])                  # one look each, and none of them waits
+
     def test_a_stop_seen_before_a_resume_does_not_satisfy_the_next_wait(self):
         stopped = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
         self.server.push(stopped)
