@@ -55,9 +55,18 @@ SERVER_WAIT_S = 30.0                    # from spawning the server to its sessio
 POLL_S = 0.2
 STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status` by then is busy, not dead
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
-ENTER_TIMEOUT_S = 600.0
-LONG_TIMEOUT_S = 900.0                  # advance and try-event
+ENTER_TIMEOUT_S = 1200.0
+LONG_TIMEOUT_S = 900.0                  # try-event, and advance's rounds
+ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fixture's game first if need be
 # The worst cases, from the waits the session and the fixture allow themselves:
+#   enter-game, each console call counted with one foreground wait (FOREGROUND_WAIT_S 120) and each debugger
+#   request at dap's 30 s: the two ensure_opens before the clicks (2 x (30 + 120 + PROBE_ARRIVAL_S 6) = 312), the
+#   settles (CLICK_SETTLE_S 1 + ENTER_SETTLE_S 10), the console after Start (ENTER_WAIT_S 90 + one try in flight,
+#   156: 246), the new attach (4 requests: 120, and a pending stop's release, under 61), the tag (ARRIVAL_S 5 + 120,
+#   its reply 30: 155), the date (STOP_WAIT_S 15 + DATE_WAIT_S 5) and the unpaused proof (PROOF_S 3, an ensure_open
+#   156, two dates and PROOF_PAUSE_S 2: 201): about 1125 s, under ENTER_TIMEOUT_S. (Before the re-attach and
+#   re-tag it was about 540, under the 600 it had.) Someone at the machine for most of 120 s at several of those
+#   calls can take longer: the client then answers no_answer, the verb runs on, and `status` answers once it ends.
 #   stop: kill and adopt (about 10 s, twice with a fresh helper), watch (WATCH_WAIT_S 60), restore's retries
 #   (30 + 60 + 95 s), the restore itself and the closes (about 35 s): about 300 s, under STOP_TIMEOUT_S.
 #   start: the fixture's run (FIXTURE_LIMIT_S 900, its restore's retries 30 + 60 s, and its snapshot, launch,
@@ -677,7 +686,7 @@ def cmd_enter_game(args) -> tuple[dict, int]:
 
 
 def cmd_advance(args) -> tuple[dict, int]:
-    return call(_backup_root(), "advance", {"days": args.days}, LONG_TIMEOUT_S)
+    return call(_backup_root(), "advance", {"days": args.days}, ADVANCE_TIMEOUT_S)
 
 
 def cmd_shot(args) -> tuple[dict, int]:
