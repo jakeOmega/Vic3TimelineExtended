@@ -59,15 +59,19 @@ class Report:
 
     def close(self, summary: Mapping) -> Path:
         """Write summary.md and return its path. Its first line is the restore's outcome, from `summary["outcome"]`
-        ("restored", "held" or "refused"; worked out from `summary["restore"]`, the restore's reply, when absent),
-        so a reader learns first whether the owner's files are back. Then the permission, the snapshot, the save,
-        the country and any notes; then one table row per step (verb, outcome); then, for each `try_event` step,
-        its options' table and whether every option fired and was picked."""
-        lines = [_restore_line(summary.get("restore"), summary.get("outcome")), ""]
+        ("restored", "held", "refused", or "game_left_up" when restore was not run because the game may still be
+        up; worked out from `summary["restore"]`, the restore's reply, when absent), so a reader learns first
+        whether the owner's files are back. Then the permission, the snapshot, the save, the country, whether the
+        overlay was removed (and, when `summary["overlay_kept"]` gives a reason, why it was kept) and any notes;
+        then one table row per step (verb, outcome); then, for each `try_event` step, its options' table and
+        whether every option fired and was picked."""
+        lines = [_restore_line(summary.get("restore"), summary.get("outcome"), summary.get("snapshot")), ""]
         for label, key in (("Permission", "permission"), ("Snapshot", "snapshot"), ("Save", "save"),
                            ("Country", "country"), ("Overlay removed", "overlay_removed")):
             value = summary.get(key)
             lines.append("- %s: %s" % (label, _text(value) if value not in (None, "") else "(none)"))
+        if summary.get("overlay_kept"):
+            lines.append("- Overlay kept: " + _text(summary["overlay_kept"]))
         for note in summary.get("notes") or ():
             lines.append("- Note: " + _text(note))
         steps = self.steps()
@@ -89,13 +93,23 @@ def _outcome(restore: Mapping | None) -> str | None:
     return "refused" if restore.get("refused") else "restored"
 
 
-def _restore_line(restore: Mapping | None, outcome: str | None) -> str:
+def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | None = None) -> str:
+    if outcome == "game_left_up":
+        return ("Restore: NOT RUN: the game may still be up, and a restore beside it would hold. Nothing was put "
+                "back; run `python3 -m game_qa restore %s` once no game is running." % _text(snapshot or "<id>"))
     outcome = outcome or _outcome(restore)
     if restore is None or outcome is None:
         return "Restore: not run. No snapshot was taken, so there was nothing of the owner's to put back."
     if outcome == "held":
+        reason = _text(restore.get("reason") or "no reason given")
+        if restore.get("playset_restored") is True:
+            # restore puts the owner's playset back even when it holds the rest (part 1, `playset_restored`)
+            return ("Restore: HELD (%s). content_load.json was put back, so the game starts with the owner's "
+                    "playset again; the rest of the snapshot waits: only the owner resolves a hold "
+                    "(`python3 -m game_qa held` lists it)." % reason)
+        left = " The run's playset is still in place." if restore.get("playset_left") else ""
         return ("Restore: HELD (%s). Nothing was put back: only the owner resolves a hold "
-                "(`python3 -m game_qa held` lists it)." % _text(restore.get("reason") or "no reason given"))
+                "(`python3 -m game_qa held` lists it).%s" % (reason, left))
     if outcome == "refused":
         detail = restore.get("detail")
         return "Restore: REFUSED (%s). The snapshot is not finished.%s" % (

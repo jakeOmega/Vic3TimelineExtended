@@ -103,6 +103,12 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str) -> Overlay:
     return Overlay(dest, dest / EVENTS_FILE, read_line, setup_events)
 
 
+def check_setups(setups: Mapping[str, str]) -> None:
+    """Raise OverlayError for a setup name or body `build` would refuse; nothing is read or written."""
+    for name, body in setups.items():
+        _clean_body(name, body)
+
+
 def remove(dest: Path) -> bool:
     """Delete the overlay at `dest`. Only a real folder named OVERLAY_NAME whose metadata.json carries
     MARKER is deleted; anything else (missing, a symlink, someone else's folder) is left as it is

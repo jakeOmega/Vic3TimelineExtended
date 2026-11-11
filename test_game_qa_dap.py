@@ -266,6 +266,22 @@ class DebuggerTest(unittest.TestCase):
             self.server.push({"type": "event", "event": "stopped", "body": {"reason": reason, "threadId": 1}})
         self.assertEqual([self.dbg.wait_stopped(1.0) for _ in range(4)], [True, True, True, False])
 
+    def test_the_reason_of_the_stop_last_taken_is_kept(self):
+        self.assertIsNone(self.dbg.last_stop_reason)
+        for reason in ("pause", "breakpoint"):
+            self.server.push({"type": "event", "event": "stopped", "body": {"reason": reason, "threadId": 1}})
+        taken = []
+        while self.dbg.wait_stopped(0.01):
+            taken.append(self.dbg.last_stop_reason)
+        self.assertEqual(taken, ["pause", "breakpoint"])         # each stop's own, in order, not the latest seen
+        self.server.push({"type": "event", "event": "stopped", "body": {"threadId": 1}})
+        self.assertTrue(self.dbg.wait_stopped(0.01))
+        self.assertIsNone(self.dbg.last_stop_reason)              # a stop that gave no reason
+        self.server.push(STOPPED)
+        self.server.reply("continue")
+        self.dbg.resume()                                          # the stops forgotten: no reason is left over
+        self.assertIsNone(self.dbg.last_stop_reason)
+
     def test_a_bad_message_among_the_replies_does_not_wedge_the_client(self):
         self.server._out += b"Content-Length: 9\r\n\r\n{not json"
         self.server._out += b"Content-Length: 2\r\n\r\n\xff\xfe"

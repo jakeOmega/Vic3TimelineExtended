@@ -621,23 +621,19 @@ class DeadServerTest(ChildServerTestCase):
                 mock.patch.object(client, "spawn_server", spawn):
             reply, code = self.run_cli("start", "--permission", PERMISSION, "--save", "owner_save", "--playset", "current")
 
-        # refused by `snapshot` itself, because the dead run is unfinished; the caller is told to run `recover`
-        self.assertEqual((reply["refused"], code), ("snapshot_refused", 2), reply)
-        self.assertEqual(reply["reply"]["refused"], "unfinished_run")
-        self.assertEqual(reply["reply"]["unfinished"], [dead_run])
+        # refused before anything, because the dead run's overlay is there (its playset may still name it); the
+        # caller is told to run `recover`, then remove the folder
+        self.assertEqual((reply["refused"], code), ("overlay_left", 2), reply)
+        self.assertIn("recover", reply["detail"])
         self.assertIn("recover", reply["next"])
         self.assertEqual(reply["stale_session"]["pid"], child.pid)
         self.assertIn("recover", reply["stale_session"]["detail"])
         # the new server is gone, and so is its file
         self.assertFalse(spawn.handles[0].thread.is_alive())
         self.assertFalse(self.info_path.exists())
-        # nothing of the owner's changed: every file outside the overlay is as the dead run left it
-        def owners(files):
-            return [f for f in files if not f[0].startswith(os.path.join("mod", overlay.OVERLAY_NAME))]
-        self.assertEqual(owners(tree(self.user)), owners(before))
-        # The overlay folder is the harness's own: the refused start replaced the dead run's (overlay.build replaces
-        # a marked overlay) and its stop removed it. Reported beside the overlay question the stop-path review has.
-        self.assertFalse(overlay_dir.exists())
+        # nothing changed, the dead run's overlay included: it is neither replaced nor removed
+        self.assertEqual(tree(self.user), before)
+        self.assertTrue((overlay_dir / ".metadata" / "metadata.json").is_file())
         # the dead run is still unfinished: no verdict was given, and no snapshot was taken over it
         events = [e["event"] for e in snapshot.journal(snapshot.all_snapshots(self.backups)[-1])]
         self.assertIn("started", events)
@@ -721,8 +717,9 @@ class DoctorTest(ServerTestCase):
         self.assertFalse(reply["ok"])
         problems = "\n".join(reply["problems"])
         for needle in ("not deployed", "victoria3.exe", "helper_gone", "nvidia-smi", held, unfinished,
-                       never_launched, overlay.OVERLAY_NAME, "stale"):
+                       never_launched, overlay.OVERLAY_NAME, "stale", "overlay_left"):
             self.assertIn(needle, problems)
+        self.assertNotIn("replaces it", problems)              # `start` refuses a left overlay; it never replaces it
         self.assertEqual(len(reply["checks"]), 9)
         self.assertEqual((tree(self.user), tree(self.backups)), before)          # it changed nothing
 

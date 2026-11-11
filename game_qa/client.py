@@ -64,6 +64,10 @@ LAUNCHER_SETTINGS = Path("launcher") / "launcher-settings.json"
 RECOVER_HINT = ("a run is unfinished: its session ended without `stop` (its server died, or was killed). If its game "
                 "is still up, its `watch` still records it. Once no game of that run is running and its `watch` has "
                 "returned, run `python3 -m game_qa recover`, which finishes the run, then `start` again")
+OVERLAY_LEFT_HINT = ("the overlay folder is an earlier run's, and that run's playset may still name it, so `start` "
+                     "neither replaces nor removes it. Once no game of that run is running, finish the run "
+                     "(`python3 -m game_qa recover`, or `restore <id>` for a run whose stop ended game_left_up or "
+                     "refused), then remove the folder and `start` again")
 DEAD_SERVER = ("%s names a session server (pid %s, port %s) that nothing answers for: it has died. " + RECOVER_HINT
                + ". `doctor` says what is left")
 
@@ -179,6 +183,8 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
     out["server"] = where
     if (reply.get("reply") or {}).get("refused") == "unfinished_run" or reply.get("refused") == "no_session":
         out["next"] = RECOVER_HINT
+    elif reply.get("refused") == "overlay_left":
+        out["next"] = OVERLAY_LEFT_HINT
     elif reply.get("refused") == "no_answer":
         out["next"] = ("the start may still be running: `status` answers once it is done. Do not run `recover` "
                        "meanwhile: it would finish this start's own snapshot")
@@ -325,7 +331,8 @@ def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: C
     left = user / "mod" / overlay.OVERLAY_NAME if user is not None else None
     if left is not None and os.path.lexists(left):
         note("overlay folder", None if state in ("live", "busy") else
-             "%s is there, left by a session that ended without its stop: the next `start` replaces it" % left,
+             "%s is there, left by a session that ended without its stop or whose stop kept it: `start` refuses "
+             "(overlay_left). %s" % (left, OVERLAY_LEFT_HINT),
              "ok (the running session's)")
     else:
         note("overlay folder", None, "ok (none)")
@@ -534,7 +541,8 @@ def cmd_doctor(args) -> tuple[dict, int]:
 
 def cmd_session_serve(args) -> tuple[dict, int]:
     paths = real_paths()
-    sess = session.Session(ProcessHelper(), run_cli, lambda snapshot_id: spawn_watch(snapshot_id, paths.run_root), paths)
+    sess = session.Session(ProcessHelper(), run_cli, lambda snapshot_id: spawn_watch(snapshot_id, paths.run_root), paths,
+                           helper_factory=ProcessHelper)
     result = server.SessionServer(sess, paths.backup_root, port=args.port, log=sys.stderr).serve(signals=True)
     return result, 0 if server.clean_stop(result.get("stop") or {}) else 2
 

@@ -55,6 +55,28 @@ class ReportTest(unittest.TestCase):
                 first = self.report.close(self.summary(restore, outcome)).read_text("utf-8").split("\n")[0]
                 self.assertTrue(first.startswith(start), first)
 
+    def test_a_hold_says_whether_the_owners_playset_was_put_back(self):
+        put_back = {"restored": ["content_load.json"], "removed": [], "held": True, "reason": "other_game_ran",
+                    "playset_restored": True}
+        left = {"restored": [], "removed": [], "held": True, "reason": "other_game_running", "playset_left": True}
+        first = self.report.close(self.summary(put_back, "held")).read_text("utf-8").split("\n")[0]
+        self.assertTrue(first.startswith("Restore: HELD (other_game_ran)"), first)
+        self.assertIn("content_load.json was put back", first)        # the playset: the game starts as before
+        self.assertNotIn("Nothing was put back", first)
+        first = self.report.close(self.summary(left, "held")).read_text("utf-8").split("\n")[0]
+        self.assertIn("Nothing was put back", first)
+        self.assertIn("run's playset is still in place", first)
+
+    def test_a_game_left_up_says_restore_was_not_run_and_how_to_finish(self):
+        summary = dict(self.summary(None, "game_left_up"), overlay_removed=False,
+                       overlay_kept="the game may still be up, and the run's playset names the overlay")
+        text = self.report.close(summary).read_text("utf-8")
+        first = text.split("\n")[0]
+        self.assertTrue(first.startswith("Restore: NOT RUN"), first)
+        self.assertIn("python3 -m game_qa restore 20261110T150000Z", first)
+        self.assertIn("once no game is running", first)
+        self.assertIn("- Overlay kept: the game may still be up", text)
+
     def test_a_try_event_step_is_a_table_of_its_options(self):
         rows = [
             {"index": 0, "fired": True, "fired_by": "console", "pending_options": 2,

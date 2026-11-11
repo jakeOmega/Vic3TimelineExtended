@@ -302,6 +302,15 @@ class BodyTest(OverlayTestCase):
             self.build({"alpha": SETUP_A, "beta": "a = {"})
         self.assertIn("beta", str(caught.exception))
 
+    def test_check_setups_refuses_what_build_refuses_and_writes_nothing(self):
+        for setups in ({"alpha": "a = {"}, {"Alpha": SETUP_A}, {"alpha": ""}, {"alpha": 3}):
+            with self.subTest(setups=setups):
+                with self.assertRaises(overlay.OverlayError):
+                    overlay.check_setups(setups)
+        overlay.check_setups({"alpha": SETUP_A, "beta": "a = { b = yes }"})
+        overlay.check_setups({})
+        self.assertFalse(self.dest.exists())
+
 
 class RemoveTest(OverlayTestCase):
     def test_remove_deletes_a_marked_overlay(self):

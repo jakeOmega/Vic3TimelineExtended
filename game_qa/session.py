@@ -6,8 +6,14 @@ The session never touches the owner's files itself. The protective verbs of part
 reported, never worked around. Under the user-data folder the session itself writes only the overlay mod
 (`overlay.build` and `overlay.remove`) and, through `fixture`, the `te_qa_fixture_*` saves.
 
-    start   held?  overlay  fixture  snapshot  launch  watch at once  adopt  window  logs  console  tag  debugger
+    start   overlay left?  held?  overlay  fixture  snapshot  launch  watch at once  adopt  window  logs  console
+            tag  debugger
     stop    kill  wait for watch  restore  overlay.remove  close the relay and the helper  close the report
+
+A game that may still be up is never restored beside (part 1 would hold): `stop` then ends `game_left_up` and
+says to run `restore <id>` once no game is running. The overlay goes only once the game is known ended and the
+owner's playset is known back; otherwise it stays, and the next `start` refuses (`overlay_left`) until that run
+is finished and the folder removed. A `stop` that ended refused or game_left_up is run again by the next `stop`.
 
 Keys and clicks go out only through `Console` and the helper, which check that the game is in front; a click
 is preceded by a console call that needs the game in front, so the presence rule decides whether the foreground
@@ -16,13 +22,16 @@ may be taken, never a bare `focus`. A console command is typed once: nothing her
 Reads go through the overlay's read event (`overlay.READ_EVENT`): console `event te_qa.1` runs its `immediate`
 at once, the debugger stops on its `debug_log` line, and each expression is evaluated there; once resumed, the
 event logs `TE_QA read country=FRA date=January 11, 1836` and its padding flushes the log. That line is how the
-session reads the date (`enter_game`, `advance`). Facts from the live session of 2026-11-10 (spec § 12): the
-fixture opens on the country-select screen, where time does not advance; after `tag` the camera is on that
-country, and a click at COUNTRY_CLICK then START_CLICK (fractions of the client area) enters the game; the game
-is paused when a save loads, and space toggles the pause only with the console closed.
+session reads the date (`enter_game`, `advance`). Before each read a stop left over from an earlier one is
+released, and only a stop whose reason is "breakpoint" is evaluated at. Facts from the live session of
+2026-11-10 (spec § 12): the fixture opens on the country-select screen, where time does not advance; after `tag`
+the camera is on that country, and a click at COUNTRY_CLICK then START_CLICK (fractions of the client area)
+enters the game; the game is paused when a save loads, and space toggles the pause only with the console closed.
+Each round of time ends by proving the pause: two date reads PROOF_PAUSE_S apart must agree.
 """
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 import time
@@ -70,8 +79,23 @@ MAX_WAIT_S = 20.0
 MAX_ROUNDS = 20
 WATCH_WAIT_S = 60.0                     # stop: for `watch` to see the game gone and return
 WATCH_POLL_S = 1.0
-RESTORE_RETRY_S = 5.0                   # stop: while `restore` refuses watch_still_recording
-RESTORE_RETRY_TOTAL_S = 30.0
+RESTORE_RETRY_S = 5.0                   # stop: while `restore` refuses watch_still_recording or busy
+RESTORE_RETRY_TOTAL_S = 30.0            # for watch_still_recording
+BUSY_RETRY_TOTAL_S = 60.0               # for busy: another session's protective verb holds the backup root's lock
+LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the claim (__main__.LAUNCH_IN_FLIGHT_S)
+DRAIN_S = 0.5                           # before a read: a stop left over from an earlier one (real seconds: dap's clock)
+PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
+WATCH_RESPAWNS = 3                      # a watch that returns while the game's window is up is run again, this often
+
+# `launch` refusals given before it claims the snapshot: no game was started (game_qa/__main__.py). Any other
+# reply that is not a success (not_recorded, start_unconfirmed, a refusal after the claim, a name not known here,
+# a lost or unreadable reply) may come with a game up.
+NO_GAME_REFUSALS = frozenset({
+    "already_finished", "already_started", "not_armed", "no_end_date", "bad_argument", "no_permission",
+    "backup_root", "other_game", "gpu_busy", "game_running", "stale_snapshot", "no_game_binary",
+    "mod_not_in_playset", "playset_not_restored", "busy"})
+_CLAIMED = "stays claimed"              # said by every refusal after the claim (__main__._CLAIM_STAYS)
+_RETRIED = ("refused", "game_left_up")  # a stop that ended so is run again by the next stop()
 
 _TAG = re.compile(r"[A-Za-z0-9_]{1,16}")
 _EVENT = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.]*")
@@ -82,13 +106,17 @@ class SessionError(Exception):
     """A verb that did not go through. `code` names why; `info` holds what goes with it (`reply`: a protective
     verb's reply; `stop`: the reply of the `stop` a failed start ran; `screenshot`, …).
 
-    Codes: already_started, no_permission, bad_argument, bad_tag, no_save, held_snapshot, held_unknown,
-    overlay_refused, fixture_failed, snapshot_refused, launch_refused, bad_launch_reply, unknown_start, game_gone,
-    no_window, breakpoint_unverified, debugger, no_stop, no_date, bad_date, tag_failed, use_read, unknown_setup,
-    setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country, click_refused, not_entered,
-    left_running, bad_days, stalled, not_started, stopped, watch_ended, already_pending; after `launch`, a console
-    error that ended `start` keeps its own code (no_ack, not_foreground, …) and `entered`, as does one that ended
-    `try_event` (whose error also carries the rows so far, `options`)."""
+    Codes: already_started, overlay_left, no_permission, bad_argument, bad_tag, no_save, held_snapshot,
+    held_unknown, overlay_refused, fixture_failed, snapshot_refused, launch_refused (with `game_may_be_up` when a
+    game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
+    breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
+    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
+    not_on_country_select, click_refused, not_entered, left_running, bad_days, stalled, not_started, stopped
+    (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
+    `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
+    or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
+    not_foreground, …) and `entered`, as does one that ended `try_event` (whose error also carries the rows so
+    far, `options`)."""
 
     def __init__(self, code: str, detail: str = "", **info: Any) -> None:
         super().__init__("%s: %s" % (code, detail) if detail else code)
@@ -134,10 +162,16 @@ class Paths:
 
 class Session:
     def __init__(self, helper: Helper, run_cli: RunCli, spawn_watch: Callable[[str], Any], paths: Paths,
-                 sleep=time.sleep, clock=time.monotonic) -> None:
+                 sleep=time.sleep, clock=time.monotonic, helper_factory: Callable[[], Helper] | None = None) -> None:
+        """`helper_factory` makes a new helper when the one in use has ended (`helper_gone`) as `stop` ends the
+        game: the new one adopts the game by launch's record, then ends it. Without it the game is left up."""
         self._helper, self._run_cli, self._spawn_watch, self._paths = helper, run_cli, spawn_watch, paths
         self._sleep, self._clock = sleep, clock
-        self._began = False                 # start() was called
+        self._helper_factory = helper_factory
+        self._began = False                 # start() got past its refusals
+        self._starting = False              # start() is running: a stop() is left to it
+        self._abort = False                 # a stop() came while start() ran
+        self._stopping = False              # stop() is running: a stop() inside it does nothing
         self._ready = False                 # start() finished: the other verbs may run
         self._permission: str | None = None
         self._overlay: overlay.Overlay | None = None     # built by this session, so stop removes it
@@ -145,8 +179,11 @@ class Session:
         self._snapshot: str | None = None
         self._report: Report | None = None
         self._early: list[tuple[str, dict]] = []         # steps from before the run folder existed
-        self._launched = False              # `launch` succeeded: a game of this run may be up
+        self._launched = False              # `launch` answered other than a no-game refusal: a game may be up
         self._launch_reply: dict = {}
+        self._game_ended = False            # the launched game is known to be over: ended here, or gone already
+        self._fixture_loaded = False        # the save is the fixture, which opens on the country-select screen
+        self._fixture_left: str | None = None    # why the fixture's own run may have left a game or its playset
         self._watch: Any = None
         self._proc: ProcId | None = None
         self._adopted = False
@@ -159,6 +196,10 @@ class Session:
         self._entered = False
         self._shots = 0
         self._stopped: dict | None = None
+        self._maybe_stopped = False         # the game may be stopped at the breakpoint: the next verb releases it
+        self._left_running = False          # a round may have left the game unpaused: no more time until stop
+        self._watch_respawns = 0
+        self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
 
@@ -168,42 +209,64 @@ class Session:
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
 
-        Refused with nothing done, and the session left as it was: an empty permission, a bad argument, a save
-        that is not there, and any held snapshot (only the owner resolves a hold, and a hold leaves the run's
-        playset in place). A second start, or one after `stop`, is refused. A refused snapshot or launch raises with
-        the verb's reply and starts nothing further. Every failure once the overlay is built runs `stop()` before
-        raising (its reply is the error's `info["stop"]`)."""
+        Refused with nothing done, and the session left as it was: an overlay folder already there (an earlier
+        run's playset may still name it: `overlay_left`, and it is neither replaced nor removed), an empty
+        permission, a bad argument or setup, a save that is not there, and any held snapshot (only the owner
+        resolves a hold, and a hold leaves the run's playset in place). A second start, or one after `stop`, is
+        refused. A refused snapshot or launch raises with the verb's reply and starts nothing further. Every
+        failure once the session has begun runs `stop()` before raising (its reply is the error's `info["stop"]`),
+        an interrupt (KeyboardInterrupt, SystemExit) too, which is then raised again. A `stop()` called while this
+        runs is left to it: it answers `deferred_to_start`, and this ends at its next step with `stopped`."""
         if self._began or self._stopped is not None:
             raise SessionError("already_started", "a session runs one game: stop it and start a new session")
+        if os.path.lexists(self._paths.overlay_dir):
+            raise SessionError("overlay_left", "%s is there already, left by an earlier run whose playset may still "
+                               "name it: finish that run (`python3 -m game_qa recover`, or `restore <id>` once no "
+                               "game is running), then remove the folder. Nothing was done" % self._paths.overlay_dir)
         if not isinstance(permission, str) or not permission.strip():
             raise SessionError("no_permission", "say where the go-ahead to launch came from")
         if playset not in PLAYSETS:
             raise SessionError("bad_argument", "playset is one of %s, not %r" % (", ".join(PLAYSETS), playset))
         if as_tag is not None:
             _check_tag(as_tag)
+        if setups is not None and not isinstance(setups, Mapping):
+            raise SessionError("bad_argument", "setups maps a setup's name to its script, not %r" % (setups,))
+        setups = dict(setups or {})
+        try:
+            overlay.check_setups(setups)
+        except overlay.OverlayError as e:
+            raise SessionError("overlay_refused", str(e)) from e
         if save is not None:
             save = self._check_save(save)
         self._refuse_if_held()
         self._began = True
+        self._starting = True
         self._permission = permission
         try:
-            self._overlay = overlay.build(self._paths.overlay_dir, dict(setups or {}), self._paths.game_version)
-        except overlay.OverlayError as e:
-            raise SessionError("overlay_refused", str(e)) from e
-        self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
-        try:
-            return self._start(permission, as_tag, save, playset, owner_confirmed_busy)
-        except Exception as e:
+            return self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy)
+        except BaseException as e:
+            self._starting = False
             stopped = self.stop()
+            if not isinstance(e, Exception):
+                raise
             if isinstance(e, SessionError):
                 e.info["stop"] = stopped
                 raise
             extra = {"entered": e.entered} if isinstance(e, ConsoleError) else {}
             raise SessionError(_code_of(e), str(e), stop=stopped, **extra) from e
+        finally:
+            self._starting = False
 
-    def _start(self, permission: str, as_tag: str | None, save: str | None, playset: str, busy: bool) -> dict:
+    def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
+               busy: bool) -> dict:
+        try:
+            self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version)
+        except overlay.OverlayError as e:
+            raise SessionError("overlay_refused", str(e)) from e
+        self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
         save, made, pruned = self._the_save(save, permission, playset, busy)
         self._save = save
+        self._check_abort()
         reply, code = self._cli(["snapshot", "--save", save])
         snap = reply.get("id")
         if code != 0 or not isinstance(snap, str) or not snap:
@@ -212,21 +275,41 @@ class Session:
         self._snapshot = snap
         self._open_report(snap)
         self._record("snapshot", outcome="ok", reply=reply)
+        self._check_abort()
 
         argv = ["launch", snap, "--permission", permission, "--playset", playset,
                 "--add-mod", self._paths.overlay_windows_path]
         if busy:
             argv.append("--owner-confirmed-busy")
         argv += ["--", *SESSION_ARGS, "-loadsave=" + save]
-        reply, code = self._cli(argv)
-        if code != 0:
+        try:
+            reply, code = self._cli(argv)
+        except Exception as e:
+            reply, code = {"refused": "no_reply", "detail": "launch could not be run, or its reply was lost: %r"
+                           % e}, 2
+        except BaseException:
+            # Interrupted: the launch may have got as far as starting the game. Watched, and never restored beside.
+            self._launched = True
+            try:
+                self._watch = self._spawn_watch(snap)
+            except Exception:
+                pass
+            raise
+        if code != 0 and _no_game(reply):
             self._record("launch", outcome="refused", reply=reply)
             raise SessionError("launch_refused", _why(reply), reply=reply)
+        # From here a game of this run may be up, whatever the reply says: it is watched, and stop ends it by
+        # launch's own record of it when the reply gives one.
         self._launched = True
         self._launch_reply = reply
         # At once: part 1 holds a run whose first look came more than 120 s after the start.
         self._watch = self._spawn_watch(snap)
-        self._record("launch", outcome="ok", reply=reply)
+        self._record("launch", outcome="ok" if code == 0 else "refused", reply=reply)
+        self._check_abort()
+        if code != 0:
+            raise SessionError("launch_refused", "%s; a game may have started all the same, so it is watched and "
+                               "ended by the pid and start time the reply gives, if it gives them" % _why(reply),
+                               reply=reply, game_may_be_up=True)
         self._proc = _proc_of(reply)
         self._helper.adopt(self._proc)
         self._adopted = True
@@ -242,6 +325,7 @@ class Session:
             with self._step("tag", tag=as_tag):
                 self._tag(as_tag)
         self._attach()
+        self._check_abort()
         self._ready = True
         ov = self._overlay
         result = {
@@ -255,6 +339,10 @@ class Session:
             result["fixtures_pruned"] = pruned
         self._record("start", outcome="ok", **result)
         return result
+
+    def _check_abort(self) -> None:
+        if self._abort:
+            raise SessionError("stopped", "stop was asked while start ran: start has stopped the session")
 
     def _refuse_if_held(self) -> None:
         try:
@@ -285,18 +373,33 @@ class Session:
         if save is not None:
             self._record("fixture", outcome="not_used", save=save)
             return save, False, []
+        self._fixture_loaded = True
         user = Path(self._paths.user_data)
         key = fixture.key(self._paths.game_version, self._paths.enabled_mods, self._paths.deploy_dir)
         found = fixture.find(user, key)
         if found is not None:
             self._record("fixture", outcome="found", save=found.stem)
             return found.stem, False, []
+        calls: list[tuple[str, dict | None, int | None]] = []      # the fixture's own verbs, as they answered
+
+        def run_cli(argv):
+            try:
+                reply, code = self._run_cli(argv)
+            except BaseException:
+                calls.append((argv[0], None, None))
+                raise
+            calls.append((argv[0], reply if isinstance(reply, dict) else None, code))
+            return reply, code
         try:
-            made = fixture.make(self._run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
+            made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep)
         except fixture.FixtureError as e:
+            self._fixture_left = _fixture_left(calls, e.snapshot)
             self._record("fixture", outcome="failed", step=e.step, reply=e.reply, snapshot=e.snapshot)
             raise SessionError("fixture_failed", str(e), step=e.step, reply=e.reply, snapshot=e.snapshot) from e
+        except BaseException:
+            self._fixture_left = _fixture_left(calls, None)
+            raise
         try:
             pruned = fixture.prune(user, keep=FIXTURES_KEPT)
         except OSError as e:
@@ -308,6 +411,7 @@ class Session:
     def _await_window(self) -> None:
         deadline = self._clock() + WINDOW_WAIT_S
         while True:
+            self._check_abort()
             win = self._helper.window(self._proc.pid)
             if win.exists and win.responding:
                 self._record("window", outcome="ok", client=list(win.client))
@@ -337,12 +441,14 @@ class Session:
     # ---- the verbs
 
     def console(self, text: str) -> Reply:
-        """One console command, with its reply. The read event is refused: it would stop at the breakpoint with
-        nobody to resume it (`read` is its verb)."""
+        """One console command, with its reply. Any text that starts `event te_qa.1`, in any case and spacing and
+        whatever follows, is refused: the read event would stop at the breakpoint with nobody to resume it (`read`
+        is its verb)."""
         self._require_game()
         with self._step("console", text=text) as out:
-            if text.split() == ["event", overlay.READ_EVENT]:
-                raise SessionError("use_read", "%r stops at the debugger's breakpoint: use read" % text)
+            if " ".join(str(text).split()).lower().startswith(READ_COMMAND.lower()):
+                raise SessionError("use_read", "%r may run the read event, which stops at the debugger's "
+                                   "breakpoint: use read" % text)
             reply = self._console.run(text)
             out.update(ok=reply.ok, lines=reply.lines)
         return reply
@@ -416,19 +522,27 @@ class Session:
             self._tag(tag)
 
     def enter_game(self) -> dict:
-        """Click the country the camera is on, then Start, and prove it by the date moving while unpaused."""
+        """Click the country the camera is on, then Start, and prove it by the date moving while unpaused. Only
+        the fixture opens on the country-select screen: with an owner's save it is refused
+        (`not_on_country_select`), and `advance` needs no entering."""
         self._require_game()
+        self._refuse_if_left_running()
+        if not self._fixture_loaded:
+            raise SessionError("not_on_country_select", "the game was started on a save of the owner's, which "
+                               "opens in play: there is no country-select screen to click (advance works as it is)")
         with self._step("enter_game") as out:
             result = self._enter()
             out.update(result)
         return result
 
     def advance(self, days: int) -> tuple[int, int, int]:
-        """Let at least `days` game days pass (entering the game first if need be); return the date reached."""
+        """Let at least `days` game days pass (entering the fixture's game first if need be); return the date
+        reached."""
         self._require_game()
+        self._refuse_if_left_running()
         if isinstance(days, bool) or not isinstance(days, int) or days < 1:
             raise SessionError("bad_days", "days is a whole number of at least 1, not %r" % (days,))
-        if not self._entered:
+        if self._fixture_loaded and not self._entered:
             start = tuple(self.enter_game()["after"])
         else:
             start = None
@@ -541,66 +655,144 @@ class Session:
                 "save": self._save, "country": self._country, "entered": self._entered,
                 "game": {"pid": proc.pid, "created": proc.created} if proc is not None else None,
                 "watch_returned": self._watch_returned(),
-                "run_dir": str(self._report.dir) if self._report is not None else None}
+                "run_dir": str(self._report.dir) if self._report is not None else None,
+                "maybe_stopped": self._maybe_stopped, "left_running": self._left_running,
+                "watch_respawns": self._watch_respawns}
 
     # ---- stop
 
     def stop(self) -> dict:
         """End the game this session started and put the owner's files back; never raises.
 
-        In order: end the game (`kill`; adopted first if a failure came before `adopt`), wait for `watch` to
-        return (up to WATCH_WAIT_S), `restore <id>` (retried while it refuses watch_still_recording, up to
-        RESTORE_RETRY_TOTAL_S), remove the overlay this session built, close the debugger's relay and the helper,
-        close the report. With no launch, a snapshot taken is still restored: an armed one blocks every later one.
-        The reply is restore's reply plus `outcome` (restored, held or refused), `snapshot`, `overlay_removed`,
-        `report` (the summary's path) and any `notes`; a second call returns the first one's reply."""
-        if self._stopped is None:
-            try:
-                self._stopped = self._stop()
-            except Exception as e:      # a backstop: each stage below already catches its own failures
-                self._stopped = {"snapshot": self._snapshot, "outcome": "error", "notes": ["stop failed: %r" % e]}
+        In order: end the game (`kill`; adopted first if a failure came before `adopt`; through a fresh helper
+        from `helper_factory` once if the helper has ended), wait for `watch` to return (up to WATCH_WAIT_S),
+        `restore <id>` (retried every RESTORE_RETRY_S while it refuses watch_still_recording, up to
+        RESTORE_RETRY_TOTAL_S; busy, up to BUSY_RETRY_TOTAL_S; or launch_in_flight, which a launch that was not
+        recorded leaves for 90 s after its claim, up to LAUNCH_IN_FLIGHT_RETRY_TOTAL_S: by now the launch call
+        has returned), remove the overlay this session built, close
+        the debugger's relay and the helper, close the report. With no launch, a snapshot taken is still
+        restored: an armed one blocks every later one.
+
+        A game that may still be up (no start time to end it by, a kill refused, the helper gone) is not
+        restored beside: `outcome` is game_left_up and `next` says to run `restore <id>` once no game is running.
+        The overlay is removed only once the game is known ended and restore put the owner's playset back
+        (`restored`, or `held` with `playset_restored`); otherwise `overlay_kept` is true and
+        `overlay_kept_because` says why.
+
+        The reply is restore's reply plus `outcome` (restored, held, refused, game_left_up, or None with no
+        snapshot), `snapshot`, `overlay_removed`, `overlay_kept`, `report` (the summary's path) and any `notes`.
+        A later call returns that reply again, unless it ended refused or game_left_up: then it is run again,
+        from ending the game if that was not done. Called while `start` runs, it answers `deferred_to_start` and
+        `start` stops the session itself; called inside a stop under way, it answers `in_progress`."""
+        if self._stopping:
+            return {"outcome": "in_progress", "snapshot": self._snapshot, "detail": "a stop is under way"}
+        if self._starting:
+            self._abort = True
+            return {"outcome": "deferred_to_start", "snapshot": self._snapshot,
+                    "detail": "start is running: it stops the session at its next step and raises `stopped`"}
+        if not self._began:
+            return {"outcome": None, "snapshot": None, "overlay_removed": False, "report": None}
+        if self._stopped is not None and self._stopped.get("outcome") not in _RETRIED:
+            return self._stopped
+        self._stopping = True
+        try:
+            self._stopped = self._stop()
+        except Exception as e:      # a backstop: each stage below already catches its own failures
+            self._stopped = {"snapshot": self._snapshot, "outcome": "error", "notes": ["stop failed: %r" % e]}
+        finally:
+            self._stopping = False
         return self._stopped
 
     def _stop(self) -> dict:
-        notes: list[str] = []
-        if self._launched:
+        notes = list(self._notes)
+        if self._launched and not self._game_ended:
             self._end_game(notes)
-            self._await_watch(notes)
-        restore, outcome = self._restore(notes) if self._snapshot is not None else (None, None)
-        removed = self._remove_overlay(notes)
+        left_up = self._launched and not self._game_ended
+        restore, outcome = None, None
+        if left_up:
+            outcome = "game_left_up"
+            self._record("restore", outcome="not_run", detail="the game may still be up")
+        else:
+            if self._launched:
+                self._await_watch(notes)
+            if self._snapshot is not None:
+                restore, outcome = self._restore(notes)
+        removed, kept = self._settle_overlay(restore, outcome, notes)
         self._close_relay(notes)
         self._close_helper(notes)
         reply = dict(restore) if restore is not None else {}
         reply.update(outcome=outcome, snapshot=self._snapshot, overlay_removed=removed)
-        reply["report"] = self._close_report(restore, outcome, removed, notes)
+        if self._overlay is not None:
+            reply["overlay_kept"] = kept is not None
+        if kept is not None:
+            reply["overlay_kept_because"] = kept
+        if left_up:
+            reply["next"] = ("the game may still be up: once no game is running, run `python3 -m game_qa restore "
+                             "%s` (or `stop` again, which first tries to end the game), then remove %s"
+                             % (self._snapshot, self._paths.overlay_dir))
+        elif outcome == "refused":
+            reply["next"] = ("`stop` again runs restore again; or run `python3 -m game_qa restore %s`, then remove %s"
+                             % (self._snapshot, self._paths.overlay_dir))
+        reply["report"] = self._close_report(restore, outcome, removed, kept, notes)
         if notes:
             reply["notes"] = notes
         return reply
 
     def _end_game(self, notes: list[str]) -> None:
+        """End the game, setting `_game_ended` once it is known to be over; any doubt leaves it up, noted."""
         # `launch`'s own record of the game, if the failure came before it was taken as `_proc`: the helper
         # adopts a process only when its creation time matches (win_helper._op_adopt).
         proc = self._proc or _named_proc(self._launch_reply)
         if proc is None:
-            notes.append("the game's process is not known (launch's reply did not name it), so it was not ended")
+            notes.append("the game's process is not known (launch's reply did not name it), so it was not ended "
+                         "and may still be up")
             return
         if proc.created == UNKNOWN_START:
             # A pid alone may be another game's by now: wait for no game at all, then restore (part 1's rule).
             notes.append("launch recorded no start time for pid %d, so it was not ended: a pid alone may be "
                          "another game's" % proc.pid)
             return
-        if not self._adopted:
-            try:
-                self._helper.adopt(proc)
-                self._adopted = True
-            except Exception as e:
-                notes.append("adopting the game before ending it failed: %s" % e)
         try:
-            gone = self._helper.kill(proc)
-            self._record("kill", outcome="already_exited" if gone else "ok")
+            self._kill(proc)
+            return
+        except HelperError as e:
+            if e.code != "helper_gone" or self._helper_factory is None:
+                self._kill_failed(notes, e)
+                return
+            notes.append("the helper had ended (%s), so a new one adopts the game and ends it" % e.detail)
         except Exception as e:
-            notes.append("ending the game failed: %s" % e)
-            self._record("kill", outcome="failed", detail=str(e))
+            self._kill_failed(notes, e)
+            return
+        try:
+            self._new_helper()
+            self._kill(proc)
+        except Exception as e:
+            self._kill_failed(notes, e)
+
+    def _kill(self, proc: ProcId) -> None:
+        if not self._adopted:
+            self._helper.adopt(proc)
+            self._adopted = True
+        gone = self._helper.kill(proc)
+        self._game_ended = True
+        self._record("kill", outcome="already_exited" if gone else "ok")
+
+    def _kill_failed(self, notes: list[str], e: Exception) -> None:
+        notes.append("ending the game failed (%s), so it may still be up" % _describe(e))
+        self._record("kill", outcome="failed", detail=_describe(e))
+
+    def _new_helper(self) -> None:
+        """Swap in a helper from the factory. It remembers no process, so the game is adopted again; the relay was
+        the old helper's."""
+        old, self._helper = self._helper, self._helper_factory()
+        self._adopted = False
+        self._relay_open = False
+        close = getattr(old, "close", None)
+        if callable(close):
+            try:
+                close()
+            except Exception:
+                pass                            # it has ended already
 
     def _await_watch(self, notes: list[str]) -> None:
         if self._watch is None:
@@ -617,28 +809,52 @@ class Session:
             notes.append("looking at watch failed: %s" % e)
 
     def _restore(self, notes: list[str]) -> tuple[dict, str]:
-        waited = 0.0
+        budgets = {"watch_still_recording": RESTORE_RETRY_TOTAL_S, "busy": BUSY_RETRY_TOTAL_S,
+                   "launch_in_flight": LAUNCH_IN_FLIGHT_RETRY_TOTAL_S}
+        waited = dict.fromkeys(budgets, 0.0)
         while True:
             try:
                 reply, code = self._cli(["restore", self._snapshot])
             except Exception as e:
                 reply, code = {"held": False, "refused": "error", "detail": "restore could not be run: %r" % e}, 2
-            if code == 0 or reply.get("refused") != "watch_still_recording" or waited >= RESTORE_RETRY_TOTAL_S:
+            refused = reply.get("refused") if code != 0 else None
+            if not isinstance(refused, str) or refused not in budgets or waited[refused] >= budgets[refused]:
                 break
             self._sleep(RESTORE_RETRY_S)
-            waited += RESTORE_RETRY_S
+            waited[refused] += RESTORE_RETRY_S
         outcome = "held" if reply.get("held") is True else ("restored" if code == 0 else "refused")
         self._record("restore", outcome=outcome, reply=reply)
         return reply, outcome
 
-    def _remove_overlay(self, notes: list[str]) -> bool:
+    def _settle_overlay(self, restore: dict | None, outcome: str | None, notes: list[str]) -> tuple[bool, str | None]:
+        """(removed, why it was kept). The overlay goes only when nothing may still name it."""
         if self._overlay is None:
-            return False
+            return False, None
+        kept = self._keep_overlay(restore, outcome)
+        if kept is not None:
+            return False, kept
         try:
-            return overlay.remove(self._paths.overlay_dir)
+            return overlay.remove(self._paths.overlay_dir), None
         except Exception as e:
             notes.append("removing the overlay failed: %s" % e)
-            return False
+            return False, "removing it failed: %s" % e
+
+    def _keep_overlay(self, restore: dict | None, outcome: str | None) -> str | None:
+        """Why the overlay must stay (a running game or a playset may still name it), or None."""
+        if self._fixture_left:
+            return self._fixture_left
+        if self._launched and not self._game_ended:
+            return "the game may still be up, and the run's playset names the overlay"
+        if restore is None or outcome == "restored":
+            return None
+        why = _text(restore.get("refused") or restore.get("reason") or "no reason given")
+        if outcome == "held":
+            if restore.get("playset_restored") is True:
+                return None
+            if restore.get("playset_left"):
+                return "restore held (%s) and left the run's playset, which names the overlay, in place" % why
+            return "restore held (%s) without saying the owner's playset is back: it may still name the overlay" % why
+        return "restore did not finish (%s): the run's playset may still name the overlay" % why
 
     def _close_relay(self, notes: list[str]) -> None:
         if not self._relay_open:
@@ -658,14 +874,16 @@ class Session:
         except Exception as e:
             notes.append("closing the helper failed: %s" % e)
 
-    def _close_report(self, restore: dict | None, outcome: str | None, removed: bool, notes: list[str]) -> str | None:
+    def _close_report(self, restore: dict | None, outcome: str | None, removed: bool, kept: str | None,
+                      notes: list[str]) -> str | None:
         if self._report is None:
             return None
         try:
-            self._record("stop", outcome=outcome or "not_run", overlay_removed=removed, notes=list(notes))
+            self._record("stop", outcome=outcome or "not_run", overlay_removed=removed, overlay_kept=kept,
+                         notes=list(notes))
             path = self._report.close({"restore": restore, "outcome": outcome, "permission": self._permission,
                                        "snapshot": self._snapshot, "save": self._save, "country": self._country,
-                                       "overlay_removed": removed, "notes": notes})
+                                       "overlay_removed": removed, "overlay_kept": kept, "notes": notes})
             return str(path)
         except Exception as e:
             notes.append("writing the report failed: %s" % e)
@@ -674,9 +892,11 @@ class Session:
     # ---- reads and the date
 
     def _fire_read(self, exprs: list[str]) -> tuple[list[Read], dict]:
-        """Fire the read event, evaluate `exprs` at its breakpoint, let the game run on. Once the game has
-        stopped, a resume is always attempted, so no failure leaves it frozen at the breakpoint."""
+        """Release any stop left over, fire the read event, evaluate `exprs` at its breakpoint, let the game run
+        on. Only a stop whose reason is "breakpoint" is evaluated at. Once the game may have stopped, a resume is
+        always attempted (twice if need be), so no failure leaves it frozen without `_maybe_stopped` saying so."""
         dbg = self._debugger
+        self._drain()
         self._new_lines()                       # a date line from before is not this read's
         try:
             self._console.send(READ_COMMAND)
@@ -684,47 +904,89 @@ class Session:
             if e.entered is not False:          # it may have run: release a stop rather than leave the game in it
                 self._release(dbg)
             raise
-        owed = False                            # stopped and not yet resumed
         try:
-            if not dbg.wait_stopped(STOP_WAIT_S):
-                self._try_resume(dbg)           # a stop may come late: a refused resume does no harm
-                raise SessionError("no_stop", "the game did not stop at the read event within %g s" % STOP_WAIT_S,
-                                   arrived=self._console.arrived(READ_COMMAND))
-            owed = True
-            # Streamed before the stop: error-log lines of the game's own (the debugger streams every one), which
-            # the log follower yields too. From the stop to the resume the game is frozen, so what streams then is
-            # the validator burst the evaluations cause.
-            stray = dbg.errors()
-            reads = []
+            stopped = dbg.wait_stopped(STOP_WAIT_S)
+        except DebuggerError as e:
+            self._maybe_stopped = True
+            raise SessionError("debugger", str(e), maybe_stopped=True) from e
+        if not stopped:
+            self._resume(dbg)                   # a stop may come late: a resume answered "not stopped" does no harm
+            self._maybe_stopped = True          # and it may come later still: the next verb releases it first
+            raise SessionError("no_stop", "the game did not stop at the read event within %g s" % STOP_WAIT_S,
+                               arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True)
+        reason = dbg.last_stop_reason
+        if reason != "breakpoint":
+            self._resume(dbg)
+            self._maybe_stopped = True          # the read's own stop may still come
+            raise SessionError("unexpected_stop", "the game stopped for %r, not at the read event's breakpoint, so "
+                               "nothing was evaluated; it was resumed" % (reason,), reason=reason, maybe_stopped=True)
+        # Streamed before the stop: error-log lines of the game's own (the debugger streams every one), which the
+        # log follower yields too. From the stop to the resume the game is frozen, so what streams then is the
+        # validator burst the evaluations cause.
+        stray = dbg.errors()
+        reads: list[Read] = []
+        failure: DebuggerError | None = None
+        resumed = False
+        try:
             for expr in exprs:
                 got = dbg.evaluate(expr)
                 reads.append(Read(expr, got.ok, got.raw, got.value))
-            owed = False
-            dbg.resume()
-            burst = dbg.errors()
         except DebuggerError as e:
-            raise SessionError("debugger", str(e)) from e
+            failure = e
         finally:
-            if owed:
-                self._try_resume(dbg)
+            resumed = self._resume(dbg)
+            self._maybe_stopped = not resumed
+        if failure is not None:
+            raise SessionError("debugger", str(failure), maybe_stopped=not resumed) from failure
+        if not resumed:
+            raise SessionError("debugger", "the reads were made, but the game did not take the resume, twice: it may "
+                               "still be stopped at the breakpoint", maybe_stopped=True,
+                               reads=[asdict(r) for r in reads])
+        burst = dbg.errors()
         if self._burst is not None:
             self._burst.extend(burst)
         # The stop proved the command ran; a history that did not gain it (it skips a repeat) is only noted.
         return reads, {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(stray) + len(burst)}
 
-    @staticmethod
-    def _try_resume(dbg: Debugger) -> None:
+    def _drain(self) -> None:
+        """Release a stop left over from an earlier read before anything is typed (a frozen game takes no key).
+        With `_maybe_stopped` set (a resume that may not have reached the game, a stop that may come late) a
+        resume is sent whether or not a stop is seen; answered "not stopped", the game is running."""
+        dbg = self._debugger
         try:
-            dbg.resume()
-        except DebuggerError:
-            pass
+            stopped = dbg.wait_stopped(DRAIN_S)
+        except DebuggerError as e:
+            self._maybe_stopped = True
+            raise SessionError("debugger", "%s (looking for a stop left over from an earlier read; nothing was "
+                               "typed)" % e, maybe_stopped=True) from e
+        if (stopped or self._maybe_stopped) and not self._resume(dbg):
+            self._maybe_stopped = True
+            raise SessionError("maybe_stopped", "the game may be stopped at the read event's breakpoint, and did not "
+                               "take a resume, twice: nothing was typed", maybe_stopped=True)
+        self._maybe_stopped = False
+
+    @staticmethod
+    def _resume(dbg: Debugger) -> bool:
+        """Let the game run on; True once it is known to run: it took the resume, or answered that it was not
+        stopped. A resume that may not have reached it is tried once more."""
+        for _ in range(2):
+            try:
+                dbg.resume()
+                return True
+            except DebuggerError as e:
+                if str(e).startswith("continue refused"):      # the game's own answer (dap's `_must`)
+                    return True
+        return False
 
     def _release(self, dbg: Debugger) -> None:
+        """After a read command that may have been entered: release its stop, or leave the next verb to."""
         try:
-            if dbg.wait_stopped(STOP_WAIT_S):
-                dbg.resume()
+            stopped = dbg.wait_stopped(STOP_WAIT_S)
         except DebuggerError:
-            pass
+            stopped = False
+        if stopped and self._resume(dbg):
+            return
+        self._maybe_stopped = True
 
     def _date(self) -> tuple[int, int, int]:
         """The game's date, from the read event's line, which its padding flushes once the game is resumed."""
@@ -820,7 +1082,14 @@ class Session:
                 raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
             clicks.append([x, y])
             self._sleep(settle)
-        before = self._date()
+        try:
+            before = self._date()
+        except Exception as e:
+            # Start may have been pressed: the game may be entered, and running. Nothing is clicked again.
+            self._left_running = True
+            raise SessionError("not_entered", "the clicks went out but the date could not be read after them (%s): "
+                               "the game may be entered and running unpaused; enter_game and advance are refused "
+                               "until stop" % _describe(e), clicks=clicks) from e
         after = self._run_for(PROOF_S)
         if _game_day(after) <= _game_day(before):
             try:
@@ -840,17 +1109,46 @@ class Session:
         return min(round(width * fraction[0]), width - 1), min(round(height * fraction[1]), height - 1)
 
     def _run_for(self, seconds: float) -> tuple[int, int, int]:
-        """Close the console, unpause, wait, pause, reopen the console; return the date then."""
+        """Close the console, unpause, wait, pause, reopen the console, and prove the pause: two date reads
+        PROOF_PAUSE_S apart must agree. If they do not, the pause key goes once more and the pause is proved again.
+        From the first key on, any failure is `left_running`, as is a date still moving after the second pause
+        key; the flag then refuses `enter_game` and `advance` until `stop`. Return the date the game paused at."""
         self._console.close()
-        self._console.hotkey(SCAN_SPACE)
-        self._sleep(seconds)
         try:
             self._console.hotkey(SCAN_SPACE)
-        except ConsoleError as e:
-            raise SessionError("left_running", "the pause key did not go out (%s): the game is running"
-                               % e.code, console=e.code) from e
-        self._console.ensure_open()
-        return self._date()
+            self._sleep(seconds)
+            self._console.hotkey(SCAN_SPACE)
+            self._console.ensure_open()
+            when = self._paused_date()
+            if when is None:                # the pause did not take: once more
+                self._console.close()
+                self._console.hotkey(SCAN_SPACE)
+                self._console.ensure_open()
+                when = self._paused_date()
+            if when is None:
+                raise SessionError("left_running", "the date still moved after a second pause key: the game is "
+                                   "running unpaused")
+            return when
+        except BaseException as e:
+            self._left_running = True
+            if not isinstance(e, Exception) or (isinstance(e, SessionError) and e.code == "left_running"):
+                raise
+            extra = {"entered": e.entered} if isinstance(e, ConsoleError) else {}
+            raise SessionError("left_running", "a round failed once its first pause key had been tried (%s): the "
+                               "game may be running unpaused; enter_game and advance are refused until stop"
+                               % _describe(e), cause=_code_of(e), **extra) from e
+
+    def _paused_date(self) -> tuple[int, int, int] | None:
+        """The date, if two reads PROOF_PAUSE_S apart agree on it (the game is paused); else None."""
+        first = self._date()
+        self._sleep(PROOF_PAUSE_S)
+        second = self._date()
+        return second if second == first else None
+
+    def _refuse_if_left_running(self) -> None:
+        if self._left_running:
+            raise SessionError("left_running", "an earlier round may have left the game running unpaused, so no more "
+                               "time is let pass and nothing is clicked: stop the session")
 
     def _advance(self, days: int, start: tuple[int, int, int] | None, out: dict) -> tuple[int, int, int]:
         start = start or self._date()
@@ -877,12 +1175,32 @@ class Session:
     # ---- plumbing
 
     def _require_game(self) -> None:
-        if self._stopped is not None:
+        """Before any verb: the session is running and watched, and the game is not left stopped at the
+        breakpoint (released first when it may be)."""
+        if self._stopped is not None or self._stopping:
             raise SessionError("stopped", "this session's game has been stopped")
         if not self._ready:
             raise SessionError("not_started", "start() has not finished")
-        if self._watch is not None and self._watch.poll() is not None:
+        self._check_watch()
+        if self._maybe_stopped:
+            self._drain()
+
+    def _check_watch(self) -> None:
+        """A `watch` that has returned while the game's window is still up is run again at once (up to
+        WATCH_RESPAWNS times), and noted; with the window gone the game has ended."""
+        if self._watch is None or self._watch.poll() is None:
+            return
+        try:
+            up = self._helper.window(self._proc.pid).exists
+        except Exception:
+            up = False
+        if not up or self._watch_respawns >= WATCH_RESPAWNS:
             raise SessionError("watch_ended", "`watch` has returned, so the game has ended (or watch failed): stop")
+        self._watch = self._spawn_watch(self._snapshot)
+        self._watch_respawns += 1
+        self._notes.append("watch returned at %s while the game's window was still up, and was run again at once"
+                           % stamp(utc_now()))
+        self._record("watch_respawned", outcome="ok", respawns=self._watch_respawns)
 
     def _cli(self, argv: list[str]) -> tuple[dict, int]:
         reply, code = self._run_cli(list(argv))
@@ -897,8 +1215,6 @@ class Session:
             self._record(verb, **fields)
 
     def _record(self, verb: str, **fields) -> None:
-        if self._stopped is not None:
-            return
         if self._report is None:
             self._early.append((verb, dict(fields, time=stamp(utc_now()))))
             return
@@ -935,6 +1251,51 @@ def _new_errors(lines: list[str], burst: list[str]) -> list[str]:
     line is the bare message; the log's first line of an entry carries a `[time][file.cpp:n]: ` prefix."""
     own = {piece.strip() for text in burst for piece in text.split("\n")} - {""}
     return [line for line in lines if line.strip() and parse(line).text.strip() not in own]
+
+
+def _no_game(reply: dict) -> bool:
+    """Whether a launch refusal came before the claim, so that no game was started."""
+    refused = reply.get("refused")
+    if refused in NO_GAME_REFUSALS:
+        return True
+    detail = str(reply.get("detail") or "")
+    return refused == "playset_unwritable" and "Nothing was written" in detail and _CLAIMED not in detail
+
+
+def _fixture_left(calls: list[tuple[str, dict | None, int | None]], snapshot: str | None) -> str | None:
+    """Why the fixture's own run, from its verbs' answers, may have left a game up or its playset in place (so
+    the overlay must stay), or None."""
+    launches = [(reply, code) for verb, reply, code in calls if verb == "launch"]
+    if not launches:
+        return None
+    named = " (snapshot %s)" % snapshot if snapshot else ""
+    reply, code = launches[-1]
+    if code == 0:
+        watches = [(r, c) for verb, r, c in calls if verb == "watch"]
+        up = not watches or watches[-1][1] != 0
+    else:
+        up = reply is None or not _no_game(reply)
+    if up:
+        return "the fixture's run%s may have left its game up, and its playset names the overlay" % named
+    restores = [(r, c) for verb, r, c in calls if verb == "restore"]
+    if restores:
+        reply, code = restores[-1]
+        if code == 0 or (reply is not None and reply.get("held") is True and reply.get("playset_restored") is True):
+            return None
+    return "the fixture's run%s may have left its playset, which names the overlay, in place" % named
+
+
+def _describe(e: BaseException) -> str:
+    """An error as `code: detail`, its code said once."""
+    if isinstance(e, HelperError):
+        return "helper: %s" % e
+    if isinstance(e, (SessionError, ConsoleError)):
+        return str(e)
+    return "%s: %s" % (_code_of(e), e)
+
+
+def _text(value) -> str:
+    return " ".join(str(value).split())
 
 
 def _check_tag(tag: str) -> None:

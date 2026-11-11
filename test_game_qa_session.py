@@ -48,6 +48,8 @@ class Adapter:
         self.stopped = False
         self.burst: list[str] = []              # what each evaluation makes the validator write ({n}: its number)
         self.burst_lag = False                  # error.log gets each burst only at the next evaluation
+        self.stop_reason = "breakpoint"         # the reason the game's stops give
+        self.failing_continues = 0              # this many `continue` requests are lost on the way (a broken relay)
         self._evaluations = 0
         self._late: list[str] = []
         self._decoder = dap.Decoder()
@@ -61,6 +63,9 @@ class Adapter:
     def send(self, data: bytes) -> None:
         for req in self._decoder.feed(data):
             self.requests.append(req)
+            if req["command"] == "continue" and self.failing_continues:
+                self.failing_continues -= 1
+                raise OSError("the relay dropped the request")
             self._answer(req)
 
     def recv(self, timeout: float) -> bytes:
@@ -71,9 +76,9 @@ class Adapter:
         self._seq += 1
         self._out += dap.encode(dict(msg, seq=self._seq))
 
-    def stop(self) -> None:
+    def stop(self, reason: str | None = None) -> None:
         self.stopped = True
-        self.push(STOPPED)
+        self.push(dict(STOPPED, body=dict(STOPPED["body"], reason=reason or self.stop_reason)))
 
     def output(self, text: str) -> None:
         """An error-log line streamed to the debugger, as the bare message (debugger_transcript.txt:51-53)."""
@@ -138,6 +143,9 @@ class Game(fakes.FakeHelper):
         self.closed = False
         self.setups: dict[str, tuple[str, list[str]]] = {}     # setup event -> (its name, the lines its body logs)
         self.on_command = None                  # called with each command the game runs, before it answers
+        self.on_sleep = None                    # called with each sleep's seconds, before the time passes
+        self.dropped_pauses = 0                 # this many pause keys (space, the game running) are lost
+        self.logs_date = True                   # the read event logs its date line once resumed
         self.error_log = logs / "error.log"
         self.on("tag FRA", success=["Now Playing - France"])
 
@@ -157,6 +165,8 @@ class Game(fakes.FakeHelper):
         return START_DATE + dt.timedelta(days=int(self.elapsed))
 
     def sleep(self, seconds: float) -> None:
+        if self.on_sleep is not None:
+            self.on_sleep(seconds)
         if self.entered and not self.paused:
             self.elapsed += seconds * self.days_per_second
         super().sleep(seconds)
@@ -167,6 +177,9 @@ class Game(fakes.FakeHelper):
             if step.get("scan") == SPACE:
                 self.order.append("space")
                 if not self.console_open:
+                    if not self.paused and self.dropped_pauses:
+                        self.dropped_pauses -= 1
+                        continue
                     self.paused = not self.paused
 
     def click(self, pid, x, y):
@@ -233,8 +246,9 @@ class Game(fakes.FakeHelper):
     def finish_read(self) -> None:
         """The rest of the read event: its debug_log line, then the padding that flushes the log."""
         when = self.date
-        self.script("TE_QA read country=%s date=%s %d, %d" % (self.played or "", MONTHS[when.month - 1], when.day,
-                                                             when.year))
+        if self.logs_date:
+            self.script("TE_QA read country=%s date=%s %d, %d" % (self.played or "", MONTHS[when.month - 1],
+                                                                 when.day, when.year))
         self.pad()
 
     def pad(self) -> None:
@@ -251,9 +265,12 @@ class Watch:
     def __init__(self, game: Game, order: list):
         self.game, self.order = game, order
         self.hangs = False
+        self.dies = False                       # it ends while the game is still up
         self.returned = False
 
     def poll(self):
+        if self.dies:
+            return 1
         if self.hangs or not (self.game.killed or self.game.exited):
             return None
         if not self.returned:
@@ -279,6 +296,7 @@ class Cli:
         self.calls: list[list[str]] = []
         self.queued: dict[str, list[tuple[dict, int]]] = {}
         self.raise_on: str | None = None
+        self.on_call = None                     # called with each argv before it is answered
         self.overlay_at_restore: list[bool] = []
         self.clock_at: dict[str, float] = {}
 
@@ -295,6 +313,8 @@ class Cli:
         self.calls.append(argv)
         self.test.order.append("cli " + verb)
         self.clock_at[verb] = self.test.game.now
+        if self.on_call is not None:
+            self.on_call(argv)
         if verb == self.raise_on:
             raise OSError("python3 could not be started")
         saves = self.test.user / "save games"
@@ -341,8 +361,18 @@ class SessionTestCase(unittest.TestCase):
         self.cli = Cli(self)
         self.watches: list[Watch] = []
         self.spawn_error: Exception | None = None
+        self.fresh_helper: fakes.FakeHelper | None = None     # what the helper factory hands out, if anything
+        # The drain before each read waits on the debugger client's own clock (real seconds): keep it short here.
+        patcher = mock.patch.object(session, "DRAIN_S", 0.005)
+        patcher.start()
+        self.addCleanup(patcher.stop)
         self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
-                                       sleep=self.game.sleep, clock=self.game.clock)
+                                       sleep=self.game.sleep, clock=self.game.clock, helper_factory=self.new_helper)
+
+    def new_helper(self) -> fakes.FakeHelper:
+        if self.fresh_helper is None:
+            raise HelperError("helper_gone", "no Windows python.exe in the tests")
+        return self.fresh_helper
 
     def windows_path(self, path: Path) -> str:
         self.windows_paths_asked.append(Path(path))
@@ -431,25 +461,30 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.cli.verbs, [])
         self.assertFalse(self.paths.overlay_dir.exists())
 
-    def test_start_refuses_while_a_snapshot_is_held_and_leaves_its_overlay(self):
-        earlier = overlay.build(self.paths.overlay_dir, {}, "1.15.0")     # a held run's playset still names it
+    def test_start_refuses_while_a_snapshot_is_held(self):
         self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
         error = self.session_error(self.start)
         self.assertEqual(error.code, "held_snapshot")
         self.assertIn("20261109T100000Z", error.detail)
         self.assertEqual(self.cli.verbs, ["held"])
-        self.assertTrue(earlier.events_file.is_file())
+        self.assertFalse(self.paths.overlay_dir.exists())      # built only once `held` has answered none
         self.cli.calls.clear()                  # the owner resolves the hold; the same session may start then
         self.assertEqual(self.start()["snapshot"], SNAP)
         self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
 
-    def test_stop_after_a_held_refusal_leaves_an_earlier_overlay_alone(self):
-        earlier = overlay.build(self.paths.overlay_dir, {}, "1.15.0")
-        self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
-        self.session_error(self.start)
+    def test_an_overlay_left_by_an_earlier_run_is_refused_before_anything(self):
+        # An earlier run's playset may still name it, so it is neither replaced nor removed here.
+        earlier = overlay.build(self.paths.overlay_dir, {"old": "set_variable = x"}, "1.15.0")
+        before = sorted(p.relative_to(earlier.dir).as_posix() for p in earlier.dir.rglob("*"))
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "overlay_left")
+        self.assertIn("recover", error.detail)
+        self.assertEqual(self.cli.calls, [])
         self.session.stop()
-        self.assertTrue(earlier.events_file.is_file())
-        self.assertEqual(self.cli.verbs, ["held"])
+        self.assertEqual(sorted(p.relative_to(earlier.dir).as_posix() for p in earlier.dir.rglob("*")), before)
+        self.assertEqual(self.cli.calls, [])
+        overlay.remove(earlier.dir)             # once it is gone, the same session may start
+        self.assertEqual(self.start()["snapshot"], SNAP)
 
     def test_a_held_list_that_cannot_be_read_is_refused_too(self):
         self.cli.queue("held", {"refused": "BackupRootError", "detail": "no backup root"}, 2)
@@ -510,10 +545,16 @@ class StartTest(SessionTestCase):
         error = self.session_error(self.start)
         self.assertEqual(error.code, "unknown_start")
         self.assertEqual(len(self.watches), 1)
-        # a pid alone may be another game's: nothing is adopted or ended by it
+        # a pid alone may be another game's: nothing is adopted or ended by it, and the game may still be up,
+        # so restore is left for later (beside a running game it would hold) and the overlay stays
         self.assertEqual((self.game.adopted, self.game.killed), ([], []))
-        self.assertTrue(any("no start time" in note for note in error.info["stop"]["notes"]))
-        self.assertEqual(self.cli.verbs[-1], "restore")
+        stop = error.info["stop"]
+        self.assertTrue(any("no start time" in note for note in stop["notes"]))
+        self.assertEqual(stop["outcome"], "game_left_up")
+        self.assertIn("restore %s" % SNAP, stop["next"])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+        self.assertTrue(stop["overlay_kept"])
+        self.assertTrue(self.paths.overlay_dir.exists())
 
     def test_a_watch_that_cannot_be_spawned_still_ends_the_game(self):
         self.spawn_error = OSError("python3 could not be started")
@@ -531,7 +572,8 @@ class StartTest(SessionTestCase):
     def test_status_says_how_far_the_session_is(self):
         self.assertEqual(self.session.status(), {
             "started": False, "stopped": False, "snapshot": None, "save": None, "country": None, "entered": False,
-            "game": None, "watch_returned": False, "run_dir": None})
+            "game": None, "watch_returned": False, "run_dir": None, "maybe_stopped": False, "left_running": False,
+            "watch_respawns": 0})
         self.started()
         status = self.session.status()
         self.assertEqual((status["started"], status["snapshot"], status["country"]), (True, SNAP, "FRA"))
@@ -567,8 +609,10 @@ class ReadTest(SessionTestCase):
     def test_a_closed_relay_is_an_error_of_the_verb_not_a_crash(self):
         self.started()
         self.game.tcp_error = HelperError("tcp_closed", "the peer closed the connection")
-        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "debugger")
-        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual(error.code, "debugger")
+        self.assertTrue(error.info["maybe_stopped"])
+        self.assertEqual(self.typed().count("event te_qa.1"), 0)         # the drain before it failed: nothing typed
         self.assertEqual(self.session.stop()["outcome"], "restored")
 
     def test_a_read_that_may_have_been_entered_is_not_typed_again_and_its_stop_is_released(self):
@@ -589,8 +633,10 @@ class ReadTest(SessionTestCase):
 
     def test_the_console_verb_refuses_the_read_event(self):
         self.started()
-        self.assertEqual(self.session_error(self.session.console, "event te_qa.1").code, "use_read")
-        self.assertNotIn("event te_qa.1", self.typed())
+        for text in ("event te_qa.1", "event te_qa.1 FRA", "EVENT TE_QA.1", "  event   te_qa.1x", "Event Te_Qa.1 c:FRA"):
+            with self.subTest(text=text):
+                self.assertEqual(self.session_error(self.session.console, text).code, "use_read")
+        self.assertFalse([t for t in self.typed() if "te_qa.1" in t.lower()])
 
     def test_run_setup_returns_the_lines_between_its_markers(self):
         reply = self.started(setups={"border": "set_variable = te_x"})
@@ -976,6 +1022,8 @@ class StopTest(SessionTestCase):
         self.assertEqual((reply["outcome"], reply["refused"]), ("refused", "game_still_up"))
         self.assertEqual(self.cli.verbs, ["restore"])
         self.assertIn("REFUSED", Path(reply["report"]).read_text("utf-8").split("\n")[0])
+        self.assertTrue(reply["overlay_kept"])             # the run's playset may still name it
+        self.assertTrue(self.paths.overlay_dir.exists())
 
     def test_a_watch_that_does_not_return_is_noted_and_restore_still_runs(self):
         self.started()
@@ -986,24 +1034,31 @@ class StopTest(SessionTestCase):
         self.assertTrue(any("watch" in note for note in reply["notes"]))
         self.assertEqual(self.cli.verbs, ["restore"])
 
-    def test_a_kill_that_fails_is_noted_and_the_rest_still_runs(self):
+    def test_a_kill_that_fails_leaves_the_game_up_and_keeps_the_overlay(self):
         self.started()
 
         def kill(proc):
-            raise HelperError("helper_gone", "the helper has ended")
+            self.order.append("kill")
+            raise HelperError("not_ours", "process 7 changed under its id before it could be ended")
         self.game.kill = kill
-        self.game.exited = True                 # the game went by itself all the same
         reply = self.session.stop()
-        self.assertTrue(any("helper_gone" in note for note in reply["notes"]))
-        self.assertEqual(self.cli.verbs, ["restore"])
-        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(reply["outcome"], "game_left_up")
+        self.assertTrue(any("not_ours" in note for note in reply["notes"]))
+        self.assertEqual(self.cli.verbs, [])                   # beside a game that may be the run's: no restore
+        self.assertIn("restore %s" % SNAP, reply["next"])
+        self.assertTrue(reply["overlay_kept"])
+        self.assertTrue(self.paths.overlay_dir.exists())
+        self.assertEqual(self.order, ["kill", "tcp_close", "helper_close"])   # nothing of the session's own left
+        first = Path(reply["report"]).read_text("utf-8").split("\n")[0]
+        self.assertIn("NOT RUN", first)
+        self.assertIn("restore %s" % SNAP, first)
 
     def test_a_restore_that_raises_is_a_refusal_and_stop_does_not_raise(self):
         self.started()
         self.cli.raise_on = "restore"
         reply = self.session.stop()
         self.assertEqual(reply["outcome"], "refused")
-        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertTrue(self.paths.overlay_dir.exists())       # it may not have run: the playset may name it
 
     def test_stop_before_start_does_nothing(self):
         reply = self.session.stop()
@@ -1022,6 +1077,436 @@ class StopTest(SessionTestCase):
             self.assertIn(verb, verbs)
         self.assertLess(verbs.index("snapshot"), verbs.index("read"))
         self.assertIn("| read | ok |", report.read_text("utf-8"))
+
+
+class LaunchOutcomeTest(SessionTestCase):
+    """C1: a launch that may have started a game is watched at once and its game ended by launch's own record."""
+
+    def test_a_launch_that_started_a_game_it_could_not_record_still_ends_it(self):
+        self.cli.queue("launch", {"refused": "not_recorded", "id": SNAP, "pid": PID, "created": CREATED,
+                                  "detail": "the game started but its start could not be recorded"}, 2)
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "launch_refused")
+        self.assertTrue(error.info["game_may_be_up"])
+        self.assertEqual(self.order[2:4], ["cli launch", "spawn_watch " + SNAP])     # watched at once
+        self.assertEqual(self.game.adopted, [self.game.proc])      # by the pid and start time the reply gave
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.cli.verbs[-1], "restore")
+        self.assertEqual(self.game.steps, [])
+
+    def test_restore_waits_out_launch_in_flight_once_the_game_launch_named_is_ended(self):
+        # The start was never recorded, so restore gives no verdict until LAUNCH_IN_FLIGHT_S after the claim.
+        self.cli.queue("launch", {"refused": "not_recorded", "id": SNAP, "pid": PID, "created": CREATED}, 2)
+        in_flight = {"held": False, "refused": "launch_in_flight", "id": SNAP}
+        for _ in range(3):
+            self.cli.queue("restore", in_flight, 2)
+        before = self.game.now
+        stop = self.session_error(self.start).info["stop"]
+        self.assertEqual(stop["outcome"], "restored")
+        self.assertEqual(self.cli.verbs.count("restore"), 4)
+        self.assertEqual(self.game.now - before, 3 * session.RESTORE_RETRY_S)
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_launch_in_flight_for_longer_is_reported(self):
+        self.started()
+        for _ in range(40):
+            self.cli.queue("restore", {"held": False, "refused": "launch_in_flight", "id": SNAP}, 2)
+        before = self.game.now
+        stop = self.session.stop()
+        self.assertEqual((stop["outcome"], stop["refused"]), ("refused", "launch_in_flight"))
+        self.assertEqual(self.game.now - before, session.LAUNCH_IN_FLIGHT_RETRY_TOTAL_S)
+        self.assertTrue(stop["overlay_kept"])
+
+    def test_a_launch_whose_reply_was_lost_may_have_started_a_game(self):
+        for how in ("raised", "not_json"):
+            with self.subTest(how=how):
+                self.setUp()
+                if how == "raised":
+                    self.cli.raise_on = "launch"
+                else:
+                    self.cli.queue("launch", "Traceback (most recent call last): ...", 0)
+                error = self.session_error(self.start)
+                self.assertEqual(error.code, "launch_refused")
+                self.assertTrue(error.info["game_may_be_up"])
+                self.assertEqual(len(self.watches), 1)
+                stop = error.info["stop"]
+                # no pid to end it by: it is left up, with restore for once no game runs, and the overlay stays
+                self.assertEqual(stop["outcome"], "game_left_up")
+                self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+                self.assertTrue(self.paths.overlay_dir.exists())
+
+    def test_which_launch_refusals_mean_that_no_game_started(self):
+        claimed = ("x could not be written (e), so it is as it was. Nothing was started. The snapshot stays claimed, "
+                   "so `launch` refuses it: `restore <id>` or `recover` finishes it 90 s after the claim")
+        cases = (("gpu_busy", "the GPU is at 80% load", False), ("busy", "another session is in `restore`", False),
+                 ("playset_not_restored", "content_load.json still holds another run's playset", False),
+                 ("stale_snapshot", "the folder has changed since the snapshot was taken", False),
+                 ("playset_unwritable", "content_load.json could not be read (e). Nothing was written", False),
+                 ("playset_unwritable", claimed, True), ("start_unconfirmed", "PowerShell's reply was lost", True),
+                 ("refusal_of_a_later_launch", "a name this session does not know", True))
+        for refused, detail, may_be_up in cases:
+            with self.subTest(refused=refused, may_be_up=may_be_up):
+                self.setUp()
+                self.cli.queue("launch", {"refused": refused, "id": SNAP, "detail": detail}, 2)
+                error = self.session_error(self.start)
+                self.assertEqual(error.code, "launch_refused")
+                self.assertEqual(bool(error.info.get("game_may_be_up")), may_be_up)
+                self.assertEqual(len(self.watches), 1 if may_be_up else 0)
+                self.assertEqual(error.info["stop"]["outcome"], "game_left_up" if may_be_up else "restored")
+
+
+class StopDuringStartTest(SessionTestCase):
+    """C2 and I6: a stop asked while `start` runs is left to `start`, which stops once; a stop inside a stop."""
+
+    def stop_inside(self, verb):
+        inner = []
+        self.cli.on_call = lambda argv: inner.append(self.session.stop()) if argv[0] == verb else None
+        return inner
+
+    def test_a_stop_during_launch_is_deferred_and_start_stops_once(self):
+        inner = self.stop_inside("launch")
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "stopped")
+        self.assertEqual(inner[0]["outcome"], "deferred_to_start")
+        self.assertEqual(len(self.watches), 1)                  # the game launch started is watched...
+        self.assertEqual(self.game.killed, [self.game.proc])    # ...and ended, by launch's own record
+        self.assertEqual(self.game.steps, [])                   # and nothing was typed into it
+        self.assertEqual(self.cli.verbs.count("restore"), 1)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+        self.assertEqual(self.session.stop(), error.info["stop"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_stop_during_the_snapshot_launches_nothing(self):
+        inner = self.stop_inside("snapshot")
+        error = self.session_error(self.start)
+        self.assertEqual((error.code, inner[0]["outcome"]), ("stopped", "deferred_to_start"))
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "restore"])
+        self.assertEqual(self.watches, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_stop_while_the_window_is_awaited_ends_the_start(self):
+        self.game.exists = False
+        sleeps = []
+
+        def on_sleep(seconds):
+            sleeps.append(seconds)
+            if len(sleeps) == 3:
+                self.inner = self.session.stop()
+        self.game.on_sleep = on_sleep
+        error = self.session_error(self.start)
+        self.assertEqual((error.code, self.inner["outcome"]), ("stopped", "deferred_to_start"))
+        self.assertLess(self.game.now, session.WINDOW_WAIT_S)
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.cli.verbs.count("restore"), 1)
+
+    def test_an_interrupt_during_launch_leaves_a_game_that_may_be_up_watched_and_unrestored(self):
+        def interrupted(argv):
+            if argv[0] == "launch":
+                raise KeyboardInterrupt
+        self.cli.on_call = interrupted
+        with self.assertRaises(KeyboardInterrupt):
+            self.start()
+        self.assertEqual(len(self.watches), 1)          # the launch may have got as far as the game: it is watched
+        stop = self.session.stop()
+        self.assertEqual(stop["outcome"], "game_left_up")
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+        self.assertTrue(self.paths.overlay_dir.exists())
+
+    def test_a_stop_inside_a_stop_does_not_run_the_teardown_twice(self):
+        self.started()
+        self.watches[0].hangs = True
+        inner = []
+
+        def on_sleep(seconds):
+            if not inner:
+                self.watches[0].hangs = False
+                inner.append(self.session.stop())
+        self.game.on_sleep = on_sleep
+        outer = self.session.stop()
+        self.assertEqual((inner[0]["outcome"], outer["outcome"]), ("in_progress", "restored"))
+        self.assertEqual((self.cli.verbs.count("restore"), len(self.game.killed)), (1, 1))
+        self.assertEqual(self.session.stop(), outer)
+
+    def test_an_interrupt_during_start_stops_and_is_raised_again(self):
+        self.game.exists = False                # waiting for the window
+        sleeps = []
+
+        def on_sleep(seconds):
+            sleeps.append(seconds)
+            if len(sleeps) == 3:
+                raise KeyboardInterrupt
+        self.game.on_sleep = on_sleep
+        with self.assertRaises(KeyboardInterrupt):
+            self.start()
+        self.assertEqual(self.game.killed, [self.game.proc])
+        self.assertEqual(self.cli.verbs[-1], "restore")
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertTrue(self.session.status()["stopped"])
+
+
+class GameLeftUpTest(SessionTestCase):
+    """I1: a game that may still be up is not restored beside; a helper that has ended is replaced once."""
+
+    def gone(self, proc):
+        self.order.append("kill")
+        raise HelperError("helper_gone", "the helper has ended")
+
+    def test_a_helper_gone_at_the_kill_is_retried_through_a_fresh_helper(self):
+        self.started()
+        self.game.kill = self.gone
+        fresh = fakes.FakeHelper()
+        fresh_kill = fresh.kill
+
+        def kill(proc):
+            self.game.exited = True             # the game's process ends, whichever helper ended it
+            return fresh_kill(proc)
+        fresh.kill = kill
+        self.fresh_helper = fresh
+        reply = self.session.stop()
+        self.assertEqual((fresh.adopted, fresh.killed), ([self.game.proc], [self.game.proc]))
+        self.assertEqual(reply["outcome"], "restored")
+        self.assertEqual(self.cli.verbs, ["restore"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_with_no_fresh_helper_the_game_is_left_up(self):
+        self.started()
+        self.game.kill = self.gone
+        reply = self.session.stop()
+        self.assertEqual(reply["outcome"], "game_left_up")
+        self.assertEqual(self.cli.verbs, [])
+        self.assertTrue(self.paths.overlay_dir.exists())
+
+    def test_a_later_stop_tries_again_once_the_game_can_be_ended(self):
+        self.started()
+        self.game.kill = self.gone
+        first = self.session.stop()
+        self.assertEqual(first["outcome"], "game_left_up")
+        del self.game.kill                      # the helper answers again
+        second = self.session.stop()
+        self.assertEqual(second["outcome"], "restored")
+        self.assertEqual(self.cli.verbs, ["restore"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(self.session.stop(), second)
+        self.assertTrue(Path(second["report"]).read_text("utf-8").startswith("Restore: restored"))
+
+
+class OverlayVerdictTest(SessionTestCase):
+    """I2: the overlay goes only once the game is known ended and the owner's playset is known back."""
+
+    def test_the_overlay_goes_only_when_the_owners_playset_is_known_back(self):
+        put_back = {"restored": ["content_load.json"], "removed": [], "held": True, "reason": "other_game_ran",
+                    "playset_restored": True}
+        left = {"restored": [], "removed": [], "held": True, "reason": "other_game_running", "playset_left": True}
+        cases = ((RESTORED, True), ((put_back, 2), True), ((left, 2), False), (HELD, False),
+                 (({"held": False, "refused": "game_still_up", "id": SNAP}, 2), False),
+                 (({"held": False, "refused": "error", "detail": "a copy in the store is damaged"}, 2), False))
+        for restore, removed in cases:
+            with self.subTest(reply=restore[0]):
+                self.setUp()
+                self.started()
+                self.cli.queue("restore", *restore)
+                reply = self.session.stop()
+                self.assertEqual(reply["overlay_removed"], removed)
+                self.assertEqual(self.paths.overlay_dir.exists(), not removed)
+                self.assertEqual(reply.get("overlay_kept", False), not removed)
+                if not removed:
+                    self.assertTrue(reply["overlay_kept_because"])
+
+    def test_a_fixture_run_that_may_have_left_its_playset_keeps_the_overlay(self):
+        cases = ((("launch", {"refused": "gpu_busy", "id": FIXTURE_SNAP}, 2), True),
+                 (("restore", {"held": True, "reason": "unwatched_stretch", "restored": [], "removed": []}, 2), False),
+                 (("launch", {"refused": "not_recorded", "id": FIXTURE_SNAP, "pid": 9, "created": CREATED}, 2), False))
+        for (verb, reply, code), removed in cases:
+            with self.subTest(verb=verb, reply=reply):
+                self.setUp()
+                self.fixture_save.unlink()
+                self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+                self.cli.queue(verb, reply, code)
+                self.assertEqual(self.session_error(self.start).code, "fixture_failed")
+                self.assertEqual(self.paths.overlay_dir.exists(), not removed)
+
+
+class StopsTest(SessionTestCase):
+    """I3: a stop left over is released before anything is typed; only a breakpoint stop is evaluated at."""
+
+    def test_a_late_stop_is_released_before_the_next_read(self):
+        self.started()
+        self.game.stops = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual(error.code, "no_stop")
+        self.assertTrue(error.info["maybe_stopped"])
+        self.game.stops = True
+        self.game.adapter.stop()                # the first read's stop comes after all
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.assertEqual([r.value for r in self.session.read(["c:FRA.gdp"])], [7.0])
+        self.assertFalse(self.game.adapter.stopped)            # not left frozen at the breakpoint
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
+        self.assertFalse(self.session.status()["maybe_stopped"])
+
+    def test_a_stop_for_another_reason_is_not_taken_for_the_reads(self):
+        self.started()
+        self.game.adapter.stop_reason = "pause"
+        error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual((error.code, error.info["reason"]), ("unexpected_stop", "pause"))
+        self.assertNotIn("evaluate", self.game.adapter.commands)
+        self.assertFalse(self.game.adapter.stopped)
+        self.assertTrue(error.info["maybe_stopped"])           # the read's own stop may still come
+        self.game.adapter.stop_reason = "breakpoint"
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.assertEqual([r.value for r in self.session.read(["c:FRA.gdp"])], [7.0])
+
+    def test_a_resume_that_fails_twice_says_maybe_stopped_and_the_next_verb_drains_first(self):
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.adapter.failing_continues = 2
+        error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual(error.code, "debugger")
+        self.assertTrue(error.info["maybe_stopped"])
+        self.assertTrue(self.game.adapter.stopped)
+        self.assertTrue(self.session.status()["maybe_stopped"])
+        typed_before = len(self.game.steps)
+
+        def resumed_before_any_key(sent):
+            self.assertFalse(self.game.adapter.stopped)
+        self.game.on_step = resumed_before_any_key
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.session.events(), [])
+        self.assertGreater(len(self.game.steps), typed_before)
+        self.assertFalse(self.session.status()["maybe_stopped"])
+
+    def test_a_game_that_stays_stopped_refuses_the_next_verb_before_any_key(self):
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.adapter.failing_continues = 4
+        self.session_error(self.session.read, ["c:FRA.gdp"])
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.events)
+        self.assertEqual(error.code, "maybe_stopped")
+        self.assertEqual(len(self.game.steps), steps)
+
+
+class PauseTest(SessionTestCase):
+    """I4: a round that may have left the game running says so and refuses more time; the pause is proved."""
+
+    def test_a_helper_failure_after_the_unpause_key_is_left_running_and_refuses_more_time(self):
+        self.started()
+        self.session.enter_game()
+        keys = self.game.keys
+        armed = [True]
+
+        def keys_then_fail(pid, steps):
+            keys(pid, steps)
+            if armed[0] and {"scan": SPACE} in steps:
+                armed[0] = False
+                raise HelperError("helper_gone", "the pipe broke after the key went out")
+        self.game.keys = keys_then_fail
+        error = self.session_error(self.session.advance, 5)
+        self.assertEqual(error.code, "left_running")
+        self.assertIn("unpaused", error.detail)
+        self.assertFalse(self.game.paused)                  # and so it is
+        spaces, clicks = self.order.count("space"), len(self.game.clicks)
+        self.assertEqual(self.session_error(self.session.advance, 5).code, "left_running")
+        self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+        self.assertEqual((self.order.count("space"), len(self.game.clicks)), (spaces, clicks))
+        self.assertTrue(self.session.status()["left_running"])
+
+    def test_a_pause_that_did_not_take_is_sent_once_more_and_proved(self):
+        self.started()
+        self.session.enter_game()
+        self.game.dropped_pauses = 1
+        spaces = self.order.count("space")
+        reached = self.session.advance(5)
+        self.assertTrue(self.game.paused)
+        self.assertEqual(self.order.count("space") - spaces, 3)        # unpause, the lost pause, one more
+        self.assertEqual(dt.date(*reached), self.game.date)
+
+    def test_a_game_that_will_not_pause_is_left_running(self):
+        self.started()
+        self.session.enter_game()
+        self.game.dropped_pauses = 99
+        spaces = self.order.count("space")
+        self.assertEqual(self.session_error(self.session.advance, 5).code, "left_running")
+        self.assertEqual(self.order.count("space") - spaces, 3)
+        self.assertTrue(self.session.status()["left_running"])
+
+    def test_a_date_that_cannot_be_read_after_the_clicks_is_not_entered_and_clicks_no_more(self):
+        self.started()
+        self.game.logs_date = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "not_entered")
+        self.assertEqual(len(self.game.clicks), 2)
+        self.game.logs_date = True
+        self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+        self.assertEqual(len(self.game.clicks), 2)
+
+
+class RestoreRetryTest(SessionTestCase):
+    """I5: `busy` is retried for a minute; a later stop after a refusal runs restore again."""
+
+    BUSY = {"held": False, "refused": "busy", "detail": "another session is in `snapshot`"}
+
+    def test_busy_is_retried_every_five_seconds(self):
+        self.started()
+        self.cli.queue("restore", self.BUSY, 2)
+        self.cli.queue("restore", self.BUSY, 2)
+        now = self.game.now
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+        self.assertEqual(self.cli.verbs, ["restore"] * 3)
+        self.assertEqual(self.game.now - now, 2 * session.RESTORE_RETRY_S)
+
+    def test_busy_for_longer_is_reported_and_a_later_stop_runs_restore_again(self):
+        self.started()
+        for _ in range(int(session.BUSY_RETRY_TOTAL_S / session.RESTORE_RETRY_S) + 1):
+            self.cli.queue("restore", self.BUSY, 2)
+        now = self.game.now
+        first = self.session.stop()
+        self.assertEqual((first["outcome"], first["refused"]), ("refused", "busy"))
+        self.assertEqual(self.game.now - now, session.BUSY_RETRY_TOTAL_S)
+        self.assertTrue(self.paths.overlay_dir.exists())
+        second = self.session.stop()
+        self.assertEqual(second["outcome"], "restored")
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(len(self.game.killed), 1)              # the game was ended once
+        self.assertEqual(self.session.stop(), second)
+        self.assertEqual(self.cli.verbs.count("restore"), 14)
+
+
+class MinorsTest(SessionTestCase):
+    def test_a_bad_setup_is_refused_before_anything_and_the_session_can_start_after(self):
+        error = self.session_error(self.start, setups={"border": "set_variable = { x"})
+        self.assertEqual(error.code, "overlay_refused")
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(self.start(setups={"border": "set_variable = x"})["snapshot"], SNAP)
+
+    def test_a_watch_that_ends_while_the_game_is_up_is_run_again(self):
+        self.started()
+        self.watches[0].dies = True
+        self.game.adapter.values = {"c:FRA.gdp": "1"}
+        self.session.read(["c:FRA.gdp"])
+        self.assertEqual(len(self.watches), 2)
+        self.assertEqual(self.session.status()["watch_respawns"], 1)
+        reply = self.session.stop()
+        self.assertTrue(any("run again" in note for note in reply["notes"]))
+        self.assertIn("watch_respawned", Path(reply["report"]).read_text("utf-8"))
+
+    def test_a_watch_that_returned_with_the_game_gone_ends_the_verbs(self):
+        self.started()
+        self.watches[0].dies = True
+        self.game.exists = False
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "watch_ended")
+        self.assertEqual(len(self.watches), 1)
+
+    def test_with_an_owners_save_there_is_no_country_select_to_click(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.started(save="france_1850")
+        self.game.entered = True                # the owner's save opens in play
+        self.assertEqual(self.session_error(self.session.enter_game).code, "not_on_country_select")
+        reached = self.session.advance(3)
+        self.assertGreaterEqual(dt.date(*reached), START_DATE + dt.timedelta(days=3))
+        self.assertEqual(self.game.clicks, [])
 
 
 if __name__ == "__main__":

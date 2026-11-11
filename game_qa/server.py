@@ -12,8 +12,9 @@ file when it exits by any route it controls, and never removes one another serve
 
 The server never touches the owner's files itself: only the `Session` does, through part 1's verbs. If the
 server is killed outright nothing here restores anything. `watch`, its own process, still records the game's
-exit, and the next `start` is refused because `snapshot` refuses while that run is unfinished; `recover`
-finishes it (spec § 5.2, Review Focus 1).
+exit, and the next `start` is refused: the dead run's overlay is still there (`overlay_left`), and `snapshot`
+refuses while that run is unfinished. `recover` finishes it, and then the folder is removed by hand (spec § 5.2,
+Review Focus 1).
 
     start      the session's start. Any error stops the session and ends the server; a second `start` is
                refused `session_running`, touching nothing
