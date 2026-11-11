@@ -1,4 +1,5 @@
-"""The launch gate: may the harness start the game now?
+"""The launch gate: may the harness start the game now? And the start itself (`start_game`), which
+`python3 -m game_qa launch` runs after these checks.
 
 The owner's rule (spec § 2): a session asks before launching unless the owner
 granted launches for the session, and even with a grant the GPU is checked
@@ -15,6 +16,7 @@ the pair is not.
 """
 from __future__ import annotations
 
+import base64
 import subprocess
 import time
 from dataclasses import dataclass
@@ -67,7 +69,9 @@ class GpuSample:
 class ProcId:
     pid: int
     # Creation time, UTC ISO-8601, as Windows reports it; UNKNOWN_START when the session may not read it.
-    # Such a process never equals a recorded one, so it is never this harness's own.
+    # A listed UNKNOWN_START process is never counted as this harness's own (`ours_from_journals` leaves out
+    # a start recorded as unknown), so the gate refuses beside it; restore and recover, which compare it with
+    # the run's recorded start, take an equal pair for the run's game still up and change nothing.
     created: str
 
 
@@ -144,9 +148,62 @@ def list_games(run=subprocess.run) -> list[ProcId]:
     return games
 
 
+def windows_path(path: Path, run=subprocess.run) -> str:
+    """`path` as Windows names it (`wslpath -w`). Raises GateError if wslpath fails."""
+    try:
+        out = run(["wslpath", "-w", str(path)], capture_output=True, text=True, timeout=10, check=False)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise GateError(f"could not convert {path} to a Windows path: {exc!r}") from exc
+    text = (out.stdout or "").strip()
+    if out.returncode != 0 or not text:
+        raise GateError(f"wslpath -w {path} failed (exit {out.returncode}): {(out.stderr or '').strip()[:300]!r}")
+    return text
+
+
+def _powershell_quoted(text: str) -> str:
+    """`text` as a PowerShell single-quoted string. PowerShell also ends such a string at a typographic single
+    quote, so those are doubled like ' is."""
+    return "'" + "".join(c * 2 if c in "'‘’‚‛" else c for c in text) + "'"
+
+
+def start_game(exe_windows_path: str, args: Sequence[str], cwd_windows_path: str, run=subprocess.run) -> ProcId:
+    """Start the game with `args`, in `cwd_windows_path`, and return its process id and start time
+    (UNKNOWN_START if the session may not read it).
+
+    One PowerShell call, sent as -EncodedCommand so that no command line's quoting touches the script. Start-
+    Process joins the -ArgumentList elements with spaces and adds no quotes (probed 2026-11-10 with cmd.exe /c
+    echo), so each argument is first put in the Windows command-line form (subprocess.list2cmdline: double
+    quotes around one with a space), then quoted for PowerShell. An empty list is left out: Start-Process
+    refuses one. Raises GateError unless the output ends with LIST_END after exactly one `<pid> <time>` line.
+    """
+    start = (f"$p = Start-Process -FilePath {_powershell_quoted(exe_windows_path)} "
+             f"-WorkingDirectory {_powershell_quoted(cwd_windows_path)} ")
+    if args:
+        start += "-ArgumentList " + ", ".join(_powershell_quoted(subprocess.list2cmdline([a])) for a in args) + " "
+    script = ("$ErrorActionPreference = 'Stop'; " + start + "-PassThru; "
+              "try { '{0} {1}' -f $p.Id, $p.StartTime.ToUniversalTime().ToString('o') } "
+              "catch { '{0} unknown' -f $p.Id }; "
+              "'te_qa_end'")
+    encoded = base64.b64encode(script.encode("utf-16-le")).decode("ascii")
+    try:
+        out = run(["powershell.exe", "-NoProfile", "-EncodedCommand", encoded],
+                  capture_output=True, text=True, timeout=60, check=False)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise GateError(f"could not start the game: {exc!r}") from exc
+    lines = [line.strip() for line in (out.stdout or "").splitlines() if line.strip()]
+    if not lines or lines[-1] != LIST_END:
+        raise GateError(f"the game's start did not finish (exit {out.returncode}; a game may be running): "
+                        f"{(out.stdout or '').strip()[:300]!r} {(out.stderr or '').strip()[:300]!r}")
+    parts = lines[0].split() if len(lines) == 2 else []
+    if len(parts) != 2 or not parts[0].isdigit():
+        raise GateError(f"the game's start gave no process id (a game may be running): {lines[:-1]!r}")
+    return ProcId(int(parts[0]), parts[1])
+
+
 def ours_from_journals(backup_root: Path) -> set[ProcId]:
     """The game processes of runs that started and were neither restored nor
-    held: if one is still up, it is this harness's own orphan."""
+    held: if one is still up, it is this harness's own orphan. A start
+    recorded with an unknown time is left out: it cannot be told apart."""
     ours: set[ProcId] = set()
     if not Path(backup_root).is_dir():
         return ours
@@ -156,14 +213,15 @@ def ours_from_journals(backup_root: Path) -> set[ProcId]:
         if "restored" in names or "held" in names:
             continue
         for e in events:
-            if e.get("event") == "started" and "pid" in e and "created" in e:
+            if (e.get("event") == "started" and "pid" in e and "created" in e
+                    and str(e["created"]) != UNKNOWN_START):
                 ours.add(ProcId(int(e["pid"]), str(e["created"])))
     return ours
 
 
-def check(permission: str, games: Sequence[ProcId], ours: set[ProcId], samples: Sequence[GpuSample],
-          owner_confirmed_busy: bool, backup_error: str | None) -> Gate:
-    """The first refusal that applies, in the order of the module docstring."""
+def check_before_gpu(permission: str, games: Sequence[ProcId], ours: set[ProcId],
+                     backup_error: str | None) -> Gate | None:
+    """The first of `check`'s refusals that needs no GPU reading, or None."""
     if not permission.strip():
         return Gate(False, "no_permission",
                     "state where the permission to launch came from (asked, or granted for this session)")
@@ -174,6 +232,15 @@ def check(permission: str, games: Sequence[ProcId], ours: set[ProcId], samples: 
         return Gate(False, "other_game",
                     "a Victoria 3 process this harness did not start is running: "
                     + ", ".join(f"pid {g.pid} (started {g.created})" for g in theirs))
+    return None
+
+
+def check(permission: str, games: Sequence[ProcId], ours: set[ProcId], samples: Sequence[GpuSample],
+          owner_confirmed_busy: bool, backup_error: str | None) -> Gate:
+    """The first refusal that applies, in the order of the module docstring."""
+    first = check_before_gpu(permission, games, ours, backup_error)
+    if first is not None:
+        return first
     if gpu_busy(samples) and not owner_confirmed_busy:
         if not samples:
             return Gate(False, "gpu_busy", "no GPU reading (nvidia-smi missing or failing): ask the owner")

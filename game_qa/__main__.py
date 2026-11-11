@@ -1,15 +1,19 @@
 """Command line of the in-game QA harness, part 1: protecting the owner's files.
 
-    python3 -m game_qa gate --permission "asked 12:40"     # may the game be launched now?
-    python3 -m game_qa snapshot [--save NAME]...           # before a launch, with no game running
-    python3 -m game_qa watch <id> [--pid N]                # right after launching: records the game's
-                                                           # start, that it is alive, and its exit
+    python3 -m game_qa snapshot [--save NAME]...           # with no game running
+    python3 -m game_qa launch <id> --permission "asked 12:40" -- -debug_mode -loadsave=NAME
+                                                           # the gate's checks, then start the game and
+                                                           # record its start: the only way to start it
+    python3 -m game_qa watch <id>                          # right after: records that the launched game is
+                                                           # alive, and its exit
     python3 -m game_qa restore <id>                        # after `watch` has returned
+    python3 -m game_qa gate --permission "asked 12:40"     # dry check: would a launch be allowed now?
     python3 -m game_qa recover                             # finish runs a dead session left
     python3 -m game_qa held                                # snapshots kept because the owner played since
     python3 -m game_qa selftest-restore                    # prove a snapshot restores, touching nothing
 
-Each verb prints one JSON object. Exit 0 on success, 2 on a refusal, a hold or an error.
+Each verb prints one JSON object. Exit 0 on success, 2 on a refusal, a hold or an error. Usage errors are
+argparse's (a message on stderr, exit 2).
 Spec: docs/superpowers/specs/2026-11-10-in-game-qa-harness-design.md §§ 5.2–5.3.
 """
 from __future__ import annotations
@@ -30,18 +34,16 @@ from game_qa import gate, restore, snapshot
 MIN_FREE_BYTES = 2 * 1024**3
 KEEP_SNAPSHOTS = 5
 SELFTEST_TIME_TOLERANCE_NS = 2_000_000_000
-WATCH_WAIT_S = 180.0      # how long `watch` waits for the game process to appear
 WATCH_INTERVAL_S = 5.0    # between looks; a heartbeat is recorded at each
-# `watch` adopts only a game created after the snapshot was armed and at most this long after it: a game
-# started later may be the owner's. A launch slower than this needs a fresh snapshot.
-WATCH_ADOPT_WINDOW_S = 600.0
 WATCH_LOOK_TRIES = 5      # failed looks in a row after which `watch` stops, recording no exit
 # A `started` or `heartbeat` younger than this, with no `game_exited`: `watch` is still recording, and a
 # restore now would judge the game's exit writes against the last heartbeat. Three default intervals.
 WATCH_RECORDING_S = 15.0
+# How long `launch` looks for a start time PowerShell could not read at the start, in the process listing.
+LAUNCH_LOOKUP_S = 10.0
 _VERDICTS = ("restored", "held")
 _sleep = time.sleep       # patched in tests
-_clock = time.monotonic   # patched in tests; `watch --wait` is measured on it, not by counting naps
+_clock = time.monotonic   # patched in tests; `launch`'s look-up is measured on it, not by counting naps
 
 
 class UnknownSnapshotError(LookupError):
@@ -49,7 +51,7 @@ class UnknownSnapshotError(LookupError):
 
 
 class _Refused(Exception):
-    """A refusal of `watch`, carried out of its helpers as the JSON object to print."""
+    """A refusal of `watch` or `launch`, carried out of their helpers as the JSON object to print."""
 
     def __init__(self, reason: str, detail: str, **fields):
         super().__init__(reason)
@@ -151,13 +153,13 @@ def cmd_snapshot(args) -> tuple[dict, int]:
     if open_runs:
         # Snapshots must never nest: one taken over an unrestored run's leftovers records them as the owner's files.
         return {"refused": "unfinished_run", "unfinished": [s.id for s in open_runs],
-                "detail": "an earlier snapshot has neither been restored nor held. If its game is open, close "
-                          "it and wait for `watch` to return, then run `restore <id>`; for a run whose session "
-                          "died, or one whose start was never recorded, run `recover`. Either puts the files "
-                          "back or holds the snapshot, and a held snapshot does not block a new one"}, 2
+                "detail": "an earlier snapshot has been neither restored nor held. If it is your own run's, wait "
+                          "for its `watch` to return and run `restore <id>`. If not, run `recover`: it finishes "
+                          "a run whose session died (doing nothing while that run's game is up), and puts back or "
+                          "holds a snapshot nothing was launched under. A held snapshot does not block a new one"}, 2
     games = gate.list_games()
     if games:
-        return _game_running(games), 2
+        return _game_running(games, "a snapshot taken while a game writes its files catches them mid-run").result, 2
     extra = ["save games/" + (name if name.endswith(".v3") else name + ".v3") for name in args.save]
     snap = snapshot.take(user, backups, extra=extra)
     snapshot.record(snap, "armed")
@@ -166,27 +168,148 @@ def cmd_snapshot(args) -> tuple[dict, int]:
             "held": [s.id for s in restore.held(backups)]}, 0
 
 
-def _game_running(games: list[gate.ProcId]) -> dict:
-    return {"refused": "game_running", "games": _running(games),
-            "detail": "a Victoria 3 process is running: a snapshot taken while a game writes its files "
-                      "captures them mid-run. Close it first"}
+def _game_running(games: list[gate.ProcId], why: str) -> _Refused:
+    return _Refused("game_running", f"a Victoria 3 process is running, and {why}. `gate` says whether this "
+                                    "harness started it: if it did, finish that run first (its `watch`, then "
+                                    "`restore <id>`, or `recover`); if not, it is the owner's: ask them, and "
+                                    "never end it", games=_running(games))
+
+
+def cmd_launch(args) -> tuple[dict, int]:
+    """Start the game for a snapshot's run, after the gate's checks, and record its start at once.
+
+    The only supported way to start the game: the journal names the process from the moment it exists, so
+    no command ever has to guess which game is the run's. Nothing is started, and nothing recorded, unless
+    the snapshot is armed with no `started` and no verdict; an unattended run (`-handsoff`) carries
+    `-run_until=`; the gate's checks pass (a stated permission, a usable backup root, no game this harness
+    did not start, the GPU unless the owner confirmed); no Victoria 3 process at all is running (one
+    snapshot, one game); and no file outside `logs/` has changed since the snapshot. That last one means
+    someone has used the folder since: a start recorded now would date their writes before the run, and
+    restore would put the old copies back over them. The journal, the processes and the folder are looked
+    at again last, right before the start.
+
+    `started` (pid, start time, arguments) is recorded the moment the process exists. A start time
+    PowerShell could not read is recorded as "unknown" and looked for in the process listing for up to
+    LAUNCH_LOOKUP_S; once found, it is recorded in a second `started`, and every reader takes the last."""
+    user, backups = _paths()
+    snap = _find(backups, args.id)
+    game_args = list(args.game_args)
+    try:
+        _launchable(snap)
+        _check_end_date(game_args)
+        games = gate.list_games()
+        ours = gate.ours_from_journals(backups)
+        backup_error = _backup_error(backups)
+        early = gate.check_before_gpu(args.permission, games, ours, backup_error)
+        if early is not None:
+            raise _Refused(early.reason, early.detail)
+        if games:
+            raise _game_running(games, "one snapshot is for one game")
+        verdict = gate.check(args.permission, games, ours, gate.sample_gpu(), args.owner_confirmed_busy, backup_error)
+        if not verdict.ok:
+            raise _Refused(verdict.reason, verdict.detail)
+        exe = _game_exe()
+        exe_windows, cwd_windows = gate.windows_path(exe), gate.windows_path(exe.parent)
+        # The last looks, right before the start: the folder (slow: it hashes), then the journal and the processes.
+        _check_unchanged(snap, user)
+        _launchable(snap)
+        games = gate.list_games()
+        if games:
+            raise _game_running(games, "one snapshot is for one game")
+    except _Refused as refused:
+        return dict(refused.result, id=snap.id), 2
+    try:
+        proc = gate.start_game(exe_windows, game_args, cwd_windows)
+    except gate.GateError as exc:
+        return {"refused": "GateError", "id": snap.id,
+                "detail": f"{exc}. Nothing was recorded: a game this started would count as another game "
+                          "everywhere (`gate` and `launch` refuse beside it, `restore` and `recover` hold)"}, 2
+    try:
+        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args)
+    except OSError as exc:
+        return {"refused": "not_recorded", "id": snap.id, "pid": proc.pid, "created": proc.created,
+                "detail": f"the game started (pid {proc.pid}) but its start could not be recorded: {exc}. It "
+                          "counts as another game everywhere (`restore` and `recover` hold); this harness "
+                          f"started it, so it may end pid {proc.pid}"}, 2
+    result = {"id": snap.id, "pid": proc.pid, "created": proc.created, "args": game_args}
+    if proc.created == gate.UNKNOWN_START:
+        found = _look_up_start(proc.pid)
+        if found is not None:
+            snapshot.record(snap, "started", pid=found.pid, created=found.created, args=game_args)
+            result["created"] = found.created
+        else:
+            result["detail"] = (f"the game's start time could not be read, so it is recorded as unknown: `watch` "
+                                f"cannot tell pid {proc.pid} from another game and will refuse. Once the game "
+                                f"has closed, `restore {snap.id}` holds anything it wrote")
+    return result, 0
+
+
+def _game_exe() -> Path:
+    import path_constants
+
+    return Path(path_constants.refresh("base_game_path")) / "binaries" / "victoria3.exe"
+
+
+def _launchable(snap: snapshot.Snapshot) -> None:
+    """Raise _Refused unless the snapshot is armed, with no `started` and no verdict."""
+    events = _events(snap)
+    if any(v in events for v in _VERDICTS):
+        raise _Refused("already_finished", f"snapshot {snap.id} already has a verdict (restored or held): take "
+                                           "a new snapshot")
+    if "started" in events:
+        raise _Refused("already_started", f"a game was already launched for snapshot {snap.id}: `watch {snap.id}`")
+    if "armed" not in events:
+        raise _Refused("not_armed", "this snapshot was not taken by `snapshot` for a run")
+
+
+def _check_end_date(game_args: list[str]) -> None:
+    """Raise _Refused for an unattended run (`-handsoff`) without `-run_until=<date>`: one without an end date
+    runs on and writes autosaves over the owner's (spec § 5.3)."""
+    lowered = [a.lower() for a in game_args]
+    if "-handsoff" in lowered and not any(a.startswith("-run_until=") and a != "-run_until=" for a in lowered):
+        raise _Refused("no_end_date", "an unattended run (-handsoff) must carry -run_until=<date>, such as "
+                                      "-run_until=1836.2.10: without one it runs on and writes autosaves")
+
+
+def _check_unchanged(snap: snapshot.Snapshot, user: Path) -> None:
+    """Raise _Refused if a file outside `logs/` no longer matches the snapshot."""
+    diff = restore.compare(snap, user)
+    files = sorted(name for name in {*diff.changed, *diff.missing, *diff.added_in_set, *diff.created}
+                   if not name.startswith("logs/"))
+    if files:
+        raise _Refused("stale_snapshot", "the folder has changed since the snapshot was taken, so someone has used "
+                                         "it since: a run started now would make restore put the old copies back "
+                                         "over theirs. Run `recover` (it holds this snapshot), then take a new one",
+                       files=files)
+
+
+def _look_up_start(pid: int) -> gate.ProcId | None:
+    """The process `pid` with a readable start time, looked for in the listing for up to LAUNCH_LOOKUP_S."""
+    start = _clock()
+    while True:
+        try:
+            for game in gate.list_games():
+                if game.pid == pid and game.created != gate.UNKNOWN_START:
+                    return game
+        except gate.GateError:
+            pass
+        if _clock() - start >= LAUNCH_LOOKUP_S:
+            return None
+        _sleep(1.0)
 
 
 def cmd_watch(args) -> tuple[dict, int]:
-    """Record the run's game in the snapshot's journal as it happens: `started`
-    when the process appears, a `heartbeat` at each look, `game_exited` when a
-    look shows it gone. Restore judges later changes against these times, so
-    they must be written while the game runs and not when restore is called.
+    """Follow the game `launch` started for the snapshot's run: a `heartbeat` at
+    each look that lists it, `game_exited` at the first look that succeeds
+    without it. Restore judges later changes against these times, so they must
+    be written while the game runs and not when restore is called.
 
-    Which game is the run's:
-    - With no `started` in the journal: the process `--pid` names, or else the
-      one game created after the snapshot was armed and at most
-      WATCH_ADOPT_WINDOW_S after it. A game that was already running is the
-      owner's, and so may be one started later.
-    - With a `started`: that process only (same pid and creation time), so a
-      `watch` that died is picked up again. If it is gone, nobody saw when it
-      exited: nothing is recorded, and restore judges against the last heartbeat.
-    - After `game_exited`: none. The run is over.
+    `watch` never adopts a game: by its creation time alone the run's game
+    cannot be told from one the owner starts. It follows only the process
+    `launch` recorded (pid and start time). If that process is already gone at
+    the first look, nobody saw when it exited: nothing is recorded, and restore
+    judges against the last heartbeat. Run again after it died, it picks the
+    same process up; after `game_exited` it refuses.
 
     A look that fails, or that cannot read the run's game's start time, is not
     taken for an exit: `watch` looks again, and after WATCH_LOOK_TRIES such
@@ -195,100 +318,49 @@ def cmd_watch(args) -> tuple[dict, int]:
     snap = _find(backups, args.id)
     journal = snapshot.journal(snap)
     events = [str(e.get("event")) for e in journal]
-    if any(v in events for v in _VERDICTS):
-        return {"refused": "already_finished", "detail": f"snapshot {snap.id} already has a verdict"}, 2
-    armed = next((_when(str(e.get("at"))) for e in journal if e.get("event") == "armed"), None)
-    if armed is None:
-        return {"refused": "not_armed", "detail": "this snapshot was not taken by `snapshot` for a run"}, 2
-    if "game_exited" in events:
-        return {"refused": "already_exited",
-                "detail": f"the game of snapshot {snap.id}'s run has exited: run `restore {snap.id}`"}, 2
     starts = [e for e in journal if e.get("event") == "started"]
     try:
-        if starts:
-            proc = _proc(starts[-1])
-            if proc is None:
-                raise _Refused("unreadable_start", f"the journal's last `started` entry cannot be read: "
-                                                   f"{starts[-1]!r}. Nothing is adopted")
-            _resume(proc, args.pid)
-        else:
-            proc = _adopt(armed, args.pid, args.wait)
-            snapshot.record(snap, "started", pid=proc.pid, created=proc.created)
+        if any(v in events for v in _VERDICTS):
+            raise _Refused("already_finished", f"snapshot {snap.id} already has a verdict")
+        if "game_exited" in events:
+            raise _Refused("already_exited", f"the run's game has exited: run `restore {snap.id}`")
+        if not starts:
+            raise _Refused("not_started", f"no game was launched for snapshot {snap.id}: start the game with "
+                                          f"`launch {snap.id}`. `watch` never adopts a game")
+        proc = _proc(starts[-1])
+        if proc is None:
+            raise _Refused("unreadable_start", f"the journal's last `started` entry cannot be read: {starts[-1]!r}")
+        if proc.created == gate.UNKNOWN_START:
+            raise _Refused("unknown_start", f"`launch` could not read the start time of pid {proc.pid}, so it "
+                                            "cannot be told from another game: nothing is recorded, and once the "
+                                            f"game has closed `restore {snap.id}` holds anything it wrote")
+        _first_look(proc)
         beats = _follow(snap, proc, args.interval)
     except _Refused as refusal:
         return dict(refusal.result, id=snap.id), 2
-    return {"id": snap.id, "pid": proc.pid, "created": proc.created, "resumed": bool(starts),
-            "heartbeats": beats, "exited": True}, 0
+    return {"id": snap.id, "pid": proc.pid, "created": proc.created, "heartbeats": beats, "exited": True}, 0
 
 
-def _look(watched: int | None = None) -> list[gate.ProcId] | None:
+def _look(watched: int) -> list[gate.ProcId] | None:
     """The running games, or None when the look failed, or when it lists the process `watched` with a start
     time it could not read (that may still be the run's game)."""
     try:
         games = gate.list_games()
     except gate.GateError:
         return None
-    if watched is not None and gate.ProcId(watched, gate.UNKNOWN_START) in games:
+    if gate.ProcId(watched, gate.UNKNOWN_START) in games:
         return None
     return games
 
 
 def _cannot_look(tries: int, **fields) -> _Refused:
     return _Refused("cannot_look", f"the game processes could not be listed {tries} times running, so no exit "
-                                   "is recorded. Run `watch` again once they can: it picks up the run's game "
-                                   "if one was recorded", **fields)
+                                   "is recorded. Run `watch` again once they can: it picks the run's game up "
+                                   "where it was", **fields)
 
 
-def _adoptable(game: gate.ProcId, armed: dt.datetime) -> bool:
-    """Created after `armed` and at most WATCH_ADOPT_WINDOW_S after it."""
-    created = _when(game.created)
-    return created is not None and armed < created <= armed + dt.timedelta(seconds=WATCH_ADOPT_WINDOW_S)
-
-
-def _adopt(armed: dt.datetime, pid: int | None, wait: float) -> gate.ProcId:
-    """The run's game, looked for until `wait` seconds have passed: the process `pid`, or else the one game
-    created in the adoption window. Raises _Refused."""
-    window = f"after the snapshot was armed ({armed:%H:%M:%S} UTC) and within {WATCH_ADOPT_WINDOW_S:.0f} s of it"
-    start = _clock()
-    failures = 0
-    while True:
-        games = _look()
-        if games is None:
-            failures += 1
-            if failures >= WATCH_LOOK_TRIES:
-                raise _cannot_look(failures)
-        else:
-            failures = 0
-            if pid is not None:
-                named = [g for g in games if g.pid == pid]
-                if named:
-                    if _adoptable(named[0], armed):
-                        return named[0]
-                    raise _Refused("not_the_run", f"pid {pid} (started {named[0].created}) was not created {window}")
-            else:
-                if any(g.created == gate.UNKNOWN_START for g in games):
-                    raise _Refused("unknown_game", "a Victoria 3 process whose start time cannot be read is "
-                                                   "running, so the run's game cannot be told apart: pass --pid",
-                                   games=_running(games))
-                mine = [g for g in games if _adoptable(g, armed)]
-                if len(mine) == 1:
-                    return mine[0]
-                if len(mine) > 1:
-                    raise _Refused("several_games", f"more than one game was created {window}: pass --pid",
-                                   games=_running(mine))
-        if _clock() - start >= wait:
-            if games is None:
-                raise _cannot_look(failures)
-            if pid is not None:
-                raise _Refused("not_the_run", f"no game process with pid {pid} appeared")
-            raise _Refused("no_game", f"no game process created {window} appeared", games_not_adopted=len(games))
-        _sleep(2.0)
-
-
-def _resume(proc: gate.ProcId, pid: int | None) -> None:
-    """Check that the run's recorded game is still running. Raises _Refused."""
-    if pid is not None and pid != proc.pid:
-        raise _Refused("not_the_run", f"this run's game is pid {proc.pid}, recorded when it started")
+def _first_look(proc: gate.ProcId) -> None:
+    """Check that the run's recorded game is running. Raises _Refused."""
     failures = 0
     while (games := _look(proc.pid)) is None:
         failures += 1
@@ -326,7 +398,7 @@ def _follow(snap: snapshot.Snapshot, proc: gate.ProcId, interval: float) -> int:
 
 def cmd_restore(args) -> tuple[dict, int]:
     """Put the owner's files back. This never writes a time into the journal:
-    when the run ended is what `watch` (or the driver) recorded while it
+    when the run ended is what `launch` and `watch` recorded while it
     happened. With no such record, anything that would need judging is held."""
     user, backups = _paths()
     snap = _find(backups, args.id)
@@ -334,7 +406,8 @@ def cmd_restore(args) -> tuple[dict, int]:
     mine = _started(snap)
     if mine is not None and mine in games:
         return {"held": False, "refused": "game_still_up",
-                "detail": f"this run's own game (pid {mine.pid}) is still running: close it first"}, 2
+                "detail": f"this run's own game (pid {mine.pid}, started by `launch`) is still running: wait "
+                          "for it to exit and for `watch` to return, then restore"}, 2
     age = _since_last_seen_alive(snap)
     if age is not None and age < WATCH_RECORDING_S:
         return {"held": False, "refused": "watch_still_recording",
@@ -382,10 +455,12 @@ def cmd_recover(args) -> tuple[dict, int]:
 
 
 def _recover_never_started(backups: Path, user: Path) -> list[dict]:
-    """Restore or hold each snapshot armed for a run that never recorded `started` (the session died before
-    `watch`, or `watch` refused), newest first, stopping at the first hold or error, as `restore.recover`
-    does. Such a run has no game of its own to wait for, so any game running may be the owner's: hold. With
-    none, restore puts the folder back when nothing needs judging and holds (`no_reference_time`) otherwise."""
+    """Restore or hold each snapshot armed for a run that never recorded `started`, newest first, stopping at
+    the first hold or error, as `restore.recover` does. `launch` records `started` the moment the game
+    exists, so nothing was launched under such a snapshot (the session died before `launch`, or `launch`
+    refused): any game running may be the owner's, so hold. With none, restore puts the folder back when
+    nothing needs judging and holds (`no_reference_time`) otherwise. A session's own snapshot, between its
+    `snapshot` and `launch`, is finished too: `launch` then refuses `already_finished`, starting nothing."""
     never_started = [s for s in _open_snapshots(backups) if "started" not in _events(s)]
     if not never_started:
         return []
@@ -424,7 +499,7 @@ def cmd_selftest_restore(args) -> tuple[dict, int]:
     user, backups = _paths()
     games = gate.list_games()
     if games:
-        return _game_running(games), 2
+        return _game_running(games, "a snapshot taken while a game writes its files catches them mid-run").result, 2
     snap = snapshot.take(user, backups)
     mismatched = []
     wrong_time = []
@@ -461,7 +536,7 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="python3 -m game_qa", description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="verb", required=True)
 
-    p = sub.add_parser("gate", help="may the game be launched now?")
+    p = sub.add_parser("gate", help="a dry check: would a launch be allowed now? (`launch` runs it itself)")
     p.add_argument("--permission", required=True,
                    help="where the permission to launch came from (asked, or granted for this session)")
     p.add_argument("--owner-confirmed-busy", action="store_true",
@@ -479,22 +554,38 @@ def main(argv=None) -> int:
                    help="copy the run's own logs here first (default: run_logs/ in the snapshot's folder)")
     p.set_defaults(run=cmd_restore)
 
-    p = sub.add_parser("watch", help="record the run's game in the snapshot's journal until it exits")
+    p = sub.add_parser("launch", help="the gate's checks, then start the game for a snapshot's run and record it",
+                       description="Everything after `--` is passed to victoria3.exe as it is; nothing is added.")
     p.add_argument("id")
-    p.add_argument("--pid", type=int, metavar="N",
-                   help="adopt exactly this process, which must have been created after the snapshot and "
-                        f"within {WATCH_ADOPT_WINDOW_S:.0f} s of it (default: the one game that was)")
-    p.add_argument("--wait", type=float, default=WATCH_WAIT_S, help="seconds to wait for the game to appear")
+    p.add_argument("--permission", required=True,
+                   help="where the permission to launch came from (asked, or granted for this session)")
+    p.add_argument("--owner-confirmed-busy", action="store_true",
+                   help="the owner was asked about the busy GPU and said to go ahead")
+    p.set_defaults(run=cmd_launch)
+
+    p = sub.add_parser("watch", help="follow the game `launch` started, recording that it is alive and its exit")
+    p.add_argument("id")
     p.add_argument("--interval", type=float, default=WATCH_INTERVAL_S, help="seconds between looks")
     p.set_defaults(run=cmd_watch)
 
-    for name, fn, text in (("recover", cmd_recover, "finish the restore of runs that never finished"),
+    for name, fn, text in (("recover", cmd_recover,
+                            "finish the runs a dead session left, and clear snapshots nothing was launched under; "
+                            "never run it between your own `snapshot` and `launch` (it would finish that "
+                            "snapshot, and `launch` would then refuse already_finished)"),
                            ("held", cmd_held, "list snapshots held because the owner played since"),
                            ("selftest-restore", cmd_selftest_restore,
                             "prove a snapshot of the real folder restores, changing nothing in it")):
         sub.add_parser(name, help=text).set_defaults(run=fn)
 
+    argv = list(sys.argv[1:] if argv is None else argv)
+    game_args: list[str] = []
+    if "--" in argv:  # split by hand: argparse's handling of `--` differs between Python versions
+        cut = argv.index("--")
+        argv, game_args = argv[:cut], argv[cut + 1:]
     args = parser.parse_args(argv)
+    if args.verb != "launch" and game_args:
+        parser.error(f"only `launch` takes game arguments after `--`, not `{args.verb}`")
+    args.game_args = game_args
     try:
         result, code = args.run(args)
     except Exception as exc:  # every failure is one JSON object: BackupRootError, GateError, OSError, ...
