@@ -391,7 +391,7 @@ class ExpiryTest(ServerTestCase):
 
     def test_expiry_is_judged_by_the_servers_clock(self):
         fake = FakeSession()
-        srv = server.SessionServer(fake, self.backups, port=0, now=lambda: time.time() + 3600)
+        srv = server.SessionServer(fake, self.backups, port=0, now=lambda: server.machine_clock() + 3600)
         thread = threading.Thread(target=srv.serve, daemon=True)
         thread.start()
         self.threads.append(thread)
@@ -399,7 +399,7 @@ class ExpiryTest(ServerTestCase):
         reply, code = client._post(server.read_info(self.backups), "events", {}, timeout=5)
         self.assertEqual((reply["refused"], code), ("expired", 2))
         self.assertNotIn(("events",), fake.calls)
-        srv._now = time.time
+        srv._now = server.machine_clock
         self.assertEqual(client.call(self.backups, "stop", {}, timeout=5)[1], 0)
 
 

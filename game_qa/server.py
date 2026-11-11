@@ -9,9 +9,9 @@ a time, and holds exactly one `Session`. While it listens, `<backup root>/sessio
 `started`, then `snapshot` once the session has started, and `token`, which every request must carry, so that no
 other program on the machine (a web page in a browser included) can type into the game. The file is its owner's
 alone to read (0600), and the server removes it when it exits by any route it controls, never one another server
-wrote. Every request also carries its client's expiry (`X-Game-QA-Expires`, epoch seconds: when the client stops
-waiting); the server never begins a request whose expiry has passed (`expired`), so a verb whose client gave up
-behind a long one is not run later, out of its sight. A connection that sends nothing is dropped after
+wrote. Every request also carries its client's expiry (`X-Game-QA-Expires`: when the client stops waiting, by
+`machine_clock`); the server never begins a request whose expiry has passed (`expired`), so a verb whose client
+gave up behind a long one is not run later, out of its sight. A connection that sends nothing is dropped after
 HANDLER_TIMEOUT_S, so it cannot keep `stop` waiting.
 
 The server never touches the owner's files itself: only the `Session` does, through part 1's verbs. If the
@@ -63,7 +63,7 @@ HOST = "127.0.0.1"
 PORT = 8951
 SESSION_FILE = "session.json"
 TOKEN_HEADER = "X-Game-QA-Token"
-EXPIRES_HEADER = "X-Game-QA-Expires"    # epoch seconds: the client has stopped waiting by then
+EXPIRES_HEADER = "X-Game-QA-Expires"    # machine_clock seconds: the client has stopped waiting by then
 HANDLER_TIMEOUT_S = 30.0                # a connection that sends nothing for that long is dropped
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
@@ -121,6 +121,14 @@ def clean_stop(reply: dict) -> bool:
             and not reply.get("overlay_kept") and not reply.get("snapshot_unknown"))
 
 
+def machine_clock() -> float:
+    """The clock a request's expiry is set and judged by: CLOCK_MONOTONIC, one clock for every process on this
+    machine (the client and its server always share one: the server binds 127.0.0.1), and never stepped. Not
+    `time.time()`: under WSL2 the wall clock steps back about 2 s every half minute or so (measured 2026-11-11,
+    3 runs in 300), which would let a request whose client gave up run after all."""
+    return time.clock_gettime(time.CLOCK_MONOTONIC)
+
+
 def final_stop(reply: Any) -> bool:
     """Whether a stop's reply ends the server: running the stop again cannot change it. The session says so in
     `stop_again`; a reply without it is judged by its outcome (RETRYABLE). Anything that is not a reply is final."""
@@ -135,10 +143,10 @@ def final_stop(reply: Any) -> bool:
 class SessionServer:
     """Serves one `Session` (or anything with its public methods) on HOST until a final stop (from `stop` or a
     failed `start`) or a signal; `serve` returns what it did. `log` gets one line per request and per event, or
-    nothing when None. `now` is the clock a request's expiry is judged by (epoch seconds)."""
+    nothing when None. `now` is the clock a request's expiry is judged by (`machine_clock`)."""
 
     def __init__(self, session, backup_root: Path, port: int = PORT, log: TextIO | None = None,
-                 now: Callable[[], float] = time.time) -> None:
+                 now: Callable[[], float] = machine_clock) -> None:
         self._session = session
         self._backup_root = Path(backup_root)
         self._port = port
@@ -425,8 +433,8 @@ class _Handler(BaseHTTPRequestHandler):
             if not math.isfinite(expires):
                 raise ValueError(expires)
         except ValueError:
-            self._answer(400, {"refused": "bad_request", "detail": "the request carries no expiry (%s: epoch seconds)"
-                                                                   % EXPIRES_HEADER}, 2)
+            self._answer(400, {"refused": "bad_request", "detail": "the request carries no expiry (%s: seconds of "
+                                                                   "the machine's monotonic clock)" % EXPIRES_HEADER}, 2)
             return
         verb = self.path.lstrip("/")
         late = owner._now() - expires

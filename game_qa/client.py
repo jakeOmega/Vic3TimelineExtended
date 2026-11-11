@@ -111,7 +111,7 @@ def _post(info: Mapping, verb: str, body: Mapping, timeout: float) -> tuple[dict
     """One request. Raises OSError (ConnectionRefusedError: nothing listens; TimeoutError: no answer in time),
     http.client.HTTPException, or ValueError for an answer that is not the server's."""
     conn = http.client.HTTPConnection(server.HOST, int(info["port"]), timeout=timeout)
-    expires = time.time() + timeout         # when this client stops waiting: the server never begins it after
+    expires = server.machine_clock() + timeout      # when this client stops waiting: the server never begins it after
     try:
         conn.request("POST", "/" + verb, body=json.dumps(body).encode("utf-8"),
                      headers={"Content-Type": "application/json", server.TOKEN_HEADER: str(info.get("token", "")),
