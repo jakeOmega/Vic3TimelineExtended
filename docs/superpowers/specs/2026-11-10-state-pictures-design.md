@@ -315,11 +315,15 @@ would be over 1 GB.
    forestry families of § 5, and the three provisional levels there.
 4. **Town, metropolis, megacity (104).**
 5. **Means and upkeep (120),** with their part of the yearly pass.
-6. **Character, function, conditions (about 30),** with theirs. Its 30 prompts are drafted in `DRAFTS`
-   (18 character, 6 function, 6 condition), for any region and on the rungs where each fits.
-7. **Natural terrain (about 15).** Its 15 prompts are drafted in `DRAFTS`: each of vanilla's natural
-   pictures with the motor age in it (a motorway, pylons, a pipeline), on Modern Urban Planning for want of
-   a ladder of its own.
+6. **Character, function, conditions (30).** All 30 are rendered. **Painted and wired 2026-11-10:** the 11
+   a weight reads live (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two
+   spans each; § 7). The other 19 stay in `DRAFTS` with their candidates on disk: boomtown, declining,
+   divided, heavy industry and resort (17) need the yearly pass to store a trend or a share, which is the
+   next piece of work now that a weight is known to read a stored tag; the flooded coast (2) waits for
+   the warming system.
+7. **Natural terrain (15). Painted and wired 2026-11-10:** each of vanilla's natural pictures with the
+   motor age in it (a motorway, pylons, a pipeline), in vanilla's own families (§ 5), on Modern Urban
+   Planning for want of a ladder of its own (the tundra's pipeline on Integrated Circuits).
 
 If the set is cut: natural terrain first, then megacities merged into four broad families, then means and
 upkeep limited to rungs 2 to 4.
@@ -387,6 +391,17 @@ upkeep limited to rungs 2 to 4.
   - *The dark strip* was on 6 of this wave's 46 renders of that seed; none was picked.
   - *Later rungs of a ladder drift toward one look* (drones, wind turbines, solar panels on every roof).
     It reads as its time, but the farm families' fourth rungs are closer to one another than their first.
+- **What waves 6 and 7 taught** (2026-11-10, 180 renders for 45 pictures, none rerun):
+  - *A dated vehicle in the prompt works for cars and buses, less for trucks.* "Rounded 1950s cars" gave
+    1950s cars; "1950s trucks" on an empty highway still gave today's long-haul rigs in about half the
+    candidates. The natural-terrain pictures have one rung and show from 1960 to the end of the game, so a
+    later truck was let pass where the rest of the picture was best.
+  - *A famous landscape is a landmark too.* "A red rock desert" drew Monument Valley's two buttes in one
+    candidate; the pick has plain mesa cliffs.
+  - *Destruction renders mild.* The ruins and the struck city of the later rungs came out as a damaged,
+    hazy city with traffic still moving, not the flattened one the prompts describe; the 1960 strike (an
+    ash plain) is the only one that reads at a glance. A second set with the damage named first would
+    help if the play-test finds them too gentle.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
