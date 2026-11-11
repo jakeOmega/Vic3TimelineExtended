@@ -109,6 +109,23 @@ natural terrain with a road, pylons or a pipeline in it. Technologies: the city 
 | **Overlays on natural terrain.** Watch a plain, a hill and a mountain road for a few seconds. Vanilla's overlays for these carry blowing grass (plains, American plains, arid mountains, hills) and a glow (hills, arid plain, American desert), judged from their texture names only. | Grass and light that sit on the land, not on the asphalt. | Grass waving across a motorway: add the overlay to `PLACED_OVERLAYS` and give the picture `NEUTRAL_OVERLAY`. |
 | **Lettering and flags.** Look closely at the vehicles, the factory fronts and the ruins. | Nothing that reads as writing, no real flag. | A `smudge` box in `WAVE6_PICKS` or `WAVE7_PICKS`, and reconvert. |
 
+## A great city on any terrain (2026-11-11)
+
+The engine held Singapore, a metropolis of one province with no farm, to be rice farmland. Every city
+picture is now also in the list of every other land terrain, for a metropolis or larger. The entries are
+written one line each, in 22 terrains, two of which (`river`, `snow`) the mod had not injected into before.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Load.** Start the game with the mod and read `error.log`. | No `terrain.cpp` line ("Terrain effect is missing") and no non-existing-entry line for `river` or `snow`. | An error on a one-line entry: write the takeover entries in the long form (`gen_state_pictures.py`, `render`). A missing terrain: take it out of `CITY_TAKEOVER_TERRAINS`. |
+| **Singapore.** The owner's save `singapore_1900_02_13`, the state of Singapore. | A city picture of the East Asian family on the Computer-Aided Design rung (or a character's, if the state is tagged), not the rice fields. | Still the rice fields: the state's terrain is one the list misses, or the entry didn't load (the row above). |
+| **A smaller city keeps its land.** The same save: Singapore's states in Guangdong and North Sumatra (cities, not metropolises). | The harbor, as before. | A city picture: the size condition isn't first or isn't read. |
+| **A forced metropolis.** In a farm or forest state that is your capital, `event te_debug_state_picture.2`. | The city picture until the next yearly pass, then the land again. | |
+| **A metropolis in oil country.** A metropolis whose state is tagged oil and shows open land. | The city, not the derricks. | The derricks: 11,000,000 doesn't outrank 10,000,000 plus the rung. |
+| **Ruins on any terrain.** A devastated metropolis whose state shows land. | The ruins. | The intact city: the condition's entry in that terrain. |
+| **A great port.** A metropolis whose banner was the major port (the docks terrain prevails). | The city now. This is a call the owner can reverse: take `docks` out of `CITY_TAKEOVER_TERRAINS`. | |
+| **Cost.** Open and close state panels quickly in a late game, on a state of farmland. | No stutter: about 70 more weights are read there, each failing on its first line unless the state is a metropolis. | A hitch that the old build doesn't have: thin the takeover to the regional streets. |
+
 ## The pass's city tags (2026-11-11)
 
 Eighteen more city paintings for any region: boomtown, declining, divided, heavy industry, resort. All

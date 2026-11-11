@@ -112,9 +112,9 @@ class TestRegistry(unittest.TestCase):
         # the highest weight wins; two families can hold the same state (Japan lies inside East Asia), so no two
         # pictures of a terrain may weigh the same, whatever their regions
         seen = {}
-        for key, p in registry.PICTURES.items():
-            for terrain in p["terrain"]:
-                spot = (terrain, registry.weight(key))
+        for key in registry.PICTURES:
+            for terrain in registry.terrains(key):
+                spot = (terrain, registry.weight(key, terrain))
                 self.assertNotIn(spot, seen, f"{key} and {seen.get(spot)} weigh the same in {terrain}")
                 seen[spot] = key
 
@@ -194,7 +194,12 @@ class TestRegistry(unittest.TestCase):
         top = r.W_OVER + r.W_COND * max(d for _l, d in r.CONDITIONS.values()) + 9 * r.W_RUNG + 9 * r.W_CHAR + 99
         self.assertLess(top, 2 ** 24)
         for key in r.PICTURES:
-            self.assertLess(r.weight(key), 2 ** 24, key)
+            for terrain in r.terrains(key):
+                self.assertLess(r.weight(key, terrain), 2 ** 24, key)
+        # a great city's takeover stands above the oil field's and under the lowest condition
+        most = 9 * r.W_RUNG + 9 * r.W_CHAR + 99
+        self.assertLess(r.W_OVER + most, r.W_CITY_OVER)
+        self.assertLess(r.W_CITY_OVER + most, r.W_OVER + r.W_COND * min(d for _l, d in r.CONDITIONS.values()))
 
     def test_wave_7_wiring_covers_its_drafts(self):
         nature = {k for k, d in registry.DRAFTS.items() if d["family"] == "nature"}
@@ -279,6 +284,49 @@ class TestRegistry(unittest.TestCase):
                     self.assertRegex(line, r"^(any_scope_building = \{ is_building_type = building_[a-z_]+ level >= \d+ \}"
                                            r"|has_variable = te_sp_[a-z]+)$")
 
+    def test_a_great_city_takes_over_every_other_land_terrain(self):
+        # the engine can hold a metropolis's state to be farmland (Singapore, 2026-11-11), so a city
+        # picture is in every land terrain's list, not the city's alone
+        land = set(_vanilla_terrains()) - {"ocean", "lakes"}
+        self.assertEqual(set(registry.CITY_TAKEOVER_TERRAINS), land - {registry.CITY_TERRAIN})
+        self.assertEqual(len(set(registry.CITY_TAKEOVER_TERRAINS)), len(registry.CITY_TAKEOVER_TERRAINS))
+        guard = registry.SIZES[registry.CITY_TAKEOVER_SIZE][0]
+        cities = [k for k, p in registry.PICTURES.items() if registry.CITY_TERRAIN in p["terrain"]]
+        self.assertGreater(len(cities), 60)
+        for key in cities:
+            p = registry.PICTURES[key]
+            with self.subTest(key):
+                self.assertEqual(p["terrain"], [registry.CITY_TERRAIN])
+                if p["size"] == "town":
+                    self.assertEqual(registry.terrains(key), p["terrain"])
+                    continue
+                self.assertEqual(set(registry.terrains(key)), land)
+                # in the city's own list nothing changes; elsewhere the size comes first
+                self.assertEqual(registry.weight(key, registry.CITY_TERRAIN), registry.weight(key))
+                if p["size"] is None:
+                    self.assertFalse(set(guard) & set(generator.conditions(key)))
+                for terrain in registry.CITY_TAKEOVER_TERRAINS:
+                    wants = generator.conditions(key, terrain)
+                    self.assertEqual(wants[:len(guard)], guard)
+                    self.assertEqual(sorted(wants), sorted({*guard, *generator.conditions(key)}))
+        for key, p in registry.PICTURES.items():
+            if registry.CITY_TERRAIN not in p["terrain"]:
+                with self.subTest(key):
+                    self.assertEqual(registry.terrains(key), p["terrain"])
+                    self.assertFalse(any(registry.takes_over(key, t) for t in _vanilla_terrains()))
+
+    def test_a_great_city_outranks_the_land_and_keeps_the_citys_own_order(self):
+        lists = generator.by_terrain(registry.PICTURES)
+        own = lists[registry.CITY_TERRAIN]
+        for terrain in registry.CITY_TAKEOVER_TERRAINS:
+            keys = lists[terrain]
+            cities = [k for k in keys if registry.takes_over(k, terrain)]
+            with self.subTest(terrain):
+                # the land's own pictures and the oil field, then the city pictures in the city's order
+                self.assertEqual(keys[-len(cities):], cities)
+                self.assertEqual(cities, [k for k in own if k in cities])
+                self.assertEqual(set(cities), {k for k in own if registry.PICTURES[k]["size"] != "town"})
+
     def test_a_takeover_outranks_every_rung(self):
         top = registry.W_RUNG * 9 + registry.W_SIZE * 9 + registry.W_REGION * 9
         self.assertGreater(registry.W_OVER, top)
@@ -339,6 +387,14 @@ class TestGeneratedFile(unittest.TestCase):
         entries = sum(len(p["terrain"]) for p in wired.values())
         self.assertEqual(len(re.findall(r'^\t\t\tpath = "gfx/state_pictures/te_\w+\.dds"$', text, re.M)), entries)
         self.assertEqual(len(re.findall(r'^\t\t\teffect = "vfx_entity_ui_state_\w+"$', text, re.M)), entries)
+        # a great city's entries in the terrains it takes over, one line each
+        taken = sum(len(registry.terrains(key)) - len(p["terrain"]) for key, p in wired.items())
+        self.assertGreater(taken, 0)
+        one_line = (r'^\t\t\{ weight = \{ value = 0 if = \{ limit = \{ scope:state = \{ has_variable = te_sp_size '
+                    r'var:te_sp_size >= 3 .+ \} \} add = \d+ \} \} path = "gfx/state_pictures/te_\w+\.dds" '
+                    r'effect = "vfx_entity_ui_state_\w+" \}$')
+        self.assertEqual(len(re.findall(one_line, text, re.M)), taken)
+        self.assertEqual(text.count("path = "), entries + taken)
         # only INJECTs: a bare or REPLACEd terrain would drop vanilla's own pictures and its map fields
         tops = re.findall(r"^(\S[^=\n]*?)\s*=\s*\{", text, re.M)
         self.assertTrue(tops)
