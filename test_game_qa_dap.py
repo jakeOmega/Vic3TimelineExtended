@@ -10,6 +10,7 @@ from pathlib import Path
 
 from game_qa import dap
 
+STOPPED = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
 RECORDED = json.loads(
     (Path(__file__).resolve().parent / "test_fixtures" / "game_qa" / "debugger_messages.json").read_text("utf-8")
 )
@@ -28,6 +29,7 @@ class Server:
         self._out = b""
         self._replies: dict[str, list[dict]] = {}
         self._before: list[dict] = []
+        self._after: list[dict] = []
         self._seq = 0
 
     # the client's two callables
@@ -42,6 +44,9 @@ class Server:
                 reply = dict(queue.pop(0))
                 reply.update(type="response", request_seq=req["seq"], command=req["command"])
                 self.push(reply)
+            for event in self._after:
+                self.push(event)
+            self._after = []
 
     def recv(self, timeout: float) -> bytes:
         data, self._out = self._out, b""
@@ -60,6 +65,9 @@ class Server:
 
     def before_next_reply(self, events: list[dict]) -> None:
         self._before = list(events)
+
+    def after_next_reply(self, events: list[dict]) -> None:
+        self._after = list(events)
 
     def script_attach(self, verified: bool) -> None:
         self.reply("initialize", {"supportsConfigurationDoneRequest": True})
@@ -210,6 +218,41 @@ class DebuggerTest(unittest.TestCase):
         self.dbg.resume()
         self.assertFalse(self.dbg.wait_stopped(0.01))
 
+    def test_a_stop_that_follows_the_continue_reply_in_the_same_chunk_counts(self):
+        # The live order: the continue reply, `continued`, then `stopped` (a breakpoint the game passes again at once).
+        self.server.after_next_reply([{"type": "event", "event": "continued", "body": {"threadId": 1}}, STOPPED])
+        self.server.reply("continue")
+        self.dbg.resume()
+        self.assertTrue(self.dbg.wait_stopped(0.01))
+        self.assertFalse(self.dbg.wait_stopped(0.01))
+
+    def test_only_the_stop_after_the_reply_counts_when_one_comes_before_it_in_the_same_chunk(self):
+        self.server.before_next_reply([STOPPED])
+        self.server.after_next_reply([STOPPED])
+        self.server.reply("continue")
+        self.dbg.resume()
+        self.assertTrue(self.dbg.wait_stopped(0.01))
+        self.assertFalse(self.dbg.wait_stopped(0.01))
+
+    def test_a_resume_that_could_not_be_sent_forgets_the_stops(self):
+        self.server.push(STOPPED)
+        self.server.reply("evaluate", {"result": "1"})
+        calls = []
+
+        def send(data):
+            calls.append(data)
+            if len(calls) == 1:
+                self.server.send(data)
+            else:
+                raise OSError("tcp_closed")
+        dbg = dap.Debugger(send, self.server.recv)
+        dbg.evaluate("x")                           # reads the stop on the way to its own reply
+        with self.assertRaises(dap.DebuggerError):
+            dbg.resume()
+        self.assertFalse(dbg.wait_stopped(0.01))
+        self.server.push(STOPPED)                   # and the marker is gone: a later stop counts
+        self.assertTrue(dbg.wait_stopped(1.0))
+
     def test_a_refused_resume_forgets_the_stops_too(self):
         stopped = {"type": "event", "event": "stopped", "body": {"reason": "breakpoint", "threadId": 1}}
         self.server.before_next_reply([stopped])
@@ -230,6 +273,20 @@ class DebuggerTest(unittest.TestCase):
         self.assertIs(self.dbg.evaluate("is_player = yes").value, True)
         self.server.reply("evaluate", {"result": "no - No"})
         self.assertIs(self.dbg.evaluate("is_player = yes").value, False)
+
+    def test_messages_of_odd_shapes_are_skipped_and_counted_and_the_rest_of_the_chunk_is_kept(self):
+        for odd in ({"type": "response", "request_seq": [1], "command": "evaluate", "success": True},
+                    {"type": "response", "request_seq": {"a": 1}, "command": "evaluate", "success": True},
+                    {"type": "event", "event": "output", "body": "just a string"},
+                    {"type": "event", "event": "stopped", "body": [1, 2]},
+                    {"type": "response", "request_seq": 99, "command": "evaluate", "success": True, "body": [1]}):
+            self.server.push(odd)
+        self.server.push(STOPPED)
+        self.server.reply("evaluate", {"result": "7"})
+        self.assertEqual(self.dbg.evaluate("x").value, 7.0)
+        self.assertTrue(self.dbg.wait_stopped(0.01))
+        self.assertFalse(self.dbg.wait_stopped(0.01))
+        self.assertEqual(self.dbg.skipped, 5)
 
     def test_an_error_of_the_send_callable_is_a_debugger_error(self):
         boom = OSError("tcp_closed")

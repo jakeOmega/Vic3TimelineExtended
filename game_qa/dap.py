@@ -101,6 +101,13 @@ class Debugger:
         self._replies: dict[int, dict] = {}
         self._errors: list[str] = []
         self._stops = 0
+        self._forget_stops_at: int | None = None    # seq of a request whose answer ends the stops seen so far
+
+    @property
+    def skipped(self) -> int:
+        """How many messages the client dropped as not being messages (see `Decoder`) or having a shape it
+        cannot file."""
+        return self._decoder.skipped
 
     # -- plumbing -----------------------------------------------------------
 
@@ -114,26 +121,47 @@ class Debugger:
 
     def _pump(self, timeout: float) -> None:
         """Read once and file what arrived: replies by request, error-log
-        output, stops."""
+        output, stops. A message of a shape that cannot be filed (a body that
+        is not an object, a `request_seq` that is not a number) is counted in
+        `skipped`, like one that is not a message, and the rest of what
+        arrived is still filed."""
         for msg in self._decoder.feed(self._through(self._recv, "recv", timeout)):
+            body = msg.get("body")
+            if body and not isinstance(body, dict):
+                self._decoder.skipped += 1
+                continue
             kind = msg.get("type")
             if kind == "response":
-                self._replies[msg.get("request_seq")] = msg
+                seq = msg.get("request_seq")
+                if not isinstance(seq, int):
+                    self._decoder.skipped += 1
+                    continue
+                self._replies[seq] = msg
+                if seq == self._forget_stops_at:
+                    # Everything seen before this answer is from before the game ran on; what follows it in the
+                    # same read (`continued`, a `stopped` at a breakpoint it passes again at once) is new.
+                    self._forget_stops_at = None
+                    self._stops = 0
             elif kind == "event":
-                event, body = msg.get("event"), msg.get("body") or {}
+                event, body = msg.get("event"), body or {}
                 if event == "output" and body.get("category") == "stderr":
                     self._errors.append(str(body.get("output", "")).rstrip("\n"))
                 elif event == "stopped":
                     self._stops += 1
 
-    def _request(self, command: str, arguments: dict | None = None, timeout: float = 30.0) -> dict:
+    def _request(self, command: str, arguments: dict | None = None, timeout: float = 30.0,
+                 forgets_stops: bool = False) -> dict:
         """Send one request and wait for its own reply; events and other
-        replies that arrive first (hundreds, after an evaluation) are filed."""
+        replies that arrive first (hundreds, after an evaluation) are filed.
+        With `forgets_stops`, the stops counted when its reply is filed are
+        dropped (`_pump` does it at that moment)."""
         self._seq += 1
         seq = self._seq
         msg: dict = {"seq": seq, "type": "request", "command": command}
         if arguments is not None:
             msg["arguments"] = arguments
+        if forgets_stops:
+            self._forget_stops_at = seq
         self._through(self._send, "send", encode(msg))
         deadline = time.monotonic() + timeout
         while seq not in self._replies:
@@ -143,8 +171,9 @@ class Debugger:
             self._pump(min(left, 0.5))
         return self._replies.pop(seq)
 
-    def _must(self, command: str, arguments: dict | None = None, timeout: float = 30.0) -> dict:
-        reply = self._request(command, arguments, timeout)
+    def _must(self, command: str, arguments: dict | None = None, timeout: float = 30.0,
+              forgets_stops: bool = False) -> dict:
+        reply = self._request(command, arguments, timeout, forgets_stops)
         if not reply.get("success"):
             raise DebuggerError(f"{command} refused: {reply.get('message', '')}")
         return reply.get("body") or {}
@@ -197,12 +226,18 @@ class Debugger:
         return out
 
     def resume(self) -> None:
-        """Let the game run on. Every stop seen up to the game's answer is the old one, not the next: it is
-        forgotten, so it cannot satisfy the next `wait_stopped`, whether the game accepts the request or not."""
+        """Let the game run on. Every stop counted up to the moment the game's answer is filed is the old one,
+        not the next: it is forgotten, so it cannot satisfy the next `wait_stopped`, whether the game accepts
+        the request or not. A `stopped` that comes after the answer, even in the same read of the connection
+        (the order seen live: the answer, `continued`, `stopped`), is the next one and counts. If no answer is
+        ever filed (the connection fails, or the game does not answer in time) the old stops are forgotten
+        when the error is raised."""
         try:
-            self._must("continue", {"threadId": GAME_THREAD})
+            self._must("continue", {"threadId": GAME_THREAD}, forgets_stops=True)
         finally:
-            self._stops = 0
+            if self._forget_stops_at is not None:       # no answer was filed
+                self._forget_stops_at = None
+                self._stops = 0
 
     def errors(self) -> list[str]:
         """The error-log lines the game has streamed since the last call."""
