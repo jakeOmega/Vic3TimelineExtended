@@ -303,3 +303,39 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   India, State of Indonesia, State of China, Intermarium Federation, Union of Dar-Al-Islam; the unions as they
   are). C21: whether a formable under a government-flavored dynamic name shows that name or the `_DEF` one, and what
   a country with no `_DEF` key shows. If a dynamic name shows its key with `_DEF` appended, its 84 names need one each.
+
+## 1.15.1 hotfix (2026-11-11)
+
+What the 1.15.1 bump (`docs/audits/vanilla_1_15_1_migration.md`) leaves for the game. Any new 1.15.1 game will do
+unless a line names a save.
+
+- **Load.** `debug.log` has no `Unexpected token`, `Unknown modifier type` or `inject/replace to a non-existing
+  entry` line from a mod file, and the launcher shows no version warning for the mod.
+- **Stake Colonial Claim.** As a colonizer beside a decentralized nation, the action's tooltip shows 1.15.1's
+  infamy (half the state's infamy value, where it was 5 to 20). A country that has renounced its claims through
+  Decolonization still sees the action closed with the mod's reason.
+- **AI subsidies (owner call 2 of the record).** Vanilla reworked them, and the mod's `should_remove` on power
+  plants, railways and ports was last read on 1.14.5. A few years into a game, count AI power plants, railways and
+  ports with `subsidized=yes` in a plain-text save, as `docs/testing/ai-economy-playtest.md` did. Near none: the
+  setting still works, or vanilla's new logic does the job. To tell which, read the same counts in a game with
+  `common/ai_strategies/te_ai_subsidy_strategies.txt` taken out: if they match, the file can go. If railways or
+  ports that lose money and carry a state's infrastructure are now stripped where vanilla would keep them, the
+  workaround has turned harmful.
+- **Copper.** The seven states that now hold vanilla's copper (New Brunswick among them) can build a Copper Mine
+  from the start; the copper price through the 1840s and 1850s sits nearer its base than on 1.15.0; Telephones and
+  Arc-Welded Buildings stay profitable with their new inputs.
+- **Ports and railways** start a new game unsubsidized (vanilla's change). Watch an early AI country's railways
+  for a state whose infrastructure collapses.
+- **Merged panels.** A broken GUI merge logs nothing, so open each:
+  - *Market panel, Trade tab*: the order and spacing of the capacity boxes, the filters, vanilla's charts, the
+    mod's three chart blocks, the All Goods rows (on their darker background) and the goods list; the world market
+    hub filter button and its menu. With a hub selected, vanilla's charts show the hub and the mod's the whole
+    market (owner call 6).
+  - *Formation panel*: one of your fleets shows Formation Settings with only Auto-replace lost ships; an army shows
+    only borrow and lending; another country's fleet shows no section, and another country's army shows the section
+    as before (`Or(IsArmy, GetCountry.IsLocalPlayer)` is a new combination on this panel). Mobilize and Raise
+    Conscripts keep their text clear of their icons, here and on the military overview.
+  - *Journal*: a historical outcome's own box; the tighter bars; a mod entry that draws its bars on top still hides
+    vanilla's.
+  - *Treaty panel*: the binding-period box, and a law commitment's icon opening the law group. *Right-click on a
+    state*: the world market hub entry. *Building details* on a hub's state: the second go-to button.

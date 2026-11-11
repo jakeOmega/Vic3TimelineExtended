@@ -3315,6 +3315,8 @@ Merge semantics are documented to vary by entity type, so a **new** entity type 
 
 `should_remove` is a working subsidy priority below `nice_to_have`: the AI drops the subsidy (within 3½ months there). Vanilla never uses it and no doc lists it; it sits beside `must_have`, `nice_to_have` and `should_have` among the executable's strings. An INJECT can add a *new* key to a strategy whose vanilla `subsidies` block exists: the second block merges, as an INJECTed list does (round 2, same save and date: 257 power plants in countries on the four administrative strategies with a vanilla `subsidies` block fell from 99% to 19% subsidized, railways 98%). So the rule is per key: a new key merges in, a key vanilla's block already holds keeps vanilla's value.
 
+**1.15.1 changed what a priority means, and none of the above has been read since.** Vanilla's comment on the default strategy's block now calls each value the *maximum* spending priority the AI may give a building type, the AI "no longer subsidizes profitable buildings or buildings it does not consider necessary" (the 1.15.1 notes; `NAI|SUBSIDIZE_REMOVE_PROFIT_MARGIN_BUFFER`), vanilla's own strategies moved from `nice_to_have` to `wants_to_have`, and the default gained `building_shipyard = should_have`. The executable still holds `should_remove`, `nice_to_have`, `must_have`, `should_have` and `wants_to_have`. Whether `should_remove` still strips a subsidy, and whether the mod still needs it for power plants, railways and ports, is on the 1.15.1 play-test list (`docs/testing/vanilla-1-15-playtest.md`).
+
 ### Subsidy and level levers: what the engine offers (#1050, 2026-10-21)
 
 - **No condition form, and no state scope.**
