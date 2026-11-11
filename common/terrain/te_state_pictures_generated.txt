@@ -2490,7 +2490,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_1.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2509,7 +2509,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_north_american_1.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2595,7 +2595,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_east_asian_1.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2611,7 +2611,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_1.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2643,7 +2643,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_1_metropolis.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2673,7 +2673,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_2.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2692,7 +2692,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_north_american_2.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2778,7 +2778,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_east_asian_2.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2794,7 +2794,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_2.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2824,7 +2824,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_3.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2843,7 +2843,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_north_american_3.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2929,7 +2929,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_east_asian_3.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2945,7 +2945,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_3.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2975,7 +2975,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_4.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -2994,7 +2994,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_north_american_4.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -3080,7 +3080,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_east_asian_4.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -3096,7 +3096,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_4.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -3126,7 +3126,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_european_5.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -3145,7 +3145,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_north_american_5.dds"
-			effect = "vfx_entity_ui_state_urban_european"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -3231,7 +3231,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_east_asian_5.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 		{
 			weight = {
@@ -3247,7 +3247,7 @@ INJECT:urban = {
 				}
 			}
 			path = "gfx/state_pictures/te_urban_japanese_5.dds"
-			effect = "vfx_entity_ui_state_urban_asian"
+			effect = "vfx_entity_ui_state_docks"
 		}
 	}
 }

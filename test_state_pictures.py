@@ -99,6 +99,13 @@ class TestRegistry(unittest.TestCase):
                     self.assertIn("has_building = building_port", p.get("where", []))
                     self.assertIn("has_building = building_port", generator.conditions(key))
 
+    def test_no_picture_takes_an_overlay_placed_for_vanillas_painting(self):
+        # vanilla's European city overlay has smoke over its own chimneys, its Asian one surf on its own shore
+        self.assertEqual(registry.NEUTRAL_OVERLAY, "vfx_entity_ui_state_docks")
+        for key, p in {**registry.PICTURES, **{k: d for k, d in registry.DRAFTS.items() if "effect" in d}}.items():
+            with self.subTest(key):
+                self.assertNotIn(p["effect"], registry.PLACED_OVERLAYS)
+
     def test_no_two_pictures_of_a_terrain_can_tie(self):
         # the highest weight wins; two families can hold the same state (Japan lies inside East Asia), so no two
         # pictures of a terrain may weigh the same, whatever their regions

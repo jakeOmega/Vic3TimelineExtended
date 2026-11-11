@@ -74,8 +74,10 @@ The same picture shows in the state tooltip, pop details, the invasion and battl
 region panel. The mod does not change which terrain prevails: vanilla's mine weighting counts only coal, iron,
 lead, sulfur and gold mines, and that stays as it is in this design.
 
-Still unread, and on the play-test list: a weight reading a state variable, a BC7-compressed picture, and
-how a vanilla overlay sits on a new painting.
+Read in game the same evening, from the owner's look at Home Counties as a metropolis: a weight reads a
+state variable, and a BC7-compressed picture shows sharp. The third question, how a vanilla overlay sits on
+a new painting, got its answer too: the European city overlay's smoke was "in the wrong place" (§ 10,
+Overlays).
 
 ## 3. How a picture is chosen
 
@@ -333,10 +335,14 @@ upkeep limited to rungs 2 to 4.
 - **The yearly pass,** `te_state_picture_refresh` on `on_yearly_pulse_state`
   (`common/scripted_effects/te_state_picture_effects.txt`). The pilot stores the size, `te_sp_size`; later
   waves add means, upkeep and character the same way.
-- **Overlays.** Every entry reuses a vanilla overlay whose content suits any painting of its kind: the port
-  one (birds, light rays, mist), the mine one (clouds, mist), the European city one (birds, mist, two
-  smokes). A mod-defined empty overlay is the fallback if a vanilla one sits badly; the mod has no entity
-  files yet, so that is unread.
+- **Overlays.** Every entry reuses a vanilla overlay, and only one whose effects aren't placed for
+  vanilla's own painting. Vanilla's European city overlay has two smoke plumes over its painting's chimneys
+  and its Asian one two lines of surf on its shore; on the pilot's metropolis the smoke rose from mid-air
+  (the owner, in game). So the European, North American, East Asian and Japanese city pictures take the
+  port's overlay (birds and drifting mist, the registry's `NEUTRAL_OVERLAY`), and a test keeps the two
+  placed ones (`PLACED_OVERLAYS`) off every picture. The other families' overlays are leaves, mist, dust
+  and shimmer and stay. A mod-defined overlay of its own (smoke where a painting has chimneys) is possible
+  later; the mod has no entity files yet.
 - **Pictures.** FLUX.1-schnell at 1536 × 752, with the style ahead of the subject in the prompt (the text
   encoder that sets the look reads only the first 77 tokens). The pick is converted by
   `scripts/image_pipeline/convert_state_picture.py`: cropped where an edge carries a signature or a stray
