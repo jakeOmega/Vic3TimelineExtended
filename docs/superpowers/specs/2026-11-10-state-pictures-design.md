@@ -56,6 +56,13 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
     terrain manipulator and none creates cleared land (`docs/guides/scripting_best_practices.md`, § "State
     pictures"). The six pictures are wired and harmless; giving plantations the manipulator would show
     them and would also change the map, which is a separate decision.
+12. **A great city shows as a city whatever its terrain** (2026-11-11). The owner's Singapore, one province
+    with an Urban Center of 405 and no farm, showed rice farmland: the engine decides the terrain, and not by
+    building levels alone. Offered: "let city pictures take over other terrains, the way the oil field
+    does", for "metropolis and megacity only", so that "a farm state with a modest town keeps its fields".
+    The owner: "This sounds like a good idea - let's do it". Not the owner's words, and open to overruling:
+    the takeover covers every land terrain, the port's and the mine's included, and a metropolis outranks
+    an oil field.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -88,7 +95,7 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 | Place | Axis | Values | Read from |
 |---|---|---|---|
 | 1 | Condition | devastated, nuclear aftermath, flooded | the state, live |
-| 2 | Takeover | an oil field, on the open land it stands on | the yearly pass |
+| 2 | Takeover | a great city (a metropolis or larger) on any land; under it, an oil field on the open land it stands on | the yearly pass |
 | 3 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
 | 4 | Character or function | housing blocks, smog; boomtown, declining, divided, heavy industry, resort | the owner's law and the state region's pollution, live; the yearly pass for the rest |
 | 5 | Upkeep | run-down | the yearly pass |
@@ -110,6 +117,14 @@ shows the plain, desert or farmland the rigs stand on. The oil pictures join tho
 outrank every rung there, so that a later farm technology doesn't put the wheat back over the derricks. A
 **scale** is the worked-land counterpart of a city's size: the larger or the special kind of a picture
 (§ 5).
+
+A **great city's takeover** is the same pattern for the city pictures (§ 1, item 12). Which terrain a state
+shows is the engine's choice, and a state of one province can be held to be farmland with no farm in it. So
+every city picture also joins the list of every other land terrain, where it asks for a metropolis or
+larger and weighs 11,000,000 more than in the city's own list: above that terrain's rungs and the oil
+field's 10,000,000, under the lowest condition's 12,000,000. The city pictures keep their own order there,
+and the ruins and the strike join at their own weights. A town or a city of under a million keeps the
+land's picture.
 
 **The yearly pass.** The engine may evaluate a weight every frame, so a weight reads only the owner's
 technology, vanilla's region triggers and a few state variables. A yearly state pulse computes those

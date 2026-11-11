@@ -199,6 +199,22 @@ W_CHAR = 10000  # times the character's digit
 # weight in one.
 W_COND = 1000000  # times the condition's digit, on top of W_OVER
 
+# A great city shows as a city whatever terrain the engine holds its state to be (the owner,
+# 2026-11-11). Which terrain prevails is the engine's choice, and it isn't the building levels
+# alone: Singapore, one province with an Urban Center of 405 and no farm, showed rice farmland
+# (scripting_best_practices.md § "State pictures"). So every city picture also joins the list of
+# every other land terrain, there asking for a metropolis or larger, at a weight above that
+# terrain's own rungs and above the oil field. A condition's own weight already stands above
+# that, so the ruins and the strike keep their place among the city pictures.
+CITY_TERRAIN = "urban"
+CITY_TAKEOVER_SIZE = "metropolis"  # from this size up; a town's or a city's state keeps its land
+CITY_TAKEOVER_TERRAINS = [
+    "plains", "forest", "hills", "mountain", "jungle", "wetland", "desert", "tundra", "savanna", "snow", "river",
+    "farmland_rye", "farmland_rice", "farmland_millet", "farmland_wheat", "farmland_maize",
+    "pasture", "plantation", "cleared_land", "mining", "forestry", "docks",
+]  # vanilla's terrains but the city's own and the two of open water (ocean, lakes)
+W_CITY_OVER = 11000000
+
 # Characters and conditions a weight can read live, off the state or its owner.
 # (state trigger lines, the digit in the weight)
 SMOG_POLLUTION = 150  # of 255; vanilla's pollution map mode is at full color from 153
@@ -268,8 +284,8 @@ PICTURES = {
         "rung": 1,
         "region": None,
         "size": None,
-        # the docks terrain also prevails in any one-province state, port or not, where vanilla
-        # shows its dry plain: the port picture asks for a port, as vanilla's does
+        # vanilla's docks weight is a flat 1 in a one-province state, port or not, and its picture
+        # there is the dry plain: the port picture asks for a port, as vanilla's does
         "where": ["has_building = building_port"],
         "effect": "vfx_entity_ui_state_docks",
         "seed": 3,
@@ -1410,9 +1426,26 @@ def full_prompt(key: str) -> str:
     return f"{STYLE}. {entry['prompt']}{TAIL}"
 
 
-def weight(key: str) -> int:
+def terrains(key: str) -> list:
+    """The terrains whose lists a picture joins: its own, and for a city picture that a
+    metropolis can show, every terrain a great city takes over."""
+    p = PICTURES[key]
+    if CITY_TERRAIN not in p["terrain"] or p["size"] == "town":
+        return list(p["terrain"])
+    return [*p["terrain"], *(t for t in CITY_TAKEOVER_TERRAINS if t not in p["terrain"])]
+
+
+def takes_over(key: str, terrain: str) -> bool:
+    """Whether the picture is in this terrain's list as a great city's takeover."""
+    return terrain not in PICTURES[key]["terrain"] and terrain in terrains(key)
+
+
+def weight(key: str, terrain: str = None) -> int:
+    """A picture's weight, in its own terrains or, with `terrain`, in that terrain's list."""
     p = PICTURES[key]
     w = W_RUNG * p["rung"]
+    if terrain and takes_over(key, terrain) and not p.get("condition"):
+        w += W_CITY_OVER
     if p["size"]:
         w += W_SIZE * SIZES[p["size"]][1]
     if p.get("scale"):

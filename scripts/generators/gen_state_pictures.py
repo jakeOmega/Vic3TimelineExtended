@@ -7,7 +7,10 @@ terrain, adding an entry for each picked picture of
 scripts/image_pipeline/state_picture_registry.py (an INJECT adds to vanilla's
 list; scripting_best_practices.md § "State pictures"). Every entry carries an
 `effect`: the engine rejects one without it, and the state it matched then
-shows the plains picture.
+shows the plains picture. A city picture is also written, one line an entry,
+into every other land terrain's list, where it asks for a metropolis (the
+registry's CITY_TAKEOVER_TERRAINS): the engine can hold a great city's state
+to be farmland.
 
 Needs nothing but the repo. Re-run after the registry changes;
 test_state_pictures.py fails CI when the committed file is stale:
@@ -36,14 +39,18 @@ def picture_path(key):
 def conditions(key, terrain=None):
     """The state triggers a picture needs, one a line; a nested line starts with its own tabs.
 
-    In a terrain of the picture's `any_region` list its region isn't asked for.
+    In a terrain of the picture's `any_region` list its region isn't asked for. In a terrain a
+    great city takes over, the city's size comes first, so every other state fails at once.
     """
     p = registry.PICTURES[key]
-    lines = [f"owner = {{ has_technology_researched = {p['tech']} }}"]
+    lines = []
+    if terrain and registry.takes_over(key, terrain):
+        lines += registry.SIZES[registry.CITY_TAKEOVER_SIZE][0]
+    lines += [f"owner = {{ has_technology_researched = {p['tech']} }}"]
     if p["region"] and terrain not in p.get("any_region", ()):
         lines += registry.region_conditions(p["region"])
     if p["size"]:
-        lines += registry.SIZES[p["size"]][0]
+        lines += [line for line in registry.SIZES[p["size"]][0] if line not in lines]
     if p.get("scale"):
         lines += registry.SCALES[p["scale"]][0]
     if p.get("character"):
@@ -55,13 +62,13 @@ def conditions(key, terrain=None):
 
 
 def by_terrain(pictures=None):
-    """{terrain: [key, ...]}: terrains sorted, each one's pictures by weight."""
+    """{terrain: [key, ...]}: terrains sorted, each one's pictures by their weight there."""
     pictures = registry.wired() if pictures is None else pictures
     out = {}
-    for key, p in pictures.items():
-        for terrain in p["terrain"]:
+    for key in pictures:
+        for terrain in registry.terrains(key):
             out.setdefault(terrain, []).append(key)
-    return {t: sorted(keys, key=lambda k: (registry.weight(k), k)) for t, keys in sorted(out.items())}
+    return {t: sorted(keys, key=lambda k: (registry.weight(k, t), k)) for t, keys in sorted(out.items())}
 
 
 def render(pictures=None):
@@ -70,12 +77,20 @@ def render(pictures=None):
         "# Source: scripts/image_pipeline/state_picture_registry.py. Design:",
         "# docs/superpowers/specs/2026-11-10-state-pictures-design.md.",
         "# Each INJECT adds its pictures to the terrain's own list; the highest weight that",
-        "# applies is the state's banner. Vanilla's weights are 1 and 2.",
+        "# applies is the state's banner. Vanilla's weights are 1 and 2. The one-line entries are",
+        "# the city pictures in a terrain a metropolis takes over.",
     ]
     for terrain, keys in by_terrain(pictures).items():
         lines += ["", f"INJECT:{terrain} = {{", "\ttextures = {"]
         for key in keys:
             p = registry.PICTURES[key]
+            if registry.takes_over(key, terrain):
+                wants = " ".join(c.strip() for c in conditions(key, terrain))
+                lines.append(
+                    f"\t\t{{ weight = {{ value = 0 if = {{ limit = {{ scope:state = {{ {wants} }} }}"
+                    f" add = {registry.weight(key, terrain)} }} }}"
+                    f' path = "{picture_path(key)}" effect = "{p["effect"]}" }}')
+                continue
             lines += [
                 "\t\t{",
                 "\t\t\tweight = {",
@@ -88,7 +103,7 @@ def render(pictures=None):
             lines += [
                 "\t\t\t\t\t\t}",
                 "\t\t\t\t\t}",
-                f"\t\t\t\t\tadd = {registry.weight(key)}",
+                f"\t\t\t\t\tadd = {registry.weight(key, terrain)}",
                 "\t\t\t\t}",
                 "\t\t\t}",
                 f'\t\t\tpath = "{picture_path(key)}"',
