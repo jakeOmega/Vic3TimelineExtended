@@ -75,7 +75,9 @@ class Outcome:
     # "" | "other_game_running" | "modified_after_exit" | "no_reference_time" | "modified_during_restore"
     # | "already_restored" (another game is running and the journal already ends in `restored`: left as it is,
     # nothing recorded, held False). recover() adds "game_still_up" (left alone, nothing recorded) and
-    # "error: <message>" (restore, or own_game_up, raised).
+    # "error: <message>" (restore, or own_game_up, raised). The command line (game_qa/__main__.py) builds
+    # Outcomes too: held "other_game_ran" and "unwatched_stretch" (recorded), and, with nothing recorded and
+    # held False, "launch_in_flight" and "watch_still_recording" (its `recover`, which runs its own loop).
     reason: str
 
 

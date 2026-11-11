@@ -498,7 +498,7 @@ class CommandLineTest(unittest.TestCase):
         snapshot.record(self.the_snapshot(), "started", pid=MINE.pid, created=MINE.created)
         self.games = [MINE]
         out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["refused"]), (2, "game_still_up"))
+        self.assertEqual((code, out["refused"], out["id"]), (2, "game_still_up", taken["id"]))
         self.assertNotIn("game_exited", self.events())
 
     def test_restore_reports_a_damaged_store_instead_of_a_traceback(self):
@@ -530,7 +530,7 @@ class CommandLineTest(unittest.TestCase):
         (self.user / "continue_game.json").write_text('{"title": "autosave_exit"}  ')
         before = self.tree()
         out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"], out["refused"]), (2, False, "watch_still_recording"))
+        self.assertEqual((code, out["held"], out["refused"], out["id"]), (2, False, "watch_still_recording", taken["id"]))
         self.assertEqual(self.events(), ["armed", "started", "heartbeat"])
         self.assertEqual(self.tree(), before)
 
@@ -938,13 +938,16 @@ class CommandLineTest(unittest.TestCase):
     def test_an_unattended_run_needs_an_end_date_in_any_spelling(self):
         # Break-it review 2026-11-10, (8): `--handsoff`, `/handsoff` and `-handsoff=1` went through without an end
         # date, as did `-run_until=never`.
+        # Final touches: of the end date, only the spelling probed against the game counts.
         refused = (["-handsoff"], ["--handsoff"], ["-HANDSOFF"], ["/handsoff"], ["-handsoff=1"],
                    ["-debug_mode -handsoff"], ["-handsoff", "-run_until"], ["-handsoff", "-run_until="],
                    ["-handsoff", "-run_until= "], ["-handsoff", "-run_until=never"],
                    ["-handsoff", "-run_until", "1836.2.10"], ["-handsoff", "-run_until=1836.2.10 -foo"],
-                   ["-handsoff", "-run_until=1836.2"], ["-handsoff", "-run_until=18361.2.10"])
-        allowed = (["-debug_mode"], ["-handsoff", "-run_until=1836.2.10"], ["-handsoff", "-RUN_UNTIL=1836.2.10"],
-                   ["--handsoff", "--run_until=1836.12.31"], ["/handsoff=1", "/run_until=9.1.1"])
+                   ["-handsoff", "-run_until=1836.2"], ["-handsoff", "-run_until=18361.2.10"],
+                   ["-handsoff", "-RUN_UNTIL=1836.2.10"], ["--handsoff", "--run_until=1836.12.31"],
+                   ["/handsoff=1", "/run_until=9.1.1"], ["-handsoff", " -run_until=1836.2.10"])
+        allowed = (["-debug_mode"], ["-handsoff", "-run_until=1836.2.10"], ["--handsoff", "-run_until=1836.12.31"],
+                   ["/HANDSOFF=1", "-run_until=9.1.1"])
         for args in refused:
             with self.subTest(args=args):
                 with self.assertRaises(cli._Refused) as raised:
@@ -1033,7 +1036,9 @@ class CommandLineTest(unittest.TestCase):
         self.assertIn("last heartbeat", out["detail"])
         self.assertEqual(self.events(), ["armed", "started", "watching", "other_game"])   # the first look too
         self.games = []
-        out, code = self.run_cli("restore", taken["id"])
+        later = dt.datetime.now(UTC) + dt.timedelta(seconds=20)       # past `watching`, a sign of life
+        with mock.patch.object(snapshot, "_drive_clock", lambda folder: later):
+            out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_ran"))
 
     def test_watch_refuses_a_recorded_start_it_cannot_read(self):
@@ -1168,7 +1173,7 @@ class CommandLineTest(unittest.TestCase):
         taken, _ = self.run_cli("snapshot")
         game = self.game(seconds_from_now=-120)
         long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=90)
-        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {}),
+        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {"gap_s": 1}),
                               ("heartbeat", {})):
             snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
         self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=0.5)   # inside the gap
@@ -1188,7 +1193,7 @@ class CommandLineTest(unittest.TestCase):
         taken, _ = self.run_cli("snapshot")
         game = self.game(seconds_from_now=-30)
         lately = dt.datetime.now(UTC) - dt.timedelta(seconds=5)
-        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {}),
+        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {"gap_s": 1}),
                               ("heartbeat", {})):
             snapshot.record(self.the_snapshot(), event, now=lately, **fields)
         self.games = [[game], [game], []]
@@ -1197,6 +1202,77 @@ class CommandLineTest(unittest.TestCase):
         out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"]), (0, False))
         self.assertEqual(self.events()[-1], "restored")
+
+    def test_a_first_watch_more_than_two_minutes_after_launch_leads_to_a_hold(self):
+        # Final check 2026-11-10: `watch` started two minutes after `launch`; in between the owner's own second
+        # instance started, saved and quit; `restore` then judged their writes against the exit and undid them.
+        taken, _ = self.run_cli("snapshot")
+        launched = dt.datetime.now(UTC) - dt.timedelta(seconds=150)
+        game = gate.ProcId(4242, launched.strftime("%Y-%m-%dT%H:%M:%S.0000000Z"))
+        snapshot.record(self.the_snapshot(), "started", now=launched, pid=game.pid, created=game.created)
+        self.owner_writes("save games/autosave.v3", b"the owner's progress", minutes_ago=1)
+        self.owner_writes("save games/autosave_1.v3", b"the owner's new autosave", minutes_ago=1)
+        self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=1)
+        self.games = [[game], [game], []]
+        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+        watching = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watching"]
+        self.assertGreaterEqual(watching[0]["gap_s"], 145)
+        before = self.tree()
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
+        self.assertEqual(self.tree(), before)
+
+    def test_a_first_watch_within_two_minutes_of_launch_restores_as_before(self):
+        taken, _ = self.run_cli("snapshot")
+        launched = dt.datetime.now(UTC) - dt.timedelta(seconds=100)
+        game = gate.ProcId(4242, launched.strftime("%Y-%m-%dT%H:%M:%S.0000000Z"))
+        snapshot.record(self.the_snapshot(), "started", now=launched, pid=game.pid, created=game.created)
+        self.games = [[game], [game], []]
+        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"]), (0, False))
+
+    def test_a_first_watch_whose_gap_cannot_be_read_leads_to_a_hold(self):
+        taken, _ = self.run_cli("snapshot")
+        long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=30)
+        for event, fields in (("started", {"pid": 4242, "created": "2026-11-10T08:00:00.0000000Z"}),
+                              ("watching", {"gap_s": None}), ("game_exited", {})):
+            snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
+        out, code = self.run_cli("recover")
+        self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                         (2, [(taken["id"], True, "unwatched_stretch")]))
+
+    def test_recover_waits_while_a_watch_may_still_be_recording(self):
+        # Final touches: `recover` had no such guard; it judged a run whose `watch` was mid-look.
+        for newest in ("started", "heartbeat", "watching"):
+            with self.subTest(newest=newest):
+                snap = self.armed_snapshot(dt.datetime.now(UTC) - dt.timedelta(minutes=5))
+                long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=60)
+                snapshot.record(snap, "started", now=long_ago if newest != "started" else None,
+                                pid=4242, created="2026-11-10T08:00:00.0000000Z")
+                if newest != "started":
+                    snapshot.record(snap, newest, **({"gap_s": 1} if newest == "watching" else {}))
+                (self.user / "continue_game.json").write_text('{"title": "%s"}' % newest)
+                before, events = self.tree(), [e["event"] for e in snapshot.journal(snap)]
+                out, code = self.run_cli("recover")
+                self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                                 (2, [(snap.id, False, "watch_still_recording")]))
+                self.assertEqual((self.tree(), [e["event"] for e in snapshot.journal(snap)]), (before, events))
+                snapshot.record(snap, "held", reason="test cleanup")      # out of the next subtest's way
+
+    def test_a_start_whose_reply_was_lost_is_refused_as_unconfirmed(self):
+        taken, _ = self.run_cli("snapshot")
+
+        def lost():
+            raise gate.GateError("powershell.exe timed out after 60 s")
+
+        self.start_result = lost
+        out, code = self.launch(taken["id"], "-debug_mode")
+        self.assertEqual((code, out["refused"], out["id"]), (2, "start_unconfirmed", taken["id"]))
+        self.assertIn("stays claimed", out["detail"])
+        self.assertEqual(self.events(), ["armed"])
 
     def test_watch_stops_without_an_exit_when_the_journal_cannot_take_an_entry(self):
         # The third round's concern 3: a write that fails must not let `watch` go on to record an exit.
@@ -1326,7 +1402,8 @@ class CommandLineTest(unittest.TestCase):
 
     def test_recover_holds_a_run_whose_pid_now_belongs_to_another_game(self):
         taken, _ = self.run_cli("snapshot")
-        snapshot.record(self.the_snapshot(), "started", pid=MINE.pid, created=MINE.created)
+        snapshot.record(self.the_snapshot(), "started", pid=MINE.pid, created=MINE.created,
+                        now=dt.datetime.now(UTC) - dt.timedelta(seconds=30))     # no `watch` still recording
         (self.user / "continue_game.json").write_text("{}")
         before = self.tree()
         self.games = [gate.ProcId(MINE.pid, "2026-11-10T15:00:00.0000000Z")]
@@ -1352,8 +1429,9 @@ class CommandLineTest(unittest.TestCase):
         # the last, but counted both as the harness's own, and restored while the first one's game was running.
         taken, _ = self.run_cli("snapshot")
         live, dead = self.game(pid=1111), self.game(pid=2222, seconds_from_now=61)
-        snapshot.record(self.the_snapshot(), "started", pid=live.pid, created=live.created)
-        snapshot.record(self.the_snapshot(), "started", pid=dead.pid, created=dead.created)
+        long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=30)          # no `watch` still recording
+        snapshot.record(self.the_snapshot(), "started", now=long_ago, pid=live.pid, created=live.created)
+        snapshot.record(self.the_snapshot(), "started", now=long_ago, pid=dead.pid, created=dead.created)
         (self.user / "continue_game.json").write_text("{}")
         before = self.tree()
         self.games = [live]
@@ -1366,7 +1444,7 @@ class CommandLineTest(unittest.TestCase):
         taken, _ = self.run_cli("snapshot")
         run = self.game()
         long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=30)
-        for event, fields in (("started", {"pid": run.pid, "created": run.created}), ("watching", {}),
+        for event, fields in (("started", {"pid": run.pid, "created": run.created}), ("watching", {"gap_s": 1}),
                               ("look_failed", {"why": "the listing did not finish"}), ("game_exited", {})):
             snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
         (self.user / "continue_game.json").write_text('{"title": "whose?"}')
