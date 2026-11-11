@@ -75,3 +75,23 @@ has an Oil Rig. The rows that need a level say how to get one; a save from the 1
 | **Plantation, pasture, cleared land.** After Rural Electrification (Modern Tools for cleared land), a state of each. | The new painting, the same everywhere. | |
 | **Overlays on worked land.** Watch one of each for a few seconds. | Vanilla's birds and mist for that terrain. The oil field carries the arid plain's. | A mismatch: the picture's overlay is its draft's `like` in the registry. |
 | **Lettering.** Look closely at the ports and the trucks. | Nothing that reads as writing. | A legible word: add a `smudge` box in `WAVE3_PICKS` and reconvert. |
+
+## Waves 6 and 7: special cities and natural terrain (2026-11-10)
+
+Eleven city paintings a weight reads live (housing blocks, smog, ruins, a nuclear strike) and fifteen of
+natural terrain with a road, pylons or a pipeline in it. Technologies: the city ladder's for the first;
+`modern_urban_planning` for natural terrain, and `integrated_circuits` for the tundra.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Natural terrain.** After Modern Urban Planning, a state whose banner is a mountain, hill, plain, desert, forest, jungle or marsh, in Europe, in the Americas and in Africa or the Middle East. | The same landscape with a motorway or a highway in it, in the family vanilla showed: the Alps and the Rockies differ, the green plain and the dry one differ. | Vanilla's painting still showing: that family's trigger. The wrong family's painting: the fallback's "none of the others". |
+| **Savanna.** After Modern Urban Planning, a savanna state outside Africa and the Middle East, if there is one, and one inside. | The dry plain with its road in both, as vanilla shows its dry plain in both. | Vanilla's in the first: the picture's `any_region` isn't dropping its region there. |
+| **Tundra.** After Integrated Circuits, a tundra state (northern Siberia, northern Canada). | The pipeline on stilts. | |
+| **An oil field still takes over.** A plain or desert state with an Oil Rig of level 10, after both technologies. | The oil field, not the road. | The road: the takeover isn't outranking rung 1 there. |
+| **Housing blocks.** As a country with Command Economy (`tag` to one, or enact it), after Prefabricated Construction and Modern Urban Planning, any city state. | Ranks of identical prefab blocks, whatever the region. Change the law and the region's own street returns. On Art Deco alone, or after Vactrains, the region's street. | The region's street under Command Economy: the owner's law isn't read in a weight. |
+| **Smog.** A city state whose pollution reads 150 or more (the pollution map mode at or near its darkest), after Art Deco Architecture. | The city under a brown haze, in the rung's period. | Smog nowhere in a late game: 150 is too high; everywhere: too low. The figure is provisional. |
+| **Ruins.** A city state with devastation of half or more (a long battle in it), after Art Deco Architecture. | A ruined street; from Computer-Aided Design, ruined tower blocks. It clears as devastation decays. | |
+| **A nuclear strike.** Strike a city state whose owner has Modern Urban Planning. | The ash plain while the aftermath modifier lasts, then the ruins while devastation is still half or more, then the city. A strike on an owner without the technology shows the ruins. | The city's own street during the aftermath: `has_modifier` on the state isn't read in a weight, or the strike's modifier is on another scope. |
+| **Housing blocks and smog together.** A Command Economy city with heavy pollution. | The housing blocks (the higher digit). | |
+| **Lettering and flags.** Look closely at the vehicles, the factory fronts and the ruins. | Nothing that reads as writing, no real flag. | A `smudge` box in `WAVE6_PICKS` or `WAVE7_PICKS`, and reconvert. |
+
