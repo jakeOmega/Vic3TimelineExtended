@@ -139,6 +139,26 @@ class TestRegistry(unittest.TestCase):
                     with self.subTest(winner=winner, rung=rung, size=size):
                         self.assertIn((terrain, rung, size, winner), spots)
 
+    def test_a_plain_and_a_special_picture_of_a_rung_are_wired_together(self):
+        for keys in registry.WIRED_TOGETHER:
+            if all(key in registry.PICTURES for key in keys):     # a draft not yet promoted holds nothing
+                with self.subTest(keys):
+                    wired = {registry.PICTURES[key]["seed"] is not None for key in keys}
+                    self.assertEqual(len(wired), 1, f"wire {keys} together")
+
+    def test_wave_3_wiring_covers_its_drafts(self):
+        worked = {k for k, d in registry.DRAFTS.items() if d["family"] in ("port", "mine", "oil", "farm", "forest")}
+        promoted = set(registry.WAVE3_PICKS)
+        self.assertEqual(worked | promoted, set(registry.WAVE3_WIRING))
+        for key, wiring in registry.WAVE3_WIRING.items():
+            with self.subTest(key):
+                self.assertLessEqual(set(wiring), {"region", "scale", "over", "where"})
+                if wiring.get("region"):
+                    self.assertTrue(any(wiring["region"] in g for g in registry.REGION_GROUPS.values()))
+        for key, pick in registry.WAVE3_PICKS.items():
+            with self.subTest(key):
+                self.assertIsNotNone(pick.get("seed"))
+
     def test_the_fallback_family_takes_the_states_of_no_family(self):
         fallback = registry.FALLBACK_REGION
         lines = registry.region_conditions(fallback)

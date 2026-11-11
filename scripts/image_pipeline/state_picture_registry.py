@@ -1132,6 +1132,60 @@ DRAFTS = {
 }
 
 
+# --- Wave 3: worked land. A draft becomes a picture here once it has a picked render: its
+# prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
+# picture it is like, and this table adds what decides between it and its neighbors.
+_HAS_PORT = ["has_building = building_port"]
+_OIL_FIELD = [f"any_scope_building = {{ is_building_type = building_oil_rig level >= {OIL_LEVEL} }}"]
+WAVE3_WIRING = {
+    # a harbor is any Port; the major port asks for the level (the pilot's docks_1 is rung 1's)
+    **{f"docks_harbor_{n}": {"where": _HAS_PORT} for n in (1, 2, 3, 4)},
+    **{f"docks_{n}": {"where": _HAS_PORT, "scale": "major_port"} for n in (2, 3, 4)},
+    # the open pit is any mining state; the colliery asks for the coal mines' level
+    **{f"mining_{n}": {} for n in (2, 3)},
+    **{f"mining_deep_{n}": {"scale": "colliery"} for n in (1, 2, 3)},
+    # an oil field takes over the land it stands on
+    **{f"oil_{n}": {"where": _OIL_FIELD, "over": True} for n in (1, 2, 3)},
+    **{f"farmland_{family}_{n}": {"region": f"farm_{family}"}
+       for family in ("generic", "arabic", "asian", "subtropic") for n in (1, 2, 3, 4)},
+    "farmland_5": {},
+    **{f"plantation_{n}": {} for n in (1, 2, 3, 4)},
+    **{f"pasture_{n}": {} for n in (1, 2, 3, 4)},
+    **{f"forestry_{n}": {} for n in (1, 2)},
+    **{f"forestry_tropical_{n}": {"region": "forest_tropical"} for n in (1, 2)},
+    **{f"cleared_land_{n}": {} for n in (1, 2)},
+}
+# A rung outranks a scale or a region, so the plain and the special picture of a rung are wired
+# together: a harbor of rung 2 wired without the major port of rung 2 would show in a great port
+# over the major port of rung 1. The test holds each tuple to all or none.
+WIRED_TOGETHER = (
+    *((f"docks_harbor_{n}", f"docks_{n}") for n in (1, 2, 3, 4)),
+    *((f"mining_{n}", f"mining_deep_{n}") for n in (1, 2, 3)),
+    *((f"forestry_{n}", f"forestry_tropical_{n}") for n in (1, 2)),
+)
+
+# The picked render of each wave 3 picture, with its crop and smudge boxes.
+WAVE3_PICKS = {
+}
+
+for _key, _pick in WAVE3_PICKS.items():
+    _draft_entry = DRAFTS.pop(_key)
+    _wiring = WAVE3_WIRING[_key]
+    PICTURES[_key] = {
+        "terrain": _draft_entry["terrain"],
+        "tech": _draft_entry["tech"],
+        "rung": _draft_entry["rung"],
+        "region": _wiring.get("region"),
+        "size": None,
+        **{k: v for k, v in _wiring.items() if k != "region"},
+        "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
+        "prompt": _draft_entry["prompt"],
+        **_pick,
+    }
+if "docks_harbor_1" in PICTURES:
+    PICTURES["docks_1"]["scale"] = "major_port"  # the pilot's port is rung 1's major port
+
+
 def full_prompt(key: str) -> str:
     entry = PICTURES[key] if key in PICTURES else DRAFTS[key]
     return f"{STYLE}. {entry['prompt']}{TAIL}"
