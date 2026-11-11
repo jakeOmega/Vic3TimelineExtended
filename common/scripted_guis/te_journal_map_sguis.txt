@@ -206,6 +206,58 @@ te_jmap_pick_fighting_age_men_sgui = {
 	}
 }
 
+# The classes (41-44) and Trade Volume (45), 2026-11-11: the yearly walk's counts and an engine figure, whatever the
+# Demographics rule.
+te_jmap_pick_capitalists_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 41 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 41 }
+	}
+}
+
+te_jmap_pick_aristocrats_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 42 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 42 }
+	}
+}
+
+te_jmap_pick_clergy_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 43 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 43 }
+	}
+}
+
+te_jmap_pick_academics_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 44 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 44 }
+	}
+}
+
+te_jmap_pick_trade_volume_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 45 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 45 }
+	}
+}
+
 # War Dead is the census's, last year's (te_dg_dc_war, once a state has stepped), so it waits for the census as the
 # census maps below do; on the page it sits beside Armed Forces, since the census shares a country's war dead out to
 # its states by their soldiers.

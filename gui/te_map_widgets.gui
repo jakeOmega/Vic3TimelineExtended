@@ -254,478 +254,682 @@ types te_map_widgets
 		size = { 150 30 }
 	}
 
-	### The Map Room's picks, one per map (common/scripted_guis/te_journal_map_sguis.txt): pressed while it is the
-	### pick, hidden while its data doesn't exist (the census maps while the census doesn't run). Three 150-wide buttons
-	### to a row fit the page.
+	### A category's header on the Map Room's page: the Demographics tab's section header (te_demog_section_header), as
+	### wide as a row of three picks and a little more.
+	type te_jmap_category_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 470 38 }
+		}
+	}
+
+	### A category's rows, under its header while it is open.
+	type te_jmap_category = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		margin_top = 2
+		margin_bottom = 4
+	}
+
+	### The Map Room's picks, one per map (common/scripted_guis/te_journal_map_sguis.txt), in seven categories, each a
+	### collapsible section (owner, 2026-11-11): a header (te_jmap_category_header) and its rows, shown while the
+	### category's client-side flag te_jmap_cat_<key>_open is set. Every category starts collapsed (a long list:
+	### gui_style_guide.md, Sections), and the flags outlive a pick's reopen (the GetVariableSystem's, as the see-through
+	### page's), so a category opened stays open from map to map. A button is pressed while it is the pick, hidden while
+	### its data doesn't exist (the census maps while the census doesn't run). Three 150-wide buttons to a row fit the
+	### page.
 	type te_jmap_pick_row = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 
-		# The world's maps: the state's own figures, and the yearly walk's urban share (whatever the Demographics rule).
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_turmoil"
-				tooltip = "te_jmap_pick_turmoil_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_turmoil_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+		# Society: the world's own figures: the state's turmoil and devastation, and the yearly walk's urban share.
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_society"
 			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_devastation"
-				tooltip = "te_jmap_pick_devastation_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_devastation_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_devastation_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_devastation_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_society_open')]"
 			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_society_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_society_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_society_open')]"
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_urban_share"
-				tooltip = "te_jmap_pick_urban_share_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_urban_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_urban_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_urban_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_turmoil"
+					tooltip = "te_jmap_pick_turmoil_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_turmoil_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_devastation"
+					tooltip = "te_jmap_pick_devastation_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_devastation_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_devastation_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_devastation_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_urban_share"
+					tooltip = "te_jmap_pick_urban_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_urban_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_urban_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_urban_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 
-		# Wealth: GDP per capita (engine figures), then the same walk's Gini and Dynastic Wealth.
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+		# Classes: four classes' share of the people, the yearly walk's (whatever the Demographics rule): the old elites, then the new.
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_classes"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_classes_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_classes_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_classes_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_classes_open')]"
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_gdp_per_capita"
-				tooltip = "te_jmap_pick_gdp_per_capita_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_aristocrats"
+					tooltip = "te_jmap_pick_aristocrats_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_aristocrats_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_aristocrats_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_aristocrats_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_clergy"
+					tooltip = "te_jmap_pick_clergy_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_clergy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_clergy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_clergy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_gini"
-				tooltip = "te_jmap_pick_gini_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_gini_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_gini_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_gini_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_dynastic_wealth"
-				tooltip = "te_jmap_pick_dynastic_wealth_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_capitalists"
+					tooltip = "te_jmap_pick_capitalists_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_capitalists_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_capitalists_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_capitalists_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_academics"
+					tooltip = "te_jmap_pick_academics_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_academics_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_academics_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_academics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 
-		# What a state's climate and crowding do to its migration attraction: Local Climate before any technology's
-		# relief and after its owner's, and Migration Crowding.
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+		# Economy: wealth (GDP per capita, then the walk's Gini and Dynastic Wealth), then who owns the economy, where the companies keep
+			# their headquarters and how much each country trades.
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_economy"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_economy_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_economy_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_economy_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_economy_open')]"
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_base_comfort"
-				tooltip = "te_jmap_pick_base_comfort_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_gdp_per_capita"
+					tooltip = "te_jmap_pick_gdp_per_capita_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_gini"
+					tooltip = "te_jmap_pick_gini_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_gini_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_gini_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_gini_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_dynastic_wealth"
+					tooltip = "te_jmap_pick_dynastic_wealth_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_current_comfort"
-				tooltip = "te_jmap_pick_current_comfort_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_crowding"
-				tooltip = "te_jmap_pick_crowding_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_crowding_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_crowding_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_crowding_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_ownership"
+					tooltip = "te_jmap_pick_ownership_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_ownership_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_ownership_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_ownership_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_company_hqs"
+					tooltip = "te_jmap_pick_company_hqs_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_trade_volume"
+					tooltip = "te_jmap_pick_trade_volume_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_trade_volume_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_trade_volume_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_trade_volume_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 
-		# The world's cities: what draws visitors (tourism's Base Appeal) and how large each is (tourism's city ranking),
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+		# Migration and cities: what a state's climate and crowding do to its migration attraction (Local Climate before any technology's relief and
+			# after its owner's, and Migration Crowding), then the world's cities: what draws visitors and how large each is.
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_migration"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_migration_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_migration_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_migration_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_migration_open')]"
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_tourism_appeal"
-				tooltip = "te_jmap_pick_tourism_appeal_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_base_comfort"
+					tooltip = "te_jmap_pick_base_comfort_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_current_comfort"
+					tooltip = "te_jmap_pick_current_comfort_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_crowding"
+					tooltip = "te_jmap_pick_crowding_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_crowding_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_crowding_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_crowding_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_city_rank"
-				tooltip = "te_jmap_pick_city_rank_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_city_rank_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_tourism_appeal"
+					tooltip = "te_jmap_pick_tourism_appeal_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_city_rank"
+					tooltip = "te_jmap_pick_city_rank_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_city_rank_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 
-		# who owns the economy (the yearly walk's building levels) and where the companies keep their headquarters,
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_ownership"
-				tooltip = "te_jmap_pick_ownership_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_ownership_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_ownership_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_ownership_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+		# Military: where the soldiers are (the yearly walk's), the men of fighting age and the war dead the census counted last year,
+			# which it shares out to a country's states by their soldiers (the census's two hide while it doesn't run).
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_military"
 			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_military_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_military_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_military_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_military_open')]"
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_company_hqs"
-				tooltip = "te_jmap_pick_company_hqs_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_armed_forces"
+					tooltip = "te_jmap_pick_armed_forces_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_fighting_age_men"
+					tooltip = "te_jmap_pick_fighting_age_men_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_war_dead"
+					tooltip = "te_jmap_pick_war_dead_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_war_dead_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 
-		# and the armies: where the soldiers are (the yearly walk's), the men of fighting age and the war dead the census
-		# counted last year, which it shares out to a country's states by their soldiers (the census's two hide while it
-		# doesn't run).
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+		# Systems: the systems' maps, each also on its own entry: emissions, the bomb and the networks; the world's institutions and
+			# ideas and the seabed; the monuments, the empires and the power grids. Each hides while its system's rule is off.
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_systems"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_systems_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_systems_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_systems_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_systems_open')]"
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_armed_forces"
-				tooltip = "te_jmap_pick_armed_forces_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_emissions"
+					tooltip = "te_jmap_pick_emissions_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_emissions_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_emissions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_nuclear"
+					tooltip = "te_jmap_pick_nuclear_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_nuclear_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_networks"
+					tooltip = "te_jmap_pick_networks_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_networks_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_networks_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_networks_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_fighting_age_men"
-				tooltip = "te_jmap_pick_fighting_age_men_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_united_nations"
+					tooltip = "te_jmap_pick_united_nations_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_united_nations_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_political_models"
+					tooltip = "te_jmap_pick_political_models_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_political_models_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_political_models_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_political_models_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_ocean_basins"
+					tooltip = "te_jmap_pick_ocean_basins_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_ocean_basins_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_war_dead"
-				tooltip = "te_jmap_pick_war_dead_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_war_dead_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_grandeur"
+					tooltip = "te_jmap_pick_grandeur_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_grandeur_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_colonies"
+					tooltip = "te_jmap_pick_colonies_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_colonies_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_colonies_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_power_grids"
+					tooltip = "te_jmap_pick_power_grids_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_power_grids_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 
-		# The systems' maps, each also on its own entry: emissions, the bomb and the networks,
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_emissions"
-				tooltip = "te_jmap_pick_emissions_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_emissions_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_emissions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+		# Census: the census maps (hidden while the census doesn't run), three to a row: how long people live and what they die of, a
+			# year's births and deaths, the population's shape, who is in it and how it moves (Population Growth, the yearly
+			# walk's, shows without the census), and what medicine and family planning reach.
+		te_jmap_category_header = {
+			blockoverride "left_text" {
+				text = "te_jmap_cat_census"
 			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_nuclear"
-				tooltip = "te_jmap_pick_nuclear_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_nuclear_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_census_open')]"
 			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_networks"
-				tooltip = "te_jmap_pick_networks_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_networks_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_networks_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_networks_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_cat_census_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_cat_census_open')]"
 			}
 		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_cat_census_open')]"
 
-		# the world's institutions and ideas and the seabed,
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_united_nations"
-				tooltip = "te_jmap_pick_united_nations_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_united_nations_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_life_expectancy"
+					tooltip = "te_jmap_pick_life_expectancy_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_infant_mortality"
+					tooltip = "te_jmap_pick_infant_mortality_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_infant_mortality_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_infant_mortality_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_infant_mortality_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_leading_cause"
+					tooltip = "te_jmap_pick_leading_cause_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_leading_cause_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_leading_cause_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_leading_cause_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_political_models"
-				tooltip = "te_jmap_pick_political_models_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_political_models_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_political_models_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_political_models_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_birth_rate"
+					tooltip = "te_jmap_pick_birth_rate_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_birth_rate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_birth_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_birth_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_death_rate"
+					tooltip = "te_jmap_pick_death_rate_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_death_rate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_death_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_death_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_natural_change"
+					tooltip = "te_jmap_pick_natural_change_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_natural_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_natural_change_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_natural_change_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_ocean_basins"
-				tooltip = "te_jmap_pick_ocean_basins_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_ocean_basins_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-		}
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
-		# the monuments, the empires and the power grids.
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_fertility"
+					tooltip = "te_jmap_pick_fertility_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_fertility_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_fertility_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_fertility_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_grandeur"
-				tooltip = "te_jmap_pick_grandeur_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_grandeur_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_median_age"
+					tooltip = "te_jmap_pick_median_age_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_median_age_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_median_age_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_median_age_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_colonies"
-				tooltip = "te_jmap_pick_colonies_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_colonies_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_colonies_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_power_grids"
-				tooltip = "te_jmap_pick_power_grids_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_power_grids_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-		}
-
-		# The census maps, three to a row: how long people live and what they die of,
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_life_expectancy"
-				tooltip = "te_jmap_pick_life_expectancy_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_old_share"
+					tooltip = "te_jmap_pick_old_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_old_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_old_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_old_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_infant_mortality"
-				tooltip = "te_jmap_pick_infant_mortality_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_infant_mortality_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_infant_mortality_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_infant_mortality_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_sex_balance"
+					tooltip = "te_jmap_pick_sex_balance_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_sex_balance_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_sex_balance_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_sex_balance_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_net_migration"
+					tooltip = "te_jmap_pick_net_migration_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_net_migration_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_net_migration_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_net_migration_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_population_growth"
+					tooltip = "te_jmap_pick_population_growth_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_population_growth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_population_growth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_population_growth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_leading_cause"
-				tooltip = "te_jmap_pick_leading_cause_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_leading_cause_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_leading_cause_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_leading_cause_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-		}
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
-		# a year's births and deaths,
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_health_care"
+					tooltip = "te_jmap_pick_health_care_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_health_care_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_health_care_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_health_care_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_birth_rate"
-				tooltip = "te_jmap_pick_birth_rate_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_birth_rate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_birth_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_birth_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_death_rate"
-				tooltip = "te_jmap_pick_death_rate_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_death_rate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_death_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_death_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_natural_change"
-				tooltip = "te_jmap_pick_natural_change_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_natural_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_natural_change_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_natural_change_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-		}
-
-		# the population's shape,
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_fertility"
-				tooltip = "te_jmap_pick_fertility_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_fertility_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_fertility_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_fertility_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_median_age"
-				tooltip = "te_jmap_pick_median_age_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_median_age_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_median_age_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_median_age_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_old_share"
-				tooltip = "te_jmap_pick_old_share_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_old_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_old_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_old_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-		}
-
-		# who is in it and how it moves (Population Growth, the yearly walk's, shows without the census),
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_sex_balance"
-				tooltip = "te_jmap_pick_sex_balance_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_sex_balance_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_sex_balance_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_sex_balance_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_net_migration"
-				tooltip = "te_jmap_pick_net_migration_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_net_migration_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_net_migration_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_net_migration_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_population_growth"
-				tooltip = "te_jmap_pick_population_growth_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_population_growth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_population_growth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_population_growth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-		}
-
-		# and what medicine and family planning reach.
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_health_care"
-				tooltip = "te_jmap_pick_health_care_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_health_care_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_health_care_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_health_care_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
-			}
-
-			te_jmap_pick_button = {
-				text = "te_jmap_pick_family_planning"
-				tooltip = "te_jmap_pick_family_planning_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_family_planning_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_family_planning_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_family_planning_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_family_planning"
+					tooltip = "te_jmap_pick_family_planning_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_family_planning_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_family_planning_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_family_planning_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
 			}
 		}
 	}

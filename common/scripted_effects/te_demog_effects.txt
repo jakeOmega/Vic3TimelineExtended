@@ -26,6 +26,9 @@
 #                       London 0.174)
 #   te_dg_soldiers      Soldiers + Officers, people
 #   te_dg_bureaucrats   Bureaucrats, people
+#   te_dg_capitalists, te_dg_aristocrats, te_dg_clergy, te_dg_academics  those classes, people: the Map
+#                       Room's class maps, counted by its three calls (te_jmap_class_walk_*,
+#                       te_journal_map_effects.txt)
 #   te_dg_urban         people not at a rural workplace
 #   te_dg_urban_share   te_dg_urban over te_dg_walk_pop
 #   te_dg_fjob_share    share of employed people at a workplace that draws
@@ -250,6 +253,8 @@ te_demog_walks = {
 	te_demog_absorbed_walk_init = yes
 	# phase 2 step 1: the lower strata, the pops' own ratios and the engine's workforce, under the cohorts only
 	te_demog_work_walk_init = yes
+	# the Map Room's classes (te_journal_map_effects.txt), whatever the rule
+	te_jmap_class_walk_init = yes
 	every_scope_pop = {
 		change_local_variable = { name = te_dg_w_pop add = total_size }
 		change_local_variable = { name = te_dg_w_lit add = te_demog_pop_literate }
@@ -310,6 +315,7 @@ te_demog_walks = {
 			change_local_variable = { name = te_dg_w_rural add = total_size }
 		}
 		te_demog_work_walk_pop = yes
+		te_jmap_class_walk_pop = yes
 	}
 	set_variable = { name = te_dg_walk_pop value = local_var:te_dg_w_pop }
 	set_variable = { name = te_dg_lit value = { value = local_var:te_dg_w_lit divide = { value = local_var:te_dg_w_pop min = 1 } } }
@@ -349,6 +355,7 @@ te_demog_walks = {
 	set_variable = { name = te_dg_fjob_share value = { value = local_var:te_dg_w_fjob divide = { value = local_var:te_dg_w_emp min = 1 } } }
 	te_demog_gini_band_store = yes
 	te_demog_work_walk_store = yes
+	te_jmap_class_walk_store = yes
 	# buildings: capital in private, cooperative and state hands; ownership levels
 	set_local_variable = { name = te_dg_w_priv value = 0 }
 	set_local_variable = { name = te_dg_w_self value = 0 }

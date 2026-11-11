@@ -115,8 +115,10 @@ FULL_CASES = ("farm_full_on_top", "rich_full")
 # Phase 2 step 4: the war dead's 18-40 sums became the pool's (old name: new name); its new state variables
 STEP4_RENAMED = {"te_dg_f1840": "te_dg_faw", "te_dg_m1840": "te_dg_fam"}
 STEP4_NEW_VARS = {"te_dg_faw", "te_dg_fam", "te_dg_sxb", "te_dg_mc", "te_dg_yb"}
-# Task 5's three calls in te_demog_walks; nothing else in the walk may change
-WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
+# Task 5's three calls in te_demog_walks, and the Map Room's three (its class maps' counts, 2026-11-11, which change no
+# census number); nothing else in the walk may change
+WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes",
+              "te_jmap_class_walk_init = yes", "te_jmap_class_walk_pop = yes", "te_jmap_class_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
 LIFE_TABLE_ADDED = re.compile(r"te_dg_oal\d|te_dg_oapy\d|^te_demog_old_age_pass = yes$")
 # Calibration step 3 (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md) changes these blocks on
