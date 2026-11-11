@@ -1494,6 +1494,59 @@ class StopAgainTest(SessionTestCase):
         self.assertEqual(self.session.stop(), second)                       # final: not run a third time
 
 
+class ClosingGame(Game):
+    """As the real ProcessHelper: once closed, every call raises helper_gone."""
+
+    def _gone(self):
+        if self.closed:
+            raise HelperError("helper_gone", "the helper has ended")
+
+    def adopt(self, proc):
+        self._gone()
+        return super().adopt(proc)
+
+    def kill(self, proc):
+        self._gone()
+        return super().kill(proc)
+
+
+class SecondStopThroughAClosedHelperTest(SessionTestCase):
+    """R7 (the re-review's script): the first stop's kill is refused, since the game's pid was reused after it
+    exited, so game_left_up with stop_again, and that stop closed the helper. The second stop goes helper_gone,
+    the factory, a fresh adopt refused not_ours: the game counts as ended, watch is waited for, and only then is
+    the snapshot restored, once."""
+
+    def setUp(self):
+        super().setUp()
+        self.game = ClosingGame(self.user, self.order)
+        self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
+                                       sleep=self.game.sleep, clock=self.game.clock, helper_factory=self.new_helper)
+
+    def test_the_second_stop_finds_the_game_gone_through_a_fresh_helper_and_restores_once(self):
+        self.started()
+        self.game.exited = True                         # the game has exited; watch recorded it (exit 0)
+
+        def reused(proc):
+            self.game._gone()
+            raise HelperError("not_ours", "process 7 is not the one this helper started (its id was reused)")
+        self.game.kill = reused
+        first = self.session.stop()
+        self.assertEqual((first["outcome"], first["stop_again"]), ("game_left_up", True))
+        self.assertTrue(self.game.closed)
+        self.assertNotIn("restore", self.cli.verbs)
+        fresh = fakes.FakeHelper()
+
+        def not_ours(proc):
+            raise HelperError("not_ours", "no live process %d was created at %s" % (proc.pid, proc.created))
+        fresh.adopt = not_ours
+        self.fresh_helper = fresh
+        second = self.session.stop()
+        self.assertEqual((second["outcome"], second["stop_again"]), ("restored", False))
+        self.assertTrue(any("helper had ended" in note for note in second["notes"]))
+        self.assertEqual(self.cli.verbs.count("restore"), 1)    # never restored while it may have been up
+        self.assertEqual(fresh.killed, [])
+
+
 class OverlayVerdictTest(SessionTestCase):
     """I2: the overlay goes only once the game is known ended and the owner's playset is known back."""
 
