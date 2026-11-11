@@ -56,6 +56,11 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
     terrain manipulator and none creates cleared land (`docs/guides/scripting_best_practices.md`, § "State
     pictures"). The six pictures are wired and harmless; giving plantations the manipulator would show
     them and would also change the map, which is a separate decision.
+12. **The two axes of prosperity stand** ("I am happy with your two axes", 2026-11-11), and the means
+    floors are the owner's first-pass figures, poor below the first and affluent from the second, by era:
+    6: 12, 20; 7: 14, 22; 8: 18, 28; 9: 22, 32; 10: 26, 36; 11: 30, 40; 12: 35, 45; 13: 40, 60. "Very
+    rough values for the first pass": the calibration game was put off ("we just run the generation and
+    leave the calibration for later"), since the game and a render don't fit on the card together.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -98,8 +103,8 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 
 So the right technology beats the right size, and a devastated city beats everything. The weight is a number
 in place value (a takeover 10,000,000, and a condition its digit × 1,000,000 on top of that; rung × 100,000;
-a character its digit × 10,000; size or scale × 10; a named region its family's digit; 1,000 and 100 are
-reserved for upkeep and means), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
+a character its digit × 10,000; upkeep 1,000; means its digit × 100; size or scale × 10; a named region its
+family's digit), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
 any mod picture that applies wins. Conditions and takeovers share the place above the rung without meeting:
 a condition is a city picture and a takeover stands on open land. That keeps the largest weight (13,400,000
 so far) under 16,777,216, the last whole number a 32-bit float holds exactly, in case the engine keeps a
@@ -236,13 +241,28 @@ Two axes, because they draw different things.
 afford, so it draws amenities and build quality: how many motor cars, shop fronts and street lighting, paved
 or dirt streets, parks, the housing stock (shacks and tenements, or villas and glass). Three levels: poor,
 ordinary, affluent. The floors are fixed numbers for each rung, since an affluent street of 1930 and one of
-2030 are different pictures; they are not relative to the world of the day. § 9 sets them from an observer
-game, so that roughly a fifth of the city states of countries on a rung sit in each extreme.
+2030 are different pictures; they are not relative to the world of the day. They are the owner's figures
+(§ 1 item 12), taken at the era of the rung's technology, because the rung is the street the picture shows:
+
+| City rung | Era | Poor below | Affluent from |
+|---|---|---|---|
+| 1 (Art Deco Architecture) | 6 | 12 | 20 |
+| 2 (Modern Urban Planning) | 7 | 14 | 22 |
+| 3 (Computer-Aided Design) | 8 | 18 | 28 |
+| 4 (Advanced Structural Engineering) | 10 | 26 | 36 |
+| 5 (Vactrains) | 12 | 35 | 45 |
+
+The figures for eras 9, 11 and 13 have no rung of their own and aren't used: a country on rung 3 is judged by
+era 8's floors until it reaches rung 4. Reading the floors off the owner's actual era instead needs a
+country-era value the mod doesn't have. The pass stores `te_sp_means` (1 poor, 3 affluent, absent
+ordinary), and a state leaves a level only half a point past its floor.
 
 **Upkeep** is relative: `average_sol` minus `average_expected_sol`, the game's own measure of whether people
 have what they expect. It decides how the place is kept, so it draws neglect: litter, shuttered shops,
-broken windows, peeling paint, queues and idle crowds. Two levels: ordinary and run-down, run-down when the
-standard of living sits a set margin under expectations. Under the mod's Standard of Living Expectations
+broken windows, peeling paint, queues and idle crowds. Two levels: ordinary and run-down, run-down (`te_sp_rundown`) when the
+standard of living sits 2 points or more under expectations, until it is within 1.5. That margin is this
+design's and unchecked: the mod's welfare laws put a floor under expectations, so a generous welfare state
+may sit a long way under what its people expect, and the calibration game is to say how common that is. Under the mod's Standard of Living Expectations
 system, expectations lag a fall and rise with a richer world, so a rich city in decline reads run-down while
 a poor one that never had more doesn't. That is the split the owner asked for: a poor but content town is
 drawn modest and tidy, a wealthy but aggrieved one prosperous and neglected.
@@ -313,8 +333,11 @@ would be over 1 GB.
    46, each picked from four candidates (the two port pictures of the 2040s from a later set, § 10). With the pilot's port and mine that is every
    worked-land picture of § 8. What it designed: the scales and the takeover of § 3, the farmland and
    forestry families of § 5, and the three provisional levels there.
-4. **Town, metropolis, megacity (104).**
-5. **Means and upkeep (120),** with their part of the yearly pass.
+4. **Town, metropolis, megacity (103),** and
+5. **Means and upkeep (120).** All 223 prompts are written (`DRAFTS`, family `variant`: twelve by hand as
+   a pilot, the rest from one table a region and one a rung, `variant_prompt()`), the pass stores the two
+   prosperity tags, and the weight has their places (upkeep 1,000, means its digit × 100). A variant is
+   wired by picking its render (`VARIANT_PICKS`): its name says its axis. Rendering began 2026-11-11.
 6. **Character, function, conditions (31). Painted and wired:** on 2026-11-10 the 11 a weight reads live
    (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two spans each; § 7); on
    2026-11-11 the 18 that read the yearly pass's tags (boomtown and declining on four rungs, divided on

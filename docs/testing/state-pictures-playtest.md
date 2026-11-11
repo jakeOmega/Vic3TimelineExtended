@@ -124,3 +124,14 @@ owner and run `event te_debug_state_picture.1` (or wait a year; growth needs sev
 | **The debug event's line.** `event te_debug_state_picture.1`, then `debug.log`. | Each of your states' lines ends with `character=` (6 boomtown, 5 declining, 4 divided, 2 heavy industry, 1 resort, 0 none) and `growth=` (the smoothed yearly rate, in percent). | |
 | **Lettering.** Trucks, hoardings, the airliners over the resorts. | Nothing that reads as writing. | A `smudge` box in `WAVE6_PICKS`, and reconvert. |
 
+## Prosperity tags (2026-11-11)
+
+No picture reads these yet; the size and prosperity variants are being rendered. The pass already stores
+them, so they can be checked from the log.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The reads.** After Art Deco Architecture, `event te_debug_state_picture.1` as any country, then `debug.log`. | Each of your states' lines ends with `means=` (1 poor, 2 ordinary, 3 affluent), `rundown=` (0 or 1), `sol=` (the state's standard of living, as its panel shows) and `short=` (how far that sits under what its people expect). | `sol=0` everywhere or a load error naming `average_sol` or `average_expected_sol`: a state doesn't read one of them in a script value. Use the Demographics walk's `te_dg_sol` for the first and the owner's figure for the second. |
+| **The floors.** In a save, compare `sol=` with `means=` for states of an owner on each city rung. | Poor under 12, 14, 18, 26, 35 by rung; affluent from 20, 22, 28, 36, 45. | |
+| **How many are run-down.** In a late save, count `rundown=1`. | A minority: states that have lost ground. | Most states of a welfare state run-down: the laws' floor under expectations is what `short=` is measuring. Raise the margin (2), or take the owner's floor out of the figure. |
+

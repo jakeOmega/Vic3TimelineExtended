@@ -192,6 +192,19 @@ W_OVER = 10000000
 # A city's character (housing blocks, smog) sits between the rung and the size: the right
 # technology still comes first, but a smog-bound metropolis shows the smog.
 W_CHAR = 10000  # times the character's digit
+# Prosperity (design section 6) sits between a city's character and its size: a run-down street
+# over a poor or an affluent one over a town or a metropolis.
+W_UPKEEP = 1000
+W_MEANS = 100  # times the level's digit
+# The yearly pass's tags: te_sp_means is 1 poor, 3 affluent, absent ordinary; te_sp_rundown is
+# present while the standard of living sits well under what the state's people expect.
+MEANS = {
+    "poor": (["has_variable = te_sp_means", "var:te_sp_means <= 1"], 1),
+    "affluent": (["has_variable = te_sp_means", "var:te_sp_means >= 3"], 3),
+}
+UPKEEP = {
+    "rundown": (["has_variable = te_sp_rundown"], 1),
+}
 # A condition (ruins, a nuclear strike) outranks every rung, like a takeover, and the conditions
 # rank among themselves by their digit. Conditions are city pictures and takeovers stand on open
 # land, so they share the place above the rung without meeting. The largest weight stays under
@@ -1213,8 +1226,9 @@ DRAFTS = {
 # had to, and keeps the family's landmark so the variant reads as the same place.
 def _variant(region, rung, variant, shows, prompt):
     tech, _when = CITY_LADDER[rung]
-    return _draft("variant", ["urban"], "urban_european", tech, rung, shows,
-                  prompt.replace("{landmark}", CITY_LANDMARK[region]))
+    return {**_draft("variant", ["urban"], "urban_european", tech, rung, shows,
+                     prompt.replace("{landmark}", CITY_LANDMARK[region])),
+            "region": region, "variant": variant}
 
 
 DRAFTS.update({
@@ -1666,6 +1680,27 @@ WAVE6_PICKS = {
     "resort_4": {"seed": 0},
 }
 
+# --- Waves 4 and 5: a variant's wiring is its own name. A town, metropolis or megacity is a
+# size; poor and affluent are means; run-down is upkeep. Each keeps its family's region and
+# overlay. The picked render of each goes in VARIANT_PICKS.
+VARIANT_AXIS = {"town": "size", "metropolis": "size", "megacity": "size",
+                "poor": "means", "affluent": "means", "rundown": "upkeep"}
+VARIANT_PICKS = {
+}
+for _key, _pick in VARIANT_PICKS.items():
+    _draft_entry = DRAFTS.pop(_key)
+    PICTURES[_key] = {
+        "terrain": ["urban"],
+        "tech": _draft_entry["tech"],
+        "rung": _draft_entry["rung"],
+        "region": _draft_entry["region"],
+        "size": None,
+        VARIANT_AXIS[_draft_entry["variant"]]: _draft_entry["variant"],
+        "effect": CITY_EFFECT[_draft_entry["region"]],
+        "prompt": _draft_entry["prompt"],
+        **_pick,
+    }
+
 for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
     for _key, _pick in _picks.items():
         _draft_entry = DRAFTS.pop(_key)
@@ -1705,6 +1740,10 @@ def weight(key: str) -> int:
         w += W_OVER
     if p.get("character"):
         w += W_CHAR * CHARACTERS[p["character"]][1]
+    if p.get("upkeep"):
+        w += W_UPKEEP * UPKEEP[p["upkeep"]][1]
+    if p.get("means"):
+        w += W_MEANS * MEANS[p["means"]][1]
     if p.get("condition"):
         w += W_OVER + W_COND * CONDITIONS[p["condition"]][1]
     return w

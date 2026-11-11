@@ -76,6 +76,60 @@ te_state_picture_k_decline_keep = { value = -0.005 }
 te_state_picture_k_divided = { value = 0.85 }
 te_state_picture_k_divided_keep = { value = 0.83 }
 
+# Means: the state's standard of living (average_sol) against two floors that rise with the
+# time. The owner's first-pass figures by era (2026-11-11), poor below the first and affluent
+# from the second:
+#   era 6: 12, 20   era 7: 14, 22   era 8: 18, 28   era 9: 22, 32
+#   era 10: 26, 36  era 11: 30, 40  era 12: 35, 45  era 13: 40, 60
+# A state is judged by the era of the city rung its owner is on, since that is the street its
+# picture shows: rung 1 is era 6, rung 2 era 7, rung 3 era 8, rung 4 era 10, rung 5 era 12.
+te_state_picture_city_rung = {
+	value = 0
+	owner = {
+		if = { limit = { has_technology_researched = art_deco_architecture } add = 1 }
+		if = { limit = { has_technology_researched = modern_urban_planning } add = 1 }
+		if = { limit = { has_technology_researched = computer_aided_design } add = 1 }
+		if = { limit = { has_technology_researched = advanced_structural_engineering } add = 1 }
+		if = { limit = { has_technology_researched = vactrains } add = 1 }
+	}
+}
+te_state_picture_poor_floor = {
+	value = 12
+	if = { limit = { te_state_picture_city_rung >= 5 } value = 35 }
+	else_if = { limit = { te_state_picture_city_rung >= 4 } value = 26 }
+	else_if = { limit = { te_state_picture_city_rung >= 3 } value = 18 }
+	else_if = { limit = { te_state_picture_city_rung >= 2 } value = 14 }
+}
+te_state_picture_affluent_floor = {
+	value = 20
+	if = { limit = { te_state_picture_city_rung >= 5 } value = 45 }
+	else_if = { limit = { te_state_picture_city_rung >= 4 } value = 36 }
+	else_if = { limit = { te_state_picture_city_rung >= 3 } value = 28 }
+	else_if = { limit = { te_state_picture_city_rung >= 2 } value = 22 }
+}
+# A state leaves poor, or affluent, only this far past the floor, so one at a floor doesn't change
+# picture each year.
+te_state_picture_k_means_keep = { value = 0.5 }
+te_state_picture_poor_floor_keep = {
+	value = te_state_picture_poor_floor
+	add = te_state_picture_k_means_keep
+}
+te_state_picture_affluent_floor_keep = {
+	value = te_state_picture_affluent_floor
+	subtract = te_state_picture_k_means_keep
+}
+te_state_picture_sol = { value = average_sol }
+# Upkeep: how far the standard of living sits under what the state's people expect
+# (average_expected_sol, which the mod's Standard of Living Expectations system moves). Run-down
+# from te_state_picture_k_rundown under, until within te_state_picture_k_rundown_keep.
+# Provisional and this design's: the calibration game is to set them.
+te_state_picture_k_rundown = { value = 2 }
+te_state_picture_k_rundown_keep = { value = 1.5 }
+te_state_picture_sol_shortfall = {
+	value = average_expected_sol
+	subtract = average_sol
+}
+
 # This year's growth rate (state scope; only where te_state_picture_growth_known holds) ...
 te_state_picture_growth_rate = {
 	value = var:te_dg_walk_pop
@@ -191,6 +245,21 @@ te_state_picture_character_shown = {
 	}
 	else_if = {
 		limit = { has_variable = te_sp_resort }
+		value = 1
+	}
+}
+# The stored means and upkeep, for a log line: 1 poor, 2 ordinary, 3 affluent; 1 run-down.
+te_state_picture_means_shown = {
+	value = 2
+	if = {
+		limit = { has_variable = te_sp_means }
+		value = var:te_sp_means
+	}
+}
+te_state_picture_rundown_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_rundown }
 		value = 1
 	}
 }

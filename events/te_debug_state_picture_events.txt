@@ -30,7 +30,7 @@ te_debug_state_picture.1 = { # REVIEWED 2026-11-10: console-only test event (`ev
 		}
 		debug_log = "TE_STATE_PICTURE debug: the yearly pass ran in every state; the states of [THIS.GetCountry.GetNameNoFormatting] follow"
 		every_scope_state = {
-			debug_log = "TE_STATE_PICTURE debug: state=[THIS.GetState.GetNameNoFormatting] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0] oil=[THIS.ScriptValue('te_state_picture_oil_shown')|0] coal=[THIS.ScriptValue('te_state_picture_coal_shown')|0] character=[THIS.ScriptValue('te_state_picture_character_shown')|0] growth=[THIS.ScriptValue('te_state_picture_growth_shown')|2]"
+			debug_log = "TE_STATE_PICTURE debug: state=[THIS.GetState.GetNameNoFormatting] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0] oil=[THIS.ScriptValue('te_state_picture_oil_shown')|0] coal=[THIS.ScriptValue('te_state_picture_coal_shown')|0] character=[THIS.ScriptValue('te_state_picture_character_shown')|0] growth=[THIS.ScriptValue('te_state_picture_growth_shown')|2] means=[THIS.ScriptValue('te_state_picture_means_shown')|0] rundown=[THIS.ScriptValue('te_state_picture_rundown_shown')|0] sol=[THIS.ScriptValue('te_state_picture_sol')|1] short=[THIS.ScriptValue('te_state_picture_sol_shortfall')|1]"
 		}
 	}
 }

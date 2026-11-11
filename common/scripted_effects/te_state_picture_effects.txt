@@ -14,6 +14,9 @@
 #                several years (te_sp_growth, a smoothed yearly rate; te_sp_prov, the province
 #                count it was last taken at)
 #   te_sp_divided   present while a metropolis is very unequal
+#   te_sp_means  1 poor, 3 affluent, absent ordinary: the state's standard of living against
+#                the floors of its owner's city rung
+#   te_sp_rundown   present while the standard of living sits well under what its people expect
 # A picture can therefore lag a change by up to a year.
 # ============================================================================
 
@@ -40,6 +43,7 @@ te_state_picture_refresh = {
 	}
 	te_state_picture_refresh_land = yes
 	te_state_picture_refresh_city = yes
+	te_state_picture_refresh_prosperity = yes
 	te_state_picture_selfcheck = yes
 }
 
@@ -260,6 +264,56 @@ te_state_picture_refresh_city = {
 			}
 		}
 		remove_variable = te_sp_divided
+	}
+}
+
+# Prosperity (design section 6): means, the standard of living against the floors of the time,
+# and upkeep, the standard of living against what the state's people expect. Before the owner's
+# first city technology there are no floors and no tags.
+te_state_picture_refresh_prosperity = {
+	if = {
+		limit = { te_state_picture_city_rung < 1 }
+		remove_variable = te_sp_means
+		remove_variable = te_sp_rundown
+	}
+	else = {
+		# means: poor under the first floor, affluent from the second, each kept a little past it
+		if = {
+			limit = { te_state_picture_sol < te_state_picture_poor_floor }
+			set_variable = { name = te_sp_means value = 1 }
+		}
+		else_if = {
+			limit = { te_state_picture_sol >= te_state_picture_affluent_floor }
+			set_variable = { name = te_sp_means value = 3 }
+		}
+		else_if = {
+			limit = {
+				has_variable = te_sp_means
+				OR = {
+					AND = {
+						var:te_sp_means = 1
+						te_state_picture_sol >= te_state_picture_poor_floor_keep
+					}
+					AND = {
+						var:te_sp_means = 3
+						te_state_picture_sol < te_state_picture_affluent_floor_keep
+					}
+				}
+			}
+			remove_variable = te_sp_means
+		}
+		# upkeep
+		if = {
+			limit = { te_state_picture_sol_shortfall >= te_state_picture_k_rundown }
+			set_variable = { name = te_sp_rundown value = 1 }
+		}
+		else_if = {
+			limit = {
+				has_variable = te_sp_rundown
+				te_state_picture_sol_shortfall < te_state_picture_k_rundown_keep
+			}
+			remove_variable = te_sp_rundown
+		}
 	}
 }
 

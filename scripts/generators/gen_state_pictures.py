@@ -48,6 +48,10 @@ def conditions(key, terrain=None):
         lines += registry.SCALES[p["scale"]][0]
     if p.get("character"):
         lines += registry.CHARACTERS[p["character"]][0]
+    if p.get("upkeep"):
+        lines += registry.UPKEEP[p["upkeep"]][0]
+    if p.get("means"):
+        lines += registry.MEANS[p["means"]][0]
     if p.get("condition"):
         lines += registry.CONDITIONS[p["condition"]][0]
     lines += p.get("where", [])
