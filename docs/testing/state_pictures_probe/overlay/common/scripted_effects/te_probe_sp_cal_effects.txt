@@ -1,0 +1,70 @@
+﻿# STATE PICTURES CALIBRATION PROBE - not part of the mod (docs/testing/state_pictures_probe/README.md).
+#
+# One debug.log line a state every few years with the figures the banner pictures' floors are set
+# from: the owner's rung on the city ladder, the largest city's people, standard of living and
+# what is expected, inequality, the population walk, and the state's building levels by kind.
+# State scope, from on_yearly_pulse_state. It stores nothing on the state: the sums go through
+# global variables, read back in the same effect.
+te_probe_sp_cal = {
+	if = {
+		limit = {
+			te_probe_sp_cal_year >= te_probe_sp_cal_k_from
+			te_probe_sp_cal_phase = 0
+		}
+		set_local_variable = { name = te_p_all value = 0 }
+		set_local_variable = { name = te_p_oil value = 0 }
+		set_local_variable = { name = te_p_mine value = 0 }
+		set_local_variable = { name = te_p_coal value = 0 }
+		set_local_variable = { name = te_p_heavy value = 0 }
+		set_local_variable = { name = te_p_manuf value = 0 }
+		set_local_variable = { name = te_p_tour value = 0 }
+		set_local_variable = { name = te_p_port value = 0 }
+		set_local_variable = { name = te_p_urb value = 0 }
+		every_scope_building = {
+			limit = { is_subsistence_building = no }
+			change_local_variable = { name = te_p_all add = level }
+			if = {
+				limit = { is_building_type = building_oil_rig }
+				change_local_variable = { name = te_p_oil add = level }
+			}
+			if = {
+				limit = { is_building_group = bg_mining }
+				change_local_variable = { name = te_p_mine add = level }
+			}
+			if = {
+				limit = { is_building_type = building_coal_mine }
+				change_local_variable = { name = te_p_coal add = level }
+			}
+			if = {
+				limit = { is_building_group = bg_heavy_industry }
+				change_local_variable = { name = te_p_heavy add = level }
+			}
+			if = {
+				limit = { is_building_group = bg_manufacturing }
+				change_local_variable = { name = te_p_manuf add = level }
+			}
+			if = {
+				limit = { is_building_type = building_tourism_industry }
+				change_local_variable = { name = te_p_tour add = level }
+			}
+			if = {
+				limit = { is_building_type = building_port }
+				change_local_variable = { name = te_p_port add = level }
+			}
+			if = {
+				limit = { is_building_type = building_urban_center }
+				change_local_variable = { name = te_p_urb add = level }
+			}
+		}
+		set_global_variable = { name = te_p_all value = local_var:te_p_all }
+		set_global_variable = { name = te_p_oil value = local_var:te_p_oil }
+		set_global_variable = { name = te_p_mine value = local_var:te_p_mine }
+		set_global_variable = { name = te_p_coal value = local_var:te_p_coal }
+		set_global_variable = { name = te_p_heavy value = local_var:te_p_heavy }
+		set_global_variable = { name = te_p_manuf value = local_var:te_p_manuf }
+		set_global_variable = { name = te_p_tour value = local_var:te_p_tour }
+		set_global_variable = { name = te_p_port value = local_var:te_p_port }
+		set_global_variable = { name = te_p_urb value = local_var:te_p_urb }
+		debug_log = "TE_SP_CAL;y=[THIS.ScriptValue('te_probe_sp_cal_year')|0];owner=[THIS.GetState.GetOwner.GetTagName];rung=[THIS.ScriptValue('te_probe_sp_cal_city_rung')|0];size=[THIS.ScriptValue('te_state_picture_size_shown')|0];city=[THIS.ScriptValue('te_state_picture_city_people')|0];pop=[THIS.ScriptValue('te_state_picture_state_people')|0];sol=[THIS.ScriptValue('te_probe_sp_cal_sol')|2];exp=[THIS.ScriptValue('te_probe_sp_cal_exp')|2];wsol=[THIS.ScriptValue('te_probe_sp_cal_wsol')|2];osol=[THIS.ScriptValue('te_probe_sp_cal_osol')|2];oexp=[THIS.ScriptValue('te_probe_sp_cal_oexp')|2];gini=[THIS.ScriptValue('te_probe_sp_cal_gini')|3];walk=[THIS.ScriptValue('te_probe_sp_cal_walk')|0];walk_prev=[THIS.ScriptValue('te_probe_sp_cal_walk_prev')|0];prov=[THIS.ScriptValue('te_probe_sp_cal_provinces')|0];gdp=[THIS.ScriptValue('te_probe_sp_cal_gdp')|0];dev=[THIS.ScriptValue('te_probe_sp_cal_devastation')|2];poll=[THIS.ScriptValue('te_probe_sp_cal_pollution')|0];all=[GetGlobalVariable('te_p_all').GetValue|0];oil=[GetGlobalVariable('te_p_oil').GetValue|0];mine=[GetGlobalVariable('te_p_mine').GetValue|0];coal=[GetGlobalVariable('te_p_coal').GetValue|0];heavy=[GetGlobalVariable('te_p_heavy').GetValue|0];manuf=[GetGlobalVariable('te_p_manuf').GetValue|0];tour=[GetGlobalVariable('te_p_tour').GetValue|0];port=[GetGlobalVariable('te_p_port').GetValue|0];urb=[GetGlobalVariable('te_p_urb').GetValue|0];state=[THIS.GetState.GetNameNoFormatting];date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}

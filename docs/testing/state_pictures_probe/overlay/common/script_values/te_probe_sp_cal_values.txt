@@ -1,0 +1,77 @@
+﻿# STATE PICTURES CALIBRATION PROBE - not part of the mod (docs/testing/state_pictures_probe/README.md).
+# State scope unless noted.
+
+# A line every te_probe_sp_cal_k_every years from te_probe_sp_cal_k_from on.
+te_probe_sp_cal_k_from = { value = 1880 }
+te_probe_sp_cal_k_every = { value = 5 }
+te_probe_sp_cal_year = { value = year }
+te_probe_sp_cal_phase = {
+	value = year
+	modulo = te_probe_sp_cal_k_every
+}
+
+# The owner's rung on the city ladder: how many of its five technologies are researched.
+te_probe_sp_cal_city_rung = {
+	value = 0
+	owner = {
+		if = { limit = { has_technology_researched = art_deco_architecture } add = 1 }
+		if = { limit = { has_technology_researched = modern_urban_planning } add = 1 }
+		if = { limit = { has_technology_researched = computer_aided_design } add = 1 }
+		if = { limit = { has_technology_researched = advanced_structural_engineering } add = 1 }
+		if = { limit = { has_technology_researched = vactrains } add = 1 }
+	}
+}
+
+# Standard of living: the state's own (the engine's figure and the Demographics walk's), the
+# owner's, and what the owner's people expect. Whether a state reads average_expected_sol is one
+# of the things this probe finds out: te_probe_sp_cal_exp reads 0 with a load error if it doesn't.
+te_probe_sp_cal_sol = { value = average_sol }
+te_probe_sp_cal_exp = { value = average_expected_sol }
+te_probe_sp_cal_wsol = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_sol }
+		value = var:te_dg_sol
+	}
+}
+te_probe_sp_cal_osol = { value = owner.average_sol }
+te_probe_sp_cal_oexp = { value = owner.average_expected_sol }
+
+te_probe_sp_cal_gini = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_gini }
+		value = var:te_dg_gini
+	}
+}
+te_probe_sp_cal_walk = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_walk_pop }
+		value = var:te_dg_walk_pop
+	}
+}
+te_probe_sp_cal_walk_prev = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_walk_pop_prev }
+		value = var:te_dg_walk_pop_prev
+	}
+}
+te_probe_sp_cal_provinces = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_provinces }
+		value = var:te_dg_provinces
+	}
+}
+te_probe_sp_cal_gdp = { value = gdp }
+te_probe_sp_cal_devastation = { value = devastation }
+# The state region's pollution in steps: 0 under 50, 1 from 50, 2 from 100, 3 from 150, 4 from 200 (of 255).
+te_probe_sp_cal_pollution = {
+	value = 0
+	if = { limit = { state_region = { pollution_amount >= 50 } } add = 1 }
+	if = { limit = { state_region = { pollution_amount >= 100 } } add = 1 }
+	if = { limit = { state_region = { pollution_amount >= 150 } } add = 1 }
+	if = { limit = { state_region = { pollution_amount >= 200 } } add = 1 }
+}

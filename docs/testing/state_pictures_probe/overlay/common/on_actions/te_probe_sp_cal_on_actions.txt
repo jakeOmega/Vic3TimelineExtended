@@ -1,0 +1,13 @@
+﻿# STATE PICTURES CALIBRATION PROBE - not part of the mod. Copied into the deployed mod folder for
+# one observer game and removed after it (docs/testing/state_pictures_probe/README.md).
+on_yearly_pulse_state = {
+	on_actions = {
+		te_probe_sp_cal_on_action
+	}
+}
+
+te_probe_sp_cal_on_action = {
+	effect = {
+		te_probe_sp_cal = yes
+	}
+}
