@@ -322,6 +322,8 @@ class CommandLineTest(unittest.TestCase):
         self.clock = 0.0          # seconds the naps add up to
         self.on_nap = []          # callables run at each nap: the world moves on while `watch` sleeps
         self.look_seconds = 0.0   # how far one look moves the clock (PowerShell takes its time)
+        self.on_look = []         # callables run at each process listing (not again from inside one of them)
+        self._in_look_hook = False
         # What gate.start_game returns, or a callable it calls for that (to act during the start); while None,
         # a start fails the test.
         self.start_result = None
@@ -354,6 +356,13 @@ class CommandLineTest(unittest.TestCase):
 
     def _list_games(self, *a, **k):
         self.clock += self.look_seconds
+        if self.on_look and not self._in_look_hook:
+            self._in_look_hook = True
+            try:
+                for hook in self.on_look:
+                    hook()
+            finally:
+                self._in_look_hook = False
         if self.games and isinstance(self.games[0], (list, Exception)):
             item = self.games.pop(0) if len(self.games) > 1 else self.games[0]
             if isinstance(item, Exception):
@@ -733,7 +742,8 @@ class CommandLineTest(unittest.TestCase):
         self.start_result = start
         out, code = self.launch(taken["id"], "-debug_mode")
         self.assertEqual((code, out["pid"]), (0, live.pid))
-        self.assertEqual((second["reply"][1], second["reply"][0]["refused"]), (2, "already_started"))
+        # Round 5: the lock refuses the second first; the claim would refuse it as already_started.
+        self.assertEqual((second["reply"][1], second["reply"][0]["refused"]), (2, "busy"))
         self.assertEqual(len(self.starts), 1)
         self.assertEqual([e["pid"] for e in self.started_entries()], [live.pid])
 
@@ -787,8 +797,8 @@ class CommandLineTest(unittest.TestCase):
         out, code = self.launch(taken["id"], "-debug_mode")
         self.assertEqual((code, out["pid"]), (0, game.pid))
         self.start_result = None
-        self.assertEqual(replies["restore"][0]["refused"], "launch_in_flight")
-        self.assertEqual([r["reason"] for r in replies["recover"][0]["runs"]], ["launch_in_flight"])
+        # Round 5: `launch` holds the lock until `started` is recorded, so both wait their turn.
+        self.assertEqual((replies["restore"][0]["refused"], replies["recover"][0]["refused"]), ("busy", "busy"))
         self.assertEqual(self.events(), ["armed", "started"])
         self.games = [[game], [game], []]
         self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
@@ -820,6 +830,110 @@ class CommandLineTest(unittest.TestCase):
                     out, code = self.run_cli("recover")
                     self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
                                      (expected[0], [(snap.id, *expected[1:])]))
+
+    # -- the lock -------------------------------------------------------------
+    # Round 5 ruling: the verbs that change things take turns, so that no check-then-act of one session can
+    # interleave with another's. The pre-claim window (scratch replay r4_preclaim): a `recover` run inside
+    # launch's last process listing, before its claim, recorded `restored`; the launch then started the game,
+    # `started` landed after the verdict, and the run was never restored.
+
+    def hold_the_lock(self, verb="restore", minutes_ago=0.0):
+        """Another session's lock, taken that many minutes ago."""
+        self.backups.mkdir(exist_ok=True)
+        lock = self.backups / cli.LOCK_NAME
+        lock.write_text(json.dumps({"verb": verb, "pid": 1, "token": "theirs"}) + "\n")
+        when = time.time() - minutes_ago * 60
+        os.utime(lock, (when, when))
+        return lock
+
+    def test_every_verb_that_changes_things_refuses_busy_while_another_holds_the_lock(self):
+        taken, _ = self.run_cli("snapshot")
+        before, count = self.tree(), len(snapshot.all_snapshots(self.backups))
+        lock = self.hold_the_lock("launch")
+        self.start_result = self.game()
+        for argv in (("snapshot",), ("restore", taken["id"]), ("recover",), ("selftest-restore",),
+                     ("launch", taken["id"], "--permission", "session grant", "--", "-debug_mode")):
+            with self.subTest(verb=argv[0]):
+                out, code = self.run_cli(*argv)
+                self.assertEqual((code, out["refused"], out["holder"]), (2, "busy", "launch"))
+                self.assertLess(out["age_s"], 60)
+        self.assertEqual((self.tree(), self.events(), self.starts), (before, ["armed"], []))
+        self.assertEqual(len(snapshot.all_snapshots(self.backups)), count)
+        self.assertEqual(lock.read_text(), json.dumps({"verb": "launch", "pid": 1, "token": "theirs"}) + "\n")
+
+    def test_watch_gate_and_held_run_while_the_lock_is_held(self):
+        taken, _ = self.run_cli("snapshot")
+        game = self.game()
+        snapshot.record(self.the_snapshot(), "started", pid=game.pid, created=game.created)
+        self.hold_the_lock("recover")
+        self.games = [[game], [game], []]
+        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+        self.games = []
+        out, code = self.run_cli("gate", "--permission", "session grant")
+        self.assertEqual((code, out["ok"]), (0, True))
+        self.assertEqual(self.run_cli("held")[1], 0)
+
+    def test_the_lock_is_released_after_a_success_a_refusal_and_an_exception(self):
+        lock = self.backups / cli.LOCK_NAME
+        taken, code = self.run_cli("snapshot")
+        self.assertEqual((code, lock.exists()), (0, False))
+        out, code = self.run_cli("snapshot")
+        self.assertEqual((code, out["refused"], lock.exists()), (2, "unfinished_run", False))
+        self.games = [gate.GateError("the process listing did not finish")]
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["refused"], lock.exists()), (2, "GateError", False))
+        self.games = []
+
+        def start_breaks():
+            raise RuntimeError("something nobody expected")
+
+        self.start_result = start_breaks                    # an exception from inside `launch`, after its claim
+        out, code = self.launch(taken["id"], "-debug_mode")
+        self.assertEqual((code, out["refused"], lock.exists()), (2, "RuntimeError", False))
+
+    def test_a_lock_older_than_fifteen_minutes_is_broken_and_a_younger_one_is_not(self):
+        taken, _ = self.run_cli("snapshot")
+        self.hold_the_lock("launch", minutes_ago=14)
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["refused"]), (2, "busy"))
+        self.hold_the_lock("launch", minutes_ago=16)              # its process died
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"]), (0, False))
+        self.assertFalse((self.backups / cli.LOCK_NAME).exists())
+
+    def test_a_stale_lock_another_session_is_breaking_is_left_to_it(self):
+        taken, _ = self.run_cli("snapshot")
+        lock = self.hold_the_lock("launch", minutes_ago=16)
+        (self.backups / cli.LOCK_BREAK_NAME).write_text("")         # another session is breaking it
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["refused"]), (2, "busy"))
+        self.assertTrue(lock.exists())
+        self.assertEqual(self.events(), ["armed"])
+
+    def test_a_recover_during_a_launch_is_busy_and_one_before_it_makes_the_launch_refuse(self):
+        taken, _ = self.run_cli("snapshot")
+        before = self.tree()
+        game = self.game(seconds_from_now=1)
+        replies = []
+        self.on_look = [lambda: replies.append(self.run_cli("recover")[0])]   # at every listing, the last one too
+        self.start_result = game
+        out, code = self.launch(taken["id"], "-debug_mode")
+        self.on_look = []
+        self.assertEqual((code, out["pid"]), (0, game.pid))
+        self.assertEqual(len(replies), 2)                               # launch's two listings
+        self.assertEqual([r["refused"] for r in replies], ["busy", "busy"])
+        self.assertEqual(self.events(), ["armed", "started"])
+        self.games = [[game], [game], []]
+        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+        self.games = []
+        self.assertEqual(self.run_cli("restore", taken["id"])[1], 0)
+        self.assertEqual(self.tree(), before)
+        # A `recover` that finished before the launch took the lock: the launch reads its verdict and refuses.
+        second, _ = self.run_cli("snapshot")
+        self.assertEqual(self.run_cli("recover")[1], 0)
+        self.starts.clear()
+        out, code = self.launch(second["id"], "-debug_mode")
+        self.assertEqual((code, out["refused"], self.starts), (2, "already_finished", []))
 
     def test_an_unattended_run_needs_an_end_date_in_any_spelling(self):
         # Break-it review 2026-11-10, (8): `--handsoff`, `/handsoff` and `-handsoff=1` went through without an end

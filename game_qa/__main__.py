@@ -13,7 +13,8 @@
     python3 -m game_qa selftest-restore                    # prove a snapshot restores, touching nothing
 
 A run `watch` lost sight of (a failed look, or a resume after more than 15 s) is held for the owner to
-resolve, as is one during which it saw another game.
+resolve, as is one during which it saw another game. `snapshot`, `launch`, `restore`, `recover` and
+`selftest-restore` take turns (a lock in the backup root): `busy` means another session is in one of them.
 
 Each verb prints one JSON object. Exit 0 on success, 2 on a refusal, a hold or an error. Usage errors are
 argparse's (a message on stderr, exit 2).
@@ -23,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import functools
 import hashlib
 import json
 import os
@@ -58,6 +60,13 @@ LAUNCH_CLAIM = "launch.claim"
 # `recover` give it no verdict (`launch_in_flight`). gate.start_game gives PowerShell up to 60 s; the rest is
 # margin for the journal write and the drive's coarse file times.
 LAUNCH_IN_FLIGHT_S = 90.0
+# The verbs that change things (snapshot, launch, restore, recover, selftest-restore) take turns: each holds
+# LOCK_NAME in the backup root, created with O_EXCL, for its whole run, and refuses `busy` while another session
+# holds it, so that no check-then-act of one can interleave with another's. A lock older than LOCK_STALE_S was
+# left by a process that died: it is broken, by one session at a time (LOCK_BREAK_NAME, also O_EXCL).
+LOCK_NAME = ".lock"
+LOCK_BREAK_NAME = ".lock.break"
+LOCK_STALE_S = 15 * 60.0
 _END_DATE = re.compile(r"[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}")   # -run_until=1836.2.10, matched whole
 _VERDICTS = ("restored", "held")
 _sleep = time.sleep       # patched in tests
@@ -73,6 +82,116 @@ class _Refused(Exception):
     def __init__(self, reason: str, detail: str, **fields):
         super().__init__(reason)
         self.result = {"refused": reason, "detail": detail, **fields}
+
+
+def _takes_turns(verb: str):
+    """Run the decorated verb holding the backup root's lock, or refuse `busy` without waiting. The lock is
+    released however the verb ends."""
+    def wrap(fn):
+        @functools.wraps(fn)
+        def run(args) -> tuple[dict, int]:
+            _user, backups = _paths()
+            try:
+                token = _take_lock(backups, verb)
+            except _Refused as refused:
+                snap_id = getattr(args, "id", None)
+                return (dict(refused.result, id=snap_id) if snap_id else refused.result), 2
+            try:
+                return fn(args)
+            finally:
+                _release_lock(backups, token)
+        return run
+    return wrap
+
+
+def _take_lock(backups: Path, verb: str) -> str:
+    """Create the lock for `verb` and return its token, or raise _Refused (`busy`)."""
+    if not backups.is_dir():
+        if not backups.parent.is_dir():
+            raise snapshot.BackupRootError(f"the folder that should hold the backups does not exist: {backups.parent}")
+        backups.mkdir(exist_ok=True)
+    lock = backups / LOCK_NAME
+    token = os.urandom(8).hex()
+    for _attempt in range(3):
+        at = snapshot._drive_clock(backups).strftime("%Y-%m-%dT%H:%M:%SZ")
+        try:
+            fd = os.open(lock, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+        except FileExistsError:
+            holder = _lock_holder(backups)
+            if holder is None:                      # released between the two looks: try again
+                continue
+            if holder[2] <= LOCK_STALE_S:
+                raise _busy(*holder) from None
+            _break_stale_lock(backups, *holder)
+            continue
+        try:
+            os.write(fd, (json.dumps({"verb": verb, "pid": os.getpid(), "at": at, "token": token}) + "\n")
+                     .encode("ascii"))
+            os.fsync(fd)
+        except BaseException:
+            os.close(fd)
+            lock.unlink(missing_ok=True)
+            raise
+        os.close(fd)
+        return token
+    raise _Refused("busy", "the lock changed hands while this looked at it: retry shortly", holder="unknown")
+
+
+def _lock_holder(backups: Path) -> tuple[str, object, float] | None:
+    """The lock's verb, process id and age in seconds by the backup drive's clock, or None if there is none."""
+    lock = backups / LOCK_NAME
+    try:
+        made = os.stat(lock).st_mtime
+        text = lock.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        return None
+    try:
+        entry = json.loads(text.splitlines()[0])
+        verb, pid = str(entry["verb"]), entry.get("pid")
+    except (ValueError, IndexError, KeyError, TypeError, AttributeError):   # cut short when its process died
+        verb, pid = "unknown", None
+    return verb, pid, snapshot._drive_clock(backups).timestamp() - made
+
+
+def _busy(verb: str, pid, age: float) -> _Refused:
+    return _Refused("busy", f"another session is in `{verb}` (pid {pid}, for {max(age, 0):.0f} s): `snapshot`, "
+                            "`launch`, `restore`, `recover` and `selftest-restore` take turns. Retry shortly. A "
+                            f"lock older than {LOCK_STALE_S / 60:g} minutes is taken as left by a process that died, "
+                            "and broken", holder=verb, holder_pid=pid, age_s=round(max(age, 0.0), 1))
+
+
+def _break_stale_lock(backups: Path, verb: str, pid, age: float) -> None:
+    """Remove a stale lock, one session at a time: only the session that creates LOCK_BREAK_NAME may, after
+    looking at the lock again. Raises _Refused (`busy`) while another session is breaking it."""
+    breaker = backups / LOCK_BREAK_NAME
+    try:
+        fd = os.open(breaker, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+    except FileExistsError:
+        try:
+            if snapshot._drive_clock(backups).timestamp() - os.stat(breaker).st_mtime > LOCK_STALE_S:
+                breaker.unlink(missing_ok=True)     # its breaker died too: the next call breaks the lock
+        except FileNotFoundError:
+            pass
+        raise _Refused("busy", f"the lock `{verb}` (pid {pid}) left {age / 60:.0f} minutes ago is being broken by "
+                               "another session: retry shortly", holder=verb, holder_pid=pid,
+                       age_s=round(age, 1)) from None
+    os.close(fd)
+    try:
+        holder = _lock_holder(backups)              # again, now that no other session may break it
+        if holder is not None and holder[2] > LOCK_STALE_S:
+            (backups / LOCK_NAME).unlink(missing_ok=True)
+    finally:
+        breaker.unlink(missing_ok=True)
+
+
+def _release_lock(backups: Path, token: str) -> None:
+    """Remove the lock if it is still the one `token` names (never another session's)."""
+    lock = backups / LOCK_NAME
+    try:
+        if json.loads(lock.read_text(encoding="utf-8").splitlines()[0]).get("token") == token:
+            lock.unlink()
+    except (OSError, ValueError, IndexError, AttributeError):
+        pass
 
 
 def _paths() -> tuple[Path, Path]:
@@ -170,6 +289,7 @@ def cmd_gate(args) -> tuple[dict, int]:
             "permission": args.permission}, 0 if result.ok else 2
 
 
+@_takes_turns("snapshot")
 def cmd_snapshot(args) -> tuple[dict, int]:
     user, backups = _paths()
     open_runs = _open_snapshots(backups)
@@ -198,6 +318,7 @@ def _game_running(games: list[gate.ProcId], why: str) -> _Refused:
                                     "never end it", games=_running(games))
 
 
+@_takes_turns("launch")
 def cmd_launch(args) -> tuple[dict, int]:
     """Start the game for a snapshot's run, after the gate's checks, and record its start at once.
 
@@ -211,7 +332,10 @@ def cmd_launch(args) -> tuple[dict, int]:
     someone has used the folder since: a start recorded now would date their writes before the run, and
     restore would put the old copies back over them. The folder, the journal and the processes are looked
     at again last; then the launch claims the snapshot (LAUNCH_CLAIM, created with O_EXCL, so of two
-    launches on one id only one can start a game) and starts it.
+    launches on one id only one can start a game) and starts it. All of it runs holding the backup root's
+    lock, so a verdict another session gave before is read here (already_finished), and a `restore` or
+    `recover` arriving during it is refused `busy`. The claim and `launch_in_flight` remain for a launch
+    whose process died between the start and the record.
 
     `started` (pid, start time, arguments) is recorded the moment the process exists. A start time
     PowerShell could not read is recorded as "unknown" and never looked up later: a process found by its pid
@@ -522,6 +646,7 @@ def _follow(snap: snapshot.Snapshot, proc: gate.ProcId, interval: float, seen: s
     return beats
 
 
+@_takes_turns("restore")
 def cmd_restore(args) -> tuple[dict, int]:
     """Put the owner's files back. This never writes a time into the journal:
     when the run ended is what `launch` and `watch` recorded while it
@@ -617,6 +742,7 @@ def _since_last_seen_alive(snap: snapshot.Snapshot) -> float | None:
     return (snapshot._drive_clock(snap.dir) - max(times)).total_seconds()
 
 
+@_takes_turns("recover")
 def cmd_recover(args) -> tuple[dict, int]:
     """Finish the runs a dead session left: first the started ones, then, if those all finished, the
     snapshots armed for a run whose start was never recorded.
@@ -696,6 +822,7 @@ def cmd_held(args) -> tuple[dict, int]:
     return {"held": [s.id for s in restore.held(backups)]}, 0
 
 
+@_takes_turns("selftest-restore")
 def cmd_selftest_restore(args) -> tuple[dict, int]:
     """Snapshot the real user-data folder, restore it into an empty temp
     folder, and compare every file's hash with its manifest entry. Reads the
