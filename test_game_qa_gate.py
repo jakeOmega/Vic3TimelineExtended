@@ -10,6 +10,7 @@ import json
 import os
 import subprocess
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -437,7 +438,7 @@ class CommandLineTest(unittest.TestCase):
 
         snap_id = self.launched_run(the_run)
         self.assertIn("save games/new york_1940_07_29.v3", self.the_snapshot().files)
-        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "game_exited"])
+        self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat", "game_exited"])
         out, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, out["held"]), (0, False))
         self.assertEqual(self.tree(), before)
@@ -738,7 +739,10 @@ class CommandLineTest(unittest.TestCase):
 
     def test_a_claim_without_a_recorded_start_is_a_launch_whose_record_was_lost(self):
         taken, _ = self.run_cli("snapshot")
-        (self.the_snapshot().dir / cli.LAUNCH_CLAIM).write_text("4242\n")
+        claim = self.the_snapshot().dir / cli.LAUNCH_CLAIM
+        claim.write_text("4242\n")
+        old = time.time() - cli.LAUNCH_IN_FLIGHT_S - 30          # no `launch` is still on its way to the record
+        os.utime(claim, (old, old))
         self.start_result = self.game()
         out, code = self.launch(taken["id"], "-debug_mode")
         self.assertEqual((code, out["refused"], self.starts), (2, "already_started", []))
@@ -752,6 +756,70 @@ class CommandLineTest(unittest.TestCase):
         out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_running"))
         self.assertEqual(self.tree(), before)
+
+    def test_restore_and_recover_give_no_verdict_while_a_launch_is_in_flight(self):
+        # The third round's concern 2: between `launch`'s claim and its `started`, the game may not be listed yet;
+        # `recover` saw nothing, recorded `restored`, and the run's writes were then left unrestored.
+        taken, _ = self.run_cli("snapshot")
+        (self.the_snapshot().dir / cli.LAUNCH_CLAIM).write_text("1\n")          # just made
+        (self.user / "continue_game.json").write_text('{"title": "the run, loading"}')
+        before = self.tree()
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"], out["refused"], out["id"]), (2, False, "launch_in_flight", taken["id"]))
+        out, code = self.run_cli("recover")
+        self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                         (2, [(taken["id"], False, "launch_in_flight")]))
+        self.assertEqual(self.events(), ["armed"])
+        self.assertEqual(self.tree(), before)
+
+    def test_a_launch_whose_start_lands_just_after_such_a_refusal_proceeds_normally(self):
+        taken, _ = self.run_cli("snapshot")
+        before = self.tree()
+        game = self.game(seconds_from_now=1)
+        replies = {}
+
+        def start():                     # another session runs `restore` and `recover` while the game starts
+            replies["restore"] = self.run_cli("restore", taken["id"])
+            replies["recover"] = self.run_cli("recover")
+            return game
+
+        self.start_result = start
+        out, code = self.launch(taken["id"], "-debug_mode")
+        self.assertEqual((code, out["pid"]), (0, game.pid))
+        self.start_result = None
+        self.assertEqual(replies["restore"][0]["refused"], "launch_in_flight")
+        self.assertEqual([r["reason"] for r in replies["recover"][0]["runs"]], ["launch_in_flight"])
+        self.assertEqual(self.events(), ["armed", "started"])
+        self.games = [[game], [game], []]
+        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"]), (0, False))
+        self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat", "game_exited", "restored"])
+        self.assertEqual(self.tree(), before)
+
+    def test_an_old_claim_with_no_start_is_judged_as_a_snapshot_nothing_was_launched_under(self):
+        old = time.time() - cli.LAUNCH_IN_FLIGHT_S - 30
+        for case, games, change, verb, expected in (
+                ("a game is up", [self.game(pid=5555)], None, "restore", (2, True, "other_game_running")),
+                ("a file changed", [], "continue_game.json", "restore", (2, True, "no_reference_time")),
+                ("nothing changed", [], None, "restore", (0, False, "")),
+                ("nothing changed, by recover", [], None, "recover", (0, False, ""))):
+            with self.subTest(case=case):
+                snap = self.armed_snapshot(dt.datetime.now(UTC) - dt.timedelta(minutes=20))
+                claim = snap.dir / cli.LAUNCH_CLAIM
+                claim.write_text("1\n")
+                os.utime(claim, (old, old))
+                if change:
+                    (self.user / change).write_text('{"title": "%s"}' % case)
+                self.games = games
+                if verb == "restore":
+                    out, code = self.run_cli("restore", snap.id)
+                    self.assertEqual((code, out["held"], out["reason"]), expected)
+                else:
+                    out, code = self.run_cli("recover")
+                    self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                                     (expected[0], [(snap.id, *expected[1:])]))
 
     def test_an_unattended_run_needs_an_end_date_in_any_spelling(self):
         # Break-it review 2026-11-10, (8): `--handsoff`, `/handsoff` and `-handsoff=1` went through without an end
@@ -837,7 +905,7 @@ class CommandLineTest(unittest.TestCase):
         self.games = [[game], [game], []]
         out, code = self.run_cli("watch", taken["id"])
         self.assertEqual((code, out["heartbeats"], out["pid"]), (0, 1, game.pid))
-        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "heartbeat", "game_exited"])
+        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "watch_resumed", "heartbeat", "game_exited"])
 
     def test_watch_records_no_exit_for_a_recorded_game_gone_at_its_first_look(self):
         taken, _ = self.run_cli("snapshot")
@@ -849,7 +917,7 @@ class CommandLineTest(unittest.TestCase):
         out, code = self.run_cli("watch", taken["id"])
         self.assertEqual((code, out["refused"]), (2, "game_gone_unrecorded"))
         self.assertIn("last heartbeat", out["detail"])
-        self.assertEqual(self.events(), ["armed", "started", "other_game"])   # the first look records it too
+        self.assertEqual(self.events(), ["armed", "started", "watching", "other_game"])   # the first look too
         self.games = []
         out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_ran"))
@@ -873,7 +941,14 @@ class CommandLineTest(unittest.TestCase):
         self.games = [[game], failed, [game], [unreadable], failed, [game], []]
         out, code = self.run_cli("watch", taken["id"])
         self.assertEqual((code, out["heartbeats"]), (0, 2))
-        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "heartbeat", "game_exited"])
+        self.assertEqual(self.events(), ["armed", "started", "watching", "look_failed", "heartbeat", "look_failed",
+                                         "look_failed", "heartbeat", "game_exited"])
+        # Round 4 ruling: during a failed look nobody saw whether another game ran, so nothing vouches for the files.
+        before = self.tree()
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
+        self.assertEqual(self.tree(), before)
 
     def test_watch_records_no_exit_when_a_look_failed_since_the_last_heartbeat(self):
         # Break-it review 2026-11-10, (10): four failed looks after the run's game exited, during which the owner
@@ -903,11 +978,11 @@ class CommandLineTest(unittest.TestCase):
             out, code = self.run_cli("watch", taken["id"])
             self.on_nap = []
             self.assertEqual((code, out["refused"]), (2, "game_gone_unrecorded"))
-            self.assertEqual(self.events(), ["armed", "started", "heartbeat"])
+            self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat"] + ["look_failed"] * 4)
             before = self.tree()
             self.games = []
             out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"], out["reason"]), (2, True, "modified_after_exit"))
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
         self.assertEqual(self.tree(), before)
 
     def test_watch_refuses_an_interval_longer_than_ten_seconds(self):
@@ -959,11 +1034,77 @@ class CommandLineTest(unittest.TestCase):
         self.games = [[game], [game], gate.GateError("no PowerShell")]
         out, code = self.run_cli("watch", taken["id"])
         self.assertEqual((code, out["refused"], out["heartbeats"]), (2, "cannot_look", 1))
-        self.assertEqual(self.events(), ["armed", "started", "heartbeat"])
+        self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat"] + ["look_failed"] * 5)
         # Once PowerShell answers again, `watch` picks the run up where it was.
         self.games = [[game], []]
         self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
-        self.assertEqual(self.events(), ["armed", "started", "heartbeat", "game_exited"])
+        self.assertEqual(self.events()[-2:], ["watch_resumed", "game_exited"])
+        # Round 4 ruling: while it could not look, nobody saw whether another game ran: the run is held.
+        (self.user / "continue_game.json").write_text('{"title": "whose?"}')
+        before = self.tree()
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
+        self.assertEqual(self.tree(), before)
+
+    def test_a_watch_resumed_after_a_long_gap_leads_to_a_hold(self):
+        # Round 4 ruling on the third round's concern 1: the session's `watch` died; the owner started a game of
+        # their own beside the run's, played and quit; a later `watch` saw the run's game alive and recorded its
+        # exit after the owner's writes, and restore put the snapshot's copy back over them.
+        taken, _ = self.run_cli("snapshot")
+        game = self.game(seconds_from_now=-120)
+        long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=90)
+        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {}),
+                              ("heartbeat", {})):
+            snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
+        self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=0.5)   # inside the gap
+        self.games = [[game], [game], []]
+        out, code = self.run_cli("watch", taken["id"])
+        self.assertEqual(code, 0)
+        resumed = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watch_resumed"]
+        self.assertEqual(len(resumed), 1)
+        self.assertGreaterEqual(resumed[0]["gap_s"], 85)
+        before = self.tree()
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
+        self.assertEqual(self.tree(), before)
+
+    def test_a_watch_resumed_within_fifteen_seconds_restores_as_before(self):
+        taken, _ = self.run_cli("snapshot")
+        game = self.game(seconds_from_now=-30)
+        lately = dt.datetime.now(UTC) - dt.timedelta(seconds=5)
+        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {}),
+                              ("heartbeat", {})):
+            snapshot.record(self.the_snapshot(), event, now=lately, **fields)
+        self.games = [[game], [game], []]
+        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+        self.games = []
+        out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"]), (0, False))
+        self.assertEqual(self.events()[-1], "restored")
+
+    def test_watch_stops_without_an_exit_when_the_journal_cannot_take_an_entry(self):
+        # The third round's concern 3: a write that fails must not let `watch` go on to record an exit.
+        game, other = self.game(), self.game(pid=99, seconds_from_now=90)
+        original = snapshot.record
+        for event, games in (("other_game", [[game], [game, other], []]),
+                             ("look_failed", [[game], gate.GateError("no listing"), []]),
+                             ("heartbeat", [[game], [game], []])):
+            with self.subTest(event=event):
+                snap = self.armed_snapshot(dt.datetime.now(UTC))
+                original(snap, "started", pid=game.pid, created=game.created)
+
+                def failing(s, ev, *a, _event=event, **k):
+                    if ev == _event:
+                        raise OSError(28, "No space left on device")
+                    return original(s, ev, *a, **k)
+
+                self.games = games
+                with mock.patch.object(snapshot, "record", side_effect=failing):
+                    out, code = self.run_cli("watch", snap.id)
+                self.assertEqual((code, out["refused"], out["id"]), (2, "journal_unwritable", snap.id))
+                self.assertNotIn("game_exited", [e["event"] for e in snapshot.journal(snap)])
 
     def test_every_watch_refusal_carries_the_snapshot_id(self):
         game = self.game()
@@ -1107,6 +1248,21 @@ class CommandLineTest(unittest.TestCase):
                          (2, [(taken["id"], True, "other_game_running")]))
         self.assertEqual(self.tree(), before)
 
+    def test_recover_holds_a_run_whose_watch_lost_sight_of_the_game(self):
+        taken, _ = self.run_cli("snapshot")
+        run = self.game()
+        long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=30)
+        for event, fields in (("started", {"pid": run.pid, "created": run.created}), ("watching", {}),
+                              ("look_failed", {"why": "the listing did not finish"}), ("game_exited", {})):
+            snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
+        (self.user / "continue_game.json").write_text('{"title": "whose?"}')
+        before = self.tree()
+        out, code = self.run_cli("recover")
+        self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                         (2, [(taken["id"], True, "unwatched_stretch")]))
+        self.assertEqual(self.events()[-1], "held")
+        self.assertEqual(self.tree(), before)
+
     def test_recover_holds_a_run_during_which_another_game_ran(self):
         taken, _ = self.run_cli("snapshot")
         run, owner = self.game(), self.game(pid=99)
@@ -1160,7 +1316,7 @@ class CommandLineTest(unittest.TestCase):
         snapshot.record(self.the_snapshot(), "started", pid=game.pid, created=game.created)
         out, code = self.run_cli("watch", taken["id"])
         self.assertEqual((code, out["refused"]), (2, "cannot_look"))
-        self.assertEqual(self.events(), ["armed", "started"])
+        self.assertEqual(self.events(), ["armed", "started", "watching"] + ["look_failed"] * 5)
 
     def test_game_arguments_go_to_launch_only(self):
         err = io.StringIO()

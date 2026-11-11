@@ -12,6 +12,9 @@
     python3 -m game_qa held                                # snapshots kept because the owner played since
     python3 -m game_qa selftest-restore                    # prove a snapshot restores, touching nothing
 
+A run `watch` lost sight of (a failed look, or a resume after more than 15 s) is held for the owner to
+resolve, as is one during which it saw another game.
+
 Each verb prints one JSON object. Exit 0 on success, 2 on a refusal, a hold or an error. Usage errors are
 argparse's (a message on stderr, exit 2).
 Spec: docs/superpowers/specs/2026-11-10-in-game-qa-harness-design.md §§ 5.2–5.3.
@@ -43,9 +46,18 @@ WATCH_LOOK_TRIES = 5      # failed looks in a row after which `watch` stops, rec
 # A `started` or `heartbeat` younger than this, with no `game_exited`: `watch` is still recording, and a
 # restore now would judge the game's exit writes against the last heartbeat. Three default intervals.
 WATCH_RECORDING_S = 15.0
+# A `watch_resumed` whose gap since the run's game was last seen alive is longer than this holds the run
+# (`unwatched_stretch`): nobody saw in that time whether another game ran.
+WATCH_RESUME_GAP_S = 15.0
+# The `watch` entries: a journal with one of them has been followed before, so a new `watch` is a resume.
+_WATCH_EVENTS = ("watching", "watch_resumed", "heartbeat", "look_failed", "other_game")
 # Created in the snapshot's folder with O_EXCL by the one `launch` that may start the game; it counts as a
 # start. A claim with no `started` is a launch whose record was lost (its reply, or the journal write).
 LAUNCH_CLAIM = "launch.claim"
+# A claim younger than this with no `started` may be a `launch` still on its way to the record: `restore` and
+# `recover` give it no verdict (`launch_in_flight`). gate.start_game gives PowerShell up to 60 s; the rest is
+# margin for the journal write and the drive's coarse file times.
+LAUNCH_IN_FLIGHT_S = 90.0
 _END_DATE = re.compile(r"[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}")   # -run_until=1836.2.10, matched whole
 _VERDICTS = ("restored", "held")
 _sleep = time.sleep       # patched in tests
@@ -359,7 +371,15 @@ def cmd_watch(args) -> tuple[dict, int]:
 
     Every look that lists another Victoria 3 process records it once as
     `other_game` (pid, start time): it may be the owner's, writing the same
-    files, so `restore` and `recover` hold the run (`other_game_ran`)."""
+    files, so `restore` and `recover` hold the run (`other_game_ran`).
+
+    Each failed look is journaled (`look_failed`), and a `watch` run on a
+    journal some `watch` has written to before journals `watch_resumed` with
+    the seconds since the game was last seen alive (else `watching`). During
+    a failed look, or a gap of more than WATCH_RESUME_GAP_S, nobody saw
+    whether another game ran, so `restore` and `recover` hold the run
+    (`unwatched_stretch`). If an entry cannot be written, `watch` stops
+    (`journal_unwritable`), recording no exit."""
     _user, backups = _paths()
     snap = _find(backups, args.id)
     journal = snapshot.journal(snap)
@@ -391,6 +411,7 @@ def cmd_watch(args) -> tuple[dict, int]:
                                             f"game has closed `restore {snap.id}` judges the files against the "
                                             "start and holds any written after it")
         seen = {(str(e.get("pid")), str(e.get("created"))) for e in journal if e.get("event") == "other_game"}
+        _begin_watch(snap, journal)
         _first_look(snap, proc, seen)
         beats = _follow(snap, proc, args.interval, seen)
     except _Refused as refusal:
@@ -398,21 +419,51 @@ def cmd_watch(args) -> tuple[dict, int]:
     return {"id": snap.id, "pid": proc.pid, "created": proc.created, "heartbeats": beats, "exited": True}, 0
 
 
+def _record(snap: snapshot.Snapshot, event: str, **fields) -> None:
+    """Journal one of `watch`'s entries, or raise _Refused: without it `watch` must not go on to record an exit."""
+    try:
+        snapshot.record(snap, event, **fields)
+    except OSError as exc:
+        raise _Refused("journal_unwritable", f"`watch` could not write `{event}` into the journal ({exc}), so it "
+                                             "stops, recording no exit: `restore` judges the files against the last "
+                                             "heartbeat. Run `watch` again once the journal can be written",
+                       event=event) from None
+
+
+def _begin_watch(snap: snapshot.Snapshot, journal: list[dict]) -> None:
+    """Journal `watching`, or `watch_resumed` when a `watch` has written to this journal before, with `gap_s`:
+    the seconds, by the backup drive's clock, since the run's game was last seen alive (its last `heartbeat`,
+    else `started`); None when no time can be read, which holds like a long gap."""
+    if not any(e.get("event") in _WATCH_EVENTS for e in journal):
+        _record(snap, "watching")
+        return
+    times = [t for t in (_when(str(e.get("at"))) for e in journal if e.get("event") in ("started", "heartbeat"))
+             if t is not None]
+    try:
+        now = snapshot._drive_clock(snap.dir)
+    except OSError as exc:
+        raise _Refused("journal_unwritable", f"`watch` could not read the backup drive's clock ({exc}), so it "
+                                             "stops, recording no exit. Run `watch` again once it can") from None
+    _record(snap, "watch_resumed", gap_s=round((now - max(times)).total_seconds(), 1) if times else None)
+
+
 def _look(snap: snapshot.Snapshot, proc: gate.ProcId, seen: set[tuple[str, str]]) -> list[gate.ProcId] | None:
-    """The running games, or None when the look failed, or when it lists the run's game's pid with a start
-    time it could not read (that may still be the run's game). Each game in the listing other than the run's
-    is recorded as `other_game` the first time it is seen (`seen` holds the pid and start time of those
-    recorded)."""
+    """The running games, or None (journaled as `look_failed`) when the look failed, or when it lists the run's
+    game's pid with a start time it could not read (that may still be the run's game). Each game in the listing
+    other than the run's is recorded as `other_game` the first time it is seen (`seen` holds the pid and start
+    time of those recorded)."""
     try:
         games = gate.list_games()
-    except gate.GateError:
+    except gate.GateError as exc:
+        _record(snap, "look_failed", why=f"the process listing failed: {str(exc)[:200]}")
         return None
     for game in games:
         key = (str(game.pid), str(game.created))
         if game != proc and game != gate.ProcId(proc.pid, gate.UNKNOWN_START) and key not in seen:
-            snapshot.record(snap, "other_game", pid=game.pid, created=game.created)
+            _record(snap, "other_game", pid=game.pid, created=game.created)
             seen.add(key)
     if gate.ProcId(proc.pid, gate.UNKNOWN_START) in games:
+        _record(snap, "look_failed", why=f"the start time of pid {proc.pid} could not be read")
         return None
     return games
 
@@ -463,10 +514,10 @@ def _follow(snap: snapshot.Snapshot, proc: gate.ProcId, interval: float, seen: s
                                "so when it exited is not known and no exit is recorded: `restore` will judge the "
                                "files against the last heartbeat", pid=proc.pid, heartbeats=beats)
             break
-        snapshot.record(snap, "heartbeat")
+        _record(snap, "heartbeat")
         beats += 1
         failed_since_beat = False
-    snapshot.record(snap, "game_exited")
+    _record(snap, "game_exited")
     return beats
 
 
@@ -475,10 +526,16 @@ def cmd_restore(args) -> tuple[dict, int]:
     when the run ended is what `launch` and `watch` recorded while it
     happened. With no such record, anything that would need judging is held.
     A run during which `watch` saw another game is held (`other_game_ran`),
-    changing nothing. With no `started` nothing was launched, so `logs/` is
-    whoever played since, and is left alone."""
+    changing nothing, as is one it lost sight of (`unwatched_stretch`). With
+    no `started` nothing was launched, so `logs/` is whoever played since, and
+    is left alone. A snapshot a `launch` may still be on its way to recording
+    a start for gets no verdict (`launch_in_flight`)."""
     user, backups = _paths()
     snap = _find(backups, args.id)
+    age = _in_flight_age(snap)
+    if age is not None:
+        return {"held": False, "refused": "launch_in_flight", "id": snap.id,
+                "detail": _in_flight_detail(snap, age)}, 2
     games = gate.list_games()
     mine = _started(snap)
     if mine is not None and mine in games:
@@ -493,7 +550,7 @@ def cmd_restore(args) -> tuple[dict, int]:
                           "returned without recording an exit (game_gone_unrecorded, cannot_look) or died, run "
                           f"`restore` again {WATCH_RECORDING_S:g} s after that time"}, 2
     try:
-        out = _other_game_hold(snap) or restore.restore(
+        out = _unvouched_hold(snap) or restore.restore(
             snap, user, other_game_running=bool(games), logs="started" in _events(snap),
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
@@ -501,19 +558,47 @@ def cmd_restore(args) -> tuple[dict, int]:
     return _outcome(out), 2 if out.held else 0
 
 
-def _other_game_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
-    """Hold, changing nothing, a run during which `watch` saw another game (`other_game` in the journal): its
-    writes cannot be told from the run's. None when there is no such entry. A run already restored is left as
-    it is, as `restore.restore` leaves one beside a running game."""
+def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
+    """Hold, changing nothing, a run whose files nothing vouches for: `watch` saw another game (`other_game_ran`:
+    its writes cannot be told from the run's), or lost sight of the run's game at a failed look or across a gap
+    of more than WATCH_RESUME_GAP_S before a resumed `watch` (`unwatched_stretch`: nobody saw then whether
+    another game ran). None when neither. A run already restored is left as it is, as `restore.restore` leaves
+    one beside a running game."""
     journal = snapshot.journal(snap)
     others = [f"pid {e.get('pid')} (started {e.get('created')})" for e in journal if e.get("event") == "other_game"]
-    if not others:
+    failed = sum(1 for e in journal if e.get("event") == "look_failed")
+    gaps = [e.get("gap_s") for e in journal if e.get("event") == "watch_resumed"]
+    long_gaps = [g for g in gaps if not (isinstance(g, (int, float)) and not isinstance(g, bool)
+                                         and g <= WATCH_RESUME_GAP_S)]
+    if not (others or failed or long_gaps):
         return None
     verdicts = [e.get("event") for e in journal if e.get("event") in _VERDICTS]
     if verdicts and verdicts[-1] == "restored":
         return restore.Outcome([], [], False, "already_restored")
-    snapshot.record(snap, "held", reason="other_game_ran", games=others)
-    return restore.Outcome([], [], True, "other_game_ran")
+    if others:
+        snapshot.record(snap, "held", reason="other_game_ran", games=others)
+        return restore.Outcome([], [], True, "other_game_ran")
+    snapshot.record(snap, "held", reason="unwatched_stretch", looks_failed=failed, gaps_s=long_gaps)
+    return restore.Outcome([], [], True, "unwatched_stretch")
+
+
+def _in_flight_age(snap: snapshot.Snapshot) -> float | None:
+    """The claim's age in seconds, by the backup drive's clock, when the snapshot is claimed, has no `started`,
+    and the claim is younger than LAUNCH_IN_FLIGHT_S: a `launch` may be about to record its start. Else None."""
+    if "started" in _events(snap):
+        return None
+    try:
+        made = os.stat(snap.dir / LAUNCH_CLAIM).st_mtime
+    except FileNotFoundError:
+        return None
+    age = snapshot._drive_clock(snap.dir).timestamp() - made
+    return age if age < LAUNCH_IN_FLIGHT_S else None
+
+
+def _in_flight_detail(snap: snapshot.Snapshot, age: float) -> str:
+    return (f"a `launch` claimed snapshot {snap.id} {max(age, 0):.0f} s ago and has not recorded a start: it may "
+            "be about to, and its game may not be listed yet. Nothing was recorded. Run this again once that "
+            f"`launch` has replied, or {LAUNCH_IN_FLIGHT_S:g} s after the claim")
 
 
 def _since_last_seen_alive(snap: snapshot.Snapshot) -> float | None:
@@ -539,7 +624,8 @@ def cmd_recover(args) -> tuple[dict, int]:
     and nothing at all while the last recorded game of any of them is up (`game_still_up`), or when a `started`
     cannot be read. Two things are added: any game running holds (`other_game_running`), even one an earlier
     `started` of the run names, since a game's pid and start time alone say nothing of whose files it
-    writes; and a run during which `watch` saw another game holds (`other_game_ran`)."""
+    writes; and a run during which `watch` saw another game holds (`other_game_ran`), as does one it lost
+    sight of (`unwatched_stretch`)."""
     user, backups = _paths()
     games = gate.list_games()
     stack = list(reversed(restore.unfinished(backups)))
@@ -556,7 +642,7 @@ def cmd_recover(args) -> tuple[dict, int]:
                          for s in stack]}, 2
     for snap in stack:
         try:
-            out = _other_game_hold(snap) or restore.restore(snap, user, other_game_running=bool(games))
+            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games))
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id))
             break
@@ -578,7 +664,9 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
     safe: any game running may be the owner's, so this holds (`other_game_running`). With none, restore puts
     the folder back when nothing needs judging and holds (`no_reference_time`) otherwise, leaving `logs/`
     alone: with nothing recorded, the logs are whoever played since. A session's own snapshot, between its
-    `snapshot` and `launch`, is finished too: `launch` then refuses `already_finished`, starting nothing."""
+    `snapshot` and `launch`, is finished too: `launch` then refuses `already_finished`, starting nothing.
+    A claimed one whose claim is younger than LAUNCH_IN_FLIGHT_S gets no verdict: a `launch` may be about to
+    record its start, its game not yet listed. It is reported (`launch_in_flight`) and the unwinding stops."""
     never_started = [s for s in _open_snapshots(backups) if "started" not in _events(s)]
     if not never_started:
         return []
@@ -589,7 +677,10 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
         return [dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=never_started[-1].id)]
     for snap in reversed(never_started):
         try:
-            out = _other_game_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
+            if _in_flight_age(snap) is not None:
+                runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
+                break
+            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id))
             break
