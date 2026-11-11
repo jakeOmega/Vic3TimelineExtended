@@ -209,6 +209,8 @@ def cmd_launch(args) -> tuple[dict, int]:
         if not verdict.ok:
             raise _Refused(verdict.reason, verdict.detail)
         exe = _game_exe()
+        if not exe.is_file():   # wslpath converts a path that does not exist, and the start would then fail
+            raise _Refused("no_game_binary", f"there is no game at {exe}: check base_game_path")
         exe_windows, cwd_windows = gate.windows_path(exe), gate.windows_path(exe.parent)
         # The last looks, right before the start: the folder (slow: it hashes), then the journal and the processes.
         _check_unchanged(snap, user)

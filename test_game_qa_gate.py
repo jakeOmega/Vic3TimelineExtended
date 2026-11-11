@@ -323,6 +323,8 @@ class CommandLineTest(unittest.TestCase):
         self.start_result = None  # what gate.start_game returns; while None, a start fails the test
         self.starts = []          # (exe, args, cwd) of every start
         self.base_game = root / "game"
+        (self.base_game / "binaries").mkdir(parents=True)
+        (self.base_game / "binaries" / "victoria3.exe").write_bytes(b"MZ")
         env = {"VIC3_USER_DATA": str(self.user), "VIC3_QA_BACKUPS": str(self.backups),
                "VIC3_BASE_GAME": str(self.base_game)}
         patches = [mock.patch.dict(os.environ, env),
@@ -622,6 +624,13 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(out["files"], ["continue_game.json", "save games/autosave.v3", "save games/autosave_1.v3"])
         self.assertEqual((self.starts, self.events()), ([], ["armed"]))
         self.assertEqual(self.tree(), before)
+
+    def test_launch_refuses_when_the_game_is_not_where_base_game_path_says(self):
+        taken, _ = self.run_cli("snapshot")
+        self.start_result = self.game()
+        (self.base_game / "binaries" / "victoria3.exe").unlink()
+        out, code = self.launch(taken["id"], "-debug_mode")
+        self.assertEqual((code, out["refused"], self.starts, self.events()), (2, "no_game_binary", [], ["armed"]))
 
     def test_launch_reports_the_pid_it_started_when_the_start_cannot_be_recorded(self):
         taken, _ = self.run_cli("snapshot")
