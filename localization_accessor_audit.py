@@ -807,6 +807,9 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         # and the interest tier a project-power order would reach
         # (`.GetTargetInterestTierTypeInRegion(...).GetNameNoIcon`).
         "GetNewShipsHQ": "hq",
+        # 1.15.1: the state a fleet draws supply from, a State per the data
+        # types (vanilla: `MilitaryFormation.GetSupplyHub.GetName`).
+        "GetSupplyHub": "state",
         "GetTargetSeaNode": "province",
         "GetTargetInterestTierTypeInRegion": "interest_tier_type",
         "GetTargetInterestTierTypeWithoutFleetInRegion": "interest_tier_type",

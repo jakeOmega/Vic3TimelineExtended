@@ -1,4 +1,4 @@
-# Auto-generated from modifiers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from modifiers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 battle|battle_casualties_mult|A bonus or penalty to the number of Casualties this side takes in Battle
 battle|battle_combat_width_mult|A bonus or penalty to the Terrain Combat Width for this side of the Battle
@@ -4486,6 +4486,7 @@ country|country_can_only_conscript_peasants_bool|Conscript Battalions can only c
 country|country_cannot_be_subjugated_bool|This country recently declared its Neutrality and cannot be subjugated
 country|country_cannot_be_target_for_law_imposition_bool|Country cannot be targeted for new Law Imposition attempts while this is in effect
 country|country_cannot_cancel_law_enactment_bool|A penalty preventing a country from cancelling the enactment of any Laws currently in progress
+country|country_cannot_decrease_autonomy_bool|A guarantee preventing the Overlord from decreasing Autonomy or using the Install Favored Ruler Overlord Action
 country|country_cannot_enact_laws_bool|A penalty preventing a country from enacting any Laws
 country|country_cannot_join_power_bloc_bool|This country recently declared its Neutrality and cannot join any Power Bloc
 country|country_cannot_start_law_enactment_bool|A penalty preventing a country from starting to enact any new Laws
@@ -6625,6 +6626,7 @@ state|state_dependent_wage_add|An increase or decrease in Dependents Income
 state|state_dependent_wage_mult|An increase or decrease in Dependents Income
 state|state_devastation_decay_mult|A bonus or penalty to the speed at which States recover from Devastation.
 state|state_dinka_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
+state|state_disable_disband_prestige_penalty_bool|Disbanding Battalions from the State does not cost Prestige
 state|state_disallow_barracks_construction_bool|Army Buildings cannot be constructed in the State, and no new Battalions can be raised there
 state|state_disallow_incorporation_bool|Cannot Incorporate State due to a modifier
 state|state_dixie_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]

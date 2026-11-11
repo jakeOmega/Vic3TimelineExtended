@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log + effects.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log + effects.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 2044 trigger entries and 3666 effect entries.*
-*99 iterator families, 963 standalone triggers, 403 standalone effects.*
+*Auto-generated from 2045 trigger entries and 3666 effect entries.*
+*99 iterator families, 964 standalone triggers, 403 standalone effects.*
 
 ## Reading Guide
 
@@ -774,7 +774,7 @@
 ---
 ## Building
 
-### Triggers (24)
+### Triggers (25)
 
 - `building_has_goods_shortage` — Check if building has a shortage of any of its inputs
 - `can_queue_building_levels` — Checks if the building's owner could queue the provided number of additional levels without hitting a level or resource potential cap
@@ -795,6 +795,7 @@
 - `is_subsistence_building` — Check if a building is a subsistence building
 - `is_under_construction` — Checks if building is under construction
 - `levels_owned_by_country` — Compares how many levels a country or investors in that country own in a building  levels_owned_by_country
+- `num_building_assets_of_group` — Checks the number of building levels of a given building group the scoped building own.
 - `num_building_assets_of_type` — Checks the number of building levels of a given type the scoped building own.
 - `occupancy` — Evaluates a building's current occupancy
 - `private_ownership_fraction` — Compares the fraction of this building's levels that are privately owned

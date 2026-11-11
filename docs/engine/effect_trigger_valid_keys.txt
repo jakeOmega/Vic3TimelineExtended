@@ -1639,6 +1639,7 @@ can_reach_target_state_to_coerce
 can_reach_target_state_to_conquer
 can_research
 can_revolution_inherit
+can_secede_during_revolution
 can_select_to_break
 can_send_diplomatic_action
 can_start_play_against_overlord
@@ -1812,6 +1813,7 @@ clear_populism_vars
 clear_pro_lobby_vars
 clear_saved_scope
 clear_scaled_debt
+clear_springtime_revolution_variables
 clear_tags
 clear_variable_list
 clear_variable_map
@@ -1927,6 +1929,7 @@ commander_coup_strength_country_display
 commander_is_available
 commander_military_formation
 commander_rank
+common_child_outfit_trigger
 communist_agitator_election_scope_effect
 communist_clothes_trigger
 company_employed_levels
@@ -5096,6 +5099,7 @@ je_tsarpoints_cleanup_favourite_variables
 je_tsarpoints_cleanup_gendarme_of_europe_variables
 je_tsarpoints_cleanup_great_reform_variables
 je_tsarpoints_cleanup_heir_of_alexander_variables
+je_tsarpoints_cleanup_master_modifiers
 je_tsarpoints_cleanup_master_variables
 je_tsarpoints_cleanup_mission_variables
 je_tsarpoints_cleanup_unshakable_autocracy_variables
@@ -5521,6 +5525,7 @@ normal_modifier_time
 normalized_socialism_coefficient
 normalized_socialism_coefficient_squared
 not
+num_building_assets_of_group
 num_building_assets_of_type
 num_casualties
 num_companies
@@ -9183,6 +9188,7 @@ struggling_pop_trigger
 stupidly_long_modifier_time
 subject
 subject_can_increase_autonomy
+subject_join_initiator_trigger
 subject_type
 subsidized
 subtract

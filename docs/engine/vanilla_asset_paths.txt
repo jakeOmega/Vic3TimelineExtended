@@ -1,5 +1,5 @@
 # AUTO-GENERATED vanilla asset path catalog for texture_reference_audit.py.
-# Game version 1.15.0. Regenerate on a vanilla bump:
+# Game version 1.15.1. Regenerate on a vanilla bump:
 #   python3 texture_reference_audit.py --bootstrap
 # Every file under game/gfx, jomini/gfx, clausewitz/gfx and game/dlc/*/gfx
 # with one of the extensions .dds .png .tga .jpg .jpeg .bk2 .shader .fxh .txt .settings, as the engine
@@ -496,6 +496,7 @@ gfx/coat_of_arms/colored_emblems/ce_hammer_and_sickle_round.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_compass_ddr.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_ddr.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_hoe.dds
+gfx/coat_of_arms/colored_emblems/ce_hammer_scythe.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_cogwheel_usa.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_india.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_india_02.dds
@@ -766,6 +767,7 @@ gfx/coat_of_arms/colored_emblems/ce_star_13.dds
 gfx/coat_of_arms/colored_emblems/ce_star_14.dds
 gfx/coat_of_arms/colored_emblems/ce_star_16.dds
 gfx/coat_of_arms/colored_emblems/ce_star_16_bright.dds
+gfx/coat_of_arms/colored_emblems/ce_star_and_gear.dds
 gfx/coat_of_arms/colored_emblems/ce_star_frame_hammer_sickle.dds
 gfx/coat_of_arms/colored_emblems/ce_star_gunelve.dds
 gfx/coat_of_arms/colored_emblems/ce_star_hexagram.dds
@@ -4655,6 +4657,7 @@ gfx/interface/icons/lens_toolbar_icons/da_request_support_regime.dds
 gfx/interface/icons/lens_toolbar_icons/da_stake_colonial_claim.dds
 gfx/interface/icons/lens_toolbar_icons/da_subject_request_investment_rights.dds
 gfx/interface/icons/lens_toolbar_icons/da_support_regime.dds
+gfx/interface/icons/lens_toolbar_icons/da_tsarpoints_install_subject_ruler.dds
 gfx/interface/icons/lens_toolbar_icons/damage_relations.dds
 gfx/interface/icons/lens_toolbar_icons/declare_interest.dds
 gfx/interface/icons/lens_toolbar_icons/decrease_payments.dds
