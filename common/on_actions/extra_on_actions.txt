@@ -423,8 +423,10 @@ te_pm_retooling_weekly_schedule = {
 
 # DIPLOMATIC PLAY ESCALATION - weekly tick distributed across the month at
 # days 0/7/14/21. Day 0 runs inline; days 7/14/21 fire dp_escalation_events.1
-# in country scope. The apply effect short-circuits via three is_diplomatic_play_*
-# guards, so countries not in any play do ~zero work.
+# in country scope. The apply effect short-circuits on is_diplomatic_play_initiator,
+# so countries that started no play do ~zero work; each play's extra is added at
+# its initiator's tick, only for the days its escalation wasn't paused
+# (dp_escalation_effects.txt).
 st_dp_escalation_weekly_schedule = {
 	effect = {
 		st_dp_country_apply_weekly_escalation = yes

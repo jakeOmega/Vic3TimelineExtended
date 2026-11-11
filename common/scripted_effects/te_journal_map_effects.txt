@@ -129,3 +129,44 @@ te_jmap_hq_selfcheck = {
 		remove_global_variable = te_jmap_sc_hq_nonzero
 	}
 }
+
+# The class maps' figures (41-44; te_journal_map_values.txt): each state's Capitalists, Aristocrats, Clergymen and
+# Academics, counted in Demographics' yearly walk (te_demog_walks, te_demog_effects.txt), whatever the rule, as Armed
+# Forces' soldiers are, and stored as te_dg_capitalists, te_dg_aristocrats, te_dg_clergy and te_dg_academics. Three calls
+# of their own, not the census's helpers, which set nothing outside the census (test_demographics_registry.py,
+# TestWorkWalk); test_demographics_golden.py leaves their three lines out of the walk it pins.
+# State scope, before the walk's pop loop.
+te_jmap_class_walk_init = {
+	set_local_variable = { name = te_jmap_w_cap value = 0 }
+	set_local_variable = { name = te_jmap_w_ari value = 0 }
+	set_local_variable = { name = te_jmap_w_cle value = 0 }
+	set_local_variable = { name = te_jmap_w_aca value = 0 }
+}
+
+# Pop scope, in the walk's pop loop.
+te_jmap_class_walk_pop = {
+	if = {
+		limit = { is_pop_type = capitalists }
+		change_local_variable = { name = te_jmap_w_cap add = total_size }
+	}
+	else_if = {
+		limit = { is_pop_type = aristocrats }
+		change_local_variable = { name = te_jmap_w_ari add = total_size }
+	}
+	else_if = {
+		limit = { is_pop_type = clergymen }
+		change_local_variable = { name = te_jmap_w_cle add = total_size }
+	}
+	else_if = {
+		limit = { is_pop_type = academics }
+		change_local_variable = { name = te_jmap_w_aca add = total_size }
+	}
+}
+
+# State scope, after the walk's pop loop.
+te_jmap_class_walk_store = {
+	set_variable = { name = te_dg_capitalists value = local_var:te_jmap_w_cap }
+	set_variable = { name = te_dg_aristocrats value = local_var:te_jmap_w_ari }
+	set_variable = { name = te_dg_clergy value = local_var:te_jmap_w_cle }
+	set_variable = { name = te_dg_academics value = local_var:te_jmap_w_aca }
+}

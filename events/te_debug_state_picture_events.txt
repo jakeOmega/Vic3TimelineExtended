@@ -1,0 +1,52 @@
+﻿# ============================================================================
+# STATE PICTURES TEST CONSOLE - fired only from the console:
+#   event te_debug_state_picture.1   run the yearly pass now, in every state
+#   event te_debug_state_picture.2   show your capital as a metropolis
+# The play-test list (docs/testing/state-pictures-playtest.md) says when to use each.
+# ============================================================================
+# Vic3's console has no `effect` command; `event <id>` is the way to run script
+# by hand. Nothing in the mod fires these events.
+#
+# The size a banner picture follows (te_sp_size) and the oil and coal tags
+# (te_sp_oil, te_sp_coal) are stored by a yearly state pass
+# (common/scripted_effects/te_state_picture_effects.txt), so a new game shows no
+# metropolis picture for up to a year, and a loaded save no oil field. .1 runs that pass at once. Every 1836
+# state has had its Demographics walk by then, so the figure the pass reads is
+# there from the first day.
+namespace = te_debug_state_picture
+
+# .1: the yearly pass in every state of the world, then a line for each of your
+# own states with the size it got and the largest-city figure behind it, so a
+# banner can be checked against its number. size: 1 town, 2 city, 3 metropolis,
+# 4 megacity, 0 no walk yet. oil and coal: 1 where the state is tagged. The pass's once-a-game self-check line
+# (TE_SELF_CHECK state_picture_size) is logged too, if a metropolis exists.
+te_debug_state_picture.1 = { # REVIEWED 2026-11-10: console-only test event (`event te_debug_state_picture.1`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_state = {
+			te_state_picture_refresh = yes
+		}
+		debug_log = "TE_STATE_PICTURE debug: the yearly pass ran in every state; the states of [THIS.GetCountry.GetNameNoFormatting] follow"
+		every_scope_state = {
+			debug_log = "TE_STATE_PICTURE debug: state=[THIS.GetState.GetNameNoFormatting] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0] oil=[THIS.ScriptValue('te_state_picture_oil_shown')|0] coal=[THIS.ScriptValue('te_state_picture_coal_shown')|0] character=[THIS.ScriptValue('te_state_picture_character_shown')|0] growth=[THIS.ScriptValue('te_state_picture_growth_shown')|2]"
+		}
+	}
+}
+
+# .2: your capital state reads as a metropolis whatever its people, so the
+# metropolis picture can be looked at (and a weight's read of the variable
+# checked) without a city that clears the floor. The next pass, yearly or .1,
+# puts the size back to what the state's people make it.
+te_debug_state_picture.2 = { # REVIEWED 2026-11-10: console-only test event (`event te_debug_state_picture.2`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		capital = {
+			set_variable = { name = te_sp_size value = 3 }
+			debug_log = "TE_STATE_PICTURE debug: state=[THIS.GetState.GetNameNoFormatting] forced to size=3 (metropolis) until the next pass; city_people=[THIS.ScriptValue('te_state_picture_city_people')|0]"
+		}
+	}
+}
