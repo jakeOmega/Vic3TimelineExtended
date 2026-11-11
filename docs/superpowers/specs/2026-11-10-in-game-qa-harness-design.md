@@ -541,3 +541,79 @@ below) and the probe's overlay in `docs/testing/game_qa_probe/overlay/`.
 | 5.7 | Flush with `help ndefines.ngui` or padding | Padding from the carrier (A5) |
 | 5.8 | `try-event` isolates options by setup, country or relaunch | Console `event` ignores trigger and cooldown (A6), so the shared game with the setup re-run per option stands as the default |
 
+
+## 13. Results of part 2's live sessions (2026-11-11) and what they change
+
+Three launches on the owner's machine with their go-ahead, the owner away. The first used only
+part 1 and the helper's new calls; the second and third went through the session's verbs.
+Evidence: `docs/testing/game_qa_probe/captures/session_2026-11-11/` and
+`docs/testing/game_qa_probe/live_session/part2_*.py`. Before and after each launch an
+independent manifest of the game's user-data folder (path, size, time, SHA-256; 325 to 332
+entries) was compared: no entry was ever missing and no content ever differed.
+
+### 13.1 What ran
+
+| Run | What | Result |
+|---|---|---|
+| 01:09–01:16, main menu | `selftest-restore`; `snapshot`; `launch --playset mod_only`; `watch`; the helper's `adopt`, `window`, `presence`, `click`, `screenshot`, `kill`; `restore` | Restored, not held, playset put back. The game was up for four minutes |
+| 03:38–03:47, first session | `doctor`; `start --as FRA` with two setups (3 min 50 s, a new fixture made by its own unattended run); `read`; `run-setup`; `console`; `events`; `pick`; `shot`; `try-event`; `enter-game`; `stop` | Everything but `enter-game` worked at the first try. `try-event minor_events_timelineextended.3` was complete in 9 s: option 0 set Nation Building Investment, option 1 Foreign Investment Dependency, no new errors. `stop` restored in 26 s |
+| 04:21–04:27, second session | `start` on the cached fixture (1 min 52 s); a hidden event from the console; `enter-game` (63 s); `read`; `advance 10` (34 s, 5 to 16 January 1836); `shot`; `events`; `stop` | All of it worked. `stop` restored in 31 s |
+
+### 13.2 Facts the sessions established
+
+- **Starting a game from the country-select screen drops the debugger's breakpoints.** After the
+  two clicks the read event ran but no longer stopped, twice, a minute apart, with the relay
+  silent and the console answering. Closing the relay, connecting again and attaching with the
+  breakpoint (the game verified it on the second connection) made reads work. `enter-game` now
+  does this.
+- **The first click selects the country the camera is on, whatever was tagged.** The first
+  session entered as Denmark after `tag FRA`. `enter-game` now tags the session's country again
+  once the game is entered, and the second session then played France (`root = c:FRA`).
+  § 12.1's A2 saw the camera on France after a `tag`; that does not hold in general.
+- **Inside an entered, paused game the console still works**: `help`, a console `event` (pending
+  at once), `run-setup`, `select_event_option`. Reopening the console after each pause, which
+  `advance` does every round, did nothing unwanted, and the pause proof (two equal dates two
+  seconds apart) held.
+- **Console `event <id>` answers `Executed "<id>"` for a hidden event**, and nothing pends: what
+  `try-event` reports as `ran_not_pending`.
+- **`read`**: five expressions come back in about a second. A trigger is written bare and runs
+  in the played country's scope; `c:FRA.has_technology_researched = railways` is "Unknown
+  trigger type". An unset variable reads 0.
+- **The playset file**: the owner's launcher writes `content_load.json` without a byte-order
+  mark, indented by two, with line feeds, which is what `launch` writes. The game did not
+  rewrite it at the main menu, in play or when ended. `playset_written`'s size and time equaled
+  the file's.
+- **Nobody at the machine means nothing moves.** Over two and a half minutes idle under the
+  remote session the cursor and the foreground window stayed put, and the cursor stayed where
+  the helper's click left it. The presence rule does not see a person who is not there.
+- **Clicks**: four points outside the window were refused `bad_point` without the cursor
+  moving; a click on Credits opened it and scancode Esc closed it; the game window is one
+  3840x2160 client area and the cursor had been on a second monitor.
+- **The game rewrites `pdx_settings.json` at launch with the same bytes** (all three runs).
+  `restore` leaves a file whose content matches, so its time stays the run's. In the first
+  session `tutorial.txt`, which is outside the snapshot's set, also came out with the same bytes
+  and a new time; in the second it did not, and what wrote it was not established.
+- **The fixture stays** in `save games/` as `te_qa_fixture_<key>.v3`, by design, and shows in the
+  owner's load list.
+- **A session's `debug.log` copy is large** (19 MB for the first session): every debugger
+  evaluation prints its tooltip there and in `error.log`, and the game's error count climbs
+  with it. The session subtracts that output from an option's new errors.
+
+### 13.3 Not verified live
+
+The console taking the foreground back when another window is in front (the game was always in
+front); a fixture made under `--playset current`; an argument with a space; a failed process
+lookup on a live game; a game left stopped at the breakpoint by a late stop; whether state a
+setup wrote on the country-select screen survives entering the game; a session whose server
+died with the game up (`watch` recording on by itself, then `recover` and `remove-overlay`:
+tested only against fakes and constructed journals). The three
+hardenings the last review left are issue #1588.
+
+### 13.4 What changes in the design
+
+| § | As designed | Now |
+|---|---|---|
+| 5.5 | After `tag`, two clicks enter the game as the tagged country | The clicks enter as the country under the fixed point; the session then attaches the debugger again and tags its country again, and only then proves entry by the date |
+| 5.5 | The fixture is keyed by game version and build | Also by the run's playset and DLC set, and its own game is watched, limited to 900 s and ended by the session if it may still be up |
+| 5.6 | Keys go to the game's process | Every key, focus and click first proves the process by its id and start time, and none goes out once `watch` has recorded the game's exit |
+| 5.8 | `stop` restores | `stop` never restores beside a game that may be up (`game_left_up`), keeps the overlay while a playset may name it, and the server serves on after a stop that can be run again; a left overlay goes only through `remove-overlay` |

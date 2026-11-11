@@ -28,12 +28,23 @@ how the harness should be written. Nothing here is deployed or loaded by the mod
 | `captures/debugger_evaluations_2026-11-10.txt` | Every expression evaluated at the breakpoint, with its reply |
 | `captures/log_rotation_2026-11-10.txt` | Inode, size and first bytes of each generation before and after a rotation; the padding flush |
 | `captures/content_load_with_overlay.json` | The playset file with the overlay added as a fifth mod folder |
+| `live_session/part2_manifest.py` | Part 2 (2026-11-11): an independent manifest of the game's user-data folder (path, size, time, SHA-256), taken before and after each live run and compared; it does not go through `game_qa` |
+| `live_session/part2_wait_menu.py`, `part2_click_test.py`, `part2_end_game.py` | Part 2's first live run, on the main menu: adopt with a wrong and a right start time, the window, cursor and foreground readings while idle, the playset file's size and time, four refused clicks and one real one (Credits), Esc, and the kill by process id and start time |
+| `captures/session_2026-11-11/run1_summary.md`, `run1_steps.jsonl` | The first full session through the verbs (03:38–03:47): start on a new fixture, reads, a setup, a console event, a pick, `try-event` on `minor_events_timelineextended.3`, the `enter-game` that entered as Denmark and could not read the date, the stop |
+| `captures/session_2026-11-11/run2_summary.md`, `run2_steps.jsonl` | The second (04:21–04:27), after the fix: start on the cached fixture, a hidden event from the console, `enter-game` with the debugger attached again and the country tagged again, `advance 10`, the stop |
+| `captures/session_2026-11-11/setup_clean.txt`, `setup_mark.txt` | The two setups those sessions were started with |
 
 For the first eight probes the overlay files were copied into the deployed mod folder and
 removed afterwards. For the live session of 2026-11-10 (two launches, 16:06–16:16) the overlay was
 a mod folder of its own, `mod/te_qa_overlay/`, added to `content_load.json`; the owner's files
 were snapshotted and restored with `python3 -m game_qa`. A Windows user name in a captured path
 is written `<winuser>`.
+
+Part 2's three live runs of 2026-11-11 (01:09–01:16, 03:38–03:47, 04:21–04:27) went through
+`python3 -m game_qa` alone: the overlay was the generated one (`game_qa/overlay.py`), not the
+probe's. Their results are the design's § 13. The screenshots and the copied logs stayed in the
+run folders under the backup root (19 MB of `debug.log` for the first session: every debugger
+evaluation floods it).
 
 Not captured: the raw bytes of a rotation as it happens (the inode table in
 `captures/log_rotation_2026-11-10.txt` records what the follower needs, and the session's raw
