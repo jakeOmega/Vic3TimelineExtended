@@ -31,6 +31,7 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder (se
 | Writing or rewriting in-game text | the `event-text` skill, which follows `docs/guides/loc_style_guide.md` | on request |
 | Adding an event | the `add-event` skill | on request |
 | Game logs | the `log-triage` skill | on request |
+| Launching the game to check something in it | the `game-qa` skill (ask the owner before any launch) | on request |
 
 ## Common commands
 
