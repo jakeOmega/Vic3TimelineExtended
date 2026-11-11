@@ -24,6 +24,8 @@ Fields:
   seed     the picked render, or None
   crop     optional (left, top, right, bottom) on the 1536 x 752 render, to drop a
            signature or a stray object at an edge; close to 2.04 : 1
+  smudge   optional list of (left, top, right, bottom) boxes on the render, blurred
+           before the crop: a lettered sign where a crop can't reach
   prompt   the subject; STYLE is appended
 
 Writing a prompt: a picture stands for every state of its region, so it must not
@@ -227,13 +229,17 @@ CITY_LANDMARK = {
 # robots, keep the family's old quarter and landmark small beneath them, and end with this.
 CITY_FAR_FUTURE_SKY = ", a spacecraft climbing on a thin white trail in the far sky"
 
+# Vehicles: a date in the sentence ("around 1960") doesn't date the cars, which come out as the
+# 2000s' unless the vehicles themselves carry a decade ("rounded 1950s cars"). The 1960 streets
+# whose cars had one rendered in period; the two that didn't (European, Japanese) had modern
+# cars in all four candidates and were reworded.
 # {(region, rung): the street, without its date and landmark}. "{when}" is the rung's date.
 CITY_STREETS = {
     ("european", 2): (
         "A European city avenue {when}: plain concrete and glass slab office blocks of eight to "
         "twelve storeys rising beside older five-storey stone apartment buildings, a wide asphalt "
-        "road full of small rounded cars, a single-deck bus and a streamlined tram under overhead "
-        "wires, pedestrians in raincoats, tall modern lamp posts"
+        "road of small rounded 1950s cars, a rounded 1950s single-deck bus and a streamlined tram "
+        "under overhead wires, pedestrians in raincoats and hats, tall lamp posts"
     ),
     ("european", 3): (
         "A European city avenue {when}: mirrored curtain-wall office towers of twenty storeys "
@@ -444,9 +450,9 @@ CITY_STREETS = {
     ),
     ("japanese", 2): (
         "A Japanese city street {when}: plain concrete office buildings of six to nine storeys "
-        "among the last tiled wooden houses, a street crowded with small three-wheeled trucks, "
-        "compact cars, trams and buses, utility poles strung with dense wires, a blunt-nosed "
-        "express train on an elevated concrete viaduct in the middle distance"
+        "among the last tiled wooden houses, a street of small three-wheeled 1950s trucks, tiny "
+        "rounded 1950s cars, a tram and rounded 1950s buses, utility poles strung with dense "
+        "wires, a blunt-nosed express train on an elevated concrete viaduct in the middle distance"
     ),
     ("japanese", 3): (
         "A Japanese city street {when}: tile-clad and glass office towers of twenty to thirty "
@@ -469,6 +475,54 @@ CITY_STREETS = {
     ),
 }
 
+# The picked render of each city picture, with the boxes that drop or blur its lettering. Seed 2
+# often leaves a dark strip of 9 to 25 pixels along the bottom of a render; its picks crop it off
+# (the converter refuses a picture with one).
+CITY_PICKS = {
+    "urban_european_2": {"seed": 3, "smudge": [(8, 534, 62, 580), (1340, 630, 1408, 676)]},
+    "urban_european_3": {"seed": 3},
+    "urban_european_4": {"seed": 3},
+    "urban_north_american_1": {"seed": 0, "crop": (30, 0, 1480, 711),
+                               "smudge": [(1290, 480, 1335, 530), (760, 238, 786, 262)]},
+    "urban_north_american_2": {"seed": 1},
+    "urban_north_american_3": {"seed": 1, "crop": (160, 0, 1536, 675), "smudge": [(430, 558, 530, 582)]},
+    "urban_north_american_4": {"seed": 0},
+    "urban_latin_american_1": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_latin_american_2": {"seed": 0},
+    "urban_latin_american_3": {"seed": 0, "crop": (0, 15, 1490, 745), "smudge": [(1285, 440, 1356, 536)]},
+    "urban_latin_american_4": {"seed": 2},
+    "urban_african_1": {"seed": 0},
+    "urban_african_2": {"seed": 0, "smudge": [(308, 158, 356, 184), (52, 488, 108, 506)]},
+    "urban_african_3": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_african_4": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_south_asian_1": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_south_asian_2": {"seed": 3},
+    "urban_south_asian_3": {"seed": 3},
+    "urban_south_asian_4": {"seed": 3, "crop": (0, 15, 1476, 739)},
+    "urban_middle_eastern_1": {"seed": 1},
+    "urban_middle_eastern_2": {"seed": 1},
+    "urban_middle_eastern_3": {"seed": 3},
+    "urban_middle_eastern_4": {"seed": 0, "crop": (50, 14, 1536, 742)},
+    "urban_east_asian_1": {"seed": 1, "smudge": [(1250, 480, 1312, 528), (1432, 458, 1522, 490),
+                                                 (1128, 472, 1178, 520), (1445, 625, 1502, 697)]},
+    "urban_east_asian_2": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_east_asian_3": {"seed": 0},
+    "urban_east_asian_4": {"seed": 0, "crop": (30, 0, 1458, 700)},
+    "urban_japanese_1": {"seed": 3, "smudge": [(1212, 470, 1258, 605), (652, 500, 672, 560), (955, 490, 982, 560)]},
+    "urban_japanese_2": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_japanese_3": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_japanese_4": {"seed": 0},
+    # the last rung, from the second set of renders (the bolder prompts)
+    "urban_european_5": {"seed": 0},
+    "urban_north_american_5": {"seed": 0, "smudge": [(40, 446, 150, 468)]},
+    "urban_latin_american_5": {"seed": 0},
+    "urban_african_5": {"seed": 3},
+    "urban_south_asian_5": {"seed": 0},
+    "urban_middle_eastern_5": {"seed": 3},
+    "urban_east_asian_5": {"seed": 0},
+    "urban_japanese_5": {"seed": 3},
+}
+
 for (_region, _rung), _street in CITY_STREETS.items():
     _tech, _when = CITY_LADDER[_rung]
     PICTURES[f"urban_{_region}_{_rung}"] = {
@@ -479,6 +533,7 @@ for (_region, _rung), _street in CITY_STREETS.items():
         "size": None,
         "effect": CITY_EFFECT[_region],
         "seed": None,
+        **CITY_PICKS.get(f"urban_{_region}_{_rung}", {}),
         "prompt": (f"{_street.format(when=_when)}, {CITY_LANDMARK[_region]} hazy at the end of the street"
                    + (CITY_FAR_FUTURE_SKY if _rung == 5 else "")),
     }

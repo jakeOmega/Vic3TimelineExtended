@@ -34,3 +34,18 @@ Four pictures. The engine facts under them were read in game the same day
 | **Outside Europe.** After the technologies, a city state in Asia or the Americas. | Vanilla's city picture: the pilot's city paintings are European only. The port and mine paintings show everywhere. (Since the wave 2 registry, the European paintings also show in the states of no region family, as vanilla's European picture does: Tibet and the Pacific islands.) | A European painting in Tokyo, New York or Mexico City: the fallback's `is_not_in_geographic_region` lines in `te_state_pictures_generated.txt` don't hold in a weight. |
 | **The other panels.** Hover a state for its tooltip; open a pop's details. | The same new painting, cropped as vanilla's is. | |
 | **The size floors.** In a game past 1920, note which states read metropolis. | Roughly the world's great cities. | Too many or too few: the floors in `te_state_picture_values.txt` are provisional, and the spec's wave 2 sets them from an observer game. |
+
+## Wave 2: the city tier (2026-11-10)
+
+Thirty-nine more city paintings: eight region families on the five rungs of the city ladder. `research` each rung's
+technology as the state's owner: `art_deco_architecture`, `modern_urban_planning`, `computer_aided_design`,
+`advanced_structural_engineering`, `vactrains`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A family's ladder.** As one country with a city state, research the five technologies in order and reopen the state after each. | The street changes with each: 1930s, about 1960, about 1990, the 2030s, the far future, with the same kind of landmark at its end. A later technology outranks an earlier one. | An earlier painting after a later technology: the rung isn't the weight's leading place. |
+| **The eight families.** After Art Deco Architecture (`tag` to each owner): London, New York, Rio de Janeiro or Mexico City, Lagos or Cairo, Bombay, Constantinople or Tehran, Beijing, Tokyo. | European, North American, Latin American, African, South Asian, Middle Eastern, East Asian, Japanese. Sydney shows the North American street; Mexico City the Latin American (vanilla shows it the European). | A European street in one of the others: the family's region trigger doesn't hold, or the fallback's `is_not_in_geographic_region` lines don't. |
+| **The overlaps.** Tokyo, and Quetta or Peshawar. | Tokyo the Japanese street, never the East Asian; Quetta the Middle Eastern, not the South Asian. | The other one: the family digits aren't deciding. |
+| **No family.** Lhasa, or a Pacific island, where the city terrain prevails at all. | The European street, as vanilla's European picture shows there. | |
+| **Overlays on the new families.** Watch a city of each family for a few seconds. | Vanilla's birds, mist and smoke for that family, sitting plausibly. | A mismatch: change the family's `CITY_EFFECT` in the registry. |
+| **Lettering.** Look closely at each painting once. | Nothing that reads as writing. Signs in the renders were cropped or blurred before the filter. | A legible word: add a `smudge` box for it in `CITY_PICKS` and reconvert. |

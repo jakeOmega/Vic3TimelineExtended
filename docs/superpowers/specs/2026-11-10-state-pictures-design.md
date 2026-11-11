@@ -217,9 +217,9 @@ would be over 1 GB.
 2. **Calibration, then the city tier of the core grid (40).** An observer game's figures (largest-city
    people, `average_sol` and the expectations gap by year and by rung) fix the floors of §§ 5 and 6. Then 8
    regions × 5 rungs of the middle picture. After this wave every city past rung 1 has a picture of its
-   time, and these stay the fallback for every size and level of prosperity. The 39 prompts beside the
-   pilot's are in the registry (`CITY_STREETS`), unrendered: the renders wait on the owner's look at the
-   pilot in game, which may change how a picture is composed for the panel.
+   time, and these stay the fallback for every size and level of prosperity. **Painted and wired 2026-11-10:** all 39 beside the pilot's, picked from four candidates each (the last
+   rung from a second set, below). The calibration game is still to run, so the size floors stay
+   provisional; the city tier doesn't read them.
 3. **Worked land (about 50):** ports, mines and oil, farmland, forestry. Its 46 prompts are drafted
    in the registry's `DRAFTS`, outside the wired list: each has its technology and, in plain words, when it
    should show, and none has a condition or a place in the weight yet. What this wave still has to design:
@@ -261,6 +261,25 @@ upkeep limited to rungs 2 to 4.
   and the flag bottom left, and a second widget shows the picture at 260 × 145. Where vanilla has a picture
   of the same subject, the new one keeps its composition (the street with the dome at its end, the ship at
   the quay), so a state's banner reads as the same place later.
+- **What the first wave taught** (2026-11-10, 196 renders for 39 pictures):
+  - *Vehicles need their own decade.* "A street around 1960" dates the buildings and leaves the cars in
+    the 2000s. "Rounded 1950s cars", "boxy 1980s cars" render in period. The two 1960 streets without it
+    had modern cars in all four candidates and were reworded and rerun.
+  - *The far future has to be asked for by name.* The last rung's first prompts ("terraced arcology
+    buildings, a vacuum-train tube") came out as a present-day street with one odd building; the owner:
+    "the far future could look more futuristic, given the technologies in the last couple eras". Leading
+    with "a far-future city", kilometre-high towers, flying craft, humanoid robots and a spacecraft's
+    trail gave megastructures in every candidate, with the family's landmark still in place.
+  - *The landmark carries.* The same kind of building closed the street on all five rungs of every
+    family, without naming a real one.
+  - *Lettering comes in small.* About a third of candidates carry a sign or a plate. A crop drops one at
+    an edge; for one in the middle the registry's `smudge` boxes blur it to a dab before the filter.
+    At 1020 x 500 after the filter nothing in the picked set reads as writing.
+  - *One seed leaves a dark strip* of 9 to 25 pixels along the bottom of about half its renders; the
+    converter refuses a picture with one, and the picks crop it.
+  - *Budget:* 28 s a render held. Ten of the 39 pictures were rendered twice: the eight of the last rung
+    for the bolder prompt and the two 1960 streets for their cars. The other 29 were picked from their
+    first four candidates.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
   every pick zoomed for lettering, signatures and broken anatomy.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
