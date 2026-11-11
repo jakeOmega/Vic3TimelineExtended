@@ -208,6 +208,12 @@ class SessionServer:
                         stopped = self._stop_session()
                     else:
                         stopped = self._stop_reply
+                    if not final_stop(stopped):
+                        # Its `next` says `stop` again, and this server is going: say what works instead.
+                        self._note("exiting with a stop that could be run again (outcome %s), so its run is left "
+                                   "unfinished: once no Victoria 3 process runs, `python3 -m game_qa recover` "
+                                   "finishes it, then `python3 -m game_qa remove-overlay`"
+                                   % (stopped or {}).get("outcome"))
                     self._release()
             finally:
                 for signum, handler in previous.items():

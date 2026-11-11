@@ -488,6 +488,23 @@ class StopTest(ServerTestCase):
         self.assertFalse(self.info_path.exists())
         self.assertEqual(fake.stops, 3)
 
+    def test_a_signal_with_a_stop_still_retryable_leaves_word_of_what_works(self):
+        fake = Retrying([LEFT_UP, LEFT_UP])
+        log = io.StringIO()
+        srv = server.SessionServer(fake, self.backups, port=0, log=log)
+        thread = threading.Thread(target=srv.serve, daemon=True)
+        thread.start()
+        self.threads.append(thread)
+        self.wait_for(lambda: server.read_info(self.backups) is not None, "the server's session.json")
+        self.assertEqual(self.run_cli("stop"), (LEFT_UP, 2))
+        srv._signalled = signal.SIGTERM
+        client.call(self.backups, "status", {}, timeout=5)
+        thread.join(10)
+        self.assertFalse(thread.is_alive())
+        self.assertEqual(fake.stops, 2)
+        self.assertIn("left unfinished", log.getvalue())
+        self.assertIn("`python3 -m game_qa recover`", log.getvalue())
+
     def test_a_signal_after_a_stop_that_can_be_retried_runs_the_stop_once_more(self):
         fake = Retrying([LEFT_UP, RESTORED])
         _fake, thread, srv = self.serve_with_server(fake)
