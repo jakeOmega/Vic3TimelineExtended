@@ -438,6 +438,15 @@ class Session:
             out["path"] = str(path)
         return path
 
+    def status(self) -> dict:
+        """How far this session is, from what it holds: nothing is asked of the game or of a verb."""
+        proc = self._proc
+        return {"started": self._ready, "stopped": self._stopped is not None, "snapshot": self._snapshot,
+                "save": self._save, "country": self._country, "entered": self._entered,
+                "game": {"pid": proc.pid, "created": proc.created} if proc is not None else None,
+                "watch_returned": self._watch_returned(),
+                "run_dir": str(self._report.dir) if self._report is not None else None}
+
     # ---- stop
 
     def stop(self) -> dict:

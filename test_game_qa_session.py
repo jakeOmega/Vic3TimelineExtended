@@ -496,6 +496,19 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.session_error(self.start).code, "already_started")
         self.assertEqual(self.cli.calls, [])
 
+    def test_status_says_how_far_the_session_is(self):
+        self.assertEqual(self.session.status(), {
+            "started": False, "stopped": False, "snapshot": None, "save": None, "country": None, "entered": False,
+            "game": None, "watch_returned": False, "run_dir": None})
+        self.started()
+        status = self.session.status()
+        self.assertEqual((status["started"], status["snapshot"], status["country"]), (True, SNAP, "FRA"))
+        self.assertEqual(status["game"], {"pid": PID, "created": CREATED})
+        self.assertEqual(Path(status["run_dir"]), self.paths.backup_root / "runs" / SNAP)
+        self.session.stop()
+        self.assertEqual((self.session.status()["stopped"], self.session.status()["watch_returned"]), (True, True))
+        self.assertEqual(self.cli.calls, [["restore", SNAP]])     # status itself runs nothing
+
 
 class ReadTest(SessionTestCase):
     def test_read_evaluates_at_the_breakpoint_and_resumes(self):
