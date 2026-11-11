@@ -15,8 +15,12 @@ Fields:
   tech     the owner's technology that unlocks it (a live check in the weight)
   rung     its place on its family's technology ladder, 1-9: among the pictures
            that apply, a higher rung beats everything but a condition
-  region   a key of REGIONS, or None for any region; FALLBACK_REGION's pictures also
-           show in the states of no family, as vanilla's European city picture does
+  region   a family of REGION_GROUPS (city, farm or forest), or None for any region; a
+           group's fallback family also shows in the states of no family, as vanilla's
+           European city picture and its generic farmland do
+  scale    optional key of SCALES: a major port, a colliery (a building's level)
+  over     optional True: the picture takes over another family's terrain (an oil
+           field on farmland) and outranks every rung of that terrain's own pictures
   size     a key of SIZES, or None for any size (the family's middle picture,
            which stays the fallback for the sizes not painted yet)
   where    optional extra state triggers, one a line
@@ -97,6 +101,53 @@ FALLBACK_REGION = "european"
 # the Japanese one would show in Tokyo over Japan's rung 1. The test holds a wave to that.
 REGION_OVERLAPS = (("japanese", "east_asian"), ("middle_eastern", "south_asian"))
 
+# Farmland families: vanilla's four, by vanilla's own scripted triggers. They don't overlap (1.15:
+# 157 Arabic states, which is the Middle East and most of Africa; 68 Asian; 61 subtropic, which is
+# Latin America; 390 generic, India and Oceania among them). The generic family is the states of
+# no other, as in vanilla.
+FARM_REGIONS = {
+    "farm_generic": ([], 1),
+    "farm_arabic": (["is_arabic_farmland = yes"], 2),
+    "farm_asian": (["is_asian_farmland = yes"], 3),
+    "farm_subtropic": (["is_subtropic_farmland = yes"], 4),
+}
+# Forestry: the tropical picture, where the forest is rainforest. No fallback: the conifer picture
+# has no region and stands everywhere else.
+FOREST_REGIONS = {
+    "forest_tropical": ([
+        "is_in_geographic_region = geographic_region_south_east_asia",
+        "is_in_geographic_region = geographic_region_equatorial_africa",
+        "is_in_geographic_region = geographic_region_west_africa",
+        "is_in_geographic_region = geographic_region_central_america",
+        "is_in_geographic_region = geographic_region_gran_colombia",
+        "is_in_geographic_region = geographic_region_brazil",
+        "is_jungle_hills = yes",
+    ], 1),
+}
+# Every region family by its group; a group's fallback family also takes the states of no family.
+REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS}
+GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic"}
+
+
+def region_group(region: str) -> str:
+    return next(group for group, families in REGION_GROUPS.items() if region in families)
+
+
+def region_digit(region: str) -> int:
+    return REGION_GROUPS[region_group(region)][region][1]
+
+
+# Scales: the larger or the special kind of a worked-land picture, in the size place of the weight
+# (a picture has a size or a scale, never both). A major port is a Port's level, read live:
+# provisional, from a 1940 save, where 44 of 405 port states have a Port of 20 or more (in 1836
+# the largest is Guangdong's, 15). A colliery is the yearly pass's tag (te_sp_coal: coal is the
+# larger part of the state's mines; common/scripted_effects/te_state_picture_effects.txt).
+PORT_MAJOR_LEVEL = 20
+SCALES = {
+    "major_port": ([f"any_scope_building = {{ is_building_type = building_port level >= {PORT_MAJOR_LEVEL} }}"], 2),
+    "colliery": (["has_variable = te_sp_coal"], 1),
+}
+
 # City sizes, from the yearly pass's state variable te_sp_size (1 town, 2 city,
 # 3 metropolis, 4 megacity; common/scripted_effects/te_state_picture_effects.txt).
 # (trigger lines, the size's digit in the weight)
@@ -114,6 +165,9 @@ SIZES = {
 W_RUNG = 100000
 W_SIZE = 10
 W_REGION = 1  # times the family's digit, 1 to 8
+# A picture that takes over another family's terrain (an oil field on farmland) outranks every
+# rung of that terrain's own pictures: "over" in its entry.
+W_OVER = 10000000
 
 PICTURES = {
     "urban_european_1": {
@@ -160,8 +214,9 @@ PICTURES = {
         # shows its dry plain: the port picture asks for a port, as vanilla's does
         "where": ["has_building = building_port"],
         "effect": "vfx_entity_ui_state_docks",
-        "seed": 1,
-        "crop": (43, 0, 1493, 711),
+        "seed": 3,
+        "crop": (0, 0, 1510, 740),
+        "smudge": [(1066, 526, 1102, 562)],
         "prompt": (
             "A large seaport in the 1930s: a black-hulled ocean liner with two funnels moored "
             "at a concrete quay, a row of tall steel dockside cranes on rails, brick "
@@ -599,9 +654,11 @@ DRAFTS = {
         "small white lighthouse"),
     "docks_harbor_4": _draft(
         "port", ["docks"], "docks", "autonomous_vehicles", 4, "a Port below the major port's level",
-        "A small harbor {when}: low crewless electric cargo boats with no wheelhouse gliding to a "
-        "quay, a single robotic crane, sheds roofed with solar panels, rows of seaweed-farm buoys "
-        "in the bay, white offshore wind turbines on the horizon, a breakwater with a small white "
+        "A futuristic small harbor {when}: sleek white autonomous cargo vessels with smooth "
+        "windowless hulls, no masts and no wheelhouse, gliding to a quay, a hydrofoil passenger "
+        "ferry riding above the water, a slender white robotic crane arm, curved harbor sheds "
+        "roofed in dark solar glass, small cargo drones overhead, rows of seaweed-farm buoys in "
+        "the bay, white offshore wind turbines on the horizon, a breakwater with a small white "
         "lighthouse"),
     "docks_2": _draft(
         "port", ["docks"], "docks", "containerization", 2, "a major Port",
@@ -617,10 +674,11 @@ DRAFTS = {
         "reaching to the horizon"),
     "docks_4": _draft(
         "port", ["docks"], "docks", "autonomous_vehicles", 4, "a major Port",
-        "An automated port {when}: long crewless container ships with no bridge and tall rigid "
-        "wing sails at the quay, slender robotic cranes working without drivers, driverless "
-        "electric trucks in convoy, blocks of plain colored steel boxes, no people anywhere, "
-        "offshore wind turbines on the horizon"),
+        "A futuristic automated container port {when}: a huge low cargo ship stacked high with "
+        "plain colored steel boxes, with no bridge and no funnel and four tall rigid white wing "
+        "sails standing along its deck, rows of slender white robotic gantry cranes with no cabs "
+        "lifting boxes, flat driverless electric carriers in convoy, cargo drones overhead, long "
+        "blocks of stacked steel boxes, no people anywhere, offshore wind turbines on the horizon"),
 
     # Mines. mining_1 (the pilot) is the open pit of rung 1.
     "mining_2": _draft(
@@ -841,14 +899,13 @@ DRAFTS = {
     "housing_blocks_2": _draft(
         "character", ["urban"], "urban_european", "modern_urban_planning", 2, "Command Economy and Prefabricated Construction",
         "A planned city district {when}: long identical five-storey prefabricated concrete "
-        "apartment blocks in parallel rows, a wide empty avenue with a few small cars, trams and "
+        "apartment blocks in parallel rows, a wide empty avenue with a few small rounded 1950s cars, trams and "
         "a queue at a tram stop, a bare square with one large bronze statue of a worker, tower "
         "cranes raising more blocks, a factory's chimneys behind"),
     "housing_blocks_3": _draft(
         "character", ["urban"], "urban_european", "computer_aided_design", 3, "Command Economy and Prefabricated Construction",
         "A planned city district {when}: ranks of identical sixteen-storey grey concrete panel "
-        "tower blocks to the horizon, weathered and stained, a broad avenue with trolleybuses and "
-        "boxy cars, heating pipes on trestles crossing a muddy yard, playgrounds between the "
+        "tower blocks to the horizon, weathered and stained, a broad avenue with trolleybuses and boxy 1980s cars, heating pipes on trestles crossing a muddy yard, playgrounds between the "
         "blocks, washing on the balconies"),
     "housing_blocks_4": _draft(
         "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "Command Economy and Prefabricated Construction",
@@ -859,13 +916,12 @@ DRAFTS = {
     "boomtown_1": _draft(
         "character", ["urban"], "urban_european", "art_deco_architecture", 1, "the state's people have grown fast for several years",
         "A fast-growing city {when}: steel frames of new buildings rising everywhere behind "
-        "wooden scaffolding, derrick cranes, a street half paved and half mud, trucks of bricks "
-        "and timber, crowds of newly arrived workers with suitcases, raw new brick blocks beside "
+        "wooden scaffolding, derrick cranes, a street half paved and half mud, 1920s trucks of bricks and timber, crowds of newly arrived workers with suitcases, raw new brick blocks beside "
         "tents and shacks, smoke and dust"),
     "boomtown_2": _draft(
         "character", ["urban"], "urban_european", "modern_urban_planning", 2, "the state's people have grown fast for several years",
         "A fast-growing city {when}: a dozen tower cranes over half-built concrete apartment "
-        "blocks, a new road being laid by bulldozers and steamrollers, cement trucks, prefabricated "
+        "blocks, a new road being laid by bulldozers and steamrollers, 1950s cement trucks, prefabricated "
         "panels stacked on site, families moving in with furniture on handcarts, fields at the "
         "edge already staked out"),
     "boomtown_3": _draft(
@@ -887,13 +943,13 @@ DRAFTS = {
     "declining_2": _draft(
         "character", ["urban"], "urban_european", "modern_urban_planning", 2, "the state's people are falling",
         "A declining industrial city {when}: closed mills with boarded windows along a canal, "
-        "rows of emptied brick houses, some half demolished, a rusting gasholder, a few old cars, "
+        "rows of emptied brick houses, some half demolished, a rusting gasholder, a few old rounded 1950s cars, "
         "an empty bus, a lone figure on the pavement, washing in one yard, a grey sky"),
     "declining_3": _draft(
         "character", ["urban"], "urban_european", "computer_aided_design", 3, "the state's people are falling",
         "A declining industrial city {when}: a vast abandoned steelworks rusting behind a chain-"
         "link fence, empty lots where houses stood, boarded-up brick buildings, a cracked road "
-        "with one old car, leaning utility poles, saplings growing from a roof, a grey sky"),
+        "with one old boxy 1980s car, leaning utility poles, saplings growing from a roof, a grey sky"),
     "declining_4": _draft(
         "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the state's people are falling",
         "A shrinking city {when}: empty glass office towers with dark windows and missing panels, "
@@ -904,7 +960,7 @@ DRAFTS = {
         "character", ["urban"], "urban_latin_american", "modern_urban_planning", 2, "a large city with high inequality",
         "A divided city {when}: white modern apartment blocks and villas with gardens and "
         "swimming pools behind high walls on a hill, and below them a dense hillside of shacks "
-        "of scrap wood and tin, mud lanes, washing lines, children, a few big cars on the "
+        "of scrap wood and tin, mud lanes, washing lines, children, a few big finned 1950s cars on the "
         "boulevard between"),
     "divided_3": _draft(
         "character", ["urban"], "urban_latin_american", "computer_aided_design", 3, "a large city with high inequality",
@@ -926,14 +982,14 @@ DRAFTS = {
         "stacks fading into the murk"),
     "smog_2": _draft(
         "character", ["urban"], "urban_european", "modern_urban_planning", 2, "heavy pollution",
-        "A city under smog {when}: a wide avenue of traffic with headlamps lit in a brown haze "
+        "A city under smog {when}: a wide avenue of rounded 1950s cars and buses with headlamps lit in a brown haze "
         "at midday, concrete blocks fading to silhouettes within a few streets, a power station's "
         "stacks pouring smoke, soot-streaked walls, pedestrians holding handkerchiefs to their "
         "faces, a dull orange sun"),
     "smog_3": _draft(
         "character", ["urban"], "urban_european", "computer_aided_design", 3, "heavy pollution",
         "A city under smog {when}: glass towers reduced to grey ghosts in thick yellow haze, a "
-        "jammed multi-lane expressway of cars and trucks trailing exhaust, pedestrians and "
+        "jammed multi-lane expressway of boxy 1980s cars and trucks trailing exhaust, pedestrians and "
         "cyclists in white face masks, a dull red sun, chimneys and cooling towers faint at the "
         "edge of sight"),
     "smog_4": _draft(
@@ -955,19 +1011,18 @@ DRAFTS = {
     "industry_3": _draft(
         "function", ["urban"], "urban_european", "computer_aided_design", 3, "most building levels are heavy industry",
         "A heavy-industry city {when}: an enormous refinery and petrochemical complex of silver "
-        "columns, flare stacks and pipe racks beside a car plant's long white halls, a yard of "
-        "thousands of new cars, freight trains, a motorway of trucks, tower blocks in the haze"),
+        "columns, flare stacks and pipe racks beside a car plant's long white halls, a yard of thousands of new boxy 1980s cars, freight trains, a motorway of trucks, tower blocks in the haze"),
     "resort_1": _draft(
         "function", ["urban"], "urban_european", "art_deco_architecture", 1, "tourism dominates",
         "A seaside resort {when}: a curving promenade with white art deco hotels and a domed "
         "pavilion on an iron pier, striped bathing tents and deck chairs on the beach, holiday "
-        "crowds in summer whites, open motor cars, palm trees in tubs, sailing boats on a bright "
+        "crowds in summer whites, open 1920s motor cars, palm trees in tubs, sailing boats on a bright "
         "sea"),
     "resort_2": _draft(
         "function", ["urban"], "urban_european", "modern_urban_planning", 2, "tourism dominates",
         "A beach resort {when}: a row of white concrete hotel slabs of twelve storeys with "
         "balconies along a sandy bay, plain striped parasols in ranks, swimming pools, a coast "
-        "road of small cars and coaches, a jet airliner low overhead, palm trees, a bright sea"),
+        "road of small rounded 1950s cars and coaches, a jet airliner low overhead, palm trees, a bright sea"),
     "resort_4": _draft(
         "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "tourism dominates",
         "A beach resort {when}: terraced hotel towers stepped like hillsides and covered in "
@@ -982,7 +1037,7 @@ DRAFTS = {
     "devastated_late": _draft(
         "condition", ["urban"], "urban_european", "computer_aided_design", 3, "heavy devastation, from the third rung",
         "A city ruined by war {when}: concrete tower blocks with whole faces sheared away and "
-        "floors hanging, a collapsed flyover, burnt-out cars and buses, shattered glass towers, "
+        "floors hanging, a collapsed flyover, burnt-out boxy 1980s cars and buses, shattered glass towers, "
         "smoke columns, craters in a wide road, a few people picking through the rubble"),
     "nuclear_strike_early": _draft(
         "condition", ["urban"], "urban_european", "modern_urban_planning", 2, "a nuclear strike on the state, on the first three rungs",
@@ -1001,87 +1056,185 @@ DRAFTS = {
         "on rooftops and footbridges of planks, a new concrete sea wall being built by cranes"),
     "flooded_coast_5": _draft(
         "condition", ["urban"], "urban_european", "vactrains", 5, "the warming system's sea-level stage, in a coastal state",
-        "A coastal city drowned by the risen sea {when}: the lower floors of old towers standing "
-        "abandoned in open water, green with weed, and behind a great curved sea wall a new city "
-        "of garden towers on raised ground, boats crossing between, sea birds"),
+        "A far-future coastal city drowned by the risen sea {when}: the lower floors of old towers standing "
+        "abandoned in open water, green with weed, and behind a great curved sea wall a new city of kilometre-high garden towers on raised ground, flying craft between them, boats crossing between, sea birds"),
 
     # ---- Wave 7: natural terrain in the motor age (optional) ------------------------------------
     "mountains_road": _draft(
         "nature", ["mountain"], "mountains", "modern_urban_planning", 1, "vanilla's generic mountains",
         "High mountains {when}: a motorway carried on tall concrete viaducts along a valley side "
-        "and into a tunnel mouth, small cars and trucks, a cable car climbing to a station on a "
+        "and into a tunnel mouth, small rounded 1950s cars and trucks, a cable car climbing to a station on a "
         "ridge, a line of pylons over a pass, dark pine forest, snowy peaks"),
     "mountains_northamerica_road": _draft(
         "nature", ["mountain"], "mountains_northamerica", "modern_urban_planning", 1, "the Americas",
         "Rocky mountains {when}: a two-lane highway winding beside a rushing river, a very long "
-        "freight train on the far bank, a steel truss bridge, big trucks, pylons striding up a "
+        "freight train on the far bank, a steel truss bridge, big 1950s trucks and finned cars, pylons striding up a "
         "valley, pine forest, bare grey peaks with snow"),
     "mountains_arid_road": _draft(
         "nature", ["mountain"], "mountains_arid", "modern_urban_planning", 1, "an arid region",
         "Bare arid mountains {when}: a paved road climbing in switchbacks across a dry rocky "
-        "slope, a convoy of trucks, a line of pylons crossing a ridge, a small roadside "
+        "slope, a convoy of 1950s trucks, a line of pylons crossing a ridge, a small roadside "
         "settlement of flat roofs by a green patch of trees, sharp brown peaks in the haze"),
     "hills_road": _draft(
         "nature", ["hills"], "hills", "modern_urban_planning", 1, "vanilla's generic hills",
         "Rolling green hills {when}: a new motorway curving through a deep cutting and over a "
-        "long bridge, small cars and trucks, a line of pylons, a tall lattice radio mast on the "
+        "long bridge, small rounded 1950s cars and trucks, a line of pylons, a tall lattice radio mast on the "
         "highest summit, hedged pastures with sheep, a village in a fold of the land"),
     "hills_jungle_road": _draft(
         "nature", ["hills"], "hills_jungle", "modern_urban_planning", 1, "jungle hills",
         "Jungle-covered hills {when}: a paved road cut into a steep green hillside, a concrete "
-        "bridge over a river gorge, loaded trucks and a bus, a landslide scar of red earth, a "
+        "bridge over a river gorge, loaded 1950s trucks and a bus, a landslide scar of red earth, a "
         "line of pylons, low cloud caught in the trees"),
     "hills_subtropic_road": _draft(
         "nature", ["hills"], "hills_subtropic", "modern_urban_planning", 1, "Latin America",
-        "Green subtropical hills {when}: a winding paved highway with brightly painted buses and "
-        "trucks, terraced coffee bushes on the slopes, a small white town with red tile roofs on "
+        "Green subtropical hills {when}: a winding paved highway with brightly painted 1950s buses and trucks, terraced coffee bushes on the slopes, a small white town with red tile roofs on "
         "a ridge, a line of pylons, banana plants, mist in the valleys"),
     "plains_road": _draft(
         "nature", ["plains"], "plains", "modern_urban_planning", 1, "vanilla's generic plains",
         "A wide green plain {when}: a new motorway running straight to the horizon with a "
-        "cloverleaf junction, small cars and trucks, an electric railway alongside, rows of "
+        "cloverleaf junction, small rounded 1950s cars and trucks, an electric railway alongside, rows of "
         "pylons, large fields, a river with poplars, a distant town with a water tower"),
     "plains_northamerica_road": _draft(
         "nature", ["plains"], "plains_northamerica", "modern_urban_planning", 1, "the Americas",
-        "Open prairie {when}: an arrow-straight four-lane highway to the horizon, big trucks, a "
+        "Open prairie {when}: an arrow-straight four-lane highway to the horizon, big 1950s trucks and finned cars, a "
         "freight train a mile long on a parallel track, a tall white grain elevator beside the "
         "rails, a row of pylons, wind in the grass, an enormous sky"),
     "plains_arid_road": _draft(
         "nature", ["plains"], "plains_arid", "modern_urban_planning", 1, "an arid region",
-        "A dry plain of thorn scrub {when}: a straight tarred road with a convoy of trucks "
+        "A dry plain of thorn scrub {when}: a straight tarred road with a convoy of 1950s trucks "
         "trailing dust, a line of pylons, a railway with a diesel train, a roadside settlement "
         "of tin roofs under a few trees, flat-topped hills on the horizon"),
     "desert_road": _draft(
         "nature", ["desert"], "desert", "modern_urban_planning", 1, "outside the Americas",
-        "A sand desert {when}: a black asphalt highway running between dunes, a convoy of "
-        "trucks, a steel pipeline beside the road, a line of pylons, a small pumping station "
+        "A sand desert {when}: a black asphalt highway running between dunes, a convoy of 1950s trucks, a steel pipeline beside the road, a line of pylons, a small pumping station "
         "with silver tanks, a few camels, heat haze"),
     "desert_northamerica_road": _draft(
         "nature", ["desert"], "desert_northamerica", "modern_urban_planning", 1, "the Americas",
         "A red rock desert {when}: a two-lane highway running straight across sagebrush flats "
-        "toward red sandstone cliffs, a few long cars and a big truck, a line of wooden utility "
+        "toward red sandstone cliffs, a few long finned 1950s cars and a big truck, a line of wooden utility "
         "poles, a lone wind pump and water tank beside a cattle grid, tall cactus, heat haze"),
     "tundra_pipeline": _draft(
         "nature", ["tundra"], "tundra", "integrated_circuits", 1, "",
         "Open tundra {when}: a silver pipeline on steel stilts zigzagging to the horizon, a "
-        "gravel service road with a truck, a small pumping station of metal sheds, a herd of "
+        "gravel service road with a 1950s truck, a small pumping station of metal sheds, a herd of "
         "reindeer crossing under the pipe, patches of snow, low bare hills"),
     "forest_road": _draft(
         "nature", ["forest"], "forest", "modern_urban_planning", 1, "",
         "A great conifer forest {when}: a two-lane asphalt road running through tall dark "
-        "trees, a log truck, a line of pylons in a cleared strip, a wooden fire-watch tower on "
+        "trees, a 1950s log truck, a line of pylons in a cleared strip, a wooden fire-watch tower on "
         "a rise, a lake between the trees, misty ridges"),
     "jungle_road": _draft(
         "nature", ["jungle"], "jungle", "modern_urban_planning", 1, "",
         "Dense rainforest {when}: a long steel and concrete bridge carrying a highway across a "
-        "wide brown river, trucks and a bus, a tall lattice mast above the canopy, a river boat, "
+        "wide brown river, 1950s trucks and a bus, a tall lattice mast above the canopy, a river boat, "
         "a small landing of tin roofs, low cloud over the trees"),
     "wetland_road": _draft(
         "nature", ["wetland"], "wetland", "modern_urban_planning", 1, "",
         "A broad marsh {when}: a road on a low concrete causeway crossing reed beds and open "
-        "water, a few cars and a truck, a line of pylons on concrete footings, a pumping station "
+        "water, a few rounded 1950s cars and a truck, a line of pylons on concrete footings, a pumping station "
         "on a dike, white egrets, a flat-bottomed boat"),
 }
+
+
+# --- Wave 3: worked land. A draft becomes a picture here once it has a picked render: its
+# prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
+# picture it is like, and this table adds what decides between it and its neighbors.
+_HAS_PORT = ["has_building = building_port"]
+_OIL_FIELD = ["has_variable = te_sp_oil"]  # the yearly pass's tag: oil is a major part of the state's economy
+WAVE3_WIRING = {
+    # a harbor is any Port; the major port asks for the level (the pilot's docks_1 is rung 1's)
+    **{f"docks_harbor_{n}": {"where": _HAS_PORT} for n in (1, 2, 3, 4)},
+    **{f"docks_{n}": {"where": _HAS_PORT, "scale": "major_port"} for n in (2, 3, 4)},
+    # the open pit is any mining state; the colliery asks for the coal mines' level
+    **{f"mining_{n}": {} for n in (2, 3)},
+    **{f"mining_deep_{n}": {"scale": "colliery"} for n in (1, 2, 3)},
+    # an oil field takes over the land it stands on
+    **{f"oil_{n}": {"where": _OIL_FIELD, "over": True} for n in (1, 2, 3)},
+    **{f"farmland_{family}_{n}": {"region": f"farm_{family}"}
+       for family in ("generic", "arabic", "asian", "subtropic") for n in (1, 2, 3, 4)},
+    "farmland_5": {},
+    **{f"plantation_{n}": {} for n in (1, 2, 3, 4)},
+    **{f"pasture_{n}": {} for n in (1, 2, 3, 4)},
+    **{f"forestry_{n}": {} for n in (1, 2)},
+    **{f"forestry_tropical_{n}": {"region": "forest_tropical"} for n in (1, 2)},
+    **{f"cleared_land_{n}": {} for n in (1, 2)},
+}
+# A rung outranks a scale or a region, so the plain and the special picture of a rung are wired
+# together: a harbor of rung 2 wired without the major port of rung 2 would show in a great port
+# over the major port of rung 1. The test holds each tuple to all or none.
+WIRED_TOGETHER = (
+    *((f"docks_harbor_{n}", f"docks_{n}") for n in (1, 2, 3, 4)),
+    *((f"mining_{n}", f"mining_deep_{n}") for n in (1, 2, 3)),
+    *((f"forestry_{n}", f"forestry_tropical_{n}") for n in (1, 2)),
+)
+
+# The picked render of each wave 3 picture, with its crop and smudge boxes.
+WAVE3_PICKS = {
+    "docks_harbor_1": {"seed": 1, "smudge": [(880, 548, 1010, 568)]},
+    "docks_harbor_2": {"seed": 0, "smudge": [(1300, 448, 1536, 472), (880, 560, 915, 590)]},
+    "docks_harbor_3": {"seed": 0, "smudge": [(440, 462, 500, 488), (298, 388, 326, 412), (1150, 428, 1450, 450),
+                                             (1380, 512, 1435, 534), (0, 626, 40, 650)]},
+    "docks_harbor_4": {"seed": 1},
+    "docks_2": {"seed": 0, "smudge": [(1110, 640, 1165, 672), (355, 398, 410, 418)]},
+    "docks_3": {"seed": 3},
+    "docks_4": {"seed": 3, "smudge": [(140, 458, 200, 480)]},
+    "mining_2": {"seed": 1},
+    "mining_3": {"seed": 3},
+    "mining_deep_1": {"seed": 1},
+    "mining_deep_2": {"seed": 3},
+    "mining_deep_3": {"seed": 0, "smudge": [(672, 432, 694, 450)]},
+    "oil_1": {"seed": 0},
+    "oil_2": {"seed": 0},
+    "oil_3": {"seed": 1},
+    "farmland_generic_1": {"seed": 3},
+    "farmland_generic_2": {"seed": 1, "smudge": [(1455, 718, 1536, 752)]},
+    "farmland_generic_3": {"seed": 0, "smudge": [(375, 460, 480, 482)]},
+    "farmland_generic_4": {"seed": 0},
+    "farmland_arabic_1": {"seed": 0},
+    "farmland_arabic_2": {"seed": 0},
+    "farmland_arabic_3": {"seed": 1, "smudge": [(495, 526, 520, 546)]},
+    "farmland_arabic_4": {"seed": 1},
+    "farmland_asian_1": {"seed": 3},
+    "farmland_asian_2": {"seed": 0},
+    "farmland_asian_3": {"seed": 0},
+    "farmland_asian_4": {"seed": 1},
+    "farmland_subtropic_1": {"seed": 3},
+    "farmland_subtropic_2": {"seed": 1},
+    "farmland_subtropic_3": {"seed": 1},
+    "farmland_subtropic_4": {"seed": 3, "smudge": [(742, 608, 782, 648)]},
+    "farmland_5": {"seed": 1},
+    "plantation_1": {"seed": 1},
+    "plantation_2": {"seed": 0},
+    "plantation_3": {"seed": 0},
+    "plantation_4": {"seed": 3},
+    "pasture_1": {"seed": 0},
+    "pasture_2": {"seed": 1},
+    "pasture_3": {"seed": 3},
+    "pasture_4": {"seed": 0},
+    "forestry_1": {"seed": 0},
+    "forestry_2": {"seed": 1},
+    "forestry_tropical_1": {"seed": 0, "smudge": [(1200, 448, 1450, 482)]},
+    "forestry_tropical_2": {"seed": 0, "smudge": [(700, 486, 800, 504)]},
+    "cleared_land_1": {"seed": 0},
+    "cleared_land_2": {"seed": 3},
+}
+
+for _key, _pick in WAVE3_PICKS.items():
+    _draft_entry = DRAFTS.pop(_key)
+    _wiring = WAVE3_WIRING[_key]
+    PICTURES[_key] = {
+        "terrain": _draft_entry["terrain"],
+        "tech": _draft_entry["tech"],
+        "rung": _draft_entry["rung"],
+        "region": _wiring.get("region"),
+        "size": None,
+        **{k: v for k, v in _wiring.items() if k != "region"},
+        "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
+        "prompt": _draft_entry["prompt"],
+        **_pick,
+    }
+if "docks_harbor_1" in PICTURES:
+    PICTURES["docks_1"]["scale"] = "major_port"  # the pilot's port is rung 1's major port
 
 
 def full_prompt(key: str) -> str:
@@ -1094,19 +1247,33 @@ def weight(key: str) -> int:
     w = W_RUNG * p["rung"]
     if p["size"]:
         w += W_SIZE * SIZES[p["size"]][1]
+    if p.get("scale"):
+        w += W_SIZE * SCALES[p["scale"]][1]
     if p["region"]:
-        w += W_REGION * REGIONS[p["region"]][1]
+        w += W_REGION * region_digit(p["region"])
+    if p.get("over"):
+        w += W_OVER
     return w
+
+
+def _negated(line: str) -> str:
+    if line.startswith("is_in_geographic_region"):
+        return line.replace("is_in_geographic_region", "is_not_in_geographic_region", 1)
+    assert line.endswith(" = yes"), line
+    return line[:-len("yes")] + "no"
 
 
 def region_conditions(region: str) -> list:
     """The state triggers of a region family, one a line, nested lines tab-indented."""
-    lines = REGIONS[region][0]
-    if region != FALLBACK_REGION:
+    group = region_group(region)
+    lines = REGION_GROUPS[group][region][0]
+    if region != GROUP_FALLBACK.get(group):
         return list(lines) if len(lines) == 1 else ["OR = {", *("\t" + line for line in lines), "}"]
     # the states of no family, in the form vanilla's own fallback entry uses
-    others = [line.replace("is_in_geographic_region", "is_not_in_geographic_region")
-              for key, (other, _digit) in REGIONS.items() if key != region for line in other]
+    others = [_negated(line) for key, (other, _digit) in REGION_GROUPS[group].items() if key != region
+              for line in other]
+    if not lines:
+        return others
     return ["OR = {", *("\t" + line for line in lines),
             "\tAND = {", *("\t\t" + line for line in others), "\t}", "}"]
 

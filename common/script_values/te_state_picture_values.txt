@@ -22,6 +22,25 @@ te_state_picture_k_megacity_keep = {
 	value = te_state_picture_k_megacity
 	multiply = te_state_picture_k_keep
 }
+# Oil country: Oil Rigs hold at least this share of the state's building levels (subsistence
+# buildings left out) and at least this many levels. Provisional, from a 1940 save: 24 of 109 oil
+# states pass, and a state of 100 rig levels among 4,499 doesn't. Oil rigs earn more a level than
+# most buildings, so 5% of levels stands for about a tenth of the state's GDP (owner, 2026-11-10).
+te_state_picture_k_oil_share = { value = 0.05 }
+te_state_picture_k_oil_levels = { value = 10 }
+te_state_picture_k_oil_levels_keep = {
+	value = te_state_picture_k_oil_levels
+	multiply = te_state_picture_k_keep
+}
+# A colliery: Coal Mines hold at least this share of the state's mine levels and at least this many
+# levels. Provisional, from the same save: 44 of 139 coal states pass.
+te_state_picture_k_coal_share = { value = 0.5 }
+te_state_picture_k_coal_levels = { value = 10 }
+te_state_picture_k_coal_levels_keep = {
+	value = te_state_picture_k_coal_levels
+	multiply = te_state_picture_k_keep
+}
+
 # The largest city's share of the state's urban people where the census keeps none (Demographics
 # disabled, or under 5,000 urban people): te_demog_k_mt_base as a fraction.
 te_state_picture_k_share = { value = 0.4 }

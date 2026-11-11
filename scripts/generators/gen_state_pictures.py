@@ -41,6 +41,8 @@ def conditions(key):
         lines += registry.region_conditions(p["region"])
     if p["size"]:
         lines += registry.SIZES[p["size"]][0]
+    if p.get("scale"):
+        lines += registry.SCALES[p["scale"]][0]
     lines += p.get("where", [])
     return lines
 
