@@ -56,7 +56,14 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
     terrain manipulator and none creates cleared land (`docs/guides/scripting_best_practices.md`, § "State
     pictures"). The six pictures are wired and harmless; giving plantations the manipulator would show
     them and would also change the map, which is a separate decision.
-12. **The two axes of prosperity stand** ("I am happy with your two axes", 2026-11-11), and the means
+12. **A great city shows as a city whatever its terrain** (2026-11-11). The owner's Singapore, one province
+    with an Urban Center of 405 and no farm, showed rice farmland: the engine decides the terrain, and not by
+    building levels alone. Offered: "let city pictures take over other terrains, the way the oil field
+    does", for "metropolis and megacity only", so that "a farm state with a modest town keeps its fields".
+    The owner: "This sounds like a good idea - let's do it". Not the owner's words, and open to overruling:
+    the takeover covers every land terrain, the port's and the mine's included, and a metropolis outranks
+    an oil field.
+13. **The two axes of prosperity stand** ("I am happy with your two axes", 2026-11-11), and the means
     floors are the owner's first-pass figures, poor below the first and affluent from the second, by era:
     6: 12, 20; 7: 14, 22; 8: 18, 28; 9: 22, 32; 10: 26, 36; 11: 30, 40; 12: 35, 45; 13: 40, 60. "Very
     rough values for the first pass": the calibration game was put off ("we just run the generation and
@@ -93,7 +100,7 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 | Place | Axis | Values | Read from |
 |---|---|---|---|
 | 1 | Condition | devastated, nuclear aftermath, flooded | the state, live |
-| 2 | Takeover | an oil field, on the open land it stands on | the yearly pass |
+| 2 | Takeover | a great city (a metropolis or larger) on any land; under it, an oil field on the open land it stands on | the yearly pass |
 | 3 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
 | 4 | Character or function | housing blocks, smog; boomtown, declining, divided, heavy industry, resort | the owner's law and the state region's pollution, live; the yearly pass for the rest |
 | 5 | Upkeep | run-down | the yearly pass |
@@ -115,6 +122,14 @@ shows the plain, desert or farmland the rigs stand on. The oil pictures join tho
 outrank every rung there, so that a later farm technology doesn't put the wheat back over the derricks. A
 **scale** is the worked-land counterpart of a city's size: the larger or the special kind of a picture
 (§ 5).
+
+A **great city's takeover** is the same pattern for the city pictures (§ 1, item 12). Which terrain a state
+shows is the engine's choice, and a state of one province can be held to be farmland with no farm in it. So
+every city picture also joins the list of every other land terrain, where it asks for a metropolis or
+larger and weighs 11,000,000 more than in the city's own list: above that terrain's rungs and the oil
+field's 10,000,000, under the lowest condition's 12,000,000. The city pictures keep their own order there,
+and the ruins and the strike join at their own weights. A town or a city of under a million keeps the
+land's picture.
 
 **The yearly pass.** The engine may evaluate a weight every frame, so a weight reads only the owner's
 technology, vanilla's region triggers and a few state variables. A yearly state pulse computes those
@@ -242,7 +257,7 @@ afford, so it draws amenities and build quality: how many motor cars, shop front
 or dirt streets, parks, the housing stock (shacks and tenements, or villas and glass). Three levels: poor,
 ordinary, affluent. The floors are fixed numbers for each rung, since an affluent street of 1930 and one of
 2030 are different pictures; they are not relative to the world of the day. They are the owner's figures
-(§ 1 item 12), taken at the era of the rung's technology, because the rung is the street the picture shows:
+(§ 1 item 13), taken at the era of the rung's technology, because the rung is the street the picture shows:
 
 | City rung | Era | Poor below | Affluent from |
 |---|---|---|---|
