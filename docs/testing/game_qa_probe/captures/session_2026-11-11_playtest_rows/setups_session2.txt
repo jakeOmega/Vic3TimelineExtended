@@ -1,0 +1,8 @@
+# jud_enact
+start_enactment = law_type:law_freedom_of_conscience
+# jud_tribunals
+activate_law = law_type:law_executive_tribunals
+# qa_mark
+set_variable = { name = te_qa_mark value = 7 }
+# tariff_all
+te_bulk_tariff_apply = { DIR = import KIND = tariff LEVEL = max_tariffs }
