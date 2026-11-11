@@ -24634,6 +24634,10 @@
    "secession": [
     "=",
     {
+     "can_secede_during_revolution": [
+      "=",
+      "yes"
+     ],
      "possible": [
       "=",
       {
@@ -25931,6 +25935,10 @@
    "secession": [
     "=",
     {
+     "can_secede_during_revolution": [
+      "=",
+      "yes"
+     ],
      "possible": [
       "=",
       {
@@ -29271,6 +29279,10 @@
    "secession": [
     "=",
     {
+     "can_secede_during_revolution": [
+      "=",
+      "yes"
+     ],
      "possible": [
       "=",
       {
@@ -46390,6 +46402,10 @@
    "secession": [
     "=",
     {
+     "can_secede_during_revolution": [
+      "=",
+      "yes"
+     ],
      "possible": [
       "=",
       {
@@ -47272,6 +47288,10 @@
    "secession": [
     "=",
     {
+     "can_secede_during_revolution": [
+      "=",
+      "yes"
+     ],
      "weight": [
       "=",
       {
@@ -48397,6 +48417,10 @@
    "secession": [
     "=",
     {
+     "can_secede_during_revolution": [
+      "=",
+      "yes"
+     ],
      "possible": [
       "=",
       {

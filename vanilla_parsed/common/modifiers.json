@@ -770,6 +770,10 @@
    "state_conscription_rate_mult": [
     "=",
     "-0.50"
+   ],
+   "state_disable_disband_prestige_penalty_bool": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -787,6 +791,10 @@
    "building_nationalization_radicals_mult": [
     "=",
     "-0.75"
+   ],
+   "state_disable_disband_prestige_penalty_bool": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -15367,6 +15375,40 @@
    ]
   }
  ],
+ "modifier_dirge_of_third_rome_bonus": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "1"
+   ],
+   "interest_group_pol_str_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_dirge_of_third_rome_penalty": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-1"
+   ],
+   "interest_group_pol_str_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
  "modifier_regional_russification_payments": [
   "=",
   {
@@ -15936,6 +15978,71 @@
    "interest_group_approval_add": [
     "=",
     "-2"
+   ]
+  }
+ ],
+ "modifier_favored_interests_ig_approval": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "modifier_favorite_embarrassment": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "-0.15"
+   ]
+  }
+ ],
+ "modifier_crowd_charisma": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_popularity_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "modifier_favored_outcome": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+   ],
+   "country_law_enactment_success_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "modifier_rousing_speech": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "15"
    ]
   }
  ],
@@ -16793,6 +16900,19 @@
    "state_conscription_rate_mult": [
     "=",
     "1"
+   ]
+  }
+ ],
+ "congress_poland_white_guarantee": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_cannot_decrease_autonomy_bool": [
+    "=",
+    "yes"
    ]
   }
  ],
