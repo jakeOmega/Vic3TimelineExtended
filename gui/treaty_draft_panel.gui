@@ -1,4 +1,4 @@
-﻿# TE override of vanilla treaty_draft_panel.gui (1.15.0): vanilla's file plus the article inputs vanilla
+﻿# TE override of vanilla treaty_draft_panel.gui (1.15.1): vanilla's file plus the article inputs vanilla
 # draws only for its own articles: a quantity for any article (#542), a company and a building type (TE).
 # Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
 # COPY-PASTED FOR NOW
@@ -1728,15 +1728,15 @@ types treaty_draft_panel_types
 						}
 
 						textbox = {
-							text = "[LawType.GetNameNoFormatting]"
+							minimumsize = { 130 20 }
+							maximumsize = { 130 50 }
 							parentanchor = vcenter
 							autoresize = yes
-							minimumsize = { 135 20 }
-							maximumsize = { 135 50 }
 							align = nobaseline
-							margin_left = 45
+							margin_left = 43
 							multiline = yes
 							using = elide_fontsize_min
+							text = "[LawType.GetNameNoFormatting]"
 						}
 
 						button = {

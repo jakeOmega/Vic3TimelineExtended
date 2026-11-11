@@ -356,8 +356,8 @@ types TooltipTypes
 
 					flowcontainer = {
 						visible = "[Or(Or(And(Treaty.DoesOweObligation(Country.Self), Treaty.AreObligationsEffectuated), And(Treaty.DoesOweObligation(Country.Self), Not(Treaty.AreObligationsEffectuated))), Not(Country.IsPlayer))]"
-						parentanchor = vcenter
 						direction = vertical
+						parentanchor = vcenter
 						datacontext = "[Treaty.GetLeftCountry]"
 
 						widget = {
@@ -418,8 +418,8 @@ types TooltipTypes
 					datacontext = "[Treaty.GetRightCountry]"
 
 					flowcontainer = {
-						parentanchor = vcenter
 						direction = vertical
+						parentanchor = vcenter
 						datacontext = "[Treaty.GetRightCountry]"
 
 						widget = {
@@ -474,8 +474,8 @@ types TooltipTypes
 					}
 
 					widget = {
-						parentanchor = vcenter
 						size = { 75 29 }
+						parentanchor = vcenter
 
 						total_influence_cost = {
 							blockoverride "expand_before" {
@@ -516,14 +516,14 @@ types TooltipTypes
 				}
 
 				flowcontainer = {
-					position = { 0 50 }
 					direction = vertical
+					position = { 0 50 }
 					spacing = 2
 
 					### MUTUAL AGREEMENTS
 					flowcontainer = {
-						parentanchor = hcenter
 						direction = vertical
+						parentanchor = hcenter
 						datacontext = "[Treaty.GetLeftCountry]"
 						datamodel = "[Treaty.GetMutualAgreements]"
 						alpha = "[TransparentIfTrue(Treaty.IsFrozenForBothCountries)]"
@@ -552,9 +552,9 @@ types TooltipTypes
 							flowcontainer = {
 								visible = "[And(Not(IsDataModelEmpty(Treaty.GetOffers)), LessThanOrEqualTo_int32(GetDataModelSize(Treaty.GetOffers), '(int32)10'))]"
 								direction = vertical
-								datamodel = "[Treaty.GetOffers]"
 								spacing = 2
 								alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
+								datamodel = "[Treaty.GetOffers]"
 
 								item = {
 									treaty_tooltip_article_entry = {}
@@ -564,9 +564,9 @@ types TooltipTypes
 							flowcontainer = {
 								visible = "[GreaterThan_int32(GetDataModelSize(Treaty.GetOffers), '(int32)10')]"
 								direction = vertical
-								datamodel = "[DataModelFirst(Treaty.GetOffers, '(int32)10')]"
 								spacing = 2
 								alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
+								datamodel = "[DataModelFirst(Treaty.GetOffers, '(int32)10')]"
 
 								item = {
 									treaty_tooltip_article_entry = {}
@@ -592,9 +592,9 @@ types TooltipTypes
 								}
 
 								flowcontainer = {
-									spacing = 5
 									parentanchor = vcenter
 									position = { 10 0 }
+									spacing = 5
 
 									### AND X MORE
 									textbox = {
@@ -668,9 +668,9 @@ types TooltipTypes
 							flowcontainer = {
 								visible = "[And(Not(IsDataModelEmpty(Treaty.GetDemands)), LessThanOrEqualTo_int32(GetDataModelSize(Treaty.GetDemands), '(int32)10'))]"
 								direction = vertical
-								datamodel = "[Treaty.GetDemands]"
 								spacing = 2
 								alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
+								datamodel = "[Treaty.GetDemands]"
 
 								item = {
 									treaty_tooltip_article_entry = {}
@@ -680,9 +680,9 @@ types TooltipTypes
 							flowcontainer = {
 								visible = "[GreaterThan_int32(GetDataModelSize(Treaty.GetDemands), '(int32)10')]"
 								direction = vertical
-								datamodel = "[DataModelFirst(Treaty.GetDemands, '(int32)10')]"
 								spacing = 2
 								alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
+								datamodel = "[DataModelFirst(Treaty.GetDemands, '(int32)10')]"
 
 								item = {
 									treaty_tooltip_article_entry = {}
@@ -707,9 +707,9 @@ types TooltipTypes
 								}
 
 								flowcontainer = {
-									spacing = 5
 									parentanchor = vcenter
 									position = { 10 0 }
+									spacing = 5
 
 									### AND X MORE
 									textbox = {
@@ -820,7 +820,7 @@ types TooltipTypes
 	}
 
 	type treaty_tooltip_article = widget {
-		size = { 220 40 }
+		size = { 220 44 }
 
 		state = {
 			name = 1
@@ -858,8 +858,8 @@ types TooltipTypes
 			}
 
 			icon = {
-				parentanchor = vcenter
 				size = { 30 30 }
+				parentanchor = vcenter
 				texture = "[Article.GetIcon]"
 			}
 
@@ -982,6 +982,7 @@ types TooltipTypes
 
 			### LAW COMMITMENT
 			law_commitment_article = {
+				visible = "[And(Article.HasType('law_commitment'), Not(Article.ExceedsMaxContraventions(Country.Self)))]"
 				parentanchor = vcenter
 
 				blockoverride "text_format" {
@@ -990,11 +991,28 @@ types TooltipTypes
 
 				blockoverride "law_icon_background_size" {
 					size = { 38 38 }
-			}
+				}
 
 				blockoverride "law_name_text_maximumsize" {
-					maximumsize = { 110 38 }
-		}
+					maximumsize = { 118 38 }
+				}
+			}
+
+			law_commitment_article = {
+				visible = "[And(Article.HasType('law_commitment'), Article.ExceedsMaxContraventions(Country.Self))]"
+				parentanchor = vcenter
+
+				blockoverride "text_format" {
+					fonttintcolor = "[TooltipInfo.GetTintColor]"
+				}
+
+				blockoverride "law_icon_background_size" {
+					size = { 38 38 }
+				}
+
+				blockoverride "law_name_text_maximumsize" {
+					maximumsize = { 100 38 }
+				}
 			}
 		}
 
@@ -1253,8 +1271,35 @@ types TooltipTypes
 				visible = "[Article.HasType('law_commitment')]"
 				direction = vertical
 
-				custom_tooltip_textbox = {
-					text = "ARTICLE_LAW_LABEL"
+				button = {
+					size = { @tooltip_fixed_width 44 }
+					datacontext = "[Article.GetLaw]"
+					onclick = "[InformationPanelBar.OpenChangeLaw(LawType.GetGroup)]"
+					using = default_button
+
+					tooltipwidget = {
+						FancyTooltip_LawType = {}
+					}
+
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+						spacing = 5
+						margin = { 5 2 }
+
+						icon = {
+							size = { 38 38 }
+							texture = "[LawType.GetTexture]"
+						}
+
+						textbox = {
+							layoutpolicy_horizontal = expanding
+							size = { 0 38 }
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "[LawType.GetNameNoFormatting]"
+						}
+					}
 				}
 
 				custom_tooltip_textbox_with_empty_line = {
@@ -1792,8 +1837,8 @@ types TooltipTypes
 
 						### ACCEPTANCE ICON
 						widget = {
-							parentanchor = vcenter
 							size = { 30 30 }
+							parentanchor = vcenter
 
 							treaty_draft_acceptance_icon = {
 								blockoverride "acceptance_value" {}
@@ -1938,9 +1983,9 @@ types TooltipTypes
 
 		blockoverride "tooltip_content_after" {
 			flowcontainer = {
+				direction = vertical
 				parentanchor = hcenter
 				spacing = 2
-				direction = vertical
 
 				block "war_goal_before_text" {}
 
@@ -2018,14 +2063,14 @@ types TooltipTypes
 				}
 
 				flowcontainer = {
-					block "click_prompt_visibility" {
-						visible = "[And(WarGoal.HoldsArticle, WarGoal.GetArticleType.RequiresAnyInput)]"
-					}
-
 					direction = vertical
 					spacing = 2
 					datacontext = "[WarGoal.GetArticleType]"
 					datacontext = "[WarGoal.GetArticleDraft]"
+
+					block "click_prompt_visibility" {
+						visible = "[And(WarGoal.HoldsArticle, WarGoal.GetArticleType.RequiresAnyInput)]"
+					}
 
 					custom_tooltip_textbox = {
 						visible = "[Not(Or(Or(Or(Or(ArticleDraft.RequiresInput('goods'), ArticleType.HasType('money_transfer')), Or(ArticleType.HasType('acquire_monopoly_for_company'), ArticleDraft.RequiresInput('state'))), Or(ArticleDraft.RequiresInput('strategic_region'), ArticleDraft.RequiresInput('law_type'))), ArticleDraft.RequiresInput('country')))]"
@@ -3096,7 +3141,6 @@ types TooltipTypes
 
 	type RegularTooltip_MarketWorldMarketExportsTo = RegularTooltip {
 		blockoverride "tooltip_content_after" {
-
 			flowcontainer = {
 				direction = vertical
 				margin_top = 10
@@ -3106,14 +3150,17 @@ types TooltipTypes
 				}
 
 				flowcontainer = {
-					datamodel = "[Goods.GetImportersFromMarket]"
 					margin_top = 5
 					wrap_count = 4
 
+					block "partners" {
+						datamodel = "[Goods.GetImportersFromMarket]"
+					}
+
 					item = {
 						flowcontainer = {
-							margin = { 8 6 }
 							spacing = 7
+							margin = { 8 6 }
 
 							background = {
 								using = entry_bg_simple
@@ -3125,21 +3172,26 @@ types TooltipTypes
 							}
 
 							custom_tooltip_textbox = {
-								text = "[Market.GetImportedAmountFromMarket(Goods.GetMarket, Goods.Self)|v1]"
-								autoresize = yes
-								align = nobaseline
-								parentanchor = vcenter
 								minimumsize = { 50 -1 }
 								maximumsize = { 50 -1 }
-								using = elide_fontsize_min
+								parentanchor = vcenter
+								autoresize = yes
+								align = nobaseline
 								multiline = no
+								using = elide_fontsize_min
+
+								block "partner_amount" {
+									text = "[Market.GetImportedAmountFromMarket(Goods.GetMarket, Goods.Self)|v1]"
+								}
 							}
 
 							tooltipwidget = {
 								FancyTooltip_Market = {
 									blockoverride "tooltip_content_before" {
 										custom_tooltip_textbox = {
-											text = "MARKET_TRADE_VALUES"
+											block "partner_trade_values" {
+												text = "MARKET_TRADE_VALUES"
+											}
 										}
 									}
 								}
@@ -3149,12 +3201,15 @@ types TooltipTypes
 				}
 
 				custom_tooltip_textbox = {
-					visible = "[GreaterThan_CFixedPoint(Goods.GetWorldMarketAdditionalExportsFromMarket,'(CFixedPoint)0')]"
-					text = "GOODS_ADDITIONAL_EXPORTS"
 					autoresize = yes
 					align = nobaseline
-					using = elide_fontsize_min
 					multiline = no
+					using = elide_fontsize_min
+					text = "GOODS_ADDITIONAL_EXPORTS"
+
+					block "additional_trade_visibility" {
+						visible = "[GreaterThan_CFixedPoint(Goods.GetWorldMarketAdditionalExportsFromMarket,'(CFixedPoint)0')]"
+					}
 				}
 			}
 		}
@@ -3171,41 +3226,50 @@ types TooltipTypes
 				}
 
 				flowcontainer = {
-					datamodel = "[Goods.GetExportersToMarket]"
 					margin_top = 5
 					wrap_count = 4
 
+					block "partners" {
+						datamodel = "[Goods.GetExportersToMarket]"
+					}
+
 					item = {
 						flowcontainer = {
+							spacing = 7
+							margin = { 8 6 }
+
 							background = {
 								using = entry_bg_simple
-					}
-							margin = { 8 6 }
-							spacing = 7
+							}
 
 							small_market_flag = {
 								parentanchor = vcenter
 								blockoverride "small_market_flag_tooltip" {}
-				}
+							}
 
 							custom_tooltip_textbox = {
-								text = "[Market.GetExportedAmountToMarket(Goods.GetMarket, Goods.Self)|v1]"
-								autoresize = yes
-								align = nobaseline
-								parentanchor = vcenter
 								minimumsize = { 50 -1 }
 								maximumsize = { 50 -1 }
-								using = elide_fontsize_min
+								parentanchor = vcenter
+								autoresize = yes
+								align = nobaseline
 								multiline = no
-			}
+								using = elide_fontsize_min
+
+								block "partner_amount" {
+									text = "[Market.GetExportedAmountToMarket(Goods.GetMarket, Goods.Self)|v1]"
+								}
+							}
 
 							tooltipwidget = {
 								FancyTooltip_Market = {
 									blockoverride "tooltip_content_before" {
 										custom_tooltip_textbox = {
-											text = "MARKET_TRADE_VALUES"
-		}
-	}
+											block "partner_trade_values" {
+												text = "MARKET_TRADE_VALUES"
+											}
+										}
+									}
 								}
 							}
 						}
@@ -3213,12 +3277,117 @@ types TooltipTypes
 				}
 
 				custom_tooltip_textbox = {
-					visible = "[GreaterThan_CFixedPoint(Goods.GetWorldMarketAdditionalImportsToMarket,'(CFixedPoint)0')]"
-					text = "GOODS_ADDITIONAL_IMPORTS"
 					autoresize = yes
 					align = nobaseline
-					using = elide_fontsize_min
 					multiline = no
+					using = elide_fontsize_min
+					text = "GOODS_ADDITIONAL_IMPORTS"
+
+					block "additional_trade_visibility" {
+						visible = "[GreaterThan_CFixedPoint(Goods.GetWorldMarketAdditionalImportsToMarket,'(CFixedPoint)0')]"
+					}
+				}
+			}
+		}
+	}
+
+	type RegularTooltip_WorldMarketHub = RegularTooltip {
+		blockoverride "tooltip_content" {
+			flowcontainer = {
+				direction = vertical
+				spacing = 2
+
+				custom_tooltip_textbox = {
+					text = "WORLD_MARKET_HUB_TOOLTIP_HEADER"
+				}
+
+				flowcontainer = {
+					spacing = 5
+
+					icon = {
+						visible = "[Country.IsHostileTo(GetMapPerspectiveCountry.Self)]"
+						size = { 25 25 }
+						parentanchor = vcenter
+						color = "[GetDefine('NGUI','NAVAL_MISSION_HIGHLIGHT_ENEMY_COLOR')]"
+						texture = "gfx/interface/icons/generic_icons/world_market.dds"
+					}
+
+					icon = {
+						visible = "[Country.IsFriendlyTo(GetMapPerspectiveCountry.Self)]"
+						size = { 25 25 }
+						parentanchor = vcenter
+						color = "[GetDefine('NGUI','NAVAL_MISSION_HIGHLIGHT_FRIENDLY_COLOR')]"
+						texture = "gfx/interface/icons/generic_icons/world_market.dds"
+					}
+
+					icon = {
+						visible = "[Not(Or(Country.IsFriendlyTo(GetMapPerspectiveCountry.Self), Country.IsHostileTo(GetMapPerspectiveCountry.Self)))]"
+						size = { 25 25 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/generic_icons/world_market.dds"
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[ObjectsEqual(Country.Self, GetMapPerspectiveCountry.Self)]"
+						parentanchor = vcenter
+						text = "WORLD_MARKET_HUB_OWNER_YOURS"
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[And(Country.IsFriendlyTo(GetMapPerspectiveCountry.Self), Not(ObjectsEqual(Country.Self, GetMapPerspectiveCountry.Self)))]"
+						parentanchor = vcenter
+						text = "WORLD_MARKET_HUB_OWNER_FRIENDLY"
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[Country.IsHostileTo(GetMapPerspectiveCountry.Self)]"
+						parentanchor = vcenter
+						text = "WORLD_MARKET_HUB_OWNER_HOSTILE"
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[Not(Or(Country.IsFriendlyTo(GetMapPerspectiveCountry.Self), Country.IsHostileTo(GetMapPerspectiveCountry.Self)))]"
+						parentanchor = vcenter
+						text = "WORLD_MARKET_HUB_OWNER_NEUTRAL"
+					}
+				}
+
+				custom_tooltip_textbox = {
+					text = "WORLD_MARKET_HUB_FOR_MARKET"
+				}
+
+				tooltip_divider = {}
+
+				custom_tooltip_textbox = {
+					text = "WORLD_MARKET_HUB_TRADING_STATES"
+				}
+
+				custom_tooltip_textbox = {
+					text = "WORLD_MARKET_HUB_TRADE_CAPACITY"
+				}
+
+				custom_tooltip_textbox = {
+					text = "WORLD_MARKET_HUB_ACCESS"
+				}
+
+				custom_tooltip_textbox = {
+					visible = "[IsZero(State.GetTradeCapacity)]"
+					text = "NO_WORLD_MARKET_ACCESS_DUE_TO_NO_TRADE_CAPACITY"
+				}
+
+				custom_tooltip_textbox = {
+					text = "[State.GetWorldMarketHubAccessDesc]"
+				}
+
+				custom_tooltip_textbox = {
+					visible = "[State.HasBlockadeSeaRegion]"
+					text = "WORLD_MARKET_HUB_EXIT_SEA"
+				}
+
+				custom_tooltip_newline = {}
+
+				custom_tooltip_textbox = {
+					text = "[SelectLocalization(State.HasBlockadeSeaRegion, 'WORLD_MARKET_HUB_BLOCKADE_IN_SEA_REGION', 'WORLD_MARKET_HUB_BLOCKADE_HERE')]"
 				}
 			}
 		}
@@ -12852,9 +13021,53 @@ types TooltipTypes
 				direction = vertical
 				using = tooltip_segment_margin_first
 
+				flowcontainer = {
+					visible = "[MilitaryFormation.IsDefeated]"
+					spacing = 5
+
+					icon = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/commander_order_icons/admiral_repairing.dds"
+					}
+
+					custom_tooltip_textbox = {
+						parentanchor = vcenter
+						max_width = 471
+						text = "[SelectLocalization(MilitaryFormation.GetCurrentHQ.IsValid, 'FORMATION_FULLY_DEFEATED_SHORT', 'FORMATION_DEFEATED_MUST_RETURN_TO_HQ')]"
+					}
+				}
+
+				flowcontainer = {
+					spacing = 5
+
+					icon = {
+						visible = "[Or(MilitaryFormation.IsRecalledForRepairs, And(MilitaryFormation.IsDefeated, MilitaryFormation.GetCurrentHQ.IsValid))]"
+						size = { 24 24 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/generic_icons/repairing.dds"
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[Not(And(MilitaryFormation.IsDefeated, Not(MilitaryFormation.GetCurrentHQ.IsValid)))]"
+						parentanchor = vcenter
+						max_width = 471
+						text = "[MilitaryFormation.GetFormationStatusDesc]"
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[And(MilitaryFormation.IsDefeated, Not(MilitaryFormation.GetCurrentHQ.IsValid))]"
+						parentanchor = vcenter
+						max_width = 471
+						text = "[MilitaryFormation.GetShortFormationStatusDesc]"
+					}
+				}
+
 				custom_tooltip_textbox = {
-					max_width = @tooltip_fixed_width
-					text = "[MilitaryFormation.GetFormationStatusDesc]"
+					visible = "[And(MilitaryFormation.IsDefeated, MilitaryFormation.GetCurrentHQ.IsValid)]"
+					max_width = 471
+					margin_left = 29
+					text = "[SelectLocalization(MilitaryFormation.IsRecalledForRepairs, 'FORMATION_DEFEATED_REPAIR_PROGRESS', 'FORMATION_DEFEATED_REPAIR_PROGRESS_CONCEPTS')]"
 				}
 
 				custom_tooltip_textbox = {
@@ -13612,17 +13825,22 @@ types TooltipTypes
 					parentanchor = hcenter
 
 					blockoverride "size" {
-							size = { 500 50 }
+						size = { 500 50 }
 					}
 
 					blockoverride "button_size" {
-							size = { 485 75% }
+						size = { 485 75% }
 					}
 
 					blockoverride "fontsize" {}
 
 					blockoverride "mobilization_icon_size" {
 						size = { 50 50 }
+					}
+
+					blockoverride "text_margin" {
+						margin_left = 39
+						margin_right = 8
 					}
 				}
 			}

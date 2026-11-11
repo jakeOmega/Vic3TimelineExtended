@@ -540,12 +540,13 @@ types building_panels
 									autoresize = yes
 									parentanchor = vcenter
 								}
+
 								button_icon_goto = {
-									size = { 25 25 }
-									onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(BuildingOwnership.GetOwnedBuilding.AccessSelf)]"
 									visible = "[Building.IsValid]"
-									tooltip = "GO_TO_BUTTON_BUILDING"
+									size = { 25 25 }
 									parentanchor = vcenter
+									onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(BuildingOwnership.GetOwnedBuilding.AccessSelf)]"
+									tooltip = "GO_TO_BUTTON_BUILDING"
 								}
 							}
 
@@ -616,11 +617,21 @@ types building_panels
 
 				blockoverride "right" {
 					button_icon_goto = {
-						position = { -10 0 }
 						size = { 28 28 }
 						parentanchor = vcenter|right
+						position = { -10 0 }
 						onclick = "[InformationPanelBar.OpenPanel('world_market')]"
 						tooltip = "GOTO_WORLD_MARKET"
+					}
+
+					button_icon_goto = {
+						visible = "[State.IsWorldMarketHub]"
+						size = { 28 28 }
+						parentanchor = vcenter|right
+						position = { -42 0 }
+						enabled = "[State.HasWorldMarketHubTrade]"
+						onclick = "[InformationPanelBar.OpenMarketPanelForWorldMarketHub(State.Self)]"
+						tooltip = "[SelectLocalization(State.HasWorldMarketHubTrade, 'GOTO_WORLD_MARKET_HUB', 'GOTO_WORLD_MARKET_HUB_NO_TRADE')]"
 					}
 				}
 			}
@@ -2061,15 +2072,15 @@ types building_panels
 			autoresize = yes
 			parentanchor = vcenter
 		}
+
 		button_icon_goto = {
 			size = { 25 25 }
+			parentanchor = vcenter
+			tooltip = "GO_TO_BUTTON_BUILDING"
 
 			block "oln_button" {
 
 			}
-
-			tooltip = "GO_TO_BUTTON_BUILDING"
-			parentanchor = vcenter
 		}
 	}
 

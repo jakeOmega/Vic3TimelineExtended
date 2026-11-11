@@ -1,4 +1,4 @@
-﻿# TE override of vanilla right_click_menu.gui (1.15.0): vanilla's file plus the treaty-article inputs
+﻿# TE override of vanilla right_click_menu.gui (1.15.1): vanilla's file plus the treaty-article inputs
 # vanilla draws only for its own articles (a quantity for any article, #542; a company; a building type
 # and Cede Colony's colonies, #1140, #1255), each marked TE, and the taxation toggles greyed while the
 # legislated tax code sets the taxed goods (### MOD: Tax Code).
@@ -704,7 +704,7 @@ types right_click_menu_types {
 		}
 
 		block "default_button_template" {
-			using = default_button_action
+			using = default_button
 		}
 
 		textbox = {
@@ -718,7 +718,7 @@ types right_click_menu_types {
 			fontsize_min = 12
 
 			block "button_text" {
-				raw_text = "[State.GetCountry.GetFlagTextIcon] [State.GetName]"
+				raw_text = "[State.GetCountry.GetFlagTextIcon] [State.GetNameNoFormatting]"
 			}
 		}
 
@@ -843,7 +843,7 @@ types right_click_menu_types {
 			fontsize_min = 12
 
 			block "button_text" {
-				raw_text = "[State.GetCountry.GetFlagTextIcon] [State.GetName]"
+				raw_text = "[State.GetCountry.GetFlagTextIcon] [State.GetNameNoFormatting]"
 			}
 		}
 
@@ -938,6 +938,179 @@ types right_click_menu_types {
 
 					block "starvation_severe_text" {
 						raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
+					}
+				}
+			}
+		}
+
+		icon = {
+			using = highlighted_square_selection
+		}
+	}
+
+	type market_world_market_hub_filter_right_click_menu_item = button {
+		size = { 100% 100% }
+
+		block "highlight" {
+			onmousehierarchyenter = "[AccessHighlightManager.HighlightMarketArea(State.Self)]"
+			onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+		}
+
+		block "tooltip" {
+			tooltip = "MARKET_WORLD_MARKET_HUB_BUTTON_TOOLTIP"
+		}
+
+		block "default_button_template" {
+			using = default_button
+		}
+
+		textbox = {
+			parentanchor = vcenter
+			position = { 15 0 }
+			elide = right
+			max_width = 230
+			fontsize_min = 12
+			align = nobaseline
+			autoresize = yes
+
+			block "button_text" {
+				text = "[State.GetOwner.GetFlagTextIcon] [State.GetWorldMarketHubNameNoFormatting]"
+			}
+		}
+
+		block "values" {
+			flowcontainer = {
+				parentanchor = right|vcenter
+				position = { -10 0 }
+				spacing = 5
+
+				flowcontainer = {
+					parentanchor = vcenter
+					spacing = 5
+					tooltip = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityDesc(State.Self)]"
+
+					icon = {
+						size = { 30 30 }
+						texture = "gfx/interface/icons/state_status_icons/trade_capacity.dds"
+					}
+
+					textbox = {
+						size = { 50 30 }
+						parentanchor = vcenter
+						elide = right
+						fontsize_min = 12
+						align = nobaseline
+						text = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityBalance(State.Self)|+=]"
+					}
+				}
+
+				vertical_divider = {}
+
+				flowcontainer = {
+					parentanchor = vcenter
+					spacing = 5
+					tooltip = "STATE_WORLD_MARKET_ACCESS_DESC"
+
+					icon = {
+						size = { 30 30 }
+						texture = "gfx/interface/icons/state_status_icons/world_market_access.dds"
+					}
+
+					textbox = {
+						size = { 50 30 }
+						parentanchor = vcenter
+						elide = right
+						fontsize_min = 12
+						align = nobaseline
+						text = "[State.GetWorldMarketAccessFormatted]"
+					}
+				}
+			}
+		}
+
+		block "highlight_frame" {
+			icon = {
+				visible = "[State.IsMarketAreaBeingHighlighted]"
+				using = highlighted_active_square_selection
+			}
+		}
+	}
+
+	type market_world_market_hub_filter_right_click_menu_item_selected = widget {
+		size = { 100% 100% }
+
+		block "highlight" {
+			onmousehierarchyenter = "[AccessHighlightManager.HighlightMarketArea(State.Self)]"
+			onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+		}
+
+		block "tooltip" {
+			tooltip = "MARKET_WORLD_MARKET_HUB_SELECTED_TOOLTIP"
+		}
+
+		background = {
+			using = paper_bg
+		}
+
+		textbox = {
+			parentanchor = vcenter
+			position = { 15 0 }
+			elide = right
+			max_width = 230
+			fontsize_min = 12
+			align = nobaseline
+			autoresize = yes
+
+			block "button_text" {
+				text = "[State.GetOwner.GetFlagTextIcon] [State.GetWorldMarketHubNameNoFormatting]"
+			}
+		}
+
+		block "values" {
+			flowcontainer = {
+				parentanchor = right|vcenter
+				position = { -10 0 }
+				spacing = 5
+
+				flowcontainer = {
+					parentanchor = vcenter
+					spacing = 5
+					tooltip = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityDesc(State.Self)]"
+
+					icon = {
+						size = { 30 30 }
+						texture = "gfx/interface/icons/state_status_icons/trade_capacity.dds"
+					}
+
+					textbox = {
+						size = { 50 30 }
+						parentanchor = vcenter
+						elide = right
+						fontsize_min = 12
+						align = nobaseline
+						text = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityBalance(State.Self)|+=]"
+					}
+				}
+
+				vertical_divider = {}
+
+				flowcontainer = {
+					parentanchor = vcenter
+					spacing = 5
+					tooltip = "STATE_WORLD_MARKET_ACCESS_DESC"
+
+					icon = {
+						size = { 30 30 }
+						texture = "gfx/interface/icons/state_status_icons/world_market_access.dds"
+					}
+
+					textbox = {
+						size = { 50 30 }
+						parentanchor = vcenter
+						elide = right
+						fontsize_min = 12
+						align = nobaseline
+						text = "[State.GetWorldMarketAccessFormatted]"
 					}
 				}
 			}
@@ -6230,6 +6403,24 @@ right_click_menu = {
 						onclick = "[State.TogglePinInOutliner]"
 					}
 				}
+			}
+		}
+
+		right_click_menu_item = {
+			visible = "[State.IsWorldMarketHub]"
+
+			blockoverride "properties" {
+				enabled = "[State.HasWorldMarketHubTrade]"
+				onclick = "[InformationPanelBar.OpenMarketPanelForWorldMarketHub(State.Self)]"
+				tooltip = "[SelectLocalization(State.HasWorldMarketHubTrade, 'GOTO_WORLD_MARKET_HUB', 'GOTO_WORLD_MARKET_HUB_NO_TRADE')]"
+			}
+
+			blockoverride "texture" {
+				texture = "gfx/interface/icons/generic_icons/world_market.dds"
+			}
+
+			blockoverride "text" {
+				text = "STATE_RIGHT_CLICK_MENU_WORLD_MARKET_HUB"
 			}
 		}
 
@@ -13376,6 +13567,75 @@ right_click_menu = {
 						datacontext = "[State.GetFoodSecurity]"
 
 						visible = "[FoodSecurityFilter.IsStateSelected(State.Self)]"
+					}
+				}
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "market_world_market_hub_filter_right_click_menu"
+	parentanchor = right
+
+	blockoverride "title_text" {
+		text = "MARKET_WORLD_MARKET_HUB_FILTER_TITLE"
+	}
+
+	blockoverride "list" {
+		market_world_market_hub_filter_right_click_menu_item = {
+			visible = "[And(MarketPanel.HasSelectedWorldMarketHub, GreaterThan_int32(GetDataModelSize(MarketPanel.AccessWorldMarketHubs), '(int32)1'))]"
+			size = { 450 45 }
+			onclick = "[MarketPanel.SelectAllWorldMarketHubs]"
+			onclick = "[RightClickMenuManager.Close]"
+
+			blockoverride "highlight" {}
+
+			blockoverride "highlight_frame" {}
+
+			blockoverride "values" {}
+
+			blockoverride "tooltip" {
+				tooltip = "MARKET_ALL_WORLD_MARKET_HUBS_TOOLTIP"
+			}
+
+			blockoverride "button_text" {
+				text = "MARKET_ALL_WORLD_MARKET_HUBS"
+			}
+		}
+
+		market_world_market_hub_filter_right_click_menu_item_selected = {
+			visible = "[And(Not(MarketPanel.HasSelectedWorldMarketHub), GreaterThan_int32(GetDataModelSize(MarketPanel.AccessWorldMarketHubs), '(int32)1'))]"
+			size = { 450 45 }
+
+			blockoverride "highlight" {}
+
+			blockoverride "values" {}
+
+			blockoverride "tooltip" {
+				tooltip = "MARKET_ALL_WORLD_MARKET_HUBS_TOOLTIP"
+			}
+
+			blockoverride "button_text" {
+				text = "MARKET_ALL_WORLD_MARKET_HUBS"
+			}
+		}
+
+		dynamicgridbox = {
+			datamodel = "[MarketPanel.AccessWorldMarketHubs]"
+
+			item = {
+				widget = {
+					size = { 450 45 }
+
+					market_world_market_hub_filter_right_click_menu_item = {
+						visible = "[Not(MarketPanel.IsWorldMarketHubSelected(State.Self))]"
+						onclick = "[MarketPanel.SelectWorldMarketHub(State.Self)]"
+						onclick = "[RightClickMenuManager.Close]"
+					}
+
+					market_world_market_hub_filter_right_click_menu_item_selected = {
+						visible = "[MarketPanel.IsWorldMarketHubSelected(State.Self)]"
 					}
 				}
 			}

@@ -81,6 +81,10 @@ types journal_entry_panel_types
 						}
 
 						historical_journal_entry_outcome_icon_button = {
+							blockoverride "historical_position" {
+								parentanchor = right|vcenter
+							}
+
 							blockoverride "historical_icon_visibility" {
 								visible = "[And(ConcludedJournalEntry.IsHistorical, StringIsEmpty(ConcludedJournalEntry.GetHistoricalUrl))]"
 							}
@@ -434,7 +438,7 @@ types journal_entry_panel_types
 					visible = "[And( Not( IsDataModelEmpty( JournalEntry.GetScriptedProgressBars ) ), Not( JournalEntry.HasCustomWidget('custom_widget_container_7') ) )]"
 					parentanchor = hcenter
 					direction = vertical
-					spacing = 10
+					spacing = 2
 					datamodel = "[JournalEntry.GetScriptedProgressBars]"
 
 					item = {
@@ -513,9 +517,9 @@ types journal_entry_panel_types
 
 							# Look defined in script
 							widget = {
-								size = { 520 45 }
-								parentanchor = center
 								visible = "[ScriptedProgressBar.IsDynamic]"
+								size = { 504 45 }
+								parentanchor = center
 
 								hbox = {
 									size = { 100% 100% }
@@ -532,7 +536,7 @@ types journal_entry_panel_types
 										tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
 
 										block "progressbar_size" {
-											size = { 430 30 }
+											size = { 414 30 }
 										}
 
 										textbox = {
@@ -803,21 +807,43 @@ types journal_entry_panel_types
 									spacing = 5
 
 									textbox = {
-										visible = "[And(Not(StringIsEmpty(JournalEntryOutcome.GetConditionsDesc)), Not(JournalEntryOutcome.IsTimeout))]"
-										text = "[JournalEntryOutcome.GetConditionsDesc]"
-										autoresize = yes
-										multiline = yes
+										visible = "[And(Not(StringIsEmpty(JournalEntryOutcome.GetConditionsDesc)), Not(Or(JournalEntryOutcome.IsTimeout, JournalEntryOutcome.IsHistorical)))]"
 										minimumsize = { @panel_width_minus_30 -1 }
 										maximumsize = { @panel_width_minus_30 -1 }
-										using = default_list_position
+										autoresize = yes
+										multiline = yes
 										align = nobaseline
-
 										margin = { 15 5 }
+										using = default_list_position
+										text = "[JournalEntryOutcome.GetConditionsDesc]"
 
 										background = {
-											texture = "gfx/interface/tooltip/tooltip_title_bg.dds"
 											color = "[JournalEntryOutcome.GetColor]"
 											alpha = 0.4
+											texture = "gfx/interface/tooltip/tooltip_title_bg.dds"
+
+											modify_texture = {
+												using = texture_velvet
+											}
+										}
+									}
+
+									textbox = {
+										visible = "[And(And(Not(StringIsEmpty(JournalEntryOutcome.GetConditionsDesc)), Not(JournalEntryOutcome.IsTimeout)), JournalEntryOutcome.IsHistorical)]"
+										minimumsize = { @panel_width_minus_30 44 }
+										maximumsize = { @panel_width_minus_30 -1 }
+										autoresize = yes
+										multiline = yes
+										align = nobaseline
+										margin = { 15 5 }
+										margin_right = 50
+										using = default_list_position
+										text = "[JournalEntryOutcome.GetConditionsDesc]"
+
+										background = {
+											color = "[JournalEntryOutcome.GetColor]"
+											alpha = 0.4
+											texture = "gfx/interface/tooltip/tooltip_title_bg.dds"
 
 											modify_texture = {
 												using = texture_velvet
@@ -939,7 +965,10 @@ types journal_entry_panel_types
 	}
 
 	type historical_journal_entry_outcome_icon_button = flowcontainer {
-		parentanchor = right|vcenter
+		block "historical_position" {
+			parentanchor = right
+			position = { -5 5 }
+		}
 
 		icon = {
 			block "historical_icon_visibility" {
