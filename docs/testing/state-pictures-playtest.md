@@ -123,7 +123,7 @@ written one line each, in 22 terrains, two of which (`river`, `snow`) the mod ha
 | **A forced metropolis.** In a farm or forest state that is your capital, `event te_debug_state_picture.2`. | The city picture until the next yearly pass, then the land again. | |
 | **A metropolis in oil country.** A metropolis whose state is tagged oil and shows open land. | The city, not the derricks. | The derricks: 11,000,000 doesn't outrank 10,000,000 plus the rung. |
 | **Ruins on any terrain.** A devastated metropolis whose state shows land. | The ruins. | The intact city: the condition's entry in that terrain. |
-| **A great port.** A metropolis whose banner was the major port (the docks terrain prevails). | The city now. This is a call the owner can reverse: take `docks` out of `CITY_TAKEOVER_TERRAINS`. | |
+| **A great port, a great mining state.** A metropolis whose banner was the major port (the docks terrain prevails), and one whose banner was the pit or the colliery. | The city now, in both. These are calls the owner can reverse: take `docks` or `mining` out of `CITY_TAKEOVER_TERRAINS`. | |
 | **Cost.** Open and close state panels quickly in a late game, on a state of farmland. | No stutter: about 70 more weights are read there, each failing on its first line unless the state is a metropolis. | A hitch that the old build doesn't have: thin the takeover to the regional streets. |
 
 ## The pass's city tags (2026-11-11)
