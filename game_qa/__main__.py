@@ -85,6 +85,10 @@ PLAYSET_MODES = ("current", "mod_only")
 # An --add-mod path: a drive path (`C:\…`) or a UNC path (`\\server\…`), as the launcher writes them.
 _WINDOWS_PATH = re.compile(r"[A-Za-z]:\\|\\\\[^\\]")
 _SHA256_HEX = re.compile(r"[0-9a-f]{64}")
+# Where `launch` writes the playset before renaming it over the file: restore's own temp name, so `compare` skips it.
+_PLAYSET_TEMP = PLAYSET_FILE + restore._TEMP_SUFFIX
+_PLAYSET_STAYS = (f"the playset this wrote into {PLAYSET_FILE} stays the run's until `restore` or `recover`, run "
+                  "once no game is running, puts the owner's back")
 _VERDICTS = ("restored", "held")
 _sleep = time.sleep       # patched in tests
 
@@ -320,6 +324,9 @@ def cmd_snapshot(args) -> tuple[dict, int]:
     games = gate.list_games()
     if games:
         return _game_running(games, "a snapshot taken while a game writes its files catches them mid-run").result, 2
+    left = _unanswered_write(backups, user)
+    if left is not None:
+        return _playset_not_restored(left.id, "a snapshot now would record it as the owner's").result, 2
     extra = ["save games/" + (name if name.endswith(".v3") else name + ".v3") for name in args.save]
     snap = snapshot.take(user, backups, extra=extra)
     snapshot.record(snap, "armed")
@@ -364,9 +371,9 @@ def cmd_launch(args) -> tuple[dict, int]:
     against the snapshot. After the claim the `playset` entry (mode, enabled paths, and the SHA-256 of the bytes
     to be written) is journaled first, and only then is the file written: a write no entry vouches for would
     be held. A refusal after the claim (the entry or the write failed, or the start did) leaves the claim, as
-    for a failed start. `restore` puts the owner's file back after a run; after a start that was never
-    recorded, `restore` and `recover` put it back when `launch`'s write is the only change outside `logs/`
-    (`_put_back_launchs_playset`)."""
+    for a failed start. `restore` and `recover` put the owner's file back whenever they judge the run with no
+    game running, held or not (`_settle_playset`). Whatever the options, nothing starts while the folder's
+    playset is another run's write never put back (`playset_not_restored`): the owner never chose it."""
     user, backups = _paths()
     snap = _find(backups, args.id)
     game_args = list(args.game_args)
@@ -377,6 +384,9 @@ def cmd_launch(args) -> tuple[dict, int]:
         _check_arguments(game_args)
         _check_end_date(game_args)
         _check_mod_paths(args.add_mod)
+        left = _unanswered_write(backups, user, exclude=snap.id)
+        if left is not None:
+            raise _playset_not_restored(left.id, "a game started now would run with a playset the owner never chose")
         if playset_wanted:
             _check_playset_present(snap, user)
         games = gate.list_games()
@@ -419,8 +429,7 @@ def cmd_launch(args) -> tuple[dict, int]:
                           "everywhere (`gate` and `launch` refuse beside it, `restore` and `recover` hold). The "
                           f"snapshot stays claimed, so `launch` refuses it: once no game runs, `restore {snap.id}` "
                           f"finishes it, {LAUNCH_IN_FLIGHT_S:g} s after the claim: "
-                          + (f"it puts back the owner's {PLAYSET_FILE}, which this rewrote, when that is the only "
-                             "file changed outside `logs/`; otherwise it holds, changing nothing, and it leaves "
+                          + (f"{_PLAYSET_STAYS}; it holds any other file changed outside `logs/`, and leaves "
                              "`logs/` as it is" if written else
                              "it holds a changed file outside `logs/` and leaves `logs/` as it is")}, 2
     try:
@@ -430,7 +439,8 @@ def cmd_launch(args) -> tuple[dict, int]:
                 "detail": f"the game started (pid {proc.pid}) but its start could not be recorded: {exc}. It "
                           "counts as another game everywhere (`restore` and `recover` hold). This harness "
                           f"started it, so it may end pid {proc.pid}, but only while the game listing shows pid "
-                          f"{proc.pid} with start time {proc.created}: a pid alone may be another game's by then"}, 2
+                          f"{proc.pid} with start time {proc.created}: a pid alone may be another game's by then"
+                          + (f". Meanwhile {_PLAYSET_STAYS}" if written else "")}, 2
     result = {"id": snap.id, "pid": proc.pid, "created": proc.created, "args": game_args}
     if playset is not None:
         result["playset"] = {"mode": playset.mode, "enabled": playset.enabled, "written": written}
@@ -529,6 +539,36 @@ _CLAIM_STAYS = ("Nothing was started. The snapshot stays claimed, so `launch` re
                 f"finishes it {LAUNCH_IN_FLIGHT_S:g} s after the claim; then take a new snapshot")
 
 
+def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> snapshot.Snapshot | None:
+    """The newest snapshot (other than `exclude`) with a `playset` entry that the live `content_load.json` hashes
+    to and no `playset_restored` after it: that run's playset write is still in the folder, never put back. None
+    when there is none, or no regular playset file. `snapshot` and `launch` refuse beside one: the owner never
+    chose that playset."""
+    path = user / PLAYSET_FILE
+    try:
+        if not stat.S_ISREG(os.lstat(path).st_mode):
+            return None
+        live = _sha256(path)
+    except FileNotFoundError:
+        return None
+    for snap in reversed(snapshot.all_snapshots(backups)):
+        if snap.id == exclude:
+            continue
+        journal = snapshot.journal(snap)
+        for i, entry in enumerate(journal):
+            if (entry.get("event") == "playset" and entry.get("sha256") == live
+                    and not any(later.get("event") == "playset_restored" for later in journal[i + 1:])):
+                return snap
+    return None
+
+
+def _playset_not_restored(snap_id: str, why: str) -> _Refused:
+    return _Refused("playset_not_restored", f"{PLAYSET_FILE} still holds the playset `launch` wrote for snapshot "
+                                            f"{snap_id}'s run, never put back: {why}. Run `restore {snap_id}` with no "
+                                            "game running: it puts the owner's playset back, and holds again for "
+                                            "anything else that needs the owner", snapshot=snap_id)
+
+
 def _deployed_mod() -> str:
     """This mod's deployed folder (`mod_deploy_target`) as Windows names it, the form the playset holds."""
     import path_constants
@@ -592,9 +632,9 @@ def _plan_playset(snap: snapshot.Snapshot, user: Path, mode: str, add_mods: list
         if not isinstance(mods, list) or not all(isinstance(m, dict) and isinstance(m.get("path"), str)
                                                  for m in mods):
             raise ValueError('"enabledMods" is not a list of {"path": "…"}')
-    except (ValueError, KeyError, TypeError) as exc:    # UnicodeDecodeError and JSONDecodeError are ValueErrors
-        raise _Refused("playset_unwritable", f"{path} cannot be read as a playset ({exc!r}). Nothing was "
-                                             "written") from None
+    except Exception as exc:    # any failure to read it: not UTF-8, not JSON, nested too deep, not a playset
+        raise _Refused("playset_unwritable", f"{path} cannot be read as a playset ({type(exc).__name__}: "
+                                             f"{str(exc)[:200]}). Nothing was written") from None
     if mode == "mod_only":
         kept = [m for m in mods if _folder_key(m["path"]) == _folder_key(this_mod)]
         if not kept:
@@ -613,9 +653,9 @@ def _plan_playset(snap: snapshot.Snapshot, user: Path, mode: str, add_mods: list
     data["enabledMods"] = kept
     try:
         return _Playset(mode, enabled, json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8"))
-    except UnicodeEncodeError as exc:                   # a lone surrogate the owner's file spelled as an escape
-        raise _Refused("playset_unwritable", f"{path} holds text that cannot be written back as UTF-8 ({exc}). "
-                                             "Nothing was written") from None
+    except Exception as exc:    # a lone surrogate the owner's file spelled as an escape; nesting too deep to write
+        raise _Refused("playset_unwritable", f"{path} cannot be written back ({type(exc).__name__}: "
+                                             f"{str(exc)[:200]}). Nothing was written") from None
 
 
 def _record_playset(snap: snapshot.Snapshot, playset: _Playset) -> None:
@@ -637,7 +677,7 @@ def _write_playset(snap: snapshot.Snapshot, user: Path, data: bytes) -> None:
     is. Right before the rename the file must still be the snapshot's: the owner's launcher may have written it
     since it was read. The temp name is restore's own, which `compare` skips and the next `restore` sweeps."""
     target = user / PLAYSET_FILE
-    temp = target.with_name(PLAYSET_FILE + restore._TEMP_SUFFIX)
+    temp = user / _PLAYSET_TEMP
     try:
         with open(temp, "wb") as handle:
             handle.write(data)
@@ -839,9 +879,10 @@ def cmd_restore(args) -> tuple[dict, int]:
     changing nothing, as is one it lost sight of (`unwatched_stretch`). With
     no `started` nothing was launched, so `logs/` is whoever played since, and
     is left alone. A snapshot a `launch` may still be on its way to recording
-    a start for gets no verdict (`launch_in_flight`). After a start that was
-    never recorded, the playset `launch` wrote is put back first when it is
-    the only change outside `logs/` (`_put_back_launchs_playset`)."""
+    a start for gets no verdict (`launch_in_flight`). Before judging, the
+    playset `launch` wrote for the run is put back when it is provably still
+    the harness's own and no game runs, whatever the verdict
+    (`_settle_playset`); beside a game the reply says `playset_left`."""
     user, backups = _paths()
     snap = _find(backups, args.id)
     age = _in_flight_age(snap)
@@ -861,64 +902,91 @@ def cmd_restore(args) -> tuple[dict, int]:
                           "recorded its exit: wait for `watch` to return, then restore. If `watch` has already "
                           "returned without recording an exit (game_gone_unrecorded, cannot_look) or died, run "
                           f"`restore` again {WATCH_RECORDING_S:g} s after that time"}, 2
+    notes: dict = {}
     try:
-        out = _unvouched_hold(snap) or _restore_or_hold(
+        _settle_playset(snap, user, bool(games), notes)
+        out = _unvouched_hold(snap) or restore.restore(
             snap, user, other_game_running=bool(games), logs="started" in _events(snap),
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
-        return {"held": False, "refused": "error", "detail": str(exc)}, 2
-    return _outcome(out), 2 if out.held else 0
+        return {"held": False, "refused": "error", "detail": str(exc), **notes}, 2
+    return _reply(out, notes), 2 if out.held else 0
 
 
-def _restore_or_hold(snap: snapshot.Snapshot, user: Path, other_game_running: bool, **restore_args) -> restore.Outcome:
-    """`restore.restore`, with a playset `launch` wrote for a start it never recorded put back first
-    (`_put_back_launchs_playset`) and added to the Outcome's `restored`. Beside a running game nothing is put
-    back: `restore.restore` holds, or leaves a restored snapshot as it is."""
-    put_back = [] if other_game_running else _put_back_launchs_playset(snap, user)
-    out = restore.restore(snap, user, other_game_running=other_game_running, **restore_args)
-    return restore.Outcome([*put_back, *out.restored], out.removed, out.held, out.reason) if put_back else out
+def _reply(out: restore.Outcome, notes: dict) -> dict:
+    """The Outcome as printed, with `_settle_playset`'s notes; a playset put back is listed in `restored`."""
+    result = _outcome(out)
+    if notes.get("playset_restored") and PLAYSET_FILE not in result["restored"]:
+        result["restored"] = [PLAYSET_FILE, *result["restored"]]
+    return {**result, **notes}
 
 
-def _put_back_launchs_playset(snap: snapshot.Snapshot, user: Path) -> list[str]:
-    """Put back the owner's playset file when it holds exactly `launch`'s own write and nothing else outside
-    `logs/` needs judging; return [PLAYSET_FILE] then, else [] with nothing changed.
+def _settle_playset(snap: snapshot.Snapshot, user: Path, game_running: bool, notes: dict) -> None:
+    """Before a snapshot is judged, undo `launch`'s playset write for its run when it is provably still the
+    harness's own (`_launchs_live_write`), whatever the verdict then is. The write is not the owner's work, so
+    putting their copy back touches nothing of theirs; left in place after a hold, the next `snapshot` would
+    record it as their playset and the next `launch` would run with it.
 
-    A start that failed after `launch` wrote the playset (`start_unconfirmed`, `not_recorded`) leaves a snapshot
-    with no `started`, so no reference time: `restore.restore` would hold the changed playset
-    (`no_reference_time`), and the owner's would stay altered until they resolved the hold. The file is known to
-    be `launch`'s write when the journal has no `started`, its last `playset` entry carries a SHA-256, and the
-    file is a regular file with exactly those bytes. An earlier verdict does not matter, as `restore` re-judges
-    a held snapshot: one held beside a running game (perhaps the unrecorded start's own) gets its playset back
-    once none runs; after `restored` the file is the snapshot's again, so nothing matches. It is put back from
-    the store (its hash checked against the manifest, and the file looked at again just before the rename, as
-    `restore` does), and `playset_restored` journaled, only when outside `logs/` no other file has changed, been
-    added or been created; else everything, this file included, is left to `restore.restore` to judge as
-    before, and a hold changes nothing. A missing file does not count: restore puts one back without judging
-    it. The caller has ruled out a running game, a launch still in flight and a run nothing vouches for."""
+    With no game running: a temp a killed write left is swept, the owner's copy goes back from the store (its
+    hash checked against the manifest, the file looked at again just before the rename, as `restore` does),
+    `playset_restored` is journaled, and `notes` gets `playset_restored`. A game running may be anyone's, so the
+    file is left as it is, and `notes` gets `playset_left` and the remedy. `notes` is filled before the journal
+    write, so a caller reporting a failure can still say the playset went back. Raises OSError as restore does
+    (a missing or damaged stored copy), changing nothing."""
+    if not any(e.get("event") == "playset" for e in snapshot.journal(snap)):
+        return
+    if game_running:
+        if _launchs_live_write(snap, user) is not None:
+            notes.update(playset_left=True, playset_detail=(
+                f"{PLAYSET_FILE} still holds the playset `launch` wrote for this run: a game is running, so it is "
+                f"left as it is. Once no game is running, run `restore {snap.id}`: it puts the owner's playset back "
+                "and holds again for anything else. Until then `snapshot` and `launch` refuse "
+                "(playset_not_restored), and `recover` does not look at a held snapshot again"))
+        return
+    with contextlib.suppress(FileNotFoundError):
+        os.unlink(user / _PLAYSET_TEMP)                 # the harness's own temp, never the owner's file
+    live = _launchs_live_write(snap, user)
+    if live is None:
+        return
+    sha, seen = live
+    backup_root = restore._backup_root(snap)
+    restore._check_store(backup_root, snap, [PLAYSET_FILE])
+    done, _changed = restore._put_back(backup_root, snap, [PLAYSET_FILE], user, {PLAYSET_FILE: seen})
+    if done:
+        notes["playset_restored"] = True
+        snapshot.record(snap, "playset_restored", sha256=sha)
+
+
+def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple[int, int]] | None:
+    """The SHA-256 and (size, mtime_ns) of the live playset file when it is this snapshot's run's write to put
+    back, else None: the journal's last `playset` entry carries a SHA-256 with no `playset_restored` after it;
+    this is the newest snapshot with a `playset` entry at all (an older one's write can coincide byte for byte
+    with a newer one's, with `mod_only` even after the owner changed their other mods, and its copy would then
+    go back over the owner's current playset); the snapshot holds the file; and the file is a regular file with
+    exactly those bytes."""
     journal = snapshot.journal(snap)
-    events = [e.get("event") for e in journal]
-    hashes = [e.get("sha256") for e in journal if e.get("event") == "playset"]
-    if ("started" in events or not hashes or not isinstance(hashes[-1], str) or not _SHA256_HEX.fullmatch(hashes[-1])
-            or PLAYSET_FILE not in snap.files):
-        return []
+    entries = [i for i, e in enumerate(journal) if e.get("event") == "playset"]
+    if not entries or PLAYSET_FILE not in snap.files:
+        return None
+    sha = journal[entries[-1]].get("sha256")
+    if not isinstance(sha, str) or not _SHA256_HEX.fullmatch(sha):
+        return None
+    if any(e.get("event") == "playset_restored" for e in journal[entries[-1] + 1:]):
+        return None
+    every = snapshot.all_snapshots(restore._backup_root(snap))
+    ids = [s.id for s in every]
+    if snap.id not in ids:
+        return None
+    if any(e.get("event") == "playset" for s in every[ids.index(snap.id) + 1:] for e in snapshot.journal(s)):
+        return None
     path = user / PLAYSET_FILE
     try:
         st = os.lstat(path)
-        if not stat.S_ISREG(st.st_mode) or _sha256(path) != hashes[-1]:
-            return []
+        if not stat.S_ISREG(st.st_mode) or _sha256(path) != sha:
+            return None
     except FileNotFoundError:
-        return []
-    diff = restore.compare(snap, user)
-    outside_logs = sorted(n for n in {*diff.changed, *diff.added_in_set, *diff.created} if not n.startswith("logs/"))
-    if outside_logs != [PLAYSET_FILE]:
-        return []
-    backup_root = restore._backup_root(snap)
-    restore._check_store(backup_root, snap, [PLAYSET_FILE])
-    done, _changed = restore._put_back(backup_root, snap, [PLAYSET_FILE], user,
-                                       {PLAYSET_FILE: (st.st_size, st.st_mtime_ns)})
-    if done:
-        snapshot.record(snap, "playset_restored", sha256=hashes[-1])
-    return done
+        return None
+    return sha, (st.st_size, st.st_mtime_ns)
 
 
 def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
@@ -998,7 +1066,9 @@ def cmd_recover(args) -> tuple[dict, int]:
     `started` of the run names, since a game's pid and start time alone say nothing of whose files it
     writes; and a run during which `watch` saw another game holds (`other_game_ran`), as does one it lost
     sight of (`unwatched_stretch`). A run whose last sign of life is under WATCH_RECORDING_S old is reported
-    `watch_still_recording`, as `restore` refuses it, and the unwinding stops there, nothing recorded."""
+    `watch_still_recording`, as `restore` refuses it, and the unwinding stops there, nothing recorded. Each
+    run judged gets its playset settled first, as in `restore` (`_settle_playset`). A held snapshot is never
+    looked at again here: `restore <id>` does that."""
     user, backups = _paths()
     games = gate.list_games()
     stack = list(reversed(restore.unfinished(backups)))
@@ -1014,16 +1084,18 @@ def cmd_recover(args) -> tuple[dict, int]:
         return {"runs": [dict(_outcome(restore.Outcome([], [], False, "game_still_up")), id=s.id)
                          for s in stack]}, 2
     for snap in stack:
+        notes: dict = {}
         try:
             age = _since_last_seen_alive(snap)
             if age is not None and age < WATCH_RECORDING_S:   # as `restore` refuses: leave it, record nothing
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "watch_still_recording")), id=snap.id))
                 break
+            _settle_playset(snap, user, bool(games), notes)
             out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games))
         except Exception as exc:
-            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id))
+            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
-        runs.append(dict(_outcome(out), id=snap.id))
+        runs.append(dict(_reply(out, notes), id=snap.id))
         if out.held:
             break
     if all(not r["held"] and not r["reason"] for r in runs):
@@ -1044,8 +1116,7 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
     `snapshot` and `launch`, is finished too: `launch` then refuses `already_finished`, starting nothing.
     A claimed one whose claim is younger than LAUNCH_IN_FLIGHT_S gets no verdict: a `launch` may be about to
     record its start, its game not yet listed. It is reported (`launch_in_flight`) and the unwinding stops. The
-    playset a failed start left is put back when it is the only change outside `logs/`
-    (`_put_back_launchs_playset`)."""
+    playset a failed start left is put back first, held or not (`_settle_playset`)."""
     never_started = [s for s in _open_snapshots(backups) if "started" not in _events(s)]
     if not never_started:
         return []
@@ -1055,15 +1126,17 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
     except gate.GateError as exc:
         return [dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=never_started[-1].id)]
     for snap in reversed(never_started):
+        notes: dict = {}
         try:
             if _in_flight_age(snap) is not None:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
                 break
-            out = _unvouched_hold(snap) or _restore_or_hold(snap, user, other_game_running=bool(games), logs=False)
+            _settle_playset(snap, user, bool(games), notes)
+            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
         except Exception as exc:
-            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id))
+            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
-        runs.append(dict(_outcome(out), id=snap.id))
+        runs.append(dict(_reply(out, notes), id=snap.id))
         if out.held:
             break
     return runs
@@ -1186,7 +1259,9 @@ def main(argv=None) -> int:
         result, code = args.run(args)
     except Exception as exc:  # every failure is one JSON object: BackupRootError, GateError, OSError, ...
         result, code = {"refused": type(exc).__name__, "detail": str(exc)}, 2
-    print(json.dumps(result, indent=1, ensure_ascii=False))
+    # ASCII, escapes and all: a reply can quote the owner's playset, which may spell a lone surrogate, and a UTF-8
+    # stdout cannot print one.
+    print(json.dumps(result, indent=1, ensure_ascii=True))
     return code
 
 

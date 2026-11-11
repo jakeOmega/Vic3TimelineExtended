@@ -174,12 +174,28 @@ class PlaysetTest(unittest.TestCase):
         self.start_result = lost
         out, code = self.launch(snap_id, *(options or ("--add-mod", OVERLAY)))
         self.assertEqual((code, out["refused"], out["id"]), (2, "start_unconfirmed", snap_id))
-        self.assertIn(f"after the claim: it puts back the owner's {PLAYSET}", out["detail"])
+        self.assertIn(f"the playset this wrote into {PLAYSET} stays the run's until", out["detail"])
         self.start_result = None
         self.assertIn(OVERLAY, self.enabled())                  # the file stays as written
         self.assertEqual(self.events(), ["armed", "playset"])
         self.assertTrue(self.claim().exists())                  # and the snapshot stays claimed
         return snap_id
+
+    def started_run(self, snap_id, *options, others=(), during=lambda: None) -> gate.ProcId:
+        """`launch` with `options`, then `watch` over the game, seen twice (beside `others`) and then gone."""
+        game = self.game()
+        self.start_result = game
+        out, code = self.launch(snap_id, *options)
+        self.assertEqual(code, 0, out)
+        self.start_result = None
+        during()
+        self.games = [[game], [game, *others], []]
+        self.assertEqual(self.run_cli("watch", snap_id)[1], 0)
+        self.games = []
+        return game
+
+    def is_the_owners_playset(self) -> bool:
+        return self.playset.read_bytes() == self.playset_bytes
 
     # -- what launch writes ------------------------------------------------------
 
@@ -315,9 +331,13 @@ class PlaysetTest(unittest.TestCase):
                 self.assertEqual(self.playset.read_bytes(), self.playset_bytes)
                 self.assertEqual(self.tree(), before)
 
-    def test_a_failed_start_with_another_change_since_holds_and_changes_nothing(self):
-        # The owner played meanwhile: the autosave is theirs, and with no start recorded nothing can be judged.
-        # Even the playset `launch` wrote is left as it is: a hold changes nothing.
+    def without_the_playset(self, tree):
+        return [entry for entry in tree if entry[0] != PLAYSET]
+
+    def test_a_failed_start_with_another_change_since_holds_the_rest_and_puts_the_playset_back(self):
+        # Break-it review, Important 1, replay 2: the owner played meanwhile, and with no start recorded nothing
+        # can be judged, so the snapshot holds. The playset is `launch`'s own write, provably (its hash), so it
+        # goes back; everything else is held exactly as before.
         for verb, autosave in (("recover", "autosave.v3"), ("restore", "autosave.v3"), ("recover", "autosave_1.v3")):
             with self.subTest(verb=verb, autosave=autosave):      # a changed autosave, then a new one
                 self.write_the_owners_files()
@@ -327,9 +347,36 @@ class PlaysetTest(unittest.TestCase):
                 before = self.tree()
                 out, code = self.run_cli(*((verb,) if verb == "recover" else (verb, snap_id)))
                 result = out["runs"][0] if verb == "recover" else out
-                self.assertEqual((code, result["held"], result["reason"]), (2, True, "no_reference_time"))
-                self.assertEqual(self.tree(), before)
-                self.assertEqual(self.events(), ["armed", "playset", "held"])
+                self.assertEqual((code, result["held"], result["reason"], result["playset_restored"]),
+                                 (2, True, "no_reference_time", True))
+                self.assertTrue(self.is_the_owners_playset())
+                self.assertEqual(self.without_the_playset(self.tree()), self.without_the_playset(before))
+                self.assertEqual(self.events(), ["armed", "playset", "playset_restored", "held"])
+                self.take_snapshot()                                        # the next snapshot is not refused
+                self.assertEqual(self.run_cli("recover")[1], 0)
+
+    def test_a_started_run_held_for_another_game_gets_the_owners_playset_back(self):
+        # Break-it review, Important 1, replay 1: `watch` saw another game, so the run holds (`other_game_ran`);
+        # the run's playset was left live, and the next snapshot recorded it as the owner's.
+        for verb in ("restore", "recover"):
+            with self.subTest(verb=verb):
+                self.write_the_owners_files()
+                snap_id = self.take_snapshot()
+                self.started_run(snap_id, "--playset", "mod_only", "--add-mod", OVERLAY, others=[self.game(pid=7777)],
+                                 during=lambda: (self.user / "continue_game.json").write_text('{"title": "run"}'))
+                before = self.tree()
+                out, code = self.run_cli(*((verb,) if verb == "recover" else (verb, snap_id)))
+                result = out["runs"][0] if verb == "recover" else out
+                self.assertEqual((code, result["held"], result["reason"], result["playset_restored"]),
+                                 (2, True, "other_game_ran", True))
+                self.assertTrue(self.is_the_owners_playset())
+                self.assertEqual(self.without_the_playset(self.tree()), self.without_the_playset(before))
+                self.assertEqual((self.user / "continue_game.json").read_text(), '{"title": "run"}')   # held
+                self.assertEqual(self.events()[-2:], ["playset_restored", "held"])
+                taken, code = self.run_cli("snapshot")
+                self.assertEqual(code, 0, taken)
+                self.assertEqual(self.the_snapshot().files[PLAYSET].sha256, sha256(self.playset_bytes))
+                self.assertEqual(self.run_cli("recover")[1], 0)
 
     def test_a_failed_start_whose_game_wrote_only_logs_gets_its_playset_back_and_keeps_the_logs(self):
         # The reply was lost, the game ran unrecorded and quit at the menu: only `logs/` and the playset changed.
@@ -367,14 +414,163 @@ class PlaysetTest(unittest.TestCase):
         self.games = [self.game(pid=5555)]
         before = self.tree()
         out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_running"))
+        self.assertEqual((code, out["held"], out["reason"], out["playset_left"]), (2, True, "other_game_running", True))
+        self.assertIn(f"restore {snap_id}", out["playset_detail"])
         self.assertEqual(self.tree(), before)
         self.assertEqual(self.events(), ["armed", "playset", "held"])
         self.games = []
         out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["restored"]), (0, False, [PLAYSET]))
+        self.assertEqual((code, out["held"], out["restored"], out["playset_restored"]), (0, False, [PLAYSET], True))
         self.assertEqual(self.events(), ["armed", "playset", "held", "playset_restored", "restored"])
         self.assertEqual(self.tree(), original)
+
+    def test_a_playset_left_beside_a_game_blocks_the_next_snapshot_and_launch_until_restore(self):
+        # Break-it review, Important 1, replay 3 (its run 3e): `recover` held the failed start beside a game and
+        # never looks at a held snapshot again; `snapshot` then recorded `launch`'s write as the owner's playset,
+        # and a later `launch` with no option ran the game with a playset the owner never chose.
+        snap_id = self.failed_start_after_the_write()
+        self.age_the_claim()
+        self.games = [self.game(pid=5555)]
+        out, code = self.run_cli("recover")
+        run = out["runs"][0]
+        self.assertEqual((code, run["held"], run["reason"], run["playset_left"]), (2, True, "other_game_running", True))
+        self.games = []
+        self.assertEqual(self.run_cli("recover"), ({"runs": []}, 0))      # a held snapshot is not revisited
+        (self.user / "save games" / "autosave.v3").write_bytes(b"the owner's game, which was running")
+        before = self.tree()
+        out, code = self.run_cli("snapshot")
+        self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
+        self.assertIn(f"restore {snap_id}", out["detail"])
+        self.assertEqual(len(snapshot.all_snapshots(self.backups)), 1)
+        laundered = self.armed_snapshot()                      # one taken past that refusal
+        self.starts.clear()                                     # (the failed start's)
+        self.start_result = self.game()
+        for options in ((), ("--add-mod", OVERLAY)):
+            with self.subTest(options=options):
+                out, code = self.launch(laundered.id, *options)
+                self.assertEqual((code, out["refused"], out["snapshot"]), (2, "playset_not_restored", snap_id))
+        self.assertEqual((self.starts, (laundered.dir / cli.LAUNCH_CLAIM).exists()), ([], False))
+        self.assertEqual(self.tree(), before)
+        snapshot.record(laundered, "restored")                  # out of the way, as `recover` would leave it
+        out, code = self.run_cli("restore", snap_id)            # no game now: the playset back, the rest held
+        self.assertEqual((code, out["held"], out["reason"], out["playset_restored"]),
+                         (2, True, "no_reference_time", True))
+        self.assertTrue(self.is_the_owners_playset())
+        self.assertEqual(self.without_the_playset(self.tree()), self.without_the_playset(before))
+        self.assertEqual(self.run_cli("snapshot")[1], 0)
+
+    def test_a_started_run_held_beside_a_running_game_leaves_the_playset_until_restore(self):
+        snap_id = self.take_snapshot()
+        self.started_run(snap_id, "--add-mod", OVERLAY)
+        self.games = [self.game(pid=5555)]                      # the owner started their own game
+        before = self.tree()
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["reason"], out["playset_left"]), (2, "other_game_running", True))
+        self.assertEqual(self.tree(), before)
+        self.games = []
+        self.assertEqual(self.run_cli("snapshot")[0]["refused"], "playset_not_restored")
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["playset_restored"]), (0, False, True))
+        self.assertTrue(self.is_the_owners_playset())
+        self.assertEqual(self.run_cli("snapshot")[1], 0)
+
+    def test_restore_of_an_older_snapshot_never_puts_its_playset_over_a_newer_one(self):
+        # Break-it review, Important 2 (runs m1, m1b): with `mod_only`, two snapshots' writes are the same bytes even
+        # though the owner changed their other mods in between, so the put-back for the older snapshot matched the
+        # newer one's write and put the older playset back over the owner's current one.
+        first = self.failed_start_after_the_write("--playset", "mod_only", "--add-mod", OVERLAY)
+        self.age_the_claim()
+        self.assertEqual(self.run_cli("recover")[1], 0)
+        newer = dict(self.owners_playset, enabledMods=[{"path": WORKSHOP + "999"}, *self.owners_playset["enabledMods"]])
+        self.write_the_owners_files(newer)
+        second = self.failed_start_after_the_write("--playset", "mod_only", "--add-mod", OVERLAY)
+        hashes = [e["sha256"] for s in snapshot.all_snapshots(self.backups) for e in snapshot.journal(s)
+                  if e["event"] == "playset"]
+        self.assertEqual(len(set(hashes)), 1)                   # the two writes coincide
+        launchs_write = self.playset.read_bytes()
+        out, code = self.run_cli("restore", first)
+        self.assertNotIn("playset_restored", out)
+        self.assertEqual(self.playset.read_bytes(), launchs_write)            # not the first snapshot's playset
+        self.age_the_claim()
+        (self.user / "save games" / "autosave.v3").write_bytes(b"the owner played")      # m1: the second holds
+        out, code = self.run_cli("restore", second)
+        self.assertEqual((code, out["held"], out["playset_restored"]), (2, True, True))
+        self.assertTrue(self.is_the_owners_playset())                         # the newer playset, the owner's now
+        self.assertEqual(self.run_cli("restore", first)[0].get("playset_restored"), None)
+        self.assertTrue(self.is_the_owners_playset())
+
+    def test_restore_of_the_newer_snapshot_puts_its_own_playset_back(self):
+        # m1b: as above, and the second restores cleanly.
+        first = self.failed_start_after_the_write("--playset", "mod_only", "--add-mod", OVERLAY)
+        self.age_the_claim()
+        self.assertEqual(self.run_cli("recover")[1], 0)
+        self.write_the_owners_files(dict(self.owners_playset,
+                                         enabledMods=[{"path": WORKSHOP + "999"}, *self.owners_playset["enabledMods"]]))
+        second = self.failed_start_after_the_write("--playset", "mod_only", "--add-mod", OVERLAY)
+        self.run_cli("restore", first)
+        self.age_the_claim()
+        out, code = self.run_cli("restore", second)
+        self.assertEqual((code, out["held"], out["restored"]), (0, False, [PLAYSET]))
+        self.assertTrue(self.is_the_owners_playset())
+
+    def test_no_snapshot_or_launch_is_refused_after_clean_runs(self):
+        for _ in range(2):
+            snap_id = self.take_snapshot()
+            self.started_run(snap_id, "--playset", "mod_only", "--add-mod", OVERLAY)
+            self.assertEqual(self.run_cli("restore", snap_id)[1], 0)
+        self.failed_start_after_the_write()
+        self.age_the_claim()
+        self.assertEqual(self.run_cli("recover")[1], 0)
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+        self.assertEqual(self.launch(snap_id)[1], 0)
+
+    def test_a_hold_after_a_killed_write_sweeps_its_temp(self):
+        # A `launch` killed between its temp write and the rename leaves the temp, which is the harness's own.
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+
+        def killed(snap, user, data):
+            (user / (PLAYSET + ".te_qa_restore.tmp")).write_bytes(data)
+            raise gate.GateError("killed")                      # stands in for the process dying here
+
+        with mock.patch.object(cli, "_write_playset", killed), contextlib.suppress(Exception):
+            self.launch(snap_id, "--add-mod", OVERLAY)
+        (self.user / "save games" / "autosave.v3").write_bytes(b"the owner played")
+        self.age_the_claim()
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (2, True))
+        self.assertEqual([p.name for p in self.user.iterdir() if p.name.endswith(".tmp")], [])
+        self.assertTrue(self.is_the_owners_playset())
+
+    def test_a_restore_that_fails_after_the_put_back_says_the_playset_went_back(self):
+        snap_id = self.failed_start_after_the_write()
+        (self.user / "continue_game.json").unlink()            # restore puts a missing file back, from the store
+        entry = self.the_snapshot().files["continue_game.json"]
+        (self.backups / "store" / entry.sha256[:2] / entry.sha256).unlink()
+        self.age_the_claim()
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["refused"], out["playset_restored"]), (2, "error", True))
+        self.assertTrue(self.is_the_owners_playset())
+        out, code = self.run_cli("recover")
+        self.assertEqual(code, 2)
+        self.assertTrue(out["runs"][0]["reason"].startswith("error: "))
+        self.assertNotIn("playset_restored", out["runs"][0])    # it went back the first time
+
+    def test_the_failure_details_say_the_playset_stays_the_runs(self):
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+        record = snapshot.record
+
+        def failing(snap, event, *a, **k):
+            if event == "started":
+                raise OSError("the backup drive went away")
+            return record(snap, event, *a, **k)
+
+        with mock.patch.object(snapshot, "record", side_effect=failing):
+            out, code = self.launch(snap_id, "--add-mod", OVERLAY)
+        self.assertEqual((code, out["refused"]), (2, "not_recorded"))
+        self.assertIn(f"the playset this wrote into {PLAYSET} stays the run's until", out["detail"])
 
     # -- refusals ---------------------------------------------------------------------
 
@@ -434,7 +630,9 @@ class PlaysetTest(unittest.TestCase):
         cases = {"missing": None, "not JSON": b'{"enabledMods": [', "a list": b"[]",
                  "no enabledMods": b'{"disabledDLC": []}', "enabledMods not a list": b'{"enabledMods": {}}',
                  "an entry without a path": b'{"enabledMods": [{"name": "x"}]}',
-                 "a path that is not text": b'{"enabledMods": [{"path": 7}]}'}
+                 "a path that is not text": b'{"enabledMods": [{"path": 7}]}',
+                 "nested too deep to parse": b"[" * 200000, "UTF-16": '{"enabledMods": []}'.encode("utf-16"),
+                 "null": b"null"}
         for case, content in cases.items():
             with self.subTest(case=case):
                 if content is None:
@@ -461,6 +659,24 @@ class PlaysetTest(unittest.TestCase):
         self.assertEqual((self.starts, self.events(), self.claim().exists()), ([], ["armed"], False))
         self.assertEqual(self.tree(), before)
         self.assertEqual(self.launch(snap_id, "--add-mod", "\\\\wsl.localhost\\Ubuntu\\home\\overlay")[1], 0)
+
+    def test_a_lone_surrogate_in_the_owners_playset_cannot_break_the_reply(self):
+        # Break-it review, minor: the owner's file may spell a lone surrogate as an escape; a reply that names the
+        # enabled mods then crashed the final print on a UTF-8 stdout.
+        self.playset.write_bytes(b'{"enabledMods": [{"path": "C:\\\\a\\ud800"}]}')
+        snap = self.armed_snapshot()
+        self.start_result = self.game()
+        for options in (("--playset", "mod_only"), ("--add-mod", OVERLAY)):
+            with self.subTest(options=options):
+                raw = io.BytesIO()
+                stdout = io.TextIOWrapper(raw, encoding="utf-8", errors="strict")
+                with contextlib.redirect_stdout(stdout):
+                    code = cli.main(["launch", snap.id, "--permission", "session grant", *options, "--", "-x"])
+                stdout.flush()
+                out = json.loads(raw.getvalue().decode("ascii"))
+                self.assertEqual(code, 2)
+                self.assertIn(out["refused"], ("mod_not_in_playset", "playset_unwritable"))
+        self.assertEqual(self.starts, [])
 
 
 if __name__ == "__main__":
