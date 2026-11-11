@@ -5,18 +5,41 @@ The game keeps six generations of a log (`debug.log`, `debug.1.log` …
 end in the middle of a line. A hot reload has been seen to fill all six
 generations in one second (spec § 3.3), so a reader that looks afterwards
 finds nothing: `LogFollower` is polled for the whole run and keeps its place
-by the first bytes of the file it was reading.
+by the inode of the file it was reading, which a rename keeps. A flood makes
+every generation begin with the same repeated line, so the first bytes of a
+file never tell it from another one: they are consulted only when the live
+file kept the inode and shrank (a rotation that copies and truncates), and as
+a guard against a filesystem handing a deleted file's inode to a new one.
 """
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Sequence
+from typing import BinaryIO, Sequence
 
 GAP_MARKER = "<<game_qa: log lines lost in rotation>>"
 GENERATIONS = 5
 _HEAD_BYTES = 64
+_ATTEMPTS = 4           # looks at the files, when a rotation keeps changing them under the look
+
+
+@dataclass
+class _Held:
+    """A file opened once: everything known about it comes from this one descriptor, so a rename after the
+    open changes none of it."""
+    f: BinaryIO
+    ino: int
+    size: int
+
+    def head(self, size: int = _HEAD_BYTES) -> bytes:
+        self.f.seek(0)
+        return self.f.read(size)
+
+    def read_from(self, start: int) -> bytes:
+        self.f.seek(start)
+        return self.f.read()
 
 
 class LogFollower:
@@ -24,9 +47,13 @@ class LogFollower:
     first, each exactly once. A last line with no newline yet is held back.
 
     The file being read is known by its inode, which a rename keeps (rotation
-    renames `debug.log` to `debug.1.log`). Its first bytes are the fallback:
-    they cannot be the main test, because during a reload flood every
-    generation starts with the same repeated line."""
+    renames `debug.log` to `debug.1.log`), and each poll opens a file once and
+    takes its inode, its size and its data from that one descriptor. When the
+    inode is not among the live file and the generations, the file fell off
+    the end: the poll puts `GAP_MARKER` first and reads what is left. While
+    there is no live file, the follower stays on the newest generation it
+    read, so a file that appears and rotates before the next poll is not
+    skipped."""
 
     def __init__(self, path: Path):
         self.path = Path(path)
@@ -39,78 +66,99 @@ class LogFollower:
         return self.path.with_name(f"{self.path.stem}.{k}{self.path.suffix}")
 
     @staticmethod
-    def _read(path: Path, start: int = 0) -> bytes:
+    def _open(path: Path, held: list[BinaryIO]) -> _Held | None:
+        """The file opened once, or None. It is closed with the rest of `held` when the poll is over."""
         try:
-            with open(path, "rb") as f:
-                f.seek(start)
-                return f.read()
+            f = open(path, "rb")
         except OSError:
-            return b""
-
-    @staticmethod
-    def _read_head(path: Path) -> bytes:
+            return None
+        held.append(f)
         try:
-            with open(path, "rb") as f:
-                return f.read(_HEAD_BYTES)
+            st = os.fstat(f.fileno())
         except OSError:
-            return b""
+            return None
+        return _Held(f, st.st_ino, st.st_size)
 
-    @staticmethod
-    def _stat(path: Path) -> tuple[int | None, int]:
-        try:
-            st = path.stat()
-        except OSError:
-            return None, -1
-        return st.st_ino, st.st_size
+    def _is_mine(self, file: _Held) -> bool:
+        """Same inode, and still the same first bytes: a filesystem hands a deleted file's inode to the next
+        file created."""
+        return file.ino == self._ino and file.size >= self._offset and file.head(len(self._head)) == self._head
 
-    def _same_inode(self, path: Path) -> bool:
-        """Same inode, and still the same first bytes: a filesystem hands a
-        deleted file's inode to the next file created."""
-        ino, size = self._stat(path)
-        if ino is None or ino != self._ino or size < self._offset:
-            return False
-        return self._read_head(path)[: len(self._head)] == self._head
+    def _same_head(self, file: _Held) -> bool:
+        return bool(self._head) and file.size >= self._offset and file.head(len(self._head)) == self._head
 
-    def _same_head(self, path: Path) -> bool:
-        if not self._head or self._stat(path)[1] < self._offset:
-            return False
-        return self._read_head(path)[: len(self._head)] == self._head
-
-    def _find_mine(self) -> int | None:
-        """The numbered generation that is the file this follower was reading."""
-        for test in (self._same_inode, self._same_head):
-            for k in range(1, GENERATIONS + 1):
-                if test(self._generation(k)):
+    def _find_mine(self, generations: list[tuple[int, _Held]], truncated: bool) -> int | None:
+        """The numbered generation that is the file this follower was reading. The first bytes are asked only
+        when the live file kept our inode and shrank (copy and truncate): after a rename they would match any
+        generation of a flood."""
+        for test in (self._is_mine, self._same_head) if truncated else (self._is_mine,):
+            for k, file in generations:
+                if test(file):
                     return k
         return None
 
     def poll(self) -> list[str]:
+        for _ in range(_ATTEMPTS):
+            held: list[BinaryIO] = []
+            try:
+                lines = self._poll_once(held)
+            finally:
+                for f in held:
+                    f.close()
+            if lines is not None:
+                return lines
+        return []           # the files kept moving; nothing was consumed, the next poll looks again
+
+    def _poll_once(self, held: list[BinaryIO]) -> list[str] | None:
+        """One look at the files, or None if a rotation raced the look (and then nothing has been consumed)."""
+        live = self._open(self.path, held)
+        if self._ino is None:
+            return self._take(live, 0) if live is not None else []
+        if live is not None and self._is_mine(live):
+            return self._take(live, self._offset)
+        truncated = live is not None and live.ino == self._ino
+        # The live file was opened first: if it is a generation by now, a rotation came between, and the look
+        # has to be made again (it would be read twice, and a newer live file would be missed).
+        generations: list[tuple[int, _Held]] = []
+        for k in range(1, GENERATIONS + 1):
+            file = self._open(self._generation(k), held)
+            if file is not None:
+                generations.append((k, file))
+        inodes = [file.ino for _k, file in generations] + ([live.ino] if live is not None else [])
+        if len(set(inodes)) != len(inodes):
+            return None
+        mine = self._find_mine(generations, truncated)
         lines: list[str] = []
-        if self._ino is not None and not self._same_inode(self.path):
-            mine = self._find_mine()
-            if mine is None:
-                # Its file fell off the end: what it had not read is gone.
-                self._partial = b""
-                lines.append(GAP_MARKER)
-                chunks = [self._read(self._generation(k)) for k in range(GENERATIONS, 0, -1)]
-            else:
-                chunks = [self._read(self._generation(mine), self._offset)]
-                chunks.extend(self._read(self._generation(k)) for k in range(mine - 1, 0, -1))
-            for chunk in chunks:
-                lines.extend(self._lines(chunk))
-            self._offset = 0
-            self._ino = None
-            self._head = b""
-        ino, _size = self._stat(self.path)
-        if ino is None:
-            return lines
-        data = self._read(self.path, self._offset)
-        lines.extend(self._lines(data))
-        self._offset += len(data)
-        self._ino = ino
-        if len(self._head) < _HEAD_BYTES:
-            self._head = self._read_head(self.path)
+        if mine is None:
+            # Its file fell off the end: what it had not read is gone.
+            self._partial = b""
+            lines.append(GAP_MARKER)
+            unread = [(file, 0) for _k, file in reversed(generations)]
+        else:
+            unread = [(file, self._offset if k == mine else 0) for k, file in reversed(generations) if k <= mine]
+        anchor: tuple[int, int, bytes] | None = None
+        for file, start in unread:
+            data = file.read_from(start)
+            lines.extend(self._lines(data))
+            anchor = (file.ino, start + len(data), file.head())
+        if live is not None:
+            self._ino, self._offset, self._head = None, 0, b""      # the live file follows them: from its start
+            lines.extend(self._take(live, 0))
+        elif anchor is not None:
+            # No live file yet: stay on the newest file read, so a new one that rotates before the next poll
+            # is found behind it.
+            self._ino, self._offset, self._head = anchor
+        else:
+            self._ino, self._offset, self._head = None, 0, b""
         return lines
+
+    def _take(self, file: _Held, start: int) -> list[str]:
+        """Read `file` from `start` and make it the file being followed."""
+        data = file.read_from(start)
+        self._ino, self._offset = file.ino, start + len(data)
+        if len(self._head) < _HEAD_BYTES:
+            self._head = file.head()
+        return self._lines(data)
 
     def _lines(self, data: bytes) -> list[str]:
         buf = self._partial + data

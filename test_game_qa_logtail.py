@@ -7,10 +7,12 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from game_qa import logtail
 
 FIXTURE = Path(__file__).resolve().parent / "test_fixtures" / "game_qa" / "debug_console_lines.txt"
+FLOOD_LINE = "[12:10:58][jomini_effect.cpp:160]: Adding effect after PostInitAndValidate, unless this is handled\n"
 
 
 class FollowerTest(unittest.TestCase):
@@ -113,6 +115,86 @@ class FollowerTest(unittest.TestCase):
         self.assertEqual(got.count(logtail.GAP_MARKER), 1)
         self.assertEqual(got[1:], ["gen1", "gen2", "gen3", "gen4", "gen5", "gen6"])
         self.assertNotIn("a", got)
+        self.assertEqual(self.follower.poll(), [])
+
+    def test_a_file_that_fell_off_the_end_is_not_mistaken_for_a_generation_that_starts_like_it(self):
+        # Seven rotations inside one second: every generation begins with the same repeated line and the file the
+        # follower was reading is deleted. Each file is held open, so no inode is reused (the game's NTFS ids are not).
+        self.append(FLOOD_LINE * 50 + "mine 1\n")
+        self.follower.poll()
+        self.append("mine 2 never read\n" + FLOOD_LINE * 10)
+        pins = [open(self.live, "rb")]
+        self.addCleanup(lambda: [f.close() for f in pins])
+        for i in range(7):
+            self.rotate()
+            self.append(FLOOD_LINE * 200 + "gen%d\n" % i)
+            pins.append(open(self.live, "rb"))
+        got = self.follower.poll()
+        self.assertEqual(got.count(logtail.GAP_MARKER), 1)
+        self.assertEqual(got[0], logtail.GAP_MARKER)
+        self.assertEqual([line for line in got if line.startswith("gen")], ["gen%d" % i for i in range(1, 7)])
+        self.assertNotIn("mine 2 never read", got)
+        self.assertEqual(self.follower.poll(), [])
+
+    def test_a_rotation_between_the_identity_check_and_the_read_is_not_read_from_the_wrong_offset(self):
+        self.append("line 1\nline 2\n")
+        self.assertEqual(self.follower.poll(), ["line 1", "line 2"])
+        self.append("tail of A\n")
+        real_open, opened = open, []
+
+        def open_then_rotate(path, *args, **kwargs):
+            handle = real_open(path, *args, **kwargs)
+            if Path(path) == self.live and not opened:      # the first look at the live file has just been made
+                opened.append(True)
+                self.rotate()
+                self.append("B first\nB second\n")
+            return handle
+        with mock.patch.object(logtail, "open", open_then_rotate, create=True):
+            self.assertEqual(self.follower.poll(), ["tail of A"])
+        self.assertEqual(self.follower.poll(), ["B first", "B second"])
+        self.assertEqual(self.follower.poll(), [])
+
+    def test_a_rotation_while_the_files_are_being_opened_is_neither_repeated_nor_lost(self):
+        self.append("A1\n")
+        self.follower.poll()
+        self.rotate()
+        self.append("B1\n")
+        real_open, opened = open, []
+
+        def open_then_rotate(path, *args, **kwargs):
+            handle = real_open(path, *args, **kwargs)
+            if Path(path) == self.live and not opened:
+                opened.append(True)
+                self.rotate()
+                self.append("C1\n")
+            return handle
+        with mock.patch.object(logtail, "open", open_then_rotate, create=True):
+            self.assertEqual(self.follower.poll(), ["B1", "C1"])
+        self.assertEqual(self.follower.poll(), [])
+
+    def test_a_live_file_missing_at_a_poll_does_not_lose_the_file_that_follows_it(self):
+        self.append("a\n")
+        self.assertEqual(self.follower.poll(), ["a"])
+        self.append("b\n")
+        os.replace(self.live, self.logs / "debug.1.log")        # renamed; the game has not made the new one yet
+        self.assertEqual(self.follower.poll(), ["b"])
+        self.live.write_bytes(b"B1\nB2\n")
+        self.rotate()                                           # and that one rotates before the next poll
+        self.append("C1\n")
+        self.assertEqual(self.follower.poll(), ["B1", "B2", "C1"])
+        self.assertEqual(self.follower.poll(), [])
+
+    def test_a_live_file_that_stays_missing_repeats_nothing(self):
+        self.append("a\nb\n")
+        self.follower.poll()
+        os.replace(self.live, self.logs / "debug.1.log")
+        with open(self.logs / "debug.1.log", "ab") as f:        # the game still holds the renamed file open
+            f.write(b"c\n")
+        self.assertEqual(self.follower.poll(), ["c"])
+        self.assertEqual(self.follower.poll(), [])
+        self.assertEqual(self.follower.poll(), [])
+        self.live.write_bytes(b"d\n")
+        self.assertEqual(self.follower.poll(), ["d"])
         self.assertEqual(self.follower.poll(), [])
 
     def test_copy_and_truncate_rotation_falls_back_to_the_first_bytes(self):
