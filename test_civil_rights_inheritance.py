@@ -14,7 +14,7 @@ import os
 import re
 import unittest
 
-from je_test_helpers import OLD_BLOCKS, old_block
+from je_test_helpers import OLD_BLOCKS, old_block, outcome_text
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
@@ -446,6 +446,51 @@ class OtherDebatesTests(unittest.TestCase):
                                  r"is_revolutionary\s*=\s*no\b")
                 self.assertNotIn("is_revolutionary", _block(body, "possible", top_level=False))
                 self.assertNotRegex(body, r"can_deactivate\s*=\s*yes")
+
+
+class ResolvedEntriesTests(unittest.TestCase):
+    """#471: a finished Digital Rights, World War or Post-Scarcity entry must not re-run on a winner.
+
+    Each sets its resolved variable in every outcome that grants something, never in
+    the invalid one (a rule switched off or a decentralized country), and its
+    activation gates require the variable's absence.
+    """
+
+    CASES = {
+        "je_digital_rights": (("common", "journal_entries", "je_digital_rights.txt"),
+                              "digital_rights_resolved", ("on_complete", "on_fail", "on_timeout")),
+        # ww_fully_resolved is a phase flag both outcomes clear, so a name of its own.
+        "je_world_war": (("common", "journal_entries", "world_war_je.txt"),
+                         "ww_entry_resolved", ("on_complete", "on_fail")),
+        "je_post_scarcity": (("common", "journal_entries", "je_post_scarcity.txt"),
+                             "post_scarcity_resolved", ("on_complete", "on_timeout")),
+    }
+
+    def test_every_end_records_and_activation_checks(self):
+        for je, (parts, var, hooks) in self.CASES.items():
+            body = _block(_read(*parts), je)
+            for hook in hooks:
+                with self.subTest(je=je, hook=hook):
+                    self.assertRegex(old_block(body, hook), r"set_variable\s*=\s*" + var + r"\b")
+            with self.subTest(je=je, hook="on_invalid"):
+                self.assertNotIn(var, outcome_text(body, "invalid"))
+            for gate in ("is_shown_when_inactive", "possible"):
+                with self.subTest(je=je, gate=gate):
+                    self.assertRegex(_block(body, gate, top_level=False),
+                                     r"NOT\s*=\s*\{\s*has_variable\s*=\s*" + var + r"\s*\}")
+            with self.subTest(je=je, removed=var):
+                for top in ("common", "events"):
+                    for root, _dirs, files in os.walk(_path(top)):
+                        for name in files:
+                            if name.endswith(".txt"):
+                                text = _read(os.path.relpath(os.path.join(root, name), REPO))
+                                self.assertNotRegex(text, r"remove_variable\s*=\s*" + var + r"\b", name)
+
+    def test_the_world_war_phase_flag_is_still_cleared(self):
+        body = _block(_read(*self.CASES["je_world_war"][0]), "je_world_war")
+        for hook in ("on_complete", "on_fail"):
+            with self.subTest(hook=hook):
+                self.assertRegex(old_block(body, hook), r"remove_variable\s*=\s*ww_fully_resolved\b")
 
 
 if __name__ == "__main__":
