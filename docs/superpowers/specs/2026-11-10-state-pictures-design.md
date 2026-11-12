@@ -479,8 +479,9 @@ upkeep limited to rungs 2 to 4.
   - *Count the vehicles and empty the street* (the second and third rounds, 2026-11-12). Naming each
     vehicle by its shape and its decade, giving how many, and saying "the street otherwise empty" fixed
     the cars: "a rounded 1950s country bus with a split windscreen ... two heavy two-tone 1950s sedans
-    with chrome grilles and whitewall tires at the kerb, the street otherwise empty" drew the period in
-    every candidate of the seven towns of 1960. The same pattern fixed the South Asian town of the 1930s
+    with chrome grilles and whitewall tires at the kerb, the street otherwise empty" put period
+    vehicles in the foreground of every candidate of the seven towns of 1960; a later car still turns up
+    far down the street in some, a smudge's work. The same pattern fixed the South Asian town of the 1930s
     (all four candidates) and the Japanese town of 1990 (two of four). "Polished boxy 1980s saloons with
     square headlamps, one long square-edged 1980s limousine" was weaker: about one candidate in four on
     the affluent streets of 1990, the rest still the luxury cars of the 2010s (the East Asian pick has no
