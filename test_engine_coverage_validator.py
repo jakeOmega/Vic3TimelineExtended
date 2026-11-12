@@ -55,8 +55,9 @@ def _build_fixture():
     Returns (mock_ms, fake_engine_docs) with:
       - PM `pm_test` referencing two booleans + two _add modifiers
       - JE `je_test` with a `possible` clause reading modifier:NAME for both bools
-      - `Modifier Types` declaring foo_known_bool only
-      - engine_docs declaring foo_known_add only
+      - `Modifier Types` declaring foo_known_bool and foo_known_add
+      - engine_docs (the `modifiers.log` dump) listing foo_listed_add, which
+        no definition registers (#391)
     """
     pm_data = {
         "country_modifiers": {
@@ -65,6 +66,7 @@ def _build_fixture():
                 "foo_unknown_bool": "yes",
                 "foo_known_add": 5,
                 "foo_unknown_add": 3,
+                "foo_listed_add": 2,
             }
         }
     }
@@ -80,9 +82,10 @@ def _build_fixture():
     }
     modifier_types = {
         "foo_known_bool": {"color": "good", "boolean": "yes"},
+        "foo_known_add": {"color": "good"},
     }
     fake_ms = _MockModState(mod_parsers, modifier_types, script_values={})
-    fake_engine_docs = {"modifiers": [{"name": "foo_known_add"}]}
+    fake_engine_docs = {"modifiers": [{"name": "foo_listed_add"}]}
     return fake_ms, fake_engine_docs
 
 
@@ -146,6 +149,149 @@ class ValidatorBooleanCoverageTests(unittest.TestCase):
         unknown = self._names("unknown_modifiers")
         self.assertIn("foo_unknown_add", unknown)
         self.assertNotIn("foo_known_add", unknown)
+
+    def test_name_only_the_engine_docs_list_is_flagged(self):
+        """#391 gap 1: `modifiers.log` listing a name does not register it.
+
+        A dump older than the game still lists a name a patch removed (1.14.4's
+        `country_prestige_from_navy_power_projection_mult`), and a current one
+        lists every name the engine could register."""
+        report = mss._validate_engine_coverage()
+        unknown = {e["name"]: e for e in report["unknown_modifiers"]}
+        self.assertIn("foo_listed_add", unknown)
+        self.assertIs(unknown["foo_listed_add"].get("listed_in_engine_docs"), True)
+        self.assertNotIn("listed_in_engine_docs", unknown["foo_unknown_add"])
+
+
+_THROUGHPUT = "building_{building}_throughput_add"
+
+
+def _build_pattern_fixture():
+    """A production method granting four names of one dynamic family (#391 gap 2).
+
+    The pattern catalog knows `building_{building}_throughput_add` and the
+    building vocabulary holds three buildings. Only the biomass plant's type is
+    defined; the coal plant's is the #681 case (a mod building, never
+    registered); Angkor Wat's is one `modifiers.log` lists and vanilla does not
+    register; the fourth names no building."""
+    pms = {
+        "pm_test": {
+            "building_modifiers": ("=", {"workforce_scaled": ("=", {
+                "building_synthetics_plant_biomass_throughput_add": ("=", "0.05"),
+                "building_synthetics_plant_coal_throughput_add": ("=", "0.05"),
+                "building_angkor_wat_throughput_add": ("=", "0.05"),
+                "building_synthetic_plant_throughput_add": ("=", "0.05"),
+            })}),
+        },
+    }
+    jes = {
+        "je_test": {
+            "possible": ("=", {
+                "modifier:building_synthetics_plant_coal_throughput_add": ("=", "0.05"),
+            }),
+        },
+    }
+    fake_ms = _MockModState(
+        {"Production Methods": _MockParser(pms), "Journal Entries": _MockParser(jes)},
+        modifier_types={"building_synthetics_plant_biomass_throughput_add": {"color": "good"}},
+        script_values={},
+    )
+    catalog = [{"pattern": _THROUGHPUT, "placeholder": "building", "vocab": "building"}]
+    vocab = {"building": ["synthetics_plant_biomass", "synthetics_plant_coal", "angkor_wat"]}
+    listed = "building_angkor_wat_throughput_add"
+    return (fake_ms, {"modifiers": [{"name": listed}]}, catalog, vocab,
+            {listed: (_THROUGHPUT, "angkor_wat", "catalog")})
+
+
+class ValidatorPatternRegistrationTests(unittest.TestCase):
+    """#391 gap 2: a name that fits a dynamic pattern still needs its own definition."""
+
+    def setUp(self):
+        fake_ms, docs, catalog, vocab, to_pattern = _build_pattern_fixture()
+        self._patches = [
+            patch.object(mss, "ms", fake_ms),
+            patch.object(mss, "engine_docs", docs),
+            patch.object(mss, "pattern_catalog", catalog),
+            patch.object(mss, "modifier_to_pattern", to_pattern),
+            patch.object(mss, "_vocabulary_index", return_value=vocab),
+        ]
+        for p in self._patches:
+            p.start()
+        self.report = mss._validate_engine_coverage()
+        self.unknown = {e["name"]: e for e in self.report["unknown_modifiers"]}
+        self.suspicious = {e["name"]: e for e in self.report["suspicious_modifiers"]}
+
+    def tearDown(self):
+        for p in reversed(self._patches):
+            p.stop()
+
+    def test_registered_instance_is_clean(self):
+        name = "building_synthetics_plant_biomass_throughput_add"
+        self.assertNotIn(name, self.unknown)
+        self.assertNotIn(name, self.suspicious)
+
+    def test_unregistered_instance_of_a_known_building_is_flagged(self):
+        """`carbon_removal_modifier`'s line (#681): the building exists, the type does not."""
+        entry = self.unknown.get("building_synthetics_plant_coal_throughput_add")
+        self.assertIsNotNone(entry, sorted(self.unknown))
+        self.assertEqual(entry["pattern"], _THROUGHPUT)
+        self.assertEqual(entry["value"], "synthetics_plant_coal")
+        self.assertIs(entry["unregistered_pattern_instance"], True)
+        self.assertNotIn("listed_in_engine_docs", entry)
+
+    def test_modifier_read_of_an_unregistered_instance_is_flagged(self):
+        used = self.unknown["building_synthetics_plant_coal_throughput_add"]["used_in"]
+        self.assertTrue(any("Production Methods/pm_test" in u for u in used), used)
+        self.assertTrue(any("modifier:building_synthetics_plant_coal_throughput_add" in u
+                            for u in used), used)
+
+    def test_instance_the_engine_docs_list_is_flagged(self):
+        """`modifiers.log` lists a throughput type for every building; vanilla
+        defines it for under half of them."""
+        entry = self.unknown.get("building_angkor_wat_throughput_add")
+        self.assertIsNotNone(entry, sorted(self.unknown))
+        self.assertIs(entry["listed_in_engine_docs"], True)
+        self.assertIs(entry["unregistered_pattern_instance"], True)
+        self.assertEqual(entry["value"], "angkor_wat")
+
+    def test_markdown_report_says_what_unknown_means_and_tags_each_name(self):
+        """The rendered report states the rule (only a definition makes a name
+        valid; the engine docs and the pattern catalog do not) and says on each
+        line whether the dump lists the name and which family it fits."""
+        md = mss._render_engine_coverage_md(self.report)
+        section = md.split("## Unknown modifiers", 1)[1]
+        self.assertIn("no modifier type definition registers", section)
+        self.assertNotIn("absent from both", section)
+        self.assertNotIn("regenerate the engine docs in-game", section)
+        lines = {line.split("`")[1]: line for line in section.splitlines() if line.startswith("- `")}
+        angkor = lines["building_angkor_wat_throughput_add"]
+        self.assertIn("listed in the engine docs", angkor)
+        self.assertIn(f"unregistered instance of `{_THROUGHPUT}` (`angkor_wat`)", angkor)
+        coal = lines["building_synthetics_plant_coal_throughput_add"]
+        self.assertIn("unregistered instance of", coal)
+        self.assertNotIn("listed in the engine docs", coal)
+
+    def test_value_outside_the_vocabulary_stays_suspicious(self):
+        entry = self.suspicious.get("building_synthetic_plant_throughput_add")
+        self.assertIsNotNone(entry, sorted(self.suspicious))
+        self.assertEqual(entry["captured_value"], "synthetic_plant")
+        self.assertNotIn("building_synthetic_plant_throughput_add", self.unknown)
+
+    def test_classifier_never_answers_pattern(self):
+        """No status but 'engine' clears a name."""
+        pairs = [(_THROUGHPUT, "building_", "_throughput_add",
+                  {"synthetics_plant_coal"}, "building")]
+        for name in ("building_synthetics_plant_coal_throughput_add",
+                     "building_angkor_wat_throughput_add", "foo_add"):
+            with self.subTest(name=name):
+                status, _info = mss._classify_modifier_name(
+                    name, {"building_angkor_wat_throughput_add"}, pairs)
+                self.assertIn(status, ("unknown", "suspicious"))
+        self.assertEqual(
+            mss._classify_modifier_name(
+                "building_synthetics_plant_biomass_throughput_add", set(), pairs),
+            ("engine", {}),
+        )
 
 
 # The scripted effects #1403 quotes from the 1.15 tree's report, each as the
