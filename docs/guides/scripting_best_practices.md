@@ -1172,7 +1172,7 @@ A permanent saved scope also blocks a temporary one of the same name. `save_temp
 
 **Silent-drop symptom**: a tooltip with missing chunks ("Norway will annex without war.") usually means a chain failed and the renderer chopped at the failure point, eating intermediate text. The engine doesn't log it, so static analysis is the only signal.
 
-**Audit**: `localization_accessor_audit.py` (registered in `mod_state_server.py:POST_LOAD_GENERATORS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass — vanilla loc is the authoritative source for what the engine accepts.
+**Audit**: `localization_accessor_audit.py` (in CI, and in `mod_state_server.py:POST_LOAD_AUDITS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass with `scripts/generators/fold_vanilla_loc_accessors.py` — vanilla loc is the authoritative source for what the engine accepts. The catalog holds what vanilla's loc calls, so an accessor the engine has and vanilla's loc never uses flags too: check it in the engine's data types and add it to the audit's hand table (`docs/guides/python_tools.md`, the audit's row).
 
 ## Entity Name Keys Render as Raw Text: No Data Functions in Them
 
