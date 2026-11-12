@@ -13,7 +13,7 @@ Reference for all custom journal entry systems added by the Vic3TimelineExtended
 Simulates a realistic financial cycle with boom/bust mechanics, including speculative bubbles, crashes, and economic contagion between trading partners. Every country under the rule holds the entry from the game's first fortnight (not the rebels of a running revolution); its financial cycle starts once the country has `stock_exchange` tech and an urban center of level 5+, and until then the entry is dormant: no readings, its tools greyed, Monetary Policy read-only (`docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md`).
 
 ### Key Mechanics
-- **3 progress bars:** `banking_cycle_value_bar` (phase 0-100), `banking_cycle_momentum_bar` (velocity -5 to +5), `banking_bubble_pressure_bar` (speculation 0-100)
+- **4 progress bars:** `banking_cycle_value_bar` (phase 0-100), `banking_cycle_momentum_bar` (velocity -5 to +5), `banking_policy_stance_bar` (tight -2 to loose +2), `banking_bubble_pressure_bar` (speculation 0-100). The first three are bars between two poles, blue fill over gold with 1.15's sliding marker (the cycle value since #1434: "panic" at 0 and "frenzy" at 100, neither end the good one); bubble pressure is `default_bad`.
 - **7-tier economy phases:** panic → downturn → stagnation → stable → expansion → boom → frenzy
 - **Momentum system:** Monthly momentum decays (90% retention), modifiers add/subtract momentum, random nudge with bias
 - **Crash detection:** Asymmetric — higher probability in frenzy/boom when bubble pressure is high

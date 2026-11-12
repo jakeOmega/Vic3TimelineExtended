@@ -406,6 +406,7 @@
  banking_crash_intervention_swap_lines_desc:0 "Foreign central banks are providing emergency currency swaps. Imports are easier and contagion risk falls — but our diplomatic bargaining position is constrained."
  banking_crash_response_cost_desc:0 "Emergency outlays from the treasury to contain the financial crisis."
  banking_crisis_protectionism_modifier_desc:0 "Emergency capital controls and trade restrictions imposed to contain financial contagion."
+ banking_cycle_value_bar_desc:0 "[concept_banking_cycle] Value — panic"
  banking_dash_empty:0 ""
  banking_directed_credit_agriculture_desc:0 "Applies the effects of the Directed Credit to Agriculture banking policy."
  banking_directed_credit_armaments_desc:0 "Applies the effects of the Directed Credit to Armaments banking policy."

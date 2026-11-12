@@ -1,19 +1,27 @@
-﻿banking_cycle_value_bar = {
+﻿# Banking's three tug-of-war bars, the cycle value, momentum and the policy
+# stance, are drawn the way 1.14's double_sided_gold preset drew the last two,
+# in the fields 1.15 gives a bar between two poles: blue fill over a gold
+# background with the sliding marker, as vanilla's Cuban bar was converted
+# (00_ip4_cuba_progress_bars.txt). The glow is the default blue one. No end
+# icons: the preset's were the Great Game's bear and lion. The cycle value's
+# poles are panic at 0 and frenzy at 100, with stable in the middle (#1434), so
+# neither end is the good one and the bar keeps the neutral colours, not
+# Civil Rights' green over red. Another country's panel draws the same look
+# from the variables (te_banking_bars, banking_dashboard_widget.gui).
+banking_cycle_value_bar = {
 	name = "banking_cycle_value_bar_name"
-	desc = "banking_cycle_value_bar_name"
+	desc = "banking_cycle_value_bar_desc"
+	second_desc = "banking_cycle_value_bar_second"
 
-	default_green = yes
+	progress_texture = "gfx/interface/progressbar/progressbar_default.dds"
+	background_texture = "gfx/interface/progressbar/progressbar_gold.dds"
+	marker = yes
 
 	start_value = 50
 	min_value = 0
 	max_value = 100
 }
 
-# The two tug-of-war bars are drawn the way 1.14's double_sided_gold preset
-# drew them, in the fields 1.15 gives a bar between two poles: blue fill over a
-# gold background with the sliding marker, as vanilla's Cuban bar was converted
-# (00_ip4_cuba_progress_bars.txt). The glow is the default blue one. No end
-# icons: the preset's were the Great Game's bear and lion.
 banking_cycle_momentum_bar = {
 	name = "banking_cycle_momentum_bar_name"
 	desc = "banking_cycle_momentum_bar_name"
