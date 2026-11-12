@@ -64,6 +64,20 @@ amendment_minority_script_preservation = {
 
 # Language Requirement for Naturalization - ties citizenship to national
 # language proficiency. Increases assimilation but slows migration.
+#
+# Migration restrictiveness is an acceptance threshold: a pop whose
+# acceptance is below the country's total can't migrate there (vanilla's
+# country_migration_restrictiveness_add_desc). A culture that shares no
+# language and no heritage or tradition has the law's floor: 20 under National
+# Supremacy, 40 under Cultural Exclusion, 60 under Multiculturalism
+# (common/laws/modified.txt). 21 clears the first floor (#1384; it was 5, which
+# only a pop already below 5 felt): under National Supremacy it bars a culture
+# that speaks another language and shares nothing else, under Cultural
+# Exclusion one with 20 points of penalties on top (Language Reform's -10, a
+# discrimination trait, a young cultural community), under Multiculturalism one
+# with 40. Not 20: that ties the National Supremacy floor, and vanilla says a
+# pop at the threshold may still migrate. test_language_naturalization.py
+# pins the order.
 amendment_language_naturalization_requirement = {
 	parent = law_civic_monolingualism
 
@@ -75,7 +89,7 @@ amendment_language_naturalization_requirement = {
 
 	modifier = {
 		state_assimilation_mult = 0.10
-		country_migration_restrictiveness_add = 5
+		country_migration_restrictiveness_add = 21
 	}
 
 	possible = {
