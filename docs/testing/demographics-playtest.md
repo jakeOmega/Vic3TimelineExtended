@@ -1747,3 +1747,32 @@ gap between the game's figure and the aim in a census year, at most 0.2 either w
    the lead at its cap is still slow (half a move takes 12 years at 6 and 23 at 3); a short top-up of births and
    deaths that the census backs out of its own count, only where a state is far off, is the follow-up (owner,
    2026-11-07).
+
+## The sweep's death rates multiplied first (#967, 2026-11-12)
+
+The census took a cohort's survivors as people × (1 − rate ÷ 100000), which kept only the rate's whole deaths per
+100,000, and the seed kept its growth power as a product cut at every age. Both now multiply first (`te_demog_age_slot`,
+`te_demog_fold_slot`, `te_demog_seed_slot` and the late sweep's; `docs/systems/mod_systems/demographics.md`, "Deaths in
+fixed point"). The census's deaths rise by under 1e-5 of a state's people a year, about 0.005 per 1,000. Offline:
+`test_demographics_fixed_point.py` holds the sweep to the model in the engine's fixed point, and the largest product of
+a seed or a step is the same as before at every population tried.
+
+No self-check was added. The rewrite rests on no engine fact the census did not already use at a larger size: the
+seed's `state_population × 100000` (owner check 3) and the step's own `te_dg_births × te_dg_nb_f` are bigger products
+than a cohort × its rate. A check that the ring's total equals the state's people would pass whatever the sweep did,
+since each step sets the ring's scale to the people. And a sweep gone wrong already trips two rows of the Self-checks
+table: `cause_deaths_estimate` (the sweep's natural deaths against the independent estimate by cause) and
+`demog_runaway`.
+
+1. **The self-checks still read OK** (Full or Display only, a new 1836 game, a few years). `TE_SELF_CHECK OK
+   cause_deaths_estimate` at the first census step of a state with 1,000 natural deaths, `fit` between 0.9 and 1.1
+   as before; no `TE_SELF_CHECK BROKEN demog_runaway`.
+2. **A big capital's step replays** (Full or Display only). As a country with a large capital (Great Qing in 1836),
+   console option a, which replays the capital's step, then `demographics_harness.py replay debug.log`: OK, the worst
+   slot error where it was (about 0.01% at 2 million people). A slot far off, or deaths of 0 or more than the people,
+   would mean a product went past the range. If so, revert this change's two effect files; the old form costs 1e-5 of
+   the people in deaths.
+3. **A late-game capital** (Full, a save past the first ageing carrier). Option a's replay again, and the capital's
+   deaths per 1,000 in the panel against the year before: the same to the first decimal.
+4. **A seed** (any rule that runs the census). Console option c, which re-seeds the country's census, then the
+   country's pyramid: the same shape as before the re-seed, the bars from 85 up no shorter or longer by eye.
