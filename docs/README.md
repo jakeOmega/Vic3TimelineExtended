@@ -169,7 +169,7 @@ All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Mo
 | [`engine/kill_character_audit.md`](engine/kill_character_audit.md) | `kill_character` calls audited for void6 / exists guards |
 | [`engine/event_magnitude_report.md`](engine/event_magnitude_report.md) | Hardcoded fast-scaling event effects flagged by the magnitude audit |
 | [`engine/event_image_inventory.md`](engine/event_image_inventory.md) | Every mod event with title, description, flavor, and current image path (gitignored; rewritten on every reload) |
-| [`engine/loc_render_report.md`](engine/loc_render_report.md) | Bracket-style formatting tags (`[b]`, `[/i]`, …) in loc values — render-breaking, cause log-spam lag |
+| [`engine/loc_render_report.md`](engine/loc_render_report.md) | Bracket-style formatting tags (`[b]`, `[/i]`, …) in loc values — render-breaking, cause log-spam lag — and `#` formatting tags left open (`#bold` with no `#!`) |
 | [`engine/any_limit_report.md`](engine/any_limit_report.md) | `limit = { }` placed as an immediate child of an `any_*` trigger (silently ignored → meaning flip), and `always = no` in the same place (always false → the enclosing block never passes) |
 | [`engine/iterator_limit_report.md`](engine/iterator_limit_report.md) | An iterator's `limit = { }` written after an effect sibling — the limit gates that effect too |
 | [`engine/modifier_multiplier_var_report.md`](engine/modifier_multiplier_var_report.md) | Permanent `add_modifier { multiplier = var:X }` whose backing variable is removed later in the same block |
