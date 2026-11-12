@@ -50,8 +50,9 @@ game, in English.
   - `TE_SELF_CHECK OK|BROKEN scaling_inherited`: 30 days after revolutionaries win a civil war, the winner's Covert
     Warfare funding cost is declared again (rebels who ran a Covert Warfare entry of their own don't count). BROKEN
     means every inherited entry has lost its declarations, which this change already relies on: Covert Warfare's five,
-    Global Warming's six (Carbon Removal's and Aerosol Injection's restore effects are gone), and later the
-    revolution repairs PRs 3, 7 and 8 delete. Fallback: the design's § 5.
+    Global Warming's fourteen (no restore effects: since #1466 all eleven policies, and the Colonial Empire's five
+    bands, come back only through the declarations), and the revolution repairs PRs 3, 7 and 8 delete. Fallback: the
+    design's § 5.
   Also look at: the Budget panel's Strategic Reserve Sales, Covert Actions and Nuclear Program rows still list their
   amounts (they read the modifiers' budget mirror fields); a converted modifier's tooltip names its entry as the
   source; and **Carbon Removal's forced coal subsidy**: `carbon_removal_modifier` carries
@@ -59,7 +60,14 @@ game, in English.
   field. With the policy on, a synthetics plant on a coal method should show as subsidized and unable to drop it. If
   it doesn't, add that modifier to the entry by hand again (it is a flat 1).
   Colonial Empire: a step on a program moves its modifier, now on the entry, within a few days, and the
-  investment's expense follows. Cultural Hegemony: ending a program reads "Ends …" in the tooltip, the program
+  investment's expense follows. The stability band's modifier (#1466) sits on the entry, named as the source, and
+  moves within a few days of the bar crossing an edge (`event te_debug_colonial_empire.1` sets the bar to each band):
+  exactly one band at a time, Solidified from 90. It reads the bar through `je:` from the country
+  (`colonial_empire_live_tier`), a country read the probe covers; if no band shows, put the monthly swap back
+  (`git show` #1466's parent, `je_colonial_empire.txt`'s pulse). Global Warming (#1466): adopting any of the nine
+  flat policies (Carbon Tax … Fossil-Fuel Tariffs) shows the policy on the entry within a few days, named as the
+  source, and repealing takes it off; the row's active check and the adoption counts move at once (they read the
+  variable). A treaty 109 source shows its seven policies adopted, each with its text in the treaty's tooltip. Cultural Hegemony: ending a program reads "Ends …" in the tooltip, the program
   count drops in the same click and the modifier leaves the entry within a few days; starting Outreach previews
   the program and its cost, which then follows GDP; repealing the Ministry of Culture stops the four programs at
   the next monthly update and the funding pair within days; a country trailing the hegemon shows the Foreign

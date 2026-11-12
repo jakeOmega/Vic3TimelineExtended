@@ -1071,14 +1071,15 @@ the old government built. UN membership, seat and programs, the central bank's
 gold and monetary settings, the banking cycle's position, nuclear arsenals,
 space-race rewards and milestone progress, the arable-land bonuses from
 farming breakthroughs, and under the Legislated Tax Code rule the tax code with
-its passed bills and promises (under the Light Tax Code, its rates), all carry
-over. So do UN sanctions on the nation. A Civil
+its passed bills and promises (under the Light Tax Code, its rates), and the
+national climate policies in force all carry over. So do UN sanctions on the
+nation. A Civil
 Rights Movement, Human
 Augmentation Debate, Morphological Freedom Debate or Mental Health Crisis
 journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
-journal-entry buttons, such as banking tools and climate policies, have to be
-switched on again, and history charts start empty. The colonial empire is the
+journal-entry buttons, such as banking tools, have to be switched on again, and
+history charts start empty. The colonial empire is the
 exception: the winner keeps the colonial programs you were running while the
 Colonial Empire entry is open, Colonial Empire Solidified and the path rewards
 of a finished empire, and the Imperial Federation and Mandate System modifiers
