@@ -310,6 +310,23 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   India, State of Indonesia, State of China, Intermarium Federation, Union of Dar-Al-Islam; the unions as they
   are). C21: whether a formable under a government-flavored dynamic name shows that name or the `_DEF` one, and what
   a country with no `_DEF` key shows. If a dynamic name shows its key with `_DEF` appended, its 84 names need one each.
+- **Treaty articles: `can_propose` and the lens (#1440).** In the treaty designer, add Extensive Modernization Aid
+  before Modernization Aid, Joint Military Exercises before an alliance, and a Nuclear Guarantee before a Guarantee
+  Independence: each draft accepts the article and the proposal goes through once the partner is in; without the
+  partner the Propose button is greyed with the requirement's line. Also note whether an AI ever proposes one of the
+  three, and whether the Budapest offer's guarantees (`nuclear_custody.11`) are still created (C21: whether
+  `create_treaty` runs `can_propose`). The diplomatic lens's Treaty Articles tab lists the mod's articles with no
+  input; with the Nuclear Weapons rule off, or the banking system on its simplified setting, their articles are absent.
+- **Cessions and reparations as treaties (#1457).** One line each in `debug.log`, once a game:
+  `TE_SELF_CHECK OK|BROKEN treaty_state_transfer` (three days after `irredentism.2.b` "Cede peacefully" or a
+  complied UN court ruling, the state is the taker's) and `TE_SELF_CHECK OK|BROKEN treaty_reparations` (three days
+  after `decolonization_events.6.a` "We acknowledge the debt" or a nuclear crisis's reparations, the Reparations
+  article's `on_entry_into_force` paid). BROKEN means `create_treaty` with `is_draft = no` doesn't run
+  `on_entry_into_force` (C21); the check has already made the transfer directly, so play is unaffected, but then put
+  the direct `set_state_owner` / paired `add_treasury` back at the four call sites (the parent of #1457's commit) and
+  drop the two helpers. Also check: the treaty shows in both countries' diplomacy panels, named and with the state or
+  Reparations article; the treasuries move by the sum the option's tooltip showed, once; the state does not move
+  back, and nothing is paid twice, if the treaty is later withdrawn.
 
 ## 1.15.1 hotfix (2026-11-11)
 

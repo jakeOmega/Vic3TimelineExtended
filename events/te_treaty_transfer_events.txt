@@ -1,0 +1,89 @@
+﻿namespace = te_treaty_transfer
+
+# ============================================================================
+# CESSIONS AND REPARATIONS AS TREATIES: the checks (#1457)
+# ============================================================================
+# Three days after te_cede_state_by_treaty / te_pay_reparations_by_treaty
+# (common/scripted_effects/te_treaty_transfer_effects.txt) create a treaty in
+# force, read whether its article moved the state or the money, and move it
+# directly if not, so a cession or a payment never silently does nothing.
+# Each logs its self-check once a game per verdict. No `trigger`: a delayed
+# event's trigger is also read when it is queued (scripting_best_practices.md),
+# so the conditions sit in `immediate`.
+# ============================================================================
+
+# ROOT = the giver, holding te_cession_state / te_cession_taker.
+te_treaty_transfer.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = te_cession_state }
+			var:te_cession_state = { save_scope_as = te_tt_state }
+			if = {
+				limit = { has_variable = te_cession_taker }
+				var:te_cession_taker = { save_scope_as = te_tt_taker }
+			}
+			remove_variable = te_cession_state
+			if = {
+				limit = { has_variable = te_cession_taker }
+				remove_variable = te_cession_taker
+			}
+			if = {
+				limit = {
+					exists = scope:te_tt_taker
+					scope:te_tt_state = { owner ?= scope:te_tt_taker }
+				}
+				if = {
+					limit = { NOT = { has_global_variable = te_sc_treaty_state_transfer_ok } }
+					set_global_variable = te_sc_treaty_state_transfer_ok
+					debug_log = "TE_SELF_CHECK OK treaty_state_transfer (a state_transfer treaty created in force moved the state: [SCOPE.sState('te_tt_state').GetName] from [ROOT.GetCountry.GetNameNoFormatting] to [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			else_if = {
+				limit = {
+					exists = scope:te_tt_taker
+					scope:te_tt_taker = { is_country_alive = yes }
+					scope:te_tt_state = { owner ?= ROOT }
+				}
+				if = {
+					limit = { NOT = { has_global_variable = te_sc_treaty_state_transfer_broken } }
+					set_global_variable = te_sc_treaty_state_transfer_broken
+					debug_log = "TE_SELF_CHECK BROKEN treaty_state_transfer (three days after a state_transfer treaty was created in force, [SCOPE.sState('te_tt_state').GetName] is still [ROOT.GetCountry.GetNameNoFormatting]'s, not [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]'s: create_treaty with is_draft = no does not run on_entry_into_force, or created nothing. The check moved it directly; take the fallback in docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				scope:te_tt_state = { set_state_owner = scope:te_tt_taker }
+			}
+		}
+	}
+}
+
+# ROOT = the payer, holding te_reparations_check_pending.
+te_treaty_transfer.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = te_reparations_check_pending }
+			remove_variable = te_reparations_check_pending
+			if = {
+				limit = { has_variable = te_reparations_due }
+				if = {
+					limit = { NOT = { has_global_variable = te_sc_treaty_reparations_broken } }
+					set_global_variable = te_sc_treaty_reparations_broken
+					debug_log = "TE_SELF_CHECK BROKEN treaty_reparations (three days after a te_reparations treaty was created in force, [ROOT.GetCountry.GetNameNoFormatting] still owes due=[THIS.Var('te_reparations_due').GetValue|0]: create_treaty with is_draft = no does not run on_entry_into_force, or created nothing. The check paid it directly; take the fallback in docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				te_reparations_settle = yes
+			}
+			else_if = {
+				limit = { has_variable = te_reparations_paid }
+				if = {
+					limit = { NOT = { has_global_variable = te_sc_treaty_reparations_ok } }
+					set_global_variable = te_sc_treaty_reparations_ok
+					debug_log = "TE_SELF_CHECK OK treaty_reparations (a te_reparations treaty created in force paid: [ROOT.GetCountry.GetNameNoFormatting] paid=[THIS.Var('te_reparations_paid').GetValue|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+		}
+	}
+}

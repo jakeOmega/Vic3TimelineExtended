@@ -1,0 +1,189 @@
+﻿# ============================================================================
+# CESSIONS AND REPARATIONS AS TREATIES (#1457)
+# ============================================================================
+# A state or a sum the mod hands from one country to another outside a war
+# goes as a treaty in force at once, as vanilla 1.15 does with its
+# treaty-flavored decisions: it shows in the diplomacy panel, and breaking it
+# inside the binding period costs what breaking a treaty costs. A state goes
+# under vanilla's state_transfer; a sum under the mod's te_reparations
+# (common/treaty_articles/126_reparations.txt), a one-off payment.
+#
+# UNVERIFIED (vanilla_1_15_prep.md C21): whether a treaty created with
+# is_draft = no runs its articles' on_entry_into_force, which is what moves
+# the state or the money. So the game never relies on it alone:
+#   * where the treaty can't be made (can_create_treaty false: a capital, a
+#     state neither adjacent to the taker nor coastal, a giver with one
+#     state), or a check from an earlier transfer by the same country is
+#     still waiting, the state or the money moves directly, now, as before;
+#   * otherwise a hidden check three days on (te_treaty_transfer.1 / .2)
+#     reads the result and makes the direct transfer itself if the treaty
+#     did not, logging once a game
+#     TE_SELF_CHECK OK|BROKEN treaty_state_transfer / treaty_reparations.
+# Play-test list: docs/testing/vanilla-1-15-playtest.md, "1.15 opportunities".
+# If BROKEN, the fallback is the parent of #1457's commit: set_state_owner /
+# paired add_treasury at each call site.
+#
+# Each tooltip shows the transfer as the direct effect did (show_as_tooltip),
+# since a tooltip walk writes nothing and the treaty's own lines say less.
+# ============================================================================
+
+# Any scope. $GIVER$ cedes $STATE$ (which it owns) to $TAKER$.
+# Callers: irredentism.2.b, un_court_comply.
+te_cede_state_by_treaty = {
+	show_as_tooltip = {
+		$STATE$ = { set_state_owner = $TAKER$ }
+	}
+	hidden_effect = {
+		if = {
+			limit = {
+				$GIVER$ = { NOT = { has_variable = te_cession_state } }
+				can_create_treaty = {
+					first_country = $GIVER$
+					second_country = $TAKER$
+					is_draft = no
+					binding_period = { years = 2 }
+					articles_to_create = {
+						{
+							article = state_transfer
+							source_country = $GIVER$
+							target_country = $TAKER$
+							inputs = {
+								{ state = $STATE$ }
+							}
+						}
+					}
+				}
+			}
+			# Keep identical to the can_create_treaty above.
+			create_treaty = {
+				first_country = $GIVER$
+				second_country = $TAKER$
+				is_draft = no
+				binding_period = { years = 2 }
+				articles_to_create = {
+					{
+						article = state_transfer
+						source_country = $GIVER$
+						target_country = $TAKER$
+						inputs = {
+							{ state = $STATE$ }
+						}
+					}
+				}
+			}
+			# The record the check reads, removed only by it (the days are a
+			# backstop for a check that never ran).
+			$GIVER$ = {
+				set_variable = { name = te_cession_state value = $STATE$ days = 30 }
+				set_variable = { name = te_cession_taker value = $TAKER$ days = 30 }
+				trigger_event = { id = te_treaty_transfer.1 days = 3 }
+			}
+		}
+		else = {
+			$STATE$ = { set_state_owner = $TAKER$ }
+		}
+	}
+}
+
+# Any scope. $PAYER$ pays $PAYEE$ $AMOUNT$, a value that reads the same in
+# any scope (a saved scope's variable, or a script value over saved scopes):
+# it is read in the payer's scope and, on the direct path, in each party's.
+# Callers: decolonization_events.6.a, nd_crisis_concede_reparations.
+te_pay_reparations_by_treaty = {
+	show_as_tooltip = {
+		$PAYER$ = { add_treasury = { value = $AMOUNT$ multiply = -1 } }
+		$PAYEE$ = { add_treasury = $AMOUNT$ }
+	}
+	hidden_effect = {
+		if = {
+			limit = {
+				$AMOUNT$ > 0
+				$PAYER$ = {
+					NOT = { has_variable = te_reparations_due }
+					NOT = { has_variable = te_reparations_check_pending }
+				}
+			}
+			# Set first: te_reparations' visible and possible read them, and
+			# can_create_treaty runs the article's gates.
+			$PAYER$ = {
+				set_variable = { name = te_reparations_due value = $AMOUNT$ }
+				set_variable = { name = te_reparations_due_to value = $PAYEE$ }
+			}
+			if = {
+				limit = {
+					can_create_treaty = {
+						first_country = $PAYER$
+						second_country = $PAYEE$
+						is_draft = no
+						binding_period = { years = 2 }
+						articles_to_create = {
+							{
+								article = te_reparations
+								source_country = $PAYER$
+								target_country = $PAYEE$
+							}
+						}
+					}
+				}
+				# Keep identical to the can_create_treaty above.
+				create_treaty = {
+					first_country = $PAYER$
+					second_country = $PAYEE$
+					is_draft = no
+					binding_period = { years = 2 }
+					articles_to_create = {
+						{
+							article = te_reparations
+							source_country = $PAYER$
+							target_country = $PAYEE$
+						}
+					}
+				}
+				$PAYER$ = {
+					set_variable = { name = te_reparations_check_pending value = yes days = 30 }
+					trigger_event = { id = te_treaty_transfer.2 days = 3 }
+				}
+			}
+			else = {
+				$PAYER$ = { te_reparations_settle = yes }
+			}
+		}
+		else_if = {
+			# An earlier payment still waits on its check: this one changes
+			# hands directly, so the check can't take one for the other.
+			limit = { $AMOUNT$ > 0 }
+			$PAYER$ = { add_treasury = { value = $AMOUNT$ multiply = -1 } }
+			$PAYEE$ = { add_treasury = $AMOUNT$ }
+		}
+	}
+}
+
+# Payer scope, with te_reparations_due / te_reparations_due_to set: the sum
+# changes hands and the record goes. te_reparations_paid tells the check that
+# the article's on_entry_into_force did it. Called by the article, by the
+# check's fallback and by the direct path above.
+te_reparations_settle = {
+	save_scope_as = te_rep_settle_payer
+	if = {
+		limit = {
+			has_variable = te_reparations_due
+			var:te_reparations_due_to ?= { is_country_alive = yes }
+		}
+		var:te_reparations_due_to = {
+			add_treasury = scope:te_rep_settle_payer.var:te_reparations_due
+		}
+		add_treasury = {
+			value = var:te_reparations_due
+			multiply = -1
+		}
+		set_variable = { name = te_reparations_paid value = var:te_reparations_due days = 30 }
+	}
+	if = {
+		limit = { has_variable = te_reparations_due }
+		remove_variable = te_reparations_due
+	}
+	if = {
+		limit = { has_variable = te_reparations_due_to }
+		remove_variable = te_reparations_due_to
+	}
+}
