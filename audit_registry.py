@@ -260,9 +260,17 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "treaty_evaluation_scope_audit",
-        "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root.",
+        "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root; or a "
+        "party scope in a block that does not bind it: `scope:source_country` / `scope:target_country` "
+        "in `visible` / `possible` (use root and `scope:other_country`), or `scope:other_country` in "
+        "`can_ratify` / `requirement_to_maintain` (use source / target; first / second on a mutual "
+        "article).",
         post_load=False,
+        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify` or "
+              "`requirement_to_maintain`; a read in `evaluation_chance` takes none",
+        tags=("treaty_scope",),
         report=None,
+        note="Direct reads only: it does not open a scripted trigger or value the block calls.",
     ),
     Audit(
         "principle_tier_audit",
