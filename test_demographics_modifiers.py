@@ -55,6 +55,27 @@ class TestTotals(unittest.TestCase):
         t = DM.totals(self.CARRIERS, laws=laws, institutions=self.LEVELS, institution_impact=1.0)
         self.assertAlmostEqual(t["state_health_care_access_add"], 0.36)
 
+    def test_an_institutions_own_impact_scales_its_lines(self):
+        """#1046: Mandatory Augmentation's -0.02 mortality line sits on the Ministry of War, whose impact Total War raises
+        by +0.25: at level 5, -0.10 at full impact and -0.125 under Total War. Read from the game files' carriers."""
+        self.assertEqual(DM.country_institution_impacts(laws={"law_total_war"}),
+                         {"institution_ministry_of_war": 1.25})
+        self.assertEqual(DM.country_institution_impacts(), {})
+        absorbed = "state_demog_absorbed_mortality_mult"
+        lines = [c for c in DM.line_carriers() if c.key == "law_mandatory_augmentation" and c.type == absorbed]
+        self.assertEqual([(c.kind, c.institution, c.value) for c in lines],
+                         [("law_institution", "institution_ministry_of_war", -0.02)])
+        levels = {"institution_ministry_of_war": 5}
+        plain = DM.totals(lines, laws={"law_mandatory_augmentation"}, institutions=levels, types=(absorbed,))
+        self.assertAlmostEqual(plain[absorbed], -0.10)
+        war = DM.totals(lines, laws={"law_mandatory_augmentation", "law_total_war"}, institutions=levels,
+                        types=(absorbed,))
+        self.assertAlmostEqual(war[absorbed], -0.125)
+        # it multiplies the state's own Impact of Institutions (Local Vernacular's 0.95)
+        both = DM.totals(lines, laws={"law_mandatory_augmentation", "law_total_war", "law_local_vernacular"},
+                         institutions=levels, types=(absorbed,))
+        self.assertAlmostEqual(both[absorbed], -0.125 * 0.95)
+
     def test_unincorporated_states_get_no_institution_line(self):
         t = DM.totals(self.CARRIERS, laws={"law_public_health_insurance"}, institutions=self.LEVELS,
                       incorporated=False)

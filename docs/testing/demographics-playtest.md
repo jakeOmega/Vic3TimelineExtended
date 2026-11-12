@@ -1722,8 +1722,8 @@ of millions to around 10¹⁵ came before 1917.
    rise is births and too few deaths, so it is skipped only where arrivals are three times its natural increase, and
    the skip sets no mark: the next census reads the state afresh. **To check**: an observer game's `why=5` lines
    (and `te_dg_chk_runaway = 5` marks in its saves) should be rare, and each should read its `mig=` under three
-   quarters of `people` − `prev`. A sane state still tripping on sign 5 goes back to #1500's other options (two
-   censuses running, or the floor in the model).
+   quarters of `people` − `prev`. A sane state still tripping on sign 5 means the skip isn't enough: reopen #1500 (its other options were two
+   censuses running, or the floor in the model). Six of its sane states had no surviving line, so this can happen.
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
 

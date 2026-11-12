@@ -100,13 +100,22 @@ def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
     return out
 
 
+_COUNTRY_IMPACT = re.compile(r"^country_institution_impact_(\w+)_mult$")
+
+
 @functools.lru_cache(maxsize=None)
 def _impact_lines(root=ROOT):
-    """{(kind, key): value} for every law's or technology's state_institution_impact_add (Local Vernacular and
-    Devolution -0.05, Ubiquitous Translation +0.10), vanilla's and the mod's, as engine_rate_lines sums them."""
-    return {(kind, key): value for (kind, key, block, _f), value in
-            engine_rate_lines(root, keep=lambda f: f == "state_institution_impact_add").items()
-            if block == "modifier" and abs(value) > 1e-12}
+    """{(kind, key, field): value} for every law's or technology's Impact of Institutions line, vanilla's and the
+    mod's, as engine_rate_lines sums them: state_institution_impact_add (Local Vernacular and Devolution -0.05,
+    Ubiquitous Translation +0.10) and each institution's own country_institution_impact_<institution>_mult (Total War's
+    +0.25 on the Ministry of War, where Mandatory Augmentation's mortality line sits)."""
+    keep = lambda f: f == "state_institution_impact_add" or bool(_COUNTRY_IMPACT.match(f))  # noqa: E731
+    return {(kind, key, field): value for (kind, key, block, field), value in engine_rate_lines(root, keep=keep).items()
+            if kind in ("law", "technology") and block == "modifier" and abs(value) > 1e-12}
+
+
+def _held(kind, key, techs, laws):
+    return (kind == "law" and key in laws) or (kind == "technology" and key in techs)
 
 
 def state_institution_impact(techs=(), laws=(), root=ROOT):
@@ -115,21 +124,44 @@ def state_institution_impact(techs=(), laws=(), root=ROOT):
     alone can't give is left out: obstinance's -1.0 x its share and a building's method (the Consciousness Network's
     +0.10), so a state with either reads high here."""
     techs, laws = set(techs), set(laws)
-    add = sum(v for (kind, key), v in _impact_lines(root).items()
-              if (kind == "law" and key in laws) or (kind == "technology" and key in techs))
+    add = sum(v for (kind, key, field), v in _impact_lines(root).items()
+              if field == "state_institution_impact_add" and _held(kind, key, techs, laws))
     return max(0.0, 1.0 + add)
 
 
+def country_institution_impacts(techs=(), laws=(), root=ROOT):
+    """{institution: 1 + its country_institution_impact_<institution>_mult} from the owner's laws and technologies
+    (#1046: Total War's +0.25 on the Ministry of War). An institution with none is left out (1). Left out as well: a
+    building's method (the Pentagon's +0.10 on the Ministry of War) and an institution's own line (International Aid's
+    on Foreign Affairs), which a save's laws don't give. That the engine multiplies it with the state's Impact of
+    Institutions, rather than adding the two, is assumed: no demographic line has been read under both."""
+    techs, laws = set(techs), set(laws)
+    out = {}
+    for (kind, key, field), v in _impact_lines(root).items():
+        m = _COUNTRY_IMPACT.match(field)
+        if m and _held(kind, key, techs, laws):
+            out[m.group(1)] = out.get(m.group(1), 1.0) + v
+    return {inst: max(0.0, f) for inst, f in out.items()}
+
+
 def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES,
-           institution_impact=None, amendments=()):
+           institution_impact=None, amendments=(), institution_impacts=None):
     """{type: total} that one state reads: its owner's techs, laws and amendments and, in an incorporated
     state, each institution line times the owner's investment level in that institution, times the
     state's Impact of Institutions (1 + state_institution_impact_add, at least 0: Local Vernacular's -0.05,
-    obstinance's -1.0 x its share; the probe session, 2026-10-11). institution_impact None: the one the owner's laws
-    and technologies give (state_institution_impact(); #1046 found every caller had read full impact)."""
+    obstinance's -1.0 x its share; the probe session, 2026-10-11) and that institution's own impact (1 + the owner's
+    country_institution_impact_<institution>_mult). institution_impact and institution_impacts None: the ones the
+    owner's laws and technologies give (state_institution_impact(), country_institution_impacts(); #1046 found every
+    caller had read full impact)."""
     if institution_impact is None:
         institution_impact = state_institution_impact(techs, laws)
+    if institution_impacts is None:
+        institution_impacts = country_institution_impacts(techs, laws)
     techs, laws, levels, amendments = set(techs), set(laws), institutions or {}, set(amendments)
+
+    def scale(inst):
+        return levels.get(inst, 0) * institution_impact * institution_impacts.get(inst, 1.0)
+
     out = {t: 0.0 for t in types}
     for c in carriers:
         if c.type not in out:
@@ -139,9 +171,9 @@ def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, ty
         elif (c.kind == "law" and c.key in laws) or (c.kind == "amendment" and c.key in amendments):
             out[c.type] += c.value
         elif c.kind == "law_institution" and c.key in laws and incorporated:
-            out[c.type] += c.value * levels.get(c.institution, 0) * institution_impact
+            out[c.type] += c.value * scale(c.institution)
         elif c.kind == "institution" and incorporated:
-            out[c.type] += c.value * levels.get(c.key, 0) * institution_impact
+            out[c.type] += c.value * scale(c.key)
     return out
 
 
