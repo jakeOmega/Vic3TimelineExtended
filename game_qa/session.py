@@ -775,7 +775,12 @@ class Session:
 
         The click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
         (`_ProvedHelper.click`); the console is left as it is. A click refused before the button went down is
-        `click_refused` and pressed nothing."""
+        `click_refused` and pressed nothing.
+
+        A click into a tool window takes the keyboard (live, 2026-11-12): the next typed command does not reach the
+        console (a read's `no_stop` with `arrived: false`) until the console's input line is clicked, at
+        (0.1125, 0.544) with the console open on the left. #1710 asks for that to be done here, with drag and
+        wheel verbs for the profiler's window."""
         self._require_game()
         fraction = (_fraction("x", x), _fraction("y", y))
         with self._step("click", x=x, y=y) as out:
