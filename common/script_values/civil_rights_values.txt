@@ -90,12 +90,14 @@ cr_months_disp_total = {
 	add = cr_months_disp_segregationist
 }
 
-# The victory event je_civil_rights's on_complete would fire now: 1 Victory on
-# Paper (.240), 2 the Civil Rights Mandate (.220), 3 the Movement Carries the
-# Day (.221), 4 a Settlement (.222), 5 Reform on Paper (.223), 6 the generic
-# ending (.200). The same branches as on_complete, in the same order, over the
-# display copies of its counters; test_vanilla_panel_additions.py holds the
-# two to the same conditions.
+# Which victory je_civil_rights would reach now: 1 Victory on Paper (.240),
+# 2 the Civil Rights Mandate (.220), 3 the Movement Carries the Day (.221),
+# 4 a Settlement (.222), 5 Reform on Paper (.223), 6 the generic ending (.200).
+# Each of the entry's six victory outcomes requires its own number (#1431), so
+# this one chain decides the ending, for the outcomes and the status line
+# alike; test_vanilla_panel_additions.py holds the outcomes to it. It reads the
+# display copies of the counters, 0 where one is missing, as the old effect
+# chain read them after cr_ensure_tracker_vars_effect.
 cr_win_ending_now = {
 	value = 6
 	if = {
@@ -127,9 +129,10 @@ cr_win_ending_now = {
 	}
 }
 
-# The failure event on_fail would fire now: 1 the Movement Broken (.100),
+# Which collapse je_civil_rights would reach now: 1 the Movement Broken (.100),
 # 2 the Movement Demobilizes (.230), 3 the Long Drift (.231), 4 the Movement
-# Fades (.232). Mirrors on_fail as cr_win_ending_now mirrors on_complete.
+# Fades (.232). Decides the four failure outcomes as cr_win_ending_now decides
+# the victories.
 cr_fail_ending_now = {
 	value = 4
 	if = {
