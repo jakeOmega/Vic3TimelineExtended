@@ -11,8 +11,8 @@ mod's own widgets that no doc names as kept or as a placeholder.
 **Mod-owned.** A mod GUI file at a path vanilla also has replaces vanilla's
 panel, and draws vanilla art by design; only a file with no vanilla
 counterpart is the mod's own widget. A file name cannot tell the two apart
-(28 of the mod's 89 files sit at a vanilla path, and most of the rest carry
-no `te_` prefix), so the vanilla file names are committed as
+(28 of the mod's 88 `.gui` files sit at a vanilla path, and 24 of the other
+60 carry no `te_` prefix), so the vanilla file names are committed as
 `docs/engine/vanilla_gui_files.txt`, written by `python3
 texture_reference_audit.py --bootstrap` on the machine with the game, beside
 the asset catalog that run already writes. Re-run it after a vanilla patch.
