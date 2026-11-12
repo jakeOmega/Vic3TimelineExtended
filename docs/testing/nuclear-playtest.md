@@ -127,6 +127,13 @@ None of these rests on an unread engine fact in script, so there is no new self-
 70. **Sabotage and a self-set ceiling.** Run Nuclear Program Sabotage against a country with a programme, then, as the target (`play <tag>`), set an arsenal ceiling at your stockpile and lift it again. The operation keeps running throughout. It still ends on a freeze treaty, a crisis freeze or disarmament.
 71. **One notice per strike.** Where the popup's one option does nothing, it is the only notice: a stopped strategic strike (`.3` and `.4`), a tactical strike that lands on us (`.5`) or is stopped (`.7`, `.8`), and a retaliation, to the side that fired it when it lands (`.12`) and to both sides when it is stopped (`.13`, `.14`), show the popup and post no feed message. The popups with a choice to make or two worded options keep theirs (`.1`, `.2`, `.6`, `.11`).
 
+## Event-sweep follow-ups (#448, #798; listed 2026-11-12)
+
+Two engine behaviours the 2026-10 event sweep rests on, with no vanilla precedent, carried here from the test plans of #448 and #798.
+
+72. **The pledge struck from a law still being enacted.** Armed, at No First Use, enact Humanitarian Regulations or Limited War with the No-First-Strike Pledge amendment, and leave No First Use while the law is still being enacted. The amendment is gone from the enacting law at once (`remove_amendment` on `currently_enacting_law`, in `nd_strike_nfu_amendment`). If it is still there, the fallback marker (`nd_nfu_amendment_repudiated`) must catch it: within a week of the law passing, `nd_weekly_update` strikes it from the passed law, and the doctrine is not pulled back to No First Use. If the law passes with the pledge and the doctrine snaps back to No First Use, neither removal took.
+73. **The referral (`.18` option d with the treaty in force).** With the Non-Proliferation Treaty in force, as a UN member, take d on A Bomb Nearly Built: the proliferator's Our Record → Nuclear weapons gains 20 (30 when it ratified the treaty). A second recipient of the same alert sees d's "already before the General Assembly" line, and the record does not grow again. The tooltip's line with no record added: `un_dossier_record` did not run inside the `custom_tooltip`.
+
 ## Self-checks
 
 | Line | What it tests | If BROKEN |

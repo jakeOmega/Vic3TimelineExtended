@@ -3797,7 +3797,11 @@ From 1.15 every `$key$` splice inside a single-quoted argument of a `[...]` data
 
 ### 1.15: six concepts became glossary entries
 
-1.15 adds a `common/glossary/` database (`glossary_x = {}`, with `glossary_x` and `glossary_x_desc` loc) and moved six concepts there: `concept_zaibatsu`, `concept_gongen`, `concept_boddhisattva`, `concept_house_of_obrenovic`, `concept_house_of_karadjordjevic` and `concept_bio_tomas_de_zumalacarregui`. Link one as `[glossary_zaibatsu]` (`[glossary_zaibatsu|l]` lowercases it), or with display text `[Glossary('glossary_ri','ri')]`. A `[concept_zaibatsu]` left behind is an unregistered concept, which `concept_reference_audit` flags.
+1.15 adds a `common/glossary/` database (`glossary_x = {}`, with `glossary_x` and `glossary_x_desc` loc) and moved six concepts there: `concept_zaibatsu`, `concept_gongen`, `concept_boddhisattva`, `concept_house_of_obrenovic`, `concept_house_of_karadjordjevic` and `concept_bio_tomas_de_zumalacarregui`. Link one as `[glossary_zaibatsu]` (`[glossary_zaibatsu|l]` should lowercase it, unverified in game, and vanilla never uses it), or with display text `[Glossary('glossary_ri','ri')]`. A `[concept_zaibatsu]` left behind is an unregistered concept, which `concept_reference_audit` flags.
+
+### A historical or setting term gets a glossary entry, a mechanic gets a concept
+
+The two databases split by what the word names. A game concept (`common/game_concepts/`) explains a rule the player plans around: the policy rate, a UN veto, orbital debris. A glossary entry explains setting vocabulary that a text uses but no rule depends on: a historical body (the Sejm, the zemstvo), an event (the Decembrist Revolt), a foreign word (zaibatsu). So a new historical or setting term in event or description text becomes a glossary entry (`common/glossary/`, `glossary_x = {}` with `glossary_x` and `glossary_x_desc` loc), and a term that names something the script does stays a concept: Kessler syndrome is the mechanic `concept_orbital_debris`, so it stays a concept. Link a vanilla entry before writing a mod one: `building_sumitomo_besshi_mine_desc` links vanilla's `[glossary_zaibatsu]` and the mod defines none. `scripts/analysis/concept_term_audit.py` lists plain-text mentions of glossary names (vanilla's from `vanilla_parsed/` when no game is installed, and the mod's) beside concept names, as candidates to link (#1438).
 
 ## Defined-But-Unused Modifiers
 
@@ -4750,7 +4754,7 @@ Setting `is_government_funded = yes` on a `common/building_groups/` entry makes 
 
 - **`create_building` now validates the state owner's building-unlock tech** and REFUSES ("\<country\> must have invented \<tech\>", `jomini_script_system.cpp:247`). Pre-1.13.9 the building was created anyway. Any history/script seeding of buildings into tech-less countries must grant the prerequisite tech first (see `build_effects.txt` for the pattern).
 - **Active laws are validated against `unlocking_technologies` at load** ("Country X is not permitted to retain law Y", `country_law_manager.cpp:464`). Warning-only — the law is kept. Fires for deliberate historical seeds and for first-in-group auto-assignment (below).
-- **`set_institution_investment_level` validates the institution is active** ("invalid institution type") — surfaced 18 vanilla-history schools errors; investigation tracked in issue #226.
+- **`set_institution_investment_level` validates the institution is active** ("invalid institution type"). The 18 history-time schools errors it surfaced were the mod's, not vanilla's: the law-consistency sweep, run mid-history by `on_law_activated`, set countries to No Schools before their history set a schools level. Fixed in #1408; the lesson is § "`activate_law` From Script Fires `on_law_activated`".
 
 ## First Law in a Lawgroup File Is the Unseeded Default
 
