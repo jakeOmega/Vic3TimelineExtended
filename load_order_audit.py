@@ -57,8 +57,8 @@ path are checked, and vanilla's own repeated keys are listed
 (`vanilla_only`). The report says which mode it ran in.
 
 Not covered: events, on_actions (their lists add up), defines, history, and
-the `common/` folders ModState doesn't parse. Scripted effects, triggers,
-GUIs and progress bars have no vanilla in ModState or the snapshot, so
+the `common/` folders ModState doesn't parse. Scripted effects, triggers
+and GUIs have no vanilla in ModState or the snapshot, so
 without the game files only the mod's own definitions are compared there.
 Where ModState and the model agree nothing is listed, though both may rest
 on the same unprobed rule: an INJECT below its mod-only target in one file
@@ -480,7 +480,7 @@ def _check_db(ms, et: str, db: str, rule, mod_path: str, o_files: list, vanilla,
     server_holds_vanilla = et in VANILLA_COMMON_DIRS
     v_scan = vanilla.scan(db)               # None without the game files
     if vanilla.source(db) is None and not server_holds_vanilla:
-        # Scripted effects, triggers, GUIs, progress bars: the snapshot holds
+        # Scripted effects, triggers and GUIs: the snapshot holds
         # no vanilla for them, as ModState doesn't. Vanilla is left out.
         result.no_vanilla.append(f"common/{db}")
     vfiles = vanilla.snapshot_files(db) or []

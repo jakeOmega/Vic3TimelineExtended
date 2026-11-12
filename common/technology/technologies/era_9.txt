@@ -126,6 +126,9 @@ digital_telecommunications = {
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.05
+		# Colonial empire: mobile networks skip over colonial-era infrastructure,
+		# so development investment goes further (see globalization).
+		country_colonial_invest_effectiveness_add = 0.25
 	}
 
 	ai_weight = {
@@ -347,6 +350,8 @@ automated_surveillance = {
 		country_auto_surveillance_pb_principles_bool = yes
 		character_coup_strength_mult = -0.10
 		country_legislative_override_capacity_add = 1
+		# Colonial empire: a garrison that watches dissent (see globalization).
+		country_colonial_garrison_effectiveness_add = 0.25
 	}
 
 	ai_weight = {
@@ -376,7 +381,7 @@ advanced_body_armor = {
 
 rapid_deployment_forces = {
 	# Stealth Reconnaissance Drone Carrier, Expeditionary Sea Bases units,
-	# Advanced Logisitical Support mobilization option
+	# Advanced Logistical Support mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/rapid_deployment_forces.dds"
 	category = military
@@ -402,7 +407,7 @@ rapid_deployment_forces = {
 }
 
 globalization = {
-	# Global Ports PM for Ports, Just-in-Time Logisitics PM for Trade Centers,
+	# Global Ports PM for Ports, Just-in-Time Logistics PM for Trade Centers,
 	# Securitization and Derivatives law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/globalization.dds"
@@ -427,8 +432,13 @@ globalization = {
 		country_power_bloc_formation_mandates_add = 1
 
 		# Colonial empire (je_colonial_empire): globalization makes empire
-		# unsustainable -- decolonization becomes irresistible.
+		# unsustainable unless the metropole pays to hold it. Six era 9 techs
+		# (this one among them) add +0.25 to one programme's effectiveness each:
+		# +1.5 with all three programmes at level 3, against this tech's and
+		# Knowledge Economy's -2.25 (decolonization.md § Colonial Programmes).
 		country_colonial_stability_drift_add = -1.5
+		# Global capital reaches the colonies: development investment pays more.
+		country_colonial_invest_effectiveness_add = 0.25
 		country_can_use_bail_in_bool = yes
 	}
 
@@ -529,6 +539,8 @@ digital_entertainment = {
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
+		# Colonial empire: the metropole's culture on every screen (see globalization).
+		country_colonial_assim_effectiveness_add = 0.25
 	}
 
 	unlocking_technologies = {
@@ -556,6 +568,8 @@ digital_education = {
 		state_education_access_add = -0.1
 		country_digital_ed_pb_principles_bool = yes
 		state_literacy_growth_add = 0.0001
+		# Colonial empire: the metropole's schooling at a distance (see globalization).
+		country_colonial_assim_effectiveness_add = 0.25
 	}
 
 	ai_weight = {
@@ -603,6 +617,8 @@ terrorism_and_anti_terrorism = {
 	modifier = {
 		country_influence_mult = 0.1
 		state_building_barrack_max_level_add = 50
+		# Colonial empire: counterinsurgency doctrine (see globalization).
+		country_colonial_garrison_effectiveness_add = 0.25
 	}
 
 	ai_weight = {

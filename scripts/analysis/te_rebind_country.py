@@ -21,7 +21,9 @@ panel_loc_keys): the tab's wide composer (gen_te_systems_window.TABS) and, for a
 that opens without its entry, its readout (Tab.readout, gen.ni_types), every type it
 draws outside te_own_country_only and outside a block default that every place
 drawing the type overrides, the templates they use, and every loc key their text
-renders, through splices and GetCustom (common/customizable_localization). A read is
+renders, through splices, GetCustom (common/customizable_localization) and the
+tooltips they ask of a scripted GUI (ExecuteTooltip, IsValidTooltip, IsShownTooltip:
+the custom_tooltip keys its script prints, gui_test_helpers.ScriptedGuis). A read is
 one of:
 
   mechanical    `JournalEntry.GetCountry.` or `GetPlayer.`, which becomes `Country.`.
@@ -48,12 +50,24 @@ one of:
                 wide: any script token that spells the key counts, so look before
                 splitting. A customizable localization entry's keys are not script's:
                 they render in the context of the text that calls GetCustom.
+  scripted tooltip
+                (loc) a key a scripted GUI's tooltip prints: a custom_tooltip of its
+                effect (ExecuteTooltip) or of its is_valid or is_shown, or of a
+                scripted effect or trigger those call. It renders in script's
+                context, with the scripted GUI's root as its scope and no Country,
+                so --write leaves it: read the root (SCOPE.GetRootScope, as
+                covert_last_exposed_sgui's lines do, the markup passing
+                GuiScope.SetRoot( Country.MakeScope )), or guard the hover.
   item tooltip  a tooltip inside a datamodel's item, in markup or the loc key it
                 renders. Gotcha #24 found a chart bar's (the item's own widget) has
                 only the item's context; a tooltip deeper in an item is unverified,
                 and the mod's own all root on GetPlayer, so it is left too. A world
                 read keeps the player's copy (in loc it goes in WORLD_LOC); bind the
                 rest by hand and check it in game, or guard the control it is on.
+                A blockoverride "bar_tooltip" counts only where it fills a chart's
+                bar (an instance of te_history_chart or of a type derived from it)
+                or a block that sits in a datamodel's item; any other block of
+                that name (Seabed's pool bar) is plain markup.
 
 A loc key another candidate tab's panel renders too (survey_tab's others: public
 tabs and test_te_system_tab_bodies.UNBOUND) says which: if it goes in WORLD_LOC, it
@@ -85,7 +99,8 @@ import gui_test_helpers as h  # noqa: E402
 
 MECHANICAL = ("JournalEntry.GetCountry", "GetPlayer")
 NEW = "Country"
-CLASSES = ("mechanical", "entry-only", "bare", "player-other", "shadowed", "shared", "item tooltip")
+CLASSES = ("mechanical", "entry-only", "bare", "player-other", "shadowed", "scripted tooltip", "shared",
+           "item tooltip")
 WRITABLE = {"mechanical"}
 
 # A datacontext or datamodel whose last call names a country other than the panel's
@@ -96,8 +111,11 @@ _OTHER = re.compile(r"^(?:Get|Access)?(?:Top)?(?:Country|Countries|Owner|Overlor
 _SAME = {"JournalEntry.GetCountry", "Country", "Country.Self"}
 _DATAMODEL = re.compile(r"\bdatamodel\s*=")
 _TOOLTIP = re.compile(r'\btooltip\s*=\s*"([^"]*)"')
-# A chart bar's tooltip, which the chart's instance fills from outside its datamodel.
+# A chart bar's tooltip, which the chart's instance fills from outside its datamodel
+# (_bar_item says which blockoverrides of the name are one).
 _BAR_TOOLTIP = re.compile(r'blockoverride\s+"bar_tooltip"\s*\{')
+_BAR_BLOCK = re.compile(r'\bblock\s+"bar_tooltip"\s*\{')
+CHART = "te_history_chart"
 _GENERATED = re.compile(r"AUTO-GENERATED", re.I)
 _GENERATOR = re.compile(r"scripts/generators/[\w/]+\.py")
 _TOKEN = re.compile(r"[A-Za-z_][\w.\-]*")
@@ -257,7 +275,7 @@ def _inner_blocks(body, a, b):
     return out
 
 
-def _keys_where(names, types, loc, pick, view, custom):
+def _keys_where(names, types, loc, pick, view, custom, scripted=None, contexts=()):
     """{key: why} for the loc closure of the keys named in the parts of each type
     that `pick(name, body)` gives: a list of (start, end, why), or None."""
     roots = {}
@@ -266,22 +284,42 @@ def _keys_where(names, types, loc, pick, view, custom):
         for a, b, why in pick(name, body) or ():
             for key in _gui_keys(body[a:b + 1], loc, custom):
                 roots.setdefault(key, why)
-    return _closure_with_source(roots, loc, custom)
+    return _closure_with_source(roots, loc, custom, scripted, contexts)
 
 
-def _closure_with_source(roots, loc, custom):
+def _scripted_tooltip_keys(asked, keys, loc, custom, scripted, contexts):
+    """{key: which scripted GUI's tooltip prints it} for each loc key a scripted
+    tooltip of the panel prints (asked: gui_test_helpers.panel_tooltips' calls in
+    markup; keys: the panel's loc keys, whose values may ask for one too) and
+    every key those reach."""
+    roots = {}
+    for where, td, pos, sguis, method in asked:
+        at = f"{td.path}:{td.line + h._line_of(td, pos)}"
+        for name in sorted(sguis):
+            for key in sorted(scripted.keys(name, method, loc)):
+                roots.setdefault(key, f"{name}'s {method} ({at}, the {h.SCRIPTED_TOOLTIP[method]} in "
+                                      f"common/scripted_guis/)")
+    for holder in sorted(keys):
+        for name, method, _ in h.tooltip_calls(loc[holder], own=False):
+            for sgui in sorted({name} if name else contexts):
+                for key in sorted(scripted.keys(sgui, method, loc)):
+                    roots.setdefault(key, f"{sgui}'s {method} (asked by loc key {holder}, the "
+                                          f"{h.SCRIPTED_TOOLTIP[method]} in common/scripted_guis/)")
+    return _closure_with_source(roots, loc, custom, scripted, contexts)
+
+
+def _closure_with_source(roots, loc, custom, scripted=None, contexts=()):
     """{key: source} for the roots and every key they reach (loc_closure, own=False),
-    each with the source of the first root that reaches it."""
+    each with the source of the first root that reaches it. scripted and contexts
+    as gui_test_helpers.scripted_keys: no scripted tooltip is followed when None."""
+    scripted = h.ScriptedGuis(None) if scripted is None else scripted
     out, todo = {}, collections.deque(roots.items())
     while todo:
         key, source = todo.popleft()
         if key in out or key not in loc:
             continue
         out[key] = source
-        value = h._OWN_BRANCH.sub(r"\1''", loc[key])
-        todo.extend((k, source) for k in re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
-        todo.extend((k, source) for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
-        todo.extend((k, source) for k in h.custom_keys(value, custom))
+        todo.extend((k, source) for k in sorted(h.value_keys(loc[key], loc, False, custom, scripted, contexts)))
     return out
 
 
@@ -358,10 +396,40 @@ def _is_frame(name, types):
 @functools.lru_cache(maxsize=4096)
 def _tooltip_spans(body):
     """A body's tooltip values (start, end) and bar_tooltip blockoverrides
-    (start, end, its opening), each in order."""
+    (start, end, its opening, the widget it is written in: the name the widget
+    is an instance of, None at the body's root), each in order."""
     values = [(m.start(1), m.end(1)) for m in _TOOLTIP.finditer(body)]
-    bars = [(*h.enclosing_block(body, m.end()), m.start()) for m in _BAR_TOOLTIP.finditer(body)]
+    bars = []
+    for m in _BAR_TOOLTIP.finditer(body):
+        a = h._holder(body, m.start())[0]  # through a block or a blockoverride it is nested in
+        opener = h._OPENER.search(body, max(0, a - 120), a + 1) if a else None
+        bars.append((*h.enclosing_block(body, m.end()), m.start(), (opener.group(1) if opener else "") if a else None))
     return values, bars
+
+
+def _bar_item(name, instance, types, item, items_of):
+    """Whether a blockoverride "bar_tooltip" fills a datamodel item's tooltip:
+    written in an instance of a chart (te_history_chart, or a type derived from
+    it), or filling a `block "bar_tooltip"` that sits in a datamodel's item, by
+    the test _item_tooltip makes of a tooltip. `instance` is what the widget
+    the override is written in instances; None at the root of type `name`,
+    where it is that type's base. Seabed's pool bar is neither (#1361)."""
+    target = types[name].base if instance is None and name in types else instance
+    seen, t = set(), target
+    while t in types and t not in seen:
+        if t == CHART:
+            return True
+        seen.add(t)
+        t = types[t].base
+    if t == CHART:
+        return True
+    for t in h.type_closure({target}, types) if target in types else ():
+        body = types[t].body
+        for m in _BAR_BLOCK.finditer(body):
+            if item.get(t) or any(c < m.start() < d for a, b, _ in items_of.get(t, ())
+                                  for c, d in _inner_blocks(body, a, b)):
+                return True
+    return False
 
 
 def _in_sorted(pos, spans):
@@ -369,12 +437,12 @@ def _in_sorted(pos, spans):
     return i >= 0 and spans[i][0] <= pos < spans[i][1]
 
 
-def _item_tooltip(name, td, pos, item, items_of):
+def _item_tooltip(name, td, pos, item, items_of, types):
     """Where a read at a body offset sits in a tooltip inside a datamodel's item
     (a chart bar's bar_tooltip, or a tooltip = "..." in an item), or None."""
     values, bars = _tooltip_spans(td.body)
-    for a, b, opening in bars:
-        if a < pos < b:
+    for a, b, opening, instance in bars:
+        if a < pos < b and _bar_item(name, instance, types, item, items_of):
             return f"{td.path}:{td.line + h._line_of(td, opening)} bar_tooltip"
     if not _in_sorted(pos, values):
         return None
@@ -418,14 +486,16 @@ def survey(target, root=REPO, world_loc=(), gate=None, others=None, also=()):
             if why:
                 kind = "shadowed"
             else:
-                why = _item_tooltip(f.where, td, pos, item, items_of) or ""
+                why = _item_tooltip(f.where, td, pos, item, items_of, types) or ""
                 if why:
                     kind = "item tooltip"
         block = next((name for a, b, name in _block_spans(td.body) if a < pos < b), "")
         markup.append(Read(kind, f, why, block))
         generated.setdefault(f.path, generator_of(root, f.path))
 
-    keys = h.panel_loc_keys(names, types, loc, templates, custom)
+    scripted = h.scripted_guis(root)
+    asked, contexts = h.panel_tooltips(names, types, templates)
+    keys = h.panel_loc_keys(names, types, loc, templates, custom, scripted)
     world_loc = set(world_loc)
     shared = _script_keys(root, loc, types, custom)
 
@@ -443,17 +513,24 @@ def survey(target, root=REPO, world_loc=(), gate=None, others=None, also=()):
         out = [(m.start(), m.end(), why) for a, e, why in items_of.get(n, []) for m in _TOOLTIP.finditer(b, a, e)
                if h.enclosing_block(b, m.start())[0] != a]
         td = types[n]
-        return out + [(*h.enclosing_block(b, m.end()), f"{td.path}:{td.line + h._line_of(td, m.start())} bar_tooltip")
-                      for m in _BAR_TOOLTIP.finditer(b)]
+        return out + [(a, e, f"{td.path}:{td.line + h._line_of(td, opening)} bar_tooltip")
+                      for a, e, opening, instance in _tooltip_spans(td.body)[1]
+                      if _bar_item(n, instance, types, item, items_of)]
 
-    shadow_keys = _keys_where(opened, types, loc, shadowed, view, custom)
-    item_keys = _keys_where(opened, types, loc, item_tooltips, view, custom)
+    shadow_keys = _keys_where(opened, types, loc, shadowed, view, custom, scripted, contexts)
+    item_keys = _keys_where(opened, types, loc, item_tooltips, view, custom, scripted, contexts)
+    tooltip_keys = _scripted_tooltip_keys(asked, keys, loc, custom, scripted, contexts)
+    # what the panel's own text renders, the scripted tooltips left out: a key only a
+    # scripted tooltip prints has script for its one context, so it is not shared
+    direct = h.panel_loc_keys(names, types, loc, templates, custom, h.ScriptedGuis(None))
     report = {}
     for f in h.loc_reads(keys - world_loc, index):
         kr = report.get(f.where)
         if kr is None:
             kr = report[f.where] = KeyReport(f.where, f.path, f.line, generated=generator_of(root, f.path))
-            if f.where in shared:
+            if f.where in tooltip_keys:
+                kr.notes.append(("scripted tooltip", tooltip_keys[f.where]))
+            if f.where in shared and (f.where in direct or f.where not in tooltip_keys):
                 kr.notes.append(("shared", shared[f.where]))
             if f.where in item_keys:
                 kr.notes.append(("item tooltip", item_keys[f.where]))
@@ -493,6 +570,9 @@ HINTS = {
     "bare": "drop it, or pass Country.Self",
     "player-other": "Country's own function by hand, or guard it (gotcha #35)",
     "shadowed": "Country here is another country: read the shown one from a block outside",
+    "scripted tooltip": ("it renders in script's context, with the scripted GUI's root as its scope and no Country: "
+                         "read the root (SCOPE.GetRootScope, as covert_last_exposed_sgui's lines do, the markup passing "
+                         "GuiScope.SetRoot( Country.MakeScope )), or guard the hover"),
     "shared": "split it: a _ni copy for the panel, the original left as it is",
     "item tooltip": ("a chart bar's has only the item's context (gotcha #24); deeper in an item is unverified. "
                      "A world read keeps GetPlayer (a loc key goes in WORLD_LOC); else bind it and check in game, "

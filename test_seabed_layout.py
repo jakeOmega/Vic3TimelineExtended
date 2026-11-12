@@ -302,7 +302,8 @@ class ScriptTooltipTest(unittest.TestCase):
     country's panel reads the shown country, not the player. The Free
     figure's hover is te_seabed_build_in_sgui's ExecuteTooltip: its lines
     come from the effect's custom_tooltip keys, which no panel's loc closure
-    reaches, so BindingTest can't see them. They read the scripted GUI's root
+    reached when this was written (BindingTest follows them since #1361; this
+    holds the lines by name). They read the scripted GUI's root
     (SCOPE.GetRootScope, covert_last_exposed_sgui's form)."""
 
     TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip)")

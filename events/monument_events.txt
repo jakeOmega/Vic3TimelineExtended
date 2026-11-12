@@ -2113,7 +2113,7 @@ monument_events.16 = {
 					gm_state_is_contested = yes
 					owner = root
 				}
-				trigger_event = { id = monument_events.17 }
+				trigger_event = { id = monument_events.17 } # REVIEWED 2026-11-12 (trigger_event_cycle): this event goes to a player only (gm_notify_new_contests: is_ai = no) and its immediate removed every gm_new_contest, which that effect reads, so the refresh behind monument_events.17's options does not send this event again
 			}
 		}
 		# A monument beside another is decided on its own row.
@@ -2170,7 +2170,7 @@ monument_events.17 = {
 			limit = { owner = scope:monument_owner }
 			gm_state_choose_tear_down = yes
 			hidden_effect = {
-				owner = { trigger_event = { id = monument_events.20 } }
+				owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh reaches this event again only through gm_notify_new_contests -> monument_events.16, whose immediate removed this state's gm_new_contest before the option that sent this
 			}
 		}
 	}
@@ -2181,7 +2181,7 @@ monument_events.17 = {
 			limit = { owner = scope:monument_owner }
 			gm_state_choose_rededicate = yes
 			hidden_effect = {
-				owner = { trigger_event = { id = monument_events.20 } }
+				owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh reaches this event again only through gm_notify_new_contests -> monument_events.16, whose immediate removed this state's gm_new_contest before the option that sent this
 			}
 		}
 	}
@@ -2192,7 +2192,7 @@ monument_events.17 = {
 			limit = { owner = scope:monument_owner }
 			gm_state_choose_preserve = yes
 			hidden_effect = {
-				owner = { trigger_event = { id = monument_events.20 } }
+				owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh reaches this event again only through gm_notify_new_contests -> monument_events.16, whose immediate removed this state's gm_new_contest before the option that sent this
 			}
 		}
 	}

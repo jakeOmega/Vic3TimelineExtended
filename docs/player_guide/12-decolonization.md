@@ -50,6 +50,9 @@ A great power with a few well-integrated colonies and little international
 opposition can hold on; a smaller empire condemned by the big powers usually
 can't. Two era 9 technologies, Knowledge Economy and Globalization, add −0.75
 and −1.5 a month to the drift, so holding on gets harder as the game goes on.
+Six other era 9 technologies make the colonial programs stronger, so an empire
+that pays for all three at level 3 can still hold on (see
+[The three colonial programs](#the-three-colonial-programs)).
 
 ### The Colonial Empire panels
 
@@ -280,8 +283,8 @@ Each program runs at a level from 0 (off) to 3, set with the minus and plus
 buttons on its row. Level 3 is the full program and each level is a third of
 it: a third of its value to the bar every month, a third of its effects and a
 third of its running cost. The bar values below are the base at level 3; your
-laws change them, and the row shows what the program adds now; hover it for
-what one more level would add and for its costs.
+laws and some technologies change them, and the row shows what the program adds
+now; hover it for what one more level would add and for its costs.
 
 | Program | Requirement | Bar, per month at level 3 | Costs and side effects at level 3 |
 |---|---|---|---|
@@ -306,6 +309,18 @@ Assimilation minority-rights law strengthen assimilation, and Universal
 Citizenship weakens it. The program you run longest also decides how the empire
 ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)); a month at
 a lower level counts as a third of a month for each level.
+
+Six era 9 technologies each make one program worth +0.25 a month more at level
+3: Globalization and Digital Telecommunications strengthen investment, Terrorism
+and Antiterrorism and Automated Surveillance the garrison, and Digital Education
+and Digital Entertainment assimilation. With all three programs at level 3 that
+is +1.5 a month, against the −2.25 that Knowledge Economy and Globalization
+take. So late in the game a great power with a colony or two and little
+condemnation can still hold them if it pays for every program, and an empire
+that doesn't pay can't. The laws that weaken the garrison and assimilation
+still do: under Protected Speech, the Protection or Affirmative Action
+minority-rights law and Universal Citizenship, the two are worth only about +0.4
+and +0.2 a month at level 3, even with all four of their technologies.
 
 ### Releasing colonies
 
@@ -359,7 +374,7 @@ subject ends the entry (see [How a colonial empire ends](#how-a-colonial-empire-
 
 Once the UN charter carries Charter Reform II and the Decolonization Resolution
 is in force, the General Assembly can order a referendum in a direct subject
-whose liberty desire is 50 or more. You hold it, and the subject leaves with a
+whose liberty desire is 50 or more, unless a war is already set to free it. You hold it, and the subject leaves with a
 chance equal to its liberty desire, or you refuse and pay in standing,
 prestige and the loyalty of every subject (see [Supervised
 referendums](10-united-nations.md#supervised-referendums)).
@@ -451,7 +466,8 @@ Open Talks on a war's row asks for a popup first. Talks take six months while
 the fighting goes on. When the accords are signed, your claim is dropped and
 the rebels accept a peace: offer one from the peace screen, conceding their
 independence if they refuse a white peace. An AI opens talks after half a year
-of war support in the red, or after four years.
+of war support in the red, after four years, or once the war is counting down
+to a stalemate.
 
 A war that has run four years, with your war support in it at 25 or below for a
 year running, breaks the home front. Without a voting franchise, junior

@@ -333,7 +333,6 @@ SERVER_TYPES = {
     "scripted_effects": "Scripted Effects",
     "scripted_triggers": "Scripted Triggers",
     "scripted_guis": "Scripted GUIs",
-    "scripted_progress_bars": "Scripted Progress Bars",
     "on_actions": "On Actions",
 }
 # GUI names that land in one global registry whichever file defines them
