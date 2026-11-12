@@ -5635,3 +5635,27 @@ Probed on 1.15.0 with `-debug_mode`; the evidence and the rest of what the game 
 ## `gdp_ownership_ratio` Is a Trigger With No Value Form: Rank Owners by Bands, Not `ordered_country`
 
 `gdp_ownership_ratio = { target = X value > 0.05 }` only compares; nothing returns the share as a number, so `ordered_country = { order_by = ... }` cannot rank foreign owners by it, and a `random_country` with the 5% test names any owner, not the largest (`decolonization_events.15` did, #1617). Rank by bands: clear the scope, then run one `random_country` per threshold from the top (50%, 35%, 25%, 15%, 10%, 5%), each guarded by `NOT = { exists = scope:X }`, so the first band an owner reaches names it. The shares sum to at most 1, so the top bands hold one or two countries. `decol_save_biggest_foreign_owner` (`common/scripted_effects/decolonization.txt`) is the worked example. The same shape serves any trigger-only comparison.
+
+## `list_scopes` Lists Only a Positive Count: Write "No X That Fails" as `filter` Plus `count = all` (1.15)
+
+`list_scopes = yes` (and `show_trigger_per_scope = yes`) on an `any_*` trigger make its tooltip name the scopes it
+counted. Every vanilla use (`je_consolidate_colonial_rule`, `je_greek_nationalism`, the tsar scripted buttons) is a
+positive count: `count >= N`, `percent >= x` or `count = all`, with `filter = { ... }` saying which scopes are counted
+(`count = all` and `percent` count against the filtered set). Whether a count wrapped in `NOT = { }` lists anything is
+untested, so a gate written "no great power that fails" (`NOT = { any_country = { <who> <fails> } }`) becomes
+`any_country = { filter = { <who> } <passes> count = all list_scopes = yes }`. Two things keep it exactly equal:
+put it under `trigger_if = { limit = { any_country = { <who> } } ... }`, since the NOT form passed over an empty set
+and what `count = all` does there is unverified; and "at most one fails" (`NOT = { ... count >= 2 }`) becomes
+`count >= <script value: the size of the set less one>`, since no vanilla trigger uses `count <`. The United Nations
+of Earth gates are the worked example (`formable_gating_triggers.txt`, `te_formation_gating_values.txt`), and
+`test_une_formation_gates.py` checks both forms against each other over random worlds. Whether a list survives inside
+`custom_tooltip = { text = ... }` is C10 (`docs/audits/vanilla_1_15_prep.md`), open.
+
+## Latitude Triggers Are State-Scoped and Read the State Region's Centre Point (1.15)
+
+`in_tropics`, `in_north_hemisphere` and `in_south_hemisphere` take a state (not a state region, a province or a
+country) and test where its state region's centre point lies: between the tropics, north or south of the equator.
+None is used in vanilla 1.15's `common/`. Offline, the closest stand-in for that point is each state's reference
+place in `scripts/generators/data/local_climate.csv` (column `latitude`, whole degrees), which is how the space
+elevator's site list and the Antarctic station AI were checked (#1454); a state within a degree or two of a tropic
+can fall either way in the game. A building's `possible` is in state scope, so `in_tropics = yes` goes there bare.
