@@ -27,6 +27,7 @@ _None._
 - `extra_law_events.25.d_baltic`: "catechisms" (Christian) — **2026-11-12**: says what the language survives in, a fact about the language and not a scene in the country; offered on the primary culture's language, which fixes no faith
 - `extra_law_events.25.d_germanic`: "Bible" (Christian) — **2026-11-12**: says what the language survives in, a fact about the language and not a scene in the country; offered on the primary culture's language, which fixes no faith
 - `extra_law_events.25.d_iranic`: "priesthood" (Christian, Hindu, Shinto and Chinese) — **2026-11-12**: says what the language survives in, a fact about the language and not a scene in the country; offered on the primary culture's language, which fixes no faith
+- `extra_law_events.25.d_slavic`: "Church" (Christian) — **2026-11-12**: a culture-family variant, shown on a Slavic primary language and judged right in #1531; the language's champions are the church's scholars wherever it is revived
 - `extra_law_events.3.f_gold`: "crown of thorns" (Christian), "crucify" (Christian) — **2026-11-12**: a real quotation, Bryan's Cross of Gold speech of 1896, worded as he gave it
 - `formation_te.10.d`: "Muslim" (Islamic) — **2026-11-12**: names the faith of the state the event is about, which extra_on_actions.txt picks for its Muslim state religion, not the reader's
 - `inheritance_events.4.f`: "Gospel" (Christian) — **2026-11-12**: a real quotation; the word is in the title of Carnegie's essay, in the attribution
@@ -45,8 +46,8 @@ _None._
 - events read: 1046
 - loc keys read: 10273
 - uses of a listed word that a gate makes safe: 54
-- total flags: 18
+- total flags: 19
 - unreviewed: 0
-- exempted: 18
+- exempted: 19
 - stale tags: 0
 

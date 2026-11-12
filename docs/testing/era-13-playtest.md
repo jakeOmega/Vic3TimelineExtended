@@ -228,7 +228,7 @@ country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
 6. **Events.** Over a twenty-year debate, count the events: no two within two
    years, The First Clinics, Fair Play, Old Enough to Choose and Everyone Has
    Ears Now once each, at most eight in all. Old Enough to Choose and Everyone
-   Has Ears Now never come under Natural Form, and The Pulpits Speak only with
+   Has Ears Now never come under Natural Form, and The Faithful Object only with
    a powerful Devout group, whose name it shows.
 
 ## Phase 3: Frontier AI Control

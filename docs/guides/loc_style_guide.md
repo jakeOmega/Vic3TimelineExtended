@@ -283,7 +283,7 @@ The same event in three forms, none ending on a turn:
 - **One name per thing.** Use the in-game name, spelled and capitalized as its own key renders it, and splice it (`$key$`) rather than retyping it, so a rename reaches every mention. Splice only a name that reads as a noun in the sentence: a law whose name is "Ministry of Intelligence and Security Established" goes in a list of laws, or the sentence is written around it.
 - **Props that fit every era the event can fire in.** "Crates", not "bales"; "a message", not "a telegram", unless the event is gated to the years that had them.
 - **A coined term says what it means** the first time, or links the concept that does.
-- **Do not put one faith's furniture in a scene any country can get** (a priest, a pew, a sermon). Write the scene without a named faith or gate the version. `event_creation_guide.md` has the pattern.
+- **Do not put one faith's furniture in a scene any country can get** (a priest, a pew, a sermon). Write the scene without a named faith or gate the version. `event_creation_guide.md` has the pattern, and `faith_scene_audit` fails CI on a faith's word that another faith's country can be shown (§ "What the machine checks").
 
 ## Before you commit a text
 
@@ -303,6 +303,8 @@ Two lints run in `scripts/preflight.py` and CI. Both are ratchets: the mod's old
 - `python3 scripts/analysis/flavor_forms.py --check` fails when a form that is over a third of its chain gains a text. After rewriting a chain, `--update`.
 
 Neither can judge whether a sentence is particular, whether a game could make it false, or whether it ends on a kicker. Those are the writer's.
+
+One audit reads the script beside the text, and is not a ratchet: `python3 faith_scene_audit.py --strict` (CI runs it with the other audits) fails when an event can show a text with one faith's word in it (a priest, a mosque, a guru, the faith's name) to a country whose state religion the word does not fit (#1531). It covers what an event shows: titles, descriptions, flavor, options, tooltips and the modifiers it adds. It reads religion gates only, so a text gated on culture or on a variable, a real quotation and a metaphor ("Cathedrals of Coral") are flagged and take `# REVIEWED YYYY-MM-DD (faith_scene): why` trailing on the loc line. `--explain <key>` lists where a key is named and the gate read there. The word list, with the faiths each word fits, is `VOCABULARY` in the audit: add a word there when a scene gets past it.
 
 ## Still open
 
