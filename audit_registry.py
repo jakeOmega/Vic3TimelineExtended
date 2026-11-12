@@ -214,6 +214,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("system_ungated", "unchosen_self_action", "imputed_foreign_action"),
     ),
     Audit(
+        "faith_scene_audit",
+        "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
+        "a country of another state religion can be shown: its title, description, flavor, option, "
+        "tooltip or a modifier it adds. Write the scene without a named faith, or gate that version on "
+        "the faith (#1531).",
+        where="trailing on the key's loc line",
+        tags=("faith_scene",),
+        note="`--explain <key>` lists where a key is named and the gate read at each place. It reads "
+             "religion gates only: a text gated on culture, a country or a variable is flagged and "
+             "takes the comment. The word list is `VOCABULARY` in the audit.",
+    ),
+    Audit(
         "silent_variable_audit",
         "An event option that moves a number the UI shows with `change_variable` / `set_variable`, "
         "which render nothing in the tooltip. Wrap it in a `custom_tooltip`.",
@@ -231,8 +243,9 @@ AUDITS: tuple[Audit, ...] = (
         "event_magnitude_audit",
         "A hardcoded amount in an event for a resource that grows fast over the game (prestige is the "
         "model case), which is invisible at late-game scale.",
-        ci=None,
         where=VALUE_LINE,
+        note="Reads `events/` only: an amount granted from a scripted effect is flagged only where an "
+             "event repeats it, as in a `show_as_tooltip` (#1593).",
     ),
     # --- treaties, blocs, companies, laws ------------------------------------
     Audit(
@@ -247,9 +260,17 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "treaty_evaluation_scope_audit",
-        "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root.",
+        "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root; or a "
+        "party scope in a block that does not bind it: `scope:source_country` / `scope:target_country` "
+        "in `visible` / `possible` (use root and `scope:other_country`), or `scope:other_country` in "
+        "`can_ratify` / `requirement_to_maintain` (use source / target; first / second on a mutual "
+        "article).",
         post_load=False,
+        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify` or "
+              "`requirement_to_maintain`; a read in `evaluation_chance` takes none",
+        tags=("treaty_scope",),
         report=None,
+        note="Direct reads only: it does not open a scripted trigger or value the block calls.",
     ),
     Audit(
         "principle_tier_audit",

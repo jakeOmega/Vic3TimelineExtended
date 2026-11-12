@@ -329,7 +329,8 @@ surveillance_events.3 = {
 	}
 }
 
-# Event 4: AI Predictive Policing
+# Event 4: Predictive Policing (era 9 software: the gate has no AI technology,
+# so neither the text nor the modifiers' names say AI; #1616)
 # AI systems begin predicting crimes before they happen.
 surveillance_events.4 = {
 	type = country_event
@@ -386,7 +387,7 @@ surveillance_events.4 = {
 		}
 	}
 
-	# Ban AI policing systems
+	# Ban the prediction software from policing
 	option = {
 		name = surveillance_events.4.c
 		ai_chance = {

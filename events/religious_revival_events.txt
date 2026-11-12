@@ -7,8 +7,10 @@
 # Inspired by 20th/21st century religious-political movements.
 #
 # Religion-variant descriptions via heritage traits:
-#   heritage_christian, heritage_islamic, heritage_dharmic, heritage_taoic,
-#   heritage_jewish, plus a generic default.
+#   heritage_christian, heritage_islamic, heritage_jewish, plus a generic
+#   default that names no faith. The *_dharmic keys are Hindu scenes (gurus,
+#   caste, Hindutva), so they ask for rel:hindu, not heritage_dharmic, which
+#   also covers the Buddhist faiths and Sikhism (2026-11-12, #1544).
 #
 # Law gating:
 #   - state_atheism blocks most events (except liberation theology / welfare)
@@ -34,7 +36,7 @@ religious_revival_events.1 = {
 	desc = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.1.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.1.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.1.d_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.1.d }
 		}
 	}
@@ -42,7 +44,7 @@ religious_revival_events.1 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.1.f_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.1.f_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.1.f_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.1.f }
 		}
 	}
@@ -186,7 +188,8 @@ religious_revival_events.2 = {
 	desc = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.2.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.2.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.2.d_dharmic }
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = religious_revival_events.2.d_christian }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.2.d }
 		}
 	}
@@ -194,7 +197,8 @@ religious_revival_events.2 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.2.f_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.2.f_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.2.f_dharmic }
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = religious_revival_events.2.f_christian }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.2.f }
 		}
 	}
@@ -277,7 +281,8 @@ religious_revival_events.2 = {
 		}
 	}
 
-	# Tax megachurches like businesses
+	# No favors for the broadcasters. The option levies no tax (its old name
+	# promised one, #1615): it angers the Devout and pleases academics.
 	option = {
 		name = religious_revival_events.2.c
 		ai_chance = {
@@ -318,7 +323,7 @@ religious_revival_events.3 = {
 			# over the underground-atheism body, and t_atheism is unreachable for them.
 			triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.t_atheism }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.t_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.t_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.3.t_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.t }
 		}
 	}
@@ -327,7 +332,7 @@ religious_revival_events.3 = {
 		first_valid = {
 			triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.d_atheism }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.3.d_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.d }
 		}
 	}
@@ -336,7 +341,7 @@ religious_revival_events.3 = {
 		first_valid = {
 			triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.f_atheism }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.f_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.f_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.3.f_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.f }
 		}
 	}
@@ -460,7 +465,7 @@ religious_revival_events.4 = {
 	title = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.4.t_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.4.t_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.4.t_dharmic }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_jewish } } desc = religious_revival_events.4.t_jewish }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.4.t }
 		}
@@ -469,7 +474,7 @@ religious_revival_events.4 = {
 	desc = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.4.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.4.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.4.d_dharmic }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_jewish } } desc = religious_revival_events.4.d_jewish }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.4.d }
 		}
@@ -478,7 +483,7 @@ religious_revival_events.4 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.4.f_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.4.f_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.4.f_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.4.f }
 		}
 	}
@@ -613,7 +618,7 @@ religious_revival_events.5 = {
 	desc = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.5.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.5.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.5.d_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.5.d }
 		}
 	}
@@ -621,6 +626,7 @@ religious_revival_events.5 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.5.f_islamic }
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = religious_revival_events.5.f_christian }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.5.f }
 		}
 	}
@@ -739,7 +745,7 @@ religious_revival_events.6 = {
 	desc = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.6.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.6.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.6.d_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.6.d }
 		}
 	}
@@ -747,7 +753,7 @@ religious_revival_events.6 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.6.f_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.6.f_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.6.f_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.6.f }
 		}
 	}
@@ -888,7 +894,7 @@ religious_revival_events.7 = {
 		first_valid = {
 			triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.7.d_atheism }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.7.d_islamic }
-			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.7.d_dharmic }
+			triggered_desc = { trigger = { country_has_state_religion = rel:hindu } desc = religious_revival_events.7.d_dharmic }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.7.d }
 		}
 	}

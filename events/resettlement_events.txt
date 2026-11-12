@@ -117,9 +117,27 @@ resettlement.3 = {
 
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 
-	title = resettlement.3.t
-	desc = resettlement.3.d
-	flavor = resettlement.3.f
+	# The winter text only where the destination's winter freezes (Local Climate's
+	# coldest-month mean, warming included); frontiers also open in the tropics and
+	# the deserts, which get the neutral first-season text.
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { scope:rs_event_state = { te_climate_winter_eff <= 0 } } desc = resettlement.3.t }
+			triggered_desc = { trigger = { always = yes } desc = resettlement.3.t_season }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { scope:rs_event_state = { te_climate_winter_eff <= 0 } } desc = resettlement.3.d }
+			triggered_desc = { trigger = { always = yes } desc = resettlement.3.d_season }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { scope:rs_event_state = { te_climate_winter_eff <= 0 } } desc = resettlement.3.f }
+			triggered_desc = { trigger = { always = yes } desc = resettlement.3.f_season }
+		}
+	}
 
 	duration = 3
 

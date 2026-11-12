@@ -25,6 +25,21 @@ class ClassifyTests(unittest.TestCase):
             r"First.\n\nThe second paragraph runs on well past twelve words, so it is no closing line built to land."))
 
 
+class KeyTests(unittest.TestCase):
+    def test_only_flavor_keys_count(self):
+        def is_flavor(key):
+            return bool(ff.FLAVOR_KEY.match(f' {key}:0 "Text."'))
+        for key in ("chain.1.f", "chain.1.f_first", "chain.12.flavor", "chain.3.flavor_alt", "chain.60.f.cat2"):
+            self.assertTrue(is_flavor(key), key)
+        # Option labels and a form's name that happen to start with f (#1550).
+        for key in ("monument_events.11.faith_shinto", "monument_events.24.forum", "chain.1.a", "chain.1.f.tt"):
+            self.assertFalse(is_flavor(key), key)
+
+    def test_an_option_named_like_a_flavor_is_not_one(self):
+        self.assertIn("te_map_modes.1.f_dismiss", ff.option_names())
+        self.assertNotIn("te_map_modes.1.f_dismiss", [key for key, _ in ff.load()["te_map_modes"]])
+
+
 class RepoTests(unittest.TestCase):
     def test_reads_the_mod_s_flavor(self):
         chains = ff.load()

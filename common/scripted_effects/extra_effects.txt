@@ -126,6 +126,86 @@ generic_wonder_construction_base = {
 
 space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 REBUILD = yes } }
 
+# The halt wonder_events.2.a orders (#1621): while the owner holds the timed
+# variable space_elevator_halt (180 days), each of its sites stands on Space
+# Elevator Construction (Paused), the method a player would otherwise switch
+# to by hand to stop paying for a site that is not building. The option runs
+# space_elevator_halt_site at once and space_elevator_on_action runs it again
+# every month of the halt, so a method picked in the building panel meanwhile
+# is remembered as the speed to return to and the site is paused again (it
+# would pay full inputs for no progress: the pulse skips the tick). Once the
+# variable has run out, the same pulse runs space_elevator_resume_site, which
+# puts the remembered speed back, so the halt ends with no action from the
+# player. A site that was already paused when the halt came has nothing
+# remembered and stays paused.
+#
+# State scope: a state with building_space_elevator_construction_site. The
+# speed is remembered on the state (a flag, as gm_restore_pm) for 240 days,
+# the halt plus the month the pulse can take to see it over, with margin; it
+# runs out by itself where the site has gone meanwhile, so a later site in the
+# same state is not switched on by an old halt. Should the state lose the
+# variable (a state split by a revolution), the site stays paused until it is
+# switched back in the building panel.
+space_elevator_halt_site = {
+	space_elevator_halt_remember = { SPEED = slow }
+	space_elevator_halt_remember = { SPEED = medium }
+	space_elevator_halt_remember = { SPEED = fast }
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator_construction_site
+				NOT = { has_active_production_method = pm_space_elevator_construction_paused }
+			}
+		}
+		activate_production_method = {
+			building_type = building_space_elevator_construction_site
+			production_method = pm_space_elevator_construction_paused
+		}
+	}
+}
+
+space_elevator_halt_remember = {
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator_construction_site
+				has_active_production_method = pm_space_elevator_construction_$SPEED$
+			}
+		}
+		set_variable = { name = space_elevator_halt_resume value = flag:$SPEED$ days = 240 }
+	}
+}
+
+# Only a site still on the paused method is switched: a speed picked after the
+# pulse last paused it is the player's own and stands.
+space_elevator_resume_site = {
+	if = {
+		limit = { has_variable = space_elevator_halt_resume }
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_space_elevator_construction_site
+					has_active_production_method = pm_space_elevator_construction_paused
+				}
+			}
+			space_elevator_halt_restore = { SPEED = slow }
+			space_elevator_halt_restore = { SPEED = medium }
+			space_elevator_halt_restore = { SPEED = fast }
+		}
+		remove_variable = space_elevator_halt_resume
+	}
+}
+
+space_elevator_halt_restore = {
+	if = {
+		limit = { var:space_elevator_halt_resume = flag:$SPEED$ }
+		activate_production_method = {
+			building_type = building_space_elevator_construction_site
+			production_method = pm_space_elevator_construction_$SPEED$
+		}
+	}
+}
+
 solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 REBUILD = no } }
 
 orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 REBUILD = no } }

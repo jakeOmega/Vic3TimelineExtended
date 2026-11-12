@@ -1773,7 +1773,6 @@ un_events.11 = {
 # Event 12: Decolonization Resolution
 # The Assembly debates colonial liberation. Framing depends on the player's ideology.
 un_events.12 = {
-	# REVIEWED 2026-09-25 (system_ungated): a UN topic raised by a real colonial collapse (docket item 8); UN history, independent of the decolonization JE
 	type = country_event
 	placement = root
 

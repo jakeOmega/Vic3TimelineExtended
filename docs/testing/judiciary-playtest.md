@@ -80,8 +80,7 @@ Spec § 14. Built before phase 1's play-test, so read phase 1's items first: the
     least 90". The self-check above logs once.
 15. **Filing and ruling.** Let the forced law pass. Within a month `save_country_probe.py --var te_jud_case` shows
     `te_jud_case_law` and `te_jud_case_filed`; about six months after that the ruling comes. At score 55 after Expedite
-    (below 90) it is The Court Upholds the Act; with Force it through (threshold 30) it is The Court Strikes Down the
-    Act, and its description names the law. A forced law that fails leaves no case behind.
+    (below 90) it is Within Its Powers; with Force it through (threshold 30) it is Struck Down, and its description names the law. A forced law that fails leaves no case behind.
 16. **Comply.** The law in force before the forced one comes back (its tooltip names it), the score rises 5 at the next
     monthly refresh, and Ruling Obeyed shows. **Defy:** the score falls 20 and Ruling Defied raises the risk premium
     by about 1pp. **Pack:** the score falls 15, Packed Court and Packing the Court show, entrenchment stops (start a

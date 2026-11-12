@@ -121,6 +121,17 @@ class TestHostAccidents(unittest.TestCase):
                         self.immediate.index("nd_accident_local_damage = yes"))
         self.assertIn("limit = { var:nd_accident_kind = 4 } nd_accident_lose_warhead = yes", self.immediate)
 
+    def test_a_kind_that_names_a_carrier_needs_its_technology(self):
+        """An arsenal held by custody can sit with a country that never researched the programme's
+        prerequisites, so the bomber kinds (1, 3) need bombing_aircraft as the silo (2) needs ICBMs
+        (#1619). Kinds 4 and 5 are always in the draw, so it is never empty."""
+        draw = self.immediate[:self.immediate.index("save_scope_as = nd_accident_guest")]
+        for kind, tech, weight in ((1, "bombing_aircraft", 30), (2, "ICBMs", 20), (3, "bombing_aircraft", 15)):
+            self.assertIn(f"0 = {{ modifier = {{ if = {{ limit = {{ has_technology_researched = {tech} }} "
+                          f"add = {weight} }} }} set_variable = {{ name = nd_accident_kind value = {kind} }} }}", draw)
+        for kind, weight in ((4, 10), (5, 25)):
+            self.assertIn(f"{weight} = {{ set_variable = {{ name = nd_accident_kind value = {kind} }} }}", draw)
+
     def test_site_is_a_hosts_incorporated_state(self):
         abroad = squash(block(self.effects, "nd_accident_site_abroad"))
         for needle in ("nd_hosts_weapons_of = { GUEST = scope:nd_accident_guest }", "save_scope_as = nd_accident_host",

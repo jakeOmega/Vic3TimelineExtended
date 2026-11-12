@@ -772,6 +772,12 @@ sr_disp_cost_ambitious_probe = {
 	value = sr_disp_cost_safe_probe
 	multiply = 2
 }
+# The Grand Tour's weekly innovation, on top of funding and the approach
+# (sr_probe_cost's tour term), for its option's tooltip in space_race_events.81.
+sr_disp_cost_tour_probe = {
+	value = sr_disp_cost_safe_probe
+	multiply = sr_tour_cost_levels_probe
+}
 sr_disp_cost_safe_mars_landing = {
 	value = sr_innovation_per_cost_level
 	multiply = sr_cost_factor_mars_landing
