@@ -14,7 +14,7 @@ import tempfile
 import unittest
 
 from gui_test_helpers import (ScriptedGuis, _children, assert_wide_matches_narrow, loc_closure, loc_keys_of,
-                              own_branch_spans, printed_keys, scripted_keys, tooltip_calls)
+                              own_branch_spans, printed_keys, scripted_guis, scripted_keys, tooltip_calls)
 
 NARROW = """
 types fixture {
@@ -811,6 +811,7 @@ fx_hover_sgui = {
 			text = fx_shown_tt
 			fx_is_far = yes
 		}
+		fx_is_near = no
 	}
 	ai_is_valid = { custom_tooltip = fx_ai_tt }
 	is_valid = {
@@ -863,6 +864,9 @@ fx_is_far = {
 fx_is_deep = {
 	custom_tooltip = fx_deep_tt
 }
+	fx_is_near = {
+		custom_tooltip = fx_near_tt
+	}
 """
 
 
@@ -880,7 +884,7 @@ class ScriptedTooltipTest(unittest.TestCase):
         cls.scripted = ScriptedGuis(cls.tmp.name)
         names = ("fx_shown_tt fx_valid_tt fx_far_tt fx_deep_tt fx_ai_tt fx_line_a fx_line_b fx_line_c fx_line_d "
                  "fx_line_c_more fx_line_d_more fx_head_pacific fx_head_arctic fx_head_indian fx_basin_pacific "
-                 "fx_basin_indian fx_hidden fx_commented fx_other_line fx_spliced")
+                 "fx_basin_indian fx_hidden fx_commented fx_other_line fx_spliced fx_near_tt")
         cls.loc = {name: name.upper() for name in names.split()}
 
     @classmethod
@@ -890,7 +894,7 @@ class ScriptedTooltipTest(unittest.TestCase):
     def test_each_function_renders_its_own_block(self):
         """ExecuteTooltip the effect, IsValidTooltip is_valid (not
         ai_is_valid), IsShownTooltip is_shown."""
-        self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsShownTooltip"), {"fx_shown_tt"})
+        self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsShownTooltip"), {"fx_shown_tt", "fx_near_tt"})
         self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsValidTooltip"), {"fx_far_tt", "fx_valid_tt"})
         self.assertEqual(self.scripted.printed("fx_other_sgui"), {"fx_other_line"})
         self.assertEqual(self.scripted.printed("fx_no_such_sgui"), set())
@@ -916,6 +920,16 @@ class ScriptedTooltipTest(unittest.TestCase):
         got = self.scripted.keys("fx_hover_sgui", "ExecuteTooltip", self.loc)
         self.assertEqual(got, {"fx_line_a", "fx_line_b", "fx_line_c", "fx_line_d", "fx_line_c_more", "fx_line_d_more",
                                "fx_head_pacific", "fx_head_arctic", "fx_far_tt", "fx_basin_pacific", "fx_basin_indian"})
+
+    def test_a_trigger_called_no_and_an_indented_definition_are_followed(self):
+        """`fx_is_near = no` prints fx_is_near's line, negated; fx_is_near is
+        defined tab-indented at the top of its file (build_effects.txt's
+        first effect is), and a nested `name = {` is no definition."""
+        self.assertIn("fx_near_tt", self.scripted.printed("fx_hover_sgui", "IsShownTooltip"))
+        self.assertIn("fx_is_near", self.scripted.calls)
+        self.assertEqual(set(self.scripted.guis), {"fx_hover_sgui", "fx_other_sgui"})
+        self.assertNotIn("custom_tooltip", self.scripted.calls)
+        self.assertIn("extended_timeline_extra_construction_building", scripted_guis().calls)
 
     def test_a_name_with_an_argument_left_out_is_any_key_it_could_spell(self):
         """fx_loose is called with no B: fx_basin_$B$ is every fx_basin_ key.
@@ -975,12 +989,12 @@ class ScriptedTooltipTest(unittest.TestCase):
 """
         def keys(more="", contexts=()):
             return scripted_keys(body.replace("@MORE@", more), self.loc, self.scripted, contexts, markup=True)
-        self.assertEqual(keys(), {"fx_shown_tt"}, "the nearest; none for the textbox, with no context given")
-        self.assertEqual(keys(contexts={"fx_other_sgui"}), {"fx_shown_tt", "fx_other_line"})
+        self.assertEqual(keys(), {"fx_shown_tt", "fx_near_tt"}, "the nearest; none for the textbox, with no context given")
+        self.assertEqual(keys(contexts={"fx_other_sgui"}), {"fx_shown_tt", "fx_near_tt", "fx_other_line"})
         inner = 'textbox = { tooltip = "[ScriptedGui.ExecuteTooltip( X )]" }'
-        self.assertEqual(keys(inner), {"fx_shown_tt", "fx_other_line"}, "the outer widget's")
+        self.assertEqual(keys(inner), {"fx_shown_tt", "fx_near_tt", "fx_other_line"}, "the outer widget's")
         over = 'fx_row = { blockoverride "slot" { tooltip = "[ScriptedGui.IsValidTooltip( X )]" } }'
-        self.assertEqual(keys(over), {"fx_shown_tt"}, "fx_other_sgui's is_valid prints nothing")
+        self.assertEqual(keys(over), {"fx_shown_tt", "fx_near_tt"}, "fx_other_sgui's is_valid prints nothing")
         # fx_hover_sgui's is_valid, asked only in the override: the panel's, with the body's own
         self.assertIn("fx_valid_tt", keys(over, {"fx_hover_sgui"}))
         self.assertNotIn("fx_valid_tt", keys("", {"fx_hover_sgui"}))

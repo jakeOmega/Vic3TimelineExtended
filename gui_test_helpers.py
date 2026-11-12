@@ -625,9 +625,9 @@ def custom_keys(text, custom=None):
 
 # The block of a scripted GUI each tooltip function renders.
 SCRIPTED_TOOLTIP = {"ExecuteTooltip": "effect", "IsValidTooltip": "is_valid", "IsShownTooltip": "is_shown"}
-_SCRIPT_TOP = re.compile(r"(?m)^(?:[A-Z_]+:)?([\w.\-]+)\s*=\s*\{")
+_SCRIPT_TOP = re.compile(r"(?m)^[ \t]*(?:[A-Z_]+:)?([\w.\-]+)\s*=\s*\{")
 _PRINTS = re.compile(r'\b(?:custom_tooltip(?:_no_bullet)?|text)\s*=\s*"?([\w.\-$]+)"?')
-_SCRIPT_CALL = re.compile(r"(?<![\w.$\-])([\w.\-]+)\s*=\s*(yes\b|\{)")
+_SCRIPT_CALL = re.compile(r"(?<![\w.$\-])([\w.\-]+)\s*=\s*(yes\b|no\b|\{)")
 _SCRIPT_ARG = re.compile(r'(\w+)\s*=\s*("[^"]*"|[^\s{}]+)')
 _SCRIPT_PART = re.compile(r"\b(effect|is_valid|is_shown)\s*=\s*\{")
 _PARAM = re.compile(r"\$\w+\$")
@@ -646,14 +646,18 @@ def _script_code(text):
 
 @functools.lru_cache(maxsize=16)
 def _script_blocks(root, folder):
-    """Each top-level `name = { ... }` of common/<folder>/*.txt: name -> its
-    body, comments cut. A name defined twice keeps both bodies, one after the
-    other (an INJECT:, or a later file's)."""
+    """Each top-level `name = { ... }` of common/<folder>/*.txt, indented or
+    not (build_effects.txt's first): name -> its body, comments cut. A name
+    defined twice keeps both bodies, one after the other (an INJECT:, or a
+    later file's)."""
     out = {}
     for path in sorted(glob.glob(os.path.join(root, "common", folder, "*.txt"))):
-        code = _script_code(_read(path))
+        code, end = _script_code(_read(path)), 0
         for m in _SCRIPT_TOP.finditer(code):
-            body = code[m.end():_close(code, m.end() - 1)]
+            if m.start() < end:
+                continue  # inside the last one
+            end = _close(code, m.end() - 1)
+            body = code[m.end():end]
             out[m.group(1)] = out[m.group(1)] + "\n" + body if m.group(1) in out else body
     return out
 
@@ -683,8 +687,9 @@ def printed_keys(text, calls, _seen=None):
     """The loc keys a script block's tooltip may print: each
     `custom_tooltip = <key>`, `custom_tooltip_no_bullet = <key>` and
     `text = <key>` it renders (_rendered), and those of the scripted effects
-    and triggers it calls (calls: name -> body), all the way down, a call's
-    `$X$` arguments filled in. It errs wide otherwise: a line under an `if`
+    and triggers it calls (calls: name -> body; `= yes`, `= no`, whose lines
+    print negated, or `= { ... }`), all the way down, a call's `$X$`
+    arguments filled in. It errs wide otherwise: a line under an `if`
     whose `limit` never holds counts, and so does a call in a `limit`. A key
     that still holds a `$X$` (a call that leaves the argument out) is kept as
     written: loc_keys_of matches it against the loc."""
@@ -810,35 +815,57 @@ def tooltip_calls(text, own=True):
             if not any(a <= m.start() < b for a, b in spans)]
 
 
-def _context_sguis(body, pos, contexts):
+_USES_OR_BLOCKS = re.compile(r'\busing\s*=|\b(?:block|blockoverride)\s+"\w+"')
+
+
+def _context_sguis(body, pos, contexts, types=None):
     """The scripted GUIs a `ScriptedGui` at a body offset may be: the one of
     the nearest `datacontext = "[GetScriptedGui('x')]"` on a block around
-    it. `contexts` (every one the panel sets) when there is none in the body,
-    and with it when a blockoverride lies between: the override's contents
-    sit where its block is, which may be under a nearer datacontext."""
+    it. `contexts` (every one the panel sets) when there is none in the
+    body, and with it where something the body doesn't spell out may set
+    another on the call's widget or a widget between, the found one's
+    included: a blockoverride lies between (its contents sit where its block
+    is), or one of those widgets instances a mod type (whose root may set
+    one; types: the mod's types by name, mod_types() when None), uses a
+    template, or holds a block or a blockoverride at its own level (whose
+    default or override may set one), or is the body's root (the instance
+    that draws the type may set its own). The engine takes the context on
+    the call's own widget, so one the walk can't see prints other lines."""
+    types = _mod_types(REPO) if types is None else types
     found = {enclosing_block(body, m.start()): m.group(1) for m in _SGUI_CONTEXT.finditer(body)}
     a, b = enclosing_block(body, pos)
-    crossed = False
+    wide = False
     while True:
+        root = (a, b) == (0, len(body))
+        if root:  # the widget that instances the type (or uses the template), which may set its own
+            wide = True
+        else:  # a widget's braces, or a block's or an override's: the widget holding it says the block is there
+            m = _OPENER.search(body, max(0, a - 120), a + 1)
+            wide = wide or bool(m and m.group(1) in types) or bool(_USES_OR_BLOCKS.search(own_props(body[a + 1:b])))
         if (a, b) in found:
-            return ({found[(a, b)]} | set(contexts)) if crossed else {found[(a, b)]}
-        if (a, b) == (0, len(body)):
+            return ({found[(a, b)]} | set(contexts)) if wide else {found[(a, b)]}
+        if root:
             return set(contexts)
-        opener = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
-        crossed = crossed or bool(opener and opener.group(1) == "blockoverride")
         a, b = enclosing_block(body, a)
 
 
-def scripted_keys(text, loc, scripted=None, contexts=(), own=True, markup=False):
+class UnresolvedTooltip(AssertionError):
+    """A scripted GUI's tooltip the panel asks for that names no scripted GUI
+    there is: a bare `ScriptedGui` with no datacontext the panel sets (the
+    mount's or a datamodel's), or one that names none in common/scripted_guis/.
+    Its lines can't be judged, so the walk fails rather than drop them."""
+
+
+def scripted_keys(text, loc, scripted=None, contexts=(), own=True, markup=False, types=None):
     """The loc keys the scripted tooltips a text asks for print
     (tooltip_calls, ScriptedGuis.keys). scripted: scripted_guis() (the repo's
     when None). contexts: the scripted GUIs a `ScriptedGui` in context may
     be; markup=True reads the text as a type's body and takes the nearest
-    datacontext around each such call first (_context_sguis)."""
+    datacontext around each such call first (_context_sguis, with types)."""
     scripted = scripted_guis(REPO) if scripted is None else scripted
     out = set()
     for name, method, pos in tooltip_calls(text, own):
-        names = {name} if name else (_context_sguis(text, pos, contexts) if markup else set(contexts))
+        names = {name} if name else (_context_sguis(text, pos, contexts, types) if markup else set(contexts))
         for n in names:
             out |= scripted.keys(n, method, loc)
     return out
@@ -1512,10 +1539,13 @@ def _on_guard_widgets(types, templates):
     text of its default, its path and line) for each of those blocks, and
     the widgets whose own blockoverrides may fill a block the mod's types
     don't place, as (TypeDef, the offset of its brace or 0 for the root, the
-    guard's widget, whether every block of it is such): an instance of a
-    type the mod doesn't define that carries the guard (every block), and a
-    guard-carrying instance of a mod type, a guarded root and each instance
-    of a type with one (a block no mod type or template declares).
+    guard's widget, the block names an override there may fill and stay
+    placed or None, the reason suffix): an instance of a type the mod doesn't
+    define that carries the guard (none: NOT_THE_MODS_TYPE); a guard-carrying
+    instance of a mod type built on such a type, its guarded root and each
+    instance of a type with one (those its own chain declares:
+    NOT_THE_MODS_BASE); and the same of a mod type built on an engine widget
+    (None, any a mod type or template declares: NOT_THE_MODS_BLOCK).
 
     The guard's widget is the one it is written in. A guard written in a
     `blockoverride "x"` (the Colonial Empire's `down_action`) sits on the
@@ -1562,6 +1592,30 @@ def _on_guard_widgets(types, templates):
                                                                   and guarded_root(types[name].base))
         return roots[name]
 
+    def chain(name):
+        seen = []
+        while name in types and name not in seen:
+            seen.append(name)
+            name = types[name].base
+        return seen, name
+
+    def allowed(name):
+        """The rule for a blockoverride written on an instance of `name` that
+        carries the guard (unread's last two): None and NOT_THE_MODS_BLOCK for
+        a mod type built on an engine widget (any block a mod type or template
+        declares is placed by name); for a type the mod doesn't define, no
+        block (NOT_THE_MODS_TYPE); for a mod type built on one, only the
+        blocks its own chain declares, its templates' included
+        (NOT_THE_MODS_BASE): the vanilla root's are not read."""
+        own, end = chain(name)
+        if not own:
+            return frozenset(), NOT_THE_MODS_TYPE
+        if end in _engine_widgets():
+            return None, NOT_THE_MODS_BLOCK
+        return frozenset({x for t in own for x, _ in _block_sites(types[t].body)}
+                         | {x for t in own for u, _ in _using_sites(types[t].body) for x in tmpl_blocks(u, set())}
+                         ), NOT_THE_MODS_BASE
+
     def derives(name, base):
         seen = set()
         while name in types and name not in seen:
@@ -1582,14 +1636,13 @@ def _on_guard_widgets(types, templates):
                         root_of(other, where)
             else:
                 at(td, 0, where)
-            unread.append((td, 0, where, False))
+            unread.append((td, 0, where) + (allowed(name) if group is types else (None, NOT_THE_MODS_BLOCK)))
             return
         at(td, w, where)
         opener = _OPENER.search(td.body, max(0, w - 120), w + 1)
-        mod = bool(opener) and opener.group(1) in types
-        if mod:
+        if opener and opener.group(1) in types:
             root_of(opener.group(1), where)
-        unread.append((td, w, where, not mod))
+        unread.append((td, w, where) + allowed(opener and opener.group(1)))
 
     def written_on(x):
         """Each widget a `block "x"` is written on, in any type or template (a
@@ -1629,7 +1682,7 @@ def _on_guard_widgets(types, templates):
                 if (a, b) == (0, len(body)):
                     if group is templates:  # a type's guarded root: below, with the types derived from it
                         at(td, 0, where)
-                        unread.append((td, 0, where, False))
+                        unread.append((td, 0, where, None, NOT_THE_MODS_BLOCK))
                     continue
                 written = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
                 if not written:
@@ -1646,16 +1699,16 @@ def _on_guard_widgets(types, templates):
                 else:
                     instanced = td.base
                 found = land(via[0], where, set())
-                unread.append((td, w, where, not found or instanced not in types))
+                unread.append((td, w, where) + (allowed(instanced) if found else (frozenset(), NOT_THE_MODS_TYPE)))
     for name, td in types.items():
         if guarded_root(name):
             root_of(name, (td.path, td.line, name))
-            unread.append((td, 0, (td.path, td.line, name), False))
+            unread.append((td, 0, (td.path, td.line, name)) + allowed(name))
     for group in (types, templates):
         for td in group.values():
             for child, brace in _child_sites(td.body):
                 if child in types and guarded_root(child):
-                    unread.append((td, brace, (types[child].path, types[child].line, child), False))
+                    unread.append((td, brace, (types[child].path, types[child].line, child)) + allowed(child))
     return names, defaults, unread
 
 
@@ -1687,6 +1740,16 @@ def _landing(text):
 NOT_THE_MODS_TYPE = " on an instance of a type the mod doesn't define, whose blocks may sit on that widget"
 NOT_THE_MODS_BLOCK = (", and no mod type or template declares the block: it is a vanilla type's, which may put it on "
                       "that widget")
+NOT_THE_MODS_BASE = (" on an instance of a mod type built on a type the mod doesn't define, and the mod type doesn't "
+                     "declare the block: the base's, whose blocks may sit on that widget")
+
+
+@functools.lru_cache(maxsize=1)
+def _engine_widgets():
+    """The engine's own elements (gui_reference_audit.BUILTINS): a mod type
+    built on one has no blocks but the mod's."""
+    from gui_reference_audit import BUILTINS
+    return frozenset(BUILTINS)
 
 
 def guard_visible_overrides(types, templates, texts):
@@ -1704,23 +1767,29 @@ def guard_visible_overrides(types, templates, texts):
     - a blockoverride written on the guard's own widget that does, where the
       mod's types can't say which widget its block is on: any, on an instance
       of a type the mod doesn't define (vanilla's root blocks are not read:
-      why ends NOT_THE_MODS_TYPE), and on any other guard-carrying widget one
-      of a block no mod type or template declares (NOT_THE_MODS_BLOCK).
+      why ends NOT_THE_MODS_TYPE); on an instance or a guarded root of a mod
+      type built on one, one of a block that type's own chain doesn't declare
+      (NOT_THE_MODS_BASE: a name another mod type declares is no proof); and
+      on any other guard-carrying widget one of a block no mod type or
+      template declares (NOT_THE_MODS_BLOCK).
     The blockoverride walk (_dead_overrides) and the guard itself
     (guard_spans, which reads a guard as hiding what is written inside the
     widget, the block default or the blockoverride it is written in) rest on
-    this finding nothing. What it can't see: an override, written anywhere
+    this finding nothing. What it can't see, all for vanilla's types not
+    being read: a vanilla type inside the instanced one with a block of a
+    guarded mod block's name; a block a vanilla-built type's chain declares
+    that its vanilla base declares too; and an override, written anywhere
     but on the guard's own widget, of a vanilla type's block that sits on
     that widget."""
     names, defaults, unread = _on_guard_widgets(types, templates)
     out = {(path, line, x, f"its default {w}", names[x]) for x, text, path, line in defaults for w in _landing(text)[0]}
     declared = {x for group in (types, templates) for td in group.values() for x, _ in _block_sites(td.body)}
-    for td, w, where, every in unread:
+    for td, w, where, may, suffix in unread:
         a, b = (0, len(td.body)) if w == 0 else (w, _close(td.body, w))
         for x, start, brace, end in _own_overrides(td.body, a, b):
-            if every or x not in declared:
-                out |= {(td.path, td.line + _line_of(td, start), x, reason + (NOT_THE_MODS_TYPE if every else NOT_THE_MODS_BLOCK),
-                         where) for reason in _landing(td.body[brace + 1:end])[0]}
+            if x not in (declared if may is None else may):
+                out |= {(td.path, td.line + _line_of(td, start), x, reason + suffix, where)
+                        for reason in _landing(td.body[brace + 1:end])[0]}
     by_name = {}
     for path, text in texts.items():
         for m in _OVERRIDE_OPEN.finditer(text):
@@ -1987,14 +2056,38 @@ def panel_tooltips(names, types, templates=None):
     templates, own-country branches left out), as (where, TypeDef, the body
     offset of the call, the scripted GUIs it may be, the function), and the
     scripted GUIs the panel sets as a datacontext: what a `ScriptedGui` in
-    context may be where its own body doesn't say (_context_sguis)."""
+    context may be where its own body doesn't say (_context_sguis). A bare
+    call the panel sets no context for may be none: panel_loc_keys fails it."""
     drawn = [(where, td, unguarded(td.body, spans)) for where, td, spans in _drawn(names, types, templates)]
     contexts = {name for _, _, text in drawn for name in _SGUI_CONTEXT.findall(text)}
     out = []
     for where, td, text in drawn:
         for name, method, pos in tooltip_calls(text, own=False):
-            out.append((where, td, pos, {name} if name else _context_sguis(text, pos, contexts), method))
+            out.append((where, td, pos, {name} if name else _context_sguis(text, pos, contexts, types), method))
     return out, contexts
+
+
+def _unresolved(asked, keys, loc, scripted, contexts):
+    """Each tooltip a panel asks for (in markup: panel_tooltips' calls; in the
+    loc keys it renders) that may be no scripted GUI there is, as "path:line
+    what": a bare `ScriptedGui` the panel sets no datacontext for, or one
+    whose names are none of `scripted`'s."""
+    there = set(scripted.guis)
+    out = []
+    for where, td, pos, sguis, method in asked:
+        if not sguis & there:
+            what = ", ".join(sorted(sguis)) or "ScriptedGui, with no scripted GUI datacontext in the panel"
+            out.append(f"{td.path}:{td.line + _line_of(td, pos)} {where}: {method} of {what}")
+    index = None
+    for key in sorted(keys):
+        for name, method, _ in tooltip_calls(loc[key], own=False):
+            sguis = {name} if name else set(contexts)
+            if not sguis & there:
+                index = _loc_index(LOC_DIR) if index is None else index
+                path, line = index[key][1:] if key in index else ("loc", "?")
+                what = ", ".join(sorted(sguis)) or "ScriptedGui, with no scripted GUI datacontext in the panel"
+                out.append(f"{path}:{line} loc key {key}: {method} of {what}")
+    return out
 
 
 def panel_loc_keys(names, types, loc, templates=None, custom=None, scripted=None):
@@ -2004,7 +2097,10 @@ def panel_loc_keys(names, types, loc, templates=None, custom=None, scripted=None
     GetCustom's and a scripted tooltip's included, less what is shown only
     for the player's own country (the first branch of a SelectLocalization on
     Country.IsLocalPlayer, which another country's panel never renders).
-    custom: custom_loc(). scripted: scripted_guis()."""
+    custom: custom_loc(). scripted: scripted_guis(); one with no scripted
+    GUIs at all (ScriptedGuis(None)) follows no tooltip. Raises
+    UnresolvedTooltip, naming each, where a tooltip asked for may be no
+    scripted GUI there is (_unresolved): its lines would go unjudged."""
     scripted = scripted_guis(REPO) if scripted is None else scripted
     roots = set()
     for _, td, spans in _drawn(names, types, templates):
@@ -2013,7 +2109,14 @@ def panel_loc_keys(names, types, loc, templates=None, custom=None, scripted=None
     for _, _, _, sguis, method in asked:
         for name in sguis:
             roots |= scripted.keys(name, method, loc)
-    return loc_closure(roots, loc, own=False, custom=custom, scripted=scripted, contexts=contexts)
+    keys = loc_closure(roots, loc, own=False, custom=custom, scripted=scripted, contexts=contexts)
+    if scripted.guis:
+        bad = _unresolved(asked, keys, loc, scripted, contexts)
+        if bad:
+            raise UnresolvedTooltip("a scripted GUI's tooltip this panel asks for names no scripted GUI there is, so "
+                                    "the lines it prints can't be judged: set the datacontext in the panel (or name "
+                                    "the scripted GUI: GetScriptedGui('x')), or fix the name\n  " + "\n  ".join(bad))
+    return keys
 
 
 def loc_reads(keys, index):

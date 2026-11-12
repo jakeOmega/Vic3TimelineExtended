@@ -353,13 +353,16 @@ sits on the widget `block "x"` is written on (found by name, in any type or temp
 block, so every other block on that widget is held to the same rule. And where the mod's types can't say which widget
 a block is on, the seal goes by where the override is written: on a guard-carrying instance of a type the mod doesn't
 define (a vanilla type's root blocks are not read; `button_icon_minus_action` and `button_icon_plus_action` carry the
-guard on `main`), no blockoverride written on that instance may set a `visible`, use a template or hold another, and
-on any other widget that carries the guard (an instance of a mod type, a type's guarded root, an instance of such a
-type) none of a block that no mod type or template declares may. A block's own default that sets a `visible` is
-reported at the block's line. Two limits stay open, unsafe the same way and not met on `main`, both because vanilla's
-types are not read: a vanilla type inside the instanced one that has a block of the same name as a guarded mod block
-is not seen, and neither is a blockoverride of a vanilla type's block that sits on a guard's widget when it is
-written anywhere but on that widget (an outer instance, a derived type's root).
+guard on `main`), no blockoverride written on that instance may set a `visible`, use a template or hold another. A mod
+type whose bases end at such a type (`type x = vanilla_button`) has that type's root blocks too, so on a guard-carrying
+instance of it, or at a guarded root of it, only a block its own chain (or a template it uses) declares may; a name
+some other mod type declares proves nothing there. On any other widget that carries the guard (an instance of a mod
+type built on an engine widget, a type's guarded root, an instance of such a type) none of a block that no mod type or
+template declares may. A block's own default that sets a `visible` is reported at the block's line. Three limits stay
+open, unsafe the same way and not met on `main`, all because vanilla's types are not read: a vanilla type inside the
+instanced one that has a block of the same name as a guarded mod block is not seen; a vanilla-built type's own block
+that its vanilla base declares too is read as the mod's; and a blockoverride of a vanilla type's block that sits on a
+guard's widget is not seen when it is written anywhere but on that widget (an outer instance, a derived type's root).
 `SkippedOverrideTest` fails when a skipped name is one a vanilla copy under `gui/` declares, the part of the first
 limit the repo can check; `skipped_overrides(view, types)` lists the names. `ungated_world_reads(names, types)` lists the
 `# world:` reads an observer's panel would evaluate: each needs an observer gate (`OBSERVER_GATE`, the test first in a
@@ -379,10 +382,20 @@ shows `x` in place of what it holds, and a `hidden_effect` shows nothing. Otherw
 `if` whose `limit` never holds counts). `tooltip_calls(text, own=False)` lists the tooltips a markup or loc text asks
 for, less those in the first branch of a `SelectLocalization` or `AddLocalizationIf` on `Country.IsLocalPlayer`
 (alone, or first in an `And`), which only the player's own country renders. A bare `ScriptedGui.ExecuteTooltip` is
-the scripted GUI of the nearest `datacontext = "[GetScriptedGui('x')]"` around it in the same body; where the body
-has none, or a `blockoverride` lies between, it may be any the panel sets as a datacontext, and all of them count.
-`loc_closure` follows a tooltip a loc value asks for the same way. So a player or entry read, or "our", in a line a
-public tab's hover prints fails `BindingTest` like any other text of the panel.
+the scripted GUI in context on the call's own widget. The walk takes the nearest `datacontext =
+"[GetScriptedGui('x')]"` around it in the same body, and counts every one the panel sets as well wherever the body
+doesn't spell the widget's context out: the body has none, a `blockoverride` lies between, or the call's widget or one
+between (the found one included) instances a mod type, uses a template, holds a block or blockoverride at its own
+level, or is the body's root (the type's root, the template's, or the instance that draws it, may set another).
+`loc_closure` follows a tooltip a loc value asks for with every context the panel sets. A tooltip that may be no
+scripted GUI there is (a bare call in a panel that sets no scripted GUI datacontext, the mount's or a datamodel's
+being out of sight, or a name `common/scripted_guis/` lacks) fails `panel_loc_keys` with `UnresolvedTooltip`, naming
+each call's file and line, rather than drop its lines. So a player or entry read, or "our", in a line a public tab's
+hover prints fails `BindingTest` like any other text of the panel. The lines the engine writes itself in such a
+tooltip (a trigger's own text, an `add_modifier`'s modifier name) describe the root the markup passes in
+`GuiScope.SetRoot`, which the markup check already judges: only the `custom_tooltip` keys need this walk. The script
+reader takes a scripted trigger called `= yes`, `= no` (its line prints negated) or `= { … }`, and a top-level
+definition indented or not.
 
 ## Formatting & Maintenance
 
