@@ -211,7 +211,7 @@ An option's wording is also a claim like any other. "Rush a replacement vehicle 
 
 **An option speaks at the moment its event reports.** Where an event reports something done and shows the option that matches a choice made earlier, the option is the ruler's reaction to the result, not the choice again. The Mars landing's options read "Establish orbital infrastructure first." under a description in which the crew had already landed; it is now "Building in Mars orbit first was the right call. The station stays in service."
 
-**Titles hint,** in two to five words: "A Routine Mishap", not "Hacker Collective Attack". A title needs no wordplay. Two cautions from the rewrite (2026-11-12). A title that works as a name stays one: the thirty resolution topics of `un_vote.1` ("Arms Embargo Vote") and the crash's severity tiers are how the player tells which question is in front of them. And a title is quoted elsewhere: before renaming one, `grep -rnF "<old title>" docs/ localization/english/` and change the player guide's chapters, the system docs and any tooltip that names the event in the same change.
+**Titles hint,** in two to five words: "A Routine Mishap", not "Hacker Collective Attack". A title needs no wordplay. Two cautions from the rewrite (2026-11-12). A title that works as a name stays one: the thirty-four resolution topics of `un_vote.1` ("Arms Embargo Vote") and the crash's severity tiers are how the player tells which question is in front of them. And a title is quoted elsewhere: before renaming one, `grep -rnF "<old title>" docs/ localization/english/` and change the player guide's chapters, the system docs and any tooltip that names the event in the same change.
 
 ### Flavor text: vary the form
 
@@ -276,7 +276,7 @@ The same event in three forms, none ending on a turn:
 - **No ellipsis** at the end of a text.
 - **Quotes** in loc are `\"`, straight, and paired.
 - **Formatting codes mean something.** `#v` marks a live figure, `#G` / `#R` good and bad for the player, `#b` a heading inside a tooltip or a word the player must not miss. None of them is decoration, and an event description carries none except to mark a threshold or a required action.
-- **No text ends with `\n`,** except a fragment a `desc` block splices in front of another (`un_events.*.d_cause_*`), which ends in `\n\n` by design and is in the lint's baseline.
+- **No text ends with `\n`,** except a fragment a `desc` block splices in front of another (`un_events.*.d_cause_*`), which ends in `\n\n` by design and carries `# REVIEWED … (loc_style)` on its line.
 
 ## Words
 
