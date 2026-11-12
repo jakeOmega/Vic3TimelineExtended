@@ -847,8 +847,6 @@
 				# post-crash values next to its crash marker.
 				te_history_record_banking_samples = yes
 
-				set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
-
 				banking_cycle_random_event_effect = yes
 				banking_cycle_update_progress_bars = yes
 				banking_cycle_cleanup_capital_controls = yes
