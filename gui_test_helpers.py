@@ -217,7 +217,9 @@ class _Walk:
         """Walk a body and return the te_* instances it holds directly. `widget`
         says whose it is: a wrapper's (its kind), a composer's ("composer"), or,
         when None, a block's content, which draws in the widget around the
-        block, `spacing` apart."""
+        block. `spacing` is the spacing around the body: a block's content
+        sits at it, and so does the one child of a wrapper or composer that
+        holds no second, which draws no spacing of its own."""
         items = _children(body)
         gates = gates + _own_gates(items)
         props = {k: v for kind, k, v in items if kind == "property"}
@@ -241,7 +243,7 @@ class _Walk:
                 self.instance(name, inner, gates, spacing)
                 held.append(name)
             elif name in WRAPPERS:
-                self.body(inner, gates, overrides, widget=name)
+                self.body(inner, gates, overrides, widget=name, spacing=spacing)
             else:
                 self.test.fail(f"{self.where} draws {name} inline: make it a te_* section type, so the check can "
                                f"follow it")
@@ -320,7 +322,7 @@ class _Walk:
             where = self.where
             if self.checking:                         # the wide layout's own composer: a failure in it names it
                 self.where = f"{where}'s {name}"
-            self.body(_type_body(self.text, name), gates, filled, widget="composer")
+            self.body(_type_body(self.text, name), gates, filled, widget="composer", spacing=spacing)
             self.shared, self.where = self.shared - shared, where
         else:
             in_column = bool(self.columns) and self.columns[-1] is not None

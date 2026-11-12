@@ -508,6 +508,49 @@ class WideMatchesNarrowTest(unittest.TestCase):
                 self.assertEqual(self.check(GOOD.replace(one, one.replace("flowcontainer = {\n", f"flowcontainer = {{ {bare}\n"))),
                                  COLUMNS)
 
+    def test_a_section_alone_in_a_narrow_wrapper_sits_at_the_spacing_around_it(self):
+        """A narrow wrapper around one section draws no spacing: the section sits at the spacing of the next widget
+        out that holds two or more. Here te_x_sec_c, alone in a wrapper that only gates it, is 4 from its neighbours,
+        the status composer's spacing. (te_x_sec_how, alone in its composer, sits at a spacing the check can't read.)"""
+        lone = '\t\tflowcontainer = {\n\t\t\tvisible = "[HasC]"\n\t\t\tte_x_sec_c = {}\n\t\t}\n'
+        narrow = NARROW.replace('\t\tte_x_sec_c = {\n\t\t\tvisible = "[HasC]"\n\t\t}\n', lone)
+        self.assertNotEqual(narrow, NARROW)
+        pair = ('\t\t\tflowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n'
+                '\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t}\n\t\t\tte_x_sec_how = {}\n')
+        self.assertEqual(GOOD.count(pair), 1)
+
+        def check(spacing):
+            wide = GOOD.replace(pair, f"\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                      '\t\t\t\tvisible = "[JournalEntry.IsActive]"\n'
+                                      '\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t\tte_x_sec_how = {}\n\t\t\t}\n')
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, added_gates=("te_x_sec_how",),
+                                              text=narrow + fixture(wide)[len(NARROW):])
+
+        self.assertEqual(check(4), COLUMNS)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_sec_c', 'te_x_sec_how'\] spaces its "
+                                                    r"sections 30 apart, the narrow layout \['4'\]"):
+            check(30)
+
+    def test_a_section_alone_in_a_narrow_composer_sits_at_the_spacing_around_it(self):
+        """The same through a composer: te_x_q and te_x_r, each the one section of its composer, sit 6 apart, the
+        spacing of the composer that holds the two."""
+        more = ("\ttype te_x_outer_sections = flowcontainer {\n\t\tspacing = 6\n\t\tte_x_one_sections = {}\n"
+                "\t\tte_x_two_sections = {}\n\t}\n"
+                "\ttype te_x_one_sections = flowcontainer {\n\t\tspacing = 99\n\t\tte_x_q = {}\n\t}\n"
+                "\ttype te_x_two_sections = flowcontainer {\n\t\tte_x_r = {}\n\t}\n")
+
+        def check(spacing):
+            wide = GOOD.replace("\t\t\tte_x_sec_how = {}\n",
+                                f"\t\t\tte_x_sec_how = {{}}\n\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                "\t\t\t\tte_x_q = {}\n\t\t\t\tte_x_r = {}\n\t\t\t}\n")
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES + ["te_x_outer_sections"],
+                                              text=fixture(wide + more))
+
+        check(6)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_q', 'te_x_r'\] spaces its sections "
+                                                    r"30 apart, the narrow layout \['6'\]"):
+            check(30)
+
     def test_a_wrapper_with_no_visible_of_its_own_is_spaced_too(self):
         """Only a gated wrapper used to be held to the narrow spacing (#1338)."""
         pair = "\t\t\t\t\tte_x_sec_b = {}\n\t\t\t\t\tte_x_summary = {}\n"

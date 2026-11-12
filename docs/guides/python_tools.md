@@ -288,7 +288,8 @@ the narrow layout (#1338: it was matched by gate set, which a second composer un
 instance in a wide layout takes a `visible` and no other property, and a second row of columns fails. The wrapper and
 instance rules stop at a composer both layouts place, whose type draws the same in both frames. A column's own
 `column_<n>_visible`, which closes up a column whose sections all hide, counts as one more gate on each of them;
-`assert_column_closes_with_its_sections` holds such a gate equal to the sections' own, joined. A test moves onto them when it is next touched, not in a sweep (wide-mode spec § 9.5).
+`assert_column_closes_with_its_sections` holds such a gate equal to the sections' own, joined. A test moves onto them
+when it is next touched, not in a sweep (wide-mode spec § 9.5).
 
 `panel_view(names, types)` is what another country's panel draws of the named types, for the National Info tests
 (`BindingTest`, `GuardTest` and each system's `PrivateTest`; `markup_reads`, `unguarded_controls` and `panel_loc_keys`

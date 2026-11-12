@@ -711,8 +711,12 @@ class StripTest(unittest.TestCase):
         unlearned; and the rebels of a revolution, who start none, get no
         running one either: a hub that falls to them stays the nation's
         (st_res_hub_stays_within_nation), and the entry with its holder.
-        The last two are the engine's and the script's to keep, not shown
-        here; test_strategic_reserve_lifecycle.py holds the script's side."""
+        Three engine facts under that are named here, not shown: an entry
+        auto-activates only while is_shown_when_inactive holds as well as
+        possible (scripting_best_practices.md, "JE Auto-Activation Requires
+        BOTH"), a technology isn't unlearned, and a revolution's rebels take
+        over no running entry. test_strategic_reserve_lifecycle.py holds the
+        script's side."""
         reserve = _tab("strategic_reserve")
         tab, unlock = "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"
         self.assertEqual((reserve.open_, reserve.strip, reserve.unlock), (_shown(tab), _shown(unlock), unlock))
