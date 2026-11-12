@@ -483,20 +483,22 @@ te_demog_lx_deaths = {
 	set_local_variable = { name = te_dg_lx_mt value = { value = local_var:te_dg_m multiply = local_var:te_dg_lx_sk } }
 	set_local_variable = { name = te_dg_lx_fu value = { value = local_var:te_dg_f subtract = local_var:te_dg_lx_ft } }
 	set_local_variable = { name = te_dg_lx_mu value = { value = local_var:te_dg_m subtract = local_var:te_dg_lx_mt } }
+	# Fixed point (#967): each part's people x its rate first and divide = 100000 last, as te_demog_age_slot's (the
+	# bound is there: a part is no more than its cohort)
 	set_local_variable = {
 		name = te_dg_lx_u2f
 		value = {
-			value = local_var:te_dg_qf
+			value = local_var:te_dg_lx_fu
+			multiply = local_var:te_dg_qf
 			divide = 100000
 			multiply = -1
-			add = 1
-			multiply = local_var:te_dg_lx_fu
+			add = local_var:te_dg_lx_fu
 			subtract = { value = local_var:te_dg_lx_bmu multiply = local_var:te_dg_mmr divide = 100000 }
 		}
 	}
 	set_local_variable = {
 		name = te_dg_lx_u2m
-		value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mu }
+		value = { value = local_var:te_dg_lx_mu multiply = local_var:te_dg_qm divide = 100000 multiply = -1 add = local_var:te_dg_lx_mu }
 	}
 	set_local_variable = { name = te_dg_lx_t2f value = 0 }
 	set_local_variable = { name = te_dg_lx_t2m value = 0 }
@@ -513,17 +515,17 @@ te_demog_lx_deaths = {
 		set_local_variable = {
 			name = te_dg_lx_t2f
 			value = {
-				value = local_var:te_dg_lx_qf
+				value = local_var:te_dg_lx_ft
+				multiply = local_var:te_dg_lx_qf
 				divide = 100000
 				multiply = -1
-				add = 1
-				multiply = local_var:te_dg_lx_ft
+				add = local_var:te_dg_lx_ft
 				subtract = { value = local_var:te_dg_lx_bmt multiply = local_var:te_dg_mmr divide = 100000 }
 			}
 		}
 		set_local_variable = {
 			name = te_dg_lx_t2m
-			value = { value = local_var:te_dg_lx_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mt }
+			value = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_qm divide = 100000 multiply = -1 add = local_var:te_dg_lx_mt }
 		}
 	}
 	change_local_variable = {
@@ -701,26 +703,30 @@ te_demog_lx_fold_deaths = {
 	}
 	change_local_variable = { name = te_dg_lx_guf add = local_var:te_dg_lx_fu }
 	change_local_variable = { name = te_dg_lx_gum add = local_var:te_dg_lx_mu }
+	# the pool's survivors by sex: both parts' deaths as the count just above takes them, off the pool (#967; the
+	# same products, the people x the rate first)
 	set_variable = {
 		name = te_dg_pf
 		value = {
-			value = local_var:te_dg_lx_qf
+			value = local_var:te_dg_lx_ft
+			multiply = local_var:te_dg_lx_qf
+			add = { value = local_var:te_dg_lx_fu multiply = local_var:te_dg_qf }
 			divide = 100000
 			multiply = -1
-			add = 1
-			multiply = local_var:te_dg_lx_ft
-			add = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_fu }
+			add = local_var:te_dg_lx_ft
+			add = local_var:te_dg_lx_fu
 		}
 	}
 	set_variable = {
 		name = te_dg_pm
 		value = {
-			value = local_var:te_dg_lx_qm
+			value = local_var:te_dg_lx_mt
+			multiply = local_var:te_dg_lx_qm
+			add = { value = local_var:te_dg_lx_mu multiply = local_var:te_dg_qm }
 			divide = 100000
 			multiply = -1
-			add = 1
-			multiply = local_var:te_dg_lx_mt
-			add = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mu }
+			add = local_var:te_dg_lx_mt
+			add = local_var:te_dg_lx_mu
 		}
 	}
 	if = {
@@ -741,12 +747,13 @@ te_demog_lx_fold_deaths = {
 			set_variable = {
 				name = te_dg_lx_ps
 				value = {
-					value = local_var:te_dg_lx_qf
+					value = local_var:te_dg_lx_ft
+					multiply = local_var:te_dg_lx_qf
+					add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_qm }
 					divide = 100000
 					multiply = -1
-					add = 1
-					multiply = local_var:te_dg_lx_ft
-					add = { value = local_var:te_dg_lx_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mt }
+					add = local_var:te_dg_lx_ft
+					add = local_var:te_dg_lx_mt
 					divide = { value = local_var:te_dg_lx_alive min = 0.00001 }
 				}
 			}
@@ -959,9 +966,11 @@ te_demog_lx_seed_decrement = {
 		value = { value = local_var:te_dg_age subtract = te_demog_k_lx_join_age multiply = local_var:te_dg_lx_rr add = te_demog_k_lx_join_age }
 	}
 	te_demog_lx_rates_at = yes
+	# Fixed point (#967): the survivors x the blended rate first and divide = 100000 last, as te_demog_seed_slot's
+	# (at most 100,000 survivors x a rate of 100,000 or so: 1e10)
 	change_local_variable = {
 		name = te_dg_lsf
-		multiply = {
+		subtract = {
 			value = local_var:te_dg_asfr
 			multiply = local_var:te_dg_tfr
 			multiply = local_var:te_dg_mmr
@@ -972,21 +981,19 @@ te_demog_lx_seed_decrement = {
 				multiply = local_var:te_dg_qf
 				add = { value = local_var:te_dg_lx_e multiply = local_var:te_dg_lx_qf }
 			}
+			multiply = local_var:te_dg_lsf
 			divide = 100000
-			multiply = -1
-			add = 1
 		}
 	}
 	change_local_variable = {
 		name = te_dg_lsm
-		multiply = {
+		subtract = {
 			value = 1
 			subtract = local_var:te_dg_lx_e
 			multiply = local_var:te_dg_qm
 			add = { value = local_var:te_dg_lx_e multiply = local_var:te_dg_lx_qm }
+			multiply = local_var:te_dg_lsm
 			divide = 100000
-			multiply = -1
-			add = 1
 		}
 	}
 }

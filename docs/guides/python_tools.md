@@ -270,8 +270,9 @@ passes `truncate=False` itself stays in floats. A float test can't see an early 
 tolerance: an early divide in the script, a fixture on a threshold's edge, or the cut multiplied by the case's own
 arithmetic. Then loosen only the comparison that needs it, by a bound worked out from the cut (`_lead_cuts` is the
 pattern: the float case split into draws and a run helper, the twin holding each draw to its own bound); a
-`mock.patch` of the tolerance around a whole case also loosens every other comparison in it. Only the suites that seed
-or step the ring keep #967's 1e-3 (`_CohortTwin`), for the drifts the file's docstring lists.
+`mock.patch` of the tolerance around a whole case also loosens every other comparison in it. The suites that seed
+or step the ring take 2.5e-4 (`_CohortTwin`: the shares a cohort's flows are stored as), and the life table's
+figures alone keep #967's 1e-3.
 
 GUI tests share `gui_test_helpers.py` (not a test file, so nothing collects it): `_read`, `_strip_comments`, `_close`,
 `_block_at`, `_type_body`, `_children` and `_instances` read markup, and `assert_wide_matches_narrow` checks a wide
