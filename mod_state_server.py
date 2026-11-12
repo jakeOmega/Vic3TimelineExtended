@@ -3622,14 +3622,25 @@ def _render_engine_coverage_md(report: dict) -> str:
     if report.get("unknown_modifiers"):
         out.append("## Unknown modifiers")
         out.append("")
-        out.append("Modifier-shaped names (ending in `_add`/`_mult`/`_max`/`_set`) used in mod "
-                   "data but absent from both the engine modifier registry and the pattern "
-                   "catalog. May indicate typos OR modifiers added after the engine-doc "
-                   "snapshot was taken — regenerate the engine docs in-game and `POST /reload` "
-                   "to refresh.")
+        out.append("Modifier-shaped names (ending in `_add`, `_mult`, `_max_level(s)`, `_set`, "
+                   "`_bool` or `_boolean`) used in mod data that no modifier type definition "
+                   "registers, vanilla's or the mod's. The engine drops such a field at load "
+                   "(`Unknown modifier type`, in `debug.log` only) and a `modifier:` read of it "
+                   "reads nothing: register the name in `common/modifier_type_definitions/` or "
+                   "fix it. Neither the engine's `modifiers.log` listing a name nor a name "
+                   "fitting a pattern-catalog family makes it valid (#391); either one only "
+                   "says the name can be registered, and is noted on its line. Regenerating "
+                   "the engine docs changes no verdict.")
         out.append("")
         for entry in report["unknown_modifiers"]:
-            out.append(f"- `{entry['name']}`")
+            notes = []
+            if entry.get("unregistered_pattern_instance"):
+                notes.append(f"unregistered instance of `{entry.get('pattern', '?')}` "
+                             f"(`{entry.get('value', '?')}`)")
+            if entry.get("listed_in_engine_docs"):
+                notes.append("listed in the engine docs (`modifiers.log`)")
+            tail = f" — {'; '.join(notes)}" if notes else ""
+            out.append(f"- `{entry['name']}`{tail}")
             for u in entry.get("used_in", [])[:5]:
                 out.append(f"  - {u}")
         out.append("")

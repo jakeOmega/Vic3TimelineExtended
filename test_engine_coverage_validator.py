@@ -254,6 +254,23 @@ class ValidatorPatternRegistrationTests(unittest.TestCase):
         self.assertIs(entry["unregistered_pattern_instance"], True)
         self.assertEqual(entry["value"], "angkor_wat")
 
+    def test_markdown_report_says_what_unknown_means_and_tags_each_name(self):
+        """The rendered report states the rule (only a definition makes a name
+        valid; the engine docs and the pattern catalog do not) and says on each
+        line whether the dump lists the name and which family it fits."""
+        md = mss._render_engine_coverage_md(self.report)
+        section = md.split("## Unknown modifiers", 1)[1]
+        self.assertIn("no modifier type definition registers", section)
+        self.assertNotIn("absent from both", section)
+        self.assertNotIn("regenerate the engine docs in-game", section)
+        lines = {line.split("`")[1]: line for line in section.splitlines() if line.startswith("- `")}
+        angkor = lines["building_angkor_wat_throughput_add"]
+        self.assertIn("listed in the engine docs", angkor)
+        self.assertIn(f"unregistered instance of `{_THROUGHPUT}` (`angkor_wat`)", angkor)
+        coal = lines["building_synthetics_plant_coal_throughput_add"]
+        self.assertIn("unregistered instance of", coal)
+        self.assertNotIn("listed in the engine docs", coal)
+
     def test_value_outside_the_vocabulary_stays_suspicious(self):
         entry = self.suspicious.get("building_synthetic_plant_throughput_add")
         self.assertIsNotNone(entry, sorted(self.suspicious))

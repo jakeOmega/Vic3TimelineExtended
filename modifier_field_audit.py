@@ -23,10 +23,20 @@ Registered means defined, and nothing else. A name that fits a dynamic family
 because the building or the good exists: vanilla registers the throughput type
 for under half of its own buildings, and the mod must register every one it
 uses. The engine's `modifiers.log` listing a name (the catalog committed as
-`docs/engine/modifiers_summary.txt`) does not make it valid either: about
-4,700 of the names it lists are registered by nobody, the mod has had to
-register 96 of them itself, and vanilla 1.15.1 writes no unregistered name in
-any of its own modifier blocks (about 16,000 fields). The pattern catalog
+`docs/engine/modifiers_summary.txt`) does not make it valid either. The game
+said so: `building_financial_district_throughput_add`, #1072's own example of
+a name "the engine generates for every building", is in `modifiers.log` and
+registered nowhere, and the game dropped it at load as `Unknown modifier
+type` (#1096: `docs/testing/demographics-playtest.md` § "Resettlement events
+load again; Metropolis without the Financial District",
+`test_demographics_metro.py`'s `test_every_field_is_an_engine_modifier`). A
+read fares no better: `modifier:` of a mortality key only `modifiers.log`
+lists gave `'none'` on every pop (`docs/guides/scripting_best_practices.md` §
+"`modifiers.log` listing ≠ script-usable"). About 4,700 of the names the log
+lists are registered by nobody, the mod has had to register 96 of them
+itself, and vanilla 1.15.1 writes no unregistered name in any of its own
+modifier blocks (about 16,100 fields in 21 entity directories, held by
+`test_vanilla_writes_no_field_this_audit_would_flag`). The pattern catalog
 (`common/_meta/modifier_patterns.yml`) and the engine's list are used only to
 say, in the flag, that the name can be registered.
 
@@ -65,7 +75,10 @@ hand-written ship modifications); `test_modifier_field_audit` holds the two
 scans to the same sites otherwise. A journal entry's
 `modifiers_while_active` and `scaling_modifiers_while_active` name static
 modifiers, whose own fields are checked where they are defined. Script
-directories (effects, triggers, events) hold no modifier block.
+directories (effects, triggers, events) hold no modifier block. A field whose
+name is built from a `$PARAM$` is skipped, as such a read is: the name is
+known only once the parameter is filled in. The rule for one line is
+`site_label`.
 
 Costs: a ship type's or ship modification's `construction_goods` and
 `materiel_goods` are written with modifier type names too
@@ -257,6 +270,19 @@ def _bare(key: str) -> str:
     return key
 
 
+def site_label(stack: list, key: str, mode: str, rules=None) -> str | None:
+    """The `block` of a `<key> = <value>` line whose enclosing blocks are
+    `stack` ([0] the entity, directives stripped), or None when the line names
+    no modifier type: the server's modifier-block rule, then a ship's cost
+    blocks. A key built from a `$PARAM$` is skipped, as a read of one is."""
+    if "$" in key or (mode == "direct" and key in NOT_A_FIELD):
+        return None
+    label = (rules or grant_rules())._grant_block_label(stack, mode)
+    if label is None and len(stack) == 2 and stack[1] in COST_BLOCKS:
+        label = stack[1]
+    return label
+
+
 def scan_text(text: str, rel_path: str, mode: str, rules=None) -> tuple[list, list]:
     """(sites, tag_lines) of one file's raw text.
 
@@ -279,11 +305,7 @@ def scan_text(text: str, rel_path: str, mode: str, rules=None) -> tuple[list, li
             stack.append(_bare(m.group("key")))
         elif m.group("value") and stack and stack[0] is not None:
             key = _bare(m.group("key"))
-            if mode == "direct" and key in NOT_A_FIELD:
-                continue
-            label = rules._grant_block_label(stack, mode)
-            if label is None and len(stack) == 2 and stack[1] in COST_BLOCKS:
-                label = stack[1]
+            label = site_label(stack, key, mode, rules)
             if label is None:
                 continue
             line = bisect_right(starts, m.start())
@@ -430,21 +452,27 @@ def check(sites, tags, src: Sources, patterns=(), engine_listed=frozenset()) -> 
             shown, reviewed,
         ))
 
-    site_at = {(s.file, s.line): s for s in sites if s.shown}
+    # Every shown site of a line: a block written on one line has several.
+    sites_at: dict = {}
+    for s in sites:
+        if s.shown:
+            sites_at.setdefault((s.file, s.line), []).append(s)
     for file, line in tags:
         if (file, line) in covered:
             continue
-        site = site_at.get((file, line))
-        if site is None:
-            why = "the line writes no field of a modifier block"
-        elif site.field not in src.registered:
-            why = "an unregistered field takes no comment"
+        here = sites_at.get((file, line), [])
+        unreg = [s for s in here if s.field not in src.registered]
+        if not here:
+            why, named = "the line writes no field of a modifier block", ""
+        elif unreg:
+            why, named = "an unregistered field takes no comment", unreg[0].field
         else:
-            why = "the field is not flagged; remove it"
+            why = "no field on the line is flagged; remove it"
+            named = ", ".join(dict.fromkeys(s.field for s in here))
         result.flags.append(Flag(
-            "stale_review", site.field if site else "",
+            "stale_review", named,
             f"a `({CHECK})` comment that suppresses nothing: {why}",
-            [site or Site("", file, line, "", "")],
+            unreg[:1] or here or [Site("", file, line, "", "")],
         ))
     return result
 

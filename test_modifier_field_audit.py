@@ -130,6 +130,22 @@ class ScanTests(unittest.TestCase):
             ("country_x_add", 3, "modifier"),
         ])
 
+    def test_a_field_built_from_a_parameter_is_skipped(self):
+        """Like a `$`-built `modifier:` read: the name is only known once the
+        parameter is filled in, so it is neither a site nor a flag."""
+        text = (
+            "law_x = {\n"
+            "\tmodifier = {\n"
+            "\t\tgoods_input_$GOOD$_add = 1\n"
+            "\t\t$TYPE$_mult = 0.1\n"
+            "\t\tcountry_x_add = 1\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual([f[:3] for f in fields(text)], [("country_x_add", 5, "modifier")])
+        self.assertEqual(fields("m = {\n\t$NAME$_mult = 1\n}\n", mode="direct"), [])
+        self.assertEqual(kinds(run(text, sources(vanilla=["country_x_add"], loc=["country_x_add"]))), [])
+
     def test_directive_prefixes_are_not_part_of_the_name(self):
         text = (
             "INJECT:law_x = {\n"
@@ -424,8 +440,32 @@ class LocTests(unittest.TestCase):
         result = run(text, sources(vanilla=["country_prestige_mult"], loc=["country_prestige_mult"]), mode="direct")
         self.assertEqual(kinds(result), [("stale_review", ""), ("stale_review", "country_prestige_mult")])
         details = sorted(f.detail for f in result.flags)
-        self.assertIn("the field is not flagged", details[0])
+        self.assertIn("no field on the line is flagged", details[0])
         self.assertIn("the line writes no field of a modifier block", details[1])
+
+    def test_stale_tag_on_a_one_line_block_names_the_right_field(self):
+        """A block written on one line has several fields on the tagged line:
+        the flag names the unregistered one if any, else every field."""
+        text = (
+            "law_x = {\n"
+            "\tmodifier = { country_bad_add = 1 country_prestige_mult = 0.1 }"
+            " # REVIEWED 2026-11-12 (modifier_field_loc): stale\n"
+            "}\n"
+            "law_y = {\n"
+            "\tmodifier = { country_a_mult = 1 country_prestige_mult = 0.1 }"
+            " # REVIEWED 2026-11-12 (modifier_field_loc): stale\n"
+            "}\n"
+        )
+        named = ["country_a_mult", "country_prestige_mult"]
+        result = run(text, sources(vanilla=named, loc=named))
+        stale = sorted((f.name, f.line, f.detail) for f in result.flags if f.kind == "stale_review")
+        self.assertEqual([s[:2] for s in stale], [
+            ("country_a_mult, country_prestige_mult", 5),
+            ("country_bad_add", 2),
+        ])
+        self.assertIn("no field on the line is flagged", stale[0][2])
+        self.assertIn("an unregistered field takes no comment", stale[1][2])
+        self.assertIn(("unregistered", "country_bad_add"), kinds(result))
 
 
 class ReportAndCliTests(unittest.TestCase):
@@ -637,36 +677,68 @@ class RealModTests(unittest.TestCase):
         self.assertTrue(all(s.field.startswith("goods_input_") for s in costs), {s.field for s in costs})
 
     def test_vanilla_writes_no_field_this_audit_would_flag(self):
-        """What both checks rest on: every field of every vanilla static
-        modifier, and every ship cost, is a registered type, and a static
-        modifier's field has a loc key or belongs to a family the engine
-        names. A snapshot rebuilt after a patch that breaks either (a new
-        engine-named family, say) fails here."""
-        def load(name):
-            with open(os.path.join(ROOT, "vanilla_parsed", "common", name), encoding="utf-8") as fh:
-                return json.load(fh)
+        """What both checks rest on: every field of every modifier block in
+        the vanilla snapshot (static modifiers, laws, technologies, production
+        methods, principles, traits, every entity directory the audit scans),
+        and every ship cost, is a registered type, and every field of a
+        modifier block has a vanilla loc key or belongs to a family the engine
+        names. Which blocks count is the audit's own rule (`site_label`), so a
+        snapshot rebuilt after a patch that breaks either (a new engine-named
+        family, say) fails here."""
+        import vanilla_parsed
 
-        def body_of(value):
-            while isinstance(value, list) and len(value) == 2 and value[0] == "=":
-                value = value[1]
-            return value if isinstance(value, dict) else {}
+        snap = os.path.join(ROOT, "vanilla_parsed")
+        manifest = vanilla_parsed.read_manifest(snap)
+        modes = {sub: mode for _et, sub, mode in mss.MODIFIER_GRANT_SOURCES}
+        prefix = "game/common/"
+
+        def walk(key, value, stack, out):
+            """One `key = value` of the parse, `stack` the blocks around it."""
+            if isinstance(value, list):            # a key written more than once
+                for item in value:
+                    walk(key, item, stack, out)
+                return
+            if isinstance(value, tuple):           # (operator, value)
+                value = value[-1]
+            key = mfa._bare(key)
+            if isinstance(value, dict):
+                for k, v in value.items():
+                    walk(k, v, stack + [key], out)
+            elif stack and not isinstance(value, list):
+                label = mfa.site_label(stack, key, mode, mss)
+                if label is not None:
+                    out.append(mfa.Site(key, rel, 0, label, stack[0]))
 
         sites = []
-        for name, raw in load("modifiers.json").items():
-            sites += [mfa.Site(key, "vanilla", 0, "direct", name)
-                      for key in body_of(raw) if key not in mfa.NOT_A_FIELD]
-        self.assertGreater(len(sites), 5000)
-        costs = []
-        for file in ("ship_types.json", "ship_modifications.json"):
-            for name, raw in load(file).items():
-                for block in mfa.COST_BLOCKS:
-                    costs += [mfa.Site(key, "vanilla", 0, block, name) for key in body_of(body_of(raw).get(block))]
-        self.assertGreater(len(costs), 400)
-        src = mfa.Sources(self.src.vanilla_types, self.src.vanilla_types, self.src.cultures,
-                          self.src.vanilla_religions, self.src.has_loc)
-        result = mfa.check(sites + costs, [], src)
-        self.assertEqual(kinds(result), [])
+        per_type = {}
+        for entity_type, info in manifest["entity_types"].items():
+            sub = info["dir"][len(prefix):]
+            if not info["dir"].startswith(prefix) or sub.split("/")[0] in mss._GRANT_SKIP_DIRS:
+                continue
+            mode = modes.get(sub, "wrapped")
+            rel = info["file"]
+            with open(os.path.join(snap, rel), encoding="utf-8") as fh:
+                data = vanilla_parsed.decode(json.load(fh))
+            found = []
+            for name, raw in data.items():
+                walk(name, raw, [], found)
+            per_type[entity_type] = len(found)
+            sites += found
 
+        costs = [s for s in sites if s.block in mfa.COST_BLOCKS]
+        self.assertGreater(len(sites) - len(costs), 15000)
+        self.assertGreater(len(costs), 400)
+        for entity_type, floor in (("Modifiers", 5000), ("PMs", 1000), ("Laws", 500), ("Technologies", 100),
+                                   ("Principles", 100), ("Character Traits", 100), ("Company Types", 100)):
+            self.assertGreater(per_type.get(entity_type, 0), floor, entity_type)
+
+        with open(os.path.join(snap, "common", "cultures.json"), encoding="utf-8") as fh:
+            vanilla_cultures = set(json.load(fh))
+        vanilla_loc = set(vanilla_parsed.load(snap).localization)
+        src = mfa.Sources(self.src.vanilla_types, self.src.vanilla_types, vanilla_cultures,
+                          self.src.vanilla_religions, vanilla_loc.__contains__)
+        result = mfa.check(sites, [], src)
+        self.assertEqual([(f.kind, f.name, f.sites[0].file, f.sites[0].entity) for f in result.flags], [])
 
 if __name__ == "__main__":
     unittest.main()
