@@ -209,7 +209,7 @@ needs you, with the detail on hover. A word turns red when something is due:
 
 | Cell | Reads |
 |---|---|
-| Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony at autonomy 50 or more, which wants self-rule, and how many more do. Hover it for all of them. |
+| Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony of 1,000 people or more at autonomy 50 or more, which wants self-rule, and how many more do. Hover it for all of them. |
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
@@ -946,8 +946,12 @@ drives bring the outer colonies closer: with a fusion torch the distance all but
 disappears. Keep settlers or modules arriving, on Low emigration if nothing
 else, so that no colony goes a year without contact.
 
-At 50, the colony demands self-government, once in five years at most, and you
-choose:
+A colony of fewer than 1,000 people has none of these terms: its autonomy only
+settles, toward 0, and it never demands self-government or breaks away, even at
+war.
+
+At 50, a colony of 1,000 people or more demands self-government, once in five
+years at most, and you choose:
 
 | Choice | Now | After |
 |---|---|---|
@@ -997,7 +1001,8 @@ supplying it brings it back in about two years; one that broke away starts at
 colonies and accept a colony that asks.
 
 Covert operations reach colonies too: Incite Colonial Autonomy raises the
-autonomy of every colony the target holds, Sabotage Colony kills a share of
+autonomy of every colony of 1,000 people or more the target holds, and needs one
+to start, Sabotage Colony kills a share of
 the people of its largest, and under Full Colonies Survey Colony Defenses
 shows your fleets the target's colony defenses and sharpens their fire on them
 (see [The covert operations](11-influence.md#the-covert-operations)).
@@ -1185,7 +1190,7 @@ Seize or Destroy button:
 | Choice | Needs | What follows | Price |
 |---|---|---|---|
 | Seize | More marines than the site's garrison and militia (a battalion for every 20,000 people, at least one) | The site is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more marines than the occupier's garrison | None |
-| Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the site lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
+| Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the site lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies of 1,000 people or more and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at
 once, and seizing it makes it yours at autonomy 60. A party to the

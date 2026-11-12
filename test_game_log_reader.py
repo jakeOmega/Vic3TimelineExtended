@@ -19,6 +19,8 @@ from game_log_reader import (
     cluster_sessions,
     summarize,
     render_error_log_digest,
+    MESSAGE_CATEGORY_BY_FILE,
+    SOURCE_CATEGORY_FILE,
     SOURCE_CATEGORY_PREFIX,
     load_vanilla_bug_registry,
     load_mod_noise_registry,
@@ -65,6 +67,23 @@ class ParseLogTests(unittest.TestCase):
         # Second entry references a mod file path; `files` should pick it up.
         self.assertIn("common/production_methods/strategic_reserve_pms.txt", entries[1].files)
         self.assertEqual(entries[1].category, "script_parse_error")
+
+    def test_parses_the_1_15_gamedatabase_lines(self):
+        # error.log, vanilla 1.15.0, 2026-11-10 (#1571): the same two messages
+        # 1.14.5 logged from gamedatabase.h:378 and :395.
+        path = _write_log(
+            "[10:21:16][gamedatabase.h:394]: Duplicated key has_indian_primary_culture will not be "
+            "created from file: common/scripted_triggers/00_scripted_triggers.txt:2015\n"
+            "[10:21:18][gamedatabase.h:411]: You are trying to inject/replace to a non-existing entry: "
+            "te_probe_pic_no_such_terrain:Inject in the file common/terrain/te_probe_pics_c.txt:2\n"
+        )
+        try:
+            entries = parse_log(path)
+        finally:
+            os.remove(path)
+        self.assertEqual([e.source for e in entries], ["gamedatabase.h:394", "gamedatabase.h:411"])
+        self.assertEqual([e.category for e in entries], ["duplicated_key", "inject_to_missing"])
+        self.assertEqual(entries[1].files, ["common/terrain/te_probe_pics_c.txt"])
 
     def test_continuation_lines_attach_to_previous(self):
         path = _write_log(
@@ -119,6 +138,75 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(e.category, "inconsistent_effect_scope")
         e = LogEntry("00:00:00", "virtualfilesystem.cpp:569", "Could not find texture")
         self.assertEqual(e.category, "missing_file")
+
+    DUPLICATED_KEY = ("Duplicated key has_indian_primary_culture will not be created from file: "
+                      "common/scripted_triggers/00_scripted_triggers.txt:2015")
+    INJECT_TO_MISSING = ("You are trying to inject/replace to a non-existing entry: "
+                         "te_probe_pic_no_such_terrain:Inject in the file common/terrain/te_probe_pics_c.txt:2")
+
+    def test_gamedatabase_lines_classify_on_1_14_and_1_15(self):
+        # 1.15.0 moved both lines by 16 (#1571): 378 -> 394, 395 -> 411.
+        for source in ("gamedatabase.h:378", "gamedatabase.h:394"):
+            with self.subTest(source=source):
+                self.assertEqual(LogEntry("00:00:00", source, self.DUPLICATED_KEY).category, "duplicated_key")
+        for source in ("gamedatabase.h:395", "gamedatabase.h:411"):
+            with self.subTest(source=source):
+                self.assertEqual(LogEntry("00:00:00", source, self.INJECT_TO_MISSING).category,
+                                 "inject_to_missing")
+
+    def test_gamedatabase_lines_classify_by_message_at_an_unknown_line(self):
+        # The next patch moves the lines again: the message text still says
+        # which of the two it is, so neither drops to gamedatabase_other.
+        for source in ("gamedatabase.h:427", "gamedatabase.h:1", "gamedatabase.h"):
+            with self.subTest(source=source):
+                self.assertEqual(LogEntry("00:00:00", source, self.DUPLICATED_KEY).category, "duplicated_key")
+                self.assertEqual(LogEntry("00:00:00", source, self.INJECT_TO_MISSING).category,
+                                 "inject_to_missing")
+
+    def test_gamedatabase_message_outranks_a_line_number_another_version_used(self):
+        # One version's line number can be another version's line for the
+        # other message; the text is what the engine said.
+        sources = [k for k in SOURCE_CATEGORY_PREFIX if k.startswith("gamedatabase.h:")]
+        self.assertTrue(sources)
+        for source in sources:
+            with self.subTest(source=source):
+                self.assertEqual(LogEntry("00:00:00", source, self.DUPLICATED_KEY).category,
+                                 "duplicated_key")
+                self.assertEqual(LogEntry("00:00:00", source, self.INJECT_TO_MISSING).category,
+                                 "inject_to_missing")
+
+    def test_gamedatabase_known_line_with_new_wording_keeps_its_category(self):
+        # The other way round: the wording changes and the line stays.
+        for source, category in (("gamedatabase.h:378", "duplicated_key"),
+                                 ("gamedatabase.h:394", "duplicated_key"),
+                                 ("gamedatabase.h:395", "inject_to_missing"),
+                                 ("gamedatabase.h:411", "inject_to_missing")):
+            with self.subTest(source=source):
+                self.assertEqual(LogEntry("00:00:00", source, "reworded").category, category)
+
+    def test_other_gamedatabase_lines_stay_gamedatabase_other(self):
+        e = LogEntry("00:00:00", "gamedatabase.h:500", "Some other database complaint")
+        self.assertEqual(e.category, "gamedatabase_other")
+        # The text only counts at the start of the message.
+        e = LogEntry("00:00:00", "gamedatabase.h:500", "Entry x: Duplicated key y")
+        self.assertEqual(e.category, "gamedatabase_other")
+
+    def test_gamedatabase_message_rules_cover_no_other_source(self):
+        # `Duplicated key` in another file's message (a script's debug_log
+        # line, say) is not the database's dropped duplicate.
+        e = LogEntry("00:00:00", "jomini_effect_impl.cpp:454", "Duplicated key foo")
+        self.assertEqual(e.category, "debug_log")
+        e = LogEntry("00:00:00", "completely_made_up.cpp:99", self.INJECT_TO_MISSING)
+        self.assertEqual(e.category, "other")
+
+    def test_message_category_rules_name_files_the_file_table_knows(self):
+        # A message rule refines a file's category, so its file needs the
+        # whole-file fallback too, and is keyed without a `:line`.
+        for source_file, rules in MESSAGE_CATEGORY_BY_FILE.items():
+            with self.subTest(source_file=source_file):
+                self.assertIn(source_file, SOURCE_CATEGORY_FILE)
+                self.assertNotIn(":", source_file)
+                self.assertTrue(all(prefix and category for prefix, category in rules))
 
     def test_unknown_source_falls_back_to_other(self):
         e = LogEntry("00:00:00", "completely_made_up.cpp:99", "whatever")
@@ -824,6 +912,42 @@ class StackVanillaOnlyTests(unittest.TestCase):
         _vanilla_bug_cache.clear()
         _, _, _, warnings = load_mod_noise_registry(os.path.join(root, "docs", "audits", "mod_known_noise.md"))
         self.assertEqual(warnings, [])
+
+
+class LiveGamedatabaseNoiseTests(unittest.TestCase):
+    """The culture merges' restated `has_indian_primary_culture` drops vanilla's
+    copy at every launch (open_issues.md L31). A registry `- source:` matches an
+    entry's `file:line` exactly, so the entry lists the line of each vanilla
+    version: 1.15.0 logs it from gamedatabase.h:394, 1.14.5 from :378 (#1571)."""
+
+    MESSAGE = ("Duplicated key has_indian_primary_culture will not be created from file: "
+               "common/scripted_triggers/00_scripted_triggers.txt:2015")
+
+    def _tag(self, source: str, message: str) -> LogEntry:
+        root = os.path.dirname(os.path.abspath(__file__))
+        _vanilla_bug_cache.clear()
+        _, by_basename, by_source, _ = load_mod_noise_registry(
+            os.path.join(root, "docs", "audits", "mod_known_noise.md"))
+        entry = LogEntry("10:21:16", source, message)
+        tag_vanilla_bugs([entry], by_basename, by_source, mod_root=root)
+        return entry
+
+    def test_the_restated_trigger_line_is_tagged_on_1_14_and_1_15(self):
+        for source in ("gamedatabase.h:378", "gamedatabase.h:394"):
+            with self.subTest(source=source):
+                entry = self._tag(source, self.MESSAGE)
+                self.assertIsNotNone(entry.vanilla_bug_ref)
+                self.assertEqual(entry.vanilla_bug_ref["kind"], "mod_low_priority")
+                self.assertIn("culture merges", entry.vanilla_bug_ref["title"])
+
+    def test_a_line_naming_the_mods_copy_is_not_tagged(self):
+        # The signature names vanilla's file on purpose: the mod's file in
+        # that place means the mod's copy lost.
+        message = ("Duplicated key has_indian_primary_culture will not be created from file: "
+                   "common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt:9")
+        for source in ("gamedatabase.h:378", "gamedatabase.h:394"):
+            with self.subTest(source=source):
+                self.assertIsNone(self._tag(source, message).vanilla_bug_ref)
 
 
 class GitHubHeadingSlugTests(unittest.TestCase):
