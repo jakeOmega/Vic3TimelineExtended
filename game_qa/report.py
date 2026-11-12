@@ -119,6 +119,16 @@ def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | 
         # restore puts the owner's playset back even when it holds the rest (`playset_restored`): say what was.
         reason = _text(restore.get("reason") or "no reason given")
         restored, removed = restore.get("restored") or [], restore.get("removed") or []
+        if restore.get("reason") == "retime_unverified":
+            # The one hold that comes after everything is back (restore._retime): nothing waits. The reply does
+            # not name the file; the journal's `held` entry does.
+            return ("Restore: HELD (%s). Nothing is left to put back (%d files put back, %d removed, %d given the "
+                    "snapshot's time again), but one file carries the snapshot's time over bytes that could not be "
+                    "proved the snapshot's: the last `held` entry of the snapshot's journal.jsonl names it "
+                    "(`files`). Look at that file first, and if its content is wanted, save it again so that its "
+                    "time is no longer the snapshot's; only the owner resolves a hold (`python3 -m game_qa held` "
+                    "lists it)."
+                    % (reason, len(restored), len(removed), len(restore.get("retimed") or [])))
         if restore.get("playset_restored") is True:
             done = " (%d files put back and %d removed in all)" % (len(restored), len(removed)) if (
                 len(restored) > 1 or removed) else ""

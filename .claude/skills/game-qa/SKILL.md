@@ -10,7 +10,7 @@ description: Launch Victoria 3 from a session and check something in the running
 
 1. **Ask the owner before launching**, unless they granted launches for this session in their own words. A grant has limits (a time, "after I leave"): keep to them. Even with a grant the tool's gate decides: it refuses beside a game it did not start, and on a busy GPU. Never pass `--owner-confirmed-busy` unless the owner was asked about that reading and said yes.
 2. **The game starts only through `start`** (or part 1's `launch`). Never run `victoria3.exe`, the launcher or PowerShell yourself, never end a game process by hand, and never edit, copy or delete anything in the game's user-data folder: the verbs do all of it, with checks.
-3. **A hold is the owner's.** `held` in a reply means the tool could not prove that putting the files back was safe (the owner may have played since), so it changed nothing. Only the owner resolves a hold. Tell them which snapshot and why, and start nothing more.
+3. **A hold is the owner's.** `held` in a reply means the tool could not prove that putting the files back was safe (the owner may have played since), so it stopped. Most holds change nothing but the run's playset, which goes back when no game is running. Two come later: `modified_during_restore` (a file changed under the restore; the files before it were already put back) and `retime_unverified` (everything was put back, and one file was left with the snapshot's time over bytes nobody could vouch for). The reply's `restored`, `removed` and `retimed` list what was done. Only the owner resolves a hold. Tell them which snapshot and why, and start nothing more.
 
 ## The order of verbs
 
@@ -44,7 +44,7 @@ python3 -m game_qa stop                         # always, even after a failure
 | Reply | Meaning | Do |
 |---|---|---|
 | `outcome: restored` | The owner's files are back as they were | Done. Run `doctor` to confirm nothing is left |
-| `outcome: held` | Nothing was overwritten; the owner decides | Report the snapshot id and the reason; start nothing |
+| `outcome: held` | The restore stopped for the owner to decide; `restored`, `removed` and `retimed` list what it had put back by then (for most holds, the playset at most) | Report the snapshot id and the reason; start nothing. After `retime_unverified`, name the file too (the journal's last `held` entry, `files`) and what to do about it (`docs/guides/python_tools.md`, the hardenings bullet) |
 | `outcome: game_left_up` | The game may still be running; nothing was restored beside it | Follow `next` exactly; ask the owner to close the game if it says so |
 | `outcome: refused` | The restore would not run yet | `stop` again when `next` says so; otherwise `recover`, then `remove-overlay` |
 | `overlay_kept: true` | The overlay folder was left because a playset may still name it | `remove-overlay`, once `next` allows it. Never delete the folder by hand |

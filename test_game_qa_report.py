@@ -82,6 +82,28 @@ class ReportTest(unittest.TestCase):
         self.assertIn("content_load.json was put back", first)
         self.assertIn("2 files put back and 1 removed in all", first)
 
+    def test_a_hold_that_came_after_everything_was_put_back_does_not_say_the_rest_waits(self):
+        # retime_unverified (restore._retime) is the one hold with nothing left to put back: the files, the
+        # removals and the playset are done, and one file's time could not be vouched for
+        done = {"restored": ["content_load.json", "continue_game.json"], "removed": ["save games/autosave.v3"],
+                "retimed": ["console_history.txt"], "held": True, "reason": "retime_unverified"}
+        for restore in (done, dict(done, playset_restored=True), dict(done, restored=[], removed=[], retimed=[])):
+            with self.subTest(restore=restore):
+                first = self.report.close(self.summary(restore, "held")).read_text("utf-8").split("\n")[0]
+                self.assertTrue(first.startswith("Restore: HELD (retime_unverified)"), first)
+                self.assertNotIn("waits", first)
+                self.assertNotIn("Nothing was put back", first)
+                self.assertIn("Nothing is left to put back (%d files put back, %d removed, %d given the snapshot's "
+                              "time again)" % (len(restore["restored"]), len(restore["removed"]),
+                                               len(restore["retimed"])), first)
+                # the reply does not name the file; the journal does, and the owner is told what to do about it
+                self.assertIn("journal", first)
+                self.assertIn("save it again", first)
+                self.assertIn("only the owner resolves a hold", first)
+        # any other hold still says what waits
+        other = self.report.close(self.summary(dict(done, reason="modified_during_restore"), "held")).read_text("utf-8")
+        self.assertIn("the rest waits", other.split("\n")[0])
+
     def test_a_game_left_up_says_restore_was_not_run_and_how_to_finish(self):
         summary = dict(self.summary(None, "game_left_up"), overlay_removed=False,
                        overlay_kept="the game may still be up, and the run's playset names the overlay")
