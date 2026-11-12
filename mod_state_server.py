@@ -74,9 +74,12 @@ import loc_accessor_usage  # GET /loc-accessors (#1246)
 import state_history  # GET /state-history (#901)
 import strategic_regions  # GET /strategic-regions, /state-region (#917)
 
-# Route groups moved into server/ (#1537). Each module reads this module's
-# state through server.server_module() at call time; the names are re-exported
-# here because tests and tools import them from mod_state_server.
+# Route groups moved into server/ (#1537). Each module reads this file's
+# state through server.server_state() at call time, from the globals this file
+# registers just below (however it was run: as __main__, imported, or exec'd
+# into a dict by cProfile); the names are re-exported here because tests and
+# tools import them from mod_state_server.
+import server as _server_pkg
 from server.routes_engine_docs import (  # noqa: F401 — re-exported
     EngineDocsRoutes,
     _LOC_IDENT_RE,
@@ -87,9 +90,7 @@ from server.routes_engine_docs import (  # noqa: F401 — re-exported
     _is_function_like_ident,
 )
 
-# Tells server.server_module() that a `__main__` carrying it is this server
-# (`python3 mod_state_server.py`), not pytest or a script that imported it.
-_MOD_STATE_SERVER_ENTRY_POINT = True
+_server_pkg.register_state(globals())
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")

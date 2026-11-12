@@ -6,10 +6,11 @@ The code moved; the state did not. Everything module-level that these
 functions read or rebind (`engine_docs`, `engine_docs_source_label`,
 `pattern_index`, `base_game_path`, `_BASE_COMMON`, the `_LOC_FUNCTION_INDEX`
 and `_USAGE_TARGET_RE_CACHE` caches, the `_LOC_EXPR_RE` the GUI index shares)
-stays defined in mod_state_server and is read through `server_module()` at
+stays defined in mod_state_server and is read through `server_state()` at
 call time, never imported into this module, so a reload's rebinding and a
 test's `mock.patch.object(mod_state_server, ...)` reach it as before. The
-error classes come from there too, so do_GET's `except` clauses match them.
+error classes come from there too, so do_GET's `except` clauses match them
+however the server file was run (see server/__init__.py).
 mod_state_server re-exports every name below.
 """
 import difflib
@@ -18,7 +19,7 @@ import re
 import shutil
 import subprocess
 
-from server import server_module
+from server import server_state
 
 _LOC_IDENT_RE = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*")
 # Identifier "kind" classification:
@@ -41,7 +42,7 @@ def _build_loc_function_index() -> dict:
     Cached after first build (call `_get_loc_function_index` from endpoints).
     Single-pass over ~16 MB of text; ~2-4s on WSL+NTFS.
     """
-    srv = server_module()
+    srv = server_state()
     index: dict[str, dict] = {}
     max_examples_per_token = 8
 
@@ -113,7 +114,7 @@ def _build_loc_function_index() -> dict:
 
 def _get_loc_function_index() -> dict:
     """Return the cached loc-function index, building it on first access."""
-    srv = server_module()
+    srv = server_state()
     if srv._LOC_FUNCTION_INDEX is None:
         srv._LOC_FUNCTION_INDEX = _build_loc_function_index()
     return srv._LOC_FUNCTION_INDEX
@@ -137,7 +138,7 @@ def _engine_docs_find_usage(
     Backend: ripgrep when available (fast, ~1-2s across vanilla); Python
     `os.walk` otherwise. Either way the result is capped at `limit`.
     """
-    srv = server_module()
+    srv = server_state()
     if not target or not re.match(r"^[a-z][a-z0-9_]*$", target):
         return {
             "name": target,
@@ -295,7 +296,7 @@ def _group_similar_entries(entries: list[dict]) -> tuple[list[dict], list[dict]]
     Falls back to returning everything as ungrouped if the pattern engine
     hasn't been initialized (e.g. server is starting up).
     """
-    srv = server_module()
+    srv = server_state()
     if not srv.pattern_index:
         return [], list(entries)
 
@@ -388,7 +389,7 @@ class EngineDocsRoutes:
                                                 researching the canonical loc
                                                 idiom for a feature.
         """
-        srv = server_module()
+        srv = server_state()
         if not parts:
             return {
                 "available_types": list(srv.engine_docs.keys()),

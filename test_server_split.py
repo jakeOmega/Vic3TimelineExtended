@@ -20,6 +20,8 @@ import contextlib
 import io
 import json
 import os
+import shutil
+import subprocess
 import sys
 import tempfile
 import types
@@ -146,6 +148,8 @@ ENGINE_DOCS_GUI = (
     "}\n"
 )
 
+GREP = shutil.which("grep")
+
 # Fixed, so the 503 body (which names the directory) is the same everywhere.
 MISSING_COMMON = "/nonexistent/te_server_split/game/common"
 
@@ -214,6 +218,9 @@ def engine_docs_fixture():
             ("_LOC_FUNCTION_INDEX", None),
         ):
             stack.enter_context(mock.patch.object(mss, name, value))
+        # The usage scan takes grep, else ripgrep, else a Python walk, by what
+        # is on PATH: pin grep so `backend` is the same on every machine.
+        stack.enter_context(mock.patch("shutil.which", side_effect=lambda name: GREP if name == "grep" else None))
         yield
 
 
@@ -258,6 +265,8 @@ class GoldenResponseTests(unittest.TestCase):
         self.assertEqual(sorted(got), sorted(golden), "the case list changed: re-record on the pre-move commit")
         for label, want in golden.items():
             with self.subTest(case=label, path=want["path"]):
+                if GREP is None and '"backend": "grep"' in want["body"]:
+                    self.skipTest("no grep on PATH")
                 self.assertEqual(got[label]["path"], want["path"])
                 self.assertEqual(got[label]["status"], want["status"])
                 self.assertEqual(got[label]["body"], want["body"])
@@ -286,7 +295,7 @@ MOVED = {
 }
 
 # Module-level state the moved code reads or rebinds. It stays defined in
-# mod_state_server, and the moved code reaches it through server_module().
+# mod_state_server, and the moved code reaches it through server_state().
 STATE_LEFT_IN_SERVER = [
     "engine_docs", "engine_docs_source_label", "pattern_index", "base_game_path",
     "_BASE_COMMON", "_LOC_FUNCTION_INDEX", "_USAGE_TARGET_RE_CACHE", "_LOC_EXPR_RE",
@@ -326,62 +335,90 @@ class MovedNamesTests(unittest.TestCase):
         with mock.patch.object(mss, "_LOC_FUNCTION_INDEX", {"F": {"count": 1}}):
             self.assertEqual(mss._get_loc_function_index(), {"F": {"count": 1}})
 
-    def test_server_module_is_main_when_the_server_runs_as_a_script(self):
-        # `python3 mod_state_server.py` runs the module as __main__; an
-        # `import mod_state_server` there would load a second copy with empty
-        # state, so the route modules must take __main__.
+    def test_state_comes_from_the_registered_globals(self):
         import server
-        self.assertIs(server.server_module(), mss)
-        fake_main = types.ModuleType("__main__")
-        fake_main._MOD_STATE_SERVER_ENTRY_POINT = True
-        with mock.patch.dict(sys.modules, {"__main__": fake_main}):
-            self.assertIs(server.server_module(), fake_main)
-        other_main = types.ModuleType("__main__")  # pytest, scripts/query.py, an audit's CLI
-        with mock.patch.dict(sys.modules, {"__main__": other_main}):
-            self.assertIs(server.server_module(), mss)
+        self.assertIs(server.server_globals(), vars(mss))  # imported: pytest, query.py, an audit's CLI
+        state = server.server_state()
+        with mock.patch.object(mss, "engine_docs", {"late": []}):
+            self.assertEqual(state.engine_docs, {"late": []})
+        with mock.patch.object(mss, "_LOC_FUNCTION_INDEX", None):
+            state._LOC_FUNCTION_INDEX = {"F": {}}
+            self.assertEqual(mss._LOC_FUNCTION_INDEX, {"F": {}})
+        with self.assertRaises(AttributeError):
+            state.no_such_name_anywhere
+        # The script's own globals, wherever they live, win over an imported copy.
+        script_globals = {"__name__": "__main__"}
+        with mock.patch.object(server, "_registered", [script_globals, vars(mss)]):
+            self.assertIs(server.server_globals(), script_globals)
+        with mock.patch.object(server, "_registered", []):
+            with self.assertRaises(RuntimeError):
+                server.server_globals()
 
-    def test_routes_serve_main_state_when_run_as_a_script(self):
-        # The real thing, in a fresh interpreter: the file's code runs as
-        # __main__ (all of it but the last line, which would start the
-        # server), and a request through its handler must answer from
-        # __main__'s state without importing a second mod_state_server.
-        script = (
-            "import io, json, sys, types\n"
-            "path = sys.argv[1]\n"
-            "src = open(path, encoding='utf-8').read()\n"
-            "tail = 'if __name__ == \"__main__\":\\n    main()\\n'\n"
-            "assert src.endswith(tail), 'the file no longer ends with its main() call'\n"
-            "entry = sys.modules['__main__']  # not `main`: the server defines main()\n"
-            "entry.__file__ = path\n"
-            "exec(compile(src[:-len(tail)], path, 'exec'), entry.__dict__)\n"
-            "entry.engine_docs = {'from_main': []}\n"
-            "class H(ModStateHandler):\n"
-            "    def __init__(self, p):\n"
-            "        self.path = p\n"
-            "        self.headers = {'Host': '127.0.0.1:8950'}\n"
-            "        self.server = types.SimpleNamespace(server_port=8950)\n"
-            "        self.wfile = io.BytesIO()\n"
-            "    def send_response(self, code, message=None): self.code = code\n"
-            "    def send_header(self, k, v): pass\n"
-            "    def end_headers(self): pass\n"
-            "h = H('/engine-docs')\n"
-            "h.do_GET()\n"
-            "print(json.dumps({'code': h.code, 'body': json.loads(h.wfile.getvalue()),\n"
-            "                  'copy_imported': 'mod_state_server' in sys.modules}))\n"
-        )
-        import subprocess
+    # How each way of running the file executes its code: into the __main__
+    # module (`python3 mod_state_server.py`, `-m`), or into a plain dict
+    # (`python3 -m cProfile|profile|trace mod_state_server.py`, built the way
+    # cProfile.main and trace.main build it). The last line, main(), is left
+    # out: it would start a server.
+    _PROBE = """\
+import importlib.machinery, io, json, sys, types
+mode, path = sys.argv[1], sys.argv[2]
+src = open(path, encoding='utf-8').read()
+tail = 'if __name__ == "__main__":\\n    main()\\n'
+assert src.endswith(tail), 'the file no longer ends with its main() call'
+code = compile(src[:-len(tail)], path, 'exec')
+if mode == 'script':
+    globs = sys.modules['__main__'].__dict__
+    globs['__file__'] = path
+    exec(code, globs)
+else:
+    globs = {'__spec__': importlib.machinery.ModuleSpec(name='__main__', loader=None, origin=path),
+             '__file__': path, '__name__': '__main__', '__package__': None, '__cached__': None}
+    if mode == 'cProfile':
+        import cProfile
+        cProfile.Profile().runctx(code, globs, None)
+    else:
+        import trace
+        trace.Trace(count=0, trace=0).runctx(code, globs, globs)
+globs['engine_docs'] = {'from_main': []}
+class H(globs['ModStateHandler']):
+    def __init__(self, p):
+        self.path = p
+        self.headers = {'Host': '127.0.0.1:8950'}
+        self.server = types.SimpleNamespace(server_port=8950)
+        self.wfile = io.BytesIO()
+    def send_response(self, code, message=None): self.code = code
+    def send_header(self, k, v): pass
+    def end_headers(self): pass
+out = {}
+for p in ('/engine-docs', '/engine-docs/bogus'):
+    h = H(p)
+    h.do_GET()
+    out[p] = [h.code, json.loads(h.wfile.getvalue())]
+out['copy_imported'] = 'mod_state_server' in sys.modules
+print(json.dumps(out))
+"""
+
+    def test_routes_serve_the_running_file_state_however_it_was_run(self):
+        # The real thing, in a fresh interpreter per mode: a request through
+        # the running file's handler answers from that file's globals, raises
+        # its own NotFound (a copy's class would miss do_GET's except: 500),
+        # and loads no second mod_state_server.
         env = dict(os.environ)
         for key, value in {"VIC3_BASE_GAME": "/nonexistent/game", "VIC3_MOD_DEPLOY_TARGET": "/nonexistent/deploy",
                            "VIC3_VANILLA_REPO": "/nonexistent/vic3", "VIC3_VANILLA_DOCS_RUNTIME": "/nonexistent/docs",
                            "VIC3_GAME_LOGS": "/nonexistent/logs"}.items():
             env.setdefault(key, value)
-        proc = subprocess.run([sys.executable, "-c", script, os.path.join(ROOT, "mod_state_server.py")],
-                              cwd=ROOT, env=env, capture_output=True, text=True, timeout=120)
-        self.assertEqual(proc.returncode, 0, proc.stderr[-2000:])
-        result = json.loads(proc.stdout.strip().splitlines()[-1])
-        self.assertEqual(result["code"], 200)
-        self.assertEqual(result["body"]["available_types"], ["from_main"])
-        self.assertFalse(result["copy_imported"])
+        for mode in ("script", "cProfile", "trace"):
+            with self.subTest(mode=mode):
+                proc = subprocess.run(
+                    [sys.executable, "-c", self._PROBE, mode, os.path.join(ROOT, "mod_state_server.py")],
+                    cwd=ROOT, env=env, capture_output=True, text=True, timeout=120)
+                self.assertEqual(proc.returncode, 0, proc.stderr[-2000:])
+                result = json.loads(proc.stdout.strip().splitlines()[-1])
+                self.assertEqual(result["/engine-docs"][0], 200)
+                self.assertEqual(result["/engine-docs"][1]["available_types"], ["from_main"])
+                self.assertEqual(result["/engine-docs/bogus"][0], 404)
+                self.assertFalse(result["copy_imported"])
 
     def test_route_modules_do_not_import_the_server_at_import_time(self):
         # A module-level `import mod_state_server` would, under __main__, load
@@ -405,7 +442,6 @@ if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--record":
         group = sys.argv[2]
         os.makedirs(GOLDEN_DIR, exist_ok=True)
-        import subprocess
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
                                 capture_output=True, text=True).stdout.strip()
         data = {"recorded_on": commit, "responses": responses(group)}
