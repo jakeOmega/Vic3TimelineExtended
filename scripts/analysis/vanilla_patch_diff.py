@@ -28,16 +28,26 @@ Subcommands:
   targets OLD_REF NEW_REF [--vanilla-repo DIR] [--mod-root DIR] [--diffs replace|all|none]
       The one mode that does need the vanilla mirror: two of its commits (the
       runbook's OLD_REF and NEW_REF). It reads every top-level entry of every
-      `common/` folder at both, compares them without comments and
-      indentation, and lists the mod's `REPLACE:` / `INJECT:` / `TRY_*` /
-      `*_OR_CREATE` and bare same-name definitions of each entry vanilla
-      changed, removed or added, with file and line (the runbook's § 5 sweep).
+      script folder (`common/<folder>`, `events/`, the `.txt` folders of
+      `gfx/`) at both, compares them without comments and indentation, and
+      prints:
+      - the mod's `REPLACE:` / `INJECT:` / `TRY_*` / `*_OR_CREATE` and bare
+        same-name definitions of each entry vanilla changed, removed or added,
+        with file and line (the runbook's § 5 sweep);
+      - the mod's files at the path of a vanilla file that changed;
+      - every entry and event vanilla removed, with the uses of its name left
+        in the mod's script, GUI and loc (a removed scripted trigger the mod
+        only calls is no target);
+      - the defines vanilla removed, with the mod's `define:` / `GetDefine`
+        reads and `common/defines/` overrides, and the changed ones it sets;
+      - the vanilla events the mod redefines;
+      - the files the scanner could not read cleanly;
+      - vanilla's diff of each changed block the mod restates.
       A key is looked up in its whole folder, so an entry vanilla moved to
-      another file unchanged is not a change. The same pass lists the defines
-      vanilla removed (with the mod's `define:` / `GetDefine` reads and
-      `common/defines/` overrides of each), the changed defines the mod
-      overrides, the vanilla events the mod redefines or (removed ones) still
-      names, and vanilla's diff of each changed block the mod restates.
+      another file unchanged is not a change. Not listed: a CHANGED entry the
+      mod only uses by name, GUI, loc, and what a changed `@constant` does to
+      the entries that read it. It exits 2, printing nothing, when a commit
+      has no script under `game/common` or the mod root has none.
 
 `--mod-uses` greps the mod (common/ events/ gui/ localization/english/) for
 every REMOVED name and prints the hits; comment-only hits are counted apart.
@@ -249,24 +259,30 @@ def diff_parsed(new_dir, old_ref=None, old_dir=None, fields_out=None):
 # The comparison takes plain {path: text} trees (`sweep_targets`), so it runs
 # on anything; the git access is the few functions at the end of the section.
 # Paths are relative to the mirror's `game/` folder and to the mod root, which
-# have the same shape: `common/<folder>/...`, `events/...`.
+# have the same shape: `common/<folder>/...`, `events/...`, `gfx/.../*.txt`.
 
 EVENTS = "events"
 DEFINES = "defines"
 _EVENT_ID = re.compile(r"^[\w\-]+\.[\w\-]+$")
-_SCRIPT_TOKEN = re.compile(r"[\w\-.]+")
+# A name as script, GUI and loc write one: no leading or trailing `.` or `-`,
+# so `law_x.` at the end of a sentence is `law_x` and `ns.4.t` is not `ns.4`.
+_NAME_TOKEN = re.compile(r"\w(?:[\w\-.]*\w)?")
 _DEFINE_READS = (re.compile(r"define:(\w+)\|(\w+)"),
                  re.compile(r"GetDefine\(\s*'(\w+)'\s*,\s*'(\w+)'\s*\)"))
+# A define value too common for "the same value under a new name" to mean a rename.
+_TRIVIAL_VALUE = re.compile(r"yes|no|-?\d?\.?\d?")
 # Folders where a bare same-name block adds to vanilla's instead of competing
 # with it (external_mod_overlap.rule_for: on_actions, history).
 _MERGING_KINDS = ("on_actions", "additive")
-# What the mod's files are read for: script (entries, event ids, `define:`),
-# and GUI and loc for `GetDefine`.
-MOD_SCAN = (("common", ".txt"), ("events", ".txt"), ("gui", ".gui"),
+# The mod's files: script (entries, event ids, `define:`), and GUI and loc for
+# `GetDefine` and for uses of a removed name.
+MOD_SCAN = (("common", ".txt"), ("events", ".txt"), ("gfx", ".txt"), ("gui", ".gui"),
             ("localization/english", ".yml"))
-VANILLA_ROOTS = ("game/common", "game/events")
+VANILLA_ROOTS = ("game/common", "game/events", "game/gfx")
 _STATUS_ORDER = {"removed": 0, "added": 1, "changed": 2}
 _MAX_RENAME_HINTS = 3
+_MAX_USES_SHOWN = 10
+_GIT = ("git", "-c", "core.fsmonitor=false", "-c", "core.hooksPath=/dev/null")
 
 
 @dataclass
@@ -298,7 +314,8 @@ def normalise(lines):
 def group_of(rel):
     """The database a script file belongs to: `common/<folder>/...` gives the
     folder as external_mod_overlap names it (`laws`, `technology/technologies`),
-    `events/...` gives `events`; None for anything else."""
+    `events/...` gives `events`, `gfx/<folders>/x.txt` its folder with the
+    `gfx/` (`gfx/portraits/portrait_modifiers`); None for anything else."""
     if not rel.endswith(".txt"):
         return None
     top, _, rest = rel.partition("/")
@@ -307,15 +324,18 @@ def group_of(rel):
     if top == "common":
         split = emo.split_common_path(rest)
         return split[0] if split else None
+    if top == "gfx":
+        return rel.rpartition("/")[0]
     return None
 
 
 def blocks_in(group, text):
-    """The Blocks of one file of `group`. external_mod_overlap.scan_script
-    finds the entries; a block's text is its lines, first to closing brace.
-    A define or a wrapper's child runs to the line before the next one."""
-    lines = text.lstrip("﻿").splitlines()   # as scan_script numbers them
-    entries, _warnings = emo.scan_script(text)
+    """(the Blocks of one file of `group`, the scanner's warnings).
+    external_mod_overlap.scan_script finds the entries; a block's text is its
+    lines, first to closing brace. A define or a wrapper's child runs to the
+    line before the next one."""
+    lines = text.lstrip("\ufeff").splitlines()   # as scan_script numbers them
+    entries, warnings = emo.scan_script(text)
 
     def span(start, end):
         return [raw.rstrip() for raw in lines[start - 1:end]]
@@ -347,13 +367,14 @@ def blocks_in(group, text):
         elif group != EVENTS or (e.value is None and _EVENT_ID.match(e.key)):
             out.append(Block(e.key, e.directive, e.line,
                              span(e.line, e.end_line or len(lines)), e.value))
-    return out
+    return out, warnings
 
 
-def index_tree(files, cache=None, groups=None):
+def index_tree(files, cache=None, groups=None, warnings=None):
     """{group: {key: [(path, Block), ...]}} for a {path: text} tree, each
     key's list in path and line order. `cache` (a dict) lets two trees share
-    the scan of a file they both hold; `groups` limits the scan."""
+    the scan of a file they both hold; `groups` limits the scan; a `warnings`
+    dict gets {path: [the scanner's warnings]} for the files that have any."""
     cache = {} if cache is None else cache
     out = {}
     for path in sorted(files):
@@ -363,8 +384,23 @@ def index_tree(files, cache=None, groups=None):
         text = files[path]
         if (group, text) not in cache:
             cache[(group, text)] = blocks_in(group, text)
-        for block in cache[(group, text)]:
+        blocks, warned = cache[(group, text)]
+        if warned and warnings is not None:
+            warnings[path] = warned
+        for block in blocks:
             out.setdefault(group, {}).setdefault(block.key, []).append((path, block))
+    return out
+
+
+def _only_in(blocks, others):
+    """The (path, Block)s of `blocks` with no equal block left in `others`."""
+    left = collections.Counter(b.norm for _p, b in others)
+    out = []
+    for path, block in blocks:
+        if left[block.norm] > 0:
+            left[block.norm] -= 1
+        else:
+            out.append((path, block))
     return out
 
 
@@ -376,44 +412,55 @@ def _body(group, key, blocks):
 
 
 def vanilla_delta(old_index, new_index):
-    """{group: {key: {'status', 'old', 'new', 'renamed_to'}}} for every key
-    whose definitions differ between two index_tree results. `status` is
-    changed, added or removed; `renamed_to` lists the added keys of the group
-    that carry a removed key's body (at most three)."""
+    """{group: {key: row}} for every key whose definitions differ between two
+    index_tree results. A row has `status` (changed, added or removed), `old`
+    and `new` (the key's definitions on each side), `old_only` and `new_only`
+    (those with no equal on the other side: what changed, when a key has
+    several), and `renamed_to` (the added keys of the group that carry a
+    removed key's body)."""
     delta = {}
     for group in sorted(set(old_index) | set(new_index)):
         old, new = old_index.get(group, {}), new_index.get(group, {})
         rows = {}
         for key in sorted(set(old) | set(new)):
             o, n = old.get(key, []), new.get(key, [])
-            if sorted(b.norm for _p, b in o) == sorted(b.norm for _p, b in n):
+            old_only, new_only = _only_in(o, n), _only_in(n, o)
+            if not old_only and not new_only:
                 continue
             status = "added" if not o else "removed" if not n else "changed"
-            rows[key] = {"status": status, "old": o, "new": n, "renamed_to": []}
+            rows[key] = {"status": status, "old": o, "new": n, "old_only": old_only,
+                         "new_only": new_only, "renamed_to": []}
         added = collections.defaultdict(list)
         for key, row in rows.items():
             if row["status"] == "added":
                 added[_body(group, key, row["new"])].append(key)
         for key, row in rows.items():
             if row["status"] == "removed":
-                row["renamed_to"] = added.get(_body(group, key, row["old"]), [])[:_MAX_RENAME_HINTS]
+                row["renamed_to"] = added.get(_body(group, key, row["old"]), [])
         if rows:
             delta[group] = rows
     return delta
 
 
-def consequence(status, directive, bare_rule=emo.UNKNOWN):
+def consequence(status, directive, bare_rule=emo.UNKNOWN, own=None, same_path=False):
     """What a vanilla change of `status` does to a mod definition with
     `directive` (None: a bare same-name definition), in a few words; '' when
-    the directive says it all. The directive semantics are
-    external_mod_overlap.LOAD_ORDER_MODEL's `directives` and `bare_duplicate`."""
+    the directive says it all. `own` is where the mod itself defines the key
+    bare, `same_path` whether a bare definition sits in a mod file at the path
+    of the vanilla file that holds the key. The directive semantics are
+    external_mod_overlap.LOAD_ORDER_MODEL's `directives`, `bare_duplicate` and
+    `same_path`."""
     try_form = directive in emo.TRY_FORMS
     or_create = directive in emo.OR_CREATE_DIRECTIVES
     bare = {emo.FIRST_WINS: "the first file read wins",
             emo.LAST_WINS: "the last file read wins"}.get(bare_rule, "")
+    if directive is None and same_path:
+        return "in the mod's copy of vanilla's file, which replaces it whole"
     if status == "removed":
         if directive is None:
             return "the mod's is now the only definition"
+        if own:
+            return f"its target is now the mod's own definition, {own}"
         if try_form:
             return "no target now: the block is skipped, with no log line"
         if or_create:
@@ -431,17 +478,26 @@ def consequence(status, directive, bare_rule=emo.UNKNOWN):
 
 
 def _vanilla_files(row):
-    """The base names of the vanilla files a delta row's key is (was) in."""
-    side = row["new"] or row["old"]
+    """The base names of the vanilla files in which a delta row's key changed:
+    the files of its new or changed definitions, or of the ones that went."""
+    side = row["new_only"] or row["old_only"]
     return sorted({os.path.basename(p) for p, _b in side})
 
 
 def _block_diff(row):
-    """Unified diff of a changed key's raw lines, old to new."""
-    old = [line for _p, b in row["old"] for line in b.lines]
-    new = [line for _p, b in row["new"] for line in b.lines]
+    """Unified diff of a changed key's raw lines, old to new (of the
+    definitions that differ, when the key has several)."""
+    old = [line for _p, b in row["old_only"] for line in b.lines]
+    new = [line for _p, b in row["new_only"] for line in b.lines]
     return [l for l in difflib.unified_diff(old, new, lineterm="", n=3)
             if not l.startswith(("---", "+++"))]
+
+
+def _code_lines(path, text):
+    """(line number, the line without its comment) for a mod file. A loc line
+    is kept whole: `#` is markup there."""
+    for lineno, raw in enumerate(text.splitlines(), 1):
+        yield lineno, raw if path.endswith(".yml") else emo.strip_comment(raw)
 
 
 def define_reads(mod_files, wanted):
@@ -453,10 +509,9 @@ def define_reads(mod_files, wanted):
         text = mod_files[path]
         if "efine" not in text:
             continue
-        for lineno, raw in enumerate(text.splitlines(), 1):
-            if "efine" not in raw:
+        for lineno, code in _code_lines(path, text):
+            if "efine" not in code:
                 continue
-            code = raw if path.endswith(".yml") else emo.strip_comment(raw)
             for pattern in _DEFINE_READS:
                 for m in pattern.finditer(code):
                     name = f"{m.group(1)}|{m.group(2)}"
@@ -465,18 +520,17 @@ def define_reads(mod_files, wanted):
     return hits
 
 
-def script_mentions(mod_files, wanted):
-    """{name: ['file:line', ...]} for whole-token uses of the `wanted` names
-    (event ids) in the mod's script, comments apart."""
+def name_uses(mod_files, wanted):
+    """{name: ['file:line', ...]} for the whole-name uses of the `wanted`
+    names anywhere in the mod's script, GUI and loc, comments apart. By name
+    only: a goods `radio` and a technology `radio` are one name."""
     hits = collections.defaultdict(list)
     for path in sorted(mod_files):
-        if group_of(path) is None:
-            continue
         text = mod_files[path]
-        if not wanted.intersection(_SCRIPT_TOKEN.findall(text)):
+        if wanted.isdisjoint(_NAME_TOKEN.findall(text)):
             continue
-        for lineno, raw in enumerate(text.splitlines(), 1):
-            for tok in _SCRIPT_TOKEN.findall(emo.strip_comment(raw)):
+        for lineno, code in _code_lines(path, text):
+            for tok in set(_NAME_TOKEN.findall(code)):
                 if tok in wanted:
                     hits[tok].append(f"{path}:{lineno}")
     return hits
@@ -487,15 +541,22 @@ def sweep_targets(old_files, new_files, mod_files):
 
     `old_files` and `new_files` are {path below `game/`: text} for vanilla's
     script at the two versions (whole folders: a key is looked up across its
-    folder's files), `mod_files` {path below the mod root: text}. Returns
-    {'counts', 'targets', 'merged', 'defines_removed', 'defines_changed',
-    'events', 'diffs'}: `counts` is {group: {status: n}}, the rest sorted lists.
+    folder's files), `mod_files` {path below the mod root: text}. Returns a
+    dict: `counts` is {group: {status: n}}, the rest sorted lists:
+    `targets` (the mod's definitions of changed, removed and added entries),
+    `merged` (on_action and history blocks), `same_path` (mod files at the
+    path of a vanilla file that changed), `removed` (every removed entry and
+    event, with the mod's uses of its name), `defines_removed`,
+    `defines_changed`, `events` (redefined ones), `warnings` (the scanner's)
+    and `diffs`.
     """
-    cache = {}
-    delta = vanilla_delta(index_tree(old_files, cache), index_tree(new_files, cache))
-    mod = index_tree(mod_files, groups=set(delta))
-    report = {"counts": {}, "targets": [], "merged": [], "defines_removed": [],
-              "defines_changed": [], "events": [], "diffs": []}
+    cache, warned = {}, {"old": {}, "new": {}, "mod": {}}
+    delta = vanilla_delta(index_tree(old_files, cache, warnings=warned["old"]),
+                          index_tree(new_files, cache, warnings=warned["new"]))
+    mod = index_tree(mod_files, groups=set(delta), warnings=warned["mod"])
+    report = {"counts": {}, "targets": [], "merged": [], "same_path": [], "removed": [],
+              "defines_removed": [], "defines_changed": [], "events": [], "warnings": [],
+              "diffs": []}
 
     for group, rows in delta.items():
         report["counts"][group] = dict(collections.Counter(r["status"] for r in rows.values()))
@@ -507,6 +568,9 @@ def sweep_targets(old_files, new_files, mod_files):
             mine = mod.get(group, {}).get(key, [])
             common = {"group": group, "key": key, "status": row["status"],
                       "vanilla_files": _vanilla_files(row)}
+            vanilla_paths = {p for p, _b in (row["new"] or row["old"])}
+            own = next((f"{p}:{b.line}" for p, b in mine
+                        if b.directive is None and not merging), None)
             hooks = []
             for path, b in mine:
                 if merging and b.directive is None:
@@ -514,7 +578,8 @@ def sweep_targets(old_files, new_files, mod_files):
                     continue
                 report["targets"].append({
                     **common, "directive": b.directive, "file": path, "line": b.line,
-                    "note": consequence(row["status"], b.directive, rule.bare_duplicate),
+                    "note": consequence(row["status"], b.directive, rule.bare_duplicate,
+                                        own=own, same_path=path in vanilla_paths),
                     "renamed_to": row["renamed_to"]})
             if hooks:
                 report["merged"].append({**common, "sites": hooks})
@@ -530,34 +595,72 @@ def sweep_targets(old_files, new_files, mod_files):
     report["targets"].sort(key=lambda r: (_STATUS_ORDER[r["status"]], rank(r["directive"]),
                                           r["group"], r["key"], r["file"], r["line"]))
 
+    # A mod file at a vanilla file's path replaces it whole, so what vanilla
+    # did to that file never reaches the game.
+    for path in sorted(mod_files):
+        old, new = old_files.get(path), new_files.get(path)
+        if group_of(path) is None or (old is None and new is None):
+            continue
+        if old is None or new is None:
+            report["same_path"].append({"file": path, "status": "added" if old is None else "removed"})
+        elif normalise(old.splitlines()) != normalise(new.splitlines()):
+            report["same_path"].append({"file": path, "status": "changed"})
+
+    # Every removed entry and event, with the uses of its name the mod still
+    # has: a removed scripted trigger the mod only calls is no target above.
+    gone = [(group, key, row) for group, rows in delta.items() if group != DEFINES
+            for key, row in rows.items() if row["status"] == "removed"]
+    uses = name_uses(mod_files, {key for _g, key, _r in gone}) if gone else {}
+    for group, key, row in gone:
+        own_sites = {f"{p}:{b.line}" for p, b in mod.get(group, {}).get(key, [])}
+        report["removed"].append({
+            "group": group, "key": key, "status": "removed", "vanilla_files": _vanilla_files(row),
+            "renamed_to": row["renamed_to"],
+            "uses": [site for site in uses.get(key, []) if site not in own_sites]})
+
     defines = delta.get(DEFINES, {})
     removed = {k for k, row in defines.items() if row["status"] == "removed"}
     reads = define_reads(mod_files, removed) if removed else {}
+    arrived = collections.defaultdict(list)      # KEY -> the `NBlock|KEY`s vanilla added
+    for name, row in defines.items():
+        if row["status"] == "added":
+            arrived[name.split("|")[1]].append(name)
     for name, row in defines.items():
         overrides = [{"file": p, "line": b.line, "value": b.value}
                      for p, b in mod.get(DEFINES, {}).get(name, [])]
         old = row["old"][-1][1].value if row["old"] else None
         new = row["new"][-1][1].value if row["new"] else None
         if row["status"] == "removed":
+            # The same value under a new name says little when the value is 0
+            # or yes, or when several new defines carry it.
+            hints = row["renamed_to"]
+            if len(hints) > _MAX_RENAME_HINTS or _TRIVIAL_VALUE.fullmatch(old or ""):
+                hints = []
             report["defines_removed"].append({
                 "define": name, "status": "removed", "old": old,
-                "vanilla_files": _vanilla_files(row),
-                "renamed_to": row["renamed_to"], "overrides": overrides,
-                "reads": reads.get(name, [])})
+                "vanilla_files": _vanilla_files(row), "renamed_to": hints,
+                "moved_to": arrived.get(name.split("|")[1], []),
+                "overrides": overrides, "reads": reads.get(name, [])})
         elif row["status"] == "changed" and overrides:
             report["defines_changed"].append({
                 "define": name, "old": old, "new": new, "overrides": overrides})
 
-    events = delta.get(EVENTS, {})
-    gone = {k for k, row in events.items() if row["status"] == "removed"}
-    mentions = script_mentions(mod_files, gone) if gone else {}
-    for event_id, row in events.items():
+    for event_id, row in delta.get(EVENTS, {}).items():
         defs = [f"{p}:{b.line}" for p, b in mod.get(EVENTS, {}).get(event_id, [])]
-        names = [site for site in mentions.get(event_id, []) if site not in defs]
-        if defs or names:
+        if defs:
             report["events"].append({
                 "id": event_id, "status": row["status"], "vanilla_files": _vanilla_files(row),
-                "redefined": defs, "named": names})
+                "redefined": defs})
+
+    # A file the scanner could not read cleanly: with a brace missing, the
+    # entries after it fold into the open one and are not compared.
+    sides = collections.defaultdict(list)
+    for side, label in (("old", "the old commit"), ("new", "the new commit"), ("mod", "the mod")):
+        for path, messages in warned[side].items():
+            for message in messages:
+                sides[(path if side == "mod" else "game/" + path, side == "mod", message)].append(label)
+    report["warnings"] = [{"file": path, "where": " and ".join(labels), "warning": message}
+                          for (path, _mod, message), labels in sorted(sides.items())]
     return report
 
 
@@ -580,7 +683,7 @@ def format_targets(report, diffs="replace"):
     totals = collections.Counter()
     for counts in folders.values():
         totals.update(counts)
-    out.append(f"top-level entries of vanilla's common/ (a define counts as one): "
+    out.append(f"top-level entries of vanilla's common/ and gfx/ script (a define counts as one): "
                f"{totals['changed']} changed, {totals['added']} added, "
                f"{totals['removed']} removed in {len(folders)} folder(s)")
     if folders:
@@ -589,11 +692,14 @@ def format_targets(report, diffs="replace"):
     out.append(f"vanilla events: {events.get('changed', 0)} changed, {events.get('added', 0)} "
                f"added, {events.get('removed', 0)} removed")
 
+    def same_body(names):
+        return "same body now under " + _sites(names, _MAX_RENAME_HINTS)
+
     out.append(f"\n== the mod's definitions of those entries: {len(report['targets'])}")
     for r in report["targets"]:
         notes = [_where(r)]
         if r["renamed_to"]:
-            notes.append("same body now under " + ", ".join(r["renamed_to"]))
+            notes.append(same_body(r["renamed_to"]))
         if r["note"]:
             notes.append(r["note"])
         out.append(f"{r['directive'] or 'bare':<17}  {r['group']}/{r['key']}  "
@@ -605,10 +711,39 @@ def format_targets(report, diffs="replace"):
         out.append(f"{r['group']}/{r['key']}  ({_where(r)})  {len(r['sites'])} mod block(s): "
                    f"{_sites(r['sites'])}")
 
+    out.append("\n== mod files at the path of a vanilla file that changed "
+               f"(the mod's file replaces vanilla's whole): {len(report['same_path'])}")
+    for r in report["same_path"]:
+        what = {"changed": "vanilla changed its file",
+                "removed": "vanilla has no file here now: the mod's no longer replaces one",
+                "added": "vanilla has a file here now: the mod's replaces it"}[r["status"]]
+        out.append(f"{r['file']}  ({what})")
+
+    named = [r for r in report["removed"] if r["uses"]]
+    out.append("\n== entries and events vanilla removed whose name the mod still uses "
+               f"(comments apart): {len(named)}")
+    for r in named:
+        hint = "; " + same_body(r["renamed_to"]) if r["renamed_to"] else ""
+        out.append(f"{r['group']}/{r['key']}  ({_where(r)}{hint})  {len(r['uses'])} use(s):")
+        out.extend(f"    {site}" for site in r["uses"][:_MAX_USES_SHOWN])
+        if len(r["uses"]) > _MAX_USES_SHOWN:
+            out.append(f"    (+{len(r['uses']) - _MAX_USES_SHOWN} more)")
+    unnamed = collections.defaultdict(list)
+    for r in report["removed"]:
+        if not r["uses"]:
+            unnamed[r["group"]].append(r["key"])
+    out.append("\n== removed and used nowhere else in the mod (its own definitions of them "
+               f"are above): {sum(len(keys) for keys in unnamed.values())}")
+    for group, keys in sorted(unnamed.items()):
+        out.append(f"{group}: {', '.join(keys)}")
+
     out.append(f"\n== defines vanilla removed: {len(report['defines_removed'])}")
     for d in report["defines_removed"]:
-        hint = (f"; same value now under {', '.join(n.split('|')[1] for n in d['renamed_to'])}"
-                if d["renamed_to"] else "")
+        hint = ""
+        if d["moved_to"]:
+            hint = f"; now {', '.join(d['moved_to'])}"
+        elif d["renamed_to"]:
+            hint = f"; same value now under {', '.join(n.split('|')[1] for n in d['renamed_to'])}"
         used = "" if d["overrides"] or d["reads"] else "  the mod neither sets nor reads it"
         out.append(f"{d['define']} = {d['old']}  ({_where(d)}{hint}){used}")
         for o in d["overrides"]:
@@ -622,13 +757,15 @@ def format_targets(report, diffs="replace"):
             out.append(f"{d['define']}  {d['old']} -> {d['new']}  "
                        f"{o['file']}:{o['line']}  = {o['value']}")
 
-    out.append("\n== vanilla events the mod redefines, or names though vanilla removed them: "
-               f"{len(report['events'])}")
+    out.append(f"\n== vanilla events the mod redefines: {len(report['events'])}")
     for e in report["events"]:
         for site in e["redefined"]:
             out.append(f"redefined  {e['id']}  {site}  ({_where(e)})")
-        for site in e["named"]:
-            out.append(f"named      {e['id']}  {site}  ({_where(e)})")
+
+    out.append("\n== files the scanner could not read cleanly (entries after an unclosed "
+               f"brace are not compared): {len(report['warnings'])}")
+    for w in report["warnings"]:
+        out.append(f"{w['file']}  ({w['where']}): {w['warning']}")
 
     shown = [d for d in report["diffs"] if diffs == "all" or (diffs == "replace" and d["restated"])]
     if diffs != "none":
@@ -641,23 +778,13 @@ def format_targets(report, diffs="replace"):
     return out
 
 
-def read_mod_tree(mod_root):
-    """{path below the mod root: text} for the files MOD_SCAN names."""
-    out = {}
-    for top, ext in MOD_SCAN:
-        for rel in emo.list_files(mod_root, top):
-            if rel.endswith(ext):
-                out[rel] = emo.read_text(os.path.join(mod_root, *rel.split("/")))
-    return out
-
-
 class GitError(RuntimeError):
-    """A git command on the vanilla mirror failed."""
+    """A git command failed, or a commit does not hold what the sweep reads."""
 
 
 def _git(repo, *args, stdin=None):
     try:
-        r = subprocess.run(["git", "-C", repo, *args], input=stdin, capture_output=True)
+        r = subprocess.run([*_GIT, "-C", repo, *args], input=stdin, capture_output=True)
     except OSError as exc:
         raise GitError(f"could not run git: {exc}") from exc
     if r.returncode != 0:
@@ -679,7 +806,8 @@ def resolve_commit(repo, ref):
 
 
 def ls_tree(repo, commit, roots=VANILLA_ROOTS):
-    """{path below `game/`: blob SHA} for the .txt files under `roots` at `commit`."""
+    """{path below `game/`: blob SHA} for the .txt files under `roots` at
+    `commit` (nothing else is listed, so no texture or model is ever read)."""
     tree = {}
     for record in _git(repo, "ls-tree", "-r", "-z", commit, "--", *roots).split(b"\0"):
         meta, _, path = record.partition(b"\t")
@@ -689,18 +817,19 @@ def ls_tree(repo, commit, roots=VANILLA_ROOTS):
     return tree
 
 
-def read_blobs(repo, shas):
-    """{blob SHA: text} from one `git cat-file --batch` (BOM dropped)."""
-    shas = list(shas)
-    out = _git(repo, "cat-file", "--batch", stdin=("\n".join(shas) + "\n").encode()) if shas else b""
+def read_blobs(repo, names):
+    """{name: text} from one `git cat-file --batch`, for object names: blob
+    SHAs, or `:path` for a file in the index. A BOM is dropped."""
+    names = list(names)
+    out = _git(repo, "cat-file", "--batch", stdin=("\n".join(names) + "\n").encode()) if names else b""
     texts, pos = {}, 0
-    for sha in shas:
+    for name in names:
         eol = out.index(b"\n", pos)
         header = out[pos:eol].split()
         if len(header) != 3 or header[1] != b"blob":
-            raise GitError(f"`git cat-file` could not read {sha} in {repo}")
+            raise GitError(f"`git cat-file` could not read {name} in {repo}")
         size = int(header[2])
-        texts[sha] = out[eol + 1:eol + 1 + size].decode("utf-8-sig", errors="replace")
+        texts[name] = out[eol + 1:eol + 1 + size].decode("utf-8-sig", errors="replace")
         pos = eol + 1 + size + 1
     return texts
 
@@ -708,9 +837,17 @@ def read_blobs(repo, shas):
 def read_vanilla_pair(repo, old_ref, new_ref):
     """(old files, new files, number of files that differ): vanilla's script at
     two commits of the mirror as {path below `game/`: text}, for every file of
-    each folder in which some file differs (the folders `sweep_targets` needs)."""
-    old_tree = ls_tree(repo, resolve_commit(repo, old_ref))
-    new_tree = ls_tree(repo, resolve_commit(repo, new_ref))
+    each folder in which some file differs (the folders `sweep_targets` needs).
+    GitError when a commit has no script under `game/common`: not the mirror,
+    or not its layout."""
+    trees = []
+    for ref in (old_ref, new_ref):
+        tree = ls_tree(repo, resolve_commit(repo, ref))
+        if not any(p.startswith("common/") for p in tree):
+            raise GitError(f"{ref!r} holds no .txt file under game/common in {repo}: the sweep "
+                           "reads the vanilla mirror, which keeps the game's files under game/")
+        trees.append(tree)
+    old_tree, new_tree = trees
     differing = [p for p in set(old_tree) | set(new_tree) if old_tree.get(p) != new_tree.get(p)]
     groups = {group_of(p) for p in differing} - {None}
     old_tree = {p: sha for p, sha in old_tree.items() if group_of(p) in groups}
@@ -718,6 +855,26 @@ def read_vanilla_pair(repo, old_ref, new_ref):
     texts = read_blobs(repo, sorted(set(old_tree.values()) | set(new_tree.values())))
     return ({p: texts[sha] for p, sha in old_tree.items()},
             {p: texts[sha] for p, sha in new_tree.items()}, len(differing))
+
+
+def read_mod_tree(mod_root, git_fallback=False):
+    """{path below the mod root: text} for the files MOD_SCAN names, read from
+    disk. With `git_fallback`, a folder the checkout lacks (a sparse worktree
+    has no `gfx/`) is read from git's index instead; ask for that on this
+    repository only, since git runs the configuration of the repository it is
+    pointed at."""
+    out = {}
+    for top, ext in MOD_SCAN:
+        if os.path.isdir(os.path.join(mod_root, *top.split("/"))):
+            for rel in emo.list_files(mod_root, top):
+                if rel.endswith(ext):
+                    out[rel] = emo.read_text(os.path.join(mod_root, *rel.split("/")))
+        elif git_fallback and os.path.exists(os.path.join(mod_root, ".git")):
+            tracked = [p for p in _git(mod_root, "ls-files", "-z", "--", top).decode(
+                "utf-8", errors="replace").split("\0") if p.endswith(ext)]
+            texts = read_blobs(mod_root, [":" + p for p in tracked])
+            out.update((p, texts[":" + p]) for p in tracked)
+    return out
 
 
 # -------------------------------------------------------------------- mod uses
@@ -825,12 +982,20 @@ def _cmd_targets(args):
         print(f"no vanilla mirror at {repo} (path_constants.vanilla_source_repo_path; "
               "name another with --vanilla-repo)", file=sys.stderr)
         return 2
+    mod_root = args.mod_root
     try:
         old_files, new_files, differing = read_vanilla_pair(repo, args.old_ref, args.new_ref)
+        # git only on this repository (read_mod_tree): its sparse worktrees have no gfx/.
+        mod_files = read_mod_tree(mod_root, git_fallback=os.path.isdir(mod_root)
+                                  and os.path.samefile(mod_root, REPO_ROOT))
     except GitError as exc:
         print(exc, file=sys.stderr)
         return 2
-    report = sweep_targets(old_files, new_files, read_mod_tree(args.mod_root))
+    if not any(group_of(path) for path in mod_files):
+        print(f"no script under {mod_root} (common/, events/): --mod-root names the mod's root "
+              "folder", file=sys.stderr)
+        return 2
+    report = sweep_targets(old_files, new_files, mod_files)
     print(f"vanilla {args.old_ref} -> {args.new_ref} ({repo}): {differing} script file(s) differ")
     print("\n".join(format_targets(report, args.diffs)))
     return 0
