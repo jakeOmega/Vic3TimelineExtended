@@ -645,7 +645,7 @@ def _milestone(m: str) -> list[str]:
         status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
                    f'block "sr_window_{m}_live" {{']
                   + [f"\t{ln}" for ln in status] + ["}"])
-    own = _sr_own(m, status + SR_OPEN_JOURNAL)
+    own = _sr_own(m, status + ["te_je_modifier_strip = {}"] + SR_OPEN_JOURNAL)
     return ([f"### {m}",
              "te_system_tab_frame = {",
              '\tblockoverride "tab_country" {}',

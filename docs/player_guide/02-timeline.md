@@ -475,7 +475,7 @@ more naval power projection would win you one more license at the next sharing,
 a figure that is enough and often more than needed. Click a basin to see its claimants, largest
 share first, each with its mines, claims and share of the weight in columns,
 and your own row with its Relinquish button. A Seabed Licenses
-tile on every coastal state's panel shows that state's basin, the licenses its
+tile on each of your coastal states' panels shows that state's basin, the licenses its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
