@@ -73,7 +73,8 @@ SOURCES = {
         # the labor standards conceded to anti-globalization protesters
         # (society_technology_events.10).
         "energy_industry": ("Energy and Industry Programs", (
-            "re_quantum_subsidy_cost", "re_sbsp_reserves_cost", "we_sc_postscarcity_subsidize_cost",
+            "re_quantum_subsidy_cost", "re_sbsp_reserves_cost", "re_sbsp_imports_cost",
+            "we_sc_postscarcity_subsidize_cost",
             "ste_antiglobal_concession_cost",
         )),
     },

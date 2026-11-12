@@ -4749,6 +4749,18 @@ ww_home_front_strain_modifier = {
 	country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 }
 
+# world_war_events.11.a, "Put the safety of our cities first": the home front
+# strain's values under a name of its own, decaying, on the journal entry.
+# Until #1617 the option added a decaying copy of ww_home_front_strain_modifier
+# itself. Before the war's second year that copy kept the pulse from adding the
+# standing one until it had run out (the pulse adds it only when the entry
+# holds none), and after it the two stacked. Keep the two at the same values.
+ww_air_raid_relief_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_bureaucracy_mult = -0.1
+	country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
+}
+
 # ---- Late Entry Modifiers ----
 
 # Fresh forces - late entrant has rested, well-supplied troops
@@ -7647,6 +7659,14 @@ nuclear_civilian_applications = {
 
 # Nuclear program — safety review after incident/close call
 nuclear_safety_review = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_tech_spread_add = 15
+}
+
+# The same review under the name the Close Call gives it
+# (nuclear_weapon_events.21.a): that country has no nuclear program to review,
+# only warning stations (#1619). Keep both at the same values.
+nuclear_warning_review = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_tech_spread_add = 15
 }

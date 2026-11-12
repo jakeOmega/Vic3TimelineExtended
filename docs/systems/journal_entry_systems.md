@@ -1754,7 +1754,7 @@ Models a World War lifecycle from rising tensions through active total war to po
 ### Modifiers
 - **Leadup:** `ww_rising_tensions_modifier` (≥30 tension, non-belligerent), `ww_rearmament_modifier`, `ww_appeasement_modifier`, `ww_lend_lease_modifier`
 - **War:** `ww_total_war_economy_modifier`, `ww_war_propaganda_modifier`, `ww_wartime_rationing_modifier`
-- **Strain:** `ww_home_front_strain_modifier` (2+ years), `ww_prolonged_war_exhaustion_modifier` (4+ years)
+- **Strain:** `ww_home_front_strain_modifier` (2+ years), `ww_prolonged_war_exhaustion_modifier` (4+ years); `ww_air_raid_relief_modifier` (decaying, from `world_war_events.11.a`: the strain's values under its own name, so it neither delays nor stacks on the standing one)
 - **Positive:** `ww_fresh_forces_modifier`, `ww_arsenal_of_democracy_modifier`
 - **War support (1.14):** the two strain modifiers are read from the JE (`je:je_world_war ?= { has_modifier = … }`) by `common/script_values/zz_te_war_support_injections.txt` for −0.5 per beat each (see `mod_systems/war.md` § War Support Feeds)
 

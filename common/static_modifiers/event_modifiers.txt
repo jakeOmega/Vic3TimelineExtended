@@ -214,6 +214,15 @@ re_sbsp_imports = {
 	goods_output_electricity_mult = -0.03
 	country_improve_relations_speed_mult = 0.10
 }
+# What the imported power costs each week, applied beside re_sbsp_imports
+# with multiplier = sv_money_flow_event_modest, so it holds no other field.
+# Until #1616 the option paid nothing, and beat the blackouts on every line
+# but authority.
+re_sbsp_imports_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_energy_industry_add = 1
+}
 
 # ======= Compute cluster crunch
 re_compute_fasttrack = {

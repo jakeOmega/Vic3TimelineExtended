@@ -52,13 +52,22 @@ INJECT:war_support_from_journal_entries = {
 	# ---- World War (je_world_war) ----
 	# The phase modifiers are applied to the journal entry, not the country
 	# (world_war_je.txt), so a country-scope has_modifier never sees them.
-	# ?= because the JE may not exist. Also catches the short decaying copy
-	# world_war_events.11 applies.
+	# ?= because the JE may not exist. world_war_events.11.a's decaying
+	# ww_air_raid_relief_modifier costs the same, and nothing more where the
+	# standing strain already holds (else_if): until #1617 it was a copy of the
+	# strain modifier, and this line counted the two once.
 	if = {
 		limit = { je:je_world_war ?= { has_modifier = ww_home_front_strain_modifier } }
 		add = {
 			value = -0.5
 			desc = "WAR_SUPPORT_TE_WW_HOME_FRONT_STRAIN"
+		}
+	}
+	else_if = {
+		limit = { je:je_world_war ?= { has_modifier = ww_air_raid_relief_modifier } }
+		add = {
+			value = -0.5
+			desc = "WAR_SUPPORT_TE_WW_AIR_RAIDS"
 		}
 	}
 	if = {

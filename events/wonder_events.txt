@@ -95,10 +95,27 @@ wonder_events.2 = {
 		name = wonder_events.2.a
 		default_option = yes
 		ai_chance = { base = 5 }
+		# The halt is real (#1621; until then the site built on under
+		# "Elevator Construction Halted"). The timed variable is what the
+		# state pulse reads (space_elevator_on_action): a variable, not the
+		# modifier, because a revolution's winner keeps variables only. Each
+		# site is switched to its paused method at once, so it stops costing
+		# without the player touching the building panel, and returns to its
+		# speed by itself (space_elevator_halt_site, extra_effects.txt). The
+		# modifier lasts as long as the halt, so its name and description
+		# stay true; it lasted normal_modifier_time before.
 		add_modifier = {
 			name = we_se_structural_halt
-			days = normal_modifier_time
+			days = 180
 			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = wonder_events.2.a.tt
+			set_variable = { name = space_elevator_halt days = 180 }
+			every_scope_state = {
+				limit = { has_building = building_space_elevator_construction_site }
+				space_elevator_halt_site = yes
+			}
 		}
 	}
 

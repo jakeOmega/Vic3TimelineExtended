@@ -30,7 +30,8 @@ Vanilla 1.14 computes each country's weekly war support change in `common/script
 | System | Condition (root = country) | Per beat |
 |---|---|---|
 | World War | `je:je_world_war ?= { has_modifier = ww_home_front_strain_modifier }` (2+ years) — the phase modifiers sit on the **journal entry**, not the country | −0.5 |
-| World War | same for `ww_prolonged_war_exhaustion_modifier` (4+ years; stacks with the line above) | −0.5 |
+| World War | `else_if` to the first line: `ww_air_raid_relief_modifier`, the decaying modifier `world_war_events.11.a` puts on the entry (its own name since #1617; it never adds to the strain line) | −0.5 |
+| World War | same for `ww_prolonged_war_exhaustion_modifier` (4+ years; stacks with the lines above) | −0.5 |
 | United Nations | `un_condemned_modifier` on root (`else_if` `un_non_binding_rebuke_modifier`, −0.25) | −0.5 |
 | United Nations | an enemy in `scope:war` carries `un_condemned_modifier` ("the world is with us") | +0.25 |
 | Covert Warfare | root is `second_country` of a `covert_comms_disruption_action` pact whose attacker fights in `scope:war` (flat — operation phase lives on the attacker's containers) | −0.25 |

@@ -504,6 +504,7 @@ repeatable_events.80 = {
 	option = {
 		name = repeatable_events.80.c
 		add_modifier = { name = re_sbsp_imports days = normal_modifier_time }
+		add_modifier = { name = re_sbsp_imports_cost days = normal_modifier_time multiplier = sv_money_flow_event_modest }
 	}
 }
 

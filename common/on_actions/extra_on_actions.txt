@@ -916,7 +916,17 @@ space_elevator_on_action = {
 			limit = {
 				has_building = building_space_elevator_construction_site
 			}
-			space_elevator_construction = yes
+			# wonder_events.2.a's halt (#1621): while the owner holds the timed
+			# variable the site stands paused and gets no tick; the month
+			# after it runs out, the site goes back to the speed it had.
+			if = {
+				limit = { owner = { has_variable = space_elevator_halt } }
+				space_elevator_halt_site = yes
+			}
+			else = {
+				space_elevator_resume_site = yes
+				space_elevator_construction = yes
+			}
 			every_scope_building = {
 				limit = {
 					is_building_type = building_space_elevator_construction_site
@@ -2045,13 +2055,16 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.8 }
 				}
-				# Nuclear Close Call (outside the deterrence system — see the event)
+				# Nuclear Close Call: the false alarm of a country with no arsenal
+				# in service, whose radar watches a rival believed armed (#1619;
+				# an armed country's warnings are the deterrence system's own).
+				# The same tests as the event's trigger.
 				3 = {
 					trigger = {
 						has_game_rule = nuclear_weapons_enabled
-						has_modifier = nuclear_power
-						any_rival_country = { has_modifier = nuclear_power }
+						has_technology_researched = radar
 						NOT = { nd_is_armed = yes }
+						any_rival_country = { nd_believed_armed = yes }
 					}
 					trigger_event = { id = nuclear_weapon_events.21 }
 				}
@@ -2678,14 +2691,21 @@ society_technology_events_on_action = {
 			5 = {
 				trigger = {
 					has_technology_researched = second_wave_feminism
-					OR = { has_law = law_type:law_women_in_the_workplace has_law = law_type:law_women_own_property }
+					OR = {
+						has_law = law_type:law_women_own_property
+						has_law = law_type:law_women_in_the_workplace
+						has_law = law_type:law_womens_suffrage
+					}
 				}
 				trigger_event = { id = society_technology_events.1 }
 			}
 			5 = {
 				trigger = {
 					has_technology_researched = second_wave_feminism
-					has_law = law_type:law_women_in_the_workplace
+					OR = {
+						has_law = law_type:law_women_in_the_workplace
+						has_law = law_type:law_womens_suffrage
+					}
 				}
 				trigger_event = { id = society_technology_events.2 }
 			}

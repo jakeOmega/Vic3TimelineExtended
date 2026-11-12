@@ -208,6 +208,9 @@ defense, never below 5% and never above 100%.
 | Heightened readiness | +5% | Orbital Weapon Platforms | +50% |
 | High Alert | +10% | Non-Proliferation Treaty guarantee (members with no bomb and no program) | +5% at the UN's middle tier of enforcement, scaled by the tier |
 
+A country that holds warheads without having researched Nuclear Weapons, such
+as one that annexed a nuclear power, delivers them with the same +100%.
+
 Technology defends every state. A Military Base defends its own state only, by
 +2% per level with a Missile Defense Battery or +3% with Directed Energy Point
 Defense, and AI planners aim fewer strikes at defended states. Military bases in

@@ -2247,9 +2247,11 @@ nuclear_weapon_events.20 = {
 # ============================================================================
 # EVENT 21: A Moment of Terror — Nuclear Close Call
 # ============================================================================
-# Rare random event for nuclear powers. A false alarm, training exercise
-# malfunction, or near-accidental launch. Based on real Cold War incidents
-# (Petrov, Able Archer, Norwegian rocket incident, etc.).
+# Rare random event for a country with no arsenal in service whose warning
+# radar watches a rival believed armed: a false alarm of an incoming strike,
+# traced to its own equipment (the Norwegian rocket incident seen from the
+# other side). It has nothing to launch, so no line may speak of a launch, an
+# arsenal or a retaliation (#1619).
 # ============================================================================
 
 nuclear_weapon_events.21 = {
@@ -2273,21 +2275,30 @@ nuclear_weapon_events.21 = {
 	# (the Unconfirmed Warning family, nuclear_incident.1-.5) are rolled by
 	# nd_roll_incident from its posture and readiness; this one reads neither.
 	# The deterrence half of je_nuclear_program is gated on nd_is_armed.
+	# Until #1619 this also asked for the nuclear_power modifier, which only
+	# a country that has held a warhead carries: with "not armed" that left a
+	# country that had used or lost its last one, so the event almost never
+	# fired. It now needs no arsenal, past or present: warning stations
+	# (radar) and a rival the world believes armed (nd_believed_armed, which
+	# also tests the game rule). The same tests as the pool entry in
+	# common/on_actions/extra_on_actions.txt.
 	trigger = {
-		has_modifier = nuclear_power
-		any_rival_country = { has_modifier = nuclear_power }
+		has_technology_researched = radar
 		NOT = { nd_is_armed = yes }
+		any_rival_country = { nd_believed_armed = yes }
 	}
 
 	immediate = {
 	}
 
-	# "Review our safety procedures." — small prestige loss, stability
+	# "Review our warning procedures." — small prestige loss, and the review
+	# (nuclear_warning_review: nuclear_safety_review's values under a name
+	# that needs no nuclear program)
 	option = {
 		name = nuclear_weapon_events.21.a
 		default_option = yes
 		add_modifier = { name = prestige_loss_small days = normal_modifier_time is_decaying = yes }
-		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = nuclear_warning_review days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { ruler_is_cautious = yes } add = 4 }
@@ -2310,14 +2321,19 @@ nuclear_weapon_events.21 = {
 			base = 3
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
 			modifier = {
+				# A rival whose arsenal, as the world estimates it (not its
+				# secret, docs/systems/nuclear_crisis_design.md §0.6), is
+				# larger than anything we hold. We hold none in service, and
+				# usually no stockpile variable at all; a disarmed country
+				# keeps one.
 				trigger = {
-					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
-						has_modifier = nuclear_power
-						# The rival's arsenal as the world estimates it, not its secret
-						# (docs/systems/nuclear_crisis_design.md §0.6).
+						nd_believed_armed = yes
 						has_variable = nd_public_estimate
-						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
+						OR = {
+							NOT = { ROOT = { has_variable = nuclear_weapon_stockpile } }
+							var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
+						}
 					}
 				}
 				add = 5
