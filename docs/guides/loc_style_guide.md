@@ -307,6 +307,6 @@ Neither can judge whether a sentence is particular, whether a game could make it
 ## Still open
 
 1. **Existing text.** The election chain was the pilot (2026-11-09), and the other ten batches of #1539 followed on 2026-11-12: every chain's flavor was rewritten, and nearly every description, since most had a verdict word, a stock metaphor, a closing line or an unbacked claim. What each chain's triggers guarantee is in `event_text_guarantees.md`. Not yet done: the `te_debug_*` test benches (out of scope), and text outside events (modifier and law descriptions, tooltips, concepts), which the lint's baseline still lists.
-3. **Documents that close "We ask ...".** The guide's model for a document ends on its request, and the rewrite's documents nearly all do. Read in a row that is a formula too; the next pass should vary how a paper closes (its next step, the writer's office, the enclosure).
-4. **`event_guarantees.py` does not follow the gates listed under "What a chain's triggers already guarantee"**: `is_enacting_law`, a journal entry's `possible`, a weighted pool, a scripted trigger.
 2. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. The guide allows them for paired facts and discourages them in event prose.
+3. **Documents that close "We ask ...".** The guide's model for a document ends on its request, and the rewrite's documents nearly all do. Read in a row that is a formula too; the next pass should vary how a paper closes (its next step, the writer's office, the enclosure).
+4. **`event_guarantees.py` does not follow the gates listed under "What a chain's triggers already guarantee"**: `is_enacting_law`, a journal entry's `possible`, a weighted pool, a scripted trigger. Tracked in #1622.
