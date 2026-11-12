@@ -357,7 +357,7 @@ subject ends the entry (see [How a colonial empire ends](#how-a-colonial-empire-
 
 Once the UN charter carries Charter Reform II and the Decolonization Resolution
 is in force, the General Assembly can order a referendum in a direct subject
-whose liberty desire is 50 or more. You hold it, and the subject leaves with a
+whose liberty desire is 50 or more, unless a war is already set to free it. You hold it, and the subject leaves with a
 chance equal to its liberty desire, or you refuse and pay in standing,
 prestige and the loyalty of every subject (see [Supervised
 referendums](10-united-nations.md#supervised-referendums)).
@@ -449,7 +449,8 @@ Open Talks on a war's row asks for a popup first. Talks take six months while
 the fighting goes on. When the accords are signed, your claim is dropped and
 the rebels accept a peace: offer one from the peace screen, conceding their
 independence if they refuse a white peace. An AI opens talks after half a year
-of war support in the red, or after four years.
+of war support in the red, after four years, or once the war is counting down
+to a stalemate.
 
 A war that has run four years, with your war support in it at 25 or below for a
 year running, breaks the home front. Without a voting franchise, junior

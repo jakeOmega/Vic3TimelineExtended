@@ -149,7 +149,7 @@ trade privilege in the new country, whose upkeep you pay.
 |---|---|
 | A Political Fact | A colonial subject reaches 50 liberty desire. |
 | Pressed to Let Go | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
-| The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
+| The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). If you hold the line, a direct subject that can still challenge you opens a war of independence against you. |
 | Trouble in (the colony's name) | A colony has a severely unaccepted population. |
 | Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. Below 40 stability its suppression is a war of independence. |
 | Declaration in (the territory) | Below 40 stability, a colony with severely unaccepted people declares independence; also each declaration of a collapse. See [Wars of independence](12-decolonization.md#wars-of-independence). |
