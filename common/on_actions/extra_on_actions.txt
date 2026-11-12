@@ -1213,12 +1213,14 @@ global_warming_events_on_action = {
 					}
 					trigger_event = { id = environmentalism_events.9 }
 				}
-				# Water shortage (severe+ warming)
-				10 = {
+				# Water shortage (severe+ warming): 5, plus up to 10 by the share
+				# of incorporated states in the tropics (global_warming_event_values.txt)
+				5 = {
 					trigger = {
 						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.0
 					}
+					modifier = { add = gw_water_shortage_tropical_weight }
 					trigger_event = { id = environmentalism_events.10 }
 				}
 				# Green tech boom (environmental_movement tech + renewables)
@@ -1269,12 +1271,19 @@ global_warming_events_on_action = {
 					}
 					trigger_event = { id = environmentalism_events.13 }
 				}
-				# Disease outbreak (severe+ warming)
-				10 = {
+				# Disease outbreak (severe+ warming): weighted by the share of
+				# incorporated states in the tropics, 0 with none
+				# (global_warming_event_values.txt)
+				0 = {
 					trigger = {
 						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.0
+						any_scope_state = {
+							is_incorporated = yes
+							in_tropics = yes
+						}
 					}
+					modifier = { add = gw_disease_event_weight }
 					trigger_event = { id = environmentalism_events.14 }
 				}
 				# Political clash (clean_energy_technologies + industrialists in gov + catastrophic warming)

@@ -19,6 +19,7 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 	relations_improvement_min = 0
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		can_be_renegotiated
 		giftable
@@ -61,6 +62,12 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 	# Target = the country demanding emissions reduction (gains prestige)
 	target_modifier = {
 		country_prestige_mult = 0.02
+	}
+
+	# Lens (1.15 show_in_lens flag): the world-wide `visible` gate, so the
+	# article stays out of the lens until warming begins.
+	show_in_lens = {
+		temperature_anomaly_display > 0.1
 	}
 
 	# ROOT in visible and possible is the source, the country being

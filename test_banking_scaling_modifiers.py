@@ -48,19 +48,15 @@ ROSTER = (FISCAL,) + INERTIA + PHASE_KEYS + STANCE + (POOL,) + tuple(CHARGES)
 DELETED = ("banking_cycle_update_fiscal_policy", "banking_cycle_apply_phase_modifiers",
            "remove_all_banking_phase_modifiers", "banking_cycle_apply_stance_band",
            "te_mon_stance_band_applied", "banking_stance_band_healed")
-# The old adds' JE-scope multipliers (owner = { } around a country value): uncalled, but an older save's added
-# copy names its multiplier until the strip takes the copy off, so each stays defined until the strip goes.
-PENDING_WRAPPERS = {
+# The old adds' JE-scope multipliers (owner = { } around a country value): kept only for an older save's added
+# copies, and gone with the old-save strip (#1429), as 1.15 loads no older save.
+RETIRED_WRAPPERS = {
     "financial_cycle_government_fiscal_policy_effect_size_for_je": SCRIPT_VALUES,
     "bubble_inertia_multiplier_script_value": SCRIPT_VALUES,
     "ce_treasury_pool_balance_multiplier_for_je": SCRIPT_VALUES,
     "banking_external_sterilization_weekly_charge_for_je": EXTERNAL_VALUES,
     "banking_external_import_weekly_charge_for_je": EXTERNAL_VALUES,
 }
-PENDING_TAG = ('# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect '
-               '(after 2026-12-31)')
-# The old saves' strip (design rule 7) may name these keys and variables until it goes.
-LEGACY_STRIP = "common/scripted_effects/legacy_modifier_cleanup.txt"
 
 COMPARE = {"=": operator.eq, ">": operator.gt, "<": operator.lt, ">=": operator.ge, "<=": operator.le}
 
@@ -211,8 +207,6 @@ class RefreshGoneTest(unittest.TestCase):
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
                 rel = path.relative_to(ROOT).as_posix()
-                if rel == LEGACY_STRIP:
-                    continue
                 text = _strip_comments(_text(path))
                 with self.subTest(file=rel):
                     self.assertEqual(sorted(set(deleted.findall(text))), [])
@@ -240,22 +234,15 @@ class RefreshGoneTest(unittest.TestCase):
                 (value,) = declarations()[modifier]
                 self.assertIn(("add", "=", "bubble_inertia_curve"), value[1][2])
 
-    def test_the_old_multipliers_stay_defined_and_uncalled_until_the_strip_goes(self):
-        callers = {}
+    def test_the_old_multipliers_are_gone(self):
+        found = {}
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
                 text = _strip_comments(_text(path))
-                for name in PENDING_WRAPPERS:
-                    if re.search(r"=\s*%s\b" % name, text):
-                        callers.setdefault(name, []).append(path.relative_to(ROOT).as_posix())
-        self.assertEqual(callers, {})
-        for name, path in PENDING_WRAPPERS.items():
-            with self.subTest(value=name):
-                text = _text(path)
-                body = _strip_comments(_top_level_block(text, name))
-                self.assertRegex(" ".join(body.split()), r"^%s = \{ value = 0 owner = \{ add = \w+ \} \}$" % name)
-                head = text[: text.index("\n" + name + " = {")]
-                self.assertEqual(head.rsplit("\n", 1)[-1], PENDING_TAG)
+                for name in RETIRED_WRAPPERS:
+                    if re.search(r"\b%s\b" % name, text):
+                        found.setdefault(name, []).append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(found, {})
 
 
 class FiscalPolicyTest(unittest.TestCase):

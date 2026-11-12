@@ -778,30 +778,23 @@ STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor:
 # (this gives +11%), West Bengal at about 167-176 showed +32% (+36% to +38%). The census reads the real line.
 POLLUTION_HEALTH_MORTALITY = 0.55
 POLLUTION_MAX = 255
-# Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
-# of the census's term: their lines sit on the on-top family's script-only types (state_demog_ontop_*), which under
-# Full the census adds at its rate. Every other law, technology or institution line is on the absorbed family's
-# (state_demog_absorbed_*), which under Full the engine doesn't apply (the engine-lines plan, 2026-10-11).
-# Hand-kept, not derived: TestEngineRateLines.test_the_families_match_the_on_top_lists pins it to the carriers'
-# types. The women's-rights laws left this list in Task 8: Task 7's natural-fertility term
-# (NATURAL_FERTILITY_BY_LAW) carries their effect.
-ENGINE_LINES_ON_TOP = frozenset({
-    # Communal Child-Rearing's -20%, which a State Youth Center's method cancels (phase 2 §3.2, call 9). Pro-Natalist
-    # Policy's and Population Control Measures' births lines are absorbed since phase 2 step 3b: their force under Full
-    # comes from desired fertility and the measures
-    "law_communal_child_rearing",
-    # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
-    # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10). Mental Health Awareness, Biological
-    # Immortality and Mind Backups left this list in phase 3 (the late-game design §8.4, call 19): the census carries them
-    # under Full (LATE_EXTERNAL_LINES, LATE_WORK_LINES, the ageing ladder), their flat lines on the absorbed family
-    "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
-})
-# Fields whose lines stay on top wherever they sit: wealth mortality's per-pop scaling ("per Wealth") waits on probe P6,
-# so M doesn't net it out yet. Private Health Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top
-# for now). Nobody holds the law in the owner's 1949 save; had the rich health-law countries held it at their own
-# level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
-# as mild starvation, is proposed.
-ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
+# Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top of the
+# census's term have them on the on-top family's script-only types (state_demog_ontop_*), which under Full the census
+# adds at its rate; every other law, technology or institution line is on the absorbed family's (state_demog_absorbed_*),
+# which under Full the engine doesn't apply (the engine-lines plan, 2026-10-11). The family is written on the carrier
+# itself, so the list of on-top carriers is read from the files (demographics_modifiers.engine_lines_on_top(); #1046:
+# it was kept by hand here). Today: Communal Child-Rearing's -20%, which a State Youth Center's method cancels (phase 2
+# §3.2, call 9), and the late-era lines with no census term (Full Equality and Protection's token -0.01, State Eugenics,
+# Second-Wave Feminism, the Sexual Revolution). Pro-Natalist Policy's, Population Control Measures' and the
+# women's-rights laws' births lines are absorbed: desired fertility, the measures and the natural-fertility term
+# (NATURAL_FERTILITY_BY_LAW) carry them under Full.
+# Fields whose lines stay on top wherever they sit: those with an on-top type and no absorbed one. That is wealth
+# mortality: its per-pop scaling ("per Wealth") waits on probe P6, so M doesn't net it out yet. Private Health
+# Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top for now). Nobody holds the law in the owner's
+# 1949 save; had the rich health-law countries held it at their own level, France would lose about a fifth of its deaths
+# (results doc, phase 2 step 4). Absorbing it per pop under Full, as mild starvation, is proposed.
+ENGINE_FIELDS_ON_TOP = frozenset(f for fam, f in ENGINE_LINE_TYPES if fam == "ontop"
+                                 and ("absorbed", f) not in ENGINE_LINE_TYPES)
 # Causes of Death (owner, 2026-10-22): the deaths the engine adds on top of the census count under their own causes, not
 # as a slice of their own. Every state-level mortality line the census leaves on top carries a tag: a script-only copy
 # of its value on the type of the cause its deaths count under (demographics_modifier_types.txt), which the engine sums

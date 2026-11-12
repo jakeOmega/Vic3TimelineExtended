@@ -195,211 +195,280 @@
 		}
 	}
 
+	# --- The nine endings (1.15 outcomes, #1432) ----------------------------
+	# One outcome per ending, so the journal panel lists every ending with its
+	# condition before it happens. Two outcomes true on one update: the first
+	# declared wins and only its effect runs (probed, scripting_best_practices.md
+	# § "1.15 journal entries, scaling modifiers and once-only events"). The
+	# triggers are written to exclude each other anyway, so the panel ticks one
+	# ending of each kind, not several: success first (the two Imperial
+	# Federation capstones, then the four paths of a held bar), then failure
+	# (the voluntary end, then the two collapses). A secured empire that also
+	# holds no colony on the same update concludes on its success, as before.
+	#
+	# The path is the programme that has run longest, if it ran more than 24
+	# months (each programme's months are weighted by its level: a month at
+	# level 1 counts a third); ties go to Garrison, then Investment. The
+	# counters are read through colonial_{invest,garrison,assimilate}_months_value,
+	# which are 0 until the first monthly pulse creates the variables: the panel
+	# renders every outcome's trigger and effect every frame, and a bare var:
+	# read of a counter that does not exist yet logged an error per frame.
+	#
+	# The endings read only variables and the bar, so a revolution's winner,
+	# which inherits the loser's variables (the Act flags and the counters),
+	# continues on the same path.
+
+	# The Imperial Federation Act: the Iron Fist decision (which also sets
+	# imperial_federation_taken) concludes the entry at once.
 	outcome = {
-		header = je_standard_completion_header
+		header = je_colonial_empire_act_iron_fist_header
 		effect_header = je_standard_on_completion_header
 		color = "gold_positive"
-		conclusion_desc = je_colonial_empire_complete_conclusion_desc
+		conclusion_desc = je_colonial_empire_act_iron_fist_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_act_iron_fist_tt
+				has_variable = imperial_federation_iron_fist
+			}
+		}
+		effect = {
+			trigger_event = { id = decolonization_events.300 }
+			colonial_empire_secured_end = yes
+		}
+	}
+
+	# The Civilizing Mission Compact: the Civilizing Mission decision.
+	outcome = {
+		header = je_colonial_empire_act_civilizing_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_colonial_empire_act_civilizing_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_act_civilizing_tt
+				has_variable = imperial_federation_civilizing
+				NOT = { has_variable = imperial_federation_iron_fist }
+			}
+		}
+		effect = {
+			trigger_event = { id = decolonization_events.301 }
+			colonial_empire_secured_end = yes
+		}
+	}
+
+	# The four paths of a held bar: colonial_empire_completion_months (60, five
+	# years) sustained at 100. Reaching 100 is not enough on its own: the bar
+	# must hold. Longer than the Act's colonial_empire_federation_months (36) at
+	# 90 or more, so the decision path stays faster for a country that
+	# qualifies. Both live in colonial_empire_values.txt, which the overview
+	# reads too. A country that has taken an Act concludes on the Act's outcome
+	# above, so these four leave it out.
+	outcome = {
+		header = je_colonial_empire_iron_fist_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_colonial_empire_iron_fist_conclusion_desc
 		trigger = {
 			custom_tooltip = {
 				text = je_colonial_empire_complete_tt
-				OR = {
-					# Basic completion: colonial_empire_completion_months (60, five
-					# years) sustained at the cap. Reaching 100 is not enough on its
-					# own — the bar must hold. Longer than the IF Act's
-					# colonial_empire_federation_months (36) at ≥90 so the decision
-					# path stays meaningfully faster for countries that qualify. Both
-					# live in colonial_empire_values.txt, which the overview reads too.
-					root = {
-						has_variable = colonial_at_100_months
-						var:colonial_at_100_months >= colonial_empire_completion_months
-					}
-					# IF Act capstone — set by the Imperial Federation Act decision
-					root = {
-						has_variable = imperial_federation_taken
-					}
-				}
+				has_variable = colonial_at_100_months
+				var:colonial_at_100_months >= colonial_empire_completion_months
+				NOT = { has_variable = imperial_federation_taken }
+			}
+			custom_tooltip = {
+				text = je_colonial_empire_garrison_led_tt
+				colonial_garrison_months_value >= colonial_invest_months_value
+				colonial_garrison_months_value >= colonial_assimilate_months_value
+				colonial_garrison_months_value > 24
 			}
 		}
-		# Path-dependent resolution: which policy did the empire lean on?
-		# Months tracked in vars colonial_invest_months / colonial_garrison_months /
-		# colonial_assimilate_months by the monthly pulse below. The dispatch
-		# picks the dominant path and triggers a flavor-matched event. It reads them
-		# through colonial_{invest,garrison,assimilate}_months_value, which are 0
-		# until the first pulse creates the variables: the journal panel renders
-		# the outcomes' effects as tooltips every frame, and a bare var: read of a
-		# counter that does not exist yet logged an error per frame.
-		#
-		# IF Act capstone routes (300/301) take priority — reaching the Solidified
-		# capstone is the explicit "victory" path; it bypasses the bar-100 routing.
 		effect = {
-			if = {
-				limit = { has_variable = imperial_federation_iron_fist }
-				trigger_event = { id = decolonization_events.300 }   # Iron Fist Federation capstone
-			}
-			else_if = {
-				limit = { has_variable = imperial_federation_civilizing }
-				trigger_event = { id = decolonization_events.301 }   # Civilizing Mission capstone
-			}
-			else_if = {
-				limit = {
-					colonial_garrison_months_value >= colonial_invest_months_value
-					colonial_garrison_months_value >= colonial_assimilate_months_value
-					colonial_garrison_months_value > 24
-				}
-				trigger_event = { id = decolonization_events.203 }   # Iron Fist
-			}
-			else_if = {
-				limit = {
-					colonial_invest_months_value >= colonial_assimilate_months_value
-					colonial_invest_months_value > 24
-				}
-				trigger_event = { id = decolonization_events.202 }   # Commonwealth Path
-			}
-			else_if = {
-				limit = { colonial_assimilate_months_value > 24 }
-				trigger_event = { id = decolonization_events.205 }   # Quiet Assimilation
-			}
-			else = {
-				trigger_event = { id = decolonization_events.200 }   # generic Empire Endures
-			}
-			# Chosen-release count (decol_record_chosen_release) is read only by
-			# the voluntary-fail event .206; drop it on every other ending.
-			remove_variable = decol_chosen_releases
-
-			# Clean up persistent state from this JE run. Path-tracking variables,
-			# country-scope policy modifiers, civil-rights movement modifiers, and
-			# subject-side LD modifiers all need explicit removal -- they are
-			# attached to entities that survive the JE's end and would otherwise
-			# stick around indefinitely.
-			colonial_empire_je_cleanup_effect = yes
-			# No success event forms a country, so the programme-month counters
-			# can go now (the failure outcome keeps them for .201 / .204).
-			colonial_empire_clear_path_months = yes
-
-			# Permanent re-entry block. Any successful completion (bar 100 hold or
-			# IF Act capstone) commits the player out of further je_colonial_empire
-			# runs even if colonies are reacquired later.
-			set_variable = { name = colonial_empire_completed value = yes }
+			trigger_event = { id = decolonization_events.203 }
+			colonial_empire_secured_end = yes
 		}
 	}
 
 	outcome = {
-		header = je_standard_failure_header
+		header = je_colonial_empire_commonwealth_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_colonial_empire_commonwealth_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_complete_tt
+				has_variable = colonial_at_100_months
+				var:colonial_at_100_months >= colonial_empire_completion_months
+				NOT = { has_variable = imperial_federation_taken }
+			}
+			custom_tooltip = {
+				text = je_colonial_empire_invest_led_tt
+				colonial_invest_months_value > colonial_garrison_months_value
+				colonial_invest_months_value >= colonial_assimilate_months_value
+				colonial_invest_months_value > 24
+			}
+		}
+		effect = {
+			trigger_event = { id = decolonization_events.202 }
+			colonial_empire_secured_end = yes
+		}
+	}
+
+	outcome = {
+		header = je_colonial_empire_assimilation_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_colonial_empire_assimilation_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_complete_tt
+				has_variable = colonial_at_100_months
+				var:colonial_at_100_months >= colonial_empire_completion_months
+				NOT = { has_variable = imperial_federation_taken }
+			}
+			custom_tooltip = {
+				text = je_colonial_empire_assim_led_tt
+				colonial_assimilate_months_value > colonial_garrison_months_value
+				colonial_assimilate_months_value > colonial_invest_months_value
+				colonial_assimilate_months_value > 24
+			}
+		}
+		effect = {
+			trigger_event = { id = decolonization_events.205 }
+			colonial_empire_secured_end = yes
+		}
+	}
+
+	outcome = {
+		header = je_colonial_empire_endures_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_colonial_empire_endures_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_complete_tt
+				has_variable = colonial_at_100_months
+				var:colonial_at_100_months >= colonial_empire_completion_months
+				NOT = { has_variable = imperial_federation_taken }
+			}
+			custom_tooltip = {
+				text = je_colonial_empire_no_path_tt
+				colonial_garrison_months_value <= 24
+				colonial_invest_months_value <= 24
+				colonial_assimilate_months_value <= 24
+			}
+		}
+		effect = {
+			trigger_event = { id = decolonization_events.200 }
+			colonial_empire_secured_end = yes
+		}
+	}
+
+	# The voluntary end: no colony or colonial subject left while the bar is
+	# above 0. The colony test reads the monthly separation cache
+	# (colonial_geography_effects.txt). A save from before the cache holds none
+	# until our first pass, and would read "no colonies" here and end the entry.
+	outcome = {
+		header = je_colonial_empire_voluntary_header
 		effect_header = je_standard_on_failure_header
 		color = "blue_negative"
-		conclusion_desc = je_colonial_empire_fail_conclusion_desc
+		conclusion_desc = je_colonial_empire_voluntary_conclusion_desc
 		trigger = {
-			OR = {
-				custom_tooltip = {
-					text = je_colonial_empire_fail_tt
-					scope:journal_entry = {
-						"scripted_bar_progress(colonial_stability_bar)" <= 0
+			custom_tooltip = {
+				text = je_colonial_empire_voluntary_fail_tt
+				has_variable = ce_separation_cached
+				NOT = {
+					OR = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						country_has_qualifying_colonial_subject = yes
 					}
 				}
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" > 0
+				}
+			}
+		}
+		effect = {
+			# .206 reads and then clears var:decol_chosen_releases itself.
+			trigger_event = { id = decolonization_events.206 }
+			# .206 forms no country. .204 and .201 start the collapse's wave of
+			# declarations (decol_wave_start), whose successors' legacy
+			# (apply_decolonization_path) reads these counters; the wave clears
+			# them after its last answer (decol_wave_end).
+			colonial_empire_clear_path_months = yes
+			# Not a cooldown: the owner's rule is that a voluntary end sets
+			# none, and possible does not read this. It is a guard against a
+			# flickering colony test. The re-entry pass (ce_reentry_due) waits
+			# for it, so a country whose one colony passes the test on two
+			# monthly passes and fails it a few days later (outcomes are
+			# checked every 4 days) does not loop through .206, a fresh entry
+			# and .206 again every two months.
+			set_variable = { name = ce_reentry_voluntary_hold value = yes days = 365 }
+			colonial_empire_je_cleanup_effect = yes
+		}
+	}
 
-				custom_tooltip = {
-					text = je_colonial_empire_voluntary_fail_tt
-					# The colony test reads the monthly separation cache
-					# (colonial_geography_effects.txt). A save from before the
-					# cache holds none until our first pass, and would read "no
-					# colonies" here and end the entry.
-					has_variable = ce_separation_cached
-					NOT = {
-						OR = {
-							any_scope_state = { is_overseas_colonial_state = yes }
-							country_has_qualifying_colonial_subject = yes
-						}
+	# The two collapses: the bar at 0. Investment or Assimilation ahead of
+	# Garrison, past 24 months, lets the empire negotiate its way out;
+	# otherwise it crumbles.
+	outcome = {
+		header = je_colonial_empire_negotiated_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_colonial_empire_negotiated_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_collapse_tt
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" <= 0
+				}
+			}
+			custom_tooltip = {
+				text = je_colonial_empire_negotiated_path_tt
+				NAND = {
+					colonial_garrison_months_value >= colonial_invest_months_value
+					colonial_garrison_months_value >= colonial_assimilate_months_value
+				}
+				OR = {
+					colonial_invest_months_value > 24
+					colonial_assimilate_months_value > 24
+				}
+			}
+		}
+		effect = {
+			trigger_event = { id = decolonization_events.204 }
+			colonial_empire_collapse_end = yes
+		}
+	}
+
+	outcome = {
+		header = je_colonial_empire_crumbles_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_colonial_empire_crumbles_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_colonial_empire_collapse_tt
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" <= 0
+				}
+			}
+			custom_tooltip = {
+				text = je_colonial_empire_crumbles_path_tt
+				OR = {
+					AND = {
+						colonial_garrison_months_value >= colonial_invest_months_value
+						colonial_garrison_months_value >= colonial_assimilate_months_value
 					}
-					scope:journal_entry = {
-						"scripted_bar_progress(colonial_stability_bar)" > 0
+					AND = {
+						colonial_invest_months_value <= 24
+						colonial_assimilate_months_value <= 24
 					}
 				}
 			}
 		}
-		# Path-dependent failure: did the empire bleed out (garrison-only),
-		# negotiate its way out (invest + assimilate), or voluntarily decolonize?
 		effect = {
-			if = {
-				limit = {
-					scope:journal_entry = {
-						"scripted_bar_progress(colonial_stability_bar)" > 0
-					}
-				}
-				# .206 reads and then clears var:decol_chosen_releases itself.
-				trigger_event = { id = decolonization_events.206 }   # Voluntary Decolonization
-				# .206 forms no country. .204 and .201 below start the collapse's
-				# wave of declarations (decol_wave_start), whose successors'
-				# legacy (apply_decolonization_path) reads these counters; the
-				# wave clears them after its last answer (decol_wave_end).
-				colonial_empire_clear_path_months = yes
-				# Not a cooldown: the owner's rule is that a voluntary end sets
-				# none, and possible does not read this. It is a guard against a
-				# flickering colony test. The re-entry pass (ce_reentry_due) waits
-				# for it, so a country whose one colony passes the test on two
-				# monthly passes and fails it a few days later (this fail is
-				# checked every 4 days) does not loop through .206, a fresh entry
-				# and .206 again every two months.
-				set_variable = { name = ce_reentry_voluntary_hold value = yes days = 365 }
-			}
-			else_if = {
-				limit = {
-					NAND = {
-						colonial_garrison_months_value >= colonial_invest_months_value
-						colonial_garrison_months_value >= colonial_assimilate_months_value
-					}
-					OR = {
-						colonial_invest_months_value > 24
-						colonial_assimilate_months_value > 24
-					}
-				}
-				trigger_event = { id = decolonization_events.204 }   # Negotiated Withdrawal
-				remove_variable = decol_chosen_releases   # read only by .206
-				# Bar reached zero -- 10-year cooldown blocks re-entry even if
-				# colonies are reacquired. Voluntary fail (bar>0) above does not
-				# set this flag, so peaceful decolonizers can re-engage freely:
-				# the re-entry pass (ce_reentry_monthly) adds the entry back a
-				# month after the country is due it, here once the ten years
-				# have run out.
-				set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
-			}
-			else = {
-				trigger_event = { id = decolonization_events.201 }   # The Empire Crumbles (bloody)
-				remove_variable = decol_chosen_releases   # read only by .206
-				set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
-			}
-
-			# Subject-holders: instead of forced release, every qualifying
-			# colonial subject takes a strong LD spike + relations hit. Subjects
-			# don't auto-secede but become much harder to hold; the player has to
-			# negotiate releases or weather the LD-driven independence pressure.
-			# Direct-state release (where applicable) happens through the wave of
-			# declarations .204 / .201 start (decol_wave_start, .77 -> .70).
-			# Removed first: the entry can now run again after a collapse (the
-			# re-entry pass), a second collapse comes about 13 years after the
-			# first (ten years, up to two months, some 34 months at the drift
-			# cap), and a same-name add_modifier stacks, so a subject through two
-			# collapses would carry the 20-year aftershock twice.
-			# The subject is told why (decol_collapse_aftershock_notice names us).
-			save_scope_as = decol_colonial_power
-			every_subject_or_below = {
-				limit = { is_qualifying_colonial_subject = yes }
-				post_notification = decol_collapse_aftershock_notice
-				remove_modifier_if_exists_effect = { MODIFIER = colonial_collapse_subject_unrest_modifier }
-				add_modifier = {
-					name = colonial_collapse_subject_unrest_modifier
-					days = very_long_modifier_time
-					is_decaying = no
-				}
-				change_relations = { country = ROOT value = -50 }
-			}
-
-			# Clean up persistent JE state. The collapse_subject_unrest_modifier
-			# applied just above is intentionally preserved (failure consequence)
-			# -- the cleanup helper removes the bar-band LD modifiers but not the
-			# failure aftershock. It leaves the programme-month counters, which
-			# the wave .201 / .204 start still needs (decol_wave_end clears them).
-			colonial_empire_je_cleanup_effect = yes
+			trigger_event = { id = decolonization_events.201 }
+			colonial_empire_collapse_end = yes
 		}
 	}
 
@@ -429,19 +498,13 @@
 		}
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_colonial_empire = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	on_monthly_pulse = {
 		effect = {
 			# --- Path-dependence tracking ---
 			# Count months each programme runs, weighted by its level: a month
 			# at the top level counts 1 (as a month of the old on/off programme
-			# did), a month at level 1 a third. Read by the success and failure effects
-			# to choose the appropriate resolution event, so a cheap low level
+			# did), a month at level 1 a third. Read by the nine outcomes' triggers
+			# to choose the ending, so a cheap low level
 			# cannot steer the ending as fast as the full programme.
 			if = {
 				limit = { NOT = { has_variable = colonial_invest_months } }

@@ -69,9 +69,9 @@ LOC_DIR = _path("localization", "english")
 #                   declares it at the enforcement while its mirror
 #                   (<member_modifier>_on) is set (#1404), and the mirror is
 #                   the ratification
-# scope             where a save from before 1.15 holds its added copy, which
-#                   legacy_modifier_cleanup strips: "je" (je_united_nations)
-#                   or "country"; None with no member modifier
+# scope             where the old pulse added its copy before 1.15: "je"
+#                   (je_united_nations) or "country"; None with no member
+#                   modifier
 # op                its row in the chamber's Table a Resolution list
 # event             its proposer event, un_events.<event>
 # refusal_reason    the ledger reason its proposer event's refusal books

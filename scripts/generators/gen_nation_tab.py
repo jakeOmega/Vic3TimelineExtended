@@ -164,8 +164,9 @@ SECTIONS = {
         # UN's entry since #1404, and the UN's absence and NPT disarmament are added to it:
         # NOT_ON_COUNTRY)
         "un_sanctions_enforcer_modifier",
-        # Intelligence sharing and the nuclear taboo
-        "intelligence_sharing_defense_shield_modifier", "nd_taboo_*",
+        # Intelligence sharing and the nuclear taboo, and a conceded crisis
+        # freeze (timed; untimed on a revolution's winner, #758)
+        "intelligence_sharing_defense_shield_modifier", "nd_taboo_*", "nd_crisis_programme_freeze",
         # A colonial subject's overlord in decline
         "colonial_overlord_*",
         # A great power's stance on colonialism, held while it counts
@@ -308,8 +309,8 @@ SOURCE_GROUPS = {
     # The health bill, family limitation, the life-expectancy gap, pension positions
     "demography": ("te_demog_health_bill_*", "te_demog_family_limitation", "te_demog_lx_gap_politics",
                    "te_demog_pension_pos_*"),
-    # The nuclear taboo
-    "nuclear_order": ("nd_taboo_*",),
+    # The nuclear taboo, and a conceded crisis freeze
+    "nuclear_order": ("nd_taboo_*", "nd_crisis_programme_freeze"),
     # Barracks doctrine, heir education, Liquid Democracy
     "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
                    "te_continuous_vote"),
@@ -472,6 +473,8 @@ NOT_A_ROW = {
                                             "(the Anti-Colonial Policy's hypocrite tax on them)",
     "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
+    "country_enactment_speed_law_multicultural_mult": "the Civil Rights journal entry (Federal Protection, "
+                                                      "Segregationist Consolidation) and the law panel's enactment",
 }
 
 

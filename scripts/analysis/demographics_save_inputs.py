@@ -297,8 +297,8 @@ def state_unemployment(sections):
     phase 2 step 4's youth bulge takes it. In game the census stores te_state_unemployment_share (te_dg_unemp, 2026-10-17):
     the engine's state_unemployment_rate, the idle workforce over all the people, over the workforce's share of the
     people. That equals this count where the engine's figure is per person, as the self-checks unemployment_rate_read
-    and unemployment_share_read test. A save holds neither figure, so this is the stand-in, the walk's own count
-    (te_dg_unemp_walk)."""
+    and unemployment_share_read read OK (2026-11-11). A save holds neither figure, so this is the stand-in: the count
+    the census walk kept as te_dg_unemp_walk until #1046 retired it."""
     out = {}
     for rec in sections["pops"].values():
         wf = _num(rec.get("workforce"))

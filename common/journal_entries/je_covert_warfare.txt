@@ -118,12 +118,6 @@ je_covert_warfare = {
 		covert_tradecraft_init = yes
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_covert_warfare = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	on_monthly_pulse = {
 		effect = {
 			te_scaling_inherited_selfcheck_rebel_entry = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
