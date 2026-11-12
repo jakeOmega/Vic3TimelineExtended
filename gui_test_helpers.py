@@ -147,12 +147,20 @@ def _own_gates(items):
 
 # The plain containers a layout may wrap its sections in. Any other widget
 # drawn in a layout is content the check can't follow: make it a te_* section.
+# A wide layout's own wrappers are flowcontainers only (_Walk.check_wrapper).
 WRAPPERS = {"flowcontainer", "widget", "vbox", "hbox", "container"}
 
 # What a wrapper in a wide layout may carry: it gates and spaces its sections,
 # nothing else (no datacontext, margin, position or size of its own).
 WIDE_WRAPPER_PROPS = {"direction", "parentanchor", "ignoreinvisible", "spacing", "minimumsize", "maximumsize", "name",
                       "visible"}
+
+# The one size limit a wide wrapper may carry: a column's width, any height.
+COLUMN_SIZE = ["520", "-1"]
+
+# The spacing of a widget the check can't read: the one around a tab body's
+# layout block (the frame's), or a column's (the column type's).
+_UNKNOWN = object()
 
 
 def _find_block(body, name):
@@ -171,60 +179,105 @@ class _Walk:
     """The sections a layout places, in the order they draw, each with the
     gates (visible expressions) on its way down, and whether it sits in a
     column; and its columns, if any. A composer instance expands into its
-    type's sections, under the instance's blockoverrides."""
+    type's sections, under the instance's blockoverrides.
 
-    def __init__(self, test, where, text, composers, skip=(), narrow_spacing=None):
+    The narrow side (`narrow` None) also records the spacing each te_*
+    instance sits at (that of the nearest widget around it that holds two or
+    more, since one that holds a single child draws no spacing), and the
+    composers it expands. The wide
+    side (`narrow` the narrow walk) holds its own wrappers and instances to
+    the rules in assert_wide_matches_narrow's docstring; inside a composer
+    the narrow layout places too (`shared`), which draws the same in both
+    frames, it only reads the sections."""
+
+    def __init__(self, test, where, text, composers, skip=(), narrow=None):
         self.test, self.where, self.text = test, where, text
         self.composers, self.skip = composers, set(skip)
         self.sections, self.columns, self.skipped = [], [], set()
-        # the narrow side records each gated level's spacing, by the gates down to it;
-        # the wide side checks its wrappers against that record
-        self.narrow_spacing = narrow_spacing
-        self.spacing = {}
+        self.narrow = narrow
+        self.spacing, self.expanded = {}, set()
+        self.rows = 0        # the rows of columns walked
+        self.shared = 0      # the depth inside composers the narrow layout places too
+
+    @property
+    def checking(self):
+        return self.narrow is not None and not self.shared
 
     def is_composer(self, name):
         return name in self.composers if self.composers is not None else name.endswith("_sections")
 
-    def body(self, body, gates, overrides=None, wrapper=None):
+    def body(self, body, gates, overrides=None, widget=None, spacing=_UNKNOWN):
+        """Walk a body and return the te_* instances it holds directly. `widget`
+        says whose it is: a wrapper's (its kind), a composer's ("composer"), or,
+        when None, a block's content, which draws in the widget around the
+        block, `spacing` apart."""
         items = _children(body)
-        own = _own_gates(items)
-        gates = gates + own
+        gates = gates + _own_gates(items)
         props = {k: v for kind, k, v in items if kind == "property"}
-        if own and self.narrow_spacing is None:
-            self.spacing.setdefault(frozenset(gates), set()).add(props.get("spacing"))
-        if wrapper and self.narrow_spacing is not None:
-            self.check_wrapper(wrapper, props, own, gates)
+        if widget and self.children(items, overrides) >= 2:
+            spacing = props.get("spacing")
+        held = []
         for kind, name, inner in items:
             if kind == "block":                       # a block draws its override, or its default content
-                self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides)
+                held += self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides,
+                                  spacing=spacing)
             elif kind == "blockoverride":
-                self.body(inner, gates, overrides)
+                held += self.body(inner, gates, overrides, spacing=spacing)
             elif kind != "widget":
                 continue
             elif name in COLUMN_TYPES:
                 self.columns_of(name, inner, gates)
             elif name.startswith("te_"):
-                self.instance(name, inner, gates)
+                self.instance(name, inner, gates, spacing)
+                held.append(name)
             elif name in WRAPPERS:
-                self.body(inner, gates, overrides, wrapper=name)
+                self.body(inner, gates, overrides, widget=name)
             else:
                 self.test.fail(f"{self.where} draws {name} inline: make it a te_* section type, so the check can "
                                f"follow it")
+        if widget in WRAPPERS and self.checking:
+            self.check_wrapper(widget, props, held)
+        return held
 
-    def check_wrapper(self, name, props, own, gates):
+    def children(self, items, overrides):
+        """How many widgets a body holds directly, through its blocks."""
+        n = 0
+        for kind, name, inner in items:
+            if kind == "block":
+                n += self.children(_children(overrides[name] if overrides and name in overrides else inner), overrides)
+            elif kind == "blockoverride":
+                n += self.children(_children(inner), overrides)
+            elif kind == "widget":
+                n += 1
+        return n
+
+    def check_wrapper(self, kind, props, held):
+        """A wide layout's own wrapper: `kind` with `props`, holding the te_*
+        instances `held` directly."""
+        self.test.assertEqual(kind, "flowcontainer",
+                              f"{self.where} wraps sections in `{kind}`; a wide layout's wrappers are flowcontainers "
+                              f"(an hbox sets its sections side by side in the 520 column, a widget or a container "
+                              f"draws them over each other, and a column, a flowcontainer, can't hold a vbox)")
         extra = sorted(set(props) - WIDE_WRAPPER_PROPS)
         self.test.assertFalse(extra, f"{self.where}: a wrapper carries {extra}; a wide layout's wrappers only gate and "
                                      f"space their sections")
         self.test.assertEqual(props.get("ignoreinvisible"), "yes",
                               f"{self.where}: a wrapper without ignoreinvisible = yes keeps a hidden section's space")
-        if name == "flowcontainer":
-            self.test.assertEqual(props.get("direction"), "vertical",
-                                  f"{self.where}: a flowcontainer wrapper runs vertically in its column")
-        narrow = self.narrow_spacing.get(frozenset(gates))
-        if own and narrow is not None:
+        self.test.assertEqual(props.get("direction"), "vertical",
+                              f"{self.where}: a flowcontainer wrapper runs vertically in its column")
+        for limit in ("minimumsize", "maximumsize"):
+            if limit in props:
+                self.test.assertEqual(props[limit].strip("{}").split(), COLUMN_SIZE,
+                                      f"{self.where}: a wrapper's {limit} is {props[limit]}; its column is 520 wide, "
+                                      f"so {{ 520 -1 }} or none")
+        # Its spacing draws between the sections it holds, so only two or more
+        # are held to the narrow layout's: the spacing one of them sits at
+        # there (a composer's root's, or a wrapper's).
+        narrow = set().union(*(self.narrow.spacing.get(name, ()) for name in held))
+        if len(held) >= 2 and narrow:
             self.test.assertIn(props.get("spacing"), narrow,
-                               f"{self.where}: a wrapper spaces its sections {props.get('spacing')} apart under "
-                               f"{sorted(set(gates))}, the narrow layout {sorted(narrow, key=str)}")
+                               f"{self.where}: the wrapper around {held} spaces its sections {props.get('spacing')} "
+                               f"apart, the narrow layout {sorted(narrow, key=str)}")
 
     def type_gates(self, name):
         """A type's own root visible, or () when it has none or isn't found."""
@@ -232,18 +285,29 @@ class _Walk:
             return ()
         return _own_gates(_children(_type_body(self.text, name)))
 
-    def instance(self, name, own, gates):
+    def instance(self, name, own, gates, spacing=_UNKNOWN):
         items = _children(own)
         mine = _own_gates(items)
         if mine and self.type_gates(name):
             self.test.fail(f"{self.where}: {name}'s visible replaces its type's own (gotcha #17), so it draws where "
                            f"its own gate hides it; gate a wrapper instead")
+        if self.checking:
+            extra = sorted({k for kind, k, _ in items if kind == "property"} - {"visible"})
+            self.test.assertFalse(extra, f"{self.where}: {name} carries {extra}; an instance in a wide layout takes a "
+                                         f"visible and nothing else of its own (no datacontext, margin, position or "
+                                         f"size), as its wrappers do")
+        if self.narrow is None and spacing is not _UNKNOWN:
+            self.spacing.setdefault(name, set()).add(spacing)
         gates = gates + mine
         if name in self.skip:
             self.skipped.add(name)
         elif self.is_composer(name):
+            self.expanded.add(name)
             filled = {n: inner for kind, n, inner in items if kind == "blockoverride"}
-            self.body(_type_body(self.text, name), gates, filled)
+            shared = self.narrow is not None and name in self.narrow.expanded
+            self.shared += shared
+            self.body(_type_body(self.text, name), gates, filled, widget="composer")
+            self.shared -= shared
         else:
             in_column = bool(self.columns) and self.columns[-1] is not None
             self.sections.append((name, gates, in_column))
@@ -252,6 +316,10 @@ class _Walk:
 
     def columns_of(self, column_type, body, gates):
         n = COLUMN_TYPES[column_type]
+        if self.narrow is not None:
+            self.test.assertEqual(self.rows, 0, f"{self.where} places a second row of columns; a wide layout is one "
+                                                f"row, read down each column and then across")
+        self.rows += 1
         items = _children(body)
         gates = gates + _own_gates(items)
         overrides = [(name, inner) for kind, name, inner in items if kind == "blockoverride"]
@@ -317,12 +385,12 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       wrappers (flowcontainer, widget, vbox, hbox, container) and blocks, on
       either side; any other te_* instance is a section. Any other widget
       drawn inline fails: make it a te_* section.
-    - The wide composer, `wide_type`, must lay its sections out on
+    - The wide composer, `wide_type`, must lay its sections out on one row of
       te_ui_columns_three or te_ui_columns_two (spec § 9.4) and place exactly
       the narrow sections, in the same order read down each column and then
-      across. Every column holds at least one section. A section outside the
-      columns (the Census Data window's pending line) must be named in
-      `outside`, and counts where it draws.
+      across. Every column holds at least one section. A second row of
+      columns fails. A section outside the columns (the Census Data window's
+      pending line) must be named in `outside`, and counts where it draws.
     - `extra` names wide-only te_* instances to skip.
     - Each section sits under exactly the gates the narrow layout gives it (a
       composer's or a wrapper's visible, or the instance's own; an And( a, b )
@@ -332,11 +400,23 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       may carry more (the Census Data window's How waits for the first
       census). An instance's visible over a type's own fails either way: in
       game it replaces the type's (gotcha #17).
-    - A wrapper in the wide layout only gates and spaces its sections: it
-      carries nothing but direction, parentanchor, ignoreinvisible = yes,
-      spacing, a size limit, a name and its visible; a flowcontainer runs
-      vertically; and one under the same gates as a narrow composer or wrapper
-      spaces its sections as that one does.
+    - A wrapper in the wide layout only gates and spaces its sections: it is
+      a flowcontainer, running vertically, and carries nothing but direction,
+      parentanchor, ignoreinvisible = yes, spacing, a size limit of its
+      column's width ({ 520 -1 }), a name and its visible. One that holds two
+      or more te_* instances directly (through blocks, not through a wrapper
+      inside it) spaces them as the narrow layout does: the spacing one of
+      them sits at there, that of the nearest composer's root or wrapper
+      around it that holds two or more widgets. A wrapper that holds one
+      draws no spacing, so needs none, on either side; an instance the narrow
+      layout holds in a widget the check can't read (the frame around a tab
+      body's layout block) sets no spacing to match.
+    - A te_* instance in the wide layout carries a visible and nothing else of
+      its own (blockoverrides and child widgets aside): no datacontext,
+      margin, position or size, as its wrappers.
+    - Neither rule reaches inside a composer both layouts place: its type
+      draws the same in both frames. A composer only the wide layout places
+      is the wide layout's own, and held to both.
     - `split` maps a wide-only section to the narrow section it draws part
       of (the Space Race's solar colonization tabs, which the narrow layout
       draws inside the milestones and full screen takes a column of their
@@ -371,7 +451,7 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
 
     m = re.search(rf"\btype {wide_type} = (\w+) \{{", text)
     test.assertIsNotNone(m, f"no type {wide_type}")
-    wide = _Walk(test, wide_type, text, composers, skip=extra, narrow_spacing=narrow.spacing)
+    wide = _Walk(test, wide_type, text, composers, skip=extra, narrow=narrow)
     if m.group(1) in COLUMN_TYPES:
         wide.columns_of(m.group(1), _type_body(text, wide_type), ())
     else:
