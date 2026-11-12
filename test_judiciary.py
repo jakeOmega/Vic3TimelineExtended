@@ -355,8 +355,8 @@ class ScoreScriptTest(unittest.TestCase):
 
     def test_refresh_reads_the_conditions(self):
         block = _block(_read(EFFECTS), "te_jud_refresh")
-        self.assertIn("te_jud_elected_government = yes", block)
-        self.assertIn("NOT = { te_jud_elected_government = yes }", block)
+        self.assertIn("te_holds_elections = yes", block)
+        self.assertIn("NOT = { te_holds_elections = yes }", block)
         self.assertIn("has_law = law_type:law_algorithmic_governance", block)
 
     def test_yearly_step(self):

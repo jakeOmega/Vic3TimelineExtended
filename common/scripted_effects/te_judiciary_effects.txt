@@ -141,7 +141,7 @@ te_jud_refresh = {
 	}
 	if = {
 		limit = {
-			te_jud_elected_government = yes
+			te_holds_elections = yes
 			var:te_jud_votes_mult > 0
 		}
 		add_modifier = {
@@ -151,7 +151,7 @@ te_jud_refresh = {
 	}
 	else_if = {
 		limit = {
-			NOT = { te_jud_elected_government = yes }
+			NOT = { te_holds_elections = yes }
 			var:te_jud_authority_mult > 0
 		}
 		add_modifier = {

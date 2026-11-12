@@ -320,6 +320,7 @@ forced_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restrict
 	relations_improvement_min = 0
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		hostile
 	}

@@ -117,17 +117,19 @@ un_resolution_accuses_target = {
 
 # Whether the target's vote for the resolution accepts its verdict
 # (un_vote_cast_yes: un_self_corrected_modifier and un_res_target_accepted).
-# Every topic that accuses it, except the three that acceptance cannot soften:
-# an expulsion, a military mandate and a World Court referral, whose effects
-# never read un_res_target_accepted. On those the target's yes is an ordinary
-# yes, so it is not charged for a confession that buys nothing.
+# Every topic that accuses it, except the two that acceptance cannot soften:
+# an expulsion and a military mandate, whose effects never read
+# un_res_target_accepted. On those the target's yes is an ordinary yes, so it
+# is not charged for a confession that buys nothing. A World Court referral
+# may be accepted (owner, 2026-11-12, issue #978): a holder that voted for it
+# must obey a ruling against it (un_court.2 offers no defiance), as an
+# overlord that voted for a referendum must hold it (un_referendum.1).
 # Scope: resolution container
 un_resolution_target_may_accept = {
 	un_resolution_accuses_target = yes
 	NOR = {
 		has_tag = un_topic_expulsion
 		has_tag = un_topic_military_mandate
-		has_tag = un_topic_court_referral
 	}
 }
 

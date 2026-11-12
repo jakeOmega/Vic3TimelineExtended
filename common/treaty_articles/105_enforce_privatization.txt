@@ -11,6 +11,7 @@ enforce_privatization = {  # REVIEWED 2026-11-03 (involvement): an imposed restr
 	cost = 150
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		hostile
 	}

@@ -476,7 +476,7 @@ te_judiciary_events.20 = {
 			is_enacting_law = law_type:law_constitutional_review
 		}
 		# amendment_judicial_elections's `possible`
-		te_jud_elected_government = yes
+		te_holds_elections = yes
 		NOT = {
 			currently_enacting_law = {
 				has_amendment = amendment_type:amendment_judicial_elections
@@ -1070,7 +1070,7 @@ te_judiciary_events.33 = {
 	fire_only_once = yes
 
 	trigger = {
-		te_jud_elected_government = yes
+		te_holds_elections = yes
 		NOT = { te_jud_paper_court = yes }
 		has_variable = te_judicial_independence
 		var:te_judicial_independence >= 50
