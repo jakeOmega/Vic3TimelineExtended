@@ -384,14 +384,14 @@ centered, and a journal root collapses. The rows of `te-window-wide-playtest.md`
 When the rebels win, `te_history_repair_after_civil_war` (`te_history_civil_war_effects.txt`, from the shared
 `te_civil_war_on_won`) moves the dead loser's samples older than the winner's own oldest to the winner with
 `set_parent` and adds them to the winner's lists, `te_hist` (the system charts) and `te_dg_hist` (the census), then cuts
-each to its cap and sorts it. Before, every rebel win reset the nation's charts. Two engine facts are unverified, and
+each to its cap (evicting the oldest directly) and sorts it once. Before, every rebel win reset the nation's charts. Two engine facts are unverified, and
 each has a self-check. Any game with a rebel win over a played country or a major power reads them; the observer
 runs' revolutions are enough.
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK … history_after_civil_war` | Once a game, at the first rebel win whose loser kept a monthly store (`te_hist_since_y`). A loser whose samples were all newer than the winner's logs nothing | the dead loser's lists and their containers read at `on_civil_war_won`: `hist_moved` / `dg_moved` samples reached the winner (`hist_before` / `dg_before` were its own, from the war's months) | `hist_loser=0`: the loser kept a store and its list read empty at that hook, so lists or their containers are gone by then | Copy the samples before the war ends: at `on_revolution_start` re-parent nothing, but at each month of the war give the rebels' own store the original's older samples, so a rebel win needs no read of the dead loser |
-| `TE_SELF_CHECK … history_after_civil_war_kept` | Once a game, two months after the OK above | both stores still hold at least the samples they held after the repair (`hist=N of M`): the moved containers outlived the loser's deletion | fewer: `set_parent` did not keep them, and they died with the loser | Copy instead of moving: create a container parented to the winner for each sample and copy its variables, every `te_hist_v_<METRIC>` and `te_hist_mk_<MARK>` and the census's `te_dg_h_*`, with a test that the list of names covers every recorder |
+| `TE_SELF_CHECK … history_after_civil_war_kept` | Once a game, two months after the OK above, when it moved three or more monthly samples (two new months would mask the loss of fewer). The census half (`dg`) is judged only when three or more of its samples moved; otherwise it reads `dg=… of 0` and says nothing | both stores still hold at least the samples they held after the repair (`hist=N of M`): the moved containers outlived the loser's deletion | fewer: `set_parent` did not keep them, and they died with the loser | Copy instead of moving: create a container parented to the winner for each sample and copy its variables, every `te_hist_v_<METRIC>` and `te_hist_mk_<MARK>` and the census's `te_dg_h_*`, with a test that the list of names covers every recorder |
 
 | Check | Expect | If it fails |
 |---|---|---|

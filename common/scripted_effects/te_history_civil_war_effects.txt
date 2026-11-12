@@ -18,7 +18,7 @@
 # outlives the loser, and the winner's list takes it. The winner's own samples
 # (the war's months, recorded by the rebels) stay, so no month is held twice;
 # a winner with no store of its own takes every sample. Then the store is cut
-# back to its cap, oldest first, and put in month order, which the charts draw
+# back to its cap, oldest first, and put in month order once, which the charts draw
 # and check_save_history_order.py holds both stores to.
 #
 # Re-parenting, not copying: a sample holds one variable per metric and marker
@@ -58,7 +58,6 @@ te_history_repair_after_civil_war = {
 			TAG = te_hist_sample
 			CAP = 240 # te_history_sample_cap
 			OVER = 241
-			PRUNE = te_history_prune_samples
 		}
 		if = {
 			limit = { has_variable_list = te_hist }
@@ -71,7 +70,6 @@ te_history_repair_after_civil_war = {
 			TAG = te_dg_hist_sample
 			CAP = 100
 			OVER = 101
-			PRUNE = te_demog_history_prune
 		}
 		if = {
 			limit = { has_variable_list = te_dg_hist }
@@ -88,7 +86,7 @@ te_history_repair_after_civil_war = {
 }
 
 # Hand the loser's samples of one store, older than the winner's own oldest, to
-# the winner, then cut the store to $CAP$ and sort it. Leaves the counts
+# the winner, then cut the store to $CAP$ ($OVER$ = $CAP$ + 1) and sort it. Leaves the counts
 # te_hcw_$KEY$_before (the winner's samples before), _loser (the loser's) and
 # _moved (those handed over) for the self-checks.
 # Scope: the winner, saved as scope:te_hcw_winner; scope:te_cw_loser the loser.
@@ -138,10 +136,24 @@ te_history_cw_take_store = {
 	}
 	if = {
 		limit = { var:te_hcw_$KEY$_moved > 0 }
-		# The cap, oldest first. Each eviction sorts the store again.
+		# The cap, oldest first, evicted here rather than by the store's own
+		# pruner: that one sorts after each eviction with a sort that assumes the
+		# store is exactly at its cap and reads only the first $CAP$, so on a
+		# merged store two or more over it would keep the oldest and orphan the
+		# newest, te_hist_cur's month among them. One sort follows, below.
 		while = {
 			limit = { any_in_list = { variable = $LIST$ count >= $OVER$ has_tag = $TAG$ } }
-			$PRUNE$ = yes
+			ordered_in_list = {
+				variable = $LIST$
+				position = 0
+				order_by = te_history_sample_order
+				save_scope_as = te_hcw_evicted
+			}
+			if = {
+				limit = { exists = scope:te_hcw_evicted }
+				remove_list_variable = { name = $LIST$ target = scope:te_hcw_evicted }
+				scope:te_hcw_evicted = { destroy_container = yes }
+			}
 		}
 		te_history_cw_sort = { LIST = $LIST$ TMP = $TMP$ CAP = $CAP$ }
 	}
@@ -225,7 +237,11 @@ te_history_cw_sort = {
 #
 # On OK the winner is armed for history_after_civil_war_kept, two months on
 # (te_history_cw_selfcheck_kept, monthly): its stores still hold as many
-# samples, so the moved containers outlived the loser's deletion.
+# samples, so the moved containers outlived the loser's deletion. Armed only
+# when at least three monthly samples moved: under the cap the two months
+# between add two samples, which would mask the loss of one or two. The census
+# half is judged only when three or more of its samples moved (it adds one a
+# year at most), and is 0, so silent, otherwise.
 # Scope: the winner.
 te_history_cw_selfcheck_read = {
 	if = {
@@ -238,10 +254,17 @@ te_history_cw_selfcheck_read = {
 			set_global_variable = te_hcw_selfcheck_read_done
 			debug_log = "TE_SELF_CHECK OK history_after_civil_war country=[THIS.GetCountry.GetTagName] hist_before=[THIS.Var('te_hcw_hist_before').GetValue|0] hist_loser=[THIS.Var('te_hcw_hist_loser').GetValue|0] hist_moved=[THIS.Var('te_hcw_hist_moved').GetValue|0] dg_before=[THIS.Var('te_hcw_dg_before').GetValue|0] dg_loser=[THIS.Var('te_hcw_dg_loser').GetValue|0] dg_moved=[THIS.Var('te_hcw_dg_moved').GetValue|0] (the dead loser's history stores read at on_civil_war_won and the winner took them) date=[TimeKeeper.GetCurrentDate.GetString]"
 			# Armed for the second check: the counts the stores must still reach.
-			set_variable = { name = te_hcw_check_due_i value = te_history_month_index }
-			change_variable = { name = te_hcw_check_due_i add = 2 }
-			te_history_cw_count = { LIST = te_hist TAG = te_hist_sample NAME = te_hcw_check_hist }
-			te_history_cw_count = { LIST = te_dg_hist TAG = te_dg_hist_sample NAME = te_hcw_check_dg }
+			if = {
+				limit = { var:te_hcw_hist_moved >= 3 }
+				set_variable = { name = te_hcw_check_due_i value = te_history_month_index }
+				change_variable = { name = te_hcw_check_due_i add = 2 }
+				te_history_cw_count = { LIST = te_hist TAG = te_hist_sample NAME = te_hcw_check_hist }
+				set_variable = { name = te_hcw_check_dg value = 0 }
+				if = {
+					limit = { var:te_hcw_dg_moved >= 3 }
+					te_history_cw_count = { LIST = te_dg_hist TAG = te_dg_hist_sample NAME = te_hcw_check_dg }
+				}
+			}
 		}
 		else_if = {
 			limit = { var:te_hcw_hist_loser = 0 }

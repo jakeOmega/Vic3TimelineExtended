@@ -91,7 +91,8 @@ class StoreTests(unittest.TestCase):
         for key, want in STORES.items():
             got = calls[key]
             with self.subTest(store=key):
-                for arg in ("LIST", "TMP", "TAG", "PRUNE"):
+                self.assertNotIn("PRUNE", got)
+                for arg in ("LIST", "TMP", "TAG"):
                     self.assertEqual(got[arg], want[arg], arg)
                 self.assertEqual(int(got["CAP"]), caps[key])
                 self.assertEqual(int(got["OVER"]), caps[key] + 1)
@@ -108,6 +109,26 @@ class StoreTests(unittest.TestCase):
             r"scope:te_hcw_winner\s*=\s*\{\s*add_to_variable_list\s*=\s*\{\s*name\s*=\s*\$LIST\$\s+target\s*=\s*scope:te_hcw_moved\s*\}")
         # The cap before the sort: the sort reads at most $CAP$ samples.
         self.assertLess(body.index("while = {"), body.index("te_history_cw_sort = {"))
+
+    def test_the_cap_loop_evicts_directly_and_never_sorts(self):
+        """The stores' own pruners sort a list assumed to be at exactly the cap; a merged one can be far over."""
+        body = _block(_read(*EFFECTS), "te_history_cw_take_store")
+        m = re.search(r"while\s*=\s*\{", body)
+        depth, i = 0, m.end() - 1
+        while True:
+            depth += {"{": 1, "}": -1}.get(body[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        loop = body[m.end():i]
+        for name in ("$PRUNE$", "te_history_prune_samples", "te_demog_history_prune",
+                     "te_history_sort_samples", "te_demog_history_sort", "te_history_cw_sort"):
+            with self.subTest(called=name):
+                self.assertNotIn(name, loop)
+        self.assertRegex(loop, r"ordered_in_list\s*=\s*\{\s*variable\s*=\s*\$LIST\$\s*position\s*=\s*0\s*"
+                               r"order_by\s*=\s*te_history_sample_order\s*save_scope_as\s*=\s*te_hcw_evicted\s*\}")
+        self.assertRegex(loop, r"remove_list_variable\s*=\s*\{\s*name\s*=\s*\$LIST\$\s+target\s*=\s*scope:te_hcw_evicted\s*\}"
+                               r"\s*scope:te_hcw_evicted\s*=\s*\{\s*destroy_container\s*=\s*yes\s*\}")
 
     def test_the_sort_replaces_the_list_only_when_the_copy_is_complete(self):
         body = _block(_read(*EFFECTS), "te_history_cw_sort")
@@ -134,8 +155,13 @@ class SelfCheckTests(unittest.TestCase):
         self.assertEqual(read.count("set_global_variable = te_hcw_selfcheck_read_done"), 2)
         # Judged only for a loser that kept a store.
         self.assertIn("scope:te_cw_loser = { has_variable = te_hist_since_y }", read)
-        # The kept check is armed only by an OK and disarms itself.
+        # The kept check is armed only by an OK with three or more monthly samples moved
+        # (two new months would mask fewer), and disarms itself.
         self.assertEqual(text.count("name = te_hcw_check_due_i value"), 1)
+        self.assertRegex(read, r"limit\s*=\s*\{\s*var:te_hcw_hist_moved\s*>=\s*3\s*\}\s*"
+                               r"set_variable\s*=\s*\{\s*name\s*=\s*te_hcw_check_due_i")
+        self.assertRegex(read, r"limit\s*=\s*\{\s*var:te_hcw_dg_moved\s*>=\s*3\s*\}\s*"
+                               r"te_history_cw_count\s*=\s*\{\s*LIST\s*=\s*te_dg_hist")
         self.assertIn("remove_variable = te_hcw_check_due_i", kept)
 
     def test_the_play_test_list_names_both(self):

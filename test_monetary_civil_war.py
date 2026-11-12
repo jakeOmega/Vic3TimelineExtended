@@ -295,8 +295,8 @@ class TimedClockTests(unittest.TestCase):
                 self.assertRegex(tick, r"te_mon_cw_tick\s*=\s*\{\s*VAR\s*=\s*" + counter + r"\s*\}")
                 if decaying:
                     self.assertRegex(
-                        body, r"te_mon_cw_restore_decaying\s*=\s*\{\s*NAME\s*=\s*" + name
-                        + r"\s+VAR\s*=\s*" + counter + r"\s+TERM\s*=\s*" + str(months) + r"\s*\}")
+                        body, r"te_mon_cw_restore_decaying_" + str(months) + r"\s*=\s*\{\s*NAME\s*=\s*" + name
+                        + r"\s+VAR\s*=\s*" + counter + r"\s*\}")
                 else:
                     self.assertRegex(
                         body, r"te_mon_cw_restore_timed\s*=\s*\{\s*NAME\s*=\s*" + name
@@ -314,12 +314,37 @@ class TimedClockTests(unittest.TestCase):
             r"change_variable\s*=\s*\{\s*name\s*=\s*\$VAR\$\s+subtract\s*=\s*1\s*\}")
 
     def test_a_decaying_one_resumes_at_the_share_left(self):
-        body = _block(_read(EFFECTS), "te_mon_cw_restore_decaying")
-        self.assertRegex(body, r"name\s*=\s*te_mon_work2\s+value\s*=\s*\{\s*value\s*=\s*var:\$VAR\$\s+divide\s*=\s*\$TERM\$")
-        self.assertIn("DECAYING = yes MULT = var:te_mon_work2", body)
-        self.assertIn("DECAYING = no MULT = 1", _block(_read(EFFECTS), "te_mon_cw_restore_timed"))
-        ladder = _block(_read(EFFECTS), "te_mon_cw_add_timed")
-        self.assertEqual(ladder.count("is_decaying = $DECAYING$ multiplier = $MULT$"), ladder.count("add_modifier"))
+        """Literal months and multipliers (cr_rebuild_outcome_modifier's ladder), never a variable."""
+        effects = _read(EFFECTS)
+        for term in (24, 120):
+            ladder = _block(effects, f"te_mon_cw_restore_decaying_{term}")
+            rungs = [
+                (int(t), int(m), float(x)) for t, m, x in re.findall(
+                    r"var:\$VAR\$\s*>\s*(\d+)\s*\}\s*add_modifier\s*=\s*\{\s*name\s*=\s*\$NAME\$\s+"
+                    r"months\s*=\s*(\d+)\s+multiplier\s*=\s*([\d.]+)\s+is_decaying\s*=\s*yes\s*\}", ladder)]
+            with self.subTest(term=term):
+                self.assertEqual(len(rungs), ladder.count("add_modifier"))
+                self.assertNotIn("var:te_mon_work", ladder)
+                self.assertEqual(rungs[0][1], term)
+                self.assertEqual(rungs[-1][0], 0)
+
+                def added(remaining):
+                    for threshold, months, mult in rungs:
+                        if remaining > threshold:
+                            return months, mult
+                    return 0, 0
+
+                self.assertEqual(added(0), (0, 0))
+                width = 2 if term == 24 else 12
+                for remaining in range(1, term + 1):
+                    months, mult = added(remaining)
+                    with self.subTest(term=term, remaining=remaining):
+                        self.assertLessEqual(abs(months - remaining), width)
+                        self.assertAlmostEqual(mult, months / term, delta=0.01)
+        # The flat ladder stays flat.
+        ladder = _block(effects, "te_mon_cw_add_timed")
+        self.assertNotIn("is_decaying", ladder)
+        self.assertNotIn("multiplier", ladder)
 
 
 class WiringTests(unittest.TestCase):
