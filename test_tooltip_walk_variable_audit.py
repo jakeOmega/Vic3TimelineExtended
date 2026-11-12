@@ -131,6 +131,50 @@ class GuardTests(unittest.TestCase):
         })
         self.assertEqual(_flags(r), [(SGUIS, 7, "var:x_tmp")])
 
+    GUARDED_BODY = ("\t\tif = {\n\t\t\tlimit = { has_variable = x_mode }\n"
+                    "\t\t\tset_variable = { name = x_tmp value = 5 }\n"
+                    "\t\t\tif = { limit = { var:x_tmp > 3 } add_treasury = 1 }\n"
+                    "\t\t\tremove_variable = x_tmp\n\t\t}")
+
+    def test_a_flag_one_option_sets_and_another_removes_persists(self):
+        """Option b's removal is not on option a's path: once a is picked the
+        flag stays, so a guard on it is no fence."""
+        r = _run({
+            EVENTS: ("x.1 = {\n\ttype = country_event\n\toption = {\n\t\tname = x.1.a\n"
+                     "\t\tset_variable = x_mode\n\t}\n\toption = {\n\t\tname = x.1.b\n"
+                     "\t\tremove_variable = x_mode\n\t}\n}\n"),
+            SGUIS: _sgui(self.GUARDED_BODY),
+        })
+        self.assertEqual(_flags(r), [(SGUIS, 7, "var:x_tmp")])
+
+    def test_a_toggle_that_removes_in_its_else_persists(self):
+        r = _run({
+            EFFECTS: ("x_toggle = {\n\tif = {\n\t\tlimit = { NOT = { has_variable = x_mode } }\n"
+                      "\t\tset_variable = x_mode\n\t}\n\telse = {\n\t\tremove_variable = x_mode\n\t}\n}\n"),
+            SGUIS: _sgui("\t\tx_toggle = yes", "t_sgui") + _sgui(self.GUARDED_BODY),
+        })
+        self.assertEqual(_flags(r), [(SGUIS, 13, "var:x_tmp")])
+
+    def test_an_or_that_passes_when_unset_guards_its_later_children(self):
+        """`OR = { NOT = { has_variable = x } … var:x … }` reads x only when x
+        is set (`nd_taboo_effective_ceiling_value`)."""
+        r = _run({SGUIS: _sgui(
+            "\t\tset_variable = { name = x_cap value = 5 }\n"
+            "\t\tif = { limit = { OR = { NOT = { has_variable = x_cap } var:x_cap > 3 } } add_treasury = 1 }\n"
+            "\t\tif = { limit = { OR = { var:x_cap > 3 NOT = { has_variable = x_cap } } } add_treasury = 1 }")})
+        # The guard holds for what follows it in the OR, not for what precedes it.
+        self.assertEqual(_flags(r), [(SGUIS, 6, "var:x_cap")])
+
+    def test_a_template_no_caller_fills_does_not_unmake_a_marker(self):
+        """`x_d$J$` with no caller fits `x_dbg_click` only by accident."""
+        r = _run({
+            EFFECTS: "x_band = {\n\tset_variable = { name = x_d$J$ value = 1 }\n}\n",
+            SGUIS: _sgui("\t\tset_variable = x_dbg_click\n\t\tif = {\n\t\t\tlimit = { has_variable = x_dbg_click }\n"
+                         "\t\t\tremove_variable = x_dbg_click\n"
+                         "\t\t\tset_variable = { name = x_tmp value = 5 }\n\t\t\tadd_treasury = var:x_tmp\n\t\t}"),
+        })
+        self.assertEqual(r.flags, [])
+
     def test_a_guard_on_the_name_read_holds_even_when_it_persists(self):
         r = _run({SGUIS: _sgui("\t\tset_variable = { name = x_level value = 2 }\n"
                                "\t\tif = { limit = { has_variable = x_level var:x_level > 1 } add_treasury = 1 }\n"

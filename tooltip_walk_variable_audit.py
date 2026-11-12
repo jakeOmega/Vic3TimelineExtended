@@ -42,15 +42,21 @@ does run it: § "An Option's Tooltip Walks Its Effects"). A read is flagged when
 2. no guard covers it. A `has_variable = <V>` (or `exists = var:<V>`) in an
    `if` / `else_if` / iterator `limit`, a `trigger_if` limit, or before the
    read in the same `AND`, works two ways:
-   * V a *scratch* name, every write of it removed later in its own body (a
-     click-only marker, a staged figure): it cannot be set while a tooltip
+   * V a *scratch* name, every write of it removed later in its own body on
+     a path the write runs on (not in a sibling `if` / `else` branch, a
+     `random_list` or `switch` branch, or another option of the event): a
+     click-only marker, a staged figure. It cannot be set while a tooltip
      shows, so the guard is false in the walk and the walk skips what it
-     guards;
+     guards. Only writes of V's own name count here, not a `$J$` template
+     no caller fills in;
    * any other V, a flag a click or a pulse sets and leaves (`gm_com_open`):
      once set, the walk enters what it guards every frame, so the block is
      walked; only a read of V itself behind the guard is safe.
    A guard after the read, or beside it in a `NOT` / `NOR` / `NAND` (which
-   reads every child), covers nothing. A guard in a scripted trigger the
+   reads every child), covers nothing. In an `OR`, a child
+   `NOT = { has_variable = x }` covers x in the children after it (the OR
+   stops at its first true child), as `nd_taboo_effective_ceiling_value`
+   relies on; `variable_guard_audit` reads that shape as sound too. A guard in a scripted trigger the
    `limit` calls counts, and one behind a link (`root = { has_variable = x }`)
    covers `root.var:x`;
 3. nothing else keeps the name set (below).
@@ -533,6 +539,10 @@ class Keepers:
                 if child[0] == "block" and child[1].key:
                     entity = _strip(child[1].key)
                     self._scan(rel, entity, child[1], ())
+        # Mutually exclusive branches per file, as line spans: an `if` chain's
+        # branches, `random_list` and `switch` branches, an event's options.
+        self._branches: dict[str, list[list[tuple[int, int]]]] = {
+            rel: _exclusive_groups(tree, rel) for rel, tree in mod.trees.items()}
         self._removes_by_body: dict[tuple, list[Site]] = {}
         for r in self.removes:
             self._removes_by_body.setdefault(r.body, []).append(r)
@@ -651,10 +661,25 @@ class Keepers:
                     changed = True
         return {k: frozenset(v) for k, v in out.items()}
 
+    def _exclusive(self, file: str, a: int, b: int) -> bool:
+        """Lines `a` and `b` of `file` sit in two branches of which only one
+        runs (an `if` and its `else`, two options of one event)."""
+        for group in self._branches.get(file, ()):
+            ia = next((i for i, (lo, hi) in enumerate(group) if lo <= a <= hi), None)
+            if ia is None:
+                continue
+            ib = next((i for i, (lo, hi) in enumerate(group) if lo <= b <= hi), None)
+            if ib is not None and ib != ia:
+                return True
+        return False
+
     def _removed_after(self, w: Site) -> bool:
+        """The same body removes the name after the write, on a path the
+        write runs on: not in a sibling branch, not in another option."""
         var = (w.prefix, w.name)
         for r in self._removes_by_body.get(w.body, []):
-            if r.file == w.file and r.line > w.line and (r.prefix, r.name) == var:
+            if r.file == w.file and r.line > w.line and (r.prefix, r.name) == var \
+                    and not self._exclusive(w.file, w.line, r.line):
                 return True
         # A call later in the same body to an effect that removes it.
         import script_call_graph as scg
@@ -667,7 +692,8 @@ class Keepers:
             edges = [x for x in self._entity_calls.get(entity, ())
                      if x.file == rel and (x.path[:1] == (top,) if top else True)]
         for e in edges:
-            if e.file == w.file and e.line > w.line and var in self._effect_removes(e.dst.name):
+            if e.file == w.file and e.line > w.line and var in self._effect_removes(e.dst.name) \
+                    and not self._exclusive(w.file, w.line, e.line):
                 return True
         return False
 
@@ -692,8 +718,10 @@ class Keepers:
         key = (prefix, name)
         hit = self._scratch.get(key)
         if hit is None:
+            # The writes of this very name. A `$J$` template no caller fills
+            # in (`te_dg_d$J$`) stands for names of its own family; it fits
+            # `te_dg_dbg_click` by accident, so it is left out here.
             sites = list(self._writes_by_name.get(key, []))
-            sites += [w for w in self._pattern_writes if w.prefix == prefix and w.pattern.match(name)]
             hit = bool(sites) and all(self._removed_after(w) for w in sites)
             self._scratch[key] = hit
         return hit
@@ -707,6 +735,48 @@ class Keepers:
         res = any(w.background and not self._removed_after(w) for w in sites)
         self._kept[key] = res
         return res
+
+
+def _last_line(node: vga.Node) -> int:
+    last = node.line
+    for c in node.children:
+        last = max(last, _last_line(c[1]) if c[0] == "block" else c[-1])
+    return last
+
+
+def _exclusive_groups(tree: vga.Node, rel: str) -> list[list[tuple[int, int]]]:
+    """Every set of sibling blocks of which one runs, as (first, last line)
+    spans: an `if` / `else_if` / `else` chain, the branches of a `random_list`
+    or a `switch`, and an event's options."""
+    groups: list[list[tuple[int, int]]] = []
+
+    def visit(node: vga.Node, top: bool) -> None:
+        chain: list[tuple[int, int]] = []
+        blocks = [c[1] for c in node.children if c[0] == "block"]
+        for b in blocks:
+            if b.key == "if":
+                if len(chain) > 1:
+                    groups.append(chain)
+                chain = [(b.line, _last_line(b))]
+            elif b.key in ("else_if", "else") and chain:
+                chain.append((b.line, _last_line(b)))
+        if len(chain) > 1:
+            groups.append(chain)
+        if node.key in ("random_list", "switch"):
+            spans = [(b.line, _last_line(b)) for b in blocks]
+            if len(spans) > 1:
+                groups.append(spans)
+        if top and rel.startswith("events/") and node.key and _EVENT_ID_RE.match(node.key):
+            spans = [(b.line, _last_line(b)) for b in blocks if b.key == "option"]
+            if len(spans) > 1:
+                groups.append(spans)
+        for b in blocks:
+            visit(b, False)
+
+    for c in tree.children:
+        if c[0] == "block":
+            visit(c[1], True)
+    return groups
 
 
 def _name_of(node: vga.Node) -> str | None:
@@ -1127,6 +1197,27 @@ class Walker:
 
     # -- triggers ---------------------------------------------------------
 
+    def _negated_guards(self, child, st) -> set:
+        """The variables a `NOT = { has_variable = x }` (or a `NOR` of such
+        guards) tests; empty for any other child."""
+        if child[0] != "block" or (child[1].key or "").upper() not in ("NOT", "NOR"):
+            return set()
+        out = set()
+        for c in child[1].children:
+            if c[0] != "scalar" or c[2] != "=" or not c[3]:
+                return set()
+            key, value = c[1], self._sub(c[3], st["params"])[0]
+            if key in GUARD_KEYS and "$" not in value:
+                out.add((GUARD_KEYS[key], value))
+            elif key == "exists":
+                reads = self._chain_reads(value, st["scopes"], st["aliases"])
+                if not reads:
+                    return set()
+                out.add((reads[-1][0], reads[-1][1]))
+            else:
+                return set()
+        return out
+
     def trigger_and(self, children, st, stop=True):
         """Walk a trigger block's children in order. False when the walk knows
         the block is false (a guard on a scratch name), else None.
@@ -1171,7 +1262,14 @@ class Walker:
         if upper in ("AND", "LIMIT") or key is None:
             return self.trigger_and(node.children, st)
         if upper == "OR":
-            results = [self.trigger_child(c, self._fork(st)) for c in node.children]
+            # An OR stops at its first true child, so after
+            # `NOT = { has_variable = x }` its later children run only when x
+            # is set: they may read it (`nd_taboo_effective_ceiling_value`).
+            orst = self._fork(st)
+            results = []
+            for c in node.children:
+                results.append(self.trigger_child(c, self._fork(orst)))
+                orst["guarded"] |= self._negated_guards(c, orst)
             return False if results and all(r is False for r in results) else None
         if upper in ("NOT", "NOR", "NAND"):
             # A multi-child NOT reads every child: a guard there guards nothing.
