@@ -244,3 +244,12 @@ The entry's endings are nine outcomes, one each, so the journal panel lists them
 | **A path ending fires its event.** `event te_debug_colonial_empire.1` to Solidified, run Garrison past 24 months and hold at 100 for 60 months (or the harness's shortcut). | The Iron Fist Holds concludes the entry, `.203` fires, and the concluded page shows "concluded with our colonies held by the garrisons". | Nothing concludes with the bar held: a trigger never passes; compare the counters in the tooltip with `colonial_*_months`. |
 | **A collapse picks its ending.** Drain the bar to 0, once with Investment the longest program past 24 months and once with Garrison the longest. | Negotiated Withdrawal (`.204`) the first time, The Empire Crumbles (`.201`) the second; both set the ten-year cooldown and the subjects' aftershock. | |
 | **The two-pole bar.** Look wherever the stock bar block draws `colonial_stability_bar` (the entry's page while it is not active, the concluded page if it shows bars). | Green fill over red, the sliding marker at the value, "Colonial Stability: collapse at 0" on the left and "integrated at 100" on the right. While the entry runs the overview's own five-layer row is unchanged. | A blank or magenta bar: a texture path is wrong; copy vanilla's `great_game_core_progress_bar` fields. |
+
+## The bar's monthly cap as a clamp (2026-11-12)
+
+`colonial_stability_bar`'s `monthly_progress` now ends with `max = colonial_stability_drift_cap` and `min = colonial_stability_drift_floor`, where it ended with a 23rd line (`colonial_stability_term_cap`, the capped minus the uncapped sum) that evaluated every leaf twice more each month. The clamp form is vanilla's (`00_rlit_progress_bars.txt`); whether a progress bar applies a `max`/`min` at the end of its `monthly_progress` has not been read in this mod's game.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A capped month moves the bar by the cap.** A country whose drift is past the cap: the overview's breakdown shows the cap row taking something off. Note the bar's value on the 1st and on the next 1st. | It moved by 1.5 exactly, up or down, the figure the overview's headline (`colonial_stability_drift_total_display`) gave. | It moved by the uncapped sum: the clamp isn't applied to `monthly_progress`. Restore the 23rd line from before this change (`git log -S colonial_stability_term_cap`). |
+| **An uncapped month is untouched.** A country whose drift is inside the cap. | The bar moves by the headline figure, as before. | Any other figure: compare with the overview's breakdown. |

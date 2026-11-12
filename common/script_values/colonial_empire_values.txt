@@ -701,9 +701,8 @@ colonial_state_sol_qualifying_floor = {
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
 # in docs/systems/mod_systems/decolonization.md § Stability Bar Formula.
 #
-# The bar's 23rd and last line, colonial_stability_term_cap, is not one of
-# these leaves: it caps the sum of all 22 and lives in the MONTHLY CAP
-# section after the group sums.
+# The bar ends with a clamp of the sum of all 22 to +/- colonial_stability_drift_cap
+# (max / min), not a leaf: see the MONTHLY CAP section after the group sums.
 #
 # Every leaf returns 0 when its gate is false (the gate moved from the bar's
 # enclosing `if` into the leaf), so the bar's `add` lines are unconditional.
@@ -1022,31 +1021,31 @@ colonial_stability_drift_uncapped = {
 # change the inputs (win the great power over, integrate the colony, release
 # it) to turn the trend around.
 #
-# The bar applies it as one last leaf, colonial_stability_term_cap: the
-# difference between the capped and the uncapped sum, 0 while the sum is
-# inside the cap. Its hover line therefore shows how much the cap absorbed.
+# The bar applies it as a clamp at the end of its monthly_progress (max =
+# colonial_stability_drift_cap, min = colonial_stability_drift_floor), and
+# colonial_stability_drift_total clamps with the same two values. Until
+# 2026-11-12 the bar's last line was a leaf, the capped minus the uncapped sum,
+# whose hover line showed how much the cap absorbed; it evaluated every leaf
+# twice more a month. The panel never showed the bar's own hover (the overview
+# draws the value), and its breakdown shows the cap from
+# colonial_stability_drift_cap_display.
 # ============================================================================
 
 colonial_stability_drift_cap = 1.5
 
+colonial_stability_drift_floor = {
+	value = colonial_stability_drift_cap
+	multiply = -1
+}
+
 # Projected monthly change after the cap, identical by construction to what
-# the bar applies (its 22 leaves plus colonial_stability_term_cap). Snapshotted
+# the bar applies (its 22 leaves, then the same clamp). Snapshotted
 # into colonial_empire_d_total for the signed history series, which is sampled
 # from the monthly pulse and can afford the iteration.
 colonial_stability_drift_total = {
 	value = colonial_stability_drift_uncapped
 	max = colonial_stability_drift_cap
-	min = {
-		value = colonial_stability_drift_cap
-		multiply = -1
-	}
-}
-
-# The bar's last line. Capped minus uncapped, so the clamp above finishes
-# inside its own script value before the subtraction runs.
-colonial_stability_term_cap = {
-	value = colonial_stability_drift_total
-	subtract = colonial_stability_drift_uncapped
+	min = colonial_stability_drift_floor
 }
 
 # The uncapped total, but safe to read from the widget every frame: the six O(1)
