@@ -275,7 +275,9 @@ class MonetaryRuleSwitchTest(unittest.TestCase):
                 self.assertIn(("te_mon_can_be_anchor", "yes"), pairs(reads))
 
     def test_the_teardown_settles_the_line_then_clears_the_roles(self):
-        order = [n for n in self.leave.children if n.key == "if"]
+        self.assertIn(("te_mon_leave_backstop_treaties", "yes"), pairs(self.leave.children))
+        step4 = self.switch["te_mon_leave_backstop_treaties"]
+        order = [n for n in step4.children if n.key == "if"]
         settle = next(i for i, n in enumerate(order) if "te_mon_effect_swap_settle" in keys(n))
         cleared = {}
         for i, n in enumerate(order):
@@ -288,17 +290,35 @@ class MonetaryRuleSwitchTest(unittest.TestCase):
             with self.subTest(role=role):
                 self.assertIn(role, cleared)
                 self.assertGreater(cleared[role], settle, "settle while the role still names the lender")
-        self.assertIn(("te_mon_clear_backstop_rows", "yes"), pairs(self.leave.children))
+        self.assertIn(("te_mon_clear_backstop_rows", "yes"), pairs(step4.children))
+
+    def test_a_save_switched_before_step_4_still_runs_it(self):
+        # No te_mon_ran_full mark (switched between #1667 and the requirement), but a role still held off Full.
+        settle = self.switch["te_monetary_settle_rule_switch"]
+        last = [c for c in settle.children if c.key == "else_if"][-1]
+        limit = next(c for c in last.children if c.key == "limit")
+        roles = {n.key for n in walk(limit.children)}
+        for role in ("te_mon_is_swap_recipient", "te_mon_is_lolr_ward", "te_mon_is_under_receivership"):
+            with self.subTest(role=role):
+                self.assertIn(role, roles)
+        self.assertEqual(pairs(c for c in last.children if c.key != "limit"),
+                         [("te_mon_leave_backstop_treaties", "yes")])
+        # Idempotent: step 4 clears every role that opens the branch.
+        step4 = self.switch["te_mon_leave_backstop_treaties"]
+        cleared = {dict(pairs(sv.children)).get("name") for sv in walk(step4.children)
+                   if sv.key == "set_variable" and sv.children}
+        self.assertLessEqual({"te_mon_swap_recipient", "te_mon_lolr_ward", "te_mon_receivership"}, cleared)
 
     def test_the_self_check_reads_a_month_later_once_a_game(self):
         settle = self.switch["te_monetary_settle_rule_switch"]
         branches = [c for c in settle.children if c.key == "else_if"]
-        self.assertEqual(len(branches), 2)
+        self.assertEqual(len(branches), 3)
         later = branches[1]
         self.assertIn(("has_variable", "te_mon_switch_treaty_check"),
                       pairs(next(c for c in later.children if c.key == "limit").children))
         self.assertIn(("te_mon_selfcheck_switch_treaties", "yes"), pairs(later.children))
-        self.assertIn("te_mon_switch_treaty_check", {n.value for n in walk(self.leave.children)})
+        self.assertIn("te_mon_switch_treaty_check",
+                      {n.value for n in walk(self.switch["te_mon_leave_backstop_treaties"].children)})
         check = self.switch["te_mon_selfcheck_switch_treaties"]
         self.assertEqual(sum(1 for n in walk(check.children) if n.key == "debug_log"), 2)
         self.assertIn("te_mon_switch_treaties_selfcheck_logged", {n.value for n in walk(check.children)})

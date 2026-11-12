@@ -77,8 +77,9 @@
 # neutral seeds, and an ended treaty is not restored (it has to be signed
 # again). A country that never ran a Full pulse after this effect was added
 # carries no mark, so a save already switched before it loads keeps what it
-# had, except that its backstop articles now end on their requirement; their
-# roles then stay set until the rule goes back to Full and the discovery runs.
+# had, except the backstop treaties: their articles now end on their
+# requirement, and a country still holding a role runs step 4 alone on its
+# next pulse (the last branch of te_monetary_settle_rule_switch).
 #
 # TE_SELF_CHECK mon_rule_switch_treaties. That a failed requirement_to_maintain
 # ends the article with no breaker is read from vanilla, not seen in game. A
@@ -113,10 +114,25 @@ te_monetary_settle_rule_switch = {
 		remove_variable = te_mon_switch_treaty_check
 		te_mon_selfcheck_switch_treaties = yes
 	}
+	# A save switched off Full before step 4 existed (between #1667 and the
+	# treaties' requirement) carries no te_mon_ran_full mark but may still hold
+	# a backstop role. Nothing sets a role off Full (the discovery is a skipped
+	# step), so once step 4 has cleared them this branch never runs again.
+	else_if = {
+		limit = {
+			OR = {
+				te_mon_is_swap_recipient = yes
+				te_mon_is_lolr_ward = yes
+				te_mon_is_under_receivership = yes
+			}
+		}
+		te_mon_leave_backstop_treaties = yes
+	}
 }
 
-# Steps 1 to 3 of the header above. Called only by te_monetary_settle_rule_switch,
-# before step 0, so step 0 seeds what step 2 forgets on the same pulse.
+# Steps 1 to 4 of the header above (4 in te_mon_leave_backstop_treaties).
+# Called only by te_monetary_settle_rule_switch, before step 0, so step 0 seeds
+# what step 2 forgets on the same pulse.
 te_monetary_leave_full_system = {
 	# 1. The managed modifiers: a changed home strips them all (step 0b).
 	if = {
@@ -177,8 +193,20 @@ te_monetary_leave_full_system = {
 			banking_effect_cb_disable_emergency_import_financing = yes
 		}
 	}
-	# 4. The backstop treaties (the header's step 4). The settlement first,
-	# while te_mon_swap_provider still names the lender, as in the discovery.
+	# 4. The backstop treaties.
+	te_mon_leave_backstop_treaties = yes
+
+	debug_log = "TE_MONETARY: [THIS.GetCountry.GetNameNoFormatting] left the full monetary system (banking rule switched) date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# Step 4 of the header above: what a swap line, a lender of last resort or a
+# debt receivership left on this country once its article ended with the rule.
+# Called by te_monetary_leave_full_system, and by te_monetary_settle_rule_switch
+# for a country still holding a role off Full without the mark (a save switched
+# before this step existed). Idempotent: off Full nothing sets a role again.
+# The settlement first, while te_mon_swap_provider still names the lender, as
+# in the discovery.
+te_mon_leave_backstop_treaties = {
 	if = {
 		limit = {
 			OR = {
@@ -222,8 +250,6 @@ te_monetary_leave_full_system = {
 		set_variable = { name = te_mon_receivership_clear_months value = 0 }
 	}
 	te_mon_clear_backstop_rows = yes
-
-	debug_log = "TE_MONETARY: [THIS.GetCountry.GetNameNoFormatting] left the full monetary system (banking rule switched) date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
 # The header's TE_SELF_CHECK mon_rule_switch_treaties. Called by
