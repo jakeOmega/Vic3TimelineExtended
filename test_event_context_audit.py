@@ -351,6 +351,74 @@ class EventContextAuditTests(unittest.TestCase):
         sites = eca.build_graph(mod).sites_by_event.get("flav.1", [])
         self.assertEqual([(s.entity, s.switches) for s in sites], [("flav.2", ["scope:rival"])])
 
+    # -- what script_call_graph reads (#1012) ------------------------------
+
+    def test_a_delay_is_recorded_and_a_literal_zero_is_none(self):
+        body = ("\timmediate = {\n"
+                "\t\ttrigger_event = { id = flav.1 }\n"
+                "\t\ttrigger_event = { id = flav.1 days = 1 }\n"
+                "\t\ttrigger_event = { id = flav.1 months = { 1 3 } popup = yes }\n"
+                "\t\ttrigger_event = { id = flav.1 days = 0 }\n"
+                "\t\ttrigger_event = flav.1\n"
+                "\t\ttrigger_event = {\n\t\t\tid = flav.1\n\t\t\tyears = 2\n\t\t}\n"
+                "\t}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + _event("flav.2", body, hidden=True)})
+        sites = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual([s.delayed for s in sites], [False, True, True, False, False, True])
+
+    def test_a_site_moved_to_its_caller_keeps_where_it_was_written(self):
+        eff = ("send_it = {\n\ttrigger_event = { id = $EVENT$ }\n}\n"
+               "tell_it = {\n\t$WHO$ = {\n\t\ttrigger_event = { id = flav.1 days = 3 }\n\t}\n}\n")
+        pre = _event("flav.2", "\toption = {\n\t\tsend_it = { EVENT = flav.1 }\n"
+                               "\t\ttell_it = { WHO = scope:rival }\n\t}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": eff})
+        sites = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual(
+            [(s.entity, s.param_event, s.delayed, s.origin) for s in sites],
+            [("flav.2", True, False, ("common/scripted_effects/h.txt", 2, "send_it")),
+             ("flav.2", False, True, ("common/scripted_effects/h.txt", 6, "tell_it"))])
+
+    def test_of_two_sites_differing_only_in_delay_the_undelayed_reads(self):
+        eff = ("send_it = {\n\ttrigger_event = { id = $EVENT$ days = 1 }\n"
+               "\ttrigger_event = { id = $EVENT$ }\n}\n")
+        pre = _event("flav.2", "\toption = { send_it = { EVENT = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": eff})
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertFalse(site.delayed)
+        self.assertEqual(site.origin, ("common/scripted_effects/h.txt", 3, "send_it"))
+
+    def test_console_harnesses_are_read_only_on_request(self):
+        dbg = _event("te_debug_x.1", "\toption = { trigger_event = { id = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "events/te_debug_x_events.txt": dbg})
+        self.assertNotIn("flav.1", eca.build_graph(mod).sites_by_event)
+        [site] = eca.build_graph(mod, include_console=True).sites_by_event["flav.1"]
+        self.assertEqual(site.entity, "te_debug_x.1")
+
+    def test_a_dispatcher_call_is_kept_under_its_written_name(self):
+        eff = ("act_go = {\n\tadd = 1\n}\n"
+               "pick = {\n\tact_$ACT$ = yes\n\t$WHO$ = { add = 1 }\n\tscope:x_$ACT$ = { add = 1 }\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1", "\toption = { pick = { ACT = go WHO = root } }\n"),
+                         "common/scripted_effects/h.txt": eff})
+        g = eca.build_graph(mod)
+        # `$WHO$ = { }` is main's bare key (#1652), next to the dispatcher's.
+        self.assertEqual(sorted(g.effect_calls), ["$WHO$", "act_$ACT$", "pick"])
+        [call] = g.effect_calls["act_$ACT$"]
+        self.assertEqual((call[0], call[1], call[5]), ("common/scripted_effects/h.txt", 5, "pick"))
+
+    def test_a_merge_directive_is_stripped_only_on_request(self):
+        # This audit's own report names the entity as written; the call graph
+        # (script_call_graph) asks for `x`.
+        eff = "REPLACE:send_it = {\n\ttrigger_event = { id = flav.1 days = { 0 2 } }\n}\n"
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/scripted_effects/h.txt": eff})
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual((site.entity, site.delays, site.delayed), ("REPLACE:send_it", ("0",), False))
+        [site] = eca.build_graph(mod, strip_directives=True).sites_by_event["flav.1"]
+        self.assertEqual(site.entity, "send_it")
+
     def test_on_action_cycle_does_not_crash(self):
         oa = ("on_yearly_pulse_country = {\n\ton_actions = { oa_a }\n}\n"
               "oa_a = {\n\ton_actions = { oa_b }\n\teffect = { trigger_event = { id = flav.1 } }\n}\n"

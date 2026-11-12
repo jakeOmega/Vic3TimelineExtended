@@ -10284,6 +10284,7 @@ POST_LOAD_AUDITS = [
     ("event_image_audit",             "event_image_audit"),
     ("treaty_leverage_side_audit",    "treaty_leverage_side_audit"),
     ("event_context_audit",           "event_context_audit"),
+    ("trigger_event_cycle_audit",     "trigger_event_cycle_audit"),
     ("silent_variable_audit",         "silent_variable_audit"),
     ("prev_scope_audit",              "prev_scope_audit"),
     ("container_timed_variable_audit", "container_timed_variable_audit"),
