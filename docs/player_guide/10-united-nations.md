@@ -707,7 +707,7 @@ support. Our Obligations shows an order against you, or against your enemy.
 
 With the Decolonization Resolution in force, a member can ask the Assembly to
 order a referendum in another member's direct subject whose liberty desire is
-50 or more; a subject can ask for its own. A veto blocks it. If it carries, the
+50 or more and that no war goal is already freeing; a subject can ask for its own. A veto blocks it. If it carries, the
 overlord receives A Referendum Ordered:
 
 | Choice | Result |

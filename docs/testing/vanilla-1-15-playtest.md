@@ -154,6 +154,13 @@ game, in English.
   - External Trade IV and V: the interest-tier trade advantage lines (+5% to +20%, +10% to +40% from engaged to
     hegemonic). Compare a member's trade advantage in a region where it is hegemonic with one where it is only
     engaged.
+- **Stalemates (#1449).** In a long world war, `world_war_events.31` (The Same Line) should also arrive for a
+  war leader whose war is in the engine's stalemate countdown (both leaders at minimum war support, the war
+  panel's stalemate timer running), whatever its age and battle count; its co-belligerents should not get it
+  that way. After Hold the line (+5) the timer should stop; after armistice
+  talks it should run on. In the same game, a Binding Ceasefire against one side of a stalemated war should come
+  sooner and carry more votes than against a fresh one, and an AI metropole in a war of independence that stalls
+  should open talks (the panel's row shows them) before its four years are up.
 
 ## Panels and systems
 

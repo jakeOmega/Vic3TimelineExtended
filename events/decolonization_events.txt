@@ -32,9 +32,11 @@ decolonization_events.1 = {
 			has_modifier = peaceful_decolonization_modifier
 		}
 		has_technology_researched = decolonization
+		# Not a subject a war goal is already freeing (1.15): the war decides it.
 		any_subject_or_below = {
 			is_qualifying_colonial_subject = yes
 			liberty_desire >= 50
+			is_subject_of_and_not_being_freed = overlord
 		}
 	}
 
@@ -45,6 +47,7 @@ decolonization_events.1 = {
 			limit = {
 				is_qualifying_colonial_subject = yes
 				liberty_desire >= 50
+				is_subject_of_and_not_being_freed = overlord
 			}
 			save_scope_as = restless_subject
 		}
@@ -412,9 +415,11 @@ decolonization_events.3 = {
 			has_modifier = colonial_crackdown_modifier
 		}
 		has_technology_researched = civil_rights_movement
+		# Not a subject a war goal is already freeing (1.15): the war decides it.
 		any_subject_or_below = {
 			is_qualifying_colonial_subject = yes
 			liberty_desire >= 75
+			is_subject_of_and_not_being_freed = overlord
 		}
 	}
 
@@ -425,6 +430,7 @@ decolonization_events.3 = {
 			limit = {
 				is_qualifying_colonial_subject = yes
 				liberty_desire >= 75
+				is_subject_of_and_not_being_freed = overlord
 			}
 			save_scope_as = rebellious_subject
 		}
@@ -488,6 +494,54 @@ decolonization_events.3 = {
 		scope:rebellious_subject = {
 			add_liberty_desire = 25
 			post_notification = colonial_crackdown_begun_notice
+		}
+		# The colony takes up arms: a direct subject the engine lets open a play
+		# against us (can_start_play_against_overlord, even while we are at war
+		# elsewhere) opens one for its independence, at the escalation of the
+		# mod's own wars of independence (dp_te_colonial_uprising). The war
+		# that follows takes a record in the monthly settle.
+		# Neither side may be committed to another play: create_diplomatic_play
+		# would then open nothing while the tooltip promised a war (irredentism.2).
+		if = {
+			limit = {
+				is_diplomatic_play_committed_participant = no
+				scope:rebellious_subject = {
+					is_direct_subject_of = root
+					NOT = { has_war_with = root }
+					can_start_play_against_overlord = yes
+					is_diplomatic_play_committed_participant = no
+				}
+			}
+			custom_tooltip = {
+				text = decolonization_events.3.b_uprising_tt
+				scope:rebellious_subject = {
+					create_diplomatic_play = {
+						name = decol_iw_war_name
+						type = dp_te_colonial_uprising
+						target_country = root
+						escalation = 80
+					}
+				}
+			}
+			# Self-check (docs/testing/colonial-wars-playtest.md): the play
+			# exists once it has been created. Once a game.
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_global_variable = te_selfcheck_decol_uprising_play } }
+					set_global_variable = te_selfcheck_decol_uprising_play
+					if = {
+						limit = {
+							scope:rebellious_subject = {
+								any_diplomatic_play = { is_diplomatic_play_type = dp_te_colonial_uprising }
+							}
+						}
+						debug_log = "TE_SELF_CHECK OK decol_uprising_play overlord=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN decol_uprising_play overlord=[THIS.GetCountry.GetTagName] (the colony's independence play against us does not exist once created: open it from the overlord's scope with the subject's independence as an added goal, as vanilla's Polish uprising does; docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
+			}
 		}
 		# Armed forces approve, everyone else uneasy
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }

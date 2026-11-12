@@ -149,7 +149,7 @@ trade privilege in the new country, whose upkeep you pay.
 |---|---|
 | A Political Fact | A colonial subject reaches 50 liberty desire. |
 | Pressed to Let Go | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
-| The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
+| The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). If you hold the line, a direct subject that can still challenge you opens a war of independence against you. |
 | Trouble in (the colony's name) | A colony has a severely unaccepted population. |
 | Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. Below 40 stability its suppression is a war of independence. |
 | Declaration in (the territory) | Below 40 stability, a colony with severely unaccepted people declares independence; also each declaration of a collapse. See [Wars of independence](12-decolonization.md#wars-of-independence). |
@@ -216,8 +216,9 @@ from the Air (bombing raids, once an enemy has
 Bombing Aircraft; air defense costs a spell of Home Front Strain) and Behind
 Their Lines (resistance, after a year of war, when the enemy holds 5% of your land). From two
 years, The Long Lists asks whether to push on or seek terms, and The Same
-Line, when your war goal has stalled after 24 months and ten large battles,
-offers +5 war support to hold the line or −10 to open armistice talks.
+Line, when your war goal has stalled after 24 months and ten large battles, or
+when a war you lead is counting down to a stalemate, offers +5 war support to
+hold the line or −10 to open armistice talks.
 
 In the 36 months after peace, three events can reach great powers. What Was
 Done, a war crimes tribunal, lets you prosecute (Liberation Hero), move on, or bury the evidence,
