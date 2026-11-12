@@ -958,7 +958,7 @@ def _dead_overrides(view, types, templates):
     overrides the View skips: only the guards left hide a block then.
 
     Known limits, each of which reads a drawn override as not drawn (the
-    unsafe way), none met on main:
+    unsafe way), none known on main:
     - a vanilla type inside the instanced one with a block of the same name
       as a guarded mod block: vanilla's types are not read
       (test_te_system_tab_bodies.py holds the skipped names to ones no

@@ -276,9 +276,20 @@ read through it). It follows a `blockoverride` to the blocks it fills (#1363, #1
 instancing type but drawn where the instanced type puts `block "x"`, so one whose every block sits under
 `te_own_country_only`, in a block default no place draws, or in a type the panel doesn't draw, is skipped with what it
 holds (`View.skip`), as if the guard were written around it. A control or a player-only key fed to a guarded row
-through an override needs no wrapper of its own in the instance. The blocks counted are those of the instanced type
-and of every mod type and template it draws, and one drawn block of the name keeps the override drawn; so does a
-name no mod type defines, since vanilla's types are not read. `ungated_world_reads(names, types)` lists the
+through an override needs no wrapper of its own in the instance. The blocks counted are those of the instanced type,
+of the mod types the instance's own contents hold (a derived type's whole body, for an override at its root), of every
+mod type and template those draw, and any the contents declare. One drawn block of the name keeps the override
+drawn, and so does a name no mod type defines. An override that sets a `visible` (its own, a template's, a nested
+block default's) sets it on the widget its block is written in, which for a block at a type's root is the widget
+that instances the type; where that widget carries the guard, the guard is replaced (gotcha #17) and counts as gone
+for every override of that instance. Three known limits, each of which reads something drawn as not drawn, the
+unsafe way; none is known on `main`. A vanilla type inside the instanced one that has a block of the same name
+as a guarded mod block is not seen, since vanilla's types are not read (`SkippedOverrideTest` fails when a skipped
+name is one a vanilla copy under `gui/` declares, the part of this the repo can check; `skipped_overrides(view,
+types)` lists the names). A `visible` that reaches the guard's widget from an override on an instance further out
+is not followed. And the guard itself is still read where it is written, as before this walk: an instance that
+carries `te_own_country_only` and whose own override puts a `visible` on it is skipped whole, though in game that
+`visible` replaces the guard (`GuardTemplateTest` checks the widget's own `visible`, not an override's). `ungated_world_reads(names, types)` lists the
 `# world:` reads an observer's panel would evaluate: each needs an observer gate (`OBSERVER_GATE`, the test first in a
 `visible`) on its own line, on a widget around it, or around every place that draws its type, a type's own root
 counting only while no instance sets its own `visible`. `test_te_system_tab_bodies.py`'s `ObserverTest` runs it over
