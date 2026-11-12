@@ -263,6 +263,93 @@ class DropTest(SelfCheckTestCase):
         self.assertFalse((self.backups / "fixtures").exists())
 
 
+class SymlinkTest(SelfCheckTestCase):
+    """Nothing is written or removed outside the backup root, whatever stands where a folder should."""
+
+    def setUp(self):
+        super().setUp()
+        self.outside = self.backups.parent / "outside"
+        self.outside.mkdir()
+        for name in ("lines.log", "record.json"):
+            (self.outside / name).write_text("the owner's own " + name, encoding="utf-8")
+        self.snap = self.fixture_run(logged(["common/a.txt:1: TE_SELF_CHECK OK the_runs"]))
+        self.run_folder(log=[])
+
+    def untouched(self) -> None:
+        self.assertEqual({p.name: p.read_text("utf-8") for p in self.outside.iterdir() if p.is_file()},
+                         {"lines.log": "the owner's own lines.log", "record.json": "the owner's own record.json"})
+
+    def refused_everywhere(self, link: Path) -> None:
+        for call in (lambda: selfchecks.forget_fixture_lines(self.backups, KEY),
+                     lambda: selfchecks.keep_fixture_lines(self.backups, KEY, self.snap)):
+            with self.assertRaises(selfchecks.SelfCheckError) as caught:
+                call()
+            self.assertEqual(caught.exception.code, "not_ours")
+        self.assertEqual(selfchecks.drop_orphans(self.backups, self.user), [])
+        self.assertIsNone(selfchecks.fixture_record(self.backups, KEY))
+        found = selfchecks.of_run(self.backups, RUN)
+        self.assertEqual((found["fixture"]["kept"], found["checks"]), (False, []))
+        self.assertIn("is a symlink", found["fixture"]["detail"])
+        self.assertTrue(link.is_symlink())
+        self.untouched()
+
+    def test_a_key_folder_that_is_a_symlink_is_never_followed(self):
+        (self.backups / "fixtures").mkdir()
+        link = self.backups / "fixtures" / KEY
+        os.symlink(self.outside, link)
+        self.refused_everywhere(link)
+
+    def test_a_fixtures_folder_that_is_a_symlink_is_never_followed(self):
+        (self.outside / KEY).mkdir()
+        (self.outside / KEY / "record.json").write_text("{}", encoding="utf-8")
+        link = self.backups / "fixtures"
+        os.symlink(self.outside, link)
+        self.refused_everywhere(link)
+        self.assertEqual((self.outside / KEY / "record.json").read_text("utf-8"), "{}")
+
+    def test_a_link_where_a_file_or_its_temp_would_go_is_replaced_not_written_through(self):
+        folder = self.backups / "fixtures" / KEY
+        folder.mkdir(parents=True)
+        for name in ("lines.log", "record.json", "lines.log.tmp", "record.json.tmp"):
+            os.symlink(self.outside / name.removesuffix(".tmp"), folder / name)
+        record = selfchecks.keep_fixture_lines(self.backups, KEY, self.snap)
+        self.assertEqual(record["lines"], 1)
+        self.assertEqual(sorted(p.name for p in folder.iterdir() if not p.is_symlink()), ["lines.log", "record.json"])
+        self.untouched()
+
+
+class OtherGameTest(SelfCheckTestCase):
+    def journal(self, *entries: dict) -> None:
+        folder = self.backups / "snapshots" / RUN
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "journal.jsonl").write_text("".join(json.dumps(e) + "\n" for e in entries), encoding="utf-8")
+
+    def test_a_run_another_game_was_seen_beside_has_its_sessions_rows_marked(self):
+        snap = self.fixture_run(logged(["common/a.txt:1: TE_SELF_CHECK OK at_setup"]))
+        selfchecks.keep_fixture_lines(self.backups, KEY, snap)
+        self.run_folder(log=logged(["common/a.txt:2: TE_SELF_CHECK BROKEN in_session"]))
+        clean = selfchecks.of_run(self.backups, RUN)                    # no journal: the snapshot was restored
+        self.assertNotIn("unvouched", clean["session"])
+        self.assertFalse(any("unvouched" in check for check in clean["checks"]))
+        cases = (
+            ([{"event": "started", "pid": 7}, {"event": "other_game", "pid": 4242, "created": "2026-11-11T18:30:00Z"}],
+             "pid 4242 (started 2026-11-11T18:30:00Z)"),
+            ([{"event": "held", "reason": "other_game_running"}], "other_game_running"),
+            ([{"event": "held", "reason": "other_game_ran", "games": ["pid 1"]}], "other_game_ran"),
+        )
+        for entries, named in cases:
+            with self.subTest(named):
+                self.journal(*entries)
+                found = selfchecks.of_run(self.backups, RUN)
+                self.assertIn(named, found["session"]["unvouched"])
+                self.assertEqual([(c["name"], c["source"], c.get("unvouched")) for c in found["checks"]],
+                                 [("in_session", "session", True), ("at_setup", "fixture", None)])
+                self.assertEqual(found["broken"], ["in_session"])       # kept, and marked
+        for entries in ([{"event": "held", "reason": "modified_after_exit"}], [{"event": "restored"}], []):
+            self.journal(*entries)
+            self.assertNotIn("unvouched", selfchecks.of_run(self.backups, RUN)["session"])
+
+
 class VerdictTest(unittest.TestCase):
     def test_one_entry_per_check_with_the_line_as_the_script_logged_it(self):
         raw = captured("session2_self_checks.txt")

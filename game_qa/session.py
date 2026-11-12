@@ -885,29 +885,33 @@ class Session:
         event, whose padding flushes what was logged before it, and its date line is waited for as the proof.
         `flushed` says whether that worked. When it did not (the game is not in front, the debugger did not
         stop), `not_flushed` says why, and the lines already in the game's log are taken without typing
-        anything, but only while the game is still proved alive by its pid and start time and `watch` still
-        follows it. Otherwise (the game has ended, `watch` recorded its exit, the session is stopped) the logs
-        are not read at all, since another game may have written them since, and `log_not_read` says so. The
-        verdicts are given in every case, from what the run folder holds: a line logged since the last verb may
-        then be missing."""
+        anything, while `watch` still follows the game and nothing has said it ended. Every line read, here as
+        in any verb, is kept only if the game is proved alive after the read (`_new_lines`). When the logs are
+        not read, or what was read had to be dropped (the game has ended, `watch` recorded its exit, the
+        session is stopped), `log_not_read` says so. The verdicts are given in every case, from what the run
+        folder holds: a line logged since the last verb may then be missing."""
         if self._snapshot is None or self._report is None:
             raise SessionError("not_started", "this session has no run folder yet: start() has not got that far")
         with self._step("selfchecks") as out:
             found: dict = {"live": True, "flushed": False}
             try:
                 self._require_game()
-                self._prove_game()              # before the read polls the logs, not only before its first key
                 self._date()
                 found["flushed"] = True
             except (SessionError, ConsoleError, DebuggerError, HelperError) as e:
                 found["not_flushed"] = {"refused": _code_of(e), "detail": str(e)}
-                if (self._stopped is None and not self._stopping and self._watch_ended is None
-                        and not self._watch_returned() and self._proved_alive()):
-                    self._take_log_lines()
-                else:
+                watched = (self._stopped is None and not self._stopping and self._watch_ended is None
+                           and not self._watch_returned() and self._debug_log is not None)
+                if watched:
+                    try:
+                        self._new_lines()
+                    except Exception:
+                        pass                    # dropped and closed (`_vouch_for_polled`), or not readable
+                if not watched or self._logs_closed:
                     found["log_not_read"] = ("the run's game is not proved alive (it has ended, or the session is "
-                                             "stopped), so `logs/` was not read: another game may have written "
-                                             "it since. These are the lines the run folder already held")
+                                             "stopped), so `logs/` was not read, or what was read was dropped: "
+                                             "another game may have written it since. These are the lines the "
+                                             "run folder already held")
             found.update(selfchecks.of_run(self._paths.backup_root, self._snapshot))
             out.update(flushed=found["flushed"], not_flushed=found.get("not_flushed"), counts=found["counts"],
                        broken=found["broken"])
@@ -1358,20 +1362,52 @@ class Session:
                     return when
         return None
 
-    def _new_lines(self) -> list[str]:
-        """The debug.log lines since the last call; both logs' new lines are copied into the run folder."""
+    def _new_lines(self, ended_here: bool = False) -> list[str]:
+        """The debug.log lines since the last call; both logs' new lines are copied into the run folder.
+
+        Nothing polled is copied, or returned, unless the run's game is proved alive by its pid and start time
+        AFTER the poll that read it (`_vouch_for_polled`; one `adopt`, and none for a poll that read nothing).
+        Alive after the read is alive at the read, so no line of a game started once ours had died can be
+        among them; a proof before the read would leave the time between the two. `ended_here` is the one
+        exception, for the stop's single read right after its own `kill` ended the game alive. Once the logs
+        are closed nothing is read."""
+        if self._logs_closed:
+            return []
         lines = self._debug_log.poll()
+        errors = self._error_log.poll()
+        if (lines or errors) and not ended_here:
+            self._vouch_for_polled()
         if self._debug_log.skipped:
             skipped, self._debug_log.skipped = self._debug_log.skipped, 0
             self._notes.append("the game appended to the debug.log it found: its first %d bytes are an earlier "
                                "game's (the run's snapshot recorded them) and were not read as this run's" % skipped)
             self._record("found_log", outcome="prefix_skipped", bytes=skipped)
         self._copy("debug.log", lines)
-        errors = self._error_log.poll()
         self._copy("error.log", errors)
         if self._errors_seen is not None:
             self._errors_seen.extend(errors)
         return lines
+
+    def _vouch_for_polled(self) -> None:
+        """After a poll that read lines: the game must still be the run's own, alive (`adopt` compares the pid
+        and the start time, and sends nothing). If it cannot be proved, the lines just read are dropped, the
+        logs are closed for good, a note says so, and the verbs end (`watch_ended`): the game died at a time
+        nobody knows, and a game started since may have written what was read."""
+        try:
+            self._helper.adopt(self._proc)
+        except Exception as e:
+            self._logs_closed = True
+            why = ("the game could not be proved alive by its pid and start time after its log was read (%s), so "
+                   "the lines read were dropped: another game may have written them. Stop the session"
+                   % _describe(e))
+            self._notes.append("at %s log lines were read and dropped, since the game could not be proved alive "
+                               "afterwards and they may be another game's; the game's logs were not read again. "
+                               "Self-check lines logged after the verb before are not in the summary"
+                               % stamp(utc_now()))
+            self._record("log_lines", outcome="dropped", detail=_describe(e))
+            if self._watch_ended is None:
+                self._watch_ended = why
+            raise SessionError("watch_ended", why) from e
 
     def _last_log_lines(self, left_up: bool, notes: list[str]) -> None:
         """At a stop, before any restore: the last lines the game wrote, for the report's self-checks.
@@ -1382,11 +1418,15 @@ class Session:
         the owner closed it, `watch` recorded its exit) ended at a time nobody knows, and another game may have
         started since: a launch moves the logs on, and the follower would read that game's lines as a rotation
         of the run's. Then nothing is read, the logs are closed for good, and a note says so. A game left up is
-        not read either, and the logs stay open for the stop that ends it."""
+        not read either, and the logs stay open for the stop that ends it. Never raises."""
         if self._logs_closed or self._debug_log is None or self._error_log is None:
             return
         if self._ended_alive:
-            self._take_log_lines(last=True)
+            try:
+                self._new_lines(ended_here=True)
+            except Exception:
+                pass                            # the copy is a convenience
+            self._logs_closed = True
             return
         self._logs_closed = not left_up
         note = ("the game's log was not read at this stop: %s. Self-check lines the game logged after the last "
@@ -1396,30 +1436,6 @@ class Session:
                     "since"))
         if note not in notes:
             notes.append(note)
-
-    def _proved_alive(self) -> bool:
-        """Whether the run's game is alive this moment, by its pid and start time (`adopt`, which sends nothing).
-        False on any doubt, and nothing is latched: it only decides whether the logs may be read."""
-        proc = self._proc
-        if proc is None or proc.created == UNKNOWN_START:
-            return False
-        try:
-            self._helper.adopt(proc)
-        except Exception:
-            return False
-        return True
-
-    def _take_log_lines(self, last: bool = False) -> None:
-        """Copy what the game's logs hold by now into the run folder, typing nothing; never raises. Only for a
-        caller that knows the run's game is alive this moment, or has just ended it (`self_checks`,
-        `_last_log_lines`). With `last` it is the last time."""
-        if self._logs_closed or self._debug_log is None or self._error_log is None:
-            return
-        self._logs_closed = last
-        try:
-            self._new_lines()
-        except Exception:
-            pass                                # the copy is a convenience
 
     def _copy(self, name: str, lines: list[str]) -> None:
         if not lines or self._report is None:

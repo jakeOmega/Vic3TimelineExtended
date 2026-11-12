@@ -2832,6 +2832,91 @@ class SelfChecksTest(SessionTestCase):
         self.assertNotIn("from_the_owners_own_game", self.run_log())
         self.assertTrue(self.steps("selfchecks")[-1]["log_not_read"])
 
+    def test_an_ordinary_verb_never_copies_lines_polled_after_the_game_died(self):
+        # #1650's second review (V6): every verb polls the logs before its first proved key. The game is dead,
+        # `watch` has not looked yet, and another launch has moved the log on: the poll reads that game's
+        # lines, and the proof that follows the poll drops them.
+        self.started()
+        self.game_logs("common/a.txt:1: TE_SELF_CHECK OK the_runs_own")
+        self.session.read([])
+        self.game_wrote("common/a.txt:2: TE_SELF_CHECK OK logged_after_the_last_verb")
+        self.game.process_gone = True
+        self.another_game_starts()
+        typed = len(self.typed())
+        self.assertEqual(self.session_error(self.session.read, []).code, "watch_ended")
+        self.assertEqual(self.typed()[typed:], [])
+        for foreign in ("from_the_owners_own_game", "logged_after_the_last_verb"):   # read in the same poll: dropped
+            self.assertNotIn(foreign, self.run_log())
+        (step,) = self.steps("log_lines")
+        self.assertEqual(step["outcome"], "dropped")
+        found = self.session.self_checks()
+        self.assertIn("log_not_read", found)
+        self.assertEqual([(c["name"], c["source"]) for c in found["checks"]], [("the_runs_own", "session")])
+        reply = self.session.stop()
+        text = Path(reply["report"]).read_text("utf-8")
+        self.assertNotIn("from_the_owners_own_game", text)
+        self.assertNotIn("from_the_owners_own_game", self.run_log())
+        self.assertTrue(any("read and dropped" in note for note in reply["notes"]))
+        self.assertIn("read and dropped", text)
+
+    def test_run_setup_has_the_same_guard(self):
+        reply = self.started(setups={"border": "set_variable = te_x"})
+        self.game.setups = {reply["overlay"]["setup_events"]["border"]: ("border", ["a line"])}
+        self.game.process_gone = True
+        self.another_game_starts()
+        typed = len(self.typed())
+        self.assertEqual(self.session_error(self.session.run_setup, "border").code, "watch_ended")
+        self.assertEqual(self.typed()[typed:], [])
+        self.assertNotIn("from_the_owners_own_game", self.run_log())
+
+    def test_a_death_between_the_flushs_first_key_and_its_date_line_drops_what_was_read(self):
+        # V1: proved alive, then dead, then another game's log, all inside one `selfchecks`
+        self.started()
+        self.game_logs("common/a.txt:1: TE_SELF_CHECK OK the_runs_own")
+        self.session.read([])
+
+        def dies(text):                         # as the game takes the read event's command
+            if text == "event " + overlay.READ_EVENT and not self.game.process_gone:
+                self.game.process_gone = True
+                self.another_game_starts()      # the fake goes on writing the date line, into that game's log
+        self.game.on_command = dies
+        found = self.session.self_checks()
+        self.assertEqual((found["flushed"], found["not_flushed"]["refused"]), (False, "watch_ended"))
+        self.assertIn("log_not_read", found)
+        self.assertEqual([c["name"] for c in found["checks"]], ["the_runs_own"])
+        self.assertNotIn("from_the_owners_own_game", self.run_log())
+
+    def test_a_live_games_lines_are_written_after_one_proof_and_an_empty_poll_asks_nothing(self):
+        self.started()
+        self.session.read([])
+        adopts = self.order.count("adopt")
+        self.assertEqual(self.session._new_lines(), [])                 # nothing new: no helper call
+        self.assertEqual(self.order.count("adopt"), adopts)
+        self.game_wrote("common/a.txt:1: TE_SELF_CHECK OK written_by_the_live_game")
+        (line,) = self.session._new_lines()
+        self.assertIn("written_by_the_live_game", line)
+        self.assertEqual(self.order.count("adopt"), adopts + 1)         # one proof for a poll that read lines
+        self.assertIn("written_by_the_live_game", self.run_log())
+        self.game.error("an error the game logged")                     # error.log alone counts as lines read
+        self.assertEqual(self.session._new_lines(), [])
+        self.assertEqual(self.order.count("adopt"), adopts + 2)
+        self.assertEqual(self.steps("log_lines"), [])
+
+    def test_another_game_seen_beside_the_runs_marks_the_sessions_rows(self):
+        # no proof of the run's own game rules out a second one writing the same logs: `watch` journals it
+        self.started()
+        self.game_logs("common/a.txt:1: TE_SELF_CHECK OK the_runs_own")
+        journal = self.paths.backup_root / "snapshots" / SNAP / "journal.jsonl"
+        journal.parent.mkdir(parents=True)
+        journal.write_text(json.dumps({"event": "other_game", "at": "2026-11-10T15:02:00Z", "pid": 4242,
+                                       "created": "2026-11-10T15:01:55.0000000Z"}) + "\n", encoding="utf-8")
+        found = self.session.self_checks()
+        self.assertIn("pid 4242", found["session"]["unvouched"])
+        self.assertEqual([(c["name"], c["unvouched"]) for c in found["checks"]], [("the_runs_own", True)])
+        text = Path(self.session.stop()["report"]).read_text("utf-8")
+        self.assertIn("The session's rows cannot be vouched for", text)
+        self.assertIn("| the_runs_own | OK | session (not vouched for) |", text)
+
     def test_the_verb_does_not_read_logs_of_a_game_it_cannot_prove_alive(self):
         self.started()
         self.game.process_gone = True           # the game died; its watch has not returned yet

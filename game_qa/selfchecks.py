@@ -24,8 +24,12 @@ a stale OK would pass an engine fact nobody checked. So:
   earlier game, and is not read.
 - A run is shown a fixture's lines only if they were kept from a run before it (`_fixture_part`).
 
-Nothing here writes outside `<backup root>/fixtures/`, and of the user-data folder only the names of the
-fixtures in `save games/` are looked at. The line's pattern is `scripts/analysis/log_triage.py`'s, so the two
+- A run beside whose game `watch` saw another Victoria 3 process, or whose restore held for one, has its
+  session's rows marked `unvouched`: whether two games can share `logs/` is not known (`_other_game`).
+
+Nothing here writes outside `<backup root>/fixtures/`: a `fixtures` folder or a key's folder that is a symlink
+is refused, never followed (`_own_folder`). Of the user-data folder only the names of the fixtures in
+`save games/` are looked at. The line's pattern is `scripts/analysis/log_triage.py`'s, so the two
 tools cannot come to read a line differently.
 """
 from __future__ import annotations
@@ -151,12 +155,25 @@ def fixture_dir(backup_root: Path, key: str) -> Path:
     return Path(backup_root) / FIXTURES_FOLDER / key
 
 
+def _own_folder(backup_root: Path, key: str) -> Path:
+    """`fixture_dir`, once neither it nor `fixtures/` itself is a symlink: a link would take what is written or
+    removed here somewhere else, and nothing here may touch a file outside the backup root. SelfCheckError
+    `not_ours` otherwise."""
+    folder = fixture_dir(backup_root, key)
+    for path in (folder.parent, folder):
+        if path.is_symlink():
+            raise SelfCheckError("not_ours", "%s is a symlink, not a folder of the harness's: it is not followed, "
+                                             "and nothing is kept, read or removed through it" % path)
+    return folder
+
+
 def forget_fixture_lines(backup_root: Path, key: str, detail: str = BEING_MADE) -> None:
     """Before a fixture is made under `key`: whatever was kept for an earlier fixture of that key goes, and a
     record that nothing is kept, with `detail` as the reason, takes its place until `keep_fixture_lines` has kept
     the new run's. So a run that fails anywhere after this leaves no lines of another run to be shown as its
-    own. Raises OSError when the old record cannot be removed; the new one is then not written."""
-    folder = fixture_dir(backup_root, key)
+    own. Raises OSError when the old record cannot be removed (the new one is then not written), and
+    SelfCheckError for a folder that is a symlink."""
+    folder = _own_folder(backup_root, key)
     _forget(folder)
     _say_not_kept(folder, key, detail)
 
@@ -176,8 +193,9 @@ def keep_fixture_lines(backup_root: Path, key: str, snapshot_id: str) -> dict:
     exactly the bytes of the `logs/debug.log` the snapshot recorded was appended to rather than started anew:
     that beginning is skipped, and the record's `prefix_skipped` says so (the fixture run's `debug.log` of
     2026-11-11 held that run's lines alone, so this is a guard, not something seen). When the snapshot's
-    manifest cannot be read to tell the owner's bytes apart, nothing is kept."""
-    folder = fixture_dir(backup_root, key)
+    manifest cannot be read to tell the owner's bytes apart, nothing is kept. A `fixtures/<key>` that is a
+    symlink is refused before anything is removed or written (SelfCheckError `not_ours`)."""
+    folder = _own_folder(backup_root, key)
     _forget(folder)
     try:
         record, lines = _run_lines(Path(backup_root), key, snapshot_id)
@@ -261,10 +279,11 @@ def _say_not_kept(folder: Path, key: str, detail: str, snapshot: str | None = No
 
 
 def fixture_record(backup_root: Path, key: str) -> dict | None:
-    """The record written for `key`, or None: there is none, or it does not read as one."""
+    """The record written for `key`, or None: there is none, it does not read as one, or its folder is a
+    symlink."""
     try:
-        record = json.loads((fixture_dir(backup_root, key) / RECORD_FILE).read_text("utf-8"))
-    except (OSError, ValueError):
+        record = json.loads((_own_folder(backup_root, key) / RECORD_FILE).read_text("utf-8"))
+    except (OSError, ValueError, SelfCheckError):
         return None
     return record if isinstance(record, dict) else None
 
@@ -276,7 +295,7 @@ def drop_orphans(backup_root: Path, user_data: Path) -> list[str]:
     folder that is not mounted would read as every fixture gone."""
     saves = Path(user_data) / fixture.SAVE_FOLDER
     root = Path(backup_root) / FIXTURES_FOLDER
-    if not saves.is_dir():
+    if not saves.is_dir() or root.is_symlink():
         return []
     try:
         names = sorted(os.listdir(root))
@@ -314,8 +333,11 @@ def _sha256(path: Path) -> str:
 
 
 def _write(path: Path, text: str) -> None:
+    """Write `path` by rename from a temp file made anew: a link left under either name is replaced, not
+    followed."""
     temp = path.with_name(path.name + _TEMP_SUFFIX)
-    with open(temp, "w", encoding="utf-8", newline="\n") as f:
+    temp.unlink(missing_ok=True)
+    with open(temp, "x", encoding="utf-8", newline="\n") as f:
         f.write(text)
         f.flush()
         os.fsync(f.fileno())
@@ -360,22 +382,54 @@ def of_run(backup_root: Path, run_id: str) -> dict:
         fixture   the lines of the run that made the fixture this run loaded: `key`, `kept`, and when kept
                   `file` and the record's `snapshot`, `at`, `lines` (TE_MONUMENTS lines too), `self_checks` and
                   `prefix_skipped`; else `detail` says why this run is shown none (`_fixture_part`)
-        session   the session's own lines: `file` (the run folder's debug.log), `lines`, and `gaps`, how often
-                  lines were lost to the log's rotation, when that happened
+        session   the session's own lines: `file` (the run folder's debug.log), `lines`, `gaps`, how often
+                  lines were lost to the log's rotation, when that happened, and `unvouched`, why the session's
+                  rows cannot be vouched for, when another game ran beside the run's (`_other_game`); each
+                  such row then carries `unvouched: true`
 
     Raises OSError when a file of the run is there and cannot be read."""
     run_dir = Path(backup_root) / RUNS_FOLDER / run_id
     log = run_dir / RUN_LOG
     session_lines, gaps = marked_lines(log, (SELF_CHECK,))
     kept, fixture_lines = _fixture_part(Path(backup_root), run_id, read_steps(run_dir))
-    checks = verdicts(fixture_lines, "fixture") + verdicts(session_lines, "session")
-    checks.sort(key=_rank)
+    session_checks = verdicts(session_lines, "session")
     session_part: dict = {"file": str(log), "lines": len(session_lines)}
     if gaps:
         session_part["gaps"] = gaps
+    other = _other_game(Path(backup_root), run_id)
+    if other is not None:
+        session_part["unvouched"] = other
+        for check in session_checks:
+            check["unvouched"] = True
+    checks = verdicts(fixture_lines, "fixture") + session_checks
+    checks.sort(key=_rank)
     return {"run": run_id, "broken": list(dict.fromkeys(c["name"] for c in checks if c["verdict"] == BROKEN)),
             "counts": dict(Counter(check["verdict"] for check in checks)), "checks": checks,
             "fixture": kept, "session": session_part}
+
+
+def _other_game(backup_root: Path, run_id: str) -> str | None:
+    """Why the session's lines of run `run_id` cannot be vouched for, or None. The run's journal (its snapshot's)
+    says another Victoria 3 process was seen beside the run's game (`watch` records `other_game`), or its restore
+    held for one (`other_game_ran`, `other_game_running`). No proof of the run's own game being alive rules out
+    a second game writing the same `logs/`, and whether two can share them is not verified, so such a run's
+    lines are shown and marked. A snapshot that is gone was restored, which a run with another game seen never
+    is: None."""
+    snap = snapshot.Snapshot(id=run_id, dir=backup_root / "snapshots" / run_id, files={}, listing=frozenset())
+    try:
+        journal = snapshot.journal(snap)
+    except OSError:
+        return None
+    seen = ["pid %s (started %s)" % (e.get("pid"), e.get("created")) for e in journal if e.get("event") == "other_game"]
+    if seen:
+        return ("`watch` saw another Victoria 3 process beside the run's game (%s): it may have written the same "
+                "logs, so the session's lines may not all be the run's" % ", ".join(seen))
+    held = [e.get("reason") for e in journal
+            if e.get("event") == "held" and e.get("reason") in ("other_game_ran", "other_game_running")]
+    if held:
+        return ("the run's restore held for another game (%s): it may have written the same logs, so the "
+                "session's lines may not all be the run's" % held[-1])
+    return None
 
 
 def _fixture_part(backup_root: Path, run_id: str, steps: list[dict]) -> tuple[dict, list[str]]:
@@ -396,7 +450,10 @@ def _fixture_part(backup_root: Path, run_id: str, steps: list[dict]) -> tuple[di
     def none(detail: str) -> tuple[dict, list[str]]:
         return {"key": key, "kept": False, "detail": "%s: %s" % (save, detail)}, []
 
-    folder = fixture_dir(backup_root, key)
+    try:
+        folder = _own_folder(backup_root, key)
+    except SelfCheckError as error:
+        return none(error.detail)
     record = fixture_record(backup_root, key)
     if record is None:
         if os.path.lexists(folder / RECORD_FILE):

@@ -161,6 +161,24 @@ class ReportTest(unittest.TestCase):
             ["| odd_one", "ODD", "session"]])
         self.assertTrue(rows[0].endswith("state=Corsica \\| read=0.000 |"), rows[0])
 
+    def test_rows_that_cannot_be_vouched_for_are_kept_and_marked(self):
+        found = {"run": "20261110T150000Z", "broken": ["in_session"], "counts": {"BROKEN": 1, "OK": 1},
+                 "checks": [{"name": "in_session", "verdict": "BROKEN", "source": "session", "unvouched": True,
+                             "line": "common/x.txt:1: TE_SELF_CHECK BROKEN in_session"},
+                            {"name": "at_setup", "verdict": "OK", "source": "fixture",
+                             "line": "common/x.txt:2: TE_SELF_CHECK OK at_setup"}],
+                 "fixture": {"key": "0123456789ab", "kept": True, "file": "/b/fixtures/0123456789ab/lines.log",
+                             "snapshot": "20261110T145500Z", "lines": 1, "self_checks": 1},
+                 "session": {"file": "/b/runs/20261110T150000Z/debug.log", "lines": 1,
+                             "unvouched": "`watch` saw another Victoria 3 process beside the run's game (pid 4242 "
+                                          "(started x)): it may have written the same logs"}}
+        text = self.report.close(dict(self.summary(None, None), self_checks=found)).read_text("utf-8")
+        section = text.split("## Self-checks")[1]
+        self.assertIn("- **The session's rows cannot be vouched for** (marked \"not vouched for\" below): `watch` "
+                      "saw another Victoria 3 process beside the run's game (pid 4242", section)
+        self.assertIn("| in_session | BROKEN | session (not vouched for) |", section)
+        self.assertIn("| at_setup | OK | fixture |", section)
+
     def test_a_run_with_no_self_check_line_says_so_and_one_never_read_has_no_section(self):
         found = {"run": "20261110T150000Z", "broken": [], "counts": {}, "checks": [],
                  "fixture": {"key": None, "kept": False, "detail": "the game ran on a save of the owner's, not on "

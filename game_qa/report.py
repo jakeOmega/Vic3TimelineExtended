@@ -183,11 +183,15 @@ def _self_checks(found: Mapping) -> list[str]:
     else:
         out.append("- The run that made the fixture: no lines (%s)."
                    % _text(fixture.get("detail") or "none were kept").rstrip("."))
+    if session.get("unvouched"):
+        out.append("- **The session's rows cannot be vouched for** (marked \"not vouched for\" below): %s."
+                   % _text(session["unvouched"]).rstrip("."))
     if checks:
         out += ["", "| Check | Verdict | From | Line |", "|---|---|---|---|"]
         for check in checks:
+            source = "%s%s" % (_text(check.get("source")), " (not vouched for)" if check.get("unvouched") else "")
             out.append("| %s | %s | %s | %s |" % (_cell(check.get("name")), _cell(check.get("verdict")),
-                                                  _cell(check.get("source")), _cell(check.get("line"))))
+                                                  _cell(source), _cell(check.get("line"))))
     return out
 
 
