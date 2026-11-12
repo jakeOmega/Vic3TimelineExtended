@@ -862,6 +862,8 @@ modern_election_events.9 = {
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_jingoist } } add = 2 }
+			# Our own blunder: letting it run costs us and gains nothing.
+			modifier = { trigger = { exists = scope:own_gaffe_party } add = -4 }
 		}
 	}
 
@@ -882,6 +884,7 @@ modern_election_events.9 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_freedom_of_conscience } add = 2 }
+			modifier = { trigger = { exists = scope:own_gaffe_party } add = 2 }
 		}
 	}
 
@@ -3149,9 +3152,10 @@ modern_election_events.34 = {
 		NOT = { has_variable = election_event_cooldown }
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
-		# Food grown by design needs synthetic biology (its Designed Crops
-		# method; it requires biotechnology through genetic_engineering).
-		has_technology_researched = synthetic_biology
+		# Laboratory-grown food needs the technology that unlocks the Cultured
+		# Meat Plant and Cultured Produce Facility (era 11, society). They can be
+		# built but need not exist, so the text treats the food as a proposal.
+		has_technology_researched = lab-grown_food
 	}
 
 	immediate = {

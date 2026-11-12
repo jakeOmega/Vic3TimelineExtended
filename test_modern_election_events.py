@@ -35,9 +35,9 @@ class GateTests(unittest.TestCase):
         trigger = eg.read_trigger(_event("modern_election_events.33"))
         self.assertIn("brain_computer_interfaces", trigger["required"])
 
-    def test_synthetic_food_needs_synthetic_biology(self):
+    def test_lab_grown_food_needs_its_technology(self):
         trigger = eg.read_trigger(_event("modern_election_events.34"))
-        self.assertIn("synthetic_biology", trigger["required"])
+        self.assertIn("lab-grown_food", trigger["required"])
 
     def test_economic_miracle_needs_a_running_cycle(self):
         body = _norm(_event("modern_election_events.15"))
@@ -67,6 +67,11 @@ class OptionTests(unittest.TestCase):
             text = _norm(option)
             self.assertIn(f"text = modern_election_events.{key}_own", text)
             self.assertIn(f"text = modern_election_events.{key} ", text)
+
+    def test_ai_does_not_prefer_letting_our_own_blunder_run(self):
+        options = _options(_event("modern_election_events.9"))
+        self.assertIn("modifier = { trigger = { exists = scope:own_gaffe_party } add = -4 }",
+                      _norm(options[0]))
 
 
 if __name__ == "__main__":
