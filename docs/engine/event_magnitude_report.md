@@ -12,7 +12,6 @@ _None._
 
 ## Reviewed Exemptions
 
-- `events/decolonization_events.txt` — `decolonization_events.22` — `country_prestige_add = country_prestige_add=25 (in bloody_decolonization_legacy_modifier)` — 2026-11-12: shown, not applied: decol_path_legacy and decol_iw_aftermath_bloody (common/scripted_effects/) made the grant, and this audit reads events only; the modifier's flat +25 is as it was before #1560
 - `events/te_debug_tax_events.txt` — `te_debug_tax.34` — `country_bureaucracy_add = country_bureaucracy_add=-10000 (in te_tp_bureaucracy)` — 2026-11-05: tax-code probe (console only); the -10000 bureaucracy is the deficit it tests
 - `events/te_formable_formation_events.txt` — `formation_te.1` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
 - `events/te_formable_formation_events.txt` — `formation_te.2` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
@@ -20,6 +19,6 @@ _None._
 
 ## Coverage
 
-- total flags: 5
+- total flags: 4
 - unreviewed: 0
-- exempted: 5
+- exempted: 4

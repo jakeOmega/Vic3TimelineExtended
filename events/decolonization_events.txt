@@ -3244,7 +3244,7 @@ decolonization_events.22 = {
 			if = {
 				limit = { has_modifier = bloody_decolonization_legacy_modifier }
 				add_modifier = {
-					name = bloody_decolonization_legacy_modifier	# REVIEWED 2026-11-12: shown, not applied: decol_path_legacy and decol_iw_aftermath_bloody (common/scripted_effects/) made the grant, and this audit reads events only; the modifier's flat +25 is as it was before #1560
+					name = bloody_decolonization_legacy_modifier
 					days = long_modifier_time
 					is_decaying = yes
 				}
