@@ -285,16 +285,29 @@ decol_save_foreign_owner_above = {
 # Scope: country (the former colony)
 decol_mark_former_colony = {
 	set_variable = { name = former_overlord value = $OVERLORD$ }
+	decol_mark_freed_from = { OVERLORD = $OVERLORD$ }
 	set_variable = { name = recently_decolonized days = 7300 }
 	decol_young_state_reset = yes
 }
 
+# Mark the scoped country, about to be freed, as freed from $OVERLORD$ for a
+# day, for decol_leave_former_overlord_plays (on_become_independent). Every mod
+# make_independent site calls it just before freeing: decol_mark_former_colony
+# (decolonization_events .1 and .3, every country the mod's releases form) and
+# the UN referendum, which frees any direct subject. A day, not untimed: the
+# untimed former_overlord (also set by vanilla's release on-actions) can name
+# an earlier overlord than the one just left.
+# Parameters: $OVERLORD$ = the overlord it is leaving
+# Scope: country (the subject)
+decol_mark_freed_from = {
+	set_variable = { name = decol_freed_from_overlord value = $OVERLORD$ days = 1 }
+}
+
 # A country just become independent leaves every play and war in which it
-# supports its former overlord (1.15 leave_plays_supporting; a war it leads
-# itself stays). From on_become_independent. Every mod path that frees a
-# subject sets former_overlord (decol_mark_former_colony) before its
-# make_independent, so the variable names the overlord just left; a release
-# through vanilla's actions sets it too (te_construction_market_on_actions.txt).
+# supports the overlord it has just left (1.15 leave_plays_supporting; a war it
+# leads itself stays). From on_become_independent. It reads only the day-long
+# marker decol_mark_freed_from sets, so a freeing the mod did not script (a
+# vanilla independence war, which the subject leads) does nothing here.
 # Whether make_independent already does this is unread (vanilla_1_15_prep.md
 # C21); the self-check reads it: a shared war seen here means it does not.
 # Scope: country (the former subject)
@@ -302,9 +315,9 @@ decol_leave_former_overlord_plays = {
 	if = {
 		limit = {
 			is_subject = no
-			var:former_overlord ?= { is_country_alive = yes }
+			var:decol_freed_from_overlord ?= { is_country_alive = yes }
 		}
-		var:former_overlord = { save_scope_as = decol_freed_from }
+		var:decol_freed_from_overlord = { save_scope_as = decol_freed_from }
 		# Self-check (docs/testing/colonial-wars-playtest.md), once a game, only
 		# when we still fight beside the former overlord: the wars we share
 		# with it before and after.

@@ -216,8 +216,9 @@ from the Air (bombing raids, once an enemy has
 Bombing Aircraft; air defense costs a spell of Home Front Strain) and Behind
 Their Lines (resistance, after a year of war, when the enemy holds 5% of your land). From two
 years, The Long Lists asks whether to push on or seek terms, and The Same
-Line, when your war goal has stalled after 24 months and ten large battles,
-offers +5 war support to hold the line or −10 to open armistice talks.
+Line, when your war goal has stalled after 24 months and ten large battles, or
+when a war you lead is counting down to a stalemate, offers +5 war support to
+hold the line or −10 to open armistice talks.
 
 In the 36 months after peace, three events can reach great powers. What Was
 Done, a war crimes tribunal, lets you prosecute (Liberation Hero), move on, or bury the evidence,

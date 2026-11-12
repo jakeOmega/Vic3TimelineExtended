@@ -11,6 +11,7 @@ mod_systems/decolonization.md, mod_systems/covert_warfare.md.
 """
 
 import os
+import re
 import unittest
 
 from test_decolonization_wars import _block, _def, _loc_keys, _read
@@ -24,6 +25,7 @@ DECOL = _read("common", "scripted_effects", "decolonization.txt")
 PLAY = _read("common", "diplomatic_plays", "te_colonial_war_play.txt")
 ON_ACTIONS = _read("common", "on_actions", "extra_on_actions.txt")
 COVERT_JE = _read("common", "journal_entries", "je_covert_warfare.txt")
+REPO = os.path.dirname(os.path.abspath(__file__))
 COVERT_VALUES = _read("common", "script_values", "covert_warfare_script_values.txt")
 
 
@@ -31,12 +33,17 @@ class StalemateTests(unittest.TestCase):
     def test_the_world_war_stalemate_reads_the_engine_first(self):
         event = _def(WW, "world_war_events.31")
         war = _block(_block(event, "trigger"), "any_scope_war")
-        self.assertIn("war_is_in_stalemate = yes", _block(war, "OR"))
+        either = _block(war, "OR")
+        # Only a war leader's war support drives the countdown.
+        engine = _block(either, "AND")
+        self.assertIn("war_is_in_stalemate = yes", engine)
+        self.assertIn("is_warleader = ROOT", engine)
         # The 1.14 reads stay as the fallback.
-        self.assertIn("has_stalled_wargoal_held_by = ROOT", _block(war, "AND"))
+        self.assertIn("has_stalled_wargoal_held_by = ROOT", either)
         immediate = _block(event, "immediate")
         first = _block(immediate, "random_scope_war")
         self.assertIn("war_is_in_stalemate = yes", first)
+        self.assertIn("is_warleader = ROOT", first)
 
     def test_the_un_ceasefire_weighs_a_stalemate_up(self):
         for value in ("un_lean_interests_ceasefire", "un_ceasefire_ai_chance"):
@@ -84,6 +91,8 @@ class SubjectTests(unittest.TestCase):
         self.assertIn("type = dp_te_colonial_uprising", create)
         self.assertIn("target_country = root", create)
         self.assertIn("decolonization_events.3.b_uprising_tt", hold)
+        # Neither side committed to another play, or the play would open nothing.
+        self.assertEqual(hold.count("is_diplomatic_play_committed_participant = no"), 2)
         self.assertIn("TE_SELF_CHECK OK decol_uprising_play", _raw_events())
 
     def test_the_uprising_play_is_script_only_independence(self):
@@ -106,14 +115,34 @@ class SubjectTests(unittest.TestCase):
         self.assertIn("leave_plays_supporting = scope:decol_freed_from", effect)
         self.assertIn("is_subject = no", _block(effect, "limit"))
 
-    def test_every_freeing_sets_the_former_overlord_first(self):
-        # The on-action reads var:former_overlord, so each make_independent in
-        # the decolonization events comes straight after decol_mark_former_colony.
-        lines = [line.strip() for line in DECOL_EVENTS.splitlines() if line.strip()]
-        for i, line in enumerate(lines):
-            if line == "make_independent = yes":
-                with self.subTest(at=i):
-                    self.assertTrue(lines[i - 1].startswith("decol_mark_former_colony"), lines[i - 1])
+    def test_every_freeing_marks_the_overlord_just_left(self):
+        # The on-action reads the day-long decol_freed_from_overlord, so every
+        # mod make_independent comes straight after decol_mark_freed_from, or
+        # after decol_mark_former_colony, which calls it.
+        self.assertIn("decol_mark_freed_from = { OVERLORD = $OVERLORD$ }",
+                      _def(DECOL, "decol_mark_former_colony"))
+        self.assertIn("days = 1", _def(DECOL, "decol_mark_freed_from"))
+        self.assertIn("var:decol_freed_from_overlord", _def(DECOL, "decol_leave_former_overlord_plays"))
+        self.assertNotIn("var:former_overlord", _def(DECOL, "decol_leave_former_overlord_plays"))
+        roots = [os.path.join(REPO, d) for d in ("common", "events")]
+        sites = 0
+        for root in roots:
+            for folder, _, names in os.walk(root):
+                for name in names:
+                    if not name.endswith(".txt"):
+                        continue
+                    path = os.path.join(folder, name)
+                    with open(path, encoding="utf-8-sig") as f:
+                        text = re.sub(r"#[^\n]*", "", f.read())
+                    lines = [line.strip() for line in text.splitlines() if line.strip()]
+                    for i, line in enumerate(lines):
+                        if "make_independent = yes" not in line:
+                            continue
+                        sites += 1
+                        before = line.split("make_independent")[0] + " " + lines[i - 1]
+                        with self.subTest(file=os.path.relpath(path, REPO), at=i):
+                            self.assertRegex(before, r"decol_mark_(freed_from|former_colony) = \{")
+        self.assertGreaterEqual(sites, 8)
 
 
 class CovertFundingTests(unittest.TestCase):

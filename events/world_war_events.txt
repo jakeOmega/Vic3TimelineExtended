@@ -1112,10 +1112,12 @@ world_war_events.30 = {
 }
 # Stalemate on the front. Fires from the je_world_war monthly pulse. A war is
 # stuck when the engine counts it down to a stalemate (1.15
-# war_is_in_stalemate: both leaders at minimum war support), or by the 1.14
-# reads it used before: old, many battles, and our own war goals stalled. In
-# the engine's case the options are the real decision: holding the line lifts
-# us off the floor and stops the countdown, armistice talks let it run.
+# war_is_in_stalemate: both leaders at minimum war support) and we lead our
+# side of it, or by the 1.14 reads it used before: old, many battles, and our
+# own war goals stalled. Only a war leader's war support drives the countdown,
+# so a co-belligerent hears of it only through the 1.14 reads. In the engine's
+# case the options are the real decision: holding the line lifts us off the
+# floor and stops the countdown, armistice talks let it run.
 world_war_events.31 = {
 	type = country_event
 	placement = root
@@ -1139,7 +1141,10 @@ world_war_events.31 = {
 		# battle count are a second gate on the war that is actually stuck.
 		any_scope_war = {
 			OR = {
-				war_is_in_stalemate = yes
+				AND = {
+					war_is_in_stalemate = yes
+					is_warleader = ROOT
+				}
 				AND = {
 					war_duration_months >= 24
 					num_significant_battles >= 10
@@ -1154,7 +1159,10 @@ world_war_events.31 = {
 	immediate = {
 		# The engine's stalemate first: it is the war whose countdown runs.
 		random_scope_war = {
-			limit = { war_is_in_stalemate = yes }
+			limit = {
+				war_is_in_stalemate = yes
+				is_warleader = ROOT
+			}
 			save_scope_as = ww_stalemate_war
 		}
 		if = {

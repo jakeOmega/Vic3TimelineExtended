@@ -500,12 +500,16 @@ decolonization_events.3 = {
 		# elsewhere) opens one for its independence, at the escalation of the
 		# mod's own wars of independence (dp_te_colonial_uprising). The war
 		# that follows takes a record in the monthly settle.
+		# Neither side may be committed to another play: create_diplomatic_play
+		# would then open nothing while the tooltip promised a war (irredentism.2).
 		if = {
 			limit = {
+				is_diplomatic_play_committed_participant = no
 				scope:rebellious_subject = {
 					is_direct_subject_of = root
 					NOT = { has_war_with = root }
 					can_start_play_against_overlord = yes
+					is_diplomatic_play_committed_participant = no
 				}
 			}
 			custom_tooltip = {
