@@ -366,6 +366,29 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   a gate that passes or fails differently from before means the engine reads `filter` or `count = all` otherwise
   than vanilla's tsar buttons suggest.
 
+- **Treaty articles: `can_propose` and the lens (#1440).** In the treaty designer, add Extensive Modernization Aid
+  before Modernization Aid, Joint Military Exercises before an alliance, and a Nuclear Guarantee before a Guarantee
+  Independence: each draft accepts the article and the proposal goes through once the partner is in; without the
+  partner the Propose button is greyed with the requirement's line. Also note whether an AI ever proposes one of the
+  three, and whether the Budapest offer's guarantees (`nuclear_custody.11`) are still created (C21: whether
+  `create_treaty` runs `can_propose`). The diplomatic lens's Treaty Articles tab lists the mod's articles with no
+  input; with the Nuclear Weapons rule off, or the banking system on its simplified setting, their articles are absent.
+- **Cessions and reparations as treaties (#1457).** One line each in `debug.log`, once a game:
+  `TE_SELF_CHECK OK|BROKEN treaty_state_transfer` (three days after `irredentism.2.b` "Cede peacefully" or a
+  complied UN court ruling, the state is the taker's) and `TE_SELF_CHECK OK|BROKEN treaty_reparations` (three days
+  after `decolonization_events.6.a` "We acknowledge the debt" or a nuclear crisis's reparations, the Reparations
+  article's `on_entry_into_force` paid). Either BROKEN leaves play correct (the check has already made the transfer
+  directly); the line says which failure it was. `treaty=yes`: the treaty exists but its `on_entry_into_force` did
+  not run for `is_draft = no` (C21), so put the direct `set_state_owner` / paired `add_treasury` back at the four
+  call sites (the parent of #1457's commit) and drop the two helpers. `treaty=no`: `create_treaty` made nothing
+  although `can_create_treaty` passed, so the treaty block is wrong (the `inputs` form, the binding period) rather
+  than the hook: compare it with vanilla's 1.15 uses before dropping the helpers. A
+  `TE_SELF_CHECK BROKEN treaty_reparations_gate` line means `can_create_treaty` refused the Reparations article with
+  the payer's record just set (its `visible` / `possible` don't see the record, or `scope:other_country` is unbound
+  there), so every reparation is paid directly and neither verdict above can appear: fix the article's gate. Also check: the treaty shows in both countries' diplomacy panels, named and with the state or
+  Reparations article; the treasuries move by the sum the option's tooltip showed, once; the state does not move
+  back, and nothing is paid twice, if the treaty is later withdrawn.
+
 ## 1.15.1 hotfix (2026-11-11)
 
 What the 1.15.1 bump (`docs/audits/vanilla_1_15_1_migration.md`) leaves for the game. Any new 1.15.1 game will do

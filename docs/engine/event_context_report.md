@@ -3,7 +3,7 @@
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
 - `system_ungated`: **0** unreviewed, 11 REVIEWED
-- `unchosen_self_action`: **0** unreviewed, 5 REVIEWED
+- `unchosen_self_action`: **0** unreviewed, 6 REVIEWED
 - `imputed_foreign_action`: **0** unreviewed, 6 REVIEWED
 - Tags to remove: **0**
 
@@ -39,6 +39,7 @@ No unreviewed flags. ✅
 - `modern_election_events.25` — events/modern_election_events.txt (REVIEWED 2026-09-25: gated on a surveillance apparatus law (te_ea_has_surveillance_apparatus): the government does run the programme)
 - `nuclear_crisis.7` — events/nuclear_crisis_events.txt (REVIEWED 2026-09-25: the issuer chose the ultimatum through nd_nuclear_ultimatum_action; the weekly tick only reports that its dispute became a war)
 - `nuclear_loose.9` — events/nuclear_loose_events.txt (REVIEWED 2026-09-26: "Our agents" is d_covert's, shown only for nd_loose_recovered_how = 2, which only the recipient's own covert operation sets (covert_secure_material_action, which it launched); inspection, the article and the convention have their own texts)
+- `un_court.2` — events/un_court_events.txt (REVIEWED 2026-11-12: "our agent" is our counsel before the court, a standing post, not an operation; the audit reads the flavor's triggered_desc keys as desc)
 - `un_vote.1` — events/un_vote_events.txt (REVIEWED 2026-10-25: "our veto record" shows only to an expulsion motion's target, which must carry un_veto_isolation_modifier (un_expulsion_candidate), added only in its own veto option (un_vote_cast_effects))
 
 ## `imputed_foreign_action`

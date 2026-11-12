@@ -885,7 +885,9 @@ class TestPeacetimeStrikeDispute(unittest.TestCase):
 
     def test_reparations_concession(self):
         body = block(self.crisis, "nd_crisis_concede_reparations")
-        for needle in ("nd_loose_compensation_value", "add_treasury", "name = nd_loose_inspected value = 1 days = 7300",
+        # The sum goes under a Reparations treaty (#1457), paid directly if not.
+        for needle in ("nd_loose_compensation_value", "te_pay_reparations_by_treaty",
+                       "name = nd_loose_inspected value = 1 days = 7300",
                        "name = nd_loose_inspections", "remove_variable = nd_peacetime_struck_by"):
             self.assertIn(needle, body)
         self.assertNotIn("nd_loose_answer", body)
@@ -1103,7 +1105,10 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         concede = block(self.crisis, "nd_crisis_concede_reparations")
         for body in (pay, concede):
             self.assertNotIn("nd_reparations_due", body)
-        self.assertEqual(concede.count("nd_loose_compensation_value"), 2)
+        # One read, passed to the treaty helper (#1457), which reads it where
+        # it pays and stores it only in its hidden_effect.
+        self.assertEqual(concede.count("nd_loose_compensation_value"), 1)
+        self.assertIn("AMOUNT = nd_loose_compensation_value", concede)
         # The two payments, and the sum kept on the claimant for the answer
         # it is sent (nuclear_weapon_events.33): stored in a hidden_effect and
         # read in that event, never read back in this walked block.

@@ -2,6 +2,26 @@
 #  Miscellaneous Reusable Triggers
 # ======================================================================
 
+# The country holds elections: a voting law, or Anarchy, which the mod counts
+# as electoral (te_tradition_of_free_elections.txt). The one list for every
+# gate that asks whether a government is elected: the judiciary's Statutory
+# Courts lines and Judicial Elections, Election Interference's target
+# (covert_operations.txt), and a UN electoral observer mission's host
+# (un_mission_triggers.txt and its callers). Moved here from the judiciary's
+# te_jud_elected_government (issue #896), so the gates cannot drift apart.
+# Scope: country
+te_holds_elections = {
+	OR = {
+		has_law = law_type:law_landed_voting
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_liquid_democracy
+		has_law = law_type:law_labour_suffrage
+		has_law = law_type:law_anarchy
+	}
+}
+
 # True if the country has any language reform modifier active (transition costs)
 # or any language reform amendment on the law
 has_any_langreform_modifier = {

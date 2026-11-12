@@ -178,7 +178,7 @@ The owner's two calls: a player with many rivals catches foreign operations ofte
 - **Icon:** a black glove holding up a round steel shield (icon batch 6, 2026-10-27), `covert_counterintel_support_action.dds` with its lens copy; the widget row draws the same file.
 
 ### Election Interference & Electoral Confidence
-- **Gate:** Election interference (`covert_election_interference_action`) requires the target to have an elected legislature (Landed/Wealth/Census/Universal Suffrage). If the target abolishes elections, the operation auto-cancels via `requirement_to_maintain`.
+- **Gate:** Election interference (`covert_election_interference_action`) requires the target to hold elections: `te_holds_elections` (`misc_triggers.txt`), a voting law or Anarchy, the same trigger a UN electoral observer mission's host must pass (issue #896). If the target abolishes elections, the operation auto-cancels via `requirement_to_maintain`.
 - **Electoral Confidence Effect:** On `on_election_campaign_end`, the system checks if any country has an active election interference operation against the country holding the election. Based on the **worst** (most advanced) operation among all attackers:
   - **Preparatory phase** (<6 months): No effect.
   - **Establishing phase** (6–11 months): `-0.05` electoral confidence.

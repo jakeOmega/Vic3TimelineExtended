@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent
 
 ONE_OFFS = {
     "disband_company", "seize_company", "return_cultural_property", "surrender_monument", "te_cede_colony",
-    "population_transfer",
+    "population_transfer", "te_reparations",
 }
 
 
