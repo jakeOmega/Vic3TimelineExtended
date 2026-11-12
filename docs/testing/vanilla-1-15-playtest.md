@@ -196,6 +196,13 @@ or Spanish game.
   the toggle's `visible`, the mod's first call of 1.15's `GetDeltaEffectDesc`: drop that half and relaunch.
 - Military panel: mobilization groups one card a row with their backgrounds; the Nuclear and Covert tabs.
 - Power bloc panel: principle slots 5-8 and the remove button; the formation panel's primary principles one a row.
+- Descriptions added offline (#897; not part of the migration, listed here because these are the panels that show
+  them). Laws panel: the Minority Rights group's tooltip opens with a sentence, not `lawgroup_minority_rights_desc`.
+  Military panel: the Training mobilization group's tooltip, and the Heavy Tanks and Aircraft unit groups wherever a
+  group's tooltip shows, read as sentences, not `training_desc` or `combat_unit_group_*_desc`. Power bloc panel: a
+  tier IV or V principle (and Sacred Civics at any tier) shows its group's description in its tooltip, as most tiers I to
+  III do. Whether a principle with no `_desc` key shows the raw key or nothing was never checked; none is left to look
+  at, so that needs a key commented out.
 - Politics overview: the ruler's aptitude traits in the featured slots.
 
 **Politics**

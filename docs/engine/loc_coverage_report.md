@@ -12,7 +12,10 @@ Fix: add the missing key(s) to a `localization/english/*_l_english.yml`
 file. For static modifiers and most simple entities the key is the
 entity name itself (including game concept names, whose `_desc`
 does not substitute for the name); for journal entries and institutions also
-`<name>_desc`; for
+`<name>_desc`, as for law groups, combat unit groups and mobilization
+option groups; for a power bloc principle `<name>_desc` alone, which
+points at its group's (`$principle_group_x_desc$`) unless the tier has
+text of its own; for
 events the keys are whatever `title`/`desc`/`flavor`/option `name`
 fields point at; for messages (`common/messages`) the keys are
 `notification_<name>_name` / `_desc` / `_tooltip`, never the bare
