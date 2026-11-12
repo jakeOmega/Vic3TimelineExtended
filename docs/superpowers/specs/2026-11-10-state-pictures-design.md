@@ -353,9 +353,8 @@ would be over 1 GB.
    a pilot, the rest from one table a region and one a rung, `variant_prompt()`), the pass stores the two
    prosperity tags, and the weight has their places (upkeep 1,000, means its digit × 100). A variant is
    wired by picking its render (`VARIANT_PICKS`): its name says its axis. **Painted and wired
-   2026-11-12:** 222 of the 223, each picked from four candidates, 20 of them from a later set with words
-   of their own (`VARIANT_REWORD`, § 10). The East Asian affluent street of about 1990 waits for its
-   second set; until it is wired an affluent East Asian state of that rung shows the region's street.
+   2026-11-12:** all 223, each picked from four candidates, 21 of them from a later set with words of
+   their own (`VARIANT_REWORD`, § 10).
 6. **Character, function, conditions (31). Painted and wired:** on 2026-11-10 the 11 a weight reads live
    (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two spans each; § 7); on
    2026-11-11 the 18 that read the yearly pass's tags (boomtown and declining on four rungs, divided on
@@ -484,7 +483,8 @@ upkeep limited to rungs 2 to 4.
     every candidate of the seven towns of 1960. The same pattern fixed the South Asian town of the 1930s
     (all four candidates) and the Japanese town of 1990 (two of four). "Polished boxy 1980s saloons with
     square headlamps, one long square-edged 1980s limousine" was weaker: about one candidate in four on
-    the affluent streets of 1990, the rest still the luxury cars of the 2010s. Saying what the towers are
+    the affluent streets of 1990, the rest still the luxury cars of the 2010s (the East Asian pick has no
+    car at all). Saying what the towers are
     did not keep New York out of the North American skyline: two or three candidates of four on every rung
     still drew an Empire State spire, a broadcast needle or a pair of antennas. Each rung's pick is the one
     that didn't, its antennas smudged into what reads as a wisp of haze over a roof.
