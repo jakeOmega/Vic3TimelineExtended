@@ -68,7 +68,7 @@ Existing colony pictures are reused. Probabilities apply per eligible month.
 
 | ID | Colony | Discovery | Monthly chance | Choices |
 |---|---|---|---|---|
-| 1 | europa | A Second Living World | 1% | Protect the ocean and establish a permanent biology institute. / Share the discovery through an international research consortium. |
+| 1 | europa | The Cultures Grew | 1% | Protect the ocean and establish a permanent biology institute. / Share the discovery through an international research consortium. |
 | 2 | europa | Chimneys Beneath the Ice | 2% | Keep the vent field undisturbed for chemical research. / Develop instruments for operations in hot, pressurized water. |
 | 3 | enceladus | Life in the Ice Grains | 1% | Designate the plume catchment as a protected biological reserve. / Share sealed samples and methods with international laboratories. |
 | 4 | titan | An Impact-Born Chemical Laboratory | 2% | Preserve the deposit and reconstruct its chemical history. / Use the reaction pathways to improve industrial synthesis. |
@@ -89,7 +89,7 @@ Existing colony pictures are reused. Probabilities apply per eligible month.
 | 19 | triton | A Jet Beneath the Landing Field | 2% | Close the field and establish a remote geyser observatory. / Relocate the field and develop pressure monitoring equipment. |
 | 20 | pluto | Antifreeze at the Edge of the System | 2% | Map the buried ocean and preserve the fracture samples. / Use the low-temperature chemistry to improve cryogenic systems. |
 
-### 1. A Second Living World
+### 1. The Cultures Grew
 
 Present-day evidence supports an ocean and possible water-rock energy sources. Event 1 establishes living microbes through replicated cultures; event 2 establishes a hydrothermal vent field through direct surveys and sampling. [Europa: ingredients for life](https://science.nasa.gov/mission/europa-clipper/why-europa-ingredients-for-life/).
 

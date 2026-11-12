@@ -16,7 +16,7 @@ it did not build. Each item says what the change would be and what it costs.
    button strictly better than vanilla's. A cost is the other way to set them apart: the Armed Forces' or the
    Landowners' disapproval, or prestige.
 2. **A freed subject's stability boost** is the unilateral territory release's, +1 a month for 8 months. The event
-   that offers the same grant to a restless subject (Winds of Change, `.1.c`) gives 150 days. One figure for both
+   that offers the same grant to a restless subject (A Political Fact, `.1.c`) gives 150 days. One figure for both
    would be simpler; which?
 3. **The AI's single releases still stack Peaceful Decolonization.** A release from a row grants it only when not
    held (`decol_chosen_release_rewards`), because a row at a time would pile up +15% prestige each. The AI's

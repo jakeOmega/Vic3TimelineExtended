@@ -167,7 +167,7 @@ economies 20% less, and less still when the crash is imported.
 
 ### Responding to a banking crash
 
-The crash event always offers Weather the storm, which is free but angers the
+The crash event always offers "Let the losses fall where they fall.", which is free but angers the
 upper and middle strata. Beside it you get one response set by your financial
 regulation law and up to four more, depending on your technology and laws: an
 emergency discount window (Central Banking), coordinated swap lines (Investment
@@ -1005,7 +1005,7 @@ or currency boards.
 You still borrow at a rate of your own: the Reference Rate, a point more
 without a national bank, plus credit standing and risk premium, so a Panic still
 raises your interest. Open-Market Operations needs only Keynesian Economics,
-four points and a law that allows it, and The Gold Window Closes, a
+four points and a law that allows it, and A Run on Gold, a
 gold-standard crisis event, appears only under this setting. With the rule on
 *Disabled* interest works the same way, minus the cycle's premium.
 
@@ -1052,7 +1052,7 @@ and is not in default. Its event can pick a smaller trading partner in a
 Downturn or Panic, not at war with it, where one of the two markets relies on
 the other for at least 5% of its trade. That partner gets Appeal for a Rescue?;
 asking costs 5% prestige for a while (Hat in Hand). The rescuer then answers
-International Bailout Request:
+A Partner Asks for Help:
 
 | Answer | Effect |
 |---|---|

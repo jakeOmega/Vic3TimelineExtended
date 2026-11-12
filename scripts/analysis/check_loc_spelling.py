@@ -275,6 +275,8 @@ ALLOWLIST: list[str] = [
     "United Nations Environment Programme",
     "Tyre",                                      # the Lebanese city; the product is lower case
     "my dear",                                   # affectionate, not "expensive" (UN flavor text)
+    "Dear Mother",                               # a letter's salutation (flavor in the document form)
+    "Dear colleague",
 ]
 
 # Keys whose whole value keeps its spelling, such as a historical text quoted

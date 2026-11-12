@@ -48,7 +48,7 @@ The `.100` (failure) and `.200` (victory) capstone events for these four have be
 Each surviving JE has monthly pulse events plus a fail-state event (except Post-Scarcity, which has no failure outcome). Events follow these design principles:
 
 - **Three-option structure:** Option A (progressive/reformist), Option B (moderate/compromise), Option C (regressive/oppressive). Most options have meaningful tradeoffs — treasury costs for spending decisions, opposition radicals for partisan choices.
-- **Fire-once events:** the two AI policy debates, AI Replaces Bureaucrats (`post_scarcity_events.3`) and Predictive Policing (`surveillance_events.4`), fire once per country through 1.15's `fire_only_once` (#1404). Their old country variables (`ai_bureaucracy_debate_happened`, `ai_predictive_policing_debate_happened`) are gone.
+- **Fire-once events:** the two AI policy debates, No Clerk on Duty (`post_scarcity_events.3`) and Before the Fact (`surveillance_events.4`), fire once per country through 1.15's `fire_only_once` (#1404). Their old country variables (`ai_bureaucracy_debate_happened`, `ai_predictive_policing_debate_happened`) are gone.
 - **Law-gated options:** Some regressive options require specific laws to be available (e.g., surveillance expansion requires `law_intrusive_surveillance`). AI chance modifiers weight options contextually based on current laws.
 - **Law-gated AI weights:** AI preference for certain options increases when the country has relevant laws (e.g., `law_laissez_faire` boosts "protect industry" choice, `law_outlawed_dissent` boosts "label as terrorists" choice).
 - **Cooldowns:** Routine debate events use `normal_modifier_time`; serious incidents and fire-once events use `long_modifier_time`. Digital Rights also spaces its three leak stories (`surveillance_events.1`–`.3`): each sets `te_dr_leak_recent` for two years and none fires while it holds, and its pool's no-event weight is 400, not 200.
@@ -125,16 +125,16 @@ The deadline failure is a branch of the timeout outcome, not a failure outcome: 
 - **Dharmic variants:** Reference dharma, swamis/gurus, ashrams, satsangs, seva, darshan, saffron, Hindutva.
 - **Jewish variants:** Event 4 has a religious Zionist variant.
 - **Default:** Covers Christian and other religions with generic or broadly Western religious language.
-- Some events also have variant titles (e.g., "The Satellite Minbar" for Islamic event 2, "One Ummah, One Law" for Islamic event 4).
+- Some events also have variant titles (e.g., "The Minbar on the Air" for Islamic event 2, "One Ummah, One Law" for Islamic event 4).
 
 **Removal:** The "Secularization Campaign" decision (requires `decline_of_organized_religion` tech) removes all seven strong-option modifiers at once, with a radicals cost, instead of waiting out their 20 years.
 
 **Events:**
 1. **The Moral Majority** (`television_broadcasting`, era 7) — Religious political organizing via broadcast media
-2. **The Electronic Pulpit** (`pop_culture`, era 7) — Televangelism and megachurches
-3. **The Preferential Option** (`civil_rights_movement`, era 7) — Liberation theology (fires under state atheism)
-4. **One Nation Under God** (`globalization`, era 9) — Religious nationalism
-5. **The Digital Pulpit** (`social_media`, era 9) — Online faith communities
+2. **Faith in Prime Time** (`pop_culture`, era 7) — Televangelism and megachurches
+3. **Bread and Justice** (`civil_rights_movement`, era 7) — Liberation theology (fires under state atheism)
+4. **Faith and Flag** (`globalization`, era 9) — Religious nationalism
+5. **Faith Online** (`social_media`, era 9) — Online faith communities
 6. **The Culture War** (`sexual_revolution`, era 8) — Religious conservative backlash
 7. **The Faithful Hand** (`social_justice_movements`, era 9) — Faith-based welfare (fires under state atheism)
 

@@ -115,14 +115,14 @@ of progress toward the first device, never taking it below zero.
 
 The first country to finish a device gets "Dawn of the Atomic Age", the Nuclear
 Power modifier and a burst of loyalists, and its warhead brings the nuclear taboo
-into being at 20. Later powers get "Our Nuclear Arsenal is Complete" and the
+into being at 20. Later powers get "The First Warhead" and the
 same modifier, which raises prestige (+30%), diplomatic play maneuvers, and
 leverage generation (+25%) and resistance. Once the taboo rises above 40, The
 Burden of the Bomb eats into that prestige and leverage generation (see [What
 the nuclear taboo costs](#what-the-nuclear-taboo-costs)).
 
 A later program is noticed at 75 progress on its first device: the great powers,
-its rivals and its neighbors get "Nuclear Proliferation Alert". A nuclear power
+its rivals and its neighbors get "A Bomb Nearly Built". A nuclear power
 can answer with a public ultimatum, or with a public denunciation where no
 crisis can be opened. A country with a program of its own can crash it or stay
 the course. Anyone can push for a non-proliferation treaty, accept the new

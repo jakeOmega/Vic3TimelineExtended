@@ -147,7 +147,7 @@ ahead, raised if they fall short.
 8. **Human Labor Quotas' own lines** (owner, 2026-11-04). The law's tooltip
    lists Trade Unions +10% political strength and −10% radicals from
    political movements, and the country's modifiers show both while it
-   holds. Neo-Luddite Terrorism (`post_scarcity_events.4`) never fires under
+   holds. The New Luddites (`post_scarcity_events.4`) never fires under
    the quotas.
 9. **Displaced Workers** (owner, 2026-11-04). Under Unrestricted Automation,
    move a few buildings onto robotic methods. Nothing shows until the twelfth

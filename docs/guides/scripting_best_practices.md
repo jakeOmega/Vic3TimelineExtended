@@ -4468,7 +4468,7 @@ Intent: "this state already has the HQ, OR no state anywhere has one." Reality: 
 
 If an event fires but **none** of its options' `trigger = { ... }` blocks match for the receiving country, the engine renders the event with **no clickable button** — the player is stuck. Vic3 doesn't auto-fall-back to `default_option = yes` when its trigger fails.
 
-This bit `un_vote.3` (General Assembly Vote Results): the event broadcasts to every UN member, but all three options gated on `has_variable = un_vote_choice`, which only exists for countries that voted. A country that joined the UN *after* the vote was called but *before* results fired passed the event-level trigger, saw the description text, and had no button.
+This bit `un_vote.3` (The Assembly Has Voted): the event broadcasts to every UN member, but all three options gated on `has_variable = un_vote_choice`, which only exists for countries that voted. A country that joined the UN *after* the vote was called but *before* results fired passed the event-level trigger, saw the description text, and had no button.
 
 **Rule**: collectively, the option triggers must form a tautology over the event's trigger surface. Treat the `default_option = yes` option as the catch-all — include a `NOT = { has_variable = X }` (or equivalent) branch so it matches everything the other options don't. This is especially load-bearing for broadcast/notification events fired via `every_country = { trigger_event = ... }` where the receiving country's local state varies.
 

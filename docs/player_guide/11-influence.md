@@ -205,7 +205,7 @@ once, at 10% and at 25% while ranked first. Trailing countries under the
 benchmark get events of their own. Most let you embrace the foreign influence
 (research, relations, often a push toward the hegemon's model) or resist it
 (authority and interest group approval, often at a cost in relations,
-legitimacy or pull). The harshest, Hegemonic Convergence, can press you to adopt
+legitimacy or pull). The harshest, Pressure to Conform, can press you to adopt
 one of the hegemon's laws once it holds 25% and your share is a tenth of its
 share or less. Four more events follow the political models. All of them are in
 [Cultural hegemony event list](19-appendix-events.md#cultural-hegemony-event-list).
