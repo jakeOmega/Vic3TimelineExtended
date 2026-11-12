@@ -13211,6 +13211,7 @@ sr_site_months_since_contact_valles_marineris = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_valles_marineris = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_valles_marineris divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13221,6 +13222,7 @@ sr_site_aut_pressure_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_valles_marineris multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_valles_marineris = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13271,6 +13273,7 @@ sr_site_months_since_contact_olympus_mons = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_olympus_mons = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_olympus_mons divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13281,6 +13284,7 @@ sr_site_aut_pressure_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_charter_olympus_mons } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_olympus_mons multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_olympus_mons = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13331,6 +13335,7 @@ sr_site_months_since_contact_hellas_planitia = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_hellas_planitia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_hellas_planitia divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13341,6 +13346,7 @@ sr_site_aut_pressure_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_charter_hellas_planitia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_hellas_planitia multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_hellas_planitia = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13391,6 +13397,7 @@ sr_site_months_since_contact_utopia_planitia = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_utopia_planitia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_utopia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13401,6 +13408,7 @@ sr_site_aut_pressure_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_charter_utopia_planitia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_utopia_planitia multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_utopia_planitia = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13451,6 +13459,7 @@ sr_site_months_since_contact_arcadia_planitia = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_arcadia_planitia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_arcadia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13461,6 +13470,7 @@ sr_site_aut_pressure_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_charter_arcadia_planitia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_arcadia_planitia multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_arcadia_planitia = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13511,6 +13521,7 @@ sr_site_months_since_contact_ceres = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_ceres = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_ceres divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13521,6 +13532,7 @@ sr_site_aut_pressure_ceres = {
 	if = { limit = { has_global_variable = sr_site_charter_ceres } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_ceres multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_ceres = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13571,6 +13583,7 @@ sr_site_months_since_contact_vesta = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_vesta = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_vesta divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13581,6 +13594,7 @@ sr_site_aut_pressure_vesta = {
 	if = { limit = { has_global_variable = sr_site_charter_vesta } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_vesta multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_vesta = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13631,6 +13645,7 @@ sr_site_months_since_contact_psyche = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_psyche = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_psyche divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13641,6 +13656,7 @@ sr_site_aut_pressure_psyche = {
 	if = { limit = { has_global_variable = sr_site_charter_psyche } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_psyche multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_psyche = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13691,6 +13707,7 @@ sr_site_months_since_contact_pallas = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_pallas = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_pallas divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13701,6 +13718,7 @@ sr_site_aut_pressure_pallas = {
 	if = { limit = { has_global_variable = sr_site_charter_pallas } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_pallas multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_pallas = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13751,6 +13769,7 @@ sr_site_months_since_contact_hygiea = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_hygiea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_hygiea divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13761,6 +13780,7 @@ sr_site_aut_pressure_hygiea = {
 	if = { limit = { has_global_variable = sr_site_charter_hygiea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_hygiea multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_hygiea = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13811,6 +13831,7 @@ sr_site_months_since_contact_io = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_io = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_io divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13821,6 +13842,7 @@ sr_site_aut_pressure_io = {
 	if = { limit = { has_global_variable = sr_site_charter_io } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_io multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_io = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13871,6 +13893,7 @@ sr_site_months_since_contact_europa = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_europa = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_europa divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13881,6 +13904,7 @@ sr_site_aut_pressure_europa = {
 	if = { limit = { has_global_variable = sr_site_charter_europa } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_europa multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_europa = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13931,6 +13955,7 @@ sr_site_months_since_contact_ganymede = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_ganymede = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_ganymede divide = 10000 multiply = sr_aut_per_10k_people }
@@ -13941,6 +13966,7 @@ sr_site_aut_pressure_ganymede = {
 	if = { limit = { has_global_variable = sr_site_charter_ganymede } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_ganymede multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_ganymede = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -13991,6 +14017,7 @@ sr_site_months_since_contact_callisto = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_callisto = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_callisto divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14001,6 +14028,7 @@ sr_site_aut_pressure_callisto = {
 	if = { limit = { has_global_variable = sr_site_charter_callisto } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_callisto multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_callisto = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14051,6 +14079,7 @@ sr_site_months_since_contact_himalia = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_himalia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_himalia divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14061,6 +14090,7 @@ sr_site_aut_pressure_himalia = {
 	if = { limit = { has_global_variable = sr_site_charter_himalia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_himalia multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_himalia = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14111,6 +14141,7 @@ sr_site_months_since_contact_amalthea = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_amalthea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_amalthea divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14121,6 +14152,7 @@ sr_site_aut_pressure_amalthea = {
 	if = { limit = { has_global_variable = sr_site_charter_amalthea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_amalthea multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_amalthea = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14171,6 +14203,7 @@ sr_site_months_since_contact_venus = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_venus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_venus divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14181,6 +14214,7 @@ sr_site_aut_pressure_venus = {
 	if = { limit = { has_global_variable = sr_site_charter_venus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_venus multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_venus = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14231,6 +14265,7 @@ sr_site_months_since_contact_mercury = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_mercury = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_mercury divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14241,6 +14276,7 @@ sr_site_aut_pressure_mercury = {
 	if = { limit = { has_global_variable = sr_site_charter_mercury } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_mercury multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_mercury = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14291,6 +14327,7 @@ sr_site_months_since_contact_titan = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_titan = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_titan divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14301,6 +14338,7 @@ sr_site_aut_pressure_titan = {
 	if = { limit = { has_global_variable = sr_site_charter_titan } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_titan multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_titan = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14351,6 +14389,7 @@ sr_site_months_since_contact_enceladus = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_enceladus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_enceladus divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14361,6 +14400,7 @@ sr_site_aut_pressure_enceladus = {
 	if = { limit = { has_global_variable = sr_site_charter_enceladus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_enceladus multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_enceladus = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14411,6 +14451,7 @@ sr_site_months_since_contact_rhea = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_rhea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_rhea divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14421,6 +14462,7 @@ sr_site_aut_pressure_rhea = {
 	if = { limit = { has_global_variable = sr_site_charter_rhea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_rhea multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_rhea = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14471,6 +14513,7 @@ sr_site_months_since_contact_mimas = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_mimas = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_mimas divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14481,6 +14524,7 @@ sr_site_aut_pressure_mimas = {
 	if = { limit = { has_global_variable = sr_site_charter_mimas } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_mimas multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_mimas = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14531,6 +14575,7 @@ sr_site_months_since_contact_iapetus = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_iapetus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_iapetus divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14541,6 +14586,7 @@ sr_site_aut_pressure_iapetus = {
 	if = { limit = { has_global_variable = sr_site_charter_iapetus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_iapetus multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_iapetus = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14591,6 +14637,7 @@ sr_site_months_since_contact_titania = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_titania = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_titania divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14601,6 +14648,7 @@ sr_site_aut_pressure_titania = {
 	if = { limit = { has_global_variable = sr_site_charter_titania } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_titania multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_titania = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14651,6 +14699,7 @@ sr_site_months_since_contact_oberon = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_oberon = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_oberon divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14661,6 +14710,7 @@ sr_site_aut_pressure_oberon = {
 	if = { limit = { has_global_variable = sr_site_charter_oberon } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_oberon multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_oberon = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14711,6 +14761,7 @@ sr_site_months_since_contact_miranda = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_miranda = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_miranda divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14721,6 +14772,7 @@ sr_site_aut_pressure_miranda = {
 	if = { limit = { has_global_variable = sr_site_charter_miranda } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_miranda multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_miranda = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14771,6 +14823,7 @@ sr_site_months_since_contact_ariel = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_ariel = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_ariel divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14781,6 +14834,7 @@ sr_site_aut_pressure_ariel = {
 	if = { limit = { has_global_variable = sr_site_charter_ariel } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_ariel multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_ariel = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14831,6 +14885,7 @@ sr_site_months_since_contact_triton = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_triton = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_triton divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14841,6 +14896,7 @@ sr_site_aut_pressure_triton = {
 	if = { limit = { has_global_variable = sr_site_charter_triton } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_triton multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_triton = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14891,6 +14947,7 @@ sr_site_months_since_contact_proteus = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_proteus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_proteus divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14901,6 +14958,7 @@ sr_site_aut_pressure_proteus = {
 	if = { limit = { has_global_variable = sr_site_charter_proteus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_proteus multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_proteus = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -14951,6 +15009,7 @@ sr_site_months_since_contact_pluto = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_pluto = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_pluto divide = 10000 multiply = sr_aut_per_10k_people }
@@ -14961,6 +15020,7 @@ sr_site_aut_pressure_pluto = {
 	if = { limit = { has_global_variable = sr_site_charter_pluto } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_pluto multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_pluto = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15011,6 +15071,7 @@ sr_site_months_since_contact_eris = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_eris = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_eris divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15021,6 +15082,7 @@ sr_site_aut_pressure_eris = {
 	if = { limit = { has_global_variable = sr_site_charter_eris } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_eris multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_eris = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15071,6 +15133,7 @@ sr_site_months_since_contact_makemake = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_makemake = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_makemake divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15081,6 +15144,7 @@ sr_site_aut_pressure_makemake = {
 	if = { limit = { has_global_variable = sr_site_charter_makemake } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_makemake multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_makemake = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15131,6 +15195,7 @@ sr_site_months_since_contact_haumea = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_haumea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_haumea divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15141,6 +15206,7 @@ sr_site_aut_pressure_haumea = {
 	if = { limit = { has_global_variable = sr_site_charter_haumea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_haumea multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_haumea = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15191,6 +15257,7 @@ sr_site_months_since_contact_sedna = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_sedna = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_sedna divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15201,6 +15268,7 @@ sr_site_aut_pressure_sedna = {
 	if = { limit = { has_global_variable = sr_site_charter_sedna } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_sedna multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_sedna = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15251,6 +15319,7 @@ sr_site_months_since_contact_shackleton = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_shackleton = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_shackleton divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15261,6 +15330,7 @@ sr_site_aut_pressure_shackleton = {
 	if = { limit = { has_global_variable = sr_site_charter_shackleton } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_shackleton multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_shackleton = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15311,6 +15381,7 @@ sr_site_months_since_contact_peary = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_peary = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_peary divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15321,6 +15392,7 @@ sr_site_aut_pressure_peary = {
 	if = { limit = { has_global_variable = sr_site_charter_peary } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_peary multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_peary = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15371,6 +15443,7 @@ sr_site_months_since_contact_tranquility = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_tranquility = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_tranquility divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15381,6 +15454,7 @@ sr_site_aut_pressure_tranquility = {
 	if = { limit = { has_global_variable = sr_site_charter_tranquility } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_tranquility multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_tranquility = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15431,6 +15505,7 @@ sr_site_months_since_contact_marius_hills = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_marius_hills = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_marius_hills divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15441,6 +15516,7 @@ sr_site_aut_pressure_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_charter_marius_hills } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_marius_hills multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_marius_hills = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15491,6 +15567,7 @@ sr_site_months_since_contact_daedalus = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_daedalus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_daedalus divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15501,6 +15578,7 @@ sr_site_aut_pressure_daedalus = {
 	if = { limit = { has_global_variable = sr_site_charter_daedalus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_daedalus multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_daedalus = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
@@ -15551,6 +15629,7 @@ sr_site_months_since_contact_imbrium = {
 	min = 0
 }
 # Every term but settling: where autonomy heads (colony management design § 4.2).
+# Nothing under sr_free_colony_minimum people: autonomy only settles there.
 sr_site_aut_pressure_imbrium = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_imbrium divide = 10000 multiply = sr_aut_per_10k_people }
@@ -15561,6 +15640,7 @@ sr_site_aut_pressure_imbrium = {
 	if = { limit = { has_global_variable = sr_site_charter_imbrium } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 	add = { value = sr_site_admin_staffed_imbrium multiply = sr_aut_per_admin_level }
+	if = { limit = { NOT = { sr_site_peopled_imbrium = yes } } value = 0 }
 }
 # The month's drift: the pressure less settling, a share of the autonomy itself, so
 # autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).

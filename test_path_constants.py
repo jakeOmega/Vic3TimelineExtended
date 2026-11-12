@@ -217,5 +217,96 @@ class RefreshTest(unittest.TestCase):
         self.assertEqual(pc.mod_path, str(REPO_ROOT))
 
 
+class DigestVersionKeyTest(unittest.TestCase):
+    """#332: Modding-Digests publishes open betas as `1.14-openbeta` and
+    `1.14.5-openbeta`; a key of `()` for those dropped them from the resolver."""
+
+    # Oldest first: an open beta sorts after every earlier release and just
+    # before the release of its own version.
+    ORDERED = (
+        "1.9.8", "1.13.9", "1.13.11",
+        "1.14-openbeta", "1.14.0", "1.14.1-openbeta", "1.14.1",
+        "1.14.4-openbeta", "1.14.5-openbeta", "1.14.5", "1.15.0",
+    )
+
+    def test_each_name_shape_has_a_key(self):
+        for name in self.ORDERED:
+            with self.subTest(name=name):
+                self.assertTrue(pc._semver_key(name))
+
+    def test_order(self):
+        keys = [pc._semver_key(name) for name in self.ORDERED]
+        for older, newer, a, b in zip(self.ORDERED, self.ORDERED[1:], keys, keys[1:]):
+            with self.subTest(older=older, newer=newer):
+                self.assertLess(a, b)
+        self.assertEqual(sorted(reversed(self.ORDERED), key=pc._semver_key),
+                         list(self.ORDERED))
+
+    def test_a_two_part_release_is_its_dot_zero(self):
+        self.assertEqual(pc._semver_key("1.14"), pc._semver_key("1.14.0"))
+        self.assertLess(pc._semver_key("1.14-openbeta"), pc._semver_key("1.14"))
+
+    def test_names_that_are_no_version_have_no_key(self):
+        for name in ("script", "documentation", "README.md", ".gitignore", ".git",
+                     "1.x", "1..2", "1.14-", "-openbeta", "1.14openbeta",
+                     "v1.14.0", "1.14.0 copy", ""):
+            with self.subTest(name=name):
+                self.assertEqual(pc._semver_key(name), ())
+
+
+class DigestDocsResolverTest(unittest.TestCase):
+    """`vanilla_snapshot_docs_path_default` is the newest digest folder that
+    holds a `docs/modifiers.log`, open betas included (#332)."""
+
+    def _resolve(self, *folders: str, without_logs=()) -> str | None:
+        """The resolved docs dir, as a path relative to the digests root."""
+        with tempfile.TemporaryDirectory() as tmp:
+            digests = Path(tmp) / "Modding-Digests"
+            digests.mkdir()
+            for name in folders:
+                docs = digests / name / "docs"
+                docs.mkdir(parents=True)
+                if name not in without_logs:
+                    (docs / "modifiers.log").write_text("")
+            (digests / "README.md").write_text("")
+            with isolated({"VIC3_MODDING_DIGESTS_REPO": str(digests)}):
+                found = pc.vanilla_snapshot_docs_path_default
+            return os.path.relpath(found, digests) if found else None
+
+    def test_an_open_beta_newer_than_every_release_is_picked(self):
+        # The issue's machine: 1.13.11 was resolved with this folder on disk.
+        self.assertEqual(self._resolve("1.13.9", "1.13.11", "1.14-openbeta"),
+                         os.path.join("1.14-openbeta", "docs"))
+
+    def test_the_release_beats_its_own_open_beta(self):
+        self.assertEqual(self._resolve("1.13.11", "1.14-openbeta", "1.14.0"),
+                         os.path.join("1.14.0", "docs"))
+        self.assertEqual(self._resolve("1.14.5-openbeta", "1.14.5"),
+                         os.path.join("1.14.5", "docs"))
+
+    def test_a_later_open_beta_beats_an_earlier_release(self):
+        # What Modding-Digests held for 1.14: open betas only.
+        self.assertEqual(
+            self._resolve("1.13.11", "1.14.1-openbeta", "1.14.4-openbeta",
+                          "1.14.5-openbeta", "script", "documentation"),
+            os.path.join("1.14.5-openbeta", "docs"),
+        )
+        self.assertEqual(self._resolve("1.14.0", "1.14.4-openbeta"),
+                         os.path.join("1.14.4-openbeta", "docs"))
+
+    def test_numeric_order_not_string_order(self):
+        self.assertEqual(self._resolve("1.13.9", "1.13.11", "1.9.8"),
+                         os.path.join("1.13.11", "docs"))
+
+    def test_a_folder_without_the_logs_is_passed_over(self):
+        self.assertEqual(
+            self._resolve("1.13.11", "1.14-openbeta", without_logs=("1.14-openbeta",)),
+            os.path.join("1.13.11", "docs"),
+        )
+
+    def test_no_version_folder_resolves_to_none(self):
+        self.assertIsNone(self._resolve("script", "documentation"))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable, Optional
@@ -187,15 +188,27 @@ def refresh(name: str):
     return _lazy(name)
 
 
+# A Modding-Digests version folder: `1.13.11`, or a pre-release such as
+# `1.14-openbeta` / `1.14.5-openbeta` (dotted integers, then `-<tag>`).
+_DIGEST_VERSION_RE = re.compile(r"(\d+(?:\.\d+)*)(-[A-Za-z][A-Za-z0-9._-]*)?")
+
+
 def _semver_key(name: str) -> tuple:
-    """Sort key for digest version dirs (e.g. '1.13.4' → (1, 13, 4))."""
-    parts = []
-    for piece in name.split("."):
-        try:
-            parts.append(int(piece))
-        except ValueError:
-            return ()
-    return tuple(parts)
+    """Sort key for a digest version folder; `()` when the name is no version.
+
+    `((major, minor, patch, ...), is_release)`: the numbers, padded to three,
+    then 0 for a pre-release folder and 1 for a release, so an open beta sorts
+    after every earlier release and just before its own:
+    `1.13.11` < `1.14-openbeta` < `1.14.0` < `1.14.4` < `1.14.5-openbeta` <
+    `1.14.5`. The Modding-Digests repository publishes open betas under such
+    names, some versions only so (1.14.x); reading them as "not a version"
+    pinned the engine docs to the last numeric release (#332)."""
+    m = _DIGEST_VERSION_RE.fullmatch(name)
+    if not m:
+        return ()
+    numbers = [int(piece) for piece in m.group(1).split(".")]
+    numbers += [0] * (3 - len(numbers))
+    return (tuple(numbers), 0 if m.group(2) else 1)
 
 
 def _derive_digest_docs_path() -> Optional[str]:

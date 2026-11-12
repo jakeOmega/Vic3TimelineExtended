@@ -27,15 +27,13 @@ sys.path.insert(0, str(REPO))
 import pm_balance_lib as lib  # noqa: E402
 
 PM_DIR = REPO / lib.PM_SUBDIR
-PM_FILES = lib.PM_FILES
 
 
 def main() -> int:
     rows = []
-    for fname in PM_FILES:
+    pm_files = lib.pm_file_names(REPO)
+    for fname in pm_files:
         path = PM_DIR / fname
-        if not path.exists():
-            continue
         for pm_id, body in lib.iter_pms(path):
             costs = lib.parse_cost_comments(body)
             flag = lib.classify_pm(body, costs)
@@ -58,7 +56,7 @@ def main() -> int:
                 "flag": flag,
             })
 
-    print(f"# PM balance audit — {len(rows)} PMs across {len(PM_FILES)} files\n")
+    print(f"# PM balance audit — {len(rows)} PMs across {len(pm_files)} files\n")
 
     by_file = {}
     for r in rows:

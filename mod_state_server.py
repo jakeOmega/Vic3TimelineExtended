@@ -1905,6 +1905,45 @@ def _compute_version_status(repo_head: Optional[dict] = None) -> dict:
         "mismatch": _versions_mismatch(live_version, clone_version, docs_version),
     }
 
+
+def _version_mismatch_warnings() -> list[dict]:
+    """A one-entry reload-warning list when `_compute_version_status` reports a
+    mismatch, else [].
+
+    The same finding as the `[VERSION MISMATCH]` startup log line and /status
+    `versions`, in the `warnings` array of every POST /reload (#332): the
+    startup log is not re-read mid-session, and a stale engine-docs baseline
+    makes every engine-doc-backed validation quietly wrong. A cross-check that
+    crashes is reported the same way, never raised into the reload."""
+    try:
+        status = _compute_version_status()
+        if not status.get("mismatch"):
+            return []
+        docs_dir, _label = _engine_docs_source()
+    except Exception as e:  # noqa: BLE001
+        return [_failure_warning("version_mismatch",
+                                 "mod_state_server._compute_version_status", e)]
+    return [{
+        "label": "version_mismatch",
+        "detail": (
+            "vanilla versions disagree: "
+            f"live_game={status.get('live_game')} "
+            f"vanilla_clone_head={status.get('vanilla_clone_head')} "
+            f"engine_docs_source={status.get('engine_docs_source')} "
+            f"({status.get('engine_docs_source_label')}, {docs_dir}). "
+            "Engine-doc-backed checks (/modifier-search, /engine-docs/origin, "
+            "the effect/trigger and modifier audits) judge the mod by the "
+            "engine-docs version. Refresh whichever is stale; GET /status "
+            "`versions` has the same fields."
+        ),
+        "live_game": status.get("live_game"),
+        "vanilla_clone_head": status.get("vanilla_clone_head"),
+        "engine_docs_source": status.get("engine_docs_source"),
+        "engine_docs_source_label": status.get("engine_docs_source_label"),
+        "engine_docs_dir": docs_dir,
+    }]
+
+
 def _parse_effects_triggers_log(filepath: str) -> list[dict]:
     """Parse effects.log / triggers.log format:
     ## name
@@ -3891,8 +3930,8 @@ def _engine_docs_render_blockers(
     render_all rewrites the ~30k committed lines of engine reference from
     whatever parsed. With a log missing (no game install, or a fresh machine's
     digest snapshot not cloned yet), that is mod-only content. With a snapshot
-    older than the one the files came from (the digest resolver skips open-beta
-    versions, #332), it is a silent downgrade. With one newer than both the
+    older than the one the files came from (a stale snapshot pin, or a digest
+    clone not pulled), it is a silent downgrade. With one newer than both the
     vanilla_parsed snapshot and the installed game (the digest publishes a
     patch before the game updates), the audits would judge the mod by names the
     game doesn't have yet. Either way the audits that read those files change
@@ -3970,6 +4009,11 @@ def _load_engine_docs():
       - "vanilla" when read from the vanilla snapshot
       - "unknown" when read from the fallback runtime path (we can't tell)
       - "mod"     after the mod-source-derived union below
+
+    Returns render_all's {filename: size} for the docs/engine/ reference files
+    it wrote, or None when they were left alone (`_engine_docs_warnings` says
+    why) or the render crashed (logged). `python3 engine_docs_render.py` reads
+    it; the server's own callers don't.
     """
     global engine_docs, engine_docs_sources, engine_docs_source_label, _engine_docs_warnings
     engine_docs = {}
@@ -4043,6 +4087,7 @@ def _load_engine_docs():
 
     # Regenerate the engine-doc reference files in docs/engine/, unless the
     # parse can't reproduce them (_engine_docs_render_blockers).
+    written = None
     if _engine_docs_warnings:
         logger.warning(f"[engine-docs WARN] {_engine_docs_warnings[0]['detail']}")
     else:
@@ -4092,6 +4137,8 @@ def _load_engine_docs():
         logger.info(f"Wrote error log digest to {doc_path}/engine/error_log_digest.md")
     except Exception as e:
         logger.error(f"Failed to render error log digest: {e}\n{traceback.format_exc()}")
+
+    return written
 
 
 def _load_dev_reference_docs():
@@ -5880,7 +5927,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # A failed engine-docs load or validation pass used to be
                     # logged and dropped; report it in the same `warnings`
                     # array the full reload uses. (#242)
-                    warnings = _reload_engine_only()
+                    warnings = _reload_engine_only() + _version_mismatch_warnings()
                     _record_reload_warnings(flags, warnings)
                     body = {"status": "engine-only reload complete"}
                     if warnings:
@@ -5908,6 +5955,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     warnings = (
                         list(_vanilla_source_warnings)
                         + list(_engine_docs_warnings)
+                        + _version_mismatch_warnings()
                         + list(_post_load_warnings)
                         + _collect_registry_warnings()
                     )

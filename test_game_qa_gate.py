@@ -452,6 +452,28 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((code, out["held"]), (0, False))
         self.assertEqual(self.tree(), before)
 
+    def test_a_file_the_game_wrote_again_with_the_same_bytes_gets_its_time_back(self):
+        # #1588: the game writes pdx_settings.json again at launch, byte for byte (here, a file this folder has).
+        # Nothing is put back, and the folder still ends exactly as the snapshot found it, times included; the
+        # reply says which time moved.
+        before = self.tree()
+
+        def the_run():
+            path = self.user / "continue_game.json"
+            path.write_bytes(path.read_bytes())
+            when = time.time() + 0.5                    # later than the snapshot's, whatever the clock's grain
+            os.utime(path, (when, when))
+
+        snap_id = self.launched_run(the_run)
+        self.assertNotEqual(self.tree(), before)
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["restored"], out["retimed"]), (0, False, [], ["continue_game.json"]))
+        self.assertEqual(self.tree(), before)
+        self.assertEqual(snapshot.journal(self.the_snapshot())[-1]["retimed"], ["continue_game.json"])
+        again, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, again["held"]), (0, False))
+        self.assertNotIn("retimed", again)              # nothing moved: the key is there only when a time was set
+
     def test_restore_writes_no_time_into_the_journal(self):
         taken, _ = self.run_cli("snapshot")
         (self.user / "continue_game.json").write_text("{}")
