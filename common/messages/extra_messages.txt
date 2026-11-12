@@ -63,42 +63,7 @@ industrial_nuke_succeeds_defender = {
 	color = bad
 }
 
-industrial_nuke_fails_attacker = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = bad
-}
-
-industrial_nuke_fails_defender = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = good
-}
-
 tactical_nuke_succeeds_attacker = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = good
-}
-
-tactical_nuke_succeeds_defender = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = bad
-}
-
-tactical_nuke_fails_attacker = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = bad
-}
-
-tactical_nuke_fails_defender = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/military.dds"
 	notification_type = feed

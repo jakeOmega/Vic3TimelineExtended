@@ -3821,6 +3821,16 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         self.t = strip_comments(read(TRIGGERS))
         self.nt = strip_comments(read(NUKE_TRIGGERS))
 
+    def test_one_untriggered_default(self):
+        # #806: C (a programme country's "stay the course") and D both held
+        # default_option, and nothing says which of two valid defaults the
+        # engine takes. D, open to everyone, is now the only one.
+        event = block(self.ev, "nuclear_weapon_events.18")
+        self.assertEqual(event.count("default_option = yes"), 1)
+        d = option_body(self.ev, "nuclear_weapon_events.18.opt_d")
+        self.assertIn("default_option = yes", d)
+        self.assertNotRegex(d, r"(?m)^\t\ttrigger = \{")
+
     def test_accommodation_pays_with_the_opponents(self):
         e = option_body(self.ev, "nuclear_weapon_events.18.opt_e")
         self.assertIn("value = 25", e)
