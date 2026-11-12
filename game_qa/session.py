@@ -4,7 +4,8 @@ The session never touches the owner's files itself. The protective verbs of part
 `run_cli` it is given (`python3 -m game_qa <argv>`, returning its JSON reply and exit code): `held`, `snapshot`,
 `launch`, `restore`, and `watch` as the subprocess `spawn_watch` starts. A refusal or a hold from any of them is
 reported, never worked around. Under the user-data folder the session itself writes only the overlay mod
-(`overlay.build` and `overlay.remove`) and, through `fixture`, the `te_qa_fixture_*` saves.
+(`overlay.build` and `overlay.remove`) and, through `fixture`, the `te_qa_fixture_*` saves. Under the backup root
+it writes the run's folder and, through `selfchecks`, the lines kept with a fixture (`fixtures/<key>/`).
 
     start   overlay left?  held?  overlay  fixture  snapshot  launch  watch at once  adopt  window  logs  console
             tag  debugger
@@ -54,6 +55,7 @@ from game_qa.gate import UNKNOWN_START, ProcId
 from game_qa.helper import Helper, HelperError
 from game_qa.logtail import GAP_MARKER, LogFollower, Pending, parse, pending_events
 from game_qa.report import Report, stamp, utc_now
+from game_qa import selfchecks          # the mod's TE_SELF_CHECK lines: kept with the fixture, reported for a run
 
 COUNTRY_CLICK = (0.492, 0.656)          # the country the camera is on, tagged or not (3840x2160, spec § 12.1 A2)
 START_CLICK = (0.9216, 0.975)           # the country-select screen's Start button
@@ -241,6 +243,7 @@ class Session:
         self._adopted = False
         self._debug_log: LogFollower | None = None       # the session's own followers: Console consumes its own
         self._error_log: LogFollower | None = None
+        self._logs_closed = False           # stop took the logs' last lines: `logs/` may be the owner's again
         self._console: Console | None = None
         self._relay_open = False
         self._debugger: Debugger | None = None
@@ -330,6 +333,7 @@ class Session:
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
         save, made, pruned = self._the_save(save, permission, playset, busy)
         self._save = save
+        self._drop_fixture_lines()
         self._check_abort()
         try:
             reply, code = self._cli(["snapshot", "--save", save])
@@ -471,7 +475,8 @@ class Session:
         try:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
-                                clock=self._clock, started=self._journaled_proc)
+                                clock=self._clock, started=self._journaled_proc,
+                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap))
         except fixture.FixtureError as e:
             up = e.code == fixture.GAME_MAY_BE_UP
             self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
@@ -493,6 +498,29 @@ class Session:
             self._record("fixture_prune", outcome="failed", detail=str(e))
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
+
+    def _keep_fixture_lines(self, key: str, snap: str) -> None:
+        """Once the fixture is made: keep its run's TE_SELF_CHECK and TE_MONUMENTS lines under the backup root
+        (`selfchecks.keep_fixture_lines`). Never raises: a fixture whose lines could not be kept is still the
+        fixture, and the step says what went wrong."""
+        try:
+            record = selfchecks.keep_fixture_lines(self._paths.backup_root, key, snap)
+        except Exception as e:
+            self._record("fixture_lines", outcome="failed", snapshot=snap, detail=_describe(e))
+            return
+        self._record("fixture_lines", outcome="kept", **record)
+
+    def _drop_fixture_lines(self) -> None:
+        """The kept lines go with their fixture: those of a fixture `fixture.prune` has just removed, or that is
+        gone from `save games/` for any other reason. Only files under `<backup root>/fixtures/` are removed.
+        Never raises: lines left behind are swept at the next start."""
+        try:
+            dropped = selfchecks.drop_orphans(self._paths.backup_root, self._paths.user_data)
+        except Exception as e:
+            self._record("fixture_lines", outcome="drop_failed", detail=_describe(e))
+            return
+        if dropped:
+            self._record("fixture_lines", outcome="dropped", keys=dropped)
 
     def _take_fixture_run(self, snap: str | None, may_be_up: bool, proc: ProcId | None, watch: Any,
                           restore: tuple[dict, int] | None, calls: list[tuple[str, dict | None, int | None]]) -> None:
@@ -825,6 +853,31 @@ class Session:
                 "maybe_stopped": self._maybe_stopped, "left_running": self._left_running,
                 "watch_respawns": self._watch_respawns}
 
+    def self_checks(self) -> dict:
+        """The verdicts of the mod's TE_SELF_CHECK lines in this run so far, the fixture's run's included
+        (`selfchecks.of_run`, read from the run folder's copy of the log and the lines kept with the fixture).
+
+        The game's log is pushed out first, since the game writes it in blocks: an empty read fires the read
+        event, whose padding flushes what was logged before it, and its date line is waited for as the proof.
+        `flushed` says whether that worked. When it did not (the game has ended, is not in front, or the session
+        is stopped), `not_flushed` says why, the lines already in the game's log are taken without typing
+        anything, and the verdicts are still given: a line logged since the last verb may then be missing."""
+        if self._snapshot is None or self._report is None:
+            raise SessionError("not_started", "this session has no run folder yet: start() has not got that far")
+        with self._step("selfchecks") as out:
+            found: dict = {"live": True, "flushed": False}
+            try:
+                self._require_game()
+                self._date()
+                found["flushed"] = True
+            except (SessionError, ConsoleError, DebuggerError, HelperError) as e:
+                found["not_flushed"] = {"refused": _code_of(e), "detail": str(e)}
+                self._take_log_lines()
+            found.update(selfchecks.of_run(self._paths.backup_root, self._snapshot))
+            out.update(flushed=found["flushed"], not_flushed=found.get("not_flushed"), counts=found["counts"],
+                       broken=found["broken"])
+        return found
+
     # ---- stop
 
     def stop(self) -> dict:
@@ -891,6 +944,8 @@ class Session:
         if self._launched and not self._game_ended:
             self._end_game(notes)
         left_up = self._launched and not self._game_ended
+        # The last lines the game wrote, for the report's self-checks: before any restore, never after one.
+        self._take_log_lines(last=not left_up)
         restore, outcome = None, None
         if left_up:
             outcome = "game_left_up"
@@ -1127,12 +1182,17 @@ class Session:
         if self._report is None:
             return None
         try:
+            try:
+                found = selfchecks.of_run(self._paths.backup_root, self._snapshot)
+            except Exception as e:              # the summary is written all the same, with a note
+                found = None
+                notes.append("the run's self-check lines could not be read: %s" % _describe(e))
             self._record("stop", outcome=outcome or "not_run", overlay_removed=removed, overlay_kept=kept,
                          notes=list(notes))
             path = self._report.close({"restore": restore, "outcome": outcome, "permission": self._permission,
                                        "snapshot": self._snapshot, "save": self._save, "country": self._country,
                                        "overlay_removed": removed, "overlay_kept": kept, "notes": notes,
-                                       "next": next_step})
+                                       "next": next_step, "self_checks": found})
             return str(path)
         except Exception as e:
             notes.append("writing the report failed: %s" % e)
@@ -1269,6 +1329,18 @@ class Session:
         if self._errors_seen is not None:
             self._errors_seen.extend(errors)
         return lines
+
+    def _take_log_lines(self, last: bool = False) -> None:
+        """Copy what the game's logs hold by now into the run folder, typing nothing; never raises. With `last`
+        (stop, about to restore) it is the last time: once a restore has been tried, `logs/` may hold the
+        owner's logs again, and the follower would take them for a rotation of the run's."""
+        if self._logs_closed or self._debug_log is None or self._error_log is None:
+            return
+        self._logs_closed = last
+        try:
+            self._new_lines()
+        except Exception:
+            pass                                # the copy is a convenience
 
     def _copy(self, name: str, lines: list[str]) -> None:
         if not lines or self._report is None:

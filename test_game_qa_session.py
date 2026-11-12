@@ -2602,5 +2602,220 @@ class MinorsTest(SessionTestCase):
         self.assertEqual(self.game.clicks, [])
 
 
+class SelfChecksTest(SessionTestCase):
+    """#1601: the mod's TE_SELF_CHECK lines are kept with the fixture, read by a verb, and listed at the stop."""
+
+    @staticmethod
+    def logged(*messages: str) -> list[str]:
+        return ["[18:27:01][jomini_effect_impl.cpp:459]: " + message for message in messages]
+
+    def game_logs(self, *messages: str) -> None:
+        """The game logs these and has not written them to its file yet."""
+        for message in messages:
+            self.game._logged("jomini_effect_impl.cpp:459", message)
+
+    def game_wrote(self, *messages: str) -> None:
+        with open(self.user / "logs" / "debug.log", "a", encoding="utf-8", newline="\n") as f:
+            f.write("".join(line + "\n" for line in self.logged(*messages)))
+
+    def run_log(self) -> str:
+        path = self.paths.run_root / SNAP / "debug.log"
+        return path.read_text("utf-8") if path.exists() else ""
+
+    def steps(self, verb: str) -> list[dict]:
+        lines = (self.paths.run_root / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [step for step in map(json.loads, lines) if step["verb"] == verb]
+
+    def a_fixture_run(self, *messages: str) -> str:
+        """The fixture is missing, and the run that makes it logs `messages`: a real snapshot of the folder,
+        whose `restore` leaves the run's log in its `run_logs/`, as part 1's does. Its id."""
+        self.fixture_save.unlink()
+        snap = snapshot.take(self.user, self.paths.backup_root)
+        self.fixture_snaps = {snap.id}
+        self.cli.queue("snapshot", {"id": snap.id}, 0)
+
+        def restore(argv):
+            if argv[:2] == ["restore", snap.id] and messages:
+                (snap.dir / "run_logs").mkdir()
+                (snap.dir / "run_logs" / "debug.log").write_text(
+                    "".join(line + "\n" for line in self.logged(*messages)), encoding="utf-8")
+        self.cli.on_call = restore
+        return snap.id
+
+    SETUP_LINES = ("common/on_actions/te_decentralized_laws_selfcheck_on_actions.txt:46: TE_SELF_CHECK OK "
+                   "decentralized_law_baseline (the history baseline reached them)",
+                   "common/scripted_effects/gm_landmark_effects.txt:145: TE_MONUMENTS: landmark arc_de_triomphe "
+                   "placed in Ile-de-France for FRA: 15 levels recorded",
+                   "common/scripted_effects/te_unemployment_effects.txt:110: TE_SELF_CHECK BROKEN "
+                   "unemployment_share_read state=Corsica conv=0.000 exact=0.038")
+
+    def test_making_the_fixture_keeps_its_runs_lines_beside_it_under_the_backup_root(self):
+        fixture_snap = self.a_fixture_run(*self.SETUP_LINES)
+        reply = self.start()
+        self.assertTrue(reply["fixture_made"])
+        folder = self.paths.backup_root / "fixtures" / self.key
+        self.assertEqual((folder / "lines.log").read_text("utf-8").splitlines(), self.logged(*self.SETUP_LINES))
+        record = json.loads((folder / "record.json").read_text("utf-8"))
+        self.assertEqual((record["snapshot"], record["lines"], record["self_checks"]), (fixture_snap, 3, 2))
+        (step,) = self.steps("fixture_lines")
+        self.assertEqual((step["outcome"], step["snapshot"], step["lines"]), ("kept", fixture_snap, 3))
+        # nothing of it is in the game's folder
+        self.assertEqual([p for p in self.user.rglob("*") if p.name in ("lines.log", "record.json", "fixtures")], [])
+        # and the session's verdicts include them, though no session ever logs them again
+        found = self.session.self_checks()
+        self.assertEqual(found["broken"], ["unemployment_share_read"])
+        self.assertEqual([(c["name"], c["verdict"], c["source"]) for c in found["checks"]], [
+            ("unemployment_share_read", "BROKEN", "fixture"), ("decentralized_law_baseline", "OK", "fixture")])
+        self.assertEqual((found["fixture"]["snapshot"], found["fixture"]["lines"]), (fixture_snap, 3))
+
+    def test_a_fixture_whose_lines_cannot_be_kept_is_still_the_fixture(self):
+        self.a_fixture_run()                    # its restore leaves no run_logs
+        reply = self.start()
+        self.assertTrue(reply["fixture_made"])
+        (step,) = self.steps("fixture_lines")
+        self.assertEqual(step["outcome"], "failed")
+        self.assertIn("debug.log", step["detail"])
+        self.assertFalse((self.paths.backup_root / "fixtures").exists())
+        found = self.session.self_checks()
+        self.assertEqual((found["fixture"]["key"], found["fixture"]["kept"]), (self.key, False))
+
+    def test_the_kept_lines_go_with_the_fixture_prune_removes(self):
+        saves = self.user / "save games"
+        for age, key in ((300, "000000000001"), (200, "000000000002")):
+            path = saves / ("te_qa_fixture_%s.v3" % key)
+            path.write_bytes(b"an older fixture")
+            os.utime(path, (path.stat().st_atime - age, path.stat().st_mtime - age))
+            kept = self.paths.backup_root / "fixtures" / key
+            kept.mkdir(parents=True)
+            (kept / "lines.log").write_text("x\n", encoding="utf-8")
+            (kept / "record.json").write_text("{}\n", encoding="utf-8")
+        self.a_fixture_run(*self.SETUP_LINES)
+        reply = self.start()
+        self.assertEqual(reply["fixtures_pruned"], ["te_qa_fixture_000000000001.v3"])
+        self.assertEqual(sorted(p.name for p in (self.paths.backup_root / "fixtures").iterdir()),
+                         sorted(["000000000002", self.key]))
+        self.assertEqual([(s["outcome"], s.get("keys")) for s in self.steps("fixture_lines")],
+                         [("kept", None), ("dropped", ["000000000001"])])
+
+    def test_a_start_on_a_fixture_already_there_keeps_its_lines(self):
+        kept = self.paths.backup_root / "fixtures" / self.key
+        kept.mkdir(parents=True)
+        (kept / "lines.log").write_text("".join(line + "\n" for line in self.logged(*self.SETUP_LINES)), "utf-8")
+        (kept / "record.json").write_text(json.dumps({"key": self.key, "snapshot": FIXTURE_SNAP, "lines": 3,
+                                                      "self_checks": 2, "kept_at": "2026-11-10T14:56:00Z"}), "utf-8")
+        self.started()
+        self.assertEqual(self.steps("fixture_lines"), [])
+        found = self.session.self_checks()
+        self.assertEqual(found["broken"], ["unemployment_share_read"])
+        self.assertEqual(found["fixture"]["snapshot"], FIXTURE_SNAP)
+
+    def test_the_verb_pushes_the_games_log_out_before_it_reads(self):
+        self.started()
+        self.game_logs("common/scripted_effects/cultural_hegemony_effects.txt:162: TE_SELF_CHECK OK ch_board_rows "
+                       "ranked=70 date=January 3, 1836",
+                       "events/te_debug_demog_events.txt:1298: TE_SELF_CHECK BROKEN delayed_state_event (a state "
+                       "event triggered with days = 7 never ran) date=January 17, 1836")
+        self.assertNotIn("TE_SELF_CHECK", (self.user / "logs" / "debug.log").read_text("utf-8"))
+        typed = len(self.typed())
+        found = self.session.self_checks()
+        self.assertEqual(self.typed()[typed:], ["event " + overlay.READ_EVENT])       # the flush: one empty read
+        self.assertEqual((found["live"], found["flushed"], found["run"]), (True, True, SNAP))
+        self.assertNotIn("not_flushed", found)
+        self.assertEqual(found["broken"], ["delayed_state_event"])
+        self.assertEqual([(c["name"], c["verdict"], c["source"]) for c in found["checks"]],
+                         [("delayed_state_event", "BROKEN", "session"), ("ch_board_rows", "OK", "session")])
+        self.assertEqual(found["checks"][0]["line"],
+                         "events/te_debug_demog_events.txt:1298: TE_SELF_CHECK BROKEN delayed_state_event (a state "
+                         "event triggered with days = 7 never ran) date=January 17, 1836")
+        self.assertEqual(found["session"]["file"], str(self.paths.run_root / SNAP / "debug.log"))
+        self.assertIn("TE_SELF_CHECK OK ch_board_rows", self.run_log())
+        (step,) = self.steps("selfchecks")
+        self.assertEqual((step["outcome"], step["flushed"], step["broken"]), ("ok", True, ["delayed_state_event"]))
+        self.assertFalse(self.game.adapter.stopped)             # the read's stop was released
+
+    def test_when_the_log_cannot_be_flushed_what_is_written_is_still_read_and_nothing_is_typed(self):
+        self.started()
+        self.game_wrote("common/a.txt:1: TE_SELF_CHECK OK written_before_the_game_went")
+        self.game.exited = True                 # watch records the exit: no key may go out any more
+        typed = len(self.typed())
+        found = self.session.self_checks()
+        self.assertEqual(self.typed()[typed:], [])
+        self.assertEqual((found["live"], found["flushed"]), (True, False))
+        self.assertEqual(found["not_flushed"]["refused"], "watch_ended")
+        self.assertEqual([c["name"] for c in found["checks"]], ["written_before_the_game_went"])
+
+    def test_before_a_run_folder_exists_the_verb_is_refused(self):
+        self.assertEqual(self.session_error(self.session.self_checks).code, "not_started")
+
+    def test_stop_lists_the_verdicts_in_the_summary_with_every_broken_first(self):
+        self.started()
+        self.session.read([])                   # a verb's flush brings the first two
+        self.game_wrote("common/a.txt:1: TE_SELF_CHECK OK first_ok n=1",
+                        "common/a.txt:2: TE_SELF_CHECK START waiting (the verdict follows in a week)",
+                        "common/a.txt:3: TE_SELF_CHECK BROKEN the_broken_one | read=0.000")
+        reply = self.session.stop()             # no verb since: the stop takes the log's last lines itself
+        self.assertEqual(reply["outcome"], "restored")
+        text = Path(reply["report"]).read_text("utf-8")
+        self.assertTrue(text.startswith("Restore: restored"), text[:80])       # the owner's files still come first
+        section = text.split("## Self-checks")[1].split("| # | Verb | Outcome |")[0]
+        self.assertIn("1 BROKEN, 1 START (no verdict was logged after it), 1 OK.", section)
+        rows = [line for line in section.splitlines() if line.startswith("| ") and "Check" not in line]
+        self.assertEqual([row.split(" | ")[0:3] for row in rows], [
+            ["| the_broken_one", "BROKEN", "session"], ["| waiting", "START", "session"],
+            ["| first_ok", "OK", "session"]])
+        self.assertIn("TE_SELF_CHECK BROKEN the_broken_one \\| read=0.000 |", rows[0])     # a pipe cannot end the cell
+        self.assertIn("- Session: 3 TE_SELF_CHECK lines in %s." % (self.paths.run_root / SNAP / "debug.log"), section)
+        self.assertIn("- The run that made the fixture: no lines (no lines were kept for te_qa_fixture_", section)
+        self.assertNotIn("self-check lines could not be read", text)
+
+    def test_the_owners_logs_are_never_read_as_the_runs_once_a_restore_was_tried(self):
+        self.started()
+        self.game_wrote("common/a.txt:1: TE_SELF_CHECK OK the_runs_own")
+        log = self.user / "logs" / "debug.log"
+
+        def restore(argv):                      # part 1's restore renames the owner's log back over the run's
+            if argv[0] == "restore":
+                temp = log.with_name("debug.log.te_qa_restore.tmp")
+                temp.write_text("".join(line + "\n" for line in self.logged(
+                    "common/a.txt:9: TE_SELF_CHECK BROKEN from_the_owners_own_game")), encoding="utf-8")
+                os.replace(temp, log)
+        self.cli.on_call = restore
+        self.cli.queue("restore", {"held": False, "refused": "error", "detail": "a stored copy is damaged"}, 2)
+        first = self.session.stop()
+        self.assertEqual(first["outcome"], "refused")
+        second = self.session.stop()            # run again: it must not take the logs a second time
+        for text in (self.run_log(), Path(second["report"]).read_text("utf-8")):
+            self.assertIn("the_runs_own", text)
+            self.assertNotIn("from_the_owners_own_game", text)
+        found = self.session.self_checks()      # nor does the verb, after the stop
+        self.assertEqual((found["flushed"], found["not_flushed"]["refused"]), (False, "stopped"))
+        self.assertEqual([c["name"] for c in found["checks"]], ["the_runs_own"])
+        self.assertNotIn("from_the_owners_own_game", self.run_log())
+
+    def test_a_game_left_up_keeps_its_log_open_for_the_stop_that_ends_it(self):
+        self.started()
+        self.game.kill = mock.Mock(side_effect=HelperError("kill_failed", "access denied"))
+        self.game_wrote("common/a.txt:1: TE_SELF_CHECK OK before_the_first_stop")
+        self.assertEqual(self.session.stop()["outcome"], "game_left_up")
+        self.assertEqual(self.cli.verbs, [])                    # nothing was restored beside the game
+        self.game_wrote("common/a.txt:2: TE_SELF_CHECK OK logged_while_left_up")
+        del self.game.kill
+        second = self.session.stop()
+        self.assertEqual(second["outcome"], "restored")
+        text = Path(second["report"]).read_text("utf-8")
+        self.assertIn("before_the_first_stop", text)
+        self.assertIn("logged_while_left_up", text)
+
+    def test_summary_lines_that_cannot_be_read_are_a_note_not_a_lost_summary(self):
+        self.started()
+        with mock.patch.object(session.selfchecks, "of_run", side_effect=OSError("the drive went away")):
+            reply = self.session.stop()
+        self.assertEqual(reply["outcome"], "restored")
+        self.assertTrue(any("self-check lines could not be read" in note for note in reply["notes"]))
+        text = Path(reply["report"]).read_text("utf-8")
+        self.assertTrue(text.startswith("Restore: restored"))
+        self.assertNotIn("## Self-checks", text)
+
+
 if __name__ == "__main__":
     unittest.main()

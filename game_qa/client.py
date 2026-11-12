@@ -19,6 +19,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa stop                  # end the game, put the owner's files back, end the server (it
                                              # serves on when the stop can be run again: `stop` again)
     python3 -m game_qa status                # the server and its session
+    python3 -m game_qa selfchecks [--run ID] # the verdicts of the mod's TE_SELF_CHECK lines in a run (the newest
+                                             # by default), the fixture's run's included; needs no session
     python3 -m game_qa doctor                # is this machine ready for a session? (starts nothing)
     python3 -m game_qa remove-overlay        # the overlay folder an earlier run left, once nothing can use it
 
@@ -47,6 +49,7 @@ from typing import Any
 from game_qa import gate, overlay, restore, server, session, snapshot
 from game_qa.helper import ProcessHelper, to_windows_path
 from game_qa.report import utc_now
+from game_qa import selfchecks
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS = "runs"
@@ -289,6 +292,32 @@ def _text(path: Path) -> str | None:
 def _tail(log: Path, size: int = 800) -> str:
     text = (_text(log) or "").strip()
     return ("...%s" % text[-size:] if len(text) > size else text) or "(the log %s is empty)" % log
+
+
+# ---- selfchecks
+
+def self_checks(backup_root: Path, run: str | None = None) -> tuple[dict, int]:
+    """`selfchecks [--run ID]`: the verdicts of the mod's TE_SELF_CHECK lines in a run, the newest session's by
+    default, with those of the run that made its fixture (`selfchecks.of_run`). It reads files under the backup
+    root only, so it needs no session and works after `stop`.
+
+    When session.json names a session whose run this is (`live`), the session is asked first, since it pushes
+    the game's log out before it reads (`Session.self_checks`; `flushed` says whether that worked). If it does
+    not answer, the files are read as they are and `not_flushed` carries its refusal. Exit 0 whenever the run
+    was read, whatever the verdicts: `broken` names the checks that logged BROKEN. A run that is not there is
+    refused `no_run`."""
+    backup_root = Path(backup_root)
+    try:
+        run_id = selfchecks.resolve_run(backup_root, run)
+    except selfchecks.SelfCheckError as e:
+        return {"refused": e.code, "detail": e.detail}, 2
+    info = server.read_info(backup_root)
+    if info is None or info.get("snapshot") != run_id:
+        return {"live": False, **selfchecks.of_run(backup_root, run_id)}, 0
+    reply, code = call(backup_root, "selfchecks")
+    if code == 0:
+        return reply, 0
+    return {"live": True, "flushed": False, "not_flushed": reply, **selfchecks.of_run(backup_root, run_id)}, 0
 
 
 # ---- doctor
@@ -705,6 +734,10 @@ def cmd_status(args) -> tuple[dict, int]:
     return call(_backup_root(), "status", timeout=STATUS_TIMEOUT_S)
 
 
+def cmd_selfchecks(args) -> tuple[dict, int]:
+    return self_checks(_backup_root(), args.run_id)
+
+
 def cmd_doctor(args) -> tuple[dict, int]:
     return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1))
 
@@ -780,6 +813,12 @@ def add_verbs(sub) -> None:
                                                                   "once no server, game, unfinished run or held "
                                                                   "playset can still use it")):
         sub.add_parser(name, help=text).set_defaults(run=fn)
+    p = sub.add_parser("selfchecks", help="the verdicts of the mod's TE_SELF_CHECK lines in a run, every BROKEN "
+                                          "first, with those of the run that made its fixture; a live session's "
+                                          "log is flushed first")
+    p.add_argument("--run", dest="run_id", metavar="ID",       # not `run`: that is the verb's function
+                   help="a run's snapshot id (default: the newest session's run)")
+    p.set_defaults(run=cmd_selfchecks)
     p = sub.add_parser("session-serve", help="the session server (`start` runs it detached; not for direct use)")
     p.add_argument("--port", type=int, default=server.PORT)
     p.set_defaults(run=cmd_session_serve)

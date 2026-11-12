@@ -1,8 +1,9 @@
 """The run folder's record: one JSON line per step, and a summary a session reads first.
 
     <backup root>/runs/<snapshot id>/steps.jsonl   one object per step: its UTC time, the verb, what it found
-    <backup root>/runs/<snapshot id>/summary.md    the restore's outcome first, then the run, then a table of the steps,
-                                                   then one table per try-event check, a row per option
+    <backup root>/runs/<snapshot id>/summary.md    the restore's outcome first, then the run, then the mod's
+                                                   self-check verdicts (every BROKEN first), then a table of the
+                                                   steps, then one table per try-event check, a row per option
 
 Nothing here touches the owner's files: the folder is the harness's own, under the backup root.
 """
@@ -26,6 +27,24 @@ def stamp(when: dt.datetime) -> str:
     return when.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def read_steps(run_dir: Path) -> list[dict]:
+    """The steps recorded in a run folder, in order; a line that does not parse is skipped, and a folder with no
+    step record has none. Reads only: unlike `Report`, it never makes the folder."""
+    try:
+        text = (Path(run_dir) / STEPS_FILE).read_text("utf-8")
+    except (FileNotFoundError, NotADirectoryError):
+        return []
+    out = []
+    for line in text.splitlines():
+        try:
+            record = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(record, dict):
+            out.append(record)
+    return out
+
+
 class Report:
     def __init__(self, run_dir: Path, now: Callable[[], dt.datetime] = utc_now) -> None:
         self.dir = Path(run_dir)
@@ -43,19 +62,7 @@ class Report:
 
     def steps(self) -> list[dict]:
         """The steps recorded so far, in order; a line that does not parse is skipped."""
-        try:
-            text = self.steps_path.read_text("utf-8")
-        except FileNotFoundError:
-            return []
-        out = []
-        for line in text.splitlines():
-            try:
-                record = json.loads(line)
-            except ValueError:
-                continue
-            if isinstance(record, dict):
-                out.append(record)
-        return out
+        return read_steps(self.dir)
 
     def close(self, summary: Mapping) -> Path:
         """Write summary.md and return its path. Its first line is the restore's outcome, from `summary["outcome"]`
@@ -64,8 +71,9 @@ class Report:
         whether the owner's files are back; when the stop's reply says what to do next (`summary["next"]`), that
         line says it, word for word. Then the permission, the snapshot, the save, the country, whether the
         overlay was removed (and, when `summary["overlay_kept"]` gives a reason, why it was kept) and any notes;
-        then one table row per step (verb, outcome); then, for each `try_event` step, its options' table and
-        whether every option fired and was picked."""
+        then, when `summary["self_checks"]` holds them (`selfchecks.of_run`), the run's TE_SELF_CHECK verdicts,
+        every BROKEN first; then one table row per step (verb, outcome); then, for each `try_event` step, its
+        options' table and whether every option fired and was picked."""
         lines = [_restore_line(summary.get("restore"), summary.get("outcome"), summary.get("snapshot"),
                                summary.get("next")), ""]
         for label, key in (("Permission", "permission"), ("Snapshot", "snapshot"), ("Save", "save"),
@@ -76,6 +84,8 @@ class Report:
             lines.append("- Overlay kept: " + _text(summary["overlay_kept"]))
         for note in summary.get("notes") or ():
             lines.append("- Note: " + _text(note))
+        if isinstance(summary.get("self_checks"), Mapping):
+            lines += ["", *_self_checks(summary["self_checks"])]
         steps = self.steps()
         lines += ["", "| # | Verb | Outcome |", "|---|---|---|"]
         for n, record in enumerate(steps, start=1):
@@ -129,6 +139,45 @@ def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | 
     reason = restore.get("reason")
     return "Restore: restored (%d files put back, %d removed)%s." % (
         len(restored), len(removed), "; " + _text(reason) if reason else "")
+
+
+_VERDICT_ORDER = ("BROKEN", "START", "OK")        # as selfchecks orders the checks: every BROKEN first
+
+
+def _self_checks(found: Mapping) -> list[str]:
+    """The mod's TE_SELF_CHECK lines of the run (`selfchecks.of_run`): how many checks ended on each verdict,
+    where the lines were read from (the session's copy of the log, and the lines kept from the run that made
+    the fixture), then a row per check in the order given, which puts every BROKEN first."""
+    checks = [check for check in found.get("checks") or () if isinstance(check, Mapping)]
+    counts = found.get("counts") if isinstance(found.get("counts"), Mapping) else {}
+    session = found.get("session") if isinstance(found.get("session"), Mapping) else {}
+    fixture = found.get("fixture") if isinstance(found.get("fixture"), Mapping) else {}
+    out = ["## Self-checks", ""]
+    if checks:
+        order = [v for v in _VERDICT_ORDER if counts.get(v)] + sorted(v for v in counts if v not in _VERDICT_ORDER)
+        out.append(", ".join("%s %s%s" % (counts[v], _text(v), " (no verdict was logged after it)" if v == "START"
+                                          else "") for v in order) + ".")
+    else:
+        out.append("No TE_SELF_CHECK line was read.")
+    gaps = session.get("gaps")
+    out += ["", "- Session: %s TE_SELF_CHECK lines in %s%s. The game writes its log in blocks, so a line logged "
+                "after the last verb may be missing."
+                % (_text(session.get("lines", 0)), _text(session.get("file") or "(no log)"),
+                   "; lines were lost to the log's rotation (%s times), and a verdict logged then is not here"
+                   % _text(gaps) if gaps else "")]
+    if fixture.get("kept"):
+        out.append("- The run that made the fixture: %s lines kept from snapshot %s, %s of them TE_SELF_CHECK (%s)."
+                   % (_text(fixture.get("lines")), _text(fixture.get("snapshot")), _text(fixture.get("self_checks")),
+                      _text(fixture.get("file"))))
+    else:
+        out.append("- The run that made the fixture: no lines (%s)."
+                   % _text(fixture.get("detail") or "none were kept").rstrip("."))
+    if checks:
+        out += ["", "| Check | Verdict | From | Line |", "|---|---|---|---|"]
+        for check in checks:
+            out.append("| %s | %s | %s | %s |" % (_cell(check.get("name")), _cell(check.get("verdict")),
+                                                  _cell(check.get("source")), _cell(check.get("line"))))
+    return out
 
 
 def _try_event_table(record: Mapping) -> list[str]:

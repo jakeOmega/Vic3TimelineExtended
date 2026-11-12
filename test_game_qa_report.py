@@ -100,6 +100,60 @@ class ReportTest(unittest.TestCase):
                                          next="`python3 -m game_qa stop` again")).read_text("utf-8")
         self.assertIn("Next: `python3 -m game_qa stop` again", refused.split("\n")[0])
 
+    def test_the_self_checks_are_listed_before_the_steps_in_the_order_given(self):
+        # #1601: `selfchecks.of_run` orders them, every BROKEN first; the summary keeps that order
+        found = {"run": "20261110T150000Z", "broken": ["unemployment_share_read"],
+                 "counts": {"OK": 2, "BROKEN": 1, "START": 1, "ODD": 1},
+                 "checks": [
+                     {"name": "unemployment_share_read", "verdict": "BROKEN", "source": "fixture",
+                      "line": "common/scripted_effects/te_unemployment_effects.txt:110: TE_SELF_CHECK BROKEN "
+                              "unemployment_share_read state=Corsica | read=0.000"},
+                     {"name": "cm_census_yearly", "verdict": "START", "source": "session",
+                      "line": "common/x.txt:1: TE_SELF_CHECK START cm_census_yearly"},
+                     {"name": "primate_state_flag", "verdict": "OK", "source": "fixture",
+                      "line": "common/x.txt:2: TE_SELF_CHECK OK primate_state_flag tag=GBR"},
+                     {"name": "ch_board_rows", "verdict": "OK", "source": "session",
+                      "line": "common/x.txt:3: TE_SELF_CHECK OK ch_board_rows ranked=70"},
+                     {"name": "odd_one", "verdict": "ODD", "source": "session", "line": "TE_SELF_CHECK ODD odd_one"}],
+                 "fixture": {"key": "0123456789ab", "kept": True, "file": "/backups/fixtures/0123456789ab/lines.log",
+                             "snapshot": "20261110T145500Z", "kept_at": "2026-11-10T14:56:00Z", "lines": 114,
+                             "self_checks": 11},
+                 "session": {"file": "/backups/runs/20261110T150000Z/debug.log", "lines": 4, "gaps": 2}}
+        self.report.step("start", outcome="ok")
+        restored = {"restored": ["a"], "removed": [], "held": False, "reason": ""}
+        text = self.report.close(dict(self.summary(restored, "restored"), self_checks=found)).read_text("utf-8")
+        self.assertTrue(text.startswith("Restore: restored"), text[:60])
+        head, section = text.split("## Self-checks")
+        section, steps = section.split("| # | Verb | Outcome |")
+        self.assertIn("- Country: FRA", head)
+        self.assertIn("| 1 | start | ok |", steps)
+        self.assertIn("1 BROKEN, 1 START (no verdict was logged after it), 2 OK, 1 ODD.", section)
+        self.assertIn("- Session: 4 TE_SELF_CHECK lines in /backups/runs/20261110T150000Z/debug.log; lines were lost "
+                      "to the log's rotation (2 times), and a verdict logged then is not here.", section)
+        self.assertIn("- The run that made the fixture: 114 lines kept from snapshot 20261110T145500Z, 11 of them "
+                      "TE_SELF_CHECK (/backups/fixtures/0123456789ab/lines.log).", section)
+        rows = [line for line in section.splitlines() if line.startswith("| ")][1:]
+        self.assertEqual([row.split(" | ")[:3] for row in rows], [
+            ["| unemployment_share_read", "BROKEN", "fixture"], ["| cm_census_yearly", "START", "session"],
+            ["| primate_state_flag", "OK", "fixture"], ["| ch_board_rows", "OK", "session"],
+            ["| odd_one", "ODD", "session"]])
+        self.assertTrue(rows[0].endswith("state=Corsica \\| read=0.000 |"), rows[0])
+
+    def test_a_run_with_no_self_check_line_says_so_and_one_never_read_has_no_section(self):
+        found = {"run": "20261110T150000Z", "broken": [], "counts": {}, "checks": [],
+                 "fixture": {"key": None, "kept": False, "detail": "the game ran on a save of the owner's, not on "
+                                                                   "the fixture"},
+                 "session": {"file": "/backups/runs/20261110T150000Z/debug.log", "lines": 0}}
+        text = self.report.close(dict(self.summary(None, None), self_checks=found)).read_text("utf-8")
+        section = text.split("## Self-checks")[1]
+        self.assertIn("No TE_SELF_CHECK line was read.", section)
+        self.assertIn("- The run that made the fixture: no lines (the game ran on a save of the owner's, not on the "
+                      "fixture).", section)
+        self.assertNotIn("| Check |", section)
+        for absent in (None, "not a mapping"):
+            text = self.report.close(dict(self.summary(None, None), self_checks=absent)).read_text("utf-8")
+            self.assertNotIn("Self-checks", text)
+
     def test_a_try_event_step_is_a_table_of_its_options(self):
         rows = [
             {"index": 0, "fired": True, "fired_by": "console", "pending_options": 2,
