@@ -699,29 +699,33 @@ treaty_article_events.8 = {
 	option = {
 		name = treaty_article_events.8.a
 		default_option = yes
-		# Accept the freeze as the price of peace
+		# Accept the freeze as the price of peace: the question is settled, so
+		# the tension passes sooner, and the two groups that wanted the freeze
+		# ended (the description names them) are told no.
 		add_modifier = {
 			name = nuclear_freeze_tension_modifier
-			days = normal_modifier_time
+			days = short_modifier_time
 			is_decaying = yes
 		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
 		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
 	option = {
 		name = treaty_article_events.8.b
-		# Promise the hawks that this is only temporary
+		# Promise the hawks that this is only temporary: they are not angered,
+		# but the question stays open and the tension lasts (#1617: the
+		# promise used to anger them, and "the price of peace" did not).
 		add_modifier = {
 			name = nuclear_freeze_tension_modifier
-			days = short_modifier_time
+			days = normal_modifier_time
 			is_decaying = yes
 		}
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 }

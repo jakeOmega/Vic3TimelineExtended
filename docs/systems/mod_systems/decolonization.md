@@ -334,7 +334,7 @@ An empire never condemns and mostly supports: 0 : 1 : 10-13 (Support 91-93%), or
 - **Purpose:** When a country gains independence, presents a choice about foreign-owned assets.
 - **Trigger:** `on_become_independent` on_action (any subject that becomes independent), and `apply_decolonization_path` a week after it forms a country (release decisions and collapses; the new country was never a subject, so `on_become_independent` may not reach it).
 - **Condition:** the decolonization game rule, the world's decolonization era (`decol_era_begun`), not a subject, no nationalization in the last 20 years (`nationalization_cooldown_var`, which also stops a double firing), and at least one foreign minor power or above owns >5% of the new country's GDP.
-- **Branching description:** Uses `first_valid` + `triggered_desc` — violent version if `is_at_war = yes`, peaceful version otherwise.
+- **Branching description:** Uses `first_valid` + `triggered_desc` — violent version if `is_at_war = yes`, peaceful version otherwise. It names `scope:biggest_foreign_owner`, the largest foreign owner by band (`decol_save_biggest_foreign_owner`, `decolonization.txt`: over 50%, 35%, 25%, 15%, 10%, then the trigger's 5%). `gdp_ownership_ratio` is a trigger with no value form, so `ordered_country` cannot rank by it; a random owner was named before #1617.
 - **Options:**
   - **(A) Full nationalization:** Seize all foreign assets. +10 infamy, -60 relations with all foreign owners, prestige boost, throughput penalty. Loyalists among lower strata, trade unions approve, industrialists oppose.
   - **(B) Selective nationalization:** Strategic sectors only. +5 infamy, -30 relations, moderate prestige boost.

@@ -747,7 +747,30 @@ nuclear_program_display_aid_bonus = {
 # unverified; these thin wrappers are the documented way to show the number.
 nuclear_program_display_attack_rating = {
 	value = modifier:country_nuclear_weapon_attack_success_add
+	# The +1 nuclear_strike_attack_rating adds for an arsenal held without
+	# the technology, shown only to a country that holds one (the panel is
+	# also a non-nuclear country's). te_nuke_attack_held_arsenal is its line
+	# in the tooltip.
+	if = {
+		limit = { nd_holds_arsenal_without_technology = yes }
+		add = 1
+	}
 	multiply = 100
+}
+
+# Country scope, the striker's: what its delivery adds to a strike's odds. The
+# one read of country_nuclear_weapon_attack_success_add the strike formulas
+# share (nuclear_strike_success_chance, nuclear_strike_success_fraction_here,
+# nd_ai_capital_hit_share). It is the modifier, plus the nuclear_weapons
+# technology's own +1 for a country that launches without that technology
+# (nd_lacks_weapon_technology, which says why the stockpile is not tested).
+# For a country that has the technology it is the modifier unchanged.
+nuclear_strike_attack_rating = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	if = {
+		limit = { nd_lacks_weapon_technology = yes }
+		add = 1
+	}
 }
 
 # Country scope. The defence is state-level; the capital's value is the
@@ -816,7 +839,7 @@ nuclear_tactical_strike_civilian_killed_population = {
 # swapped and scope:target_country is the striker, so a country-side read
 # there subtracted the retaliator's own defence.
 nuclear_strike_success_chance = {
-	value = modifier:country_nuclear_weapon_attack_success_add
+	value = nuclear_strike_attack_rating
 	scope:target_state = {
 		subtract = modifier:state_nuclear_weapon_defense_chance_add
 	}
@@ -1865,14 +1888,14 @@ nuclear_strike_success_fraction_here = {
 			exists = scope:target_country
 			owner ?= scope:attacking_country
 		}
-		add = scope:target_country.modifier:country_nuclear_weapon_attack_success_add
+		add = scope:target_country.nuclear_strike_attack_rating
 	}
 	else_if = {
 		limit = { exists = scope:attacking_country }
-		add = scope:attacking_country.modifier:country_nuclear_weapon_attack_success_add
+		add = scope:attacking_country.nuclear_strike_attack_rating
 	}
 	else = {
-		add = root.modifier:country_nuclear_weapon_attack_success_add
+		add = root.nuclear_strike_attack_rating
 	}
 	subtract = modifier:state_nuclear_weapon_defense_chance_add
 	min = 0.05

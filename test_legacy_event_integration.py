@@ -222,11 +222,15 @@ class LegacyIntegrationTests(unittest.TestCase):
                 country = self.country(rules={'space_race_enabled'}, techs=set(),
                                        vars={'sr_colony_count': count, **({'ste_event_18_fired': 1} if number == 19 and charter else {})})
                 self.assertEqual(self.evaluate(gate, country, country), expected)
-            # Buildings alone are sufficient only with the system off.
+            # Buildings alone are sufficient only with the system off, and
+            # then .19 still waits for .18 to have fired (#1616).
             for enabled in (True, False):
-                country = self.country(rules={'space_race_enabled' if enabled else 'space_race_disabled'},
-                                       techs={'space_colonization'}, building=True)
-                self.assertEqual(self.evaluate(gate, country, country), not enabled)
+                for founded in (True, False):
+                    country = self.country(rules={'space_race_enabled' if enabled else 'space_race_disabled'},
+                                           techs={'space_colonization'}, building=True,
+                                           vars={'ste_event_18_fired': 1} if founded else {})
+                    expected = not enabled and founded == (number == 19)
+                    self.assertEqual(self.evaluate(gate, country, country), expected)
 
     def test_colony_dispatch_backfills_saves_without_racing_establishment(self):
         actions = parse('common/on_actions/extra_on_actions.txt')
@@ -245,6 +249,45 @@ class LegacyIntegrationTests(unittest.TestCase):
             })
             self.assertEqual(self.evaluate(first, country, country), expected_first)
             self.assertEqual(self.evaluate(governance, country, country), expected_governance)
+        # With the system off the pool offers the petition only once .18 has
+        # fired, as the event's own trigger does (#1616).
+        for founded in (True, False):
+            country = self.country(rules={'space_race_disabled'}, techs={'space_colonization'},
+                                   building=True, vars={'ste_event_18_fired': 1} if founded else {})
+            self.assertEqual(self.evaluate(first, country, country), not founded)
+            self.assertEqual(self.evaluate(governance, country, country), founded)
+
+    def test_womens_work_events_reach_every_law_women_work_under(self):
+        # The law tests are by name, so a law left out never sees the event:
+        # until #1616 neither fired under Women's Suffrage. Protected Class
+        # stays out (a refusal "for no reason but their sex" is unlawful there),
+        # and .2's wage gap needs women in paid work, so not Women Own Property.
+        def laws(block):
+            found = set()
+            for key, _, value in entries(block):
+                if key == 'has_law':
+                    found.add(value.removeprefix('law_type:'))
+                elif key in ('AND', 'OR') and isinstance(value, dict):
+                    found |= laws(value)
+            return found
+
+        actions = parse('common/on_actions/extra_on_actions.txt')
+        expected = {
+            1: {'law_women_own_property', 'law_women_in_the_workplace', 'law_womens_suffrage'},
+            2: {'law_women_in_the_workplace', 'law_womens_suffrage'},
+        }
+        for number, want in expected.items():
+            event = f'society_technology_events.{number}'
+            with self.subTest(event=event):
+                self.assertEqual(laws(body(body(self.society, event), 'trigger')), want)
+                # The pool asks the same laws, or it rolls an event that can't fire.
+                self.assertEqual(laws(find_dispatch(actions, event)), want)
+        # "Progress waits for no one" is the AI's lean under the two laws that
+        # already admit women to work.
+        option = next(value for key, _, value in entries(body(self.society, 'society_technology_events.1'))
+                      if key == 'option' and body(value, 'name') == 'society_technology_events.1.a')
+        lean = body(body(body(option, 'ai_chance'), 'modifier'), 'trigger')
+        self.assertEqual(laws(lean), {'law_women_in_the_workplace', 'law_womens_suffrage'})
 
     def test_bank_runs_never_initialize_a_disabled_banking_system(self):
         effect = body(self.effects, 'banking_enactment_run_shock')

@@ -281,7 +281,8 @@ religious_revival_events.2 = {
 		}
 	}
 
-	# Tax megachurches like businesses
+	# No favors for the broadcasters. The option levies no tax (its old name
+	# promised one, #1615): it angers the Devout and pleases academics.
 	option = {
 		name = religious_revival_events.2.c
 		ai_chance = {
