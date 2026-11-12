@@ -596,6 +596,132 @@ class RetimeTests(RestoreTestCase):
         again = snapshot.take(self.user, self.backups, now=self.next_time())
         self.assertNotEqual(again.files["pdx_settings.json"].sha256, snap.files["pdx_settings.json"].sha256)
 
+    # Once the snapshot's time is on a file it stays only if the file was then read whole and hashed to the
+    # snapshot's bytes. Every other way out takes the time off again, and when that fails too the snapshot is held.
+
+    def failing_hash(self, path, error):
+        """`restore._sha256`, raising `error` for `path` once the snapshot's time has been set on it."""
+        real = restore._sha256
+        entry_time = {}
+
+        def sha(target):
+            if Path(target) == path and path.stat().st_mtime_ns == entry_time.get("ns"):
+                raise error
+            return real(target)
+        return sha, entry_time
+
+    def test_a_file_that_cannot_be_read_back_does_not_keep_the_snapshots_time(self):
+        # A writer came between the last look and the time being set (other bytes, the same size) and still has
+        # the file open, so the hash that would have caught it fails. The time must not stay the snapshot's.
+        snap, path, owners = self.rewritten()
+        mine = bytes(b ^ 1 for b in path.read_bytes())
+        sha, entry_time = self.failing_hash(path, PermissionError(13, "sharing violation"))
+        entry_time["ns"] = owners
+        real = os.utime
+        wrote = []
+
+        def utime(target, *args, **kwargs):
+            if Path(target) == path and kwargs.get("ns") is not None and not wrote:
+                path.write_bytes(mine)
+                wrote.append(1)
+            return real(target, *args, **kwargs)
+        began = time.time()
+        with mock.patch.object(restore.os, "utime", utime), mock.patch.object(restore, "_sha256", sha):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.read_bytes(), mine)
+        self.assertNotEqual(path.stat().st_mtime_ns, owners)
+        self.assertGreaterEqual(path.stat().st_mtime, began - 5)
+        self.assertEqual(events(snap)[-1], "restored")
+        # so the next snapshot reads the file, and a later run's restore leaves the newer bytes alone
+        again = snapshot.take(self.user, self.backups, now=self.next_time())
+        self.assertEqual(again.files["pdx_settings.json"].sha256, hashlib.sha256(mine).hexdigest())
+        later = NOW + timedelta(days=1)
+        snapshot.record(again, "started", now=later, pid=1, created="x")
+        finish(again, at=later + timedelta(seconds=60))
+        self.assertEqual(restore.restore(again, self.user, other_game_running=False).restored, [])
+        self.assertEqual(path.read_bytes(), mine)
+
+    def test_a_file_that_cannot_be_read_back_is_not_listed_though_its_bytes_are_the_snapshots(self):
+        snap, path, owners = self.rewritten()
+        before = path.read_bytes()
+        sha, entry_time = self.failing_hash(path, OSError(5, "Input/output error"))
+        entry_time["ns"] = owners
+        with mock.patch.object(restore, "_sha256", sha):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.read_bytes(), before)
+        self.assertNotEqual(path.stat().st_mtime_ns, owners)        # not vouched for: not the snapshot's time
+        self.assertNotIn("retimed", snapshot.journal(snap)[-1])
+
+    def test_an_interrupt_while_the_file_is_read_back_takes_the_time_off_first(self):
+        snap, path, owners = self.rewritten()
+        sha, entry_time = self.failing_hash(path, KeyboardInterrupt())
+        entry_time["ns"] = owners
+        with mock.patch.object(restore, "_sha256", sha), self.assertRaises(KeyboardInterrupt):
+            restore.restore(snap, self.user, other_game_running=False)
+        self.assertNotEqual(path.stat().st_mtime_ns, owners)
+        self.assertNotIn("restored", events(snap))                  # nothing was recorded: the restore runs again
+
+    def unsettable(self, path, owners, refuse):
+        """`os.utime` that sets the snapshot's time on `path` and then fails for it as `refuse(kwargs)` says."""
+        real = os.utime
+
+        def utime(target, *args, **kwargs):
+            if Path(target) == path and path.stat().st_mtime_ns == owners and refuse(kwargs):
+                raise PermissionError(13, "sharing violation")
+            return real(target, *args, **kwargs)
+        return utime
+
+    def test_when_the_present_time_cannot_be_set_the_file_gets_back_the_time_it_had(self):
+        snap, path, owners = self.rewritten()
+        written = path.stat().st_mtime_ns
+        sha, entry_time = self.failing_hash(path, PermissionError(13, "sharing violation"))
+        entry_time["ns"] = owners
+        utime = self.unsettable(path, owners, lambda kwargs: kwargs.get("ns") is None)
+        with mock.patch.object(restore.os, "utime", utime), mock.patch.object(restore, "_sha256", sha):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.stat().st_mtime_ns, written)
+
+    def test_a_time_that_can_be_neither_vouched_for_nor_taken_back_holds_the_snapshot_and_names_the_file(self):
+        # The last resort: the snapshot's time is on the file, the file cannot be read, and no other time will
+        # go on. That is never a clean restore: the snapshot is held, with the file, for the owner to look at.
+        log = self.user / "logs/error.log"                          # a second file the run wrote again
+        set_mtime(log, NOW, -86400)
+        log_owners = log.stat().st_mtime_ns
+        snap, path, owners = self.rewritten()
+        set_mtime(log, NOW, 20)
+        (self.user / "console_history.txt").write_text("event x\n")
+        set_mtime(self.user / "console_history.txt", NOW, 10)
+        sha, entry_time = self.failing_hash(path, PermissionError(13, "sharing violation"))
+        entry_time["ns"] = owners
+        utime = self.unsettable(path, owners, lambda kwargs: True)
+        with mock.patch.object(restore.os, "utime", utime), mock.patch.object(restore, "_sha256", sha):
+            out = restore.restore(snap, self.user, other_game_running=False, now=NOW)
+        self.assertEqual((out.held, out.reason), (True, "retime_unverified"))
+        self.assertEqual((out.restored, out.removed, out.retimed), (["console_history.txt"], [], ["logs/error.log"]))
+        self.assertEqual(path.stat().st_mtime_ns, owners)           # what the hold is for
+        self.assertEqual(snapshot.journal(snap)[-1], {
+            "event": "held", "at": "2026-11-10T12:00:00Z", "reason": "retime_unverified",
+            "files": ["pdx_settings.json"], "restored": ["console_history.txt"], "retimed": ["logs/error.log"]})
+        self.assertNotIn("restored", events(snap))
+        self.assertEqual([s.id for s in restore.held(self.backups)], [snap.id])
+        self.assertEqual(log.stat().st_mtime_ns, log_owners)        # done before it (in name order), and kept
+
+    def test_a_file_gone_once_its_time_was_set_is_nothing_to_hold_for(self):
+        snap, path, owners = self.rewritten()
+        real = restore._sha256
+
+        def sha(target):
+            if Path(target) == path and path.stat().st_mtime_ns == owners:
+                path.unlink()
+            return real(target)
+        with mock.patch.object(restore, "_sha256", sha):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertFalse(path.exists())
+
     def test_a_link_where_the_file_was_is_never_retimed_nor_is_what_it_points_to(self):
         snap, path, owners = self.rewritten()
         elsewhere = self.tmp / "elsewhere.json"

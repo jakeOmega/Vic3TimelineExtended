@@ -379,8 +379,8 @@ def _prove_ours(backend, state: State, pid: int, **fields) -> None:
 
 def _op_focus(req, backend, state):
     pid = _pid(req)
-    _prove_ours(backend, state, pid)    # before the window is looked up: an ALT tap lands in whatever is in front
     win = _window(backend, pid)
+    _prove_ours(backend, state, pid)    # after the lookup by id, so it vouches for the window found; before any tap
     if win is None:
         return {"foreground": False}
     _observe(backend, state)            # before our own ALT tap lands in the system's input time
@@ -419,12 +419,17 @@ def _steps(req: dict) -> list[tuple[str, object]]:
 
 
 def _front_window(backend, state: State, pid: int, **fields) -> dict:
-    """The game's window, which must be in front, once the process is proved to be the one recorded
-    (`_prove_ours`); then look at the system's latest input, as close to the send as possible, so a person's key
-    in the gap is seen and not written over by ours. Called before every step, character and press."""
-    _prove_ours(backend, state, pid, **fields)
+    """The game's window, which must be in front and its process the one recorded (`_prove_ours`); then look at
+    the system's latest input, as close to the send as possible, so a person's key in the gap is seen and not
+    written over by ours. Called before every step, character and press.
+
+    The process is proved after the window has been looked up by its id and the foreground read, so the proof
+    vouches for the window about to take the input as well; and it is raised first, so a process that is gone is
+    `not_ours`, which no caller waits out, and never `not_foreground`."""
     win = _window(backend, pid)
-    if win is None or backend.foreground_hwnd() != win["hwnd"]:
+    in_front = win is not None and backend.foreground_hwnd() == win["hwnd"]
+    _prove_ours(backend, state, pid, **fields)
+    if not in_front:
         raise _Refusal("not_foreground", "the game's window is not in front", **fields)
     _observe(backend, state)
     return win

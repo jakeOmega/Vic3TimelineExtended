@@ -378,11 +378,49 @@ class ProcessProofTest(BackendCase):
         self.assertTrue(self.call("keys", pid=7, steps=[{"scan": 1}, {"wait_ms": 5}, {"text": "abc"}, {"scan": 2}])["ok"])
         self.assertEqual(read, [7] * 6)
 
-    def test_the_process_is_proved_before_the_window_is_looked_at(self):
-        # A window that is gone with the process is `not_ours`, which no caller waits out, not `not_foreground`.
+    def test_a_process_gone_with_its_window_is_not_ours_and_never_not_foreground(self):
+        # `not_foreground` is waited out and tried again by the console; `not_ours` is not.
         del self.backend.creation[7]
         self.backend.windows.clear()
         self.assertEqual(self.call("keys", pid=7, steps=[{"scan": 1}])["error"], "not_ours")
+        self.backend.foreground = 999
+        self.assertEqual(self.call("click", pid=7, x=1, y=1)["error"], "not_ours")
+
+    def test_the_process_is_proved_after_its_window_is_found_and_the_foreground_read(self):
+        # The window is looked up by process id, so the proof comes after the lookup and vouches for that window.
+        looks = []
+        window_of, creation_time = self.backend.window_of, self.backend.creation_time
+        self.backend.window_of = lambda pid: looks.append("window") or window_of(pid)
+        self.backend.creation_time = lambda pid: looks.append("created") or creation_time(pid)
+        self.backend.on_foreground_check = lambda: looks.append("front")
+        self.call("keys", pid=7, steps=[{"scan": 1}, {"text": "a"}])
+        self.assertEqual(looks, ["window", "front", "created"] * 2)
+        del looks[:]
+        self.backend.on_foreground_check = None
+        self.backend.foreground = 999
+        self.call("focus", pid=7)
+        self.assertEqual(looks[:2], ["window", "created"])
+
+    def test_a_process_replaced_while_its_window_is_looked_up_gets_nothing(self):
+        # The id changes hands between the proof and the lookup of the window by that id: with the proof made
+        # first, the other program's window, in front, would have passed.
+        def dies():
+            self.backend.creation[7] = fakes.REUSED_CREATED
+        self.backend.on_foreground_check = dies
+        self.assertEqual(self.call("keys", pid=7, steps=[{"scan": 0x1C}])["error"], "not_ours")
+        self.assertEqual(self.call("click", pid=7, x=5, y=5)["error"], "not_ours")
+        self.assertEqual((self.backend.sent, self.backend.mouse), ([], []))
+        self.backend.on_foreground_check = None
+        self.backend.creation[7] = fakes.GAME_CREATED
+        self.backend.foreground = 999
+        window_of = self.backend.window_of
+
+        def looked_up(pid):
+            dies()
+            return window_of(pid)
+        self.backend.window_of = looked_up
+        self.assertEqual(self.call("focus", pid=7)["error"], "not_ours")
+        self.assertEqual((self.backend.set_foreground_calls, self.backend.alt_taps), (0, 0))
 
     def test_focus_taps_no_alt_for_a_replaced_process(self):
         self.backend.foreground = 999                   # the tap would land in that window
