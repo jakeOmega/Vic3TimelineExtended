@@ -90,8 +90,12 @@ Blind spots
   `prev.var:X` from inside an iterator, or a state's `owner` that is the root
   country, reads as another scope (missed, not falsely flagged).
 * A `limit` whose truth depends on anything but a `has_variable` of a
-  variable nothing keeps is taken to pass; every branch of an `if` chain,
-  every `random_list` branch and every `switch` case is walked.
+  scratch name is taken to pass; every branch of an `if` chain, every
+  `random_list` branch and every `switch` case is walked.
+* "Removed later in the same body" looks inside one body only: a pulse that
+  sets `x` in effect A and removes it in B, which the pulse calls after A,
+  reads as keeping `x`. So a button that calls A, reads `x` and calls B is
+  not flagged. The same holds for deciding what is scratch.
 * A name written to the same object by unrelated code that keeps it is
   enough to clear a read, whatever the scope: a scratch name shared by a
   pulse that keeps it hides a real flag.
