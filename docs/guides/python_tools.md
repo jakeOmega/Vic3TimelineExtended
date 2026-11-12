@@ -188,6 +188,7 @@ Defensive pattern: make the regex match BOTH the legacy untagged form and the ta
 | `mod_state.py` | `ModState` class wrapping the parser. Loads all entity types and localization; `parser_for(entity_type)` builds each type's parser, with `script_values=True` for the types in `SCRIPT_VALUE_TYPES`. Provides `localize()`, `unlocalize()`, `search_localization()`, `build_reverse_localization()`. Module-level `parse_loc_line()` / `iter_loc_lines()` are the single loc-line rule (escape-aware — a value containing `\"` reads back whole, backslashes kept verbatim; the `l_english:` header, comment lines and unquoted lines are skipped) shared with the server's `_parse_loc_lines`. | Library (import) |
 | `mod_state_server.py` | Persistent HTTP server (port 8950) serving parsed mod data as JSON. See **Mod State Server** section. | `.venv/bin/python mod_state_server.py` |
 | `mod_state_client.py` | CLI client for the mod state server. | `python mod_state_client.py <command> [args]` |
+| `scripts/query.py` | Answers `modifier-search`, `localize`, `references`, `script-args` and `modifier-grants` with no server running (#1538): it builds `cli_mod_state()` (vanilla from the game or `vanilla_parsed/`, about 10 s; the two file-scan lookups skip it) and sends the request through the server's own `ModStateHandler.get_result` and `encode_response`, so it prints the endpoint's JSON byte for byte (a result JSON can't encode is the server's 500 body in both). `name=value` arguments become query parameters. A server already up on :8950 for this checkout answers instead (said on stderr; if it stops answering, the lookup runs offline; `--offline` skips it). Exit 1 on an endpoint error (its body still printed), 2 on bad arguments. Without a game install `modifier-grants` covers the mod only, as the server does there. | `.venv/bin/python scripts/query.py modifier-search goods_output` |
 | `mod_state_script.py` | Generates text reference docs (`docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt`) from parsed mod state. This is also called automatically when the mod state server starts or reloads. | `python mod_state_script.py` |
 
 ### Before you push: `scripts/preflight.py`
@@ -1057,7 +1058,7 @@ python mod_state_client.py modifier-search goods_output
 
 ### AI Agent Workflow
 
-1. **Check server:** Verify with `Invoke-RestMethod http://localhost:8950/status`. If down, start in a background terminal.
+1. **Check server:** Verify with `Invoke-RestMethod http://localhost:8950/status`. If down, start in a background terminal. With no server (a cloud container, a worktree), `scripts/query.py <lookup> <arg>` answers five lookups, `modifier-search`, `localize`, `references`, `script-args` and `modifier-grants`, in about 10 s, printing the endpoint's JSON, so those five need no `git grep` fallback. Vanilla comes from the game where it is installed, else from `vanilla_parsed/`.
 2. **Localize / unlocalize:** `/unlocalize/Monarchy` → `law_monarchy`, `/localize/law_monarchy` → "Monarchy".
 3. **Search first:** When unsure of exact IDs, use `/search?q=...`.
 4. **Prefer structured endpoints** (`/laws`, `/technologies`, `/buildings`) over `/raw`.
