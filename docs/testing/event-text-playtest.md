@@ -21,3 +21,9 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | The gated description | With Universal Basic Income enacted, `event modern_election_events.29` | The description opens "Universal basic income is already law in ..."; without the law, "Universal basic income has become the most argued-over proposal ..." |
 | The live figure | `event modern_election_events.3` with Global Warming on | The description shows the world's temperature anomaly as a number with °C, not `0` or a raw key |
 | The one-line quotation | `event modern_election_events.19` | "The medium is the message." with its attribution beneath |
+
+## Space race landing reports (`space_race_events.3`, `.7`)
+
+| Check | How | Expected |
+|---|---|---|
+| Each option reads as said after the landing | `event space_race_events.7` after choosing each approach in `event space_race_events.83` (and once with none chosen); `event space_race_events.3` with the Sea of Tranquility and far side sites from `.5` | One option, matching the approach or site, in the past or present tense; the two-sentence orbital line fits its button |

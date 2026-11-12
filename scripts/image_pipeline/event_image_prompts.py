@@ -15,7 +15,8 @@ if the new picture has no entry here. An image with no .dds yet is *pending*:
 its events keep interim art until it is generated, and phase 3 then wires them.
 
 A prompt records what was asked for, not what was drawn. Look at a picture
-before reusing it (`contact_sheet.py NAME ...`).
+before reusing it (`contact_sheet.py NAME ...`; add `--window` to see it as
+the event window shows it, with the text panel over the right half).
 
 Usage:
     python event_image_prompts.py              # Print summary stats
@@ -31,6 +32,17 @@ DO:
   - Use period-specific physical props (ledgers, inkwells, gas lamps, microscopes)
   - Specify clear lighting (chiaroscuro, warm lamplight, overcast sky, golden hour)
   - Use simple compositions: 1-3 focal subjects, or a crowd at distance
+  - Put the subject at the left of the frame and say what fills the right
+    ("at the left, a lander descends on its engine flame; the right of the
+    frame is open dust and sky"). The event window lays its text panel over
+    the right half of the picture, so a centered subject is half hidden and
+    one on the right is not seen at all (docs/guides/event_creation_guide.md;
+    owner, 2026-11-11). FLUX may ignore the placement: review every render
+    with `contact_sheet.py --window`, and if the subject sits in the middle
+    or on the right, move it with `reframe_event_image.py` (`--mirror` for a
+    subject on the right, `--shift 0.2` for a centered one) or render again.
+    A picture that will be mirrored must hold nothing that reads wrong
+    reversed, which the rules below about lettering and flags already ask
   - Describe posture and body language instead of facial expressions
   - Use "oil painting" styles — they produce the most consistent results
   - Anchor scenes with concrete architectural details (marble columns, brick walls)
