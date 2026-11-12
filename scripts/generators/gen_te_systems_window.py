@@ -161,10 +161,10 @@ class Tab:
     unlock        the scripted GUI whose IsValid and IsValidTooltip make the
                   grayed tab's checklist
     body          the type the tab's mount instances
+    wide          the wide composer the full-screen mount places (spec § 7:
+                  every tab has one, so the registry takes no tab without)
     layout        the layout block the body declares, which a wide mount
                   overrides (None: the body is the layout)
-    wide          the wide composer the full-screen mount places (every tab has
-                  one; test_te_systems_window.py fails on a tab without)
     tooltip_expr  a tooltip expression replacing the three-branch one
     public        another country's panel may show it (National Info, spec
                   2026-11-02-charts-help-national-info § 6.4): its sections
@@ -194,13 +194,13 @@ class Tab:
     label: str
     tooltip: str
     body: str
+    wide: str
     locked: str | None = None
     met: str = "te_system_tab_met_tt"
     open_: str | None = None
     strip: str | None = None
     unlock: str | None = None
     layout: str | None = None
-    wide: str | None = None
     tooltip_expr: str | None = None
     public: bool = False
     readout: Readout | None = None
@@ -508,7 +508,7 @@ def _content(tab: Tab, wide: bool = False) -> list[str]:
     """What a mount holds: the tab's body, or full screen its wide layout
     (in the body's layout block, so with its gate, its entry and its
     controls, or alone where the body declares none)."""
-    if not wide or tab.wide is None:
+    if not wide:
         return [f"{tab.body} = {{}}"]
     if tab.layout is None:
         return [f"{tab.wide} = {{}}"]
@@ -555,7 +555,7 @@ def tabs_wide() -> list[str]:
     out = ["### The full-screen frame's column: three 520 columns and their 30 px",
            "### gaps wide (spec § 4.3), centered, so the frame scrolls sideways",
            "### below that width. Each tab's mount as narrow, holding its wide",
-           "### layout once the registry names one (its `wide`), else its body.",
+           "### layout (the registry's `wide`).",
            "type te_systems_window_tabs_wide = flowcontainer {",
            '\tname = "te_systems_window_content_wide"',
            "\tparentanchor = hcenter",
@@ -750,6 +750,38 @@ FRAME_CHANGES = [
 ]
 
 
+def _block_end(text: str, open_brace: int, what: str) -> int:
+    """The index of the brace that closes the one at open_brace. A brace in a
+    comment (# to the line's end) or in a quoted string (which ends with its
+    line, as gui_test_helpers._strip_comments reads one) is not counted. A
+    block that never closes raises ValueError, naming `what`."""
+    depth, quoted, i = 0, False, open_brace
+    while i < len(text):
+        ch = text[i]
+        if ch == "\n":
+            quoted = False
+        elif quoted:
+            if ch == "\\":
+                i += 1                      # an escaped character, a quote too
+            elif ch == '"':
+                quoted = False
+        elif ch == '"':
+            quoted = True
+        elif ch == "#":
+            i = text.find("\n", i)         # the comment, up to its line's end
+            if i < 0:
+                break
+            continue
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    raise ValueError(f"{what} is never closed")
+
+
 def fullscreen_frame() -> list[str]:
     """Vanilla's fullscreen_block_window under the mod's name, Back and Close
     clearing the window's open state: vanilla's call the information panel
@@ -759,12 +791,7 @@ def fullscreen_frame() -> list[str]:
     m = re.search(r"^\ttype fullscreen_block_window = widget \{$", text, re.M)
     if not m:
         raise ValueError(f"{VANILLA_FRAMES.name}: no fullscreen_block_window")
-    depth, end = 0, None
-    for i in range(m.end() - 1, len(text)):
-        depth += {"{": 1, "}": -1}.get(text[i], 0)
-        if depth == 0:
-            end = i
-            break
+    end = _block_end(text, m.end() - 1, f"{VANILLA_FRAMES.name}: fullscreen_block_window")
     frame = text[m.start():end + 1]
     for old, new in FRAME_CHANGES:
         if frame.count(old) != 1:
@@ -1084,8 +1111,6 @@ def _validate_ni() -> None:
     for t in TABS:
         if t.public and t.key not in NI_ORDER:
             raise ValueError(f"{t.key} is public: give it a place in NI_ORDER")
-        if t.public and t.wide is None:
-            raise ValueError(f"{t.key} is public: National Info draws its wide layout")
 
 
 def render_ni() -> str:
