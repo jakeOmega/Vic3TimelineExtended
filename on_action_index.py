@@ -41,7 +41,11 @@ from event_context_audit's dispatch graph (mod script only). It follows
 on-actions, scripted effects and events; every other entity the graph knows
 calls the target (a journal entry's pulse, a button, a decision, ...) is
 listed in `not_followed`, so an empty `callers` is not read as "nothing runs
-this".
+this". An effect a caller passes by name (`helper = { EFFECT = name }`, run
+as `$EFFECT$ = yes` inside the helper) is followed through the helper, and
+listed in `passed_as_parameter` either way. A row is the shortest route from
+its on-action call site, not the only one: `guards_complete` is false, with
+`other_routes`, when a link on it has another call site or another way down.
 """
 from __future__ import annotations
 
@@ -309,7 +313,15 @@ class Index:
         if not self.vanilla_indexed:
             out["note"] = VANILLA_NOTE
         if self.shadowed_vanilla_files:
-            out["shadowed_vanilla_files"] = list(self.shadowed_vanilla_files)
+            same_path = ext.LOAD_ORDER_MODEL["same_path"]
+            out["shadowed_vanilla_files"] = {
+                "files": list(self.shadowed_vanilla_files),
+                "rule": "a mod file at a vanilla file's path replaces vanilla's whole file, "
+                        "so these are not read",
+                # "documented": a repo doc says so; not read in game.
+                "rule_status": same_path["status"],
+                "rule_see": f"external_mod_overlap.LOAD_ORDER_MODEL['same_path']; {same_path['see']}",
+            }
         warnings = self.warnings_for(d.file for d in decls)
         if warnings:
             out["warnings"] = warnings
@@ -383,23 +395,67 @@ CALLERS_NOTE = (
     "(an event's immediate, after or option: the hop's path says which). Entities of any "
     "other kind that call the target or a link of such a chain (a journal entry's pulse, a "
     "scripted button, a decision, ...) are not followed: they are in not_followed, so read "
-    "count together with not_followed_count."
+    "count together with not_followed_count. A row is the shortest route from that on-action "
+    "call site, not the only one: where guards_complete is false, a link on it has another "
+    "call site or another way down to the target (other_routes), whose guards may differ."
 )
 
 
+def _hop(kind: str, entity: str, rel: str, line: int, path, guards: str, via: str) -> dict:
+    return {"in": entity, "kind": kind, "file": rel, "line": line, "path": list(path),
+            "guards": guards.strip(), "via": via}
+
+
+def _passed_effects(graph) -> dict:
+    """{scripted effect: [(helper, param, call, run sites)]} for every call
+    that passes the effect's name as an argument (`helper = { EFFECT = name }`).
+    The run sites are the `$EFFECT$ = yes` / `$EFFECT$ = { }` sites inside the
+    helper: with some, the effect runs wherever the helper is called that way.
+    Kept on the graph, which is built once per request."""
+    cached = getattr(graph, "_passed_effects", None)
+    if cached is None:
+        cached = {}
+        for helper, calls in graph.effect_calls.items():
+            if helper not in graph.effect_file:
+                continue
+            for call in calls:
+                for param, value in call[7].items():
+                    if value in graph.effect_file:
+                        runs = [c for c in graph.effect_calls.get(f"${param}$", [])
+                                if c[5] == helper and c[6] == "scripted_effect"]
+                        cached.setdefault(value, []).append((helper, param, call, runs))
+        graph._passed_effects = cached
+    return cached
+
+
 def _incoming(graph, kind: str, name: str):
-    """Every site that reaches the node `(kind, name)`:
-    (caller kind, caller, file, line, path, guards, via)."""
+    """Every site that reaches the node `(kind, name)`, as (hop, inner): the
+    caller's hop, and the hops between it and the node that are not links of
+    their own. `inner` is empty for a plain call. For an effect a caller
+    passes by name to a helper, the caller's hop is its call of the helper
+    (`passes`) and `inner` is the helper's `$PARAM$ = yes` site."""
     if kind == "scripted_effect":
         for rel, line, path, _sw, conds, entity, caller_kind, _params in graph.effect_calls.get(name, []):
-            yield caller_kind, entity, rel, line, list(path), conds.strip(), "effect"
+            yield _hop(caller_kind, entity, rel, line, path, conds, "effect"), []
+        for helper, param, call, runs in _passed_effects(graph).get(name, []):
+            if not runs:
+                continue
+            rel, line, path, _sw, conds, entity, caller_kind, _params = call
+            outer = _hop(caller_kind, entity, rel, line, path, conds, "effect")
+            outer["passes"] = {"to": helper, "param": param}
+            r_rel, r_line, r_path, _s, r_conds, _e, _k, _p = runs[0]
+            inner = _hop("scripted_effect", helper, r_rel, r_line, r_path, r_conds, "parameter")
+            inner["param"] = param
+            if len(runs) > 1:
+                inner["other_sites"] = len(runs) - 1
+            yield outer, [inner]
     elif kind == "event":
         for site in graph.sites_by_event.get(name, []):
-            yield (site.entity_kind, site.entity, site.file, site.line, list(site.path),
-                   site.conds.strip(), site.via)
+            yield _hop(site.entity_kind, site.entity, site.file, site.line, site.path,
+                       site.conds, site.via), []
     elif kind == "on_action":
         for parent, line, rel in graph.on_action_parents.get(name, []):
-            yield "on_action", parent, rel, line, ["on_actions"], "", "on_actions"
+            yield _hop("on_action", parent, rel, line, ["on_actions"], "", "on_actions"), []
 
 
 def _roots(graph, name: str) -> list:
@@ -421,11 +477,16 @@ def _walk(graph, start: list):
     """Walk backwards from the `start` nodes through scripted effects and
     events. Returns (chains ending at an on-action, chains ending at an entity
     of a kind not followed, the direct callers of a start node that nothing
-    outside the walk reaches). A chain is a list of hops, the outermost
-    first; a hop is one call site: the entity it sits in (`in`, `kind`),
-    where (`file`, `line`, `path`), its `guards`, how it calls the next link
-    (`via`), and `other_sites`, the number of further call sites of that link
-    in the same entity (given when there are some; their guards can differ)."""
+    outside the walk reaches, and `calls`: for each link, the nodes of the
+    walk it calls). A chain is a list of hops, the outermost first; a hop is
+    one call site: the entity it sits in (`in`, `kind`), where (`file`,
+    `line`, `path`), its `guards`, how it calls the next link (`via`), and
+    `other_sites`, the number of further call sites of that link in the same
+    entity (given when there are some; their guards can differ).
+
+    Each link is visited once, so a chain is the shortest route from its
+    first call site to the target, not the only one: `calls` says which links
+    have another way down."""
     found, not_followed = [], []
     seen = set(start)
     todo = deque((node, []) for node in start)
@@ -434,26 +495,24 @@ def _walk(graph, start: list):
     while todo:
         node, chain = todo.popleft()
         by_caller: dict = {}
-        for caller_kind, caller, rel, line, path, guards, via in _incoming(graph, *node):
-            hop = {"in": caller, "kind": caller_kind, "file": rel, "line": line,
-                   "path": path, "guards": guards, "via": via}
-            if caller_kind == "on_action":
+        for hop, inner in _incoming(graph, *node):
+            if hop["kind"] == "on_action":
                 entered.add(node)
-                found.append([hop] + chain)   # every on-action call site is a row
+                found.append([hop] + inner + chain)   # every on-action call site is a row
             else:
-                by_caller.setdefault((caller_kind, caller), []).append(hop)
+                by_caller.setdefault((hop["kind"], hop["in"]), []).append((hop, inner))
         for (caller_kind, caller), hops in by_caller.items():
-            hop = dict(hops[0])
+            hop, inner = dict(hops[0][0]), hops[0][1]
             if len(hops) > 1:
                 hop["other_sites"] = len(hops) - 1
             if caller_kind in FOLLOWED:
                 calls.setdefault((caller_kind, caller), set()).add(node)
                 if (caller_kind, caller) not in seen:
                     seen.add((caller_kind, caller))
-                    todo.append(((caller_kind, caller), [hop] + chain))
+                    todo.append(((caller_kind, caller), [hop] + inner + chain))
             else:
                 entered.add(node)
-                not_followed.append([hop] + chain)
+                not_followed.append([hop] + inner + chain)
     # A link is reached when something enters it, or a reached link calls it.
     reached, spread = set(entered), deque(entered)
     while spread:
@@ -466,7 +525,29 @@ def _walk(graph, start: list):
     unreached = sorted(
         {caller for caller, callees in calls.items()
          if caller not in reached and caller not in start and callees & set(start)})
-    return found, not_followed, [{"kind": kind, "id": name} for kind, name in unreached]
+    return found, not_followed, [{"kind": kind, "id": name} for kind, name in unreached], calls
+
+
+def _other_routes(chain: list, start: list, calls: dict) -> list:
+    """Why a row's guards are not the whole condition: each link of `chain`
+    that calls the next one from more than one site (`other_sites`), or that
+    reaches the target through another link as well (`also_through`)."""
+    out = []
+    for i, hop in enumerate(chain):
+        row = {}
+        if hop.get("other_sites"):
+            row["other_sites"] = hop["other_sites"]
+        if i and hop["via"] != "parameter":
+            # The node this link calls: the next link, or the target itself.
+            # A helper's `$PARAM$` site is part of the hop before it, not a link.
+            later = [h for h in chain[i + 1:] if h["via"] != "parameter"]
+            nxt = {(later[0]["kind"], later[0]["in"])} if later else set(start)
+            also = sorted(name for _kind, name in calls.get((hop["kind"], hop["in"]), set()) - nxt)
+            if also:
+                row["also_through"] = also
+        if row:
+            out.append({"in": hop["in"], **row})
+    return out
 
 
 def callers(mod_root: str, target: str, code_on_actions=None) -> Optional[dict]:
@@ -490,7 +571,7 @@ def callers(mod_root: str, target: str, code_on_actions=None) -> Optional[dict]:
         start.append(("on_action", target))
     if not start:
         return None
-    found, skipped, unreached = _walk(graph, start)
+    found, skipped, unreached, calls = _walk(graph, start)
 
     rows, seen = [], set()
     for chain in sorted(found, key=lambda c: (c[0]["file"], c[0]["line"], c[0]["in"])):
@@ -501,12 +582,21 @@ def callers(mod_root: str, target: str, code_on_actions=None) -> Optional[dict]:
             continue
         seen.add(sig)
         roots = _roots(graph, first["in"])
+        other_routes = _other_routes(chain, start, calls)
         rows.append({
             "on_action": first["in"], "file": first["file"], "line": first["line"],
             "via": first["via"], "through": through,
             # One entry per hop, the on-action's own call first: an empty
             # string is a hop with no enclosing limit or trigger.
             "guards": [hop["guards"] for hop in chain],
+            # False: this is the shortest route from the on-action's call, and
+            # a link on it has another call site or another way down to the
+            # target (other_routes), under guards this row does not show.
+            "guards_complete": not other_routes,
+            "other_routes": other_routes,
+            # The route runs through an event option: someone has to pick it.
+            "through_option": any(hop["kind"] == "event" and "option" in hop["path"]
+                                  for hop in chain),
             "hops": chain,
             "roots": roots,
             "engine_hooks": (None if code_on_actions is None
@@ -526,16 +616,33 @@ def callers(mod_root: str, target: str, code_on_actions=None) -> Optional[dict]:
     not_followed = sorted(grouped.values(), key=lambda r: (r["kind"], r["id"], r["through"]))
     kinds = Counter(row["kind"] for row in not_followed)
 
+    passed = [
+        {"to": helper, "param": param, "in": call[5], "kind": call[6], "file": call[0],
+         "line": call[1], "followed": bool(runs)}
+        for helper, param, call, runs in _passed_effects(graph).get(target, [])
+    ] if ("scripted_effect", target) in start else []
+
+    one_route = sum(not r["guards_complete"] for r in rows)
     if rows:
         summary = f"{len({r['on_action'] for r in rows})} on-action(s) reach it"
+        if one_route:
+            summary += (f"; {one_route} of {len(rows)} rows show one route of several "
+                        "(guards_complete false)")
     else:
         summary = "no on-action reaches it"
     if not_followed:
         summary += ("; also called from " + ", ".join(f"{n} {k}" for k, n in sorted(kinds.items()))
                     + " (not_followed), which this does not trace to a pulse")
     elif not rows:
-        summary += (": nothing in the mod's script calls it" if not unreached else
-                    ": only entities nothing in the mod's script reaches call it (unreached)")
+        if unreached:
+            summary += ": only entities nothing in the mod's script reaches call it (unreached)"
+        elif passed:
+            first = passed[0]
+            summary += (f": its name is passed as a parameter to {first['to']} at "
+                        f"{first['file']}:{first['line']} (passed_as_parameter), which runs it "
+                        "in a way this did not follow")
+        else:
+            summary += ": nothing in the mod's script calls it"
     return {
         "target": target,
         "kind": "+".join(kind for kind, _name in start),
@@ -549,4 +656,5 @@ def callers(mod_root: str, target: str, code_on_actions=None) -> Optional[dict]:
         "not_followed_kinds": dict(sorted(kinds.items())),
         "not_followed": not_followed,
         "unreached": unreached,
+        "passed_as_parameter": passed,
     }

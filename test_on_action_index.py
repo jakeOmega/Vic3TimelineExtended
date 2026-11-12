@@ -68,6 +68,9 @@ third_monthly_on_action = {
 	effect = {
 		te_event_helper = yes
 		te_guarded_helper = yes
+		te_run_named = yes
+		te_two_ways = yes
+		te_two_sites = yes
 	}
 }
 on_yearly_events = {
@@ -96,6 +99,37 @@ te_guarded_helper = {
 }
 te_guarded_inner = { add_treasury = 3 }
 te_event_run_effect = { add_treasury = 4 }
+te_on_each = {
+	if = {
+		limit = { is_at_war = no }
+		ROOT = { $EFFECT$ = yes }
+	}
+}
+te_passed_effect = { add_treasury = 7 }
+te_passed_nowhere = { add_treasury = 8 }
+te_forwarder = { te_sink = { NAME = $NAME$ } }
+te_sink = { set_variable = { name = $NAME$ value = 1 } }
+te_run_named = {
+	te_on_each = { EFFECT = te_passed_effect }
+	te_forwarder = { NAME = te_passed_nowhere }
+}
+te_two_ways = {
+	if = {
+		limit = { has_variable = months }
+		te_leaf = yes
+	}
+	te_two_ways_inner = yes
+}
+te_two_ways_inner = { te_leaf = yes }
+te_two_sites = {
+	if = {
+		limit = { has_variable = late }
+		te_leaf_twice = yes
+	}
+	te_leaf_twice = yes
+}
+te_leaf = { add_treasury = 9 }
+te_leaf_twice = { add_treasury = 10 }
 te_je_only_effect = { add_treasury = 5 }
 te_console_only_effect = { add_treasury = 6 }
 te_unused_effect = { add_treasury = 2 }
@@ -275,8 +309,12 @@ class ScanTests(_Trees):
         self.assertIsNone(index.entry("on_shadowed"))
         self.assertEqual(index.shadowed_vanilla_files,
                          ["game/common/on_actions/b_second_on_actions.txt"])
-        self.assertEqual(index.entry("on_monthly_pulse_country")["shadowed_vanilla_files"],
-                         ["game/common/on_actions/b_second_on_actions.txt"])
+        shadowed = index.entry("on_monthly_pulse_country")["shadowed_vanilla_files"]
+        self.assertEqual(shadowed["files"], ["game/common/on_actions/b_second_on_actions.txt"])
+        # A documented rule, labelled as the effect winner's is.
+        self.assertEqual(shadowed["rule_status"], ext.LOAD_ORDER_MODEL["same_path"]["status"])
+        self.assertEqual(shadowed["rule_status"], "documented")
+        self.assertIn("same_path", shadowed["rule_see"])
         self.assertNotIn("shadowed_vanilla_files", oai.scan(str(self.mod)).entry("on_yearly_events"))
 
     def test_an_effect_set_twice_names_the_later_file_and_the_rules_status(self):
@@ -454,6 +492,69 @@ class CallersTests(_Trees):
         # The same event also runs it from an option.
         self.assertEqual(event_hop["other_sites"], 1)
         self.assertIn("1 on-action(s) reach it", out["summary"])
+
+    def test_an_effect_passed_by_name_is_followed_through_the_helper(self):
+        # te_run_named calls te_on_each = { EFFECT = te_passed_effect }, and
+        # te_on_each runs `$EFFECT$ = yes`: no site names the effect as a call.
+        out = self.callers("te_passed_effect")
+        self.assertEqual(out["on_actions"], ["third_monthly_on_action"])
+        row, = out["callers"]
+        self.assertEqual(row["through"], ["te_run_named", "te_on_each"])
+        # The helper's own guard at the `$EFFECT$ = yes` site is the last hop's.
+        self.assertEqual(row["guards"], ["", "", "is_at_war no"])
+        self.assertEqual(row["hops"][1]["passes"], {"to": "te_on_each", "param": "EFFECT"})
+        self.assertEqual((row["hops"][2]["via"], row["hops"][2]["param"]), ("parameter", "EFFECT"))
+        self.assertEqual(out["passed_as_parameter"], [{
+            "to": "te_on_each", "param": "EFFECT", "in": "te_run_named",
+            "kind": "scripted_effect", "file": "common/scripted_effects/test_effects.txt",
+            "line": 29, "followed": True}])
+        self.assertNotIn("nothing in the mod's script calls it", out["summary"])
+
+    def test_a_name_passed_where_no_site_runs_it_is_still_not_uncalled(self):
+        # The helper forwards the parameter and nothing runs `$NAME$ = yes`:
+        # not followed, but the summary must not say nothing calls it.
+        out = self.callers("te_passed_nowhere")
+        self.assertEqual((out["count"], out["not_followed"], out["unreached"]), (0, [], []))
+        self.assertEqual([(p["to"], p["followed"]) for p in out["passed_as_parameter"]],
+                         [("te_forwarder", False)])
+        self.assertIn("passed as a parameter to te_forwarder at "
+                      "common/scripted_effects/test_effects.txt:30", out["summary"])
+        self.assertNotIn("nothing in the mod's script calls it", out["summary"])
+
+    def test_a_row_says_when_its_guards_are_one_route_of_several(self):
+        # te_two_ways reaches te_leaf under a limit and, through
+        # te_two_ways_inner, with none: the first is the row shown.
+        out = self.callers("te_leaf")
+        row, = out["callers"]
+        self.assertEqual((row["through"], row["guards"]),
+                         (["te_two_ways"], ["", "has_variable months"]))
+        self.assertIs(row["guards_complete"], False)
+        self.assertEqual(row["other_routes"],
+                         [{"in": "te_two_ways", "also_through": ["te_two_ways_inner"]}])
+        self.assertIn("1 of 1 rows show one route of several", out["summary"])
+        # Two call sites in one helper, the second unconditional.
+        row, = self.callers("te_leaf_twice")["callers"]
+        self.assertEqual(row["guards"], ["", "has_variable late"])
+        self.assertIs(row["guards_complete"], False)
+        self.assertEqual(row["other_routes"], [{"in": "te_two_sites", "other_sites": 1}])
+
+    def test_a_single_route_is_marked_complete(self):
+        row, = self.callers("te_guarded_inner")["callers"]
+        self.assertIs(row["guards_complete"], True)
+        self.assertEqual(row["other_routes"], [])
+        out = self.callers("te_first_update")
+        self.assertTrue(all(r["guards_complete"] for r in out["callers"]))
+        self.assertNotIn("one route of several", out["summary"])
+
+    def test_a_route_through_an_event_option_is_flagged(self):
+        via_option, = self.callers("te_je_only_effect")["callers"]
+        self.assertIs(via_option["through_option"], True)
+        via_immediate, = self.callers("te_event_run_effect")["callers"]
+        self.assertIs(via_immediate["through_option"], False)
+        # ... though the same event also runs it from an option: not the whole story.
+        self.assertIs(via_immediate["guards_complete"], False)
+        self.assertEqual(via_immediate["other_routes"],
+                         [{"in": "second_events.3", "other_sites": 1}])
 
     def test_an_effect_only_a_journal_entry_pulse_runs(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -722,6 +823,42 @@ class ModFilesTests(unittest.TestCase):
         self.assertEqual(silent, [])
         # The mod runs many effects from the immediate of an event an on-action fires.
         self.assertGreater(through_events, 0)
+
+    def test_an_effect_named_anywhere_never_reads_as_uncalled(self):
+        """The graph sees `name = yes` and `name = { }` calls. An effect whose
+        name is a token anywhere else (an argument: `EFFECT = name`) must not
+        get the "nothing calls it" summary either."""
+        graph = eca.build_graph(str(REPO), include_console=True)
+        with mock.patch.object(eca, "build_graph", return_value=graph):
+            uncalled = {
+                effect for effect in graph.effect_file
+                if oai.callers(str(REPO), effect)["summary"].endswith(
+                    "nothing in the mod's script calls it")}
+            passed = {name: oai.callers(str(REPO), name) for name in (
+                "nd_loose_accuse_one", "nd_loose_ask_one",
+                "nuclear_strike_naval_fortification_pms", "nuclear_strike_military_base_pms")}
+        named = {}
+        for base in ("events", "common"):
+            for path in sorted((REPO / base).rglob("*.txt")):
+                rel = path.relative_to(REPO).as_posix()
+                tokens = list(eca._tokens(path.read_text(encoding="utf-8-sig", errors="replace")))
+                depth = 0
+                for i, (tok, line) in enumerate(tokens):
+                    if tok == "{":
+                        depth += 1
+                    elif tok == "}":
+                        depth -= 1
+                    elif tok in uncalled:
+                        definition = (depth == 0 and rel.startswith("common/scripted_effects/")
+                                      and i + 1 < len(tokens) and tokens[i + 1][0] == "=")
+                        if not definition:
+                            named.setdefault(tok, f"{rel}:{line}")
+        self.assertEqual(named, {})
+        # The four effects the mod passes by name today.
+        for name, out in passed.items():
+            self.assertNotIn(name, uncalled)
+            self.assertTrue(out["passed_as_parameter"], name)
+            self.assertTrue(out["callers"] or out["not_followed"], name)
 
 
 if __name__ == "__main__":

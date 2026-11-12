@@ -6186,7 +6186,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/loc-accessors/<Type?>?context=&examples=&min_uses=", "desc": "Which accessors vanilla loc (and vanilla .gui when the game is installed) chains on a data type (#1246): each with its use count, per-context counts (events, notification, ui, gui, ...), the type it returns, and example expressions, plus the SCOPE.sX / gsX saved-scope accessor for the type. <Type> is PoliticalLobby, political_lobby or politicallobby. ?context= keeps only uses in that context. Bare: every type with its use count."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
                 {"path": "/on-actions/<id?>", "desc": "On-actions as the engine merges them (#333): every declaration of <id> in load order (sources: file, line, on_actions, events, random_events, chance_to_happen, fields), merged (on_actions and events added up; random_events only when one declaration sets it; null under a directive), fields_set_more_than_once (effect: the later file's wins, a documented rule), fired_by, warnings, and raw (the store's last-read block). Vanilla's declarations are read only with a game install: check vanilla_indexed / origin. Bare: the on-actions the mod declares, with their files."},
-                {"path": "/on-action-callers/<scripted_effect|event_id|on_action>", "desc": "The mod on-actions that reach a scripted effect, an event or an on-action, through any chain of scripted effects and events, each with file:line, per-hop guards and the roots it hangs from (#333). Callers of other kinds (journal-entry pulses, buttons, decisions) are not followed: they are in not_followed, so count 0 is 'nothing calls it' only when not_followed and unreached are empty. Mod script only; several seconds a call."},
+                {"path": "/on-action-callers/<scripted_effect|event_id|on_action>", "desc": "The mod on-actions that reach a scripted effect, an event or an on-action, through any chain of scripted effects and events, each with file:line, per-hop guards and the roots it hangs from (#333). Callers of other kinds (journal-entry pulses, buttons, decisions) are not followed: they are in not_followed, so count 0 is 'nothing calls it' only when not_followed, unreached and passed_as_parameter are empty. A row is the shortest route, not the only one: guards_complete false means other_routes exist. Mod script only; several seconds a call."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
                 {"path": "/event-balance/<id?>", "desc": "Event option / fast-scaling magnitude analysis."},
                 {"path": "/institutions/<id?>", "desc": "Institutions catalog."},
@@ -9369,10 +9369,20 @@ class ModStateHandler(BaseHTTPRequestHandler):
         line, via (effect | trigger_event | events | random_events |
         first_valid | on_actions), through (the effects and events between the
         on-action and the target), guards (one entry per hop, the on-action's
-        own call first), hops (each call site: in, kind, file, line, path,
-        guards, via, other_sites), roots (the on-actions nothing in the mod
-        lists that it hangs from) and engine_hooks (those of them the engine
-        fires from code; null when the engine docs are not loaded)}.
+        own call first), guards_complete, other_routes, through_option, hops
+        (each call site: in, kind, file, line, path, guards, via, other_sites),
+        roots (the on-actions nothing in the mod lists that it hangs from) and
+        engine_hooks (those of them the engine fires from code; null when the
+        engine docs are not loaded)}.
+
+        A row is the shortest route from that on-action call site, not the
+        only one. `guards_complete` is false when a link on it calls the next
+        from another site too, or reaches the target through another link as
+        well (`other_routes` names them): the guards shown are then not the
+        whole condition. `through_option` marks a route that runs through an
+        event option. An effect a caller passes by name (`helper = { EFFECT =
+        x }`, run as `$EFFECT$ = yes`) is followed through the helper;
+        `passed_as_parameter` lists those call sites.
 
         It follows on-actions, scripted effects and events only. Every other
         entity the graph knows calls the target or a link of a chain (a
@@ -9380,7 +9390,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
         `not_followed` ({kind, id, file, line, path, sites, through}), counted
         in `not_followed_count` / `not_followed_kinds`; `unreached` lists the
         links nothing in the mod calls or fires. So `count: 0` means "nothing
-        calls it" only when both are empty: `summary` says which.
+        calls it" only when those and `passed_as_parameter` are empty:
+        `summary` says which.
 
         Built from event_context_audit's graph on each call (several seconds,
         as /event-dispatch), console harness files included. Mod script only."""

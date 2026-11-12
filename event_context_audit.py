@@ -538,7 +538,12 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                             entity, pk, sw, conds = context()
                             sites.append(Site(toks[k + 2][0], rel, ln, entity, kind, pk, sw, conds))
                         k += 1
-            elif t in effect_names and stack:
+            elif (t in effect_names or (kind == "scripted_effect" and _PARAM_RE.match(t))) and stack:
+                # `$EFFECT$ = yes` inside a helper runs whatever effect a caller
+                # names (kept under the key `$EFFECT$`: no entity is called
+                # that, so the audit's own lookups never see it; a `$WHO$ = { }`
+                # scope block lands there too, and only /on-action-callers
+                # reads these, for a parameter some caller sets to an effect).
                 entity, pk, sw, conds = context()
                 # `helper = { WHO = scope:x EVENT = ns.7 }` — keep simple
                 # depth-1 arguments for `$PARAM$` substitution.
