@@ -241,7 +241,7 @@ hbox = {
 
 ```
 fixedgridbox = {
-    datamodel = "[GetPlayer.AccessIdeas]"
+    datamodel = "[AccessPlayer.AccessIdeas]"
     addcolumn = 48                # Column width
     addrow = 48                   # Row height
     datamodel_wrap = 5            # Wrap after 5 columns
@@ -624,7 +624,7 @@ Data models are lists of game objects that drive repeated UI elements.
 
 ```
 fixedgridbox = {
-    datamodel = "[GetPlayer.AccessStates]"      # List of State objects
+    datamodel = "[AccessPlayer.AccessStates]"      # List of State objects
     addcolumn = 300
     addrow = 40
     
@@ -665,7 +665,7 @@ flowcontainer = {
 
 ```
 flowcontainer = {
-    datamodel = "[GetPlayer.AccessStates]"
+    datamodel = "[AccessPlayer.AccessStates]"
     direction = vertical
     
     item = {
@@ -879,7 +879,7 @@ checkbutton = {
 
 ```
 dropDown = {
-    datamodel = "[GetPlayer.AccessAvailableLaws]"
+    datamodel = "[AccessPlayer.AccessAvailableLaws]"
     selected_index = 0
     
     # ... complex dropdown patterns vary
@@ -1298,8 +1298,8 @@ my_loc_key:0 "Production: @icon_my_custom! 500 units"
 
 | Accessor | Returns | Description |
 |---|---|---|
-| `GetPlayer` | Country (mutable) | Player's country, can execute actions |
-| `AccessPlayer` | Country (read-only) | Player's country, data access only |
+| `GetPlayer` | Country (const) | Player's country, for reading data (`GetName`, `MakeScope.ScriptValue`, `Get…` promotes) |
+| `AccessPlayer` | Country (non-const) | Player's country, for `Access…` promotes and commands such as `SortStates` (gotcha 4) |
 | `GetMetaPlayer` | MetaPlayer | `.GetPlayedOrObservedCountry` for observer checks |
 | `GetVariableSystem` | UI state | Client-side toggles (not saved) |
 | `GetCurrentDate` | Date | Current in-game date |
@@ -1559,7 +1559,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 3. **`flowcontainer` vs `fixedgridbox` visibility:** `flowcontainer` collapses hidden children (zero space). `fixedgridbox` always reserves cells. Use `flowcontainer` when items should disappear; `fixedgridbox` for consistent grid layouts.
 
-4. **`GetPlayer` vs `AccessPlayer`:** `GetPlayer` returns mutable (can call actions). `AccessPlayer` is read-only. Use `AccessPlayer` when you only need data.
+4. **`GetPlayer` vs `AccessPlayer`:** `GetPlayer` is the const country, enough for reading data. `AccessPlayer` is the non-const one, needed for an `Access…` promote (`AccessPlayer.AccessActiveLawFromGroup('lawgroup_taxation')`, `budget_panel.gui`) and for a command that changes the country's lists (`AccessPlayer.SortStates('name')`). Vanilla says so at `diplomatic_overview.gui:17`: `datacontext = "[AccessPlayer]" # using AccessPlayer instead of GetPlayer here because sorting subjects requires a non-const country`. A non-const call on `GetPlayer` logs `requires non const promote` at load and the engine drops the binding, as gotcha #35's `GetOwner` chain did. `GetPlayerJournalEntry` and `AccessPlayerJournalEntry` split the same way (gotcha #29).
 
 5. **`ScriptValue` requires `MakeScope`.** `Country.ScriptValue('x')` does NOT work. Use `Country.MakeScope.ScriptValue('x')`.
 
