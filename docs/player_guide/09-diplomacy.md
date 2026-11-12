@@ -370,7 +370,8 @@ Members get +10% influence; the leader gets +50% pact leverage generation and
 Cohesion rests on the leader's legitimacy, the worst relations inside the bloc,
 and the infamy of the leader and the worst member. The leader can use Diplomatic
 Alignment, a pact that slowly aligns a country's relations with third parties to
-its own, and a Diplomatic Framework never blocks a member's voluntary union.
+its own and builds the leader up to 1,000 Involvement where that country is
+local, and a Diplomatic Framework never blocks a member's voluntary union.
 
 ### New principle groups
 
@@ -422,7 +423,7 @@ Several principles give your bloc an article, action or decree.
 | Healthcare IV and V | Healthcare Aid |
 | Police Coordination IV and V | Security Aid |
 | Advanced Research IV and V | Modernization Aid; V adds Extensive Modernization Aid |
-| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage and better relations |
+| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage, better relations and up to 1,000 Involvement where the recipient is local |
 | Vassalization IV and V | Peaceful Integration: annex a puppet or colony with under 25 liberty desire, cordial relations and under a tenth of your GDP, without a play |
 | Cultural Unity II+ | Enforce Cultural Acceptance: a member of five years or more adds your primary cultures to its own, if the bloc has 50% cohesion and you have three times its prestige |
 | Cultural Unity V | Enforce Cultural Adoption: a subject replaces its primary cultures with yours |

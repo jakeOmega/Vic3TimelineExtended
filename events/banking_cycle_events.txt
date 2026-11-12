@@ -3082,9 +3082,7 @@ banking_cycle_events.30 = {
 # (banking_can_enact_cb_bank_holiday), and option A enacts the tool itself —
 # banking_effect_cb_bank_holiday: 90 days, the five-year cooldown, the two
 # intervention points the holiday holds, the history marker — rather than a
-# bespoke modifier beside it (#428). banking_event_bank_holiday, which option A
-# used to grant, stays defined for saves that carry it (PENDING REMOVAL in
-# common/scripted_effects/legacy_modifier_cleanup.txt).
+# bespoke modifier beside it (#428).
 # --------------------------------------------------------------------------
 banking_cycle_events.31 = {
 	type = country_event
