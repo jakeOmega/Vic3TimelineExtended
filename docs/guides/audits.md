@@ -44,7 +44,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `kill_character_audit` | A `kill_character` in an event with no guard that the character exists. | CI, reload |
 | `event_magnitude_audit` | A hardcoded amount in an event for a resource that grows fast over the game (prestige is the model case), which is invisible at late-game scale. | CI, reload |
 | `treaty_leverage_side_audit` | A treaty article with `country_treaty_leverage_generation_add` on the side that pays, or one that builds no Involvement because it lacks `max_target_involvement` / `target_involvement_applies_to` or names the wrong side. | CI, reload |
-| `treaty_evaluation_scope_audit` | A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root. | CI |
+| `treaty_evaluation_scope_audit` | A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root; or a party scope in a block that does not bind it: `scope:source_country` / `scope:target_country` in `visible` / `possible` (use root and `scope:other_country`), or `scope:other_country` in `can_ratify` / `requirement_to_maintain` (use source / target; first / second on a mutual article). | CI |
 | `principle_tier_audit` | A power bloc principle tier that drops a modifier the tier below carried. Tiers replace each other, so each restates everything below it. | CI, reload |
 | `prestige_good_roster_audit` | A company prestige good no `building_types` building of the company can make, or one on a `local = yes` good. | CI, reload |
 | `amendment_reachability_audit` | An amendment no script attaches, or an `add_amendment` whose type names no amendment. | CI, reload |
@@ -91,7 +91,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `kill_character_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the `kill_character` line or the line above it |
 | `event_magnitude_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the flagged line |
 | `treaty_leverage_side_audit` | `# REVIEWED YYYY-MM-DD: why`<br>`# REVIEWED YYYY-MM-DD (involvement): why` | trailing on the `country_treaty_leverage_generation_add` line or the article's opening line; for an Involvement flag, the `(involvement)` form on the article's opening line or either field's line |
-| `treaty_evaluation_scope_audit` | none | Fix the flag. |
+| `treaty_evaluation_scope_audit` | `# REVIEWED YYYY-MM-DD (treaty_scope): why` | trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify` or `requirement_to_maintain`; a read in `evaluation_chance` takes none |
 | `principle_tier_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the higher tier's opening line (covers the whole tier) or the modifier's line in either tier |
 | `prestige_good_roster_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the prestige good's line in `possible_prestige_goods` or the company's opening line (covers the whole company); for a `local` flag, the prestige good's opening line |
 | `amendment_reachability_audit` | `# REVIEWED YYYY-MM-DD (amendment_reachability): why` | trailing on the amendment's opening line or its `allowed_laws` entry; for an unknown type, the `add_amendment = {` or `type =` line |
@@ -138,7 +138,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `kill_character_audit` | `python3 kill_character_audit.py --check` | `docs/engine/kill_character_audit.md` |  |
 | `event_magnitude_audit` | `python3 event_magnitude_audit.py --strict` | `docs/engine/event_magnitude_report.md` | Reads `events/` only: an amount granted from a scripted effect is flagged only where an event repeats it, as in a `show_as_tooltip` (#1593). |
 | `treaty_leverage_side_audit` | `python3 treaty_leverage_side_audit.py --strict` | `docs/engine/treaty_leverage_side_report.md` |  |
-| `treaty_evaluation_scope_audit` | `python3 treaty_evaluation_scope_audit.py --strict` | none |  |
+| `treaty_evaluation_scope_audit` | `python3 treaty_evaluation_scope_audit.py --strict` | none | Direct reads only: it does not open a scripted trigger or value the block calls. |
 | `principle_tier_audit` | `python3 principle_tier_audit.py --strict` | `docs/engine/principle_tier_report.md` |  |
 | `prestige_good_roster_audit` | `python3 prestige_good_roster_audit.py --strict` | `docs/engine/prestige_good_roster_report.md` |  |
 | `amendment_reachability_audit` | `python3 amendment_reachability_audit.py --strict` | `docs/engine/amendment_reachability_report.md` |  |
