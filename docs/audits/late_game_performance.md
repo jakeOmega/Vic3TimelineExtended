@@ -55,7 +55,7 @@ the user-data folder before `stop`, because the restore puts `logs/` back.
 - Check the speed dial on a `shot`. Whether wall time measures the work
   depends on it being at V.
 - `log_ticktask_performance` claims to write `profiling.log` but wrote
-  nothing (#1700).
+  nothing (#1700; again on 2026-11-12, enabled for 33 game days).
 
 The scripts used on 2026-11-12 are in
 `/mnt/d/vic3te-data/perf-2026-11-12/scripts/`, beside the dumps.
@@ -160,6 +160,75 @@ all three runs, the first measurement included. Had the 136 ms run serially
 on the main thread, it would have shown as about 3.7 s over those 27 days. It
 did not, and why is unexplained.
 
+## Which script holds up the day: the call graph, 2026-11-12
+
+**The profiler window, made readable.** The script profiler is a game `.gui`
+window (`jomini/gui/script_profiler/script_profiler.gui`), not an ImGui one.
+At its default size the Callees column is cut off. A copy of that file with a
+larger `minimumsize` on its root `vbox` (and on the Callers/Current/Callees
+row), deployed under the mod's own `gui/script_profiler/`, is picked up live.
+`Script.Profiling.Gui` then reopens the window at the new size. Clicking an
+entry makes it Current and lists its callees, each with two times. The copy
+is a measuring aid only and is never committed (the one used is in
+`/mnt/d/vic3te-data/perf-2026-11-12/callgraph/`).
+
+**Bottleneck time is the column that predicts wall time.** Each entry shows
+*Bottleneck time (worst thread)* and *Total time (sum all threads)*.
+- **Parallel:** trigger and script-value work that the AI and the interface
+  run on worker threads has a bottleneck far below its total. The UN
+  credentials button's `visible` was 325 ms against 4,079 ms. That is why
+  #1713's cut did not move wall time.
+- **Serial:** effects have equal bottleneck and total: on_actions, journal
+  entry pulses, events' `immediate`, and the progress bars' monthly values.
+  They run on one thread at the day boundary, and they are where the mod's
+  own wall time is.
+
+**Serial script, 2 July → 1 August 1931** (GUI profiler, one month start,
+`un_events.4` answered first; the profiler inflates every figure):
+
+| Entry | 30 days | Largest parts |
+|---|---|---|
+| `te_construction_market_recalc_events.1` (152 calls, from `on_revolution_start` ×126, treaty-article events, the yearly country pulse) | 3,027 ms | all in `te_construction_market_country_update_sites`: 20 ms a call |
+| `on_monthly_pulse_country` (265 country pulses) | 2,801 ms | Cultural Hegemony 526, SoL expectations 443, monetary 363, monuments 244, `headlines_on_actions.txt` (vanilla) 121, culture merge 112, trade partner 88, space race 84, eight `extra_on_actions.txt` blocks 370 |
+| Journal entry pulses | 2,939 ms | Strategic Reserve weekly 806, covert warfare monthly 791, Cultural Hegemony monthly 689, nuclear program weekly 160 and monthly 72, UN monthly 144, banking monthly 95 and weekly 15 |
+| `on_yearly_pulse_state` (63 states) | 2,738 ms | Demographics `te_demog_state_yearly` 2,083 (33 ms a state: inheritance and Wealth Concentration refresh 1,178, the walks 892), local climate 589 |
+| Colonial stability bar's `monthly_progress` (`extra_progress_bars.txt:117`, 237 calls) | 899 ms | |
+| `on_monthly_pulse`, global (1 call) | 669 ms | journal map 177, power grid 151, UN 110, tax 92, launch windows 40 |
+
+About 13 s of serial script over 30 days, roughly 0.4 s a game day under the
+profiler.
+
+**Script per frame type** (flat dump, a dump after every day of 4 August →
+3 September): an ordinary day ran 0.83–1.6 s of script (summed over threads),
+mean 1.1 s. The one single weekly day ran 1.1 s, so the weekly frame's extra
+3 s is engine work, not script (`HandleAutonomousInvestment` 1.05 s,
+`UpdateCivilWars` 0.26 s, the economy tasks about 0.6 s; tick-task CSV of the
+same run). The month start added the colonial stability bar's 0.3 s and
+little else in the flat dump. Its journal entry pulses are effects
+(`MonthlyPulseJournalEntries`, 1.05 s in the tick tasks).
+
+**The weekly frame grows; the rest don't.** Over the owner's own play of this
+game (rotated `dedicated_server` logs, a year at each point), an ordinary
+hour 0 stayed at 0.63–0.81 s and the 1st at 3.9–4.3 s. The weekly frame grew
+from 2.06 s (1916–17) to 2.47 s (1922), 2.74 s (1927), 3.13 s (1930) and
+3.67 s (first half of 1931).
+
+**The construction market's world walk (#1721).** The largest entry,
+`te_construction_market_recalc_events.1`, spent its 20 ms a call in
+`te_construction_market_country_update_sites`. That effect walked
+`every_state`, the whole world, from a country scope. #1721 makes it
+`every_scope_state`. The A/B on the same save compared `main` with `main` plus
+#1721: answer `un_events.4`, play 60 days unprofiled, then 30 under the
+profiler.
+- **Serial script:** `on_revolution_start` fell from 1,883 ms to under
+  404 ms over 1 September to 1 October, and the treaty-article events from
+  643 ms to under 404 ms. The other serial roots stayed within 5%.
+- **Wall time:** 75 s against 74 s over 3 July to 1 September. That is at
+  the log's resolution.
+
+Data: `/mnt/d/vic3te-data/perf-2026-11-12/callgraph/`, which also holds the
+profiler window file and the scripts.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
@@ -231,6 +300,11 @@ All are exact: they change no result unless a line says otherwise.
   off the flat dump's script time (15% of it) and left wall time per day
   where it was. The flat dump sums CPU over threads; judge a speed fix by
   wall time per frame type, and say which one it is.
+- **Read the bottleneck column.** The GUI profiler gives each entry its
+  worst thread's time beside the sum over threads. Where the two are equal
+  the work is serial and holds up the day; where the bottleneck is a tenth
+  of the total, as for the UN buttons, cutting it frees CPU but not time.
+  Choose fixes by the bottleneck.
 - **Measure which walk costs before caching one.** The formables'
   external-pressure walk was cached monthly on the reasoning that it was
   one of three `any_country` walks per call; AFU's `possible` did not move.
@@ -250,7 +324,9 @@ All are exact: they change no result unless a line says otherwise.
 ## Open (ranked by measured cost, 2026-11-12)
 
 1. **Unattributed day-boundary time: about 0.43 s of each ordinary day's
-   hour 0** (1931; 22% of wall time), beyond the tick tasks and the
+   hour 0** (partly attributed now: the serial script in "Which script holds
+   up the day" is about 0.4 s a day under the profiler, spread over the day
+   boundaries; the construction market's share is fixed in #1721) (1931; 22% of wall time), beyond the tick tasks and the
    per-frame floor. Suspects:
    - The day-spread pulses. Monthly country pulses come about 9 countries a
      day, and yearly state and country pulses are spread over the year. The
@@ -352,3 +428,20 @@ All are exact: they change no result unless a line says otherwise.
 11. **The colonial stability bar** (1.3 ms a read in 1931) still evaluates
    its 21 terms three times per read (the bar's lines, `drift_total` and `drift_uncapped` in the cap
    term).
+12. **The other serial script** (call graph, 2 July → 1 August 1931; see
+    "Which script holds up the day"). By size:
+    - **Demographics' yearly state step:** `te_demog_state_yearly`, 2,083 ms,
+      33 ms a state. Its inheritance and Wealth Concentration refresh took
+      1,178 ms, the walks 892 ms.
+    - **The Strategic Reserve's weekly pulse:** 806 ms, on the weekly frame,
+      which is already the longest. Nearly all of it is
+      `st_res_weekly_update_effect`; the #1404 self-checks beside it stop on
+      a global flag.
+    - **The monthly country pulse's largest parts:** Cultural Hegemony
+      526 ms, SoL expectations 443 ms, monetary 363 ms.
+    - **Local climate's yearly state pulse:** 589 ms.
+
+    Each of these needs its callees opened before a fix is chosen; the
+    bigger window makes that a few clicks each.
+    `on_revolution_start` fired 126 times in those 30 days, which may be
+    worth a look on its own.
