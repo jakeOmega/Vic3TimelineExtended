@@ -96,6 +96,22 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `limit = {` line or the iterator's opener line",
     ),
     Audit(
+        "delayed_event_trigger_audit",
+        "Not a gate: lists the events queued with a delay whose `trigger` may be false when queued, "
+        "which seems to drop them (#1596), for the play-test that settles the rule.",
+        ci=None,
+        where="trailing on the target event's `trigger = {` line",
+        note="A report: it fails nothing and adds no reload warning until the self-check "
+             "`delayed_trigger_queue_check` confirms the rule. `--write` writes the report offline.",
+    ),
+    Audit(
+        "random_list_weight_audit",
+        "A `trigger = { }` in a `random_list` branch's weight `modifier`: the engine rejects the token "
+        "and the tilt is lost. Use `if = { limit = { ... } add = N }`; the `ai_chance` form is valid.",
+        post_load=False,
+        report=None,
+    ),
+    Audit(
         "effect_trigger_validity_audit",
         "An effect or trigger name the engine doesn't know, or a known one in the wrong kind of block (an "
         "effect where triggers are read, or the reverse). The engine logs it at load and drops the line.",
