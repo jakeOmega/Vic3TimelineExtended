@@ -1028,6 +1028,60 @@ class EnterGameTest(SessionTestCase):
         self.assertIn("still moved after a second pause key", error.detail)     # _run_for's own words
 
 
+class ClickTest(SessionTestCase):
+    """`click X Y`: one click at fractions of the client area, for the engine's tool windows (#1701)."""
+
+    def test_a_click_lands_at_its_fraction_of_the_client_area_and_takes_a_screenshot(self):
+        for client, at, pixel in (((0, 0, 3840, 2160), (0.5, 0.25), (1920, 540)),
+                                  ((40, 30, 1920, 1080), (0.1, 0.9), (192, 972)),
+                                  ((0, 0, 1920, 1080), (0.9999, 0.0), (1919, 0))):
+            with self.subTest(client=client, at=at):
+                self.setUp()
+                self.game.client = client
+                self.started()
+                console_open = self.game.console_open
+                steps = len(self.game.steps)
+                reply = self.session.click(*at)
+                self.assertEqual(self.game.clicks, [pixel])
+                self.assertEqual(reply["pixel"], list(pixel))
+                self.assertTrue(Path(reply["screenshot"]).is_file())
+                # The console is neither opened nor closed for it: no key went out.
+                self.assertEqual((len(self.game.steps), self.game.console_open), (steps, console_open))
+
+    def test_a_point_off_the_window_is_refused_and_nothing_is_pressed(self):
+        self.started()
+        for bad in (-0.1, 1, 1.0, 2.5, True, "0.5", None):
+            with self.subTest(bad=bad):
+                self.assertEqual(self.session_error(self.session.click, bad, 0.5).code, "bad_argument")
+                self.assertEqual(self.session_error(self.session.click, 0.5, bad).code, "bad_argument")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_a_click_waits_for_the_presence_rule_and_never_focuses_on_its_own(self):
+        self.started()
+        self.game.foreground = False
+
+        def someone_moves_the_mouse(reading):
+            self.game.cursor = (10 * reading, 5 * reading)
+        self.game.on_presence = someone_moves_the_mouse
+        with self.assertRaises(ConsoleError) as caught:
+            self.session.click(0.5, 0.5)
+        self.assertEqual(caught.exception.code, "not_foreground")
+        self.assertEqual((self.game.clicks, self.game.focus_calls), ([], 0))
+
+    def test_a_game_that_cannot_be_proved_gets_no_click(self):
+        self.started()
+        self.game.process_gone = True
+        self.assertEqual(self.session_error(self.session.click, 0.5, 0.5).code, "watch_ended")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_a_refused_click_says_so(self):
+        self.started()
+        self.game.click = mock.Mock(side_effect=HelperError("bad_point", "outside"))
+        error = self.session_error(self.session.click, 0.5, 0.5)
+        self.assertEqual(error.code, "click_refused")
+        self.assertIn("bad_point", error.detail)
+
+
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
         self.started()
@@ -1823,7 +1877,7 @@ class StopAgainTest(SessionTestCase):
         # adopt or debugger call (the helper and the relay are closed, and the pid may be another program's).
         verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("events", ()), ("pick", (0,)),
                  ("read", (["c:FRA.gdp"],)), ("tag", ("GBR",)), ("enter_game", ()), ("advance", (5,)), ("shot", ()),
-                 ("try_event", ("x.1", None, ["c:FRA.gdp"])))
+                 ("click", (0.5, 0.5)), ("try_event", ("x.1", None, ["c:FRA.gdp"])))
         for state in ("game_left_up", "refused"):
             with self.subTest(state=state):
                 self.setUp()

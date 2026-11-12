@@ -13,6 +13,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa enter-game            # the two clicks past the country-select screen, proven
     python3 -m game_qa advance DAYS          # let at least DAYS game days pass
     python3 -m game_qa shot                  # a screenshot of the game's window, into the run folder
+    python3 -m game_qa click X Y             # one click at fractions of the window (0.5 0.5 is its middle),
+                                             # then a screenshot: for the engine's tool windows
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -731,6 +733,10 @@ def cmd_shot(args) -> tuple[dict, int]:
     return call(_backup_root(), "shot")
 
 
+def cmd_click(args) -> tuple[dict, int]:
+    return call(_backup_root(), "click", {"x": args.x, "y": args.y})
+
+
 def cmd_try_event(args) -> tuple[dict, int]:
     return call(_backup_root(), "try-event", {"event": args.event, "setup": args.setup, "reads": args.reads},
                 LONG_TIMEOUT_S)
@@ -803,6 +809,12 @@ def add_verbs(sub) -> None:
     p.add_argument("days", type=int)
     p.set_defaults(run=cmd_advance)
     sub.add_parser("shot", help="a screenshot of the game's window, into the run folder").set_defaults(run=cmd_shot)
+    p = sub.add_parser("click", help="one left click at X, Y (fractions of the game window's client area from its "
+                                     "top left), then a screenshot: for the engine's own tool windows, such as the "
+                                     "script profiler's")
+    p.add_argument("x", type=float)
+    p.add_argument("y", type=float)
+    p.set_defaults(run=cmd_click)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")
     p.add_argument("event")

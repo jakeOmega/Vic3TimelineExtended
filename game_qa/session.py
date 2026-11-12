@@ -767,6 +767,29 @@ class Session:
             out["path"] = str(path)
         return path
 
+    def click(self, x: float, y: float) -> dict:
+        """One left click at (x, y), fractions of the game window's client area from its top left, then a
+        screenshot of what it did. It is for the engine's own tool windows that no console command reads, such as
+        the script profiler's call graph (#1701, the owner's go-ahead of 2026-11-12); it can press anything a
+        player can, so what it is aimed at is the caller's to know, from a `shot` first.
+
+        The click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
+        (`_ProvedHelper.click`); the console is left as it is. A click refused before the button went down is
+        `click_refused` and pressed nothing."""
+        self._require_game()
+        fraction = (_fraction("x", x), _fraction("y", y))
+        with self._step("click", x=x, y=y) as out:
+            self._console.front()
+            px, py = self._point(fraction)
+            try:
+                self._sends.click(self._proc.pid, px, py)
+            except HelperError as e:
+                raise SessionError("click_refused", "%s: %s" % (e.code, e.detail)) from e
+            out["pixel"] = [px, py]
+            self._sleep(CLICK_SETTLE_S)
+            out["screenshot"] = str(self._shot())
+        return {"pixel": [px, py], "screenshot": out["screenshot"]}
+
     def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:
         """The owner's first check: each option of `event` in turn, fired, read, picked and read again.
 
@@ -1816,6 +1839,14 @@ def _describe(e: BaseException) -> str:
 
 def _text(value) -> str:
     return " ".join(str(value).split())
+
+
+def _fraction(name: str, value) -> float:
+    """A click's coordinate: a fraction of the client area, at least 0 and below 1."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value < 1:
+        raise SessionError("bad_argument", "%s is a fraction of the window, at least 0 and below 1, not %r"
+                           % (name, value))
+    return float(value)
 
 
 def _check_tag(tag: str) -> None:
