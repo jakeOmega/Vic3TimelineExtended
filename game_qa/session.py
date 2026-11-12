@@ -71,6 +71,8 @@ FIXTURES_KEPT = 2
 WINDOW_WAIT_S = 300.0                   # from launch to a window that responds
 WINDOW_POLL_S = 1.0
 CONSOLE_READY_S = 180.0                 # the first round trip: a save took about 2 minutes to a usable console
+LOAD_WAIT_S = 600.0                     # from the first answering window to a console that takes commands, retrying
+                                        # while a late save's load keeps the window from responding (a guess, generous)
 STOP_WAIT_S = 15.0                      # from typing the read event to the debugger's stop (real seconds: dap's clock)
 DATE_WAIT_S = 5.0                       # from the resume to the read event's line in the log
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
@@ -388,8 +390,7 @@ class Session:
         self._error_log = LogFollower(self._paths.logs / "error.log")
         self._console = Console(self._sends, self._proc, self._paths.history,
                                 LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock)
-        with self._step("console_ready"):
-            self._console.ensure_open(CONSOLE_READY_S)
+        self._console_when_loaded()
         if as_tag is not None:
             with self._step("tag", tag=as_tag):
                 self._tag(as_tag)
@@ -531,6 +532,31 @@ class Session:
         except OSError:
             pass
         return None
+
+    def _console_when_loaded(self) -> None:
+        """Wait for the console to take commands once the window has first answered: `ensure_open` is tried
+        every ENTER_RETRY_S while it refuses for a reason in ENTER_RETRIED, until LOAD_WAIT_S has passed; any
+        other error is raised at once, and `watch` (and a stop asked meanwhile) is looked at before each retry,
+        so a game that ended stops the tries. A save from late in a game keeps the window from responding for
+        longer than UNRESPONSIVE_S while it loads (live 2026-11-12: a 47 MB save of 1931 ended the first start
+        `game_gone` 75 s after the launch), which one `ensure_open` takes for a game that has gone. Recorded as
+        the step `console_ready`, with the tries made."""
+        deadline = self._clock() + LOAD_WAIT_S
+        with self._step("console_ready") as out:
+            tries = 0
+            while True:
+                tries += 1
+                out["tries"] = tries
+                try:
+                    self._console.ensure_open(max(1.0, min(CONSOLE_READY_S, deadline - self._clock())))
+                    return
+                except ConsoleError as e:
+                    if e.code not in ENTER_RETRIED or self._clock() + ENTER_RETRY_S > deadline:
+                        raise
+                    out["last_refusal"] = e.code
+                self._sleep(ENTER_RETRY_S)
+                self._check_watch()
+                self._check_abort()
 
     def _await_window(self) -> None:
         deadline = self._clock() + WINDOW_WAIT_S
