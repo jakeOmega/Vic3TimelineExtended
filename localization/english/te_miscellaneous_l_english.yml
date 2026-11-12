@@ -1426,6 +1426,7 @@
  banking_cw_mutual_aid_loyalists_tt:0 "[Concept('concept_loyalist', 'Loyalists')] among the [concept_lower_strata], at most once every #v 5#! years."
  banking_cycle_momentum_bar_name:0 "[concept_banking_momentum]"
  banking_cycle_value_bar_name:0 "[concept_banking_cycle] Value"
+ banking_cycle_value_bar_second:0 "frenzy"
  banking_dash_active_header:0 "Active Policies"
  banking_dash_available_header:0 "Available Interventions"
  banking_dash_band_unknown:0 "#lore unknown#!"
