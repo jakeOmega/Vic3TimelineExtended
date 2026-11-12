@@ -130,11 +130,14 @@ def _old_failure_holds(world):
 def _worlds():
     months = (0, 10, 24, 24.33, 30, 40)
     acts = ((), ("imperial_federation_taken", "imperial_federation_iron_fist"),
-            ("imperial_federation_taken", "imperial_federation_civilizing"))
-    for g, i, a, act, held, bar, colonies in itertools.product(
-            months, months, months, acts, (None, 59, 60), (0, 50, 100), (True, False)):
+            ("imperial_federation_taken", "imperial_federation_civilizing"),
+            # Both flags (not reachable through the decisions): the Iron Fist wins, as in the old chain.
+            ("imperial_federation_taken", "imperial_federation_iron_fist", "imperial_federation_civilizing"))
+    for g, i, a, act, held, bar, colonies, cached in itertools.product(
+            months, months, months, acts, (None, 59, 60), (0, 50, 100), (True, False), (True, False)):
         vars_ = {name: "yes" for name in act}
-        vars_["ce_separation_cached"] = "yes"
+        if cached:
+            vars_["ce_separation_cached"] = "yes"
         if held is not None:
             vars_["colonial_at_100_months"] = held
         yield {"colonial_garrison_months_value": g, "colonial_invest_months_value": i,

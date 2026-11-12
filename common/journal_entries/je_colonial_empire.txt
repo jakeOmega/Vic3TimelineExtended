@@ -509,8 +509,8 @@
 			# --- Path-dependence tracking ---
 			# Count months each programme runs, weighted by its level: a month
 			# at the top level counts 1 (as a month of the old on/off programme
-			# did), a month at level 1 a third. Read by the success and failure effects
-			# to choose the appropriate resolution event, so a cheap low level
+			# did), a month at level 1 a third. Read by the nine outcomes' triggers
+			# to choose the ending, so a cheap low level
 			# cannot steer the ending as fast as the full programme.
 			if = {
 				limit = { NOT = { has_variable = colonial_invest_months } }
