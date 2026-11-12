@@ -1576,6 +1576,9 @@ class Session:
             raise SessionError("no_country", "tag a country first: the click enters whichever country the camera is "
                                "on, and the tagged one is tagged again once the game is entered")
         clicks: list[list[int]] = []
+        # The game in front first (the console's own check, as before each click): a screenshot of the screen
+        # with another window over the game would be that window, and any later look would differ from it.
+        self._console.ensure_open()
         unselected = self._panel()              # the side panel with no country selected, or None: cannot tell
         self._click(COUNTRY_CLICK, clicks)
         self._sleep(CLICK_SETTLE_S)

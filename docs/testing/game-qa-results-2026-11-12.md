@@ -50,7 +50,7 @@ save is not shown by this.
 | 2 (`…082309Z`) | The fixed `add-setup` wait | **Failed, and showed the real cause.** The wait gave up after five minutes (19 looks, the window not responding each time) although the reload's log burst had ended after 67 s. The next `read` then worked at once. Between them nothing read the debugger's connection |
 | 3 (`…083507Z`) | The wait again, now reading the debugger's connection before each look; what Esc does to a law window | **`add-setup` OK by itself**: `loaded: true` after 4 looks and 65.6 s, no debugger stop reported; `run-setup` logged the setup's line and its variable read 7. **Esc probe**: one `activate_law` of State as Universal Heir on the country-select screen raised two windows in turn ("We now have State as Universal Heir!", then "We now have Forced Heirship!", "changed from" the first: something put the law back at once). After `press esc` the first was gone; after a second, both; no menu opened; `enter-game` then entered. The view had moved between the shots |
 | 4 (`…084824Z`) | A fresh save under the owner's current playset (#1588); `enter-game` past a law window | **Playset OK**: the save was made (`te_qa_fixture_e8ac82a3afab`, 38 rule settings, the playset's `headlines_all_minor_events` among them), loaded and read (`c:USA.gdp`, two `has_game_rule`). **Window not closed**: `enter-game`, which then pressed Esc when a click selected nothing, pressed three times and the window stayed; two more `press esc` by hand and the Enter of a console probe left it up as well. The cursor was on the window after the click each time, unlike in session 3. The lobby's side panel was read as unchanged every time, which is right. The view had moved off the country, over open sea |
-| 5 (`…090111Z`) | The console taking the foreground back (#1588) | **OK, by inference.** With the owner's terminal in front of the game and nobody at the machine, a `read` was typed and answered eight seconds later; the console types only into a game in front and waits two quiet three-second gaps before it brings it forward. The session does not record the focus call itself. **Then `enter-game` failed `not_entered`**: by the time it ran the lobby's view was at the top edge of the map, so the country click selected nothing (the side panel read as changed all the same, because it is translucent and the map behind it had moved) |
+| 5 (`…090111Z`) | The console taking the foreground back (#1588) | **OK, by inference.** The owner put their terminal in front of the game and left the machine alone; the next `read` was typed and answered, taking 7 s where the five reads timed that day with the game already in front and the console open took 1 to 2 s. The console types only into a game in front and waits two quiet three-second gaps before it brings it forward, which is the difference. The session does not record the focus call itself. **Then `enter-game` failed `not_entered`**: by the time it ran the lobby's view was at the top edge of the map, so the country click selected nothing (the side panel read as changed all the same, because it is translucent and the map behind it had moved) |
 | 6 (`…090755Z`) | `enter-game`'s panel check on an ordinary lobby | **OK.** A country was selected, 19.1% of the side panel's pixels changed (the threshold is 1%; a covered lobby gave 0.0% in session 4), Start was clicked and the date moved from 2 to 6 January |
 
 What these settle:
@@ -72,9 +72,12 @@ What these settle:
   its letters are camera keys: every verb after a `press` does this once. And in session 5 the view ran to the
   top of the map while the game sat in front between two verbs; the mouse resting on a screen edge would do
   that, but it was not checked. `enter-game` clicks wherever the view is, so either can make it miss.
-- **Activating State as Universal Heir by effect does not stick**: the game put Forced Heirship back at once,
-  on the country-select screen and in an entered game alike (`has_law` read no for it afterwards). Not looked
-  into; it means the 2026-11-11 note "laws changed there were not read afterwards" may have this cause.
+- **State as Universal Heir, activated by a setup on the country-select screen, was replaced at once.** A
+  second window, "We now have Forced Heirship!" (`law_equal_inheritance`), said "changed from State as
+  Universal Heir" (sessions 3 and 4), and after entering `has_law = law_type:law_state_universal_heir` read no.
+  Which law the USA then had was not read with a form that must say yes. The mod's generated law-consistency
+  effect has a cascade for that law (`extra_law_consistency_generated.txt`), which would explain it; not
+  checked. The 2026-11-11 note "laws changed there were not read afterwards" may have this cause.
 
 ## Self-checks in the runs
 

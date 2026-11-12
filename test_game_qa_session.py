@@ -1134,6 +1134,21 @@ class EnterPastAWindowTest(SessionTestCase):
         self.session.advance(3)
         self.assertGreaterEqual((self.game.date - start).days, 3)
 
+    def test_the_first_look_at_the_panel_comes_with_the_game_in_front(self):
+        # A screenshot is of the screen: with another window over the game the first look would be of that
+        # window, and every later look would differ from it.
+        self.started()
+        self.game.foreground = False
+        in_front = []
+        real = self.game.screenshot
+
+        def shot(pid, path, max_width=1600):
+            in_front.append(self.game.foreground)
+            return real(pid, path, max_width)
+        self.game.screenshot = shot
+        self.assertTrue(self.session.enter_game()["entered"])
+        self.assertTrue(in_front and all(in_front))
+
     def test_a_selected_country_goes_on_to_start(self):
         self.started()
         result = self.session.enter_game()
