@@ -611,7 +611,9 @@ tested only against fakes and constructed journals). The three
 hardenings the last review left (issue #1588) were built on 2026-11-12 and are tested only against
 fakes too: the helper's `not_ours` when the process changes in the middle of a batch, a `stop` after
 the game's process id was reused, and the time put back on a file the game rewrote with the same
-bytes (on a Windows drive, where a time set from WSL keeps whole seconds).
+bytes (on a Windows drive, where a time set from WSL keeps whole seconds). The first live run
+should show `pdx_settings.json` under `retimed` in the stop's reply: a time that cannot be set is
+skipped silently, so a drive on which it never works would look like a run with nothing to retime.
 
 Settled on 2026-11-11 by the first play-test runs (`docs/testing/game-qa-results-2026-11-11.md`): a variable a
 setup set on the country-select screen survives entering the game (laws and modifiers changed there were not
