@@ -158,3 +158,12 @@ operation against us now.
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 `covert_can_research_current` OK (`held=75 can_research=75`).
+
+## The world's best capacity, once a month (#1724)
+
+The first holder to pulse each month stores `global_max_ic`, and a 25-day global lock (`iw_max_ic_lock`) spares the rest.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The figure is there.** Any game past the first month with the entry active: hover the overview's Capacity bar. | "of the world's best (N)" with N above 0, and the standing icon (Vulnerable … Fortress) as before. | N reads 0 or the bar is full for everyone: `global_max_ic` isn't being set; read `has_global_variable = iw_max_ic_lock`. A lock that never lapses would freeze the figure. |
+| **It refreshes.** The same game two months later. | N changes as the leading service grows or shrinks. | The same N month after month while capacities change: the lock isn't expiring. |
