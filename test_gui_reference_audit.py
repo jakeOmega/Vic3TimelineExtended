@@ -2,6 +2,7 @@
 import contextlib
 import io
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,6 +11,15 @@ from types import SimpleNamespace
 
 import gui_reference_audit as audit
 import loc_coverage_audit as loc
+
+REPO = Path(__file__).resolve().parent
+# What `--strict` reported as unresolved `gui_types` on a machine with the game
+# (#1271, #1349, #1403): every one an element or block property the engine
+# builds in, which no vanilla .gui file defines with `type` or `template`.
+ENGINE_NAMES_A_REAL_INSTALL_FLAGGED = """scrollbar_vertical scrollbar_horizontal marker
+click_modifiers datacontext_from_model treemapchart track texticon slider
+right_click_menu_widget offset inc_button iconsize drop_target draggable_behavior
+drag_widget dec_button camera_position camera_near_far camera_look_at""".split()
 
 
 class GuiReferenceTests(unittest.TestCase):
@@ -293,6 +303,77 @@ REPLACE:mod_base = { x = 1 }
         vanilla = self.root.parent / 'game'
         (vanilla / 'gui').mkdir(parents=True)
         self.assertIn(('gui_types', 'Typo'), self.errors(self.run_audit(vanilla)))
+
+    def test_engine_names_a_real_install_flagged_are_builtins(self):
+        # #1349: with vanilla's gui/ read, an unresolved name is an error, so
+        # an engine element missing from BUILTINS failed --strict locally.
+        self.gui('widget = {\n' + ''.join(f' {name} = {{ }}\n' for name in ENGINE_NAMES_A_REAL_INSTALL_FLAGGED)
+                 + ' Typo = { }\n}\ntypes T { type mine = right_click_menu_widget { } }\n')
+        vanilla = self.root.parent / 'game'
+        (vanilla / 'gui').mkdir(parents=True)
+        self.assertEqual([('gui_types', 'Typo')], self.errors(self.run_audit(vanilla)))
+        # offline they aren't warnings either
+        self.assertEqual(['Typo'], [f.name for f in self.run_audit().flags])
+
+    def test_name_vanilla_instantiates_without_defining_is_an_engine_element(self):
+        # #1271: vanilla's own files use every engine element and block
+        # property without defining it, so a name vanilla opens a block with
+        # needs no BUILTINS entry. The mod's own use of a name proves nothing.
+        vanilla = self.root.parent / 'game'
+        self.write('gui/v.gui', '''types V {
+ type vanilla_type = button {
+  engine_element = { engine_property = { 1 2 } }
+ }
+ type other = engine_base { }
+}
+# commented_out = { }
+window = { text = "quoted = { }" }
+''', base=vanilla)
+        self.gui('''widget = {
+ vanilla_type = { }
+ engine_element = { engine_property = { 3 4 } }
+ commented_out = { }
+ quoted = { }
+ Typo = { }
+ Typo = { }
+}
+types T { type mine = engine_base { } type bad = no_such_base { } }
+''')
+        result = self.run_audit(vanilla)
+        self.assertEqual([('gui_types', 'commented_out'), ('gui_types', 'quoted'), ('gui_types', 'Typo'),
+                          ('gui_types', 'Typo'), ('gui_types', 'no_such_base')], self.errors(result))
+        self.assertEqual({'engine_element', 'engine_property', 'engine_base'},
+                         audit.Index(self.root, vanilla).engine_elements - audit.BUILTINS)
+        # a type vanilla defines is still a recorded, resolved reference
+        self.assertIn({'name': 'vanilla_type', 'line': 2, 'resolved': True}, result.references['gui/test.gui']['gui_types'])
+
+    def test_the_mod_against_the_vanilla_gui_fixtures_as_an_install(self):
+        # The reproduction without a game: the eight vanilla files under
+        # test_fixtures/vanilla_gui stand in for <install>/game/gui, which
+        # marks gui_types complete, as a real install does. Against the whole
+        # mod, the names a real install flagged came to 270 errors here before
+        # the fix, the figure #1403 gives. Most vanilla types are defined in
+        # files that aren't fixtures, so the mod can't be clean in this setup:
+        # check the engine names only. The generated row files are left out for
+        # time (three files, half the mod's GUI text, and the audit's line
+        # lookup is quadratic in file size); the rest uses all twenty names.
+        install = self.root.parent / 'install'
+        shutil.copytree(REPO / audit.VANILLA_GUI_FIXTURES, install / 'game/gui')
+        mod = self.root.parent / 'mod_gui'
+        uses = set()
+        for path in sorted((REPO / 'gui').rglob('*.gui')):
+            if not path.name.endswith('_generated_rows.gui'):
+                target = mod / path.relative_to(REPO)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(path, target)
+                uses.update(m[1] or m[2] for m in audit.GUI_USE.finditer(audit.masks(audit.read(path))[1]))
+        self.assertLessEqual(set(ENGINE_NAMES_A_REAL_INSTALL_FLAGGED), uses)
+        # vanilla's own files vouch for the three of those names they use
+        engine_elements = audit.Index(self.root, install).engine_elements
+        self.assertLessEqual({'scrollbar_vertical', 'scrollbar_horizontal', 'click_modifiers'}, engine_elements)
+        errors = {f.name for f in audit.audit(mod, install).flags if f.kind == 'gui_types' and f.severity == 'error'}
+        self.assertTrue(errors, 'with gui/ read, a vanilla type defined outside the fixtures should be an error')
+        self.assertEqual(set(), errors & (set(ENGINE_NAMES_A_REAL_INSTALL_FLAGGED) | engine_elements))
 
     def test_cli_no_writes_strict_status_and_regenerate(self):
         self.gui('widget = { onclick = "[GetScriptedGui(\'bad\')]" }')
