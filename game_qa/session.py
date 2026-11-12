@@ -502,7 +502,7 @@ class Session:
             stem = path.stem
             self._rules = {"settings": settings, "switched": changed, "switched_at": rules.SWITCHED_AT}
             self._record("switch_rules", outcome="ok", save=stem, switched=changed)
-            pruned = pruned + self._prune(user)
+            pruned = pruned + self._prune(user, in_use=(path.name, fixture.FIXTURE_PREFIX + key + ".v3"))
         else:
             try:
                 self._rules = {"settings": rules.settings_of((user / fixture.SAVE_FOLDER / (stem + ".v3"))
@@ -511,9 +511,11 @@ class Session:
                 self._record("rules", outcome="unread", detail=str(e))
         return stem, made, pruned
 
-    def _prune(self, user: Path) -> list[str]:
+    def _prune(self, user: Path, in_use: Sequence[str] = ()) -> list[str]:
+        """Trim the old fixtures, never one of `in_use` (file names): the save about to be loaded, and the
+        fixture it was copied from."""
         try:
-            return fixture.prune(user, keep=FIXTURES_KEPT)
+            return fixture.prune(user, keep=FIXTURES_KEPT, in_use=in_use)
         except OSError as e:
             self._record("fixture_prune", outcome="failed", detail=str(e))
             return []
@@ -558,7 +560,7 @@ class Session:
             self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
                                    if launches else None, watches[-1] if watches else None, None, calls)
             raise
-        pruned = self._prune(user)
+        pruned = self._prune(user, in_use=(made.name,))
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
 
@@ -710,7 +712,8 @@ class Session:
             if self._clock() + RELOAD_RETRY_S > deadline:
                 raise SessionError(
                     "not_reloaded", "the game had not loaded revision %d of %s after %d looks (it last logged "
-                    "revision %d%s). The setup is in the file: run-setup looks again before it runs it"
+                    "revision %d%s). The setup is in the file: run-setup and read look again before they run, "
+                    "and attach the debugger again once the reload has come"
                     % (revision, overlay.EFFECTS_FILE, tries, self._loaded_revision,
                        "; the last look failed with " + failed if failed else ""),
                     revision=revision, seen=self._loaded_revision, tries=tries)
@@ -724,13 +727,30 @@ class Session:
         deadline = self._clock() + LOADED_WAIT_S
         while True:
             found = [overlay.loaded_revision(parse(line).text) for line in self._new_lines() if line != GAP_MARKER]
-            found = [rev for rev in found if rev is not None]
+            # Only a revision this overlay has written counts: a setup's own log line could carry the text.
+            found = [rev for rev in found if rev is not None and rev <= self._overlay.revision]
             if found:
-                self._loaded_revision = max(self._loaded_revision, *found)
+                self._loaded_revision = max(self._loaded_revision, found[-1])
                 return
             if self._clock() >= deadline:
                 return
             self._sleep(LOG_POLL_S)
+
+    def _catch_up_reload(self) -> bool:
+        """After an `add_setup` whose reload was not seen: look once more, and when the game has moved on to a
+        newer revision attach the debugger again (the reload may have dropped the breakpoint). True when it had."""
+        if self._loaded_revision >= self._overlay.revision:
+            return False
+        before = self._loaded_revision
+        try:
+            self._look_for_revision()
+        except ConsoleError as e:
+            if e.code not in RELOAD_RETRIED:
+                raise
+        if self._loaded_revision == before:
+            return False
+        self._attach("reattach")
+        return True
 
     def run_setup(self, name: str) -> list[str]:
         """Run a setup through its event; return its log lines between its start and done markers. A setup added
@@ -742,21 +762,15 @@ class Session:
             if event is None:
                 raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
                                    % (name, sorted(self._overlay.setup_events) or "none"))
+            if self._catch_up_reload():
+                out["reloaded"] = True
             added = self._overlay.added.get(name)
             if added is not None and self._loaded_revision < added[0] + 1:
                 needed = added[0] + 1       # slot n was filled by revision n + 1
-                try:
-                    self._look_for_revision()
-                except ConsoleError as e:
-                    if e.code not in RELOAD_RETRIED:
-                        raise
-                if self._loaded_revision < needed:
-                    raise SessionError("setup_not_loaded", "the game has not reloaded %s since setup %s was added "
-                                       "(it logs revision %d, the setup came with %d): wait and run it again"
-                                       % (overlay.EFFECTS_FILE, name, self._loaded_revision, needed),
-                                       revision=needed, seen=self._loaded_revision)
-                out["reloaded"] = True
-                self._attach("reattach")
+                raise SessionError("setup_not_loaded", "the game has not reloaded %s since setup %s was added "
+                                   "(it logs revision %d, the setup came with %d): wait and run it again"
+                                   % (overlay.EFFECTS_FILE, name, self._loaded_revision, needed),
+                                   revision=needed, seen=self._loaded_revision)
             self._new_lines()                   # what was logged before is not this setup's
             self._console.run("event " + event, reply=False)
             lines = self._setup_lines(name)
@@ -807,6 +821,7 @@ class Session:
         "Unknown trigger type". A variable that is not set reads 0, not an error (`c:FRA.var:x` gave "0", live
         2026-11-11), so a 0 does not prove the variable set."""
         self._require_game()
+        self._catch_up_reload()             # a reload still due after add-setup may have dropped the breakpoint
         if isinstance(exprs, str):
             raise SessionError("bad_argument", "read takes a list of expressions, not one string")
         exprs = list(exprs)

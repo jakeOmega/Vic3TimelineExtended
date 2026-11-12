@@ -813,6 +813,29 @@ class SwitchRulesTest(SessionTestCase):
         self.assertIn("-loadsave=" + stem, launch)
         self.assertEqual(next(c for c in self.cli.calls if c[0] == "snapshot"), ["snapshot", "--save", stem])
 
+    def test_the_copy_about_to_load_survives_the_prune(self):
+        # Review finding: with three copies and the oldest asked for, prune removed the save the reply named.
+        first = self.start(switch_rules={"tax_rule": "tax_off"})["save"]
+        saves = self.user / "save games"
+        os.utime(saves / (first + ".v3"), (1_600_000_000,) * 2)
+        for n in (1, 2):
+            other = saves / ("te_qa_fixture_%s_s%08x.v3" % (self.key, n))
+            other.write_bytes(text_save(["no_fantasy", "tax_off"]))
+        self.setUp_second_session()
+        reply = self.start(switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], first)
+        self.assertTrue((saves / (first + ".v3")).is_file())
+        self.assertTrue(self.fixture_save.is_file())
+        self.assertNotIn(first + ".v3", reply.get("fixtures_pruned", []))
+
+    def setUp_second_session(self):
+        """A new session over the same folders (a session runs one game)."""
+        self.session.stop()
+        self.game = Game(self.user, self.order)
+        self.cli = Cli(self)
+        self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
+                                       sleep=self.game.sleep, clock=self.game.clock, helper_factory=self.new_helper)
+
     def test_a_rule_or_setting_the_game_does_not_define_starts_nothing(self):
         for switches, code in (({"nope": "x"}, "bad_rule"), ({"tax_rule": "no_fantasy"}, "bad_rule"),
                                ({"tax rule": "tax_off"}, "bad_rule"), ("tax_rule=tax_off", "bad_argument")):
@@ -937,6 +960,34 @@ class AddSetupTest(SessionTestCase):
         self.game.adapter.breakpoints.clear()
         self.assertEqual(self.session.run_setup("late"), ["one line"])
         self.assertIn(EVENTS_WIN, self.game.adapter.breakpoints)
+
+    def test_a_read_after_a_late_reload_attaches_again_first(self):
+        # Review finding: after not_reloaded nothing attached the debugger again once the reload came, and every
+        # read failed.
+        self.started()
+        self.game.reloads = False
+        self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_reloaded")
+        self.game.loaded_revision = 1               # the reload lands, and drops the breakpoint
+        self.game.adapter.breakpoints.clear()
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+        self.assertIn(EVENTS_WIN, self.game.adapter.breakpoints)
+
+    def test_a_revision_the_overlay_never_wrote_is_not_believed(self):
+        # Review finding: a log line naming a later revision latched "loaded" for every setup after it.
+        self.started()
+        self.game.reloads = False
+        real = self.game._run
+
+        def forged(text):
+            real(text)
+            if text == "event te_qa.3":
+                self.game.script("TE_QA overlay rev 99")
+                self.game.pad()
+        self.game._run = forged
+        error = self.session_error(self.session.add_setup, "late", self.BODY)
+        self.assertEqual((error.code, error.info["seen"]), ("not_reloaded", 0))
+        self.assertEqual(self.session._loaded_revision, 0)
 
     def test_a_game_that_ends_during_the_wait_stops_the_looks(self):
         self.started()

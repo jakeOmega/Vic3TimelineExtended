@@ -252,14 +252,21 @@ def make(
     return target
 
 
-def prune(user_data: Path, keep: int = 2, keep_switched: int = 2) -> list[str]:
+_SWITCHED_KEY = re.compile(r"(.+)_s[0-9a-f]{8}")     # SWITCHED_MARK and the eight hex digits rules.switched_key adds
+
+
+def prune(user_data: Path, keep: int = 2, keep_switched: int = 2, in_use: Sequence[str] = ()) -> list[str]:
     """Remove all but the `keep` newest `te_qa_fixture_*.v3` files directly in `save games/` (newest by
     modification time, equal times by name) and return the names removed, oldest first. Nothing else is touched.
 
-    A copy with a rule switched (its key holds SWITCHED_MARK) is not counted among those: it is removed with
-    the fixture it was made from, and of the ones whose fixture stays only the `keep_switched` newest are kept.
-    Counted together, two switched copies would push out the fixture they came from, and the next plain start
-    would pay for a new run."""
+    A copy with a rule switched (its key ends in SWITCHED_MARK and eight hex digits) is not counted among
+    those: it is removed with the fixture it was made from, and of the ones whose fixture stays only the
+    `keep_switched` newest are kept. Counted together, two switched copies would push out the fixture they came
+    from, and the next plain start would pay for a new run.
+
+    `in_use` names files (as in the folder) that are never removed, whatever their age: the save a session is
+    about to load, and the fixture it was copied from. A copy used again keeps its old time, so age alone
+    could remove the very save the reply names."""
     if keep < 0 or keep_switched < 0:
         raise ValueError("keep is a count of fixtures, not negative")
     found = sorted(
@@ -267,16 +274,25 @@ def prune(user_data: Path, keep: int = 2, keep_switched: int = 2) -> list[str]:
         for path in (Path(user_data) / SAVE_FOLDER).glob(FIXTURE_GLOB)
         if path.is_file() and not path.is_symlink()
     )
-    plain = [entry for entry in found if SWITCHED_MARK not in _key_of(entry[1])]
-    switched = [entry for entry in found if SWITCHED_MARK in _key_of(entry[1])]
-    doomed = plain[: max(len(plain) - keep, 0)]
-    kept_keys = {_key_of(name) for _, name, _ in plain[len(doomed):]}
-    orphans = [entry for entry in switched if _key_of(entry[1]).split(SWITCHED_MARK)[0] not in kept_keys]
+    protected = set(in_use)
+    plain = [entry for entry in found if _base_key(entry[1]) is None]
+    switched = [entry for entry in found if _base_key(entry[1]) is not None]
+    doomed = [entry for entry in plain[: max(len(plain) - keep, 0)] if entry[1] not in protected]
+    going = {entry[1] for entry in doomed}
+    kept_keys = {_key_of(entry[1]) for entry in plain if entry[1] not in going}
+    orphans = [entry for entry in switched if _base_key(entry[1]) not in kept_keys and entry[1] not in protected]
     living = [entry for entry in switched if entry not in orphans]
-    doomed = sorted(doomed + orphans + living[: max(len(living) - keep_switched, 0)])
+    extra = [entry for entry in living[: max(len(living) - keep_switched, 0)] if entry[1] not in protected]
+    doomed = sorted(doomed + orphans + extra)
     for _, _, path in doomed:
         path.unlink()
     return [name for _, name, _ in doomed]
+
+
+def _base_key(name: str) -> str | None:
+    """The key of the fixture a switched copy was made from, or None for a file that is not one."""
+    found = _SWITCHED_KEY.fullmatch(_key_of(name))
+    return found.group(1) if found else None
 
 
 def _key_of(name: str) -> str:

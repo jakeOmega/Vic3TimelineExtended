@@ -103,6 +103,21 @@ class LastAppliedTest(RulesTestCase):
         self.assertEqual(rules.last_applied(self.user), [])
 
 
+    def test_a_field_between_the_name_and_the_settings_is_read_past(self):
+        self.write_presets('game_rules_preset={\n\tname="LastAppliedRules"\n\tironman=no\n\tsetting={ a b }\n}\n')
+        self.assertEqual(rules.last_applied(self.user), ["a", "b"])
+
+    def test_a_commented_out_preset_is_not_read(self):
+        self.write_presets('# game_rules_preset={ name="LastAppliedRules" setting={ old } }\n'
+                           'game_rules_preset={\n\tname="LastAppliedRules"\n\tsetting={ a } # setting={ c }\n}\n')
+        self.assertEqual(rules.last_applied(self.user), ["a"])
+
+    def test_another_presets_settings_are_not_taken_for_last_applied(self):
+        self.write_presets('game_rules_preset={\n\tname="Mine"\n\tsetting={ x }\n}\n'
+                           'game_rules_preset={\n\tname="LastAppliedRules"\n}\n')
+        self.assertEqual(rules.last_applied(self.user), [])
+
+
 class RuleTableTest(RulesTestCase):
     def test_a_rule_is_a_top_level_block_and_a_setting_a_block_inside_it(self):
         found = rules.rules_in(RULE_FILE)
@@ -161,6 +176,27 @@ class SwitchTest(RulesTestCase):
         self.assertEqual(new[:15], data[:15], "the header's other fields stay")
         self.assertEqual(new[24 + new_len - 2:24 + new_len + 9], b"}\nironman={")
         self.assertEqual(rules.settings_of(new), ["achievements_allowed", "tax_full", "merges_off", "no_fantasy"])
+
+    def test_only_the_one_entry_is_rewritten_whatever_else_the_lists_hold(self):
+        # Review finding: rewriting the whole list dropped a second "", split a name at a no-break space and
+        # turned bytes that are not UTF-8 into U+FFFD. Every byte but the entry's own must stay.
+        odd = b' ""  "" achievements_allowed\ttax_light na\xc2\xa0me bad\xff merges_on no_fantasy '
+        plain = b' "" achievements_allowed tax_light merges_on no_fantasy '
+        data = save_bytes()
+        self.assertEqual(data.count(plain), 2)
+        data = data.replace(plain, odd)
+        data = data[:15] + b"%08x" % (int(data[15:23], 16) + len(odd) - len(plain)) + data[23:]
+        new, changed = rules.switch(data, {"tax_rule": "tax_off"}, self.table)
+        self.assertEqual(changed["tax_rule"], {"from": "tax_light", "to": "tax_off"})
+        self.assertEqual(new.count(odd.replace(b"tax_light", b"tax_off")), 2)
+        self.assertEqual(new.replace(b"tax_off", b"tax_light")[23:], data[23:])
+
+    def test_a_header_length_that_is_not_the_blocks_is_refused(self):
+        data = save_bytes()
+        for off in (-12, -3, -1, 1, 5, 12):
+            lying = data[:15] + b"%08x" % (int(data[15:23], 16) + off) + data[23:]
+            with self.subTest(off=off), self.assertRaisesRegex(rules.RulesError, "length"):
+                rules.switch(lying, {"tax_rule": "tax_off"}, self.table)
 
     def test_a_switch_to_the_setting_already_held_changes_nothing(self):
         data = save_bytes()
@@ -254,6 +290,56 @@ class SwitchedFixtureTest(RulesTestCase):
             with self.assertRaisesRegex(rules.RulesError, "could not be written"):
                 rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
         self.assertEqual(sorted(p.name for p in self.saves.iterdir()), ["autosave.v3", self.fixture.name])
+
+    def test_a_link_at_the_staged_name_is_removed_and_never_written_through(self):
+        # Review finding: the staged file was opened through a link, and the owner's save it pointed at was
+        # overwritten.
+        owner = self.saves / "autosave.v3"
+        target = self.saves / ("te_qa_fixture_%s.v3" % rules.switched_key(self.KEY, {"tax_rule": "tax_off"}))
+        staged = self.saves / (target.name + rules.STAGED_SUFFIX)
+        staged.symlink_to(owner)
+        path, _, _ = rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
+        self.assertEqual(owner.read_bytes(), b"the owner's")
+        self.assertFalse(path.is_symlink())
+        self.assertEqual(rules.settings_of(path.read_bytes())[1], "tax_off")
+        self.assertFalse(staged.is_symlink() or staged.exists())
+        # A link that points nowhere does not make a file where it points.
+        staged.symlink_to(self.base / "elsewhere.v3")
+        path.unlink()
+        rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
+        self.assertFalse((self.base / "elsewhere.v3").exists())
+
+    def test_a_folder_at_the_staged_name_is_refused_and_left(self):
+        target = self.saves / ("te_qa_fixture_%s.v3" % rules.switched_key(self.KEY, {"tax_rule": "tax_off"}))
+        staged = self.saves / (target.name + rules.STAGED_SUFFIX)
+        staged.mkdir()
+        with self.assertRaisesRegex(rules.RulesError, "could not be written"):
+            rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
+        self.assertTrue(staged.is_dir())
+        self.assertFalse(target.exists())
+
+    def test_a_copy_cut_short_or_a_link_to_another_save_is_not_used_again(self):
+        # Review finding: the reuse check compared the two lists only.
+        path, _, _ = rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
+        whole = path.read_bytes()
+        path.write_bytes(whole[:-10])
+        rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
+        self.assertEqual(path.read_bytes(), whole)
+        other = self.saves / "te_qa_fixture_other.v3"
+        other.write_bytes(whole[:-3] + b"y}\n")
+        path.unlink()
+        path.symlink_to(other)
+        rules.switched_fixture(self.user, self.KEY, {"tax_rule": "tax_off"}, self.table)
+        self.assertFalse(path.is_symlink())
+        self.assertEqual(path.read_bytes(), whole)
+        self.assertEqual(other.read_bytes(), whole[:-3] + b"y}\n")
+
+    def test_a_key_that_is_not_a_plain_word_is_refused(self):
+        (self.saves / "te_qa_fixture_x").mkdir()
+        for key in ("x/../../evil", "../x", "a b", ""):
+            with self.subTest(key=key), self.assertRaises(rules.RulesError):
+                rules.switched_fixture(self.user, key, {"tax_rule": "tax_off"}, self.table)
+        self.assertEqual(sorted(p.name for p in self.user.iterdir()), [fixture.SAVE_FOLDER])
 
     def test_a_staged_file_an_earlier_attempt_left_is_replaced(self):
         target = self.saves / ("te_qa_fixture_%s.v3" % rules.switched_key(self.KEY, {"tax_rule": "tax_off"}))

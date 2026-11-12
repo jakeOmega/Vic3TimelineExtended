@@ -304,6 +304,26 @@ class AddSetupTest(OverlayTestCase):
                 overlay.add_setup(ov, "late", SETUP_A)
         self.assertEqual((ov.revision, ov.added, ov.setup_events), (0, {}, {}))
 
+    def test_a_write_cut_short_puts_the_old_file_back(self):
+        # Review finding: a failure midway left half a file, which the game would reload.
+        ov = self.build({"alpha": SETUP_A})
+        before = ov.effects_file.read_bytes()
+        real = Path.write_bytes
+        calls = []
+
+        def cut_short(path, data):
+            calls.append(len(data))
+            if len(calls) == 1:
+                real(path, data[:197])
+                raise OSError("no space left on device")
+            return real(path, data)
+
+        with mock.patch.object(Path, "write_bytes", cut_short):
+            with self.assertRaisesRegex(overlay.OverlayError, "put back as it was"):
+                overlay.add_setup(ov, "late", SETUP_B)
+        self.assertEqual(ov.effects_file.read_bytes(), before)
+        self.assertEqual((ov.revision, ov.added), (0, {}))
+
     def test_too_many_start_setups_are_refused(self):
         setups = {"s%d" % n: SETUP_A for n in range(overlay.MAX_START_SETUPS + 1)}
         with self.assertRaisesRegex(overlay.OverlayError, "at most"):
@@ -315,6 +335,8 @@ class AddSetupTest(OverlayTestCase):
         self.assertEqual(overlay.loaded_revision(line), 7)
         self.assertEqual(overlay.loaded_revision("TE_QA overlay rev 12"), 12)
         self.assertIsNone(overlay.loaded_revision("TE_QA overlay rev"))
+        self.assertIsNone(overlay.loaded_revision("TE_QA overlay rev \u00b2"))      # a digit to str.isdigit, not to int
+        self.assertIsNone(overlay.loaded_revision("TE_QA overlay rev 3 and more"))
         self.assertIsNone(overlay.loaded_revision("TE_QA PAD 0123"))
 
 

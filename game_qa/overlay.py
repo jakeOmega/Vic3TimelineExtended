@@ -152,19 +152,31 @@ def add_setup(ov: Overlay, name: str, body: str) -> tuple[str, int]:
     revision = ov.revision + 1
     text = _effects_text(ov.bodies, added, revision)
     try:
+        before = ov.effects_file.read_bytes()
+    except OSError as error:
+        raise OverlayError(f"{ov.effects_file} could not be read ({error}); nothing was written") from error
+    try:
         ov.effects_file.write_bytes(_txt(text))
     except OSError as error:
-        raise OverlayError(f"{ov.effects_file} could not be rewritten ({error}); the setup was not added") from error
+        # A write cut short leaves half a file, which the game would reload: put the old one back.
+        try:
+            ov.effects_file.write_bytes(before)
+            state = "the file was put back as it was"
+        except OSError as again:
+            state = f"and the old file could not be put back ({again}): the overlay's effects may be cut short"
+        raise OverlayError(f"{ov.effects_file} could not be rewritten ({error}); the setup was not added, "
+                           f"{state}") from error
     ov.added, ov.revision = added, revision
     ov.setup_events[name] = slot_event(slot)
     return ov.setup_events[name], revision
 
 
 def loaded_revision(line_text: str) -> int | None:
-    """The revision a LOADED_EVENT log line names, or None for any other line."""
+    """The revision a LOADED_EVENT log line names, or None for any other line: the message must end with the
+    prefix and plain digits, nothing after."""
     _, found, rest = line_text.partition(LOADED_PREFIX)
     rest = rest.strip()
-    return int(rest) if found and rest.isdigit() else None
+    return int(rest) if found and re.fullmatch(r"[0-9]{1,6}", rest) else None
 
 
 def check_setups(setups: Mapping[str, str]) -> None:

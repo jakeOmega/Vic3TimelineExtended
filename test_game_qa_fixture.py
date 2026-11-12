@@ -652,6 +652,31 @@ class PruneTest(FixtureTestCase):
                                 "te_qa_fixture_base_s44444444.v3", "te_qa_fixture_new.v3"])
         self.assertEqual(fixture.prune(self.user), [])
 
+    def test_a_file_in_use_is_never_removed_whatever_its_age(self):
+        # Review finding: a copy used again keeps its old time, so prune removed the save the reply named.
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        names = ["te_qa_fixture_base.v3", "te_qa_fixture_base_s11111111.v3", "te_qa_fixture_base_s22222222.v3",
+                 "te_qa_fixture_base_s33333333.v3", "te_qa_fixture_mid.v3", "te_qa_fixture_new.v3"]
+        for age, name in enumerate(names):
+            (self.save_dir / name).write_bytes(b"x")
+            os.utime(self.save_dir / name, (1_700_000_000 + age * 1000,) * 2)
+        in_use = ("te_qa_fixture_base_s11111111.v3", "te_qa_fixture_base.v3")
+        removed = fixture.prune(self.user, in_use=in_use)
+        self.assertEqual(removed, [])       # the base is in use, so its copies have a fixture; the oldest is in use
+        os.utime(self.save_dir / "te_qa_fixture_base_s11111111.v3", (1_600_000_000,) * 2)
+        (self.save_dir / "te_qa_fixture_base_s44444444.v3").write_bytes(b"x")
+        removed = fixture.prune(self.user, in_use=in_use)
+        self.assertNotIn("te_qa_fixture_base_s11111111.v3", removed)
+        self.assertNotIn("te_qa_fixture_base.v3", removed)
+        self.assertTrue(all((self.save_dir / name).exists() for name in in_use))
+
+    def test_a_hand_named_fixture_with_an_underscore_s_is_a_plain_fixture(self):
+        # Review finding: `_s` anywhere in the key read as a switched copy, and the file went as an orphan.
+        path = self.save_dir / "te_qa_fixture_my_seed.v3"
+        path.write_bytes(b"x")
+        self.assertEqual(fixture.prune(self.user), [])
+        self.assertTrue(path.exists())
+
     def test_a_negative_keep_is_refused_and_removes_nothing(self):
         with self.assertRaises(ValueError):
             fixture.prune(self.user, keep=-1)

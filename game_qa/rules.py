@@ -22,7 +22,9 @@ them, which only a lobby of the owner's (or a write to their `presets.txt`, whic
 Whether the mod treats an edited save exactly as it treats a rule changed in game is not verified.
 
 Nothing here writes outside `save games/te_qa_fixture_*`: the copy is staged as `<name>.part` beside its final
-name and renamed, and `presets.txt` is only ever read.
+name and renamed, and `presets.txt` is only ever read. The staged file is made new and never opened through a
+link: whatever sits at that name first is unlinked (a link, not what it points at), and the open refuses to
+follow one.
 """
 
 from __future__ import annotations
@@ -30,6 +32,7 @@ from __future__ import annotations
 import hashlib
 import os
 import re
+import stat
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
@@ -42,7 +45,10 @@ STAGED_SUFFIX = ".part"
 SWITCHED_AT = "2 January 1836, the day after the game began: its setup ran under the old setting"
 
 _NAME = re.compile(r"[A-Za-z0-9_]{1,80}")
-_PRESET = re.compile(r'game_rules_preset\s*=\s*\{\s*name\s*=\s*"([^"]*)"\s*setting\s*=\s*\{([^{}]*)\}')
+_PRESET_OPEN = re.compile(r"game_rules_preset\s*=\s*\{")
+_PRESET_NAME = re.compile(r'(?<![A-Za-z0-9_])name\s*=\s*"([^"]*)"')
+_PRESET_SETTING = re.compile(r"(?<![A-Za-z0-9_])setting\s*=\s*\{([^{}]*)\}")
+_ASCII_SPACE = b" \t\n\r\x0b\x0c"
 _META_LIST = re.compile(rb"\tgame_rules=\{\n\t\tsettings=\{([^{}\n]*)\}")
 _STATE_LIST = re.compile(rb"\ngame_rules=\{\n\tsetting=\{([^{}\n]*)\}")
 _HEADER = re.compile(rb"SAV[0-9a-f]{12}([0-9a-f]{8})")
@@ -63,10 +69,34 @@ def last_applied(user_data: Path) -> list[str]:
         text = (Path(user_data) / PRESETS_FILE).read_text(encoding="utf-8-sig")
     except (OSError, UnicodeDecodeError):
         return []
-    for name, settings in _PRESET.findall(text):
-        if name == LAST_APPLIED:
-            return settings.split()
+    text = "\n".join(_uncommented(line) for line in text.splitlines())
+    for opened in _PRESET_OPEN.finditer(text):
+        block = _block(text, opened.end())
+        name, setting = _PRESET_NAME.search(block), _PRESET_SETTING.search(block)
+        if name is not None and name.group(1) == LAST_APPLIED and setting is not None:
+            return setting.group(1).split()
     return []
+
+
+def _uncommented(line: str) -> str:
+    in_string = False
+    for i, char in enumerate(line):
+        if char == '"':
+            in_string = not in_string
+        elif char == "#" and not in_string:
+            return line[:i]
+    return line
+
+
+def _block(text: str, start: int) -> str:
+    """The text of the block whose opening brace ends at `start`, without its closing brace (to the end of the
+    text when it never closes)."""
+    depth = 1
+    for i in range(start, len(text)):
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        if depth == 0:
+            return text[start:i]
+    return text[start:]
 
 
 # --- the rules the game loads ------------------------------------------------------------------
@@ -123,16 +153,7 @@ def load_rules(folders: Sequence[Path]) -> dict[str, dict]:
 
 def _tokens(text: str):
     """`}` and (key, whether it opens a block, its value or None), comments and quoted strings set aside."""
-    clean = []
-    for line in text.splitlines():
-        in_string, kept = False, []
-        for char in line:
-            if char == '"':
-                in_string = not in_string
-            elif char == "#" and not in_string:
-                break
-            kept.append(char)
-        clean.append("".join(kept))
+    clean = [_uncommented(line) for line in text.splitlines()]
     pattern = re.compile(r'\}|([A-Za-z0-9_.:]+)\s*=\s*(\{|"[^"]*"|[^\s{}]+)|\{')
     for found in pattern.finditer("\n".join(clean)):
         if found.group(0) == "}":
@@ -156,16 +177,23 @@ def settings_of(data: bytes) -> list[str]:
 
 def _lists(data: bytes) -> tuple[re.Match, re.Match, list[str]]:
     header = _header(data)
-    meta_end = len(header.group(0)) + 1 + int(header.group(1), 16)
+    meta_start = len(header.group(0)) + 1
+    meta_end = meta_start + int(header.group(1), 16)
+    block = data[meta_start:meta_end]
+    # The length must be the block's own: it starts `meta_data={`, ends with its closing brace and a newline,
+    # and its braces balance. A length that lies would put the rewritten header out by as much.
+    if not (block.startswith(b"meta_data={") and block.endswith(b"\n}\n")
+            and block.count(b"{") == block.count(b"}")):
+        raise RulesError("the save's header gives a length that is not its meta_data block's, so the block "
+                         "cannot be rewritten safely")
     # From the newline that ends meta_data, so a rule block right after it is found too.
     metas, states = list(_META_LIST.finditer(data, 0, meta_end)), list(_STATE_LIST.finditer(data, meta_end - 1))
     if len(metas) != 1 or len(states) != 1:
         raise RulesError(f"the save names its rule settings {len(metas)} time(s) in meta_data and {len(states)} "
                          "time(s) in the game state, not once in each: it is not a save this can read")
-    meta, state = (_settings(m.group(1)) for m in (metas[0], states[0]))
-    if meta != state:
+    if metas[0].group(1).split() != states[0].group(1).split():
         raise RulesError("the save's two rule lists differ, so which one the game reads is not known")
-    return metas[0], states[0], state
+    return metas[0], states[0], _settings(states[0].group(1))
 
 
 def _header(data: bytes) -> re.Match:
@@ -177,7 +205,19 @@ def _header(data: bytes) -> re.Match:
 
 
 def _settings(raw: bytes) -> list[str]:
-    return [t for t in raw.decode("utf-8", "replace").split() if t != '""']
+    """The list's entries as text, for a report: split where the game splits (ASCII white space), the empty
+    first entry left out."""
+    return [t.decode("utf-8", "replace") for t in raw.split() if t != b'""']
+
+
+def _replace_token(raw: bytes, old: bytes, new: bytes) -> bytes:
+    """`raw` with its one whole entry `old` replaced by `new`, every other byte as it was."""
+    spots = [m for m in re.finditer(re.escape(old), raw)
+             if (m.start() == 0 or raw[m.start() - 1:m.start()] in _ASCII_SPACE)
+             and (m.end() == len(raw) or raw[m.end():m.end() + 1] in _ASCII_SPACE)]
+    if len(spots) != 1:
+        raise RulesError(f"the save's list holds {old.decode()!r} {len(spots)} time(s), not once")
+    return raw[:spots[0].start()] + new + raw[spots[0].end():]
 
 
 def switch(data: bytes, switches: Mapping[str, str], rules: Mapping[str, dict]) -> tuple[bytes, dict[str, dict]]:
@@ -189,6 +229,8 @@ def switch(data: bytes, switches: Mapping[str, str], rules: Mapping[str, dict]) 
     meta, state, current = _lists(data)
     changed: dict[str, dict] = {}
     new = list(current)
+    # Only the one entry of each rule is rewritten: the rest of each list stays byte for byte, whatever it holds.
+    meta_list, state_list = meta.group(1), state.group(1)
     for rule, option in sorted(switches.items()):
         known = rules.get(rule)
         if known is None:
@@ -201,13 +243,15 @@ def switch(data: bytes, switches: Mapping[str, str], rules: Mapping[str, dict]) 
             raise RulesError(f"the save holds {len(held)} setting(s) of {rule}, not one, so there is nothing "
                              "to switch safely")
         changed[rule] = {"from": new[held[0]], "to": option}
+        old, wanted = new[held[0]].encode("utf-8"), option.encode("utf-8")
+        meta_list = _replace_token(meta_list, old, wanted)
+        state_list = _replace_token(state_list, old, wanted)
         new[held[0]] = option
-    listed = (' "" ' + " ".join(new) + " ").encode("utf-8")
     header = _header(data)
     meta_start = header.end() + 1
     meta_len = int(header.group(1), 16)
-    out_meta = data[meta_start:meta.start(1)] + listed + data[meta.end(1):meta_start + meta_len]
-    out_rest = data[meta_start + meta_len:state.start(1)] + listed + data[state.end(1):]
+    out_meta = data[meta_start:meta.start(1)] + meta_list + data[meta.end(1):meta_start + meta_len]
+    out_rest = data[meta_start + meta_len:state.start(1)] + state_list + data[state.end(1):]
     head = data[:header.start(1)] + b"%08x" % len(out_meta)
     return head + b"\n" + out_meta + out_rest, changed
 
@@ -243,6 +287,10 @@ def switched_fixture(user_data: Path, base_key: str, switches: Mapping[str, str]
     files named `te_qa_fixture_*` are touched. RulesError, with nothing written, for whatever `switch` refuses
     and for a base fixture that is not there."""
     check_switches(switches)
+    try:
+        fixture._check_key(base_key)
+    except ValueError as error:
+        raise RulesError(str(error)) from error
     saves = Path(user_data) / fixture.SAVE_FOLDER
     base = saves / f"{fixture.FIXTURE_PREFIX}{base_key}.v3"
     target = saves / f"{fixture.FIXTURE_PREFIX}{switched_key(base_key, switches)}.v3"
@@ -251,23 +299,47 @@ def switched_fixture(user_data: Path, base_key: str, switches: Mapping[str, str]
     except OSError as error:
         raise RulesError(f"the fixture {base.name} could not be read ({error})") from error
     new, changed = switch(data, switches, rules)
-    if target.is_file():
+    if _is_plain_file(target):
+        # Used again only when it is, byte for byte, what would be written now: a copy cut short, or a link to
+        # another save with the same rules, is not it.
         try:
-            held = settings_of(target.read_bytes())
-        except (OSError, RulesError):
-            held = None
-        if held == settings_of(new):
-            return target, changed, held
+            same = target.read_bytes() == new
+        except OSError:
+            same = False
+        if same:
+            return target, changed, settings_of(new)
     staged = target.with_name(target.name + STAGED_SUFFIX)
     try:
-        with open(staged, "wb") as handle:
-            handle.write(new)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(staged, target)
+        _clear(staged)
+        # A new file, never one reached through a link someone left at this name.
+        fd = os.open(staged, os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0), 0o644)
+        try:
+            with os.fdopen(fd, "wb") as handle:
+                handle.write(new)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(staged, target)      # a link at the target is replaced, not written through
+        finally:
+            _clear(staged)
     except OSError as error:
         raise RulesError(f"{target.name} could not be written ({error})") from error
-    finally:
-        if staged.exists():
-            staged.unlink()
     return target, changed, settings_of(new)
+
+
+def _is_plain_file(path: Path) -> bool:
+    try:
+        return stat.S_ISREG(os.lstat(path).st_mode)
+    except OSError:
+        return False
+
+
+def _clear(staged: Path) -> None:
+    """Remove what is at the staged name: a file or a link (the link, never what it points at). A folder there
+    is left, and raises OSError, as nothing of the harness's is a folder."""
+    try:
+        mode = os.lstat(staged).st_mode
+    except FileNotFoundError:
+        return
+    if stat.S_ISDIR(mode):
+        raise IsADirectoryError(f"{staged} is a folder")
+    os.unlink(staged)
