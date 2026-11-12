@@ -188,15 +188,19 @@ is a measuring aid only and is never committed (the one used is in
 
 | Entry | 30 days | Largest parts |
 |---|---|---|
-| `te_construction_market_recalc_events.1` (152 calls, from `on_revolution_start` ×126, treaty-article events, the yearly country pulse) | 3,027 ms | all in `te_construction_market_country_update_sites`: 20 ms a call |
+| `te_construction_market_recalc_events.1` (152 calls: `on_revolution_start` 126, the yearly country pulse 21) | 3,027 ms | all in `te_construction_market_country_update_sites`: 20 ms a call |
 | `on_monthly_pulse_country` (265 country pulses) | 2,801 ms | Cultural Hegemony 526, SoL expectations 443, monetary 363, monuments 244, `headlines_on_actions.txt` (vanilla) 121, culture merge 112, trade partner 88, space race 84, eight `extra_on_actions.txt` blocks 370 |
 | Journal entry pulses | 2,939 ms | Strategic Reserve weekly 806, covert warfare monthly 791, Cultural Hegemony monthly 689, nuclear program weekly 160 and monthly 72, UN monthly 144, banking monthly 95 and weekly 15 |
 | `on_yearly_pulse_state` (63 states) | 2,738 ms | Demographics `te_demog_state_yearly` 2,083 (33 ms a state: inheritance and Wealth Concentration refresh 1,178, the walks 892), local climate 589 |
 | Colonial stability bar's `monthly_progress` (`extra_progress_bars.txt:117`, 237 calls) | 899 ms | |
 | `on_monthly_pulse`, global (1 call) | 669 ms | journal map 177, power grid 151, UN 110, tax 92, launch windows 40 |
 
-About 13 s of serial script over 30 days, roughly 0.4 s a game day under the
-profiler.
+About 13 s of serial script over 30 days, 0.4 s a game day under the
+profiler. Read that as a ceiling, not as the unattributed 0.43 s: the profiler
+inflates what it times. The #1721 A/B below is the only calibration so far,
+at least 2 s profiled over 30 days showing as about 1 s of wall time over 59
+unprofiled days. All the serial script is probably well under a tenth of wall
+time.
 
 **Script per frame type** (flat dump, a dump after every day of 4 August →
 3 September): an ordinary day ran 0.83–1.6 s of script (summed over threads),
@@ -221,7 +225,8 @@ from 2.06 s (1916–17) to 2.47 s (1922), 2.74 s (1927), 3.13 s (1930) and
 #1721: answer `un_events.4`, play 60 days unprofiled, then 30 under the
 profiler.
 - **Serial script:** `on_revolution_start` fell from 1,883 ms to under
-  404 ms over 1 September to 1 October, and the treaty-article events from
+  404 ms over 1 September to 1 October, and the yearly country pulse's `events` list
+  (`treaty_article_events_on_actions.txt:1`, which fires the recalc) from
   643 ms to under 404 ms. The other serial roots stayed within 5%.
 - **Wall time:** 75 s against 74 s over 3 July to 1 September. That is at
   the log's resolution.
@@ -324,9 +329,9 @@ All are exact: they change no result unless a line says otherwise.
 ## Open (ranked by measured cost, 2026-11-12)
 
 1. **Unattributed day-boundary time: about 0.43 s of each ordinary day's
-   hour 0** (partly attributed now: the serial script in "Which script holds
-   up the day" is about 0.4 s a day under the profiler, spread over the day
-   boundaries; the construction market's share is fixed in #1721) (1931; 22% of wall time), beyond the tick tasks and the
+   hour 0** (the serial script in "Which script holds up the day" is part of
+   it, at most 0.4 s a day under the profiler and likely well under half that
+   unprofiled; the construction market's share is fixed in #1721) (1931; 22% of wall time), beyond the tick tasks and the
    per-frame floor. Suspects:
    - The day-spread pulses. Monthly country pulses come about 9 countries a
      day, and yearly state and country pulses are spread over the year. The
