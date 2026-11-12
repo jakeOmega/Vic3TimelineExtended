@@ -2132,7 +2132,7 @@ un_chamber_propose_sgui = {
 			# audit, UN-23), then the whole test, which they make up.
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_observer_request
-				un_mission_holds_elections = yes
+				te_holds_elections = yes
 			}
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_observer_request_seated

@@ -35,13 +35,20 @@ nuclear_guarantee = {
 	max_target_involvement = 1000
 	target_involvement_applies_to = target_country
 
-	flags = { can_be_renegotiated giftable friendly }
+	flags = { show_in_lens can_be_renegotiated giftable friendly }
 
 	usage_limit = once_per_side
 
 	# The beneficiary is the one leaned on (see header).
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200
+	}
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		has_game_rule = nuclear_weapons_enabled
 	}
 
 	# ROOT is the source (the guarantor) in visible and possible, as in the
@@ -123,7 +130,8 @@ nuclear_guarantee = {
 				}
 			}
 		}
-		# Two gates on a new guarantee (owner rulings 2026-10-05); a guarantee
+		# Two gates on a new guarantee (owner rulings 2026-10-05), this one and
+		# the ties gate in can_propose below; a guarantee
 		# in force stays, since neither is in requirement_to_maintain, but a
 		# renegotiated treaty must pass them. The Budapest offer skips both:
 		# nuclear_custody.11 creates guarantees from the powers that pressed
@@ -148,6 +156,24 @@ nuclear_guarantee = {
 				scope:source_country = { has_variable = nuclear_weapon_stockpile }
 				scope:target_country = {
 					nd_believed_stockpile < scope:source_country.var:nuclear_weapon_stockpile
+				}
+			}
+		}
+	}
+
+	# The ties gate, in can_propose (1.15; can_ratify until 2026-11-12):
+	# it runs on the whole treaty when it is proposed, never when an
+	# article is added to a draft, so the alliance, pact or Guarantee
+	# Independence can be added after the guarantee. It sees can_ratify's
+	# scopes. The Budapest offer skips it as it skips the outguns gate
+	# above; whether create_treaty runs can_propose is untested too.
+	can_propose = {
+		trigger_if = {
+			limit = {
+				NOT = {
+					scope:target_country = {
+						is_target_in_variable_list = { name = nd_bp_guarantors target = scope:source_country }
+					}
 				}
 			}
 			# Military ties: an alliance or defensive pact, in force or in this

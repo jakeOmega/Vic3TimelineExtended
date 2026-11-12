@@ -389,3 +389,21 @@ Each system tab with a journal entry now ends, above Open Journal Entry, on the 
 | **2. Banking and the United Nations.** With a few policies active (Banking) or a resolution's modifier in force (UN), the Budget panel's Banking tab and the Diplomacy panel's UN tab, side panel and full screen in the Timeline Extended window. | The strip at the foot of each, in both modes; the scaling row first, then the timed one. | Missing in full screen only: a wide mount replaced the frame's `tab_entry_modifiers` block. |
 | **3. A tab with nothing on its entry.** Covert Warfare or Grand Monuments with no modifier on the entry. | No strip and no gap: Open Journal Entry sits its usual 10 below the sections. | A gap: the strip's root lost `ignoreinvisible`, or its inner `visible`. |
 | **4. Another country.** National Info's Cultural Hegemony and Space Race tabs for another country. | No strip. | A strip with your own entry's icons: the strip lost `te_own_country_only`. |
+
+## A revolution's winner keeps the nation's history (#1477, 2026-11-12)
+
+When the rebels win, `te_history_repair_after_civil_war` (`te_history_civil_war_effects.txt`, from the shared
+`te_civil_war_on_won`) moves the dead loser's samples older than the winner's own oldest to the winner with
+`set_parent` and adds them to the winner's lists, `te_hist` (the system charts) and `te_dg_hist` (the census), then cuts
+each to its cap (evicting the oldest directly) and sorts it once. Before, every rebel win reset the nation's charts. Two engine facts are unverified, and
+each has a self-check. Any game with a rebel win over a played country or a major power reads them; the observer
+runs' revolutions are enough.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … history_after_civil_war` | Once a game, at the first rebel win whose loser kept a monthly store (`te_hist_since_y`). A loser whose samples were all newer than the winner's logs nothing | the dead loser's lists and their containers read at `on_civil_war_won`: `hist_moved` / `dg_moved` samples reached the winner (`hist_before` / `dg_before` were its own, from the war's months) | `hist_loser=0`: the loser kept a store and its list read empty at that hook, so lists or their containers are gone by then | Copy the samples before the war ends: at `on_revolution_start` re-parent nothing, but at each month of the war give the rebels' own store the original's older samples, so a rebel win needs no read of the dead loser |
+| `TE_SELF_CHECK … history_after_civil_war_kept` | Once a game, two months after the OK above, when it moved three or more monthly samples (two new months would mask the loss of fewer). The census half (`dg`) is judged only when three or more of its samples moved; otherwise it reads `dg=… of 0` and says nothing | both stores still hold at least the samples they held after the repair (`hist=N of M`): the moved containers outlived the loser's deletion | fewer: `set_parent` did not keep them, and they died with the loser | Copy instead of moving: create a container parented to the winner for each sample and copy its variables, every `te_hist_v_<METRIC>` and `te_hist_mk_<MARK>` and the census's `te_dg_h_*`, with a test that the list of names covers every recorder |
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. The charts go on.** A save before and two weeks after a rebel win over a tracked country (the player's, or a major power's). Open its National Info charts, or run `python3 scripts/analysis/check_save_history_order.py` and `scripts/analysis/save_country_probe.py --tag <TAG>` on the later save. | The winner's Banking or Monetary charts and its Demographics history reach back before the war; "History available since" names the loser's first month; both stores `ascending=True`, at most 240 and 100 samples. | Empty before the war: read the two self-checks above. Out of order: the sort's completeness gate (`te_hcw_n_sorted = te_hcw_n_live`) did not pass. |

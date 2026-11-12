@@ -462,8 +462,8 @@ un_vote.1 = {
 		# sanctions resolution against ROOT means accepting the verdict. Only
 		# on a resolution whose verdict the target can accept
 		# (un_resolution_target_may_accept): a refugee resolution names the
-		# country its refugees flee, and an expulsion, a mandate or a court
-		# referral lands in full whatever the target votes.
+		# country its refugees flee, and an expulsion or a mandate lands in
+		# full whatever the target votes.
 		name = {
 			trigger = {
 				scope:un_vote_target ?= this
@@ -2135,9 +2135,10 @@ un_vote.3 = {
 	# standing: it was asked for nothing, so it complied with nothing. In the
 	# no-ballot case the country is still bound by a passed
 	# convention (default acceptance), since the apply blocks below gate on
-	# the passed tag; but what only a ballot commits a member to — a great
-	# power's anti-colonial stance, a pledge of peacekeepers or aid — is
-	# gated inside those effects on having voted (un_lobby_has_voted).
+	# the passed tag; but what only a ballot commits a member to is gated
+	# inside those effects: a pledge of peacekeepers or aid on having voted
+	# (un_lobby_has_voted), a great power's anti-colonial stance on a yes
+	# vote (un_res_yes), so a no voter here takes no stance.
 	option = {
 		name = un_vote.3.a
 		default_option = yes
@@ -2226,8 +2227,9 @@ un_vote.3 = {
 		ai_chance = {
 			base = 50
 			# Ratifying against itself: an armed power does not accept its own
-			# disarmament, and the cultural hegemon does not give up its pull
-			# (option C's weights).
+			# disarmament, the cultural hegemon does not give up its pull
+			# (option C's weights), and a colonial empire does not condemn
+			# colonialism (below).
 			modifier = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
@@ -2239,6 +2241,18 @@ un_vote.3 = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
 					un_regime_cultural_hegemon = yes
+				}
+				factor = 0
+			}
+			# A colonial empire does not accept a decolonization declaration
+			# it voted against (issue #1373). Option B is not offered on that
+			# topic today (un_vote_3_can_refuse), and a no voter takes no
+			# stance either way (un_vote_apply_treaty_modifier); this keeps
+			# an empire's acceptance at zero should B return.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
+					decol_holds_colonial_empire = yes
 				}
 				factor = 0
 			}

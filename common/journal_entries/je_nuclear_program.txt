@@ -285,7 +285,7 @@ je_nuclear_program = {
 				value = 0
 			}
 		}
-		set_variable = {
+		set_variable = { # REVIEWED 2026-11-12: the bar wraps at each warhead; a revolution's winner gets a fresh record (can_revolution_inherit = no) and nd_custody_restore_progress carries the progress over (#467, #472)
 			name = nuclear_weapon_program_progress
 			value = 0
 		}
