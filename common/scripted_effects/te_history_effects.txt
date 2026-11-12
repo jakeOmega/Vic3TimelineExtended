@@ -11,7 +11,10 @@
 #
 #   tags    te_hist, te_hist_sample  (+ te_hist_global for the global series)
 #   parent  the recording country — the engine culls the containers when the
-#           country stops existing, so history never outlives its owner
+#           country stops existing, so history never outlives its owner. A
+#           revolution's winner takes the loser's (set_parent,
+#           te_history_civil_war_effects.txt, #1477), which continues the
+#           nation
 #   vars    te_hist_i          monotonic month index (te_history_month_index)
 #           te_hist_y          calendar year   ] display only; the GUI has no
 #           te_hist_mo         calendar month  ] integer division

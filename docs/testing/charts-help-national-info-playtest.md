@@ -378,3 +378,21 @@ centered, and a journal root collapses. The rows of `te-window-wide-playtest.md`
 | **6b. No gap where the record was.** Banking's journal entry and Budget tab with the cycle dormant; Tax Code's under the Light code; Global Warming's journal entry with the rule off. | The entry ends on its last section, and the tab's Open Journal Entry sits its usual 10 below the sections, not 20. | A gap: the record's composer or its journal root (`widget_je_banking_reference`, `widget_je_tax_code_reference`, `widget_je_gw_reference`) lacks the gate its sections carry. |
 | **7. An observer.** As an observer, open a journal entry, the window's tabs, a state's Demographics subtab and National Info for a country. | No "?" anywhere, and no gap where one would be: the rows collapse. | A gap above an entry's overview: the row's `visible` on `te_help_row` (it must hide the row, not only the button). |
 | **8. The Population panel's Family Policy.** Under Full demographics, the Population panel's Demographics tab, Family Policy. The tab now takes its `Country` from `te_demog_window_body` (`datacontext = "[GetPlayer]"`) instead of the panel's `AccessPlayer`. | Law in Force names your Family & Reproductive Policy law, with its tooltip, as in the window's Demographics tab. | Blank or `debug.log` reports a non-const call: `Country.AccessActiveLawFromGroup` (`te_demographics_widgets.gui`) needs a writable country; switch it to `Country.GetActiveLawFromGroup` (Promote to Law) and update `test_demographics_measures.py`. |
+
+## A revolution's winner keeps the nation's history (#1477, 2026-11-12)
+
+When the rebels win, `te_history_repair_after_civil_war` (`te_history_civil_war_effects.txt`, from the shared
+`te_civil_war_on_won`) moves the dead loser's samples older than the winner's own oldest to the winner with
+`set_parent` and adds them to the winner's lists, `te_hist` (the system charts) and `te_dg_hist` (the census), then cuts
+each to its cap and sorts it. Before, every rebel win reset the nation's charts. Two engine facts are unverified, and
+each has a self-check. Any game with a rebel win over a played country or a major power reads them; the observer
+runs' revolutions are enough.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … history_after_civil_war` | Once a game, at the first rebel win whose loser kept a monthly store (`te_hist_since_y`). A loser whose samples were all newer than the winner's logs nothing | the dead loser's lists and their containers read at `on_civil_war_won`: `hist_moved` / `dg_moved` samples reached the winner (`hist_before` / `dg_before` were its own, from the war's months) | `hist_loser=0`: the loser kept a store and its list read empty at that hook, so lists or their containers are gone by then | Copy the samples before the war ends: at `on_revolution_start` re-parent nothing, but at each month of the war give the rebels' own store the original's older samples, so a rebel win needs no read of the dead loser |
+| `TE_SELF_CHECK … history_after_civil_war_kept` | Once a game, two months after the OK above | both stores still hold at least the samples they held after the repair (`hist=N of M`): the moved containers outlived the loser's deletion | fewer: `set_parent` did not keep them, and they died with the loser | Copy instead of moving: create a container parented to the winner for each sample and copy its variables, every `te_hist_v_<METRIC>` and `te_hist_mk_<MARK>` and the census's `te_dg_h_*`, with a test that the list of names covers every recorder |
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. The charts go on.** A save before and two weeks after a rebel win over a tracked country (the player's, or a major power's). Open its National Info charts, or run `python3 scripts/analysis/check_save_history_order.py` and `scripts/analysis/save_country_probe.py --tag <TAG>` on the later save. | The winner's Banking or Monetary charts and its Demographics history reach back before the war; "History available since" names the loser's first month; both stores `ascending=True`, at most 240 and 100 samples. | Empty before the war: read the two self-checks above. Out of order: the sort's completeness gate (`te_hcw_n_sorted = te_hcw_n_live`) did not pass. |

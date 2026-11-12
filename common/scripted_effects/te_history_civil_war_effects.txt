@@ -1,0 +1,299 @@
+﻿# ============================================================================
+# HISTORY STORES — a revolution's winner keeps the nation's charts (#1477)
+# ============================================================================
+# The two history stores are variable lists of script containers parented to
+# the recording country: te_hist, the monthly samples every system chart draws
+# (te_history_effects.txt), and te_dg_hist, the census's yearly samples
+# (te_demog_history_effects.txt). A revolution's winner inherits the loser's
+# variables but no variable list (scripting_best_practices.md § "What a Civil
+# War's Winner Inherits"), and the containers die with the loser once the
+# engine deletes it, so every rebel win reset the nation's charts: Revolutionary
+# East India's census history began in 1917, the year it won the Dominion of
+# India's civil war. The mod's rule is that the winner continues the nation.
+#
+# HOW. Called from te_civil_war_on_won (the shared layer, #467) with ROOT =
+# THIS = the winner, after the merge. On a rebel win whose dead loser still
+# resolves, each of the loser's samples older than the winner's own oldest is
+# handed to the winner: set_parent moves the container to the winner, so it
+# outlives the loser, and the winner's list takes it. The winner's own samples
+# (the war's months, recorded by the rebels) stay, so no month is held twice;
+# a winner with no store of its own takes every sample. Then the store is cut
+# back to its cap, oldest first, and put in month order, which the charts draw
+# and check_save_history_order.py holds both stores to.
+#
+# Re-parenting, not copying: a sample holds one variable per metric and marker
+# recorded that month (te_hist_v_<METRIC>, te_hist_mk_<MARK>: well over a
+# hundred names across the systems), so a copy would have to list every name
+# and fail silently for each one added later. set_parent moves the whole
+# container whatever it holds.
+#
+# Idempotent: a second call for the same loser (two civil wars at once naming
+# the same dead original) finds nothing older than the winner's oldest sample,
+# which is now the loser's own oldest.
+#
+# THE ENGINE FACTS, unverified, and the self-checks that read them:
+#   - the dead loser's variable lists and their containers can still be read
+#     at on_civil_war_won (the save of 2026-09-25 had them in the save just
+#     after the win, and gone two weeks later): TE_SELF_CHECK
+#     history_after_civil_war, at the repair;
+#   - a container set_parent has moved survives the loser's deletion: TE_SELF_CHECK
+#     history_after_civil_war_kept, two months on.
+# Both are in docs/testing/charts-help-national-info-playtest.md, with the
+# fallback for each.
+# ============================================================================
+
+# Scope: the winner (ROOT), from te_civil_war_on_won; scope:te_cw_loser saved by the layer.
+te_history_repair_after_civil_war = {
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			scope:te_cw_loser ?= { is_country_alive = no }
+		}
+		save_scope_as = te_hcw_winner
+		te_history_cw_take_store = {
+			KEY = hist
+			LIST = te_hist
+			TMP = te_hist_tmp
+			TAG = te_hist_sample
+			CAP = 240 # te_history_sample_cap
+			OVER = 241
+			PRUNE = te_history_prune_samples
+		}
+		if = {
+			limit = { has_variable_list = te_hist }
+			te_history_refresh_since = yes
+		}
+		te_history_cw_take_store = {
+			KEY = dg
+			LIST = te_dg_hist
+			TMP = te_dg_hist_tmp
+			TAG = te_dg_hist_sample
+			CAP = 100
+			OVER = 101
+			PRUNE = te_demog_history_prune
+		}
+		if = {
+			limit = { has_variable_list = te_dg_hist }
+			te_demog_history_e0_axis = yes
+		}
+		te_history_cw_selfcheck_read = yes
+		remove_variable = te_hcw_hist_before
+		remove_variable = te_hcw_hist_loser
+		remove_variable = te_hcw_hist_moved
+		remove_variable = te_hcw_dg_before
+		remove_variable = te_hcw_dg_loser
+		remove_variable = te_hcw_dg_moved
+	}
+}
+
+# Hand the loser's samples of one store, older than the winner's own oldest, to
+# the winner, then cut the store to $CAP$ and sort it. Leaves the counts
+# te_hcw_$KEY$_before (the winner's samples before), _loser (the loser's) and
+# _moved (those handed over) for the self-checks.
+# Scope: the winner, saved as scope:te_hcw_winner; scope:te_cw_loser the loser.
+te_history_cw_take_store = {
+	set_variable = { name = te_hcw_floor value = 1000000 }
+	set_variable = { name = te_hcw_$KEY$_before value = 0 }
+	set_variable = { name = te_hcw_$KEY$_loser value = 0 }
+	set_variable = { name = te_hcw_$KEY$_moved value = 0 }
+	if = {
+		limit = { has_variable_list = $LIST$ }
+		every_in_list = {
+			variable = $LIST$
+			limit = { has_tag = $TAG$ }
+			scope:te_hcw_winner = { change_variable = { name = te_hcw_$KEY$_before add = 1 } }
+		}
+		# te_history_sample_order negates the index, and ordered_* sorts highest
+		# first, so position 0 is the oldest.
+		ordered_in_list = {
+			variable = $LIST$
+			position = 0
+			order_by = te_history_sample_order
+			save_scope_as = te_hcw_$KEY$_oldest
+		}
+		if = {
+			limit = { exists = scope:te_hcw_$KEY$_oldest }
+			set_variable = { name = te_hcw_floor value = scope:te_hcw_$KEY$_oldest.var:te_hist_i }
+		}
+	}
+	scope:te_cw_loser = {
+		if = {
+			limit = { has_variable_list = $LIST$ }
+			every_in_list = {
+				variable = $LIST$
+				limit = { has_tag = $TAG$ }
+				scope:te_hcw_winner = { change_variable = { name = te_hcw_$KEY$_loser add = 1 } }
+				if = {
+					limit = { var:te_hist_i < scope:te_hcw_winner.var:te_hcw_floor }
+					set_parent = scope:te_hcw_winner
+					save_scope_as = te_hcw_moved
+					scope:te_hcw_winner = {
+						add_to_variable_list = { name = $LIST$ target = scope:te_hcw_moved }
+						change_variable = { name = te_hcw_$KEY$_moved add = 1 }
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = { var:te_hcw_$KEY$_moved > 0 }
+		# The cap, oldest first. Each eviction sorts the store again.
+		while = {
+			limit = { any_in_list = { variable = $LIST$ count >= $OVER$ has_tag = $TAG$ } }
+			$PRUNE$ = yes
+		}
+		te_history_cw_sort = { LIST = $LIST$ TMP = $TMP$ CAP = $CAP$ }
+	}
+	remove_variable = te_hcw_floor
+}
+
+# Put $LIST$ in month order, oldest first, through the scratch list $TMP$. As
+# te_history_sort_samples does, the sorted copy is built first and the live list
+# replaced only when the copy is complete; here completeness is a count of both
+# lists, since the store can be anywhere under its cap.
+# Scope: the winner, saved as scope:te_hcw_winner.
+te_history_cw_sort = {
+	if = {
+		limit = { has_variable_list = $TMP$ }
+		clear_variable_list = $TMP$
+	}
+	ordered_in_list = {
+		variable = $LIST$
+		order_by = te_history_sample_order
+		min = 0
+		max = $CAP$
+		check_range_bounds = no
+		save_scope_as = te_hcw_sorted
+		scope:te_hcw_winner = {
+			add_to_variable_list = { name = $TMP$ target = scope:te_hcw_sorted }
+		}
+	}
+	set_variable = { name = te_hcw_n_live value = 0 }
+	set_variable = { name = te_hcw_n_sorted value = 0 }
+	every_in_list = {
+		variable = $LIST$
+		scope:te_hcw_winner = { change_variable = { name = te_hcw_n_live add = 1 } }
+	}
+	if = {
+		limit = { has_variable_list = $TMP$ }
+		every_in_list = {
+			variable = $TMP$
+			scope:te_hcw_winner = { change_variable = { name = te_hcw_n_sorted add = 1 } }
+		}
+	}
+	if = {
+		limit = {
+			var:te_hcw_n_sorted > 0
+			var:te_hcw_n_sorted = var:te_hcw_n_live
+		}
+		clear_variable_list = $LIST$
+		ordered_in_list = {
+			variable = $TMP$
+			order_by = te_history_sample_order
+			min = 0
+			max = $CAP$
+			check_range_bounds = no
+			save_scope_as = te_hcw_sorted
+			scope:te_hcw_winner = {
+				add_to_variable_list = { name = $LIST$ target = scope:te_hcw_sorted }
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = $TMP$ }
+		clear_variable_list = $TMP$
+	}
+	remove_variable = te_hcw_n_live
+	remove_variable = te_hcw_n_sorted
+}
+
+
+# ----------------------------------------------------------------------------
+# The self-checks
+# ----------------------------------------------------------------------------
+# history_after_civil_war, once a game, at the repair. Judged only for a loser
+# that kept a monthly store (te_hist_since_y, a plain variable, which the dead
+# loser is known to read), so a loser no chart tracked is no false pass.
+#   OK      some of its samples reached the winner: the dead loser's list and its
+#           containers read at on_civil_war_won.
+#   BROKEN  the loser kept a store and its list read empty there: lists or their
+#           containers are gone by that hook, and only an earlier copy can save
+#           the charts (the play-test row's fallback).
+# A loser whose samples were all newer than the winner's oldest hands over
+# nothing and logs no line.
+#
+# On OK the winner is armed for history_after_civil_war_kept, two months on
+# (te_history_cw_selfcheck_kept, monthly): its stores still hold as many
+# samples, so the moved containers outlived the loser's deletion.
+# Scope: the winner.
+te_history_cw_selfcheck_read = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_hcw_selfcheck_read_done }
+			scope:te_cw_loser = { has_variable = te_hist_since_y }
+		}
+		if = {
+			limit = { var:te_hcw_hist_moved > 0 }
+			set_global_variable = te_hcw_selfcheck_read_done
+			debug_log = "TE_SELF_CHECK OK history_after_civil_war country=[THIS.GetCountry.GetTagName] hist_before=[THIS.Var('te_hcw_hist_before').GetValue|0] hist_loser=[THIS.Var('te_hcw_hist_loser').GetValue|0] hist_moved=[THIS.Var('te_hcw_hist_moved').GetValue|0] dg_before=[THIS.Var('te_hcw_dg_before').GetValue|0] dg_loser=[THIS.Var('te_hcw_dg_loser').GetValue|0] dg_moved=[THIS.Var('te_hcw_dg_moved').GetValue|0] (the dead loser's history stores read at on_civil_war_won and the winner took them) date=[TimeKeeper.GetCurrentDate.GetString]"
+			# Armed for the second check: the counts the stores must still reach.
+			set_variable = { name = te_hcw_check_due_i value = te_history_month_index }
+			change_variable = { name = te_hcw_check_due_i add = 2 }
+			te_history_cw_count = { LIST = te_hist TAG = te_hist_sample NAME = te_hcw_check_hist }
+			te_history_cw_count = { LIST = te_dg_hist TAG = te_dg_hist_sample NAME = te_hcw_check_dg }
+		}
+		else_if = {
+			limit = { var:te_hcw_hist_loser = 0 }
+			set_global_variable = te_hcw_selfcheck_read_done
+			debug_log = "TE_SELF_CHECK BROKEN history_after_civil_war country=[THIS.GetCountry.GetTagName] hist_before=[THIS.Var('te_hcw_hist_before').GetValue|0] hist_loser=0 dg_loser=[THIS.Var('te_hcw_dg_loser').GetValue|0] (the loser kept a monthly history store, but its list read empty at on_civil_war_won: take the fallback in docs/testing/charts-help-national-info-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# Count the samples of $LIST$ into $NAME$. Scope: a country.
+te_history_cw_count = {
+	set_variable = { name = $NAME$ value = 0 }
+	if = {
+		limit = { has_variable_list = $LIST$ }
+		save_scope_as = te_hcw_counted
+		every_in_list = {
+			variable = $LIST$
+			limit = { has_tag = $TAG$ }
+			scope:te_hcw_counted = { change_variable = { name = $NAME$ add = 1 } }
+		}
+	}
+}
+
+# history_after_civil_war_kept, once a game, two months after an OK above.
+#   OK      both stores still hold at least the samples they held after the
+#           repair (one is added a month and one evicted at the cap, so a store
+#           never shrinks): the containers set_parent moved outlived the loser.
+#   BROKEN  fewer: the moved containers died with the loser, so set_parent did
+#           not take, and the charts are reset as before.
+# Scope: country, from te_history_cw_selfcheck_on_action (monthly).
+te_history_cw_selfcheck_kept = {
+	if = {
+		limit = {
+			has_variable = te_hcw_check_due_i
+			te_history_month_index >= var:te_hcw_check_due_i
+		}
+		te_history_cw_count = { LIST = te_hist TAG = te_hist_sample NAME = te_hcw_now_hist }
+		te_history_cw_count = { LIST = te_dg_hist TAG = te_dg_hist_sample NAME = te_hcw_now_dg }
+		if = {
+			limit = {
+				var:te_hcw_now_hist >= var:te_hcw_check_hist
+				var:te_hcw_now_dg >= var:te_hcw_check_dg
+			}
+			debug_log = "TE_SELF_CHECK OK history_after_civil_war_kept country=[THIS.GetCountry.GetTagName] hist=[THIS.Var('te_hcw_now_hist').GetValue|0] of [THIS.Var('te_hcw_check_hist').GetValue|0] dg=[THIS.Var('te_hcw_now_dg').GetValue|0] of [THIS.Var('te_hcw_check_dg').GetValue|0] (the samples the winner took outlived the loser) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN history_after_civil_war_kept country=[THIS.GetCountry.GetTagName] hist=[THIS.Var('te_hcw_now_hist').GetValue|0] of [THIS.Var('te_hcw_check_hist').GetValue|0] dg=[THIS.Var('te_hcw_now_dg').GetValue|0] of [THIS.Var('te_hcw_check_dg').GetValue|0] (the samples the winner took died with the loser: set_parent did not keep them; take the fallback in docs/testing/charts-help-national-info-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_variable = te_hcw_check_due_i
+		remove_variable = te_hcw_check_hist
+		remove_variable = te_hcw_check_dg
+		remove_variable = te_hcw_now_hist
+		remove_variable = te_hcw_now_dg
+	}
+}
