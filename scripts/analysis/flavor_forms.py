@@ -14,16 +14,26 @@ before adding to a chain and write in a form it is short of.
 
 The classes are read from the text's shape, so they are approximate:
 
-  exchange    two or more paragraphs, nearly all of them quoted speech
-  one voice   a single quoted paragraph, or one speaker throughout
-  quotation   ends in an attribution line (`— Name`)
-  scene       narration with some speech in it
-  list        a heading line ending in a colon, then three or more items
-  document    opens as a paper does ("To the ..., from ...", "Notes from ...")
-  narration   no speech at all (a scene without speech)
+  exchange        two or more paragraphs, nearly all of them quoted speech
+  several voices  a heading line that says where the remarks were heard
+                  ("Remarks heard ...", "Overheard ...", "Statements given
+                  ..."), then three or more quoted remarks
+  one voice       a single quoted paragraph, alone or under one narrated line
+                  that says who speaks ("A merchant, to the manager:")
+  quotation       ends in an attribution line (`— Name`)
+  scene           narration with some speech in it
+  list            a heading line ending in a colon, then three or more items
+  document        opens as a paper does ("To the ..., from ...", "Notes from ...")
+  narration       no speech at all (a scene without speech)
 
-The guide's "several voices" cannot be told from an exchange by shape, and
-counts as one.
+Several voices and an exchange are both runs of quoted paragraphs, so the
+heading is what tells them apart (#1622): a run headed any other way ("Two
+officials argued the proposal.") is an exchange with a narrated opening, and
+an unheaded run is an exchange.
+
+The table also counts the documents that close on "We ask ..." or "I ask
+...": the guide's model document ends on its request, and a chain whose every
+paper does has a formula (loc_style_guide.md, "Still open").
 
 `--check` is the ratchet CI runs. scripts/analysis/flavor_forms_baseline.json
 records, for each chain of six or more texts, how many texts it had in any form
@@ -59,11 +69,15 @@ FLAVOR_KEY = re.compile(r'^\s*((?P<ns>[\w\-]+)\.\d+\.(?:f|flavor)(?:_\w+|\.(?!tt
 # A key that some event uses as an option's `name` is an option, whatever it is
 # called (`te_map_modes.1.f_dismiss`).
 OPTION_NAME = re.compile(r"^\s*name\s*=\s*([\w\-]+\.\d+\.[\w.]+)\s*(?:#.*)?$", re.M)
-FORMS = ("exchange", "one voice", "quotation", "scene", "list", "document", "narration")
+FORMS = ("exchange", "several voices", "one voice", "quotation", "scene", "list", "document", "narration")
 DOCUMENT_OPENING = re.compile(
     r"^(?:To |From |Notes? (?:from|for|of) |Memorandum|Minutes |Dear |Report |Order |Notice |Circular |Resolved)"
 )
+# How a several-voices text is headed: where the remarks were heard, not who the two speakers are.
+SEVERAL_VOICES_HEADING = re.compile(r"^(?:Remarks|Heard|Overheard|Voices|Statements|What\b.*\bsaid)\b")
+ASK_CLOSING = re.compile(r"^(?:We|I) ask\b")
 SHARE_LIMIT = 1 / 3
+LIST_COLUMN = max(len(form) for form in FORMS)
 QUOTE_OPENERS = ('\\"', "'", "\u201c", "\u2018")
 
 
@@ -86,9 +100,33 @@ def classify(text: str) -> str:
     has_speech = '\\"' in text or bool(re.search(r"(^|\s)'\w", text))
     if len(paras) == 1:
         return "one voice" if quoted else ("scene" if has_speech else "narration")
+    if heading_line(paras[0]) and len(quoted) == len(paras) - 1:
+        if len(paras) == 2 and only_speech(paras[1]):
+            return "one voice"
+        if len(paras) >= 4 and SEVERAL_VOICES_HEADING.match(paras[0]):
+            return "several voices"
     if len(quoted) >= 0.75 * len(paras):
         return "exchange"
     return "scene" if has_speech else "narration"
+
+
+def heading_line(para: str) -> bool:
+    """One narrated line with no speech in it: a heading, or the line that says who speaks."""
+    return not para.startswith(QUOTE_OPENERS) and "\\n" not in para and '\\"' not in para
+
+
+def only_speech(para: str) -> bool:
+    """A paragraph that is one quotation and nothing else (no `," he said.`)."""
+    return para.startswith('\\"') and para.endswith('\\"') and para.count('\\"') == 2
+
+
+def closes_on_ask(text: str) -> bool:
+    """Whether the text's last sentence opens "We ask" or "I ask"."""
+    paras = paragraphs(text)
+    if not paras:
+        return False
+    sentences = [s for s in re.split(r"(?<=[.!?])\s+", paras[-1].replace("\\n", " ")) if s.strip()]
+    return bool(sentences) and bool(ASK_CLOSING.match(sentences[-1].lstrip('\\"\'')))
 
 
 def short_last_paragraph(text: str) -> bool:
@@ -127,13 +165,21 @@ def summarize(entries):
     return counts, short
 
 
+def ask_closings(entries) -> tuple:
+    """(documents that close on "We ask ..." or "I ask ...", documents)."""
+    documents = [text for _, text in entries if classify(text) == "document"]
+    return sum(closes_on_ask(text) for text in documents), len(documents)
+
+
 def row(name, entries):
     counts, short = summarize(entries)
     total = len(entries)
-    cells = "".join(f"{counts.get(form, 0):>10}" for form in FORMS)
+    cells = "".join(f"{counts.get(form, 0):>{max(10, len(form) + 2)}}" for form in FORMS)
+    asks, documents = ask_closings(entries)
+    asked = f"{asks}/{documents}" if documents else "-"
     top, top_n = counts.most_common(1)[0]
     over = f"  <- {top} is {100 * top_n // total}%" if total >= 6 and top_n / total > SHARE_LIMIT else ""
-    return f"{name:32}{total:>6}{cells}{short:>12}{over}"
+    return f"{name:32}{total:>6}{cells}{short:>12}{asked:>10}{over}"
 
 
 def over_counts(chains) -> dict:
@@ -220,18 +266,25 @@ def main(argv=None) -> int:
     if args.list:
         for name in names:
             for key, text in chains[name]:
+                form = classify(text)
                 mark = "  (short last paragraph)" if short_last_paragraph(text) else ""
-                print(f"{classify(text):10} {key}{mark}")
+                if form == "document" and closes_on_ask(text):
+                    mark += '  (closes on "We ask")'
+                print(f"{form:{LIST_COLUMN}} {key}{mark}")
         return 0
 
-    header = "".join(f"{form:>10}" for form in FORMS)
-    print(f"{'namespace':32}{'texts':>6}{header}{'short last':>12}")
+    header = "".join(f"{form:>{max(10, len(form) + 2)}}" for form in FORMS)
+    print(f"{'namespace':32}{'texts':>6}{header}{'short last':>12}{'We ask':>10}")
     for name in names:
         print(row(name, chains[name]))
+    everything = [entry for name in names for entry in chains[name]]
     if not args.namespaces:
-        everything = [entry for name in names for entry in chains[name]]
         print(row("ALL", everything))
     print("\nA form over a third of a chain of six or more is marked. Write the next one in another form.")
+    asks, documents = ask_closings(everything)
+    if documents:
+        print(f'{asks} of {documents} document(s) close on "We ask ..." or "I ask ..." ({100 * asks // documents}%): '
+              "a paper can also close on its next step, the writer's office or what is enclosed.")
     return 0
 
 

@@ -211,16 +211,38 @@ committed baseline, so the mod's older text passes and only new text is judged. 
 (`--check`, `--update`, `--rule`, `--key`) flags stock metaphors, verdict words, the player-guide lint's inflated
 words and phrases, ` - ` as a dash and a text ending in an ellipsis or `\n`; its baseline is
 `scripts/analysis/loc_style_baseline.txt` (`rule<TAB>key`), and a baseline line whose finding is gone also fails, so
-the file only shrinks. `scripts/analysis/flavor_forms.py` classes each event flavor text by shape (exchange, one voice,
-quotation, scene, narration) and prints a chain's mix; `--check` fails when a form over a third of its chain gains a
-text (`flavor_forms_baseline.json`).
+the file only shrinks. `scripts/analysis/flavor_forms.py` classes each event flavor text by shape (exchange, several
+voices, one voice, quotation, scene, list, document, narration) and prints a chain's mix, with the number of its
+documents that close on "We ask ..." or "I ask ..."; `--check` fails when a form over a third of its chain gains a
+text (`flavor_forms_baseline.json`). Several voices are told from an exchange by their heading line ("Remarks heard
+...", "Overheard ...", "Statements given ..."), the one thing their shapes do not share.
 
-`scripts/analysis/event_guarantees.py <event id | namespace>` prints what an event's own trigger guarantees, for
-whoever writes its text: the technologies it requires with their eras, their prerequisites all the way down, the era
-at or before which every technology may be assumed (three or more eras behind the latest required; owner,
-2026-11-09), technologies it requires to be absent, and the trigger's other top-level lines. `--tech <name>` shows one
-technology. It reads the mod's technology files and `vanilla_parsed/`, and reads only the trigger: what fires the
-event, and an option's own trigger, can guarantee more.
+`scripts/analysis/event_guarantees.py <event id | namespace>` prints what is guaranteed whenever an event fires, for
+whoever writes its text. From the event's own trigger: the technologies it requires with their eras, their
+prerequisites all the way down, the era at or before which every technology may be assumed (three or more eras behind
+the latest required; owner, 2026-11-09), technologies it requires to be absent, and the trigger's other top-level
+lines. From outside it (#1622), each labeled by where it came from: `law X unlocks at` (`is_enacting_law` / `has_law`:
+the law's `unlocking_technologies` and one of its `unlocking_laws`), `scripted trigger X tests` (opened one level),
+and under `fired by` one entry per route that reaches the event: `journal entry Y requires` (`possible`,
+`is_shown_when_inactive`, and the tests around any `add_journal_entry` of it), `pool weight tests` (a `random_list`
+draw of base weight 0, with `! weight added outside that gate` for an add that skips a technology the others test),
+`tests at the dispatch` (the `if` limits, `random_list` triggers and outcome trigger around the `trigger_event`),
+`sent by` (another event: none of the sender's technology carries over), an on-action's own `trigger`. A scripted
+effect is followed to its callers, one handed the event as an argument is read with the arguments filled in, and a
+scope change on the way keeps only the tests made after it. `from outside` is what **every** route gives, and nothing
+once a route is `not followed` (a decision, a button, a treaty, an effect nothing calls); `in all` adds the event's
+own trigger. Only technology is totalled, since a law or a variable read when an entry activated can have changed.
+`--json` prints the same as data, `--tech <name>` one technology, `--trigger <name>` one scripted trigger, `--own`
+the event's own trigger alone (no dispatch graph, so it answers at once), and `--check-doc` reads
+`event_text_guarantees.md` and lists each technology a row's Guaranteed column names that the tool finds guaranteed
+to no event of the row's chains, and each `tech (era N)` with the wrong era: a reading aid over prose, not a gate. It
+reads the mod's files and `vanilla_parsed/` (technologies, laws, journal entries); vanilla's on-actions and scripted
+triggers are in neither, so a trigger vanilla gives an on-action is not counted. Still unread: a latch variable (the
+banking draws get `stock_exchange` through `finance_cycle_value`), a building's own technology (`wonder_events`),
+`owner = { }` in a state event, and anything about another country. The dispatch graph is
+`event_context_audit.build_graph`, but the tests are read from the script tree (`faith_scene_audit.parse_script`),
+not from `Site.conds`: `conds` joins every enclosing limit with the failed `if` siblings of an `else`, un-negated, so
+it says what a dispatch reads, not what holds there.
 
 `scripts/lessons.py <name>…` searches the guides' `##` sections for an effect, trigger, modifier or any word, ranks
 a heading match above a body match, and prints a section with `--show N`. It is the way into
