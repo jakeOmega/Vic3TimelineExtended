@@ -328,9 +328,14 @@ nuclear_program_refresh_state_effect = {
 }
 
 # Rebuilds nd_powers, the ten largest arsenals AS THE WORLD ESTIMATES THEM
-# (nd_display_public_estimate, re-observed yearly with an error;
-# docs/systems/nuclear_crisis_design.md §0.6), largest first: a variable list
-# of their capitals on the panel's global store (nd_lists_store_ensure,
+# (nd_shown_public_estimate, re-observed yearly with an error;
+# docs/systems/nuclear_crisis_design.md §0.6), largest first. Listed is what
+# the world sees (#1366): a country believed armed whose estimate is at least
+# one, never the true stockpile, so a country that fires its last warhead stays
+# listed until the world's estimate says otherwise (the yearly observation, or
+# a strike's snap to the truth). Ordered by the same no-fallback value each
+# row prints, never one that falls back to the truth. A variable list of
+# their capitals on the panel's global store (nd_lists_store_ensure,
 # nuclear_crisis_effects.txt). The Nuclear Powers section draws it as a
 # datamodel (NUC-14 of the 2026-10-27 GUI audit), reading each country through
 # its capital (gui_modding_guide.md gotcha #15): its flag, the estimate and its
@@ -348,11 +353,10 @@ update_nuclear_powers_ranking = {
 	set_global_variable = { name = nuke_ldr_idx value = 0 }
 	ordered_country = {
 		limit = {
-			has_modifier = nuclear_power
-			has_variable = nuclear_weapon_stockpile
-			var:nuclear_weapon_stockpile >= 1
+			nd_believed_armed = yes
+			nd_shown_public_estimate >= 1
 		}
-		order_by = nd_display_public_estimate
+		order_by = nd_shown_public_estimate
 		check_range_bounds = no
 
 		if = {
