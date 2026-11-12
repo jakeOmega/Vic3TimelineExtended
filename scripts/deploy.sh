@@ -76,8 +76,8 @@ INCLUDES=(
   --include=/map_data/***
   --include=/.metadata
   --include=/.metadata/***
-  # thumbnail.png does not exist yet; rsync ignores an include with no match, so
-  # this line just starts shipping it the day the owner adds one (issue #255).
+  # The launcher's picture. LICENSE and README stay in the repo: the engine
+  # reads neither (#255).
   --include=/thumbnail.png
   --exclude=/*
   --exclude=*.pyc

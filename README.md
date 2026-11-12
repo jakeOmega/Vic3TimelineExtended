@@ -38,6 +38,7 @@ Per-path env-var overrides also work, useful for one-off invocations: `VIC3_BASE
   - [Documentation (`docs/`)](#documentation-docs)
 - [Developer workflow](#developer-workflow)
 - [Credits](#credits)
+- [License](#license)
 
 ---
 
@@ -220,7 +221,7 @@ The Clausewitz engine reads only these top-level entries (everything else stays 
 | `localization/english/` | YAML loc files. The 29 `te_*_l_english.yml` files are auto-categorized by `organize_loc.py`. The `replace/` subfolder contains overrides for vanilla loc keys (e.g. `fertilizer` → "Chemicals"). The mod is written in English: `scripts/deploy.sh` builds each of the game's ten other languages at deploy time (not committed), from the English plus that language's translation memory where one exists (German and Spanish, machine-translated; `i18n/README.md`), so no player sees raw keys. |
 | `gfx/` | Event pictures, interface icons, portraits, unit illustrations. |
 | `map_data/state_regions/` | Per-region resource deposits, regenerated from `deposits_config.json` by `resources.py`. |
-| `.metadata/metadata.json` | Mod metadata — name, version, supported game version, tags. Vic3 reads this instead of a top-level `descriptor.mod`, which this mod does **not** have; the deploy script copies the whole directory. There is no `thumbnail.png` yet either; `scripts/deploy.sh` already carries the include, so one will ship the day it is added. |
+| `.metadata/metadata.json` | Mod metadata — name, version, supported game version, tags. Vic3 reads this instead of a top-level `descriptor.mod`, which this mod does **not** have; the deploy script copies the whole directory. The launcher's picture is `thumbnail.png` at the repo root, which `scripts/deploy.sh` ships beside it. |
 
 The `common/` directory is the bulk of the mod. Highlights of less-obvious subdirectories:
 
@@ -280,7 +281,7 @@ Files at the repo root form the data-server spine plus a handful of one-shot gen
 
 | Path | Role |
 |---|---|
-| `scripts/deploy.sh` | rsync the engine-required top-level entries (`common/`, `events/`, `gui/`, `gfx/`, `localization/`, `map_data/`, `.metadata/`, plus `thumbnail.png` once one exists) into the Paradox mod folder, then the non-English loc copies staged by `gen_non_english_loc.py`. Dry-run by default; pass `--apply` to actually copy. Override target via `VIC3_MOD_DEPLOY_TARGET=...`. |
+| `scripts/deploy.sh` | rsync the engine-required top-level entries (`common/`, `events/`, `gui/`, `gfx/`, `localization/`, `map_data/`, `.metadata/`, plus `thumbnail.png`) into the Paradox mod folder, then the non-English loc copies staged by `gen_non_english_loc.py`. Dry-run by default; pass `--apply` to actually copy. Override target via `VIC3_MOD_DEPLOY_TARGET=...`. |
 | `scripts/watch_deploy_on_edit.sh` | Continuous deploy watcher (inotifywait with polling fallback). Auto-started by VS Code via `.vscode/tasks.json`. |
 | `scripts/format_paradox_tabs.py` | Re-tabs brace-based Paradox `.txt` files from inferred brace depth. Only safe for brace-format `.txt` — *never* on YAML / JSON / Python. `--check` for CI-style verification. |
 | `scripts/snapshot_balance.py` | Snapshots PM balance metrics into `docs/data/balance_snapshot.json` for diff-based reviews. |
@@ -391,3 +392,7 @@ Core deps (`requests`, `pyyaml`, `regex`, `numpy`) are required for the server p
 The construction-market subsystem (files prefixed `te_construction_market_*` in `common/` and `events/`, plus the integration in `gui/construction_panel.gui`) is based on the third-party **Free Market Construction** mod. Credit and thanks to that mod's author.
 
 Vanilla event picture / icon assets are © Paradox Interactive, used under their modding terms. AI-generated event art produced by the `scripts/image_pipeline/` toolchain.
+
+## License
+
+The repository's own work (the mod's script, interface and localization files, the Python tooling, the tests and the documentation) is under the MIT License: see [`LICENSE`](LICENSE). It does not cover Victoria 3's content, which belongs to Paradox Interactive (the files that override or quote vanilla, and `vanilla_parsed/`), or third-party material such as images under `gfx/` from other sources, which keep their own terms.
