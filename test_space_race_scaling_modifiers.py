@@ -333,9 +333,10 @@ class ChoiceEventTest(unittest.TestCase):
     def test_each_option_sets_its_variable_and_previews_the_modifier(self):
         """The option that added the modifier on the entry now sets the variable
         the declaration reads and shows the modifier (design § 4.0, rule 8). The
-        preview keeps the bare `add_modifier = X` form the option had, which the
-        Nation tab's scan of duration-less adds (gen_nation_tab.py, block form
-        only) never counted: these sit on an entry, not the country."""
+        preview keeps the bare `add_modifier = X` form the option had. The
+        Nation tab's scan of duration-less adds (gen_nation_tab.py) reads that
+        form too since #1023, and its registry places these on the entry, not
+        the country (NOT_ON_COUNTRY's `sr_choice_*`)."""
         events = _read(EVENTS)
         for m, (event, choices) in CHOICES.items():
             body = _block(events, f"space_race_events.{event}")

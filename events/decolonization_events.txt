@@ -1938,20 +1938,9 @@ decolonization_events.15 = {
 			name = nationalization_cooldown_var
 			years = 20
 		}
-		# Save the biggest foreign owner for description/effects
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				country_rank >= rank_value:minor_power
-				root = {
-					gdp_ownership_ratio = {
-						target = prev
-						value > 0.05
-					}
-				}
-			}
-			save_scope_as = biggest_foreign_owner
-		}
+		# The largest foreign owner, for the description (the options act on
+		# every owner above 5%).
+		decol_save_biggest_foreign_owner = yes
 	}
 
 	# Option A: Full nationalization: seize all foreign assets
@@ -2208,12 +2197,31 @@ decolonization_events.16 = {
 					}
 				}
 			}
+			# The same owner test as the outer limit and the trigger, so the
+			# neighbor saved is the one of shared heritage that qualified the
+			# state, not any other country on its border (#1617).
 			random_neighbouring_state = {
 				limit = {
 					owner = {
 						NOT = { this = root }
 						is_country_alive = yes
 						NOT = { is_country_type = decentralized }
+						OR = {
+							AND = {
+								has_variable = recently_decolonized
+								any_primary_culture = {
+									shares_heritage_trait_group_with_any_primary_culture = root
+								}
+							}
+							AND = {
+								any_scope_state = {
+									is_overseas_colonial_state = yes
+									any_scope_culture = {
+										shares_heritage_trait_group_with_any_primary_culture = root
+									}
+								}
+							}
+						}
 					}
 				}
 				owner = {

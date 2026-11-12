@@ -29,6 +29,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -36,6 +37,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 from gui_test_helpers import _type_body, assert_column_closes_with_its_sections, assert_wide_matches_narrow  # noqa: E402
+from paradox_file_parser import directive_prefixes  # noqa: E402
 from scripts.generators import gen_nation_tab as gen  # noqa: E402
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 
@@ -277,6 +279,110 @@ class RegistryTest(unittest.TestCase):
                     self.assertEqual(loc[twin], loc[of])
                     self.assertIn(of, set(gen.listed(lists)))
                     self.assertNotIn(twin, shown)
+
+
+class FinderTest(unittest.TestCase):
+    """The finder on small trees of its own (#1023): three ways of writing a
+    permanent grant it used to miss. A grant the finder misses skips the
+    registry without a word: the modifier is in All Modifiers, in no section,
+    and every other test here passes."""
+
+    STATICS = "".join(f"te_{kind}_reward = {{ country_prestige_add = 1 }}\n"
+                      for kind in ("bare", "gold", "silver", "iron", "tin", "deep", "loop"))
+
+    def _candidates(self, files):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "events").mkdir()
+            for rel, text in {"common/static_modifiers/statics.txt": self.STATICS, **files}.items():
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8-sig")
+            return gen.candidates(root)
+
+    def test_the_bare_form_is_a_permanent_grant(self):
+        # `add_modifier = <name>` has no duration field, so it is always permanent.
+        found = self._candidates({
+            "common/scripted_effects/effects.txt": (
+                "te_reward_country = {\n\tadd_modifier = te_bare_reward\n}\n"
+                "te_reward_kind = {\n\tadd_modifier = te_$KIND$_reward\n}\n"
+                # a timed grant in the brace form is still no candidate
+                "te_reward_timed = {\n\tadd_modifier = { name = te_tin_reward months = 12 }\n}\n"
+            ),
+            "events/events.txt": "te_finder.1 = {\n\timmediate = { te_reward_kind = { KIND = gold } }\n}\n",
+        })
+        self.assertEqual(found, {"te_bare_reward": ["common/scripted_effects/effects.txt"],
+                                 "te_gold_reward": ["common/scripted_effects/effects.txt"]})
+
+    def test_a_replaced_or_injected_effect_expands_from_its_callers(self):
+        # Callers write `te_reward_kind = { ... }`, never `INJECT:te_reward_kind`.
+        for directive in directive_prefixes:
+            with self.subTest(directive=directive):
+                found = self._candidates({
+                    "common/scripted_effects/effects.txt": (
+                        f"{directive}te_reward_kind = {{\n\tadd_modifier = {{ name = te_$KIND$_reward }}\n}}\n"
+                        # a call that passes its parameter on from inside a directive block
+                        "te_reward_inner = {\n\tadd_modifier = { name = te_$KIND$_reward }\n}\n"
+                        f"{directive}te_reward_outer = {{\n\tte_reward_inner = {{ KIND = $METAL$ }}\n}}\n"
+                    ),
+                    "events/events.txt": (
+                        "te_finder.1 = {\n\timmediate = {\n"
+                        "\t\tte_reward_kind = { KIND = gold }\n"
+                        "\t\tte_reward_outer = { METAL = silver }\n"
+                        "\t}\n}\n"
+                    ),
+                })
+                self.assertEqual(sorted(found), ["te_gold_reward", "te_silver_reward"])
+
+    def test_a_long_call_chain_expands(self):
+        # te_chain_0 holds the grant; te_chain_<n> passes KIND down to
+        # te_chain_<n-1>; an event calls the top one with the name. The finder
+        # stopped at four calls and returned nothing for the rest.
+        for calls in (1, 4, 5, 12, gen.MAX_CALL_CHAIN):
+            chain = "te_chain_0 = {\n\tadd_modifier = { name = te_$KIND$_reward }\n}\n" + "".join(
+                f"te_chain_{n} = {{\n\tte_chain_{n - 1} = {{ KIND = $KIND$ }}\n}}\n" for n in range(1, calls))
+            with self.subTest(calls=calls):
+                found = self._candidates({
+                    "common/scripted_effects/effects.txt": chain,
+                    "events/events.txt": f"te_finder.1 = {{\n\timmediate = {{ te_chain_{calls - 1} = "
+                                         "{ KIND = deep } }\n}\n",
+                })
+                self.assertEqual(sorted(found), ["te_deep_reward"])
+
+    def test_a_call_cycle_ends(self):
+        # An effect that calls itself, and two that call each other, passing
+        # the parameter round: the names are the ones callers outside give.
+        found = self._candidates({
+            "common/scripted_effects/effects.txt": (
+                "te_reward_again = {\n\tadd_modifier = { name = te_$KIND$_reward }\n"
+                "\tte_reward_again = { KIND = $KIND$ }\n\tte_reward_back = { KIND = $KIND$ }\n}\n"
+                "te_reward_back = {\n\tte_reward_again = { KIND = $KIND$ }\n}\n"
+            ),
+            "events/events.txt": (
+                "te_finder.1 = {\n\timmediate = {\n"
+                "\t\tte_reward_again = { KIND = loop }\n"
+                "\t\tte_reward_back = { KIND = iron }\n"
+                "\t}\n}\n"
+            ),
+        })
+        self.assertEqual(sorted(found), ["te_iron_reward", "te_loop_reward"])
+
+    def test_a_chain_past_the_cap_raises(self):
+        # Never an empty answer: one call more than the cap, and a name that
+        # grows each time its effect calls itself.
+        calls = gen.MAX_CALL_CHAIN + 1
+        chain = "te_chain_0 = {\n\tadd_modifier = { name = te_$KIND$_reward }\n}\n" + "".join(
+            f"te_chain_{n} = {{\n\tte_chain_{n - 1} = {{ KIND = $KIND$ }}\n}}\n" for n in range(1, calls))
+        growing = ("te_reward_more = {\n\tadd_modifier = { name = te_$KIND$_reward }\n"
+                   "\tte_reward_more = { KIND = more_$KIND$ }\n}\n")
+        for name, effects, call in (("long", chain, f"te_chain_{calls - 1} = {{ KIND = deep }}"),
+                                    ("growing", growing, "te_reward_more = { KIND = gold }")):
+            with self.subTest(chain=name):
+                with self.assertRaisesRegex(ValueError, "MAX_CALL_CHAIN"):
+                    self._candidates({
+                        "common/scripted_effects/effects.txt": effects,
+                        "events/events.txt": f"te_finder.1 = {{\n\timmediate = {{ {call} }}\n}}\n",
+                    })
 
 
 class GeneratedTest(unittest.TestCase):

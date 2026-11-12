@@ -527,8 +527,8 @@ its later methods pull ahead. Pops buy Drugs for Intoxicants and, from wealth
 wealth](03-economy.md#pop-consumption-at-high-wealth)), so in a rich country
 most Drugs are bought as medicine. The Ministry of Health and the Ministry of
 Consumer Protection cut the throughput of your own opium plantations, and a
-rich country whose market runs short of Drugs can get a Medicine Shortage
-event. The base game's journal entry The Opium Trade is not offered after
+rich country whose market runs short of Drugs can get a medicine shortage, the
+event Half a Course. The base game's journal entry The Opium Trade is not offered after
 January 1912, and one still open then fails.
 
 ### Later production methods for existing buildings

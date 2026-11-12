@@ -1282,9 +1282,10 @@ nuclear_incident.20 = {
 
 # ---- .30 The Cost of Permanent Alert ----------------------------------------------
 # Prolonged high alert (or strain ≥ 60). nd_accident_kind:
-#   1 a bomber breaks up with weapons aboard   (Goldsboro, Palomares, Thule)
+#   1 a bomber breaks up with weapons aboard   (Goldsboro, Palomares, Thule;
+#                                              needs bombing_aircraft)
 #   2 a silo explodes                          (Damascus; needs ICBMs)
-#   3 armed weapons flown across the country   (Minot)
+#   3 armed weapons flown across the country   (Minot; needs bombing_aircraft)
 #   4 a weapon lost at sea                     (the Philippine Sea A-4)
 #   5 exhausted crews, failing maintenance     (the generic case)
 # Kinds 1 and 2 contaminate a home state; kind 4 costs a warhead.
@@ -1378,8 +1379,20 @@ nuclear_incident.30 = {
 	}
 
 	immediate = {
+		# Kinds 1 and 3 name a bomber, so they need one: an arsenal that came
+		# by custody (an annexer's, a successor's) can sit with a country
+		# that never researched bombing_aircraft, a prerequisite of the
+		# programme's own technology (#1619). Kind 5 is always in the draw.
 		random_list = {
-			30 = { set_variable = { name = nd_accident_kind value = 1 } }
+			0 = {
+				modifier = {
+					if = {
+						limit = { has_technology_researched = bombing_aircraft }
+						add = 30
+					}
+				}
+				set_variable = { name = nd_accident_kind value = 1 }
+			}
 			0 = {
 				modifier = {
 					if = {
@@ -1389,7 +1402,15 @@ nuclear_incident.30 = {
 				}
 				set_variable = { name = nd_accident_kind value = 2 }
 			}
-			15 = { set_variable = { name = nd_accident_kind value = 3 } }
+			0 = {
+				modifier = {
+					if = {
+						limit = { has_technology_researched = bombing_aircraft }
+						add = 15
+					}
+				}
+				set_variable = { name = nd_accident_kind value = 3 }
+			}
 			10 = { set_variable = { name = nd_accident_kind value = 4 } }
 			25 = { set_variable = { name = nd_accident_kind value = 5 } }
 		}

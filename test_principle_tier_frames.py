@@ -7,6 +7,7 @@ in its group's `levels` list.
 """
 
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,13 @@ sys.path.insert(0, str(MOD_ROOT / "scripts" / "image_pipeline"))
 
 import gen_principle_tier_frames as ptf  # noqa: E402
 from generate_icons import rewrite_icon_refs  # noqa: E402
+
+
+def tracked(rel):
+    """Whether git tracks rel. CI and sparse worktrees leave gfx/, or all of it but one subfolder, out of
+    the working tree, so a frame can be committed yet absent from disk (#1587)."""
+    result = subprocess.run(["git", "ls-files", "--error-unmatch", rel], cwd=MOD_ROOT, capture_output=True)
+    return result.returncode == 0
 
 
 class TierFrameTests(unittest.TestCase):
@@ -32,11 +40,9 @@ class TierFrameTests(unittest.TestCase):
                          "run gen_principle_tier_frames.py --wire")
 
     def test_tier_iv_and_v_frames_are_committed(self):
-        folder = MOD_ROOT / ptf.FOLDER
-        if not (MOD_ROOT / "gfx").is_dir():
-            raise unittest.SkipTest("gfx/ not checked out (sparse worktree)")
         for t in (4, 5):
-            self.assertTrue((MOD_ROOT / ptf.FRAME[t]).is_file(), f"{ptf.FRAME[t]} missing from {folder}")
+            rel = ptf.FRAME[t]
+            self.assertTrue((MOD_ROOT / rel).is_file() or tracked(rel), f"{rel} is neither on disk nor tracked by git")
 
     def test_injected_levels_follow_vanillas_three(self):
         with tempfile.TemporaryDirectory() as d:

@@ -1016,8 +1016,17 @@ monument_events.4 = {
 	type = country_event
 	placement = root
 
+	# Every faith of a family is listed, the mod's custom religions
+	# (common/religions/custom_religion.txt) included: the last block has no
+	# trigger, so a faith left out of its family's list shows the animism
+	# picture (the Ibadi did, #1621).
 	event_image = {
-		trigger = { religion = rel:jewish }
+		trigger = {
+			OR = {
+				religion = rel:jewish
+				religion = rel:custom_religion_jewish
+			}
+		}
 		video = "europenorthamerica_judaism"
 	}
 	event_image = {
@@ -1027,6 +1036,7 @@ monument_events.4 = {
 				religion = rel:catholic
 				religion = rel:orthodox
 				religion = rel:oriental_orthodox
+				religion = rel:custom_religion_christian
 			}
 		}
 		video = "southamerica_christianity"
@@ -1045,6 +1055,7 @@ monument_events.4 = {
 			OR = {
 				religion = rel:shinto
 				religion = rel:confucian
+				religion = rel:custom_religion_eastern
 			}
 		}
 		video = "asia_confucianism_shinto"
@@ -1055,6 +1066,7 @@ monument_events.4 = {
 				religion = rel:mahayana
 				religion = rel:gelugpa
 				religion = rel:theravada
+				religion = rel:custom_religion_buddhist
 			}
 		}
 		video = "asia_buddhism"
@@ -1064,6 +1076,8 @@ monument_events.4 = {
 			OR = {
 				religion = rel:sunni
 				religion = rel:shiite
+				religion = rel:ibadi
+				religion = rel:custom_religion_muslim
 			}
 		}
 		video = "middleeast_islam"

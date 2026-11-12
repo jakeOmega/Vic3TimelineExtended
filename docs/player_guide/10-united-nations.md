@@ -279,15 +279,16 @@ vetoed, Our Record shows your veto record and the case for expelling you.
 
 The floor takes one resolution at a time, and each is open for a year. The
 proposer's own vote counts in favor. Human members can vote in the chamber at
-any time. Those that haven't voted yet receive the UN General Assembly Vote event
-once, in the ninth month of the session. Its default option, "We will decide
+any time. Those that haven't voted yet receive a vote event named for the
+resolution (Climate Accord Vote, for example) once, in the ninth month of the session. Its default option, "We will decide
 later.", closes the event without voting, so an event left to time out casts no
 vote. After that, the chamber's buttons are the only way to vote, and a member
 that never uses them abstains. AI members vote late too: each votes in the ninth,
 tenth or eleventh month, drawn at random, by its lean at that time. An AI member
 that still has not voted (one that joined late, for example) votes in the last
-month of the session. After a year, General Assembly Vote Results applies the
-outcome.
+month of the session. After a year, The Count Is In applies the outcome for the
+proposer, and the other members learn it in The Assembly Has Voted (a country a
+verdict names hears its own news instead).
 
 Most topics pass by **Majority**: the votes in favor outnumber those against.
 Charter reforms, motions to expel and a suspension of credentials need **Two-Thirds**: two thirds of all
@@ -495,21 +496,21 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 | Situation | Offered to | Event |
 |---|---|---|
 | A nuclear strike | The struck country first | An Appeal to the Assembly |
-| The end of a year-long war between great powers | A proposer | Declaration of Universal Human Rights, or International Criminal Court |
+| The end of a year-long war between great powers | A proposer | Free and Equal, or International Criminal Court |
 | A war of aggression on a member, six months or more, with heavy devastation or a quarter of the member occupied | The attacked member first | An Appeal to the Assembly |
-| A warming threshold (0.5, 1, 2 and 3 °C) | A proposer | Climate Change Resolution |
+| A warming threshold (0.5, 1, 2 and 3 °C) | A proposer | Binding Targets |
 | A country's first nuclear bomb | A proposer | Nuclear Non-Proliferation Treaty |
 | A severe covert operation exposed | The target first | An Appeal to the Assembly |
 | A destructive anti-satellite strike | A proposer, never the striker | A Moratorium on Anti-Satellite Tests |
 | A colony in space seized or destroyed | A proposer that holds a colony, never the country that did it | A Convention on the Settlement of Outer Space |
 | A state collapse | Up to three peacekeeping powers | A State Has Collapsed |
 | The charter outgrown | A great power | The Charter Has Been Outgrown |
-| A famine | Up to three donor powers | Humanitarian Crisis Demands Response |
+| A famine | Up to three donor powers | An Appeal for Relief |
 | A banking panic or default in a contagion wave | The member in trouble | An Emergency Lending Facility |
-| A colonial empire's collapse | A proposer | Decolonization Resolution |
-| The first Moon landing or colony | A proposer | International Space Cooperation |
+| A colonial empire's collapse | A proposer | An End to Empire |
+| The first Moon landing or colony | A proposer | Together in Orbit |
 | A country's first Antarctic research station | A proposer | The Antarctic Treaty |
-| A trade embargo between members | The weaker party | International Trade Dispute |
+| A trade embargo between members | The weaker party | A Quarrel Over Trade |
 | Nothing graver, at most once in 24 months (12 while a great power member is Respected or better) | A proposer | A convention no situation raises |
 
 An appeal lets the wronged party table a condemnation or sanctions, ask for

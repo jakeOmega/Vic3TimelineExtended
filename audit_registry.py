@@ -214,6 +214,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("system_ungated", "unchosen_self_action", "imputed_foreign_action"),
     ),
     Audit(
+        "faith_scene_audit",
+        "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
+        "a country of another state religion can be shown: its title, description, flavor, option, "
+        "tooltip or a modifier it adds. Write the scene without a named faith, or gate that version on "
+        "the faith (#1531).",
+        where="trailing on the key's loc line",
+        tags=("faith_scene",),
+        note="`--explain <key>` lists where a key is named and the gate read at each place. It reads "
+             "religion gates only: a text gated on culture, a country or a variable is flagged and "
+             "takes the comment. The word list is `VOCABULARY` in the audit.",
+    ),
+    Audit(
         "silent_variable_audit",
         "An event option that moves a number the UI shows with `change_variable` / `set_variable`, "
         "which render nothing in the tooltip. Wrap it in a `custom_tooltip`.",

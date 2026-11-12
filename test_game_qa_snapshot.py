@@ -499,12 +499,15 @@ class JournalTests(SnapshotTestCase):
         self.assertEqual(entry, {"event": "started", "at": "2026-11-10T20:40:35Z", "pid": 7})
 
     def test_record_defaults_to_the_current_time(self):
+        # "current" by the drive's clock, which the marker file carries. The machine's clock is a second clock:
+        # WSL's steps by seconds, and a step between two lines failed a tight bound against it (#1604), so it
+        # only gets a loose one, enough to tell a stamp made now from a stale or fixed one.
         snap = snapshot.take(self.user, self.backups)
-        before = datetime.now(timezone.utc).replace(microsecond=0)
         snapshot.record(snap, "heartbeat")
         at = datetime.strptime(snapshot.journal(snap)[0]["at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-        self.assertLessEqual(before, at)
-        self.assertLessEqual(at, datetime.now(timezone.utc))
+        stamped = datetime.fromtimestamp((snap.dir / snapshot.CLOCK_MARKER).stat().st_mtime, timezone.utc)
+        self.assertEqual(at, stamped.replace(microsecond=0))
+        self.assertLess(abs(datetime.now(timezone.utc) - at), timedelta(minutes=5))
 
     def test_the_default_time_is_the_backup_drives_own_clock(self):
         # WSL's clock drifts after the host sleeps; file times on the drive do not, and the hold rule compares them

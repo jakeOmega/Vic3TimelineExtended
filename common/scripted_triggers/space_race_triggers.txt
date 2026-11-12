@@ -435,11 +435,13 @@ sr_mars_landing_choice_made = {
 # Failure-event themes, keyed on the milestone that failed
 # (scope:sr_setback_<milestone>, saved by the failure dispatchers in
 # common/scripted_effects/space_race_effects.txt).
+# The Deep-Space Probe only: its milestone has a probe in flight (.37 reports
+# its images while the entry runs). The interstellar probe stands on the pad
+# until its milestone completes (space_race_events.8), so "contact lost with
+# a probe" is not one of its failures (#1620); it draws from the pool's
+# milestone-neutral entries.
 sr_setback_is_deep_space_probe = {
-	OR = {
-		exists = scope:sr_setback_probe
-		exists = scope:sr_setback_interstellar_probe
-	}
+	exists = scope:sr_setback_probe
 }
 
 # Any failure-event marker at all. Without one the setback helpers fall back to

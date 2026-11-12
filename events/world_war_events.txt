@@ -745,8 +745,10 @@ world_war_events.11 = {
 				add = 2
 			}
 		}
+		# Its own modifier, not a copy of ww_home_front_strain_modifier, which
+		# the yearly pulse adds only when the entry holds none (#1617).
 		je:je_world_war = { add_modifier = {
-				name = ww_home_front_strain_modifier
+				name = ww_air_raid_relief_modifier
 				days = short_modifier_time
 				is_decaying = yes
 			} }
@@ -891,7 +893,24 @@ world_war_events.20 = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	title = world_war_events.20.t
-	desc = world_war_events.20.d
+	# The two sides are named only when ww_save_entry_sides found a pair at war
+	# with each other (the same test that shows option a); the trigger's
+	# ww_world_war_is_being_fought does not promise one.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					exists = scope:ww_main_defender
+					exists = scope:ww_main_aggressor
+				}
+				desc = world_war_events.20.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = world_war_events.20.d_no_side
+			}
+		}
+	}
 	flavor = world_war_events.20.f
 
 	duration = 3

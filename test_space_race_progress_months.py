@@ -140,6 +140,30 @@ class ProgressMonthsTest(unittest.TestCase):
                         self.assertTrue(months)
                         self.assertTrue(all(1 <= m <= 4 for m in months), months)
 
+    def test_signal_lost_is_the_deep_space_probes_alone(self):
+        """The interstellar probe stands on the pad until its milestone completes (.8), so "contact lost
+        with a probe" (.13) is drawn only for the Deep-Space Probe (#1620); the interstellar milestone's
+        Ambitious failure draws from the pool's ungated entries."""
+        triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt"))
+        gate = _block(triggers, "sr_setback_is_deep_space_probe")
+        self.assertIn("exists = scope:sr_setback_probe", gate)
+        self.assertNotIn("interstellar", gate)
+        self.assertIn("sr_setback_is_deep_space_probe = yes", _block(self.events[13], "\ttrigger"))
+        pool = _block(_read(EFFECTS), "sr_fire_ambitious_failure_event")
+        entries = [pool[m.end():_close(pool, m.end() - 1) - 1] for m in re.finditer(r"\n\t\t\d+ = \{", pool)]
+        ungated = [e for e in entries if "trigger = {" not in e]
+        self.assertGreaterEqual(len(ungated), 3)
+        gated_13 = [e for e in entries if "space_race_events.13 }" in e]
+        self.assertEqual(len(gated_13), 1)
+        self.assertIn("sr_setback_is_deep_space_probe = yes", gated_13[0])
+
+    def test_the_breakthrough_serves_the_program_longest_when_applied_to_it(self):
+        """.74.a applies the breakthrough to the program, .74.b patents it: a's boost is the longer (#1620)."""
+        months = {name: int(re.search(r"name = sr_engineering_breakthrough months = (\d+)", body).group(1))
+                  for name, body in _options(self.events[74]).items()}
+        self.assertEqual(set(months), {"74.a", "74.b"})
+        self.assertGreater(months["74.a"], months["74.b"])
+
     def test_tooltips_quote_their_months(self):
         values = _read(VALUES)
         used = set(re.findall(r"SR_(?:SETBACK_LOSE|PROGRESS_ADD|PROGRESS_LOSE)_\d_MONTHS_TT", _read(EVENTS)))
