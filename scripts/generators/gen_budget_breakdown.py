@@ -31,7 +31,7 @@ SOURCES = {
             "banking_event_sovereign_wealth_fund_cost", "banking_crash_response_cost",
             "banking_event_interbank_guarantee", "banking_event_microfinance_cost",
             "banking_event_student_debt_relief_cost", "banking_event_bailout_cost",
-            "planning_treasury_pool_balance", "te_mon_gold_carry_expense",
+            "planning_treasury_pool_balance",
             # Two external tools' bills, weekly since 2026-10-27 (BNK-14).
             "banking_external_sterilization_charge", "banking_external_import_charge",
         )),
@@ -67,7 +67,6 @@ SOURCES = {
             "te_demog_ms_free_contraception_cost",
         )),
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
-        "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
         "climate": ("Climate Policy", ("renewable_investment_cost_modifier", "aerosol_injection_cost_modifier")),
         # Event programs that pay for power, for an industry's output, or for
         # the labor standards conceded to anti-globalization protesters

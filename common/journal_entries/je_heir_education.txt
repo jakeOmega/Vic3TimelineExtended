@@ -219,7 +219,7 @@ je_heir_education = {
 			# track with no focus set: after the heir-change reset above, in saves
 			# where that reset left the modifiers behind, and after any other path
 			# that clears a focus without its modifier. (With no active entry,
-			# legacy_modifier_cleanup.txt removes them.)
+			# every way out runs heir_education_cleanup_effect.)
 			if = {
 				limit = {
 					has_modifier = heir_ed_trait_focus_active

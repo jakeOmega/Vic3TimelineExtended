@@ -38,24 +38,6 @@ gm_monument_monthly = {
 		}
 		gm_world_base_self_check = yes
 	}
-	# An older save's finished monuments, marked once before any is migrated
-	# (sites spec 2026-10-18 §3.5): gm_state_needs_migration reads the mark, and
-	# a finished building with neither it nor gm_migrated is a stray
-	# (gm_state_stray_building).
-	if = {
-		limit = {
-			gm_system_enabled = yes
-			NOT = { has_global_variable = gm_sites_marked }
-		}
-		set_global_variable = gm_sites_marked
-		every_state = {
-			limit = {
-				has_building = building_grand_monument
-				NOT = { has_variable = gm_migrated }
-			}
-			set_variable = gm_premigration
-		}
-	}
 	if = {
 		limit = {
 			gm_system_enabled = yes
@@ -1525,8 +1507,8 @@ gm_sh_settle_region = {
 		list = gm_sh_left
 		gm_sh_settle_one = yes
 	}
-	# Not an older save's building before monument_events.32 records it: it
-	# stands at its full height until then (gm_migrated).
+	# Only a building script made (gm_migrated): one no record describes is a
+	# stray's, not this monument's.
 	scope:gm_sh_region = {
 		every_scope_state = {
 			limit = {

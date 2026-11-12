@@ -72,12 +72,6 @@ banking_external_sterilization_weekly_charge = {
 	value = banking_external_sterilization_cost
 	divide = 4
 }
-# Uncalled since 1.15; an older save's added copy of the charge still names it.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-banking_external_sterilization_weekly_charge_for_je = {
-	value = 0
-	owner = { add = banking_external_sterilization_weekly_charge }
-}
 banking_external_surrender_purchase = {
 	value = gdp
 	multiply = banking_external_surrender_share
@@ -116,12 +110,6 @@ banking_external_import_cost = {
 banking_external_import_weekly_charge = {
 	value = banking_external_import_cost
 	divide = 4
-}
-# Uncalled since 1.15; an older save's added copy of the charge still names it.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-banking_external_import_weekly_charge_for_je = {
-	value = 0
-	owner = { add = banking_external_import_weekly_charge }
 }
 
 banking_external_real_gap = {

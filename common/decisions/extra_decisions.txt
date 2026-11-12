@@ -137,7 +137,13 @@ imperial_federation_act_iron_fist = {
 		}
 		# Power and scale
 		country_rank >= rank_value:great_power
-		colonial_state_count >= 4
+		# colonial_state_count >= 4, written as the count itself so the
+		# tooltip names the colonies (list_scopes, vanilla 1.15)
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+			count >= 4
+			list_scopes = yes
+		}
 		# Colonial Affairs commitment
 		OR = {
 			has_law = law_type:law_colonial_exploitation
@@ -203,7 +209,11 @@ imperial_federation_act_civilizing_mission = {
 			colonial_solidified_months_value >= colonial_empire_federation_months
 		}
 		country_rank >= rank_value:great_power
-		colonial_state_count >= 4
+		any_scope_state = {  # colonial_state_count >= 4, listing the colonies
+			is_overseas_colonial_state = yes
+			count >= 4
+			list_scopes = yes
+		}
 		OR = {
 			has_law = law_type:law_colonial_exploitation
 			has_law = law_type:law_colonial_resettlement
