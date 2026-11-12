@@ -106,8 +106,10 @@ te_pay_reparations_by_treaty = {
 			# Set first: te_reparations' visible and possible read them, and
 			# can_create_treaty runs the article's gates.
 			$PAYER$ = {
-				set_variable = { name = te_reparations_due value = $AMOUNT$ }
-				set_variable = { name = te_reparations_due_to value = $PAYEE$ }
+				# The days are a backstop for a check that never ran, so the
+				# record (and the article it makes draftable) can't outlive it.
+				set_variable = { name = te_reparations_due value = $AMOUNT$ days = 30 }
+				set_variable = { name = te_reparations_due_to value = $PAYEE$ days = 30 }
 			}
 			if = {
 				limit = {
@@ -145,6 +147,17 @@ te_pay_reparations_by_treaty = {
 				}
 			}
 			else = {
+				# No pending check (the branch above), so the article's own
+				# gate failed for a payer it should admit: if every reparation
+				# lands here, the treaty route never runs and neither verdict
+				# below is ever logged.
+				if = {
+					limit = { NOT = { has_global_variable = te_sc_treaty_reparations_gate_broken } }
+					set_global_variable = te_sc_treaty_reparations_gate_broken
+					$PAYER$ = { save_scope_as = te_rep_gate_payer }
+					$PAYEE$ = { save_scope_as = te_rep_gate_payee }
+					debug_log = "TE_SELF_CHECK BROKEN treaty_reparations_gate (can_create_treaty refused a te_reparations treaty from [SCOPE.sCountry('te_rep_gate_payer').GetNameNoFormatting] to [SCOPE.sCountry('te_rep_gate_payee').GetNameNoFormatting] with the payer's record just set: the article's visible/possible don't see it, or scope:other_country is unbound there. Paid directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
 				$PAYER$ = { te_reparations_settle = yes }
 			}
 		}

@@ -64,6 +64,12 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 		country_prestige_mult = 0.02
 	}
 
+	# Lens (1.15 show_in_lens flag): the world-wide `visible` gate, so the
+	# article stays out of the lens until warming begins.
+	show_in_lens = {
+		temperature_anomaly_display > 0.1
+	}
+
 	# ROOT in visible and possible is the source, the country being
 	# forced to reduce emissions; scope:other_country is the demanding target
 	# (vanilla 14_treaty_port, 29_recognize_independence).

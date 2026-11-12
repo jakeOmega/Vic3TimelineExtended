@@ -321,10 +321,15 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   `TE_SELF_CHECK OK|BROKEN treaty_state_transfer` (three days after `irredentism.2.b` "Cede peacefully" or a
   complied UN court ruling, the state is the taker's) and `TE_SELF_CHECK OK|BROKEN treaty_reparations` (three days
   after `decolonization_events.6.a` "We acknowledge the debt" or a nuclear crisis's reparations, the Reparations
-  article's `on_entry_into_force` paid). BROKEN means `create_treaty` with `is_draft = no` doesn't run
-  `on_entry_into_force` (C21); the check has already made the transfer directly, so play is unaffected, but then put
-  the direct `set_state_owner` / paired `add_treasury` back at the four call sites (the parent of #1457's commit) and
-  drop the two helpers. Also check: the treaty shows in both countries' diplomacy panels, named and with the state or
+  article's `on_entry_into_force` paid). Either BROKEN leaves play correct (the check has already made the transfer
+  directly); the line says which failure it was. `treaty=yes`: the treaty exists but its `on_entry_into_force` did
+  not run for `is_draft = no` (C21), so put the direct `set_state_owner` / paired `add_treasury` back at the four
+  call sites (the parent of #1457's commit) and drop the two helpers. `treaty=no`: `create_treaty` made nothing
+  although `can_create_treaty` passed, so the treaty block is wrong (the `inputs` form, the binding period) rather
+  than the hook: compare it with vanilla's 1.15 uses before dropping the helpers. A
+  `TE_SELF_CHECK BROKEN treaty_reparations_gate` line means `can_create_treaty` refused the Reparations article with
+  the payer's record just set (its `visible` / `possible` don't see the record, or `scope:other_country` is unbound
+  there), so every reparation is paid directly and neither verdict above can appear: fix the article's gate. Also check: the treaty shows in both countries' diplomacy panels, named and with the state or
   Reparations article; the treasuries move by the sum the option's tooltip showed, once; the state does not move
   back, and nothing is paid twice, if the treaty is later withdrawn.
 

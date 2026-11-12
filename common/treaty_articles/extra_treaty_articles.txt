@@ -950,9 +950,9 @@ science_aid_2 = {
 			text = REQ_BASE_SCIENCE_AID_ARTICLE
 			OR = {
 				# any_scope_treaty requires a country scope (vanilla 00_alliance.txt
-				# wraps it in scope:first_country). In can_ratify the ambient scope is
-				# the treaty, so scope to the proposer before iterating its treaties.
-				# can_ratify names the parties scope:source_country and
+				# wraps it in scope:first_country). In can_propose, as in can_ratify,
+				# the ambient scope is the treaty, so scope to the proposer before
+				# iterating its treaties. Both name the parties scope:source_country and
 				# scope:target_country; scope:other_country is unset here, so until
 				# 2026-10-17 neither path could test the right partner.
 				scope:source_country ?= {
