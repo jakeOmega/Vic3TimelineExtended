@@ -1348,6 +1348,7 @@
  disestablishment_push_modifier_desc:0 "Support for separating church and state is growing, weakening religious institutional power."
  disestablishment_religious_movement_modifier_desc:0 "The push to separate church and state is weakening religious [Concept('concept_political_movement', 'political movements')]."
  dp_nuclear_exchange:0 "War After a Nuclear Exchange"
+ dp_te_colonial_uprising_desc:0 "Sets the initiating [concept_war_goal] to win the colony's independence from its colonial power."
  dp_te_colonial_war_desc:0 "Sets the initiating [concept_war_goal] to take back the colony that declared its independence."
  dp_te_independence_war_desc:0 "Sets the initiating [concept_war_goal] to keep the independence a colony declared from its colonial power."
  dp_te_seize_strait_desc:0 "Sets the initiating [concept_war_goal] to force the targeted [concept_country] to cede the [concept_strait] shore of the targeted [concept_state], keeping the rest of it."
