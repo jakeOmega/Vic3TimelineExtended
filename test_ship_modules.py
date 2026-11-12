@@ -97,6 +97,30 @@ MEDIUM_TOTALS_BEFORE_RESHAPE = {
     'swarm_coordination_vessel': {'hull_damage': 880, 'crew_damage': 230, 'armor': 831, 'hit_points_max': 9475, 'supply_capacity': 215, 'power_projection': 440},
 }
 
+# Vulnerability and screening before vanilla 1.14.5's rescale (#1625): each mod
+# ship's hull (V, S), and its analogue's in vanilla 1.14.4. The hull now carries
+# that value times the analogue's current / old, rounded half up (header of
+# common/ship_types/extra_ship_types.txt), so the ships keep their relation to
+# each other and to their analogues. If vanilla rescales again, the test fails
+# until the values are re-derived.
+VS_BEFORE_RESCALE = {
+    "asw_destroyer": (50, 250), "guided_missile_ship": (50, 250),
+    "nuclear_submarine": (5, 5), "stealth_attack_submarine": (5, 5), "autonomous_swarm_submarine": (5, 10),
+    "nuclear_supercarrier": (100, 30), "fleet_carrier": (100, 25),
+    "arsenal_ship": (200, 10), "stealth_battlecruiser": (100, 30),
+    "hypersonic_missile_platform": (200, 10), "antimatter_battleship": (200, 30),
+    "pulsed_laser_escort": (75, 600), "swarm_coordination_vessel": (100, 700),
+    "networked_air_defense_cruiser": (60, 500),
+    "expeditionary_sea_base": (250, 0), "orbital_support_amphibious_mothership": (250, 20),
+    "amphibious_assault_ship": (200, 0), "marine_assault_ship": (220, 0),
+    "expeditionary_fast_transport": (250, 0),
+}
+ANALOGUE_VS_1_14_4 = {
+    "destroyer": (50, 150), "submarine": (5, 5), "aircraft_carrier": (100, 10),
+    "super_dreadnought": (200, 20), "light_cruiser": (10, 270), "troop_ship": (25, 5),
+}
+VS_STATS = ("ship_vulnerability_add", "ship_screening_add")
+
 _STATE = None
 
 
@@ -447,6 +471,41 @@ class TestShipUtilities(unittest.TestCase):
                 with self.subTest(attacker=attacker, target=target):
                     self.assertGreaterEqual(round(penalty + built_in + best, 6), -0.8)
 
+    def test_vulnerability_and_screening_follow_the_analogues_rescale(self):
+        """Vanilla 1.14.5 rescaled vulnerability and screening by about x0.56;
+        each mod hull keeps its pre-rescale relation to its analogue (#1625)."""
+        types, _, _, _, _ = _state()
+        self.assertEqual(set(VS_BEFORE_RESCALE), set(ANALOGUE))
+        for ship, before in VS_BEFORE_RESCALE.items():
+            analogue = ANALOGUE[ship]
+            now = _modifier(types["ship_type_" + analogue])
+            for stat, old, anchor_old in zip(VS_STATS, before, ANALOGUE_VS_1_14_4[analogue]):
+                want = int(old * now.get(stat, 0.0) / anchor_old + 0.5)
+                with self.subTest(ship=ship, stat=stat):
+                    self.assertEqual(_modifier(types["ship_type_" + ship]).get(stat, 0.0), want)
+
+    def test_gun_module_vulnerability_is_the_analogues(self):
+        """A gun module's ship_vulnerability_add is its analogue's gun module of
+        the same tier, at the base game's current value (none where vanilla has
+        none, as on the 1.15 submarine)."""
+        types, mods, _, _, _ = _state()
+        for ship, analogue in ANALOGUE.items():
+            _, want = _tier_values(types, mods, analogue, "guns", "ship_vulnerability_add")
+            _, have = _tier_values(types, mods, ship, "guns", "ship_vulnerability_add")
+            with self.subTest(ship=ship):
+                self.assertEqual(have, want)
+
+    def test_no_module_or_technology_on_the_old_screening_scale(self):
+        """Flat screening outside the hulls follows the light cruiser's rescale
+        (270 -> 150): the utilities' 200 became 111, Unmanned Aerial Vehicles'
+        50 became 28, the Swarm Coordination Vessel's high guns' 100 became 56."""
+        _, mods, _, mod_mods, _ = _state()
+        want = {"utility_mod_dew_point_defense": 111, "utility_mod_aegis_air_defense": 111,
+                "ship_mod_swarm_coordination_vessel_guns_high": 56}
+        have = {m: _modifier(mods[m])["ship_screening_add"] for m in sorted(mod_mods)
+                if "ship_screening_add" in _modifier(mods[m])}
+        self.assertEqual(have, want)
+        self.assertEqual(_modifier(_EXTRA["techs"]["unmanned_aerial_vehicles"]).get("ship_screening_add"), 28)
 
 if __name__ == "__main__":
     unittest.main()
