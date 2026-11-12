@@ -158,7 +158,7 @@ te_tax_detect_drift = {
 						var:te_tax_drift_goods = 0
 						var:te_tax_drift_amend = 0
 						# An AI market owner may move tariffs every month (customs option).
-						NAND = { has_variable = te_tax_drift_customs var:te_tax_drift_customs > 0 }
+						trigger_if = { limit = { has_variable = te_tax_drift_customs } NOT = { var:te_tax_drift_customs > 0 } }
 					}
 				}
 			}
