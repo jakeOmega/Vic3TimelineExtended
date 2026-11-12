@@ -2368,12 +2368,14 @@ class CommissionLifeTests(unittest.TestCase):
                       "owner = { custom_tooltip = gm_ded_reason_opportunity_tt } default_option = yes "
                       "ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
                       squash(ev))
-        self.assertIn("name = monument_events.2.a trigger = { hidden_trigger = { NOT = { has_variable = gm_ceremony_mode "
-                      "var:gm_ceremony_mode = flag:rededicate } } custom_tooltip = { text = gm_ded_reason_leave_tt "
+        self.assertIn("name = monument_events.2.a trigger = { hidden_trigger = { trigger_if = { "
+                      "limit = { has_variable = gm_ceremony_mode } NOT = { var:gm_ceremony_mode = flag:rededicate } } } "
+                      "custom_tooltip = { text = gm_ded_reason_leave_tt "
                       "gm_state_ceremony_offers_opportunity = no } } "
                       "default_option = yes ai_chance = { base = 0 }", squash(ev))
-        self.assertIn("name = monument_events.2.a trigger = { hidden_trigger = { NOT = { has_variable = gm_ceremony_mode "
-                      "var:gm_ceremony_mode = flag:rededicate } } custom_tooltip = { text = gm_ded_reason_leave_tt "
+        self.assertIn("name = monument_events.2.a trigger = { hidden_trigger = { trigger_if = { "
+                      "limit = { has_variable = gm_ceremony_mode } NOT = { var:gm_ceremony_mode = flag:rededicate } } } "
+                      "custom_tooltip = { text = gm_ded_reason_leave_tt "
                       "gm_state_ceremony_offers_opportunity = yes } } "
                       "ai_chance = { base = 0 }", squash(ev), "the AI never leaves its monument undedicated")
         # The opportunity's, Not yet's and Keep it as it is's: exactly one valid at a time.
@@ -6560,7 +6562,10 @@ class SiteDedicationTests(unittest.TestCase):
     def test_not_yet_is_a_sites_and_keep_is_rededicates(self):
         ev = self.ceremony()
         options = re.findall(r"option = \{ name = (monument_events\.2\.\w+) (.*?) \}(?= option = \{|$)", ev)
-        not_rededicate = "hidden_trigger = { NOT = { has_variable = gm_ceremony_mode var:gm_ceremony_mode = flag:rededicate } }"
+        # The guard is the limit, never a sibling of the read in the NOT
+        # (variable_guard_audit): an unset mode passes.
+        not_rededicate = ("hidden_trigger = { trigger_if = { limit = { has_variable = gm_ceremony_mode } "
+                          "NOT = { var:gm_ceremony_mode = flag:rededicate } } }")
         a = [b for n, b in options if n == "monument_events.2.a"]
         keep = [b for n, b in options if n == "monument_events.2.keep"]
         self.assertEqual(len(a), 2)
