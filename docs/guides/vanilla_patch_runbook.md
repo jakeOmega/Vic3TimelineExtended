@@ -113,7 +113,7 @@ comm -23 /tmp/mt_old.txt /tmp/mt_new.txt   # removed → grep the mod for every 
 
 This found both 1.13.9 breakage classes (the law-enactment rename and the harvest-condition deregistration) before the game was ever launched.
 
-You can use the mod-state server validator as a gating signal: after preliminary edits, `curl http://localhost:8950/validate/engine-coverage` returns the modifier names the mod uses that are no longer recognized.
+You can use the mod-state server validator as a gating signal: after preliminary edits, `curl http://localhost:8950/validate/engine-coverage` returns the modifier names the mod uses that are no longer recognized. Both it and `modifier_field_audit` (on every reload, and `python3 modifier_field_audit.py --strict` once `vanilla_parsed/` is rebuilt) judge by the patched game's modifier type definitions, not by the engine-docs dump, so a renamed or removed modifier the mod still writes is flagged on the first reload after the patch (#391).
 
 ### Known vanilla renames (cumulative across patches)
 
