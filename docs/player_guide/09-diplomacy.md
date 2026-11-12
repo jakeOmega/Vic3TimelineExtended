@@ -348,6 +348,8 @@ the leader has researched adds a slot: Intergovernmental Organizations (era 6),
 Containerization (era 8), Globalization (era 9) and Universal Digital Identity
 (era 11). The slots are counted, not tied to positions, so a small bloc whose
 leader has two of the technologies fills its third and fourth slots with them.
+A country founding a bloc can spend one more mandate on principles at
+formation for each of the four it has researched.
 The panel shows all eight slots from the start and locks the ones above the
 bloc's count. Hover a locked slot to see the count it needs, the count the bloc
 has, and a tick or a cross for each rank condition and each slot technology.
@@ -370,7 +372,8 @@ Members get +10% influence; the leader gets +50% pact leverage generation and
 Cohesion rests on the leader's legitimacy, the worst relations inside the bloc,
 and the infamy of the leader and the worst member. The leader can use Diplomatic
 Alignment, a pact that slowly aligns a country's relations with third parties to
-its own, and a Diplomatic Framework never blocks a member's voluntary union.
+its own and builds the leader up to 1,000 Involvement where that country is
+local, and a Diplomatic Framework never blocks a member's voluntary union.
 
 ### New principle groups
 
@@ -422,7 +425,7 @@ Several principles give your bloc an article, action or decree.
 | Healthcare IV and V | Healthcare Aid |
 | Police Coordination IV and V | Security Aid |
 | Advanced Research IV and V | Modernization Aid; V adds Extensive Modernization Aid |
-| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage and better relations |
+| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage, better relations and up to 1,000 Involvement where the recipient is local |
 | Vassalization IV and V | Peaceful Integration: annex a puppet or colony with under 25 liberty desire, cordial relations and under a tenth of your GDP, without a play |
 | Cultural Unity II+ | Enforce Cultural Acceptance: a member of five years or more adds your primary cultures to its own, if the bloc has 50% cohesion and you have three times its prestige |
 | Cultural Unity V | Enforce Cultural Adoption: a subject replaces its primary cultures with yours |
@@ -509,9 +512,10 @@ to every identity. It needs a Subjugation Strength of at least 1.0, which means
 roughly that your prestige is twenty times the target's: ten times if your bloc
 is a Sovereign Empire, and about twelve times when your identity's bond applies
 (shared religion, governance principle or culture, economic dependence, or an
-army five times the target's that can get to it). Its infamy grows with the target's population, up
-to 25; a Sovereign Empire pays half as much, so it reaches that cap only against
-far more populous targets.
+army five times the target's that can get to it). Its infamy is a fifth of what
+annexing the target would cost, up to 25, so the cap decides for all but small
+targets. A Sovereign Empire's figure is halved before the cap, so it reaches 25
+only against larger targets.
 
 ## Formable countries
 

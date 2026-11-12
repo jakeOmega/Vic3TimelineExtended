@@ -13,8 +13,8 @@ by hand reads this table instead:
 * `test_audit_registry.py` holds it to `POST_LOAD_AUDITS` in
   `mod_state_server.py` and to the `*_audit.py` files on disk.
 
-Adding an audit: write the module and its test, add it to `POST_LOAD_AUDITS`
-if a reload should run it, add one `Audit(...)` here, and run
+Adding an audit: write the module (on `audit_common.py`) and its test, add it
+to `POST_LOAD_AUDITS` if a reload should run it, add one `Audit(...)` here, and run
 `python3 audit_registry.py --write`. Nothing else restates the roster.
 
 Stdlib only, and it imports no audit: a reader needs neither numpy nor a game
@@ -96,6 +96,22 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `limit = {` line or the iterator's opener line",
     ),
     Audit(
+        "delayed_event_trigger_audit",
+        "Not a gate: lists the events queued with a delay whose `trigger` may be false when queued, "
+        "which seems to drop them (#1596), for the play-test that settles the rule.",
+        ci=None,
+        where="trailing on the target event's `trigger = {` line",
+        note="A report: it fails nothing and adds no reload warning until the self-check "
+             "`delayed_trigger_queue_check` confirms the rule. `--write` writes the report offline.",
+    ),
+    Audit(
+        "random_list_weight_audit",
+        "A `trigger = { }` in a `random_list` branch's weight `modifier`: the engine rejects the token "
+        "and the tilt is lost. Use `if = { limit = { ... } add = N }`; the `ai_chance` form is valid.",
+        post_load=False,
+        report=None,
+    ),
+    Audit(
         "effect_trigger_validity_audit",
         "An effect or trigger name the engine doesn't know, or a known one in the wrong kind of block (an "
         "effect where triggers are read, or the reverse). The engine logs it at load and drops the line.",
@@ -118,6 +134,20 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the duplicate's line",
     ),
     Audit(
+        "modifier_field_audit",
+        "A modifier type name no definition registers: written as a field in a modifier block (the "
+        "engine drops the line) or read as `modifier:<name>` (it reads nothing). A name that fits a "
+        "dynamic family, or that `modifiers.log` lists, still needs its own definition in "
+        "`common/modifier_type_definitions/`. Also a field whose type vanilla registers without a loc "
+        "key, so its line shows the raw key.",
+        where="for a missing loc key only, trailing on a modifier block's line that writes the field (one "
+              "comment covers every use); an unregistered name takes none",
+        tags=("modifier_field_loc",),
+        note="Builds a small ModState from vanilla_parsed/. A type only the mod registers is "
+             "`loc_coverage_audit`'s to name. `/validate/engine-coverage` makes the registration "
+             "judgment interactively; this is the copy that fails a reload and CI.",
+    ),
+    Audit(
         "mod_structure_audit",
         "Unbalanced braces in a `common/` file (the engine drops the rest of the file), an `INJECT:` on "
         "an entity the mod itself defines or REPLACEs (it never applies), and two bare declarations of "
@@ -126,11 +156,21 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `INJECT:<name>` line (brace and collision flags take none)",
     ),
     Audit(
+        "load_order_audit",
+        "A key whose value in ModState differs from what the engine loads: a bare copy the engine drops "
+        "for an earlier one (the first bare definition wins, and vanilla's and the mod's files sort "
+        "together), an `INJECT:` lost to a `REPLACE:` of its key, or a directive on a key nothing "
+        "defines. Every tool built on ModState then reads a definition the game doesn't use.",
+        note="Replays `external_mod_overlap`'s load-order model against the values ModState holds "
+             "(#1191). CI has no game files, so a mod bare copy of a vanilla key is decided only when "
+             "its file sorts before or after every vanilla file of the folder; the rest are listed as "
+             "undetermined, and a reload on a machine with the game decides them.",
+    ),
+    Audit(
         "attitude_key_audit",
         "An `attitude = <key>` that is not one of the engine's fifteen attitude keys.",
-        ci=(),
         where=VALUE_LINE,
-        note="Runs bare in CI: it has no flag, and `main()` returns the exit code.",
+        note="The bare run fails on a flag too, as it did before it took `--strict`.",
     ),
     Audit(
         "prev_scope_audit",
@@ -172,6 +212,12 @@ AUDITS: tuple[Audit, ...] = (
         where=VALUE_LINE,
     ),
     Audit(
+        "sol_fraction_audit",
+        "A `*_standard_of_living_add` that is not a whole number and is not scaled before it applies. "
+        "Standard of living is an integer, so the fraction does nothing on its own (#338).",
+        where=VALUE_LINE,
+    ),
+    Audit(
         "change_variable_clamp_audit",
         "A `min =` / `max =` inside `change_variable`, where which way it clamps is a guess.",
         where="trailing on the `min =` / `max =` line or the `change_variable = {` line",
@@ -180,6 +226,19 @@ AUDITS: tuple[Audit, ...] = (
         "building_scope_variable_audit",
         "A variable set or read in building scope. Buildings hold no variables (#519).",
         where="trailing on the flagged operation or the bare `var:X` line",
+    ),
+    Audit(
+        "variable_guard_audit",
+        "A `has_variable = X` guard (or the global or local form) as a direct child of a `NOT`, `NAND` "
+        "or `NOR` that also reads `var:X` bare. A multi-child `NOT` reads every child, so the guard "
+        "protects nothing and an unset X logs `Failed to fetch variable`; read as NOR the block is "
+        "also wrong when X is set. Move the guard into a limit and keep the rest of the block inside "
+        "the negation, `trigger_if = { limit = { has_variable = X } NOT = { … } }`; an equality with "
+        "a number can instead be read as `var:X ?= N`.",
+        where="trailing on the opening line of the `NOT` / `NAND` / `NOR`",
+        tags=("variable_guard",),
+        note="A guard beside its read in an `AND` or at a trigger's top level is not flagged. Walks "
+             "all of `common/` and `events/`, so it takes several seconds.",
     ),
     Audit(
         "container_timed_variable_audit",
@@ -214,6 +273,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("system_ungated", "unchosen_self_action", "imputed_foreign_action"),
     ),
     Audit(
+        "trigger_event_cycle_audit",
+        "A `trigger_event` with no delay on a cycle of scripted effect calls and other undelayed "
+        "`trigger_event`s. It runs inside the effect that fires it, so a cycle nothing stops overflows "
+        "the stack: a crash with no log line. Write what the cycle re-reads before the `trigger_event`, "
+        "or give it `days = 1`; the comment is for a cycle a write already stops, and names that write.",
+        where="trailing on the `trigger_event` line; for an id passed as `$EVENT$`, on the opening line "
+              "of the call that names it",
+        tags=("trigger_event_cycle",),
+        note="`--through <event or effect>` lists the flagged cycles a name lies on. The graph is "
+             "`script_call_graph.py`.",
+    ),
+    Audit(
         "faith_scene_audit",
         "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
         "a country of another state religion can be shown: its title, description, flavor, option, "
@@ -235,9 +306,10 @@ AUDITS: tuple[Audit, ...] = (
     Audit(
         "kill_character_audit",
         "A `kill_character` in an event with no guard that the character exists.",
-        ci=("--check",),
         where="trailing on the `kill_character` line or the line above it",
         report="kill_character_audit.md",
+        note="`--strict` (alias `--check`) fails on a kill with neither guard and writes no report; "
+             "the bare run writes the report.",
     ),
     Audit(
         "event_magnitude_audit",
@@ -252,10 +324,11 @@ AUDITS: tuple[Audit, ...] = (
         "treaty_leverage_side_audit",
         "A treaty article with `country_treaty_leverage_generation_add` on the side that pays, or one "
         "that builds no Involvement because it lacks `max_target_involvement` / "
-        "`target_involvement_applies_to` or names the wrong side.",
+        "`target_involvement_applies_to` or names the wrong side; and a diplomatic action's pact "
+        "that builds none or departs from vanilla's pact convention (`source_country`, or `mutual`).",
         where="trailing on the `country_treaty_leverage_generation_add` line or the article's opening "
-              "line; for an Involvement flag, the `(involvement)` form on the article's opening line "
-              "or either field's line",
+              "line; for an Involvement flag, the `(involvement)` form on the article's or action's "
+              "opening line, a pact's `pact = {` line, or either field's line",
         tags=("", "involvement"),
     ),
     Audit(
@@ -263,11 +336,11 @@ AUDITS: tuple[Audit, ...] = (
         "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root; or a "
         "party scope in a block that does not bind it: `scope:source_country` / `scope:target_country` "
         "in `visible` / `possible` (use root and `scope:other_country`), or `scope:other_country` in "
-        "`can_ratify` / `requirement_to_maintain` (use source / target; first / second on a mutual "
-        "article).",
+        "`can_ratify` / `requirement_to_maintain` / `can_propose` (use source / target; first / "
+        "second on a mutual article).",
         post_load=False,
-        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify` or "
-              "`requirement_to_maintain`; a read in `evaluation_chance` takes none",
+        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify`, "
+              "`requirement_to_maintain` or `can_propose`; a read in `evaluation_chance` takes none",
         tags=("treaty_scope",),
         report=None,
         note="Direct reads only: it does not open a scripted trigger or value the block calls.",
@@ -281,11 +354,11 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "prestige_good_roster_audit",
-        "A company prestige good no `building_types` building of the company can make, or one on a "
-        "`local = yes` good.",
+        "A company prestige good no `building_types` building of the company can make, one on a "
+        "`local = yes` good, or a fourth prestige good on one base good (the engine keeps three).",
         where="trailing on the prestige good's line in `possible_prestige_goods` or the company's "
-              "opening line (covers the whole company); for a `local` flag, the prestige good's "
-              "opening line",
+              "opening line (covers the whole company); for a `local` or cap flag, the prestige "
+              "good's opening line",
     ),
     Audit(
         "amendment_reachability_audit",
@@ -355,6 +428,21 @@ AUDITS: tuple[Audit, ...] = (
         note="The .gui half is gui_reference_audit's.",
     ),
     Audit(
+        "loc_root_context_audit",
+        "A loc key on a country root that doesn't fit where it renders, reached there by a `$KEY$` splice, "
+        "a named key or a `GetCustom` entry. A `ROOT.`, `SCOPE.` or `THIS.` read in a key a widget renders "
+        "comes out blank. A `JournalEntry.` or `Country.` read in a `status_desc` key or a scripted "
+        "button's text is the unproven root there (not known to fail): use the proven one, "
+        "`ROOT.GetCountry…`. An entry or player read on a public tab shows another country the player's "
+        "figure, or nothing.",
+        where="trailing on the flagged key's loc line (a public-tab flag takes none: a world read goes "
+              "in `WORLD_LOC`)",
+        tags=("loc_root_context",),
+        note="A reload leaves the public-tab kinds to this command and to `BindingTest` "
+             "(`test_te_system_tab_bodies.py`), whose rules they are; it takes about 1.4 s without them, "
+             "this command about 4 s. Each flag gives its path from the line that names the first key.",
+    ),
+    Audit(
         "concept_reference_audit",
         "A loc link to a game concept that doesn't exist. The link breaks and logs three errors a "
         "render (#1257).",
@@ -363,9 +451,13 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "localization_accessor_audit",
-        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow.",
-        ci=None,
+        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. The engine "
+        "renders it as nothing.",
+        ci=(),
         where="trailing on the loc line",
+        note="The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's "
+             "loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing "
+             "(#348; its row in python_tools.md).",
     ),
     # --- GUI and assets ------------------------------------------------------
     Audit(
@@ -510,9 +602,14 @@ def render_markdown() -> str:
         "",
         "## Adding an audit",
         "",
-        "1. Write `<name>_audit.py` at the repo root, with a `--strict` mode that exits 1 on an "
-        "unreviewed flag, and `test_<name>_audit.py` beside it. A reload audit also needs "
-        "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array.",
+        "1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit "
+        "is the function that finds flags; `audit_common.py` gives it the rest: "
+        "`parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` "
+        "hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report "
+        "with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that "
+        "exits 1 on an unreviewed flag or a stale tag. A reload audit also needs "
+        "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array "
+        "(`audit_common.summary` builds it).",
         "2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.",
         "3. Add one `Audit(...)` entry to `audit_registry.py`.",
         "4. Run `python3 audit_registry.py --write` and commit this file with the rest.",

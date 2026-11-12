@@ -72,6 +72,8 @@ import pm_employment_audit
 import script_argument_audit
 import variable_usage
 import loc_accessor_usage  # GET /loc-accessors (#1246)
+import state_history  # GET /state-history (#901)
+import strategic_regions  # GET /strategic-regions, /state-region (#917)
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -140,6 +142,9 @@ engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
 _company_catalog_cache: tuple[ModState, list[dict]] | None = None
 _party_catalog_cache: tuple[ModState, list[dict]] | None = None
+# (ModState, {state: record}, state-region table, vanilla source) for
+# /state-history; cleared with the catalogs on every load.
+_state_history_cache: tuple | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -2550,27 +2555,52 @@ def _walk_dict_keys(node, path: list[str]):
 def _classify_modifier_name(name: str, modifiers_set: set, pattern_pairs: list) -> tuple[str, dict]:
     """Return (status, info) for a candidate modifier name.
 
-    status: 'engine' | 'pattern' | 'suspicious' | 'unknown'
+    status: 'engine' | 'suspicious' | 'unknown'
     info: extra details for the validation report.
+
+    'engine' means a modifier type definition registers the name: vanilla's
+    `common/modifier_type_definitions/` or the mod's, the merged `Modifier
+    Types` of the loaded ModState, read here. `modifiers_set` is every name
+    the caller knows of, the engine-docs dump and the definitions together; it
+    no longer decides validity, only whether the dump lists the name. Nothing
+    but a definition makes a name valid (#391):
+
+    * The engine-docs dump (`modifiers.log`) lists every name the engine
+      could register, about 4,700 of which nobody registers, and a dump older
+      than the game still lists names a patch removed. Such a name is
+      'unknown', with `listed_in_engine_docs`.
+    * A name with a catalog pattern's shape whose captured value is in the
+      vocabulary (`building_<building>_throughput_add` for a building that
+      exists) is 'unknown' too, with the `pattern` and `value` it matched and
+      `unregistered_pattern_instance`: the engine takes each name of a family
+      from its own definition and silently ignores the rest. Vanilla defines
+      the throughput type for under half of its own buildings.
+
+    'suspicious' is unchanged: the shape of a pattern with a value outside its
+    vocabulary, likely a typo.
     """
-    if name in modifiers_set:
+    registered = (ms.get_data("Modifier Types") or {}) if ms else {}
+    if name in registered:
         return "engine", {}
+    info: dict = {}
+    if name in modifiers_set:
+        info["listed_in_engine_docs"] = True
     pat = modifier_to_pattern.get(name)
     if pat:
-        return "pattern", {"pattern": pat[0], "value": pat[1], "source": pat[2]}
-    # Try every catalog pattern. A mod-only modifier (not in engine_docs) is
-    # still valid if it structurally matches a catalog pattern AND its captured
-    # placeholder value is a member of the corresponding vocabulary.
+        return "unknown", {
+            **info, "pattern": pat[0], "value": pat[1], "source": pat[2],
+            "unregistered_pattern_instance": True,
+        }
     suspicious_match: dict | None = None
     for pattern_str, prefix, suffix, vocab_values, placeholder in pattern_pairs:
         captured = _match_pattern(name, prefix, suffix)
         if captured is None:
             continue
         if not vocab_values or captured in vocab_values:
-            return "pattern", {
-                "pattern": pattern_str,
-                "value": captured,
+            return "unknown", {
+                **info, "pattern": pattern_str, "value": captured,
                 "source": "catalog_runtime",
+                "unregistered_pattern_instance": True,
             }
         # Pattern shape matches but the captured value isn't in the vocab.
         # Hold the first such match as a fallback if no full match is found.
@@ -2583,7 +2613,7 @@ def _classify_modifier_name(name: str, modifiers_set: set, pattern_pairs: list) 
             }
     if suspicious_match:
         return "suspicious", suspicious_match
-    return "unknown", {}
+    return "unknown", info
 
 
 def _did_you_mean(captured: str, vocab_values: set, limit: int = 3) -> list[str]:
@@ -2622,12 +2652,11 @@ def _validate_engine_coverage() -> dict:
     if not ms or not engine_docs:
         return {"error": "Mod state or engine docs not loaded"}
 
-    # The "valid modifier name" set is the union of:
-    #   (a) vanilla engine-doc modifiers (modifiers.log)
-    #   (b) modifier-type definitions registered by the mod (or vanilla) under
-    #       common/modifier_type_definitions/. Without (b) every dynamic-pattern
-    #       registration and every custom mod modifier looks "unknown" even
-    #       though the engine accepts it.
+    # Every modifier name known to exist: the engine-docs dump (modifiers.log)
+    # and the modifier type definitions, vanilla's and the mod's. It does not
+    # decide validity: `_classify_modifier_name` accepts only a name a
+    # definition registers, and uses this set to say whether the dump lists an
+    # unregistered one (#391).
     modifiers_set = {e.get("name", "") for e in engine_docs.get("modifiers", [])}
     mod_types = ms.get_data("Modifier Types") or {}
     modifiers_set.update(mod_types.keys())
@@ -2698,7 +2727,7 @@ def _validate_engine_coverage() -> dict:
                                 and bool_name not in script_values_set:
                             tstatus, tinfo = _classify_modifier_name(
                                 bool_name, modifiers_set, catalog_pairs)
-                            if tstatus not in ("engine", "pattern"):
+                            if tstatus != "engine":
                                 used_in = (
                                     f"{etype}/{entity_id} → "
                                     + " → ".join(str(p) for p in path)
@@ -2732,7 +2761,7 @@ def _validate_engine_coverage() -> dict:
                 if key in scripted_call_names and actual_val in ("yes", "no"):
                     continue
                 status, info = _classify_modifier_name(key, modifiers_set, catalog_pairs)
-                if status in ("engine", "pattern"):
+                if status == "engine":
                     continue
                 used_in = f"{etype}/{entity_id} → " + " → ".join(str(p) for p in path)
                 bucket = unknown_modifiers if status == "unknown" else suspicious_modifiers
@@ -2751,7 +2780,8 @@ def _validate_engine_coverage() -> dict:
         delta_days = int((most_recent_mod - most_recent_engine) // 86400)
         stale_warning = (
             f"Engine docs are {delta_days} days older than the most recent mod edit; "
-            "some unknowns may be entries added after the last in-game regeneration."
+            "an unknown's `listed_in_engine_docs` may be out of date. Validity comes from "
+            "the modifier type definitions alone."
         )
 
     return {
@@ -3597,14 +3627,25 @@ def _render_engine_coverage_md(report: dict) -> str:
     if report.get("unknown_modifiers"):
         out.append("## Unknown modifiers")
         out.append("")
-        out.append("Modifier-shaped names (ending in `_add`/`_mult`/`_max`/`_set`) used in mod "
-                   "data but absent from both the engine modifier registry and the pattern "
-                   "catalog. May indicate typos OR modifiers added after the engine-doc "
-                   "snapshot was taken — regenerate the engine docs in-game and `POST /reload` "
-                   "to refresh.")
+        out.append("Modifier-shaped names (ending in `_add`, `_mult`, `_max_level(s)`, `_set`, "
+                   "`_bool` or `_boolean`) used in mod data that no modifier type definition "
+                   "registers, vanilla's or the mod's. The engine drops such a field at load "
+                   "(`Unknown modifier type`, in `debug.log` only) and a `modifier:` read of it "
+                   "reads nothing: register the name in `common/modifier_type_definitions/` or "
+                   "fix it. Neither the engine's `modifiers.log` listing a name nor a name "
+                   "fitting a pattern-catalog family makes it valid (#391); either one only "
+                   "says the name can be registered, and is noted on its line. Regenerating "
+                   "the engine docs changes no verdict.")
         out.append("")
         for entry in report["unknown_modifiers"]:
-            out.append(f"- `{entry['name']}`")
+            notes = []
+            if entry.get("unregistered_pattern_instance"):
+                notes.append(f"unregistered instance of `{entry.get('pattern', '?')}` "
+                             f"(`{entry.get('value', '?')}`)")
+            if entry.get("listed_in_engine_docs"):
+                notes.append("listed in the engine docs (`modifiers.log`)")
+            tail = f" — {'; '.join(notes)}" if notes else ""
+            out.append(f"- `{entry['name']}`{tail}")
             for u in entry.get("used_in", [])[:5]:
                 out.append(f"  - {u}")
         out.append("")
@@ -4350,6 +4391,37 @@ def _party_catalog():
     rows = party_catalog.party_rows(parties, vanilla, sites)
     _party_catalog_cache = (ms, rows)
     return rows
+
+
+def _state_history_tables():
+    """(states, regions, source) for /state-history (#901): the start map
+    with the mod's own history files layered on (state_history.merge), the
+    hub table from `map_data/state_regions`, and where vanilla's history came
+    from. Vanilla follows the load's vanilla source: the snapshot's
+    `history/states.json`, or the game's files. Cached on `ms`."""
+    global _state_history_cache
+    if ms is None:
+        raise DataNotLoaded("State history")
+    if _state_history_cache is not None and _state_history_cache[0] is ms:
+        return _state_history_cache[1:]
+    rel = state_history.REL_DIR.split("/")
+    regions_rel = state_history.STATE_REGIONS_REL_DIR.split("/")
+    tree = _vanilla_tree_present()
+    if _vanilla_source.get("kind") == "vanilla_parsed" or not tree:
+        vanilla = vanilla_parsed.load_state_history(VANILLA_PARSED_DIR)
+        source = "vanilla_parsed"
+    else:
+        vanilla = state_history.parse_dir(os.path.join(base_game_path, "game", *rel))
+        source = "game_files"
+    if not vanilla:
+        raise DataNotLoaded("State history")
+    states = state_history.merge(vanilla, state_history.parse_dir(os.path.join(mod_path, *rel)))
+    regions = state_history.state_regions(
+        os.path.join(base_game_path, "game", *regions_rel) if tree else None,
+        os.path.join(mod_path, *regions_rel),
+    )
+    _state_history_cache = (ms, states, regions, source)
+    return states, regions, source
 
 
 def _data_contains_string(obj, needle):
@@ -5478,15 +5550,34 @@ def _mod_grep_mentions(name: str) -> tuple:
     comment-only if every match sits in a comment (#485: a header comment
     explaining a vanilla rename is not a use of the old name). Both empty on no
     match (git grep exits 1) or error. Only searches tracked files — matches
-    the mod's committed state."""
+    the mod's committed state.
+
+    A define's surface name is `Namespace.KEY`, a spelling no mod file uses:
+    script reads the define as `define:Namespace|KEY`, and a GUI or loc string
+    as `GetDefine('Namespace', 'KEY')`. For a dotted name those two forms are
+    mentions too; grepping the dotted name alone missed the mod's read of a
+    define 1.14.4 removed (#391). The grep is then on the key, and a line
+    counts only where one of the three forms is on it, so the same key under
+    another namespace is not a mention."""
     repo = mod_path
     dirs = [d for d in _MOD_GREP_DIRS if os.path.isdir(os.path.join(repo, d))]
     if not dirs:
         return [], []
+    forms = [re.escape(name)]
+    needle = name
+    if "." in name:
+        parts = name.split(".")
+        needle = parts[-1]
+        forms.append(re.escape("|".join(parts)))
+        if len(parts) == 2:
+            forms.append(
+                r"GetDefine\(\s*['\"]" + re.escape(parts[0]) + r"['\"]\s*,\s*['\"]"
+                + re.escape(parts[1]) + r"['\"]\s*\)"
+            )
     try:
         r = subprocess.run(
             ["git", "-C", repo, "grep", "--no-color", "-z", "-w", "-F",
-             "-e", name, "--", *dirs],
+             "-e", needle, "--", *dirs],
             capture_output=True, encoding="utf-8", errors="replace",
             timeout=30,
         )
@@ -5495,14 +5586,16 @@ def _mod_grep_mentions(name: str) -> tuple:
     # git grep's -w word boundary, re-applied to the code part: a plain
     # substring test would count `<name>_extra` in code when the whole-word
     # match was only in the comment.
-    word = re.compile(r"(?<![A-Za-z0-9_])" + re.escape(name) + r"(?![A-Za-z0-9_])")
+    word = re.compile(
+        r"(?<![A-Za-z0-9_])(?:" + "|".join(forms) + r")(?![A-Za-z0-9_])"
+    )
     used: set = set()
     mentioned: set = set()
     # Split on "\n" only: git ends each record with it, and splitlines() would
     # also break a record at \x0c, \x85,   and the like inside the line.
     for ln in r.stdout.split("\n"):
         path, sep, text = ln.partition("\0")
-        if not sep:
+        if not sep or not word.search(text):
             continue
         mentioned.add(path)
         if word.search(_code_part(text)):
@@ -5871,6 +5964,24 @@ def _local_request_rejection(host, origin, port: int):
     return None
 
 
+def json_body(data) -> bytes:
+    """The bytes of a JSON response: what the server sends and what
+    `scripts/query.py` prints, so the two match byte for byte (#1538)."""
+    return json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+
+
+def encode_response(data, status: int = 200, what: str = "response") -> tuple[bytes, int]:
+    """(bytes, status) for a response body. One json can't encode (a set, a
+    Path) becomes the 500 body do_GET gives any other failure, so the client
+    gets an answer rather than a dropped connection. `what` names the request
+    in the log line."""
+    try:
+        return json_body(data), status
+    except Exception as exc:
+        logger.error(f"Error handling {what}: {exc}\n{traceback.format_exc()}")
+        return json_body({"error": f"{type(exc).__name__}: {exc}"}), 500
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- local-origin gate ------------------------------------------------
@@ -5906,23 +6017,28 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self._local_request_ok("GET"):
             return
-        parsed = urlparse(self.path)
+        data, status = self.get_result(self.path)
+        self._respond_json(data, status)
+
+    def get_result(self, path):
+        """(body, status) for GET `path`, with no socket: do_GET's routing and
+        error mapping, shared with the offline `scripts/query.py` (#1538)."""
+        parsed = urlparse(path)
         parts = [unquote(p) for p in parsed.path.strip("/").split("/") if p]
         params = parse_qs(parsed.query)
         try:
-            data = self.route(parts, params)
-            self._respond_json(data)
+            return self.route(parts, params), 200
         except _EndpointError as exc:
             # NotFound (404) / BadRequest (400) and the richer payload variants.
-            self._respond_json(exc.payload, exc.status)
+            return exc.payload, exc.status
         except _ServiceNotReady as exc:
-            self._respond_json(exc.payload, exc.status)
+            return exc.payload, exc.status
         except Exception as exc:
             # A bare KeyError lands here on purpose since #254: it means a
             # parsed record was missing a field, which is a server bug, not a
             # missing entity. Endpoints signal the latter with NotFound.
-            logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
-            self._respond_json({"error": f"{type(exc).__name__}: {exc}"}, 500)
+            logger.error(f"Error handling GET {path}: {exc}\n{traceback.format_exc()}")
+            return {"error": f"{type(exc).__name__}: {exc}"}, 500
 
     def do_POST(self):
         if not self._local_request_ok("POST"):
@@ -6038,6 +6154,13 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movement-stances": lambda: self._movement_stances(rest, params),
             # Party types and their merged join_weight terms (#1164)
             "parties": lambda: self._parties(rest, params),
+            # Strategic region <-> state region (#917)
+            "strategic-regions": lambda: self._strategic_regions(rest),
+            "state-region": lambda: self._state_region(rest),
+            # Who owns each state at game start (#901)
+            "state-history": lambda: self._state_history(rest, params),
+            # Prestige goods per base good, against the engine's cap (#749)
+            "prestige-goods": lambda: self._prestige_goods(params),
             "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             # Another mod's entries that land on ours, and which side wins (#1170)
@@ -6080,6 +6203,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
             "on-actions": lambda: self._on_actions(rest),
+            # Inverse: the on-actions that run an effect / fire an event (#333)
+            "on-action-callers": lambda: self._on_action_callers(rest),
             # Technology effects endpoint
             "technology-effects": lambda: self._technology_effects(rest),
             # Engine docs endpoints
@@ -6108,7 +6233,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "religions": lambda: self._vocab_endpoint("religion"),
             "interest-groups": lambda: self._vocab_endpoint("ig"),
             "law-groups": lambda: self._vocab_endpoint("law_group"),
-            "building-groups": lambda: self._vocab_endpoint("bg"),
+            # The vocab wrapper plus the parent_group hierarchy (#383)
+            "building-groups": lambda: self._building_groups(rest),
             "pop-types": lambda: self._vocab_endpoint("poptype"),
             "country-ranks": lambda: self._vocab_endpoint("country_rank"),
             "terrain": lambda: self._vocab_endpoint("terrain"),
@@ -6171,6 +6297,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
                 {"path": "/parties/<key?>?desc=<desc>", "desc": "Party types (mod ∪ vanilla, #1164): source vanilla|mod|both, defining files, the file whose join_weight the merged party carries (an injected join_weight replaces the field), and join_weight_terms, the desc of each term in source order (a desc-less term as `value = 0` / `if = {...}`). ?desc= keeps the parties naming it; /<key> adds per-term detail. Merged AST: /raw/Parties/<key>."},
+                {"path": "/strategic-regions/<name?>", "desc": "Strategic regions (mod ∪ vanilla, #917): the state regions each holds. /state-region/<STATE_X> is the inverse."},
+                {"path": "/state-region/<STATE_X>", "desc": "The strategic region a state region is in (#917)."},
+                {"path": "/state-history/<STATE_X?>?country=<TAG>&provinces=true", "desc": "Who owns each state on the start date (#901): one part per owning country, with its province count and the hubs (city, port, farm, mine, wood) it holds, plus homelands and claims. ?country= lists what a tag starts with. Works from vanilla_parsed/ with no game install."},
+                {"path": "/prestige-goods?base_good=<good>", "desc": "Prestige goods per base good (#749): origin vanilla|mod, prestige_bonus, the companies listing each, and count against the engine's cap of 3 per base good."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
@@ -6182,7 +6312,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
                 {"path": "/loc-accessors/<Type?>?context=&examples=&min_uses=", "desc": "Which accessors vanilla loc (and vanilla .gui when the game is installed) chains on a data type (#1246): each with its use count, per-context counts (events, notification, ui, gui, ...), the type it returns, and example expressions, plus the SCOPE.sX / gsX saved-scope accessor for the type. <Type> is PoliticalLobby, political_lobby or politicallobby. ?context= keeps only uses in that context. Bare: every type with its use count."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
-                {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
+                {"path": "/on-actions/<id?>", "desc": "On-actions as the engine merges them (#333): every declaration of <id> in load order (sources: file, line, on_actions, events, random_events, chance_to_happen, fields), merged (on_actions and events added up; random_events only when one declaration sets it; null under a directive), fields_set_more_than_once (effect: the later file's wins, a documented rule), fired_by, warnings, and raw (the store's last-read block). Vanilla's declarations are read only with a game install: check vanilla_indexed / origin. Bare: the on-actions the mod declares, with their files."},
+                {"path": "/on-action-callers/<scripted_effect|event_id|on_action>", "desc": "The mod on-actions that reach a scripted effect, an event or an on-action, through any chain of scripted effects and events, each with file:line, per-hop guards and the roots it hangs from (#333). Callers of other kinds (journal-entry pulses, buttons, decisions) are not followed: they are in not_followed, so count 0 is 'nothing calls it' only when not_followed, unreached and passed_as_parameter are empty. A row is the shortest route, not the only one: guards_complete false means other_routes exist. Mod script only; several seconds a call."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
                 {"path": "/event-balance/<id?>", "desc": "Event option / fast-scaling magnitude analysis."},
                 {"path": "/institutions/<id?>", "desc": "Institutions catalog."},
@@ -6216,7 +6347,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/religions", "desc": "Religion vocab."},
                 {"path": "/interest-groups", "desc": "IG vocab."},
                 {"path": "/law-groups", "desc": "Law-group vocab."},
-                {"path": "/building-groups", "desc": "Building-group vocab."},
+                {"path": "/building-groups", "desc": "Building-group vocab; each group also carries parent_group (merged), origin (vanilla / mod / mod-injected / mod-replaced) and construction_efficiency_modifier (#383). An entry with alias_of is the prefix-less spelling, not a group."},
+                {"path": "/building-groups/<id>[/reach]", "desc": "One group: ancestors, children, descendants, the buildings directly in it and the mod files defining it. /reach: every building a building_group_<id>_* modifier applies to, walking descendants (#383)."},
                 {"path": "/pop-types", "desc": "Pop-type vocab."},
                 {"path": "/country-ranks", "desc": "Country-rank vocab."},
                 {"path": "/terrain", "desc": "Terrain vocab."},
@@ -6470,6 +6602,68 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "count": len(values),
             "entries": [{"id": v, "name": ms.localize(v)} for v in values],
         }
+
+    def _building_groups(self, parts):
+        """GET /building-groups[/<id>[/reach]] (#383)
+
+        Bare: the vocabulary wrapper (`{placeholder, entity_type, count,
+        entries: [{id, name}]}`), each real group also carrying `parent_group`
+        (merged: after the mod's REPLACE / INJECT), `origin` (vanilla | mod |
+        mod-injected, a vanilla group the mod only INJECTs into | mod-replaced,
+        one a mod file redefines) and `construction_efficiency_modifier` (whether
+        it registers its own building_group_<id>_construction_efficiency_add). The
+        prefix-less spellings the vocabulary lists (`manufacturing`) carry
+        `alias_of` instead; `group_count` counts the real groups.
+
+        /<id>: that group with `ancestors` (nearest first), `children`,
+        `descendants`, the `buildings` directly in it and `mod_definitions`
+        (each mod file's line and directive). /<id>/reach: every building a
+        building_group_<id>_* modifier applies to, the group's own and its
+        descendants'. <id> may be the prefix-less spelling."""
+        import building_group_tree as bgt
+
+        groups = (ms.get_data(bgt.ENTITY_TYPE) if ms else None) or {}
+        if not groups:
+            if parts:
+                raise DataNotLoaded(bgt.ENTITY_TYPE)
+            return self._vocab_endpoint("bg")
+        vanilla_parser = ms.base_parsers.get(bgt.ENTITY_TYPE)
+        definitions = bgt.definitions(mod_path)
+        tree = bgt.Tree(groups, vanilla_parser.data if vanilla_parser is not None else None,
+                        ms.get_data("Buildings"), definitions)
+
+        if not parts:
+            out = self._vocab_endpoint("bg")
+            for entry in out["entries"]:
+                if entry["id"] in groups:
+                    entry.update(tree.row(entry["id"]))
+                else:
+                    entry["alias_of"] = tree.resolve(entry["id"])
+            out["group_count"] = len(groups)
+            return out
+
+        gid = tree.resolve(parts[0])
+        if gid is None or len(parts) > 2 or (len(parts) == 2 and parts[1] != "reach"):
+            raise NotFound("/".join(parts))
+        out = {"type": bgt.ENTITY_TYPE, "id": gid, "name": ms.localize(gid), **tree.row(gid)}
+        if len(parts) == 2:
+            reach = tree.reach(gid)
+            out.update({
+                "groups": [gid, *tree.descendants(gid)],
+                "count": len(reach),
+                "buildings": [{"id": bid, "name": ms.localize(bid), "building_group": group}
+                              for bid, group in reach],
+                "note": bgt.REACH_NOTE,
+            })
+            return out
+        out.update({
+            "ancestors": tree.ancestors(gid),
+            "children": list(tree.children[gid]),
+            "descendants": tree.descendants(gid),
+            "buildings": [{"id": bid, "name": ms.localize(bid)} for bid in tree.buildings[gid]],
+            "mod_definitions": definitions.get(gid, []),
+        })
+        return out
 
     # ---- modifier patterns -----------------------------------------------
     def _modifier_patterns(self, parts, params):
@@ -7805,6 +7999,102 @@ class ModStateHandler(BaseHTTPRequestHandler):
             for row in rows
             if desc is None or desc in row["join_weight_terms"]
         ]
+
+    def _strategic_region_data(self):
+        data = ms.get_data("Strategic Regions") if ms is not None else None
+        if not data:
+            raise DataNotLoaded("Strategic Regions")
+        return data
+
+    def _strategic_regions(self, parts):
+        """GET /strategic-regions, GET /strategic-regions/<name> (#917): the
+        state regions a strategic region holds, mod REPLACEs applied."""
+        table = strategic_regions.region_states(self._strategic_region_data())
+        if not parts:
+            return [
+                {"name": name, "localized": ms.localize(name), "states": len(states)}
+                for name, states in table.items()
+            ]
+        name = parts[0]
+        if name not in table:
+            raise NotFound(name, did_you_mean=difflib.get_close_matches(name, list(table), n=5))
+        return {"name": name, "localized": ms.localize(name), "states": list(table[name])}
+
+    def _state_region(self, parts):
+        """GET /state-region/<STATE_X> (#917): its strategic region."""
+        if not parts:
+            raise BadRequest("Provide a state region, e.g. /state-region/STATE_SVEALAND")
+        state = parts[0]
+        of = strategic_regions.region_of(self._strategic_region_data())
+        if state not in of:
+            raise NotFound(state, did_you_mean=difflib.get_close_matches(state, list(of), n=5))
+        region = of[state]
+        return {
+            "state": state, "localized": ms.localize(state),
+            "strategic_region": region, "strategic_region_localized": ms.localize(region),
+        }
+
+    def _state_history(self, parts, params):
+        """GET /state-history/<STATE_X>[?provinces=true], GET
+        /state-history?country=<TAG>, GET /state-history (#901): who owns each
+        state on the start date, part by part for a split state, with the hub
+        provinces (city, port, farm, mine, wood) each part holds."""
+        states, regions, source = _state_history_tables()
+        region_of = strategic_regions.region_of(ms.get_data("Strategic Regions"))
+
+        def name(row, key="country"):
+            row[f"{key}_name"] = ms.localize(row[key]) if row.get(key) else None
+            return row
+
+        if parts:
+            state = parts[0]
+            if state not in states:
+                raise NotFound(state, did_you_mean=difflib.get_close_matches(state, list(states), n=5))
+            with_provinces = (params.get("provinces") or ["false"])[0].lower() in ("1", "true", "yes")
+            out = state_history.describe(state, states[state], regions, provinces=with_provinces)
+            out["parts"] = [name(p) for p in out["parts"]]
+            out["localized"] = ms.localize(state)
+            out["strategic_region"] = region_of.get(state)
+            out["vanilla_source"] = source
+            return out
+        tag = (params.get("country") or [None])[0]
+        if tag:
+            rows = state_history.owned_by(states, tag, regions)
+            if not rows:
+                raise NotFound(tag, hint="No state names this tag as an owner on the start date.")
+            return {
+                "country": tag, "country_name": ms.localize(tag),
+                "states": [dict(r, strategic_region=region_of.get(r["state"])) for r in rows],
+                "vanilla_source": source,
+            }
+        return {
+            **state_history.summary(states),
+            "vanilla_source": source,
+            "owners": {state: [p.get("country") for p in rec["parts"]]
+                       for state, rec in sorted(states.items())},
+        }
+
+    def _prestige_goods(self, params):
+        """GET /prestige-goods[?base_good=<good>] (#749): the prestige goods
+        that share each base good, who defines them and which companies list
+        them, against the engine's cap of three per base good."""
+        import prestige_good_roster_audit as roster
+
+        merged = ms.get_data("Prestige Goods") if ms is not None else None
+        if not merged:
+            raise DataNotLoaded("Prestige Goods")
+        vanilla = getattr(ms.base_parsers.get("Prestige Goods"), "data", None) or {}
+        rows = roster.prestige_slots(merged, vanilla, ms.get_data("Company Types") or {})
+        good = (params.get("base_good") or [None])[0]
+        if good is None:
+            return rows
+        row = next((r for r in rows if r["base_good"] == good), None)
+        if row is None:
+            if good not in (ms.get_data("Goods") or {}):
+                raise NotFound(good)
+            row = {"base_good": good, "count": 0, "cap": roster.PRESTIGE_GOODS_PER_BASE_GOOD,
+                   "free": roster.PRESTIGE_GOODS_PER_BASE_GOOD, "prestige_goods": []}
+        return row
 
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
@@ -9220,18 +9510,124 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- structured: on-actions -------------------------------------------
     def _on_actions(self, parts):
-        """GET /on-actions[/<on_action_id>]"""
-        oas = ms.get_data("On Actions")
-        if not oas:
+        """GET /on-actions[/<on_action_id>] (#333)
+
+        The engine merges every declaration of an on-action; the parsed store
+        keeps the last one read. So one on-action comes back with every
+        declaration on disk (`sources`, in load order: file, line, origin, its
+        `on_actions`, `events` and `random_events`, its `chance_to_happen`,
+        and the fields it sets), `merged`, `fields_set_more_than_once` and
+        `fired_by`, the declarations whose `on_actions` list names it. `raw`
+        is still the store's block, i.e. the last declaration only.
+
+        `merged` holds what the recorded rules allow: `on_actions` and
+        `events` added up, and `random_events` only when one declaration sets
+        it (several are separate pools, each with its own chance_to_happen,
+        and how they combine is not recorded: null, with a note). It is null
+        altogether when a declaration carries a directive. For an `effect` two
+        declarations set, `fields_set_more_than_once` names the later file's
+        as `winner` and gives the rule's status (documented, not probed); any
+        other field set twice has no recorded rule and no winner.
+
+        Load order is one list by file name, vanilla's files and the mod's
+        together (probed). Reads `common/on_actions` from disk on each call
+        (about 40 ms), so it follows edits without a /reload. Vanilla's
+        declarations are read only where the game is installed (they are not
+        in vanilla_parsed/): `vanilla_indexed` says which, and without them
+        `origin` reads "mod (vanilla not indexed)". The bare listing is the
+        on-actions a mod file declares, each with its declaration count and
+        files. A file the scan warned about (an unclosed brace swallows the
+        on-actions after it) shows as `warnings` on the rows and entries that
+        name it, and in the 404 body of a lookup that finds nothing."""
+        import on_action_index
+
+        oas = (ms.get_data("On Actions") if ms else None) or {}
+        index = on_action_index.scan(mod_path, os.path.join(base_game_path, "game"))
+        if not oas and not index.declarations:
             raise DataNotLoaded("On Actions")
 
-        if parts:
-            oaid = parts[0]
-            if oaid not in oas:
-                raise NotFound(oaid)
-            return {"type": "On Actions", "id": oaid, "raw": serialize(oas[oaid])}
+        if not parts:
+            listing = index.listing()
+            listed = {row["id"] for row in listing}
+            # In the loaded store but no longer declared on disk.
+            listing.extend({"type": "On Actions", "id": oaid, "declarations": 0, "files": []}
+                           for oaid in oas if oaid not in listed)
+            return listing
 
-        return [{"type": "On Actions", "id": oaid} for oaid in oas]
+        oaid = parts[0]
+        entry = index.entry(oaid)
+        if entry is None:
+            if oaid not in oas:
+                if index.warnings:
+                    # A broken file can hide the on-action asked for.
+                    raise NotFound(oaid, scan_warnings=index.warnings)
+                raise NotFound(oaid)
+            entry = {
+                "type": "On Actions", "id": oaid, "origin": index.origin_of(oaid),
+                "vanilla_indexed": index.vanilla_indexed, "declarations": 0, "sources": [],
+                "note": "In the server's loaded store, but no file under common/on_actions "
+                        "declares it now: the store predates an edit (POST /reload).",
+            }
+            if index.warnings:
+                entry["warnings"] = index.warnings
+        hook = next((e for e in engine_docs.get("on-actions") or []
+                     if e.get("name") == oaid), None)
+        if hook is not None:
+            # on_actions.log: an on-action the engine itself knows.
+            entry["engine"] = {"from_code": bool(hook.get("from_code")),
+                               "scopes": hook.get("scopes") or []}
+        if oaid in oas:
+            entry["raw"] = serialize(oas[oaid])
+            if entry["declarations"] > 1:
+                entry["raw_note"] = ("raw is the parsed store's block, which keeps one per "
+                                     "name: the last declaration read. Read sources and merged.")
+        return entry
+
+    def _on_action_callers(self, parts):
+        """GET /on-action-callers/<scripted_effect | event_id | on_action> (#333)
+
+        The mod on-actions that reach the scripted effect, the event or the
+        on-action, through any chain of scripted effects and events (an
+        event's immediate, after or option). `callers` rows: {on_action, file,
+        line, via (effect | trigger_event | events | random_events |
+        first_valid | on_actions), through (the effects and events between the
+        on-action and the target), guards (one entry per hop, the on-action's
+        own call first), guards_complete, other_routes, through_option, hops
+        (each call site: in, kind, file, line, path, guards, via, other_sites),
+        roots (the on-actions nothing in the mod lists that it hangs from) and
+        engine_hooks (those of them the engine fires from code; null when the
+        engine docs are not loaded)}.
+
+        A row is the shortest route from that on-action call site, not the
+        only one. `guards_complete` is false when a link on it calls the next
+        from another site too, or reaches the target through another link as
+        well (`other_routes` names them): the guards shown are then not the
+        whole condition. `through_option` marks a route that runs through an
+        event option. An effect a caller passes by name (`helper = { EFFECT =
+        x }`, run as `$EFFECT$ = yes`) is followed through the helper;
+        `passed_as_parameter` lists those call sites.
+
+        It follows on-actions, scripted effects and events only. Every other
+        entity the graph knows calls the target or a link of a chain (a
+        journal entry's pulse, a scripted button, a decision, ...) is in
+        `not_followed` ({kind, id, file, line, path, sites, through}), counted
+        in `not_followed_count` / `not_followed_kinds`; `unreached` lists the
+        links nothing in the mod calls or fires. So `count: 0` means "nothing
+        calls it" only when those and `passed_as_parameter` are empty:
+        `summary` says which.
+
+        Built from event_context_audit's graph on each call (several seconds,
+        as /event-dispatch), console harness files included. Mod script only."""
+        import on_action_index
+
+        if not parts:
+            raise BadRequest("usage: /on-action-callers/<scripted_effect|event_id|on_action>")
+        hooks = engine_docs.get("on-actions") or []
+        code = {e.get("name") for e in hooks if e.get("from_code")} if hooks else None
+        out = on_action_index.callers(mod_path, parts[0], code)
+        if out is None:
+            raise NotFound(parts[0])
+        return out
 
     # ---- technology effects -----------------------------------------------
     def _technology_effects(self, parts):
@@ -9866,7 +10262,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
-        body = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+        what = f"{getattr(self, 'command', None) or 'request'} {getattr(self, 'path', '?')}"
+        body, status = encode_response(data, status, what)
         try:
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -9931,6 +10328,7 @@ POST_LOAD_AUDITS = [
     ("concept_reference_audit",       "concept_reference_audit"),
     ("localization_accessor_audit",   "localization_accessor_audit"),
     ("mod_structure_audit",           "mod_structure_audit"),
+    ("load_order_audit",              "load_order_audit"),
     ("loc_render_audit",              "loc_render_audit"),
     ("any_limit_audit",               "any_limit_audit"),
     ("iterator_limit_audit",          "iterator_limit_audit"),
@@ -9940,10 +10338,12 @@ POST_LOAD_AUDITS = [
     ("orphaned_event_audit",          "orphaned_event_audit"),
     ("effect_trigger_validity_audit", "effect_trigger_validity_audit"),
     ("duplicate_key_audit",           "duplicate_key_audit"),
+    ("modifier_field_audit",          "modifier_field_audit"),
     ("attitude_key_audit",            "attitude_key_audit"),
     ("event_image_audit",             "event_image_audit"),
     ("treaty_leverage_side_audit",    "treaty_leverage_side_audit"),
     ("event_context_audit",           "event_context_audit"),
+    ("trigger_event_cycle_audit",     "trigger_event_cycle_audit"),
     ("silent_variable_audit",         "silent_variable_audit"),
     ("prev_scope_audit",              "prev_scope_audit"),
     ("container_timed_variable_audit", "container_timed_variable_audit"),
@@ -9952,6 +10352,7 @@ POST_LOAD_AUDITS = [
     ("empty_effect_audit",            "empty_effect_audit"),
     ("change_variable_clamp_audit",   "change_variable_clamp_audit"),
     ("building_scope_variable_audit", "building_scope_variable_audit"),
+    ("variable_guard_audit",          "variable_guard_audit"),
     ("principle_tier_audit",          "principle_tier_audit"),
     ("prestige_good_roster_audit",    "prestige_good_roster_audit"),
     ("amendment_reachability_audit",  "amendment_reachability_audit"),
@@ -9960,11 +10361,14 @@ POST_LOAD_AUDITS = [
     ("script_argument_audit",         "script_argument_audit"),
     ("modifier_duration_audit",       "modifier_duration_audit"),
     ("loc_script_value_audit",        "loc_script_value_audit"),
+    ("loc_root_context_audit",        "loc_root_context_audit"),
     ("texture_reference_audit",       "texture_reference_audit"),
     ("long_tooltip_audit",            "long_tooltip_audit"),
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
     ("button_reason_audit",           "button_reason_audit"),
     ("faith_scene_audit",             "faith_scene_audit"),
+    ("sol_fraction_audit",            "sol_fraction_audit"),
+    ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
@@ -10101,7 +10505,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     None.
     """
     global _tech_unlocks_index_cache, _last_validation_report, _company_catalog_cache
-    global _party_catalog_cache
+    global _party_catalog_cache, _state_history_cache
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -10119,6 +10523,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
         _party_catalog_cache = None
+        _state_history_cache = None
         _overlap_state_cache.clear()
         _invalidate_call_index()
         _last_validation_report = None
@@ -10428,7 +10833,7 @@ _vanilla_source_warnings: list[dict] = []
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _company_catalog_cache, _party_catalog_cache
+    global _company_catalog_cache, _party_catalog_cache, _state_history_cache
     global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
@@ -10481,6 +10886,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     _tech_unlocks_index_cache = None
     _company_catalog_cache = None
     _party_catalog_cache = None
+    _state_history_cache = None
     _invalidate_call_index()
     _annotator_compute_cache.clear()
 

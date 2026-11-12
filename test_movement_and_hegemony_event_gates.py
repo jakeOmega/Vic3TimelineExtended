@@ -68,9 +68,15 @@ class MovementBrokenFadedTextTests(unittest.TestCase):
     def test_on_fail_sends_it_for_segregation_alone(self):
         # The premise: without this branch the faded text could test
         # suppression only.
+        # The outcome that sends it requires cr_fail_ending_now = 1 (#1431), and
+        # that value's branch counts segregation alone.
         sent = self.entry.index("id = movement_events_te.100")
-        limit = self.entry[self.entry.rindex("if = {", 0, sent):sent]
-        self.assertRegex(limit, r"var:cr_segregationist_months\s*>\s*18")
+        outcome = self.entry[self.entry.rindex("outcome = {", 0, sent):sent]
+        self.assertRegex(outcome, r"\bcr_fail_ending_now\s*=\s*1\b")
+        chain = _block(self.values, "cr_fail_ending_now = {")
+        first = _block(chain, "if = {")
+        self.assertRegex(first, r"\bvalue\s*=\s*1\b")
+        self.assertRegex(first, r"cr_months_disp_segregationist\s*>\s*18")
 
     def test_faded_text_needs_both_trackers_at_zero(self):
         trigger = self._faded_trigger()

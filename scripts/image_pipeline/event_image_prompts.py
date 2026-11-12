@@ -1878,7 +1878,7 @@ IMAGES = {
     },
 
     # =========================================================================
-    # SPACE RACE EVENTS — Industry & Progress (50-55, 60, 72-76)
+    # SPACE RACE EVENTS — Industry & Progress (50-55, 60, 72-76, 83)
     # =========================================================================
     "private_rocket_landing": {
         "prompt": "A private space company's reusable rocket landing on its tail on a drone ship at sea. The company logo prominently displayed. Contrails of steam, perfectly balanced on engine thrust. The commercialization of orbit.",
@@ -1919,6 +1919,14 @@ IMAGES = {
         "prompt": "An empty space program facility: lights off, equipment covered in dust sheets, a partially built rocket standing alone in a cavernous assembly hall. The dream abandoned, the budget redirected, the engineers scattered.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.76"],
+    },
+    "mars_orbit_station": {
+        # Replaces space_station.dds, a watermarked Creative Commons photograph of
+        # the ISS, not a render (#1610). Until this is drawn, the event borrows
+        # colony_valles_marineris.
+        "prompt": "At the left of the frame, a crewed station in orbit high above Mars: a few white cylindrical habitat modules joined end to end, two broad dark solar wings, and a small landing craft docked at one end. Below it the rust-red curve of the planet with a thin pale haze along its rim. The right of the frame is open black space with a few faint stars.",
+        "style": "digital painting, cinematic light, hard sci-fi",
+        "events": ["space_race_events.83"],
     },
 
     # =========================================================================

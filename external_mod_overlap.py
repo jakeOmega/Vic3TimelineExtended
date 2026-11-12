@@ -296,6 +296,13 @@ BARE_DUPLICATE_RULES = {
     "scripted_rules": FIRST_WINS,                    # probed (round 2)
     "script_values": LAST_WINS,                      # probed (round 2): ["bare_duplicate_script_values"]
 }
+# The folders whose rule above was read in game: facts 3 and 5, and for
+# decisions the control of fact 7's round 5. In the other DIGEST_INJECT_DIRS
+# the rule is the digest's word (LOAD_ORDER_MODEL["bare_duplicate"]).
+BARE_DUPLICATE_PROBED = frozenset({
+    "static_modifiers", "scripted_effects", "scripted_triggers", "scripted_rules",
+    "script_values", "decisions",
+})
 
 # `common/` folders whose subfolders are separate databases.
 CONTAINER_DIRS = frozenset({"coat_of_arms", "history", "technology", "terrain_manipulators"})
@@ -326,7 +333,6 @@ SERVER_TYPES = {
     "scripted_effects": "Scripted Effects",
     "scripted_triggers": "Scripted Triggers",
     "scripted_guis": "Scripted GUIs",
-    "scripted_progress_bars": "Scripted Progress Bars",
     "on_actions": "On Actions",
 }
 # GUI names that land in one global registry whichever file defines them
@@ -402,6 +408,16 @@ def rule_for(db: str) -> DirRule:
         return DirRule("unknown", UNKNOWN, "bare_duplicate_other")
     return DirRule("database", rule, "bare_duplicate")
 
+
+def bare_rule_status(db: str) -> str:
+    """How sure BARE_DUPLICATE_RULES is of `db`'s rule, as a LOAD_ORDER_MODEL
+    status: `probed` (BARE_DUPLICATE_PROBED), `documented` (the digest's
+    folders) or `unknown` (no rule recorded)."""
+    if db not in BARE_DUPLICATE_RULES:
+        return "unknown"
+    return "probed" if db in BARE_DUPLICATE_PROBED else "documented"
+
+
 def split_common_path(rel_in_common: str) -> Optional[tuple[str, str]]:
     """(database, path within it) for a file path relative to `common/`, or
     None for a file directly in `common/`."""
@@ -468,8 +484,9 @@ def _tokens(text: str) -> list[tuple[str, int]]:
     return out
 
 
-def _block_text(tokens, start: int, cap: int = 200) -> str:
-    """The tokens of the block opening at tokens[start], joined by spaces."""
+def _block_text(tokens, start: int, cap: Optional[int] = 200) -> str:
+    """The tokens of the block opening at tokens[start], joined by spaces, cut
+    to `cap` characters (None: the whole block)."""
     depth, parts = 0, []
     for j in range(start, len(tokens)):   # not tokens[start:]: a copy per block is quadratic
         tok = tokens[j][0]
@@ -481,13 +498,15 @@ def _block_text(tokens, start: int, cap: int = 200) -> str:
             if depth == 0:
                 break
     text = " ".join(parts)
-    return text if len(text) <= cap else text[: cap - 1] + "…"
+    return text if cap is None or len(text) <= cap else text[: cap - 1] + "…"
 
 
-def scan_script(text: str) -> tuple[list[Entry], list[str]]:
+def scan_script(text: str, block_cap: Optional[int] = 200) -> tuple[list[Entry], list[str]]:
     """Every depth-0 key of a script file, with the depth-1 keys of each
-    block. `@name` constants are skipped at both depths (file-local). Returns
-    (entries, warnings)."""
+    block. `@name` constants are skipped at both depths (file-local). A
+    depth-1 block's value is its tokens joined by spaces, cut to `block_cap`
+    characters (None keeps it whole, for a caller that reads the list).
+    Returns (entries, warnings)."""
     warnings = []
     if text.startswith("﻿"):
         warnings.append("doubled UTF-8 BOM: the engine reads the second as part of the "
@@ -531,7 +550,7 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
                     entries.append(entry)
                     current = entry if is_block else None
                 elif depth == 1 and current is not None:
-                    value = _block_text(tokens, i + 2) if is_block else value_tok
+                    value = _block_text(tokens, i + 2, block_cap) if is_block else value_tok
                     current.children.append((tok, line, value))
             i += 2 if is_block else 3
             continue
@@ -1025,12 +1044,15 @@ class VanillaIndex:
     `game_common` exists (with file names; a folder vanilla lacks has no
     keys), else from the `vanilla_parsed/` snapshot (keys only), else unknown
     (LOAD_ORDER_MODEL["vanilla_source"]). `keys` ({db: iterable}) replaces
-    both, for tests."""
+    both, for tests. `scan_cache`: see _scan_file."""
 
     def __init__(self, game_common: Optional[str] = None, snapshot_dir: Optional[str] = SNAPSHOT_DIR,
-                 keys: Optional[dict] = None):
+                 keys: Optional[dict] = None, scan_cache: Optional[dict] = None):
         self.game_common = game_common if game_common and os.path.isdir(game_common) else None
         self.snapshot_dir = snapshot_dir
+        # Scans of the game files that outlive this index (_scan_file), for a
+        # caller that builds one on every run.
+        self.scan_cache = scan_cache
         self._keys = {db: set(v) for db, v in keys.items()} if keys is not None else None
         self._cache: dict = {}
         self._manifest = None
@@ -1120,7 +1142,7 @@ class VanillaIndex:
             for rel in list_files(base):
                 if not rel.endswith(".txt"):
                     continue
-                entries, _w = scan_script(read_text(os.path.join(base, rel)))
+                entries, _w = _scan_file(os.path.join(base, rel), self.scan_cache)
                 for e in _flatten(db, entries):
                     out[e.key].append((rel, e))
         self._cache[key] = out
@@ -1183,14 +1205,33 @@ class DbScan:
     entries: dict = field(default_factory=lambda: defaultdict(list))  # key -> [(path, Entry)]
 
 
-def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str) -> DbScan:
+def _scan_file(full: str, cache: Optional[dict],
+               block_cap: Optional[int] = 200) -> tuple[list[Entry], list[str]]:
+    """scan_script() of one file. With `cache` ({(path, block_cap): (stamp,
+    scan)}), a file whose size and mtime stand since it was last scanned isn't
+    read again."""
+    if cache is None:
+        return scan_script(read_text(full), block_cap)
+    st = os.stat(full)
+    stamp = (st.st_size, st.st_mtime_ns)
+    hit = cache.get((full, block_cap))
+    if hit is None or hit[0] != stamp:
+        hit = cache[(full, block_cap)] = (stamp, scan_script(read_text(full), block_cap))
+    return hit[1]
+
+
+def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str,
+             block_cap: Optional[int] = 200, cache: Optional[dict] = None) -> DbScan:
+    """Every key of `db`'s files, with its file. `cache` (see _scan_file) is
+    for a caller that scans one mod again and again (load_order_audit, on
+    every reload); the entries it holds are shared, not copied."""
     out = DbScan(files=list(files))
     for rel in files:
         if not rel.endswith(".txt"):
             continue
         full = os.path.join(root, "common", *db.split("/"), *rel.split("/"))
         try:
-            entries, w = scan_script(read_text(full))
+            entries, w = _scan_file(full, cache, block_cap)
         except OSError as exc:
             warnings.append({"side": side, "file": f"common/{db}/{rel}", "warning": str(exc)})
             continue

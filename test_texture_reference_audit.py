@@ -370,7 +370,7 @@ UNCOVERED = ["acceptance_statuses", "ai_strategic_region_stance_types", "ai_stra
              "commander_ranks", "company_charter_types", "interest_tier_types", "liberty_desire_levels",
              "military_formation_flags", "naval_battle_conditions", "naval_mission_types", "objectives",
              "political_lobbies", "political_movement_categories", "power_bloc_map_textures",
-             "prestige_goods", "ship_veterancy_levels", "state_traits", "war_goal_types"]
+             "ship_veterancy_levels", "state_traits", "war_goal_types"]
 
 
 class DeclarationTests(_Fixture):

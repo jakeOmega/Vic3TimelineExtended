@@ -885,7 +885,9 @@ class TestPeacetimeStrikeDispute(unittest.TestCase):
 
     def test_reparations_concession(self):
         body = block(self.crisis, "nd_crisis_concede_reparations")
-        for needle in ("nd_loose_compensation_value", "add_treasury", "name = nd_loose_inspected value = 1 days = 7300",
+        # The sum goes under a Reparations treaty (#1457), paid directly if not.
+        for needle in ("nd_loose_compensation_value", "te_pay_reparations_by_treaty",
+                       "name = nd_loose_inspected value = 1 days = 7300",
                        "name = nd_loose_inspections", "remove_variable = nd_peacetime_struck_by"):
             self.assertIn(needle, body)
         self.assertNotIn("nd_loose_answer", body)
@@ -1103,7 +1105,10 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         concede = block(self.crisis, "nd_crisis_concede_reparations")
         for body in (pay, concede):
             self.assertNotIn("nd_reparations_due", body)
-        self.assertEqual(concede.count("nd_loose_compensation_value"), 2)
+        # One read, passed to the treaty helper (#1457), which reads it where
+        # it pays and stores it only in its hidden_effect.
+        self.assertEqual(concede.count("nd_loose_compensation_value"), 1)
+        self.assertIn("AMOUNT = nd_loose_compensation_value", concede)
         # The two payments, and the sum kept on the claimant for the answer
         # it is sent (nuclear_weapon_events.33): stored in a hidden_effect and
         # read in that event, never read back in this walked block.
@@ -1726,6 +1731,46 @@ def revalidate_branch(effects, dispute):
         if re.search(r"var:nd_crisis_dispute = " + str(dispute) + r"\b", block(branch, "limit")):
             return branch
     raise AssertionError(f"no revalidation branch for dispute {dispute}")
+
+
+class TestCrisisFreezeSurvivesRevolution(unittest.TestCase):
+    """#758: a revolution's winner inherits variables but no modifiers, so the
+    conceded programme freeze carries a countdown the winner inherits, and a
+    monthly pass re-adds the modifier from it."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.monthly = block(self.effects, "nd_crisis_freeze_monthly")
+
+    def test_yield_removes_the_old_copy_then_adds_and_sets_the_countdown(self):
+        concession = self.crisis[self.crisis.index("var:nd_crisis_dispute = 4 }"):]
+        concession = block(concession, "scope:nd_target")
+        remove = concession.index("remove_modifier = nd_crisis_programme_freeze")
+        add = concession.index("name = nd_crisis_programme_freeze")
+        self.assertLess(remove, add)
+        self.assertIn("years = 10", concession)
+        self.assertIn("name = nd_crisis_freeze_months value = nd_crisis_freeze_months_value", concession)
+        self.assertIn("remove_variable = nd_crisis_freeze_untimed", concession)
+        # 30-day country pulses: 122 outlasts the ten-year modifier by under one.
+        self.assertRegex(read(VALUES), r"(?m)^nd_crisis_freeze_months_value = 122\b")
+
+    def test_monthly_readd_only_where_the_modifier_is_missing(self):
+        running = block(self.monthly, "if")
+        readd = running[running.index("NOT = { has_modifier = nd_crisis_programme_freeze }"):]
+        self.assertIn("add_modifier = { name = nd_crisis_programme_freeze }", readd)
+        self.assertIn("set_variable = nd_crisis_freeze_untimed", readd)
+
+    def test_only_the_untimed_copy_is_removed_at_the_end(self):
+        end = block(self.monthly[self.monthly.index("else = {"):], "else")
+        self.assertIn("remove_variable = nd_crisis_freeze_months", end)
+        untimed = block(end, "if")
+        self.assertIn("has_variable = nd_crisis_freeze_untimed", untimed)
+        self.assertIn("remove_modifier = nd_crisis_programme_freeze", untimed)
+        self.assertEqual(self.monthly.count("remove_modifier = nd_crisis_programme_freeze"), 1)
+
+    def test_runs_for_every_country_monthly(self):
+        self.assertIn("nd_crisis_freeze_monthly = yes", block(self.effects, "nd_country_monthly_cleanup"))
 
 
 class TestNativeCloses(unittest.TestCase):
@@ -3820,6 +3865,16 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         self.ev = strip_comments(read(WEAPON_EVENTS))
         self.t = strip_comments(read(TRIGGERS))
         self.nt = strip_comments(read(NUKE_TRIGGERS))
+
+    def test_one_untriggered_default(self):
+        # #806: C (a programme country's "stay the course") and D both held
+        # default_option, and nothing says which of two valid defaults the
+        # engine takes. D, open to everyone, is now the only one.
+        event = block(self.ev, "nuclear_weapon_events.18")
+        self.assertEqual(event.count("default_option = yes"), 1)
+        d = option_body(self.ev, "nuclear_weapon_events.18.opt_d")
+        self.assertIn("default_option = yes", d)
+        self.assertNotRegex(d, r"(?m)^\t\ttrigger = \{")
 
     def test_accommodation_pays_with_the_opponents(self):
         e = option_body(self.ev, "nuclear_weapon_events.18.opt_e")

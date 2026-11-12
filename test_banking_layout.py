@@ -1291,9 +1291,10 @@ class PrivateTest(unittest.TestCase):
              "banking_dash_mon_value", "te_banking_history_panel", "te_banking_history_charts", "te_hist_bank_value",
              "te_hist_bank_momentum", "te_hist_bank_bubble", "te_hist_mon_policy", "te_hist_mon_inflation",
              "te_hist_mon_fx")
-    SHOWN_KEYS = ("banking_cycle_value_bar_name", "banking_cycle_momentum_bar_name", "banking_policy_stance_bar_name",
-                  "banking_bubble_pressure_bar_name", "banking_dash_phase_boom_value", "banking_dash_mon_rate_label",
-                  "banking_dash_mon_inflation_label", "banking_dash_mon_fx_label", "banking_dash_active_header",
+    SHOWN_KEYS = ("banking_cycle_value_bar_desc", "banking_cycle_value_bar_second", "banking_cycle_momentum_bar_name",
+                  "banking_policy_stance_bar_name", "banking_bubble_pressure_bar_name", "banking_dash_phase_boom_value",
+                  "banking_dash_mon_rate_label", "banking_dash_mon_inflation_label", "banking_dash_mon_fx_label",
+                  "banking_dash_active_header",
                   "banking_dash_name_active_cb_bank_holiday", "te_hist_chart_bank_value_title",
                   "te_hist_chart_mon_policy_title", "banking_dash_not_started_other_tt",
                   # the overview's stance and price-band cells, whose keys nothing else names
@@ -1316,7 +1317,7 @@ class PrivateTest(unittest.TestCase):
                 self.assertNotIn((0, len(types[name].body)), view.skip[name], "guarded on its root")
         # every bar and every Active Policies row, not just their types
         bars = types["te_banking_bars"].body
-        # four bars; the two with a marker read their value twice (1.15's markup)
+        # four bars; the three with a marker read their value twice (1.15's markup)
         self.assertEqual(len(set(re.findall(r"ScriptValue\('(banking_disp_bar_\w+)'\)", bars))), 4)
         self.assertEqual(view.skip["te_banking_bars"], [])
         active = types["te_banking_sec_active"].body
@@ -1512,7 +1513,8 @@ class BarsTest(unittest.TestCase):
 
 class ScriptedTooltipTest(unittest.TestCase):
     """Text a scripted GUI prints through ExecuteTooltip, IsValidTooltip or
-    IsShownTooltip is invisible to BindingTest and te_rebind_country.py. What
+    IsShownTooltip was invisible to BindingTest and te_rebind_country.py when
+    this was written; both follow it since #1361, and this holds it by name. What
     another country's panel prints that way (the history markers' lines,
     te_hist_tt_markers) speaks of no one and reads neither the player nor the
     entry; the keys that still read GetPlayer print only under the guard."""

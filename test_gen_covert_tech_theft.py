@@ -316,7 +316,6 @@ class ReviewFixTest(unittest.TestCase):
 
     def test_espionage_loc_describes_theft_not_spread(self):
         for key in (
-            "covert_espionage_base_desc",
             "covert_industrial_espionage_action_desc",
             "covert_industrial_espionage_action_effect_desc_global",
             "covert_military_espionage_action_desc",

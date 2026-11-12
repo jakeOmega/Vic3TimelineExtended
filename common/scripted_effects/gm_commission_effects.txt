@@ -705,7 +705,7 @@ gm_com_fulfil = {
 		trigger_event = { id = monument_events.28 popup = yes }
 	}
 	gm_com_close = yes
-	scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } }
+	scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_com_close on the line above removes gm_com_open (gm_com_clear), which gm_com_check_progress reads, so the gift's refresh finds no opportunity to fulfil again
 }
 
 # Country scope. Time ran out: the moment passes, at no cost.
@@ -802,7 +802,7 @@ gm_state_gift_grandeur = {
 			gm_state_is_dedicated = yes
 		}
 		gm_state_add_age = { AGE = gm_com_gift }
-		owner = { trigger_event = { id = monument_events.20 } }
+		owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the way back is the refresh's gm_com_check_progress -> gm_com_fulfil -> monument_events.26, and gm_com_fulfil closed the opportunity (gm_com_close removes gm_com_open) before it fired .26; gm_gift, .26's trigger, is removed at the top of this effect
 	}
 }
 

@@ -27,8 +27,9 @@ offending line (the engine ignores everything after `#` on a script line):
     ... attitude = somekey   # REVIEWED YYYY-MM-DD: rationale
 
 Usage:
-  * Standalone:  `python3 attitude_key_audit.py`  (pure file scan, no ModState;
-    exits nonzero if any unreviewed invalid key is found).
+  * Standalone:  `python3 attitude_key_audit.py [--strict]`  (pure file scan, no
+    ModState; exits nonzero if any unreviewed invalid key is found, with or
+    without `--strict`).
   * Post-load:   registered in `mod_state_server.py` POST_LOAD_AUDITS; the
     server calls `regenerate(mod_state)` on every `POST /reload`, which writes
     `docs/engine/attitude_key_report.md` and returns a summary dict whose
@@ -37,6 +38,9 @@ Usage:
 import os
 import re
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 # Canonical engine attitude keys. Anything else in an `attitude = <key>`
@@ -62,7 +66,7 @@ class AttitudeFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[AttitudeFlag] = field(default_factory=list)
     files_scanned: int = 0
     refs_checked: int = 0
@@ -73,21 +77,9 @@ class AuditResult:
 # matching only the value-position token. Block form `attitude = {` never
 # matches because `{` is not in the bareword class.
 _ATTITUDE_RE = re.compile(r"\battitude\s*=\s*([A-Za-z_][A-Za-z0-9_]*)")
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 # Mod script roots that carry `attitude = ...` references.
 _SCAN_SUBDIRS = ("common", "events")
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def audit(mod_path: str | None = None) -> AuditResult:
@@ -129,8 +121,8 @@ def audit(mod_path: str | None = None) -> AuditResult:
                                 if key in ATTITUDE_KEYS:
                                     continue
                                 # `sep` is the stripped `#`; feed it back so
-                                # `_REVIEWED_RE`'s `#` anchor matches.
-                                exemption = _parse_reviewed(sep + comment) if sep else None
+                                # the pattern's `#` anchor matches.
+                                exemption = parse_reviewed(sep + comment) if sep else None
                                 flags.append(AttitudeFlag(
                                     file=rel_p,
                                     line=i,
@@ -148,8 +140,8 @@ def audit(mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Attitude key audit report",
@@ -228,12 +220,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "attitude_key_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "attitude_key_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_scanned": result.files_scanned,
         "refs_checked": result.refs_checked,
@@ -244,15 +233,13 @@ def regenerate(mod_state) -> dict:
     }
 
 
-def main() -> int:
+def main(argv=None) -> int:
     """Standalone entry: pure file scan, print the report, exit nonzero if any
-    unreviewed invalid key is found. Does NOT build ModState."""
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    unreviewed invalid key is found. Does NOT build ModState. The bare run has
+    always failed on a flag, so it is strict with or without `--strict`."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    return 1 if any(not f.exemption for f in result.flags) else 0
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0], always_strict=True)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,6 @@ TRIGGERS = ROOT / "common/scripted_triggers/cultural_hegemony_triggers.txt"
 BUTTONS = ROOT / "common/scripted_buttons/cultural_hegemony_buttons.txt"
 SGUIS = ROOT / "common/scripted_guis/cultural_hegemony_sguis.txt"
 EVENTS = ROOT / "events/cultural_hegemony_events.txt"
-LEGACY = "common/scripted_effects/legacy_modifier_cleanup.txt"
 LOC_DIR = ROOT / "localization/english"
 
 # programme -> (its modifier, its country variable, the op its end tooltip is named for)
@@ -189,9 +188,6 @@ class ProgrammeVariableTests(unittest.TestCase):
         allowed.add(_top_level_block(effects, "ch_shut_down_programmes = {"))
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
-                rel = path.relative_to(ROOT).as_posix()
-                if rel == LEGACY:
-                    continue
                 text = _text(path)
                 if path == EFFECTS:
                     for block in allowed:
@@ -200,7 +196,7 @@ class ProgrammeVariableTests(unittest.TestCase):
                     text = text.replace(_pulse(), "")
                 for name in re.findall(r"(?:set_variable|remove_variable|change_variable)\b[^\n]*?\b(ch_\w+_on)\b",
                                        text):
-                    with self.subTest(file=rel):
+                    with self.subTest(file=path.relative_to(ROOT).as_posix()):
                         self.assertNotIn(name, variables)
 
 
@@ -290,10 +286,9 @@ class RefreshGoneTests(unittest.TestCase):
                     self.assertNotIn("ch_refresh_funding_modifiers", text)
                     self.assertNotIn("ch_effect_mult_cached", text)
                     for wrapper in WRAPPERS:
-                        # Kept, uncalled, until the old-save strip's removal date: an old
-                        # save's entry copies still name them in their multipliers.
-                        allowed = 1 if path == VALUES else 0
-                        self.assertEqual(text.count(wrapper), allowed, wrapper)
+                        # Gone with the old-save strip (#1429): only an older save's
+                        # entry copies named them.
+                        self.assertNotIn(wrapper, text)
 
     def test_the_pulse_only_ends_programmes_writes_the_benchmark_and_fires_milestones(self):
         pulse = _pulse()
@@ -315,28 +310,6 @@ class LateCostTests(unittest.TestCase):
                 block = _top_level_block(effects, f"ch_effect_{prog} = {{")
                 self.assertIn(f"value = {{ value = var:ch_influence_pending add = {cost} }}", block)
                 self.assertIn(f"set_variable = {{ name = ch_influence_pending value = {cost} days = 7 }}", block)
-
-
-class OldSaveMigrationTests(unittest.TestCase):
-    """The strip sets a programme's variable from an older save's copy only under the Ministry of Culture, and
-    not when the programme it excludes was started since the load (the copy is invisible to the exclusion)."""
-
-    def test_the_migration_keeps_the_law_and_the_exclusion(self):
-        text = _text(ROOT / LEGACY)
-        for modifier, var in (("ch_world_exposition", "ch_world_exposition_on"),
-                              ("ch_cultural_institutes_program", "ch_cultural_institutes_on"),
-                              ("ch_global_media_campaign", "ch_global_media_campaign_on"),
-                              ("ch_cultural_protectionism_program", "ch_cultural_protectionism_on")):
-            with self.subTest(programme=modifier):
-                head = f"limit = {{ je:je_cultural_hegemony ?= {{ has_modifier = {modifier} }} }}"
-                block = text[text.index(head):]
-                block = block[:block.index(f"je:je_cultural_hegemony = {{ remove_modifier = {modifier} }}")]
-                self.assertIn("has_law = law_type:law_ministry_of_culture", block)
-                self.assertIn(f"set_variable = {{ name = {var} value = yes }}", block)
-                partner = {"ch_global_media_campaign_on": "ch_cultural_protectionism_on",
-                           "ch_cultural_protectionism_on": "ch_global_media_campaign_on"}.get(var)
-                if partner:
-                    self.assertIn(f"NOT = {{ has_variable = {partner} }}", block)
 
 
 if __name__ == "__main__":

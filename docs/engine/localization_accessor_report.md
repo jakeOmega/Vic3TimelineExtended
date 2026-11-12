@@ -19,6 +19,55 @@ _None._
 
 _None._
 
+## Where the check stops
+
+Every step after an accessor typed `value` is accepted unread. That is
+right after a name or a number. An accessor that returns an object and
+is typed `value` all the same switches the check off for the rest of
+each chain through it. Vanilla's loc shows which those are: the engine
+reads it, so an accessor it chains further through returns an object.
+
+### Vanilla 1.15.1 chains further through
+
+**Folded as `value`, undetermined (4).** Nothing says what these
+return, so they stay as the fold left them.
+
+- `country.GetGovernmentData`, then `GetCost`, `GetTimeRemainingElection`, `GetTimeRemainingPreElection`: no `GetGovernmentData` on any type in the 1.15.1 data types (vanilla: TIME_REMAINING, CHANGE_GOVERNMENT_BUTTON, test.pre.election_tooltip)
+- `military_formation.GetFormationOrder`, then `GetType`: no `GetFormationOrder` on any type in the 1.15.1 data types (vanilla: FRONT_FORMATION_ORDER_NAME, FORMATION_PANEL_CURRENT_ORDER)
+- `state.GetOccupier`, then `GetCountry`: no `GetOccupier` on any type in the 1.15.1 data types; a State has `GetOccupant` (vanilla: TOOLTIP_STATE_OCCUPATION_MINIMAL / _PARTIAL / _FULL)
+- `war_goal.GetInitiator`, then `GetName`: no `GetInitiator` on WarGoal in the 1.15.1 data types; DiplomaticPlay has one (vanilla: WAR_GOAL_WORTH)
+
+**Typed `value` by hand (20).** The catalog has no type for what
+these return, or had none when they were written.
+
+- `building.GetBuildingType`, then `GetBuildingGroup`, `GetBuildingKindDesc`, `GetDesc`, `GetName`, `GetNameNoFormatting`, `GetTabName`, `GetTextIcon`, `GetTooltipForBuilding`
+- `character.GetIdeology`, then `GetName`, `GetNameNoFormatting`
+- `character.GetOrderType`, then `GetAltName`, `GetName`
+- `character.GetPrimaryRole`, then `GetName`, `GetPreposition`
+- `country.GetAttitudeTowards`, then `CalcScore`, `GetName`, `GetReasonsDesc`, `GetStrategicDesireDesc`, `GetTooltip`
+- `country.GetGovernment`, then `GetName`, `GetPossibleTriggerDesc`, `GetTooltipTag`, `GetTransferOfPowerDesc`, `GetTransferOfPowerName`
+- `country.GetLawBeingEnacted`, then `GetCheckpointRemainingDays`, `GetEnactmentLastCheckpointResult`, `GetGroup`, `GetName`
+- `country.GetSubjectType`, then `GetHigherAutonomySubjectType`, `GetLowerAutonomySubjectType`, `GetName`
+- `country.Var`, then `GetCharacter`, `GetCountry`, `GetLaw`, `GetState`, `GetValue`
+- `law.GetGroup`, then `GetFirstInstitutionType`, `GetName`
+- `military_formation.GetSelectedUnitTypeForGroup`, then `GetName`, `GetNameWithCulture`
+- `military_formation.GetShipList`, then `GetArmorAverage`, `GetCrew`, `GetCrewDamageAverage`, `GetCrewMax`, `GetDamageAverage`, `GetHullDamageAverage`, `GetNumCrewFromState`, `GetNumShips`, `GetNumShipsFromState`, `GetNumShipsOfType`, `GetNumShipsToRetrofit`, `GetNumShipsUnderConstructionOfType`, `GetShipCrewBreakdown`, `GetShipGroupsBreakdown`, `GetShipTypesOfGroupBreakdown`, `GetShipsOfTypeBreakdown`, `GetSupplyExpenses`, `GetSupplyExpensesDesc`
+- `political_movement.GetCivilWar`, then `GetClockCheckpointDateString`, `GetClockCheckpointRemainingWeeks`, `GetMaxProgress`, `GetMaxProgressDesc`, `GetName`, `GetNumUprisingStates`, `GetProgress`, `GetProgressAtCheckpoint`, `GetProgressAtCheckpointDesc`, `GetUprisingStatesString`
+- `pop.GetPopType`, then `GetName`, `GetNameNoIcon`
+- `power_bloc.GetIdentity`, then `GetName`
+- `scope_object.GetInvasion`, then `GetFront`, `GetInvaderCountry`, `GetName`, `GetSeaNodeName`, `GetTargetState`
+- `scope_object.Var`, then `GetAmendmentType`, `GetBuildingGroup`, `GetBuildingType`, `GetCharacter`, `GetCountry`, `GetInterestGroup`, `GetLaw`, `GetValue`
+- `scope_object.sFront`, then `GetName`
+- `scope_object.sPowerBlocPrinciple`, then `GetName`
+- `state.GetFoodSecurity`, then `GetNumStarvingPops`, `GetNumStarvingPopsMild`, `GetNumStarvingPopsSevere`, `GetPercentageStarvingPops`, `GetPercentageStarvingPopsMild`, `GetPercentageStarvingPopsSevere`
+
+### The mod's own chains past a `value`
+
+- `country.GetSubjectType`, then `GetNameNoIcon`
+- `country.Var`, then `GetState`, `GetValue`
+- `scope_object.Var`, then `GetCharacter`, `GetCompany`, `GetCountry`, `GetCulture`, `GetFlagName`, `GetState`, `GetValue`
+- `scope_object.sArticleOption`, then `GetInputState`
+
 ## Coverage
 
 - total flags: 0

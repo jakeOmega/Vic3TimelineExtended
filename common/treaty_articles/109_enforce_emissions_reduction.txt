@@ -19,6 +19,7 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 	relations_improvement_min = 0
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		can_be_renegotiated
 		giftable
@@ -61,6 +62,12 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 	# Target = the country demanding emissions reduction (gains prestige)
 	target_modifier = {
 		country_prestige_mult = 0.02
+	}
+
+	# Lens (1.15 show_in_lens flag): the world-wide `visible` gate, so the
+	# article stays out of the lens until warming begins.
+	show_in_lens = {
+		temperature_anomaly_display > 0.1
 	}
 
 	# ROOT in visible and possible is the source, the country being
@@ -109,48 +116,42 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 				# Set treaty flag so remove buttons are blocked
 				set_variable = has_emissions_reduction_treaty
 
-				# Force only the source country's policies, including for market members.
-				if = {
-					limit = { NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } } }
-					je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
-				}
-				if = {
-					limit = { NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } } }
-					je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
-					# The policy's running cost follows it: je_global_warming
-					# declares renewable_investment_cost_modifier while the policy
-					# modifier is on the entry. Previewed as the adopt button does.
-					show_as_tooltip = {
-						add_modifier = {
-							name = renewable_investment_cost_modifier
-							multiplier = gw_renewable_investment_cost_value
-						}
-					}
-				}
-				if = {
-					limit = { NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } } }
-					je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
-				}
-
-				# Apply country-only modifiers. A source without the journal entry
-				# has nowhere to hold them; the sweeps above skip it the same way.
+				# Force only the source country's policies, including for market
+				# members, through the adopt effects the panel's buttons call: each
+				# sets the policy's country variable, which je_global_warming's
+				# declaration follows (#1466), and prints the policy and its effects
+				# (Renewable Investment's running cost too). `possible` requires the
+				# entry; the guard keeps a policy from waiting in a variable for an
+				# entry that is not there.
 				if = {
 					limit = { has_journal_entry = je_global_warming }
 					if = {
-						limit = { NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } } }
-						je:je_global_warming = { add_modifier = { name = reforestation_subsidies_modifier } }
+						limit = { NOT = { gw_policy_carbon_tax_active = yes } }
+						gw_effect_carbon_tax = yes
 					}
 					if = {
-						limit = { NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } } }
-						je:je_global_warming = { add_modifier = { name = public_transit_modifier } }
+						limit = { NOT = { gw_policy_renewable_investment_active = yes } }
+						gw_effect_renewable_investment = yes
 					}
 					if = {
-						limit = { NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } } }
-						je:je_global_warming = { add_modifier = { name = fossil_fuel_divestment_modifier } }
+						limit = { NOT = { gw_policy_emission_standards_active = yes } }
+						gw_effect_emission_standards = yes
 					}
 					if = {
-						limit = { NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } } }
-						je:je_global_warming = { add_modifier = { name = green_building_codes_modifier } }
+						limit = { NOT = { gw_policy_reforestation_active = yes } }
+						gw_effect_reforestation = yes
+					}
+					if = {
+						limit = { NOT = { gw_policy_public_transit_active = yes } }
+						gw_effect_public_transit = yes
+					}
+					if = {
+						limit = { NOT = { gw_policy_fossil_fuel_divestment_active = yes } }
+						gw_effect_fossil_fuel_divestment = yes
+					}
+					if = {
+						limit = { NOT = { gw_policy_green_building_codes_active = yes } }
+						gw_effect_green_building_codes = yes
 					}
 				}
 			}
@@ -181,13 +182,13 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 					source_country = {
 						has_journal_entry = je_global_warming
 						OR = {
-							NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-							NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-							NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
-							NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
-							NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
-							NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
-							NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
+							NOT = { gw_policy_carbon_tax_active = yes }
+							NOT = { gw_policy_renewable_investment_active = yes }
+							NOT = { gw_policy_emission_standards_active = yes }
+							NOT = { gw_policy_reforestation_active = yes }
+							NOT = { gw_policy_fossil_fuel_divestment_active = yes }
+							NOT = { gw_policy_green_building_codes_active = yes }
+							NOT = { gw_policy_public_transit_active = yes }
 						}
 					}
 				}
@@ -253,8 +254,8 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 				if = {
 					limit = {
 						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = carbon_tax_modifier }
-						je:je_global_warming = { has_modifier = emission_standards_modifier }
+						gw_policy_carbon_tax_active = yes
+						gw_policy_emission_standards_active = yes
 					}
 					add = {
 						desc = "AI_ALREADY_GREEN_POLICIES"
@@ -319,9 +320,9 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 					limit = {
 						scope:source_country = {
 							has_journal_entry = je_global_warming
-							je:je_global_warming = { has_modifier = carbon_tax_modifier }
-							je:je_global_warming = { has_modifier = emission_standards_modifier }
-							je:je_global_warming = { has_modifier = renewable_investment_modifier }
+							gw_policy_carbon_tax_active = yes
+							gw_policy_emission_standards_active = yes
+							gw_policy_renewable_investment_active = yes
 						}
 					}
 					add = {

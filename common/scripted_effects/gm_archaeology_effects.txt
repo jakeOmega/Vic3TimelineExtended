@@ -34,8 +34,7 @@
 # else the container stays as a secondary monument beside the primary:
 # gm_arch_stand_beside), the way a trophy comes home.
 #
-# The sites are seeded once, lazily, from the monthly pass (gm_arch_monthly),
-# so a save from before this change has them too. One call per row of
+# The sites are seeded once, lazily, from the monthly pass (gm_arch_monthly). One call per row of
 # ARCH_SITES in test_grand_monument_archaeology.py, in LANDMARKS order.
 #
 # No order runs where a tooltip walks the effect: a scripted GUI or an event
@@ -58,11 +57,9 @@ gm_arch_monthly = {
 		}
 		# A site added since a game was seeded is seeded the next month: the
 		# seeding makes no site twice (gm_arch_seed_site), so running it again
-		# adds only the new rows. Pompeii is round 2 (2026-10-16).
-		if = {
-			limit = { NOT = { has_global_variable = gm_arch_seed_round } }
-			set_global_variable = { name = gm_arch_seed_round value = 1 }
-		}
+		# adds only the new rows. Pompeii is round 2 (2026-10-16). Every game
+		# seeded since then holds its round (a save from before it can't load
+		# in 1.15, #1429).
 		if = {
 			limit = { global_var:gm_arch_seed_round < gm_arch_seed_rounds }
 			set_global_variable = { name = gm_arch_seed_round value = gm_arch_seed_rounds }
@@ -401,7 +398,7 @@ gm_arch_tell_found = {
 			limit = { NOT = { var:gm_site_vector = flag:incidental } }
 			$STATE$ = { save_scope_as = gm_arch_ev_survey }
 		}
-		$WHO$ = { trigger_event = { id = arch_events.1 } }
+		$WHO$ = { trigger_event = { id = arch_events.1 } } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_site_told, added to above, is what this effect's limit reads: a player is told of a site once, so gm_arch_pass's listing cannot send arch_events.1 for it again
 	}
 }
 
@@ -1063,7 +1060,7 @@ gm_arch_ev_mark = {
 gm_arch_order_launch = {
 	set_variable = { name = gm_site_order_method value = flag:$METHOD$ }
 	save_scope_as = gm_arch_pick
-	$WHO$ = { trigger_event = { id = arch_events.10 } }
+	$WHO$ = { trigger_event = { id = arch_events.10 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the way back is arch_events.1's launch option; gm_arch_tell_found sends arch_events.1 once per site and player (gm_site_told, written before it fires) and to a player only (is_ai = no), so each pass waits on a click
 }
 
 # Container scope. $WHO$ is to stop digging it (arch_events.11).

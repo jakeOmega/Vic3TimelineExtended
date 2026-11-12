@@ -1,0 +1,85 @@
+﻿# PENDING REMOVAL at the next vanilla patch that breaks saves (added 2026-11-12,
+# #1466): a 1.3.x save's flat policy and band modifiers.
+#
+# Mod releases 1.3.0 and 1.3.1, on vanilla 1.15.0, added Global Warming's nine
+# flat policies to je:je_global_warming with add_modifier, and swapped the
+# Colonial Empire's five stability bands on je:je_colonial_empire each month.
+# Since #1466 the entries declare all fourteen (scaling_modifiers_while_active),
+# so a 1.3.x save's added copy would stay on the entry beside the new state:
+# the policy reads as not adopted (its variable is unset), Repeal is hidden and
+# nothing can take the copy off, re-adopting doubles it, and the entry carries
+# the saved band beside the declared one. These two effects, from each entry's
+# weekly pulse, take the added copies off and carry a policy over to its
+# variable, so the doubled window is days. has_modifier sees only an added
+# copy, never a declaration, so on a save made after #1466 neither does
+# anything. Remove this file, its two calls (je_global_warming.txt,
+# je_colonial_empire.txt, on_weekly_pulse) and MIGRATION_FILE in
+# test_journal_entry_shape.py, and test_flat_toggle_migration.py, once a
+# vanilla patch stops 1.3.x saves loading.
+
+# Country scope: je_global_warming's weekly pulse. Each copy is removed before
+# its variable is set, so on an untouched save the declared value is still 0
+# when the remove runs. Fossil-Fuel Tariffs carries over only for a country
+# that still leads its market; the monthly refresh would drop it otherwise.
+gw_migrate_flat_policies = {
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = carbon_tax_modifier } }
+		je:je_global_warming = { remove_modifier = carbon_tax_modifier }
+		set_variable = { name = gw_carbon_tax_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = renewable_investment_modifier } }
+		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
+		set_variable = { name = gw_renewable_investment_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = climate_adaptation_modifier } }
+		je:je_global_warming = { remove_modifier = climate_adaptation_modifier }
+		set_variable = { name = gw_climate_adaptation_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = emission_standards_modifier } }
+		je:je_global_warming = { remove_modifier = emission_standards_modifier }
+		set_variable = { name = gw_emission_standards_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = reforestation_subsidies_modifier } }
+		je:je_global_warming = { remove_modifier = reforestation_subsidies_modifier }
+		set_variable = { name = gw_reforestation_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = public_transit_modifier } }
+		je:je_global_warming = { remove_modifier = public_transit_modifier }
+		set_variable = { name = gw_public_transit_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = fossil_fuel_divestment_modifier } }
+		je:je_global_warming = { remove_modifier = fossil_fuel_divestment_modifier }
+		set_variable = { name = gw_fossil_fuel_divestment_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = green_building_codes_modifier } }
+		je:je_global_warming = { remove_modifier = green_building_codes_modifier }
+		set_variable = { name = gw_green_building_codes_policy value = yes }
+	}
+	if = {
+		limit = { je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier } }
+		je:je_global_warming = { remove_modifier = fossil_fuel_tariffs_modifier }
+		if = {
+			limit = { te_tax_owns_market = yes }
+			set_variable = { name = gw_fossil_fuel_tariffs_policy value = yes }
+		}
+	}
+}
+
+# Country scope: je_colonial_empire's weekly pulse. The band needs no variable:
+# the declaration reads the bar.
+ce_migrate_flat_bands = {
+	je:je_colonial_empire ?= {
+		if = { limit = { has_modifier = colonial_empire_crumbling_modifier } remove_modifier = colonial_empire_crumbling_modifier }
+		if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }
+		if = { limit = { has_modifier = colonial_empire_strained_modifier } remove_modifier = colonial_empire_strained_modifier }
+		if = { limit = { has_modifier = colonial_empire_stable_modifier } remove_modifier = colonial_empire_stable_modifier }
+		if = { limit = { has_modifier = colonial_empire_solidified_modifier } remove_modifier = colonial_empire_solidified_modifier }
+	}
+}

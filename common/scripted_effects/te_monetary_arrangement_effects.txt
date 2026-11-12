@@ -208,21 +208,6 @@ te_monetary_init_arrangement_variables = {
 		limit = { NOT = { has_variable = te_mon_board_seigniorage_applied } }
 		set_variable = { name = te_mon_board_seigniorage_applied value = 0 }
 	}
-
-	# SAVE MIGRATION (§18.2). The deleted FX Swap Lines tool's modifier, stripped
-	# wherever a save still carries it, every pulse, until
-	# legacy_modifier_cleanup.txt's dated checklist retires the definition. No
-	# state to migrate: the tool was a flat +momentum / -contagion modifier, and
-	# its replacement is a treaty the country has to go and sign.
-	if = {
-		limit = { has_journal_entry = je_banking_cycle }
-		je:je_banking_cycle = {
-			if = {
-				limit = { has_modifier = banking_fx_swap_lines }
-				remove_modifier = banking_fx_swap_lines
-			}
-		}
-	}
 }
 
 

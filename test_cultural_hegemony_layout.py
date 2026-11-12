@@ -1158,7 +1158,7 @@ class WideTest(unittest.TestCase):
 # ---- Another country's panel (charts-help-national-info plan, PR F4) ------------
 WIDE = {"te_ch_wide_sections"}
 # A scripted GUI's printed text: the custom_tooltip keys its triggers and effects
-# print, which neither BindingTest nor te_rebind_country.py follows.
+# print (BindingTest and te_rebind_country.py follow them too, since #1361).
 # What gates a world read for an observer (who has no GetPlayer): the observer
 # test (or GetPlayer.IsValid) first in the widget's `visible`, alone or leading
 # an And; a wrapper widget gated on the test alone counts too.

@@ -495,14 +495,19 @@ decol_iw_war_month = {
 			debug_log = "TE_SELF_CHECK BROKEN decol_iw_talks_peace metropole=[SCOPE.sCountry('decol_iw_self').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_month_rebels').GetNameNoFormatting] (six months after the accords dropped our goal the war is still on: talks end the war only by the player's peace offer; the drain stays at the talks' figure) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
-	# An AI opens talks when the war has gone sour for half a year, or after
-	# four years.
+	# An AI opens talks when the war has gone sour for half a year, after four
+	# years, or once the engine counts the war down to a stalemate (1.15
+	# war_is_in_stalemate: both leaders at minimum war support).
 	else_if = {
 		limit = {
 			is_ai = yes
 			OR = {
 				var:decol_iw_red_$N$ >= 6
 				var:decol_iw_months_$N$ >= decol_iw_crisis_war_months
+				any_scope_war = {
+					is_war_participant = scope:decol_iw_month_rebels
+					war_is_in_stalemate = yes
+				}
 			}
 		}
 		decol_iw_open_talks = { N = $N$ }

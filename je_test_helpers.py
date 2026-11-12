@@ -171,6 +171,27 @@ def outcome_part(entry, kind, part, index=0):
     return blocks[0]
 
 
+def outcome_parts(entry, kind, part):
+    """The `part` body of every outcome of `kind`, in declaration order (for an entry
+    with one outcome per ending, such as je_civil_rights)."""
+    found = [body for body in outcome_texts(entry) if text_kind(body) == kind]
+    if not found:
+        raise AssertionError(f"no {kind} outcome")
+    out = []
+    for body in found:
+        blocks = _direct_blocks(body, part)
+        if not blocks:
+            raise AssertionError(f"a {kind} outcome has no {part}")
+        out.append(blocks[0])
+    return out
+
+
+def old_blocks(entry, name):
+    """Every body an old block's name maps to in 1.15: one per outcome of its kind."""
+    kind, part = OLD_BLOCKS[name]
+    return outcome_parts(entry, kind, part)
+
+
 def old_block(entry, name, index=0):
     """Where an old block's body lives in 1.15: `on_complete` is the success outcome's effect."""
     kind, part = OLD_BLOCKS[name]
