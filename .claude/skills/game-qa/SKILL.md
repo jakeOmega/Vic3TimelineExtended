@@ -17,9 +17,10 @@ description: Launch Victoria 3 from a session and check something in the running
 ```bash
 python3 -m game_qa doctor                       # ready? starts nothing
 python3 -m game_qa start --permission "<the owner's words, and when>" --as FRA \
-        [--setup NAME=FILE]... [--playset mod_only|current] [--save NAME]
+        [--setup NAME=FILE]... [--playset mod_only|current] [--save NAME] [--switch-rule RULE=SETTING]...
 python3 -m game_qa read "c:FRA.gdp" "root.has_technology_researched = railways"
-python3 -m game_qa run-setup NAME               # a setup given at start, run through its event
+python3 -m game_qa run-setup NAME               # a setup, run through its event
+python3 -m game_qa add-setup NAME=FILE          # a new setup for the running game (the game reloads: ~40 s)
 python3 -m game_qa console "event my_events.3"
 python3 -m game_qa events                       # what is pending, with numeric ids
 python3 -m game_qa pick 0 my_events.3           # option index is 0-based
@@ -29,7 +30,9 @@ python3 -m game_qa stop                         # always, even after a failure
 ```
 
 - **`start`** takes two to four minutes: it snapshots, builds the overlay mod, makes a fresh save if none is cached for this build (an unattended run of its own), loads it, attaches the debugger and opens the console. `--permission` records where the go-ahead came from. Without `--save` the game sits on the fresh save's country-select screen with time stopped, which is all that reads, events and picks need. `--playset mod_only` (the default) loads only this mod's deployed folder; `current` loads the owner's playset. The build under test is whatever is in the deployed mod folder, so deploy first if the change is not there.
-- **A setup** is a file holding an effect block's body, run in the played country's scope. Give it at `start`; it cannot be added later.
+- **A setup** is a file holding an effect block's body, run in the played country's scope. Give the ones you know you need at `start`. **`add-setup NAME=FILE`** adds one to the running game: it rewrites the overlay's effect file, the game reloads it (about 40 seconds with this mod, and it takes no console command meanwhile), and the reply's `loaded: true` means the game logged the new revision. `not_reloaded` means it did not within three minutes: the setup is in the file, and `run-setup` looks again before running it. A name is used once; thirty can be added in a session. (Built 2026-11-12; not yet run live.)
+- **The fresh save's game rules are the ones the owner last applied in a lobby**, not the defaults: an unattended new game reads `LastAppliedRules` from the user-data folder's `player/game_rules/presets.txt`. `start`'s reply lists them (`rules.settings`), and the fixture is remade when they change. Say which rules a check ran under when a row depends on one (Tax Code, culture merges, fantastical content have all been off their defaults).
+- **`--switch-rule RULE=SETTING`** (repeatable, not with `--save`) loads a copy of the fresh save with that rule switched. It is a rule changed on 2 January 1836, a day after the game began, as the change-country screen changes it mid-game: what the game's setup decided under the old setting has already happened. That is the right test for "a rule switched off mid-game ends its journal entry", and not proof of how a game made under the setting starts. A rule from the first day needs the owner to apply it in a lobby first (start a New Game with it and quit). No verb changes a rule in an entered game. (Built 2026-11-12; not yet run live, and whether the mod reads an edited save as it reads a rule changed in game is unverified: pair the rule's `has_game_rule` read with one that must say yes.)
 - **`read`** evaluates triggers and values at a breakpoint in the played country's scope: `c:TAG.<value>`, `root.<value>`, a script value's name, `c:TAG.var:x`, a trigger. Write a trigger bare (`has_modifier = x`); `c:FRA.has_modifier = x` is refused by the game as an unknown trigger type. An unset variable reads 0, so read `has_variable = x` when that matters. A read that fails comes back `ok: false` with the game's words; the verb still exits 0.
 - **`console`** types one command (ASCII, at most 64 characters). `event <id>` ignores the event's trigger and cooldown. There is no console `effect` or `run`: use a setup.
 - **`try-event`** is the owner's first check: for each option it runs the setup, fires the event, reads, picks, reads again, and writes a table to the run folder. The options share one game, each starting from the state the one before left, so write the setup to put back what the options change, or say so when reporting. It exits 0 only when every option fired and was picked.
