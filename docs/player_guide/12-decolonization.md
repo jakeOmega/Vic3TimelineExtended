@@ -479,7 +479,11 @@ instead, for two years, but never joins the war.
 The journal entry ends in one of four ways. The event you get when the empire
 holds or collapses depends on the program you ran longest, counting a month at
 level 1 or 2 as a third or two thirds of a month, and only a program with more
-than 24 months.
+than 24 months. On a tie, Military Garrison counts as the longest, then
+Colonial Development Investment. The journal panel lists each of the nine
+endings (the two federations, the four ways the empire holds, the voluntary end
+and the two collapses) with its conditions and the months each program has
+run, so you can see which one the empire is heading for.
 
 | Ending | Condition | Result |
 |---|---|---|

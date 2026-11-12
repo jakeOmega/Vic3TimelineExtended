@@ -17,6 +17,7 @@ import unittest
 from pathlib import Path
 
 from je_multiplier_scope_audit import parse_text
+from je_test_helpers import entry_text, outcome_texts
 
 ROOT = Path(__file__).resolve().parent
 JE = ROOT / "common/journal_entries/je_colonial_empire.txt"
@@ -145,9 +146,21 @@ class DeclarationTests(unittest.TestCase):
         cleanup = _top_level_block(_text(EFFECTS), "colonial_empire_je_cleanup_effect = {")
         for _modifier, (_value, level) in PROGRAMMES.items():
             self.assertIn("remove_variable = " + level, cleanup)
-        je = _strip_comments(_text(JE))
-        # Success, failure, and the invalid outcome on the rule switched off mid-game (2026-11-08).
-        self.assertEqual(je.count("colonial_empire_je_cleanup_effect = yes"), 3)
+        # Every ending (the nine of #1432, and the invalid outcome on the rule
+        # switched off mid-game, 2026-11-08) runs the cleanup, directly or
+        # through the success and collapse helpers, which call it.
+        effects = _text(EFFECTS)
+        for helper in ("colonial_empire_secured_end", "colonial_empire_collapse_end"):
+            body = _strip_comments(_top_level_block(effects, helper + " = {"))
+            self.assertEqual(body.count("colonial_empire_je_cleanup_effect = yes"), 1, helper)
+        entry = entry_text(_text(JE), "je_colonial_empire")
+        endings = outcome_texts(entry)
+        self.assertEqual(len(endings), 10)
+        for i, body in enumerate(endings):
+            with self.subTest(outcome=i):
+                self.assertEqual(sum(body.count(call + " = yes") for call in (
+                    "colonial_empire_je_cleanup_effect", "colonial_empire_secured_end",
+                    "colonial_empire_collapse_end")), 1)
 
     def test_the_bands_stay_on_the_pulse(self):
         # Not converted: Solidified is also the endings' permanent country
