@@ -424,6 +424,19 @@ class RuleEndTreeTest(unittest.TestCase):
 # declaration never is, so a check can wait for the strip instead of misreading the sum.
 SELFCHECK_FILE = "common/scripted_effects/te_scaling_selfcheck_effects.txt"
 
+# A declared key that is also a country modifier of its own, with the files that may name it, never inside a `je:`
+# block (an add there would sit beside the declaration). The Colonial Empire's Solidified band (#1466) is the endings'
+# permanent reward too: decol_grant_permanent_modifier grants it on the country from the ending's event, after the
+# entry has ended, so the declared copy and the reward never meet; the civil-war sync restores it and the Nation tab
+# lists it. has_modifier sees the reward alone, never the declaration.
+COUNTRY_COPY = {
+    "colonial_empire_solidified_modifier": {
+        "events/decolonization_events.txt",
+        "common/scripted_effects/decolonization.txt",
+        "common/script_values/te_nation_generated_values.txt",
+    },
+}
+
 
 def _walk(nodes: list[Node]):
     for node in nodes:
@@ -452,7 +465,8 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
     """(file, line, kind, modifier) for every `key = <declared modifier>` outside its declaration: a has_modifier,
     add_modifier or remove_modifier of it, and a helper argument that passes it on (`un_state_on = { MODIFIER = x }`,
     whose body adds `$MODIFIER$`). Allowed: the declaration's own `modifier =`, an add inside show_as_tooltip (the
-    option's preview, design § 4.0 rule 8), and the self-checks' tests for an old copy. Not a use: a variable or a loc key that shares the modifier's name (a Grand Monuments
+    option's preview, design § 4.0 rule 8), the self-checks' tests for an old copy, and a COUNTRY_COPY key in its
+    files outside a `je:` block. Not a use: a variable or a loc key that shares the modifier's name (a Grand Monuments
     boon's countdown is the variable gm_boon_<source>, read with has_variable and named by its loc)."""
     out: list[tuple[str, int, str, str]] = []
     selfcheck = rel == SELFCHECK_FILE
@@ -472,11 +486,11 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
         pattern = re.compile(re.sub(r"\\\$\w+\\\$", r"\\w+", re.escape(value)))
         return any(pattern.fullmatch(name) for name in declared)
 
-    def walk(items: list[Node], parent: str, declaration: bool, preview: bool):
+    def walk(items: list[Node], parent: str, declaration: bool, preview: bool, entry: bool):
         for node in items:
             if node.children:
                 walk(node.children, node.key, declaration or node.key == "scaling_modifiers_while_active",
-                     preview or node.key == "show_as_tooltip")
+                     preview or node.key == "show_as_tooltip", entry or node.key.startswith("je:"))
                 continue
             modifier_op = node.key in ("add_modifier", "remove_modifier", "has_modifier") or (
                 node.key == "name" and parent in ("add_modifier", "remove_modifier"))
@@ -491,9 +505,11 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
             adds = kind not in ("has_modifier", "remove_modifier", "remove_modifier_if_exists_effect")
             if (preview and adds) or (selfcheck and kind == "has_modifier"):
                 continue
+            if rel in COUNTRY_COPY.get(node.value, ()) and not entry:
+                continue
             out.append((rel, node.line, kind, node.value))
 
-    walk(nodes, "", False, False)
+    walk(nodes, "", False, False, False)
     return out
 
 
@@ -531,6 +547,18 @@ class ScalingModifierFixtureTest(unittest.TestCase):
         self.assertEqual(self.sites(text), [])
         self.assertEqual(self.sites("e = { set_variable = { name = x value = 1 } add_modifier = { name = m } }"),
                          [("add_modifier", "m")])
+
+    def test_a_country_copy_is_allowed_in_its_files_off_the_entry(self):
+        key = "colonial_empire_solidified_modifier"
+        grant = "o = { decol_grant_permanent_modifier = { MODIFIER = %s } }" % key
+        on_entry = "e = { je:je_colonial_empire = { add_modifier = { name = %s } } }" % key
+
+        def sites(text, rel):
+            return [(kind, name) for _, _, kind, name in misuse_sites(parse_text(text, rel)[0], {key}, rel)]
+        self.assertEqual(sites(grant, "events/decolonization_events.txt"), [])
+        self.assertEqual(sites(grant, "events/other_events.txt"), [("MODIFIER", key)], "only in its files")
+        self.assertEqual(sites(on_entry, "events/decolonization_events.txt"), [("add_modifier", key)],
+                         "never on the entry, beside the declaration")
 
     def test_a_helper_argument_is_flagged(self):
         self.assertEqual(self.sites("e = { un_state_on = { MODIFIER = m } }"), [("MODIFIER", "m")])

@@ -139,6 +139,85 @@
 		}
 	}
 
+	# --- The five stability bands ---
+	# One band modifier at a time, the one whose band the stability bar is in,
+	# read through colonial_empire_live_tier (1 Collapsing .. 5 Solidified,
+	# colonial_empire_values.txt), the ladder the panel's band names read, so
+	# the modifier and the name cannot disagree. The engine re-reads it about
+	# every four days, so the band follows the bar within days; the monthly
+	# pulse swapped a plain modifier until #1466. All five are declared: with
+	# one left on the pulse, the 90 edge would show two bands or none for up
+	# to a month. colonial_empire_solidified_modifier is also the endings'
+	# permanent reward on the country (decol_grant_permanent_modifier); the
+	# two never meet, since the entry has ended before the reward's event.
+	# Collapsing, bar under 20
+	scaling_modifiers_while_active = {
+		modifier = colonial_empire_crumbling_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					colonial_empire_live_tier >= 1
+					colonial_empire_live_tier < 2
+				}
+				add = 1
+			}
+		}
+	}
+	# Crumbling, 20 to 40
+	scaling_modifiers_while_active = {
+		modifier = colonial_empire_under_pressure_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					colonial_empire_live_tier >= 2
+					colonial_empire_live_tier < 3
+				}
+				add = 1
+			}
+		}
+	}
+	# Strained, 40 to 65
+	scaling_modifiers_while_active = {
+		modifier = colonial_empire_strained_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					colonial_empire_live_tier >= 3
+					colonial_empire_live_tier < 4
+				}
+				add = 1
+			}
+		}
+	}
+	# Stable, 65 to 90
+	scaling_modifiers_while_active = {
+		modifier = colonial_empire_stable_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					colonial_empire_live_tier >= 4
+					colonial_empire_live_tier < 5
+				}
+				add = 1
+			}
+		}
+	}
+	# Solidified, 90 and over
+	scaling_modifiers_while_active = {
+		modifier = colonial_empire_solidified_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { colonial_empire_live_tier >= 5 }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		# Populate the widget's display state on the first frame, so a freshly
 		# activated entry shows real numbers instead of dashes for a month.
@@ -616,41 +695,6 @@
 			else_if = {
 				limit = { colonial_assim_level_value >= 1 }
 				colonial_assim_disrupt_colonies = { MULT = 0.333 }
-			}
-
-			# Phase modifiers based on current bar value (five status bands)
-			je:je_colonial_empire = { remove_modifier = colonial_empire_solidified_modifier }
-			je:je_colonial_empire = { remove_modifier = colonial_empire_stable_modifier }
-			je:je_colonial_empire = { remove_modifier = colonial_empire_strained_modifier }
-			je:je_colonial_empire = { remove_modifier = colonial_empire_under_pressure_modifier }
-			je:je_colonial_empire = { remove_modifier = colonial_empire_crumbling_modifier }
-
-			if = {
-				limit = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 20 }
-				}
-				je:je_colonial_empire = { add_modifier = { name = colonial_empire_crumbling_modifier } }
-			}
-			else_if = {
-				limit = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 40 }
-				}
-				je:je_colonial_empire = { add_modifier = { name = colonial_empire_under_pressure_modifier } }
-			}
-			else_if = {
-				limit = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 65 }
-				}
-				je:je_colonial_empire = { add_modifier = { name = colonial_empire_strained_modifier } }
-			}
-			else_if = {
-				limit = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 90 }
-				}
-				je:je_colonial_empire = { add_modifier = { name = colonial_empire_stable_modifier } }
-			}
-			else = {
-				je:je_colonial_empire = { add_modifier = { name = colonial_empire_solidified_modifier } }
 			}
 
 			# --- Subject-side LD pressure ---
