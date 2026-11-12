@@ -462,8 +462,8 @@ un_vote.1 = {
 		# sanctions resolution against ROOT means accepting the verdict. Only
 		# on a resolution whose verdict the target can accept
 		# (un_resolution_target_may_accept): a refugee resolution names the
-		# country its refugees flee, and an expulsion, a mandate or a court
-		# referral lands in full whatever the target votes.
+		# country its refugees flee, and an expulsion or a mandate lands in
+		# full whatever the target votes.
 		name = {
 			trigger = {
 				scope:un_vote_target ?= this
@@ -2226,8 +2226,9 @@ un_vote.3 = {
 		ai_chance = {
 			base = 50
 			# Ratifying against itself: an armed power does not accept its own
-			# disarmament, and the cultural hegemon does not give up its pull
-			# (option C's weights).
+			# disarmament, the cultural hegemon does not give up its pull
+			# (option C's weights), and a colonial empire does not condemn
+			# colonialism (below).
 			modifier = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
@@ -2239,6 +2240,17 @@ un_vote.3 = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
 					un_regime_cultural_hegemon = yes
+				}
+				factor = 0
+			}
+			# A colonial empire does not ratify the decolonization declaration
+			# it voted against: ratifying would put a great power on the
+			# anti-colonial stance (un_vote_apply_treaty_modifier), condemning the
+			# colonialism it practices (issue #1373).
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
+					decol_holds_colonial_empire = yes
 				}
 				factor = 0
 			}

@@ -241,7 +241,9 @@ holds colonies. An AI takes a side only with 150 influence and 100
 more to spare, and drops its stance when its influence runs negative. When a
 Decolonization Resolution passes at the United Nations, every great power that
 voted for it, or voted against it and then accepted it, takes the anti-colonial
-stance automatically, and can't change it for 24 months.
+stance automatically, and can't change it for 24 months. An AI power with
+colonies or colonial subjects leans against the resolution, and never accepts
+one it voted against.
 
 Each condemning great power costs you about 0.45 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
