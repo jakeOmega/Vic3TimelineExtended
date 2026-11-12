@@ -357,7 +357,7 @@ have agencies of their own.
 
 | Operation | What it does at base strength | Also needs | Influence |
 |---|---|---|---|
-| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature | 50 |
+| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target holds elections (a voting law, or Anarchy) | 50 |
 | Financial Subversion | Target +2 bubble pressure a month | Computer Networks | 50 |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target | None |
 | Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target | None |
@@ -655,8 +655,8 @@ The Shadow War and The Spy Who Was Caught stand in for the operations; see
 ### How the AI runs covert operations
 
 AI countries set their funding each month: none while idle, level 1 to keep
-operations alive when bankrupt or without rivals (and for a major power with a
-rival), level 3 for a great power with a rival or a major power at war, and
+operations alive when bankrupt, borrowing with bankruptcy under half a year
+away, or without rivals (and for a major power with a rival), level 3 for a great power with a rival or a major power at war, and
 level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
 antagonistic or domineering toward; espionage goes to countries with technology

@@ -774,6 +774,8 @@ un_referendum_hold = {
 				decol_record_chosen_release = yes
 			}
 		}
+		# Any freed subject leaves the overlord's wars (on_become_independent).
+		scope:un_ref_subject = { decol_mark_freed_from = { OVERLORD = scope:un_ref_overlord } }
 		scope:un_ref_subject = { make_independent = yes }
 		scope:un_ref_subject = { trigger_event = { id = un_referendum.2 } }
 		un_referendum_notify_proposer = { EVENT = un_referendum.2 }

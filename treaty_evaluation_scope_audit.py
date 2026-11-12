@@ -11,16 +11,18 @@ false (`Undefined event target`, `Invalid right side during comparison`).
 
 2. The party scopes (`scope:other_country`, `scope:source_country`,
    `scope:target_country`, `scope:first_country`, `scope:second_country`) in
-   the four trigger blocks whose bindings are known (issue #1026; the table is
+   the five trigger blocks whose bindings are known (issue #1026; the table is
    `UNBOUND` below, from `docs/guides/scripting_best_practices.md` § "Treaty
    Article Scoping", which quotes vanilla's treaty_articles.md):
 
    * `visible`, `possible`: root is the prospective source and
      `scope:other_country` the prospective target. The other four do not exist.
-   * `can_ratify`, `requirement_to_maintain`: a directed article gets
-     `scope:source_country` / `scope:target_country`, a mutual one
+   * `can_ratify`, `requirement_to_maintain`, and 1.15's `can_propose` (which
+     "sees the same scopes as can_ratify", treaty_articles.md, and where
+     vanilla's ship_transfer reads `scope:source_country`): a directed article
+     gets `scope:source_country` / `scope:target_country`, a mutual one
      `scope:first_country` / `scope:second_country`. `scope:other_country` does
-     not exist in either, nor source / target in a mutual article.
+     not exist in any of them, nor source / target in a mutual article.
 
    Extensive Modernization Aid read `scope:other_country` in `can_ratify` for
    five months (#1025); the requirement could never be met.
@@ -37,9 +39,9 @@ What check 2 leaves alone, on purpose:
   `scope:input`, `scope:is_renegotiation`, a scope the script saved itself).
   It is a deny-list of reads known to be unbound, not an allow-list.
 * `scope:first_country` / `scope:second_country` in a directed article's
-  `can_ratify` / `requirement_to_maintain`. No vanilla article reads them
-  there and the docs do not say they are unset.
-* Every other block: `can_propose`, `can_withdraw`, the input valid triggers,
+  `can_ratify` / `requirement_to_maintain` / `can_propose`. No vanilla
+  article reads them there and the docs do not say they are unset.
+* Every other block: `can_withdraw`, the input valid triggers,
   the `on_*` hooks, `non_fulfillment`, `wargoal`, and the `ai` fields other
   than `evaluation_chance`. The evidence there is thin or contradicts the
   docs: vanilla reads `scope:target_country` bare in two `on_break` hooks, and
@@ -88,7 +90,9 @@ UNBOUND = {
     "possible": {"directed": _PROSPECT_UNBOUND, "mutual": _PROSPECT_UNBOUND},
     "can_ratify": _RATIFY_UNBOUND,
     "requirement_to_maintain": _RATIFY_UNBOUND,
+    "can_propose": _RATIFY_UNBOUND,
 }
+_RATIFY_BLOCKS = frozenset(b for b, by_kind in UNBOUND.items() if by_kind is _RATIFY_UNBOUND)
 _BINDS = {
     "visible": "root (the prospective source) and scope:other_country",
     "possible": "root (the prospective source) and scope:other_country",
@@ -159,7 +163,7 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
                     continue
             reviewed = block != EVALUATION_CHANCE and bool(_REVIEWED.search(comments.get(line, "")))
             flags.append(Flag(rel_path, line, stack[0] if stack else "?", scope, block,
-                              kind if block in ("can_ratify", "requirement_to_maintain") else None,
+                              kind if block in _RATIFY_BLOCKS else None,
                               reviewed))
         pending.clear()
 

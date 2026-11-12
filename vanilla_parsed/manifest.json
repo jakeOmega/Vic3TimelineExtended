@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.15.1",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "c6d35a843fbf0b8b",
- "built_at": "2026-11-11T17:12:51+00:00",
+ "parser_fingerprint": "94a695b378759776",
+ "built_at": "2026-11-12T06:20:34+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -299,12 +299,37 @@
    "dir": "game/common/ai_ship_categories",
    "file": "common/ai_ship_categories.json",
    "entities": 7
+  },
+  "Strategic Regions": {
+   "dir": "game/common/strategic_regions",
+   "file": "common/strategic_regions.json",
+   "entities": 142
+  },
+  "Prestige Goods": {
+   "dir": "game/common/prestige_goods",
+   "file": "common/prestige_goods.json",
+   "entities": 76
+  },
+  "Scripted Progress Bars": {
+   "dir": "game/common/scripted_progress_bars",
+   "file": "common/scripted_progress_bars.json",
+   "entities": 61
   }
  },
  "localization": {
   "dir": "game/localization/english",
   "file": "localization_english.json",
   "keys": 108112
+ },
+ "state_history": {
+  "dir": "game/common/history/states",
+  "file": "history/states.json",
+  "files": 1,
+  "states": 676,
+  "parts": 1156,
+  "split_states": 222,
+  "unowned_states": 0,
+  "countries": 449
  },
  "parse_failures": [],
  "sources": {
@@ -991,6 +1016,10 @@
   "game/common/harvest_condition_types/01_sea_harvest_condition_types.txt": {
    "size": 9651,
    "sha256": "8d33218e730e1419bd50929f4a671750b31c93368a9d394683034778259307d0"
+  },
+  "game/common/history/states/00_states.txt": {
+   "size": 477281,
+   "sha256": "282d1cff65f459bbb8a7150f212851130897c247e6524786715c812f6cd360f3"
   },
   "game/common/ideologies/00_ig_ideologies.txt": {
    "size": 34745,
@@ -2200,6 +2229,10 @@
    "size": 46970,
    "sha256": "f0d7229c45bc4371bb2ff23a7bff86e95e022a18e1491b03fafdc45283f9f9bf"
   },
+  "game/common/prestige_goods/00_prestige_goods.txt": {
+   "size": 16712,
+   "sha256": "08f96f7a451ea878e9e2d22940687049f4e76c71ad4379f156c9b08988ded517"
+  },
   "game/common/production_method_groups/00_dummy.txt": {
    "size": 201,
    "sha256": "683158fd1dcd0bd3e2e269466b57969a0f318365f0d80c0a38fc832fbfe96f19"
@@ -2700,6 +2733,90 @@
    "size": 1706,
    "sha256": "01535c263362e7f8cbf99266799e76ffbbd28c342f4e5880a5b5f3cb39ebbf81"
   },
+  "game/common/scripted_progress_bars/00_austrian_progress_bars.txt": {
+   "size": 3975,
+   "sha256": "918917d4ec3305e2a447899b3d640e9dfe0366833f65e0ee0b624c8b817dadc8"
+  },
+  "game/common/scripted_progress_bars/00_ep2_ryukyu_rivalry_progress_bars.txt": {
+   "size": 8838,
+   "sha256": "55dc6571f42cf165f1aee8b9e660c4bfc403c965e8a7ecfb1cee0356f4fe5578"
+  },
+  "game/common/scripted_progress_bars/00_great_game_progress_bars.txt": {
+   "size": 1057,
+   "sha256": "6051597e40f630a665ca1f3a828fd2e409d00ffe27c93f0ad609cf8aaf630c6e"
+  },
+  "game/common/scripted_progress_bars/00_greece_progress_bars.txt": {
+   "size": 3536,
+   "sha256": "56d2a7821e7f869868ef77dd6a3a05c5f6612124c0a67efaf0dd34bb190fbe8a"
+  },
+  "game/common/scripted_progress_bars/00_grunderzeit_progress_bars.txt": {
+   "size": 212,
+   "sha256": "2b4b9b9152c1d086f278eabc6a7725d2b2cd9806594947f9ba52ed5c4e38b1e7"
+  },
+  "game/common/scripted_progress_bars/00_ip4_carlist_wars_progress_bars.txt": {
+   "size": 745,
+   "sha256": "4ca31eb6bb06c46a4f334f191cead9327b73f3a97344004d15db427d5c6c1a46"
+  },
+  "game/common/scripted_progress_bars/00_ip4_cuba_progress_bars.txt": {
+   "size": 1652,
+   "sha256": "3bb33e95ddca0561116e32440b0fba53e59cb5ee55f9e1946356df600d5f5089"
+  },
+  "game/common/scripted_progress_bars/00_ip4_morocco_progress_bars.txt": {
+   "size": 12075,
+   "sha256": "79bd8caf1c1b93652826309e893838d754d5e1cb0ceb5de818a5825756c22d22"
+  },
+  "game/common/scripted_progress_bars/00_ip4_negotiation_progress_bars.txt": {
+   "size": 1692,
+   "sha256": "8233a4df155db9d5eae346958b1419bbfeb63d29685deea382c636e9b03da37c"
+  },
+  "game/common/scripted_progress_bars/00_ip4_victoria_progress_bars.txt": {
+   "size": 3074,
+   "sha256": "6e4582ec631e0b09ff0443de4bfb42e197fa9e464e1aa4d81ea3aa1166a46c11"
+  },
+  "game/common/scripted_progress_bars/00_ip5_bolshevik_bars.txt": {
+   "size": 1781,
+   "sha256": "5794b86f67d17fdc22ff6b877bc33975e1cff9e0ba0587c618460293f18aea95"
+  },
+  "game/common/scripted_progress_bars/00_ip5_cultural_renaissance_bars.txt": {
+   "size": 2956,
+   "sha256": "10131abb9ae62bbb0b4efb41b5f708824f5b601385279966f7cc37987cacfd4b"
+  },
+  "game/common/scripted_progress_bars/00_ip5_poland_progress_bars.txt": {
+   "size": 8489,
+   "sha256": "2002d1a6c3dd350650c72660be0760fdc0bb2445a4eb7f42070b5695989765ef"
+  },
+  "game/common/scripted_progress_bars/00_je_progress_bars.txt": {
+   "size": 735,
+   "sha256": "44334c6daa4c5ce8eafd89c6c7f819f333089056d322760e8c7c718caafee664"
+  },
+  "game/common/scripted_progress_bars/00_krakatoa_progress_bars.txt": {
+   "size": 497,
+   "sha256": "eec6d17b85e463d04708b1718b0771a9a77dc85fb1b20f04ba0e6df84c8fba11"
+  },
+  "game/common/scripted_progress_bars/00_rlit_progress_bars.txt": {
+   "size": 8223,
+   "sha256": "acac9f814236a65d553410c0d86deb5ffc3192c49fc92b9348d11ba9f55c78f9"
+  },
+  "game/common/scripted_progress_bars/00_sepoy_mutiny_progress_bars.txt": {
+   "size": 21825,
+   "sha256": "34059c952771e8049cea11a5459367c8f91f70e0a10b35b16d41151310e9b067"
+  },
+  "game/common/scripted_progress_bars/00_victoria_progress_bars.txt": {
+   "size": 58188,
+   "sha256": "6adf9d7104b0d7b3609bca91ee9788a245072a319cea1ae6bfe81b4def2f9bc0"
+  },
+  "game/common/scripted_progress_bars/08_tsarpoints_progress_bars.txt": {
+   "size": 1130,
+   "sha256": "f5099dfe4ab627a2da67333527d485dcacef2fcd27a562c9c6720d8cf1f188ac"
+  },
+  "game/common/scripted_progress_bars/08_victoria_ip5_progress_bars.txt": {
+   "size": 6673,
+   "sha256": "698330ffa34523f5ae36fc7517e41b0a5992aacd2753ce4c1c0a80f805c417cb"
+  },
+  "game/common/scripted_progress_bars/09_forest_of_bayonets_progress_bars.txt": {
+   "size": 3402,
+   "sha256": "a633f696ab2f9355dbbe202fb994d72c66cf2868cbc55407af36b4a7c5b7fece"
+  },
   "game/common/ship_groups/00_ship_groups.txt": {
    "size": 668,
    "sha256": "bc4ea0057656ffd17b6fc5763dce52b3edf0f8b03575736875759f93c1fb3cd3"
@@ -3083,6 +3200,34 @@
   "game/common/static_modifiers/unification.txt": {
    "size": 413,
    "sha256": "a775306fdb7e7c7af79901ba1d0fe8f2bf187bd39a7e70f3002a21f2a1138e59"
+  },
+  "game/common/strategic_regions/african_strategic_regions.txt": {
+   "size": 2313,
+   "sha256": "8b8bd16d57f25c53a855c7307cea94c3824035dff1111505f214fad39f8e4de6"
+  },
+  "game/common/strategic_regions/east_asia_strategic_regions.txt": {
+   "size": 2761,
+   "sha256": "220b662fe36ba692338d8ddb217ef47b193b723dc28e37c5a4d6d0a456df8df0"
+  },
+  "game/common/strategic_regions/europe_strategic_regions.txt": {
+   "size": 7703,
+   "sha256": "1c4a54e6dc8bd8caa2079db47c07524ef2cbe17900b3861b82ba62e9ccc6973e"
+  },
+  "game/common/strategic_regions/north_america_strategic_regions.txt": {
+   "size": 2033,
+   "sha256": "4ce977e0d1c341868b5105b322927e6967d217355126fd0e646bd11175dc4701"
+  },
+  "game/common/strategic_regions/south_america_strategic_regions.txt": {
+   "size": 1352,
+   "sha256": "92fff7edb013f33a9bbe0641d8412abb0a618afabda18ce468297da9863b4556"
+  },
+  "game/common/strategic_regions/water_strategic_regions.txt": {
+   "size": 7116,
+   "sha256": "3bce450032c0231581b3daf644c0abf9b8ed659fe449674df62fb6f4635a7aaf"
+  },
+  "game/common/strategic_regions/west_south_asia_strategic_regions.txt": {
+   "size": 2354,
+   "sha256": "64549538054c9647bd7776caa5544a3020f6b420cd6f9cfcd310afa2051f88c1"
   },
   "game/common/subject_types/00_subject_types.txt": {
    "size": 12649,

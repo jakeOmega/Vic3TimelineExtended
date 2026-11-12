@@ -76,6 +76,9 @@ The old-save code's removal (#1407, 2026-11-06) rewrites te_demog_gini_band_stor
 The census's guards (#1476, 2026-11-06) cap crowding's infection factor at a pull of 5 (GUARDS_DIGESTS). No case's
 crowding comes near it, so no number changes.
 
+Fast mode's class pairs (#1046, 2026-11-12) add one sum to the walk's two absorbed blocks (CLASS_PAIR_DIGESTS), read
+only on fast mode's first Full step; no case holds a class pair, so no number changes.
+
 The death rates' decimals (#967, 2026-11-12) change the three census cases on purpose, in their last places, and
 nothing else. The sweep took a cohort's survivors as people x (1 - rate / 100000), which kept only the rate's whole
 deaths per 100,000, and the seed kept its growth power as a product cut at every age; both now multiply first
@@ -338,6 +341,12 @@ GUARDS_DIGESTS = {
     ("generated_values", "te_demog_f_infection_crowding"):
         "e1bee69b4cf134356a618db0a2d8514e766b0c109d8569abcaa69db7617c0ed7",
 }
+# Fast mode's class pairs (#1046): the walk's Full-only sums gain the moved lines' class pairs at their pops' bare deaths
+# (te_dg_w_edl), which only fast mode's first Full step reads; no recorded case holds a class pair, so no number changes.
+CLASS_PAIR_DIGESTS = {
+    ("generated_effects", "te_demog_absorbed_walk_init"): "d55951aa65b56203c04529399901e75f843a9c8241dc1d8c88e4340219cc2b3d",
+    ("generated_effects", "te_demog_absorbed_walk_pop"): "56dc6fbc4c5dd04fd655ae60386e607e3cae29cb53a2653eca85978a34e7a0b3",
+}
 
 
 def _ring300(name):
@@ -546,6 +555,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = STRATA_BIRTH_DIGESTS.get((key, name), want)
                 want = OLDSAVE_DIGESTS.get((key, name), want)
                 want = GUARDS_DIGESTS.get((key, name), want)
+                want = CLASS_PAIR_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

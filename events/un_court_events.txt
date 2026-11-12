@@ -21,7 +21,8 @@
 #
 #   un_court.1  hidden, to the claimant: the court rules (un_court_rule)
 #   un_court.2  to the holder, when a binding ruling goes against it: obey or
-#               defy (un_court_comply / un_court_defy)
+#               defy (un_court_comply / un_court_defy); a holder that voted
+#               for the referral may only obey
 #   un_court.3  to either party: what the court found, or what the holder did
 # ============================================================================
 
@@ -53,8 +54,28 @@ un_court.2 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_court.2.t
-	desc = un_court.2.d
-	flavor = un_court.2.f
+	# A holder that voted for the referral accepted the court's verdict in
+	# advance (un_resolution_target_may_accept, un_res_target_accepted): it
+	# may only obey (option B's trigger).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_court.2.d_accepted
+				trigger = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+			}
+			desc = un_court.2.d
+		}
+	}
+	# REVIEWED 2026-11-12 (unchosen_self_action): "our agent" is our counsel before the court, a standing post, not an operation; the audit reads the flavor's triggered_desc keys as desc
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_court.2.f_accepted
+				trigger = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+			}
+			desc = un_court.2.f
+		}
+	}
 
 	duration = 3
 
@@ -92,9 +113,13 @@ un_court.2 = {
 		un_court_comply = yes
 	}
 
-	# Option B: defy the court
+	# Option B: defy the court. Not open to a holder that voted for the
+	# referral.
 	option = {
 		name = un_court.2.b
+		trigger = {
+			NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+		}
 		ai_chance = {
 			base = 2
 			modifier = {

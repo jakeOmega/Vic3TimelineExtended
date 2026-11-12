@@ -72,6 +72,8 @@ import pm_employment_audit
 import script_argument_audit
 import variable_usage
 import loc_accessor_usage  # GET /loc-accessors (#1246)
+import state_history  # GET /state-history (#901)
+import strategic_regions  # GET /strategic-regions, /state-region (#917)
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -140,6 +142,9 @@ engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
 _company_catalog_cache: tuple[ModState, list[dict]] | None = None
 _party_catalog_cache: tuple[ModState, list[dict]] | None = None
+# (ModState, {state: record}, state-region table, vanilla source) for
+# /state-history; cleared with the catalogs on every load.
+_state_history_cache: tuple | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -4352,6 +4357,37 @@ def _party_catalog():
     return rows
 
 
+def _state_history_tables():
+    """(states, regions, source) for /state-history (#901): the start map
+    with the mod's own history files layered on (state_history.merge), the
+    hub table from `map_data/state_regions`, and where vanilla's history came
+    from. Vanilla follows the load's vanilla source: the snapshot's
+    `history/states.json`, or the game's files. Cached on `ms`."""
+    global _state_history_cache
+    if ms is None:
+        raise DataNotLoaded("State history")
+    if _state_history_cache is not None and _state_history_cache[0] is ms:
+        return _state_history_cache[1:]
+    rel = state_history.REL_DIR.split("/")
+    regions_rel = state_history.STATE_REGIONS_REL_DIR.split("/")
+    tree = _vanilla_tree_present()
+    if _vanilla_source.get("kind") == "vanilla_parsed" or not tree:
+        vanilla = vanilla_parsed.load_state_history(VANILLA_PARSED_DIR)
+        source = "vanilla_parsed"
+    else:
+        vanilla = state_history.parse_dir(os.path.join(base_game_path, "game", *rel))
+        source = "game_files"
+    if not vanilla:
+        raise DataNotLoaded("State history")
+    states = state_history.merge(vanilla, state_history.parse_dir(os.path.join(mod_path, *rel)))
+    regions = state_history.state_regions(
+        os.path.join(base_game_path, "game", *regions_rel) if tree else None,
+        os.path.join(mod_path, *regions_rel),
+    )
+    _state_history_cache = (ms, states, regions, source)
+    return states, regions, source
+
+
 def _data_contains_string(obj, needle):
     """Recursively check if *needle* appears as a string value anywhere in the data tree."""
     if isinstance(obj, str):
@@ -5871,6 +5907,24 @@ def _local_request_rejection(host, origin, port: int):
     return None
 
 
+def json_body(data) -> bytes:
+    """The bytes of a JSON response: what the server sends and what
+    `scripts/query.py` prints, so the two match byte for byte (#1538)."""
+    return json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+
+
+def encode_response(data, status: int = 200, what: str = "response") -> tuple[bytes, int]:
+    """(bytes, status) for a response body. One json can't encode (a set, a
+    Path) becomes the 500 body do_GET gives any other failure, so the client
+    gets an answer rather than a dropped connection. `what` names the request
+    in the log line."""
+    try:
+        return json_body(data), status
+    except Exception as exc:
+        logger.error(f"Error handling {what}: {exc}\n{traceback.format_exc()}")
+        return json_body({"error": f"{type(exc).__name__}: {exc}"}), 500
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- local-origin gate ------------------------------------------------
@@ -5906,23 +5960,28 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self._local_request_ok("GET"):
             return
-        parsed = urlparse(self.path)
+        data, status = self.get_result(self.path)
+        self._respond_json(data, status)
+
+    def get_result(self, path):
+        """(body, status) for GET `path`, with no socket: do_GET's routing and
+        error mapping, shared with the offline `scripts/query.py` (#1538)."""
+        parsed = urlparse(path)
         parts = [unquote(p) for p in parsed.path.strip("/").split("/") if p]
         params = parse_qs(parsed.query)
         try:
-            data = self.route(parts, params)
-            self._respond_json(data)
+            return self.route(parts, params), 200
         except _EndpointError as exc:
             # NotFound (404) / BadRequest (400) and the richer payload variants.
-            self._respond_json(exc.payload, exc.status)
+            return exc.payload, exc.status
         except _ServiceNotReady as exc:
-            self._respond_json(exc.payload, exc.status)
+            return exc.payload, exc.status
         except Exception as exc:
             # A bare KeyError lands here on purpose since #254: it means a
             # parsed record was missing a field, which is a server bug, not a
             # missing entity. Endpoints signal the latter with NotFound.
-            logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
-            self._respond_json({"error": f"{type(exc).__name__}: {exc}"}, 500)
+            logger.error(f"Error handling GET {path}: {exc}\n{traceback.format_exc()}")
+            return {"error": f"{type(exc).__name__}: {exc}"}, 500
 
     def do_POST(self):
         if not self._local_request_ok("POST"):
@@ -6038,6 +6097,13 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movement-stances": lambda: self._movement_stances(rest, params),
             # Party types and their merged join_weight terms (#1164)
             "parties": lambda: self._parties(rest, params),
+            # Strategic region <-> state region (#917)
+            "strategic-regions": lambda: self._strategic_regions(rest),
+            "state-region": lambda: self._state_region(rest),
+            # Who owns each state at game start (#901)
+            "state-history": lambda: self._state_history(rest, params),
+            # Prestige goods per base good, against the engine's cap (#749)
+            "prestige-goods": lambda: self._prestige_goods(params),
             "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             # Another mod's entries that land on ours, and which side wins (#1170)
@@ -6174,6 +6240,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
                 {"path": "/parties/<key?>?desc=<desc>", "desc": "Party types (mod ∪ vanilla, #1164): source vanilla|mod|both, defining files, the file whose join_weight the merged party carries (an injected join_weight replaces the field), and join_weight_terms, the desc of each term in source order (a desc-less term as `value = 0` / `if = {...}`). ?desc= keeps the parties naming it; /<key> adds per-term detail. Merged AST: /raw/Parties/<key>."},
+                {"path": "/strategic-regions/<name?>", "desc": "Strategic regions (mod ∪ vanilla, #917): the state regions each holds. /state-region/<STATE_X> is the inverse."},
+                {"path": "/state-region/<STATE_X>", "desc": "The strategic region a state region is in (#917)."},
+                {"path": "/state-history/<STATE_X?>?country=<TAG>&provinces=true", "desc": "Who owns each state on the start date (#901): one part per owning country, with its province count and the hubs (city, port, farm, mine, wood) it holds, plus homelands and claims. ?country= lists what a tag starts with. Works from vanilla_parsed/ with no game install."},
+                {"path": "/prestige-goods?base_good=<good>", "desc": "Prestige goods per base good (#749): origin vanilla|mod, prestige_bonus, the companies listing each, and count against the engine's cap of 3 per base good."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
@@ -7872,6 +7942,102 @@ class ModStateHandler(BaseHTTPRequestHandler):
             for row in rows
             if desc is None or desc in row["join_weight_terms"]
         ]
+
+    def _strategic_region_data(self):
+        data = ms.get_data("Strategic Regions") if ms is not None else None
+        if not data:
+            raise DataNotLoaded("Strategic Regions")
+        return data
+
+    def _strategic_regions(self, parts):
+        """GET /strategic-regions, GET /strategic-regions/<name> (#917): the
+        state regions a strategic region holds, mod REPLACEs applied."""
+        table = strategic_regions.region_states(self._strategic_region_data())
+        if not parts:
+            return [
+                {"name": name, "localized": ms.localize(name), "states": len(states)}
+                for name, states in table.items()
+            ]
+        name = parts[0]
+        if name not in table:
+            raise NotFound(name, did_you_mean=difflib.get_close_matches(name, list(table), n=5))
+        return {"name": name, "localized": ms.localize(name), "states": list(table[name])}
+
+    def _state_region(self, parts):
+        """GET /state-region/<STATE_X> (#917): its strategic region."""
+        if not parts:
+            raise BadRequest("Provide a state region, e.g. /state-region/STATE_SVEALAND")
+        state = parts[0]
+        of = strategic_regions.region_of(self._strategic_region_data())
+        if state not in of:
+            raise NotFound(state, did_you_mean=difflib.get_close_matches(state, list(of), n=5))
+        region = of[state]
+        return {
+            "state": state, "localized": ms.localize(state),
+            "strategic_region": region, "strategic_region_localized": ms.localize(region),
+        }
+
+    def _state_history(self, parts, params):
+        """GET /state-history/<STATE_X>[?provinces=true], GET
+        /state-history?country=<TAG>, GET /state-history (#901): who owns each
+        state on the start date, part by part for a split state, with the hub
+        provinces (city, port, farm, mine, wood) each part holds."""
+        states, regions, source = _state_history_tables()
+        region_of = strategic_regions.region_of(ms.get_data("Strategic Regions"))
+
+        def name(row, key="country"):
+            row[f"{key}_name"] = ms.localize(row[key]) if row.get(key) else None
+            return row
+
+        if parts:
+            state = parts[0]
+            if state not in states:
+                raise NotFound(state, did_you_mean=difflib.get_close_matches(state, list(states), n=5))
+            with_provinces = (params.get("provinces") or ["false"])[0].lower() in ("1", "true", "yes")
+            out = state_history.describe(state, states[state], regions, provinces=with_provinces)
+            out["parts"] = [name(p) for p in out["parts"]]
+            out["localized"] = ms.localize(state)
+            out["strategic_region"] = region_of.get(state)
+            out["vanilla_source"] = source
+            return out
+        tag = (params.get("country") or [None])[0]
+        if tag:
+            rows = state_history.owned_by(states, tag, regions)
+            if not rows:
+                raise NotFound(tag, hint="No state names this tag as an owner on the start date.")
+            return {
+                "country": tag, "country_name": ms.localize(tag),
+                "states": [dict(r, strategic_region=region_of.get(r["state"])) for r in rows],
+                "vanilla_source": source,
+            }
+        return {
+            **state_history.summary(states),
+            "vanilla_source": source,
+            "owners": {state: [p.get("country") for p in rec["parts"]]
+                       for state, rec in sorted(states.items())},
+        }
+
+    def _prestige_goods(self, params):
+        """GET /prestige-goods[?base_good=<good>] (#749): the prestige goods
+        that share each base good, who defines them and which companies list
+        them, against the engine's cap of three per base good."""
+        import prestige_good_roster_audit as roster
+
+        merged = ms.get_data("Prestige Goods") if ms is not None else None
+        if not merged:
+            raise DataNotLoaded("Prestige Goods")
+        vanilla = getattr(ms.base_parsers.get("Prestige Goods"), "data", None) or {}
+        rows = roster.prestige_slots(merged, vanilla, ms.get_data("Company Types") or {})
+        good = (params.get("base_good") or [None])[0]
+        if good is None:
+            return rows
+        row = next((r for r in rows if r["base_good"] == good), None)
+        if row is None:
+            if good not in (ms.get_data("Goods") or {}):
+                raise NotFound(good)
+            row = {"base_good": good, "count": 0, "cap": roster.PRESTIGE_GOODS_PER_BASE_GOOD,
+                   "free": roster.PRESTIGE_GOODS_PER_BASE_GOOD, "prestige_goods": []}
+        return row
 
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
@@ -10039,7 +10205,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
-        body = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+        what = f"{getattr(self, 'command', None) or 'request'} {getattr(self, 'path', '?')}"
+        body, status = encode_response(data, status, what)
         try:
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -10140,6 +10307,8 @@ POST_LOAD_AUDITS = [
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
     ("button_reason_audit",           "button_reason_audit"),
     ("faith_scene_audit",             "faith_scene_audit"),
+    ("sol_fraction_audit",            "sol_fraction_audit"),
+    ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
@@ -10276,7 +10445,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     None.
     """
     global _tech_unlocks_index_cache, _last_validation_report, _company_catalog_cache
-    global _party_catalog_cache
+    global _party_catalog_cache, _state_history_cache
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -10294,6 +10463,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
         _party_catalog_cache = None
+        _state_history_cache = None
         _overlap_state_cache.clear()
         _invalidate_call_index()
         _last_validation_report = None
@@ -10603,7 +10773,7 @@ _vanilla_source_warnings: list[dict] = []
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _company_catalog_cache, _party_catalog_cache
+    global _company_catalog_cache, _party_catalog_cache, _state_history_cache
     global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
@@ -10656,6 +10826,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     _tech_unlocks_index_cache = None
     _company_catalog_cache = None
     _party_catalog_cache = None
+    _state_history_cache = None
     _invalidate_call_index()
     _annotator_compute_cache.clear()
 

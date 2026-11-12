@@ -178,13 +178,13 @@ Added 2026-10-30, from the changelog and digest:
 - Contextless entries: whether `should_be_involved` is re-checked for countries created after activation, what `JournalEntry.GetCountry` and `je:` return for one, and whether `effect_all_involved` replaces 1.14.5's `on_*_all_involved` everywhere.
 - `diplomatic_play_acceptance`: its scopes and which sign means "backs down", read by logging it with `debug_log` on 1.14.5.
 - How vanilla wires `will_incorporate_state` into `common/ai_strategies`, and the cost of `military_reach` inside AI loops.
-- Whether `make_independent` already leaves the former overlord's plays (so `leave_plays_supporting` is redundant).
+- Whether `make_independent` already leaves the former overlord's plays (so `leave_plays_supporting` is redundant). Built with the effect regardless (#1455); the `decol_leave_plays` self-check reads it (`docs/testing/colonial-wars-playtest.md`).
 - The keys of the Scandalous trait and the Hemophilia condition.
 - The `<TAG>_DEF` key's case and what the map-name rule shows without one.
 - The syntax for alternative names of goods, buildings, religions, cultures, interest groups and subject types.
 - How monument trivia is defined.
 - Whether `map_color` takes a scope path such as a `color` link.
-- Whether a non-draft `create_treaty` with `state_transfer` moves the state on creation.
+- Whether a non-draft `create_treaty` with `state_transfer` moves the state on creation. Built on it with a self-check and a direct fallback (#1457): `TE_SELF_CHECK OK|BROKEN treaty_state_transfer` and `treaty_reparations`, `docs/testing/vanilla-1-15-playtest.md`.
 - Whether `MAX_MANDATES` caps `country_power_bloc_formation_mandates_add`.
 - Whether the Five-Year Plan pays through investment-pool income.
 - Whether the Electoral Confidence notification fires on scripted changes.
@@ -732,7 +732,7 @@ Systems, rebalances and UI that touch the mod's design. None blocks the load; ea
 
 **UI.**
 - **Unrealized Taxes** (a per-state list in the budget panel; the state tooltip shows them): nothing in the mod duplicates it. The Tax Code's Regional Relief (`state_tax_collection_mult` −0.25/−0.5) will show there as uncollected tax, so add a line to the relief tooltip and the tax chapter. Only visible once `budget_panel.gui` is rebuilt (§ 3.4).
-- **State Infamy map mode** shows vanilla's `state_infamy_value`, so the mod's goals that charge their own figures will disagree with it: `te_force_become_subject` and `te_un_mandate_restore_state`'s fallback, items 1–2 of `vanilla_1_14_5_migration.md`'s open infamy list. Finishing those fixes the visible part. **State Value** may make § 4.1's GDP-per-capita map unnecessary.
+- **State Infamy map mode** shows vanilla's `state_infamy_value`, so the mod's goals that charge their own figures will disagree with it: `te_force_become_subject` and `te_un_mandate_restore_state`'s fallback, items 1–2 of `vanilla_1_14_5_migration.md`'s open infamy list. Both now read vanilla's values (#387), so the visible part is fixed. **State Value** may make § 4.1's GDP-per-capita map unnecessary.
 - **The journal panel**: themed groups (a themed Space Race group for the nine milestone entries; finally a use for `je_group_environment`, with Global Warming); entry tooltips now list active modifiers, so the UN (566 `je:je_united_nations` references), Banking (213) and Global Warming (130) entries will have long ones. Check them in game.
 - **Long tooltips now nest their overflow** (journal entries, event options). `long_tooltip_audit` is unaffected: it enforces the house style on the mod's own `.gui` tooltips, not an overflow workaround. But `tooltip.gui` redefines vanilla's base tooltip types (§ 3.4), and would switch the nesting off everywhere if it lives there.
 

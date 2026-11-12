@@ -392,6 +392,30 @@ class CommandLineTest(unittest.TestCase):
     def events(self):
         return [e["event"] for e in snapshot.journal(self.the_snapshot())]
 
+    @contextlib.contextmanager
+    def naps_clock(self):
+        """Inside, the backup drive's clock is the naps': the machine's time on entry, to the second, plus the
+        seconds `_nap` adds from then on. Yields a function that reads it. Journal times, and the file times a
+        test sets from it, are then as far apart as the run's steps make them, whatever the machine's clock does.
+        Two tests whose restore must happen relied on that clock (#1648): WSL steps it by seconds, a step back
+        between the run's write and its `game_exited` made the write look later than the exit, and one forward
+        between two lines made a resumed `watch`'s gap look longer than WATCH_RESUME_GAP_S."""
+        base = dt.datetime.now(UTC).replace(microsecond=0) - dt.timedelta(seconds=self.clock)
+
+        def now():
+            return base + dt.timedelta(seconds=self.clock)
+
+        with mock.patch.object(snapshot, "_drive_clock", lambda folder: now()):
+            yield now
+
+    def why(self, out) -> str:
+        """For an assertion on a restore: its reply (with the reason a hold gave), the journal, and each file's
+        time, so that a hold the test did not expect says why it held (#1648)."""
+        times = {str(p.relative_to(self.user)): dt.datetime.fromtimestamp(p.stat().st_mtime, UTC).isoformat()
+                 for p in sorted(self.user.rglob("*")) if p.is_file()}
+        return (f"\nreply: {out}\njournal: {snapshot.journal(self.the_snapshot())}\nfile times: {times}"
+                f"\nmachine clock: {dt.datetime.now(UTC).isoformat()}")
+
     def owner_writes(self, rel, data, minutes_ago):
         """The owner writes `rel`, dated that many minutes ago."""
         path = self.user / rel
@@ -574,19 +598,23 @@ class CommandLineTest(unittest.TestCase):
         game = self.game(seconds_from_now=1)
         self.start_result = game
         args = ["-gdpr-compliant", "-debug_mode", "-loadsave=te_qa_fixture_x"]
-        out, code = self.launch(taken["id"], *args)
-        self.assertEqual((code, out), (0, {"id": taken["id"], "pid": game.pid, "created": game.created, "args": args}))
-        exe = self.base_game / "binaries" / "victoria3.exe"
-        self.assertEqual(self.starts, [("W:" + str(exe), args, "W:" + str(exe.parent))])   # nothing added
-        started = snapshot.journal(self.the_snapshot())[-1]
-        self.assertEqual((started["event"], started["pid"], started["created"], started["args"]),
-                         ("started", game.pid, game.created, args))
-        (self.user / "continue_game.json").write_text('{"title": "te_qa_fixture_x"}')
-        self.games = [[game], [game], []]
-        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
-        self.games = []
-        out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"], out["restored"]), (0, False, ["continue_game.json"]))
+        with self.naps_clock() as now:      # the run's write is judged against its exit (#1648)
+            out, code = self.launch(taken["id"], *args)
+            self.assertEqual((code, out),
+                             (0, {"id": taken["id"], "pid": game.pid, "created": game.created, "args": args}))
+            exe = self.base_game / "binaries" / "victoria3.exe"
+            self.assertEqual(self.starts, [("W:" + str(exe), args, "W:" + str(exe.parent))])   # nothing added
+            started = snapshot.journal(self.the_snapshot())[-1]
+            self.assertEqual((started["event"], started["pid"], started["created"], started["args"]),
+                             ("started", game.pid, game.created, args))
+            run_write = self.user / "continue_game.json"
+            run_write.write_text('{"title": "te_qa_fixture_x"}')
+            os.utime(run_write, (now().timestamp(), now().timestamp()))   # while the run's game is up
+            self.games = [[game], [game], []]
+            self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+            self.games = []
+            out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"], out["restored"]), (0, False, ["continue_game.json"]), self.why(out))
         self.assertEqual(self.tree(), before)
 
     def test_launch_refuses_beside_any_running_game(self):
@@ -1214,15 +1242,18 @@ class CommandLineTest(unittest.TestCase):
     def test_a_watch_resumed_within_fifteen_seconds_restores_as_before(self):
         taken, _ = self.run_cli("snapshot")
         game = self.game(seconds_from_now=-30)
-        lately = dt.datetime.now(UTC) - dt.timedelta(seconds=5)
-        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {"gap_s": 1}),
-                              ("heartbeat", {})):
-            snapshot.record(self.the_snapshot(), event, now=lately, **fields)
-        self.games = [[game], [game], []]
-        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
-        self.games = []
-        out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"]), (0, False))
+        with self.naps_clock() as now:      # the gap is the drive clock's time since `lately` (#1648)
+            lately = now() - dt.timedelta(seconds=5)
+            for event, fields in (("started", {"pid": game.pid, "created": game.created}),
+                                  ("watching", {"gap_s": 1}), ("heartbeat", {})):
+                snapshot.record(self.the_snapshot(), event, now=lately, **fields)
+            self.games = [[game], [game], []]
+            self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+            resumed = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watch_resumed"]
+            self.assertEqual([e["gap_s"] for e in resumed], [5.0])
+            self.games = []
+            out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
         self.assertEqual(self.events()[-1], "restored")
 
     def test_a_first_watch_more_than_two_minutes_after_launch_leads_to_a_hold(self):

@@ -243,8 +243,10 @@ often as it condemns once it also has Colonial Exploitation or an ally that
 holds colonies. An AI takes a side only with 150 influence and 100
 more to spare, and drops its stance when its influence runs negative. When a
 Decolonization Resolution passes at the United Nations, every great power that
-voted for it, or voted against it and then accepted it, takes the anti-colonial
-stance automatically, and can't change it for 24 months.
+voted for it takes the anti-colonial stance automatically, and can't change it
+for 24 months; one that voted against it is bound by the resolution but takes no
+stance. An AI power with colonies or colonial subjects leans against the
+resolution.
 
 Each condemning great power costs you about 0.45 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
@@ -372,7 +374,7 @@ subject ends the entry (see [How a colonial empire ends](#how-a-colonial-empire-
 
 Once the UN charter carries Charter Reform II and the Decolonization Resolution
 is in force, the General Assembly can order a referendum in a direct subject
-whose liberty desire is 50 or more. You hold it, and the subject leaves with a
+whose liberty desire is 50 or more, unless a war is already set to free it. You hold it, and the subject leaves with a
 chance equal to its liberty desire, or you refuse and pay in standing,
 prestige and the loyalty of every subject (see [Supervised
 referendums](10-united-nations.md#supervised-referendums)).
@@ -464,7 +466,8 @@ Open Talks on a war's row asks for a popup first. Talks take six months while
 the fighting goes on. When the accords are signed, your claim is dropped and
 the rebels accept a peace: offer one from the peace screen, conceding their
 independence if they refuse a white peace. An AI opens talks after half a year
-of war support in the red, or after four years.
+of war support in the red, after four years, or once the war is counting down
+to a stalemate.
 
 A war that has run four years, with your war support in it at 25 or below for a
 year running, breaks the home front. Without a voting franchise, junior
@@ -494,7 +497,11 @@ instead, for two years, but never joins the war.
 The journal entry ends in one of four ways. The event you get when the empire
 holds or collapses depends on the program you ran longest, counting a month at
 level 1 or 2 as a third or two thirds of a month, and only a program with more
-than 24 months.
+than 24 months. On a tie, Military Garrison counts as the longest, then
+Colonial Development Investment. The journal panel lists each of the nine
+endings (the two federations, the four ways the empire holds, the voluntary end
+and the two collapses) with its conditions and the months each program has
+run, so you can see which one the empire is heading for.
 
 | Ending | Condition | Result |
 |---|---|---|

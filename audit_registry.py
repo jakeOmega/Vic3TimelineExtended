@@ -96,6 +96,22 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `limit = {` line or the iterator's opener line",
     ),
     Audit(
+        "delayed_event_trigger_audit",
+        "Not a gate: lists the events queued with a delay whose `trigger` may be false when queued, "
+        "which seems to drop them (#1596), for the play-test that settles the rule.",
+        ci=None,
+        where="trailing on the target event's `trigger = {` line",
+        note="A report: it fails nothing and adds no reload warning until the self-check "
+             "`delayed_trigger_queue_check` confirms the rule. `--write` writes the report offline.",
+    ),
+    Audit(
+        "random_list_weight_audit",
+        "A `trigger = { }` in a `random_list` branch's weight `modifier`: the engine rejects the token "
+        "and the tilt is lost. Use `if = { limit = { ... } add = N }`; the `ai_chance` form is valid.",
+        post_load=False,
+        report=None,
+    ),
+    Audit(
         "effect_trigger_validity_audit",
         "An effect or trigger name the engine doesn't know, or a known one in the wrong kind of block (an "
         "effect where triggers are read, or the reverse). The engine logs it at load and drops the line.",
@@ -169,6 +185,12 @@ AUDITS: tuple[Audit, ...] = (
         "modifier_visibility_audit",
         "A modifier value too small to show at its type's `decimals = N`, so the tooltip prints 0.",
         ci=None,
+        where=VALUE_LINE,
+    ),
+    Audit(
+        "sol_fraction_audit",
+        "A `*_standard_of_living_add` that is not a whole number and is not scaled before it applies. "
+        "Standard of living is an integer, so the fraction does nothing on its own (#338).",
         where=VALUE_LINE,
     ),
     Audit(
@@ -277,11 +299,11 @@ AUDITS: tuple[Audit, ...] = (
         "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root; or a "
         "party scope in a block that does not bind it: `scope:source_country` / `scope:target_country` "
         "in `visible` / `possible` (use root and `scope:other_country`), or `scope:other_country` in "
-        "`can_ratify` / `requirement_to_maintain` (use source / target; first / second on a mutual "
-        "article).",
+        "`can_ratify` / `requirement_to_maintain` / `can_propose` (use source / target; first / "
+        "second on a mutual article).",
         post_load=False,
-        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify` or "
-              "`requirement_to_maintain`; a read in `evaluation_chance` takes none",
+        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify`, "
+              "`requirement_to_maintain` or `can_propose`; a read in `evaluation_chance` takes none",
         tags=("treaty_scope",),
         report=None,
         note="Direct reads only: it does not open a scripted trigger or value the block calls.",
@@ -295,11 +317,11 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "prestige_good_roster_audit",
-        "A company prestige good no `building_types` building of the company can make, or one on a "
-        "`local = yes` good.",
+        "A company prestige good no `building_types` building of the company can make, one on a "
+        "`local = yes` good, or a fourth prestige good on one base good (the engine keeps three).",
         where="trailing on the prestige good's line in `possible_prestige_goods` or the company's "
-              "opening line (covers the whole company); for a `local` flag, the prestige good's "
-              "opening line",
+              "opening line (covers the whole company); for a `local` or cap flag, the prestige "
+              "good's opening line",
     ),
     Audit(
         "amendment_reachability_audit",
@@ -392,9 +414,13 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "localization_accessor_audit",
-        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow.",
-        ci=None,
+        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. The engine "
+        "renders it as nothing.",
+        ci=(),
         where="trailing on the loc line",
+        note="The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's "
+             "loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing "
+             "(#348; its row in python_tools.md).",
     ),
     # --- GUI and assets ------------------------------------------------------
     Audit(

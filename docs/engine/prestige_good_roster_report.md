@@ -14,13 +14,17 @@ and `extension_only` (only an `extension_building_types` building
 does, which needs an industry charter; a company holds one at a time).
 Flagged per prestige good the mod defines: `local_base_good` (its base
 good is `local = yes`, and a prestige version of a local good does
-nothing).
+nothing). Flagged per base good that carries one of the mod's prestige
+goods: `base_good_cap` (more than three prestige goods, vanilla's and
+the mod's together, share it; the engine keeps three and asserts in
+`debug.log` on the rest).
 
 Suppress a deliberate case with a trailing
 `# REVIEWED YYYY-MM-DD: rationale` comment on the prestige good's line
 in `possible_prestige_goods` or on the company's opening `<name> = {`
 line (covers every flag on that company); for `local_base_good`, on
-the prestige good's opening line in `common/prestige_goods/`.
+the prestige good's opening line in `common/prestige_goods/` (for
+`base_good_cap`, on any of the mod's prestige goods of that base good).
 
 ## Unreviewed Flags
 
@@ -34,67 +38,9 @@ _None._
 
 - mod-touched companies checked: 317
 - vanilla-only companies not judged: 10
-- prestige goods checked: 216
-- prestige goods with an unknown base good (vanilla named goods, not in the snapshot), not judged: 55
+- prestige goods checked: 283
+- prestige goods with an unknown base good (defined by neither vanilla nor the mod), not judged: 0
 - total flags: 0
 - unreviewed: 0
 - exempted: 0
-
-### Unknown base goods
-
-- `prestige_good_acorn_fed_pork`: `company_klanicko_drustvo`
-- `prestige_good_assam_tea`: `company_assam_company`
-- `prestige_good_bacardi_rum`: `company_bacardi`
-- `prestige_good_baku_oil`: `company_branobel`
-- `prestige_good_basma_tobacco`: `company_united_tobacco_factories`
-- `prestige_good_bengal_opium`: `company_east_india_company`
-- `prestige_good_bentwood_furniture`: `company_gebruder_thonet`
-- `prestige_good_bohemian_crystal`: `company_ludwig_moser_and_sons`
-- `prestige_good_brunn_type_engines`: `company_airbus`, `company_erste_brunner`, `company_ferrari`, `company_hyundai`, `company_volkswagen`
-- `prestige_good_burmese_teak`: `company_bombay_burmah_trading_corporation`
-- `prestige_good_canton_porcelain`: `company_jingdezhen`
-- `prestige_good_champagne`: `company_cgv`
-- `prestige_good_china_tea`: `company_ong_lung_sheng_tea_company`
-- `prestige_good_cigars`: `company_rodriguez_arguelles_y_cia`
-- `prestige_good_clyde_built_liners`: `company_john_brown`
-- `prestige_good_colt_revolvers`: `company_colt_firearms`
-- `prestige_good_como_silk`: `company_mantero_seta`
-- `prestige_good_english_upholstery`: `company_maple_and_co`
-- `prestige_good_ericsson_apparatus`: `company_ericsson`
-- `prestige_good_ferranti_radios`: `company_ferranti_ltd`
-- `prestige_good_ford_automobiles`: `company_ford_motor`
-- `prestige_good_german_aniline`: `company_basf`, `company_bayer`, `company_ig_farben`
-- `prestige_good_grand_strategy_games`: `company_paradox`
-- `prestige_good_gros_michel_banana`: `company_united_fruit`
-- `prestige_good_haute_couture`: `company_maison_worth`
-- `prestige_good_havana_sugar`: `company_gran_azucarera`
-- `prestige_good_java_coffee`: `company_nhm`
-- `prestige_good_kikkoman_soy_sauce`: `company_noda_shoyu`
-- `prestige_good_krupp_guns`: `company_krupp`
-- `prestige_good_meissen_porcelain`: `company_konigliche_porzellan_manufaktur_meissen`
-- `prestige_good_mit_afifi`: `company_misr`
-- `prestige_good_oerlikon_engines`: `company_maschinenfabrik_oerlikon`
-- `prestige_good_pannonian_patent_flour`: `company_elso_budapesti_gozmalom`
-- `prestige_good_philips_chapel_radio`: `company_philips`
-- `prestige_good_port_wine`: `company_douro_wine_company`
-- `prestige_good_radiola_radios`: `company_apple`, `company_basic_electrics`, `company_ericsson`, `company_general_electric`, `company_nokia`, `company_samsung`
-- `prestige_good_river_plate_beef`: `company_compania_sansinena_de_carnes_congeladas`
-- `prestige_good_rosewood`: `company_kablin`
-- `prestige_good_russia_iron`: `company_john_hughes`
-- `prestige_good_saint_etienne_rifles`: `company_saint_etienne`
-- `prestige_good_satsuma_ware`: `company_kinkozan_sobei`
-- `prestige_good_schichau_engines`: `company_schichau`
-- `prestige_good_schneider_guns`: `company_schneider_creusot`
-- `prestige_good_sea_island_cotton`: `company_lee_wilson`
-- `prestige_good_sheffield_steel`: `company_bolckow_vaughan`
-- `prestige_good_sherry`: `company_pedro_domecq`
-- `prestige_good_sicilian_sulfur`: `company_anglo_sicilian_sulphur_company`
-- `prestige_good_smirnoff_vodka`: `company_vodka_monopoly`
-- `prestige_good_suzhou_silk`: `company_jiangnan_weaving_bureaus`
-- `prestige_good_swedish_bar_iron`: `company_lkab`
-- `prestige_good_tomioka_silk`: `company_mitsui`
-- `prestige_good_turin_automobiles`: `company_fiat`
-- `prestige_good_turkish_tobacco`: `company_ottoman_tobacco_regie`
-- `prestige_good_washi_paper`: `company_mitsubishi`
-- `prestige_good_white_star_liners`: `company_white_star_line`
 

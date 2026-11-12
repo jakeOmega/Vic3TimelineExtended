@@ -1403,8 +1403,9 @@ class PrivateTest(unittest.TestCase):
 
 class TooltipKeysTest(unittest.TestCase):
     """The keys a scripted GUI's effect prints into a hover (custom_tooltip)
-    are invisible to test_te_system_tab_bodies.py's BindingTest and to the
-    rebinding tool. Every handler another country's panel asks for a tooltip
+    were invisible to test_te_system_tab_bodies.py's BindingTest and to the
+    rebinding tool when this was written (both follow them since #1361; this
+    names the handlers, and checks the true count too). Every handler another country's panel asks for a tooltip
     (ExecuteTooltip, IsValidTooltip, IsShownTooltip) prints keys that read no
     entry and no player (the root is the shown country), and nothing of the
     true count. The private sections' breakdowns are not asked there at all."""

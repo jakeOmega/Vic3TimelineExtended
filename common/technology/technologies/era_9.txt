@@ -381,7 +381,7 @@ advanced_body_armor = {
 
 rapid_deployment_forces = {
 	# Stealth Reconnaissance Drone Carrier, Expeditionary Sea Bases units,
-	# Advanced Logisitical Support mobilization option
+	# Advanced Logistical Support mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/rapid_deployment_forces.dds"
 	category = military
@@ -407,7 +407,7 @@ rapid_deployment_forces = {
 }
 
 globalization = {
-	# Global Ports PM for Ports, Just-in-Time Logisitics PM for Trade Centers,
+	# Global Ports PM for Ports, Just-in-Time Logistics PM for Trade Centers,
 	# Securitization and Derivatives law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/globalization.dds"
@@ -428,6 +428,8 @@ globalization = {
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_globalization_pb_principles_bool = yes
 		country_te_pb_principle_slots_add = 1
+		# A bloc formed after this starts with a mandate for the new slot (1.15, #1458)
+		country_power_bloc_formation_mandates_add = 1
 
 		# Colonial empire (je_colonial_empire): globalization makes empire
 		# unsustainable unless the metropole pays to hold it. Six era 9 techs

@@ -7,24 +7,39 @@ Mirrors the structure of test_event_magnitude_audit.py:
 - ValidationTests: chain walk, success and failure modes
 - SuppressionTests: # REVIEWED comment parsing
 - EndToEndTests: tempdir audit + report rendering
-- VanillaCleanTests: zero unreviewed flags on vanilla loc (skipUnless installed)
+- WalkTests / BlindPairTests: the chain walker and the blind-pair detector (#348)
+- VanillaSnapshotTests: the catalog against the committed vanilla snapshot
+- VanillaCleanTests: the same against a game install (skipUnless installed)
 """
 import os
 import tempfile
 import unittest
 
+import localization_accessor_audit as audit_mod
 from localization_accessor_audit import (
+    BLIND_UNDETERMINED,
+    HAND_TYPED_ACCESSORS,
+    KNOWN_VANILLA_FLAGS,
+    VANILLA_EXTRACTED_ACCESSORS,
     _load_engine_catalog,
     _split_chain,
     _strip_format_modifier,
     audit,
+    audit_lines,
     classify_context,
     extract_chains,
+    find_blind_pairs,
+    lines_from_dict,
+    load_vanilla_snapshot_loc,
+    merge_folded,
     parse_reviewed_comment,
     render_report,
     resolve_first_step,
     validate_chain,
+    walk_chain,
 )
+
+REPO = os.path.dirname(os.path.abspath(__file__))
 
 
 VANILLA_LOC_PATH = (
@@ -448,28 +463,269 @@ class EndToEndTests(unittest.TestCase):
         self.assertNotIn("4007", text)
 
 
+# A small catalog for the walker and the detector: `GetOwner` is typed, the
+# two `value`s are a hand-typed one and a folded one.
+_HAND = {
+    "state": {"GetName": "value", "GetOwner": "country", "GetHub": "value"},
+    "country": {"GetName": "value", "GetCapital": "state"},
+}
+_FOLDED = {
+    "state": {"GetMayor": "value", "GetPopulation": "value"},
+    "country": {"GetBloc": "value"},
+}
+_CATALOG = merge_folded(_HAND, _FOLDED)
+
+
+class WalkTests(unittest.TestCase):
+    def steps(self, text, catalog=None):
+        chain = extract_chains(text)[0]
+        return [(s.index, s.receiver, s.name, s.returns, s.last)
+                for s in walk_chain(chain, "events", catalog or _CATALOG)]
+
+    def test_every_step_carries_its_receiver_and_return_type(self):
+        self.assertEqual(
+            self.steps("[STATE.GetOwner.GetCapital.GetName|U]"),
+            [(1, "state", "GetOwner", "country", False),
+             (2, "country", "GetCapital", "state", False),
+             (3, "state", "GetName", "value", True)])
+
+    def test_arguments_are_stripped_from_the_name(self):
+        self.assertEqual(self.steps("[STATE.GetOwner(ROOT.Self).GetName]")[0][2], "GetOwner")
+
+    def test_the_walk_ends_after_a_value(self):
+        # `GetName` after the `value` is what validate_chain accepts unread.
+        self.assertEqual(
+            self.steps("[STATE.GetMayor.GetName]"),
+            [(1, "state", "GetMayor", "value", False)])
+
+    def test_an_unlisted_accessor_is_the_last_step_yielded(self):
+        steps = self.steps("[STATE.GetNoSuch.GetName]")
+        self.assertEqual(steps, [(1, "state", "GetNoSuch", None, False)])
+        chain = extract_chains("[STATE.GetNoSuch.GetName]")[0]
+        self.assertIn("GetNoSuch", validate_chain(chain, "events", _CATALOG))
+
+    def test_an_unknown_first_step_yields_nothing(self):
+        self.assertEqual(self.steps("[NoSuchScope.GetOwner.GetName]"), [])
+        self.assertEqual(self.steps("[STATE]"), [])
+
+
+class BlindPairTests(unittest.TestCase):
+    """#348: a `value` that some chain continues past is where the check stops."""
+
+    def find(self, loc, **kwargs):
+        kwargs.setdefault("hand_typed", _HAND)
+        return find_blind_pairs(lines_from_dict(loc), _CATALOG, **kwargs)
+
+    def test_a_value_chained_further_is_blind(self):
+        pairs = self.find({"k.1.d": "[STATE.GetMayor.GetFullName] [STATE.GetMayor.GetAge]",
+                           "k.2.d": "[STATE.GetOwner.GetCapital.GetMayor.GetFullName]"})
+        self.assertEqual([p.name for p in pairs], ["state.GetMayor"])
+        pair = pairs[0]
+        self.assertEqual(pair.chains, 3)
+        self.assertFalse(pair.hand_typed)
+        self.assertEqual(pair.continuations, {"GetFullName": 2, "GetAge": 1})
+        self.assertEqual((pair.example_key, pair.example_chain),
+                         ("k.1.d", "STATE.GetMayor.GetFullName"))
+
+    def test_a_value_at_the_end_of_its_chain_is_not_blind(self):
+        self.assertEqual(self.find({"k.1.d": "[STATE.GetMayor] [STATE.GetPopulation|D]"}), [])
+
+    def test_a_typed_accessor_is_never_blind(self):
+        self.assertEqual(self.find({"k.1.d": "[STATE.GetOwner.GetName]"}), [])
+
+    def test_hand_typed_and_folded_values_are_told_apart(self):
+        pairs = self.find({"k.1.d": "[STATE.GetHub.GetName] [COUNTRY.GetBloc.GetName]"})
+        self.assertEqual({p.name: p.hand_typed for p in pairs},
+                         {"state.GetHub": True, "country.GetBloc": False})
+
+    def test_most_chained_first(self):
+        pairs = self.find({"k.1.d": "[COUNTRY.GetBloc.GetName] [STATE.GetMayor.GetAge]",
+                           "k.2.d": "[STATE.GetMayor.GetAge]"})
+        self.assertEqual([p.name for p in pairs], ["state.GetMayor", "country.GetBloc"])
+
+    def test_only_the_first_value_of_a_chain_counts(self):
+        # Past the first `value` nothing is typed, so nothing more is found.
+        pairs = self.find({"k.1.d": "[STATE.GetMayor.GetPopulation.GetName]"})
+        self.assertEqual([p.name for p in pairs], ["state.GetMayor"])
+
+    def test_typing_the_accessor_ends_the_blindness(self):
+        loc = {"k.1.d": "[STATE.GetMayor.GetNoSuch]"}
+        lines = lines_from_dict(loc)
+        self.assertEqual(audit_lines(lines, _CATALOG).flags, [])  # accepted unread
+        typed = merge_folded({**_HAND, "state": {**_HAND["state"], "GetMayor": "character"},
+                              "character": {"GetFullName": "value"}}, _FOLDED)
+        self.assertEqual(find_blind_pairs(lines, typed, hand_typed=_HAND), [])
+        flags = audit_lines(lines, typed).flags
+        self.assertEqual([f.key for f in flags], ["k.1.d"])
+        self.assertIn("'GetNoSuch' is not valid on type 'character'", flags[0].reason)
+
+    def test_report_lists_where_the_check_stops(self):
+        with tempfile.TemporaryDirectory() as td:
+            with open(os.path.join(td, "x_l_english.yml"), "w", encoding="utf-8-sig") as f:
+                f.write("l_english:\n")
+                f.write(' some_key:0 "[ROOT.Var(\'x\').GetValue] [ROOT.GetName]"\n')
+            result = audit(td, engine_docs_dir=os.path.join(REPO, "docs", "engine"), blind=True)
+            self.assertEqual([p.name for p in result.blind.mod], ["country.Var"])
+            text = render_report(result)
+            self.assertIn("## Where the check stops", text)
+            self.assertIn("### The mod's own chains past a `value`", text)
+            self.assertIn("- `country.Var`, then `GetValue`", text)
+            for (typ, accessor), why in BLIND_UNDETERMINED.items():
+                self.assertIn(f"- `{typ}.{accessor}`, then ", text)
+                self.assertIn(why, text)
+            self.assertNotIn("to be typed", text)
+            # Without `blind` the section is left out, and no snapshot is read.
+            plain = audit(td, engine_docs_dir=os.path.join(REPO, "docs", "engine"))
+            self.assertIsNone(plain.blind)
+            self.assertNotIn("Where the check stops", render_report(plain))
+
+    def test_report_names_a_folded_pair_nobody_has_typed(self):
+        blind = audit_mod.BlindReport(
+            vanilla_version="9.9", mod=[],
+            vanilla=find_blind_pairs(lines_from_dict({"k.1.d": "[STATE.GetMayor.GetAge]"}),
+                                     _CATALOG, hand_typed=_HAND))
+        self.assertEqual([p.name for p in blind.untyped_folded], ["state.GetMayor"])
+        text = "\n".join(audit_mod._render_blind(blind))
+        self.assertIn("**Folded as `value`, to be typed (1).**", text)
+        self.assertIn("- `state.GetMayor`, then `GetAge`", text)
+
+
+# The hand-typed `value`s that vanilla 1.15.1 chains further through. #348
+# typed the folded ones; these were written `value` on purpose, most before the
+# catalog had a type for what they return, and they are listed here so the set
+# can only change in the open. Drop a name when its accessor gets a real type.
+HAND_TYPED_BLIND = {
+    "building.GetBuildingType",
+    "character.GetIdeology",
+    "character.GetOrderType",
+    "character.GetPrimaryRole",
+    "country.GetAttitudeTowards",
+    "country.GetGovernment",
+    "country.GetLawBeingEnacted",
+    "country.GetSubjectType",
+    "country.Var",
+    "law.GetGroup",
+    "military_formation.GetSelectedUnitTypeForGroup",
+    "military_formation.GetShipList",
+    "political_movement.GetCivilWar",
+    "pop.GetPopType",
+    "power_bloc.GetIdentity",
+    "scope_object.GetInvasion",
+    "scope_object.Var",
+    "scope_object.sFront",
+    "scope_object.sPowerBlocPrinciple",
+    "state.GetFoodSecurity",
+}
+
+
+class VanillaSnapshotTests(unittest.TestCase):
+    """The catalog against vanilla's own loc, from the committed snapshot.
+
+    The engine reads vanilla's loc, so a flag there is a gap in the catalog (or
+    a vanilla mistake, listed by key), and an accessor vanilla chains further
+    through returns an object. This is the calibration CI can run: the test on
+    the game install below skips without one.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        snapshot = load_vanilla_snapshot_loc()
+        assert snapshot is not None, "vanilla_parsed/ is committed; this test needs it"
+        cls.lines = lines_from_dict(snapshot[0])
+        cls.catalog = _load_engine_catalog(os.path.join(REPO, "docs", "engine"))
+        cls.result = audit_lines(cls.lines, cls.catalog)
+        cls.blind = find_blind_pairs(cls.lines, cls.catalog)
+
+    def test_vanilla_flags_are_exactly_the_known_ones(self):
+        flagged = {(f.key, f.chain) for f in self.result.flags}
+        new = sorted(flagged - set(KNOWN_VANILLA_FLAGS))
+        gone = sorted(set(KNOWN_VANILLA_FLAGS) - flagged)
+        self.assertEqual(
+            (new, gone), ([], []),
+            "vanilla's loc flags differently from KNOWN_VANILLA_FLAGS.\n"
+            "New flags are catalog gaps: run scripts/generators/"
+            "fold_vanilla_loc_accessors.py --dry-run and follow it. A listed flag "
+            "that no longer fires comes out of the table.\n"
+            f"new: {[(f.key, f.chain, f.reason) for f in self.result.flags if (f.key, f.chain) in new]}\n"
+            f"gone: {gone}")
+
+    def test_no_folded_accessor_is_chained_further_unexplained(self):
+        folded = {(p.type, p.accessor) for p in self.blind if not p.hand_typed}
+        self.assertEqual(
+            folded, set(BLIND_UNDETERMINED),
+            "A folded accessor typed `value` that vanilla chains further through "
+            "returns an object: type it in _BUILTIN_ACCESSORS_BY_TYPE and rerun the "
+            "fold, or say in BLIND_UNDETERMINED why nothing determines its type.")
+
+    def test_hand_typed_blind_pairs_are_the_listed_ones(self):
+        self.assertEqual({p.name for p in self.blind if p.hand_typed}, HAND_TYPED_BLIND)
+
+    def test_extras_hold_only_unshadowed_values(self):
+        # What a run of the fold leaves: every entry a `value`, none that the
+        # hand table defines too.
+        for typ, accessors in VANILLA_EXTRACTED_ACCESSORS.items():
+            self.assertEqual({a for a, ret in accessors.items() if ret != "value"}, set(), typ)
+            self.assertEqual(set(accessors) & set(HAND_TYPED_ACCESSORS.get(typ, {})), set(), typ)
+
+    def test_every_hand_typed_return_type_exists(self):
+        # A misspelt return type has no accessors, so every step after it flags.
+        for typ, accessors in HAND_TYPED_ACCESSORS.items():
+            for accessor, returns in accessors.items():
+                self.assertIn(returns, self.catalog, f"{typ}.{accessor} -> {returns}")
+
+    def test_retyped_accessors_keep_checking(self):
+        # Chains from vanilla's loc through accessors the fold had typed
+        # `value` (#348). Each validates, and its broken variant, the last step
+        # swapped for a bogus one, flags: before, both passed unread.
+        chains = [
+            "JournalEntry.GetTarget.GetInterestGroup.GetName",
+            "MilitaryFormation.GetNavalMission.GetNumSeaRegions",
+            "GetPlayer.GetGovernmentLegitimacyLevel.GetName",
+            "Treaty.GetOtherCountry(SCOPE.sCountry('actor')).GetName",
+            "Character.GetHomeState.GetName",
+            "PoliticalMovement.GetCountry.GetName",
+            "GetTutorialJournalEntry.GetBuildingTarget.GetDefaultOutputGoods.GetName",
+            "GetTutorialJournalEntry.GetTarget.GetLawType.GetName",
+            "Pop.GetSocialClass.GetName",
+            "SCOPE.GetRootScope.GetDiplomaticRelations.GetFirstCountry.GetName",
+            "SCOPE.GetRootScope.GetCompany.GetCompanyType.GetName",
+            "SCOPE.sIdeology('elitist_scope').GetName",
+            "SCOPE.sProvince('province').GetState.GetName",
+            "SCOPE.GetRootScope.GetInterest.GetStrategicRegion.GetName",
+            "WAR_GOAL_DRAFT.GetCountryFormation.GetAdjective",
+            "Law.GetCheckpointEndDate.GetString",
+            "Party.GetLeader.GetLeader.GetFullName",
+            "Country.GetPlayer.GetName",
+        ]
+        for text in chains:
+            with self.subTest(chain=text):
+                chain = extract_chains(f"[{text}]")[0]
+                self.assertIsNone(validate_chain(chain, "permissive", self.catalog))
+                broken = extract_chains(f"[{text.rsplit('.', 1)[0]}.GetNoSuchThing]")[0]
+                self.assertIn(
+                    "GetNoSuchThing", validate_chain(broken, "permissive", self.catalog) or "")
+
+    def test_a_party_leader_is_an_interest_group(self):
+        # `party.GetLeader` was typed `character`, which had the fold add a
+        # `character.GetLeader` the engine doesn't have.
+        self.assertEqual(self.catalog["party"]["GetLeader"], "interest_group")
+        self.assertNotIn("GetLeader", self.catalog["character"])
+
+
 @unittest.skipUnless(
     os.path.isdir(VANILLA_LOC_PATH),
     "vanilla loc dir not present; install Vic3 to run vanilla calibration test",
 )
 class VanillaCleanTests(unittest.TestCase):
-    def test_vanilla_loc_has_minimal_unreviewed_flags(self):
-        """Vanilla loc is engine-validated by definition. The catalog has been
-        bootstrapped against it so this should produce ~0 unreviewed flags
-        (one known vanilla bug — `sCharacter('...').GetHerselfHimself` with a
-        missing `.` separator — counts; we tolerate it as a known vanilla typo)."""
+    def test_vanilla_loc_flags_only_known_vanilla_mistakes(self):
+        """The engine reads vanilla's loc, so the only flags it may raise are
+        vanilla's own mistakes, listed in KNOWN_VANILLA_FLAGS. Any other is a
+        gap in the catalog: run fold_vanilla_loc_accessors.py. (This reads
+        english/ itself; VanillaSnapshotTests covers its subfolders too.)"""
         result = audit(VANILLA_LOC_PATH, engine_docs_dir="docs/engine")
-        unrev = [f for f in result.flags if not f.exemption]
-        # Allow up to 5 vanilla flags as a buffer for cross-version drift.
-        # Currently 1 (a real vanilla typo bug). If this number grows, the
-        # catalog is missing accessors — re-run the bootstrap.
-        self.assertLessEqual(
-            len(unrev),
-            5,
-            f"vanilla loc has {len(unrev)} unreviewed flags; "
-            f"the catalog likely needs more accessors. "
-            f"First few: {[(f.key, f.chain, f.reason) for f in unrev[:5]]}",
-        )
+        unexpected = [(f.key, f.chain, f.reason) for f in result.flags
+                      if not f.exemption and (f.key, f.chain) not in KNOWN_VANILLA_FLAGS]
+        self.assertEqual(unexpected, [])
 
 
 if __name__ == "__main__":
