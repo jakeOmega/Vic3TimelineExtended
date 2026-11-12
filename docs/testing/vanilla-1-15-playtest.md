@@ -200,7 +200,7 @@ or Spanish game.
   them). Laws panel: the Minority Rights group's tooltip opens with a sentence, not `lawgroup_minority_rights_desc`.
   Military panel: the Training mobilization group's tooltip, and the Heavy Tanks and Aircraft unit groups wherever a
   group's tooltip shows, read as sentences, not `training_desc` or `combat_unit_group_*_desc`. Power bloc panel: a
-  tier IV or V principle (and Sacred Civics at any tier) shows its group's description in its tooltip, as tiers I to
+  tier IV or V principle (and Sacred Civics at any tier) shows its group's description in its tooltip, as most tiers I to
   III do. Whether a principle with no `_desc` key shows the raw key or nothing was never checked; none is left to look
   at, so that needs a key commented out.
 - Politics overview: the ruler's aptitude traits in the featured slots.
