@@ -13,6 +13,7 @@ a guard against a filesystem handing a deleted file's inode to a new one.
 """
 from __future__ import annotations
 
+import hashlib
 import os
 import re
 from dataclasses import dataclass
@@ -53,14 +54,35 @@ class LogFollower:
     the end: the poll puts `GAP_MARKER` first and reads what is left. While
     there is no live file, the follower stays on the newest generation it
     read, so a file that appears and rotates before the next poll is not
-    skipped."""
+    skipped.
 
-    def __init__(self, path: Path):
+    `found` is the (size, SHA-256) of the log that was there before the game
+    was launched, when the caller knows it. If the first live file read begins
+    with exactly those bytes, the game appended to the log it found instead of
+    starting a new one, and that beginning is somebody else's game: it is not
+    returned, and `skipped` is its size. (Not seen live: the logs of
+    2026-11-11 began with their own run's lines. The check is the guard for
+    the day a patch changes that.)"""
+
+    def __init__(self, path: Path, found: tuple[int, str] | None = None):
         self.path = Path(path)
         self._offset = 0
         self._ino: int | None = None
         self._head = b""
         self._partial = b""
+        self._found = found
+        self.skipped = 0
+
+    def _found_prefix(self, file: _Held) -> int:
+        """How many bytes at the start of the first file read are the log the game found. Asked once."""
+        found, self._found = self._found, None
+        if found is None or found[0] <= 0 or file.size < found[0]:
+            return 0
+        file.f.seek(0)
+        if hashlib.sha256(file.f.read(found[0])).hexdigest() != found[1]:
+            return 0
+        self.skipped = found[0]
+        return found[0]
 
     def _generation(self, k: int) -> Path:
         return self.path.with_name(f"{self.path.stem}.{k}{self.path.suffix}")
@@ -113,7 +135,7 @@ class LogFollower:
         """One look at the files, or None if a rotation raced the look (and then nothing has been consumed)."""
         live = self._open(self.path, held)
         if self._ino is None:
-            return self._take(live, 0) if live is not None else []
+            return self._take(live, self._found_prefix(live)) if live is not None else []
         if live is not None and self._is_mine(live):
             return self._take(live, self._offset)
         truncated = live is not None and live.ino == self._ino

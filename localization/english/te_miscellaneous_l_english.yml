@@ -6641,6 +6641,8 @@
  sr_md_start_tt:0 "Take one level of this module down. It comes down in #v [GetPlayer.MakeScope.ScriptValue('sr_mod_dismantle_months')|0]#! months, one level at a time at this colony; until then it keeps working. A blockade holds the work where it is, and losing the colony or its occupation ends it, the level still standing."
  sr_md_stop_tt:0 "Stop taking this module down: the level stays, and the months spent on it are lost."
  sr_milestone_fail_cleanup_tt:0 "Milestone progress is reset and program costs are recalculated."
+ sr_milestone_first_claimed_tt:0 "Another country has already achieved this milestone"
+ sr_milestone_first_open_tt:0 "No other country has achieved this milestone yet"
  sr_mission_failure_catastrophic:0 "Catastrophic Space Mission Failure"
  sr_mod_clear_queue_tt:0 "Remove all of this colony's modules from the queue. Modules already built or on their way still arrive."
  sr_mod_nothing_queued_tt:0 "Something is queued at this colony"
