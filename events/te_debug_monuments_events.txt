@@ -37,7 +37,12 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 	# Run this month's pass now (contests, ledgers, totals, the log).
 	option = {
 		name = te_debug_monuments.1.b
-		gm_country_monthly = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			gm_country_monthly = yes
+		}
 	}
 
 	# Contest our tallest regime, ruler or faith monument now, as if it had
@@ -230,11 +235,16 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event 
 	# Run it out: the clock ends this month.
 	option = {
 		name = te_debug_monuments.2.l
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
 		if = {
-			limit = { has_variable = gm_com_open }
-			set_variable = { name = gm_com_months_left value = 1 }
-			gm_com_monthly = yes
-			gm_country_refresh = yes
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			if = {
+				limit = { has_variable = gm_com_open }
+				set_variable = { name = gm_com_months_left value = 1 }
+				gm_com_monthly = yes
+				gm_country_refresh = yes
+			}
 		}
 	}
 

@@ -1261,27 +1261,37 @@ te_debug_monetary.11 = { # REVIEWED 2026-09-21: console-only test event (`event 
 
 	option = {
 		name = te_debug_monetary.11.a
-		ordered_country = {
-			limit = {
-				NOT = { this = root }
-				te_mon_can_be_anchor = yes
-			}
-			order_by = gdp
-			position = 0
-			save_scope_as = te_debug_new_provider
-		}
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
 		if = {
-			limit = { exists = scope:te_debug_new_provider }
-			set_variable = { name = te_mon_debug_swap_provider value = scope:te_debug_new_provider }
-			set_variable = { name = te_mon_debug_swap_on value = 1 }
-			te_monetary_discover_arrangements = yes
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			ordered_country = {
+				limit = {
+					NOT = { this = root }
+					te_mon_can_be_anchor = yes
+				}
+				order_by = gdp
+				position = 0
+				save_scope_as = te_debug_new_provider
+			}
+			if = {
+				limit = { exists = scope:te_debug_new_provider }
+				set_variable = { name = te_mon_debug_swap_provider value = scope:te_debug_new_provider }
+				set_variable = { name = te_mon_debug_swap_on value = 1 }
+				te_monetary_discover_arrangements = yes
+			}
 		}
 	}
 
 	option = {
 		name = te_debug_monetary.11.b
-		set_variable = { name = te_mon_debug_swap_on value = 0 }
-		te_monetary_discover_arrangements = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			set_variable = { name = te_mon_debug_swap_on value = 0 }
+			te_monetary_discover_arrangements = yes
+		}
 	}
 
 	option = {

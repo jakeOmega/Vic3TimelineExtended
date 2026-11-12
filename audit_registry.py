@@ -294,8 +294,11 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the read line; for a read passed as a `$PARAM$` argument, on the line of the "
               "call that passes it",
         tags=("tooltip_walk",),
+        post_load=False,
+        report=None,
         note="`--root <scripted GUI, event id or decision>` lists one root's flags with their call chains. "
-             "It reads `script_call_graph.py` to tell which effects run outside a tooltip.",
+             "It reads `script_call_graph.py` to tell which effects run outside a tooltip. Not on reload: "
+             "a run takes about 25 s cold and 13 to 15 s warm.",
     ),
     Audit(
         "faith_scene_audit",

@@ -15,6 +15,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 
+import tooltip_walk_variable_audit as tva
 from tooltip_walk_variable_audit import CHECK, audit, describe, main, render_report
 
 SGUIS = "common/scripted_guis/x_sguis.txt"
@@ -116,6 +117,32 @@ class GuardTests(unittest.TestCase):
             "\t\tif = {\n\t\t\tlimit = { has_variable = x_click }\n\t\t\tremove_variable = x_click\n"
             "\t\t\tset_variable = { name = x_a value = 2 }\n"
             "\t\t\tadd_treasury = var:x_a\n\t\t}")})
+        self.assertEqual(r.flags, [])
+
+    def test_a_flag_a_click_sets_and_leaves_does_not_hide_its_block(self):
+        """Once an option has set `x_open`, the walk enters what it guards
+        every frame: a guard on it is no fence for a scratch name inside."""
+        r = _run({
+            EVENTS: ("x.1 = {\n\ttype = country_event\n\toption = {\n\t\tname = x.1.a\n"
+                     "\t\tset_variable = x_open\n\t}\n}\n"),
+            SGUIS: _sgui("\t\tif = {\n\t\t\tlimit = { has_variable = x_open }\n"
+                         "\t\t\tset_variable = { name = x_tmp value = 2 }\n"
+                         "\t\t\tadd_treasury = var:x_tmp\n\t\t\tremove_variable = x_tmp\n\t\t}"),
+        })
+        self.assertEqual(_flags(r), [(SGUIS, 7, "var:x_tmp")])
+
+    def test_a_guard_on_the_name_read_holds_even_when_it_persists(self):
+        r = _run({SGUIS: _sgui("\t\tset_variable = { name = x_level value = 2 }\n"
+                               "\t\tif = { limit = { has_variable = x_level var:x_level > 1 } add_treasury = 1 }\n"
+                               "\t\tif = { limit = { has_variable = x_level } add_treasury = var:x_level }")})
+        self.assertEqual(r.flags, [])
+
+    def test_a_guard_in_a_scripted_trigger_holds_for_the_block(self):
+        r = _run({
+            SGUIS: _sgui("\t\tset_variable = { name = x_level value = 2 }\n"
+                         "\t\tif = { limit = { x_has_level = yes } add_treasury = var:x_level }"),
+            TRIGGERS: "x_has_level = {\n\thas_variable = x_level\n}\n",
+        })
         self.assertEqual(r.flags, [])
 
     def test_the_else_of_a_marker_is_walked(self):
@@ -267,6 +294,27 @@ class OtherCodeTests(unittest.TestCase):
         "}\n"
     )
 
+    def test_com_drop_where_it_was_behind_the_open_commission(self):
+        """Where gm_com_drop really sat: gm_com_check_progress, inside
+        `has_variable = gm_com_open`, a flag only an event option sets
+        (gm_com_accept). Open, the walk goes in, and the drop logs."""
+        r = _run({
+            SGUIS: _sgui("\t\thidden_effect = { gm_country_refresh = yes }", "gm_policy_culture_sgui"),
+            EFFECTS: (
+                "gm_country_refresh = {\n\tgm_com_check_progress = yes\n}\n"
+                "gm_com_check_progress = {\n\tif = {\n\t\tlimit = { has_variable = gm_com_open }\n"
+                "\t\tset_variable = { name = gm_com_drop value = gm_com_fit_grandeur }\n"
+                "\t\tif = { limit = { var:gm_com_drop > 0 } add_treasury = 1 }\n"
+                "\t\tremove_variable = gm_com_drop\n\t}\n}\n"
+                "gm_com_accept = {\n\tset_variable = gm_com_open\n}\n"
+            ),
+            EVENTS: ("monument_events.21 = {\n\ttype = country_event\n\toption = {\n"
+                     "\t\tname = monument_events.21.a\n\t\tgm_com_accept = yes\n\t}\n}\n"),
+            **_pulse("gm_country_refresh"),
+        })
+        self.assertEqual(_flags(r), [(EFFECTS, 8, "var:gm_com_drop")])
+        self.assertEqual(r.flags[0].chain, ["gm_country_refresh", "gm_com_check_progress"])
+
     def test_com_drop_flags_and_grandeur_does_not(self):
         r = _run({
             SGUIS: _sgui("\t\thidden_effect = { gm_country_refresh = yes }", "gm_policy_culture_sgui"),
@@ -313,6 +361,13 @@ class RootTests(unittest.TestCase):
         self.assertEqual(_flags(r), [(EVENTS, 7, "var:x_a")])
         self.assertEqual(r.flags[0].roots, ["`x.1 option 1`"])
 
+    def test_an_options_walk_goes_on_into_the_events_after(self):
+        r = _run({EVENTS: (
+            "x.1 = {\n\ttype = country_event\n\toption = {\n\t\tname = x.1.a\n"
+            "\t\tset_variable = { name = x_a value = 2 }\n\t}\n"
+            "\tafter = {\n\t\tadd_treasury = var:x_a\n\t\tremove_variable = x_a\n\t}\n}\n")})
+        self.assertEqual(_flags(r), [(EVENTS, 8, "var:x_a")])
+
     def test_decisions_and_journal_buttons_are_roots(self):
         body = "\t\tset_variable = { name = x_a value = 2 }\n\t\tadd_treasury = var:x_a"
         r = _run({
@@ -357,6 +412,19 @@ class TagTests(unittest.TestCase):
     def test_another_checks_tag_is_not_ours(self):
         r = _run({SGUIS: _sgui(self.BODY + " # REVIEWED 2026-11-12 (variable_guard): x")})
         self.assertEqual((len(r.flags), r.failing, r.stale_tags), (1, 1, []))
+
+
+class CacheTests(unittest.TestCase):
+    def test_a_second_run_reads_a_changed_file_again(self):
+        with tempfile.TemporaryDirectory() as mod:
+            _tree(mod, {SGUIS: _sgui("\t\tadd_treasury = 1")})
+            self.assertEqual(audit(mod_path=mod).flags, [])
+            path = os.path.join(mod, SGUIS)
+            self.assertIn(path, tva._PARSE_CACHE)
+            _tree(mod, {SGUIS: _sgui(TagTests.BODY)})
+            st = os.stat(path)
+            os.utime(path, ns=(st.st_atime_ns, st.st_mtime_ns + 1_000_000_000))
+            self.assertEqual(len(audit(mod_path=mod).flags), 1)
 
 
 class CommandLineTests(unittest.TestCase):

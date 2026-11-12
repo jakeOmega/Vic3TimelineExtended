@@ -18,12 +18,15 @@ Rededicate button (about 600 lines a frame, 2026-10-12).
 Roots
 -----
 * every `effect` block in `common/scripted_guis/` and `common/scripted_buttons/`;
-* every `option` of an event, its `trigger` and `ai_chance` left out;
+* every `option` of an event, its `trigger` and `ai_chance` left out, then
+  the event's `after`, walked as the rest of the option's body (an `after`'s
+  effects show in every option's preview: scripting_best_practices.md §
+  "`every_*` Iterators Enumerate in Tooltip Previews");
 * every decision's `when_taken`.
 
 An event's `immediate` is not a root: it runs for real when the event fires,
 so what it sets is there when the options' tooltips walk (it counts as code
-that keeps a variable set, below). Nothing says a tooltip walks `after`.
+that keeps a variable set, below).
 
 The walk
 --------
@@ -36,12 +39,20 @@ does run it: § "An Option's Tooltip Walks Its Effects"). A read is flagged when
 
 1. an earlier `set_variable` / `change_variable` of the name (global forms too)
    in the same walk wrote it on the same scope;
-2. no guard keeps the walk away from it: an `if` / `else_if` / iterator
-   `limit` or a `trigger_if` limit holding `has_variable = <V>` (or
-   `exists = var:<V>`), where V is a variable nothing keeps set (the
-   variable read, or a click-only marker set just before), is false in the
-   walk, so the walk skips that block (and the rest of an `AND`: a guard
-   before the read in one `limit` holds, one after it does not);
+2. no guard covers it. A `has_variable = <V>` (or `exists = var:<V>`) in an
+   `if` / `else_if` / iterator `limit`, a `trigger_if` limit, or before the
+   read in the same `AND`, works two ways:
+   * V a *scratch* name, every write of it removed later in its own body (a
+     click-only marker, a staged figure): it cannot be set while a tooltip
+     shows, so the guard is false in the walk and the walk skips what it
+     guards;
+   * any other V, a flag a click or a pulse sets and leaves (`gm_com_open`):
+     once set, the walk enters what it guards every frame, so the block is
+     walked; only a read of V itself behind the guard is safe.
+   A guard after the read, or beside it in a `NOT` / `NOR` / `NAND` (which
+   reads every child), covers nothing. A guard in a scripted trigger the
+   `limit` calls counts, and one behind a link (`root = { has_variable = x }`)
+   covers `root.var:x`;
 3. nothing else keeps the name set (below).
 
 The reads of an `if`'s branches start from what was set before the `if`, so
@@ -104,7 +115,13 @@ call that passes it. A tag on a line with no flag is stale and fails
 `--strict`. `--root <sgui, event id or decision>` prints one root's walk
 flags with their call chains.
 
-Report: docs/engine/tooltip_walk_variable_report.md. Registered in POST_LOAD_AUDITS.
+Where it runs: CI (`--strict`, through `scripts/run_audits.py`) and the
+command line, not the server's reload. A run takes about 25 s cold; the
+per-file parse and call scan are kept across runs in one process
+(`_PARSE_CACHE`, `_CALL_SCAN_CACHE`), but the walk is most of a warm run, so
+a warm one still takes 13 to 15 s, too much for every `POST /reload`.
+`regenerate()` is there for the day it joins POST_LOAD_AUDITS: it writes
+docs/engine/tooltip_walk_variable_report.md.
 """
 from __future__ import annotations
 
@@ -146,6 +163,7 @@ CHAIN_KEYS = ("if", "else_if", "else")
 _DIRECTIVE_RE = re.compile(r"^(?:TRY_)?(?:INJECT|REPLACE)(?:_OR_CREATE)?:")
 _EVENT_ID_RE = re.compile(r"^[A-Za-z_][\w]*\.\d+$")
 _PARAM_RE = re.compile(r"\$(\w+)\$")
+_DISPATCH_RE = re.compile(r"^[A-Za-z0-9_$]+$")
 _SEG_VAR_RE = re.compile(r"^(var|global_var):([A-Za-z0-9_$\-]+)$", re.I)
 _TAGGED_REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
@@ -183,6 +201,8 @@ class Root:
     line: int
     node: vga.Node
     skip: frozenset = frozenset()
+    # An option's tooltip shows the event's `after` too: walked after the option.
+    after: vga.Node | None = None
 
 
 @dataclass
@@ -260,6 +280,22 @@ def _subdir(rel: str) -> str:
 DEF_DIRS = {"scripted_effects": "effect", "scripted_triggers": "trigger", "script_values": "value"}
 
 
+# Kept across runs in one process (the server's reloads), so a run reads again
+# only what changed: {abs path: ((size, mtime_ns), tree or None)} for the
+# parse, and {abs path: ((size, mtime_ns), effect-name token, effect_calls)}
+# for event_context_audit's per-file call scan. A tree is read, never written.
+_PARSE_CACHE: dict = {}
+_CALL_SCAN_CACHE: dict = {}
+
+
+def _stamp(path: str) -> tuple[int, int] | None:
+    try:
+        st = os.stat(path)
+    except OSError:
+        return None
+    return (st.st_size, st.st_mtime_ns)
+
+
 class Mod:
     """The parsed files the audit reads, its definitions and roots."""
 
@@ -268,18 +304,12 @@ class Mod:
         self.trees: dict[str, vga.Node] = {}
         self.defs: dict[str, dict[str, Def]] = {"effect": {}, "trigger": {}, "value": {}}
         self.roots: list[Root] = []
-        for path, rel in _files(mod_path):
+        self.files: list[tuple[str, str]] = list(_files(mod_path))
+        for path, rel in self.files:
             sub = _subdir(rel)
-            try:
-                with open(path, encoding="utf-8-sig", errors="replace") as fh:
-                    text = fh.read()
-            except OSError:
+            tree = self._parse(path, sub)
+            if tree is None:
                 continue
-            if sub not in DEF_DIRS and sub not in ROOT_BLOCKS and sub != "events" \
-                    and not _ANY_WRITE_RE.search(text):
-                continue  # no write, no def, no root: nothing to read here
-            clean, _comments = blank_comments_and_strings(text)
-            tree = vga.parse_tree(clean)
             self.trees[rel] = tree
             if sub in DEF_DIRS:
                 kind = DEF_DIRS[sub]
@@ -305,12 +335,45 @@ class Mod:
                     if child[0] != "block" or not child[1].key or not _EVENT_ID_RE.match(child[1].key):
                         continue
                     n = 0
+                    after = next((sc[1] for sc in child[1].children
+                                  if sc[0] == "block" and sc[1].key == "after"), None)
                     for sc in child[1].children:
                         if sc[0] == "block" and sc[1].key == "option":
                             n += 1
                             self.roots.append(Root("option", f"{child[1].key} option {n}", rel,
-                                                   sc[1].line, sc[1], frozenset(OPTION_SKIP)))
+                                                   sc[1].line, sc[1], frozenset(OPTION_SKIP), after))
 
+
+    @staticmethod
+    def _parse(path: str, sub: str) -> vga.Node | None:
+        stamp = _stamp(path)
+        hit = _PARSE_CACHE.get(path)
+        if hit is not None and stamp is not None and hit[0] == stamp:
+            return hit[1]
+        try:
+            with open(path, encoding="utf-8-sig", errors="replace") as fh:
+                text = fh.read()
+        except OSError:
+            return None
+        if sub not in DEF_DIRS and sub not in ROOT_BLOCKS and sub != "events" \
+                and not _ANY_WRITE_RE.search(text):
+            tree = None  # no write, no def, no root: nothing to read here
+        else:
+            tree = vga.parse_tree(blank_comments_and_strings(text)[0])
+        if stamp is not None:
+            _PARSE_CACHE[path] = (stamp, tree)
+        return tree
+
+    def _fitting(self, template: str) -> list[Def]:
+        """The effects and triggers a parameterised name (`helper_$KIND$`) fits."""
+        memo = self.__dict__.setdefault("_fit_defs", {})
+        hit = memo.get(template)
+        if hit is None:
+            literal = _PARAM_RE.split(template)[::2]
+            pat = re.compile("^" + "[A-Za-z0-9_]+".join(re.escape(p) for p in literal) + "$")
+            hit = memo[template] = [d for kind in ("effect", "trigger")
+                                    for n, d in self.defs[kind].items() if pat.match(n)]
+        return hit
 
     def summary(self, d: Def) -> tuple[frozenset, frozenset, frozenset, frozenset]:
         """(reads, writes, guards, scopes): the variable names `d` could read,
@@ -358,16 +421,27 @@ class Mod:
                     if "$" in t:
                         if "var:" not in t:
                             scopes.add("$")
-                            if t == toks[0]:
-                                # A `$PARAM$` key (`$EFFECT$ = yes`,
-                                # `helper_$KIND$`) may call anything.
-                                reads.add("$")
-                                writes.add("$")
-                                guards.add("$")
-                            else:
+                            if t != toks[0]:
                                 # A value: whatever the argument is (a `var:`,
                                 # a script value), kept as written.
                                 reads.add(t)
+                            elif _PARAM_RE.sub("", t) and _DISPATCH_RE.match(t):
+                                # `helper_$KIND$`: any effect or trigger the
+                                # name's pattern fits.
+                                for sub in self._fitting(t):
+                                    if sub is not d:
+                                        r, w, g, sc = self.summary(sub)
+                                        reads |= r
+                                        writes |= w
+                                        guards |= g
+                                        scopes |= sc
+                            elif c[0] == "scalar":
+                                # `$EFFECT$ = yes`: whatever a caller names.
+                                reads.add("$")
+                                writes.add("$")
+                                guards.add("$")
+                            # A `$WHO$ = { … }` block is a scope: its body
+                            # is read like any other.
                         continue
                     for kind in ("effect", "trigger", "value"):
                         sub = self.defs[kind].get(t)
@@ -392,7 +466,7 @@ def _root_context(rel: str, path: tuple[str, ...]) -> bool:
     file `rel` sits inside a tooltip root."""
     sub = _subdir(rel)
     if sub == "events":
-        return "option" in path
+        return "option" in path or path[:1] == ("after",)
     want = ROOT_BLOCKS.get(sub)
     return bool(want and path and path[0] == want)
 
@@ -410,9 +484,23 @@ class Keepers:
         import event_context_audit as eca
         import script_call_graph as scg
 
-        g = eca.build_graph(mod.mod_path, include_console=True, strip_directives=True)
-        cg = scg.from_event_graph(g)
-        self.g = g
+        # The calls of every script file (event_context_audit's scan, the
+        # console harnesses read too), each file's scan kept while it stands.
+        names = set(mod.defs["effect"])
+        token = hash(frozenset(names))
+        effect_calls: dict[str, list] = {}
+        for path, rel in mod.files:
+            stamp = _stamp(path)
+            hit = _CALL_SCAN_CACHE.get(path)
+            if hit is None or stamp is None or hit[0] != stamp or hit[1] != token:
+                calls = eca.scan_file(path, rel, names, strip_directives=True).effect_calls
+                hit = (stamp, token, calls)
+                if stamp is not None:
+                    _CALL_SCAN_CACHE[path] = hit
+            for callee, lst in hit[2].items():
+                effect_calls.setdefault(callee, []).extend(lst)
+        self.effect_calls = effect_calls
+        cg = scg.calls_only({n: d.file for n, d in mod.defs["effect"].items()}, effect_calls)
         self.cg = cg
         self.effects = set(mod.defs["effect"])
 
@@ -455,9 +543,10 @@ class Keepers:
         for e in cg.edges:
             if e.kind == "call" and e.src.kind != scg.EFFECT:
                 self._entity_calls.setdefault(e.src.name, []).append(e)
-        self._transitive_removes: dict[str, set] = {}
+        self._transitive_removes: dict[str, frozenset] | None = None
         self._kept: dict[tuple[str, str], bool] = {}
         self._fits: dict[str, bool] = {}
+        self._scratch: dict[tuple[str, str], bool] = {}
         # Every concrete name written somewhere that nothing keeps: the only
         # names a walk can flag. Pattern writes stand for no name of their own.
         self.volatile = frozenset(
@@ -496,7 +585,7 @@ class Keepers:
         out: list[tuple] = []
         if depth > 6:
             return out
-        for (crel, cln, cpk, _sw, _conds, centity, ckind, cparams) in self.g.effect_calls.get(effect, []):
+        for (crel, cln, cpk, _sw, _conds, centity, ckind, cparams) in self.effect_calls.get(effect, []):
             names = _PARAM_RE.findall(template)
             if any(p not in cparams for p in names):
                 continue
@@ -527,20 +616,36 @@ class Keepers:
 
     # -- the question -----------------------------------------------------
 
-    def _effect_removes(self, effect: str, seen: frozenset = frozenset()) -> set:
+    def _effect_removes(self, effect: str) -> frozenset:
         """(prefix, name) every removal `effect` makes, through what it calls."""
-        if effect in self._transitive_removes:
-            return self._transitive_removes[effect]
-        if effect in seen:
-            return set()
+        if self._transitive_removes is None:
+            self._transitive_removes = self._all_removes()
+        return self._transitive_removes.get(effect, frozenset())
+
+    def _all_removes(self) -> dict[str, frozenset]:
+        """Every effect's removals through its callees, to a fixed point."""
         import script_call_graph as scg
 
-        out = {(r.prefix, r.name) for r in self._removes_by_body.get(("effect", effect), [])}
-        for e in self.cg.edges_from(scg.Node(scg.EFFECT, effect), lambda x: x.kind == "call"):
-            out |= self._effect_removes(e.dst.name, seen | {effect})
-        if not seen:
-            self._transitive_removes[effect] = out
-        return out
+        callees: dict[str, set[str]] = {}
+        for e in self.cg.edges:
+            if e.kind == "call" and e.src.kind == scg.EFFECT:
+                callees.setdefault(e.src.name, set()).add(e.dst.name)
+        out: dict[str, set] = {}
+        for body, lst in self._removes_by_body.items():
+            if body[0] == "effect":
+                out.setdefault(body[1], set()).update((r.prefix, r.name) for r in lst)
+        changed = True
+        while changed:
+            changed = False
+            for src, dsts in callees.items():
+                cur = out.setdefault(src, set())
+                before = len(cur)
+                for d in dsts:
+                    if d in out and d != src:
+                        cur |= out[d]
+                if len(cur) != before:
+                    changed = True
+        return {k: frozenset(v) for k, v in out.items()}
 
     def _removed_after(self, w: Site) -> bool:
         var = (w.prefix, w.name)
@@ -573,6 +678,20 @@ class Keepers:
                 pat = re.compile("^" + "[A-Za-z0-9_]+".join(re.escape(p) for p in literal) + "$")
                 hit = any(pat.match(x) for x in self.volatile)
             self._fits[template] = hit
+        return hit
+
+    def scratch(self, prefix: str, name: str) -> bool:
+        """True when every write of the name is removed later in the same body
+        (a scratch name, a click-only marker): it cannot be set when a tooltip
+        shows, so a guard on it is false in the walk. A flag a click sets and
+        leaves is not: once set, the walk enters what it guards every frame."""
+        key = (prefix, name)
+        hit = self._scratch.get(key)
+        if hit is None:
+            sites = list(self._writes_by_name.get(key, []))
+            sites += [w for w in self._pattern_writes if w.prefix == prefix and w.pattern.match(name)]
+            hit = bool(sites) and all(self._removed_after(w) for w in sites)
+            self._scratch[key] = hit
         return hit
 
     def kept(self, prefix: str, name: str) -> bool:
@@ -706,7 +825,9 @@ class Walker:
     def _check(self, r: _Read, key: tuple, st) -> None:
         """A read flags when this frame wrote the name earlier; otherwise it is
         handed to the caller's frame, which checks it against what it wrote
-        before the call."""
+        before the call. A read behind a guard on its own name is safe."""
+        if (key[1], key[2]) in st["guarded"]:
+            return
         at = st["sets"].get(key)
         if at is not None:
             r.set_at = at
@@ -714,25 +835,50 @@ class Walker:
         elif key not in st["removed"] and st["ext"] is not None:
             st["ext"].append((key, r))
 
-    def _not_kept_guard(self, key: str, value: str | None, st) -> bool:
-        """True for `has_variable = V` / `exists = var:V` with V nothing keeps:
-        false in the walk."""
+    @staticmethod
+    def _fork(st) -> dict:
+        """A copy of the walk state for a block of its own: guards found inside
+        it do not reach past it."""
+        new = dict(st)
+        new["guarded"] = set(st["guarded"])
+        return new
+
+    def _guard(self, key: str, value: str | None, st) -> bool:
+        """`has_variable = V` / `exists = var:V`: True when the guard is false
+        in the walk (V is a scratch name, or a scope the walk never made).
+        Otherwise V may be set, and a read of V behind the guard is safe:
+        V joins `st["guarded"]` for the rest of the block."""
         if not value:
             return False
-        if key in GUARD_KEYS:
-            return "$" not in value and not self.keepers.kept(GUARD_KEYS[key], value)
         if key == "exists" and value.startswith("scope:") and "." not in value:
             return st["aliases"].get(value[6:]) == UNSET
-        if key == "exists":
+        if key in GUARD_KEYS:
+            var = (GUARD_KEYS[key], value)
+        elif key == "exists":
             reads = self._chain_reads(value, st["scopes"], st["aliases"])
-            return bool(reads) and "$" not in reads[-1][1] and not self.keepers.kept(reads[-1][0], reads[-1][1])
+            if not reads:
+                return False
+            var = (reads[-1][0], reads[-1][1])
+        else:
+            return False
+        if "$" in var[1]:
+            return False
+        if self.keepers.scratch(*var):
+            return True
+        if not st.get("no_guard"):
+            st["guarded"].add(var)
         return False
 
     def _call(self, d: Def, params: dict, st, line: int, file: str, ctx: str):
         if d.name in st["stack"] or len(st["stack"]) >= MAX_DEPTH:
             return None
+        rkey = ("relevant", d.kind, d.name, ctx, tuple(sorted((k, v[0]) for k, v in params.items())))
+        relevant = self.cache.get(rkey)
         reads, writes, guards, named = self.mod.summary(d)
-        if not self._relevant(reads, writes, guards if ctx != "effect" else (), params):
+        if relevant is None:
+            relevant = self.cache[rkey] = self._relevant(
+                reads, writes, guards if ctx != "effect" else (), params)
+        if not relevant:
             return None  # it can neither read, write nor test a name nothing keeps
         # The call is walked once for its arguments, scope and the scopes named
         # so far, from an empty frame, across roots (a refresh many options
@@ -743,15 +889,15 @@ class Walker:
         else:
             aliases = frozenset((k, v) for k, v in st["aliases"].items() if k in named)
         key = (d.kind, d.name, ctx, tuple(sorted(params.items())), st["scopes"], aliases,
-               st.get("read_kind"), bool(st.get("creating")))
+               st.get("read_kind"), bool(st.get("creating")), bool(st.get("no_guard")))
         hit = self.cache.get(key)
         base_chain = st["chain"]
         if hit is None:
             n_reads = len(self.reads)
             before_alias = dict(st["aliases"])
-            sub = dict(st)
+            sub = self._fork(st)
             sub.update(params=params, stack=st["stack"] + (d.name,), chain=(d.name,), file=d.file,
-                       sets={}, removed=set(), ext=[])
+                       sets={}, removed=set(), ext=[], guarded=set())
             if d.kind == "value":
                 sub["read_kind"] = "value"
             if ctx == "effect":
@@ -762,14 +908,18 @@ class Walker:
             alias_delta = {k: v for k, v in st["aliases"].items() if before_alias.get(k) != v}
             inner = self.reads[n_reads:]
             del self.reads[n_reads:]
-            hit = (inner, sub["ext"], sub["sets"], sub["removed"], alias_delta, result)
+            # A scripted trigger's own guards hold for the caller's block too.
+            guards = frozenset(sub["guarded"]) if ctx != "effect" else frozenset()
+            hit = (inner, sub["ext"], sub["sets"], sub["removed"], alias_delta, result, guards)
             self.cache[key] = hit
-        inner, ext, added, removed, alias_delta, result = hit
+        inner, ext, added, removed, alias_delta, result, guards = hit
         # A read inside a script value is reported where the value is named:
         # the one place a guard or a review can go (the value's own lines are
         # shared, and often generated).
         at = (file, line) if d.kind == "value" and st.get("read_kind") != "value" else None
         for r in inner:
+            if (r.prefix, r.name) in st["guarded"]:
+                continue  # the caller's guard on the name covers the call
             self.reads.append(_Read(*(at or (r.file, r.line)), r.prefix, r.name, r.kind, r.set_at,
                                     base_chain + r.chain, r.via_argument))
         for k, r in ext:
@@ -782,6 +932,8 @@ class Walker:
             st["sets"] = new
             st["removed"] = (st["removed"] - set(added)) | removed
         st["aliases"].update(alias_delta)
+        if guards and not st.get("no_guard"):
+            st["guarded"] |= guards
         return result
 
     def _relevant(self, reads, writes, guards, params) -> bool:
@@ -855,7 +1007,7 @@ class Walker:
                     if key == "if" or chain_base is None:
                         close_chain()
                         chain_base = dict(st["sets"])
-                    branch = dict(st)
+                    branch = self._fork(st)
                     branch["sets"] = dict(chain_base)
                     self.block_with_limit(node.children, branch)
                     chain_out.append(branch["sets"])
@@ -938,7 +1090,7 @@ class Walker:
                     self.effect_scalar(c, st)
                     base = dict(st["sets"])
                 elif c[0] == "block":
-                    branch = dict(st)
+                    branch = self._fork(st)
                     branch["sets"] = dict(base)
                     self.effect_body(c[1].children, branch)
                     outs.append(branch["sets"])
@@ -948,7 +1100,7 @@ class Walker:
         if node.op != "?=":
             self._read(node.key, None, node.line, file, "scope", st)
         if key in CREATE_KEYS:
-            inner = dict(st)
+            inner = self._fork(st)
             inner["creating"] = True
             inner["scopes"] = st["scopes"] + ("<created>",)
             self.effect_body(node.children, inner)
@@ -958,18 +1110,22 @@ class Walker:
             sid = self._scope_of(key, st["scopes"], st["aliases"])
             if sid == UNSET:
                 return  # a scope the walk never made: nothing runs in it
-            inner = dict(st)
+            inner = self._fork(st)
             inner["scopes"] = st["scopes"] + (sid,)
             self.effect_body(node.children, inner)
             st["sets"], st["removed"] = inner["sets"], inner["removed"]
             return
-        self.effect_body(node.children, st)
+        # Any other block (`hidden_effect`, `custom_tooltip`, `while`, a value
+        # block): a guard in its own `limit` does not reach past it.
+        inner = self._fork(st)
+        self.effect_body(node.children, inner)
+        st["sets"], st["removed"] = inner["sets"], inner["removed"]
 
     # -- triggers ---------------------------------------------------------
 
     def trigger_and(self, children, st, stop=True):
         """Walk a trigger block's children in order. False when the walk knows
-        the block is false (a guard on a variable nothing keeps), else None.
+        the block is false (a guard on a scratch name), else None.
         `stop`: an AND stops at its first false child."""
         for child in children:
             r = self.trigger_child(child, st)
@@ -983,7 +1139,7 @@ class Walker:
             _, rkey, op, rvalue, line = child
             key, korigin = self._sub(rkey, st["params"])
             value, vorigin = self._sub(rvalue, st["params"])
-            if op == "=" and self._not_kept_guard(key, value, st):
+            if op == "=" and self._guard(key, value, st):
                 return False
             if op == "=" and st["scopes"][-1] == ROOT_SCOPE and (
                     (key == "is_ai" and value == "yes") or (key == "is_player" and value == "no")):
@@ -1011,12 +1167,16 @@ class Walker:
         if upper in ("AND", "LIMIT") or key is None:
             return self.trigger_and(node.children, st)
         if upper == "OR":
-            results = [self.trigger_child(c, st) for c in node.children]
+            results = [self.trigger_child(c, self._fork(st)) for c in node.children]
             return False if results and all(r is False for r in results) else None
         if upper in ("NOT", "NOR", "NAND"):
-            self.trigger_and(node.children, st, stop=False)  # a multi-child NOT reads every child
+            # A multi-child NOT reads every child: a guard there guards nothing.
+            inner = self._fork(st)
+            inner["no_guard"] = True
+            self.trigger_and(node.children, inner, stop=False)
             return None
         if key in ("trigger_if", "trigger_else_if", "if", "else_if"):
+            st = self._fork(st)
             rest = []
             for c in node.children:
                 if c[0] == "block" and c[1].key == "limit":
@@ -1031,21 +1191,41 @@ class Walker:
         if node.op != "?=":
             self._read(node.key, None, node.line, file, "limit", st)
         if vga._is_scope_change(key, self.links):
-            inner = dict(st)
+            iterator = (key or "").startswith(vga.ITERATOR_PREFIXES)
+            # A guard behind a link (`root = { has_variable = x }`) guards
+            # the enclosing block's reads (`root.var:x`); one in an iterator
+            # tested other objects.
+            inner = self._fork(st) if iterator else dict(st)
             inner["scopes"] = st["scopes"] + (self._scope_of(key, st["scopes"], st["aliases"]),)
             r = self.trigger_and(node.children, inner)
-            return None if (key or "").startswith(vga.ITERATOR_PREFIXES) else r
-        self.trigger_and(node.children, st, stop=False)
+            return None if iterator else r
+        self.trigger_and(node.children, self._fork(st), stop=False)
         return None
 
     # -- entry ------------------------------------------------------------
+
+    def can_flag(self, root: Root) -> bool:
+        """False when nothing the root reaches writes a name nothing keeps:
+        no read in its walk can follow a write, so it needs no walk."""
+        node = vga.Node(None, None, root.line)
+        node.children = list(root.node.children) + (list(root.after.children) if root.after else [])
+        _r, writes, _g, _s = self.mod.summary(Def("root", f"{root.file}:{root.line}", root.file, node))
+        pool = self.keepers.volatile
+        for n in writes:
+            if n == "$" or ("$" in n and self.keepers.fits_volatile(n)) or n in pool:
+                return True
+        return False
 
     def walk(self, root: Root) -> None:
         st = {
             "sets": {}, "scopes": (ROOT_SCOPE,), "aliases": {}, "params": {},
             "stack": (), "chain": (), "file": root.file, "removed": set(), "ext": None,
+            "guarded": set(),
         }
-        self.effect_body(root.node.children, st, root.skip)
+        children = list(root.node.children)
+        if root.after is not None:
+            children += root.after.children
+        self.effect_body(children, st, root.skip)
 
 
 # ---------------------------------------------------------------------------
@@ -1096,6 +1276,8 @@ def audit(mod_state=None, mod_path: str | None = None, only_root: str | None = N
             continue
         result.roots += 1
         w = Walker(mod, keepers, links, cache)
+        if not w.can_flag(root):
+            continue
         w.walk(root)
         seen: set = set()
         for r in w.reads:
