@@ -107,7 +107,7 @@ Every row writes only its report under `docs/engine/`, so `?audits_only=true` le
 | `python3 attitude_key_audit.py` | any unexempted flag exists — **no flag at all**; `main()` returns the exit code natively, so passing `--strict` does nothing |
 | `python3 event_image_audit.py --strict` | any unexempted flag exists |
 | `python3 treaty_leverage_side_audit.py --strict` | any unexempted flag exists |
-| `python3 treaty_evaluation_scope_audit.py --strict` | any direct named-scope read in treaty AI `evaluation_chance` exists (root only; quoted expressions included). CI-only, not a post-load audit; supports `--mod-path PATH`. |
+| `python3 treaty_evaluation_scope_audit.py --strict` | any direct named-scope read in treaty AI `evaluation_chance` exists (root only; quoted expressions included), or any party scope read in a trigger block that does not bind it without a `# REVIEWED YYYY-MM-DD (treaty_scope): …` comment on its line: `scope:source_country` / `target_country` / `first_country` / `second_country` in `visible` / `possible`, `scope:other_country` in `can_ratify` / `requirement_to_maintain`, and source / target in a mutual article's (#1026). It is a deny-list of those reads only: other scopes, other blocks, a scope the block saves itself and whatever a called scripted trigger reads are not judged; the table and its evidence are in the module docstring, and `test_treaty_evaluation_scope_audit.py` holds the table to `vanilla_parsed/`. CI-only, not a post-load audit; supports `--mod-path PATH`. |
 | `python3 event_context_audit.py --strict` | any flag without a check-tagged `# REVIEWED YYYY-MM-DD (<check>): …` comment inside the event, or any such comment that suppresses nothing (stale — the check no longer fires there — or a misspelled check name) |
 | `python3 silent_variable_audit.py --strict` | any flag without a `# REVIEWED YYYY-MM-DD (silent_variable): …` comment inside the option, or any such comment on an option that is no longer flagged |
 | `python3 prev_scope_audit.py --strict` | any unexempted flag exists |
@@ -256,6 +256,20 @@ Import a `TestCase` class through its module (`import test_demographics_registry
 `TestCase` in a module's namespace, so `from test_x import TestY` runs all of `TestY`'s tests again in the importing
 file (phase 2 step 3b's family-census tests ran 92 tests where 30 were its own). Plain helpers (`_Engine`, `_block`)
 import by name safely.
+
+A census script test that runs the interpreter gets a fixed-point twin in `test_demographics_fixed_point.py` (#967):
+its name in the `PLAIN` table, or `class TestXFixedPoint(_FixedPointTwin, module.TestX)` when it needs an override. The
+mixin (`test_demographics_registry._FixedPointTwin`) runs every case of `TestX` again with each `_Engine` cutting to
+five decimals, as the game does, and loosens `close()` and `assertAlmostEqual` to five units of the last decimal, or
+1e-5 of a larger figure; exact comparisons stay exact. It works by patching `_Engine.FIXED_POINT`, the default of
+`truncate=` when a test leaves it out, before the suite's own `setUp` and around its `setUpClass`, so a helper that
+passes `truncate=False` itself stays in floats. A float test can't see an early divide (#964 matched its model at
+1e-8); the twin of a new test of census arithmetic can. When a twin's case fails, find which it is before touching a
+tolerance: an early divide in the script, a fixture on a threshold's edge, or the cut multiplied by the case's own
+arithmetic. Then loosen only the comparison that needs it, by a bound worked out from the cut (`_lead_cuts` is the
+pattern: the float case split into draws and a run helper, the twin holding each draw to its own bound); a
+`mock.patch` of the tolerance around a whole case also loosens every other comparison in it. Only the suites that seed
+or step the ring keep #967's 1e-3 (`_CohortTwin`), for the drifts the file's docstring lists.
 
 GUI tests share `gui_test_helpers.py` (not a test file, so nothing collects it): `_read`, `_strip_comments`, `_close`,
 `_block_at`, `_type_body`, `_children` and `_instances` read markup, and `assert_wide_matches_narrow` checks a wide
