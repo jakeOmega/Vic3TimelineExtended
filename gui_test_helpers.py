@@ -1219,11 +1219,18 @@ def _dead_overrides(view, types, templates):
       type's roots only; one from an instance further out or further in,
       and one on an instance that itself carries the guard (which
       guard_spans skips whole, before this is asked), are caught there.
-    One limit is left open, unsafe the same way and not met on main: a
-    vanilla type inside the instanced one with a block of the same name as
-    a guarded mod block, since vanilla's types are not read
+      So is one beside a guard that guard_spans reads narrower than it is:
+      a guard written in a blockoverride or in a block's default, which
+      guard_spans takes as hiding only what that override or default holds,
+      sits on the block's widget with everything else on it.
+    Two limits are left open, unsafe the same way and not met on main, since
+    vanilla's types are not read: a vanilla type inside the instanced one
+    with a block of the same name as a guarded mod block
     (SkippedOverrideTest holds the skipped names to ones no vanilla copy
-    under gui/ declares, the part the repo can check)."""
+    under gui/ declares, the part the repo can check); and a blockoverride
+    of a vanilla type's block that sits on a guard's widget, written
+    anywhere but on that widget (on it, guard_visible_overrides fails any
+    that could set a `visible`)."""
     guards, occ, held, hold, universes, by_block = {}, {}, {}, {}, {}, {}
 
     def guard_set(name):
@@ -1405,8 +1412,20 @@ def _on_guard_widgets(types, templates):
     too), declared by a template it uses, or at the root of the mod type it
     instances, that type's bases' roots included; and at the root of any type
     whose own root, or a base's, carries the guard. Also (block name, the
-    text of its default) for each of those blocks."""
-    names, defaults, roots = {}, [], {}
+    text of its default, its path and line) for each of those blocks, and
+    the widgets whose own blockoverrides may fill a block the mod's types
+    don't place, as (TypeDef, the offset of its brace or 0 for the root, the
+    guard's widget, whether every block of it is such): an instance of a
+    type the mod doesn't define that carries the guard (every block), and a
+    guard-carrying instance of a mod type, a guarded root and each instance
+    of a type with one (a block no mod type or template declares).
+
+    The guard's widget is the one it is written in. A guard written in a
+    `blockoverride "x"` (the Colonial Empire's `down_action`) sits on the
+    widget `block "x"` is written on, wherever a type or a template declares
+    one: by name, as the seal goes, so each such widget counts as carrying
+    it. One in a block's default sits on the widget around the block."""
+    names, defaults, unread, roots, sites = {}, [], [], {}, {}
 
     def tmpl_blocks(t, seen):
         if t not in templates or t in seen:
@@ -1425,7 +1444,7 @@ def _on_guard_widgets(types, templates):
             if lo <= pos <= hi and _holder(body, pos)[0] == a:
                 names.setdefault(x, where)
                 brace = body.index("{", pos)
-                defaults.append((x, body[brace + 1:_close(body, brace)]))
+                defaults.append((x, body[brace + 1:_close(body, brace)], td.path, td.line + _line_of(td, pos)))
         for t, pos in _using_sites(body):
             if lo <= pos <= hi and _holder(body, pos)[0] == a:
                 for x in tmpl_blocks(t, set()):
@@ -1446,32 +1465,112 @@ def _on_guard_widgets(types, templates):
                                                                   and guarded_root(types[name].base))
         return roots[name]
 
-    for kind, group in (("", types), ("template ", templates)):
+    def derives(name, base):
+        seen = set()
+        while name in types and name not in seen:
+            if name == base:
+                return True
+            seen.add(name)
+            name = types[name].base
+        return False
+
+    def carry(group, name, w, where):
+        """The widget at a body offset carries the guard (0: the root, which
+        for a type is the widget that instances it, or a type derived from it)."""
+        td = group[name]
+        if w == 0:
+            if group is types:
+                for other in types:
+                    if derives(other, name):
+                        root_of(other, where)
+            else:
+                at(td, 0, where)
+            unread.append((td, 0, where, False))
+            return
+        at(td, w, where)
+        opener = _OPENER.search(td.body, max(0, w - 120), w + 1)
+        mod = bool(opener) and opener.group(1) in types
+        if mod:
+            root_of(opener.group(1), where)
+        unread.append((td, w, where, not mod))
+
+    def written_on(x):
+        """Each widget a `block "x"` is written on, in any type or template (a
+        template's at each `using`): (group, name, _holder's answer)."""
+        if not sites:
+            sites[None] = ()  # built, even when empty
+            for group in (types, templates):
+                for name, td in group.items():
+                    for y, pos in _block_sites(td.body):
+                        sites.setdefault(y, []).append((group, name, _holder(td.body, pos)))
+                    for t, pos in _using_sites(td.body):
+                        for y in tmpl_blocks(t, set()):
+                            sites.setdefault(y, []).append((group, name, _holder(td.body, pos)))
+        return sites.get(x, ())
+
+    def land(x, where, seen):
+        """A guard written in a `blockoverride "x"` sits where `block "x"` is:
+        each widget one is written on carries it. A block that is itself
+        written in a blockoverride sits where that one's block is, too.
+        Whether the mod declares any."""
+        if x in seen:
+            return True
+        seen.add(x)
+        found = False
+        for group, name, (w, via) in written_on(x):
+            found = True
+            carry(group, name, w, where)
+            if via:
+                land(via[0], where, seen)
+        return found
+
+    for group in (types, templates):
         for name, td in group.items():
             body = td.body
             for a, b in guard_spans(body):
-                where = (td.path, td.line + _line_of(td, a), kind + name)
+                where = (td.path, td.line + _line_of(td, a), ("" if group is types else "template ") + name)
                 if (a, b) == (0, len(body)):
-                    if kind:  # a type's guarded root: below, with the types derived from it
+                    if group is templates:  # a type's guarded root: below, with the types derived from it
                         at(td, 0, where)
+                        unread.append((td, 0, where, False))
                     continue
-                at(td, a, where)
-                opener = _OPENER.search(body, max(0, a - 120), a + 1)
-                if opener and opener.group(1) in types:
-                    root_of(opener.group(1), where)
+                written = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
+                if not written:
+                    carry(group, name, a, where)
+                    continue
+                w, via = _holder(body, a + 1)
+                if not via:  # in a block's default: on the widget around the block
+                    carry(group, name, w, where)
+                    continue
+                # in a blockoverride: on its block's widget, in the type the override's widget instances
+                if w:
+                    opener = _OPENER.search(body, max(0, w - 120), w + 1)
+                    instanced = opener.group(1) if opener else None
+                else:
+                    instanced = td.base
+                found = land(via[0], where, set())
+                unread.append((td, w, where, not found or instanced not in types))
     for name, td in types.items():
         if guarded_root(name):
             root_of(name, (td.path, td.line, name))
-    return names, defaults
+            unread.append((td, 0, (td.path, td.line, name), False))
+    for group in (types, templates):
+        for td in group.values():
+            for child, brace in _child_sites(td.body):
+                if child in types and guarded_root(child):
+                    unread.append((td, brace, (types[child].path, types[child].line, child), False))
+    return names, defaults, unread
 
 
 def _landing(text):
     """What a block's contents put on the widget the block is written in:
     (why a `visible` may be among it, the blocks declared there), each at
-    the contents' own level or in a block default nested there."""
+    the contents' own level or in a block default nested there. The guard
+    itself is no other `visible`."""
     flat = _lands(text)
     why = [reason for found, reason in ((_OWN_VISIBLE.search(flat), "sets a visible"),
-                                        (_USING.search(flat), "uses a template, which may set a visible"),
+                                        (any(t != GUARD for t in _USING.findall(flat)),
+                                         "uses a template, which may set a visible"),
                                         (_OVERRIDE.search(flat), "holds a blockoverride, which may set a visible"))
            if found]
     held = set()
@@ -1487,21 +1586,44 @@ def _landing(text):
     return why, held
 
 
+# Why an own blockoverride on a guard's widget fails the seal though no mod type places its block.
+NOT_THE_MODS_TYPE = " on an instance of a type the mod doesn't define, whose blocks may sit on that widget"
+NOT_THE_MODS_BLOCK = (", and no mod type or template declares the block: it is a vanilla type's, which may put it on "
+                      "that widget")
+
+
 def guard_visible_overrides(types, templates, texts):
     """Each place that could put a `visible` on a widget that carries
     te_own_country_only, where it would replace the guard (gotcha #17), as
     (path, line, block name, why, the guard's widget as (path, line, type)).
-    That is a blockoverride, anywhere in `texts` (path -> a GUI file's text,
-    comments cut), of a block that sits on such a widget (_on_guard_widgets),
-    which sets a `visible`, uses a template or holds another blockoverride
-    at its own level; or such a block's own default that does (line 0). A
-    block that an override of one of those names declares at its own level
-    sits on the widget as well. By name, so every instance level is covered:
-    the blockoverride walk (_dead_overrides) and the guard itself
-    (guard_spans, which reads the guard where it is written) rest on this
-    finding nothing."""
-    names, defaults = _on_guard_widgets(types, templates)
-    out = {(names[x][0], 0, x, f"its default {w}", names[x]) for x, text in defaults for w in _landing(text)[0]}
+    Three kinds:
+    - a blockoverride, anywhere in `texts` (path -> a GUI file's text,
+      comments cut), of a block that sits on such a widget
+      (_on_guard_widgets), which sets a `visible`, uses a template or holds
+      another blockoverride at its own level. A block that an override of one
+      of those names declares at its own level sits on the widget as well.
+      By name, so every instance level is covered;
+    - such a block's own default that does (why: "its default ...");
+    - a blockoverride written on the guard's own widget that does, where the
+      mod's types can't say which widget its block is on: any, on an instance
+      of a type the mod doesn't define (vanilla's root blocks are not read:
+      why ends NOT_THE_MODS_TYPE), and on any other guard-carrying widget one
+      of a block no mod type or template declares (NOT_THE_MODS_BLOCK).
+    The blockoverride walk (_dead_overrides) and the guard itself
+    (guard_spans, which reads a guard as hiding what is written inside the
+    widget, the block default or the blockoverride it is written in) rest on
+    this finding nothing. What it can't see: an override, written anywhere
+    but on the guard's own widget, of a vanilla type's block that sits on
+    that widget."""
+    names, defaults, unread = _on_guard_widgets(types, templates)
+    out = {(path, line, x, f"its default {w}", names[x]) for x, text, path, line in defaults for w in _landing(text)[0]}
+    declared = {x for group in (types, templates) for td in group.values() for x, _ in _block_sites(td.body)}
+    for td, w, where, every in unread:
+        a, b = (0, len(td.body)) if w == 0 else (w, _close(td.body, w))
+        for x, start, brace, end in _own_overrides(td.body, a, b):
+            if every or x not in declared:
+                out |= {(td.path, td.line + _line_of(td, start), x, reason + (NOT_THE_MODS_TYPE if every else NOT_THE_MODS_BLOCK),
+                         where) for reason in _landing(td.body[brace + 1:end])[0]}
     by_name = {}
     for path, text in texts.items():
         for m in _OVERRIDE_OPEN.finditer(text):

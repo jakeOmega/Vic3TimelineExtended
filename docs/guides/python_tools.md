@@ -305,12 +305,23 @@ another level (a slot an outer instance fills, a derived type's instance). Secon
 `guard_visible_overrides(types, templates, texts)` lists every blockoverride, anywhere under `gui/`, of a block that
 sits on a guard's widget (at its own level, or at the root of the mod type it instances) which sets a `visible`,
 uses a template or holds another blockoverride, and `SkippedOverrideTest` holds the list empty. That covers a
-`visible` from an instance further out or further in, which the walk does not follow, and the guard read where it is
-written: an instance that carries `te_own_country_only` is skipped whole whatever an override puts on it, as it was
-before this walk. One limit stays open, unsafe the same way and not met on `main`: a vanilla type inside the
-instanced one that has a block of the same name as a guarded mod block is not seen, since vanilla's types are not
-read. `SkippedOverrideTest` fails when a skipped name is one a vanilla copy under `gui/` declares, the part of this
-the repo can check; `skipped_overrides(view, types)` lists the names. `ungated_world_reads(names, types)` lists the
+`visible` from an instance further out or further in, which the walk does not follow, and three places where the
+walk reads a guard more simply than the game applies it. An instance that carries `te_own_country_only` is skipped
+whole whatever an override puts on it, as it was before this walk. A guard written in a `blockoverride "x"` (the
+Colonial Empire's `down_action`) or in a block's default is read as hiding what that override or default holds; it
+sits on the widget `block "x"` is written on (found by name, in any type or template) or on the widget around the
+block, so every other block on that widget is held to the same rule. And where the mod's types can't say which widget
+a block is on, the seal goes by where the override is written: on a guard-carrying instance of a type the mod doesn't
+define (a vanilla type's root blocks are not read; `button_icon_minus_action` and `button_icon_plus_action` carry the
+guard on `main`), no blockoverride written on that instance may set a `visible`, use a template or hold another, and
+on any other widget that carries the guard (an instance of a mod type, a type's guarded root, an instance of such a
+type) none of a block that no mod type or template declares may. A block's own default that sets a `visible` is
+reported at the block's line. Two limits stay open, unsafe the same way and not met on `main`, both because vanilla's
+types are not read: a vanilla type inside the instanced one that has a block of the same name as a guarded mod block
+is not seen, and neither is a blockoverride of a vanilla type's block that sits on a guard's widget when it is
+written anywhere but on that widget (an outer instance, a derived type's root).
+`SkippedOverrideTest` fails when a skipped name is one a vanilla copy under `gui/` declares, the part of the first
+limit the repo can check; `skipped_overrides(view, types)` lists the names. `ungated_world_reads(names, types)` lists the
 `# world:` reads an observer's panel would evaluate: each needs an observer gate (`OBSERVER_GATE`, the test first in a
 `visible`) on its own line, on a widget around it, or around every place that draws its type, a type's own root
 counting only while no instance sets its own `visible`. `test_te_system_tab_bodies.py`'s `ObserverTest` runs it over
