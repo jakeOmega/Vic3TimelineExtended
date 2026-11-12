@@ -284,6 +284,7 @@ te_on_company_disbanded = {
 on_become_independent = {
 	on_actions = {
 		decol_collapse_grace_on_action
+		decol_leave_overlord_plays_on_action
 	}
 	events = {
 		decolonization_events.15
@@ -297,6 +298,14 @@ on_become_independent = {
 decol_collapse_grace_on_action = {
 	effect = {
 		set_variable = { name = decol_collapse_grace days = 7300 }
+	}
+}
+
+# A colony freed mid-war leaves its former overlord's wars and plays (1.15
+# leave_plays_supporting). decolonization.txt, decol_leave_former_overlord_plays.
+decol_leave_overlord_plays_on_action = {
+	effect = {
+		decol_leave_former_overlord_plays = yes
 	}
 }
 

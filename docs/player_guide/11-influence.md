@@ -655,8 +655,8 @@ The Shadow War and The Spy Who Was Caught stand in for the operations; see
 ### How the AI runs covert operations
 
 AI countries set their funding each month: none while idle, level 1 to keep
-operations alive when bankrupt or without rivals (and for a major power with a
-rival), level 3 for a great power with a rival or a major power at war, and
+operations alive when bankrupt, borrowing with bankruptcy under half a year
+away, or without rivals (and for a major power with a rival), level 3 for a great power with a rival or a major power at war, and
 level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
 antagonistic or domineering toward; espionage goes to countries with technology

@@ -155,10 +155,13 @@ un_order_ceasefire_aggressor_gained = {
 
 # The pool: a direct subject whose liberty desire has reached the floor, of a
 # represented member that is not the proposer (the proposer may be the subject
-# itself, a dominion asking for its own vote), and not at war with it.
+# itself, a dominion asking for its own vote), and not at war with it. Not one
+# that a war goal is already freeing (1.15 is_subject_of_and_not_being_freed):
+# the war decides it.
 # Scope: the prospective subject; expects scope:un_order_proposer
 un_referendum_subject_eligible = {
 	is_subject = yes
+	is_subject_of_and_not_being_freed = overlord
 	liberty_desire >= un_ref_liberty_desire_floor
 	save_temporary_scope_as = un_ref_subject_check
 	overlord = {

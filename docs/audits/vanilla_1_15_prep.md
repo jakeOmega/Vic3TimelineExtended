@@ -178,7 +178,7 @@ Added 2026-10-30, from the changelog and digest:
 - Contextless entries: whether `should_be_involved` is re-checked for countries created after activation, what `JournalEntry.GetCountry` and `je:` return for one, and whether `effect_all_involved` replaces 1.14.5's `on_*_all_involved` everywhere.
 - `diplomatic_play_acceptance`: its scopes and which sign means "backs down", read by logging it with `debug_log` on 1.14.5.
 - How vanilla wires `will_incorporate_state` into `common/ai_strategies`, and the cost of `military_reach` inside AI loops.
-- Whether `make_independent` already leaves the former overlord's plays (so `leave_plays_supporting` is redundant).
+- Whether `make_independent` already leaves the former overlord's plays (so `leave_plays_supporting` is redundant). Built with the effect regardless (#1455); the `decol_leave_plays` self-check reads it (`docs/testing/colonial-wars-playtest.md`).
 - The keys of the Scandalous trait and the Hemophilia condition.
 - The `<TAG>_DEF` key's case and what the map-name rule shows without one.
 - The syntax for alternative names of goods, buildings, religions, cultures, interest groups and subject types.

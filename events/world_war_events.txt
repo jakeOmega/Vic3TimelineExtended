@@ -964,6 +964,19 @@ world_war_events.20 = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 3
 			}
+			# Our entry would join an important land theater of the war to the
+			# other side's (1.15's rule for violating sovereignty).
+			modifier = {
+				trigger = {
+					scope:ww_main_defender = {
+						any_scope_war = {
+							is_war_participant = scope:ww_main_aggressor
+							connects_important_war_theaters = ROOT
+						}
+					}
+				}
+				add = 3
+			}
 		}
 		# Join the existing war on the defender's side (shared with
 		# ww_join_war_button)
@@ -1097,8 +1110,14 @@ world_war_events.30 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 	}
 }
-# Stalemate on the front: the war is old, the front is frozen and our own war
-# goals have stalled (1.14 war reads). Fires from the je_world_war monthly pulse.
+# Stalemate on the front. Fires from the je_world_war monthly pulse. A war is
+# stuck when the engine counts it down to a stalemate (1.15
+# war_is_in_stalemate: both leaders at minimum war support) and we lead our
+# side of it, or by the 1.14 reads it used before: old, many battles, and our
+# own war goals stalled. Only a war leader's war support drives the countdown,
+# so a co-belligerent hears of it only through the 1.14 reads. In the engine's
+# case the options are the real decision: holding the line lifts us off the
+# floor and stops the countdown, armistice talks let it run.
 world_war_events.31 = {
 	type = country_event
 	placement = root
@@ -1121,22 +1140,41 @@ world_war_events.31 = {
 		# ww_years_elapsed counts the whole world war; the per-war duration and
 		# battle count are a second gate on the war that is actually stuck.
 		any_scope_war = {
-			war_duration_months >= 24
-			num_significant_battles >= 10
-			has_stalled_wargoal_held_by = ROOT
+			OR = {
+				AND = {
+					war_is_in_stalemate = yes
+					is_warleader = ROOT
+				}
+				AND = {
+					war_duration_months >= 24
+					num_significant_battles >= 10
+					has_stalled_wargoal_held_by = ROOT
+				}
+			}
 		}
 	}
 
 	cooldown = { days = long_modifier_time }
 
 	immediate = {
+		# The engine's stalemate first: it is the war whose countdown runs.
 		random_scope_war = {
 			limit = {
-				war_duration_months >= 24
-				num_significant_battles >= 10
-				has_stalled_wargoal_held_by = ROOT
+				war_is_in_stalemate = yes
+				is_warleader = ROOT
 			}
 			save_scope_as = ww_stalemate_war
+		}
+		if = {
+			limit = { NOT = { exists = scope:ww_stalemate_war } }
+			random_scope_war = {
+				limit = {
+					war_duration_months >= 24
+					num_significant_battles >= 10
+					has_stalled_wargoal_held_by = ROOT
+				}
+				save_scope_as = ww_stalemate_war
+			}
 		}
 	}
 
@@ -1545,7 +1583,14 @@ world_war_events.102 = {
 	option = {
 		name = world_war_events.102.a
 		default_option = yes
-		ai_chance = { base = 7 }
+		# A country the war wrecked takes the aid (average_devastation is 0-1).
+		ai_chance = {
+			base = 7
+			modifier = {
+				trigger = { average_devastation >= 0.2 }
+				add = 5
+			}
+		}
 		add_modifier = {
 			name = ww_defeated_modifier
 			days = normal_modifier_time
@@ -1575,7 +1620,14 @@ world_war_events.102 = {
 	# Option B: Reject foreign aid - rebuild independently, slower but sovereign
 	option = {
 		name = world_war_events.102.b
-		ai_chance = { base = 3 }
+		# One the war barely touched can afford to refuse it.
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { average_devastation < 0.05 }
+				add = 4
+			}
+		}
 		add_modifier = {
 			name = ww_defeated_modifier
 			days = long_modifier_time
