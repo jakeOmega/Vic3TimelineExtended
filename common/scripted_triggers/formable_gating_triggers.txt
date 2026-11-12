@@ -87,23 +87,17 @@ is_at_friction_with_root = {
 # Performance (2026-10-03 script profile: the AFU formation's possible cost
 # 0.29 ms a call): each any_country below drops `count >= 1`, which means the
 # same as a bare any_country and may make the engine count every country
-# instead of stopping at the first match.
-#
-# External pressure is read from a global variable the world's monthly pulse
-# sets (te_formable_refresh_external_pressure, te_formable_effects.txt), not
-# walked per call: it does not depend on ROOT, and in the 2026-11-12 profile of
-# a 1931 game the AFU formation's possible cost 0.47 ms a call, 1,890 calls in
-# 33 days, and INM's and EAF's about 0.5 ms (docs/audits/late_game_performance.md;
-# the profile does not say how much of that is this walk and how much the two
-# below). A great power entering or leaving the top three takes effect at the
-# next monthly pulse, which the tooltip says.
+# instead of stopping at the first match, and the external-pressure tests
+# check the global top 3 before great-power rank.
 
 # === EU (European Union) ======================================================
 
 eu_formation_external_pressure = {
-	custom_tooltip = {
-		text = eu_formation_external_pressure_tt
-		has_global_variable = te_formable_pressure_eu
+	# At least one non-European great power sits in the global top-3.
+	any_country = {
+		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
+		NOT = { is_major_european_power = yes }
 	}
 }
 
@@ -128,9 +122,10 @@ eu_formation_no_internal_rivalry = {
 # === AFU (African Union) ======================================================
 
 afu_formation_external_pressure = {
-	custom_tooltip = {
-		text = afu_formation_external_pressure_tt
-		has_global_variable = te_formable_pressure_afu
+	any_country = {
+		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
+		NOT = { is_major_african_power = yes }
 	}
 }
 
@@ -155,9 +150,10 @@ afu_formation_no_internal_rivalry = {
 # === UNA (United North America) ==============================================
 
 una_formation_external_pressure = {
-	custom_tooltip = {
-		text = una_formation_external_pressure_tt
-		has_global_variable = te_formable_pressure_una
+	any_country = {
+		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
+		NOT = { is_major_north_american_power = yes }
 	}
 }
 
@@ -182,9 +178,10 @@ una_formation_no_internal_rivalry = {
 # === INM (Intermarium) ========================================================
 
 inm_formation_external_pressure = {
-	custom_tooltip = {
-		text = inm_formation_external_pressure_tt
-		has_global_variable = te_formable_pressure_inm
+	any_country = {
+		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
+		NOT = { is_major_intermarium_power = yes }
 	}
 }
 
@@ -209,9 +206,10 @@ inm_formation_no_internal_rivalry = {
 # === EAF (East African Federation) ============================================
 
 eaf_formation_external_pressure = {
-	custom_tooltip = {
-		text = eaf_formation_external_pressure_tt
-		has_global_variable = te_formable_pressure_eaf
+	any_country = {
+		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
+		NOT = { is_major_east_african_power = yes }
 	}
 }
 
@@ -241,9 +239,10 @@ eaf_formation_no_internal_rivalry = {
 # read as rivalry/war between major Muslim powers).
 
 dar_formation_external_pressure = {
-	custom_tooltip = {
-		text = dar_formation_external_pressure_tt
-		has_global_variable = te_formable_pressure_dar
+	any_country = {
+		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
+		NOT = { is_major_dar_al_islam_power = yes }
 	}
 }
 
