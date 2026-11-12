@@ -702,6 +702,31 @@ class StripTest(unittest.TestCase):
         self.assertIn("has_game_rule = banking_system_enabled", full)
         self.assertIn("has_game_rule = banking_system_enabled", on)
 
+    def test_the_strategic_reserve_never_opens_off_the_strip(self):
+        """The one mirrored tab whose open gate doesn't follow from its strip
+        gate by their triggers: open is holding the entry, on the strip is
+        Logistics and not being a revolution's rebels. It follows from the
+        entry instead (#1338). The entry starts only while the journal shows
+        it greyed, which is the strip gate word for word; a technology isn't
+        unlearned; and the rebels of a revolution, who start none, get no
+        running one either: a hub that falls to them stays the nation's
+        (st_res_hub_stays_within_nation), and the entry with its holder.
+        The last two are the engine's and the script's to keep, not shown
+        here; test_strategic_reserve_lifecycle.py holds the script's side."""
+        reserve = _tab("strategic_reserve")
+        tab, unlock = "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"
+        self.assertEqual((reserve.open_, reserve.strip, reserve.unlock), (_shown(tab), _shown(unlock), unlock))
+        self.assertIn("is_shown = { has_journal_entry = je_strategic_reserve }", _txt_block(self.sguis, tab))
+        strip = re.search(r"is_shown = \{ (.*) \}", _txt_block(self.sguis, unlock)).group(1)
+        self.assertEqual(strip, "has_technology_researched = logistics is_revolutionary = no")
+        je = _txt_block(_strip_comments(_read(os.path.join(JE_DIR, "je_strategic_reserve.txt"))).replace("\n\t", "\n"),
+                        "je_strategic_reserve")
+        self.assertEqual(" ".join(_txt_block(je, "is_shown_when_inactive").split()), strip)
+        kept = _txt_block(_read(os.path.join(REPO, "common", "on_actions", "st_res_on_actions.txt")),
+                          "st_res_on_state_owner_change")
+        self.assertRegex(kept, r"limit = \{\s*NOT = \{ st_res_hub_stays_within_nation = yes \}\s*\}\s*"
+                               r"remove_building = building_strategic_reserve_hub")
+
     def test_demographics_opens_with_its_first_census(self):
         """As the Population panel's tab: its gate and its checklist passing."""
         demog = _tab("demographics")
