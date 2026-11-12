@@ -1683,7 +1683,7 @@ law_legal_limbo = {
 	progressiveness = 10
 
 	modifier = {
-		state_standard_of_living_add = 0.5
+		state_standard_of_living_add = 0.5	# REVIEWED 2026-11-12: owner call (#338). Standard of living is whole points, so this plays as 0; rounding to 1 would equal Basic Protections, the next law up (1, 2, 3).
 		country_cultural_hegemony_art_mult = -0.02
 	}
 }
@@ -5290,7 +5290,10 @@ law_private_policing = {
 		# Wealthy neighbourhoods are policed, in every state. Private Health
 		# Insurance pays upper strata +0.5 a level the same way.
 		state_upper_strata_standard_of_living_add = 0.25
-		state_middle_strata_standard_of_living_add = 0.1
+		# Standard of living is whole points, so the middle strata's share must
+		# reach one at the levels a force gets to: +1 from level 7 (it was 0.1,
+		# which never did, #338); upper strata +1 from level 4, +2 from 8.
+		state_middle_strata_standard_of_living_add = 0.15
 		# Unrest happens where nobody pays for cover: cancels half of the
 		# institution's own -10% turmoil effects a level.
 		state_turmoil_effects_mult = 0.05

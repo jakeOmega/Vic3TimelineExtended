@@ -18,40 +18,14 @@ Suppress an intended value with `# REVIEWED YYYY-MM-DD: rationale` on its line.
 
 ## Unreviewed flags
 
-- `common/laws/extra_laws.txt:1686` `law_legal_limbo`: `state_standard_of_living_add = 0.5`
-- `common/laws/extra_laws.txt:5293` `law_private_policing`: `state_middle_strata_standard_of_living_add = 0.1` (per institution level, below 1 at the top level)
-- `common/static_modifiers/extra_modifiers.txt:1083` `banking_raise_margin_requirements`: `state_middle_strata_standard_of_living_add = -0.5`
-- `common/static_modifiers/extra_modifiers.txt:1458` `climate_adaptation_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:1644` `crop_failure_relief_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:1650` `crop_failure_ministry_modifier`: `state_standard_of_living_add = 0.3`
-- `common/static_modifiers/extra_modifiers.txt:1657` `climate_refugee_welcome_modifier`: `state_standard_of_living_add = -0.5`
-- `common/static_modifiers/extra_modifiers.txt:1711` `water_crisis_rationing_modifier`: `state_standard_of_living_add = -1.5`
-- `common/static_modifiers/extra_modifiers.txt:1719` `water_crisis_infrastructure_modifier`: `state_standard_of_living_add = -0.5`
-- `common/static_modifiers/extra_modifiers.txt:1726` `water_crisis_ministry_modifier`: `state_standard_of_living_add = -0.3`
-- `common/static_modifiers/extra_modifiers.txt:1804` `tropical_disease_public_health_modifier`: `state_standard_of_living_add = -0.3`
-- `common/static_modifiers/extra_modifiers.txt:3332` `riot_curfew_modifier`: `state_standard_of_living_add = -0.5`
-- `common/static_modifiers/extra_modifiers.txt:3343` `riot_concessions_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:3443` `immigration_welcome_modifier`: `state_standard_of_living_add = -0.5`
-- `common/static_modifiers/extra_modifiers.txt:3501` `revival_channeled_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:3532` `globalization_embrace_modifier`: `state_standard_of_living_add = -0.5`
-- `common/static_modifiers/extra_modifiers.txt:3540` `globalization_protect_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:3547` `globalization_retrain_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:4482` `un_humanitarian_token_received_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:4502` `un_refugee_source_relief_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:4508` `un_refugee_source_brain_drain_modifier`: `state_standard_of_living_add = -0.25`
-- `common/static_modifiers/extra_modifiers.txt:5639` `cooperative_consumption_ceiling`: `state_middle_strata_standard_of_living_add = -0.50`
-- `common/static_modifiers/extra_modifiers.txt:5640` `cooperative_consumption_ceiling`: `state_lower_strata_standard_of_living_add = -0.25`
-- `common/static_modifiers/extra_modifiers.txt:6735` `rre_liberation_theology_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:6793` `rre_faith_services_modifier`: `state_standard_of_living_add = 0.5`
-- `common/static_modifiers/extra_modifiers.txt:6800` `rre_faith_partnership_modifier`: `state_standard_of_living_add = 0.25`
-- `common/static_modifiers/extra_modifiers.txt:6807` `rre_secular_welfare_modifier`: `state_standard_of_living_add = 0.5`
+_None._
 
 ## Reviewed exemptions
 
-_None._
+- `common/laws/extra_laws.txt` `law_legal_limbo`: `state_standard_of_living_add = 0.5` — **2026-11-12**: owner call (#338). Standard of living is whole points, so this plays as 0; rounding to 1 would equal Basic Protections, the next law up (1, 2, 3).
 
 ## Coverage
 
-- total flags: 27
-- unreviewed: 27
-- exempted: 0
+- total flags: 1
+- unreviewed: 0
+- exempted: 1

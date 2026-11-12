@@ -322,7 +322,7 @@ International Exchange Standards; the other three are available from the start.
 | Moral Suasion | −0.15 bubble pressure, −0.02 momentum | 1 point and nothing else. |
 | Raise Reserve Requirements | −0.9 bubble pressure, −0.04 momentum; under the full Banking System, half a point less inflation pressure | 2 points and 5% lower investment efficiency for capitalists. 2% of pops radicalize when you raise them, and again when you lift them. |
 | Enable Counter-cyclical Buffer | −1.5 bubble pressure, −0.05 momentum | 2 points. Capitalists pay 1 point and shopkeepers 5 points less of their income into the investment pool. Radicals when you enable it and when you lift it, as above. |
-| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −0.5 standard of living for the middle strata. Radicals when you raise them and when you lift them. |
+| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −1 standard of living for the middle strata. Radicals when you raise them and when you lift them. |
 
 Measure them against the phases: Expansion adds 3 bubble pressure a month, Boom
 4 and Frenzy 8. All four together drain about 3.75 and take 7 points, enough to

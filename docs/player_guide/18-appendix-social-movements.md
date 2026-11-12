@@ -130,11 +130,11 @@ faith.
 |---|---|---|
 | The Moral Majority | Television Broadcasting (7) | The Religious Right: +35% Devout political strength, +30% Devout attraction, −50 Authority |
 | Faith in Prime Time | Pop Culture (7) | Televangelism Movement: +20% strength, +50% attraction |
-| Bread and Justice | Civil Rights Movement (7) | Liberation Theology: +30% strength, +25% attraction, +0.5 standard of living |
+| Bread and Justice | Civil Rights Movement (7) | Liberation Theology: +30% strength, +25% attraction, +1 standard of living |
 | Faith and Flag | Globalization (9) | Religious Nationalism: +50% strength, +40% attraction, +10% assimilation, −5% prestige (fading) |
 | Faith Online | Social Media (9) | Digital Faith Movement: +25% strength, +45% attraction |
 | The Culture War | Sexual Revolution (8) | Culture War: +40% strength, +35% attraction, slower research (fading) |
-| The Faithful Hand | Social Justice Movements (9) | Faith-Based Social Services: +25% strength, +30% attraction, +0.5 standard of living (fading) |
+| The Faithful Hand | Social Justice Movements (9) | Faith-Based Social Services: +25% strength, +30% attraction, +1 standard of living (fading) |
 
 The Devout clout ceiling is 15% instead of 10% for Faith and Flag, The
 Culture War and The Faithful Hand.
