@@ -812,29 +812,6 @@
 				}
 			}
 			else = {
-				# SAVE MIGRATION — added 2026-09-19, remove after one release.
-				# The "Raise Policy Rate" tool was deleted (monetary_policy_design.md
-				# §18) and with it the button that switched it off. A save carrying
-				# the modifier would otherwise reserve 2 intervention points forever,
-				# so strip it here.
-				#
-				# The points do not come back until next month: add_modifier and
-				# remove_modifier results are not visible inside the effect block that
-				# issues them, so every `modifier:country_banking_intervention_max_add`
-				# read later in THIS pulse still sees the stale -2. The one such read is
-				# banking_crash_check_overdrawn_interventions at the end of the block,
-				# and the stale -2 makes it MORE likely to shed a tool this month, not
-				# less — a one-off cost on the single migrating month, on a save that
-				# was already two points down. Nothing else in the pulse reads the
-				# modifier, so the position of this block within it is cosmetic.
-				#
-				# The eventual removal of the static modifier itself is tracked in
-				# common/scripted_effects/legacy_modifier_cleanup.txt.
-				if = {
-					limit = { je:je_banking_cycle ?= { has_modifier = banking_policy_rate_hike } }
-					je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
-				}
-
 				banking_cycle_bank_holiday_reopen = yes
 				banking_cycle_advance_variables = yes
 				banking_cycle_check_and_execute_crash = yes
@@ -846,8 +823,6 @@
 				# Runs after the crash check so a crash month's bar shows the
 				# post-crash values next to its crash marker.
 				te_history_record_banking_samples = yes
-
-				set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
 
 				banking_cycle_random_event_effect = yes
 				banking_cycle_update_progress_bars = yes
@@ -861,7 +836,6 @@
 
 	on_weekly_pulse = {
 		effect = {
-			legacy_scaling_strip_banking_cycle = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 			# The pool's weekly add, country_weekly_investment_pool_mult and _add,
 			# runs whether or not the cycle has started (owner, 2026-11-07): the
 			# modifiers that carry it are not all the cycle's (Neocolonial

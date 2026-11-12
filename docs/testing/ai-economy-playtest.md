@@ -215,3 +215,13 @@ technologies already grant, and the tile's breakdown shows it.
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 `unemployment_share_read` OK on 8 January in two sessions, and a false BROKEN on 4 January in the run that made the save, before the engine had computed unemployment (#1597). The check now arms only once the engine's figure is above 0.
+
+## Advanced Material Fabricator: dearer inputs, a 100-staff floor (#1033)
+
+The three upper base methods buy more inputs: Advanced Self-Replicating Assemblers takes 100 electronic components and 80 digital access a level (was 15 and 40). Automation cuts 150 machinists and 10 engineers, and Orbital Fabrication 20 engineers and 20 academics, so a level keeps at least 100 staff. At base prices the most automated combination makes about 115 value added per employee (was 2,818), beside Network Infrastructure's 40 to 133. Figures: `python3 test_advanced_material_fabricator_balance.py --table`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Input prices.** A late save (2040 on) with fabricators running Advanced Self-Replicating Assemblers: the electronic components and digital access prices, against a save from before the change. | Both rise, perhaps sharply, where fabricators are a large buyer; the economy still supplies them. | Either good pinned at its maximum price for years: trim that good's amount on the top method and take the rest from another input. |
+| **Method choice.** The same save: count fabricators by base method (`production_methods` under `building_manager`). | Most on the newest method they have the technology for; some may drop a tier when inputs are short. | Most stuck a tier below the newest: the top method's margin is too thin at market prices; ease its inputs. |
+| **Value added per employee.** Re-run the 2026-10-17 save analysis (`outputs/top_earners_2045.txt` columns) on the new save. | The fabricator near its high-technology peers (semiconductors, network infrastructure), not tens of times the average building. | Still far above: read which method combination the high earners run, and compare the save's prices with base prices. |

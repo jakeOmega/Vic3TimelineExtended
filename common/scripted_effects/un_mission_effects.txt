@@ -849,7 +849,7 @@ un_mission_monthly = {
 				}
 				AND = {
 					has_tag = un_msn_electoral
-					scope:un_msn_host_now = { NOT = { un_mission_holds_elections = yes } }
+					scope:un_msn_host_now = { NOT = { te_holds_elections = yes } }
 				}
 			}
 		}
@@ -858,7 +858,7 @@ un_mission_monthly = {
 		if = {
 			limit = {
 				has_tag = un_msn_electoral
-				scope:un_msn_host_now = { NOT = { un_mission_holds_elections = yes } }
+				scope:un_msn_host_now = { NOT = { te_holds_elections = yes } }
 			}
 			scope:un_msn_host_now = {
 				un_standing_loss = { AMOUNT = un_mission_electoral_abolished_standing REASON = 46 }
@@ -1371,7 +1371,7 @@ un_observer_request_on_carried = {
 			limit = {
 				scope:un_vote_proposer = {
 					is_at_war = no
-					un_mission_holds_elections = yes
+					te_holds_elections = yes
 					un_mission_can_join_host = { TYPE = electoral }
 				}
 			}

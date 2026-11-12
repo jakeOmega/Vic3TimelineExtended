@@ -199,20 +199,12 @@ def _script_files():
                     yield os.path.join(dirpath, f)
 
 
-# The old-save strip (legacy_scaling_strip_united_nations) sets a mirror from an older save's
-# added copy before removing it, as the deleted monthly reconcile did. It goes after 2026-12-31.
-LEGACY_STRIP = os.path.join("common", "scripted_effects", "legacy_modifier_cleanup.txt")
-
-
 def _writes(variable, ops=("set_variable", "remove_variable", "change_variable")):
-    """(file, top-level definition) of every write of ``variable`` in common/ and events/, by op, the old-save
-    strip's migration left out."""
+    """(file, top-level definition) of every write of ``variable`` in common/ and events/, by op."""
     out = {op: [] for op in ops}
     pattern = re.compile(r"\b(" + "|".join(ops) + r")\s*=\s*(?:\{\s*name\s*=\s*)?" + re.escape(variable) + r"\b")
     top = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
     for path in _script_files():
-        if os.path.relpath(path, REPO) == LEGACY_STRIP:
-            continue
         text = _read(path)
         if variable not in text:
             continue
@@ -224,41 +216,11 @@ def _writes(variable, ops=("set_variable", "remove_variable", "change_variable")
 
 
 class OldSaveStripTests(unittest.TestCase):
-    def test_the_strip_sets_mirrors_and_never_clears_one(self):
-        text = _read(_path(*LEGACY_STRIP.split(os.sep)))
-        body = text.split("legacy_scaling_strip_united_nations = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertNotIn("remove_variable", body)
-        for key in (*PROGRAMMES, "un_human_rights_declaration_modifier", "un_law_of_sea_modifier",
-                    "un_regime_climate_emitter_modifier"):
-            with self.subTest(key=key):
-                self.assertIn(f"set_variable = {key}_on", body)
-                self.assertLess(body.index(f"set_variable = {key}_on"), body.index(f"remove_modifier = {key} "))
-        self.assertIn("set_variable = un_sanctions_target_on", body)
-
-    def test_every_clear_strips_first(self):
-        # Until a country's first strip, an older save's copy stands beside a
-        # mirror the new code clears, and the strip would set it again from the
-        # copy (review of PR 8): each helper that clears a mirror runs it first.
-        sites = {
-            STATE_EFFECTS: ("un_mirror_clear",),
-            REGIME_EFFECTS: ("un_regime_term_off",),
-            JUSTICE_EFFECTS: ("un_sanctions_lift_regime", "un_sanctions_lift_ours"),
-            LADDER: ("un_dissolve_strip_country",),
-        }
-        for path, names in sites.items():
-            text = _read(path)
-            for name in names:
-                with self.subTest(effect=name):
-                    body = _flat(_block(text, name))
-                    self.assertIn("legacy_scaling_strip_united_nations = yes", body)
-                    self.assertLess(body.index("legacy_scaling_strip_united_nations = yes"),
-                                    body.index("remove_variable"))
-
-    def test_a_stale_dues_figure_goes(self):
-        text = _read(_path(*LEGACY_STRIP.split(os.sep)))
-        body = _flat(text.split("legacy_scaling_strip_united_nations = {", 1)[1].split("\n}\n", 1)[0])
-        self.assertIn("if = { limit = { has_variable = un_dues_cached NOT = { un_dues_in_force = yes } } "
-                      "un_dues_stop_paying = yes }", body)
+    def test_the_old_save_strip_is_gone(self):
+        # 1.15 loads no older save, so the strip and the calls that ran it first went (#1429).
+        for path in _script_files():
+            with self.subTest(file=os.path.relpath(path, REPO)):
+                self.assertNotIn("legacy_scaling_strip_united_nations", _read(path))
 
 
 class UprisingTests(unittest.TestCase):
@@ -323,14 +285,11 @@ class MembershipBenefitsTests(unittest.TestCase):
         self.assertIn("add = modifier:country_un_institutional_alignment", body)
         self.assertNotIn("owner", body)
 
-    def test_the_old_wrapper_is_left_uncalled_for_old_saves(self):
-        raw = _raw(UN_VALUES)
-        at = raw.index("\nun_membership_benefits_multiplier_for_je = {")
-        self.assertIn("PENDING REMOVAL", raw[raw.rindex("\n\n", 0, at):at])
+    def test_the_old_wrapper_is_gone(self):
         for root in ("common", "events"):
             for dirpath, _dirs, files in os.walk(_path(root)):
                 for f in files:
-                    if f.endswith(".txt") and f != "un_script_values.txt":
+                    if f.endswith(".txt"):
                         with self.subTest(file=f):
                             self.assertNotIn("un_membership_benefits_multiplier_for_je",
                                              _read(os.path.join(dirpath, f)))
@@ -482,7 +441,6 @@ class ProgrammeTests(unittest.TestCase):
         state = _read(STATE_EFFECTS)
         self.assertEqual(_lines(_block(state, "un_mirror_set")), ["set_variable = $MIRROR$"])
         self.assertEqual(_flat(_block(state, "un_mirror_clear")),
-                         "legacy_scaling_strip_united_nations = yes "
                          "if = { limit = { has_variable = $MIRROR$ } remove_variable = $MIRROR$ }")
         for modifier in PROGRAMMES:
             with self.subTest(modifier=modifier):
@@ -596,7 +554,6 @@ class RegimeTermTests(unittest.TestCase):
                          "name = un_regime_$TERM$_modifier multiplier = $MULT$ } } } "
                          "set_variable = un_regime_$TERM$_modifier_on")
         self.assertEqual(_flat(_block(effects, "un_regime_term_off")),
-                         "legacy_scaling_strip_united_nations = yes "
                          "if = { limit = { has_variable = un_regime_$TERM$_modifier_on } "
                          "remove_variable = un_regime_$TERM$_modifier_on }")
         clear = _block(effects, "un_regime_clear_country")

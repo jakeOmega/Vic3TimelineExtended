@@ -677,10 +677,6 @@ nuclear_weapon_events.3 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = industrial_nuke_fails_defender
-	}
-
 	option = {
 		name = nuclear_weapon_events.3.a
 		default_option = yes
@@ -705,10 +701,6 @@ nuclear_weapon_events.4 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = industrial_nuke_fails_attacker
 	}
 
 	option = {
@@ -752,10 +744,6 @@ nuclear_weapon_events.5 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = tactical_nuke_succeeds_defender
 	}
 
 	option = {
@@ -848,10 +836,6 @@ nuclear_weapon_events.7 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = tactical_nuke_fails_defender
-	}
-
 	option = {
 		name = nuclear_weapon_events.7.a
 		default_option = yes
@@ -876,10 +860,6 @@ nuclear_weapon_events.8 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = tactical_nuke_fails_attacker
 	}
 
 	option = {
@@ -1257,10 +1237,6 @@ nuclear_weapon_events.12 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = industrial_nuke_succeeds_attacker
-	}
-
 	option = {
 		name = nuclear_weapon_events.12.a
 		default_option = yes
@@ -1287,10 +1263,6 @@ nuclear_weapon_events.13 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = industrial_nuke_fails_defender
-	}
-
 	option = {
 		name = nuclear_weapon_events.13.a
 		default_option = yes
@@ -1315,10 +1287,6 @@ nuclear_weapon_events.14 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = industrial_nuke_fails_attacker
 	}
 
 	option = {
@@ -1696,7 +1664,9 @@ nuclear_weapon_events.18 = {
 		}
 	}
 
-	# Option C — Has nuclear program: "Stay the course."
+	# Option C — Has nuclear program: "Stay the course." Not the default (#806):
+	# D, open to everyone, is the event's one default, so a country with a
+	# programme that lets the alert lapse lobbies too.
 	option = {
 		name = nuclear_weapon_events.18.opt_c
 		trigger = {
@@ -1705,7 +1675,6 @@ nuclear_weapon_events.18 = {
 			has_variable = nuclear_weapon_program_progress
 			has_variable = nuclear_weapons_program_funding
 		}
-		default_option = yes
 		custom_tooltip = {
 			text = NW_PROGRESS_ADD_5_TT
 			change_variable = { name = nuclear_weapon_program_progress add = 5 }
@@ -1746,6 +1715,9 @@ nuclear_weapon_events.18 = {
 	# queueing an offer the reserved floor would silently drop.
 	# nuclear_npt_lobbied tells un_events.14 that we asked for it: an AI that
 	# did then tables the treaty rather than passing or refusing it.
+	#
+	# The event's only default, and untriggered, so it is valid for every
+	# recipient (#806): which of two valid defaults the engine takes is unread.
 	option = {
 		name = nuclear_weapon_events.18.opt_d
 		default_option = yes

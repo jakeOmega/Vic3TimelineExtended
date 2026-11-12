@@ -25,12 +25,17 @@
 		has_game_rule = social_movements_enabled
 		has_technology_researched = post_work_society
 		NOT = { is_country_type = decentralized }
+		# Set by the success and timeout outcomes. A revolution's winner gets a
+		# fresh record of an entry the loser had finished, and without this a
+		# timed-out transition would run its thirty years again (#471).
+		NOT = { has_variable = post_scarcity_resolved }
 		NOT = {
 			has_law = law_type:law_post-scarcity
 		}
 	}
 
 	possible = {
+		NOT = { has_variable = post_scarcity_resolved }
 		has_technology_researched = post_work_society
 		NOT = {
 			has_law = law_type:law_post-scarcity
@@ -84,6 +89,7 @@
 			has_law = law_type:law_post-scarcity
 		}
 		effect = {
+			set_variable = post_scarcity_resolved
 			trigger_event = { id = post_scarcity_events.200 }
 		}
 	}
@@ -106,6 +112,7 @@
 		flags = { timeout }
 		conclusion_desc = je_post_scarcity_timeout_conclusion_desc
 		effect = {
+			set_variable = post_scarcity_resolved
 			add_radicals = {
 				value = medium_radicals
 				strata = lower

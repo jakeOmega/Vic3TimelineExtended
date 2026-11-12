@@ -19,7 +19,12 @@ wars small. What these checks pin, none of which the engine would report:
 - social_tensions_events.7's reform option can actually appear;
 - each law charges its infamy standing once on taking effect: the full
   difference from the standing already charged toward a looser law, 90% of it
-  rounded down toward a stricter one, so every round trip costs infamy.
+  rounded down toward a stricter one, so every round trip costs infamy;
+- nothing is charged for the laws a country is given rather than enacts: at
+  game start (Total War, the group's first law, then history's Traditional,
+  3 infamy for everyone before, #1595) or as a country made mid-game, which
+  holds no standing yet; the standing is still recorded, and a monthly
+  backfill records it for a country the engine gave its laws silently.
 
 No game install needed.
 """
@@ -52,6 +57,7 @@ MODIFIER_TYPES = os.path.join(
 SOCIAL_EVENTS = os.path.join(REPO, "events", "social_tensions_events.txt")
 ROW_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "rules_of_war_effects.txt")
 ROW_VALUES = os.path.join(REPO, "common", "script_values", "rules_of_war_values.txt")
+ROW_ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_rules_of_war_on_actions.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 
@@ -368,10 +374,11 @@ class InfamyStandingTests(unittest.TestCase):
         )
         self.assertIn(gain, body)
         self.assertIn(cut, body)
-        self.assertIn(
-            "hidden_effect = { set_variable = { name = te_row_infamy_standing "
-            "value = $STANDING$ } }",
-            body,
+        self.assertIn("hidden_effect = {", body)
+        self.assertTrue(
+            body.rstrip().endswith(
+                "set_variable = { name = te_row_infamy_standing value = $STANDING$ } }"
+            )
         )
         charged = re.sub(r"\s+", " ", _block(self.values, "te_row_charged_standing"))
         self.assertIn("value = 0", charged)
@@ -380,6 +387,75 @@ class InfamyStandingTests(unittest.TestCase):
             "value = var:te_row_infamy_standing",
             charged,
         )
+
+    def test_the_start_and_a_new_country_are_not_charged(self):
+        # #1595: both change_infamy branches sit inside one gate on the start
+        # date and on a recorded standing; the standing is set outside it.
+        body = re.sub(r"\s+", " ", self.effect)
+        gate = (
+            "if = { limit = { game_date > 1836.1.1 has_variable = te_row_infamy_standing } "
+            "if = { limit = { te_row_charged_standing < $STANDING$ }"
+        )
+        self.assertIn(gate, body)
+        self.assertEqual(body.count("change_infamy"), 2)
+        gated = _block("x = {" + self.effect + "}", "x")
+        outer = re.search(r"if\s*=\s*\{", gated)
+        depth, end = 0, None
+        for j in range(outer.end() - 1, len(gated)):
+            depth += {"{": 1, "}": -1}.get(gated[j], 0)
+            if depth == 0:
+                end = j
+                break
+        inside = gated[outer.start():end]
+        self.assertEqual(inside.count("change_infamy"), 2)
+        self.assertNotIn("set_variable = { name = te_row_infamy_standing", inside)
+        self.assertIn("set_variable = { name = te_row_infamy_standing", gated[end:])
+
+    def test_replay_from_game_start(self):
+        # The effect as gated: the setup's Total War and history's Traditional
+        # record a standing and charge nothing; the first real change pays.
+        def replay(events):
+            infamy, charged = 0.0, None
+            for name, started in events:
+                if started and charged is not None:
+                    infamy = max(0.0, infamy + self._change(charged, self.standing[name]))
+                charged = self.standing[name]
+            return infamy, charged
+
+        start = [(TOTAL, False), (TRADITIONAL, False)]
+        self.assertEqual(replay(start), (0.0, 0.0))
+        self.assertEqual(replay(start + [(TOTAL, True)]), (25.0, 25.0))
+        # A country made mid-game: given Total War, then its origin's
+        # Traditional (or Total War again); nothing until it enacts one.
+        self.assertEqual(replay([(TOTAL, True), (TRADITIONAL, True)]), (0.0, 0.0))
+        self.assertEqual(replay([(TOTAL, True)]), (0.0, 25.0))
+
+    def test_backfill_standing_matches_each_law(self):
+        body = re.sub(r"\s+", " ", _block(self.values, "te_row_law_standing"))
+        self.assertTrue(body.strip().startswith("value = 0"))
+        for name in LAWS_IN_GROUP:
+            if self.standing[name] == 0:
+                self.assertNotIn(f"law_type:{name}", body)
+                continue
+            with self.subTest(law=name):
+                expected = f"has_law = law_type:{name} }} value = {int(self.standing[name])} }}"
+                self.assertIn(expected, body)
+        backfill = re.sub(
+            r"\s+", " ", _block(_strip_comments(_read(ROW_EFFECTS)), "te_row_backfill_standing")
+        )
+        self.assertIn(
+            "game_date > 1836.1.1 NOT = { has_variable = te_row_infamy_standing }", backfill
+        )
+        self.assertIn(
+            "set_variable = { name = te_row_infamy_standing value = te_row_law_standing }", backfill
+        )
+        on_actions = _strip_comments(_read(ROW_ON_ACTIONS))
+        self.assertRegex(
+            on_actions,
+            r"on_monthly_pulse_country\s*=\s*\{\s*on_actions\s*=\s*\{\s*"
+            r"te_row_backfill_standing_on_action",
+        )
+        self.assertIn("te_row_backfill_standing = yes", on_actions)
 
     def test_a_cut_keeps_less_than_the_whole_difference(self):
         self.assertLess(self.share, 1)

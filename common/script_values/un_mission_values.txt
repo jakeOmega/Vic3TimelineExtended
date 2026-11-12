@@ -1201,7 +1201,7 @@ un_state_mission_barred = {
 un_lean_interests_observer_request = {
 	value = 0
 	if = {
-		limit = { un_mission_holds_elections = yes }
+		limit = { te_holds_elections = yes }
 		add = 15
 	}
 	if = {

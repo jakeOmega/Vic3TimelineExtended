@@ -368,9 +368,12 @@ irredentism.2 = {
 				add = -3
 			}
 		}
-		# Peaceful transfer of the demanded state to the demander -- no war.
-		scope:irr_demanded_state = {
-			set_state_owner = scope:irr_unifier
+		# Peaceful transfer of the demanded state to the demander -- no war --
+		# as a state transfer treaty (#1457), or directly where none can be made.
+		te_cede_state_by_treaty = {
+			STATE = scope:irr_demanded_state
+			GIVER = ROOT
+			TAKER = scope:irr_unifier
 		}
 		# De-escalation goodwill toward the power we accommodated.
 		change_relations = {

@@ -95,6 +95,10 @@ te_nation_src_demography_count = {
 te_nation_src_nuclear_order_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = nd_crisis_programme_freeze }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
 		add = 1
 	}
@@ -3979,6 +3983,10 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = nd_crisis_programme_freeze }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
 		add = 1
 	}
@@ -4596,6 +4604,10 @@ te_nation_type_country_colonial_stability_drift_add_count = {
 te_nation_group_nuclear_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = nd_crisis_programme_freeze }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
 		add = 1
 	}
@@ -4617,6 +4629,10 @@ te_nation_type_country_nuclear_disarmament_bool_count = {
 # Used by: the country_nuclear_program_pause_bool row
 te_nation_type_country_nuclear_program_pause_bool_count = {
 	value = 0
+	if = {
+		limit = { has_modifier = nd_crisis_programme_freeze }
+		add = 1
+	}
 	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
 		add = 1
