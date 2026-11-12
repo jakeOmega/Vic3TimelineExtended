@@ -5,9 +5,10 @@
     python3 scripts/analysis/flavor_forms.py banking_cycle_events
     python3 scripts/analysis/flavor_forms.py banking_cycle_events --list
 
-Flavor text (`<namespace>.<n>.f*` in te_events_l_english.yml) is where sameness
-shows most: read in a row, a chain whose every event is two unnamed voices
-trading lines is one text. `docs/guides/loc_style_guide.md` § "Flavor text:
+Flavor text (`<namespace>.<n>.f` or `.flavor`, with any `_variant` or `.variant`
+suffix but not `.tt`, and never a key an event names as an option, in
+te_events_l_english.yml) is where sameness shows most: read in a row, a chain
+whose every event is two unnamed voices trading lines is one text. `docs/guides/loc_style_guide.md` § "Flavor text:
 vary the form" asks that no form take more than a third of a chain. Run this
 before adding to a chain and write in a form it is short of.
 

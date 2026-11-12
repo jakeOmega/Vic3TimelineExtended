@@ -672,7 +672,7 @@ believed armed, and after a salvo only when one warhead landed (twice as
 often under an aggressive ruler, less under an honorable or direct one, more
 under a ruthless one or a grifter, half as often once the taboo is 50).
 
-The struck country's event ("A City Erased", or "A Nuclear Salvo from …")
+The struck country's event ("The Bomb Falls on …", or "A Nuclear Salvo from …")
 shows the claim, with a choice to accept it: hold back the answer and demand
 reparations, which the launcher may pay or
 refuse. The choice comes once a strike, and not while Automatic Retaliation has
@@ -687,7 +687,7 @@ lets it make amends.
 
 ### Retaliation and Automatic Retaliation
 
-The victim of a strategic strike gets "A City Erased" with its answer: condemn
+The victim of a strategic strike gets "The Bomb Falls on …" with its answer: condemn
 the attack, retaliate with one warhead, or launch a full retaliation of three if
 it holds more than two. Retaliation costs no infamy, counts for less with the
 United Nations than a first strike, knocks the nuclear taboo down half as far,

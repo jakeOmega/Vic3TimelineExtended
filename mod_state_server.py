@@ -9884,6 +9884,7 @@ POST_LOAD_AUDITS = [
     ("long_tooltip_audit",            "long_tooltip_audit"),
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
     ("button_reason_audit",           "button_reason_audit"),
+    ("faith_scene_audit",             "faith_scene_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

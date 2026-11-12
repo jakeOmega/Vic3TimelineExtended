@@ -11,7 +11,7 @@ The house style is `docs/guides/loc_style_guide.md`. Read it in full before writ
 1. **Read the guide**, and `docs/guides/event_creation_guide.md` § "Event Localization Style Guide" for the per-key conventions. Where they differ on voice, the style guide wins.
 2. **Read the script before the text.** For each event: its `trigger`, what fires it (an on_action, another event's `trigger_event`, a button), and what each option does. `grep -n "<namespace>\.<n> = {" events/*.txt` finds it. For a modifier or law description, find what adds or defines it under `common/` and `events/`.
 3. **Write down what the triggers guarantee** before writing a sentence. `python3 scripts/analysis/event_guarantees.py <event id or namespace>` prints each event's required technologies, what follows from them (prerequisites, and everything more than two eras behind), and the rest of its trigger. Work out which technology, law, system, scope or state of the world must hold for this text to be shown. Read the chain's row in `docs/guides/event_text_guarantees.md` (the general rows are in the guide, § "What a chain's triggers already guarantee", with the gates the tool does not follow), and add or correct it. This is a deliverable, not a note to self.
-4. **For flavor, look at the chain's mix:** `python3 scripts/analysis/flavor_forms.py <namespace>` (add `--list` for each key's form). Choose a form the chain is short of. No form takes more than a third of a chain.
+4. **For flavor, look at the chain's mix:** `python3 scripts/analysis/flavor_forms.py <namespace>` (add `--list` for each key's form). Choose a form the chain is short of. No form takes more than a third of a chain, except the space program's attributed quote (the guide, § "Flavor text: vary the form").
 5. **Write.** The three tests from the guide, on every sentence: could it be about anything else, could a game make it false, is it trying to be admired.
 6. **Fix other text only where it breaks the guide** when the task is a rewrite: a stock metaphor, a claim the script does not back, an option whose wording misstates what it does, a report label for a title. Leave text that is plain and correct. In the pilot chain that still meant every description; budget for it.
 7. **Check each text against the script again**, option wording included, then run the checklist at the end of the guide.
@@ -30,7 +30,7 @@ The house style is `docs/guides/loc_style_guide.md`. Read it in full before writ
 ## Mechanics
 
 - **A renamed title is quoted elsewhere.** `grep -rnF "<old title>" docs/ localization/english/` before renaming, and change the player guide and system docs in the same change.
-- **Never write `[...]` or any other square bracket in a text:** the engine reads it as a data call.
+- **No square bracket in the prose itself** (an editorial `[...]` in a quotation, a bracketed aside): the engine reads every `[` as the start of a data call. The only brackets in a text are its data calls, such as `[SCOPE.sCountry('x').GetName]`.
 - **Keep every key and every scope reference** in a rewrite. A new gated variant (`first_valid`, a triggered `desc`) needs its script change and its loc key in the same change.
 - **Loc syntax:** `.claude/rules/localization.md`. One BOM, `\"` for a quote inside a value, `#b text#!` for bold, no text ending in `\n`.
 - **After editing loc:** `python3 organize_loc.py`, and commit everything it rewrote.

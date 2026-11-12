@@ -13,8 +13,6 @@ ai-phrase	je_colonial_empire_fail_tt
 ai-phrase	je_nuclear_program_reason
 ai-phrase	je_space_race_widget_how_approach
 ai-phrase	law_mandatory_augmentation_desc
-ai-phrase	monument_events.2.a
-ai-phrase	monument_events.2.a.tt
 ai-phrase	nd_tt_cwr_offer
 ai-phrase	nd_tt_open_uncertain
 ai-phrase	notification_headlines_tech_advanced_assembly_lines_desc
@@ -262,15 +260,6 @@ trailing-newline	te_window_tab_seabed_locked_tt
 trailing-newline	te_window_tab_space_race_locked_tt
 trailing-newline	te_window_tab_strategic_reserve_locked_tt
 trailing-newline	te_window_tab_united_nations_locked_tt
-trailing-newline	un_events.12.d_cause_collapse
-trailing-newline	un_events.14.d_cause_other
-trailing-newline	un_events.14.d_cause_self
-trailing-newline	un_events.17.d_cause_threshold
-trailing-newline	un_events.19.d_cause_world
-trailing-newline	un_events.3.d_cause_war
-trailing-newline	un_events.40.d_cause_station
-trailing-newline	un_events.41.d_cause_strike
-trailing-newline	un_events.42.d_cause_seizure
 verdict-word	ICBMs_desc
 verdict-word	SR_ELEVATOR_BOOST_TT
 verdict-word	SR_MARS_DIRECT_CHOSEN_TT

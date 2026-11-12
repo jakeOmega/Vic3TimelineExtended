@@ -287,7 +287,8 @@ that never uses them abstains. AI members vote late too: each votes in the ninth
 tenth or eleventh month, drawn at random, by its lean at that time. An AI member
 that still has not voted (one that joined late, for example) votes in the last
 month of the session. After a year, The Count Is In applies the outcome for the
-proposer, and every other member learns it in The Assembly Has Voted.
+proposer, and the other members learn it in The Assembly Has Voted (a country a
+verdict names hears its own news instead).
 
 Most topics pass by **Majority**: the votes in favor outnumber those against.
 Charter reforms, motions to expel and a suspension of credentials need **Two-Thirds**: two thirds of all

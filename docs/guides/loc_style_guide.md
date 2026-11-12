@@ -211,7 +211,7 @@ An option's wording is also a claim like any other. "Rush a replacement vehicle 
 
 **An option speaks at the moment its event reports.** Where an event reports something done and shows the option that matches a choice made earlier, the option is the ruler's reaction to the result, not the choice again. The Mars landing's options read "Establish orbital infrastructure first." under a description in which the crew had already landed; it is now "Building in Mars orbit first was the right call. The station stays in service."
 
-**Titles hint,** in two to five words: "A Routine Mishap", not "Hacker Collective Attack". A title needs no wordplay. Two cautions from the rewrite (2026-11-12). A title that works as a name stays one: the thirty resolution topics of `un_vote.1` ("Arms Embargo Vote") and the crash's severity tiers are how the player tells which question is in front of them. And a title is quoted elsewhere: before renaming one, `grep -rnF "<old title>" docs/ localization/english/` and change the player guide's chapters, the system docs and any tooltip that names the event in the same change.
+**Titles hint,** in two to five words: "A Routine Mishap", not "Hacker Collective Attack". A title needs no wordplay. Two cautions from the rewrite (2026-11-12). A title that works as a name stays one: the thirty-four resolution topics of `un_vote.1` ("Arms Embargo Vote") and the crash's severity tiers are how the player tells which question is in front of them. And a title is quoted elsewhere: before renaming one, `grep -rnF "<old title>" docs/ localization/english/` and change the player guide's chapters, the system docs and any tooltip that names the event in the same change.
 
 ### Flavor text: vary the form
 
@@ -276,14 +276,14 @@ The same event in three forms, none ending on a turn:
 - **No ellipsis** at the end of a text.
 - **Quotes** in loc are `\"`, straight, and paired.
 - **Formatting codes mean something.** `#v` marks a live figure, `#G` / `#R` good and bad for the player, `#b` a heading inside a tooltip or a word the player must not miss. None of them is decoration, and an event description carries none except to mark a threshold or a required action.
-- **No text ends with `\n`,** except a fragment a `desc` block splices in front of another (`un_events.*.d_cause_*`), which ends in `\n\n` by design and is in the lint's baseline.
+- **No text ends with `\n`,** except a fragment a `desc` block splices in front of another (`un_events.*.d_cause_*`), which ends in `\n\n` by design and carries `# REVIEWED … (loc_style)` on its line.
 
 ## Words
 
 - **One name per thing.** Use the in-game name, spelled and capitalized as its own key renders it, and splice it (`$key$`) rather than retyping it, so a rename reaches every mention. Splice only a name that reads as a noun in the sentence: a law whose name is "Ministry of Intelligence and Security Established" goes in a list of laws, or the sentence is written around it.
 - **Props that fit every era the event can fire in.** "Crates", not "bales"; "a message", not "a telegram", unless the event is gated to the years that had them.
 - **A coined term says what it means** the first time, or links the concept that does.
-- **Do not put one faith's furniture in a scene any country can get** (a priest, a pew, a sermon). Write the scene without a named faith or gate the version. `event_creation_guide.md` has the pattern.
+- **Do not put one faith's furniture in a scene any country can get** (a priest, a pew, a sermon). Write the scene without a named faith or gate the version. `event_creation_guide.md` has the pattern, and `faith_scene_audit` fails CI on a faith's word that another faith's country can be shown (§ "What the machine checks").
 
 ## Before you commit a text
 
@@ -303,6 +303,8 @@ Two lints run in `scripts/preflight.py` and CI. Both are ratchets: the mod's old
 - `python3 scripts/analysis/flavor_forms.py --check` fails when a form that is over a third of its chain gains a text. After rewriting a chain, `--update`.
 
 Neither can judge whether a sentence is particular, whether a game could make it false, or whether it ends on a kicker. Those are the writer's.
+
+One audit reads the script beside the text, and is not a ratchet: `python3 faith_scene_audit.py --strict` (CI runs it with the other audits) fails when an event can show a text with one faith's word in it (a priest, a mosque, a guru, the faith's name) to a country whose state religion the word does not fit (#1531). It covers what an event shows: titles, descriptions, flavor, options, tooltips and the modifiers it adds. It reads religion gates only, so a text gated on culture or on a variable, a real quotation and a metaphor ("Cathedrals of Coral") are flagged and take `# REVIEWED YYYY-MM-DD (faith_scene): why` trailing on the loc line. `--explain <key>` lists where a key is named and the gate read there. The word list, with the faiths each word fits, is `VOCABULARY` in the audit: add a word there when a scene gets past it.
 
 ## Still open
 
