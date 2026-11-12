@@ -11,7 +11,8 @@ undo them:
 - World War's rule-off helper clears every variable the completion outcome clears, and the latches;
 - Grand Monuments' rule-off pass keeps the upkeep exemption on the building;
 - the monetary layer, when the banking rule goes from Full to Simplified (the entry stays), strips its managed modifiers,
-  forgets the skipped steps' state so step 0 seeds it neutral again, and switches off the full-system tools (#1507).
+  forgets the skipped steps' state so step 0 seeds it neutral again, and switches off the full-system tools (#1507);
+  its treaty articles end on the rule (owner, 2026-11-12), and the teardown clears the backstop roles they leave.
 """
 from __future__ import annotations
 
@@ -245,6 +246,66 @@ class MonetaryRuleSwitchTest(unittest.TestCase):
         for tool in sorted(tools):
             with self.subTest(tool=tool):
                 self.assertIn(f"banking_effect_cb_disable_{tool}", called)
+
+    def requirement_triggers(self, rel: str, article: str) -> list[Node]:
+        node = top(rel)[article]
+        return [t for r in node.children if r.key == "requirement_to_maintain"
+                for t in r.children if t.key == "trigger"]
+
+    def test_the_backstop_articles_end_on_the_rule(self):
+        # Owner, 2026-11-12: a signed swap line, guarantee or receivership ends when the rule leaves Full,
+        # through a failed requirement (no breaker), not by a withdrawal the teardown would charge to a party.
+        for rel, article in (("common/treaty_articles/111_swap_line.txt", "swap_line"),
+                             ("common/treaty_articles/112_lender_of_last_resort.txt", "lender_of_last_resort"),
+                             ("common/treaty_articles/114_debt_receivership.txt", "debt_receivership")):
+            with self.subTest(article=article):
+                found = [t for t in self.requirement_triggers(rel, article)
+                         if ("te_mon_full_system", "yes") in pairs(walk(t.children))]
+                self.assertEqual(len(found), 1, "one requirement on te_mon_full_system")
+
+    def test_the_pegs_end_on_the_rule_through_the_anchors_dial(self):
+        triggers = top("common/scripted_triggers/te_monetary_triggers.txt")
+        triggers.update(top("common/scripted_triggers/te_monetary_arrangement_triggers.txt"))
+        self.assertIn(("te_mon_has_dial", "yes"), pairs(triggers["te_mon_can_be_anchor"].children))
+        self.assertIn(("te_mon_full_system", "yes"), pairs(triggers["te_mon_has_dial"].children))
+        for rel, article in (("common/treaty_articles/110_currency_peg.txt", "currency_peg"),
+                             ("common/treaty_articles/113_imposed_currency_peg.txt", "imposed_currency_peg")):
+            with self.subTest(article=article):
+                reads = [n for t in self.requirement_triggers(rel, article) for n in walk(t.children)]
+                self.assertIn(("te_mon_can_be_anchor", "yes"), pairs(reads))
+
+    def test_the_teardown_settles_the_line_then_clears_the_roles(self):
+        order = [n for n in self.leave.children if n.key == "if"]
+        settle = next(i for i, n in enumerate(order) if "te_mon_effect_swap_settle" in keys(n))
+        cleared = {}
+        for i, n in enumerate(order):
+            for sv in (c for c in walk(n.children) if c.key == "set_variable" and c.children):
+                fields = dict(pairs(sv.children))
+                if fields.get("value") == "0":
+                    cleared[fields["name"]] = i
+        for role in ("te_mon_swap_recipient", "te_mon_lolr_ward", "te_mon_receivership",
+                     "te_mon_receivership_clear_months"):
+            with self.subTest(role=role):
+                self.assertIn(role, cleared)
+                self.assertGreater(cleared[role], settle, "settle while the role still names the lender")
+        self.assertIn(("te_mon_clear_backstop_rows", "yes"), pairs(self.leave.children))
+
+    def test_the_self_check_reads_a_month_later_once_a_game(self):
+        settle = self.switch["te_monetary_settle_rule_switch"]
+        branches = [c for c in settle.children if c.key == "else_if"]
+        self.assertEqual(len(branches), 2)
+        later = branches[1]
+        self.assertIn(("has_variable", "te_mon_switch_treaty_check"),
+                      pairs(next(c for c in later.children if c.key == "limit").children))
+        self.assertIn(("te_mon_selfcheck_switch_treaties", "yes"), pairs(later.children))
+        self.assertIn("te_mon_switch_treaty_check", {n.value for n in walk(self.leave.children)})
+        check = self.switch["te_mon_selfcheck_switch_treaties"]
+        self.assertEqual(sum(1 for n in walk(check.children) if n.key == "debug_log"), 2)
+        self.assertIn("te_mon_switch_treaties_selfcheck_logged", {n.value for n in walk(check.children)})
+        # This parser keeps no quoted string whole, so the two lines are read from the text.
+        text = (ROOT / "common/scripted_effects/te_monetary_rule_switch_effects.txt").read_text(encoding="utf-8-sig")
+        for verdict in ("OK", "BROKEN"):
+            self.assertIn(f'debug_log = "TE_SELF_CHECK {verdict} mon_rule_switch_treaties', text)
 
 
 if __name__ == "__main__":
