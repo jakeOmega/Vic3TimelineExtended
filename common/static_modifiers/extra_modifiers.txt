@@ -940,18 +940,6 @@ banking_event_sovereign_wealth_fund_cost = {
 }
 
 # ----- Interventions (buttons spend points here via negative adds) -----
-# KEPT FOR SAVE MIGRATION ONLY (2026-09-19). The "Raise Policy Rate" tool that
-# applied this is deleted (monetary_policy_design.md §18); nothing adds it any
-# more, and je_banking_cycle's monthly pulse strips it from saves that still
-# carry it. Removal checklist: common/scripted_effects/legacy_modifier_cleanup.txt.
-banking_policy_rate_hike = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_banking_intervention_max_add = -2
-	interest_group_ig_industrialists_approval_add = -2
-	# monthly:
-	country_finance_momentum_monthly_add = -0.25
-	country_bubble_pressure_monthly_add  = -2.0
-}
 
 # THE TEN DASHBOARD TOOLS' MONTHLY LINES WERE RE-SIZED 2026-09-22
 # (docs/audits/banking_cycle_simulation.md F1, §3):
@@ -1086,32 +1074,6 @@ banking_raise_margin_requirements = {
 	country_bubble_pressure_monthly_add  = -1.2
 }
 
-# LEGACY — monetary policy phase 4 (2026-09-21) deleted cb_fx_devaluation and
-# cb_fx_support: a weak or strong currency is now an OUTCOME (te_fx_index, §15),
-# not a button. Both definitions stay for one release so a save that holds them
-# loads clean; te_monetary_init_fx_variables converts them to an index of 80 /
-# 120 and strips them. Retire with legacy_modifier_cleanup.txt's dated checklist.
-banking_fx_devaluation = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_banking_intervention_max_add = -3
-	state_import_advantage_mult = -0.25
-	state_export_advantage_mult = 0.25		     # exporters advantaged
-	country_risk_premium_add = 0.004            # inflation pass-through
-	country_finance_momentum_monthly_add = 0.1
-	country_bubble_pressure_monthly_add  = 0.3
-}
-
-banking_fx_support = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_banking_intervention_max_add = -3
-	state_import_advantage_mult = 0.25
-	state_export_advantage_mult = -0.25		     # importers advantaged
-	country_risk_premium_add = -0.002
-	country_finance_momentum_monthly_add = 0.05
-	country_bubble_pressure_monthly_add  = -0.4
-	state_tax_collection_mult = -0.03             # ongoing cost of deploying foreign reserves
-}
-
 banking_capital_controls_out = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
@@ -1130,19 +1092,6 @@ banking_capital_controls_out = {
 	country_authority_add = 100
 	country_finance_momentum_monthly_add = 0.02
 	country_bubble_pressure_monthly_add  = -0.1
-}
-
-# LEGACY since monetary policy phase 5a (2026-09-21): the FX Swap Lines tool is
-# deleted and the swap_line treaty article replaces it, so nothing applies this
-# any more. The definition stays for one release so a save holding it loads
-# clean; legacy_modifier_cleanup.txt carries the dated removal checklist.
-banking_fx_swap_lines = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_banking_intervention_max_add = -4
-	state_import_advantage_mult = 0.05
-	country_influence_cost_add = 100
-	country_finance_momentum_monthly_add = 0.15
-	country_bubble_pressure_monthly_add  = -0.3
 }
 
 banking_export_credit_facility = {
@@ -1744,14 +1693,6 @@ fossil_lobby_concessions_modifier = {
 	state_pollution_generation_mult = 0.05
 }
 
-# Replacement when global warming rule is disabled
-fossil_lobby_concessions_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	building_coal_mine_throughput_add = 0.10
-	building_group_bg_oil_extraction_throughput_add = 0.10
-	state_pollution_generation_mult = 0.15
-}
-
 climate_summit_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.15
@@ -1759,25 +1700,10 @@ climate_summit_leader_modifier = {
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
 }
 
-# Replacement when global warming rule is disabled: pollution reduction instead of GHG
-climate_summit_leader_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.15
-	state_pollution_generation_mult = -0.10
-	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
-}
-
 climate_summit_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
 	country_greenhouse_gas_emissions_mult = -0.03
-}
-
-# Replacement when global warming rule is disabled
-climate_summit_pledge_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.05
-	state_pollution_generation_mult = -0.05
 }
 
 tropical_disease_spread_modifier = {
@@ -1846,13 +1772,6 @@ climate_dismissal_boost_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.05
 }
 
-# Replacement when global warming rule is disabled
-climate_dismissal_boost_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_throughput_add = 0.03
-	state_pollution_generation_mult = 0.10
-}
-
 # Not spending on climate crisis - saves government resources (event 3B)
 climate_inaction_savings_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -1874,27 +1793,11 @@ climate_accord_rejection_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.05
 }
 
-# Replacement when global warming rule is disabled
-climate_accord_rejection_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_coal_mine_throughput_add = 0.05
-	building_group_bg_oil_extraction_throughput_add = 0.05
-	state_pollution_generation_mult = 0.10
-}
-
 # Rolling back climate protections during cooling (events 17B, 18B, 19B, 23B)
 climate_deregulation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03
 	country_greenhouse_gas_emissions_mult = 0.05
-	country_bureaucracy_mult = 0.03
-}
-
-# Replacement when global warming rule is disabled
-climate_deregulation_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_throughput_add = 0.03
-	state_pollution_generation_mult = 0.10
 	country_bureaucracy_mult = 0.03
 }
 
@@ -1905,27 +1808,12 @@ climate_measures_sunset_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.10
 }
 
-# Replacement when global warming rule is disabled
-climate_measures_sunset_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_throughput_add = 0.05
-	state_pollution_generation_mult = 0.15
-}
-
 # Declaring victory on climate and reducing policy intensity (event 21B)
 climate_victory_dividend_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_prestige_mult = 0.15
 	building_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.05
-}
-
-# Replacement when global warming rule is disabled
-climate_victory_dividend_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_prestige_mult = 0.15
-	building_throughput_add = 0.05
-	state_pollution_generation_mult = 0.10
 }
 
 # ============================================================================
@@ -5300,14 +5188,6 @@ banking_event_cooperative_growth = {
 	building_group_bg_agriculture_throughput_add = 0.03
 }
 
-# PENDING REMOVAL (2026-09-25, #428): banking_cycle_events.31 now enacts the
-# dashboard's cb_bank_holiday instead. Kept for saves that carry it — see
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-banking_event_bank_holiday = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	goods_output_services_mult = -0.05
-}
-
 banking_event_trust_collapse = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
@@ -7006,8 +6886,7 @@ intelligence_capacity_defense = {
 # resistances as intelligence_capacity_defense, which lives on
 # je_covert_warfare, plus a small intelligence capacity boost (owner decision,
 # PR #510: 2 per unit, so +6 when granted, decaying). That option used to add
-# intelligence_capacity_defense itself, at country scope, where
-# legacy_je_modifier_cleanup_effect strips it every month.
+# intelligence_capacity_defense itself, at country scope.
 covert_counterintelligence_alert = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_support_separatism_resistance_mult = 0.05
@@ -7042,31 +6921,6 @@ iw_tradecraft_bonus = {
 	country_intelligence_capacity_mult = 0.05
 }
 
-# RETIRED 2026-10-07: industrial espionage's +5 innovation; the operation now
-# pays in stolen technology only. Kept defined so a save carrying it (a
-# three-month timed modifier) loads cleanly; legacy_modifier_cleanup.txt strips
-# it (PENDING REMOVAL).
-covert_espionage_base = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_weekly_innovation_add = 5
-}
-
-# RETIRED 2026-10-06 (covert tech theft): no longer applied; espionage steals
-# technology instead. Kept defined so a save carrying it (a three-month timed
-# modifier) loads cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
-covert_industrial_espionage = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_production_tech_spread_mult = 0.15
-}
-
-# RETIRED 2026-10-06 (covert tech theft): no longer applied; espionage steals
-# technology instead. Kept defined so a save carrying it (a three-month timed
-# modifier) loads cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
-covert_military_espionage = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_military_tech_spread_mult = 0.15
-}
-
 # Applied to TARGET when influence campaign operation is active
 covert_influence_campaign = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -7081,36 +6935,10 @@ covert_ideological_subversion = {
 	political_movement_pop_attraction_mult = 0.1
 }
 
-# RETIRED 2026-09-25: destabilization's movement pressure now rides on
-# covert_destabilization_resist. These two survive one release so a save made
-# while one was running loads clean; see PENDING REMOVAL in
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-covert_destabilization_separatist = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 0.15
-	political_movement_pop_attraction_mult = 0.15
-}
-
-covert_destabilization_general = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 0.05
-	political_movement_pop_attraction_mult = 0.05
-}
-
 # Applied to TARGET during wartime infrastructure sabotage (morale effect, country-scoped)
 covert_infra_sabotage_morale = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	unit_morale_loss_mult = 0.15
-}
-
-# RETIRED 2026-10-07: military espionage's unit bonus, which helped against
-# every enemy, not only the target; the operation now pays in stolen technology
-# only. Kept defined so a save carrying it (a three-month timed modifier) loads
-# cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
-covert_military_espionage_unit = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	unit_offense_mult = 0.05
-	unit_defense_mult = 0.05
 }
 
 # Applied to TARGET during ideological subversion (separatism resistance, country-scoped)
@@ -8394,18 +8222,6 @@ te_mon_mandate_loosened = {
 # te_mon_peg_suspension and te_mon_peg_credibility_lost for the time their
 # counter says is left.
 
-# RETIRED 2026-10-06 — the carry on borrowed gold (owner decision I, reversed:
-# under gold, private borrowers paid the interest on balances a high rate drew
-# in, never the treasury). Nothing applies it any more. It survives only so a
-# save made while it was applied loads clean; step 10 of
-# te_monetary_monthly_update strips it every pulse. Removal checklist:
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-te_mon_gold_carry_expense = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_expenses_add = 1 # REVIEWED 2026-10-06: unit value of a retired stub; nothing applies it, step 10 strips it from old saves
-	country_te_budget_expense_banking_add = 1
-}
-
 # Suspend convertibility: +2pp of cyclical premium for the five years the
 # suspension runs (days = 1825).
 te_mon_peg_suspension = {
@@ -8419,17 +8235,6 @@ te_mon_peg_suspension = {
 te_mon_peg_credibility_lost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_credit_standing_add = 0.01
-}
-
-# LEGACY since phase 4 (2026-09-21): §12.3's Devalue now SETS te_fx_index to 88
-# and lets it walk back to par (te_mon_effect_fx_devalue_peg) — same peak, same
-# impulse — so nothing applies this any more. The definition stays for one
-# release because a save can hold up to five years of it, and for that save it
-# still IS the devaluation's export edge. Listed in legacy_modifier_cleanup.txt.
-te_mon_peg_devalued = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	state_export_advantage_mult = 0.15
-	state_import_advantage_mult = -0.15
 }
 
 # ...and §12.3's "expected inflation +3" (days = 730, decaying), delivered as
