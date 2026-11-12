@@ -273,13 +273,11 @@ verdict-word	augmented_police_modifier_desc
 verdict-word	biotechnology_desc
 verdict-word	climate_crisis_emergency_modifier_desc
 verdict-word	climate_summit_leader_modifier_desc
-verdict-word	climate_summit_leader_no_gw_modifier_desc
 verdict-word	concept_banking_crash_desc
 verdict-word	concept_bubble_pressure_desc
 verdict-word	concept_foreign_cultural_benchmark_desc
 verdict-word	concept_nuclear_strike_desc
 verdict-word	concept_world_war_system_desc
-verdict-word	covert_destabilization_separatist_desc
 verdict-word	early_nanotechnology_desc
 verdict-word	free_port_concession_desc
 verdict-word	free_port_state_modifier_desc
