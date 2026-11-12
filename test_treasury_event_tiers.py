@@ -49,8 +49,11 @@ class TreasuryEventTierTest(unittest.TestCase):
         for option in ("ministry_law_events.2.a", "ministry_law_events.40.b"):
             with self.subTest(option=option):
                 self.assertRegex(option_body(self.events, option), cost)
+        # Closing the Doors: the swift closure saves the cost at once. The
+        # saving sat on the phased wind-down until #1614.
         self.assertIn("add_treasury = sv_treasury_event_small\n",
-                      option_body(self.events, "ministry_law_events.42.b"))
+                      option_body(self.events, "ministry_law_events.42.a"))
+        self.assertNotIn("add_treasury", option_body(self.events, "ministry_law_events.42.b"))
 
 
 if __name__ == "__main__":

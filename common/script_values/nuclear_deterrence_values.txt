@@ -1141,7 +1141,7 @@ nd_ai_salvo_spare_value = {
 # The chance a warhead lands on the enemy's capital, 0.05 to 1:
 # nuclear_strike_success_chance's, read at the capital.
 nd_ai_capital_hit_share = {
-	value = modifier:country_nuclear_weapon_attack_success_add
+	value = nuclear_strike_attack_rating
 	scope:nd_sv_enemy = {
 		capital = {
 			subtract = modifier:state_nuclear_weapon_defense_chance_add

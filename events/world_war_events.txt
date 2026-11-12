@@ -745,8 +745,10 @@ world_war_events.11 = {
 				add = 2
 			}
 		}
+		# Its own modifier, not a copy of ww_home_front_strain_modifier, which
+		# the yearly pulse adds only when the entry holds none (#1617).
 		je:je_world_war = { add_modifier = {
-				name = ww_home_front_strain_modifier
+				name = ww_air_raid_relief_modifier
 				days = short_modifier_time
 				is_decaying = yes
 			} }

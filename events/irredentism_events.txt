@@ -275,6 +275,22 @@ irredentism.2 = {
 
 	duration = 3
 
+	# Event 1 option C's tests, asked again on arrival five days later
+	# (#1617): the state is still ours to cede, and neither country has joined
+	# a play in the meantime, since a refusal's create_diplomatic_play would
+	# then open nothing while its tooltip promised a play. A demand that fails
+	# here lapses without a word to either side.
+	trigger = {
+		exists = scope:irr_unifier
+		exists = scope:irr_demanded_state
+		scope:irr_demanded_state = { owner = { this = root } }
+		is_diplomatic_play_committed_participant = no
+		scope:irr_unifier = {
+			NOT = { is_country_type = decentralized }
+			is_diplomatic_play_committed_participant = no
+		}
+	}
+
 	immediate = {
 		save_scope_as = irr_target
 	}
@@ -865,6 +881,11 @@ irredentism.8 = {
 		exists = scope:irr_unifier
 		scope:irr_proposed_target = { NOT = { is_country_type = decentralized } }
 		scope:irr_unifier = { NOT = { is_country_type = decentralized } }
+		# A leader is not asked to rule on its own proposal (#1617). The
+		# dispatch excludes it; this covers a proposer that took the bloc's
+		# lead in the three days since. Its union needs no blessing
+		# (irredentist_bloc_check_peace, target side).
+		NOT = { scope:irr_unifier = { this = root } }
 	}
 
 	immediate = {

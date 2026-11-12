@@ -46,12 +46,13 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | Check | How | Expected |
 |---|---|---|
 | `extra_law_events.3` gold flavor | Enact Gold Standard with an IG opposed until the debate checkpoint fires .3 (or `event extra_law_events.3` while enacting) | Flavor shows the Bryan quotation with its "— William Jennings Bryan" line under it. While enacting Fiat Currency it shows the four voices instead |
-| `extra_law_events.32` description ladder | Fire .32 while enacting Humanitarian Regulations (rule on), Limited War (rule on), War Crimes Forbidden, and Limited War with the nuclear rule off | `d`, `d_pledge_only`, `d_no_pledge` and `d_no_clause` respectively, each naming only the clauses its options offer |
+| `extra_law_events.32` description ladder | Fire .32 while enacting Humanitarian Regulations (rule on), Limited War (rule on), War Crimes Forbidden, and Limited War with the nuclear rule off | `d`, `d_pledge_only`, `d_no_pledge` and `d_no_clause` respectively, each naming only the clauses its options offer. Since #1613 the last case no longer fires from the debate checkpoint (the trigger excludes it); `event extra_law_events.32` still shows `d_no_clause` there |
 | List layout | Fire .14, .24 or .31 | Heading line, a blank line, then one item per line with no bullets. .31's items show the interest group names, not raw keys |
 | Long flavor | Fire .31 (143 words) or .4 (131) | Fits the event window without the options being pushed off-screen |
 | Gated descriptions and flavor in the stall events | Enact Multilingual Federalism (.49), Federal System (.51), Human Purity (.52), Freedom of Testation (.53) and Indifference (.57) with an opposed group, `event extra_law_events.<n>` | Each shows its variant (`_pluralist`, `_central`, `_purity`, `_testation`, `_indifference`); the same events for Civic Monolingualism, Unitary State, Unrestricted Augmentation, Forced Heirship, Protection show the default |
 | The four list flavors render as lists | `event extra_law_events.50`, `.62`, `.68`, `.73`, `.79`, `.83` | A heading line, a blank line, then one item to a line; no item cut off; .73 (the longest, about 145 words) fits the flavor box |
 | Law names inside parentheses | `event extra_law_events.57` and `.81` under each minority-rights law | "the government's law on minority rights (Affirmative Action)" reads as one phrase |
+| `extra_law_events.25` shows a country's own tongue (#1613) | `event extra_law_events.25` as Egypt, Sweden, Ethiopia and Prussia | Egypt reads the Classical Arabic description and Sweden the Old Norse one, each still offered Hebrew or Gothic among the options; Ethiopia (Ge'ez and Coptic) reads "More than one classical language"; Prussia reads the Gothic description |
 
 ## Ministries, amendments and courts (#1543)
 
@@ -98,6 +99,8 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | Law-name splices render | Fire `surveillance_events.100`, `.200` and `post_scarcity_events.200` | "Intrusive Surveillance System", "Strong Privacy Rights" and "Post-Scarcity Economy" appear in the descriptions, not `$law_...$` |
 | A quotation-only flavor | Fire `post_scarcity_events.200` | Marx's line in quotes with "— Karl Marx" below it, as `nuclear_weapon_events.10.f_world_first` shows |
 | A long one-voice flavor | Fire `morphological_freedom_events.1` (144 words in one paragraph) | Fits the flavor box without clipping |
+| Each repeatable event shows its own subject (#1616) | Fire `repeatable_events.20` to `.100` and `minor_events_timelineextended.7` and `.8` | `.20` a jammed port, `.30` robots on a factory floor, `.40` viewers at a television, `.50` a control room with failing lights, `.60` a broadcast control room, `.70` debris around the Earth, `.80` a collector satellite under a particle stream, `.90` a laboratory sample, `.100` a server room; `.7` a trading floor, `.8` a man with papers on a wet street. No magenta |
+| The prediction software's modifiers (#1616) | Fire `surveillance_events.4` and hover each option | "Predictive Policing", "Prediction for Intelligence Only" and "Predictive Policing Banned": no modifier says AI |
 
 ## Decolonization, diplomacy and war (#1546)
 
@@ -169,6 +172,8 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | A long document flavor in the window | Fire `space_race_discovery_events.17` | The whole letter shows, closing request included |
 | Attributed quote layout | Fire `space_race_discovery_events.7` and `.19` | The attribution line ("— Glaciologist, Space Program Science Office") sits on its own line under the quote |
 | Ribbon strike text | Fire `te_orbital_debris.1` with a Space Elevator | The flavor's "at a price" matches option b's treasury cost in its tooltip |
+| `.37` names the probe's target (#1620) | Run the Deep-Space Probe three times past 50%, choosing Venus, Mars and the asteroid belt in `.81`; then `event space_race_events.37` in a country that never had the milestone | Venus's cloud bands, Mars's channels and polar cap, the first asteroid of the belt, each with the frame of Earth; the country with no target reads "its target" and names none |
+| `.45` names no planet (#1620) | Let `.45` fire at 30% under each target | The description and all three options read for any target: no Jupiter, no "outer system"; the fastest option is the direct flight |
 
 ## Monuments, environment and people (#1550)
 
@@ -185,3 +190,25 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | The lists render as lists | Fire `environmentalism_events.3`, `.14`, `resettlement.6` and `te_demog_wave.8` | One heading line, a blank line, then one item to a line with no bullets; nothing cut off at the foot of the event window |
 | The new world figure in the recurring climate events | Fire `environmentalism_events.5`, `.6`, `.8`, `.13` and `.16` at some warming (`event te_debug_gw.1` sets it) | Each description prints the same anomaly the Global Warming entry shows, with "°C" after it, not 0 and not a raw key |
 | The two quotations | Fire `resettlement.9` and `resettlement.20` | The quoted line, then the attribution on its own line after an em dash |
+
+## Script fixes the rewrite's reading found (#1612–#1621)
+
+The script bugs the batches reported were fixed after the texts. These rows are what only the game can show of those fixes.
+
+| Check | How | Expected |
+|---|---|---|
+| A banking draw's bonus counts only inside its gate (#1612) | Under Unregulated Banking or Light Prudence, before `consumer_credit` and `modern_financial_instruments` are researched, let the banking cycle run for some years | No Predatory Lending Scandal (`.44`) and no shadow-banking event (`.20`, `.120`, `.170`) before their technologies; each still arrives in a Boom or Frenzy once its technology is researched, so the nested bonus `if` has not emptied the draw |
+| The planned and cooperative twins read as their own measure (#1612) | Under a Command Economy take `banking_cycle_events.104.b` and `.116.a`; under Cooperative Ownership `.154.b` and `.166.a` | "Emergency Stockpiles Opened", "Planning Bureau Upheld", "Federation Relief Fund Opened", "The Old Slate Upheld"; no deposit guarantee and no central bank in the modifier list |
+| `decolonization_events.15` names the largest owner (#1617) | Free a subject in which two foreign powers own over 5% of GDP, one of them over 25% | The description names the larger owner every time |
+| `decolonization_events.16` names a neighbor of shared heritage (#1617) | Fire `.16` as a young state bordering both a kin state and an unrelated country | The description and option A name the kin state, never the unrelated one |
+| A bloc leader is not asked to bless its own union (#1617) | As a bloc leader, propose voluntary union to a member of the bloc and have it accept | No `irredentism.8` arrives, and the union goes ahead |
+| A refused demand always opens its play (#1617) | Demand a state with `irredentism.1.c`; in the next five days have either country join another play | `irredentism.2` does not arrive; with neither in a play it arrives and a refusal opens the return-state play |
+| `monument_events.4` picture by faith (#1621) | Fire `.4` as an Ibadi country (Oman) | The Islam video, not the animism one |
+| The elevator halt stops the site and its cost (#1621) | With a space elevator site on "Construction (1 year)", fire `wonder_events.2` and take "Halt construction". Look at the site's building panel at once, a week later, during the halt after switching it back to "1 year" by hand, and in the month after day 180 | At once the site is on "Construction (Paused)" and the option's tooltip said so. A week later it buys only the paused method's Advanced Materials and its staff is falling toward 500. The progress figure does not move for six months. A speed picked by hand is paused again at the next month's start, and is the speed the site returns to. Within a month of "Elevator Construction Halted" running out the site is back on its speed with no click, and hires again. A site already on Paused when the event came stays paused afterwards. If the scripted switch does not hold on this government building (the site stays on its speed, paying, with no progress), the fallback is a timed state modifier that takes the site's throughput to zero for the halt |
+| `environmentalism_events.23` prints the figure that crossed (#1621) | Under stratospheric aerosols, let unmasked warming fall back below 4.0 | The description's figure is just under four degrees, not the lower felt anomaly |
+| `nuclear_incident.30` kinds follow the arsenal (#1619) | Take over a nuclear power's warheads as a country without `bombing_aircraft`, then hold high alert | No bomber accident and no cross-country flight; the lost weapon and the exhausted crews still come |
+| The Close Call goes to a country with no arsenal (#1619) | As a country with `radar`, no warheads and a nuclear-armed rival, wait on the yearly pool (or `event nuclear_weapon_events.21`); check an armed country over the same years | "A Moment of Terror" arrives; option a adds "Warning Procedures Reviewed"; no line speaks of a launch or an arsenal of ours. The armed country never gets it |
+| An arsenal held without the technology lands (#1619) | Annex a nuclear power as a country without `nuclear_weapons`, open the Nuclear tab, then strike an undefended state | Delivery capability reads 100%, its tooltip and the strike's odds tooltip carry "+100% from warheads that were built before we held them", and the strike's success chance is 100%, not 5% |
+| Buying power abroad is paid for (#1616) | Fire `repeatable_events.80` and take "Buy power from abroad" | The tooltip lists "Imported Power Costs" beside the import modifier, and the Budget breakdown shows a weekly amount under Energy and Industry Programs for five years |
+| Air Raid Relief does not stand in for Home Front Strain (#1617) | In a world war's first year take `world_war_events.11.a`; look at the World War entry at year two, and take the option again after it | Home Front Strain arrives at year two on time; after it the entry shows one Home Front Strain and one Air Raid Relief, never two strains |
+| The women's work events reach suffrage countries (#1616) | Research Second-Wave Feminism as a country already under Women's Suffrage | `society_technology_events.1` and `.2` can both arrive |

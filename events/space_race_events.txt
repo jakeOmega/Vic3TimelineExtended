@@ -1346,7 +1346,28 @@ space_race_events.37 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.37.t
-	desc = space_race_events.37.d
+	# The description names the target chosen in .81 (Venus, Mars or the
+	# asteroid belt: none is in the outer solar system, which the old text
+	# reported from whichever was chosen, #1620). The last rung is for a probe
+	# with no target set and names none. The title and the flavor name no
+	# target and serve all four.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.37.d_venus
+				trigger = { has_variable = sr_probe_target_venus }
+			}
+			triggered_desc = {
+				desc = space_race_events.37.d_mars
+				trigger = { has_variable = sr_probe_target_mars }
+			}
+			triggered_desc = {
+				desc = space_race_events.37.d_asteroid
+				trigger = { has_variable = sr_probe_target_asteroid }
+			}
+			desc = space_race_events.37.d
+		}
+	}
 	flavor = space_race_events.37.f
 
 	duration = 3
@@ -1913,7 +1934,9 @@ space_race_events.45 = {
 		name = space_race_events.45.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Jupiter slingshot: fastest trajectory, narrow launch window
+		# The direct flight: the fastest. No option names a planet, since the
+		# probe's target (.81) is Venus, Mars or the asteroid belt and a
+		# Jupiter flyby leads to none of them (#1620).
 		custom_tooltip = SR_PROGRESS_ADD_3_MONTHS_TT
 		sr_gain_progress_months = { MILESTONE = probe MONTHS = 3 }
 	}
@@ -1921,7 +1944,7 @@ space_race_events.45 = {
 	option = {
 		name = space_race_events.45.b
 		ai_chance = { base = 4 }
-		# Venus-Earth-Jupiter triple gravity assist: slower but more data
+		# A gravity assist from another planet on the way: slower but more data
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 		sr_gain_progress_months = { MILESTONE = probe MONTHS = 1 }
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -2903,7 +2926,7 @@ space_race_events.12 = {
 	}
 }
 
-# Event 13: Deep Space Signal Lost (probe/interstellar)
+# Event 13: Deep Space Signal Lost (the Deep-Space Probe milestone)
 space_race_events.13 = {
 	type = country_event
 	placement = root
@@ -3800,7 +3823,8 @@ space_race_events.72 = {
 		name = space_race_events.72.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Replace the damaged equipment and improve fire suppression
+		# Replace the damaged equipment and get back to work (the safety
+		# protocols are option b's alone)
 		custom_tooltip = SR_SETBACK_LOSE_3_MONTHS_TT
 		sr_setback_lose_months = { MONTHS = 3 }
 		random_scope_state = {
@@ -3921,14 +3945,15 @@ space_race_events.74 = {
 		name = space_race_events.74.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Apply the breakthrough: integrate it into the current program
+		# Apply the breakthrough: integrate it into the current program. The
+		# option named for the program gives it the longer boost (#1620).
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_engineering_breakthrough months = 18 }
+				add_modifier = { name = sr_engineering_breakthrough months = 24 }
 			}
 		}
 		add_loyalists = { value = medium_radicals pop_type = engineers }
@@ -3941,14 +3966,15 @@ space_race_events.74 = {
 	option = {
 		name = space_race_events.74.b
 		ai_chance = { base = 3 }
-		# Patent and commercialize the technology
+		# Patent and commercialize the technology: the program gets it for a
+		# shorter time, and the capitalists are pleased
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_engineering_breakthrough months = 24 }
+				add_modifier = { name = sr_engineering_breakthrough months = 18 }
 			}
 		}
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
