@@ -321,3 +321,27 @@ in a Panic, or `te_debug_monetary` to seed headline).
 4. **No overshoot to speak of.** Once inflation passes 2% the programme is back to its +1%. If inflation runs past
    6% after a recovery with the tool still on, note how far: the simulator puts the median peak at 5.5%, against
    5.8% with the flat point.
+
+## The arrangement events, one namespace to a file (2026-11-12, #1403)
+
+`events/te_monetary_arrangement_events.txt` declared two namespaces, `te_lolr` and then `te_union`; the `te_union`
+events now have their own file, `events/te_monetary_union_events.txt`. Nobody has established what the engine did
+with the second `namespace` line, and none of these four events has been seen in a running game. If the old file
+was dropping one namespace's events, they fire for the first time with this change, so each needs seeing once. The
+only earlier mention of The Question, P5-17 in `monetary_policy_design.md` ("fewer than ~6 times a campaign"), passes
+if it never fires.
+
+1. **The Question of the Common Currency (`te_union.1`) fires at least once.** As a member of a bloc whose leader
+   runs a common currency at Monetary Union tier II or above, hold out; have the leader Press for Convergence (play
+   the leader in a second game, or wait for an AI leader to). The event opens on the pressed human holdout within
+   the month, names the leader, and Adopt and Refuse each do what their tooltips say. If it never opens:
+   `error.log` for `te_union`, then `te_monetary_update_union`'s step 9b.
+2. **Out of the Common Currency (`te_union.2`)** has its row in the Events table of
+   `told-of-effects-playtest.md`; run it in the same game.
+3. **The Guarantee Is Called (`te_lolr.1`) fires on the guarantor.** Sign a Lender of Last Resort treaty as the
+   guarantor of a country that then defaults (P5-9 has the rest: once in five years, and what reneging does). The
+   event opens on the guarantor when the ward defaults and names the ward.
+4. **The ward is told (`te_lolr.2`).** As the ward in the same arrangement, default: the event opens once the
+   guarantor has answered, with the honored text and the sum when it pays and the refused text when it does not.
+5. **The log.** After a game in which the above ran, neither `error.log` nor `debug.log` has a line naming
+   `te_monetary_arrangement_events.txt` or `te_monetary_union_events.txt`.

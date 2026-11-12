@@ -66,6 +66,7 @@ MONETARY_FILES = [
     ("events", "te_peg_events.txt"),
     ("events", "te_inflation_events.txt"),
     ("events", "te_monetary_arrangement_events.txt"),
+    ("events", "te_monetary_union_events.txt"),
 ]
 
 # Group (d) of the effect's header: deliberately NOT taken from the loser.
