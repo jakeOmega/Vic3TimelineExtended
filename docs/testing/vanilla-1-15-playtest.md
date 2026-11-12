@@ -116,12 +116,20 @@ game, in English.
     or more mandates, a few a decade per bloc, mostly `rally` and `leverage`. None at all after a decade of blocs
     holding mandates means the monthly roll never fires.
 - **C21, formation mandates (#1458).** The four technologies that add a principle slot each carry
-  `country_power_bloc_formation_mandates_add = 1`. One once-a-game line in `debug.log` when a bloc forms:
-  `TE_SELF_CHECK OK|BROKEN formation_mandates`, with the new bloc's count and the founder's grant (capped at
-  `MAX_MANDATES`, 5). BROKEN: check the bloc's mandates in its panel a day later (the grant may land after the
-  on-action); if still short, grant them in the on-action with `add_power_bloc_mandate` and drop the technologies'
-  lines. No line at all once a bloc has formed means `scope:country` is not set in `on_power_bloc_formed`. Whether
-  `MAX_MANDATES` caps the grant shows only if a founder carries more than 5.
+  `country_power_bloc_formation_mandates_add = 1`, which vanilla describes as more mandates to spend on principles
+  when forming a bloc. One once-a-game line in `debug.log` when a bloc forms: `TE_SELF_CHECK OK|BROKEN
+  formation_mandates`, with the new bloc's unspent mandates, its principle levels and the founder's grant. Principles
+  taken at formation count: the founder spends the mandates there, so unspent mandates alone can read 0 when the
+  modifier works. OK can't tell the extra mandates from vanilla's free formation picks, so found one bloc with the
+  technologies and one without and compare the principles each could pick in the formation window. BROKEN: open the
+  bloc's panel and count its principles and mandates; if the founder could pick no more than one without the
+  technologies, grant them in the on-action with `add_power_bloc_mandate` and drop the technologies' lines. No line
+  at all once a bloc has formed means `scope:country` is not set in `on_power_bloc_formed`. Whether `MAX_MANDATES`
+  (5) caps the grant shows only if a founder carries more than 5.
+  Under the Four principle slots rule, found a bloc with all four technologies and count the principles the
+  formation window lets you pick: `te_pb_principle_slot_free` passes while the founder is not yet in a bloc, so the
+  pick may exceed the rule's cap of four. If it does, gate the formation pick on the rule or drop the mandates under
+  it.
 - **New 1.15 modifier hooks (#1453, #1458).** Hover each and read the tooltip, then watch it act once:
   - Civil Rights: Federal Protection's +25% and Segregationist Consolidation's −25% enactment speed for
     Multicultural. Enact Multicultural under each and compare the progress per week.

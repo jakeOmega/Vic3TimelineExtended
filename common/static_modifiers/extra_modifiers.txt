@@ -1723,7 +1723,9 @@ water_crisis_infrastructure_modifier = {
 
 water_crisis_ministry_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_standard_of_living_add = -1
+	# No standard of living cost: the ministry's option costs less than
+	# rationing's -2 and infrastructure's -1, and a whole point is the least
+	# that counts (it was an inert -0.3, #338).
 	state_infrastructure_add = 3
 	country_legitimacy_base_add = 5
 }
@@ -1801,7 +1803,8 @@ tropical_disease_public_health_modifier = {
 	state_mortality_mult = 0.01
 	state_death_cause_inf_mult = 0.01
 	country_legitimacy_base_add = 10
-	state_standard_of_living_add = -1
+	# No standard of living cost: the ministry's option costs less than the
+	# others, and a whole point is the least that counts (it was an inert -0.3, #338).
 }
 
 climate_political_turmoil_modifier = {
@@ -4184,7 +4187,10 @@ un_regime_refugee_host_modifier = {
 # Refugees, a source: relief.
 un_regime_refugee_source_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_standard_of_living_add = 0.25
+	# Scaled by un_enforcement (0 to 2.5), and standard of living is whole
+	# points: 0.4 reaches +1 at the top step, Supranational. 0.25 never
+	# reached a point (#338).
+	state_standard_of_living_add = 0.4
 }
 # Outer space, the leader: it shares what it learns.
 un_regime_space_leader_modifier = {
