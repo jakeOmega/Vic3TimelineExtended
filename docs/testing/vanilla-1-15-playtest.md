@@ -115,6 +115,12 @@ game, in English.
   - **The AI.** In an observer game, `debug.log` should carry `TE_PB_SUMMIT <kind> by=ai` lines once AI blocs hold two
     or more mandates, a few a decade per bloc, mostly `rally` and `leverage`. None at all after a decade of blocs
     holding mandates means the monthly roll never fires.
+- **Stalemates (#1449).** In a long world war, `world_war_events.31` (The Same Line) should also arrive for a
+  war in the engine's stalemate countdown (both leaders at minimum war support, the war panel's stalemate timer
+  running), whatever its age and battle count. After Hold the line (+5) the timer should stop; after armistice
+  talks it should run on. In the same game, a Binding Ceasefire against one side of a stalemated war should come
+  sooner and carry more votes than against a fresh one, and an AI metropole in a war of independence that stalls
+  should open talks (the panel's row shows them) before its four years are up.
 
 ## Panels and systems
 
