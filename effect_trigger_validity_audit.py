@@ -786,12 +786,25 @@ def _catalog_entries(text: str) -> set[str]:
     return entries
 
 
-def _write_catalog(out_path: str, text: str, dry_run: bool) -> dict:
+class BootstrapRefused(FileNotFoundError):
+    """A bootstrap that could not find what it reads, and so wrote nothing."""
+
+
+def _write_catalog(
+    out_path: str, text: str, dry_run: bool, *,
+    vanilla_files: int, game_dir: str, allow_no_install: bool = False,
+) -> dict:
     """Write a bootstrapped catalog, or with `dry_run` write nothing (not even
     the directory) and return what the write would change: `written` False,
     `exists`, `current` (entries in the file now), `added`, `removed`, and
-    `identical` when the file would come out byte for byte the same."""
-    if not dry_run:
+    `identical` when the file would come out byte for byte the same.
+
+    A real write built from no vanilla script (`vanilla_files` 0: no install
+    under `game_dir`) raises `BootstrapRefused` and leaves the file alone,
+    unless `allow_no_install` (#1403: it cut the catalog from 9,513 entries to
+    5,702 and said nothing)."""
+    refused = not dry_run and not vanilla_files and not allow_no_install
+    if not dry_run and not refused:
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(text)
@@ -803,6 +816,14 @@ def _write_catalog(out_path: str, text: str, dry_run: bool) -> dict:
     except FileNotFoundError:
         old_text, exists = "", False
     old, new = _catalog_entries(old_text), _catalog_entries(text)
+    if refused:
+        raise BootstrapRefused(
+            f"{out_path} not written. No vanilla script was found under "
+            f"{game_dir}, so the catalog would be built from the engine docs "
+            f"alone: {len(old)} entries now, {len(new)} after. Run it on the "
+            "machine with the game, look first with --dry-run, or pass "
+            "--allow-no-install to write it anyway."
+        )
     return {
         "written": False,
         "exists": exists,
@@ -815,14 +836,16 @@ def _write_catalog(out_path: str, text: str, dry_run: bool) -> dict:
 
 def bootstrap_catalog(
     base_game_path: str, mod_path: str, dry_run: bool = False,
+    allow_no_install: bool = False,
 ) -> dict:
     """Extract the frozen valid-key catalog from vanilla and write it to
     `docs/engine/effect_trigger_valid_keys.txt`. Re-run on a vanilla bump.
 
     `dry_run` writes nothing and adds `_write_catalog`'s account of what would
     change. `vanilla_files` counts the vanilla script files read: at 0 there is
-    no install under `base_game_path`, and the catalog shrinks to the summary
-    names (#1403)."""
+    no install under `base_game_path`, the catalog would shrink to the summary
+    names, and a real run raises `BootstrapRefused` unless `allow_no_install`
+    (#1403)."""
     game = os.path.join(base_game_path, "game")
     engine_docs = os.path.join(mod_path, "docs", "engine")
 
@@ -866,7 +889,10 @@ def bootstrap_catalog(
         "\n# Regenerate on a vanilla bump: "
         "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
     ) + "".join(k + "\n" for k in sorted(keys))
-    change = _write_catalog(out_path, text, dry_run)
+    change = _write_catalog(
+        out_path, text, dry_run, vanilla_files=vanilla_files, game_dir=game,
+        allow_no_install=allow_no_install,
+    )
     return {
         "keys": len(keys), "path": out_path, "vanilla_files": vanilla_files,
         **change,
@@ -945,9 +971,12 @@ def context_key_uses(lines, root: ScanRoot):
                 yield ctx, m.group(1), sl.lineno, sl
 
 
-def harvest_context_keys(game_dir: str) -> dict[str, set[str]]:
+def harvest_context_keys(
+    game_dir: str, read: list[str] | None = None,
+) -> dict[str, set[str]]:
     """Every LHS keyword vanilla reads in trigger context and in effect context,
-    over all of `game/common/` and `game/events/`."""
+    over all of `game/common/` and `game/events/`. The files it read are
+    appended to `read`, when given."""
     used: dict[str, set[str]] = {CTX_TRIGGER: set(), CTX_EFFECT: set()}
     for top in ("common", "events"):
         base = os.path.join(game_dir, top)
@@ -960,19 +989,25 @@ def harvest_context_keys(game_dir: str) -> dict[str, set[str]]:
                     lines = fh.readlines()
             except OSError:
                 continue
+            if read is not None:
+                read.append(path)
             for ctx, key, _lineno, _sl in context_key_uses(lines, root):
                 used[ctx].add(key)
     return used
 
 
 def bootstrap_context_catalog(
-    base_game_path: str, mod_path: str, engine_docs_path: str,
-    dry_run: bool = False,
+    base_game_path: str, mod_path: str, engine_docs_path: str | None,
+    dry_run: bool = False, allow_no_install: bool = False,
 ) -> dict:
     """Write `docs/engine/effect_trigger_context_keys.txt`: the effect names the
     engine rejects in trigger context and the trigger names it rejects in
     effect context. Re-run on a vanilla bump, like `bootstrap_catalog`, whose
-    `dry_run` this shares.
+    `dry_run`, `vanilla_files` and `allow_no_install` this shares: with no
+    install nothing is subtracted for vanilla's own usage and vanilla's
+    scripted effects and triggers are missing. With no engine docs
+    (`engine_docs_path` unset, or without the two logs) it raises
+    `BootstrapRefused` whatever the flags.
 
     effect_only = names in `effects.log`, not in `triggers.log`, and never an
     LHS in trigger context anywhere in vanilla's `common/` or `events/`, plus
@@ -982,13 +1017,22 @@ def bootstrap_context_catalog(
     (vanilla uses it in both) out of the check even where the docs list it on
     one side only."""
     game = os.path.join(base_game_path, "game")
+    if not engine_docs_path:
+        raise BootstrapRefused(
+            "nothing written. The engine docs path is not set: point "
+            "VIC3_VANILLA_DOCS_SNAPSHOT, or `vanilla_snapshot_docs_path` in "
+            "paths.local.json, at the folder that holds the new version's "
+            "effects.log and triggers.log."
+        )
     effects = _engine_doc_names(os.path.join(engine_docs_path, "effects.log"))
     triggers = _engine_doc_names(os.path.join(engine_docs_path, "triggers.log"))
     if not effects or not triggers:
-        raise FileNotFoundError(
-            f"effects.log / triggers.log not found under {engine_docs_path}"
+        raise BootstrapRefused(
+            "nothing written. effects.log / triggers.log not found under "
+            f"{engine_docs_path}"
         )
-    used = harvest_context_keys(game)
+    read: list[str] = []
+    used = harvest_context_keys(game, read)
     sc_effects = _top_level_names(os.path.join(game, "common", "scripted_effects"))
     sc_triggers = _top_level_names(os.path.join(game, "common", "scripted_triggers"))
     svalues = _top_level_names(os.path.join(game, "common", "script_values"))
@@ -1032,12 +1076,16 @@ def bootstrap_context_catalog(
     for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
         parts.append(f"[{section}]\n")
         parts.extend(k + "\n" for k in sorted(sections[section]))
-    change = _write_catalog(out_path, "".join(parts), dry_run)
+    change = _write_catalog(
+        out_path, "".join(parts), dry_run, vanilla_files=len(read),
+        game_dir=game, allow_no_install=allow_no_install,
+    )
     return {
         "effect_only": len(sections[_EFFECT_ONLY]),
         "trigger_only": len(sections[_TRIGGER_ONLY]),
         "dropped_as_used_by_vanilla": dropped,
         "path": out_path,
+        "vanilla_files": len(read),
         **change,
     }
 
@@ -1372,44 +1420,83 @@ def render_dry_run(info: dict, mod_path: str, base_game_path: str) -> str:
         warning = [
             f"WARNING: no vanilla script found under "
             f"{os.path.join(base_game_path, 'game')}, so the catalog would "
-            "hold only the engine-doc summary names. Run the bootstrap on "
-            "the machine with the game."
+            "be built from the engine docs alone. Run the bootstrap on the "
+            "machine with the game; a real run here refuses unless given "
+            "--allow-no-install."
         ]
     changes = [f"  + {name}" for name in added] + [f"  - {name}" for name in removed]
     # The list can run to thousands of lines: say it before and after.
     return "\n".join(lines + warning + changes + (warning if changes else []))
 
 
+_BOOTSTRAP_FLAGS = ("--dry-run", "--allow-no-install")
+
+
+def _bootstrap_main(argv: list[str], mod_path: str) -> int:
+    """`bootstrap` / `bootstrap-context` and their flags. Returns 2, having
+    read and written nothing, on an argument it does not know: a misspelt
+    `--dry-run` used to run for real. Returns 1 on `BootstrapRefused`."""
+    import sys
+
+    command, flags = argv[0], argv[1:]
+    unknown = [a for a in flags if a not in _BOOTSTRAP_FLAGS]
+    if unknown:
+        print(
+            f"ERROR: {command}: unknown argument(s) {' '.join(unknown)}; it "
+            f"takes {' and '.join(_BOOTSTRAP_FLAGS)}. Nothing was written.",
+            file=sys.stderr,
+        )
+        return 2
+    dry_run = "--dry-run" in flags
+    allow_no_install = "--allow-no-install" in flags
+    # Only the bootstrap subcommands read vanilla; keep the default audit
+    # runnable on a machine with no Victoria 3 install.
+    from path_constants import base_game_path
+
+    try:
+        if command == "bootstrap":
+            info = bootstrap_catalog(
+                base_game_path, mod_path, dry_run=dry_run,
+                allow_no_install=allow_no_install,
+            )
+        else:
+            # The effect-only / trigger-only catalog (#1142): engine docs from
+            # the pinned snapshot, usage from the live install's game/common +
+            # events.
+            from path_constants import vanilla_snapshot_docs_path
+
+            info = bootstrap_context_catalog(
+                base_game_path, mod_path, vanilla_snapshot_docs_path,
+                dry_run=dry_run, allow_no_install=allow_no_install,
+            )
+    except BootstrapRefused as exc:
+        print(f"ERROR: {command}: {exc}", file=sys.stderr)
+        return 1
+    if dry_run:
+        print(render_dry_run(info, mod_path, base_game_path))
+        return 0
+    print(info)
+    if not info["vanilla_files"]:
+        print(
+            f"WARNING: {command}: written from no vanilla script "
+            "(--allow-no-install).", file=sys.stderr,
+        )
+    return 0
+
+
 def main(argv: list[str] | None = None, mod_path: str | None = None) -> int:
     """The CLI: `bootstrap`, `bootstrap-context`, or the audit, whose report
     goes to stdout. With `--strict` (CI) it returns 1 if any flag lacks a
     `# REVIEWED ...` exemption. `--dry-run` after either bootstrap prints what
-    the rewrite would change and writes nothing."""
+    the rewrite would change and writes nothing; `--allow-no-install` lets a
+    real one write with no vanilla script to read."""
     import sys
 
     argv = sys.argv[1:] if argv is None else argv
     if mod_path is None:
         from path_constants import mod_path
-    dry_run = "--dry-run" in argv
-    if argv[:1] == ["bootstrap"]:
-        # Only the bootstrap subcommands read vanilla; keep the default audit
-        # runnable on a machine with no Victoria 3 install.
-        from path_constants import base_game_path
-
-        info = bootstrap_catalog(base_game_path, mod_path, dry_run=dry_run)
-        print(render_dry_run(info, mod_path, base_game_path) if dry_run else info)
-        return 0
-    if argv[:1] == ["bootstrap-context"]:
-        # The effect-only / trigger-only catalog (#1142): engine docs from the
-        # pinned snapshot, usage from the live install's game/common + events.
-        from path_constants import base_game_path, vanilla_snapshot_docs_path
-
-        info = bootstrap_context_catalog(
-            base_game_path, mod_path, vanilla_snapshot_docs_path,
-            dry_run=dry_run,
-        )
-        print(render_dry_run(info, mod_path, base_game_path) if dry_run else info)
-        return 0
+    if argv[:1] in (["bootstrap"], ["bootstrap-context"]):
+        return _bootstrap_main(argv, mod_path)
     result = audit(mod_path)
     print(render_report(result, mod_path))
     if "--strict" in argv:
