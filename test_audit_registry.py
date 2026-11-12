@@ -45,6 +45,9 @@ class RosterTests(unittest.TestCase):
         for audit in audit_registry.ci_audits():
             source = read(f"{audit.name}.py")
             for arg in audit.ci:
+                # `audit_common.cli_main` gives an audit its `--strict`.
+                if arg == "--strict" and "cli_main(" in source:
+                    continue
                 self.assertIn(f'"{arg}"', source, f"{audit.name} does not define {arg}")
 
     def test_reports_named_exist(self):
