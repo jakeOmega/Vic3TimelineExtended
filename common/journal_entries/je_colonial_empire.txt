@@ -577,6 +577,12 @@
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			ce_migrate_flat_bands = yes		# PENDING REMOVAL at the next save-breaking vanilla patch (#1466): a 1.3.x save's band copies, te_flat_toggle_migration_effects.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = {
 			# --- Path-dependence tracking ---

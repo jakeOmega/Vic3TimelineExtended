@@ -364,7 +364,14 @@ As built (#1466): all five bands are declared, each at 1 in its band of
 `colonial_empire_live_tier`, and the pulse's swap is gone.
 `test_journal_entry_shape.py`'s misuse check allows Solidified's country copy
 (the reward) in the three files that grant, restore and list it, never inside
-a `je:` block (`COUNTRY_COPY`). No old-save strip: #1680 retired them.
+a `je:` block (`COUNTRY_COPY`). Unlike the #1404 conversions, these fourteen
+keys were still flat in the released 1.3.0 and 1.3.1, on vanilla 1.15.0, so a
+one-time migration (`te_flat_toggle_migration_effects.txt`, from each entry's
+weekly pulse, PENDING REMOVAL at the next save-breaking vanilla patch) removes
+a 1.3.x save's added copies and sets each policy's variable from its copy (the
+tariffs only for a country still leading its market), remove before set.
+`misuse_sites` lets that file test and remove the keys, never add them
+(`MIGRATION_FILE`).
 
 ### 4.6 Cultural Hegemony (5 keys + 4 programmes)
 

@@ -338,6 +338,12 @@
 	immediate = {
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			gw_migrate_flat_policies = yes		# PENDING REMOVAL at the next save-breaking vanilla patch (#1466): a 1.3.x save's flat policies, te_flat_toggle_migration_effects.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = {
 			# History samples for the widget's two charts. Gated on the game rule

@@ -62,12 +62,19 @@ game, in English.
   Colonial Empire: a step on a program moves its modifier, now on the entry, within a few days, and the
   investment's expense follows. The stability band's modifier (#1466) sits on the entry, named as the source, and
   moves within a few days of the bar crossing an edge (`event te_debug_colonial_empire.1` sets the bar to each band):
-  exactly one band at a time, Solidified from 90. It reads the bar through `je:` from the country
-  (`colonial_empire_live_tier`), a country read the probe covers; if no band shows, put the monthly swap back
-  (`git show` #1466's parent, `je_colonial_empire.txt`'s pulse). Global Warming (#1466): adopting any of the nine
+  exactly one band at a time, Solidified from 90. Each declaration reads the bar through `je:` from the country
+  (`colonial_empire_live_tier`), which no probe has read inside a declared value: this row is the check, by eye. If
+  no band shows, declare the bands from vanilla's form instead, `scope:journal_entry.scripted_bar_progress(...)`
+  in the value (`je_state_and_revolution`, `00_communism.txt`), or put the monthly swap back (`git show` #1466's
+  parent, `je_colonial_empire.txt`'s pulse). Global Warming (#1466): adopting any of the nine
   flat policies (Carbon Tax … Fossil-Fuel Tariffs) shows the policy on the entry within a few days, named as the
   source, and repealing takes it off; the row's active check and the adoption counts move at once (they read the
-  variable). A treaty 109 source shows its seven policies adopted, each with its text in the treaty's tooltip. Cultural Hegemony: ending a program reads "Ends …" in the tooltip, the program
+  variable). A treaty 109 source shows its seven policies adopted, each with its text in the treaty's tooltip.
+  **A 1.3.x save** (#1466's one-time migration, `te_flat_toggle_migration_effects.txt`): load a 1.3.0 or 1.3.1
+  save with several climate policies adopted (Fossil-Fuel Tariffs among them, as a market leader) and a Colonial
+  Empire running. After a week each policy shows adopted once, its modifier on the entry once (not doubled) and
+  Repeal offered; repealing takes it off. The colonial entry carries exactly one band modifier. If a copy is still
+  doubled, the remove didn't see the saved copy (`has_modifier` on the entry). Cultural Hegemony: ending a program reads "Ends …" in the tooltip, the program
   count drops in the same click and the modifier leaves the entry within a few days; starting Outreach previews
   the program and its cost, which then follows GDP; repealing the Ministry of Culture stops the four programs at
   the next monthly update and the funding pair within days; a country trailing the hegemon shows the Foreign
