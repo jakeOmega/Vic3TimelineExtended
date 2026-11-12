@@ -4751,7 +4751,7 @@ Setting `is_government_funded = yes` on a `common/building_groups/` entry makes 
 
 - **`create_building` now validates the state owner's building-unlock tech** and REFUSES ("\<country\> must have invented \<tech\>", `jomini_script_system.cpp:247`). Pre-1.13.9 the building was created anyway. Any history/script seeding of buildings into tech-less countries must grant the prerequisite tech first (see `build_effects.txt` for the pattern).
 - **Active laws are validated against `unlocking_technologies` at load** ("Country X is not permitted to retain law Y", `country_law_manager.cpp:464`). Warning-only — the law is kept. Fires for deliberate historical seeds and for first-in-group auto-assignment (below).
-- **`set_institution_investment_level` validates the institution is active** ("invalid institution type") — surfaced 18 vanilla-history schools errors; investigation tracked in issue #226.
+- **`set_institution_investment_level` validates the institution is active** ("invalid institution type"). The 18 history-time schools errors it surfaced were the mod's, not vanilla's: the law-consistency sweep, run mid-history by `on_law_activated`, set countries to No Schools before their history set a schools level. Fixed in #1408; the lesson is § "`activate_law` From Script Fires `on_law_activated`".
 
 ## First Law in a Lawgroup File Is the Unseeded Default
 
