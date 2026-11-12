@@ -25,11 +25,10 @@ DEMOG_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_demog_effec
 DEMOG_VALUES = [os.path.join(REPO, "common", "script_values", name) for name in
                 ("te_demog_consequence_values.txt", "te_demog_wave_values.txt", "te_demog_work_values.txt")]
 
-# file -> the script values allowed to read the engine's figure there: the conversion and its effect wrapper, and the
-# Demographics self-check's wrapper (the census reads its own count, test_demographics_registry).
+# file -> the script values allowed to read the engine's figure there: the conversion and its effect wrapper (the
+# Demographics self-check that had its own wrapper, unemployment_rate_read, was retired: #1046).
 ENGINE_READERS = {
     "common/script_values/te_unemployment_values.txt": ["te_state_unemployment_share", "te_unemp_engine_read"],
-    "common/script_values/te_debug_demog_values.txt": ["te_debug_demog_unemp_engine_read"],
 }
 
 # (file, the block that reads, the comparison it makes): the readers the conversion replaced, thresholds unchanged.
