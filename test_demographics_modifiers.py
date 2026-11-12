@@ -41,6 +41,20 @@ class TestTotals(unittest.TestCase):
         self.assertAlmostEqual(t["state_health_care_access_add"], 0.36)
         self.assertAlmostEqual(t["state_external_mortality_mult"], -0.16)
 
+    def test_the_owners_laws_set_the_impact_of_institutions(self):
+        """#1046: totals() read every state at full impact. The owner's laws' state_institution_impact_add scales the
+        institution lines (Local Vernacular -0.05, so 0.95), and leaves the flat lines alone; an explicit figure wins."""
+        self.assertEqual(DM.state_institution_impact(), 1.0)
+        self.assertAlmostEqual(DM.state_institution_impact(laws={"law_local_vernacular"}), 0.95)
+        self.assertAlmostEqual(DM.state_institution_impact(laws={"law_ubiquitous_translation"}), 1.1)
+        laws = {"law_public_health_insurance", "law_local_vernacular", "law_child_labor_allowed"}
+        t = DM.totals(self.CARRIERS, laws=laws, institutions=self.LEVELS)
+        self.assertAlmostEqual(t["state_health_care_access_add"], 0.36 * 0.95)
+        self.assertAlmostEqual(t["state_external_mortality_mult"], -0.16 * 0.95)
+        self.assertAlmostEqual(t["state_work_mortality_mult"], 0.1)
+        t = DM.totals(self.CARRIERS, laws=laws, institutions=self.LEVELS, institution_impact=1.0)
+        self.assertAlmostEqual(t["state_health_care_access_add"], 0.36)
+
     def test_unincorporated_states_get_no_institution_line(self):
         t = DM.totals(self.CARRIERS, laws={"law_public_health_insurance"}, institutions=self.LEVELS,
                       incorporated=False)
@@ -418,10 +432,18 @@ class TestEngineRateLines(unittest.TestCase):
             self.assertTrue(DM.is_engine_rate_field(f), f)
 
     def test_the_families_match_the_on_top_lists(self):
-        """A line's family is written on its carrier; P's on-top lists must agree with the files."""
+        """A line's family is written on its carrier, and the on-top carriers are read from it (#1046: they were kept by
+        hand). A field with no absorbed type is on top wherever it sits; the derived list is the five carriers the
+        design puts on top (demographics_params, the on-top note), and a carrier is on one side only."""
+        on_top = DM.engine_lines_on_top(moved=self.moved)
+        self.assertEqual(sorted(on_top), ["law_communal_child_rearing", "law_full_equality_and_protection",
+                                          "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution"])
+        self.assertEqual(P.ENGINE_FIELDS_ON_TOP, frozenset({"state_mortality_wealth_mult"}))
         for (kind, key, block, field), (family, v) in self.moved.items():
-            on_top = key in P.ENGINE_LINES_ON_TOP or field in P.ENGINE_FIELDS_ON_TOP
-            self.assertEqual(family, "ontop" if on_top else "absorbed", (kind, key, block, field))
+            if field in P.ENGINE_FIELDS_ON_TOP:
+                self.assertEqual(family, "ontop", (kind, key, block, field))
+            elif key in on_top:
+                self.assertEqual(family, "ontop", (kind, key, block, field))
 
     def test_line_carriers_keep_the_engines_scaling(self):
         """A law's institution_modifier line is per level of the law's institution and an institution's own line per
@@ -449,10 +471,10 @@ class TestEngineRateLines(unittest.TestCase):
         self.assertIn("state_mortality_wealth_mult", P.ENGINE_FIELDS_ON_TOP)
 
     def test_the_on_top_carriers_keep_their_lines(self):
-        """Each carrier the census adds on top still carries an on-top line: one listed with no line left would be a
-        stale entry (#881 took three LGBTQ+ Rights laws' lines away)."""
+        """Each carrier the census adds on top carries an on-top line (#881 took three LGBTQ+ Rights laws' lines away;
+        the list is read from the lines since #1046, so it can't hold a stale entry)."""
         on_top = {k[1] for k, (family, v) in self.moved.items() if family == "ontop"}
-        self.assertEqual(sorted(P.ENGINE_LINES_ON_TOP - on_top), [])
+        self.assertEqual(sorted(DM.engine_lines_on_top(moved=self.moved) - on_top), [])
 
     def test_the_natural_fertility_sizes_follow_the_owners_rule(self):
         """Owner call (d), 2026-10-10: each women's-rights law's natural fertility is its own birth line re-centred on
@@ -483,7 +505,7 @@ class TestEngineRateLines(unittest.TestCase):
                     "law_womens_suffrage", "law_protected_class"):
             family, value = self.moved[("law", law, "modifier", "state_birth_rate_mult")]
             self.assertEqual(family, "absorbed", law)
-            self.assertNotIn(law, P.ENGINE_LINES_ON_TOP)
+            self.assertNotIn(law, DM.engine_lines_on_top(moved=self.moved))
 
     def test_augmentation_carries_flat_chronic_treatment_beside_its_mortality_lines(self):
         """The design note's values as totals: flat lines (kind 'law'), not per level (an institution_modifier

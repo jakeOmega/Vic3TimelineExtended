@@ -11,6 +11,7 @@ and institution investment levels:
     an institution's own `modifier`         per level, incorporated states
 """
 
+import functools
 import json
 import os
 import re
@@ -99,12 +100,35 @@ def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
     return out
 
 
+@functools.lru_cache(maxsize=None)
+def _impact_lines(root=ROOT):
+    """{(kind, key): value} for every law's or technology's state_institution_impact_add (Local Vernacular and
+    Devolution -0.05, Ubiquitous Translation +0.10), vanilla's and the mod's, as engine_rate_lines sums them."""
+    return {(kind, key): value for (kind, key, block, _f), value in
+            engine_rate_lines(root, keep=lambda f: f == "state_institution_impact_add").items()
+            if block == "modifier" and abs(value) > 1e-12}
+
+
+def state_institution_impact(techs=(), laws=(), root=ROOT):
+    """A state's Impact of Institutions from its owner's laws and technologies: 1 + their state_institution_impact_add,
+    at least 0 (te_demog_institution_impact in script; #1046). The owner's laws reach every state it owns. What a save
+    alone can't give is left out: obstinance's -1.0 x its share and a building's method (the Consciousness Network's
+    +0.10), so a state with either reads high here."""
+    techs, laws = set(techs), set(laws)
+    add = sum(v for (kind, key), v in _impact_lines(root).items()
+              if (kind == "law" and key in laws) or (kind == "technology" and key in techs))
+    return max(0.0, 1.0 + add)
+
+
 def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES,
-           institution_impact=1.0, amendments=()):
+           institution_impact=None, amendments=()):
     """{type: total} that one state reads: its owner's techs, laws and amendments and, in an incorporated
     state, each institution line times the owner's investment level in that institution, times the
     state's Impact of Institutions (1 + state_institution_impact_add, at least 0: Local Vernacular's -0.05,
-    obstinance's -1.0 x its share; the probe session, 2026-10-11)."""
+    obstinance's -1.0 x its share; the probe session, 2026-10-11). institution_impact None: the one the owner's laws
+    and technologies give (state_institution_impact(); #1046 found every caller had read full impact)."""
+    if institution_impact is None:
+        institution_impact = state_institution_impact(techs, laws)
     techs, laws, levels, amendments = set(techs), set(laws), institutions or {}, set(amendments)
     out = {t: 0.0 for t in types}
     for c in carriers:
@@ -250,21 +274,31 @@ def workforce_line_carriers(root=ROOT):
     return out
 
 
+def engine_lines_on_top(root=ROOT, moved=None):
+    """The carriers whose moved birth or mortality lines stay on top of the census's term: each that has an on-top
+    line on a field the census can also absorb (P.ENGINE_FIELDS_ON_TOP's fields are on top wherever they sit, so a
+    carrier there isn't listed). Read from the carriers' own types (engine_lines()), not kept by hand (#1046)."""
+    moved = engine_lines(root) if moved is None else moved
+    return frozenset(key for (_kind, key, _block, field), (family, _v) in moved.items()
+                     if family == "ontop" and field not in P.ENGINE_FIELDS_ON_TOP)
+
+
 def absorbed_carriers(root=ROOT, lines=None):
     """Phase 2 step 4 (owner amendment, 2026-10-10): any engine birth or mortality line still live on a law,
     technology or institution that the census would absorb, as Carriers (`type` is the engine field). Since the
     engine-lines plan (2026-10-11) every such line sits on a script-only type, so this returns [] (the walk nets
-    nothing for them; TestEngineLinesMoved fails CI on a new one). Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
+    nothing for them; TestEngineLinesMoved fails CI on a new one). Every live line not on top (engine_lines_on_top()'s carriers,
     P.ENGINE_FIELDS_ON_TOP's fields) is absorbed. Kinds follow the engine's scaling: a law's
     institution_modifier line is law_institution (per level of the law's institution, incorporated states), an
     institution's own line is institution (per its level, incorporated states), the rest are flat."""
     lines = engine_rate_lines(root) if lines is None else lines
     institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    on_top = engine_lines_on_top(root)
     out = []
     for (kind, key, block, field), value in sorted(lines.items()):
         if abs(value) < 1e-12 or not is_engine_rate_field(field):
             continue
-        if key in P.ENGINE_LINES_ON_TOP or field in P.ENGINE_FIELDS_ON_TOP:
+        if key in on_top or field in P.ENGINE_FIELDS_ON_TOP:
             continue
         if kind == "law" and block == "institution_modifier":
             out.append(Carrier("law_institution", key, field, value, institution.get(key)))

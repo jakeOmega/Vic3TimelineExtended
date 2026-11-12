@@ -10206,10 +10206,15 @@ te_demog_absorbed_walk_init = {
 	set_local_variable = { name = te_dg_w_odx value = 0 }
 	set_local_variable = { name = te_dg_w_odq value = 0 }
 	set_local_variable = { name = te_dg_w_odw value = 0 }
+	set_local_variable = { name = te_dg_w_edl value = 0 }
 	set_local_variable = { name = te_dg_w_rep value = 0 }
 	if = {
 		limit = { te_demog_effects_run = yes }
 		set_local_variable = { name = te_dg_w_rep value = 1 }
+		set_local_variable = { name = te_dg_w_lq_farmers value = te_demog_line_farmers_deaths_applied }
+		set_local_variable = { name = te_dg_w_lq_laborers value = te_demog_line_laborers_deaths_applied }
+		set_local_variable = { name = te_dg_w_lq_machinists value = te_demog_line_machinists_deaths_applied }
+		set_local_variable = { name = te_dg_w_lq_peasants value = te_demog_line_peasants_deaths_applied }
 	}
 }
 
@@ -10283,6 +10288,10 @@ te_demog_absorbed_walk_pop = {
 			else_if = { limit = { is_pop_type = peasants } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_peasants_mortality_mult } }
 			else_if = { limit = { is_pop_type = slaves } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_slaves_mortality_mult } }
 			else_if = { limit = { is_pop_type = soldiers } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_soldiers_mortality_mult } }
+			if = { limit = { is_pop_type = farmers } change_local_variable = { name = te_dg_w_edl add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_w_lq_farmers } } }
+			else_if = { limit = { is_pop_type = laborers } change_local_variable = { name = te_dg_w_edl add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_w_lq_laborers } } }
+			else_if = { limit = { is_pop_type = machinists } change_local_variable = { name = te_dg_w_edl add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_w_lq_machinists } } }
+			else_if = { limit = { is_pop_type = peasants } change_local_variable = { name = te_dg_w_edl add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_w_lq_peasants } } }
 			if = {
 				limit = { OR = { is_pop_type = officers is_pop_type = soldiers } }
 				change_local_variable = { name = te_dg_w_odq add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }
