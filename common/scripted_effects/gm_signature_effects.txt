@@ -625,7 +625,7 @@ gm_state_sig_take_grant = {
 			limit = { gm_state_takes_grant = yes }
 			set_variable = { name = gm_signature value = var:gm_sig_grant }
 			gm_sig_set_special_parent = { VAR = gm_sig_parent SIGVAR = gm_signature }
-			owner = { trigger_event = { id = monument_events.20 } }
+			owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): reached only from monument_events.26, which gm_com_fulfil fires after gm_com_close removed gm_com_open, so the refresh's gm_com_check_progress fulfils nothing again
 		}
 		else = {
 			if = {

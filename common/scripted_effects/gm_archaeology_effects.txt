@@ -398,7 +398,7 @@ gm_arch_tell_found = {
 			limit = { NOT = { var:gm_site_vector = flag:incidental } }
 			$STATE$ = { save_scope_as = gm_arch_ev_survey }
 		}
-		$WHO$ = { trigger_event = { id = arch_events.1 } }
+		$WHO$ = { trigger_event = { id = arch_events.1 } } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_site_told, added to above, is what this effect's limit reads: a player is told of a site once, so gm_arch_pass's listing cannot send arch_events.1 for it again
 	}
 }
 
@@ -1060,7 +1060,7 @@ gm_arch_ev_mark = {
 gm_arch_order_launch = {
 	set_variable = { name = gm_site_order_method value = flag:$METHOD$ }
 	save_scope_as = gm_arch_pick
-	$WHO$ = { trigger_event = { id = arch_events.10 } }
+	$WHO$ = { trigger_event = { id = arch_events.10 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the way back is arch_events.1's launch option; gm_arch_tell_found sends arch_events.1 once per site and player (gm_site_told, written before it fires) and to a player only (is_ai = no), so each pass waits on a click
 }
 
 # Container scope. $WHO$ is to stop digging it (arch_events.11).
