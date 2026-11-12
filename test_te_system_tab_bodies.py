@@ -67,10 +67,13 @@ class FrameTest(unittest.TestCase):
         inner = [text for kind, name, text in gate if kind == "widget"]
         self.assertEqual(len(inner), 1)
         # the entry's column: its datacontext block, a fixed 520, the content,
-        # then the link
+        # the entry's modifier strip (empty by default: a body with no entry
+        # has no JournalEntry; test_te_entry_modifier_strip.py), then the link
         column = _children(inner[0])
         self.assertEqual([name for kind, name, _ in column if kind == "block"],
-                         ["tab_entry", "tab_content", "tab_open_journal"])
+                         ["tab_entry", "tab_content", "tab_entry_modifiers", "tab_open_journal"])
+        strip = [text for kind, name, text in column if kind == "block" and name == "tab_entry_modifiers"][0]
+        self.assertEqual(strip.strip(), "")
         self.assertIn(("property", "minimumsize", "{ 520 -1 }"), column)
         self.assertNotIn("visible", [name for kind, name, _ in column if kind == "property"])
         # the layout the window's tabs had inline (no visible change): spacing

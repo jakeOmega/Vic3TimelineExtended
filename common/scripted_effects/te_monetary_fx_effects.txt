@@ -110,29 +110,6 @@ te_monetary_init_fx_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_fx_index } }
 		set_variable = { name = te_fx_index value = te_mon_fx_par }
-
-		# SAVE MIGRATION (§18.2), one shot, riding on the seed so it can never
-		# run twice. A country holding one of the two deleted tools has its
-		# index SET to what the +/-0.25 modifier was in index points — 80 / 120 —
-		# and drifts to its own target from there. Not a te_fx_shock: a shock
-		# delivers 38% of its size, which would swap a 25% edge for 5% overnight,
-		# the lurch the migration exists to prevent. The modifiers themselves are
-		# stripped below, every pulse, until legacy_modifier_cleanup.txt's dated
-		# checklist retires the definitions.
-		if = {
-			limit = {
-				has_journal_entry = je_banking_cycle
-				je:je_banking_cycle = { has_modifier = banking_fx_devaluation }
-			}
-			set_variable = { name = te_fx_index value = 80 }
-		}
-		else_if = {
-			limit = {
-				has_journal_entry = je_banking_cycle
-				je:je_banking_cycle = { has_modifier = banking_fx_support }
-			}
-			set_variable = { name = te_fx_index value = 120 }
-		}
 	}
 	if = {
 		limit = { NOT = { has_variable = te_fx_shadow } }
@@ -173,22 +150,6 @@ te_monetary_init_fx_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_capital_controls_fatigue_applied } }
 		set_variable = { name = te_capital_controls_fatigue_applied value = 0 }
-	}
-
-	# The two deleted tools' modifiers, stripped wherever a save still carries
-	# them (the migration above has already read them on the seeding pulse).
-	if = {
-		limit = { has_journal_entry = je_banking_cycle }
-		je:je_banking_cycle = {
-			if = {
-				limit = { has_modifier = banking_fx_devaluation }
-				remove_modifier = banking_fx_devaluation
-			}
-			if = {
-				limit = { has_modifier = banking_fx_support }
-				remove_modifier = banking_fx_support
-			}
-		}
 	}
 }
 

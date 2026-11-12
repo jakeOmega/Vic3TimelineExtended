@@ -144,6 +144,27 @@ its law's rate.
 3. **Both.** No `te_tax_ig_view_*` or relief modifier is left on the country or its states.
 4. **Switched back on**, the full code migrates the country again on the next monthly dispatch, from its base-game law.
 
+## Banking: Full to Simplified
+
+The banking rule has a third setting: Simplified keeps the entry and the cycle and switches off the monetary layer
+(`banking_cycle.md`, "Full to Simplified mid-game"). Setup: Banking set to Full, a national bank on fiat money with
+inflation above the comfort band, a loose or tight stance, Sterilize Capital Inflows on, and, in a second game, a gold
+standard the peg crisis suspended. Switch the rule to Simplified.
+
+1. **The entry stays**, and within a month none of the inflation-band, stance-politics, real-wage, minting, exchange-rate
+   or arrangement modifiers is left on the entry or the country. The rate paid is still there.
+2. **The rate paid** stops counting inflation: within a month it is the reference rate plus the risk premium, with no
+   inflation, expectations, monetisation or exchange-rate term in its breakdown.
+3. **The stance band** on the entry is the neutral one, and the cycle panel shows no stance push.
+4. **Sterilize Capital Inflows is off**, its history marker is drawn, and its weekly bill is gone from the budget a week
+   later. The same for any other External & Currency tool that was on.
+5. **The suspended gold standard** counts as convertible again (the simplified End the Gold Standard event can fire in
+   a downturn).
+6. **What stays:** a swap line, a lender of last resort or a receivership stays in force with its article modifiers, and
+   a bloc keeps a monetary-union principle it held. Note whether either reads as a problem in play.
+7. **Switched back to Full**, the dial, inflation and exchange rate start again from the neutral seeds, and the log has
+   one `TE_MONETARY: … left the full monetary system` line per country from the earlier switch.
+
 ## Self-checks
 
 None: every check above is a look at the panels and the modifier list. A failure's fallback is in the system's own doc,
