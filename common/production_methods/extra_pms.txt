@@ -6617,14 +6617,14 @@ pm_automated_am_fabrication = {
 			# Profit: -120.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -180
-			# Wage breakeven: 0.67
+			# Employment: -160
+			# Wage breakeven: 0.75
 		}
 
 		level_scaled = {
 			# employment
 			building_employment_machinists_add = -150
-			building_employment_engineers_add = -30
+			building_employment_engineers_add = -10
 		}
 	}
 
@@ -6649,13 +6649,14 @@ pm_orbital_fabrication = {
 			# Profit: -200.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -20
-			# Wage breakeven: 10.00
+			# Employment: -40
+			# Wage breakeven: 5.00
 		}
 
 		level_scaled = {
 			# employment
 			building_employment_engineers_add = -20
+			building_employment_academics_add = -20
 		}
 	}
 }
