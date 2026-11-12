@@ -2208,9 +2208,8 @@ covert_catch_expose = {
 
 # Shore up our counterintelligence: a decaying boost to separatism and coup
 # resistance and +6 intelligence capacity, three times the unit
-# (covert_counterintelligence_alert). Its own modifier:
-# intelligence_capacity_defense at country scope is stripped every month by
-# legacy_je_modifier_cleanup_effect. Removed first: a same-name add_modifier
+# (covert_counterintelligence_alert), not intelligence_capacity_defense, which
+# lives on je_covert_warfare. Removed first: a same-name add_modifier
 # stacks, and with the follow-up chosen at the catch nothing holds it to once
 # in covert_warfare.2's 24 months any more, so a second exposure refreshes it.
 # Shown in an option as it is (covert_warfare.2.a) or under show_as_tooltip

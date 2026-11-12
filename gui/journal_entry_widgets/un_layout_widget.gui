@@ -687,6 +687,9 @@ types un_layout_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_united_nations')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 
 		blockoverride "tab_content" {
 			block "te_un_tab_layout" {

@@ -2520,9 +2520,11 @@ types state_panel_types
 				}
 			}
 
-			### SEABED LICENCES (Global Commons, spec § 2.7): on a coastal state
-			### once its owner has taken part in a seabed sharing
-			### (te_seabed_tile_shown). The rows are this state's: its basin, the
+			### SEABED LICENCES (Global Commons, spec § 2.7): on the player's own
+			### coastal state once the player has taken part in a seabed sharing
+			### (te_seabed_tile_shown and State.GetOwner.IsLocalPlayer: its words
+			### are written for the player, #1352; another country's coastal state
+			### shows the Ocean Basin tile below). The rows are this state's: its basin, the
 			### licences on its Deep-Sea Mine levels and how many are another
 			### basin's, our unused claims in its basin (what a new level here
 			### would take at full throughput) and what it adds to our claim
@@ -2530,7 +2532,7 @@ types state_panel_types
 			### has the country's licences and sends the player to the Seabed tab
 			### for each basin's figures (GUI audit VAN-8).
 			state_panel_status_item_small = {
-				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0')]"
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0'), State.GetOwner.IsLocalPlayer )]"
 				tooltip = "TE_STATE_SEABED_TT"
 
 				blockoverride "texture" {
@@ -2625,14 +2627,15 @@ types state_panel_types
 			}
 
 			### OCEAN BASIN (GUI audit VAN-8b, owner 2026-10-27): a coastal state
-			### without the Seabed Licences tile above (its owner never took part
-			### in a sharing, or it is another country's) shows its basin once
-			### the viewing player has researched Abyssal Plain Mining, so the
+			### without the Seabed Licences tile above (another country's, or the
+			### player's own before it took part in a sharing) shows its basin
+			### once the viewing player has researched Abyssal Plain Mining, so the
 			### player can see which pool a port there would weigh in. The cheap
-			### state test first; Not( GetMetaPlayer.IsObserver ) before the
-			### GetPlayer-rooted gate, since an observer has no player.
+			### state tests first, then the Licences tile's own test negated;
+			### Not( GetMetaPlayer.IsObserver ) before the GetPlayer-rooted gate,
+			### since an observer has no player.
 			state_panel_status_item_small = {
-				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0'), State.GetOwner.IsLocalPlayer ) ), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				tooltip = "TE_STATE_SEABED_BASIN_TT"
 
 				blockoverride "texture" {

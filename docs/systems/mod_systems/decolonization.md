@@ -141,7 +141,7 @@ The raise and lower rules leave a dead band one level wide, so a programme does 
 
 **Endings.** The programme-month counters (`colonial_invest_months` etc.) add level ÷ 3 a month, so a month at level 3 counts 1 as before and a cheap low level cannot steer the ending as fast.
 
-**Old saves.** A save from before 1.15's scaling modifiers holds the copies the old refresh added to the country; `legacy_je_modifier_cleanup_effect` strips each once. The pre-levels migration (`decol_migrate_programmes`, which made a save from before 2026-10-09 holding a programme modifier and no level run at level 3) went with the conversion: vanilla 1.15 loads no 1.14 save, so no such save can reach it (owner, 2026-11-06), and its `has_modifier` tests could not have told an old copy from nothing once the entry declared the key.
+**Old saves.** The strip of an older save's added copies went with the old-save code (#1429). The pre-levels migration (`decol_migrate_programmes`, which made a save from before 2026-10-09 holding a programme modifier and no level run at level 3) went with the conversion: vanilla 1.15 loads no 1.14 save, so no such save can reach it (owner, 2026-11-06), and its `has_modifier` tests could not have told an old copy from nothing once the entry declared the key.
 
 ### Stances on Colonialism and the Colonial Powers (2026-11-03)
 
