@@ -809,6 +809,108 @@ class GlossaryAndExilePoolTests(unittest.TestCase):
             self.assertEqual({n: m for n, m in missing.items() if m}, {}, etype)
 
 
+class GroupAndPrincipleDescTests(unittest.TestCase):
+    """#897: four types whose `<name>_desc` vanilla defines for every entity
+    and the audit did not check. 71 principles, a law group, two combat unit
+    groups and a mobilization option group had shipped without one."""
+
+    # category -> (source file, entity)
+    CASES = {
+        "Principles": ("common/power_bloc_principles/p.txt", "principle_my_group_4"),
+        "Law Groups": ("common/law_groups/g.txt", "lawgroup_my_rights"),
+        "Combat Unit Groups": ("common/combat_unit_groups/g.txt", "combat_unit_group_drones"),
+        "Mobilization Option Groups": ("common/mobilization_option_groups/g.txt", "drill"),
+    }
+    GROUPS = ("Law Groups", "Combat Unit Groups", "Mobilization Option Groups")
+
+    def _run(self, category, loc_keys, *, base=None, reviewed=False):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        rel, entity = self.CASES[category]
+        comment = " # REVIEWED 2026-11-12: the tooltip hides an empty description" if reviewed else ""
+        _write(tmp.name, rel, f"{entity} = {{{comment}\n}}\n")
+        ms = FakeMS(
+            mod_data={category: {entity: {}}},
+            base_data={category: base or {}},
+            loc_keys=loc_keys,
+        )
+        return audit(ms, mod_path=tmp.name)
+
+    def test_principle_without_desc_flags(self):
+        result = self._run("Principles", set())
+        self.assertEqual(
+            [(f.category, f.entity, f.missing_keys, f.file, f.line) for f in result.flags],
+            [("Principles", "principle_my_group_4", ["principle_my_group_4_desc"],
+              "common/power_bloc_principles/p.txt", 1)],
+        )
+        self.assertEqual(strict_exit_code(result), 1)
+
+    def test_principle_with_desc_passes(self):
+        self.assertEqual(self._run("Principles", {"principle_my_group_4_desc"}).flags, [])
+
+    def test_principle_needs_no_name_key(self):
+        """A principle is named from its group and its tier, so the bare key
+        is never looked up: vanilla defines it for none of its own."""
+        from loc_coverage_audit import _principle_keys
+        self.assertEqual(
+            _principle_keys("principle_my_group_4", {}),
+            [("principle_my_group_4_desc", True, "desc")],
+        )
+
+    def test_group_without_desc_flags(self):
+        for category in self.GROUPS:
+            entity = self.CASES[category][1]
+            with self.subTest(category):
+                flags = self._run(category, {entity}).flags
+                self.assertEqual(
+                    [(f.category, f.entity, f.missing_keys) for f in flags],
+                    [(category, entity, [f"{entity}_desc"])],
+                )
+
+    def test_group_without_name_flags(self):
+        for category in self.GROUPS:
+            entity = self.CASES[category][1]
+            with self.subTest(category):
+                flags = self._run(category, {f"{entity}_desc"}).flags
+                self.assertEqual([f.missing_keys for f in flags], [[entity]])
+
+    def test_group_with_name_and_desc_passes(self):
+        for category in self.GROUPS:
+            entity = self.CASES[category][1]
+            with self.subTest(category):
+                self.assertEqual(self._run(category, {entity, f"{entity}_desc"}).flags, [])
+
+    def test_vanilla_entity_the_mod_restates_is_skipped(self):
+        for category, (_rel, entity) in self.CASES.items():
+            with self.subTest(category):
+                self.assertEqual(self._run(category, set(), base={entity: {}}).flags, [])
+
+    def test_reviewed_comment_exempts(self):
+        result = self._run("Principles", set(), reviewed=True)
+        self.assertEqual(len(result.flags), 1)
+        self.assertEqual(result.flags[0].exemption["date"], "2026-11-12")
+        self.assertEqual(strict_exit_code(result), 0)
+
+    def test_rules_hold_for_vanilla(self):
+        import vanilla_parsed
+        from loc_coverage_audit import _REQUIREMENTS
+        snap = vanilla_parsed.load()
+        for etype, at_least in (("Principles", 60), ("Law Groups", 20),
+                                ("Combat Unit Groups", 4), ("Mobilization Option Groups", 6)):
+            entities = snap.data[etype]
+            self.assertGreaterEqual(len(entities), at_least, etype)
+            missing = {n: [k for k, req, _ in _REQUIREMENTS[etype](n, b)
+                           if req and k not in snap.localization]
+                       for n, b in entities.items()}
+            self.assertEqual({n: m for n, m in missing.items() if m}, {}, etype)
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP
+        for category, (rel, _entity) in self.CASES.items():
+            self.assertIn(category, _REQUIREMENTS)
+            self.assertEqual(_DIR_MAP[category], os.path.dirname(rel))
+
+
 class GameConceptTests(unittest.TestCase):
     def _run(self, loc_keys, *, base=None, reviewed=False):
         tmp = tempfile.TemporaryDirectory()
