@@ -135,8 +135,6 @@
 #                       the walk, which the youth bulge, the event wave, the pension AI and the panel read
 #                       (te_demog_unemployment). Stored, not read live: a scripted GUI reads state_unemployment_rate as
 #                       none, so the panel and the effects read the one stored figure (owner, 2026-10-17)
-#   te_dg_unemp_walk    the walk's own count, under the cohorts only: the workforce of pops with no workplace over all
-#                       the workforce, which the self-check unemployment_rate_read compares the engine's figure with
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -739,7 +737,8 @@ te_demog_seed = {
 	te_demog_enter_group = yes
 	set_local_variable = { name = te_dg_lsf value = 100000 }
 	set_local_variable = { name = te_dg_lsm value = 100000 }
-	set_local_variable = { name = te_dg_dpow value = 1 }
+	# the growth factor's power, at radix 100,000 as the survivors are (te_demog_seed_slot)
+	set_local_variable = { name = te_dg_dpow value = 100000 }
 	te_demog_reset_accumulators = yes
 	te_demog_no_flows = yes
 	# the seed counts the people as they are now: war dead and kills noted before it are in them already
@@ -853,13 +852,19 @@ te_demog_seed_slot = {
 				local_var:te_dg_lsm >= 1
 			}
 		}
+		# Fixed point (#967): the power is te_dg_dpow / 100000. Kept as growth factor^age itself it lost a unit of its
+		# fifth decimal at every multiply, 5.8e-4 of it by age 67 and 1.2e-3 by 103 at a factor of 0.98556, and most of
+		# its digits by old age in a fast-growing state. The births' share comes first, so the largest product here is
+		# survivors x the share x the power x 100,000, at most the survivors x the power x 51,220: what the old order's
+		# was (5e10 at that factor's largest, 1.05707, and 1836's mortality). The power itself is at most 1.05707^300 x
+		# 100,000 = 1.7e12 (te_demog_set_growth_factor's largest factor), inside the range's 9.2e13.
 		set_variable = {
 			name = te_dg_f$S$
-			value = { value = local_var:te_dg_lsf multiply = local_var:te_dg_dpow multiply = te_demog_k_female_births_per_100k divide = 100000 }
+			value = { value = local_var:te_dg_lsf multiply = te_demog_k_female_births_per_100k divide = 100000 multiply = local_var:te_dg_dpow divide = 100000 }
 		}
 		set_variable = {
 			name = te_dg_m$S$
-			value = { value = local_var:te_dg_lsm multiply = local_var:te_dg_dpow multiply = te_demog_k_male_births_per_100k divide = 100000 }
+			value = { value = local_var:te_dg_lsm multiply = te_demog_k_male_births_per_100k divide = 100000 multiply = local_var:te_dg_dpow divide = 100000 }
 		}
 		# §2.6: the US frontier's men at the 1840 census's ratio (generated; te_demog_resettle_effects.txt)
 		if = {
@@ -888,21 +893,22 @@ te_demog_seed_slot = {
 		te_demog_lx_seed_decrement = yes
 	}
 	else = {
-		# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
+		# women die of the group's causes and in childbirth (demographics_model.seed's decrement). Fixed point (#967):
+		# the survivors x the rate first and divide = 100000 last; survivors x (1 - rate / 100000) kept only the rate's
+		# whole deaths per 100,000. The product is at most 100,000 survivors x a rate of 100,000 or so: 1e10.
 		change_local_variable = {
 			name = te_dg_lsf
-			multiply = {
+			subtract = {
 				value = local_var:te_dg_asfr
 				multiply = local_var:te_dg_tfr
 				multiply = local_var:te_dg_mmr
 				divide = 100000
 				add = local_var:te_dg_qf
+				multiply = local_var:te_dg_lsf
 				divide = 100000
-				multiply = -1
-				add = 1
 			}
 		}
-		change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+		change_local_variable = { name = te_dg_lsm subtract = { value = local_var:te_dg_qm multiply = local_var:te_dg_lsm divide = 100000 } }
 	}
 	change_local_variable = { name = te_dg_dpow multiply = local_var:te_dg_d }
 	change_local_variable = { name = te_dg_age add = 1 }
@@ -1133,13 +1139,12 @@ te_demog_work_walk_init = {
 	set_local_variable = { name = te_dg_w_low value = 0 }
 	set_local_variable = { name = te_dg_w_wbase value = 0 }
 	set_local_variable = { name = te_dg_w_wf value = 0 }
-	set_local_variable = { name = te_dg_w_un value = 0 }
 	# Largest Cities: the people at work for each of the state's towns (te_demog_place_effects.txt)
 	te_demog_town_walk_init = yes
 }
 
-# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio, the engine's
-# workforce and the workforce of a pop with no workplace (triggers.log: workforce, strata), under the cohorts only.
+# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio and the engine's
+# workforce (triggers.log: workforce, strata), under the cohorts only.
 te_demog_work_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_on > 0 }
@@ -1149,19 +1154,16 @@ te_demog_work_walk_pop = {
 			limit = { strata = lower }
 			change_local_variable = { name = te_dg_w_low add = total_size }
 		}
-		if = {
-			limit = { NOT = { exists = workplace } }
-			change_local_variable = { name = te_dg_w_un add = workforce }
-		}
 		te_demog_town_walk_pop = yes
 	}
 }
 
 # THIS = a state, after the walk's Gini store: the three shares, and the unemployment, under the cohorts only. The
 # census's unemployment (te_dg_unemp) is the shared conversion, te_state_unemployment_share: the engine's figure over the
-# workforce's share of the people (owner, 2026-10-17: one source for every reader). The walk's own count, the workforce
-# with no workplace over the workforce (te_dg_unemp_walk, the harness's demographics_save_inputs.state_unemployment), is
-# kept for the self-check unemployment_rate_read.
+# workforce's share of the people (owner, 2026-10-17: one source for every reader). The walk no longer counts the
+# workforce with no workplace itself (te_dg_unemp_walk until 2026-11-12): the self-check that compared the engine's
+# figure with that count, unemployment_rate_read, read OK and was retired (#1046), and unemployment_share_read
+# (te_unemployment_effects.txt, from the unemployment walk's own count) is the one check of the conversion.
 te_demog_work_walk_store = {
 	if = {
 		limit = { local_var:te_dg_w_on > 0 }
@@ -1178,7 +1180,6 @@ te_demog_work_walk_store = {
 			set_variable = { name = te_unemp_wf_share value = var:te_dg_wf_engine }
 		}
 		set_variable = { name = te_dg_unemp value = te_state_unemployment_share }
-		set_variable = { name = te_dg_unemp_walk value = { value = local_var:te_dg_w_un divide = { value = local_var:te_dg_w_wf min = 1 } } }
 		# Largest Cities: the state's towns in order (te_demog_place_effects.txt)
 		te_demog_town_walk_store = yes
 	}
@@ -2235,21 +2236,26 @@ te_demog_age_slot = {
 		te_demog_lx_deaths = yes
 	}
 	else = {
-		# deaths, and maternal deaths per birth
+		# deaths, and maternal deaths per birth. Fixed point (#967): the people x the rate first and divide = 100000
+		# last. People x (1 - rate / 100000) kept only the rate's whole deaths per 100,000, so a year's deaths came out
+		# short by up to 1e-5 of the people. The product is a cohort x at most 100,000 (te_demog_enter_group's max):
+		# inside the range's 9.2e13 while one year's cohort of one sex is under 920 million people, which the seed's own
+		# state_population x 100000 already asks of the whole state. A state of half a billion (the census's guard) has
+		# cohorts under ten million: 1e12 at the most, 1.6e11 at 1836's rates, under its own te_dg_births x te_dg_nb_f.
 		set_local_variable = {
 			name = te_dg_f2
 			value = {
-				value = local_var:te_dg_qf
+				value = local_var:te_dg_f
+				multiply = local_var:te_dg_qf
 				divide = 100000
 				multiply = -1
-				add = 1
-				multiply = local_var:te_dg_f
+				add = local_var:te_dg_f
 				subtract = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 }
 			}
 		}
 		set_local_variable = {
 			name = te_dg_m2
-			value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_m }
+			value = { value = local_var:te_dg_m multiply = local_var:te_dg_qm divide = 100000 multiply = -1 add = local_var:te_dg_m }
 		}
 		change_local_variable = {
 			name = te_dg_deaths
@@ -2352,8 +2358,9 @@ te_demog_fold_slot = {
 				divide = 100000
 			}
 		}
-		change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
-		change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+		# the pool's survivors, multiplied first as its deaths are just above (#967): the same products
+		change_variable = { name = te_dg_pf subtract = { value = var:te_dg_pf multiply = local_var:te_dg_qf divide = 100000 } }
+		change_variable = { name = te_dg_pm subtract = { value = var:te_dg_pm multiply = local_var:te_dg_qm divide = 100000 } }
 	}
 	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
 	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }

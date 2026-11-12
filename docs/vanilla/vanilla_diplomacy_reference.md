@@ -138,7 +138,7 @@ Two practical implications survive any specific rebalance:
 1. **Cost follows world share, so the same conquest costs about the same in 1836 and 2036.** A mod formula that scales with absolute population instead drifts upward as populations grow, and diverges from vanilla for every state-based goal.
 2. **Sovereignty violations and regime changes are also infamy-bearing** — not just war goals. Expel-diplomats has its own scaled infamy charge by target rank.
 
-Pull the actual numbers from `common/defines/00_defines.txt` (the `WAR_GOAL_INFAMY_*` block), `common/script_values/00_infamy_values.txt`, and the goal files in `common/war_goal_types/`. The mod's reunification goal (`te_reunify_country`) uses vanilla's annex block since 1.14.5, so it gets all of the discounts above; its force-subject action (`te_force_become_subject`) still uses the pre-1.14 shape (issue #387) and gets none of them.
+Pull the actual numbers from `common/defines/00_defines.txt` (the `WAR_GOAL_INFAMY_*` block), `common/script_values/00_infamy_values.txt`, and the goal files in `common/war_goal_types/`. The mod's reunification goal (`te_reunify_country`) uses vanilla's annex block since 1.14.5, so it gets all of the discounts above; its force-subject action (`te_force_become_subject`) charges a fifth of the target's `country_infamy_value`, capped at 25 (halved for a Sovereign Empire), since #387, so it gets them too. The UN mandate's war goal (`te_un_mandate_restore_state`) charges vanilla `return_state`'s figure (`state_infamy_value`) when no mandate covers it.
 
 ### 5.4 Diplomatic incidents
 

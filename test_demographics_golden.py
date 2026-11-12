@@ -74,7 +74,28 @@ The old-save code's removal (#1407, 2026-11-06) rewrites te_demog_gini_band_stor
 (OLDSAVE_DIGESTS) and changes no number.
 
 The census's guards (#1476, 2026-11-06) cap crowding's infection factor at a pull of 5 (GUARDS_DIGESTS). No case's
-crowding comes near it, so no number changes."""
+crowding comes near it, so no number changes.
+
+Fast mode's class pairs (#1046, 2026-11-12) add one sum to the walk's two absorbed blocks (CLASS_PAIR_DIGESTS), read
+only on fast mode's first Full step; no case holds a class pair, so no number changes.
+
+The death rates' decimals (#967, 2026-11-12) change the three census cases on purpose, in their last places, and
+nothing else. The sweep took a cohort's survivors as people x (1 - rate / 100000), which kept only the rate's whole
+deaths per 100,000, and the seed kept its growth power as a product cut at every age; both now multiply first
+(te_demog_age_slot, te_demog_fold_slot, te_demog_seed_slot and the late sweep's, all hand-written: no generated block
+moved). What moved, as the fixed-point twins measured the drifts (test_demographics_fixed_point.py):
+- the year's deaths rise by under 1e-5 of the 251,000 people: 7,760.67 to 7,762.08 in farm_display_only (5.6e-6 of the
+  people, 1.8e-4 of the deaths), +1.45 in farm_full_on_top (5.8e-6) and +0.45 in rich_full (1.8e-6), with the slices by
+  cause, the model's death rate and, under Full, the deaths term that reads it (-0.41682 to -0.41671);
+- the seed's ring, hence every cohort and band: 2.7e-4 at the most for a band (the farm cases' men from 85, 187.03 to
+  187.08), 5.0e-4 for a cohort (theirs aged 100, under a tenth of a person), and 1e-5 to 1e-4 for the sums of the
+  childbearing ages and the conscription pool's;
+- the births that ring bears, by 2.4e-5 in the farm cases (-0.25 and -0.28 of 10,633 and 11,697) and 5.7e-5 in the
+  rich one (+0.10 of 1,717).
+No cohort crossed half a person either way, and no recorded number moved by more than 5.0e-4 of itself. The three
+were re-recorded on this tree (TE_RECORD_GOLDEN_CASES), so their slots now carry the 300-year ring's own names (which
+_ring300 leaves as they are) and they hold the names added since their last record (te_dg_ring, te_dg_of1,
+te_dg_om1, te_dg_dc_second). The model's two cases and the lines' two are as they were."""
 
 import functools
 import hashlib
@@ -320,6 +341,12 @@ GUARDS_DIGESTS = {
     ("generated_values", "te_demog_f_infection_crowding"):
         "e1bee69b4cf134356a618db0a2d8514e766b0c109d8569abcaa69db7617c0ed7",
 }
+# Fast mode's class pairs (#1046): the walk's Full-only sums gain the moved lines' class pairs at their pops' bare deaths
+# (te_dg_w_edl), which only fast mode's first Full step reads; no recorded case holds a class pair, so no number changes.
+CLASS_PAIR_DIGESTS = {
+    ("generated_effects", "te_demog_absorbed_walk_init"): "d55951aa65b56203c04529399901e75f843a9c8241dc1d8c88e4340219cc2b3d",
+    ("generated_effects", "te_demog_absorbed_walk_pop"): "56dc6fbc4c5dd04fd655ae60386e607e3cae29cb53a2653eca85978a34e7a0b3",
+}
 
 
 def _ring300(name):
@@ -528,6 +555,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = STRATA_BIRTH_DIGESTS.get((key, name), want)
                 want = OLDSAVE_DIGESTS.get((key, name), want)
                 want = GUARDS_DIGESTS.get((key, name), want)
+                want = CLASS_PAIR_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

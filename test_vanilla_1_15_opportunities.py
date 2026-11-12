@@ -9,6 +9,7 @@ formal name filed as unused. These check the wiring. The in-game checks are in d
 Run: python3 -m unittest test_vanilla_1_15_opportunities -v
 """
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -68,6 +69,18 @@ class GdpPerCapitaTest(unittest.TestCase):
         """Other values read global_gdp_script_value; global_population is an engine event target."""
         values = _strip_comments(_text("common/script_values/extra_script_values.txt"))
         self.assertRegex(values, r"(?m)^global_gdp_script_value = \{")
+
+    def test_country_gdp_per_capita_is_vanilla_s(self):
+        """#1460: 1.15 defines country_gdp_per_capita; the mod's identical copy is gone and its readers read vanilla's.
+
+        A bare duplicate script value logs nothing and the copy read last wins, so a mod copy would silently replace
+        (or be replaced by) vanilla's in Reform or Revolution and the Five-Year Plan if the two ever diverged.
+        """
+        for path in (ROOT / "common" / "script_values").rglob("*.txt"):
+            self.assertNotRegex(_strip_comments(path.read_text(encoding="utf-8-sig")),
+                                r"(?m)^\s*country_gdp_per_capita\s*=\s*\{", path.relative_to(ROOT).as_posix())
+        vanilla = json.loads(_text("vanilla_parsed/common/script_values.json"))
+        self.assertIn("country_gdp_per_capita", vanilla)
 
 
 class LeaderChanceTest(unittest.TestCase):

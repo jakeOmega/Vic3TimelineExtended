@@ -1675,6 +1675,11 @@ class PrivateTest(unittest.TestCase):
         mine += [f"je_space_race_widget_reward_{m}" for m in RACING]
         mine += [k[:-len("_ni")] for k in shown if k.endswith("_ni")]
         mine += ["je_space_race_widget_orbit_satellites_label"]
+        # what an overview passes to the guarded cells and bar row through a
+        # blockoverride (the exact progress, the risk, the approach's cost):
+        # the walk follows the override to its block (#1368)
+        mine += [f"je_space_race_widget_{part}_{m}" for m in CONTROLLED
+                 for part in ("progress", "risk", "ov_safe", "ov_ambitious")]
         for key in mine:
             with self.subTest(key=key):
                 self.assertNotIn(key, self.keys)
@@ -1852,8 +1857,9 @@ class ScriptTooltipTest(unittest.TestCase):
     country's panel reads the shown country, not the player (spec
     2026-11-02-charts-help-national-info § 6.4). Orbit's Strikes hover is
     te_asat_record_sgui's ExecuteTooltip: its lines come from the effect's
-    custom_tooltip keys, which no panel's loc closure reaches, so BindingTest
-    can't see them. They read the scripted GUI's root (SCOPE.GetRootScope, the
+    custom_tooltip keys, which no panel's loc closure reached when this was
+    written (BindingTest follows them since #1361; this holds the lines by
+    name). They read the scripted GUI's root (SCOPE.GetRootScope, the
     form covert_last_exposed_sgui ships), or nothing at all."""
 
     TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")

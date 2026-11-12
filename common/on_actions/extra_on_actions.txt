@@ -284,6 +284,7 @@ te_on_company_disbanded = {
 on_become_independent = {
 	on_actions = {
 		decol_collapse_grace_on_action
+		decol_leave_overlord_plays_on_action
 	}
 	events = {
 		decolonization_events.15
@@ -297,6 +298,14 @@ on_become_independent = {
 decol_collapse_grace_on_action = {
 	effect = {
 		set_variable = { name = decol_collapse_grace days = 7300 }
+	}
+}
+
+# A colony freed mid-war leaves its former overlord's wars and plays (1.15
+# leave_plays_supporting). decolonization.txt, decol_leave_former_overlord_plays.
+decol_leave_overlord_plays_on_action = {
+	effect = {
+		decol_leave_former_overlord_plays = yes
 	}
 }
 
@@ -1204,12 +1213,14 @@ global_warming_events_on_action = {
 					}
 					trigger_event = { id = environmentalism_events.9 }
 				}
-				# Water shortage (severe+ warming)
-				10 = {
+				# Water shortage (severe+ warming): 5, plus up to 10 by the share
+				# of incorporated states in the tropics (global_warming_event_values.txt)
+				5 = {
 					trigger = {
 						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.0
 					}
+					modifier = { add = gw_water_shortage_tropical_weight }
 					trigger_event = { id = environmentalism_events.10 }
 				}
 				# Green tech boom (environmental_movement tech + renewables)
@@ -1260,12 +1271,19 @@ global_warming_events_on_action = {
 					}
 					trigger_event = { id = environmentalism_events.13 }
 				}
-				# Disease outbreak (severe+ warming)
-				10 = {
+				# Disease outbreak (severe+ warming): weighted by the share of
+				# incorporated states in the tropics, 0 with none
+				# (global_warming_event_values.txt)
+				0 = {
 					trigger = {
 						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.0
+						any_scope_state = {
+							is_incorporated = yes
+							in_tropics = yes
+						}
 					}
+					modifier = { add = gw_disease_event_weight }
 					trigger_event = { id = environmentalism_events.14 }
 				}
 				# Political clash (clean_energy_technologies + industrialists in gov + catastrophic warming)

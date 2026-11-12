@@ -141,16 +141,7 @@ covert_election_interference_action = {
 		}
 		custom_tooltip = {
 			text = iw_target_has_elections_tt
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_landed_voting
-					has_law = law_type:law_wealth_voting
-					has_law = law_type:law_census_voting
-					has_law = law_type:law_universal_suffrage
-					has_law = law_type:law_liquid_democracy
-					has_law = law_type:law_labour_suffrage
-				}
-			}
+			scope:target_country = { te_holds_elections = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
@@ -185,6 +176,8 @@ covert_election_interference_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -197,16 +190,7 @@ covert_election_interference_action = {
 				# Target must still have elections
 				custom_tooltip = {
 					text = iw_target_has_elections_tt
-					scope:target_country = {
-						OR = {
-							has_law = law_type:law_landed_voting
-							has_law = law_type:law_wealth_voting
-							has_law = law_type:law_census_voting
-							has_law = law_type:law_universal_suffrage
-							has_law = law_type:law_liquid_democracy
-							has_law = law_type:law_labour_suffrage
-						}
-					}
+					scope:target_country = { te_holds_elections = yes }
 				}
 			}
 		}
@@ -378,6 +362,8 @@ covert_financial_subversion_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -562,6 +548,8 @@ covert_infrastructure_sabotage_action = {
 	pact = {
 		cost = 0 # war tier: no influence (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -736,6 +724,8 @@ covert_comms_disruption_action = {
 	pact = {
 		cost = 0 # war tier: no influence (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -915,6 +905,8 @@ covert_industrial_espionage_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1090,6 +1082,8 @@ covert_military_espionage_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1259,6 +1253,8 @@ covert_influence_campaign_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1448,6 +1444,8 @@ covert_ideological_subversion_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1643,6 +1641,8 @@ covert_destabilization_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1845,6 +1845,8 @@ covert_regime_change_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2032,6 +2034,8 @@ covert_nuclear_sabotage_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2047,12 +2051,14 @@ covert_nuclear_sabotage_action = {
 		# The Tradecraft gate is launch-only: a running operation survives the
 		# agency's score falling below Seasoned. Maintained on the programme
 		# existing, not on it being funded: a target that steps funding to 0
-		# for a week must not end the operation for free.
+		# for a week must not end the operation for free. Nor must an arsenal
+		# ceiling the target sets itself and lifts with a click (#758): the
+		# nuclear crisis's test, which does not count that hold as a stop.
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
 					text = iw_target_nuclear_programme_standing_tt
-					scope:target_country = { nuclear_program_is_standing = yes }
+					scope:target_country = { nuclear_program_has_stopped = no }
 				}
 			}
 		}
@@ -2228,6 +2234,8 @@ covert_space_espionage_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2395,6 +2403,8 @@ covert_cultivate_assets_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2577,6 +2587,8 @@ covert_secure_material_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2751,6 +2763,8 @@ covert_counterintel_support_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2922,6 +2936,8 @@ covert_incite_autonomy_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -3112,6 +3128,8 @@ covert_sabotage_colony_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -3307,6 +3325,8 @@ covert_survey_defences_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {

@@ -8148,7 +8148,7 @@
   "de": "Hält der Block das [concept_power_bloc_principle] Bildung, öffnet die Universität ihre Türen als Kulturzentrum, produziert Dienstleistungen und Kunst und projiziert die [concept_cultural_pull] des Blocks ins Ausland."
  },
  "pm_principle_engineering_and_logistics": {
-  "en": "Engineering and Logisitics [concept_power_bloc_principle] 1",
+  "en": "Engineering and Logistics [concept_power_bloc_principle] 1",
   "de": "Ingenieurwesen und Logistik [concept_power_bloc_principle] 1"
  },
  "pm_programmable_fibers": {
@@ -11152,7 +11152,7 @@
   "de": "Bildung"
  },
  "pmg_principle_engineering_and_logistics": {
-  "en": "Engineering and Logisitics [concept_power_bloc_principle_group]",
+  "en": "Engineering and Logistics [concept_power_bloc_principle_group]",
   "de": "[concept_power_bloc_principle_group]: Technik und Logistik"
  },
  "pmg_prussian_railway_directorate": {

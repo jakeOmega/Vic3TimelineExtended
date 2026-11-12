@@ -1050,6 +1050,11 @@ environmentalism_events.14 = {
 		}
 		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
+		# A tropical disease needs the tropics (in_tropics: the state region's centre point)
+		any_scope_state = {
+			is_incorporated = yes
+			in_tropics = yes
+		}
 		# Strong consumer protection (level 5) prevents outbreaks through public health systems
 		NOT = {
 			has_consumer_protection_ministry_5 = yes

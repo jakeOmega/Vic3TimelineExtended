@@ -8,43 +8,51 @@
 # the multiplier, so a second shock replaces the first, and only for a deeper
 # cut than the one being paid for: a sideways or upward move during a shock
 # adds nothing.
+#
+# No `trigger` (#1596): on the day the hook queues this the new law's ceiling
+# is not yet in `modifier:` reads, so a trigger on the gap is false then, and
+# a delayed event whose trigger is false when queued seems to be dropped
+# (scripting_best_practices.md § "A Delayed `trigger_event` Re-Checks Its
+# Trigger When It Fires"). The conditions are read here, on the day.
 te_judiciary_events.1 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
-		has_variable = te_jud_seeded
-		has_variable = te_judicial_independence
-		te_jud_overhaul_gap >= 20
-		OR = {
-			NOT = { has_modifier = te_jud_court_overhaul }
-			AND = {
-				has_variable = te_jud_overhaul_mult
-				te_jud_overhaul_mult_value > var:te_jud_overhaul_mult
-			}
-		}
-	}
-
 	immediate = {
+		te_jud_rule_probe_verdict = yes
 		if = {
-			limit = { has_modifier = te_jud_court_overhaul }
-			remove_modifier = te_jud_court_overhaul
-		}
-		set_variable = {
-			name = te_jud_overhaul_mult
-			value = te_jud_overhaul_mult_value
-		}
-		add_modifier = {
-			name = te_jud_court_overhaul
-			years = 5
-			is_decaying = yes
-			multiplier = var:te_jud_overhaul_mult
-		}
-		# The protests (phase 2, spec § 14.1): Lawyers in the Streets, in
-		# place of phase 1's bare middle-strata radicals.
-		if = {
-			limit = { te_jud_overhaul_gap >= 40 }
-			trigger_event = { id = te_judiciary_events.6 }
+			limit = {
+				has_variable = te_jud_seeded
+				has_variable = te_judicial_independence
+				te_jud_overhaul_gap >= 20
+				OR = {
+					NOT = { has_modifier = te_jud_court_overhaul }
+					AND = {
+						has_variable = te_jud_overhaul_mult
+						te_jud_overhaul_mult_value > var:te_jud_overhaul_mult
+					}
+				}
+			}
+			if = {
+				limit = { has_modifier = te_jud_court_overhaul }
+				remove_modifier = te_jud_court_overhaul
+			}
+			set_variable = {
+				name = te_jud_overhaul_mult
+				value = te_jud_overhaul_mult_value
+			}
+			add_modifier = {
+				name = te_jud_court_overhaul
+				years = 5
+				is_decaying = yes
+				multiplier = var:te_jud_overhaul_mult
+			}
+			# The protests (phase 2, spec § 14.1): Lawyers in the Streets, in
+			# place of phase 1's bare middle-strata radicals.
+			if = {
+				limit = { te_jud_overhaul_gap >= 40 }
+				trigger_event = { id = te_judiciary_events.6 }
+			}
 		}
 	}
 }
@@ -342,6 +350,80 @@ te_judiciary_events.6 = {
 }
 
 # ======================================================================
+#  DELAYED RELAYS (#1596)
+#  A delayed trigger_event seems to drop its event when the event's trigger
+#  is false on the day it is queued. The Enlarged Bench (.5) and the
+#  Doctrine of Necessity (.34) are queued on such a day (the packing's
+#  modifier, a new law's modifier sums), so each is queued through a hidden
+#  event with no trigger that reads the conditions when it fires and opens
+#  the popup then. .9 and .10 are the self-check that tests the rule
+#  (te_jud_rule_probe_queue).
+# ======================================================================
+
+# The Enlarged Bench's year (te_jud_pack_court): the bench is still packed.
+te_judiciary_events.7 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_modifier = te_jud_court_packed }
+			trigger_event = { id = te_judiciary_events.5 }
+		}
+	}
+}
+
+# The Doctrine of Necessity's fortnight (te_jud_law_activated): the court
+# is now a paper court and has standing to lose (.34's trigger).
+te_judiciary_events.8 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_jud_seeded
+				te_jud_paper_court = yes
+				has_variable = te_judicial_independence
+				var:te_judicial_independence >= 30
+			}
+			trigger_event = { id = te_judiciary_events.34 }
+		}
+	}
+}
+
+# The self-check's probe (TE_SELF_CHECK delayed_trigger_queue_check): queued
+# six days ahead with this trigger false. If it runs, the rule is refuted.
+te_judiciary_events.9 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { # REVIEWED 2026-11-12: the probe; false when queued on purpose
+		has_variable = te_jud_rule_probe_queued
+		te_jud_overhaul_gap >= 20
+	}
+
+	immediate = {
+		set_variable = { name = te_jud_rule_probe_fired days = 30 }
+	}
+}
+
+# The probe's witness: no trigger, queued with .9 for the same day, it
+# records the gap that day so the verdict (te_judiciary_events.1) knows .9's
+# trigger was true when .9 was due.
+te_judiciary_events.10 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = te_jud_rule_probe_queued }
+			set_variable = { name = te_jud_rule_probe_due_gap value = te_jud_overhaul_gap days = 30 }
+		}
+	}
+}
+
+# ======================================================================
 #  PHASE 3: AMENDMENT DEBATES (spec § 14.2)
 #  The scripted ways in for three Judiciary amendments while a host court
 #  law is enacted, pooled in on_law_checkpoint_debate. Each trigger
@@ -394,7 +476,7 @@ te_judiciary_events.20 = {
 			is_enacting_law = law_type:law_constitutional_review
 		}
 		# amendment_judicial_elections's `possible`
-		te_jud_elected_government = yes
+		te_holds_elections = yes
 		NOT = {
 			currently_enacting_law = {
 				has_amendment = amendment_type:amendment_judicial_elections
@@ -988,7 +1070,7 @@ te_judiciary_events.33 = {
 	fire_only_once = yes
 
 	trigger = {
-		te_jud_elected_government = yes
+		te_holds_elections = yes
 		NOT = { te_jud_paper_court = yes }
 		has_variable = te_judicial_independence
 		var:te_judicial_independence >= 50

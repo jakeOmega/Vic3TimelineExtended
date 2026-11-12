@@ -335,9 +335,10 @@ class TestFamilyLawsUnderFull(unittest.TestCase):
             self.assertFalse(any(k.startswith("te_demog_line_births_") for k in eng.modifiers), law)
 
     def test_the_on_top_list_keeps_communal_child_rearing_only(self):
-        self.assertNotIn(PN, P.ENGINE_LINES_ON_TOP)
-        self.assertNotIn(PC, P.ENGINE_LINES_ON_TOP)
-        self.assertIn("law_communal_child_rearing", P.ENGINE_LINES_ON_TOP)
+        on_top = DM.engine_lines_on_top()
+        self.assertNotIn(PN, on_top)
+        self.assertNotIn(PC, on_top)
+        self.assertIn("law_communal_child_rearing", on_top)
         sums = DM.totals(self.lines, laws={"law_communal_child_rearing"}, types=tuple(P.ENGINE_LINE_TYPES.values()))
         self.assertAlmostEqual(sums["state_demog_ontop_birth_rate_mult"], -0.2)
 

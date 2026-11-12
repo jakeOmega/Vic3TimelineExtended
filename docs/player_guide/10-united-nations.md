@@ -640,6 +640,9 @@ finds for you, the holder chooses in The World Court Rules Against Us:
 | We abide by the ruling. | The state is yours. The holder gains 2 standing and the UN gains credibility. |
 | The court has no say over our soil. | The holder keeps the state, loses 5 standing, takes a defiance record of 6 and International Court Defied, and the UN loses credibility. For ten years you may table a military mandate over that region against it without the case of 60. |
 
+A holder that voted for the referral accepted the verdict in advance: it may
+only abide by the ruling.
+
 If the court finds for the holder, your claim on the region is withdrawn, and
 for twenty years each diplomatic play in which you take a war goal there costs
 you 10 × enforcement extra infamy, once per play. The case is struck off as
@@ -704,7 +707,7 @@ support. Our Obligations shows an order against you, or against your enemy.
 
 With the Decolonization Resolution in force, a member can ask the Assembly to
 order a referendum in another member's direct subject whose liberty desire is
-50 or more; a subject can ask for its own. A veto blocks it. If it carries, the
+50 or more and that no war goal is already freeing; a subject can ask for its own. A veto blocks it. If it carries, the
 overlord receives A Referendum Ordered:
 
 | Choice | Result |
@@ -729,7 +732,8 @@ is struck or charged in the play a mandate is used in.
 
 ### Electoral observers
 
-A member that holds elections and is at peace can Request Electoral Observers.
+A member that holds elections (a voting law, or Anarchy) and is at peace can
+Request Electoral Observers.
 It is a request: no veto, and it shares the request cooldown. If it carries
 while you are still at peace and holding elections, an Electoral Observer
 Mission goes to your capital, paid from the UN's budget, so
@@ -901,7 +905,7 @@ a weekly upkeep of a tenth of a percent of GDP a year, never less than 1,000 a
 week. It also adds to your claim weight in the Southern basin, coastline or
 not. The decision Close the Antarctic Research Station ends both. The AI opens a station when
 its weekly surplus covers ten times the upkeep: great and major powers, and
-smaller powers with a Southern coastline or a place in the Antarctic Treaty.
+smaller powers with a coast south of the tropics or a place in the Antarctic Treaty.
 
 A country's first station puts the Antarctic Treaty on the docket. Its parties
 hold no new Southern seabed licenses; levels built before they ratified keep

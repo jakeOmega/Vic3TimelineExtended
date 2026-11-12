@@ -326,7 +326,6 @@ SERVER_TYPES = {
     "scripted_effects": "Scripted Effects",
     "scripted_triggers": "Scripted Triggers",
     "scripted_guis": "Scripted GUIs",
-    "scripted_progress_bars": "Scripted Progress Bars",
     "on_actions": "On Actions",
 }
 # GUI names that land in one global registry whichever file defines them
@@ -426,6 +425,8 @@ class Entry:
     line: int
     value: Optional[str]                 # a scalar's value; None for a block
     children: list = field(default_factory=list)   # [(key, line, value)] at depth 1
+    end_line: Optional[int] = None       # the line of the closing brace (a scalar: of its
+                                         # value); None for a block that never closes
 
 
 def split_directive(raw_key: str) -> tuple[Optional[str], str]:
@@ -466,10 +467,12 @@ def _tokens(text: str) -> list[tuple[str, int]]:
     return out
 
 
-def _block_text(tokens, start: int, cap: int = 200) -> str:
-    """The tokens of the block opening at tokens[start], joined by spaces."""
+def _block_text(tokens, start: int, cap: Optional[int] = 200) -> str:
+    """The tokens of the block opening at tokens[start], joined by spaces, cut
+    to `cap` characters (None: the whole block)."""
     depth, parts = 0, []
-    for tok, _line in tokens[start:]:
+    for j in range(start, len(tokens)):   # not tokens[start:]: a copy per block is quadratic
+        tok = tokens[j][0]
         parts.append(tok)
         if tok == "{":
             depth += 1
@@ -478,13 +481,15 @@ def _block_text(tokens, start: int, cap: int = 200) -> str:
             if depth == 0:
                 break
     text = " ".join(parts)
-    return text if len(text) <= cap else text[: cap - 1] + "…"
+    return text if cap is None or len(text) <= cap else text[: cap - 1] + "…"
 
 
-def scan_script(text: str) -> tuple[list[Entry], list[str]]:
+def scan_script(text: str, block_cap: Optional[int] = 200) -> tuple[list[Entry], list[str]]:
     """Every depth-0 key of a script file, with the depth-1 keys of each
-    block. `@name` constants are skipped at both depths (file-local). Returns
-    (entries, warnings)."""
+    block. `@name` constants are skipped at both depths (file-local). A
+    depth-1 block's value is its tokens joined by spaces, cut to `block_cap`
+    characters (None keeps it whole, for a caller that reads the list).
+    Returns (entries, warnings)."""
     warnings = []
     if text.startswith("﻿"):
         warnings.append("doubled UTF-8 BOM: the engine reads the second as part of the "
@@ -505,6 +510,8 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
             else:
                 depth -= 1
                 if depth == 0:
+                    if current is not None:
+                        current.end_line = line
                     current = None
             i += 1
             continue
@@ -521,11 +528,12 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
                     directive, key = split_directive(tok)
                     if directive is None and _UNKNOWN_PREFIX_RE.match(tok):
                         warnings.append(f"line {line}: unknown directive prefix in {tok!r}")
-                    entry = Entry(tok, key, directive, line, None if is_block else value_tok)
+                    entry = Entry(tok, key, directive, line, None if is_block else value_tok,
+                                  end_line=None if is_block else tokens[min(i + 2, n - 1)][1])
                     entries.append(entry)
                     current = entry if is_block else None
                 elif depth == 1 and current is not None:
-                    value = _block_text(tokens, i + 2) if is_block else value_tok
+                    value = _block_text(tokens, i + 2, block_cap) if is_block else value_tok
                     current.children.append((tok, line, value))
             i += 2 if is_block else 3
             continue
@@ -1177,14 +1185,15 @@ class DbScan:
     entries: dict = field(default_factory=lambda: defaultdict(list))  # key -> [(path, Entry)]
 
 
-def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str) -> DbScan:
+def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str,
+             block_cap: Optional[int] = 200) -> DbScan:
     out = DbScan(files=list(files))
     for rel in files:
         if not rel.endswith(".txt"):
             continue
         full = os.path.join(root, "common", *db.split("/"), *rel.split("/"))
         try:
-            entries, w = scan_script(read_text(full))
+            entries, w = scan_script(read_text(full), block_cap)
         except OSError as exc:
             warnings.append({"side": side, "file": f"common/{db}/{rel}", "warning": str(exc)})
             continue

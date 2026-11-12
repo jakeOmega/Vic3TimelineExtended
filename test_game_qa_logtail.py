@@ -3,6 +3,7 @@
 The rotation here is the game's as the probes saw it: `debug.log` is renamed
 `debug.1.log`, each older generation moves up one, the sixth is dropped.
 """
+import hashlib
 import os
 import tempfile
 import unittest
@@ -207,6 +208,59 @@ class FollowerTest(unittest.TestCase):
             pass
         self.append("d\n")
         self.assertEqual(self.follower.poll(), ["c", "d"])
+
+
+class FoundLogTest(unittest.TestCase):
+    """A game that appended to the log it found would hand the follower an earlier game's lines as its own
+    (#1601): told the size and hash of that log, the follower skips a beginning with exactly those bytes."""
+
+    OWNERS = b"[10:00:00][x.cpp:1]: the owner's earlier game\n[10:00:01][x.cpp:1]: its last line\n"
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.live = Path(tmp.name) / "debug.log"
+        self.found = (len(self.OWNERS), hashlib.sha256(self.OWNERS).hexdigest())
+
+    def test_a_log_that_begins_with_the_log_found_is_read_from_where_that_ends(self):
+        self.live.write_bytes(self.OWNERS + b"the run's first\n")
+        follower = logtail.LogFollower(self.live, found=self.found)
+        self.assertEqual(follower.poll(), ["the run's first"])
+        self.assertEqual(follower.skipped, len(self.OWNERS))
+        with open(self.live, "ab") as f:
+            f.write(b"the run's second\n")
+        self.assertEqual(follower.poll(), ["the run's second"])
+
+    def test_a_log_started_anew_is_read_from_its_start(self):
+        for name, data in (("other bytes", b"[12:00:00][x.cpp:1]: the run's own first line, longer than the "
+                                           b"owner's whole log was, so that sizes alone would say prefix\n" * 3),
+                           ("shorter", b"the run's\n"), ("empty", b"")):
+            with self.subTest(name):
+                self.live.write_bytes(data)
+                follower = logtail.LogFollower(self.live, found=self.found)
+                self.assertEqual(follower.poll(), data.decode().splitlines())
+                self.assertEqual(follower.skipped, 0)
+
+    def test_only_the_first_file_read_can_begin_with_it(self):
+        self.live.write_bytes(b"the run's\n")
+        follower = logtail.LogFollower(self.live, found=self.found)
+        self.assertEqual(follower.poll(), ["the run's"])
+        os.replace(self.live, self.live.with_name("debug.1.log"))      # a rotation; the new file holds those bytes
+        self.live.write_bytes(self.OWNERS)
+        self.assertEqual(follower.poll(), self.OWNERS.decode().splitlines())
+        self.assertEqual(follower.skipped, 0)
+
+    def test_an_empty_log_found_skips_nothing_and_none_known_is_as_before(self):
+        self.live.write_bytes(b"a\n")
+        empty = logtail.LogFollower(self.live, found=(0, hashlib.sha256(b"").hexdigest()))
+        self.assertEqual((empty.poll(), empty.skipped), (["a"], 0))
+        self.assertEqual(logtail.LogFollower(self.live).poll(), ["a"])
+
+    def test_a_log_that_is_not_there_yet_is_still_checked_when_it_comes(self):
+        follower = logtail.LogFollower(self.live, found=self.found)
+        self.assertEqual(follower.poll(), [])
+        self.live.write_bytes(self.OWNERS + b"the run's\n")
+        self.assertEqual((follower.poll(), follower.skipped), (["the run's"], len(self.OWNERS)))
 
 
 class ParseTest(unittest.TestCase):

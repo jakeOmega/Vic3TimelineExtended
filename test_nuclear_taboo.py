@@ -114,6 +114,16 @@ class TestScoreCore(unittest.TestCase):
         self.assertNotIn("update_nuclear_powers_ranking", strip_comments(read(JE)))
         self.assertIn("update_nuclear_powers_ranking = yes", block(self.effects, "nd_taboo_monthly_update"))
 
+    def test_leaderboard_lists_what_the_world_believes(self):
+        # #1366: a country that fired its last warhead must not drop off the
+        # list before the world's estimate does, or the list reveals the truth.
+        body = strip_comments(block(read(WEAPON_EFFECTS), "update_nuclear_powers_ranking"))
+        self.assertIn("nd_believed_armed = yes", body)
+        self.assertIn("nd_shown_public_estimate >= 1", body)
+        self.assertIn("order_by = nd_shown_public_estimate", body)
+        for truth in ("nuclear_weapon_stockpile", "nd_stockpile", "nd_display_public_estimate"):
+            self.assertNotIn(truth, body)
+
     def test_new_loc_family_is_filed_whole(self):
         sys.path.insert(0, str(ROOT))
         import organize_loc

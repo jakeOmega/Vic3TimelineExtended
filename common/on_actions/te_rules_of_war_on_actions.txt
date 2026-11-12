@@ -1,0 +1,18 @@
+﻿# Rules of War (common/scripted_effects/rules_of_war_effects.txt).
+#
+# A country made mid-game that holds no infamy standing gets the standing of
+# the law it holds (te_row_backfill_standing), so its first real change of law
+# is charged. Only a country the engine gave its laws without on_activate
+# lacks one; the effect logs the row_standing_on_creation self-check the first
+# time it finds one.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_row_backfill_standing_on_action
+	}
+}
+
+te_row_backfill_standing_on_action = {
+	effect = {
+		te_row_backfill_standing = yes
+	}
+}

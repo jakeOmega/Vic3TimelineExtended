@@ -184,6 +184,68 @@ types te_system_tab_widgets
 		}
 	}
 
+	### The entry's modifier strip (#1383): the modifiers script puts on the
+	### journal entry (`je:je_<x> ?= { add_modifier = { ... } }`), which the
+	### journal draws at the right of its header and no tab section otherwise
+	### shows (Cultural Hegemony's bonus, #1382, was one). Vanilla 1.15's markup
+	### (gui/journal_entry.gui, TIMED AND SCALING MODIFIERS): the scaling
+	### modifiers' row, then the timed ones', each icon with its own tooltip, at
+	### 35 px and 12 to a row of the 480 column. Under te_own_country_only, as it
+	### reads JournalEntry (gotcha #35: another country's panel has none). A tab
+	### body with an entry draws it through the frame's tab_entry_modifiers
+	### block; a Space Race milestone inside its own part, under the entry's
+	### datacontext. test_te_entry_modifier_strip.py holds every tab of an entry
+	### that script adds modifiers to to it. Not yet seen in game outside the
+	### journal window (docs/testing/charts-help-national-info-playtest.md).
+	type te_je_modifier_strip = flowcontainer {
+		using = te_own_country_only
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+
+		flowcontainer = {
+			visible = "[Or(Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers)), Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers)))]"
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 5
+
+			flowcontainer = {
+				visible = "[Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers))]"
+				parentanchor = hcenter
+				spacing = 5
+				wrap_count = 12
+				datamodel = "[JournalEntry.GetScalingModifiers]"
+
+				item = {
+					icon = {
+						size = { 35 35 }
+						using = tooltip_se
+						tooltip = "[ScalingModifier.GetTooltip]"
+						texture = "[ScalingModifier.GetIcon]"
+					}
+				}
+			}
+
+			flowcontainer = {
+				visible = "[Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers))]"
+				parentanchor = hcenter
+				spacing = 5
+				wrap_count = 12
+				datamodel = "[JournalEntry.GetTimedModifiers]"
+
+				item = {
+					icon = {
+						size = { 35 35 }
+						using = tooltip_se
+						tooltip = "[TimedModifier.GetTooltip]"
+						texture = "[TimedModifier.GetIcon]"
+					}
+				}
+			}
+		}
+	}
+
 	### The entry's goal bar (`progressbar = yes`, from current_value and
 	### goal_add_value), in vanilla 1.15's markup (gui/journal_entry.gui, the block
 	### under the scripted bars), at 480 px like the scripted bars. All four of
@@ -669,6 +731,10 @@ types te_system_tab_widgets
 	###                             (style guide rule 8); a body declares its
 	###                             layout block inside it, which a wide mount
 	###                             overrides
+	###   tab_entry_modifiers       the entry's modifier strip (#1383): a body
+	###                             with an entry fills it with
+	###                             te_je_modifier_strip = {}; empty by default,
+	###                             since a body with no entry has no JournalEntry
 	###   tab_open_journal          the Open Journal Entry button: emptied where
 	###                             the tab has no entry
 	###   tab_open_journal_font     its font, after default_button's
@@ -704,6 +770,8 @@ types te_system_tab_widgets
 				minimumsize = { 520 -1 }
 
 				block "tab_content" {}
+
+				block "tab_entry_modifiers" {}
 
 				block "tab_open_journal" {
 					button = {

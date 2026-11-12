@@ -475,7 +475,7 @@ more naval power projection would win you one more license at the next sharing,
 a figure that is enough and often more than needed. Click a basin to see its claimants, largest
 share first, each with its mines, claims and share of the weight in columns,
 and your own row with its Relinquish button. A Seabed Licenses
-tile on every coastal state's panel shows that state's basin, the licenses its
+tile on each of your coastal states' panels shows that state's basin, the licenses its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
@@ -669,7 +669,7 @@ specialists per level, and their effects scale with how fully they are staffed.
 
 | Megaproject | Technology | Levels | What it does |
 |---|---|---|---|
-| Space Elevator | Space Elevator | 20 | Produces a million Launch Capacity per level and adds space race progress. Can only be built in states near the equator: most of tropical Africa, northern South America and Panama, southern India and Ceylon, Southeast Asia, the Pacific islands and a few others. |
+| Space Elevator | Space Elevator | 20 | Produces a million Launch Capacity per level and adds space race progress. Can only be built in states between the tropics of Cancer and Capricorn. |
 | Orbital Solar Collector | Space-Based Solar Power | 10 | Each level opens three slots for Solar Power Receivers, ordinary buildings you build in any state; each receiver level produces a million electricity. |
 | Orbital Battlestation | Orbital Weapon Platforms | 5 | Raises unit offense, defense, morale recovery and morale damage by 5% per level and improves defense against nuclear strikes. |
 | Antimatter Containment Facility | Antimatter Production | 10 | Each level opens five slots, shared between Antimatter Engines (Launch Capacity, faster army and fleet movement, space race progress) and Antimatter Warhead Plants (nuclear strike success, unit offense). Each level of either uses one slot. |

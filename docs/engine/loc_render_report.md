@@ -27,6 +27,14 @@ or `_effects_desc`. That text renders with no article instance behind it,
 so the scope promotes to nullptr and shows blank. Fix: keep it scope-free
 and move scoped text into `<article>_article_short_desc`.
 
+Also flagged: a formatting tag (`#bold`, `#v`, `#R`, …) still open at
+the end of its value, so the format runs on into whatever follows the
+value in the same text. Each tag needs its own `#!`; a surplus `#!` is
+not flagged. Fix: close it. An opening fragment that its caller closes
+(a color prefix from customizable localization) takes a `# REVIEWED`
+naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.
+Fix: write a literal hash as `##`.
+
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`
 
@@ -36,11 +44,17 @@ _None._
 
 ## Reviewed Exemptions
 
-_None._
+- `localization/english/te_miscellaneous_l_english.yml` — `gw_trend_prefix_cooling` (unclosed_format) — **2026-11-12**: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
+- `localization/english/te_miscellaneous_l_english.yml` — `gw_trend_prefix_steady` (unclosed_format) — **2026-11-12**: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
+- `localization/english/te_miscellaneous_l_english.yml` — `gw_trend_prefix_warming` (unclosed_format) — **2026-11-12**: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
+- `localization/english/te_miscellaneous_l_english.yml` — `te_yearly_temp_change_down_blue` (unclosed_format) — **2026-11-12**: opening fragment of the te_yearly_temp_change_color custom loc, which nothing calls today; a caller has to close it
+- `localization/english/te_miscellaneous_l_english.yml` — `te_yearly_temp_change_prefix_down_blue` (unclosed_format) — **2026-11-12**: opening fragment of the te_yearly_temp_change_prefix custom loc, which nothing calls today; a caller has to close it
+- `localization/english/te_miscellaneous_l_english.yml` — `te_yearly_temp_change_prefix_up_red` (unclosed_format) — **2026-11-12**: opening fragment of the te_yearly_temp_change_prefix custom loc, which nothing calls today; a caller has to close it
+- `localization/english/te_miscellaneous_l_english.yml` — `te_yearly_temp_change_up_red` (unclosed_format) — **2026-11-12**: opening fragment of the te_yearly_temp_change_color custom loc, which nothing calls today; a caller has to close it
 
 ## Coverage
 
-- total flags: 0
+- total flags: 7
 - unreviewed: 0
-- exempted: 0
+- exempted: 7
 

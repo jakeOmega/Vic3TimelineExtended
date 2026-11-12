@@ -122,6 +122,12 @@ covert_exposure_infamy_max = 25
 # Maximum funding level (0 = dormant, max = deep state)
 iw_funding_level_max = 5
 
+# An AI borrowing with bankruptcy closer than this many weeks steps its
+# funding down to the floor before it defaults (je_covert_warfare's AI funding;
+# weeks_until_bankruptcy read behind taking_loans, as vanilla's own
+# war_support_from_looming_bankruptcy does).
+iw_ai_funding_bankruptcy_weeks = 26
+
 # ---- Per-operation priority (slice 3) ----
 # An operation's priority (iw_priority on its container, 1 when missing)
 # multiplies what it does, what it costs and how exposed it is, and it fills

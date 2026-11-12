@@ -321,3 +321,64 @@ in a Panic, or `te_debug_monetary` to seed headline).
 4. **No overshoot to speak of.** Once inflation passes 2% the programme is back to its +1%. If inflation runs past
    6% after a recovery with the tool still on, note how far: the simulator puts the median peak at 5.5%, against
    5.8% with the flat point.
+
+## Event-sweep follow-ups (#448, #798; listed 2026-11-12)
+
+Two checks carried from #798's test plan. Neither has a vanilla precedent.
+
+1. **`clear_scaled_debt` takes a script value.** In a market economy with debt over a quarter of its credit limit,
+   fire `banking_cycle_events.10` (Sovereign Debt Scare) and take C, "Default on part of the debt". The debt falls by
+   a quarter, and neither `error.log` nor `debug.log` mentions `clear_scaled_debt`. The sovereign debt crisis's
+   write-offs (`banking_debt_effects.txt`, reprofiling and the deep haircut) rest on the same answer. If the debt
+   does not move, the effect takes only a literal: fall back to a few `scaled_debt` bands with a literal each.
+2. **The peg tooltips follow the controls.** Fire `event te_peg.1` on a gold-standard country with a national bank
+   whose cycle has not started (no Stock Exchange or no level 5 Urban Center), and hover each option: the texts
+   name what its read-only readout shows (Peg Confidence, the Exchange Rate Index) but no control: Defend reads
+   "your central bank holds its rate", not "your rate target" (the `.no_je_tt` versions). On a country whose cycle
+   runs, the options name the dial (the `.tt` versions). Since 2026-10-17 every country holds the entry, so the
+   switch is `te_banking_controls_open`, not the entry.
+
+## The arrangement events, one namespace to a file (2026-11-12, #1403)
+
+`events/te_monetary_arrangement_events.txt` declared two namespaces, `te_lolr` and then `te_union`; the `te_union`
+events now have their own file, `events/te_monetary_union_events.txt`. Nobody has established what the engine did
+with the second `namespace` line, and none of these four events has been seen in a running game. If the old file
+was dropping one namespace's events, they fire for the first time with this change, so each needs seeing once. The
+only earlier mention of The Question, P5-17 in `monetary_policy_design.md` ("fewer than ~6 times a campaign"), passes
+if it never fires.
+
+1. **The Question of the Common Currency (`te_union.1`) fires at least once.** As a member of a bloc whose leader
+   runs a common currency at Monetary Union tier II or above, hold out; have the leader Press for Convergence (play
+   the leader in a second game, or wait for an AI leader to). The event opens on the pressed human holdout within
+   the month, names the leader, and Adopt and Refuse each do what their tooltips say. If it never opens:
+   `error.log` for `te_union`, then `te_monetary_update_union`'s step 9b.
+2. **Out of the Common Currency (`te_union.2`)** has its row in the Events table of
+   `told-of-effects-playtest.md`; run it in the same game.
+3. **The Guarantee Is Called (`te_lolr.1`) fires on the guarantor.** Sign a Lender of Last Resort treaty as the
+   guarantor of a country that then defaults (P5-9 has the rest: once in five years, and what reneging does). The
+   event opens on the guarantor when the ward defaults and names the ward.
+4. **The ward is told (`te_lolr.2`).** As the ward in the same arrangement, default: the event opens once the
+   guarantor has answered, with the honored text and the sum when it pays and the refused text when it does not.
+5. **The log.** After a game in which the above ran, neither `error.log` nor `debug.log` has a line naming
+   `te_monetary_arrangement_events.txt` or `te_monetary_union_events.txt`.
+
+## Five timed monetary modifiers survive a revolution (2026-11-12, #470)
+
+A revolution's winner inherits no modifier, so a rebel win used to clear the Break the Peg premium
+(`te_mon_peg_broken_premium`), Devalue's inflation pressure (`te_mon_peg_devaluation_pressure`), a currency reform's
+premium (`te_mon_currency_reform_premium`), the bloc-currency exit premium (`te_mon_union_exit_premium`) and a holdout's
+`te_mon_union_independence`. Each now has a `te_mon_*_months` counter, set where the modifier is added and ticked down by
+`te_mon_cw_tick_penalty_clocks` each month, and `te_monetary_inherit_central_bank` re-adds it from that counter. The two
+decaying ones come back at the share of their term left, read off a ladder of literal months and multipliers
+(`te_mon_cw_restore_decaying_24` / `_120`), as `cr_rebuild_outcome_modifier` rebuilds the civil-rights outcome modifiers.
+
+1. **Each comes back.** In a game where a country holding one of these loses a revolution to its rebels (the console's
+   `te_debug_monetary` options or a save with a revolution about to end), compare a save before and just after the win
+   with `save_country_probe.py --diff <before> <after> --tag <TAG> --var '^te_mon_.*_months$'`. The winner holds each
+   counter at the loser's value, and the modifier is on the winner with roughly that many months left (within three
+   months above six). If it is missing: `te_mon_cw_restore_timed` / `_decaying` in `te_monetary_civil_war_effects.txt`.
+2. **A decaying one resumes where it was.** A devaluation a year old (12 of 24 months left) or an exit five years old:
+   the winner's modifier tooltip shows about half the full value (+1.5pp inflation pressure; about +1.5pp premium), not
+   the full value. Full value or near 0: a literal `multiplier` on an `is_decaying` add is not read as a starting
+   strength; read `cr_rebuild_outcome_modifier`'s civil-rights modifiers on the same winner, which rest on the same
+   reading.

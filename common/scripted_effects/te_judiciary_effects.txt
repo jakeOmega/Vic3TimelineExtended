@@ -141,7 +141,7 @@ te_jud_refresh = {
 	}
 	if = {
 		limit = {
-			te_jud_elected_government = yes
+			te_holds_elections = yes
 			var:te_jud_votes_mult > 0
 		}
 		add_modifier = {
@@ -151,7 +151,7 @@ te_jud_refresh = {
 	}
 	else_if = {
 		limit = {
-			NOT = { te_jud_elected_government = yes }
+			NOT = { te_holds_elections = yes }
 			var:te_jud_authority_mult > 0
 		}
 		add_modifier = {
@@ -427,7 +427,10 @@ te_jud_close_case = {
 # authority it takes, ten years of a court that challenges nothing and is
 # trusted less, and a year later the choice of what to do with the bench
 # (te_judiciary_events.5). The score's cost is the caller's, in its own
-# custom_tooltip.
+# custom_tooltip. The year is waited out in the hidden te_judiciary_events.7,
+# which has no trigger: .5's reads the modifier added just above, which this
+# block cannot see yet, and a delayed event whose trigger is false when
+# queued seems to be dropped (#1596).
 te_jud_pack_court = {
 	add_modifier = { name = te_jud_packing_cost years = 5 is_decaying = yes }
 	if = {
@@ -436,6 +439,68 @@ te_jud_pack_court = {
 	}
 	add_modifier = { name = te_jud_court_packed years = 10 }
 	hidden_effect = {
-		trigger_event = { id = te_judiciary_events.5 days = 365 }
+		trigger_event = { id = te_judiciary_events.7 days = 365 }
+	}
+}
+
+# TE_SELF_CHECK delayed_trigger_queue_check (#1596): is a delayed event whose
+# trigger is false when it is queued dropped, even if the trigger is true on
+# the day it is due? Country scope, from te_jud_law_activated beside the
+# queue of te_judiciary_events.1, once a game: when a ceiling law changes and
+# the gap still reads under 20 (the new law's ceiling is not yet in
+# `modifier:` reads), queue the probe .9 (its trigger: a gap of 20 or more)
+# and the witness .10 (no trigger, records the gap) six days ahead. The
+# verdict comes in .1 on day 7 (te_jud_rule_probe_verdict).
+te_jud_rule_probe_queue = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jud_rule_probe_done }
+			NOT = { has_variable = te_jud_rule_probe_queued }
+			has_variable = te_jud_seeded
+			has_variable = te_judicial_independence
+			te_jud_overhaul_gap < 20
+		}
+		set_variable = { name = te_jud_rule_probe_queued value = te_jud_overhaul_gap days = 30 }
+		trigger_event = { id = te_judiciary_events.9 days = 6 }
+		trigger_event = { id = te_judiciary_events.10 days = 6 }
+	}
+}
+
+# The verdict, in te_judiciary_events.1 a day after the probe was due. OK:
+# the probe's trigger was false when queued and true on its day (the
+# witness read the gap at 20 or more), and the probe did not run, so the
+# rule holds. BROKEN: the probe ran, so a delayed event's trigger is read
+# only when it fires; the relays (.7, .8) and .1's lack of a trigger are
+# then harmless, and delayed_event_trigger_report.md's list is not at risk.
+# A law change that leaves the gap under 20 on the probe's day gives no
+# verdict, and the check waits for the next one.
+te_jud_rule_probe_verdict = {
+	if = {
+		limit = {
+			has_variable = te_jud_rule_probe_queued
+			NOT = { has_global_variable = te_jud_rule_probe_done }
+		}
+		if = {
+			limit = { has_variable = te_jud_rule_probe_fired }
+			set_global_variable = te_jud_rule_probe_done
+			debug_log = "TE_SELF_CHECK BROKEN delayed_trigger_queue_check country=[THIS.GetCountry.GetTagName] queued_gap=[THIS.Var('te_jud_rule_probe_queued').GetValue|0] (a delayed event whose trigger was false when queued ran when due: the trigger is read only when the event fires, so delayed events need no relay; see docs/testing/judiciary-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				has_variable = te_jud_rule_probe_due_gap
+				var:te_jud_rule_probe_due_gap >= 20
+			}
+			set_global_variable = te_jud_rule_probe_done
+			debug_log = "TE_SELF_CHECK OK delayed_trigger_queue_check country=[THIS.GetCountry.GetTagName] queued_gap=[THIS.Var('te_jud_rule_probe_queued').GetValue|0] due_gap=[THIS.Var('te_jud_rule_probe_due_gap').GetValue|0] (a delayed event whose trigger was false when queued and true when due was dropped) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_variable = te_jud_rule_probe_queued
+		if = {
+			limit = { has_variable = te_jud_rule_probe_fired }
+			remove_variable = te_jud_rule_probe_fired
+		}
+		if = {
+			limit = { has_variable = te_jud_rule_probe_due_gap }
+			remove_variable = te_jud_rule_probe_due_gap
+		}
 	}
 }
