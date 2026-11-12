@@ -300,6 +300,8 @@ gm_state_tr_remove_whole = {
 	else = {
 		set_variable = { name = gm_rebuilding days = 1 }
 		remove_building = building_grand_monument
+		# No building of script's here any more (#1409, as gm_state_tear_down).
+		gm_remove_state_var = { VAR = gm_migrated }
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }

@@ -2695,9 +2695,7 @@ class GiftTests(unittest.TestCase):
                                      "production_method = pm_monument_$KEY$ } } }"), one[-200:])
         e = read(EFFECTS)
         refresh = squash(block(e, "gm_country_refresh"))
-        # After an older save's migration ask (MigrationTests).
         self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument } "
-                      "if = { limit = { gm_state_needs_migration = yes } trigger_event = { id = monument_events.32 } } "
                       "gm_state_restore_dedication = yes", refresh)
         monthly = squash(block(e, "gm_state_monthly"))
         self.assertTrue(monthly.startswith("gm_state_count_site_levels = yes gm_remove_local_modifiers = yes "
@@ -4657,7 +4655,8 @@ class LandmarkReviewFixTests(unittest.TestCase):
         self.assertIn("else = { if = { limit = { OR = { has_variable = gm_seen gm_state_is_landmark = yes } } "
                       "if = { limit = { gm_state_lost_building = yes } trigger_event = { id = monument_events.29 } } "
                       "else = { if = { limit = { gm_state_is_contested = yes NOT = { has_variable = gm_carried_off } } "
-                      "gm_state_record_teardown = yes } gm_clear_state = { KEEP_LANDMARK = no } } }", monthly)
+                      "gm_state_record_teardown = yes } gm_clear_state = { KEEP_LANDMARK = no } "
+                      "gm_remove_state_var = { VAR = gm_migrated } } }", monthly)
 
     def test_the_seed_writes_its_records_before_the_building(self):
         # I3: if create_building fires on_building_built at once, monument_events.1
@@ -6730,7 +6729,8 @@ class NoRebuildTests(unittest.TestCase):
             body = squash(strip_comments(block(read(path), name)))
             self.assertIn("if = { limit = { gm_state_has_secondary = yes } gm_state_promote_secondary = yes } "
                           "else = { set_variable = { name = gm_rebuilding days = 1 } "
-                          "remove_building = building_grand_monument }", body, name)
+                          "remove_building = building_grand_monument "
+                          "gm_remove_state_var = { VAR = gm_migrated } }", body, name)
         rise = squash(strip_comments(block(read("common/scripted_effects/gm_trophy_effects.txt"),
                                            "gm_state_tr_rebuild_from_moving")))
         self.assertIn("if = { limit = { NOT = { has_building = building_grand_monument } } "
@@ -6789,61 +6789,39 @@ class LostBuildingTests(unittest.TestCase):
 
 
 class MigrationTests(unittest.TestCase):
-    """Sites spec 2026-10-18 §3.5: an older save's monument is recorded and
-    its building reset once (a dedicated one), or becomes a construction site
-    at its level (an undedicated one, a ceremony open), from the hidden
-    monument_events.32; never inside the walked refresh."""
+    """Sites spec 2026-10-18 §3.5's old-save migration (monument_events.32, gm_state_migrate) went with #1429:
+    1.15 loads no older save. gm_migrated stays, the mark on every finished building script makes."""
 
     def body(self, path, name):
         return squash(strip_comments(block(read(path), name)))
 
-    def ev32(self):
-        return squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.32\s*=\s*\{")))
+    def test_the_old_save_migration_is_gone(self):
+        names = ("gm_state_migrate", "gm_state_needs_migration", "monument_events.32", "gm_premigration",
+                 "gm_sites_marked", "gm_monument_migration_self_check", "gm_mig_before", "gm_state_mig_",
+                 "monument_migrated", "gm_migration_self_checked", "gm_migrate_levels", "gm_mig_excess")
+        for pattern in ("common/**/*.txt", "events/*.txt"):
+            for path in sorted(ROOT.glob(pattern)):
+                text = strip_comments(read(path.relative_to(ROOT).as_posix()))
+                for name in names:
+                    with self.subTest(file=path.name, name=name):
+                        self.assertNotIn(name, text)
 
-    def test_the_refresh_only_asks(self):
-        self.assertEqual(self.body(TRIGGERS, "gm_state_needs_migration"),
-                         "has_building = building_grand_monument has_variable = gm_premigration "
-                         "NOT = { has_variable = gm_migrated } "
-                         "NOT = { has_variable = gm_rebuilding } NOT = { has_variable = gm_restore_pm } "
-                         "NOT = { has_variable = gm_ceremony_pending }")
-        refresh = self.body(EFFECTS, "gm_country_refresh")
-        self.assertIn("if = { limit = { gm_state_needs_migration = yes } trigger_event = { id = monument_events.32 } }",
-                      refresh)
-        self.assertNotIn("gm_state_migrate = yes", refresh)
-
-    def test_waits_for_construction(self):
-        ev = self.ev32()
-        self.assertIn("type = state_event hidden = yes", ev)
-        self.assertIn("trigger = { gm_system_enabled = yes gm_state_needs_migration = yes }", ev)
-        self.assertIn("if = { limit = { b:building_grand_monument ?= { is_under_construction = no } } "
-                      "gm_state_migrate = yes }", ev)
-
-    def test_a_dedicated_monument_is_recorded_then_reset(self):
-        body = self.body(EFFECTS, "gm_state_migrate")
-        order = ["set_variable = gm_migrated",
-                 "limit = { gm_state_is_dedicated = yes has_variable = gm_seen }",
-                 "set_variable = { name = gm_mig_before value = gm_state_grandeur }",
-                 "if = { limit = { NOT = { has_variable = gm_levels } } "
-                 "set_variable = { name = gm_levels value = gm_state_built_levels } }",
-                 "gm_state_record_dedication = yes",
-                 "limit = { gm_state_level > 1 }", "gm_state_mark_restore_pm = yes",
-                 "set_variable = { name = gm_rebuilding days = 1 }",
-                 "remove_building = building_grand_monument",
-                 "create_building = { building = building_grand_monument level = 1 }"]
-        positions = [body.find(s) for s in order]
-        self.assertNotIn(-1, positions, [s for s, p in zip(order, positions) if p == -1])
-        self.assertEqual(positions, sorted(positions))
-
-    def test_an_undedicated_one_becomes_a_site(self):
-        body = self.body(EFFECTS, "gm_state_migrate")
-        rest = body[body.find("else = {"):]
-        for s in ("set_variable = { name = gm_migrate_levels value = gm_state_built_levels }",
-                  "gm_remove_state_var = { VAR = gm_ceremony_level }",
-                  "if = { limit = { gm_state_has_secondary = yes } gm_state_promote_secondary = yes }",
-                  "SPEC_TYPE = building_grand_monument_site SPEC_LEVEL = var:gm_migrate_levels",
-                  "set_variable = { name = gm_site_counted value = var:gm_migrate_levels }",
-                  "set_variable = { name = gm_site_grandeur value = var:gm_migrate_levels }"):
-            self.assertIn(s, rest)
+    def test_teardown_and_carry_off_drop_the_mark_and_rededicate_keeps_it(self):
+        """#1409: a state whose building went keeps no gm_migrated, so a building a merge brings in is
+        unrecorded (it waits for its orphan) rather than first-sighted. Rededicate keeps its building."""
+        down = self.body(EFFECTS, "gm_state_tear_down")
+        self.assertIn("else = { set_variable = { name = gm_rebuilding days = 1 } "
+                      "remove_building = building_grand_monument gm_remove_state_var = { VAR = gm_migrated } }", down)
+        whole = self.body("common/scripted_effects/gm_trophy_effects.txt", "gm_state_tr_remove_whole")
+        self.assertIn("else = { set_variable = { name = gm_rebuilding days = 1 } "
+                      "remove_building = building_grand_monument gm_remove_state_var = { VAR = gm_migrated } }", whole)
+        monthly = self.body(EFFECTS, "gm_state_monthly")
+        self.assertIn("gm_clear_state = { KEEP_LANDMARK = no } gm_remove_state_var = { VAR = gm_migrated }", monthly)
+        for name in ("gm_clear_state", "gm_state_rededicate", "gm_state_apply_rededicate"):
+            body = block(read(EFFECTS), name)
+            self.assertIsNotNone(body, name)
+            self.assertNotIn("VAR = gm_migrated", body, name)
+            self.assertNotIn("remove_variable = gm_migrated", body, name)
 
     def test_new_monuments_are_never_migrated(self):
         for path, name in ((EFFECTS, "gm_state_finish_site"), (EFFECTS, "gm_state_put_back_building"),
@@ -6855,16 +6833,6 @@ class MigrationTests(unittest.TestCase):
         self.assertIn("text = gm_expand_migrating_tt OR = { NOT = { has_building = building_grand_monument } "
                       "has_variable = gm_migrated }", gate)
         self.assertIn("gm_expand_migrating_tt", loc())
-
-    def test_totals_survive(self):
-        """Review Focus 1: a dedicated monument's grandeur reads the same a
-        month after its migration (TE_SELF_CHECK monument_migrated)."""
-        check = self.body(EFFECTS, "gm_monument_migration_self_check")
-        for s in ("has_variable = gm_mig_before", "TE_SELF_CHECK OK monument_migrated",
-                  "TE_SELF_CHECK BROKEN monument_migrated", "remove_variable = gm_mig_before",
-                  "has_global_variable = gm_migration_self_checked"):
-            self.assertIn(s, check)
-        self.assertIn("gm_monument_migration_self_check = yes", self.body(EFFECTS, "gm_state_monthly"))
 
     def test_the_one_off_repair_goes(self):
         for pattern in ("common/scripted_effects/gm_*.txt", "common/scripted_triggers/*.txt",
@@ -6957,10 +6925,8 @@ class MergeRecordTests(unittest.TestCase):
         """Owner, 2026-10-18: the monument stays with the part that keeps its
         records. Adopt first (an orphan in the region), then remove a stray."""
         unclaimed = self.body(TRIGGERS, "gm_state_unclaimed_building")
-        self.assertEqual(unclaimed, "has_global_variable = gm_sites_marked "
-                                    "has_building = building_grand_monument NOT = { has_variable = gm_migrated } "
-                                    "NOT = { has_variable = gm_premigration } NOT = { has_variable = gm_rebuilding } "
-                                    "gm_state_orphan_in_region = no")
+        self.assertEqual(unclaimed, "has_building = building_grand_monument NOT = { has_variable = gm_migrated } "
+                                    "NOT = { has_variable = gm_rebuilding } gm_state_orphan_in_region = no")
         stray = self.body(TRIGGERS, "gm_state_stray_building")
         self.assertEqual(stray, "gm_state_unclaimed_building = yes OR = { AND = { "
                                 "gm_state_region_original_stands = yes gm_state_region_shadow_unhoused = no } "
@@ -6971,11 +6937,6 @@ class MergeRecordTests(unittest.TestCase):
         ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
         self.assertIn("limit = { gm_state_stray_building = yes } set_variable = { name = gm_rebuilding days = 1 } "
                       "remove_building = building_grand_monument", ev29)
-        # The older save's buildings, marked once before any is migrated.
-        self.assertIn("has_variable = gm_premigration", self.body(TRIGGERS, "gm_state_needs_migration"))
-        mark = self.body(MON_EFFECTS, "gm_monument_monthly")
-        self.assertIn("NOT = { has_global_variable = gm_sites_marked }", mark)
-        self.assertIn("set_variable = gm_premigration", mark)
         self.assertIn("set_variable = gm_migrated", self.body("common/scripted_effects/gm_trophy_effects.txt",
                                                               "gm_state_tr_take_records_from_moving"))
 
@@ -7761,20 +7722,6 @@ class SitesFinalReviewTests(unittest.TestCase):
         body = squash(block(read(EFFECTS), "gm_state_start_ceremony"))
         self.assertIn("OR = { has_variable = gm_rededicate_asking NOT = { has_variable = gm_restore_pm } }", body)
 
-    def test_migration_keeps_levels_above_the_record(self):
-        # I2: levels finished on a dedicated monument above its recorded size
-        # (queued before the update) become a construction site, not lost.
-        body = squash(block(read(EFFECTS), "gm_state_migrate"))
-        dedicated = body[:body.index("else = { set_variable = { name = gm_migrate_levels")]
-        self.assertIn("set_variable = { name = gm_mig_excess value = gm_state_built_levels }", dedicated)
-        self.assertIn("change_variable = { name = gm_mig_excess subtract = var:gm_levels }", dedicated)
-        self.assertIn("SPEC_TYPE = building_grand_monument_site SPEC_LEVEL = var:gm_mig_excess", dedicated)
-        self.assertIn("set_variable = { name = gm_site_counted value = var:gm_mig_excess }", dedicated)
-        self.assertIn("set_variable = { name = gm_site_grandeur value = var:gm_mig_excess }", dedicated)
-        # Measured before the building goes back to level 1.
-        self.assertLess(dedicated.index("gm_mig_excess value = gm_state_built_levels"),
-                        dedicated.index("remove_building = building_grand_monument"))
-
     def test_merge_reset_waits_for_migration(self):
         # Minor 7, re-graded: an older save's building stands at its full
         # height until .32 records it; a merge must not reset it first.
@@ -7816,7 +7763,8 @@ class SitesFinalReviewTests(unittest.TestCase):
                             self.assertIn(through[name], squash(body), name)
                     else:
                         self.assertIn("gm_migrated", body, f"{rel}: {name}")
-        self.assertGreaterEqual(len(seen), 7, sorted(seen))
+        # Six since the old-save migration (gm_state_migrate) went (#1429).
+        self.assertGreaterEqual(len(seen), 6, sorted(seen))
 
     def test_opportunity_text_counts_grandeur(self):
         # I4: the target is grandeur (Plan B); what is queued is levels.

@@ -20,7 +20,7 @@ import os
 import re
 import unittest
 
-from je_test_helpers import entry_text, old_block
+from je_test_helpers import entry_text, outcome_parts
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 CONSTRUCTION = os.path.join(REPO, "gui", "construction_panel.gui")
@@ -175,31 +175,53 @@ class HomelandTileTest(unittest.TestCase):
                 self.assertNotIn("points", loc[key])
 
 
-class CivilRightsEndingMirrorTest(unittest.TestCase):
-    """cr_win_ending_now / cr_fail_ending_now take the branches of the success and
-    failure outcomes' effects in the same order, over the display copies of the counters."""
+class CivilRightsEndingOutcomesTest(unittest.TestCase):
+    """One outcome per ending (#1431): cr_win_ending_now / cr_fail_ending_now decide
+    the ending, each outcome requires its own number, in the chain's order, and fires
+    that number's event, and every outcome of a kind shares the same victory or
+    collapse condition. The status line reads the same two values."""
 
-    @staticmethod
-    def limits(block):
-        out = []
-        for m in re.finditer(r"limit = \{", block):
-            body = _block_from(block, m.start())[1:-1]
-            out.append(" ".join(body.split()))
-        return out
+    WIN = ["movement_events_te.240", "movement_events_te.220", "movement_events_te.221",
+           "movement_events_te.222", "movement_events_te.223", "movement_events_te.200"]
+    FAIL = ["movement_events_te.100", "movement_events_te.230", "movement_events_te.231",
+            "movement_events_te.232"]
 
-    def check(self, dispatcher, value):
-        script = self.limits(old_block(entry_text(_read(CIVIL_RIGHTS), "je_civil_rights"), dispatcher))
+    def check(self, kind, value, events):
+        entry = entry_text(_read(CIVIL_RIGHTS), "je_civil_rights")
+        triggers = outcome_parts(entry, kind, "trigger")
+        effects = outcome_parts(entry, kind, "effect")
+        self.assertEqual(len(triggers), len(events))
+        shared = None
+        for n, (trigger, effect, event) in enumerate(zip(triggers, effects, events), start=1):
+            with self.subTest(kind=kind, ending=n):
+                tests = re.findall(r"\b%s\s*=\s*(\d+)" % value, trigger)
+                self.assertEqual(tests, [str(n)])
+                self.assertEqual(re.findall(r"id = (movement_events_te\.\d+)", effect), [event])
+                # The ending's test is a custom_tooltip line, so the panel reads it.
+                self.assertRegex(trigger, r"custom_tooltip = \{\s*text = je_civil_rights_\w+_tt\s*%s = %d\s*\}" % (value, n))
+                rest = " ".join(re.sub(r"custom_tooltip = \{\s*text = je_civil_rights_\w+_tt\s*%s = \d+\s*\}" % value, "", trigger).split())
+                if shared is None:
+                    shared = rest
+                self.assertEqual(rest, shared)
         values = _read(CR_VALUES)
         m = re.search(r"(?m)^%s = \{" % value, values)
-        mirror = self.limits(_block_from(values, m.end() - 1))
-        script = [re.sub(r"var:cr_(\w+?)_months", r"cr_months_disp_\1", s) for s in script]
-        self.assertEqual(mirror, script)
+        chain = _block_from(values, m.end() - 1)
+        # The default and every branch's number, each once: 1..n.
+        numbers = sorted(int(x) for x in re.findall(r"\bvalue = (\d+)", chain))
+        self.assertEqual(numbers, list(range(1, len(events) + 1)))
 
     def test_win(self):
-        self.check("on_complete", "cr_win_ending_now")
+        self.check("complete", "cr_win_ending_now", self.WIN)
 
     def test_fail(self):
-        self.check("on_fail", "cr_fail_ending_now")
+        self.check("fail", "cr_fail_ending_now", self.FAIL)
+
+    def test_every_ending_has_its_text(self):
+        loc = _loc()
+        entry = entry_text(_read(CIVIL_RIGHTS), "je_civil_rights")
+        for key in re.findall(r"(?:header|conclusion_desc|text) = (je_civil_rights_\w+)", entry):
+            with self.subTest(key=key):
+                self.assertIn(key, loc)
 
 
 class HeirEducationCostPreviewTest(unittest.TestCase):
@@ -238,13 +260,33 @@ class OceanBasinTileTest(unittest.TestCase):
         self.assertIn("is_shown = { has_technology_researched = abyssal_plain_mining }", body)
         self.assertNotIn("any_country", body)
 
+    LICENCES_SHOWN = ("And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), "
+                      "'(CFixedPoint)0'), State.GetOwner.IsLocalPlayer )")
+
+    def licences_tile(self):
+        text = _read(STATES)
+        at = text.index('tooltip = "TE_STATE_SEABED_TT"')
+        return text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+
+    def test_licences_tile_only_on_the_players_own_state(self):
+        # #1352: the Licences tile's words are the player's ("our claims"), so
+        # it shows only on the player's own state; the guide's Ocean Basin row
+        # gives every other coastal state the basin tile.
+        visible = re.search(r'visible = "(.*)"', self.licences_tile()).group(1)
+        self.assertEqual(visible, "[" + self.LICENCES_SHOWN + "]")
+        values = _read(SEABED_VALUES)
+        m = re.search(r"(?m)^te_seabed_tile_shown = \{", values)
+        self.assertIn("owner = { has_variable = te_seabed_shared }", _block_from(values, m.end() - 1))
+
     def test_never_beside_the_licences_tile(self):
+        # The basin tile shows exactly where the Licences tile doesn't: its own
+        # value is owner-agnostic and the GUI negates the Licences tile's test.
         values = _read(SEABED_VALUES)
         m = re.search(r"(?m)^te_seabed_basin_tile_shown = \{", values)
         body = _block_from(values, m.end() - 1)
-        self.assertIn("NOT = { owner = { has_variable = te_seabed_shared } }", body)
-        m = re.search(r"(?m)^te_seabed_tile_shown = \{", values)
-        self.assertIn("owner = { has_variable = te_seabed_shared }", _block_from(values, m.end() - 1))
+        self.assertNotIn("te_seabed_shared", body)
+        visible = re.search(r'visible = "(.*)"', self.tile()).group(1)
+        self.assertIn("Not( " + self.LICENCES_SHOWN + " )", visible)
 
 
 if __name__ == "__main__":

@@ -21,6 +21,7 @@ from treaty_leverage_side_audit import (
     audit,
     render_report,
     scan_involvement_text,
+    scan_pact_text,
     scan_text,
     strict_failures,
 )
@@ -512,6 +513,154 @@ class InvolvementIntegrationTests(unittest.TestCase):
         self.assertEqual(strict_failures(result), 0)
 
 
+def _pact_action(name="an_action", max_inv="1000", applies="source_country",
+                 opener_comment="", pact_comment=""):
+    lines = [f"{name} = {{{opener_comment}", "\tgroups = { general }",
+             f"\tpact = {{{pact_comment}", "\t\tcost = 100", "\t\tis_two_sided_pact = no"]
+    if max_inv is not None:
+        lines.append(f"\t\tmax_target_involvement = {max_inv}")
+    if applies is not None:
+        lines.append(f"\t\ttarget_involvement_applies_to = {applies}")
+    lines += ["\t}", "}"]
+    return "\n".join(lines) + "\n"
+
+
+def _pacts(text):
+    return scan_pact_text(text, "common/diplomatic_actions/test.txt")
+
+
+PACT_TAG = "  # REVIEWED 2026-11-12 (involvement): a vote, not a region"
+
+
+class PactInvolvementTests(unittest.TestCase):
+    """A mod pact copies vanilla's convention: a directed pact names
+    `source_country`, a mutual one `mutual`, or it says why it builds none."""
+
+    def test_clean_directed_pact(self):
+        self.assertEqual(_pacts(_pact_action()), [])
+
+    def test_mutual_pact_is_allowed(self):
+        # vanilla's embargo
+        self.assertEqual(_pacts(_pact_action(applies="mutual")), [])
+
+    def test_missing_involvement(self):
+        flags = _pacts(_pact_action(max_inv=None, applies=None))
+        self.assertEqual(_kinds(flags), ["missing_involvement"])
+        self.assertEqual((flags[0].article, flags[0].line), ("an_action", 1))
+
+    def test_missing_side(self):
+        flags = _pacts(_pact_action(applies=None))
+        self.assertEqual(_kinds(flags), ["missing_side"])
+        self.assertEqual(flags[0].line, 6)
+
+    def test_target_country_is_wrong_for_a_pact(self):
+        # The treaty-article rule would want it; no vanilla pact names it.
+        flags = _pacts(_pact_action(applies="target_country"))
+        self.assertEqual(_kinds(flags), ["wrong_side"])
+        self.assertEqual(flags[0].line, 7)
+
+    def test_bad_values(self):
+        for value in ("0", "-5", "9000", "lots"):
+            with self.subTest(value=value):
+                self.assertEqual(_kinds(_pacts(_pact_action(max_inv=value))), ["bad_value"])
+        self.assertEqual(_kinds(_pacts(_pact_action(applies="both"))), ["bad_value"])
+
+    def test_subject_pact_figures_are_allowed(self):
+        # vanilla's puppet 8000 is above the 5,000 regional cap.
+        self.assertEqual(_pacts(_pact_action(max_inv="8000")), [])
+
+    def test_action_without_a_pact_is_not_judged(self):
+        text = "one_off = {\n\tgroups = { general }\n\taccept_effect = { }\n}\n"
+        self.assertEqual(_pacts(text), [])
+
+    def test_fields_outside_the_pact_block_do_not_count(self):
+        text = (
+            "an_action = {\n"
+            "\tmax_target_involvement = 1000\n"
+            "\ttarget_involvement_applies_to = source_country\n"
+            "\tpact = {\n\t\tcost = 100\n"
+            "\t\tsecond_modifier = { max_target_involvement = 1000 }\n"
+            "\t}\n}\n"
+        )
+        self.assertEqual(_kinds(_pacts(text)), ["missing_involvement"])
+
+    def test_inject_is_skipped(self):
+        text = "INJECT:fund_lobbies = {\n\tpact = { cost = 50 }\n}\n"
+        self.assertEqual(_pacts(text), [])
+
+    def test_state_does_not_leak_between_actions(self):
+        text = _pact_action(name="first") + _pact_action(name="second", max_inv=None,
+                                                          applies=None)
+        self.assertEqual([(f.article, f.kind) for f in _pacts(text)],
+                         [("second", "missing_involvement")])
+
+    def test_tag_on_the_opener_or_pact_line_suppresses(self):
+        for kw in ("opener_comment", "pact_comment"):
+            with self.subTest(site=kw):
+                flags = _pacts(_pact_action(max_inv=None, applies=None, **{kw: PACT_TAG}))
+                self.assertEqual(_kinds(flags), ["missing_involvement"])
+                self.assertIn("a vote", flags[0].exemption["rationale"])
+
+    def test_untagged_reviewed_does_not_suppress(self):
+        flags = _pacts(_pact_action(max_inv=None, applies=None,
+                                    opener_comment="  # REVIEWED 2026-11-12: a vote"))
+        self.assertIsNone(flags[0].exemption)
+
+    def test_stale_tag_is_flagged(self):
+        flags = _pacts(_pact_action(opener_comment=PACT_TAG))
+        self.assertEqual(_kinds(flags), ["stale_review"])
+        self.assertIsNone(flags[0].exemption)
+
+    def test_audit_counts_pacts_and_strict_fails_on_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = os.path.join(tmp, "common", "diplomatic_actions")
+            os.makedirs(d)
+            with open(os.path.join(d, "a.txt"), "w", encoding="utf-8-sig") as fh:
+                fh.write(_pact_action(name="good")
+                         + _pact_action(name="silent", max_inv=None, applies=None)
+                         + _pact_action(name="vote", max_inv=None, applies=None,
+                                        opener_comment=PACT_TAG))
+            result = audit(mod_path=tmp)
+        self.assertEqual(result.pacts_checked, 3)
+        self.assertEqual(result.pacts_with_involvement, 1)
+        self.assertEqual(result.pacts_reviewed_without_involvement, 1)
+        self.assertEqual(strict_failures(result), 1)
+        report = render_report(result)
+        self.assertIn("## Pact Involvement", report)
+        self.assertIn("`silent`", report)
+        self.assertIn("**2026-11-12**: a vote, not a region", report)
+
+
+class VanillaPactConventionTests(unittest.TestCase):
+    """The pact rule is vanilla's own convention; this fails if a patch breaks it."""
+
+    def test_vanilla_pacts_name_source_country_or_mutual(self):
+        import json
+        repo = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(repo, "vanilla_parsed", "common", "diplomatic_actions.json")
+        if not os.path.isfile(path):
+            self.skipTest("no vanilla_parsed snapshot")
+        with open(path, encoding="utf-8") as fh:
+            actions = json.load(fh)
+        seen = {}
+        for name, entry in actions.items():
+            body = entry[1] if isinstance(entry, list) else entry
+            if not isinstance(body, dict) or "pact" not in body:
+                continue
+            pact = body["pact"][1]
+            if "max_target_involvement" not in pact:
+                continue
+            side = pact.get("target_involvement_applies_to", ["=", None])[1]
+            seen[name] = (float(pact["max_target_involvement"][1]), side)
+        self.assertIn("fund_lobbies", seen)
+        self.assertEqual(seen["fund_lobbies"], (1000.0, "source_country"))
+        self.assertEqual(seen["embargo"], (1000.0, "mutual"))
+        for name, (amount, side) in seen.items():
+            with self.subTest(pact=name):
+                self.assertIn(side, ("source_country", "mutual"))
+                self.assertTrue(0 < amount <= 8000)
+
+
 class RealModTests(unittest.TestCase):
     """The mod's own `common/treaty_articles/` must stay clean."""
 
@@ -538,6 +687,21 @@ class RealModTests(unittest.TestCase):
             unreviewed,
             [],
             "treaty articles with an Involvement problem: "
+            + ", ".join(f"{f.article} {f.kind} ({f.file}:{f.line})" for f in unreviewed),
+        )
+
+
+    def test_mod_pacts_declare_involvement_or_say_why_not(self):
+        repo = os.path.dirname(os.path.abspath(__file__))
+        if not os.path.isdir(os.path.join(repo, "common", "diplomatic_actions")):
+            self.skipTest("no diplomatic_actions/ in this checkout")
+        result = audit(mod_path=repo)
+        self.assertGreaterEqual(result.pacts_checked, 24)
+        unreviewed = [f for f in result.pact_involvement_flags if not f.exemption]
+        self.assertEqual(
+            unreviewed,
+            [],
+            "pacts with an Involvement problem: "
             + ", ".join(f"{f.article} {f.kind} ({f.file}:{f.line})" for f in unreviewed),
         )
 

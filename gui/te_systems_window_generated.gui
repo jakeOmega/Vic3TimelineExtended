@@ -259,7 +259,7 @@ types te_systems_window_generated_types
 			margin_left = 50
 			layoutpolicy_vertical = expanding
 			layoutpolicy_horizontal = preferred
-			
+
 			block "content_margin_right" {
 				margin_right = 45
 			}
@@ -1312,7 +1312,7 @@ types te_systems_window_generated_types
 	### The full-screen frame's column: three 520 columns and their 30 px
 	### gaps wide (spec § 4.3), centered, so the frame scrolls sideways
 	### below that width. Each tab's mount as narrow, holding its wide
-	### layout once the registry names one (its `wide`), else its body.
+	### layout (the registry's `wide`).
 	type te_systems_window_tabs_wide = flowcontainer {
 		name = "te_systems_window_content_wide"
 		parentanchor = hcenter
@@ -1694,6 +1694,7 @@ types te_systems_window_generated_types
 						te_sr_suborbital_status = {
 							blockoverride "sr_debris" {}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1745,6 +1746,7 @@ types te_systems_window_generated_types
 						te_sr_orbital_status = {
 							blockoverride "sr_debris" {}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1796,6 +1798,7 @@ types te_systems_window_generated_types
 						te_sr_moon_landing_status = {
 							blockoverride "sr_debris" {}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1847,6 +1850,7 @@ types te_systems_window_generated_types
 						te_sr_probe_status = {
 							blockoverride "sr_debris" {}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1898,6 +1902,7 @@ types te_systems_window_generated_types
 						te_sr_mars_landing_status = {
 							blockoverride "sr_debris" {}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1949,6 +1954,7 @@ types te_systems_window_generated_types
 						te_sr_interstellar_probe_status = {
 							blockoverride "sr_debris" {}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1997,6 +2003,7 @@ types te_systems_window_generated_types
 						ignoreinvisible = yes
 						spacing = 10
 
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -2052,6 +2059,7 @@ types te_systems_window_generated_types
 								blockoverride "sr_debris" {}
 							}
 						}
+						te_je_modifier_strip = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button

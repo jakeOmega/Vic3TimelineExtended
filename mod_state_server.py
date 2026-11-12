@@ -10135,11 +10135,13 @@ POST_LOAD_AUDITS = [
     ("script_argument_audit",         "script_argument_audit"),
     ("modifier_duration_audit",       "modifier_duration_audit"),
     ("loc_script_value_audit",        "loc_script_value_audit"),
+    ("loc_root_context_audit",        "loc_root_context_audit"),
     ("texture_reference_audit",       "texture_reference_audit"),
     ("long_tooltip_audit",            "long_tooltip_audit"),
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
     ("button_reason_audit",           "button_reason_audit"),
     ("faith_scene_audit",             "faith_scene_audit"),
+    ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

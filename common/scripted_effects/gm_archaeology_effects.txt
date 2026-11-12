@@ -34,8 +34,7 @@
 # else the container stays as a secondary monument beside the primary:
 # gm_arch_stand_beside), the way a trophy comes home.
 #
-# The sites are seeded once, lazily, from the monthly pass (gm_arch_monthly),
-# so a save from before this change has them too. One call per row of
+# The sites are seeded once, lazily, from the monthly pass (gm_arch_monthly). One call per row of
 # ARCH_SITES in test_grand_monument_archaeology.py, in LANDMARKS order.
 #
 # No order runs where a tooltip walks the effect: a scripted GUI or an event
@@ -58,11 +57,9 @@ gm_arch_monthly = {
 		}
 		# A site added since a game was seeded is seeded the next month: the
 		# seeding makes no site twice (gm_arch_seed_site), so running it again
-		# adds only the new rows. Pompeii is round 2 (2026-10-16).
-		if = {
-			limit = { NOT = { has_global_variable = gm_arch_seed_round } }
-			set_global_variable = { name = gm_arch_seed_round value = 1 }
-		}
+		# adds only the new rows. Pompeii is round 2 (2026-10-16). Every game
+		# seeded since then holds its round (a save from before it can't load
+		# in 1.15, #1429).
 		if = {
 			limit = { global_var:gm_arch_seed_round < gm_arch_seed_rounds }
 			set_global_variable = { name = gm_arch_seed_round value = gm_arch_seed_rounds }
