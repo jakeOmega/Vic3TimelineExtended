@@ -23,9 +23,9 @@ Where:
                  source `.log`; the version in its directory name (e.g.
                  `.../1.14.4/docs/`) goes into the auto-generated headers.
 
-The module also retains a `parse_log` shim for backwards-compat with the
-old `docs/parse_triggers_effects.py` callers, but new code should use the
-shared parsers in mod_state_server.
+Command line: `python3 engine_docs_render.py` re-renders `docs/engine/` with no
+server running, through the server's own loader (`_cli` below), so the result
+is what a server start writes.
 """
 from __future__ import annotations
 
@@ -746,44 +746,77 @@ def _txt_header(logs: str, version: str | None, note: str | None = None) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Backwards-compat: light wrapper for the old parse_triggers_effects.py CLI
+# Command line: render docs/engine/ the way a server start does
 # ---------------------------------------------------------------------------
-def _cli():
-    """Standalone fallback: regenerate from disk without the server."""
+def _cli(argv: list[str] | None = None) -> int:
+    """`python3 engine_docs_render.py`: re-render docs/engine/ with no server.
 
-    from path_constants import vanilla_docs_path, doc_path
+    Runs the server's own loader, `mod_state_server._load_engine_docs`, after
+    the steps a cold start takes before it (the Modding-Digests pull, then the
+    vanilla + mod parse), so the files are the ones a server start writes: from
+    the source `_engine_docs_source` picks, with its version in every header
+    and the dynamic-pattern grouping. It used to be a second code path that
+    read `vanilla_docs_path`, the dump the game last wrote with whatever mods
+    were on, and rendered with no pattern data: no versions, no
+    `modifier_patterns.md`, an ungrouped modifier reference (#1592).
 
-    # Lazy import so the module doesn't require the server at import time
-    from mod_state_server import (
-        _parse_effects_triggers_log,
-        _parse_modifiers_log,
-        _parse_event_targets_log,
-        _parse_on_actions_log,
-        _parse_custom_localization_log,
-    )
+    Like the server, it leaves the files alone when the source can't reproduce
+    them (`_engine_docs_render_blockers`). Returns the exit status: 0 when the
+    files were written, 1 when they were not, with the reason on stderr.
+    """
+    import argparse
+    import sys
 
-    sources = {
-        "triggers": os.path.join(vanilla_docs_path, "triggers.log"),
-        "effects": os.path.join(vanilla_docs_path, "effects.log"),
-        "modifiers": os.path.join(vanilla_docs_path, "modifiers.log"),
-        "event-targets": os.path.join(vanilla_docs_path, "event_targets.log"),
-        "on-actions": os.path.join(vanilla_docs_path, "on_actions.log"),
-        "custom-localization": os.path.join(vanilla_docs_path, "custom_localization.log"),
-    }
-    engine_docs = {
-        "triggers": _parse_effects_triggers_log(sources["triggers"]),
-        "effects": _parse_effects_triggers_log(sources["effects"]),
-        "modifiers": _parse_modifiers_log(sources["modifiers"]),
-        "event-targets": _parse_event_targets_log(sources["event-targets"]),
-        "on-actions": _parse_on_actions_log(sources["on-actions"]),
-        "custom-localization": _parse_custom_localization_log(sources["custom-localization"]),
-    }
-    out_dir = os.path.join(doc_path, "engine")
-    written = render_all(engine_docs, out_dir, source_paths=sources)
+    argparse.ArgumentParser(
+        prog="engine_docs_render.py",
+        description=(
+            "Re-render the engine reference files in docs/engine/ exactly as a "
+            "mod_state_server start does, without starting one. The source is "
+            "`vanilla_snapshot_docs_path` if set, else the newest Modding-Digests "
+            "version (the checkout is cloned or pulled first, as on a server "
+            "start; VIC3_SKIP_DIGESTS_FETCH=1 skips that), else the dump the game "
+            "last wrote. Exits 1 if nothing was rendered."
+        ),
+    ).parse_args(argv)
+
+    # Imported here: the server imports this module for render_all.
+    import mod_state_server as mss
+
+    mss._ensure_modding_digests_fresh()
+    mss._refresh_digest_snapshot_path()
+    mss.ms = mss.cli_mod_state()
+    written = mss._load_engine_docs()
+
+    chosen_dir, source_label = mss._engine_docs_source()
+    out_dir = os.path.join(mss.doc_path, "engine")
+    print(f"Engine docs source: {source_label} ({chosen_dir})")
+    for warning in mss._version_mismatch_warnings():
+        print(f"WARNING: {warning.get('detail') or warning.get('error')}", file=sys.stderr)
+    if mss._engine_docs_warnings:
+        print(f"ERROR: {mss._engine_docs_warnings[0]['detail']}", file=sys.stderr)
+        return 1
+    if written is None:
+        print(
+            f"ERROR: the render failed, so {out_dir} may be half-written; the "
+            "traceback is in the log lines above.",
+            file=sys.stderr,
+        )
+        return 1
+    if source_label == "mod_loaded":
+        print(
+            f"WARNING: rendered from {chosen_dir}, the dump the game last wrote, "
+            "because there is no vanilla-only snapshot and no Modding-Digests "
+            "version to read. A dump taken with mods on lists their modifier "
+            "types as the engine's, and its path names no version for the "
+            "headers. Set `vanilla_snapshot_docs_path` to a vanilla-only dump "
+            "and run this again before committing the result.",
+            file=sys.stderr,
+        )
     for name, size in written.items():
         print(f"  {name}: {size:,} bytes")
     print(f"Done — wrote {len(written)} files to {out_dir}")
+    return 0
 
 
 if __name__ == "__main__":
-    _cli()
+    raise SystemExit(_cli())
