@@ -20,7 +20,7 @@ from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _stri
                               file_templates, file_types, is_entry_read, load_loc, loc_closure, loc_index, loc_reads,
                               markup_reads, mod_gui_paths, mod_types, open_types, panel_loc_keys, panel_view,
                               personal_text, skipped_overrides, type_closure, ungated_world_reads, unguarded_controls,
-                              WORLD, READ)
+                              guard_visible_overrides, mod_templates, _on_guard_widgets, WORLD, READ)
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -872,6 +872,34 @@ class SkippedOverrideTest(unittest.TestCase):
                               f"type, the override is drawn there. Rename the mod's block.")
 
 
+    def test_no_override_puts_a_visible_on_a_guards_widget(self):
+        """The seal the guard rests on. te_own_country_only is a `visible`,
+        and a second `visible` on the same widget replaces it (gotcha #17).
+        A blockoverride reaches a guard's widget from any instance level, so
+        this goes by name: no blockoverride anywhere under gui/ of a block
+        that sits on a guard's widget (at its own level, or at the root of
+        the mod type it instances) sets a `visible`, uses a template or holds
+        another blockoverride there. The binding tests read the guard where
+        it is written and follow such a `visible` only from an instance's own
+        overrides, so they are right about the rest only while this holds:
+        don't drop it as covered elsewhere."""
+        types, templates = _mod(), mod_templates()
+        names, _ = _on_guard_widgets(types, templates)
+        # guard the guard: the Space Race's exact bar row (the guard on an instance), Seabed's chevron (on a button)
+        for block in ("row_tooltip", "basin_toggle"):
+            self.assertIn(block, names)
+        texts = {os.path.relpath(p, REPO): _strip_comments(_read(p))
+                 for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)}
+        found = guard_visible_overrides(types, templates, texts)
+        if found:
+            self.fail("\n" + "\n".join(
+                f'{path}:{line}  blockoverride "{block}" {why}; the block sits on the guarded widget at '
+                f"{where[0]}:{where[1]} ({where[2]})" for path, line, block, why, where in found)
+                + "\nThat would replace te_own_country_only on the widget, and another country would see what it "
+                  "holds. Put what the override adds in a child widget of its own (a `visible` there is the "
+                  "child's), or move the guard to a container around the widget.")
+
+
 class ObserverTest(unittest.TestCase):
     """National Info opens to an observer, who has no GetPlayer, and
     Country.IsLocalPlayer is false for every country one opens: an observer
@@ -1074,6 +1102,36 @@ class MutationTest(unittest.TestCase):
 	type fx_slot = widget {
 		block "row_slot" {}
 	}
+	type fx_dslot = fx_slot {
+	}
+	type fx_gslot = widget {
+		using = te_own_country_only
+		block "row_slot" {}
+	}
+	type fx_gd = fx_gslot {
+		@GD@
+	}
+	type fx_inner = flowcontainer {
+		widget = {
+			using = te_own_country_only
+			block "row_y" {}
+		}
+	}
+	type fx_gcell = flowcontainer {
+		widget = {
+			using = te_own_country_only
+			block "row_shown" {}
+			button = { block "row_button" {} }
+		}
+	}
+	type fx_mid = flowcontainer {
+		fx_row = {
+			blockoverride "row_button" {
+				onclick = "[GetScriptedGui('m').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			}
+			blockoverride "row_label" { block "row_extra" {} }
+		}
+	}
 	type fx_cell = flowcontainer {
 		button = { block "row_button" {} }
 	}
@@ -1087,7 +1145,7 @@ class MutationTest(unittest.TestCase):
 
     def row(self, guard="using = te_own_country_only", **parts):
         text = self.ROW.replace("@GUARD@", guard)
-        for part in ("HELD", "INSTANCE", "SECOND", "GUARDED", "OPEN", "DERIVED"):
+        for part in ("HELD", "INSTANCE", "SECOND", "GUARDED", "OPEN", "DERIVED", "GD"):
             text = text.replace(f"@{part}@", parts.get(part.lower(), ""))
         return file_types(text, "fixture.gui")
 
@@ -1134,10 +1192,37 @@ class MutationTest(unittest.TestCase):
         drawn = [("fx_wide", "Execute")]
         self.assertEqual(self.row_draws(self.row(instance='blockoverride "row_label" { fx_cell = {} }'))[0], drawn)
         self.assertEqual(self.row_draws(self.row(instance='blockoverride "row_label" { using = fx_tmpl }'))[0], drawn)
-        self.assertEqual(self.row_draws(self.row(second="fx_derived = {}", derived="fx_cell = {}"))[0],
-                         [("fx_derived", "Execute")], "the derived type's root override; the instance's is still the player's")
-        self.assertEqual(self.row_draws(self.row(second="fx_derived = {}", derived="widget = { using = fx_tmpl }"))[0],
-                         [("fx_derived", "Execute")])
+        both = [("fx_derived", "Execute"), ("fx_wide", "Execute")]  # a block of the name drawn anywhere keeps both
+        self.assertEqual(self.row_draws(self.row(second="fx_derived = {}", derived="fx_cell = {}"))[0], both)
+        self.assertEqual(self.row_draws(self.row(second="fx_derived = {}", derived="widget = { using = fx_tmpl }"))[0], both)
+
+    def test_a_guard_in_what_the_instance_itself_holds_can_be_replaced_too(self):
+        """The guard a `visible` replaces may be one in the instance's own
+        contents: in a mod type put in a slot, or on a widget written there
+        that declares the block."""
+        shown = 'blockoverride "row_shown" { visible = "[Country.IsAtWar]" }'
+        cell = 'blockoverride "row_label" { fx_gcell = {} }\n\t\t\t'
+        self.assertEqual(self.row_draws(self.row(instance=cell))[0], [])
+        self.assertEqual(self.row_draws(self.row(instance=cell + shown))[0], [("fx_wide", "Execute")])
+        slot = ('blockoverride "row_slot" {\n\t\t\t\t%s\n\t\t\t\tbutton = { onclick = "[GetScriptedGui(\'z\').Execute( '
+                'GuiScope.SetRoot( Country.MakeScope ).End )]" }\n\t\t\t}\n\t\t\t')
+        written = 'blockoverride "row_label" { widget = { using = te_own_country_only  block "row_slot" {} } }'
+        deep = 'widget = { block "row_slot" {} }'
+        self.assertEqual(self.row_draws(self.row(guarded=deep, instance=slot % "" + written))[0], [])
+        self.assertEqual(self.row_draws(self.row(guarded=deep, instance=slot % 'visible = "[Country.IsAtWar]"' + written))[0],
+                         [("fx_wide", "Execute")])
+
+    def test_a_drawn_block_of_the_name_anywhere_in_the_panel_keeps_the_override_drawn(self):
+        """A block of the name can reach an instance from another level: an
+        instance of a derived type fills a slot, or the instance of the type
+        that holds the row fills a slot the row passes on. The walk doesn't
+        trace those, so one drawn block of the name anywhere in the panel
+        keeps every override of it drawn (review of #1639, X4 and X5)."""
+        derived = self.row(second='fx_derived = {\n\t\t\tblockoverride "row_label" { fx_cell = {} }\n\t\t}')
+        self.assertEqual(self.row_draws(derived)[0], [("fx_derived", "Execute"), ("fx_wide", "Execute")])
+        self.assertEqual(self.row_draws(self.row(second="fx_mid = {}"))[0], [])
+        passed = self.row(second='fx_mid = {\n\t\t\tblockoverride "row_extra" { fx_cell = {} }\n\t\t}')
+        self.assertEqual(self.row_draws(passed)[0], [("fx_mid", "Execute"), ("fx_wide", "Execute")])
 
     def test_a_templates_block_counts_where_the_template_is_used(self):
         """A block a template declares is one at each `using`: drawn outside
@@ -1190,6 +1275,119 @@ class MutationTest(unittest.TestCase):
         inside = "widget = {\n\t\t\tusing = te_own_country_only\n\t\t\tfx_slot = {}\n\t\t}"
         self.assertEqual(self.row_draws(self.row(open=inside, instance=slot % 'visible = "[Country.IsAtWar]"'))[0], [],
                          "the guard is a container's: the instance's visible is its own")
+
+    def test_the_guard_a_visible_replaces_may_be_a_types_own_or_a_derived_types(self):
+        """The widget a root-level block lands on may carry the guard as an
+        instance of a derived type, or as the type's own root guard (a
+        derived type's root being the same widget); and the block may reach
+        a nested type's guard widget through that instance's blockoverride.
+        With a `visible` the guard is replaced; without one the override is
+        the player's."""
+        slot = ('blockoverride "row_slot" {\n\t\t\t\t%s\n\t\t\t\tbutton = { onclick = "[GetScriptedGui(\'z\').Execute( '
+                'GuiScope.SetRoot( Country.MakeScope ).End )]" }\n\t\t\t}')
+        shown = 'visible = "[Country.IsAtWar]"'
+        for name, parts in (("an instance of a derived type", {"open": "fx_dslot = { using = te_own_country_only }"}),
+                            ("through a nested instance's blockoverride",
+                             {"open": 'fx_inner = { blockoverride "row_y" { block "row_slot" {} } }'})):
+            with self.subTest(guard=name):
+                self.assertEqual(self.row_draws(self.row(instance=slot % "", **parts))[0], [])
+                self.assertEqual(self.row_draws(self.row(instance=slot % shown, **parts))[0], [("fx_wide", "Execute")])
+        with self.subTest(guard="the type's own root"):
+            rooted = "fx_gslot = {\n\t\t\t%s\n\t\t}"
+            self.assertEqual(self.row_draws(self.row(second=rooted % (slot % "")))[0], [])
+            self.assertEqual(self.row_draws(self.row(second=rooted % (slot % shown)))[0], [("fx_wide", "Execute")])
+        with self.subTest(guard="a base's root, the override at the derived type's root"):
+            self.assertEqual(self.row_draws(self.row(second="fx_gd = {}", gd=slot % ""))[0], [])
+            self.assertEqual(self.row_draws(self.row(second="fx_gd = {}", gd=slot % shown))[0], [("fx_gd", "Execute")])
+
+    def test_a_visible_set_at_the_types_root_counts_for_its_instances(self):
+        """A derived type's override at its root puts a `visible` on the
+        guard's widget: the guard is gone for an instance of that type too."""
+        slot = ('blockoverride "row_slot" {\n\t\t\t\tbutton = { onclick = "[GetScriptedGui(\'z\').Execute( '
+                'GuiScope.SetRoot( Country.MakeScope ).End )]" }\n\t\t\t}')
+        blocks = 'block "row_slot" {}\n\t\t\tblock "row_shown" {}'
+        instance = "fx_derived = {\n\t\t\t%s\n\t\t}" % slot
+        self.assertEqual(self.row_draws(self.row(guarded=blocks, second=instance))[0], [])
+        setter = 'blockoverride "row_shown" { visible = "[Country.IsAtWar]" }'
+        self.assertEqual(self.row_draws(self.row(guarded=blocks, second=instance, derived=setter))[0],
+                         [("fx_derived", "Execute"), ("fx_wide", "Execute")])
+
+    SEAL = """template fx_blocks {
+	block "t_block" {}
+}
+template fx_guarded {
+	using = te_own_country_only
+	block "t_slot" {}
+}
+types fixture
+{
+	type fx_wide = flowcontainer {
+		@WIDE@
+	}
+	type fx_row = flowcontainer {
+		widget = {
+			using = te_own_country_only
+			block "slot" {}
+			block "shown" {}
+			button = { block "button" {} }
+			@GUARDED@
+		}
+	}
+	type fx_slot = widget {
+		block "root_slot" {}
+	}
+	type fx_gslot = widget {
+		using = te_own_country_only
+		block "g_slot" {}
+	}
+	@TYPES@
+}
+"""
+
+    def sealed(self, wide="", types="", guarded=""):
+        text = self.SEAL.replace("@WIDE@", wide).replace("@TYPES@", types).replace("@GUARDED@", guarded)
+        found = guard_visible_overrides(file_types(text, "f.gui"), file_templates(text, "f.gui"), {"f.gui": text})
+        return [(block, why) for _, _, block, why, _ in found]
+
+    def test_an_override_that_puts_a_visible_on_a_guards_widget_fails_the_seal(self):
+        """SkippedOverrideTest's seal (guard_visible_overrides), on what the
+        walk doesn't follow (review of #1639: I6, I7, I8, I11, I12) and what
+        it does: by name, wherever the override is written."""
+        shown = 'visible = "[Country.IsAtWar]"'
+        sets = "sets a visible"
+        row = "fx_row = {\n\t\t\t%s\n\t\t}"
+        self.assertEqual(self.sealed(row % ('blockoverride "slot" { button = { %s } }\n\t\t\tblockoverride "button" { %s }'
+                                            % (shown, shown))), [], "a child's visible, and one on a widget inside")
+        self.assertEqual(self.sealed(row % ('blockoverride "shown" { %s }' % shown)), [("shown", sets)])
+        self.assertEqual(self.sealed(row % ('blockoverride "slot" { block "v" { %s } }' % shown)), [("slot", sets)])
+        self.assertEqual(self.sealed(row % 'blockoverride "slot" { using = fx_tmpl }'),
+                         [("slot", "uses a template, which may set a visible")])
+        # an override nested in the override (I6)
+        self.assertEqual(self.sealed(row % ('blockoverride "slot" { blockoverride "shown" { %s } }' % shown)),
+                         [("shown", sets), ("slot", "holds a blockoverride, which may set a visible")])
+        # from an instance further out or further in (I7, I11): wherever it is written, drawn or not
+        other = 'type fx_other = flowcontainer {\n\t\tfx_mid = { blockoverride "shown" { %s } }\n\t}' % shown
+        self.assertEqual(self.sealed(row % 'blockoverride "slot" {}', types=other), [("shown", sets)])
+        # a block an override declares on the guard's widget is on it too
+        self.assertEqual(self.sealed(row % ('blockoverride "slot" { block "more" {} }'),
+                                     types='type fx_other = fx_row {\n\t\tblockoverride "more" { %s }\n\t}' % shown),
+                         [("more", sets)])
+        # the instance carries the guard: the root of the type it instances (I8)
+        slot = 'fx_slot = {\n\t\t\t%s\n\t\t\tblockoverride "root_slot" { %s }\n\t\t}'
+        self.assertEqual(self.sealed(slot % ("", shown)), [])
+        self.assertEqual(self.sealed(slot % ("using = te_own_country_only", shown)), [("root_slot", sets)])
+        # a type whose own root carries it, and a type derived from that one
+        self.assertEqual(self.sealed('fx_gslot = { blockoverride "g_slot" { %s } }' % shown), [("g_slot", sets)])
+        derived = 'type fx_gd = fx_gslot {\n\t\tblock "gd_slot" {}\n\t}'
+        self.assertEqual(self.sealed('fx_gd = { blockoverride "gd_slot" { %s } }' % shown, types=derived), [("gd_slot", sets)])
+        # a block a template declares: one the guard's widget uses, and a template that takes the guard itself
+        self.assertEqual(self.sealed(row % ('blockoverride "t_block" { %s }' % shown)), [])
+        self.assertEqual(self.sealed(row % ('blockoverride "t_block" { %s }' % shown), guarded="using = fx_blocks"),
+                         [("t_block", sets)])
+        self.assertEqual(self.sealed('widget = {\n\t\t\tusing = fx_guarded\n\t\t\tblockoverride "t_slot" { %s }\n\t\t}' % shown),
+                         [("t_slot", sets)])
+        # the block's own default
+        self.assertEqual(self.sealed(guarded='block "late" { %s }' % shown), [("late", "its default sets a visible")])
 
     def test_a_visible_reaches_the_guards_widget_by_another_way(self):
         """Through a block default nested in the override, or through a
