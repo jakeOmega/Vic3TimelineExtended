@@ -133,7 +133,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `script_argument_audit` | `python3 script_argument_audit.py --strict` | `docs/engine/script_argument_report.md` | CI checks mod callees only; a reload on a machine with the game checks calls to vanilla's too. `GET /script-args/<helper>` lists every caller's arguments. |
 | `duplicate_key_audit` | `python3 duplicate_key_audit.py --strict` | `docs/engine/duplicate_key_report.md` |  |
 | `mod_structure_audit` | reload only | `docs/engine/mod_structure_report.md` |  |
-| `attitude_key_audit` | `python3 attitude_key_audit.py` | `docs/engine/attitude_key_report.md` | Runs bare in CI: it has no flag, and `main()` returns the exit code. |
+| `attitude_key_audit` | `python3 attitude_key_audit.py --strict` | `docs/engine/attitude_key_report.md` | The bare run fails on a flag too, as it did before it took `--strict`. |
 | `prev_scope_audit` | `python3 prev_scope_audit.py --strict` | `docs/engine/prev_scope_report.md` |  |
 | `empty_effect_audit` | `python3 empty_effect_audit.py --strict` | `docs/engine/empty_effect_report.md` |  |
 | `modifier_multiplier_var_audit` | `python3 modifier_multiplier_var_audit.py --strict` | `docs/engine/modifier_multiplier_var_report.md` |  |
@@ -151,7 +151,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `event_context_audit` | `python3 event_context_audit.py --strict` | `docs/engine/event_context_report.md` |  |
 | `faith_scene_audit` | `python3 faith_scene_audit.py --strict` | `docs/engine/faith_scene_report.md` | `--explain <key>` lists where a key is named and the gate read at each place. It reads religion gates only: a text gated on culture, a country or a variable is flagged and takes the comment. The word list is `VOCABULARY` in the audit. |
 | `silent_variable_audit` | `python3 silent_variable_audit.py --strict` | `docs/engine/silent_variable_report.md` |  |
-| `kill_character_audit` | `python3 kill_character_audit.py --check` | `docs/engine/kill_character_audit.md` |  |
+| `kill_character_audit` | `python3 kill_character_audit.py --strict` | `docs/engine/kill_character_audit.md` | `--strict` (alias `--check`) fails on a kill with neither guard and writes no report; the bare run writes the report. |
 | `event_magnitude_audit` | `python3 event_magnitude_audit.py --strict` | `docs/engine/event_magnitude_report.md` | Reads `events/` only: an amount granted from a scripted effect is flagged only where an event repeats it, as in a `show_as_tooltip` (#1593). |
 | `treaty_leverage_side_audit` | `python3 treaty_leverage_side_audit.py --strict` | `docs/engine/treaty_leverage_side_report.md` |  |
 | `treaty_evaluation_scope_audit` | `python3 treaty_evaluation_scope_audit.py --strict` | none | Direct reads only: it does not open a scripted trigger or value the block calls. |
@@ -176,7 +176,7 @@ One comment on an event's opening line is read by every audit that reads that li
 
 ## Adding an audit
 
-1. Write `<name>_audit.py` at the repo root, with a `--strict` mode that exits 1 on an unreviewed flag, and `test_<name>_audit.py` beside it. A reload audit also needs `regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array.
+1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit is the function that finds flags; `audit_common.py` gives it the rest: `parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that exits 1 on an unreviewed flag or a stale tag. A reload audit also needs `regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array (`audit_common.summary` builds it).
 2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.
 3. Add one `Audit(...)` entry to `audit_registry.py`.
 4. Run `python3 audit_registry.py --write` and commit this file with the rest.

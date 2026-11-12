@@ -13,8 +13,8 @@ by hand reads this table instead:
 * `test_audit_registry.py` holds it to `POST_LOAD_AUDITS` in
   `mod_state_server.py` and to the `*_audit.py` files on disk.
 
-Adding an audit: write the module and its test, add it to `POST_LOAD_AUDITS`
-if a reload should run it, add one `Audit(...)` here, and run
+Adding an audit: write the module (on `audit_common.py`) and its test, add it
+to `POST_LOAD_AUDITS` if a reload should run it, add one `Audit(...)` here, and run
 `python3 audit_registry.py --write`. Nothing else restates the roster.
 
 Stdlib only, and it imports no audit: a reader needs neither numpy nor a game
@@ -144,9 +144,8 @@ AUDITS: tuple[Audit, ...] = (
     Audit(
         "attitude_key_audit",
         "An `attitude = <key>` that is not one of the engine's fifteen attitude keys.",
-        ci=(),
         where=VALUE_LINE,
-        note="Runs bare in CI: it has no flag, and `main()` returns the exit code.",
+        note="The bare run fails on a flag too, as it did before it took `--strict`.",
     ),
     Audit(
         "prev_scope_audit",
@@ -270,9 +269,10 @@ AUDITS: tuple[Audit, ...] = (
     Audit(
         "kill_character_audit",
         "A `kill_character` in an event with no guard that the character exists.",
-        ci=("--check",),
         where="trailing on the `kill_character` line or the line above it",
         report="kill_character_audit.md",
+        note="`--strict` (alias `--check`) fails on a kill with neither guard and writes no report; "
+             "the bare run writes the report.",
     ),
     Audit(
         "event_magnitude_audit",
@@ -565,9 +565,14 @@ def render_markdown() -> str:
         "",
         "## Adding an audit",
         "",
-        "1. Write `<name>_audit.py` at the repo root, with a `--strict` mode that exits 1 on an "
-        "unreviewed flag, and `test_<name>_audit.py` beside it. A reload audit also needs "
-        "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array.",
+        "1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit "
+        "is the function that finds flags; `audit_common.py` gives it the rest: "
+        "`parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` "
+        "hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report "
+        "with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that "
+        "exits 1 on an unreviewed flag or a stale tag. A reload audit also needs "
+        "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array "
+        "(`audit_common.summary` builds it).",
         "2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.",
         "3. Add one `Audit(...)` entry to `audit_registry.py`.",
         "4. Run `python3 audit_registry.py --write` and commit this file with the rest.",

@@ -31,6 +31,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 # An event-id token: `namespace.number`, NOT followed by another `.` or word
 # char (so loc keys `my_events.1.t` and longer ids don't false-match).
 _EVENT_ID_RE = re.compile(r"(?<![\w.])([a-z_][a-z0-9_]*\.\d+)(?![\w.])")
@@ -40,9 +43,6 @@ _DEF_LINE_RE = re.compile(r"^\s*([a-z_][a-z0-9_]*\.\d+)\s*=\s*\{")
 # LHS token of a definition line so it isn't counted as a self-reference.
 _DEF_LHS_RE = re.compile(
     r"^\s*(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([a-z_][a-z0-9_]*\.\d+)\s*=\s*\{"
-)
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
 
 # Directories (relative to mod root) scanned for event *references*.
@@ -72,18 +72,13 @@ class OrphanFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[OrphanFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
 
-def parse_reviewed_comment(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+# This audit's old name for the shared parser.
+parse_reviewed_comment = parse_reviewed
 
 
 def _trailing_comment(line: str) -> str:
@@ -223,8 +218,8 @@ def audit(mod_path: str) -> AuditResult:
 
 
 def render_report(result: AuditResult, mod_path: str = "") -> str:
-    unreviewed = [f for f in result.flags if not f.exemption]
-    exempted = [f for f in result.flags if f.exemption]
+    unreviewed = result.unreviewed
+    exempted = result.exemptions
 
     out: list[str] = []
     out.append("# Orphaned Event Report")
@@ -292,27 +287,26 @@ def regenerate(mod_state=None) -> dict:
     result = audit(mod_path)
     report = render_report(result, mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "orphaned_event_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
+    write_text(out_path, report)
 
-    unreviewed = sum(1 for f in result.flags if not f.exemption)
+    unreviewed = len(result.unreviewed)
     return {
         "unreviewed": unreviewed,
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "exempted": len(result.exemptions),
         # Coverage, which the committed report no longer prints.
         **result.coverage,
         "path": out_path,
     }
 
 
-if __name__ == "__main__":
-    import sys
-
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path as _mp
 
-    res = audit(_mp)
-    print(render_report(res, _mp))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in res.flags) else 0)
+    return cli_main(lambda args: audit(_mp), lambda result, args: render_report(result, _mp),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
