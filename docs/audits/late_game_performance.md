@@ -314,9 +314,10 @@ All are exact: they change no result unless a line says otherwise.
   with `file:line`. In a journal entry, on_action or event file that is the
   real line. Inside a scripted effect the body is renumbered: the
   definition's line plus the count of lines since it that hold code, with
-  comment lines and blank lines not counted. Counting comments but not blank
-  lines first put Demographics' census on the inheritance block and made
-  aeroplanes look like the Strategic Reserve's costly good.
+  comment lines and blank lines not counted. Reading a label as the file's
+  own line put Demographics' census on the inheritance refresh (file line
+  421), and counting comment lines but not blank lines made aeroplanes look
+  like the Strategic Reserve's costly good.
 - **Measure which walk costs before caching one.** The formables'
   external-pressure walk was cached monthly on the reasoning that it was
   one of three `any_country` walks per call; AFU's `possible` did not move.
@@ -452,13 +453,16 @@ All are exact: they change no result unless a line says otherwise.
    its 21 terms three times per read (the bar's lines, `drift_total` and `drift_uncapped` in the cap
    term).
 12. **The other serial script** (call graph, 2 July → 1 August 1931; see
-    "Which script holds up the day"). By size:
+    "Which script holds up the day"), by size. The callees were opened in a
+    second profiled run over the same dates (snapshot `20261112T215918Z`),
+    so some totals here differ from the table's first run by up to 4%.
     - **Demographics' yearly state step:** `te_demog_state_yearly`, 2,083 ms,
-      33 ms a state. The census took 1,178 ms (`te_demog_state_census`
-      1,157, about 18 ms a state), the walks 892 ms, inheritance and Wealth
-      Concentration 10 ms. (An earlier version of this item gave the census's
-      1,178 ms to inheritance and Wealth Concentration: the labels were read
-      before the line-numbering rule in "Lessons" was known.) The census is
+      33 ms a state. The census block took 1,178 ms (1,206 in the second
+      run, of which `te_demog_state_census` 1,157, about 18 ms a state), the
+      walks 892 ms, inheritance and Wealth Concentration 10 ms. (An earlier
+      version of this item gave the census's 1,178 ms to inheritance and
+      Wealth Concentration, by reading a label as the file's line; see
+      "Lessons".) The census is
       Demographics Full's core, so this is a lead for the owner, not a fix.
     - **The Strategic Reserve's weekly pulse:** 820 ms, 278 calls, about
       3 ms a country a week, on the weekly frame, which is already the
