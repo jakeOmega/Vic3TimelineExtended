@@ -739,7 +739,8 @@ te_demog_seed = {
 	te_demog_enter_group = yes
 	set_local_variable = { name = te_dg_lsf value = 100000 }
 	set_local_variable = { name = te_dg_lsm value = 100000 }
-	set_local_variable = { name = te_dg_dpow value = 1 }
+	# the growth factor's power, at radix 100,000 as the survivors are (te_demog_seed_slot)
+	set_local_variable = { name = te_dg_dpow value = 100000 }
 	te_demog_reset_accumulators = yes
 	te_demog_no_flows = yes
 	# the seed counts the people as they are now: war dead and kills noted before it are in them already
@@ -853,13 +854,19 @@ te_demog_seed_slot = {
 				local_var:te_dg_lsm >= 1
 			}
 		}
+		# Fixed point (#967): the power is te_dg_dpow / 100000. Kept as growth factor^age itself it lost a unit of its
+		# fifth decimal at every multiply, 5.8e-4 of it by age 67 and 1.2e-3 by 103 at a factor of 0.98556, and most of
+		# its digits by old age in a fast-growing state. The births' share comes first, so the largest product here is
+		# survivors x the share x the power x 100,000, at most the survivors x the power x 51,220: what the old order's
+		# was (5e10 at that factor's largest, 1.05707, and 1836's mortality). The power itself is at most 1.05707^300 x
+		# 100,000 = 1.7e12 (te_demog_set_growth_factor's largest factor), inside the range's 9.2e13.
 		set_variable = {
 			name = te_dg_f$S$
-			value = { value = local_var:te_dg_lsf multiply = local_var:te_dg_dpow multiply = te_demog_k_female_births_per_100k divide = 100000 }
+			value = { value = local_var:te_dg_lsf multiply = te_demog_k_female_births_per_100k divide = 100000 multiply = local_var:te_dg_dpow divide = 100000 }
 		}
 		set_variable = {
 			name = te_dg_m$S$
-			value = { value = local_var:te_dg_lsm multiply = local_var:te_dg_dpow multiply = te_demog_k_male_births_per_100k divide = 100000 }
+			value = { value = local_var:te_dg_lsm multiply = te_demog_k_male_births_per_100k divide = 100000 multiply = local_var:te_dg_dpow divide = 100000 }
 		}
 		# §2.6: the US frontier's men at the 1840 census's ratio (generated; te_demog_resettle_effects.txt)
 		if = {
@@ -888,21 +895,22 @@ te_demog_seed_slot = {
 		te_demog_lx_seed_decrement = yes
 	}
 	else = {
-		# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
+		# women die of the group's causes and in childbirth (demographics_model.seed's decrement). Fixed point (#967):
+		# the survivors x the rate first and divide = 100000 last; survivors x (1 - rate / 100000) kept only the rate's
+		# whole deaths per 100,000. The product is at most 100,000 survivors x a rate of 100,000 or so: 1e10.
 		change_local_variable = {
 			name = te_dg_lsf
-			multiply = {
+			subtract = {
 				value = local_var:te_dg_asfr
 				multiply = local_var:te_dg_tfr
 				multiply = local_var:te_dg_mmr
 				divide = 100000
 				add = local_var:te_dg_qf
+				multiply = local_var:te_dg_lsf
 				divide = 100000
-				multiply = -1
-				add = 1
 			}
 		}
-		change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+		change_local_variable = { name = te_dg_lsm subtract = { value = local_var:te_dg_qm multiply = local_var:te_dg_lsm divide = 100000 } }
 	}
 	change_local_variable = { name = te_dg_dpow multiply = local_var:te_dg_d }
 	change_local_variable = { name = te_dg_age add = 1 }
@@ -2235,21 +2243,26 @@ te_demog_age_slot = {
 		te_demog_lx_deaths = yes
 	}
 	else = {
-		# deaths, and maternal deaths per birth
+		# deaths, and maternal deaths per birth. Fixed point (#967): the people x the rate first and divide = 100000
+		# last. People x (1 - rate / 100000) kept only the rate's whole deaths per 100,000, so a year's deaths came out
+		# short by up to 1e-5 of the people. The product is a cohort x at most 100,000 (te_demog_enter_group's max):
+		# inside the range's 9.2e13 while one year's cohort of one sex is under 920 million people, which the seed's own
+		# state_population x 100000 already asks of the whole state. A state of half a billion (the census's guard) has
+		# cohorts under ten million: 1e12 at the most, 1.6e11 at 1836's rates, under its own te_dg_births x te_dg_nb_f.
 		set_local_variable = {
 			name = te_dg_f2
 			value = {
-				value = local_var:te_dg_qf
+				value = local_var:te_dg_f
+				multiply = local_var:te_dg_qf
 				divide = 100000
 				multiply = -1
-				add = 1
-				multiply = local_var:te_dg_f
+				add = local_var:te_dg_f
 				subtract = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 }
 			}
 		}
 		set_local_variable = {
 			name = te_dg_m2
-			value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_m }
+			value = { value = local_var:te_dg_m multiply = local_var:te_dg_qm divide = 100000 multiply = -1 add = local_var:te_dg_m }
 		}
 		change_local_variable = {
 			name = te_dg_deaths
@@ -2352,8 +2365,9 @@ te_demog_fold_slot = {
 				divide = 100000
 			}
 		}
-		change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
-		change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+		# the pool's survivors, multiplied first as its deaths are just above (#967): the same products
+		change_variable = { name = te_dg_pf subtract = { value = var:te_dg_pf multiply = local_var:te_dg_qf divide = 100000 } }
+		change_variable = { name = te_dg_pm subtract = { value = var:te_dg_pm multiply = local_var:te_dg_qm divide = 100000 } }
 	}
 	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
 	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }

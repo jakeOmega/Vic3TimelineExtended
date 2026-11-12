@@ -22,7 +22,7 @@
  je_ch_board_head_country:0 "Country"
  je_ch_board_head_model:0 "Model"
  je_ch_board_head_model_tt:0 "Its political model at the last recount, in the colors of Political Models of the World below. Hover a swatch for the model's name and the laws behind it."
- je_ch_board_head_rank:0 "#"
+ je_ch_board_head_rank:0 "##"
  je_ch_board_head_rank_tt:0 "Place at the last recount. The arrow marks the country's own row."
  je_ch_board_head_share:0 "[Concept('concept_cultural_pull_share','Share')]"
  je_ch_how_benchmark:0 "A country with this journal entry whose share trails the leading cultural power's by more than a few points carries the [concept_foreign_cultural_benchmark]: its people measure their government against the leader's, and [concept_legitimacy] falls. The wider the gap, the larger the loss. The leader never carries it. While we do, the overview shows it."

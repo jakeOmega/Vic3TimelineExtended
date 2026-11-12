@@ -1,12 +1,15 @@
-"""Unit tests for loc_render_audit (issue #134).
+"""Unit tests for loc_render_audit (issues #134, #266).
 
 Covers the pure check_value detector, loc-line parsing + REVIEWED suppression,
 an end-to-end tempdir run with mixed clean/bad/suppressed values, and a
 vanilla-clean calibration (the bracket-tag check must be 0 on vanilla loc).
-The treaty-article scope check gets the same three layers.
+The treaty-article scope check gets the same three layers. The formatting-tag
+checks (#266) are calibrated against the committed `vanilla_parsed/` snapshot,
+so that calibration runs in CI.
 """
 from __future__ import annotations
 
+import json
 import os
 import tempfile
 import unittest
@@ -15,14 +18,18 @@ from loc_render_audit import (
     article_type_text_key,
     audit,
     check_article_scope,
+    check_format_tags,
     check_quoted_expansion,
     check_quoted_name,
     check_value,
+    closed_tag_names,
     render_report,
     _parse_loc_line,
     _parse_reviewed,
 )
 
+REPO = os.path.dirname(os.path.abspath(__file__))
+VANILLA_LOC_SNAPSHOT = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
 VANILLA_GAME = "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game"
 
 
@@ -53,11 +60,165 @@ class CheckValueTests(unittest.TestCase):
         # The correct #b …#! style must never be flagged.
         self.assertEqual(check_value("gained #b 5#! points"), [])
 
-    def test_unbalanced_hash_not_flagged(self):
-        # The unbalanced-#…#! check was dropped (2341 vanilla false positives);
-        # such values must pass cleanly now.
-        self.assertEqual(check_value("#R unclosed red text"), [])
+    def test_unclosed_format_tag_flagged_and_surplus_reset_not(self):
+        # #134 dropped a balance check that counted both directions; #266's
+        # flags only a tag left open, and check_value carries it.
+        self.assertEqual([i for i, _d in check_value("#R unclosed red text")],
+                         ["unclosed_format"])
         self.assertEqual(check_value("trailing reset only #!"), [])
+
+
+class FormatTagTests(unittest.TestCase):
+    """#266: a `#tag` opened and never closed with `#!`, and a `#` that is
+    neither a tag, a `#!` nor a `##`."""
+
+    # The line as it shipped until #261 gave it its `#!` (found in #255).
+    GDP_BEFORE = ("$GDP_SHORT$ per Capita:\\n     Local/National\\n@money!#bold "
+                  "$GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]")
+    GDP_AFTER = GDP_BEFORE + "#!"
+
+    def _kinds(self, value):
+        return [i for i, _d in check_format_tags(value)]
+
+    def test_the_gdp_per_capita_line_before_and_after_261(self):
+        issues = check_format_tags(self.GDP_BEFORE)
+        self.assertEqual([i for i, _d in issues], ["unclosed_format"])
+        self.assertIn("`#bold`", issues[0][1])
+        self.assertEqual(check_format_tags(self.GDP_AFTER), [])
+        # check_value is what audit() calls
+        self.assertEqual([i for i, _d in check_value(self.GDP_BEFORE)], ["unclosed_format"])
+        self.assertEqual(check_value(self.GDP_AFTER), [])
+
+    def test_each_reset_closes_one_tag(self):
+        self.assertEqual(self._kinds("#r #b nested#!#!"), [])
+        self.assertEqual(self._kinds("#r #b nested#! still red"), ["unclosed_format"])
+        self.assertEqual(
+            self._kinds("#tooltippable #tooltip:[State.GetTooltipTag],my_tt #v [X|%0]#!#!#!"), [])
+        self.assertEqual(
+            self._kinds("#tooltippable #tooltip:[State.GetTooltipTag],my_tt #v [X|%0]#!#!"),
+            ["unclosed_format"])
+
+    def test_one_header_is_one_tag_whatever_it_combines(self):
+        # `;` joins formats and `:` gives one an argument; the header runs to
+        # the next space, through any data expression inside it.
+        for value in (
+            "#bold;red +60.0%#! of them",
+            "#indent_newline:3 \\n• a line#!",
+            "gets #tooltippable;tooltip:[GetPlayer.GetTooltipTag],my_tt $my_modifier$#!",
+            "#tooltip:[SCOPE.sCountry('a b').GetTooltipTag],my_tt text#!",
+            "#color:{$R$,$G$,$B$,$A$} tinted#!",
+        ):
+            with self.subTest(value=value):
+                self.assertEqual(check_format_tags(value), [])
+
+    def test_computed_tag_names_open_a_tag(self):
+        self.assertEqual(self._kinds("#[GetMoraleColorString( X.GetMorale )] 80%#!"), [])
+        self.assertEqual(self._kinds("#$COLOR_STR$ 80%"), ["unclosed_format"])
+        self.assertEqual(self._kinds("#[GetMoraleColorString( X.GetMorale )] 80%"),
+                         ["unclosed_format"])
+
+    def test_header_ends_at_a_newline_escape_or_the_next_hash(self):
+        # vanilla's `concept_open_market_desc_added_3` and
+        # `possible_dp_with_austria_scope_tt`
+        self.assertEqual(self._kinds("#indent_newline:3\\n[GetStaticModifier('x').GetDesc]#!"), [])
+        self.assertEqual(self._kinds("#r#b May lead to a play#!#!"), [])
+        self.assertEqual(self._kinds("#r#b two tags, one reset#!"), ["unclosed_format"])
+        self.assertEqual(self._kinds("#bold#!"), [])
+
+    def test_a_header_runs_through_its_data_expression_whatever_is_inside(self):
+        # A header that stopped at the space inside the brackets would read
+        # the quoted `#v` as a tag of the text and leave `#tooltip` open.
+        self.assertEqual(
+            self._kinds("#tooltip:[GetRawTextTooltipTag('#v 5#! more')] text#!"), [])
+        (_issue, detail), = check_format_tags(
+            "#tooltip:[SCOPE.sCountry('a b').GetTooltipTag],my_tt text")
+        self.assertIn("`#tooltip:[SCOPE.sCountry('a b...`", detail)
+
+    def test_surplus_resets_are_not_flagged(self):
+        # A closing fragment, and vanilla's defensive `#!#!`.
+        self.assertEqual(self._kinds("[X.GetCustom('prefix')][X.GetValue|2]#! °C"), [])
+        self.assertEqual(self._kinds("#v 5#!#!"), [])
+
+    def test_a_tag_opened_after_a_surplus_reset_still_has_to_close(self):
+        # Counting openers against resets would call this balanced.
+        self.assertEqual(self._kinds("5#! then #b bold to the end"), ["unclosed_format"])
+
+    def test_an_opening_fragment_is_flagged(self):
+        # Deliberate ones carry `# REVIEWED` (EndToEndTests).
+        for value in ("#R +", "#B", "#italic"):
+            with self.subTest(value=value):
+                self.assertEqual(self._kinds(value), ["unclosed_format"])
+
+    def test_hashes_inside_a_data_expression_are_ignored(self):
+        self.assertEqual(
+            self._kinds("[AddTextIf( X.IsValid, '#v unclosed in the literal' )] plain"), [])
+        self.assertEqual(
+            self._kinds("[GetRawTextTooltipTag('#header $NAME|q$#!')] $NAME$"), [])
+        # ...and a `]` inside a quoted argument does not end the expression.
+        self.assertEqual(self._kinds("[Concept('concept_x', 'a ] #b b')] plain"), [])
+        # After the expression the scan is back on.
+        self.assertEqual(self._kinds("[X.GetName] #b bold"), ["unclosed_format"])
+
+    def test_double_hash_is_a_literal_hash(self):
+        self.assertEqual(check_format_tags("[concept_power_bloc_rank] #v ##3#! or better"), [])
+        self.assertEqual(check_format_tags("Rank ##[Building.GetRank]"), [])
+        self.assertEqual(check_format_tags("##"), [])
+
+    def test_bare_hash_flagged(self):
+        for value in ("#", "Snapshot #", "settled (#1084): a few %", "# [State.GetName] is a port",
+                      "Does #b not# have one"):
+            with self.subTest(value=value):
+                issues = check_format_tags(value)
+                self.assertIn("bare_hash", [i for i, _d in issues])
+                self.assertIn("`##`", dict(issues)["bare_hash"])
+        # A bare hash opens nothing: it is not also reported as unclosed.
+        self.assertEqual(self._kinds("Snapshot #"), ["bare_hash"])
+
+    def test_detail_names_every_tag_left_open(self):
+        (_issue, detail), = check_format_tags("#header Title\\n#v 5 and #b more#!")
+        self.assertIn("`#header`", detail)
+        self.assertIn("`#v`", detail)
+        self.assertNotIn("`#b`", detail)
+
+    def test_computed_name_left_open_is_told_about_the_literal_hash(self):
+        # `Rank #$RANK$` reads as a tag; adding `#!` would pass the audit and
+        # leave the text wrong, so the hint names the other reading.
+        for value in ("Rank #$RANK$", "#[X.GetRank] of 10"):
+            with self.subTest(value=value):
+                (issue, detail), = check_format_tags(value)
+                self.assertEqual(issue, "unclosed_format")
+                self.assertIn("Computed tag name", detail)
+                self.assertIn("If a literal `#` was meant, write `##`", detail)
+        (_issue, detail), = check_format_tags("#bold never closed")
+        self.assertNotIn("literal", detail)
+
+    def test_name_no_value_closes_is_told_about_the_literal_hash(self):
+        known = closed_tag_names(["#bold x#!", "#MeToo is a movement"])
+        (_issue, detail), = check_format_tags("the #MeToo movement", known)
+        self.assertIn("No value in the mod closes a tag of this name: `#MeToo`", detail)
+        self.assertIn("If a literal `#` was meant, write `##`", detail)
+        # A name the mod does close gets the plain hint, whatever its case.
+        for value in ("#bold never closed", "#BOLD never closed"):
+            (_issue, detail), = check_format_tags(value, known)
+            self.assertNotIn("literal", detail)
+        # Without the mod's names (check_value on one string) nothing is guessed.
+        (_issue, detail), = check_format_tags("the #MeToo movement")
+        self.assertNotIn("literal", detail)
+
+    def test_closed_tag_names_are_the_formats_of_every_closed_header(self):
+        self.assertEqual(
+            closed_tag_names([
+                "#bold x#!",
+                "#Tooltippable;tooltip:[X.GetTooltipTag],my_tt y#!",
+                "#indent_newline:3 a#! and #R never closed",
+                "#[X.GetColor] z#!",
+                "no tags, ##3",
+            ]),
+            {"bold", "tooltippable", "tooltip", "indent_newline"})
+
+    def test_plain_text_and_texticons_untouched(self):
+        self.assertEqual(check_format_tags("@money! 5 and nothing else!"), [])
+        self.assertEqual(check_format_tags(""), [])
 
 
 class CheckQuotedExpansionTests(unittest.TestCase):
@@ -194,6 +355,21 @@ class ParseLineTests(unittest.TestCase):
         self.assertIn("[b]", value)
         self.assertIn("Iron", value)
 
+    def test_quote_in_the_comment_is_not_read_as_value(self):
+        # The value ends at its first unescaped quote. Taking the last quote
+        # on the line read the comment as value, found a bare `#` in it and
+        # lost the exemption.
+        key, value, trailing = _parse_loc_line(
+            ' k:0 "#R +" # REVIEWED 2026-11-12: its caller writes "#!" after\n')
+        self.assertEqual((key, value), ("k", "#R +"))
+        self.assertEqual(_parse_reviewed(trailing)["rationale"], 'its caller writes "#!" after')
+
+    def test_escaped_quote_does_not_end_the_value(self):
+        key, value, trailing = _parse_loc_line(
+            ' k:0 "the \\"Iron\\" #b man" # REVIEWED 2026-11-12: a "demo"\n')
+        self.assertEqual(value, 'the \\"Iron\\" #b man')
+        self.assertIn("REVIEWED", trailing)
+
     def test_header_and_comment_lines_skipped(self):
         self.assertIsNone(_parse_loc_line("l_english:\n"))
         self.assertIsNone(_parse_loc_line("# a comment\n"))
@@ -239,6 +415,55 @@ class EndToEndTests(unittest.TestCase):
             self.assertEqual(len(exemp), 1)
             self.assertEqual(exemp[0].loc_key, "ok_key")
             self.assertEqual(exemp[0].exemption["date"], "2026-05-21")
+
+    def test_unclosed_format_reviewed_fragment_and_unreviewed_slip(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' trend_prefix_up:0 "#R +" # REVIEWED 2026-11-12: opening fragment; '
+                'its caller writes the #!\n'
+                ' trend_value:0 "[X.GetCustom(\'trend_prefix\')][X.GetValue|2]#! °C"\n'
+                ' gdp_line:0 "@money!#bold $GDP$/@money![X.GetGDP|2*]"\n'
+                ' rank_head:0 "#"\n'
+                ' rank_row:0 "##[X.GetRank]"\n',
+            )
+            result = audit(mod_path=td)
+        got = sorted((f.loc_key, f.issue, bool(f.exemption)) for f in result.flags)
+        self.assertEqual(got, [
+            ("gdp_line", "unclosed_format", False),
+            ("rank_head", "bare_hash", False),
+            ("trend_prefix_up", "unclosed_format", True),
+        ])
+        report = render_report(result)
+        self.assertIn("Formatting tags left open", report)
+        self.assertIn("A `#` that is not a tag", report)
+
+    def test_reviewed_comment_may_quote_markup(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' trend_prefix_up:0 "#R +" # REVIEWED 2026-11-12: its caller writes "#!" after\n',
+            )
+            result = audit(mod_path=td)
+        self.assertEqual(
+            [(f.loc_key, f.issue, bool(f.exemption)) for f in result.flags],
+            [("trend_prefix_up", "unclosed_format", True)])
+
+    def test_audit_knows_which_tag_names_the_mod_closes(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' fine:0 "#bold closed#! and #v 5#!"\n'
+                ' slip:0 "#bold never closed"\n'
+                ' hashtag:0 "the #MeToo movement"\n',
+            )
+            details = {f.loc_key: f.detail for f in audit(mod_path=td).flags}
+        self.assertEqual(sorted(details), ["hashtag", "slip"])
+        self.assertIn("write `##`", details["hashtag"])
+        self.assertNotIn("write `##`", details["slip"])
 
     def test_quoted_name_only_checks_modifier_and_modifier_type_names(self):
         with tempfile.TemporaryDirectory() as td:
@@ -372,6 +597,56 @@ class EndToEndTests(unittest.TestCase):
         self.assertIn("`localization/english/a_l_english.yml:4`", report)  # unreviewed
         self.assertNotIn("18981", report)
         self.assertNotIn("loc files scanned", report)
+
+
+@unittest.skipUnless(os.path.isfile(VANILLA_LOC_SNAPSHOT), "no vanilla_parsed/ snapshot")
+class VanillaFormatTagCalibrationTests(unittest.TestCase):
+    """A coarse sanity bound on real text, not the grammar's proof. Vanilla is
+    never judged by the audit (it splits formatting across keys, the #134
+    objection); these run the scanner over its 12,705 values with a `#` and
+    fail only if it goes badly wrong: flags a large share of them, stops
+    reading `##` as a literal hash, or flags a surplus reset. A scanner that
+    skips no `[...]`, or lets one `#!` close every tag, stays inside these
+    bounds; the cases in `FormatTagTests` are what pin those rules.
+
+    Measured on the 1.15.1 snapshot: 157 values (1.2%) leave a tag open and 4
+    hold a bare `#`. The bounds are wide so that a patch's new text, or more
+    flavor lines the snapshot's reader cuts at an inner quote (`#italic`
+    before quoted text), does not trip them."""
+
+    @classmethod
+    def setUpClass(cls):
+        with open(VANILLA_LOC_SNAPSHOT, encoding="utf-8") as fh:
+            values = json.load(fh)
+        cls.tagged = {k: v for k, v in values.items() if "#" in v}
+        cls.issues = {k: check_format_tags(v) for k, v in cls.tagged.items()}
+
+    def _keys(self, kind):
+        return sorted(k for k, found in self.issues.items() if kind in dict(found))
+
+    def test_vanilla_closes_nearly_every_tag_it_opens(self):
+        self.assertGreater(len(self.tagged), 10000)
+        unclosed = self._keys("unclosed_format")
+        self.assertLess(len(unclosed) / len(self.tagged), 0.05, unclosed[:10])
+
+    def test_vanilla_writes_a_literal_hash_doubled(self):
+        # Every bare `#` in vanilla is a slip (two `#` for `#!` at the end of
+        # a settings tooltip, `#b not# have`, a stray `# ` bullet); a scanner
+        # that read `##` as a tag would flag every doubled one too.
+        self.assertLessEqual(len(self._keys("bare_hash")), 12, self._keys("bare_hash"))
+        doubled = [k for k, v in self.tagged.items() if "##" in v]
+        self.assertGreaterEqual(len(doubled), 3)
+        for key in doubled:
+            self.assertNotIn("bare_hash", dict(self.issues[key]), key)
+
+    def test_surplus_resets_exist_in_vanilla_and_pass(self):
+        # A reset with nothing to close (`"Legal Categories#!"`): the engine
+        # tolerates it, and it is half of what #134 counted. Never flagged.
+        only_resets = [k for k, v in self.tagged.items()
+                       if "#!" in v and "#" not in v.replace("#!", "")]
+        self.assertGreaterEqual(len(only_resets), 5)
+        for key in only_resets:
+            self.assertEqual(self.issues[key], [], key)
 
 
 @unittest.skipUnless(os.path.isdir(VANILLA_GAME), "vanilla install not found")
