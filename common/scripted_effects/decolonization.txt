@@ -523,6 +523,21 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 	# `common/country_definitions/zz_te_extended_dynamic.txt` extends it to 1000.
 	# on_created does not see the scopes saved before the call either, so it only
 	# touches the new country itself; the legacy runs after the random_list.
+	# The new country's religion (#1499). Without `religion =` it inherits the
+	# parent's state religion and laws; from an atheist metropole that is
+	# State Religion with no religion, which vanilla's law_state_religion
+	# on_activate cannot repair (it reads root.country_definition, which a
+	# dynamic tag lacks). So pass the parent's religion, which changes
+	# nothing, or the released culture's when the parent is atheist. Saved
+	# here because create_dynamic_country runs in scope none, and saved on
+	# every call: one option can release several countries, and a saved scope
+	# lasts the whole chain (a country always has a state religion).
+	scope:decolonizing_parent.religion = { save_scope_as = new_country_religion }
+	if = {
+		limit = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+		scope:new_country_culture.religion ?= { save_scope_as = new_country_religion }
+	}
+
 	custom_tooltip = {
 		text = decolonization_form_country_tt
 		random_list = {
@@ -531,6 +546,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 65 65 }
@@ -555,6 +571,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 140 65 }
@@ -579,6 +596,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 216 65 }
@@ -603,6 +621,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 140 216 65 }
@@ -627,6 +646,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 216 65 }
@@ -651,6 +671,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 216 140 }
@@ -675,6 +696,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 216 216 }
@@ -699,6 +721,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 140 216 }
@@ -723,6 +746,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 65 216 }
@@ -747,6 +771,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 140 65 216 }
@@ -771,6 +796,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 65 216 }
@@ -795,6 +821,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 65 140 }
@@ -824,6 +851,38 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 			if = {
 				limit = { NOT = { this = scope:decolonizing_parent } }
 				apply_decolonization_path = yes
+				# TE_SELF_CHECK decol_new_country_religion (#1499), once a game
+				# for each kind of parent: the new country holds the religion
+				# passed in (the parent's, read through `.religion`; or, from
+				# an atheist parent, the culture's).
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								NOT = { has_global_variable = te_selfcheck_decol_religion }
+								NOT = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+							}
+							AND = {
+								NOT = { has_global_variable = te_selfcheck_decol_religion_atheist }
+								scope:decolonizing_parent = { country_has_state_religion = rel:atheist }
+							}
+						}
+					}
+					if = {
+						limit = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+						set_global_variable = te_selfcheck_decol_religion_atheist
+					}
+					else = {
+						set_global_variable = te_selfcheck_decol_religion
+					}
+					if = {
+						limit = { country_has_state_religion = scope:new_country_religion }
+						debug_log = "TE_SELF_CHECK OK decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country holds the religion passed to create_dynamic_country) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country does not hold the religion passed to create_dynamic_country: `religion =` is ignored there, or a country's `.religion` is not its state religion; see docs/testing/decolonization-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
 			}
 		}
 	}

@@ -214,3 +214,22 @@ reforms.
 | **The bars leave the drift cap.** Watch the colonial great powers' stability through a few years (the Colonial Powers list, or the entry's history chart). | No longer at the cap (−1.5 a month since the second 2026-11-03 pass, −1.667 before) from the first month: the great-power pressure row is smaller and the bars fall more slowly, if at all. | Still at the cap: the condemners left are enough on their own; look at the International Pressure table for who condemns. |
 | **The balance target.** An observer run into the 1950s-60s. | The top two or three colonial great powers keep most of their colonies; the smaller colonial powers lose most of theirs. Great powers without colonies, with an elected government and without a regressive or colonizing law (a reformed USA, a democratic France or Britain after their empires) still mostly condemn; the regressive ones (the USA and Brazil while on Racialized Citizenship; TUR and India, holding slaves, least of all), the illiberal ones (an autocratic Russia or China, a single-party state that is not a Council Republic) and allies of an empire more often stay neutral or support. | Every empire holds on: the empires now back one another and too few powers condemn. Lower Support's +10 for an empire or the +8s for a partner, a colonizing law and an illiberal government, or raise Condemn's factor for a regressive or slaveholding power or a partner (`decolonization_events.14`). Still collapsing within 34 months (30 at the old 1.667 cap): look for condemners that hold an empire (the review should have cleared them). |
 | **The debug harness keeps its condemners.** `event te_debug_colonial_empire.2`, option a, then a month. | The International Pressure table keeps every condemner, the colonial great powers included: the harness sets the stance on every other great power, those already condemning too, and starts each one's 24-month cooldown. | A colonial great power's condemnation vanishes a month later: either the harness did not start its cooldown (`decol_stance_start_cooldown`; before this fix it skipped a power already condemning, such as Britain or Spain in the 1910 save, which the review then dropped), or the AI's influence went negative, a drop that ignores the cooldown (`decol_stance_monthly`'s first branch). Check the power's influence before blaming the review. |
+
+## The religion a release forms with (2026-11-12, issue #1499)
+
+`form_decolonized_country` now passes `religion =` to `create_dynamic_country`: the metropole's own (`.religion`, which
+changes nothing), or the released culture's when the metropole's state religion is atheist. Before, a release from an
+atheist metropole kept State Religion with no religion, and vanilla's `law_state_religion` `on_activate` logged
+`set_state_religion effect [ ... doesn't exist ]` at `common/laws/00_church_and_state.txt:37` once per country formed.
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `decol_new_country_religion` | The released country's state religion is the one passed in. Once a game for a non-atheist metropole (every observer run that releases anyone: shows `.religion` on a country is its state religion, so the pass changes nothing) and once for an atheist one (rare: shows `religion =` is honoured). Lines carry `country=`, `parent=` and `date=`. | after the `random_list` in `form_decolonized_country`, `common/scripted_effects/decolonization.txt` | For the common case: pass the religion only for an atheist metropole, which means two `create_dynamic_country` blocks per colour branch. For the atheist case: set the religion in the legacy block after the call (`set_state_religion = scope:new_country_religion` on the capital's owner) |
+
+### Checks
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **An atheist metropole releases a colony.** Under State Atheism with a colony, release it from Colonial Holdings (or wait for a planned decolonization, `decolonization_events.401`). | The new country's state religion is the released culture's; `error.log` has no `set_state_religion effect` line framed in `events/decolonization_events.txt`. `TE_SELF_CHECK OK decol_new_country_religion` with the atheist parent. | The country is atheist: see the self-check's fallback. |
