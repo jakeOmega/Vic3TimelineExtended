@@ -18,8 +18,8 @@ import functools
 
 from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _strip_comments, _type_body, custom_loc,
                               file_templates, file_types, is_entry_read, load_loc, loc_closure, loc_index, loc_reads,
-                              markup_reads, mod_gui_paths, mod_types, panel_loc_keys, personal_text, type_closure,
-                              unguarded_controls, WORLD, READ)
+                              markup_reads, mod_gui_paths, mod_types, open_types, panel_loc_keys, personal_text,
+                              type_closure, ungated_world_reads, unguarded_controls, WORLD, READ)
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -833,6 +833,28 @@ class GuardTest(unittest.TestCase):
                     self.fail(_report(found, t.key))
 
 
+class ObserverTest(unittest.TestCase):
+    """National Info opens to an observer, who has no GetPlayer, and
+    Country.IsLocalPlayer is false for every country one opens: an observer
+    sees another country's panel. A `# world:` read there (the player's copy
+    of what is the same for every country, which BindingTest lets through)
+    logs a null-country line every frame it is evaluated, so each sits under
+    an observer gate (gui_modding_guide.md, "An observer has no GetPlayer"):
+    Not( GetMetaPlayer.IsObserver ), or GetPlayer.IsValid, first in the
+    `visible` of a widget around the read. One check for every public tab
+    (#1368); MutationTest holds it on a fixture."""
+
+    def test_every_world_read_is_gated_for_an_observer(self):
+        types = mod_types()
+        for t in PUBLIC:
+            with self.subTest(tab=t.key):
+                found = ungated_world_reads(gen.ni_types(t), types)
+                if found:
+                    self.fail("\n" + "\n".join(str(f) for f in found) + "\nA `# world:` read with no observer gate: "
+                              "put it in a container with `visible = \"[Not( GetMetaPlayer.IsObserver )]\"`, or put "
+                              "that test first in an And in the read's own `visible`.")
+
+
 class PublicTest(unittest.TestCase):
     """The public flags and UNBOUND (one line each per system, so the
     systems' parallel PRs merge cleanly)."""
@@ -979,6 +1001,188 @@ class MutationTest(unittest.TestCase):
         self.assertEqual([(f.where, f.what) for f in found], [("fx_frame", "GetPlayer")], "a second, plain instance")
         self.assertEqual([f.what for f in unguarded_controls({"fx_wide"}, self.frame())], ["Execute"],
                          "a block no instance overrides is still drawn")
+
+    ROW = """types fixture
+{
+	type fx_wide = flowcontainer {
+		fx_row = {
+			blockoverride "row_label" { text = "fx_label" }
+			blockoverride "row_button" {
+				onclick = "[GetScriptedGui('x').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				enabled = "[JournalEntry.IsActive]"
+				tooltip = "fx_mine"
+				@HELD@
+			}
+			@INSTANCE@
+		}
+		@SECOND@
+	}
+	type fx_row = flowcontainer {
+		textbox = { block "row_label" {} }
+		widget = {
+			@GUARD@
+			button = { block "row_button" {} }
+			@GUARDED@
+		}
+		@OPEN@
+	}
+	type fx_derived = fx_row {
+		blockoverride "row_button" {
+			onclick = "[GetScriptedGui('y').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		}
+	}
+	type fx_cell = flowcontainer {
+		button = { block "row_button" {} }
+	}
+	type fx_held = flowcontainer {
+		textbox = { text = "fx_held_label" }
+	}
+}
+"""
+
+    def row(self, guard="using = te_own_country_only", **parts):
+        text = self.ROW.replace("@GUARD@", guard)
+        for part in ("HELD", "INSTANCE", "SECOND", "GUARDED", "OPEN"):
+            text = text.replace(f"@{part}@", parts.get(part.lower(), ""))
+        return file_types(text, "fixture.gui")
+
+    def row_draws(self, types):
+        """What another country's panel draws of the row fixture: its
+        controls, its reads and its loc keys."""
+        loc = {"fx_label": "Arsenal", "fx_mine": "Our arsenal"}
+        return ([(f.where, f.what) for f in unguarded_controls({"fx_wide"}, types)],
+                [(f.where, f.what) for f in markup_reads({"fx_wide"}, types)],
+                panel_loc_keys({"fx_wide"}, types, loc))
+
+    def test_an_override_into_a_guarded_block_is_the_players(self):
+        """An instance's blockoverride lands where its block is. One whose
+        only block sits under te_own_country_only is guarded as if the guard
+        were written around it (#1363), and its text is not another country's
+        (#1368); with the type's guard removed it is drawn again."""
+        self.assertEqual(self.row_draws(self.row()), ([], [], {"fx_label"}))
+        self.assertEqual(self.row_draws(self.row(guard="")),
+                         ([("fx_wide", "Execute")], [("fx_wide", "JournalEntry.IsActive")], {"fx_label", "fx_mine"}))
+        # a derived type's override at its root, the same
+        self.assertEqual(self.row_draws(self.row(second="fx_derived = {}"))[0], [])
+        self.assertEqual(self.row_draws(self.row(guard="", second="fx_derived = {}"))[0],
+                         [("fx_derived", "Execute"), ("fx_wide", "Execute")])
+
+    def test_an_override_that_fills_a_drawn_block_is_drawn(self):
+        """One block of the name outside the guard keeps the override drawn:
+        in the type itself, or in a type it draws (an override reaches the
+        blocks of nested types). A nested type under the guard draws none."""
+        mine = ([], [], {"fx_label"})
+        self.assertEqual(self.row_draws(self.row(open='button = { block "row_button" {} }'))[0],
+                         [("fx_wide", "Execute")], "a second block of the name, unguarded")
+        self.assertEqual(self.row_draws(self.row(open="fx_cell = {}"))[0], [("fx_wide", "Execute")],
+                         "a nested type's block, unguarded")
+        self.assertEqual(self.row_draws(self.row(guarded="fx_cell = {}")), mine, "a nested type's, under the guard")
+        # the instance's own contents declare the block: not known to be the type's guarded one alone
+        self.assertEqual(self.row_draws(self.row(instance='blockoverride "row_label" { block "row_button" {} }'))[0],
+                         [("fx_wide", "Execute")])
+
+    def test_an_override_of_no_block_the_mod_defines_is_drawn(self):
+        """A blockoverride whose block no mod type has (a vanilla type's, which
+        the walk doesn't read) stays drawn, and so does one on a widget that
+        is no mod type."""
+        other = ('blockoverride "row_other" {\n\t\t\t\tonclick = "[GetScriptedGui(\'z\').Execute( '
+                 'GuiScope.SetRoot( Country.MakeScope ).End )]"\n\t\t\t}')
+        self.assertEqual(self.row_draws(self.row(instance=other))[0], [("fx_wide", "Execute")])
+        self.assertEqual(self.row_draws(self.row(second="default_header = {\n\t\t\t" + other.replace(
+            "row_other", "row_button") + "\n\t\t}"))[0], [("fx_wide", "Execute")])
+
+    def test_an_override_that_sets_the_guards_own_widgets_visible_is_drawn(self):
+        """An override's `visible` is its block's widget's. On the widget
+        that carries the guard it replaces the guard's (gotcha #17), so the
+        override is drawn; on a widget inside the guarded one it changes
+        nothing."""
+        slot = ('blockoverride "row_slot" {\n\t\t\t\t%s\n\t\t\t\tbutton = { onclick = "[GetScriptedGui(\'z\').Execute( '
+                'GuiScope.SetRoot( Country.MakeScope ).End )]" }\n\t\t\t}')
+        block = 'block "row_slot" {}'
+        self.assertEqual(self.row_draws(self.row(guarded=block, instance=slot % ""))[0], [])
+        self.assertEqual(self.row_draws(self.row(guarded=block, instance=slot % 'visible = "[Country.IsAtWar]"'))[0],
+                         [("fx_wide", "Execute")])
+        self.assertEqual(self.row_draws(self.row(guarded=block, instance=slot % "using = fx_shown"))[0],
+                         [("fx_wide", "Execute")], "a template may set one")
+        self.assertEqual(self.row_draws(self.row(held='visible = "[Country.IsAtWar]"')), ([], [], {"fx_label"}),
+                         "the button's own visible, inside the guarded widget")
+
+    def test_an_override_into_a_guarded_block_hides_what_it_holds(self):
+        """The walk doesn't follow an instance inside such an override: a
+        type drawn only there is not another country's (panel_view's open)."""
+        self.assertNotIn("fx_held", open_types({"fx_wide"}, self.row(held="fx_held = {}")))
+        self.assertIn("fx_held", open_types({"fx_wide"}, self.row(guard="", held="fx_held = {}")))
+
+    GATE = """types fixture
+{
+	type fx_wide = flowcontainer {
+		@WIDE@
+	}
+	type fx_list = flowcontainer {
+		@ROOT@
+		flowcontainer = {
+			# world: the list is the world's, kept on the player
+			datamodel = "[GetPlayer.MakeScope.GetList('fx_rows')]"
+		}
+	}
+}
+"""
+    OBSERVER = 'visible = "[Not( GetMetaPlayer.IsObserver )]"'
+
+    def ungated(self, wide="fx_list = {}", root=""):
+        types = file_types(self.GATE.replace("@WIDE@", wide).replace("@ROOT@", root), "fixture.gui")
+        return [(f.where, f.what) for f in ungated_world_reads({"fx_wide"}, types)]
+
+    def test_a_world_read_with_no_observer_gate_fails(self):
+        """ObserverTest's check: a `# world:` read needs an observer gate on a
+        widget around it, in its own type or around every place that draws
+        the type; a gate beside it, or one whose test isn't first, is none."""
+        read = [("fx_list", "GetPlayer")]
+        self.assertEqual(self.ungated(), read, "no gate")
+        box = "widget = {\n\t\t\t%s\n\t\t\tfx_list = {}\n\t\t}"
+        self.assertEqual(self.ungated(box % self.OBSERVER), [], "a container around the only place that draws it")
+        self.assertEqual(self.ungated(box % self.OBSERVER + "\n\t\tfx_list = {}"), read, "a second place, bare")
+        self.assertEqual(self.ungated("widget = { %s }\n\t\tfx_list = {}" % self.OBSERVER), read, "a gate beside it")
+        self.assertEqual(self.ungated(box % 'visible = "[And( Not( GetMetaPlayer.IsObserver ), Country.IsAtWar )]"'), [])
+        self.assertEqual(self.ungated(box % 'visible = "[And( GetPlayer.IsValid, Country.IsAtWar )]"'), [])
+        self.assertEqual(self.ungated(box % 'visible = "[And( Country.IsAtWar, Not( GetMetaPlayer.IsObserver ) )]"'), read,
+                         "the test isn't first")
+        self.assertEqual(self.ungated(box % 'visible = "[Or( Not( GetMetaPlayer.IsObserver ), Country.IsAtWar )]"'), read)
+        self.assertEqual(self.ungated("widget = {\n\t\t\tusing = te_own_country_only\n\t\t\tfx_list = {}\n\t\t}"), [],
+                         "the player's own: an observer's panel doesn't draw it")
+
+    def test_a_gate_on_a_types_root_holds_until_an_instance_sets_its_visible(self):
+        """Colonial Powers' form: the gate on the section type's root, every
+        instance {} (an instance's own visible replaces the type's, gotcha
+        #17). The panel's own top type's root is not counted: its mount sets
+        a visible."""
+        read = [("fx_list", "GetPlayer")]
+        self.assertEqual(self.ungated(root=self.OBSERVER), [])
+        self.assertEqual(self.ungated('fx_list = { visible = "[Country.IsAtWar]" }', self.OBSERVER), read)
+        self.assertEqual(self.ungated('fx_list = {}\n\t\tfx_list = { visible = "[Country.IsAtWar]" }', self.OBSERVER),
+                         read, "one of two")
+        self.assertEqual(self.ungated("fx_list = { %s }" % self.OBSERVER), [], "the instance's own is the gate")
+        types = file_types(self.GATE.replace("@WIDE@", "").replace("@ROOT@", self.OBSERVER), "fixture.gui")
+        self.assertEqual(len(ungated_world_reads({"fx_list"}, types)), 1)
+
+    def test_a_world_read_gated_on_its_own_line(self):
+        """The observer test first in the read's own visible, or the read
+        behind GetPlayer.IsValid; an unmarked read is BindingTest's."""
+        def found(read):
+            return [f.what for f in ungated_world_reads({"fx_wide"}, _fixture(read))]
+        self.assertEqual(found("# world: w\n\t\tvisible = \"[GetPlayer.MakeScope.ScriptValue('y')]\""), ["GetPlayer"])
+        self.assertEqual(found("# world: w\n\t\tvisible = \"[And( Not( GetMetaPlayer.IsObserver ), "
+                               "GetPlayer.MakeScope.ScriptValue('y') )]\""), [])
+        self.assertEqual(found("# world: w\n\t\tvisible = \"[And( GetPlayer.MakeScope.ScriptValue('y'), "
+                               "Not( GetMetaPlayer.IsObserver ) )]\""), ["GetPlayer"])
+        self.assertEqual(found("# world: w\n\t\ttext = \"[SelectLocalization( GetPlayer.IsValid, "
+                               "GetPlayer.GetName, '' )]\""), [])
+        self.assertEqual(found("# world: w\n\t\ttext = \"[GetPlayer.GetName]\""), ["GetPlayer"])
+        self.assertEqual(found("visible = \"[GetPlayer.MakeScope.ScriptValue('y')]\""), [])
+        text = ("template fx_tmpl {\n\t# world: w\n\ttooltip = \"[GetPlayer.GetName]\"\n}\ntypes fixture\n{\n"
+                "\ttype fx_wide = flowcontainer {\n\t\twidget = { using = fx_tmpl }\n\t}\n}\n")
+        self.assertEqual([f.where for f in ungated_world_reads({"fx_wide"}, file_types(text, "f.gui"),
+                                                               file_templates(text, "f.gui"))], ["template fx_tmpl"])
 
     def test_a_guarded_type_given_its_own_visible_is_open(self):
         """A type whose root takes te_own_country_only loses the guard where an
