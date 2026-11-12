@@ -1814,6 +1814,79 @@ class ErrorBodyStatusTests(unittest.TestCase):
         self.assertEqual({e["category"] for e in only["entries"]}, {"debug_log"})
         self.assertEqual(only["total"], 2)
 
+    def test_logs_untag_a_mod_gui_context_failure_under_a_source_only_vanilla_entry(self):
+        """#1269: `PdxDataFetchLocalizedData failed for '<key>'` names no file,
+        so the source-only vanilla entry hid it from the canonical triage view
+        even when the mod's own widget drew the key."""
+        import game_log_reader
+        failed = "PdxDataFetchLocalizedData failed for '{}'"
+        with tempfile.TemporaryDirectory() as tmp:
+            mod, install = os.path.join(tmp, "mod"), os.path.join(tmp, "install")
+            files = {
+                (mod, "docs/vanilla/vanilla_known_bugs.md"):
+                    "## Engine noise (source-anchored)\n\n"
+                    "### `pdx_gui_localize.cpp:140` — vanilla GUI loc fetch failure\n"
+                    "- source: `pdx_gui_localize.cpp:140`\n\n"
+                    "```\nPdxDataFetchLocalizedData failed for\n```\n",
+                (mod, "docs/audits/mod_known_noise.md"): "## Entries\n",
+                (mod, "docs/audits/open_issues.md"): "",
+                # The mod's own widget draws a vanilla key; its override of
+                # vanilla's panel draws vanilla's title and a key of the mod's.
+                (mod, "gui/te_census_widgets.gui"):
+                    'textbox = { text = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL" }\n',
+                (mod, "gui/pops_overview.gui"):
+                    'textbox = { text = "POPS_OVERVIEW_TITLE" }\ntextbox = { text = "te_panel_income" }\n',
+                (mod, "localization/english/te_l_english.yml"): 'l_english:\n te_panel_income:0 "y"\n',
+                (install, "game/gui/pops_overview.gui"): "",
+                (tmp, "debug.log"): "".join(
+                    f"[02:19:22][pdx_gui_localize.cpp:140]: {failed.format(key)}\n"
+                    for key in ("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "POPS_OVERVIEW_TITLE", "te_panel_income")),
+            }
+            for (root, rel), text in files.items():
+                path = os.path.join(root, rel)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(text)
+            info = types.SimpleNamespace(family="debug", generation=0, path=os.path.join(tmp, "debug.log"),
+                                         to_dict=lambda: {"family": "debug"})
+            params = {"mod_only": ["unknown"], "vanilla_bugs": ["hide"], "mod_noise": ["hide"],
+                      "dedupe": ["false"]}
+
+            def logs(base_game, **more):
+                game_log_reader._vanilla_bug_cache.clear()
+                with mock.patch("game_log_reader.list_logs", return_value=[info]), \
+                        mock.patch.object(mss, "mod_path", mod), \
+                        mock.patch.object(mss, "base_game_path", base_game):
+                    return mss.ModStateHandler._logs(self.handler, ["debug"], {**params, **more})
+
+            shown = logs(install)
+            # Vanilla's title, drawn by the override of vanilla's panel, stays
+            # vanilla's. The key only the mod's loc defines is the mod's
+            # whichever file draws it.
+            self.assertEqual([e["message"] for e in shown["entries"]],
+                             [failed.format("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL"),
+                              failed.format("te_panel_income")])
+            self.assertNotIn("vanilla_bug_ref", shown["entries"][0])
+            self.assertEqual(shown["entries"][0]["mod_gui_context"], {
+                "key": "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "files": ["gui/te_census_widgets.gui"],
+                "file_count": 1, "untagged_from": "vanilla GUI loc fetch failure"})
+            self.assertEqual(shown["entries"][1]["mod_gui_context"]["files"], ["gui/pops_overview.gui"])
+            self.assertNotIn("mod_gui_untagging", shown)
+            # No install to tell the two files apart: the vanilla key the mod's
+            # widget draws stays hidden, the reply says so in every shape, and
+            # the server log says it once.
+            game_log_reader._mod_gui_warned.clear()
+            no_install = os.path.join(tmp, "no_install")
+            with self.assertLogs("mod_state_server", level="WARNING") as logged:
+                limited = logs(no_install)
+            self.assertEqual([e["message"] for e in limited["entries"]], [failed.format("te_panel_income")])
+            self.assertEqual(limited["mod_gui_untagging"], [game_log_reader.MOD_GUI_UNTAG_NO_INSTALL])
+            self.assertEqual(sum("mod GUI untagging is limited" in line for line in logged.output), 1)
+            with self.assertNoLogs("mod_state_server", level="WARNING"):
+                for shape in ({}, {"summary": ["true"]}, {"raw": ["true"]}, {"dedupe": ["true"]}):
+                    self.assertEqual(logs(no_install, **shape)["mod_gui_untagging"],
+                                     [game_log_reader.MOD_GUI_UNTAG_NO_INSTALL], shape)
+
     def test_loc_keys_usage_is_400_and_unknown_type_is_404(self):
         with mock.patch.object(mss, "ms", _StubModState()):
             with self.assertRaises(mss.BadRequest):

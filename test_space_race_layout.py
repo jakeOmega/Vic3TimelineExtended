@@ -1675,6 +1675,11 @@ class PrivateTest(unittest.TestCase):
         mine += [f"je_space_race_widget_reward_{m}" for m in RACING]
         mine += [k[:-len("_ni")] for k in shown if k.endswith("_ni")]
         mine += ["je_space_race_widget_orbit_satellites_label"]
+        # what an overview passes to the guarded cells and bar row through a
+        # blockoverride (the exact progress, the risk, the approach's cost):
+        # the walk follows the override to its block (#1368)
+        mine += [f"je_space_race_widget_{part}_{m}" for m in CONTROLLED
+                 for part in ("progress", "risk", "ov_safe", "ov_ambitious")]
         for key in mine:
             with self.subTest(key=key):
                 self.assertNotIn(key, self.keys)

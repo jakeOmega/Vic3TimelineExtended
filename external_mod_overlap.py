@@ -426,6 +426,8 @@ class Entry:
     line: int
     value: Optional[str]                 # a scalar's value; None for a block
     children: list = field(default_factory=list)   # [(key, line, value)] at depth 1
+    end_line: Optional[int] = None       # the line of the closing brace (a scalar: of its
+                                         # value); None for a block that never closes
 
 
 def split_directive(raw_key: str) -> tuple[Optional[str], str]:
@@ -470,7 +472,8 @@ def _block_text(tokens, start: int, cap: Optional[int] = 200) -> str:
     """The tokens of the block opening at tokens[start], joined by spaces, cut
     to `cap` characters (None: the whole block)."""
     depth, parts = 0, []
-    for tok, _line in tokens[start:]:
+    for j in range(start, len(tokens)):   # not tokens[start:]: a copy per block is quadratic
+        tok = tokens[j][0]
         parts.append(tok)
         if tok == "{":
             depth += 1
@@ -508,6 +511,8 @@ def scan_script(text: str, block_cap: Optional[int] = 200) -> tuple[list[Entry],
             else:
                 depth -= 1
                 if depth == 0:
+                    if current is not None:
+                        current.end_line = line
                     current = None
             i += 1
             continue
@@ -524,7 +529,8 @@ def scan_script(text: str, block_cap: Optional[int] = 200) -> tuple[list[Entry],
                     directive, key = split_directive(tok)
                     if directive is None and _UNKNOWN_PREFIX_RE.match(tok):
                         warnings.append(f"line {line}: unknown directive prefix in {tok!r}")
-                    entry = Entry(tok, key, directive, line, None if is_block else value_tok)
+                    entry = Entry(tok, key, directive, line, None if is_block else value_tok,
+                                  end_line=None if is_block else tokens[min(i + 2, n - 1)][1])
                     entries.append(entry)
                     current = entry if is_block else None
                 elif depth == 1 and current is not None:
