@@ -87,9 +87,10 @@ def build_fixture(tmp):
     # laws: first-wins on the digest's word, not probed.
     _write(mod, c + "laws/a_te.txt", "law_dup = { group = x }\n")
     _write(mod, c + "laws/b_te.txt", "law_dup = { group = y }\n")
-    # messages: no rule recorded.
-    _write(mod, c + "messages/a_te.txt", "msg_dup = { type = a }\n")
-    _write(mod, c + "messages/b_te.txt", "msg_dup = { type = b }\n")
+    # messages: no rule recorded. msg_v: ModState keeps b_te.txt's copy and
+    # drops the INJECT, which the engine applies under either rule.
+    _write(mod, c + "messages/a_te.txt", "msg_dup = { type = a }\nINJECT:msg_v = { extra = 1 }\n")
+    _write(mod, c + "messages/b_te.txt", "msg_dup = { type = b }\nmsg_v = { type = b }\n")
     # A mod file at a vanilla file's path replaces it whole.
     _write(mod, c + "decrees/00_decrees.txt", "decree_kept = { cost = 2 }\n")
     # A mod copy of a vanilla scripted effect: ModState holds no vanilla there.
@@ -277,6 +278,26 @@ class FolderRuleTests(_Fixture):
                              {"bare_duplicate is first_wins": False,
                               "bare_duplicate is last_wins": True})
 
+    def test_an_unknown_rule_ModState_loses_under_either_reading_is_a_difference(self):
+        # First-wins gives vanilla's copy with the INJECT, last-wins b_te.txt's
+        # with it; ModState holds b_te.txt's alone. Neither reading agrees.
+        for row in self.both("msg_v"):
+            self.assertEqual(row.kind, DIFFERENCE)
+            self.assertEqual(row.depends_on, ["bare_duplicate"])
+            self.assertEqual({c["when"]: c["agrees"] for c in row.cases},
+                             {"bare_duplicate is first_wins": False,
+                              "bare_duplicate is last_wins": False})
+            self.assertIn("b_te.txt", row.mod_state)
+            # The first case (first-wins) stands as the engine line.
+            self.assertIn("INJECT", row.engine)
+            self.assertEqual(row.fields, ["extra", "type"])
+            # The bare rule is under Depends on; what else decides a case is cited.
+            self.assertEqual(self.entries(row), ["directives_deferred"])
+        self.assertIn("msg_v", [r.key for r in self.snapshot.of(DIFFERENCE)])
+        block = loa.render_report(self.snapshot).split("`msg_v`")[1].split("###")[0]
+        self.assertIn("- Depends on: `bare_duplicate`", block)
+        self.assertIn("- Decided by: `directives_deferred` (probed", block)
+
     def test_a_try_form_is_model_unsure(self):
         # Fact 10's open question: among the INJECTs in file order, or before them.
         for row in self.both("v_try"):
@@ -352,7 +373,7 @@ class ReportTests(_Fixture):
         self.assertEqual(s["unreviewed"], len(self.snapshot.of(DIFFERENCE)))
         self.assertEqual(
             sorted(r.key for r in self.snapshot.of(DIFFERENCE)),
-            ["law_dup", "m_dup", "m_late", "m_nowhere", "sv_before", "v_last", "v_rep"])
+            ["law_dup", "m_dup", "m_late", "m_nowhere", "msg_v", "sv_before", "v_last", "v_rep"])
         self.assertEqual(s["undetermined"], 2)
         self.assertEqual(s["model_unsure"], 4)
         self.assertEqual(s["not_compared"], 1)
@@ -428,7 +449,7 @@ class ReportTests(_Fixture):
             summary = loa.regenerate(object())
             with open(os.path.join(tmp, loa.REPORT_PATH), encoding="utf-8") as fh:
                 self.assertEqual(fh.read(), loa.render_report(self.snapshot))
-        self.assertEqual(summary["unreviewed"], 7)
+        self.assertEqual(summary["unreviewed"], 8)
 
 
 class VanillaSourceTests(unittest.TestCase):
@@ -464,12 +485,35 @@ class VanillaSourceTests(unittest.TestCase):
         game_common = os.path.join(self.install, "game", "common")
         served = emo.VanillaIndex(game_common=game_common, snapshot_dir=self.snap)
         server = mock.Mock(_overlap_vanilla_index=lambda: served)
+        self.addCleanup(loa._GAME_INDEXES.clear)
         with mock.patch.dict("sys.modules", {"__main__": server}):
             index = loa._server_vanilla()
         self.assertEqual((index.game_common, index.snapshot_dir), (game_common, self.snap))
         self.assertIs(index.scan_cache, loa._SCAN_CACHE)
         with mock.patch.dict("sys.modules", {"__main__": object()}):
             self.assertIsNone(loa._server_vanilla())
+
+    def test_a_second_reload_reuses_the_game_files_index(self):
+        # Game mode: the index (its folder listings and parses) outlives a
+        # reload, so the second run doesn't list vanilla's folders again.
+        game_common = os.path.join(self.install, "game", "common")
+        served = emo.VanillaIndex(game_common=game_common, snapshot_dir=self.snap)
+        server = mock.Mock(_overlap_vanilla_index=lambda: served)
+        ms = game_state(self.install, self.mod)
+        self.addCleanup(loa._GAME_INDEXES.clear)
+        loa._GAME_INDEXES.clear()
+        with mock.patch.dict("sys.modules", {"__main__": server}):
+            first = loa._server_vanilla()
+            loa.audit(ms, self.mod, first)
+            with mock.patch.object(emo, "list_files", wraps=emo.list_files) as listed:
+                second = loa._server_vanilla()
+                self.assertIs(second, first)
+                loa.audit(ms, self.mod, second)
+            self.assertFalse([c for c in listed.call_args_list
+                              if str(c.args[0]).startswith(game_common)])
+            # A snapshot index is built afresh: `vanilla_parsed.py build` rewrites it in place.
+            served = emo.VanillaIndex(game_common=None, snapshot_dir=self.snap)
+            self.assertIsNot(loa._server_vanilla(), loa._server_vanilla())
 
     def test_regenerate_passes_the_server_s_vanilla(self):
         served = emo.VanillaIndex(game_common=None, snapshot_dir=self.snap)

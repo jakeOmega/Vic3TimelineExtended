@@ -28,13 +28,16 @@ Each key the mod defines lands in one group:
 
 - agrees (not listed), with a count of bare copies whose bodies are
   identical (`identical`: the value is the same whichever the engine keeps);
-- `difference`: every reading gives the same value and ModState holds
-  another. The row names the LOAD_ORDER_MODEL entries that decide it (found
-  by flipping one at a time: the bare-duplicate rule, the directive phases,
-  vanilla's files read first) and their status. `--strict` fails on these;
-- `model_unsure`: the value depends on something the model doesn't know (a
-  folder whose bare-duplicate rule isn't recorded, where the TRY_ forms
-  apply) or rests on a rule nobody read in game (the order of two plain
+- `difference`: ModState holds a value no reading the model allows gives.
+  The row names the LOAD_ORDER_MODEL entries that decide it (found by
+  flipping one at a time: the bare-duplicate rule, the directive phases,
+  vanilla's files read first) and their status; when the readings also
+  differ from each other, it lists each and the unknowns they turn on.
+  `--strict` fails on these;
+- `model_unsure`: one reading agrees with ModState and another doesn't, the
+  value turning on something the model doesn't know (a folder whose
+  bare-duplicate rule isn't recorded, where the TRY_ forms apply); or the
+  value rests on a rule nobody read in game (the order of two plain
   REPLACEs of one key, a directive in the same file as a bare definition of
   its key). Listed apart, never as fact;
 - `undetermined`: without the game files. The `vanilla_parsed/` snapshot
@@ -120,6 +123,9 @@ _FIELD_CAP = 8
 # (external_mod_overlap._scan_file), so a reload re-scans only what changed:
 # the scan is most of a run.
 _SCAN_CACHE: dict = {}
+# _server_vanilla()'s index of the game files, kept across reloads:
+# {(game common/, snapshot dir, game version): VanillaIndex}, one at most.
+_GAME_INDEXES: dict = {}
 # scenario_loads()'s name for an unknown -> the LOAD_ORDER_MODEL entry that records it.
 _UNKNOWN_ENTRY = {"file_order": "file_order", "bare_duplicate": "bare_duplicate_other",
                   "load_reading": "directive_phases", "or_create_phase": "or_create_with_bare",
@@ -418,26 +424,39 @@ def _check_key(et, db, key, rule, o_ops, v_ops, guesses, o_files, value_of, serv
                             "load": _steps(db, c, guessed_vanilla=guessed)})
         return out
 
-    if deciding:
-        row.kind, row.depends_on = MODEL_UNSURE, deciding
-        several = len({c.when for c in cases}) > 1
-        row.cases = case_rows(lambda c: "; ".join(
-            [*([c.when] if several else []), *(f"{n} is {c.scenario[n]}" for n in deciding)]))
-        return row
+    several = len({c.when for c in cases}) > 1
+
+    def when(c):
+        return "; ".join([*([c.when] if several or not deciding else []),
+                          *(f"{n} is {c.scenario[n]}" for n in deciding)])
+
+    # One reading agrees with ModState: unsure while it rests on a model
+    # unknown, undetermined while it rests only on vanilla's file.
     if held in values:
-        row.kind = UNDETERMINED
-        row.cases = case_rows(lambda c: c.when)
+        row.kind = MODEL_UNSURE if deciding else UNDETERMINED
+        row.depends_on = deciding
+        row.cases = case_rows(when)
         return row
 
-    # ModState differs in every case (and, but for a vanilla file nobody can
-    # name here, from one and the same engine value).
+    # ModState differs in every case: under every reading the model allows
+    # and every place vanilla's file can sort. The first case stands for the
+    # rest when they agree with each other; otherwise each is listed.
     first = cases[0]
+    row.depends_on = deciding
     row.engine = _engine_text(db, first, guessed_vanilla=guessed)
     row.load = _steps(db, first, guessed_vanilla=guessed)
     row.fields = _differing_fields(server_value, first.value)
-    row.decided_by = _decided_by(et, key, db, rule, first, value_of)
     if len(values) > 1:
-        row.cases = case_rows(lambda c: c.when)
+        row.cases = case_rows(when)
+    if deciding:
+        # The unknowns were tried every way (Depends on); cite what decides
+        # the cases besides them, whose status alone can make the row unsure.
+        tried = {rule.source if n == "bare_duplicate" else _UNKNOWN_ENTRY[n] for n in deciding}
+        found = {d["entry"]: d for c in cases
+                 for d in _decided_by(et, key, db, rule, c, value_of) if d["entry"] not in tried}
+        row.decided_by = list(found.values())
+    else:
+        row.decided_by = _decided_by(et, key, db, rule, first, value_of)
     unprobed = _unprobed(all_ops)
     if unprobed:
         row.kind = MODEL_UNSURE
@@ -571,7 +590,8 @@ def _server_vanilla() -> Optional[emo.VanillaIndex]:
     server (which runs as `__main__`). Its `_overlap_vanilla_index()` picks
     the game files when the server's vanilla matches them and the snapshot
     otherwise; the index returned here reads the same source, through this
-    module's scan cache, so a reload doesn't scan vanilla's files again."""
+    module's scan cache, so a reload doesn't scan vanilla's files again, and
+    for the game files is the same index from one reload to the next."""
     fn = getattr(sys.modules.get("__main__"), "_overlap_vanilla_index", None)
     try:
         index = fn() if callable(fn) else None
@@ -579,8 +599,27 @@ def _server_vanilla() -> Optional[emo.VanillaIndex]:
         return None
     if index is None:
         return None
-    return emo.VanillaIndex(game_common=index.game_common, snapshot_dir=index.snapshot_dir,
-                            scan_cache=_SCAN_CACHE)
+    if not index.game_common:
+        # The snapshot: local JSON, cheap to read, and rebuilt in place by
+        # `vanilla_parsed.py build`, so a fresh index each time.
+        return emo.VanillaIndex(game_common=None, snapshot_dir=index.snapshot_dir,
+                                scan_cache=_SCAN_CACHE)
+    # The game files: one index across reloads, so vanilla's folders on /mnt/c
+    # aren't listed and its files stat'ed again each time. Keyed on the game's
+    # version too, so a patch mid-session gets a new one.
+    try:
+        import vanilla_parsed
+        version = vanilla_parsed.game_files_version(
+            os.path.dirname(os.path.dirname(index.game_common)))
+    except Exception:  # noqa: BLE001 - no version to read: key on the path alone
+        version = None
+    key = (index.game_common, index.snapshot_dir, version)
+    if key not in _GAME_INDEXES:
+        _GAME_INDEXES.clear()
+        _GAME_INDEXES[key] = emo.VanillaIndex(game_common=index.game_common,
+                                              snapshot_dir=index.snapshot_dir,
+                                              scan_cache=_SCAN_CACHE)
+    return _GAME_INDEXES[key]
 
 
 def load_state(mod_path: str, snapshot_dir: Optional[str] = None):
@@ -675,7 +714,7 @@ def _row_lines(row: Row) -> list:
     if row.depends_on:
         out.append("- Depends on: " + ", ".join(
             f"`{n}` (LOAD_ORDER_MODEL entry `{_UNKNOWN_ENTRY[n]}`)" for n in row.depends_on))
-    else:
+    if row.decided_by or not row.depends_on:
         out.append(f"- Decided by: {_decided_text(row)}")
     for case in row.cases:
         verdict = "agrees with ModState" if case["agrees"] else "differs"
@@ -779,14 +818,16 @@ def render_report(result: AuditResult) -> str:
         out.append(f"| `{entry}` | {status} | {m['see']} |")
     out.append("")
     _section(out, "Differences", [
-        "Every reading the model allows gives the same value, and ModState holds",
-        "another. In game the engine's value is the one that applies. Fix the",
+        "ModState holds a value that no reading the model allows gives. In game the",
+        "engine's value is the one that applies (where the readings differ, one of",
+        "those listed). Fix the",
         "script (one bare definition per key; `REPLACE:` to override, `INJECT:` to",
         "extend) or make ModState's merge follow the engine. `--strict` fails on",
         "these.",
     ], result.of(DIFFERENCE))
     _section(out, "Model unsure", [
-        "The value depends on something the load-order model doesn't know, or rests",
+        "ModState agrees with the engine under one reading of something the",
+        "load-order model doesn't know and differs under another, or the value rests",
         "on a rule nobody has read in game. Not a finding until a probe settles it.",
     ], result.of(MODEL_UNSURE))
     _section(out, "Undetermined without the game files", [

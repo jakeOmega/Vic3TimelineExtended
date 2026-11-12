@@ -41,8 +41,9 @@ their status:
 
 ## Differences
 
-Every reading the model allows gives the same value, and ModState holds
-another. In game the engine's value is the one that applies. Fix the
+ModState holds a value that no reading the model allows gives. In game the
+engine's value is the one that applies (where the readings differ, one of
+those listed). Fix the
 script (one bare definition per key; `REPLACE:` to override, `INJECT:` to
 extend) or make ModState's merge follow the engine. `--strict` fails on
 these.
@@ -51,7 +52,8 @@ _None._
 
 ## Model unsure
 
-The value depends on something the load-order model doesn't know, or rests
+ModState agrees with the engine under one reading of something the
+load-order model doesn't know and differs under another, or the value rests
 on a rule nobody has read in game. Not a finding until a probe settles it.
 
 _None._
