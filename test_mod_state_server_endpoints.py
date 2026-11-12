@@ -1814,6 +1814,63 @@ class ErrorBodyStatusTests(unittest.TestCase):
         self.assertEqual({e["category"] for e in only["entries"]}, {"debug_log"})
         self.assertEqual(only["total"], 2)
 
+    def test_logs_untag_a_mod_gui_context_failure_under_a_source_only_vanilla_entry(self):
+        """#1269: `PdxDataFetchLocalizedData failed for '<key>'` names no file,
+        so the source-only vanilla entry hid it from the canonical triage view
+        even when the mod's own widget drew the key."""
+        with tempfile.TemporaryDirectory() as tmp:
+            mod, install = os.path.join(tmp, "mod"), os.path.join(tmp, "install")
+            files = {
+                (mod, "docs/vanilla/vanilla_known_bugs.md"):
+                    "## Engine noise (source-anchored)\n\n"
+                    "### `pdx_gui_localize.cpp:140` — vanilla GUI loc fetch failure\n"
+                    "- source: `pdx_gui_localize.cpp:140`\n\n"
+                    "```\nPdxDataFetchLocalizedData failed for\n```\n",
+                (mod, "docs/audits/mod_known_noise.md"): "## Entries\n",
+                (mod, "docs/audits/open_issues.md"): "",
+                (mod, "gui/te_census_widgets.gui"): 'textbox = { text = "te_census_income" }\n',
+                (mod, "gui/pops_overview.gui"): 'textbox = { text = "te_panel_income" }\n',
+                (mod, "localization/english/te_l_english.yml"):
+                    'l_english:\n te_census_income:0 "x"\n te_panel_income:0 "y"\n',
+                (install, "game/gui/pops_overview.gui"): "",
+                (tmp, "debug.log"):
+                    "[02:19:22][pdx_gui_localize.cpp:140]: PdxDataFetchLocalizedData failed for 'te_census_income'\n"
+                    "[02:19:22][pdx_gui_localize.cpp:140]: PdxDataFetchLocalizedData failed for 'te_panel_income'\n",
+            }
+            for (root, rel), text in files.items():
+                path = os.path.join(root, rel)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(text)
+            info = types.SimpleNamespace(family="debug", generation=0, path=os.path.join(tmp, "debug.log"),
+                                         to_dict=lambda: {"family": "debug"})
+            params = {"mod_only": ["unknown"], "vanilla_bugs": ["hide"], "mod_noise": ["hide"],
+                      "dedupe": ["false"]}
+
+            def logs(base_game):
+                import game_log_reader
+                game_log_reader._vanilla_bug_cache.clear()
+                with mock.patch("game_log_reader.list_logs", return_value=[info]), \
+                        mock.patch.object(mss, "mod_path", mod), \
+                        mock.patch.object(mss, "base_game_path", base_game):
+                    return mss.ModStateHandler._logs(self.handler, ["debug"], dict(params))
+
+            shown = logs(install)
+            # The key the mod's own widget draws shows; the one only its
+            # override of vanilla's panel draws stays vanilla's.
+            self.assertEqual([e["message"] for e in shown["entries"]],
+                             ["PdxDataFetchLocalizedData failed for 'te_census_income'"])
+            self.assertNotIn("vanilla_bug_ref", shown["entries"][0])
+            self.assertEqual(shown["entries"][0]["mod_gui_context"], {
+                "key": "te_census_income", "files": ["gui/te_census_widgets.gui"], "file_count": 1,
+                "untagged_from": "vanilla GUI loc fetch failure"})
+            # No install to tell the two files apart: nothing is untagged, and
+            # the server log says the pass is off.
+            with self.assertLogs("mod_state_server", level="WARNING") as logged:
+                hidden = logs(os.path.join(tmp, "no_install"))
+            self.assertEqual(hidden["entries"], [])
+            self.assertTrue(any("mod GUI untagging is off" in line for line in logged.output), logged.output)
+
     def test_loc_keys_usage_is_400_and_unknown_type_is_404(self):
         with mock.patch.object(mss, "ms", _StubModState()):
             with self.assertRaises(mss.BadRequest):

@@ -37,6 +37,10 @@ from game_log_reader import (
     mod_uses,
     apply_known_noise_modes,
     WATCH_KIND,
+    MOD_GUI_UNTAG_OFF,
+    mod_gui_references,
+    untag_mod_gui_fetches,
+    vanilla_gui_file_names,
 )
 
 
@@ -1109,6 +1113,247 @@ class GuiInjectedScopeTests(unittest.TestCase):
         self.assertIn(slug, slugs)
         issue_doc, _, issue_slug = GUI_INJECTED_SCOPE_REF.tracked_issue.partition("#")
         self.assertIn(issue_slug, _open_issues_anchors(os.path.join(root, issue_doc)))
+
+
+class ModGuiFetchUntagTests(unittest.TestCase):
+    """untag_mod_gui_fetches (#1269): three vanilla_known_bugs.md entries match
+    a cpp source and a generic message, so a mod GUI's data-context failure,
+    whose lines name no file, was hidden as vanilla noise. A line whose key or
+    data type a mod-owned .gui reaches loses the tag; one only vanilla's GUI
+    reaches keeps it."""
+
+    WANTED = "No context supplied (Use SetDataContext), wanted context of type '{}' for '{} '"
+    FETCH = "FetchData failed for '{}'"
+    LOCALIZED = "PdxDataFetchLocalizedData failed for '{}'"
+
+    # te_census_widgets.gui has no vanilla counterpart; pops_overview.gui
+    # replaces vanilla's panel and carries vanilla's own keys.
+    OWN_GUI = (
+        "types te_census {\n"
+        "\ttype te_census_income = flowcontainer {\n"
+        "\t\ttextbox = {\n"
+        "\t\t\ttext = \"POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL\"\n"
+        "\t\t\ttooltip = \"POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL_TOOLTIP\"\n"
+        "\t\t}\n"
+        "\t\t# text = \"COMMENTED_OUT_LABEL\"\n"
+        "\t\ttextbox = { raw_text = \"#v [Character.GetFullName]#!\" }\n"
+        "\t\ttextbox = { text = \"[SelectLocalization( Country.IsAI, 'te_census_ai', 'te_census_own' )]\" }\n"
+        "\t\ttextbox = { visible = \"[GetVariableSystem.Exists('te_census_open')]\" }\n"
+        "\t}\n"
+        "}\n"
+    )
+    OVERRIDE_GUI = (
+        "window = {\n"
+        "\tdatacontext = \"[PopsOverviewPanel.GetMapModeList]\"\n"
+        "\ttextbox = { text = \"POPS_OVERVIEW_TITLE\" tooltip = \"[CulturalCommunity.GetName]\" }\n"
+        "}\n"
+    )
+    MOD_LOC = (
+        "l_english:\n"
+        " te_census_ai:0 \"$te_census_nested$ of the AI\"\n"
+        " te_census_own:0 \"Yours\"\n"
+        " te_census_nested:0 \"[JournalEntry.GetName]\"\n"
+        " te_event_desc:0 \"The [InterestGroup.GetName] object.\"\n"
+    )
+    VANILLA_LOC = {
+        "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL": "@money![PopsOverviewPanel.GetAverageIncomeRich|v1] Income",
+        "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL_TOOLTIP":
+            "#header Average Income#!\\n@money![PopsOverviewPanel.GetAverageIncomeRich|v1]",
+        "POPS_OVERVIEW_TITLE": "Population",
+        "INCORPORATION_TIME_SAME_TRAIT_GROUP": "shares the [DiscriminationTraitGroup.GetName] with",
+    }
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.mod = os.path.join(self._tmp.name, "mod")
+        self.install = os.path.join(self._tmp.name, "install")
+        self._write(self.mod, "gui/te_census_widgets.gui", self.OWN_GUI)
+        self._write(self.mod, "gui/pops_overview.gui", self.OVERRIDE_GUI)
+        self._write(self.mod, "localization/english/te_census_l_english.yml", self.MOD_LOC)
+        self._write(self.install, "game/gui/pops_overview.gui", "")
+        self._write(self.install, "jomini/gui/Shared/Windows.gui", "")
+        self._write(self.install, "clausewitz/gui/console.gui", "")
+
+    @staticmethod
+    def _write(root, rel, text):
+        path = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8-sig") as f:
+            f.write(text)
+        return path
+
+    def _refs(self):
+        return mod_gui_references(self.mod, vanilla_gui_file_names(self.install), self.VANILLA_LOC)
+
+    def _tagged(self, rows):
+        """Entries for (source, message) rows, tagged by this checkout's
+        vanilla registry: its three source-only entries are the ones at issue."""
+        root = os.path.dirname(os.path.abspath(__file__))
+        _vanilla_bug_cache.clear()
+        _, by_basename, by_source, _ = load_vanilla_bug_registry(
+            os.path.join(root, "docs", "vanilla", "vanilla_known_bugs.md"))
+        entries = [LogEntry("02:19:22", source, message) for source, message in rows]
+        tag_vanilla_bugs(entries, by_basename, by_source, mod_root=self.mod)
+        return entries
+
+    def _flood(self, key, type_, chain):
+        return self._tagged([
+            ("pdx_data_callstack.cpp:16", self.WANTED.format(type_, chain)),
+            ("pdx_data_localize_helper.cpp:286", self.FETCH.format(chain)),
+            ("pdx_gui_localize.cpp:140", self.LOCALIZED.format(key)),
+        ])
+
+    def test_the_2026_10_31_flood_comes_back_untagged_and_vanillas_own_stays_tagged(self):
+        ours = self._flood("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "PopsOverviewPanel",
+                           "PopsOverviewPanel.GetAverageIncomeRich")
+        vanillas = self._flood("INCORPORATION_TIME_SAME_TRAIT_GROUP", "DiscriminationTraitGroup",
+                               "DiscriminationTraitGroup.GetName")
+        # The gap: the registry files all six under vanilla's engine noise.
+        for e in ours + vanillas:
+            self.assertEqual((e.vanilla_bug_ref or {}).get("kind"), "vanilla_noise", e.message)
+        titles = [e.vanilla_bug_ref["title"] for e in ours]
+
+        untag_mod_gui_fetches(ours + vanillas, self._refs())
+
+        for e, title in zip(ours, titles):
+            self.assertIsNone(e.vanilla_bug_ref, e.message)
+            self.assertEqual(e.mod_gui_context["files"], ["gui/te_census_widgets.gui"])
+            self.assertEqual(e.mod_gui_context["file_count"], 1)
+            self.assertEqual(e.mod_gui_context["untagged_from"], title)
+            self.assertEqual(e.to_dict()["mod_gui_context"], e.mod_gui_context)
+        self.assertEqual([e.mod_gui_context.get("type") for e in ours],
+                         ["PopsOverviewPanel", "PopsOverviewPanel", None])
+        self.assertEqual(ours[2].mod_gui_context["key"], "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL")
+        for e in vanillas:
+            self.assertEqual(e.vanilla_bug_ref["kind"], "vanilla_noise", e.message)
+            self.assertIsNone(e.mod_gui_context)
+            self.assertNotIn("mod_gui_context", e.to_dict())
+        # What the canonical view keeps is the mod's three lines.
+        shown = apply_known_noise_modes(ours + vanillas, "hide", "hide")
+        self.assertEqual(shown, ours)
+
+    def test_an_override_of_a_vanilla_file_carries_vanillas_keys_and_types(self):
+        refs = self._refs()
+        self.assertNotIn("POPS_OVERVIEW_TITLE", refs.keys)
+        self.assertNotIn("CulturalCommunity", refs.types)
+        # PopsOverviewPanel is there through the key the mod's own file draws,
+        # not through the override's datacontext.
+        self.assertEqual(refs.types["PopsOverviewPanel"], ("gui/te_census_widgets.gui",))
+        e = self._tagged([("pdx_data_callstack.cpp:16",
+                           self.WANTED.format("CulturalCommunity", "CulturalCommunity.GetName"))])[0]
+        untag_mod_gui_fetches([e], refs)
+        self.assertIsNotNone(e.vanilla_bug_ref)
+
+    def test_what_a_mod_owned_file_reaches(self):
+        refs = self._refs()
+        own = ("gui/te_census_widgets.gui",)
+        # text/tooltip/raw_text values, a quoted key in an expression, and the
+        # key that one nests; a commented-out line and a variable name are not keys.
+        for key in ("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL_TOOLTIP",
+                    "#v [Character.GetFullName]#!", "te_census_ai", "te_census_own", "te_census_nested"):
+            self.assertEqual(refs.keys.get(key), own, key)
+        self.assertNotIn("COMMENTED_OUT_LABEL", refs.keys)
+        self.assertNotIn("te_census_open", refs.keys)
+        # Heads of the chains in the file and in the values its keys reach.
+        for name in ("Character", "Country", "GetVariableSystem", "PopsOverviewPanel"):
+            self.assertEqual(refs.types.get(name), own, name)
+        loc = "localization/english/te_census_l_english.yml"
+        self.assertEqual(refs.types["JournalEntry"], own + (loc,))
+        # A type only a mod loc value reads: the string logs the same lines
+        # whichever GUI draws it.
+        self.assertEqual(refs.types["InterestGroup"], (loc,))
+        for name in ("SelectLocalization", "IsAI", "GetName", "Exists", "DiscriminationTraitGroup"):
+            self.assertNotIn(name, refs.types)
+
+    def test_the_payload_shapes(self):
+        refs = self._refs()
+        rows = [
+            # The wanted type decides, whatever the expression's own head.
+            ("pdx_data_callstack.cpp:16", self.WANTED.format("JournalEntry", "JournalEntry.GetCountry.MakeScope"), "type"),
+            # An expression with quoted arguments: the last quote closes the payload.
+            ("pdx_data_localize_helper.cpp:286",
+             self.FETCH.format("GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'x', Scope.Var('y') ).End"),
+             "type"),
+            # Inline text a mod-owned file draws, and a bracketed payload it does not.
+            ("pdx_gui_localize.cpp:302", self.LOCALIZED.format("#v [Character.GetFullName]#!"), "key"),
+            ("pdx_gui_localize.cpp:140", self.LOCALIZED.format("#b [InterestGroup.GetName]#!"), "type"),
+            # A key nothing of the mod's draws, with no chain of its own.
+            ("pdx_gui_localize.cpp:140", self.LOCALIZED.format("POPS_OVERVIEW_TITLE"), None),
+            ("pdx_data_localize_helper.cpp:286", self.FETCH.format("Building.GetName"), None),
+        ]
+        entries = self._tagged([(source, message) for source, message, _ in rows])
+        self.assertTrue(all(e.vanilla_bug_ref for e in entries))
+        untag_mod_gui_fetches(entries, refs)
+        for e, (_, _, expected) in zip(entries, rows):
+            with self.subTest(message=e.message):
+                if expected is None:
+                    self.assertIsNotNone(e.vanilla_bug_ref)
+                    self.assertIsNone(e.mod_gui_context)
+                else:
+                    self.assertIsNone(e.vanilla_bug_ref)
+                    self.assertIn(expected, e.mod_gui_context)
+
+    def test_only_a_vanilla_tag_on_one_of_the_three_lines_is_cleared(self):
+        refs = self._refs()
+        message = self.WANTED.format("PopsOverviewPanel", "PopsOverviewPanel.GetAverageIncomeRich")
+        for kind in ("mod_low_priority", WATCH_KIND):
+            e = LogEntry("00:00:00", "pdx_data_callstack.cpp:16", message)
+            e.vanilla_bug_ref = {"title": "registered on purpose", "section": "x", "kind": kind}
+            untag_mod_gui_fetches([e], refs)
+            self.assertEqual(e.vanilla_bug_ref["kind"], kind)
+            self.assertIsNone(e.mod_gui_context)
+        # The same words from another cpp file are another entry's business.
+        other = LogEntry("00:00:00", "pdx_assert.cpp:637", message)
+        other.vanilla_bug_ref = {"title": "an assert", "section": "x", "kind": "vanilla_noise"}
+        untag_mod_gui_fetches([other], refs)
+        self.assertIsNotNone(other.vanilla_bug_ref)
+        # An entry no registry tagged is left as it is.
+        bare = LogEntry("00:00:00", "pdx_data_callstack.cpp:16", message)
+        untag_mod_gui_fetches([bare], refs)
+        self.assertIsNone(bare.vanilla_bug_ref)
+        self.assertIsNone(bare.mod_gui_context)
+
+    def test_a_cached_entry_is_judged_afresh_on_every_run(self):
+        """parse_log hands the same LogEntry objects to every request."""
+        e = self._flood("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "PopsOverviewPanel",
+                        "PopsOverviewPanel.GetAverageIncomeRich")[2]
+        untag_mod_gui_fetches([e], self._refs())
+        self.assertIsNotNone(e.mod_gui_context)
+        # The widget stops drawing the key; the next request re-tags and re-reads.
+        path = self._write(self.mod, "gui/te_census_widgets.gui", "types te_census { }\n")
+        os.utime(path, (time.time() + 10, time.time() + 10))
+        self.assertNotIn("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", self._refs().keys)
+        e.vanilla_bug_ref = {"title": "vanilla GUI loc fetch failure", "section": "x", "kind": "vanilla_noise"}
+        untag_mod_gui_fetches([e], self._refs())
+        self.assertIsNotNone(e.vanilla_bug_ref)
+        self.assertIsNone(e.mod_gui_context)
+
+    def test_without_the_vanilla_gui_folder_nothing_is_untagged_and_a_warning_says_so(self):
+        self.assertIsNone(vanilla_gui_file_names(None))
+        self.assertIsNone(vanilla_gui_file_names(os.path.join(self._tmp.name, "no_install")))
+        refs = mod_gui_references(self.mod, None, self.VANILLA_LOC)
+        self.assertEqual((refs.keys, refs.types), ({}, {}))
+        self.assertEqual(refs.warnings, (MOD_GUI_UNTAG_OFF,))
+        ours = self._flood("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "PopsOverviewPanel",
+                           "PopsOverviewPanel.GetAverageIncomeRich")
+        untag_mod_gui_fetches(ours, refs)
+        self.assertTrue(all(e.vanilla_bug_ref for e in ours))
+        self.assertEqual(self._refs().warnings, ())
+
+    def test_vanilla_gui_file_names_are_the_mounted_paths_of_all_three_trees(self):
+        self.assertEqual(vanilla_gui_file_names(self.install), frozenset({
+            "gui/pops_overview.gui", "gui/shared/windows.gui", "gui/console.gui"}))
+        # Matched without case, as the game's file system does.
+        self._write(self.mod, "gui/Shared/windows.gui", "textbox = { text = \"SHARED_WINDOW_TITLE\" }\n")
+        self.assertNotIn("SHARED_WINDOW_TITLE", self._refs().keys)
+
+    def test_a_vanilla_key_is_followed_through_the_committed_loc_snapshot_by_default(self):
+        """The server and log_triage.py pass no vanilla loc: the key the Census
+        window drew on 2026-10-31 must still lead to PopsOverviewPanel."""
+        refs = mod_gui_references(self.mod, vanilla_gui_file_names(self.install))
+        self.assertEqual(refs.warnings, ())
+        self.assertEqual(refs.types.get("PopsOverviewPanel"), ("gui/te_census_widgets.gui",))
 
 
 class HelperAnchorTests(unittest.TestCase):

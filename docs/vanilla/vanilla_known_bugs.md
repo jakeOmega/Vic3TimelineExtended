@@ -2049,7 +2049,7 @@ Vanilla naval-battle UI loc accessors (`NAVAL_BATTLE.GetAttackerNumWantedShipsDe
 No context supplied (Use SetDataContext), wanted context of type
 ```
 
-Vanilla loc strings (`INCORPORATION_TIME_SAME_TRAIT_GROUP`, `PRODUCTION_METHOD_OPTIONS_BULK`, etc.) read chained data-system functions (`DiscriminationTraitGroup.GetName`, `BuildingProductionMethodsEntry.GetBuildingType`) without first calling `SetDataContext` to bind the upstream object. Engine emits the context-missing error and falls back to the raw loc value. Cosmetic; loc still renders (with the placeholder visible to the player).
+Vanilla loc strings (`INCORPORATION_TIME_SAME_TRAIT_GROUP`, `PRODUCTION_METHOD_OPTIONS_BULK`, etc.) read chained data-system functions (`DiscriminationTraitGroup.GetName`, `BuildingProductionMethodsEntry.GetBuildingType`) without first calling `SetDataContext` to bind the upstream object. Engine emits the context-missing error and falls back to the raw loc value. Cosmetic; loc still renders (with the placeholder visible to the player). A line whose key or data type a mod-owned GUI file reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269).
 
 ### `pdx_data_callstack.cpp:325` — vanilla new-data-types missing context registration
 - source: `pdx_data_callstack.cpp:325`
@@ -2085,7 +2085,7 @@ Downstream cascade from the `pdx_data_callstack.cpp:16` missing-context bug — 
 FetchData failed for
 ```
 
-Final cascade step of the `pdx_data_callstack.cpp` context-missing chain — once the data lookup fails, the helper logs this summary message per failed loc fetch. Companion to the cpp:16 / :325 entries above. Cosmetic.
+Final cascade step of the `pdx_data_callstack.cpp` context-missing chain — once the data lookup fails, the helper logs this summary message per failed loc fetch. Companion to the cpp:16 / :325 entries above. Cosmetic. A line whose key or data type a mod-owned GUI file reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269).
 
 ### `pdx_gui_data_model.cpp:95` — vanilla GUI reshape with negative offset
 - source: `pdx_gui_data_model.cpp:95`
@@ -2104,7 +2104,7 @@ Vanilla GUI panel reshape logic occasionally hands the data-model layer a negati
 PdxDataFetchLocalizedData failed for
 ```
 
-Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic.
+Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic. A line whose key or data type a mod-owned GUI file reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269).
 
 ### `navy_ai.cpp:3585` — no naval mission type possible for a country
 - source: `navy_ai.cpp:3585`

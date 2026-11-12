@@ -24,6 +24,9 @@ What the report holds, and the triage step each part replaces:
                   exact message: the findings. Each has its launch, game date,
                   burst shape, whether a stack frame is a mod file, and for a
                   line with no frame what else was logged in the same seconds.
+                  A `MOD GUI:` line marks a GUI data-context failure that a
+                  source-only vanilla entry matches and the mod's own GUI
+                  reaches, with the files that draw the key or read the type.
   Watch list      lines an entry tags and leaves visible, with its check.
   Hidden, mod     lines a vanilla entry hides although a mod file is in the
                   stack: a hidden mod error, or an entry needing review.
@@ -210,10 +213,13 @@ def read_snapshot(snap_dir: str) -> dict:
 
 
 class Registries:
-    """Both known-noise registries and the GUI-injected scope names, loaded
-    from `docs_root` (a checkout), tagging as /logs tags."""
+    """Both known-noise registries, the GUI-injected scope names and what the
+    mod's own GUI reaches, loaded from `docs_root` (a checkout), tagging as
+    /logs tags. `vanilla_game` is the install's `game` folder: without it no
+    mod `.gui` file can be told from an override of vanilla's, so the mod GUI
+    untagging is off and `warnings` says so."""
 
-    def __init__(self, docs_root: str, mod_root: str):
+    def __init__(self, docs_root: str, mod_root: str, vanilla_game: str | None = None):
         self.mod_root = mod_root
         self.refs, self.vb, self.vs, w1 = glr.load_vanilla_bug_registry(os.path.join(docs_root, VANILLA_DOC))
         mod_refs, self.mb, self.ms, w2 = glr.load_mod_noise_registry(os.path.join(docs_root, MOD_NOISE_DOC))
@@ -221,12 +227,16 @@ class Registries:
         self.warnings = list(w1) + list(w2)
         self.gui_scopes = glr.gui_injected_scope_names(
             [os.path.join(mod_root, "gui"), os.path.join(mod_root, "localization", "english")])
+        self.mod_gui = glr.mod_gui_references(mod_root, glr.vanilla_gui_file_names(
+            os.path.dirname(os.path.normpath(vanilla_game)) if vanilla_game else None))
+        self.warnings += self.mod_gui.warnings
         self.by_title = {r.title: r for r in self.refs}
 
     def tag(self, entries: list) -> None:
         glr.tag_vanilla_bugs(entries, self.vb, self.vs, mod_root=self.mod_root)
         glr.tag_vanilla_bugs(entries, self.mb, self.ms, mod_root=self.mod_root)
         glr.tag_gui_injected_scopes(entries, self.gui_scopes)
+        glr.untag_mod_gui_fetches(entries, self.mod_gui)
 
 
 # ------------------------------------------------------------------ launches
@@ -412,6 +422,7 @@ class Finding:
         self.times: list = []
         self.files: list = []
         self.ref = None
+        self.mod_gui = None  # the entry's mod_gui_context (glr.untag_mod_gui_fetches)
 
     def add(self, line: Line, site: str | None) -> None:
         self.per_family[line.family] += 1
@@ -421,6 +432,7 @@ class Finding:
             self.times.append(line.when)
         self.files = self.files or line.entry.files
         self.ref = self.ref or line.entry.vanilla_bug_ref
+        self.mod_gui = self.mod_gui or line.entry.mod_gui_context
 
     @property
     def count(self) -> int:
@@ -469,6 +481,17 @@ def neighbours(finding: Finding, first: dt.datetime, lines_by_second: dict, limi
     return [text for _rank, text in sorted(out)[:limit]]
 
 
+def mod_gui_note(context: dict) -> str:
+    """Why a GUI data-context failure is listed although a vanilla entry
+    matches it: the mod files that draw the key or read the data type."""
+    what = (f"loc key '{context['key']}' is drawn by" if "key" in context
+            else f"data type '{context['type']}' is read by")
+    more = context["file_count"] - len(context["files"])
+    return (f"MOD GUI: {what} {', '.join(context['files'])}"
+            + (f" and {more} more" if more > 0 else "")
+            + f"; otherwise hidden by '{context['untagged_from']}'")
+
+
 def describe(finding: Finding, clock: Clock, mod_root: str, vanilla_game: str | None,
              lines_by_second: dict, full: bool) -> list[str]:
     times = sorted(finding.times)
@@ -496,6 +519,8 @@ def describe(finding: Finding, clock: Clock, mod_root: str, vanilla_game: str | 
     out = [head, f"  {when}" if when else "", f"  [{finding.source}]"]
     body = finding.text.split("\n")
     out += ["  " + ln for ln in (body if full else body[:8])]
+    if finding.mod_gui:
+        out.append("  " + mod_gui_note(finding.mod_gui))
     if finding.sites:
         sites = ", ".join(f"{s}" + (f" x{n}" if n > 1 else "")
                           for s, n in sorted(finding.sites.items(), key=lambda kv: int(kv[0])))
@@ -650,7 +675,7 @@ def report(snap_dir: str, docs_root: str = REPO_ROOT, mod_root: str | None = Non
            full: bool = False) -> str:
     mod_root = mod_root or docs_root
     families = read_snapshot(snap_dir)
-    registries = Registries(docs_root, mod_root)
+    registries = Registries(docs_root, mod_root, vanilla_game)
     clock = Clock(families)
     lines = error_lines(families, registries)
     manifest = {}

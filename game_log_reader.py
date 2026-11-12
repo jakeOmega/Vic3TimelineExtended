@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import difflib
 import fnmatch
+import json
 import os
 import pathlib
 import re
@@ -164,7 +165,8 @@ _LINE_RE = re.compile(r"^\[(?P<time>\d\d:\d\d:\d\d)\]\[(?P<source>[^\]]+)\]:\s*(
 # Public types
 # ---------------------------------------------------------------------------
 class LogEntry:
-    __slots__ = ("time", "source", "source_file", "message", "category", "files", "vanilla_bug_ref")
+    __slots__ = ("time", "source", "source_file", "message", "category", "files", "vanilla_bug_ref",
+                 "mod_gui_context")
 
     def __init__(self, time: str, source: str, message: str):
         self.time = time
@@ -181,6 +183,9 @@ class LogEntry:
         # Set later by tag_vanilla_bugs() if the entry matches a known vanilla bug
         # registered in docs/vanilla/vanilla_known_bugs.md.
         self.vanilla_bug_ref: dict | None = None
+        # Set by untag_mod_gui_fetches() on a line it takes a vanilla tag off:
+        # the key or data type the line names and the mod files that reach it.
+        self.mod_gui_context: dict | None = None
 
     def to_dict(self, include_message: bool = True) -> dict:
         d = {
@@ -192,6 +197,8 @@ class LogEntry:
         }
         if self.vanilla_bug_ref is not None:
             d["vanilla_bug_ref"] = self.vanilla_bug_ref
+        if self.mod_gui_context is not None:
+            d["mod_gui_context"] = self.mod_gui_context
         if include_message:
             d["message"] = self.message
         return d
@@ -1273,6 +1280,307 @@ def tag_gui_injected_scopes(entries: list[LogEntry], names: frozenset[str]) -> N
         m = _NEVER_SET_EVENT_TARGET_RE.match(e.message)
         if m and m.group(1) in names:
             e.vanilla_bug_ref = dict(ref)
+
+
+# ---------------------------------------------------------------------------
+# Mod GUI context failures under vanilla's source-only entries (#1269)
+# ---------------------------------------------------------------------------
+# Three vanilla_known_bugs.md entries match a cpp source and a generic message
+# (`wanted context of type`, `PdxDataFetchLocalizedData failed for`,
+# `FetchData failed for`). Their lines name no file, so a mod GUI that draws a
+# key outside the window the key was written for is tagged as vanilla's noise:
+# on 2026-10-31 one mod bug put 40,010 lines under them and the canonical view
+# showed none. What tells the mod's lines from vanilla's is the payload in
+# quotes: the loc key, the data type, the expression. This pass takes the tag
+# off a line whose payload a mod-owned GUI file, or a mod loc value, reaches.
+#
+# A mod GUI file at a vanilla path replaces a vanilla panel and carries
+# vanilla's own keys, so only a file with no vanilla counterpart counts; which
+# those are needs the install's GUI folders (see vanilla_gui_file_names).
+VANILLA_GUI_TREES = ("game", "jomini", "clausewitz")
+MOD_GUI_UNTAG_OFF = (
+    "mod GUI untagging is off: no vanilla GUI folder (<install>/game/gui) to tell the mod's own "
+    ".gui files from its overrides of vanilla's, so a mod GUI's data-context failure stays hidden "
+    "under the source-only vanilla entries (pdx_data_callstack.cpp, pdx_gui_localize.cpp, "
+    "pdx_data_localize_helper.cpp); count those entries' payloads by hand (#1269)"
+)
+# Files listed in a line's `mod_gui_context`; `file_count` covers the rest.
+_MOD_GUI_FILES_SHOWN = 5
+
+_GUI_STRING_RE = re.compile(r'"([^"\n]*)"')
+_GUI_TEXT_PROP_RE = re.compile(r'\b(?:text|tooltip|raw_text)\s*=\s*"([^"\n]*)"')
+_DATA_EXPR_RE = re.compile(r"\[([^\[\]\n]*)\]")
+_QUOTED_ARG_RE = re.compile(r"'([^'\n]*)'")
+# `Foo` in `Foo.Bar`, at the head of a chain: not after a `.`, and not inside
+# a name. Quoted arguments are blanked first.
+_DATA_ROOT_RE = re.compile(r"(?<![\w.])([A-Za-z_]\w*)\.(?=[A-Za-z_])")
+_LOC_NEST_RE = re.compile(r"\$([A-Za-z_][\w.\-]*)(?:\|[^$\n]*)?\$")
+# The payload of each of the three lines, by the cpp file that logs it (the
+# line number moves with a patch). `type` is the context the engine wanted.
+_MOD_GUI_FETCH_SHAPES: dict[str, re.Pattern] = {
+    "pdx_data_callstack.cpp": re.compile(
+        r"wanted context of type '(?P<type>[^']*)' for '(?P<payload>.*)'"),
+    "pdx_gui_localize.cpp": re.compile(r"PdxDataFetchLocalizedData failed for '(?P<payload>.*)'"),
+    "pdx_data_localize_helper.cpp": re.compile(r"FetchData failed for '(?P<payload>.*)'"),
+}
+
+
+class ModGuiRefs:
+    """What a mod-owned GUI file can put in a data-context failure line.
+
+    `keys`: loc key (or inline text) -> the mod-owned `.gui` files that draw
+    it, directly or through a key they name. `types`: data type at the head of
+    a `[Foo.Bar]` chain -> the mod files that read it: those `.gui` files,
+    then the mod loc files whose values do. `warnings`: why the sets are
+    empty, when they could not be built.
+    """
+    __slots__ = ("keys", "types", "warnings")
+
+    def __init__(self, keys: dict[str, tuple[str, ...]] | None = None,
+                 types: dict[str, tuple[str, ...]] | None = None,
+                 warnings: tuple[str, ...] = ()):
+        self.keys = keys or {}
+        self.types = types or {}
+        self.warnings = tuple(warnings)
+
+
+_vanilla_gui_names_cache: dict[str, frozenset[str]] = {}
+
+
+def vanilla_gui_file_names(base_game_path: str | None) -> frozenset[str] | None:
+    """Every file under the install's `game/gui`, `jomini/gui` and
+    `clausewitz/gui`, as the engine mounts it (`gui/...`, lowercased). A mod
+    GUI file at one of these paths replaces a vanilla file. None when there is
+    no `game/gui` to read (a cloud container, CI). Read once per process.
+    """
+    if not base_game_path or not os.path.isdir(os.path.join(base_game_path, "game", "gui")):
+        return None
+    cached = _vanilla_gui_names_cache.get(base_game_path)
+    if cached is not None:
+        return cached
+    found: set[str] = set()
+    for tree in VANILLA_GUI_TREES:
+        top = os.path.join(base_game_path, tree)
+        for dirpath, _dirs, names in os.walk(os.path.join(top, "gui")):
+            for name in names:
+                rel = os.path.relpath(os.path.join(dirpath, name), top)
+                found.add(rel.replace("\\", "/").lower())
+    result = _vanilla_gui_names_cache[base_game_path] = frozenset(found)
+    return result
+
+
+_VANILLA_LOC_SNAPSHOT = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "vanilla_parsed", "localization_english.json")
+_vanilla_loc_cache: dict[str, tuple[float, dict[str, str]]] = {}
+
+
+def _vanilla_loc_snapshot(path: str = _VANILLA_LOC_SNAPSHOT) -> dict[str, str] | None:
+    """Vanilla's English loc from the committed snapshot, or None without one."""
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return None
+    cached = _vanilla_loc_cache.get(path)
+    if cached and cached[0] == mtime:
+        return cached[1]
+    try:
+        with open(path, encoding="utf-8") as f:
+            loc = json.load(f)
+    except (OSError, ValueError):
+        return None
+    _vanilla_loc_cache[path] = (mtime, loc)
+    return loc
+
+
+def _data_roots(text: str, bracketed: bool = True) -> list[str]:
+    """The name at the head of each data chain in `text`'s `[...]` expressions
+    (or in `text` itself, an expression, when not `bracketed`), in order."""
+    out: list[str] = []
+    if "." not in text:
+        return out
+    for body in (_DATA_EXPR_RE.findall(text) if bracketed else [text]):
+        for root in _DATA_ROOT_RE.findall(_QUOTED_ARG_RE.sub("''", body)):
+            if root not in out:
+                out.append(root)
+    return out
+
+
+def _tree_files(mod_root: str, sub: str, ext: str) -> list[tuple[str, str, float]]:
+    """(path, path under mod_root, mtime) of each `ext` file under `sub`, sorted."""
+    out = []
+    for dirpath, dirs, names in os.walk(os.path.join(mod_root, sub)):
+        dirs.sort()
+        for name in sorted(names):
+            if name.endswith(ext):
+                path = os.path.join(dirpath, name)
+                try:
+                    out.append((path, os.path.relpath(path, mod_root).replace("\\", "/"),
+                                os.path.getmtime(path)))
+                except OSError:
+                    continue
+    return out
+
+
+# {mod_root: (vanilla_gui_files, vanilla_loc, stamp, ModGuiRefs)}, the latest only.
+_mod_gui_refs_cache: dict = {}
+
+
+def mod_gui_references(
+    mod_root: str,
+    vanilla_gui_files: frozenset[str] | None,
+    vanilla_loc: dict[str, str] | None = None,
+) -> ModGuiRefs:
+    """The loc keys and data types the mod's own GUI reaches (#1269).
+
+    A mod `.gui` file is the mod's own when `vanilla_gui_files` (see
+    vanilla_gui_file_names) has no file at its path. From each such file:
+
+      - keys: every `text =` / `tooltip =` / `raw_text =` value, every quoted
+        loc key inside a `[...]` expression, and every key those keys' values
+        nest (`$KEY$`, a quoted key in an expression), in the mod's English
+        loc or vanilla's;
+      - types: the head of every `[Foo.Bar]` chain in the file and in the
+        values of those keys.
+
+    To the types it adds the heads of the chains in every mod loc value: a
+    mod string that reads a context its window lacks logs the same lines
+    whichever GUI draws it.
+
+    `vanilla_loc` is vanilla's {key: value}, which is how a vanilla key the
+    mod draws leads to the type it reads; by default the committed
+    `vanilla_parsed/` snapshot. With `vanilla_gui_files` None nothing can be
+    called the mod's own: the result is empty and its `warnings` say so.
+    Memoized on the files' mtimes, like gui_injected_scope_names.
+    """
+    if vanilla_gui_files is None:
+        return ModGuiRefs(warnings=(MOD_GUI_UNTAG_OFF,))
+    warnings: list[str] = []
+    if vanilla_loc is None:
+        vanilla_loc = _vanilla_loc_snapshot()
+        if vanilla_loc is None:
+            vanilla_loc = {}
+            warnings.append(
+                "mod GUI untagging: no vanilla loc snapshot (vanilla_parsed/localization_english.json), "
+                "so a vanilla key a mod GUI draws is not followed to the data types it reads")
+    gui_files = [f for f in _tree_files(mod_root, "gui", ".gui") if f[1].lower() not in vanilla_gui_files]
+    loc_files = _tree_files(mod_root, os.path.join("localization", "english"), ".yml")
+    stamp = tuple((rel, mtime) for _, rel, mtime in gui_files + loc_files)
+    cached = _mod_gui_refs_cache.get(mod_root)
+    if cached and cached[0] == vanilla_gui_files and cached[1] is vanilla_loc and cached[2] == stamp:
+        return cached[3]
+
+    from mod_state import iter_loc_lines
+    from script_helper_index import blank_comments
+
+    def read(path: str) -> str:
+        try:
+            with open(path, encoding="utf-8-sig", errors="replace") as f:
+                return f.read()
+        except OSError:
+            return ""
+
+    keys: dict[str, set[str]] = defaultdict(set)
+    types: dict[str, set[str]] = defaultdict(set)
+    mod_loc: dict[str, str] = {}
+    for path, rel, _ in loc_files:
+        for key, value in iter_loc_lines(read(path)):
+            mod_loc[key] = value
+            for root in _data_roots(value):
+                types[root].add(rel)
+
+    def value_of(key: str) -> str | None:
+        value = mod_loc.get(key)
+        return vanilla_loc.get(key) if value is None else value
+
+    links: dict[str, tuple[list[str], list[str]]] = {}
+
+    def links_of(key: str) -> tuple[list[str], list[str]]:
+        """(the types `key`'s value reads, the keys it nests)."""
+        hit = links.get(key)
+        if hit is None:
+            value = value_of(key) or ""
+            nested = set(_LOC_NEST_RE.findall(value))
+            for body in _DATA_EXPR_RE.findall(value):
+                nested.update(_QUOTED_ARG_RE.findall(body))
+            hit = links[key] = (_data_roots(value), sorted(k for k in nested if value_of(k) is not None))
+        return hit
+
+    for path, rel, _ in gui_files:
+        text, _clean = blank_comments(read(path))
+        seeds: set[str] = set()
+        for value in _GUI_TEXT_PROP_RE.findall(text):
+            value = value.strip()
+            if value:
+                keys[value].add(rel)
+                seeds.add(value)
+        for string in _GUI_STRING_RE.findall(text):
+            for root in _data_roots(string):
+                types[root].add(rel)
+            for body in _DATA_EXPR_RE.findall(string):
+                seeds.update(_QUOTED_ARG_RE.findall(body))
+        todo = [k for k in seeds if value_of(k) is not None]
+        seen = set(todo)
+        while todo:
+            key = todo.pop()
+            keys[key].add(rel)
+            roots, nested = links_of(key)
+            for root in roots:
+                types[root].add(rel)
+            for k in nested:
+                if k not in seen:
+                    seen.add(k)
+                    todo.append(k)
+
+    def gui_first(files: set[str]) -> tuple[str, ...]:
+        return tuple(sorted(files, key=lambda f: (not f.startswith("gui/"), f)))
+
+    result = ModGuiRefs({k: gui_first(v) for k, v in keys.items()},
+                        {t: gui_first(v) for t, v in types.items()}, tuple(warnings))
+    _mod_gui_refs_cache[mod_root] = (vanilla_gui_files, vanilla_loc, stamp, result)
+    return result
+
+
+def untag_mod_gui_fetches(entries: list[LogEntry], refs: ModGuiRefs) -> None:
+    """Take the vanilla tag off a GUI data-context failure the mod's own GUI
+    reaches, so it shows as an untagged mod error (#1269).
+
+    An entry qualifies when a vanilla registry entry tagged it and its message
+    is one of the three lines of _MOD_GUI_FETCH_SHAPES. Its tag is cleared when
+    the quoted payload is a key in `refs.keys`, or when the data type the line
+    names (the wanted context, or the head of a chain in the payload) is in
+    `refs.types`. Such an entry gets `mod_gui_context`: `key` or `type`, the
+    mod `files` that reach it (the first few, with `file_count`), and
+    `untagged_from`, the title of the entry that had hidden it. A payload only
+    vanilla's GUI reaches keeps its tag.
+
+    Run it after the registry passes, on every tagging run: it also clears the
+    `mod_gui_context` an earlier run left on a cached entry.
+    """
+    for e in entries:
+        e.mod_gui_context = None
+        ref = e.vanilla_bug_ref
+        if ref is None or ref.get("kind") not in VANILLA_KINDS:
+            continue
+        shape = _MOD_GUI_FETCH_SHAPES.get(e.source_file)
+        if shape is None:
+            continue
+        m = shape.search(e.message.split("\n", 1)[0])
+        if not m:
+            continue
+        payload = m.group("payload").strip()
+        if payload in refs.keys:
+            hit, files = {"key": payload}, refs.keys[payload]
+        else:
+            wanted = [m.groupdict().get("type")] + _data_roots(payload, bracketed="[" in payload)
+            name = next((t for t in wanted if t and t in refs.types), None)
+            if name is None:
+                continue
+            hit, files = {"type": name}, refs.types[name]
+        hit["files"] = list(files[:_MOD_GUI_FILES_SHOWN])
+        hit["file_count"] = len(files)
+        hit["untagged_from"] = ref.get("title")
+        e.mod_gui_context = hit
+        e.vanilla_bug_ref = None
 
 
 def apply_known_noise_modes(entries: list[LogEntry], vanilla_mode: str = "show",

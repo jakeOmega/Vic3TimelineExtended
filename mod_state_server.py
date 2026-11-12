@@ -6582,6 +6582,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             dedupe, summarize, diff_against_backup, cluster_sessions,
             load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
             gui_injected_scope_names, tag_gui_injected_scopes, apply_known_noise_modes,
+            vanilla_gui_file_names, mod_gui_references, untag_mod_gui_fetches,
         )
 
         vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
@@ -6630,6 +6631,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             (`Event target 'X' is used but is never set` for an X a mod .gui
             or loc string sets with AddScope; open_issues.md L14). Once tagged,
             an entry's vanilla_bug_ref.kind tells us which mode applies.
+            Last, a GUI data-context failure under a source-only vanilla entry
+            loses its tag when a mod-owned .gui reaches the key or data type it
+            names (#1269); the entry then carries `mod_gui_context`.
             """
             # mod_root: a `- stack: vanilla only` entry skips stacks with a mod frame (#863).
             tag_vanilla_bugs(entries, vb_by_basename, vb_by_source, mod_root=mod_path)
@@ -6638,6 +6642,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 os.path.join(mod_path, "gui"),
                 os.path.join(mod_path, "localization", "english"),
             ]))
+            mod_gui = mod_gui_references(mod_path, vanilla_gui_file_names(base_game_path))
+            for warning in mod_gui.warnings:  # /logs has no warnings field: the server log
+                logger.warning("/logs: %s", warning)
+            untag_mod_gui_fetches(entries, mod_gui)
 
             return apply_known_noise_modes(entries, vanilla_mode, mod_noise_mode)
 
