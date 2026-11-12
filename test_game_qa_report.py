@@ -138,7 +138,7 @@ class ReportTest(unittest.TestCase):
                       "line": "common/x.txt:3: TE_SELF_CHECK OK ch_board_rows ranked=70"},
                      {"name": "odd_one", "verdict": "ODD", "source": "session", "line": "TE_SELF_CHECK ODD odd_one"}],
                  "fixture": {"key": "0123456789ab", "kept": True, "file": "/backups/fixtures/0123456789ab/lines.log",
-                             "snapshot": "20261110T145500Z", "kept_at": "2026-11-10T14:56:00Z", "lines": 114,
+                             "snapshot": "20261110T145500Z", "at": "2026-11-10T14:56:00Z", "lines": 114,
                              "self_checks": 11},
                  "session": {"file": "/backups/runs/20261110T150000Z/debug.log", "lines": 4, "gaps": 2}}
         self.report.step("start", outcome="ok")

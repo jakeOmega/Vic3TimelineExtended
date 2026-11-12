@@ -243,7 +243,8 @@ class Session:
         self._adopted = False
         self._debug_log: LogFollower | None = None       # the session's own followers: Console consumes its own
         self._error_log: LogFollower | None = None
-        self._logs_closed = False           # stop took the logs' last lines: `logs/` may be the owner's again
+        self._logs_closed = False           # the logs are read no more: `logs/` may be another game's by now
+        self._ended_alive = False           # the stop under way ended the game while it was alive
         self._console: Console | None = None
         self._relay_open = False
         self._debugger: Debugger | None = None
@@ -388,7 +389,7 @@ class Session:
         self._adopted = True
         self._await_window()
 
-        self._debug_log = LogFollower(self._paths.logs / "debug.log")
+        self._debug_log = LogFollower(self._paths.logs / "debug.log", found=self._found_log(snap))
         self._error_log = LogFollower(self._paths.logs / "error.log")
         self._console = Console(self._sends, self._proc, self._paths.history,
                                 LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock)
@@ -472,6 +473,7 @@ class Session:
             watch = self._spawn_watch(snapshot_id)
             watches.append(watch)
             return watch
+        self._forget_fixture_lines(key)
         try:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
@@ -498,6 +500,17 @@ class Session:
             self._record("fixture_prune", outcome="failed", detail=str(e))
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
+
+    def _forget_fixture_lines(self, key: str) -> None:
+        """Before a fixture is made under `key`: nothing kept for an earlier fixture of that key, or for one whose
+        save is gone, may be left to be shown as the new one's (a deleted fixture is made again under its key).
+        The orphans go first, then `key`'s own, which leaves a record that nothing is kept yet. Never raises; a
+        record that could not be removed is a step, and `keep_fixture_lines` removes it again."""
+        self._drop_fixture_lines()
+        try:
+            selfchecks.forget_fixture_lines(self._paths.backup_root, key)
+        except Exception as e:
+            self._record("fixture_lines", outcome="forget_failed", key=key, detail=_describe(e))
 
     def _keep_fixture_lines(self, key: str, snap: str) -> None:
         """Once the fixture is made: keep its run's TE_SELF_CHECK and TE_MONUMENTS lines under the backup root
@@ -559,6 +572,17 @@ class Session:
         except OSError:
             pass
         return None
+
+    def _found_log(self, snap: str) -> tuple[int, str] | None:
+        """The size and hash of the `logs/debug.log` the run's snapshot recorded: the log the game found when it
+        was launched. A game that appended to it would hand the session an earlier game's lines as its own, so
+        the follower skips a beginning with exactly those bytes (`LogFollower`). None when the snapshot's
+        manifest cannot be read or holds no such log."""
+        try:
+            entry = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files.get(selfchecks.OWNERS_LOG)
+        except (OSError, ValueError):
+            return None
+        return (entry.size, entry.sha256) if entry is not None else None
 
     def _await_window(self) -> None:
         deadline = self._clock() + WINDOW_WAIT_S
@@ -859,23 +883,36 @@ class Session:
 
         The game's log is pushed out first, since the game writes it in blocks: an empty read fires the read
         event, whose padding flushes what was logged before it, and its date line is waited for as the proof.
-        `flushed` says whether that worked. When it did not (the game has ended, is not in front, or the session
-        is stopped), `not_flushed` says why, the lines already in the game's log are taken without typing
-        anything, and the verdicts are still given: a line logged since the last verb may then be missing."""
+        `flushed` says whether that worked. When it did not (the game is not in front, the debugger did not
+        stop), `not_flushed` says why, and the lines already in the game's log are taken without typing
+        anything, but only while the game is still proved alive by its pid and start time and `watch` still
+        follows it. Otherwise (the game has ended, `watch` recorded its exit, the session is stopped) the logs
+        are not read at all, since another game may have written them since, and `log_not_read` says so. The
+        verdicts are given in every case, from what the run folder holds: a line logged since the last verb may
+        then be missing."""
         if self._snapshot is None or self._report is None:
             raise SessionError("not_started", "this session has no run folder yet: start() has not got that far")
         with self._step("selfchecks") as out:
             found: dict = {"live": True, "flushed": False}
             try:
                 self._require_game()
+                self._prove_game()              # before the read polls the logs, not only before its first key
                 self._date()
                 found["flushed"] = True
             except (SessionError, ConsoleError, DebuggerError, HelperError) as e:
                 found["not_flushed"] = {"refused": _code_of(e), "detail": str(e)}
-                self._take_log_lines()
+                if (self._stopped is None and not self._stopping and self._watch_ended is None
+                        and not self._watch_returned() and self._proved_alive()):
+                    self._take_log_lines()
+                else:
+                    found["log_not_read"] = ("the run's game is not proved alive (it has ended, or the session is "
+                                             "stopped), so `logs/` was not read: another game may have written "
+                                             "it since. These are the lines the run folder already held")
             found.update(selfchecks.of_run(self._paths.backup_root, self._snapshot))
             out.update(flushed=found["flushed"], not_flushed=found.get("not_flushed"), counts=found["counts"],
                        broken=found["broken"])
+            if "log_not_read" in found:
+                out["log_not_read"] = True
         return found
 
     # ---- stop
@@ -941,11 +978,11 @@ class Session:
             notes = kept + [n for n in notes if n not in kept]
             notes.append("stop was run again at %s: the stop before ended %s" % (stamp(utc_now()),
                                                                                  previous.get("outcome")))
+        self._ended_alive = False
         if self._launched and not self._game_ended:
             self._end_game(notes)
         left_up = self._launched and not self._game_ended
-        # The last lines the game wrote, for the report's self-checks: before any restore, never after one.
-        self._take_log_lines(last=not left_up)
+        self._last_log_lines(left_up, notes)
         restore, outcome = None, None
         if left_up:
             outcome = "game_left_up"
@@ -1066,6 +1103,7 @@ class Session:
                 raise
             return
         self._game_ended = True
+        self._ended_alive = not gone        # this call ended a process proved the game by its pid and start time
         self._record("kill", outcome="already_exited" if gone else "ok")
 
     def _found_gone(self, proc: ProcId, notes: list[str], after: str = "") -> bool:
@@ -1323,6 +1361,11 @@ class Session:
     def _new_lines(self) -> list[str]:
         """The debug.log lines since the last call; both logs' new lines are copied into the run folder."""
         lines = self._debug_log.poll()
+        if self._debug_log.skipped:
+            skipped, self._debug_log.skipped = self._debug_log.skipped, 0
+            self._notes.append("the game appended to the debug.log it found: its first %d bytes are an earlier "
+                               "game's (the run's snapshot recorded them) and were not read as this run's" % skipped)
+            self._record("found_log", outcome="prefix_skipped", bytes=skipped)
         self._copy("debug.log", lines)
         errors = self._error_log.poll()
         self._copy("error.log", errors)
@@ -1330,10 +1373,46 @@ class Session:
             self._errors_seen.extend(errors)
         return lines
 
+    def _last_log_lines(self, left_up: bool, notes: list[str]) -> None:
+        """At a stop, before any restore: the last lines the game wrote, for the report's self-checks.
+
+        They are read only when this very call ended the run's game while it was alive (`kill` ended a process
+        it had proved the game by pid and start time), and then the logs are closed: a restore follows, and
+        afterwards `logs/` holds the owner's logs again. A game that had ended before this call (it crashed,
+        the owner closed it, `watch` recorded its exit) ended at a time nobody knows, and another game may have
+        started since: a launch moves the logs on, and the follower would read that game's lines as a rotation
+        of the run's. Then nothing is read, the logs are closed for good, and a note says so. A game left up is
+        not read either, and the logs stay open for the stop that ends it."""
+        if self._logs_closed or self._debug_log is None or self._error_log is None:
+            return
+        if self._ended_alive:
+            self._take_log_lines(last=True)
+            return
+        self._logs_closed = not left_up
+        note = ("the game's log was not read at this stop: %s. Self-check lines the game logged after the last "
+                "verb are not in the summary" % (
+                    "the game was left up, and its log is read by the stop that ends it" if left_up else
+                    "the game had ended before the stop came to end it, so another game may have written `logs/` "
+                    "since"))
+        if note not in notes:
+            notes.append(note)
+
+    def _proved_alive(self) -> bool:
+        """Whether the run's game is alive this moment, by its pid and start time (`adopt`, which sends nothing).
+        False on any doubt, and nothing is latched: it only decides whether the logs may be read."""
+        proc = self._proc
+        if proc is None or proc.created == UNKNOWN_START:
+            return False
+        try:
+            self._helper.adopt(proc)
+        except Exception:
+            return False
+        return True
+
     def _take_log_lines(self, last: bool = False) -> None:
-        """Copy what the game's logs hold by now into the run folder, typing nothing; never raises. With `last`
-        (stop, about to restore) it is the last time: once a restore has been tried, `logs/` may hold the
-        owner's logs again, and the follower would take them for a rotation of the run's."""
+        """Copy what the game's logs hold by now into the run folder, typing nothing; never raises. Only for a
+        caller that knows the run's game is alive this moment, or has just ended it (`self_checks`,
+        `_last_log_lines`). With `last` it is the last time."""
         if self._logs_closed or self._debug_log is None or self._error_log is None:
             return
         self._logs_closed = last

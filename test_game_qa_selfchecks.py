@@ -5,6 +5,7 @@ Everything is files in a temp folder. The lines are the ones the game logged on 
 `logged` puts back.
 """
 import contextlib
+import datetime as dt
 import io
 import json
 import os
@@ -22,6 +23,7 @@ FIXTURE_RUN = "20261111T103846Z"
 KEY = "81677a2162d5"
 SAVE = "te_qa_fixture_" + KEY
 NOISE = "[18:26:00][console.cpp:1175]: Running console command: event te_qa.1"
+EARLIER = dt.datetime(2026, 11, 11, 10, 38, 46, tzinfo=dt.timezone.utc)      # FIXTURE_RUN's time, before RUN's
 
 
 def captured(name: str) -> list[str]:
@@ -50,10 +52,11 @@ class SelfCheckTestCase(unittest.TestCase):
         self.backups.mkdir()
 
     def fixture_run(self, lines, owners_log=("an earlier game of the owner's",)) -> str:
-        """A snapshot of the user-data folder, then the run's logs as its restore leaves them in `run_logs/`:
-        an older generation holding the owner's last log (`debug.1.log`), and the run's own `debug.log`."""
+        """A snapshot of the user-data folder (taken at FIXTURE_RUN's time, before RUN: a second one in a test
+        gets `-2`), then the run's logs as its restore leaves them in `run_logs/`: an older generation holding
+        the owner's last log (`debug.1.log`), and the run's own `debug.log`."""
         write_log(self.user / "logs" / "debug.log", owners_log)
-        snap = snapshot.take(self.user, self.backups)
+        snap = snapshot.take(self.user, self.backups, now=EARLIER)
         run_logs = snap.dir / "run_logs"
         write_log(run_logs / "debug.1.log", owners_log)
         write_log(run_logs / "debug.log", lines)
@@ -86,7 +89,9 @@ class KeepTest(SelfCheckTestCase):
         self.assertEqual(sorted(p.name for p in folder.iterdir()), ["lines.log", "record.json"])
         self.assertEqual((folder / "lines.log").read_text("utf-8").splitlines(), lines)
         self.assertEqual(json.loads((folder / "record.json").read_text("utf-8")), record)
-        self.assertEqual((record["key"], record["save"], record["snapshot"]), (KEY, SAVE, snap))
+        self.assertEqual((record["key"], record["save"], record["kept"], record["snapshot"]), (KEY, SAVE, True, snap))
+        self.assertEqual(snap, FIXTURE_RUN)
+        self.assertNotIn("prefix_skipped", record)
         self.assertEqual((record["lines"], record["self_checks"]), (114, 11))        # and 103 TE_MONUMENTS lines
         # nothing in the game's folder was written
         self.assertEqual(sorted(p.relative_to(self.user).as_posix() for p in self.user.rglob("*")), before)
@@ -110,28 +115,103 @@ class KeepTest(SelfCheckTestCase):
         kept = (self.backups / "fixtures" / KEY / "lines.log").read_text("utf-8").splitlines()
         self.assertEqual([line.rsplit(" ", 1)[1] for line in kept], ["first", "second"])
 
-    def test_without_the_snapshots_manifest_only_the_live_log_is_read(self):
+    def test_a_log_the_game_appended_to_is_read_from_where_the_owners_ends(self):
+        # Not seen live; if a patch makes the game append to the log it finds, the owner's lines head the run's.
+        owners = logged(["common/x.txt:1: TE_SELF_CHECK BROKEN from_the_owners_own_game"])
+        write_log(self.user / "logs" / "debug.log", owners)
+        size = (self.user / "logs" / "debug.log").stat().st_size
+        snap = snapshot.take(self.user, self.backups, now=EARLIER)
+        write_log(snap.dir / "run_logs" / "debug.log", owners + logged(["common/x.txt:2: TE_SELF_CHECK OK the_runs"]))
+        record = selfchecks.keep_fixture_lines(self.backups, KEY, snap.id)
+        self.assertEqual((record["read"], record["prefix_skipped"], record["lines"]), (["debug.log"], {"debug.log": size}, 1))
+        kept = (self.backups / "fixtures" / KEY / "lines.log").read_text("utf-8")
+        self.assertIn("the_runs", kept)
+        self.assertNotIn("from_the_owners_own_game", kept)
+
+    def assert_nothing_kept(self, detail: str, snap: str | None) -> dict:
+        """Under KEY there is a record that nothing is kept, and no lines."""
+        folder = self.backups / "fixtures" / KEY
+        self.assertEqual([p.name for p in folder.iterdir()], ["record.json"])
+        record = json.loads((folder / "record.json").read_text("utf-8"))
+        self.assertEqual((record["key"], record["kept"], record.get("snapshot")), (KEY, False, snap))
+        self.assertIn(detail, record["detail"])
+        return record
+
+    def test_without_the_snapshots_manifest_nothing_is_kept(self):
+        # the owner's logs cannot be told from the run's then
         snap = self.fixture_run(logged(["common/x.txt:2: TE_SELF_CHECK OK the_runs"]),
                                 owners_log=logged(["common/x.txt:1: TE_SELF_CHECK BROKEN the_owners"]))
         (self.backups / "snapshots" / snap / snapshot.MANIFEST_NAME).unlink()
-        record = selfchecks.keep_fixture_lines(self.backups, KEY, snap)
-        self.assertEqual((record["read"], record["skipped"], record["self_checks"]), (["debug.log"], ["debug.1.log"], 1))
+        with self.assertRaises(selfchecks.SelfCheckError) as caught:
+            selfchecks.keep_fixture_lines(self.backups, KEY, snap)
+        self.assertEqual(caught.exception.code, "no_manifest")
+        self.assert_nothing_kept("manifest", snap)
 
     def test_a_run_that_left_no_log_keeps_nothing(self):
-        snap = snapshot.take(self.user, self.backups).id
+        snap = snapshot.take(self.user, self.backups, now=EARLIER).id
         with self.assertRaises(selfchecks.SelfCheckError) as caught:
             selfchecks.keep_fixture_lines(self.backups, KEY, snap)
         self.assertEqual(caught.exception.code, "no_run_log")
-        self.assertFalse((self.backups / "fixtures").exists())
+        self.assert_nothing_kept("holds no debug.log of the run's own", snap)
 
     def test_a_key_or_an_id_that_is_no_name_is_refused(self):
         snap = self.fixture_run(logged(["common/x.txt:2: TE_SELF_CHECK OK a"]))
         for key in ("../escape", "", "a/b", None):
             with self.subTest(key=key), self.assertRaises(ValueError):
                 selfchecks.keep_fixture_lines(self.backups, key, snap)
+        self.assertFalse((self.backups / "fixtures").exists())
         with self.assertRaises(selfchecks.SelfCheckError):
             selfchecks.keep_fixture_lines(self.backups, KEY, "../" + snap)
-        self.assertFalse((self.backups / "fixtures").exists())
+        self.assert_nothing_kept("not a snapshot's id", "../" + snap)
+        self.assertEqual(sorted(p.name for p in self.backups.iterdir()), ["fixtures", "snapshots", "store"])
+
+    def test_a_record_never_vouches_for_another_fixture_runs_lines(self):
+        # Blocking 2 of #1650's review: the fixture is made again under its key, and this time keeping fails.
+        # Each way of failing must leave no lines of the first run and a record that says nothing is kept.
+        def first() -> None:
+            snap = self.fixture_run(logged(["common/a.txt:1: TE_SELF_CHECK OK from_first_fixture_run"]))
+            self.assertTrue(selfchecks.keep_fixture_lines(self.backups, KEY, snap)["kept"])
+
+        def no_run_logs() -> str:
+            return snapshot.take(self.user, self.backups, now=EARLIER).id
+
+        def unreadable_log() -> str:
+            return self.fixture_run(logged(["common/a.txt:1: TE_SELF_CHECK BROKEN from_second"]), owners_log=("o2",))
+
+        self.run_folder(log=[])
+        for name, second, patch in (
+                ("no run_logs", no_run_logs, None),
+                ("a log that cannot be hashed", unreadable_log, "_sha256"),
+                ("a log that cannot be read", unreadable_log, "marked_lines"),
+                ("lines that cannot be written", unreadable_log, "_write")):
+            with self.subTest(name):
+                first()
+                snap = second()
+                with contextlib.ExitStack() as stack:
+                    if patch == "_write":       # the lines, and then the record that says they were not kept
+                        stack.enter_context(mock.patch.object(selfchecks, "_write", side_effect=OSError("disk full")))
+                    elif patch:
+                        stack.enter_context(mock.patch.object(selfchecks, patch, side_effect=OSError("unreadable")))
+                    with self.assertRaises((selfchecks.SelfCheckError, OSError)):
+                        selfchecks.keep_fixture_lines(self.backups, KEY, snap)
+                folder = self.backups / "fixtures" / KEY
+                self.assertFalse((folder / "lines.log").exists())
+                record = selfchecks.fixture_record(self.backups, KEY)
+                if patch == "_write":
+                    self.assertIsNone(record)
+                else:
+                    self.assertEqual((record["kept"], record["snapshot"]), (False, snap))
+                found = selfchecks.of_run(self.backups, RUN)
+                self.assertEqual((found["fixture"]["kept"], found["checks"]), (False, []))
+
+    def test_forgetting_before_a_fixture_is_made_leaves_a_record_that_nothing_is_kept(self):
+        snap = self.fixture_run(logged(["common/a.txt:1: TE_SELF_CHECK OK from_first_fixture_run"]))
+        selfchecks.keep_fixture_lines(self.backups, KEY, snap)
+        selfchecks.forget_fixture_lines(self.backups, KEY)
+        record = self.assert_nothing_kept("restore held or was refused", None)
+        self.assertEqual(record["detail"], selfchecks.BEING_MADE)
+        selfchecks.forget_fixture_lines(self.backups, "cccccccccccc")       # one never kept: the same record
+        self.assertEqual(selfchecks.fixture_record(self.backups, "cccccccccccc")["kept"], False)
 
     def test_a_fixture_made_again_under_its_key_replaces_the_lines(self):
         first = self.fixture_run(logged(["common/x.txt:2: TE_SELF_CHECK OK first_run"]))
@@ -253,7 +333,7 @@ class RunTest(SelfCheckTestCase):
                          [("fixture", "BROKEN"), ("session", "OK")])
         self.assertEqual(found["fixture"], {
             "key": KEY, "kept": True, "file": str(self.backups / "fixtures" / KEY / "lines.log"),
-            "snapshot": fixture_snap, "kept_at": selfchecks.fixture_record(self.backups, KEY)["kept_at"],
+            "snapshot": fixture_snap, "at": selfchecks.fixture_record(self.backups, KEY)["at"],
             "lines": 114, "self_checks": 11})
         self.assertEqual(found["session"], {"file": str(folder / "debug.log"), "lines": 31, "gaps": 1})
         json.dumps(found)
@@ -262,9 +342,63 @@ class RunTest(SelfCheckTestCase):
         self.run_folder(log=self.session_log())
         found = selfchecks.of_run(self.backups, RUN)
         self.assertEqual((found["fixture"]["key"], found["fixture"]["kept"]), (KEY, False))
+        self.assertIn("made before the lines of a fixture's run were kept", found["fixture"]["detail"])
         self.assertIn("run_logs/debug.log", found["fixture"]["detail"])
         self.assertEqual({c["source"] for c in found["checks"]}, {"session"})
         self.assertEqual(found["broken"], ["delayed_state_event"])
+
+    def test_the_reply_says_which_reason_left_a_fixture_without_lines(self):
+        self.run_folder(log=[])
+        folder = self.backups / "fixtures" / KEY
+
+        def detail() -> str:
+            found = selfchecks.of_run(self.backups, RUN)
+            self.assertEqual((found["fixture"]["key"], found["fixture"]["kept"], found["checks"]), (KEY, False, []))
+            self.assertTrue(found["fixture"]["detail"].startswith(SAVE + ": "), found["fixture"]["detail"])
+            return found["fixture"]["detail"]
+
+        selfchecks.forget_fixture_lines(self.backups, KEY)      # its run did not get as far as keeping them
+        self.assertIn("restore held or was refused", detail())
+        with self.assertRaises(selfchecks.SelfCheckError):      # keeping them failed
+            selfchecks.keep_fixture_lines(self.backups, KEY, snapshot.take(self.user, self.backups, now=EARLIER).id)
+        self.assertIn("could not be kept from snapshot", detail())
+        self.kept_fixture()
+        (folder / "lines.log").unlink()                         # the record is there and its lines are not
+        self.assertIn("lines.log is gone", detail())
+        for text in ("{not json", "[1]", "\ufffd"):               # a record that does not read
+            (folder / "record.json").write_text(text, encoding="utf-8")
+            self.assertIn("does not read as one", detail())
+        (folder / "record.json").write_bytes(b"\xff\xfe")
+        self.assertIn("does not read as one", detail())
+        (folder / "record.json").write_text(json.dumps({"key": KEY, "snapshot": FIXTURE_RUN}), encoding="utf-8")
+        self.assertIn("does not say its lines were kept", detail())
+
+    def test_a_fixture_made_again_after_the_run_is_not_that_runs(self):
+        # `--run` on an older run: the fixture it loaded was since made again under the same key
+        snap = self.kept_fixture()
+        self.assertEqual(snap, FIXTURE_RUN)
+        for older in ("20261111T090000Z", FIXTURE_RUN):         # before the fixture's run, and that run itself
+            self.run_folder(older, log=[])
+            found = selfchecks.of_run(self.backups, older)
+            self.assertEqual((found["fixture"]["kept"], found["checks"]), (False, []), older)
+            self.assertIn("made again after this run (by the run of snapshot %s)" % FIXTURE_RUN,
+                          found["fixture"]["detail"])
+        self.run_folder(RUN, log=[])
+        self.assertTrue(selfchecks.of_run(self.backups, RUN)["fixture"]["kept"])
+        record = self.backups / "fixtures" / KEY / "record.json"
+        record.write_text(json.dumps(dict(json.loads(record.read_text("utf-8")), snapshot="not an id")), "utf-8")
+        self.assertFalse(selfchecks.of_run(self.backups, RUN)["fixture"]["kept"])
+
+    def test_a_check_broken_in_both_sources_is_named_once_and_listed_twice(self):
+        snap = self.fixture_run(logged(["common/a.txt:1: TE_SELF_CHECK BROKEN in_both n=1"]))
+        selfchecks.keep_fixture_lines(self.backups, KEY, snap)
+        self.run_folder(log=logged(["common/a.txt:1: TE_SELF_CHECK BROKEN in_both n=2",
+                                    "common/a.txt:2: TE_SELF_CHECK BROKEN session_only"]))
+        found = selfchecks.of_run(self.backups, RUN)
+        self.assertEqual(found["broken"], ["in_both", "session_only"])
+        self.assertEqual([(c["name"], c["source"]) for c in found["checks"]],
+                         [("in_both", "fixture"), ("in_both", "session"), ("session_only", "session")])
+        self.assertEqual(found["counts"], {"BROKEN": 3})
 
     def test_a_run_on_the_owners_save_has_no_fixture(self):
         self.kept_fixture()
@@ -337,6 +471,20 @@ class VerbTest(SelfCheckTestCase):
         self.run_folder(RUN)
         reply, code = self.run_cli("selfchecks", "--run", "20200101T000000Z")
         self.assertEqual((reply["refused"], code), ("no_run", 2))
+
+    def test_a_run_whose_files_cannot_be_read_is_a_refusal_not_a_traceback(self):
+        folder = self.run_folder(RUN)
+        (folder / "debug.log").mkdir()          # there, and not a file
+        reply, code = client.self_checks(self.backups)
+        self.assertEqual((reply["refused"], reply["run"], code), ("unreadable_run", RUN, 2))
+        self.assertIn("IsADirectoryError", reply["detail"])
+        reply, code = self.run_cli("selfchecks", "--run", RUN)
+        self.assertEqual((reply["refused"], code), ("unreadable_run", 2))
+        (folder / "debug.log").rmdir()
+        (folder / "steps.jsonl").write_bytes(b"\xff\xfe not utf-8\n" + json.dumps(
+            {"verb": "fixture", "outcome": "not_used", "save": "france_1850"}).encode() + b"\n")
+        reply, code = client.self_checks(self.backups)          # a line that does not read is skipped, as ever
+        self.assertEqual((code, reply["fixture"]["detail"]), (0, "the game ran on a save of the owner's, not on the fixture"))
 
     def test_a_session_file_that_names_a_dead_server_does_not_hide_the_files(self):
         self.run_folder(RUN, log=logged(captured("session2_self_checks.txt")))

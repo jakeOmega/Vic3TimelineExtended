@@ -305,19 +305,25 @@ def self_checks(backup_root: Path, run: str | None = None) -> tuple[dict, int]:
     the game's log out before it reads (`Session.self_checks`; `flushed` says whether that worked). If it does
     not answer, the files are read as they are and `not_flushed` carries its refusal. Exit 0 whenever the run
     was read, whatever the verdicts: `broken` names the checks that logged BROKEN. A run that is not there is
-    refused `no_run`."""
+    refused `no_run`, and one whose files are there but cannot be read `unreadable_run`."""
     backup_root = Path(backup_root)
     try:
         run_id = selfchecks.resolve_run(backup_root, run)
     except selfchecks.SelfCheckError as e:
         return {"refused": e.code, "detail": e.detail}, 2
     info = server.read_info(backup_root)
-    if info is None or info.get("snapshot") != run_id:
-        return {"live": False, **selfchecks.of_run(backup_root, run_id)}, 0
-    reply, code = call(backup_root, "selfchecks")
-    if code == 0:
-        return reply, 0
-    return {"live": True, "flushed": False, "not_flushed": reply, **selfchecks.of_run(backup_root, run_id)}, 0
+    live = info is not None and info.get("snapshot") == run_id
+    head: dict = {"live": live}
+    if live:
+        reply, code = call(backup_root, "selfchecks")
+        if code == 0:
+            return reply, 0
+        head.update(flushed=False, not_flushed=reply)
+    try:
+        return {**head, **selfchecks.of_run(backup_root, run_id)}, 0
+    except OSError as e:
+        return {"refused": "unreadable_run", "run": run_id,
+                "detail": "a file of run %s is there and cannot be read (%s: %s)" % (run_id, type(e).__name__, e)}, 2
 
 
 # ---- doctor

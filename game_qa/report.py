@@ -28,10 +28,11 @@ def stamp(when: dt.datetime) -> str:
 
 
 def read_steps(run_dir: Path) -> list[dict]:
-    """The steps recorded in a run folder, in order; a line that does not parse is skipped, and a folder with no
-    step record has none. Reads only: unlike `Report`, it never makes the folder."""
+    """The steps recorded in a run folder, in order; a line that does not parse (bytes that are not UTF-8
+    included) is skipped, and a folder with no step record has none. Reads only: unlike `Report`, it never makes
+    the folder."""
     try:
-        text = (Path(run_dir) / STEPS_FILE).read_text("utf-8")
+        text = (Path(run_dir) / STEPS_FILE).read_text("utf-8", errors="replace")
     except (FileNotFoundError, NotADirectoryError):
         return []
     out = []
