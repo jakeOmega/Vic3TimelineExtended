@@ -243,6 +243,27 @@ class BuildPmBalanceMapTests(unittest.TestCase):
                          "HIGH-PROFIT")
         self.assertEqual(result["pm_coal-fired_plant"]["flag"], "HIGH-PROFIT")
 
+    def test_annotating_a_replaced_vanilla_pm_keeps_the_entry_s_own_keys(self) -> None:
+        # `/tech-unlocks?source=all&annotate=balance` lists a vanilla PM the
+        # mod redefines as a vanilla-source entry with vanilla's file name.
+        # It gains the flag of the PM as played, and nothing else changes:
+        # the map row's `file` must not overwrite the entry's.
+        _write(self.repo_root / "common" / "production_methods" / "extra_pms.txt",
+               _pm("REPLACE:pm_vanilla_one", total_input=100, total_output=300,
+                   margin=200, wage_be=0.05, profit=200))
+        self.assertEqual(
+            lib.build_pm_balance_map(self.repo_root)["pm_vanilla_one"]["file"],
+            "extra_pms.txt",
+        )
+        entry = {"type": "PMs", "id": "pm_vanilla_one",
+                 "file": "01_industry.txt", "source": "vanilla"}
+        annotators.apply_to_response([entry], "balance", self.repo_root)
+        self.assertEqual(entry, {
+            "type": "PMs", "id": "pm_vanilla_one",
+            "file": "01_industry.txt", "source": "vanilla",
+            "flag": "HIGH-PROFIT", "margin_pct": 200.0, "wage_be": 0.05,
+        })
+
     def test_inject_blocks_are_not_definitions(self) -> None:
         # An INJECT: patches a PM defined elsewhere. It must not give a
         # vanilla PM a row, nor replace the row of a PM the mod defines
@@ -281,8 +302,15 @@ class RealPmDirectoryCoverageTests(unittest.TestCase):
 
     `test_annotator_endpoints.py` asserts that every PM a technology unlocks
     comes back from `?annotate=balance` with a `flag`, but it needs a live
-    server and so never runs in CI. These are its offline twins: they call
-    what the endpoints call.
+    server and so never runs in CI.
+
+    The two tech-unlock tests here are offline twins of the `/tech-unlocks`
+    one only: they build the index `tech_unlocks_lib` builds and run the
+    post-processor route() runs. `/unlocked-by/<tech>` takes another path,
+    `_find_unlocked_by_tech` in `mod_state_server.py`, which walks
+    ModState's merged data, and no offline test calls it. What stands in
+    for it is `test_every_pm_the_mod_defines_is_in_the_map`: whichever PM
+    the mod defines, however an endpoint came to list it, has a row.
     """
 
     @classmethod

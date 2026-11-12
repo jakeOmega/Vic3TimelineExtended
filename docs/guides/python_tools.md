@@ -774,6 +774,10 @@ me everything that applies" idiom.
   `/references/<key>`, `/tech-tree/<id>`, `/unlocked-by/<id>`,
   `/tech-unlocks`, `/keys/<EntityType>`, etc. Future entity-list
   endpoints just need to set `type=<EntityType>` on their entries.
+- Only the fields an annotator declares (`fields`, listed by
+  `/annotators`) are merged into an entry. Any other key in its
+  `compute()` rows stays out, so an entry's own `file` or `source` is
+  never overwritten.
 - The post-processor **mutates entry dicts in place**. A handler that
   serves entries out of a module-level cache must return copies of the
   entry dicts, not just of the lists holding them — otherwise one

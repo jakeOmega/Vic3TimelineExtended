@@ -240,6 +240,10 @@ def build_pm_balance_map(repo_root: Path) -> dict[str, dict]:
     return `{pm_id: {flag, margin_pct, wage_be, profit, file}}` for every PM
     the mod defines. PMs without a cost-comment block are recorded as
     `flag = "NO-COSTS"` with the numeric fields as None.
+
+    `file` and `profit` are for callers of this function. The annotator
+    declares `flag`, `margin_pct` and `wage_be`, and only those are merged
+    into a server entry.
     """
     out: dict[str, dict] = {}
     pm_dir = repo_root / PM_SUBDIR
