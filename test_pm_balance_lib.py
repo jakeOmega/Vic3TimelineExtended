@@ -7,7 +7,6 @@ mod's own `common/production_methods/`. No server. Run:
 from __future__ import annotations
 
 import copy
-import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +14,7 @@ from pathlib import Path
 import annotators
 import pm_balance_lib as lib
 import tech_unlocks_lib
+from paradox_file_parser import INJECT_DIRECTIVES, ParadoxFileParser
 
 REPO = Path(__file__).resolve().parent
 
@@ -220,21 +220,60 @@ class BuildPmBalanceMapTests(unittest.TestCase):
                          "zz_brand_new_generated_pms.txt")
         self.assertEqual(result["pm_new_bare"]["flag"], "NO-COSTS")
 
+    def test_replace_blocks_and_other_names_are_definitions(self) -> None:
+        # extra_pms.txt redefines vanilla PMs with `REPLACE:`, names the
+        # plantation methods `factory_farm_building_*`, and has ids with a
+        # hyphen. pm_costs.py writes a cost block into each, and all of them
+        # were skipped by a walker that only matched a bare `pm_[A-Za-z0-9_]+`.
+        costs = dict(total_input=100, total_output=300, margin=200,
+                     wage_be=0.05, profit=200)
+        _write(self.repo_root / "common" / "production_methods" / "extra_pms.txt",
+               _pm("REPLACE:pm_vanilla_one", **costs)
+               + _pm("REPLACE_OR_CREATE:pm_vanilla_two", no_cost_comments=True)
+               + _pm("factory_farm_building_vineyard", **costs)
+               + _pm("pm_coal-fired_plant", **costs))
+        result = lib.build_pm_balance_map(self.repo_root)
+        self.assertEqual(sorted(result), [
+            "factory_farm_building_vineyard", "pm_coal-fired_plant",
+            "pm_vanilla_one", "pm_vanilla_two",
+        ])
+        self.assertEqual(result["pm_vanilla_one"]["flag"], "HIGH-PROFIT")
+        self.assertEqual(result["pm_vanilla_two"]["flag"], "NO-COSTS")
+        self.assertEqual(result["factory_farm_building_vineyard"]["flag"],
+                         "HIGH-PROFIT")
+        self.assertEqual(result["pm_coal-fired_plant"]["flag"], "HIGH-PROFIT")
 
-# A top-level definition: `name = {` at the start of a line, with an optional
-# merge directive. Written out here, not borrowed from the library, so the
-# tests below do not agree with the code under test by construction.
-_TOP_LEVEL_RE = re.compile(
-    r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z_][A-Za-z0-9_]*)[ \t]*=[ \t]*\{",
-    re.MULTILINE,
-)
+    def test_inject_blocks_are_not_definitions(self) -> None:
+        # An INJECT: patches a PM defined elsewhere. It must not give a
+        # vanilla PM a row, nor replace the row of a PM the mod defines
+        # (zz_ sorts after extra_pms.txt, so its block would be read last).
+        pm_dir = self.repo_root / "common" / "production_methods"
+        _write(pm_dir / "extra_pms.txt",
+               _pm("pm_mod_defined", total_input=100, total_output=300,
+                   margin=200, wage_be=0.05, profit=200))
+        _write(pm_dir / "zz_generated_injects.txt",
+               _pm("INJECT:pm_mod_defined", no_cost_comments=True)
+               + _pm("INJECT:pm_vanilla_only", no_cost_comments=True)
+               + _pm("TRY_INJECT:pm_vanilla_maybe", no_cost_comments=True)
+               + _pm("pm_after_the_injects", no_cost_comments=True))
+        result = lib.build_pm_balance_map(self.repo_root)
+        self.assertEqual(sorted(result), ["pm_after_the_injects", "pm_mod_defined"])
+        self.assertEqual(result["pm_mod_defined"]["flag"], "HIGH-PROFIT")
+        self.assertEqual(result["pm_mod_defined"]["file"], "extra_pms.txt")
 
 
-def _top_level_definitions(path: Path) -> list[tuple[str, str]]:
-    """`(directive or "", id)` for each top-level block of a PM file."""
-    text = path.read_text(encoding="utf-8-sig")
-    return [(m.group("directive") or "", m.group("id"))
-            for m in _TOP_LEVEL_RE.finditer(text)]
+def _parser_defined_pms(path: Path) -> set[str]:
+    """The PMs a file defines, by the mod's real parser rather than by the
+    library's own line matching: every top-level key but the `INJECT:`
+    family, with any `REPLACE:` directive dropped."""
+    parser = ParadoxFileParser()
+    parser.parse_file(str(path), apply_directives=False)
+    defined = set()
+    for key in parser.data:
+        directive, _, name = key.rpartition(":")
+        if directive not in INJECT_DIRECTIVES:
+            defined.add(name)
+    return defined
 
 
 class RealPmDirectoryCoverageTests(unittest.TestCase):
@@ -248,25 +287,30 @@ class RealPmDirectoryCoverageTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.pm_dir = REPO / lib.PM_SUBDIR
-        cls.files = sorted(cls.pm_dir.glob("*.txt"))
+        pm_dir = REPO / lib.PM_SUBDIR
+        cls.defined = {path.name: _parser_defined_pms(path)
+                       for path in sorted(pm_dir.glob("*.txt"))}
         cls.balance = lib.build_pm_balance_map(REPO)
         cls.unlocks = tech_unlocks_lib.build_tech_unlock_index(REPO)
 
-    def test_every_file_that_defines_a_pm_is_read(self) -> None:
-        self.assertGreater(len(self.files), 5)
-        read = {row["file"] for row in self.balance.values()}
-        unread = [
-            path.name for path in self.files
-            if path.name not in read
-            and any(d == "" and i.startswith("pm_")
-                    for d, i in _top_level_definitions(path))
-        ]
-        self.assertEqual(
-            unread, [],
-            "the balance map reads none of the PMs these files define, so "
-            "`?annotate=balance` returns them with no `flag`",
-        )
+    def test_every_pm_the_mod_defines_is_in_the_map(self) -> None:
+        # Fails when the directory gains a file the map does not read, or a
+        # file gains a definition the walker does not recognise.
+        self.assertGreater(len(self.defined), 5)
+        mapped: dict[str, set[str]] = {name: set() for name in self.defined}
+        for pm_id, row in self.balance.items():
+            mapped.setdefault(row["file"], set()).add(pm_id)
+        for name, defined in self.defined.items():
+            self.assertEqual(
+                sorted(defined - mapped[name]), [],
+                f"{name} defines PMs the balance map lacks, so "
+                "`?annotate=balance` returns them with no `flag`",
+            )
+            self.assertEqual(
+                sorted(mapped[name] - defined), [],
+                f"the balance map has rows for {name} that it does not define",
+            )
+        self.assertEqual(sorted(set(mapped) - set(self.defined)), [])
 
     def _annotated_pms(self, tech_id: str) -> list[dict]:
         # What `/tech-unlocks/<tech>?annotate=balance` does: the server
@@ -284,6 +328,26 @@ class RealPmDirectoryCoverageTests(unittest.TestCase):
         for e in entries:
             self.assertIn("flag", e, e)
             self.assertIn(e["flag"], lib.FLAGS)
+
+    def test_every_tech_unlocked_pm_the_mod_defines_carries_a_flag(self) -> None:
+        # The same check for every technology, not only the one the live
+        # tests happen to ask about. A PM the mod only INJECTs into is
+        # vanilla's and gets no flag, like every other vanilla PM.
+        defined = set().union(*self.defined.values())
+        cache: dict = {}
+        checked = 0
+        missing = []
+        for tech_id in self.unlocks:
+            rec = copy.deepcopy(self.unlocks[tech_id])
+            annotators.apply_to_response(rec, "balance", REPO, cache=cache)
+            for e in rec["by_type"].get("PMs", []):
+                if e["id"] not in defined:
+                    continue
+                checked += 1
+                if e.get("flag") not in lib.FLAGS:
+                    missing.append((tech_id, e["id"], e["file"]))
+        self.assertGreater(checked, 500)
+        self.assertEqual(missing, [])
 
 
 class AnnotatorRegistrationTests(unittest.TestCase):

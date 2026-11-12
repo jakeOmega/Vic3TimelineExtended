@@ -789,7 +789,15 @@ Today's registered annotator: `balance` for `PMs` — adds
 `flag` (`HIGH-PROFIT` / `DEEP-LOSS` / `THROUGHPUT` / `HIGH-WAGE` /
 `LOW-WAGE` / `OK` / `NO-COSTS`), `margin_pct`, `wage_be`. Computed
 from the auto-generated cost-comment block in PM bodies via
-`pm_balance_lib.build_pm_balance_map`.
+`pm_balance_lib.build_pm_balance_map`, which reads every `*.txt` under
+`common/production_methods/` and gives a row to every PM the mod defines
+there, `REPLACE:` blocks included; a PM with no cost block is `NO-COSTS`.
+A vanilla PM gets no fields, and neither does one the mod only `INJECT:`s
+into. The map once walked a hand-kept list of five files and only blocks
+named `pm_[A-Za-z0-9_]+`, so a PM in a newer file, a redefined vanilla PM
+or `pm_coal-fired_plant` came back with no `flag` (#1552);
+`test_pm_balance_lib.py` now checks the map against the parser's reading
+of the directory, offline.
 
 #### Technology & Engine Research Endpoints
 

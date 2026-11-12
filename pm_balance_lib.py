@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Iterator
 
 import annotators
+from paradox_file_parser import INJECT_DIRECTIVES
 
 
 # ---------------------------------------------------------------------------
@@ -40,6 +41,7 @@ def pm_file_names(repo_root: Path) -> list[str]:
     if not pm_dir.is_dir():
         return []
     return sorted(p.name for p in pm_dir.glob("*.txt"))
+
 
 # Flag values returned by classify_pm. Documented for /annotators consumers.
 #
@@ -83,22 +85,36 @@ _MODIFIER_BLOCK_RE = re.compile(
 # Parsing primitives
 # ---------------------------------------------------------------------------
 
+# A top-level definition: `<id> = {` at the start of a line, with an optional
+# merge directive (`REPLACE:pm_x = {`). Not every PM is named `pm_*` (the
+# plantation methods are `factory_farm_building_*` and
+# `GMO_plantation_building_*`), and an id may hold a hyphen
+# (`pm_coal-fired_plant`).
+_TOP_LEVEL_RE = re.compile(
+    r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z0-9_.-]+)\s*=\s*\{",
+    re.MULTILINE,
+)
+
+
 def iter_pms(path: Path) -> Iterator[tuple[str, str]]:
-    """Yield (pm_id, body_with_comments) for each top-level PM in a file.
+    """Yield (pm_id, body_with_comments) for each PM a file defines.
 
     Includes the leading comment block that precedes the PM's `= {` so we
     can parse the auto-generated cost summary.
+
+    A `REPLACE:` block (and its `TRY_` and `_OR_CREATE` forms) is a whole
+    definition and is yielded under the bare id, as the engine resolves it.
+    An `INJECT:` block is a patch to a PM defined somewhere else, usually in
+    vanilla, and carries no economics of its own: it is skipped, so it can
+    neither stand in for the PM nor overwrite the row of one the mod defines.
     """
     text = path.read_text(encoding="utf-8-sig")
     pos = 0
     while pos < len(text):
-        m = re.search(r"^pm_[A-Za-z0-9_]+\s*=\s*\{", text[pos:], re.MULTILINE)
+        m = _TOP_LEVEL_RE.search(text, pos)
         if not m:
             break
-        pm_start = pos + m.start()
-        pm_id_match = re.match(r"(pm_[A-Za-z0-9_]+)", text[pm_start:])
-        pm_id = pm_id_match.group(1) if pm_id_match else "?"
-        body_start = pm_start + m.end() - m.start()
+        body_start = m.end()
         depth = 1
         i = body_start
         while i < len(text) and depth > 0:
@@ -108,9 +124,10 @@ def iter_pms(path: Path) -> Iterator[tuple[str, str]]:
             elif c == "}":
                 depth -= 1
             i += 1
-        body = text[body_start:i - 1]
-        yield pm_id, body
         pos = i
+        if m.group("directive") in INJECT_DIRECTIVES:
+            continue
+        yield m.group("id"), text[body_start:i - 1]
 
 
 def parse_cost_comments(body: str) -> dict | None:
