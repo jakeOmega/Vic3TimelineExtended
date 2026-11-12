@@ -486,10 +486,13 @@ class _Engine:
     set fails, as does an argument the callee doesn't name (the script_argument_audit rule).
     `fixtures` stand in for engine reads and for script values that read the owner. With
     truncate=True every operation and every stored value is cut to five decimals, toward zero:
-    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails."""
+    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails. Left out, truncate is
+    FIXED_POINT: False, except inside a fixed-point twin's test (_FixedPointTwin, issue #967)."""
 
-    def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
-        self.truncate = truncate
+    FIXED_POINT = False
+
+    def __init__(self, fixtures, triggers=None, effects=None, truncate=None):
+        self.truncate = _Engine.FIXED_POINT if truncate is None else truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
                                     LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS,
@@ -774,6 +777,71 @@ class _Engine:
 
     def call(self, effect):
         self.run(_parse_script(f"{effect} = yes"))
+
+
+class _FixedPointTwin:
+    """Mixin for a fixed-point twin of a script test (issue #967): `class TestXFixedPoint(_FixedPointTwin, TestX)` runs
+    every case of TestX again with each _Engine it builds in the engine's fixed point (truncate=True), and with each
+    near-equality (the class's own close(), assertAlmostEqual) loosened to what the five-decimal cut allows. Floats
+    can't see that cut: #964's late births took TFR / 100000 first, which the engine stores as 0.00001 or 0, and
+    matched the model at 1e-8 in floats the whole time.
+
+    The tolerance is the larger of FLOOR and REL x the wanted value. Every operation and every stored value is cut by
+    under 1e-5 (UNIT), and a float case's inputs carry sixteen digits where the script keeps five. FLOOR is five
+    units: a figure of a few sums and clamps carries that many cuts at most. REL is one unit per unit of the figure:
+    a figure past 1 is a product, and the cut of one factor weighs the rest of it. A suite whose arithmetic
+    multiplies the cut further (a chain over 300 ages, a quotient of small numbers) gives its twin a looser REL and
+    FLOOR, with the reason and its size worked out from the cut, not copied from the run; a single case overrides
+    the method instead. Exact comparisons (assertEqual and the rest) stay exact. A disagreement past the tolerance
+    is an early divide or a product of small factors in the script, a fixture on a threshold's edge, or a case whose
+    arithmetic multiplies its inputs' cut: find which before loosening anything. A new case in TestX gets its twin
+    with no further work. The twins are in test_demographics_fixed_point.py."""
+
+    UNIT = 1e-5
+    REL = UNIT
+    FLOOR = 5 * UNIT
+
+    @classmethod
+    def setUpClass(cls):
+        # what the class builds once (TestCountry's states) is built in fixed point too
+        with unittest.mock.patch.object(_Engine, "FIXED_POINT", True):
+            super().setUpClass()
+
+    def setUp(self):
+        # before the float suite's own setUp, so an engine built there cuts too
+        patch = unittest.mock.patch.object(_Engine, "FIXED_POINT", True)
+        patch.start()
+        self.addCleanup(patch.stop)
+        super().setUp()
+
+    def near(self, got, want):
+        return abs(got - want) <= max(self.REL * abs(want), self.FLOOR)
+
+    def _past(self, check, *args, **kw):
+        """The float case's own comparison (its tolerance may be the looser one), failing with the twin's named."""
+        try:
+            check(*args, **kw)
+        except AssertionError as err:
+            raise self.failureException(
+                f"{err} (in fixed point: past {self.REL:g} of the value and {self.FLOOR:g} too)") from None
+
+    def close(self, got, want, *args, **kw):
+        if not self.near(got, want):
+            self._past(super().close, got, want, *args, **kw)
+
+    def assertAlmostEqual(self, first, second, places=None, msg=None, delta=None):
+        if not self.near(first, second):
+            self._past(super().assertAlmostEqual, first, second, places=places, msg=msg, delta=delta)
+
+    def test_the_twin_runs_in_fixed_point(self):
+        """An engine built with no truncate= cuts to five decimals inside the twin, and outside it does not. (An
+        engine built in a suite's own setUp: test_demographics_fixed_point.TestTheTwinMixin.)"""
+        eng = _Engine({})
+        self.assertTrue(eng.truncate)
+        eng.run(_parse_script("set_variable = { name = x value = { value = 2 divide = 3 } }"))
+        self.assertEqual(eng.vars["x"], 0.66666)
+        self.doCleanups()
+        self.assertFalse(_Engine({}).truncate)
 
 
 def _stored(inp):
@@ -6732,7 +6800,12 @@ class TestCausesInTheStep(unittest.TestCase):
         self.assertLess(demographics_model.infection_adult(drifted), 0.97, "a factor that moves the life table")
         qf, qm, _ = demographics_model.group_rates(drifted)
         e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
-        self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
+        self.life_expectancy_close(eng.vars["te_dg_e0"], e0)
+
+    def life_expectancy_close(self, got, want):
+        """Its own method so the fixed-point twin can give the life table, and nothing else here, its tolerance
+        (test_demographics_fixed_point.py)."""
+        self.assertAlmostEqual(got, want, places=6)
 
     def stepped(self, effects=None):
         """A state seeded on INP0's inputs in 1836, then one whole te_demog_step on INP1's (TestTrend's setup)."""
