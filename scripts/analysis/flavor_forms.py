@@ -5,9 +5,10 @@
     python3 scripts/analysis/flavor_forms.py banking_cycle_events
     python3 scripts/analysis/flavor_forms.py banking_cycle_events --list
 
-Flavor text (`<namespace>.<n>.f*` in te_events_l_english.yml) is where sameness
-shows most: read in a row, a chain whose every event is two unnamed voices
-trading lines is one text. `docs/guides/loc_style_guide.md` § "Flavor text:
+Flavor text (`<namespace>.<n>.f` or `.flavor`, with any `_variant` or `.variant`
+suffix but not `.tt`, and never a key an event names as an option, in
+te_events_l_english.yml) is where sameness shows most: read in a row, a chain
+whose every event is two unnamed voices trading lines is one text. `docs/guides/loc_style_guide.md` § "Flavor text:
 vary the form" asks that no form take more than a third of a chain. Run this
 before adding to a chain and write in a form it is short of.
 
@@ -50,7 +51,14 @@ LOC_FILE = os.path.join("localization", "english", "te_events_l_english.yml")
 BASELINE = os.path.join("scripts", "analysis", "flavor_forms_baseline.json")
 MIN_CHAIN = 6
 
-FLAVOR_KEY = re.compile(r'^\s*((?P<ns>[\w\-]+)\.\d+\.f\w*):\d*\s*"(?P<text>.*)"\s*(?:#.*)?$')
+# A flavor key is `.f`, `.flavor` or either with a variant suffix (`.f_first`,
+# `.f.cat2`), but not a tooltip hung on one (`.f.tt`).
+# `\.f\w*` also took `monument_events.11.faith_*` (option labels) and
+# `monument_events.24.forum`, which made that chain read 45% narration (#1550).
+FLAVOR_KEY = re.compile(r'^\s*((?P<ns>[\w\-]+)\.\d+\.(?:f|flavor)(?:_\w+|\.(?!tt\b)\w+)?):\d*\s*"(?P<text>.*)"\s*(?:#.*)?$')
+# A key that some event uses as an option's `name` is an option, whatever it is
+# called (`te_map_modes.1.f_dismiss`).
+OPTION_NAME = re.compile(r"^\s*name\s*=\s*([\w\-]+\.\d+\.[\w.]+)\s*(?:#.*)?$", re.M)
 FORMS = ("exchange", "one voice", "quotation", "scene", "list", "document", "narration")
 DOCUMENT_OPENING = re.compile(
     r"^(?:To |From |Notes? (?:from|for|of) |Memorandum|Minutes |Dear |Report |Order |Notice |Circular |Resolved)"
@@ -91,12 +99,26 @@ def short_last_paragraph(text: str) -> bool:
 def load(repo_root=REPO_ROOT):
     """{namespace: [(key, text), ...]} for every flavor key."""
     chains = defaultdict(list)
+    options = option_names(repo_root)
     with open(os.path.join(repo_root, LOC_FILE), encoding="utf-8-sig") as fh:
         for line in fh:
             match = FLAVOR_KEY.match(line)
-            if match:
+            if match and match.group(1) not in options:
                 chains[match.group("ns")].append((match.group(1), match.group("text")))
     return chains
+
+
+def option_names(repo_root=REPO_ROOT) -> set:
+    """Every loc key an event script names as an option."""
+    names = set()
+    events = os.path.join(repo_root, "events")
+    if not os.path.isdir(events):
+        return names
+    for fname in sorted(os.listdir(events)):
+        if fname.endswith(".txt"):
+            with open(os.path.join(events, fname), encoding="utf-8-sig") as fh:
+                names.update(OPTION_NAME.findall(fh.read()))
+    return names
 
 
 def summarize(entries):

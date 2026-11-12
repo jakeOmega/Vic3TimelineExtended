@@ -229,7 +229,7 @@ Social Movements rule doesn't stop them.
 | Movement | Needs | Events |
 |---|---|---|
 | Second-wave feminism | Second Wave Feminism (era 7) | The Second Shift and Half the Salary, once each, over women's work and equal pay |
-| LGBTQ+ rights | LGBTQ+ Rights Movement (era 9) | Pride and Protest, at most once in ten years until you enact Full Equality and Protection; The Marriage Equality Question, once, under Basic Protections or Anti-Discrimination Laws |
+| LGBTQ+ rights | LGBTQ+ Rights Movement (era 9) | Pride and Protest, at most once in ten years until you enact Full Equality and Protection; A Test Case, once, under Basic Protections or Anti-Discrimination Laws |
 | Secularization | One of several technologies, such as Sexual Revolution or Social Media, or the Total Separation law | Religious Revival Sweeps the Nation and Faith Against Modernity, each at most once in ten years and never under State Atheism |
 | Environmentalism | The Global Warming journal entry | Climate events as world temperature crosses thresholds, under the Global Warming rule; see [Climate and pollution](15-climate.md) |
 

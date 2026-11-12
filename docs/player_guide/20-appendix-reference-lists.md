@@ -98,7 +98,7 @@ you qualify.
 | No-First-Strike Pledge (*Never the First*) | Nuclear Weapons researched and at peace, with a nuclear-armed rival or an anti-war movement at 5% support, and either no arsenal yet or a doctrine already at No First Use | 5% | Intelligentsia, or Trade Unions |
 | Military Necessity Clause (*Necessity Knows No Law*) | At war, with the Armed Forces powerful or in government | 25% | Armed Forces |
 | Small Donor Matching (*Pennies Against Millions*) | An election campaign, with the Industrialists or the Landowners powerful | 25% | Trade Unions, or Intelligentsia |
-| Religious Exemption Clause (*The Pulpit's Exception*) | The Devout are powerful or in government, and their approval is below zero | 5% | Devout |
+| Religious Exemption Clause (*An Exemption for Faith*) | The Devout are powerful or in government, and their approval is below zero | 5% | Devout |
 | Spoils System (*Rotation in Office*) | One group holds at least half of your government's political strength | 2.5% | That group |
 | Corporate Security Powers (*Company Men*) | A labor movement has 5% support, or unrest as for Order in the Courts; from Corporate Charters on | 5% | Industrialists |
 | Civilian Oversight (*Complaints Against the Force*) | A civil rights movement has 5% support, or unrest as for Order in the Courts; from the Civil Rights Movement technology on | 5% | Intelligentsia |
@@ -116,7 +116,7 @@ you qualify.
 | First Past the Post (*Two Parties Are Enough*) | Two parties whose groups hold at least 60% of your clout, on a voting law without it | 2.5% | The strongest group in either party |
 
 Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
-for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval
+for a few years, and refusing An Exemption for Faith costs the Devout 5 approval
 instead of 3. The No-First-Strike Pledge holds your nuclear doctrine at No First
 Use, so its petition comes only when that changes nothing today.
 

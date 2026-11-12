@@ -94,6 +94,23 @@ te_nuke_attack_nuclear_weapons = {
 	}
 }
 
+# The technology's +100% for an arsenal held without it: a country that came
+# by its warheads through custody (nuclear_strike_attack_rating adds it to the
+# odds; the modifier's own breakdown cannot show it, #1619). Never beside the
+# line above, which needs the technology.
+te_nuke_attack_held_arsenal = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_holds_arsenal_without_technology = yes }
+		localization_key = nuke_attack_line_held_arsenal
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
 te_nuke_attack_icbms = {
 	type = country
 	random_valid = no

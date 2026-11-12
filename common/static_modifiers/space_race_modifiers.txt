@@ -508,6 +508,19 @@ sr_probe_target_asteroid = {
 	country_space_race_progress_add = 0.4
 	country_weekly_innovation_max_add = 25
 }
+# The Grand Tour (space_race_events.81.e, paid by .4.g): every line the three
+# single targets pay, none above the target whose own line it is (research is
+# Venus's, progress and prestige Mars's, the innovation cap the asteroid
+# belt's), and paid for twice as long (very_long_modifier_time against their
+# long_modifier_time, both decaying). test_space_probe_grand_tour.py holds the
+# ordering.
+sr_probe_target_tour = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+	country_space_race_progress_add = 0.4
+	country_prestige_mult = 0.01
+	country_weekly_innovation_max_add = 15
+}
 
 # --- Mars Landing Strategy ---
 sr_mars_direct_landing = {
@@ -571,6 +584,16 @@ sr_choice_probe_mars = {
 sr_choice_probe_asteroid = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_space_race_risk_mult = 0.35
+}
+# The Grand Tour's profile: the heavier probe takes a quarter of the whole
+# program's pace while its milestone runs (the multiplier is the country's, as
+# every choice line is, so other running milestones slow too). Its other cost
+# is not here: two cost levels of weekly innovation in sr_probe_cost
+# (space_race_values.txt), where the approach overheads sit, so an AI that
+# makes no progress does not pay it.
+sr_choice_probe_tour = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_space_race_progress_mult = -0.25
 }
 
 # --- Mars Landing Strategy (Event 83) ---

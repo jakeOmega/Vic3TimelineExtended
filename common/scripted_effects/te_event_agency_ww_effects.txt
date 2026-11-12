@@ -162,6 +162,7 @@ ww_clear_war_phase_modifiers = {
 		if = { limit = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } } je:je_world_war = { remove_modifier = ww_war_propaganda_modifier } }
 		if = { limit = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } } je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier } }
 		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_air_raid_relief_modifier } } je:je_world_war = { remove_modifier = ww_air_raid_relief_modifier } }
 		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
 		if = { limit = { je:je_world_war = { has_modifier = ww_rearmament_modifier } } je:je_world_war = { remove_modifier = ww_rearmament_modifier } }
 		if = { limit = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } } je:je_world_war = { remove_modifier = ww_lend_lease_modifier } }

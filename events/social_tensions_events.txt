@@ -7,7 +7,6 @@
 # Event 1: Domestic Terror Attack
 # A bombing or mass-casualty attack by radical elements. Tied to terrorism_and_anti_terrorism tech era.
 social_tensions_events.1 = {
-	# REVIEWED 2026-09-25 (system_ungated): a domestic terror attack, not a state covert operation
 	type = country_event
 	placement = ROOT
 
@@ -1109,8 +1108,9 @@ social_tensions_events.13 = {
 	title = social_tensions_events.13.t
 	desc = {
 		first_valid = {
-			triggered_desc = { desc = social_tensions_events.13.d_tv trigger = { has_technology_researched = television_broadcasting } }
+			# The later technology first: social media nearly always follows television.
 			triggered_desc = { desc = social_tensions_events.13.d_social trigger = { has_technology_researched = social_media } }
+			triggered_desc = { desc = social_tensions_events.13.d_tv trigger = { has_technology_researched = television_broadcasting } }
 			desc = social_tensions_events.13.d_base
 		}
 	}

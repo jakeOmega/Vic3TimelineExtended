@@ -8613,6 +8613,51 @@ sr_life_has_colony = {
 	}
 }
 
+# Per world, any scope: the world holds people enough for colony politics,
+# sr_free_colony_minimum, the size at which it could stand as a free colony. Below
+# it no autonomy builds (sr_site_aut_pressure_<key> is 0), and it neither demands
+# self-government nor breaks away (sr_site_aut_step_<key>; owner, 2026-11-12).
+sr_site_peopled_valles_marineris = { sr_site_pop_value_valles_marineris >= sr_free_colony_minimum }
+sr_site_peopled_olympus_mons = { sr_site_pop_value_olympus_mons >= sr_free_colony_minimum }
+sr_site_peopled_hellas_planitia = { sr_site_pop_value_hellas_planitia >= sr_free_colony_minimum }
+sr_site_peopled_utopia_planitia = { sr_site_pop_value_utopia_planitia >= sr_free_colony_minimum }
+sr_site_peopled_arcadia_planitia = { sr_site_pop_value_arcadia_planitia >= sr_free_colony_minimum }
+sr_site_peopled_ceres = { sr_site_pop_value_ceres >= sr_free_colony_minimum }
+sr_site_peopled_vesta = { sr_site_pop_value_vesta >= sr_free_colony_minimum }
+sr_site_peopled_psyche = { sr_site_pop_value_psyche >= sr_free_colony_minimum }
+sr_site_peopled_pallas = { sr_site_pop_value_pallas >= sr_free_colony_minimum }
+sr_site_peopled_hygiea = { sr_site_pop_value_hygiea >= sr_free_colony_minimum }
+sr_site_peopled_io = { sr_site_pop_value_io >= sr_free_colony_minimum }
+sr_site_peopled_europa = { sr_site_pop_value_europa >= sr_free_colony_minimum }
+sr_site_peopled_ganymede = { sr_site_pop_value_ganymede >= sr_free_colony_minimum }
+sr_site_peopled_callisto = { sr_site_pop_value_callisto >= sr_free_colony_minimum }
+sr_site_peopled_himalia = { sr_site_pop_value_himalia >= sr_free_colony_minimum }
+sr_site_peopled_amalthea = { sr_site_pop_value_amalthea >= sr_free_colony_minimum }
+sr_site_peopled_venus = { sr_site_pop_value_venus >= sr_free_colony_minimum }
+sr_site_peopled_mercury = { sr_site_pop_value_mercury >= sr_free_colony_minimum }
+sr_site_peopled_titan = { sr_site_pop_value_titan >= sr_free_colony_minimum }
+sr_site_peopled_enceladus = { sr_site_pop_value_enceladus >= sr_free_colony_minimum }
+sr_site_peopled_rhea = { sr_site_pop_value_rhea >= sr_free_colony_minimum }
+sr_site_peopled_mimas = { sr_site_pop_value_mimas >= sr_free_colony_minimum }
+sr_site_peopled_iapetus = { sr_site_pop_value_iapetus >= sr_free_colony_minimum }
+sr_site_peopled_titania = { sr_site_pop_value_titania >= sr_free_colony_minimum }
+sr_site_peopled_oberon = { sr_site_pop_value_oberon >= sr_free_colony_minimum }
+sr_site_peopled_miranda = { sr_site_pop_value_miranda >= sr_free_colony_minimum }
+sr_site_peopled_ariel = { sr_site_pop_value_ariel >= sr_free_colony_minimum }
+sr_site_peopled_triton = { sr_site_pop_value_triton >= sr_free_colony_minimum }
+sr_site_peopled_proteus = { sr_site_pop_value_proteus >= sr_free_colony_minimum }
+sr_site_peopled_pluto = { sr_site_pop_value_pluto >= sr_free_colony_minimum }
+sr_site_peopled_eris = { sr_site_pop_value_eris >= sr_free_colony_minimum }
+sr_site_peopled_makemake = { sr_site_pop_value_makemake >= sr_free_colony_minimum }
+sr_site_peopled_haumea = { sr_site_pop_value_haumea >= sr_free_colony_minimum }
+sr_site_peopled_sedna = { sr_site_pop_value_sedna >= sr_free_colony_minimum }
+sr_site_peopled_shackleton = { sr_site_pop_value_shackleton >= sr_free_colony_minimum }
+sr_site_peopled_peary = { sr_site_pop_value_peary >= sr_free_colony_minimum }
+sr_site_peopled_tranquility = { sr_site_pop_value_tranquility >= sr_free_colony_minimum }
+sr_site_peopled_marius_hills = { sr_site_pop_value_marius_hills >= sr_free_colony_minimum }
+sr_site_peopled_daedalus = { sr_site_pop_value_daedalus >= sr_free_colony_minimum }
+sr_site_peopled_imbrium = { sr_site_pop_value_imbrium >= sr_free_colony_minimum }
+
 # Per world, country scope: THIS may receive the free colony's petition: it supplies
 # it with full ties, can hold a colony, and has no petition open.
 sr_free_may_petition_valles_marineris = {

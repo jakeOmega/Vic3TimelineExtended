@@ -405,6 +405,7 @@
  lawgroup_ministry_of_war:0 "Ministry of War"
  lawgroup_ministry_of_war_desc:0 "As part of the [concept_ministry_system], the establishment of a Ministry of War allows for the management of military affairs, defense strategy, and national security."
  lawgroup_minority_rights:0 "Minority Rights"
+ lawgroup_minority_rights_desc:0 "How the state treats its minorities, from violent persecution to preference in schooling and work."
  lawgroup_monetary_policy:0 "Monetary Policy"
  lawgroup_monetary_policy_desc:0 "The form money take and the extent to which the government controls the money supply, interest rates, and inflation in the economy."
  lawgroup_national_bank:0 "National Bank"

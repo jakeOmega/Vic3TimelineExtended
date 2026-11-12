@@ -275,7 +275,7 @@ banking_cycle_events.104 = {
 		name = banking_cycle_events.104.b
 		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
 		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
-		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_stockpile_release multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 60 }
 	}
@@ -329,7 +329,7 @@ banking_cycle_events.154 = {
 		name = banking_cycle_events.154.b
 		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
 		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
-		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_federation_relief_fund multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 60 }
 	}
@@ -1860,7 +1860,7 @@ banking_cycle_events.116 = {
 		name = banking_cycle_events.116.a
 		default_option = yes
 		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
-		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_plan_figures_upheld days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = { base = 50 }
 	}
@@ -1909,7 +1909,7 @@ banking_cycle_events.166 = {
 		name = banking_cycle_events.166.a
 		default_option = yes
 		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
-		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_old_slate_upheld days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = capitalists }
 		ai_chance = { base = 50 }
 	}

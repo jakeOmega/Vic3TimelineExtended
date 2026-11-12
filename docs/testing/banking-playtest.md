@@ -65,9 +65,9 @@ flavour read the event's own roll, as the options do.
 6. **No `contagion_roll_scope` BROKEN.** It judges every contagion event now, since one is open at a time
    (below), and logs its OK once. The NO_VERDICT lines are gone: a second copy open is `contagion_one_open`'s
    BROKEN. A BROKEN with `open=1` is real: take the fallback in the table.
-7. **The text matches the options.** A country whose own roll crashed reads "Cascading Financial Collapse" and the
+7. **The text matches the options.** A country whose own roll crashed reads "Their Crash Becomes Ours" and the
    cascade description and sees the crash-only options where its laws and institutions allow; a scare reads
-   "Contagion from Abroad" (or "Financial Contagion" after a severe crash) and gets only "Close the gates" and
+   "Contagion from Abroad" (or "Panic Abroad" after a severe crash) and gets only "Close the gates" and
    "Maintain open markets". Two at once should no longer happen (item 8).
 
 ## One contagion event at a time (2026-10-17)
@@ -99,7 +99,7 @@ floor. **The origin is counted once:** `banking_crisis_wave_init` marks the orig
 contagion event it still holds from an earlier wave cannot count it a second time toward the Great Depression.
 
 11. **A crash shelters a country for a year.** A country that crashed, at home or by contagion, and is reached again
-    within the year gets "Contagion from Abroad" (or "Financial Contagion" after a severe crash) with only "Close the
+    within the year gets "Contagion from Abroad" (or "Panic Abroad" after a severe crash) with only "Close the
     gates" and "Maintain open markets", whatever its bubble. `save_country_probe.py --var '^banking_crashed_last_year'`
     shows the marker on it.
 12. **No contagion crash within a year of a crash.** On any country's history chart, a contagion crash marker never
@@ -200,7 +200,7 @@ cycle drop, no radicals. Every engine fact it rests on is used elsewhere in the 
 `trigger_event`, a timed country variable, saved scopes riding into a triggered event), so there is no self-check line.
 
 30. **One scare popup in two years.** In a long game, a country the player runs that is reached by several spreads
-    that roll scares gets "Contagion from Abroad" (or "Financial Contagion" after a severe crash) at most once in 730 days.
+    that roll scares gets "Contagion from Abroad" (or "Panic Abroad" after a severe crash) at most once in 730 days.
     `save_country_probe.py --var '^banking_contagion_'` shows `banking_contagion_scare_cooldown` after the first.
     *Fallback if a second one still opens inside the window:* the variable is not surviving, or `banking_contagion_decide`
     is not the one sending the popup; look for `minor_events_timelineextended.7` in a `trigger_event` anywhere else.
@@ -209,7 +209,7 @@ cycle drop, no radicals. Every engine fact it rests on is used elsewhere in the 
     `banking_contagion_turned_away`, and its cycle value is unchanged by it. The next wave can reach it again.
 32. **A crash is never held back.** A contagion crash inside the cooldown still opens its popup, and does not move the
     cooldown's date. *Watch the title:* the popup is queued after the roll now, with `contagion_crashed` already
-    saved, so a crash should open as "Cascading Financial Collapse". If it reads "Financial Contagion" or "Contagion
+    saved, so a crash should open as "Their Crash Becomes Ours". If it reads "Panic Abroad" or "Contagion
     from Abroad" instead, the engine takes the title it reads at queue time from before that save
     (`scripting_best_practices.md`, "An event's `title` is read when `trigger_event` queues it"); the options and
     text below it still follow the crash, so that is cosmetic.
@@ -321,3 +321,27 @@ in a Panic, or `te_debug_monetary` to seed headline).
 4. **No overshoot to speak of.** Once inflation passes 2% the programme is back to its +1%. If inflation runs past
    6% after a recovery with the tool still on, note how far: the simulator puts the median peak at 5.5%, against
    5.8% with the flat point.
+
+## The arrangement events, one namespace to a file (2026-11-12, #1403)
+
+`events/te_monetary_arrangement_events.txt` declared two namespaces, `te_lolr` and then `te_union`; the `te_union`
+events now have their own file, `events/te_monetary_union_events.txt`. Nobody has established what the engine did
+with the second `namespace` line, and none of these four events has been seen in a running game. If the old file
+was dropping one namespace's events, they fire for the first time with this change, so each needs seeing once. The
+only earlier mention of The Question, P5-17 in `monetary_policy_design.md` ("fewer than ~6 times a campaign"), passes
+if it never fires.
+
+1. **The Question of the Common Currency (`te_union.1`) fires at least once.** As a member of a bloc whose leader
+   runs a common currency at Monetary Union tier II or above, hold out; have the leader Press for Convergence (play
+   the leader in a second game, or wait for an AI leader to). The event opens on the pressed human holdout within
+   the month, names the leader, and Adopt and Refuse each do what their tooltips say. If it never opens:
+   `error.log` for `te_union`, then `te_monetary_update_union`'s step 9b.
+2. **Out of the Common Currency (`te_union.2`)** has its row in the Events table of
+   `told-of-effects-playtest.md`; run it in the same game.
+3. **The Guarantee Is Called (`te_lolr.1`) fires on the guarantor.** Sign a Lender of Last Resort treaty as the
+   guarantor of a country that then defaults (P5-9 has the rest: once in five years, and what reneging does). The
+   event opens on the guarantor when the ward defaults and names the ward.
+4. **The ward is told (`te_lolr.2`).** As the ward in the same arrangement, default: the event opens once the
+   guarantor has answered, with the honored text and the sum when it pays and the refused text when it does not.
+5. **The log.** After a game in which the above ran, neither `error.log` nor `debug.log` has a line naming
+   `te_monetary_arrangement_events.txt` or `te_monetary_union_events.txt`.

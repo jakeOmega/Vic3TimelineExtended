@@ -18,6 +18,8 @@ class BackendCase(unittest.TestCase):
     def setUp(self):
         self.backend = fakes.FakeBackend()
         self.state = win_helper.State()
+        # The game is adopted, as the session adopts it before anything is sent: input goes to no other process.
+        self.assertTrue(self.call("adopt", pid=fakes.GAME_PID, created=fakes.GAME_CREATED)["ok"])
 
     def call(self, op, **fields):
         return win_helper.handle({"id": 1, "op": op, **fields}, self.backend, self.state)
@@ -48,6 +50,8 @@ class ClickTest(BackendCase):
 
     def test_the_window_is_the_one_asked_for(self):
         self.backend.windows[8] = {"hwnd": 80, "title": "other", "responding": True, "client": (500, 500, 100, 100)}
+        self.backend.creation[8] = "A"                            # a second process of the helper's own
+        self.call("adopt", pid=8, created="A")
         out = self.click(1, 1, pid=8)
         self.assertEqual(out["error"], "not_foreground")          # window 80 is not the one in front
         self.assert_nothing_touched()
@@ -105,6 +109,29 @@ class ClickTest(BackendCase):
         self.backend.lose_focus_after_sleep = True
         out = self.click(300, 200)
         self.assertEqual(out["error"], "not_foreground")
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])
+
+    # #1588: the process is proved by its creation time at both looks, so a click never goes to a program that
+    # took the game's id (its window where the game's was, in front, under the point).
+
+    def test_a_process_replaced_before_the_click_is_not_ours_and_nothing_moves(self):
+        self.backend.creation[7] = fakes.REUSED_CREATED
+        out = self.click(300, 200)
+        self.assertEqual((out["ok"], out["error"]), (False, "not_ours"))
+        self.assert_nothing_touched()
+        self.assertEqual(self.state.helper_cursor, None)
+
+    def test_a_process_replaced_while_the_cursor_settles_is_not_pressed(self):
+        def dies(ms):
+            self.backend.creation[7] = fakes.REUSED_CREATED
+        self.backend.on_sleep = dies
+        out = self.click(300, 200)
+        self.assertEqual(out["error"], "not_ours")
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])          # the cursor moved; no button went down
+
+    def test_a_process_that_exited_while_the_cursor_settles_is_not_pressed(self):
+        self.backend.on_sleep = lambda ms: self.backend.creation.pop(7, None)
+        self.assertEqual(self.click(300, 200)["error"], "not_ours")
         self.assertEqual(self.backend.mouse, [("move", 300, 200)])
 
     def test_click_releases_the_button_when_the_press_raises(self):

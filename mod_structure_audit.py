@@ -65,14 +65,18 @@ _FILE_LINE_RE = re.compile(r"(\.txt):\d+")
 
 # `common/<subdir>/` namespaces in which Paradox merges multiple bare blocks
 # of the same name across files instead of treating them as collisions:
-#   - on_actions: every file's `on_X = { events = {...} }` blocks merge
-#   - defines:    every file's `NPops = {...}` group merges keyed-by-key
-#   - history:    every file's `GLOBAL = {...}` block merges
+#   - on_actions:   every file's `on_X = { events = {...} }` blocks merge
+#   - defines:      every file's `NPops = {...}` group merges keyed-by-key
+#   - history:      every file's `GLOBAL = {...}` block merges
+#   - named_colors: every file opens one `colors = {...}` block and they all
+#                   merge; vanilla 1.15 ships seven such files (#1423). A
+#                   `REPLACE:colors` there would drop the other files' colors.
 # Collision detection skips these subdirectories.
 _MERGE_BY_DESIGN_DIRS: frozenset[str] = frozenset({
     "on_actions",
     "defines",
     "history",
+    "named_colors",
 })
 
 
@@ -158,9 +162,9 @@ def audit(mod_state, mod_path: str | None = None) -> AuditResult:
     # `common/<subdirectory>/` since each subdirectory is its own entity-type
     # namespace -- a country tag like `BHA` in `country_definitions/` is a
     # different entity from `BHA` in `dynamic_country_names/`. Subdirectories
-    # in MERGE_BY_DESIGN_DIRS (on_actions, defines, history) accept multiple
-    # bare blocks of the same name from different files; the engine merges
-    # them rather than treating them as collisions.
+    # in _MERGE_BY_DESIGN_DIRS (on_actions, defines, history, named_colors)
+    # accept multiple bare blocks of the same name from different files; the
+    # engine merges them rather than treating them as collisions.
     #
     # Keys: `subdir/name`. Values: list of (relative_file, line).
     all_top_level: dict[str, list[tuple[str, int]]] = {}

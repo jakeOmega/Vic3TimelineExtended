@@ -114,8 +114,9 @@ LOAD_ORDER_MODEL = {
     },
     "bare_duplicate": {
         "status": "probed",
-        "claim": "A bare definition of a key that already exists is dropped (gamedatabase.h:378 "
-                 "`Duplicated key X will not be created from file:`): the first one wins.",
+        "claim": "A bare definition of a key that already exists is dropped (gamedatabase.h "
+                 "`Duplicated key X will not be created from file:`, line 378 on 1.14.5 and 394 "
+                 "on 1.15): the first one wins.",
         "see": f"{LOAD_ORDER_DOC}, fact 3 (static_modifiers, scripted_effects, scripted_triggers, "
                "scripted_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, "
                "breaking_changes.md (no implicit overwrites). Setting: BARE_DUPLICATE_RULES.",
@@ -123,10 +124,11 @@ LOAD_ORDER_MODEL = {
     "directives": {
         "status": "documented",
         "claim": "INJECT/REPLACE act on an existing entry and error when there is none "
-                 "(gamedatabase.h:395); TRY_INJECT/TRY_REPLACE skip it; "
+                 "(gamedatabase.h `You are trying to inject/replace to a non-existing entry`, "
+                 "line 395 on 1.14.5 and 411 on 1.15); TRY_INJECT/TRY_REPLACE skip it; "
                  "INJECT_OR_CREATE/REPLACE_OR_CREATE create it. A REPLACE wipes what came "
                  "before it, an INJECT adds to it.",
-        "see": f"Modding-Digests 1.12.0 inject_types.md; the :395 text, {LOAD_ORDER_DOC}, fact 4.",
+        "see": f"Modding-Digests 1.12.0 inject_types.md; the message's text, {LOAD_ORDER_DOC}, fact 4.",
     },
     "directives_deferred": {
         "status": "probed",
@@ -424,6 +426,8 @@ class Entry:
     line: int
     value: Optional[str]                 # a scalar's value; None for a block
     children: list = field(default_factory=list)   # [(key, line, value)] at depth 1
+    end_line: Optional[int] = None       # the line of the closing brace (a scalar: of its
+                                         # value); None for a block that never closes
 
 
 def split_directive(raw_key: str) -> tuple[Optional[str], str]:
@@ -467,7 +471,8 @@ def _tokens(text: str) -> list[tuple[str, int]]:
 def _block_text(tokens, start: int, cap: int = 200) -> str:
     """The tokens of the block opening at tokens[start], joined by spaces."""
     depth, parts = 0, []
-    for tok, _line in tokens[start:]:
+    for j in range(start, len(tokens)):   # not tokens[start:]: a copy per block is quadratic
+        tok = tokens[j][0]
         parts.append(tok)
         if tok == "{":
             depth += 1
@@ -503,6 +508,8 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
             else:
                 depth -= 1
                 if depth == 0:
+                    if current is not None:
+                        current.end_line = line
                     current = None
             i += 1
             continue
@@ -519,7 +526,8 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
                     directive, key = split_directive(tok)
                     if directive is None and _UNKNOWN_PREFIX_RE.match(tok):
                         warnings.append(f"line {line}: unknown directive prefix in {tok!r}")
-                    entry = Entry(tok, key, directive, line, None if is_block else value_tok)
+                    entry = Entry(tok, key, directive, line, None if is_block else value_tok,
+                                  end_line=None if is_block else tokens[min(i + 2, n - 1)][1])
                     entries.append(entry)
                     current = entry if is_block else None
                 elif depth == 1 and current is not None:

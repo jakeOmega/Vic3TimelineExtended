@@ -166,7 +166,20 @@ extra_law_events.3 = {
 
 	title = extra_law_events.3.t
 	desc = extra_law_events.3.d
-	flavor = extra_law_events.3.f
+	# Bryan's "cross of gold" speech argued against the gold standard: it fits
+	# only an opposition to enacting one.
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_gold_standard }
+				desc = extra_law_events.3.f_gold
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.3.f
+			}
+		}
+	}
 
 	category = enactment
 
@@ -569,10 +582,23 @@ extra_law_events.7 = {
 		add_enactment_modifier = {
 			name = genetics_ethics_debate_advance
 		}
-		scope:devout_ig = {
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
+		# The cost falls on whoever objects to this law (#1613): the Devout
+		# want the Ban, so there it is the scientists who are overruled.
+		if = {
+			limit = { is_enacting_law = law_type:law_ban_on_genetic_modification }
+			ig:ig_intelligentsia ?= {
+				add_modifier = {
+					name = ig_approval_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+		}
+		else = {
+			scope:devout_ig ?= {
+				add_modifier = {
+					name = ig_approval_negative_modifier
+					days = normal_modifier_time
+				}
 			}
 		}
 		ai_chance = { base = 3 }
@@ -1239,8 +1265,21 @@ extra_law_events.16 = {
 		add_enactment_modifier = {
 			name = augment_ethics_board_advance
 		}
-		# Domain side-effect
-		add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		# Domain side-effect: a health scare over the implants the law
+		# allows. Human Purity allows none (#1613), so there the cost is the
+		# scientists whose evidence the hearing set aside.
+		if = {
+			limit = { is_enacting_law = law_type:law_human_purity }
+			ig:ig_intelligentsia ?= {
+				add_modifier = {
+					name = ig_approval_negative_modifier
+					days = normal_modifier_time
+				}
+			}
+		}
+		else = {
+			add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		}
 		ai_chance = { base = 3 }
 	}
 
@@ -1884,6 +1923,16 @@ extra_law_events.25 = {
 	placement = root
 
 	title = extra_law_events.25.t
+	# d_multi shows only when two tongues with separate claims hold. Two of
+	# the shared triggers are group-level and always hold beside a more
+	# specific one: te_heritage_hebrew is true for every Semitic-language
+	# culture (all of them Arabic, Amharic, Tigrinya or Aramaic), and
+	# te_heritage_gothic for every Germanic one, the Scandinavian included.
+	# Counted plainly, those countries always made two, so d_arabic, d_geez,
+	# d_aramaic and d_norse could never show (#1613). Hebrew counts beside
+	# Arabic, Ge'ez or Aramaic only with a Jewish state religion, and Gothic
+	# does not count beside Norse. The options still offer both tongues: the
+	# triggers are shared with the Grand Monuments, which keep the broad match.
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -1891,7 +1940,17 @@ extra_law_events.25 = {
 					calc_true_if = {
 						amount >= 2
 						te_heritage_latin = yes
-						te_heritage_hebrew = yes
+						AND = {
+							te_heritage_hebrew = yes
+							OR = {
+								country_has_state_religion = rel:jewish
+								NOR = {
+									te_heritage_arabic = yes
+									te_heritage_geez = yes
+									te_heritage_aramaic = yes
+								}
+							}
+						}
 						te_heritage_sanskrit = yes
 						te_heritage_geez = yes
 						te_heritage_slavonic = yes
@@ -1904,7 +1963,10 @@ extra_law_events.25 = {
 						te_heritage_coptic = yes
 						te_heritage_nahuatl = yes
 						te_heritage_norse = yes
-						te_heritage_gothic = yes
+						AND = {
+							te_heritage_gothic = yes
+							te_heritage_norse = no
+						}
 						te_heritage_mayan = yes
 						te_heritage_prussian = yes
 						te_heritage_aramaic = yes
@@ -1920,8 +1982,17 @@ extra_law_events.25 = {
 				trigger = { any_primary_culture = { OR = { has_discrimination_trait = language_amharic has_discrimination_trait = language_tigrinya } } }
 				desc = extra_law_events.25.d_geez
 			}
+			# Aramaic before Hebrew: the Hebrew rung below is true for every
+			# Semitic-language culture, Aramaic's included.
 			triggered_desc = {
-				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_semitic } }
+				trigger = { any_primary_culture = { has_discrimination_trait = language_aramaic } }
+				desc = extra_law_events.25.d_aramaic
+			}
+			# The Hebrew description: reached by a Jewish state religion whose
+			# primary cultures claim no tongue of their own (the Semitic
+			# cultures are all caught above).
+			triggered_desc = {
+				trigger = { te_heritage_hebrew = yes }
 				desc = extra_law_events.25.d_semitic
 			}
 			triggered_desc = {
@@ -1983,10 +2054,6 @@ extra_law_events.25 = {
 			triggered_desc = {
 				trigger = { any_primary_culture = { has_discrimination_trait_group = language_group_baltic } }
 				desc = extra_law_events.25.d_baltic
-			}
-			triggered_desc = {
-				trigger = { any_primary_culture = { has_discrimination_trait = language_aramaic } }
-				desc = extra_law_events.25.d_aramaic
 			}
 			triggered_desc = {
 				trigger = { always = yes }
@@ -3150,16 +3217,29 @@ extra_law_events.32 = {
 	placement = root
 
 	title = extra_law_events.32.t
-	# The pledge sentence only when option a can actually be taken.
+	# REVIEWED 2026-11-12 (system_ungated): the two descriptions that name nuclear weapons show only under te_ea_no_first_strike_pledge_available, which reads the nuclear rule and the technology
+	# The pledge sentence only when option a can actually be taken, and the
+	# military necessity sentence only when option b can (not under Limited War).
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { te_ea_no_first_strike_pledge_available = yes }
+				trigger = {
+					te_ea_no_first_strike_pledge_available = yes
+					NOT = { is_enacting_law = law_type:law_limited_war }
+				}
 				desc = extra_law_events.32.d
 			}
 			triggered_desc = {
-				trigger = { always = yes }
+				trigger = { te_ea_no_first_strike_pledge_available = yes }
+				desc = extra_law_events.32.d_pledge_only
+			}
+			triggered_desc = {
+				trigger = { NOT = { is_enacting_law = law_type:law_limited_war } }
 				desc = extra_law_events.32.d_no_pledge
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.32.d_no_clause
 			}
 		}
 	}
@@ -3182,6 +3262,14 @@ extra_law_events.32 = {
 			is_enacting_law = law_type:law_humanitarian_regulations
 			is_enacting_law = law_type:law_limited_war
 			is_enacting_law = law_type:law_war_crimes_forbidden
+		}
+		# Limited War can take only the pledge (option b excludes it), so
+		# without the nuclear rule and technology the event would offer "no
+		# amendment" alone (#1613). d_no_clause above is then unreachable and
+		# stays as the first_valid's fallback.
+		OR = {
+			NOT = { is_enacting_law = law_type:law_limited_war }
+			te_ea_no_first_strike_pledge_available = yes
 		}
 		NOT = {
 			currently_enacting_law = {
@@ -5136,8 +5224,36 @@ extra_law_events.49 = {
 	placement = root
 
 	title = extra_law_events.49.t
-	desc = extra_law_events.49.d
-	flavor = extra_law_events.49.f
+	# The two pluralist laws are opposed for the opposite reason: the
+	# default text has the law costing a people its language.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_multilingual_federalism
+						is_enacting_law = law_type:law_ubiquitous_translation
+					}
+				}
+				desc = extra_law_events.49.d_pluralist
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.49.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_multilingual_federalism
+						is_enacting_law = law_type:law_ubiquitous_translation
+					}
+				}
+				desc = extra_law_events.49.f_pluralist
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.49.f }
+		}
+	}
 
 	category = enactment
 
@@ -5212,8 +5328,19 @@ extra_law_events.49 = {
 		add_enactment_modifier = {
 			name = langpol_cultural_resistance_stall
 		}
-		# Domain side-effect
-		add_modifier = { name = langpol_assimilation_boost days = normal_modifier_time }
+		# Domain side-effect, only for the laws that press one language
+		# (#1613): Multilingual Federalism and Ubiquitous Translation keep
+		# the minority languages in use, so pressing on with them speeds no
+		# assimilation. The same split as the description's.
+		if = {
+			limit = {
+				NOR = {
+					is_enacting_law = law_type:law_multilingual_federalism
+					is_enacting_law = law_type:law_ubiquitous_translation
+				}
+			}
+			add_modifier = { name = langpol_assimilation_boost days = normal_modifier_time }
+		}
 	}
 }
 
@@ -5311,8 +5438,27 @@ extra_law_events.51 = {
 	placement = root
 
 	title = extra_law_events.51.t
-	desc = extra_law_events.51.d
-	flavor = extra_law_events.51.f
+	# Unitary State takes power from the regions, so the regions object;
+	# Federal System and Devolved Administration give it to them, so the
+	# objection comes from those who want one government for the country.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_unitary_state }
+				desc = extra_law_events.51.d
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.51.d_central }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_unitary_state }
+				desc = extra_law_events.51.f
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.51.f_central }
+		}
+	}
 
 	category = enactment
 
@@ -5400,8 +5546,36 @@ extra_law_events.52 = {
 	placement = root
 
 	title = extra_law_events.52.t
-	desc = extra_law_events.52.d
-	flavor = extra_law_events.52.f
+	# Human Purity and Medical Augmentation Only forbid enhancement, so they
+	# are opposed by those who want it, not by the ethicists of the default.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_human_purity
+						is_enacting_law = law_type:law_medical_augmentation_only
+					}
+				}
+				desc = extra_law_events.52.d_purity
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.52.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_human_purity
+						is_enacting_law = law_type:law_medical_augmentation_only
+					}
+				}
+				desc = extra_law_events.52.f_purity
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.52.f }
+		}
+	}
 
 	category = enactment
 
@@ -5476,8 +5650,18 @@ extra_law_events.52 = {
 		add_enactment_modifier = {
 			name = augment_ethics_board_stall
 		}
-		# Domain side-effect
-		add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		# Domain side-effect, only for the laws that allow enhancement
+		# (#1613): no health scare over implants when the law pressed on is
+		# one that forbids them. The same split as the description's.
+		if = {
+			limit = {
+				NOR = {
+					is_enacting_law = law_type:law_human_purity
+					is_enacting_law = law_type:law_medical_augmentation_only
+				}
+			}
+			add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		}
 	}
 }
 
@@ -5489,7 +5673,17 @@ extra_law_events.53 = {
 	placement = root
 
 	title = extra_law_events.53.t
-	desc = extra_law_events.53.d
+	# Freedom of Testation lets an estate pass whole, so it is opposed by
+	# those who want it shared, not by the old families of the default.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_free_testation }
+				desc = extra_law_events.53.d_testation
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.53.d }
+		}
+	}
 	flavor = extra_law_events.53.f
 
 	category = enactment
@@ -5564,8 +5758,14 @@ extra_law_events.53 = {
 		add_enactment_modifier = {
 			name = inherit_succession_dispute_stall
 		}
-		# Domain side-effect
-		add_modifier = { name = inherit_wealth_consolidation days = normal_modifier_time }
+		# Domain side-effect, only for Freedom of Testation (#1613), the one
+		# law here under which an estate passes whole: Concentrated
+		# Inheritances is what its opponents warn of. The other three divide
+		# or end inheritance, so pressing on with them concentrates nothing.
+		if = {
+			limit = { is_enacting_law = law_type:law_free_testation }
+			add_modifier = { name = inherit_wealth_consolidation days = normal_modifier_time }
+		}
 	}
 }
 
@@ -5844,8 +6044,26 @@ extra_law_events.57 = {
 	placement = root
 
 	title = extra_law_events.57.t
-	desc = extra_law_events.57.d
-	flavor = extra_law_events.57.f
+	# Indifference can end protection or end persecution, so its variant
+	# takes no side; the default has a majority resisting minority rights.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_minority_rights_indifference }
+				desc = extra_law_events.57.d_indifference
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.57.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_minority_rights_indifference }
+				desc = extra_law_events.57.f_indifference
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.57.f }
+		}
+	}
 
 	category = enactment
 
@@ -6465,10 +6683,13 @@ extra_law_events.65 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		# Only the two laws that protect personal data (#1613, as .79 was
+		# narrowed): an exemption from privacy rules means nothing on an
+		# Intrusive Surveillance System bill, which sets none. That law still
+		# gets .5 and .41.
 		OR = {
 			is_enacting_law = law_type:law_moderate_data_privacy
 			is_enacting_law = law_type:law_strong_privacy_rights
-			is_enacting_law = law_type:law_intrusive_surveillance
 		}
 		NOR = {
 			has_modifier = privacy_civil_liberties_carve_outs
@@ -6954,14 +7175,18 @@ extra_law_events.73 = {
 		name = extra_law_events.73.a
 		default_option = yes
 		add_enactment_modifier = { name = langpol_pluralist_accommodation }
-		# Domain side-effect
-		add_modifier = { name = langpol_assimilation_boost days = normal_modifier_time }
+		# The concession's benefit: the speakers of the minority languages,
+		# the mirror of option b's radicals. Until #1613 this option carried
+		# the assimilation push, the opposite of what it says.
+		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 1 }
 	}
 
 	option = {
 		name = extra_law_events.73.b
 		add_enactment_modifier = { name = langpol_assimilationist_push }
+		# Domain side-effect
+		add_modifier = { name = langpol_assimilation_boost days = normal_modifier_time }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = { base = 3 }
@@ -7165,11 +7390,14 @@ extra_law_events.77 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		# Only the two laws under which an estate passes to heirs (#1613, as
+		# .79 was narrowed): under State as Universal Heir and Possession by
+		# Use nothing does, so "Great Estates Broken Up" and "Primogeniture
+		# Preserved" read as another law's clauses. Those two still get .17
+		# and .53.
 		OR = {
 			is_enacting_law = law_type:law_equal_inheritance
 			is_enacting_law = law_type:law_free_testation
-			is_enacting_law = law_type:law_state_universal_heir
-			is_enacting_law = law_type:law_non_inheritable_usage_rights
 		}
 		NOR = {
 			has_modifier = inherit_equal_split
@@ -7189,8 +7417,11 @@ extra_law_events.77 = {
 		name = extra_law_events.77.a
 		default_option = yes
 		add_enactment_modifier = { name = inherit_equal_split }
-		# Domain side-effect
-		add_modifier = { name = inherit_wealth_consolidation days = normal_modifier_time }
+		# The mirror of option b, as .75 pairs its two sides. Until #1613
+		# this option carried Concentrated Inheritances (Aristocrats' political
+		# strength +10%), the opposite of dividing the estates.
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 		ai_chance = { base = 3 }
 	}
 
@@ -7405,10 +7636,12 @@ extra_law_events.81 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		# Only the two laws the debate is between (#1613, as .79 was
+		# narrowed): an Indifference bill favors and guarantees nothing, so
+		# neither clause is its own. That law still gets .21 and .57.
 		OR = {
 			is_enacting_law = law_type:law_minority_rights_protection
 			is_enacting_law = law_type:law_minority_rights_affirmative_action
-			is_enacting_law = law_type:law_minority_rights_indifference
 		}
 		NOR = {
 			has_modifier = minrights_affirmative_action
@@ -7464,10 +7697,10 @@ extra_law_events.82 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		OR = {
-			is_enacting_law = law_type:law_universal_basic_income
-			is_enacting_law = law_type:law_post-scarcity
-		}
+		# Only Universal Basic Income (#1613, as .79 was narrowed): under a
+		# Post-Scarcity Economy bill nobody is retrained for work and an
+		# income is no longer the question. That law still gets .22 and .58.
+		is_enacting_law = law_type:law_universal_basic_income
 		NOR = {
 			has_modifier = welfare_retraining_first
 			has_modifier = welfare_ubi_first
@@ -7639,6 +7872,10 @@ extra_law_events.85 = {
 	duration = 3
 
 	trigger = {
+		# The description names the Industrialists and option a has them
+		# sponsor the amendment; the exemption can outlive the group (#1613).
+		# Without them it lapses with vanilla's toast alone.
+		exists = ig:ig_industrialists
 	}
 
 	immediate = {
@@ -7718,6 +7955,9 @@ extra_law_events.86 = {
 	duration = 3
 
 	trigger = {
+		# As .85: the description names the Industrialists, who may be gone
+		# by the time the grace period ends (#1613).
+		exists = ig:ig_industrialists
 	}
 
 	immediate = {

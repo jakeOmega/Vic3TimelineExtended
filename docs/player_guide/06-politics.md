@@ -277,7 +277,7 @@ Each one says Robotic or AI-Managed in its tooltip.
 |---|---|---|
 | Unrestricted Automation | Nothing changes. | Displaced Workers when the share rises (below) |
 | Robot Tax | +10% taxes collected from pops | Capitalists invest 5% less of their profits; Displaced Workers at half size |
-| Human Labor Quotas | The Trade Unions gain 10% political strength and movements create 10% fewer radicals; the methods above can't be used, so the buildings on them keep their workers; no Neo-Luddite Terrorism | The output those methods add |
+| Human Labor Quotas | The Trade Unions gain 10% political strength and movements create 10% fewer radicals; the methods above can't be used, so the buildings on them keep their workers; the event The New Luddites can't fire | The output those methods add |
 | Automation Dividend | +2 standard of living for the lower strata and +1 for the middle strata, half as much again with Universal Basic Income or Post-Scarcity Economy | Capitalists invest 10% less of their profits |
 
 At a share of 40%, Robot Tax gives +4% taxes. Its effect and the Dividend's

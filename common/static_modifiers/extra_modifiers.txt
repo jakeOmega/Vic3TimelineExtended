@@ -693,6 +693,21 @@ banking_event_deposit_guarantee_emergency = {
 	country_te_budget_expense_banking_add = 1
 }
 
+# The same charge under the names the planned (.104.b) and cooperative (.154.b)
+# variants of the event give it: neither economy has bank deposits to guarantee
+# (#1612). Keep all three at the same values.
+banking_event_stockpile_release = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
+}
+
+banking_event_federation_relief_fund = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
+}
+
 banking_event_selective_bailout = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	goods_output_services_mult = 0.03
@@ -840,6 +855,23 @@ banking_event_currency_collapse = {
 
 # --- Event 16: Central Bank Independence Debate ---
 banking_event_cb_independence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_risk_premium_add = -0.01
+	country_banking_random_momentum_mult = -0.15
+	country_banking_crash_chance_mult = -0.1
+}
+
+# The same effects under the names the planned (.116.a, the bureau backed) and
+# cooperative (.166.a, the old slate backed) variants give them: neither is a
+# central bank's independence (#1612). Keep all three at the same values.
+banking_event_plan_figures_upheld = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_risk_premium_add = -0.01
+	country_banking_random_momentum_mult = -0.15
+	country_banking_crash_chance_mult = -0.1
+}
+
+banking_event_old_slate_upheld = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_risk_premium_add = -0.01
 	country_banking_random_momentum_mult = -0.15
@@ -2503,7 +2535,7 @@ bloody_decolonization_legacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_cost_add = 50
 	state_radicals_from_political_movements_mult = 0.10
-	country_prestige_add = 25
+	country_prestige_mult = 0.05
 	character_loyalty_add = -2
 }
 
@@ -4717,6 +4749,18 @@ ww_home_front_strain_modifier = {
 	country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 }
 
+# world_war_events.11.a, "Put the safety of our cities first": the home front
+# strain's values under a name of its own, decaying, on the journal entry.
+# Until #1617 the option added a decaying copy of ww_home_front_strain_modifier
+# itself. Before the war's second year that copy kept the pulse from adding the
+# standing one until it had run out (the pulse adds it only when the entry
+# holds none), and after it the two stacked. Keep the two at the same values.
+ww_air_raid_relief_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_bureaucracy_mult = -0.1
+	country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
+}
+
 # ---- Late Entry Modifiers ----
 
 # Fresh forces - late entrant has rested, well-supplied troops
@@ -5992,12 +6036,6 @@ augmentation_market_efficiency_modifier = {
 	country_weekly_innovation_mult = 0.03
 }
 
-augmentation_mandate_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_weekly_innovation_mult = 0.05
-	state_turmoil_effects_mult = 0.10
-}
-
 # Event 4: Religious condemnation
 augmentation_religious_anger_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -6276,7 +6314,7 @@ surveillance_massive_expansion_modifier = {
 	country_prestige_mult = -0.03
 }
 
-# Event 4: AI predictive policing
+# Event 4: predictive policing (era 9 software, not AI: the loc says "prediction software")
 predictive_policing_deployed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 75
@@ -7621,6 +7659,14 @@ nuclear_civilian_applications = {
 
 # Nuclear program — safety review after incident/close call
 nuclear_safety_review = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_tech_spread_add = 15
+}
+
+# The same review under the name the Close Call gives it
+# (nuclear_weapon_events.21.a): that country has no nuclear program to review,
+# only warning stations (#1619). Keep both at the same values.
+nuclear_warning_review = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_tech_spread_add = 15
 }

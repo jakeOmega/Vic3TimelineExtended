@@ -214,6 +214,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("system_ungated", "unchosen_self_action", "imputed_foreign_action"),
     ),
     Audit(
+        "faith_scene_audit",
+        "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
+        "a country of another state religion can be shown: its title, description, flavor, option, "
+        "tooltip or a modifier it adds. Write the scene without a named faith, or gate that version on "
+        "the faith (#1531).",
+        where="trailing on the key's loc line",
+        tags=("faith_scene",),
+        note="`--explain <key>` lists where a key is named and the gate read at each place. It reads "
+             "religion gates only: a text gated on culture, a country or a variable is flagged and "
+             "takes the comment. The word list is `VOCABULARY` in the audit.",
+    ),
+    Audit(
         "silent_variable_audit",
         "An event option that moves a number the UI shows with `change_variable` / `set_variable`, "
         "which render nothing in the tooltip. Wrap it in a `custom_tooltip`.",
@@ -231,8 +243,9 @@ AUDITS: tuple[Audit, ...] = (
         "event_magnitude_audit",
         "A hardcoded amount in an event for a resource that grows fast over the game (prestige is the "
         "model case), which is invisible at late-game scale.",
-        ci=None,
         where=VALUE_LINE,
+        note="Reads `events/` only: an amount granted from a scripted effect is flagged only where an "
+             "event repeats it, as in a `show_as_tooltip` (#1593).",
     ),
     # --- treaties, blocs, companies, laws ------------------------------------
     Audit(
@@ -247,9 +260,17 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "treaty_evaluation_scope_audit",
-        "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root.",
+        "A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root; or a "
+        "party scope in a block that does not bind it: `scope:source_country` / `scope:target_country` "
+        "in `visible` / `possible` (use root and `scope:other_country`), or `scope:other_country` in "
+        "`can_ratify` / `requirement_to_maintain` (use source / target; first / second on a mutual "
+        "article).",
         post_load=False,
+        where="trailing on the flagged line, for a read in `visible`, `possible`, `can_ratify` or "
+              "`requirement_to_maintain`; a read in `evaluation_chance` takes none",
+        tags=("treaty_scope",),
         report=None,
+        note="Direct reads only: it does not open a scripted trigger or value the block calls.",
     ),
     Audit(
         "principle_tier_audit",
@@ -283,6 +304,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("ideology_lawgroup",),
     ),
     Audit(
+        "roster_membership_audit",
+        "A mod ship type with no `ai_ship_category` (required since vanilla 1.14.4), an unknown one, or "
+        "no fleet entity row; a ship modification no ship type lists in a slot, so it can never be "
+        "fitted; or a production method no production method group lists.",
+        where="trailing on the opening line of the unlisted modification or production method; a ship "
+              "type flag takes none",
+        tags=("roster_membership",),
+        note="Builds a small ModState from vanilla_parsed/. The fleet entity check reads the `SHIPS` "
+             "table of `scripts/generators/gen_fleet_entities.py`, and the generated blocks too where "
+             "gfx/ is on disk.",
+    ),
+    Audit(
         "pm_employment_audit",
         "A building where some valid production-method combination drives a profession's employment "
         "below zero.",
@@ -307,9 +340,12 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "loc_render_audit",
-        "Bracket-style formatting in a loc value (`[b]x[/b]`), which errors on every render. Write "
-        "`#b x#!`.",
+        "Bracket-style formatting in a loc value (`[b]x[/b]`), which errors on every render: write "
+        "`#b x#!`. Also a formatting tag left open at the end of a value (`#bold` with no `#!`), which "
+        "runs on into the text after it, and a `#` that is no tag: write a literal hash as `##`.",
         where="trailing on the loc line",
+        note="Only the mod's own values are judged, and a surplus `#!` is never flagged. An opening "
+             "fragment that its caller closes takes the comment, naming the caller.",
     ),
     Audit(
         "loc_script_value_audit",
