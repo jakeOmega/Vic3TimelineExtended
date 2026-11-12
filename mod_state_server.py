@@ -6582,7 +6582,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             dedupe, summarize, diff_against_backup, cluster_sessions,
             load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
             gui_injected_scope_names, tag_gui_injected_scopes, apply_known_noise_modes,
-            vanilla_gui_file_names, mod_gui_references, untag_mod_gui_fetches,
+            vanilla_gui_file_names, mod_gui_references, untag_mod_gui_fetches, new_mod_gui_warnings,
         )
 
         vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
@@ -6623,6 +6623,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 return kept
             return entries
 
+        # What a tagging pass could not do, added to every reply that tagged.
+        tagging_limits: dict = {}
+
         def _apply_known_noise_tagging(entries, vanilla_mode, mod_noise_mode):
             """Tag entries against both registries, then apply per-kind modes (show|hide|only).
 
@@ -6632,8 +6635,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
             or loc string sets with AddScope; open_issues.md L14). Once tagged,
             an entry's vanilla_bug_ref.kind tells us which mode applies.
             Last, a GUI data-context failure under a source-only vanilla entry
-            loses its tag when a mod-owned .gui reaches the key or data type it
-            names (#1269); the entry then carries `mod_gui_context`.
+            loses its tag when the mod's own GUI reaches the key or data type
+            it names (#1269); the entry then carries `mod_gui_context`. Where
+            that pass could not do all of it (no game install), the reply
+            says why under `mod_gui_untagging`.
             """
             # mod_root: a `- stack: vanilla only` entry skips stacks with a mod frame (#863).
             tag_vanilla_bugs(entries, vb_by_basename, vb_by_source, mod_root=mod_path)
@@ -6643,9 +6648,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 os.path.join(mod_path, "localization", "english"),
             ]))
             mod_gui = mod_gui_references(mod_path, vanilla_gui_file_names(base_game_path))
-            for warning in mod_gui.warnings:  # /logs has no warnings field: the server log
+            for warning in new_mod_gui_warnings(mod_gui):  # once per process
                 logger.warning("/logs: %s", warning)
-            untag_mod_gui_fetches(entries, mod_gui)
+            if mod_gui.warnings:
+                tagging_limits["mod_gui_untagging"] = list(mod_gui.warnings)
+            untag_mod_gui_fetches(entries, mod_gui, (vb_by_source, mn_by_source), mod_root=mod_path)
 
             return apply_known_noise_modes(entries, vanilla_mode, mod_noise_mode)
 
@@ -6711,6 +6718,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
                 "diff": diff_against_backup(current_entries, against_entries),
+                **tagging_limits,
             }
 
         # Raw / parsed entries
@@ -6747,7 +6755,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             since=(params.get("since") or [None])[0],
         )
         if (params.get("summary") or ["false"])[0].lower() == "true":
-            return {"file": match.to_dict(), **summarize(entries)}
+            return {"file": match.to_dict(), **summarize(entries), **tagging_limits}
 
         if (params.get("raw") or ["false"])[0].lower() == "true":
             limit = int((params.get("limit") or ["1000"])[0])
@@ -6757,7 +6765,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 f"[{e.time}][{e.source}]: {e.message}" if e.time else e.message
                 for e in chunk
             )
-            return {"file": match.to_dict(), "raw": text, "count": len(chunk)}
+            return {"file": match.to_dict(), "raw": text, "count": len(chunk), **tagging_limits}
 
         do_dedupe = (params.get("dedupe") or ["true"])[0].lower() == "true"
         if do_dedupe:
@@ -6770,6 +6778,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "deduped": True,
                 "total_unique": len(deduped),
                 "entries": deduped[offset: offset + limit],
+                **tagging_limits,
             }
         limit = int((params.get("limit") or ["1000"])[0])
         offset = int((params.get("offset") or ["0"])[0])
@@ -6779,6 +6788,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "deduped": False,
             "total": len(entries),
             "entries": [e.to_dict() for e in chunk],
+            **tagging_limits,
         }
 
     def _auto_generated(self):

@@ -367,12 +367,29 @@ PdxDataFetchLocalizedData failed for
         # Vanilla's own flood stays under its entries, and is still counted.
         self.assertEqual(untagged.count("MOD GUI:"), 3)
         self.assertIn("[vanilla_noise] vanilla GUI loc fetch failure", section(report, "Volume"))
-        self.assertNotIn("mod GUI untagging is off", report)
+        self.assertNotIn("mod GUI untagging", report)
 
-    def test_without_the_install_the_lines_stay_hidden_and_the_registry_section_says_why(self):
+    def test_without_the_install_only_the_mods_own_key_shows_and_the_registry_section_says_why(self):
         report = self.fx.report()
-        self.assertNotIn("PopsOverviewPanel", section(report, "Untagged"))
-        self.assertIn("mod GUI untagging is off: no vanilla GUI folder", section(report, "Registry"))
+        untagged = section(report, "Untagged")
+        # A key vanilla's loc lacks is the mod's with no install to consult ...
+        self.assertIn("MOD GUI: loc key 'te_census_income' is drawn by gui/te_census_widgets.gui", untagged)
+        # ... but no file can be called the mod's own, so no data type is.
+        self.assertEqual(untagged.count("MOD GUI:"), 1)
+        self.assertNotIn("  [pdx_data_callstack.cpp:16]", untagged)
+        self.assertIn("mod GUI untagging is limited to keys only the mod's loc defines: no vanilla GUI folder",
+                      section(report, "Registry"))
+
+    def test_a_key_no_gui_names_is_listed_with_the_loc_file_that_defines_it(self):
+        note = log_triage.mod_gui_note({"key": "te_event_desc", "files": ["localization/english/te_l_english.yml"],
+                                        "file_count": 1, "untagged_from": "vanilla GUI loc fetch failure"})
+        self.assertEqual(note, "MOD GUI: loc key 'te_event_desc' is the mod's own "
+                               "(localization/english/te_l_english.yml); no .gui names it; "
+                               "otherwise hidden by 'vanilla GUI loc fetch failure'")
+        note = log_triage.mod_gui_note({"type": "Country", "files": ["gui/a.gui", "gui/b.gui"], "file_count": 7,
+                                        "untagged_from": "x"})
+        self.assertEqual(note, "MOD GUI: data type 'Country' is read by gui/a.gui, gui/b.gui and 5 more; "
+                               "otherwise hidden by 'x'")
 
 
 class PauseTests(unittest.TestCase):

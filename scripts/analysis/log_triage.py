@@ -217,7 +217,7 @@ class Registries:
     mod's own GUI reaches, loaded from `docs_root` (a checkout), tagging as
     /logs tags. `vanilla_game` is the install's `game` folder: without it no
     mod `.gui` file can be told from an override of vanilla's, so the mod GUI
-    untagging is off and `warnings` says so."""
+    untagging is limited to the mod's own loc keys and `warnings` says so."""
 
     def __init__(self, docs_root: str, mod_root: str, vanilla_game: str | None = None):
         self.mod_root = mod_root
@@ -236,7 +236,7 @@ class Registries:
         glr.tag_vanilla_bugs(entries, self.vb, self.vs, mod_root=self.mod_root)
         glr.tag_vanilla_bugs(entries, self.mb, self.ms, mod_root=self.mod_root)
         glr.tag_gui_injected_scopes(entries, self.gui_scopes)
-        glr.untag_mod_gui_fetches(entries, self.mod_gui)
+        glr.untag_mod_gui_fetches(entries, self.mod_gui, (self.vs, self.ms), mod_root=self.mod_root)
 
 
 # ------------------------------------------------------------------ launches
@@ -484,12 +484,16 @@ def neighbours(finding: Finding, first: dt.datetime, lines_by_second: dict, limi
 def mod_gui_note(context: dict) -> str:
     """Why a GUI data-context failure is listed although a vanilla entry
     matches it: the mod files that draw the key or read the data type."""
-    what = (f"loc key '{context['key']}' is drawn by" if "key" in context
-            else f"data type '{context['type']}' is read by")
+    files = ", ".join(context["files"])
     more = context["file_count"] - len(context["files"])
-    return (f"MOD GUI: {what} {', '.join(context['files'])}"
-            + (f" and {more} more" if more > 0 else "")
-            + f"; otherwise hidden by '{context['untagged_from']}'")
+    files += f" and {more} more" if more > 0 else ""
+    if "type" in context:
+        what = f"data type '{context['type']}' is read by {files}"
+    elif context["files"][0].endswith(".gui"):
+        what = f"loc key '{context['key']}' is drawn by {files}"
+    else:  # a key only the mod's loc defines, which no .gui names
+        what = f"loc key '{context['key']}' is the mod's own ({files}); no .gui names it"
+    return f"MOD GUI: {what}; otherwise hidden by '{context['untagged_from']}'"
 
 
 def describe(finding: Finding, clock: Clock, mod_root: str, vanilla_game: str | None,
