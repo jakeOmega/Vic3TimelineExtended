@@ -16,6 +16,11 @@ than a failed step:
 
   * keys go only to the process's own window while that window is in front,
     checked again before every step and before every character of typed text;
+  * keys, a click and the ALT tap of `focus` go only to a process this helper
+    started or adopted, and only while the live process still has the creation
+    time recorded then, read again before every step, every character and the
+    press (`not_ours`): a batch that began at the game must not end at whatever
+    program took its id when the game died;
   * a process is ended only if this helper started it (or was told its
     creation time) and the live process still has that creation time: a
     process id is reused, the pair is not. One it started that has already
@@ -361,8 +366,20 @@ def _op_idle_ms(req, backend, state):
     return {"idle_ms": max(0, backend.tick() - state.last_foreign_tick)}
 
 
+def _prove_ours(backend, state: State, pid: int, **fields) -> None:
+    """The process is still the one this helper started or adopted: its creation time is read again and compared
+    with the one recorded then, as `_op_adopt` and `_op_kill` compare it (an id is reused, the pair is not). A
+    process never recorded is refused the same way, so no input goes out by a process id alone."""
+    recorded = state.ours.get(pid)
+    if recorded is None:
+        raise _Refusal("not_ours", "process %d was not started or adopted by this helper" % pid, **fields)
+    if backend.creation_time(pid) != recorded:
+        raise _Refusal("not_ours", "no live process %d was created at %s" % (pid, recorded), **fields)
+
+
 def _op_focus(req, backend, state):
     pid = _pid(req)
+    _prove_ours(backend, state, pid)    # before the window is looked up: an ALT tap lands in whatever is in front
     win = _window(backend, pid)
     if win is None:
         return {"foreground": False}
@@ -402,8 +419,10 @@ def _steps(req: dict) -> list[tuple[str, object]]:
 
 
 def _front_window(backend, state: State, pid: int, **fields) -> dict:
-    """The game's window, which must be in front; then look at the system's latest input, as close to the send as
-    possible, so a person's key in the gap is seen and not written over by ours."""
+    """The game's window, which must be in front, once the process is proved to be the one recorded
+    (`_prove_ours`); then look at the system's latest input, as close to the send as possible, so a person's key
+    in the gap is seen and not written over by ours. Called before every step, character and press."""
+    _prove_ours(backend, state, pid, **fields)
     win = _window(backend, pid)
     if win is None or backend.foreground_hwnd() != win["hwnd"]:
         raise _Refusal("not_foreground", "the game's window is not in front", **fields)

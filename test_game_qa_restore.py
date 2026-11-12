@@ -425,6 +425,206 @@ class RestoreTests(RestoreTestCase):
         self.assertEqual(events(snap), ["started", "game_exited"])
 
 
+class RetimeTests(RestoreTestCase):
+    """#1588: a file the run wrote again with the same bytes (the game writes `pdx_settings.json` at every launch)
+    is not rewritten, and gets the time the snapshot recorded back, but only a time the run can have set."""
+
+    RUN_SECONDS = 60
+
+    def rewritten(self, rel="pdx_settings.json", seconds_into_run=30.0, exited=True):
+        """A run from NOW, exited after RUN_SECONDS, whose game wrote `rel` again with the bytes it had, that long
+        after the start; the owner's file was a day old. Returns the snapshot, the path and the owner's time."""
+        path = self.user / rel
+        set_mtime(path, NOW, -86400)
+        owners = path.stat().st_mtime_ns
+        snap = self.run_started(at=NOW)
+        path.write_bytes(path.read_bytes())
+        set_mtime(path, NOW, seconds_into_run)
+        if exited:
+            finish(snap, at=NOW + timedelta(seconds=self.RUN_SECONDS))
+        return snap, path, owners
+
+    def test_a_file_rewritten_with_the_same_bytes_gets_the_snapshots_time_back(self):
+        before = tree(self.user)
+        set_mtime(self.user / "pdx_settings.json", NOW, -86400)
+        before["pdx_settings.json"] = (before["pdx_settings.json"][0], (self.user / "pdx_settings.json").stat().st_mtime_ns)
+        snap, path, owners = self.rewritten()
+        inode = path.stat().st_ino
+        out = restore.restore(snap, self.user, other_game_running=False, now=NOW)
+        self.assertEqual((out.held, out.restored, out.removed, out.retimed), (False, [], [], ["pdx_settings.json"]))
+        self.assertEqual(path.stat().st_mtime_ns, owners)
+        self.assertEqual(path.stat().st_ino, inode)                 # the same file: nothing was written over it
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual(snapshot.journal(snap)[-1], {"event": "restored", "at": "2026-11-10T12:00:00Z",
+                                                      "restored": [], "removed": [], "retimed": ["pdx_settings.json"]})
+
+    def test_it_is_listed_beside_what_was_put_back_and_never_among_it(self):
+        snap, path, owners = self.rewritten()
+        (self.user / "console_history.txt").write_text("event x\n")
+        set_mtime(self.user / "console_history.txt", NOW, 10)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.restored, out.retimed), (["console_history.txt"], ["pdx_settings.json"]))
+
+    def test_nothing_is_listed_when_no_time_moved(self):
+        snap = self.run_started()
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.retimed, [])
+        self.assertNotIn("retimed", snapshot.journal(snap)[-1])
+
+    def test_a_time_later_than_the_runs_end_is_someone_elses_and_stays(self):
+        # The owner's launcher saved the same settings after the run: no hold (the bytes match), and their time.
+        snap, path, owners = self.rewritten(seconds_into_run=self.RUN_SECONDS + restore.SLACK_SECONDS + 0.5)
+        written = path.stat().st_mtime_ns
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.stat().st_mtime_ns, written)
+
+    def test_a_time_within_the_slack_after_the_end_is_the_runs(self):
+        snap, path, owners = self.rewritten(seconds_into_run=self.RUN_SECONDS + restore.SLACK_SECONDS)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.retimed, ["pdx_settings.json"])
+        self.assertEqual(path.stat().st_mtime_ns, owners)
+
+    def test_without_a_recorded_end_no_time_is_touched(self):
+        path = self.user / "pdx_settings.json"
+        set_mtime(path, NOW, -86400)
+        snap = self.take()                                          # no journal: nothing says when a run ended
+        path.write_bytes(path.read_bytes())
+        set_mtime(path, NOW, 30)
+        written = path.stat().st_mtime_ns
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.stat().st_mtime_ns, written)
+
+    def test_with_only_a_start_recorded_the_start_is_the_limit(self):
+        snap, path, owners = self.rewritten(seconds_into_run=30.0, exited=False)
+        written = path.stat().st_mtime_ns
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.retimed, [])
+        self.assertEqual(path.stat().st_mtime_ns, written)
+
+    def test_a_time_earlier_than_the_snapshots_is_not_the_runs_and_stays(self):
+        snap, path, owners = self.rewritten()
+        set_mtime(path, NOW, -2 * 86400)
+        earlier = path.stat().st_mtime_ns
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.retimed, [])
+        self.assertEqual(path.stat().st_mtime_ns, earlier)
+
+    def test_a_log_is_retimed_with_the_rest_and_left_alone_when_told_to_leave_the_logs(self):
+        for logs, expected in ((True, ["logs/error.log"]), (False, [])):
+            with self.subTest(logs=logs):
+                snap, path, owners = self.rewritten("logs/error.log")
+                written = path.stat().st_mtime_ns
+                out = restore.restore(snap, self.user, other_game_running=False, logs=logs)
+                self.assertEqual(out.retimed, expected)
+                self.assertEqual(path.stat().st_mtime_ns, owners if logs else written)
+
+    def test_restoring_twice_retimes_nothing_the_second_time(self):
+        snap, path, owners = self.rewritten()
+        restore.restore(snap, self.user, other_game_running=False)
+        again = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((again.restored, again.removed, again.retimed), ([], [], []))
+        self.assertEqual(path.stat().st_mtime_ns, owners)
+
+    def test_a_hold_retimes_nothing(self):
+        snap, path, owners = self.rewritten()
+        written = path.stat().st_mtime_ns
+        late = self.user / "continue_game.json"
+        late.write_text("{}")
+        set_mtime(late, NOW, 600)                                   # the owner has played since
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.retimed), (True, "modified_after_exit", []))
+        self.assertEqual(path.stat().st_mtime_ns, written)
+        self.assertTrue(restore.restore(snap, self.user, other_game_running=True).held)
+        self.assertEqual(path.stat().st_mtime_ns, written)
+
+    def test_a_restore_stopped_part_way_retimes_nothing(self):
+        snap, path, owners = self.rewritten()
+        written = path.stat().st_mtime_ns
+        history = self.user / "console_history.txt"
+        history.write_text("event x\n")
+        set_mtime(history, NOW, 10)
+        real = restore._copy_logs_out
+
+        def the_owner_types(*args, **kwargs):
+            real(*args, **kwargs)
+            history.write_text("the owner typed this")
+        with mock.patch.object(restore, "_copy_logs_out", the_owner_types):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.retimed), (True, "modified_during_restore", []))
+        self.assertEqual(path.stat().st_mtime_ns, written)
+
+    def test_a_file_written_again_since_the_comparison_keeps_the_time_it_has(self):
+        snap, path, owners = self.rewritten()
+        real = restore._copy_logs_out
+
+        def someone_saves_the_same_settings(*args, **kwargs):      # after the comparison, before any change
+            real(*args, **kwargs)
+            set_mtime(path, NOW, 45)
+        with mock.patch.object(restore, "_copy_logs_out", someone_saves_the_same_settings):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.stat().st_mtime, NOW.timestamp() + 45)
+
+    def test_other_bytes_written_in_the_moment_before_the_time_is_set_do_not_keep_the_snapshots_time(self):
+        # The one moment nothing can close by looking first: between the last look and the time being set. The
+        # file is hashed again afterwards, and one that no longer holds the snapshot's bytes gets the present
+        # time, since `snapshot.take` trusts a stored file's size and time and would not read it again.
+        snap, path, owners = self.rewritten()
+        mine = bytes(b ^ 1 for b in path.read_bytes())              # the same size
+        real = os.utime
+        calls = []
+
+        def utime(target, *args, **kwargs):
+            if Path(target) == path:                                # copying the logs out sets times too
+                calls.append((args, kwargs.get("ns")))
+                if len(calls) == 1:
+                    path.write_bytes(mine)
+            return real(target, *args, **kwargs)
+        began = time.time()
+        with mock.patch.object(restore.os, "utime", utime):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(calls[0][1][1], owners)                    # the snapshot's time was set
+        self.assertEqual(calls[1], ((), None))                      # and then the present one
+        self.assertEqual((out.held, out.retimed), (False, []))
+        self.assertEqual(path.read_bytes(), mine)                   # theirs, untouched
+        self.assertNotEqual(path.stat().st_mtime_ns, owners)
+        self.assertGreaterEqual(path.stat().st_mtime, began - 5)   # the present time (the clock may step a little)
+        again = snapshot.take(self.user, self.backups, now=self.next_time())
+        self.assertNotEqual(again.files["pdx_settings.json"].sha256, snap.files["pdx_settings.json"].sha256)
+
+    def test_a_link_where_the_file_was_is_never_retimed_nor_is_what_it_points_to(self):
+        snap, path, owners = self.rewritten()
+        elsewhere = self.tmp / "elsewhere.json"
+        os.replace(path, elsewhere)                                 # same bytes, the run's time
+        os.symlink(elsewhere, path)
+        written = elsewhere.stat().st_mtime_ns
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.restored, out.retimed), (False, [], []))
+        self.assertTrue(path.is_symlink())
+        self.assertEqual(elsewhere.stat().st_mtime_ns, written)
+
+    def test_a_time_that_cannot_be_set_fails_nothing(self):
+        snap, path, owners = self.rewritten()
+        written = path.stat().st_mtime_ns
+        (self.user / "console_history.txt").write_text("event x\n")
+        set_mtime(self.user / "console_history.txt", NOW, 10)
+        real = os.utime
+
+        def utime(target, *args, **kwargs):
+            if Path(target) == path:
+                raise PermissionError(13, "Permission denied")
+            return real(target, *args, **kwargs)
+        with mock.patch.object(restore.os, "utime", utime):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.restored, out.retimed), (False, ["console_history.txt"], []))
+        self.assertEqual(path.stat().st_mtime_ns, written)
+        self.assertEqual(events(snap)[-1], "restored")
+
+
 class FailureTests(RestoreTestCase):
     def run_that_changed_two_files(self):
         snap = self.run_started()

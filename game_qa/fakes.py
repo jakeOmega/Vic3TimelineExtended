@@ -16,6 +16,9 @@ from game_qa.gate import ProcId
 from game_qa.helper import HelperError, Presence, Window
 
 GAME_HWND = 70                              # the handle of the game's window in both fakes
+GAME_PID = 7                                # the game's process in both fakes
+GAME_CREATED = "2026-11-10T14:00:00.0000000Z"       # and its creation time
+REUSED_CREATED = "2026-11-10T15:00:00.0000000Z"     # that of the program that has the game's id once it is reused
 SCAN_ENTER = 0x1C
 SCAN_CONSOLE = 0x29
 SCAN_BACKSPACE = 0x0E
@@ -66,6 +69,12 @@ class FakeBackend:
     key or a mouse button (or taps ALT to take the foreground), as Windows would.
     The cursor is `cursor`; `mouse` is the log of what the helper did with it:
     ("move", x, y) as asked, and ("button", flags), in order.
+
+    The game is process GAME_PID, live and created at GAME_CREATED, with its window
+    in front. The game dying and another program taking its id is a new creation
+    time under the same id (REUSED_CREATED), with the window left as it is, in
+    front: `replaced_after` does that once so many keys have been sent, in the
+    middle of a batch.
     """
 
     def __init__(self) -> None:
@@ -74,9 +83,10 @@ class FakeBackend:
         self.foreground = GAME_HWND             # the foreground window's handle
         self.other_window = 999                 # where the foreground goes when the game loses it
         self.windows: dict[int, dict] = {
-            7: {"hwnd": GAME_HWND, "title": "Victoria 3", "responding": True, "client": (0, 0, 1920, 1080)},
+            GAME_PID: {"hwnd": GAME_HWND, "title": "Victoria 3", "responding": True, "client": (0, 0, 1920, 1080)},
         }
-        self.creation: dict[int, str] = {}      # live processes: pid -> creation time
+        self.creation: dict[int, str] = {GAME_PID: GAME_CREATED}       # live processes: pid -> creation time
+        self.replaced_after: int | None = None  # another program has the game's id after this many keys
         self.next_pid = 1000
         self.launched: list[tuple[str, list, str]] = []
         self.vanish_on_launch = False
@@ -168,6 +178,8 @@ class FakeBackend:
         self.last_input = self.now
         if self.lose_focus_after is not None and len(self.sent) >= self.lose_focus_after:
             self.foreground = self.other_window
+        if self.replaced_after is not None and len(self.sent) == self.replaced_after:
+            self.creation[GAME_PID] = REUSED_CREATED
 
     def send_scan(self, scan: int) -> None:
         self._key("scan", scan)
@@ -260,7 +272,7 @@ class FakeHelper:
     def __init__(self, history: Path | None = None, log: Path | None = None) -> None:
         self.history = Path(history) if history is not None else None
         self.log = Path(log) if log is not None else None
-        self.proc = ProcId(7, "2026-11-10T14:00:00.0000000Z")
+        self.proc = ProcId(GAME_PID, GAME_CREATED)
         self.exists = True
         self.foreground = True
         self.responding = True

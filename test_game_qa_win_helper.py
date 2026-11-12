@@ -23,10 +23,15 @@ from game_qa.gate import ProcId
 ROOT = Path(__file__).resolve().parent
 
 
+GAME = {fakes.GAME_PID: fakes.GAME_CREATED}      # what the helper records once it has adopted the fake's game
+
+
 class BackendCase(unittest.TestCase):
     def setUp(self):
         self.backend = fakes.FakeBackend()
         self.state = win_helper.State()
+        # The game is adopted, as the session adopts it before anything is sent: input goes to no other process.
+        self.assertTrue(self.call("adopt", pid=fakes.GAME_PID, created=fakes.GAME_CREATED)["ok"])
 
     def call(self, op, **fields):
         return win_helper.handle({"id": 1, "op": op, **fields}, self.backend, self.state)
@@ -103,7 +108,7 @@ class RefusalTest(BackendCase):
         del self.backend.creation[pid]                  # it ended on its own
         out = self.call("kill", pid=pid)
         self.assertTrue(out["ok"]); self.assertIs(out["already_exited"], True)
-        self.assertEqual(self.backend.terminated, []); self.assertEqual(self.state.ours, {})
+        self.assertEqual(self.backend.terminated, []); self.assertEqual(self.state.ours, GAME)
         self.assertEqual(self.call("kill", pid=pid)["error"], "not_ours")       # and is no longer one it may end
 
     def test_kill_of_an_exited_process_lets_the_backend_let_go_of_its_handle(self):
@@ -120,7 +125,7 @@ class RefusalTest(BackendCase):
     def test_kill_ends_what_it_started_and_forgets_it(self):
         pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
         self.assertTrue(self.call("kill", pid=pid)["ok"])
-        self.assertEqual(self.backend.terminated, [pid]); self.assertEqual(self.state.ours, {})
+        self.assertEqual(self.backend.terminated, [pid]); self.assertEqual(self.state.ours, GAME)
 
     def test_kill_hands_the_recorded_creation_time_to_the_backend(self):
         # The real backend re-reads it through the handle it ends, which closes the pid-reuse window.
@@ -143,9 +148,9 @@ class RefusalTest(BackendCase):
     def test_adopt_records_the_pair_only_when_it_matches(self):
         self.backend.creation[55] = "A"
         self.call("adopt", pid=55, created="B")
-        self.assertEqual(self.state.ours, {})
+        self.assertEqual(self.state.ours, GAME)
         self.call("adopt", pid=55, created="A")
-        self.assertEqual(self.state.ours, {55: "A"})
+        self.assertEqual(self.state.ours, {**GAME, 55: "A"})
 
     def test_adopt_of_a_missing_process_is_not_ours(self):
         self.assertEqual(self.call("adopt", pid=56, created="A")["error"], "not_ours")
@@ -193,13 +198,13 @@ class LaunchWindowTest(BackendCase):
         out = self.call("launch", exe="victoria3.exe", args=["-debug_mode"], cwd="C:\\g")
         self.assertTrue(out["ok"])
         self.assertRegex(out["created"], r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{7}Z$")
-        self.assertEqual(self.state.ours, {out["pid"]: out["created"]})
+        self.assertEqual(self.state.ours, {**GAME, out["pid"]: out["created"]})
         self.assertEqual(self.backend.launched, [("victoria3.exe", ["-debug_mode"], "C:\\g")])
 
     def test_a_process_gone_at_launch_is_a_launch_failure(self):
         self.backend.vanish_on_launch = True
         self.assertEqual(self.call("launch", exe="victoria3.exe", args=[], cwd="")["error"], "launch_failed")
-        self.assertEqual(self.state.ours, {})
+        self.assertEqual(self.state.ours, GAME)
 
     def test_window_of_a_running_game(self):
         out = self.call("window", pid=7)
@@ -233,6 +238,8 @@ class LaunchWindowTest(BackendCase):
         self.assertTrue(self.call("focus", pid=7)["foreground"]); self.assertEqual(self.backend.set_foreground_calls, 0)
 
     def test_focus_of_a_pid_without_a_window(self):
+        self.backend.creation[8] = "A"                  # a live process of the helper's own that has no window yet
+        self.call("adopt", pid=8, created="A")
         out = self.call("focus", pid=8)
         self.assertTrue(out["ok"]); self.assertFalse(out["foreground"]); self.assertEqual(self.backend.set_foreground_calls, 0)
 
@@ -302,6 +309,93 @@ class KeysTest(BackendCase):
         self.backend.lose_focus_after_sleep = True
         out = self.call("keys", pid=7, steps=[{"scan": 1}, {"wait_ms": 10}, {"scan": 2}])
         self.assertEqual(out["error"], "not_foreground"); self.assertEqual(self.backend.sent, [("scan", 1)])
+
+
+class ProcessProofTest(BackendCase):
+    """#1588: the helper sends by process id, and an id is reused once its process has died. So before every
+    step of `keys`, every character, both looks of `click` and the ALT tap of `focus`, the process's creation
+    time is read again and compared with the one recorded at `launch` or `adopt`; anything else is `not_ours`.
+    The worst case is the one scripted here: the other program's window is where the game's was, in front."""
+
+    def test_a_process_replaced_in_the_middle_of_typed_text_gets_no_character_more(self):
+        self.backend.replaced_after = 3                 # the console key, then "e" and "v": then the game dies
+        out = self.call("keys", pid=7, steps=[{"scan": 0x29}, {"text": "event x.1"}, {"scan": 0x1C}])
+        self.assertEqual((out["ok"], out["error"]), (False, "not_ours"))
+        self.assertEqual(self.backend.sent, [("scan", 0x29), ("text", "e"), ("text", "v")])
+        self.assertEqual((out["steps_done"], out["chars_sent"]), (1, 2))    # how far it got, as for not_foreground
+        self.assertEqual(self.backend.foreground, fakes.GAME_HWND)          # its window was in front all along
+
+    def test_a_process_replaced_between_two_steps_gets_no_step_more(self):
+        self.backend.replaced_after = 2
+        out = self.call("keys", pid=7, steps=[{"scan": 0x29}, {"text": "x"}, {"scan": 0x1C}])
+        self.assertEqual((out["error"], out["steps_done"], out["chars_sent"]), ("not_ours", 2, 0))
+        self.assertEqual(self.backend.sent, [("scan", 0x29), ("text", "x")])    # the Enter is never sent
+
+    def test_a_process_replaced_during_a_wait_gets_no_key_after_it(self):
+        def dies(ms):
+            self.backend.creation[7] = fakes.REUSED_CREATED
+        self.backend.on_sleep = dies
+        out = self.call("keys", pid=7, steps=[{"scan": 1}, {"wait_ms": 10}, {"scan": 2}])
+        self.assertEqual((out["error"], out["steps_done"]), ("not_ours", 2))
+        self.assertEqual(self.backend.sent, [("scan", 1)])
+
+    def test_a_process_replaced_before_the_batch_gets_nothing(self):
+        self.backend.creation[7] = fakes.REUSED_CREATED
+        out = self.call("keys", pid=7, steps=[{"scan": 0x29}, {"text": "a"}])
+        self.assertEqual((out["error"], out["steps_done"], out["chars_sent"]), ("not_ours", 0, 0))
+        self.assertEqual(self.backend.sent, [])
+
+    def test_a_process_that_has_exited_gets_nothing_though_a_window_answers_for_its_id(self):
+        del self.backend.creation[7]
+        self.assertEqual(self.call("keys", pid=7, steps=[{"scan": 0x29}])["error"], "not_ours")
+        self.assertEqual(self.backend.sent, [])
+
+    def test_a_process_the_helper_neither_started_nor_adopted_gets_nothing(self):
+        # Alive, its window in front: everything but the record says yes.
+        self.backend.creation[8] = "A"
+        self.backend.windows[8] = {"hwnd": 80, "title": "other", "responding": True, "client": (0, 0, 800, 600)}
+        self.backend.foreground = 80
+        for op, fields in (("keys", {"steps": [{"scan": 0x29}]}), ("click", {"x": 5, "y": 5}), ("focus", {})):
+            with self.subTest(op=op):
+                self.assertEqual(self.call(op, pid=8, **fields)["error"], "not_ours")
+        self.assertEqual((self.backend.sent, self.backend.mouse, self.backend.alt_taps), ([], [], 0))
+
+    def test_a_process_the_helper_has_ended_gets_nothing(self):
+        pid = self.call("launch", exe="victoria3.exe", args=[], cwd="C:\\g")["pid"]
+        self.backend.foreground = self.backend.windows[pid]["hwnd"]
+        self.assertTrue(self.call("keys", pid=pid, steps=[{"scan": 1}])["ok"])      # launched is recorded: it may
+        self.assertTrue(self.call("kill", pid=pid)["ok"])
+        self.backend.creation[pid] = fakes.REUSED_CREATED                           # the id is another program's
+        self.backend.windows[pid] = {"hwnd": 90, "title": "other", "responding": True, "client": (0, 0, 800, 600)}
+        self.backend.foreground = 90
+        self.assertEqual(self.call("keys", pid=pid, steps=[{"scan": 2}])["error"], "not_ours")
+        self.assertEqual(self.backend.sent, [("scan", 1)])
+
+    def test_the_creation_time_is_read_before_every_step_and_every_character(self):
+        read = []
+        real = self.backend.creation_time
+        self.backend.creation_time = lambda pid: read.append(pid) or real(pid)
+        self.assertTrue(self.call("keys", pid=7, steps=[{"scan": 1}, {"wait_ms": 5}, {"text": "abc"}, {"scan": 2}])["ok"])
+        self.assertEqual(read, [7] * 6)
+
+    def test_the_process_is_proved_before_the_window_is_looked_at(self):
+        # A window that is gone with the process is `not_ours`, which no caller waits out, not `not_foreground`.
+        del self.backend.creation[7]
+        self.backend.windows.clear()
+        self.assertEqual(self.call("keys", pid=7, steps=[{"scan": 1}])["error"], "not_ours")
+
+    def test_focus_taps_no_alt_for_a_replaced_process(self):
+        self.backend.foreground = 999                   # the tap would land in that window
+        self.backend.creation[7] = fakes.REUSED_CREATED
+        out = self.call("focus", pid=7)
+        self.assertEqual((out["ok"], out["error"]), (False, "not_ours"))
+        self.assertEqual((self.backend.set_foreground_calls, self.backend.alt_taps, self.backend.foreground), (0, 0, 999))
+
+    def test_a_refusal_is_not_recorded_as_the_helpers_own_input(self):
+        self.backend.creation[7] = fakes.REUSED_CREATED
+        self.call("keys", pid=7, steps=[{"scan": 1}])
+        self.call("focus", pid=7)
+        self.assertIsNone(self.state.last_sent_tick)
 
 
 class IdleTest(BackendCase):
@@ -947,6 +1041,10 @@ class RealPipeTest(unittest.TestCase):
         self.assertRegex(ph.ping(), r"^\d+\.\d+")
         self.assertEqual(ph.window(7), helper.Window(True, True, True, "Victoria 3", (0, 0, 1920, 1080)))
         self.assertFalse(ph.window(8).exists)
+        with self.assertRaises(helper.HelperError) as ctx:
+            ph.keys(7, [{"scan": 0x1C}])                    # a new helper has adopted nothing: no key by pid alone
+        self.assertEqual(ctx.exception.code, "not_ours")
+        ph.adopt(ProcId(fakes.GAME_PID, fakes.GAME_CREATED))
         ph.keys(7, [{"text": 'event "\u00e9".1'}, {"scan": 0x1C}])
         with self.assertRaises(helper.HelperError) as ctx:
             ph.kill(ProcId(4242, "T"))

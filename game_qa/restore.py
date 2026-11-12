@@ -11,6 +11,10 @@ The rules (spec section 5.3):
 - The run's end is the journal's `game_exited`, else its last `heartbeat`, else `started`. A changed, added or
   created file modified more than SLACK_SECONDS after it means someone else has used the folder: hold. Logs
   (`logs/*`) are never judged: the game writes them to the last moment, and the saves tell the story.
+- A file whose bytes are still the snapshot's is never rewritten. If the run moved its time (the game writes
+  `pdx_settings.json` again at launch with the same bytes), a restore that finishes puts the snapshot's time back
+  on it, judging the time as the hold rule does: one later than the run's end by more than SLACK_SECONDS is
+  someone else's and stays, as does every time when the journal gives no end.
 - Journal times come from the backup drive's clock (see `snapshot.record`), as file times do.
 - A snapshot is never deleted unless its journal ends in `restored` (or says nothing at all), and never by
   the run that made it.
@@ -27,7 +31,7 @@ import shutil
 import stat
 import time
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -79,6 +83,8 @@ class Outcome:
     # Outcomes too: held "other_game_ran" and "unwatched_stretch" (recorded), and, with nothing recorded and
     # held False, "launch_in_flight" and "watch_still_recording" (its `recover`, which runs its own loop).
     reason: str
+    # Files left as they were, bytes and all, that got the snapshot's modification time back (`_retime`).
+    retimed: list[str] = field(default_factory=list)
 
 
 # A file's size and mtime_ns as compare saw them, or None if it was absent.
@@ -389,6 +395,55 @@ def _remove(names: Sequence[str], user_data: Path, seen: dict[str, _Signature]) 
     return done, None
 
 
+def _retouched(snap: Snapshot, diff: Diff, seen: dict[str, _Signature], logs: bool) -> list[str]:
+    """The manifest's files that the run wrote again with the same bytes: `compare` found their content the
+    snapshot's, and their time is later than the manifest's but not later than the run's end by more than
+    SLACK_SECONDS. A later time is someone else's, as in the hold rule, and without a recorded end none can be
+    told from the run's, so then there are none. With `logs` False, `logs/` is left out."""
+    reference = _reference_time(snap)
+    if reference is None:
+        return []
+    limit_ns = int((reference.timestamp() + SLACK_SECONDS) * 1_000_000_000)
+    differ = {*diff.changed, *diff.missing}
+    names = []
+    for rel, entry in sorted(snap.files.items()):
+        signature = seen.get(rel)
+        if rel in differ or signature is None or (not logs and rel.startswith("logs/")):
+            continue
+        size, mtime_ns = signature
+        if size == entry.size and entry.mtime_ns < mtime_ns <= limit_ns:
+            names.append(rel)
+    return names
+
+
+def _retime(snap: Snapshot, names: Sequence[str], user_data: Path, seen: dict[str, _Signature]) -> list[str]:
+    """Give `names` (from `_retouched`) the modification times the snapshot recorded; return the ones done.
+
+    No byte is written. Just before, each file is looked at again, itself and not what a link points to: one
+    that is no longer a regular file of the size and time `compare` saw has been written since, and is left
+    with the time it has. Once the time is set the file is hashed again: if someone wrote other bytes in that
+    moment, it gets the present time instead, so that no file is left with the snapshot's size and time over
+    other bytes (`snapshot.take` trusts that pair for a file it has stored before). A file whose time cannot be
+    set is left too: the time is a courtesy, and never a reason to fail or hold a restore whose files are back.
+    """
+    done: list[str] = []
+    for rel in names:
+        path = user_data / rel
+        entry = snap.files[rel]
+        try:
+            st = os.lstat(path)
+            if not stat.S_ISREG(st.st_mode) or (st.st_size, st.st_mtime_ns) != seen[rel]:
+                continue
+            os.utime(path, ns=(st.st_atime_ns, entry.mtime_ns), follow_symlinks=False)
+            if _sha256(path) != entry.sha256:
+                os.utime(path, follow_symlinks=False)
+                continue
+        except OSError:
+            continue
+        done.append(rel)
+    return done
+
+
 def restore(
     snap: Snapshot,
     user_data: Path,
@@ -409,7 +464,9 @@ def restore(
 
     Otherwise: clears the leftover temp files of a killed restore; copies the live `logs/*` to `run_logs_dir`
     (by default `<snapshot folder>/run_logs`); copies the changed and missing files back from the store with
-    their recorded times; removes the files the run added or created; records `restored` with the names.
+    their recorded times; removes the files the run added or created; puts the recorded time back on the files
+    the run wrote again with the same bytes (`_retouched`; listed as `retimed`, in the Outcome and, when there
+    are some, in the journal entry); records `restored` with the names.
 
     Just before each change the file is looked at again. If it is no longer as it was compared, the restore
     stops, records `held` with the reason `modified_during_restore` and the file, and returns what it had
@@ -444,8 +501,10 @@ def restore(
         removed, changed_file = _remove(to_remove, user_data, seen)
     if changed_file is not None:
         return _hold(snap, "modified_during_restore", now, files=[changed_file], restored=restored, removed=removed)
-    snapshot.record(snap, "restored", now=now, restored=restored, removed=removed)
-    return Outcome(restored, removed, False, "")
+    retimed = _retime(snap, _retouched(snap, diff, seen, logs), user_data, seen)
+    done = {"restored": restored, "removed": removed, **({"retimed": retimed} if retimed else {})}
+    snapshot.record(snap, "restored", now=now, **done)
+    return Outcome(restored, removed, False, "", retimed)
 
 
 # --- unfinished runs -------------------------------------------------------------------------
