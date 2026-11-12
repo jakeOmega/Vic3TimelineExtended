@@ -151,3 +151,9 @@ operation against us now.
 | **Expose / Ask if severe.** Set each and catch a mild operation, then (under Ask if severe) a severe one (regime change, nuclear sabotage). | The mild one is exposed with no event, then Operation Exposed; the severe one opens A Foreign Operation Uncovered. | |
 | **Mute.** Message Settings lists Counterintelligence. | Muting it hides all four notices. | |
 | **AI defender.** An AI that exposes a watched operation. | Its exposure still opens Foreign Interference Detected (its own choice); nothing changes for AI countries. | |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`covert_can_research_current` OK (`held=75 can_research=75`).

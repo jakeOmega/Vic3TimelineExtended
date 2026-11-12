@@ -1226,6 +1226,270 @@ te_jmap_range_fam = {
 	}
 }
 
+# Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+te_jmap_range_capitalists = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_capitalists_lo }
+		remove_global_variable = te_jmap_rng_capitalists_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_capitalists_hi }
+		remove_global_variable = te_jmap_rng_capitalists_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_capitalists_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_capitalists_hi value = te_jmap_capitalists_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_capitalists_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_capitalists_lo value = te_jmap_capitalists_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_capitalists_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_capitalists_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_capitalists_hi value = te_jmap_capitalists_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_capitalists_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_capitalists_lo value = te_jmap_capitalists_input }
+		}
+	}
+}
+
+# Aristocrats, their share of the state's people (the yearly walk's).
+te_jmap_range_aristocrats = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_aristocrats_lo }
+		remove_global_variable = te_jmap_rng_aristocrats_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_aristocrats_hi }
+		remove_global_variable = te_jmap_rng_aristocrats_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_aristocrats_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_aristocrats_hi value = te_jmap_aristocrats_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_aristocrats_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_aristocrats_lo value = te_jmap_aristocrats_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_aristocrats_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_aristocrats_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_aristocrats_hi value = te_jmap_aristocrats_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_aristocrats_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_aristocrats_lo value = te_jmap_aristocrats_input }
+		}
+	}
+}
+
+# Clergymen, their share of the state's people (the yearly walk's).
+te_jmap_range_clergy = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_clergy_lo }
+		remove_global_variable = te_jmap_rng_clergy_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_clergy_hi }
+		remove_global_variable = te_jmap_rng_clergy_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_clergy_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_clergy_hi value = te_jmap_clergy_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_clergy_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_clergy_lo value = te_jmap_clergy_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_clergy_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_clergy_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_clergy_hi value = te_jmap_clergy_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_clergy_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_clergy_lo value = te_jmap_clergy_input }
+		}
+	}
+}
+
+# Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+te_jmap_range_academics = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_academics_lo }
+		remove_global_variable = te_jmap_rng_academics_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_academics_hi }
+		remove_global_variable = te_jmap_rng_academics_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_academics_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_academics_hi value = te_jmap_academics_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+		order_by = te_jmap_academics_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_academics_lo value = te_jmap_academics_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_academics_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_academics_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_academics_hi value = te_jmap_academics_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 }
+			order_by = te_jmap_academics_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_academics_lo value = te_jmap_academics_input }
+		}
+	}
+}
+
+# Trade Capacity, the state's own, its Trade Center's: the same share of the color for each doubling from the world's low (at least 1) to its high.
+te_jmap_range_trade = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_trade_lo }
+		remove_global_variable = te_jmap_rng_trade_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_trade_hi }
+		remove_global_variable = te_jmap_rng_trade_hi
+	}
+	ordered_state = {
+		limit = { te_jmap_trade_capacity > 0 }
+		order_by = te_jmap_trade_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_trade_hi value = te_jmap_trade_input }
+	}
+	ordered_state = {
+		limit = { te_jmap_trade_capacity > 0 }
+		order_by = te_jmap_trade_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_trade_lo value = te_jmap_trade_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_trade_hi } }
+		ordered_state = {
+			limit = { te_jmap_trade_capacity > 0 }
+			order_by = te_jmap_trade_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_trade_hi value = te_jmap_trade_input }
+		}
+		ordered_state = {
+			limit = { te_jmap_trade_capacity > 0 }
+			order_by = te_jmap_trade_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_trade_lo value = te_jmap_trade_input }
+		}
+	}
+}
+
+# Investment, what the state's owners pay into the Investment Pool a week, estimated: the same share of the color for each doubling from the world's low (at least 1) to its high.
+te_jmap_range_invest = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_invest_lo }
+		remove_global_variable = te_jmap_rng_invest_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_invest_hi }
+		remove_global_variable = te_jmap_rng_invest_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_jmap_inv_cap te_jmap_invest_value > 0 }
+		order_by = te_jmap_invest_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_invest_hi value = te_jmap_invest_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_jmap_inv_cap te_jmap_invest_value > 0 }
+		order_by = te_jmap_invest_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_invest_lo value = te_jmap_invest_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_invest_hi } }
+		ordered_state = {
+			limit = { has_variable = te_jmap_inv_cap te_jmap_invest_value > 0 }
+			order_by = te_jmap_invest_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_invest_hi value = te_jmap_invest_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_jmap_inv_cap te_jmap_invest_value > 0 }
+			order_by = te_jmap_invest_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_invest_lo value = te_jmap_invest_input }
+		}
+	}
+}
+
 # The pick's map, if it is fitted to the world (te_jmap_selector, te_journal_map_values.txt).
 te_jmap_refresh_range = {
 	if = {
@@ -1343,6 +1607,30 @@ te_jmap_refresh_range = {
 	else_if = {
 		limit = { te_jmap_selector = 40 }
 		te_jmap_range_fam = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 41 }
+		te_jmap_range_capitalists = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 42 }
+		te_jmap_range_aristocrats = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 43 }
+		te_jmap_range_clergy = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 44 }
+		te_jmap_range_academics = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 45 }
+		te_jmap_range_trade = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 46 }
+		te_jmap_range_invest = yes
 	}
 }
 

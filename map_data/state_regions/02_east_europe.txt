@@ -39,7 +39,7 @@ STATE_LOWER_SILESIA = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 10
+        discovered_amount = 12
     }
 }
 
@@ -246,7 +246,7 @@ STATE_CENTRAL_HUNGARY = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 6
     }
 }
 
@@ -391,7 +391,7 @@ STATE_SOUTHERN_TRANSYLVANIA = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 6
     }
 }
 

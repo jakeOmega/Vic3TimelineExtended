@@ -29,3 +29,9 @@ and replays the arithmetic; the checks below are what only the game shows.
 | **Game rule and Limited War's −25% infamy.** Repeat the charge with the `infamy_generation` rule off its default, and Total War to Limited War with and without Limited War's own modifier in force. | Whether either scales a script `change_infamy` is undocumented. Record what you see here. | Nothing to fix if they scale it: the standings then read as base values. |
 | **Game start.** Start a new game; read a few countries' infamy on the first day. | 0 everywhere: the history's Traditional activation charges 0. | If any country starts with infamy from this, the history's `activate_law` ran the effect with a non-zero standing. |
 | **Law in force.** Hover the Rules of War law you already hold. | No infamy line: a change of 0 takes neither branch. | Cosmetic. |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+**Charge** and **Cut** read OK (+25, −22, −40, +5, −4, in whole numbers). **Game start** is BROKEN: every country starts with 3 infamy (#1595). The preview, the `infamy_generation` rule and "Law in force" were not run.

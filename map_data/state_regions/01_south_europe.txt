@@ -285,7 +285,7 @@ STATE_TUSCANY = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 9
     }
     naval_exit_id = 3098
     min_cold_effect = 0.00
@@ -584,8 +584,8 @@ STATE_LOWER_ANDALUSIA = {
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 214
-        discovered_amount = 6
+        undiscovered_amount = 211
+        discovered_amount = 9
     }
     naval_exit_id = 3089
     min_cold_effect = 0.00
@@ -936,7 +936,7 @@ STATE_NORTHERN_THRACE = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 6
     }
     naval_exit_id = 3036
     min_cold_effect = 0.00
@@ -962,7 +962,7 @@ STATE_BULGARIA = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 6
     }
     naval_exit_id = 3036
     min_cold_effect = 0.00

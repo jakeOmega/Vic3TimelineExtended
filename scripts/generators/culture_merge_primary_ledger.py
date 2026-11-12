@@ -310,6 +310,9 @@ _ENTITY_PARTS: dict[tuple[str, str], Disposition] = {
     ("on_secession_start", "north_italian"): Disposition(ENTRIES, entries=("je_risorgimento",)),
     ("on_secession_start", "south_italian"): Disposition(ENTRIES, entries=("je_risorgimento",)),
     ("on_secession_start", "polish"): Disposition(CASE, case="one_off_events"),
+    # 1.15.1: a subject may join a Polish secession's initiator only while the Whites are weak, a test the play makes
+    # only of a subject that has the Congress Poland entry (`subject_join_initiator_trigger`).
+    ("dp_secession", "polish"): Disposition(ENTRIES, entries=("je_congress_poland",)),
 }
 
 

@@ -335,7 +335,7 @@ STATE_WESTERN_NEW_GUINEA = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 9
     }
     naval_exit_id = 3125
     blockade_locator = {
@@ -488,7 +488,7 @@ STATE_MINDANAO = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3125
 }
@@ -522,7 +522,7 @@ STATE_LUZON = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3056
 }

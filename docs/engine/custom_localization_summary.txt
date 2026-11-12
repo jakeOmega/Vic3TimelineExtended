@@ -1,4 +1,4 @@
-# Auto-generated from custom_localization.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from custom_localization.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 character|BR_Dede|random_valid=no
 character|BR_DoDa|random_valid=no
@@ -308,6 +308,8 @@ country|expedition_progress_loc|random_valid=yes
 country|ezo_or_japan_arrival_text|random_valid=no
 country|fast_object_type|random_valid=no
 country|fatal_injury_gunshot|random_valid=yes
+character|favorite_law_speech|random_valid=no
+country|favorite_scandal_reason|random_valid=yes
 country|fiction_cliche|random_valid=no
 country|film_industry_name|random_valid=no
 political_lobby|flavored_name_lobby_anti_country|random_valid=yes

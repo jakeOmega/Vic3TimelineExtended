@@ -1,8 +1,8 @@
-<!-- Auto-generated from modifiers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7293 modifier entries.*
+*Auto-generated from 7295 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1119,7 +1119,7 @@ _country_enactment_speed_law_anarchy_mult_desc_
 - `country_enactment_success_chance_law_warrior_caste_add`, `country_enactment_success_chance_law_wealth_voting_add`, `country_enactment_success_chance_law_women_in_the_fields_add`, `country_enactment_success_chance_law_women_in_the_workplace_add`, `country_enactment_success_chance_law_women_own_property_add`, `country_enactment_success_chance_law_womens_suffrage_add`
 - `country_enactment_success_chance_law_worker_protections_add`
 
-### `country_fervor_target_{culture}_add` (321 members)
+### `country_fervor_target_{culture}_add` (342 members)
 
 _A bonus or penalty to a specific culture's [concept_fervor], to be proportioned according the percentage of the culture's [Concept('concept_pop', 'Pops')] that reside in the affected [concept_count..._
 
@@ -1135,48 +1135,51 @@ _A bonus or penalty to a specific culture's [concept_fervor], to be proportioned
 - `country_fervor_target_british_add`, `country_fervor_target_bulgarian_add`, `country_fervor_target_bundeli_add`, `country_fervor_target_burmese_add`, `country_fervor_target_buryat_add`, `country_fervor_target_byelorussian_add`
 - `country_fervor_target_caddoan_add`, `country_fervor_target_cajun_add`, `country_fervor_target_cariban_add`, `country_fervor_target_caribeno_add`, `country_fervor_target_catalan_add`, `country_fervor_target_caucasian_turk_add`
 - `country_fervor_target_central_american_add`, `country_fervor_target_champa_add`, `country_fervor_target_chechen_add`, `country_fervor_target_cherokee_add`, `country_fervor_target_chewa_add`, `country_fervor_target_chhattisgarhi_add`
-- `country_fervor_target_chilean_add`, `country_fervor_target_chukchi_add`, `country_fervor_target_chuvash_add`, `country_fervor_target_circassian_add`, `country_fervor_target_colombian_add`, `country_fervor_target_comanche_add`
-- `country_fervor_target_corsican_add`, `country_fervor_target_cree_add`, `country_fervor_target_crimean_tatar_add`, `country_fervor_target_croat_add`, `country_fervor_target_czech_add`, `country_fervor_target_dagestani_add`
-- `country_fervor_target_dakota_add`, `country_fervor_target_danish_add`, `country_fervor_target_dayak_add`, `country_fervor_target_deccani_add`, `country_fervor_target_dinka_add`, `country_fervor_target_dixie_add`
-- `country_fervor_target_dutch_add`, `country_fervor_target_dyula_add`, `country_fervor_target_east_german_add`, `country_fervor_target_ecuadorian_add`, `country_fervor_target_edo_add`, `country_fervor_target_equatorial_bantu_add`
-- `country_fervor_target_estonian_add`, `country_fervor_target_evenki_add`, `country_fervor_target_ewe_add`, `country_fervor_target_fang_add`, `country_fervor_target_filipino_add`, `country_fervor_target_filipino_hispanophone_add`
-- `country_fervor_target_filipino_mestizo_add`, `country_fervor_target_finnish_add`, `country_fervor_target_flemish_add`, `country_fervor_target_fluvian_bantu_add`, `country_fervor_target_fon_add`, `country_fervor_target_franco_canadian_add`
-- `country_fervor_target_francoprovencal_add`, `country_fervor_target_french_add`, `country_fervor_target_fulbe_add`, `country_fervor_target_fur_add`, `country_fervor_target_galician_add`, `country_fervor_target_georgian_add`
-- `country_fervor_target_gondi_add`, `country_fervor_target_greek_add`, `country_fervor_target_griqua_add`, `country_fervor_target_guajiro_add`, `country_fervor_target_guarani_add`, `country_fervor_target_gujarati_add`
-- `country_fervor_target_hakka_add`, `country_fervor_target_han_add`, `country_fervor_target_haratin_add`, `country_fervor_target_hausa_add`, `country_fervor_target_hawaiian_add`, `country_fervor_target_hazara_add`
-- `country_fervor_target_herero_add`, `country_fervor_target_hindustani_add`, `country_fervor_target_hokan_add`, `country_fervor_target_hungarian_add`, `country_fervor_target_iberian_add`, `country_fervor_target_ibibio_add`
-- `country_fervor_target_ibo_add`, `country_fervor_target_icelandic_add`, `country_fervor_target_ilocano_add`, `country_fervor_target_inuit_add`, `country_fervor_target_irish_add`, `country_fervor_target_iroquoian_add`
-- `country_fervor_target_japanese_add`, `country_fervor_target_javan_add`, `country_fervor_target_kachin_add`, `country_fervor_target_kalmyk_add`, `country_fervor_target_kannada_add`, `country_fervor_target_kanuri_add`
-- `country_fervor_target_karelian_add`, `country_fervor_target_karen_add`, `country_fervor_target_kashmiri_add`, `country_fervor_target_kavango_bantu_add`, `country_fervor_target_kazak_add`, `country_fervor_target_khmer_add`
-- `country_fervor_target_khmu_add`, `country_fervor_target_kho_add`, `country_fervor_target_khoisan_add`, `country_fervor_target_kikuyu_add`, `country_fervor_target_kirgiz_add`, `country_fervor_target_kissi_add`
-- `country_fervor_target_korean_add`, `country_fervor_target_kru_add`, `country_fervor_target_kurdish_add`, `country_fervor_target_lacustrine_bantu_add`, `country_fervor_target_lao_add`, `country_fervor_target_latvian_add`
-- `country_fervor_target_lithuanian_add`, `country_fervor_target_lomwe_add`, `country_fervor_target_luba_add`, `country_fervor_target_lumad_add`, `country_fervor_target_lunda_add`, `country_fervor_target_luo_add`
-- `country_fervor_target_luri_add`, `country_fervor_target_lushai_add`, `country_fervor_target_maasai_add`, `country_fervor_target_maghrebi_add`, `country_fervor_target_makua_add`, `country_fervor_target_malagasy_add`
-- `country_fervor_target_malay_add`, `country_fervor_target_malayalam_add`, `country_fervor_target_maltese_add`, `country_fervor_target_manchu_add`, `country_fervor_target_mande_add`, `country_fervor_target_manipuri_add`
-- `country_fervor_target_maori_add`, `country_fervor_target_marathi_add`, `country_fervor_target_mari_add`, `country_fervor_target_mashriqi_add`, `country_fervor_target_mayan_add`, `country_fervor_target_mazanderani_add`
-- `country_fervor_target_melanesian_add`, `country_fervor_target_metis_add`, `country_fervor_target_mexican_add`, `country_fervor_target_miao_add`, `country_fervor_target_micronesian_add`, `country_fervor_target_min_add`
-- `country_fervor_target_miskito_add`, `country_fervor_target_misri_add`, `country_fervor_target_mixtec_add`, `country_fervor_target_moluccan_add`, `country_fervor_target_mon_add`, `country_fervor_target_mongo_add`
-- `country_fervor_target_mongol_add`, `country_fervor_target_mordvin_add`, `country_fervor_target_moro_add`, `country_fervor_target_mossi_add`, `country_fervor_target_muisca_add`, `country_fervor_target_muskogean_add`
-- `country_fervor_target_naga_add`, `country_fervor_target_nahua_add`, `country_fervor_target_navajo_add`, `country_fervor_target_nepali_add`, `country_fervor_target_nez_perce_add`, `country_fervor_target_nguni_add`
-- `country_fervor_target_nilotic_add`, `country_fervor_target_nordestino_add`, `country_fervor_target_north_andean_add`, `country_fervor_target_north_german_add`, `country_fervor_target_north_italian_add`, `country_fervor_target_norwegian_add`
-- `country_fervor_target_nuba_add`, `country_fervor_target_nuer_add`, `country_fervor_target_nyamwezi_add`, `country_fervor_target_occitan_add`, `country_fervor_target_oodham_add`, `country_fervor_target_oriya_add`
-- `country_fervor_target_oromo_add`, `country_fervor_target_ossetian_add`, `country_fervor_target_ovimbundu_add`, `country_fervor_target_pahari_add`, `country_fervor_target_paiute_add`, `country_fervor_target_panjabi_add`
-- `country_fervor_target_paraguayan_add`, `country_fervor_target_pashtun_add`, `country_fervor_target_patagonian_add`, `country_fervor_target_pathan_add`, `country_fervor_target_paulista_add`, `country_fervor_target_persian_add`
-- `country_fervor_target_peruvian_add`, `country_fervor_target_platinean_add`, `country_fervor_target_polish_add`, `country_fervor_target_polynesian_add`, `country_fervor_target_portuguese_add`, `country_fervor_target_promethean_add`
-- `country_fervor_target_pueblo_add`, `country_fervor_target_quechua_add`, `country_fervor_target_rajput_add`, `country_fervor_target_romanian_add`, `country_fervor_target_ruanda_add`, `country_fervor_target_rundi_add`
-- `country_fervor_target_russian_add`, `country_fervor_target_ryukyuan_add`, `country_fervor_target_salish_add`, `country_fervor_target_sami_add`, `country_fervor_target_sara_add`, `country_fervor_target_scottish_add`
-- `country_fervor_target_scottish_gaelic_add`, `country_fervor_target_sena_add`, `country_fervor_target_senufo_add`, `country_fervor_target_sephardic_add`, `country_fervor_target_serb_add`, `country_fervor_target_shan_add`
-- `country_fervor_target_shona_add`, `country_fervor_target_sidama_add`, `country_fervor_target_sindi_add`, `country_fervor_target_sinhala_add`, `country_fervor_target_siouan_add`, `country_fervor_target_slovak_add`
-- `country_fervor_target_slovene_add`, `country_fervor_target_somali_add`, `country_fervor_target_songhai_add`, `country_fervor_target_sorb_add`, `country_fervor_target_sotho_add`, `country_fervor_target_south_andean_add`
-- `country_fervor_target_south_german_add`, `country_fervor_target_south_italian_add`, `country_fervor_target_spanish_add`, `country_fervor_target_sudanese_add`, `country_fervor_target_sukuma_add`, `country_fervor_target_sulista_add`
-- `country_fervor_target_sumatran_add`, `country_fervor_target_swahili_add`, `country_fervor_target_swedish_add`, `country_fervor_target_szekely_add`, `country_fervor_target_tagalog_add`, `country_fervor_target_tajik_add`
-- `country_fervor_target_tamil_add`, `country_fervor_target_tarascan_add`, `country_fervor_target_tatar_add`, `country_fervor_target_teda_add`, `country_fervor_target_telegu_add`, `country_fervor_target_thai_add`
-- `country_fervor_target_tibetan_add`, `country_fervor_target_tigray_add`, `country_fervor_target_tiv_add`, `country_fervor_target_tonga_add`, `country_fervor_target_tswana_add`, `country_fervor_target_tuareg_add`
-- `country_fervor_target_tupinamba_add`, `country_fervor_target_turkish_add`, `country_fervor_target_turkmen_add`, `country_fervor_target_tuvan_add`, `country_fervor_target_udmurt_add`, `country_fervor_target_ugrian_add`
-- `country_fervor_target_uighur_add`, `country_fervor_target_ukrainian_add`, `country_fervor_target_uruguayan_add`, `country_fervor_target_uzbek_add`, `country_fervor_target_venezuelan_add`, `country_fervor_target_vietnamese_add`
-- `country_fervor_target_visayan_add`, `country_fervor_target_wallonian_add`, `country_fervor_target_welsh_add`, `country_fervor_target_wolof_add`, `country_fervor_target_xhosa_add`, `country_fervor_target_yakut_add`
-- `country_fervor_target_yankee_add`, `country_fervor_target_yao_add`, `country_fervor_target_yemenite_add`, `country_fervor_target_yoruba_add`, `country_fervor_target_yuanzhumin_add`, `country_fervor_target_yue_add`
-- `country_fervor_target_zapotec_add`, `country_fervor_target_zhuang_add`, `country_fervor_target_zulu_add`
+- `country_fervor_target_chilean_add`, `country_fervor_target_chukchi_add`, `country_fervor_target_chuvash_add`, `country_fervor_target_circassian_add`, `country_fervor_target_cm_american_add`, `country_fervor_target_cm_andean_add`
+- `country_fervor_target_cm_anglophone_add`, `country_fervor_target_cm_arab_add`, `country_fervor_target_cm_czechoslovak_add`, `country_fervor_target_cm_dravidian_add`, `country_fervor_target_cm_east_african_add`, `country_fervor_target_cm_east_slavic_add`
+- `country_fervor_target_cm_german_add`, `country_fervor_target_cm_gran_colombian_add`, `country_fervor_target_cm_indonesian_add`, `country_fervor_target_cm_italian_add`, `country_fervor_target_cm_latin_add`, `country_fervor_target_cm_nguni_add`
+- `country_fervor_target_cm_oghuz_turkic_add`, `country_fervor_target_cm_pan_malay_add`, `country_fervor_target_cm_pan_slavic_add`, `country_fervor_target_cm_pan_turkic_add`, `country_fervor_target_cm_platine_add`, `country_fervor_target_cm_scandinavian_add`
+- `country_fervor_target_cm_yugoslav_add`, `country_fervor_target_colombian_add`, `country_fervor_target_comanche_add`, `country_fervor_target_corsican_add`, `country_fervor_target_cree_add`, `country_fervor_target_crimean_tatar_add`
+- `country_fervor_target_croat_add`, `country_fervor_target_czech_add`, `country_fervor_target_dagestani_add`, `country_fervor_target_dakota_add`, `country_fervor_target_danish_add`, `country_fervor_target_dayak_add`
+- `country_fervor_target_deccani_add`, `country_fervor_target_dinka_add`, `country_fervor_target_dixie_add`, `country_fervor_target_dutch_add`, `country_fervor_target_dyula_add`, `country_fervor_target_east_german_add`
+- `country_fervor_target_ecuadorian_add`, `country_fervor_target_edo_add`, `country_fervor_target_equatorial_bantu_add`, `country_fervor_target_estonian_add`, `country_fervor_target_evenki_add`, `country_fervor_target_ewe_add`
+- `country_fervor_target_fang_add`, `country_fervor_target_filipino_add`, `country_fervor_target_filipino_hispanophone_add`, `country_fervor_target_filipino_mestizo_add`, `country_fervor_target_finnish_add`, `country_fervor_target_flemish_add`
+- `country_fervor_target_fluvian_bantu_add`, `country_fervor_target_fon_add`, `country_fervor_target_franco_canadian_add`, `country_fervor_target_francoprovencal_add`, `country_fervor_target_french_add`, `country_fervor_target_fulbe_add`
+- `country_fervor_target_fur_add`, `country_fervor_target_galician_add`, `country_fervor_target_georgian_add`, `country_fervor_target_gondi_add`, `country_fervor_target_greek_add`, `country_fervor_target_griqua_add`
+- `country_fervor_target_guajiro_add`, `country_fervor_target_guarani_add`, `country_fervor_target_gujarati_add`, `country_fervor_target_hakka_add`, `country_fervor_target_han_add`, `country_fervor_target_haratin_add`
+- `country_fervor_target_hausa_add`, `country_fervor_target_hawaiian_add`, `country_fervor_target_hazara_add`, `country_fervor_target_herero_add`, `country_fervor_target_hindustani_add`, `country_fervor_target_hokan_add`
+- `country_fervor_target_hungarian_add`, `country_fervor_target_iberian_add`, `country_fervor_target_ibibio_add`, `country_fervor_target_ibo_add`, `country_fervor_target_icelandic_add`, `country_fervor_target_ilocano_add`
+- `country_fervor_target_inuit_add`, `country_fervor_target_irish_add`, `country_fervor_target_iroquoian_add`, `country_fervor_target_japanese_add`, `country_fervor_target_javan_add`, `country_fervor_target_kachin_add`
+- `country_fervor_target_kalmyk_add`, `country_fervor_target_kannada_add`, `country_fervor_target_kanuri_add`, `country_fervor_target_karelian_add`, `country_fervor_target_karen_add`, `country_fervor_target_kashmiri_add`
+- `country_fervor_target_kavango_bantu_add`, `country_fervor_target_kazak_add`, `country_fervor_target_khmer_add`, `country_fervor_target_khmu_add`, `country_fervor_target_kho_add`, `country_fervor_target_khoisan_add`
+- `country_fervor_target_kikuyu_add`, `country_fervor_target_kirgiz_add`, `country_fervor_target_kissi_add`, `country_fervor_target_korean_add`, `country_fervor_target_kru_add`, `country_fervor_target_kurdish_add`
+- `country_fervor_target_lacustrine_bantu_add`, `country_fervor_target_lao_add`, `country_fervor_target_latvian_add`, `country_fervor_target_lithuanian_add`, `country_fervor_target_lomwe_add`, `country_fervor_target_luba_add`
+- `country_fervor_target_lumad_add`, `country_fervor_target_lunda_add`, `country_fervor_target_luo_add`, `country_fervor_target_luri_add`, `country_fervor_target_lushai_add`, `country_fervor_target_maasai_add`
+- `country_fervor_target_maghrebi_add`, `country_fervor_target_makua_add`, `country_fervor_target_malagasy_add`, `country_fervor_target_malay_add`, `country_fervor_target_malayalam_add`, `country_fervor_target_maltese_add`
+- `country_fervor_target_manchu_add`, `country_fervor_target_mande_add`, `country_fervor_target_manipuri_add`, `country_fervor_target_maori_add`, `country_fervor_target_marathi_add`, `country_fervor_target_mari_add`
+- `country_fervor_target_mashriqi_add`, `country_fervor_target_mayan_add`, `country_fervor_target_mazanderani_add`, `country_fervor_target_melanesian_add`, `country_fervor_target_metis_add`, `country_fervor_target_mexican_add`
+- `country_fervor_target_miao_add`, `country_fervor_target_micronesian_add`, `country_fervor_target_min_add`, `country_fervor_target_miskito_add`, `country_fervor_target_misri_add`, `country_fervor_target_mixtec_add`
+- `country_fervor_target_moluccan_add`, `country_fervor_target_mon_add`, `country_fervor_target_mongo_add`, `country_fervor_target_mongol_add`, `country_fervor_target_mordvin_add`, `country_fervor_target_moro_add`
+- `country_fervor_target_mossi_add`, `country_fervor_target_muisca_add`, `country_fervor_target_muskogean_add`, `country_fervor_target_naga_add`, `country_fervor_target_nahua_add`, `country_fervor_target_navajo_add`
+- `country_fervor_target_nepali_add`, `country_fervor_target_nez_perce_add`, `country_fervor_target_nguni_add`, `country_fervor_target_nilotic_add`, `country_fervor_target_nordestino_add`, `country_fervor_target_north_andean_add`
+- `country_fervor_target_north_german_add`, `country_fervor_target_north_italian_add`, `country_fervor_target_norwegian_add`, `country_fervor_target_nuba_add`, `country_fervor_target_nuer_add`, `country_fervor_target_nyamwezi_add`
+- `country_fervor_target_occitan_add`, `country_fervor_target_oodham_add`, `country_fervor_target_oriya_add`, `country_fervor_target_oromo_add`, `country_fervor_target_ossetian_add`, `country_fervor_target_ovimbundu_add`
+- `country_fervor_target_pahari_add`, `country_fervor_target_paiute_add`, `country_fervor_target_panjabi_add`, `country_fervor_target_paraguayan_add`, `country_fervor_target_pashtun_add`, `country_fervor_target_patagonian_add`
+- `country_fervor_target_pathan_add`, `country_fervor_target_paulista_add`, `country_fervor_target_persian_add`, `country_fervor_target_peruvian_add`, `country_fervor_target_platinean_add`, `country_fervor_target_polish_add`
+- `country_fervor_target_polynesian_add`, `country_fervor_target_portuguese_add`, `country_fervor_target_promethean_add`, `country_fervor_target_pueblo_add`, `country_fervor_target_quechua_add`, `country_fervor_target_rajput_add`
+- `country_fervor_target_romanian_add`, `country_fervor_target_ruanda_add`, `country_fervor_target_rundi_add`, `country_fervor_target_russian_add`, `country_fervor_target_ryukyuan_add`, `country_fervor_target_salish_add`
+- `country_fervor_target_sami_add`, `country_fervor_target_sara_add`, `country_fervor_target_scottish_add`, `country_fervor_target_scottish_gaelic_add`, `country_fervor_target_sena_add`, `country_fervor_target_senufo_add`
+- `country_fervor_target_sephardic_add`, `country_fervor_target_serb_add`, `country_fervor_target_shan_add`, `country_fervor_target_shona_add`, `country_fervor_target_sidama_add`, `country_fervor_target_sindi_add`
+- `country_fervor_target_sinhala_add`, `country_fervor_target_siouan_add`, `country_fervor_target_slovak_add`, `country_fervor_target_slovene_add`, `country_fervor_target_somali_add`, `country_fervor_target_songhai_add`
+- `country_fervor_target_sorb_add`, `country_fervor_target_sotho_add`, `country_fervor_target_south_andean_add`, `country_fervor_target_south_german_add`, `country_fervor_target_south_italian_add`, `country_fervor_target_spanish_add`
+- `country_fervor_target_sudanese_add`, `country_fervor_target_sukuma_add`, `country_fervor_target_sulista_add`, `country_fervor_target_sumatran_add`, `country_fervor_target_swahili_add`, `country_fervor_target_swedish_add`
+- `country_fervor_target_szekely_add`, `country_fervor_target_tagalog_add`, `country_fervor_target_tajik_add`, `country_fervor_target_tamil_add`, `country_fervor_target_tarascan_add`, `country_fervor_target_tatar_add`
+- `country_fervor_target_teda_add`, `country_fervor_target_telegu_add`, `country_fervor_target_thai_add`, `country_fervor_target_tibetan_add`, `country_fervor_target_tigray_add`, `country_fervor_target_tiv_add`
+- `country_fervor_target_tonga_add`, `country_fervor_target_tswana_add`, `country_fervor_target_tuareg_add`, `country_fervor_target_tupinamba_add`, `country_fervor_target_turkish_add`, `country_fervor_target_turkmen_add`
+- `country_fervor_target_tuvan_add`, `country_fervor_target_udmurt_add`, `country_fervor_target_ugrian_add`, `country_fervor_target_uighur_add`, `country_fervor_target_ukrainian_add`, `country_fervor_target_uruguayan_add`
+- `country_fervor_target_uzbek_add`, `country_fervor_target_venezuelan_add`, `country_fervor_target_vietnamese_add`, `country_fervor_target_visayan_add`, `country_fervor_target_wallonian_add`, `country_fervor_target_welsh_add`
+- `country_fervor_target_wolof_add`, `country_fervor_target_xhosa_add`, `country_fervor_target_yakut_add`, `country_fervor_target_yankee_add`, `country_fervor_target_yao_add`, `country_fervor_target_yemenite_add`
+- `country_fervor_target_yoruba_add`, `country_fervor_target_yuanzhumin_add`, `country_fervor_target_yue_add`, `country_fervor_target_zapotec_add`, `country_fervor_target_zhuang_add`, `country_fervor_target_zulu_add`
 
 ### `country_institution_cost_{institution}_mult` (18 members)
 
@@ -1199,15 +1202,15 @@ _How fast you change the size of Colonial Affairs_
 
 - `country_institution_size_change_speed_institution_colonial_affairs_mult`, `country_institution_size_change_speed_institution_ministry_of_the_environment_mult`, `country_institution_size_change_speed_institution_police_mult`, `country_institution_size_change_speed_institution_schools_mult`
 
-### `country_st_res_{good}_capacity_add` (8 members)
+### `country_st_res_{good}_capacity_add` (9 members)
 
-- `country_st_res_aeroplanes_capacity_add`, `country_st_res_ammunition_capacity_add`, `country_st_res_artillery_capacity_add`, `country_st_res_fertilizer_capacity_add`, `country_st_res_grain_capacity_add`, `country_st_res_oil_capacity_add`
-- `country_st_res_small_arms_capacity_add`, `country_st_res_tanks_capacity_add`
+- `country_st_res_aeroplanes_capacity_add`, `country_st_res_ammunition_capacity_add`, `country_st_res_artillery_capacity_add`, `country_st_res_copper_capacity_add`, `country_st_res_fertilizer_capacity_add`, `country_st_res_grain_capacity_add`
+- `country_st_res_oil_capacity_add`, `country_st_res_small_arms_capacity_add`, `country_st_res_tanks_capacity_add`
 
-### `country_st_res_{good}_decay_add` (8 members)
+### `country_st_res_{good}_decay_add` (9 members)
 
-- `country_st_res_aeroplanes_decay_add`, `country_st_res_ammunition_decay_add`, `country_st_res_artillery_decay_add`, `country_st_res_fertilizer_decay_add`, `country_st_res_grain_decay_add`, `country_st_res_oil_decay_add`
-- `country_st_res_small_arms_decay_add`, `country_st_res_tanks_decay_add`
+- `country_st_res_aeroplanes_decay_add`, `country_st_res_ammunition_decay_add`, `country_st_res_artillery_decay_add`, `country_st_res_copper_decay_add`, `country_st_res_fertilizer_decay_add`, `country_st_res_grain_decay_add`
+- `country_st_res_oil_decay_add`, `country_st_res_small_arms_decay_add`, `country_st_res_tanks_decay_add`
 
 ### `country_{bg}_goods_cost_mult` (3 members)
 
@@ -1254,7 +1257,7 @@ _A bonus or penalty to the monetary cost of military material necessities._
 - `country_building_tooling_workshop_require_subsidies_bool`, `country_building_trade_center_require_subsidies_bool`, `country_building_university_require_subsidies_bool`, `country_building_urban_center_require_subsidies_bool`, `country_building_vatican_city_require_subsidies_bool`, `country_building_victoria_terminus_require_subsidies_bool`
 - `country_building_vineyard_require_subsidies_bool`, `country_building_wat_arun_require_subsidies_bool`, `country_building_whaling_station_require_subsidies_bool`, `country_building_wheat_farm_require_subsidies_bool`, `country_building_white_house_require_subsidies_bool`, `country_building_winter_palace_require_subsidies_bool`
 
-### `country_{culture}_cultural_acceptance_add` (321 members)
+### `country_{culture}_cultural_acceptance_add` (342 members)
 
 _A bonus or penalty to a specific culture's [concept_acceptance]_
 
@@ -1270,48 +1273,51 @@ _A bonus or penalty to a specific culture's [concept_acceptance]_
 - `country_british_cultural_acceptance_add`, `country_bulgarian_cultural_acceptance_add`, `country_bundeli_cultural_acceptance_add`, `country_burmese_cultural_acceptance_add`, `country_buryat_cultural_acceptance_add`, `country_byelorussian_cultural_acceptance_add`
 - `country_caddoan_cultural_acceptance_add`, `country_cajun_cultural_acceptance_add`, `country_cariban_cultural_acceptance_add`, `country_caribeno_cultural_acceptance_add`, `country_catalan_cultural_acceptance_add`, `country_caucasian_turk_cultural_acceptance_add`
 - `country_central_american_cultural_acceptance_add`, `country_champa_cultural_acceptance_add`, `country_chechen_cultural_acceptance_add`, `country_cherokee_cultural_acceptance_add`, `country_chewa_cultural_acceptance_add`, `country_chhattisgarhi_cultural_acceptance_add`
-- `country_chilean_cultural_acceptance_add`, `country_chukchi_cultural_acceptance_add`, `country_chuvash_cultural_acceptance_add`, `country_circassian_cultural_acceptance_add`, `country_colombian_cultural_acceptance_add`, `country_comanche_cultural_acceptance_add`
-- `country_corsican_cultural_acceptance_add`, `country_cree_cultural_acceptance_add`, `country_crimean_tatar_cultural_acceptance_add`, `country_croat_cultural_acceptance_add`, `country_czech_cultural_acceptance_add`, `country_dagestani_cultural_acceptance_add`
-- `country_dakota_cultural_acceptance_add`, `country_danish_cultural_acceptance_add`, `country_dayak_cultural_acceptance_add`, `country_deccani_cultural_acceptance_add`, `country_dinka_cultural_acceptance_add`, `country_dixie_cultural_acceptance_add`
-- `country_dutch_cultural_acceptance_add`, `country_dyula_cultural_acceptance_add`, `country_east_german_cultural_acceptance_add`, `country_ecuadorian_cultural_acceptance_add`, `country_edo_cultural_acceptance_add`, `country_equatorial_bantu_cultural_acceptance_add`
-- `country_estonian_cultural_acceptance_add`, `country_evenki_cultural_acceptance_add`, `country_ewe_cultural_acceptance_add`, `country_fang_cultural_acceptance_add`, `country_filipino_cultural_acceptance_add`, `country_filipino_hispanophone_cultural_acceptance_add`
-- `country_filipino_mestizo_cultural_acceptance_add`, `country_finnish_cultural_acceptance_add`, `country_flemish_cultural_acceptance_add`, `country_fluvian_bantu_cultural_acceptance_add`, `country_fon_cultural_acceptance_add`, `country_franco_canadian_cultural_acceptance_add`
-- `country_francoprovencal_cultural_acceptance_add`, `country_french_cultural_acceptance_add`, `country_fulbe_cultural_acceptance_add`, `country_fur_cultural_acceptance_add`, `country_galician_cultural_acceptance_add`, `country_georgian_cultural_acceptance_add`
-- `country_gondi_cultural_acceptance_add`, `country_greek_cultural_acceptance_add`, `country_griqua_cultural_acceptance_add`, `country_guajiro_cultural_acceptance_add`, `country_guarani_cultural_acceptance_add`, `country_gujarati_cultural_acceptance_add`
-- `country_hakka_cultural_acceptance_add`, `country_han_cultural_acceptance_add`, `country_haratin_cultural_acceptance_add`, `country_hausa_cultural_acceptance_add`, `country_hawaiian_cultural_acceptance_add`, `country_hazara_cultural_acceptance_add`
-- `country_herero_cultural_acceptance_add`, `country_hindustani_cultural_acceptance_add`, `country_hokan_cultural_acceptance_add`, `country_hungarian_cultural_acceptance_add`, `country_iberian_cultural_acceptance_add`, `country_ibibio_cultural_acceptance_add`
-- `country_ibo_cultural_acceptance_add`, `country_icelandic_cultural_acceptance_add`, `country_ilocano_cultural_acceptance_add`, `country_inuit_cultural_acceptance_add`, `country_irish_cultural_acceptance_add`, `country_iroquoian_cultural_acceptance_add`
-- `country_japanese_cultural_acceptance_add`, `country_javan_cultural_acceptance_add`, `country_kachin_cultural_acceptance_add`, `country_kalmyk_cultural_acceptance_add`, `country_kannada_cultural_acceptance_add`, `country_kanuri_cultural_acceptance_add`
-- `country_karelian_cultural_acceptance_add`, `country_karen_cultural_acceptance_add`, `country_kashmiri_cultural_acceptance_add`, `country_kavango_bantu_cultural_acceptance_add`, `country_kazak_cultural_acceptance_add`, `country_khmer_cultural_acceptance_add`
-- `country_khmu_cultural_acceptance_add`, `country_kho_cultural_acceptance_add`, `country_khoisan_cultural_acceptance_add`, `country_kikuyu_cultural_acceptance_add`, `country_kirgiz_cultural_acceptance_add`, `country_kissi_cultural_acceptance_add`
-- `country_korean_cultural_acceptance_add`, `country_kru_cultural_acceptance_add`, `country_kurdish_cultural_acceptance_add`, `country_lacustrine_bantu_cultural_acceptance_add`, `country_lao_cultural_acceptance_add`, `country_latvian_cultural_acceptance_add`
-- `country_lithuanian_cultural_acceptance_add`, `country_lomwe_cultural_acceptance_add`, `country_luba_cultural_acceptance_add`, `country_lumad_cultural_acceptance_add`, `country_lunda_cultural_acceptance_add`, `country_luo_cultural_acceptance_add`
-- `country_luri_cultural_acceptance_add`, `country_lushai_cultural_acceptance_add`, `country_maasai_cultural_acceptance_add`, `country_maghrebi_cultural_acceptance_add`, `country_makua_cultural_acceptance_add`, `country_malagasy_cultural_acceptance_add`
-- `country_malay_cultural_acceptance_add`, `country_malayalam_cultural_acceptance_add`, `country_maltese_cultural_acceptance_add`, `country_manchu_cultural_acceptance_add`, `country_mande_cultural_acceptance_add`, `country_manipuri_cultural_acceptance_add`
-- `country_maori_cultural_acceptance_add`, `country_marathi_cultural_acceptance_add`, `country_mari_cultural_acceptance_add`, `country_mashriqi_cultural_acceptance_add`, `country_mayan_cultural_acceptance_add`, `country_mazanderani_cultural_acceptance_add`
-- `country_melanesian_cultural_acceptance_add`, `country_metis_cultural_acceptance_add`, `country_mexican_cultural_acceptance_add`, `country_miao_cultural_acceptance_add`, `country_micronesian_cultural_acceptance_add`, `country_min_cultural_acceptance_add`
-- `country_miskito_cultural_acceptance_add`, `country_misri_cultural_acceptance_add`, `country_mixtec_cultural_acceptance_add`, `country_moluccan_cultural_acceptance_add`, `country_mon_cultural_acceptance_add`, `country_mongo_cultural_acceptance_add`
-- `country_mongol_cultural_acceptance_add`, `country_mordvin_cultural_acceptance_add`, `country_moro_cultural_acceptance_add`, `country_mossi_cultural_acceptance_add`, `country_muisca_cultural_acceptance_add`, `country_muskogean_cultural_acceptance_add`
-- `country_naga_cultural_acceptance_add`, `country_nahua_cultural_acceptance_add`, `country_navajo_cultural_acceptance_add`, `country_nepali_cultural_acceptance_add`, `country_nez_perce_cultural_acceptance_add`, `country_nguni_cultural_acceptance_add`
-- `country_nilotic_cultural_acceptance_add`, `country_nordestino_cultural_acceptance_add`, `country_north_andean_cultural_acceptance_add`, `country_north_german_cultural_acceptance_add`, `country_north_italian_cultural_acceptance_add`, `country_norwegian_cultural_acceptance_add`
-- `country_nuba_cultural_acceptance_add`, `country_nuer_cultural_acceptance_add`, `country_nyamwezi_cultural_acceptance_add`, `country_occitan_cultural_acceptance_add`, `country_oodham_cultural_acceptance_add`, `country_oriya_cultural_acceptance_add`
-- `country_oromo_cultural_acceptance_add`, `country_ossetian_cultural_acceptance_add`, `country_ovimbundu_cultural_acceptance_add`, `country_pahari_cultural_acceptance_add`, `country_paiute_cultural_acceptance_add`, `country_panjabi_cultural_acceptance_add`
-- `country_paraguayan_cultural_acceptance_add`, `country_pashtun_cultural_acceptance_add`, `country_patagonian_cultural_acceptance_add`, `country_pathan_cultural_acceptance_add`, `country_paulista_cultural_acceptance_add`, `country_persian_cultural_acceptance_add`
-- `country_peruvian_cultural_acceptance_add`, `country_platinean_cultural_acceptance_add`, `country_polish_cultural_acceptance_add`, `country_polynesian_cultural_acceptance_add`, `country_portuguese_cultural_acceptance_add`, `country_promethean_cultural_acceptance_add`
-- `country_pueblo_cultural_acceptance_add`, `country_quechua_cultural_acceptance_add`, `country_rajput_cultural_acceptance_add`, `country_romanian_cultural_acceptance_add`, `country_ruanda_cultural_acceptance_add`, `country_rundi_cultural_acceptance_add`
-- `country_russian_cultural_acceptance_add`, `country_ryukyuan_cultural_acceptance_add`, `country_salish_cultural_acceptance_add`, `country_sami_cultural_acceptance_add`, `country_sara_cultural_acceptance_add`, `country_scottish_cultural_acceptance_add`
-- `country_scottish_gaelic_cultural_acceptance_add`, `country_sena_cultural_acceptance_add`, `country_senufo_cultural_acceptance_add`, `country_sephardic_cultural_acceptance_add`, `country_serb_cultural_acceptance_add`, `country_shan_cultural_acceptance_add`
-- `country_shona_cultural_acceptance_add`, `country_sidama_cultural_acceptance_add`, `country_sindi_cultural_acceptance_add`, `country_sinhala_cultural_acceptance_add`, `country_siouan_cultural_acceptance_add`, `country_slovak_cultural_acceptance_add`
-- `country_slovene_cultural_acceptance_add`, `country_somali_cultural_acceptance_add`, `country_songhai_cultural_acceptance_add`, `country_sorb_cultural_acceptance_add`, `country_sotho_cultural_acceptance_add`, `country_south_andean_cultural_acceptance_add`
-- `country_south_german_cultural_acceptance_add`, `country_south_italian_cultural_acceptance_add`, `country_spanish_cultural_acceptance_add`, `country_sudanese_cultural_acceptance_add`, `country_sukuma_cultural_acceptance_add`, `country_sulista_cultural_acceptance_add`
-- `country_sumatran_cultural_acceptance_add`, `country_swahili_cultural_acceptance_add`, `country_swedish_cultural_acceptance_add`, `country_szekely_cultural_acceptance_add`, `country_tagalog_cultural_acceptance_add`, `country_tajik_cultural_acceptance_add`
-- `country_tamil_cultural_acceptance_add`, `country_tarascan_cultural_acceptance_add`, `country_tatar_cultural_acceptance_add`, `country_teda_cultural_acceptance_add`, `country_telegu_cultural_acceptance_add`, `country_thai_cultural_acceptance_add`
-- `country_tibetan_cultural_acceptance_add`, `country_tigray_cultural_acceptance_add`, `country_tiv_cultural_acceptance_add`, `country_tonga_cultural_acceptance_add`, `country_tswana_cultural_acceptance_add`, `country_tuareg_cultural_acceptance_add`
-- `country_tupinamba_cultural_acceptance_add`, `country_turkish_cultural_acceptance_add`, `country_turkmen_cultural_acceptance_add`, `country_tuvan_cultural_acceptance_add`, `country_udmurt_cultural_acceptance_add`, `country_ugrian_cultural_acceptance_add`
-- `country_uighur_cultural_acceptance_add`, `country_ukrainian_cultural_acceptance_add`, `country_uruguayan_cultural_acceptance_add`, `country_uzbek_cultural_acceptance_add`, `country_venezuelan_cultural_acceptance_add`, `country_vietnamese_cultural_acceptance_add`
-- `country_visayan_cultural_acceptance_add`, `country_wallonian_cultural_acceptance_add`, `country_welsh_cultural_acceptance_add`, `country_wolof_cultural_acceptance_add`, `country_xhosa_cultural_acceptance_add`, `country_yakut_cultural_acceptance_add`
-- `country_yankee_cultural_acceptance_add`, `country_yao_cultural_acceptance_add`, `country_yemenite_cultural_acceptance_add`, `country_yoruba_cultural_acceptance_add`, `country_yuanzhumin_cultural_acceptance_add`, `country_yue_cultural_acceptance_add`
-- `country_zapotec_cultural_acceptance_add`, `country_zhuang_cultural_acceptance_add`, `country_zulu_cultural_acceptance_add`
+- `country_chilean_cultural_acceptance_add`, `country_chukchi_cultural_acceptance_add`, `country_chuvash_cultural_acceptance_add`, `country_circassian_cultural_acceptance_add`, `country_cm_american_cultural_acceptance_add`, `country_cm_andean_cultural_acceptance_add`
+- `country_cm_anglophone_cultural_acceptance_add`, `country_cm_arab_cultural_acceptance_add`, `country_cm_czechoslovak_cultural_acceptance_add`, `country_cm_dravidian_cultural_acceptance_add`, `country_cm_east_african_cultural_acceptance_add`, `country_cm_east_slavic_cultural_acceptance_add`
+- `country_cm_german_cultural_acceptance_add`, `country_cm_gran_colombian_cultural_acceptance_add`, `country_cm_indonesian_cultural_acceptance_add`, `country_cm_italian_cultural_acceptance_add`, `country_cm_latin_cultural_acceptance_add`, `country_cm_nguni_cultural_acceptance_add`
+- `country_cm_oghuz_turkic_cultural_acceptance_add`, `country_cm_pan_malay_cultural_acceptance_add`, `country_cm_pan_slavic_cultural_acceptance_add`, `country_cm_pan_turkic_cultural_acceptance_add`, `country_cm_platine_cultural_acceptance_add`, `country_cm_scandinavian_cultural_acceptance_add`
+- `country_cm_yugoslav_cultural_acceptance_add`, `country_colombian_cultural_acceptance_add`, `country_comanche_cultural_acceptance_add`, `country_corsican_cultural_acceptance_add`, `country_cree_cultural_acceptance_add`, `country_crimean_tatar_cultural_acceptance_add`
+- `country_croat_cultural_acceptance_add`, `country_czech_cultural_acceptance_add`, `country_dagestani_cultural_acceptance_add`, `country_dakota_cultural_acceptance_add`, `country_danish_cultural_acceptance_add`, `country_dayak_cultural_acceptance_add`
+- `country_deccani_cultural_acceptance_add`, `country_dinka_cultural_acceptance_add`, `country_dixie_cultural_acceptance_add`, `country_dutch_cultural_acceptance_add`, `country_dyula_cultural_acceptance_add`, `country_east_german_cultural_acceptance_add`
+- `country_ecuadorian_cultural_acceptance_add`, `country_edo_cultural_acceptance_add`, `country_equatorial_bantu_cultural_acceptance_add`, `country_estonian_cultural_acceptance_add`, `country_evenki_cultural_acceptance_add`, `country_ewe_cultural_acceptance_add`
+- `country_fang_cultural_acceptance_add`, `country_filipino_cultural_acceptance_add`, `country_filipino_hispanophone_cultural_acceptance_add`, `country_filipino_mestizo_cultural_acceptance_add`, `country_finnish_cultural_acceptance_add`, `country_flemish_cultural_acceptance_add`
+- `country_fluvian_bantu_cultural_acceptance_add`, `country_fon_cultural_acceptance_add`, `country_franco_canadian_cultural_acceptance_add`, `country_francoprovencal_cultural_acceptance_add`, `country_french_cultural_acceptance_add`, `country_fulbe_cultural_acceptance_add`
+- `country_fur_cultural_acceptance_add`, `country_galician_cultural_acceptance_add`, `country_georgian_cultural_acceptance_add`, `country_gondi_cultural_acceptance_add`, `country_greek_cultural_acceptance_add`, `country_griqua_cultural_acceptance_add`
+- `country_guajiro_cultural_acceptance_add`, `country_guarani_cultural_acceptance_add`, `country_gujarati_cultural_acceptance_add`, `country_hakka_cultural_acceptance_add`, `country_han_cultural_acceptance_add`, `country_haratin_cultural_acceptance_add`
+- `country_hausa_cultural_acceptance_add`, `country_hawaiian_cultural_acceptance_add`, `country_hazara_cultural_acceptance_add`, `country_herero_cultural_acceptance_add`, `country_hindustani_cultural_acceptance_add`, `country_hokan_cultural_acceptance_add`
+- `country_hungarian_cultural_acceptance_add`, `country_iberian_cultural_acceptance_add`, `country_ibibio_cultural_acceptance_add`, `country_ibo_cultural_acceptance_add`, `country_icelandic_cultural_acceptance_add`, `country_ilocano_cultural_acceptance_add`
+- `country_inuit_cultural_acceptance_add`, `country_irish_cultural_acceptance_add`, `country_iroquoian_cultural_acceptance_add`, `country_japanese_cultural_acceptance_add`, `country_javan_cultural_acceptance_add`, `country_kachin_cultural_acceptance_add`
+- `country_kalmyk_cultural_acceptance_add`, `country_kannada_cultural_acceptance_add`, `country_kanuri_cultural_acceptance_add`, `country_karelian_cultural_acceptance_add`, `country_karen_cultural_acceptance_add`, `country_kashmiri_cultural_acceptance_add`
+- `country_kavango_bantu_cultural_acceptance_add`, `country_kazak_cultural_acceptance_add`, `country_khmer_cultural_acceptance_add`, `country_khmu_cultural_acceptance_add`, `country_kho_cultural_acceptance_add`, `country_khoisan_cultural_acceptance_add`
+- `country_kikuyu_cultural_acceptance_add`, `country_kirgiz_cultural_acceptance_add`, `country_kissi_cultural_acceptance_add`, `country_korean_cultural_acceptance_add`, `country_kru_cultural_acceptance_add`, `country_kurdish_cultural_acceptance_add`
+- `country_lacustrine_bantu_cultural_acceptance_add`, `country_lao_cultural_acceptance_add`, `country_latvian_cultural_acceptance_add`, `country_lithuanian_cultural_acceptance_add`, `country_lomwe_cultural_acceptance_add`, `country_luba_cultural_acceptance_add`
+- `country_lumad_cultural_acceptance_add`, `country_lunda_cultural_acceptance_add`, `country_luo_cultural_acceptance_add`, `country_luri_cultural_acceptance_add`, `country_lushai_cultural_acceptance_add`, `country_maasai_cultural_acceptance_add`
+- `country_maghrebi_cultural_acceptance_add`, `country_makua_cultural_acceptance_add`, `country_malagasy_cultural_acceptance_add`, `country_malay_cultural_acceptance_add`, `country_malayalam_cultural_acceptance_add`, `country_maltese_cultural_acceptance_add`
+- `country_manchu_cultural_acceptance_add`, `country_mande_cultural_acceptance_add`, `country_manipuri_cultural_acceptance_add`, `country_maori_cultural_acceptance_add`, `country_marathi_cultural_acceptance_add`, `country_mari_cultural_acceptance_add`
+- `country_mashriqi_cultural_acceptance_add`, `country_mayan_cultural_acceptance_add`, `country_mazanderani_cultural_acceptance_add`, `country_melanesian_cultural_acceptance_add`, `country_metis_cultural_acceptance_add`, `country_mexican_cultural_acceptance_add`
+- `country_miao_cultural_acceptance_add`, `country_micronesian_cultural_acceptance_add`, `country_min_cultural_acceptance_add`, `country_miskito_cultural_acceptance_add`, `country_misri_cultural_acceptance_add`, `country_mixtec_cultural_acceptance_add`
+- `country_moluccan_cultural_acceptance_add`, `country_mon_cultural_acceptance_add`, `country_mongo_cultural_acceptance_add`, `country_mongol_cultural_acceptance_add`, `country_mordvin_cultural_acceptance_add`, `country_moro_cultural_acceptance_add`
+- `country_mossi_cultural_acceptance_add`, `country_muisca_cultural_acceptance_add`, `country_muskogean_cultural_acceptance_add`, `country_naga_cultural_acceptance_add`, `country_nahua_cultural_acceptance_add`, `country_navajo_cultural_acceptance_add`
+- `country_nepali_cultural_acceptance_add`, `country_nez_perce_cultural_acceptance_add`, `country_nguni_cultural_acceptance_add`, `country_nilotic_cultural_acceptance_add`, `country_nordestino_cultural_acceptance_add`, `country_north_andean_cultural_acceptance_add`
+- `country_north_german_cultural_acceptance_add`, `country_north_italian_cultural_acceptance_add`, `country_norwegian_cultural_acceptance_add`, `country_nuba_cultural_acceptance_add`, `country_nuer_cultural_acceptance_add`, `country_nyamwezi_cultural_acceptance_add`
+- `country_occitan_cultural_acceptance_add`, `country_oodham_cultural_acceptance_add`, `country_oriya_cultural_acceptance_add`, `country_oromo_cultural_acceptance_add`, `country_ossetian_cultural_acceptance_add`, `country_ovimbundu_cultural_acceptance_add`
+- `country_pahari_cultural_acceptance_add`, `country_paiute_cultural_acceptance_add`, `country_panjabi_cultural_acceptance_add`, `country_paraguayan_cultural_acceptance_add`, `country_pashtun_cultural_acceptance_add`, `country_patagonian_cultural_acceptance_add`
+- `country_pathan_cultural_acceptance_add`, `country_paulista_cultural_acceptance_add`, `country_persian_cultural_acceptance_add`, `country_peruvian_cultural_acceptance_add`, `country_platinean_cultural_acceptance_add`, `country_polish_cultural_acceptance_add`
+- `country_polynesian_cultural_acceptance_add`, `country_portuguese_cultural_acceptance_add`, `country_promethean_cultural_acceptance_add`, `country_pueblo_cultural_acceptance_add`, `country_quechua_cultural_acceptance_add`, `country_rajput_cultural_acceptance_add`
+- `country_romanian_cultural_acceptance_add`, `country_ruanda_cultural_acceptance_add`, `country_rundi_cultural_acceptance_add`, `country_russian_cultural_acceptance_add`, `country_ryukyuan_cultural_acceptance_add`, `country_salish_cultural_acceptance_add`
+- `country_sami_cultural_acceptance_add`, `country_sara_cultural_acceptance_add`, `country_scottish_cultural_acceptance_add`, `country_scottish_gaelic_cultural_acceptance_add`, `country_sena_cultural_acceptance_add`, `country_senufo_cultural_acceptance_add`
+- `country_sephardic_cultural_acceptance_add`, `country_serb_cultural_acceptance_add`, `country_shan_cultural_acceptance_add`, `country_shona_cultural_acceptance_add`, `country_sidama_cultural_acceptance_add`, `country_sindi_cultural_acceptance_add`
+- `country_sinhala_cultural_acceptance_add`, `country_siouan_cultural_acceptance_add`, `country_slovak_cultural_acceptance_add`, `country_slovene_cultural_acceptance_add`, `country_somali_cultural_acceptance_add`, `country_songhai_cultural_acceptance_add`
+- `country_sorb_cultural_acceptance_add`, `country_sotho_cultural_acceptance_add`, `country_south_andean_cultural_acceptance_add`, `country_south_german_cultural_acceptance_add`, `country_south_italian_cultural_acceptance_add`, `country_spanish_cultural_acceptance_add`
+- `country_sudanese_cultural_acceptance_add`, `country_sukuma_cultural_acceptance_add`, `country_sulista_cultural_acceptance_add`, `country_sumatran_cultural_acceptance_add`, `country_swahili_cultural_acceptance_add`, `country_swedish_cultural_acceptance_add`
+- `country_szekely_cultural_acceptance_add`, `country_tagalog_cultural_acceptance_add`, `country_tajik_cultural_acceptance_add`, `country_tamil_cultural_acceptance_add`, `country_tarascan_cultural_acceptance_add`, `country_tatar_cultural_acceptance_add`
+- `country_teda_cultural_acceptance_add`, `country_telegu_cultural_acceptance_add`, `country_thai_cultural_acceptance_add`, `country_tibetan_cultural_acceptance_add`, `country_tigray_cultural_acceptance_add`, `country_tiv_cultural_acceptance_add`
+- `country_tonga_cultural_acceptance_add`, `country_tswana_cultural_acceptance_add`, `country_tuareg_cultural_acceptance_add`, `country_tupinamba_cultural_acceptance_add`, `country_turkish_cultural_acceptance_add`, `country_turkmen_cultural_acceptance_add`
+- `country_tuvan_cultural_acceptance_add`, `country_udmurt_cultural_acceptance_add`, `country_ugrian_cultural_acceptance_add`, `country_uighur_cultural_acceptance_add`, `country_ukrainian_cultural_acceptance_add`, `country_uruguayan_cultural_acceptance_add`
+- `country_uzbek_cultural_acceptance_add`, `country_venezuelan_cultural_acceptance_add`, `country_vietnamese_cultural_acceptance_add`, `country_visayan_cultural_acceptance_add`, `country_wallonian_cultural_acceptance_add`, `country_welsh_cultural_acceptance_add`
+- `country_wolof_cultural_acceptance_add`, `country_xhosa_cultural_acceptance_add`, `country_yakut_cultural_acceptance_add`, `country_yankee_cultural_acceptance_add`, `country_yao_cultural_acceptance_add`, `country_yemenite_cultural_acceptance_add`
+- `country_yoruba_cultural_acceptance_add`, `country_yuanzhumin_cultural_acceptance_add`, `country_yue_cultural_acceptance_add`, `country_zapotec_cultural_acceptance_add`, `country_zhuang_cultural_acceptance_add`, `country_zulu_cultural_acceptance_add`
 
 ### `country_{good}_export_tariffs_rate_add` (54 members)
 
@@ -1513,18 +1519,18 @@ _A bonus or penalty to the how attracted Pops are to the Politically Unaligned (
 - `interest_group_ig_armed_forces_pop_attraction_mult`, `interest_group_ig_devout_pop_attraction_mult`, `interest_group_ig_industrialists_pop_attraction_mult`, `interest_group_ig_intelligentsia_pop_attraction_mult`, `interest_group_ig_landowners_pop_attraction_mult`, `interest_group_ig_petty_bourgeoisie_pop_attraction_mult`
 - `interest_group_ig_rural_folk_pop_attraction_mult`, `interest_group_ig_trade_unions_pop_attraction_mult`
 
-### `interest_group_{ideology}_leader_chance_mult` (47 members)
+### `interest_group_{ideology}_leader_chance_mult` (48 members)
 
 _An increase or decrease to the chance for this Interest Group to select a Leader with the Abolitionist Ideology_
 
 - `interest_group_ideology_abolitionist_leader_chance_mult`, `interest_group_ideology_anarchist_leader_chance_mult`, `interest_group_ideology_authoritarian_leader_chance_mult`, `interest_group_ideology_bonapartist_leader_chance_mult`, `interest_group_ideology_carlist_2_leader_chance_mult`, `interest_group_ideology_carlist_leader_chance_mult`
-- `interest_group_ideology_communist_leader_leader_chance_mult`, `interest_group_ideology_corporatist_leader_leader_chance_mult`, `interest_group_ideology_despotic_utopian_leader_chance_mult`, `interest_group_ideology_ethno_nationalist_leader_chance_mult`, `interest_group_ideology_fascist_leader_chance_mult`, `interest_group_ideology_feminist_leader_chance_mult`
-- `interest_group_ideology_humanitarian_leader_chance_mult`, `interest_group_ideology_humanitarian_royalist_leader_chance_mult`, `interest_group_ideology_ilustrado_leader_leader_chance_mult`, `interest_group_ideology_integralist_leader_chance_mult`, `interest_group_ideology_jacksonian_democrat_leader_chance_mult`, `interest_group_ideology_jingoist_leader_leader_chance_mult`
-- `interest_group_ideology_land_reformer_leader_chance_mult`, `interest_group_ideology_legitimist_leader_chance_mult`, `interest_group_ideology_liberal_leader_leader_chance_mult`, `interest_group_ideology_luddite_leader_chance_mult`, `interest_group_ideology_market_liberal_leader_chance_mult`, `interest_group_ideology_miguelist_2_leader_chance_mult`
-- `interest_group_ideology_miguelist_leader_chance_mult`, `interest_group_ideology_mitogaku_leader_chance_mult`, `interest_group_ideology_moderate_leader_chance_mult`, `interest_group_ideology_modernizer_leader_leader_chance_mult`, `interest_group_ideology_nihilist_leader_chance_mult`, `interest_group_ideology_orleanist_leader_chance_mult`
-- `interest_group_ideology_pacifist_leader_chance_mult`, `interest_group_ideology_positivist_leader_chance_mult`, `interest_group_ideology_protectionist_leader_chance_mult`, `interest_group_ideology_radical_leader_chance_mult`, `interest_group_ideology_reformer_leader_chance_mult`, `interest_group_ideology_republican_leader_leader_chance_mult`
-- `interest_group_ideology_royalist_leader_chance_mult`, `interest_group_ideology_shojoi_leader_chance_mult`, `interest_group_ideology_slaver_leader_chance_mult`, `interest_group_ideology_sovereignist_leader_leader_chance_mult`, `interest_group_ideology_state_socialist_leader_chance_mult`, `interest_group_ideology_theocrat_leader_chance_mult`
-- `interest_group_ideology_traditionalist_leader_chance_mult`, `interest_group_ideology_traditionalist_minoritarian_leader_chance_mult`, `interest_group_ideology_utilitarian_leader_leader_chance_mult`, `interest_group_ideology_utopian_leader_chance_mult`, `interest_group_ideology_vanguardist_leader_chance_mult`
+- `interest_group_ideology_communist_leader_leader_chance_mult`, `interest_group_ideology_corporatist_leader_leader_chance_mult`, `interest_group_ideology_despotic_utopian_leader_chance_mult`, `interest_group_ideology_environmentalists_leader_chance_mult`, `interest_group_ideology_ethno_nationalist_leader_chance_mult`, `interest_group_ideology_fascist_leader_chance_mult`
+- `interest_group_ideology_feminist_leader_chance_mult`, `interest_group_ideology_humanitarian_leader_chance_mult`, `interest_group_ideology_humanitarian_royalist_leader_chance_mult`, `interest_group_ideology_ilustrado_leader_leader_chance_mult`, `interest_group_ideology_integralist_leader_chance_mult`, `interest_group_ideology_jacksonian_democrat_leader_chance_mult`
+- `interest_group_ideology_jingoist_leader_leader_chance_mult`, `interest_group_ideology_land_reformer_leader_chance_mult`, `interest_group_ideology_legitimist_leader_chance_mult`, `interest_group_ideology_liberal_leader_leader_chance_mult`, `interest_group_ideology_luddite_leader_chance_mult`, `interest_group_ideology_market_liberal_leader_chance_mult`
+- `interest_group_ideology_miguelist_2_leader_chance_mult`, `interest_group_ideology_miguelist_leader_chance_mult`, `interest_group_ideology_mitogaku_leader_chance_mult`, `interest_group_ideology_moderate_leader_chance_mult`, `interest_group_ideology_modernizer_leader_leader_chance_mult`, `interest_group_ideology_nihilist_leader_chance_mult`
+- `interest_group_ideology_orleanist_leader_chance_mult`, `interest_group_ideology_pacifist_leader_chance_mult`, `interest_group_ideology_positivist_leader_chance_mult`, `interest_group_ideology_protectionist_leader_chance_mult`, `interest_group_ideology_radical_leader_chance_mult`, `interest_group_ideology_reformer_leader_chance_mult`
+- `interest_group_ideology_republican_leader_leader_chance_mult`, `interest_group_ideology_royalist_leader_chance_mult`, `interest_group_ideology_shojoi_leader_chance_mult`, `interest_group_ideology_slaver_leader_chance_mult`, `interest_group_ideology_sovereignist_leader_leader_chance_mult`, `interest_group_ideology_state_socialist_leader_chance_mult`
+- `interest_group_ideology_theocrat_leader_chance_mult`, `interest_group_ideology_traditionalist_leader_chance_mult`, `interest_group_ideology_traditionalist_minoritarian_leader_chance_mult`, `interest_group_ideology_utilitarian_leader_leader_chance_mult`, `interest_group_ideology_utopian_leader_chance_mult`, `interest_group_ideology_vanguardist_leader_chance_mult`
 
 ### `power_bloc_invite_acceptance_{country_rank}_add` (8 members)
 
@@ -1651,7 +1657,7 @@ _An increase or decrease to the attraction for Pops towards joining a Political 
 - `state_sell_orders_steamers_add`, `state_sell_orders_steel_add`, `state_sell_orders_sugar_add`, `state_sell_orders_sulfur_add`, `state_sell_orders_tanks_add`, `state_sell_orders_tea_add`
 - `state_sell_orders_telephones_add`, `state_sell_orders_tobacco_add`, `state_sell_orders_tools_add`, `state_sell_orders_transportation_add`, `state_sell_orders_wine_add`, `state_sell_orders_wood_add`
 
-### `state_{culture}_standard_of_living_add` (321 members)
+### `state_{culture}_standard_of_living_add` (342 members)
 
 _A bonus or penalty to a specific culture's [concept_sol]_
 
@@ -1667,48 +1673,51 @@ _A bonus or penalty to a specific culture's [concept_sol]_
 - `state_british_standard_of_living_add`, `state_bulgarian_standard_of_living_add`, `state_bundeli_standard_of_living_add`, `state_burmese_standard_of_living_add`, `state_buryat_standard_of_living_add`, `state_byelorussian_standard_of_living_add`
 - `state_caddoan_standard_of_living_add`, `state_cajun_standard_of_living_add`, `state_cariban_standard_of_living_add`, `state_caribeno_standard_of_living_add`, `state_catalan_standard_of_living_add`, `state_caucasian_turk_standard_of_living_add`
 - `state_central_american_standard_of_living_add`, `state_champa_standard_of_living_add`, `state_chechen_standard_of_living_add`, `state_cherokee_standard_of_living_add`, `state_chewa_standard_of_living_add`, `state_chhattisgarhi_standard_of_living_add`
-- `state_chilean_standard_of_living_add`, `state_chukchi_standard_of_living_add`, `state_chuvash_standard_of_living_add`, `state_circassian_standard_of_living_add`, `state_colombian_standard_of_living_add`, `state_comanche_standard_of_living_add`
-- `state_corsican_standard_of_living_add`, `state_cree_standard_of_living_add`, `state_crimean_tatar_standard_of_living_add`, `state_croat_standard_of_living_add`, `state_czech_standard_of_living_add`, `state_dagestani_standard_of_living_add`
-- `state_dakota_standard_of_living_add`, `state_danish_standard_of_living_add`, `state_dayak_standard_of_living_add`, `state_deccani_standard_of_living_add`, `state_dinka_standard_of_living_add`, `state_dixie_standard_of_living_add`
-- `state_dutch_standard_of_living_add`, `state_dyula_standard_of_living_add`, `state_east_german_standard_of_living_add`, `state_ecuadorian_standard_of_living_add`, `state_edo_standard_of_living_add`, `state_equatorial_bantu_standard_of_living_add`
-- `state_estonian_standard_of_living_add`, `state_evenki_standard_of_living_add`, `state_ewe_standard_of_living_add`, `state_fang_standard_of_living_add`, `state_filipino_hispanophone_standard_of_living_add`, `state_filipino_mestizo_standard_of_living_add`
-- `state_filipino_standard_of_living_add`, `state_finnish_standard_of_living_add`, `state_flemish_standard_of_living_add`, `state_fluvian_bantu_standard_of_living_add`, `state_fon_standard_of_living_add`, `state_franco_canadian_standard_of_living_add`
-- `state_francoprovencal_standard_of_living_add`, `state_french_standard_of_living_add`, `state_fulbe_standard_of_living_add`, `state_fur_standard_of_living_add`, `state_galician_standard_of_living_add`, `state_georgian_standard_of_living_add`
-- `state_gondi_standard_of_living_add`, `state_greek_standard_of_living_add`, `state_griqua_standard_of_living_add`, `state_guajiro_standard_of_living_add`, `state_guarani_standard_of_living_add`, `state_gujarati_standard_of_living_add`
-- `state_hakka_standard_of_living_add`, `state_han_standard_of_living_add`, `state_haratin_standard_of_living_add`, `state_hausa_standard_of_living_add`, `state_hawaiian_standard_of_living_add`, `state_hazara_standard_of_living_add`
-- `state_herero_standard_of_living_add`, `state_hindustani_standard_of_living_add`, `state_hokan_standard_of_living_add`, `state_hungarian_standard_of_living_add`, `state_iberian_standard_of_living_add`, `state_ibibio_standard_of_living_add`
-- `state_ibo_standard_of_living_add`, `state_icelandic_standard_of_living_add`, `state_ilocano_standard_of_living_add`, `state_inuit_standard_of_living_add`, `state_irish_standard_of_living_add`, `state_iroquoian_standard_of_living_add`
-- `state_japanese_standard_of_living_add`, `state_javan_standard_of_living_add`, `state_kachin_standard_of_living_add`, `state_kalmyk_standard_of_living_add`, `state_kannada_standard_of_living_add`, `state_kanuri_standard_of_living_add`
-- `state_karelian_standard_of_living_add`, `state_karen_standard_of_living_add`, `state_kashmiri_standard_of_living_add`, `state_kavango_bantu_standard_of_living_add`, `state_kazak_standard_of_living_add`, `state_khmer_standard_of_living_add`
-- `state_khmu_standard_of_living_add`, `state_kho_standard_of_living_add`, `state_khoisan_standard_of_living_add`, `state_kikuyu_standard_of_living_add`, `state_kirgiz_standard_of_living_add`, `state_kissi_standard_of_living_add`
-- `state_korean_standard_of_living_add`, `state_kru_standard_of_living_add`, `state_kurdish_standard_of_living_add`, `state_lacustrine_bantu_standard_of_living_add`, `state_lao_standard_of_living_add`, `state_latvian_standard_of_living_add`
-- `state_lithuanian_standard_of_living_add`, `state_lomwe_standard_of_living_add`, `state_luba_standard_of_living_add`, `state_lumad_standard_of_living_add`, `state_lunda_standard_of_living_add`, `state_luo_standard_of_living_add`
-- `state_luri_standard_of_living_add`, `state_lushai_standard_of_living_add`, `state_maasai_standard_of_living_add`, `state_maghrebi_standard_of_living_add`, `state_makua_standard_of_living_add`, `state_malagasy_standard_of_living_add`
-- `state_malay_standard_of_living_add`, `state_malayalam_standard_of_living_add`, `state_maltese_standard_of_living_add`, `state_manchu_standard_of_living_add`, `state_mande_standard_of_living_add`, `state_manipuri_standard_of_living_add`
-- `state_maori_standard_of_living_add`, `state_marathi_standard_of_living_add`, `state_mari_standard_of_living_add`, `state_mashriqi_standard_of_living_add`, `state_mayan_standard_of_living_add`, `state_mazanderani_standard_of_living_add`
-- `state_melanesian_standard_of_living_add`, `state_metis_standard_of_living_add`, `state_mexican_standard_of_living_add`, `state_miao_standard_of_living_add`, `state_micronesian_standard_of_living_add`, `state_min_standard_of_living_add`
-- `state_miskito_standard_of_living_add`, `state_misri_standard_of_living_add`, `state_mixtec_standard_of_living_add`, `state_moluccan_standard_of_living_add`, `state_mon_standard_of_living_add`, `state_mongo_standard_of_living_add`
-- `state_mongol_standard_of_living_add`, `state_mordvin_standard_of_living_add`, `state_moro_standard_of_living_add`, `state_mossi_standard_of_living_add`, `state_muisca_standard_of_living_add`, `state_muskogean_standard_of_living_add`
-- `state_naga_standard_of_living_add`, `state_nahua_standard_of_living_add`, `state_navajo_standard_of_living_add`, `state_nepali_standard_of_living_add`, `state_nez_perce_standard_of_living_add`, `state_nguni_standard_of_living_add`
-- `state_nilotic_standard_of_living_add`, `state_nordestino_standard_of_living_add`, `state_north_andean_standard_of_living_add`, `state_north_german_standard_of_living_add`, `state_north_italian_standard_of_living_add`, `state_norwegian_standard_of_living_add`
-- `state_nuba_standard_of_living_add`, `state_nuer_standard_of_living_add`, `state_nyamwezi_standard_of_living_add`, `state_occitan_standard_of_living_add`, `state_oodham_standard_of_living_add`, `state_oriya_standard_of_living_add`
-- `state_oromo_standard_of_living_add`, `state_ossetian_standard_of_living_add`, `state_ovimbundu_standard_of_living_add`, `state_pahari_standard_of_living_add`, `state_paiute_standard_of_living_add`, `state_panjabi_standard_of_living_add`
-- `state_paraguayan_standard_of_living_add`, `state_pashtun_standard_of_living_add`, `state_patagonian_standard_of_living_add`, `state_pathan_standard_of_living_add`, `state_paulista_standard_of_living_add`, `state_persian_standard_of_living_add`
-- `state_peruvian_standard_of_living_add`, `state_platinean_standard_of_living_add`, `state_polish_standard_of_living_add`, `state_polynesian_standard_of_living_add`, `state_portuguese_standard_of_living_add`, `state_promethean_standard_of_living_add`
-- `state_pueblo_standard_of_living_add`, `state_quechua_standard_of_living_add`, `state_rajput_standard_of_living_add`, `state_romanian_standard_of_living_add`, `state_ruanda_standard_of_living_add`, `state_rundi_standard_of_living_add`
-- `state_russian_standard_of_living_add`, `state_ryukyuan_standard_of_living_add`, `state_salish_standard_of_living_add`, `state_sami_standard_of_living_add`, `state_sara_standard_of_living_add`, `state_scottish_gaelic_standard_of_living_add`
-- `state_scottish_standard_of_living_add`, `state_sena_standard_of_living_add`, `state_senufo_standard_of_living_add`, `state_sephardic_standard_of_living_add`, `state_serb_standard_of_living_add`, `state_shan_standard_of_living_add`
-- `state_shona_standard_of_living_add`, `state_sidama_standard_of_living_add`, `state_sindi_standard_of_living_add`, `state_sinhala_standard_of_living_add`, `state_siouan_standard_of_living_add`, `state_slovak_standard_of_living_add`
-- `state_slovene_standard_of_living_add`, `state_somali_standard_of_living_add`, `state_songhai_standard_of_living_add`, `state_sorb_standard_of_living_add`, `state_sotho_standard_of_living_add`, `state_south_andean_standard_of_living_add`
-- `state_south_german_standard_of_living_add`, `state_south_italian_standard_of_living_add`, `state_spanish_standard_of_living_add`, `state_sudanese_standard_of_living_add`, `state_sukuma_standard_of_living_add`, `state_sulista_standard_of_living_add`
-- `state_sumatran_standard_of_living_add`, `state_swahili_standard_of_living_add`, `state_swedish_standard_of_living_add`, `state_szekely_standard_of_living_add`, `state_tagalog_standard_of_living_add`, `state_tajik_standard_of_living_add`
-- `state_tamil_standard_of_living_add`, `state_tarascan_standard_of_living_add`, `state_tatar_standard_of_living_add`, `state_teda_standard_of_living_add`, `state_telegu_standard_of_living_add`, `state_thai_standard_of_living_add`
-- `state_tibetan_standard_of_living_add`, `state_tigray_standard_of_living_add`, `state_tiv_standard_of_living_add`, `state_tonga_standard_of_living_add`, `state_tswana_standard_of_living_add`, `state_tuareg_standard_of_living_add`
-- `state_tupinamba_standard_of_living_add`, `state_turkish_standard_of_living_add`, `state_turkmen_standard_of_living_add`, `state_tuvan_standard_of_living_add`, `state_udmurt_standard_of_living_add`, `state_ugrian_standard_of_living_add`
-- `state_uighur_standard_of_living_add`, `state_ukrainian_standard_of_living_add`, `state_uruguayan_standard_of_living_add`, `state_uzbek_standard_of_living_add`, `state_venezuelan_standard_of_living_add`, `state_vietnamese_standard_of_living_add`
-- `state_visayan_standard_of_living_add`, `state_wallonian_standard_of_living_add`, `state_welsh_standard_of_living_add`, `state_wolof_standard_of_living_add`, `state_xhosa_standard_of_living_add`, `state_yakut_standard_of_living_add`
-- `state_yankee_standard_of_living_add`, `state_yao_standard_of_living_add`, `state_yemenite_standard_of_living_add`, `state_yoruba_standard_of_living_add`, `state_yuanzhumin_standard_of_living_add`, `state_yue_standard_of_living_add`
-- `state_zapotec_standard_of_living_add`, `state_zhuang_standard_of_living_add`, `state_zulu_standard_of_living_add`
+- `state_chilean_standard_of_living_add`, `state_chukchi_standard_of_living_add`, `state_chuvash_standard_of_living_add`, `state_circassian_standard_of_living_add`, `state_cm_american_standard_of_living_add`, `state_cm_andean_standard_of_living_add`
+- `state_cm_anglophone_standard_of_living_add`, `state_cm_arab_standard_of_living_add`, `state_cm_czechoslovak_standard_of_living_add`, `state_cm_dravidian_standard_of_living_add`, `state_cm_east_african_standard_of_living_add`, `state_cm_east_slavic_standard_of_living_add`
+- `state_cm_german_standard_of_living_add`, `state_cm_gran_colombian_standard_of_living_add`, `state_cm_indonesian_standard_of_living_add`, `state_cm_italian_standard_of_living_add`, `state_cm_latin_standard_of_living_add`, `state_cm_nguni_standard_of_living_add`
+- `state_cm_oghuz_turkic_standard_of_living_add`, `state_cm_pan_malay_standard_of_living_add`, `state_cm_pan_slavic_standard_of_living_add`, `state_cm_pan_turkic_standard_of_living_add`, `state_cm_platine_standard_of_living_add`, `state_cm_scandinavian_standard_of_living_add`
+- `state_cm_yugoslav_standard_of_living_add`, `state_colombian_standard_of_living_add`, `state_comanche_standard_of_living_add`, `state_corsican_standard_of_living_add`, `state_cree_standard_of_living_add`, `state_crimean_tatar_standard_of_living_add`
+- `state_croat_standard_of_living_add`, `state_czech_standard_of_living_add`, `state_dagestani_standard_of_living_add`, `state_dakota_standard_of_living_add`, `state_danish_standard_of_living_add`, `state_dayak_standard_of_living_add`
+- `state_deccani_standard_of_living_add`, `state_dinka_standard_of_living_add`, `state_dixie_standard_of_living_add`, `state_dutch_standard_of_living_add`, `state_dyula_standard_of_living_add`, `state_east_german_standard_of_living_add`
+- `state_ecuadorian_standard_of_living_add`, `state_edo_standard_of_living_add`, `state_equatorial_bantu_standard_of_living_add`, `state_estonian_standard_of_living_add`, `state_evenki_standard_of_living_add`, `state_ewe_standard_of_living_add`
+- `state_fang_standard_of_living_add`, `state_filipino_hispanophone_standard_of_living_add`, `state_filipino_mestizo_standard_of_living_add`, `state_filipino_standard_of_living_add`, `state_finnish_standard_of_living_add`, `state_flemish_standard_of_living_add`
+- `state_fluvian_bantu_standard_of_living_add`, `state_fon_standard_of_living_add`, `state_franco_canadian_standard_of_living_add`, `state_francoprovencal_standard_of_living_add`, `state_french_standard_of_living_add`, `state_fulbe_standard_of_living_add`
+- `state_fur_standard_of_living_add`, `state_galician_standard_of_living_add`, `state_georgian_standard_of_living_add`, `state_gondi_standard_of_living_add`, `state_greek_standard_of_living_add`, `state_griqua_standard_of_living_add`
+- `state_guajiro_standard_of_living_add`, `state_guarani_standard_of_living_add`, `state_gujarati_standard_of_living_add`, `state_hakka_standard_of_living_add`, `state_han_standard_of_living_add`, `state_haratin_standard_of_living_add`
+- `state_hausa_standard_of_living_add`, `state_hawaiian_standard_of_living_add`, `state_hazara_standard_of_living_add`, `state_herero_standard_of_living_add`, `state_hindustani_standard_of_living_add`, `state_hokan_standard_of_living_add`
+- `state_hungarian_standard_of_living_add`, `state_iberian_standard_of_living_add`, `state_ibibio_standard_of_living_add`, `state_ibo_standard_of_living_add`, `state_icelandic_standard_of_living_add`, `state_ilocano_standard_of_living_add`
+- `state_inuit_standard_of_living_add`, `state_irish_standard_of_living_add`, `state_iroquoian_standard_of_living_add`, `state_japanese_standard_of_living_add`, `state_javan_standard_of_living_add`, `state_kachin_standard_of_living_add`
+- `state_kalmyk_standard_of_living_add`, `state_kannada_standard_of_living_add`, `state_kanuri_standard_of_living_add`, `state_karelian_standard_of_living_add`, `state_karen_standard_of_living_add`, `state_kashmiri_standard_of_living_add`
+- `state_kavango_bantu_standard_of_living_add`, `state_kazak_standard_of_living_add`, `state_khmer_standard_of_living_add`, `state_khmu_standard_of_living_add`, `state_kho_standard_of_living_add`, `state_khoisan_standard_of_living_add`
+- `state_kikuyu_standard_of_living_add`, `state_kirgiz_standard_of_living_add`, `state_kissi_standard_of_living_add`, `state_korean_standard_of_living_add`, `state_kru_standard_of_living_add`, `state_kurdish_standard_of_living_add`
+- `state_lacustrine_bantu_standard_of_living_add`, `state_lao_standard_of_living_add`, `state_latvian_standard_of_living_add`, `state_lithuanian_standard_of_living_add`, `state_lomwe_standard_of_living_add`, `state_luba_standard_of_living_add`
+- `state_lumad_standard_of_living_add`, `state_lunda_standard_of_living_add`, `state_luo_standard_of_living_add`, `state_luri_standard_of_living_add`, `state_lushai_standard_of_living_add`, `state_maasai_standard_of_living_add`
+- `state_maghrebi_standard_of_living_add`, `state_makua_standard_of_living_add`, `state_malagasy_standard_of_living_add`, `state_malay_standard_of_living_add`, `state_malayalam_standard_of_living_add`, `state_maltese_standard_of_living_add`
+- `state_manchu_standard_of_living_add`, `state_mande_standard_of_living_add`, `state_manipuri_standard_of_living_add`, `state_maori_standard_of_living_add`, `state_marathi_standard_of_living_add`, `state_mari_standard_of_living_add`
+- `state_mashriqi_standard_of_living_add`, `state_mayan_standard_of_living_add`, `state_mazanderani_standard_of_living_add`, `state_melanesian_standard_of_living_add`, `state_metis_standard_of_living_add`, `state_mexican_standard_of_living_add`
+- `state_miao_standard_of_living_add`, `state_micronesian_standard_of_living_add`, `state_min_standard_of_living_add`, `state_miskito_standard_of_living_add`, `state_misri_standard_of_living_add`, `state_mixtec_standard_of_living_add`
+- `state_moluccan_standard_of_living_add`, `state_mon_standard_of_living_add`, `state_mongo_standard_of_living_add`, `state_mongol_standard_of_living_add`, `state_mordvin_standard_of_living_add`, `state_moro_standard_of_living_add`
+- `state_mossi_standard_of_living_add`, `state_muisca_standard_of_living_add`, `state_muskogean_standard_of_living_add`, `state_naga_standard_of_living_add`, `state_nahua_standard_of_living_add`, `state_navajo_standard_of_living_add`
+- `state_nepali_standard_of_living_add`, `state_nez_perce_standard_of_living_add`, `state_nguni_standard_of_living_add`, `state_nilotic_standard_of_living_add`, `state_nordestino_standard_of_living_add`, `state_north_andean_standard_of_living_add`
+- `state_north_german_standard_of_living_add`, `state_north_italian_standard_of_living_add`, `state_norwegian_standard_of_living_add`, `state_nuba_standard_of_living_add`, `state_nuer_standard_of_living_add`, `state_nyamwezi_standard_of_living_add`
+- `state_occitan_standard_of_living_add`, `state_oodham_standard_of_living_add`, `state_oriya_standard_of_living_add`, `state_oromo_standard_of_living_add`, `state_ossetian_standard_of_living_add`, `state_ovimbundu_standard_of_living_add`
+- `state_pahari_standard_of_living_add`, `state_paiute_standard_of_living_add`, `state_panjabi_standard_of_living_add`, `state_paraguayan_standard_of_living_add`, `state_pashtun_standard_of_living_add`, `state_patagonian_standard_of_living_add`
+- `state_pathan_standard_of_living_add`, `state_paulista_standard_of_living_add`, `state_persian_standard_of_living_add`, `state_peruvian_standard_of_living_add`, `state_platinean_standard_of_living_add`, `state_polish_standard_of_living_add`
+- `state_polynesian_standard_of_living_add`, `state_portuguese_standard_of_living_add`, `state_promethean_standard_of_living_add`, `state_pueblo_standard_of_living_add`, `state_quechua_standard_of_living_add`, `state_rajput_standard_of_living_add`
+- `state_romanian_standard_of_living_add`, `state_ruanda_standard_of_living_add`, `state_rundi_standard_of_living_add`, `state_russian_standard_of_living_add`, `state_ryukyuan_standard_of_living_add`, `state_salish_standard_of_living_add`
+- `state_sami_standard_of_living_add`, `state_sara_standard_of_living_add`, `state_scottish_gaelic_standard_of_living_add`, `state_scottish_standard_of_living_add`, `state_sena_standard_of_living_add`, `state_senufo_standard_of_living_add`
+- `state_sephardic_standard_of_living_add`, `state_serb_standard_of_living_add`, `state_shan_standard_of_living_add`, `state_shona_standard_of_living_add`, `state_sidama_standard_of_living_add`, `state_sindi_standard_of_living_add`
+- `state_sinhala_standard_of_living_add`, `state_siouan_standard_of_living_add`, `state_slovak_standard_of_living_add`, `state_slovene_standard_of_living_add`, `state_somali_standard_of_living_add`, `state_songhai_standard_of_living_add`
+- `state_sorb_standard_of_living_add`, `state_sotho_standard_of_living_add`, `state_south_andean_standard_of_living_add`, `state_south_german_standard_of_living_add`, `state_south_italian_standard_of_living_add`, `state_spanish_standard_of_living_add`
+- `state_sudanese_standard_of_living_add`, `state_sukuma_standard_of_living_add`, `state_sulista_standard_of_living_add`, `state_sumatran_standard_of_living_add`, `state_swahili_standard_of_living_add`, `state_swedish_standard_of_living_add`
+- `state_szekely_standard_of_living_add`, `state_tagalog_standard_of_living_add`, `state_tajik_standard_of_living_add`, `state_tamil_standard_of_living_add`, `state_tarascan_standard_of_living_add`, `state_tatar_standard_of_living_add`
+- `state_teda_standard_of_living_add`, `state_telegu_standard_of_living_add`, `state_thai_standard_of_living_add`, `state_tibetan_standard_of_living_add`, `state_tigray_standard_of_living_add`, `state_tiv_standard_of_living_add`
+- `state_tonga_standard_of_living_add`, `state_tswana_standard_of_living_add`, `state_tuareg_standard_of_living_add`, `state_tupinamba_standard_of_living_add`, `state_turkish_standard_of_living_add`, `state_turkmen_standard_of_living_add`
+- `state_tuvan_standard_of_living_add`, `state_udmurt_standard_of_living_add`, `state_ugrian_standard_of_living_add`, `state_uighur_standard_of_living_add`, `state_ukrainian_standard_of_living_add`, `state_uruguayan_standard_of_living_add`
+- `state_uzbek_standard_of_living_add`, `state_venezuelan_standard_of_living_add`, `state_vietnamese_standard_of_living_add`, `state_visayan_standard_of_living_add`, `state_wallonian_standard_of_living_add`, `state_welsh_standard_of_living_add`
+- `state_wolof_standard_of_living_add`, `state_xhosa_standard_of_living_add`, `state_yakut_standard_of_living_add`, `state_yankee_standard_of_living_add`, `state_yao_standard_of_living_add`, `state_yemenite_standard_of_living_add`
+- `state_yoruba_standard_of_living_add`, `state_yuanzhumin_standard_of_living_add`, `state_yue_standard_of_living_add`, `state_zapotec_standard_of_living_add`, `state_zhuang_standard_of_living_add`, `state_zulu_standard_of_living_add`
 
 ### `state_{poptype}_dependent_wage_mult` (15 members)
 
@@ -1904,7 +1913,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (436)
+### country (437)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1975,6 +1984,7 @@ _Cannon Artillery Offense_
 - `country_cannot_be_subjugated_bool` — **Cannot be Subjugated** — This country recently declared its Neutrality and cannot be subjugated
 - `country_cannot_be_target_for_law_imposition_bool` — **Cannot be targeted for Law Imposition** — Country cannot be targeted for new Law Imposition attempts while this is in effect
 - `country_cannot_cancel_law_enactment_bool` — **Disallow Cancel Law Enactment** — A penalty preventing a country from cancelling the enactment of any Laws currently in progress
+- `country_cannot_decrease_autonomy_bool` — **Guaranteed Autonomy** — A guarantee preventing the Overlord from decreasing Autonomy or using the Install Favored Ruler Overlord Action
 - `country_cannot_enact_laws_bool` — **Disallow Enacting Laws** — A penalty preventing a country from enacting any Laws
 - `country_cannot_join_power_bloc_bool` — **Cannot join Power Blocks** — This country recently declared its Neutrality and cannot join any Power Bloc
 - `country_cannot_start_law_enactment_bool` — **Disallow Start Law Enactment** — A penalty preventing a country from starting to enact any new Laws
@@ -2493,7 +2503,7 @@ _Cannon Artillery Offense_
 - `ship_vulnerability_add` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 - `ship_vulnerability_mult` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 
-### state (225)
+### state (226)
 
 - `state_allow_assimilation_in_homeland_bool` — **Assimilation in Homeland States Allowed** — Assimilation of Pops is allowed even if they are living in one of their Homeland States
 - `state_allow_assimilation_without_presence_bool` — **Assimilation to Primary Culture Always Allowed** — Assimilation to Primary Culture is allowed even if no Pops of that Culture are present in the State
@@ -2515,6 +2525,7 @@ _Cannon Artillery Offense_
 - `state_dependent_wage_add` — **Yearly Dependents Income** — An increase or decrease in Dependents Income
 - `state_dependent_wage_mult` — **Dependents Income** — An increase or decrease in Dependents Income
 - `state_devastation_decay_mult` — **Devastation Recovery** — A bonus or penalty to the speed at which States recover from Devastation.
+- `state_disable_disband_prestige_penalty_bool` — **No Prestige Penalty for Disbanding** — Disbanding Battalions from the State does not cost Prestige
 - `state_disallow_barracks_construction_bool` — **Disallow Army Building Construction** — Army Buildings cannot be constructed in the State, and no new Battalions can be raised there
 - `state_disallow_incorporation_bool` — **State Incorporation Disallowed** — Cannot Incorporate State due to a modifier
 - `state_education_access_add` — **Education Access** — A bonus or penalty to education access for all pops

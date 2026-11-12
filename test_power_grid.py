@@ -834,6 +834,92 @@ class AITest(unittest.TestCase):
                       "te_grid_station_placeable = yes"):
             self.assertIn(check, site)
 
+    def test_ai_builds_beside_a_partners_station_without_power_of_its_own(self):
+        # A country that makes no Electricity and has a Grid Interconnection Agreement never
+        # built a station, so the agreement brought it nothing.
+        site = _code(_top_level(_read(TRIGGERS), "te_grid_ai_station_site"))
+        either = _sub(site, "OR")
+        powered = _sub(either, "AND")
+        self.assertIn("te_grid_ai_market_area_has_power = yes", powered)
+        # The branch that needs no power asks for the partner's station, not just its state:
+        # the power has to come from that side.
+        self.assertIn("te_grid_ai_partner_near = { ANY = no }", either.replace(powered, ""))
+        # The country gate lets such a country through to the per-state search.
+        build = _code(_top_level(_read(EFFECTS), "te_grid_ai_build_effect"))
+        gate = _sub(build, "OR")
+        self.assertIn("te_grid_electricity_production > 0", gate)
+        self.assertIn("has_variable_list = te_grid_partners", gate)
+        # And its ranking is not zero there.
+        value = _code(_top_level(_read(VALUES), "te_grid_station_ai_value"))
+        self.assertIn("te_grid_ai_partner_near = { ANY = no }", _sub(_sub(value, "limit"), "OR"))
+        # The border ranks first of what the placement rule allows.
+        self.assertRegex(value, r"limit = \{ te_grid_ai_partner_near = \{ ANY = yes \} \}\s+add = 3000")
+
+    def test_ai_station_pass_keeps_its_own_partner_list(self):
+        # The balancing refreshes te_grid_partners only for a country with a station, which is
+        # what a country with no power lacks.
+        build = _code(_top_level(_read(EFFECTS), "te_grid_ai_build_effect"))
+        self.assertLess(build.index("te_grid_refresh_partners_effect = yes"), build.index("ordered_scope_state"))
+        # Whatever its queue or its credit: a stale list would outlast the agreement.
+        self.assertLess(build.index("te_grid_refresh_partners_effect = yes"), build.index("in_default = no"))
+        near = _code(_top_level(_read(TRIGGERS), "te_grid_ai_partner_near"))
+        self.assertIn("owner = { has_variable_list = te_grid_partners }", near)
+        end = _code(_top_level(_read(TRIGGERS), "te_grid_ai_partner_end"))
+        # The site's owner's list, read from the site, with the state beside it as the other end.
+        self.assertIn("NOT = { owner = scope:te_grid_ai_site.owner }", end)
+        self.assertRegex(end, r"scope:te_grid_ai_site = \{\s+te_grid_owners_interconnected = "
+                              r"\{ FROM = scope:te_grid_ai_near \}")
+        self.assertRegex(end, r"OR = \{\s+always = \$ANY\$\s+te_grid_state_has_station = yes\s+\}")
+
+    def test_ai_partner_across_the_sea_counts_once_it_can_lay_a_cable(self):
+        near = _code(_top_level(_read(TRIGGERS), "te_grid_ai_partner_near"))
+        self.assertIn("te_grid_ai_partner_end = { ANY = $ANY$ }", _sub(near, "any_neighbouring_state"))
+        sea = _sub(_sub(near, "OR"), "AND")
+        self.assertIn("is_coastal = yes", sea)
+        self.assertIn("owner = { has_technology_researched = clean_energy_technologies }", sea)
+        self.assertIn("te_grid_ai_partner_end = { ANY = $ANY$ }", _sub(sea, "any_sea_node_adjacent_state"))
+        # The interconnector's own technology.
+        hvdc = _code(_top_level(_read(BUILDING), "building_grid_hvdc_interconnector"))
+        self.assertIn("clean_energy_technologies", _sub(hvdc, "unlocking_technologies"))
+
+    def test_ai_builds_no_station_that_would_be_a_grid_of_one(self):
+        # A one-state country with power plants and no agreement built a station that could
+        # join nothing.
+        site = _code(_top_level(_read(TRIGGERS), "te_grid_ai_station_site"))
+        self.assertIn("te_grid_ai_station_has_use = yes", _sub(_sub(site, "OR"), "AND"))
+        use = _code(_top_level(_read(TRIGGERS), "te_grid_ai_station_has_use"))
+        # Another state of its own in the market area, where the grid can grow.
+        self.assertRegex(use, r"NOT = \{ this = scope:te_grid_ai_lone \}\s+"
+                              r"is_in_same_market_area = scope:te_grid_ai_lone")
+        # A partner beside it, with a station or not: a country with power goes first, so two
+        # one-state neighbours don't each wait for the other.
+        self.assertIn("te_grid_ai_partner_near = { ANY = yes }", use)
+        # Its own states in another market area, once a cable can reach them.
+        overseas = _sub(_sub(use, "OR"), "AND")
+        self.assertIn("is_coastal = yes", overseas)
+        self.assertIn("has_technology_researched = clean_energy_technologies", overseas)
+        self.assertIn("NOT = { is_in_same_market_area = scope:te_grid_ai_lone }", overseas)
+
+    def test_a_grid_that_brings_power_counts_as_power_in_the_market_area(self):
+        # A state with no power uses none, so a station joined to a partner's grid downloads
+        # nothing at first; the country's other states there still become sites.
+        powered = _code(_top_level(_read(TRIGGERS), "te_grid_ai_market_area_has_power"))
+        self.assertRegex(powered, r"has_variable = te_grid_region_ratio\s+var:te_grid_region_ratio > 0")
+        # A station off any grid keeps no ratio, so last month's doesn't count.
+        idle = _code(_top_level(_read(EFFECTS), "te_grid_idle_station_effect"))
+        self.assertIn("remove_variable = te_grid_region_ratio", idle)
+
+    def test_ai_cable_pass_reads_its_own_partner_list(self):
+        # The far owner's list may be last month's, or never kept (its only station queued).
+        wanted = _code(_top_level(_read(TRIGGERS), "te_grid_ai_interconnector_wanted"))
+        self.assertRegex(wanted, r"save_temporary_scope_as = te_grid_ai_far\s+scope:te_grid_ai_end = \{\s+"
+                                 r"te_grid_owners_interconnected = \{ FROM = scope:te_grid_ai_far \}")
+        self.assertNotIn("te_grid_owners_interconnected = { FROM = scope:te_grid_ai_end }", wanted)
+        # Its own is fresh: the run refreshes it just before the pass.
+        run = _code(_top_level(_read(EFFECTS), "te_grid_world_update_effect"))
+        self.assertLess(run.index("te_grid_refresh_partners_effect = yes"),
+                        run.index("te_grid_ai_interconnectors_effect = yes"))
+
 
 class CrossMarketTest(unittest.TestCase):
     def setUp(self):
@@ -995,7 +1081,13 @@ class CableRangeTest(unittest.TestCase):
         for name in ("te_grid_sea_reach", "te_grid_sea_layer", "te_grid_sea_next"):
             self.assertIn(f"clear_global_variable_list = {name}", clear)
         # No trigger walks the sea by nesting any_sea_node_adjacent_state, which grows as 30^k.
-        self.assertNotIn("any_sea_node_adjacent_state", _code(_read(TRIGGERS)))
+        # The one that looks a single Sea Node out is the AI's site rule for a station.
+        triggers = _code(_read(TRIGGERS))
+        self.assertEqual(triggers.count("any_sea_node_adjacent_state"), 1)
+        near = _top_level(triggers, "te_grid_ai_partner_near")
+        self.assertNotIn("any_sea_node_adjacent_state", _sub(near, "any_sea_node_adjacent_state"))
+        # What it calls there looks no farther.
+        self.assertNotIn("adjacent_state", _top_level(triggers, "te_grid_ai_partner_end"))
 
     def test_the_ai_reckons_its_reach_with_the_method(self):
         ai = _code(_top_level(_read(EFFECTS), "te_grid_ai_interconnectors_effect"))

@@ -19,7 +19,7 @@
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 
@@ -332,7 +332,7 @@ STATE_CENTRAL_PROVINCES = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 
@@ -380,7 +380,7 @@ STATE_RAJPUTANA = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 
@@ -705,7 +705,7 @@ STATE_KACHIN = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 

@@ -870,6 +870,11 @@ STATE_AKMOLINSK = {
     }
     min_cold_effect = 0.05
     max_cold_effect = 0.65
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 5
+    }
 }
 
 STATE_FERGANA = {
@@ -1374,7 +1379,7 @@ STATE_CHELYABINSK = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 9
     }
 }
 

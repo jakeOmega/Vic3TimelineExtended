@@ -969,6 +969,12 @@ society_technology_events.10 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_antiglobal_concession_cost
+			days = normal_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_tiny
+		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = very_small_radicals strata = upper }
 	}
@@ -1037,6 +1043,12 @@ society_technology_events.11 = {
 			name = ste_terror_security_state
 			days = long_modifier_time
 			is_decaying = yes
+		}
+		add_modifier = {
+			name = ste_terror_security_state_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_modest
 		}
 		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = small_radicals }

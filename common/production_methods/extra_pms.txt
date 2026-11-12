@@ -8682,10 +8682,10 @@ REPLACE:pm_telephones = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (14.29%)
+			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (28.57%)
 			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (28.57%)
-			goods_input_copper_add = 30                          # Price:   40, Total cost:  1200.0 (42.86%)
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (14.29%)
+			goods_input_copper_add = 15                          # Price:   40, Total cost:   600.0 (21.43%)
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (21.43%)
 			# Output goods
 			goods_output_telephones_add = 60                     # Price:   70, Total cost:  4200.0 (100.00%)
 			# Total input cost: 2800.0
@@ -17746,9 +17746,9 @@ REPLACE:pm_arc_welded_buildings = {
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (24.01%)
 			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (15.37%)
 			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (9.60%)
-			goods_input_tools_add = 12                           # Price:   40, Total cost:   480.0 (11.52%)
+			goods_input_tools_add = 14                           # Price:   40, Total cost:   560.0 (13.45%)
 			goods_input_electricity_add = 16                     # Price:   30, Total cost:   480.0 (11.52%)
-			goods_input_copper_add = 4                           # Price:   40, Total cost:   160.0 (3.84%)
+			goods_input_copper_add = 2                           # Price:   40, Total cost:    80.0 (1.92%)
 			goods_input_transportation_add = 33.5                # Price:   30, Total cost:  1005.0 (24.13%)
 			# Output goods
 			goods_output_construction_add = 5                    # Price: 1000, Total cost:  5000.0 (100.00%)

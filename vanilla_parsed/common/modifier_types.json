@@ -20533,6 +20533,28 @@
    ]
   }
  ],
+ "state_disable_disband_prestige_penalty_bool": [
+  "=",
+  {
+   "color": [
+    "=",
+    "good"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "state_allow_assimilation_in_homeland_bool": [
   "=",
   {
@@ -46542,6 +46564,32 @@
    "color": [
     "=",
     "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_cannot_decrease_autonomy_bool": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "boolean": [
+    "=",
+    "yes"
    ],
    "game_data": [
     "=",

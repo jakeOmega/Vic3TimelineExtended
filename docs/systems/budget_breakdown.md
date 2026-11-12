@@ -69,8 +69,10 @@ Banking, Covert Actions, Cultural Hegemony, Colonial Development, the United
 Nations, Nuclear Program, Nuclear Civil Defense, Space Race, Drug Shortage
 Response, Family Policy, Old-Age Pensions, Archaeological Digs, Climate Policy and
 Energy and Industry Programs each have a separate expense category. Nuclear Civil
-Defense also carries the two reactor-meltdown bills, and Energy and Industry
-Programs the event subsidies and reserve-power costs. UN grants, Strategic Reserve
+Defense also carries the two reactor-meltdown bills, Covert Actions the security
+state built after a terrorist attack, Space Race the event laser sweeps and the
+national space colony, and Energy and Industry Programs the event subsidies,
+reserve-power costs and labor-standard concessions. UN grants, Strategic Reserve
 sales, war-profit taxes and spectrum auctions have separate income categories.
 Hover a row for the engine's applied modifier sources and amounts.
 
@@ -298,3 +300,9 @@ Engine rendering and accounting still require an in-game check:
    a slice and a hover that lists Quantum Subsidy Payments. If the option shows
    an expense of 0 or 1, the `sv_money_flow_event_tiny` / `_modest` values did
    not read (five decimals is the engine's limit).
+12. Three more followed on 2026-11-11. Hear their grievances in
+   `society_technology_events.10` lists Labor Concession Costs under Energy and
+   Industry Programs; Expand the security apparatus in
+   `society_technology_events.11` lists Security Apparatus Costs under Covert
+   Actions; Conduct a laser sweep in `repeatable_events.70` lists Laser Sweep
+   Costs under Space Race. None of the three options shows a wage line.

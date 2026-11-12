@@ -101,7 +101,9 @@ class Debugger:
         self._replies: dict[int, dict] = {}
         self._errors: list[str] = []
         self._stops = 0
+        self._reasons: list[str | None] = []        # each stop not yet taken: its `reason`, in order
         self._forget_stops_at: int | None = None    # seq of a request whose answer ends the stops seen so far
+        self.last_stop_reason: str | None = None    # the reason of the stop `wait_stopped` last took, if it gave one
 
     @property
     def skipped(self) -> int:
@@ -141,13 +143,20 @@ class Debugger:
                     # Everything seen before this answer is from before the game ran on; what follows it in the
                     # same read (`continued`, a `stopped` at a breakpoint it passes again at once) is new.
                     self._forget_stops_at = None
-                    self._stops = 0
+                    self._forget_stops()
             elif kind == "event":
                 event, body = msg.get("event"), body or {}
                 if event == "output" and body.get("category") == "stderr":
                     self._errors.append(str(body.get("output", "")).rstrip("\n"))
                 elif event == "stopped":
                     self._stops += 1
+                    reason = body.get("reason")
+                    self._reasons.append(reason if isinstance(reason, str) else None)
+
+    def _forget_stops(self) -> None:
+        self._stops = 0
+        self._reasons.clear()
+        self.last_stop_reason = None
 
     def _request(self, command: str, arguments: dict | None = None, timeout: float = 30.0,
                  forgets_stops: bool = False) -> dict:
@@ -197,14 +206,26 @@ class Debugger:
 
     def wait_stopped(self, timeout: float) -> bool:
         """True once per `stopped` event the game has sent, whatever its reason (a breakpoint, a step, a
-        pause), within `timeout` seconds. `resume()` forgets the stops not yet taken."""
+        pause), within `timeout` seconds; `last_stop_reason` is then that stop's reason. `resume()` forgets the
+        stops not yet taken, and the reason with them."""
         deadline = time.monotonic() + timeout
         while not self._stops:
             left = deadline - time.monotonic()
             if left <= 0:
                 return False
             self._pump(min(left, 0.5))
+        return self._take_stop()
+
+    def poll_stopped(self) -> bool:
+        """`wait_stopped` without the wait: one look at what has arrived (`recv(0)`, which the helper turns into
+        a 1 ms poll), then True once per stop not yet taken. `wait_stopped(0)` would not look at all."""
+        if not self._stops:
+            self._pump(0)
+        return self._take_stop() if self._stops else False
+
+    def _take_stop(self) -> bool:
         self._stops -= 1
+        self.last_stop_reason = self._reasons.pop(0) if self._reasons else None
         return True
 
     def evaluate(self, expr: str, frame: int = 0, timeout: float = 30.0) -> Eval:
@@ -237,7 +258,7 @@ class Debugger:
         finally:
             if self._forget_stops_at is not None:       # no answer was filed
                 self._forget_stops_at = None
-                self._stops = 0
+                self._forget_stops()
 
     def errors(self) -> list[str]:
         """The error-log lines the game has streamed since the last call."""

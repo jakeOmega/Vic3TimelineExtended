@@ -772,6 +772,7 @@ company_huawei = {
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_telecom
+		prestige_good_generic_consumer_appliances
 	}
 	ai_will_do = {
 		has_technology_researched = computer_networks

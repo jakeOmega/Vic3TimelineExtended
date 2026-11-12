@@ -209,3 +209,9 @@ technologies already grant, and the tile's breakdown shows it.
 | **The level cap (2026-11-02).** With Urban Planning but not Paved Roads, open the build menu's Government group and hover Paved Roads in the technology tree. | The building shows a maximum of 12 levels in each state, and Paved Roads' tooltip lists Public Housing Max Level +3. | No maximum, or no line: `state_building_public_housing_max_level_add` isn't registered (`mod_entity_modifier_types.txt`) or the building lacks `has_max_level = yes`. |
 | **The AI's method.** The same run, after Steel-Frame Buildings. | AI housing on the newest method it has the technology and goods for, not stuck on Model Dwellings. | It holds the first method: `most_productive` with cost-only methods doesn't follow `ai_value`; try `ai_selection` unset. |
 | **The icon (icon batch 8).** Open the building panel and the build menu's Government group. | Public Housing shows its own icon: a brick courtyard block of six-story apartment buildings with a pale concrete tower behind, not the Urban Center's. | The `icon` line in `07_zz_te_government.txt` or the DDS (`building_icons/building_public_housing.dds`). |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`unemployment_share_read` OK on 8 January in two sessions, and a false BROKEN on 4 January in the run that made the save, before the engine had computed unemployment (#1597).

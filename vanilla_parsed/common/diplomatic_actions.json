@@ -13465,6 +13465,10 @@
         "=",
         "yes"
        ],
+       "modifier:country_cannot_decrease_autonomy_bool": [
+        "?=",
+        "no"
+       ],
        "liberty_desire": [
         "<",
         "define:NDiplomacy|WAR_GOAL_INFAMY_LOW_LIBERTY_DESIRE_THRESHOLD"
@@ -26341,93 +26345,23 @@
          "value": [
           "=",
           {
-           "add": [
+           "scope:second_state": [
             "=",
-            "5"
+            {
+             "save_temporary_scope_as": [
+              "=",
+              "infamy_ignores_claim"
+             ],
+             "add": [
+              "=",
+              "state_infamy_value"
+             ]
+            }
            ],
            "multiply": [
             [
              "=",
-             {
-              "value": [
-               "=",
-               "scope:second_state.state_population"
-              ],
-              "divide": [
-               "=",
-               "define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR"
-              ],
-              "multiply": [
-               "=",
-               "define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER"
-              ],
-              "add": [
-               "=",
-               "1"
-              ],
-              "max": [
-               "=",
-               "define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE"
-              ]
-             }
-            ],
-            [
-             "=",
-             {
-              "value": [
-               "=",
-               "1"
-              ],
-              "if": [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "NOR": [
-                   "=",
-                   {
-                    "is_country_type": [
-                     [
-                      "=",
-                      "unrecognized"
-                     ],
-                     [
-                      "=",
-                      "decentralized"
-                     ]
-                    ]
-                   }
-                  ],
-                  "scope:second_state.owner": [
-                   "=",
-                   {
-                    "OR": [
-                     "=",
-                     {
-                      "is_country_type": [
-                       [
-                        "=",
-                        "unrecognized"
-                       ],
-                       [
-                        "=",
-                        "decentralized"
-                       ]
-                      ]
-                     }
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "add": [
-                 "=",
-                 "modifier:country_infamy_generation_against_unrecognized_mult"
-                ]
-               }
-              ]
-             }
+             "0.5"
             ],
             [
              "=",
@@ -26461,19 +26395,6 @@
               ]
              }
             ]
-           ],
-           "min": [
-            "=",
-            {
-             "value": [
-              "=",
-              "5"
-             ]
-            }
-           ],
-           "max": [
-            "=",
-            "20"
            ]
           }
          ]
@@ -28498,6 +28419,10 @@
           "je_congress_poland"
          ]
         }
+       ],
+       "modifier:country_cannot_decrease_autonomy_bool": [
+        "?=",
+        "no"
        ]
       }
      ]

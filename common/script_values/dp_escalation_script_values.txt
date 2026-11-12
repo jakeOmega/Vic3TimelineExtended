@@ -18,12 +18,15 @@
 # positive _add paired with a negative _mult — the prior `floor` truncated
 # residuals like 0.65/week to zero, masking the player-facing modifier.
 # `max = 10` is a runaway-stacking safety cap — even with every tech _add
-# and an extreme _mult, no single weekly tick can add more than 10 escalation
-# in one day (so worst-case spike-day delta is ~+11 with vanilla).
+# and an extreme _mult, no country adds more than 10 escalation a week in one
+# role (a play's tick sums its roles: initiator and target together at most 20
+# for a week of unpaused days).
 #
-# Read by `st_dp_country_apply_weekly_escalation` (common/scripted_effects/
-# dp_escalation_effects.txt), which loops `add_escalation = 1` this many
-# times on each play the country is in, in the appropriate role.
+# Read by `st_dp_play_apply_weekly_escalation` (common/scripted_effects/
+# dp_escalation_effects.txt) at the initiator's weekly tick: every role's
+# total summed for the play, then scaled by the days the play escalated since
+# the last tick over 7 (none while vanilla has its escalation paused), and
+# added by looping `add_escalation = 1`.
 # ============================================================================
 
 country_aggressor_dp_escalation_weekly_total = {
@@ -75,4 +78,120 @@ country_participant_dp_escalation_weekly_total = {
 	min = 0
 	max = 10
 	round = yes
+}
+
+# ============================================================================
+# A play's escalation now, 0-100 (diplomatic-play scope)
+# ============================================================================
+# The engine gives script no number for a play's escalation: `escalation` is a
+# comparator only (triggers.log: "Checks whether escalation has passed a certain
+# threshold"), and no link reads it. So it is counted against each whole point,
+# a hundred comparisons (war breaks out at 100). Read by
+# st_dp_play_apply_weekly_escalation (dp_escalation_effects.txt) to tell the
+# days a play escalated from the days its escalation was paused: the engine adds
+# DIPLOMATIC_PLAY_ESCALATION_DAILY (1) a day except while a demand or a sway has
+# it paused. Unverified that the comparator reads in a script value; the
+# self-check dp_esc_pause says (te_dp_esc_pause_self_check).
+te_dp_escalation_now = {
+	value = 0
+	if = { limit = { escalation >= 1 } add = 1 }
+	if = { limit = { escalation >= 2 } add = 1 }
+	if = { limit = { escalation >= 3 } add = 1 }
+	if = { limit = { escalation >= 4 } add = 1 }
+	if = { limit = { escalation >= 5 } add = 1 }
+	if = { limit = { escalation >= 6 } add = 1 }
+	if = { limit = { escalation >= 7 } add = 1 }
+	if = { limit = { escalation >= 8 } add = 1 }
+	if = { limit = { escalation >= 9 } add = 1 }
+	if = { limit = { escalation >= 10 } add = 1 }
+	if = { limit = { escalation >= 11 } add = 1 }
+	if = { limit = { escalation >= 12 } add = 1 }
+	if = { limit = { escalation >= 13 } add = 1 }
+	if = { limit = { escalation >= 14 } add = 1 }
+	if = { limit = { escalation >= 15 } add = 1 }
+	if = { limit = { escalation >= 16 } add = 1 }
+	if = { limit = { escalation >= 17 } add = 1 }
+	if = { limit = { escalation >= 18 } add = 1 }
+	if = { limit = { escalation >= 19 } add = 1 }
+	if = { limit = { escalation >= 20 } add = 1 }
+	if = { limit = { escalation >= 21 } add = 1 }
+	if = { limit = { escalation >= 22 } add = 1 }
+	if = { limit = { escalation >= 23 } add = 1 }
+	if = { limit = { escalation >= 24 } add = 1 }
+	if = { limit = { escalation >= 25 } add = 1 }
+	if = { limit = { escalation >= 26 } add = 1 }
+	if = { limit = { escalation >= 27 } add = 1 }
+	if = { limit = { escalation >= 28 } add = 1 }
+	if = { limit = { escalation >= 29 } add = 1 }
+	if = { limit = { escalation >= 30 } add = 1 }
+	if = { limit = { escalation >= 31 } add = 1 }
+	if = { limit = { escalation >= 32 } add = 1 }
+	if = { limit = { escalation >= 33 } add = 1 }
+	if = { limit = { escalation >= 34 } add = 1 }
+	if = { limit = { escalation >= 35 } add = 1 }
+	if = { limit = { escalation >= 36 } add = 1 }
+	if = { limit = { escalation >= 37 } add = 1 }
+	if = { limit = { escalation >= 38 } add = 1 }
+	if = { limit = { escalation >= 39 } add = 1 }
+	if = { limit = { escalation >= 40 } add = 1 }
+	if = { limit = { escalation >= 41 } add = 1 }
+	if = { limit = { escalation >= 42 } add = 1 }
+	if = { limit = { escalation >= 43 } add = 1 }
+	if = { limit = { escalation >= 44 } add = 1 }
+	if = { limit = { escalation >= 45 } add = 1 }
+	if = { limit = { escalation >= 46 } add = 1 }
+	if = { limit = { escalation >= 47 } add = 1 }
+	if = { limit = { escalation >= 48 } add = 1 }
+	if = { limit = { escalation >= 49 } add = 1 }
+	if = { limit = { escalation >= 50 } add = 1 }
+	if = { limit = { escalation >= 51 } add = 1 }
+	if = { limit = { escalation >= 52 } add = 1 }
+	if = { limit = { escalation >= 53 } add = 1 }
+	if = { limit = { escalation >= 54 } add = 1 }
+	if = { limit = { escalation >= 55 } add = 1 }
+	if = { limit = { escalation >= 56 } add = 1 }
+	if = { limit = { escalation >= 57 } add = 1 }
+	if = { limit = { escalation >= 58 } add = 1 }
+	if = { limit = { escalation >= 59 } add = 1 }
+	if = { limit = { escalation >= 60 } add = 1 }
+	if = { limit = { escalation >= 61 } add = 1 }
+	if = { limit = { escalation >= 62 } add = 1 }
+	if = { limit = { escalation >= 63 } add = 1 }
+	if = { limit = { escalation >= 64 } add = 1 }
+	if = { limit = { escalation >= 65 } add = 1 }
+	if = { limit = { escalation >= 66 } add = 1 }
+	if = { limit = { escalation >= 67 } add = 1 }
+	if = { limit = { escalation >= 68 } add = 1 }
+	if = { limit = { escalation >= 69 } add = 1 }
+	if = { limit = { escalation >= 70 } add = 1 }
+	if = { limit = { escalation >= 71 } add = 1 }
+	if = { limit = { escalation >= 72 } add = 1 }
+	if = { limit = { escalation >= 73 } add = 1 }
+	if = { limit = { escalation >= 74 } add = 1 }
+	if = { limit = { escalation >= 75 } add = 1 }
+	if = { limit = { escalation >= 76 } add = 1 }
+	if = { limit = { escalation >= 77 } add = 1 }
+	if = { limit = { escalation >= 78 } add = 1 }
+	if = { limit = { escalation >= 79 } add = 1 }
+	if = { limit = { escalation >= 80 } add = 1 }
+	if = { limit = { escalation >= 81 } add = 1 }
+	if = { limit = { escalation >= 82 } add = 1 }
+	if = { limit = { escalation >= 83 } add = 1 }
+	if = { limit = { escalation >= 84 } add = 1 }
+	if = { limit = { escalation >= 85 } add = 1 }
+	if = { limit = { escalation >= 86 } add = 1 }
+	if = { limit = { escalation >= 87 } add = 1 }
+	if = { limit = { escalation >= 88 } add = 1 }
+	if = { limit = { escalation >= 89 } add = 1 }
+	if = { limit = { escalation >= 90 } add = 1 }
+	if = { limit = { escalation >= 91 } add = 1 }
+	if = { limit = { escalation >= 92 } add = 1 }
+	if = { limit = { escalation >= 93 } add = 1 }
+	if = { limit = { escalation >= 94 } add = 1 }
+	if = { limit = { escalation >= 95 } add = 1 }
+	if = { limit = { escalation >= 96 } add = 1 }
+	if = { limit = { escalation >= 97 } add = 1 }
+	if = { limit = { escalation >= 98 } add = 1 }
+	if = { limit = { escalation >= 99 } add = 1 }
+	if = { limit = { escalation >= 100 } add = 1 }
 }

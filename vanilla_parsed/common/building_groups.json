@@ -1335,7 +1335,7 @@
    ],
    "subsidized": [
     "=",
-    "yes"
+    "no"
    ],
    "cash_reserves_max": [
     "=",

@@ -974,8 +974,8 @@ class FakeHelperTest(unittest.TestCase):
         self.game = fakes.FakeHelper(history=self.history)
 
     def test_it_is_a_helper(self):
-        for name in ("launch", "adopt", "window", "idle_ms", "focus", "keys", "screenshot", "kill",
-                     "tcp_open", "tcp_send", "tcp_recv", "tcp_close"):
+        for name in ("launch", "adopt", "window", "idle_ms", "focus", "keys", "click", "presence", "screenshot",
+                     "kill", "tcp_open", "tcp_send", "tcp_recv", "tcp_close"):
             self.assertTrue(callable(getattr(self.game, name)), name)
 
     def test_window_reflects_its_flags(self):

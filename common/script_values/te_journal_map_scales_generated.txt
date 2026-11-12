@@ -2693,3 +2693,631 @@ te_jmap_fam_factor = {
 	min = 0
 	max = 1
 }
+
+# Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+# Fitted to the world; before the first measure, 0 to 0.01.
+te_jmap_capitalists_input = {
+	value = te_jmap_capitalists_share
+}
+te_jmap_capitalists_input_neg = {
+	value = te_jmap_capitalists_input
+	multiply = -1
+}
+te_jmap_capitalists_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_capitalists_lo }
+		value = global_var:te_jmap_rng_capitalists_lo
+	}
+}
+te_jmap_capitalists_hi = {
+	value = 0.01
+	if = {
+		limit = { has_global_variable = te_jmap_rng_capitalists_hi }
+		value = global_var:te_jmap_rng_capitalists_hi
+	}
+	min = te_jmap_capitalists_hi_floor
+}
+te_jmap_capitalists_hi_floor = {
+	value = te_jmap_capitalists_lo
+	add = 0.002
+}
+te_jmap_capitalists_span = {
+	value = te_jmap_capitalists_hi
+	subtract = te_jmap_capitalists_lo
+}
+te_jmap_capitalists_k1 = {
+	value = te_jmap_capitalists_span
+	multiply = 0.2
+	add = te_jmap_capitalists_lo
+}
+te_jmap_capitalists_d0 = {
+	value = te_jmap_capitalists_span
+	multiply = 0.4
+}
+te_jmap_capitalists_d1 = {
+	value = te_jmap_capitalists_span
+	multiply = 1.6
+}
+te_jmap_capitalists_factor = {
+	if = {
+		limit = { te_jmap_capitalists_share < te_jmap_capitalists_k1 }
+		value = te_jmap_capitalists_share subtract = te_jmap_capitalists_lo divide = te_jmap_capitalists_d0
+	}
+	else = {
+		value = te_jmap_capitalists_share subtract = te_jmap_capitalists_k1 divide = te_jmap_capitalists_d1 add = 0.5
+	}
+	min = 0
+	max = 1
+}
+
+# Aristocrats, their share of the state's people (the yearly walk's).
+# Fitted to the world; before the first measure, 0 to 0.04.
+te_jmap_aristocrats_input = {
+	value = te_jmap_aristocrats_share
+}
+te_jmap_aristocrats_input_neg = {
+	value = te_jmap_aristocrats_input
+	multiply = -1
+}
+te_jmap_aristocrats_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_aristocrats_lo }
+		value = global_var:te_jmap_rng_aristocrats_lo
+	}
+}
+te_jmap_aristocrats_hi = {
+	value = 0.04
+	if = {
+		limit = { has_global_variable = te_jmap_rng_aristocrats_hi }
+		value = global_var:te_jmap_rng_aristocrats_hi
+	}
+	min = te_jmap_aristocrats_hi_floor
+}
+te_jmap_aristocrats_hi_floor = {
+	value = te_jmap_aristocrats_lo
+	add = 0.005
+}
+te_jmap_aristocrats_span = {
+	value = te_jmap_aristocrats_hi
+	subtract = te_jmap_aristocrats_lo
+}
+te_jmap_aristocrats_d0 = {
+	value = te_jmap_aristocrats_span
+	multiply = 1
+}
+te_jmap_aristocrats_factor = {
+	value = te_jmap_aristocrats_share subtract = te_jmap_aristocrats_lo divide = te_jmap_aristocrats_d0
+	min = 0
+	max = 1
+}
+
+# Clergymen, their share of the state's people (the yearly walk's).
+# Fitted to the world; before the first measure, 0 to 0.04.
+te_jmap_clergy_input = {
+	value = te_jmap_clergy_share
+}
+te_jmap_clergy_input_neg = {
+	value = te_jmap_clergy_input
+	multiply = -1
+}
+te_jmap_clergy_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_clergy_lo }
+		value = global_var:te_jmap_rng_clergy_lo
+	}
+}
+te_jmap_clergy_hi = {
+	value = 0.04
+	if = {
+		limit = { has_global_variable = te_jmap_rng_clergy_hi }
+		value = global_var:te_jmap_rng_clergy_hi
+	}
+	min = te_jmap_clergy_hi_floor
+}
+te_jmap_clergy_hi_floor = {
+	value = te_jmap_clergy_lo
+	add = 0.005
+}
+te_jmap_clergy_span = {
+	value = te_jmap_clergy_hi
+	subtract = te_jmap_clergy_lo
+}
+te_jmap_clergy_d0 = {
+	value = te_jmap_clergy_span
+	multiply = 1
+}
+te_jmap_clergy_factor = {
+	value = te_jmap_clergy_share subtract = te_jmap_clergy_lo divide = te_jmap_clergy_d0
+	min = 0
+	max = 1
+}
+
+# Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+# Fitted to the world; before the first measure, 0 to 0.01.
+te_jmap_academics_input = {
+	value = te_jmap_academics_share
+}
+te_jmap_academics_input_neg = {
+	value = te_jmap_academics_input
+	multiply = -1
+}
+te_jmap_academics_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_academics_lo }
+		value = global_var:te_jmap_rng_academics_lo
+	}
+}
+te_jmap_academics_hi = {
+	value = 0.01
+	if = {
+		limit = { has_global_variable = te_jmap_rng_academics_hi }
+		value = global_var:te_jmap_rng_academics_hi
+	}
+	min = te_jmap_academics_hi_floor
+}
+te_jmap_academics_hi_floor = {
+	value = te_jmap_academics_lo
+	add = 0.002
+}
+te_jmap_academics_span = {
+	value = te_jmap_academics_hi
+	subtract = te_jmap_academics_lo
+}
+te_jmap_academics_k1 = {
+	value = te_jmap_academics_span
+	multiply = 0.2
+	add = te_jmap_academics_lo
+}
+te_jmap_academics_d0 = {
+	value = te_jmap_academics_span
+	multiply = 0.4
+}
+te_jmap_academics_d1 = {
+	value = te_jmap_academics_span
+	multiply = 1.6
+}
+te_jmap_academics_factor = {
+	if = {
+		limit = { te_jmap_academics_share < te_jmap_academics_k1 }
+		value = te_jmap_academics_share subtract = te_jmap_academics_lo divide = te_jmap_academics_d0
+	}
+	else = {
+		value = te_jmap_academics_share subtract = te_jmap_academics_k1 divide = te_jmap_academics_d1 add = 0.5
+	}
+	min = 0
+	max = 1
+}
+
+# Trade Capacity, the state's own, its Trade Center's: the same share of the color for each doubling from the world's low (at least 1) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 10 to 5120.
+te_jmap_trade_input = {
+	value = te_jmap_trade_capacity
+}
+te_jmap_trade_input_neg = {
+	value = te_jmap_trade_input
+	multiply = -1
+}
+te_jmap_trade_lo = {
+	value = 10
+	if = {
+		limit = { has_global_variable = te_jmap_rng_trade_lo }
+		value = global_var:te_jmap_rng_trade_lo
+	}
+	min = 1
+}
+te_jmap_trade_hi = {
+	value = 5120
+	if = {
+		limit = { has_global_variable = te_jmap_rng_trade_hi }
+		value = global_var:te_jmap_rng_trade_hi
+	}
+	min = te_jmap_trade_hi_floor
+}
+te_jmap_trade_hi_floor = {
+	value = te_jmap_trade_lo
+	multiply = 4
+}
+te_jmap_trade_ratio = {
+	value = te_jmap_trade_capacity
+	divide = te_jmap_trade_lo
+}
+te_jmap_trade_log = {
+	if = {
+		limit = { te_jmap_trade_ratio < 2 }
+		value = te_jmap_trade_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 4 }
+		value = te_jmap_trade_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 8 }
+		value = te_jmap_trade_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 16 }
+		value = te_jmap_trade_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 32 }
+		value = te_jmap_trade_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 64 }
+		value = te_jmap_trade_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 128 }
+		value = te_jmap_trade_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 256 }
+		value = te_jmap_trade_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 512 }
+		value = te_jmap_trade_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 1024 }
+		value = te_jmap_trade_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 2048 }
+		value = te_jmap_trade_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 4096 }
+		value = te_jmap_trade_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 8192 }
+		value = te_jmap_trade_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 16384 }
+		value = te_jmap_trade_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 32768 }
+		value = te_jmap_trade_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 65536 }
+		value = te_jmap_trade_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 131072 }
+		value = te_jmap_trade_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 262144 }
+		value = te_jmap_trade_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 524288 }
+		value = te_jmap_trade_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_trade_ratio < 1048576 }
+		value = te_jmap_trade_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_trade_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_trade_span_ratio = {
+	value = te_jmap_trade_hi
+	divide = te_jmap_trade_lo
+}
+te_jmap_trade_log_span = {
+	if = {
+		limit = { te_jmap_trade_span_ratio < 2 }
+		value = te_jmap_trade_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 4 }
+		value = te_jmap_trade_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 8 }
+		value = te_jmap_trade_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 16 }
+		value = te_jmap_trade_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 32 }
+		value = te_jmap_trade_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 64 }
+		value = te_jmap_trade_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 128 }
+		value = te_jmap_trade_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 256 }
+		value = te_jmap_trade_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 512 }
+		value = te_jmap_trade_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 1024 }
+		value = te_jmap_trade_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 2048 }
+		value = te_jmap_trade_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 4096 }
+		value = te_jmap_trade_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 8192 }
+		value = te_jmap_trade_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 16384 }
+		value = te_jmap_trade_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 32768 }
+		value = te_jmap_trade_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 65536 }
+		value = te_jmap_trade_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 131072 }
+		value = te_jmap_trade_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 262144 }
+		value = te_jmap_trade_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 524288 }
+		value = te_jmap_trade_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_trade_span_ratio < 1048576 }
+		value = te_jmap_trade_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_trade_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_trade_factor = {
+	value = te_jmap_trade_log
+	divide = te_jmap_trade_log_span
+	min = 0
+	max = 1
+}
+
+# Investment, what the state's owners pay into the Investment Pool a week, estimated: the same share of the color for each doubling from the world's low (at least 1) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 10 to 10240.
+te_jmap_invest_input = {
+	value = te_jmap_invest_value
+}
+te_jmap_invest_input_neg = {
+	value = te_jmap_invest_input
+	multiply = -1
+}
+te_jmap_invest_lo = {
+	value = 10
+	if = {
+		limit = { has_global_variable = te_jmap_rng_invest_lo }
+		value = global_var:te_jmap_rng_invest_lo
+	}
+	min = 1
+}
+te_jmap_invest_hi = {
+	value = 10240
+	if = {
+		limit = { has_global_variable = te_jmap_rng_invest_hi }
+		value = global_var:te_jmap_rng_invest_hi
+	}
+	min = te_jmap_invest_hi_floor
+}
+te_jmap_invest_hi_floor = {
+	value = te_jmap_invest_lo
+	multiply = 4
+}
+te_jmap_invest_ratio = {
+	value = te_jmap_invest_value
+	divide = te_jmap_invest_lo
+}
+te_jmap_invest_log = {
+	if = {
+		limit = { te_jmap_invest_ratio < 2 }
+		value = te_jmap_invest_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 4 }
+		value = te_jmap_invest_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 8 }
+		value = te_jmap_invest_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 16 }
+		value = te_jmap_invest_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 32 }
+		value = te_jmap_invest_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 64 }
+		value = te_jmap_invest_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 128 }
+		value = te_jmap_invest_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 256 }
+		value = te_jmap_invest_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 512 }
+		value = te_jmap_invest_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 1024 }
+		value = te_jmap_invest_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 2048 }
+		value = te_jmap_invest_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 4096 }
+		value = te_jmap_invest_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 8192 }
+		value = te_jmap_invest_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 16384 }
+		value = te_jmap_invest_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 32768 }
+		value = te_jmap_invest_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 65536 }
+		value = te_jmap_invest_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 131072 }
+		value = te_jmap_invest_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 262144 }
+		value = te_jmap_invest_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 524288 }
+		value = te_jmap_invest_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_invest_ratio < 1048576 }
+		value = te_jmap_invest_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_invest_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_invest_span_ratio = {
+	value = te_jmap_invest_hi
+	divide = te_jmap_invest_lo
+}
+te_jmap_invest_log_span = {
+	if = {
+		limit = { te_jmap_invest_span_ratio < 2 }
+		value = te_jmap_invest_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 4 }
+		value = te_jmap_invest_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 8 }
+		value = te_jmap_invest_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 16 }
+		value = te_jmap_invest_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 32 }
+		value = te_jmap_invest_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 64 }
+		value = te_jmap_invest_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 128 }
+		value = te_jmap_invest_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 256 }
+		value = te_jmap_invest_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 512 }
+		value = te_jmap_invest_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 1024 }
+		value = te_jmap_invest_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 2048 }
+		value = te_jmap_invest_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 4096 }
+		value = te_jmap_invest_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 8192 }
+		value = te_jmap_invest_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 16384 }
+		value = te_jmap_invest_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 32768 }
+		value = te_jmap_invest_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 65536 }
+		value = te_jmap_invest_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 131072 }
+		value = te_jmap_invest_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 262144 }
+		value = te_jmap_invest_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 524288 }
+		value = te_jmap_invest_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_invest_span_ratio < 1048576 }
+		value = te_jmap_invest_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_invest_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_invest_factor = {
+	value = te_jmap_invest_log
+	divide = te_jmap_invest_log_span
+	min = 0
+	max = 1
+}

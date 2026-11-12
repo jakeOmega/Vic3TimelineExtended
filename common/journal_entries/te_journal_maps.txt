@@ -774,6 +774,97 @@ je_te_map_room = {
 				factor = te_jmap_fam_factor
 			}
 		}
+		# 41-44. The classes (2026-11-11): Capitalists, Aristocrats, Clergymen and Academics, each class's share of the
+		# state's people (the yearly walk's, whatever the Demographics rule; te_jmap_<class>_share).
+		else_if = {
+			limit = {
+				te_jmap_selector = 41
+				has_variable = te_dg_capitalists
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_capitalists_low"
+				max_color = "te_jmap_capitalists_high"
+				factor = te_jmap_capitalists_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 42
+				has_variable = te_dg_aristocrats
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_aristocrats_low"
+				max_color = "te_jmap_aristocrats_high"
+				factor = te_jmap_aristocrats_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 43
+				has_variable = te_dg_clergy
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_clergy_low"
+				max_color = "te_jmap_clergy_high"
+				factor = te_jmap_clergy_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 44
+				has_variable = te_dg_academics
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_academics_low"
+				max_color = "te_jmap_academics_high"
+				factor = te_jmap_academics_factor
+			}
+		}
+		# 45. Trade Capacity (2026-11-11): the state's own Trade Capacity, its Trade Center's (te_jmap_trade_capacity), a
+		# doubling at a time; a state with none pale. Until the same day it painted the owner's trade, every state of a
+		# country alike, and striped the Trade Centers.
+		else_if = {
+			limit = {
+				te_jmap_selector = 45
+				te_jmap_trade_capacity > 0
+			}
+			lerp = {
+				min_color = "te_jmap_trade_low"
+				max_color = "te_jmap_trade_high"
+				factor = te_jmap_trade_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 45 }
+			value = "te_jmap_none"
+		}
+		# 46. Investment (2026-11-11): what the state's owners pay into the Investment Pool each week, estimated from its
+		# Financial Districts', Manor Houses' and company headquarters' profit (te_jmap_invest_value, the store's state
+		# variables: te_jmap_store_invest), a doubling at a time; a state that pays nothing pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 46
+				has_variable = te_jmap_inv_cap
+				te_jmap_invest_value > 0
+			}
+			lerp = {
+				min_color = "te_jmap_invest_low"
+				max_color = "te_jmap_invest_high"
+				factor = te_jmap_invest_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 46 }
+			value = "te_jmap_none"
+		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
 		else_if = {
@@ -1326,6 +1417,10 @@ je_te_map_room = {
 					te_jmap_selector = 38
 					te_jmap_selector = 39
 					te_jmap_selector = 40
+					te_jmap_selector = 41
+					te_jmap_selector = 42
+					te_jmap_selector = 43
+					te_jmap_selector = 44
 				}
 			}
 			value = "te_jmap_no_data"
@@ -1335,7 +1430,8 @@ je_te_map_room = {
 	# Stripes. 11, the leading cause of death: the runner-up's color (te_dg_dc_second, the pie's) where it took at least
 	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). 31, Power Grids: white on each grid's
 	# hub. 34, Company Headquarters: gold where a company keeps a regional headquarters (owner, 2026-11-08), over the
-	# grey of a state with no headquarters of its own too. No other map stripes, and a state no branch takes has none.
+	# grey of a state with no headquarters of its own too. No other map stripes, and a state no branch takes has none
+	# (Trade Capacity striped its Trade Centers while it painted the owner's trade, until 2026-11-11).
 	map_color_second = {
 		if = {
 			limit = {
@@ -1829,6 +1925,65 @@ je_te_map_room = {
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_fam
 		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 41
+				has_variable = te_dg_capitalists
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_capitalists
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 42
+				has_variable = te_dg_aristocrats
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_aristocrats
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 43
+				has_variable = te_dg_clergy
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_clergy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 44
+				has_variable = te_dg_academics
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_academics
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 45
+				te_jmap_trade_capacity > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_trade
+		}
+		else_if = {
+			limit = { te_jmap_selector = 45 }
+			custom_tooltip_no_bullet = te_jmap_tt_trade_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 46
+				has_variable = te_jmap_inv_cap
+				te_jmap_invest_value > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_invest
+		}
+		else_if = {
+			limit = { te_jmap_selector = 46 }
+			custom_tooltip_no_bullet = te_jmap_tt_invest_none
+		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
 		else_if = {
@@ -2156,6 +2311,10 @@ je_te_map_room = {
 					te_jmap_selector = 38
 					te_jmap_selector = 39
 					te_jmap_selector = 40
+					te_jmap_selector = 41
+					te_jmap_selector = 42
+					te_jmap_selector = 43
+					te_jmap_selector = 44
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census
@@ -2163,13 +2322,21 @@ je_te_map_room = {
 		else = {
 			custom_tooltip_no_bullet = te_jmap_tt_no_pick
 		}
-		# The stripes, a line under the map's own: 11's runner-up, where the map stripes it, and 34's regional headquarters.
+		# A line under the map's own: the stripes' (11's runner-up, where the map stripes it, and 34's regional
+		# headquarters) and 45's Trade Center, which has no stripes.
 		if = {
 			limit = {
 				te_jmap_selector = 34
 				has_variable = te_jmap_rhq_n
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_hq_regional
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 45
+				has_building = building_trade_center
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_trade_center
 		}
 		else_if = {
 			limit = {

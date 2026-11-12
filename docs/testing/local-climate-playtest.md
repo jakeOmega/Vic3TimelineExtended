@@ -89,3 +89,9 @@ now about +10%, Hawaii +9%, Cape Colony +8%, Glasgow −2%.
 | Relief | Geoengineering's and Terraforming's tooltips list Winter Sun Relief +30% and +70%; with both, every state's Sunshine hover reads 0% left | The relief lines in `era_12.txt` and `era_13.txt` |
 | Old save | A save from before this shows the sunshine part in the Comfort hover at once, and the total takes it at each state's next yearly refresh | |
 | The Map Room | Base Comfort paints Madeira and Hawaii the deepest green (the scale's end is now −10.8) | `gen_journal_map_scales.py`'s comfort knots |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+"The modifier's size": the amenity side OK (Madeira's pull is exactly its bonus × 0.01, so the multiplier is read from the state); the discomfort side not shown, since a state's total pull mixes every source and only the breakdown separates them. "First application" OK for the USA's states. The breakdown and the tile's rows were not looked at.

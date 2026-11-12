@@ -1,4 +1,4 @@
-﻿# TE override of vanilla treaty_panel.gui (1.15.0): vanilla's file plus the article inputs vanilla shows
+﻿# TE override of vanilla treaty_panel.gui (1.15.1): vanilla's file plus the article inputs vanilla shows
 # only for its own articles: a quantity for any article (#542), a company and a building type (TE).
 # Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
 # COPY-PASTED FOR NOW
@@ -201,8 +201,11 @@ types treaty_panel_types
 
 			widget = {
 				size = { 200 40 }
-				tooltip = "concept_binding_period_desc"
 				using = tooltip_ne
+
+				block "binding_period_tooltip" {
+					tooltip = "TREATY_BINDING_PERIOD_FRAME_TOOLTIP"
+				}
 
 				background = {
 					using = frame_decorative_light_bg
@@ -210,9 +213,9 @@ types treaty_panel_types
 
 				hbox = {
 					layoutpolicy_horizontal = expanding
-					spacing = 5
-
-					expand = {}
+					layoutpolicy_vertical = expanding
+					spacing = 2
+					margin = { 8 0 }
 
 					icon = {
 						visible = "[Treaty.IsEnforced]"
@@ -224,9 +227,9 @@ types treaty_panel_types
 						### BINDING PERIOD
 						treaty_textbox = {
 							visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Not(Treaty.IsBindingPeriodPending))]"
-							align = nobaseline
-							autoresize = yes
-							max_width = 200
+							layoutpolicy_horizontal = expanding
+							size = { 0 40 }
+							align = hcenter|nobaseline
 							using = elide_fontsize_min
 							text = "TREATY_BINDING_PERIOD_REMAINING_NO_CONCEPT"
 						}
@@ -234,20 +237,19 @@ types treaty_panel_types
 						### BINDING PERIOD PENDING
 						treaty_textbox = {
 							visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Treaty.IsBindingPeriodPending)]"
-							align = nobaseline
-							autoresize = yes
-							max_width = 200
+							layoutpolicy_horizontal = expanding
+							size = { 0 40 }
+							align = hcenter|nobaseline
 							using = elide_fontsize_min
-							tooltip = "TREATY_BINDING_PERIOD_PENDING_TOOLTIP"
 							text = "TREATY_BINDING_PERIOD_PENDING_NO_CONCEPT"
 						}
 
 						### BINDING PERIOD HAS ENDED
 						treaty_textbox = {
 							visible = "[And(IsZero(Treaty.GetBindingDaysLeft), NotZero(Treaty.GetBindingDays))]"
-							align = nobaseline
-							autoresize = yes
-							max_width = 200
+							layoutpolicy_horizontal = expanding
+							size = { 0 40 }
+							align = hcenter|nobaseline
 							using = elide_fontsize_min
 							text = "TREATY_BINDING_PERIOD_HAS_ENDED_SHORT_NO_CONCEPT"
 						}
@@ -255,15 +257,13 @@ types treaty_panel_types
 						### NO BINDING PERIOD SET TO BEGIN WITH
 						treaty_textbox = {
 							visible = "[And(IsZero(Treaty.GetBindingDaysLeft), IsZero(Treaty.GetBindingDays))]"
-							align = nobaseline
-							autoresize = yes
-							max_width = 200
+							layoutpolicy_horizontal = expanding
+							size = { 0 40 }
+							align = hcenter|nobaseline
 							using = elide_fontsize_min
 							text = "TREATY_NO_BINDING_PERIOD_NO_CONCEPT"
 						}
 					}
-
-					expand = {}
 				}
 			}
 
@@ -1625,17 +1625,23 @@ types treaty_panel_types
 			parentanchor = vcenter
 			spacing = 2
 
-			icon = {
-				texture = "gfx/interface/backgrounds/round_button_bg.dds"
+			button_icon_round = {
 				parentanchor = vcenter
+				onclick = "[InformationPanelBar.OpenChangeLaw(LawType.GetGroup)]"
+
+				tooltipwidget = {
+					FancyTooltip_LawType = {}
+				}
 
 				block "law_icon_background_size" {
 					size = { 60 60 }
 				}
 
-				icon = {
+				blockoverride "icon" {
 					texture = "[LawType.GetTexture]"
-					parentanchor = center
+				}
+
+				blockoverride "icon_size" {
 					size = { 70% 70% }
 				}
 			}

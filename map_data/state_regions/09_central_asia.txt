@@ -349,7 +349,7 @@ STATE_HERAT = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 
@@ -432,7 +432,7 @@ STATE_KABUL = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
 }
 
@@ -457,7 +457,7 @@ STATE_BALUCHISTAN = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 4
+        discovered_amount = 5
     }
     naval_exit_id = 3048
     min_cold_effect = 0.00
@@ -484,7 +484,8 @@ STATE_LHASA = {
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 370
+        undiscovered_amount = 365
+        discovered_amount = 5
     }
 }
 

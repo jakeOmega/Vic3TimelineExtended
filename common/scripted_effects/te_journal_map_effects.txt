@@ -11,6 +11,11 @@ te_jmap_set_selector = {
 		limit = { global_var:te_jmap_sel = 34 }
 		te_jmap_store_hqs = yes
 	}
+	# Investment paints stored figures too.
+	if = {
+		limit = { global_var:te_jmap_sel = 46 }
+		te_jmap_store_invest = yes
+	}
 	# The picked map's colors run over the world as it stands now (te_journal_map_ranges_generated.txt), measured
 	# here so the reopened page paints on them; the monthly pulse measures them again.
 	te_jmap_refresh_range = yes
@@ -128,4 +133,130 @@ te_jmap_hq_selfcheck = {
 		remove_global_variable = te_jmap_sc_hq_states
 		remove_global_variable = te_jmap_sc_hq_nonzero
 	}
+}
+
+# The Investment map's figures (46; te_journal_map_values.txt): what each state's owners pay into the Investment Pool
+# a week, estimated, in two state variables the map, its hover and its range read (te_jmap_inv_cap from its Financial
+# Districts and company headquarters, te_jmap_inv_ari from its Manor Houses), removed where both are 0. At a pick of
+# the map and from the global monthly pulse while it is the pick (te_jmap_monthly_invest): nothing else reads them, so
+# the world's buildings aren't walked for a map nobody is looking at. No root: any scope.
+te_jmap_store_invest = {
+	every_state = {
+		if = {
+			limit = {
+				OR = {
+					te_jmap_invest_walk_cap > 0
+					te_jmap_invest_walk_ari > 0
+				}
+			}
+			set_variable = { name = te_jmap_inv_cap value = te_jmap_invest_walk_cap }
+			set_variable = { name = te_jmap_inv_ari value = te_jmap_invest_walk_ari }
+		}
+		else_if = {
+			limit = { has_variable = te_jmap_inv_cap }
+			remove_variable = te_jmap_inv_cap
+			remove_variable = te_jmap_inv_ari
+		}
+	}
+}
+
+# The monthly store, behind the pick: the global monthly pulse calls it before the ranges (te_journal_map_on_actions.txt).
+te_jmap_monthly_invest = {
+	if = {
+		limit = {
+			has_global_variable = te_jmap_sel
+			global_var:te_jmap_sel = 46
+		}
+		te_jmap_store_invest = yes
+		te_jmap_invest_selfcheck = yes
+	}
+}
+
+# TE_SELF_CHECK invest_rate (docs/testing/journal-map-modes-playtest.md, check 28). The Investment map (46) multiplies
+# an owners' building's profit by the share its owners reinvest, read in the state (modifier:state_capitalists_
+# investment_pool_contribution_add), on the unverified fact that the state's read carries the country's base (0.30
+# for capitalists, 0.20 for aristocrats: base_values). Once a game, the first month the map is the pick and at least
+# three states hold a Financial District, a Manor House or a company headquarters in profit (fewer and an all-zero
+# read proves nothing): OK when any of them stores a contribution, BROKEN when none does, and the map is pale
+# everywhere. It arms on the buildings' profit, not on the figure it tests. After the store: no root, so the counts
+# are globals. The fallback, if BROKEN: read the two shares from the owner (owner.modifier:...), or take the bases.
+te_jmap_invest_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_invest_selfcheck_done }
+			any_state = {
+				count >= 3
+				OR = {
+					te_jmap_invest_walk_cap_profit > 0
+					te_jmap_invest_walk_ari_profit > 0
+				}
+			}
+		}
+		set_global_variable = te_jmap_invest_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_inv_states value = 0 }
+		set_global_variable = { name = te_jmap_sc_inv_paying value = 0 }
+		every_state = {
+			limit = {
+				OR = {
+					te_jmap_invest_walk_cap_profit > 0
+					te_jmap_invest_walk_ari_profit > 0
+				}
+			}
+			change_global_variable = { name = te_jmap_sc_inv_states add = 1 }
+			if = {
+				limit = { te_jmap_invest_value > 0 }
+				change_global_variable = { name = te_jmap_sc_inv_paying add = 1 }
+			}
+		}
+		if = {
+			limit = { global_var:te_jmap_sc_inv_paying > 0 }
+			debug_log = "TE_SELF_CHECK OK invest_rate states=[GetGlobalVariable('te_jmap_sc_inv_states').GetValue|0] paying=[GetGlobalVariable('te_jmap_sc_inv_paying').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN invest_rate states=[GetGlobalVariable('te_jmap_sc_inv_states').GetValue|0] paying=0 (owners' buildings are in profit, but every state reads a reinvested share of 0: the state's modifier read doesn't carry the country's base, so the Investment map is pale everywhere; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_inv_states
+		remove_global_variable = te_jmap_sc_inv_paying
+	}
+}
+
+# The class maps' figures (41-44; te_journal_map_values.txt): each state's Capitalists, Aristocrats, Clergymen and
+# Academics, counted in Demographics' yearly walk (te_demog_walks, te_demog_effects.txt), whatever the rule, as Armed
+# Forces' soldiers are, and stored as te_dg_capitalists, te_dg_aristocrats, te_dg_clergy and te_dg_academics. Three calls
+# of their own, not the census's helpers, which set nothing outside the census (test_demographics_registry.py,
+# TestWorkWalk); test_demographics_golden.py leaves their three lines out of the walk it pins.
+# State scope, before the walk's pop loop.
+te_jmap_class_walk_init = {
+	set_local_variable = { name = te_jmap_w_cap value = 0 }
+	set_local_variable = { name = te_jmap_w_ari value = 0 }
+	set_local_variable = { name = te_jmap_w_cle value = 0 }
+	set_local_variable = { name = te_jmap_w_aca value = 0 }
+}
+
+# Pop scope, in the walk's pop loop.
+te_jmap_class_walk_pop = {
+	if = {
+		limit = { is_pop_type = capitalists }
+		change_local_variable = { name = te_jmap_w_cap add = total_size }
+	}
+	else_if = {
+		limit = { is_pop_type = aristocrats }
+		change_local_variable = { name = te_jmap_w_ari add = total_size }
+	}
+	else_if = {
+		limit = { is_pop_type = clergymen }
+		change_local_variable = { name = te_jmap_w_cle add = total_size }
+	}
+	else_if = {
+		limit = { is_pop_type = academics }
+		change_local_variable = { name = te_jmap_w_aca add = total_size }
+	}
+}
+
+# State scope, after the walk's pop loop.
+te_jmap_class_walk_store = {
+	set_variable = { name = te_dg_capitalists value = local_var:te_jmap_w_cap }
+	set_variable = { name = te_dg_aristocrats value = local_var:te_jmap_w_ari }
+	set_variable = { name = te_dg_clergy value = local_var:te_jmap_w_cle }
+	set_variable = { name = te_dg_academics value = local_var:te_jmap_w_aca }
 }

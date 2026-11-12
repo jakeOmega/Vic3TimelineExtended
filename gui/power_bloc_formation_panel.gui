@@ -1,4 +1,4 @@
-﻿# TE override of vanilla power_bloc_formation_panel.gui (1.15.0): vanilla's file with the primary
+﻿# TE override of vanilla power_bloc_formation_panel.gui (1.15.1): vanilla's file with the primary
 # principle groups one a row (datamodel_wrap = 1): the mod's groups have five levels (tiers IV and V),
 # too wide for two a row.
 # Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
@@ -527,13 +527,6 @@ types power_bloc_formation
 							autoresize = yes
 							align = nobaseline
 							text = "AVAILABLE_MANDATES_TITLE_FORMATION"
-						}
-
-						icon = {
-							visible = "[GreaterThan_int32(PowerBlocFormation.GetMandatesLostToCap, '(int32)0')]"
-							size = { 30 30 }
-							parentanchor = vcenter
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
 						}
 					}
 

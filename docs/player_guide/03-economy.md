@@ -541,6 +541,10 @@ buildings can't run the methods that need it; a station lets it receive power
 once a building there switches to one. The AI builds stations in every market
 area where it makes Electricity: it starts in a state with power plants and
 queues a station in one more bordering state each month, larger states first.
+An AI country that makes none builds one beside the station of a partner under
+a Grid Interconnection Agreement, so build yours on the border if you mean to
+sell it power. The AI builds no station that would have nothing to join: a
+one-state country builds one only once it has an agreement with a neighbor.
 
 ## Tariffs for all goods at once
 

@@ -441,11 +441,11 @@
        ],
        "goods_input_glass_add": [
         "=",
-        "3"
+        "4"
        ],
        "goods_input_copper_add": [
         "=",
-        "2"
+        "1"
        ],
        "goods_output_liquor_add": [
         "=",
@@ -499,11 +499,11 @@
        ],
        "goods_input_glass_add": [
         "=",
-        "6"
+        "7"
        ],
        "goods_input_copper_add": [
         "=",
-        "4"
+        "3"
        ],
        "goods_output_liquor_add": [
         "=",
@@ -5042,7 +5042,7 @@
       {
        "goods_input_iron_add": [
         "=",
-        "10"
+        "20"
        ],
        "goods_input_rubber_add": [
         "=",
@@ -5050,11 +5050,11 @@
        ],
        "goods_input_copper_add": [
         "=",
-        "30"
+        "15"
        ],
        "goods_input_tools_add": [
         "=",
-        "10"
+        "15"
        ],
        "goods_output_telephones_add": [
         "=",
@@ -19435,13 +19435,22 @@
     "=",
     "\"gfx/interface/icons/production_method_icons/anchorage.dds\""
    ],
-   "low_pop_method": [
+   "scoring_override": [
     "=",
-    "yes"
+    "world_market_hub_status"
    ],
    "building_modifiers": [
     "=",
     {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_output_services_add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ],
      "level_scaled": [
       "=",
       {
@@ -20442,9 +20451,9 @@
     "=",
     "\"gfx/interface/icons/production_method_icons/trade_quantity_1.dds\""
    ],
-   "low_pop_method": [
+   "scoring_override": [
     "=",
-    "yes"
+    "low_pop_method"
    ],
    "building_modifiers": [
     "=",
@@ -22210,7 +22219,7 @@
        ],
        "goods_input_tools_add": [
         "=",
-        "30"
+        "35"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -22218,7 +22227,7 @@
        ],
        "goods_input_copper_add": [
         "=",
-        "10"
+        "5"
        ]
       }
      ],
@@ -23276,10 +23285,6 @@
        "state_migration_pull_add": [
         "=",
         "10"
-       ],
-       "state_migration_pull_mult": [
-        "=",
-        "0.1"
        ]
       }
      ],

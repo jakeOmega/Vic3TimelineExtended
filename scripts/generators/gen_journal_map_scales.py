@@ -283,6 +283,40 @@ SCALES = [
          where=["has_variable = te_dg_fam", "has_variable = te_dg_people"], world=rel(linear(0.08, 0.2)),
          min_span=0.02,
          note="Fighting-Age Men, the census's men aged 20 to 39 (the conscription pool, te_dg_fam) over its people"),
+    # The classes, Trade Capacity and Investment (2026-11-11). Each class's share of the state's people (the yearly walk's, whatever
+    # the Demographics rule). Capitalists and Academics gather in a few great cities, so half their color goes by a
+    # fifth of the world's range, as turmoil's; Aristocrats and Clergymen spread more evenly, so straight.
+    dict(name="capitalists", input="te_jmap_capitalists_share", guards=[], three=False, sel=41,
+         where=["has_variable = te_dg_capitalists", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(soft_cap(0, 0.002, 0.01)), min_span=0.002,
+         note="Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the "
+              "world's range"),
+    dict(name="aristocrats", input="te_jmap_aristocrats_share", guards=[], three=False, sel=42,
+         where=["has_variable = te_dg_aristocrats", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(linear(0, 0.04)), min_span=0.005,
+         note="Aristocrats, their share of the state's people (the yearly walk's)"),
+    dict(name="clergy", input="te_jmap_clergy_share", guards=[], three=False, sel=43,
+         where=["has_variable = te_dg_clergy", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(linear(0, 0.04)), min_span=0.005,
+         note="Clergymen, their share of the state's people (the yearly walk's)"),
+    dict(name="academics", input="te_jmap_academics_share", guards=[], three=False, sel=44,
+         where=["has_variable = te_dg_academics", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(soft_cap(0, 0.002, 0.01)), min_span=0.002,
+         note="Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the "
+              "world's range"),
+    # Trade Capacity: the state's own (state_trade_capacity_add times its multipliers, te_jmap_trade_capacity), which
+    # runs from one Trade Center level's 10 to a great entrepot's thousands, so a doubling at a time; a state with
+    # none pale, apart from the scale.
+    dict(name="trade", input="te_jmap_trade_capacity", guards=[], three=False, sel=45,
+         where=["te_jmap_trade_capacity > 0"], world=rel_doubling(10, 5120, 4, 1), min_span=4,
+         note="Trade Capacity, the state's own, its Trade Center's: the same share of the color for each doubling "
+              "from the world's low (at least 1) to its high"),
+    # Investment reads the store's state variables (te_jmap_store_invest), as Company Headquarters does.
+    dict(name="invest", input="te_jmap_invest_value", guards=[], three=False, sel=46,
+         where=["has_variable = te_jmap_inv_cap", "te_jmap_invest_value > 0"],
+         world=rel_doubling(10, 10240, 4, 1), min_span=4,
+         note="Investment, what the state's owners pay into the Investment Pool a week, estimated: the same share of "
+              "the color for each doubling from the world's low (at least 1) to its high"),
 ]
 
 

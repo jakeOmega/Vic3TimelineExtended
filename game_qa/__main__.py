@@ -1,9 +1,11 @@
 """Command line of the in-game QA harness, part 1: protecting the owner's files.
 
     python3 -m game_qa snapshot [--save NAME]...           # with no game running
-    python3 -m game_qa launch <id> --permission "asked 12:40" -- -debug_mode -loadsave=NAME
-                                                           # the gate's checks, then start the game and
-                                                           # record its start: the only way to start it
+    python3 -m game_qa launch <id> --permission "asked 12:40" [--playset current|mod_only]
+                       [--add-mod WINDOWS_PATH]... -- -debug_mode -loadsave=NAME
+                                                           # the gate's checks, the run's playset, then start
+                                                           # the game and record its start: the only way to
+                                                           # start it
     python3 -m game_qa watch <id> [--interval S]           # right after: records that the launched game is
                                                            # alive, and its exit (S at most 10)
     python3 -m game_qa restore <id>                        # after `watch` has returned
@@ -23,6 +25,7 @@ Spec: docs/superpowers/specs/2026-11-10-in-game-qa-harness-design.md §§ 5.2–
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as dt
 import functools
 import hashlib
@@ -30,12 +33,15 @@ import json
 import os
 import re
 import shutil
+import stat
 import sys
 import tempfile
 import time
+from dataclasses import dataclass
 from pathlib import Path
 
 from game_qa import gate, restore, snapshot
+from game_qa import client
 
 MIN_FREE_BYTES = 2 * 1024**3
 KEEP_SNAPSHOTS = 5
@@ -72,6 +78,18 @@ LOCK_BREAK_NAME = ".lock.break"
 LOCK_STALE_S = 15 * 60.0
 # The one spelling of the end date probed against the game, matched whole: -run_until=1836.2.10.
 _END_DATE_ARG = re.compile(r"-run_until=[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}")
+# The playset a direct start of the game loads; the launcher writes it. `launch --playset mod_only` and `--add-mod`
+# rewrite it for the run (UTF-8 without a BOM, indent 2: the form a live session proved the game reads,
+# 2026-11-10). It is in the snapshot set, so `restore` puts the owner's back.
+PLAYSET_FILE = "content_load.json"
+PLAYSET_MODES = ("current", "mod_only")
+# An --add-mod path: a drive path (`C:\…`) or a UNC path (`\\server\…`), as the launcher writes them.
+_WINDOWS_PATH = re.compile(r"[A-Za-z]:\\|\\\\[^\\]")
+_SHA256_HEX = re.compile(r"[0-9a-f]{64}")
+# Where `launch` writes the playset before renaming it over the file: restore's own temp name, so `compare` skips it.
+_PLAYSET_TEMP = PLAYSET_FILE + restore._TEMP_SUFFIX
+_PLAYSET_STAYS = (f"the playset this wrote into {PLAYSET_FILE} stays the run's until `restore` or `recover`, run "
+                  "once no game is running, puts the owner's back")
 _VERDICTS = ("restored", "held")
 _sleep = time.sleep       # patched in tests
 
@@ -307,6 +325,9 @@ def cmd_snapshot(args) -> tuple[dict, int]:
     games = gate.list_games()
     if games:
         return _game_running(games, "a snapshot taken while a game writes its files catches them mid-run").result, 2
+    left = _unanswered_write(backups, user)
+    if left is not None:
+        return _playset_not_restored(left.id, "a snapshot now would record it as the owner's").result, 2
     extra = ["save games/" + (name if name.endswith(".v3") else name + ".v3") for name in args.save]
     snap = snapshot.take(user, backups, extra=extra)
     snapshot.record(snap, "armed")
@@ -343,14 +364,32 @@ def cmd_launch(args) -> tuple[dict, int]:
 
     `started` (pid, start time, arguments) is recorded the moment the process exists. A start time
     PowerShell could not read is recorded as "unknown" and never looked up later: a process found by its pid
-    alone could be another game that took the pid."""
+    alone could be another game that took the pid.
+
+    The run's playset: with `--playset mod_only` or an `--add-mod`, `content_load.json` is rewritten for the run
+    after the claim and before the start (`_plan_playset`, `_write_playset`); with neither it is not touched.
+    Everything that can refuse is decided before the claim, from the file the stale check has just matched
+    against the snapshot. After the claim the `playset` entry (mode, enabled paths, and the SHA-256 of the bytes
+    to be written) is journaled first, and only then is the file written: a write no entry vouches for would
+    be held. A refusal after the claim (the entry or the write failed, or the start did) leaves the claim, as
+    for a failed start. `restore` and `recover` put the owner's file back whenever they judge the run with no
+    game running, held or not (`_settle_playset`). Whatever the options, nothing starts while the folder's
+    playset is another run's write never put back (`playset_not_restored`): the owner never chose it."""
     user, backups = _paths()
     snap = _find(backups, args.id)
     game_args = list(args.game_args)
+    playset_wanted = args.playset == "mod_only" or bool(args.add_mod)
+    playset = None
     try:
         _launchable(snap)
         _check_arguments(game_args)
         _check_end_date(game_args)
+        _check_mod_paths(args.add_mod)
+        left = _unanswered_write(backups, user, exclude=snap.id)
+        if left is not None:
+            raise _playset_not_restored(left.id, "a game started now would run with a playset the owner never chose")
+        if playset_wanted:
+            _check_playset_present(snap, user)
         games = gate.list_games()
         ours = gate.ours_from_journals(backups)
         backup_error = _backup_error(backups)
@@ -366,15 +405,23 @@ def cmd_launch(args) -> tuple[dict, int]:
         if not exe.is_file():   # wslpath converts a path that does not exist, and the start would then fail
             raise _Refused("no_game_binary", f"there is no game at {exe}: check base_game_path")
         exe_windows, cwd_windows = gate.windows_path(exe), gate.windows_path(exe.parent)
+        this_mod = _deployed_mod() if args.playset == "mod_only" else None
         # The last looks, right before the start: the folder (slow: it hashes), then the journal and the processes.
         _check_unchanged(snap, user)
+        if playset_wanted:
+            playset = _plan_playset(snap, user, args.playset, args.add_mod, this_mod)
         _launchable(snap)
         games = gate.list_games()
         if games:
             raise _game_running(games, "one snapshot is for one game")
         _claim(snap)
+        if playset is not None:
+            _record_playset(snap, playset)
+            if playset.data is not None:
+                _record_written(snap, _write_playset(snap, user, playset.data))
     except _Refused as refused:
         return dict(refused.result, id=snap.id), 2
+    written = playset is not None and playset.data is not None
     try:
         proc = gate.start_game(exe_windows, game_args, cwd_windows)
     except gate.GateError as exc:
@@ -382,8 +429,10 @@ def cmd_launch(args) -> tuple[dict, int]:
                 "detail": f"{exc}. Nothing was recorded: a game this started would count as another game "
                           "everywhere (`gate` and `launch` refuse beside it, `restore` and `recover` hold). The "
                           f"snapshot stays claimed, so `launch` refuses it: once no game runs, `restore {snap.id}` "
-                          f"finishes it, {LAUNCH_IN_FLIGHT_S:g} s after the claim: it holds a changed file outside "
-                          "`logs/` and leaves `logs/` as it is"}, 2
+                          f"finishes it, {LAUNCH_IN_FLIGHT_S:g} s after the claim: "
+                          + (f"{_PLAYSET_STAYS}; it holds any other file changed outside `logs/`, and leaves "
+                             "`logs/` as it is" if written else
+                             "it holds a changed file outside `logs/` and leaves `logs/` as it is")}, 2
     try:
         snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args)
     except OSError as exc:
@@ -391,8 +440,11 @@ def cmd_launch(args) -> tuple[dict, int]:
                 "detail": f"the game started (pid {proc.pid}) but its start could not be recorded: {exc}. It "
                           "counts as another game everywhere (`restore` and `recover` hold). This harness "
                           f"started it, so it may end pid {proc.pid}, but only while the game listing shows pid "
-                          f"{proc.pid} with start time {proc.created}: a pid alone may be another game's by then"}, 2
+                          f"{proc.pid} with start time {proc.created}: a pid alone may be another game's by then"
+                          + (f". Meanwhile {_PLAYSET_STAYS}" if written else "")}, 2
     result = {"id": snap.id, "pid": proc.pid, "created": proc.created, "args": game_args}
+    if playset is not None:
+        result["playset"] = {"mode": playset.mode, "enabled": playset.enabled, "written": written}
     if proc.created == gate.UNKNOWN_START:
         result["detail"] = (f"the game's start time could not be read, so it is recorded as unknown: `watch` "
                             f"cannot tell pid {proc.pid} from another game and will refuse `unknown_start`. Wait "
@@ -472,6 +524,240 @@ def _check_unchanged(snap: snapshot.Snapshot, user: Path) -> None:
                                          "over theirs. Run `recover`: it judges this snapshot and holds it, unless "
                                          "the only change is a missing file, which it puts back, or is in `logs/`, "
                                          "which it leaves alone. Then take a new snapshot", files=files)
+
+
+@dataclass(frozen=True)
+class _Playset:
+    """The run's playset as `launch` leaves it: `enabled` the mod folders, `data` the file to write, or None when
+    the owner's file already enables exactly those (it is then not touched)."""
+    mode: str
+    enabled: list[str]
+    data: bytes | None
+
+
+# Said by every refusal after the claim: the snapshot cannot be launched again, and is finished as a failed start.
+_CLAIM_STAYS = ("Nothing was started. The snapshot stays claimed, so `launch` refuses it: `restore <id>` or `recover` "
+                f"finishes it {LAUNCH_IN_FLIGHT_S:g} s after the claim; then take a new snapshot")
+
+
+def _answered(journal: list[dict], index: int) -> bool:
+    """Whether the `playset` entry at `index` is answered: a `playset_restored` or a `restored` follows it. A
+    restored folder equals the snapshot, so after `restored` the entry vouches for nothing: bytes equal to that
+    write later are the owner's choice (their launcher's), and are neither refused nor put back. A held snapshot
+    leaves its entry unanswered."""
+    return any(later.get("event") in ("playset_restored", "restored") for later in journal[index + 1:])
+
+
+def _written_signature(journal: list[dict], index: int) -> tuple[int, int] | None:
+    """The (size, mtime_ns) `launch` journaled in `playset_written` for the `playset` entry at `index`, or None
+    if none was (a kill between the rename and the read-back, or a write that never happened)."""
+    for later in journal[index + 1:]:
+        if later.get("event") == "playset":
+            return None
+        if later.get("event") == "playset_written":
+            size, mtime_ns = later.get("size"), later.get("mtime_ns")
+            if all(isinstance(v, int) and not isinstance(v, bool) for v in (size, mtime_ns)):
+                return size, mtime_ns
+            return None
+    return None
+
+
+def _is_launchs_write(journal: list[dict], index: int, live_sha: str, live: tuple[int, int]) -> bool:
+    """Whether the live playset file (its SHA-256 and (size, mtime_ns)) is the write of the `playset` entry at
+    `index`: the same bytes, and, when `playset_written` was journaled, the same size and time as read back
+    right after the rename. The same bytes written again later (the owner's launcher saving that playset)
+    carry another time, and are the owner's. With nothing journaled, the hash alone decides."""
+    if journal[index].get("sha256") != live_sha:
+        return False
+    written = _written_signature(journal, index)
+    return written is None or written == live
+
+
+def _live_playset(user: Path) -> tuple[str, tuple[int, int]] | None:
+    """The live playset file's SHA-256 and (size, mtime_ns), or None when it is not a regular file. The put-back
+    looks at the file again, time and bytes, just before its rename."""
+    path = user / PLAYSET_FILE
+    try:
+        st = os.lstat(path)
+        if not stat.S_ISREG(st.st_mode):
+            return None
+        return _sha256(path), (st.st_size, st.st_mtime_ns)
+    except FileNotFoundError:
+        return None
+
+
+def _unanswered_write(backups: Path, user: Path, exclude: str | None = None) -> snapshot.Snapshot | None:
+    """The newest snapshot (other than `exclude`) with an unanswered (`_answered`) `playset` entry whose write
+    the live `content_load.json` still is (`_is_launchs_write`): that run's playset is still in the folder, never
+    put back. None when there is none, or no regular playset file. `snapshot` and `launch` refuse beside one: the
+    owner never chose that playset."""
+    live = _live_playset(user)
+    if live is None:
+        return None
+    for snap in reversed(snapshot.all_snapshots(backups)):
+        if snap.id == exclude:
+            continue
+        journal = snapshot.journal(snap)
+        for i, entry in enumerate(journal):
+            if entry.get("event") == "playset" and _is_launchs_write(journal, i, *live) and not _answered(journal, i):
+                return snap
+    return None
+
+
+def _playset_not_restored(snap_id: str, why: str) -> _Refused:
+    return _Refused("playset_not_restored", f"{PLAYSET_FILE} still holds the playset `launch` wrote for snapshot "
+                                            f"{snap_id}'s run, never put back: {why}. Run `restore {snap_id}` with no "
+                                            "game running: it puts the owner's playset back when this is the newest "
+                                            "snapshot with a playset entry, and holds again for anything else that "
+                                            "needs the owner. Otherwise the owner saving their playset again in the "
+                                            "launcher clears it", snapshot=snap_id)
+
+
+def _deployed_mod() -> str:
+    """This mod's deployed folder (`mod_deploy_target`) as Windows names it, the form the playset holds."""
+    import path_constants
+
+    return gate.windows_path(Path(path_constants.refresh("mod_deploy_target")))
+
+
+def _folder_key(path: str) -> str:
+    """A Windows folder path as compared: in any case, with either separator, with or without a trailing one."""
+    return path.replace("/", "\\").rstrip("\\").lower()
+
+
+def _check_mod_paths(paths: list[str]) -> None:
+    """Raise _Refused for an --add-mod that is not a Windows path (`C:\\…` or `\\\\server\\…`, as the launcher
+    writes them: the caller converts a WSL path with `wslpath -w`) or that cannot be written whole (a control
+    character, or a lone surrogate, which UTF-8 cannot hold)."""
+    for path in paths:
+        try:
+            path.encode("utf-8")
+        except UnicodeEncodeError:
+            raise _Refused("bad_argument", f"the --add-mod path {path!r} cannot be written as UTF-8") from None
+        if any(ord(c) < 32 or ord(c) == 127 for c in path):
+            raise _Refused("bad_argument", f"the --add-mod path {path!r} has a control character in it")
+        if not _WINDOWS_PATH.match(path):
+            raise _Refused("bad_argument", f"the --add-mod path {path!r} is not a Windows path (C:\\… or "
+                                           "\\\\server\\…): convert a WSL path with `wslpath -w`")
+
+
+def _check_playset_present(snap: snapshot.Snapshot, user: Path) -> None:
+    """Raise _Refused (`playset_unwritable`) unless both the snapshot and the folder hold the playset file:
+    `launch` rewrites the owner's playset for the run, and never makes one."""
+    where = [name for name, present in (("the snapshot", PLAYSET_FILE in snap.files),
+                                        ("the folder", (user / PLAYSET_FILE).is_file())) if not present]
+    if where:
+        raise _Refused("playset_unwritable", f"{PLAYSET_FILE}, the playset a direct start loads, is missing from "
+                                             f"{' and '.join(where)}: --playset mod_only and --add-mod rewrite "
+                                             "the owner's playset and never make one. Nothing was written. The "
+                                             "launcher writes the file when it starts the game")
+
+
+def _plan_playset(snap: snapshot.Snapshot, user: Path, mode: str, add_mods: list[str],
+                  this_mod: str | None) -> _Playset:
+    """The run's playset, from the owner's `content_load.json`: their enabled mods (with `mod_only`, only the
+    entries for this mod's deployed folder, `this_mod`), then each of `add_mods` not among them yet, in order;
+    every other key, and every entry kept, as it was. Folders are matched by `_folder_key`. Raises _Refused,
+    having written nothing: `stale_snapshot` when the file's bytes are not the snapshot's (the stale check has
+    just matched them, but the owner's launcher writes this file); `playset_unwritable` when it cannot be read
+    as a playset; `mod_not_in_playset` for `mod_only` when no entry is this mod's."""
+    path = user / PLAYSET_FILE
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"{path} could not be read ({exc}). Nothing was written") from None
+    if hashlib.sha256(raw).hexdigest() != snap.files[PLAYSET_FILE].sha256:
+        raise _Refused("stale_snapshot", f"{PLAYSET_FILE} has changed since the snapshot was taken, so someone has "
+                                         "used the folder since. Run `recover`, then take a new snapshot",
+                       files=[PLAYSET_FILE])
+    try:
+        data = json.loads(raw.decode("utf-8-sig"))
+        mods = data["enabledMods"]
+        if not isinstance(mods, list) or not all(isinstance(m, dict) and isinstance(m.get("path"), str)
+                                                 for m in mods):
+            raise ValueError('"enabledMods" is not a list of {"path": "…"}')
+    except Exception as exc:    # any failure to read it: not UTF-8, not JSON, nested too deep, not a playset
+        raise _Refused("playset_unwritable", f"{path} cannot be read as a playset ({type(exc).__name__}: "
+                                             f"{str(exc)[:200]}). Nothing was written") from None
+    if mode == "mod_only":
+        kept = [m for m in mods if _folder_key(m["path"]) == _folder_key(this_mod)]
+        if not kept:
+            raise _Refused("mod_not_in_playset", f"--playset mod_only keeps this mod, and the playset enables no mod "
+                                                 f"at its deployed folder, {this_mod} (mod_deploy_target): enable it "
+                                                 "in the launcher, or check mod_deploy_target. Nothing was written",
+                           enabled=[m["path"] for m in mods])
+    else:
+        kept = list(mods)
+    for added in add_mods:
+        if all(_folder_key(m["path"]) != _folder_key(added) for m in kept):
+            kept.append({"path": added})
+    enabled = [m["path"] for m in kept]
+    if kept == mods:
+        return _Playset(mode, enabled, None)
+    data["enabledMods"] = kept
+    try:
+        return _Playset(mode, enabled, json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8"))
+    except Exception as exc:    # a lone surrogate the owner's file spelled as an escape; nesting too deep to write
+        raise _Refused("playset_unwritable", f"{path} cannot be written back ({type(exc).__name__}: "
+                                             f"{str(exc)[:200]}). Nothing was written") from None
+
+
+def _record_playset(snap: snapshot.Snapshot, playset: _Playset) -> None:
+    """Journal `playset` (mode, enabled paths, and the SHA-256 of the bytes `launch` is about to write, when it
+    writes any), or raise _Refused, having written nothing. Journaled before the write: an entry for a write
+    that then fails leaves the file the snapshot's, which nothing judges; a write with no entry would be held."""
+    fields = {"mode": playset.mode, "enabled": playset.enabled}
+    if playset.data is not None:
+        fields["sha256"] = hashlib.sha256(playset.data).hexdigest()
+    try:
+        snapshot.record(snap, "playset", **fields)
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"the journal could not take the `playset` entry ({exc}), so the playset "
+                                             f"was not written. {_CLAIM_STAYS}") from None
+
+
+def _write_playset(snap: snapshot.Snapshot, user: Path, data: bytes) -> tuple[int, int]:
+    """Write `data` over the owner's playset file by temp name and rename, and return the file's (size,
+    mtime_ns) as read back right after the rename; or raise _Refused, leaving it as it is. Right before the
+    rename the file must still be the snapshot's: the owner's launcher may have written it since it was read.
+    The temp name is restore's own, which `compare` skips and the next `restore` sweeps."""
+    target = user / PLAYSET_FILE
+    temp = user / _PLAYSET_TEMP
+    try:
+        with open(temp, "wb") as handle:
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        if _sha256(target) != snap.files[PLAYSET_FILE].sha256:
+            raise _Refused("playset_unwritable", f"{PLAYSET_FILE} changed after `launch` read it (the launcher may "
+                                                 f"have written it), so it was left as it is. {_CLAIM_STAYS}")
+        os.replace(temp, target)
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"{target} could not be written ({exc}), so it is as it was. "
+                                             f"{_CLAIM_STAYS}") from None
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(temp)
+    try:
+        st = os.lstat(target)
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"{target} was written but could not be read back ({exc}); the "
+                                             "owner's playset goes back when the snapshot is finished. "
+                                             f"{_CLAIM_STAYS}") from None
+    return st.st_size, st.st_mtime_ns
+
+
+def _record_written(snap: snapshot.Snapshot, written: tuple[int, int]) -> None:
+    """Journal `playset_written`: the size and mtime_ns of the file `launch` just wrote, as read back. With them,
+    the same bytes written again later (by the owner's launcher) carry another time and are not taken for
+    `launch`'s write (`_is_launchs_write`). Raises _Refused if the journal cannot take it: a journal that fails
+    here would fail the game's `started` too, so nothing starts."""
+    try:
+        snapshot.record(snap, "playset_written", size=written[0], mtime_ns=written[1])
+    except OSError as exc:
+        raise _Refused("playset_unwritable", f"{PLAYSET_FILE} was written, but the journal could not take its size "
+                                             f"and time ({exc}); the owner's playset goes back, known by its hash, "
+                                             f"when the snapshot is finished. {_CLAIM_STAYS}") from None
 
 
 def cmd_watch(args) -> tuple[dict, int]:
@@ -655,10 +941,13 @@ def cmd_restore(args) -> tuple[dict, int]:
     when the run ended is what `launch` and `watch` recorded while it
     happened. With no such record, anything that would need judging is held.
     A run during which `watch` saw another game is held (`other_game_ran`),
-    changing nothing, as is one it lost sight of (`unwatched_stretch`). With
+    changing nothing else, as is one it lost sight of (`unwatched_stretch`). With
     no `started` nothing was launched, so `logs/` is whoever played since, and
     is left alone. A snapshot a `launch` may still be on its way to recording
-    a start for gets no verdict (`launch_in_flight`)."""
+    a start for gets no verdict (`launch_in_flight`). Before judging, the
+    playset `launch` wrote for the run is put back when it is provably still
+    the harness's own and no game runs, whatever the verdict
+    (`_settle_playset`); beside a game the reply says `playset_left`."""
     user, backups = _paths()
     snap = _find(backups, args.id)
     age = _in_flight_age(snap)
@@ -678,13 +967,100 @@ def cmd_restore(args) -> tuple[dict, int]:
                           "recorded its exit: wait for `watch` to return, then restore. If `watch` has already "
                           "returned without recording an exit (game_gone_unrecorded, cannot_look) or died, run "
                           f"`restore` again {WATCH_RECORDING_S:g} s after that time"}, 2
+    notes: dict = {}
     try:
+        _settle_playset(snap, user, bool(games), notes)
         out = _unvouched_hold(snap) or restore.restore(
             snap, user, other_game_running=bool(games), logs="started" in _events(snap),
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
-        return {"held": False, "refused": "error", "detail": str(exc)}, 2
-    return _outcome(out), 2 if out.held else 0
+        return {"held": False, "refused": "error", "detail": str(exc), **notes}, 2
+    return _reply(out, notes), 2 if out.held else 0
+
+
+def _reply(out: restore.Outcome, notes: dict) -> dict:
+    """The Outcome as printed, with `_settle_playset`'s notes; a playset put back is listed in `restored`."""
+    result = _outcome(out)
+    if notes.get("playset_restored") and PLAYSET_FILE not in result["restored"]:
+        result["restored"] = [PLAYSET_FILE, *result["restored"]]
+    return {**result, **notes}
+
+
+def _settle_playset(snap: snapshot.Snapshot, user: Path, game_running: bool, notes: dict) -> None:
+    """Before a snapshot is judged, undo `launch`'s playset write for its run when it is provably still the
+    harness's own (`_launchs_live_write`), whatever the verdict then is. The write is not the owner's work, so
+    putting their copy back touches nothing of theirs; left in place after a hold, the next `snapshot` would
+    record it as their playset and the next `launch` would run with it.
+
+    With no game running: a temp a killed write left is swept, the owner's copy goes back from the store (its
+    hash checked against the manifest; the file's size, time and bytes looked at again just before the rename),
+    `playset_restored` is journaled, and `notes` gets `playset_restored`. A game running may be anyone's, so the
+    file is left as it is, and `notes` gets `playset_left` and the remedy. `notes` is filled before the journal
+    write, so a caller reporting a failure can still say the playset went back. Raises OSError as restore does
+    (a missing or damaged stored copy), changing nothing."""
+    if not any(e.get("event") == "playset" for e in snapshot.journal(snap)):
+        return
+    if game_running:
+        if _launchs_live_write(snap, user) is not None:
+            notes.update(playset_left=True, playset_detail=(
+                f"{PLAYSET_FILE} still holds the playset `launch` wrote for this run: a game is running, so it is "
+                f"left as it is. Once no game is running, run `restore {snap.id}`: it puts the owner's playset back "
+                "and holds again for anything else. Until then `snapshot` and `launch` refuse "
+                "(playset_not_restored), and `recover` does not look at a held snapshot again"))
+        return
+    with contextlib.suppress(FileNotFoundError):
+        os.unlink(user / _PLAYSET_TEMP)                 # the harness's own temp, never the owner's file
+    live = _launchs_live_write(snap, user)
+    if live is None:
+        return
+    sha, seen = live
+    backup_root = restore._backup_root(snap)
+    restore._check_store(backup_root, snap, [PLAYSET_FILE])
+    entry, target = snap.files[PLAYSET_FILE], user / PLAYSET_FILE
+    temp = restore._stage(restore._store_blob(backup_root, entry.sha256), entry, target)  # hash-checked, its time
+    try:
+        # The last look, right before the rename: the same size and time, and the same bytes (a write that kept
+        # the size and the time would pass the first alone). If it is no longer `launch`'s write, leave it.
+        try:
+            still = restore._signature(target, follow=False) == seen and _sha256(target) == sha
+        except FileNotFoundError:
+            still = False
+        if not still:
+            return
+        os.replace(temp, target)
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(temp)
+    notes["playset_restored"] = True
+    snapshot.record(snap, "playset_restored", sha256=sha)
+
+
+def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple[int, int]] | None:
+    """The SHA-256 and (size, mtime_ns) of the live playset file when it is this snapshot's run's write to put
+    back, else None: the journal's last `playset` entry carries a SHA-256 and is unanswered (`_answered`);
+    this is the newest snapshot with a `playset` entry at all (an older one's write can coincide byte for byte
+    with a newer one's, with `mod_only` even after the owner changed their other mods, and its copy would then
+    go back over the owner's current playset); the snapshot holds the file; and the file is still that write
+    (`_is_launchs_write`: its bytes, and its size and time when `launch` journaled them)."""
+    journal = snapshot.journal(snap)
+    entries = [i for i, e in enumerate(journal) if e.get("event") == "playset"]
+    if not entries or PLAYSET_FILE not in snap.files:
+        return None
+    sha = journal[entries[-1]].get("sha256")
+    if not isinstance(sha, str) or not _SHA256_HEX.fullmatch(sha):
+        return None
+    if _answered(journal, entries[-1]):
+        return None
+    every = snapshot.all_snapshots(restore._backup_root(snap))
+    ids = [s.id for s in every]
+    if snap.id not in ids:
+        return None
+    if any(e.get("event") == "playset" for s in every[ids.index(snap.id) + 1:] for e in snapshot.journal(s)):
+        return None
+    live = _live_playset(user)
+    if live is None or not _is_launchs_write(journal, entries[-1], *live):
+        return None
+    return live
 
 
 def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
@@ -764,7 +1140,9 @@ def cmd_recover(args) -> tuple[dict, int]:
     `started` of the run names, since a game's pid and start time alone say nothing of whose files it
     writes; and a run during which `watch` saw another game holds (`other_game_ran`), as does one it lost
     sight of (`unwatched_stretch`). A run whose last sign of life is under WATCH_RECORDING_S old is reported
-    `watch_still_recording`, as `restore` refuses it, and the unwinding stops there, nothing recorded."""
+    `watch_still_recording`, as `restore` refuses it, and the unwinding stops there, nothing recorded. Each
+    run judged gets its playset settled first, as in `restore` (`_settle_playset`). A held snapshot is never
+    looked at again here: `restore <id>` does that."""
     user, backups = _paths()
     games = gate.list_games()
     stack = list(reversed(restore.unfinished(backups)))
@@ -780,16 +1158,18 @@ def cmd_recover(args) -> tuple[dict, int]:
         return {"runs": [dict(_outcome(restore.Outcome([], [], False, "game_still_up")), id=s.id)
                          for s in stack]}, 2
     for snap in stack:
+        notes: dict = {}
         try:
             age = _since_last_seen_alive(snap)
             if age is not None and age < WATCH_RECORDING_S:   # as `restore` refuses: leave it, record nothing
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "watch_still_recording")), id=snap.id))
                 break
+            _settle_playset(snap, user, bool(games), notes)
             out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games))
         except Exception as exc:
-            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id))
+            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
-        runs.append(dict(_outcome(out), id=snap.id))
+        runs.append(dict(_reply(out, notes), id=snap.id))
         if out.held:
             break
     if all(not r["held"] and not r["reason"] for r in runs):
@@ -809,7 +1189,8 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
     alone: with nothing recorded, the logs are whoever played since. A session's own snapshot, between its
     `snapshot` and `launch`, is finished too: `launch` then refuses `already_finished`, starting nothing.
     A claimed one whose claim is younger than LAUNCH_IN_FLIGHT_S gets no verdict: a `launch` may be about to
-    record its start, its game not yet listed. It is reported (`launch_in_flight`) and the unwinding stops."""
+    record its start, its game not yet listed. It is reported (`launch_in_flight`) and the unwinding stops. The
+    playset a failed start left is put back first, held or not (`_settle_playset`)."""
     never_started = [s for s in _open_snapshots(backups) if "started" not in _events(s)]
     if not never_started:
         return []
@@ -819,15 +1200,17 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
     except gate.GateError as exc:
         return [dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=never_started[-1].id)]
     for snap in reversed(never_started):
+        notes: dict = {}
         try:
             if _in_flight_age(snap) is not None:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
                 break
+            _settle_playset(snap, user, bool(games), notes)
             out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
         except Exception as exc:
-            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id))
+            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
-        runs.append(dict(_outcome(out), id=snap.id))
+        runs.append(dict(_reply(out, notes), id=snap.id))
         if out.held:
             break
     return runs
@@ -908,12 +1291,19 @@ def main(argv=None) -> int:
     p.set_defaults(run=cmd_restore)
 
     p = sub.add_parser("launch", help="the gate's checks, then start the game for a snapshot's run and record it",
-                       description="Everything after `--` is passed to victoria3.exe as it is; nothing is added.")
+                       description="Everything after `--` is passed to victoria3.exe as it is; nothing is added. "
+                                   f"--playset mod_only and --add-mod rewrite {PLAYSET_FILE} for the run; "
+                                   "`restore` puts the owner's back.")
     p.add_argument("id")
     p.add_argument("--permission", required=True,
                    help="where the permission to launch came from (asked, or granted for this session)")
     p.add_argument("--owner-confirmed-busy", action="store_true",
                    help="the owner was asked about the busy GPU and said to go ahead")
+    p.add_argument("--playset", choices=PLAYSET_MODES, default="current",
+                   help="current (the default): the mods the owner has enabled; mod_only: only this mod's "
+                        "deployed folder (mod_deploy_target)")
+    p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
+                   help="a mod folder to enable for the run as well, as Windows names it (repeatable)")
     p.set_defaults(run=cmd_launch)
 
     p = sub.add_parser("watch", help="follow the game `launch` started, recording that it is alive and its exit")
@@ -929,6 +1319,7 @@ def main(argv=None) -> int:
                            ("selftest-restore", cmd_selftest_restore,
                             "prove a snapshot of the real folder restores, changing nothing in it")):
         sub.add_parser(name, help=text).set_defaults(run=fn)
+    client.add_verbs(sub)
 
     argv = list(sys.argv[1:] if argv is None else argv)
     game_args: list[str] = []
@@ -943,7 +1334,9 @@ def main(argv=None) -> int:
         result, code = args.run(args)
     except Exception as exc:  # every failure is one JSON object: BackupRootError, GateError, OSError, ...
         result, code = {"refused": type(exc).__name__, "detail": str(exc)}, 2
-    print(json.dumps(result, indent=1, ensure_ascii=False))
+    # ASCII, escapes and all: a reply can quote the owner's playset, which may spell a lone surrogate, and a UTF-8
+    # stdout cannot print one.
+    print(json.dumps(result, indent=1, ensure_ascii=True))
     return code
 
 

@@ -34,6 +34,17 @@ class Window:
     client: tuple[int, int, int, int]       # x, y, width, height of the client area, in screen pixels
 
 
+@dataclass(frozen=True)
+class Presence:
+    """Where the cursor and the foreground window were at one reading, and where the helper last put the cursor.
+
+    Two readings that differ in the foreground window, or in a cursor that is not at `helper_cursor`, mean a person
+    was at the machine between them. Coordinates are screen pixels; `foreground` is a window handle (0: none)."""
+    cursor: tuple[int, int]
+    foreground: int
+    helper_cursor: tuple[int, int] | None
+
+
 class Helper(Protocol):
     def launch(self, exe: str, args: Sequence[str], cwd: str) -> ProcId: ...
     def adopt(self, proc: ProcId) -> None: ...
@@ -41,6 +52,10 @@ class Helper(Protocol):
     def idle_ms(self) -> int: ...
     def focus(self, pid: int) -> bool: ...
     def keys(self, pid: int, steps: Sequence[dict]) -> None: ...
+    def click(self, pid: int, x: int, y: int) -> None: ...
+    # click: x, y in client pixels. Refused (HelperError) with not_foreground, bad_point (outside the client area, or
+    # the window moved), cursor_misplaced or covered, in which cases nothing was pressed.
+    def presence(self) -> Presence: ...
     def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path: ...
     def kill(self, proc: ProcId) -> bool: ...      # True if the process had already exited
     def tcp_open(self, port: int) -> None: ...
@@ -148,6 +163,15 @@ class ProcessHelper:
 
     def keys(self, pid: int, steps: Sequence[dict]) -> None:
         self._call("keys", pid=pid, steps=list(steps))
+
+    def click(self, pid: int, x: int, y: int) -> None:
+        self._call("click", pid=pid, x=x, y=y)
+
+    def presence(self) -> Presence:
+        r = self._call("presence")
+        mine = r.get("helper_cursor")
+        return Presence((int(r["cursor"][0]), int(r["cursor"][1])), int(r["foreground"]),
+                        None if mine is None else (int(mine[0]), int(mine[1])))
 
     def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path:
         path = Path(path)

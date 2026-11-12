@@ -1093,8 +1093,8 @@ STATE_KATANGA = {
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 770
-        discovered_amount = 30
+        undiscovered_amount = 765
+        discovered_amount = 35
     }
 
     resource = {
@@ -1159,8 +1159,8 @@ STATE_ZAMBIA = {
 
     resource = {
         type = "building_copper_mine"
-        undiscovered_amount = 457
-        discovered_amount = 18
+        undiscovered_amount = 454
+        discovered_amount = 21
     }
 }
 
@@ -1253,7 +1253,7 @@ STATE_NAMAQUALAND = {
 
     resource = {
         type = "building_copper_mine"
-        discovered_amount = 6
+        discovered_amount = 9
     }
     naval_exit_id = 3104
     min_cold_effect = 0.00

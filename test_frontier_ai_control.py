@@ -241,7 +241,8 @@ class LawsTest(unittest.TestCase):
 
         import gen_law_consistency as glc
 
-        laws = glc.parse_laws(glc.load_vanilla()["laws"])
+        vanilla = glc.load_vanilla()  # None on a machine with the game: parse_laws then reads the game's files
+        laws = glc.parse_laws(vanilla and vanilla["laws"])
         group = glc.laws_by_group(laws)[GROUP]
         self.assertEqual(sorted(group), sorted(ORDER))
         fallbacks = [

@@ -1092,8 +1092,11 @@ gm_mon_copy_record = {
 # State scope, before gm_state_tr_take on the AI's occupation roll. One roll
 # falls on one monument of the state: the primary, or (every monument as
 # likely) a secondary, named in gm_tr_take_target. A primary that cannot go
-# (undedicated, a Grand Shrine: gm_state_tr_takeable) leaves the roll to the
-# secondaries, which the caller's gm_state_tr_any_takeable found open.
+# (undedicated, a Grand Shrine, a piece of it abroad: gm_state_tr_takeable)
+# leaves the roll to the secondaries, which the caller's
+# gm_state_tr_any_takeable found open. A secondary with a piece of it abroad is
+# never the pick (gm_mon_tr_piece_abroad): a monument is looted once until what
+# was taken comes home.
 gm_state_tr_ai_choose_target = {
 	gm_remove_state_var = { VAR = gm_tr_take_target }
 	if = {
@@ -1104,12 +1107,20 @@ gm_state_tr_ai_choose_target = {
 		clear_saved_scope = gm_mon_pick
 		if = {
 			limit = { gm_state_tr_takeable = no }
-			random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
+			random_in_list = {
+				variable = gm_monuments_here
+				limit = { gm_mon_tr_piece_abroad = no }
+				save_scope_as = gm_mon_pick
+			}
 		}
 		else = {
 			random = {
 				chance = gm_state_tr_ai_secondary_chance
-				random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
+				random_in_list = {
+					variable = gm_monuments_here
+					limit = { gm_mon_tr_piece_abroad = no }
+					save_scope_as = gm_mon_pick
+				}
 			}
 		}
 		if = {
