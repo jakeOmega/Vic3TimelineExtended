@@ -62,8 +62,8 @@ The scripts used on 2026-11-12 are in
 
 ## Measurements, 2026-11-12: 1931, 1.15.1
 
-The owner's exit autosave (Singapore, 1 July 1931; `perf_bench_sgp_1931_08_12.v3`)
-was played to 2 September at speed V through the harness, with the script
+The owner's exit autosave (Singapore, 1 July 1931; copied as
+`perf_bench_sgp_1931_08_12.v3`, a name whose date is wrong) was played to 2 September at speed V through the harness, with the script
 debugger attached. It was the latest save that 1.15 could load: the 1940 and
 2020 saves are 1.14.5. The world held 250–299 countries, 200 or more of them
 UN members. Eras after 1931 (nuclear, space, warming at scale) are
@@ -78,15 +78,29 @@ play of this game ran at 1.33 s a day from 1916 to 1921 and at 1.6–1.9 s from
 | Hour 0, ordinary day | 0.77 s | 40% | 0.23 s, of which `RecalculateModifierNodes` 0.13 s |
 | Hours 6, 12 and 18 | 0.15 s | 28% | 0.04 s |
 | Hour 0, weekly day | 2.85 s (3.3 s in 1929–31) | 24% | 2.6 s: `HandleAutonomousInvestment` 1.1 s, `UpdateBuildingSpendingPriorities_Stage2` 0.31 s, `UpdateCivilWars` 0.30 s, `UpdateEmployment` 0.14 s, `WeeklyUpdateJournalEntries` 0.11 s |
-| Hour 0 on the 1st | 3.8 s (5.2 s with the quarterly autosave) | 8.5% | 1.4 s: `MonthlyPulseJournalEntries` 1.06 s |
+| Hour 0 on the 1st | 3.8 s (5.2 s with the quarterly autosave) | 8.5% | 1.4 s: `MonthlyPulseJournalEntries` 1.06 s (one frame, 1 August) |
 
-So about 0.54 s of each ordinary day, and 2.4 s of each 1st, run outside every
-tick task. That is on_actions, events and their effects. Monthly country
-pulses are spread over the month, about 9 countries a day (`extra_on_actions.txt:2405`,
-a trigger in `decolonization_events_on_action`, fired 249 times from 3 to 31
-July with no 1st in the window), as are the yearly state and country pulses.
-That bucket is about a third of wall time. It is the largest one the mod can
-change, and neither text dump can split it by system (#1701).
+Two buckets of wall time are outside every tick task, and neither is
+attributed yet:
+
+- **A per-frame floor**: about 0.11 s on every frame, the sub-ticks included,
+  where no pulse runs. That is about 27% of wall time: rendering, speed
+  pacing, or work the interface does (#1700 has the test).
+- **Day-boundary time**: on an ordinary day's hour 0, about 0.43 s beyond the
+  tasks and the floor (22% of wall time). On the 1st the figure is about
+  2.4 s. Suspects:
+  - The day-spread pulses and their events. Monthly country pulses are spread
+    over the month, about 9 countries a day (`extra_on_actions.txt:2405`, a
+    trigger in `decolonization_events_on_action`, fired 249 times from 3 to
+    31 July with no 1st in the window), as are the yearly state and country
+    pulses.
+  - The engine's or the interface's own work at the day change.
+
+  One thing cuts against a single big pulse. The GUI profiler's root list
+  (if it is sorted by inclusive time) put the largest on_actions entry below
+  `un_buttons.txt:1296`, which cost 3.95 s over that 28-day capture, about
+  0.14 s a day. Splitting this bucket needs the GUI profiler's call graph
+  (#1701).
 
 **Script, 3 July → 5 August** (flat dump, CPU summed over threads, with no GUI
 profiler; it inflates per-call cost 2–4×): 0.98 s per game day, 46% of it in
@@ -113,8 +127,10 @@ Vanilla script that the mod's content may enlarge:
   flagships, 40 Strategic Reserve sites, 39 wonders). Whether
   `HandleAutonomousInvestment` scales with the number of types is unmeasured;
   it needs an A/B run (#1702).
-- `RecalculateModifierNodes` is a flat ~130 ms at every day boundary. It
-  doesn't spike on the 1st, so it isn't driven by the monthly refreshes.
+- `RecalculateModifierNodes` is a flat ~130 ms at every day boundary, over
+  half of an ordinary day's task time. A flat cost doesn't clear the mod's
+  refreshes: remove-and-re-add pulses spread at about 9 countries a day would
+  produce exactly that. It stays a suspect.
 - On each 1st, `extra_script_values.txt:1587` logs about 5,700 errors in one
   burst (#1703).
 - The GUI capture's largest root entry was a trigger in
@@ -203,13 +219,19 @@ All are exact: they change no result unless a line says otherwise.
 
 ## Open (ranked by measured cost, 2026-11-12)
 
-1. **The day-spread pulses: about 0.54 s of each ordinary day runs outside
-   every tick task** (1931; about a third of wall time). Monthly country
-   pulses come about 9 countries a day, and yearly state and country pulses
-   are spread over the year. The merged `on_monthly_pulse_country` has 22
-   on_actions in `extra_on_actions.txt` alone; the Demographics census steps
-   about 2–3 states a day; then there are the events those pulses fire. The
-   flat dump records none of the effect work, so this needs the GUI
+1. **Unattributed day-boundary time: about 0.43 s of each ordinary day's
+   hour 0** (1931; 22% of wall time), beyond the tick tasks and the
+   per-frame floor. Suspects:
+   - The day-spread pulses. Monthly country pulses come about 9 countries a
+     day, and yearly state and country pulses are spread over the year. The
+     merged `on_monthly_pulse_country` has 22 on_actions in
+     `extra_on_actions.txt` alone, the Demographics census steps about 2–3
+     states a day, and then there are the events those pulses fire.
+   - The engine's or the interface's own day-change work.
+   - `RecalculateModifierNodes` (0.13 s a day, in tasks), driven by the
+     pulses' modifier refreshes.
+
+   The flat dump records none of the effect work, so this needs the GUI
    profiler's call graph (#1701). In 2072 the merged monthly country pulse
    read about 1.25 s per month on the worst thread, and it and the
    journal-entry pulses read higher than in the first capture of the original
@@ -234,12 +256,14 @@ All are exact: they change no result unless a line says otherwise.
    the breach-or-defiance test first because most countries fail it, but
    120+ of the 250–299 countries pass it in 1931 (outlawed dissent and the
    like), so the dossier test runs for each of them. In order:
-   - **Exact:** put the cheap tabling gates of `possible`
-     (`un_propose_own_motion_gates`: no vote under way, no cooldown, not in
-     recess, dues paid, represented) in each AI-only `visible`, ahead of the
-     case scan. The AI presses a button only when it is both visible and
-     possible, so no decision changes, and the scan stops running while a
-     vote is under way or the Assembly is in recess.
+   - **Exact, given one engine assumption:** put each button's own cheap
+     tabling gates from its `possible` in its AI-only `visible`, ahead of the
+     case scan. For most buttons these are `un_propose_own_motion_gates`: no
+     vote under way, no cooldown, not in recess, dues paid, represented. The
+     observer request has its own list. The scan then stops running while a
+     vote is under way or the Assembly is in recess. The assumption, not yet
+     verified, is that the AI presses a button only when it is both visible
+     and possible; if so, no decision changes.
    - **Exact:** in `un_credentials_candidate`, move the cheaper target-side
      tests ahead of the breach test, after measuring what each costs.
    - **Owner call:** a monthly list of candidate targets per topic, read by
@@ -261,8 +285,9 @@ All are exact: they change no result unless a line says otherwise.
    to a month, which is an owner call.
 6. **The month-start error burst**: about 5,700 errors from
    `extra_script_values.txt:1587` on every 1st (#1703).
-7. **Sub-tick frames**: 0.15 s each against 0.04 s of tasks, 28% of wall
-   time. They are probably rendering or speed pacing, not script. Test with
+7. **The per-frame floor**: about 0.11 s on every frame beyond its tasks,
+   27% of wall time (a sub-tick takes 0.15 s against 0.04 s of tasks). It is
+   probably rendering or speed pacing, not script. Test with
    `-disable_renderframeifneeded` (#1700). Script the interface evaluates
    lands here: an open event window evaluates its options' effect tooltips
    every frame (`un_events.4`'s mission effects were the GUI capture's top
