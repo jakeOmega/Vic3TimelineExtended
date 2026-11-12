@@ -12,22 +12,20 @@ where it is twinned. A disagreement past the tolerance is an early divide in the
 edge, or the cut multiplied by the case's own arithmetic. The suites are imported as modules, so pytest collects only
 the twins from this file.
 
-What the twins found (2026-11-12; docs/systems/mod_systems/demographics.md, "Deaths in fixed point"). The script is as
-it was: each change would move every recorded census case (test_demographics_golden.py), so they are left for a change
-of their own, whose scope that section lists.
-- The sweep's survivors are people x (1 - q / 100000), and q / 100000 keeps five decimals, so a death rate counts only
-  its whole deaths per 100,000 (te_demog_age_slot; the late sweep and the pool's survivors take the same form). The
-  year's deaths come out short by under 1e-5 of the people, about half that on average: 1.45 of 5,892 in
-  TestCohortScript's plain step (2.5e-4), where multiplying first (people x q / 100000) leaves 0.03 (6e-6). The
-  shortfall is a share of the people, not of the deaths, so it weighs more where deaths are few: with the on-top scale
-  at -0.99 it is 1.3 of the 58 natural deaths left (2.2%), and that year's deaths are 2.0e-3 short.
-- The seed's growth power is a chain, te_dg_dpow x d once an age, cut at each multiply (te_demog_seed_slot). At
-  d = 0.98556 it is 5.8e-4 low by age 67 and 1.17e-3 by 103. The survivors' cut runs the other way in the same chain
-  (with the power kept exact the old cohorts are up to 3.7e-4 high), so the seed's ring nets 2.0e-4 low at women
-  aged 67, 4.3e-4 at 91, 5.0e-4 at 103 and 4.2e-4 on the band from 85. The two partly cancel: with the survivors
-  alone taken multiply-first the ring is 3.9e-4 low at 67, 7.7e-4 at 91 and 9.6e-4 at 103, so a fix takes both.
+What the twins found (2026-11-12; docs/systems/mod_systems/demographics.md, "Deaths in fixed point"), and what became
+of it:
+- The sweep's survivors were people x (1 - q / 100000), and q / 100000 keeps five decimals, so a death rate counted only
+  its whole deaths per 100,000 and a year's deaths came out short by up to 1e-5 of the people: 1.45 of 5,892 in
+  TestCohortScript's plain step (2.5e-4), 2.2% of the natural deaths where the on-top scale left 58. Fixed: the people
+  x the rate first and divide = 100000 last (te_demog_age_slot, the pool, the late sweep, the seed's decrement). The
+  plain step's deaths are now 0.03 short (6e-6) and its cohorts within 3e-6 of the model's.
+- The seed's growth power was a chain, growth factor^age x the factor once an age, cut at each multiply: at 0.98556 it
+  was 5.8e-4 low by age 67 and 1.17e-3 by 103. The survivors' cut ran the other way in the same chain, so the ring
+  netted 2.0e-4 low at women aged 67 and 5.0e-4 at 103. Fixed: the power is kept at radix 100,000 (te_demog_seed_slot).
+  The seed's ring is now within 4.5e-5 of the model's at every age with a person in it.
 - The life table (te_demog_lt_sex) puts life expectancy at birth 0.017 of 43.3 years high in the seed's case (4e-4):
-  a third from the cut of q, the rest from its survival powers, each multiply cut again, over a small q.
+  a third from the cut of q, the rest from its survival powers, each multiply cut again, over a small q. Not changed:
+  it keeps a survival probability by design, and the figure it moves is shown to one decimal.
 - W's lead is its gap x (0.5 / the pull share - 1): 12 at 38 births per 1,000, 41 at 12, 83 at 6, 499 at 1 and 4,999
   with none, and one unit of the gap's last decimal moves W by that many (TestWorkforceTermFixedPoint). The pull share
   keeps two digits at 1 birth per 1,000 (0.00099 for 0.0009995), which makes that lead 1% larger. No early divide.
@@ -36,6 +34,7 @@ of their own, whose scope that section lists.
 import random
 import unittest
 
+import test_demographics_cause_deaths as cause_deaths
 import test_demographics_family_census as family_census
 import test_demographics_registry as registry
 import test_demographics_spread as spread
@@ -46,21 +45,32 @@ from test_demographics_registry import _Engine, _FixedPointTwin
 M, P = work.M, work.P   # demographics_model and demographics_params, on the path the suites set
 UNIT = _FixedPointTwin.UNIT
 
-# The sweep's survivors keep five decimals of 1 - q / 100000, so each cohort's deaths are short by under this share of
-# its people (the docstring's first finding).
-SURVIVOR_CUT = UNIT
 
 
 class _CohortTwin(_FixedPointTwin):
-    """The twin of a suite that seeds or steps the ring and compares its cohorts, deaths or life table. REL is #967's
-    1e-3, which is room for the three drifts the docstring lists and not a bound worked out from them: the deaths'
-    shortfall is under 1e-5 of the people, 4.3e-4 of a year's deaths at 1836's 23.5 per 1,000 at the very worst
-    (2.5e-4 here); the seed's ring is up to 5.0e-4 low at the oldest ages; life expectancy is 4e-4 high. FLOOR is
-    ten units: a cohort of under one person (0.03 at age 105) comes through half a dozen cuts with two digits left.
-    When the script's forms are fixed these should come down to the mixin's own."""
+    """The twin of a suite that seeds or steps the ring and compares its cohorts, births, deaths or life table.
 
-    REL = 1e-3
+    REL: a cohort leaves a step as its people x the ring's scale, less its dead, its killed and its migrants, and each
+    of those is the cohort x a share kept to five decimals (the scale, the kills', the war's, its class's migrants'
+    and the flat rate): five units of the cohort at most, over the part of it that stays, which at the oldest ages
+    under the heaviest emigration here is a fifth. Children per woman is a product of five stored factors and the
+    births carry it (3e-5). Since #967's fix the death rates themselves cost nothing: a step with no flows is within
+    3e-6 at every age, and the seed within 4.5e-5.
+    FLOOR is ten units: a cohort of under one person (0.03 at age 105) comes through a dozen cuts.
+    LIFE_TABLE: the figures the life table gives, which is not rewritten (the module's docstring): life expectancy
+    and the net reproduction rate both 4e-4 high. They keep #967's 1e-3, which is room for that and not a bound."""
+
+    REL = 5 * UNIT / 0.2
     FLOOR = 10 * UNIT
+    LIFE_TABLE = frozenset({"e0 women", "e0 men", "e0", "e65", "NRR"})
+    LIFE_TABLE_REL = 1e-3
+
+    def close(self, got, want, *args, **kw):
+        what = kw.get("what", args[1] if len(args) > 1 else "")
+        if what in self.LIFE_TABLE:
+            self.assertLessEqual(abs(got - want), self.LIFE_TABLE_REL * abs(want), f"{what}: {got} vs {want}")
+        else:
+            super().close(got, want, *args, **kw)
 
 
 # -- the cohorts: the seed and the step, with flows, war dead and kills --------------------------------------------
@@ -68,39 +78,43 @@ class _CohortTwin(_FixedPointTwin):
 class TestCohortScriptFixedPoint(_CohortTwin, registry.TestCohortScript):
 
     def test_on_top_scales_have_only_their_natural_floor(self):
-        """The float case's scales of +9 and -0.99, where two of its comparisons don't survive the cut.
-
-        The deaths: -0.99 leaves a hundredth of the natural deaths (58; the year's other 618 are maternal, of ten
-        times the births), and the survivors' cut is a share of the people, under SURVIVOR_CUT of 251,000, so it can
-        pass REL of the year's 677. The deaths are held to that bound, on the short side only.
-
-        The rate read back: -0.99 is the edge of te_demog_k_on_top_factor_min (1 + dz = 0.01). The window's events are
-        stored at five decimals, so events x 1000 / (rate x people) falls a hair under 0.01 and is kept as 0.00999:
-        dz is -0.99001, 1 + dz is under the minimum, and the model's rate M aims at stays the last one (30), as in
-        test_no_events_keep_the_models_own_rate. The float case reads it back from the step. The births' +9 comes
-        out as 8.99999 by the same cut."""
+        """The float case's scales of +9 and -0.99, of which -0.99 is the edge of te_demog_k_on_top_factor_min
+        (1 + dz = 0.01). The window's events are stored at five decimals, so events x 1000 / (rate x people) falls a
+        hair under 0.01 and is kept as 0.00999: dz is -0.99001, 1 + dz is under the minimum, and the model's rate M
+        aims at stays the last one (30), as in test_no_events_keep_the_models_own_rate. The float case reads it back
+        from the step. The births' +9 comes out as 8.99999 by the same cut. The step itself is the float case's:
+        its 677 deaths (58 of them natural, a hundredth of the year's) are 1.7e-4 short, the scale's own last
+        decimal."""
         eng, ring, figures, pop = self.step_both(on_top=(9.0, -0.99), full=True)
-        short = figures["deaths"] - eng.vars["te_dg_deaths"]
-        self.assertGreaterEqual(short, 0.0)
-        self.assertLess(short, SURVIVOR_CUT * pop)
-        self.check_step(eng, ring, {**figures, "deaths": eng.vars["te_dg_deaths"]}, pop)
+        self.check_step(eng, ring, figures, pop)
         self.assertEqual(eng.vars["te_dg_bz"], 8.99999)
         self.assertEqual(eng.vars["te_dg_dz"], -0.99001)
         self.close(eng.vars["te_dg_cbr_model"], figures["births_model"] * 1000 / pop, what="cbr_model")
         self.assertEqual(eng.vars["te_dg_cdr_model"], 30.0, "the last step's own rate stays")
 
-    def test_the_survivors_cut_is_under_a_hundred_thousandth_of_the_people(self):
-        """The finding's size, in the plain step and with war dead, kills and migrants: the script's deaths are
-        short of the model's, by less than SURVIVOR_CUT of the people. A second early divide in the sweep would add
-        to the shortfall or change its sign. The lower bound pins the defect as it stands: when the survivors are
-        taken multiply-first this case goes, with SURVIVOR_CUT and the override above."""
-        for flows in (dict(), dict(war_dead=900.0, kills=1500.0, migration=4000.0),
-                      dict(war_dead=300.0, kills=200.0, migration=-6000.0)):
-            with self.subTest(flows=flows):
-                eng, _ring, figures, pop = self.step_both(**flows)
-                short = figures["deaths"] - eng.vars["te_dg_deaths"]
-                self.assertGreater(short, 0.0)
-                self.assertLess(short, SURVIVOR_CUT * pop)
+    def test_the_death_rates_keep_their_decimals(self):
+        """#967's fix, held: the sweep takes the people x the rate first, so with nothing but births and deaths in
+        the year every cohort of a person or more is within one unit per unit of the model's and the year's deaths
+        within two (they were 2.5e-4 short while a rate counted only its whole deaths per 100,000). The seed's ring
+        is within five at every age since its growth power kept its decimals (it was 5.0e-4 low at 103). What is left
+        there is the cause multipliers' own fifth decimal, which a cohort's survival carries once for each unit of its
+        cumulative hazard: 4.5e-5 at women aged 100, the last age with a person in it."""
+        eng, ring, figures, _pop = self.step_both()
+        self.assertLessEqual(abs(eng.vars["te_dg_deaths"] - figures["deaths"]), 2 * UNIT * figures["deaths"])
+        for k in range(P.RING_YEARS):
+            age = ring.age_of_slot(k)
+            # not the newborns, who carry children per woman's cut, nor the two cohorts step_both plants at the ring's
+            # end, most of whom die: the scale's cut is a share of those who began the year
+            for sex, people in (("f", ring.f[k]), ("m", ring.m[k])):
+                if people >= 1.0 and 0 < age < P.RING_YEARS - 2:
+                    self.assertLessEqual(abs(eng.vars[f"te_dg_{sex}{k}"] - people), UNIT * people, f"{sex} aged {age}")
+        eng, ring = self.seed_both()
+        for age, women, men in ring.by_age()[:-1]:
+            k = (self.YEAR - age) % P.RING_YEARS
+            for sex, people in (("f", women), ("m", men)):
+                if people >= 1.0:
+                    self.assertLessEqual(abs(eng.vars[f"te_dg_{sex}{k}"] - people),
+                                         max(5 * UNIT * people, self.FLOOR), f"the seed's {sex} aged {age}")
 
 
 class TestStepWithMeasuresFixedPoint(_CohortTwin, family_census.TestStepWithMeasures):
@@ -109,13 +123,19 @@ class TestStepWithMeasuresFixedPoint(_CohortTwin, family_census.TestStepWithMeas
     COHORT = TestCohortScriptFixedPoint
 
 
+class TestCauseDeathsScriptFixedPoint(_CohortTwin, cause_deaths.TestScript):
+    """The step's deaths by cause against the model's, from the same ring."""
+
+    COHORT = TestCohortScriptFixedPoint
+
+
 class TestCausesInTheStepFixedPoint(_FixedPointTwin, registry.TestCausesInTheStep):
 
     def life_expectancy_close(self, got, want):
-        """The one figure here that comes off the life table, which is a cohort suite's arithmetic (_CohortTwin):
-        each age group's person-years are (1 - p^n) / q, n cuts over a small q. 41.771 for 41.755 here (3.8e-4). The
-        multipliers and the stored inputs beside it stay at the mixin's tolerance."""
-        self.assertLessEqual(abs(got - want), _CohortTwin.REL * want)
+        """The one figure here that comes off the life table (_CohortTwin.LIFE_TABLE): each age group's person-years
+        are (1 - p^n) / q, n cuts over a small q. 41.771 for 41.755 here (3.8e-4). The multipliers and the stored
+        inputs beside it stay at the mixin's tolerance."""
+        self.assertLessEqual(abs(got - want), _CohortTwin.LIFE_TABLE_REL * want)
 
 
 # -- fast mode: the census's terms at K times the rates ------------------------------------------------------------
