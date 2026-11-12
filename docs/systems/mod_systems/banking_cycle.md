@@ -149,7 +149,7 @@ simplified, and what the journal entry and the history store ask.
 | Site | Behaviour when `te_mon_full_system = no` |
 |---|---|
 | `te_mon_has_dial` | false for every country — one line, and every consumer (steps 2/4, the dashboard block, the OMO gate, the conditions' stance row, the union principles' `ai_weight`) falls to its no-dial side |
-| `te_monetary_monthly_update` | steps 0, 0b, 1, 4, 5, 7 and 9 only. 1b, 1c, 5b, 6, 6c, 6d, 8, 8b, 9b and 10 are skipped, so their variables keep step 0's neutral seeds (`te_inflation` 0, `te_fx_index` par, `te_mon_anchor_kind` 0, `te_mon_stance_gap` 0) and every downstream read gets a sane answer rather than a missing variable |
+| `te_monetary_monthly_update` | steps 0, 0b, 1, 4, 5, 7 and 9 only. 1b, 1c, 5b, 6, 6c, 6d, 8, 8b, 9b and 10 are skipped, so their variables keep step 0's neutral seeds (`te_inflation` 0, `te_fx_index` par, `te_mon_anchor_kind` 0, `te_mon_stance_gap` 0) and every downstream read gets a sane answer rather than a missing variable (a switch from Full mid-game puts them back there: see **Full to Simplified mid-game** below) |
 | `te_monetary_set_derived_rate` | the **bankless spread is conditional**: normally every country here is bankless, but with the dial off a country that built a national bank would otherwise be charged 1pp for not having one |
 | `te_monetary_refresh_world_rate` | short-circuits to the era base — with no dial anywhere the accumulator would reach its own `else` after two ~200-country scans |
 | on-action hooks | the phase-4 world-inflation refresh, the phase-5 anchored-GDP scan, the yearly arrangement scan, `on_become_subject` and the `on_country_default` guarantee call are all skipped |
@@ -187,6 +187,18 @@ it) and `immediate` starts a fresh cycle once `te_banking_cycle_unlocked` holds.
 modifiers when the entry goes (`te_monetary_settle_modifier_home`). Every other rule-gated entry ends on its rule the
 same way (`scripting_best_practices.md`, the `disable_evaluation` bullet). Play-test: `docs/testing/banking-playtest.md`,
 "The rule switched off mid-game".
+
+**Full to Simplified mid-game** (#1507). The entry stays, but the skipped steps neither refresh nor remove what they
+applied while the rule was Full, and steps that still run read their variables: the rate paid subtracts `te_inflation`,
+the premium prices monetisation and the exchange rate, the derived rate follows an anchor, and the entry's stance-band
+modifiers follow `te_mon_stance_band`. `te_monetary_settle_rule_switch` (`te_monetary_rule_switch_effects.txt`), first
+in `te_monetary_monthly_update`, marks every Full pulse (`te_mon_ran_full`); the first pulse without the full system
+that finds the mark (Simplified or Disabled) strips the managed modifiers through a change of home (step 9 re-adds the
+rate paid at once), forgets the skipped steps' economic state so step 0 seeds it neutral again on the same pulse, and
+switches off the five External & Currency tools, whose bills would otherwise go on charging. Records and clocks only a
+skipped step reads (the vault, peg confidence, LOLR calls, union membership) stay, and resume if the rule goes back to
+Full. The effect's header lists every site it leaves and why; `test_rule_off_teardown.py` pins the order and the
+seeds. Play-test: `docs/testing/rules-off-midgame-playtest.md`, "Banking: Full to Simplified".
 
 ### Banking Law Modifiers
 Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) to tune the banking cycle:

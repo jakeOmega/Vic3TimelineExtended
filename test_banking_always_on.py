@@ -258,6 +258,8 @@ ENTRY_OBJECT_READERS = {
     ("common/scripted_triggers/te_monetary_triggers.txt", "te_mon_mod_has"),
     ("common/scripted_effects/te_monetary_fx_effects.txt", "te_monetary_init_fx_variables"),
     ("common/scripted_effects/te_monetary_arrangement_effects.txt", "te_monetary_init_arrangement_variables"),
+    # The banking rule leaving Full: the tools' Disable effects work on the entry object.
+    ("common/scripted_effects/te_monetary_rule_switch_effects.txt", "te_monetary_leave_full_system"),
     ("common/on_actions/extra_on_actions.txt", "te_banking_law_change_cleanup"),
     ("common/on_actions/extra_on_actions.txt", "te_banking_economy_law_cleanup"),
     ("common/on_actions/te_banking_entry_on_actions.txt", "te_banking_entry_net"),
