@@ -185,6 +185,7 @@ These explain rules, so they are judged on whether a player could act on them.
 - **Several figures are a list**, one "Label: value" line each, with the explanation after.
 - **Name the tab, not the journal entry**, when sending the player somewhere.
 - **Link a concept the first time it appears** in a text, and not again.
+- **A historical or setting term links a glossary entry, not a concept.** Concepts explain mechanics; the glossary explains vocabulary such as "zaibatsu" or "the Sejm" (`[glossary_zaibatsu]`). Link vanilla's entry where it has one; a new term gets a glossary entry. The rule and the syntax: `scripting_best_practices.md` § "A historical or setting term gets a glossary entry, a mechanic gets a concept".
 - **Say only what the script does.** A tooltip that promises an effect the script does not produce is a bug. Read the script first.
 - **A limit nobody reaches is not a figure to give.** "Up to 15 legitimacy" was true of a gap of 100 points, which no game sees. Give the rate and one worked case: "0.15 for each point of the gap: 4.5 at a gap of 30".
 
