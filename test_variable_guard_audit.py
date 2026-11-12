@@ -117,6 +117,38 @@ class FlaggedShapes(unittest.TestCase):
         flags = _scan("x = { NOR = { has_global_variable = g owner = { global_var:g > 0 } } }\n")
         self.assertEqual(len(flags), 1)
 
+    def test_this_is_the_current_scope(self):
+        for read in ("this.var:v > 0", "this = { var:v > 0 }", "THIS.var:v > 0"):
+            with self.subTest(read=read):
+                self.assertEqual(len(_scan(f"x = {{ NAND = {{ has_variable = v {read} }} }}\n")), 1)
+        # Once: the head read and the chain read are the same one.
+        flags = _scan("x = { NAND = { has_global_variable = g this.global_var:g > 0 } }\n")
+        self.assertEqual([len(f.reads) for f in flags], [1])
+
+    def test_an_or_does_not_guard_its_siblings(self):
+        # `OR = { has_variable = v  var:v > 0 }` reads v whether or not it is
+        # set, so the outer block's guard is still the only one, and useless.
+        flags = _scan("x = {\n\tNOR = {\n\t\thas_variable = v\n"
+                      "\t\tOR = { has_variable = v var:v > 0 }\n\t}\n}\n")
+        self.assertEqual([(f.line, f.reads[0].line) for f in flags], [(2, 4)])
+
+    def test_a_limit_above_a_scope_change_guards_another_object(self):
+        # The country's `v` is set; the state's is what the NAND reads.
+        flags = _scan("x = { if = { limit = { has_variable = v } "
+                      "capital = { set_x = { limit = { NAND = { has_variable = v var:v > 0 } } } } } }\n")
+        self.assertEqual(len(flags), 1)
+        flags = _scan("x = { trigger_if = { limit = { has_variable = v } "
+                      "any_scope_state = { NAND = { has_variable = v var:v > 0 } } } }\n")
+        self.assertEqual(len(flags), 1)
+        # A global has no scope: the limit still guards it.
+        self.assertEqual(_scan(
+            "x = { trigger_if = { limit = { has_global_variable = g } "
+            "owner = { NAND = { has_global_variable = g global_var:g > 0 } } } }\n"), [])
+        # And a limit inside the scope change is that object's own.
+        self.assertEqual(_scan(
+            "x = { owner = { trigger_if = { limit = { has_variable = v } "
+            "NAND = { has_variable = v var:v > 0 } } } }\n"), [])
+
     def test_a_safe_read_does_not_hide_a_bare_one(self):
         flags = _scan("x = { NOR = { has_variable = v var:v ?= 1 var:v > 3 } }\n")
         self.assertEqual(len(flags), 1)
@@ -250,16 +282,60 @@ class SuppressionTests(unittest.TestCase):
 
 
 class SuggestionTests(unittest.TestCase):
-    def test_equality_offers_the_null_safe_read(self):
-        flag = _scan("x = { NAND = { has_variable = v var:v = 1 } }\n")[0]
-        self.assertIn("`var:v ?= …`", flag.suggestion)
-        self.assertIn("trigger_if = { limit = { has_variable = v }", flag.suggestion)
+    WRAPPED = ("`trigger_if = { limit = { has_variable = v } NAND = { <the block's other conditions> } }` "
+               "(`NOT` if one condition is left; passes when unset)")
+
+    def suggestion(self, block: str) -> str:
+        return _scan(f"x = {{ {block} }}\n")[0].suggestion
+
+    def test_equality_with_a_number_offers_the_null_safe_read(self):
+        for read in ("var:v = 1", "var:v = -2", "var:v = 0.5"):
+            with self.subTest(read=read):
+                text = self.suggestion(f"NAND = {{ has_variable = v {read} }}")
+                self.assertIn("read it as `var:v ?= <number>` and drop the guard", text)
+                self.assertIn(self.WRAPPED, text)
+
+    def test_equality_with_anything_else_does_not(self):
+        # `?=` guards its left side only, and with a `var:` or a `flag:` on the
+        # right it is unverified (scripting_best_practices.md, "Triggered
+        # Option Names"). On main's script this audit once suggested it for
+        # both of these, and one reached a pull request.
+        for read in ("var:v = var:te_tax_bl_rev", "var:v = flag:rededicate", "var:v = scope:target",
+                     "var:v = some_script_value", "var:v = global_var:g", "var:v = root",
+                     "var:v = yes", "var:v = { value = 1 }"):
+            with self.subTest(read=read):
+                text = self.suggestion(f"NAND = {{ has_variable = v {read} }}")
+                self.assertNotIn("?=", text)
+                self.assertIn(self.WRAPPED, text)
+
+    def test_one_read_that_is_not_a_numeric_equality_withholds_it(self):
+        text = self.suggestion("NAND = { has_variable = v var:v = 1 has_variable = w var:w = var:v }")
+        self.assertNotIn("?=", text)
 
     def test_inequality_offers_the_trigger_if_only(self):
-        flag = _scan("x = { NOR = { has_global_variable = g global_var:g > 0 } }\n")[0]
+        flag = _scan("x = { NAND = { has_global_variable = g global_var:g > 0 } }\n")[0]
         self.assertNotIn("?=", flag.suggestion)
-        self.assertIn("trigger_if = { limit = { has_global_variable = g } NOT = { <the read> } }",
-                      flag.suggestion)
+        self.assertIn("trigger_if = { limit = { has_global_variable = g } NAND = { "
+                      "<the block's other conditions> } }", flag.suggestion)
+
+    def test_the_rest_of_the_block_stays_inside_the_negation(self):
+        # Followed literally, "NOT = { <the read> }" would drop `is_ai = yes`.
+        for block in ("NAND = { has_variable = v var:v > 0 is_ai = yes }",
+                      "NOT = { has_variable = v var:v = 1 is_ai = yes }"):
+            with self.subTest(block=block):
+                text = self.suggestion(block)
+                self.assertIn("keep the rest of the block inside the negation", text)
+                self.assertNotIn("<the read>", text)
+        self.assertIn("leaving the block's other conditions where they are",
+                      self.suggestion("NOT = { has_variable = v var:v = 1 is_ai = yes }"))
+
+    def test_a_nor_is_not_given_a_mechanical_rewrite(self):
+        # NOR = { has_variable = v  var:v = 1 } is "v is unset and …": no
+        # rewrite keeps a meaning the author can have wanted.
+        text = self.suggestion("NOR = { has_variable = v var:v = 1 }")
+        self.assertTrue(text.startswith("as `NOR` this is false whenever the variable is set"))
+        self.assertNotIn("?=", text)
+        self.assertIn(self.WRAPPED, text)
 
 
 class AuditAndReportTests(unittest.TestCase):
@@ -283,7 +359,8 @@ class AuditAndReportTests(unittest.TestCase):
             report = render_report(result)
             self.assertIn("# Variable guard audit report", report)
             self.assertIn("### `events/a.txt`", report)
-            self.assertIn("- line 2: `NOT` holds `has_variable = v` beside `var:v > 0` (line 4).", report)
+            self.assertIn("- line 2: `NOT` holds `has_variable = v` beside `var:v > 0` (line 4). "
+                          "Fix: move the guard into a limit", report)
             self.assertIn("- unreviewed: 2", report)
 
     def test_scope_links_come_from_the_catalog(self):

@@ -12,10 +12,12 @@ read as NOR a multi-child `NOT` also gives the wrong answer when X is
 set (`docs/guides/scripting_best_practices.md` § "Write `NOR` or
 `NAND`, Never a Multi-Child `NOT`").
 
-Fix: for an equality, `var:X ?= N` with no guard (false when X is
-unset). Otherwise `trigger_if = { limit = { has_variable = X }
-NOT = { var:X > 0 } }`, which passes when X is unset. Both mean the
-same under every reading of the engine.
+Fix: move the guard into a limit and keep the rest of the block inside
+the negation, `trigger_if = { limit = { has_variable = X }
+NOT = { var:X > 0 } }`, which passes when X is unset. Where every read
+is an equality with a number, `var:X ?= N` with no guard also does
+(false when X is unset; unverified with a `var:` or a `flag:` on the
+right). Both mean the same under every reading of the engine.
 
 Suppress a block that is deliberately left with a trailing comment on
 its opening line:

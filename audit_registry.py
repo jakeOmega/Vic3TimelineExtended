@@ -186,11 +186,13 @@ AUDITS: tuple[Audit, ...] = (
         "A `has_variable = X` guard (or the global or local form) as a direct child of a `NOT`, `NAND` "
         "or `NOR` that also reads `var:X` bare. A multi-child `NOT` reads every child, so the guard "
         "protects nothing and an unset X logs `Failed to fetch variable`; read as NOR the block is "
-        "also wrong when X is set. Read an equality as `var:X ?= N`; put anything else in "
-        "`trigger_if = { limit = { has_variable = X } NOT = { … } }`.",
+        "also wrong when X is set. Move the guard into a limit and keep the rest of the block inside "
+        "the negation, `trigger_if = { limit = { has_variable = X } NOT = { … } }`; an equality with "
+        "a number can instead be read as `var:X ?= N`.",
         where="trailing on the opening line of the `NOT` / `NAND` / `NOR`",
         tags=("variable_guard",),
-        note="A guard beside its read in an `AND` or at a trigger's top level is not flagged.",
+        note="A guard beside its read in an `AND` or at a trigger's top level is not flagged. Walks "
+             "all of `common/` and `events/`, so it takes several seconds.",
     ),
     Audit(
         "container_timed_variable_audit",

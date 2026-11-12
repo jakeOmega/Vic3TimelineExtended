@@ -33,11 +33,12 @@ What is not
 -----------
 * A read written `var:X ?= …`, which is false when X is unset and logs nothing.
 * A read inside a block that guards it itself: a nested block with its own
-  `has_variable = X` child (judged on its own if it is a `NOT`/`NAND`/`NOR`),
-  or a `trigger_if` / `trigger_else_if` / `if` / `else_if` whose `limit` names
-  the guard.
+  `has_variable = X` child (judged on its own if it is a `NOT`/`NAND`/`NOR`;
+  an `OR` guards nothing and is not counted), or a `trigger_if` /
+  `trigger_else_if` / `if` / `else_if` whose `limit` names the guard.
 * A negating block that already sits inside such a `trigger_if` (the read is
-  guarded from outside; the inner guard is only redundant).
+  guarded from outside; the inner guard is only redundant), unless a scope
+  change lies between the two: that limit tested another object's variable.
 * A read of `var:X` behind a scope change (`owner = { var:X > 0 }`): that is
   another object's variable, which the guard never covered. Global and local
   variables have no scope, so those reads count at any depth.
@@ -48,14 +49,31 @@ What is not
 
 The fix
 -------
-For an equality, `var:X ?= N` in place of the guard and the read. For anything
-else, `trigger_if = { limit = { has_variable = X } NOT = { var:X > 0 } }`,
-which passes when X is unset. Both mean the same under every reading of the
-engine. Suppress a block that is deliberately left with a trailing
+Move the guard into a limit and keep the rest of the block inside the
+negation: `trigger_if = { limit = { has_variable = X } NOT = { var:X > 0 } }`
+(`NAND = { … }` when more than one condition is left), which passes when X is
+unset. Where every read is an equality with a number, `var:X ?= N` with no
+guard also does, the block's other conditions staying where they are: `?=` is
+false when X is unset. Both mean the same under every reading of the engine.
+`?=` is offered for a number only: with a `var:` or a `flag:` on the right it
+is unverified (`scripting_best_practices.md` § "Triggered Option Names").
+Suppress a block that is deliberately left with a trailing
 `# REVIEWED YYYY-MM-DD (variable_guard): rationale` on its opening line.
 
+Known gaps (none occurs in the mod as of 2026-11-12)
+----------------------------------------------------
+* `root.var:X`, `prev.var:X`, `root = { var:X > 0 }`: skipped as another
+  object's variable even where `root` is the scope the guard ran in, which a
+  text scan cannot know.
+* A guard whose name is quoted (`has_variable = "x"`): string bodies are
+  blanked before the scan, so the name is not seen.
+* A guard or a read that arrives through a scripted trigger call or a `$X$`
+  argument: only what the file's text spells out is compared.
+
 A raw-text scan, like `iterator_limit_audit` and for its reasons: the parser
-keeps neither line numbers nor comments, and folds repeated keys.
+keeps neither line numbers nor comments, and folds repeated keys. It walks
+every character of `common/` and `events/` (about 40 MB), so it takes several
+seconds (7 to 10 s on a loaded 4-core machine), like `prev_scope_audit`.
 """
 from __future__ import annotations
 
@@ -106,10 +124,12 @@ _TOKEN_RE = re.compile(
     rf"|(?P<bare>{_WORD})"
 )
 
-# A variable read at the head of a token. `scope:x.var:y` and `owner.var:y`
-# read another object's variable, so only global and local reads count deeper
-# in a chain.
-_HEAD_READ_RE = re.compile(r"^(var|global_var|local_var):([A-Za-z0-9_$\-]+)")
+# A variable read at the head of a token (`this.` is the current scope).
+# `scope:x.var:y` and `owner.var:y` read another object's variable, so only
+# global and local reads count deeper in a chain.
+_HEAD_READ_RE = re.compile(r"^(?:this\.)?(var|global_var|local_var):([A-Za-z0-9_$\-]+)", re.I)
+# The right side `?=` is known to take: a plain number.
+_NUMBER_RE = re.compile(r"-?\d+(?:\.\d+)?")
 _CHAIN_READ_RE = re.compile(r"[.(|](global_var|local_var):([A-Za-z0-9_$\-]+)")
 
 
@@ -128,7 +148,7 @@ class Node:
 class Read:
     line: int
     text: str  # the statement as written, for the report
-    equality: bool  # `var:X = <scalar>`: the `?=` rewrite fits
+    equality: bool  # `var:X = <number>`: the `?=` rewrite fits
 
 
 @dataclass
@@ -144,11 +164,18 @@ class Flag:
 
     @property
     def suggestion(self) -> str:
-        wrapped = (f"`trigger_if = {{ limit = {{ {self.guard} }} NOT = {{ <the read> }} }}` "
-                   "(passes when unset)")
+        wrapped = (
+            "move the guard into a limit and keep the rest of the block inside the negation: "
+            f"`trigger_if = {{ limit = {{ {self.guard} }} NAND = {{ <the block's other conditions> }} }}` "
+            "(`NOT` if one condition is left; passes when unset)"
+        )
+        if self.block == "NOR":
+            return ("as `NOR` this is false whenever the variable is set, so the read can only "
+                    "matter when it is unset: decide what was meant. For \"not (set and …)\", "
+                    + wrapped)
         if all(r.equality for r in self.reads):
-            return (f"read it as `{self.variable} ?= …` and drop the guard "
-                    f"(false when unset), or {wrapped}")
+            return (f"read it as `{self.variable} ?= <number>` and drop the guard, leaving the "
+                    f"block's other conditions where they are (false when unset), or {wrapped}")
         return wrapped
 
 
@@ -186,6 +213,8 @@ def _is_scope_change(key: str | None, links: set[str]) -> bool:
     if key.startswith(ITERATOR_PREFIXES):
         return True
     low = key.lower()
+    if low == "this":
+        return False
     if low in ("root", "prev"):
         return True
     if ":" in key or "." in key:
@@ -212,9 +241,10 @@ def _reads_in(token: str | None, scoped: bool) -> list[tuple[str, str]]:
         return []
     found: list[tuple[str, str]] = []
     m = _HEAD_READ_RE.match(token)
-    if m and (scoped or m.group(1) != "var"):
-        found.append((m.group(1), m.group(2)))
-    found.extend((c.group(1), c.group(2)) for c in _CHAIN_READ_RE.finditer(token))
+    if m and (scoped or m.group(1).lower() != "var"):
+        found.append((m.group(1).lower(), m.group(2)))
+    found.extend((c.group(1), c.group(2))
+                 for c in _CHAIN_READ_RE.finditer(token, m.end() if m else 0))
     return found
 
 
@@ -283,14 +313,16 @@ def _collect_reads(node: Node, var: tuple[str, str], links: set[str],
             _, key, op, value, line = child
             text = f"{key} {op} {value}"
             if op != "?=" and var in _reads_in(key, scoped):
-                out.append(Read(line, text, op == "="))
+                out.append(Read(
+                    line, text, op == "=" and bool(_NUMBER_RE.fullmatch(value or ""))))
             if var in _reads_in(value, scoped):
                 out.append(Read(line, text, False))
         else:
             sub = child[1]
             if sub.op != "?=" and var in _reads_in(sub.key, scoped):
                 out.append(Read(sub.line, f"{sub.key} {sub.op} {{ … }}", False))
-            if var in _direct_guards(sub) or var in _limit_guards(sub):
+            regards = var in _direct_guards(sub) and (sub.key or "").upper() != "OR"
+            if regards or var in _limit_guards(sub):
                 continue  # guarded again further in; judged there
             _collect_reads(
                 sub, var, links,
@@ -298,15 +330,18 @@ def _collect_reads(node: Node, var: tuple[str, str], links: set[str],
             )
 
 
-def _guarded_from_outside(node: Node, var: tuple[str, str]) -> bool:
+def _guarded_from_outside(node: Node, var: tuple[str, str], links: set[str]) -> bool:
     """True when an enclosing `trigger_if`-like block's limit guards `var` and
-    `node` sits in that block's body, not in the limit itself."""
-    below: Node | None = node
+    `node` sits in that block's body, not in the limit itself. For a `var:`,
+    the search stops at a scope change: a limit above it tested another
+    object's variable."""
+    below = node
     cur = node.parent
     while cur is not None:
-        if (below is not None and below.key != "limit"
-                and var in _limit_guards(cur)):
+        if below.key != "limit" and var in _limit_guards(cur):
             return True
+        if var[0] == "var" and _is_scope_change(cur.key, links):
+            return False
         below, cur = cur, cur.parent
     return False
 
@@ -326,7 +361,7 @@ def scan_text(text: str, rel_path: str, links: set[str] | None = None) -> list[F
             for var, guard_line in _direct_guards(node).items():
                 reads: list[Read] = []
                 _collect_reads(node, var, links, True, reads)
-                if not reads or _guarded_from_outside(node, var):
+                if not reads or _guarded_from_outside(node, var, links):
                     continue
                 guard_key = next(k for k, p in GUARD_KEYS.items() if p == var[0])
                 flags.append(Flag(
@@ -403,10 +438,12 @@ def render_report(result: AuditResult) -> str:
         "set (`docs/guides/scripting_best_practices.md` § \"Write `NOR` or",
         "`NAND`, Never a Multi-Child `NOT`\").",
         "",
-        "Fix: for an equality, `var:X ?= N` with no guard (false when X is",
-        "unset). Otherwise `trigger_if = { limit = { has_variable = X }",
-        "NOT = { var:X > 0 } }`, which passes when X is unset. Both mean the",
-        "same under every reading of the engine.",
+        "Fix: move the guard into a limit and keep the rest of the block inside",
+        "the negation, `trigger_if = { limit = { has_variable = X }",
+        "NOT = { var:X > 0 } }`, which passes when X is unset. Where every read",
+        "is an equality with a number, `var:X ?= N` with no guard also does",
+        "(false when X is unset; unverified with a `var:` or a `flag:` on the",
+        "right). Both mean the same under every reading of the engine.",
         "",
         "Suppress a block that is deliberately left with a trailing comment on",
         "its opening line:",

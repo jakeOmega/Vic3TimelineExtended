@@ -1332,7 +1332,9 @@ def _unset_or_not(variable, comparison):
 def _not_committed(com):
     """The group whose commitment token is `com` has not committed to the bill's current revision:
     either token is unset, or it is not 1 for this revision. Guards as in _unset_or_not, which
-    keeps every read of a view behind its own has_variable (test_tax_code_state)."""
+    keeps every read of a view behind its own has_variable (test_tax_code_state); the two
+    variables are compared with a plain =, since ?= with a var: on the right is unverified.
+    te_tax_can_accept_offer (te_tax_triggers.txt) writes the same test."""
     return (f"trigger_if = {{ limit = {{ has_variable = {com} has_variable = {com}_rev }} "
             f"NAND = {{ var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }}")
 

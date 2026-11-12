@@ -34,7 +34,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `modifier_visibility_audit` | A modifier value too small to show at its type's `decimals = N`, so the tooltip prints 0. | reload |
 | `change_variable_clamp_audit` | A `min =` / `max =` inside `change_variable`, where which way it clamps is a guess. | CI, reload |
 | `building_scope_variable_audit` | A variable set or read in building scope. Buildings hold no variables (#519). | CI, reload |
-| `variable_guard_audit` | A `has_variable = X` guard (or the global or local form) as a direct child of a `NOT`, `NAND` or `NOR` that also reads `var:X` bare. A multi-child `NOT` reads every child, so the guard protects nothing and an unset X logs `Failed to fetch variable`; read as NOR the block is also wrong when X is set. Read an equality as `var:X ?= N`; put anything else in `trigger_if = { limit = { has_variable = X } NOT = { … } }`. | CI, reload |
+| `variable_guard_audit` | A `has_variable = X` guard (or the global or local form) as a direct child of a `NOT`, `NAND` or `NOR` that also reads `var:X` bare. A multi-child `NOT` reads every child, so the guard protects nothing and an unset X logs `Failed to fetch variable`; read as NOR the block is also wrong when X is set. Move the guard into a limit and keep the rest of the block inside the negation, `trigger_if = { limit = { has_variable = X } NOT = { … } }`; an equality with a number can instead be read as `var:X ?= N`. | CI, reload |
 | `container_timed_variable_audit` | A timed variable set on a script container, where it never expires. | CI, reload |
 | `je_immediate_reset_audit` | An unguarded write in a journal entry's `immediate`. A revolution's winner re-runs `immediate`, so the write resets state the nation should keep. | CI, reload |
 | `orphaned_event_audit` | An event nothing fires (#147). | CI, reload |
@@ -132,7 +132,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `modifier_visibility_audit` | reload only | `docs/engine/modifier_visibility_report.md` |  |
 | `change_variable_clamp_audit` | `python3 change_variable_clamp_audit.py --strict` | `docs/engine/change_variable_clamp_report.md` |  |
 | `building_scope_variable_audit` | `python3 building_scope_variable_audit.py --strict` | `docs/engine/building_scope_variable_report.md` |  |
-| `variable_guard_audit` | `python3 variable_guard_audit.py --strict` | `docs/engine/variable_guard_report.md` | A guard beside its read in an `AND` or at a trigger's top level is not flagged. |
+| `variable_guard_audit` | `python3 variable_guard_audit.py --strict` | `docs/engine/variable_guard_report.md` | A guard beside its read in an `AND` or at a trigger's top level is not flagged. Walks all of `common/` and `events/`, so it takes several seconds. |
 | `container_timed_variable_audit` | `python3 container_timed_variable_audit.py --strict` | `docs/engine/container_timed_variable_report.md` |  |
 | `je_immediate_reset_audit` | `python3 je_immediate_reset_audit.py --strict` | `docs/engine/je_immediate_reset_report.md` |  |
 | `orphaned_event_audit` | `python3 orphaned_event_audit.py --strict` | `docs/engine/orphaned_event_report.md` |  |

@@ -472,12 +472,23 @@ class AcceptTest(unittest.TestCase):
         self.assertIn("var:te_tax_off_$IG$_rev = var:te_tax_bl_rev", trigger)
         self.assertIn("custom_tooltip = { text = te_tax_tt_offer_not_marginal ig:ig_$IG$ ?= { ig_counts_as_marginal = no } }",
                       trigger)
-        self.assertIn("NAND = { var:te_tax_com_$IG$ ?= 1 var:te_tax_com_$IG$_rev ?= var:te_tax_bl_rev }", trigger)
+        # Not committed: the guards are a trigger_if's limit, never siblings of the reads in the
+        # NAND (variable_guard_audit), and the two variables are compared with a plain =, since
+        # ?= with a var: on the right is unverified (scripting_best_practices.md, "Triggered
+        # Option Names").
+        not_committed = ("custom_tooltip = { text = te_tax_tt_offer_not_committed trigger_if = { "
+                         "limit = { has_variable = te_tax_com_$IG$ has_variable = te_tax_com_$IG$_rev } "
+                         "NAND = { var:te_tax_com_$IG$ = 1 var:te_tax_com_$IG$_rev = var:te_tax_bl_rev } } }")
+        self.assertIn(not_committed, trigger)
+        self.assertNotIn("?= var:", trigger)
         self.assertIn("custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }",
                       trigger)
         self.assertIn("trigger_else = { custom_tooltip = { text = te_tax_tt_bill_open always = no } }", trigger)
-        # One trigger_if (the open bill): no line can pass for want of an offer.
-        self.assertEqual(trigger.count("trigger_if"), 1)
+        # Two trigger_ifs: the open bill, and the commitment test above, which passes for want of
+        # a commitment (that is its meaning). No line can pass for want of an offer: every line
+        # that reads the offer sits outside the second one.
+        self.assertEqual(trigger.count("trigger_if"), 2)
+        self.assertEqual(trigger.replace(not_committed, "").count("trigger_if"), 1)
         feasible = norm(block(read(GEN_TRIGGERS), "te_tax_gen_offer_feasible"))
         self.assertTrue(feasible.startswith("has_variable = te_tax_off_$IG$_kind has_variable = te_tax_off_$IG$_arg "
                                             "var:te_tax_off_$IG$_kind > 0 trigger_if = {"))

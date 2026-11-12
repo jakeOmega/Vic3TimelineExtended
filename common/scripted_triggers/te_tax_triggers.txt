@@ -1302,7 +1302,9 @@ te_tax_can_obl_renegotiate = {
 # the offer can still be carried out (te_tax_gen_offer_feasible: the bill still
 # raises the tax a cut softens or adds the staple, relief has a band to add, or
 # the promise is still feasible and could be recorded; false without an offer).
-# No line sits inside a trigger_if that could pass for want of an offer.
+# No line sits inside a trigger_if that could pass for want of an offer: the
+# only other trigger_if is the commitment's, which passes for want of a
+# commitment.
 te_tax_can_accept_offer = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
 	trigger_if = {
@@ -1320,11 +1322,20 @@ te_tax_can_accept_offer = {
 		}
 		custom_tooltip = {
 			text = te_tax_tt_offer_not_committed
-			# Read with ?=, false for an unset token: a group with no
-			# commitment tokens has not committed (variable_guard_audit).
-			NAND = {
-				var:te_tax_com_$IG$ ?= 1
-				var:te_tax_com_$IG$_rev ?= var:te_tax_bl_rev
+			# A group with no commitment tokens has not committed, so this
+			# trigger_if passes for want of a commitment, as it should. The
+			# guards are its limit, never siblings of the reads in the NAND
+			# (variable_guard_audit), and the two variables are compared
+			# with a plain =: ?= with a var: on the right is unverified.
+			trigger_if = {
+				limit = {
+					has_variable = te_tax_com_$IG$
+					has_variable = te_tax_com_$IG$_rev
+				}
+				NAND = {
+					var:te_tax_com_$IG$ = 1
+					var:te_tax_com_$IG$_rev = var:te_tax_bl_rev
+				}
 			}
 		}
 		custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }
