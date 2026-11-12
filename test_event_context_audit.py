@@ -403,7 +403,8 @@ class EventContextAuditTests(unittest.TestCase):
         mod = self._mod({"events/flav.txt": _event("flav.1", "\toption = { pick = { ACT = go WHO = root } }\n"),
                          "common/scripted_effects/h.txt": eff})
         g = eca.build_graph(mod)
-        self.assertEqual(sorted(g.effect_calls), ["act_$ACT$", "pick"])
+        # `$WHO$ = { }` is main's bare key (#1652), next to the dispatcher's.
+        self.assertEqual(sorted(g.effect_calls), ["$WHO$", "act_$ACT$", "pick"])
         [call] = g.effect_calls["act_$ACT$"]
         self.assertEqual((call[0], call[1], call[5]), ("common/scripted_effects/h.txt", 5, "pick"))
 

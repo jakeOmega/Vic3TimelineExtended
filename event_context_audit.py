@@ -567,10 +567,15 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                     for s in found:
                         s.delayed = delayed
                     sites.extend(found)
-            elif (t in effect_names or (kind == "scripted_effect" and _is_dispatch_name(t))) and stack:
-                # A dispatcher call (`helper_$KIND$ = yes`) is kept under its
-                # name as written, which is no effect's name, so nothing here
-                # reads it; `script_call_graph` resolves it at each caller.
+            elif (t in effect_names or (kind == "scripted_effect"
+                                        and (_PARAM_RE.match(t) or _is_dispatch_name(t)))) and stack:
+                # `$EFFECT$ = yes` inside a helper runs whatever effect a caller
+                # names, and a dispatcher call (`helper_$KIND$ = yes`) the effect
+                # its caller's value picks. Each is kept under its name as
+                # written (`$EFFECT$`, `helper_$KIND$`), which is no entity's
+                # name, so the audit's own lookups never see it; a `$WHO$ = { }`
+                # scope block lands there too. /on-action-callers and
+                # `script_call_graph` resolve them at each caller.
                 entity, pk, sw, conds = context()
                 # `helper = { WHO = scope:x EVENT = ns.7 }` — keep simple
                 # depth-1 arguments for `$PARAM$` substitution.
@@ -801,9 +806,12 @@ def _collect_def_files(mod_path: str, sub: str) -> dict[str, list[str]]:
 
 
 def build_graph(mod_path: str, include_console: bool = False) -> Graph:
-    """`include_console` also reads the `te_debug_*` console harnesses, which
-    this audit leaves out (nothing in them reaches a player unasked) and
-    `trigger_event_cycle_audit` needs (a loop there still crashes the game)."""
+    """The dispatch graph of the mod at `mod_path`. The console-only harness
+    files (`te_debug_*`) are left out, since nothing in them reaches a player,
+    unless `include_console`: /on-action-callers asks what an on-action runs,
+    and a harness can hook a live pulse (te_debug_tax_on_actions.txt), and
+    `trigger_event_cycle_audit` reads them because a loop there still crashes
+    the game."""
     events = load_events(mod_path)
     effect_file = _collect_defs(mod_path, "scripted_effects")
     on_action_files = _collect_def_files(mod_path, "on_actions")

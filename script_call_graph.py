@@ -272,8 +272,12 @@ def _dispatch_edges(g) -> list[Edge]:
                 elif ckind == EFFECT and _LITERAL_RE.match(_PARAM_RE.sub("", sub) or "_"):
                     hit = resolve(sub, centity, crel, cln, cpk, (holder,) + through, depth + 1) or hit
         # No caller names an effect (none calls it, or none passes a name):
-        # every effect the pattern fits, from where the name is written.
-        return hit or by_pattern(template, holder, rel, ln, path, through)
+        # every effect the pattern fits, from where the name is written. Not
+        # for a bare `$EFFECT$`, which fits every name; its key also holds the
+        # `$WHO$ = { … }` scope blocks, so only a caller's value makes it a call.
+        if hit or not _PARAM_RE.sub("", template):
+            return hit
+        return by_pattern(template, holder, rel, ln, path, through)
 
     for key, calls in g.effect_calls.items():
         if "$" not in key:
