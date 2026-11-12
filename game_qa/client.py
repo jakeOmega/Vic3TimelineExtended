@@ -77,9 +77,10 @@ ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fi
 #   (30 + 60 + 95 s), the restore itself and the closes (about 35 s): about 300 s, under STOP_TIMEOUT_S.
 #   start: the fixture's run (FIXTURE_LIMIT_S 900, its restore's retries 30 + 60 s, and its snapshot, launch,
 #   restore and rename, about 160 s: 1150 s), the session's snapshot and launch (about 120 s), the window
-#   (WINDOW_WAIT_S 300), the console's first answer (CONSOLE_READY_S 180), the debugger (about 30 s), and the
-#   stop a failure runs (300 s): about 2080 s, under START_TIMEOUT_S.
-START_TIMEOUT_S = 2400.0
+#   (WINDOW_WAIT_S 300), the console's first answer, retried while a late save loads (LOAD_WAIT_S 600, the last
+#   try ending at its deadline, plus a probe round), the debugger (about 30 s), and the stop a failure runs (300 s):
+#   about 2500 s, under START_TIMEOUT_S. A `--save` start makes no fixture and takes 1150 s less.
+START_TIMEOUT_S = 2800.0
 STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
 MIN_FREE_BYTES = 2 * 1024**3            # what `snapshot` wants free under the backup root
