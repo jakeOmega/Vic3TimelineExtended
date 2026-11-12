@@ -66,6 +66,7 @@ un_court.2 = {
 			desc = un_court.2.d
 		}
 	}
+	# REVIEWED 2026-11-12 (unchosen_self_action): "our agent" is our counsel before the court, a standing post, not an operation; the audit reads the flavor's triggered_desc keys as desc
 	flavor = {
 		first_valid = {
 			triggered_desc = {
