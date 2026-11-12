@@ -345,3 +345,23 @@ if it never fires.
    guarantor has answered, with the honored text and the sum when it pays and the refused text when it does not.
 5. **The log.** After a game in which the above ran, neither `error.log` nor `debug.log` has a line naming
    `te_monetary_arrangement_events.txt` or `te_monetary_union_events.txt`.
+
+## Five timed monetary modifiers survive a revolution (2026-11-12, #470)
+
+A revolution's winner inherits no modifier, so a rebel win used to clear the Break the Peg premium
+(`te_mon_peg_broken_premium`), Devalue's inflation pressure (`te_mon_peg_devaluation_pressure`), a currency reform's
+premium (`te_mon_currency_reform_premium`), the bloc-currency exit premium (`te_mon_union_exit_premium`) and a holdout's
+`te_mon_union_independence`. Each now has a `te_mon_*_months` counter, set where the modifier is added and ticked down by
+`te_mon_cw_tick_penalty_clocks` each month, and `te_monetary_inherit_central_bank` re-adds it from that counter. The two
+decaying ones come back with `multiplier` = the share of their term left (`te_mon_work2`), as the civil-rights outcome
+modifiers do.
+
+1. **Each comes back.** In a game where a country holding one of these loses a revolution to its rebels (the console's
+   `te_debug_monetary` options or a save with a revolution about to end), compare a save before and just after the win
+   with `save_country_probe.py --diff <before> <after> --tag <TAG> --var '^te_mon_.*_months$'`. The winner holds each
+   counter at the loser's value, and the modifier is on the winner with roughly that many months left (within three
+   months above six). If it is missing: `te_mon_cw_restore_timed` / `_decaying` in `te_monetary_civil_war_effects.txt`.
+2. **A decaying one resumes where it was.** A devaluation a year old (12 of 24 months left) or an exit five years old:
+   the winner's modifier tooltip shows about half the full value (+1.5pp inflation pressure; about +1.5pp premium), not
+   the full value. Full value: `multiplier` from a variable does not reach a decaying modifier; fall back to a ladder of
+   literal multipliers, as `cr_rebuild_outcome_modifier` has. Near 0: the multiplier is read as 0; same fallback.

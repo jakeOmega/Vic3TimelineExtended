@@ -245,6 +245,83 @@ class ClassificationTests(unittest.TestCase):
                     self.assertLessEqual(abs(added(remaining) - remaining), 3)
 
 
+# The five timed modifiers that had no clock until #470: modifier -> (counter,
+# its term in months, decaying?).
+CLOCKED = {
+    "te_mon_peg_broken_premium": ("te_mon_peg_broken_months", 60, False),
+    "te_mon_peg_devaluation_pressure": ("te_mon_peg_devaluation_months", 24, True),
+    "te_mon_currency_reform_premium": ("te_mon_currency_reform_months", 120, False),
+    "te_mon_union_exit_premium": ("te_mon_union_exit_months", 120, True),
+    "te_mon_union_independence": ("te_mon_union_independence_months", 120, False),
+}
+
+
+class TimedClockTests(unittest.TestCase):
+    """#470: each timed modifier a rebel win used to clear has a month counter."""
+
+    def _adds(self):
+        """(file, the 40 lines after each real add of a clocked modifier), show_as_tooltip copies left out."""
+        found = []
+        for parts in MONETARY_FILES:
+            text = _read(_path(*parts))
+            for m in re.finditer(r"add_modifier\s*=\s*\{\s*name\s*=\s*(\w+)([^{}]*)\}", text):
+                if m.group(1) not in CLOCKED:
+                    continue
+                before = text[max(0, m.start() - 200):m.start()]
+                if re.search(r"show_as_tooltip\s*=\s*\{[^}]*$", before):
+                    continue
+                found.append((parts[-1], m.group(1), m.group(2), text[m.end():m.end() + 400]))
+        return found
+
+    def test_every_add_sets_its_counter_to_the_full_term(self):
+        adds = self._adds()
+        self.assertEqual(sorted({name for _f, name, _b, _a in adds}), sorted(CLOCKED))
+        for file, name, body, after in adds:
+            counter, months, decaying = CLOCKED[name]
+            with self.subTest(file=file, modifier=name):
+                days = int(re.search(r"days\s*=\s*(\d+)", body).group(1))
+                self.assertAlmostEqual(days / 30.4, months, delta=1)
+                self.assertEqual(bool(re.search(r"is_decaying\s*=\s*yes", body)), decaying)
+                self.assertRegex(
+                    after, r"set_variable\s*=\s*\{\s*name\s*=\s*" + counter + r"\s+value\s*=\s*" + str(months) + r"\s*\}")
+
+    def test_every_counter_is_copied_ticked_and_restored(self):
+        take, _take_scope, body = _copied()
+        effects = _read(EFFECTS)
+        tick = _block(effects, "te_mon_cw_tick_penalty_clocks")
+        for name, (counter, months, decaying) in CLOCKED.items():
+            with self.subTest(modifier=name):
+                self.assertIn(counter, take)
+                self.assertRegex(tick, r"te_mon_cw_tick\s*=\s*\{\s*VAR\s*=\s*" + counter + r"\s*\}")
+                if decaying:
+                    self.assertRegex(
+                        body, r"te_mon_cw_restore_decaying\s*=\s*\{\s*NAME\s*=\s*" + name
+                        + r"\s+VAR\s*=\s*" + counter + r"\s+TERM\s*=\s*" + str(months) + r"\s*\}")
+                else:
+                    self.assertRegex(
+                        body, r"te_mon_cw_restore_timed\s*=\s*\{\s*NAME\s*=\s*" + name
+                        + r"\s+VAR\s*=\s*" + counter + r"\s*\}")
+        # The copy comes before the re-adds that read it.
+        self.assertLess(body.index("VAR = te_mon_union_independence_months }"),
+                        body.index("te_mon_cw_restore_timed"))
+
+    def test_the_clocks_tick_every_month_outside_the_update(self):
+        monthly = _block(_read(ON_ACTIONS), "te_monetary_monthly_on_action")
+        self.assertRegex(monthly, r"te_monetary_monthly_update\s*=\s*yes\s*te_mon_cw_tick_penalty_clocks\s*=\s*yes")
+        self.assertRegex(
+            _block(_read(EFFECTS), "te_mon_cw_tick"),
+            r"has_variable\s*=\s*\$VAR\$\s*var:\$VAR\$\s*>\s*0\s*\}\s*"
+            r"change_variable\s*=\s*\{\s*name\s*=\s*\$VAR\$\s+subtract\s*=\s*1\s*\}")
+
+    def test_a_decaying_one_resumes_at_the_share_left(self):
+        body = _block(_read(EFFECTS), "te_mon_cw_restore_decaying")
+        self.assertRegex(body, r"name\s*=\s*te_mon_work2\s+value\s*=\s*\{\s*value\s*=\s*var:\$VAR\$\s+divide\s*=\s*\$TERM\$")
+        self.assertIn("DECAYING = yes MULT = var:te_mon_work2", body)
+        self.assertIn("DECAYING = no MULT = 1", _block(_read(EFFECTS), "te_mon_cw_restore_timed"))
+        ladder = _block(_read(EFFECTS), "te_mon_cw_add_timed")
+        self.assertEqual(ladder.count("is_decaying = $DECAYING$ multiplier = $MULT$"), ladder.count("add_modifier"))
+
+
 class WiringTests(unittest.TestCase):
     def test_the_copy_runs_only_behind_the_rebel_win_guard(self):
         self.assertRegex(
