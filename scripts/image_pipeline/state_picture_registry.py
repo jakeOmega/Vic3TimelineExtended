@@ -1467,6 +1467,38 @@ VARIANT_RUNG = {
         "kilometre-high garden towers behind",
         "a dead humanoid robot slumped beside a grounded pod vehicle"),
 }
+# On the last two rungs the time leads the picture, straight after the verdict: what stands over
+# the street, then what stands in it. With the time left to the end of the prompt, as on rungs 1
+# to 3, the first renders of the 2030s and of the far future were the 1950s street again (a poor
+# lane, a fountain square, a wreck at the kerb) with a different car. (what looms; what is in the
+# street), by variant; the small town is only rewritten on rung 5. "A wall of ... towers that rise
+# close behind the roofs" is the wording that draws them; "in the shadow of kilometre-high
+# arcology towers that fill the sky" drew none.
+VARIANT_LEAD = {
+    4: {
+        "poor": ("under a wall of slender supertall glass towers that rise close behind the roofs",
+                 "worn electric scooters and a patched old electric bus, old solar panels and "
+                 "satellite dishes on the roofs"),
+        "affluent": ("below slender supertall glass towers with sky gardens that rise close behind the roofs",
+                     "sleek silent electric limousines and driverless shuttles"),
+        "rundown": ("under dull, stained supertall glass towers that rise close behind the roofs",
+                    "a stripped electric car on blocks, dead solar panels hanging from the roofs"),
+    },
+    5: {
+        "town": ("a transparent vacuum-train tube on slender pylons passing over the roofs, two garden "
+                 "towers of twenty storeys rising behind, a flying craft overhead",
+                 "small pod vehicles and humanoid robots"),
+        "poor": ("under a wall of colossal white futuristic towers joined by sky bridges that rise close "
+                 "behind the roofs, flying craft between them",
+                 "battered pod vehicles and patched-up humanoid robots"),
+        "affluent": ("below a wall of colossal white futuristic garden towers joined by sky bridges that "
+                     "rise close behind the roofs",
+                     "gleaming private flying craft landing, attendant humanoid robots"),
+        "rundown": ("under a wall of colossal stained white futuristic towers that rise close behind the "
+                    "roofs",
+                    "a dead humanoid robot slumped beside a grounded pod vehicle"),
+    },
+}
 VARIANT_SHOWS = {
     "town": "the largest city under 100,000 people",
     "metropolis": "the largest city over 1,000,000 people",
@@ -1484,6 +1516,24 @@ def variant_prompt(region: str, rung: int, variant: str) -> str:
     future = "far-future " if rung == 5 else ""
     a = "an" if (future or adj)[0] in "AEIOU" else "a"      # "an African city", "a far-future African city"
     end = "{landmark} hazy at the end of the street"
+    if variant in VARIANT_LEAD.get(rung, {}):
+        looms, street = VARIANT_LEAD[rung][variant]
+        if variant == "town":
+            return (f"A small {future}{adj} provincial town {{when}}, {looms}: a quiet main street of "
+                    f"{low}, {street}, {detail}, a few people, {{landmark}} at the end of the street, "
+                    f"{beyond}")
+        if variant == "poor":
+            return (f"A poor, shabby quarter of {a} {future}{adj} city {{when}}, {looms}: {street}, "
+                    f"{poor}, washing hung across a potholed unpaved lane, tangled overhead wires, "
+                    f"{detail}, street vendors with crates, people in worn clothes, {end}")
+        if variant == "affluent":
+            return (f"A wealthy, immaculate quarter of {a} {future}{adj} city {{when}}, {looms}: "
+                    f"{street}, {rich}, a spotless tree-lined boulevard, a fountain, terraces under "
+                    f"plain parasols, elegantly dressed people, {end}")
+        return (f"A neglected, decaying quarter of {a} {future}{adj} city in hard times {{when}}, "
+                f"{looms}: {street}, {plain} with peeling paint, boarded-up windows and shuttered "
+                f"ground floors, litter and overflowing bins, weeds in the cracked pavement, a queue "
+                f"of idle people, {end}")
     if variant == "town":
         return (f"A small {future}{adj} provincial town {{when}}: a quiet main street of {low}, {town}, "
                 f"{cars}, {detail}, a few people, {{landmark}} at the end of the street, {beyond}")
