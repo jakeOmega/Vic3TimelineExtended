@@ -191,12 +191,11 @@ class _Walk:
     The narrow side (`narrow` None) also records the spacing each te_*
     instance sits at (that of the nearest widget around it that holds two or
     more, since one that holds a single child draws no spacing), and the
-    composers it expands. The wide
-    side (`narrow` the narrow walk) holds its own wrappers and instances to
-    the rules in assert_wide_matches_narrow's docstring; inside a composer
-    the narrow layout places too (`shared`), which draws the same in both
-    frames, it only reads the sections, but for what the wide layout itself
-    fills that composer's blocks with."""
+    composers it expands. The wide side (`narrow` the narrow walk) holds its
+    own wrappers and instances to the rules in assert_wide_matches_narrow's
+    docstring. Inside a composer the narrow layout places too (`shared`),
+    which draws the same in both frames, it only reads the sections, but for
+    what the wide layout itself fills that composer's blocks with."""
 
     def __init__(self, test, where, text, composers, skip=(), narrow=None):
         self.test, self.where, self.text = test, where, text
