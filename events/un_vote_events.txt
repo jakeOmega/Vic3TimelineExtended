@@ -1656,6 +1656,12 @@ un_vote.2 = {
 				# a target that voted for its own sanctions carries none, and
 				# an enforcer with nothing to enforce could table no sanctions
 				# again until it paid credibility to lift nothing.
+				# The three months wait in the hidden un_events.43, which opens
+				# un_events.5 on the day if the regime still stands (#1596):
+				# queued directly, .5's trigger was false when queued (the
+				# enforcer modifier added here is not readable in this block, and
+				# the target's regime variable is set below), and a delayed event
+				# whose trigger is false when queued seems to be dropped.
 				if = {
 					limit = {
 						exists = scope:un_vote_target
@@ -1664,7 +1670,7 @@ un_vote.2 = {
 					add_modifier = { name = un_sanctions_enforcer_modifier }
 					hidden_effect = {
 						scope:un_vote_target = { save_scope_as = sanctioned_country }
-						trigger_event = { id = un_events.5 days = 90 }
+						trigger_event = { id = un_events.43 days = 90 }
 					}
 				}
 				# Apply sanctions to target
