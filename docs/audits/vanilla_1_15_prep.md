@@ -864,7 +864,7 @@ Candidates, best first:
 ### 7.5 Map, economy and names
 
 - **Latitude triggers** `in_tropics`, `in_north_hemisphere` and `in_south_hemisphere` (this corrects § 4.11, which found no latitude lists).
-  - The space elevator's `possible` lists 92 state regions by hand (`building_space_elevator_construction_site`, `extra_buildings.txt:207-299`). `in_tropics = yes` replaces it. The band is wider (it adds Cuba, Hawaii and the Sahel), which suits the soft-caps default.
+  - The space elevator's `possible` lists 92 state regions by hand (`building_space_elevator_construction_site`, `extra_buildings.txt:207-299`). `in_tropics = yes` replaces it. The band is wider (it adds Cuba, Hawaii and the Sahel), which suits the soft-caps default. *Not kept*: #1672 made the swap, the band roughly doubled the sites (about 183), and the owner restored the list (2026-11-12).
   - `tropical_disease_spread_modifier` (`extra_modifiers.txt:1737`) applies to a whole country, Siberia included, and the water-shortage and disease events are weighted without regard to geography (`extra_on_actions.txt:1168-1175`, `:1227-1234`). Weight them by the share of tropical incorporated states instead.
   - The Antarctic station AI (`te_global_commons_un_decisions.txt:55-61`) uses seabed basin 5 as a stand-in for "has a southern coast". `in_south_hemisphere = yes`, `in_tropics = no` and `is_coastal = yes` test that directly.
 - **Cold, the one lever.** Nothing moves cold at runtime (§ 6), but `cold_effect` reads a state's current winter, so mod content can respond to it.

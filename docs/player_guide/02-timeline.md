@@ -669,7 +669,7 @@ specialists per level, and their effects scale with how fully they are staffed.
 
 | Megaproject | Technology | Levels | What it does |
 |---|---|---|---|
-| Space Elevator | Space Elevator | 20 | Produces a million Launch Capacity per level and adds space race progress. Can only be built in states between the tropics of Cancer and Capricorn. |
+| Space Elevator | Space Elevator | 20 | Produces a million Launch Capacity per level and adds space race progress. Can only be built in states near the equator: most of tropical Africa, northern South America and Panama, southern India and Ceylon, Southeast Asia, the Pacific islands and a few others. |
 | Orbital Solar Collector | Space-Based Solar Power | 10 | Each level opens three slots for Solar Power Receivers, ordinary buildings you build in any state; each receiver level produces a million electricity. |
 | Orbital Battlestation | Orbital Weapon Platforms | 5 | Raises unit offense, defense, morale recovery and morale damage by 5% per level and improves defense against nuclear strikes. |
 | Antimatter Containment Facility | Antimatter Production | 10 | Each level opens five slots, shared between Antimatter Engines (Launch Capacity, faster army and fleet movement, space race progress) and Antimatter Warhead Plants (nuclear strike success, unit offense). Each level of either uses one slot. |
