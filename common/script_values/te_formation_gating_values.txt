@@ -1,0 +1,31 @@
+﻿# ============================================================================
+# FORMATION GATES — counts read by common/scripted_triggers/formable_gating_triggers.txt
+# ============================================================================
+# The United Nations of Earth's supermajority (une_formation_supermajority):
+# at most one great power other than the candidate stands outside its bloc,
+# written as "at least (other great powers - 1) inside it", so the trigger can
+# list the great powers (list_scopes, vanilla 1.15). A trigger can't count, so
+# the threshold is a script value. Neither reads a scope: the trigger picks
+# the one that fits the candidate's own rank.
+
+# Every great power in the world.
+une_great_power_count = {
+	value = 0
+	every_country = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 1
+	}
+}
+
+# The candidate is a great power: the others are the count less one, and all
+# but one of them must be inside.
+une_supermajority_needed_gp_candidate = {
+	value = une_great_power_count
+	subtract = 2
+}
+
+# The candidate is not a great power: every great power is an "other".
+une_supermajority_needed_other_candidate = {
+	value = une_great_power_count
+	subtract = 1
+}

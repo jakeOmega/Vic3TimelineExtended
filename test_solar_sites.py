@@ -282,11 +282,6 @@ class RecordTest(unittest.TestCase):
                 with self.subTest(cause=cause, side=side):
                     self.assertRegex(self.shared, rf"(?m)^sr_site_{side}_{cause} = \{{")
 
-    def test_the_migration_reads_every_record(self):
-        body = _block(self.effects, "sr_sites_migrate_country")
-        held = set(re.findall(r"has_variable = (\w+)_held", body))
-        self.assertEqual(held, {m for m, *_ in gss.choices()})
-
     def test_the_revolution_repoints_every_world(self):
         body = _block(self.effects, "sr_sites_repoint_loser")
         for site in gss.SITES:
@@ -437,7 +432,9 @@ class LunarMoonByChoiceTest(unittest.TestCase):
     def test_the_old_save_migration_is_gone(self):
         names = ("sr_lunar_migrate", "sr_lunar_initialized", "sr_lunar_carry", "sr_lunar_note",
                  "sr_lunar_fire_notice", "sr_lunar_notice", "sr_launch_banked_progress", "sr_holds_lunar_world",
-                 "sr_lunar_world_free_any", "space_race_events.109", "te_debug_space_race.8")
+                 "sr_lunar_world_free_any", "space_race_events.109", "te_debug_space_race.8",
+                 # the record's old-save migration and its grace (#1429)
+                 "sr_sites_migrate_country", "sr_sites_initialized", "sr_sites_grace")
         for top in ("common", "events"):
             for path in glob.glob(os.path.join(REPO, top, "**", "*.txt"), recursive=True):
                 text = _strip(_raw(path))

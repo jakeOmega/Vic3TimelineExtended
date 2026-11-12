@@ -25,7 +25,7 @@ Outputs:
   stage check (``sr_launch_month`` calls the draw), and per world the sync,
   mirror, release, transfer and monthly step; the choice dispatcher
   (``sr_site_choose_<modifier>``, an option of the founding and discovery
-  events); the migration, the revolution repoint, the panel snapshot, Cede
+  events); the revolution repoint, the panel snapshot, Cede
   Colony's apply and the console's helpers.
 - ``common/journal_entries/sr_sites_generated.txt``: the solar colonization
   entry's declarations of the 80 specializations, the 40 discovery outcomes and
@@ -866,8 +866,7 @@ def _monthly(site: Site) -> list[str]:
         f"\t\t\tlimit = {{ exists = scope:sr_site_to_{k} }}",
         f"\t\t\tsr_site_transfer_{k} = {{ CAUSE = quiet }}",
         "\t\t}",
-        "\t\telse_if = {",
-        "\t\t\tlimit = { NOT = { has_global_variable = sr_sites_grace } }",
+        "\t\telse = {",
         f"\t\t\tsr_site_release_{k} = yes",
         "\t\t}",
         "\t}",
@@ -960,32 +959,6 @@ def render_monthly_list() -> list[str]:
     out = ["# ===== The global monthly step (sr_sites_global_monthly) =====",
            "sr_sites_monthly = {"]
     out += [f"\tsr_site_monthly_{s.key} = yes" for s in SITES]
-    out.append("}")
-    return out
-
-
-def render_migration() -> list[str]:
-    out = ["# ===== A save from before the record (sr_sites_global_monthly, once) =====",
-           "# THIS is a country carrying colony records. Each _held writes its choice and,",
-           "# for a specialization, the holder; a pending discovery becomes global.",
-           "sr_sites_migrate_country = {"]
-    for modifier, site, kind, option in choices():
-        k = site.key
-        out.append("\tif = {")
-        out.append(f"\t\tlimit = {{ has_variable = {modifier}_held }}")
-        if kind == "spec":
-            out.append(f"\t\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_holder_{k} }} }} "
-                       f"set_global_variable = {{ name = sr_site_holder_{k} value = this }} }}")
-            out.append(f"\t\tset_global_variable = {{ name = sr_site_spec_{k} value = {option} }}")
-        else:
-            out.append(f"\t\tset_global_variable = {{ name = sr_site_disc_{kind} value = {option} }}")
-        out.append("\t}")
-    for site in SITES:
-        for d in site.discoveries:
-            out += ["\tif = {",
-                    f"\t\tlimit = {{ has_variable = sr_discovery_{d}_pending NOT = {{ has_variable = sr_discovery_{d}_done }} }}",
-                    f"\t\tset_global_variable = {{ name = sr_site_disc_{d}_pending value = yes }}",
-                    "\t}"]
     out.append("}")
     return out
 
@@ -1467,7 +1440,7 @@ def render_effects() -> str:
     for site in SITES:
         parts += ["", f"# --- {site.name} ({site.key}), stage {site.stage} ---"]
         parts += _sync(site) + _mirror_on(site) + _unmirror(site) + _release(site) + _transfer(site) + _monthly(site)
-    parts += ["", *render_dispatcher(), "", *render_monthly_list(), "", *render_migration(), "",
+    parts += ["", *render_dispatcher(), "", *render_monthly_list(), "",
               *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
               "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects(),
               "", *render_dismantle_effects(), "", *render_autonomy_effects(), "", *render_overview_effects()]
@@ -2026,13 +1999,6 @@ def render_facility_values() -> list[str]:
         out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = sr_site_{f.key}_staffed_{s.key} }}" for s in SITES
                 if f.key in generic_types(s)]
         out.append("}")
-        if f.modifier:
-            # The old multiplier, read through owner from the entry's scope. Nothing
-            # calls it now; a save from before the declarations may still name it on
-            # the copy it added, until the old-save strip removes that copy.
-            out += ["# PENDING REMOVAL with the \"1.15 scaling modifiers\" block of "
-                    "legacy_je_modifier_cleanup_effect (after 2026-12-31)",
-                    f"sr_mod_units_{f.key}_entry = {{", "\tvalue = 0", f"\towner = {{ add = sr_mod_units_{f.key} }}", "}"]
     out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a slot module",
             "# (code 3 on) the world's sr_mod_generic_cost_<key>, a specialization level the base.",
             "sr_mq_head_cost = {",

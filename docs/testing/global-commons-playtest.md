@@ -447,7 +447,7 @@ types, and every trigger, docket item and vote follows a pattern already seen in
       Global Commons rule only); taking it shows +2% research speed and +25 innovation cap, and an
       upkeep of 0.1% of GDP a year, at least 1,000 a week, under Space Race in the Breakdown.
 - [ ] The AI opens stations: great and major powers with the surplus, smaller powers only with a
-      Southern coastline or as treaty parties, none in default. About thirty countries is the
+      coast south of the tropics or as treaty parties, none in default. About thirty countries is the
       target (the real number); far more means the weights in `te_decision_open_antarctic_station`
       need lowering.
 - [ ] The first station puts the Antarctic Treaty on the docket (the chamber's last item: "the first

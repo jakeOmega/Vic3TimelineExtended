@@ -52,13 +52,17 @@ te_decision_open_antarctic_station = {
 				limit = { country_rank >= rank_value:major_power }
 				add = 30
 			}
-			# A Southern coastline (the seabed basins' map, where it runs): the
-			# only reason a smaller power runs a station.
+			# A coast south of the tropics (vanilla 1.15's latitude triggers,
+			# the state region's centre point): the only reason a smaller power
+			# runs a station. Wider than the Southern seabed basin it replaced
+			# (Chile, Argentina, Uruguay, southern Brazil, New Zealand and the
+			# rest of Australia join), and it needs no basin map to have run.
 			if = {
 				limit = {
 					any_scope_state = {
-						has_variable = te_seabed_basin
-						var:te_seabed_basin = 5
+						in_south_hemisphere = yes
+						in_tropics = no
+						is_coastal = yes
 					}
 				}
 				add = 20

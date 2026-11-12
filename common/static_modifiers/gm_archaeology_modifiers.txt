@@ -14,16 +14,6 @@ gm_arch_diversion = {
 	country_weekly_innovation_add = -1
 }
 
-# RETIRED 2026-10-16: the digs' weekly treasury cost. Digs now cost innovation
-# alone (owner, 2026-10-16). Nothing adds it, and no save that carried it
-# loads in 1.15 (#1407), so nothing removes it either; the stub keeps its
-# Budget Breakdown row (Archaeological Digs), which stays empty.
-gm_arch_expense = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_expenses_add = 1
-	country_te_budget_expense_archaeology_add = 1
-}
-
 # A dig abroad that left its finds with the host: under an Excavation Permit,
 # or a Concession at a rock-cut site, which has nothing to carry off (rework
 # spec § 3). The sponsor's scholars publish, and its name is on the site. Ten
