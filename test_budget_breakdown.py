@@ -466,6 +466,19 @@ class BudgetWiringTests(unittest.TestCase):
         monetary = {key for key, block in modifiers.items() if "country_expenses_add" in block or "country_tax_income_add" in block}
         self.assertEqual(monetary - assigned, {"cheaty"})
 
+    def test_an_event_cost_twin_is_charged_beside_its_program(self):
+        # A `<program>_cost` modifier holds only the unit expense, so it charges
+        # nothing unless script adds it with a multiplier, for as long as the
+        # program runs. "Buy power from abroad" (repeatable_events.80.c) added
+        # its program alone until #1616: free, and better than the blackouts
+        # on every line but authority.
+        events = (ROOT / "events/repeatable_events.txt").read_text(encoding="utf-8-sig")
+        for program, days in (("re_sbsp_reserves", "short_modifier_time"), ("re_sbsp_imports", "normal_modifier_time")):
+            with self.subTest(program=program):
+                self.assertIn(f"add_modifier = {{ name = {program} days = {days} }}\n"
+                              f"\t\tadd_modifier = {{ name = {program}_cost days = {days} multiplier = sv_money_flow_event_modest }}\n",
+                              events)
+
     def test_mirror_lines_read_as_breakdown_labels(self):
         # A source modifier's tooltip lists the mirror beside its native field,
         # and no modifier-type key hides it. So the mirror prints the native

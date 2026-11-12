@@ -1738,6 +1738,59 @@ class FreeColoniesTest(unittest.TestCase):
                     self.assertIn(term, pressure)
                 self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", pressure)
 
+    def test_colony_politics_need_a_free_colonys_people(self):
+        """Owner, 2026-11-12 (#1620): a world under sr_free_colony_minimum people
+        builds no autonomy (its pressure is 0, so it only settles) and neither
+        demands self-government nor breaks away, and the overview counts and
+        lists only colonies that size as restless."""
+        self.assertEqual(self._number("sr_free_colony_minimum"), 1000)
+        count = _block(self.display, "sr_disp_aut_restless_count")
+        listed = _block(self.effects, "sr_ov_list_restless")
+        named = _block(self.custom_loc, "sr_ov_restless_site")
+        for site in gss.SITES:
+            k = site.key
+            peopled = f"sr_site_peopled_{k} = yes"
+            with self.subTest(site=k):
+                self.assertEqual(_block(self.triggers, f"sr_site_peopled_{k}").strip(),
+                                 f"sr_site_pop_value_{k} >= sr_free_colony_minimum")
+                # the pressure's last line zeroes it under the minimum
+                pressure = _block(self.values, f"sr_site_aut_pressure_{k}").strip().splitlines()
+                self.assertEqual(pressure[-1].strip(), f"if = {{ limit = {{ NOT = {{ {peopled} }} }} value = 0 }}")
+                # both thresholds test the people
+                step = _block(self.effects, f"sr_site_aut_step_{k}")
+                brk = step[step.rindex("limit", 0, step.index("sr_aut_break_away")):step.index("sr_aut_break_away")]
+                ask = step[step.index("else_if"):step.index("sr_aut_ask =")]
+                self.assertIn("sr_aut_break_level", brk)
+                self.assertIn(peopled, brk)
+                self.assertIn("sr_aut_ask_level", ask)
+                self.assertIn(peopled, ask)
+                # the overview's count, list and name
+                self.assertIn(f"sr_site_autonomy_value_{k} >= sr_aut_ask_level {peopled}", count)
+                self.assertIn(f"sr_site_autonomy_value_{k} >= sr_aut_ask_level {peopled}", listed)
+                self.assertIn(f"sr_site_autonomy_value_{k} >= sr_aut_ask_level {peopled}", named)
+                # the drift hover's flag
+                self.assertIn(f"if = {{ limit = {{ NOT = {{ {peopled} }} }} value = 1 }}",
+                              _block(self.display, f"sr_disp_aut_unpeopled_{k}"))
+        # No other reader of the two levels in the generated script skips the test.
+        for text in (self.effects, self.values, self.display, self.custom_loc, self.triggers):
+            for m in re.finditer(r"autonomy_value_(\w+) >= sr_aut_(?:ask|break)_level", text):
+                # the same limit names the world's people, on that line or the next
+                near = text[m.end():m.end() + 120].split("}")[0]
+                self.assertIn(f"sr_site_peopled_{m.group(1)} = yes", near, text[m.start():m.end() + 120])
+        # An autonomy gain needs the people too (incitement, sabotage, a destroyed colony's resentment).
+        add = _block(self.shared, "sr_site_aut_add_at")
+        self.assertIn("local_var:sr_aut_delta < 0", add)
+        self.assertIn("sr_site_peopled_$KEY$ = yes", add)
+        # Incite Colonial Autonomy starts only against a colony that size.
+        ops = _strip(_raw("common", "diplomatic_actions", "covert_operations.txt"))
+        incite = _block(ops, "covert_incite_autonomy_action")
+        possible = _block(incite, "possible")
+        self.assertIn("sr_life_has_colony = { MIN = sr_free_colony_minimum }", possible)
+        # .93's free option needs it as well.
+        free = _block(self.events, "space_race_events.93")
+        free = free[free.index("name = space_race_events.93.b"):]
+        self.assertIn("MIN = sr_free_colony_minimum", free[:free.index("custom_tooltip")])
+
     def test_autonomy_settles_at_a_hundred_times_its_pressure(self):
         """Settling (colony management design § 4.2): 1% of the autonomy a month,
         so a colony settles at 100 x the other terms' sum."""

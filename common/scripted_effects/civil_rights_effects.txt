@@ -47,7 +47,8 @@ cr_ensure_tracker_vars_effect = {
 # on_complete / on_fail also set civil_rights_resolved, which blocks one) starts
 # with zeroed counters. The cr_*_months counters themselves are left in place:
 # the resolution events read them after on_complete / on_fail has fired them
-# (movement_events_te.100's desc reads cr_suppression_months).
+# (movement_events_te.100's desc reads cr_suppression_months and
+# cr_segregationist_months).
 #
 # Called from je_civil_rights's on_complete, on_fail, on_invalid. Each removal
 # is guarded: remove_modifier on a modifier the country does not hold is not a

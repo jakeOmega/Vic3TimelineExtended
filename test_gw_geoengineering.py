@@ -165,6 +165,19 @@ class MaskedTemperatureTest(unittest.TestCase):
         urgency = load("common/script_values/global_warming_ai_values.txt")["gw_ai_will_urgency"]
         self.assertEqual(urgency["value"], "gw_unmasked_temperature")
 
+    def test_a_cooling_event_prints_the_figure_that_crossed(self):
+        """Under a haze the felt anomaly can have been below the threshold for years, so a cooling event's
+        text that gives a figure gives the warming beneath, the one its dispatch compared (#1621)."""
+        on_actions = _text(ON_ACTIONS)
+        cooling = re.findall(r"gw_fire_cooling_threshold_event = \{[^}]*EVENT_ID = (environmentalism_events\.\d+)",
+                             on_actions)
+        self.assertIn("environmentalism_events.23", cooling)
+        for event in cooling:
+            for key in ("d", "f"):
+                with self.subTest(event=event, key=key):
+                    self.assertNotIn("temperature_anomaly_display", _loc(f"{event}.{key}"))
+        self.assertIn("ScriptValue('gw_unmasked_temperature')", _loc("environmentalism_events.23.d"))
+
 
 class MaskStepTest(unittest.TestCase):
     """The monthly step as gw_aerosol_mask_next writes it."""

@@ -45,9 +45,15 @@ society_technology_events.1 = {
 			has_global_variable = te_fire_only_once_canary_armed
 			NOT = { has_variable = ste_event_1_fired }
 		}
+		# Any law under which women work and can still be turned away for
+		# their sex. Women's Suffrage is here since #1616: the law tests are by
+		# name, so a country that already had the vote when it researched the
+		# technology never saw this event or .2. Protected Class is left out:
+		# there a refusal "for no reason but their sex" is against the law.
 		OR = {
-			has_law = law_type:law_women_in_the_workplace
 			has_law = law_type:law_women_own_property
+			has_law = law_type:law_women_in_the_workplace
+			has_law = law_type:law_womens_suffrage
 		}
 	}
 
@@ -70,7 +76,12 @@ society_technology_events.1 = {
 		ai_chance = {
 			base = 3
 			modifier = {
-				trigger = { has_law = law_type:law_women_in_the_workplace }
+				trigger = {
+					OR = {
+						has_law = law_type:law_women_in_the_workplace
+						has_law = law_type:law_womens_suffrage
+					}
+				}
 				add = 2
 			}
 		}
@@ -132,7 +143,11 @@ society_technology_events.2 = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_equal_pay_reform }
 		NOT = { has_modifier = ste_equal_pay_rejected }
-		has_law = law_type:law_women_in_the_workplace
+		# Women's Suffrage too (#1616, as .1): the vote does not set pay.
+		OR = {
+			has_law = law_type:law_women_in_the_workplace
+			has_law = law_type:law_womens_suffrage
+		}
 	}
 
 	option = {
@@ -1788,6 +1803,9 @@ society_technology_events.19 = {
 					is_building_type = building_space_elevator
 					level >= 1
 				}
+				# The settlers petition only after .18 has told the country
+				# that its first settlement was founded (#1616).
+				has_variable = ste_event_18_fired
 			}
 		}
 	}

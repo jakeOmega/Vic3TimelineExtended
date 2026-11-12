@@ -38,12 +38,6 @@ space_race_colony_events.1 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.1.a
@@ -62,15 +56,6 @@ space_race_colony_events.1 = {
 		sr_site_choose_sr_colony_valles_marineris_mining = yes
 		add_loyalists = { value = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -194,12 +179,6 @@ space_race_colony_events.4 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.4.a
@@ -219,15 +198,6 @@ space_race_colony_events.4 = {
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
-	}
 }
 
 # Colony 5: Mars - Arcadia Planitia
@@ -245,12 +215,6 @@ space_race_colony_events.5 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.5.a
@@ -271,15 +235,6 @@ space_race_colony_events.5 = {
 		add_loyalists = { value = small_radicals pop_type = soldiers }
 		add_loyalists = { value = small_radicals }
 	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
-	}
 }
 
 # Colony 6: Ceres
@@ -297,12 +252,6 @@ space_race_colony_events.6 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.6.a
@@ -322,15 +271,6 @@ space_race_colony_events.6 = {
 		sr_site_choose_sr_colony_ceres_observatory = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -401,12 +341,6 @@ space_race_colony_events.8 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.8.a
@@ -426,15 +360,6 @@ space_race_colony_events.8 = {
 		sr_site_choose_sr_colony_psyche_careful = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -505,12 +430,6 @@ space_race_colony_events.10 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.10.a
@@ -530,15 +449,6 @@ space_race_colony_events.10 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -613,12 +523,6 @@ space_race_colony_events.12 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.12.a
@@ -637,15 +541,6 @@ space_race_colony_events.12 = {
 		sr_site_choose_sr_colony_europa_surface = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -717,14 +612,6 @@ space_race_colony_events.14 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = {
-				place_character_in_void = 6
-			}
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.14.a
@@ -745,15 +632,6 @@ space_race_colony_events.14 = {
 		add_loyalists = { value = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = farmers }
 	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
-	}
 }
 
 # Colony 15: Himalia
@@ -771,12 +649,6 @@ space_race_colony_events.15 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.15.a
@@ -796,15 +668,6 @@ space_race_colony_events.15 = {
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -875,12 +738,6 @@ space_race_colony_events.17 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.17.a
@@ -901,15 +758,6 @@ space_race_colony_events.17 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -932,12 +780,6 @@ space_race_colony_events.18 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.18.a
@@ -957,15 +799,6 @@ space_race_colony_events.18 = {
 		sr_site_choose_sr_colony_mercury_ice = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1087,12 +920,6 @@ space_race_colony_events.21 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.21.a
@@ -1112,15 +939,6 @@ space_race_colony_events.21 = {
 		sr_site_choose_sr_colony_rhea_observation = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1190,12 +1008,6 @@ space_race_colony_events.23 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.23.a
@@ -1215,15 +1027,6 @@ space_race_colony_events.23 = {
 		add_loyalists = { value = small_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1297,12 +1100,6 @@ space_race_colony_events.25 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.25.a
@@ -1322,15 +1119,6 @@ space_race_colony_events.25 = {
 		sr_site_choose_sr_colony_oberon_research = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1401,12 +1189,6 @@ space_race_colony_events.27 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.27.a
@@ -1426,15 +1208,6 @@ space_race_colony_events.27 = {
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1506,12 +1279,6 @@ space_race_colony_events.29 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.29.a
@@ -1532,15 +1299,6 @@ space_race_colony_events.29 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals pop_type = machinists }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1563,12 +1321,6 @@ space_race_colony_events.30 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.30.a
@@ -1590,15 +1342,6 @@ space_race_colony_events.30 = {
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
 	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
-	}
 }
 
 # Colony 31: Eris
@@ -1616,12 +1359,6 @@ space_race_colony_events.31 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.31.a
@@ -1641,15 +1378,6 @@ space_race_colony_events.31 = {
 		sr_site_choose_sr_colony_eris_monitoring = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1772,12 +1500,6 @@ space_race_colony_events.34 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.34.a
@@ -1797,15 +1519,6 @@ space_race_colony_events.34 = {
 		sr_site_choose_sr_colony_sedna_interstellar = yes
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1828,12 +1541,6 @@ space_race_colony_events.35 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.35.a
@@ -1853,15 +1560,6 @@ space_race_colony_events.35 = {
 		sr_site_choose_sr_colony_shackleton_outpost = yes
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -1932,12 +1630,6 @@ space_race_colony_events.37 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.37.a
@@ -1958,15 +1650,6 @@ space_race_colony_events.37 = {
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }
 
@@ -2089,12 +1772,6 @@ space_race_colony_events.40 = {
 
 	duration = 3
 	trigger = { }
-	immediate = {
-		create_character = {
-			save_scope_as = flavor_speaker
-			on_created = { place_character_in_void = 6 }
-		}
-	}
 
 	option = {
 		name = space_race_colony_events.40.a
@@ -2115,14 +1792,5 @@ space_race_colony_events.40 = {
 		add_loyalists = { value = small_radicals pop_type = machinists }
 		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
-	}
-
-	after = {
-		hidden_effect = {
-			if = {
-				limit = { exists = scope:flavor_speaker }
-				scope:flavor_speaker = { kill_character = { hidden = yes } }
-			}
-		}
 	}
 }

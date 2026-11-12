@@ -2838,7 +2838,8 @@ def _autonomy_world(site: Site) -> list[str]:
         "\t\t}",
         "\t}",
         "}",
-        f"# THIS holds {site.name}: its autonomy for the month, then its thresholds (design § 2).",
+        f"# THIS holds {site.name}: its autonomy for the month, then its thresholds (design § 2),",
+        "# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).",
         f"sr_site_aut_step_{k} = {{",
         f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_contact_{k} }} }} "
         f"set_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }} }}",
@@ -2859,12 +2860,13 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\t\tif = {{ limit = {{ sr_site_self_value_{k} >= sr_module_points }} sr_site_self_build_{k} = yes }}",
         "\t}",
         "\tif = {",
-        f"\t\tlimit = {{ sr_site_autonomy_value_{k} >= sr_aut_break_level }}",
+        f"\t\tlimit = {{ sr_site_autonomy_value_{k} >= sr_aut_break_level sr_site_peopled_{k} = yes }}",
         f"\t\tsr_aut_break_away = {{ KEY = {k} INDEX = {i} }}",
         "\t}",
         "\telse_if = {",
         "\t\tlimit = {",
         f"\t\t\tsr_site_autonomy_value_{k} >= sr_aut_ask_level",
+        f"\t\t\tsr_site_peopled_{k} = yes",
         f"\t\t\tNOT = {{ has_global_variable = sr_site_aut_asked_{k} }}",
         "\t\t\tNOT = { has_variable = sr_aut_site }",
         "\t\t}",
@@ -2947,7 +2949,8 @@ def render_autonomy_effects() -> list[str]:
     out += ["",
             "# Incite Colonial Autonomy (covert_ops_apply_all_phase_effects; THIS the target,",
             "# local_var:sr_cov_mult the operation's phase x priority): every colony THIS holds",
-            "# gains sr_cov_incite_autonomy_base x the multiplier a month.",
+            "# gains sr_cov_incite_autonomy_base x the multiplier a month, one with fewer than",
+            "# sr_free_colony_minimum people nothing (sr_site_aut_add_at).",
             "sr_cov_incite_autonomy = {",
             "\tset_local_variable = { name = sr_aut_delta value = { value = sr_cov_incite_autonomy_base multiply = local_var:sr_cov_mult } }"]
     for site in SITES:
@@ -3078,6 +3081,12 @@ def render_autonomy_triggers() -> list[str]:
             "sr_life_has_colony = {", "\tOR = {"]
     out += [f"\t\tAND = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_pop_value_{s.key} >= $MIN$ }}" for s in SITES]
     out += ["\t}", "}", "",
+            "# Per world, any scope: the world holds people enough for colony politics,",
+            "# sr_free_colony_minimum, the size at which it could stand as a free colony. Below",
+            "# it no autonomy builds (sr_site_aut_pressure_<key> is 0), and it neither demands",
+            "# self-government nor breaks away (sr_site_aut_step_<key>; owner, 2026-11-12)."]
+    out += [f"sr_site_peopled_{s.key} = {{ sr_site_pop_value_{s.key} >= sr_free_colony_minimum }}" for s in SITES]
+    out += ["",
             "# Per world, country scope: THIS may receive the free colony's petition: it supplies",
             "# it with full ties, can hold a colony, and has no petition open."]
     for site in SITES:
@@ -3120,6 +3129,7 @@ def render_autonomy_values() -> list[str]:
                 "\tmin = 0",
                 "}",
                 "# Every term but settling: where autonomy heads (colony management design § 4.2).",
+                "# Nothing under sr_free_colony_minimum people: autonomy only settles there.",
                 f"sr_site_aut_pressure_{k} = {{",
                 "\tvalue = sr_aut_home_pull",
                 f"\tadd = {{ value = sr_site_pop_value_{k} divide = 10000 multiply = sr_aut_per_10k_people }}",
@@ -3131,6 +3141,7 @@ def render_autonomy_values() -> list[str]:
                 "\tif = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } "
                 "add = sr_aut_destroyed_colony }",
                 f"\tadd = {{ value = sr_site_admin_staffed_{k} multiply = sr_aut_per_admin_level }}",
+                f"\tif = {{ limit = {{ NOT = {{ sr_site_peopled_{k} = yes }} }} value = 0 }}",
                 "}",
                 "# The month's drift: the pressure less settling, a share of the autonomy itself, so",
                 "# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).",
@@ -3313,9 +3324,10 @@ def render_overview_display() -> list[str]:
     out += ["}",
             "",
             "# The overview's Colonies cell (audit SPC-6): our colonies at or past the",
-            "# autonomy that demands self-government (sr_aut_ask_level).",
+            "# autonomy that demands self-government (sr_aut_ask_level), with the people to.",
             "sr_disp_aut_restless_count = {", "\tvalue = 0"]
-    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_autonomy_value_{s.key} >= sr_aut_ask_level }} add = 1 }}"
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_autonomy_value_{s.key} >= sr_aut_ask_level "
+            f"sr_site_peopled_{s.key} = yes }} add = 1 }}"
             for s in SITES]
     out += ["}",
             "# ... less the one the cell names.",
@@ -3328,9 +3340,11 @@ def render_overview_effects() -> list[str]:
     self-government by name (sr_colony_overview_sgui, op 1), at the root's scope,
     so the lines print in order (gotcha #18)."""
     def restless(k):
-        return f"global_var:sr_site_holder_{k} ?= this sr_site_autonomy_value_{k} >= sr_aut_ask_level"
+        return (f"global_var:sr_site_holder_{k} ?= this sr_site_autonomy_value_{k} >= sr_aut_ask_level"
+                f" sr_site_peopled_{k} = yes")
     out = ["# ===== The colonization overview's lists (audit SPC-6; display only) =====",
-           "# Country scope: one line per colony of ours at or past sr_aut_ask_level, or",
+           "# Country scope: one line per colony of ours at or past sr_aut_ask_level with",
+           "# sr_free_colony_minimum people or more, or",
            "# the line that none is.",
            "sr_ov_list_restless = {"]
     for site in panel_order():
@@ -3385,7 +3399,8 @@ def render_autonomy_display() -> list[str]:
                 "}"]
     out += ["",
             "# A colony's autonomy drift by term (audit SPC-15: its drift hover lists its own",
-            "# terms): its people, its distance by our drive, a year without contact. The",
+            "# terms): its people, its distance by our drive, a year without contact, and 1",
+            "# while it has too few people for any of them to count (sr_disp_aut_unpeopled). The",
             "# country's terms (a war, a colony we destroyed) are sr_disp_aut_war and",
             "# sr_disp_aut_destroyed; the flat ones are constants."]
     for site in SITES:
@@ -3398,6 +3413,10 @@ def render_autonomy_display() -> list[str]:
                 "}",
                 f"sr_disp_aut_settle_{k} = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate multiply = -1 }}",
                 f"sr_disp_aut_admin_{k} = {{ value = sr_site_admin_staffed_{k} multiply = sr_aut_per_admin_level }}",
+                f"sr_disp_aut_unpeopled_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ NOT = {{ sr_site_peopled_{k} = yes }} }} value = 1 }}",
+                "}",
                 f"sr_disp_aut_target_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = sr_site_aut_pressure_{k} divide = sr_aut_settle_rate }}",
@@ -3744,12 +3763,14 @@ def render_custom_loc() -> str:
                     "\t}"]
         out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
     out += ["# The overview's Colonies cell (audit SPC-6): the first colony of ours, in the",
-            "# panel's order, at or past the autonomy that demands self-government.",
+            "# panel's order, at or past the autonomy that demands self-government, with the",
+            "# people to (sr_site_peopled_<key>).",
             "sr_ov_restless_site = {", "\ttype = country", "\trandom_valid = no", ""]
     for site in panel_order():
         k = site.key
         out += ["\ttext = {",
-                f"\t\ttrigger = {{ global_var:sr_site_holder_{k} ?= this sr_site_autonomy_value_{k} >= sr_aut_ask_level }}",
+                f"\t\ttrigger = {{ global_var:sr_site_holder_{k} ?= this sr_site_autonomy_value_{k} >= sr_aut_ask_level "
+                f"sr_site_peopled_{k} = yes }}",
                 f"\t\tlocalization_key = {overview_name_key(site)}",
                 "\t}"]
     out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]

@@ -141,8 +141,10 @@ banking_cycle_random_event_effect = {
 			# ---- MID ERA (central_banking / investment_banks / mutual_funds) ----
 
 			# Event 7: Bank Consolidation Wave (boom/frenzy, central_banking)
+			# banking_has_private_banks here and on 21, 32, 47 and 59: banks that
+			# buy each other, report profits or fail are not the state's (#1612).
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = { banking_has_private_banks = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -169,8 +171,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.8 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -212,8 +214,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
@@ -261,8 +263,8 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.13 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -280,8 +282,8 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.14 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -307,8 +309,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
@@ -351,10 +353,12 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
-					}
-					if = {
-						limit = { has_law = law_type:law_central_bank_independence }
-						add = 2
+						# Inside the gate: outside it, the law alone drew the debate
+						# in a panic or before keynesian_economics (#1612).
+						if = {
+							limit = { has_law = law_type:law_central_bank_independence }
+							add = 2
+						}
 					}
 				}
 				if = {
@@ -415,7 +419,10 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 19: Sovereign Wealth Fund Proposal (expansion+, keynesian_economics, NOT laissez_faire)
+			# Market economies only: it has no planned or cooperative variant, and
+			# option C leaves the money "with the taxpayers" (#1612).
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -442,15 +449,17 @@ banking_cycle_random_event_effect = {
 							var:bubble_pressure >= 50
 						}
 						add = 2
-					}
-					if = {
-						limit = {
-							OR = {
-								has_law = law_type:law_unregulated_banking
-								has_law = law_type:law_universal_banking_light_prudence
+						# Inside the gate: outside it, a weak banking law alone drew
+						# the event in any phase and era (#1612).
+						if = {
+							limit = {
+								OR = {
+									has_law = law_type:law_unregulated_banking
+									has_law = law_type:law_universal_banking_light_prudence
+								}
 							}
+							add = 1
 						}
-						add = 1
 					}
 				}
 				if = {
@@ -471,7 +480,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 21: Merchant Bank Prosperity (stable/expansion, no extra tech)
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = { banking_has_private_banks = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -604,8 +613,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_downturn = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_downturn = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.28 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -624,10 +633,10 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
-					}
-					if = {
-						limit = { has_law = law_type:law_free_mutual_banking }
-						add = 3
+						if = {
+							limit = { has_law = law_type:law_free_mutual_banking }
+							add = 3
+						}
 					}
 				}
 				trigger_event = { id = banking_cycle_events.29 }
@@ -647,8 +656,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.30 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -674,15 +683,15 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.31 }
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 32: Trust Company Failure (RARE, boom/frenzy, mutual_funds, bubble >= 30)
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = { banking_has_private_banks = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -761,13 +770,19 @@ banking_cycle_random_event_effect = {
 
 			# ---- LATE ERA NEW EVENTS ----
 
-			# Event 36: Fintech Disruption (expansion+, modern_financial_instruments)
+			# Event 36: Fintech Disruption (expansion+, modern_financial_instruments, computer_networks)
+			# computer_networks (era 8) is the first technology that means
+			# networked computers, and the one that brings Digital Trading to the
+			# financial districts. modern_financial_instruments alone is era 5,
+			# decades before the firms the event and Financial Technology Growth
+			# describe (#1612).
 			0 = {
 				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
 							has_technology_researched = modern_financial_instruments
+							has_technology_researched = computer_networks
 							OR = {
 								banking_cycle_is_expansion = yes
 								banking_cycle_is_boom = yes
@@ -790,16 +805,16 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 3
-					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
-					if = {
-						limit = {
-							OR = {
-								has_law = law_type:law_unregulated_banking
-								has_law = law_type:law_universal_banking_light_prudence
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+						if = {
+							limit = {
+								OR = {
+									has_law = law_type:law_unregulated_banking
+									has_law = law_type:law_universal_banking_light_prudence
+								}
 							}
+							add = 2
 						}
-						add = 2
 					}
 				}
 				trigger_event = { id = banking_cycle_events.37 }
@@ -850,8 +865,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.39 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -939,15 +954,17 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 3
-					}
-					if = {
-						limit = {
-							OR = {
-								has_law = law_type:law_unregulated_banking
-								has_law = law_type:law_universal_banking_light_prudence
+						# Inside the gate: outside it, a weak banking law alone drew
+						# the scandal in any phase and era (#1612).
+						if = {
+							limit = {
+								OR = {
+									has_law = law_type:law_unregulated_banking
+									has_law = law_type:law_universal_banking_light_prudence
+								}
 							}
+							add = 2
 						}
-						add = 2
 					}
 				}
 				trigger_event = { id = banking_cycle_events.44 }
@@ -1215,7 +1232,7 @@ banking_cycle_random_event_effect = {
 			# Event 47: Trust Company Failure (downturn/panic, market econ, RARE)
 			0 = {
 				trigger = {
-					banking_is_market_economy = yes
+					banking_has_private_banks = yes
 					OR = {
 						banking_cycle_is_downturn = yes
 						banking_cycle_is_panic = yes
@@ -1273,7 +1290,7 @@ banking_cycle_random_event_effect = {
 			# Event 59: Rogue Trader (boom/frenzy, modern instruments, RARE)
 			0 = {
 				trigger = {
-					banking_is_market_economy = yes
+					banking_has_private_banks = yes
 					has_technology_researched = modern_financial_instruments
 					OR = {
 						banking_cycle_is_boom = yes

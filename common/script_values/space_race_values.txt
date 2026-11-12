@@ -631,8 +631,19 @@ sr_probe_cost = {
 		if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe }
 		if = { limit = { has_variable = sr_safe_probe sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_probe sr_ai_should_participate = yes } add = 2 }
+		# The Grand Tour (space_race_events.81.e): two more cost levels for as
+		# long as the milestone is billed, whatever the funding and the
+		# approach, so nothing switched off and on avoids it. Gated like the
+		# approach terms: an AI outside the top three makes no progress and
+		# pays nothing for the profile it chose. sr_disp_cost_tour_probe
+		# prints it.
+		if = { limit = { has_variable = sr_probe_target_tour sr_ai_should_participate = yes } add = sr_tour_cost_levels_probe }
 	}
 	multiply = sr_cost_factor_probe
+}
+# The Grand Tour's overhead in cost levels: the Ambitious approach's two.
+sr_tour_cost_levels_probe = {
+	value = 2
 }
 sr_mars_landing_cost = {
 	value = 0

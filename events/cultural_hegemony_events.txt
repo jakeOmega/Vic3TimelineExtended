@@ -339,15 +339,24 @@ cultural_hegemony.4 = {
 		name = cultural_hegemony.4.a
 		default_option = yes
 
-		# Channel nationalism - armed forces & devout rally, radicals calm
-		ig:ig_armed_forces = {
+		# Channel nationalism - the three groups the trigger and the
+		# description name (officers, clergy, landowners) rally, radicals calm.
+		# The Landowners were in the gate but not in the options until #1615.
+		ig:ig_armed_forces ?= {
 			add_modifier = {
 				name = ch_nationalist_rally_ig
 				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
-		ig:ig_devout = {
+		ig:ig_devout ?= {
+			add_modifier = {
+				name = ch_nationalist_rally_ig
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+		ig:ig_landowners ?= {
 			add_modifier = {
 				name = ch_nationalist_rally_ig
 				days = short_modifier_time
@@ -361,6 +370,10 @@ cultural_hegemony.4 = {
 			}
 			add_loyalists_in_state = {
 				interest_group = ig:ig_devout
+				value = very_small_radicals
+			}
+			add_loyalists_in_state = {
+				interest_group = ig:ig_landowners
 				value = very_small_radicals
 			}
 		}
@@ -385,6 +398,10 @@ cultural_hegemony.4 = {
 			}
 			add_radicals_in_state = {
 				interest_group = ig:ig_devout
+				value = small_radicals
+			}
+			add_radicals_in_state = {
+				interest_group = ig:ig_landowners
 				value = small_radicals
 			}
 			add_loyalists_in_state = {
@@ -1468,7 +1485,6 @@ cultural_hegemony.14 = {
 # ============================================================================
 
 cultural_hegemony.15 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): our reformers cite the hegemon's universities; the hegemon is not said to act
 	type = country_event
 	placement = root
 

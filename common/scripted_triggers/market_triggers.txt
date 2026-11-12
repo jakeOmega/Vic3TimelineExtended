@@ -53,6 +53,17 @@ banking_is_market_economy = {
 	NOT = { has_law = law_type:law_command_economy }
 	NOT = { has_law = law_type:law_cooperative_ownership }
 }
+# Private banks exist: a market economy whose banks the state has not absorbed.
+# State-Owned Banking ("private banks have been dissolved or absorbed") is
+# unlocked by the Command Economy but not ended by leaving it, so a market
+# economy can hold it. Asked by the event draws whose subject is a private bank
+# or trust company (banking_cycle_events 7, 21, 32, 47, 59; #1612). It is not
+# part of banking_is_market_economy, which the dashboard's whole market toolset
+# and its AI buttons read.
+banking_has_private_banks = {
+	banking_is_market_economy = yes
+	te_mon_is_state_banking = no
+}
 banking_is_command_economy     = { has_law = law_type:law_command_economy }
 banking_is_cooperative_economy = { has_law = law_type:law_cooperative_ownership }
 
