@@ -45,7 +45,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `treaty_leverage_side_audit` | A treaty article with `country_treaty_leverage_generation_add` on the side that pays, or one that builds no Involvement because it lacks `max_target_involvement` / `target_involvement_applies_to` or names the wrong side. | CI, reload |
 | `treaty_evaluation_scope_audit` | A named-scope read in a treaty article's AI `evaluation_chance`, which sees only root. | CI |
 | `principle_tier_audit` | A power bloc principle tier that drops a modifier the tier below carried. Tiers replace each other, so each restates everything below it. | CI, reload |
-| `prestige_good_roster_audit` | A company prestige good no `building_types` building of the company can make, or one on a `local = yes` good. | CI, reload |
+| `prestige_good_roster_audit` | A company prestige good no `building_types` building of the company can make, one on a `local = yes` good, or a fourth prestige good on one base good (the engine keeps three). | CI, reload |
 | `amendment_reachability_audit` | An amendment no script attaches, or an `add_amendment` whose type names no amendment. | CI, reload |
 | `ideology_lawgroup_audit` | An ideology's lawgroup block that leaves out a law of its group, which makes the ideology neutral on it. | CI, reload |
 | `pm_employment_audit` | A building where some valid production-method combination drives a profession's employment below zero. | CI, reload |
@@ -91,7 +91,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `treaty_leverage_side_audit` | `# REVIEWED YYYY-MM-DD: why`<br>`# REVIEWED YYYY-MM-DD (involvement): why` | trailing on the `country_treaty_leverage_generation_add` line or the article's opening line; for an Involvement flag, the `(involvement)` form on the article's opening line or either field's line |
 | `treaty_evaluation_scope_audit` | none | Fix the flag. |
 | `principle_tier_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the higher tier's opening line (covers the whole tier) or the modifier's line in either tier |
-| `prestige_good_roster_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the prestige good's line in `possible_prestige_goods` or the company's opening line (covers the whole company); for a `local` flag, the prestige good's opening line |
+| `prestige_good_roster_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the prestige good's line in `possible_prestige_goods` or the company's opening line (covers the whole company); for a `local` or cap flag, the prestige good's opening line |
 | `amendment_reachability_audit` | `# REVIEWED YYYY-MM-DD (amendment_reachability): why` | trailing on the amendment's opening line or its `allowed_laws` entry; for an unknown type, the `add_amendment = {` or `type =` line |
 | `ideology_lawgroup_audit` | `# REVIEWED YYYY-MM-DD (ideology_lawgroup): why` | on the lawgroup block's or the ideology's opening line in a hand-written ideology file; for the generated `modified.txt`, on the `"lawgroup_x":` or `"ideology_x": {` line in `ideology_modifications.py` |
 | `pm_employment_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the opening line of the building or of the most negative production method (a method's comment covers every building that uses it) |
