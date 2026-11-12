@@ -11,7 +11,6 @@ mod_systems/decolonization.md, mod_systems/covert_warfare.md.
 """
 
 import os
-import re
 import unittest
 
 from test_decolonization_wars import _block, _def, _loc_keys, _read
