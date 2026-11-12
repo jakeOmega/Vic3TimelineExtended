@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent
 EFFECTS = ROOT / "common/scripted_effects/te_construction_market_update_effects.txt"
 EFFECT = "te_construction_market_country_update_sites"
 WORLD_STATE_ITERATORS = ("every_state", "any_state", "random_state", "ordered_state")
+# A walk over every country's own states is the world walk again.
+COUNTRY_ITERATORS = ("every_country", "any_country", "random_country", "ordered_country")
 
 
 def body(text: str, name: str) -> str:
@@ -47,6 +49,13 @@ class SiteWalkTest(unittest.TestCase):
             with self.subTest(iterator=iterator):
                 self.assertNotRegex(self.body, r"(?<![\w.:])%s\s*=" % iterator,
                                     "%s walks every state in the world; the country's own are every_scope_state"
+                                    % iterator)
+
+    def test_no_country_iterator(self):
+        for iterator in COUNTRY_ITERATORS:
+            with self.subTest(iterator=iterator):
+                self.assertNotRegex(self.body, r"(?<![\w.:])%s\s*=" % iterator,
+                                    "%s = { every_scope_state = { ... } } walks every state in the world again"
                                     % iterator)
 
 

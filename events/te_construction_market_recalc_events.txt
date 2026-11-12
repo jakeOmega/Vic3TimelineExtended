@@ -16,8 +16,8 @@ te_construction_market_recalc_events.1 = {
 	}
 }
 
-# One-shot per-country setup — runs from on_country_formed and once at game
-# start (history file). Initializes the public buy-target variable and creates
+# One-shot per-country setup — runs once at game start (history file);
+# on_country_formed fires .1, the border recalc. Initializes the public buy-target variable and creates
 # the construction-site building in the capital if the country has none.
 te_construction_market_recalc_events.2 = {
 	type = country_event
