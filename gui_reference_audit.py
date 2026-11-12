@@ -64,6 +64,10 @@ DIRS = {
     "static_modifiers": "static_modifiers",
 }
 # Engine primitives and compound-valued properties, not user-defined types.
+# No .gui file defines these with `type`/`template`. With vanilla's gui/ read,
+# Index.engine_elements finds them in vanilla's own use, so this list matters
+# for a name vanilla never opens a block with, and for runs with no install.
+# The last four lines are what a real install reported (#1271, #1349).
 BUILTINS = set("""types widget container flowcontainer hbox vbox button icon textbox
 text_single text_multi progressbar scrollarea scrollbar item blockoverride block
 tooltipwidget background modify_texture state animation dynamicgridbox fixedgridbox
@@ -72,7 +76,15 @@ soundparam start_sound attachto editbox checkbutton piechart plotline divider dr
 list drag_drop_target margin minimumsize maximumsize spriteborder framesize bezier
 uv_scale translate_uv portrait_button cursorposition color size position resizeparent
 layer alpha blend_mode cliprect layoutpolicy texture uv_offset font fontsize
-on_start on_finish sound stop_sound datacontext""".split())
+on_start on_finish sound stop_sound datacontext
+scrollbar_vertical scrollbar_horizontal marker click_modifiers datacontext_from_model
+treemapchart track texticon slider right_click_menu_widget offset inc_button iconsize
+drop_target draggable_behavior drag_widget dec_button camera_position camera_near_far
+camera_look_at""".split())
+# A type or template definition, and a use: a block a name opens (a widget
+# instance or a compound property) or the base a `type` inherits from.
+GUI_DEFINITION = re.compile(rf"\b(?:type|template)\s+({IDENT})")
+GUI_USE = re.compile(rf"\b({IDENT})\s*=\s*\{{|\btype\s+{IDENT}\s*=\s*({IDENT})")
 
 
 def masks(text: str) -> tuple[str, str]:
@@ -149,7 +161,7 @@ def blocks(syntax: str):
 
 def gui_names(text: str) -> set[str]:
     code, syntax = masks(text)
-    names = set(re.findall(rf"\b(?:type|template)\s+({IDENT})", syntax))
+    names = set(GUI_DEFINITION.findall(syntax))
     # Only root widget names, not arbitrary name properties inside controls.
     for _, _, start, end in blocks(syntax):
         body = code[start:end]
@@ -198,6 +210,7 @@ class Index:
         self.saved = {}
         self.shown = []
         self.gui_files = {}
+        vanilla_gui_uses: set[str] = set()
         for base in (self.vanilla, root):  # mod definitions override vanilla
             if base is None:
                 continue
@@ -236,8 +249,16 @@ class Index:
                 self.complete["gui_types"] = True
             for path in sorted(gui_dir.rglob("*.gui")):
                 text = read(path)
-                self.keys["gui_types"].update(re.findall(rf"\b(?:type|template)\s+({IDENT})", masks(text)[1]))
+                syntax = masks(text)[1]
+                self.keys["gui_types"].update(GUI_DEFINITION.findall(syntax))
+                if base == self.vanilla:
+                    vanilla_gui_uses.update(m[1] or m[2] for m in GUI_USE.finditer(syntax))
                 self.gui_files[str(path.relative_to(base))] = gui_names(text)
+        # What vanilla's own .gui files use and no file defines: the engine's
+        # elements and block properties (`scrollbar_horizontal`, `click_modifiers`).
+        # Read from the install, they need no BUILTINS entry and follow each patch
+        # (#1271). The mod's own uses don't count: a typo would vouch for itself.
+        self.engine_elements = vanilla_gui_uses - self.keys["gui_types"]
         for kind, rel in (("script_values", "common/script_values.json"),
                           ("static_modifiers", "common/modifiers.json"),
                           ("loc_keys", "localization_english.json")):
@@ -344,9 +365,9 @@ def audit(mod_path: str | Path | None = None, vanilla_path: str | Path | None = 
             ln = line(m.start())
             reference(file, ln, "loc_keys", m[1], vanillas=source_lines[ln - 1].strip() in vanilla_lines)
         # Only actual widget instances and inheritance bases, outside strings.
-        for m in re.finditer(rf"\b({IDENT})\s*=\s*\{{|\btype\s+{IDENT}\s*=\s*({IDENT})", syntax):
+        for m in GUI_USE.finditer(syntax):
             name = m[1] or m[2]
-            if name not in BUILTINS:
+            if name not in BUILTINS and name not in index.engine_elements:
                 reference(file, line(m.start()), "gui_types", name)
         # Literal GetScriptedGui calls bind scopes exactly. ScriptedGui via a
         # type's overridable datacontext cannot be statically bound: warn only.
