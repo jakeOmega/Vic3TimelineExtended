@@ -791,6 +791,44 @@ class EnterGameTest(SessionTestCase):
         self.assertEqual(shot.parent, self.paths.backup_root / "runs" / SNAP)
         self.assertEqual(len(self.game.clicks), 2)
 
+    def test_a_date_that_stayed_locks_nothing_and_enter_game_can_be_tried_again(self):
+        # #1598: a window over the country-select screen took the country click, so Start did nothing. The proof
+        # ran to its end (unpaused 3 s, paused again, the pause proved) and the date had not moved: the game is
+        # where it was, so the session is not left refusing enter_game and advance until stop.
+        self.started()
+        self.game.clicks_work = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "not_entered")
+        self.assertIn("the date stayed", error.detail)
+        self.assertNotIn("cause", error.info)
+        self.assertEqual(error.info["clicks"], [list(c) for c in self.game.clicks])
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, False, False))
+        self.assertTrue(self.game.paused)
+        self.assertEqual(self.session.read([]), [])              # the debugger attached again still stops
+        self.game.clicks_work = True                              # the window is gone
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(len(self.game.clicks), 4)                # the two points, clicked again
+        self.assertEqual(self.game.clicks[2:], self.game.clicks[:2])
+        self.assertEqual(self.game.played, "FRA")
+        self.assertGreater(session._game_day(result["after"]), session._game_day(result["before"]))
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (True, False, False))
+        self.assertGreaterEqual(session._game_day(self.session.advance(3)), session._game_day(result["after"]) + 3)
+
+    def test_advance_after_a_date_that_stayed_enters_again_instead_of_refusing(self):
+        self.started()
+        self.game.clicks_work = False
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "not_entered")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "not_entered")     # not left_running
+        self.assertEqual(len(self.game.clicks), 4)
+        self.game.clicks_work = True
+        start = self.game.date
+        reached = self.session.advance(3)
+        self.assertGreaterEqual(session._game_day(reached), session._game_day((start.year, start.month, start.day)) + 3)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
     def test_a_click_waits_for_the_presence_rule_and_never_focuses_on_its_own(self):
         self.started()
         self.game.foreground = False
@@ -1314,12 +1352,15 @@ class StopTest(SessionTestCase):
         reply = self.session.stop()
         self.assertEqual(reply["outcome"], "game_left_up")
         self.assertTrue(any("not_ours" in note for note in reply["notes"]))
+        self.assertTrue(any("still finds process 7" in note for note in reply["notes"]))
         self.assertEqual(self.cli.verbs, [])                   # beside a game that may be the run's: no restore
         self.assertIn("`python3 -m game_qa stop` again", reply["next"])         # it is known: a later stop can end it
         self.assertIn(SNAP, reply["next"])
         self.assertTrue(reply["overlay_kept"])
         self.assertTrue(self.paths.overlay_dir.exists())
-        self.assertEqual(self.order, ["kill", "tcp_close", "helper_close"])   # nothing of the session's own left
+        # #1588: the refused kill is followed by one adopt, which proved the game alive, so it is not counted as
+        # ended; then nothing of the session's own is left
+        self.assertEqual(self.order, ["kill", "adopt", "tcp_close", "helper_close"])
         first = Path(reply["report"]).read_text("utf-8").split("\n")[0]
         self.assertIn("NOT RUN", first)
         self.assertIn("Next: " + reply["next"], first)                      # the reply's own next, not another
@@ -1618,6 +1659,92 @@ class GameLeftUpTest(SessionTestCase):
         self.assertNotIn("stop` again", stop["next"])
 
 
+class ReusedPidStopTest(SessionTestCase):
+    """#1588: the game died and another program took its process id before `stop`. `kill` refuses not_ours, which
+    alone proves nothing (it refuses a live game it could not open, too), so `adopt` is asked again: refused
+    not_ours as well, no live process has the game's pid and start time, and the stop restores as for a game
+    found gone, instead of answering game_left_up for as long as that other program runs."""
+
+    def reused(self, proc):
+        self.order.append("kill")
+        raise HelperError("not_ours", "process 7 is not the one this helper started (its id was reused)")
+
+    def test_a_stop_after_the_pid_was_reused_finds_the_game_ended_and_restores(self):
+        self.started()
+        self.game.exited = True                 # the game died; watch records its exit
+        self.game.process_gone = True           # and adopt finds no live process with its pid and start time
+        self.game.kill = self.reused
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["stop_again"]), ("restored", False))
+        self.assertEqual(self.order, ["kill", "watch_returned", "cli restore", "tcp_close", "helper_close"])
+        self.assertEqual(self.cli.calls, [["restore", SNAP]])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertNotIn("next", reply)
+        note = next(note for note in reply["notes"] if "the game has ended" in note)
+        self.assertIn("kill refused", note)
+        self.assertIn("no live process 7", note)
+        steps = [json.loads(line) for line in
+                 (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()]
+        kill = next(step for step in steps if step["verb"] == "kill")
+        self.assertEqual(kill["outcome"], "already_exited")
+        self.assertEqual(self.session.stop(), reply)                    # final: not run again
+
+    def test_the_restore_still_refuses_beside_a_game_it_finds_itself(self):
+        # The helper's two refusals end the wait for the kill, not part 1's own look for a running game.
+        self.started()
+        self.game.exited = self.game.process_gone = True
+        self.game.kill = self.reused
+        self.cli.queue("restore", {"held": False, "refused": "game_still_up", "id": SNAP}, 2)
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["refused"], reply["stop_again"]), ("refused", "game_still_up", True))
+        self.assertTrue(self.paths.overlay_dir.exists())
+
+    def test_an_adopt_that_fails_otherwise_after_the_refused_kill_proves_nothing(self):
+        self.started()
+        self.game.kill = self.reused
+
+        def adopt(proc):
+            self.order.append("adopt")
+            raise HelperError("backend_error", "OSError('access denied')")
+        self.game.adopt = adopt
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["stop_again"]), ("game_left_up", True))
+        self.assertEqual(self.cli.verbs, [])                            # no restore beside a game that may be up
+        self.assertTrue(self.paths.overlay_dir.exists())
+        self.assertEqual(self.order, ["kill", "adopt", "tcp_close", "helper_close"])
+        self.assertTrue(any("backend_error" in note for note in reply["notes"]))
+
+    def test_a_helper_that_ends_at_the_second_look_is_replaced_once_as_at_the_kill(self):
+        self.started()
+        self.game.exited = True
+        self.game.kill = self.reused
+
+        def adopt(proc):
+            raise HelperError("helper_gone", "the helper has ended")
+        self.game.adopt = adopt
+        fresh = fakes.FakeHelper()
+
+        def not_ours(proc):
+            raise HelperError("not_ours", "no live process %d was created at %s" % (proc.pid, proc.created))
+        fresh.adopt = not_ours
+        self.fresh_helper = fresh
+        reply = self.session.stop()
+        self.assertEqual(reply["outcome"], "restored")
+        self.assertEqual((fresh.killed, self.cli.verbs), ([], ["restore"]))
+
+    def test_a_later_stop_finds_the_pid_reused_since_and_restores(self):
+        # First the kill is refused beside a live game (game_left_up); the game then dies and its id is reused.
+        self.started()
+        self.game.kill = self.reused
+        first = self.session.stop()
+        self.assertEqual((first["outcome"], first["stop_again"]), ("game_left_up", True))
+        self.game.exited = self.game.process_gone = True
+        second = self.session.stop()
+        self.assertEqual((second["outcome"], second["stop_again"]), ("restored", False))
+        self.assertEqual(self.cli.verbs, ["restore"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+
 class StopAgainTest(SessionTestCase):
     """R7, N3, N12: `stop_again` says whether a later stop can change anything, `next` names a verb that can work
     then, and a stop run again keeps what the one before found."""
@@ -1748,10 +1875,11 @@ class ClosingGame(Game):
 
 
 class SecondStopThroughAClosedHelperTest(SessionTestCase):
-    """R7 (the re-review's script): the first stop's kill is refused, since the game's pid was reused after it
-    exited, so game_left_up with stop_again, and that stop closed the helper. The second stop goes helper_gone,
-    the factory, a fresh adopt refused not_ours: the game counts as ended, watch is waited for, and only then is
-    the snapshot restored, once."""
+    """R7 (the re-review's script): the first stop's kill is refused while the helper's adopt still answers for
+    the process, so game_left_up with stop_again, and that stop closed the helper. (When adopt refuses too, as it
+    does once the pid really is another program's, the first stop already restores: `ReusedPidStopTest`.) The
+    second stop goes helper_gone, the factory, a fresh adopt refused not_ours: the game counts as ended, watch is
+    waited for, and only then is the snapshot restored, once."""
 
     def setUp(self):
         super().setUp()
@@ -2189,6 +2317,32 @@ class SendGuardTest(SessionTestCase):
         self.started()
         self.assertIsInstance(self.session._console._helper, session._ProvedHelper)
         self.assertIs(self.session._sends._session, self.session)
+
+    def test_the_proved_helper_passes_on_only_the_calls_that_send_nothing(self):
+        # #1588: a call added to the helper later must not reach the game unproved through the pass-through.
+        self.started()
+        sends = self.session._sends
+        self.assertEqual(sends.window(PID), self.game.window(PID))
+        self.assertEqual(sends.presence().foreground, fakes.GAME_HWND)
+        self.game.type_unicode = lambda pid, text: self.fail("an input call the proof does not know went out")
+        for name in ("type_unicode", "kill", "launch", "adopt", "screenshot", "idle_ms", "tcp_open", "tcp_send",
+                     "tcp_recv", "tcp_close", "close"):
+            with self.subTest(name=name):
+                with self.assertRaises(AttributeError) as caught:
+                    getattr(sends, name)
+                self.assertIn(name, str(caught.exception))
+        self.assertFalse(hasattr(sends, "type_unicode"))
+        self.assertEqual(session._ProvedHelper._UNPROVED, {"window", "presence"})
+
+    def test_the_console_uses_no_helper_call_the_proved_helper_refuses(self):
+        # What the Console calls on its helper, read from its source: each is proved here or on the list, so
+        # the refusal above can never be the Console's own in a path the other tests do not reach.
+        source = Path(session.__file__).with_name("console.py").read_text(encoding="utf-8")
+        used = set(re.findall(r"self\._helper\.(\w+)", source))
+        self.assertIn("keys", used)
+        proved = {name for name in ("keys", "focus", "click") if name in vars(session._ProvedHelper)}
+        self.assertEqual(proved, {"keys", "focus", "click"})
+        self.assertLessEqual(used, proved | session._ProvedHelper._UNPROVED)
 
     def test_a_pid_whose_start_time_no_longer_matches_gets_no_key_though_watch_still_runs(self):
         self.started()

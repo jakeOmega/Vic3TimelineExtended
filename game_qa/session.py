@@ -176,14 +176,22 @@ class Paths:
 
 class _ProvedHelper:
     """The helper as everything that sends input sees it (X1): `keys`, `focus` and `click` go out only once
-    `Session._prove_game` has passed, just before each one, since the helper sends by pid alone and a pid may be
-    another program's once the game has died. Every other call goes to the session's current helper (a fresh one
-    from `_new_helper` too)."""
+    `Session._prove_game` has passed, just before each one, since a pid may be another program's once the game
+    has died (the helper compares the start time again before each step it sends, win_helper._prove_ours). Of
+    the helper's other calls only those in `_UNPROVED` pass through, to the session's current helper (a fresh one
+    from `_new_helper` too): they send nothing. Any other name is an AttributeError, so a call added to the
+    helper later reaches the game through here only once someone has decided whether it needs the proof."""
+
+    _UNPROVED = frozenset({"window", "presence"})      # what the Console reads; neither sends input
 
     def __init__(self, session: Session) -> None:
         self._session = session
 
     def __getattr__(self, name: str):
+        if name not in self._UNPROVED:
+            raise AttributeError("the proved helper passes on only %s unproved, not %r: give it a method here that "
+                                 "calls Session._prove_game first if it sends input, or add it to _UNPROVED if it "
+                                 "sends none" % (", ".join(sorted(self._UNPROVED)), name))
         return getattr(self._session._helper, name)
 
     def keys(self, pid: int, steps: Sequence[dict]) -> None:
@@ -669,7 +677,12 @@ class Session:
         again (`tag`), and only then read the date and run the unpaused proof. Any failure from the Start click on
         sets `left_running` and `entered_unproved`, clicks nothing more, and carries the clicks: its own code for
         breakpoint_unverified, tag_failed, debugger, watch_ended or left_running, else not_entered with the code as
-        `cause`."""
+        `cause`.
+
+        One not_entered sets neither and has no `cause`: the proof ran to its end, the pause proved, and the date
+        had not moved ("the date stayed"). The game is then where it was, on the country-select screen with time
+        stopped, as when a window covered the country click (#1598), so `enter_game` may be called again, and
+        `advance` calls it again."""
         self._require_game()
         self._refuse_if_left_running()
         if not self._fixture_loaded:
@@ -818,7 +831,9 @@ class Session:
         """End the game this session started and put the owner's files back; never raises.
 
         In order: end the game (`kill`; adopted first if a failure came before `adopt`; through a fresh helper
-        from `helper_factory` once if the helper has ended), wait for `watch` to return (up to WATCH_WAIT_S),
+        from `helper_factory` once if the helper has ended; a `kill` refused not_ours is followed by `adopt`, and
+        the game counts as ended, its pid being another program's by now, only if that refuses not_ours too),
+        wait for `watch` to return (up to WATCH_WAIT_S),
         `restore <id>` (retried every RESTORE_RETRY_S while it refuses watch_still_recording, up to
         RESTORE_RETRY_TOTAL_S; busy, up to BUSY_RETRY_TOTAL_S; or launch_in_flight, which a launch that was not
         recorded leaves for 90 s after its claim, up to LAUNCH_IN_FLIGHT_RETRY_TOTAL_S: by now the launch call
@@ -978,22 +993,42 @@ class Session:
 
     def _kill(self, proc: ProcId, notes: list[str]) -> None:
         if not self._adopted:
-            try:
-                self._helper.adopt(proc)
-            except HelperError as e:
-                if e.code != "not_ours":
-                    raise
-                # No live process has that pid and start time (win_helper._op_adopt): the game has ended. Part 1's
-                # restore still looks for a running game itself.
-                self._game_ended = True
-                notes.append("the helper finds no live process %d started at %s (%s): the game has ended"
-                             % (proc.pid, proc.created, e.detail))
-                self._record("kill", outcome="already_exited", detail="adopt: " + _describe(e))
+            if self._found_gone(proc, notes):
                 return
             self._adopted = True
-        gone = self._helper.kill(proc)
+        try:
+            gone = self._helper.kill(proc)
+        except HelperError as e:
+            if e.code != "not_ours":
+                raise
+            # `kill` refuses not_ours when the pid is another program's by now (the game died and its id was
+            # reused), but also when it could not open a live game to end it (win_helper._op_kill, terminate), so
+            # its refusal alone proves nothing. `adopt` is asked again: only if it too finds no live process with
+            # that pid and start time has the game ended. If it proves the game alive, ending it failed.
+            if not self._found_gone(proc, notes, after="kill refused (%s), and " % _describe(e)):
+                notes.append("the helper still finds process %d started at %s alive, so that refusal was not the "
+                             "game's end" % (proc.pid, proc.created))
+                raise
+            return
         self._game_ended = True
         self._record("kill", outcome="already_exited" if gone else "ok")
+
+    def _found_gone(self, proc: ProcId, notes: list[str], after: str = "") -> bool:
+        """Ask the helper to adopt `proc`. Refused `not_ours`, no live process has that pid and start time
+        (win_helper._op_adopt): the game has ended, which is recorded, and True is returned. Part 1's restore
+        still looks for a running game itself. False once the helper has proved the game alive; any other
+        failure of `adopt` is raised."""
+        try:
+            self._helper.adopt(proc)
+        except HelperError as e:
+            if e.code != "not_ours":
+                raise
+            self._game_ended = True
+            notes.append("%sthe helper finds no live process %d started at %s (%s): the game has ended"
+                         % (after, proc.pid, proc.created, e.detail))
+            self._record("kill", outcome="already_exited", detail="%sadopt: %s" % (after, _describe(e)))
+            return True
+        return False
 
     def _kill_failed(self, notes: list[str], e: Exception) -> None:
         notes.append("ending the game failed (%s), so it may still be up" % _describe(e))
