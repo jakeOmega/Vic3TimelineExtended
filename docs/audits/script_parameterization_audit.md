@@ -88,7 +88,7 @@ The big candidates are mostly addressed (see commits leading to and including th
 | [common/script_values/st_res_script_values.txt](../common/script_values/st_res_script_values.txt) | Per-good weekly delta and capacity values | Grain/ammunition/oil blocks share the same skeleton | Medium: many JE/status references depend on the existing names |
 | ~~`common/scripted_buttons/st_res_buttons.txt`~~ | ~~Per-good increase/decrease rate buttons~~ | **Done differently (2026-09-17):** the 14 per-good buttons were deleted outright, not parameterized — the reserve inventory widget's row controls replaced them. Only the two shared buttons remain. | — |
 | [common/scripted_triggers/wonder_triggers.txt](../common/scripted_triggers/wonder_triggers.txt) | Repeated continent/building checks | Placeholder-friendly, but not as high leverage as SR | Medium |
-| [common/scripted_effects/legacy_modifier_cleanup.txt](../common/scripted_effects/legacy_modifier_cleanup.txt) | 207 inline `if has_modifier remove_modifier` patterns | Could use `remove_modifier_if_exists_effect` | **Skip**: temporary save-migration code, slated for deletion once no pre-migration saves exist |
+| ~~`common/scripted_effects/legacy_modifier_cleanup.txt`~~ | ~~207 inline `if has_modifier remove_modifier` patterns~~ | **Gone (#1429):** the file was save-migration code, deleted with the move to vanilla 1.15, which loads no older save. | |
 | [common/buildings/08_zz_te_wonders.txt](../common/buildings/08_zz_te_wonders.txt), synthetics plants in `01_zz_te_industry.txt` | Repeated building boilerplate | 46 wonders + 11 synthetics share scaffolding | **Skip**: pure data, intentionally grep-friendly; would belong to a generator if scaled further |
 
 ## Refactor Guidance

@@ -260,13 +260,33 @@ class OceanBasinTileTest(unittest.TestCase):
         self.assertIn("is_shown = { has_technology_researched = abyssal_plain_mining }", body)
         self.assertNotIn("any_country", body)
 
+    LICENCES_SHOWN = ("And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), "
+                      "'(CFixedPoint)0'), State.GetOwner.IsLocalPlayer )")
+
+    def licences_tile(self):
+        text = _read(STATES)
+        at = text.index('tooltip = "TE_STATE_SEABED_TT"')
+        return text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+
+    def test_licences_tile_only_on_the_players_own_state(self):
+        # #1352: the Licences tile's words are the player's ("our claims"), so
+        # it shows only on the player's own state; the guide's Ocean Basin row
+        # gives every other coastal state the basin tile.
+        visible = re.search(r'visible = "(.*)"', self.licences_tile()).group(1)
+        self.assertEqual(visible, "[" + self.LICENCES_SHOWN + "]")
+        values = _read(SEABED_VALUES)
+        m = re.search(r"(?m)^te_seabed_tile_shown = \{", values)
+        self.assertIn("owner = { has_variable = te_seabed_shared }", _block_from(values, m.end() - 1))
+
     def test_never_beside_the_licences_tile(self):
+        # The basin tile shows exactly where the Licences tile doesn't: its own
+        # value is owner-agnostic and the GUI negates the Licences tile's test.
         values = _read(SEABED_VALUES)
         m = re.search(r"(?m)^te_seabed_basin_tile_shown = \{", values)
         body = _block_from(values, m.end() - 1)
-        self.assertIn("NOT = { owner = { has_variable = te_seabed_shared } }", body)
-        m = re.search(r"(?m)^te_seabed_tile_shown = \{", values)
-        self.assertIn("owner = { has_variable = te_seabed_shared }", _block_from(values, m.end() - 1))
+        self.assertNotIn("te_seabed_shared", body)
+        visible = re.search(r'visible = "(.*)"', self.tile()).group(1)
+        self.assertIn("Not( " + self.LICENCES_SHOWN + " )", visible)
 
 
 if __name__ == "__main__":

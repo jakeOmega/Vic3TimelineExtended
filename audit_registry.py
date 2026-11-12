@@ -96,6 +96,22 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `limit = {` line or the iterator's opener line",
     ),
     Audit(
+        "delayed_event_trigger_audit",
+        "Not a gate: lists the events queued with a delay whose `trigger` may be false when queued, "
+        "which seems to drop them (#1596), for the play-test that settles the rule.",
+        ci=None,
+        where="trailing on the target event's `trigger = {` line",
+        note="A report: it fails nothing and adds no reload warning until the self-check "
+             "`delayed_trigger_queue_check` confirms the rule. `--write` writes the report offline.",
+    ),
+    Audit(
+        "random_list_weight_audit",
+        "A `trigger = { }` in a `random_list` branch's weight `modifier`: the engine rejects the token "
+        "and the tilt is lost. Use `if = { limit = { ... } add = N }`; the `ai_chance` form is valid.",
+        post_load=False,
+        report=None,
+    ),
+    Audit(
         "effect_trigger_validity_audit",
         "An effect or trigger name the engine doesn't know, or a known one in the wrong kind of block (an "
         "effect where triggers are read, or the reverse). The engine logs it at load and drops the line.",
@@ -265,10 +281,11 @@ AUDITS: tuple[Audit, ...] = (
         "treaty_leverage_side_audit",
         "A treaty article with `country_treaty_leverage_generation_add` on the side that pays, or one "
         "that builds no Involvement because it lacks `max_target_involvement` / "
-        "`target_involvement_applies_to` or names the wrong side.",
+        "`target_involvement_applies_to` or names the wrong side; and a diplomatic action's pact "
+        "that builds none or departs from vanilla's pact convention (`source_country`, or `mutual`).",
         where="trailing on the `country_treaty_leverage_generation_add` line or the article's opening "
-              "line; for an Involvement flag, the `(involvement)` form on the article's opening line "
-              "or either field's line",
+              "line; for an Involvement flag, the `(involvement)` form on the article's or action's "
+              "opening line, a pact's `pact = {` line, or either field's line",
         tags=("", "involvement"),
     ),
     Audit(
@@ -366,6 +383,21 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the loc line, or in script on the line the string closes on",
         tags=("loc_script_value",),
         note="The .gui half is gui_reference_audit's.",
+    ),
+    Audit(
+        "loc_root_context_audit",
+        "A loc key on a country root that doesn't fit where it renders, reached there by a `$KEY$` splice, "
+        "a named key or a `GetCustom` entry. A `ROOT.`, `SCOPE.` or `THIS.` read in a key a widget renders "
+        "comes out blank. A `JournalEntry.` or `Country.` read in a `status_desc` key or a scripted "
+        "button's text is the unproven root there (not known to fail): use the proven one, "
+        "`ROOT.GetCountry…`. An entry or player read on a public tab shows another country the player's "
+        "figure, or nothing.",
+        where="trailing on the flagged key's loc line (a public-tab flag takes none: a world read goes "
+              "in `WORLD_LOC`)",
+        tags=("loc_root_context",),
+        note="A reload leaves the public-tab kinds to this command and to `BindingTest` "
+             "(`test_te_system_tab_bodies.py`), whose rules they are; it takes about 1.4 s without them, "
+             "this command about 4 s. Each flag gives its path from the line that names the first key.",
     ),
     Audit(
         "concept_reference_audit",
