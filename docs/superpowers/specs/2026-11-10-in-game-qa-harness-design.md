@@ -592,7 +592,9 @@ entries) was compared: no entry was ever missing and no content ever differed.
 - **The game rewrites `pdx_settings.json` at launch with the same bytes** (all three runs).
   `restore` leaves a file whose content matches, so its time stays the run's. In the first
   session `tutorial.txt`, which is outside the snapshot's set, also came out with the same bytes
-  and a new time; in the second it did not, and what wrote it was not established.
+  and a new time; in the second it did not, and what wrote it was not established. (Since #1588
+  `restore` puts the snapshot's time back on such a file of the snapshot's set and lists it as
+  `retimed`; `tutorial.txt` has no recorded time to go back to.)
 - **The fixture stays** in `save games/` as `te_qa_fixture_<key>.v3`, by design, and shows in the
   owner's load list.
 - **A session's `debug.log` copy is large** (19 MB for the first session): every debugger
@@ -606,7 +608,10 @@ front); a fixture made under `--playset current`; an argument with a space; a fa
 lookup on a live game; a game left stopped at the breakpoint by a late stop; a session whose server
 died with the game up (`watch` recording on by itself, then `recover` and `remove-overlay`:
 tested only against fakes and constructed journals). The three
-hardenings the last review left are issue #1588.
+hardenings the last review left (issue #1588) were built on 2026-11-12 and are tested only against
+fakes too: the helper's `not_ours` when the process changes in the middle of a batch, a `stop` after
+the game's process id was reused, and the time put back on a file the game rewrote with the same
+bytes (on a Windows drive, where a time set from WSL keeps whole seconds).
 
 Settled on 2026-11-11 by the first play-test runs (`docs/testing/game-qa-results-2026-11-11.md`): a variable a
 setup set on the country-select screen survives entering the game (laws and modifiers changed there were not
