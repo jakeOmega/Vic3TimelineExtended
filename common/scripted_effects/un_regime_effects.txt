@@ -374,7 +374,6 @@ un_regime_term_on = {
 # Parameters: $TERM$
 # Scope: country
 un_regime_term_off = {
-	legacy_scaling_strip_united_nations = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's copy goes first, so the strip can't set this mirror again
 	if = {
 		limit = { has_variable = un_regime_$TERM$_modifier_on }
 		remove_variable = un_regime_$TERM$_modifier_on

@@ -3322,11 +3322,6 @@ te_monetary_apply_interest_modifiers = {
 # confidence resets, and with the LAW gone the suspension's lost-credibility
 # modifier goes too; a SUSPENSION freezes vault, balance and confidence alike,
 # because suspending convertibility is refusing to pay gold out.
-#
-# THE RETIRED CARRY. Until 2026-10-06 the hot-money balance paid the policy
-# rate as the scaled budget expense te_mon_gold_carry_expense. A save from
-# before then can still carry it, so the foot of this effect strips it every
-# pulse until legacy_modifier_cleanup.txt's dated checklist says otherwise.
 te_monetary_update_gold = {
 	if = {
 		limit = { te_mon_has_gold_flows = yes }
@@ -3544,15 +3539,6 @@ te_monetary_update_gold = {
 			}
 		}
 	}
-
-	# --- SAVE MIGRATION: the retired carry ---------------------------------
-	# The carry on borrowed gold was dropped on 2026-10-06 (design §0.5,
-	# decision I, reversed). A save made before then can still hold
-	# te_mon_gold_carry_expense, on the entry or on the country; it goes on
-	# this country's first pulse, until legacy_modifier_cleanup.txt's dated
-	# checklist retires the definition. te_gold_carry and te_gold_carry_applied
-	# stay in such a save, inert: nothing reads them.
-	te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
 
 	# --- the three clocks ---------------------------------------------------
 	if = {

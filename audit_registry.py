@@ -182,6 +182,19 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the flagged operation or the bare `var:X` line",
     ),
     Audit(
+        "variable_guard_audit",
+        "A `has_variable = X` guard (or the global or local form) as a direct child of a `NOT`, `NAND` "
+        "or `NOR` that also reads `var:X` bare. A multi-child `NOT` reads every child, so the guard "
+        "protects nothing and an unset X logs `Failed to fetch variable`; read as NOR the block is "
+        "also wrong when X is set. Move the guard into a limit and keep the rest of the block inside "
+        "the negation, `trigger_if = { limit = { has_variable = X } NOT = { … } }`; an equality with "
+        "a number can instead be read as `var:X ?= N`.",
+        where="trailing on the opening line of the `NOT` / `NAND` / `NOR`",
+        tags=("variable_guard",),
+        note="A guard beside its read in an `AND` or at a trigger's top level is not flagged. Walks "
+             "all of `common/` and `events/`, so it takes several seconds.",
+    ),
+    Audit(
         "container_timed_variable_audit",
         "A timed variable set on a script container, where it never expires.",
         where="trailing on the `set_variable` line or its `days` / `months` line",
@@ -252,10 +265,11 @@ AUDITS: tuple[Audit, ...] = (
         "treaty_leverage_side_audit",
         "A treaty article with `country_treaty_leverage_generation_add` on the side that pays, or one "
         "that builds no Involvement because it lacks `max_target_involvement` / "
-        "`target_involvement_applies_to` or names the wrong side.",
+        "`target_involvement_applies_to` or names the wrong side; and a diplomatic action's pact "
+        "that builds none or departs from vanilla's pact convention (`source_country`, or `mutual`).",
         where="trailing on the `country_treaty_leverage_generation_add` line or the article's opening "
-              "line; for an Involvement flag, the `(involvement)` form on the article's opening line "
-              "or either field's line",
+              "line; for an Involvement flag, the `(involvement)` form on the article's or action's "
+              "opening line, a pact's `pact = {` line, or either field's line",
         tags=("", "involvement"),
     ),
     Audit(

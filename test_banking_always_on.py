@@ -178,8 +178,6 @@ class EntryTest(unittest.TestCase):
         # The pool's weekly add runs for every holder, the cycle started or not
         # (owner, 2026-11-07); the cycle's own weekly effects wait for it.
         effect = _norm(_key_block(_key_block(self.je, "on_weekly_pulse"), "effect"))
-        # The old-save strip runs first until 2026-12-31 (#1404, test_scaling_strip.py).
-        effect = effect.replace("legacy_scaling_strip_banking_cycle = yes ", "")
         self.assertEqual(effect, "{ banking_weekly_investment_pool_add = yes "
                                  "if = { limit = { te_banking_cycle_running = yes } "
                                  "banking_cycle_weekly_effects = yes } }")
@@ -256,8 +254,6 @@ ENTRY_OBJECT_READERS = {
     ("common/scripted_effects/te_monetary_effects.txt", "te_monetary_settle_modifier_home"),
     ("common/scripted_effects/te_monetary_effects.txt", "te_mon_mod_strip"),
     ("common/scripted_triggers/te_monetary_triggers.txt", "te_mon_mod_has"),
-    ("common/scripted_effects/te_monetary_fx_effects.txt", "te_monetary_init_fx_variables"),
-    ("common/scripted_effects/te_monetary_arrangement_effects.txt", "te_monetary_init_arrangement_variables"),
     # The banking rule leaving Full: the tools' Disable effects work on the entry object.
     ("common/scripted_effects/te_monetary_rule_switch_effects.txt", "te_monetary_leave_full_system"),
     ("common/on_actions/extra_on_actions.txt", "te_banking_law_change_cleanup"),
