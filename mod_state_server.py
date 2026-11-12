@@ -6080,6 +6080,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
             "on-actions": lambda: self._on_actions(rest),
+            # Inverse: the on-actions that run an effect / fire an event (#333)
+            "on-action-callers": lambda: self._on_action_callers(rest),
             # Technology effects endpoint
             "technology-effects": lambda: self._technology_effects(rest),
             # Engine docs endpoints
@@ -6108,7 +6110,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "religions": lambda: self._vocab_endpoint("religion"),
             "interest-groups": lambda: self._vocab_endpoint("ig"),
             "law-groups": lambda: self._vocab_endpoint("law_group"),
-            "building-groups": lambda: self._vocab_endpoint("bg"),
+            # The vocab wrapper plus the parent_group hierarchy (#383)
+            "building-groups": lambda: self._building_groups(rest),
             "pop-types": lambda: self._vocab_endpoint("poptype"),
             "country-ranks": lambda: self._vocab_endpoint("country_rank"),
             "terrain": lambda: self._vocab_endpoint("terrain"),
@@ -6182,7 +6185,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
                 {"path": "/loc-accessors/<Type?>?context=&examples=&min_uses=", "desc": "Which accessors vanilla loc (and vanilla .gui when the game is installed) chains on a data type (#1246): each with its use count, per-context counts (events, notification, ui, gui, ...), the type it returns, and example expressions, plus the SCOPE.sX / gsX saved-scope accessor for the type. <Type> is PoliticalLobby, political_lobby or politicallobby. ?context= keeps only uses in that context. Bare: every type with its use count."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
-                {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
+                {"path": "/on-actions/<id?>", "desc": "On-actions as the engine merges them (#333): every declaration of <id> in load order (sources: file, line, on_actions, events, random_events, chance_to_happen, fields), merged (on_actions and events added up; random_events only when one declaration sets it; null under a directive), fields_set_more_than_once (effect: the later file's wins, a documented rule), fired_by, warnings, and raw (the store's last-read block). Vanilla's declarations are read only with a game install: check vanilla_indexed / origin. Bare: the on-actions the mod declares, with their files."},
+                {"path": "/on-action-callers/<scripted_effect|event_id|on_action>", "desc": "The mod on-actions that reach a scripted effect, an event or an on-action, through any chain of scripted effects and events, each with file:line, per-hop guards and the roots it hangs from (#333). Callers of other kinds (journal-entry pulses, buttons, decisions) are not followed: they are in not_followed, so count 0 is 'nothing calls it' only when not_followed, unreached and passed_as_parameter are empty. A row is the shortest route, not the only one: guards_complete false means other_routes exist. Mod script only; several seconds a call."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
                 {"path": "/event-balance/<id?>", "desc": "Event option / fast-scaling magnitude analysis."},
                 {"path": "/institutions/<id?>", "desc": "Institutions catalog."},
@@ -6216,7 +6220,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/religions", "desc": "Religion vocab."},
                 {"path": "/interest-groups", "desc": "IG vocab."},
                 {"path": "/law-groups", "desc": "Law-group vocab."},
-                {"path": "/building-groups", "desc": "Building-group vocab."},
+                {"path": "/building-groups", "desc": "Building-group vocab; each group also carries parent_group (merged), origin (vanilla / mod / mod-injected / mod-replaced) and construction_efficiency_modifier (#383). An entry with alias_of is the prefix-less spelling, not a group."},
+                {"path": "/building-groups/<id>[/reach]", "desc": "One group: ancestors, children, descendants, the buildings directly in it and the mod files defining it. /reach: every building a building_group_<id>_* modifier applies to, walking descendants (#383)."},
                 {"path": "/pop-types", "desc": "Pop-type vocab."},
                 {"path": "/country-ranks", "desc": "Country-rank vocab."},
                 {"path": "/terrain", "desc": "Terrain vocab."},
@@ -6470,6 +6475,68 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "count": len(values),
             "entries": [{"id": v, "name": ms.localize(v)} for v in values],
         }
+
+    def _building_groups(self, parts):
+        """GET /building-groups[/<id>[/reach]] (#383)
+
+        Bare: the vocabulary wrapper (`{placeholder, entity_type, count,
+        entries: [{id, name}]}`), each real group also carrying `parent_group`
+        (merged: after the mod's REPLACE / INJECT), `origin` (vanilla | mod |
+        mod-injected, a vanilla group the mod only INJECTs into | mod-replaced,
+        one a mod file redefines) and `construction_efficiency_modifier` (whether
+        it registers its own building_group_<id>_construction_efficiency_add). The
+        prefix-less spellings the vocabulary lists (`manufacturing`) carry
+        `alias_of` instead; `group_count` counts the real groups.
+
+        /<id>: that group with `ancestors` (nearest first), `children`,
+        `descendants`, the `buildings` directly in it and `mod_definitions`
+        (each mod file's line and directive). /<id>/reach: every building a
+        building_group_<id>_* modifier applies to, the group's own and its
+        descendants'. <id> may be the prefix-less spelling."""
+        import building_group_tree as bgt
+
+        groups = (ms.get_data(bgt.ENTITY_TYPE) if ms else None) or {}
+        if not groups:
+            if parts:
+                raise DataNotLoaded(bgt.ENTITY_TYPE)
+            return self._vocab_endpoint("bg")
+        vanilla_parser = ms.base_parsers.get(bgt.ENTITY_TYPE)
+        definitions = bgt.definitions(mod_path)
+        tree = bgt.Tree(groups, vanilla_parser.data if vanilla_parser is not None else None,
+                        ms.get_data("Buildings"), definitions)
+
+        if not parts:
+            out = self._vocab_endpoint("bg")
+            for entry in out["entries"]:
+                if entry["id"] in groups:
+                    entry.update(tree.row(entry["id"]))
+                else:
+                    entry["alias_of"] = tree.resolve(entry["id"])
+            out["group_count"] = len(groups)
+            return out
+
+        gid = tree.resolve(parts[0])
+        if gid is None or len(parts) > 2 or (len(parts) == 2 and parts[1] != "reach"):
+            raise NotFound("/".join(parts))
+        out = {"type": bgt.ENTITY_TYPE, "id": gid, "name": ms.localize(gid), **tree.row(gid)}
+        if len(parts) == 2:
+            reach = tree.reach(gid)
+            out.update({
+                "groups": [gid, *tree.descendants(gid)],
+                "count": len(reach),
+                "buildings": [{"id": bid, "name": ms.localize(bid), "building_group": group}
+                              for bid, group in reach],
+                "note": bgt.REACH_NOTE,
+            })
+            return out
+        out.update({
+            "ancestors": tree.ancestors(gid),
+            "children": list(tree.children[gid]),
+            "descendants": tree.descendants(gid),
+            "buildings": [{"id": bid, "name": ms.localize(bid)} for bid in tree.buildings[gid]],
+            "mod_definitions": definitions.get(gid, []),
+        })
+        return out
 
     # ---- modifier patterns -----------------------------------------------
     def _modifier_patterns(self, parts, params):
@@ -9220,18 +9287,124 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- structured: on-actions -------------------------------------------
     def _on_actions(self, parts):
-        """GET /on-actions[/<on_action_id>]"""
-        oas = ms.get_data("On Actions")
-        if not oas:
+        """GET /on-actions[/<on_action_id>] (#333)
+
+        The engine merges every declaration of an on-action; the parsed store
+        keeps the last one read. So one on-action comes back with every
+        declaration on disk (`sources`, in load order: file, line, origin, its
+        `on_actions`, `events` and `random_events`, its `chance_to_happen`,
+        and the fields it sets), `merged`, `fields_set_more_than_once` and
+        `fired_by`, the declarations whose `on_actions` list names it. `raw`
+        is still the store's block, i.e. the last declaration only.
+
+        `merged` holds what the recorded rules allow: `on_actions` and
+        `events` added up, and `random_events` only when one declaration sets
+        it (several are separate pools, each with its own chance_to_happen,
+        and how they combine is not recorded: null, with a note). It is null
+        altogether when a declaration carries a directive. For an `effect` two
+        declarations set, `fields_set_more_than_once` names the later file's
+        as `winner` and gives the rule's status (documented, not probed); any
+        other field set twice has no recorded rule and no winner.
+
+        Load order is one list by file name, vanilla's files and the mod's
+        together (probed). Reads `common/on_actions` from disk on each call
+        (about 40 ms), so it follows edits without a /reload. Vanilla's
+        declarations are read only where the game is installed (they are not
+        in vanilla_parsed/): `vanilla_indexed` says which, and without them
+        `origin` reads "mod (vanilla not indexed)". The bare listing is the
+        on-actions a mod file declares, each with its declaration count and
+        files. A file the scan warned about (an unclosed brace swallows the
+        on-actions after it) shows as `warnings` on the rows and entries that
+        name it, and in the 404 body of a lookup that finds nothing."""
+        import on_action_index
+
+        oas = (ms.get_data("On Actions") if ms else None) or {}
+        index = on_action_index.scan(mod_path, os.path.join(base_game_path, "game"))
+        if not oas and not index.declarations:
             raise DataNotLoaded("On Actions")
 
-        if parts:
-            oaid = parts[0]
-            if oaid not in oas:
-                raise NotFound(oaid)
-            return {"type": "On Actions", "id": oaid, "raw": serialize(oas[oaid])}
+        if not parts:
+            listing = index.listing()
+            listed = {row["id"] for row in listing}
+            # In the loaded store but no longer declared on disk.
+            listing.extend({"type": "On Actions", "id": oaid, "declarations": 0, "files": []}
+                           for oaid in oas if oaid not in listed)
+            return listing
 
-        return [{"type": "On Actions", "id": oaid} for oaid in oas]
+        oaid = parts[0]
+        entry = index.entry(oaid)
+        if entry is None:
+            if oaid not in oas:
+                if index.warnings:
+                    # A broken file can hide the on-action asked for.
+                    raise NotFound(oaid, scan_warnings=index.warnings)
+                raise NotFound(oaid)
+            entry = {
+                "type": "On Actions", "id": oaid, "origin": index.origin_of(oaid),
+                "vanilla_indexed": index.vanilla_indexed, "declarations": 0, "sources": [],
+                "note": "In the server's loaded store, but no file under common/on_actions "
+                        "declares it now: the store predates an edit (POST /reload).",
+            }
+            if index.warnings:
+                entry["warnings"] = index.warnings
+        hook = next((e for e in engine_docs.get("on-actions") or []
+                     if e.get("name") == oaid), None)
+        if hook is not None:
+            # on_actions.log: an on-action the engine itself knows.
+            entry["engine"] = {"from_code": bool(hook.get("from_code")),
+                               "scopes": hook.get("scopes") or []}
+        if oaid in oas:
+            entry["raw"] = serialize(oas[oaid])
+            if entry["declarations"] > 1:
+                entry["raw_note"] = ("raw is the parsed store's block, which keeps one per "
+                                     "name: the last declaration read. Read sources and merged.")
+        return entry
+
+    def _on_action_callers(self, parts):
+        """GET /on-action-callers/<scripted_effect | event_id | on_action> (#333)
+
+        The mod on-actions that reach the scripted effect, the event or the
+        on-action, through any chain of scripted effects and events (an
+        event's immediate, after or option). `callers` rows: {on_action, file,
+        line, via (effect | trigger_event | events | random_events |
+        first_valid | on_actions), through (the effects and events between the
+        on-action and the target), guards (one entry per hop, the on-action's
+        own call first), guards_complete, other_routes, through_option, hops
+        (each call site: in, kind, file, line, path, guards, via, other_sites),
+        roots (the on-actions nothing in the mod lists that it hangs from) and
+        engine_hooks (those of them the engine fires from code; null when the
+        engine docs are not loaded)}.
+
+        A row is the shortest route from that on-action call site, not the
+        only one. `guards_complete` is false when a link on it calls the next
+        from another site too, or reaches the target through another link as
+        well (`other_routes` names them): the guards shown are then not the
+        whole condition. `through_option` marks a route that runs through an
+        event option. An effect a caller passes by name (`helper = { EFFECT =
+        x }`, run as `$EFFECT$ = yes`) is followed through the helper;
+        `passed_as_parameter` lists those call sites.
+
+        It follows on-actions, scripted effects and events only. Every other
+        entity the graph knows calls the target or a link of a chain (a
+        journal entry's pulse, a scripted button, a decision, ...) is in
+        `not_followed` ({kind, id, file, line, path, sites, through}), counted
+        in `not_followed_count` / `not_followed_kinds`; `unreached` lists the
+        links nothing in the mod calls or fires. So `count: 0` means "nothing
+        calls it" only when those and `passed_as_parameter` are empty:
+        `summary` says which.
+
+        Built from event_context_audit's graph on each call (several seconds,
+        as /event-dispatch), console harness files included. Mod script only."""
+        import on_action_index
+
+        if not parts:
+            raise BadRequest("usage: /on-action-callers/<scripted_effect|event_id|on_action>")
+        hooks = engine_docs.get("on-actions") or []
+        code = {e.get("name") for e in hooks if e.get("from_code")} if hooks else None
+        out = on_action_index.callers(mod_path, parts[0], code)
+        if out is None:
+            raise NotFound(parts[0])
+        return out
 
     # ---- technology effects -----------------------------------------------
     def _technology_effects(self, parts):
