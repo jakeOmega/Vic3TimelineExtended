@@ -760,8 +760,8 @@ class PrivateTest(unittest.TestCase):
     TOOLTIP = re.compile(r"\b(?:IsValidTooltip|ExecuteTooltip|IsShownTooltip)\(")
 
     def test_no_public_hover_prints_a_scripted_guis_lines(self):
-        """A scripted GUI's tooltip prints its script's custom_tooltip keys,
-        which neither BindingTest nor te_rebind_country.py sees, and Tax
+        """A scripted GUI's tooltip prints its script's custom_tooltip keys
+        (BindingTest and te_rebind_country.py follow them since #1361), and Tax
         Code's read GetPlayer (te_tax_can_pass's te_tax_tt_pass_*). So in what
         another country's panel draws, each one sits in a SelectLocalization's
         own-country branch (own_branch), and no loc it renders calls one."""

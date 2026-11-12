@@ -84,8 +84,12 @@ tooltip         (`common/scripted_guis/`), which a widget renders through
                 `je_un_ov_motions_wait_tt` reads `JournalEntry.GetCountry`).
                 Exempt. A finding on a key that is also one of these says so:
                 split the key. The helper here reads only the scripted GUI's
-                own lines, not the scripted effects it calls; #1361 is to add
-                a shared walker.
+                own lines, not the scripted effects it calls; the shared
+                walker #1361 added (`gui_test_helpers.ScriptedGuis`) is not
+                used here yet. The other contexts' walks don't follow a
+                tooltip a key asks of a scripted GUI: its lines are this
+                context's. The public panel's does, as `panel_loc_keys`
+                does.
 
 Not looked at: an event's text, a `custom_tooltip` in other script, and
 whether a widget's context holds the object a widget root names (a
@@ -323,16 +327,21 @@ class Reach:
     with each key's parent, so a finding can give its path. One step is the
     shared walker run over a table in which only the key in hand has its
     text: its `$KEY$` splices, quoted names and GetCustom keys come out, and
-    go no further."""
+    go no further. own, scripted and contexts as loc_closure's: scripted
+    None follows the repo's scripted GUIs' tooltips, which a context whose
+    keys render as widget text must not (h.ScriptedGuis(None)): the lines a
+    scripted GUI's tooltip prints render with the script's root."""
 
-    def __init__(self, loc, custom, own=True):
-        self.loc, self.custom, self.own = loc, custom, own  # own: as gui_test_helpers.loc_closure's
+    def __init__(self, loc, custom, own=True, scripted=None, contexts=()):
+        self.loc, self.custom, self.own = loc, custom, own
+        self.scripted, self.contexts = scripted, contexts
         self._blank = dict.fromkeys(loc, "")
 
     def step(self, key: str) -> set[str]:
         self._blank[key] = self.loc[key]
         try:
-            return h.loc_closure({key}, self._blank, own=self.own, custom=self.custom) - {key}
+            return h.loc_closure({key}, self._blank, own=self.own, custom=self.custom, scripted=self.scripted,
+                                 contexts=self.contexts) - {key}
         finally:
             self._blank[key] = ""
 
@@ -415,7 +424,25 @@ def repo_public_context() -> tuple[dict[str, set[str]], set[str], str]:
 def public_seeds(names, types, templates, loc, custom) -> dict[str, str]:
     """Each key the parts of the named types another country's panel draws
     name, with where: panel_loc_keys's roots (gui_test_helpers.panel_view's
-    open types less their skipped parts, then the templates they use)."""
+    open types less their skipped parts, then the templates they use, and
+    the lines the scripted GUI tooltips they ask for print, #1361). Close
+    them with Reach(own=False, contexts=public_contexts(...))."""
+    out = _drawn_seeds(names, types, templates, loc, custom)
+    scripted = h.scripted_guis(h.REPO)
+    for _, td, pos, sguis, method in h.panel_tooltips(set(names), types, templates)[0]:
+        for sgui in sorted(sguis):
+            for key in sorted(scripted.keys(sgui, method, loc)):
+                out.setdefault(key, f"{td.path}:{td.line + h._line_of(td, pos)} {sgui}'s {method}")
+    return out
+
+
+def public_contexts(names, types, templates) -> set[str]:
+    """The scripted GUIs the panel sets as a datacontext: what a bare
+    `ScriptedGui` in a loc key it renders may be (panel_tooltips)."""
+    return h.panel_tooltips(set(names), types, templates)[1]
+
+
+def _drawn_seeds(names, types, templates, loc, custom) -> dict[str, str]:
     view = h.panel_view(set(names), types, templates)
     out: dict[str, str] = {}
     drawn = [(types[name], h.unguarded(types[name].body, view.skip[name])) for name in sorted(view.open)]
@@ -456,7 +483,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
         raise FileNotFoundError(f"no loc key under {os.path.join(root, LOC_DIR)}")
     loc = {k: v for k, (v, _, _) in index.items()}
     custom = h.custom_loc(root)
-    reach = Reach(loc, custom)
+    reach = Reach(loc, custom, scripted=h.ScriptedGuis(None))  # a scripted GUI's lines are their own context
 
     status, frame = journal_seeds(root, loc)
     entry_seeds = {**block_seeds(root, "scripted_buttons", ("name", "desc"), loc), **status}
@@ -511,7 +538,8 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
     for (kind, key), (reads, tabs) in sorted(found.items()):
         if tabs[0] not in walked:
             seeds = public_seeds(public_panels[tabs[0]], types, templates, loc, custom)
-            walked[tabs[0]] = (seeds, Reach(loc, custom, own=False).closure(seeds))
+            contexts = public_contexts(public_panels[tabs[0]], types, templates)
+            walked[tabs[0]] = (seeds, Reach(loc, custom, own=False, contexts=contexts).closure(seeds))
         seeds, parent = walked[tabs[0]]
         flag(kind, key, tuple(reads), tabs=tuple(tabs), path=_path(key, parent, seeds) if key in parent else ())
     result.reach[PUBLIC] = len(public)

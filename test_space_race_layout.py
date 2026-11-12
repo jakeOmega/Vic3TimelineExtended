@@ -1857,8 +1857,9 @@ class ScriptTooltipTest(unittest.TestCase):
     country's panel reads the shown country, not the player (spec
     2026-11-02-charts-help-national-info § 6.4). Orbit's Strikes hover is
     te_asat_record_sgui's ExecuteTooltip: its lines come from the effect's
-    custom_tooltip keys, which no panel's loc closure reaches, so BindingTest
-    can't see them. They read the scripted GUI's root (SCOPE.GetRootScope, the
+    custom_tooltip keys, which no panel's loc closure reached when this was
+    written (BindingTest follows them since #1361; this holds the lines by
+    name). They read the scripted GUI's root (SCOPE.GetRootScope, the
     form covert_last_exposed_sgui ships), or nothing at all."""
 
     TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")
