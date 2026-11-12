@@ -947,7 +947,7 @@ The engine hires sailors to a ship in units of 100, so a ship type whose `ship_c
 
 ## Every Ship Type Needs `ai_ship_category` (since 1.14.4)
 
-1.14.4's AI fleet rework added `common/ai_ship_categories/` (`battle_line`, `coastal_defense`, `screens`, `torpedo_craft`, `carriers`, `transports`), and vanilla's `ai_ship_categories.md` says every ship type must belong to exactly one. The field goes on the ship type, next to `ship_group`: `ai_ship_category = ai_ship_category_screens`. It is not a parse error when missing. The engine logs `ship_type.cpp:385: Ship Type is missing ai_ship_category! Ship Type: <key>` once per type in `error.log` and keeps loading. On 2026-09-23 all 19 mod ship types lacked it, and every 1.14.4 session crashed on the month tick at the same fault address. That made it the prime suspect, and the field was added to all 19. Choose the category by combat role, not by `ship_group`, which only drives construction, laws and presentation. Vanilla's `destroyer` is `ship_group_torpedo_craft` *and* `ai_ship_category_torpedo_craft`, but a ship whose job is screening belongs in `screens`. The mod's roles in the `extra_ship_types.txt` header map as follows: capital → `battle_line` (carriers → `carriers`), escort → `screens`, raider → `torpedo_craft`, troop → `transports`. The one deliberate exception is `swarm_coordination_vessel`, labelled "capital/support", which is `screens` because its 700 screening is the highest in the roster. Getting escorts right matters more than it looks. The mod's `is_obsolete` INJECTs are meant to retire vanilla's light cruiser and destroyer at `sonar`, which would leave the escorts as the AI's only current-generation screens. Whether the AI's build choice honours `is_obsolete` is unverified. When you add a ship type, grep `error.log` for `ship_type.cpp` after the next launch. `roster_membership_audit` (CI and every reload) flags a mod ship type with no `ai_ship_category`, one naming a category that doesn't exist, and one with no row in `gen_fleet_entities.py`'s `SHIPS` table, which would leave it with no model on the map (#390).
+1.14.4's AI fleet rework added `common/ai_ship_categories/` (`battle_line`, `coastal_defense`, `screens`, `torpedo_craft`, `carriers`, `transports`), and vanilla's `ai_ship_categories.md` says every ship type must belong to exactly one. The field goes on the ship type, next to `ship_group`: `ai_ship_category = ai_ship_category_screens`. It is not a parse error when missing. The engine logs `ship_type.cpp:385: Ship Type is missing ai_ship_category! Ship Type: <key>` once per type in `error.log` and keeps loading. On 2026-09-23 all 19 mod ship types lacked it, and every 1.14.4 session crashed on the month tick at the same fault address. That made it the prime suspect, and the field was added to all 19. Choose the category by combat role, not by `ship_group`, which only drives construction, laws and presentation. Vanilla's `destroyer` is `ship_group_torpedo_craft` *and* `ai_ship_category_torpedo_craft`, but a ship whose job is screening belongs in `screens`. The mod's roles in the `extra_ship_types.txt` header map as follows: capital → `battle_line` (carriers → `carriers`), escort → `screens`, raider → `torpedo_craft`, troop → `transports`. The one deliberate exception is `swarm_coordination_vessel`, labelled "capital/support", which is `screens` because its screening (389 since #1625's rescale, 700 before) is the highest in the roster. Getting escorts right matters more than it looks. The mod's `is_obsolete` INJECTs are meant to retire vanilla's light cruiser and destroyer at `sonar`, which would leave the escorts as the AI's only current-generation screens. Whether the AI's build choice honours `is_obsolete` is unverified. When you add a ship type, grep `error.log` for `ship_type.cpp` after the next launch. `roster_membership_audit` (CI and every reload) flags a mod ship type with no `ai_ship_category`, one naming a category that doesn't exist, and one with no row in `gen_fleet_entities.py`'s `SHIPS` table, which would leave it with no model on the map (#390).
 
 ### 1.15: the submarines category, and goods in the modules
 
@@ -3082,7 +3082,7 @@ When designing a system that responds to "how authoritarian is this country", co
 
 When migrating modifiers from country scope to JE scope, existing save games still have the old country-level modifiers. A cleanup scripted effect (`legacy_je_modifier_cleanup_effect`) runs once via `on_game_start` to remove these stale modifiers.
 
-**File:** `common/scripted_effects/legacy_modifier_cleanup.txt` + `common/on_actions/legacy_modifier_cleanup.txt`
+**File:** `common/scripted_effects/legacy_modifier_cleanup.txt` + `common/on_actions/legacy_modifier_cleanup.txt`. Both were deleted with every migration they held when the mod moved to vanilla 1.15, which loads no 1.14 save (#1429); a future migration starts the pair again.
 
 ### Simple Cleanup (toggle/pulse modifiers)
 
@@ -3114,10 +3114,11 @@ Deleting a player-facing toggle whose modifier reserved a resource is the third 
 
 1. **Keep the static modifier defined for one release.** `remove_modifier` on an undefined modifier is not a safe no-op, and the modifier still needs its loc key while it is defined. Nor is it a no-op on a *defined* modifier the scope does not hold: that logs `remove_modifier effect [ Timed modifier X in scope object … not found ]` to `error.log` on every call. Guard it (`remove_modifier_if_exists_effect = { MODIFIER = X }`, `extra_effects.txt`). `cr_je_cleanup_effect` removed seven unconditionally and logged 120 lines in one session.
 2. **Strip it from a guarded one-shot at the head of the owning JE's `on_monthly_pulse`**, not from `on_game_started` — a JE pulse reaches every save including ones already in progress, and `limit = { … has_modifier = X }` makes it free on every other month. Remember the refund is not visible inside that same effect block, so any `modifier:` read later in the same pulse still sees the pre-refund value; check that the stale reading errs on the conservative side before choosing where in the pulse to put it.
-3. **Write a dated `PENDING REMOVAL` block at the top of `legacy_modifier_cleanup.txt`** listing *every* artefact that must be deleted together — the static modifier, its loc keys, the one-shot, and the line in `legacy_je_modifier_cleanup_effect`. Removing any subset early re-breaks it in one direction or the other, and nothing enforces the grouping. Live example: `banking_policy_rate_hike`, added 2026-09-19.
+3. **Write a dated `PENDING REMOVAL` block at the top of `legacy_modifier_cleanup.txt`** listing *every* artefact that must be deleted together — the static modifier, its loc keys, the one-shot, and the line in `legacy_je_modifier_cleanup_effect`. Removing any subset early re-breaks it in one direction or the other, and nothing enforces the grouping. Example: `banking_policy_rate_hike`, added 2026-09-19, removed with the file in #1429.
 
 ### Lifecycle
-- Safe to delete cleanup files once no save games from before the migration exist.
+- Safe to delete cleanup files once no save games from before the migration exist. A vanilla release that loads no older save (1.15) is such a point: everything kept only for an older mod version can go at once.
+- Before deleting a strip, prove that nothing a new game runs adds what it strips: a strip that also catches a copy a live path can still add is not old-save code.
 - Delete BOTH the scripted effect file AND the on_action file (`common/on_actions/legacy_modifier_cleanup.txt`).
 
 ## Goods-Keyed Modifier Labels Splice the Good's Name
@@ -4892,6 +4893,8 @@ Two more from the nuclear programme panel (2026-09-18):
 
 A journal entry's `status_desc` renders with `ROOT` = the journal entry, so its keys read `[ROOT.ScriptValue('x')]` / `[ROOT.GetCountry.GetModifier…]`. A custom widget has no such root: the same reading must become `[JournalEntry.GetCountry.MakeScope.ScriptValue('x')]` (gotcha #20 confirms `.MakeScope.ScriptValue`, `.MakeScope.Var` and `.GetCustom` in-game). Neither form errors visibly in the wrong context — the value simply renders blank — so every key a JE-widget refactor lifts out of `status_desc` needs its root rewritten, and **a key still reachable from both surfaces must carry no country accessor at all**; split it in two if it does. Customizable-localization targets and `$KEY$`-nested keys inherit their caller's context, so they belong in that no-accessor class by default, while an absolute accessor such as `GetPlayer` is safe anywhere (which is what the covert funding tooltips use, since both the hidden JE button and the widget render them). Moving 16 `je_iw_*` keys this way, the check that catches a mistake is *which surfaces can reach this key*, not whether the line looks right — audit reachability, not spelling.
 
+`loc_root_context_audit` (CI and every reload, #319) is that check. It closes the keys every `.gui` file names, and the keys a `status_desc` block or a scripted button's `name` and `desc` name, over `$KEY$` splices, keys named in `SelectLocalization` / `AddLocalizationIf` and `GetCustom` entries, and gives each flag's path from the line that names the first key. In the first set it flags a `ROOT.`, `SCOPE.` or `THIS.` read, the case above that renders blank. In the second it flags a `JournalEntry.` or `Country.` read as the unproven root there: use the proven one, `ROOT.GetCountry…`. That half is a convention (vanilla never reads either in a `status_desc` or button key, but nobody has seen one fail; `gui_modding_guide.md` gotcha #20 has the evidence both ways and the play-test row that would settle it). A widget's country is `Country` since 2026-11-02 (gotcha #45), and a key a public tab renders may read neither `JournalEntry` nor the player; the audit's CLI and CI run restate that, and a reload leaves it to them and to `BindingTest`. The entry's implicit keys (`<je>_reason`, `_goal`, `_status`), its `progress_desc` and a scripted progress bar's text are not judged: vanilla reads `JournalEntry` as well as `ROOT` there.
+
 ## Project a Threshold Into an Enum Variable Rather Than Comparing In `.gui`
 
 `.gui` can compare a script variable against a literal (`GreaterThanOrEqualTo_CFixedPoint(…, '(CFixedPoint)12')`), and that is how the covert-operations rows originally decided an operation's phase — which put the system's 6- and 12-month phase boundaries in a second, silent place. The fix generalises: have script write the *classification* into its own variable (`iw_phase` = 1/2/3, plus `iw_phase_months_left` for the countdown) at the one site that already recomputes the underlying number, and let the `.gui` test identity with `EqualTo_CFixedPoint` (35 vanilla uses) instead of re-deriving the band. The threshold then exists only in the scripted trigger that defines it. One consequence to plan for: a projected variable is *new*, so containers or countries restored from an older save lack it until the next pulse, and a `.gui` read of a missing variable logs "Failed to fetch variable" every frame — gate the new lines on an `is_shown`-only scripted GUI that asks script whether the variable has landed yet.
@@ -5195,9 +5198,12 @@ to `source_country`. One-off transfers and imposed restrictions build none in va
 money and ship transfers; law commitment, no tariffs), and the mod's follow suit with a
 reviewed reason. `treaty_leverage_side_audit` checks all of it, tagged
 `# REVIEWED YYYY-MM-DD (involvement): why` (`--strict` in CI). Pacts (`diplomatic_actions`
-with a `pact = {}`) carry the same two fields but appear to read the side the other way round
-(a puppet pact's `source_country` 8,000 only makes sense with the overlord gaining), so don't
-carry this rule over to them unverified.
+with a `pact = {}`, fields inside it) carry the same two fields but appear to read the side the
+other way round (a puppet pact's `source_country` 8,000 only makes sense with the overlord
+gaining), so don't carry this rule over to them. Every vanilla directed pact names
+`source_country` and `embargo` alone `mutual`; give a mod pact its nearest vanilla analogue's
+pair exactly, which reads as vanilla's whichever side the engine means (`fund_lobbies` 1,000 for
+interference, `increase_relations` 1,000 for aid). The audit's pact rule holds that (#1380).
 
 ## An "at least tier N" trigger must list every higher tier — extending a ladder breaks the short ones
 
@@ -5637,3 +5643,27 @@ Probed on 1.15.0 with `-debug_mode`; the evidence and the rest of what the game 
 ## `gdp_ownership_ratio` Is a Trigger With No Value Form: Rank Owners by Bands, Not `ordered_country`
 
 `gdp_ownership_ratio = { target = X value > 0.05 }` only compares; nothing returns the share as a number, so `ordered_country = { order_by = ... }` cannot rank foreign owners by it, and a `random_country` with the 5% test names any owner, not the largest (`decolonization_events.15` did, #1617). Rank by bands: clear the scope, then run one `random_country` per threshold from the top (50%, 35%, 25%, 15%, 10%, 5%), each guarded by `NOT = { exists = scope:X }`, so the first band an owner reaches names it. The shares sum to at most 1, so the top bands hold one or two countries. `decol_save_biggest_foreign_owner` (`common/scripted_effects/decolonization.txt`) is the worked example. The same shape serves any trigger-only comparison.
+
+## `list_scopes` Lists Only a Positive Count: Write "No X That Fails" as `filter` Plus `count = all` (1.15)
+
+`list_scopes = yes` (and `show_trigger_per_scope = yes`) on an `any_*` trigger make its tooltip name the scopes it
+counted. Every vanilla use (`je_consolidate_colonial_rule`, `je_greek_nationalism`, the tsar scripted buttons) is a
+positive count: `count >= N`, `percent >= x` or `count = all`, with `filter = { ... }` saying which scopes are counted
+(`count = all` and `percent` count against the filtered set). Whether a count wrapped in `NOT = { }` lists anything is
+untested, so a gate written "no great power that fails" (`NOT = { any_country = { <who> <fails> } }`) becomes
+`any_country = { filter = { <who> } <passes> count = all list_scopes = yes }`. Two things keep it exactly equal:
+put it under `trigger_if = { limit = { any_country = { <who> } } ... }`, since the NOT form passed over an empty set
+and what `count = all` does there is unverified; and "at most one fails" (`NOT = { ... count >= 2 }`) becomes
+`count >= <script value: the size of the set less one>`, since no vanilla trigger uses `count <`. The United Nations
+of Earth gates are the worked example (`formable_gating_triggers.txt`, `te_formation_gating_values.txt`), and
+`test_une_formation_gates.py` checks both forms against each other over random worlds. Whether a list survives inside
+`custom_tooltip = { text = ... }` is C10 (`docs/audits/vanilla_1_15_prep.md`), open.
+
+## Latitude Triggers Are State-Scoped and Read the State Region's Centre Point (1.15)
+
+`in_tropics`, `in_north_hemisphere` and `in_south_hemisphere` take a state (not a state region, a province or a
+country) and test where its state region's centre point lies: between the tropics, north or south of the equator.
+None is used in vanilla 1.15's `common/`. Offline, the closest stand-in for that point is each state's reference
+place in `scripts/generators/data/local_climate.csv` (column `latitude`, whole degrees), which is how the space
+elevator's site list and the Antarctic station AI were checked (#1454); a state within a degree or two of a tropic
+can fall either way in the game. A building's `possible` is in state scope, so `in_tropics = yes` goes there bare.

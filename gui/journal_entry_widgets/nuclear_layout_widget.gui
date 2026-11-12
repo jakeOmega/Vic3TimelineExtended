@@ -212,6 +212,9 @@ types nuclear_layout_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_nuclear_program')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 
 		blockoverride "tab_content" {
 			block "te_nuclear_tab_layout" {

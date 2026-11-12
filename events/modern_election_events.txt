@@ -825,6 +825,8 @@ modern_election_events.9 = {
 			50 = {
 				scope:govt_party = { save_scope_as = gaffe_party }
 				scope:opp_party = { save_scope_as = rival_party }
+				# Marks the blunder as our own side's, for the option names.
+				scope:govt_party = { save_scope_as = own_gaffe_party }
 			}
 			50 = {
 				scope:opp_party = { save_scope_as = gaffe_party }
@@ -835,8 +837,18 @@ modern_election_events.9 = {
 
 	cancellation_trigger = { in_election_campaign = no }
 
+	# The names follow whose candidate blundered: the effects already do
+	# (rival_party gains, gaffe_party loses), but "take the high road" reads
+	# wrong when the blunder was our own side's.
 	option = { # Capitalize ruthlessly
-		name = modern_election_events.9.a
+		name = {
+			trigger = { exists = scope:own_gaffe_party }
+			text = modern_election_events.9.a_own
+		}
+		name = {
+			trigger = { NOT = { exists = scope:own_gaffe_party } }
+			text = modern_election_events.9.a
+		}
 		default_option = yes
 		if = {
 			limit = { exists = scope:rival_party }
@@ -850,11 +862,20 @@ modern_election_events.9 = {
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_jingoist } } add = 2 }
+			# Our own blunder: letting it run costs us and gains nothing.
+			modifier = { trigger = { exists = scope:own_gaffe_party } add = -4 }
 		}
 	}
 
 	option = { # Take the high road
-		name = modern_election_events.9.b
+		name = {
+			trigger = { exists = scope:own_gaffe_party }
+			text = modern_election_events.9.b_own
+		}
+		name = {
+			trigger = { NOT = { exists = scope:own_gaffe_party } }
+			text = modern_election_events.9.b
+		}
 		add_loyalists = { value = small_radicals }
 		if = {
 			limit = { exists = scope:gaffe_party }
@@ -863,6 +884,7 @@ modern_election_events.9 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_freedom_of_conscience } add = 2 }
+			modifier = { trigger = { exists = scope:own_gaffe_party } add = 2 }
 		}
 	}
 
@@ -984,8 +1006,15 @@ modern_election_events.11 = {
 		NOT = { has_variable = election_event_cooldown }
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
+		# A radio address before television: radio itself (era 4, production;
+		# mass_propaganda cannot require it), and neither the television set
+		# (television, era 6) nor broadcast television (era 7).
 		has_technology_researched = mass_propaganda
-		NOT = { has_technology_researched = television_broadcasting }
+		has_technology_researched = radio
+		NOR = {
+			has_technology_researched = television
+			has_technology_researched = television_broadcasting
+		}
 	}
 
 	immediate = {
@@ -1033,17 +1062,15 @@ modern_election_events.11 = {
 		}
 	}
 
-	option = { # Counter with our own broadcast
+	# The address was a speaker on our side (.d): a calmer follow-up keeps a
+	# smaller share of its gain and wins back some of those it alienated.
+	option = { # Follow it with a calmer broadcast of our own
 		name = modern_election_events.11.c
 		if = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_small }
 		}
-		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
-		}
-		add_radicals = { value = very_small_radicals }
+		add_loyalists = { value = very_small_radicals }
 		ai_chance = {
 			base = 4
 			modifier = { trigger = { has_law = law_type:law_ministry_of_propaganda } add = 2 }
@@ -1358,18 +1385,15 @@ modern_election_events.15 = {
 			is_in_government = yes
 			ig_clout >= 0.15
 		}
-		# A boom story: with the banking cycle running, only in its expansion,
-		# boom or frenzy phases; never announce a boom in the middle of a panic.
+		# A boom story, so only where the mod tracks one: a running banking
+		# cycle in its expansion, boom or frenzy phase. Without a cycle (the
+		# rule off, or not yet started) nothing says the economy is growing,
+		# and the options' boom and bubble would be invented (#1551).
+		te_banking_cycle_running = yes
 		OR = {
-			te_banking_cycle_running = no
-			AND = {
-				te_banking_cycle_running = yes
-				OR = {
-					banking_cycle_is_expansion = yes
-					banking_cycle_is_boom = yes
-					banking_cycle_is_frenzy = yes
-				}
-			}
+			banking_cycle_is_expansion = yes
+			banking_cycle_is_boom = yes
+			banking_cycle_is_frenzy = yes
 		}
 	}
 
@@ -2347,10 +2371,6 @@ modern_election_events.25 = {
 
 	option = { # Pass transparency legislation
 		name = modern_election_events.25.c
-		highlighted_option = yes
-		trigger = {
-			has_technology_researched = decolonization
-		}
 		add_modifier = { name = me_transparency_act_modifier days = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
@@ -2723,6 +2743,8 @@ modern_election_events.29 = {
 
 	option = { # Propose a limited pilot program
 		name = modern_election_events.29.c
+		# A pilot makes no sense once the full scheme is law (.29.d_enacted).
+		trigger = { NOT = { has_law_or_variant = law_type:law_universal_basic_income } }
 		if = {
 			limit = { exists = scope:ubi_party }
 			scope:ubi_party = { add_momentum = momentum_small }
@@ -3043,6 +3065,8 @@ modern_election_events.33 = {
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = machine_learning
 		has_technology_researched = generative_ai
+		# Voting by neural interface needs the interfaces.
+		has_technology_researched = brain_computer_interfaces
 	}
 
 	immediate = {
@@ -3128,7 +3152,10 @@ modern_election_events.34 = {
 		NOT = { has_variable = election_event_cooldown }
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
-		has_technology_researched = biotechnology
+		# Laboratory-grown food needs the technology that unlocks the Cultured
+		# Meat Plant and Cultured Produce Facility (era 11, society). They can be
+		# built but need not exist, so the text treats the food as a proposal.
+		has_technology_researched = lab-grown_food
 	}
 
 	immediate = {

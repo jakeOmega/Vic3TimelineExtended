@@ -136,25 +136,6 @@ ch_program_funding_total_cost_mult = {
 	min = 0
 }
 
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of
-# legacy_je_modifier_cleanup_effect (after 2026-12-31): the multipliers of the
-# funding pair and the exposition's cost that a save from before #1404 still
-# holds on the entry name these, until that block strips the copies.
-ch_program_funding_level_value_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_level_value }
-}
-
-ch_program_funding_cost_mult_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_cost_mult }
-}
-
-ch_program_funding_total_cost_mult_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_total_cost_mult }
-}
-
 # The funding tooltip's two figures, in money a week: one level's cost and the
 # programme's cost at its current level.
 ch_program_funding_step_cost_display = {

@@ -19,6 +19,13 @@
 # Speed, critical hits, vulnerability, visibility and each set's thematic extras
 # are outside the rule.
 #
+# Vulnerability (#1625): a gun module's ship_vulnerability_add is its analogue's
+# gun module of the same tier, at the base game's current (1.15.1) value: super
+# dreadnought 6/14/28, destroyer 3/7/14, aircraft carrier 6/14/56, light cruiser
+# -/1/1, troopship 10/25/50, and none on the submarines, which the base game
+# dropped. test_ship_modules.py checks it. The Swarm Coordination Vessel's high
+# guns also screen (+56, its old 100 at the light cruiser's 270 -> 150 ratio).
+#
 # Ten sets were added on 2026-11-03 for ships that used to borrow another
 # ship's set; their names come from that set (or, where it was the base
 # game's 19th-century troopship or light cruiser, from a modern mod set) and
@@ -87,7 +94,7 @@ ship_mod_asw_destroyer_guns_light = {
 		ship_hull_damage_add = 48
 		ship_crew_damage_add = 8
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 5
+		ship_vulnerability_add = 3
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 340
@@ -103,7 +110,7 @@ ship_mod_asw_destroyer_guns_medium = {
 		ship_hull_damage_add = 85
 		ship_crew_damage_add = 20
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 12
+		ship_vulnerability_add = 7
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 490
@@ -119,7 +126,7 @@ ship_mod_asw_destroyer_guns_high = {
 		ship_hull_damage_add = 125
 		ship_crew_damage_add = 30
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 		ship_battle_against_ship_type_submarine_accuracy_mult = 0.15
 		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.15
 		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = 0.15
@@ -258,7 +265,6 @@ ship_mod_nuclear_submarine_guns_light = {
 		ship_hull_damage_add = 80
 		ship_crew_damage_add = 13
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 260
@@ -274,7 +280,6 @@ ship_mod_nuclear_submarine_guns_medium = {
 		ship_hull_damage_add = 145
 		ship_crew_damage_add = 32
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 1
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 445
@@ -290,7 +295,6 @@ ship_mod_nuclear_submarine_guns_high = {
 		ship_hull_damage_add = 205
 		ship_crew_damage_add = 48
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 2.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 660
@@ -415,7 +419,7 @@ ship_mod_guided_missile_ship_guns_light = {
 		ship_hull_damage_add = 85
 		ship_crew_damage_add = 15
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 5
+		ship_vulnerability_add = 3
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 430
@@ -431,7 +435,7 @@ ship_mod_guided_missile_ship_guns_medium = {
 		ship_hull_damage_add = 155
 		ship_crew_damage_add = 38
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 12
+		ship_vulnerability_add = 7
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 610
@@ -447,7 +451,7 @@ ship_mod_guided_missile_ship_guns_high = {
 		ship_hull_damage_add = 220
 		ship_crew_damage_add = 55
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 		ship_accuracy_mult = 0.3
 	}
 	construction_goods = {
@@ -588,7 +592,7 @@ ship_mod_nuclear_supercarrier_guns_light = {
 		ship_hull_damage_add = 150
 		ship_crew_damage_add = 20
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 10
+		ship_vulnerability_add = 6
 	}
 	construction_goods = {
 		goods_input_aeroplanes_add = 525
@@ -604,7 +608,7 @@ ship_mod_nuclear_supercarrier_guns_medium = {
 		ship_hull_damage_add = 255
 		ship_crew_damage_add = 33
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 	}
 	construction_goods = {
 		goods_input_aeroplanes_add = 1120
@@ -621,7 +625,7 @@ ship_mod_nuclear_supercarrier_guns_high = {
 		ship_hull_damage_add = 375
 		ship_crew_damage_add = 50
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 100
+		ship_vulnerability_add = 56
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.1
 	}
 	construction_goods = {
@@ -758,7 +762,7 @@ ship_mod_arsenal_ship_guns_light = {
 		ship_hull_damage_add = 395
 		ship_crew_damage_add = 135
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 10
+		ship_vulnerability_add = 6
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 2230
@@ -774,7 +778,7 @@ ship_mod_arsenal_ship_guns_medium = {
 		ship_hull_damage_add = 725
 		ship_crew_damage_add = 225
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 3050
@@ -790,7 +794,7 @@ ship_mod_arsenal_ship_guns_high = {
 		ship_hull_damage_add = 1050
 		ship_crew_damage_add = 320
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 50
+		ship_vulnerability_add = 28
 		ship_blockade_strength_add = 200
 	}
 	construction_goods = {
@@ -1092,7 +1096,7 @@ ship_mod_hypersonic_missile_platform_guns_light = {
 		ship_hull_damage_add = 520
 		ship_crew_damage_add = 235
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 10
+		ship_vulnerability_add = 6
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 3160
@@ -1108,7 +1112,7 @@ ship_mod_hypersonic_missile_platform_guns_medium = {
 		ship_hull_damage_add = 945
 		ship_crew_damage_add = 400
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 4440
@@ -1124,7 +1128,7 @@ ship_mod_hypersonic_missile_platform_guns_high = {
 		ship_hull_damage_add = 1370
 		ship_crew_damage_add = 565
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 50
+		ship_vulnerability_add = 28
 		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.1
 	}
 	construction_goods = {
@@ -1268,7 +1272,6 @@ ship_mod_pulsed_laser_escort_guns_light = {
 		ship_hull_damage_add = 345
 		ship_crew_damage_add = 60
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 240
@@ -1284,7 +1287,7 @@ ship_mod_pulsed_laser_escort_guns_medium = {
 		ship_hull_damage_add = 590
 		ship_crew_damage_add = 130
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 1.5
+		ship_vulnerability_add = 1
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 420
@@ -1300,7 +1303,7 @@ ship_mod_pulsed_laser_escort_guns_high = {
 		ship_hull_damage_add = 840
 		ship_crew_damage_add = 195
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 3
+		ship_vulnerability_add = 1
 		ship_accuracy_mult = 0.3
 	}
 	construction_goods = {
@@ -1441,7 +1444,6 @@ ship_mod_swarm_coordination_vessel_guns_light = {
 		ship_hull_damage_add = 295
 		ship_crew_damage_add = 50
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 330
@@ -1457,7 +1459,7 @@ ship_mod_swarm_coordination_vessel_guns_medium = {
 		ship_hull_damage_add = 505
 		ship_crew_damage_add = 105
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 1.5
+		ship_vulnerability_add = 1
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 600
@@ -1473,8 +1475,8 @@ ship_mod_swarm_coordination_vessel_guns_high = {
 		ship_hull_damage_add = 715
 		ship_crew_damage_add = 160
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 3
-		ship_screening_add = 100
+		ship_vulnerability_add = 1
+		ship_screening_add = 56
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 815
@@ -1612,7 +1614,6 @@ ship_mod_stealth_attack_submarine_guns_light = {
 		ship_hull_damage_add = 125
 		ship_crew_damage_add = 21
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 335
@@ -1628,7 +1629,6 @@ ship_mod_stealth_attack_submarine_guns_medium = {
 		ship_hull_damage_add = 220
 		ship_crew_damage_add = 50
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 1
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 595
@@ -1644,7 +1644,6 @@ ship_mod_stealth_attack_submarine_guns_high = {
 		ship_hull_damage_add = 315
 		ship_crew_damage_add = 80
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 2.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 870
@@ -1786,7 +1785,6 @@ ship_mod_autonomous_swarm_submarine_guns_light = {
 		ship_hull_damage_add = 210
 		ship_crew_damage_add = 32
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 470
@@ -1802,7 +1800,6 @@ ship_mod_autonomous_swarm_submarine_guns_medium = {
 		ship_hull_damage_add = 375
 		ship_crew_damage_add = 80
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 1
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 815
@@ -1818,7 +1815,6 @@ ship_mod_autonomous_swarm_submarine_guns_high = {
 		ship_hull_damage_add = 540
 		ship_crew_damage_add = 120
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 2.5
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 1200
@@ -2134,7 +2130,7 @@ ship_mod_stealth_battlecruiser_guns_light = {
 		ship_hull_damage_add = 350
 		ship_crew_damage_add = 150
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 10
+		ship_vulnerability_add = 6
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 2320
@@ -2150,7 +2146,7 @@ ship_mod_stealth_battlecruiser_guns_medium = {
 		ship_hull_damage_add = 640
 		ship_crew_damage_add = 255
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 3200
@@ -2166,7 +2162,7 @@ ship_mod_stealth_battlecruiser_guns_high = {
 		ship_hull_damage_add = 930
 		ship_crew_damage_add = 360
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 50
+		ship_vulnerability_add = 28
 		ship_blockade_strength_add = 200
 	}
 	construction_goods = {
@@ -2318,7 +2314,7 @@ ship_mod_antimatter_battleship_guns_light = {
 		ship_hull_damage_add = 910
 		ship_crew_damage_add = 410
 		ship_critical_hit_chance_add = 0.1
-		ship_vulnerability_add = 10
+		ship_vulnerability_add = 6
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 5090
@@ -2334,7 +2330,7 @@ ship_mod_antimatter_battleship_guns_medium = {
 		ship_hull_damage_add = 1665
 		ship_crew_damage_add = 695
 		ship_critical_hit_chance_add = 0.15
-		ship_vulnerability_add = 25
+		ship_vulnerability_add = 14
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 7150
@@ -2350,7 +2346,7 @@ ship_mod_antimatter_battleship_guns_high = {
 		ship_hull_damage_add = 2415
 		ship_crew_damage_add = 980
 		ship_critical_hit_chance_add = 0.2
-		ship_vulnerability_add = 50
+		ship_vulnerability_add = 28
 		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.1
 	}
 	construction_goods = {

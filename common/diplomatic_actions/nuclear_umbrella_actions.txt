@@ -13,7 +13,7 @@
 # inherits. An overlord action with no DLC gate has precedent in
 # annex_subject_peaceful (extra_diplo_actions.txt).
 # ============================================================================
-nd_withdraw_umbrella_action = {
+nd_withdraw_umbrella_action = {  # REVIEWED 2026-11-12 (involvement): a withdrawal on vanilla raise_payments' pattern, which builds none; the overlord already gains through the subject pact
 	groups = {
 		overlord
 	}

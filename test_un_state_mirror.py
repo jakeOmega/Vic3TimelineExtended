@@ -100,13 +100,8 @@ MEMBERSHIP = _path("common", "scripted_effects", "un_membership_effects.txt")
 STATE_TRIGGERS = _path("common", "scripted_triggers", "un_state_triggers.txt")
 JE = _path("common", "journal_entries", "je_united_nations.txt")
 
-# Files whose writes are not UN state.
-EXEMPT_FILES = {
-    # One-shot save migration: the country-scope removes are an old layout,
-    # and the journal-entry adds it makes are recorded by the monthly
-    # reconcile (un_state_reconcile).
-    os.path.join("common", "scripted_effects", "legacy_modifier_cleanup.txt"),
-}
+# Files whose writes are not UN state (none since the old-save strip went, #1429).
+EXEMPT_FILES: set[str] = set()
 # Top-level definitions that write a mirrored modifier without its mirror on
 # purpose.
 EXEMPT_DEFINITIONS = {
