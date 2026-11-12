@@ -22,7 +22,20 @@ game, in English.
 ## Not probed (needs a player or a save)
 
 - **C5**, the rest: how a `progress_condition` factor of 0, and one read from a named script value, show in the
-  panel's Advance and Retreat lists (open an entry that uses one, once one does).
+  panel's Advance and Retreat lists. Civil Rights' Movement Support bar now uses them (#1441): open the entry and
+  check that each of its 13 conditional factors is listed, ticked while it applies and unticked otherwise (Social
+  Justice Movements unresearched, a policy off), and that "States with low-acceptance pops", whose value is
+  `owner.cr_low_acceptance_count` scaled and capped, is listed with its number. If it is counted but not listed,
+  that is the named-script-value case: inline the count or accept it. Check too whether the bar's own hover then
+  repeats the list.
+- **Civil Rights, two-pole bar** (#1434): Movement Support draws green over a red background with the sliding marker
+  at the current value, in the panel and its tooltip. If the marker or the textures don't show, `marker = yes` and
+  the `progressbar_green` / `progressbar_bad` sets didn't take; go back to `default_green = yes`.
+- **Civil Rights, one outcome per ending** (#1431): the panel lists ten endings in order (Victory on Paper, the
+  Civil Rights Mandate, the Movement Carries the Day, A Settlement, Reform on Paper, A New Era of Equality, then the
+  four collapses), each with its header, the shared victory or collapse condition and its own line, exactly one of
+  each kind ticked; run Federal Protection past 18 months and its line ticks while A New Era of Equality's unticks.
+  When one concludes, its event fires and the page shows its `conclusion_desc`.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe

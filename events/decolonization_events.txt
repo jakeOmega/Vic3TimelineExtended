@@ -2459,11 +2459,13 @@ decolonization_events.17 = {
 			# They find for us: the claim, without the infamy of pressing it.
 			30 = {
 				modifier = {
-					trigger = {
-						exists = scope:border_rival
-						country_rank > scope:border_rival.country_rank
+					if = {
+						limit = {
+							exists = scope:border_rival
+							country_rank > scope:border_rival.country_rank
+						}
+						add = 15
 					}
-					add = 15
 				}
 				custom_tooltip = decolonization_events.17.b_favor_tt
 				add_modifier = {
@@ -2512,11 +2514,13 @@ decolonization_events.17 = {
 			# They find for the neighbour, who now holds a claim on our land.
 			30 = {
 				modifier = {
-					trigger = {
-						exists = scope:border_rival
-						country_rank < scope:border_rival.country_rank
+					if = {
+						limit = {
+							exists = scope:border_rival
+							country_rank < scope:border_rival.country_rank
+						}
+						add = 15
 					}
-					add = 15
 				}
 				custom_tooltip = decolonization_events.17.b_against_tt
 				if = {
