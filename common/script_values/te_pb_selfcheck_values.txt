@@ -1,0 +1,11 @@
+﻿# The formation_mandates self-check's readings
+# (common/on_actions/te_pb_formation_selfcheck_on_actions.txt), stored as
+# global variables so the debug_log line can print them from any scope.
+te_pb_chk_formation_add_g = { value = global_var:te_pb_chk_formation_add }
+te_pb_chk_formation_count_g = { value = global_var:te_pb_chk_formation_count }
+# What the bloc should start with: the founder's formation mandates, up to
+# MAX_MANDATES (5, common/defines/extra_defines.txt).
+te_pb_chk_formation_expected_g = {
+	value = global_var:te_pb_chk_formation_add
+	max = 5
+}

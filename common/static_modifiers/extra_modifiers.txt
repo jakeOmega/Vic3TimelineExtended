@@ -2888,6 +2888,9 @@ cr_federal_protection_modifier = {
 	country_bureaucracy_mult = -0.05
 	country_acceptance_not_homeland_add = 5
 	country_authority_mult = -0.05
+	# The entry completes on Multicultural (with Minority Protection): federal
+	# backing speeds that enactment, segregation slows it (1.15, #1453).
+	country_enactment_speed_law_multicultural_mult = 0.25
 }
 
 cr_gradualist_modifier = {
@@ -2920,6 +2923,7 @@ cr_segregationist_modifier = {
 	country_authority_mult = 0.10
 	state_radicals_from_political_movements_mult = 0.30
 	country_acceptance_not_homeland_add = -10
+	country_enactment_speed_law_multicultural_mult = -0.25
 }
 
 # ----------------------------------------------------------------------------

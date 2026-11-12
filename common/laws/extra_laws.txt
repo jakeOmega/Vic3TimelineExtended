@@ -327,6 +327,10 @@ law_universal_basic_income = {
 		# common/laws/te_monetary_wage_pressure_injections.txt with the other
 		# ten, because this law is the mod's own.
 		country_wage_pressure_add = 0.005
+		# Vanilla's Reform or Revolution entry already counts the Social
+		# Security institution toward reform (up to 1 a country, by incorporated
+		# population); an income for everyone adds half as much again (#1453).
+		country_reform_or_revolution_reform_bonus_add = 0.5
 	}
 
 	institution = institution_social_security

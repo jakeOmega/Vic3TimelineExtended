@@ -97,6 +97,8 @@ containerization = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_containerization_pb_principles_bool = yes
 		country_te_pb_principle_slots_add = 1
+		# A bloc formed after this starts with a mandate for the new slot (1.15, #1458)
+		country_power_bloc_formation_mandates_add = 1
 		# census only, modern safety (demographics_params.SAFETY_TYPES): cranes and boxes replace the docker's hands
 		state_work_safety_add = 0.15
 	}

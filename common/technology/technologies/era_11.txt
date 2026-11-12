@@ -563,6 +563,8 @@ universal_digital_identity = {
 		country_loyalists_from_legitimacy_mult = 0.05
 		state_radicals_and_loyalists_from_sol_change_mult = -0.05
 		country_te_pb_principle_slots_add = 1
+		# A bloc formed after this starts with a mandate for the new slot (1.15, #1458)
+		country_power_bloc_formation_mandates_add = 1
 	}
 
 	ai_weight = {

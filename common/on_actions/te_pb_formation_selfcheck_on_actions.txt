@@ -1,0 +1,48 @@
+﻿# formation_mandates: once a game, does country_power_bloc_formation_mandates_add
+# give a newly formed bloc its mandates? The four technologies that add a
+# principle slot (intergovernmental_organizations, containerization,
+# globalization, universal_digital_identity) carry 1 each (#1458), so a founder
+# holding them all
+# should start its bloc with 4, and MAX_MANDATES (5) should not bite unless
+# something else adds more. Whether MAX_MANDATES caps the formation grant at
+# all is the prep doc's open check C21. The first bloc founded by a country
+# carrying at least 1 reads the bloc's count (te_debug_pb_mandates_by_trigger,
+# a ladder: 6 means 6 or more):
+#   OK      count >= the founder's formation mandates, capped at 5
+#   BROKEN  fewer: the modifier grants nothing, or grants after this
+#           on-action runs (read the bloc's mandates in its panel a day later
+#           before taking the fallback).
+# Fallback for BROKEN: grant the mandates here with add_power_bloc_mandate,
+# from the founder's modifier, and drop the technologies' lines.
+# The scope: vanilla's formation notification reads the founder as
+# scope:country; if no line ever appears once a bloc forms, that scope is not
+# set here either. Play-test row: docs/testing/vanilla-1-15-playtest.md.
+on_power_bloc_formed = {
+	on_actions = {
+		te_pb_formation_mandates_selfcheck
+	}
+}
+
+te_pb_formation_mandates_selfcheck = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_pb_formation_mandates_checked }
+				exists = scope:country
+				scope:country = { modifier:country_power_bloc_formation_mandates_add >= 1 }
+			}
+			set_global_variable = te_pb_formation_mandates_checked
+			scope:country = {
+				set_global_variable = { name = te_pb_chk_formation_add value = modifier:country_power_bloc_formation_mandates_add }
+				set_global_variable = { name = te_pb_chk_formation_count value = te_debug_pb_mandates_by_trigger }
+			}
+			if = {
+				limit = { global_var:te_pb_chk_formation_count >= te_pb_chk_formation_expected_g }
+				debug_log = "TE_SELF_CHECK OK formation_mandates (a new bloc starts with count=[SCOPE.ScriptValue('te_pb_chk_formation_count_g')|0] mandates; its founder's formation mandates=[SCOPE.ScriptValue('te_pb_chk_formation_add_g')|0], capped at 5)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN formation_mandates (a new bloc starts with count=[SCOPE.ScriptValue('te_pb_chk_formation_count_g')|0] mandates, below its founder's formation mandates=[SCOPE.ScriptValue('te_pb_chk_formation_add_g')|0] capped at 5: the modifier grants nothing or grants after on_power_bloc_formed; check the bloc panel a day later; see docs/testing/vanilla-1-15-playtest.md)"
+			}
+		}
+	}
+}

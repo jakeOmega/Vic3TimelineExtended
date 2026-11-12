@@ -52,11 +52,11 @@ The bar's level sets a phase, applied as a modifier on the journal entry:
 | Policy | Support per month | While active |
 |---|---|---|
 | Grassroots Organizing | +0.2 | +5% enactment success chance, +10% radicals from political movements |
-| Federal Protection | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority |
+| Federal Protection | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority, +25% enactment speed for Multicultural |
 | Gradualist Accommodation | +0.1 | −5% turmoil penalties, +2 acceptance |
 | Cooptation / Token Reform | +0.15 for 12 months | −10% turmoil penalties, +3 acceptance, +5% legitimacy penalty from ideological incoherence |
 | Suppression / Crackdown | −0.6 | +5% Authority, +10% turmoil penalties |
-| Segregationist Consolidation | −0.9 | +10% Authority, +30% radicals from political movements, −10 acceptance |
+| Segregationist Consolidation | −0.9 | +10% Authority, +30% radicals from political movements, −10 acceptance, −25% enactment speed for Multicultural |
 
 Acceptance figures apply to pops outside their homeland.
 

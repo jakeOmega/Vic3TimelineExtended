@@ -115,6 +115,24 @@ game, in English.
   - **The AI.** In an observer game, `debug.log` should carry `TE_PB_SUMMIT <kind> by=ai` lines once AI blocs hold two
     or more mandates, a few a decade per bloc, mostly `rally` and `leverage`. None at all after a decade of blocs
     holding mandates means the monthly roll never fires.
+- **C21, formation mandates (#1458).** The four technologies that add a principle slot each carry
+  `country_power_bloc_formation_mandates_add = 1`. One once-a-game line in `debug.log` when a bloc forms:
+  `TE_SELF_CHECK OK|BROKEN formation_mandates`, with the new bloc's count and the founder's grant (capped at
+  `MAX_MANDATES`, 5). BROKEN: check the bloc's mandates in its panel a day later (the grant may land after the
+  on-action); if still short, grant them in the on-action with `add_power_bloc_mandate` and drop the technologies'
+  lines. No line at all once a bloc has formed means `scope:country` is not set in `on_power_bloc_formed`. Whether
+  `MAX_MANDATES` caps the grant shows only if a founder carries more than 5.
+- **New 1.15 modifier hooks (#1453, #1458).** Hover each and read the tooltip, then watch it act once:
+  - Civil Rights: Federal Protection's +25% and Segregationist Consolidation's −25% enactment speed for
+    Multicultural. Enact Multicultural under each and compare the progress per week.
+  - Vassalization V: `country_overlord_law_enactment_success_add` +10% on members. Vanilla's Congress Poland carries
+    it on the subject, so it should help an overlord enacting a law in a subject member; if it shows on the leader's
+    own enactments instead, move it to `leader_modifier`.
+  - Universal Basic Income: +0.5 toward reform in Reform or Revolution's country contribution tooltip (the "bonus
+    values" line), once the entry runs.
+  - External Trade IV and V: the interest-tier trade advantage lines (+5% to +20%, +10% to +40% from engaged to
+    hegemonic). Compare a member's trade advantage in a region where it is hegemonic with one where it is only
+    engaged.
 
 ## Panels and systems
 
