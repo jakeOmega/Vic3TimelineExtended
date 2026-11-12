@@ -25,7 +25,10 @@ country_colonial_stability_drift_add = {
 # corresponding policy button is active; the modifier value still aggregates
 # at all times (its contribution is what the button preview tooltip shows
 # via GetValueWithBreakdownFor, so the player can see what their laws will
-# contribute BEFORE pressing the button).
+# contribute BEFORE pressing the button). Sources: the base in
+# extra_modifiers.txt, laws, institutions, and six era 9 techs at +0.25 each
+# that answer Globalization's and Knowledge Economy's drift penalty
+# (decolonization.md § Colonial Programmes).
 country_colonial_garrison_effectiveness_add = {
 	color = good
 	decimals = 2

@@ -573,7 +573,7 @@ nd_crisis_notify_guarantors = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					set_variable = { name = nd_guarantee_basis value = 1 }
-					trigger_event = { id = nuclear_crisis.20 }
+					trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 				}
 			}
 		}
@@ -592,7 +592,7 @@ nd_crisis_notify_guarantors = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					set_variable = { name = nd_guarantee_basis value = 2 }
-					trigger_event = { id = nuclear_crisis.20 }
+					trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 				}
 			}
 		}
@@ -612,7 +612,7 @@ nd_crisis_notify_guarantors = {
 				save_scope_as = nd_guarantor
 				set_variable = { name = nd_guarantee_context value = 1 }
 				set_variable = { name = nd_guarantee_basis value = 3 }
-				trigger_event = { id = nuclear_crisis.20 }
+				trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 			}
 		}
 	}

@@ -31,6 +31,11 @@ game, in English.
 - **Civil Rights, two-pole bar** (#1434): Movement Support draws green over a red background with the sliding marker
   at the current value, in the panel and its tooltip. If the marker or the textures don't show, `marker = yes` and
   the `progressbar_green` / `progressbar_bad` sets didn't take; go back to `default_green = yes`.
+- **Banking, the cycle value as a two-pole bar** (#1434): Banking Cycle Value draws as momentum and the stance do,
+  blue over gold with the sliding marker at the value, "Banking Cycle Value — panic" on the left and "frenzy" on the
+  right, in the Banking panel and in another country's National Info (`te_banking_bars`). It was green from the left
+  before. If it shows neither fill nor marker, go back to `default_green = yes` and the old green bar in
+  `te_banking_bars`.
 - **Civil Rights, one outcome per ending** (#1431): the panel lists ten endings in order (Victory on Paper, the
   Civil Rights Mandate, the Movement Carries the Day, A Settlement, Reform on Paper, A New Era of Equality, then the
   four collapses), each with its header, the shared victory or collapse condition and its own line, exactly one of

@@ -2555,27 +2555,52 @@ def _walk_dict_keys(node, path: list[str]):
 def _classify_modifier_name(name: str, modifiers_set: set, pattern_pairs: list) -> tuple[str, dict]:
     """Return (status, info) for a candidate modifier name.
 
-    status: 'engine' | 'pattern' | 'suspicious' | 'unknown'
+    status: 'engine' | 'suspicious' | 'unknown'
     info: extra details for the validation report.
+
+    'engine' means a modifier type definition registers the name: vanilla's
+    `common/modifier_type_definitions/` or the mod's, the merged `Modifier
+    Types` of the loaded ModState, read here. `modifiers_set` is every name
+    the caller knows of, the engine-docs dump and the definitions together; it
+    no longer decides validity, only whether the dump lists the name. Nothing
+    but a definition makes a name valid (#391):
+
+    * The engine-docs dump (`modifiers.log`) lists every name the engine
+      could register, about 4,700 of which nobody registers, and a dump older
+      than the game still lists names a patch removed. Such a name is
+      'unknown', with `listed_in_engine_docs`.
+    * A name with a catalog pattern's shape whose captured value is in the
+      vocabulary (`building_<building>_throughput_add` for a building that
+      exists) is 'unknown' too, with the `pattern` and `value` it matched and
+      `unregistered_pattern_instance`: the engine takes each name of a family
+      from its own definition and silently ignores the rest. Vanilla defines
+      the throughput type for under half of its own buildings.
+
+    'suspicious' is unchanged: the shape of a pattern with a value outside its
+    vocabulary, likely a typo.
     """
-    if name in modifiers_set:
+    registered = (ms.get_data("Modifier Types") or {}) if ms else {}
+    if name in registered:
         return "engine", {}
+    info: dict = {}
+    if name in modifiers_set:
+        info["listed_in_engine_docs"] = True
     pat = modifier_to_pattern.get(name)
     if pat:
-        return "pattern", {"pattern": pat[0], "value": pat[1], "source": pat[2]}
-    # Try every catalog pattern. A mod-only modifier (not in engine_docs) is
-    # still valid if it structurally matches a catalog pattern AND its captured
-    # placeholder value is a member of the corresponding vocabulary.
+        return "unknown", {
+            **info, "pattern": pat[0], "value": pat[1], "source": pat[2],
+            "unregistered_pattern_instance": True,
+        }
     suspicious_match: dict | None = None
     for pattern_str, prefix, suffix, vocab_values, placeholder in pattern_pairs:
         captured = _match_pattern(name, prefix, suffix)
         if captured is None:
             continue
         if not vocab_values or captured in vocab_values:
-            return "pattern", {
-                "pattern": pattern_str,
-                "value": captured,
+            return "unknown", {
+                **info, "pattern": pattern_str, "value": captured,
                 "source": "catalog_runtime",
+                "unregistered_pattern_instance": True,
             }
         # Pattern shape matches but the captured value isn't in the vocab.
         # Hold the first such match as a fallback if no full match is found.
@@ -2588,7 +2613,7 @@ def _classify_modifier_name(name: str, modifiers_set: set, pattern_pairs: list) 
             }
     if suspicious_match:
         return "suspicious", suspicious_match
-    return "unknown", {}
+    return "unknown", info
 
 
 def _did_you_mean(captured: str, vocab_values: set, limit: int = 3) -> list[str]:
@@ -2627,12 +2652,11 @@ def _validate_engine_coverage() -> dict:
     if not ms or not engine_docs:
         return {"error": "Mod state or engine docs not loaded"}
 
-    # The "valid modifier name" set is the union of:
-    #   (a) vanilla engine-doc modifiers (modifiers.log)
-    #   (b) modifier-type definitions registered by the mod (or vanilla) under
-    #       common/modifier_type_definitions/. Without (b) every dynamic-pattern
-    #       registration and every custom mod modifier looks "unknown" even
-    #       though the engine accepts it.
+    # Every modifier name known to exist: the engine-docs dump (modifiers.log)
+    # and the modifier type definitions, vanilla's and the mod's. It does not
+    # decide validity: `_classify_modifier_name` accepts only a name a
+    # definition registers, and uses this set to say whether the dump lists an
+    # unregistered one (#391).
     modifiers_set = {e.get("name", "") for e in engine_docs.get("modifiers", [])}
     mod_types = ms.get_data("Modifier Types") or {}
     modifiers_set.update(mod_types.keys())
@@ -2703,7 +2727,7 @@ def _validate_engine_coverage() -> dict:
                                 and bool_name not in script_values_set:
                             tstatus, tinfo = _classify_modifier_name(
                                 bool_name, modifiers_set, catalog_pairs)
-                            if tstatus not in ("engine", "pattern"):
+                            if tstatus != "engine":
                                 used_in = (
                                     f"{etype}/{entity_id} → "
                                     + " → ".join(str(p) for p in path)
@@ -2737,7 +2761,7 @@ def _validate_engine_coverage() -> dict:
                 if key in scripted_call_names and actual_val in ("yes", "no"):
                     continue
                 status, info = _classify_modifier_name(key, modifiers_set, catalog_pairs)
-                if status in ("engine", "pattern"):
+                if status == "engine":
                     continue
                 used_in = f"{etype}/{entity_id} → " + " → ".join(str(p) for p in path)
                 bucket = unknown_modifiers if status == "unknown" else suspicious_modifiers
@@ -2756,7 +2780,8 @@ def _validate_engine_coverage() -> dict:
         delta_days = int((most_recent_mod - most_recent_engine) // 86400)
         stale_warning = (
             f"Engine docs are {delta_days} days older than the most recent mod edit; "
-            "some unknowns may be entries added after the last in-game regeneration."
+            "an unknown's `listed_in_engine_docs` may be out of date. Validity comes from "
+            "the modifier type definitions alone."
         )
 
     return {
@@ -3602,14 +3627,25 @@ def _render_engine_coverage_md(report: dict) -> str:
     if report.get("unknown_modifiers"):
         out.append("## Unknown modifiers")
         out.append("")
-        out.append("Modifier-shaped names (ending in `_add`/`_mult`/`_max`/`_set`) used in mod "
-                   "data but absent from both the engine modifier registry and the pattern "
-                   "catalog. May indicate typos OR modifiers added after the engine-doc "
-                   "snapshot was taken — regenerate the engine docs in-game and `POST /reload` "
-                   "to refresh.")
+        out.append("Modifier-shaped names (ending in `_add`, `_mult`, `_max_level(s)`, `_set`, "
+                   "`_bool` or `_boolean`) used in mod data that no modifier type definition "
+                   "registers, vanilla's or the mod's. The engine drops such a field at load "
+                   "(`Unknown modifier type`, in `debug.log` only) and a `modifier:` read of it "
+                   "reads nothing: register the name in `common/modifier_type_definitions/` or "
+                   "fix it. Neither the engine's `modifiers.log` listing a name nor a name "
+                   "fitting a pattern-catalog family makes it valid (#391); either one only "
+                   "says the name can be registered, and is noted on its line. Regenerating "
+                   "the engine docs changes no verdict.")
         out.append("")
         for entry in report["unknown_modifiers"]:
-            out.append(f"- `{entry['name']}`")
+            notes = []
+            if entry.get("unregistered_pattern_instance"):
+                notes.append(f"unregistered instance of `{entry.get('pattern', '?')}` "
+                             f"(`{entry.get('value', '?')}`)")
+            if entry.get("listed_in_engine_docs"):
+                notes.append("listed in the engine docs (`modifiers.log`)")
+            tail = f" — {'; '.join(notes)}" if notes else ""
+            out.append(f"- `{entry['name']}`{tail}")
             for u in entry.get("used_in", [])[:5]:
                 out.append(f"  - {u}")
         out.append("")
@@ -5514,15 +5550,34 @@ def _mod_grep_mentions(name: str) -> tuple:
     comment-only if every match sits in a comment (#485: a header comment
     explaining a vanilla rename is not a use of the old name). Both empty on no
     match (git grep exits 1) or error. Only searches tracked files — matches
-    the mod's committed state."""
+    the mod's committed state.
+
+    A define's surface name is `Namespace.KEY`, a spelling no mod file uses:
+    script reads the define as `define:Namespace|KEY`, and a GUI or loc string
+    as `GetDefine('Namespace', 'KEY')`. For a dotted name those two forms are
+    mentions too; grepping the dotted name alone missed the mod's read of a
+    define 1.14.4 removed (#391). The grep is then on the key, and a line
+    counts only where one of the three forms is on it, so the same key under
+    another namespace is not a mention."""
     repo = mod_path
     dirs = [d for d in _MOD_GREP_DIRS if os.path.isdir(os.path.join(repo, d))]
     if not dirs:
         return [], []
+    forms = [re.escape(name)]
+    needle = name
+    if "." in name:
+        parts = name.split(".")
+        needle = parts[-1]
+        forms.append(re.escape("|".join(parts)))
+        if len(parts) == 2:
+            forms.append(
+                r"GetDefine\(\s*['\"]" + re.escape(parts[0]) + r"['\"]\s*,\s*['\"]"
+                + re.escape(parts[1]) + r"['\"]\s*\)"
+            )
     try:
         r = subprocess.run(
             ["git", "-C", repo, "grep", "--no-color", "-z", "-w", "-F",
-             "-e", name, "--", *dirs],
+             "-e", needle, "--", *dirs],
             capture_output=True, encoding="utf-8", errors="replace",
             timeout=30,
         )
@@ -5531,14 +5586,16 @@ def _mod_grep_mentions(name: str) -> tuple:
     # git grep's -w word boundary, re-applied to the code part: a plain
     # substring test would count `<name>_extra` in code when the whole-word
     # match was only in the comment.
-    word = re.compile(r"(?<![A-Za-z0-9_])" + re.escape(name) + r"(?![A-Za-z0-9_])")
+    word = re.compile(
+        r"(?<![A-Za-z0-9_])(?:" + "|".join(forms) + r")(?![A-Za-z0-9_])"
+    )
     used: set = set()
     mentioned: set = set()
     # Split on "\n" only: git ends each record with it, and splitlines() would
     # also break a record at \x0c, \x85,   and the like inside the line.
     for ln in r.stdout.split("\n"):
         path, sep, text = ln.partition("\0")
-        if not sep:
+        if not sep or not word.search(text):
             continue
         mentioned.add(path)
         if word.search(_code_part(text)):
@@ -10280,10 +10337,12 @@ POST_LOAD_AUDITS = [
     ("orphaned_event_audit",          "orphaned_event_audit"),
     ("effect_trigger_validity_audit", "effect_trigger_validity_audit"),
     ("duplicate_key_audit",           "duplicate_key_audit"),
+    ("modifier_field_audit",          "modifier_field_audit"),
     ("attitude_key_audit",            "attitude_key_audit"),
     ("event_image_audit",             "event_image_audit"),
     ("treaty_leverage_side_audit",    "treaty_leverage_side_audit"),
     ("event_context_audit",           "event_context_audit"),
+    ("trigger_event_cycle_audit",     "trigger_event_cycle_audit"),
     ("silent_variable_audit",         "silent_variable_audit"),
     ("prev_scope_audit",              "prev_scope_audit"),
     ("container_timed_variable_audit", "container_timed_variable_audit"),
