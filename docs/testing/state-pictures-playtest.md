@@ -144,8 +144,8 @@ owner and run `event te_debug_state_picture.1` (or wait a year; growth needs sev
 
 ## Prosperity tags (2026-11-11)
 
-No picture reads these yet; the size and prosperity variants are being rendered. The pass already stores
-them, so they can be checked from the log.
+The size and prosperity variants (below) read these. The pass stores them whether or not a variant is
+painted, so they can be checked from the log.
 
 | Check | Expect | If it fails |
 |---|---|---|
@@ -153,3 +153,20 @@ them, so they can be checked from the log.
 | **The floors.** In a save, compare `sol=` with `means=` for states of an owner on each city rung. | Poor under 12, 14, 18, 26, 35 by rung; affluent from 20, 22, 28, 36, 45. | |
 | **How many are run-down.** In a late save, count `rundown=1`. | A minority: states that have lost ground. | Most states of a welfare state run-down: the laws' floor under expectations is what `short=` is measuring. Raise the margin (2), or take the owner's floor out of the figure. |
 
+## Size and prosperity variants (2026-11-11)
+
+Each regional street has a town, a metropolis and (from rung 3) a megacity, and a poor, an affluent and a
+run-down street, on every rung. A variant that has no painting yet falls back: a megacity to the
+metropolis, everything else to the region's street of that rung. Load a late save, play as an owner with
+states of several sizes, and run `event te_debug_state_picture.1` so every state has its tags.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Size.** Compare the banner of a state whose largest city is under 100,000 people, one over 1,000,000 and one over 10,000,000, in one region and on one rung. | A quiet main street; a city center from above; a city to the horizon. Each with the region's landmark, in the rung's period. | The street in all three: `size=` in the debug line, then the entry's first condition. |
+| **Poor and affluent.** A state with `means=1` and one with `means=3` in the debug line. | A shabby lane with washing and carts; a clean boulevard with a fountain. | |
+| **Run-down.** A state with `rundown=1`. | Neglect, not poverty: boarded windows, litter, a wreck, people standing idle. It shows over poor and affluent. | A run-down picture in states that are doing well: the margin (2 points under expectations) is too tight; the "How many are run-down" row above. |
+| **Prosperity outranks size.** A poor or an affluent metropolis or megacity; a poor small town. | The poor or affluent street, not the skyline or the small town: prosperity's place in the weight (100 and 1,000) is above size's (10). This is a call the owner can reverse by swapping the places. | A megacity that never shows its megacity picture because most great cities are poor, affluent or run-down by the floors: raise the floors, or put size above means. |
+| **The time on the last two rungs.** A poor, an affluent and a run-down state of an owner with rung 4, then rung 5. | Rung 4: supertall glass towers behind the street, electric vehicles. Rung 5: white futuristic towers, flying craft, pods or robots. | A street that reads as the 1950s: note the key; its prompt wants the time moved further forward. |
+| **A great city on other terrain.** A poor or run-down metropolis whose state the engine holds to be farmland. | The poor or run-down city picture (the variants of a great city take over as the streets do). | The farmland: the variant's takeover entries. |
+| **No real city.** Look at each metropolis and megacity for a tower or a skyline you could name. | None. The North American ones are the most likely to fail. | Tell which picture; it is repicked, or unwired so that its fallback (above this table) shows. |
+| **Lettering and flags.** Bus fronts, awnings, tower tops, the bottom corners. | Nothing that reads as writing, no real flag. | A `smudge` box in `VARIANT_PICKS`, and reconvert. |

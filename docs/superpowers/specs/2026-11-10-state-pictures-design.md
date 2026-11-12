@@ -445,8 +445,41 @@ upkeep limited to rungs 2 to 4.
     intact building anywhere") and, for the strike, the one object nothing else has: a mushroom cloud on
     the horizon. All 24 candidates read as destroyed. Towers still stand in the later ruins and the later
     strike: FLUX won't draw a skyline of stumps.
+- **What the variants taught** (2026-11-11, four candidates each of 223 pictures written from two tables):
+  - *Size reads at the first try.* A town, a metropolis and a megacity came out distinct from the street
+    and from one another in all eight regions: the low houses and the country beyond for a town, the view
+    from above for a great city, "stretching to the horizon in every direction under a haze" for a megacity.
+  - *On the last two rungs the time has to lead.* The poor, affluent and run-down streets of the 2030s and
+    of the far future first came out as the 1950s street with a different car: one composition a column
+    (the washing lane, the fountain square, the wreck at the kerb), whatever the rung. The time stood at
+    the end of the prompt ("slender supertall towers far in the background"). Moved to the front, straight
+    after the verdict (the registry's `VARIANT_LEAD`), it shows. The wording matters as much as the place:
+    "under a wall of slender supertall glass towers that rise close behind the roofs" draws the towers;
+    "in the shadow of colossal kilometre-high arcology towers that fill the sky" drew none.
+  - *A great city seen from above is a real city.* The North American metropolis and megacity drew New
+    York's, Chicago's or Toronto's towers in three candidates of four on every rung, from "stepped stone and
+    art deco towers" over "old brick blocks with water tanks on their roofs". Towers with a pair of
+    antennas and stepped spires turned up in the other regions' skylines too, on two of the four seeds. A
+    small one is smudged away; a skyline that is plainly one city is rejected. The second round's words
+    (`VARIANT_REWORD`) say what the towers are (plain, flat-roofed, of one height) and don't name what
+    they must not be.
+  - *"A few small rounded 1950s cars" are the cars of the 2000s.* The small town of 1960 had them in
+    every candidate of seven regions, beside a correct 1950s bus; the African town alone came out in
+    period. The same words in a crowded avenue ("packed with rounded 1950s cars") rendered in period, and
+    so did "finned 1950s limousines". Small and rounded is today's car: the second round asks for "heavy
+    two-tone 1950s sedans with chrome grilles and whitewall tires".
+  - *One table, one composition.* Pictures written from the same sentence repeat: the megacities of two
+    rungs of a region can be the same view with different towers, and a run-down street the same street
+    with a later wreck. Between two clean candidates the pick is the one unlike its column's others.
+  - *A reword must not move a picked render.* A region's and a rung's words are shared by every variant
+    that uses them, so the second round changes one key's words for one field and a comparison of all the
+    prompts before and after shows that only the keys meant changed.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
-  every pick zoomed for lettering, signatures and broken anatomy.
+  every pick zoomed for lettering, signatures and broken anatomy. The variants are picked a region at a
+  time: a sheet a rung with the wired street on top and a row a variant, so a candidate is judged beside
+  the picture it replaces and its siblings, and at the end one sheet of the region's picks as the game
+  shows them (smudged, cropped, filtered, 1020 × 500), where a smudge that shows as a patch or a crop
+  that cut too much is caught.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
   through all five rungs (the registry's `CITY_LANDMARK`: the European church, a North American courthouse
   with a clock tower, a Japanese castle keep, and so on), so the street changes around a fixed point and a
