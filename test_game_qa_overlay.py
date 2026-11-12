@@ -138,10 +138,13 @@ class BuildTest(OverlayTestCase):
             return parser.data
 
         effects = parse("common/scripted_effects/te_qa_effects.txt")
-        self.assertEqual(sorted(effects), ["te_qa_pad", "te_qa_setup_alpha", "te_qa_setup_beta"])
+        slots = ["te_qa_slot_%d" % n for n in range(overlay.SLOT_COUNT)]
+        self.assertEqual(sorted(effects),
+                         sorted(["te_qa_loaded", "te_qa_pad", "te_qa_setup_alpha", "te_qa_setup_beta", *slots]))
         self.assertEqual(effects["te_qa_setup_beta"], ("=", {"c:FRA": ("=", {"add_treasury": ("=", "5000")})}))
         events = parse("events/te_qa_events.txt")
-        self.assertEqual(list(events), ["namespace", "te_qa.1", "te_qa.2", "te_qa.10", "te_qa.11"])
+        spare = ["te_qa.%d" % (overlay.FIRST_SLOT_EVENT + n) for n in range(overlay.SLOT_COUNT)]
+        self.assertEqual(list(events), ["namespace", "te_qa.1", "te_qa.2", "te_qa.3", "te_qa.10", "te_qa.11", *spare])
         for key in list(events)[1:]:
             body = events[key][1]
             self.assertEqual((body["type"], body["hidden"]), (("=", "country_event"), ("=", "yes")), key)
@@ -203,6 +206,116 @@ class ReadLineTest(OverlayTestCase):
             f"{overlay.PAD_EVENT} = {{\n\ttype = country_event\n\thidden = yes\n\n\timmediate = {{\n\t\tte_qa_pad = yes\n\t}}\n}}\n",
             text,
         )
+
+
+class AddSetupTest(OverlayTestCase):
+    """A setup added to a built overlay goes into a spare slot of te_qa_effects.txt (#1600)."""
+
+    def effects(self) -> str:
+        return "\n".join(lines_of(self.dest / "common" / "scripted_effects" / "te_qa_effects.txt"))
+
+    def test_every_slot_has_an_event_and_starts_empty(self):
+        ov = self.build({"alpha": SETUP_A})
+        events = "\n".join(lines_of(ov.events_file))
+        effects = self.effects()
+        for slot in range(overlay.SLOT_COUNT):
+            event = overlay.slot_event(slot)
+            self.assertIn(
+                f"{event} = {{\n\ttype = country_event\n\thidden = yes\n\n\timmediate = {{\n"
+                f"\t\tte_qa_slot_{slot} = yes\n\t\tte_qa_pad = yes\n\t}}\n}}\n", events)
+            self.assertIn(f'te_qa_slot_{slot} = {{\n\tdebug_log = "TE_QA slot {slot} is empty"\n}}\n', effects)
+        self.assertEqual((overlay.slot_event(0), overlay.slot_event(29)), ("te_qa.100", "te_qa.129"))
+        self.assertEqual((ov.revision, ov.added), (0, {}))
+        self.assertIn('te_qa_loaded = {\n\tdebug_log = "TE_QA overlay rev 0"\n}\n', effects)
+
+    def test_the_loaded_event_logs_the_revision_and_pads(self):
+        events = "\n".join(lines_of(self.build().events_file))
+        self.assertIn(
+            f"{overlay.LOADED_EVENT} = {{\n\ttype = country_event\n\thidden = yes\n\n\timmediate = {{\n"
+            "\t\tte_qa_loaded = yes\n\t\tte_qa_pad = yes\n\t}\n}\n", events)
+
+    def test_an_added_setup_fills_the_next_slot_between_its_own_markers(self):
+        ov = self.build({"alpha": SETUP_A})
+        events_before = ov.events_file.read_bytes()
+        self.assertEqual(overlay.add_setup(ov, "late", SETUP_B), ("te_qa.100", 1))
+        self.assertEqual(overlay.add_setup(ov, "later", SETUP_A), ("te_qa.101", 2))
+        effects = self.effects()
+        self.assertIn(
+            'te_qa_slot_0 = {\n\tdebug_log = "TE_QA setup late start"\n\tc:FRA = {\n\t\tadd_treasury = 5000\n\t}\n'
+            '\tdebug_log = "TE_QA setup late done"\n}\n', effects)
+        self.assertIn(f'te_qa_slot_1 = {{\n\tdebug_log = "TE_QA setup later start"\n\t{SETUP_A}\n', effects)
+        self.assertIn('debug_log = "TE_QA slot 2 is empty"', effects)
+        self.assertIn('debug_log = "TE_QA overlay rev 2"', effects)
+        self.assertNotIn("TE_QA overlay rev 1", effects)
+        # The setups given at start are still there, and the events file is not touched: a new event may not
+        # reload, which is why the slots' events exist from the start.
+        self.assertIn(f"te_qa_setup_alpha = {{\n\t{SETUP_A}\n}}\n", effects)
+        self.assertEqual(ov.events_file.read_bytes(), events_before)
+        self.assertEqual(ov.setup_events, {"alpha": "te_qa.10", "late": "te_qa.100", "later": "te_qa.101"})
+        self.assertTrue((self.dest / "common/scripted_effects/te_qa_effects.txt").read_bytes().startswith(BOM))
+
+    def test_the_rewritten_file_still_parses(self):
+        from paradox_file_parser import ParadoxFileParser
+
+        ov = self.build({"alpha": SETUP_A})
+        overlay.add_setup(ov, "late", SETUP_B)
+        parser = ParadoxFileParser()
+        parser.parse_file(str(ov.effects_file))
+        self.assertEqual(len(parser.data), 3 + overlay.SLOT_COUNT)
+        self.assertEqual(parser.data["te_qa_loaded"], ("=", {"debug_log": ("=", '"TE_QA overlay rev 1"')}))
+
+    def test_a_used_name_is_refused_and_nothing_is_written(self):
+        ov = self.build({"alpha": SETUP_A})
+        overlay.add_setup(ov, "late", SETUP_A)
+        before = ov.effects_file.read_bytes()
+        for name in ("alpha", "late"):
+            with self.assertRaisesRegex(overlay.OverlayError, "used once"):
+                overlay.add_setup(ov, name, SETUP_B)
+        self.assertEqual((ov.effects_file.read_bytes(), ov.revision), (before, 1))
+
+    def test_a_bad_name_or_body_is_refused_and_nothing_is_written(self):
+        ov = self.build()
+        before = ov.effects_file.read_bytes()
+        for name, body in (("Bad Name", SETUP_A), ("late", "add_treasury = {"), ("late", "  ")):
+            with self.assertRaises(overlay.OverlayError):
+                overlay.add_setup(ov, name, body)
+        self.assertEqual((ov.effects_file.read_bytes(), ov.revision, ov.added), (before, 0, {}))
+
+    def test_no_slot_left_is_refused(self):
+        ov = self.build()
+        for n in range(overlay.SLOT_COUNT):
+            overlay.add_setup(ov, "late_%d" % n, SETUP_A)
+        with self.assertRaisesRegex(overlay.OverlayError, "spare slots are used"):
+            overlay.add_setup(ov, "one_more", SETUP_A)
+        self.assertEqual(ov.revision, overlay.SLOT_COUNT)
+
+    def test_an_overlay_that_is_gone_or_not_ours_is_refused(self):
+        ov = self.build()
+        overlay.remove(self.dest)
+        with self.assertRaisesRegex(overlay.OverlayError, "not this session's overlay"):
+            overlay.add_setup(ov, "late", SETUP_A)
+        self.assertFalse(self.dest.exists())
+        self.assertEqual(ov.setup_events, {})
+
+    def test_a_failed_write_leaves_the_record_as_it_was(self):
+        ov = self.build()
+        with mock.patch.object(Path, "write_bytes", side_effect=OSError("disk full")):
+            with self.assertRaisesRegex(overlay.OverlayError, "could not be rewritten"):
+                overlay.add_setup(ov, "late", SETUP_A)
+        self.assertEqual((ov.revision, ov.added, ov.setup_events), (0, {}, {}))
+
+    def test_too_many_start_setups_are_refused(self):
+        setups = {"s%d" % n: SETUP_A for n in range(overlay.MAX_START_SETUPS + 1)}
+        with self.assertRaisesRegex(overlay.OverlayError, "at most"):
+            self.build(setups)
+        self.assertFalse(self.dest.exists())
+
+    def test_loaded_revision_reads_the_log_line(self):
+        line = "[12:00:01][jomini_effect_impl.cpp:459]: common/scripted_effects/te_qa_effects.txt:12: TE_QA overlay rev 7"
+        self.assertEqual(overlay.loaded_revision(line), 7)
+        self.assertEqual(overlay.loaded_revision("TE_QA overlay rev 12"), 12)
+        self.assertIsNone(overlay.loaded_revision("TE_QA overlay rev"))
+        self.assertIsNone(overlay.loaded_revision("TE_QA PAD 0123"))
 
 
 class SetupTest(OverlayTestCase):

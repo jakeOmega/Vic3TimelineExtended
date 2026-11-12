@@ -72,6 +72,11 @@ class FakeSession:
         self._call("run_setup", name)
         return ["first line", "second line"]
 
+    def add_setup(self, name, script):
+        self._call("add_setup", name, script)
+        return {"name": name, "event": "te_qa.100", "revision": 1, "loaded": True, "tries": 3, "waited_s": 42.0,
+                "slots_left": 29}
+
     def events(self):
         self._call("events")
         return [Pending(10, "x.1", 2)]
@@ -247,6 +252,33 @@ class ServerTestCase(unittest.TestCase):
         info = {"port": port, "pid": pid, "started": "2026-11-10T15:00:00Z", "token": "0" * 32}
         self.info_path.write_text(json.dumps(info), encoding="utf-8")
         return info
+
+
+class AddSetupVerbTest(ServerTestCase):
+    def test_add_setup_sends_the_files_text_under_its_name(self):
+        fake, _thread = self.serve()
+        script = self.backups / "late.txt"
+        script.write_text("\ufeffset_variable = te_late\n", encoding="utf-8")
+        reply, code = self.run_cli("add-setup", "late=%s" % script)
+        self.assertEqual((code, reply["event"], reply["loaded"], reply["slots_left"]), (0, "te_qa.100", True, 29))
+        self.assertEqual(fake.calls[-1], ("add_setup", "late", "set_variable = te_late\n"))
+
+    def test_a_bad_argument_is_refused_before_the_server_is_asked(self):
+        fake, _thread = self.serve()
+        for spec in ("late", "late=%s" % (self.backups / "missing.txt")):
+            reply, code = self.run_cli("add-setup", spec)
+            self.assertEqual((code, reply["refused"]), (2, "bad_argument"), spec)
+            self.assertNotIn("--setup", reply["detail"])
+        self.assertEqual([c for c in fake.calls if c[0] == "add_setup"], [])
+
+    def test_a_refusal_from_the_session_keeps_its_fields(self):
+        fake = FakeSession()
+        fake.raises["add_setup"] = session.SessionError("not_reloaded", "no reload", revision=1, seen=0, tries=30)
+        self.serve(fake)
+        script = self.backups / "late.txt"
+        script.write_text("x = yes\n", encoding="utf-8")
+        reply, code = self.run_cli("add-setup", "late=%s" % script)
+        self.assertEqual((code, reply["refused"], reply["revision"], reply["seen"]), (2, "not_reloaded", 1, 0))
 
 
 class VerbTest(ServerTestCase):

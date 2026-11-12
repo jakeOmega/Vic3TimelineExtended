@@ -166,6 +166,14 @@ class Game(fakes.FakeHelper):
         self.dropped_pauses = 0                 # this many pause keys (space, the game running) are lost
         self.logs_date = True                   # the read event logs its date line once resumed
         self.error_log = logs / "error.log"
+        # The game reloads the overlay's effects file `reload_s` after it changes on disk (spec § 3.3: about 40 s
+        # with this mod), drops the console commands entered meanwhile, and the reload drops the breakpoint.
+        self.effects_file = user_data / "mod" / overlay.OVERLAY_NAME / overlay.EFFECTS_FILE
+        self.reloads = True
+        self.reload_s = 40.0
+        self.loaded_revision = 0                # the revision of te_qa_effects.txt in force
+        self.reload_due: tuple[float, int] | None = None       # (when, the revision it brings)
+        self.dropped: list[str] = []            # the commands entered during a reload
         self.on("tag FRA", success=["Now Playing - France"])
 
     def error(self, message: str, streamed: bool = False) -> None:
@@ -189,6 +197,26 @@ class Game(fakes.FakeHelper):
         if self.entered and not self.paused:
             self.elapsed += seconds * self.days_per_second
         super().sleep(seconds)
+        self._reload_tick()
+
+    def _reload_tick(self) -> None:
+        try:
+            found = re.search(r"TE_QA overlay rev (\d+)", self.effects_file.read_text(encoding="utf-8-sig"))
+        except OSError:
+            found = None
+        on_disk = int(found.group(1)) if found else self.loaded_revision
+        if self.reloads and on_disk != self.loaded_revision and (self.reload_due or (0, None))[1] != on_disk:
+            self.reload_due = (self.now + self.reload_s, on_disk)
+        if self.reload_due is not None and self.now >= self.reload_due[0]:
+            self.loaded_revision, self.reload_due = self.reload_due[1], None
+            self.adapter.breakpoints.clear()
+
+    def _enter(self) -> None:
+        if self.reload_due is not None and self.console_open and self.typed:
+            self.dropped.append(self.typed)     # "You can't add new commands while the console is still running"
+            self.typed = ""
+            return
+        super()._enter()
 
     def keys(self, pid, steps):
         super().keys(pid, steps)
@@ -271,6 +299,17 @@ class Game(fakes.FakeHelper):
                 self.adapter.stop()
             else:
                 self.finish_read()
+        elif text == "event " + overlay.LOADED_EVENT:
+            self.script("TE_QA overlay rev %d" % self.loaded_revision)
+            self.pad()
+        elif text.startswith("event te_qa.") and int(text[12:]) >= overlay.FIRST_SLOT_EVENT:
+            slot = int(text[12:]) - overlay.FIRST_SLOT_EVENT
+            if self.loaded_revision > slot and text[6:] in self.setups:     # the slot's body is in force
+                name, lines = self.setups[text[6:]]
+                self.script("TE_QA setup %s start" % name, *lines, "TE_QA setup %s done" % name)
+            else:
+                self.script("TE_QA slot %d is empty" % slot)
+            self.pad()
         elif text.startswith("event ") and text[6:] in self.setups:
             name, lines = self.setups[text[6:]]
             self.script("TE_QA setup %s start" % name, *lines, "TE_QA setup %s done" % name)
@@ -716,6 +755,103 @@ class ReadTest(SessionTestCase):
         self.game.setups = {event: ("border", ["first line", "second line"])}
         self.assertEqual(self.session.run_setup("border"), ["first line", "second line"])
         self.assertEqual(self.session_error(self.session.run_setup, "nothing").code, "unknown_setup")
+
+
+class AddSetupTest(SessionTestCase):
+    """A setup added to a running game (#1600): the overlay's effects file is rewritten, the game reloads it,
+    and the verb returns once the game has logged the new revision."""
+
+    BODY = "set_variable = te_late"
+
+    def effects(self) -> str:
+        return (self.paths.overlay_dir / overlay.EFFECTS_FILE).read_text(encoding="utf-8-sig")
+
+    def test_an_added_setup_runs_once_the_game_has_reloaded(self):
+        self.started(setups={"border": "set_variable = te_x"})
+        before = self.game.now
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertEqual((reply["name"], reply["event"], reply["revision"], reply["loaded"]),
+                         ("late", "te_qa.100", 1, True))
+        self.assertEqual(reply["slots_left"], overlay.SLOT_COUNT - 1)
+        self.assertGreaterEqual(self.game.now - before, self.game.reload_s)
+        self.assertGreater(reply["tries"], 1)
+        self.assertIn("TE_QA setup late start", self.effects())
+        # The reload dropped the breakpoint; it is set again, so a read still stops.
+        self.assertEqual(self.game.adapter.breakpoints, {EVENTS_WIN: [self.session._overlay.read_line]})
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+        self.game.setups = {"te_qa.100": ("late", ["one line"])}
+        self.assertEqual(self.session.run_setup("late"), ["one line"])
+        # A second one takes the next slot and the next revision.
+        second = self.session.add_setup("later", self.BODY)
+        self.assertEqual((second["event"], second["revision"]), ("te_qa.101", 2))
+
+    def test_the_first_look_waits_and_dropped_commands_are_tried_again(self):
+        self.started()
+        typed_before = len(self.typed())
+        reply = self.session.add_setup("late", self.BODY)
+        looks = self.typed()[typed_before:].count("event te_qa.3")
+        self.assertGreaterEqual(looks, reply["tries"])      # the console types a command that did not arrive again
+        self.assertGreater(reply["tries"], 1)
+        self.assertTrue(self.game.dropped, "the game dropped the looks made while it reloaded")
+        # Its own looks, and the console's flush and probe commands around them: nothing else was typed.
+        self.assertIn("event te_qa.3", self.game.dropped)
+        self.assertLessEqual(set(self.game.dropped),
+                             {"event te_qa.3", fakes.FLUSH_COMMAND, session.PENDING_COMMAND})
+        self.assertTrue(reply["loaded"])
+
+    def test_a_reload_that_is_already_done_takes_one_look(self):
+        self.started()
+        self.game.reload_s = 1.0
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertEqual(reply["tries"], 1)
+        self.assertLess(reply["waited_s"], 30)
+
+    def test_a_name_or_body_the_overlay_refuses_writes_and_types_nothing(self):
+        self.started(setups={"border": "set_variable = te_x"})
+        before, steps = self.effects(), len(self.game.steps)
+        for name, body in (("border", self.BODY), ("Bad Name", self.BODY), ("late", "x = {")):
+            with self.subTest(name=name, body=body):
+                self.assertEqual(self.session_error(self.session.add_setup, name, body).code, "overlay_refused")
+        self.assertEqual((self.effects(), len(self.game.steps)), (before, steps))
+
+    def test_a_game_that_never_reloads_is_not_reloaded_and_the_setup_is_refused_until_it_has(self):
+        self.started()
+        self.game.reloads = False
+        before = self.game.now
+        error = self.session_error(self.session.add_setup, "late", self.BODY)
+        self.assertEqual(error.code, "not_reloaded")
+        self.assertEqual((error.info["revision"], error.info["seen"]), (1, 0))
+        self.assertGreaterEqual(self.game.now - before, session.RELOAD_WAIT_S - session.RELOAD_RETRY_S)
+        self.assertLess(self.game.now - before, session.RELOAD_WAIT_S + 60)
+        # The setup is in the file, but the game still runs the old one: its slot would log nothing.
+        self.assertIn("TE_QA setup late start", self.effects())
+        self.game.setups = {"te_qa.100": ("late", ["one line"])}
+        typed = len(self.typed())
+        self.assertEqual(self.session_error(self.session.run_setup, "late").code, "setup_not_loaded")
+        self.assertNotIn("event te_qa.100", self.typed()[typed:])
+        # Once the game has reloaded, run-setup's own look sees it, sets the breakpoint again and runs the setup.
+        self.game.loaded_revision = 1
+        self.game.adapter.breakpoints.clear()
+        self.assertEqual(self.session.run_setup("late"), ["one line"])
+        self.assertIn(EVENTS_WIN, self.game.adapter.breakpoints)
+
+    def test_a_game_that_ends_during_the_wait_stops_the_looks(self):
+        self.started()
+        self.game.reloads = False
+
+        def gone(seconds):
+            if self.game.now > 60 and self.watches:
+                self.watches[-1].returned = True
+                self.game.exists = False
+        self.game.on_sleep = gone
+        with self.assertRaises((session.SessionError, ConsoleError)) as caught:
+            self.session.add_setup("late", self.BODY)
+        self.assertIn(caught.exception.code, ("game_gone", "watch_ended"))
+        self.assertLess(self.game.now, session.RELOAD_WAIT_S)
+
+    def test_add_setup_needs_a_started_session(self):
+        self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_started")
 
 
 class PickTest(SessionTestCase):
@@ -1692,7 +1828,8 @@ class StopAgainTest(SessionTestCase):
     def test_no_verb_reaches_the_game_after_a_stop_that_can_be_run_again(self):
         # The server now serves on after such a stop, so verbs can arrive: each is refused before any key, watch,
         # adopt or debugger call (the helper and the relay are closed, and the pid may be another program's).
-        verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("events", ()), ("pick", (0,)),
+        verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("add_setup", ("late", "x = 1")),
+                 ("events", ()), ("pick", (0,)),
                  ("read", (["c:FRA.gdp"],)), ("tag", ("GBR",)), ("enter_game", ()), ("advance", (5,)), ("shot", ()),
                  ("try_event", ("x.1", None, ["c:FRA.gdp"])))
         for state in ("game_left_up", "refused"):

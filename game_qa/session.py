@@ -74,6 +74,16 @@ CONSOLE_READY_S = 180.0                 # the first round trip: a save took abou
 STOP_WAIT_S = 15.0                      # from typing the read event to the debugger's stop (real seconds: dap's clock)
 DATE_WAIT_S = 5.0                       # from the resume to the read event's line in the log
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
+# add-setup (#1600): the game reloads te_qa_effects.txt once it is rewritten. With this mod a reload took about 40 s,
+# dropped the console commands typed during it and rotated every debug.log generation (spec § 3.3).
+RELOAD_FIRST_S = 5.0                    # after the rewrite, before the first look
+RELOAD_RETRY_S = 5.0                    # between looks
+RELOAD_WAIT_S = 180.0                   # for the game to log the new revision, in all
+LOADED_WAIT_S = 5.0                     # from the revision event's command to its line in the log
+LOADED_COMMAND = "event " + overlay.LOADED_EVENT
+# What a look may fail with while the game reloads, and so is tried again: the command was dropped (no_ack),
+# or the reload's burst swallowed its lines (no_reply, log_gap). The event only logs, so a second run costs nothing.
+RELOAD_RETRIED = ("no_ack", "no_reply", "log_gap")
 LOG_POLL_S = 0.2
 CLICK_SETTLE_S = 1.0                    # after the country click, before Start (unverified)
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
@@ -249,6 +259,7 @@ class Session:
         self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
+        self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
 
     # ---- start
 
@@ -586,14 +597,101 @@ class Session:
             out.update(ok=reply.ok, lines=reply.lines)
         return reply
 
+    def add_setup(self, name: str, body: str) -> dict:
+        """Add a setup to the running game (#1600): its body goes into a spare slot of the overlay's
+        `te_qa_effects.txt`, and the verb returns once the game has logged that file's new revision, which is the
+        proof that it reloaded the file. `run_setup(name)` then runs it like a setup given at start.
+
+        A name or body the overlay refuses is `overlay_refused`, with nothing written. When the game has not
+        logged the new revision within RELOAD_WAIT_S the error is `not_reloaded`: the setup is in the file, and
+        `run_setup` looks once more before it would run it, so a slow reload costs a wait and not the setup.
+        The debugger is attached again once the reload is seen, because a reload of the script may drop the
+        read event's breakpoint (as entering the game does)."""
+        self._require_game()
+        with self._step("add_setup", name=name) as out:
+            try:
+                event, revision = overlay.add_setup(self._overlay, name, body)
+            except overlay.OverlayError as e:
+                raise SessionError("overlay_refused", str(e)) from e
+            out.update(event=event, revision=revision)
+            began = self._clock()
+            self._sleep(RELOAD_FIRST_S)
+            self._await_revision(revision, began + RELOAD_WAIT_S, out)
+            out["waited_s"] = round(self._clock() - began, 1)
+            result = {"name": name, "event": event, "revision": revision, "loaded": True,
+                      "tries": out["tries"], "waited_s": out["waited_s"],
+                      "slots_left": overlay.SLOT_COUNT - len(self._overlay.added)}
+        self._attach("reattach")
+        return result
+
+    def _await_revision(self, revision: int, deadline: float, out: dict) -> None:
+        """Ask the game which revision of `te_qa_effects.txt` it has loaded, every RELOAD_RETRY_S, until it says
+        `revision` or later; `not_reloaded` once `deadline` has passed. `out` gets the tries made and the last
+        revision seen."""
+        tries = 0
+        while True:
+            tries += 1
+            out.update(tries=tries, seen=self._loaded_revision)
+            failed = None
+            try:
+                self._look_for_revision()
+            except ConsoleError as e:
+                if e.code not in RELOAD_RETRIED:
+                    raise
+                failed = "%s: %s" % (e.code, e)
+            out["seen"] = self._loaded_revision
+            if self._loaded_revision >= revision:
+                return
+            if self._clock() + RELOAD_RETRY_S > deadline:
+                raise SessionError(
+                    "not_reloaded", "the game had not loaded revision %d of %s after %d looks (it last logged "
+                    "revision %d%s). The setup is in the file: run-setup looks again before it runs it"
+                    % (revision, overlay.EFFECTS_FILE, tries, self._loaded_revision,
+                       "; the last look failed with " + failed if failed else ""),
+                    revision=revision, seen=self._loaded_revision, tries=tries)
+            self._sleep(RELOAD_RETRY_S)
+            self._check_watch()
+
+    def _look_for_revision(self) -> None:
+        """Run the revision event once and take the newest revision the log names into `_loaded_revision`."""
+        self._new_lines()
+        self._console.run(LOADED_COMMAND, reply=False)
+        deadline = self._clock() + LOADED_WAIT_S
+        while True:
+            found = [overlay.loaded_revision(parse(line).text) for line in self._new_lines() if line != GAP_MARKER]
+            found = [rev for rev in found if rev is not None]
+            if found:
+                self._loaded_revision = max(self._loaded_revision, *found)
+                return
+            if self._clock() >= deadline:
+                return
+            self._sleep(LOG_POLL_S)
+
     def run_setup(self, name: str) -> list[str]:
-        """Run a setup through its event; return its log lines between its start and done markers."""
+        """Run a setup through its event; return its log lines between its start and done markers. A setup added
+        with `add_setup` whose reload was never seen is looked for once more first, and refused
+        (`setup_not_loaded`) while the game still runs the older file: its slot would log nothing."""
         self._require_game()
         with self._step("run_setup", name=name) as out:
             event = self._overlay.setup_events.get(name)
             if event is None:
                 raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
                                    % (name, sorted(self._overlay.setup_events) or "none"))
+            added = self._overlay.added.get(name)
+            if added is not None and self._loaded_revision < added[0] + 1:
+                needed = added[0] + 1       # slot n was filled by revision n + 1
+                try:
+                    self._look_for_revision()
+                except ConsoleError as e:
+                    if e.code not in RELOAD_RETRIED:
+                        raise
+                if self._loaded_revision < needed:
+                    raise SessionError("setup_not_loaded", "the game has not reloaded %s since setup %s was added "
+                                       "(it logs revision %d, the setup came with %d): wait and run it again"
+                                       % (overlay.EFFECTS_FILE, name, self._loaded_revision, needed),
+                                       revision=needed, seen=self._loaded_revision)
+                out["reloaded"] = True
+                self._attach("reattach")
             self._new_lines()                   # what was logged before is not this setup's
             self._console.run("event " + event, reply=False)
             lines = self._setup_lines(name)

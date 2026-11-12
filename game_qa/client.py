@@ -5,7 +5,9 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                        [--playset mod_only|current] [--owner-confirmed-busy]
                                              # a game on the deployed build, on the fixture or on NAME
     python3 -m game_qa console "<text>"      # one console command, with its reply
-    python3 -m game_qa run-setup NAME        # a setup given at start, through its event: its log lines
+    python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
+    python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
+                                             # (about 40 s), and the reply says the game logged the new revision
     python3 -m game_qa events                # the pending events
     python3 -m game_qa pick INDEX [EVENT]    # an option of a pending event (the oldest, or EVENT's)
     python3 -m game_qa read "<expr>"...      # triggers and values, evaluated at the debugger's breakpoint
@@ -56,6 +58,9 @@ POLL_S = 0.2
 STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status` by then is busy, not dead
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
 ENTER_TIMEOUT_S = 1500.0
+# add-setup waits session.RELOAD_WAIT_S (180 s) for the reload, a last look may take a console command's 30 s
+# and LOADED_WAIT_S more, and the debugger is attached again: about 230 s, with room.
+ADD_SETUP_TIMEOUT_S = 420.0
 LONG_TIMEOUT_S = 900.0                  # try-event, and advance's rounds
 ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fixture's game first if need be
 # The worst cases, from the waits the session and the fixture allow themselves:
@@ -668,6 +673,15 @@ def cmd_run_setup(args) -> tuple[dict, int]:
     return call(_backup_root(), "run-setup", {"name": args.name})
 
 
+def cmd_add_setup(args) -> tuple[dict, int]:
+    try:
+        setups = _read_setups([args.setup])
+    except ValueError as e:
+        return {"refused": "bad_argument", "detail": str(e).replace("--setup", "add-setup")}, 2
+    (name, script), = setups.items()
+    return call(_backup_root(), "add-setup", {"name": name, "script": script}, ADD_SETUP_TIMEOUT_S)
+
+
 def cmd_events(args) -> tuple[dict, int]:
     return call(_backup_root(), "events")
 
@@ -741,7 +755,12 @@ def add_verbs(sub) -> None:
     p = sub.add_parser("console", help="one console command, with its reply")
     p.add_argument("text")
     p.set_defaults(run=cmd_console)
-    p = sub.add_parser("run-setup", help="run a setup given at start, through its event; its log lines")
+    p = sub.add_parser("add-setup", help="add a setup to the running game: the overlay's effects file is "
+                                         "rewritten and the game reloads it (about 40 s)")
+    p.add_argument("setup", metavar="NAME=FILE", help="its name, and the file (a WSL path) holding its script")
+    p.set_defaults(run=cmd_add_setup)
+    p = sub.add_parser("run-setup", help="run a setup, given at start or added since, through its event; its "
+                                         "log lines")
     p.add_argument("name")
     p.set_defaults(run=cmd_run_setup)
     sub.add_parser("events", help="the pending events").set_defaults(run=cmd_events)
