@@ -406,7 +406,7 @@ tactical_nuclear_weapons = {
 }
 
 recon_satellites = {
-	# Modern Logisitcal Support and Space Recon mobilization options
+	# Modern Logistical Support and Space Recon mobilization options
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/recon_satellites.dds"
 	category = military
