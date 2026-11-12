@@ -53,7 +53,8 @@ CHOICES = {
                            "sr_choice_site_far_side": "sr_moon_site_far_side"}),
     "probe": ("81", {"sr_choice_probe_venus": "sr_probe_target_venus",
                      "sr_choice_probe_mars": "sr_probe_target_mars",
-                     "sr_choice_probe_asteroid": "sr_probe_target_asteroid"}),
+                     "sr_choice_probe_asteroid": "sr_probe_target_asteroid",
+                     "sr_choice_probe_tour": "sr_probe_target_tour"}),
     "mars_landing": ("83", {"sr_choice_mars_direct": "sr_mars_direct",
                             "sr_choice_mars_orbital": "sr_mars_orbital_first",
                             "sr_choice_mars_robotic": "sr_mars_robotic"}),
@@ -195,7 +196,7 @@ class DeclarationShapeTest(unittest.TestCase):
                                  _read(os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt"))))
         named = {mod for _, choices in CHOICES.values() for mod in choices}
         self.assertEqual(named, defined)
-        self.assertEqual(len(named), 13)
+        self.assertEqual(len(named), 14)
         for m, (_, choices) in CHOICES.items():
             for modifier, var in choices.items():
                 with self.subTest(milestone=m, modifier=modifier):

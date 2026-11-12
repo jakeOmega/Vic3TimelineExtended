@@ -422,6 +422,7 @@ sr_probe_choice_made = {
 		has_variable = sr_probe_target_venus
 		has_variable = sr_probe_target_mars
 		has_variable = sr_probe_target_asteroid
+		has_variable = sr_probe_target_tour
 	}
 }
 sr_mars_landing_choice_made = {
