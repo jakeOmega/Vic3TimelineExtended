@@ -149,7 +149,9 @@ its law's rate.
 The banking rule has a third setting: Simplified keeps the entry and the cycle and switches off the monetary layer
 (`banking_cycle.md`, "Full to Simplified mid-game"). Setup: Banking set to Full, a national bank on fiat money with
 inflation above the comfort band, a loose or tight stance, Sterilize Capital Inflows on, and, in a second game, a gold
-standard the peg crisis suspended. Switch the rule to Simplified.
+standard the peg crisis suspended. For row 6, sign a swap line (drawn on in a crisis, if one comes), a lender of last
+resort and, against a defaulted country, a debt receivership, inside their binding periods, and note both parties'
+infamy, relations and legitimacy. Switch the rule to Simplified.
 
 1. **The entry stays**, and within a month none of the inflation-band, stance-politics, real-wage, minting, exchange-rate
    or arrangement modifiers is left on the entry or the country. The rate paid is still there.
@@ -160,12 +162,21 @@ standard the peg crisis suspended. Switch the rule to Simplified.
    later. The same for any other External & Currency tool that was on.
 5. **The suspended gold standard** counts as convertible again (the simplified End the Gold Standard event can fire in
    a downturn).
-6. **What stays:** a swap line, a lender of last resort or a receivership stays in force with its article modifiers, and
-   a bloc keeps a monetary-union principle it held. Note whether either reads as a problem in play.
+6. **The monetary treaties end** soon after the switch: a "… invalidated" notification for each swap line, lender of
+   last resort, receivership and peg, and the article is gone from its treaty (a treaty with nothing else in it is
+   gone). Nobody is charged for it: neither party's infamy rises and no relations hit or "treaty broken" line appears,
+   on either side. The receivership's debtor gets its 10 legitimacy back, and the leverage lines are gone from the
+   influence breakdown. A swap line that was drawn on is settled in one payment, with both parties' notices. The next
+   imported crash is not eased by the old guarantee. A bloc keeps a monetary-union principle it held.
+   Read `TE_SELF_CHECK mon_rule_switch_treaties` (below).
 7. **Switched back to Full**, the dial, inflation and exchange rate start again from the neutral seeds, and the log has
    one `TE_MONETARY: … left the full monetary system` line per country from the earlier switch.
 
 ## Self-checks
 
-None: every check above is a look at the panels and the modifier list. A failure's fallback is in the system's own doc,
+Every other check above is a look at the panels and the modifier list. A failure's fallback is in the system's own doc,
 under its "Switched off mid-game" note.
+
+| Self-check | OK means | BROKEN means, and the fallback |
+|---|---|---|
+| `mon_rule_switch_treaties` (Banking: Full to Simplified, row 6; logged once a game, one to two months after the switch, by a country that held a swap line, guarantee or receivership on its last Full pulse) | the country stands in none of the three articles any more: the `te_mon_full_system` requirement ended it | the article is still in force: the engine does not end an in-force article on a failed requirement, or not this soon. Script has no penalty-free way to end one article (`withdraw` is a treaty effect, and inside the binding period it is a break), so the fallback is the owner's: withdraw the treaty from `te_monetary_leave_full_system` (step 4) and accept what that charges, or leave the articles in force with their mechanics stopped, as before #1507. The same if row 6 shows a penalty |
