@@ -138,7 +138,10 @@
 	# victory or collapse condition plus its branch, which cr_win_ending_now /
 	# cr_fail_ending_now (civil_rights_values.txt) decide: one ordered chain on
 	# which policy ran longest (over 18 months), so exactly one branch holds and
-	# the status line's "if it wins now" names the same ending. Declared in the
+	# the status line's "if it wins now" names the same ending. Their branches
+	# compare one script value with another inside a script value's limit, as
+	# vanilla's russian_liberal_monthly_change does (russian_liberal_laws_value >
+	# russian_socialist_laws_value). Declared in the
 	# chain's order anyway, victories before collapses: the first declared
 	# outcome whose trigger holds concludes the entry (C3).
 	#
@@ -545,32 +548,6 @@
 					}
 				}
 				change_variable = { name = cr_segregationist_months add = 1 }
-			}
-
-			# --- Self-check, once a game (#1431): the outcomes rest on
-			# cr_win_ending_now / cr_fail_ending_now, whose branches compare one
-			# script value with another (cr_months_disp_federal >=
-			# cr_months_disp_grassroots). Vanilla compares two script values in a
-			# journal entry trigger (je_state_and_revolution: revolutionary_bloc_gdp
-			# >= revolutionary_bloc_gdp_target); this confirms it inside a script
-			# value's limit. Only where the counters differ, so OK cannot be a tie.
-			# BROKEN: every ending falls to the generic .200 / .232; rewrite the two
-			# chains on the var: counters (docs/testing/vanilla-1-15-playtest.md).
-			if = {
-				limit = {
-					NOT = { has_global_variable = te_cr_ending_chain_checked }
-					has_variable = cr_grassroots_months
-					has_variable = cr_federal_months
-					var:cr_grassroots_months > var:cr_federal_months
-				}
-				set_global_variable = te_cr_ending_chain_checked
-				if = {
-					limit = { cr_months_disp_grassroots > cr_months_disp_federal }
-					debug_log = "TE_SELF_CHECK OK cr_ending_chain ([THIS.GetCountry.GetTagName] on [TimeKeeper.GetCurrentDate.GetString]: grassroots=[THIS.Var('cr_grassroots_months').GetValue|0] federal=[THIS.Var('cr_federal_months').GetValue|0], and the script values compare the same way)"
-				}
-				else = {
-					debug_log = "TE_SELF_CHECK BROKEN cr_ending_chain ([THIS.GetCountry.GetTagName] on [TimeKeeper.GetCurrentDate.GetString]: grassroots=[THIS.Var('cr_grassroots_months').GetValue|0] federal=[THIS.Var('cr_federal_months').GetValue|0], but cr_months_disp_grassroots > cr_months_disp_federal is false: a script value compared with another fails, so the Civil Rights endings fall to the generic ones; see docs/testing/vanilla-1-15-playtest.md)"
-				}
 			}
 
 			# --- Cooptation expiry: after 12 months the bar push goes to 0 ---

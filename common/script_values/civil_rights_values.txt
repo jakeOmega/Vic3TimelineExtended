@@ -97,7 +97,10 @@ cr_months_disp_total = {
 # this one chain decides the ending, for the outcomes and the status line
 # alike; test_vanilla_panel_additions.py holds the outcomes to it. It reads the
 # display copies of the counters, 0 where one is missing, as the old effect
-# chain read them after cr_ensure_tracker_vars_effect.
+# chain read them after cr_ensure_tracker_vars_effect. Comparing one script
+# value with another in a limit here is vanilla's own pattern
+# (russian_liberal_monthly_change: russian_liberal_laws_value >
+# russian_socialist_laws_value).
 cr_win_ending_now = {
 	value = 6
 	if = {

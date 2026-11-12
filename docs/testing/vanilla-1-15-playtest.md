@@ -35,11 +35,7 @@ game, in English.
   Civil Rights Mandate, the Movement Carries the Day, A Settlement, Reform on Paper, A New Era of Equality, then the
   four collapses), each with its header, the shared victory or collapse condition and its own line, exactly one of
   each kind ticked; run Federal Protection past 18 months and its line ticks while A New Era of Equality's unticks.
-  When one concludes, its event fires and the page shows its `conclusion_desc`. Once a game, `debug.log` has
-  `TE_SELF_CHECK OK|BROKEN cr_ending_chain` (the first month a country's Grassroots counter is ahead of its Federal
-  one): BROKEN means a script value compared with another fails inside a script value's `limit`, and every ending
-  falls to the generic one; rewrite `cr_win_ending_now` and `cr_fail_ending_now` on the `var:` counters, guarded
-  with `has_variable`.
+  When one concludes, its event fires and the page shows its `conclusion_desc`.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
