@@ -4,7 +4,8 @@ Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 
 A candidate is a static modifier the mod defines that script adds somewhere
 without a duration (`add_modifier = { name = X }` with no days, months or
-years), parameterized names expanded from their callers. The registry below
+years, or the bare `add_modifier = X`), parameterized names expanded from
+their callers. The registry below
 says where each one lands and where it shows:
 
 - SECTIONS: a Nation section's list, in Where These Come From.
@@ -68,7 +69,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from organize_loc import _render_loc_file, section_label  # noqa: E402
-from paradox_file_parser import ParadoxFileParser  # noqa: E402
+from paradox_file_parser import ParadoxFileParser, directive_prefixes  # noqa: E402
 from scripts.generators.gen_budget_breakdown import SOURCES as BUDGET_SOURCES  # noqa: E402
 
 GUI_OUT = ROOT / "gui" / "te_nation_generated.gui"
@@ -228,6 +229,10 @@ NOT_ON_COUNTRY = {
     "nd_posture_*": "interest groups",
     # Previewed by an option (sr_site_choose_*); the entry declares them (#1404).
     "sr_colony_*": "je_space_race_solar_colonization", "sr_discovery_*": "je_space_race_solar_colonization",
+    # A milestone's choice (the Moon's landing site, the probe's target, the orbital and Mars programs):
+    # its event's option previews it on the entry with the bare `add_modifier = <name>`, and the entry
+    # declares it (#1404).
+    "sr_choice_*": "the milestone's entry (je_space_race_<milestone>)",
     "sr_fleet_upkeep_goods": "a Space Command building",
     "sr_space_command_paused": "a Space Command building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
@@ -477,12 +482,17 @@ NOT_A_ROW = {
 _STRING_OR_COMMENT = re.compile(r'"[^"\n]*"|#[^\n]*')
 _OPENER = re.compile(r"([\w.:@$-]+)\s*\??=\s*\{|\{|\}")
 _ADD = re.compile(r"\badd_modifier\s*=\s*\{")
+# The bare form, `add_modifier = X`: no duration field, so always permanent.
+_ADD_BARE = re.compile(r"\badd_modifier\s*=\s*(?!\{)([\w$]+)")
 _NAME = re.compile(r"\bname\s*=\s*([\w$]+)")
 # A duration, but not `= -1`, which is forever (vanilla's `months = -1 # FOREVER`).
 _DURATION = re.compile(r"\b(?:days|weeks|months|years)\s*=(?!\s*-)")
 _CALL = re.compile(r"\b(\w+)\s*=\s*\{([^{}]*)\}")
 _ARG = re.compile(r"\b([A-Z][A-Z0-9_]*)\s*=\s*([\w$.:]+)")
 _PARAM = re.compile(r"\$([A-Z][A-Z0-9_]*)\$")
+# The mod's chains are two or three calls long. Past this many the finder
+# raises: only a name that grows at every call should get here.
+MAX_CALL_CHAIN = 40
 
 
 def _strip_comments(text):
@@ -502,8 +512,18 @@ def _block_end(text, open_brace):
     return len(text)
 
 
+def _bare_name(name):
+    """A top-level block's name without its merge directive: callers write
+    `some_effect = { ... }` for a block defined as `REPLACE:some_effect`."""
+    for prefix in directive_prefixes:
+        if name.startswith(prefix):
+            return name[len(prefix):]
+    return name
+
+
 def _top_level(text):
-    """[(name, start, end)] of the file's top-level `name = { ... }` blocks."""
+    """[(name, start, end)] of the file's top-level `name = { ... }` blocks,
+    a `REPLACE:` or `INJECT:` block under the name it replaces or injects into."""
     out, depth = [], 0
     for m in _OPENER.finditer(text):
         token = m.group(0)
@@ -511,7 +531,7 @@ def _top_level(text):
             depth -= 1
         else:
             if depth == 0 and m.group(1):
-                out.append((m.group(1), m.start(), _block_end(text, m.end() - 1)))
+                out.append((_bare_name(m.group(1)), m.start(), _block_end(text, m.end() - 1)))
             depth += 1
     return out
 
@@ -546,23 +566,35 @@ class _Script:
                 name = _NAME.search(body)
                 if name:
                     sites.append((name.group(1), bool(_DURATION.search(body)), rel, _enclosing(tops, m.start())))
+            for m in _ADD_BARE.finditer(text):
+                sites.append((m.group(1), False, rel, _enclosing(tops, m.start())))
         return sites
 
-    def expand(self, template, effect, depth=0):
+    def expand(self, template, effect, seen=None, depth=0):
         """The names a `$PARAM$` template takes, from the calls of the
-        scripted effect it sits in (and theirs, up to four levels)."""
+        scripted effect it sits in, and theirs, as far as the chain goes.
+        `seen` holds the (template, effect) pairs already followed, so
+        effects that call each other end. A chain longer than
+        MAX_CALL_CHAIN raises: a name dropped without a word would skip the
+        registry (#1023)."""
         params = _PARAM.findall(template)
         if not params:
             return {template}
-        if depth > 3 or not effect:
+        seen = set() if seen is None else seen
+        if not effect or (template, effect) in seen:
             return set()
+        if depth >= MAX_CALL_CHAIN:
+            raise ValueError(f"gen_nation_tab.py: `{template}` is still a template {depth} calls up, in `{effect}`: "
+                             "a call chain this long, or a name that grows at every call. Raise MAX_CALL_CHAIN "
+                             "if the chain is real.")
+        seen.add((template, effect))
         names = set()
         for args, caller in self.calls.get(effect, ()):
             name = template
             for param in params:
                 if param in args:
                     name = name.replace(f"${param}$", args[param])
-            names |= self.expand(name, caller, depth + 1) if "$" in name else {name}
+            names |= self.expand(name, caller, seen, depth + 1) if "$" in name else {name}
         return names
 
 
