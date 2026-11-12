@@ -45,17 +45,40 @@ class CovertWorldMaximum(unittest.TestCase):
         self.assertNotIn("ordered_country", _flat(pulse).replace(body, ""))
 
     def test_only_the_display_reads_the_maximum(self):
-        """A month-old maximum is fine for a panel; it would not be for a rule that decides anything."""
-        readers = set()
+        """A month-old maximum is fine for a panel; it would not be for a rule that decides anything.
+
+        Every script value that reads global_max_ic, directly or through another such value, is followed to
+        its readers: none may be read by script outside the script values (an effect, a trigger, an AI weight,
+        an event), only by the interface and localization."""
+        # Each script value's words, a `var:`/`global_var:` read left out and a `scope.` path step kept; one pass per file.
+        words = {}
+        for path in sorted((ROOT / "common" / "script_values").glob("*.txt")):
+            text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+            for block in re.split(r"(?m)^(?=\w+ = \{)", text):
+                head = re.match(r"(\w+) = \{", block)
+                if head:
+                    body = block[head.end():]
+                    words[head.group(1)] = (set(re.findall(r"(?<![\w:])\w+", body)),
+                                            "global_var:global_max_ic" in body)
+        tainted = {name for name, (_, direct) in words.items() if direct}
+        while True:
+            more = {name for name, (used, _) in words.items() if name not in tainted and used & tainted}
+            if not more:
+                break
+            tainted |= more
+        self.assertIn("intelligence_capacity_relative", tainted)
+        self.assertIn("covert_disp_standing_code", tainted)
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
+                if path.parent.name == "script_values":
+                    continue
                 text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
-                if "global_var:global_max_ic" in text:
-                    readers.add(path.relative_to(ROOT).as_posix())
-        self.assertEqual(readers, {"common/script_values/covert_warfare_script_values.txt"})
-        values = _read("common/script_values/covert_warfare_script_values.txt")
-        users = set(re.findall(r"(?m)^(\w+) = \{", values))
-        self.assertIn("intelligence_capacity_relative", users)
+                rel = path.relative_to(ROOT).as_posix()
+                with self.subTest(file=rel):
+                    if path.name != "je_covert_warfare.txt":
+                        self.assertNotIn("global_var:global_max_ic", text)
+                    used = set(re.findall(r"(?<![\w:])\w+", text))
+                    self.assertEqual(used & tainted, set())
 
 
 class CulturalHegemonyMilestones(unittest.TestCase):
