@@ -286,6 +286,116 @@ class ReportTests(unittest.TestCase):
         self.assertIn("[untagged] Variable 'st_1' is not set", volume)
 
 
+class ModGuiUntagTests(unittest.TestCase):
+    """#1269: a mod GUI's data-context failure names no file, and three
+    source-only vanilla entries match its lines. The report lists the lines a
+    mod-owned .gui reaches and leaves vanilla's own hidden."""
+
+    ENTRIES = """
+### `pdx_data_callstack.cpp:16` — vanilla data context not supplied
+- source: `pdx_data_callstack.cpp:16`
+
+```
+No context supplied (Use SetDataContext), wanted context of type
+```
+
+### `pdx_data_localize_helper.cpp:286` — vanilla FetchData cascade
+- source: `pdx_data_localize_helper.cpp:286`
+
+```
+FetchData failed for
+```
+
+### `pdx_gui_localize.cpp:140` — vanilla GUI loc fetch failure
+- source: `pdx_gui_localize.cpp:140`
+
+```
+PdxDataFetchLocalizedData failed for
+```
+"""
+    FLOOD = (
+        "[12:05:2{n}][pdx_data_callstack.cpp:16]: No context supplied (Use SetDataContext), "
+        "wanted context of type '{type}' for '{type}.{get} '\n"
+        "[12:05:2{n}][pdx_data_localize_helper.cpp:286]: FetchData failed for '{type}.{get}'\n"
+        "[12:05:2{n}][pdx_gui_localize.cpp:140]: PdxDataFetchLocalizedData failed for '{key}'\n"
+    )
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.fx = fx = Fixture(self._tmp.name)
+        fx.write_doc("docs/vanilla/vanilla_known_bugs.md",
+                     REGISTRY.format(reviewed="").replace("## Watch list", self.ENTRIES + "\n## Watch list"))
+        glr._vanilla_bug_cache.clear()
+        fx.standard()
+        # The mod's own widget draws a key of its own that reads a panel only
+        # another window has; right_click_menu.gui replaces vanilla's file.
+        with open(os.path.join(fx.mod, "gui", "te_census_widgets.gui"), "w", encoding="utf-8-sig") as fh:
+            fh.write('textbox = { text = "te_census_income" }\n')
+        with open(os.path.join(fx.mod, "gui", "right_click_menu.gui"), "w", encoding="utf-8-sig") as fh:
+            fh.write('textbox = { text = "[DiscriminationTraitGroup.GetName]" }\n')
+        with open(os.path.join(fx.mod, "localization", "english", "x_l_english.yml"), "w",
+                  encoding="utf-8-sig") as fh:
+            fh.write('l_english:\n te_census_income:0 "[PopsOverviewPanel.GetAverageIncomeRich|v1] Income"\n')
+        self.vanilla_game = os.path.join(self._tmp.name, "install", "game")
+        os.makedirs(os.path.join(self.vanilla_game, "gui"))
+        open(os.path.join(self.vanilla_game, "gui", "right_click_menu.gui"), "w").close()
+        fx.log("debug.log", "".join([
+            self.FLOOD.format(n=1, type="PopsOverviewPanel", get="GetAverageIncomeRich", key="te_census_income") * 3,
+            self.FLOOD.format(n=2, type="DiscriminationTraitGroup", get="GetName",
+                              key="INCORPORATION_TIME_SAME_TRAIT_GROUP"),
+        ]), "12:06:00")
+
+    def test_the_mods_lines_are_findings_that_name_the_gui_file(self):
+        report = self.fx.report(vanilla_game=self.vanilla_game)
+        untagged = section(report, "Untagged")
+        for source, text, note in (
+            ("pdx_data_callstack.cpp:16", "wanted context of type 'PopsOverviewPanel'",
+             "data type 'PopsOverviewPanel' is read by"),
+            ("pdx_data_localize_helper.cpp:286", "FetchData failed for 'PopsOverviewPanel.GetAverageIncomeRich'",
+             "data type 'PopsOverviewPanel' is read by"),
+            ("pdx_gui_localize.cpp:140", "PdxDataFetchLocalizedData failed for 'te_census_income'",
+             "loc key 'te_census_income' is drawn by"),
+        ):
+            self.assertEqual(untagged.count(f"  [{source}]"), 1)  # one finding: vanilla's own is not listed
+            start = untagged.index(f"  [{source}]")
+            finding = untagged[untagged.rindex("\n[", 0, start):untagged.find("\n[", start)]
+            self.assertIn("3 lines (debug 3); no file named", finding)
+            self.assertIn(text, finding.split("near:")[0])
+            self.assertIn(f"MOD GUI: {note} gui/te_census_widgets.gui", finding)
+        self.assertIn("otherwise hidden by 'vanilla GUI loc fetch failure'", untagged)
+        # Vanilla's own flood stays under its entries, and is still counted.
+        self.assertEqual(untagged.count("MOD GUI:"), 3)
+        self.assertIn("[vanilla_noise] vanilla GUI loc fetch failure", section(report, "Volume"))
+        self.assertNotIn("mod GUI untagging", report)
+
+    def test_without_the_install_only_the_mods_own_key_shows_and_the_registry_section_says_why(self):
+        report = self.fx.report()
+        untagged = section(report, "Untagged")
+        # A key vanilla's loc lacks is the mod's with no install to consult ...
+        self.assertIn("MOD GUI: loc key 'te_census_income' is drawn by gui/te_census_widgets.gui", untagged)
+        # ... but no file can be called the mod's own, so no data type is.
+        self.assertEqual(untagged.count("MOD GUI:"), 1)
+        self.assertNotIn("  [pdx_data_callstack.cpp:16]", untagged)
+        self.assertIn("mod GUI untagging is limited to keys only the mod's loc defines: no vanilla GUI folder",
+                      section(report, "Registry"))
+
+    def test_a_key_no_gui_names_is_listed_with_the_loc_file_that_defines_it(self):
+        note = log_triage.mod_gui_note({"key": "te_event_desc", "files": ["localization/english/te_l_english.yml"],
+                                        "file_count": 1, "untagged_from": "vanilla GUI loc fetch failure"})
+        self.assertEqual(note, "MOD GUI: loc key 'te_event_desc' is the mod's own "
+                               "(localization/english/te_l_english.yml); no .gui names it; "
+                               "otherwise hidden by 'vanilla GUI loc fetch failure'")
+        note = log_triage.mod_gui_note({"type": "Country", "files": ["gui/a.gui", "gui/b.gui"], "file_count": 7,
+                                        "untagged_from": "x"})
+        self.assertEqual(note, "MOD GUI: data type 'Country' is read by gui/a.gui, gui/b.gui and 5 more; "
+                               "otherwise hidden by 'x'")
+        note = log_triage.mod_gui_note({"expression": "GetPlayer.GetFoo", "files": ["gui/a.gui"], "file_count": 1,
+                                        "untagged_from": "x"})
+        self.assertEqual(note, "MOD GUI: expression 'GetPlayer.GetFoo' is written in gui/a.gui; "
+                               "otherwise hidden by 'x'")
+
+
 class PauseTests(unittest.TestCase):
     def test_a_burst_while_paused_is_called_one(self):
         with tempfile.TemporaryDirectory() as tmp:
