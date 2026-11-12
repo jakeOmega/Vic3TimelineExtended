@@ -1,11 +1,13 @@
 """The Deep-Space Probe's events speak of the target it was sent to (#1620).
 
-space_race_events.81 sends the probe to Venus, Mars or the asteroid belt and
-records the choice in sr_probe_target_<target>. None of the three is in the
-outer solar system, yet .37 reported "the first images of the outer solar
+space_race_events.81 sends the probe to Venus, Mars or the asteroid belt, or
+on the Grand Tour past Jupiter and the planets beyond it, and records the
+choice in sr_probe_target_<target>. None of the three single targets is in
+the outer solar system, yet .37 reported "the first images of the outer solar
 system" and .45 planned a Jupiter flyby whichever was chosen. Now .37's
 description is keyed on the target, with a last rung that names none for a
-probe with no target set, and .45 names no planet.
+probe with no target set, and .45 names no planet, except in the Grand Tour's
+own texts (the `_tour` keys), which are about Jupiter.
 """
 import os
 import re
@@ -17,8 +19,11 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 
 # The words each target's description must carry, and the ones no text of
 # these two events may: places the probe is never sent.
-TARGET_WORDS = {"venus": "Venus", "mars": "Mars", "asteroid": "asteroid"}
+TARGET_WORDS = {"venus": "Venus", "mars": "Mars", "asteroid": "asteroid", "tour": "Jupiter"}
+# Where a single-target probe never goes. The Grand Tour does: its texts are
+# the keys ending in _tour, each shown only under sr_probe_target_tour.
 NEVER = ("Jupiter", "Saturn", "outer system", "outer solar system", "gas giant")
+TOUR = "_tour"
 
 
 def _read(path):
@@ -82,8 +87,8 @@ class ProbeTargetTextsTest(unittest.TestCase):
             self.assertNotIn(word, self.loc["space_race_events.37.d"])
 
     def test_what_every_target_shares_names_none(self):
-        """The title, flavor and options of .37 and every text of .45 show
-        under all three targets and under none."""
+        """The title, flavor and options of .37 show under every target and
+        under none; .45's plain texts under every target but the Grand Tour."""
         shared = [f"space_race_events.37.{s}" for s in ("t", "f", "a", "b")]
         shared += [f"space_race_events.45.{s}" for s in ("t", "d", "f", "a", "b", "c")]
         for key in shared:
@@ -94,20 +99,46 @@ class ProbeTargetTextsTest(unittest.TestCase):
         keys = [k for k in self.loc if re.match(r"space_race_events\.(37|45)\.", k)]
         self.assertGreaterEqual(len(keys), 13)
         for key in keys:
+            if key.endswith(TOUR):
+                continue
             for word in NEVER:
                 self.assertNotIn(word.lower(), self.loc[key].lower(), f"{key}: {word}")
+
+    def test_the_grand_tour_s_texts_show_only_on_the_tour(self):
+        """Every _tour key of .4, .37 and .45 is named once in its event,
+        beside a test of sr_probe_target_tour, and the plain key follows it as
+        the fallback."""
+        for event, slots in (("4", ("d",)), ("37", ("d",)), ("45", ("d", "f", "a", "b", "c"))):
+            body = " ".join(_block(self.events, f"space_race_events.{event}").split())
+            for slot in slots:
+                key = f"space_race_events.{event}.{slot}{TOUR}"
+                self.assertIn(key, self.loc)
+                self.assertEqual(body.count(key + " "), 1, key)
+                gated = (f"desc = {key} trigger = {{ has_variable = sr_probe_target_tour }}",
+                         f"trigger = {{ has_variable = sr_probe_target_tour }} text = {key} ")
+                self.assertTrue(any(g in body for g in gated), key)
+                plain = key[:-len(TOUR)]
+                self.assertGreater(body.index(plain + " ", body.index(key) + len(key)), body.index(key), key)
+        for slot in ("d", "f", "a"):
+            self.assertIn("Jupiter", self.loc[f"space_race_events.45.{slot}{TOUR}"])
 
     def test_the_fastest_trajectory_is_the_one_named_fastest(self):
         """.45.a gives the most months, and is the only option that says so."""
         event = _block(self.events, "space_race_events.45")
         months = {}
-        for option in re.finditer(r"name = space_race_events\.45\.(\w)\b(.*?)(?=\n\toption = \{|\Z)",
+        for option in re.finditer(r"text = space_race_events\.45\.(\w)\n(.*?)(?=\n\toption = \{|\Z)",
                                   event, re.S):
             months[option.group(1)] = int(re.search(r"MONTHS = (\d+)", option.group(2)).group(1))
+        self.assertEqual(sorted(months), ["a", "b", "c"])
         self.assertEqual(max(months, key=months.get), "a")
         self.assertIn("fastest", self.loc["space_race_events.45.a"])
         for letter in ("b", "c"):
             self.assertNotIn("fast", self.loc[f"space_race_events.45.{letter}"])
+        # The Grand Tour's names for the same three options: a takes the most
+        # speed, and b is the one that says it is slower.
+        self.assertIn("speed", self.loc["space_race_events.45.a_tour"])
+        self.assertIn("slower", self.loc["space_race_events.45.b_tour"])
+        self.assertNotIn("slow", self.loc["space_race_events.45.a_tour"])
 
 
 if __name__ == "__main__":

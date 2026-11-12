@@ -1116,6 +1116,7 @@
  je_space_race_probe_status_default:0 "We are designing an unmanned probe mission beyond Earth orbit."
  je_space_race_probe_status_mars:0 "#bold Target:#! Mars\nOur probe will search for evidence of water and past life on the red planet."
  je_space_race_probe_status_safe:0 "Proven instrument packages and conservative flight plans ensure the probe reaches its destination intact."
+ je_space_race_probe_status_tour:0 "#bold Target:#! Grand Tour\nOur probe will pass Jupiter and go on to the planets beyond it. Until it is finished the whole program runs slower, and the probe costs as much innovation a week as two more funding levels."
  je_space_race_probe_status_venus:0 "#bold Target:#! Venus\nOur probe will study Venus's atmosphere and greenhouse dynamics."
  je_space_race_probe_subsequent_outcome_header:0 "If others reach the target before us"
  je_space_race_probe_subsequent_outcome_tt:0 "Even a follow-on probe expands our knowledge of the inner solar system and earns modest [concept_prestige] and research benefits."

@@ -329,12 +329,15 @@ the Mars Landing starts, an event asks you to choose how to fly it.
 While that milestone runs, your choice changes the setback risk, and sometimes
 the pace, of your whole program, in the same way as an approach. When the
 milestone is finished it also decides a reward that fades over ten years.
+The probe's Grand Tour is the one costly choice: it slows the whole program by
+a quarter and costs 60 more innovation a week while the milestone runs,
+whatever the funding and approach, and its reward fades over twenty years.
 
 | Event | Milestone | Options |
 |---|---|---|
 | Who Flies First? | Orbital Flight | Civilian volunteer (riskier; prestige, cultural pull); military test pilot (lower risk, faster; military research, influence); scientist (a little riskier; research, innovation cap) |
 | Where the Eagle Shall Land | Moon Landing | Shackleton Crater (much riskier, faster; research, innovation cap); Equatorial Plain (lower risk; prestige, research); Sea of Tranquility (a little riskier; prestige, cultural pull); far side of the Moon (riskier, faster; research, innovation cap) |
-| Where Shall We Send the Probe? | Deep-Space Probe | Venus (riskier; research, space race progress); Mars (lower risk, faster; the most space race progress, prestige); the asteroid belt (much riskier; space race progress, innovation cap) |
+| Where Shall We Send the Probe? | Deep-Space Probe | Venus (riskier; research, space race progress); Mars (lower risk, faster; the most space race progress, prestige); the asteroid belt (much riskier; space race progress, innovation cap); the Grand Tour past Jupiter and the planets beyond it (slower and costlier; research, space race progress, prestige and innovation cap, each no higher than the best single target's) |
 | The Mars Strategy | Mars Landing | Direct landing (much riskier, much faster; prestige, cultural pull); orbital-first (slightly lower risk, faster; research, Space Program throughput); robotic precursors (lower risk; Extraplanetary Base throughput, innovation cap, and Mars Resource Extraction: research speed, space race progress and cultural pull) |
 
 ## Space race funding and cost
