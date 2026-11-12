@@ -537,16 +537,19 @@ un_vote_apply_treaty_modifier = {
 	# counts, and the 24-month wait before the Colonial Empire tab can change
 	# it). Setting the cooldown variable prevents decolonization_events.14
 	# from firing afterward and letting the AI re-deliberate the same stance.
-	# Only a member that cast a ballot takes the stance: a yes voter (the
-	# proposer included), or a no voter that accepts the declaration anyway
-	# (un_vote.3 option B). A member that cast none — its vote suspended
-	# under Article 19, or joined after the ballot — is bound by the
-	# declaration through un_vote.3 option A but committed itself to nothing.
+	# Only a yes voter takes the stance (the proposer included, which sits on
+	# un_res_yes). A no voter is bound by the declaration through un_vote.3
+	# option A, like a member that cast no ballot (its vote suspended under
+	# Article 19, or joined after it), but committed itself to nothing: it
+	# once committed only by choosing to accept in option B, which un_vote.3
+	# no longer offers on this topic (un_vote_3_can_refuse, #1568), so
+	# un_lobby_has_voted handed every outvoted no voter the stance (issue
+	# #1373; the orchestrator's call, 2026-11-12).
 	if = {
 		limit = {
 			scope:un_resolution ?= {
 				has_tag = un_topic_decolonization
-				un_lobby_has_voted = { COUNTRY = ROOT }
+				un_lobby_in_list = { LIST = un_res_yes COUNTRY = ROOT }
 			}
 			country_rank >= rank_value:great_power
 		}

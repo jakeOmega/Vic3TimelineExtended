@@ -8,7 +8,7 @@
 # Courts lines and Judicial Elections, Election Interference's target
 # (covert_operations.txt), and a UN electoral observer mission's host
 # (un_mission_triggers.txt and its callers). Moved here from the judiciary's
-# te_holds_elections (issue #896), so the gates cannot drift apart.
+# te_jud_elected_government (issue #896), so the gates cannot drift apart.
 # Scope: country
 te_holds_elections = {
 	OR = {
