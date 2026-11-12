@@ -6455,20 +6455,20 @@ pm_advanced_am_fabrication = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (10.98%)
-			goods_input_iron_add = 5                             # Price:   40, Total cost:   200.0 (4.88%)
-			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (10.98%)
-			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (29.27%)
-			goods_input_digital_access_add = 15                  # Price:  120, Total cost:  1800.0 (43.90%)
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (7.56%)
+			goods_input_iron_add = 5                             # Price:   40, Total cost:   200.0 (3.36%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (15.13%)
+			goods_input_electronic_components_add = 25           # Price:   80, Total cost:  2000.0 (33.61%)
+			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (40.34%)
 			# Output goods
 			goods_output_advanced_materials_add = 3              # Price: 4000, Total cost: 12000.0 (100.00%)
-			# Total input cost: 4100.0
+			# Total input cost: 5950.0
 			# Total output cost: 12000.0
-			# Profit: 7900.0
-			# Profit margin: 192.68%
-			# Zero profit price multiplier: 0.34
+			# Profit: 6050.0
+			# Profit margin: 101.68%
+			# Zero profit price multiplier: 0.50
 			# Employment: 300
-			# Wage breakeven: 26.33
+			# Wage breakeven: 20.17
 		}
 
 		level_scaled = {
@@ -6494,22 +6494,22 @@ pm_self_replicating_assemblers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (7.38%)
-			goods_input_iron_add = 5                             # Price:   40, Total cost:   200.0 (3.28%)
-			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (7.38%)
-			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (19.67%)
-			goods_input_digital_access_add = 15                  # Price:  120, Total cost:  1800.0 (29.51%)
-			goods_input_telephones_add = 20                      # Price:   70, Total cost:  1400.0 (22.95%)
-			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (9.84%)
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (4.19%)
+			goods_input_iron_add = 10                            # Price:   40, Total cost:   400.0 (3.72%)
+			goods_input_electricity_add = 50                     # Price:   30, Total cost:  1500.0 (13.95%)
+			goods_input_electronic_components_add = 35           # Price:   80, Total cost:  2800.0 (26.05%)
+			goods_input_digital_access_add = 30                  # Price:  120, Total cost:  3600.0 (33.49%)
+			goods_input_telephones_add = 20                      # Price:   70, Total cost:  1400.0 (13.02%)
+			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (5.58%)
 			# Output goods
 			goods_output_advanced_materials_add = 5              # Price: 4000, Total cost: 20000.0 (100.00%)
-			# Total input cost: 6100.0
+			# Total input cost: 10750.0
 			# Total output cost: 20000.0
-			# Profit: 13900.0
-			# Profit margin: 227.87%
-			# Zero profit price multiplier: 0.30
+			# Profit: 9250.0
+			# Profit margin: 86.05%
+			# Zero profit price multiplier: 0.54
 			# Employment: 300
-			# Wage breakeven: 46.33
+			# Wage breakeven: 30.83
 		}
 
 		level_scaled = {
@@ -6535,22 +6535,22 @@ pm_advanced_self_replicating_assemblers = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (3.91%)
-			goods_input_iron_add = 5                             # Price:   40, Total cost:   200.0 (1.74%)
-			goods_input_electricity_add = 95                     # Price:   30, Total cost:  2850.0 (24.78%)
-			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (10.43%)
-			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (41.74%)
-			goods_input_telephones_add = 20                      # Price:   70, Total cost:  1400.0 (12.17%)
-			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (5.22%)
+			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (3.19%)
+			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (2.84%)
+			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (15.96%)
+			goods_input_electronic_components_add = 100          # Price:   80, Total cost:  8000.0 (28.37%)
+			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (34.04%)
+			goods_input_telephones_add = 40                      # Price:   70, Total cost:  2800.0 (9.93%)
+			goods_input_glass_add = 40                           # Price:   40, Total cost:  1600.0 (5.67%)
 			# Output goods
 			goods_output_advanced_materials_add = 10             # Price: 4000, Total cost: 40000.0 (100.00%)
-			# Total input cost: 11500.0
+			# Total input cost: 28200.0
 			# Total output cost: 40000.0
-			# Profit: 28500.0
-			# Profit margin: 247.83%
-			# Zero profit price multiplier: 0.29
+			# Profit: 11800.0
+			# Profit margin: 41.84%
+			# Zero profit price multiplier: 0.70
 			# Employment: 300
-			# Wage breakeven: 95.00
+			# Wage breakeven: 39.33
 		}
 
 		level_scaled = {
@@ -6617,14 +6617,14 @@ pm_automated_am_fabrication = {
 			# Profit: -120.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -200
-			# Wage breakeven: 0.60
+			# Employment: -180
+			# Wage breakeven: 0.67
 		}
 
 		level_scaled = {
 			# employment
 			building_employment_machinists_add = -150
-			building_employment_engineers_add = -50
+			building_employment_engineers_add = -30
 		}
 	}
 
@@ -6649,14 +6649,13 @@ pm_orbital_fabrication = {
 			# Profit: -200.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -90
-			# Wage breakeven: 2.22
+			# Employment: -20
+			# Wage breakeven: 10.00
 		}
 
 		level_scaled = {
 			# employment
-			building_employment_engineers_add = -50
-			building_employment_academics_add = -40
+			building_employment_engineers_add = -20
 		}
 	}
 }
