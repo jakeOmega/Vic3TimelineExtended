@@ -5674,8 +5674,10 @@ of Earth gates are the worked example (`formable_gating_triggers.txt`, `te_forma
 ## Latitude Triggers Are State-Scoped and Read the State Region's Centre Point (1.15)
 
 `in_tropics`, `in_north_hemisphere` and `in_south_hemisphere` take a state (not a state region, a province or a
-country) and test where its state region's centre point lies: between the tropics, north or south of the equator.
-None is used in vanilla 1.15's `common/`. Offline, the closest stand-in for that point is each state's reference
-place in `scripts/generators/data/local_climate.csv` (column `latitude`, whole degrees), which is how the space
-elevator's site list and the Antarctic station AI were checked (#1454); a state within a degree or two of a tropic
-can fall either way in the game. A building's `possible` is in state scope, so `in_tropics = yes` goes there bare.
+country) and test where its state region's centre point lies: between the tropics, north or south of the equator. None
+is used in vanilla 1.15's `common/`. Offline, the closest stand-in for that point is each state's reference place in
+`scripts/generators/data/local_climate.csv` (column `latitude`, whole degrees), which is how the tropical disease
+weights and the Antarctic station AI were checked (#1454); a state within a degree or two of a tropic can fall either
+way in the game. A building's `possible` is in state scope, so `in_tropics = yes` could go there bare, but the band is
+wide: on the space elevator's site it roughly doubled the eligible states (about 183 against the hand-kept 92), and
+the owner kept the list (2026-11-12, #1672).

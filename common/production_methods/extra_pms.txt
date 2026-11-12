@@ -6543,14 +6543,14 @@ pm_advanced_self_replicating_assemblers = {
 			goods_input_telephones_add = 40                      # Price:   70, Total cost:  2800.0 (9.93%)
 			goods_input_glass_add = 40                           # Price:   40, Total cost:  1600.0 (5.67%)
 			# Output goods
-			goods_output_advanced_materials_add = 10             # Price: 4000, Total cost: 40000.0 (100.00%)
+			goods_output_advanced_materials_add = 15             # Price: 4000, Total cost: 60000.0 (100.00%)
 			# Total input cost: 28200.0
-			# Total output cost: 40000.0
-			# Profit: 11800.0
-			# Profit margin: 41.84%
-			# Zero profit price multiplier: 0.70
+			# Total output cost: 60000.0
+			# Profit: 31800.0
+			# Profit margin: 112.77%
+			# Zero profit price multiplier: 0.47
 			# Employment: 300
-			# Wage breakeven: 39.33
+			# Wage breakeven: 106.00
 		}
 
 		level_scaled = {
