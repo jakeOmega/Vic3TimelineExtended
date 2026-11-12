@@ -25,6 +25,8 @@ removes the folder (spec § 5.2, Review Focus 1).
     stop       the session's stop. The server answers with its reply, then exits, unless the stop can be run again
                to effect (`final_stop`: a restore refused for a reason waiting can clear, a game left up that is
                known by pid and start time): then it serves on, and `stop` again runs the stop again
+    selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
+               flushed first (`Session.self_checks`)
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, try-event
 
@@ -167,6 +169,7 @@ class SessionServer:
             "console": self._console, "run-setup": self._run_setup, "events": self._events, "pick": self._pick,
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
             "shot": self._shot, "try-event": self._try_event,
+            "selfchecks": self._selfchecks,
         }
 
     @property
@@ -335,6 +338,9 @@ class SessionServer:
     def _try_event(self, body: dict) -> tuple[dict, int]:
         reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))
         return reply, 0 if reply.get("complete") is True else 2         # a did-not-fire is never a pass
+
+    def _selfchecks(self, body: dict) -> tuple[dict, int]:
+        return self._session.self_checks(), 0
 
     # ---- session.json
 
