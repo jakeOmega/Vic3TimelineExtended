@@ -896,9 +896,11 @@ te_tax_code_equivalent_consumption_based = {
 	NOT = { te_tax_code_counts_as_graduated = yes }
 	NOT = { te_tax_code_counts_as_proportional = yes }
 	NOT = { te_tax_code_counts_as_per_capita = yes }
-	NAND = {
-		has_variable = te_tax_en_land
-		var:te_tax_en_land >= 1
+	# Unset counts as no land tax: the guard is the limit, never a sibling of
+	# the read in a NAND (variable_guard_audit).
+	trigger_if = {
+		limit = { has_variable = te_tax_en_land }
+		NOT = { var:te_tax_en_land >= 1 }
 	}
 }
 
@@ -1318,11 +1320,11 @@ te_tax_can_accept_offer = {
 		}
 		custom_tooltip = {
 			text = te_tax_tt_offer_not_committed
+			# Read with ?=, false for an unset token: a group with no
+			# commitment tokens has not committed (variable_guard_audit).
 			NAND = {
-				has_variable = te_tax_com_$IG$
-				has_variable = te_tax_com_$IG$_rev
-				var:te_tax_com_$IG$ = 1
-				var:te_tax_com_$IG$_rev = var:te_tax_bl_rev
+				var:te_tax_com_$IG$ ?= 1
+				var:te_tax_com_$IG$_rev ?= var:te_tax_bl_rev
 			}
 		}
 		custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }

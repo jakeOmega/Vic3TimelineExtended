@@ -929,7 +929,7 @@ def _overview_views():
         lines.append(
             f"\tif = {{ limit = {{ has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev "
             f"has_variable = {off}_kind has_variable = {off}_rev var:{off}_rev = var:te_tax_bl_rev var:{off}_kind > 0 "
-            f"NAND = {{ has_variable = {com} has_variable = {com}_rev var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }} "
+            f"{_not_committed(com)} }} "
             "add = 1 }")
     lines.append("}")
     lines += ["", "# Promises in their term with a failing check (te_tax_obl_st_failing_<n>), and the earliest",
@@ -1319,6 +1319,22 @@ def _ig_values():
 
 def _is_open(token):
     return f"has_variable = {token} var:{token} = 1"
+
+
+def _unset_or_not(variable, comparison):
+    """`variable` is unset, or set and not `comparison` ("> 0"). The guard is a trigger_if's limit,
+    never a sibling of the read in a NAND, NOR or NOT, where it would protect nothing
+    (scripting_best_practices.md, "Write NOR or NAND, Never a Multi-Child NOT";
+    variable_guard_audit). Not for an OR: a trigger_if whose limit fails passes."""
+    return f"trigger_if = {{ limit = {{ has_variable = {variable} }} NOT = {{ var:{variable} {comparison} }} }}"
+
+
+def _not_committed(com):
+    """The group whose commitment token is `com` has not committed to the bill's current revision:
+    either token is unset, or it is not 1 for this revision. Guards as in _unset_or_not, which
+    keeps every read of a view behind its own has_variable (test_tax_code_state)."""
+    return (f"trigger_if = {{ limit = {{ has_variable = {com} has_variable = {com}_rev }} "
+            f"NAND = {{ var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }}")
 
 
 def _split_month(name, month, guard):
@@ -3132,7 +3148,9 @@ def offer_records():
 
 
 def _not_gained(ig, code):
-    return f"NAND = {{ has_variable = te_tax_bl_got_{ig}_{code} var:te_tax_bl_got_{ig}_{code} = 1 }}"
+    """Group `ig` has not gained clause `code` under this bill: its record is unset or not 1. The
+    read is `?=`, false when the record is unset, so no guard shares a block with it."""
+    return f"NOT = {{ var:te_tax_bl_got_{ig}_{code} ?= 1 }}"
 
 
 def _offer_writes(ig, kind, arg, target="0", indent="\t\t\t"):
@@ -3199,7 +3217,7 @@ def _promise_candidates(ig, indent):
             f"{t}if = {{",
             f"{t}\tlimit = {{",
             f"{t}\t\tvar:{off}_kind = 0",
-            f"{t}\t\tNAND = {{ has_variable = te_tax_bl_prom_{ig}_kind var:te_tax_bl_prom_{ig}_kind > 0 }}",
+            f"{t}\t\t{_unset_or_not(f'te_tax_bl_prom_{ig}_kind', '> 0')}",
             f"{t}\t\t{_feasible_call(kind, arg, target)}",
             f"{t}\t\tte_tax_can_obl_propose = {{ KIND = {kind} ARG = {arg} }}",
             f"{t}\t}}",
