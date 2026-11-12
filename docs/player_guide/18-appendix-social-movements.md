@@ -13,8 +13,8 @@ fire.
 
 ### What moves Movement Support
 
-Each month Movement Support moves by the sum of these lines, which the bar's
-tooltip lists:
+Each month Movement Support moves by the sum of these lines, which the journal
+panel lists beside the bar:
 
 | Source | Change per month |
 |---|---|
