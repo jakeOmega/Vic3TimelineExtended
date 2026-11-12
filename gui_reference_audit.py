@@ -67,7 +67,7 @@ DIRS = {
 # No .gui file defines these with `type`/`template`. With vanilla's gui/ read,
 # Index.engine_elements finds them in vanilla's own use, so this list matters
 # for a name vanilla never opens a block with, and for runs with no install.
-# The last three lines are what a real install reported (#1271, #1349).
+# The last four lines are what a real install reported (#1271, #1349).
 BUILTINS = set("""types widget container flowcontainer hbox vbox button icon textbox
 text_single text_multi progressbar scrollarea scrollbar item blockoverride block
 tooltipwidget background modify_texture state animation dynamicgridbox fixedgridbox

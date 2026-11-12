@@ -355,8 +355,8 @@ types T { type mine = engine_base { } type bad = no_such_base { } }
         # the fix, the figure #1403 gives. Most vanilla types are defined in
         # files that aren't fixtures, so the mod can't be clean in this setup:
         # check the engine names only. The generated row files are left out for
-        # time (three files, half the mod's GUI text, and the audit's line
-        # lookup is quadratic in file size); the rest uses all twenty names.
+        # time: they are the three largest files, and the audit's line lookup
+        # is quadratic in file size.
         install = self.root.parent / 'install'
         shutil.copytree(REPO / audit.VANILLA_GUI_FIXTURES, install / 'game/gui')
         mod = self.root.parent / 'mod_gui'
@@ -367,7 +367,15 @@ types T { type mine = engine_base { } type bad = no_such_base { } }
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy(path, target)
                 uses.update(m[1] or m[2] for m in audit.GUI_USE.finditer(audit.masks(audit.read(path))[1]))
-        self.assertLessEqual(set(ENGINE_NAMES_A_REAL_INSTALL_FLAGGED), uses)
+        # Only a guard against a vacuous run. Which of the names the mod uses
+        # is the mod's business: one going out of use is no reason to edit
+        # the list above, which records what the install reported.
+        unused = sorted(set(ENGINE_NAMES_A_REAL_INSTALL_FLAGGED) - uses)
+        self.assertGreaterEqual(
+            len(ENGINE_NAMES_A_REAL_INSTALL_FLAGGED) - len(unused), 5,
+            f'the mod uses too few of the engine names for this test to show anything; no longer used: {unused}. '
+            'A name the mod stopped using is fine and stays in the list; if most are gone, pick mod files that '
+            'still use engine elements, or drop this test.')
         # vanilla's own files vouch for the three of those names they use
         engine_elements = audit.Index(self.root, install).engine_elements
         self.assertLessEqual({'scrollbar_vertical', 'scrollbar_horizontal', 'click_modifiers'}, engine_elements)

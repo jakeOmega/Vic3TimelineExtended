@@ -1138,15 +1138,19 @@ vanilla's own `.gui` files open a block with or inherit from and no file
 defines: the engine's elements and block properties (`scrollbar_horizontal`,
 `click_modifiers`, `datacontext_from_model`). It is read from the install on
 each run, so it follows a patch, and the mod's own uses never vouch for a
-name. `BUILTINS` is the hand-kept list, for a name vanilla never uses and for
-runs with no install. Before #1271 / #1349 only `BUILTINS` existed, and a
-local `--strict` failed with 270 errors on twenty engine names that CI never
-saw. To get the with-install mode without a game, copy
+name: a typo or a renamed mod type still errors. It opens one narrow hole. If
+a patch removes a type's definition and leaves a dangling `foo = {` in
+vanilla's own files, the mod's use of `foo` passes with an install, where it
+used to error. `BUILTINS` is the hand-kept list, for a name vanilla never uses
+and for runs with no install. Before #1271 / #1349 only `BUILTINS` existed,
+and a local `--strict` failed with 270 errors on twenty engine names that CI
+never saw. To get the with-install mode without a game, copy
 `test_fixtures/vanilla_gui/` to `<dir>/game/gui/` and pass
-`--vanilla-path <dir>`; the types vanilla defines outside those eight files
-then show as errors, so read only the names you are after
-(`test_the_mod_against_the_vanilla_gui_fixtures_as_an_install`). The committed
-report shows the mode of the machine that last regenerated it.
+`--vanilla-path <dir>`. That is not a clean run: a type vanilla defines
+outside those eight files resolves only if one of the eight uses it, and
+errors otherwise (110 names on the mod as of #1637), so read only the names
+you are after (`test_the_mod_against_the_vanilla_gui_fixtures_as_an_install`).
+The committed report shows the mode of the machine that last regenerated it.
 
 ## Driving the game from a session (probed 2026-11-10, run live 2026-11-11)
 
