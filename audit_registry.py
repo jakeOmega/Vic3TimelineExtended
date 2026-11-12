@@ -134,6 +134,20 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the duplicate's line",
     ),
     Audit(
+        "modifier_field_audit",
+        "A modifier type name no definition registers: written as a field in a modifier block (the "
+        "engine drops the line) or read as `modifier:<name>` (it reads nothing). A name that fits a "
+        "dynamic family, or that `modifiers.log` lists, still needs its own definition in "
+        "`common/modifier_type_definitions/`. Also a field whose type vanilla registers without a loc "
+        "key, so its line shows the raw key.",
+        where="for a missing loc key only, trailing on a modifier block's line that writes the field (one "
+              "comment covers every use); an unregistered name takes none",
+        tags=("modifier_field_loc",),
+        note="Builds a small ModState from vanilla_parsed/. A type only the mod registers is "
+             "`loc_coverage_audit`'s to name. `/validate/engine-coverage` makes the registration "
+             "judgment interactively; this is the copy that fails a reload and CI.",
+    ),
+    Audit(
         "mod_structure_audit",
         "Unbalanced braces in a `common/` file (the engine drops the rest of the file), an `INJECT:` on "
         "an entity the mod itself defines or REPLACEs (it never applies), and two bare declarations of "
