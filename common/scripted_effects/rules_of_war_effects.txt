@@ -11,41 +11,100 @@
 # cycling the restrictive laws can't wipe it.
 #
 # te_row_infamy_standing holds the standing of the law last charged, read
-# through te_row_charged_standing (0 when unset): the start law (every country
-# starts on Traditional, extra_history.txt), and a country from a save made
-# before this effect, which was charged nothing. No pulse resyncs it to the
-# law in force, since that would hand such a country a cut for infamy it
-# never paid. Revolutionaries start with no variables, so if their movement
-# wins them a different Rules of War law, the winner may keep the loser's
-# standing for a law it never paid for; rare, at most 45.
+# through te_row_charged_standing (0 when unset). No pulse resyncs a country
+# that holds one to the law in force, since that would hand it a cut for
+# infamy it never paid.
+#
+# Nothing is charged for the laws a country gets rather than enacts; the
+# standing is still recorded, so the next real change is charged from the law
+# it holds (#1595):
+# - At game start. Total War is the group's first law, so the engine gives it
+#   to every country at setup and runs its on_activate, and history then
+#   activates Traditional (extra_history.txt), which runs Traditional's. Charged,
+#   that was +25 then -22: 3 infamy for every country. Both fall on the start
+#   date, which vanilla tells apart the same way (game_date > 1836.1.1,
+#   01_character_ideologies.txt). Traditional stays second: first, it would
+#   break the group's order from Total War to Limited War (owner, 2026-11-12).
+# - A country made mid-game (a release, a revolution, decolonization's
+#   create_dynamic_country) holds no standing yet. Its first activation is the
+#   law it is given, not one it enacted: charged, the group's first law would
+#   put 25 on it, and 3 more if it then copies its origin's Traditional. So a
+#   country with no standing is charged nothing. Every country holds one from
+#   the start (the setup's on_activate), and a save from before the charge no
+#   longer loads (1.15), so no real enactment goes free. If the engine gives a
+#   new country its laws without on_activate, te_row_backfill_standing (monthly,
+#   te_rules_of_war_on_actions.txt) records the law it holds, before it can
+#   enact one, and logs that it had to.
+# A revolution's winner keeps its own variables where both sides hold one, so
+# a rebel that won keeps the standing of the law its movement gave it.
 #
 # The change renders in the enactment preview, computed from the standing
 # before enactment; a change of 0 (a stale standing) shows nothing.
 # Country scope.
 te_row_charge_infamy = {
-	# A looser law: the full difference.
 	if = {
-		limit = { te_row_charged_standing < $STANDING$ }
-		change_infamy = {
-			value = $STANDING$
-			subtract = te_row_charged_standing
+		limit = {
+			game_date > 1836.1.1
+			has_variable = te_row_infamy_standing
 		}
-	}
-	# A stricter law: 90% of the difference, rounded toward zero. The product
-	# is a whole or half number (the standings are multiples of 5); the 0.01
-	# keeps fixed-point error on a whole one from flooring it a point low.
-	else_if = {
-		limit = { te_row_charged_standing > $STANDING$ }
-		change_infamy = {
-			value = te_row_charged_standing
-			subtract = $STANDING$
-			multiply = te_row_infamy_reduction_share
-			add = 0.01
-			floor = yes
-			multiply = -1
+		# A looser law: the full difference.
+		if = {
+			limit = { te_row_charged_standing < $STANDING$ }
+			change_infamy = {
+				value = $STANDING$
+				subtract = te_row_charged_standing
+			}
+		}
+		# A stricter law: 90% of the difference, rounded toward zero. The
+		# product is a whole or half number (the standings are multiples of 5);
+		# the 0.01 keeps fixed-point error on a whole one from flooring it a
+		# point low.
+		else_if = {
+			limit = { te_row_charged_standing > $STANDING$ }
+			change_infamy = {
+				value = te_row_charged_standing
+				subtract = $STANDING$
+				multiply = te_row_infamy_reduction_share
+				add = 0.01
+				floor = yes
+				multiply = -1
+			}
 		}
 	}
 	hidden_effect = {
+		# The self-check's other reading: a country made mid-game got its first
+		# law through on_activate, so the no-standing gate above is what spares it.
+		if = {
+			limit = {
+				game_date > 1836.1.1
+				NOT = { has_variable = te_row_infamy_standing }
+				NOT = { has_global_variable = te_row_creation_logged }
+			}
+			set_global_variable = { name = te_row_creation_logged value = yes }
+			debug_log = "TE_SELF_CHECK OK row_standing_on_creation (a country made mid-game ran its first Rules of War law's on_activate with no standing, and was charged nothing for it)"
+		}
 		set_variable = { name = te_row_infamy_standing value = $STANDING$ }
+	}
+}
+
+# A country that holds no standing after the start: the engine gave it its
+# laws without running on_activate (see above). Record the standing of the law
+# it holds, so its first real change is charged. The first time either this
+# or te_row_charge_infamy meets a country with no standing after the start, it
+# logs which way the engine went (row_standing_on_creation, play-test list
+# docs/testing/rules-of-war-playtest.md). Country scope; monthly
+# (te_rules_of_war_on_actions.txt).
+te_row_backfill_standing = {
+	if = {
+		limit = {
+			game_date > 1836.1.1
+			NOT = { has_variable = te_row_infamy_standing }
+		}
+		set_variable = { name = te_row_infamy_standing value = te_row_law_standing }
+		if = {
+			limit = { NOT = { has_global_variable = te_row_creation_logged } }
+			set_global_variable = { name = te_row_creation_logged value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN row_standing_on_creation (a country held no Rules of War standing a month after it was made: the engine gave it its laws without on_activate. The monthly backfill recorded the law it holds, so its next change is charged; nothing to fix while the backfill runs)"
+		}
 	}
 }
