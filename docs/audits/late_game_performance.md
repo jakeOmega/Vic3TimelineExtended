@@ -138,6 +138,28 @@ Vanilla script that the mod's content may enlarge:
   on_actions, while the UN event `un_events.4` sat open on screen. An open
   event window evaluates its options' effect tooltips every frame.
 
+## Remeasure after #1713, 2026-11-12: 1931, 1.15.1
+
+The same save and steps, `main` against `main` + #1713, through the harness
+(snapshots `20261112T171606Z` and `20261112T183036Z`; data in
+`/mnt/d/vic3te-data/perf-2026-11-12/perf2/`). Script time is the flat dump
+from 3 July, per game day (CPU summed over threads).
+
+| | `main` | #1713 |
+|---|---|---|
+| UN AI buttons' `visible` | 136.5 ms | 3.9 ms |
+| All script | 877 ms | 741 ms |
+| AFU formation `possible` (the external-pressure cache, reverted) | 25.0 ms | 24.9 ms |
+| Tick tasks, 3–30 July | 690 ms | 694 ms |
+| Wall time, 3–30 July | 1.33 s | 1.33 s |
+| `extra_script_values.txt` errors, two month starts | 742 lines | 0 |
+
+Per location, two runs of `main` agree within about 5%. The wall time is
+whole seconds from `dedicated_server.log`: 35 s over the same 105 frames in
+all three runs, the first measurement included. Had the 136 ms run serially
+on the main thread, it would have shown as about 3.7 s over those 27 days. It
+did not, and why is unexplained.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
@@ -205,6 +227,14 @@ All are exact: they change no result unless a line says otherwise.
 
 ## Lessons
 
+- **A cut in script CPU need not move wall time.** #1713 took 136 ms a day
+  off the flat dump's script time (15% of it) and left wall time per day
+  where it was. The flat dump sums CPU over threads; judge a speed fix by
+  wall time per frame type, and say which one it is.
+- **Measure which walk costs before caching one.** The formables'
+  external-pressure walk was cached monthly on the reasoning that it was
+  one of three `any_country` walks per call; AFU's `possible` did not move.
+  The two ROOT-dependent walks are the cost (#1720).
 - **The doubled BOM.** A rewrite script decoded a file as `utf-8`, keeping
   its BOM, and wrote another BOM in front. The engine dropped the whole file:
   all 323 company buildings were gone, with `Duplicated key = will not be
@@ -250,7 +280,8 @@ All are exact: they change no result unless a line says otherwise.
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
-3. **UN AI propose buttons**: 4.48 s per 33 days in 1931 (14% of all script;
+3. **UN AI propose buttons** (done in #1713: 136 → 4 ms of script a day, wall
+   time unchanged; the rest of this item is the record): 4.48 s per 33 days in 1931 (14% of all script;
    2.9% in 2072). `un_propose_credentials_button`'s `visible` costs 2.75 ms a
    call: `un_credentials_case_exists` walks every country. Its comment orders
    the breach-or-defiance test first because most countries fail it, but
@@ -282,9 +313,12 @@ All are exact: they change no result unless a line says otherwise.
    `afu_formation_external_pressure` (and its siblings for the other
    formables) doesn't depend on ROOT, so a global flag set by the monthly
    pulse would replace one walk per call. The formation would then lag by up
-   to a month, which is an owner call.
+   to a month, which is an owner call. Built and measured in #1713: no change
+   (25.0 → 24.9 ms a day), so reverted. The two ROOT-dependent walks are the
+   cost; EUN's block, with the same shape, costs about 30 µs a call (#1720).
 6. **The month-start error burst**: about 5,700 errors from
-   `extra_script_values.txt:1587` on every 1st (#1703).
+   `extra_script_values.txt:1587` on every 1st (#1703; fixed in #1713, none
+   in the after-run).
 7. **The per-frame floor**: about 0.11 s on every frame beyond its tasks,
    27% of wall time (a sub-tick takes 0.15 s against 0.04 s of tasks). It is
    probably rendering or speed pacing, not script. Test with
