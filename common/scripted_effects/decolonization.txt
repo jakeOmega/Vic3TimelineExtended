@@ -854,7 +854,9 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 				# TE_SELF_CHECK decol_new_country_religion (#1499), once a game
 				# for each kind of parent: the new country holds the religion
 				# passed in (the parent's, read through `.religion`; or, from
-				# an atheist parent, the culture's).
+				# an atheist parent, the culture's). An atheist parent under
+				# State Atheism is left out: the new country inherits the law,
+				# whose on_activate sets atheism whatever `religion =` said.
 				if = {
 					limit = {
 						OR = {
@@ -864,7 +866,10 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							}
 							AND = {
 								NOT = { has_global_variable = te_selfcheck_decol_religion_atheist }
-								scope:decolonizing_parent = { country_has_state_religion = rel:atheist }
+								scope:decolonizing_parent = {
+									country_has_state_religion = rel:atheist
+									NOT = { has_law = law_type:law_state_atheism }
+								}
 							}
 						}
 					}
@@ -876,11 +881,19 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 						set_global_variable = te_selfcheck_decol_religion
 					}
 					if = {
-						limit = { country_has_state_religion = scope:new_country_religion }
+						limit = {
+							country_has_state_religion = scope:new_country_religion
+							# From an atheist parent, a culture religion that did not
+							# resolve leaves the parent's atheism: not a pass.
+							OR = {
+								NOT = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+								scope:new_country_religion = { NOT = { this = rel:atheist } }
+							}
+						}
 						debug_log = "TE_SELF_CHECK OK decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country holds the religion passed to create_dynamic_country) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 					else = {
-						debug_log = "TE_SELF_CHECK BROKEN decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country does not hold the religion passed to create_dynamic_country: `religion =` is ignored there, or a country's `.religion` is not its state religion; see docs/testing/decolonization-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+						debug_log = "TE_SELF_CHECK BROKEN decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country does not hold the religion passed to create_dynamic_country: `religion =` is ignored there, or a country's `.religion` is not its state religion; see docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 				}
 			}
