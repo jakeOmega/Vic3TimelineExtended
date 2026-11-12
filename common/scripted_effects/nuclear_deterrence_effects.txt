@@ -496,14 +496,17 @@ nd_tick_countdown = {
 # A conceded programme freeze (dispute 4, nd_crisis_act_yield) binds the
 # nation, not the regime (#758; the continuity ruling of #460-#465). The
 # ten-year timed modifier carries it in normal play; nd_crisis_freeze_months,
-# set beside it at 120, is what a revolution's winner inherits, since the
+# set beside it at 122, is what a revolution's winner inherits, since the
 # winner takes the loser's variables but none of its modifiers. While the
 # countdown runs, a country without the modifier gets it back without a
 # duration (add_modifier takes no computed one) and is marked
 # nd_crisis_freeze_untimed; when the countdown ends, that copy goes. The
-# modifier is read only while more than one month is left: the countdown's
-# 119th tick comes at most 3,622 days after the concession, before the
-# timed copy's 3,650 run out, so normal play never re-adds it. Every country,
+# countdown is in country pulses, which come every 30 days, not per calendar
+# month (scripting_best_practices.md § "`on_monthly_pulse_country` Is a
+# 30-Day Timer"): the first within 30 days of the concession, the 121st, the
+# last that reads the modifier, at most 3,630 days after it, before the timed
+# copy's 3,650 run out, so normal play never re-adds it. An untimed copy on a
+# winner goes at the 122nd, between day 3,630 and 3,660. Every country,
 # monthly (nd_country_monthly_cleanup): the frozen target need not have the
 # entry.
 nd_crisis_freeze_monthly = {

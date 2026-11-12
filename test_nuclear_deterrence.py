@@ -1728,6 +1728,46 @@ def revalidate_branch(effects, dispute):
     raise AssertionError(f"no revalidation branch for dispute {dispute}")
 
 
+class TestCrisisFreezeSurvivesRevolution(unittest.TestCase):
+    """#758: a revolution's winner inherits variables but no modifiers, so the
+    conceded programme freeze carries a countdown the winner inherits, and a
+    monthly pass re-adds the modifier from it."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.monthly = block(self.effects, "nd_crisis_freeze_monthly")
+
+    def test_yield_removes_the_old_copy_then_adds_and_sets_the_countdown(self):
+        concession = self.crisis[self.crisis.index("var:nd_crisis_dispute = 4 }"):]
+        concession = block(concession, "scope:nd_target")
+        remove = concession.index("remove_modifier = nd_crisis_programme_freeze")
+        add = concession.index("name = nd_crisis_programme_freeze")
+        self.assertLess(remove, add)
+        self.assertIn("years = 10", concession)
+        self.assertIn("name = nd_crisis_freeze_months value = nd_crisis_freeze_months_value", concession)
+        self.assertIn("remove_variable = nd_crisis_freeze_untimed", concession)
+        # 30-day country pulses: 122 outlasts the ten-year modifier by under one.
+        self.assertRegex(read(VALUES), r"(?m)^nd_crisis_freeze_months_value = 122\b")
+
+    def test_monthly_readd_only_where_the_modifier_is_missing(self):
+        running = block(self.monthly, "if")
+        readd = running[running.index("NOT = { has_modifier = nd_crisis_programme_freeze }"):]
+        self.assertIn("add_modifier = { name = nd_crisis_programme_freeze }", readd)
+        self.assertIn("set_variable = nd_crisis_freeze_untimed", readd)
+
+    def test_only_the_untimed_copy_is_removed_at_the_end(self):
+        end = block(self.monthly[self.monthly.index("else = {"):], "else")
+        self.assertIn("remove_variable = nd_crisis_freeze_months", end)
+        untimed = block(end, "if")
+        self.assertIn("has_variable = nd_crisis_freeze_untimed", untimed)
+        self.assertIn("remove_modifier = nd_crisis_programme_freeze", untimed)
+        self.assertEqual(self.monthly.count("remove_modifier = nd_crisis_programme_freeze"), 1)
+
+    def test_runs_for_every_country_monthly(self):
+        self.assertIn("nd_crisis_freeze_monthly = yes", block(self.effects, "nd_country_monthly_cleanup"))
+
+
 class TestNativeCloses(unittest.TestCase):
     """A native close (outcome 4) must observe a state the target can't undo at
     will. Funding stepped to 0 ended a proliferation crisis as the issuer's win
