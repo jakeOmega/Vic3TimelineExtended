@@ -60,8 +60,10 @@ class FakeSession:
         if verb in self.raises:
             raise self.raises[verb]
 
-    def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False):
+    def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
+              switch_rules=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
+        self.switch_rules = switch_rules
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
 
     def console(self, text):
@@ -581,6 +583,25 @@ class StartTest(ServerTestCase):
         self.assertEqual(server.read_info(self.backups)["snapshot"], SNAP)      # session.json names the run now
         self.threads.extend(h.thread for h in spawn.handles)
         self.assertEqual(self.run_cli("events")[1], 0)
+
+    def test_switch_rule_reaches_the_session_as_a_mapping(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("start", "--permission", PERMISSION, "--switch-rule", "tax_rule=tax_off",
+                                       "--switch-rule", "merges_rule=merges_on")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(fake.switch_rules, {"tax_rule": "tax_off", "merges_rule": "merges_on"})
+        self.threads.extend(h.thread for h in spawn.handles)
+
+    def test_a_malformed_or_repeated_switch_rule_spawns_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            for specs in (["tax_rule"], ["=tax_off"], ["tax_rule="], ["tax_rule=a", "tax_rule=b"]):
+                argv = [arg for spec in specs for arg in ("--switch-rule", spec)]
+                reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.assertEqual((reply["refused"], code), ("bad_argument", 2), specs)
+        self.assertEqual(spawn.handles, [])
 
     def test_a_setup_file_that_cannot_be_read_spawns_nothing(self):
         spawn = ThreadSpawner(FakeSession)

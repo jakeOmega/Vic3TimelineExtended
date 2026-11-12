@@ -757,6 +757,108 @@ class ReadTest(SessionTestCase):
         self.assertEqual(self.session_error(self.session.run_setup, "nothing").code, "unknown_setup")
 
 
+RULE_FILES = {
+    "game/game/common/game_rules/00_rules.txt": "fantasy = {\n\tdefault = allow_fantasy\n\tallow_fantasy = { }\n"
+                                                 "\tno_fantasy = { }\n}\n",
+    "deploy/common/game_rules/extra.txt": "tax_rule = {\n\tdefault = tax_off\n\ttax_off = { }\n\ttax_light = { }\n}\n",
+}
+
+
+def text_save(settings) -> bytes:
+    """A fresh save in the real one's shape (test_game_qa_rules.save_bytes)."""
+    listed = (' "" ' + " ".join(settings) + " ").encode()
+    meta = b"meta_data={\n\tgame_rules={\n\t\tsettings={" + listed + b"}\n\t}\n}\n"
+    state = b"game_rules={\n\tsetting={" + listed + b"}\n}\ncountry_manager={\n}\n"
+    return b"SAV010000000000%08x" % len(meta) + b"\n" + meta + state
+
+
+class SwitchRulesTest(SessionTestCase):
+    """`start --switch-rule` loads a copy of the fixture with a rule switched (#1599)."""
+
+    def setUp(self):
+        super().setUp()
+        base = self.user.parent
+        for rel, text in RULE_FILES.items():
+            path = base / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        # The rule file is part of the deployed mod's script, so the fixture's key follows it.
+        self.fixture_save.unlink()
+        self.key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                               playset="mod_only")
+        self.fixture_save = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key)
+        self.fixture_save.write_bytes(text_save(["no_fantasy", "tax_light"]))
+
+    def saves(self) -> list[str]:
+        return sorted(p.name for p in (self.user / "save games").iterdir())
+
+    def test_a_plain_start_reports_the_rules_the_fixture_holds(self):
+        reply = self.start()
+        self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+        self.assertEqual(self.saves(), [self.fixture_save.name])
+
+    def test_a_switched_rule_loads_a_copy_and_says_what_it_is(self):
+        before = self.fixture_save.read_bytes()
+        reply = self.start(switch_rules={"tax_rule": "tax_off"})
+        stem = "te_qa_fixture_%s" % rules_key(self.key, {"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], stem)
+        self.assertEqual(reply["rules"]["settings"], ["no_fantasy", "tax_off"])
+        self.assertEqual(reply["rules"]["switched"], {"tax_rule": {"from": "tax_light", "to": "tax_off"}})
+        self.assertIn("2 January 1836", reply["rules"]["switched_at"])
+        self.assertFalse(reply["fixture_made"])
+        self.assertEqual(self.fixture_save.read_bytes(), before)
+        self.assertEqual(self.saves(), [self.fixture_save.name, stem + ".v3"])
+        # The game was started on the copy, and the snapshot took it by name.
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertIn("-loadsave=" + stem, launch)
+        self.assertEqual(next(c for c in self.cli.calls if c[0] == "snapshot"), ["snapshot", "--save", stem])
+
+    def test_a_rule_or_setting_the_game_does_not_define_starts_nothing(self):
+        for switches, code in (({"nope": "x"}, "bad_rule"), ({"tax_rule": "no_fantasy"}, "bad_rule"),
+                               ({"tax rule": "tax_off"}, "bad_rule"), ("tax_rule=tax_off", "bad_argument")):
+            with self.subTest(switches=switches):
+                self.assertEqual(self.session_error(self.start, switch_rules=switches).code, code)
+        self.assertEqual((self.cli.calls, self.saves()), ([], [self.fixture_save.name]))
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertTrue(self.start()["rules"])      # and the session can still be started
+
+    def test_a_switch_with_the_owners_save_is_refused(self):
+        (self.user / "save games" / "mine.v3").write_bytes(b"the owner's")
+        error = self.session_error(self.start, save="mine", switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("never edited or copied", str(error))
+        self.assertEqual(self.cli.calls, [])
+        self.assertEqual((self.user / "save games" / "mine.v3").read_bytes(), b"the owner's")
+
+    def test_a_fixture_whose_rules_cannot_be_switched_stops_the_start(self):
+        self.fixture_save.write_bytes(b"a fresh game")       # not a plain-text save
+        error = self.session_error(self.start, switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(error.code, "rules_refused")
+        self.assertEqual(self.saves(), [self.fixture_save.name])
+        self.assertNotIn("launch", self.cli.verbs)
+
+    def test_the_fixture_key_follows_the_owners_last_applied_rules(self):
+        presets = self.user / "player" / "game_rules" / "presets.txt"
+        presets.parent.mkdir(parents=True)
+        presets.write_text('game_rules_preset={\n\tname="LastAppliedRules"\n\tsetting={ no_fantasy tax_light }\n}\n',
+                           encoding="utf-8")
+        before = presets.read_bytes()
+        # The fixture in the folder was made under other rules (none recorded): a new one is made for these.
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start()
+        self.assertTrue(reply["fixture_made"])
+        with_rules = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                 playset="mod_only", rules=["no_fantasy", "tax_light"])
+        self.assertEqual(reply["save"], "te_qa_fixture_%s" % with_rules)
+        self.assertNotEqual(with_rules, self.key)
+        self.assertEqual(presets.read_bytes(), before)
+
+
+def rules_key(base: str, switches: dict) -> str:
+    from game_qa import rules
+    return rules.switched_key(base, switches)
+
+
 class AddSetupTest(SessionTestCase):
     """A setup added to a running game (#1600): the overlay's effects file is rewritten, the game reloads it,
     and the verb returns once the game has logged the new revision."""

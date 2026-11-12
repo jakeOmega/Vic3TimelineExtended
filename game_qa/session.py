@@ -46,7 +46,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, overlay, snapshot
+from game_qa import fixture, overlay, rules, snapshot
 from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -260,12 +260,19 @@ class Session:
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
+        self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
 
     # ---- start
 
     def start(self, permission: str, as_tag: str | None = None, setups: Mapping[str, str] | None = None,
-              save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False) -> dict:
+              save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
+              switch_rules: Mapping[str, str] | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
+
+        `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
+        `game_qa.rules`): a game whose rule changed on 2 January 1836, a day after it began, not one made under
+        that setting. It is refused with `save` (the owner's save is never edited or copied), and for a rule
+        or setting the game's rule files do not define (`bad_rule`), before anything is done.
 
         Refused with nothing done, and the session left as it was: an overlay folder already there (an earlier
         run's playset may still name it: `overlay_left`, and it is neither replaced nor removed), an empty
@@ -297,6 +304,7 @@ class Session:
             raise SessionError("overlay_refused", str(e)) from e
         if save is not None:
             save = self._check_save(save)
+        switch_rules = self._check_switches(switch_rules, save)
         self._starting = True                   # from `held` on, a stop() is left to this
         try:
             self._refuse_if_held()
@@ -307,7 +315,7 @@ class Session:
         self._began = True
         self._permission = permission
         try:
-            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy)
+            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy, switch_rules)
             self._check_abort()
             return result
         except BaseException as e:
@@ -324,14 +332,14 @@ class Session:
             self._starting = False
 
     def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
-               busy: bool) -> dict:
+               busy: bool, switch_rules: dict[str, str] | None = None) -> dict:
         self._check_abort()
         try:
             self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version)
         except overlay.OverlayError as e:
             raise SessionError("overlay_refused", str(e)) from e
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
-        save, made, pruned = self._the_save(save, permission, playset, busy)
+        save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {})
         self._save = save
         self._check_abort()
         try:
@@ -409,6 +417,8 @@ class Session:
         }
         if pruned:
             result["fixtures_pruned"] = pruned
+        if self._rules is not None:
+            result["rules"] = self._rules
         self._record("start", outcome="ok", **result)
         return result
 
@@ -440,8 +450,39 @@ class Session:
             raise SessionError("no_save", "there is no save games/%s.v3" % name)
         return name
 
-    def _the_save(self, save: str | None, permission: str, playset: str, busy: bool) -> tuple[str, bool, list[str]]:
-        """(the save to load, whether the fixture was made now, the fixtures pruned)."""
+    def _rule_table(self) -> dict[str, dict]:
+        """The rules the run's game loads: vanilla's, then the deployed mod's (another mod's, under `--playset
+        current`, are not read, so a rule of theirs cannot be switched)."""
+        return rules.load_rules([Path(self._paths.base_game) / "game" / rules.RULES_FOLDER,
+                                 Path(self._paths.deploy_dir) / rules.RULES_FOLDER])
+
+    def _check_switches(self, switch_rules: Mapping[str, str] | None, save: str | None) -> dict[str, str]:
+        if switch_rules is None or switch_rules == {}:
+            return {}
+        if not isinstance(switch_rules, Mapping):
+            raise SessionError("bad_argument", "switch_rules maps a rule to a setting, not %r" % (switch_rules,))
+        if save is not None:
+            raise SessionError("bad_argument", "a rule is switched in a copy of the harness's own fresh save: with "
+                               "--save the game is the owner's save, which is never edited or copied")
+        try:
+            rules.check_switches(switch_rules)
+            table = self._rule_table()
+        except rules.RulesError as e:
+            raise SessionError("bad_rule", str(e)) from e
+        for rule, option in switch_rules.items():
+            if rule not in table:
+                raise SessionError("bad_rule", "no rule %r in the game's rule files; the rules are %s"
+                                   % (rule, ", ".join(sorted(table))), rules=sorted(table))
+            if option not in table[rule]["settings"]:
+                raise SessionError("bad_rule", "%r is not a setting of %s; its settings are %s"
+                                   % (option, rule, ", ".join(table[rule]["settings"])),
+                                   settings=list(table[rule]["settings"]))
+        return dict(switch_rules)
+
+    def _the_save(self, save: str | None, permission: str, playset: str, busy: bool,
+                  switch_rules: Mapping[str, str] | None = None) -> tuple[str, bool, list[str]]:
+        """(the save to load, whether the fixture was made now, the fixtures pruned). With `switch_rules` the
+        save is the fixture's copy with those rules switched, made from the fixture if it is not there yet."""
         if save is not None:
             self._record("fixture", outcome="not_used", save=save)
             return save, False, []
@@ -450,7 +491,35 @@ class Session:
         loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
                             self._paths.overlay_windows_path)
         key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
-                          disabled_dlc=self._paths.disabled_dlc)
+                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user))
+        stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
+        if switch_rules:
+            try:
+                path, changed, settings = rules.switched_fixture(user, key, switch_rules, self._rule_table())
+            except rules.RulesError as e:
+                self._record("switch_rules", outcome="refused", detail=str(e))
+                raise SessionError("rules_refused", str(e)) from e
+            stem = path.stem
+            self._rules = {"settings": settings, "switched": changed, "switched_at": rules.SWITCHED_AT}
+            self._record("switch_rules", outcome="ok", save=stem, switched=changed)
+            pruned = pruned + self._prune(user)
+        else:
+            try:
+                self._rules = {"settings": rules.settings_of((user / fixture.SAVE_FOLDER / (stem + ".v3"))
+                                                             .read_bytes())}
+            except (OSError, rules.RulesError) as e:
+                self._record("rules", outcome="unread", detail=str(e))
+        return stem, made, pruned
+
+    def _prune(self, user: Path) -> list[str]:
+        try:
+            return fixture.prune(user, keep=FIXTURES_KEPT)
+        except OSError as e:
+            self._record("fixture_prune", outcome="failed", detail=str(e))
+            return []
+
+    def _base_fixture(self, user: Path, key: str, permission: str, playset: str,
+                      busy: bool) -> tuple[str, bool, list[str]]:
         found = fixture.find(user, key)
         if found is not None:
             self._record("fixture", outcome="found", save=found.stem)
@@ -489,11 +558,7 @@ class Session:
             self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
                                    if launches else None, watches[-1] if watches else None, None, calls)
             raise
-        try:
-            pruned = fixture.prune(user, keep=FIXTURES_KEPT)
-        except OSError as e:
-            pruned = []
-            self._record("fixture_prune", outcome="failed", detail=str(e))
+        pruned = self._prune(user)
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
 

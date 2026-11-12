@@ -45,6 +45,7 @@ SpawnWatch = Callable[[str], Any]
 SAVE_FOLDER = "save games"
 FIXTURE_PREFIX = "te_qa_fixture_"
 FIXTURE_GLOB = f"{FIXTURE_PREFIX}*.v3"
+SWITCHED_MARK = "_s"                    # in the key of a fixture copy with a rule switched (game_qa.rules)
 RUN_SAVE_GLOB = "TEST_FAIL_te_qa_fixture_*.v3"
 KEY_FOLDERS = ("common", "events", "map_data")  # the folders of the deployed mod that shape a new game
 FIXTURE_LIMIT_S = 900.0     # from the launch's return to watch's: the run itself takes two or three minutes
@@ -134,10 +135,12 @@ def restore_retried(run_cli: RunCli, snapshot_id: str, sleep, retries: Mapping[s
 
 
 def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str,
-        disabled_dlc: Sequence = ()) -> str:
+        disabled_dlc: Sequence = (), rules: Sequence[str] = ()) -> str:
     """12 hex digits naming the game a fixture was made for: the game version, the run's playset (its mode,
     `playset`, `enabled_mods`, the mod paths the run loads, in order, and `disabled_dlc`, the DLC the run's
-    playset switches off, as a set: launch keeps the owner's `disabledDLC`), and the relative path, size and
+    playset switches off, as a set: launch keeps the owner's `disabledDLC`), `rules`, the rule settings the
+    owner last applied in a lobby, in the file's order (an unattended new game is made under them, not under
+    the defaults: game_qa.rules), and the relative path, size and
     modification time of every file under the deployed mod's `common/`, `events/` and `map_data/` (a folder that
     is missing is skipped). A fixture made under another playset, or another DLC set, is another world: a DLC
     changes what a new game sets up even where the script folders loaded are the same. Not covered: for
@@ -151,6 +154,8 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
         _feed(digest, "mod", mod)
     for dlc in sorted(json.dumps(entry, sort_keys=True) for entry in disabled_dlc):
         _feed(digest, "dlc_off", dlc)
+    for setting in rules:
+        _feed(digest, "rule", setting)
     root = Path(deploy_dir)
     for folder in KEY_FOLDERS:
         records = []
@@ -247,20 +252,35 @@ def make(
     return target
 
 
-def prune(user_data: Path, keep: int = 2) -> list[str]:
+def prune(user_data: Path, keep: int = 2, keep_switched: int = 2) -> list[str]:
     """Remove all but the `keep` newest `te_qa_fixture_*.v3` files directly in `save games/` (newest by
-    modification time, equal times by name) and return the names removed, oldest first. Nothing else is touched."""
-    if keep < 0:
+    modification time, equal times by name) and return the names removed, oldest first. Nothing else is touched.
+
+    A copy with a rule switched (its key holds SWITCHED_MARK) is not counted among those: it is removed with
+    the fixture it was made from, and of the ones whose fixture stays only the `keep_switched` newest are kept.
+    Counted together, two switched copies would push out the fixture they came from, and the next plain start
+    would pay for a new run."""
+    if keep < 0 or keep_switched < 0:
         raise ValueError("keep is a count of fixtures, not negative")
     found = sorted(
         (path.stat().st_mtime_ns, path.name, path)
         for path in (Path(user_data) / SAVE_FOLDER).glob(FIXTURE_GLOB)
         if path.is_file() and not path.is_symlink()
     )
-    doomed = found[: max(len(found) - keep, 0)]
+    plain = [entry for entry in found if SWITCHED_MARK not in _key_of(entry[1])]
+    switched = [entry for entry in found if SWITCHED_MARK in _key_of(entry[1])]
+    doomed = plain[: max(len(plain) - keep, 0)]
+    kept_keys = {_key_of(name) for _, name, _ in plain[len(doomed):]}
+    orphans = [entry for entry in switched if _key_of(entry[1]).split(SWITCHED_MARK)[0] not in kept_keys]
+    living = [entry for entry in switched if entry not in orphans]
+    doomed = sorted(doomed + orphans + living[: max(len(living) - keep_switched, 0)])
     for _, _, path in doomed:
         path.unlink()
     return [name for _, name, _ in doomed]
+
+
+def _key_of(name: str) -> str:
+    return name[len(FIXTURE_PREFIX):-len(".v3")]
 
 
 def _check_key(key: str) -> None:

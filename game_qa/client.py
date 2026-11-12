@@ -2,8 +2,10 @@
 real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
-                       [--playset mod_only|current] [--owner-confirmed-busy]
-                                             # a game on the deployed build, on the fixture or on NAME
+                       [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
+                                             # a game on the deployed build, on the fixture or on NAME; a
+                                             # switched rule is switched in a copy of the fixture, as of its
+                                             # second day (the reply's `rules` says what the save holds)
     python3 -m game_qa console "<text>"      # one console command, with its reply
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
@@ -645,8 +647,17 @@ def cmd_start(args) -> tuple[dict, int]:
         setups = _read_setups(args.setup)
     except ValueError as e:
         return {"refused": "bad_argument", "detail": str(e)}, 2
+    switches: dict[str, str] = {}
+    for spec in args.switch_rule:
+        rule, eq, setting = spec.partition("=")
+        if not eq or not rule or not setting or rule in switches:
+            return {"refused": "bad_argument", "detail": "--switch-rule takes RULE=SETTING, each rule once, not %r"
+                                                         % spec}, 2
+        switches[rule] = setting
     body = {"permission": args.permission, "as_tag": args.as_tag, "save": args.save, "setups": setups,
             "playset": args.playset, "owner_confirmed_busy": args.owner_confirmed_busy}
+    if switches:
+        body["switch_rules"] = switches
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -745,6 +756,9 @@ def add_verbs(sub) -> None:
     p.add_argument("--save", metavar="NAME", help="load this save from save games/ instead of the fixture")
     p.add_argument("--setup", action="append", default=[], metavar="NAME=FILE",
                    help="a setup effect: its name, and the file (a WSL path) holding its script (repeatable)")
+    p.add_argument("--switch-rule", action="append", default=[], metavar="RULE=SETTING",
+                   help="load a copy of the fresh save with this game rule switched (repeatable; not with "
+                        "--save). The rule changes on the save's second day, after the game's setup ran")
     p.add_argument("--playset", choices=session.PLAYSETS, default="mod_only",
                    help="mod_only (the default): only this mod's deployed folder; current: the owner's playset. "
                         "The overlay is added to either")
