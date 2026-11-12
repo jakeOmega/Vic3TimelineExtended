@@ -157,6 +157,26 @@ je_covert_warfare = {
 						set_variable = { name = iw_funding_level value = 0 }
 					}
 				}
+				# Borrowing toward bankruptcy: step down to the floor before the
+				# default, keeping running operations (and a war's) at 1.
+				else_if = {
+					limit = {
+						taking_loans = yes
+						weeks_until_bankruptcy < iw_ai_funding_bankruptcy_weeks
+					}
+					if = {
+						limit = {
+							OR = {
+								covert_operations_active >= 1
+								is_at_war = yes
+							}
+						}
+						set_variable = { name = iw_funding_level value = 1 }
+					}
+					else = {
+						set_variable = { name = iw_funding_level value = 0 }
+					}
+				}
 				# Has rivals/enemies and is financially healthy: fund operations
 				else_if = {
 					limit = {
