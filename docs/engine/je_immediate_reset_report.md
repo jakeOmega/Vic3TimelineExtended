@@ -121,9 +121,9 @@ where the bar wraps and say why with a REVIEWED comment
 activation"). Not failing yet.
 
 - `je_heir_education` (can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt` — the entry's `current_value` reads it; goal not pinned (+23 more writes) — reviewed **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
-- `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:285` — the entry's `current_value` reads it; goal not pinned
+- `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-11-12**: the bar wraps at each warhead; a revolution's winner gets a fresh record (can_revolution_inherit = no) and nd_custody_restore_progress carries the progress over (#467, #472)
 - `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
-- `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:29` — the entry's `current_value` reads it; goal not pinned
+- `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-11-12**: a re-activation restarts the year (owner, #472), a revolution's winner's too; the bar wraps at 52, so a guard would leave a re-activated record a non-zero baseline
 
 ### Pulse refreshes
 

@@ -2044,7 +2044,7 @@ doubles it (1.24).
 
 | # | Ruling | Why |
 |---|---|---|
-| **F1** | **The era markers are per-country signature technologies**, not `te_mon_era_base_now`: `television_broadcasting` (era 7, already `modern_election_events.11`'s end of the radio era), `containerization` (8), `globalization` (9, `te_mon_era_base`'s own marker) | there is no era trigger (`scripting_best_practices.md`), and the reference rate steps only at eras 5 and 9, so it cannot say "per era past 6". A country's own research is the right reader for its own law choice, and an `any_country` scan per evaluation is the cost `te_mon_era_base` avoids. Not monotone if researched out of order; harmless for a weight |
+| **F1** | **The era markers are per-country signature technologies**, not `te_mon_era_base_now`: `television_broadcasting` (era 7, broadcast television; `modern_election_events.11` ends its radio era at either it or the mod's `television`, era 6), `containerization` (8), `globalization` (9, `te_mon_era_base`'s own marker) | there is no era trigger (`scripting_best_practices.md`), and the reference rate steps only at eras 5 and 9, so it cannot say "per era past 6". A country's own research is the right reader for its own law choice, and an `any_country` scan per evaluation is the cost `te_mon_era_base` avoids. Not monotone if researched out of order; harmless for a weight |
 | **F2** | Gold's weight is also 0 for a country **already on Digital Currency** | the design named fiat; a digital country is as far off gold as a fiat one |
 | **F3** | **Deflation alone is not a deep slump**; Tight or Very Tight is required | the simulator read above: a fixed nominal rate in deflation already reads Tight, so the tight leg covers the classical case, and Deflation alone adds downturns the peg is not prolonging |
 | **F4** | The drain is **independent of the vault** and stacks with the under-pressure terms | the 1931 road runs with gold still in the vault; the overvaluation term is the precedent |
@@ -5104,11 +5104,12 @@ P6-1…13).
 
 ## 22. Appendix — known drift in the existing banking docs
 
-Found while researching this design; **not** fixed here (tracked in #328; the
-`/modifier-grants` coverage gap that forced a manual file walk for §7.5 is #327):
-`journal_entry_systems.md` and `mod_systems/banking_cycle.md` disagree with `je_banking.txt` on widget
-slot numbers; the banking-law table in `mod_systems/banking_cycle.md` omits `law_state_owned_banking` and
-carries stale values; the documented 12-month event cooldown is 18 in script; event counts
-are out of date (82 blocks); `banking_points_max_from_law` is written monthly and read by
-nothing; a comment in `banking_cycle_effects.txt` says the Great Depression needs 20% of
-world GDP where `great_depression_gdp_threshold` is 50%.
+Found while researching this design and tracked in #328 (the `/modifier-grants`
+coverage gap that forced a manual file walk for §7.5 is #327). **All of it is now
+put right** (2026-11-12): `journal_entry_systems.md` and `mod_systems/banking_cycle.md`
+give the entry's three widget slots and its 78 scripted buttons (44 `cb_*`, 18 `ce_*`,
+16 `cw_*`); the banking-law table carries `law_state_owned_banking` and the
+`extra_laws.txt` values; the event cooldown reads 18 months; the event counts match
+`banking_cycle_events.txt`; the dead `banking_points_max_from_law` variable is deleted;
+and the Great Depression comment in `banking_cycle_effects.txt` says 50% of world GDP,
+as `great_depression_gdp_threshold` does.

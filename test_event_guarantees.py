@@ -75,7 +75,8 @@ class TriggerTests(unittest.TestCase):
         self.assertGreater(len(chain), 30)
         text = eg.describe(*one[0], eg.load_technologies())
         self.assertIn("mass_propaganda (era 5)", text)
-        self.assertIn("must NOT have: television_broadcasting", text)
+        self.assertIn("radio (era 4)", text)
+        self.assertIn("must NOT have: television (era 6), television_broadcasting (era 7)", text)
 
 
 # ---------------------------------------------------------------------------

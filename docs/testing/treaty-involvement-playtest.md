@@ -30,3 +30,17 @@ the audit's `wrong_side` rule with it (`_BLOCK_SIDE` and the maintenance branch 
 | **Breakdown.** Sign Extend Influence with a regional power; after a few months open that region's interest tier tooltip. | The treaty appears in the Involvement breakdown, and current Involvement climbs toward the target. | Nothing listed: the field may need a game restart, or the article type isn't read; check `debug.log` for the article. |
 | **None.** Draft Seize Company or a Demilitarized Zone. | No Involvement line. | Cosmetic, but the reviewed reason no longer holds: remove the tag and give it a figure. |
 | **Cap.** A donor with five or six aid articles to one local power. | Treaty Involvement in that region stops at 5,000. | Record the figure; the cap is vanilla's `INTEREST_TREATY_PACT_INVOLVEMENT_CAP`. |
+
+## Pacts (2026-11-12, #1380)
+
+The mod's pacts copy their nearest vanilla analogue's pair exactly (`docs/systems/mod_systems/treaties.md`
+§ Involvement, **Pacts**), so they read as vanilla's whichever side `source_country` names. The checks confirm the
+fields are read on a mod pact at all and settle the side for the player guide's wording, which says the initiator
+gains where the target is local.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Vanilla first.** Hover Fund Lobbies on a country with a lobby. | An Involvement line naming the funder as gainer where the target is local. | Record the wording: it settles the side for pacts. If the target gains, reword the guide's three sentences (`09-diplomacy.md`, `11-influence.md`); the script stays as vanilla's. |
+| **Covert.** Launch Cultivate Assets (any target not your subject); hover the action and, after a few months, the target's region interest tier. | The same Involvement line as Fund Lobbies, up to 1,000; the operation listed in "Involvement is due to". | No line: the fields are not read on this pact; compare with Humanitarian Aid and record which pacts show one. |
+| **Aid.** Give Humanitarian Aid (Welfare IV bloc principle). | As Increase Relations: up to 1,000. | As above. |
+| **None.** Hover Lobby For the Resolution on an AI UN member. | No Involvement line. | Cosmetic; the reviewed reason no longer holds. |

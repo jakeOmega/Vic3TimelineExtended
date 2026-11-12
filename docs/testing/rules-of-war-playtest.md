@@ -34,4 +34,18 @@ and replays the arithmetic; the checks below are what only the game shows.
 
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
-**Charge** and **Cut** read OK (+25, −22, −40, +5, −4, in whole numbers). **Game start** is BROKEN: every country starts with 3 infamy (#1595). The preview, the `infamy_generation` rule and "Law in force" were not run.
+**Charge** and **Cut** read OK (+25, −22, −40, +5, −4, in whole numbers). **Game start** is BROKEN: every country starts with 3 infamy (#1595; the start-date gate below is the change for it, re-check it there). The preview, the `infamy_generation` rule and "Law in force" were not run.
+
+## No charge at game start or for a country made mid-game (#1595)
+
+`te_row_charge_infamy` now charges nothing on the start date (`game_date > 1836.1.1`) or for a country holding no
+standing yet, and records the standing either way; Total War stays the group's first law (owner, 2026-11-12). A monthly
+backfill (`te_row_backfill_standing`, `common/on_actions/te_rules_of_war_on_actions.txt`) records the standing of the
+law held by a country that has none after the start. The **Game start** row above is the check for the first half.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Game start.** As above: read infamy on the first day of a new game. | 0 everywhere, and every country holds `te_row_infamy_standing` = 0 (Traditional). | Still 3: the setup or history activation falls after 1836.1.1. Gate instead on a global set in `on_game_started`. |
+| **Self-check `row_standing_on_creation`.** Release a country (or let decolonization make one), and separately let a revolution break out; read `debug.log` within a month of each. It logs once a game per path (`path=revolution`, `path=other`), with the country, the standing recorded and the date. | `TE_SELF_CHECK OK row_standing_on_creation` for each path: the new country's first law ran `on_activate` with no standing and was charged nothing. | `BROKEN`: the engine gave it its laws silently, and the monthly backfill recorded the law it held. Nothing to fix; the no-standing gate is then idle. |
+| **New country's infamy.** Read the released country's infamy on its first day, with its origin on Traditional and again on Total War. | 0 in both (before, 3 and 25). | Non-zero: some other law activation charged it; read its variables in a plain-text save. |
+| **Its first real change.** Have that country enact Total War. | +25, as for any country on Traditional. | 0: it held no standing when the law took effect (the backfill missed it); read its variables. |

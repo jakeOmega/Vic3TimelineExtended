@@ -750,16 +750,16 @@ decolonization_events.6 = {
 		name = decolonization_events.6.a
 		default_option = yes
 		ai_chance = { base = 1 }
-		# The sum the claimant named in decolonization_events.61 changes hands:
-		# out of our treasury, into theirs (the swap-settle shape of
-		# te_mon_effect_swap_settle). decol_reparations_value sized it; .6.d
-		# names it, and the two add_treasury tooltips show it moving.
-		add_treasury = {
-			value = scope:reparations_claimant.var:decol_reparations_claim
-			multiply = -1
+		# The sum the claimant named in decolonization_events.61 changes hands,
+		# out of our treasury into theirs, under a reparations treaty (#1457),
+		# or directly where none can be made. decol_reparations_value sized it;
+		# .6.d names it, and the two add_treasury tooltips show it moving.
+		te_pay_reparations_by_treaty = {
+			PAYER = ROOT
+			PAYEE = scope:reparations_claimant
+			AMOUNT = scope:reparations_claimant.var:decol_reparations_claim
 		}
 		scope:reparations_claimant = {
-			add_treasury = var:decol_reparations_claim
 			remove_variable = decol_reparations_claim
 		}
 		add_modifier = {
@@ -2459,11 +2459,13 @@ decolonization_events.17 = {
 			# They find for us: the claim, without the infamy of pressing it.
 			30 = {
 				modifier = {
-					trigger = {
-						exists = scope:border_rival
-						country_rank > scope:border_rival.country_rank
+					if = {
+						limit = {
+							exists = scope:border_rival
+							country_rank > scope:border_rival.country_rank
+						}
+						add = 15
 					}
-					add = 15
 				}
 				custom_tooltip = decolonization_events.17.b_favor_tt
 				add_modifier = {
@@ -2512,11 +2514,13 @@ decolonization_events.17 = {
 			# They find for the neighbour, who now holds a claim on our land.
 			30 = {
 				modifier = {
-					trigger = {
-						exists = scope:border_rival
-						country_rank < scope:border_rival.country_rank
+					if = {
+						limit = {
+							exists = scope:border_rival
+							country_rank < scope:border_rival.country_rank
+						}
+						add = 15
 					}
-					add = 15
 				}
 				custom_tooltip = decolonization_events.17.b_against_tt
 				if = {

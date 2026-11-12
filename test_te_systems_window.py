@@ -157,6 +157,14 @@ def _top_level(text, name):
     raise AssertionError(f"no top-level widget {name}")
 
 
+def _own_state(widget, name):
+    """A widget's own state `name`: its direct child, one tab in, not the
+    state of a widget inside it."""
+    found = [_block_at(widget, m.start()) for m in re.finditer(rf"^\tstate = \{{\n\t\tname = {name}$", widget, re.M)]
+    assert len(found) == 1, f"{len(found)} states named {name} of the widget's own"
+    return found[0]
+
+
 def _txt_block(text, name):
     m = re.search(rf"^{name} = \{{", text, re.M)
     assert m, f"no {name}"
@@ -694,6 +702,35 @@ class StripTest(unittest.TestCase):
         self.assertIn("has_game_rule = banking_system_enabled", full)
         self.assertIn("has_game_rule = banking_system_enabled", on)
 
+    def test_the_strategic_reserve_never_opens_off_the_strip(self):
+        """The one mirrored tab whose open gate doesn't follow from its strip
+        gate by their triggers: open is holding the entry, on the strip is
+        Logistics and not being a revolution's rebels. It follows from the
+        entry instead (#1338). The entry starts only while the journal shows
+        it greyed, which is the strip gate word for word; a technology isn't
+        unlearned; and the rebels of a revolution, who start none, get no
+        running one either: a hub that falls to them stays the nation's
+        (st_res_hub_stays_within_nation), and the entry with its holder.
+        Three engine facts under that are named here, not shown: an entry
+        auto-activates only while is_shown_when_inactive holds as well as
+        possible (scripting_best_practices.md, "JE Auto-Activation Requires
+        BOTH"), a technology isn't unlearned, and a revolution's rebels take
+        over no running entry. test_strategic_reserve_lifecycle.py holds the
+        script's side."""
+        reserve = _tab("strategic_reserve")
+        tab, unlock = "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"
+        self.assertEqual((reserve.open_, reserve.strip, reserve.unlock), (_shown(tab), _shown(unlock), unlock))
+        self.assertIn("is_shown = { has_journal_entry = je_strategic_reserve }", _txt_block(self.sguis, tab))
+        strip = re.search(r"is_shown = \{ (.*) \}", _txt_block(self.sguis, unlock)).group(1)
+        self.assertEqual(strip, "has_technology_researched = logistics is_revolutionary = no")
+        je = _txt_block(_strip_comments(_read(os.path.join(JE_DIR, "je_strategic_reserve.txt"))).replace("\n\t", "\n"),
+                        "je_strategic_reserve")
+        self.assertEqual(" ".join(_txt_block(je, "is_shown_when_inactive").split()), strip)
+        kept = _txt_block(_read(os.path.join(REPO, "common", "on_actions", "st_res_on_actions.txt")),
+                          "st_res_on_state_owner_change")
+        self.assertRegex(kept, r"limit = \{\s*NOT = \{ st_res_hub_stays_within_nation = yes \}\s*\}\s*"
+                               r"remove_building = building_strategic_reserve_hub")
+
     def test_demographics_opens_with_its_first_census(self):
         """As the Population panel's tab: its gate and its checklist passing."""
         demog = _tab("demographics")
@@ -1060,9 +1097,23 @@ class WideTest(unittest.TestCase):
         self.assertEqual(wide.strip(), f'te_systems_window_panel_wide = {{\n\t\tvisible = "[{WIDE}]"\n\t}}')
         self.assertIn("type te_systems_window_panel_wide = te_fullscreen_block_window {", self.gui)
         self.assertNotIn("margin_widget", _strip_comments(self.gui))
-        # the state that closes vanilla's panels stays on the root: switching
-        # width doesn't rerun it
+        # the state that closes vanilla's panels stays on the root, its own
+        # and its only one: switching width doesn't rerun it
         self.assertEqual(self.root.count("name = _show"), 1)
+        self.assertIn('on_start = "[InformationPanelBar.ClosePanel]"', _own_state(self.root, "_show"))
+
+    def test_the_show_state_is_the_roots_own(self):
+        """Counted alone, the state could move into the side-panel branch and
+        still be one: there it would run again each time the width switches
+        back, and not at all for a window opened full screen (#1338)."""
+        state = _own_state(self.root, "_show")
+        branch = "\twidget = {\n\t\tsize = { 100% 100% }\n"
+        self.assertEqual(self.root.count(branch), 1)
+        moved = self.root.replace(state + "\n", "").replace(branch, branch + "\t" + state.replace("\n", "\n\t") + "\n")
+        self.assertEqual(moved.count("name = _show"), 1)
+        self.assertIn("\t\tstate = {\n\t\t\tname = _show\n", moved)
+        with self.assertRaisesRegex(AssertionError, "0 states named _show of the widget's own"):
+            _own_state(moved, "_show")
 
     def test_the_toggle_keeps_the_tab(self):
         on = _override(self.narrow, "fixed_top")
@@ -1224,6 +1275,22 @@ class GeneratorTest(unittest.TestCase):
                          "stale: run python3 scripts/generators/gen_te_systems_window.py")
         self.assertEqual(gen.main(["--check"]), 0)
 
+    def test_the_generated_files_pass_the_tab_check(self):
+        """scripts/format_paradox_tabs.py, which preflight runs over common/
+        and events/ only, so nothing held these to it: vanilla's
+        fullscreen_block_window has a line of tabs alone, which the copy
+        kept (#1338). No line ends in whitespace either."""
+        sys.path.insert(0, os.path.join(REPO, "scripts"))
+        try:
+            import format_paradox_tabs
+        finally:
+            sys.path.pop(0)
+        for path in (gen.GUI_OUT, gen.NI_OUT):
+            with self.subTest(path=path.name):
+                text = path.read_text(encoding="utf-8-sig")
+                self.assertEqual(format_paradox_tabs.format_text(text), text)
+                self.assertEqual([n for n, ln in enumerate(text.split("\n"), 1) if ln != ln.rstrip()], [])
+
     def test_the_gates_take_a_root(self):
         """The gates root on the player by default, the window's as before
         (the committed file, above), and on another root when asked: National
@@ -1263,7 +1330,7 @@ class GeneratorTest(unittest.TestCase):
         """A tab with no open gate (as Budget Breakdown) is shown whenever it
         was last chosen, and Nation's fallback reads it so. (On a strip of its
         own: the three are full.)"""
-        extra = gen.Tab("always_open", 4, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        extra = gen.Tab("always_open", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", wide="te_x_wide_sections")
         with mock.patch.object(gen, "TABS", gen.TABS + [extra]):
             text = gen.render()
         self.assertNotIn("None", text)
@@ -1279,18 +1346,34 @@ class GeneratorTest(unittest.TestCase):
     def test_a_gated_tab_needs_its_checklist(self):
         """A tab with an open gate shows a checklist while grayed, so it names
         the scripted GUI and the locked line, unless it brings its own tooltip."""
-        bad = gen.Tab("no_checklist", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", open_=gen.shown("te_x_sgui"))
+        bad = gen.Tab("no_checklist", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", wide="te_x_wide_sections",
+                      open_=gen.shown("te_x_sgui"))
         with mock.patch.object(gen, "TABS", gen.TABS + [bad]):
             with self.assertRaisesRegex(ValueError, "no_checklist"):
                 gen.render()
-        own = gen.Tab("own_tooltip", 4, label="te_x", tooltip="te_x_tt", body="te_x_body",
+        own = gen.Tab("own_tooltip", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", wide="te_x_wide_sections",
                       open_=gen.shown("te_x_sgui"), tooltip_expr="Localize( 'te_x_tt' )")
         with mock.patch.object(gen, "TABS", gen.TABS + [own]):
             self.assertIn("tooltip = \"[Localize( 'te_x_tt' )]\"", gen.render())
 
     def test_a_system_tab_can_sit_on_any_strip(self):
-        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", row=3).row, 3)
-        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout").row, 1)
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", row=3, wide="te_x_wide_sections").row, 3)
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", wide="te_x_wide_sections").row, 1)
+
+    def test_a_tab_needs_its_wide_layout(self):
+        """Every tab has a full-screen layout (spec § 7), so the registry
+        takes none without: `wide` is required, and no mount falls back to
+        the body (#1338)."""
+        with self.assertRaisesRegex(TypeError, "wide"):
+            gen.Tab("no_wide", 4, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        with self.assertRaisesRegex(TypeError, "wide"):
+            gen._system("x", "te_x_tab_body", "te_x_tab_layout")
+        with self.assertRaisesRegex(TypeError, "wide"):
+            gen._mirror("x", 2, "te_x_tt", "te_x_tab_body", "te_x_tab_layout", "te_x_tab_sgui", "te_x_tab_unlock_sgui")
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                self.assertIn(f"{t.wide} = {{}}", [ln.strip() for ln in gen._content(t, wide=True)])
+                self.assertEqual(gen._content(t), [f"{t.body} = {{}}"])
 
     def test_check_fails_on_a_file_without_its_bom(self):
         with tempfile.TemporaryDirectory() as tmp:

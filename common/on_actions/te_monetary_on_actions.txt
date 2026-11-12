@@ -93,6 +93,10 @@ on_monthly_pulse_country = {
 te_monetary_monthly_on_action = {
 	effect = {
 		te_monetary_monthly_update = yes
+		# The months left of five timed modifiers, for a revolution's winner
+		# (#470; te_monetary_civil_war_effects.txt). Outside the update: a
+		# modifier's days run whatever the banking rule says.
+		te_mon_cw_tick_penalty_clocks = yes
 		# The civil-war copy's once-per-loser marker names the loser whose bank
 		# this country took (te_monetary_repair_after_civil_war says why). It
 		# goes once that object no longer resolves — the engine deleted the dead

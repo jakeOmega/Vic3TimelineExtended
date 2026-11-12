@@ -42,6 +42,7 @@ imposed_currency_peg = {
 	target_involvement_applies_to = source_country
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		can_be_renegotiated
 		hostile
@@ -77,6 +78,13 @@ imposed_currency_peg = {
 		# which handed the coerced pegger leverage over its coercer. The PEGGER
 		# is the source.
 		country_treaty_leverage_generation_add = 400
+	}
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		te_mon_full_system = yes
 	}
 
 	visible = {

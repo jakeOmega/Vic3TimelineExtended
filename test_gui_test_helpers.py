@@ -405,7 +405,6 @@ class WideMatchesNarrowTest(unittest.TestCase):
                             f'flowcontainer = {{ {WRAPPER} visible = "[JournalEntry.IsActive]" te_x_sec_a = {{}} }}')
         self.assertEqual(self.check(wide), COLUMNS)
 
-
     def test_a_wrapper_that_keeps_a_hidden_sections_space(self):
         """Without ignoreinvisible, a hidden section still takes its place and the spacing around it."""
         self.fails("without ignoreinvisible = yes keeps a hidden section's space", GOOD,
@@ -423,11 +422,245 @@ class WideMatchesNarrowTest(unittest.TestCase):
                    wrapper=WRAPPER + ' datacontext = "[GetPlayer]"')
         self.fails(r"a wrapper carries \['margin_left'\]", GOOD, wrapper=WRAPPER + " margin_left = 200")
 
-    def test_a_wrappers_spacing_against_its_narrow_composers(self):
-        """The wrapper standing in for a narrow composer under the same gates spaces its sections as the composer
-        does."""
-        self.fails(r"spaces its sections 30 apart under \['JournalEntry.IsActive'\], the narrow layout \['4'\]", GOOD,
-                   wrapper="direction = vertical parentanchor = hcenter ignoreinvisible = yes spacing = 30")
+    def test_a_wrapper_that_is_not_a_flowcontainer(self):
+        """An hbox sets its sections side by side in the 520 column, a widget or a container draws them over each
+        other, and the column, a flowcontainer, can't hold a vbox (#1338). The narrow side may use any: its wrappers
+        are what the game already draws."""
+        opener = 'flowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a = {}'
+        self.assertEqual(GOOD.count(opener), 1)
+        for kind in ("hbox", "widget", "container", "vbox"):
+            with self.subTest(kind=kind):
+                self.fails(f"wraps sections in `{kind}`", GOOD.replace(opener, opener.replace(
+                    "flowcontainer = {\n", f"{kind} = {{ {WRAPPER}\n")))
+        narrow = NARROW.replace("flowcontainer = {\n\t\t\tspacing = 4", "widget = {\n\t\t\tspacing = 4")
+        self.assertNotEqual(narrow, NARROW)
+        self.assertEqual(assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES,
+                                                    text=narrow + fixture(GOOD)[len(NARROW):]), COLUMNS)
+
+    def test_a_wrappers_size_limit_is_its_columns(self):
+        """{ 900 -1 } would run out of its 520 column (#1338); the one real use is { 520 -1 }."""
+        for limit in ("minimumsize", "maximumsize"):
+            with self.subTest(limit=limit):
+                self.fails(rf"a wrapper's {limit} is {{ 900 -1 }}", GOOD, wrapper=f"{WRAPPER} {limit} = {{ 900 -1 }}")
+                self.fails(rf"a wrapper's {limit} is {{ 520 40 }}", GOOD, wrapper=f"{WRAPPER} {limit} = {{ 520 40 }}")
+                self.assertEqual(self.check(GOOD, wrapper=f"{WRAPPER} {limit} = {{ 520 -1 }}"), COLUMNS)
+
+    # The spacing rule (#1338): a wrapper's spacing draws between the sections it holds, so one that holds two or more
+    # directly spaces them as the widget that holds them in the narrow layout does.
+    BARE = "direction = vertical parentanchor = hcenter ignoreinvisible = yes"
+
+    def test_a_wrappers_spacing_against_its_sections_narrow_one(self):
+        """te_x_sec_b and te_x_summary sit 4 apart in the narrow layout, in its inner wrapper."""
+        self.fails(r"the wrapper around \['te_x_sec_b', 'te_x_summary'\] spaces its sections 30 apart, "
+                   r"the narrow layout \['4'\]", GOOD, wrapper=f"{self.BARE} spacing = 30")
+        self.fails(r"the wrapper around \['te_x_sec_b', 'te_x_summary'\] spaces its sections None apart", GOOD,
+                   wrapper=self.BARE)
+
+    # te_x_sec_a and te_x_sec_c directly in one wrapper, with the wrapper around te_x_sec_b and te_x_summary between
+    # them; te_x_sec_z from a second narrow composer under the same gate, which sets no spacing.
+    MORE = """
+	type te_x_more_sections = flowcontainer {
+		visible = "[JournalEntry.IsActive]"
+		te_x_sec_z = {}
+	}
+"""
+    HELD = """
+	type te_x_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_x_overview = {}
+			flowcontainer = { OUTER
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_a = {}
+				flowcontainer = {
+					visible = "[Not( IsLight )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
+				te_x_sec_c = { visible = "[HasC]" }
+			}
+		}
+		blockoverride "column_2" {
+			te_x_sec_how = {}
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_z = {}
+			}
+		}
+	}
+"""
+
+    def test_spacing_is_matched_by_the_sections_a_wrapper_holds_not_by_its_gates(self):
+        """The narrow layout has a second composer under JournalEntry.IsActive that sets no spacing. Matched by gate
+        set, that let the wrapper around te_x_sec_a and te_x_sec_c drop its 4 (#1338: the Space Race wrapper around
+        Space Powers and Orbit)."""
+        def check(outer):
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES + ["te_x_more_sections"],
+                                              text=fixture(self.HELD.replace("OUTER", outer) + self.MORE))
+
+        self.assertEqual(len(check(WRAPPER)), 2)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_sec_a', 'te_x_sec_c'\] spaces its "
+                                                    r"sections None apart, the narrow layout \['4'\]"):
+            check(self.BARE)
+
+    def test_a_wrapper_around_one_section_needs_no_spacing(self):
+        """Spacing draws between two: a one-section wrapper had to carry a spacing that draws nothing (#1338)."""
+        one = 'flowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a = {}'
+        self.assertEqual(GOOD.count(one), 1)
+        for bare in (self.BARE, f"{self.BARE} spacing = 30"):
+            with self.subTest(wrapper=bare):
+                self.assertEqual(self.check(GOOD.replace(one, one.replace("flowcontainer = {\n", f"flowcontainer = {{ {bare}\n"))),
+                                 COLUMNS)
+
+    def test_a_section_alone_in_a_narrow_wrapper_sits_at_the_spacing_around_it(self):
+        """A narrow wrapper around one section draws no spacing: the section sits at the spacing of the next widget
+        out that holds two or more. Here te_x_sec_c, alone in a wrapper that only gates it, is 4 from its neighbours,
+        the status composer's spacing. (te_x_sec_how, alone in its composer, sits at a spacing the check can't read.)"""
+        lone = '\t\tflowcontainer = {\n\t\t\tvisible = "[HasC]"\n\t\t\tte_x_sec_c = {}\n\t\t}\n'
+        narrow = NARROW.replace('\t\tte_x_sec_c = {\n\t\t\tvisible = "[HasC]"\n\t\t}\n', lone)
+        self.assertNotEqual(narrow, NARROW)
+        pair = ('\t\t\tflowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n'
+                '\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t}\n\t\t\tte_x_sec_how = {}\n')
+        self.assertEqual(GOOD.count(pair), 1)
+
+        def check(spacing):
+            wide = GOOD.replace(pair, f"\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                      '\t\t\t\tvisible = "[JournalEntry.IsActive]"\n'
+                                      '\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t\tte_x_sec_how = {}\n\t\t\t}\n')
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, added_gates=("te_x_sec_how",),
+                                              text=narrow + fixture(wide)[len(NARROW):])
+
+        self.assertEqual(check(4), COLUMNS)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_sec_c', 'te_x_sec_how'\] spaces its "
+                                                    r"sections 30 apart, the narrow layout \['4'\]"):
+            check(30)
+
+    def test_a_section_alone_in_a_narrow_composer_sits_at_the_spacing_around_it(self):
+        """The same through a composer: te_x_q and te_x_r, each the one section of its composer, sit 6 apart, the
+        spacing of the composer that holds the two."""
+        more = ("\ttype te_x_outer_sections = flowcontainer {\n\t\tspacing = 6\n\t\tte_x_one_sections = {}\n"
+                "\t\tte_x_two_sections = {}\n\t}\n"
+                "\ttype te_x_one_sections = flowcontainer {\n\t\tspacing = 99\n\t\tte_x_q = {}\n\t}\n"
+                "\ttype te_x_two_sections = flowcontainer {\n\t\tte_x_r = {}\n\t}\n")
+
+        def check(spacing):
+            wide = GOOD.replace("\t\t\tte_x_sec_how = {}\n",
+                                f"\t\t\tte_x_sec_how = {{}}\n\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                "\t\t\t\tte_x_q = {}\n\t\t\t\tte_x_r = {}\n\t\t\t}\n")
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES + ["te_x_outer_sections"],
+                                              text=fixture(wide + more))
+
+        check(6)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_q', 'te_x_r'\] spaces its sections "
+                                                    r"30 apart, the narrow layout \['6'\]"):
+            check(30)
+
+    def test_a_wrapper_with_no_visible_of_its_own_is_spaced_too(self):
+        """Only a gated wrapper used to be held to the narrow spacing (#1338)."""
+        pair = "\t\t\t\t\tte_x_sec_b = {}\n\t\t\t\t\tte_x_summary = {}\n"
+        self.assertEqual(GOOD.count(pair), 1)
+
+        def ungated(spacing):
+            return GOOD.replace(pair, f"\t\t\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                      f"\t{pair[:-1].replace(chr(10), chr(10) + chr(9))}\n\t\t\t\t\t}}\n")
+
+        self.assertEqual(self.check(ungated(4)), COLUMNS)
+        self.fails(r"the wrapper around \['te_x_sec_b', 'te_x_summary'\] spaces its sections 30 apart", ungated(30))
+
+    def test_an_instance_with_a_context_or_a_margin_of_its_own(self):
+        """What a wrapper may not carry, an instance may not either (#1338): a datacontext changes what the section
+        reads, a margin, a position or a size where it sits. A visible, a blockoverride and a child widget stay."""
+        self.fails(r"te_x_reference_sections carries \['datacontext', 'margin_left'\]",
+                   GOOD.replace("te_x_sec_how = {}",
+                                'te_x_reference_sections = { datacontext = "[GetPlayer]" margin_left = 200 }'))
+        self.fails(r"te_x_sec_how carries \['size'\]", GOOD.replace("te_x_sec_how = {}", "te_x_sec_how = { size = { 520 38 } }"))
+        self.fails(r"te_x_divider carries \['position'\]",
+                   GOOD.replace("te_x_sec_how = {}", "te_x_sec_how = {}\n\t\t\tte_x_divider = { position = { 0 4 } }"),
+                   extra=("te_x_divider",))
+        self.assertEqual(self.check(GOOD.replace("te_x_sec_how = {}", 'te_x_sec_how = {\n\t\t\t\tblockoverride "note" {}\n'
+                                                 '\t\t\t\tte_x_text = {\n\t\t\t\t\ttext = "x"\n\t\t\t\t}\n\t\t\t}')), COLUMNS)
+
+    # Both narrow composers placed whole: te_x_status_sections' inner wrapper has no direction and no ignoreinvisible.
+    WHOLE = """
+	type te_x_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_x_overview = {}
+			te_x_status_sections = {}
+		}
+		blockoverride "column_2" {
+			te_x_reference_sections = {}
+		}
+	}
+"""
+
+    def test_a_composer_both_layouts_place_is_not_held_to_the_wide_rules(self):
+        """Its type draws the same in both frames, so its inner wrappers and instances are the narrow layout's
+        (#1338: the guard checked them, under the wide composer's name)."""
+        self.assertEqual(self.check(self.WHOLE), [["te_x_overview", "te_x_sec_a", "te_x_sec_b", "te_x_summary", "te_x_sec_c"],
+                                                  ["te_x_sec_how"]])
+        narrow = NARROW.replace("te_x_sec_how = {}", "hbox = {\n\t\t\tmargin_left = 200\n\t\t\tte_x_sec_how = { size = { 520 38 } }\n\t\t}")
+        self.assertNotEqual(narrow, NARROW)
+        assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, text=narrow + fixture(self.WHOLE)[len(NARROW):])
+
+    def test_what_the_wide_layout_fills_a_shared_composers_block_with_is_held_to_them(self):
+        """A blockoverride is the markup of the layout that writes it."""
+        def filled(wrapper):
+            return self.WHOLE.replace("te_x_status_sections = {}",
+                                      'te_x_status_sections = {\n\t\t\t\tblockoverride "summary" {\n'
+                                      f"\t\t\t\t\t{wrapper}\n\t\t\t\t\t\tte_x_summary = {{}}\n\t\t\t\t\t}}\n\t\t\t\t}}\n\t\t\t}}")
+
+        self.assertEqual(len(self.check(filled("flowcontainer = {"))), 2)
+        self.fails("wraps sections in `hbox`", filled("hbox = {"))
+        self.fails(r"a wrapper carries \['margin_left'\]", filled("flowcontainer = {"), wrapper=WRAPPER + " margin_left = 200")
+
+    def test_a_composer_only_the_wide_layout_places_is_held_to_them(self):
+        """It is the wide layout's own, and a failure in it names it."""
+        own = self.WHOLE.replace("te_x_reference_sections = {}", "te_x_wide_only_sections = {}")
+        self.fails("te_x_wide_sections's te_x_wide_only_sections wraps sections in `hbox`",
+                   own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\thbox = {\n\t\t\tte_x_sec_how = {}\n\t\t}\n\t}\n")
+        self.fails(r"te_x_wide_sections's te_x_wide_only_sections: te_x_sec_how carries \['margin_left'\]",
+                   own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\tte_x_sec_how = { margin_left = 200 }\n\t}\n")
+        self.check(own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\tte_x_sec_how = {}\n\t}\n")
+
+    def test_two_rows_of_columns(self):
+        """A wide layout is one row of columns, read down each and then across (#1338)."""
+        rows = """
+	type te_x_wide_sections = flowcontainer {
+		te_ui_columns_two = {
+			blockoverride "column_1" {
+				te_x_overview = {}
+			}
+			blockoverride "column_2" {
+				flowcontainer = {
+					visible = "[JournalEntry.IsActive]"
+					te_x_sec_a = {}
+				}
+			}
+		}
+		te_ui_columns_two = {
+			blockoverride "column_1" {
+				flowcontainer = {
+					visible = "[And( JournalEntry.IsActive, Not( IsLight ) )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
+			}
+			blockoverride "column_2" {
+				flowcontainer = {
+					visible = "[JournalEntry.IsActive]"
+					te_x_sec_c = { visible = "[HasC]" }
+				}
+				te_x_sec_how = {}
+			}
+		}
+	}
+"""
+        self.fails("places a second row of columns; a wide layout is one row", rows)
+        nested = GOOD.replace("\t\t\tte_x_sec_how = {}\n", '\t\t\tte_ui_columns_two = {\n\t\t\t\tblockoverride "column_1" {\n'
+                              '\t\t\t\t\tte_x_sec_how = {}\n\t\t\t\t}\n\t\t\t\tblockoverride "column_2" {\n'
+                              '\t\t\t\t\tte_x_divider = {}\n\t\t\t\t}\n\t\t\t}\n')
+        self.assertNotEqual(nested, GOOD)
+        self.fails("places a second row of columns", nested, split={"te_x_divider": "te_x_sec_how"})
+
 
 BODY = """
 types body {
@@ -503,6 +736,37 @@ class LayoutTest(unittest.TestCase):
 
     def test_a_wide_layout_may_place_a_composer_whole(self):
         self.check(LAID_OUT.replace("te_x_sec_how = {}", "te_x_reference_sections = {}"))
+
+    def test_a_gate_on_a_composers_instance_still_sets_its_sections_spacing(self):
+        """te_x_pair_sections has no visible of its own; the body gates its instance. Its sections' 6 was never
+        recorded, so a wrapper under that gate spaced them as it liked (#1338)."""
+        pair = "\ttype te_x_pair_sections = flowcontainer {\n\t\tspacing = 6\n\t\tte_x_p = {}\n\t\tte_x_q = {}\n\t}\n"
+        body = BODY.replace("te_x_reference_sections = {}",
+                            'te_x_reference_sections = {}\n\t\t\t\tte_x_pair_sections = {\n\t\t\t\t\tvisible = "[Shown]"\n\t\t\t\t}')
+        self.assertNotEqual(body, BODY)
+
+        def check(spacing):
+            wide = LAID_OUT.replace("te_x_sec_how = {}",
+                                    f"te_x_sec_how = {{}}\n\t\t\tflowcontainer = {{ direction = vertical ignoreinvisible = yes "
+                                    f'spacing = {spacing}\n\t\t\t\tvisible = "[Shown]"\n\t\t\t\tte_x_p = {{}}\n'
+                                    f"\t\t\t\tte_x_q = {{}}\n\t\t\t}}")
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", layout=("te_x_tab_body", "te_x_tab_layout"),
+                                              text=fixture(wide + pair) + body)
+
+        check(6)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_p', 'te_x_q'\] spaces its sections 30 "
+                                                    r"apart, the narrow layout \['6'\]"):
+            check(30)
+
+    def test_sections_the_frame_spaces_set_no_spacing(self):
+        """The frame around a body's layout block spaces what sits straight in it, which the check can't read: the
+        overview, and the goal bar, alone in a wrapper that only gates it (a wrapper around one draws no spacing).
+        So a wide wrapper around the two is not held to a spacing."""
+        wide = LAID_OUT.replace('\t\t\tte_x_overview = {}\n\t\t\tte_x_goal_bar = { visible = "[HasGoal]" }\n',
+                                "\t\t\tflowcontainer = { direction = vertical ignoreinvisible = yes spacing = 10\n"
+                                '\t\t\t\tte_x_overview = {}\n\t\t\t\tte_x_goal_bar = { visible = "[HasGoal]" }\n\t\t\t}\n')
+        self.assertNotEqual(wide, LAID_OUT)
+        self.check(wide)
 
     def test_names_or_a_layout_not_both(self):
         with self.assertRaisesRegex(AssertionError, "give narrow_types or layout, not both"):

@@ -769,8 +769,11 @@ un_lean_interests = {
 	}
 	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
+		# A colonial empire (its colonies or a colonial subject) leans against;
+		# keyed on any direct subject before issue #1373, which left an empire
+		# of overseas colonies alone leaning for it.
 		if = {
-			limit = { any_subject_or_below = { is_direct_subject_of = ROOT } }
+			limit = { decol_holds_colonial_empire = yes }
 			add = -40
 		}
 		else = {
