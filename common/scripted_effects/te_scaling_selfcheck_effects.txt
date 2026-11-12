@@ -30,11 +30,12 @@
 #   OK      over 0 (the inherited entry declares it again; an inherited entry
 #           arrives with no added modifiers, so a missing declaration reads 0)
 #   BROKEN  0. Every inherited entry has lost its declarations: already
-#           Covert Warfare's five and Global Warming's six (their monthly pulses
-#           used to re-add them; Carbon Removal's and Aerosol Injection's
-#           restore effects were deleted), the Strategic Reserve's income if
-#           that entry is inherited, and the revolution repairs PRs 3, 7 and 8
-#           delete. Fallback: design § 5 (end the winner's inherited entries
+#           Covert Warfare's five and Global Warming's fourteen (their monthly
+#           pulses used to re-add some; Carbon Removal's and Aerosol
+#           Injection's restore effects were deleted, and the nine other
+#           policies were lost before #1466), the Colonial Empire's bands, the
+#           Strategic Reserve's income if that entry is inherited, and the
+#           revolution repairs PRs 3, 7 and 8 delete. Fallback: design § 5 (end the winner's inherited entries
 #           through an invalid trigger on a flag set at te_civil_war_on_won and
 #           add them again, or put the deleted repairs back).
 #

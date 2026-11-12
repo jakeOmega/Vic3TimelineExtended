@@ -178,7 +178,9 @@ class RepoTests(unittest.TestCase):
         from path_constants import mod_path
         result = audit(mod_path)
         self.assertGreater(result.files_scanned, 100)
-        self.assertGreater(result.blocks_checked, 5)
+        # The climate policies' eighteen adopt and repeal blocks left in #1466 (each sets a variable the entry
+        # declares the modifier from), so a handful of blocks remain to check.
+        self.assertGreater(result.blocks_checked, 2)
 
     def test_post_load_roster(self):
         from scripts.analysis.check_post_load_rosters import extract_rosters

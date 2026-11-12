@@ -157,7 +157,8 @@ The Colonial Stability bar runs from 0 to 100 and starts at 50. Once a month it
 moves by the sum of everything acting on it, but never by more than 1.5 up or
 down, so crossing the whole bar takes at least five and a half years. Where the bar sits
 puts you in one of five bands. Each band applies a modifier to the journal
-entry, and the lower three also raise your colonial subjects' liberty desire.
+entry, which follows the bar into a new band within a few days, and the lower
+three also raise your colonial subjects' liberty desire.
 
 | Band | Bar | While in this band |
 |---|---|---|

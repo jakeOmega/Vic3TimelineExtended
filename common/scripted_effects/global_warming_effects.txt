@@ -7,30 +7,38 @@
 #
 # National policies modify only the acting country's journal entry. Tariffs
 # alone belong to the market leader and write native customs settings.
+#
+# Each policy is a country variable, gw_<policy>_policy, and je_global_warming
+# declares the policy's modifier at 1 while it is set (a scaling modifier,
+# #1404, #1466), so the effect reaches the entry a few days after the click.
+# A civil war's winner, which inherits variables but no modifiers, keeps the
+# country's policies. The gw_policy_*_active triggers read the variables:
+# has_modifier cannot see a scaling modifier. Each text prints the modifier
+# (GetStaticModifier in its _DESC), so the hidden variable is never silent.
 
 gw_effect_carbon_tax = {
 	custom_tooltip = {
 		text = "GW_CARBON_TAX_DESC"
-		je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
+		hidden_effect = { set_variable = { name = gw_carbon_tax_policy value = yes } }
 	}
 }
 
 gw_effect_remove_carbon_tax = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CARBON_TAX_DESC"
-		je:je_global_warming = { remove_modifier = carbon_tax_modifier }
+		hidden_effect = { remove_variable = gw_carbon_tax_policy }
 	}
 }
 
 # The running cost (renewable_investment_cost_modifier, 0.5% of GDP a year) is
-# a scaling modifier je_global_warming declares while the policy modifier is on
-# the entry, so adopting and repealing the policy moves it, a few days later.
+# a scaling modifier je_global_warming declares while the policy is in force,
+# so adopting and repealing the policy moves it, a few days later.
 # The adopt tooltip previews it outside the custom_tooltip, so its scaled
 # Expenses line prints (GW-4, 2026-10-27); the repeal text names it.
 gw_effect_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_RENEWABLE_INVESTMENT_DESC"
-		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
+		hidden_effect = { set_variable = { name = gw_renewable_investment_policy value = yes } }
 	}
 	show_as_tooltip = {
 		add_modifier = {
@@ -43,91 +51,91 @@ gw_effect_renewable_investment = {
 gw_effect_remove_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
-		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
+		hidden_effect = { remove_variable = gw_renewable_investment_policy }
 	}
 }
 
 gw_effect_climate_adaptation = {
 	custom_tooltip = {
 		text = "GW_CLIMATE_ADAPTATION_DESC"
-		je:je_global_warming = { add_modifier = { name = climate_adaptation_modifier } }
+		hidden_effect = { set_variable = { name = gw_climate_adaptation_policy value = yes } }
 	}
 }
 
 gw_effect_remove_climate_adaptation = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
-		je:je_global_warming = { remove_modifier = climate_adaptation_modifier }
+		hidden_effect = { remove_variable = gw_climate_adaptation_policy }
 	}
 }
 
 gw_effect_emission_standards = {
 	custom_tooltip = {
 		text = "GW_EMISSION_STANDARDS_DESC"
-		je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
+		hidden_effect = { set_variable = { name = gw_emission_standards_policy value = yes } }
 	}
 }
 
 gw_effect_remove_emission_standards = {
 	custom_tooltip = {
 		text = "GW_REMOVE_EMISSION_STANDARDS_DESC"
-		je:je_global_warming = { remove_modifier = emission_standards_modifier }
+		hidden_effect = { remove_variable = gw_emission_standards_policy }
 	}
 }
 
 gw_effect_reforestation = {
 	custom_tooltip = {
 		text = "GW_REFORESTATION_DESC"
-		je:je_global_warming = { add_modifier = { name = reforestation_subsidies_modifier } }
+		hidden_effect = { set_variable = { name = gw_reforestation_policy value = yes } }
 	}
 }
 
 gw_effect_remove_reforestation = {
 	custom_tooltip = {
 		text = "GW_REMOVE_REFORESTATION_DESC"
-		je:je_global_warming = { remove_modifier = reforestation_subsidies_modifier }
+		hidden_effect = { remove_variable = gw_reforestation_policy }
 	}
 }
 
 gw_effect_public_transit = {
 	custom_tooltip = {
 		text = "GW_PUBLIC_TRANSIT_DESC"
-		je:je_global_warming = { add_modifier = { name = public_transit_modifier } }
+		hidden_effect = { set_variable = { name = gw_public_transit_policy value = yes } }
 	}
 }
 
 gw_effect_remove_public_transit = {
 	custom_tooltip = {
 		text = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
-		je:je_global_warming = { remove_modifier = public_transit_modifier }
+		hidden_effect = { remove_variable = gw_public_transit_policy }
 	}
 }
 
 gw_effect_fossil_fuel_divestment = {
 	custom_tooltip = {
 		text = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
-		je:je_global_warming = { add_modifier = { name = fossil_fuel_divestment_modifier } }
+		hidden_effect = { set_variable = { name = gw_fossil_fuel_divestment_policy value = yes } }
 	}
 }
 
 gw_effect_remove_fossil_fuel_divestment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
-		je:je_global_warming = { remove_modifier = fossil_fuel_divestment_modifier }
+		hidden_effect = { remove_variable = gw_fossil_fuel_divestment_policy }
 	}
 }
 
 gw_effect_green_building_codes = {
 	custom_tooltip = {
 		text = "GW_GREEN_BUILDING_CODES_DESC"
-		je:je_global_warming = { add_modifier = { name = green_building_codes_modifier } }
+		hidden_effect = { set_variable = { name = gw_green_building_codes_policy value = yes } }
 	}
 }
 
 gw_effect_remove_green_building_codes = {
 	custom_tooltip = {
 		text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
-		je:je_global_warming = { remove_modifier = green_building_codes_modifier }
+		hidden_effect = { remove_variable = gw_green_building_codes_policy }
 	}
 }
 
@@ -263,7 +271,7 @@ gw_refresh_global_counts_effect = {
 		every_country = {
 			limit = { has_journal_entry = je_global_warming }
 			if = {
-				limit = { je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier } }
+				limit = { gw_runs_fossil_fuel_tariffs = yes }
 				change_global_variable = { name = gw_g_n_fossil_fuel_tariffs add = 1 }
 			}
 			change_global_variable = { name = gw_g_sol_sum add = average_sol }
@@ -493,21 +501,24 @@ gw_effect_remove_carbon_removal = {
 gw_effect_fossil_fuel_tariffs = {
 	custom_tooltip = {
 		text = "GW_FOSSIL_FUEL_TARIFFS_DESC"
-		je:je_global_warming = { add_modifier = { name = fossil_fuel_tariffs_modifier } }
+		hidden_effect = { set_variable = { name = gw_fossil_fuel_tariffs_policy value = yes } }
 	}
 }
 
 gw_effect_remove_fossil_fuel_tariffs = {
 	custom_tooltip = {
 		text = "GW_REMOVE_FOSSIL_FUEL_TARIFFS_DESC"
-		je:je_global_warming = { remove_modifier = fossil_fuel_tariffs_modifier }
+		hidden_effect = { remove_variable = gw_fossil_fuel_tariffs_policy }
 	}
 }
 
 # Country scope. A former leader must not retain a tariff policy after its
 # customs authority moves. National mitigation choices remain its own.
 gw_drop_fossil_fuel_tariffs_effect = {
-	je:je_global_warming ?= { remove_modifier = fossil_fuel_tariffs_modifier }
+	if = {
+		limit = { has_variable = gw_fossil_fuel_tariffs_policy }
+		remove_variable = gw_fossil_fuel_tariffs_policy
+	}
 }
 
 # Ownership cleanup only; rate modifiers themselves need no reassertion.
@@ -515,7 +526,7 @@ gw_drop_fossil_fuel_tariffs_effect = {
 gw_refresh_fossil_fuel_tariffs_effect = {
 	if = {
 		limit = {
-			je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier }
+			gw_runs_fossil_fuel_tariffs = yes
 			OR = {
 				NOT = { te_tax_owns_market = yes }
 				NOT = { has_game_rule = global_warming_enabled }
