@@ -7,7 +7,8 @@
 # A held colony's autonomy (sr_site_autonomy_<key>, 0-100) drifts each month in
 # the world's step (sr_site_aut_step_<key>, generated); at 50 its holder is asked
 # (space_race_events.94: a charter, a garrison, or let it go), at 100 it breaks
-# away. A free colony (sr_site_free_<key>) is a claimed world with no holder: it
+# away. Both need sr_free_colony_minimum people, and below that no autonomy
+# builds (sr_site_peopled_<key>; owner, 2026-11-12). A free colony (sr_site_free_<key>) is a claimed world with no holder: it
 # keeps its people and modules, shows its modifiers to no one, grows only while
 # supplied, and its suppliers' ties (sr_free_ties_<key>, country) grow until it
 # asks to join one (space_race_events.99). The per-world blocks and the
@@ -86,9 +87,18 @@ sr_aut_break_away = {
 # Each names $KEY$, the dispatchers' one argument.
 
 # Any scope: local_var:sr_aut_delta points of autonomy at a held world, within 0-100.
+# A gain needs people: a world under sr_free_colony_minimum (sr_site_peopled_<key>)
+# takes no autonomy from an incitement, a sabotage or a destroyed colony's
+# resentment, and only a cut (a charter, a garrison) applies there (owner, 2026-11-12).
 sr_site_aut_add_at = {
 	if = {
-		limit = { has_global_variable = sr_site_holder_$KEY$ }
+		limit = {
+			has_global_variable = sr_site_holder_$KEY$
+			OR = {
+				local_var:sr_aut_delta < 0
+				sr_site_peopled_$KEY$ = yes
+			}
+		}
 		set_global_variable = {
 			name = sr_site_autonomy_$KEY$
 			value = {

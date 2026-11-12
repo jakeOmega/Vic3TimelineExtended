@@ -259,7 +259,18 @@ space_race_events.4 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.4.t
-	desc = space_race_events.4.d
+	# The Grand Tour has no one target: its description speaks of the last
+	# planet on the tour and the record of each. The flavor names no target
+	# and serves every probe.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.4.d_tour
+				trigger = { has_variable = sr_probe_target_tour }
+			}
+			desc = space_race_events.4.d
+		}
+	}
 	flavor = space_race_events.4.f
 
 	duration = 3
@@ -311,6 +322,21 @@ space_race_events.4 = {
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
 
+	# Grand Tour - every line the single targets pay, for twice as long
+	option = {
+		name = space_race_events.4.g
+		trigger = { has_variable = sr_probe_target_tour }
+		ai_chance = { base = 5 }
+		sr_apply_probe_reward = yes
+		add_modifier = {
+			name = sr_probe_target_tour
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals }
+	}
+
 	# Fallback - no target chosen, share data
 	option = {
 		name = space_race_events.4.e
@@ -318,6 +344,7 @@ space_race_events.4 = {
 			NOT = { has_variable = sr_probe_target_venus }
 			NOT = { has_variable = sr_probe_target_mars }
 			NOT = { has_variable = sr_probe_target_asteroid }
+			NOT = { has_variable = sr_probe_target_tour }
 		}
 		default_option = yes
 		ai_chance = { base = 5 }
@@ -1348,11 +1375,16 @@ space_race_events.37 = {
 	title = space_race_events.37.t
 	# The description names the target chosen in .81 (Venus, Mars or the
 	# asteroid belt: none is in the outer solar system, which the old text
-	# reported from whichever was chosen, #1620). The last rung is for a probe
-	# with no target set and names none. The title and the flavor name no
-	# target and serve all four.
+	# reported from whichever was chosen, #1620; the Grand Tour is, and its
+	# rung reports Jupiter). The last rung is for a probe with no target set
+	# and names none. The title and the flavor name no target and serve all
+	# five.
 	desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.37.d_tour
+				trigger = { has_variable = sr_probe_target_tour }
+			}
 			triggered_desc = {
 				desc = space_race_events.37.d_venus
 				trigger = { has_variable = sr_probe_target_venus }
@@ -1904,7 +1936,12 @@ space_race_events.44 = {
 }
 
 # Event 45: Gravitational Slingshot Calculation (probe)
-# Using planetary gravity assists to reach the outer system: real orbital mechanics
+# Using planetary gravity assists: real orbital mechanics. One set of options,
+# two sets of text. A probe bound for Venus, Mars or the asteroid belt chooses
+# among a direct flight, a swing past another planet and an ion drive, and no
+# text names a planet (#1620). The Grand Tour (sr_probe_target_tour) flies by
+# gravity assist whatever is chosen, so its description, flavor and option
+# names are about how to take the assist at Jupiter.
 space_race_events.45 = {
 	type = country_event
 	placement = root
@@ -1914,8 +1951,24 @@ space_race_events.45 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.45.t
-	desc = space_race_events.45.d
-	flavor = space_race_events.45.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.45.d_tour
+				trigger = { has_variable = sr_probe_target_tour }
+			}
+			desc = space_race_events.45.d
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.45.f_tour
+				trigger = { has_variable = sr_probe_target_tour }
+			}
+			desc = space_race_events.45.f
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
@@ -1931,29 +1984,53 @@ space_race_events.45 = {
 	}
 
 	option = {
-		name = space_race_events.45.a
+		name = {
+			trigger = { has_variable = sr_probe_target_tour }
+			text = space_race_events.45.a_tour
+		}
+		name = {
+			trigger = { always = yes }
+			text = space_race_events.45.a
+		}
 		default_option = yes
 		ai_chance = { base = 5 }
-		# The direct flight: the fastest. No option names a planet, since the
-		# probe's target (.81) is Venus, Mars or the asteroid belt and a
-		# Jupiter flyby leads to none of them (#1620).
+		# The direct flight: the fastest. Its plain name names no planet, since
+		# a single target (.81) is Venus, Mars or the asteroid belt and a
+		# Jupiter flyby leads to none of them (#1620). On the Grand Tour: the
+		# close pass at Jupiter, which gives the most speed.
 		custom_tooltip = SR_PROGRESS_ADD_3_MONTHS_TT
 		sr_gain_progress_months = { MILESTONE = probe MONTHS = 3 }
 	}
 
 	option = {
-		name = space_race_events.45.b
+		name = {
+			trigger = { has_variable = sr_probe_target_tour }
+			text = space_race_events.45.b_tour
+		}
+		name = {
+			trigger = { always = yes }
+			text = space_race_events.45.b
+		}
 		ai_chance = { base = 4 }
-		# A gravity assist from another planet on the way: slower but more data
+		# A gravity assist from another planet on the way: slower but more
+		# data. On the Grand Tour: the wide pass, longer among Jupiter's moons.
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 		sr_gain_progress_months = { MILESTONE = probe MONTHS = 1 }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 
 	option = {
-		name = space_race_events.45.c
+		name = {
+			trigger = { has_variable = sr_probe_target_tour }
+			text = space_race_events.45.c_tour
+		}
+		name = {
+			trigger = { always = yes }
+			text = space_race_events.45.c
+		}
 		ai_chance = { base = 2 }
-		# Direct trajectory with ion drive: expensive, no gravity assists
+		# Direct trajectory with ion drive: expensive, no gravity assists. On
+		# the Grand Tour: an ion drive to trim the course between planets.
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
 		sr_gain_progress_months = { MILESTONE = probe MONTHS = 2 }
 		add_loyalists = { value = small_radicals pop_type = engineers }
@@ -4321,6 +4398,44 @@ space_race_events.81 = {
 		}
 		custom_tooltip = {
 			text = "SR_PROBE_ASTEROID_CHOSEN_TT"
+		}
+	}
+
+	# The Grand Tour - Jupiter and the planets beyond it, one after another.
+	# No gate on who may take it: its cost is the limit (a quarter of the
+	# program's pace through sr_choice_probe_tour, and two cost levels of
+	# weekly innovation through sr_probe_cost, both while the milestone runs).
+	# The AI takes it only as a top-three power with innovation to spare
+	# (the tour costs 60 a week at the probe's factor), and more readily once
+	# another country has flown the first probe and there is no race to win;
+	# never by default, and not for being Ambitious, which wants speed.
+	option = {
+		name = space_race_events.81.e
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					sr_ai_should_participate = yes
+					country_innovation > 150
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					sr_ai_should_participate = yes
+					country_innovation > 150
+					has_global_variable = sr_global_first_probe
+				}
+				add = 2
+			}
+		}
+		set_variable = { name = sr_probe_target_tour value = yes }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_probe ?= { add_modifier = sr_choice_probe_tour }
+		}
+		custom_tooltip = {
+			text = "SR_PROBE_TOUR_CHOSEN_TT"
 		}
 	}
 }

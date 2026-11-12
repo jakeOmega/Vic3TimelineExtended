@@ -244,7 +244,10 @@ def _find(backup_root: Path, snap_id: str) -> snapshot.Snapshot:
 
 
 def _outcome(out: restore.Outcome) -> dict:
-    return {"restored": out.restored, "removed": out.removed, "held": out.held, "reason": out.reason}
+    result = {"restored": out.restored, "removed": out.removed, "held": out.held, "reason": out.reason}
+    if out.retimed:         # same bytes as the snapshot, the run's time on them: the snapshot's time put back
+        result["retimed"] = out.retimed
+    return result
 
 
 def _events(snap: snapshot.Snapshot) -> list[str]:

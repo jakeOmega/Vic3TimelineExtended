@@ -46,7 +46,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, overlay, rules, snapshot
+from game_qa import fixture, overlay, pixels, rules, snapshot
 from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -90,8 +90,25 @@ RELOAD_RETRIED = ("no_ack", "no_reply", "log_gap")
 # busy, so it is tried again too, but only while the window is still there (`_reloading`); `watch` is looked at
 # between tries, and ends them when the game really has gone.
 RELOAD_FROZEN = "game_gone"
+# Live, 2026-11-12: in the second session the game stayed frozen for four minutes after its reload, its log
+# silent, until a verb that reads the debugger's connection was run; then it answered at once. In the third,
+# with the connection read before every look, the wait ended after 66 s and no stop was ever reported. So the
+# game is most likely held by a debugger connection nobody reads (it streams every error-log line there, and a
+# reload writes tens of thousands), not stopped at a breakpoint; the mechanism was not looked at further. The
+# wait reads the connection before each look, and resumes a stop if it does find one.
+PRESS_KEYS = {"esc": 0x01}              # what `press` may send: a probe's key, in the game itself
 LOG_POLL_S = 0.2
 CLICK_SETTLE_S = 1.0                    # after the country click, before Start (unverified)
+# enter-game's check that the country click selected a country (#1598). The country-select screen's side panel
+# reads "Click on a country to select it." until one is selected, then shows that country; a click that lands on
+# a window (the game's "We now have <law>!" after a setup changed a law there) changes nothing in it: across the
+# real shots of 2026-11-12, with and without such a window, the panel did not differ by one pixel.
+# Nothing is pressed to close the window. Live, the same day: after the click had landed on it, neither Esc nor
+# Enter closed it (three and two presses), though in an earlier session, with the cursor elsewhere, two windows
+# went after two `press esc`; what closed them there is not established. And a console probe typed while the
+# console is closed goes to the game, where its letters move the camera off the country.
+PANEL_BOX = (0.87, 0.06, 0.99, 0.80)    # the side panel, clear of the date above and the buttons below
+PANEL_CHANGED = 0.01                    # this share of its pixels differing is a country selected
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -192,14 +209,22 @@ class Paths:
 
 class _ProvedHelper:
     """The helper as everything that sends input sees it (X1): `keys`, `focus` and `click` go out only once
-    `Session._prove_game` has passed, just before each one, since the helper sends by pid alone and a pid may be
-    another program's once the game has died. Every other call goes to the session's current helper (a fresh one
-    from `_new_helper` too)."""
+    `Session._prove_game` has passed, just before each one, since a pid may be another program's once the game
+    has died (the helper compares the start time again before each step it sends, win_helper._prove_ours). Of
+    the helper's other calls only those in `_UNPROVED` pass through, to the session's current helper (a fresh one
+    from `_new_helper` too): they send nothing. Any other name is an AttributeError, so a call added to the
+    helper later reaches the game through here only once someone has decided whether it needs the proof."""
+
+    _UNPROVED = frozenset({"window", "presence"})      # what the Console reads; neither sends input
 
     def __init__(self, session: Session) -> None:
         self._session = session
 
     def __getattr__(self, name: str):
+        if name not in self._UNPROVED:
+            raise AttributeError("the proved helper passes on only %s unproved, not %r: give it a method here that "
+                                 "calls Session._prove_game first if it sends input, or add it to _UNPROVED if it "
+                                 "sends none" % (", ".join(sorted(self._UNPROVED)), name))
         return getattr(self._session._helper, name)
 
     def keys(self, pid: int, steps: Sequence[dict]) -> None:
@@ -706,6 +731,7 @@ class Session:
             tries += 1
             out.update(tries=tries, seen=self._loaded_revision)
             failed = None
+            self._resume_after_reload(out)
             try:
                 self._look_for_revision()
             except ConsoleError as e:
@@ -725,6 +751,26 @@ class Session:
                     revision=revision, seen=self._loaded_revision, tries=tries)
             self._sleep(RELOAD_RETRY_S)
             self._check_watch()
+
+    def _resume_after_reload(self, out: dict) -> None:
+        """Read what the debugger's connection holds, which is what lets a game frozen after a reload go on (see
+        the note above PRESS_KEYS), and resume a stop if one is there. `out` gets the reason of each stop
+        released (`released`; none was, live), and what the debugger said if the look itself failed
+        (`debugger`): the relay may not survive a reload, and the wait goes on either way, since the debugger
+        is attached again at its end."""
+        dbg = self._debugger
+        try:
+            stopped = dbg.poll_stopped()
+        except DebuggerError as e:
+            out.setdefault("debugger", []).append(str(e)[:200])
+            return
+        if not stopped:
+            return
+        out.setdefault("released", []).append(dbg.last_stop_reason)
+        if not self._resume(dbg):
+            self._maybe_stopped = True
+            raise SessionError("maybe_stopped", "the reload left the game stopped at the debugger, and it did not "
+                               "take a resume, twice", maybe_stopped=True)
 
     def _reloading(self, e: ConsoleError) -> bool:
         """Whether a console error during a look is what a reloading game gives, so the look can be made again:
@@ -761,6 +807,7 @@ class Session:
         if self._loaded_revision >= self._overlay.revision:
             return False
         before = self._loaded_revision
+        self._resume_after_reload({})
         try:
             self._look_for_revision()
         except ConsoleError as e:
@@ -796,6 +843,23 @@ class Session:
             lines = self._setup_lines(name)
             out["lines"] = len(lines)
         return lines
+
+    def press(self, key: str) -> dict:
+        """Press one key of PRESS_KEYS in the game itself, the console closed first so the key does not go into
+        its input line. A probe's verb: what the key does is for the caller to see (`shot` before and after).
+        The console is left closed, and the next verb that types finds that out by typing: its first probe goes
+        to the game, where the letters move the camera (seen live, 2026-11-12), before the console key is
+        pressed. So take the `shot` first, and expect the view to have moved afterwards."""
+        self._require_game()
+        with self._step("press", key=key) as out:
+            scan = PRESS_KEYS.get(str(key).lower())
+            if scan is None:
+                raise SessionError("bad_argument", "press takes one of %s, not %r" % (", ".join(sorted(PRESS_KEYS)), key))
+            self._console.ensure_open()         # so its state is known, and the game is in front
+            self._console.close()
+            self._console.hotkey(scan)
+            out["scan"] = scan
+        return {"key": str(key).lower(), "scan": scan}
 
     def events(self) -> list[Pending]:
         self._require_game()
@@ -867,7 +931,12 @@ class Session:
         again (`tag`), and only then read the date and run the unpaused proof. Any failure from the Start click on
         sets `left_running` and `entered_unproved`, clicks nothing more, and carries the clicks: its own code for
         breakpoint_unverified, tag_failed, debugger, watch_ended or left_running, else not_entered with the code as
-        `cause`."""
+        `cause`.
+
+        One not_entered sets neither and has no `cause`: the proof ran to its end, the pause proved, and the date
+        had not moved ("the date stayed"). The game is then where it was, on the country-select screen with time
+        stopped, as when a window covered the country click (#1598), so `enter_game` may be called again, and
+        `advance` calls it again."""
         self._require_game()
         self._refuse_if_left_running()
         if not self._fixture_loaded:
@@ -1016,7 +1085,9 @@ class Session:
         """End the game this session started and put the owner's files back; never raises.
 
         In order: end the game (`kill`; adopted first if a failure came before `adopt`; through a fresh helper
-        from `helper_factory` once if the helper has ended), wait for `watch` to return (up to WATCH_WAIT_S),
+        from `helper_factory` once if the helper has ended; a `kill` refused not_ours is followed by `adopt`, and
+        the game counts as ended, its pid being another program's by now, only if that refuses not_ours too),
+        wait for `watch` to return (up to WATCH_WAIT_S),
         `restore <id>` (retried every RESTORE_RETRY_S while it refuses watch_still_recording, up to
         RESTORE_RETRY_TOTAL_S; busy, up to BUSY_RETRY_TOTAL_S; or launch_in_flight, which a launch that was not
         recorded leaves for 90 s after its claim, up to LAUNCH_IN_FLIGHT_RETRY_TOTAL_S: by now the launch call
@@ -1176,22 +1247,42 @@ class Session:
 
     def _kill(self, proc: ProcId, notes: list[str]) -> None:
         if not self._adopted:
-            try:
-                self._helper.adopt(proc)
-            except HelperError as e:
-                if e.code != "not_ours":
-                    raise
-                # No live process has that pid and start time (win_helper._op_adopt): the game has ended. Part 1's
-                # restore still looks for a running game itself.
-                self._game_ended = True
-                notes.append("the helper finds no live process %d started at %s (%s): the game has ended"
-                             % (proc.pid, proc.created, e.detail))
-                self._record("kill", outcome="already_exited", detail="adopt: " + _describe(e))
+            if self._found_gone(proc, notes):
                 return
             self._adopted = True
-        gone = self._helper.kill(proc)
+        try:
+            gone = self._helper.kill(proc)
+        except HelperError as e:
+            if e.code != "not_ours":
+                raise
+            # `kill` refuses not_ours when the pid is another program's by now (the game died and its id was
+            # reused), but also when it could not open a live game to end it (win_helper._op_kill, terminate), so
+            # its refusal alone proves nothing. `adopt` is asked again: only if it too finds no live process with
+            # that pid and start time has the game ended. If it proves the game alive, ending it failed.
+            if not self._found_gone(proc, notes, after="kill refused (%s), and " % _describe(e)):
+                notes.append("the helper still finds process %d started at %s alive, so that refusal was not the "
+                             "game's end" % (proc.pid, proc.created))
+                raise
+            return
         self._game_ended = True
         self._record("kill", outcome="already_exited" if gone else "ok")
+
+    def _found_gone(self, proc: ProcId, notes: list[str], after: str = "") -> bool:
+        """Ask the helper to adopt `proc`. Refused `not_ours`, no live process has that pid and start time
+        (win_helper._op_adopt): the game has ended, which is recorded, and True is returned. Part 1's restore
+        still looks for a running game itself. False once the helper has proved the game alive; any other
+        failure of `adopt` is raised."""
+        try:
+            self._helper.adopt(proc)
+        except HelperError as e:
+            if e.code != "not_ours":
+                raise
+            self._game_ended = True
+            notes.append("%sthe helper finds no live process %d started at %s (%s): the game has ended"
+                         % (after, proc.pid, proc.created, e.detail))
+            self._record("kill", outcome="already_exited", detail="%sadopt: %s" % (after, _describe(e)))
+            return True
+        return False
 
     def _kill_failed(self, notes: list[str], e: Exception) -> None:
         notes.append("ending the game failed (%s), so it may still be up" % _describe(e))
@@ -1485,17 +1576,22 @@ class Session:
             raise SessionError("no_country", "tag a country first: the click enters whichever country the camera is "
                                "on, and the tagged one is tagged again once the game is entered")
         clicks: list[list[int]] = []
-        for n, where in enumerate((COUNTRY_CLICK, START_CLICK)):
-            if n:
-                self._sleep(CLICK_SETTLE_S)
-            # The console's own front check, so the presence rule decides whether the foreground may be taken.
-            self._console.ensure_open()
-            x, y = self._point(where)
-            try:
-                self._sends.click(self._proc.pid, x, y)
-            except HelperError as e:        # refused before the button went down: nothing was pressed
-                raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
-            clicks.append([x, y])
+        unselected = self._panel()              # the side panel with no country selected, or None: cannot tell
+        self._click(COUNTRY_CLICK, clicks)
+        self._sleep(CLICK_SETTLE_S)
+        if unselected is not None:
+            now = self._panel()
+            if now is not None and pixels.changed(unselected, now) < PANEL_CHANGED:
+                # Start is not clicked on a lobby with no country: nothing was entered, nothing is left in doubt,
+                # and the session can go on (a refused click after Start would end `advance` for good).
+                raise SessionError(
+                    "no_country_selected", "the country click selected no country: the lobby's side panel did "
+                    "not change. Something covers the middle of the country-select screen (a setup that changes "
+                    "a law there raises the game's \"We now have …\" window, #1598), or the camera is not on a "
+                    "country. Start was not clicked, so nothing changed and enter-game can be tried again; no "
+                    "verb closes that window, so run such a setup after entering",
+                    clicks=clicks, screenshot=self._enter_shot_path())
+        self._click(START_CLICK, clicks)
         # Start may have been pressed: from here on the game may be entered, and running. Nothing is clicked again.
         try:
             self._sleep(ENTER_SETTLE_S)
@@ -1520,6 +1616,33 @@ class Session:
                                screenshot=shot, before=before, after=after, clicks=clicks)
         self._entered = True
         return {"entered": True, "clicks": clicks, "before": before, "after": after}
+
+    def _click(self, where: tuple[float, float], clicks: list[list[int]]) -> None:
+        # The console's own front check, so the presence rule decides whether the foreground may be taken.
+        self._console.ensure_open()
+        x, y = self._point(where)
+        try:
+            self._sends.click(self._proc.pid, x, y)
+        except HelperError as e:            # refused before the button went down: nothing was pressed
+            raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
+        clicks.append([x, y])
+
+    def _enter_shot_path(self) -> str:
+        return str(self._report.dir / "enter_panel.png") if self._report is not None else ""
+
+    def _panel(self) -> tuple[int, int, bytes] | None:
+        """The country-select screen's side panel as it looks now (PANEL_BOX of a screenshot kept as
+        `enter_panel.png` in the run folder), or None when it cannot be had: a screenshot that fails or cannot
+        be read is not a reason to stop entering, only to go on without the check."""
+        if self._report is None:
+            return None
+        path = self._report.dir / "enter_panel.png"
+        try:
+            self._helper.screenshot(self._proc.pid, path)
+            return pixels.region(pixels.decode_png(path.read_bytes()), PANEL_BOX)
+        except (HelperError, OSError, pixels.PixelsError) as e:
+            self._record("enter_panel", outcome="unread", detail=str(e)[:200])
+            return None
 
     def _console_after_start(self) -> None:
         """Wait for the console to take commands again once Start is pressed: `ensure_open` is tried every

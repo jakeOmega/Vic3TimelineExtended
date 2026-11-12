@@ -79,6 +79,10 @@ class FakeSession:
         return {"name": name, "event": "te_qa.100", "revision": 1, "loaded": True, "tries": 3, "waited_s": 42.0,
                 "slots_left": 29}
 
+    def press(self, key):
+        self._call("press", key)
+        return {"key": key, "scan": 1}
+
     def events(self):
         self._call("events")
         return [Pending(10, "x.1", 2)]
@@ -264,6 +268,11 @@ class AddSetupVerbTest(ServerTestCase):
         reply, code = self.run_cli("add-setup", "late=%s" % script)
         self.assertEqual((code, reply["event"], reply["loaded"], reply["slots_left"]), (0, "te_qa.100", True, 29))
         self.assertEqual(fake.calls[-1], ("add_setup", "late", "set_variable = te_late\n"))
+
+    def test_press_sends_the_key_named(self):
+        fake, _thread = self.serve()
+        self.assertEqual(self.run_cli("press", "esc"), ({"key": "esc", "scan": 1}, 0))
+        self.assertEqual(fake.calls[-1], ("press", "esc"))
 
     def test_a_bad_argument_is_refused_before_the_server_is_asked(self):
         fake, _thread = self.serve()

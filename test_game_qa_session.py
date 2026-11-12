@@ -174,6 +174,11 @@ class Game(fakes.FakeHelper):
         self.reloads = True
         self.reload_s = 90.0
         self.freezes = True
+        self.stops_after_reload = True          # the reload ends with the game stopped at the debugger
+        self.law_windows = 0                    # "We now have <law>!" windows over the country-select screen
+        self.bare_esc = 0                       # Esc presses with no such window to close
+        self.panel_shots = True                 # a screenshot shows the lobby's side panel (else 1x1, unreadable)
+        self.reload_stopped = False             # it is at that stop: its window does not respond
         self.loaded_revision = 0                # the revision of te_qa_effects.txt in force
         self.reload_due: tuple[float, int] | None = None       # (when, the revision it brings)
         self.dropped: list[str] = []            # the commands entered during a reload
@@ -213,10 +218,15 @@ class Game(fakes.FakeHelper):
         if self.reload_due is not None and self.now >= self.reload_due[0]:
             self.loaded_revision, self.reload_due = self.reload_due[1], None
             self.adapter.breakpoints.clear()
+            if self.stops_after_reload:         # live, 2026-11-12: frozen until the debugger resumes it
+                self.adapter.stop("pause")
+                self.reload_stopped = True
 
     def window(self, pid):
         win = super().window(pid)
-        if self.freezes and self.reload_due is not None and win.exists:
+        frozen = self.freezes and self.reload_due is not None
+        self.reload_stopped = self.reload_stopped and self.adapter.stopped
+        if (frozen or self.reload_stopped) and win.exists:
             return type(win)(win.exists, win.foreground, False, win.title, win.client)
         return win
 
@@ -230,6 +240,11 @@ class Game(fakes.FakeHelper):
     def keys(self, pid, steps):
         super().keys(pid, steps)
         for step in steps:
+            if step.get("scan") == 1 and not self.console_open:
+                if self.law_windows:
+                    self.law_windows -= 1
+                else:
+                    self.bare_esc += 1
             if step.get("scan") == SPACE:
                 self.order.append("space")
                 if not self.console_open:
@@ -238,6 +253,27 @@ class Game(fakes.FakeHelper):
                         continue
                     self.paused = not self.paused
 
+    def screenshot(self, pid, path, max_width=1600):
+        """A small picture of the country-select screen: the side panel on the right is dark until a country is
+        selected, and a law window sits in the middle while one is up."""
+        if not self.panel_shots:
+            return super().screenshot(pid, path, max_width)
+        width, height = 100, 60
+        rows = []
+        for y in range(height):
+            for x in range(width):
+                if x >= 85:
+                    rows.append(bytes((120, 90, 60)) if self.selected and 10 <= y < 40 else bytes((30, 30, 30)))
+                elif self.law_windows and 36 <= x < 64 and 15 <= y < 45:
+                    rows.append(bytes((80, 20, 20)))
+                else:
+                    rows.append(bytes((10, 40, 90)))
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(fakes.win_helper.encode_png(width, height, b"".join(rows)))
+        self.screenshots.append((pid, path, max_width))
+        return path
+
     def click(self, pid, x, y):
         super().click(pid, x, y)
         self.order.append("click")
@@ -245,6 +281,8 @@ class Game(fakes.FakeHelper):
             return
         _left, _top, width, height = self.client
         if abs(x - width * 0.492) < 2 and abs(y - height * 0.656) < 2:
+            if self.law_windows:                # the click lands on the window, not on the map
+                return
             self.selected = self.camera
         elif abs(x - width * 0.9216) < 2 and abs(y - height * 0.975) < 2 and self.selected:
             # As live (2026-11-11): the game is the selected country's, the script reloads and drops the
@@ -933,6 +971,17 @@ class AddSetupTest(SessionTestCase):
         self.game.setups = {"te_qa.100": ("late", ["one line"])}
         self.assertEqual(self.session.run_setup("late"), ["one line"])
 
+    def test_the_stop_a_reload_ends_with_is_released(self):
+        # Live, 2026-11-12: after its reload the game stayed frozen for four minutes, until a verb resumed it.
+        self.started()
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertTrue(reply["loaded"])
+        self.assertLess(reply["waited_s"], self.game.reload_s + 60)
+        self.assertFalse(self.game.adapter.stopped)
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        step = [s for s in map(json.loads, lines) if s["verb"] == "add_setup"][-1]
+        self.assertEqual(step["released"], ["pause"])
+
     def test_a_window_that_is_gone_is_not_waited_for(self):
         self.started()
         self.game.reloads = False
@@ -972,8 +1021,8 @@ class AddSetupTest(SessionTestCase):
         self.started()
         self.game.reload_s = 1.0
         reply = self.session.add_setup("late", self.BODY)
-        self.assertEqual(reply["tries"], 1)
-        self.assertLess(reply["waited_s"], 30)
+        self.assertLessEqual(reply["tries"], 2)     # one more when the stop the reload ends with is seen late
+        self.assertLess(reply["waited_s"], 60)
 
     def test_a_name_or_body_the_overlay_refuses_writes_and_types_nothing(self):
         self.started(setups={"border": "set_variable = te_x"})
@@ -1050,6 +1099,81 @@ class AddSetupTest(SessionTestCase):
         self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_started")
 
 
+class EnterPastAWindowTest(SessionTestCase):
+    """#1598: a setup that changes a law on the country-select screen raises the game's "We now have …" window
+    where the country click lands. The click then selects nothing, which the lobby's side panel shows. Live,
+    2026-11-12, no key closed the window once the click had landed on it, so nothing is pressed: the miss is
+    refused before Start, and the session goes on."""
+
+    def test_a_covered_screen_is_refused_before_start_and_can_be_tried_again(self):
+        self.started()
+        self.game.law_windows = 2
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "no_country_selected")
+        self.assertEqual(len(error.info["clicks"]), 1, "only the country click: Start was never clicked")
+        self.assertTrue(Path(error.info["screenshot"]).is_file())
+        self.assertFalse(self.game.entered)
+        self.assertEqual((self.game.law_windows, self.game.bare_esc), (2, 0), "nothing was pressed to close it")
+        self.assertNotIn({"scan": 1}, self.game.steps[steps:])
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, False, False))
+        # The session is not locked: reads still work, and with the window gone it enters.
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+        self.game.law_windows = 0
+        self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_advance_on_a_covered_screen_gets_the_same_refusal_and_is_not_left_running(self):
+        self.started()
+        self.game.law_windows = 1
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "no_country_selected")
+        self.assertFalse(self.session.status()["left_running"])
+        self.game.law_windows = 0
+        start = self.game.date
+        self.session.advance(3)
+        self.assertGreaterEqual((self.game.date - start).days, 3)
+
+    def test_a_selected_country_goes_on_to_start(self):
+        self.started()
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(len(result["clicks"]), 2)
+        self.assertEqual(self.game.bare_esc, 0)
+
+    def test_a_screenshot_that_cannot_be_read_goes_on_as_before(self):
+        self.started()
+        self.game.panel_shots = False           # a 1x1 picture: the panel cannot be found in it
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(len(result["clicks"]), 2)
+        self.assertIn("enter_panel", [s["verb"] for s in self.steps()])
+
+    def steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [json.loads(line) for line in lines]
+
+
+class PressTest(SessionTestCase):
+    def test_press_closes_the_console_and_sends_the_key_to_the_game(self):
+        self.started()
+        before = len(self.game.steps)
+        self.assertEqual(self.session.press("esc"), {"key": "esc", "scan": 1})
+        sent = self.game.steps[before:]
+        self.assertEqual(sent[-1], {"scan": 1})
+        self.assertFalse(self.game.console_open, "the key did not go into the console's input line")
+        # The next verb that types opens the console again.
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+
+    def test_any_other_key_is_refused_and_nothing_is_sent(self):
+        self.started()
+        before = len(self.game.steps)
+        self.assertEqual(self.session_error(self.session.press, "f4").code, "bad_argument")
+        self.assertEqual(len(self.game.steps), before)
+        self.assertEqual(self.session_error(session.Session.press, self.session, "enter").code, "bad_argument")
+
+
 class PickTest(SessionTestCase):
     def test_pick_always_passes_the_numeric_id(self):
         self.started()
@@ -1113,15 +1237,66 @@ class EnterGameTest(SessionTestCase):
                 self.assertTrue(self.game.paused)
                 self.assertEqual(self.order.count("space"), 2)
 
+    def test_clicks_that_select_nothing_are_refused_before_start(self):
+        # With the side panel readable (#1598) a country click that selects nothing is seen at once.
+        self.started()
+        self.game.clicks_work = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "no_country_selected")
+        self.assertTrue(Path(error.info["screenshot"]).is_file())
+        self.assertFalse(self.session.status()["entered_unproved"])
+
     def test_enter_game_that_does_not_move_the_date_raises_with_a_screenshot(self):
         self.started()
         self.game.clicks_work = False
+        self.game.panel_shots = False           # the panel cannot be read: only the date can tell
         error = self.session_error(self.session.enter_game)
         self.assertEqual(error.code, "not_entered")
         shot = Path(error.info["screenshot"])
         self.assertTrue(shot.is_file())
         self.assertEqual(shot.parent, self.paths.backup_root / "runs" / SNAP)
         self.assertEqual(len(self.game.clicks), 2)
+
+    def test_a_date_that_stayed_locks_nothing_and_enter_game_can_be_tried_again(self):
+        # #1598: a window over the country-select screen took the country click, so Start did nothing. The proof
+        # ran to its end (unpaused 3 s, paused again, the pause proved) and the date had not moved: the game is
+        # where it was, so the session is not left refusing enter_game and advance until stop. (With the side
+        # panel readable the miss is seen before Start, EnterPastAWindowTest; this is the path when it is not.)
+        self.started()
+        self.game.clicks_work = False
+        self.game.panel_shots = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "not_entered")
+        self.assertIn("the date stayed", error.detail)
+        self.assertNotIn("cause", error.info)
+        self.assertEqual(error.info["clicks"], [list(c) for c in self.game.clicks])
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, False, False))
+        self.assertTrue(self.game.paused)
+        self.assertEqual(self.session.read([]), [])              # the debugger attached again still stops
+        self.game.clicks_work = True                              # the window is gone
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(len(self.game.clicks), 4)                # the two points, clicked again
+        self.assertEqual(self.game.clicks[2:], self.game.clicks[:2])
+        self.assertEqual(self.game.played, "FRA")
+        self.assertGreater(session._game_day(result["after"]), session._game_day(result["before"]))
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (True, False, False))
+        self.assertGreaterEqual(session._game_day(self.session.advance(3)), session._game_day(result["after"]) + 3)
+
+    def test_advance_after_a_date_that_stayed_enters_again_instead_of_refusing(self):
+        self.started()
+        self.game.clicks_work = False
+        self.game.panel_shots = False           # the panel cannot tell, so the date has to
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "not_entered")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "not_entered")     # not left_running
+        self.assertEqual(len(self.game.clicks), 4)
+        self.game.clicks_work = True
+        start = self.game.date
+        reached = self.session.advance(3)
+        self.assertGreaterEqual(session._game_day(reached), session._game_day((start.year, start.month, start.day)) + 3)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
 
     def test_a_click_waits_for_the_presence_rule_and_never_focuses_on_its_own(self):
         self.started()
@@ -1646,12 +1821,15 @@ class StopTest(SessionTestCase):
         reply = self.session.stop()
         self.assertEqual(reply["outcome"], "game_left_up")
         self.assertTrue(any("not_ours" in note for note in reply["notes"]))
+        self.assertTrue(any("still finds process 7" in note for note in reply["notes"]))
         self.assertEqual(self.cli.verbs, [])                   # beside a game that may be the run's: no restore
         self.assertIn("`python3 -m game_qa stop` again", reply["next"])         # it is known: a later stop can end it
         self.assertIn(SNAP, reply["next"])
         self.assertTrue(reply["overlay_kept"])
         self.assertTrue(self.paths.overlay_dir.exists())
-        self.assertEqual(self.order, ["kill", "tcp_close", "helper_close"])   # nothing of the session's own left
+        # #1588: the refused kill is followed by one adopt, which proved the game alive, so it is not counted as
+        # ended; then nothing of the session's own is left
+        self.assertEqual(self.order, ["kill", "adopt", "tcp_close", "helper_close"])
         first = Path(reply["report"]).read_text("utf-8").split("\n")[0]
         self.assertIn("NOT RUN", first)
         self.assertIn("Next: " + reply["next"], first)                      # the reply's own next, not another
@@ -1950,6 +2128,92 @@ class GameLeftUpTest(SessionTestCase):
         self.assertNotIn("stop` again", stop["next"])
 
 
+class ReusedPidStopTest(SessionTestCase):
+    """#1588: the game died and another program took its process id before `stop`. `kill` refuses not_ours, which
+    alone proves nothing (it refuses a live game it could not open, too), so `adopt` is asked again: refused
+    not_ours as well, no live process has the game's pid and start time, and the stop restores as for a game
+    found gone, instead of answering game_left_up for as long as that other program runs."""
+
+    def reused(self, proc):
+        self.order.append("kill")
+        raise HelperError("not_ours", "process 7 is not the one this helper started (its id was reused)")
+
+    def test_a_stop_after_the_pid_was_reused_finds_the_game_ended_and_restores(self):
+        self.started()
+        self.game.exited = True                 # the game died; watch records its exit
+        self.game.process_gone = True           # and adopt finds no live process with its pid and start time
+        self.game.kill = self.reused
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["stop_again"]), ("restored", False))
+        self.assertEqual(self.order, ["kill", "watch_returned", "cli restore", "tcp_close", "helper_close"])
+        self.assertEqual(self.cli.calls, [["restore", SNAP]])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertNotIn("next", reply)
+        note = next(note for note in reply["notes"] if "the game has ended" in note)
+        self.assertIn("kill refused", note)
+        self.assertIn("no live process 7", note)
+        steps = [json.loads(line) for line in
+                 (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()]
+        kill = next(step for step in steps if step["verb"] == "kill")
+        self.assertEqual(kill["outcome"], "already_exited")
+        self.assertEqual(self.session.stop(), reply)                    # final: not run again
+
+    def test_the_restore_still_refuses_beside_a_game_it_finds_itself(self):
+        # The helper's two refusals end the wait for the kill, not part 1's own look for a running game.
+        self.started()
+        self.game.exited = self.game.process_gone = True
+        self.game.kill = self.reused
+        self.cli.queue("restore", {"held": False, "refused": "game_still_up", "id": SNAP}, 2)
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["refused"], reply["stop_again"]), ("refused", "game_still_up", True))
+        self.assertTrue(self.paths.overlay_dir.exists())
+
+    def test_an_adopt_that_fails_otherwise_after_the_refused_kill_proves_nothing(self):
+        self.started()
+        self.game.kill = self.reused
+
+        def adopt(proc):
+            self.order.append("adopt")
+            raise HelperError("backend_error", "OSError('access denied')")
+        self.game.adopt = adopt
+        reply = self.session.stop()
+        self.assertEqual((reply["outcome"], reply["stop_again"]), ("game_left_up", True))
+        self.assertEqual(self.cli.verbs, [])                            # no restore beside a game that may be up
+        self.assertTrue(self.paths.overlay_dir.exists())
+        self.assertEqual(self.order, ["kill", "adopt", "tcp_close", "helper_close"])
+        self.assertTrue(any("backend_error" in note for note in reply["notes"]))
+
+    def test_a_helper_that_ends_at_the_second_look_is_replaced_once_as_at_the_kill(self):
+        self.started()
+        self.game.exited = True
+        self.game.kill = self.reused
+
+        def adopt(proc):
+            raise HelperError("helper_gone", "the helper has ended")
+        self.game.adopt = adopt
+        fresh = fakes.FakeHelper()
+
+        def not_ours(proc):
+            raise HelperError("not_ours", "no live process %d was created at %s" % (proc.pid, proc.created))
+        fresh.adopt = not_ours
+        self.fresh_helper = fresh
+        reply = self.session.stop()
+        self.assertEqual(reply["outcome"], "restored")
+        self.assertEqual((fresh.killed, self.cli.verbs), ([], ["restore"]))
+
+    def test_a_later_stop_finds_the_pid_reused_since_and_restores(self):
+        # First the kill is refused beside a live game (game_left_up); the game then dies and its id is reused.
+        self.started()
+        self.game.kill = self.reused
+        first = self.session.stop()
+        self.assertEqual((first["outcome"], first["stop_again"]), ("game_left_up", True))
+        self.game.exited = self.game.process_gone = True
+        second = self.session.stop()
+        self.assertEqual((second["outcome"], second["stop_again"]), ("restored", False))
+        self.assertEqual(self.cli.verbs, ["restore"])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+
 class StopAgainTest(SessionTestCase):
     """R7, N3, N12: `stop_again` says whether a later stop can change anything, `next` names a verb that can work
     then, and a stop run again keeps what the one before found."""
@@ -2081,10 +2345,11 @@ class ClosingGame(Game):
 
 
 class SecondStopThroughAClosedHelperTest(SessionTestCase):
-    """R7 (the re-review's script): the first stop's kill is refused, since the game's pid was reused after it
-    exited, so game_left_up with stop_again, and that stop closed the helper. The second stop goes helper_gone,
-    the factory, a fresh adopt refused not_ours: the game counts as ended, watch is waited for, and only then is
-    the snapshot restored, once."""
+    """R7 (the re-review's script): the first stop's kill is refused while the helper's adopt still answers for
+    the process, so game_left_up with stop_again, and that stop closed the helper. (When adopt refuses too, as it
+    does once the pid really is another program's, the first stop already restores: `ReusedPidStopTest`.) The
+    second stop goes helper_gone, the factory, a fresh adopt refused not_ours: the game counts as ended, watch is
+    waited for, and only then is the snapshot restored, once."""
 
     def setUp(self):
         super().setUp()
@@ -2522,6 +2787,32 @@ class SendGuardTest(SessionTestCase):
         self.started()
         self.assertIsInstance(self.session._console._helper, session._ProvedHelper)
         self.assertIs(self.session._sends._session, self.session)
+
+    def test_the_proved_helper_passes_on_only_the_calls_that_send_nothing(self):
+        # #1588: a call added to the helper later must not reach the game unproved through the pass-through.
+        self.started()
+        sends = self.session._sends
+        self.assertEqual(sends.window(PID), self.game.window(PID))
+        self.assertEqual(sends.presence().foreground, fakes.GAME_HWND)
+        self.game.type_unicode = lambda pid, text: self.fail("an input call the proof does not know went out")
+        for name in ("type_unicode", "kill", "launch", "adopt", "screenshot", "idle_ms", "tcp_open", "tcp_send",
+                     "tcp_recv", "tcp_close", "close"):
+            with self.subTest(name=name):
+                with self.assertRaises(AttributeError) as caught:
+                    getattr(sends, name)
+                self.assertIn(name, str(caught.exception))
+        self.assertFalse(hasattr(sends, "type_unicode"))
+        self.assertEqual(session._ProvedHelper._UNPROVED, {"window", "presence"})
+
+    def test_the_console_uses_no_helper_call_the_proved_helper_refuses(self):
+        # What the Console calls on its helper, read from its source: each is proved here or on the list, so
+        # the refusal above can never be the Console's own in a path the other tests do not reach.
+        source = Path(session.__file__).with_name("console.py").read_text(encoding="utf-8")
+        used = set(re.findall(r"self\._helper\.(\w+)", source))
+        self.assertIn("keys", used)
+        proved = {name for name in ("keys", "focus", "click") if name in vars(session._ProvedHelper)}
+        self.assertEqual(proved, {"keys", "focus", "click"})
+        self.assertLessEqual(used, proved | session._ProvedHelper._UNPROVED)
 
     def test_a_pid_whose_start_time_no_longer_matches_gets_no_key_though_watch_still_runs(self):
         self.started()

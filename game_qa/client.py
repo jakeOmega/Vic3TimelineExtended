@@ -10,6 +10,7 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
                                              # (about 90 s), and the reply says the game logged the new revision
+    python3 -m game_qa press esc             # one key in the game itself (a probe's verb: shot before and after)
     python3 -m game_qa events                # the pending events
     python3 -m game_qa pick INDEX [EVENT]    # an option of a pending event (the oldest, or EVENT's)
     python3 -m game_qa read "<expr>"...      # triggers and values, evaluated at the debugger's breakpoint
@@ -693,6 +694,10 @@ def cmd_add_setup(args) -> tuple[dict, int]:
     return call(_backup_root(), "add-setup", {"name": name, "script": script}, ADD_SETUP_TIMEOUT_S)
 
 
+def cmd_press(args) -> tuple[dict, int]:
+    return call(_backup_root(), "press", {"key": args.key})
+
+
 def cmd_events(args) -> tuple[dict, int]:
     return call(_backup_root(), "events")
 
@@ -777,6 +782,10 @@ def add_verbs(sub) -> None:
                                          "log lines")
     p.add_argument("name")
     p.set_defaults(run=cmd_run_setup)
+    p = sub.add_parser("press", help="press one key in the game itself, the console closed first (a probe: "
+                                     "take a shot before and after)")
+    p.add_argument("key", choices=["esc"])
+    p.set_defaults(run=cmd_press)
     sub.add_parser("events", help="the pending events").set_defaults(run=cmd_events)
     p = sub.add_parser("pick", help="pick an option of a pending event, by its numeric id")
     p.add_argument("index", type=int)

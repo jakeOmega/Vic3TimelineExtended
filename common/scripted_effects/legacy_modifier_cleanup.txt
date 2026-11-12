@@ -812,6 +812,9 @@ legacy_scaling_strip_space_race_probe = {
 		if = { limit = { has_modifier = sr_choice_probe_venus } remove_modifier = sr_choice_probe_venus }
 		if = { limit = { has_modifier = sr_choice_probe_mars } remove_modifier = sr_choice_probe_mars }
 		if = { limit = { has_modifier = sr_choice_probe_asteroid } remove_modifier = sr_choice_probe_asteroid }
+		# Never an added copy (the Grand Tour was declared from its first day, 2026-11-12);
+		# listed because the strip names every key the entry declares.
+		if = { limit = { has_modifier = sr_choice_probe_tour } remove_modifier = sr_choice_probe_tour }
 	}
 }
 
