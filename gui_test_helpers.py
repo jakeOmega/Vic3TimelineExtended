@@ -16,7 +16,7 @@ Existing tests move onto it only when they are next touched, not in a sweep.
   help-national-info plan, PR F0; test_te_system_tab_bodies.py's BindingTest).
 """
 import bisect
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import functools
 import glob
 import os
@@ -665,8 +665,9 @@ _CHILD = re.compile(r"(?<![\w.])(\w+) = \{")
 
 
 @functools.lru_cache(maxsize=8192)
-def _child_names(body):
-    return tuple(_CHILD.findall(body))
+def _child_sites(body):
+    """Each `name = {` in a body: (name, the offset of its brace)."""
+    return tuple((m.group(1), m.end() - 1) for m in _CHILD.finditer(body))
 
 
 def type_closure(names, types):
@@ -680,7 +681,8 @@ def type_closure(names, types):
         if name in seen:
             continue
         seen.add(name)
-        todo += [c for c in _child_names(types[name].body) + (types[name].base,) if c in types and c not in seen]
+        todo += [c for c in [c for c, _ in _child_sites(types[name].body)] + [types[name].base]
+                 if c in types and c not in seen]
     return seen
 
 
@@ -775,10 +777,12 @@ class View:
                panel doesn't draw)
     templates  the templates the open types use outside those parts (but the
                guard itself), and the templates those use
+    overrides  type -> the blockoverrides among its skip (skipped_overrides)
     """
     open: set
     skip: dict
     templates: set
+    overrides: dict = field(default_factory=dict)
 
 
 _VIEWS = {}  # (names, id(types), id(templates)) -> (types, templates, View): the dicts held, so no id is reused
@@ -850,7 +854,7 @@ def _view_walk(names, types, dead, templates, filled=None):
         if t in templates and t not in used:
             used.add(t)
             stack += [u for u in _USING.findall(templates[t].body) if u != GUARD]
-    return View(set(seen), skip, used), sites
+    return View(set(seen), skip, used, dict(filled or {})), sites
 
 
 def _dead_defaults(names, types, sites):
@@ -875,17 +879,57 @@ def _dead_defaults(names, types, sites):
 
 _OVERRIDE_OPEN = re.compile(r'\bblockoverride\s+"(\w+)"\s*\{')
 _OPENER = re.compile(r"(?<![\w.])(\w+) = \{$")
-_BLOCK_OPENER = re.compile(r'\bblock(?:override)?\s+"\w+"\s*\{$')
+_BLOCK_OPENER = re.compile(r'\b(block|blockoverride)\s+"(\w+)"\s*\{$')
+
+
+@functools.lru_cache(maxsize=8192)
+def _block_sites(body):
+    """Each `block "x"` in a body: (name, where the word starts)."""
+    return tuple((m.group(1), m.start()) for m in _BLOCK_DEF.finditer(body))
+
+
+@functools.lru_cache(maxsize=8192)
+def _using_sites(body):
+    return tuple((m.group(1), m.start()) for m in _USING.finditer(body))
 
 
 def _holder(body, pos):
-    """The start of the widget a `block "x"` at a body offset is written in:
-    its enclosing block, or the one around that where it is a block's default
-    or a blockoverride's contents (which land in the instance); 0 at the root."""
-    a, _ = enclosing_block(body, pos)
-    while a > 0 and _BLOCK_OPENER.search(body, max(0, a - 120), a + 1):
-        a, _ = enclosing_block(body, a)
-    return a
+    """The widget a `block "x"` (or a `using`) at a body offset is written
+    in: (the offset of its brace, 0 for the type's root; the blockoverrides
+    passed on the way out). A block's default and a blockoverride's contents
+    are no widget: what is written in them lands in the widget around them,
+    a blockoverride's wherever its own block is in that instance's type."""
+    a, via = enclosing_block(body, pos)[0], []
+    while a > 0:
+        m = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
+        if not m:
+            break
+        if m.group(1) == "blockoverride":
+            via.append(m.group(2))
+        a = enclosing_block(body, a)[0]
+    return a, tuple(via)
+
+
+def _lands(text):
+    """A blockoverride's contents as its block's widget takes them: its own
+    properties (own_props), a nested `block "x" { }` default's among them."""
+    chars = list(text)
+    for m in _BLOCK_DEF.finditer(text):
+        for i in (*range(m.start(), m.end()), _close(text, m.end() - 1)):
+            chars[i] = " "
+    return own_props("".join(chars))
+
+
+def _own_overrides(body, a, b):
+    """The blockoverrides written directly in the block from a to b (the whole
+    body at a type's root): (name, where the word starts, the offset of its
+    brace, of its end)."""
+    out = []
+    for m in _OVERRIDE_OPEN.finditer(body, a, b):
+        before = body[a + 1 if a else 0:m.start()]
+        if before.count("{") == before.count("}"):
+            out.append((m.group(1), m.start(), m.end() - 1, _close(body, m.end() - 1)))
+    return out
 
 
 def _dead_overrides(view, types, templates):
@@ -896,71 +940,167 @@ def _dead_overrides(view, types, templates):
     doesn't draw) is the player's own, as if the guard were written around it.
 
     An override belongs to the instance it is written in (the base type, at a
-    type's root). The blocks it can fill are every `block "x"` of that type and
-    of all it draws (type_closure: its bases and the types and templates inside
-    it, since an override reaches the blocks of nested types too), and any the
-    instance's own contents declare. One of them drawn keeps the override
-    drawn. So does finding none: the block is then a type's the mod doesn't
-    define (vanilla's), which is not read here. For the same reason a vanilla
-    type inside the instanced one with a block of the same name is not seen.
+    type's root). The blocks it can fill are every `block "x"` of that type,
+    of the mod types its own contents draw (the derived type's whole body, at
+    a root), of all those draw (type_closure: bases, and the types inside
+    them, since an override reaches the blocks of nested types too) and of
+    the templates any of them use, and any the instance's own contents
+    declare. One of them drawn keeps the override drawn. So does finding
+    none: the block is then a type's the mod doesn't define (vanilla's).
 
-    An override that sets a `visible` (its own, or a template's) sets it on
-    the widget its block is written in. Where that widget is the one that
-    carries the guard, the override's replaces the guard's (gotcha #17), so
-    such an override is skipped only where the block's widget sits inside a
-    part not drawn, not where it is that part's own."""
-    own, merged = {}, {}
+    An override that sets a `visible` (its own, a template's, or a nested
+    block default's) sets it on the widget its block is written in: at a
+    type's root, the widget that instances the type. Where that widget
+    carries the guard, the override's `visible` replaces the guard's (gotcha
+    #17). Every guard so replaced by one of the instance's overrides, or by
+    one at the root of its type or of that type's bases, counts as gone for
+    all of the instance's overrides, and so do the block defaults and
+    overrides the View skips: only the guards left hide a block then.
 
-    def blocks_of(name):
-        """block name -> whether the panel draws one of that name in the type's
-        own body or in a template its drawn parts use, and whether it draws
-        one once the override sets its widget's `visible`."""
-        if name not in own:
-            body, found = types[name].body, {}
-            is_open = name in view.open
-            skip = view.skip[name] if is_open else [(0, len(body))]
-            for m in _BLOCK_DEF.finditer(body):
-                shown = not in_spans(m.start(), skip)
-                voids = shown
-                if is_open and not shown:
-                    widget = _holder(body, m.start())
-                    voids = not any(a < widget <= b for a, b in skip)
-                was = found.get(m.group(1), (False, False))
-                found[m.group(1)] = (was[0] or shown, was[1] or voids)
-            seen = set()
-            used = [m.group(1) for m in _USING.finditer(body) if m.group(1) in templates and not in_spans(m.start(), skip)]
-            while used:
-                t = used.pop()
-                if t not in seen:
-                    seen.add(t)
-                    found.update((x, (True, True)) for x in _BLOCK_DEF.findall(templates[t].body))
-                    used += [u for u in _USING.findall(templates[t].body) if u in templates]
-            own[name] = found
-        return own[name]
+    Known limits, each of which reads a drawn override as not drawn (the
+    unsafe way), none met on main:
+    - a vanilla type inside the instanced one with a block of the same name
+      as a guarded mod block: vanilla's types are not read
+      (test_te_system_tab_bodies.py holds the skipped names to ones no
+      vanilla copy under gui/ declares);
+    - a `visible` that reaches the guard's widget from an override on an
+      instance further out (of a type that draws this one).
+    The guard itself is still read where it is written (guard_spans): an
+    instance that carries te_own_country_only and whose own override sets a
+    `visible` on it is skipped whole, before this is asked."""
+    guards, occ, held, hold, universes, by_block = {}, {}, {}, {}, {}, {}
 
-    def fills_a_drawn_block(target, x, sets_visible):
-        if target not in merged:
+    def guard_set(name):
+        if name not in guards:
+            guards[name] = frozenset(guard_spans(types[name].body))
+        return guards[name]
+
+    def template_blocks(t):
+        """The block names a template declares, those it uses included."""
+        if t not in held:
+            found, seen, todo = set(), set(), [t]
+            while todo:
+                u = todo.pop()
+                if u in templates and u not in seen:
+                    seen.add(u)
+                    found.update(x for x, _ in _block_sites(templates[u].body))
+                    todo += [v for v, _ in _using_sites(templates[u].body)]
+            held[t] = found
+        return held[t]
+
+    def occurrences(name):
+        """(block name, offset) for each block a type's own body offers an
+        override: a `block "x"`, or one of a template it uses, at the `using`."""
+        if name not in occ:
+            body = types[name].body
+            found = list(_block_sites(body))
+            for t, pos in _using_sites(body):
+                found += [(x, pos) for x in template_blocks(t)]
+            occ[name] = found
+        return occ[name]
+
+    def drawn(name, pos, voided):
+        """Whether the panel draws what lands at a body offset, with the
+        guards in `voided` replaced."""
+        if not voided:
+            return name in view.open and not in_spans(pos, view.skip[name])
+        left = [sp for sp in guard_set(name) if (name, sp) not in voided]
+        if name in view.open:  # less a root guard the walk found replaced
+            left = [sp for sp in left if sp in view.skip[name]]
+        return not in_spans(pos, left)
+
+    def universe(key):
+        """For a set of type names: all they draw; within those, each type's
+        places (type -> [(the type it is in, its brace)]) and derived types."""
+        if key not in universes:
+            names = type_closure(key, types)
+            sites, derived = {}, {}
+            for name in names:
+                for child, brace in _child_sites(types[name].body):
+                    if child in names:
+                        sites.setdefault(child, []).append((name, brace))
+                if types[name].base in names:
+                    derived.setdefault(types[name].base, []).append(name)
+            universes[key] = (names, sites, derived)
+        return universes[key]
+
+    def blocks_in(key, x):
+        """Each `block "x"` in a universe: (type, offset)."""
+        if key not in by_block:
             found = {}
-            for name in type_closure({target}, types):
-                for block, (shown, voids) in blocks_of(name).items():
-                    was = found.get(block, (False, False))
-                    found[block] = (was[0] or shown, was[1] or voids)
-            merged[target] = found
-        return merged[target].get(x, (True, True))[1 if sets_visible else 0]
+            for name in universe(key)[0]:
+                for block, pos in occurrences(name):
+                    found.setdefault(block, []).append((name, pos))
+            by_block[key] = found
+        return by_block[key].get(x, ())
+
+    def root_guards(name):
+        """The guard on a type's root, and on its bases' roots."""
+        out, seen = set(), set()
+        while name in types and name not in seen:
+            seen.add(name)
+            if (0, len(types[name].body)) in guard_set(name):
+                out.add((name, (0, len(types[name].body))))
+            name = types[name].base
+        return out
+
+    def carriers(name, pos, key, seen=frozenset()):
+        """The guards a `visible` replaces when it lands with the block at a
+        body offset, as (type, span): the guard of the widget the block is
+        written in. At a type's root that is the type's own root guard and
+        each place in the universe that instances the type, or a type derived
+        from it, with the guard on the instance."""
+        if (name, pos) not in hold:
+            hold[(name, pos)] = _holder(types[name].body, pos)
+        (w, via), body, out = hold[(name, pos)], types[name].body, set()
+        if w == 0:
+            _, sites, derived = universe(key)
+            inst, todo, done = types[name].base, [name], set()
+            while todo:
+                n = todo.pop()
+                if n in done:
+                    continue
+                done.add(n)
+                out |= root_guards(n)
+                for parent, brace in sites.get(n, ()):
+                    span = (brace, _close(types[parent].body, brace))
+                    if span in guard_set(parent):
+                        out.add((parent, span))
+                todo += derived.get(n, ())
+        else:
+            span = (w, _close(body, w))
+            if span in guard_set(name):
+                out.add((name, span))
+            opener = _OPENER.search(body, max(0, w - 120), w + 1)
+            inst = opener.group(1) if opener else None
+            if inst in types:  # written in an instance: on that type's root
+                out |= root_guards(inst)
+        if inst in types:  # in a blockoverride of that instance: where its block is
+            for y in via:
+                if (inst, y) not in seen:
+                    for other in type_closure({inst}, types):
+                        for block, p in occurrences(other):
+                            if block == y:
+                                out |= carriers(other, p, key, seen | {(inst, y)})
+        return out
+
+    def sets_visible(body, brace, end):
+        props = _lands(body[brace + 1:end])
+        return bool(_OWN_VISIBLE.search(props) or _USING.search(props))
 
     # the names with a block not drawn somewhere: no other override can be dead
-    maybe = {x for name in type_closure(view.open, types) for x, shown in blocks_of(name).items() if not shown[0]}
+    maybe = {x for name in type_closure(view.open, types) for x, pos in occurrences(name) if not drawn(name, pos, ())}
     out = {}
     for name in view.open:
         body, skip = types[name].body, view.skip[name]
         root = (0, len(body))
         if root in skip:
             continue
-        spans = []
+        instances, spans = set(), []
         for m in _OVERRIDE_OPEN.finditer(body):
-            if m.group(1) not in maybe or in_spans(m.start(), skip):
-                continue
-            a, b = enclosing_block(body, m.start())
+            if m.group(1) in maybe and not in_spans(m.start(), skip):
+                instances.add(enclosing_block(body, m.start()))
+        for a, b in sorted(instances):
             if (a, b) == root:
                 target = types[name].base
             else:
@@ -968,17 +1108,46 @@ def _dead_overrides(view, types, templates):
                 target = opener.group(1) if opener else None
             if target not in types:
                 continue
-            x, end = m.group(1), _close(body, m.end() - 1)
-            # a block the instance's own contents declare (an override that
-            # holds `block "x"`) is one this override may fill too
-            if any(d.group(1) == x and not in_spans(d.start(), skip) for d in _BLOCK_DEF.finditer(body, a, b)):
-                continue
-            props = own_props(body[m.end():end])
-            if not fills_a_drawn_block(target, x, bool(_OWN_VISIBLE.search(props) or _USING.search(props))):
-                spans.append((m.end() - 1, end))
+            # what this instance draws: its type, and the mod types its own contents hold
+            key = frozenset({target} | {c for c, brace in _child_sites(body)
+                                        if a < brace < b and c in types and not in_spans(brace, skip)})
+            local = [(x, pos) for x, pos in occurrences(name) if a < pos < b]
+            own = _own_overrides(body, a, b)
+            setters, chain = [x for x, _, brace, end in own if sets_visible(body, brace, end)], target
+            for _ in range(8):  # and the overrides its type and that type's bases make at their roots
+                if chain not in types:
+                    break
+                other = types[chain].body
+                setters += [x for x, _, brace, end in _own_overrides(other, 0, len(other))
+                            if sets_visible(other, brace, end)]
+                chain = types[chain].base
+            voided = set()
+            for x in set(setters):
+                for other, pos in list(blocks_in(key, x)) + [(name, pos) for block, pos in local if block == x]:
+                    voided |= carriers(other, pos, key)
+            for x, start, brace, end in own:
+                if x not in maybe or in_spans(start, skip):
+                    continue
+                mine = [pos for block, pos in local if block == x]
+                fills = blocks_in(key, x)
+                if not fills and not mine:
+                    continue  # a block no mod type defines
+                if any(drawn(name, pos, voided) for pos in mine) or any(drawn(t, pos, voided) for t, pos in fills):
+                    continue
+                spans.append((brace, end))
         if spans:
             out[name] = tuple(spans)
     return out
+
+
+def skipped_overrides(view, types):
+    """The blockoverrides a View skips because they fill no block the panel
+    draws (_dead_overrides), as sorted (type, block name) pairs."""
+    out = set()
+    for name, spans in view.overrides.items():
+        for a, _ in spans:
+            out.add((name, _BLOCK_OPENER.search(types[name].body, max(0, a - 120), a + 1).group(2)))
+    return sorted(out)
 
 
 def open_types(names, types):
@@ -1104,7 +1273,11 @@ def _observer_open(names, types, view):
     and none that holds on the type's own root, which an instance that sets
     its own `visible` replaces. A base type is as open as the type derived
     from it."""
-    bare, todo = set(), [n for n in sorted(names) if n in types]
+    bare, todo, rooted = set(), [n for n in sorted(names) if n in types], {}
+
+    def tests(body):  # most bodies have no gate to look for
+        return "IsObserver" in body or _IS_VALID in body
+
     while todo:
         name = todo.pop()
         if name in bare:
@@ -1113,12 +1286,13 @@ def _observer_open(names, types, view):
         body, skip = types[name].body, view.skip.get(name, ())
         if (0, len(body)) in skip:
             continue
-        for m in _CHILD.finditer(body):
-            child, brace = m.group(1), m.end() - 1
-            if child not in types or child in bare or in_spans(brace, skip) or _observer_gate(body, brace + 1):
+        gates = tests(body)
+        for child, brace in _child_sites(body):
+            if child not in types or child in bare or in_spans(brace, skip) or (gates and _observer_gate(body, brace + 1)):
                 continue
-            own = own_props(body[brace + 1:_close(body, brace)])
-            if _OWN_VISIBLE.search(own) or not OBSERVER_GATE.search(own_props(types[child].body)):
+            if child not in rooted:
+                rooted[child] = tests(types[child].body) and bool(OBSERVER_GATE.search(own_props(types[child].body)))
+            if not rooted[child] or _OWN_VISIBLE.search(own_props(body[brace + 1:_close(body, brace)])):
                 todo.append(child)
         if types[name].base in types:
             todo.append(types[name].base)
