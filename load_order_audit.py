@@ -456,7 +456,8 @@ def _check_key(et, db, key, rule, o_ops, v_ops, guesses, o_files, value_of, serv
 
 def _check_db(ms, et: str, db: str, rule, mod_path: str, o_files: list, vanilla,
               result: AuditResult) -> None:
-    o_scan = emo._scan_db(mod_path, db, o_files, result.scan_warnings, OURS, _SCAN_CACHE)
+    o_scan = emo._scan_db(mod_path, db, o_files, result.scan_warnings, OURS,
+                          cache=_SCAN_CACHE)
     server_holds_vanilla = et in VANILLA_COMMON_DIRS
     v_scan = vanilla.scan(db)               # None without the game files
     if vanilla.source(db) is None and not server_holds_vanilla:

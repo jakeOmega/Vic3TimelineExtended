@@ -485,8 +485,9 @@ def _tokens(text: str) -> list[tuple[str, int]]:
     return out
 
 
-def _block_text(tokens, start: int, cap: int = 200) -> str:
-    """The tokens of the block opening at tokens[start], joined by spaces."""
+def _block_text(tokens, start: int, cap: Optional[int] = 200) -> str:
+    """The tokens of the block opening at tokens[start], joined by spaces, cut
+    to `cap` characters (None: the whole block)."""
     depth, parts = 0, []
     for j in range(start, len(tokens)):   # not tokens[start:]: a copy per block is quadratic
         tok = tokens[j][0]
@@ -498,13 +499,15 @@ def _block_text(tokens, start: int, cap: int = 200) -> str:
             if depth == 0:
                 break
     text = " ".join(parts)
-    return text if len(text) <= cap else text[: cap - 1] + "…"
+    return text if cap is None or len(text) <= cap else text[: cap - 1] + "…"
 
 
-def scan_script(text: str) -> tuple[list[Entry], list[str]]:
+def scan_script(text: str, block_cap: Optional[int] = 200) -> tuple[list[Entry], list[str]]:
     """Every depth-0 key of a script file, with the depth-1 keys of each
-    block. `@name` constants are skipped at both depths (file-local). Returns
-    (entries, warnings)."""
+    block. `@name` constants are skipped at both depths (file-local). A
+    depth-1 block's value is its tokens joined by spaces, cut to `block_cap`
+    characters (None keeps it whole, for a caller that reads the list).
+    Returns (entries, warnings)."""
     warnings = []
     if text.startswith("﻿"):
         warnings.append("doubled UTF-8 BOM: the engine reads the second as part of the "
@@ -548,7 +551,7 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
                     entries.append(entry)
                     current = entry if is_block else None
                 elif depth == 1 and current is not None:
-                    value = _block_text(tokens, i + 2) if is_block else value_tok
+                    value = _block_text(tokens, i + 2, block_cap) if is_block else value_tok
                     current.children.append((tok, line, value))
             i += 2 if is_block else 3
             continue
@@ -1203,21 +1206,23 @@ class DbScan:
     entries: dict = field(default_factory=lambda: defaultdict(list))  # key -> [(path, Entry)]
 
 
-def _scan_file(full: str, cache: Optional[dict]) -> tuple[list[Entry], list[str]]:
-    """scan_script() of one file. With `cache` ({path: (size, mtime, scan)}), a
-    file whose size and mtime stand since it was last scanned isn't read again."""
+def _scan_file(full: str, cache: Optional[dict],
+               block_cap: Optional[int] = 200) -> tuple[list[Entry], list[str]]:
+    """scan_script() of one file. With `cache` ({(path, block_cap): (stamp,
+    scan)}), a file whose size and mtime stand since it was last scanned isn't
+    read again."""
     if cache is None:
-        return scan_script(read_text(full))
+        return scan_script(read_text(full), block_cap)
     st = os.stat(full)
     stamp = (st.st_size, st.st_mtime_ns)
-    hit = cache.get(full)
+    hit = cache.get((full, block_cap))
     if hit is None or hit[0] != stamp:
-        hit = cache[full] = (stamp, scan_script(read_text(full)))
+        hit = cache[(full, block_cap)] = (stamp, scan_script(read_text(full), block_cap))
     return hit[1]
 
 
 def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str,
-             cache: Optional[dict] = None) -> DbScan:
+             block_cap: Optional[int] = 200, cache: Optional[dict] = None) -> DbScan:
     """Every key of `db`'s files, with its file. `cache` (see _scan_file) is
     for a caller that scans one mod again and again (load_order_audit, on
     every reload); the entries it holds are shared, not copied."""
@@ -1227,7 +1232,7 @@ def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str,
             continue
         full = os.path.join(root, "common", *db.split("/"), *rel.split("/"))
         try:
-            entries, w = _scan_file(full, cache)
+            entries, w = _scan_file(full, cache, block_cap)
         except OSError as exc:
             warnings.append({"side": side, "file": f"common/{db}/{rel}", "warning": str(exc)})
             continue
