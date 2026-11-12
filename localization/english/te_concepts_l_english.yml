@@ -662,7 +662,7 @@
  colonial_pressure_movement_radicalism_desc:0 "Colonial [concept_ch_instability] is radicalizing civil rights advocates, who see the empire's weakness as an opportunity for change."
  colonial_reparations_modifier:0 "Colonial Reparations Paid"
  colonial_reparations_modifier_desc:0 "The government is paying reparations to a former colony, acknowledging past wrongs at significant financial cost."
- colonial_stability_bar_desc:0 "100: empire integrated. 0: collapse."
+ colonial_stability_bar_desc:0 "Colonial Stability: collapse at 0"
  colonial_unrest_suppressed_modifier_desc:0 "Military force has been used to suppress unrest in a colonial territory, at the cost of our international reputation."
  colonial_war_exhaustion_modifier_desc:0 "We have withdrawn from a costly colonial war. The retreat has damaged our reputation and the credibility of our military projection abroad."
  commonwealth_legacy_modifier:0 "Commonwealth Legacy"
