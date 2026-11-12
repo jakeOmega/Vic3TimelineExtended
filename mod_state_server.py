@@ -5977,11 +5977,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movement-stances": lambda: self._movement_stances(rest, params),
             # Party types and their merged join_weight terms (#1164)
             "parties": lambda: self._parties(rest, params),
+            "references": lambda: self._references(rest),
             # Vanilla's own script, read from the installed game (#1563)
             "vanilla-refs": lambda: self._vanilla_refs(rest, params),
             "culture-reads": lambda: self._culture_reads(rest, params),
             "formables": lambda: self._formables(params),
-            "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             # Another mod's entries that land on ours, and which side wins (#1170)
             "external-mod-overlap": lambda: self._external_mod_overlap(rest, params),
@@ -6109,14 +6109,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/companies?flavored=yes|no&source=mod|vanilla|all", "desc": "Merged company rosters, prosperity effects, flagships and per-flavored-bucket statistics."},
                 {"path": "/building-companies/<building_id>", "desc": "Companies listing a building in their roster or extension roster."},
                 {"path": "/goods", "desc": "Goods catalog."},
+                {"path": "/vanilla-refs/<name>?depth=N", "desc": "Vanilla's own script, read from the installed game (#1563; 503 without one): the top-level vanilla entities in common/ and events/ whose body mentions <name>, N steps up, and the journal entries, on-actions and decisions among them. The first call reads the install (half a minute or more)."},
+                {"path": "/culture-reads/<culture>?as=primary|pop|homeland|any", "desc": "Where vanilla tests cu:<culture> (#1563, needs the game): one row per file and entity with count, the keys the tests sit under, and the journal entries the entity belongs to or is reached from."},
+                {"path": "/formables?lists_culture=<culture>", "desc": "country_formation tags, vanilla's and the mod's (#1563, needs the game): the cultures the tag's country definition lists, exists_at_start, use_culture_states, source vanilla|mod|both."},
                 {"path": "/combat-units", "desc": "Combat unit type/group catalog."},
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
                 {"path": "/parties/<key?>?desc=<desc>", "desc": "Party types (mod ∪ vanilla, #1164): source vanilla|mod|both, defining files, the file whose join_weight the merged party carries (an injected join_weight replaces the field), and join_weight_terms, the desc of each term in source order (a desc-less term as `value = 0` / `if = {...}`). ?desc= keeps the parties naming it; /<key> adds per-term detail. Merged AST: /raw/Parties/<key>."},
-                {"path": "/vanilla-refs/<name>?depth=N", "desc": "Vanilla's own script, read from the installed game (#1563; 503 without one): the top-level vanilla entities in common/ and events/ whose body mentions <name>, N steps up, and the journal entries, on-actions and decisions among them. The first call reads the install (half a minute or more)."},
-                {"path": "/culture-reads/<culture>?as=primary|pop|homeland|any", "desc": "Where vanilla tests cu:<culture> (#1563, needs the game): one row per file and entity with count, the keys the tests sit under, and the journal entries the entity belongs to or is reached from."},
-                {"path": "/formables?lists_culture=<culture>", "desc": "country_formation tags, vanilla's and the mod's (#1563, needs the game): the cultures the tag's country definition lists, exists_at_start, use_culture_states, source vanilla|mod|both."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
@@ -7734,6 +7734,24 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if desc is None or desc in row["join_weight_terms"]
         ]
 
+    # ---- analytical: references -------------------------------------------
+    def _references(self, parts):
+        """GET /references/<key>  - find all entities that reference a given key."""
+        if not parts:
+            raise BadRequest("Provide a key, e.g. /references/nuclear_fission")
+        key = parts[0]
+        results = defaultdict(list)
+        for etype in ms.mod_parsers:
+            data = ms.get_data(etype)
+            if not data:
+                continue
+            for eid, raw in data.items():
+                if _data_contains_string(raw, key):
+                    results[etype].append(
+                        {"type": etype, "id": eid, "name": ms.localize(eid)}
+                    )
+        return dict(results) if results else {"message": f"No references found for '{key}'"}
+
     def _vanilla_script(self):
         """The installed game's script for the /vanilla-refs family (#1563), read once per install state. A
         machine without the game gets a 503 that says so: these folders are not in vanilla_parsed/."""
@@ -7781,24 +7799,6 @@ class ModStateHandler(BaseHTTPRequestHandler):
         vanilla_refs, vs = self._vanilla_script()
         culture = (params.get("lists_culture") or [None])[0]
         return vanilla_refs.formables(vs, culture, Path(mod_path))
-
-    # ---- analytical: references -------------------------------------------
-    def _references(self, parts):
-        """GET /references/<key>  - find all entities that reference a given key."""
-        if not parts:
-            raise BadRequest("Provide a key, e.g. /references/nuclear_fission")
-        key = parts[0]
-        results = defaultdict(list)
-        for etype in ms.mod_parsers:
-            data = ms.get_data(etype)
-            if not data:
-                continue
-            for eid, raw in data.items():
-                if _data_contains_string(raw, key):
-                    results[etype].append(
-                        {"type": etype, "id": eid, "name": ms.localize(eid)}
-                    )
-        return dict(results) if results else {"message": f"No references found for '{key}'"}
 
     # ---- analytical: tech tree --------------------------------------------
     def _tech_tree(self, parts):
