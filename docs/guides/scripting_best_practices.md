@@ -3795,6 +3795,10 @@ From 1.15 every `$key$` splice inside a single-quoted argument of a `[...]` data
 
 1.15 adds a `common/glossary/` database (`glossary_x = {}`, with `glossary_x` and `glossary_x_desc` loc) and moved six concepts there: `concept_zaibatsu`, `concept_gongen`, `concept_boddhisattva`, `concept_house_of_obrenovic`, `concept_house_of_karadjordjevic` and `concept_bio_tomas_de_zumalacarregui`. Link one as `[glossary_zaibatsu]` (`[glossary_zaibatsu|l]` lowercases it), or with display text `[Glossary('glossary_ri','ri')]`. A `[concept_zaibatsu]` left behind is an unregistered concept, which `concept_reference_audit` flags.
 
+### A historical or setting term gets a glossary entry, a mechanic gets a concept
+
+The two databases split by what the word names. A game concept (`common/game_concepts/`) explains a rule the player plans around: the policy rate, a UN veto, orbital debris. A glossary entry explains setting vocabulary that a text uses but no rule depends on: a historical body (the Sejm, the zemstvo), an event (the Decembrist Revolt), a foreign word (zaibatsu). So a new historical or setting term in event or description text becomes a glossary entry (`common/glossary/`, `glossary_x = {}` with `glossary_x` and `glossary_x_desc` loc), and a term that names something the script does stays a concept: Kessler syndrome is the mechanic `concept_orbital_debris`, so it stays a concept. Link a vanilla entry before writing a mod one: `building_sumitomo_besshi_mine_desc` links vanilla's `[glossary_zaibatsu|l]` and the mod defines none. `scripts/analysis/concept_term_audit.py` lists plain-text mentions of glossary names (vanilla's from `vanilla_parsed/` when no game is installed, and the mod's) beside concept names, as candidates to link (#1438).
+
 ## Defined-But-Unused Modifiers
 
 A static modifier definition in `common/static_modifiers/` is dead code unless it appears in at least one `add_modifier`, `add_static_modifier`, or `name = X` reference somewhere. The mod's `colonial_empire_solidified_modifier` was defined but never applied (the JE's monthly pulse only added `_under_pressure` and `_crumbling`) — easy to miss.
