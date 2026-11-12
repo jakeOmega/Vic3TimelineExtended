@@ -376,7 +376,7 @@ advanced_body_armor = {
 
 rapid_deployment_forces = {
 	# Stealth Reconnaissance Drone Carrier, Expeditionary Sea Bases units,
-	# Advanced Logisitical Support mobilization option
+	# Advanced Logistical Support mobilization option
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/rapid_deployment_forces.dds"
 	category = military
@@ -402,7 +402,7 @@ rapid_deployment_forces = {
 }
 
 globalization = {
-	# Global Ports PM for Ports, Just-in-Time Logisitics PM for Trade Centers,
+	# Global Ports PM for Ports, Just-in-Time Logistics PM for Trade Centers,
 	# Securitization and Derivatives law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/globalization.dds"
