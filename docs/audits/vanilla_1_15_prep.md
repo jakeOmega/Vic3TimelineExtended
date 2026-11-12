@@ -184,7 +184,7 @@ Added 2026-10-30, from the changelog and digest:
 - The syntax for alternative names of goods, buildings, religions, cultures, interest groups and subject types.
 - How monument trivia is defined.
 - Whether `map_color` takes a scope path such as a `color` link.
-- Whether a non-draft `create_treaty` with `state_transfer` moves the state on creation.
+- Whether a non-draft `create_treaty` with `state_transfer` moves the state on creation. Built on it with a self-check and a direct fallback (#1457): `TE_SELF_CHECK OK|BROKEN treaty_state_transfer` and `treaty_reparations`, `docs/testing/vanilla-1-15-playtest.md`.
 - Whether `MAX_MANDATES` caps `country_power_bloc_formation_mandates_add`.
 - Whether the Five-Year Plan pays through investment-pool income.
 - Whether the Electoral Confidence notification fires on scripted changes.

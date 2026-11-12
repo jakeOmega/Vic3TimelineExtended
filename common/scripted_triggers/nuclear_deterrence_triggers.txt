@@ -1987,11 +1987,12 @@ nd_can_issue_proliferation_ultimatum = {
 #     (115_nuclear_guarantee.txt), read without a draft. possible's: the
 #     guarantor armed, the two at peace, relations above Poor, not the
 #     guarantor's direct subject (its umbrella covers those). can_ratify's:
-#     no guarantee from it already (the line above), military ties in force
-#     (an alliance or defensive pact, its Guarantee Independence of us, or a
-#     shared power bloc), and outgunning us as the world sees it, which an
-#     armed guarantor of a country not believed armed always does
-#     (nd_believed_stockpile is 0). Keep these in step with the article;
+#     no guarantee from it already (the line above) and outgunning us as the
+#     world sees it; can_propose's: military ties in force (an alliance or
+#     defensive pact, its Guarantee Independence of us, or a shared power
+#     bloc). An armed guarantor of a country not believed armed always
+#     outguns it (nd_believed_stockpile is 0). Keep these in step with the
+#     article;
 #   * and the engine's own word on the treaty .25 creates
 #     (nd_bp_can_treaty_guarantee, the Budapest offer's guarantee).
 nd_proliferation_guarantee_candidate = {
