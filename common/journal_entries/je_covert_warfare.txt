@@ -233,9 +233,10 @@ je_covert_warfare = {
 			# standing tier, the capacity bar and the overview tooltip. It is a
 			# pass over every country, the same for every holder, so the first
 			# holder to pulse takes it and the lock spares the rest for 25
-			# days, about one census a month. Every holder took it before:
-			# about 250 passes a month, the pulse's largest part in a 1931 game
-			# (docs/audits/late_game_performance.md).
+			# days: one census each 1st, when the entries pulse together. Every
+			# holder took it before, in the same frame, the last one's figure
+			# kept: about 250 passes a month, the pulse's largest part in a 1931
+			# game (docs/audits/late_game_performance.md).
 			if = {
 				limit = { NOT = { has_global_variable = iw_max_ic_lock } }
 				set_global_variable = { name = iw_max_ic_lock value = yes days = 25 }

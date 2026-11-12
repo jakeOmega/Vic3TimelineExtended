@@ -39,9 +39,9 @@ class CovertWorldMaximum(unittest.TestCase):
         self.assertIn("limit = { NOT = { has_global_variable = iw_max_ic_lock } }", body)
         days = re.search(r"set_global_variable = \{ name = iw_max_ic_lock value = yes days = (\d+) \}", body)
         self.assertIsNotNone(days)
-        # Under a month: the monthly pulses are spread over the month, so a lock of 30 days or more
-        # would skip some months.
-        self.assertLess(int(days.group(1)), 30)
+        # Journal entries pulse together on the 1st, and February has 28 days: a lock of 28 days set on
+        # 1 February is a race on 1 March, and a longer one skips March's census.
+        self.assertLessEqual(int(days.group(1)), 27)
         self.assertNotIn("ordered_country", _flat(pulse).replace(body, ""))
 
     def test_only_the_display_reads_the_maximum(self):
@@ -90,6 +90,9 @@ class CulturalHegemonyMilestones(unittest.TestCase):
         pulse = _monthly_effect("common/journal_entries/je_cultural_hegemony.txt", "je_cultural_hegemony")
         gates = [b for b in _direct_blocks(pulse, "if") if f"id = {event_id} " in _flat(b) + " "]
         self.assertEqual(len(gates), 1, f"{event_id} is not tried behind one gate")
+        # And nowhere else in the pulse, ungated.
+        self.assertEqual(len(re.findall(rf"id = {re.escape(event_id)}(?![\w.])", _flat(pulse))), 1,
+                         f"{event_id} is tried more than once in the pulse")
         return _flat(field(gates[0], "limit"))
 
     def _trigger(self, event_id: str) -> str:
