@@ -514,9 +514,6 @@ remove_banking_cooperative_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = cooperative_worker_buyout        MARK = off_cw_worker_buyout }
 }
 
-# banking_policy_rate_hike is no longer a market tool (monetary_policy_design.md
-# §18). A save that still holds it is cleaned up by the one-shot in
-# je_banking.txt's monthly pulse, which does not depend on a law change.
 remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_open_market_ops                  MARK = off_cb_open_market_ops }
 	banking_strip_tool = { MODIFIER = banking_countercyclical_capital_buffer   MARK = off_cb_countercyclical_buffer }

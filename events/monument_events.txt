@@ -1785,33 +1785,6 @@ monument_events.31 = {
 }
 
 # ============================================================================
-# Event 32: an older save's monument (sites spec 2026-10-18 §3.5)
-# ============================================================================
-# Hidden plumbing, a state event from the refresh (gm_country_refresh), which
-# tooltips walk without writing: a finished monument from before construction
-# sites is recorded and its building reset to level 1, or made a site at its
-# level (gm_state_migrate). Not while levels of it are still being built:
-# removing the building would cancel them; the refresh asks again.
-monument_events.32 = {
-	type = state_event
-	hidden = yes
-
-	trigger = {
-		gm_system_enabled = yes
-		gm_state_needs_migration = yes
-	}
-
-	immediate = {
-		if = {
-			limit = {
-				b:building_grand_monument ?= { is_under_construction = no }
-			}
-			gm_state_migrate = yes
-		}
-	}
-}
-
-# ============================================================================
 # Event 30: choices on a monument beside another (ageing spec 2026-10-16 §4.3)
 # ============================================================================
 # Hidden plumbing, a state event from gm_mon_order_choice: Pull Down and

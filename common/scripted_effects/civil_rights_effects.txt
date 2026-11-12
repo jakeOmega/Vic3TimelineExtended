@@ -13,9 +13,9 @@ save_civil_rights_movement_scope = {
 }
 
 # Defensive zero-init for the six cr_*_months trackers consumed by je_civil_rights's
-# on_complete / on_fail / on_monthly_pulse. Written on the premise that an entry a
+# outcomes and on_monthly_pulse. Written on the premise that an entry a
 # revolution's winner inherits (can_revolution_inherit = yes) skips immediate, so the
-# trackers might not exist when on_fail fires. Saves (2026-09-25) showed that immediate
+# trackers might not exist when a collapse outcome fires. Saves (2026-09-25) showed that immediate
 # does run again on an inherited entry, and the winner receives the loser's cr_* variables
 # too (scripting_best_practices.md § "What a Civil War's Winner Inherits"). The init is now
 # belt-and-braces, and harmless. What a winner keeps is handled by the revolution
@@ -43,14 +43,14 @@ cr_ensure_tracker_vars_effect = {
 # bar-suppression marker (no duration) applied at 12 months of cooptation.
 #
 # It also ends the run: the six cr_policy_* mirrors go with their modifiers, and
-# cr_run_in_progress is removed so that the next activation (after on_invalid;
-# on_complete / on_fail also set civil_rights_resolved, which blocks one) starts
+# cr_run_in_progress is removed so that the next activation (after the invalid
+# outcome; the victory and collapse outcomes also set civil_rights_resolved, which blocks one) starts
 # with zeroed counters. The cr_*_months counters themselves are left in place:
-# the resolution events read them after on_complete / on_fail has fired them
+# the resolution events read them after the outcome has fired them
 # (movement_events_te.100's desc reads cr_suppression_months and
 # cr_segregationist_months).
 #
-# Called from je_civil_rights's on_complete, on_fail, on_invalid. Each removal
+# Called from every je_civil_rights outcome's effect. Each removal
 # is guarded: remove_modifier on a modifier the country does not hold is not a
 # no-op, it logs "Timed modifier X ... not found" to error.log.
 cr_je_cleanup_effect = {
@@ -79,14 +79,14 @@ cr_je_cleanup_effect = {
 # (scripting_best_practices.md § "What a Civil War's Winner Inherits"; audit F4),
 # so this system's state lives in variables and its modifiers are rebuilt from them:
 #
-#   civil_rights_resolved   set by je_civil_rights's on_complete and on_fail and
+#   civil_rights_resolved   set by je_civil_rights's victory and collapse outcomes and
 #                           never removed. The entry's is_shown_when_inactive and
 #                           possible require its absence, so a winner, which gets
 #                           a fresh record, does not start the struggle over. In
 #                           normal play it changes nothing: a completed or failed
 #                           record is never re-activated (vanilla je_kaiserforum
 #                           relies on that; nothing stops its possible afterwards).
-#                           on_invalid does not set it: nothing was won or lost.
+#                           The invalid outcome does not set it: nothing was won or lost.
 #   cr_run_in_progress      set by immediate when a run starts, removed by
 #                           cr_je_cleanup_effect when it ends. An inherited active
 #                           entry re-runs immediate after the merge; the marker
@@ -241,7 +241,7 @@ cr_outcome_monthly_update = {
 	# also a mid-struggle event's (.16), so a hollow victory's option B (and any
 	# failure through .230-.232, or a reward that has already expired) cannot be
 	# recognised, and such a country stays unguarded. New play never takes this
-	# branch: on_complete / on_fail set civil_rights_resolved before the event
+	# branch: the outcomes set civil_rights_resolved before the event
 	# option adds the modifier.
 	if = {
 		limit = {
