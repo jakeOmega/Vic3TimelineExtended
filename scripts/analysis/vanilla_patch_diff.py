@@ -45,9 +45,11 @@ Subcommands:
       - vanilla's diff of each changed block the mod restates.
       A key is looked up in its whole folder, so an entry vanilla moved to
       another file unchanged is not a change. Not listed: a CHANGED entry the
-      mod only uses by name, GUI, loc, and what a changed `@constant` does to
-      the entries that read it. It exits 2, printing nothing, when a commit
-      has no script under `game/common` or the mod root has none.
+      mod only uses by name, a removed name inside a longer one
+      (`goods_output_<good>_add`), GUI, loc, and what a changed `@constant`
+      does to the entries that read it. It exits 2, printing nothing, when a
+      commit has no script under `game/common` or the mod root has none, and
+      says so when the mirror tracks no script under `game/gfx`.
 
 `--mod-uses` greps the mod (common/ events/ gui/ localization/english/) for
 every REMOVED name and prints the hits; comment-only hits are counted apart.
@@ -74,6 +76,7 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 import external_mod_overlap as emo  # noqa: E402
+from mod_state import split_loc_line  # noqa: E402
 from paradox_file_parser import INJECT_DIRECTIVES, REPLACE_DIRECTIVES  # noqa: E402
 
 # Section header per engine-doc log. effects/triggers use `## name`,
@@ -264,9 +267,12 @@ def diff_parsed(new_dir, old_ref=None, old_dir=None, fields_out=None):
 EVENTS = "events"
 DEFINES = "defines"
 _EVENT_ID = re.compile(r"^[\w\-]+\.[\w\-]+$")
-# A name as script, GUI and loc write one: no leading or trailing `.` or `-`,
-# so `law_x.` at the end of a sentence is `law_x` and `ns.4.t` is not `ns.4`.
+# A run of name characters as script, GUI and loc write one, dots kept and no
+# leading or trailing `.` or `-`: `law_x.` at the end of a sentence is `law_x`,
+# `owner.some_value` and `ns.4.t` are one token each (`_names_in` splits them).
 _NAME_TOKEN = re.compile(r"\w(?:[\w\-.]*\w)?")
+# A token ending in one of these is a file name: its stem is no use of a name.
+_FILE_EXTENSIONS = frozenset("dds png tga txt gui yml asset mesh anim bk2 ogg wav otf ttf".split())
 _DEFINE_READS = (re.compile(r"define:(\w+)\|(\w+)"),
                  re.compile(r"GetDefine\(\s*'(\w+)'\s*,\s*'(\w+)'\s*\)"))
 # A define value too common for "the same value under a new name" to mean a rename.
@@ -493,11 +499,37 @@ def _block_diff(row):
             if not l.startswith(("---", "+++"))]
 
 
+def _loc_code(raw):
+    """A loc line without its comment. Inside the quoted value `#` is
+    formatting; a comment is a line that starts with `#`, or what follows a
+    `#` after the closing quote (mod_state.split_loc_line's `trailing`)."""
+    if raw.lstrip().startswith("#"):
+        return ""
+    parts = split_loc_line(raw)
+    if parts is None:
+        return raw
+    cut = parts[2].find("#")
+    return raw if cut == -1 else raw[:len(raw) - len(parts[2]) + cut]
+
+
 def _code_lines(path, text):
-    """(line number, the line without its comment) for a mod file. A loc line
-    is kept whole: `#` is markup there."""
+    """(line number, the line without its comment) for a mod file."""
     for lineno, raw in enumerate(text.splitlines(), 1):
-        yield lineno, raw if path.endswith(".yml") else emo.strip_comment(raw)
+        yield lineno, _loc_code(raw) if path.endswith(".yml") else emo.strip_comment(raw)
+
+
+def _names_in(text):
+    """Every name `text` could be using: each token whole (an event id
+    `ns.4` is one, and `ns.4.t` is not it), and each dot-separated segment of
+    a scope chain, since `owner.some_value`, `b:building_x.level` and
+    `"scope:actor.some_value"` all read the name in the middle. (A `prefix:`
+    is no part of a token.) A file name's stem is left out."""
+    names = set()
+    for tok in _NAME_TOKEN.findall(text):
+        names.add(tok)
+        if "." in tok and tok.rpartition(".")[2] not in _FILE_EXTENSIONS:
+            names.update(tok.split("."))
+    return names
 
 
 def define_reads(mod_files, wanted):
@@ -521,19 +553,32 @@ def define_reads(mod_files, wanted):
 
 
 def name_uses(mod_files, wanted):
-    """{name: ['file:line', ...]} for the whole-name uses of the `wanted`
-    names anywhere in the mod's script, GUI and loc, comments apart. By name
-    only: a goods `radio` and a technology `radio` are one name."""
+    """{name: ['file:line', ...]} for the uses of the `wanted` names anywhere
+    in the mod's script, GUI and loc, comments apart: as a whole token or as
+    one segment of a dotted scope chain (`_names_in`). By name only: a goods
+    `radio` and a technology `radio` are one name. A name inside a longer
+    one (`goods_output_<good>_add`) is not a use."""
     hits = collections.defaultdict(list)
     for path in sorted(mod_files):
         text = mod_files[path]
-        if wanted.isdisjoint(_NAME_TOKEN.findall(text)):
+        if wanted.isdisjoint(_names_in(text)):
             continue
         for lineno, code in _code_lines(path, text):
-            for tok in set(_NAME_TOKEN.findall(code)):
-                if tok in wanted:
-                    hits[tok].append(f"{path}:{lineno}")
+            for name in sorted(wanted.intersection(_names_in(code))):
+                hits[name].append(f"{path}:{lineno}")
     return hits
+
+
+def gfx_directives(mod_files):
+    """['file:line DIRECTIVE:key', ...] for the mod's directives in gfx/
+    script: what goes unchecked when the mirror tracks no script there."""
+    out = []
+    for path in sorted(mod_files):
+        group = group_of(path)
+        if group and path.startswith("gfx/"):
+            out.extend(f"{path}:{b.line} {b.directive}:{b.key}"
+                       for b in blocks_in(group, mod_files[path])[0] if b.directive)
+    return out
 
 
 def sweep_targets(old_files, new_files, mod_files):
@@ -835,11 +880,11 @@ def read_blobs(repo, names):
 
 
 def read_vanilla_pair(repo, old_ref, new_ref):
-    """(old files, new files, number of files that differ): vanilla's script at
-    two commits of the mirror as {path below `game/`: text}, for every file of
-    each folder in which some file differs (the folders `sweep_targets` needs).
-    GitError when a commit has no script under `game/common`: not the mirror,
-    or not its layout."""
+    """(old files, new files, number of files that differ, the refs with no
+    script under `game/gfx`): vanilla's script at two commits of the mirror as
+    {path below `game/`: text}, for every file of each folder in which some
+    file differs (the folders `sweep_targets` needs). GitError when a commit
+    has no script under `game/common`: not the mirror, or not its layout."""
     trees = []
     for ref in (old_ref, new_ref):
         tree = ls_tree(repo, resolve_commit(repo, ref))
@@ -848,32 +893,37 @@ def read_vanilla_pair(repo, old_ref, new_ref):
                            "reads the vanilla mirror, which keeps the game's files under game/")
         trees.append(tree)
     old_tree, new_tree = trees
+    no_gfx = [ref for ref, tree in zip((old_ref, new_ref), trees)
+              if not any(p.startswith("gfx/") for p in tree)]
     differing = [p for p in set(old_tree) | set(new_tree) if old_tree.get(p) != new_tree.get(p)]
     groups = {group_of(p) for p in differing} - {None}
     old_tree = {p: sha for p, sha in old_tree.items() if group_of(p) in groups}
     new_tree = {p: sha for p, sha in new_tree.items() if group_of(p) in groups}
     texts = read_blobs(repo, sorted(set(old_tree.values()) | set(new_tree.values())))
     return ({p: texts[sha] for p, sha in old_tree.items()},
-            {p: texts[sha] for p, sha in new_tree.items()}, len(differing))
+            {p: texts[sha] for p, sha in new_tree.items()}, len(differing), no_gfx)
 
 
 def read_mod_tree(mod_root, git_fallback=False):
     """{path below the mod root: text} for the files MOD_SCAN names, read from
-    disk. With `git_fallback`, a folder the checkout lacks (a sparse worktree
-    has no `gfx/`) is read from git's index instead; ask for that on this
-    repository only, since git runs the configuration of the repository it is
-    pointed at."""
+    disk. With `git_fallback`, a tracked file that a sparse checkout leaves
+    out (this repository's worktrees have no `gfx/`, or only part of it) is
+    read from git's index instead. Ask for that on this repository only: git
+    runs the configuration of the repository it is pointed at."""
     out = {}
     for top, ext in MOD_SCAN:
-        if os.path.isdir(os.path.join(mod_root, *top.split("/"))):
-            for rel in emo.list_files(mod_root, top):
-                if rel.endswith(ext):
-                    out[rel] = emo.read_text(os.path.join(mod_root, *rel.split("/")))
-        elif git_fallback and os.path.exists(os.path.join(mod_root, ".git")):
-            tracked = [p for p in _git(mod_root, "ls-files", "-z", "--", top).decode(
-                "utf-8", errors="replace").split("\0") if p.endswith(ext)]
-            texts = read_blobs(mod_root, [":" + p for p in tracked])
-            out.update((p, texts[":" + p]) for p in tracked)
+        for rel in emo.list_files(mod_root, top):
+            if rel.endswith(ext):
+                out[rel] = emo.read_text(os.path.join(mod_root, *rel.split("/")))
+    if git_fallback and os.path.exists(os.path.join(mod_root, ".git")):
+        # `ls-files -t` tags an entry the sparse checkout skips with `S`.
+        listing = _git(mod_root, "ls-files", "-t", "-z", "--", *(top for top, _ext in MOD_SCAN))
+        skipped = [record[2:] for record in listing.decode("utf-8", errors="replace").split("\0")
+                   if record.startswith("S ")]
+        wanted = [p for p in skipped if p not in out
+                  and any(p.startswith(top + "/") and p.endswith(ext) for top, ext in MOD_SCAN)]
+        texts = read_blobs(mod_root, [":" + p for p in wanted])
+        out.update((p, texts[":" + p]) for p in wanted)
     return out
 
 
@@ -984,7 +1034,8 @@ def _cmd_targets(args):
         return 2
     mod_root = args.mod_root
     try:
-        old_files, new_files, differing = read_vanilla_pair(repo, args.old_ref, args.new_ref)
+        old_files, new_files, differing, no_gfx = read_vanilla_pair(
+            repo, args.old_ref, args.new_ref)
         # git only on this repository (read_mod_tree): its sparse worktrees have no gfx/.
         mod_files = read_mod_tree(mod_root, git_fallback=os.path.isdir(mod_root)
                                   and os.path.samefile(mod_root, REPO_ROOT))
@@ -997,6 +1048,11 @@ def _cmd_targets(args):
         return 2
     report = sweep_targets(old_files, new_files, mod_files)
     print(f"vanilla {args.old_ref} -> {args.new_ref} ({repo}): {differing} script file(s) differ")
+    unchecked = gfx_directives(mod_files) if no_gfx else []
+    if unchecked:
+        # Without vanilla's side, a removed or changed target under gfx/ would read as clean.
+        print(f"gfx script not in the mirror (no .txt under game/gfx at {' or '.join(no_gfx)}): "
+              f"{len(unchecked)} mod directive(s) under gfx/ not checked: {', '.join(unchecked)}")
     print("\n".join(format_targets(report, args.diffs)))
     return 0
 

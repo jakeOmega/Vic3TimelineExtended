@@ -8,7 +8,6 @@ Run: python3 -m unittest test_vanilla_patch_diff
 
 import json
 import os
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -376,6 +375,7 @@ def _commit_tree(repo, files, message, root="game"):
     for rel, text in files.items():
         _write(os.path.join(repo, root, *rel.split("/")), text)
     # A texture beside the script, different at each commit: never read.
+    os.makedirs(os.path.join(repo, root, "gfx", "portraits"), exist_ok=True)
     with open(os.path.join(repo, root, "gfx", "portraits", "te_test.dds"), "wb") as fh:
         fh.write(message.encode() * 64 + bytes(range(256)))
     _git(repo, "add", "-A")
@@ -411,7 +411,7 @@ class TargetsTest(unittest.TestCase):
         _commit_tree(cls.repo, VANILLA_NEW, "v2")
         for rel, text in MOD.items():
             _write(os.path.join(cls.mod, *rel.split("/")), text)
-        cls.old, cls.new, cls.differing = vpd.read_vanilla_pair(cls.repo, "v1", "v2")
+        cls.old, cls.new, cls.differing, cls.no_gfx = vpd.read_vanilla_pair(cls.repo, "v1", "v2")
         cls.report = vpd.sweep_targets(cls.old, cls.new, vpd.read_mod_tree(cls.mod))
         cls.text = vpd.format_targets(cls.report)
 
@@ -428,6 +428,7 @@ class TargetsTest(unittest.TestCase):
 
     def test_the_git_layer_reads_both_commits_of_the_touched_folders_only(self):
         self.assertEqual(self.differing, 12)   # eleven script files edited, one added
+        self.assertEqual(self.no_gfx, [])      # both commits hold script under game/gfx
         self.assertNotIn("common/buildings/00_buildings.txt", self.old)
         self.assertNotIn("common/buildings/00_buildings.txt", self.new)
         # What is read is the committed text, less its BOM; CRLF stays.
@@ -572,6 +573,7 @@ class TargetsTest(unittest.TestCase):
         self.assertEqual(code, 0)
         lines = out.splitlines()
         self.assertEqual(lines[0], f"vanilla v1 -> v2 ({self.repo}): 12 script file(s) differ")
+        self.assertNotIn("gfx script not in the mirror", out)
         self.assertEqual(lines[1:4], [
             "top-level entries of vanilla's common/ and gfx/ script (a define counts as one): "
             "10 changed, 12 added, 10 removed in 9 folder(s)",
@@ -613,19 +615,44 @@ class TargetsTest(unittest.TestCase):
             self.assertEqual((code, out), (2, ""), root)
             self.assertIn("no script under", err)
 
-    def test_a_folder_the_checkout_lacks_is_read_from_gits_index(self):
-        """A sparse worktree of this repository has no gfx/ on disk."""
+    def test_cli_says_when_the_mirror_tracks_no_gfx_script(self):
+        """Then nothing under gfx/ is compared, and silence would read as clean."""
+        other = os.path.join(self.tmp.name, "no_gfx_script")
+        os.makedirs(other)
+        subprocess.run(["git", "init", "-q", other], check=True)
+        for tag, files in (("v1", VANILLA_OLD), ("v2", VANILLA_NEW)):
+            _commit_tree(other, {p: t for p, t in files.items() if not p.startswith("gfx/")}, tag)
+        code, out, _err = _run_cli(["targets", "v1", "v2", "--vanilla-repo", other,
+                                    "--mod-root", self.mod, "--diffs", "none"])
+        self.assertEqual(code, 0)
+        self.assertEqual(out.splitlines()[1],
+                         "gfx script not in the mirror (no .txt under game/gfx at v1 or v2): "
+                         "1 mod directive(s) under gfx/ not checked: "
+                         "gfx/portraits/portrait_modifiers/te_clothes.txt:1 INJECT:clothes")
+        self.assertNotIn("portrait_modifiers/clothes", "\n".join(out.splitlines()[2:]))
+
+    def test_files_a_sparse_checkout_leaves_out_are_read_from_gits_index(self):
+        """A worktree of this repository can lack gfx/, or part of it."""
         mod = os.path.join(self.tmp.name, "sparse_mod")
-        for rel, text in MOD.items():
+        files = {**MOD, "gfx/map/fleet_entities/te_fleet.txt": "te_fleet = {\n}\n",
+                 "events/te_deleted.txt": "namespace = te_deleted\n"}
+        for rel, text in files.items():
             _write(os.path.join(mod, *rel.split("/")), text)
         subprocess.run(["git", "init", "-q", mod], check=True)
         _git(mod, "add", "-A")
         _git(mod, "commit", "-q", "-m", "mod")
-        shutil.rmtree(os.path.join(mod, "gfx"))
+        # Part of gfx/ stays on disk: the fallback is per file, not per folder.
+        _git(mod, "sparse-checkout", "set", "--no-cone", "/*", "!/gfx/portraits/")
+        self.assertFalse(os.path.exists(os.path.join(mod, "gfx", "portraits")))
+        self.assertTrue(os.path.exists(os.path.join(mod, "gfx", "map")))
+        # A file deleted from the working tree is gone, not left out: it stays unread.
+        os.remove(os.path.join(mod, "events", "te_deleted.txt"))
+        decoded = {p: t.lstrip(BOM) for p, t in files.items() if p != "events/te_deleted.txt"}
         on_disk = vpd.read_mod_tree(mod)
-        self.assertFalse([p for p in on_disk if p.startswith("gfx/")])
-        with_git = vpd.read_mod_tree(mod, git_fallback=True)
-        self.assertEqual(with_git, {p: t.lstrip(BOM) for p, t in MOD.items()})
+        self.assertEqual(on_disk, {p: t for p, t in decoded.items() if "portraits" not in p})
+        self.assertEqual(vpd.read_mod_tree(mod, git_fallback=True), decoded)
+        self.assertEqual(vpd.gfx_directives(decoded),
+                         ["gfx/portraits/portrait_modifiers/te_clothes.txt:1 INJECT:clothes"])
 
 
 class SweepEdgesTest(unittest.TestCase):
@@ -656,6 +683,51 @@ class SweepEdgesTest(unittest.TestCase):
             ("scripted_effects", "van_effect"): ["common/scripted_effects/te.txt:2"],
             ("scripted_triggers", "van_trigger"): ["common/scripted_effects/te.txt:2"],
             ("war_goal_types", "van_wargoal"): ["common/scripted_effects/te.txt:4"]})
+
+    def test_a_removed_name_read_through_a_scope_chain_is_a_use(self):
+        """33 vanilla script values are read by the mod only as
+        `owner.<value>` or `state.<value>`: one token with its dots."""
+        entry = "{0} = {{\n\tv = 1\n}}\n".format
+        old = {"common/script_values/00.txt": entry("van_value") + entry("keep_v"),
+               "common/buildings/00.txt": entry("building_van") + entry("building_keep"),
+               "common/goods/00.txt": entry("van_good") + entry("keep_g"),
+               "events/v.txt": "namespace = ns\nns.4 = {\n}\nns.5 = {\n}\n"}
+        new = {"common/script_values/00.txt": entry("keep_v"),
+               "common/buildings/00.txt": entry("building_keep"),
+               "common/goods/00.txt": entry("keep_g"),
+               "events/v.txt": "namespace = ns\nns.5 = {\n}\n"}
+        mod = {"common/scripted_triggers/te.txt": (
+            "te_t = {\n"
+            "\towner.van_value > 1\n"                                     # line 2
+            "\tb:building_van.level >= 3\n"                               # line 3
+            "\tvalue = \"scope:actor.van_value\"\n"                       # line 4
+            "\tmarket.mg:van_good.market_goods_sell_orders > 0\n"         # line 5
+            "\ticon = \"gfx/interface/icons/van_good.dds\"\n"             # line 6: a file name
+            "\tgoods_output_van_good_add = 1\n"                           # line 7: a longer name
+            "\ttitle = ns.4.t\n"                                          # line 8: a loc key
+            "\ttrigger_event = { id = ns.4 }\n"                           # line 9
+            "}\n")}
+        report = vpd.sweep_targets(old, new, mod)
+        self.assertEqual({r["key"]: r["uses"] for r in report["removed"]}, {
+            "van_value": ["common/scripted_triggers/te.txt:2", "common/scripted_triggers/te.txt:4"],
+            "building_van": ["common/scripted_triggers/te.txt:3"],
+            "van_good": ["common/scripted_triggers/te.txt:5"],
+            # an event id is dotted itself: matched whole, so `ns.4.t` is not it
+            "ns.4": ["common/scripted_triggers/te.txt:9"]})
+
+    def test_a_commented_out_loc_line_is_no_use(self):
+        old = {"common/laws/00.txt": "law_van = {\n}\nlaw_keep = {\n}\n"}
+        new = {"common/laws/00.txt": "law_keep = {\n}\n"}
+        mod = {"common/laws/te.txt": "law_te = {\n}\n",
+               "localization/english/te_l_english.yml": (
+                   "l_english:\n"
+                   " # te_old:0 \"See law_van.\"\n"                   # line 2: commented out
+                   " te_a:0 \"Fine.\" # was law_van\n"                # line 3: a trailing comment
+                   " te_b:0 \"#b law_van#! applies\"\n"               # line 4: `#` is formatting
+                   " te_c:0 \"A \\\"quote\\\" and law_van\" # note\n")}   # line 5
+        report = vpd.sweep_targets(old, new, mod)
+        self.assertEqual(report["removed"][0]["uses"], [
+            "localization/english/te_l_english.yml:4", "localization/english/te_l_english.yml:5"])
 
     def test_a_much_used_removed_name_shows_ten_uses_and_a_count(self):
         old = {"common/goods/00.txt": "tea = {\n}\ngrain = {\n}\n"}
