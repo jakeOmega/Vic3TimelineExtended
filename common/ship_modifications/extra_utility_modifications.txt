@@ -14,7 +14,10 @@
 # the next closing brace (the modifier block) and logs "Failed to read key
 # reference" in debug.log; the module keeps its goods and loses its effects. Effects are percentages wherever every
 # ship that mounts the module has a proportional base; screening and detection
-# stay flat, because capitals carry 10-30 screening and escorts 250-700.
+# stay flat, because capitals carry 5-15 screening and escorts 140-390. The two
+# flat screening values (DEW Point Defense, Aegis Air Defense: 111) and Unmanned
+# Aerial Vehicles' +28 follow the light cruiser's 1.14.5 screening rescale
+# (270 -> 150) from their old 200 and 50 (#1625; header of extra_ship_types.txt).
 #
 # Roles decide the slot a module goes in on a mod ship (extra_ship_types.txt):
 #   protection      hull and crew damage taken (the base game's Extended Sick
@@ -149,7 +152,7 @@ utility_mod_dew_point_defense = {
 	modifier = {
 		ship_suffered_accuracy_mult = -0.35
 		ship_vulnerability_mult = -0.70
-		ship_screening_add = 200
+		ship_screening_add = 111
 	}
 
 	construction_goods = {
@@ -248,7 +251,7 @@ utility_mod_aegis_air_defense = {
 
 	modifier = {
 		ship_readiness_gain_mult = 0.20
-		ship_screening_add = 200
+		ship_screening_add = 111
 		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.40
 		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.40
 		ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = 0.40

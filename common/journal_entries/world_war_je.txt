@@ -31,9 +31,17 @@ je_world_war = {
 		has_technology_researched = combined_arms
 		country_rank >= rank_value:great_power
 		NOT = { has_variable = ww_fully_resolved }
+		# Set by the completion and failure outcomes, never removed. A
+		# revolution's winner gets a fresh record of an entry the loser had
+		# finished, and would start the world war over without this (#471).
+		# ww_fully_resolved can't serve: it is a phase flag, which both
+		# outcomes clear. In normal play it changes nothing, since a finished
+		# record is never activated again.
+		NOT = { has_variable = ww_entry_resolved }
 	}
 
 	possible = {
+		NOT = { has_variable = ww_entry_resolved }
 		has_technology_researched = combined_arms
 		country_rank >= rank_value:great_power
 		OR = {
@@ -180,6 +188,7 @@ je_world_war = {
 			has_variable = ww_fully_resolved
 		}
 		effect = {
+			set_variable = ww_entry_resolved
 			# Clean up all world war variables
 			remove_variable = ww_active_phase
 			remove_variable = ww_aggressor_side
@@ -208,6 +217,7 @@ je_world_war = {
 			country_rank < rank_value:great_power
 		}
 		effect = {
+			set_variable = ww_entry_resolved
 			remove_variable = ww_active_phase
 			remove_variable = ww_aggressor_side
 			remove_variable = ww_defender_side

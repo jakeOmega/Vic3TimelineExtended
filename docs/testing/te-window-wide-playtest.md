@@ -187,3 +187,11 @@ Full screen, the Space Race now lays out in three columns of 520, as the owner a
 | **2. Another milestone, or none.** Open the tab in full screen while only another milestone runs, then between milestones. | Two columns, centered: the milestones (or the idle note), then Space Powers and Orbit, as before. No empty 520 between them. | An empty middle column: `column_2_visible` in `te_sr_wide_sections` no longer matches the type's own gate. |
 | **3. National Info.** Open National Info's Space Race tab for another country running Solar System Colonization, then for your own. | Another country's: two columns, its overview and colonies list, then Space Powers and Orbit; no tabs. Your own: the three columns of check 1. | Tabs for another country: the `te_own_country_only` guard in `te_sr_window_solar_colonization_live` is gone. |
 | **4. The side panel.** Switch to the side panel with Solar System Colonization running. | One column, as before: the overview, the four tabs and the shown tab, then Open Journal Entry. | Tabs missing: the frame's `sr_window_solar_colonization_live` block lost its default. |
+
+## The toggle's label (review follow-up, #1338, 2026-11-12)
+
+The toggle is a 140 × 26 button (`te_systems_window_toggle` in `gui/te_systems_window.gui`), beside the Map Room button. Nothing has checked in game that its two labels fit. By the style guide's budget they should: "Full Screen" is 11 characters, about 103 units of the 140 at the row font's 8.5 a character plus 10%, before the button's own margins.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. The labels fit.** In the side panel read the toggle, switch to Full Screen and read it again. Repeat at a larger UI scale. | "Full Screen" and "Side Panel" each on one line inside the button, neither cut off nor ending in an ellipsis, with the Map Room button clear of it. | Cut off or elided: widen the button's `size = { 140 26 }` in `te_systems_window_toggle`. Both frames use the one type. |

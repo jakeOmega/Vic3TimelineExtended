@@ -239,6 +239,11 @@ te_monetary_refresh_world_rate = {
 # gap left to close and that hook is gone. Do not reintroduce a second entry
 # point without a reason of the same kind.
 te_monetary_monthly_update = {
+	# --- the banking rule switched from Full mid-game -----------------------
+	# Before step 0, which seeds again what it forgets, and step 0b, which
+	# strips the managed modifiers (te_monetary_rule_switch_effects.txt).
+	te_monetary_settle_rule_switch = yes
+
 	# --- 0. initialise ------------------------------------------------------
 	te_monetary_init_variables = yes
 
@@ -403,9 +408,8 @@ te_monetary_monthly_update = {
 # the event put them — a journal entry that vanishes mid-clock would take the
 # remaining years with it. A revolution's winner receives none of the loser's
 # country modifiers either; te_monetary_inherit_central_bank
-# (te_monetary_civil_war_effects.txt) re-adds the ones whose remaining time a
-# month counter records (te_mon_peg_suspension, te_mon_peg_credibility_lost,
-# te_mon_lolr_reneged), and the rest are lost with the loser.
+# (te_monetary_civil_war_effects.txt) re-adds each from the month counter
+# set beside it (#462, #470).
 #
 # THE HOME CAN CHANGE — the entry activates when a country gets a stock
 # exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
@@ -3317,11 +3321,6 @@ te_monetary_apply_interest_modifiers = {
 # confidence resets, and with the LAW gone the suspension's lost-credibility
 # modifier goes too; a SUSPENSION freezes vault, balance and confidence alike,
 # because suspending convertibility is refusing to pay gold out.
-#
-# THE RETIRED CARRY. Until 2026-10-06 the hot-money balance paid the policy
-# rate as the scaled budget expense te_mon_gold_carry_expense. A save from
-# before then can still carry it, so the foot of this effect strips it every
-# pulse until legacy_modifier_cleanup.txt's dated checklist says otherwise.
 te_monetary_update_gold = {
 	if = {
 		limit = { te_mon_has_gold_flows = yes }
@@ -3539,15 +3538,6 @@ te_monetary_update_gold = {
 			}
 		}
 	}
-
-	# --- SAVE MIGRATION: the retired carry ---------------------------------
-	# The carry on borrowed gold was dropped on 2026-10-06 (design §0.5,
-	# decision I, reversed). A save made before then can still hold
-	# te_mon_gold_carry_expense, on the entry or on the country; it goes on
-	# this country's first pulse, until legacy_modifier_cleanup.txt's dated
-	# checklist retires the definition. te_gold_carry and te_gold_carry_applied
-	# stay in such a save, inert: nothing reads them.
-	te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
 
 	# --- the three clocks ---------------------------------------------------
 	if = {
@@ -3922,5 +3912,9 @@ te_mon_effect_new_currency = {
 	add_modifier = {
 		name = te_mon_currency_reform_premium
 		days = 3650
+	}
+	# Its months left, for a revolution's winner (#470).
+	hidden_effect = {
+		set_variable = { name = te_mon_currency_reform_months value = 120 }
 	}
 }

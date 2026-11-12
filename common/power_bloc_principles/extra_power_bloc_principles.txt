@@ -232,6 +232,9 @@ principle_vassalization_5 = {
 
 		country_allow_enacting_decrees_in_subject_bool = yes
 		country_leader_has_law_enactment_success_mult = 0.1
+		# A subject member passes the laws its overlord enacts in it more
+		# easily (1.15; vanilla's Congress Poland carries it on the subject).
+		country_overlord_law_enactment_success_add = 0.1
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
 
@@ -600,6 +603,12 @@ principle_external_trade_4 = {
 		state_trade_capacity_mult = 0.25
 		state_trade_advantage_mult = 0.25
 		country_no_advantage_loss_from_lack_of_interest_bool = yes
+		# Graded by the member's interest tier in the trade's region (1.15,
+		# #1458), on top of tier III's flat +25%, which this tier restates.
+		country_interest_tier_engaged_trade_advantage_mult = 0.05
+		country_interest_tier_influential_trade_advantage_mult = 0.1
+		country_interest_tier_pervasive_trade_advantage_mult = 0.15
+		country_interest_tier_hegemonic_trade_advantage_mult = 0.2
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 		country_influence_add = 100
@@ -629,6 +638,11 @@ principle_external_trade_5 = {
 		state_trade_capacity_mult = 0.25
 		state_trade_advantage_mult = 0.25
 		country_no_advantage_loss_from_lack_of_interest_bool = yes
+		# Tier IV's interest grades, doubled.
+		country_interest_tier_engaged_trade_advantage_mult = 0.1
+		country_interest_tier_influential_trade_advantage_mult = 0.2
+		country_interest_tier_pervasive_trade_advantage_mult = 0.3
+		country_interest_tier_hegemonic_trade_advantage_mult = 0.4
 		country_max_companies_add = 1
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
