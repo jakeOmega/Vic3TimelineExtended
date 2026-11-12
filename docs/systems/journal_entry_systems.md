@@ -1650,6 +1650,7 @@ Models failed state mechanics. When a country's average standard of living drops
 - **Collapse at 52:** Resets progress, applies `failed_state_modifier` (decaying, long duration), calls `state_collapse_remove_infrastructure` on all states and `reset_all_institutions_and_ministries`
 - **The collapse is reported (2026-11-10, #1554):** the same step fires `minor_events_timelineextended.10` ("The State Collapses") as a popup. Its one option changes nothing: it lists the buildings lost (`state_collapse_buildings_lost_tt`), the laws reset (`state_collapse_institutions_reset_tt`) and Failed State under `show_as_tooltip`. `reset_all_institutions_and_ministries` is not marked with `te_law_sweep_replacing`, which would post a notice for each of its 24 laws; the event is the one report.
 - **Never completes:** the reset happens in the same effect that reaches 52, so the success outcome's trigger (>= 52) is never true. The entry cycles yearly while SoL stays below 4 and goes inactive (`can_deactivate = yes`) when SoL recovers
+- **A re-activation restarts the year** (owner, 2026-11-12, #472): `immediate` sets the counter to 0 unguarded, so a revolution's winner, which re-runs it on the inherited entry, starts the year again too. Guarding it would leave a re-activated record a non-zero baseline under a bar that wraps at 52
 
 ### Variables
 | Variable | Description |
@@ -1714,7 +1715,7 @@ Each category uses select/deselect toggle pairs.
 Models a World War lifecycle from rising tensions through active total war to post-war resolution. Great powers track ideological tensions, war phases, and post-war cleanup.
 
 ### Key Mechanics
-- **Trigger:** Combined Arms tech + Great Power + no `ww_fully_resolved`
+- **Trigger:** Combined Arms tech + Great Power + no `ww_fully_resolved` + no `ww_entry_resolved`
 - **3 phases:** Leadup → Active War → Post-War
 - **Leadup tension tiers:** simmering → rising (30+) → high (50+) → crisis (70+)
 - **War duration tracking:** Months counter → years elapsed
@@ -1737,7 +1738,8 @@ Models a World War lifecycle from rising tensions through active total war to po
 | `ww_months_counter` | Month tracker for year increment |
 | `ww_peace_concluded` | War ended flag |
 | `ww_peace_months` | Post-war timer (36-month goal) |
-| `ww_fully_resolved` | JE completion flag |
+| `ww_fully_resolved` | JE completion flag (a phase flag: both outcomes clear it) |
+| `ww_entry_resolved` | Set by the success and failure outcomes, never removed: a revolution's winner, which gets a fresh record of a finished entry, doesn't start the world war over (#471) |
 | `ww_peace_event_fired` | Event control flag |
 | `ww_war_began` | Latch: this belligerent has fought the other side (peace detection waits for it) |
 | `ww_fought_as_aggressor` / `ww_fought_as_defender` | Latch: the side it fought on |

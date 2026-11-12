@@ -87,7 +87,7 @@
 #       provider rather than stranded.
 #
 # WHAT THE NEXT PULSE DOES WITH IT. Nothing here touches a modifier except the
-# three timed ones at the foot, and nothing calls the monthly update, which is
+# eight timed ones at the foot, and nothing calls the monthly update, which is
 # not idempotent. At the winner's next monthly pulse step 0b sees the inherited
 # banking entry as a change of home (the rebels normally had none), strips
 # every managed modifier and zeroes the five trackers; steps 6c, 8b, 9 and 9b
@@ -261,6 +261,13 @@ te_monetary_inherit_central_bank = {
 	te_mon_cw_take = { VAR = te_mon_union_ask_cooldown }
 	te_mon_cw_take = { VAR = te_mon_union_q_state }
 	te_mon_cw_take = { VAR = te_mon_board_wrong_months }
+	# The months left of the five timed penalties and rewards that had no clock
+	# of their own (#470); the modifiers come back from them at the foot.
+	te_mon_cw_take = { VAR = te_mon_peg_broken_months }
+	te_mon_cw_take = { VAR = te_mon_peg_devaluation_months }
+	te_mon_cw_take = { VAR = te_mon_currency_reform_months }
+	te_mon_cw_take = { VAR = te_mon_union_exit_months }
+	te_mon_cw_take = { VAR = te_mon_union_independence_months }
 	# An overlord's board seigniorage is re-summed only YEARLY, so it is a cache
 	# of the nation's figure like the two above, not a monthly derived value.
 	te_mon_cw_take = { VAR = te_mon_board_seigniorage_pts }
@@ -411,6 +418,18 @@ te_monetary_inherit_central_bank = {
 		set_variable = { name = te_mon_work value = var:te_mon_lolr_suspended_months }
 		te_mon_cw_add_timed = { NAME = te_mon_lolr_reneged }
 	}
+	# THE FIVE THAT GOT A CLOCK IN #470. Each counter is set beside its modifier
+	# by the effect that adds it (te_peg.2's Break, te_peg.1's Devalue,
+	# te_mon_effect_new_currency, te_mon_effect_union_exit_costs and
+	# te_mon_effect_union_refuse) and ticked by te_mon_cw_tick_penalty_clocks,
+	# so it is the modifier's remaining time, as the renege counter is. A 0
+	# means it runs out within the month. The two decaying ones resume at the
+	# share of their term still to run.
+	te_mon_cw_restore_timed = { NAME = te_mon_peg_broken_premium VAR = te_mon_peg_broken_months }
+	te_mon_cw_restore_decaying_24 = { NAME = te_mon_peg_devaluation_pressure VAR = te_mon_peg_devaluation_months }
+	te_mon_cw_restore_timed = { NAME = te_mon_currency_reform_premium VAR = te_mon_currency_reform_months }
+	te_mon_cw_restore_decaying_120 = { NAME = te_mon_union_exit_premium VAR = te_mon_union_exit_months }
+	te_mon_cw_restore_timed = { NAME = te_mon_union_independence VAR = te_mon_union_independence_months }
 
 	# --- F13: third countries' pointers to the loser -------------------------
 	te_mon_cw_repoint_to_winner = yes
@@ -443,6 +462,171 @@ te_mon_cw_take_scope = {
 			var:$VAR$ = { save_scope_as = te_mon_cw_ref }
 		}
 		set_variable = { name = $VAR$ value = scope:te_mon_cw_ref }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Re-add the loser's timed modifier $NAME$ from its month counter $VAR$ (#470)
+# ----------------------------------------------------------------------------
+# Scope: the winner, after the counter has been copied; scope:te_cw_loser saved
+# by the caller. Only when the loser held it and the winner does not.
+te_mon_cw_restore_timed = {
+	if = {
+		limit = {
+			scope:te_cw_loser = { has_modifier = $NAME$ }
+			NOT = { has_modifier = $NAME$ }
+			has_variable = $VAR$
+			var:$VAR$ > 0
+		}
+		set_variable = { name = te_mon_work value = var:$VAR$ }
+		te_mon_cw_add_timed = { NAME = $NAME$ }
+	}
+}
+
+# ...and a decaying one, at the strength its decay had reached: a ladder of
+# literal durations and multipliers, as cr_rebuild_outcome_modifier
+# (civil_rights_effects.txt) has, so nothing rests on how the engine reads a
+# variable multiplier on a decaying modifier. Each rung adds the modifier for
+# its months at months / term of full strength, so it fades out on about the
+# date the loser's would have (within a rung's width). One ladder per term:
+# 24 months (Devalue's pressure, two-month rungs) and 120 (the bloc-currency
+# exit, one-year rungs). A counter at 0 runs out within the month.
+te_mon_cw_restore_decaying_24 = {
+	if = {
+		limit = {
+			scope:te_cw_loser = { has_modifier = $NAME$ }
+			NOT = { has_modifier = $NAME$ }
+			has_variable = $VAR$
+		}
+		if = {
+			limit = { var:$VAR$ > 22 }
+			add_modifier = { name = $NAME$ months = 24 multiplier = 1.0 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 20 }
+			add_modifier = { name = $NAME$ months = 22 multiplier = 0.92 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 18 }
+			add_modifier = { name = $NAME$ months = 20 multiplier = 0.83 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 16 }
+			add_modifier = { name = $NAME$ months = 18 multiplier = 0.75 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 14 }
+			add_modifier = { name = $NAME$ months = 16 multiplier = 0.67 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 12 }
+			add_modifier = { name = $NAME$ months = 14 multiplier = 0.58 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 10 }
+			add_modifier = { name = $NAME$ months = 12 multiplier = 0.5 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 8 }
+			add_modifier = { name = $NAME$ months = 10 multiplier = 0.42 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 6 }
+			add_modifier = { name = $NAME$ months = 8 multiplier = 0.33 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 4 }
+			add_modifier = { name = $NAME$ months = 6 multiplier = 0.25 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 2 }
+			add_modifier = { name = $NAME$ months = 4 multiplier = 0.17 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 0 }
+			add_modifier = { name = $NAME$ months = 2 multiplier = 0.08 is_decaying = yes }
+		}
+	}
+}
+
+te_mon_cw_restore_decaying_120 = {
+	if = {
+		limit = {
+			scope:te_cw_loser = { has_modifier = $NAME$ }
+			NOT = { has_modifier = $NAME$ }
+			has_variable = $VAR$
+		}
+		if = {
+			limit = { var:$VAR$ > 114 }
+			add_modifier = { name = $NAME$ months = 120 multiplier = 1.0 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 102 }
+			add_modifier = { name = $NAME$ months = 108 multiplier = 0.9 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 90 }
+			add_modifier = { name = $NAME$ months = 96 multiplier = 0.8 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 78 }
+			add_modifier = { name = $NAME$ months = 84 multiplier = 0.7 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 66 }
+			add_modifier = { name = $NAME$ months = 72 multiplier = 0.6 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 54 }
+			add_modifier = { name = $NAME$ months = 60 multiplier = 0.5 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 42 }
+			add_modifier = { name = $NAME$ months = 48 multiplier = 0.4 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 30 }
+			add_modifier = { name = $NAME$ months = 36 multiplier = 0.3 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 18 }
+			add_modifier = { name = $NAME$ months = 24 multiplier = 0.2 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 6 }
+			add_modifier = { name = $NAME$ months = 12 multiplier = 0.1 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:$VAR$ > 0 }
+			add_modifier = { name = $NAME$ months = 6 multiplier = 0.05 is_decaying = yes }
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# The five clocks of #470, a month at a time
+# ----------------------------------------------------------------------------
+# Scope: country, from te_monetary_monthly_on_action for every country, outside
+# te_monetary_monthly_update: a modifier's days run whatever the banking rule
+# says, so its clock does too. A counter is set only by the effect that adds its
+# modifier, and never removed; a country that never took the modifier has none.
+te_mon_cw_tick_penalty_clocks = {
+	te_mon_cw_tick = { VAR = te_mon_peg_broken_months }
+	te_mon_cw_tick = { VAR = te_mon_peg_devaluation_months }
+	te_mon_cw_tick = { VAR = te_mon_currency_reform_months }
+	te_mon_cw_tick = { VAR = te_mon_union_exit_months }
+	te_mon_cw_tick = { VAR = te_mon_union_independence_months }
+}
+
+te_mon_cw_tick = {
+	if = {
+		limit = {
+			has_variable = $VAR$
+			var:$VAR$ > 0
+		}
+		change_variable = { name = $VAR$ subtract = 1 }
 	}
 }
 

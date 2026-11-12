@@ -408,9 +408,8 @@ te_monetary_monthly_update = {
 # the event put them — a journal entry that vanishes mid-clock would take the
 # remaining years with it. A revolution's winner receives none of the loser's
 # country modifiers either; te_monetary_inherit_central_bank
-# (te_monetary_civil_war_effects.txt) re-adds the ones whose remaining time a
-# month counter records (te_mon_peg_suspension, te_mon_peg_credibility_lost,
-# te_mon_lolr_reneged), and the rest are lost with the loser.
+# (te_monetary_civil_war_effects.txt) re-adds each from the month counter
+# set beside it (#462, #470).
 #
 # THE HOME CAN CHANGE — the entry activates when a country gets a stock
 # exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
@@ -3913,5 +3912,9 @@ te_mon_effect_new_currency = {
 	add_modifier = {
 		name = te_mon_currency_reform_premium
 		days = 3650
+	}
+	# Its months left, for a revolution's winner (#470).
+	hidden_effect = {
+		set_variable = { name = te_mon_currency_reform_months value = 120 }
 	}
 }
