@@ -1,0 +1,41 @@
+﻿# ============================================================================
+# REGIONAL FORMABLES — external pressure, once a month for the world
+# ============================================================================
+# The six regional unions (AFU, EUN, UNA, INM, EAF, DAR) can form only while a
+# great power with its capital outside the region ranks in the world's top
+# three (common/scripted_triggers/formable_gating_triggers.txt). That test
+# reads no ROOT, so the world's monthly pulse (te_formable_on_actions.txt)
+# makes it once for everyone and stores the answer in a global variable,
+# te_formable_pressure_<key>, which the formations' possible and ai_will_do
+# read instead of walking every country each time they are asked.
+#
+# Global scope (on_monthly_pulse, no ROOT).
+# ============================================================================
+
+te_formable_refresh_external_pressure = {
+	te_formable_set_external_pressure = { KEY = eu REGION = european }
+	te_formable_set_external_pressure = { KEY = afu REGION = african }
+	te_formable_set_external_pressure = { KEY = una REGION = north_american }
+	te_formable_set_external_pressure = { KEY = inm REGION = intermarium }
+	te_formable_set_external_pressure = { KEY = eaf REGION = east_african }
+	te_formable_set_external_pressure = { KEY = dar REGION = dar_al_islam }
+}
+
+# KEY: the formable's trigger prefix (eu, afu, ...). REGION: the infix of its
+# is_major_<REGION>_power constituency trigger.
+te_formable_set_external_pressure = {
+	if = {
+		limit = {
+			any_country = {
+				global_country_ranking <= 3
+				country_rank >= rank_value:great_power
+				NOT = { is_major_$REGION$_power = yes }
+			}
+		}
+		set_global_variable = te_formable_pressure_$KEY$
+	}
+	else_if = {
+		limit = { has_global_variable = te_formable_pressure_$KEY$ }
+		remove_global_variable = te_formable_pressure_$KEY$
+	}
+}
