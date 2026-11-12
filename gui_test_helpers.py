@@ -11,6 +11,9 @@ Existing tests move onto it only when they are next touched, not in a sweep.
   generated wrappers (scripts/generators/gen_te_history_charts.py).
 - load_loc, loc_index, gui_keys, loc_closure and type_bodies read the loc a
   panel reaches (moved from test_demographics_census_window.py).
+- scripted_guis gives the loc keys a scripted GUI's tooltip prints
+  (ExecuteTooltip, IsValidTooltip, IsShownTooltip), tooltip_calls the
+  tooltips a markup or loc text asks for (#1361).
 - mod_types and type_closure give the types a panel draws, all the way down;
   guard_spans and open_types the parts of them another country sees (charts-
   help-national-info plan, PR F0; test_te_system_tab_bodies.py's BindingTest).
@@ -513,6 +516,237 @@ def custom_keys(text, custom=None):
     return {k for name in _GET_CUSTOM.findall(text) for k in custom.get(name, ())}
 
 
+# --- The text a scripted GUI's tooltip prints (#1361) ----------------------------------------------
+# Markup and loc ask a scripted GUI (common/scripted_guis/) for a tooltip:
+# `GetScriptedGui('x').ExecuteTooltip( ... )` renders x's effect without running
+# it, IsValidTooltip its is_valid, IsShownTooltip its is_shown; `ScriptedGui.`
+# for `GetScriptedGui('x')` under a `datacontext = "[GetScriptedGui('x')]"`.
+# What the player reads there is the script's `custom_tooltip = <key>` lines
+# (custom_tooltip_no_bullet's too, and a `text = <key>` inside either), through
+# the scripted effects and triggers the block calls. Those keys render for
+# whoever hovers, with the scripted GUI's root as their scope.
+
+# The block of a scripted GUI each tooltip function renders.
+SCRIPTED_TOOLTIP = {"ExecuteTooltip": "effect", "IsValidTooltip": "is_valid", "IsShownTooltip": "is_shown"}
+_SCRIPT_TOP = re.compile(r"(?m)^(?:[A-Z_]+:)?([\w.\-]+)\s*=\s*\{")
+_PRINTS = re.compile(r'\b(?:custom_tooltip(?:_no_bullet)?|text)\s*=\s*"?([\w.\-$]+)"?')
+_SCRIPT_CALL = re.compile(r"(?<![\w.$\-])([\w.\-]+)\s*=\s*(yes\b|\{)")
+_SCRIPT_ARG = re.compile(r'(\w+)\s*=\s*("[^"]*"|[^\s{}]+)')
+_SCRIPT_PART = re.compile(r"\b(effect|is_valid|is_shown)\s*=\s*\{")
+_PARAM = re.compile(r"\$\w+\$")
+
+
+def _script_code(text):
+    """A script file's text with its comments cut (_strip_comments, which is
+    slow on a large file: only a line with both a # and a quote needs it)."""
+    out = []
+    for line in text.split("\n"):
+        if "#" in line:
+            line = _strip_comments(line) if '"' in line else line[:line.index("#")]
+        out.append(line)
+    return "\n".join(out)
+
+
+@functools.lru_cache(maxsize=16)
+def _script_blocks(root, folder):
+    """Each top-level `name = { ... }` of common/<folder>/*.txt: name -> its
+    body, comments cut. A name defined twice keeps both bodies, one after the
+    other (an INJECT:, or a later file's)."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(root, "common", folder, "*.txt"))):
+        code = _script_code(_read(path))
+        for m in _SCRIPT_TOP.finditer(code):
+            body = code[m.end():_close(code, m.end() - 1)]
+            out[m.group(1)] = out[m.group(1)] + "\n" + body if m.group(1) in out else body
+    return out
+
+
+_SILENT = re.compile(r"\b(custom_tooltip(?:_no_bullet)?|hidden_effect)\s*=\s*\{")
+_OWN_TEXT = re.compile(r'\btext\s*=\s*"?[\w.\-$]+"?')
+
+
+def _rendered(text):
+    """A script block as its tooltip renders it: a `custom_tooltip = { text =
+    <key> ... }` shows its text in place of what it holds, and a
+    `hidden_effect = { ... }` shows nothing (scripting_best_practices.md,
+    "Tooltip Auto-Rendering"), so what each holds is cut, the text kept."""
+    out, last = [], 0
+    for m in _SILENT.finditer(text):
+        if m.start() < last:
+            continue  # inside one already cut
+        end = _close(text, m.end() - 1)
+        out.append(text[last:m.end()])
+        if m.group(1) != "hidden_effect":
+            out.append(" ".join(_OWN_TEXT.findall(own_props(text[m.end():end]))))
+        last = end
+    return "".join(out) + text[last:]
+
+
+def printed_keys(text, calls, _seen=None):
+    """The loc keys a script block's tooltip may print: each
+    `custom_tooltip = <key>`, `custom_tooltip_no_bullet = <key>` and
+    `text = <key>` it renders (_rendered), and those of the scripted effects
+    and triggers it calls (calls: name -> body), all the way down, a call's
+    `$X$` arguments filled in. It errs wide otherwise: a line under an `if`
+    whose `limit` never holds counts, and so does a call in a `limit`. A key
+    that still holds a `$X$` (a call that leaves the argument out) is kept as
+    written: loc_keys_of matches it against the loc."""
+    seen = set() if _seen is None else _seen
+    text = _rendered(text)
+    out = set(_PRINTS.findall(text))
+    for m in _SCRIPT_CALL.finditer(text):
+        name = m.group(1)
+        if name not in calls:
+            continue
+        args = ()
+        if m.group(2) == "{":
+            inner = text[m.end():_close(text, m.end() - 1)]
+            args = tuple(sorted((k, v.strip('"')) for k, v in _SCRIPT_ARG.findall(own_props(inner))))
+        if (name, args) in seen:
+            continue
+        seen.add((name, args))
+        callee = calls[name]
+        for k, v in args:
+            callee = callee.replace(f"${k}$", v)
+        out |= printed_keys(callee, calls, seen)
+    return out
+
+
+def loc_keys_of(printed, loc):
+    """The loc keys among what a script prints (printed_keys): a plain name
+    that is a key, and for a name that still holds a `$X$` every key it could
+    spell (`a_$B$` is any key that starts with a_). A name that is all
+    arguments spells any key and gives none."""
+    out = {k for k in printed if k in loc}
+    for name in printed:
+        parts = _PARAM.split(name)
+        if len(parts) > 1 and any(parts):
+            pattern = re.compile(r"[\w.\-]+".join(re.escape(part) for part in parts))
+            out.update(k for k in loc if pattern.fullmatch(k))
+    return out
+
+
+class ScriptedGuis:
+    """The scripted GUIs under a root (common/scripted_guis/) and what each
+    one's tooltip prints, through the root's scripted effects and triggers."""
+
+    def __init__(self, root=REPO):
+        """root: a mod's folder; None for no scripted GUIs at all."""
+        self.guis = _script_blocks(root, "scripted_guis") if root else {}
+        self.calls = dict(_script_blocks(root, "scripted_triggers")) if root else {}
+        for name, body in (_script_blocks(root, "scripted_effects") if root else {}).items():
+            self.calls[name] = self.calls[name] + "\n" + body if name in self.calls else body
+        self._printed, self._keys = {}, {}
+
+    def part(self, name, method):
+        """The text of the block a tooltip function renders (SCRIPTED_TOOLTIP):
+        the scripted GUI's own `effect`, `is_valid` or `is_shown`; "" when it
+        has none, or there is no such scripted GUI."""
+        body, want = self.guis.get(name, ""), SCRIPTED_TOOLTIP[method]
+        out = []
+        for m in _SCRIPT_PART.finditer(body):
+            before = body[:m.start()]
+            if m.group(1) == want and before.count("{") == before.count("}"):
+                out.append(body[m.end():_close(body, m.end() - 1)])
+        return "\n".join(out)
+
+    def printed(self, name, method="ExecuteTooltip"):
+        """What scripted GUI `name`'s tooltip prints (printed_keys of its part)."""
+        if (name, method) not in self._printed:
+            self._printed[(name, method)] = frozenset(printed_keys(self.part(name, method), self.calls))
+        return self._printed[(name, method)]
+
+    def keys(self, name, method, loc):
+        """The loc keys scripted GUI `name`'s tooltip prints (loc_keys_of)."""
+        key = (name, method, id(loc))
+        if key not in self._keys or self._keys[key][0] is not loc:
+            self._keys[key] = (loc, frozenset(loc_keys_of(self.printed(name, method), loc)))
+        return self._keys[key][1]
+
+
+@functools.lru_cache(maxsize=4)
+def scripted_guis(root=REPO):
+    """ScriptedGuis(root), kept: the repo's by default."""
+    return ScriptedGuis(root)
+
+
+# A tooltip asked of a scripted GUI: by name, or of the one in context.
+_TOOLTIP_CALL = re.compile(r"(?:GetScriptedGui\(\s*\\?'(\w+)\\?'\s*\)|(?<![\w.'])ScriptedGui)\s*\."
+                           r"(ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
+_SGUI_CONTEXT = re.compile(r"""\bdatacontext\s*=\s*"\[\s*GetScriptedGui\(\s*'(\w+)'\s*\)\s*\]\"""")
+_SELECT = re.compile(r"\b(?:SelectLocalization|AddLocalizationIf)\(")
+_OWN_CONDITION = re.compile(r"(?:And\(\s*)?Country\.IsLocalPlayer\s*(?:,|$)")
+
+
+def own_branch_spans(text):
+    """The parts of a markup or loc text that render only for the player's
+    own country, as (start, end): the second argument of each
+    SelectLocalization or AddLocalizationIf whose first is
+    Country.IsLocalPlayer, alone or first in an And (Tax Code's Pass
+    checklist). Any expression, where _OWN_BRANCH reads a quoted key."""
+    out = []
+    for m in _SELECT.finditer(text):
+        depth, cuts, i = 1, [m.end()], m.end()
+        while i < len(text) and depth and text[i] not in '"\n':
+            if text[i] == "(":
+                depth += 1
+            elif text[i] == ")":
+                depth -= 1
+            elif text[i] == "," and depth == 1:
+                cuts.append(i + 1)
+            i += 1
+        if depth or len(cuts) < 2:
+            continue
+        cuts.append(i)  # one past the closing parenthesis
+        if _OWN_CONDITION.match(text[cuts[0]:cuts[1] - 1].strip()):
+            out.append((cuts[1], cuts[2] - 1))
+    return out
+
+
+def tooltip_calls(text, own=True):
+    """Each scripted GUI's tooltip a markup or loc text asks for: (the
+    scripted GUI, None for the `ScriptedGui` in context; the function, a
+    SCRIPTED_TOOLTIP key; where the call starts). own=False leaves out a call
+    that renders only for the player's own country (own_branch_spans)."""
+    spans = () if own else own_branch_spans(text)
+    return [(m.group(1), m.group(2), m.start()) for m in _TOOLTIP_CALL.finditer(text)
+            if not any(a <= m.start() < b for a, b in spans)]
+
+
+def _context_sguis(body, pos, contexts):
+    """The scripted GUIs a `ScriptedGui` at a body offset may be: the one of
+    the nearest `datacontext = "[GetScriptedGui('x')]"` on a block around
+    it. `contexts` (every one the panel sets) when there is none in the body,
+    and with it when a blockoverride lies between: the override's contents
+    sit where its block is, which may be under a nearer datacontext."""
+    found = {enclosing_block(body, m.start()): m.group(1) for m in _SGUI_CONTEXT.finditer(body)}
+    a, b = enclosing_block(body, pos)
+    crossed = False
+    while True:
+        if (a, b) in found:
+            return ({found[(a, b)]} | set(contexts)) if crossed else {found[(a, b)]}
+        if (a, b) == (0, len(body)):
+            return set(contexts)
+        opener = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
+        crossed = crossed or bool(opener and opener.group(1) == "blockoverride")
+        a, b = enclosing_block(body, a)
+
+
+def scripted_keys(text, loc, scripted=None, contexts=(), own=True, markup=False):
+    """The loc keys the scripted tooltips a text asks for print
+    (tooltip_calls, ScriptedGuis.keys). scripted: scripted_guis() (the repo's
+    when None). contexts: the scripted GUIs a `ScriptedGui` in context may
+    be; markup=True reads the text as a type's body and takes the nearest
+    datacontext around each such call first (_context_sguis)."""
+    scripted = scripted_guis(REPO) if scripted is None else scripted
+    out = set()
+    for name, method, pos in tooltip_calls(text, own):
+        names = {name} if name else (_context_sguis(text, pos, contexts) if markup else set(contexts))
+        for n in names:
+            out |= scripted.keys(n, method, loc)
+    return out
+
+
 # A key shown only for the player's own country: the first branch of a
 # SelectLocalization on Country.IsLocalPlayer (Global Warming's wording), or
 # AddLocalizationIf's. own=False leaves these out of a text's keys.
@@ -533,20 +767,34 @@ def gui_keys(text, loc, own=True, custom=None):
     return {k for k in out if k in loc}
 
 
-def loc_closure(keys, loc, own=True, custom=None):
-    """The keys and every key their values splice ($key$), name ('key') or
-    render through GetCustom, all the way down. own and custom as gui_keys."""
+def value_keys(value, loc, own=True, custom=None, scripted=None, contexts=()):
+    """The loc keys a loc value reaches directly: those it splices ($key$),
+    names ('key') or renders through GetCustom, and those a scripted GUI's
+    tooltip it asks for prints (scripted_keys). own and custom as gui_keys;
+    scripted and contexts as scripted_keys."""
     custom = _custom_loc(REPO) if custom is None else custom
+    out = scripted_keys(value, loc, scripted, contexts, own) if "Tooltip" in value else set()
+    if not own:
+        value = _OWN_BRANCH.sub(r"\1''", value)
+    out.update(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
+    out.update(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
+    return out | custom_keys(value, custom)
+
+
+def loc_closure(keys, loc, own=True, custom=None, scripted=None, contexts=()):
+    """The keys and every key their values splice ($key$), name ('key'),
+    render through GetCustom or have a scripted GUI's tooltip print, all the
+    way down (value_keys). own and custom as gui_keys; scripted and contexts
+    as scripted_keys."""
+    custom = _custom_loc(REPO) if custom is None else custom
+    scripted = scripted_guis(REPO) if scripted is None else scripted
     seen, stack = set(), list(keys)
     while stack:
         key = stack.pop()
         if key in seen or key not in loc:
             continue
         seen.add(key)
-        value = loc[key] if own else _OWN_BRANCH.sub(r"\1''", loc[key])
-        stack.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
-        stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
-        stack.extend(custom_keys(value, custom))
+        stack.extend(value_keys(loc[key], loc, own, custom, scripted, contexts))
     return seen
 
 
@@ -1514,16 +1762,39 @@ def unguarded_controls(names, types, templates=None):
     return out
 
 
-def panel_loc_keys(names, types, loc, templates=None, custom=None):
+def panel_tooltips(names, types, templates=None):
+    """Each scripted GUI's tooltip another country's panel asks for in its
+    markup (tooltip_calls in the drawn parts of the open types and their
+    templates, own-country branches left out), as (where, TypeDef, the body
+    offset of the call, the scripted GUIs it may be, the function), and the
+    scripted GUIs the panel sets as a datacontext: what a `ScriptedGui` in
+    context may be where its own body doesn't say (_context_sguis)."""
+    drawn = [(where, td, unguarded(td.body, spans)) for where, td, spans in _drawn(names, types, templates)]
+    contexts = {name for _, _, text in drawn for name in _SGUI_CONTEXT.findall(text)}
+    out = []
+    for where, td, text in drawn:
+        for name, method, pos in tooltip_calls(text, own=False):
+            out.append((where, td, pos, {name} if name else _context_sguis(text, pos, contexts), method))
+    return out, contexts
+
+
+def panel_loc_keys(names, types, loc, templates=None, custom=None, scripted=None):
     """The loc keys another country's panel renders: those the drawn parts of
-    the open types and their templates name (panel_view), and every key they
-    reach, GetCustom's included, less a key shown only for the player's own
-    country (the first branch of a SelectLocalization on Country.IsLocalPlayer,
-    which another country's panel never renders). custom: custom_loc()."""
+    the open types and their templates name (panel_view), those the scripted
+    tooltips they ask for print (panel_tooltips), and every key those reach,
+    GetCustom's and a scripted tooltip's included, less what is shown only
+    for the player's own country (the first branch of a SelectLocalization on
+    Country.IsLocalPlayer, which another country's panel never renders).
+    custom: custom_loc(). scripted: scripted_guis()."""
+    scripted = scripted_guis(REPO) if scripted is None else scripted
     roots = set()
     for _, td, spans in _drawn(names, types, templates):
         roots |= gui_keys(unguarded(td.body, spans), loc, own=False, custom=custom)
-    return loc_closure(roots, loc, own=False, custom=custom)
+    asked, contexts = panel_tooltips(names, types, templates)
+    for _, _, _, sguis, method in asked:
+        for name in sguis:
+            roots |= scripted.keys(name, method, loc)
+    return loc_closure(roots, loc, own=False, custom=custom, scripted=scripted, contexts=contexts)
 
 
 def loc_reads(keys, index):

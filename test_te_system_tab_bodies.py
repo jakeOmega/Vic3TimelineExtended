@@ -20,7 +20,7 @@ from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _stri
                               file_templates, file_types, is_entry_read, load_loc, loc_closure, loc_index, loc_reads,
                               markup_reads, mod_gui_paths, mod_types, open_types, panel_loc_keys, panel_view,
                               personal_text, skipped_overrides, type_closure, ungated_world_reads, unguarded_controls,
-                              guard_visible_overrides, mod_templates, _on_guard_widgets, WORLD, READ)
+                              guard_visible_overrides, mod_templates, _on_guard_widgets, WORLD, READ, ScriptedGuis)
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -816,6 +816,20 @@ class BindingTest(unittest.TestCase):
                     self.assertTrue(heads[key].startswith("Shared"),
                                     f"{key}: {', '.join(tabs)} reach it, so it goes under Shared, not {heads[key]!r}")
 
+    def test_the_walk_reaches_a_scripted_tooltips_lines(self):
+        """The lines a scripted GUI's tooltip prints are the panel's text too
+        (#1361): Seabed's Free hover (te_seabed_build_in_sgui's effect, a
+        scripted effect's `te_seabed_build_in_head_$B$`), Nuclear Weapons'
+        taboo breakdown, the Colonial Empire readout's unlock checklist (an
+        is_valid), and the Space Race's strike record, which a loc key asks
+        for. Guard the guard: a walk that stopped following them would pass
+        every other test here."""
+        for tab, key in (("seabed", "te_seabed_build_in_head_pacific"), ("seabed", "te_seabed_build_in_state_1"),
+                         ("nuclear_weapons", "nd_taboo_bd_tradition"), ("colonial_empire", "ce_unlock_colonies_tt"),
+                         ("space_race", "te_asat_record_none")):
+            with self.subTest(tab=tab, key=key):
+                self.assertIn(key, _panel(tab)["keys"])
+
     def test_the_walk_reaches_a_readout(self):
         """A tab that opens without its entry on a readout (Tab.readout) has
         it walked too: National Info's mount for another country draws it
@@ -1031,6 +1045,51 @@ class MutationTest(unittest.TestCase):
         keys = panel_loc_keys({"fx_wide"}, types, loc)
         self.assertEqual(keys, {"fx_label", "fx_theirs"})
         self.assertEqual(personal_text(keys | {"fx_says"}, loc), {"fx_says": "We hold  "})
+
+    SCRIPT = (("scripted_guis", "fx_hover_sgui = {\n\tis_valid = { custom_tooltip = fx_why }\n\teffect = {\n"
+                                "\t\tcustom_tooltip = fx_says\n\t\tfx_lines = { B = pacific }\n\t}\n}\n"),
+              ("scripted_effects", "fx_lines = {\n\tcustom_tooltip_no_bullet = fx_head_$B$\n}\n"))
+    HOVER = "GetScriptedGui('fx_hover_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )"
+
+    def test_a_scripted_tooltips_lines_are_the_panels_text(self):
+        """A hover that asks a scripted GUI for its tooltip prints the
+        script's custom_tooltip keys for whoever looks (#1361): they are the
+        panel's keys, so a player or entry read in one fails BindingTest, and
+        "we" in one fails the text check. Under the guard, or in the player's
+        own branch of a SelectLocalization, the hover is the player's."""
+        with tempfile.TemporaryDirectory() as tmp:
+            for folder, text in self.SCRIPT:
+                os.makedirs(os.path.join(tmp, "common", folder))
+                with open(os.path.join(tmp, "common", folder, "fx.txt"), "w", encoding="utf-8-sig") as fh:
+                    fh.write(text)
+            scripted = ScriptedGuis(tmp)
+        loc = {"fx_label": "Arsenal", "fx_says": "We hold [GetPlayer.GetName]", "fx_why": "Why not",
+               "fx_head_pacific": "[JournalEntry.GetCountry.GetName]'s basin", "fx_asks": "Header\n[%s]" % self.HOVER}
+
+        def keys(read):
+            return panel_loc_keys({"fx_wide"}, _fixture(read), loc, scripted=scripted)
+
+        hover = 'textbox = { tooltip = "[%s]" }' % self.HOVER
+        printed = {"fx_label", "fx_says", "fx_head_pacific"}
+        self.assertEqual(keys(hover), printed)
+        index = {k: (v, "fx_l_english.yml", 1) for k, v in loc.items()}
+        self.assertEqual(sorted((f.where, f.what) for f in loc_reads(keys(hover), index)),
+                         [("fx_head_pacific", "JournalEntry.GetCountry"), ("fx_says", "GetPlayer")])
+        self.assertEqual(list(personal_text(keys(hover), loc)), ["fx_says"])
+        self.assertEqual(panel_loc_keys({"fx_wide"}, _fixture(hover), loc, scripted=ScriptedGuis(None)), {"fx_label"},
+                         "what the walk saw before")
+        # each function its own block; a key that asks; the scripted GUI in context
+        self.assertEqual(keys(hover.replace("ExecuteTooltip", "IsValidTooltip")), {"fx_label", "fx_why"})
+        self.assertEqual(keys('textbox = { tooltip = "fx_asks" }'), printed | {"fx_asks"})
+        self.assertEqual(keys("widget = {\n\t\t\tdatacontext = \"[GetScriptedGui('fx_hover_sgui')]\"\n\t\t\ttextbox = { "
+                              'tooltip = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]" }'
+                              "\n\t\t}"), printed)
+        # the player's own
+        self.assertEqual(keys("widget = {\n\t\t\tusing = te_own_country_only\n\t\t\t%s\n\t\t}" % hover), {"fx_label"})
+        self.assertEqual(keys('textbox = { tooltip = "[SelectLocalization( Country.IsLocalPlayer, %s, \'fx_label\' )]" }'
+                              % self.HOVER), {"fx_label"})
+        self.assertEqual(keys('textbox = { tooltip = "[SelectLocalization( Country.IsAtWar, %s, \'fx_label\' )]" }'
+                              % self.HOVER), printed)
 
     FRAME = """types fixture
 {

@@ -395,6 +395,188 @@ class ItemTooltipTest(unittest.TestCase):
         self.assertIn('tooltip = "[Country.GetName]"', gui)
 
 
+BARS = """\
+types te_fix_types {
+	type te_fix_wide = flowcontainer {
+		te_fix_pool_bar = {
+			blockoverride "bar_tooltip" {
+				tooltip = "[Concatenate( GetPlayer.GetName, Localize( 'te_fix_pool_tt' ) )]"
+			}
+		}
+		te_history_chart = {
+			blockoverride "bar_tooltip" {
+				tooltip = "[Concatenate( GetPlayer.GetName, Localize( 'te_fix_chart_tt' ) )]"
+			}
+		}
+		te_fix_small_chart = {}
+		te_fix_cell = {
+			blockoverride "cell" {
+				te_fix_pool_bar = {
+					blockoverride "bar_tooltip" {
+						tooltip = "te_fix_cell_tt"
+					}
+				}
+			}
+		}
+	}
+
+	type te_fix_pool_bar = widget {
+		size = { 136 14 }
+		block "bar_tooltip" {}
+	}
+
+	type te_fix_small_chart = te_history_chart {
+		blockoverride "bar_tooltip" {
+			tooltip = "te_fix_small_tt"
+		}
+	}
+
+	type te_fix_cell = widget {
+		block "cell" {}
+	}
+}
+"""
+
+BARS_LOC = """\
+l_english:
+ te_fix_pool_tt: "[GetPlayer.MakeScope.ScriptValue('pool')]"
+ te_fix_chart_tt: "[GetPlayer.MakeScope.ScriptValue('y')]"
+ te_fix_small_tt: "[GetPlayer.MakeScope.ScriptValue('z')]"
+ te_fix_cell_tt: "[GetPlayer.MakeScope.ScriptValue('cell')]"
+"""
+
+
+class BarTooltipTest(unittest.TestCase):
+    """A `blockoverride "bar_tooltip"` is a datamodel item's tooltip only
+    where it fills a chart's bar (an instance of te_history_chart, or a type
+    derived from it, at its root too) or a block that sits in a datamodel's
+    item (LeftAloneTest's te_fix_chart). Seabed's pool bar has a block of
+    the name and no datamodel: its reads are mechanical (#1361)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = self.tmp.name
+        _put(self.root, GUI, BARS)
+        _put(self.root, YML, BARS_LOC)
+        self.s = tool.survey("te_fix_wide", self.root)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_classes(self):
+        got = sorted((r.finding.where, r.finding.line, r.cls) for r in self.s.markup)
+        self.assertEqual(got, [("te_fix_wide", 5, "mechanical"), ("te_fix_wide", 10, "item tooltip")])
+        self.assertIn(f"{GUI}:9 bar_tooltip", [r.why for r in self.s.markup if r.cls == "item tooltip"])
+        notes = {k: [cls for cls, _ in kr.notes] for k, kr in self.s.loc.items()}
+        self.assertEqual(notes, {"te_fix_pool_tt": [], "te_fix_cell_tt": [], "te_fix_chart_tt": ["item tooltip"],
+                                 "te_fix_small_tt": ["item tooltip"]})
+
+    def test_write_binds_the_pool_bar_and_leaves_the_charts(self):
+        self.assertEqual(tool.write(self.s), {GUI: 1, YML: 2})
+        gui, loc = _get(self.root, GUI), _get(self.root, YML)
+        self.assertIn("Concatenate( Country.GetName, Localize( 'te_fix_pool_tt' ) )", gui)
+        self.assertIn("Concatenate( GetPlayer.GetName, Localize( 'te_fix_chart_tt' ) )", gui)
+        self.assertIn("te_fix_pool_tt: \"[Country.MakeScope.ScriptValue('pool')]\"", loc)
+        self.assertIn("te_fix_cell_tt: \"[Country.MakeScope.ScriptValue('cell')]\"", loc)
+        self.assertIn("te_fix_chart_tt: \"[GetPlayer.MakeScope.ScriptValue('y')]\"", loc)
+        self.assertIn("te_fix_small_tt: \"[GetPlayer.MakeScope.ScriptValue('z')]\"", loc)
+
+
+HOVERS = """\
+types te_fix_types {
+	type te_fix_wide = flowcontainer {
+		textbox = {
+			text = "te_fix_both"
+			tooltip = "[GetScriptedGui('te_fix_hover_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		}
+		textbox = {
+			tooltip = "te_fix_asks"
+		}
+	}
+}
+"""
+
+HOVER_SGUI = """\
+te_fix_hover_sgui = {
+	scope = country
+	is_valid = { custom_tooltip = te_fix_unasked }
+	effect = {
+		custom_tooltip = te_fix_line
+		custom_tooltip = te_fix_both
+		te_fix_lines = { B = pacific }
+	}
+}
+te_fix_record_sgui = {
+	effect = { custom_tooltip = te_fix_record }
+}
+"""
+
+HOVER_EFFECTS = """\
+te_fix_lines = {
+	custom_tooltip_no_bullet = te_fix_head_$B$
+}
+"""
+
+HOVER_LOC = """\
+l_english:
+ te_fix_line: "[GetPlayer.GetName] holds $te_fix_spliced$"
+ te_fix_spliced: "[GetPlayer.GetName]"
+ te_fix_head_pacific: "[JournalEntry.GetCountry.GetName] and [JournalEntry.GetGoalProgress]"
+ te_fix_both: "[GetPlayer.GetName]"
+ te_fix_unasked: "[GetPlayer.GetName]"
+ te_fix_asks: "[GetScriptedGui('te_fix_record_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+ te_fix_record: "[GetPlayer.GetName]"
+"""
+
+
+class ScriptedTooltipTest(unittest.TestCase):
+    """A key a scripted GUI's tooltip prints (#1361) is the panel's text, with
+    no Country in its context: listed as a scripted tooltip, with the scripted
+    GUI and the place that asks, and left by --write."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = self.tmp.name
+        _put(self.root, GUI, HOVERS)
+        _put(self.root, YML, HOVER_LOC)
+        _put(self.root, "common/scripted_guis/te_fix_sguis.txt", HOVER_SGUI)
+        _put(self.root, "common/scripted_effects/te_fix_effects.txt", HOVER_EFFECTS)
+        self.s = tool.survey("te_fix_wide", self.root)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_classes(self):
+        got = {k: sorted(r.cls for r in kr.reads) for k, kr in self.s.loc.items()}
+        self.assertEqual(got, {"te_fix_line": ["scripted tooltip"], "te_fix_spliced": ["scripted tooltip"],
+                               "te_fix_head_pacific": ["entry-only", "scripted tooltip"],
+                               "te_fix_both": ["scripted tooltip"], "te_fix_record": ["scripted tooltip"],
+                               "te_fix_asks": ["mechanical"]})
+        self.assertNotIn("te_fix_unasked", self.s.loc, "is_valid's line: the hover asks for the effect's")
+
+    def test_the_note_names_the_scripted_gui_and_who_asks(self):
+        notes = {k: kr.notes for k, kr in self.s.loc.items()}
+        (cls, source), = notes["te_fix_line"]
+        self.assertEqual(cls, "scripted tooltip")
+        self.assertEqual(source, f"te_fix_hover_sgui's ExecuteTooltip ({GUI}:5, the effect in common/scripted_guis/)")
+        self.assertEqual(notes["te_fix_spliced"], notes["te_fix_line"], "a key the line splices is the tooltip's too")
+        self.assertEqual(notes["te_fix_record"], [("scripted tooltip", "te_fix_record_sgui's ExecuteTooltip (asked by "
+                                                   "loc key te_fix_asks, the effect in common/scripted_guis/)")])
+        # a key the panel's own text renders as well has two contexts: script's and the panel's
+        self.assertEqual([cls for cls, _ in notes["te_fix_both"]], ["scripted tooltip", "shared"])
+        self.assertEqual(notes["te_fix_asks"], [])
+        text = tool.render(self.s)
+        self.assertIn("scripted tooltip: te_fix_hover_sgui's ExecuteTooltip", text)
+        self.assertIn("read the root (SCOPE.GetRootScope", text)
+
+    def test_write_leaves_them(self):
+        self.assertEqual(tool.write(self.s), {YML: 1})
+        loc = _get(self.root, YML)
+        self.assertIn("SetRoot( Country.MakeScope )", loc, "the key that asks is the panel's own: mechanical")
+        for line in HOVER_LOC.splitlines()[1:6] + HOVER_LOC.splitlines()[7:]:
+            self.assertIn(line, loc)
+
+
 class CustomLocTest(unittest.TestCase):
     """A key that GetCustom renders is the caller's text: reached, rewritten
     with it, and not shared with script."""

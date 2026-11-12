@@ -9,9 +9,12 @@ The real calls are in each system's layout test (test_demographics_layout.py
 for the Census Data window). Each failing case names the message it expects,
 so a case can't pass on some other failure.
 """
+import os
+import tempfile
 import unittest
 
-from gui_test_helpers import _children, assert_wide_matches_narrow, loc_closure
+from gui_test_helpers import (ScriptedGuis, _children, assert_wide_matches_narrow, loc_closure, loc_keys_of,
+                              own_branch_spans, printed_keys, scripted_keys, tooltip_calls)
 
 NARROW = """
 types fixture {
@@ -533,6 +536,220 @@ class LocClosureTest(unittest.TestCase):
         """1.15 escapes a spliced key as `$key|q$`; the closure still reaches it."""
         loc = {"a": "see $b|q$ and $c$", "b": "B", "c": "C"}
         self.assertEqual(loc_closure({"a"}, loc), {"a", "b", "c"})
+
+
+SGUIS = """\
+# a comment that names custom_tooltip = fx_commented
+fx_hover_sgui = {
+	scope = country
+	is_shown = {
+		custom_tooltip = {
+			text = fx_shown_tt
+			fx_is_far = yes
+		}
+	}
+	ai_is_valid = { custom_tooltip = fx_ai_tt }
+	is_valid = {
+		fx_is_far = yes
+		custom_tooltip = {
+			text = "fx_valid_tt"
+			always = yes
+		}
+	}
+	effect = {
+		custom_tooltip = fx_line_a
+		custom_tooltip_no_bullet = fx_line_b # custom_tooltip = fx_commented
+		if = {
+			limit = { fx_is_far = yes }
+			fx_print = { KEY = fx_line_c B = pacific }
+		}
+		fx_print = { KEY = "fx_line_d" B = arctic }
+		hidden_effect = { custom_tooltip = fx_hidden }
+		fx_loose = yes
+	}
+}
+fx_other_sgui = {
+	effect = { custom_tooltip = fx_other_line }
+}
+"""
+
+EFFECTS = """\
+fx_print = {
+	custom_tooltip = $KEY$
+	custom_tooltip_no_bullet = fx_head_$B$
+	fx_again = { KEY = $KEY$ }
+}
+fx_again = {
+	custom_tooltip = { text = $KEY$_more }
+	fx_again = { KEY = $KEY$ }
+}
+fx_loose = {
+	custom_tooltip = fx_basin_$B$
+	custom_tooltip = $ALL$
+}
+"""
+
+TRIGGERS = """\
+fx_is_far = {
+	custom_tooltip = {
+		text = fx_far_tt
+		fx_is_deep = yes
+	}
+}
+fx_is_deep = {
+	custom_tooltip = fx_deep_tt
+}
+"""
+
+
+class ScriptedTooltipTest(unittest.TestCase):
+    """What a scripted GUI's tooltip prints (ScriptedGuis, #1361), and the
+    tooltips a markup or loc text asks for (tooltip_calls)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        for folder, text in (("scripted_guis", SGUIS), ("scripted_effects", EFFECTS), ("scripted_triggers", TRIGGERS)):
+            os.makedirs(os.path.join(cls.tmp.name, "common", folder))
+            with open(os.path.join(cls.tmp.name, "common", folder, "fx.txt"), "w", encoding="utf-8-sig") as fh:
+                fh.write(text)
+        cls.scripted = ScriptedGuis(cls.tmp.name)
+        names = ("fx_shown_tt fx_valid_tt fx_far_tt fx_deep_tt fx_ai_tt fx_line_a fx_line_b fx_line_c fx_line_d "
+                 "fx_line_c_more fx_line_d_more fx_head_pacific fx_head_arctic fx_head_indian fx_basin_pacific "
+                 "fx_basin_indian fx_hidden fx_commented fx_other_line fx_spliced")
+        cls.loc = {name: name.upper() for name in names.split()}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_each_function_renders_its_own_block(self):
+        """ExecuteTooltip the effect, IsValidTooltip is_valid (not
+        ai_is_valid), IsShownTooltip is_shown."""
+        self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsShownTooltip"), {"fx_shown_tt"})
+        self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsValidTooltip"), {"fx_far_tt", "fx_valid_tt"})
+        self.assertEqual(self.scripted.printed("fx_other_sgui"), {"fx_other_line"})
+        self.assertEqual(self.scripted.printed("fx_no_such_sgui"), set())
+        self.assertEqual(ScriptedGuis(None).keys("fx_hover_sgui", "ExecuteTooltip", self.loc), set())
+
+    def test_a_custom_tooltips_text_stands_for_what_it_holds(self):
+        """`custom_tooltip = { text = x  <triggers> }` shows x in place of the
+        triggers' own lines, and a hidden_effect shows nothing: the Colonial
+        Empire's unlock checklist doesn't print is_separated_from_capital's
+        line, which says "our capital"."""
+        self.assertNotIn("fx_deep_tt", self.scripted.printed("fx_hover_sgui", "IsValidTooltip"))
+        self.assertNotIn("fx_far_tt", self.scripted.printed("fx_hover_sgui", "IsShownTooltip"))
+        self.assertNotIn("fx_hidden", self.scripted.printed("fx_hover_sgui"))
+        self.assertNotIn("fx_commented", self.scripted.printed("fx_hover_sgui"))
+        self.assertEqual(printed_keys("custom_tooltip = { text = fx_a  custom_tooltip = fx_b }\ncustom_tooltip = fx_c",
+                                      {}), {"fx_a", "fx_c"})
+
+    def test_the_effects_and_triggers_it_calls_are_followed_with_their_arguments(self):
+        """A scripted effect's `custom_tooltip = $KEY$` and `fx_head_$B$` take
+        the call's arguments (Seabed's te_seabed_build_in_head_$B$), a quoted
+        one too; an effect that calls itself ends; a trigger in a `limit`
+        counts (the walk errs wide there)."""
+        got = self.scripted.keys("fx_hover_sgui", "ExecuteTooltip", self.loc)
+        self.assertEqual(got, {"fx_line_a", "fx_line_b", "fx_line_c", "fx_line_d", "fx_line_c_more", "fx_line_d_more",
+                               "fx_head_pacific", "fx_head_arctic", "fx_far_tt", "fx_basin_pacific", "fx_basin_indian"})
+
+    def test_a_name_with_an_argument_left_out_is_any_key_it_could_spell(self):
+        """fx_loose is called with no B: fx_basin_$B$ is every fx_basin_ key.
+        A name that is all arguments would be every key, so it gives none."""
+        self.assertEqual(self.scripted.printed("fx_hover_sgui") & {"fx_basin_$B$", "$ALL$"}, {"fx_basin_$B$", "$ALL$"})
+        self.assertEqual(loc_keys_of({"fx_basin_$B$", "$ALL$", "fx_line_a", "fx_gone"}, self.loc),
+                         {"fx_basin_pacific", "fx_basin_indian", "fx_line_a"})
+        self.assertEqual(loc_keys_of({"fx_$A$_$B$"}, {"fx_a_b": "", "fx_ab": "", "fx__": ""}), {"fx_a_b"})
+
+    def test_the_tooltips_a_text_asks_for(self):
+        named = "[GetScriptedGui('fx_hover_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+        self.assertEqual(tooltip_calls(named), [("fx_hover_sgui", "ExecuteTooltip", 1)])
+        self.assertEqual([c[:2] for c in tooltip_calls("[Concatenate( ScriptedGui.IsValidTooltip( X ), "
+                                                       "ScriptedGui.IsShownTooltip( X ) )]")],
+                         [(None, "IsValidTooltip"), (None, "IsShownTooltip")])
+        self.assertEqual(tooltip_calls("[GetScriptedGui('fx_hover_sgui').Execute( X )] [ScriptedGui.IsValid( X )]"), [],
+                         "a control and a test are no tooltip")
+        # a loc value escapes nothing, but a quoted call in a loc-in-markup string does
+        self.assertEqual(tooltip_calls("GetScriptedGui(\\'fx_a\\').ExecuteTooltip( X )")[0][:2], ("fx_a", "ExecuteTooltip"))
+
+    def test_a_tooltip_in_the_players_own_branch_is_left_out(self):
+        """Tax Code's Pass checklist: the tooltip is the first branch of a
+        SelectLocalization on Country.IsLocalPlayer, alone or first in an And."""
+        call = "GetScriptedGui('fx_hover_sgui').IsValidTooltip( X )"
+        for cond, own in (("Country.IsLocalPlayer", True), ("And( Country.IsLocalPlayer, Not( Y ) )", True),
+                          ("And( Not( Y ), Country.IsLocalPlayer )", False), ("Or( Country.IsLocalPlayer, Y )", False),
+                          ("Country.IsAtWar", False)):
+            with self.subTest(condition=cond):
+                first = f"[SelectLocalization( {cond}, Concatenate( 'a', {call} ), 'b' )]"
+                self.assertEqual(len(tooltip_calls(first, own=False)), 0 if own else 1)
+                self.assertEqual(len(tooltip_calls(first)), 1)
+                second = f"[SelectLocalization( {cond}, 'a', {call} )]"
+                self.assertEqual(len(tooltip_calls(second, own=False)), 1, "the other branch is everyone's")
+                added = f"[AddLocalizationIf( {cond}, {call} )]"
+                self.assertEqual(len(tooltip_calls(added, own=False)), 0 if own else 1)
+        nested = (f"[SelectLocalization( Y, 'a', SelectLocalization( Country.IsLocalPlayer, {call}, "
+                  f"GetScriptedGui('fx_other_sgui').ExecuteTooltip( X ) ) )]")
+        self.assertEqual([c[0] for c in tooltip_calls(nested, own=False)], ["fx_other_sgui"])
+        text = "[SelectLocalization( Country.IsLocalPlayer, 'a', 'b' )]"
+        self.assertEqual([text[a:b].strip() for a, b in own_branch_spans(text)], ["'a'"])
+
+    def test_the_scripted_gui_in_context(self):
+        """`ScriptedGui.` is the nearest `datacontext = "[GetScriptedGui('x')]"`
+        around the call; the panel's (contexts) where the body has none, and
+        with it where a blockoverride lies between, since the override's
+        contents sit where its block is."""
+        body = """
+		widget = {
+			datacontext = "[GetScriptedGui('fx_other_sgui')]"
+			button = {
+				datacontext = "[GetScriptedGui('fx_hover_sgui')]"
+				tooltip = "[ScriptedGui.IsShownTooltip( X )]"
+			}
+			@MORE@
+		}
+		textbox = { tooltip = "[ScriptedGui.ExecuteTooltip( X )]" }
+"""
+        def keys(more="", contexts=()):
+            return scripted_keys(body.replace("@MORE@", more), self.loc, self.scripted, contexts, markup=True)
+        self.assertEqual(keys(), {"fx_shown_tt"}, "the nearest; none for the textbox, with no context given")
+        self.assertEqual(keys(contexts={"fx_other_sgui"}), {"fx_shown_tt", "fx_other_line"})
+        inner = 'textbox = { tooltip = "[ScriptedGui.ExecuteTooltip( X )]" }'
+        self.assertEqual(keys(inner), {"fx_shown_tt", "fx_other_line"}, "the outer widget's")
+        over = 'fx_row = { blockoverride "slot" { tooltip = "[ScriptedGui.IsValidTooltip( X )]" } }'
+        self.assertEqual(keys(over), {"fx_shown_tt"}, "fx_other_sgui's is_valid prints nothing")
+        # fx_hover_sgui's is_valid, asked only in the override: the panel's, with the body's own
+        self.assertIn("fx_valid_tt", keys(over, {"fx_hover_sgui"}))
+        self.assertNotIn("fx_valid_tt", keys("", {"fx_hover_sgui"}))
+        # as plain text (a loc value) there is no markup to read: the contexts given
+        self.assertEqual(scripted_keys("[ScriptedGui.ExecuteTooltip( X )]", self.loc, self.scripted, {"fx_other_sgui"}),
+                         {"fx_other_line"})
+
+    def test_the_loc_closure_follows_a_scripted_tooltip(self):
+        loc = dict(self.loc, fx_tt="Header\n[GetScriptedGui('fx_other_sgui').ExecuteTooltip( X )]",
+                   fx_other_line="A line and $fx_spliced$",
+                   fx_bare="[ScriptedGui.ExecuteTooltip( X )]",
+                   fx_own="[SelectLocalization( Country.IsLocalPlayer, GetScriptedGui('fx_other_sgui')"
+                          ".ExecuteTooltip( X ), '' )]")
+        self.assertEqual(loc_closure({"fx_tt"}, loc, scripted=self.scripted), {"fx_tt", "fx_other_line", "fx_spliced"})
+        self.assertEqual(loc_closure({"fx_tt"}, loc, scripted=ScriptedGuis(None)), {"fx_tt"})
+        self.assertEqual(loc_closure({"fx_bare"}, loc, scripted=self.scripted), {"fx_bare"})
+        self.assertEqual(loc_closure({"fx_bare"}, loc, scripted=self.scripted, contexts={"fx_other_sgui"}),
+                         {"fx_bare", "fx_other_line", "fx_spliced"})
+        self.assertEqual(loc_closure({"fx_own"}, loc, scripted=self.scripted), {"fx_own", "fx_other_line", "fx_spliced"})
+        self.assertEqual(loc_closure({"fx_own"}, loc, own=False, scripted=self.scripted), {"fx_own"})
+
+    def test_the_repos_scripted_guis(self):
+        """Seabed's Free hover prints a head, a state and a more line for each
+        basin (te_seabed_build_in_sgui, through te_seabed_build_in_lines's
+        $B$), the Colonial Empire's unlock checklist its four lines."""
+        from gui_test_helpers import load_loc, scripted_guis
+        loc = load_loc()
+        seabed = scripted_guis().keys("te_seabed_build_in_sgui", "ExecuteTooltip", loc)
+        for key in ("te_seabed_build_in_head_pacific", "te_seabed_build_in_none_arctic", "te_seabed_build_in_state_1"):
+            self.assertIn(key, seabed)
+        self.assertEqual(scripted_guis().keys("te_window_colonial_empire_entry_unlock_sgui", "IsValidTooltip", loc),
+                         {"ce_unlock_colonies_tt", "ce_unlock_not_secured_tt", "ce_unlock_no_collapse_tt",
+                          "ce_unlock_no_recent_end_tt"})
 
 
 if __name__ == "__main__":
