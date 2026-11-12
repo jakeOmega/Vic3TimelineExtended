@@ -371,7 +371,7 @@ have agencies of their own.
 | Space Program Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
-| Incite Colonial Autonomy | Every colony the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony; Simple or Full Colonies setting of the Space Race rule | 50 |
+| Incite Colonial Autonomy | Every colony of 1,000 people or more the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony of 1,000 people or more; Simple or Full Colonies setting of the Space Race rule | 50 |
 | Sabotage Colony | The target's most populous colony loses 1% of its people a month and gains 0.25 autonomy | Target holds a colony; Simple or Full Colonies; Seasoned Tradecraft | 100 |
 | Survey Colony Defenses | Your fleets fire 20% harder on the defenses of the target's colonies, and your Fleets panel shows their Defenses, integrity and marines | Target holds a colony; Full Colonies setting | 50 |
 | Counterintelligence Support | Target: +8 economic, military and ideological covert defense. You: nothing | Target is a friend and has no other protector | 25 |
