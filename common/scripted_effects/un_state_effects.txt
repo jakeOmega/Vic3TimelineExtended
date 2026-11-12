@@ -100,7 +100,6 @@ un_mirror_set = {
 }
 
 un_mirror_clear = {
-	legacy_scaling_strip_united_nations = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's copy goes first, so the strip can't set this mirror again
 	if = {
 		limit = { has_variable = $MIRROR$ }
 		remove_variable = $MIRROR$

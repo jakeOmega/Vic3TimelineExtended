@@ -120,6 +120,18 @@ class PlanTests(unittest.TestCase):
                          ["character.GetAge", "character.GetFullName",
                           "country.GetFlag", "state.GetArea"])
 
+    def test_a_chained_gap_explained_as_undetermined_is_folded(self):
+        why = {("country", "GetHeir"): "nothing says what it returns"}
+        p = plan(undetermined=why)
+        self.assertEqual([g.name for g in p.undetermined], ["country.GetHeir"])
+        self.assertEqual(p.chained, [])
+        self.assertEqual(p.extras["country"]["GetHeir"], "value")
+        # Folded, it is a blind pair, but an explained one: no hand typing owed.
+        self.assertIn("country.GetHeir", [b.name for b in p.blind])
+        self.assertNotIn("country.GetHeir", [b.name for b in p.untyped_blind])
+        self.assertIn("GetHeir", " ".join(
+            fold.render_plan(p, "fixture", None, dry_run=True).splitlines()[-12:]))
+
     def test_the_inputs_are_not_modified(self):
         before = {typ: dict(accessors) for typ, accessors in EXTRAS.items()}
         plan()
@@ -271,6 +283,22 @@ class CommittedExtrasTests(unittest.TestCase):
             "python3 scripts/generators/fold_vanilla_loc_accessors.py and follow its report")
         self.assertEqual(p.extras, audit_mod.VANILLA_EXTRACTED_ACCESSORS)
         self.assertEqual(p.known, len(audit_mod.KNOWN_VANILLA_FLAGS))
+
+    def test_a_fold_from_empty_extras_settles(self):
+        # The undetermined pairs vanilla chains through can never be typed; the
+        # fold must still finish (exit 0) and write what is committed.
+        lines, _ = fold.load_vanilla_lines("snapshot")
+        p = fold.plan_fold(lines, audit_mod.HAND_TYPED_ACCESSORS, {},
+                           engine_docs_dir=str(fold.ENGINE_DOCS))
+        self.assertFalse(p.needs_hand_typing,
+                         [g.name for g in p.chained] + [b.name for b in p.untyped_blind])
+        self.assertEqual(sorted((g.type, g.accessor) for g in p.undetermined),
+                         sorted(audit_mod.BLIND_UNDETERMINED))
+        # Every entry it writes is committed; the committed file also keeps
+        # some the snapshot's loc no longer calls (folds add, never prune).
+        committed = {(t, a) for t, accs in audit_mod.VANILLA_EXTRACTED_ACCESSORS.items()
+                     for a in accs}
+        self.assertLessEqual({(t, a) for t, accs in p.extras.items() for a in accs}, committed)
 
     def test_the_committed_file_is_what_the_fold_writes(self):
         with open(fold.EXTRAS, encoding="utf-8") as f:

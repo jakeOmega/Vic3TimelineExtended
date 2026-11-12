@@ -3649,6 +3649,9 @@ types colonial_empire_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 		blockoverride "tab_content" {
 			block "te_ce_tab_layout" {
 				te_ce_overview_panel = {}

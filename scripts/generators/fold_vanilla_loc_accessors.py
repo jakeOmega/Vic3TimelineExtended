@@ -29,7 +29,8 @@ the folded accessors that vanilla chains further through all the same.
 Re-run after every vanilla patch (runbook § 4). `--dry-run` reports and writes
 nothing. Exit code 1 when a chained-further accessor is waiting for its type,
 or a folded one that vanilla chains through is neither typed nor explained in
-the audit's `BLIND_UNDETERMINED`.
+the audit's `BLIND_UNDETERMINED`. A chained-further gap that table explains is
+folded as `"value"` and listed, so a fold from an empty extras file settles.
 
 Usage: python3 scripts/generators/fold_vanilla_loc_accessors.py [--dry-run]
            [--source auto|install|snapshot] [--data-types DIR]
@@ -204,21 +205,24 @@ class FoldPlan:
     extras: dict[str, dict[str, str]]          # the table to write
     terminal: list[Gap] = field(default_factory=list)   # folded as "value"
     chained: list[Gap] = field(default_factory=list)    # to be typed by hand
+    # chained further, but BLIND_UNDETERMINED says nothing tells what it returns:
+    # folded as "value" all the same, so a fold from empty extras still settles
+    undetermined: list[Gap] = field(default_factory=list)
     shadowed: list[str] = field(default_factory=list)   # dropped: the hand table has them
     dropped: list[str] = field(default_factory=list)    # dropped by --drop
     known: int = 0                                      # flags in KNOWN_VANILLA_FLAGS
     residual: list = field(default_factory=list)        # flags that name no accessor
     blind: list = field(default_factory=list)           # folded pairs vanilla chains past
     flags: int = 0                                      # vanilla flags before the fold
+    explained: dict = field(default_factory=dict)       # the BLIND_UNDETERMINED in use
 
     @property
     def untyped_blind(self) -> list:
-        return [p for p in self.blind
-                if (p.type, p.accessor) not in audit_mod.BLIND_UNDETERMINED]
+        return [p for p in self.blind if (p.type, p.accessor) not in self.explained]
 
     @property
     def changed(self) -> bool:
-        return bool(self.terminal or self.shadowed or self.dropped)
+        return bool(self.terminal or self.undetermined or self.shadowed or self.dropped)
 
     @property
     def needs_hand_typing(self) -> bool:
@@ -232,12 +236,18 @@ def plan_fold(
     *,
     engine_docs_dir: str = "",
     known_flags: dict | None = None,
+    undetermined: dict | None = None,
     drop: tuple[str, ...] = (),
 ) -> FoldPlan:
     """What a fold of vanilla's `lines` would do to `extras`, given the
-    hand-typed table `hand`. Pure: reads no module state and writes nothing."""
+    hand-typed table `hand`. Writes nothing. `known_flags` and `undetermined`
+    default to the audit's `KNOWN_VANILLA_FLAGS` and `BLIND_UNDETERMINED`; a
+    chained-further gap the latter explains is folded as `"value"`, since
+    nothing says what else to type it."""
     known_flags = audit_mod.KNOWN_VANILLA_FLAGS if known_flags is None else known_flags
-    plan = FoldPlan(extras={})
+    if undetermined is None:
+        undetermined = audit_mod.BLIND_UNDETERMINED
+    plan = FoldPlan(extras={}, explained=undetermined)
     for typ, accessors in extras.items():
         for accessor, ret in accessors.items():
             name = f"{typ}.{accessor}"
@@ -279,7 +289,10 @@ def plan_fold(
             if nxt not in gap.continuations:
                 gap.continuations.append(nxt)
     for pair, gap in sorted(gaps.items()):
-        if pair in is_chained:
+        if pair in is_chained and pair in undetermined:
+            plan.undetermined.append(gap)
+            plan.extras.setdefault(gap.type, {})[gap.accessor] = "value"
+        elif pair in is_chained:
             plan.chained.append(gap)
         else:
             plan.terminal.append(gap)
@@ -325,6 +338,12 @@ def render_plan(plan: FoldPlan, source: str, data_types: dict | None, *, dry_run
         says = engine_says(data_types, gap.type, gap.accessor)
         out.append(f"  ! {gap.name}, then {', '.join(gap.continuations)}"
                    f"   e.g. {gap.key}: [{gap.chain}]" + (f"   [{says}]" if says else ""))
+    if plan.undetermined:
+        out.append("")
+        out.append(f"Chained further, {verb} as \"value\" because BLIND_UNDETERMINED "
+                   f"explains them: {len(plan.undetermined)}")
+        for gap in plan.undetermined:
+            out.append(f"  ~ {gap.name}, then {', '.join(gap.continuations)}")
     if plan.shadowed or plan.dropped:
         out.append("")
         out.append(f"Dropped from the extras: {len(plan.shadowed)} the hand table defines, "
@@ -341,7 +360,7 @@ def render_plan(plan: FoldPlan, source: str, data_types: dict | None, *, dry_run
     out.append(f"Folded accessors vanilla chains further through: {len(plan.blind)} "
                f"({len(plan.untyped_blind)} to be typed, the rest explained in BLIND_UNDETERMINED)")
     for pair in plan.blind:
-        why = audit_mod.BLIND_UNDETERMINED.get((pair.type, pair.accessor))
+        why = plan.explained.get((pair.type, pair.accessor))
         says = engine_says(data_types, pair.type, pair.accessor)
         out.append(f"  {'~' if why else '!'} {pair.name}, then {', '.join(pair.continuations)}"
                    + (f"   [{says}]" if says and not why else ""))
