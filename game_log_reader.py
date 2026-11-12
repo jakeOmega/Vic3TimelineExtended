@@ -86,10 +86,12 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
 # a `"<file>:"` key here never matches anything (that's how the physfs rule sat
 # dead until #254).
 SOURCE_CATEGORY_PREFIX: dict[str, str] = {
-    "gamedatabase.h:378": "duplicated_key",
-    # `You are trying to inject/replace to a non-existing entry: X:Inject in
-    # the file ...` (read in game, scripting_best_practices.md § Load Order).
-    "gamedatabase.h:395": "inject_to_missing",
+    # gamedatabase.h's two lines are classified by their text first
+    # (MESSAGE_CATEGORY_BY_FILE); these cover a line whose wording changed.
+    "gamedatabase.h:378": "duplicated_key",     # vanilla 1.14.5
+    "gamedatabase.h:394": "duplicated_key",     # vanilla 1.15
+    "gamedatabase.h:395": "inject_to_missing",  # vanilla 1.14.5
+    "gamedatabase.h:411": "inject_to_missing",  # vanilla 1.15
     "pdx_persistent_reader.cpp:268": "script_parse_error",
     "jomini_trigger.cpp:721": "inconsistent_trigger_scope",
     "jomini_effect.cpp:752": "inconsistent_effect_scope",
@@ -124,6 +126,24 @@ SOURCE_CATEGORY_FILE: dict[str, str] = {
     # Checked against every retained log generation, 2026-09-27.
     "jomini_effect_impl.cpp": "debug_log",
     "localization_database.cpp": "localization",
+}
+
+# Source file → ((message prefix, category), ...), tried before both tables
+# above. For a file whose lines of interest are told apart by what they say: a
+# vanilla patch moves a `file:line` (1.15.0 moved both of gamedatabase.h's by
+# 16, and the two read as gamedatabase_other, #1571), while the text stays. The
+# prefix is matched against the start of the message, case-sensitively, and
+# only for entries from that file. The file needs a SOURCE_CATEGORY_FILE row as
+# well, for its other lines.
+MESSAGE_CATEGORY_BY_FILE: dict[str, tuple[tuple[str, str], ...]] = {
+    "gamedatabase.h": (
+        # `Duplicated key X will not be created from file: <path>:<line>`
+        ("Duplicated key ", "duplicated_key"),
+        # `You are trying to inject/replace to a non-existing entry: X:Inject
+        # in the file <path>:<line>` (read in game, scripting_best_practices.md
+        # § Load Order).
+        ("You are trying to inject/replace to a non-existing entry", "inject_to_missing"),
+    ),
 }
 
 PARSED_FAMILIES = frozenset({
@@ -318,10 +338,13 @@ def parse_log(path: str) -> list[LogEntry]:
 
 
 def _classify(source: str, message: str) -> str:
+    file_part = source.split(":", 1)[0]
+    for prefix, cat in MESSAGE_CATEGORY_BY_FILE.get(file_part, ()):
+        if message.startswith(prefix):
+            return cat
     cat = SOURCE_CATEGORY_PREFIX.get(source)
     if cat:
         return cat
-    file_part = source.split(":", 1)[0]
     return SOURCE_CATEGORY_FILE.get(file_part, "other")
 
 

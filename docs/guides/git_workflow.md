@@ -41,3 +41,5 @@ On this repo `gh pr edit <n> --body-file <file>` currently exits non-zero with o
 ## A multi-issue PR needs one `Closes` keyword per issue
 
 `Closes #161, #167, #168` auto-closes **only #161** — GitHub binds the closing keyword to the first number; the rest are mere references and stay open after merge. Write `Closes #161. Closes #167. Closes #168.` (or `closes #161, closes #167, …`). Bit us on #174, which silently left #167-172 open (recovered by manual close + a follow-up PR). Verify post-merge with `gh issue list` rather than trusting the PR body.
+
+**The keyword also fires where it was not meant.** GitHub reads `fixed: #N`, `fixes #N`, `closes: #N` and their kin anywhere in a PR body or a squash commit's message, whatever comes before them. #1623's commit message said "Script bugs found and not fixed: #1612 to #1621", and merging it closed #1612 (reopened by hand, 2026-11-12). When a message lists issues it does not close, keep `fix`, `close` and `resolve` words away from the number: "reported in #1612 to #1621".

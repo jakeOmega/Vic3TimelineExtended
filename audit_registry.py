@@ -243,8 +243,9 @@ AUDITS: tuple[Audit, ...] = (
         "event_magnitude_audit",
         "A hardcoded amount in an event for a resource that grows fast over the game (prestige is the "
         "model case), which is invisible at late-game scale.",
-        ci=None,
         where=VALUE_LINE,
+        note="Reads `events/` only: an amount granted from a scripted effect is flagged only where an "
+             "event repeats it, as in a `show_as_tooltip` (#1593).",
     ),
     # --- treaties, blocs, companies, laws ------------------------------------
     Audit(

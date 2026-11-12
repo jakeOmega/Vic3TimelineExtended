@@ -114,8 +114,9 @@ LOAD_ORDER_MODEL = {
     },
     "bare_duplicate": {
         "status": "probed",
-        "claim": "A bare definition of a key that already exists is dropped (gamedatabase.h:378 "
-                 "`Duplicated key X will not be created from file:`): the first one wins.",
+        "claim": "A bare definition of a key that already exists is dropped (gamedatabase.h "
+                 "`Duplicated key X will not be created from file:`, line 378 on 1.14.5 and 394 "
+                 "on 1.15): the first one wins.",
         "see": f"{LOAD_ORDER_DOC}, fact 3 (static_modifiers, scripted_effects, scripted_triggers, "
                "scripted_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, "
                "breaking_changes.md (no implicit overwrites). Setting: BARE_DUPLICATE_RULES.",
@@ -123,10 +124,11 @@ LOAD_ORDER_MODEL = {
     "directives": {
         "status": "documented",
         "claim": "INJECT/REPLACE act on an existing entry and error when there is none "
-                 "(gamedatabase.h:395); TRY_INJECT/TRY_REPLACE skip it; "
+                 "(gamedatabase.h `You are trying to inject/replace to a non-existing entry`, "
+                 "line 395 on 1.14.5 and 411 on 1.15); TRY_INJECT/TRY_REPLACE skip it; "
                  "INJECT_OR_CREATE/REPLACE_OR_CREATE create it. A REPLACE wipes what came "
                  "before it, an INJECT adds to it.",
-        "see": f"Modding-Digests 1.12.0 inject_types.md; the :395 text, {LOAD_ORDER_DOC}, fact 4.",
+        "see": f"Modding-Digests 1.12.0 inject_types.md; the message's text, {LOAD_ORDER_DOC}, fact 4.",
     },
     "directives_deferred": {
         "status": "probed",

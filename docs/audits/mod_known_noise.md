@@ -239,6 +239,7 @@ Twenty-eight lines once per launch, from the culture merges (#1509). Eleven merg
 
 ### `gamedatabase.h:378` — culture merges: the restated vanilla trigger drops vanilla's copy
 - source: `gamedatabase.h:378`
+- source: `gamedatabase.h:394`
 - tracked: `docs/audits/open_issues.md#l31-culture-merges-the-restated-vanilla-trigger-logs-a-duplicated-key`
 
 ```

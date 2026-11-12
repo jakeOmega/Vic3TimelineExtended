@@ -90,7 +90,7 @@ Families: `error`, `debug`, `game`, `gui`, `graphics`, `event_scopes`, `dedicate
 
 ## Category playbook
 
-`SOURCE_CATEGORY_PREFIX` / `SOURCE_CATEGORY_FILE` in `game_log_reader.py` are the source of truth for category names.
+`SOURCE_CATEGORY_PREFIX` / `SOURCE_CATEGORY_FILE` / `MESSAGE_CATEGORY_BY_FILE` in `game_log_reader.py` are the source of truth for category names.
 
 | Category | What it usually means | Where to look |
 |---|---|---|
