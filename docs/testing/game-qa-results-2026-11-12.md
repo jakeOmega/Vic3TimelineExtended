@@ -79,6 +79,13 @@ What these settle:
   effect has a cascade for that law (`extra_law_consistency_generated.txt`), which would explain it; not
   checked. The 2026-11-11 note "laws changed there were not read afterwards" may have this cause.
 
+**A lead from the owner, not verified** (2026-11-12, "fairly confident, not certain"): the Back button at the
+bottom left of the country-select screen takes you back into the game as the current country, not to the main
+menu; and Esc may not close a window while that screen (with its Back button) is up. If Back does enter the
+game as the tagged country, one click on it would be a better `enter-game` than the click on whatever country
+the view is over, since it would not depend on the view. Neither was tried: the shots above show only that Esc
+never left the lobby (five presses in session 4, two in session 3), so Esc is not Back there.
+
 ## Self-checks in the runs
 
 Session 1: 27 `TE_SELF_CHECK` lines: 22 OK, 4 START, and one BROKEN, `delayed_state_event`, which has read BROKEN
