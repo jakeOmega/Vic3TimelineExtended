@@ -2903,7 +2903,7 @@ space_race_events.12 = {
 	}
 }
 
-# Event 13: Deep Space Signal Lost (probe/interstellar)
+# Event 13: Deep Space Signal Lost (the Deep-Space Probe milestone)
 space_race_events.13 = {
 	type = country_event
 	placement = root
@@ -3800,7 +3800,8 @@ space_race_events.72 = {
 		name = space_race_events.72.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Replace the damaged equipment and improve fire suppression
+		# Replace the damaged equipment and get back to work (the safety
+		# protocols are option b's alone)
 		custom_tooltip = SR_SETBACK_LOSE_3_MONTHS_TT
 		sr_setback_lose_months = { MONTHS = 3 }
 		random_scope_state = {
@@ -3921,14 +3922,15 @@ space_race_events.74 = {
 		name = space_race_events.74.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# Apply the breakthrough: integrate it into the current program
+		# Apply the breakthrough: integrate it into the current program. The
+		# option named for the program gives it the longer boost (#1620).
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_engineering_breakthrough months = 18 }
+				add_modifier = { name = sr_engineering_breakthrough months = 24 }
 			}
 		}
 		add_loyalists = { value = medium_radicals pop_type = engineers }
@@ -3941,14 +3943,15 @@ space_race_events.74 = {
 	option = {
 		name = space_race_events.74.b
 		ai_chance = { base = 3 }
-		# Patent and commercialize the technology
+		# Patent and commercialize the technology: the program gets it for a
+		# shorter time, and the capitalists are pleased
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
 			}
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
-				add_modifier = { name = sr_engineering_breakthrough months = 24 }
+				add_modifier = { name = sr_engineering_breakthrough months = 18 }
 			}
 		}
 		add_loyalists = { value = medium_radicals pop_type = capitalists }

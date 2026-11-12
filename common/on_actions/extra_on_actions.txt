@@ -2852,6 +2852,7 @@ society_technology_events_on_action = {
 							has_game_rule = space_race_disabled
 							has_technology_researched = space_colonization
 							any_scope_building = { is_building_type = building_space_elevator level >= 1 }
+							has_variable = ste_event_18_fired
 						}
 					}
 				}
@@ -3726,6 +3727,16 @@ irredentism_bloc_approval_on_action = {
 				var:irr_union_proposer ?= {
 					NOT = { is_country_type = decentralized }
 					relations:ROOT >= relations_threshold:amicable
+					# Not our own bloc's leader: it would be asked to bless
+					# its own proposal (#1617), and needs no blessing, since
+					# irredentist_bloc_check_peace's target side already
+					# passes a target whose bloc the unifier leads.
+					NOT = {
+						AND = {
+							is_power_bloc_leader = yes
+							is_in_same_power_bloc = ROOT
+						}
+					}
 				}
 			}
 			random_list = {

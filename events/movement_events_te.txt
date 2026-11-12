@@ -1031,8 +1031,12 @@ movement_events_te.100 = {
 				trigger = {
 					# The default text is about suppression (leaders imprisoned,
 					# exiled); without any suppression the movement faded instead.
-					has_variable = cr_suppression_months
-					var:cr_suppression_months = 0
+					# on_fail also sends .100 for 18+ months of Segregationist
+					# Consolidation, and a government that passed new restrictions
+					# did move against it, so both trackers must be 0 (#1615).
+					# The cr_months_disp_* values read an unset tracker as 0.
+					cr_months_disp_suppression = 0
+					cr_months_disp_segregationist = 0
 				}
 				desc = movement_events_te.100.desc_faded
 			}

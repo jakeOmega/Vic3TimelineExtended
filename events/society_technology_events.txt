@@ -1788,6 +1788,9 @@ society_technology_events.19 = {
 					is_building_type = building_space_elevator
 					level >= 1
 				}
+				# The settlers petition only after .18 has told the country
+				# that its first settlement was founded (#1616).
+				has_variable = ste_event_18_fired
 			}
 		}
 	}

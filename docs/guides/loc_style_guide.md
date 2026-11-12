@@ -154,7 +154,7 @@ The modifier's lines already show what it does. The description says why we have
 > **After:** We have settled a border dispute with a neighbor.
 
 > **Before** (`predictive_intelligence_only_modifier_desc`): AI is used only for intelligence analysis, not direct policing, balancing security with civil liberties.
-> **After:** Our analysts use AI to sort intelligence reports. The police do not use it.
+> **After:** Our analysts use prediction software to sort intelligence reports. The police do not use it.
 
 "Brought stability" and "balancing security with civil liberties" are the effects restated as abstractions; the modifier's own lines say them better. Where the terms are the interesting part, give them:
 

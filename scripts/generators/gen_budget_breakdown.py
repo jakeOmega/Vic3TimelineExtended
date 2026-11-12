@@ -24,6 +24,8 @@ SOURCES = {
     "expense": {
         "banking": ("Banking", (
             "banking_event_deposit_guarantee_emergency", "banking_event_import_and_subsidy_cost",
+            # The guarantee's charge under its planned and cooperative names.
+            "banking_event_stockpile_release", "banking_event_federation_relief_fund",
             "banking_event_fx_defense", "banking_event_quiet_rescue", "banking_event_selective_bailout_cost",
             "banking_event_rural_credit_cost", "banking_event_harvest_subsidy_cost",
             "banking_event_sovereign_wealth_fund_cost", "banking_crash_response_cost",
