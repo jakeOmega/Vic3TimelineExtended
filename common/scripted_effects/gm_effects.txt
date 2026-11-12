@@ -781,7 +781,7 @@ gm_country_refresh = {
 		}
 		if = {
 			limit = { gm_state_merge_pending = yes }
-			trigger_event = { id = monument_events.29 }
+			trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_state_adopt_orphans settles an orphan before each monument_events.20 (gm_sh_adopt_beside sets its gm_tr_origin; gm_state_promote_secondary destroys the container it raised), so each pass leaves one fewer for gm_state_merge_pending to find, or it waits a day (gm_state_tomorrow) while gm_rebuilding stands in the region
 		}
 		# A revolt's part of a monument's state: the engine's copy of its
 		# building, which nothing records and no orphan claims, beside the part
@@ -790,7 +790,7 @@ gm_country_refresh = {
 		# it.
 		else_if = {
 			limit = { gm_state_stray_building = yes }
-			trigger_event = { id = monument_events.29 }
+			trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): on this branch monument_events.29 removes the building and fires nothing (its own chain reads gm_state_merge_pending first, false here); gm_state_stray_building needs the building
 		}
 		# A merge's building before its orphan reads as one (2026-11-06,
 		# Jantar Mantar): not a copy and not a first sight. It waits up to a
@@ -827,7 +827,7 @@ gm_country_refresh = {
 			# back once settled (gm_state_settle_newcomer), from the hidden event.
 			if = {
 				limit = { gm_state_newcomer_settled = yes }
-				trigger_event = { id = monument_events.29 }
+				trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_state_settle_newcomer removes gm_newcomer on its first line, before gm_state_swap_primary's monument_events.20, and gm_state_newcomer_settled reads it
 			}
 		}
 		owner = {
@@ -1891,7 +1891,7 @@ gm_state_start_ceremony = {
 			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		trigger_event = { id = monument_events.2 popup = yes }
+		trigger_event = { id = monument_events.2 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_ceremony_pending, set on the line above, stops this effect and gm_state_offer_missed_ceremony until the answer; the answer that removes it (gm_state_dedicate) first sets gm_rebuilding for a day (gm_state_finish_site, on both of its branches), which gm_state_offer_missed_ceremony refuses, before gm_state_offer_skins fires the refresh
 	}
 	gm_remove_state_var = { VAR = gm_rededicate_asking }
 }
@@ -1902,10 +1902,16 @@ gm_state_start_ceremony = {
 # for its Dedicate button (owner, 2026-10-18). monument_events.1 is the
 # immediate path, but on_building_built did not fire when five queued levels
 # of a new monument finished on the same day (owner's game, 2026-10-07).
+# Not the day script remade a building here (gm_rebuilding, one day), as in
+# monument_events.1: a ceremony's answer sets it (gm_state_finish_site) before
+# its refresh comes back here, and whether the site it removed still reads as
+# standing in the same effect is not established (#1012). A later refresh
+# asks, normally within a month.
 gm_state_offer_missed_ceremony = {
 	if = {
 		limit = {
 			gm_system_enabled = yes
+			NOT = { has_variable = gm_rebuilding }
 			gm_state_ai_dedicates_now = yes
 			NOT = { has_variable = gm_ceremony_pending }
 		}
@@ -2069,7 +2075,7 @@ gm_notify_new_contests = {
 		}
 		if = {
 			limit = { is_ai = no }
-			trigger_event = { id = monument_events.16 }
+			trigger_event = { id = monument_events.16 } # REVIEWED 2026-11-12 (trigger_event_cycle): monument_events.16's immediate removes every gm_new_contest and gm_tr_new_contest, which this effect's limit reads, before any option; and it goes to a player only (is_ai = no above), so its options' refresh waits on a click
 		}
 		else = {
 			every_scope_state = {
@@ -2318,7 +2324,7 @@ gm_state_offer_skins = {
 			set_variable = gm_unveil_pending
 		}
 	}
-	owner = { trigger_event = { id = monument_events.20 } }
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh starts a ceremony only from gm_state_offer_missed_ceremony, which refuses while gm_rebuilding stands; a site's answer sets it for a day (gm_state_finish_site, from gm_state_dedicate) before it reaches this line, and Rededicate's question needs a ceremony to ask it
 }
 
 gm_state_offer_skins_none = {

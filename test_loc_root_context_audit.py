@@ -546,10 +546,10 @@ class RepoTests(unittest.TestCase):
         panel_loc_keys's set for every public tab, so a flag there has a path."""
         loc, custom = h.load_loc(), h.custom_loc()
         types, templates = h.mod_types(), h.mod_templates()
-        reach = Reach(loc, custom, own=False)
         for tab, names in audit_module.repo_public_context()[0].items():
             with self.subTest(tab=tab):
                 seeds = audit_module.public_seeds(names, types, templates, loc, custom)
+                reach = Reach(loc, custom, own=False, contexts=audit_module.public_contexts(names, types, templates))
                 self.assertEqual(set(reach.closure(seeds)), h.panel_loc_keys(names, types, loc, templates, custom))
 
     def test_the_reach_is_the_shared_walkers(self):

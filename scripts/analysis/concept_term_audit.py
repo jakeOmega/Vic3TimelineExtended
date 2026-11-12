@@ -2,6 +2,12 @@
 names in mod localization that are not yet tagged with `[concept_X]` /
 `[Concept('concept_X', '...')]` references.
 
+It finds 1.15 glossary names the same way (`common/glossary/`, vanilla's
+and the mod's): a plain "zaibatsu" where `[glossary_zaibatsu]` would link
+the setting term to its entry. A glossary entry is setting vocabulary,
+mostly proper or foreign nouns, so its single-word names scan everywhere
+(Tier 1) unless `GLOSSARY_EXCLUDED` lists the entry.
+
 Inverse of `concept_reference_audit.py` (which flags brackets pointing at
 unregistered concepts). This one flags untagged mentions where adding a
 bracket would link the term to its in-game tooltip.
@@ -28,6 +34,7 @@ sidecar that this script produces, then editing the sets and re-running.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -211,6 +218,13 @@ TIER3_EXCLUDED: set[str] = {
     "concept_institution",
 }
 
+# Glossary entries whose single-word name is too short or too common to
+# scan. "Ri" (the Japanese unit of distance) would match a stray "ri" in
+# names and abbreviations.
+GLOSSARY_EXCLUDED: set[str] = {
+    "glossary_ri",
+}
+
 # File-name suffix → file kind (used by Tier 2 gating).
 EVENT_LOC_RE = re.compile(r"_events_l_english\.yml$")
 
@@ -274,6 +288,83 @@ def load_registered_concepts() -> set[str]:
                 if m:
                     ids.add(m.group(1))
     return ids
+
+
+# `glossary_x = { ... }` at the top level of a 1.15 glossary file.
+_GLOSSARY_DEF_RE = re.compile(r"^\s*(glossary_[A-Za-z0-9_]+)\s*=\s*\{")
+
+_VANILLA_SNAPSHOT = _REPO_ROOT / "vanilla_parsed"
+
+
+def load_registered_glossary() -> set[str]:
+    """All glossary ids declared in vanilla + mod `common/glossary/` (1.15).
+
+    Vanilla's come from the install when there is one, otherwise from the
+    committed `vanilla_parsed/` snapshot, so the scan works without a game.
+    """
+    ids: set[str] = set()
+    dirs = [Path(mod_path) / "common" / "glossary"]
+    vanilla_dir = Path(base_game_path) / "game" / "common" / "glossary"
+    if vanilla_dir.is_dir():
+        dirs.append(vanilla_dir)
+    else:
+        snap = _VANILLA_SNAPSHOT / "common" / "glossary.json"
+        if snap.is_file():
+            ids.update(k for k in json.loads(snap.read_text(encoding="utf-8"))
+                       if k.startswith("glossary_"))
+    for d in dirs:
+        if not d.is_dir():
+            continue
+        for fp in sorted(d.glob("*.txt")):
+            try:
+                text = fp.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for line in text.splitlines():
+                m = _GLOSSARY_DEF_RE.match(line)
+                if m:
+                    ids.add(m.group(1))
+    return ids
+
+
+def _clean_display(v: str | None) -> str | None:
+    """A literal surface form to search for, or None for a value made of
+    `$...$` splices or `[...]` expressions (nothing literal to grep)."""
+    if not v or "[" in v or "$" in v:
+        return None
+    return v.strip() or None
+
+
+def load_glossary_display_names(registered: set[str]) -> dict[str, list[str]]:
+    """glossary_id → display strings (the name and its `_short` form).
+
+    Vanilla's loc comes from the snapshot's `localization_english.json`, the
+    mod's from any English loc file (a `glossary_*` key's own file is
+    whichever `organize_loc.py` gives it).
+    """
+    loc: dict[str, str] = {}
+    snap = _VANILLA_SNAPSHOT / "localization_english.json"
+    if snap.is_file():
+        loc.update((k, v) for k, v in json.loads(snap.read_text(encoding="utf-8")).items()
+                   if k.startswith("glossary_") and isinstance(v, str))
+    mod_loc = Path(mod_path) / "localization" / "english"
+    if mod_loc.is_dir():
+        for fp in sorted(mod_loc.rglob("*.yml")):
+            loc.update((k, v) for k, v in _read_loc_file(fp).items()
+                       if k.startswith("glossary_"))
+    out: dict[str, list[str]] = {}
+    for gid in registered:
+        names: list[str] = []
+        seen: set[str] = set()
+        for variant in (gid, f"{gid}_short"):
+            v = _clean_display(loc.get(variant))
+            if v is None or v.lower() in seen:
+                continue
+            seen.add(v.lower())
+            names.append(v)
+        if names:
+            out[gid] = names
+    return out
 
 
 # Loc lines look like ` concept_x:0 "Display Name"` or ` concept_x: "..."`.
@@ -366,8 +457,12 @@ class ConceptTier:
 
 def _surface_tier(cid: str, surface: str) -> tuple[int, str]:
     word_count = len(surface.split())
+    if cid.startswith("glossary_") and cid in GLOSSARY_EXCLUDED:
+        return 3, "glossary entry excluded (GLOSSARY_EXCLUDED)"
     if word_count >= 2:
         return 1, "multi-word surface form"
+    if cid.startswith("glossary_"):
+        return 1, "glossary entry (setting vocabulary)"
     # Single-word: gate by concept-id curation.
     if cid in TIER3_EXCLUDED:
         return 3, "Tier 3 concept (everyday-English single word)"
@@ -400,7 +495,9 @@ def classify(cid: str, names: list[str]) -> ConceptTier:
 # Mod loc scan
 # ---------------------------------------------------------------------------
 
-# Strip already-tagged spans so we don't re-flag them.
+# Strip already-tagged spans so we don't re-flag them. A glossary link,
+# `[glossary_x]`, `[glossary_x|l]` or `[Glossary('glossary_x', 'text')]`,
+# falls to `_BRACKET_EXPR_RE` below, like any other bracket expression.
 _TAGGED_SPAN_RE = re.compile(
     r"\[concept_[A-Za-z0-9_]+\]"
     r"|\[Concept\(\s*['\"]concept_[A-Za-z0-9_]+['\"][^]]*\]"
@@ -619,9 +716,13 @@ def render_report(
         "term unambiguously refers to the game mechanic; leave flavor",
         "untagged.",
         "",
+        "A `glossary_X` id is a 1.15 glossary entry (setting vocabulary, not",
+        "a mechanic): link it as `[glossary_X]` (`[glossary_X|l]` lowercases",
+        "it) or `[Glossary('glossary_X', 'text')]`.",
+        "",
         "## Summary",
         "",
-        f"- Concepts (registered, vanilla+mod): {sum(1 for _ in tiers)}",
+        f"- Concepts and glossary entries (registered, vanilla+mod): {sum(1 for _ in tiers)}",
         f"- Surface forms scanned: {surface_tier_count[1] + surface_tier_count[2]}",
         f"  - Tier 1 (scan everywhere): {surface_tier_count[1]}",
         f"  - Tier 2 (skip event files): {surface_tier_count[2]}",
@@ -669,13 +770,17 @@ def main() -> int:
     registered = load_registered_concepts()
     display = load_concept_display_names(registered)
 
+    glossary = load_registered_glossary()
+    glossary_display = load_glossary_display_names(glossary)
+
     tiers = [
         classify(cid, names)
-        for cid, names in display.items()
+        for cid, names in {**display, **glossary_display}.items()
     ]
 
     print(f"registered concepts: {len(registered)}")
     print(f"with display names: {len(display)}")
+    print(f"glossary entries: {len(glossary)} ({len(glossary_display)} with display names)")
     print(f"  Tier 1: {sum(1 for t in tiers if t.tier == 1)}")
     print(f"  Tier 2: {sum(1 for t in tiers if t.tier == 2)}")
     print(f"  Tier 3: {sum(1 for t in tiers if t.tier == 3)}")

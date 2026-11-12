@@ -1512,7 +1512,8 @@ class BarsTest(unittest.TestCase):
 
 class ScriptedTooltipTest(unittest.TestCase):
     """Text a scripted GUI prints through ExecuteTooltip, IsValidTooltip or
-    IsShownTooltip is invisible to BindingTest and te_rebind_country.py. What
+    IsShownTooltip was invisible to BindingTest and te_rebind_country.py when
+    this was written; both follow it since #1361, and this holds it by name. What
     another country's panel prints that way (the history markers' lines,
     te_hist_tt_markers) speaks of no one and reads neither the player nor the
     entry; the keys that still read GetPlayer print only under the guard."""

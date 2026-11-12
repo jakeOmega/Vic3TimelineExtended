@@ -263,6 +263,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("system_ungated", "unchosen_self_action", "imputed_foreign_action"),
     ),
     Audit(
+        "trigger_event_cycle_audit",
+        "A `trigger_event` with no delay on a cycle of scripted effect calls and other undelayed "
+        "`trigger_event`s. It runs inside the effect that fires it, so a cycle nothing stops overflows "
+        "the stack: a crash with no log line. Write what the cycle re-reads before the `trigger_event`, "
+        "or give it `days = 1`; the comment is for a cycle a write already stops, and names that write.",
+        where="trailing on the `trigger_event` line; for an id passed as `$EVENT$`, on the opening line "
+              "of the call that names it",
+        tags=("trigger_event_cycle",),
+        note="`--through <event or effect>` lists the flagged cycles a name lies on. The graph is "
+             "`script_call_graph.py`.",
+    ),
+    Audit(
         "faith_scene_audit",
         "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
         "a country of another state religion can be shown: its title, description, flavor, option, "
@@ -331,11 +343,11 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "prestige_good_roster_audit",
-        "A company prestige good no `building_types` building of the company can make, or one on a "
-        "`local = yes` good.",
+        "A company prestige good no `building_types` building of the company can make, one on a "
+        "`local = yes` good, or a fourth prestige good on one base good (the engine keeps three).",
         where="trailing on the prestige good's line in `possible_prestige_goods` or the company's "
-              "opening line (covers the whole company); for a `local` flag, the prestige good's "
-              "opening line",
+              "opening line (covers the whole company); for a `local` or cap flag, the prestige "
+              "good's opening line",
     ),
     Audit(
         "amendment_reachability_audit",
@@ -428,9 +440,13 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "localization_accessor_audit",
-        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow.",
-        ci=None,
+        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. The engine "
+        "renders it as nothing.",
+        ci=(),
         where="trailing on the loc line",
+        note="The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's "
+             "loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing "
+             "(#348; its row in python_tools.md).",
     ),
     # --- GUI and assets ------------------------------------------------------
     Audit(

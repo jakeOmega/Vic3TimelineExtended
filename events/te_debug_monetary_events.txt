@@ -668,7 +668,7 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 					te_mon_can_monetise = no
 				}
 			}
-			trigger_event = { id = te_debug_monetary.5 }
+			trigger_event = { id = te_debug_monetary.5 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 		}
 	}
 
