@@ -2647,12 +2647,11 @@ def _validate_engine_coverage() -> dict:
     if not ms or not engine_docs:
         return {"error": "Mod state or engine docs not loaded"}
 
-    # The "valid modifier name" set is the union of:
-    #   (a) vanilla engine-doc modifiers (modifiers.log)
-    #   (b) modifier-type definitions registered by the mod (or vanilla) under
-    #       common/modifier_type_definitions/. Without (b) every dynamic-pattern
-    #       registration and every custom mod modifier looks "unknown" even
-    #       though the engine accepts it.
+    # Every modifier name known to exist: the engine-docs dump (modifiers.log)
+    # and the modifier type definitions, vanilla's and the mod's. It does not
+    # decide validity: `_classify_modifier_name` accepts only a name a
+    # definition registers, and uses this set to say whether the dump lists an
+    # unregistered one (#391).
     modifiers_set = {e.get("name", "") for e in engine_docs.get("modifiers", [])}
     mod_types = ms.get_data("Modifier Types") or {}
     modifiers_set.update(mod_types.keys())
@@ -2723,7 +2722,7 @@ def _validate_engine_coverage() -> dict:
                                 and bool_name not in script_values_set:
                             tstatus, tinfo = _classify_modifier_name(
                                 bool_name, modifiers_set, catalog_pairs)
-                            if tstatus not in ("engine", "pattern"):
+                            if tstatus != "engine":
                                 used_in = (
                                     f"{etype}/{entity_id} → "
                                     + " → ".join(str(p) for p in path)
@@ -2757,7 +2756,7 @@ def _validate_engine_coverage() -> dict:
                 if key in scripted_call_names and actual_val in ("yes", "no"):
                     continue
                 status, info = _classify_modifier_name(key, modifiers_set, catalog_pairs)
-                if status in ("engine", "pattern"):
+                if status == "engine":
                     continue
                 used_in = f"{etype}/{entity_id} → " + " → ".join(str(p) for p in path)
                 bucket = unknown_modifiers if status == "unknown" else suspicious_modifiers
@@ -2776,7 +2775,8 @@ def _validate_engine_coverage() -> dict:
         delta_days = int((most_recent_mod - most_recent_engine) // 86400)
         stale_warning = (
             f"Engine docs are {delta_days} days older than the most recent mod edit; "
-            "some unknowns may be entries added after the last in-game regeneration."
+            "an unknown's `listed_in_engine_docs` may be out of date. Validity comes from "
+            "the modifier type definitions alone."
         )
 
     return {
