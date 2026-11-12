@@ -907,7 +907,8 @@ class MarketTabTest(unittest.TestCase):
         self.assertIn("te_tab_buttons_six = {", self.market)
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
-        found = re.findall(r"^\t+(te_\w+) = \{\}", self.body, re.M)
+        # the entry's modifier strip is the frame's, not a journal root (test_te_entry_modifier_strip.py)
+        found = [n for n in re.findall(r"^\t+(te_\w+) = \{\}", self.body, re.M) if n != "te_je_modifier_strip"]
         self.assertEqual(found, [wrapped for _, wrapped in ROOTS.values()])
         # the link back to the entry is the frame's, after every section
         self.assertNotIn('blockoverride "tab_open_journal" ', self.body)
