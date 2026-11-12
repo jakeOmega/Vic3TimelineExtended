@@ -2187,8 +2187,9 @@ class ObserverTest(unittest.TestCase):
 
 class ScriptTooltipTest(unittest.TestCase):
     """The lines a public scripted GUI's tooltip prints for another country's
-    panel. Its effect's or trigger's custom_tooltip keys are reached by no
-    panel's loc closure, so BindingTest can't see them. The readout's unlock
+    panel. Its effect's or trigger's custom_tooltip keys were reached by no
+    panel's loc closure when this was written (BindingTest follows them since
+    #1361; this holds the two by name). The readout's unlock
     checklist (te_window_colonial_empire_entry_unlock_sgui's IsValidTooltip)
     and the history charts' markers (te_history_marker_tooltip) are the two:
     they read no player and no entry, and don't speak as the player."""
