@@ -1,0 +1,50 @@
+﻿# formation_mandates: once a game, does country_power_bloc_formation_mandates_add
+# work? Vanilla describes it as "Additional Mandates to spend on Principles
+# when forming a Power Bloc", and the four technologies that add a principle
+# slot (intergovernmental_organizations, containerization, globalization,
+# universal_digital_identity) carry 1 each (#1458). A founder spends them at
+# formation, so the bloc's unspent mandates alone can read 0 when it works:
+# the check counts unspent mandates plus the principle levels the bloc holds
+# (te_debug_pb_mandates_by_trigger, te_pb_chk_bloc_principle_levels; both
+# ladders). The first bloc founded by a country carrying at least 1:
+#   OK      mandates + principle levels >= the founder's formation mandates
+#   BROKEN  fewer: the modifier gives nothing, or lands after this on-action
+#           (look at the bloc's principles and mandates in its panel).
+# OK can't tell the extra mandates from the free formation picks: compare the
+# logged levels with a bloc founded without the technologies. Whether
+# MAX_MANDATES (5) caps the grant is the prep doc's open check C21.
+# Fallback for BROKEN: grant them here with add_power_bloc_mandate, from the
+# founder's modifier, and drop the technologies' lines.
+# The scope: vanilla's formation notification reads the founder as
+# scope:country; no line at all once a bloc forms means it is not set here.
+# Play-test row: docs/testing/vanilla-1-15-playtest.md (C21).
+on_power_bloc_formed = {
+	on_actions = {
+		te_pb_formation_mandates_selfcheck
+	}
+}
+
+te_pb_formation_mandates_selfcheck = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_pb_formation_mandates_checked }
+				exists = scope:country
+				scope:country = { modifier:country_power_bloc_formation_mandates_add >= 1 }
+			}
+			set_global_variable = te_pb_formation_mandates_checked
+			scope:country = {
+				set_global_variable = { name = te_pb_chk_formation_add value = modifier:country_power_bloc_formation_mandates_add }
+				set_global_variable = { name = te_pb_chk_formation_count value = te_debug_pb_mandates_by_trigger }
+				set_global_variable = { name = te_pb_chk_formation_levels value = te_pb_chk_bloc_principle_levels }
+			}
+			if = {
+				limit = { te_pb_chk_formation_total_g >= global_var:te_pb_chk_formation_add }
+				debug_log = "TE_SELF_CHECK OK formation_mandates (a new bloc holds unspent mandates=[SCOPE.ScriptValue('te_pb_chk_formation_count_g')|0] and principle levels=[SCOPE.ScriptValue('te_pb_chk_formation_levels_g')|0], at least its founder's formation mandates=[SCOPE.ScriptValue('te_pb_chk_formation_add_g')|0]; compare the levels with a bloc founded without the slot technologies)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN formation_mandates (a new bloc holds unspent mandates=[SCOPE.ScriptValue('te_pb_chk_formation_count_g')|0] and principle levels=[SCOPE.ScriptValue('te_pb_chk_formation_levels_g')|0], fewer than its founder's formation mandates=[SCOPE.ScriptValue('te_pb_chk_formation_add_g')|0]: the modifier gives nothing or lands after on_power_bloc_formed; check the bloc panel; see docs/testing/vanilla-1-15-playtest.md)"
+			}
+		}
+	}
+}

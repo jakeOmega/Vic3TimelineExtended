@@ -29,9 +29,8 @@ Simulates a realistic financial cycle with boom/bust mechanics, including specul
 | `bubble_pressure` | 0-100 | Speculative pressure |
 | `crash` | 0/1 | Temporary crash flag |
 | `crash_severity` | int | Crash intensity |
-| `banking_points_max_from_law` | int | Law-dependent cap |
 
-### Buttons (34 market + 18 CE + 16 CW)
+### Buttons (44 market + 18 CE + 16 CW)
 Central bank policy tools, organized as toggle pairs (market economy only):
 - Open market ops (locked until the policy rate reaches its regime floor), countercyclical buffer, deposit guarantee
   (the *Raise Policy Rate* pair was deleted — the rate is now a dial, see **Monetary Policy block** below)
@@ -41,11 +40,12 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Capital controls (outflow), export credit facility, asset relief program
   (the *FX Swap Lines* pair was deleted in monetary phase 5a — a swap line is now a treaty article with a named counterparty, `swap_line`; see `mod_systems/monetary_policy.md` § **Monetary Policy (phase 5)**)
 - Added 2026-09-23: directed credit to heavy industry, agriculture, armaments and electrification & high tech (one directed-credit sector at a time, two under Directed Credit & Development Banks), reserve requirements, bank holiday (timed, 90 days, five-year cooldown), bail-in regime (excludes asset relief); see `mod_systems/banking_cycle.md` § **Policy tools added 2026-09-23**
+- Added 2026-09-27: restrict inflows, sterilize inflows, foreign borrowing limits, FX surrender and emergency import financing (full monetary system only); see `mod_systems/banking_cycle.md` § **External & Currency tools (2026-09-27)**
 
-**Command Economy planning tools** (16 buttons, visible under `law_command_economy` only):
+**Command Economy planning tools** (18 buttons, visible under `law_command_economy` only):
 - Emergency Plan Revision, Resource Allocation, Target Reduction, Strategic Stockpile
 - Distribution Upgrade, Admin Campaign, Coordination Protocol, Consolidation Order
-- Each has an enable/disable toggle pair. Modifiers use prefix `planning_*`.
+- Each has an enable/disable toggle pair, plus the investment pool's inject and withdraw (`ce_invest_pool_inject` / `_withdraw`). Modifiers use prefix `planning_*`.
 
 **Cooperative Ownership council tools** (16 buttons, visible under `law_cooperative_ownership` only):
 - Dividend Restraint, Mutual Aid Fund, Capital Plan, Solidarity Campaign
@@ -53,7 +53,7 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Each has an enable/disable toggle pair. Modifiers use prefix `cooperative_*`.
 
 ### Policy Dashboard (journal-entry widget)
-Three custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1`, `_2` and `_3` (overview, live sections, reference sections; the UN's slots), are the player-facing surface. The 68 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
+Three custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1`, `_2` and `_3` (overview, live sections, reference sections; the UN's slots), are the player-facing surface. The 78 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
 
 - **Files:** `gui/journal_entry_widgets/banking_dashboard_widget.gui` (the section types), `banking_history_widget.gui` (the charts) and `banking_layout_widget.gui` (the order, the Help page's body and the entry's named roots)
 - **Second host:** the Budget panel's Banking tab (`gui/budget_panel.gui`) composes the same layout types. See `mod_systems/banking_cycle.md` § Policy Dashboard.
@@ -143,7 +143,7 @@ Persistent journal entry (always active once unlocked).
 Tracks a civil rights movement for minority populations. Activates when a country has Civil Rights tech and incorporated states with low-acceptance pops. Redesigned away from a passive 20-year timer into a bar-and-buttons system structurally modeled on `je_colonial_empire`.
 
 ### Key Mechanics
-- **Progress bar:** `civil_rights_support_bar` (0-100), starts at 30. Drift sources include base decay, tech tier (`social_justice_movements`), current minority law, low-acceptance state count (via `cr_low_acceptance_count` SV), radical fraction tier, and active button modifiers.
+- **Progress bar:** `civil_rights_support_bar` (0-100), starts at 30, drawn as a two-pole bar (green support over a red background, with 1.15's sliding marker; #1434). Every conditional factor is a `progress_condition` (#1441), so the panel's Advance and Retreat lists show each, ticked while it applies. Drift sources include base decay, tech tier (`social_justice_movements`), current minority law, low-acceptance state count (via `cr_low_acceptance_count` SV), radical fraction tier, and active button modifiers.
 - **5 phase modifiers** keyed to bar tiers: `civil_rights_phase_marginal/growing/active/pressuring/imminent_modifier`. Imminent (90+) adds `country_law_enactment_success_add = 0.10` so the legal finish line gets a push from the very pressure the bar represents.
 - **6 button toggle pairs** (12 buttons total) representing player stance. Pro buttons (`grassroots`, `federal_protection`, `gradualist`) and anti buttons (`suppression`, `segregationist`) are mutually exclusive. Cooptation is cross-compatible with anti buttons (the historical "coopt moderates, jail radicals" stance). Each button increments a months-tracker variable consumed by path-dependent resolution.
 - **Cooptation expiry:** after 12 months, `cr_cooptation_expired` marker is added by the JE on_monthly_pulse and the bar bonus stops for the rest of the run. Ending and restarting the program does not reset it: `cr_cooptation_months` keeps counting (it also picks the Coopted Reform ending), and End Cooptation leaves the marker in place. `cr_je_cleanup_effect` removes it when the run ends.
@@ -156,8 +156,9 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 - **Tier 90:** new `.305` (March on the Capital) — universal cinematic beat
 
 ### Path-dependent resolution
-- **Complete (`movement_events_te.220-.223`):** dispatches on the months-tracker that led for ≥18 months. Federal Mandate / Grassroots Triumph / Negotiated Settlement / Coopted Reform. Falls through to existing single-option `.200` if no track took clear lead.
-- **Fail (`movement_events_te.100/.230/.231/.232`):** existing `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law (its desc switches to `.100.desc_faded`, the movement fading under the law, when both suppression trackers are 0). New `.230` (token reform demobilized) under cooptation dominance. New `.231` (gradualist stagnation) when `cr_gradualist_months > 18`. `.232` (lost momentum, neutral) otherwise.
+One outcome per ending (#1431): six victories and four collapses, so the panel lists every ending, with what leads to it, before it happens. Each outcome's trigger is the shared victory condition (bar at 100, Affirmative Action, or Multicultural with Protection) or collapse condition (bar at 0, or the movement gone) plus a `custom_tooltip` line requiring its number from `cr_win_ending_now` or `cr_fail_ending_now` (`common/script_values/civil_rights_values.txt`). Those two chains decide the ending in one place, for the outcomes and the status line's "If it wins now" alike, so exactly one outcome of a kind holds; the outcomes are declared in the chain's order anyway, victories first (C3: the first declared outcome whose trigger holds concludes the entry). The chains read `cr_months_disp_*`, which are 0 where a counter is missing, and compare one script value with another inside a script value's `limit`, as vanilla's `russian_liberal_monthly_change` does (`russian_liberal_laws_value > russian_socialist_laws_value`). Each outcome's effect sets `civil_rights_resolved`, runs `cr_ensure_tracker_vars_effect`, fires its event and runs `cr_je_cleanup_effect`. `test_vanilla_panel_additions.py` holds the outcomes to the chains.
+- **Victories (`movement_events_te.240`, `.220-.223`, `.200`):** Victory on Paper (`.240`) first, while a discriminatory minority law holds; then the months-tracker that led for over 18 months: Federal Mandate / Grassroots Triumph / Negotiated Settlement / Coopted Reform. The generic `.200` when no track took clear lead.
+- **Collapses (`movement_events_te.100/.230/.231/.232`):** `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law (its desc switches to `.100.desc_faded`, the movement fading under the law, when both suppression trackers are 0). `.230` (token reform demobilized) under cooptation dominance. `.231` (gradualist stagnation) when `cr_gradualist_months > 18`. `.232` (lost momentum, neutral) otherwise.
 - **Once only.** The success and failure outcomes set `civil_rights_resolved`, and `is_shown_when_inactive` / `possible` require its absence. In normal play that changes nothing (a finished record never re-activates), but a revolution's winner gets fresh records and used to start the struggle over at 30 %, with rewards to earn again (#463). The invalid outcome sets nothing: no result, nothing to replay. `is_shown_when_inactive` also requires `is_revolutionary = no`, following vanilla's `je_the_two_spains`: rebels don't start a struggle of their own mid-war. The check is not in `possible`, so it never affects an active or inherited record.
 - **Run lifecycle.** `immediate` zeroes the six counters, clears the tier flags and sets the bar only when `cr_run_in_progress` is absent, and sets it; `cr_je_cleanup_effect` (every outcome's effect) removes it. So a fresh run starts clean, while an entry a winner inherits mid-struggle (its `immediate` re-runs after the variable merge) keeps its counters, tier flags and bar. The counters are not reset at the end because `.100`'s desc reads them after the failure outcome fires it.
 
@@ -184,7 +185,7 @@ Design and variables: `common/scripted_effects/civil_rights_effects.txt` § REVO
 - `common/scripted_buttons/civil_rights_buttons.txt` — 12 buttons
 - `common/scripted_effects/civil_rights_effects.txt` — tracker init, end-of-run cleanup, revolution continuity
 - `common/on_actions/civil_rights_on_actions.txt` — monthly: outcome-age counter, lapse check, save migration, orphan sweep (the civil-war repair hangs off `te_civil_war_on_won`)
-- `common/script_values/civil_rights_values.txt` — `cr_low_acceptance_count`
+- `common/script_values/civil_rights_values.txt` — `cr_low_acceptance_count`, the status line's months, and the two ending chains (`cr_win_ending_now`, `cr_fail_ending_now`) the outcomes require
 - `common/static_modifiers/extra_modifiers.txt` — phase + button + victory modifiers (`civil_rights_phase_*`, `cr_*_modifier`, `civil_rights_triumph_*_modifier`)
 
 ### Removed in this redesign
@@ -586,7 +587,7 @@ Four policies also need a technology, because they rely on something a country h
 - **A shared core**, the same for all eleven policies: temperature (20 per °C of the warming beneath any aerosol haze, `gw_unmasked_temperature`, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
 - **Five signals, weighted per policy** by who the policy costs or helps: laissez-faire, industrialists in government, the environmental movement's support, standard of living against the world mean (the mean is stored by `gw_refresh_global_counts_effect`), and how far the market is a net coal and oil exporter. Each signal runs from 0 to 1, or −1 to 1 for wealth.
 
-The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +0.5 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.
+The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +1 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.
 
 Each policy has one threshold on its will. The AI adopts at or above it, and only with the authority the policy costs to spare and its technology (`possible`). It repeals only once the will is `gw_ai_repeal_band` (15) below the threshold, or while authority is negative. Between the two, neither button scores. The thresholds, from cheapest to hardest, are adaptation 25, reforestation 30, renewables 35, transit 40, green building codes and emission standards 45, carbon removal 50, carbon tax and tariffs 55, aerosol injection 60 and divestment 70. Aerosol injection's row flips the signs (laissez-faire +10, industrialists +8, fossil +10, wealth +5, movement −20): the one policy that asks nothing of industry. Its will reads the unmasked warming through the shared core, so a deployer whose mask works does not repeal it and re-adopt after the termination shock.
 

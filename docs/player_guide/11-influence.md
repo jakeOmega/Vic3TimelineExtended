@@ -380,14 +380,15 @@ An operation uses its influence for as long as it runs, more the worse the
 world would take its exposure (see [Detection and
 exposure](#detection-and-exposure)). As with any pact, a great power pays double
 and a major power half again as much, and you need the influence available to
-launch it.
+launch it. Like the base game's Fund Lobbies, every operation builds you up to
+1,000 Involvement in each strategic region where the target is local.
 
 Counterintelligence Support is open: it is never rolled for detection and never
 exposed, needs no technology, and an Intelligence Sharing Pact with the target
 doesn't block it. A country has one protector at a time, and the support ends
 if the friendship does. It uses a slot and upkeep like any operation but gives
-you nothing back. Its defense adds to the target's own (see [Covert
-defense](#covert-defense)).
+you nothing back beyond that Involvement. Its defense adds to the target's own
+(see [Covert defense](#covert-defense)).
 
 If you run several Space Program Espionage operations, their bonuses come
 from the strongest and don't add up. Stolen technology does add up: each

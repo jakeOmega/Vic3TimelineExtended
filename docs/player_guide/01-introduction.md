@@ -25,6 +25,10 @@ each topic. The "?" opens it: at the right of the tab's header, and at the top
 right of the system's journal entry and of a state's Demographics subtab. Press
 Escape or click outside the page to close it.
 
+A tab with a journal entry ends on the entry's modifier icons, the ones its
+journal page shows at the top right, above the Open Journal Entry button. Hover
+an icon for its effects.
+
 The Map Room is a page of world maps with a button for each, in seven
 groups. Click a group's header to open it or close it; every group starts
 closed, and one you open stays open as you switch maps.

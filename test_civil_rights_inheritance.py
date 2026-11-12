@@ -14,7 +14,7 @@ import os
 import re
 import unittest
 
-from je_test_helpers import OLD_BLOCKS, old_block, outcome_text
+from je_test_helpers import OLD_BLOCKS, old_block, old_blocks, outcome_text
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
@@ -74,6 +74,12 @@ def _je_block(name):
     return _block(entry, name, top_level=False)
 
 
+def _je_blocks(name):
+    """Every outcome body an old block's name maps to: the entry has one outcome per
+    ending (#1431), so on_complete is six effects and on_fail four."""
+    return old_blocks(_block(_read(*JE), "je_civil_rights"), name)
+
+
 def _param_calls(text, effect, param="MODIFIER"):
     return re.findall(re.escape(effect) + r"\s*=\s*\{\s*" + param + r"\s*=\s*(\w+)\s*\}", text)
 
@@ -81,8 +87,9 @@ def _param_calls(text, effect, param="MODIFIER"):
 class ResolutionGuardTests(unittest.TestCase):
     def test_complete_and_fail_record_the_resolution(self):
         for hook in ("on_complete", "on_fail"):
-            with self.subTest(hook=hook):
-                self.assertRegex(_je_block(hook), r"set_variable\s*=\s*civil_rights_resolved\b")
+            for i, effect in enumerate(_je_blocks(hook)):
+                with self.subTest(hook=hook, outcome=i):
+                    self.assertRegex(effect, r"set_variable\s*=\s*civil_rights_resolved\b")
 
     def test_invalid_does_not(self):
         self.assertNotIn("civil_rights_resolved", _je_block("on_invalid"))
@@ -137,15 +144,17 @@ class RunLifecycleTests(unittest.TestCase):
                     r"has_variable\s*=\s*" + var + r"\s*\}\s*remove_variable\s*=\s*" + var + r"\b",
                 )
         for hook in ("on_complete", "on_fail", "on_invalid"):
-            with self.subTest(hook=hook):
-                self.assertIn("cr_je_cleanup_effect = yes", _je_block(hook))
+            for i, effect in enumerate(_je_blocks(hook)):
+                with self.subTest(hook=hook, outcome=i):
+                    self.assertIn("cr_je_cleanup_effect = yes", effect)
 
 
 class OutcomeModifierTests(unittest.TestCase):
     def _resolution_events(self):
         ids = set()
         for hook in ("on_complete", "on_fail"):
-            ids |= set(re.findall(r"id\s*=\s*(movement_events_te\.\d+)", _je_block(hook)))
+            for effect in _je_blocks(hook):
+                ids |= set(re.findall(r"id\s*=\s*(movement_events_te\.\d+)", effect))
         self.assertTrue(ids)
         return ids
 

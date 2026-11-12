@@ -379,6 +379,17 @@ centered, and a journal root collapses. The rows of `te-window-wide-playtest.md`
 | **7. An observer.** As an observer, open a journal entry, the window's tabs, a state's Demographics subtab and National Info for a country. | No "?" anywhere, and no gap where one would be: the rows collapse. | A gap above an entry's overview: the row's `visible` on `te_help_row` (it must hide the row, not only the button). |
 | **8. The Population panel's Family Policy.** Under Full demographics, the Population panel's Demographics tab, Family Policy. The tab now takes its `Country` from `te_demog_window_body` (`datacontext = "[GetPlayer]"`) instead of the panel's `AccessPlayer`. | Law in Force names your Family & Reproductive Policy law, with its tooltip, as in the window's Demographics tab. | Blank or `debug.log` reports a non-const call: `Country.AccessActiveLawFromGroup` (`te_demographics_widgets.gui`) needs a writable country; switch it to `Country.GetActiveLawFromGroup` (Promote to Law) and update `test_demographics_measures.py`. |
 
+## The entry's modifier strip on each system tab (#1383, 2026-11-12)
+
+Each system tab with a journal entry now ends, above Open Journal Entry, on the entry's modifier strip: vanilla's row of scaling and timed modifier icons from the journal window's header (`te_je_modifier_strip`, `gui/te_system_tab_widgets.gui`), read from the tab's `GetPlayerJournalEntry('<key>')` datacontext and drawn only for your own country (`te_own_country_only`). The Space Race draws it in each milestone's own part. Offline, `test_te_entry_modifier_strip.py` holds every tab of an entry that script adds modifiers to to it. Not yet seen in game outside the journal window: whether `JournalEntry.GetTimedModifiers` and `GetScalingModifiers` fill under a `GetPlayerJournalEntry` datacontext, as the scripted bars do.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Cultural Hegemony.** With the Hegemony bonus or an event modifier on the entry, open the Society panel's Cultural Hegemony tab, then the journal entry. | The tab shows the same icons as the entry's header, above Open Journal Entry, each with the same tooltip; 12 to a row, centered. | No icons in the tab while the entry has them: the datamodels don't fill outside the journal window. Then read the modifiers through script values on `Country` instead, as #1382 did for the bonus, and drop the strip. `debug.log` lines naming `GetTimedModifiers`: the datacontext is not a `JournalEntry` there. |
+| **2. Banking and the United Nations.** With a few policies active (Banking) or a resolution's modifier in force (UN), the Budget panel's Banking tab and the Diplomacy panel's UN tab, side panel and full screen in the Timeline Extended window. | The strip at the foot of each, in both modes; the scaling row first, then the timed one. | Missing in full screen only: a wide mount replaced the frame's `tab_entry_modifiers` block. |
+| **3. A tab with nothing on its entry.** Covert Warfare or Grand Monuments with no modifier on the entry. | No strip and no gap: Open Journal Entry sits its usual 10 below the sections. | A gap: the strip's root lost `ignoreinvisible`, or its inner `visible`. |
+| **4. Another country.** National Info's Cultural Hegemony and Space Race tabs for another country. | No strip. | A strip with your own entry's icons: the strip lost `te_own_country_only`. |
+
 ## A revolution's winner keeps the nation's history (#1477, 2026-11-12)
 
 When the rebels win, `te_history_repair_after_civil_war` (`te_history_civil_war_effects.txt`, from the shared
