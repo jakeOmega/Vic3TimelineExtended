@@ -96,6 +96,13 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `limit = {` line or the iterator's opener line",
     ),
     Audit(
+        "random_list_weight_audit",
+        "A `trigger = { }` in a `random_list` branch's weight `modifier`: the engine rejects the token "
+        "and the tilt is lost. Use `if = { limit = { ... } add = N }`; the `ai_chance` form is valid.",
+        post_load=False,
+        report=None,
+    ),
+    Audit(
         "effect_trigger_validity_audit",
         "An effect or trigger name the engine doesn't know, or a known one in the wrong kind of block (an "
         "effect where triggers are read, or the reverse). The engine logs it at load and drops the line.",
