@@ -436,7 +436,7 @@ All are exact: they change no result unless a line says otherwise.
 10. **Expensive `add_modifier` multipliers.** A quick scan (multipliers whose
    script-value closure reaches an iterator) found 11 that remain:
    - `sol_expectations_{upper,middle,lower}_shift_value` (`every_country`;
-     the world-pass PR applies them from a variable)
+     #1724 applies them from a variable)
    - `global_tech_spread_script_value` (`every_country`)
    - `un_peacekeeping_benefit_scale` and `un_aid_benefit_scale`
      (`every_country`)
@@ -469,7 +469,7 @@ All are exact: they change no result unless a line says otherwise.
     - **Covert warfare's monthly pulse:** 776 ms, of which 653 ms was one
       `ordered_country` that every holder ran to store the world's best
       intelligence capacity in `global_max_ic`, which only the panel reads.
-      Fixed in the "world pass once" PR: one census a month behind a 25-day
+      Fixed in #1724: one census a month behind a 25-day
       global lock.
     - **Cultural Hegemony's monthly pulse:** 661 ms, of which 654 ms was
       `trigger_event` for the milestone events `cultural_hegemony.8` and
@@ -495,5 +495,11 @@ All are exact: they change no result unless a line says otherwise.
       180–252 ms each. `te_climate_bonus` is the penalty times −1, so the
       refresh computed the penalty twice. Fixed in the same PR: the bonus is
       written from the stored penalty.
+
+    **#1724, measured** (same save, same steps, 2 July → 1 August under the
+    profiler): the Cultural Hegemony entry's pulse 661 → 8 ms, covert
+    warfare's 777 → 132 ms, local climate's 612 → 427 ms, SoL's 447 →
+    234 ms; 1.7 s of serial script in all, with the untouched entries within
+    6%. By #1721's calibration that is roughly 1–2% of wall time.
 
     `on_revolution_start` fired 126 times in those 30 days (#1723).
