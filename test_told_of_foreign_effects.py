@@ -76,7 +76,7 @@ NOTICES = (
 EVENTS = {
     "minor_events_timelineextended.10": "events/minor_events.txt",
     "un_vote.8": "events/un_vote_events.txt",
-    "te_union.2": "events/te_monetary_arrangement_events.txt",
+    "te_union.2": "events/te_monetary_union_events.txt",
     "te_inflation.2": "events/te_inflation_events.txt",
     "irredentism.12": "events/irredentism_events.txt",
     "irredentism.13": "events/irredentism_events.txt",
