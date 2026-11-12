@@ -158,6 +158,38 @@ class AnnotatorRegistryTests(unittest.TestCase):
         self.assertEqual(response[0]["tier"], "A")
         self.assertEqual(calls_unused["n"], 0)
 
+    def test_apply_to_response_adds_only_declared_fields(self) -> None:
+        # A compute() row may carry more than the annotator declares (the PM
+        # balance map also records `file` and `profit` for its other
+        # callers). Only the declared fields reach the entry, so an entry's
+        # own keys survive: a vanilla PM the mod redefines with `REPLACE:`
+        # must not come back as `source: vanilla` with the mod's file name.
+        compute, _ = _fake_compute({"pm_x": {
+            "flag": "HIGH-PROFIT", "file": "extra_pms.txt", "profit": 5.0,
+        }})
+        annotators.register(annotators.Annotator(
+            "balance", "ProductionMethods", ["flag"], "t", compute,
+        ))
+        response = [{"type": "ProductionMethods", "id": "pm_x",
+                     "file": "01_industry.txt", "source": "vanilla"}]
+        annotators.apply_to_response(response, "balance", Path("/x"))
+        self.assertEqual(response, [{
+            "type": "ProductionMethods", "id": "pm_x",
+            "file": "01_industry.txt", "source": "vanilla",
+            "flag": "HIGH-PROFIT",
+        }])
+
+    def test_apply_to_response_refreshes_a_declared_field(self) -> None:
+        # The annotator owns the fields it declares: annotating an entry
+        # again replaces an earlier value rather than keeping a stale one.
+        compute, _ = _fake_compute({"pm_x": {"flag": "OK"}})
+        annotators.register(annotators.Annotator(
+            "balance", "ProductionMethods", ["flag"], "t", compute,
+        ))
+        response = [{"type": "ProductionMethods", "id": "pm_x", "flag": "STALE"}]
+        annotators.apply_to_response(response, "balance", Path("/x"))
+        self.assertEqual(response[0]["flag"], "OK")
+
     def test_apply_to_response_caches_compute(self) -> None:
         compute, calls = _fake_compute({"pm_x": {"flag": "OK"}})
         annotators.register(annotators.Annotator(

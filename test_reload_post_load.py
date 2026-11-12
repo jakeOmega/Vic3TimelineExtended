@@ -479,5 +479,167 @@ class ParseFailureTests(_QuietServerLogMixin):
         self.assertIsNone(_live_reload_skip_reason(status, mod_path))
 
 
+class _RecordingHandler(mss.ModStateHandler):
+    """A ModStateHandler with no socket: `_respond_json` records the reply."""
+
+    def __init__(self, path):
+        self.path = path
+        self.headers = {"Host": "127.0.0.1:8950"}
+        self.server = types.SimpleNamespace(server_port=8950)
+        self.responses = []
+
+    def _respond_json(self, data, status=200):
+        self.responses.append((status, data))
+
+
+class VersionMismatchReloadWarningTests(_QuietServerLogMixin):
+    """#332 — the vanilla-version mismatch that /status `versions` computes was
+    only a `[VERSION MISMATCH]` line in the startup log; a reload reported a
+    clean `warnings` array while every engine-doc check ran on a stale
+    baseline."""
+
+    MISMATCH = {
+        "live_game": "1.14.3", "vanilla_clone_head": "1.13.9",
+        "engine_docs_source": "1.13.11", "engine_docs_source_label": "digest_snapshot",
+        "mismatch": True,
+    }
+    AGREE = dict(MISMATCH, vanilla_clone_head="1.14.3", engine_docs_source="1.14.3",
+                 mismatch=False)
+    DOCS_DIR = "/digests/1.13.11/docs"
+
+    def setUp(self):
+        super().setUp()
+        self.status = dict(self.MISMATCH)
+        patches = [
+            mock.patch.object(mss, "_compute_version_status", lambda: self.status),
+            mock.patch.object(mss, "_engine_docs_source",
+                              lambda: (self.DOCS_DIR, "digest_snapshot")),
+            # A reload that loads nothing and finds nothing else to report.
+            mock.patch.object(mss, "_load_mod_state"),
+            mock.patch.object(mss, "_reload_engine_only", return_value=[]),
+            mock.patch.object(mss, "_collect_registry_warnings", return_value=[]),
+            mock.patch.object(mss, "ms", _FakeModState()),
+            mock.patch.object(mss, "_vanilla_source_warnings", []),
+            mock.patch.object(mss, "_engine_docs_warnings", []),
+            mock.patch.object(mss, "_post_load_warnings", []),
+            mock.patch.object(mss, "_post_load_wrote_files", []),
+            mock.patch.object(mss, "_last_reload_warnings", {}),
+        ]
+        for p in patches:
+            p.start()
+            self.addCleanup(p.stop)
+
+    def _reload(self, query=""):
+        handler = _RecordingHandler("/reload" + query)
+        handler.do_POST()
+        status, body = handler.responses[-1]
+        self.assertEqual(status, 200, body)
+        return body
+
+    def test_mismatch_is_one_warning_with_the_three_versions(self):
+        warnings = mss._version_mismatch_warnings()
+        self.assertEqual([w["label"] for w in warnings], ["version_mismatch"])
+        warning = warnings[0]
+        for part in ("live_game=1.14.3", "vanilla_clone_head=1.13.9",
+                     "engine_docs_source=1.13.11", "digest_snapshot", self.DOCS_DIR):
+            self.assertIn(part, warning["detail"])
+        self.assertEqual(
+            {k: warning[k] for k in ("live_game", "vanilla_clone_head",
+                                     "engine_docs_source", "engine_docs_source_label",
+                                     "engine_docs_dir")},
+            {"live_game": "1.14.3", "vanilla_clone_head": "1.13.9",
+             "engine_docs_source": "1.13.11",
+             "engine_docs_source_label": "digest_snapshot",
+             "engine_docs_dir": self.DOCS_DIR},
+        )
+
+    def test_agreeing_versions_warn_nothing(self):
+        self.status = dict(self.AGREE)
+        self.assertEqual(mss._version_mismatch_warnings(), [])
+
+    def test_every_reload_mode_carries_the_mismatch(self):
+        for query in ("", "?mod_only=true&audits_only=true", "?audits_only=true",
+                      "?engine_only=true"):
+            with self.subTest(query=query):
+                body = self._reload(query)
+                self.assertEqual([w["label"] for w in body.get("warnings", [])],
+                                 ["version_mismatch"])
+                # And /status `last_reload` repeats it.
+                self.assertEqual(
+                    [w["label"] for w in mss._last_reload_warnings["warnings"]],
+                    ["version_mismatch"],
+                )
+
+    def test_a_reload_with_agreeing_versions_has_no_warnings(self):
+        self.status = dict(self.AGREE)
+        for query in ("", "?engine_only=true"):
+            with self.subTest(query=query):
+                self.assertNotIn("warnings", self._reload(query))
+
+    def test_a_crashing_cross_check_is_a_warning_not_a_failed_reload(self):
+        def _boom():
+            raise OSError("launcher settings unreadable")
+
+        with mock.patch.object(mss, "_compute_version_status", _boom):
+            body = self._reload()
+        self.assertEqual([w["label"] for w in body["warnings"]], ["version_mismatch"])
+        self.assertEqual(body["warnings"][0]["error"],
+                         "OSError: launcher settings unreadable")
+
+
+class VersionMismatchNeedsTwoVersionsTests(_QuietServerLogMixin):
+    """A machine with no game and no vanilla mirror (CI, a cloud container)
+    knows at most the engine-docs version. One version, or none, cannot
+    disagree: a warning there would sit in every reload's `warnings`, which
+    agents are told to read each time. Runs the real `_compute_version_status`
+    over stubbed inputs."""
+
+    def _warnings(self, *, live, clone, docs_dir, label):
+        head = {"version": clone} if clone else {}
+        with mock.patch.object(mss, "_read_live_game_version", return_value=live), \
+                mock.patch.object(mss, "_load_vanilla_repo_head_info", return_value=head), \
+                mock.patch.object(mss, "_engine_docs_source", lambda: (docs_dir, label)):
+            return mss._version_mismatch_warnings()
+
+    def test_only_the_engine_docs_version_known(self):
+        for docs_dir in ("/digests/1.15.1/docs", "/digests/1.14.5-openbeta/docs"):
+            with self.subTest(docs_dir=docs_dir):
+                self.assertEqual(
+                    self._warnings(live=None, clone=None, docs_dir=docs_dir,
+                                   label="digest_snapshot"),
+                    [],
+                )
+
+    def test_no_version_known(self):
+        self.assertEqual(
+            self._warnings(live=None, clone=None, docs_dir="/nonexistent/docs",
+                           label="mod_loaded"),
+            [],
+        )
+
+    def test_only_the_game_or_only_the_mirror_known(self):
+        for live, clone in (("1.15.1", None), (None, "1.15.1")):
+            with self.subTest(live=live, clone=clone):
+                self.assertEqual(
+                    self._warnings(live=live, clone=clone, docs_dir="/nonexistent/docs",
+                                   label="mod_loaded"),
+                    [],
+                )
+
+    def test_two_known_versions_that_agree(self):
+        self.assertEqual(
+            self._warnings(live="1.15.1", clone=None, docs_dir="/digests/1.15.1/docs",
+                           label="digest_snapshot"),
+            [],
+        )
+
+    def test_two_known_versions_that_differ(self):
+        # The control: the same stubs do warn once two versions disagree.
+        warnings = self._warnings(live=None, clone="1.15.0",
+                                  docs_dir="/digests/1.15.1/docs", label="digest_snapshot")
+        self.assertEqual([w["label"] for w in warnings], ["version_mismatch"])
+        self.assertIn("live_game=None", warnings[0]["detail"])
+
+
 if __name__ == "__main__":
     unittest.main()
