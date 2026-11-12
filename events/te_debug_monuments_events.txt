@@ -346,7 +346,7 @@ te_debug_monuments.4 = { # REVIEWED 2026-10-11: console-only test event (`event 
 		name = te_debug_monuments.4.a
 		trigger = { exists = scope:gm_dbg_m1 }
 		scope:gm_dbg_m1 = { gm_debug_next_picture = yes }
-		trigger_event = { id = te_debug_monuments.4 }
+		trigger_event = { id = te_debug_monuments.4 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 	}
 
 	option = {
@@ -358,7 +358,7 @@ te_debug_monuments.4 = { # REVIEWED 2026-10-11: console-only test event (`event 
 				gm_debug_next_picture = yes
 			}
 		}
-		trigger_event = { id = te_debug_monuments.4 }
+		trigger_event = { id = te_debug_monuments.4 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 	}
 
 	option = {
@@ -714,7 +714,7 @@ te_debug_monuments.8 = { # REVIEWED 2026-10-16: console-only test event (`event 
 		trigger = { exists = scope:gm_dbg_m1 }
 		scope:gm_dbg_m1 = { gm_debug_next_signature = yes }
 		trigger_event = { id = monument_events.20 }
-		trigger_event = { id = te_debug_monuments.8 }
+		trigger_event = { id = te_debug_monuments.8 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 	}
 
 	option = {

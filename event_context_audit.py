@@ -107,6 +107,7 @@ FOREIGN_CHECKS = frozenset({
     "ideology_lawgroup",  # ideology_lawgroup_audit
     "script_argument",  # script_argument_audit (a call line in an event)
     "texture_reference",  # texture_reference_audit (an asset path's line in an event)
+    "trigger_event_cycle",  # trigger_event_cycle_audit (a trigger_event line in an event)
 })
 
 # ---------------------------------------------------------------------------
@@ -350,6 +351,10 @@ _COND_KEYS = {"limit", "trigger", "possible", "is_shown", "potential", "is_valid
               "can_be_enacted", "visible"}
 _NUMERIC_RE = re.compile(r"^-?\d+(?:\.\d+)?$")
 _PARAM_RE = re.compile(r"^\$\w+\$$")
+# A `trigger_event` block's delay keys. A literal 0 is no delay.
+_DELAY_KEYS = {"days", "weeks", "months", "years"}
+_DISPATCH_NAME_RE = re.compile(r"^[A-Za-z0-9_$]+$")
+_ZERO_RE = re.compile(r"^0+(?:\.0*)?$")
 # Console-only test harnesses (`event te_debug_x.1`): skipped as flag targets and
 # as dispatch sources — they are not how anything reaches a player.
 _CONSOLE_FILE_RE = re.compile(r"^te_debug_")
@@ -389,6 +394,15 @@ class Site:
     switches: list[str]  # scope-changing keys among `path`
     conds: str           # guard text: every enclosing limit / trigger
     via: str = "trigger_event"  # trigger_event | events | random_events | first_valid
+    # `trigger_event = { id = X days|weeks|months|years = N }` with N anything
+    # but a literal 0: queued, not run inside the calling effect.
+    delayed: bool = False
+    # Set when `_substitute_params` moved the site to a caller of the scripted
+    # effect that holds the `trigger_event`: (file, line, effect) of the
+    # `trigger_event` itself, and whether the caller names the event
+    # (`id = $EVENT$`) or only the scope or guard it runs in.
+    origin: tuple[str, int, str] | None = None
+    param_event: bool = False
 
     @property
     def in_option(self) -> bool:
@@ -402,6 +416,13 @@ class _Frame:
     conds: list[str] = field(default_factory=list)
     chain_conds: list[str] = field(default_factory=list)  # if/else_if siblings
     toks: list[str] | None = None  # collected tokens while inside a cond block
+
+
+def _is_dispatch_name(key: str) -> bool:
+    """`gm_state_approved_by_$IG$`: a call whose callee's name holds a
+    parameter. Not a bare `$WHO$` (a scope) and nothing with a `:` or `.`."""
+    return "$" in key and bool(_DISPATCH_NAME_RE.match(key)) and bool(
+        re.sub(r"\$\w+\$", "", key).strip("_"))
 
 
 def _is_switch(key: str) -> bool:
@@ -526,6 +547,8 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                 else:
                     depth = 0
                     k = j
+                    found: list[Site] = []
+                    delayed = False
                     while k < n:
                         tk = toks[k][0]
                         if tk == "{":
@@ -536,9 +559,18 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                                 break
                         elif tk == "id" and k + 2 < n and toks[k + 1][0] == "=" and depth == 1:
                             entity, pk, sw, conds = context()
-                            sites.append(Site(toks[k + 2][0], rel, ln, entity, kind, pk, sw, conds))
+                            found.append(Site(toks[k + 2][0], rel, ln, entity, kind, pk, sw, conds))
+                        elif (tk in _DELAY_KEYS and depth == 1 and k + 2 < n
+                              and toks[k + 1][0] == "=" and not _ZERO_RE.match(toks[k + 2][0])):
+                            delayed = True
                         k += 1
-            elif t in effect_names and stack:
+                    for s in found:
+                        s.delayed = delayed
+                    sites.extend(found)
+            elif (t in effect_names or (kind == "scripted_effect" and _is_dispatch_name(t))) and stack:
+                # A dispatcher call (`helper_$KIND$ = yes`) is kept under its
+                # name as written, which is no effect's name, so nothing here
+                # reads it; `script_call_graph` resolves it at each caller.
                 entity, pk, sw, conds = context()
                 # `helper = { WHO = scope:x EVENT = ns.7 }` — keep simple
                 # depth-1 arguments for `$PARAM$` substitution.
@@ -768,7 +800,10 @@ def _collect_def_files(mod_path: str, sub: str) -> dict[str, list[str]]:
     return dict(out)
 
 
-def build_graph(mod_path: str) -> Graph:
+def build_graph(mod_path: str, include_console: bool = False) -> Graph:
+    """`include_console` also reads the `te_debug_*` console harnesses, which
+    this audit leaves out (nothing in them reaches a player unasked) and
+    `trigger_event_cycle_audit` needs (a loop there still crashes the game)."""
     events = load_events(mod_path)
     effect_file = _collect_defs(mod_path, "scripted_effects")
     on_action_files = _collect_def_files(mod_path, "on_actions")
@@ -786,7 +821,7 @@ def build_graph(mod_path: str) -> Graph:
                     continue
                 p = os.path.join(dirpath, f)
                 rel = os.path.relpath(p, mod_path).replace("\\", "/")
-                if _CONSOLE_FILE_RE.search(f):
+                if _CONSOLE_FILE_RE.search(f) and not include_console:
                     continue  # console-only harnesses: not how anything reaches a player
                 fs = scan_file(p, rel, effect_names)
                 for s in fs.sites:
@@ -836,7 +871,9 @@ def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict
                     inner = [sub(p) for p in s.path]
                     added[event].append(Site(
                         event, rel, ln, entity, kind, pk + inner,
-                        sw + [p for p in inner if _is_switch(p)], conds + " " + sub(s.conds), s.via))
+                        sw + [p for p in inner if _is_switch(p)], conds + " " + sub(s.conds), s.via,
+                        s.delayed, s.origin or (s.file, s.line, s.entity),
+                        s.param_event or bool(_PARAM_RE.match(s.event))))
             sites_by_event[key] = keep
         for k, v in added.items():
             sites_by_event.setdefault(k, []).extend(v)
@@ -844,15 +881,20 @@ def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict
             break
     for key in [k for k, v in sites_by_event.items() if not v or _PARAM_RE.match(k)]:
         del sites_by_event[key]
-    # A recursive helper re-derives the same caller site every round.
+    # A recursive helper re-derives the same caller site every round. Of two
+    # sites that differ only in their delay (a helper that fires `$EVENT$`
+    # both ways from one block), the one kept reads as undelayed.
     for key, lst in sites_by_event.items():
-        seen: set = set()
+        seen: dict[tuple, Site] = {}
         uniq = []
         for s in lst:
             sig = (s.file, s.line, s.entity, tuple(s.path), tuple(s.switches), s.via)
-            if sig not in seen:
-                seen.add(sig)
+            kept = seen.get(sig)
+            if kept is None:
+                seen[sig] = s
                 uniq.append(s)
+            elif kept.delayed and not s.delayed:
+                kept.delayed, kept.origin, kept.param_event = False, s.origin, s.param_event
         sites_by_event[key] = uniq
 
 

@@ -813,7 +813,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						owner = { trigger_event = { id = nuclear_weapon_events.11 popup = yes } }
+						owner = { trigger_event = { id = nuclear_weapon_events.11 popup = yes } } # REVIEWED 2026-11-12 (trigger_event_cycle): this effect spends a warhead first (nuclear_weapon_stockpile - 1, above), and the retaliation that answers this event (nuclear_weapon_events.11.b) needs its launcher's stockpile above 0, so the exchange is bounded by the two stockpiles; each answer is an event option
 					}
 					trigger_event = { id = nuclear_weapon_events.12 popup = yes }
 					every_country = {
@@ -876,7 +876,7 @@ nuclear_response_response_strike = {  # Scope is target state
 								limit = { has_variable = nd_salvo_seen_by }
 								remove_variable = nd_salvo_seen_by
 							}
-							trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+							trigger_event = { id = nuclear_weapon_events.1 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): this effect spends a warhead first (nuclear_weapon_stockpile - 1, above), and the retaliation that answers this event (nuclear_weapon_events.1.b) needs its launcher's stockpile above 0, so the exchange is bounded by the two stockpiles; each answer is an event option
 						}
 					}
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }

@@ -251,7 +251,7 @@ gm_state_promote_secondary = {
 			remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_promoted }
 			gm_state_tr_rebuild_from_moving = yes
 			scope:gm_mon_promoted = { destroy_container = yes }
-			owner = { trigger_event = { id = monument_events.20 } }
+			owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the secondary raised is taken off gm_monuments_here and its container destroyed above, so a state has one fewer to promote on every pass, and gm_state_tr_rebuild_from_moving has put back the building whose absence gm_monument_pass reads
 		}
 	}
 }
@@ -560,7 +560,7 @@ gm_mon_order_choice = {
 		set_variable = { name = gm_mon_order_by value = scope:gm_mon_order_owner }
 	}
 	var:gm_tr_origin ?= {
-		trigger_event = { id = monument_events.30 }
+		trigger_event = { id = monument_events.30 } # REVIEWED 2026-11-12 (trigger_event_cycle): the way back is monument_events.16's option, sent to a player only (gm_notify_new_contests: is_ai = no) and only for a contest newly marked: its immediate removes every gm_tr_new_contest before the click that orders this
 	}
 }
 
@@ -674,7 +674,7 @@ gm_state_run_mon_orders = {
 			}
 			gm_state_tomorrow = { MARK = gm_mon_orders_tomorrow QUEUED = gm_mon_orders_relay_queued EVENT = monument_events.34 }
 		}
-		owner = { trigger_event = { id = monument_events.20 } }
+		owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): every order run here is spent first (gm_mon_order removed, or its monument destroyed by gm_mon_tear_down_one) and what is left waits a day (gm_state_tomorrow); a new order comes only from a player's click or the AI's monthly pass, neither inside the refresh
 	}
 }
 
@@ -716,7 +716,7 @@ gm_state_raise_secondary = {
 	}
 	remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_raise }
 	scope:gm_mon_raise = { destroy_container = yes }
-	owner = { trigger_event = { id = monument_events.20 } }
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): each caller spends what brought it here first: gm_state_settle_newcomer removes gm_newcomer, gm_state_run_mon_orders removes the gm_mon_order, and gm_state_raise_orphan's orphan has its gm_tr_origin (gm_sh_adopt_beside); the container raised is destroyed above
 }
 
 # State scope, from monument_events.29 once a newcomer (gm_newcomer, a
@@ -1662,7 +1662,7 @@ gm_sh_adopt_beside = {
 		owner = {
 			add_to_variable_list = { name = gm_monuments_held target = scope:gm_sh_moving }
 			set_variable = gm_mon_listed
-			trigger_event = { id = monument_events.20 }
+			trigger_event = { id = monument_events.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_tr_origin, set above, ends this shadow's being an orphan (gm_sh_orphan_of), so the refresh's gm_state_merge_pending -> monument_events.29 -> gm_state_adopt_orphans finds one fewer on every pass
 		}
 	}
 	set_global_variable = { name = gm_sh_log_kept_now value = 1 }
