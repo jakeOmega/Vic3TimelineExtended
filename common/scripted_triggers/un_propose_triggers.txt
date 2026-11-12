@@ -5,9 +5,11 @@
 # initiative, each with the two gates its journal-entry scripted button used to
 # carry inline:
 #
-#   un_propose_<key>_available   the button's `visible` — whether the topic is
-#                                on the table at all for us right now (there is
-#                                a case, we are not already enforcing it, ...)
+#   un_propose_<key>_available   whether the topic is on the table at all for
+#                                us right now (there is a case, we are not
+#                                already enforcing it, ...); the button's
+#                                `visible` asks it last, after possible's cheap
+#                                gates (un_propose_ai_floor_open below)
 #   un_propose_<key>_possible    the button's `possible` — every cost, cooldown,
 #                                lock and standing gate, with the custom_tooltip
 #                                lines that explain a refusal
