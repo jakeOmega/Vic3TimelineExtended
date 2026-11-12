@@ -57,6 +57,7 @@ article, power-bloc principle, GUI.
 | System | What else goes | Back when switched on |
 |---|---|---|
 | Banking | the cycle's three variables (`te_banking_cycle_stop_for_rule`) | yes (`te_banking_entry_net`) |
+| Banking, Full to Simplified | the entry stays; the monetary layer's managed modifiers, its economic state (back to step 0's seeds) and the External & Currency tools (`te_monetary_settle_rule_switch`); swap lines, lenders of last resort, receiverships and monetary-union principles stay | the layer starts again from neutral |
 | Social movements (6) | Civil Rights' path modifiers (`cr_je_cleanup_effect`) | no |
 | Heir Education | counters and focus modifiers (`heir_education_cleanup_effect`) | no |
 | Custom Religion | nothing (the builder's counters are its own) | no |

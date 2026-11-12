@@ -953,6 +953,32 @@ def _txt_block(text, name):
     return _top_level(text, name)
 
 
+# The "?" in a tab's header hides for an observer (test_te_help_pages.py).
+OBSERVER = 'visible = "[Not( GetMetaPlayer.IsObserver )]"'
+
+
+def _ambient_reads(text):
+    """What the widget file reads of the Market panel's ambient Market, or of
+    the player. Left out: the Help page's body and popup, whose rule gate and
+    title read the player, as a popup must (test_te_help_pages.py); and two
+    reads in the tab's body that are the tab's own, as in every host
+    (test_te_system_tab_bodies.py), its gate, in the tab_gate override, and
+    the observer gate on its header's "?". The rest of the body counts like
+    any section."""
+    body = _type_body(text, "te_gw_tab_body")
+    m = re.search(r'blockoverride "tab_gate" \{', body)
+    assert m, "te_gw_tab_body has no tab_gate"
+    gate = _block_from(body, m.end())
+    assert (text.count(body), body.count(gate), body.count(OBSERVER)) == (1, 1, 1)
+    text = text.replace(body, body.replace(gate, "").replace(OBSERVER, ""))
+    text = text.replace("type te_global_warming_help_body = flowcontainer {"
+                        + _type_body(text, "te_global_warming_help_body"), "")
+    text = text.replace("type te_global_warming_help_popup = te_ui_help_popup {"
+                        + _type_body(text, "te_global_warming_help_popup"), "")
+    code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
+    return re.findall(r"(?<![\w.'])(Market|GetPlayer|GetMetaPlayer)\.\w+", code)
+
+
 def _gui_block(text, name):
     """The contents of `block "<name>" { … }` in a GUI type."""
     m = re.search(rf'\bblock "{name}" \{{', text)
@@ -1322,19 +1348,19 @@ class MarketTabTest(unittest.TestCase):
         sguis = _read(SGUIS)
         for name in ("gw_te_members_sgui", "gw_top_emitters_sgui"):
             self.assertIn("scope = state", _top_level(sguis, name), name)
-        # the tab's body aside: its gate and datacontext are the tab's, read
-        # through the player as in every host (test_te_system_tab_bodies.py);
-        # and the Help page's body and popup, whose rule gate and title read the
-        # player, as a popup must (test_te_help_pages.py)
+        # In the tab's body, its gate and the "?"'s observer gate aside: both
+        # are the tab's own, read through the player as in every host
+        # (test_te_system_tab_bodies.py). The rest of the body is held like any
+        # section: the whole type used to be left out, so a read added to its
+        # content went unseen (#1338).
         text = _read(GUI)
-        text = text.replace("type te_gw_tab_body = te_system_tab_frame {" + _type_body(text, "te_gw_tab_body"), "")
-        text = text.replace("type te_global_warming_help_body = flowcontainer {"
-                            + _type_body(text, "te_global_warming_help_body"), "")
-        text = text.replace("type te_global_warming_help_popup = te_ui_help_popup {"
-                            + _type_body(text, "te_global_warming_help_popup"), "")
-        code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
-        ambient = re.findall(r"(?<![\w.'])(Market|GetPlayer|GetMetaPlayer)\.\w+", code)
-        self.assertEqual(ambient, [])
+        self.assertEqual(_ambient_reads(text), [])
+        view = 'block "te_gw_tab_market_view" {'
+        self.assertEqual(text.count(view), 1)
+        for read in ("Market", "GetPlayer", "GetMetaPlayer"):
+            with self.subTest(planted=read):
+                self.assertEqual(_ambient_reads(text.replace(view, f'{view}\n\t\t\t\t\ttooltip = "[{read}.GetName]"')),
+                                 [read])
         # Country is only ever the section's own (a gw_market_country block's),
         # never the panel's: none in Top Emitters, History or How.
         for name in ("te_gw_sec_emitters", "gw_emitter_row", "gw_emitter_header", "te_gw_sec_history"):

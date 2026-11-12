@@ -27,8 +27,10 @@ import difflib
 import os
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
@@ -41,12 +43,7 @@ CLEAR = "onclick = \"[GetVariableSystem.Clear('com_open_window')]\""
 def _type(text, name):
     m = re.search(rf"^\ttype {name} = widget \{{$", text, re.M)
     assert m, f"no type {name}"
-    depth = 0
-    for i in range(m.end() - 1, len(text)):
-        depth += {"{": 1, "}": -1}.get(text[i], 0)
-        if depth == 0:
-            return text[m.start():i + 1]
-    raise AssertionError("unclosed")
+    return text[m.start():gen._block_end(text, m.end() - 1, name) + 1]
 
 
 class FrameTest(unittest.TestCase):
@@ -57,7 +54,11 @@ class FrameTest(unittest.TestCase):
                          "te_fullscreen_block_window")
 
     def test_it_is_vanillas_but_for_the_name_back_and_close(self):
-        diff = [ln for ln in difflib.unified_diff(self.vanilla.splitlines(), self.ours.splitlines(), lineterm="", n=0)
+        """Line for line, but that a line of vanilla's holding only tabs is empty in ours: the generated file passes
+        the tab check (scripts/format_paradox_tabs.py; test_te_systems_window.py holds it to that)."""
+        self.assertTrue(any(ln and not ln.strip() for ln in self.vanilla.splitlines()), "vanilla has no such line now")
+        vanilla = [ln if ln.strip() else "" for ln in self.vanilla.splitlines()]
+        diff = [ln for ln in difflib.unified_diff(vanilla, self.ours.splitlines(), lineterm="", n=0)
                 if ln[:1] in "+-" and not ln.startswith(("+++", "---"))]
         self.assertEqual(sorted(ln[0] + ln[1:].strip() for ln in diff), sorted([
             "-type fullscreen_block_window = widget {",
@@ -84,6 +85,35 @@ class FrameTest(unittest.TestCase):
                       "content_margin_right", "back_button_fullscreen"):
             self.assertIn(f'block "{block}"', self.ours)
         self.assertIn("fullscreen_scrollarea = {}", self.ours)
+
+    def _frame_of(self, text):
+        """fullscreen_frame() on `text` in place of the fixture, without its four comment lines."""
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "block_windows.gui"
+            path.write_text(text, encoding="utf-8")
+            with mock.patch.object(gen, "VANILLA_FRAMES", path):
+                return [ln for ln in gen.fullscreen_frame() if not ln.startswith("###")]
+
+    def test_a_brace_in_a_comment_or_a_string_is_not_counted(self):
+        """The scan for the type's end skips comments and quoted strings: a `}` in either used to end the type
+        early, or a `{` to run it on into the next (#1338)."""
+        fixture = gen.VANILLA_FRAMES.read_text(encoding="utf-8-sig")
+        opener = "\ttype fullscreen_block_window = widget {\n"
+        self.assertEqual(fixture.count(opener), 1)
+        plain = self._frame_of(fixture)
+        for line in ("\t\t# the next type starts at its }", "\t\t# an opener, { left open",
+                     '\t\ttooltip = "a } in a string, with a \\" before a second }"', '\t\ttooltip = "#bold {#!"'):
+            with self.subTest(line=line):
+                self.assertEqual(self._frame_of(fixture.replace(opener, opener + line + "\n")),
+                                 [plain[0], line[1:], *plain[1:]])
+
+    def test_a_type_that_never_closes_says_so(self):
+        """It raised TypeError, from slicing to None (#1338)."""
+        fixture = gen.VANILLA_FRAMES.read_text(encoding="utf-8-sig")
+        start = fixture.index("\ttype fullscreen_block_window = widget {")
+        cut = fixture[:fixture.index('block "fixed_top"', start)]
+        with self.assertRaisesRegex(ValueError, r"block_windows\.gui: fullscreen_block_window is never closed"):
+            self._frame_of(cut)
 
     def test_the_fixture_is_the_installed_file(self):
         base = os.environ.get("VIC3_BASE_GAME")

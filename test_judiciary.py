@@ -485,18 +485,54 @@ class ShockTest(unittest.TestCase):
         # multiplier: a new shock removes the running one, and comes only when
         # the gap is larger than the one being paid for.
         event = _block(_read(EVENTS), "te_judiciary_events.1")
-        trigger = event[event.index("\ttrigger = {"):event.index("\timmediate = {")]
         immediate = event[event.index("\timmediate = {"):]
-        self.assertIn("NOT = { has_modifier = te_jud_court_overhaul }", trigger)
-        self.assertIn("te_jud_overhaul_mult_value > var:te_jud_overhaul_mult", trigger)
+        limit = immediate[immediate.index("\t\t\tlimit = {"):immediate.index("remove_modifier")]
+        self.assertIn("NOT = { has_modifier = te_jud_court_overhaul }", limit)
+        self.assertIn("te_jud_overhaul_mult_value > var:te_jud_overhaul_mult", limit)
         self.assertLess(immediate.index("remove_modifier = te_jud_court_overhaul"),
                         immediate.index("add_modifier = {"))
 
     def test_shock_needs_seeding(self):
         event = _block(_read(EVENTS), "te_judiciary_events.1")
-        trigger = event[event.index("\ttrigger = {"):event.index("\timmediate = {")]
-        self.assertIn("has_variable = te_jud_seeded", trigger)
-        self.assertIn("te_jud_overhaul_gap >= 20", trigger)
+        immediate = event[event.index("\timmediate = {"):]
+        limit = immediate[immediate.index("\t\t\tlimit = {"):immediate.index("remove_modifier")]
+        self.assertIn("has_variable = te_jud_seeded", limit)
+        self.assertIn("te_jud_overhaul_gap >= 20", limit)
+
+    def test_delayed_events_decide_on_the_day(self):
+        # #1596: a delayed trigger_event seems to be dropped when its event's
+        # trigger is false on the day it is queued. The shock is queued while
+        # the new law's ceiling lags, the bench's year right after the packing
+        # modifier is added, the Doctrine of Necessity while the paper court's
+        # modifier lags: each waits in a hidden event with no trigger.
+        events = _read(EVENTS)
+        for n in (1, 7, 8, 10):
+            with self.subTest(event=n):
+                self.assertNotIn("\ttrigger = {", _block(events, "te_judiciary_events.%d" % n))
+        self.assertIn("trigger_event = { id = te_judiciary_events.5 }",
+                      _block(events, "te_judiciary_events.7"))
+        self.assertIn("has_modifier = te_jud_court_packed", _block(events, "te_judiciary_events.7"))
+        relay = _block(events, "te_judiciary_events.8")
+        self.assertIn("trigger_event = { id = te_judiciary_events.34 }", relay)
+        doctrine = _block(events, "te_judiciary_events.34")
+        trigger = doctrine[doctrine.index("\ttrigger = {"):doctrine.index("\toption = {")]
+        for line in re.findall(r"^\t\t(\S.*)$", trigger, re.M):
+            self.assertIn(line, relay, "the relay restates .34's trigger")
+        activated = _block(_read(ON_ACTIONS), "te_jud_law_activated")
+        self.assertNotIn("te_judiciary_events.34 days", activated)
+        self.assertNotIn("te_judiciary_events.5 days", _block(_read(EFFECTS), "te_jud_pack_court"))
+
+    def test_the_rule_probe_is_once_a_game(self):
+        effects = _read(EFFECTS)
+        queue = _block(effects, "te_jud_rule_probe_queue")
+        self.assertIn("NOT = { has_global_variable = te_jud_rule_probe_done }", queue)
+        self.assertIn("te_jud_overhaul_gap < 20", queue, "the probe must be false when queued")
+        verdict = _block(effects, "te_jud_rule_probe_verdict")
+        self.assertEqual(verdict.count("set_global_variable = te_jud_rule_probe_done"), 2)
+        self.assertIn("TE_SELF_CHECK OK delayed_trigger_queue_check", verdict)
+        self.assertIn("TE_SELF_CHECK BROKEN delayed_trigger_queue_check", verdict)
+        self.assertIn("var:te_jud_rule_probe_due_gap >= 20", verdict, "no OK unless the probe's trigger held when due")
+        self.assertIn("te_jud_rule_probe_verdict = yes", _block(_read(EVENTS), "te_judiciary_events.1"))
 
 
 MINOR_EVENTS = os.path.join(REPO, "events", "minor_events.txt")
@@ -706,7 +742,7 @@ class DefyingTheCourtTest(unittest.TestCase):
         block = _block(_read(EFFECTS), "te_jud_pack_court")
         self.assertLess(block.index("remove_modifier = te_jud_court_packed"),
                         block.index("add_modifier = { name = te_jud_court_packed years = 10 }"))
-        self.assertIn("trigger_event = { id = te_judiciary_events.5 days = 365 }", block)
+        self.assertIn("trigger_event = { id = te_judiciary_events.7 days = 365 }", block)
         # Its authority cost is a cost, never a negative add (CLAUDE.md).
         cost = {k: _body(v) for k, v in mods["te_jud_packing_cost"].items()}
         self.assertNotIn("country_authority_add", cost)
@@ -854,7 +890,7 @@ class LandmarkCasesTest(unittest.TestCase):
                 self.assertIn("te_judiciary_events.%d" % n, _block(on_actions, "te_jud_landmark_%s" % case))
         self.assertIn("te_jud_landmark_voided_election", _block(on_actions, "on_election_campaign_end"))
         activated = _block(on_actions, "te_jud_law_activated")
-        self.assertIn("trigger_event = { id = te_judiciary_events.34 days = 14 }", activated)
+        self.assertIn("trigger_event = { id = te_judiciary_events.8 days = 14 }", activated)
 
     def test_the_otsu_power_is_never_a_player(self):
         event = _block(_read(EVENTS), "te_judiciary_events.31")

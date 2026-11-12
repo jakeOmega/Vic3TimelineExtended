@@ -10140,6 +10140,7 @@ POST_LOAD_AUDITS = [
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
     ("button_reason_audit",           "button_reason_audit"),
     ("faith_scene_audit",             "faith_scene_audit"),
+    ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

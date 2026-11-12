@@ -239,6 +239,11 @@ te_monetary_refresh_world_rate = {
 # gap left to close and that hook is gone. Do not reintroduce a second entry
 # point without a reason of the same kind.
 te_monetary_monthly_update = {
+	# --- the banking rule switched from Full mid-game -----------------------
+	# Before step 0, which seeds again what it forgets, and step 0b, which
+	# strips the managed modifiers (te_monetary_rule_switch_effects.txt).
+	te_monetary_settle_rule_switch = yes
+
 	# --- 0. initialise ------------------------------------------------------
 	te_monetary_init_variables = yes
 

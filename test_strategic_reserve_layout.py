@@ -11,7 +11,7 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow, history_charts
+from gui_test_helpers import _children, assert_wide_matches_narrow, history_charts
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "strategic_reserve_widget.gui")
@@ -856,6 +856,38 @@ BUTTONS_TAG = "### TE: Climate and Reserve tabs (te_global_warming, te_strategic
 SIX_SLOT = (540 - 6 - 10) / 6
 
 
+# The "?" in a tab's header hides for an observer (test_te_help_pages.py).
+OBSERVER = 'visible = "[Not( GetMetaPlayer.IsObserver )]"'
+
+
+def _ambient_reads(text):
+    """What the widget file reads of the Market panel's ambient Market or
+    Country, or of the player. Two reads in the tab's body are the tab's own,
+    as in every host (test_te_system_tab_bodies.py), and are left out: its
+    gate, in the tab_gate override, and the observer gate on its header's
+    "?". The rest of the body counts like any section."""
+    body = _type_body(text, "te_st_res_tab_body")
+    gate = _body(body, r'blockoverride "tab_gate" \{')
+    assert (text.count(body), body.count(gate), body.count(OBSERVER)) == (1, 1, 1)
+    text = text.replace(body, body.replace(gate, "").replace(OBSERVER, ""))
+    return re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", text)
+
+
+def _host_overrides(test, content, body):
+    """The blocks the Market panel's instance of the tab's body overrides,
+    each of which the body must declare: an override that names no block is
+    dropped without a word."""
+    host = _instances(_strip_comments(content), "te_st_res_tab_body")
+    test.assertEqual(len(host), 1)
+    items = _children(host[0])
+    test.assertEqual({kind for kind, _, _ in items}, {"blockoverride"}, "the host sets nothing else on the body")
+    declared = re.findall(r'(?<!\w)block "(\w+)" \{', _strip_comments(body))
+    named = [name for _, name, _ in items]
+    for name in named:
+        test.assertEqual(declared.count(name), 1, f'te_st_res_tab_body declares no block "{name}"')
+    return named
+
+
 def _te_blocks(text, tag):
     """Each block of market_panel.gui opened by `tag`, up to its END TE line."""
     out = []
@@ -927,6 +959,22 @@ class MarketTabTest(unittest.TestCase):
         self.assertIn('text = "je_strategic_reserve"', head)
         self.assertRegex(self.content[0], r'blockoverride "te_st_res_tab_gate" \{\s*visible = "\[And\( '
                          + re.escape(f"{SR_TAB_GATE}, {OWN_MARKET}") + r' \)\]"\s*\}')
+
+    def test_the_hosts_overrides_name_the_bodys_blocks(self):
+        """The note for another market and the own-market test reach the tab
+        through two blocks of the body. With te_st_res_tab_elsewhere misspelt
+        the note's override named nothing, and a player on another market saw
+        a bare header, with no note and no button to their own market: only a
+        lint warning said so (#1338)."""
+        self.assertEqual(_host_overrides(self, self.content[0], self.body),
+                         ["te_st_res_tab_elsewhere", "te_st_res_tab_gate"])
+        self.assertRegex(self.body, r'blockoverride "tab_before_gate" \{\s*block "te_st_res_tab_elsewhere" \{\}\s*\}')
+        for name in ("te_st_res_tab_elsewhere", "te_st_res_tab_gate"):
+            with self.subTest(misspelt=name):
+                override = f'blockoverride "{name}"'
+                self.assertEqual(self.content[0].count(override), 1)
+                with self.assertRaisesRegex(AssertionError, f'declares no block "{name[:-1]}"'):
+                    _host_overrides(self, self.content[0].replace(override, f'blockoverride "{name[:-1]}"'), self.body)
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         halves = self._sr_buttons()
@@ -1024,13 +1072,20 @@ class MarketTabTest(unittest.TestCase):
             self.assertRegex(_body(buttons, rf"(?m)^{name} = \{{"), r"visible = \{\s*is_ai = yes", name)
 
     def test_the_types_read_nothing_from_the_panel(self):
-        """No section type reads the Market panel's ambient Market or Country.
-        The tab's body aside: its gate and datacontext are the tab's, read
-        through the player as in every host (test_te_system_tab_bodies.py)."""
+        """No type reads the Market panel's ambient Market or Country. In the
+        tab's body, its gate and the "?"'s observer gate aside: both are the
+        tab's own, read through the player as in every host
+        (test_te_system_tab_bodies.py). The rest of the body is held like any
+        section: the whole type used to be left out, so a read added to its
+        content went unseen (#1338)."""
         text = _read(WIDGET)
-        text = text.replace("type te_st_res_tab_body = te_system_tab_frame {" + _type_body(text, "te_st_res_tab_body"), "")
-        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", text)
-        self.assertEqual(ambient, [])
+        self.assertEqual(_ambient_reads(text), [])
+        layout = 'block "te_st_res_tab_layout" {'
+        self.assertEqual(text.count(layout), 1)
+        for read in ("Market", "Country", "GetPlayer", "GetMetaPlayer"):
+            with self.subTest(planted=read):
+                self.assertEqual(_ambient_reads(text.replace(layout, f'{layout}\n\t\t\t\ttooltip = "[{read}.GetName]"')),
+                                 [read])
 
     def test_one_visible_per_widget(self):
         for i, block in enumerate(self.buttons + self.content):
