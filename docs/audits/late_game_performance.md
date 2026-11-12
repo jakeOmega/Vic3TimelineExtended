@@ -124,9 +124,9 @@ Vanilla script that the mod's content may enlarge:
 **Other findings.**
 
 - The mod defines 458 building types against vanilla's 118 (325 company
-  flagships, 40 Strategic Reserve sites, 39 wonders). Whether
-  `HandleAutonomousInvestment` scales with the number of types is unmeasured;
-  it needs an A/B run (#1702).
+  flagships, 40 Strategic Reserve sites, 39 wonders). An A/B run added 325
+  more types that are never buildable (open item 2):
+  `HandleAutonomousInvestment` did not move.
 - `RecalculateModifierNodes` is a flat ~130 ms at every day boundary, over
   half of an ordinary day's task time. A flat cost doesn't clear the mod's
   refreshes: remove-and-re-add pulses spread at about 9 countries a day would
@@ -191,7 +191,7 @@ is a measuring aid only and is never committed (the one used is in
 | `te_construction_market_recalc_events.1` (152 calls: `on_revolution_start` 126, the yearly country pulse 21) | 3,027 ms | all in `te_construction_market_country_update_sites`: 20 ms a call |
 | `on_monthly_pulse_country` (265 country pulses) | 2,801 ms | Cultural Hegemony 526, SoL expectations 443, monetary 363, monuments 244, `headlines_on_actions.txt` (vanilla) 121, culture merge 112, trade partner 88, space race 84, eight `extra_on_actions.txt` blocks 370 |
 | Journal entry pulses | 2,939 ms | Strategic Reserve weekly 806, covert warfare monthly 791, Cultural Hegemony monthly 689, nuclear program weekly 160 and monthly 72, UN monthly 144, banking monthly 95 and weekly 15 |
-| `on_yearly_pulse_state` (63 states) | 2,738 ms | Demographics `te_demog_state_yearly` 2,083 (33 ms a state: inheritance and Wealth Concentration refresh 1,178, the walks 892), local climate 589 |
+| `on_yearly_pulse_state` (63 states) | 2,738 ms | Demographics `te_demog_state_yearly` 2,083 (33 ms a state: the census 1,178, of which `te_demog_state_census` 1,157; the walks 892; inheritance and Wealth Concentration 10), local climate 589 |
 | Colonial stability bar's `monthly_progress` (`extra_progress_bars.txt:117`, 237 calls) | 899 ms | |
 | `on_monthly_pulse`, global (1 call) | 669 ms | journal map 177, power grid 151, UN 110, tax 92, launch windows 40 |
 
@@ -310,6 +310,13 @@ All are exact: they change no result unless a line says otherwise.
   the work is serial and holds up the day; where the bottleneck is a tenth
   of the total, as for the UN buttons, cutting it frees CPU but not time.
   Choose fixes by the bottleneck.
+- **Count lines before reading a label.** The call graph labels a callee
+  with `file:line`. In a journal entry, on_action or event file that is the
+  real line. Inside a scripted effect the body is renumbered: the
+  definition's line plus the count of lines since it that hold code, with
+  comment lines and blank lines not counted. Counting comments but not blank
+  lines first put Demographics' census on the inheritance block and made
+  aeroplanes look like the Strategic Reserve's costly good.
 - **Measure which walk costs before caching one.** The formables'
   external-pressure walk was cached monthly on the reasoning that it was
   one of three `any_country` walks per call; AFU's `possible` did not move.
@@ -354,10 +361,20 @@ All are exact: they change no result unless a line says otherwise.
    each weekly tick (about 10% of wall time in 1931). Building triggers are
    23% of script time, 64% of it in mod files; this pass and the construction
    AI are the likely askers, though the dump doesn't say which. The mod
-   defines 458 building types to vanilla's 118, so the pass may scale with
-   them, but that is unmeasured: an A/B run with the company flagships made
-   unbuildable would settle it (#1702 for loading the variant). If it scales,
-   the lever is fewer types, which is an owner call. Earlier (2026-10-03),
+   defines 458 building types to vanilla's 118. **A/B, 2026-11-12:** a local
+   build added a copy of each of the 325 company buildings with `always = no`
+   first in its `potential` (783 types in all; same save and steps, 60
+   unprofiled days). `HandleAutonomousInvestment` per weekly frame went from
+   1,014 ms to 1,028 ms, and wall time from 73 s to 75 s, both within noise.
+   So the pass does not scale with types that fail `potential` at once. The
+   real flagships fail theirs at a first cheap check too (`owner = {
+   has_company = … }`) for every country but the company's own, so they are
+   probably not the pass's cost either. What the run leaves open is the deeper
+   path for each company's own country; the reverse run (the real flagships
+   made unbuildable) would settle it. The one cost the copies did show:
+   `RecalculateModifierNodes` rose from about 100 ms to 120 ms at every hour
+   0, about 0.06 ms a day per building type, so the flagships cost about
+   20 ms a day (1.5% of wall time). Earlier (2026-10-03),
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
@@ -418,7 +435,8 @@ All are exact: they change no result unless a line says otherwise.
    call.
 10. **Expensive `add_modifier` multipliers.** A quick scan (multipliers whose
    script-value closure reaches an iterator) found 11 that remain:
-   - `sol_expectations_{upper,middle,lower}_shift_value` (`every_country`)
+   - `sol_expectations_{upper,middle,lower}_shift_value` (`every_country`;
+     the world-pass PR applies them from a variable)
    - `global_tech_spread_script_value` (`every_country`)
    - `un_peacekeeping_benefit_scale` and `un_aid_benefit_scale`
      (`every_country`)
@@ -436,17 +454,46 @@ All are exact: they change no result unless a line says otherwise.
 12. **The other serial script** (call graph, 2 July → 1 August 1931; see
     "Which script holds up the day"). By size:
     - **Demographics' yearly state step:** `te_demog_state_yearly`, 2,083 ms,
-      33 ms a state. Its inheritance and Wealth Concentration refresh took
-      1,178 ms, the walks 892 ms.
-    - **The Strategic Reserve's weekly pulse:** 806 ms, on the weekly frame,
-      which is already the longest. Nearly all of it is
-      `st_res_weekly_update_effect`; the #1404 self-checks beside it stop on
-      a global flag.
-    - **The monthly country pulse's largest parts:** Cultural Hegemony
-      526 ms, SoL expectations 443 ms, monetary 363 ms.
-    - **Local climate's yearly state pulse:** 589 ms.
+      33 ms a state. The census took 1,178 ms (`te_demog_state_census`
+      1,157, about 18 ms a state), the walks 892 ms, inheritance and Wealth
+      Concentration 10 ms. (An earlier version of this item gave the census's
+      1,178 ms to inheritance and Wealth Concentration: the labels were read
+      before the line-numbering rule in "Lessons" was known.) The census is
+      Demographics Full's core, so this is a lead for the owner, not a fix.
+    - **The Strategic Reserve's weekly pulse:** 820 ms, 278 calls, about
+      3 ms a country a week, on the weekly frame, which is already the
+      longest. It is spread over about 40 small calls: the shared refresh
+      tail 224 ms (the hub's flow modifiers 110), each good's policy tick
+      20–37 ms, each good's preset magnitudes about 14 ms. No world walk and
+      no single fix.
+    - **Covert warfare's monthly pulse:** 776 ms, of which 653 ms was one
+      `ordered_country` that every holder ran to store the world's best
+      intelligence capacity in `global_max_ic`, which only the panel reads.
+      Fixed in the "world pass once" PR: one census a month behind a 25-day
+      global lock.
+    - **Cultural Hegemony's monthly pulse:** 661 ms, of which 654 ms was
+      `trigger_event` for the milestone events `cultural_hegemony.8` and
+      `.9`, whose triggers read the live `cultural_pull_total`. Fixed in the
+      same PR: `.9` is tried only by the leaderboard's #1 (a condition its
+      trigger holds), `.8` once the monthly cache `var:ch_total` reaches 5.
+    - **Cultural Hegemony's country pulse:** 526 ms, in
+      `ch_monthly_country_update`: `ch_total = cultural_pull_total` 341 ms,
+      `ch_art` 143 ms. `cultural_pull_total` evaluates `cultural_pull_raw`
+      twice (the share and `ch_world_raw_live`), and `cultural_pull_from_art`
+      evaluates `country_fine_art_production`, an `every_country` GDP sum,
+      about four times. Caching the raw pull once would halve the first; the
+      second needs the art share restructured. Not done.
+    - **SoL expectations:** 446 ms, of which 437 ms was
+      `sol_expectations_apply_strata_shifts`. Each class's shift value adds
+      `global_average_sol`, an `every_country` pass, and the limit read it
+      twice and the multiplier once: nine world passes per country a month.
+      The `add_modifier` swaps themselves cost little. Fixed in the same PR:
+      each class's value is read once into a variable.
+    - **Monetary:** 359 ms, spread over a dozen steps, the FX and inflation
+      block the largest at 114 ms. No hotspot.
+    - **Local climate's yearly state pulse:** 624 ms, three script values at
+      180–252 ms each. `te_climate_bonus` is the penalty times −1, so the
+      refresh computed the penalty twice. Fixed in the same PR: the bonus is
+      written from the stored penalty.
 
-    Each of these needs its callees opened before a fix is chosen; the
-    bigger window makes that a few clicks each.
-    `on_revolution_start` fired 126 times in those 30 days, which may be
-    worth a look on its own.
+    `on_revolution_start` fired 126 times in those 30 days (#1723).
