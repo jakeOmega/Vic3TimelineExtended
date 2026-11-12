@@ -329,11 +329,11 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "prestige_good_roster_audit",
-        "A company prestige good no `building_types` building of the company can make, or one on a "
-        "`local = yes` good.",
+        "A company prestige good no `building_types` building of the company can make, one on a "
+        "`local = yes` good, or a fourth prestige good on one base good (the engine keeps three).",
         where="trailing on the prestige good's line in `possible_prestige_goods` or the company's "
-              "opening line (covers the whole company); for a `local` flag, the prestige good's "
-              "opening line",
+              "opening line (covers the whole company); for a `local` or cap flag, the prestige "
+              "good's opening line",
     ),
     Audit(
         "amendment_reachability_audit",
@@ -426,9 +426,13 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "localization_accessor_audit",
-        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow.",
-        ci=None,
+        "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. The engine "
+        "renders it as nothing.",
+        ci=(),
         where="trailing on the loc line",
+        note="The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's "
+             "loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing "
+             "(#348; its row in python_tools.md).",
     ),
     # --- GUI and assets ------------------------------------------------------
     Audit(

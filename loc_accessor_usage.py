@@ -19,7 +19,7 @@ walked as chains of their own.
 
 A step is counted only while its receiver's type is known. After an accessor the
 catalog types as `value` (a name, a number, and also whatever the catalog never
-modelled, such as `GetTargetCountry`) or doesn't list, the rest of the chain
+modelled, such as what `Var('x')` holds) or doesn't list, the rest of the chain
 can't be attributed; `coverage.unattributed_steps` counts those.
 
 Each use carries the context of the loc key that holds it: the audit's own
