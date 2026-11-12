@@ -511,7 +511,8 @@ is a Sovereign Empire, and about twelve times when your identity's bond applies
 (shared religion, governance principle or culture, economic dependence, or an
 army five times the target's that can get to it). Its infamy is a fifth of what
 annexing the target would cost, up to 25, so the cap decides for all but small
-targets; a Sovereign Empire pays half as much.
+targets. A Sovereign Empire's figure is halved before the cap, so it reaches 25
+only against larger targets.
 
 ## Formable countries
 

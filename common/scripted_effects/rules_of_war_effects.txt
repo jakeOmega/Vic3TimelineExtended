@@ -74,14 +74,27 @@ te_row_charge_infamy = {
 	hidden_effect = {
 		# The self-check's other reading: a country made mid-game got its first
 		# law through on_activate, so the no-standing gate above is what spares it.
+		# Once a game for each kind of new country: a revolution's, and any
+		# other (a release, decolonization's create_dynamic_country).
 		if = {
 			limit = {
 				game_date > 1836.1.1
 				NOT = { has_variable = te_row_infamy_standing }
-				NOT = { has_global_variable = te_row_creation_logged }
+				is_revolutionary = yes
+				NOT = { has_global_variable = te_row_creation_logged_revolution }
 			}
-			set_global_variable = { name = te_row_creation_logged value = yes }
-			debug_log = "TE_SELF_CHECK OK row_standing_on_creation (a country made mid-game ran its first Rules of War law's on_activate with no standing, and was charged nothing for it)"
+			set_global_variable = { name = te_row_creation_logged_revolution value = yes }
+			debug_log = "TE_SELF_CHECK OK row_standing_on_creation path=revolution country=[THIS.GetCountry.GetTagName] standing=$STANDING$ (a country made mid-game ran its first Rules of War law's on_activate with no standing, and was charged nothing for it) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				game_date > 1836.1.1
+				NOT = { has_variable = te_row_infamy_standing }
+				is_revolutionary = no
+				NOT = { has_global_variable = te_row_creation_logged_other }
+			}
+			set_global_variable = { name = te_row_creation_logged_other value = yes }
+			debug_log = "TE_SELF_CHECK OK row_standing_on_creation path=other country=[THIS.GetCountry.GetTagName] standing=$STANDING$ (a country made mid-game ran its first Rules of War law's on_activate with no standing, and was charged nothing for it) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		set_variable = { name = te_row_infamy_standing value = $STANDING$ }
 	}
@@ -91,7 +104,8 @@ te_row_charge_infamy = {
 # laws without running on_activate (see above). Record the standing of the law
 # it holds, so its first real change is charged. The first time either this
 # or te_row_charge_infamy meets a country with no standing after the start, it
-# logs which way the engine went (row_standing_on_creation, play-test list
+# logs which way the engine went, once for a revolution and once for any
+# other new country (row_standing_on_creation, play-test list
 # docs/testing/rules-of-war-playtest.md). Country scope; monthly
 # (te_rules_of_war_on_actions.txt).
 te_row_backfill_standing = {
@@ -102,9 +116,20 @@ te_row_backfill_standing = {
 		}
 		set_variable = { name = te_row_infamy_standing value = te_row_law_standing }
 		if = {
-			limit = { NOT = { has_global_variable = te_row_creation_logged } }
-			set_global_variable = { name = te_row_creation_logged value = yes }
-			debug_log = "TE_SELF_CHECK BROKEN row_standing_on_creation (a country held no Rules of War standing a month after it was made: the engine gave it its laws without on_activate. The monthly backfill recorded the law it holds, so its next change is charged; nothing to fix while the backfill runs)"
+			limit = {
+				is_revolutionary = yes
+				NOT = { has_global_variable = te_row_creation_logged_revolution }
+			}
+			set_global_variable = { name = te_row_creation_logged_revolution value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN row_standing_on_creation path=revolution country=[THIS.GetCountry.GetTagName] standing=[THIS.ScriptValue('te_row_law_standing')|0] (a country held no Rules of War standing a month after it was made: the engine gave it its laws without on_activate. The monthly backfill recorded the law it holds, so its next change is charged; nothing to fix while the backfill runs) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				is_revolutionary = no
+				NOT = { has_global_variable = te_row_creation_logged_other }
+			}
+			set_global_variable = { name = te_row_creation_logged_other value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN row_standing_on_creation path=other country=[THIS.GetCountry.GetTagName] standing=[THIS.ScriptValue('te_row_law_standing')|0] (a country held no Rules of War standing a month after it was made: the engine gave it its laws without on_activate. The monthly backfill recorded the law it holds, so its next change is charged; nothing to fix while the backfill runs) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }
