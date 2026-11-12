@@ -96,6 +96,28 @@ lender_of_last_resort = {
 		}
 	}
 
+	# THE MONETARY SYSTEM MUST BE ON (#1507; owner, 2026-11-12). The banking rule
+	# can be switched from Full to Simplified mid-game, and the monetary steps
+	# that give this article its meaning stop with it. A requirement that fails
+	# invalidates the article: the engine removes it from its treaty
+	# (vanilla's notification_treaty_article_removed, "is no longer valid and
+	# has been removed"), with no withdrawing or breaking party, so nobody pays
+	# infamy, relations or a binding-period penalty, and its source_modifier /
+	# target_modifier go with it. Vanilla ends a guarantee of independence the
+	# same way when the guarantor's rank falls. Read from vanilla, not seen in
+	# game: the TE_SELF_CHECK mon_rule_switch_treaties and the play-test row
+	# check it. te_mon_full_system reads only the rule, so a game never switched
+	# off Full never fails it. The roles the article leaves on its parties are
+	# cleared by te_monetary_leave_full_system (te_monetary_rule_switch_effects.txt).
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_mon_article_needs_full_system_tt
+				te_mon_full_system = yes
+			}
+		}
+	}
+
 	requirement_to_maintain = {
 		trigger = {
 			custom_tooltip = {

@@ -155,7 +155,7 @@ simplified, and what the journal entry and the history store ask.
 | `banking_possible_cb_open_market_ops` | drops the regime and rate-floor conditions — OMO reverts to its pre-phase-1 gate (unlock bool, 4 points, law lock). The `on_law_enacted` auto-switch-off is gated to match |
 | `cb_capital_controls_outflow` (+ disable) | `ai_chance` falls back to the pre-phase-1 cycle rule; the external-crisis rule reads its neutral inputs and would never fire |
 | `te_mon_effect_fx_shock_tt` | the wrapper the ten event options call: no shock **and no tooltip line**, so no option promises a currency move that cannot happen |
-| treaty articles 110–112, `principle_monetary_union_1..5` | `visible = no` |
+| treaty articles 110–114, `principle_monetary_union_1..5` | `visible = no`; an article already in force ends (the pegs on the anchor's dial, 111, 112 and 114 on a `te_mon_full_system` requirement), a principle stays |
 | dashboard / history GUI | the Monetary Policy readout block is hidden; open-market operations fall back to a plain row under the same header, drawn for a market economy only (moral suasion now lives in Prudential Regulation); the inflation and exchange-rate charts are hidden and not sampled |
 
 **`banking_system_disabled` takes the same path through the monetary layer** — `te_mon_full_system`
@@ -194,10 +194,20 @@ modifiers follow `te_mon_stance_band`. `te_monetary_settle_rule_switch` (`te_mon
 in `te_monetary_monthly_update`, marks every Full pulse (`te_mon_ran_full`); the first pulse without the full system
 that finds the mark (Simplified or Disabled) strips the managed modifiers through a change of home (step 9 re-adds the
 rate paid at once), forgets the skipped steps' economic state so step 0 seeds it neutral again on the same pulse, and
-switches off the five External & Currency tools, whose bills would otherwise go on charging. Records and clocks only a
-skipped step reads (the vault, peg confidence, LOLR calls, union membership) stay, and resume if the rule goes back to
-Full. The effect's header lists every site it leaves and why; `test_rule_off_teardown.py` pins the order and the
-seeds. Play-test: `docs/testing/rules-off-midgame-playtest.md`, "Banking: Full to Simplified".
+switches off the five External & Currency tools, whose bills would otherwise go on charging. The monetary treaties
+end with the system (owner, 2026-11-12): pegs because the anchor no longer holds a dial, and a swap line, a lender of
+last resort and a debt receivership through a `requirement_to_maintain { te_mon_full_system = yes }` of their own. A
+failed requirement invalidates the article, which the engine removes from its treaty with no withdrawing or breaking
+party, so nobody pays infamy, relations or a binding-period penalty, and the article's modifiers go with it (the
+receivership's −10 legitimacy, every side's leverage). The teardown clears what the skipped discovery would have: a
+line still drawn on is settled in one lump, as every line that ends is, and the recipient, ward and receivership roles
+go to 0, so a past guarantee no longer softens imported crashes. That the requirement ends the article cleanly is read
+from vanilla (its loc and its guarantee of independence), not seen in game: `TE_SELF_CHECK mon_rule_switch_treaties`
+checks it a month later. Monetary-union principles stay on the bloc. Records and clocks only a skipped step reads (the
+vault, peg confidence, LOLR calls, union membership) stay, and resume if the rule goes back to Full; an ended treaty
+has to be signed again. The effect's header lists every site it leaves and why; `test_rule_off_teardown.py` pins the
+order, the seeds and the three requirements. Play-test: `docs/testing/rules-off-midgame-playtest.md`, "Banking: Full
+to Simplified".
 
 ### Banking Law Modifiers
 Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) to tune the banking cycle:
