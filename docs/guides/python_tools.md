@@ -958,6 +958,8 @@ of the directory, offline.
 
 #### Technology & Engine Research Endpoints
 
+The `/engine-docs` handlers and their helpers live in `server/routes_engine_docs.py`, the first route group moved out of `mod_state_server.py` (#1537). A route module holds code only: the state stays in `mod_state_server.py`, which registers its own `globals()` with `server.register_state()` as it runs, and the routes read it through `server.server_state()` at call time. They never import `mod_state_server`: run as `__main__` that loads a second copy with empty globals, and under `python -m cProfile|trace` the file's globals are a plain dict no module holds. Moved names stay importable from `mod_state_server`; `test_server_split.py` checks each moved route byte for byte against a golden recorded before the move.
+
 | Endpoint | Method | Description |
 |---|---|---|
 | `/technology-effects/<tech_id>` | GET | ALL effects of a technology: direct modifiers, unlocked PMs (with modifier details), buildings, combat units, laws, institutions, decisions, journal entries, diplomatic actions, company types, mobilization options, and dependent technologies |
