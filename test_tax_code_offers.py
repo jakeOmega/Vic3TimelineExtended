@@ -377,8 +377,8 @@ class SelectionTest(unittest.TestCase):
             part = norm(selection(ig))
             for clause in CLAUSES[ig]:
                 with self.subTest(ig=ig, clause=clause):
-                    self.assertIn(f"NAND = {{ has_variable = te_tax_bl_got_{ig}_{clause} "
-                                  f"var:te_tax_bl_got_{ig}_{clause} = 1 }}", part)
+                    # ?= is false for an unset record; no guard sits beside the read.
+                    self.assertIn(f"NOT = {{ var:te_tax_bl_got_{ig}_{clause} ?= 1 }}", part)
 
     def test_a_promise_is_offered_only_when_it_can_be_recorded(self):
         for (kind, arg), groups in PROMISES.items():
@@ -388,8 +388,8 @@ class SelectionTest(unittest.TestCase):
                     self.assertIn(f"te_tax_can_obl_propose = {{ KIND = {kind} ARG = {arg} }}", part)
                     self.assertIn(f"te_tax_obl_feasible_{kind}", part)
                     # One accepted promise per group per bill.
-                    self.assertIn(f"NAND = {{ has_variable = te_tax_bl_prom_{ig}_kind "
-                                  f"var:te_tax_bl_prom_{ig}_kind > 0 }}", part)
+                    self.assertIn(f"trigger_if = {{ limit = {{ has_variable = te_tax_bl_prom_{ig}_kind }} "
+                                  f"NOT = {{ var:te_tax_bl_prom_{ig}_kind > 0 }} }}", part)
 
     def test_offers_reset_with_the_commitments(self):
         reset = block(read(GEN_BILL), "te_tax_gen_reset_commitments")
@@ -472,13 +472,23 @@ class AcceptTest(unittest.TestCase):
         self.assertIn("var:te_tax_off_$IG$_rev = var:te_tax_bl_rev", trigger)
         self.assertIn("custom_tooltip = { text = te_tax_tt_offer_not_marginal ig:ig_$IG$ ?= { ig_counts_as_marginal = no } }",
                       trigger)
-        self.assertIn("NAND = { has_variable = te_tax_com_$IG$ has_variable = te_tax_com_$IG$_rev "
-                      "var:te_tax_com_$IG$ = 1 var:te_tax_com_$IG$_rev = var:te_tax_bl_rev }", trigger)
+        # Not committed: the guards are a trigger_if's limit, never siblings of the reads in the
+        # NAND (variable_guard_audit), and the two variables are compared with a plain =, since
+        # ?= with a var: on the right is unverified (scripting_best_practices.md, "Triggered
+        # Option Names").
+        not_committed = ("custom_tooltip = { text = te_tax_tt_offer_not_committed trigger_if = { "
+                         "limit = { has_variable = te_tax_com_$IG$ has_variable = te_tax_com_$IG$_rev } "
+                         "NAND = { var:te_tax_com_$IG$ = 1 var:te_tax_com_$IG$_rev = var:te_tax_bl_rev } } }")
+        self.assertIn(not_committed, trigger)
+        self.assertNotIn("?= var:", trigger)
         self.assertIn("custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }",
                       trigger)
         self.assertIn("trigger_else = { custom_tooltip = { text = te_tax_tt_bill_open always = no } }", trigger)
-        # One trigger_if (the open bill): no line can pass for want of an offer.
-        self.assertEqual(trigger.count("trigger_if"), 1)
+        # Two trigger_ifs: the open bill, and the commitment test above, which passes for want of
+        # a commitment (that is its meaning). No line can pass for want of an offer: every line
+        # that reads the offer sits outside the second one.
+        self.assertEqual(trigger.count("trigger_if"), 2)
+        self.assertEqual(trigger.replace(not_committed, "").count("trigger_if"), 1)
         feasible = norm(block(read(GEN_TRIGGERS), "te_tax_gen_offer_feasible"))
         self.assertTrue(feasible.startswith("has_variable = te_tax_off_$IG$_kind has_variable = te_tax_off_$IG$_arg "
                                             "var:te_tax_off_$IG$_kind > 0 trigger_if = {"))
@@ -732,7 +742,8 @@ class IgViewTest(unittest.TestCase):
         self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_land_based")),
                          f"{carrier} {' '.join(neg)} has_variable = te_tax_en_land var:te_tax_en_land >= 1")
         self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_consumption_based")),
-                         f"{carrier} {' '.join(neg)} NAND = {{ has_variable = te_tax_en_land var:te_tax_en_land >= 1 }}")
+                         f"{carrier} {' '.join(neg)} trigger_if = {{ limit = {{ has_variable = te_tax_en_land }} "
+                         "NOT = { var:te_tax_en_land >= 1 } }")
         for kind in ("graduated", "proportional", "per_capita"):
             counts = norm(block(triggers, f"te_tax_code_counts_as_{kind}"))
             self.assertIn(carrier, counts)
