@@ -2265,8 +2265,7 @@ sr_site_monthly_valles_marineris = {
 			limit = { exists = scope:sr_site_to_valles_marineris }
 			sr_site_transfer_valles_marineris = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_valles_marineris = yes
 		}
 	}
@@ -2553,8 +2552,7 @@ sr_site_monthly_olympus_mons = {
 			limit = { exists = scope:sr_site_to_olympus_mons }
 			sr_site_transfer_olympus_mons = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_olympus_mons = yes
 		}
 	}
@@ -2841,8 +2839,7 @@ sr_site_monthly_hellas_planitia = {
 			limit = { exists = scope:sr_site_to_hellas_planitia }
 			sr_site_transfer_hellas_planitia = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_hellas_planitia = yes
 		}
 	}
@@ -3129,8 +3126,7 @@ sr_site_monthly_utopia_planitia = {
 			limit = { exists = scope:sr_site_to_utopia_planitia }
 			sr_site_transfer_utopia_planitia = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_utopia_planitia = yes
 		}
 	}
@@ -3417,8 +3413,7 @@ sr_site_monthly_arcadia_planitia = {
 			limit = { exists = scope:sr_site_to_arcadia_planitia }
 			sr_site_transfer_arcadia_planitia = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_arcadia_planitia = yes
 		}
 	}
@@ -3704,8 +3699,7 @@ sr_site_monthly_ceres = {
 			limit = { exists = scope:sr_site_to_ceres }
 			sr_site_transfer_ceres = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_ceres = yes
 		}
 	}
@@ -3981,8 +3975,7 @@ sr_site_monthly_vesta = {
 			limit = { exists = scope:sr_site_to_vesta }
 			sr_site_transfer_vesta = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_vesta = yes
 		}
 	}
@@ -4258,8 +4251,7 @@ sr_site_monthly_psyche = {
 			limit = { exists = scope:sr_site_to_psyche }
 			sr_site_transfer_psyche = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_psyche = yes
 		}
 	}
@@ -4535,8 +4527,7 @@ sr_site_monthly_pallas = {
 			limit = { exists = scope:sr_site_to_pallas }
 			sr_site_transfer_pallas = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_pallas = yes
 		}
 	}
@@ -4791,8 +4782,7 @@ sr_site_monthly_hygiea = {
 			limit = { exists = scope:sr_site_to_hygiea }
 			sr_site_transfer_hygiea = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_hygiea = yes
 		}
 	}
@@ -5068,8 +5058,7 @@ sr_site_monthly_io = {
 			limit = { exists = scope:sr_site_to_io }
 			sr_site_transfer_io = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_io = yes
 		}
 	}
@@ -5366,8 +5355,7 @@ sr_site_monthly_europa = {
 			limit = { exists = scope:sr_site_to_europa }
 			sr_site_transfer_europa = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_europa = yes
 		}
 	}
@@ -5644,8 +5632,7 @@ sr_site_monthly_ganymede = {
 			limit = { exists = scope:sr_site_to_ganymede }
 			sr_site_transfer_ganymede = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_ganymede = yes
 		}
 	}
@@ -5932,8 +5919,7 @@ sr_site_monthly_callisto = {
 			limit = { exists = scope:sr_site_to_callisto }
 			sr_site_transfer_callisto = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_callisto = yes
 		}
 	}
@@ -6198,8 +6184,7 @@ sr_site_monthly_himalia = {
 			limit = { exists = scope:sr_site_to_himalia }
 			sr_site_transfer_himalia = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_himalia = yes
 		}
 	}
@@ -6454,8 +6439,7 @@ sr_site_monthly_amalthea = {
 			limit = { exists = scope:sr_site_to_amalthea }
 			sr_site_transfer_amalthea = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_amalthea = yes
 		}
 	}
@@ -6732,8 +6716,7 @@ sr_site_monthly_venus = {
 			limit = { exists = scope:sr_site_to_venus }
 			sr_site_transfer_venus = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_venus = yes
 		}
 	}
@@ -7019,8 +7002,7 @@ sr_site_monthly_mercury = {
 			limit = { exists = scope:sr_site_to_mercury }
 			sr_site_transfer_mercury = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_mercury = yes
 		}
 	}
@@ -7297,8 +7279,7 @@ sr_site_monthly_titan = {
 			limit = { exists = scope:sr_site_to_titan }
 			sr_site_transfer_titan = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_titan = yes
 		}
 	}
@@ -7584,8 +7565,7 @@ sr_site_monthly_enceladus = {
 			limit = { exists = scope:sr_site_to_enceladus }
 			sr_site_transfer_enceladus = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_enceladus = yes
 		}
 	}
@@ -7840,8 +7820,7 @@ sr_site_monthly_rhea = {
 			limit = { exists = scope:sr_site_to_rhea }
 			sr_site_transfer_rhea = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_rhea = yes
 		}
 	}
@@ -8096,8 +8075,7 @@ sr_site_monthly_mimas = {
 			limit = { exists = scope:sr_site_to_mimas }
 			sr_site_transfer_mimas = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_mimas = yes
 		}
 	}
@@ -8352,8 +8330,7 @@ sr_site_monthly_iapetus = {
 			limit = { exists = scope:sr_site_to_iapetus }
 			sr_site_transfer_iapetus = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_iapetus = yes
 		}
 	}
@@ -8629,8 +8606,7 @@ sr_site_monthly_titania = {
 			limit = { exists = scope:sr_site_to_titania }
 			sr_site_transfer_titania = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_titania = yes
 		}
 	}
@@ -8885,8 +8861,7 @@ sr_site_monthly_oberon = {
 			limit = { exists = scope:sr_site_to_oberon }
 			sr_site_transfer_oberon = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_oberon = yes
 		}
 	}
@@ -9141,8 +9116,7 @@ sr_site_monthly_miranda = {
 			limit = { exists = scope:sr_site_to_miranda }
 			sr_site_transfer_miranda = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_miranda = yes
 		}
 	}
@@ -9397,8 +9371,7 @@ sr_site_monthly_ariel = {
 			limit = { exists = scope:sr_site_to_ariel }
 			sr_site_transfer_ariel = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_ariel = yes
 		}
 	}
@@ -9674,8 +9647,7 @@ sr_site_monthly_triton = {
 			limit = { exists = scope:sr_site_to_triton }
 			sr_site_transfer_triton = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_triton = yes
 		}
 	}
@@ -9930,8 +9902,7 @@ sr_site_monthly_proteus = {
 			limit = { exists = scope:sr_site_to_proteus }
 			sr_site_transfer_proteus = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_proteus = yes
 		}
 	}
@@ -10207,8 +10178,7 @@ sr_site_monthly_pluto = {
 			limit = { exists = scope:sr_site_to_pluto }
 			sr_site_transfer_pluto = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_pluto = yes
 		}
 	}
@@ -10463,8 +10433,7 @@ sr_site_monthly_eris = {
 			limit = { exists = scope:sr_site_to_eris }
 			sr_site_transfer_eris = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_eris = yes
 		}
 	}
@@ -10719,8 +10688,7 @@ sr_site_monthly_makemake = {
 			limit = { exists = scope:sr_site_to_makemake }
 			sr_site_transfer_makemake = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_makemake = yes
 		}
 	}
@@ -10975,8 +10943,7 @@ sr_site_monthly_haumea = {
 			limit = { exists = scope:sr_site_to_haumea }
 			sr_site_transfer_haumea = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_haumea = yes
 		}
 	}
@@ -11231,8 +11198,7 @@ sr_site_monthly_sedna = {
 			limit = { exists = scope:sr_site_to_sedna }
 			sr_site_transfer_sedna = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_sedna = yes
 		}
 	}
@@ -11485,8 +11451,7 @@ sr_site_monthly_shackleton = {
 			limit = { exists = scope:sr_site_to_shackleton }
 			sr_site_transfer_shackleton = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_shackleton = yes
 		}
 	}
@@ -11739,8 +11704,7 @@ sr_site_monthly_peary = {
 			limit = { exists = scope:sr_site_to_peary }
 			sr_site_transfer_peary = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_peary = yes
 		}
 	}
@@ -11993,8 +11957,7 @@ sr_site_monthly_tranquility = {
 			limit = { exists = scope:sr_site_to_tranquility }
 			sr_site_transfer_tranquility = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_tranquility = yes
 		}
 	}
@@ -12247,8 +12210,7 @@ sr_site_monthly_marius_hills = {
 			limit = { exists = scope:sr_site_to_marius_hills }
 			sr_site_transfer_marius_hills = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_marius_hills = yes
 		}
 	}
@@ -12501,8 +12463,7 @@ sr_site_monthly_daedalus = {
 			limit = { exists = scope:sr_site_to_daedalus }
 			sr_site_transfer_daedalus = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_daedalus = yes
 		}
 	}
@@ -12755,8 +12716,7 @@ sr_site_monthly_imbrium = {
 			limit = { exists = scope:sr_site_to_imbrium }
 			sr_site_transfer_imbrium = { CAUSE = quiet }
 		}
-		else_if = {
-			limit = { NOT = { has_global_variable = sr_sites_grace } }
+		else = {
 			sr_site_release_imbrium = yes
 		}
 	}
@@ -13986,652 +13946,6 @@ sr_sites_monthly = {
 	sr_site_monthly_marius_hills = yes
 	sr_site_monthly_daedalus = yes
 	sr_site_monthly_imbrium = yes
-}
-
-# ===== A save from before the record (sr_sites_global_monthly, once) =====
-# THIS is a country carrying colony records. Each _held writes its choice and,
-# for a specialization, the holder; a pending discovery becomes global.
-sr_sites_migrate_country = {
-	if = {
-		limit = { has_variable = sr_colony_valles_marineris_research_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_valles_marineris } } set_global_variable = { name = sr_site_holder_valles_marineris value = this } }
-		set_global_variable = { name = sr_site_spec_valles_marineris value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_valles_marineris_mining_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_valles_marineris } } set_global_variable = { name = sr_site_holder_valles_marineris value = this } }
-		set_global_variable = { name = sr_site_spec_valles_marineris value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_olympus_mons_atmospheric_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_olympus_mons } } set_global_variable = { name = sr_site_holder_olympus_mons value = this } }
-		set_global_variable = { name = sr_site_spec_olympus_mons value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_olympus_mons_geothermal_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_olympus_mons } } set_global_variable = { name = sr_site_holder_olympus_mons value = this } }
-		set_global_variable = { name = sr_site_spec_olympus_mons value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_olympus_tubes_a_held }
-		set_global_variable = { name = sr_site_disc_olympus_tubes value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_olympus_tubes_b_held }
-		set_global_variable = { name = sr_site_disc_olympus_tubes value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_hellas_settlement_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_hellas_planitia } } set_global_variable = { name = sr_site_holder_hellas_planitia value = this } }
-		set_global_variable = { name = sr_site_spec_hellas_planitia value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_hellas_astrobiology_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_hellas_planitia } } set_global_variable = { name = sr_site_holder_hellas_planitia value = this } }
-		set_global_variable = { name = sr_site_spec_hellas_planitia value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_hellas_fossils_a_held }
-		set_global_variable = { name = sr_site_disc_hellas_fossils value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_hellas_fossils_b_held }
-		set_global_variable = { name = sr_site_disc_hellas_fossils value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_utopia_ice_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_utopia_planitia } } set_global_variable = { name = sr_site_holder_utopia_planitia value = this } }
-		set_global_variable = { name = sr_site_spec_utopia_planitia value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_utopia_agriculture_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_utopia_planitia } } set_global_variable = { name = sr_site_holder_utopia_planitia value = this } }
-		set_global_variable = { name = sr_site_spec_utopia_planitia value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_utopia_glacier_a_held }
-		set_global_variable = { name = sr_site_disc_utopia_glacier value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_utopia_glacier_b_held }
-		set_global_variable = { name = sr_site_disc_utopia_glacier value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_arcadia_civilian_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_arcadia_planitia } } set_global_variable = { name = sr_site_holder_arcadia_planitia value = this } }
-		set_global_variable = { name = sr_site_spec_arcadia_planitia value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_arcadia_military_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_arcadia_planitia } } set_global_variable = { name = sr_site_holder_arcadia_planitia value = this } }
-		set_global_variable = { name = sr_site_spec_arcadia_planitia value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_arcadia_brines_a_held }
-		set_global_variable = { name = sr_site_disc_arcadia_brines value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_arcadia_brines_b_held }
-		set_global_variable = { name = sr_site_disc_arcadia_brines value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_ceres_waystation_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_ceres } } set_global_variable = { name = sr_site_holder_ceres value = this } }
-		set_global_variable = { name = sr_site_spec_ceres value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_ceres_observatory_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_ceres } } set_global_variable = { name = sr_site_holder_ceres value = this } }
-		set_global_variable = { name = sr_site_spec_ceres value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_ceres_reservoir_a_held }
-		set_global_variable = { name = sr_site_disc_ceres_reservoir value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_ceres_reservoir_b_held }
-		set_global_variable = { name = sr_site_disc_ceres_reservoir value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_vesta_mining_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_vesta } } set_global_variable = { name = sr_site_holder_vesta value = this } }
-		set_global_variable = { name = sr_site_spec_vesta value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_vesta_science_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_vesta } } set_global_variable = { name = sr_site_holder_vesta value = this } }
-		set_global_variable = { name = sr_site_spec_vesta value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_vesta_impactor_a_held }
-		set_global_variable = { name = sr_site_disc_vesta_impactor value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_vesta_impactor_b_held }
-		set_global_variable = { name = sr_site_disc_vesta_impactor value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_psyche_industrial_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_psyche } } set_global_variable = { name = sr_site_holder_psyche value = this } }
-		set_global_variable = { name = sr_site_spec_psyche value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_psyche_careful_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_psyche } } set_global_variable = { name = sr_site_holder_psyche value = this } }
-		set_global_variable = { name = sr_site_spec_psyche value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_psyche_metal_a_held }
-		set_global_variable = { name = sr_site_disc_psyche_metal value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_psyche_metal_b_held }
-		set_global_variable = { name = sr_site_disc_psyche_metal value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_pallas_composites_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_pallas } } set_global_variable = { name = sr_site_holder_pallas value = this } }
-		set_global_variable = { name = sr_site_spec_pallas value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_pallas_observatory_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_pallas } } set_global_variable = { name = sr_site_holder_pallas value = this } }
-		set_global_variable = { name = sr_site_spec_pallas value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_pallas_water_a_held }
-		set_global_variable = { name = sr_site_disc_pallas_water value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_pallas_water_b_held }
-		set_global_variable = { name = sr_site_disc_pallas_water value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_hygiea_volatiles_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_hygiea } } set_global_variable = { name = sr_site_holder_hygiea value = this } }
-		set_global_variable = { name = sr_site_spec_hygiea value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_hygiea_automated_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_hygiea } } set_global_variable = { name = sr_site_holder_hygiea value = this } }
-		set_global_variable = { name = sr_site_spec_hygiea value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_io_mining_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_io } } set_global_variable = { name = sr_site_holder_io value = this } }
-		set_global_variable = { name = sr_site_spec_io value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_io_research_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_io } } set_global_variable = { name = sr_site_holder_io value = this } }
-		set_global_variable = { name = sr_site_spec_io value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_io_roof_a_held }
-		set_global_variable = { name = sr_site_disc_io_roof value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_io_roof_b_held }
-		set_global_variable = { name = sr_site_disc_io_roof value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_europa_drilling_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = this } }
-		set_global_variable = { name = sr_site_spec_europa value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_europa_surface_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = this } }
-		set_global_variable = { name = sr_site_spec_europa value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_europa_life_a_held }
-		set_global_variable = { name = sr_site_disc_europa_life value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_europa_life_b_held }
-		set_global_variable = { name = sr_site_disc_europa_life value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_europa_vents_a_held }
-		set_global_variable = { name = sr_site_disc_europa_vents value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_europa_vents_b_held }
-		set_global_variable = { name = sr_site_disc_europa_vents value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_ganymede_settlement_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_ganymede } } set_global_variable = { name = sr_site_holder_ganymede value = this } }
-		set_global_variable = { name = sr_site_spec_ganymede value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_ganymede_command_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_ganymede } } set_global_variable = { name = sr_site_holder_ganymede value = this } }
-		set_global_variable = { name = sr_site_spec_ganymede value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_ganymede_layers_a_held }
-		set_global_variable = { name = sr_site_disc_ganymede_layers value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_ganymede_layers_b_held }
-		set_global_variable = { name = sr_site_disc_ganymede_layers value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_callisto_gateway_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_callisto } } set_global_variable = { name = sr_site_holder_callisto value = this } }
-		set_global_variable = { name = sr_site_spec_callisto value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_callisto_agricultural_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_callisto } } set_global_variable = { name = sr_site_holder_callisto value = this } }
-		set_global_variable = { name = sr_site_spec_callisto value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_callisto_archive_a_held }
-		set_global_variable = { name = sr_site_disc_callisto_archive value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_callisto_archive_b_held }
-		set_global_variable = { name = sr_site_disc_callisto_archive value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_himalia_telescope_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_himalia } } set_global_variable = { name = sr_site_holder_himalia value = this } }
-		set_global_variable = { name = sr_site_spec_himalia value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_himalia_depot_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_himalia } } set_global_variable = { name = sr_site_holder_himalia value = this } }
-		set_global_variable = { name = sr_site_spec_himalia value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_amalthea_physics_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_amalthea } } set_global_variable = { name = sr_site_holder_amalthea value = this } }
-		set_global_variable = { name = sr_site_spec_amalthea value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_amalthea_rings_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_amalthea } } set_global_variable = { name = sr_site_holder_amalthea value = this } }
-		set_global_variable = { name = sr_site_spec_amalthea value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_venus_atmospheric_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_venus } } set_global_variable = { name = sr_site_holder_venus value = this } }
-		set_global_variable = { name = sr_site_spec_venus value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_venus_extraction_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_venus } } set_global_variable = { name = sr_site_holder_venus value = this } }
-		set_global_variable = { name = sr_site_spec_venus value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_venus_waves_a_held }
-		set_global_variable = { name = sr_site_disc_venus_waves value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_venus_waves_b_held }
-		set_global_variable = { name = sr_site_disc_venus_waves value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_mercury_solar_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_mercury } } set_global_variable = { name = sr_site_holder_mercury value = this } }
-		set_global_variable = { name = sr_site_spec_mercury value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_mercury_ice_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_mercury } } set_global_variable = { name = sr_site_holder_mercury value = this } }
-		set_global_variable = { name = sr_site_spec_mercury value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_mercury_archive_a_held }
-		set_global_variable = { name = sr_site_disc_mercury_archive value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_mercury_archive_b_held }
-		set_global_variable = { name = sr_site_disc_mercury_archive value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_titan_hydrocarbons_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_titan } } set_global_variable = { name = sr_site_holder_titan value = this } }
-		set_global_variable = { name = sr_site_spec_titan value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_titan_prebiotic_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_titan } } set_global_variable = { name = sr_site_holder_titan value = this } }
-		set_global_variable = { name = sr_site_spec_titan value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_titan_chemistry_a_held }
-		set_global_variable = { name = sr_site_disc_titan_chemistry value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_titan_chemistry_b_held }
-		set_global_variable = { name = sr_site_disc_titan_chemistry value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_enceladus_astrobiology_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_enceladus } } set_global_variable = { name = sr_site_holder_enceladus value = this } }
-		set_global_variable = { name = sr_site_spec_enceladus value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_enceladus_water_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_enceladus } } set_global_variable = { name = sr_site_holder_enceladus value = this } }
-		set_global_variable = { name = sr_site_spec_enceladus value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_enceladus_life_a_held }
-		set_global_variable = { name = sr_site_disc_enceladus_life value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_enceladus_life_b_held }
-		set_global_variable = { name = sr_site_disc_enceladus_life value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_rhea_propellant_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_rhea } } set_global_variable = { name = sr_site_holder_rhea value = this } }
-		set_global_variable = { name = sr_site_spec_rhea value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_rhea_observation_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_rhea } } set_global_variable = { name = sr_site_holder_rhea value = this } }
-		set_global_variable = { name = sr_site_spec_rhea value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_mimas_installation_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_mimas } } set_global_variable = { name = sr_site_holder_mimas value = this } }
-		set_global_variable = { name = sr_site_spec_mimas value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_mimas_gravity_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_mimas } } set_global_variable = { name = sr_site_holder_mimas value = this } }
-		set_global_variable = { name = sr_site_spec_mimas value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_iapetus_ridge_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_iapetus } } set_global_variable = { name = sr_site_holder_iapetus value = this } }
-		set_global_variable = { name = sr_site_spec_iapetus value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_iapetus_organics_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_iapetus } } set_global_variable = { name = sr_site_holder_iapetus value = this } }
-		set_global_variable = { name = sr_site_spec_iapetus value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_titania_mining_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_titania } } set_global_variable = { name = sr_site_holder_titania value = this } }
-		set_global_variable = { name = sr_site_spec_titania value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_titania_geophysics_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_titania } } set_global_variable = { name = sr_site_holder_titania value = this } }
-		set_global_variable = { name = sr_site_spec_titania value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_titania_ocean_a_held }
-		set_global_variable = { name = sr_site_disc_titania_ocean value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_titania_ocean_b_held }
-		set_global_variable = { name = sr_site_disc_titania_ocean value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_oberon_relay_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_oberon } } set_global_variable = { name = sr_site_holder_oberon value = this } }
-		set_global_variable = { name = sr_site_spec_oberon value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_oberon_research_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_oberon } } set_global_variable = { name = sr_site_holder_oberon value = this } }
-		set_global_variable = { name = sr_site_spec_oberon value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_miranda_rupes_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_miranda } } set_global_variable = { name = sr_site_holder_miranda value = this } }
-		set_global_variable = { name = sr_site_spec_miranda value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_miranda_drilling_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_miranda } } set_global_variable = { name = sr_site_holder_miranda value = this } }
-		set_global_variable = { name = sr_site_spec_miranda value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_ariel_cryovolcanic_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_ariel } } set_global_variable = { name = sr_site_holder_ariel value = this } }
-		set_global_variable = { name = sr_site_spec_ariel value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_ariel_quarrying_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_ariel } } set_global_variable = { name = sr_site_holder_ariel value = this } }
-		set_global_variable = { name = sr_site_spec_ariel value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_triton_geyser_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_triton } } set_global_variable = { name = sr_site_holder_triton value = this } }
-		set_global_variable = { name = sr_site_spec_triton value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_triton_gateway_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_triton } } set_global_variable = { name = sr_site_holder_triton value = this } }
-		set_global_variable = { name = sr_site_spec_triton value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_triton_jet_a_held }
-		set_global_variable = { name = sr_site_disc_triton_jet value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_triton_jet_b_held }
-		set_global_variable = { name = sr_site_disc_triton_jet value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_proteus_probe_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_proteus } } set_global_variable = { name = sr_site_holder_proteus value = this } }
-		set_global_variable = { name = sr_site_spec_proteus value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_proteus_extraction_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_proteus } } set_global_variable = { name = sr_site_holder_proteus value = this } }
-		set_global_variable = { name = sr_site_spec_proteus value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_pluto_research_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_pluto } } set_global_variable = { name = sr_site_holder_pluto value = this } }
-		set_global_variable = { name = sr_site_spec_pluto value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_pluto_harvesting_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_pluto } } set_global_variable = { name = sr_site_holder_pluto value = this } }
-		set_global_variable = { name = sr_site_spec_pluto value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_pluto_antifreeze_a_held }
-		set_global_variable = { name = sr_site_disc_pluto_antifreeze value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_pluto_antifreeze_b_held }
-		set_global_variable = { name = sr_site_disc_pluto_antifreeze value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_eris_selfsufficiency_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_eris } } set_global_variable = { name = sr_site_holder_eris value = this } }
-		set_global_variable = { name = sr_site_spec_eris value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_eris_monitoring_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_eris } } set_global_variable = { name = sr_site_holder_eris value = this } }
-		set_global_variable = { name = sr_site_spec_eris value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_makemake_chemistry_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_makemake } } set_global_variable = { name = sr_site_holder_makemake value = this } }
-		set_global_variable = { name = sr_site_spec_makemake value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_makemake_solarwind_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_makemake } } set_global_variable = { name = sr_site_holder_makemake value = this } }
-		set_global_variable = { name = sr_site_spec_makemake value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_haumea_dynamics_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_haumea } } set_global_variable = { name = sr_site_holder_haumea value = this } }
-		set_global_variable = { name = sr_site_spec_haumea value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_haumea_rings_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_haumea } } set_global_variable = { name = sr_site_holder_haumea value = this } }
-		set_global_variable = { name = sr_site_spec_haumea value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_sedna_outpost_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_sedna } } set_global_variable = { name = sr_site_holder_sedna value = this } }
-		set_global_variable = { name = sr_site_spec_sedna value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_sedna_interstellar_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_sedna } } set_global_variable = { name = sr_site_holder_sedna value = this } }
-		set_global_variable = { name = sr_site_spec_sedna value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_shackleton_depot_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_shackleton } } set_global_variable = { name = sr_site_holder_shackleton value = this } }
-		set_global_variable = { name = sr_site_spec_shackleton value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_shackleton_outpost_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_shackleton } } set_global_variable = { name = sr_site_holder_shackleton value = this } }
-		set_global_variable = { name = sr_site_spec_shackleton value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_peary_solar_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_peary } } set_global_variable = { name = sr_site_holder_peary value = this } }
-		set_global_variable = { name = sr_site_spec_peary value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_peary_observatory_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_peary } } set_global_variable = { name = sr_site_holder_peary value = this } }
-		set_global_variable = { name = sr_site_spec_peary value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_tranquility_heritage_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_tranquility } } set_global_variable = { name = sr_site_holder_tranquility value = this } }
-		set_global_variable = { name = sr_site_spec_tranquility value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_tranquility_helium_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_tranquility } } set_global_variable = { name = sr_site_holder_tranquility value = this } }
-		set_global_variable = { name = sr_site_spec_tranquility value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_marius_lavatubes_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_marius_hills } } set_global_variable = { name = sr_site_holder_marius_hills value = this } }
-		set_global_variable = { name = sr_site_spec_marius_hills value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_marius_hardened_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_marius_hills } } set_global_variable = { name = sr_site_holder_marius_hills value = this } }
-		set_global_variable = { name = sr_site_spec_marius_hills value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_daedalus_telescope_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_daedalus } } set_global_variable = { name = sr_site_holder_daedalus value = this } }
-		set_global_variable = { name = sr_site_spec_daedalus value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_daedalus_relay_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_daedalus } } set_global_variable = { name = sr_site_holder_daedalus value = this } }
-		set_global_variable = { name = sr_site_spec_daedalus value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_imbrium_massdriver_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_imbrium } } set_global_variable = { name = sr_site_holder_imbrium value = this } }
-		set_global_variable = { name = sr_site_spec_imbrium value = 1 }
-	}
-	if = {
-		limit = { has_variable = sr_colony_imbrium_kreep_held }
-		if = { limit = { NOT = { has_global_variable = sr_site_holder_imbrium } } set_global_variable = { name = sr_site_holder_imbrium value = this } }
-		set_global_variable = { name = sr_site_spec_imbrium value = 2 }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_olympus_tubes_pending NOT = { has_variable = sr_discovery_olympus_tubes_done } }
-		set_global_variable = { name = sr_site_disc_olympus_tubes_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_hellas_fossils_pending NOT = { has_variable = sr_discovery_hellas_fossils_done } }
-		set_global_variable = { name = sr_site_disc_hellas_fossils_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_utopia_glacier_pending NOT = { has_variable = sr_discovery_utopia_glacier_done } }
-		set_global_variable = { name = sr_site_disc_utopia_glacier_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_arcadia_brines_pending NOT = { has_variable = sr_discovery_arcadia_brines_done } }
-		set_global_variable = { name = sr_site_disc_arcadia_brines_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_ceres_reservoir_pending NOT = { has_variable = sr_discovery_ceres_reservoir_done } }
-		set_global_variable = { name = sr_site_disc_ceres_reservoir_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_vesta_impactor_pending NOT = { has_variable = sr_discovery_vesta_impactor_done } }
-		set_global_variable = { name = sr_site_disc_vesta_impactor_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_psyche_metal_pending NOT = { has_variable = sr_discovery_psyche_metal_done } }
-		set_global_variable = { name = sr_site_disc_psyche_metal_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_pallas_water_pending NOT = { has_variable = sr_discovery_pallas_water_done } }
-		set_global_variable = { name = sr_site_disc_pallas_water_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_io_roof_pending NOT = { has_variable = sr_discovery_io_roof_done } }
-		set_global_variable = { name = sr_site_disc_io_roof_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_europa_life_pending NOT = { has_variable = sr_discovery_europa_life_done } }
-		set_global_variable = { name = sr_site_disc_europa_life_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_europa_vents_pending NOT = { has_variable = sr_discovery_europa_vents_done } }
-		set_global_variable = { name = sr_site_disc_europa_vents_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_ganymede_layers_pending NOT = { has_variable = sr_discovery_ganymede_layers_done } }
-		set_global_variable = { name = sr_site_disc_ganymede_layers_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_callisto_archive_pending NOT = { has_variable = sr_discovery_callisto_archive_done } }
-		set_global_variable = { name = sr_site_disc_callisto_archive_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_venus_waves_pending NOT = { has_variable = sr_discovery_venus_waves_done } }
-		set_global_variable = { name = sr_site_disc_venus_waves_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_mercury_archive_pending NOT = { has_variable = sr_discovery_mercury_archive_done } }
-		set_global_variable = { name = sr_site_disc_mercury_archive_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_titan_chemistry_pending NOT = { has_variable = sr_discovery_titan_chemistry_done } }
-		set_global_variable = { name = sr_site_disc_titan_chemistry_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_enceladus_life_pending NOT = { has_variable = sr_discovery_enceladus_life_done } }
-		set_global_variable = { name = sr_site_disc_enceladus_life_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_titania_ocean_pending NOT = { has_variable = sr_discovery_titania_ocean_done } }
-		set_global_variable = { name = sr_site_disc_titania_ocean_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_triton_jet_pending NOT = { has_variable = sr_discovery_triton_jet_done } }
-		set_global_variable = { name = sr_site_disc_triton_jet_pending value = yes }
-	}
-	if = {
-		limit = { has_variable = sr_discovery_pluto_antifreeze_pending NOT = { has_variable = sr_discovery_pluto_antifreeze_done } }
-		set_global_variable = { name = sr_site_disc_pluto_antifreeze_pending value = yes }
-	}
 }
 
 # ===== A revolution's winner (sr_repair_after_civil_war) =====

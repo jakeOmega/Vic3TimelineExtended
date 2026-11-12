@@ -7475,8 +7475,6 @@
  banking_event_bailout_cost_desc:0 "Emergency financial assistance to a trading partner."
  banking_event_bailout_goodwill:0 "International Financial Goodwill"
  banking_event_bailout_goodwill_desc:0 "Our generous financial assistance has earned us diplomatic goodwill."
- banking_event_bank_holiday:0 "Bank Holiday Disruption"
- banking_event_bank_holiday_desc:0 "The temporary closure of all banks is disrupting normal commerce."
  banking_event_cb_independence:0 "Central Bank Independence"
  banking_event_cb_independence_desc:0 "The government has affirmed the central bank's independence, bolstering market confidence and reducing borrowing costs."
  banking_event_commercial_paper:0 "Commercial Paper Market"

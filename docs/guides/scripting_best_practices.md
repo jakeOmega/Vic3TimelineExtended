@@ -3082,7 +3082,7 @@ When designing a system that responds to "how authoritarian is this country", co
 
 When migrating modifiers from country scope to JE scope, existing save games still have the old country-level modifiers. A cleanup scripted effect (`legacy_je_modifier_cleanup_effect`) runs once via `on_game_start` to remove these stale modifiers.
 
-**File:** `common/scripted_effects/legacy_modifier_cleanup.txt` + `common/on_actions/legacy_modifier_cleanup.txt`
+**File:** `common/scripted_effects/legacy_modifier_cleanup.txt` + `common/on_actions/legacy_modifier_cleanup.txt`. Both were deleted with every migration they held when the mod moved to vanilla 1.15, which loads no 1.14 save (#1429); a future migration starts the pair again.
 
 ### Simple Cleanup (toggle/pulse modifiers)
 
@@ -3114,10 +3114,11 @@ Deleting a player-facing toggle whose modifier reserved a resource is the third 
 
 1. **Keep the static modifier defined for one release.** `remove_modifier` on an undefined modifier is not a safe no-op, and the modifier still needs its loc key while it is defined. Nor is it a no-op on a *defined* modifier the scope does not hold: that logs `remove_modifier effect [ Timed modifier X in scope object … not found ]` to `error.log` on every call. Guard it (`remove_modifier_if_exists_effect = { MODIFIER = X }`, `extra_effects.txt`). `cr_je_cleanup_effect` removed seven unconditionally and logged 120 lines in one session.
 2. **Strip it from a guarded one-shot at the head of the owning JE's `on_monthly_pulse`**, not from `on_game_started` — a JE pulse reaches every save including ones already in progress, and `limit = { … has_modifier = X }` makes it free on every other month. Remember the refund is not visible inside that same effect block, so any `modifier:` read later in the same pulse still sees the pre-refund value; check that the stale reading errs on the conservative side before choosing where in the pulse to put it.
-3. **Write a dated `PENDING REMOVAL` block at the top of `legacy_modifier_cleanup.txt`** listing *every* artefact that must be deleted together — the static modifier, its loc keys, the one-shot, and the line in `legacy_je_modifier_cleanup_effect`. Removing any subset early re-breaks it in one direction or the other, and nothing enforces the grouping. Live example: `banking_policy_rate_hike`, added 2026-09-19.
+3. **Write a dated `PENDING REMOVAL` block at the top of `legacy_modifier_cleanup.txt`** listing *every* artefact that must be deleted together — the static modifier, its loc keys, the one-shot, and the line in `legacy_je_modifier_cleanup_effect`. Removing any subset early re-breaks it in one direction or the other, and nothing enforces the grouping. Example: `banking_policy_rate_hike`, added 2026-09-19, removed with the file in #1429.
 
 ### Lifecycle
-- Safe to delete cleanup files once no save games from before the migration exist.
+- Safe to delete cleanup files once no save games from before the migration exist. A vanilla release that loads no older save (1.15) is such a point: everything kept only for an older mod version can go at once.
+- Before deleting a strip, prove that nothing a new game runs adds what it strips: a strip that also catches a copy a live path can still add is not old-save code.
 - Delete BOTH the scripted effect file AND the on_action file (`common/on_actions/legacy_modifier_cleanup.txt`).
 
 ## Goods-Keyed Modifier Labels Splice the Good's Name
