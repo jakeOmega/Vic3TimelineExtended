@@ -1,4 +1,4 @@
-"""Lints localization values for render-breaking bracket-style formatting tags.
+"""Lints localization values for markup that breaks or bleeds when rendered.
 
 **Bracket-style formatting tags** — `[b] [/b] [i] [/i] [u] [/u]` and any `[/x]`
 closing-tag form (Markdown / BBCode muscle memory). Vic3 has no such tags; the
@@ -67,12 +67,71 @@ checks are vanilla- and mod-clean today (0 findings); they are regression guards
 re-introducing the known lag bug and the 2026-09-20 cultural-hegemony
 widget-status breakage.
 
-Note on scope: issue #134 also proposed flagging unbalanced `#…#!` formatting
-runs, but an empirical sweep found 2341 "violations" across vanilla loc
-(1.15M values) — Vic3 legitimately splits formatting across concatenated loc
-fragments (`#R` opened in one key, `#!` reset in another) and tolerates `#!#!`
-double-resets, so a balance check does not match engine behavior. That check
-was dropped as unshippable; see the issue thread.
+**Formatting tags left open** (`unclosed_format`, issue #266) — a `#bold`,
+`#v`, `#R` … opened and never closed with `#!` in the same value. The format
+runs on to the end of the text the value is part of, through whatever a
+`$key$` reference or a concatenation puts after it. The mod's `GDPPERCAPITA`
+line shipped that way, `…@money!#bold $GDP_per_capita$/…|2*]` with no `#!`,
+until #261.
+
+The grammar, read off the 12,705 of vanilla's 108,112 English values that
+hold a `#`:
+
+- `#!` closes one tag, the innermost. Two tags need two (`#r #b …#!#!`), and
+  `#tooltippable #tooltip:TAG,key #v x#!#!#!` needs three.
+- `##` is a literal `#` (vanilla's `BUILDING_RANK` writes
+  `##[Building.GetProfitabilityRankInType]` for "#3"). It opens nothing.
+- A `#` before a letter, `_`, `[` or `$` opens a tag. Its header runs to the
+  next space, newline escape, `#` or the end of the value, through any
+  `[...]` inside it, and is one tag whatever it combines: `#bold;red`,
+  `#indent_newline:3`, `#tooltippable;tooltip:[GetPlayer.GetTooltipTag],my_tt`.
+  `#[GetX]` and `#$COLOR$` are tags whose name is computed.
+- Everything inside a `[...]` data expression is skipped, so a `#v …#!` in a
+  quoted argument is the data function's business. Quotes are tracked there,
+  so a `]` in a quoted argument does not end the expression.
+- A `#!` with nothing open is ignored. Vanilla writes defensive `#!#!`, and a
+  closing fragment is the other half of an opening one.
+
+A value is flagged when a tag is still open at its end. That is stricter than
+counting openers against resets (`5#! then #b bold` counts as balanced) and
+never flags a surplus reset.
+
+Why this ships when #134's balance check did not. That check was measured on
+vanilla, counted both directions, and found 2341 "violations" across
+vanilla's eleven languages, because vanilla splits a run across keys: an
+`#indent_newline:3` left open so the effect lines the engine appends sit
+indented under it, a reset with nothing before it to close
+(`LAW_CATEGORIES_HEADER:0 "Legal Categories#!"`). Three things differ here.
+Vanilla is never judged: `audit()` reads the mod's own `localization/` only.
+A surplus `#!` is never flagged. And an opening fragment, the one split left,
+is rare enough in the mod to review key by key: seven values, all color
+prefixes that customizable localization returns
+(`gw_trend_prefix_warming:0 "#R +"`), each with a `# REVIEWED` naming who
+closes it.
+
+Vanilla's text is the evidence that the grammar reads tags as the game's
+writers do: 98.8% of its values with a `#` end with nothing open (1.15.1
+snapshot). Of the 157 that do not, 112 leave an `#indent_newline` open, 14
+end on the opener itself (event flavor ending `#italic`: the snapshot's loc
+reader stops a value at its first unescaped quote, so quoted flavor after
+the tag is cut off), and 31 are slips (`concept_recovery_rate_desc` never
+closes its `#b`) or more such cuts.
+`VanillaFormatTagCalibrationTests` holds the grammar to the committed
+snapshot.
+
+Known limits. A `$key$` or `[X.GetCustom('y')]` that pastes an opening
+fragment is not followed, so a caller that forgets the `#!` for a reviewed
+fragment is not caught. Tag names are not checked against the formats the
+game defines, so `#bolt x#!` passes.
+
+**A `#` that is not a tag** (`bare_hash`, #266) — a `#` before a digit, a
+space, punctuation or the end of the value, which is none of the three forms
+above. Vanilla writes every literal hash as `##`; its four bare ones are all
+slips (two settings tooltips ending `#` for `#!`, `#b not# have`, a stray
+`# ` bullet). What the engine draws for one has not been seen in game, so the
+fix is the form known to work: `##`. The mod had three (the cultural board's
+`#` column head, a debug panel's "Snapshot #", an issue number in a debug
+event), fixed with the check.
 
 Suppress an intentional flag with a trailing comment on the loc line — the
 engine ignores anything after the closing quote:
@@ -88,7 +147,9 @@ from dataclasses import dataclass, field
 @dataclass
 class RenderFlag:
     loc_key: str
-    issue: str  # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" | "quoted_name_apostrophe" | "article_desc_scope"
+    # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" |
+    # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash"
+    issue: str
     detail: str
     file: str
     line: int
@@ -132,6 +193,113 @@ def _nested_bracket_offsets(value: str) -> list[int]:
         elif ch == "]":
             depth = max(0, depth - 1)
     return offsets
+
+
+# What may follow the `#` that opens a formatting tag: a format name, or a
+# data expression / `$PARAM$` that computes one.
+_TAG_START = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_[$")
+
+
+def _skip_data_expr(value: str, start: int) -> int:
+    """`value[start]` is a `[`: return the offset just past the `]` that
+    closes it, or `len(value)` if nothing does. Quotes are tracked, so a
+    bracket inside a quoted argument is text."""
+    depth = 0
+    in_quote = False
+    for i in range(start, len(value)):
+        ch = value[i]
+        if ch == "'":
+            in_quote = not in_quote
+        elif in_quote:
+            continue
+        elif ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    return len(value)
+
+
+def _tag_header_end(value: str, start: int) -> int:
+    """Offset where the tag header that starts at `value[start]` (the
+    character after its `#`) ends: the next whitespace, backslash escape
+    (`\\n`) or `#`, outside any `[...]`."""
+    i = start
+    n = len(value)
+    while i < n:
+        ch = value[i]
+        if ch == "[":
+            i = _skip_data_expr(value, i)
+        elif ch.isspace() or ch in "#\\":
+            break
+        else:
+            i += 1
+    return i
+
+
+def scan_format_tags(value: str) -> tuple[list[str], list[int]]:
+    """Walk one loc value's formatting tags. Returns the headers of the tags
+    still open at its end, outermost first, and the offset of every bare `#`.
+    The grammar is in the module docstring."""
+    open_tags: list[str] = []
+    bare: list[int] = []
+    i = 0
+    n = len(value)
+    while i < n:
+        ch = value[i]
+        if ch == "[":
+            i = _skip_data_expr(value, i)
+            continue
+        if ch != "#":
+            i += 1
+            continue
+        nxt = value[i + 1: i + 2]
+        if nxt == "#":
+            i += 2
+        elif nxt == "!":
+            if open_tags:
+                open_tags.pop()
+            i += 2
+        elif nxt in _TAG_START:
+            end = _tag_header_end(value, i + 1)
+            open_tags.append(value[i:end])
+            i = end
+        else:
+            bare.append(i)
+            i += 1
+    return open_tags, bare
+
+
+def _short_tag(header: str) -> str:
+    return header if len(header) <= 32 else header[:29] + "..."
+
+
+def check_format_tags(value: str) -> list[tuple[str, str]]:
+    """Flag a formatting tag left open at the end of the value, and a `#` that
+    is neither a tag, a `#!` nor a `##`. Pure; unit-testable."""
+    if "#" not in value:
+        return []
+    out: list[tuple[str, str]] = []
+    open_tags, bare = scan_format_tags(value)
+    if open_tags:
+        names = ", ".join(f"`{_short_tag(t)}`" for t in open_tags)
+        out.append((
+            "unclosed_format",
+            f"{names} opened and never closed: the format runs on into "
+            "whatever follows this value in the same text. Each tag needs its "
+            "own `#!`. If this value is an opening fragment that its caller "
+            "closes, say who closes it in a `# REVIEWED` comment",
+        ))
+    if bare:
+        at = bare[0]
+        snippet = value[max(0, at - 12): at + 12]
+        out.append((
+            "bare_hash",
+            f"a `#` that is not a tag, a `#!` or a `##` at offset {at} "
+            f"(`{snippet}`). Write a literal hash as `##`, as vanilla does",
+        ))
+    return out
 
 
 # `$key$`, or `$key|flags$` (`$key|q$` in a quoted argument from 1.15).
@@ -396,6 +564,7 @@ def check_value(value: str) -> list[tuple[str, str]]:
             f"(`{snippet}`) — the loc parser does not nest; pass data-function "
             "arguments as bare expressions",
         ))
+    out += check_format_tags(value)
     return out
 
 
@@ -471,6 +640,8 @@ _ISSUE_LABEL = {
     "quoted_arg_expansion": "`$key$` expanding [ or ' into a quoted argument",
     "quoted_name_apostrophe": "Straight apostrophe in a modifier name",
     "article_desc_scope": "Article-instance scope in a treaty article's `_desc` / `_effects_desc`",
+    "unclosed_format": "Formatting tags left open (`#bold` with no `#!`)",
+    "bare_hash": "A `#` that is not a tag (write `##`)",
 }
 
 
@@ -507,6 +678,14 @@ def render_report(result: AuditResult) -> str:
         "or `_effects_desc`. That text renders with no article instance behind it,",
         "so the scope promotes to nullptr and shows blank. Fix: keep it scope-free",
         "and move scoped text into `<article>_article_short_desc`.",
+        "",
+        "Also flagged: a formatting tag (`#bold`, `#v`, `#R`, …) still open at",
+        "the end of its value, so the format runs on into whatever follows the",
+        "value in the same text. Each tag needs its own `#!`; a surplus `#!` is",
+        "not flagged. Fix: close it. An opening fragment that its caller closes",
+        "(a color prefix from customizable localization) takes a `# REVIEWED`",
+        "naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.",
+        "Fix: write a literal hash as `##`.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",

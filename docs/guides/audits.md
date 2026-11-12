@@ -52,7 +52,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `pm_employment_audit` | A building where some valid production-method combination drives a profession's employment below zero. | CI, reload |
 | `loc_coverage_audit` | A mod entity (modifier, journal entry, button, building, method...) with no loc key. The game shows the raw key and logs nothing. | CI, reload |
 | `script_loc_reference_audit` | A loc key named in script (`desc = "KEY"`, `text = KEY`) that no loc file defines. | CI, reload |
-| `loc_render_audit` | Bracket-style formatting in a loc value (`[b]x[/b]`), which errors on every render. Write `#b x#!`. | CI, reload |
+| `loc_render_audit` | Bracket-style formatting in a loc value (`[b]x[/b]`), which errors on every render: write `#b x#!`. Also a formatting tag left open at the end of a value (`#bold` with no `#!`), which runs on into the text after it, and a `#` that is no tag: write a literal hash as `##`. | CI, reload |
 | `loc_script_value_audit` | A `ScriptValue('x')` in loc or a script string that names no script value. It renders 0. | CI, reload |
 | `concept_reference_audit` | A loc link to a game concept that doesn't exist. The link breaks and logs three errors a render (#1257). | CI, reload |
 | `localization_accessor_audit` | A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. | reload |
@@ -146,7 +146,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `pm_employment_audit` | `python3 pm_employment_audit.py --strict` | `docs/engine/pm_employment_report.md` | Builds a ModState from vanilla_parsed/ (about 7 s). Also fails when a building is skipped for exceeding the combination cap, since it went unaudited (#681). |
 | `loc_coverage_audit` | `python3 loc_coverage_audit.py --strict` | `docs/engine/loc_coverage_report.md` | Builds a ModState from vanilla_parsed/ (about 7 s); a stale snapshot can flag or hide a vanilla key. |
 | `script_loc_reference_audit` | `python3 script_loc_reference_audit.py --strict` | `docs/engine/script_loc_reference_report.md` |  |
-| `loc_render_audit` | `python3 loc_render_audit.py --strict` | `docs/engine/loc_render_report.md` |  |
+| `loc_render_audit` | `python3 loc_render_audit.py --strict` | `docs/engine/loc_render_report.md` | Only the mod's own values are judged, and a surplus `#!` is never flagged. An opening fragment that its caller closes takes the comment, naming the caller. |
 | `loc_script_value_audit` | `python3 loc_script_value_audit.py --strict` | `docs/engine/loc_script_value_report.md` | The .gui half is gui_reference_audit's. |
 | `concept_reference_audit` | `python3 concept_reference_audit.py --strict` | `docs/engine/concept_reference_report.md` | Builds a ModState from vanilla_parsed/ (about 7 s). |
 | `localization_accessor_audit` | reload only | `docs/engine/localization_accessor_report.md` |  |
