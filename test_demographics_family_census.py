@@ -246,8 +246,10 @@ class TestStepWithMeasures(unittest.TestCase):
     check_step): desired fertility's policy term, Family Housing, the means (the model's, a fixture here),
     Restricted Contraception's maternal deaths and Birth Limit's sex ratio at birth with prenatal sexing."""
 
+    COHORT = R.TestCohortScript   # the fixed-point twin takes TestCohortScript's twin (test_demographics_fixed_point.py)
+
     def setUp(self):
-        self.cohort = R.TestCohortScript("test_seed_rates_match_the_model")   # its helpers, not its tests
+        self.cohort = self.COHORT("test_seed_rates_match_the_model")   # its helpers, not its tests
         self.YEAR, self.POP = self.cohort.YEAR, self.cohort.POP
 
     def _inp(self, **mods):
