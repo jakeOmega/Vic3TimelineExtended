@@ -1246,6 +1246,22 @@ class GeneratorTest(unittest.TestCase):
                          "stale: run python3 scripts/generators/gen_te_systems_window.py")
         self.assertEqual(gen.main(["--check"]), 0)
 
+    def test_the_generated_files_pass_the_tab_check(self):
+        """scripts/format_paradox_tabs.py, which preflight runs over common/
+        and events/ only, so nothing held these to it: vanilla's
+        fullscreen_block_window has a line of tabs alone, which the copy
+        kept (#1338). No line ends in whitespace either."""
+        sys.path.insert(0, os.path.join(REPO, "scripts"))
+        try:
+            import format_paradox_tabs
+        finally:
+            sys.path.pop(0)
+        for path in (gen.GUI_OUT, gen.NI_OUT):
+            with self.subTest(path=path.name):
+                text = path.read_text(encoding="utf-8-sig")
+                self.assertEqual(format_paradox_tabs.format_text(text), text)
+                self.assertEqual([n for n, ln in enumerate(text.split("\n"), 1) if ln != ln.rstrip()], [])
+
     def test_the_gates_take_a_root(self):
         """The gates root on the player by default, the window's as before
         (the committed file, above), and on another root when asked: National

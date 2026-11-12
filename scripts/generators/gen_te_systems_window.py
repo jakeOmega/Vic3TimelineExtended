@@ -786,7 +786,9 @@ def fullscreen_frame() -> list[str]:
     """Vanilla's fullscreen_block_window under the mod's name, Back and Close
     clearing the window's open state: vanilla's call the information panel
     bar, which a scripted widget isn't in (spec § 4.1). Each change must match
-    exactly once, so a patch that moves them fails here."""
+    exactly once, so a patch that moves them fails here. A line of vanilla's
+    that holds only tabs is written empty, as scripts/format_paradox_tabs.py
+    wants it (test_te_fullscreen_frame.py's diff allows for that)."""
     text = VANILLA_FRAMES.read_text(encoding="utf-8-sig")
     m = re.search(r"^\ttype fullscreen_block_window = widget \{$", text, re.M)
     if not m:
@@ -797,7 +799,7 @@ def fullscreen_frame() -> list[str]:
         if frame.count(old) != 1:
             raise ValueError(f"vanilla's fullscreen_block_window changed: {old!r} is there {frame.count(old)} times")
         frame = frame.replace(old, new)
-    body = [ln[1:] if ln.startswith("\t") else ln for ln in frame.split("\n")]
+    body = [(ln[1:] if ln.startswith("\t") else ln) if ln.strip() else "" for ln in frame.split("\n")]
     return ["### The full-screen frame: vanilla's fullscreen_block_window (copied from",
             "### test_fixtures/vanilla_gui/block_windows.gui), its type name, Back and Close",
             "### changed. It fills the screen from its origin, as vanilla's full-screen",

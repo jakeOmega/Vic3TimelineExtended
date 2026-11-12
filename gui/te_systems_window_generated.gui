@@ -259,7 +259,7 @@ types te_systems_window_generated_types
 			margin_left = 50
 			layoutpolicy_vertical = expanding
 			layoutpolicy_horizontal = preferred
-			
+
 			block "content_margin_right" {
 				margin_right = 45
 			}

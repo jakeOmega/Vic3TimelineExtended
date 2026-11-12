@@ -54,7 +54,11 @@ class FrameTest(unittest.TestCase):
                          "te_fullscreen_block_window")
 
     def test_it_is_vanillas_but_for_the_name_back_and_close(self):
-        diff = [ln for ln in difflib.unified_diff(self.vanilla.splitlines(), self.ours.splitlines(), lineterm="", n=0)
+        """Line for line, but that a line of vanilla's holding only tabs is empty in ours: the generated file passes
+        the tab check (scripts/format_paradox_tabs.py; test_te_systems_window.py holds it to that)."""
+        self.assertTrue(any(ln and not ln.strip() for ln in self.vanilla.splitlines()), "vanilla has no such line now")
+        vanilla = [ln if ln.strip() else "" for ln in self.vanilla.splitlines()]
+        diff = [ln for ln in difflib.unified_diff(vanilla, self.ours.splitlines(), lineterm="", n=0)
                 if ln[:1] in "+-" and not ln.startswith(("+++", "---"))]
         self.assertEqual(sorted(ln[0] + ln[1:].strip() for ln in diff), sorted([
             "-type fullscreen_block_window = widget {",
