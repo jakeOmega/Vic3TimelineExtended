@@ -8,6 +8,7 @@ request_influence = {
 	target_involvement_applies_to = source_country
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 	}
 
@@ -122,6 +123,8 @@ crisis_resolution = {
 	max_target_involvement = 1000
 	target_involvement_applies_to = target_country
 
+	flags = { show_in_lens }
+
 	usage_limit = once_per_side
 
 	target_modifier = {
@@ -225,6 +228,8 @@ extend_influence = {
 	target_modifier = {
 		country_treaty_leverage_generation_add = 500
 	}
+
+	flags = { show_in_lens }
 
 	usage_limit = once_per_side
 
@@ -335,6 +340,8 @@ education_aid = {
 	source_modifier = {
 		country_institution_cost_institution_schools_mult = 0.1
 	}
+
+	flags = { show_in_lens }
 
 	usage_limit = once_per_side
 
@@ -451,6 +458,8 @@ healthcare_aid = {
 		state_standard_of_living_add = 1
 	}
 
+	flags = { show_in_lens }
+
 	usage_limit = once_per_side
 
 	visible = {
@@ -566,6 +575,8 @@ security_aid = {
 		country_liberty_desire_add = -0.1
 		country_colonial_stability_drift_add = 0.1
 	}
+
+	flags = { show_in_lens }
 
 	usage_limit = once_per_side
 
@@ -684,6 +695,8 @@ development_assistance = {
 		country_colonial_stability_drift_add = 0.1
 	}
 
+	flags = { show_in_lens }
+
 	usage_limit = once_per_side
 
 	visible = {
@@ -778,6 +791,8 @@ science_aid = {
 	relations_improvement_max = 30
 	max_target_involvement = 1000
 	target_involvement_applies_to = target_country
+
+	flags = { show_in_lens }
 
 	usage_limit = once_per_side
 
@@ -886,6 +901,8 @@ science_aid_2 = {
 	max_target_involvement = 1000
 	target_involvement_applies_to = target_country
 
+	flags = { show_in_lens }
+
 	usage_limit = once_per_side
 
 	source_modifier = {
@@ -916,13 +933,19 @@ science_aid_2 = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = science_aid_2 }
 		}
-		# This upgraded pact requires the base Modernization Aid (science_aid)
-		# article either already IN FORCE with this counterparty, OR authored as
-		# a sibling in the CURRENT draft. The same-draft branch
-		# (scope:treaty + any_scope_article_option) only works in can_ratify --
-		# scope:treaty is unpopulated inside `possible`. Must be ONE custom_tooltip
-		# wrapping a single OR: separate tooltip blocks would be ANDed, wrongly
-		# demanding both paths at once. Vanilla pattern: 06_transfer_state.txt.
+	}
+
+	# This upgraded pact requires the base Modernization Aid (science_aid)
+	# article either already IN FORCE with this counterparty, OR authored as
+	# a sibling in the CURRENT draft. can_propose (1.15) runs on the whole
+	# treaty when it is proposed, never when an article is added to a draft,
+	# so the two can go in in either order; in can_ratify, where this sat
+	# until 2026-11-12, Modernization Aid had to be added first. It sees
+	# can_ratify's scopes (vanilla ship_transfer reads scope:treaty here).
+	# scope:treaty is unpopulated inside `possible`. Must be ONE custom_tooltip
+	# wrapping a single OR: separate tooltip blocks would be ANDed, wrongly
+	# demanding both paths at once. Vanilla pattern: 06_transfer_state.txt.
+	can_propose = {
 		custom_tooltip = {
 			text = REQ_BASE_SCIENCE_AID_ARTICLE
 			OR = {
@@ -1031,6 +1054,8 @@ suppress_subject_liberty = {  # REVIEWED 2026-11-03 (involvement): the overlord 
 	target_modifier = {
 		country_colonial_stability_drift_add = 0.1
 	}
+
+	flags = { show_in_lens }
 
 	usage_limit = once_per_side
 
@@ -1155,9 +1180,16 @@ nuclear_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restric
 		country_nuclear_disarmament_bool = yes
 	}
 
-	flags = { can_be_enforced }
+	flags = { show_in_lens can_be_enforced }
 
 	usage_limit = once_per_side
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		has_game_rule = nuclear_weapons_enabled
+	}
 
 	# ROOT is the source here, as the mod's other directed articles read it
 	# (the aid articles' `visible`, suppress_subject_liberty's `possible`), so
@@ -1464,6 +1496,8 @@ nuclear_program_aid = {
 		country_nuclear_program_progress_mult = 1.0
 	}
 
+	flags = { show_in_lens }
+
 	usage_limit = once_per_side
 
 	visible = {
@@ -1668,6 +1702,7 @@ intelligence_sharing_pact = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/intelligence_sharing_pact.dds"
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 	}
 
@@ -1833,6 +1868,7 @@ joint_military_exercises = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/joint_military_exercises.dds"
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 	}
 
@@ -1891,33 +1927,6 @@ joint_military_exercises = {
 				}
 			}
 		}
-		# New exercises need military ties (owner rulings 2026-10-05): an
-		# alliance or defensive pact, in force or in this draft, a subject
-		# relation either way (vanilla forbids an alliance or defensive pact
-		# between overlord and subject, so this is their tie), or a shared
-		# Military Treaty power bloc. An observer run to 2015 had the article
-		# in 162 of 272 treaties, 109 of them between countries with no
-		# alliance or pact. Exercises already in force stay: none of this is
-		# in requirement_to_maintain. A renegotiated treaty must pass it.
-		custom_tooltip = {
-			text = joint_military_exercises_ties_tt
-			OR = {
-				scope:first_country = {
-					te_treaty_parties_have_military_ties = { OTHER = scope:second_country }
-				}
-				# Symmetric: subject or overlord of the target.
-				scope:first_country = {
-					has_subject_relation_with = scope:second_country
-				}
-				scope:first_country = {
-					is_in_power_bloc = yes
-					is_in_same_power_bloc = scope:second_country
-					power_bloc ?= {
-						has_identity = identity:identity_military_treaty_organization
-					}
-				}
-			}
-		}
 		# At most three at a time for each signatory. The goods-cost
 		# mutual_modifier stacks once per treaty, and the same run had
 		# Germany and Britain in twelve each.
@@ -1951,6 +1960,39 @@ joint_military_exercises = {
 					}
 					any_scope_article = {
 						has_type = joint_military_exercises
+					}
+				}
+			}
+		}
+	}
+
+	# New exercises need military ties (owner rulings 2026-10-05): an
+	# alliance or defensive pact, in force or in this draft, a subject
+	# relation either way (vanilla forbids an alliance or defensive pact
+	# between overlord and subject, so this is their tie), or a shared
+	# Military Treaty power bloc. An observer run to 2015 had the article
+	# in 162 of 272 treaties, 109 of them between countries with no
+	# alliance or pact. Exercises already in force stay: none of this is
+	# in requirement_to_maintain. A renegotiated treaty must pass it.
+	# In can_propose (1.15; can_ratify until 2026-11-12), which runs on the
+	# whole treaty when it is proposed and never when an article is added,
+	# so the alliance or pact can be added after the exercises.
+	can_propose = {
+		custom_tooltip = {
+			text = joint_military_exercises_ties_tt
+			OR = {
+				scope:first_country = {
+					te_treaty_parties_have_military_ties = { OTHER = scope:second_country }
+				}
+				# Symmetric: subject or overlord of the target.
+				scope:first_country = {
+					has_subject_relation_with = scope:second_country
+				}
+				scope:first_country = {
+					is_in_power_bloc = yes
+					is_in_same_power_bloc = scope:second_country
+					power_bloc ?= {
+						has_identity = identity:identity_military_treaty_organization
 					}
 				}
 			}
@@ -2058,7 +2100,16 @@ join_united_nations = {  # REVIEWED 2026-11-03 (involvement): an imposed obligat
 		country_un_membership_obligation_bool = yes
 	}
 
+	flags = { show_in_lens }
+
 	usage_limit = once_per_side
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		has_global_variable = un_founded
+	}
 
 	visible = {
 		has_global_variable = un_founded
@@ -2202,9 +2253,16 @@ nuclear_program_pause = {  # REVIEWED 2026-11-03 (involvement): an imposed restr
 		country_nuclear_program_pause_bool = yes
 	}
 
-	flags = { can_be_enforced }
+	flags = { show_in_lens can_be_enforced }
 
 	usage_limit = once_per_side
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		has_game_rule = nuclear_weapons_enabled
+	}
 
 	# ROOT is the source here; see nuclear_disarmament's `visible`.
 	visible = {
@@ -2463,6 +2521,7 @@ population_transfer = {  # REVIEWED 2026-11-03 (involvement): a one-off concessi
 	cost = 150
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		hostile
 		is_one_time

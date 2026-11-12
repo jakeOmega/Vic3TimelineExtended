@@ -36,6 +36,7 @@ swap_line = {
 	target_involvement_applies_to = target_country
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 		giftable
 		friendly
@@ -68,6 +69,13 @@ swap_line = {
 	# recipient gain leverage over its own backstop. The RECIPIENT is the target.
 	target_modifier = {
 		country_treaty_leverage_generation_add = 150
+	}
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		te_mon_full_system = yes
 	}
 
 	# The whole phase-5 toolkit is part of the monetary layer, so the
