@@ -12,7 +12,6 @@
 
 # Event 1: The Tether Rises (construction, positive)
 wonder_events.1 = {
-	# REVIEWED 2026-09-25 (system_ungated): the space elevator is a wonder building the country chose to build, not space-race state
 	type = country_event
 	placement = root
 
@@ -35,7 +34,13 @@ wonder_events.1 = {
 		NOT = { has_modifier = we_se_milestone_focus }
 	}
 
-	immediate = { }
+	immediate = {
+		# The anchor's state, for the description.
+		random_scope_building = {
+			limit = { is_building_type = building_space_elevator_construction_site }
+			state = { save_scope_as = wonder_state }
+		}
+	}
 
 	option = {
 		name = wonder_events.1.a
@@ -134,7 +139,16 @@ wonder_events.3 = {
 		NOT = { has_modifier = we_se_gateway_restricted }
 	}
 
-	immediate = { }
+	immediate = {
+		# The ground station's state, for the description.
+		random_scope_building = {
+			limit = {
+				is_building_type = building_space_elevator
+				level >= 1
+			}
+			state = { save_scope_as = wonder_state }
+		}
+	}
 
 	option = {
 		name = wonder_events.3.a
@@ -191,7 +205,16 @@ wonder_events.4 = {
 		NOT = { has_modifier = we_se_trade_national }
 	}
 
-	immediate = { }
+	immediate = {
+		# The ground station's state, for the description.
+		random_scope_building = {
+			limit = {
+				is_building_type = building_space_elevator
+				level >= 5
+			}
+			state = { save_scope_as = wonder_state }
+		}
+	}
 
 	option = {
 		name = wonder_events.4.a
@@ -407,7 +430,13 @@ wonder_events.10 = {
 		NOT = { has_modifier = we_sc_first_light_focus }
 	}
 
-	immediate = { }
+	immediate = {
+		# The construction site's state, for the description.
+		random_scope_building = {
+			limit = { is_building_type = building_solar_collector_construction_site }
+			state = { save_scope_as = wonder_state }
+		}
+	}
 
 	option = {
 		name = wonder_events.10.a
@@ -456,7 +485,13 @@ wonder_events.11 = {
 		NOT = { has_modifier = we_sc_beam_minimize }
 	}
 
-	immediate = { }
+	immediate = {
+		# The construction site's state, for the description.
+		random_scope_building = {
+			limit = { is_building_type = building_solar_collector_construction_site }
+			state = { save_scope_as = wonder_state }
+		}
+	}
 
 	option = {
 		name = wonder_events.11.a
