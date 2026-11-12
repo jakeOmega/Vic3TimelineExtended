@@ -28,8 +28,16 @@ The gates outside it (#1622), each labeled by where it came from:
 
 * `law X unlocks at`: for `is_enacting_law` / `has_law = law_type:X`, the
   law's `unlocking_technologies` (all of them) and `unlocking_laws` (one of
-  them, each read the same way). A law in force (`has_law`) was enacted with
-  them unless the country began the game with it or an effect handed it over.
+  them, each read the same way). Only a law BEING ENACTED guarantees its
+  unlocking technologies. A law IN FORCE guarantees none: `has_law`, and
+  every law named in `unlocking_laws`, may be a law the country began the
+  game with or was handed by `activate_law`, and neither checks the
+  technology (Serbia and Greece begin 1836 with State-Led Language Reform,
+  which unlocks at an era 6 technology). That technology is never in the
+  totals. It is printed on its own line, `if enacted in play`, and is its
+  own JSON field, `if_enacted_in_play`. The same goes for a law whose
+  enactment an effect can start (`start_enactment`): the guide measured that
+  the effect starts one, not that it checks the technology.
 * `scripted trigger X tests`: a scripted trigger the trigger calls, opened one
   level, with any law inside it.
 * `journal entry Y requires`, for `has_journal_entry = Y` in the trigger: the
@@ -37,8 +45,11 @@ The gates outside it (#1622), each labeled by where it came from:
 * under `fired by`, one entry per route that reaches the event:
   - `journal entry Y requires`: the entry's `is_shown_when_inactive` and
     `possible` (it activates when both hold), and the tests around every
-    `add_journal_entry` of it, which skips both. Read when the entry
-    activated, so only its technology is carried into the totals.
+    `add_journal_entry` of it, which skips both. An add whose type holds a
+    parameter (`type = je_$M$`) is read through each call that says which
+    entry; where no call says, it counts for every entry the pattern fits,
+    with no test read. Read when the entry activated, so only its technology
+    is carried into the totals.
   - `pool weight tests`: a `random_list` draw whose base weight is 0 can only
     be drawn through an `add` in its `modifier`, so the tests around the adds
     are requirements, one of them at least. `! weight added outside that
@@ -61,6 +72,14 @@ outside` line is that intersection, and it is nothing as soon as one route is
 not followed or nothing is found that fires the event. `in all` adds the
 event's own trigger. Only technology is totalled: a law or a variable tested
 when a journal entry activated or an event was sent can have changed since.
+`if enacted in play`, under `in all`, is what would hold besides if every law
+in force the tests rest on had been enacted in play. It is NOT guaranteed.
+
+Not read, and said under every run: the `te_debug_*` files (console benches;
+the dispatch graph leaves them out, so an event one of them sends or an entry
+one of them adds is no route), and vanilla's own events, on-actions, scripted
+triggers and history, which the snapshot does not hold. An `add_journal_entry`
+that names no entry the tool knows is listed there too.
 
 A requirement inside an `OR` is listed as "one of"; what every alternative
 has in common (shared prerequisites, a lowest era) is still guaranteed. An
@@ -68,9 +87,11 @@ option's own `trigger`, and a `triggered_desc`'s, add to it for that text:
 they are listed under `only for` when they test a technology or a law.
 
 `--check-doc` reads docs/guides/event_text_guarantees.md and reports every
-technology a row's Guaranteed column names that no event of the row's chains
-is guaranteed, and every `tech (era N)` whose era is wrong. It is a reading
-aid, not a gate: the rows are prose.
+technology a row's Guaranteed column names that none of the row's events is
+guaranteed (the events its Where column numbers, else the whole chain), says
+so when the technology holds only `if enacted in play`, and reports every
+`tech (era N)` whose era is wrong. It is a reading aid, not a gate: the rows
+are prose.
 
 Technologies, laws and journal entries come from the mod's files and the
 committed vanilla_parsed/ snapshot; scripted triggers, effects and on-actions
@@ -113,7 +134,9 @@ _UNLOCKING = re.compile(r"unlocking_technologies\s*=\s*\{([^}]*)\}")
 _COMMENT = re.compile(r"#[^\n]*")
 _PREFIX = re.compile(r"^(?:INJECT|REPLACE|TRY_INJECT|REPLACE_OR_CREATE|INJECT_OR_CREATE):")
 _APPENDING = ("INJECT:", "TRY_INJECT:", "INJECT_OR_CREATE:")
-_ADD_ENTRY = re.compile(r"\badd_journal_entry\s*=\s*\{[^{}]*?\btype\s*=\s*([\w\-]+)", re.S)
+_ADD_ENTRY = re.compile(r"\badd_journal_entry\s*=\s*\{[^{}]*?\btype\s*=\s*([\w\-$]+)", re.S)
+_START_ENACTMENT = re.compile(r"\bstart_enactment\s*=\s*([^\s{}]+)")
+_PARAMETER = re.compile(r"\$(\w+)\$")
 _LAW_TESTS = {"is_enacting_law": "being enacted", "has_law": "in force", "has_law_or_variant": "in force"}
 _SAME_SCOPE_WRAPPERS = ("custom_tooltip", "custom_description", "hidden_trigger")
 _WRAPPER_FIELDS = ("text", "subject", "object", "value")
@@ -229,30 +252,69 @@ class Gate:
     `techs` holds each researched technology with its prerequisites. `era`
     says that some technology of that era or later is researched, which an
     `OR` of two era 9 technologies still guarantees though it names neither.
-    `statements` are the other tests, as written."""
+    `statements` are the other tests, as written.
+
+    `play_techs` and `play_era` are what holds besides, IF every law the
+    tests rest on was enacted in play. A law in force (`has_law`, a law
+    named in `unlocking_laws`) may be one the country began the game with,
+    or was handed by `activate_law`, and history's `activate_law` skips the
+    technology (scripting_best_practices.md, "Starting Laws"). So that
+    technology is never part of `techs`: it is carried here, beside it."""
     techs: frozenset = frozenset()
     era: int | None = None
     absent: frozenset = frozenset()
     statements: tuple = ()
+    play_techs: frozenset = frozenset()
+    play_era: int | None = None
+
+    @property
+    def full_techs(self) -> frozenset:
+        return self.techs | self.play_techs
+
+    @property
+    def full_era(self) -> int | None:
+        eras = [e for e in (self.era, self.play_era) if e]
+        return max(eras) if eras else None
+
+    @staticmethod
+    def _of(techs, era, absent, statements, full_techs, full_era) -> Gate:
+        return Gate(techs, era, absent, statements, full_techs - techs,
+                    full_era if full_era and full_era > (era or 0) else None)
 
     def both(self, other: Gate) -> Gate:
         """This and `other` together."""
         eras = [e for e in (self.era, other.era) if e]
+        full_eras = [e for e in (self.full_era, other.full_era) if e]
         statements = self.statements + tuple(s for s in other.statements if s not in self.statements)
-        return Gate(self.techs | other.techs, max(eras) if eras else None, self.absent | other.absent, statements)
+        return Gate._of(self.techs | other.techs, max(eras) if eras else None, self.absent | other.absent, statements,
+                        self.full_techs | other.full_techs, max(full_eras) if full_eras else None)
 
     def either(self, other: Gate) -> Gate:
         """One of this and `other`, the reader not knowing which: what both give."""
         era = min(self.era, other.era) if self.era and other.era else None
+        full_era = min(self.full_era, other.full_era) if self.full_era and other.full_era else None
         statements = tuple(s for s in self.statements if s in other.statements)
-        return Gate(self.techs & other.techs, era, self.absent & other.absent, statements)
+        return Gate._of(self.techs & other.techs, era, self.absent & other.absent, statements,
+                        self.full_techs & other.full_techs, full_era)
 
     def technology(self) -> Gate:
         """The part that stays true: a technology is never lost."""
-        return Gate(self.techs, self.era)
+        return Gate(self.techs, self.era, play_techs=self.play_techs, play_era=self.play_era)
+
+    def facts(self) -> Gate:
+        """Everything but the statements, which stay with the block they were written in."""
+        return Gate(self.techs, self.era, self.absent, (), self.play_techs, self.play_era)
+
+    def in_play(self) -> Gate:
+        """What holds if every law it rests on was enacted in play, as a plain Gate."""
+        return Gate(self.full_techs, self.full_era)
+
+    def if_in_play(self) -> Gate:
+        """The same technology, all of it resting on a law that was enacted in play."""
+        return Gate(play_techs=self.full_techs, play_era=self.full_era)
 
     def __bool__(self) -> bool:
-        return bool(self.techs or self.era or self.absent or self.statements)
+        return bool(self.techs or self.era or self.absent or self.statements or self.play_techs or self.play_era)
 
 
 NOTHING = Gate()
@@ -424,6 +486,7 @@ class Script:
         self._files: dict = {}
         self._effect_routes: dict = {}
         self._cycles = 0
+        self.unknown_adds: list = []
 
     # ---- sources ----------------------------------------------------------
 
@@ -454,10 +517,13 @@ class Script:
         return found
 
     @cached_property
-    def entry_adds(self) -> dict:
-        """{entry: [(file, line)]} for every `add_journal_entry` outside the
-        console benches, which add entries no player's game does."""
-        found: dict = {}
+    def scan(self) -> dict:
+        """One pass over the script outside the console benches (`te_debug_*`
+        files, which the dispatch graph leaves out too):
+        `adds`, [(file, line, type)] for every `add_journal_entry`, and
+        `enactments`, {law: [(file, line)]} for every `start_enactment`
+        (under "*" when it does not name one law)."""
+        adds, enactments = [], {}
         for base in ("common", "events"):
             for path in sorted(glob.glob(os.path.join(self.root, base, "**", "*.txt"), recursive=True)):
                 if os.path.basename(path).startswith("te_debug_"):
@@ -466,7 +532,55 @@ class Script:
                     text = eca._strip_comments(fh.read())
                 rel = os.path.relpath(path, self.root).replace("\\", "/")
                 for match in _ADD_ENTRY.finditer(text):
-                    found.setdefault(match.group(1), []).append((rel, text.count("\n", 0, match.start()) + 1))
+                    adds.append((rel, text.count("\n", 0, match.start()) + 1, match.group(1)))
+                for match in _START_ENACTMENT.finditer(text):
+                    target = match.group(1)
+                    law = target[len("law_type:"):] if target.startswith("law_type:") and "$" not in target else "*"
+                    enactments.setdefault(law, []).append((rel, text.count("\n", 0, match.start()) + 1))
+        return {"adds": adds, "enactments": enactments}
+
+    @cached_property
+    def known_entries(self) -> set:
+        return set(self.journal_entries) | set(_snapshot(self.root, "journal_entries.json"))
+
+    @cached_property
+    def entry_adds(self) -> dict:
+        """{entry: [add]} for every `add_journal_entry` that names the entry
+        or could. An add whose type holds a parameter (`type = je_$M$`) is
+        resolved through each call of the scripted effect it sits in; where
+        a call does not say (no call, or a forwarded `$M$`), every entry the
+        remaining pattern matches counts as added there with no test read.
+        `unknown_adds` lists the adds that name no entry the tool knows."""
+        found: dict = {}
+        self.unknown_adds.clear()
+
+        def record(name: str, add: dict, shown: str) -> None:
+            if name not in self.known_entries:
+                self.unknown_adds.append(f"{add['rel']}:{add['line']} adds `{shown}`, which is no journal entry the tool knows")
+            found.setdefault(name, []).append(add)
+
+        for rel, line, template in self.scan["adds"]:
+            if "$" not in template:
+                record(template, {"rel": rel, "line": line, "call": None, "pattern": None}, template)
+                continue
+            chain = self.locate(rel, line, lambda node: node.key == "add_journal_entry")
+            effect = chain[0].key if chain and chain[0].key in self.graph.effect_file else None
+            calls = self.graph.effect_calls.get(effect, []) if effect else []
+            patterns = [] if calls else [template]
+            for call in calls:
+                name = _PARAMETER.sub(lambda m, args=call[7]: args.get(m.group(1), m.group(0)), template)
+                if "$" in name:
+                    patterns.append(name)
+                else:
+                    record(name, {"rel": rel, "line": line, "call": call, "effect": effect, "pattern": None}, name)
+            for pattern in dict.fromkeys(patterns):
+                literal = _PARAMETER.split(pattern)[::2]  # the text between the parameters
+                matcher = re.compile(".*".join(re.escape(part) for part in literal) + "$")
+                names = sorted(name for name in self.known_entries if matcher.match(name))
+                if not names:
+                    self.unknown_adds.append(f"{rel}:{line} adds `{pattern}`, which matches no journal entry the tool knows")
+                for name in names:
+                    found.setdefault(name, []).append({"rel": rel, "line": line, "call": None, "pattern": pattern})
         return found
 
     def nodes(self, rel: str) -> list:
@@ -515,20 +629,38 @@ class Script:
 
     # ---- laws -------------------------------------------------------------
 
-    def law_gate(self, name: str, seen: frozenset = frozenset()) -> Gate:
-        """The technology a law's enactment needed: all of its unlocking
-        technologies, and what every one of its unlocking laws needed."""
+    def law_gate(self, name: str, in_force: bool, seen: frozenset = frozenset()) -> Gate:
+        """The technology a law's enactment needs: all of its unlocking
+        technologies, and what every one of its unlocking laws needed.
+
+        Only a law BEING ENACTED guarantees its own unlocking technologies.
+        A law in force guarantees none: the country may have begun the game
+        with it, or been handed it (history's `activate_law` skips the
+        technology; the first law of a group is every country's at setup;
+        the engine gives a new country laws too), and the tool cannot prove
+        otherwise, vanilla's history not being in the snapshot. Its
+        technology goes to the Gate's in-play side. So does everything
+        behind `unlocking_laws`, which are laws in force, and the technology
+        of a law whose enactment an effect starts (`start_enactment`: the
+        guide measured that it starts one, not that it checks the technology)."""
         law = self.laws.get(name)
         if not law:
             return NOTHING
         gate = NOTHING
         for tech in law["technologies"]:
             gate = gate.both(self.tech_gate(tech))
+        if in_force or self.enactment_started_by_effect(name):
+            gate = gate.if_in_play()
         if law["laws"] and len(seen) < LAW_DEPTH:
             # A law that unlocks itself in a circle adds nothing the others lack.
-            others = [self.law_gate(other, seen | {name}) for other in law["laws"] if other not in seen and other != name]
+            others = [self.law_gate(other, True, seen | {name}) for other in law["laws"] if other not in seen and other != name]
             gate = gate.both(_either_of(others))
         return gate.technology()
+
+    def enactment_started_by_effect(self, name: str) -> list:
+        """[(file, line)] of every `start_enactment` that could name the law."""
+        started = self.scan["enactments"]
+        return started.get(name, []) + started.get("*", [])
 
     def law_source(self, name: str, mode: str) -> dict:
         law = self.laws.get(name)
@@ -542,12 +674,18 @@ class Script:
         if law["laws"]:
             one = len(law["laws"]) == 1
             parts.append(("the law " if one else "one of the laws ") + ", ".join(law["laws"]))
-            behind = self.gives(_either_of([self.law_gate(other, frozenset({name})) for other in law["laws"]]))
+            behind = self.gives(_either_of([self.law_gate(other, True, frozenset({name})) for other in law["laws"]]).in_play())
             if behind:
                 parts.append(("that law needs " if one else "each of those laws needs ") + behind)
         text = "; ".join(parts)
+        started = self.enactment_started_by_effect(name)
         if mode == "in force" and (law["technologies"] or law["laws"]):
-            text += " (unless the country began the game with the law or an effect gave it)"
+            text += " (a law in force: counted only under `if enacted in play`)"
+        elif started and law["technologies"]:
+            text += (f" (an effect starts this law's enactment, {started[0][0]}:{started[0][1]}, and nothing says "
+                     "`start_enactment` checks the technology: counted only under `if enacted in play`)")
+        elif law["laws"]:
+            text += " (those are laws in force: what they need is counted only under `if enacted in play`)"
         source["text"] = text
         return source
 
@@ -589,7 +727,8 @@ class Script:
             names = self.law_variants(law) if key == "has_law_or_variant" else [law]
             reading.sources += [self.law_source(name, mode) for name in names]
             reading.state(render(node))
-            reading.gate = reading.gate.both(_either_of([self.law_gate(name) for name in names]))
+            in_force = mode == "in force"
+            reading.gate = reading.gate.both(_either_of([self.law_gate(name, in_force) for name in names]))
         elif key == "has_journal_entry" and value and plain and self.follow:
             lines, gate = self.entry_reading(value)
             reading.sources += [{"kind": "journal_entry", "name": value, "label": label, "text": text}
@@ -607,7 +746,7 @@ class Script:
             })
             reading.sources += inner.sources
             reading.state(render(node))
-            reading.gate = reading.gate.both(Gate(inner.gate.techs, inner.gate.era, inner.gate.absent))
+            reading.gate = reading.gate.both(inner.gate.facts())
         else:
             reading.state(render(node))
 
@@ -621,7 +760,7 @@ class Script:
         for alt in alternatives:
             reading.sources += alt.sources
         reading.state(render(node))
-        reading.gate = reading.gate.both(Gate(gate.techs, gate.era, gate.absent))
+        reading.gate = reading.gate.both(gate.facts())
 
     def line(self, reading: Reading, width: int = 110) -> str:
         """A Reading on one line."""
@@ -652,26 +791,33 @@ class Script:
 
     # ---- the tests between an entity and a dispatch -------------------------
 
-    def locate(self, rel: str, line: int, match, entity: str | None = None) -> list | None:
-        """The chain of nodes from a top-level entity of `rel` down to the
-        deepest node on `line` that `match` accepts."""
+    def locate_all(self, rel: str, line: int, match, entity: str | None = None) -> list:
+        """Every chain of nodes from a top-level entity of `rel` down to a
+        deepest node on `line` that `match` accepts, in file order. A line
+        can hold two (`if = { ... trigger_event = x.1 } else = { trigger_event
+        = x.1 }`), and the dispatch graph gives a site its line only."""
+        chains: list = []
         for top in self.nodes(rel):
             if top.children is None or top.line > line or (entity is not None and top.key != entity):
                 continue
-            chain = self._descend(top, line, match, [])
-            if chain:
-                return chain
-        return None
+            self._collect(top, lambda node: node.line == line and match(node), [], chains, line)
+        return chains
 
-    def _descend(self, node: Node, line: int, match, trail: list) -> list | None:
-        trail = trail + [node]
-        for child in node.children or []:
-            if child.line > line:
-                break
-            found = self._descend(child, line, match, trail)
-            if found:
-                return found
-        return trail if node.line == line and len(trail) > 1 and match(node) else None
+    def locate(self, rel: str, line: int, match, entity: str | None = None) -> list | None:
+        """The first of `locate_all`, or None."""
+        chains = self.locate_all(rel, line, match, entity)
+        return chains[0] if chains else None
+
+    def chains_reading(self, chains: list, site_switches=None, helper: bool = False,
+                       event_id: str | None = None, depth: int = 0) -> tuple:
+        """`chain_reading` for one chain; for several, what all of them test."""
+        found = [self.chain_reading(chain, site_switches, chain[-1] if helper else None, event_id, depth)
+                 for chain in chains]
+        if len(found) == 1:
+            return found[0]
+        merged = Reading(gate=_either_of([reading.gate for reading, _ in found]).facts())
+        merged.state(f"{len(found)} places fire or call it here: only what all of them test is kept")
+        return merged, next((switch for _, switch in found if switch), None)
 
     def chain_reading(self, chain: list, site_switches=None, helper: Node | None = None,
                       event_id: str | None = None, depth: int = 0) -> tuple:
@@ -739,20 +885,17 @@ class Script:
         self._collect(body, lambda node: _dispatches(node, event_id), [], chains)
         if not chains:
             return None
-        found = [self.chain_reading(chain, None, None, event_id, depth + 1) for chain in chains]
-        if len(found) == 1:
-            return found[0]
-        gate = _either_of([reading.gate for reading, _ in found])
-        merged = Reading(gate=Gate(gate.techs, gate.era, gate.absent))
-        merged.state(f"{call.key} fires it from {len(found)} places: only what all of them test is kept")
-        return merged, next((switch for _, switch in found if switch), None)
+        return self.chains_reading(chains, event_id=event_id, depth=depth + 1)
 
-    def _collect(self, node: Node, match, trail: list, into: list) -> None:
-        """Every chain from `node` down to a deepest node `match` accepts."""
+    def _collect(self, node: Node, match, trail: list, into: list, line: int | None = None) -> None:
+        """Every chain from `node` down to a deepest node `match` accepts
+        (with `line`, nothing that starts after it is looked at)."""
         trail = trail + [node]
         before = len(into)
         for child in node.children or []:
-            self._collect(child, match, trail, into)
+            if line is not None and child.line > line:
+                break
+            self._collect(child, match, trail, into, line)
         if len(into) == before and len(trail) > 1 and match(node):
             into.append(trail)
 
@@ -829,7 +972,7 @@ class Script:
                     "text": f"+{amount} on line {add.line} does not test {', '.join(missing)}: "
                             + (self.line(branch) or "no test at all")})
         gate = _either_of([branch.gate for branch in branches])
-        reading.gate = Gate(gate.techs, gate.era, gate.absent)
+        reading.gate = gate.facts()
         return reading
 
     # ---- journal entries and on-actions -------------------------------------
@@ -838,12 +981,16 @@ class Script:
         """([(label, text)], Gate) for a journal entry: what its activation
         tested. A technology is all that is kept: the rest was true then."""
         name = _split_prefix(entity)[1]
-        mine = self.journal_entries.get(name, [])
-        blocks = [node for _, node in mine]
-        if not mine or all(prefix in _APPENDING for prefix, _ in mine):
+        blocks, replaced = [], False
+        for prefix, node in self.journal_entries.get(name, []):
+            if prefix in _APPENDING:
+                blocks.append(node)
+            else:  # a plain or REPLACE: definition is the entry: nothing defined before it counts
+                blocks, replaced = [node], True
+        if not replaced:
             vanilla = _snapshot(self.root, "journal_entries.json").get(name)
             if vanilla:
-                blocks.append(Node(name, "=", None, _json_nodes(vanilla[1]), 0))
+                blocks.insert(0, Node(name, "=", None, _json_nodes(vanilla[1]), 0))
         tests = [line for block in blocks for key in ("is_shown_when_inactive", "possible") for line in _block(block, key)]
         lines, gates = [], []
         if tests:
@@ -855,14 +1002,40 @@ class Script:
             lines.append((f"journal entry {name}", "has no `possible` and no `is_shown_when_inactive`: only an effect adds it"))
         else:
             lines.append((f"journal entry {name}", "is not in the mod's files or the snapshot"))
-        for rel, line in self.entry_adds.get(name, []):
-            chain = self.locate(rel, line, lambda node: node.key == "add_journal_entry")
-            reading = self.chain_reading(chain)[0] if chain else Reading()
-            lines.append(("also added by effect", f"{rel}:{line}, which skips both: "
+        for add in self.entry_adds.get(name, []):
+            reading, how = self.add_reading(add, name)
+            lines.append(("also added by effect", f"{add['rel']}:{add['line']}{how}, which skips both: "
                           + (self.line(reading) or "no test the tool can read")))
             lines += self.source_lines(reading, only_adding=True)
             gates.append(reading.gate)
         return lines, _either_of(gates).technology()
+
+    def add_reading(self, add: dict, name: str) -> tuple:
+        """(the tests around one `add_journal_entry` of `name`, how it names the entry)."""
+        if add["pattern"]:
+            return Reading(), f" (`type = {add['pattern']}`, which the tool cannot resolve and so counts for every entry it fits)"
+        if not add["call"]:
+            chains = self.locate_all(add["rel"], add["line"], lambda node: node.key == "add_journal_entry")
+            return (self.chains_reading(chains)[0] if chains else Reading()), ""
+        # `type = je_$M$` inside a scripted effect, and a call that says which: the tests
+        # around the add, with the call's arguments filled in, and the tests around the call.
+        rel, line, _path, _switches, _conds, entity, _kind, args = add["call"]
+        how = f", through {add['effect']} as called at {rel}:{line}"
+        top = self.effect_node(add["effect"])
+        chains: list = []
+        if top is not None:
+            body = Node(add["effect"], "=", None, fsa._substitute(top.children, args), top.line)
+            self._collect(body, lambda node: node.key == "add_journal_entry" and any(
+                kid.key == "type" and kid.value == name for kid in node.children or []), [], chains)
+        if not chains:
+            return Reading(), how
+        inside, switch = self.chains_reading(chains)
+        if switch:
+            return inside, how
+        around = self.locate_all(rel, line, lambda node: node.key == add["effect"], entity)
+        reading = self.chains_reading(around)[0] if around else Reading()
+        reading.add(inside)
+        return reading, how
 
     def on_action_reading(self, top: Node, name: str) -> tuple:
         """([(label, text)], Gate) for the on-action block a dispatch sits in."""
@@ -905,18 +1078,19 @@ class Script:
         where = f"{rel}:{line}"
         kind_text = _KIND_TEXT.get(kind, kind.replace("_", " "))
         name = _split_prefix(entity)[1]
-        helper = None
+        helper = False
         if target[0] == "event":
-            chain = self.locate(rel, line, lambda n: _dispatches(n, target[1]), entity)
-            if chain is None:  # the event is fired inside a scripted effect that this line calls with arguments
-                chain = self.locate(rel, line, lambda n: n.key in self.graph.effect_file, entity)
-                helper = chain[-1] if chain else None
+            chains = self.locate_all(rel, line, lambda n: _dispatches(n, target[1]), entity)
+            if not chains:  # the event is fired inside a scripted effect that this line calls with arguments
+                chains = self.locate_all(rel, line, lambda n: n.key in self.graph.effect_file, entity)
+                helper = True
         else:
-            chain = self.locate(rel, line, lambda n: n.key == target[1], entity)
-        if chain is None:
+            chains = self.locate_all(rel, line, lambda n: n.key == target[1], entity)
+        if not chains:
             return [Route("not_followed", name, where, followed=False,
                           head=f"not followed: {kind_text} {name} ({where}): the tool could not find the dispatch there")]
-        local, switch = self.chain_reading(chain, switches, helper, target[1] if target[0] == "event" else None)
+        chain = chains[0]
+        local, switch = self.chains_reading(chains, switches, helper, target[1] if target[0] == "event" else None)
         lines = []
         if self.line(local):
             label = "tests at the dispatch" if target[0] == "event" else f"tests where {target[1]} is called"
@@ -1022,11 +1196,38 @@ def _variants(lines: list) -> list:
 
 
 def _technology_json(script: Script, gate: Gate) -> dict:
-    return {
-        "technologies": sorted(gate.techs, key=lambda t: (script.techs.get(t, {}).get("era") or 0, t)),
-        "era": gate.era,
-        "assume_through_era": _cutoff(gate.era),
-    }
+    """A Gate's technology as data. `if_enacted_in_play` is None, or what
+    holds BESIDES when every law in force the tests rest on was enacted in
+    play: the further technologies, and the era and cutoff of the whole."""
+    def by_era(names) -> list:
+        return sorted(names, key=lambda t: (script.techs.get(t, {}).get("era") or 0, t))
+
+    out = {"technologies": by_era(gate.techs), "era": gate.era, "assume_through_era": _cutoff(gate.era),
+           "if_enacted_in_play": None}
+    if gate.play_techs or gate.play_era:
+        out["if_enacted_in_play"] = {"technologies": by_era(gate.play_techs), "era": gate.full_era,
+                                     "assume_through_era": _cutoff(gate.full_era)}
+    return out
+
+
+def _gate(part: dict) -> Gate:
+    """The Gate a `_technology_json` dict was made from."""
+    play = part.get("if_enacted_in_play")
+    techs = frozenset(part["technologies"])
+    if not play:
+        return Gate(techs, part["era"])
+    return Gate._of(techs, part["era"], frozenset(), (), techs | frozenset(play["technologies"]), play["era"])
+
+
+def _in_play_text(script: Script, part: dict) -> str:
+    """What the part gives if its laws in force were enacted in play, when that is more."""
+    gate = _gate(part)
+    text = script.gives(gate.in_play())
+    return text if text != script.gives(gate) else ""
+
+
+IN_PLAY_CAVEAT = ("NOT guaranteed: it rests on a law in force, and a country that began the game with that law, "
+                  "or was handed it, may lack the technology")
 
 
 def analyze(event_id: str, path: str, body: str, script: Script) -> dict:
@@ -1067,11 +1268,15 @@ def analyze(event_id: str, path: str, body: str, script: Script) -> dict:
     for part, key, tests in _variants(_event_lines(body)):
         own = script.read_block(tests)
         gate = own.gate
-        if gate.techs - total.techs or (_cutoff(gate.era) or 0) > (_cutoff(total.era) or 0) or gate.absent - total.absent:
+        if gate.techs - total.techs or (_cutoff(gate.era) or 0) > (_cutoff(total.era) or 0) \
+                or gate.absent - total.absent or gate.full_techs - total.full_techs \
+                or (_cutoff(gate.full_era) or 0) > (_cutoff(total.full_era) or 0):
             out["variants"].append({"part": part, "key": key, "tests": script.line(own),
                                     "sources": own.sources, **_technology_json(script, gate)})
-    out["guaranteed"] = {**_technology_json(script, total), "leading": script.leading(total.techs),
-                         "absent": sorted(total.absent)}
+    firm = _technology_json(script, total)
+    # Beside `guaranteed`, never in it: what holds only if the laws in force were enacted in play.
+    out["if_enacted_in_play"] = firm.pop("if_enacted_in_play")
+    out["guaranteed"] = {**firm, "leading": script.leading(total.techs), "absent": sorted(total.absent)}
     return out
 
 
@@ -1097,7 +1302,7 @@ def render_event(data: dict, script: Script) -> str:
     if trigger["absent"]:
         lines.append("  must NOT have: " + ", ".join(script.with_era(t) for t in trigger["absent"]))
     for group in trigger["one_of"]:
-        common = script.gives(Gate(frozenset(group["whichever"]["technologies"]), group["whichever"]["era"]))
+        common = script.gives(_gate(group["whichever"]))
         lines.append("  one of:        " + ", ".join(script.with_era(t) for t in group["technologies"])
                      + "  (guarantees none of them" + (f"; whichever it is: {common})" if common else ")"))
     for statement in trigger["other"]:
@@ -1114,7 +1319,9 @@ def render_event(data: dict, script: Script) -> str:
         lines.append(f"  only for {names}: {_shown(tests)}")
         for label, text in _unique((s["label"], s["text"]) for s in variants[0]["sources"]):
             lines.append(f"      {label}: {text}")
-        lines.append("      gives: " + script.gives(Gate(frozenset(variants[0]["technologies"]), variants[0]["era"])))
+        lines.append("      gives: " + (script.gives(_gate(variants[0])) or "no technology"))
+        if _in_play_text(script, variants[0]):
+            lines.append("      if enacted in play: " + _in_play_text(script, variants[0]))
     lines.append("  fired by:" if data["routes"] else "  fired by:      nothing the tool can find")
     for route in data["routes"]:
         more = f"  (and {route['count'] - 1} more like it)" if route["count"] > 1 else ""
@@ -1123,9 +1330,10 @@ def render_event(data: dict, script: Script) -> str:
             lines.append(f"        through {step}")
         for label, text in _unique((line["label"], line["text"]) for line in route["lines"]):
             lines.append(f"        {label}: {text}")
-        gives = script.gives(Gate(frozenset(route["technologies"]), route["era"]))
         if route["followed"] and route["kind"] != "repeat":
-            lines.append("        gives: " + (gives or "no technology"))
+            lines.append("        gives: " + (script.gives(_gate(route)) or "no technology"))
+            if _in_play_text(script, route):
+                lines.append("        if enacted in play: " + _in_play_text(script, route))
     outside = data["outside"]
     if not outside["routes"] and not outside["not_followed"]:
         lines.append("  from outside:  nothing is guaranteed: a console command, a vanilla script or a dispatch "
@@ -1134,13 +1342,26 @@ def render_event(data: dict, script: Script) -> str:
         lines.append(f"  from outside:  nothing is guaranteed: {len(outside['not_followed'])} of "
                      f"{outside['routes']} route(s) not followed")
     else:
-        gives = script.gives(Gate(frozenset(outside["technologies"]), outside["era"]))
+        gives = script.gives(_gate(outside))
         every = "its one route gives" if outside["routes"] == 1 else f"all {outside['routes']} routes give"
         lines.append(f"  from outside:  {every} " + (gives or "no technology"))
-    total = data["guaranteed"]
-    gives = script.gives(Gate(frozenset(total["technologies"]), total["era"]))
+    total = {**data["guaranteed"], "if_enacted_in_play": data["if_enacted_in_play"]}
+    gives = script.gives(_gate(total))
     lines.append("  in all:        " + (gives or "no technology: assume none, whatever the subject suggests"))
+    if _in_play_text(script, total):
+        lines.append(f"  if enacted in play: {_in_play_text(script, total)}  ({IN_PLAY_CAVEAT})")
     return "\n".join(lines)
+
+
+def notes(script: Script) -> list:
+    """What the reader of any run should know the tool left out."""
+    script.entry_adds  # noqa: B018  (fills unknown_adds)
+    return [
+        "`te_debug_*` files (the console benches) are not read: an event one of them sends, or a journal entry one "
+        "of them adds, is not a route.",
+        "Vanilla's own events, on-actions, scripted triggers and history are not in the snapshot: a route, or an "
+        "enactment that only vanilla script starts by effect, is not seen.",
+    ] + [f"add_journal_entry: {text}" for text in script.unknown_adds]
 
 
 def _unique(pairs) -> list:
@@ -1188,27 +1409,55 @@ def check_doc(text: str, script: Script, analyses) -> list:
         if not chains:
             continue
         events = [event for chain in chains for event in analyses(chain)]
+        numbers = _row_numbers(cells[1], chains)
+        if numbers:  # "`chain` 25–27, 35 (...)": the row is about those events only
+            events = [event for event in events if int(event["event"].rsplit(".", 1)[1]) in numbers] or events
         for name in dict.fromkeys(_BACKTICKED.findall(cells[2])):
             if name not in script.techs:
                 continue
             era = script.techs[name]["era"]
-            if not any(_event_has(event, name, era) for event in events):
-                findings.append(
-                    f"line {number}: {', '.join(chains)}: the row guarantees `{name}`"
-                    + (f" (era {era})" if era else "") + ", which the tool finds guaranteed to none of the "
-                    f"{len(events)} event(s). Read the gate again, or it is one the tool does not follow.")
+            found = {_event_has(event, name, era) for event in events}
+            if "guaranteed" in found:
+                continue
+            claim = f"line {number}: {', '.join(chains)}: the row guarantees `{name}`" + (f" (era {era})" if era else "")
+            if "in play" in found:
+                findings.append(claim + ", which holds only if a law in force was enacted in play: a country that "
+                                "began the game with the law, or was handed it, may lack it. Say so in the row.")
+            else:
+                findings.append(claim + f", which the tool finds guaranteed to none of the {len(events)} event(s). "
+                                "Read the gate again, or it is one the tool does not follow.")
     return findings
 
 
-def _event_has(event: dict, name: str, era) -> bool:
-    """Whether one analyzed event is guaranteed `name`, in all or in one text."""
-    for part in [event.get("guaranteed", {})] + event.get("variants", []):
-        if name in part.get("technologies", []):
-            return True
+_NUMBER_RANGE = re.compile(r"(?<![\w.])\.?(\d+)(?:\s*(?:–|-|to)\s*\.?(\d+))?")
+
+
+def _row_numbers(where: str, chains: list) -> set:
+    """The event numbers a Where cell names before its parenthesis:
+    "`chain` .43–.48, .58" and "`chain.45` / `.68`" give {43..48, 58} and {45, 68}."""
+    head = where.split("(")[0].replace("`", " ")
+    for chain in chains:
+        head = head.replace(chain, " ")
+    numbers: set = set()
+    for first, last in _NUMBER_RANGE.findall(head):
+        numbers.update(range(int(first), int(last or first) + 1))
+    return numbers
+
+
+def _event_has(event: dict, name: str, era) -> str | None:
+    """"guaranteed" when one analyzed event is guaranteed `name`, in all or
+    in one text; "in play" when only its `if_enacted_in_play` has it."""
+    def holds(part) -> bool:
+        if not part:
+            return False
         through = part.get("assume_through_era")
-        if through and era and era <= through:
-            return True
-    return False
+        return name in part.get("technologies", []) or bool(through and era and era <= through)
+
+    parts = [event.get("guaranteed")] + event.get("variants", [])
+    if any(holds(part) for part in parts):
+        return "guaranteed"
+    conditional = [event.get("if_enacted_in_play")] + [v.get("if_enacted_in_play") for v in event.get("variants", [])]
+    return "in play" if any(holds(part) for part in conditional) else None
 
 
 # ---------------------------------------------------------------------------
@@ -1248,6 +1497,9 @@ def main(argv=None) -> int:
         for label, text in script.source_lines(reading):
             print(f"  {label}: {text}")
         print("  so, where it holds: " + (script.gives(reading.gate) or "no technology"))
+        part = _technology_json(script, reading.gate)
+        if _in_play_text(script, part):
+            print(f"  if enacted in play: {_in_play_text(script, part)}  ({IN_PLAY_CAVEAT})")
         return 0
     if args.check_doc:
         cache: dict = {}
@@ -1275,10 +1527,12 @@ def main(argv=None) -> int:
         return 1
     data = [analyze(*event, script) for event in events]
     if args.json:
-        json.dump(data, sys.stdout, indent=1)
+        json.dump({"events": data, "notes": notes(script) if script.follow else []}, sys.stdout, indent=1)
         print()
     else:
         print("\n\n".join(render_event(event, script) for event in data))
+        if script.follow:
+            print("\nNot read:\n" + "\n".join(f"  - {note}" for note in notes(script)))
     return 0
 
 

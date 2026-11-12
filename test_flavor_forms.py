@@ -23,10 +23,15 @@ class ClassifyTests(unittest.TestCase):
         for heading in ("Remarks heard at the peace rally in the capital.",
                         "Overheard in the queue outside the exchange.",
                         "Statements given to the investigators.",
-                        "What the planning team said at its first meeting, from the notes."):
+                        "What the applicants said, as the selection committee heard them."):
             self.assertEqual(ff.classify(heading + r"\n\n" + remarks), "several voices", heading)
         # Two named speakers under a narrated opening are still an exchange (#1622).
         self.assertEqual(ff.classify(r"Two officials argued the proposal.\n\n" + remarks), "exchange")
+        # So are remarks made in one meeting: the speakers hear and answer each other.
+        for heading in ("Remarks at the program's logistics meeting, from the minutes.",
+                        "What the planning team said at its first meeting, from the notes.",
+                        "Remarks to the panel choosing the probe's target, from its minutes."):
+            self.assertEqual(ff.classify(heading + r"\n\n" + remarks), "exchange", heading)
         # Two remarks are not a public mood, and a heading that ends in a colon makes a list.
         self.assertEqual(ff.classify(r'Remarks heard at the rally.\n\n\"One.\"\n\n\"Two.\"'), "scene")
         self.assertEqual(ff.classify(r"Remarks heard at the rally:\n\nOne.\nTwo.\nThree."), "list")

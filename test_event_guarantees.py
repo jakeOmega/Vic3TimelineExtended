@@ -141,6 +141,10 @@ class FixtureCase(unittest.TestCase):
     def guaranteed(self, event_id: str) -> set:
         return set(self.tree.analyze(event_id)["guaranteed"]["technologies"])
 
+    def in_play(self, event_id: str) -> set:
+        """The further technology that holds only if the laws in force were enacted in play."""
+        return set((self.tree.analyze(event_id)["if_enacted_in_play"] or {"technologies": []})["technologies"])
+
 
 class LawTests(FixtureCase):
     FILES = {
@@ -152,9 +156,11 @@ law_new = {
 law_b = { unlocking_technologies = { side_tech } }
 law_c = { unlocking_technologies = { side_tech other_late } }
 law_free = { }
+law_started = { unlocking_technologies = { late_tech } }
 """,
+        "common/scripted_effects/e.txt": "grant_effect = {\n\tstart_enactment = law_type:law_started\n}\n",
         "common/laws/m.txt": "INJECT:law_new = {\n\tunlocking_laws = { law_c }\n}\n",
-        "common/on_actions/o.txt": "on_law_checkpoint_debate = {\n\trandom_events = {\n\t\t10 = fx.1\n\t\t10 = fx.2\n\t\t10 = fx.3\n\t\t10 = fx.4\n\t}\n}\n",
+        "common/on_actions/o.txt": "on_law_checkpoint_debate = {\n\trandom_events = {\n\t\t10 = fx.1\n\t\t10 = fx.2\n\t\t10 = fx.3\n\t\t10 = fx.4\n\t\t10 = fx.5\n\t}\n}\n",
         "events/fx.txt": """namespace = fx
 fx.1 = {
 	trigger = { is_enacting_law = law_type:law_new }
@@ -173,6 +179,9 @@ fx.3 = {
 fx.4 = {
 	trigger = { is_enacting_law = law_type:law_free }
 }
+fx.5 = {
+	trigger = { is_enacting_law = law_type:law_started }
+}
 """,
     }
 
@@ -183,27 +192,46 @@ fx.4 = {
         self.assertEqual(source["label"], "law law_new unlocks at")
         self.assertEqual(source["technologies"], ["late_tech"])
         self.assertEqual(source["laws"], ["law_b", "law_c"])  # the INJECTed list adds to the law's own
-        # late_tech and its prerequisites; side_tech, which both unlocking laws need; not
-        # other_late, which only one of them does.
-        self.assertEqual(self.guaranteed("fx.1"), {"late_tech", "mid_tech", "old_tech", "side_tech"})
+        # late_tech and its prerequisites are sure: the law is being enacted now.
+        self.assertEqual(self.guaranteed("fx.1"), {"late_tech", "mid_tech", "old_tech"})
         self.assertEqual(data["guaranteed"]["assume_through_era"], 6)
+        # side_tech, which both unlocking laws need, is not: an unlocking law is a law in
+        # force, and the country may have begun the game with it. other_late, which only one
+        # of them needs, is nowhere.
+        self.assertEqual(self.in_play("fx.1"), {"side_tech"})
         text = self.tree.text("fx.1")
         self.assertIn("law law_new unlocks at: late_tech (era 9); one of the laws law_b, law_c", text)
         self.assertIn("each of those laws needs side_tech (era 6)", text)
+        self.assertIn("in all:        late_tech (era 9) and what they require; every technology of era 6 or earlier", text)
+        self.assertIn("if enacted in play: late_tech (era 9), side_tech (era 6) and what they require", text)
 
     def test_one_of_several_laws_guarantees_what_they_share(self):
         data = self.tree.analyze("fx.2")
         # law_new needs late_tech, law_c other_late: neither is sure, their shared prerequisites
-        # and side_tech are, and both are era 9.
-        self.assertEqual(self.guaranteed("fx.2"), {"mid_tech", "old_tech", "side_tech"})
+        # are, and both are era 9. side_tech is law_c's own but only law_new's unlocking laws'.
+        self.assertEqual(self.guaranteed("fx.2"), {"mid_tech", "old_tech"})
+        self.assertEqual(self.in_play("fx.2"), {"side_tech"})
         self.assertEqual(data["guaranteed"]["era"], 9)
         self.assertIn("a technology of era 9 or later; every technology of era 6 or earlier", self.tree.text("fx.2"))
 
-    def test_a_law_in_force_is_read_the_same_and_says_what_it_assumes(self):
+    def test_a_law_in_force_guarantees_no_technology(self):
+        # history's activate_law skips the unlocking technology, so a country can begin the
+        # game with law_b and no side_tech: the technology is shown, beside the total, not in it.
+        data = self.tree.analyze("fx.3")
+        self.assertEqual(data["guaranteed"]["technologies"], [])
+        self.assertIsNone(data["guaranteed"]["assume_through_era"])
+        self.assertNotIn("if_enacted_in_play", data["guaranteed"])
+        self.assertEqual(data["if_enacted_in_play"], {"technologies": ["side_tech"], "era": 6, "assume_through_era": 3})
         text = self.tree.text("fx.3")
-        self.assertIn("law law_b (in force) unlocks at: side_tech (era 6)", text)
-        self.assertIn("unless the country began the game with the law", text)
-        self.assertEqual(self.guaranteed("fx.3"), {"side_tech"})
+        self.assertIn("law law_b (in force) unlocks at: side_tech (era 6) (a law in force: counted only under", text)
+        self.assertIn("in all:        no technology: assume none", text)
+        self.assertIn("if enacted in play: side_tech (era 6); every technology of era 3 or earlier  (NOT guaranteed:", text)
+
+    def test_an_enactment_an_effect_can_start_guarantees_no_technology(self):
+        # start_enactment is measured to start an enactment, not to check the technology.
+        self.assertEqual(self.guaranteed("fx.5"), set())
+        self.assertEqual(self.in_play("fx.5"), {"late_tech", "mid_tech", "old_tech"})
+        self.assertIn("an effect starts this law's enactment, common/scripted_effects/e.txt:2", self.tree.text("fx.5"))
 
     def test_a_law_with_no_unlock_guarantees_nothing(self):
         self.assertIn("law law_free unlocks at: no technology", self.tree.text("fx.4"))
@@ -316,6 +344,32 @@ je_shared = {
 	possible = { has_technology_researched = late_tech }
 	effect_all_involved = { trigger_event = { id = fx.8 } }
 }
+je_twice = {
+	possible = { has_technology_researched = late_tech }
+}
+REPLACE:je_twice = {
+	possible = { has_technology_researched = side_tech }
+	on_weekly_pulse = { events = { fx.9 } }
+}
+je_line = {
+	possible = { has_technology_researched = late_tech }
+	on_monthly_pulse = {
+		effect = {
+			if = { limit = { has_technology_researched = side_tech } trigger_event = { id = fx.10 } } else = { trigger_event = { id = fx.10 } }
+		}
+	}
+}
+je_switches = {
+	possible = { has_technology_researched = late_tech }
+	on_monthly_pulse = {
+		effect = {
+			owner = { trigger_event = { id = fx.11 } }
+			scope:other = { trigger_event = { id = fx.12 } }
+			root = { trigger_event = { id = fx.13 } }
+			prev = { trigger_event = { id = fx.14 } }
+		}
+	}
+}
 """,
         "common/scripted_effects/e.txt": """
 net_effect = {
@@ -340,8 +394,36 @@ fx.7 = {
 	trigger = { has_journal_entry = je_test }
 }
 fx.8 = { }
+fx.9 = { }
+fx.10 = { }
+fx.11 = { }
+fx.12 = { }
+fx.13 = { }
+fx.14 = { }
 """,
     }
+
+    def test_a_replacing_definition_is_the_entry(self):
+        self.assertEqual(self.guaranteed("fx.9"), {"side_tech"})  # not the replaced definition's late_tech as well
+
+    def test_two_dispatches_on_one_line_give_what_both_test(self):
+        data = self.tree.analyze("fx.10")
+        # The `if` tests side_tech and the `else` on the same line does not: only the entry's gate is sure.
+        self.assertEqual(self.guaranteed("fx.10"), {"late_tech", "mid_tech", "old_tech"})
+        tests = [line["text"] for route in data["routes"] for line in route["lines"] if line["label"] == "tests at the dispatch"]
+        self.assertEqual(tests, ["2 places fire or call it here: only what all of them test is kept"])
+
+    def test_owner_scope_root_and_prev_are_other_scopes(self):
+        # The scope rule is event_context_audit's: if its list of same-scope keys ever grew
+        # one of these, the entry's technology would be handed to another country's event.
+        for key in ("owner", "scope:other", "root", "ROOT", "prev", "PREV", "every_country", "random_country", "c:GBR"):
+            self.assertTrue(eg.eca._is_switch(key), key)
+        for key in ("if", "else", "random_list", "effect", "option", "immediate", "hidden_effect", "on_monthly_pulse"):
+            self.assertFalse(eg.eca._is_switch(key), key)
+        for event_id in ("fx.11", "fx.12", "fx.13", "fx.14"):
+            (route,) = self.tree.analyze(event_id)["routes"]
+            self.assertEqual(route["kind"], "scope", event_id)
+            self.assertEqual(self.guaranteed(event_id), set(), event_id)
 
     def test_an_entry_s_pool_brings_its_possible(self):
         data = self.tree.analyze("fx.1")
@@ -388,6 +470,93 @@ fx.8 = { }
         data = self.tree.analyze("fx.7")
         self.assertEqual(data["trigger"]["sources"][0]["label"], "journal entry je_test requires")
         self.assertEqual(self.guaranteed("fx.7"), {"late_tech", "mid_tech", "old_tech"})
+
+
+class ParameterAddTests(FixtureCase):
+    """`add_journal_entry = { type = je_$M$ }`: the add counts against every entry it could name."""
+    FILES = {
+        "common/journal_entries/je.txt": """
+je_alpha = {
+	possible = { has_technology_researched = late_tech }
+	on_weekly_pulse = { events = { fx.1 } }
+}
+je_beta = {
+	possible = { has_technology_researched = late_tech }
+	on_weekly_pulse = { events = { fx.2 } }
+}
+other_gamma = {
+	possible = { has_technology_researched = late_tech }
+	on_weekly_pulse = { events = { fx.3 } }
+}
+""",
+        "common/scripted_effects/e.txt": """
+readd = {
+	if = {
+		limit = { has_technology_researched = side_tech }
+		add_journal_entry = { type = je_$M$ }
+	}
+}
+add_unsaid = {
+	add_journal_entry = { type = je_b$M$ }
+}
+add_nothing_known = {
+	add_journal_entry = { type = je_missing }
+}
+""",
+        "common/on_actions/o.txt": """
+on_yearly_pulse_country = {
+	effect = {
+		if = {
+			limit = { has_technology_researched = other_late }
+			readd = { M = alpha }
+		}
+	}
+}
+""",
+        "events/fx.txt": "namespace = fx\nfx.1 = { }\nfx.2 = { }\nfx.3 = { }\n",
+    }
+
+    def added(self, event_id: str) -> list:
+        (route,) = self.tree.analyze(event_id)["routes"]
+        return [line["text"] for line in route["lines"] if line["label"] == "also added by effect"]
+
+    def test_a_call_that_names_the_entry_is_read_with_the_tests_around_it(self):
+        (text,) = self.added("fx.1")
+        self.assertEqual(text, "common/scripted_effects/e.txt:5, through readd as called at common/on_actions/o.txt:6, "
+                               "which skips both: other_late (era 9); side_tech (era 6)")
+        # What the entry's own gate (late_tech) and the add's tests (other_late, side_tech) share.
+        self.assertEqual(self.guaranteed("fx.1"), {"mid_tech", "old_tech"})
+
+    def test_an_add_no_call_resolves_counts_for_every_entry_it_fits(self):
+        (text,) = self.added("fx.2")
+        self.assertIn("`type = je_b$M$`, which the tool cannot resolve", text)
+        self.assertEqual(self.guaranteed("fx.2"), set())  # not the late_tech of je_beta's `possible`
+        # An entry neither pattern fits keeps its gate.
+        self.assertEqual(self.added("fx.3"), [])
+        self.assertEqual(self.guaranteed("fx.3"), {"late_tech", "mid_tech", "old_tech"})
+
+    def test_an_add_that_names_no_known_entry_is_reported(self):
+        self.tree.analyze("fx.1")
+        self.assertEqual(self.tree.script.unknown_adds,
+                         ["common/scripted_effects/e.txt:12 adds `je_missing`, which is no journal entry the tool knows"])
+        self.assertIn("add_journal_entry: common/scripted_effects/e.txt:12 adds `je_missing`", eg.notes(self.tree.script)[-1])
+
+
+class BareParameterAddTests(FixtureCase):
+    FILES = {
+        "common/journal_entries/je.txt": """
+je_one = {
+	possible = { has_technology_researched = late_tech }
+	on_weekly_pulse = { events = { fx.1 } }
+}
+""",
+        "common/scripted_effects/e.txt": "add_it = {\n\tadd_journal_entry = { type = $JE$ }\n}\n",
+        "events/fx.txt": "namespace = fx\nfx.1 = { }\n",
+    }
+
+    def test_a_bare_parameter_counts_for_every_entry(self):
+        self.assertEqual(self.guaranteed("fx.1"), set())
+        self.assertIn("`type = $JE$`", self.tree.text("fx.1"))
 
 
 class PoolTests(FixtureCase):
@@ -650,8 +819,10 @@ class OwnTriggerOnlyTests(unittest.TestCase):
 
 class DocCheckTests(FixtureCase):
     FILES = {
-        "common/on_actions/o.txt": "on_monthly_pulse_country = {\n\trandom_events = {\n\t\t1 = fx.1\n\t}\n}\n",
+        "common/laws/l.txt": "law_held = { unlocking_technologies = { other_late } }\n",
+        "common/on_actions/o.txt": "on_monthly_pulse_country = {\n\trandom_events = {\n\t\t1 = fx.1\n\t\t1 = hx.1\n\t}\n}\n",
         "events/fx.txt": "namespace = fx\nfx.1 = {\n\ttrigger = { has_technology_researched = late_tech }\n}\n",
+        "events/hx.txt": "namespace = hx\nhx.1 = {\n\ttrigger = { has_law = law_type:law_held }\n}\n",
     }
     DOC = """
 | Where | Guaranteed | Not guaranteed |
@@ -659,16 +830,20 @@ class DocCheckTests(FixtureCase):
 | `fx` (.1 from the monthly pool) | `late_tech` (era 9) and `old_tech`, which it brings | `side_tech` |
 | `fx.1` again | `other_late` (era 5), and `side_tech`, three eras behind | Nothing |
 | `no_such_chain` | `other_late` | Nothing |
+| `hx.1` under the law | The law is in force (`other_late`) | Nothing |
 """
 
     def test_a_row_is_held_to_what_the_tool_finds(self):
         def analyses(namespace):
-            return [self.tree.analyze("fx.1")] if namespace == "fx" else []
+            return [self.tree.analyze(f"{namespace}.1")] if namespace in ("fx", "hx") else []
 
         findings = eg.check_doc(self.DOC, self.tree.script, analyses)
-        self.assertEqual(len(findings), 2, findings)
+        self.assertEqual(len(findings), 3, findings)
         self.assertIn("line 5: `other_late` is given as era 5; it is era 9", findings[0])
-        self.assertIn("line 5: fx: the row guarantees `other_late` (era 9)", findings[1])
+        self.assertIn("line 5: fx: the row guarantees `other_late` (era 9), which the tool finds guaranteed to none", findings[1])
+        # A law in force: the technology is there only if the law was enacted in play.
+        self.assertIn("line 7: hx: the row guarantees `other_late` (era 9), which holds only if a law in force was "
+                      "enacted in play", findings[2])
 
 
 class RepoTests(unittest.TestCase):
@@ -694,6 +869,30 @@ class RepoTests(unittest.TestCase):
         self.assertIn("brain_computer_interfaces", data["guaranteed"]["technologies"])
         self.assertEqual(data["guaranteed"]["assume_through_era"], 8)
 
+    def test_a_country_that_begins_with_a_law_is_not_promised_its_technology(self):
+        # Serbia and Greece begin 1836 with State-Led Language Reform, which unlocks at
+        # mass_media (era 6); history's activate_law skips the technology. `.26` needs only
+        # the law in force, so a text there may not assume radio-age media.
+        with open(os.path.join(eg.REPO_ROOT, "common", "history", "extra_history.txt"), encoding="utf-8-sig") as fh:
+            self.assertIn("activate_law = law_type:law_state_led_language_reform", fh.read())
+        self.assertEqual(eg.load_laws()["law_state_led_language_reform"]["technologies"], ["mass_media"])
+        for event_id in ("extra_law_events.25", "extra_law_events.26", "extra_law_events.27", "extra_law_events.35"):
+            data = self.analyze(event_id)
+            self.assertNotIn("mass_media", data["guaranteed"]["technologies"], event_id)
+            self.assertIsNone(data["guaranteed"]["assume_through_era"], event_id)
+            self.assertIn("mass_media", data["if_enacted_in_play"]["technologies"], event_id)
+
+    def test_a_milestone_s_re_entry_add_is_read_through_its_argument(self):
+        # je_space_race_$MILESTONE$ is added again after a programme loss; the add is guarded
+        # by sr_reentry_due_<m>, which repeats the entry's technology test.
+        data = self.analyze("space_race_events.3")
+        added = [line["text"] for route in data["routes"] for line in route["lines"]
+                 if line["label"] == "also added by effect"]
+        self.assertTrue(any("through sr_reentry_milestone" in text and "sr_reentry_due_moon_landing = yes" in text
+                            for text in added), added)
+        self.assertIn("space_exploration", data["guaranteed"]["technologies"])
+        self.assertEqual(self.script.unknown_adds, [])
+
     def test_a_banking_draw_has_its_pool_s_technology(self):
         data = self.analyze("banking_cycle_events.5")
         self.assertFalse(data["trigger"]["present"])
@@ -703,7 +902,9 @@ class RepoTests(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             self.assertEqual(eg.main(["augmentation_events.1", "--json"]), 0)
-        (data,) = json.loads(out.getvalue())
+        printed = json.loads(out.getvalue())
+        (data,) = printed["events"]
+        self.assertTrue(any("te_debug_" in note for note in printed["notes"]))
         self.assertEqual(data["event"], "augmentation_events.1")
         self.assertEqual(data["routes"][0]["kind"], "journal_entry")
         out = io.StringIO()

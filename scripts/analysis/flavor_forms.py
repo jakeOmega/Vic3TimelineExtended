@@ -29,7 +29,10 @@ The classes are read from the text's shape, so they are approximate:
 Several voices and an exchange are both runs of quoted paragraphs, so the
 heading is what tells them apart (#1622): a run headed any other way ("Two
 officials argued the proposal.") is an exchange with a narrated opening, and
-an unheaded run is an exchange.
+an unheaded run is an exchange. So is a run whose heading puts every remark
+in one meeting ("Remarks at the program's logistics meeting, from the
+minutes."): several voices are unconnected remarks heard in different
+places, and people in one room hear and answer each other.
 
 The table also counts the documents that close on "We ask ..." or "I ask
 ...": the guide's model document ends on its request, and a chain whose every
@@ -75,6 +78,8 @@ DOCUMENT_OPENING = re.compile(
 )
 # How a several-voices text is headed: where the remarks were heard, not who the two speakers are.
 SEVERAL_VOICES_HEADING = re.compile(r"^(?:Remarks|Heard|Overheard|Voices|Statements|What\b.*\bsaid)\b")
+# A heading that names one meeting or its record: the speakers are in one room, so it is an exchange.
+ONE_MEETING_HEADING = re.compile(r"\b(?:meeting|minutes)\b", re.I)
 ASK_CLOSING = re.compile(r"^(?:We|I) ask\b")
 SHARE_LIMIT = 1 / 3
 LIST_COLUMN = max(len(form) for form in FORMS)
@@ -103,7 +108,7 @@ def classify(text: str) -> str:
     if heading_line(paras[0]) and len(quoted) == len(paras) - 1:
         if len(paras) == 2 and only_speech(paras[1]):
             return "one voice"
-        if len(paras) >= 4 and SEVERAL_VOICES_HEADING.match(paras[0]):
+        if len(paras) >= 4 and SEVERAL_VOICES_HEADING.match(paras[0]) and not ONE_MEETING_HEADING.search(paras[0]):
             return "several voices"
     if len(quoted) >= 0.75 * len(paras):
         return "exchange"
