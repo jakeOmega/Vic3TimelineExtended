@@ -166,7 +166,20 @@ extra_law_events.3 = {
 
 	title = extra_law_events.3.t
 	desc = extra_law_events.3.d
-	flavor = extra_law_events.3.f
+	# Bryan's "cross of gold" speech argued against the gold standard: it fits
+	# only an opposition to enacting one.
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_gold_standard }
+				desc = extra_law_events.3.f_gold
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.3.f
+			}
+		}
+	}
 
 	category = enactment
 
@@ -3150,16 +3163,29 @@ extra_law_events.32 = {
 	placement = root
 
 	title = extra_law_events.32.t
-	# The pledge sentence only when option a can actually be taken.
+	# REVIEWED 2026-11-12 (system_ungated): the two descriptions that name nuclear weapons show only under te_ea_no_first_strike_pledge_available, which reads the nuclear rule and the technology
+	# The pledge sentence only when option a can actually be taken, and the
+	# military necessity sentence only when option b can (not under Limited War).
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { te_ea_no_first_strike_pledge_available = yes }
+				trigger = {
+					te_ea_no_first_strike_pledge_available = yes
+					NOT = { is_enacting_law = law_type:law_limited_war }
+				}
 				desc = extra_law_events.32.d
 			}
 			triggered_desc = {
-				trigger = { always = yes }
+				trigger = { te_ea_no_first_strike_pledge_available = yes }
+				desc = extra_law_events.32.d_pledge_only
+			}
+			triggered_desc = {
+				trigger = { NOT = { is_enacting_law = law_type:law_limited_war } }
 				desc = extra_law_events.32.d_no_pledge
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.32.d_no_clause
 			}
 		}
 	}
@@ -5136,8 +5162,36 @@ extra_law_events.49 = {
 	placement = root
 
 	title = extra_law_events.49.t
-	desc = extra_law_events.49.d
-	flavor = extra_law_events.49.f
+	# The two pluralist laws are opposed for the opposite reason: the
+	# default text has the law costing a people its language.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_multilingual_federalism
+						is_enacting_law = law_type:law_ubiquitous_translation
+					}
+				}
+				desc = extra_law_events.49.d_pluralist
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.49.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_multilingual_federalism
+						is_enacting_law = law_type:law_ubiquitous_translation
+					}
+				}
+				desc = extra_law_events.49.f_pluralist
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.49.f }
+		}
+	}
 
 	category = enactment
 
@@ -5311,8 +5365,27 @@ extra_law_events.51 = {
 	placement = root
 
 	title = extra_law_events.51.t
-	desc = extra_law_events.51.d
-	flavor = extra_law_events.51.f
+	# Unitary State takes power from the regions, so the regions object;
+	# Federal System and Devolved Administration give it to them, so the
+	# objection comes from those who want one government for the country.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_unitary_state }
+				desc = extra_law_events.51.d
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.51.d_central }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_unitary_state }
+				desc = extra_law_events.51.f
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.51.f_central }
+		}
+	}
 
 	category = enactment
 
@@ -5400,8 +5473,36 @@ extra_law_events.52 = {
 	placement = root
 
 	title = extra_law_events.52.t
-	desc = extra_law_events.52.d
-	flavor = extra_law_events.52.f
+	# Human Purity and Medical Augmentation Only forbid enhancement, so they
+	# are opposed by those who want it, not by the ethicists of the default.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_human_purity
+						is_enacting_law = law_type:law_medical_augmentation_only
+					}
+				}
+				desc = extra_law_events.52.d_purity
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.52.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						is_enacting_law = law_type:law_human_purity
+						is_enacting_law = law_type:law_medical_augmentation_only
+					}
+				}
+				desc = extra_law_events.52.f_purity
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.52.f }
+		}
+	}
 
 	category = enactment
 
@@ -5489,7 +5590,17 @@ extra_law_events.53 = {
 	placement = root
 
 	title = extra_law_events.53.t
-	desc = extra_law_events.53.d
+	# Freedom of Testation lets an estate pass whole, so it is opposed by
+	# those who want it shared, not by the old families of the default.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_free_testation }
+				desc = extra_law_events.53.d_testation
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.53.d }
+		}
+	}
 	flavor = extra_law_events.53.f
 
 	category = enactment
@@ -5844,8 +5955,26 @@ extra_law_events.57 = {
 	placement = root
 
 	title = extra_law_events.57.t
-	desc = extra_law_events.57.d
-	flavor = extra_law_events.57.f
+	# Indifference can end protection or end persecution, so its variant
+	# takes no side; the default has a majority resisting minority rights.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_minority_rights_indifference }
+				desc = extra_law_events.57.d_indifference
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.57.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { is_enacting_law = law_type:law_minority_rights_indifference }
+				desc = extra_law_events.57.f_indifference
+			}
+			triggered_desc = { trigger = { always = yes } desc = extra_law_events.57.f }
+		}
+	}
 
 	category = enactment
 

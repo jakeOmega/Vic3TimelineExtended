@@ -457,7 +457,7 @@ officers rise in The Captains' Revolt: step aside, and talks open on every war,
 every territory you could release goes, and the country gets universal
 suffrage and a parliamentary republic (a monarchy keeps its crown); or crush
 the officers, at −20 legitimacy for two years, and face them again a year
-later. With one, it is The Republic in Danger: call the general, who brings a
+later. With one, it is Committee of Public Safety: call the general, who brings a
 presidential republic, +100 authority for three years and a peace by the
 accords that costs no legitimacy; or hold the line at −15 legitimacy.
 
@@ -517,7 +517,7 @@ runs: as a subject's liberty desire climbs, when great powers condemn or back
 you, when colonies resist, and as the cost of empire tells at home. Repressive
 options usually add Colonial Crackdown, which strengthens your garrison but
 costs prestige and bureaucracy and gives the Intelligentsia more clout; a war
-fought while it lasts can bring on the Conscription Crisis. Conciliatory options
+fought while it lasts can bring on a conscription crisis, Not Enough Men. Conciliatory options
 add Decolonization Negotiations or free the colony. With the Neocolonialism law,
 four events offer independence on your terms and give you Neocolonial Economic
 Concessions. Each event and what triggers it is in [Colonial power event

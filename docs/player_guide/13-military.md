@@ -296,9 +296,9 @@ weapons. The entry doesn't show the number; its status text names the band.
 | Tension | Status text | What opens |
 |---|---|---|
 | 20 | The great powers watch each other warily | Pursue Appeasement |
-| 30 | Tensions are rising | Begin Rearmament, the Ideological Demands event, and Rising Global Tensions (+25 maneuvers in your plays, faster escalation as aggressor, +5% military goods cost, +10% prestige from army power projection) |
-| 40 | Tensions are rising | Provide Lend-Lease, the Border Incident event |
-| 50 | High tension | The Diplomatic Crisis event |
+| 30 | Tensions are rising | Begin Rearmament, the event The Strong Note, and Rising Global Tensions (+25 maneuvers in your plays, faster escalation as aggressor, +5% military goods cost, +10% prestige from army power projection) |
+| 40 | Tensions are rising | Provide Lend-Lease, the event Shots at the Frontier |
+| 50 | High tension | The event A Friend Under Pressure |
 | 70 | Crisis: war is imminent | The Brink of War event |
 
 ### Preparing for the world war
@@ -387,8 +387,8 @@ decides what the powers it beat receive.
 
 | Victor's choice | Victor gets | Each power it beat receives |
 |---|---|---|
-| Impose a harsh peace | Victor's Peace and Occupation Duties, 10 years | Regime Change: accept for Defeated Power and Imposed Regime Change, or resist for Defeated Power and heavy radicalism |
-| Seek a just and lasting peace | Victor's Peace for 5 years, Post-War Reconstruction for 10 | Reconstruction Aid: accept for Post-War Reconstruction and a shorter Defeated Power, or refuse for Defeated Power for 10 years |
+| Impose a harsh peace | Victor's Peace and Occupation Duties, 10 years | A Constitution Delivered: accept for Defeated Power and Imposed Regime Change, or resist for Defeated Power and heavy radicalism |
+| Seek a just and lasting peace | Victor's Peace for 5 years, Post-War Reconstruction for 10 | Help with Conditions: accept for Post-War Reconstruction and a shorter Defeated Power, or refuse for Defeated Power for 10 years |
 | Establish a new world order | Victor's Peace for 10 years, Liberation Hero for 5 | Nothing |
 
 Victor's Peace gives +30% prestige, +200 influence, +500 authority and +10%
@@ -400,8 +400,8 @@ home and keeping the army ready.
 ### The post-war years
 
 The entry stays open for 36 months after peace, and three events can reach great
-powers: a war crimes tribunal, a choice about the post-war order, and The New
-Rivalry, when a great power you fought beside now holds an opposed ideology.
-Either answer to The New Rivalry closes the entry at once. Otherwise it
+powers: a war crimes tribunal, a choice about the post-war order, and Yesterday's
+Ally, when a great power you fought beside now holds an opposed ideology.
+Either answer to Yesterday's Ally closes the entry at once. Otherwise it
 completes after the 36 months. The events are in [World War event
 list](19-appendix-events.md#world-war-event-list).
