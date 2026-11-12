@@ -193,6 +193,79 @@ class AiShipCategoryTests(_Case):
         # Vanilla's own fleet entity still serves it: no `no_fleet_entity`.
         self.assertEqual(tree.flags(), [("missing_ai_category", "ship_type_destroyer")])
 
+    def test_a_quoted_category_is_read_as_its_value(self):
+        tree = self.tree(ship_types=_SHIP_TYPES.replace(
+            "ai_ship_category = ai_ship_category_screens", 'ai_ship_category = "ai_ship_category_screens"'))
+        self.assertEqual(tree.flags(), [])
+
+    def test_a_quoted_unknown_category_is_named_in_full(self):
+        tree = self.tree(ship_types=_SHIP_TYPES.replace(
+            "ai_ship_category = ai_ship_category_screens", 'ai_ship_category = "ai_ship_category_nope"'))
+        (flag,) = tree.audit().flags
+        self.assertEqual((flag.kind, flag.line), ("unknown_ai_category", 4))
+        self.assertIn("`ai_ship_category = ai_ship_category_nope`", flag.detail)
+
+    _NO_CATEGORY = _SHIP_TYPES.replace("    ai_ship_category = ai_ship_category_screens\n", "")
+
+    def test_an_inject_can_supply_a_mod_types_category(self):
+        """The merged ship type is what the engine reads: a later `INJECT:`
+        onto the mod's own type applies (scripting_best_practices.md, Load
+        Order)."""
+        tree = self.tree(ship_types=self._NO_CATEGORY + """
+            INJECT:ship_type_cutter = {
+                ai_ship_category = ai_ship_category_screens
+            }
+        """)
+        result = tree.audit()
+        self.assertEqual(result.flags, [])
+        self.assertEqual(result.ship_types_checked, 1)
+
+    def test_an_inject_ahead_of_the_definition_supplies_nothing(self):
+        """The definition that follows replaces what the `INJECT:` made."""
+        tree = self.tree(ship_types="""
+            INJECT:ship_type_cutter = {
+                ai_ship_category = ai_ship_category_screens
+            }
+        """ + self._NO_CATEGORY)
+        (flag,) = tree.audit().flags
+        self.assertEqual((flag.kind, flag.name, flag.line), ("missing_ai_category", "ship_type_cutter", 6))
+
+    def test_a_category_written_twice_is_judged_at_each_value(self):
+        tree = self.tree(ship_types=_SHIP_TYPES.replace(
+            "    ai_ship_category = ai_ship_category_screens\n",
+            "    ai_ship_category = ai_ship_category_screens\n    ai_ship_category = ai_ship_category_nope\n"))
+        (flag,) = tree.audit().flags
+        self.assertEqual((flag.kind, flag.line), ("unknown_ai_category", 5))
+
+    def test_an_inject_or_create_onto_a_mod_type_is_not_a_second_definition(self):
+        tree = self.tree(ship_types=_SHIP_TYPES + """
+            INJECT_OR_CREATE:ship_type_cutter = {
+                is_obsolete = { always = yes }
+            }
+        """)
+        result = tree.audit()
+        self.assertEqual(result.flags, [])
+        self.assertEqual(result.ship_types_checked, 1)
+
+    def test_an_inject_or_create_that_creates_the_type_is_its_definition(self):
+        tree = self.tree(
+            ship_types="INJECT_OR_CREATE:ship_type_cutter = {\n"
+                       "    modifications = { ship_mod_slot_guns = { ship_mod_cutter_guns } }\n}\n")
+        self.assertEqual(tree.flags(), [("missing_ai_category", "ship_type_cutter")])
+
+    def test_a_field_level_directive_on_the_category_is_checked(self):
+        """`REPLACE:ai_ship_category = x` inside an `INJECT:` is the parser's
+        convention, which neither vanilla nor the mod uses; the value is
+        judged all the same, on its line."""
+        tree = self.tree(ship_types=_SHIP_TYPES + """
+            INJECT:ship_type_destroyer = {
+                REPLACE:ai_ship_category = ai_ship_category_nope
+            }
+        """)
+        (flag,) = tree.audit().flags
+        self.assertEqual((flag.kind, flag.name), ("unknown_ai_category", "ship_type_destroyer"))
+        self.assertEqual(flag.line, 11)  # the field's own line, not the block's
+
     def test_the_ship_type_flags_take_no_comment(self):
         tree = self.tree(ship_types="""
             ship_type_cutter = { # REVIEWED 2026-11-12 (roster_membership): later
@@ -228,10 +301,32 @@ class FleetEntityTests(_Case):
         self.assertFalse(result.fleet_entities_checked)
         self.assertIn("## Not checked", rma.render_report(result))
 
+    def test_a_table_of_another_shape_is_reported_as_not_checked(self):
+        """A reshaped `SHIPS` must not raise: on a reload that would turn the
+        whole audit into a `[post-load] FAILED` warning."""
+        for generator in (
+            'SHIPS = [{"ship": "ship_type_cutter", "template": "ship_type_destroyer"}]\n',
+            "SHIPS = [1, 2, 3]\n",
+            'SHIPS = {"ship_type_cutter": "ship_type_destroyer"}\n',
+            "SHIPS = [()]\n",
+            "SHIPS = build_table()\n",
+            "SHIPS = [\n",
+            "OTHER = []\n",
+        ):
+            with self.subTest(generator=generator):
+                tree = self.tree(generator=generator)
+                self.assertIsNone(rma.fleet_entity_table(tree.root))
+                result = tree.audit()
+                self.assertEqual(result.flags, [])
+                self.assertFalse(result.fleet_entities_checked)
+
     def test_the_real_table_is_read_without_importing_the_generator(self):
         table = rma.fleet_entity_table(REPO)
-        self.assertIn("ship_type_asw_destroyer", table)
-        self.assertEqual(len(table), 19)
+        self.assertTrue(table)
+        self.assertTrue(all(isinstance(name, str) and name.startswith("ship_type_") for name in table))
+        new_types = {o.name for o in rma.scan_dir(REPO, rma.SHIP_TYPES_DIR) if o.directive is None}
+        self.assertTrue(new_types)
+        self.assertLessEqual(new_types, table)
 
 
 class UnlistedModificationTests(_Case):
@@ -253,6 +348,38 @@ class UnlistedModificationTests(_Case):
     def test_a_vanilla_ship_type_listing_it_is_enough(self):
         tree = self.tree(mods=_MODS + "REPLACE:utility_mod_searchlights = {\n    type = ship_mod_slot_utility_1\n}\n")
         self.assertEqual(tree.flags(), [])
+
+    def test_a_repeated_modifications_key_keeps_every_slot_list(self):
+        tree = self.tree(
+            ship_types=_SHIP_TYPES.rstrip()[:-1]
+            + "    modifications = {\n        ship_mod_slot_utility_1 = { utility_mod_radar }\n    }\n}\n",
+            mods=_MODS + "utility_mod_radar = {\n    type = ship_mod_slot_utility_1\n}\n")
+        result = tree.audit()
+        self.assertEqual(result.flags, [])
+        self.assertEqual(result.modifications_checked, 2)
+
+    def test_a_repeated_slot_key_keeps_every_entry(self):
+        tree = self.tree(
+            ship_types=_SHIP_TYPES.replace(
+                "        ship_mod_slot_guns = { ship_mod_cutter_guns }\n",
+                "        ship_mod_slot_guns = { ship_mod_cutter_guns }\n"
+                "        ship_mod_slot_guns = { ship_mod_cutter_guns_heavy }\n"),
+            mods=_MODS + "ship_mod_cutter_guns_heavy = {\n    type = ship_mod_slot_guns\n}\n")
+        self.assertEqual(tree.flags(), [])
+
+    def test_a_slot_entry_an_inject_adds_to_a_ship_type_counts(self):
+        mods = _MODS + "utility_mod_radar = {\n    type = ship_mod_slot_utility_1\n}\n"
+        self.assertEqual(self.tree(mods=mods).flags(), [("unlisted_modification", "utility_mod_radar")])
+        for target in ("ship_type_destroyer", "ship_type_cutter"):
+            with self.subTest(target=target):
+                tree = self.tree(mods=mods, ship_types=_SHIP_TYPES + f"""
+                    INJECT:{target} = {{
+                        modifications = {{
+                            ship_mod_slot_utility_1 = {{ utility_mod_radar }}
+                        }}
+                    }}
+                """)
+                self.assertEqual(tree.flags(), [])
 
     def test_a_vanilla_modification_is_not_judged(self):
         # `utility_mod_vanilla_orphan` is in no slot list, and is vanilla's.

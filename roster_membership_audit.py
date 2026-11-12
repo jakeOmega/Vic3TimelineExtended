@@ -14,9 +14,12 @@ vanilla's definition and is judged only on a category it writes):
   1.14.4. The engine logs `ship_type.cpp: Ship Type is missing
   ai_ship_category!` once in `error.log` and keeps loading; on 2026-09-23 all
   19 mod ship types lacked it and every session crashed on the month tick
-  (#386, #390).
+  (#386, #390). Judged on the merged ship type, so a category that a later
+  `INJECT:` adds to the mod's own type counts, and one injected before the
+  definition, which then replaces it, does not.
 - `unknown_ai_category`: an `ai_ship_category` that names no entry of
-  `common/ai_ship_categories/`, vanilla or mod.
+  `common/ai_ship_categories/`, vanilla or mod: any value the mod writes
+  (bare or quoted), and the merged type's.
 - `no_fleet_entity`: a ship type that is new with the mod and has no row in
   the `SHIPS` table of `scripts/generators/gen_fleet_entities.py`, which
   writes `gfx/map/fleet_entities/02_extra_fleet_entities.txt`. Without a
@@ -50,10 +53,18 @@ Data source
 -----------
 Which blocks the mod writes, with their lines and comments, comes from a
 raw-text scan of the three mod directories, because the parser drops lines
-and comments. Category names, ship type slot lists and PM group lists are
-merged vanilla + mod data: on a post-load run the server's ModState, from the
-command line a small ModState with vanilla from the committed
-`vanilla_parsed/` snapshot, so the audit needs no game install and runs in CI.
+and comments. Category names, each ship type's category and slot lists, and
+PM group lists are merged vanilla + mod data: on a post-load run the server's
+ModState, from the command line a small ModState with vanilla from the
+committed `vanilla_parsed/` snapshot, so the audit needs no game install and
+runs in CI. A key written twice in one block (`modifications`, a slot,
+`production_methods`) is read at every occurrence.
+
+A field-level directive inside an `INJECT:` block
+(`REPLACE:ai_ship_category = x`) is read as the parser reads it, as that
+field. Neither vanilla nor the mod writes one and the engine's handling is
+unverified (`paradox_file_parser.py`), so this only keeps a bad value in
+that spelling from passing unseen.
 """
 import ast
 import os
@@ -147,8 +158,17 @@ def scan_text(text: str, rel_path: str) -> list[Opener]:
                 directive, name = _split_directive(m.group("key"))
                 openers.append(Opener(name, directive, rel_path, line, comments.get(line)))
             depth += 1
-        elif depth == 1 and openers and m.group("key") == "ai_ship_category" and m.group("value"):
-            openers[-1].categories.append((m.group("value"), bisect_right(starts, m.start())))
+        elif (
+            depth == 1 and openers and m.group("value")
+            and _split_directive(m.group("key"))[1] == "ai_ship_category"
+        ):
+            value = m.group("value")
+            if value.startswith('"'):
+                # The string's body is blanked in `clean`; read it from `text`.
+                start = m.start("value") + 1
+                end = text.find('"', start)
+                value = text[start:end if end >= 0 else len(text)].split("\n")[0].strip()
+            openers[-1].categories.append((value, bisect_right(starts, m.start())))
     return openers
 
 
@@ -171,7 +191,9 @@ def scan_dir(mod_path: str, rel_dir: str) -> list[Opener]:
 def defines(opener: Opener, vanilla_names) -> bool:
     """Whether the block is the entity's whole definition, as opposed to
     fields added to one that vanilla defines. The `TRY_` and `_OR_CREATE`
-    forms depend on whether vanilla has the entity."""
+    forms depend on whether vanilla has the entity. (An `INJECT_OR_CREATE:`
+    onto an entity the mod defines elsewhere also answers True; callers
+    judge an entity once, by name, on the merged data.)"""
     d = opener.directive
     if d is None or d in ("REPLACE", "REPLACE_OR_CREATE"):
         return True
@@ -190,7 +212,9 @@ def defines(opener: Opener, vanilla_names) -> bool:
 def fleet_entity_table(mod_path: str) -> set | None:
     """The ship types in the fleet entity generator's `SHIPS` table, read
     with `ast` so the generator (which resolves a vanilla path on import) is
-    never run. None when the generator or its table is not there."""
+    never run. None when the generator is not there or `SHIPS` is not a
+    literal list of `(ship type, template)` rows: the check is then reported
+    as not run, where raising would fail the whole audit on a reload."""
     path = os.path.join(mod_path, FLEET_ENTITY_GENERATOR)
     try:
         with open(path, "r", encoding="utf-8") as fh:
@@ -203,7 +227,11 @@ def fleet_entity_table(mod_path: str) -> set | None:
         ):
             try:
                 rows = ast.literal_eval(node.value)
-            except ValueError:
+            except (ValueError, TypeError, SyntaxError):
+                return None
+            if not isinstance(rows, (list, tuple)) or not all(
+                isinstance(row, (list, tuple)) and row and isinstance(row[0], str) for row in rows
+            ):
                 return None
             return {row[0] for row in rows}
     return None
@@ -251,18 +279,34 @@ def _parse_reviewed(comment: str | None) -> dict | None:
     return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
+def _blocks(v):
+    """Every `{ }` block a key holds: one, or one per time the key is written
+    (the parser turns a repeated key into a list)."""
+    v = _unwrap(v)
+    if isinstance(v, dict):
+        yield v
+    elif isinstance(v, (list, tuple)):
+        for x in v:
+            yield from _blocks(x)
+
+
 def listed_modifications(ship_types: dict) -> set:
     """Every modification some ship type lists in a slot."""
     listed: set = set()
     for raw in ship_types.values():
-        body = _unwrap(raw)
-        if not isinstance(body, dict):
-            continue
-        slots = _unwrap(body.get("modifications"))
-        if isinstance(slots, dict):
-            for names in slots.values():
-                listed.update(_names(names))
+        for body in _blocks(raw):
+            for slots in _blocks(body.get("modifications")):
+                for names in slots.values():
+                    listed.update(_names(names))
     return listed
+
+
+def merged_categories(ship_type) -> list[str]:
+    """The `ai_ship_category` value(s) of one merged ship type."""
+    values: list[str] = []
+    for body in _blocks(ship_type):
+        values += [v.strip('"') for v in _names(body.get("ai_ship_category"))]
+    return values
 
 
 def listed_pms(pm_groups: dict) -> set:
@@ -297,7 +341,7 @@ def check(
     *,
     categories,
     vanilla_ship_types,
-    listed_mods: set,
+    ship_types: dict,
     listed_pm_names: set,
     modifications: dict | None = None,
     vanilla_modifications=(),
@@ -305,48 +349,61 @@ def check(
     fleet_table: set | None = None,
     fleet_blocks: set | None = None,
 ) -> AuditResult:
-    """Judge the mod's scanned blocks against the merged lists.
+    """Judge the mod's scanned blocks against the merged data.
 
-    `categories` is every AI ship category name; `listed_mods` and
-    `listed_pm_names` what ship types and PM groups list; `fleet_table` and
-    `fleet_blocks` the ship types with a fleet entity (None: not available,
-    so not checked)."""
+    `categories` is every AI ship category name; `ship_types` the merged
+    ship types (their category and slot lists); `listed_pm_names` what PM
+    groups list; `fleet_table` and `fleet_blocks` the ship types with a fleet
+    entity (None: not available, so not checked)."""
     result = AuditResult(fleet_entities_checked=fleet_table is not None)
     categories = set(categories)
+    generator = FLEET_ENTITY_GENERATOR.replace(os.sep, "/")
 
-    seen: set = set()
+    by_name: dict = {}
     for o in ship_type_openers:
-        whole = defines(o, vanilla_ship_types)
-        if whole and o.name not in seen:
-            seen.add(o.name)
+        by_name.setdefault(o.name, []).append(o)
+    for name, openers in by_name.items():
+        definers = [o for o in openers if defines(o, vanilla_ship_types)]
+        # The block to point at: an `INJECT_OR_CREATE:` only when nothing
+        # else defines the type.
+        site = next((o for o in definers if o.directive != "INJECT_OR_CREATE"), None) or (
+            definers[0] if definers else None)
+        written = [(value, o.file, line) for o in openers for value, line in o.categories]
+        if name in ship_types:
+            merged = merged_categories(ship_types[name])
+        else:
+            merged = [value for o in definers for value, _line in o.categories]
+        if site is not None:
             result.ship_types_checked += 1
-        if whole and not o.categories:
+            if not merged:
+                result.flags.append(Flag(
+                    "missing_ai_category", name,
+                    "declares no `ai_ship_category`, a required field since vanilla 1.14.4",
+                    site.file, site.line,
+                ))
+        flagged: set = set()
+        for value, file, line in written + [(v, openers[0].file, openers[0].line) for v in merged]:
+            if value in categories or value in flagged:
+                continue
+            flagged.add(value)
             result.flags.append(Flag(
-                "missing_ai_category", o.name,
-                "declares no `ai_ship_category`, a required field since vanilla 1.14.4",
-                o.file, o.line,
+                "unknown_ai_category", name,
+                f"`ai_ship_category = {value}` names no entry of `common/ai_ship_categories/`",
+                file, line,
             ))
-        for value, line in o.categories:
-            if value not in categories:
+        if site is not None and name not in vanilla_ship_types:
+            if fleet_table is not None and name not in fleet_table:
                 result.flags.append(Flag(
-                    "unknown_ai_category", o.name,
-                    f"`ai_ship_category = {value}` names no entry of `common/ai_ship_categories/`",
-                    o.file, line,
+                    "no_fleet_entity", name,
+                    f"has no row in `SHIPS` in `{generator}`, so it gets no fleet entity and no "
+                    "model on the map",
+                    site.file, site.line,
                 ))
-        if whole and o.name not in vanilla_ship_types:
-            if fleet_table is not None and o.name not in fleet_table:
+            elif fleet_blocks is not None and name not in fleet_blocks:
                 result.flags.append(Flag(
-                    "no_fleet_entity", o.name,
-                    f"has no row in `SHIPS` in `{FLEET_ENTITY_GENERATOR.replace(os.sep, '/')}`, so it "
-                    "gets no fleet entity and no model on the map",
-                    o.file, o.line,
-                ))
-            elif fleet_blocks is not None and o.name not in fleet_blocks:
-                result.flags.append(Flag(
-                    "no_fleet_entity", o.name,
-                    f"has no block under `{FLEET_ENTITIES_DIR.replace(os.sep, '/')}/`: re-run "
-                    f"`{FLEET_ENTITY_GENERATOR.replace(os.sep, '/')}`",
-                    o.file, o.line,
+                    "no_fleet_entity", name,
+                    f"has no block under `{FLEET_ENTITIES_DIR.replace(os.sep, '/')}/`: re-run `{generator}`",
+                    site.file, site.line,
                 ))
 
     # Openers whose comment suppressed a flag, by identity, for the stale check.
@@ -370,7 +427,8 @@ def check(
         return count
 
     result.modifications_checked = unlisted(
-        modification_openers, vanilla_modifications, listed_mods, "unlisted_modification",
+        modification_openers, vanilla_modifications, listed_modifications(ship_types),
+        "unlisted_modification",
         lambda name: "no ship type lists it in a `modifications` slot, so it can never be fitted"
                      + _modification_detail((modifications or {}).get(name)),
     )
@@ -438,7 +496,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         scan_dir(mod_path, PMS_DIR),
         categories=mod_state.get_data("AI Ship Categories") or {},
         vanilla_ship_types=_vanilla_names(mod_state, "Ship Types"),
-        listed_mods=listed_modifications(mod_state.get_data("Ship Types") or {}),
+        ship_types=mod_state.get_data("Ship Types") or {},
         listed_pm_names=listed_pms(mod_state.get_data("PM Groups") or {}),
         modifications=mod_state.get_data("Ship Modifications") or {},
         vanilla_modifications=_vanilla_names(mod_state, "Ship Modifications"),
@@ -513,7 +571,8 @@ def render_report(result: AuditResult) -> str:
         out += [
             "## Not checked",
             "",
-            f"- `no_fleet_entity`: `SHIPS` could not be read from `{FLEET_ENTITY_GENERATOR.replace(os.sep, '/')}`.",
+            f"- `no_fleet_entity`: `SHIPS` could not be read from `{FLEET_ENTITY_GENERATOR.replace(os.sep, '/')}`"
+            " as a list of `(ship type, template)` rows.",
             "",
         ]
     return "\n".join(out)
