@@ -92,3 +92,13 @@ A lowered Space Program method or a lost building fails every milestone the laun
 3. **One entry, not two.** Drop below major power while a milestone runs (it deactivates and keeps its record, as before), then regain the rank: the milestone comes back within two weeks, as before, with no `sr_reentry` line and one entry in the journal. Two entries: the pass added on top of a record; its `has_inactive_journal_entry` test did not hold.
 4. **Colonization without a colony.** With no colony yet and Solar System Colonization running, lower the method below Solar Colonization: the programme closes (its whole staged fleets are kept, `sr_launch_banked_fleets`). Raise it again: within two months the programme runs again, and its next launch month restores the banked fleets.
 5. **The AI.** In an observer game into the 2000s, note any `TE_SELF_CHECK` line for `sr_reentry` or `sr_closed_record`: an AI that refits its Space Program down and back up should get its milestones back the same way.
+
+## First and later completion outcomes (2026-11-12, #1433)
+
+Each milestone from Suborbital Flight to the Interstellar Probe has two completion outcomes, first and later, ahead of the failure outcome (`je_space_race.txt`; `docs/systems/mod_systems/space_race.md` → *"The First" Bonus*). Offline checks cover the script; these need the game.
+
+1. **The panel.** Open a running Suborbital Flight before anyone has finished it: the outcomes list reads First into Space, Edge of Space Reached, then the failure. Each shows its trigger (the goal, then "No other country has achieved this milestone yet" or "Another country has already achieved this milestone") and its reward modifier under its effect header. The first outcome's trigger line is met and the later one's is not.
+2. **First.** Finish it first (`event te_debug_space_race.1` to push progress): the entry concludes through First into Space, the concluded page reads "... ahead of every other country", and the reward is `sr_first_suborbital`.
+3. **Later.** In another game, or as a second power, finish a milestone another country has already finished: the entry concludes through the later outcome with the old conclusion text, and the reward is `sr_<m>`.
+4. **A tie.** In an observer game, if two powers finish the same milestone on the same update, note which outcome each concluded through and which reward each holds. Expected: only one holds `sr_first_<m>`, whatever the outcomes say. If both concluded through first, the second's concluded page claims a first it did not win (its reward is still the later one); record how often, so the owner can judge whether that is worth a fix.
+

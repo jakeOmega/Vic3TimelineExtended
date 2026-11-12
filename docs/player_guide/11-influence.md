@@ -357,7 +357,7 @@ have agencies of their own.
 
 | Operation | What it does at base strength | Also needs | Influence |
 |---|---|---|---|
-| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature | 50 |
+| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target holds elections (a voting law, or Anarchy) | 50 |
 | Financial Subversion | Target +2 bubble pressure a month | Computer Networks | 50 |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target | None |
 | Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target | None |
@@ -380,14 +380,15 @@ An operation uses its influence for as long as it runs, more the worse the
 world would take its exposure (see [Detection and
 exposure](#detection-and-exposure)). As with any pact, a great power pays double
 and a major power half again as much, and you need the influence available to
-launch it.
+launch it. Like the base game's Fund Lobbies, every operation builds you up to
+1,000 Involvement in each strategic region where the target is local.
 
 Counterintelligence Support is open: it is never rolled for detection and never
 exposed, needs no technology, and an Intelligence Sharing Pact with the target
 doesn't block it. A country has one protector at a time, and the support ends
 if the friendship does. It uses a slot and upkeep like any operation but gives
-you nothing back. Its defense adds to the target's own (see [Covert
-defense](#covert-defense)).
+you nothing back beyond that Involvement. Its defense adds to the target's own
+(see [Covert defense](#covert-defense)).
 
 If you run several Space Program Espionage operations, their bonuses come
 from the strongest and don't add up. Stolen technology does add up: each
@@ -654,8 +655,8 @@ The Shadow War and The Spy Who Was Caught stand in for the operations; see
 ### How the AI runs covert operations
 
 AI countries set their funding each month: none while idle, level 1 to keep
-operations alive when bankrupt or without rivals (and for a major power with a
-rival), level 3 for a great power with a rival or a major power at war, and
+operations alive when bankrupt, borrowing with bankruptcy under half a year
+away, or without rivals (and for a major power with a rival), level 3 for a great power with a rival or a major power at war, and
 level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
 antagonistic or domineering toward; espionage goes to countries with technology

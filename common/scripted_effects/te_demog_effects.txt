@@ -135,8 +135,6 @@
 #                       the walk, which the youth bulge, the event wave, the pension AI and the panel read
 #                       (te_demog_unemployment). Stored, not read live: a scripted GUI reads state_unemployment_rate as
 #                       none, so the panel and the effects read the one stored figure (owner, 2026-10-17)
-#   te_dg_unemp_walk    the walk's own count, under the cohorts only: the workforce of pops with no workplace over all
-#                       the workforce, which the self-check unemployment_rate_read compares the engine's figure with
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -1141,13 +1139,12 @@ te_demog_work_walk_init = {
 	set_local_variable = { name = te_dg_w_low value = 0 }
 	set_local_variable = { name = te_dg_w_wbase value = 0 }
 	set_local_variable = { name = te_dg_w_wf value = 0 }
-	set_local_variable = { name = te_dg_w_un value = 0 }
 	# Largest Cities: the people at work for each of the state's towns (te_demog_place_effects.txt)
 	te_demog_town_walk_init = yes
 }
 
-# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio, the engine's
-# workforce and the workforce of a pop with no workplace (triggers.log: workforce, strata), under the cohorts only.
+# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio and the engine's
+# workforce (triggers.log: workforce, strata), under the cohorts only.
 te_demog_work_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_on > 0 }
@@ -1157,19 +1154,16 @@ te_demog_work_walk_pop = {
 			limit = { strata = lower }
 			change_local_variable = { name = te_dg_w_low add = total_size }
 		}
-		if = {
-			limit = { NOT = { exists = workplace } }
-			change_local_variable = { name = te_dg_w_un add = workforce }
-		}
 		te_demog_town_walk_pop = yes
 	}
 }
 
 # THIS = a state, after the walk's Gini store: the three shares, and the unemployment, under the cohorts only. The
 # census's unemployment (te_dg_unemp) is the shared conversion, te_state_unemployment_share: the engine's figure over the
-# workforce's share of the people (owner, 2026-10-17: one source for every reader). The walk's own count, the workforce
-# with no workplace over the workforce (te_dg_unemp_walk, the harness's demographics_save_inputs.state_unemployment), is
-# kept for the self-check unemployment_rate_read.
+# workforce's share of the people (owner, 2026-10-17: one source for every reader). The walk no longer counts the
+# workforce with no workplace itself (te_dg_unemp_walk until 2026-11-12): the self-check that compared the engine's
+# figure with that count, unemployment_rate_read, read OK and was retired (#1046), and unemployment_share_read
+# (te_unemployment_effects.txt, from the unemployment walk's own count) is the one check of the conversion.
 te_demog_work_walk_store = {
 	if = {
 		limit = { local_var:te_dg_w_on > 0 }
@@ -1186,7 +1180,6 @@ te_demog_work_walk_store = {
 			set_variable = { name = te_unemp_wf_share value = var:te_dg_wf_engine }
 		}
 		set_variable = { name = te_dg_unemp value = te_state_unemployment_share }
-		set_variable = { name = te_dg_unemp_walk value = { value = local_var:te_dg_w_un divide = { value = local_var:te_dg_w_wf min = 1 } } }
 		# Largest Cities: the state's towns in order (te_demog_place_effects.txt)
 		te_demog_town_walk_store = yes
 	}

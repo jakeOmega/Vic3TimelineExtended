@@ -1,0 +1,70 @@
+﻿# ============================================================================
+# TREATY ARTICLE: te_reparations (#1457)
+# ============================================================================
+# A one-off payment the mod's events settle as a treaty: colonial reparations
+# (decolonization_events.6.a) and a nuclear crisis's reparations
+# (nd_crisis_concede_reparations). SOURCE = the payer, which concedes; TARGET =
+# the payee. The sum is not an input: te_pay_reparations_by_treaty
+# (te_treaty_transfer_effects.txt) records it on the payer
+# (te_reparations_due, te_reparations_due_to) before it creates the treaty,
+# and the article exists only while that record does, toward that payee. On
+# entry into force the sum changes hands and the record goes; nothing is
+# undone on withdrawal or break, as vanilla's state_transfer.
+# Whether a treaty created in force runs this hook is unverified (C21): the
+# helper's check (te_treaty_transfer.2) pays directly if it did not.
+# ============================================================================
+te_reparations = {  # REVIEWED 2026-11-12 (involvement): a one-off payment, like vanilla's state, ship and money transfers, which build none
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
+	kind = directed
+	cost = 0
+
+	flags = {
+		is_one_time
+	}
+
+	maintenance_paid_by = source_country
+	usage_limit = once_per_side
+
+	# root is the prospective source (the payer), scope:other_country the
+	# payee. Never draftable otherwise.
+	visible = {
+		has_variable = te_reparations_due
+		var:te_reparations_due_to ?= scope:other_country
+	}
+
+	possible = {
+		has_variable = te_reparations_due
+		var:te_reparations_due_to ?= scope:other_country
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_reparations_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_rep_treaty_payer }
+			target_country = { save_scope_as = te_rep_treaty_payee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_rep_treaty_payer
+				exists = scope:te_rep_treaty_payee
+				scope:te_rep_treaty_payer = {
+					var:te_reparations_due_to ?= scope:te_rep_treaty_payee
+				}
+			}
+			scope:te_rep_treaty_payer = { te_reparations_settle = yes }
+		}
+	}
+
+	on_withdrawal = {}
+	on_break = {}
+
+	# Only script makes it; the AI never proposes it.
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+		evaluation_chance = { value = 0 }
+		inherent_accept_score = { value = 0 }
+	}
+}

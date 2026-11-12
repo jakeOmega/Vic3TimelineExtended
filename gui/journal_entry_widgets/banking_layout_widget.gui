@@ -295,6 +295,9 @@ types banking_layout_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 
 		blockoverride "tab_content" {
 			block "te_banking_tab_layout" {

@@ -1478,10 +1478,15 @@ def absorbed_walk(o, root):
     # Causes of Death (owner, 2026-10-22): the pops' other own lines by the cause their deaths count under
     for name in ("te_dg_w_odh", "te_dg_w_odx", "te_dg_w_odq", "te_dg_w_odw"):
         o(f"set_local_variable = {{ name = {name} value = 0 }}")
+    # the moved lines' class pairs at the walk's bare deaths (#1046): the census's refresh clears them when it first
+    # sets M, and fast mode and the window's start rate take what they were adding off the walk's sums
+    o("set_local_variable = { name = te_dg_w_edl value = 0 }")
     o("set_local_variable = { name = te_dg_w_rep value = 0 }")
     o("if = {")
     o("limit = { te_demog_effects_run = yes }")
     o("set_local_variable = { name = te_dg_w_rep value = 1 }")
+    for t, short in _line_classes():
+        o(f"set_local_variable = {{ name = te_dg_w_lq_{t} value = te_demog_line_{short}_applied }}")
     o("}")
     o("}")
     o("")
@@ -1549,6 +1554,11 @@ def absorbed_walk(o, root):
     for i, t in enumerate(classes):
         o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ is_pop_type = {t} }} "
           f"set_local_variable = {{ name = te_dg_p_oc value = state.modifier:state_{t}_mortality_mult }} }}")
+    # its class's moved-line pair, at its bare deaths (te_dg_w_edl, #1046)
+    for i, (t, _short) in enumerate(_line_classes()):
+        o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ is_pop_type = {t} }} "
+          f"change_local_variable = {{ name = te_dg_w_edl add = {{ value = local_var:te_dg_p_ed "
+          f"multiply = local_var:te_dg_w_lq_{t} }} }} }}")
     o("if = {")
     o("limit = { OR = { " + " ".join(f"is_pop_type = {t}" for t in P.DEATH_CAUSE_WAR_CLASSES) + " } }")
     o("change_local_variable = { name = te_dg_w_odq add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }")
@@ -2330,6 +2340,17 @@ LINE_HEADER = ("# The engine's birth and mortality lines on laws, technologies a
                "# (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): a fixed-sign\n"
                "# pair per field (P.ENGINE_LINE_FIELDS), re-applied at the two families' sum while te_demog_lines_apply holds.\n"
                "# A release keeps these files (scripts/release/comment_out_census_inputs.py doesn't read them).")
+
+
+def _line_classes():
+    """[(pop type, short)] for the moved lines' class fields (state_<type>_mortality_mult), in P.ENGINE_LINE_FIELDS'
+    order: the pairs that reach one class's pops only."""
+    out = []
+    for field in P.ENGINE_LINE_FIELDS:
+        m = re.fullmatch(r"state_(\w+)_mortality_mult", field)
+        if m:
+            out.append((m.group(1), P.ENGINE_LINE_SHORT[field]))
+    return out
 
 
 def _line_fields():

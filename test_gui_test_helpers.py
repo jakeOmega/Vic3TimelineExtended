@@ -9,9 +9,12 @@ The real calls are in each system's layout test (test_demographics_layout.py
 for the Census Data window). Each failing case names the message it expects,
 so a case can't pass on some other failure.
 """
+import os
+import tempfile
 import unittest
 
-from gui_test_helpers import _children, assert_wide_matches_narrow, loc_closure
+from gui_test_helpers import (ScriptedGuis, _children, assert_wide_matches_narrow, loc_closure, loc_keys_of,
+                              own_branch_spans, printed_keys, scripted_guis, scripted_keys, tooltip_calls)
 
 NARROW = """
 types fixture {
@@ -402,7 +405,6 @@ class WideMatchesNarrowTest(unittest.TestCase):
                             f'flowcontainer = {{ {WRAPPER} visible = "[JournalEntry.IsActive]" te_x_sec_a = {{}} }}')
         self.assertEqual(self.check(wide), COLUMNS)
 
-
     def test_a_wrapper_that_keeps_a_hidden_sections_space(self):
         """Without ignoreinvisible, a hidden section still takes its place and the spacing around it."""
         self.fails("without ignoreinvisible = yes keeps a hidden section's space", GOOD,
@@ -420,11 +422,245 @@ class WideMatchesNarrowTest(unittest.TestCase):
                    wrapper=WRAPPER + ' datacontext = "[GetPlayer]"')
         self.fails(r"a wrapper carries \['margin_left'\]", GOOD, wrapper=WRAPPER + " margin_left = 200")
 
-    def test_a_wrappers_spacing_against_its_narrow_composers(self):
-        """The wrapper standing in for a narrow composer under the same gates spaces its sections as the composer
-        does."""
-        self.fails(r"spaces its sections 30 apart under \['JournalEntry.IsActive'\], the narrow layout \['4'\]", GOOD,
-                   wrapper="direction = vertical parentanchor = hcenter ignoreinvisible = yes spacing = 30")
+    def test_a_wrapper_that_is_not_a_flowcontainer(self):
+        """An hbox sets its sections side by side in the 520 column, a widget or a container draws them over each
+        other, and the column, a flowcontainer, can't hold a vbox (#1338). The narrow side may use any: its wrappers
+        are what the game already draws."""
+        opener = 'flowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a = {}'
+        self.assertEqual(GOOD.count(opener), 1)
+        for kind in ("hbox", "widget", "container", "vbox"):
+            with self.subTest(kind=kind):
+                self.fails(f"wraps sections in `{kind}`", GOOD.replace(opener, opener.replace(
+                    "flowcontainer = {\n", f"{kind} = {{ {WRAPPER}\n")))
+        narrow = NARROW.replace("flowcontainer = {\n\t\t\tspacing = 4", "widget = {\n\t\t\tspacing = 4")
+        self.assertNotEqual(narrow, NARROW)
+        self.assertEqual(assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES,
+                                                    text=narrow + fixture(GOOD)[len(NARROW):]), COLUMNS)
+
+    def test_a_wrappers_size_limit_is_its_columns(self):
+        """{ 900 -1 } would run out of its 520 column (#1338); the one real use is { 520 -1 }."""
+        for limit in ("minimumsize", "maximumsize"):
+            with self.subTest(limit=limit):
+                self.fails(rf"a wrapper's {limit} is {{ 900 -1 }}", GOOD, wrapper=f"{WRAPPER} {limit} = {{ 900 -1 }}")
+                self.fails(rf"a wrapper's {limit} is {{ 520 40 }}", GOOD, wrapper=f"{WRAPPER} {limit} = {{ 520 40 }}")
+                self.assertEqual(self.check(GOOD, wrapper=f"{WRAPPER} {limit} = {{ 520 -1 }}"), COLUMNS)
+
+    # The spacing rule (#1338): a wrapper's spacing draws between the sections it holds, so one that holds two or more
+    # directly spaces them as the widget that holds them in the narrow layout does.
+    BARE = "direction = vertical parentanchor = hcenter ignoreinvisible = yes"
+
+    def test_a_wrappers_spacing_against_its_sections_narrow_one(self):
+        """te_x_sec_b and te_x_summary sit 4 apart in the narrow layout, in its inner wrapper."""
+        self.fails(r"the wrapper around \['te_x_sec_b', 'te_x_summary'\] spaces its sections 30 apart, "
+                   r"the narrow layout \['4'\]", GOOD, wrapper=f"{self.BARE} spacing = 30")
+        self.fails(r"the wrapper around \['te_x_sec_b', 'te_x_summary'\] spaces its sections None apart", GOOD,
+                   wrapper=self.BARE)
+
+    # te_x_sec_a and te_x_sec_c directly in one wrapper, with the wrapper around te_x_sec_b and te_x_summary between
+    # them; te_x_sec_z from a second narrow composer under the same gate, which sets no spacing.
+    MORE = """
+	type te_x_more_sections = flowcontainer {
+		visible = "[JournalEntry.IsActive]"
+		te_x_sec_z = {}
+	}
+"""
+    HELD = """
+	type te_x_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_x_overview = {}
+			flowcontainer = { OUTER
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_a = {}
+				flowcontainer = {
+					visible = "[Not( IsLight )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
+				te_x_sec_c = { visible = "[HasC]" }
+			}
+		}
+		blockoverride "column_2" {
+			te_x_sec_how = {}
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_z = {}
+			}
+		}
+	}
+"""
+
+    def test_spacing_is_matched_by_the_sections_a_wrapper_holds_not_by_its_gates(self):
+        """The narrow layout has a second composer under JournalEntry.IsActive that sets no spacing. Matched by gate
+        set, that let the wrapper around te_x_sec_a and te_x_sec_c drop its 4 (#1338: the Space Race wrapper around
+        Space Powers and Orbit)."""
+        def check(outer):
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES + ["te_x_more_sections"],
+                                              text=fixture(self.HELD.replace("OUTER", outer) + self.MORE))
+
+        self.assertEqual(len(check(WRAPPER)), 2)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_sec_a', 'te_x_sec_c'\] spaces its "
+                                                    r"sections None apart, the narrow layout \['4'\]"):
+            check(self.BARE)
+
+    def test_a_wrapper_around_one_section_needs_no_spacing(self):
+        """Spacing draws between two: a one-section wrapper had to carry a spacing that draws nothing (#1338)."""
+        one = 'flowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a = {}'
+        self.assertEqual(GOOD.count(one), 1)
+        for bare in (self.BARE, f"{self.BARE} spacing = 30"):
+            with self.subTest(wrapper=bare):
+                self.assertEqual(self.check(GOOD.replace(one, one.replace("flowcontainer = {\n", f"flowcontainer = {{ {bare}\n"))),
+                                 COLUMNS)
+
+    def test_a_section_alone_in_a_narrow_wrapper_sits_at_the_spacing_around_it(self):
+        """A narrow wrapper around one section draws no spacing: the section sits at the spacing of the next widget
+        out that holds two or more. Here te_x_sec_c, alone in a wrapper that only gates it, is 4 from its neighbours,
+        the status composer's spacing. (te_x_sec_how, alone in its composer, sits at a spacing the check can't read.)"""
+        lone = '\t\tflowcontainer = {\n\t\t\tvisible = "[HasC]"\n\t\t\tte_x_sec_c = {}\n\t\t}\n'
+        narrow = NARROW.replace('\t\tte_x_sec_c = {\n\t\t\tvisible = "[HasC]"\n\t\t}\n', lone)
+        self.assertNotEqual(narrow, NARROW)
+        pair = ('\t\t\tflowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n'
+                '\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t}\n\t\t\tte_x_sec_how = {}\n')
+        self.assertEqual(GOOD.count(pair), 1)
+
+        def check(spacing):
+            wide = GOOD.replace(pair, f"\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                      '\t\t\t\tvisible = "[JournalEntry.IsActive]"\n'
+                                      '\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t\tte_x_sec_how = {}\n\t\t\t}\n')
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, added_gates=("te_x_sec_how",),
+                                              text=narrow + fixture(wide)[len(NARROW):])
+
+        self.assertEqual(check(4), COLUMNS)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_sec_c', 'te_x_sec_how'\] spaces its "
+                                                    r"sections 30 apart, the narrow layout \['4'\]"):
+            check(30)
+
+    def test_a_section_alone_in_a_narrow_composer_sits_at_the_spacing_around_it(self):
+        """The same through a composer: te_x_q and te_x_r, each the one section of its composer, sit 6 apart, the
+        spacing of the composer that holds the two."""
+        more = ("\ttype te_x_outer_sections = flowcontainer {\n\t\tspacing = 6\n\t\tte_x_one_sections = {}\n"
+                "\t\tte_x_two_sections = {}\n\t}\n"
+                "\ttype te_x_one_sections = flowcontainer {\n\t\tspacing = 99\n\t\tte_x_q = {}\n\t}\n"
+                "\ttype te_x_two_sections = flowcontainer {\n\t\tte_x_r = {}\n\t}\n")
+
+        def check(spacing):
+            wide = GOOD.replace("\t\t\tte_x_sec_how = {}\n",
+                                f"\t\t\tte_x_sec_how = {{}}\n\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                "\t\t\t\tte_x_q = {}\n\t\t\t\tte_x_r = {}\n\t\t\t}\n")
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES + ["te_x_outer_sections"],
+                                              text=fixture(wide + more))
+
+        check(6)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_q', 'te_x_r'\] spaces its sections "
+                                                    r"30 apart, the narrow layout \['6'\]"):
+            check(30)
+
+    def test_a_wrapper_with_no_visible_of_its_own_is_spaced_too(self):
+        """Only a gated wrapper used to be held to the narrow spacing (#1338)."""
+        pair = "\t\t\t\t\tte_x_sec_b = {}\n\t\t\t\t\tte_x_summary = {}\n"
+        self.assertEqual(GOOD.count(pair), 1)
+
+        def ungated(spacing):
+            return GOOD.replace(pair, f"\t\t\t\t\tflowcontainer = {{ {self.BARE} spacing = {spacing}\n"
+                                      f"\t{pair[:-1].replace(chr(10), chr(10) + chr(9))}\n\t\t\t\t\t}}\n")
+
+        self.assertEqual(self.check(ungated(4)), COLUMNS)
+        self.fails(r"the wrapper around \['te_x_sec_b', 'te_x_summary'\] spaces its sections 30 apart", ungated(30))
+
+    def test_an_instance_with_a_context_or_a_margin_of_its_own(self):
+        """What a wrapper may not carry, an instance may not either (#1338): a datacontext changes what the section
+        reads, a margin, a position or a size where it sits. A visible, a blockoverride and a child widget stay."""
+        self.fails(r"te_x_reference_sections carries \['datacontext', 'margin_left'\]",
+                   GOOD.replace("te_x_sec_how = {}",
+                                'te_x_reference_sections = { datacontext = "[GetPlayer]" margin_left = 200 }'))
+        self.fails(r"te_x_sec_how carries \['size'\]", GOOD.replace("te_x_sec_how = {}", "te_x_sec_how = { size = { 520 38 } }"))
+        self.fails(r"te_x_divider carries \['position'\]",
+                   GOOD.replace("te_x_sec_how = {}", "te_x_sec_how = {}\n\t\t\tte_x_divider = { position = { 0 4 } }"),
+                   extra=("te_x_divider",))
+        self.assertEqual(self.check(GOOD.replace("te_x_sec_how = {}", 'te_x_sec_how = {\n\t\t\t\tblockoverride "note" {}\n'
+                                                 '\t\t\t\tte_x_text = {\n\t\t\t\t\ttext = "x"\n\t\t\t\t}\n\t\t\t}')), COLUMNS)
+
+    # Both narrow composers placed whole: te_x_status_sections' inner wrapper has no direction and no ignoreinvisible.
+    WHOLE = """
+	type te_x_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_x_overview = {}
+			te_x_status_sections = {}
+		}
+		blockoverride "column_2" {
+			te_x_reference_sections = {}
+		}
+	}
+"""
+
+    def test_a_composer_both_layouts_place_is_not_held_to_the_wide_rules(self):
+        """Its type draws the same in both frames, so its inner wrappers and instances are the narrow layout's
+        (#1338: the guard checked them, under the wide composer's name)."""
+        self.assertEqual(self.check(self.WHOLE), [["te_x_overview", "te_x_sec_a", "te_x_sec_b", "te_x_summary", "te_x_sec_c"],
+                                                  ["te_x_sec_how"]])
+        narrow = NARROW.replace("te_x_sec_how = {}", "hbox = {\n\t\t\tmargin_left = 200\n\t\t\tte_x_sec_how = { size = { 520 38 } }\n\t\t}")
+        self.assertNotEqual(narrow, NARROW)
+        assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, text=narrow + fixture(self.WHOLE)[len(NARROW):])
+
+    def test_what_the_wide_layout_fills_a_shared_composers_block_with_is_held_to_them(self):
+        """A blockoverride is the markup of the layout that writes it."""
+        def filled(wrapper):
+            return self.WHOLE.replace("te_x_status_sections = {}",
+                                      'te_x_status_sections = {\n\t\t\t\tblockoverride "summary" {\n'
+                                      f"\t\t\t\t\t{wrapper}\n\t\t\t\t\t\tte_x_summary = {{}}\n\t\t\t\t\t}}\n\t\t\t\t}}\n\t\t\t}}")
+
+        self.assertEqual(len(self.check(filled("flowcontainer = {"))), 2)
+        self.fails("wraps sections in `hbox`", filled("hbox = {"))
+        self.fails(r"a wrapper carries \['margin_left'\]", filled("flowcontainer = {"), wrapper=WRAPPER + " margin_left = 200")
+
+    def test_a_composer_only_the_wide_layout_places_is_held_to_them(self):
+        """It is the wide layout's own, and a failure in it names it."""
+        own = self.WHOLE.replace("te_x_reference_sections = {}", "te_x_wide_only_sections = {}")
+        self.fails("te_x_wide_sections's te_x_wide_only_sections wraps sections in `hbox`",
+                   own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\thbox = {\n\t\t\tte_x_sec_how = {}\n\t\t}\n\t}\n")
+        self.fails(r"te_x_wide_sections's te_x_wide_only_sections: te_x_sec_how carries \['margin_left'\]",
+                   own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\tte_x_sec_how = { margin_left = 200 }\n\t}\n")
+        self.check(own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\tte_x_sec_how = {}\n\t}\n")
+
+    def test_two_rows_of_columns(self):
+        """A wide layout is one row of columns, read down each and then across (#1338)."""
+        rows = """
+	type te_x_wide_sections = flowcontainer {
+		te_ui_columns_two = {
+			blockoverride "column_1" {
+				te_x_overview = {}
+			}
+			blockoverride "column_2" {
+				flowcontainer = {
+					visible = "[JournalEntry.IsActive]"
+					te_x_sec_a = {}
+				}
+			}
+		}
+		te_ui_columns_two = {
+			blockoverride "column_1" {
+				flowcontainer = {
+					visible = "[And( JournalEntry.IsActive, Not( IsLight ) )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
+			}
+			blockoverride "column_2" {
+				flowcontainer = {
+					visible = "[JournalEntry.IsActive]"
+					te_x_sec_c = { visible = "[HasC]" }
+				}
+				te_x_sec_how = {}
+			}
+		}
+	}
+"""
+        self.fails("places a second row of columns; a wide layout is one row", rows)
+        nested = GOOD.replace("\t\t\tte_x_sec_how = {}\n", '\t\t\tte_ui_columns_two = {\n\t\t\t\tblockoverride "column_1" {\n'
+                              '\t\t\t\t\tte_x_sec_how = {}\n\t\t\t\t}\n\t\t\t\tblockoverride "column_2" {\n'
+                              '\t\t\t\t\tte_x_divider = {}\n\t\t\t\t}\n\t\t\t}\n')
+        self.assertNotEqual(nested, GOOD)
+        self.fails("places a second row of columns", nested, split={"te_x_divider": "te_x_sec_how"})
+
 
 BODY = """
 types body {
@@ -501,6 +737,37 @@ class LayoutTest(unittest.TestCase):
     def test_a_wide_layout_may_place_a_composer_whole(self):
         self.check(LAID_OUT.replace("te_x_sec_how = {}", "te_x_reference_sections = {}"))
 
+    def test_a_gate_on_a_composers_instance_still_sets_its_sections_spacing(self):
+        """te_x_pair_sections has no visible of its own; the body gates its instance. Its sections' 6 was never
+        recorded, so a wrapper under that gate spaced them as it liked (#1338)."""
+        pair = "\ttype te_x_pair_sections = flowcontainer {\n\t\tspacing = 6\n\t\tte_x_p = {}\n\t\tte_x_q = {}\n\t}\n"
+        body = BODY.replace("te_x_reference_sections = {}",
+                            'te_x_reference_sections = {}\n\t\t\t\tte_x_pair_sections = {\n\t\t\t\t\tvisible = "[Shown]"\n\t\t\t\t}')
+        self.assertNotEqual(body, BODY)
+
+        def check(spacing):
+            wide = LAID_OUT.replace("te_x_sec_how = {}",
+                                    f"te_x_sec_how = {{}}\n\t\t\tflowcontainer = {{ direction = vertical ignoreinvisible = yes "
+                                    f'spacing = {spacing}\n\t\t\t\tvisible = "[Shown]"\n\t\t\t\tte_x_p = {{}}\n'
+                                    f"\t\t\t\tte_x_q = {{}}\n\t\t\t}}")
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", layout=("te_x_tab_body", "te_x_tab_layout"),
+                                              text=fixture(wide + pair) + body)
+
+        check(6)
+        with self.assertRaisesRegex(AssertionError, r"the wrapper around \['te_x_p', 'te_x_q'\] spaces its sections 30 "
+                                                    r"apart, the narrow layout \['6'\]"):
+            check(30)
+
+    def test_sections_the_frame_spaces_set_no_spacing(self):
+        """The frame around a body's layout block spaces what sits straight in it, which the check can't read: the
+        overview, and the goal bar, alone in a wrapper that only gates it (a wrapper around one draws no spacing).
+        So a wide wrapper around the two is not held to a spacing."""
+        wide = LAID_OUT.replace('\t\t\tte_x_overview = {}\n\t\t\tte_x_goal_bar = { visible = "[HasGoal]" }\n',
+                                "\t\t\tflowcontainer = { direction = vertical ignoreinvisible = yes spacing = 10\n"
+                                '\t\t\t\tte_x_overview = {}\n\t\t\t\tte_x_goal_bar = { visible = "[HasGoal]" }\n\t\t\t}\n')
+        self.assertNotEqual(wide, LAID_OUT)
+        self.check(wide)
+
     def test_names_or_a_layout_not_both(self):
         with self.assertRaisesRegex(AssertionError, "give narrow_types or layout, not both"):
             assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, layout=("te_x_tab_body", "te_x_tab_layout"),
@@ -533,6 +800,234 @@ class LocClosureTest(unittest.TestCase):
         """1.15 escapes a spliced key as `$key|q$`; the closure still reaches it."""
         loc = {"a": "see $b|q$ and $c$", "b": "B", "c": "C"}
         self.assertEqual(loc_closure({"a"}, loc), {"a", "b", "c"})
+
+
+SGUIS = """\
+# a comment that names custom_tooltip = fx_commented
+fx_hover_sgui = {
+	scope = country
+	is_shown = {
+		custom_tooltip = {
+			text = fx_shown_tt
+			fx_is_far = yes
+		}
+		fx_is_near = no
+	}
+	ai_is_valid = { custom_tooltip = fx_ai_tt }
+	is_valid = {
+		fx_is_far = yes
+		custom_tooltip = {
+			text = "fx_valid_tt"
+			always = yes
+		}
+	}
+	effect = {
+		custom_tooltip = fx_line_a
+		custom_tooltip_no_bullet = fx_line_b # custom_tooltip = fx_commented
+		if = {
+			limit = { fx_is_far = yes }
+			fx_print = { KEY = fx_line_c B = pacific }
+		}
+		fx_print = { KEY = "fx_line_d" B = arctic }
+		hidden_effect = { custom_tooltip = fx_hidden }
+		fx_loose = yes
+	}
+}
+fx_other_sgui = {
+	effect = { custom_tooltip = fx_other_line }
+}
+"""
+
+EFFECTS = """\
+fx_print = {
+	custom_tooltip = $KEY$
+	custom_tooltip_no_bullet = fx_head_$B$
+	fx_again = { KEY = $KEY$ }
+}
+fx_again = {
+	custom_tooltip = { text = $KEY$_more }
+	fx_again = { KEY = $KEY$ }
+}
+fx_loose = {
+	custom_tooltip = fx_basin_$B$
+	custom_tooltip = $ALL$
+}
+"""
+
+TRIGGERS = """\
+fx_is_far = {
+	custom_tooltip = {
+		text = fx_far_tt
+		fx_is_deep = yes
+	}
+}
+fx_is_deep = {
+	custom_tooltip = fx_deep_tt
+}
+	fx_is_near = {
+		custom_tooltip = fx_near_tt
+	}
+"""
+
+
+class ScriptedTooltipTest(unittest.TestCase):
+    """What a scripted GUI's tooltip prints (ScriptedGuis, #1361), and the
+    tooltips a markup or loc text asks for (tooltip_calls)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        for folder, text in (("scripted_guis", SGUIS), ("scripted_effects", EFFECTS), ("scripted_triggers", TRIGGERS)):
+            os.makedirs(os.path.join(cls.tmp.name, "common", folder))
+            with open(os.path.join(cls.tmp.name, "common", folder, "fx.txt"), "w", encoding="utf-8-sig") as fh:
+                fh.write(text)
+        cls.scripted = ScriptedGuis(cls.tmp.name)
+        names = ("fx_shown_tt fx_valid_tt fx_far_tt fx_deep_tt fx_ai_tt fx_line_a fx_line_b fx_line_c fx_line_d "
+                 "fx_line_c_more fx_line_d_more fx_head_pacific fx_head_arctic fx_head_indian fx_basin_pacific "
+                 "fx_basin_indian fx_hidden fx_commented fx_other_line fx_spliced fx_near_tt")
+        cls.loc = {name: name.upper() for name in names.split()}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_each_function_renders_its_own_block(self):
+        """ExecuteTooltip the effect, IsValidTooltip is_valid (not
+        ai_is_valid), IsShownTooltip is_shown."""
+        self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsShownTooltip"), {"fx_shown_tt", "fx_near_tt"})
+        self.assertEqual(self.scripted.printed("fx_hover_sgui", "IsValidTooltip"), {"fx_far_tt", "fx_valid_tt"})
+        self.assertEqual(self.scripted.printed("fx_other_sgui"), {"fx_other_line"})
+        self.assertEqual(self.scripted.printed("fx_no_such_sgui"), set())
+        self.assertEqual(ScriptedGuis(None).keys("fx_hover_sgui", "ExecuteTooltip", self.loc), set())
+
+    def test_a_custom_tooltips_text_stands_for_what_it_holds(self):
+        """`custom_tooltip = { text = x  <triggers> }` shows x in place of the
+        triggers' own lines, and a hidden_effect shows nothing: the Colonial
+        Empire's unlock checklist doesn't print is_separated_from_capital's
+        line, which says "our capital"."""
+        self.assertNotIn("fx_deep_tt", self.scripted.printed("fx_hover_sgui", "IsValidTooltip"))
+        self.assertNotIn("fx_far_tt", self.scripted.printed("fx_hover_sgui", "IsShownTooltip"))
+        self.assertNotIn("fx_hidden", self.scripted.printed("fx_hover_sgui"))
+        self.assertNotIn("fx_commented", self.scripted.printed("fx_hover_sgui"))
+        self.assertEqual(printed_keys("custom_tooltip = { text = fx_a  custom_tooltip = fx_b }\ncustom_tooltip = fx_c",
+                                      {}), {"fx_a", "fx_c"})
+
+    def test_the_effects_and_triggers_it_calls_are_followed_with_their_arguments(self):
+        """A scripted effect's `custom_tooltip = $KEY$` and `fx_head_$B$` take
+        the call's arguments (Seabed's te_seabed_build_in_head_$B$), a quoted
+        one too; an effect that calls itself ends; a trigger in a `limit`
+        counts (the walk errs wide there)."""
+        got = self.scripted.keys("fx_hover_sgui", "ExecuteTooltip", self.loc)
+        self.assertEqual(got, {"fx_line_a", "fx_line_b", "fx_line_c", "fx_line_d", "fx_line_c_more", "fx_line_d_more",
+                               "fx_head_pacific", "fx_head_arctic", "fx_far_tt", "fx_basin_pacific", "fx_basin_indian"})
+
+    def test_a_trigger_called_no_and_an_indented_definition_are_followed(self):
+        """`fx_is_near = no` prints fx_is_near's line, negated; fx_is_near is
+        defined tab-indented at the top of its file (build_effects.txt's
+        first effect is), and a nested `name = {` is no definition."""
+        self.assertIn("fx_near_tt", self.scripted.printed("fx_hover_sgui", "IsShownTooltip"))
+        self.assertIn("fx_is_near", self.scripted.calls)
+        self.assertEqual(set(self.scripted.guis), {"fx_hover_sgui", "fx_other_sgui"})
+        self.assertNotIn("custom_tooltip", self.scripted.calls)
+        self.assertIn("extended_timeline_extra_construction_building", scripted_guis().calls)
+
+    def test_a_name_with_an_argument_left_out_is_any_key_it_could_spell(self):
+        """fx_loose is called with no B: fx_basin_$B$ is every fx_basin_ key.
+        A name that is all arguments would be every key, so it gives none."""
+        self.assertEqual(self.scripted.printed("fx_hover_sgui") & {"fx_basin_$B$", "$ALL$"}, {"fx_basin_$B$", "$ALL$"})
+        self.assertEqual(loc_keys_of({"fx_basin_$B$", "$ALL$", "fx_line_a", "fx_gone"}, self.loc),
+                         {"fx_basin_pacific", "fx_basin_indian", "fx_line_a"})
+        self.assertEqual(loc_keys_of({"fx_$A$_$B$"}, {"fx_a_b": "", "fx_ab": "", "fx__": ""}), {"fx_a_b"})
+
+    def test_the_tooltips_a_text_asks_for(self):
+        named = "[GetScriptedGui('fx_hover_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+        self.assertEqual(tooltip_calls(named), [("fx_hover_sgui", "ExecuteTooltip", 1)])
+        self.assertEqual([c[:2] for c in tooltip_calls("[Concatenate( ScriptedGui.IsValidTooltip( X ), "
+                                                       "ScriptedGui.IsShownTooltip( X ) )]")],
+                         [(None, "IsValidTooltip"), (None, "IsShownTooltip")])
+        self.assertEqual(tooltip_calls("[GetScriptedGui('fx_hover_sgui').Execute( X )] [ScriptedGui.IsValid( X )]"), [],
+                         "a control and a test are no tooltip")
+        # a loc value escapes nothing, but a quoted call in a loc-in-markup string does
+        self.assertEqual(tooltip_calls("GetScriptedGui(\\'fx_a\\').ExecuteTooltip( X )")[0][:2], ("fx_a", "ExecuteTooltip"))
+
+    def test_a_tooltip_in_the_players_own_branch_is_left_out(self):
+        """Tax Code's Pass checklist: the tooltip is the first branch of a
+        SelectLocalization on Country.IsLocalPlayer, alone or first in an And."""
+        call = "GetScriptedGui('fx_hover_sgui').IsValidTooltip( X )"
+        for cond, own in (("Country.IsLocalPlayer", True), ("And( Country.IsLocalPlayer, Not( Y ) )", True),
+                          ("And( Not( Y ), Country.IsLocalPlayer )", False), ("Or( Country.IsLocalPlayer, Y )", False),
+                          ("Country.IsAtWar", False)):
+            with self.subTest(condition=cond):
+                first = f"[SelectLocalization( {cond}, Concatenate( 'a', {call} ), 'b' )]"
+                self.assertEqual(len(tooltip_calls(first, own=False)), 0 if own else 1)
+                self.assertEqual(len(tooltip_calls(first)), 1)
+                second = f"[SelectLocalization( {cond}, 'a', {call} )]"
+                self.assertEqual(len(tooltip_calls(second, own=False)), 1, "the other branch is everyone's")
+                added = f"[AddLocalizationIf( {cond}, {call} )]"
+                self.assertEqual(len(tooltip_calls(added, own=False)), 0 if own else 1)
+        nested = (f"[SelectLocalization( Y, 'a', SelectLocalization( Country.IsLocalPlayer, {call}, "
+                  f"GetScriptedGui('fx_other_sgui').ExecuteTooltip( X ) ) )]")
+        self.assertEqual([c[0] for c in tooltip_calls(nested, own=False)], ["fx_other_sgui"])
+        text = "[SelectLocalization( Country.IsLocalPlayer, 'a', 'b' )]"
+        self.assertEqual([text[a:b].strip() for a, b in own_branch_spans(text)], ["'a'"])
+
+    def test_the_scripted_gui_in_context(self):
+        """`ScriptedGui.` is the nearest `datacontext = "[GetScriptedGui('x')]"`
+        around the call; the panel's (contexts) where the body has none, and
+        with it where a blockoverride lies between, since the override's
+        contents sit where its block is."""
+        body = """
+		widget = {
+			datacontext = "[GetScriptedGui('fx_other_sgui')]"
+			button = {
+				datacontext = "[GetScriptedGui('fx_hover_sgui')]"
+				tooltip = "[ScriptedGui.IsShownTooltip( X )]"
+			}
+			@MORE@
+		}
+		textbox = { tooltip = "[ScriptedGui.ExecuteTooltip( X )]" }
+"""
+        def keys(more="", contexts=()):
+            return scripted_keys(body.replace("@MORE@", more), self.loc, self.scripted, contexts, markup=True)
+        self.assertEqual(keys(), {"fx_shown_tt", "fx_near_tt"}, "the nearest; none for the textbox, with no context given")
+        self.assertEqual(keys(contexts={"fx_other_sgui"}), {"fx_shown_tt", "fx_near_tt", "fx_other_line"})
+        inner = 'textbox = { tooltip = "[ScriptedGui.ExecuteTooltip( X )]" }'
+        self.assertEqual(keys(inner), {"fx_shown_tt", "fx_near_tt", "fx_other_line"}, "the outer widget's")
+        over = 'fx_row = { blockoverride "slot" { tooltip = "[ScriptedGui.IsValidTooltip( X )]" } }'
+        self.assertEqual(keys(over), {"fx_shown_tt", "fx_near_tt"}, "fx_other_sgui's is_valid prints nothing")
+        # fx_hover_sgui's is_valid, asked only in the override: the panel's, with the body's own
+        self.assertIn("fx_valid_tt", keys(over, {"fx_hover_sgui"}))
+        self.assertNotIn("fx_valid_tt", keys("", {"fx_hover_sgui"}))
+        # as plain text (a loc value) there is no markup to read: the contexts given
+        self.assertEqual(scripted_keys("[ScriptedGui.ExecuteTooltip( X )]", self.loc, self.scripted, {"fx_other_sgui"}),
+                         {"fx_other_line"})
+
+    def test_the_loc_closure_follows_a_scripted_tooltip(self):
+        loc = dict(self.loc, fx_tt="Header\n[GetScriptedGui('fx_other_sgui').ExecuteTooltip( X )]",
+                   fx_other_line="A line and $fx_spliced$",
+                   fx_bare="[ScriptedGui.ExecuteTooltip( X )]",
+                   fx_own="[SelectLocalization( Country.IsLocalPlayer, GetScriptedGui('fx_other_sgui')"
+                          ".ExecuteTooltip( X ), '' )]")
+        self.assertEqual(loc_closure({"fx_tt"}, loc, scripted=self.scripted), {"fx_tt", "fx_other_line", "fx_spliced"})
+        self.assertEqual(loc_closure({"fx_tt"}, loc, scripted=ScriptedGuis(None)), {"fx_tt"})
+        self.assertEqual(loc_closure({"fx_bare"}, loc, scripted=self.scripted), {"fx_bare"})
+        self.assertEqual(loc_closure({"fx_bare"}, loc, scripted=self.scripted, contexts={"fx_other_sgui"}),
+                         {"fx_bare", "fx_other_line", "fx_spliced"})
+        self.assertEqual(loc_closure({"fx_own"}, loc, scripted=self.scripted), {"fx_own", "fx_other_line", "fx_spliced"})
+        self.assertEqual(loc_closure({"fx_own"}, loc, own=False, scripted=self.scripted), {"fx_own"})
+
+    def test_the_repos_scripted_guis(self):
+        """Seabed's Free hover prints a head, a state and a more line for each
+        basin (te_seabed_build_in_sgui, through te_seabed_build_in_lines's
+        $B$), the Colonial Empire's unlock checklist its four lines."""
+        from gui_test_helpers import load_loc, scripted_guis
+        loc = load_loc()
+        seabed = scripted_guis().keys("te_seabed_build_in_sgui", "ExecuteTooltip", loc)
+        for key in ("te_seabed_build_in_head_pacific", "te_seabed_build_in_none_arctic", "te_seabed_build_in_state_1"):
+            self.assertIn(key, seabed)
+        self.assertEqual(scripted_guis().keys("te_window_colonial_empire_entry_unlock_sgui", "IsValidTooltip", loc),
+                         {"ce_unlock_colonies_tt", "ce_unlock_not_secured_tt", "ce_unlock_no_collapse_tt",
+                          "ce_unlock_no_recent_end_tt"})
 
 
 if __name__ == "__main__":

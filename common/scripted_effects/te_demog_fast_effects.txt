@@ -113,7 +113,9 @@ te_demog_country_clock_census = {
 # in, so the engine runs K x (the census's target plus the terms on top) (plan §2, "Fast mode's
 # xK"). Both census terms are te_demog_rates_refresh's locals, never has_modifier, which can't see
 # the refresh's add or remove in this same effect (plan E22): te_demog_rates_refresh must run
-# first, in the same effect (te_demog_state_clock_step).
+# first, in the same effect (te_demog_state_clock_step). On the first Full step the average also holds the moved
+# lines' pairs, which that refresh clears: the general pairs (te_dg_rate_lines_b/_d) and the class pairs' share of the
+# bare deaths (te_dg_rate_lines_q, from the walk's te_dg_w_edl; #1046) come off as well.
 te_demog_fast_refresh_rates = {
 	if = {
 		limit = { te_demog_fast_k > 1 }
@@ -164,6 +166,7 @@ te_demog_fast_refresh_rates = {
 				subtract = local_var:te_dg_fast_prev_d
 				subtract = local_var:te_dg_rate_prev_d
 				subtract = local_var:te_dg_rate_lines_d
+				subtract = local_var:te_dg_rate_lines_q
 				add = local_var:te_dg_rate_new_d
 				add = local_var:te_dg_fast_wl
 				min = 0

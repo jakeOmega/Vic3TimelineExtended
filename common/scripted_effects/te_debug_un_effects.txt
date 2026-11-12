@@ -415,6 +415,7 @@ te_debug_un_cycle_subject_member = {
 				change_subject_type = subject_type_protectorate
 			}
 			else = {
+				decol_mark_freed_from = { OVERLORD = root }
 				make_independent = yes
 			}
 		}

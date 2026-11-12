@@ -105,10 +105,11 @@ even in that save, and the scale comes from those lines.
    mine. **At 1080p no row ends in "…"**: "Southern" in the Basin row's 96 px value column, "Long-haul"
    in the 96 px label column.
 1a. **The Ocean Basin tile (VAN-8b, owner 2026-10-27).** With Abyssal Plain Mining researched, open a
-   coastal state of another country, and one of a country that never took part in a sharing: an
+   coastal state of another country (a participant in a sharing too, #1352), and one of a country that never took part in a sharing: an
    **Ocean Basin: Pacific** (or the state's basin) tile, its hover naming "the Pacific Ocean" as the
-   Seabed tab names it. Before the research, and on a landlocked state, no tile. A state of a
-   participant shows the full Seabed Licences tile instead, never both. A landlocked country with the
+   Seabed tab names it. Before the research, and on a landlocked state, no tile. Your own coastal state,
+   once you have taken part, shows the full Seabed Licences tile instead, never both; another
+   participant's state never shows the Licences tile, whose words are written for you. A landlocked country with the
    research and no coastal claimant anywhere still sees the basins the month it researches it
    (`te_seabed_basins_set`, `te_seabed_global_monthly`). **Observer:** start an observer game (or
    switch to observer) with a state panel open on a coastal state: no Ocean Basin tile, and no
@@ -446,7 +447,7 @@ types, and every trigger, docket item and vote follows a pattern already seen in
       Global Commons rule only); taking it shows +2% research speed and +25 innovation cap, and an
       upkeep of 0.1% of GDP a year, at least 1,000 a week, under Space Race in the Breakdown.
 - [ ] The AI opens stations: great and major powers with the surplus, smaller powers only with a
-      Southern coastline or as treaty parties, none in default. About thirty countries is the
+      coast south of the tropics or as treaty parties, none in default. About thirty countries is the
       target (the real number); far more means the weights in `te_decision_open_antarctic_station`
       need lowering.
 - [ ] The first station puts the Antarctic Treaty on the docket (the chamber's last item: "the first
