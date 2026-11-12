@@ -905,7 +905,7 @@ a weekly upkeep of a tenth of a percent of GDP a year, never less than 1,000 a
 week. It also adds to your claim weight in the Southern basin, coastline or
 not. The decision Close the Antarctic Research Station ends both. The AI opens a station when
 its weekly surplus covers ten times the upkeep: great and major powers, and
-smaller powers with a Southern coastline or a place in the Antarctic Treaty.
+smaller powers with a coast south of the tropics or a place in the Antarctic Treaty.
 
 A country's first station puts the Antarctic Treaty on the docket. Its parties
 hold no new Southern seabed licenses; levels built before they ratified keep

@@ -232,8 +232,7 @@ class SeedTests(unittest.TestCase):
 
     def test_a_site_added_later_is_seeded_in_a_game_already_seeded(self):
         body = squash(block(self.e, "gm_arch_monthly"))
-        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_arch_seed_round } } set_global_variable = { "
-                      "name = gm_arch_seed_round value = 1 } } if = { limit = { global_var:gm_arch_seed_round < "
+        self.assertIn("gm_arch_self_check = yes } if = { limit = { global_var:gm_arch_seed_round < "
                       "gm_arch_seed_rounds } set_global_variable = { name = gm_arch_seed_round value = "
                       "gm_arch_seed_rounds } gm_arch_seed_sites = yes }", body)
         self.assertLess(body.index("gm_arch_self_check = yes"), body.index("global_var:gm_arch_seed_round <"),
@@ -556,21 +555,14 @@ class BrakeTests(unittest.TestCase):
                       "country_weekly_innovation_add = -1 }", body)
         self.assertNotIn("innovation_max", body, "the cap is never touched (owner, 2026-10-14)")
 
-    def test_the_money_modifier_is_a_retired_stub(self):
-        # Digs cost no money (owner, 2026-10-16). The stub stays, with its Budget
-        # Breakdown category, so a save that carries it loads clean and sheds it.
-        body = squash(strip_comments(read(MODIFIERS)))
-        self.assertIn("gm_arch_expense = { icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds "
-                      "country_expenses_add = 1 country_te_budget_expense_archaeology_add = 1 }", body,
-                      "a recurring monetary modifier joins a Budget Breakdown category (test_budget_breakdown.py)")
-        self.assertIn("RETIRED 2026-10-16", read(MODIFIERS))
-        gen = read("scripts/generators/gen_budget_breakdown.py")
-        self.assertIn('"archaeology": ("Archaeological Digs", ("gm_arch_expense",)),', gen)
+    def test_the_money_modifier_is_gone(self):
+        # Digs cost no money (owner, 2026-10-16). The retired stub and its empty Budget Breakdown
+        # category went with the old-save code (#1429): no save that carried it loads in 1.15.
+        self.assertNotIn("gm_arch_expense", strip_comments(read(MODIFIERS)))
+        self.assertNotIn("gm_arch_expense", read("scripts/generators/gen_budget_breakdown.py"))
         for rel in (EFFECTS, EVENTS, SGUIS, "common/treaty_articles/120_archaeological_concession.txt",
                     "common/treaty_articles/121_excavation_permit.txt"):
-            code = strip_comments(read(rel))
-            self.assertNotIn("NAME = gm_arch_expense", code, rel)
-            self.assertNotRegex(code, r"add_modifier = \{ name = gm_arch_expense", rel)
+            self.assertNotIn("gm_arch_expense", strip_comments(read(rel)), rel)
 
     def test_the_methods_cost_what_the_spec_says(self):
         v = read(VALUES)
@@ -603,13 +595,12 @@ class BrakeTests(unittest.TestCase):
                          "modifier = gm_arch_diversion value = { value = 0 if = { limit = { has_variable = "
                          "gm_arch_innovation_units var:gm_arch_innovation_units > 0.001 } "
                          "add = var:gm_arch_innovation_units } }")
-        # The retired money modifier is neither declared nor removed any more: its remover went with
-        # the national refresh (#1404), and no save that carried it loads in 1.15 (#1407).
+        # The retired money modifier is gone (#1429), neither declared nor removed.
         self.assertIsNone(declaration("gm_arch_expense"))
         for rel in (EFFECTS, GM_EFFECTS):
             self.assertNotIn("remove_modifier = gm_arch_expense", strip_comments(read(rel)), rel)
         L = loc()
-        for key in ("gm_arch_diversion", "gm_arch_diversion_desc", "gm_arch_expense", "gm_arch_expense_desc"):
+        for key in ("gm_arch_diversion", "gm_arch_diversion_desc"):
             self.assertIn(key, L)
 
 

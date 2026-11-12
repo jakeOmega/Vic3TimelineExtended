@@ -9,7 +9,7 @@ import unittest
 
 import gui_test_helpers
 from gui_test_helpers import assert_wide_matches_narrow
-from je_test_helpers import entry_text, old_block
+from je_test_helpers import entry_text, old_block, outcome_texts
 from scripts.generators import gen_te_systems_window as window_gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -1024,8 +1024,16 @@ class QuietTooltipsTest(unittest.TestCase):
         je = _read(JE)
         decol = _read(DECOLONIZATION)
         entry = entry_text(je, "je_colonial_empire")
-        for name, body in (("on_complete", old_block(entry, "on_complete")), ("on_fail", old_block(entry, "on_fail")),
-                           ("decol_path_legacy", _block(decol, "decol_path_legacy"))):
+        # Since #1432 the path tests are the outcomes' triggers (one outcome
+        # per ending), which the panel renders every frame too.
+        endings = outcome_texts(entry)
+        self.assertEqual(len(endings), 10)
+        for i, body in enumerate(endings):
+            with self.subTest(outcome=i):
+                self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
+        path_tests = [body for body in endings if "_months_value" in body]
+        self.assertEqual(len(path_tests), 6, "four paths of a held bar and two collapses")
+        for name, body in (("decol_path_legacy", _block(decol, "decol_path_legacy")),):
             with self.subTest(block=name):
                 self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
                 self.assertRegex(body, r"colonial_(invest|garrison|assimilate)_months_value")
@@ -1073,9 +1081,13 @@ class CompletionClocksTest(unittest.TestCase):
     def test_the_targets_are_shared_and_unchanged(self):
         self.assertRegex(self.values, r"(?m)^colonial_empire_completion_months = 60$")
         self.assertRegex(self.values, r"(?m)^colonial_empire_federation_months = 36$")
-        complete = old_block(entry_text(_read(JE), "je_colonial_empire"), "complete")
-        self.assertIn("var:colonial_at_100_months >= colonial_empire_completion_months", complete)
-        self.assertNotRegex(complete, r">= 60\b")
+        # The four paths of a held bar (#1432: success outcomes 2-5, after the Acts').
+        entry = entry_text(_read(JE), "je_colonial_empire")
+        for index in range(2, 6):
+            complete = old_block(entry, "complete", index)
+            with self.subTest(outcome=index):
+                self.assertIn("var:colonial_at_100_months >= colonial_empire_completion_months", complete)
+                self.assertNotRegex(complete, r">= 60\b")
         decisions = _read(DECISIONS)
         for d in ("imperial_federation_act_iron_fist", "imperial_federation_act_civilizing_mission"):
             with self.subTest(decision=d):
@@ -1087,10 +1099,13 @@ class CompletionClocksTest(unittest.TestCase):
                 self.assertNotRegex(body, r"colonial_solidified_months(_value)? >= 36")
         self.assertRegex(self.values, r"(?s)colonial_solidified_months_value = \{\s*value = 0\s*if = \{\s*"
                                       r"limit = \{ has_variable = colonial_solidified_months \}")
-        tt = _loc()["je_colonial_empire_complete_tt"]
-        for sv in ("colonial_empire_completion_months", "colonial_empire_federation_months"):
-            self.assertIn(f"ScriptValue('{sv}')", tt, sv)
-        self.assertNotIn(".Var(", tt, "the completion tooltip reads the guarded counts")
+        loc = _loc()
+        for key, sv in (("je_colonial_empire_complete_tt", "colonial_empire_completion_months"),
+                        ("je_colonial_empire_act_iron_fist_tt", "colonial_empire_federation_months"),
+                        ("je_colonial_empire_act_civilizing_tt", "colonial_empire_federation_months")):
+            with self.subTest(key=key):
+                self.assertIn(f"ScriptValue('{sv}')", loc[key], sv)
+                self.assertNotIn(".Var(", loc[key], "the completion tooltips read the guarded counts")
 
     def test_the_clocks_show_in_the_top_band_only(self):
         m = re.search(r"### Row 4, in the top band only", self.body)

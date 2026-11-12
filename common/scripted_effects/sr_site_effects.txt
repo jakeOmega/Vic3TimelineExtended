@@ -211,18 +211,6 @@ sr_sites_refresh_players = {
 
 # ===== The global monthly step (sr_sites_on_actions.txt; no ROOT) =====
 sr_sites_global_monthly = {
-	# A save from before the record: build it from what countries carry
-	# (design § 7), once, then a grace of 45 days before a claim with no
-	# holder is released, so a founding event still open can be answered.
-	if = {
-		limit = { NOT = { has_global_variable = sr_sites_initialized } }
-		every_country = {
-			limit = { sr_has_space_colony = yes }
-			sr_sites_migrate_country = yes
-		}
-		set_global_variable = { name = sr_sites_initialized value = yes }
-		set_global_variable = { name = sr_sites_grace value = yes days = 45 }
-	}
 	# Colony fleets land first (simple and full; sr_colony_fleet_effects.txt), so
 	# the world's step syncs the colonies they founded; then the inbound record
 	# and the stage follow the month's landings.

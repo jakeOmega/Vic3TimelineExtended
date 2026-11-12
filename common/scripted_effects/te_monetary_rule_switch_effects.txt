@@ -1,0 +1,155 @@
+﻿# ============================================================================
+# Monetary policy: the banking rule switched from Full to Simplified (or
+# Disabled) mid-game
+# ============================================================================
+# A game rule can be changed mid-game, from the screen that changes country.
+# Under Simplified the banking entry stays, but te_mon_full_system is false and
+# te_monetary_monthly_update skips every step but the passive rate stack
+# (0, 0b, 1, 1d, 4, 5, 7, 9). A skipped step neither refreshes nor removes
+# what it applied while the rule was Full, so without this its modifiers would
+# stay at their last strength for the rest of the game and its variables at
+# their last value, read by steps that still run: step 7 subtracts te_inflation
+# and adds te_inflation_expected, step 5 prices te_monetisation_level and
+# te_fx_index, step 4 follows an anchor's rate, and the Demographics real rate,
+# the cycle's stance channel, the entry's stance-band modifiers
+# (je_banking.txt, declared on te_mon_stance_band) and the gold-standard laws
+# read the rest.
+#
+# te_monetary_settle_rule_switch runs first in te_monetary_monthly_update.
+# Each Full pulse marks the country (te_mon_ran_full). The first pulse without
+# the full system that finds the mark takes it off and:
+#
+#   1. Strips every managed modifier, by telling step 0b the home changed
+#      (te_mon_mod_home = -1): te_monetary_settle_modifier_home then strips the
+#      whole managed family from the country and the entry and zeroes the
+#      `_applied` bookkeeping, as for a lost entry. Step 9 re-adds
+#      te_monetary_rate_paid on this pulse, because it runs under every
+#      setting; the steps that add the rest do not run, so they stay off.
+#   2. Forgets the economic state the skipped steps own, so step 0 seeds it
+#      again on this pulse to exactly what a country that never ran the full
+#      system holds (the te_mon_full_system contract in
+#      te_monetary_triggers.txt): inflation, expectations and the band; the
+#      exchange rate and its counters; monetisation; the stance; a gold
+#      standard's suspension and defence clocks (a suspension the full system
+#      declared ends with it, so te_mon_is_on_gold holds again for the
+#      simplified gold-standard event, banking_cycle_events.58); and the
+#      anchor, so te_mon_is_anchored is false and step 4 derives the rate.
+#   3. Switches off the five External & Currency tools
+#      (banking_external_available needs the full system). Their monthly
+#      settlement is a skipped step, so an active tool would hold its points
+#      and its weekly bill would go on charging from the last cached sum; the
+#      Disable effects zero the bills and write the history marker.
+#
+# WHAT IT LEAVES, AND WHY (#1507):
+#   - Records and clocks only a skipped step or a full-system panel reads: the
+#     gold vault, peg confidence, swap-line draws, LOLR calls, the union's
+#     membership and lock, receivership's exit counter, the hyperinflation
+#     cooldown, the neutral rate. Nothing that runs under Simplified reads
+#     them, and if the rule goes back to Full they resume where they were,
+#     rather than rewarding a switch off and on.
+#   - Timed modifiers events put on the country (te_mon_peg_*, the currency
+#     reform's premium, the union exit premium and independence modifier):
+#     they run out on their own clock.
+#   - Amendments the dual mandate and inflation targeting: their mandate is
+#     read only by the dial (step 2), which nobody holds under Simplified.
+#   - Treaties: a currency peg or an imposed peg ends by itself, as its
+#     anchor must hold a dial (te_mon_can_be_anchor). A swap line, a lender of
+#     last resort and a debt receivership stay in force with their article
+#     modifiers until a signatory withdraws; their monetary mechanics are
+#     skipped steps. Monetary-union principles stay on a bloc that holds them
+#     (hidden from new picks); their bools are read only by skipped steps, but
+#     tiers 2 to 5 keep their cohesion per member. Both are left for the
+#     owner (docs/systems/mod_systems/game_rules.md).
+#
+# Simplified back to Full needs nothing: the skipped steps start again from the
+# neutral seeds. A country that never ran a Full pulse after this effect was
+# added carries no mark, so a save already switched before it loads keeps what
+# it had. Play-test: docs/testing/rules-off-midgame-playtest.md, "Banking:
+# Full to Simplified". Scope: country.
+te_monetary_settle_rule_switch = {
+	if = {
+		limit = { te_mon_full_system = yes }
+		if = {
+			limit = { NOT = { has_variable = te_mon_ran_full } }
+			set_variable = te_mon_ran_full
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_mon_ran_full }
+		remove_variable = te_mon_ran_full
+		te_monetary_leave_full_system = yes
+	}
+}
+
+# Steps 1 to 3 of the header above. Called only by te_monetary_settle_rule_switch,
+# before step 0, so step 0 seeds what step 2 forgets on the same pulse.
+te_monetary_leave_full_system = {
+	# 1. The managed modifiers: a changed home strips them all (step 0b).
+	if = {
+		limit = { has_variable = te_mon_mod_home }
+		set_variable = { name = te_mon_mod_home value = -1 }
+	}
+
+	# 2. The economic state, back to step 0's seeds.
+	te_mon_forget_variable = { VAR = te_inflation }
+	te_mon_forget_variable = { VAR = te_inflation_core }
+	te_mon_forget_variable = { VAR = te_inflation_expected }
+	te_mon_forget_variable = { VAR = te_inflation_noise }
+	te_mon_forget_variable = { VAR = te_cost_push }
+	te_mon_forget_variable = { VAR = te_inflation_band }
+	te_mon_forget_variable = { VAR = te_mon_dollarised }
+	te_mon_forget_variable = { VAR = te_fx_index }
+	te_mon_forget_variable = { VAR = te_fx_shadow }
+	te_mon_forget_variable = { VAR = te_fx_avg }
+	te_mon_forget_variable = { VAR = te_fx_shock }
+	te_mon_forget_variable = { VAR = te_fx_imported }
+	te_mon_forget_variable = { VAR = te_mon_overvaluation }
+	te_mon_forget_variable = { VAR = te_fx_devalued_months }
+	te_mon_forget_variable = { VAR = te_capital_controls_months }
+	te_mon_forget_variable = { VAR = te_mon_emergency_controls_months }
+	te_mon_forget_variable = { VAR = te_monetisation_level }
+	te_mon_forget_variable = { VAR = te_mon_deficit_pct }
+	te_mon_forget_variable = { VAR = te_mon_bond_support_months }
+	te_mon_forget_variable = { VAR = te_mon_stance_gap }
+	te_mon_forget_variable = { VAR = te_mon_stance_band }
+	te_mon_forget_variable = { VAR = te_mon_stance_months }
+	te_mon_forget_variable = { VAR = te_peg_suspended_months }
+	te_mon_forget_variable = { VAR = te_peg_defend_months }
+	te_mon_forget_variable = { VAR = te_mon_anchor_kind }
+
+	# 3. The External & Currency tools. Each Disable effect works on the entry,
+	# so only where there is one (under Disabled it has gone, and its
+	# modifiers with it).
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		if = {
+			limit = { banking_tool_restrict_inflows_active = yes }
+			banking_effect_cb_disable_restrict_inflows = yes
+		}
+		if = {
+			limit = { banking_tool_sterilize_inflows_active = yes }
+			banking_effect_cb_disable_sterilize_inflows = yes
+		}
+		if = {
+			limit = { banking_tool_foreign_borrowing_limits_active = yes }
+			banking_effect_cb_disable_foreign_borrowing_limits = yes
+		}
+		if = {
+			limit = { banking_tool_fx_surrender_active = yes }
+			banking_effect_cb_disable_fx_surrender = yes
+		}
+		if = {
+			limit = { banking_tool_emergency_import_financing_active = yes }
+			banking_effect_cb_disable_emergency_import_financing = yes
+		}
+	}
+	debug_log = "TE_MONETARY: [THIS.GetCountry.GetNameNoFormatting] left the full monetary system (banking rule switched) date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# Remove $VAR$ if it is set; step 0 seeds it again (te_monetary_init_variables).
+te_mon_forget_variable = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		remove_variable = $VAR$
+	}
+}

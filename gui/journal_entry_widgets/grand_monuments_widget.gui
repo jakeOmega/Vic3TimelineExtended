@@ -3526,6 +3526,9 @@ types grand_monuments_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_grand_monuments')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 		blockoverride "tab_content" {
 			block "te_gm_tab_layout" {
 				te_gm_overview_panel = {}

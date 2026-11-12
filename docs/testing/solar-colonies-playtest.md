@@ -443,9 +443,7 @@ reaches a milestone.
 6. **The AI.** In an observer run, no AI's stepper shows "(+…)": the AI stops at the cap. One left past it by a falling
    cap funds down to the cap within a few weeks.
 7. **An old save.** Retired with #1404: vanilla 1.15 loads no save from before the split (#1407), and each entry
-   declares both modifiers. A save from before #1404 holds added copies until the entry's strip
-   (`legacy_scaling_strip_space_race_<m>`, from its weekly pulse and the monthly cleanup) removes them; until then,
-   at most a week, a running entry's bonuses read double.
+   declares both modifiers. The old-save strip went too (#1429); nothing to check.
 
 ## Lunar colonization, build 1: technologies and the era-10 base (2026-10-29)
 
