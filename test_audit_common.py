@@ -25,8 +25,9 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 #   "comma":  tags split on commas, each stripped.
 #   "equal":  one tag, compared whole.
 #   "fixed":  the tag is written into the pattern.
-# The shared parser takes the union of these forms with the tag as a parameter:
-# for any tag, a comment some form took for that tag, and nothing else.
+# The shared parser's plain form is exactly the old plain forms. Its tagged form
+# agrees with every old form on every line in the repository, but not on every
+# shape: `TAGGED_DIVERGENCES` pins the shapes where it differs.
 _DATE = r"(?P<date>\d{4}-\d{2}-\d{2})"
 LEGACY = {
     "plain_lazy": (
@@ -146,6 +147,35 @@ EDGES = [
     "key: \"text\" # REVIEWED 2026-01-01 (long_tooltip): why\n",
 ]
 
+# Shapes where the shared tagged form differs from an audit's own, pinned so a
+# change to either is deliberate. None occurs in the repository, and no
+# migrated audit passes `tags`; they are settled when the tagged audits move
+# onto audit_common. (rule, comment, old parser takes it, shared one takes it),
+# for the tag `t_ag`.
+_A = "# REVIEWED 2026-01-01"
+_B = "# REVIEWED 2026-01-02 (t_ag): y"
+TAGGED_DIVERGENCES = [
+    # Two tagged comments on a line: the first decides in the shared parser; the
+    # stricter old forms skipped one that their pattern did not match.
+    ("tagged_word", f"{_A} (a, b): x {_B}", True, False),
+    ("tagged_lower", f"{_A} (a, b): x {_B}", True, False),
+    ("tagged_spaced", f"{_A} (a, b): x {_B}", True, False),
+    ("tagged_spaced", f"{_A} (other): x {_B}", True, False),
+    # A list naming the tag, which only the split and comma forms took.
+    ("tagged_word", f"{_A} (t_ag,): x", False, True),
+    ("tagged_word", f"{_A} (t_ag, other): x", False, True),
+    ("tagged_lower", f"{_A} (t_ag,): x", False, True),
+    ("tagged_lower", f"{_A} (t_ag, other): x", False, True),
+    ("tagged_spaced", f"{_A} (t_ag,): x", False, True),
+    ("tagged_spaced", f"{_A} (t_ag, other): x", False, True),
+    # Tabs inside the parentheses, which only the fixed form took.
+    ("tagged_split", f"{_A} (\tt_ag\t): x", False, True),
+    ("tagged_comma", f"{_A} (\tt_ag\t): x", False, True),
+    ("tagged_word", f"{_A} (\tt_ag\t): x", False, True),
+    ("tagged_lower", f"{_A} (\tt_ag\t): x", False, True),
+]
+
+
 def tags_in(lines) -> set[str]:
     found = set()
     for line in lines:
@@ -169,7 +199,9 @@ class AgreementTests(unittest.TestCase):
     def _check(self, rule: str, tags: list[str], exact: bool, lines=None):
         """Where the rule's parser took a comment, the shared one reads it the
         same. Where it did not, the shared one takes it only if another form
-        took it for that tag (the union), and with `exact`, not at all."""
+        took it for that tag, and with `exact`, not at all. Over the corpus
+        (the repository and `EDGES`); `TAGGED_DIVERGENCES` holds the shapes
+        outside it where the tagged forms differ."""
         diffs = []
         for line in self.lines if lines is None else lines:
             for tag in tags:
@@ -191,7 +223,7 @@ class AgreementTests(unittest.TestCase):
     def test_plain_audits_not_yet_migrated_agree_exactly_too(self):
         self._check("plain_greedy", [""], exact=True)
 
-    def test_tagged_forms_agree_or_widen_only_to_the_union(self):
+    def test_tagged_forms_agree_on_the_corpus_or_widen_to_another_form(self):
         for rule in ("tagged_split", "tagged_comma", "tagged_word", "tagged_lower", "tagged_spaced"):
             with self.subTest(rule=rule):
                 self._check(rule, self.tags, exact=False)
@@ -202,9 +234,9 @@ class AgreementTests(unittest.TestCase):
         the repository has."""
         self._check("tagged_split", self.tags, exact=True, lines=self.repo)
 
-    def test_nothing_outside_the_union(self):
-        """Every comment the shared parser takes, for any tag, some audit's
-        own parser took."""
+    def test_nothing_on_the_corpus_that_no_form_took(self):
+        """Every corpus comment the shared parser takes, for any tag, some
+        audit's own parser took."""
         extra = []
         for line in self.lines:
             for tag in [""] + self.tags:
@@ -220,6 +252,15 @@ class AgreementTests(unittest.TestCase):
             self.assertNotIn("re.compile(\n    r\"#\\s*REVIEWED", source, name)
             self.assertNotIn("_REVIEWED_RE", source, name)
             self.assertIn("audit_common", source, name)
+
+    def test_tagged_divergences_are_as_pinned(self):
+        for rule, comment, old, new in TAGGED_DIVERGENCES:
+            with self.subTest(rule=rule, comment=comment):
+                self.assertEqual(legacy_parse(rule, comment, "t_ag") is not None, old)
+                self.assertEqual(parse_reviewed(comment, ("t_ag",)) is not None, new)
+        # The plain form has none: a plain audit still skips a tagged comment
+        # and reads a later plain one.
+        self.assertEqual(parse_reviewed(f"{_A} (t_ag): x # REVIEWED 2026-01-02: y")["rationale"], "y")
 
     def test_the_corpus_has_both_forms(self):
         self.assertTrue(any(parse_reviewed(line) for line in self.lines))

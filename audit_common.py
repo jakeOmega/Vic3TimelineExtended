@@ -27,10 +27,12 @@ import re
 from dataclasses import dataclass, field
 from typing import Callable, Sequence
 
-# Both forms in one pattern. `tags` is None for the plain form. The tag list
-# takes the union of what the audits accepted before this module: names
+# Both forms in one pattern. `tags` is None for the plain form. The plain form
+# reads exactly as the audits' own patterns did. The tag list takes names
 # separated by spaces or commas, or one name with any whitespace around it
-# (`roster_membership_audit`'s form).
+# (`roster_membership_audit`'s form). The tagged half is not yet exactly any
+# old audit's: `test_audit_common.TAGGED_DIVERGENCES` names the shapes where it
+# differs, to be settled when the tagged audits move onto this module.
 REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*"
     r"(?:\((?P<tags>[\w ,]+|\s*\w+\s*)\)\s*)?"
@@ -54,10 +56,12 @@ def parse_reviewed(comment: str | None, tags: Sequence[str] = ()) -> dict | None
     names. `tag` in the result is `""` for the plain form, else the first
     listed name the audit takes.
 
-    `comment` may be a whole line: the pattern is searched for. As the audits'
-    own patterns did, the first comment of the plain form decides for the
-    plain form, and the first of the tagged form for the tagged one, so a
-    tagged comment naming another audit's tag suppresses nothing here.
+    `comment` may be a whole line: the pattern is searched for. The first
+    comment of the plain form decides for the plain form, as every plain
+    audit's pattern did. The first comment of the tagged form decides for the
+    tagged one, as the split-form audits did, so a tagged comment naming only
+    another audit's tag hides a later one on the same line (see
+    `test_audit_common.TAGGED_DIVERGENCES`).
     """
     if not comment or "REVIEWED" not in comment:
         return None
