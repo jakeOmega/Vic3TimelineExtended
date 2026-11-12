@@ -9,10 +9,11 @@ every high-tech building. `Tree` answers that from ModState's merged
 "Building Groups" and "Buildings": a group's parent, ancestors, descendants,
 the buildings directly in it, and the buildings its modifiers reach.
 
-`origin` compares the merged group with vanilla's: `vanilla` (untouched),
-`mod` (vanilla has no such group) or `mod-replaced` (a vanilla group a mod
-file redefines or injects into; `mod_definitions` gives each mod file's line
-and directive).
+`origin` says whose the merged group is: `vanilla` (untouched), `mod` (vanilla
+has no such group), `mod-injected` (a vanilla group every mod definition of
+which is an INJECT: vanilla's fields stay, the mod's are added or override) or
+`mod-replaced` (a vanilla group a mod file redefines, so vanilla's fields are
+gone unless restated). `definitions` reads each mod file's line and directive.
 """
 from __future__ import annotations
 
@@ -24,7 +25,9 @@ from party_catalog import field
 
 ENTITY_TYPE = "Building Groups"
 DB = "building_groups"
-VANILLA, MOD, MOD_REPLACED = "vanilla", "mod", "mod-replaced"
+VANILLA, MOD, MOD_INJECTED, MOD_REPLACED = "vanilla", "mod", "mod-injected", "mod-replaced"
+# The directives that add to an entry and keep what it had.
+INJECTS = frozenset({"INJECT", "TRY_INJECT", "INJECT_OR_CREATE"})
 REACH_NOTE = (
     "A building_group_<id>_* modifier applies to the buildings of the group and of every "
     "group below it (parent_group, after the mod's REPLACE / INJECT are applied)."
@@ -41,9 +44,12 @@ def _scalar(entity, name: str) -> Optional[str]:
 
 class Tree:
     def __init__(self, groups: dict, vanilla_groups: Optional[dict] = None,
-                 buildings: Optional[dict] = None):
+                 buildings: Optional[dict] = None, mod_definitions: Optional[dict] = None):
+        """`mod_definitions` is `definitions(mod_root)`: without it a vanilla
+        group the mod changed reads `mod-replaced` whatever the directive."""
         self.groups = groups or {}
         self.vanilla = vanilla_groups or {}
+        self.mod_definitions = mod_definitions or {}
         self.parent = {gid: _scalar(raw, "parent_group") for gid, raw in self.groups.items()}
         self.children: dict = {gid: [] for gid in self.groups}
         for gid, parent in self.parent.items():
@@ -67,6 +73,9 @@ class Tree:
     def origin(self, gid: str) -> str:
         if gid not in self.vanilla:
             return MOD
+        defs = self.mod_definitions.get(gid)
+        if defs:
+            return MOD_INJECTED if all(d["directive"] in INJECTS for d in defs) else MOD_REPLACED
         return VANILLA if self.vanilla[gid] == self.groups[gid] else MOD_REPLACED
 
     def row(self, gid: str) -> dict:
@@ -109,13 +118,16 @@ class Tree:
                 for bid in self.buildings.get(group, [])]
 
 
-def mod_definitions(mod_root: str, gid: str) -> list:
-    """Each mod file's definition of group `gid`: `{file, line, directive}`
+def definitions(mod_root: str) -> dict:
+    """{group: [{file, line, directive}]} for every group a mod file defines
     (`directive` None for a bare definition), read from
     `<mod_root>/common/building_groups` now."""
     base = os.path.join(mod_root, "common", DB)
     if not os.path.isdir(base):
-        return []
+        return {}
     scan = ext._scan_db(mod_root, DB, ext.list_files(base), [], ext.OURS)
-    return [{"file": f"common/{DB}/{rel}", "line": entry.line, "directive": entry.directive}
-            for rel, entry in scan.entries.get(gid, [])]
+    return {
+        gid: [{"file": f"common/{DB}/{rel}", "line": entry.line, "directive": entry.directive}
+              for rel, entry in lst]
+        for gid, lst in scan.entries.items()
+    }

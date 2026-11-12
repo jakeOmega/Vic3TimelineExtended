@@ -91,10 +91,10 @@ def _state():
     return tmp, root / "mod", state
 
 
-def _tree(state):
+def _tree(state, mod_root):
     return bgt.Tree(state.get_data("Building Groups"),
                     state.base_parsers["Building Groups"].data,
-                    state.get_data("Buildings"))
+                    state.get_data("Buildings"), bgt.definitions(str(mod_root)))
 
 
 class TreeTests(unittest.TestCase):
@@ -102,7 +102,7 @@ class TreeTests(unittest.TestCase):
     def setUpClass(cls):
         cls.tmp, cls.mod_root, cls.state = _state()
         cls.addClassCleanup(cls.tmp.cleanup)
-        cls.tree = _tree(cls.state)
+        cls.tree = _tree(cls.state, cls.mod_root)
 
     def test_parent_is_the_merged_value(self):
         # REPLACE moved bg_construction from bg_manufacturing.
@@ -114,7 +114,24 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(self.tree.origin("bg_heavy_industry"), "vanilla")
         self.assertEqual(self.tree.origin("bg_high_tech"), "mod")
         self.assertEqual(self.tree.origin("bg_construction"), "mod-replaced")
-        self.assertEqual(self.tree.origin("bg_power"), "mod-replaced")   # INJECT
+        # An INJECT keeps vanilla's fields: not "replaced".
+        self.assertEqual(self.tree.origin("bg_power"), "mod-injected")
+        self.assertEqual(bgt._scalar(self.tree.groups["bg_power"], "category"), "urban")
+
+    def test_origin_without_the_mod_files_falls_back_to_replaced(self):
+        tree = bgt.Tree(self.state.get_data("Building Groups"),
+                        self.state.base_parsers["Building Groups"].data)
+        self.assertEqual(tree.origin("bg_power"), "mod-replaced")
+        self.assertEqual(tree.origin("bg_heavy_industry"), "vanilla")
+        self.assertEqual(tree.origin("bg_high_tech"), "mod")
+
+    def test_an_inject_and_a_replace_of_one_group_is_replaced(self):
+        tree = bgt.Tree(self.state.get_data("Building Groups"),
+                        self.state.base_parsers["Building Groups"].data,
+                        mod_definitions={"bg_power": [
+                            {"file": "a.txt", "line": 1, "directive": "INJECT"},
+                            {"file": "b.txt", "line": 1, "directive": "REPLACE"}]})
+        self.assertEqual(tree.origin("bg_power"), "mod-replaced")
 
     def test_construction_efficiency_modifier_is_the_groups_own_flag(self):
         self.assertTrue(self.tree.row("bg_heavy_industry")["construction_efficiency_modifier"])
@@ -159,11 +176,12 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(tree.descendants("bg_a"), ["bg_b"])
         self.assertEqual(tree.ancestors("bg_c"), ["bg_gone"])
 
-    def test_mod_definitions_name_file_line_and_directive(self):
-        self.assertEqual(bgt.mod_definitions(str(self.mod_root), "bg_power"), [
+    def test_definitions_name_file_line_and_directive(self):
+        definitions = bgt.definitions(str(self.mod_root))
+        self.assertEqual(definitions["bg_power"], [
             {"file": "common/building_groups/00_file.txt", "line": 13, "directive": "INJECT"}])
-        self.assertEqual(bgt.mod_definitions(str(self.mod_root), "bg_heavy_industry"), [])
-        self.assertEqual(bgt.mod_definitions("/nonexistent", "bg_power"), [])
+        self.assertNotIn("bg_heavy_industry", definitions)
+        self.assertEqual(bgt.definitions("/nonexistent"), {})
 
 
 class HandlerTests(unittest.TestCase):
@@ -200,6 +218,7 @@ class HandlerTests(unittest.TestCase):
         })
         self.assertEqual(entries["bg_construction"]["origin"], "mod-replaced")
         self.assertEqual(entries["bg_construction"]["parent_group"], "bg_heavy_industry")
+        self.assertEqual(entries["bg_power"]["origin"], "mod-injected")
         self.assertIsNone(entries["bg_agriculture"]["parent_group"])
         self.assertEqual(entries["bg_agriculture"]["origin"], "vanilla")
 
@@ -270,7 +289,7 @@ class CommittedDataTests(unittest.TestCase):
                     "Buildings": str(REPO / "common" / "buildings")}
         cls.state = ModState(dict.fromkeys(mod_dirs, "/nonexistent"), mod_dirs,
                              vanilla_data=vanilla)
-        cls.tree = _tree(cls.state)
+        cls.tree = _tree(cls.state, REPO)
 
     def test_high_tech_sits_under_heavy_industry(self):
         self.assertEqual(self.tree.parent["bg_high_tech"], "bg_heavy_industry")
@@ -289,8 +308,10 @@ class CommittedDataTests(unittest.TestCase):
         origins = {gid: self.tree.origin(gid) for gid in self.tree.groups}
         self.assertEqual(origins["bg_manufacturing"], "vanilla")
         self.assertEqual(origins["bg_high_tech"], "mod")
-        self.assertEqual(origins["bg_power"], "mod-replaced")
-        self.assertEqual(set(origins.values()), {"vanilla", "mod", "mod-replaced"})
+        self.assertEqual(origins["bg_power"], "mod-injected")       # INJECT:bg_power
+        self.assertEqual(origins["bg_construction"], "mod-replaced")  # REPLACE:bg_construction
+        self.assertEqual(set(origins.values()),
+                         {"vanilla", "mod", "mod-injected", "mod-replaced"})
 
     def test_every_parent_is_a_known_group(self):
         for gid, parent in self.tree.parent.items():
