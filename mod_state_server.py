@@ -9877,6 +9877,7 @@ POST_LOAD_AUDITS = [
     ("prestige_good_roster_audit",    "prestige_good_roster_audit"),
     ("amendment_reachability_audit",  "amendment_reachability_audit"),
     ("ideology_lawgroup_audit",       "ideology_lawgroup_audit"),
+    ("roster_membership_audit",      "roster_membership_audit"),
     ("script_argument_audit",         "script_argument_audit"),
     ("modifier_duration_audit",       "modifier_duration_audit"),
     ("loc_script_value_audit",        "loc_script_value_audit"),

@@ -295,6 +295,18 @@ AUDITS: tuple[Audit, ...] = (
         tags=("ideology_lawgroup",),
     ),
     Audit(
+        "roster_membership_audit",
+        "A mod ship type with no `ai_ship_category` (required since vanilla 1.14.4), an unknown one, or "
+        "no fleet entity row; a ship modification no ship type lists in a slot, so it can never be "
+        "fitted; or a production method no production method group lists.",
+        where="trailing on the opening line of the unlisted modification or production method; a ship "
+              "type flag takes none",
+        tags=("roster_membership",),
+        note="Builds a small ModState from vanilla_parsed/. The fleet entity check reads the `SHIPS` "
+             "table of `scripts/generators/gen_fleet_entities.py`, and the generated blocks too where "
+             "gfx/ is on disk.",
+    ),
+    Audit(
         "pm_employment_audit",
         "A building where some valid production-method combination drives a profession's employment "
         "below zero.",
