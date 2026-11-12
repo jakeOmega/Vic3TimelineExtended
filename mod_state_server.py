@@ -2641,6 +2641,16 @@ def _validate_engine_coverage() -> dict:
     script_values = ms.get_data("Script Values") or {}
     script_values_set = set(script_values.keys())
 
+    # A scripted effect or trigger whose name ends in a modifier suffix
+    # (`un_veto_record_add`, `nd_log_doctrine_set`) is called as `name = yes`,
+    # which the walker below cannot tell from a boolean modifier line. Only
+    # that form is suppressed: `name = 5` is not a call, so a modifier that
+    # merely shares a scripted name is still checked (#1403).
+    scripted_call_names = (
+        set(ms.get_data("Scripted Effects") or {})
+        | set(ms.get_data("Scripted Triggers") or {})
+    )
+
     # Pre-compile catalog patterns for the suspicious-match check.
     catalog_pairs = []
     vocabularies = _vocabulary_index()
@@ -2717,6 +2727,9 @@ def _validate_engine_coverage() -> dict:
                 # scalars referenced in `multiplier =` / `limit = { X > 0 }`,
                 # not modifier names.
                 if key in script_values_set:
+                    continue
+                # A scripted effect or trigger call, not a modifier line.
+                if key in scripted_call_names and actual_val in ("yes", "no"):
                     continue
                 status, info = _classify_modifier_name(key, modifiers_set, catalog_pairs)
                 if status in ("engine", "pattern"):
