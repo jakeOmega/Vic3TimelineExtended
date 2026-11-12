@@ -115,6 +115,37 @@ class TestTripwire(unittest.TestCase):
             with self.subTest(change=change):
                 self.assert_trips({**SANE, **change}, why)
 
+    def test_sign_5_skips_a_census_whose_rise_is_mostly_migration(self):
+        """#1500: the deaths term floors for one census where arrivals swamp the base the year's deaths were counted
+        against. The three trips the observer games logged, at their figures: each rise is 97-102% migration."""
+        floored = {**SANE, "te_dg_rate_clamp_d": 1.0}
+        amhara = {**floored, "te_dg_walk_pop": 1_155_272.0, "te_dg_walk_pop_prev": 122_723.0,
+                  "te_dg_net_migration": 1_051_054.0, "te_dg_provinces": 19.0}
+        sachsen = {**floored, "te_dg_walk_pop": 2_552_270.0, "te_dg_walk_pop_prev": 87_533.0,
+                   "te_dg_net_migration": 2_453_762.0, "te_dg_provinces": 10.0}
+        nauru = {**floored, "te_dg_walk_pop": 17_911.0, "te_dg_walk_pop_prev": 1.0, "te_dg_net_migration": 17_437.0,
+                 "te_dg_provinces": 1.0}
+        # Amhara and Sachsen were merges (sign 3 stands aside); Nauru kept its one province but grew from one person
+        for state, prov_step in ((amhara, 1.0), (sachsen, 5.0), (nauru, 0.0)):
+            with self.subTest(people=state["te_dg_walk_pop"]):
+                self.assert_quiet(state, prov_step=prov_step)
+        # three quarters is the bound: just under it still trips, and so does a rise that is mostly births
+        rise = 1_000_000.0
+        base = {**floored, "te_dg_walk_pop": 1_000_000.0 + rise, "te_dg_walk_pop_prev": 1_000_000.0}
+        self.assert_quiet({**base, "te_dg_net_migration": 0.75 * rise})
+        self.assert_trips({**base, "te_dg_net_migration": 0.74 * rise}, 5)
+        self.assert_trips({**base, "te_dg_net_migration": 0.2 * rise}, 5)
+        # a fall in people is never skipped, whatever migration did
+        self.assert_trips({**floored, "te_dg_walk_pop": 900_000.0, "te_dg_walk_pop_prev": 1_000_000.0,
+                           "te_dg_net_migration": -90_000.0}, 5)
+        # the skip only stands sign 5 aside: the signs after it still read the state
+        self.assert_trips({**nauru, "te_dg_in_crowd": 5.1}, 6, prov_step=0.0)
+        # and it spends nothing: the next census, with the arrivals counted in, reads the state afresh
+        eng = self.run_check(nauru, prov_step=0.0)
+        eng.vars.update(te_dg_walk_pop=18_400.0, te_dg_walk_pop_prev=17_911.0, te_dg_net_migration=40.0)
+        eng.call(CHECK)
+        self.assertEqual(eng.vars.get("te_dg_chk_runaway"), 5)
+
     def test_the_rates_of_a_tiny_state_say_nothing(self):
         for change in ({"te_dg_e0": 0.5}, {"te_dg_rate_clamp_d": 1.0}, {"te_dg_in_crowd": 9.0}, {"te_dg_mb": 20.0}):
             with self.subTest(change=change):
