@@ -98,11 +98,14 @@ MEDIUM_TOTALS_BEFORE_RESHAPE = {
 }
 
 # Vulnerability and screening before vanilla 1.14.5's rescale (#1625): each mod
-# ship's hull (V, S), and its analogue's in vanilla 1.14.4. The hull now carries
-# that value times the analogue's current / old, rounded half up (header of
+# ship's hull (V, S), and its anchors' in vanilla 1.14.4. The hull now carries
+# that value times the anchor's current / old, rounded half up (header of
 # common/ship_types/extra_ship_types.txt), so the ships keep their relation to
 # each other and to their analogues. If vanilla rescales again, the test fails
-# until the values are re-derived.
+# until the values are re-derived. A ship's anchor is its ANALOGUE, except that
+# the troop ships take the capitals' V and the escorts' S (VS_ANCHOR): vanilla's
+# troopship did not move, and screening counts fleet-wide, so the transports
+# keep their relation to the mod's own capitals and escorts.
 VS_BEFORE_RESCALE = {
     "asw_destroyer": (50, 250), "guided_missile_ship": (50, 250),
     "nuclear_submarine": (5, 5), "stealth_attack_submarine": (5, 5), "autonomous_swarm_submarine": (5, 10),
@@ -117,8 +120,10 @@ VS_BEFORE_RESCALE = {
 }
 ANALOGUE_VS_1_14_4 = {
     "destroyer": (50, 150), "submarine": (5, 5), "aircraft_carrier": (100, 10),
-    "super_dreadnought": (200, 20), "light_cruiser": (10, 270), "troop_ship": (25, 5),
+    "super_dreadnought": (200, 20), "light_cruiser": (10, 270),
 }
+VS_ANCHOR = {ship: ("super_dreadnought", "light_cruiser")
+             for ship, analogue in ANALOGUE.items() if analogue == "troop_ship"}
 VS_STATS = ("ship_vulnerability_add", "ship_screening_add")
 
 _STATE = None
@@ -153,7 +158,8 @@ def _state():
         loc = dict(snapshot.localization)
         loc.update(state.localization)
         _STATE = (data["Ship Types"], data["Ship Modifications"], mod_types, mod_mods, loc)
-        _EXTRA.update(goods=data["Goods"], techs=data["Technologies"])
+        _EXTRA.update(goods=data["Goods"], techs=data["Technologies"],
+                      vanilla_techs={n: _body(v) for n, v in vanilla["Technologies"].items()})
     return _STATE
 
 
@@ -190,7 +196,15 @@ def _utility_slots(ship):
 
 def _modifier(entity):
     block = _body(entity.get("modifier")) or {}
-    return {k: float(_body(v)) for k, v in block.items() if not isinstance(_body(v), dict)}
+    blocks = [_body(b) for b in block] if isinstance(block, list) else [block]  # INJECTed techs carry two
+    out = {}
+    for b in blocks:
+        for k, v in b.items():
+            try:
+                out[k] = out.get(k, 0.0) + float(_body(v))
+            except (TypeError, ValueError):  # a block, or a boolean modifier
+                continue
+    return out
 
 
 def _slot(ship, slot):
@@ -473,14 +487,14 @@ class TestShipUtilities(unittest.TestCase):
 
     def test_vulnerability_and_screening_follow_the_analogues_rescale(self):
         """Vanilla 1.14.5 rescaled vulnerability and screening by about x0.56;
-        each mod hull keeps its pre-rescale relation to its analogue (#1625)."""
+        each mod hull keeps its pre-rescale relation to its anchor (#1625)."""
         types, _, _, _, _ = _state()
         self.assertEqual(set(VS_BEFORE_RESCALE), set(ANALOGUE))
         for ship, before in VS_BEFORE_RESCALE.items():
-            analogue = ANALOGUE[ship]
-            now = _modifier(types["ship_type_" + analogue])
-            for stat, old, anchor_old in zip(VS_STATS, before, ANALOGUE_VS_1_14_4[analogue]):
-                want = int(old * now.get(stat, 0.0) / anchor_old + 0.5)
+            anchors = VS_ANCHOR.get(ship, (ANALOGUE[ship],) * 2)
+            for i, (stat, old, anchor) in enumerate(zip(VS_STATS, before, anchors)):
+                now = _modifier(types["ship_type_" + anchor]).get(stat, 0.0)
+                want = int(old * now / ANALOGUE_VS_1_14_4[anchor][i] + 0.5)
                 with self.subTest(ship=ship, stat=stat):
                     self.assertEqual(_modifier(types["ship_type_" + ship]).get(stat, 0.0), want)
 
@@ -498,14 +512,24 @@ class TestShipUtilities(unittest.TestCase):
     def test_no_module_or_technology_on_the_old_screening_scale(self):
         """Flat screening outside the hulls follows the light cruiser's rescale
         (270 -> 150): the utilities' 200 became 111, Unmanned Aerial Vehicles'
-        50 became 28, the Swarm Coordination Vessel's high guns' 100 became 56."""
+        50 became 28, the Swarm Coordination Vessel's high guns' 100 became 56.
+        Pins every mod module and every technology the mod adds or changes that
+        carries ship_screening_add, so a new one has to be sized on this scale."""
         _, mods, _, mod_mods, _ = _state()
         want = {"utility_mod_dew_point_defense": 111, "utility_mod_aegis_air_defense": 111,
                 "ship_mod_swarm_coordination_vessel_guns_high": 56}
         have = {m: _modifier(mods[m])["ship_screening_add"] for m in sorted(mod_mods)
                 if "ship_screening_add" in _modifier(mods[m])}
         self.assertEqual(have, want)
-        self.assertEqual(_modifier(_EXTRA["techs"]["unmanned_aerial_vehicles"]).get("ship_screening_add"), 28)
+        techs, vanilla_techs = _EXTRA["techs"], _EXTRA["vanilla_techs"]
+        have = {}
+        for name, tech in techs.items():
+            value = _modifier(tech).get("ship_screening_add")
+            vanilla = _modifier(vanilla_techs[name]).get("ship_screening_add") if name in vanilla_techs else None
+            if value is not None and value != vanilla:
+                have[name] = value
+        self.assertEqual(have, {"unmanned_aerial_vehicles": 28})
+
 
 if __name__ == "__main__":
     unittest.main()
