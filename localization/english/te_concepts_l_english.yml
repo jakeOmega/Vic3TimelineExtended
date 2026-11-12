@@ -3180,7 +3180,7 @@
  trait_predictive_logistics_desc:0 "This commander uses predictive logistics systems to enhance supply chain management and increase command capacity."
  trait_swarm_technology:0 "Swarm Technology Commander"
  trait_swarm_technology_desc:0 "This commander has mastered autonomous swarm technology, vastly expanding effective command capacity."
- tropical_disease_public_health_modifier_desc:0 "A coordinated public health response has mobilized medical resources against climate-driven disease outbreaks, containing mortality while straining the [concept_sol]."
+ tropical_disease_public_health_modifier_desc:0 "A coordinated public health response has mobilized medical resources against climate-driven disease outbreaks, containing mortality."
  tropical_disease_research_modifier_desc:0 "Medical researchers are studying climate-driven diseases, boosting technological advancement but at the cost of resources and ongoing mortality."
  tropical_disease_spread_modifier_desc:0 "Tropical diseases are spreading into new regions as rising temperatures create habitats for disease-carrying insects. Mortality is rising and the population is suffering."
  ubi_expansion_modifier:0 "UBI Expansion"

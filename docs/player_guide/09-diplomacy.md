@@ -348,6 +348,8 @@ the leader has researched adds a slot: Intergovernmental Organizations (era 6),
 Containerization (era 8), Globalization (era 9) and Universal Digital Identity
 (era 11). The slots are counted, not tied to positions, so a small bloc whose
 leader has two of the technologies fills its third and fourth slots with them.
+A country founding a bloc can spend one more mandate on principles at
+formation for each of the four it has researched.
 The panel shows all eight slots from the start and locks the ones above the
 bloc's count. Hover a locked slot to see the count it needs, the count the bloc
 has, and a tick or a cross for each rank condition and each slot technology.

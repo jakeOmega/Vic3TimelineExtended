@@ -1,0 +1,66 @@
+﻿# The formation_mandates self-check's readings
+# (common/on_actions/te_pb_formation_selfcheck_on_actions.txt), stored as
+# global variables so the debug_log line can print them from any scope.
+te_pb_chk_formation_add_g = { value = global_var:te_pb_chk_formation_add }
+te_pb_chk_formation_count_g = { value = global_var:te_pb_chk_formation_count }
+te_pb_chk_formation_levels_g = { value = global_var:te_pb_chk_formation_levels }
+te_pb_chk_formation_total_g = {
+	value = global_var:te_pb_chk_formation_count
+	add = global_var:te_pb_chk_formation_levels
+}
+
+# Country scope: the principle levels the country's bloc holds, from the
+# total_used_principle_levels trigger (a ladder; 12 means 12 or more). The
+# formation mandates are spent on principles when the bloc is founded, so the
+# self-check counts these beside the mandates left unspent.
+te_pb_chk_bloc_principle_levels = {
+	value = 0
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 1 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 2 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 3 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 4 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 5 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 6 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 7 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 8 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 9 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 10 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 11 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { total_used_principle_levels >= 12 } }
+		add = 1
+	}
+}
