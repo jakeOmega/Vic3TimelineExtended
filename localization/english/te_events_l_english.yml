@@ -1105,6 +1105,7 @@
  decolonization_events.22.t:0 "What the Empire Left"
  decolonization_events.3.a:0 "Withdraw our forces and recognize independence."
  decolonization_events.3.b:0 "Hold the line."
+ decolonization_events.3.b_uprising_tt:0 "[SCOPE.sCountry('rebellious_subject').GetName] opens a war of independence against us."
  decolonization_events.3.c:0 "Grant independence with conditions."
  decolonization_events.3.d:0 "Armed groups in [SCOPE.sCountry('rebellious_subject').GetName] have begun attacking the officials and outposts of our administration there. They want independence, and they are no longer waiting to negotiate for it. Our officials there have asked for soldiers to protect them."
  decolonization_events.3.f:0 "In the offices our administration keeps in [SCOPE.sCountry('rebellious_subject').GetName], a clerk kept the register of outposts. Each outpost had a line: its name, the officer in charge, the number of men. When a report came in that one had been attacked, he wrote the date in the margin of its line. When one was abandoned, he drew a line through it and wrote the date again. In the afternoons he copied the day's entries onto a second sheet for the courier to the capital, and then went back to the reports that had come in while he was copying."

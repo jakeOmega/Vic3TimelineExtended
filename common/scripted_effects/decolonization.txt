@@ -289,6 +289,77 @@ decol_mark_former_colony = {
 	decol_young_state_reset = yes
 }
 
+# A country just become independent leaves every play and war in which it
+# supports its former overlord (1.15 leave_plays_supporting; a war it leads
+# itself stays). From on_become_independent. Every mod path that frees a
+# subject sets former_overlord (decol_mark_former_colony) before its
+# make_independent, so the variable names the overlord just left; a release
+# through vanilla's actions sets it too (te_construction_market_on_actions.txt).
+# Whether make_independent already does this is unread (vanilla_1_15_prep.md
+# C21); the self-check reads it: a shared war seen here means it does not.
+# Scope: country (the former subject)
+decol_leave_former_overlord_plays = {
+	if = {
+		limit = {
+			is_subject = no
+			var:former_overlord ?= { is_country_alive = yes }
+		}
+		var:former_overlord = { save_scope_as = decol_freed_from }
+		# Self-check (docs/testing/colonial-wars-playtest.md), once a game, only
+		# when we still fight beside the former overlord: the wars we share
+		# with it before and after.
+		if = {
+			limit = { NOT = { has_global_variable = te_selfcheck_decol_leave_plays } }
+			decol_count_wars_beside_former_overlord = { NAME = decol_shared_wars_before }
+		}
+		leave_plays_supporting = scope:decol_freed_from
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_selfcheck_decol_leave_plays }
+				var:decol_shared_wars_before ?= 0
+			}
+			remove_variable = decol_shared_wars_before
+		}
+		else_if = {
+			limit = {
+				NOT = { has_global_variable = te_selfcheck_decol_leave_plays }
+				has_variable = decol_shared_wars_before
+			}
+			set_global_variable = te_selfcheck_decol_leave_plays
+			decol_count_wars_beside_former_overlord = { NAME = decol_shared_wars_after }
+			if = {
+				limit = { var:decol_shared_wars_after = 0 }
+				debug_log = "TE_SELF_CHECK OK decol_leave_plays country=[THIS.GetCountry.GetTagName] before=[THIS.Var('decol_shared_wars_before').GetValue|0] after=0 (make_independent left us in the former overlord's wars; leave_plays_supporting took us out) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN decol_leave_plays country=[THIS.GetCountry.GetTagName] before=[THIS.Var('decol_shared_wars_before').GetValue|0] after=[THIS.Var('decol_shared_wars_after').GetValue|0] (still beside the former overlord after leave_plays_supporting: read its wars a week later before taking the fallback in docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_variable = decol_shared_wars_before
+			remove_variable = decol_shared_wars_after
+		}
+	}
+}
+
+# The wars we fight in beside scope:decol_freed_from (it is in them and not
+# our enemy there), counted into variable $NAME$ on us.
+# Scope: country; expects scope:decol_freed_from
+decol_count_wars_beside_former_overlord = {
+	save_scope_as = decol_freed_country
+	set_variable = { name = $NAME$ value = 0 }
+	every_scope_war = {
+		limit = {
+			is_war_participant = scope:decol_freed_from
+			NOT = {
+				any_war_participant = {
+					this = scope:decol_freed_country
+					has_war_with = scope:decol_freed_from
+				}
+			}
+		}
+		scope:decol_freed_country = { change_variable = { name = $NAME$ add = 1 } }
+	}
+}
+
 # The young-state events (.4, .7, .16, .17, .18, .21) each fire once per
 # independence (owner, 2026-11-10). Their 10-year cooldown inside the 20-year
 # recently_decolonized window let each fire twice, and a second "the euphoria
