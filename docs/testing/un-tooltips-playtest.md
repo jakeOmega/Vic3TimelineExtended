@@ -136,3 +136,18 @@ The four #1213 audits went into CI with their backlog fixed. Three UN changes re
 | **When it arrives.** Let an AI member propose a resolution and don't vote. | No vote event in the first eight months; it arrives in the ninth, with the chamber's lean figures current. Voting in the chamber before then means it never arrives. | It never arrives: `scope:un_resolution` didn't reach the event from the monthly update (the saved scope is set just above the send, as the old month 9 and 11 re-send had it). |
 | **Letting it time out.** With auto-pause on events off, let it expire. | The chamber still shows us as not having voted; no vote in favor was cast. | A yes vote on the record: the engine ignored `default_option` on a triggered option (`trigger = { is_ai = no }`); drop the option's trigger, since `ai_chance = { base = 0 }` already keeps the AI off it. |
 | **Once a resolution.** Decide later, then let the session run to month 12 without voting. | The event does not come back; the chamber's buttons still take a vote until the results. | |
+
+## The sanctions enforcer's choice (2026-11-12)
+
+When sanctions carry, `un_vote.2` makes the proposer the enforcer and, three months on, asks it how strictly to
+enforce them (`un_events.5`, Cargo Under Seal). Its trigger reads the enforcer modifier and the target's regime, both
+written in the block that queued it, so on the day it was queued the trigger was false, and a delayed event whose
+trigger is false when queued seems to be dropped (#1596). It now waits in the hidden `un_events.43`, which has no
+trigger and opens `un_events.5` on the day if the regime still stands. Found the UN with `event te_debug_un.1`, then as
+a major power table International Sanctions against a rival and let them carry.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The choice arrives.** Wait 90 days after the results. | Cargo Under Seal, naming the sanctioned country, with Enforce, Partial compliance and Quietly profit. Choosing Enforce gives Strict Sanctions Enforcement. | Nothing: check in the console that `un_events.43` ran (it opens nothing if the enforcer modifier or the target's `un_sanctions_target_on` is gone). A blank country name: `scope:sanctioned_country` did not ride from `un_vote.2` through the relay. |
+| **Once a regime.** Answer it, then wait out the regime. | No second Cargo Under Seal for the same regime. | A second copy: something other than `un_vote.2` queues `un_events.43` or `un_events.5` (`test_un_lift_sanctions.py` pins one site each). |
+| **A lifted regime.** Carry sanctions, then press Lift Ours (Programmes and Conventions) within 90 days. | No Cargo Under Seal. | It arrives: the relay's limit no longer restates `un_events.5`'s trigger. |
