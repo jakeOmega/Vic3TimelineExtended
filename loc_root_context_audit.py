@@ -1,43 +1,63 @@
-"""Flag a loc key whose country root is wrong for a context that renders it (#319).
+"""Flag a loc key whose country root doesn't fit a context that renders it (#319).
 
 The same loc key can be drawn from places with different data roots. Script
 builds a journal entry's `status_desc` in the entry's scope, where the country
 is `ROOT.GetCountry`; a `.gui` widget evaluates its text in the widget's data
 context, where the country is `Country` (the one its mount supplies) or
-`JournalEntry.GetCountry`. A key written for one and reached from the other
-renders blank, or shows the wrong country's figure, and no log line names the
-key. A key's own text doesn't say where it renders: it gets there through a
-`$KEY$` splice, a key named in `SelectLocalization` or `AddLocalizationIf`, or
-as a `customizable_localization` entry's `localization_key` behind a
-`GetCustom('entry')` call. #317 and #318 shipped ten such keys between them,
-three of them with their own text unchanged, pulled into a widget by a new
-parent.
+`JournalEntry.GetCountry`. A key's own text doesn't say where it renders: it
+gets there through a `$KEY$` splice, a key named in `SelectLocalization` or
+`AddLocalizationIf`, or as a `customizable_localization` entry's
+`localization_key` behind a `GetCustom('entry')` call. #317 and #318 shipped
+ten keys on a root from the other context, three of them with their own text
+unchanged, pulled into a widget by a new parent, and no log line names such a
+key.
 
 The contexts, and what is flagged in each
 -----------------------------------------
+widget          The keys any `gui/**/*.gui` file names: a `text`, `tooltip` or
+                `raw_text`, a quoted key inside an expression, a `GetCustom`
+                entry's keys. Every file counts, an overridden vanilla window
+                as much as a mod panel. Flagged (`script_root_in_widget`): a
+                `ROOT.`, `SCOPE.` or `THIS.` read. A widget has no script
+                scope, and the value renders blank (`scripting_best_
+                practices.md` § "Moving a Loc Key From `status_desc` Into a
+                Widget Changes Its Accessor Root"); read `Country`
+                (`gui_modding_guide.md` gotcha #45). Not flagged: a `PREV.`
+                read (no mod loc has one) and a `Scope.` read, which is a
+                GUI data type and not the script root `SCOPE.`.
 entry text      The keys a journal entry's `status_desc` block names (`desc =`
                 at any depth), and a scripted button's `name` and `desc`.
                 Flagged (`widget_root_in_entry_text`): a `JournalEntry.` or
-                `Country.` read. Vanilla's own keys there read `ROOT`, `SCOPE`
-                and `GetPlayer` and nothing else (the 82 of its 187
-                `status_desc` keys and the 111 of its 524 button keys that
-                read a root, in the 1.15 snapshot), so those are the proven
-                roots; read the country as `ROOT.GetCountry`.
-widget          The keys any `gui/**/*.gui` file names: a `text`, `tooltip` or
-                `raw_text`, a quoted key inside an expression, a `GetCustom`
-                entry's keys. Flagged (`script_root_in_widget`): a `ROOT.`,
-                `SCOPE.` or `THIS.` read. A widget has no script scope; read
-                `Country` (`gui_modding_guide.md` gotcha #45).
+                `Country.` read. This half is a convention, not a known
+                failure: nobody has seen such a read come out blank. The
+                proven root there is `ROOT.GetCountry` (and `SCOPE`,
+                `GetPlayer`): none of the 215 keys vanilla's `status_desc`
+                blocks name, and none of its 539 button keys, reads
+                `JournalEntry` or `Country` (1.15 snapshot). Against a
+                failure for `JournalEntry`: the status line falls back to
+                `<je>_status`, which is drawn in the same slot, and vanilla
+                reads `JournalEntry` in 22 of those. `Country` has no such
+                support (no vanilla `_status` key reads it). Keeping to the
+                proven root costs nothing and keeps a key shared with a
+                widget free of both. `docs/testing/
+                vanilla-panels-other-jes-playtest.md` row 16 is the check
+                that would confirm or drop the `JournalEntry` half.
 public panel    The keys another country's panel renders of a public tab
                 (National Info; `Tab.public` in `gen_te_systems_window.py`),
                 by `gui_test_helpers.panel_loc_keys`, which leaves out what
                 sits under `te_own_country_only`. Flagged: a `JournalEntry`
                 read (`entry_read_on_public_panel`: another country has no
                 entry in reach, gotcha #35) and a read of the player
-                (`player_read_on_public_panel`) unless the key is in
-                `WORLD_LOC` in `test_te_system_tab_bodies.py`. These are that
-                file's `BindingTest` rules for loc, restated here so a reload
-                reports them too. Fix by `te_rebind_country.py <tab>`.
+                (`player_read_on_public_panel`: the panel would show the
+                player's figure) unless the key is in `WORLD_LOC` in
+                `test_te_system_tab_bodies.py`. These are that file's
+                `BindingTest` rules for loc. **The CLI and CI look at this
+                context; a reload does not** (`regenerate()`): walking the
+                tabs' types costs more than the rest of the audit, and
+                `BindingTest` holds the same rule in CI's test step. If the
+                tab registry or `WORLD_LOC` can't be imported, the context is
+                left out and the output says so. Fix by
+                `te_rebind_country.py <tab>`.
 
 Every read is looked for inside the value's `[...]` expressions only, so
 "the richest Country." in prose is not one.
@@ -54,7 +74,8 @@ entry frame     A journal entry's implicit keys (`<je>`, `<je>_reason`,
                 (`JOURNAL_ENTRY_PROGRESSBAR_FROM_ZERO`) and in every progress
                 bar's `[JournalEntry.GetCurrentBarProgress(
                 ScriptedProgressBar.Self)]`; it reads `ROOT` and `SCOPE` there
-                too, and `Country` in eight. No root can be called wrong.
+                too, and `Country` in eight `_goal` and `_reason` keys. No
+                root can be called wrong.
 scripted GUI    The keys a scripted GUI's own `custom_tooltip` lines name
 tooltip         (`common/scripted_guis/`), which a widget renders through
                 `ExecuteTooltip`. Script builds the text, so `ROOT`, `SCOPE`
@@ -98,6 +119,12 @@ and fails `--strict`.
 No game install is needed. A scan that finds no loc file or no `.gui` file
 raises, so a wrong path can't pass as clean.
 
+Cost, measured on the shared 4-core cloud container: the reload entry about
+1.4 s, half of it reading the English loc through
+`gui_test_helpers.loc_index` and most of the rest every `.gui` file, so it is
+not one of the post-load entries that finish well under a second; the CLI's
+full run about 4.3 s, the public-panel context being the difference.
+
 Report: docs/engine/loc_root_context_report.md. Registered in POST_LOAD_AUDITS.
 """
 from __future__ import annotations
@@ -126,9 +153,11 @@ PLAYER_READ_ON_PUBLIC = "player_read_on_public_panel"
 TAGGABLE = frozenset({WIDGET_ROOT_IN_ENTRY, SCRIPT_ROOT_IN_WIDGET})
 
 WHY = {
-    WIDGET_ROOT_IN_ENTRY: "a widget's root, in text script builds (a `status_desc`, a scripted button): read "
-                          "`ROOT.GetCountry` there, or split the key",
-    SCRIPT_ROOT_IN_WIDGET: "a script root, in text a widget renders: read `Country` there, or split the key",
+    WIDGET_ROOT_IN_ENTRY: "a widget's root in a `status_desc` key or a scripted button's `name` or `desc`, where "
+                          "it is unproven (vanilla never reads it there; not known to fail): use the proven "
+                          "root, `ROOT.GetCountry…`, or split the key",
+    SCRIPT_ROOT_IN_WIDGET: "a script root in a key a widget renders; a widget has no script scope and the value "
+                           "renders blank: read `Country` there, or split the key",
     ENTRY_READ_ON_PUBLIC: "a journal entry read on a public tab: another country's panel has no entry in reach",
     PLAYER_READ_ON_PUBLIC: "a read of the player on a public tab: another country's panel would show the "
                            "player's figure (a world read goes in `WORLD_LOC`)",
@@ -156,7 +185,8 @@ class Flag:
     line: int
     reads: tuple[str, ...]
     path: tuple[str, ...] = ()
-    """Entry text and widget: where the first key is named, then each key down to this one."""
+    """Where the first key is named, then each key down to this one (a public
+    panel's: in the first of its tabs)."""
     tabs: tuple[str, ...] = ()
     """Public panel: the tabs whose panel renders the key."""
     also_sgui: bool = False
@@ -177,6 +207,8 @@ class AuditResult:
     reach: dict[str, int] = field(default_factory=dict)
     """Context -> the loc keys it renders."""
     public_tabs: int = 0
+    public_note: str = ""
+    """Why the public-panel context was left out of this run; "" when it was looked at."""
 
     @property
     def failing(self) -> int:
@@ -293,14 +325,14 @@ class Reach:
     text: its `$KEY$` splices, quoted names and GetCustom keys come out, and
     go no further."""
 
-    def __init__(self, loc, custom):
-        self.loc, self.custom = loc, custom
+    def __init__(self, loc, custom, own=True):
+        self.loc, self.custom, self.own = loc, custom, own  # own: as gui_test_helpers.loc_closure's
         self._blank = dict.fromkeys(loc, "")
 
     def step(self, key: str) -> set[str]:
         self._blank[key] = self.loc[key]
         try:
-            return h.loc_closure({key}, self._blank, custom=self.custom) - {key}
+            return h.loc_closure({key}, self._blank, own=self.own, custom=self.custom) - {key}
         finally:
             self._blank[key] = ""
 
@@ -365,17 +397,36 @@ def _is_repo(root: str) -> bool:
     return os.path.realpath(root) == os.path.realpath(h.REPO)
 
 
-def repo_public_panels() -> dict[str, set[str]]:
-    """Each public tab and the types National Info's mount for another country
-    draws for it, from the window's registry."""
-    from scripts.generators import gen_te_systems_window as gen
-    return {t.key: set(gen.ni_types(t)) for t in gen.TABS if t.public}
+def repo_public_context() -> tuple[dict[str, set[str]], set[str], str]:
+    """(tabs, world reads, why not): each public tab with the types National
+    Info's mount for another country draws for it, from the window's
+    registry, and the loc keys that are world reads, BindingTest's own list.
+    Where either can't be imported (te_rebind_country.py guards the same
+    import), no tab, and the reason, which the output prints."""
+    try:
+        from scripts.generators import gen_te_systems_window as gen
+        from test_te_system_tab_bodies import WORLD_LOC
+    except ImportError as exc:
+        return {}, set(), (f"the tab registry or `WORLD_LOC` could not be imported ({exc}); "
+                           f"`BindingTest` still holds the rule")
+    return {t.key: set(gen.ni_types(t)) for t in gen.TABS if t.public}, set(WORLD_LOC), ""
 
 
-def repo_world_loc() -> set[str]:
-    """The loc keys that are world reads: BindingTest's own list."""
-    from test_te_system_tab_bodies import WORLD_LOC
-    return set(WORLD_LOC)
+def public_seeds(names, types, templates, loc, custom) -> dict[str, str]:
+    """Each key the parts of the named types another country's panel draws
+    name, with where: panel_loc_keys's roots (gui_test_helpers.panel_view's
+    open types less their skipped parts, then the templates they use)."""
+    view = h.panel_view(set(names), types, templates)
+    out: dict[str, str] = {}
+    drawn = [(types[name], h.unguarded(types[name].body, view.skip[name])) for name in sorted(view.open)]
+    drawn += [(templates[t], templates[t].body) for t in sorted(view.templates)]
+    for td, body in drawn:
+        lines = body.split("\n")
+        for key in sorted(h.gui_keys(body, loc, own=False, custom=custom)):
+            token = re.compile(rf"(?<![\w.\-]){re.escape(key)}(?![\w.\-])")
+            at = next((i for i, line in enumerate(lines) if token.search(line)), None)
+            out.setdefault(key, f"{td.path}:{td.line + at}" if at is not None else f"{td.path} ({td.name})")
+    return out
 
 
 def _fresh():
@@ -387,15 +438,17 @@ def _fresh():
 def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> AuditResult:
     """Run the audit over a mod tree. `public_panels` ({tab: type names}) and
     `world_loc` (keys) default to the repo's own when the tree is the repo,
-    and to none for any other tree."""
+    and to none for any other tree. An empty `public_panels` leaves the
+    public-panel context out, and its cost with it (regenerate() does)."""
     if mod_path is None:
         from path_constants import mod_path as _default
         mod_path = _default
     root = str(mod_path)
+    note = ""
     if public_panels is None:
-        public_panels = repo_public_panels() if _is_repo(root) else {}
-    if world_loc is None:
-        world_loc = repo_world_loc() if _is_repo(root) else set()
+        public_panels, repo_world, note = repo_public_context() if _is_repo(root) else ({}, set(), "")
+        world_loc = repo_world if world_loc is None else world_loc
+    world_loc = set() if world_loc is None else world_loc
     _fresh()
 
     index = h.loc_index(os.path.join(root, LOC_DIR), root)
@@ -417,7 +470,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
     widget = reach.closure(gui_seeds)
     sgui = reach.closure(sgui_seeds)
     result = AuditResult(reach={ENTRY: len(entry), FRAME: len(reach.closure(frame_seeds)), WIDGET: len(widget),
-                                SGUI: len(sgui)}, public_tabs=len(public_panels))
+                                SGUI: len(sgui)}, public_tabs=len(public_panels), public_note=note)
     tags = _tags(root)
 
     def flag(kind, key, reads, **more):
@@ -438,6 +491,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
 
     public: set[str] = set()
     found: dict[tuple[str, str], tuple[list[str], list[str]]] = {}
+    types = templates = None
     if public_panels:
         types, templates = h.mod_types(root), h.mod_templates(root)
         for tab in sorted(public_panels):
@@ -453,8 +507,13 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
                     reads.append(f.what)
                 if tab not in tabs:
                     tabs.append(tab)
+    walked: dict[str, tuple[dict, dict]] = {}  # tab -> its seeds and their closure, built only for a flag
     for (kind, key), (reads, tabs) in sorted(found.items()):
-        flag(kind, key, tuple(reads), tabs=tuple(tabs))
+        if tabs[0] not in walked:
+            seeds = public_seeds(public_panels[tabs[0]], types, templates, loc, custom)
+            walked[tabs[0]] = (seeds, Reach(loc, custom, own=False).closure(seeds))
+        seeds, parent = walked[tabs[0]]
+        flag(kind, key, tuple(reads), tabs=tuple(tabs), path=_path(key, parent, seeds) if key in parent else ())
     result.reach[PUBLIC] = len(public)
 
     flagged = {f.key for f in result.flags if f.kind in TAGGABLE}
@@ -465,10 +524,10 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
 
 def _describe(f: Flag) -> str:
     reads = ", ".join(f"`{r}`" for r in f.reads)
+    where = "reached by " + " → ".join(f.path[:1] + tuple(f"`{k}`" for k in f.path[1:])) if f.path else ""
     if f.tabs:
-        where = "rendered by " + ", ".join(f.tabs) + (f": `python3 scripts/analysis/te_rebind_country.py {f.tabs[0]}`")
-    else:
-        where = "reached by " + " → ".join(f.path[:1] + tuple(f"`{k}`" for k in f.path[1:]))
+        where = (f"rendered by {', '.join(f.tabs)}" + (f", {where}" if where else "")
+                 + f": `python3 scripts/analysis/te_rebind_country.py {f.tabs[0]}`")
     note = ("; also a scripted GUI's tooltip key, where a script root is right, so split it"
             if f.also_sgui and f.kind == SCRIPT_ROOT_IN_WIDGET else "")
     return f"`{f.key}` reads {reads} ({f.kind}); {where}{note}"
@@ -483,7 +542,7 @@ def render_report(result: AuditResult, reach: bool = False) -> str:
         "Auto-generated by `loc_root_context_audit.py` on every `POST /reload` of",
         "the mod state server. Do not hand-edit.",
         "",
-        "Flagged: a loc key whose country root is wrong for a context that renders",
+        "Flagged: a loc key whose country root doesn't fit a context that renders",
         "it, through `$KEY$` splices, keys named in `SelectLocalization` and",
         "`AddLocalizationIf`, and `GetCustom` entries.",
         "",
@@ -538,20 +597,34 @@ def render_report(result: AuditResult, reach: bool = False) -> str:
         f"- stale tags: {len(result.stale_tags)}",
         "",
     ]
+    if result.public_note:
+        out += ["## Public panel", "", f"Not looked at in this run: {result.public_note}.", ""]
     if reach:
         out += ["## Reach (this run)", ""]
-        out += [f"- {context}: {n} keys" + (f" ({result.public_tabs} public tabs)" if context == PUBLIC else "")
-                + ("" if context in (ENTRY, WIDGET, PUBLIC) else ", not judged")
-                for context, n in result.reach.items()]
+        for context, n in result.reach.items():
+            if context == PUBLIC:
+                out.append(f"- {context}: {n} keys ({result.public_tabs} public tabs)" if result.public_tabs
+                           else f"- {context}: not looked at")
+            else:
+                out.append(f"- {context}: {n} keys" + ("" if context in (ENTRY, WIDGET) else ", not judged"))
         out.append("")
     return "\n".join(out) + "\n"
 
 
+RELOAD_NOTE = ("a reload leaves it to `python3 loc_root_context_audit.py --strict`, which CI runs, and to "
+               "`BindingTest` (`test_te_system_tab_bodies.py`): walking the tabs' types costs more than the rest "
+               "of the audit")
+
+
 def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report. Reads the
-    loc, script and GUI files itself, so `mod_state` is unused."""
+    loc, script and GUI files itself, so `mod_state` is unused: its loc is
+    vanilla's and the mod's merged, with no file or line, and the walk needs
+    the mod's own keys and where each is. The public-panel context is left
+    out (RELOAD_NOTE); the CLI and CI look at it."""
     from path_constants import mod_path
-    result = audit(mod_path)
+    result = audit(mod_path, public_panels={}, world_loc=set())
+    result.public_note = RELOAD_NOTE
     out_path = os.path.join(mod_path, REPORT_PATH)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
@@ -565,9 +638,7 @@ def regenerate(mod_state=None) -> dict:
         "entry_text_keys": result.reach[ENTRY],
         "entry_frame_keys": result.reach[FRAME],
         "widget_keys": result.reach[WIDGET],
-        "public_panel_keys": result.reach[PUBLIC],
         "scripted_gui_tooltip_keys": result.reach[SGUI],
-        "public_tabs": result.public_tabs,
         "path": out_path,
     }
 

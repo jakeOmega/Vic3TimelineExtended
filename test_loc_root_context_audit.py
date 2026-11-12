@@ -13,6 +13,7 @@ from __future__ import annotations
 import contextlib
 import io
 import os
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -20,12 +21,13 @@ from unittest import mock
 import gui_test_helpers as h
 import loc_root_context_audit as audit_module
 from loc_root_context_audit import (
-    CHECK, ENTRY, ENTRY_READ_ON_PUBLIC, FRAME, PLAYER_READ_ON_PUBLIC, PUBLIC, REPORT_PATH, SCRIPT_ROOT_IN_WIDGET,
-    SGUI, WIDGET, WIDGET_ROOT_IN_ENTRY, Reach, audit, main, regenerate, render_report,
+    CHECK, ENTRY, ENTRY_READ_ON_PUBLIC, FRAME, PLAYER_READ_ON_PUBLIC, PUBLIC, RELOAD_NOTE, REPORT_PATH,
+    SCRIPT_ROOT_IN_WIDGET, SGUI, WIDGET, WIDGET_ROOT_IN_ENTRY, Reach, audit, main, regenerate, render_report,
 )
 
 LOC_FILE = "localization/english/te_fx_l_english.yml"
 WIDGET_FILE = "gui/journal_entry_widgets/fx_widget.gui"
+PANEL_FILE = "gui/te_fx_panel.gui"
 
 JOURNAL = """\
 je_fx = {
@@ -148,7 +150,7 @@ class _Fixture(unittest.TestCase):
         _write(self.root, "common/scripted_guis/te_fx_sguis.txt", SGUIS)
         _write(self.root, "common/customizable_localization/te_fx_custom_loc.txt", CUSTOM)
         _write(self.root, WIDGET_FILE, JE_WIDGET)
-        _write(self.root, "gui/te_fx_panel.gui", PANEL)
+        _write(self.root, PANEL_FILE, PANEL)
         self.text = dict(CLEAN)
         self.tags: dict[str, str] = {}
 
@@ -329,7 +331,9 @@ class PublicPanelTests(_Fixture):
         r = self.run_audit(public=FX_PUBLIC, fx_public_label="[JournalEntry.GetCountry.GetName]")
         self.assertEqual(self.flags(r), [(ENTRY_READ_ON_PUBLIC, "fx_public_label", ("JournalEntry.GetCountry",))])
         self.assertEqual(r.flags[0].tabs, ("fx",))
-        self.assertIn("te_rebind_country.py fx", render_report(r))
+        self.assertEqual(r.flags[0].path, (f"{PANEL_FILE}:11", "fx_public_label"))
+        self.assertIn(f"rendered by fx, reached by {PANEL_FILE}:11 → `fx_public_label`: "
+                      f"`python3 scripts/analysis/te_rebind_country.py fx`", render_report(r))
 
     def test_the_same_key_passes_on_a_panel_that_is_not_public(self):
         self.assertEqual(self.flags(self.run_audit(fx_public_label="[JournalEntry.GetCountry.GetName]")), [])
@@ -351,6 +355,23 @@ class PublicPanelTests(_Fixture):
                            fx_public_label="$fx_deep$", fx_deep="[JournalEntry.IsActive]")
         self.assertEqual(self.flags(r), [(ENTRY_READ_ON_PUBLIC, "fx_deep", ("JournalEntry.IsActive",))])
         self.assertEqual(r.flags[0].tabs, ("also", "fx"))
+        self.assertEqual(r.flags[0].path, (f"{PANEL_FILE}:11", "fx_public_label", "fx_deep"))
+
+    def test_the_players_own_branch_is_not_on_the_path(self):
+        """SelectLocalization( Country.IsLocalPlayer, mine, theirs ): another
+        country's panel never renders the first key, so it is neither flagged
+        nor a step on the way to one."""
+        r = self.run_audit(public=FX_PUBLIC,
+                           fx_public_label="[SelectLocalization( Country.IsLocalPlayer, 'fx_mine', 'fx_theirs' )]",
+                           fx_mine="[GetPlayer.GetName] is ours", fx_theirs="[GetPlayer.GetName] is theirs")
+        self.assertEqual(self.flags(r), [(PLAYER_READ_ON_PUBLIC, "fx_theirs", ("GetPlayer",))])
+        self.assertEqual(r.flags[0].path, (f"{PANEL_FILE}:11", "fx_public_label", "fx_theirs"))
+
+    def test_a_key_a_custom_entry_brings_starts_at_the_type(self):
+        _write(self.root, PANEL_FILE, PANEL.replace('text = "fx_public_label"', "text = \"[Country.GetCustom('fx_custom')]\""))
+        r = self.run_audit(public=FX_PUBLIC, fx_custom_b="[JournalEntry.IsActive]")
+        self.assertEqual([(f.kind, f.path) for f in r.flags],
+                         [(ENTRY_READ_ON_PUBLIC, (f"{PANEL_FILE} (te_fx_section)", "fx_custom_b"))])
 
 
 class TagTests(_Fixture):
@@ -399,7 +420,7 @@ class RunTests(_Fixture):
             audit(self.root, public_panels={}, world_loc=set())
         self.run_audit()
         os.remove(os.path.join(self.root, WIDGET_FILE))
-        os.remove(os.path.join(self.root, "gui", "te_fx_panel.gui"))
+        os.remove(os.path.join(self.root, PANEL_FILE))
         with self.assertRaises(FileNotFoundError):
             self.run_audit()
 
@@ -428,9 +449,57 @@ class RunTests(_Fixture):
         with mock.patch("path_constants.mod_path", self.root):
             summary = regenerate(None)
         self.assertEqual((summary["unreviewed"], summary["total_flags"], summary["stale_tags"]), (2, 1, 1))
-        self.assertEqual((summary["entry_text_keys"], summary["widget_keys"], summary["public_tabs"]), (5, 7, 0))
+        self.assertEqual((summary["entry_text_keys"], summary["widget_keys"]), (5, 7))
+        self.assertNotIn("public_panel_keys", summary)
         with open(os.path.join(self.root, REPORT_PATH), encoding="utf-8") as fh:
-            self.assertIn("`fx_shared` reads `ROOT.GetCountry`", fh.read())
+            report = fh.read()
+        self.assertIn("`fx_shared` reads `ROOT.GetCountry`", report)
+        self.assertIn(f"Not looked at in this run: {RELOAD_NOTE}.", report)
+
+    def as_the_repo(self):
+        """The fixture tree stands for the repo: its public tab and no world read."""
+        context = mock.patch.object(audit_module, "repo_public_context", return_value=(FX_PUBLIC, set(), ""))
+        for patch in (mock.patch.object(audit_module, "_is_repo", return_value=True), context):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def test_a_reload_leaves_the_public_panel_out_and_the_cli_does_not(self):
+        """regenerate() pays for neither the tabs' types nor their walk
+        (BindingTest holds the rule in CI's test step); the CLI, which CI
+        runs with --strict, still flags the key."""
+        self.as_the_repo()
+        self.run_audit(fx_public_label="[JournalEntry.GetCountry.GetName]")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(main(["--strict", "--mod-path", self.root]), 1)
+        self.assertIn("`fx_public_label` reads `JournalEntry.GetCountry` (entry_read_on_public_panel)", out.getvalue())
+        self.assertIn("- public panel: 1 keys (1 public tabs)", out.getvalue())
+        self.assertNotIn("Not looked at", out.getvalue())
+
+        audit_module.repo_public_context.reset_mock()
+        unused = [mock.patch.object(h, name, side_effect=AssertionError(f"a reload called {name}"))
+                  for name in ("mod_types", "mod_templates", "panel_loc_keys", "panel_view")]
+        with mock.patch("path_constants.mod_path", self.root), contextlib.ExitStack() as stack:
+            for patch in unused:
+                stack.enter_context(patch)
+            summary = regenerate(None)
+        audit_module.repo_public_context.assert_not_called()
+        self.assertEqual((summary["unreviewed"], summary["total_flags"]), (0, 0))
+        with open(os.path.join(self.root, REPORT_PATH), encoding="utf-8") as fh:
+            self.assertIn("## Public panel", fh.read())
+
+    def test_the_context_is_left_out_aloud_when_its_lists_cannot_be_imported(self):
+        with mock.patch.dict(sys.modules, {"test_te_system_tab_bodies": None}):
+            panels, world, note = audit_module.repo_public_context()
+        self.assertEqual((panels, world), ({}, set()))
+        self.assertIn("could not be imported", note)
+        self.run_audit(fx_public_label="[JournalEntry.GetCountry.GetName]")
+        out = io.StringIO()
+        with mock.patch.object(audit_module, "_is_repo", return_value=True), \
+                mock.patch.dict(sys.modules, {"test_te_system_tab_bodies": None}), contextlib.redirect_stdout(out):
+            self.assertEqual(main(["--strict", "--mod-path", self.root]), 0)
+        self.assertIn("Not looked at in this run: the tab registry or `WORLD_LOC` could not be imported", out.getvalue())
+        self.assertIn("- public panel: not looked at", out.getvalue())
 
     def test_strict_exits_1_on_a_flag_only(self):
         self.run_audit()
@@ -463,11 +532,25 @@ class RepoTests(unittest.TestCase):
         self.assertGreater(reach[SGUI], 400)
         self.assertGreater(reach[PUBLIC], 3000)
         self.assertGreaterEqual(self.result.public_tabs, 11)
+        self.assertEqual(self.result.public_note, "", "the repo's own run looks at the public tabs")
 
     def test_the_public_tabs_are_the_binding_tests(self):
         import test_te_system_tab_bodies as binding
-        self.assertEqual(set(audit_module.repo_public_panels()), {t.key for t in binding.PUBLIC})
-        self.assertEqual(audit_module.repo_world_loc(), set(binding.WORLD_LOC))
+        panels, world, note = audit_module.repo_public_context()
+        self.assertEqual(set(panels), {t.key for t in binding.PUBLIC})
+        self.assertEqual(world, set(binding.WORLD_LOC))
+        self.assertEqual(note, "")
+
+    def test_a_public_flags_path_walks_the_binding_tests_keys(self):
+        """public_seeds, closed without the player's own branches, is
+        panel_loc_keys's set for every public tab, so a flag there has a path."""
+        loc, custom = h.load_loc(), h.custom_loc()
+        types, templates = h.mod_types(), h.mod_templates()
+        reach = Reach(loc, custom, own=False)
+        for tab, names in audit_module.repo_public_context()[0].items():
+            with self.subTest(tab=tab):
+                seeds = audit_module.public_seeds(names, types, templates, loc, custom)
+                self.assertEqual(set(reach.closure(seeds)), h.panel_loc_keys(names, types, loc, templates, custom))
 
     def test_the_reach_is_the_shared_walkers(self):
         """One step at a time, with parents, gives gui_test_helpers.loc_closure's set."""
