@@ -1133,6 +1133,28 @@ unresolved loc key on a line that file also holds is vanilla's reference and
 warns (`VANILLAS_DETAIL`): `pop_browser_panel.gui`'s `text = "STATE"`, which
 vanilla's English loc has only as `state`. A key the mod adds still errors.
 
+GUI types are errors only with a game install: reading `<base>/gui` marks
+`gui_types` complete, and an unresolved `name = {` or `type x = name` then
+errors where offline it warns. A name no file defines with `type` or
+`template` resolves in two ways. `Index.engine_elements` is every name
+vanilla's own `.gui` files open a block with or inherit from and no file
+defines: the engine's elements and block properties (`scrollbar_horizontal`,
+`click_modifiers`, `datacontext_from_model`). It is read from the install on
+each run, so it follows a patch, and the mod's own uses never vouch for a
+name: a typo or a renamed mod type still errors. It opens one narrow hole. If
+a patch removes a type's definition and leaves a dangling `foo = {` in
+vanilla's own files, the mod's use of `foo` passes with an install, where it
+used to error. `BUILTINS` is the hand-kept list, for a name vanilla never uses
+and for runs with no install. Before #1271 / #1349 only `BUILTINS` existed,
+and a local `--strict` failed with 270 errors on twenty engine names that CI
+never saw. To get the with-install mode without a game, copy
+`test_fixtures/vanilla_gui/` to `<dir>/game/gui/` and pass
+`--vanilla-path <dir>`. That is not a clean run: a type vanilla defines
+outside those eight files resolves only if one of the eight uses it, and
+errors otherwise (110 names on the mod as of #1637), so read only the names
+you are after (`test_the_mod_against_the_vanilla_gui_fixtures_as_an_install`).
+The committed report shows the mode of the machine that last regenerated it.
+
 ## Driving the game from a session (probed 2026-11-10, run live 2026-11-11)
 
 The harness is `game_qa`: a protective half (snapshot, launch, watch, restore) and a session that loads a save, sends console commands and reads the results. Procedure for a session: the `game-qa` skill (`.claude/skills/game-qa/SKILL.md`). The design is `docs/superpowers/specs/2026-11-10-in-game-qa-harness-design.md`, and § 3 of it lists what was verified on the owner's machine. What a session needs to know before touching a running game:
