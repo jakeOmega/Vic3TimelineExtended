@@ -2832,9 +2832,11 @@ covert_counterintel_support_action = {
 # colonies in the solar system. No modifier: once established, every colony
 # the target holds gains autonomy each month, sr_cov_incite_autonomy_base
 # (0.5) x the operation's phase x priority (1 to 4), through the space
-# race's sr_cov_incite_autonomy (covert_ops_apply_all_phase_effects). A colony
-# at 100 breaks away and becomes a free colony. Moderate tier: meddling in how
-# the target governs its own. Only under the Space Race rule's simple and
+# race's sr_cov_incite_autonomy (covert_ops_apply_all_phase_effects); one of
+# fewer than sr_free_colony_minimum people gains nothing, and the operation
+# starts only against a target holding a larger one. A colony at 100 breaks
+# away and becomes a free colony. Moderate tier: meddling in how the target
+# governs its own. Only under the Space Race rule's simple and
 # full colony settings (sr_colonies_contested_enabled), where colonies have
 # autonomy; lapses when the target holds no colony.
 covert_incite_autonomy_action = {
@@ -2909,9 +2911,11 @@ covert_incite_autonomy_action = {
 				}
 			}
 		}
+		# A colony needs sr_free_colony_minimum people for autonomy to build
+		# (sr_site_aut_add_at), so outposts alone are nothing to incite.
 		custom_tooltip = {
-			text = iw_target_holds_space_colony_tt
-			scope:target_country = { sr_has_space_colony = yes }
+			text = iw_target_holds_peopled_colony_tt
+			scope:target_country = { sr_life_has_colony = { MIN = sr_free_colony_minimum } }
 		}
 	}
 

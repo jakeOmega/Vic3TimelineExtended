@@ -612,6 +612,13 @@ class ColoniesTest(unittest.TestCase):
                              f"sr_disp_site_aut_status_{k}"):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
+                # Owner, 2026-11-12 (#1620): under sr_free_colony_minimum people the
+                # hover says first that the colony makes no demands, from the figure.
+                unpeopled = (f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                             f"'sr_disp_aut_unpeopled_{k}'), '(CFixedPoint)1' )")
+                self.assertIn(f"[AddLocalizationIf( {unpeopled}, 'te_tt_newline' )]"
+                              f"[AddLocalizationIf( {unpeopled}, 'sr_aut_line_unpeopled' )]", drift)
+                self.assertLess(drift.index("sr_aut_line_unpeopled"), drift.index("• the pull of home"))
 
     def test_the_slots_hover_reads_the_slots_modifier(self):
         """Colony management design § 5: a world's Slots hover gives its size's
@@ -631,10 +638,12 @@ class ColoniesTest(unittest.TestCase):
         signed with positive red (|=-2), never |+=2's positive green."""
         lines = sorted(k for k in self.loc if k.startswith("sr_aut_line_"))
         self.assertEqual(lines, ["sr_aut_line_charter", "sr_aut_line_destroyed", "sr_aut_line_garrison",
-                                 "sr_aut_line_nocontact", "sr_aut_line_war"])
+                                 "sr_aut_line_nocontact", "sr_aut_line_unpeopled", "sr_aut_line_war"])
         for key in lines:
             with self.subTest(line=key):
-                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), ["=-2"])
+                # the note on a colony too small for politics gives a count, not a term
+                want = ["D"] if key == "sr_aut_line_unpeopled" else ["=-2"]
+                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), want)
         for site in gss.SITES:
             k = site.key
             drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
