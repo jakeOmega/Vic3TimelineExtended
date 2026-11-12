@@ -174,6 +174,10 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | Ribbon strike text | Fire `te_orbital_debris.1` with a Space Elevator | The flavor's "at a price" matches option b's treasury cost in its tooltip |
 | `.37` names the probe's target (#1620) | Run the Deep-Space Probe three times past 50%, choosing Venus, Mars and the asteroid belt in `.81`; then `event space_race_events.37` in a country that never had the milestone | Venus's cloud bands, Mars's channels and polar cap, the first asteroid of the belt, each with the frame of Earth; the country with no target reads "its target" and names none |
 | `.45` names no planet (#1620) | Let `.45` fire at 30% under each target | The description and all three options read for any target: no Jupiter, no "outer system"; the fastest option is the direct flight |
+| The Grand Tour's choice shows its cost | Start the Deep-Space Probe, wait 30 days for `.81`, hover the fourth option | "Grand Tour Mission Profile" with −25% space race progress, and a red figure of 60 innovation a week (two funding levels at the probe's factor), not 0 and not a raw key |
+| The tour is billed and slows the program | Take the Grand Tour at funding 3 on Standard; a week later read the probe's entry and the pace hover | Space Program Cost reads 150 innovation a week (90 before the choice); the pace breakdown lists the Grand Tour's −25%; lowering funding to 0 leaves 60 a week; the entry's profile line reads "Target: Grand Tour" |
+| The tour's own texts | With the tour chosen, let `.45` fire at 30% and `.37` at 50%, then finish the milestone | `.45` and its three options are about the pass at Jupiter (triggered option names: no option shows two names or a raw key); `.37` reports Jupiter and the frame of Earth; `.4` speaks of the last planet on the tour and offers only "Jupiter, and every planet beyond it." |
+| The tour's reward | Take `.4`'s option | "Grand Tour Data" for twenty years, decaying: research +2%, space race progress +0.4, prestige +1%, innovation cap +15 |
 
 ## Monuments, environment and people (#1550)
 
