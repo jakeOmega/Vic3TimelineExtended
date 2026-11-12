@@ -9931,6 +9931,7 @@ POST_LOAD_AUDITS = [
     ("concept_reference_audit",       "concept_reference_audit"),
     ("localization_accessor_audit",   "localization_accessor_audit"),
     ("mod_structure_audit",           "mod_structure_audit"),
+    ("load_order_audit",              "load_order_audit"),
     ("loc_render_audit",              "loc_render_audit"),
     ("any_limit_audit",               "any_limit_audit"),
     ("iterator_limit_audit",          "iterator_limit_audit"),

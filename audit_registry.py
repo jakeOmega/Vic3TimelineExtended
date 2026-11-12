@@ -126,6 +126,17 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `INJECT:<name>` line (brace and collision flags take none)",
     ),
     Audit(
+        "load_order_audit",
+        "A key whose value in ModState differs from what the engine loads: a bare copy the engine drops "
+        "for an earlier one (the first bare definition wins, and vanilla's and the mod's files sort "
+        "together), an `INJECT:` lost to a `REPLACE:` of its key, or a directive on a key nothing "
+        "defines. Every tool built on ModState then reads a definition the game doesn't use.",
+        note="Replays `external_mod_overlap`'s load-order model against the values ModState holds "
+             "(#1191). CI has no game files, so a mod bare copy of a vanilla key is decided only when "
+             "its file sorts before or after every vanilla file of the folder; the rest are listed as "
+             "undetermined, and a reload on a machine with the game decides them.",
+    ),
+    Audit(
         "attitude_key_audit",
         "An `attitude = <key>` that is not one of the engine's fifteen attitude keys.",
         ci=(),
