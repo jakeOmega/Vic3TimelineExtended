@@ -26,7 +26,8 @@ company types, combat unit types, ship types, ideologies, interest groups,
 institutions, subject types, mobilization options, diplomatic actions (name
 plus the notification family their flags select), pop needs, decisions,
 amendments, messages, treaty articles, events, glossary entries and regional
-exile pools (1.15). Journal entry outcomes (1.15) get a structural check of
+exile pools (1.15), power bloc principles (the `_desc` alone), law groups,
+combat unit groups and mobilization option groups. Journal entry outcomes (1.15) get a structural check of
 their own, on every journal entry the mod defines or overrides (a `REPLACE:` of
 a vanilla one included): each outcome names a `conclusion_desc`, and each one
 not flagged `hidden` a `header` and an `effect_header` (journal_entries.md:
@@ -277,6 +278,35 @@ def _glossary_keys(name: str, body) -> list[tuple[str, bool, str]]:
     return [(name, True, "name"), (f"{name}_desc", True, "desc")]
 
 
+def _principle_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """A power bloc principle has `<name>_desc` and no name key: the game
+    names a tier from its group (`principle_group_x`) and its level, and
+    vanilla defines the bare key for none of its 69 principles. It defines
+    `<name>_desc` for every one, as `$principle_group_<group>_desc$`.
+
+    71 of the mod's 124 principles shipped without it (#897). Vanilla's
+    principle tooltip hides an empty description, and whether a missing key
+    reaches it empty or as the raw key has not been checked in game, so the
+    rule follows vanilla: a tier with nothing of its own to say points at its
+    group's description.
+    """
+    return [(f"{name}_desc", True, "desc")]
+
+
+def _group_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Law groups, combat unit groups and mobilization option groups need
+    `<name>` and `<name>_desc`; vanilla defines both for every one. The law
+    group tooltip opens with `[LawGroup.GetDesc]` (vanilla
+    `DATA_LAW_GROUP_NAME_TOOLTIP`) and the mobilization option group's is
+    `[MobilizationOptionGroup.GetDesc]` alone
+    (`MOBILIZATION_OPTION_GROUP_TOOLTIP`), so a missing one prints the raw
+    key. A mobilization option group's keys carry no prefix (`transport`,
+    `transport_desc`). `lawgroup_minority_rights`, the mod's two combat unit
+    groups and `training` shipped without a description (#897).
+    """
+    return [(name, True, "name"), (f"{name}_desc", True, "desc")]
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -319,6 +349,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Character Traits":       _name_and_desc,
     "Journal Entries":        _je_keys,
     "Laws":                   _name_and_desc,
+    "Law Groups":             _group_keys,
     "Decrees":                _name_and_desc,
     "Scripted Buttons":       _explicit_name_field,
     "Scripted Progress Bars": _progress_bar_keys,
@@ -330,6 +361,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Government Types":       _name_and_desc,
     "Company Types":          _name_and_desc,
     "Combat Unit Types":      _simple_name,
+    "Combat Unit Groups":     _group_keys,
     "Ship Types":             _simple_name,
     "Ideologies":             _simple_name,
     "Interest Groups":        _simple_name,
@@ -337,6 +369,8 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Subject Types":          _simple_name,
     "Messages":               _message_keys,
     "Mobilization Options":   _name_and_desc,
+    "Mobilization Option Groups": _group_keys,
+    "Principles":             _principle_keys,
     "Diplomatic Actions":     _diplomatic_action_keys,
     "Pop Needs":              _simple_name,
     "Decisions":              _name_and_desc,
@@ -357,6 +391,7 @@ _DIR_MAP: dict[str, str] = {
     "Character Traits":       "common/character_traits",
     "Journal Entries":        "common/journal_entries",
     "Laws":                   "common/laws",
+    "Law Groups":             "common/law_groups",
     "Decrees":                "common/decrees",
     "Scripted Buttons":       "common/scripted_buttons",
     "Scripted Progress Bars": "common/scripted_progress_bars",
@@ -368,6 +403,7 @@ _DIR_MAP: dict[str, str] = {
     "Government Types":       "common/government_types",
     "Company Types":          "common/company_types",
     "Combat Unit Types":      "common/combat_unit_types",
+    "Combat Unit Groups":     "common/combat_unit_groups",
     "Ship Types":             "common/ship_types",
     "Ideologies":             "common/ideologies",
     "Interest Groups":        "common/interest_groups",
@@ -375,6 +411,8 @@ _DIR_MAP: dict[str, str] = {
     "Subject Types":          "common/subject_types",
     "Messages":               "common/messages",
     "Mobilization Options":   "common/mobilization_options",
+    "Mobilization Option Groups": "common/mobilization_option_groups",
+    "Principles":             "common/power_bloc_principles",
     "Diplomatic Actions":     "common/diplomatic_actions",
     "Pop Needs":              "common/pop_needs",
     "Decisions":              "common/decisions",
@@ -651,7 +689,10 @@ def render_report(result: AuditResult) -> str:
         "file. For static modifiers and most simple entities the key is the",
         "entity name itself (including game concept names, whose `_desc`",
         "does not substitute for the name); for journal entries and institutions also",
-        "`<name>_desc`; for",
+        "`<name>_desc`, as for law groups, combat unit groups and mobilization",
+        "option groups; for a power bloc principle `<name>_desc` alone, which",
+        "points at its group's (`$principle_group_x_desc$`) unless the tier has",
+        "text of its own; for",
         "events the keys are whatever `title`/`desc`/`flavor`/option `name`",
         "fields point at; for messages (`common/messages`) the keys are",
         "`notification_<name>_name` / `_desc` / `_tooltip`, never the bare",

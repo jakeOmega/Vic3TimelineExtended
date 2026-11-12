@@ -11,6 +11,10 @@ The rules (spec section 5.3):
 - The run's end is the journal's `game_exited`, else its last `heartbeat`, else `started`. A changed, added or
   created file modified more than SLACK_SECONDS after it means someone else has used the folder: hold. Logs
   (`logs/*`) are never judged: the game writes them to the last moment, and the saves tell the story.
+- A file whose bytes are still the snapshot's is never rewritten. If the run moved its time (the game writes
+  `pdx_settings.json` again at launch with the same bytes), a restore that finishes puts the snapshot's time back
+  on it, judging the time as the hold rule does: one later than the run's end by more than SLACK_SECONDS is
+  someone else's and stays, as does every time when the journal gives no end.
 - Journal times come from the backup drive's clock (see `snapshot.record`), as file times do.
 - A snapshot is never deleted unless its journal ends in `restored` (or says nothing at all), and never by
   the run that made it.
@@ -27,7 +31,7 @@ import shutil
 import stat
 import time
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -73,12 +77,16 @@ class Outcome:
     removed: list[str]
     held: bool  # True only if this call recorded the snapshot as held
     # "" | "other_game_running" | "modified_after_exit" | "no_reference_time" | "modified_during_restore"
+    # | "retime_unverified" (everything was put back, but one file, named in the journal entry, carries the
+    # snapshot's time over bytes that could not be read back, and the time could not be moved off again)
     # | "already_restored" (another game is running and the journal already ends in `restored`: left as it is,
     # nothing recorded, held False). recover() adds "game_still_up" (left alone, nothing recorded) and
     # "error: <message>" (restore, or own_game_up, raised). The command line (game_qa/__main__.py) builds
     # Outcomes too: held "other_game_ran" and "unwatched_stretch" (recorded), and, with nothing recorded and
     # held False, "launch_in_flight" and "watch_still_recording" (its `recover`, which runs its own loop).
     reason: str
+    # Files left as they were, bytes and all, that got the snapshot's modification time back (`_retime`).
+    retimed: list[str] = field(default_factory=list)
 
 
 # A file's size and mtime_ns as compare saw them, or None if it was absent.
@@ -277,7 +285,8 @@ def _hold_reason(snap: Snapshot, user_data: Path, diff: Diff) -> tuple[str, list
 def _hold(snap: Snapshot, reason: str, now: datetime | None, **fields: list[str]) -> Outcome:
     fields = {name: value for name, value in fields.items() if value}
     snapshot.record(snap, "held", now=now, reason=reason, **fields)
-    return Outcome(list(fields.get("restored", [])), list(fields.get("removed", [])), True, reason)
+    restored, removed, retimed = (list(fields.get(name, [])) for name in ("restored", "removed", "retimed"))
+    return Outcome(restored, removed, True, reason, retimed)
 
 
 def _remove_stale_temps(user_data: Path) -> None:
@@ -389,6 +398,93 @@ def _remove(names: Sequence[str], user_data: Path, seen: dict[str, _Signature]) 
     return done, None
 
 
+def _retouched(snap: Snapshot, diff: Diff, seen: dict[str, _Signature], logs: bool) -> list[str]:
+    """The manifest's files that the run wrote again with the same bytes: `compare` found their content the
+    snapshot's, and their time is later than the manifest's but not later than the run's end by more than
+    SLACK_SECONDS. A later time is someone else's, as in the hold rule, and without a recorded end none can be
+    told from the run's, so then there are none. With `logs` False, `logs/` is left out."""
+    reference = _reference_time(snap)
+    if reference is None:
+        return []
+    limit_ns = int((reference.timestamp() + SLACK_SECONDS) * 1_000_000_000)
+    differ = {*diff.changed, *diff.missing}
+    names = []
+    for rel, entry in sorted(snap.files.items()):
+        signature = seen.get(rel)
+        if rel in differ or signature is None or (not logs and rel.startswith("logs/")):
+            continue
+        size, mtime_ns = signature
+        if size == entry.size and entry.mtime_ns < mtime_ns <= limit_ns:
+            names.append(rel)
+    return names
+
+
+def _move_time_off(path: Path, entry: Entry, was_ns: int) -> bool:
+    """Take the snapshot's time off `path` again: the present time, or failing that the time it had (`was_ns`).
+    True only once the file has been looked at and does not carry the snapshot's time, or is gone."""
+    for times in (None, (was_ns, was_ns)):
+        try:
+            if times is None:
+                os.utime(path, follow_symlinks=False)
+            else:
+                os.utime(path, ns=times, follow_symlinks=False)
+            if os.lstat(path).st_mtime_ns != entry.mtime_ns:
+                return True
+        except FileNotFoundError:
+            return True
+        except OSError:
+            continue
+    return False
+
+
+def _retime(
+    snap: Snapshot, names: Sequence[str], user_data: Path, seen: dict[str, _Signature]
+) -> tuple[list[str], str | None]:
+    """Give `names` (from `_retouched`) the modification times the snapshot recorded; return the ones done and,
+    if it stopped early, the file whose time it could neither vouch for nor take back.
+
+    No byte is written. Just before, each file is looked at again, itself and not what a link points to: one
+    that is no longer a regular file of the size and time `compare` saw has been written since, and is left
+    with the time it has. So is one whose time cannot be set: nothing has changed then, and the time is a
+    courtesy.
+
+    Once the snapshot's time is on a file, it stays only if the file is then read whole and hashes to the
+    snapshot's bytes. `snapshot.take` trusts a stored file's size and time without reading it, so that pair
+    over other bytes would later be taken for the snapshot's content and written over. In every other case
+    (other bytes, written in the moment between the look and the time being set; a file that cannot be read
+    back; an interrupt) the time is moved off again, to the present, or failing that to the one the file had,
+    and the file is not listed. If that fails too and the file still carries the snapshot's time, the work
+    stops there and the file is returned, for `restore` to hold the snapshot with. What this does not cover:
+    a process killed between the time being set and the hash, and bytes written while the hash is read that
+    leave the size and the time as they were.
+    """
+    done: list[str] = []
+    for rel in names:
+        path = user_data / rel
+        entry = snap.files[rel]
+        try:
+            st = os.lstat(path)
+            if not stat.S_ISREG(st.st_mode) or (st.st_size, st.st_mtime_ns) != seen[rel]:
+                continue
+            os.utime(path, ns=(st.st_atime_ns, entry.mtime_ns), follow_symlinks=False)
+        except OSError:
+            continue  # nothing was changed
+        verified = False
+        moved_off = True
+        try:
+            verified = _sha256(path) == entry.sha256
+        except OSError:
+            pass  # not read back: not vouched for
+        finally:  # an interrupt too must not leave the snapshot's time on bytes nobody read
+            if not verified:
+                moved_off = _move_time_off(path, entry, st.st_mtime_ns)
+        if verified:
+            done.append(rel)
+        elif not moved_off:
+            return done, rel
+    return done, None
+
+
 def restore(
     snap: Snapshot,
     user_data: Path,
@@ -409,11 +505,18 @@ def restore(
 
     Otherwise: clears the leftover temp files of a killed restore; copies the live `logs/*` to `run_logs_dir`
     (by default `<snapshot folder>/run_logs`); copies the changed and missing files back from the store with
-    their recorded times; removes the files the run added or created; records `restored` with the names.
+    their recorded times; removes the files the run added or created; puts the recorded time back on the files
+    the run wrote again with the same bytes (`_retouched`; listed as `retimed`, in the Outcome and, when there
+    are some, in the journal entry); records `restored` with the names.
 
     Just before each change the file is looked at again. If it is no longer as it was compared, the restore
     stops, records `held` with the reason `modified_during_restore` and the file, and returns what it had
     done so far; those files stay put back, since they are the owner's own bytes.
+
+    The one hold that comes after everything is back is `retime_unverified` (`_retime`): a file was given the
+    snapshot's time, could then not be read back to prove it still holds the snapshot's bytes, and would not take
+    another time either. The entry names it. Its bytes may be someone's newer ones, which a later `restore` of
+    this snapshot or of the next would take for the run's and write over, so the owner looks at it first.
 
     Raises, recording neither `restored` nor `held`, if the folder is missing or a stored file is missing,
     the wrong size or damaged. The store is checked before the first change. `now` stamps the journal entry.
@@ -444,8 +547,13 @@ def restore(
         removed, changed_file = _remove(to_remove, user_data, seen)
     if changed_file is not None:
         return _hold(snap, "modified_during_restore", now, files=[changed_file], restored=restored, removed=removed)
-    snapshot.record(snap, "restored", now=now, restored=restored, removed=removed)
-    return Outcome(restored, removed, False, "")
+    retimed, unverified = _retime(snap, _retouched(snap, diff, seen, logs), user_data, seen)
+    if unverified is not None:
+        return _hold(snap, "retime_unverified", now, files=[unverified], restored=restored, removed=removed,
+                     retimed=retimed)
+    done = {"restored": restored, "removed": removed, **({"retimed": retimed} if retimed else {})}
+    snapshot.record(snap, "restored", now=now, **done)
+    return Outcome(restored, removed, False, "", retimed)
 
 
 # --- unfinished runs -------------------------------------------------------------------------
