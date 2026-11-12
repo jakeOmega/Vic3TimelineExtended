@@ -1145,12 +1145,42 @@ class ContestTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }", body)
         self.assertIn("trigger_event = { id = monument_events.2 popup = yes }", body)
 
+    def test_a_dedication_closes_the_ceremony_cycle_on_gm_rebuilding(self):
+        """#1012: the AI's dedication fires the refresh with no delay
+        (gm_state_offer_skins), and the refresh can start a ceremony
+        (gm_state_offer_missed_ceremony). The answer has removed
+        gm_ceremony_pending, and the site it removed may still read as
+        standing in the same effect, so the variable gm_state_finish_site
+        sets for a day on both of its branches is what refuses a second
+        ceremony, as monument_events.1 refuses one."""
+        sweep = squash(block(self.e, "gm_state_offer_missed_ceremony"))
+        self.assertIn("NOT = { has_variable = gm_rebuilding }", sweep)
+        finish = squash(block(self.e, "gm_state_finish_site"))
+        rebuilding = finish.find("set_variable = { name = gm_rebuilding days = 1 }")
+        branches = finish.find("if = { limit = { NOT = { has_building = building_grand_monument } }")
+        self.assertGreater(rebuilding, 0)
+        self.assertLess(rebuilding, branches, "set before the create/remove branches, so both carry it")
+        self.assertEqual(finish.count("remove_building = building_grand_monument_site"), 2)
+        dedicate = squash(block(self.e, "gm_state_dedicate"))
+        self.assertLess(dedicate.find("gm_state_finish_site = { KEY = $KEY$ }"),
+                        dedicate.find("gm_remove_state_var = { VAR = gm_ceremony_pending }"))
+        # Every dedication wrapper answers before it offers the skins, whose
+        # last line fires the refresh.
+        for name in ("gm_state_dedicate_timeless", "gm_state_dedicate_regime",
+                     "gm_state_dedicate_leader", "gm_state_dedicate_faith"):
+            body = squash(block(self.e, name))
+            self.assertLess(body.find("gm_state_dedicate = {"), body.find("gm_state_offer_skins = {"), name)
+        skins = squash(strip_comments(block(self.e, "gm_state_offer_skins")))
+        self.assertTrue(skins.endswith("owner = { trigger_event = { id = monument_events.20 } }"))
+        ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
+        self.assertIn("gm_system_enabled = yes NOT = { has_variable = gm_rebuilding } }", ev1)
+
     def test_the_refresh_asks_a_ceremony_the_hook_missed(self):
         """Five queued levels finishing on one day fired no on_building_built
         (2026-10-07): the refresh asks once for each grandeur no ceremony has
         asked about, so leaving a monument undedicated waits for its next level."""
         sweep = squash(block(self.e, "gm_state_offer_missed_ceremony"))
-        self.assertIn("if = { limit = { gm_system_enabled = yes "
+        self.assertIn("if = { limit = { gm_system_enabled = yes NOT = { has_variable = gm_rebuilding } "
                       "gm_state_ai_dedicates_now = yes NOT = { has_variable = gm_ceremony_pending } } "
                       "gm_state_start_ceremony = yes }", sweep)
         refresh = squash(block(self.e, "gm_country_refresh"))

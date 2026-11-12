@@ -1890,7 +1890,7 @@ gm_state_start_ceremony = {
 			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		trigger_event = { id = monument_events.2 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_ceremony_pending, set on the line above, stops this effect and gm_state_offer_missed_ceremony; the answer that removes it (gm_state_dedicate) first removes the construction site (gm_state_finish_site), which gm_state_ai_dedicates_now needs, before gm_state_offer_skins fires the refresh
+		trigger_event = { id = monument_events.2 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_ceremony_pending, set on the line above, stops this effect and gm_state_offer_missed_ceremony until the answer; the answer that removes it (gm_state_dedicate) first sets gm_rebuilding for a day (gm_state_finish_site, on both of its branches), which gm_state_offer_missed_ceremony refuses, before gm_state_offer_skins fires the refresh
 	}
 	gm_remove_state_var = { VAR = gm_rededicate_asking }
 }
@@ -1901,10 +1901,16 @@ gm_state_start_ceremony = {
 # for its Dedicate button (owner, 2026-10-18). monument_events.1 is the
 # immediate path, but on_building_built did not fire when five queued levels
 # of a new monument finished on the same day (owner's game, 2026-10-07).
+# Not the day script remade a building here (gm_rebuilding, one day), as in
+# monument_events.1: a ceremony's answer sets it (gm_state_finish_site) before
+# its refresh comes back here, and whether the site it removed still reads as
+# standing in the same effect is not established (#1012). The next refresh
+# asks.
 gm_state_offer_missed_ceremony = {
 	if = {
 		limit = {
 			gm_system_enabled = yes
+			NOT = { has_variable = gm_rebuilding }
 			gm_state_ai_dedicates_now = yes
 			NOT = { has_variable = gm_ceremony_pending }
 		}
@@ -2430,7 +2436,7 @@ gm_state_offer_skins = {
 			set_variable = gm_unveil_pending
 		}
 	}
-	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh starts a ceremony only for an AI's finished construction site (gm_state_ai_dedicates_now), and that ceremony's answer removes the site (gm_state_finish_site, from gm_state_dedicate) before it reaches this line
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh starts a ceremony only from gm_state_offer_missed_ceremony, which refuses while gm_rebuilding stands; a site's answer sets it for a day (gm_state_finish_site, from gm_state_dedicate) before it reaches this line, and Rededicate's question needs a ceremony to ask it
 }
 
 gm_state_offer_skins_none = {
