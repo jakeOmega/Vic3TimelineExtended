@@ -362,6 +362,20 @@
 #                                                   its desc and flavour say so
 #                                                   whenever the event is opened
 #
+# THE CLOCKS OF FIVE TIMED MODIFIERS (#470). The months left of a modifier that
+# has no clock of its own, for a revolution's winner, which inherits no
+# modifier: te_monetary_inherit_central_bank re-adds each from its counter. Set
+# by the effect that adds the modifier, ticked down by
+# te_mon_cw_tick_penalty_clocks (te_monetary_monthly_on_action, every country,
+# outside the update), never removed, absent until first set. Nothing else
+# reads them.
+#
+#   te_mon_peg_broken_months         0 to 60   te_mon_peg_broken_premium (te_peg.2)
+#   te_mon_peg_devaluation_months    0 to 24   te_mon_peg_devaluation_pressure (te_peg.1)
+#   te_mon_currency_reform_months    0 to 120  te_mon_currency_reform_premium
+#   te_mon_union_exit_months         0 to 120  te_mon_union_exit_premium
+#   te_mon_union_independence_months 0 to 120  te_mon_union_independence
+#
 #   global_var:te_world_rate            the world rate (§12.1), once a month
 #   global_var:te_world_rate_acc_num    its two accumulators, reset every call
 #   global_var:te_world_rate_acc_den
