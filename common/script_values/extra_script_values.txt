@@ -1673,8 +1673,10 @@ war_propaganda_support_script_value = {
 	}
 }
 
-# country_gdp_per_capita is vanilla's (see the note above
-# construction_cost_scaling_gdp_mult below).
+# country_gdp_per_capita is vanilla's (1.15, ip5_je_values.txt): the mod's own
+# copy computed the same gdp / total_population and was deleted (#1460). A bare
+# duplicate script value is never an error: the copy read last wins, and
+# vanilla's ip5_ file sorts after this one, so the mod's copy was dead anyway.
 
 # global_gdp_per_capita (world GDP over world population) was deleted in
 # 1.15: nothing read it, and vanilla's global_average_gdp_per_capita event
@@ -2523,12 +2525,7 @@ construction_cost_gdppc_ceiling = {
 	multiply = construction_cost_ceiling_ratio
 }
 
-# country_gdp_per_capita (country scope, GDP over population) is vanilla's.
-# The mod's copy, `gdp` over `total_population` with a floor of 1, was dead in
-# game: a script value's last bare copy wins, and vanilla's file sorts after
-# this one (scripting_best_practices.md § Load Order, facts 2 and 5;
-# load_order_audit, #1191). Vanilla's divides by 1 when the population is 0,
-# so the value was the same.
+# Country-scope GDP per capita is vanilla's country_gdp_per_capita (1.15, ip5_je_values.txt), see #1460.
 
 # The GDP part: 0 at floor, max_mult at ceiling, linear interpolation.
 # Formula: clamp(0, max_mult, (gdppc - floor) / (ceiling - floor) * max_mult)
