@@ -175,6 +175,13 @@ def _find_block(body, name):
     return None
 
 
+class _Filled(dict):
+    """An instance's blockoverrides, by block name, and how deep in shared
+    composers (_Walk.shared) the instance sits: an override is the markup of
+    the layout that writes it, wherever the block it fills draws."""
+    shared = 0
+
+
 class _Walk:
     """The sections a layout places, in the order they draw, each with the
     gates (visible expressions) on its way down, and whether it sits in a
@@ -188,7 +195,8 @@ class _Walk:
     side (`narrow` the narrow walk) holds its own wrappers and instances to
     the rules in assert_wide_matches_narrow's docstring; inside a composer
     the narrow layout places too (`shared`), which draws the same in both
-    frames, it only reads the sections."""
+    frames, it only reads the sections, but for what the wide layout itself
+    fills that composer's blocks with."""
 
     def __init__(self, test, where, text, composers, skip=(), narrow=None):
         self.test, self.where, self.text = test, where, text
@@ -218,9 +226,12 @@ class _Walk:
             spacing = props.get("spacing")
         held = []
         for kind, name, inner in items:
-            if kind == "block":                       # a block draws its override, or its default content
-                held += self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides,
-                                  spacing=spacing)
+            if kind == "block" and overrides and name in overrides:    # a block draws its override,
+                depth, self.shared = self.shared, overrides.shared      # the instancing layout's markup,
+                held += self.body(overrides[name], gates, overrides, spacing=spacing)
+                self.shared = depth
+            elif kind == "block":                                       # or its default content
+                held += self.body(inner, gates, overrides, spacing=spacing)
             elif kind == "blockoverride":
                 held += self.body(inner, gates, overrides, spacing=spacing)
             elif kind != "widget":
@@ -294,8 +305,8 @@ class _Walk:
         if self.checking:
             extra = sorted({k for kind, k, _ in items if kind == "property"} - {"visible"})
             self.test.assertFalse(extra, f"{self.where}: {name} carries {extra}; an instance in a wide layout takes a "
-                                         f"visible and nothing else of its own (no datacontext, margin, position or "
-                                         f"size), as its wrappers do")
+                                         f"visible and nothing else of its own: no datacontext, margin, position or "
+                                         f"size, which a wrapper may not carry either")
         if self.narrow is None and spacing is not _UNKNOWN:
             self.spacing.setdefault(name, set()).add(spacing)
         gates = gates + mine
@@ -303,11 +314,15 @@ class _Walk:
             self.skipped.add(name)
         elif self.is_composer(name):
             self.expanded.add(name)
-            filled = {n: inner for kind, n, inner in items if kind == "blockoverride"}
+            filled = _Filled((n, inner) for kind, n, inner in items if kind == "blockoverride")
+            filled.shared = self.shared
             shared = self.narrow is not None and name in self.narrow.expanded
             self.shared += shared
+            where = self.where
+            if self.checking:                         # the wide layout's own composer: a failure in it names it
+                self.where = f"{where}'s {name}"
             self.body(_type_body(self.text, name), gates, filled, widget="composer")
-            self.shared -= shared
+            self.shared, self.where = self.shared - shared, where
         else:
             in_column = bool(self.columns) and self.columns[-1] is not None
             self.sections.append((name, gates, in_column))
@@ -415,8 +430,9 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       its own (blockoverrides and child widgets aside): no datacontext,
       margin, position or size, as its wrappers.
     - Neither rule reaches inside a composer both layouts place: its type
-      draws the same in both frames. A composer only the wide layout places
-      is the wide layout's own, and held to both.
+      draws the same in both frames. What the wide layout fills such a
+      composer's blocks with is its own markup, and held to both; so is a
+      composer only the wide layout places.
     - `split` maps a wide-only section to the narrow section it draws part
       of (the Space Race's solar colonization tabs, which the narrow layout
       draws inside the milestones and full screen takes a column of their

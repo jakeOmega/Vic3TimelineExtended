@@ -555,11 +555,23 @@ class WideMatchesNarrowTest(unittest.TestCase):
         self.assertNotEqual(narrow, NARROW)
         assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, text=narrow + fixture(self.WHOLE)[len(NARROW):])
 
+    def test_what_the_wide_layout_fills_a_shared_composers_block_with_is_held_to_them(self):
+        """A blockoverride is the markup of the layout that writes it."""
+        def filled(wrapper):
+            return self.WHOLE.replace("te_x_status_sections = {}",
+                                      'te_x_status_sections = {\n\t\t\t\tblockoverride "summary" {\n'
+                                      f"\t\t\t\t\t{wrapper}\n\t\t\t\t\t\tte_x_summary = {{}}\n\t\t\t\t\t}}\n\t\t\t\t}}\n\t\t\t}}")
+
+        self.assertEqual(len(self.check(filled("flowcontainer = {"))), 2)
+        self.fails("wraps sections in `hbox`", filled("hbox = {"))
+        self.fails(r"a wrapper carries \['margin_left'\]", filled("flowcontainer = {"), wrapper=WRAPPER + " margin_left = 200")
+
     def test_a_composer_only_the_wide_layout_places_is_held_to_them(self):
+        """It is the wide layout's own, and a failure in it names it."""
         own = self.WHOLE.replace("te_x_reference_sections = {}", "te_x_wide_only_sections = {}")
-        self.fails("wraps sections in `hbox`",
+        self.fails("te_x_wide_sections's te_x_wide_only_sections wraps sections in `hbox`",
                    own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\thbox = {\n\t\t\tte_x_sec_how = {}\n\t\t}\n\t}\n")
-        self.fails(r"te_x_sec_how carries \['margin_left'\]",
+        self.fails(r"te_x_wide_sections's te_x_wide_only_sections: te_x_sec_how carries \['margin_left'\]",
                    own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\tte_x_sec_how = { margin_left = 200 }\n\t}\n")
         self.check(own + "\ttype te_x_wide_only_sections = flowcontainer {\n\t\tte_x_sec_how = {}\n\t}\n")
 
