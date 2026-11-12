@@ -25,6 +25,12 @@ false (`Undefined event target`, `Invalid right side during comparison`).
    Extensive Modernization Aid read `scope:other_country` in `can_ratify` for
    five months (#1025); the requirement could never be met.
 
+   Vanilla's own articles agree with the table wherever they read a party
+   scope, and `test_treaty_evaluation_scope_audit.py` keeps it so. That can
+   only disprove an entry (vanilla reads a scope the table calls unbound),
+   never prove one, and vanilla has two mutual articles (`alliance`,
+   `defensive_pact`): the mutual rows rest on those two and on the guide.
+
 What check 2 leaves alone, on purpose:
 
 * Any scope outside the party family (`scope:treaty`, `scope:article`,
@@ -66,6 +72,7 @@ _TOKEN = re.compile(
 )
 _SCOPE = re.compile(r"\bscope:[A-Za-z_][A-Za-z0-9_]*", re.IGNORECASE)
 _SAVE = re.compile(r"\bsave_(?:temporary_)?scope_as\s*=\s*([A-Za-z_][A-Za-z0-9_]*)")
+_KIND = re.compile(r'"?([^\s{}"]*)')
 _REVIEWED = re.compile(r"#\s*REVIEWED\s+\d{4}-\d{2}-\d{2}\s*\(treaty_scope\)\s*:\s*\S")
 
 EVALUATION_CHANCE = "ai.evaluation_chance"
@@ -181,7 +188,8 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
         elif token.group("anon"):
             stack.append(None)
         elif len(stack) == 1 and token.group("key") == "kind" and token.group("value"):
-            kind = token.group("value")
+            # From the raw text: `clean` has blanked the body of a quoted value.
+            kind = _KIND.match(text, token.start("value")).group(1)
     stack[1:] = []
     flush()  # an article the file never closes
     return flags

@@ -148,6 +148,12 @@ class BlockScopeTests(unittest.TestCase):
                 'b = {\n can_ratify = { scope:source_country = { is_ai = yes } }\n kind = directed\n}')
         self.assertEqual(found(text), [('a', 'can_ratify', 2, 'scope:source_country')])
 
+    def test_a_quoted_kind_is_still_the_kind(self):
+        text = ('a = {\n kind = "mutual"\n can_ratify = { scope:source_country = { is_ai = yes } }\n}\n'
+                'b = {\n kind = "directed"\n can_ratify = { scope:source_country = { is_ai = yes } }\n}')
+        flag, = scan_text(text, 'test.txt')
+        self.assertEqual((flag.article, flag.line, flag.kind), ('a', 3, 'mutual'))
+
     def test_an_article_with_no_kind_gets_only_what_both_kinds_lack(self):
         text = ('INJECT:alliance = {\n can_ratify = {\n  scope:source_country = { is_ai = yes }\n'
                 '  scope:other_country = { is_ai = yes }\n }\n'
@@ -250,7 +256,16 @@ class ReviewedTests(unittest.TestCase):
 class VanillaEvidenceTests(unittest.TestCase):
     """The table is an engine fact nobody can read off the engine, so hold it
     to vanilla's own script: a party scope vanilla reads in a block is one
-    that block binds. Fails when a patch makes the table wrong."""
+    that block binds.
+
+    This can only disprove an entry, never prove one. It fails when vanilla
+    reads a scope the table calls unbound: a wrong entry, or a patch that
+    binds the scope. A denied scope vanilla never reads passes whether or not
+    the engine sets it, and so does a wrong entry for a combination vanilla
+    does not exercise. Vanilla has only two mutual articles (`alliance`,
+    `defensive_pact`), and neither reads a party scope in `visible`, so the
+    mutual rows rest on those two and on the scripting guide's reading of
+    vanilla's treaty_articles.md."""
 
     SCOPE = re.compile(r'scope:([A-Za-z_][A-Za-z0-9_]*)')
 
