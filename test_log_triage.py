@@ -390,6 +390,10 @@ PdxDataFetchLocalizedData failed for
                                         "untagged_from": "x"})
         self.assertEqual(note, "MOD GUI: data type 'Country' is read by gui/a.gui, gui/b.gui and 5 more; "
                                "otherwise hidden by 'x'")
+        note = log_triage.mod_gui_note({"expression": "GetPlayer.GetFoo", "files": ["gui/a.gui"], "file_count": 1,
+                                        "untagged_from": "x"})
+        self.assertEqual(note, "MOD GUI: expression 'GetPlayer.GetFoo' is written in gui/a.gui; "
+                               "otherwise hidden by 'x'")
 
 
 class PauseTests(unittest.TestCase):

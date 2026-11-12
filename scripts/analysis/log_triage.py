@@ -483,12 +483,15 @@ def neighbours(finding: Finding, first: dt.datetime, lines_by_second: dict, limi
 
 def mod_gui_note(context: dict) -> str:
     """Why a GUI data-context failure is listed although a vanilla entry
-    matches it: the mod files that draw the key or read the data type."""
+    matches it: the mod files that draw the key, read the data type or write
+    the expression."""
     files = ", ".join(context["files"])
     more = context["file_count"] - len(context["files"])
     files += f" and {more} more" if more > 0 else ""
     if "type" in context:
         what = f"data type '{context['type']}' is read by {files}"
+    elif "expression" in context:
+        what = f"expression '{context['expression']}' is written in {files}"
     elif context["files"][0].endswith(".gui"):
         what = f"loc key '{context['key']}' is drawn by {files}"
     else:  # a key only the mod's loc defines, which no .gui names

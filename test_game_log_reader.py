@@ -1146,6 +1146,7 @@ class ModGuiFetchUntagTests(unittest.TestCase):
         "\t\ttextbox = { text = \"[SelectLocalization( Country.IsAI, 'te_census_ai', 'te_census_own' )]\" }\n"
         "\t\ttextbox = { visible = \"[GetVariableSystem.Exists('te_census_open')]\" }\n"
         "\t\ttextbox = { text = \"te_census_scopes\" tooltip = \"[GetPlayer.GetName]\" }\n"
+        "\t\ttextbox = { text = \"te_census_player\" visible = \"[GetPlayer.MakeScope.Var( 'te_census_on' ).IsSet]\" }\n"
         "\t}\n"
         "}\n"
     )
@@ -1179,7 +1180,8 @@ class ModGuiFetchUntagTests(unittest.TestCase):
         " te_census_nested:0 \"[JournalEntry.GetName]\"\n"
         " te_census_scopes:0 \"[SCOPE.sCountry('x').GetName] [ROOT.GetCountry.GetName] [TARGET_COUNTRY.GetName]"
         " [THIS.GetName]\"\n"
-        " te_event_desc:0 \"The [InterestGroup.GetName] object.\"\n"
+        " te_event_desc:0 \"The [InterestGroup.GetName] object of [GetPlayer.GetGovernment.GetName].\"\n"
+        " te_census_player:0 \"In [GetPlayer.GetCapital.GetStateRegion.GetName|v]\"\n"
         " te_panel_income:0 \"Income\"\n"
         " te_copy_outside:0 \"Outside\"\n"
         " te_nation_panel_line:0 \"Modifiers\"\n"
@@ -1292,10 +1294,50 @@ class ModGuiFetchUntagTests(unittest.TestCase):
         self.assertNotIn("COMMENTED_OUT_LABEL", refs.keys)
         self.assertNotIn("te_census_open", refs.keys)
         # Heads of the chains in the file and in the values its keys reach.
-        for name in ("Character", "Country", "GetVariableSystem", "GetPlayer", "PopsOverviewPanel", "JournalEntry"):
+        for name in ("Character", "Country", "PopsOverviewPanel", "JournalEntry"):
             self.assertEqual(refs.types.get(name), own, name)
         for name in ("SelectLocalization", "IsAI", "GetName", "Exists", "DiscriminationTraitGroup"):
             self.assertNotIn(name, refs.types)
+        # A global function is no data type; its expressions are kept whole.
+        for name in ("GetPlayer", "GetVariableSystem"):
+            self.assertNotIn(name, refs.types)
+        self.assertEqual(set(refs.expressions), {
+            "GetVariableSystem.Exists('te_census_open')", "GetPlayer.GetName",
+            "GetPlayer.MakeScope.Var('te_census_on').IsSet", "GetPlayer.GetCapital.GetStateRegion.GetName|v"})
+        self.assertTrue(all(files == own for files in refs.expressions.values()))
+
+    def test_a_global_function_head_needs_the_mods_own_markup_to_write_the_expression(self):
+        """Every panel calls GetPlayer, and it heads one in twenty of vanilla's
+        own expressions, so reading it says nothing. Such a line is the mod's
+        only when the expression itself is one the mod's own markup writes."""
+        rows = [
+            # Vanilla's own: the mod writes no such expression.
+            (self.FETCH.format("GetPlayer.GetCapital.GetName"), None),
+            (self.LOCALIZED.format("#b [GetPlayer.GetCapital.GetName]#!"), None),
+            # Written in the mod's own .gui, as the engine prints it (its own spacing).
+            (self.FETCH.format("GetPlayer.MakeScope.Var('te_census_on').IsSet"), self.OWN),
+            (self.FETCH.format("GetPlayer.MakeScope.Var( 'te_census_on' ).IsSet "), self.OWN),
+            # Written in a loc value the mod's own .gui draws (the format suffix is not part of it).
+            (self.FETCH.format("GetPlayer.GetCapital.GetStateRegion.GetName"), self.OWN),
+            # The start of what the mod writes, or a longer name, is another expression.
+            (self.FETCH.format("GetPlayer.GetCapital.GetStateRegion"), None),
+            (self.FETCH.format("GetPlayer.GetCapital.GetStateRegion.GetNameNoFormatting"), None),
+            (self.FETCH.format("GetPlayer.MakeScope.Var('te_census_on')"), None),
+            # In a mod loc value no mod-owned .gui draws: not the GUI's reach.
+            (self.FETCH.format("GetPlayer.GetGovernment.GetName"), None),
+        ]
+        entries = self._tagged([("pdx_gui_localize.cpp:140" if "Localized" in message
+                                 else "pdx_data_localize_helper.cpp:286", message) for message, _ in rows])
+        self.assertTrue(all(e.vanilla_bug_ref for e in entries))
+        self._untag(entries)
+        for e, (_, file) in zip(entries, rows):
+            with self.subTest(message=e.message):
+                if file is None:
+                    self.assertIsNotNone(e.vanilla_bug_ref)
+                else:
+                    self.assertIsNone(e.vanilla_bug_ref)
+                    self.assertEqual(e.mod_gui_context["files"], [file])
+                    self.assertIn("GetPlayer.", e.mod_gui_context["expression"])
 
     def test_script_loc_scope_names_and_types_only_other_mod_loc_reads_are_no_data_types(self):
         refs = self._refs()
@@ -1497,7 +1539,9 @@ class ModGuiFetchUntagTests(unittest.TestCase):
         # No file can be called the mod's own, so only mod-only keys are listed,
         # under whichever file names them.
         self.assertEqual(set(refs.keys), {"te_census_scopes", "te_panel_income", "te_copy_outside",
-                                          "te_nation_panel_line", "te_census_ai", "te_census_own"})
+                                          "te_nation_panel_line", "te_census_ai", "te_census_own",
+                                          "te_census_player"})
+        self.assertEqual(refs.expressions, {})
         ours = self._flood("POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL", "PopsOverviewPanel",
                            "PopsOverviewPanel.GetAverageIncomeRich")
         own_key = self._tagged([("pdx_gui_localize.cpp:140", self.LOCALIZED.format("te_event_desc"))])

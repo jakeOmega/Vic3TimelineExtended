@@ -1324,6 +1324,10 @@ _QUOTED_ARG_RE = re.compile(r"'([^'\n]*)'")
 # a name. Quoted arguments are blanked first.
 _DATA_ROOT_RE = re.compile(r"(?<![\w.])([A-Za-z_]\w*)\.(?=[A-Za-z_])")
 _EXPR_HEAD_RE = re.compile(r"\s*([A-Za-z_]\w*)\s*\.")
+# A chain head that is itself a call, with no object before it: `GetPlayer`,
+# `AccessPlayer`, `GetVariableSystem`. A global function, not a data context.
+_GLOBAL_FUNCTION_RE = re.compile(r"(?:Get|Access)[A-Z]")
+_WHITESPACE_RE = re.compile(r"\s+")
 _LOC_NEST_RE = re.compile(r"\$([A-Za-z_][\w.\-]*)(?:\|[^$\n]*)?\$")
 # The generators' marks around what the mod changed in a copy of vanilla's
 # markup (MOD_OPEN / MOD_CLOSE in gen_nation_tab.py and gen_law_effects_gui.py).
@@ -1347,19 +1351,41 @@ class ModGuiRefs:
     the mod's loc defines any file that names it. `mod_loc_keys`: every key
     only the mod's loc defines -> the loc file that defines it. `types`: data
     type at the head of a `[Foo.Bar]` chain -> the mod-owned `.gui` files that
-    read it, directly or in the value of a key they draw. `warnings`: what
-    could not be built, and why.
+    read it, directly or in the value of a key they draw. `expressions`: each
+    `[...]` expression of that markup and those values that reads a global
+    function, without its whitespace -> the same files (see
+    expression_files). `warnings`: what could not be built, and why.
     """
-    __slots__ = ("keys", "mod_loc_keys", "types", "warnings")
+    __slots__ = ("keys", "mod_loc_keys", "types", "expressions", "warnings", "_found")
 
     def __init__(self, keys: dict[str, tuple[str, ...]] | None = None,
                  mod_loc_keys: dict[str, str] | None = None,
                  types: dict[str, tuple[str, ...]] | None = None,
-                 warnings: tuple[str, ...] = ()):
+                 warnings: tuple[str, ...] = (),
+                 expressions: dict[str, tuple[str, ...]] | None = None):
         self.keys = keys or {}
         self.mod_loc_keys = mod_loc_keys or {}
         self.types = types or {}
+        self.expressions = expressions or {}
         self.warnings = tuple(warnings)
+        self._found: dict[str, tuple[str, ...]] = {}
+
+    def expression_files(self, expression: str) -> tuple[str, ...]:
+        """The mod files in whose markup `expression` occurs as the engine
+        prints it: whitespace aside, and as a whole chain or call, not as the
+        start of a longer name or chain (`GetPlayer.GetName` is not in
+        `GetPlayer.GetNameNoFormatting`, nor in `GetPlayer.GetName.Foo`)."""
+        wanted = _WHITESPACE_RE.sub("", expression)
+        hit = self._found.get(wanted)
+        if hit is None:
+            files: set[str] = set()
+            if wanted:
+                whole = re.compile(r"(?<![\w.])" + re.escape(wanted) + r"(?![\w.])")
+                for written, where in self.expressions.items():
+                    if wanted in written and whole.search(written):
+                        files.update(where)
+            hit = self._found[wanted] = tuple(sorted(files))
+        return hit
 
 
 _vanilla_gui_names_cache: dict[str, frozenset[str]] = {}
@@ -1423,27 +1449,46 @@ def _data_types(text: str) -> list[str]:
     handed by whatever effect or tooltip renders it, not a context a window
     holds: no GUI file sets one, and they head two in five of vanilla's own
     expressions, so they never count.
+
+    Nor does a global function (see _GLOBAL_FUNCTION_RE): it needs no context,
+    every panel calls `GetPlayer`, and so reading it says nothing about whose
+    line a failure is. Those are matched by the whole expression instead
+    (_global_expressions, ModGuiRefs.expression_files).
     """
     out: list[str] = []
     if "." not in text:
         return out
     for body in _DATA_EXPR_RE.findall(text):
         for root in _DATA_ROOT_RE.findall(_QUOTED_ARG_RE.sub("''", body)):
-            if root not in out and not root.isupper():
+            if root not in out and not root.isupper() and not _GLOBAL_FUNCTION_RE.match(root):
                 out.append(root)
     return out
 
 
-def _expression_heads(payload: str) -> list[str]:
-    """The name an expression starts with (`Foo` of `Foo.Bar( Baz.Get )`): of
-    each `[...]` in an inline text, else of `payload` itself. A chain passed
-    as an argument is not the line's subject."""
-    heads = []
+def _global_expressions(text: str) -> list[str]:
+    """Each `[...]` expression of `text` that reads a global function,
+    without its whitespace."""
+    out: list[str] = []
+    if "." not in text:
+        return out
+    for body in _DATA_EXPR_RE.findall(text):
+        roots = _DATA_ROOT_RE.findall(_QUOTED_ARG_RE.sub("''", body))
+        if any(_GLOBAL_FUNCTION_RE.match(root) for root in roots):
+            out.append(_WHITESPACE_RE.sub("", body))
+    return out
+
+
+def _expressions(payload: str) -> list[tuple[str, str]]:
+    """(head, expression) of each `[...]` in an inline text, else of `payload`
+    itself. The head is the name the expression starts with (`Foo` of
+    `Foo.Bar( Baz.Get )`): a chain passed as an argument is not the line's
+    subject."""
+    out = []
     for body in (_DATA_EXPR_RE.findall(payload) if "[" in payload else [payload]):
         m = _EXPR_HEAD_RE.match(body)
-        if m and m.group(1) not in heads:
-            heads.append(m.group(1))
-    return heads
+        if m:
+            out.append((m.group(1), body))
+    return out
 
 
 def _mod_blocks(text: str) -> tuple[str, str] | None:
@@ -1508,7 +1553,9 @@ def mod_gui_references(
         nest (`$KEY$`, a quoted key in an expression), in the mod's English
         loc or vanilla's;
       - types: the head of every `[Foo.Bar]` chain in that markup and in the
-        values of those keys (see _data_types for what is no data type).
+        values of those keys (see _data_types for what is no data type);
+      - expressions: every `[...]` expression there that reads a global
+        function, which only a whole-expression match can attribute.
 
     A type only other mod loc reads is not in `types`: script-side loc
     (events, modifiers, tooltips of effects) reads scopes whichever window
@@ -1566,17 +1613,19 @@ def mod_gui_references(
         value = mod_loc.get(key)
         return vanilla_loc.get(key) if value is None else value
 
-    links: dict[str, tuple[list[str], list[str]]] = {}
+    links: dict[str, tuple[list[str], list[str], list[str]]] = {}
 
-    def links_of(key: str) -> tuple[list[str], list[str]]:
-        """(the types `key`'s value reads, the keys it nests)."""
+    def links_of(key: str) -> tuple[list[str], list[str], list[str]]:
+        """(the types `key`'s value reads, its global-function expressions,
+        the keys it nests)."""
         hit = links.get(key)
         if hit is None:
             value = value_of(key) or ""
             nested = set(_LOC_NEST_RE.findall(value))
             for body in _DATA_EXPR_RE.findall(value):
                 nested.update(_QUOTED_ARG_RE.findall(body))
-            hit = links[key] = (_data_types(value), sorted(k for k in nested if value_of(k) is not None))
+            hit = links[key] = (_data_types(value), _global_expressions(value),
+                                sorted(k for k in nested if value_of(k) is not None))
         return hit
 
     def named(text: str) -> tuple[list[str], set[str]]:
@@ -1591,6 +1640,7 @@ def mod_gui_references(
 
     keys: dict[str, set[str]] = defaultdict(set)
     types: dict[str, set[str]] = defaultdict(set)
+    expressions: dict[str, set[str]] = defaultdict(set)
     for path, rel, _ in gui_files:
         own, other = "", read(path)
         if vanilla_gui_files is not None and rel.lower() not in vanilla_gui_files:
@@ -1609,21 +1659,26 @@ def mod_gui_references(
         for string in _GUI_STRING_RE.findall(own):
             for name in _data_types(string):
                 types[name].add(rel)
+            for written in _global_expressions(string):
+                expressions[written].add(rel)
         todo = [k for k in quoted.union(values) if value_of(k) is not None]
         seen = set(todo)
         while todo:
             key = todo.pop()
             keys[key].add(rel)
-            read_types, nested = links_of(key)
+            read_types, written_here, nested = links_of(key)
             for name in read_types:
                 types[name].add(rel)
+            for written in written_here:
+                expressions[written].add(rel)
             for k in nested:
                 if k not in seen:
                     seen.add(k)
                     todo.append(k)
 
     result = ModGuiRefs({k: tuple(sorted(v)) for k, v in keys.items()}, mod_loc_keys,
-                        {t: tuple(sorted(v)) for t, v in types.items()}, tuple(warnings))
+                        {t: tuple(sorted(v)) for t, v in types.items()}, tuple(warnings),
+                        {x: tuple(sorted(v)) for x, v in expressions.items()})
     _mod_gui_refs_cache[mod_root] = (vanilla_gui_files, vanilla_loc, stamp, result)
     return result
 
@@ -1635,16 +1690,19 @@ def _mod_gui_hit(refs: ModGuiRefs, m: re.Match) -> tuple[dict, tuple[str, ...]] 
     if wanted is not None:
         # The engine names the context it lacked. The expression after it is
         # no second chance: a chain passed as an argument is not the subject.
-        names = [wanted]
-    elif payload in refs.keys:
+        return ({"type": wanted}, refs.types[wanted]) if wanted in refs.types else None
+    if payload in refs.keys:
         return {"key": payload}, refs.keys[payload]
-    elif payload in refs.mod_loc_keys:
+    if payload in refs.mod_loc_keys:
         return {"key": payload}, (refs.mod_loc_keys[payload],)
-    else:
-        names = _expression_heads(payload)
-    for name in names:
-        if name in refs.types:
-            return {"type": name}, refs.types[name]
+    for head, expression in _expressions(payload):
+        if _GLOBAL_FUNCTION_RE.match(head):
+            # Every panel calls GetPlayer: only the expression can say whose.
+            files = refs.expression_files(expression)
+            if files:
+                return {"expression": expression.strip()}, files
+        elif head in refs.types:
+            return {"type": head}, refs.types[head]
     return None
 
 
@@ -1661,12 +1719,14 @@ def untag_mod_gui_fetches(entries: list[LogEntry], refs: ModGuiRefs,
 
       - `PdxDataFetchLocalizedData failed for '<key>'` or `FetchData failed
         for '<expr>'` names a key in `refs.keys` or `refs.mod_loc_keys`, or an
-        expression whose head is in `refs.types`;
+        expression whose head is in `refs.types`, or, where the head is a
+        global function (`GetPlayer.…`), an expression the mod's own markup
+        writes (`refs.expression_files`);
       - `wanted context of type '<Type>' for '<expr>'` names a type in
         `refs.types` (the wanted type alone).
 
-    Such a line gets `mod_gui_context`: `key` or `type`, the mod `files` that
-    reach it (the first few, with `file_count`), and `untagged_from`, the
+    Such a line gets `mod_gui_context`: `key`, `type` or `expression`, the mod
+    `files` that reach it (the first few, with `file_count`), and `untagged_from`, the
     title of the entry that had hidden it. A payload only vanilla's GUI
     reaches keeps its tag.
 
