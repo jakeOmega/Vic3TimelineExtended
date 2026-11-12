@@ -25,6 +25,7 @@ nd_crisis_notice_talks_weeks_value = 6  # talks an exercise notice opens (nuclea
 nd_crisis_transit_weeks_value = 3       # weeks the clock waits for the threat to reach the target (it arrives after 14-21 days)
 nd_crisis_cooldown_months_value = 24    # no second crisis with the same country
 nd_readiness_lock_months_value = 24     # a conceded or agreed stand-down
+nd_crisis_freeze_months_value = 120     # a conceded programme freeze: its modifier's years = 10 (nuclear_crisis_effects.txt)
 nd_pledge_broken_months_value = 120     # a repudiation is remembered this long
 nd_monopoly_window_cooldown_months = 12
 nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_incident.40)

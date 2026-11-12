@@ -493,6 +493,44 @@ nd_tick_countdown = {
 	}
 }
 
+# A conceded programme freeze (dispute 4, nd_crisis_act_yield) binds the
+# nation, not the regime (#758; the continuity ruling of #460-#465). The
+# ten-year timed modifier carries it in normal play; nd_crisis_freeze_months,
+# set beside it at 120, is what a revolution's winner inherits, since the
+# winner takes the loser's variables but none of its modifiers. While the
+# countdown runs, a country without the modifier gets it back without a
+# duration (add_modifier takes no computed one) and is marked
+# nd_crisis_freeze_untimed; when the countdown ends, that copy goes. The
+# modifier is read only while more than one month is left: the countdown's
+# 119th tick comes at most 3,622 days after the concession, before the
+# timed copy's 3,650 run out, so normal play never re-adds it. Every country,
+# monthly (nd_country_monthly_cleanup): the frozen target need not have the
+# entry.
+nd_crisis_freeze_monthly = {
+	if = {
+		limit = { has_variable = nd_crisis_freeze_months }
+		if = {
+			limit = { var:nd_crisis_freeze_months > 1 }
+			change_variable = { name = nd_crisis_freeze_months subtract = 1 }
+			if = {
+				limit = { NOT = { has_modifier = nd_crisis_programme_freeze } }
+				add_modifier = { name = nd_crisis_programme_freeze }
+				set_variable = nd_crisis_freeze_untimed
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=crisis_freeze_restored; months_left=[THIS.Var('nd_crisis_freeze_months').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
+		}
+		else = {
+			remove_variable = nd_crisis_freeze_months
+			if = {
+				limit = { has_variable = nd_crisis_freeze_untimed }
+				remove_modifier = nd_crisis_programme_freeze
+				remove_variable = nd_crisis_freeze_untimed
+			}
+		}
+	}
+}
+
 nd_yearly_update = {
 	if = {
 		limit = { nd_is_armed = yes }
@@ -3558,6 +3596,7 @@ nd_country_monthly_cleanup = {
 	# A government losing a revolution while armed is asked what becomes of
 	# its warheads; a custodian's help lapses with the civil war.
 	nd_cw_monthly_check = yes
+	nd_crisis_freeze_monthly = yes
 	# Warheads unaccounted for that someone is paying to find
 	# (nuclear_loose_effects.txt).
 	nd_loose_monthly = yes
