@@ -10141,6 +10141,7 @@ POST_LOAD_AUDITS = [
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
     ("button_reason_audit",           "button_reason_audit"),
     ("faith_scene_audit",             "faith_scene_audit"),
+    ("sol_fraction_audit",            "sol_fraction_audit"),
     ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
 ]
 

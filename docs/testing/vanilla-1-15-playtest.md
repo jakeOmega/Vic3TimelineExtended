@@ -128,6 +128,32 @@ game, in English.
   - **The AI.** In an observer game, `debug.log` should carry `TE_PB_SUMMIT <kind> by=ai` lines once AI blocs hold two
     or more mandates, a few a decade per bloc, mostly `rally` and `leverage`. None at all after a decade of blocs
     holding mandates means the monthly roll never fires.
+- **C21, formation mandates (#1458).** The four technologies that add a principle slot each carry
+  `country_power_bloc_formation_mandates_add = 1`, which vanilla describes as more mandates to spend on principles
+  when forming a bloc. One once-a-game line in `debug.log` when a bloc forms: `TE_SELF_CHECK OK|BROKEN
+  formation_mandates`, with the new bloc's unspent mandates, its principle levels and the founder's grant. Principles
+  taken at formation count: the founder spends the mandates there, so unspent mandates alone can read 0 when the
+  modifier works. OK can't tell the extra mandates from vanilla's free formation picks, so found one bloc with the
+  technologies and one without and compare the principles each could pick in the formation window. BROKEN: open the
+  bloc's panel and count its principles and mandates; if the founder could pick no more than one without the
+  technologies, grant them in the on-action with `add_power_bloc_mandate` and drop the technologies' lines. No line
+  at all once a bloc has formed means `scope:country` is not set in `on_power_bloc_formed`. Whether `MAX_MANDATES`
+  (5) caps the grant shows only if a founder carries more than 5.
+  Under the Four principle slots rule, found a bloc with all four technologies and count the principles the
+  formation window lets you pick: `te_pb_principle_slot_free` passes while the founder is not yet in a bloc, so the
+  pick may exceed the rule's cap of four. If it does, gate the formation pick on the rule or drop the mandates under
+  it.
+- **New 1.15 modifier hooks (#1453, #1458).** Hover each and read the tooltip, then watch it act once:
+  - Civil Rights: Federal Protection's +25% and Segregationist Consolidation's −25% enactment speed for
+    Multicultural. Enact Multicultural under each and compare the progress per week.
+  - Vassalization V: `country_overlord_law_enactment_success_add` +10% on members. Vanilla's Congress Poland carries
+    it on the subject, so it should help an overlord enacting a law in a subject member; if it shows on the leader's
+    own enactments instead, move it to `leader_modifier`.
+  - Universal Basic Income: +0.5 toward reform in Reform or Revolution's country contribution tooltip (the "bonus
+    values" line), once the entry runs.
+  - External Trade IV and V: the interest-tier trade advantage lines (+5% to +20%, +10% to +40% from engaged to
+    hegemonic). Compare a member's trade advantage in a region where it is hegemonic with one where it is only
+    engaged.
 
 ## Panels and systems
 
@@ -381,3 +407,11 @@ unless a line names a save.
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 1.15.1 hotfix, "Ports and railways": no country starts with a subsidized port or railway. `decentralized_law_baseline` OK again.
+
+## Infamy ported to `country_infamy_value`, and the naturalization amendment (#387, #1384)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Subjugate's infamy.** As a bloc leader, subjugate a member; read your infamy before and after, and `debug.log`. | `TE_SELF_CHECK OK force_subject_infamy`, and a rise of a fifth of the annexation figure the State Infamy map mode shows for the target (summed over its states), at most 25; half that for a Sovereign Empire. The action's preview shows the same figure. | `BROKEN` (0 infamy): `country_infamy_value` doesn't resolve in a diplomatic action. Sum `state_infamy_value` over the target's states with `every_scope_state` in a script value instead, after `save_temporary_scope_as = target_country` (vanilla's stake-colonial-claim action saves its state first). |
+| **UN mandate goal without a mandate.** Only reachable if `possible` lets one through (a lapsed mandate keeps the goal: `valid` doesn't read it); add the goal and let the mandate lapse, or read the preview. | The goal's infamy equals a plain `return_state` on the same state. | Different: compare the block with vanilla's `21_return_state.txt`. |
+| **Language Requirement for Naturalization.** Under National Supremacy with the amendment and no other restrictiveness (no Migration Controls), hover the migration restrictiveness: 21. Find a culture sharing no language, heritage or tradition (acceptance 20). | It can't migrate in; under Cultural Exclusion (acceptance 40) it can. | It migrates under National Supremacy: restrictiveness isn't compared with the acceptance shown, or not strictly. Record what the tooltip shows. If the engine bars a pop *at* the threshold, 20 would do the same as 21. |

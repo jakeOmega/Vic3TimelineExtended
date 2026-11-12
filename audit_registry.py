@@ -199,6 +199,12 @@ AUDITS: tuple[Audit, ...] = (
         where=VALUE_LINE,
     ),
     Audit(
+        "sol_fraction_audit",
+        "A `*_standard_of_living_add` that is not a whole number and is not scaled before it applies. "
+        "Standard of living is an integer, so the fraction does nothing on its own (#338).",
+        where=VALUE_LINE,
+    ),
+    Audit(
         "change_variable_clamp_audit",
         "A `min =` / `max =` inside `change_variable`, where which way it clamps is a guess.",
         where="trailing on the `min =` / `max =` line or the `change_variable = {` line",
