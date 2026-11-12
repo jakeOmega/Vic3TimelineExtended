@@ -640,6 +640,9 @@ class StandaloneCliTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertIn("on_actions.log", err)
         self.assertIn("not re-rendered", err)
+        # The server's advice ends "then reload"; there is nothing to reload here.
+        self.assertIn("then run this again", err)
+        self.assertNotIn("then reload", err)
         self.assertNotIn("Done", out)
         self.assertEqual(_read_dir(cli_dir), {})
 

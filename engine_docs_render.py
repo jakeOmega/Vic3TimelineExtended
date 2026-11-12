@@ -793,7 +793,11 @@ def _cli(argv: list[str] | None = None) -> int:
     for warning in mss._version_mismatch_warnings():
         print(f"WARNING: {warning.get('detail') or warning.get('error')}", file=sys.stderr)
     if mss._engine_docs_warnings:
-        print(f"ERROR: {mss._engine_docs_warnings[0]['detail']}", file=sys.stderr)
+        # The server words its advice for a reader of the reload response.
+        detail = mss._engine_docs_warnings[0]["detail"].replace(
+            "then reload", "then run this again"
+        )
+        print(f"ERROR: {detail}", file=sys.stderr)
         return 1
     if written is None:
         print(

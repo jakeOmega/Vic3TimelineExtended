@@ -587,5 +587,59 @@ class VersionMismatchReloadWarningTests(_QuietServerLogMixin):
                          "OSError: launcher settings unreadable")
 
 
+class VersionMismatchNeedsTwoVersionsTests(_QuietServerLogMixin):
+    """A machine with no game and no vanilla mirror (CI, a cloud container)
+    knows at most the engine-docs version. One version, or none, cannot
+    disagree: a warning there would sit in every reload's `warnings`, which
+    agents are told to read each time. Runs the real `_compute_version_status`
+    over stubbed inputs."""
+
+    def _warnings(self, *, live, clone, docs_dir, label):
+        head = {"version": clone} if clone else {}
+        with mock.patch.object(mss, "_read_live_game_version", return_value=live), \
+                mock.patch.object(mss, "_load_vanilla_repo_head_info", return_value=head), \
+                mock.patch.object(mss, "_engine_docs_source", lambda: (docs_dir, label)):
+            return mss._version_mismatch_warnings()
+
+    def test_only_the_engine_docs_version_known(self):
+        for docs_dir in ("/digests/1.15.1/docs", "/digests/1.14.5-openbeta/docs"):
+            with self.subTest(docs_dir=docs_dir):
+                self.assertEqual(
+                    self._warnings(live=None, clone=None, docs_dir=docs_dir,
+                                   label="digest_snapshot"),
+                    [],
+                )
+
+    def test_no_version_known(self):
+        self.assertEqual(
+            self._warnings(live=None, clone=None, docs_dir="/nonexistent/docs",
+                           label="mod_loaded"),
+            [],
+        )
+
+    def test_only_the_game_or_only_the_mirror_known(self):
+        for live, clone in (("1.15.1", None), (None, "1.15.1")):
+            with self.subTest(live=live, clone=clone):
+                self.assertEqual(
+                    self._warnings(live=live, clone=clone, docs_dir="/nonexistent/docs",
+                                   label="mod_loaded"),
+                    [],
+                )
+
+    def test_two_known_versions_that_agree(self):
+        self.assertEqual(
+            self._warnings(live="1.15.1", clone=None, docs_dir="/digests/1.15.1/docs",
+                           label="digest_snapshot"),
+            [],
+        )
+
+    def test_two_known_versions_that_differ(self):
+        # The control: the same stubs do warn once two versions disagree.
+        warnings = self._warnings(live=None, clone="1.15.0",
+                                  docs_dir="/digests/1.15.1/docs", label="digest_snapshot")
+        self.assertEqual([w["label"] for w in warnings], ["version_mismatch"])
+        self.assertIn("live_game=None", warnings[0]["detail"])
+
+
 if __name__ == "__main__":
     unittest.main()
