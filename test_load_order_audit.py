@@ -494,6 +494,18 @@ class VanillaSourceTests(unittest.TestCase):
             loa.audit(ms, self.mod, index)
             self.assertEqual(scan.call_count, 1)
 
+    def test_the_scan_cache_keeps_each_block_cap_apart(self):
+        # on_action_index scans whole blocks (block_cap=None); the audit
+        # scans cut ones. One cache must not hand either the other's.
+        full = os.path.join(self.mod, "common", "laws", "b_te.txt")
+        _write(self.mod, "common/laws/b_te.txt", "law_long = { " + "x = 1 " * 60 + "}\n")
+        cache: dict = {}
+        cut, _w = emo._scan_file(full, cache, 20)
+        whole, _w = emo._scan_file(full, cache, None)
+        self.assertEqual(len(cache), 2)
+        self.assertIsNot(cut, whole)
+        self.assertEqual(emo._scan_file(full, cache, 20)[0], cut)
+
 
 class ModelStatusTests(unittest.TestCase):
     def test_bare_rule_status(self):

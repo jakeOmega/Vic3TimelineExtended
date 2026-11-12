@@ -18,7 +18,7 @@ in phases. Every tool built on ModState sees ModState's value (#1191).
 |---|---|
 | Differences (ModState holds a value the engine doesn't load) | 0 |
 | Model unsure | 0 |
-| Undetermined without the game files | 112 |
+| Undetermined without the game files | 111 |
 | Not compared | 0 |
 | Vanilla's own files | not checked |
 | Identical bare copies (no difference) | 15 |
@@ -76,12 +76,12 @@ clean nor a finding.
 - If vanilla defines it in `13_construction.txt`, a path the mod also ships, so vanilla's file isn't read: **differs**. The engine's load: `common/production_method_groups/extra_pm_groups.txt` (REPLACE): no entry to act on (the engine logs the non-existing-entry error).
 - Keys: `pmg_aeroplanes`, `pmg_radios_category`, `pmg_synthetic_silk`
 
-### `common/script_values`: 2 keys
+### `common/script_values`: 1 key
 
 - Definitions: vanilla (its file isn't in the snapshot); `common/script_values/extra_script_values.txt` (bare)
 - If vanilla defines it in a file that sorts before `extra_script_values.txt` (12 of vanilla's 37 files): agrees with ModState. The engine's load: vanilla's entry (bare): creates the entry; `common/script_values/extra_script_values.txt` (bare): read later, takes the key's place.
 - If vanilla defines it in a file that sorts after `extra_script_values.txt` (25 of vanilla's 37 files): **differs**. The engine's load: `common/script_values/extra_script_values.txt` (bare): creates the entry; vanilla's entry (bare): read later, takes the key's place.
-- Keys: `country_gdp_per_capita`, `leverage_threshold_to_invite`
+- Keys: `leverage_threshold_to_invite`
 
 ### `common/script_values`: 2 keys
 
