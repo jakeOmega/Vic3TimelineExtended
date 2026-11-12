@@ -5877,6 +5877,18 @@ def json_body(data) -> bytes:
     return json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
 
 
+def encode_response(data, status: int = 200, what: str = "response") -> tuple[bytes, int]:
+    """(bytes, status) for a response body. One json can't encode (a set, a
+    Path) becomes the 500 body do_GET gives any other failure, so the client
+    gets an answer rather than a dropped connection. `what` names the request
+    in the log line."""
+    try:
+        return json_body(data), status
+    except Exception as exc:
+        logger.error(f"Error handling {what}: {exc}\n{traceback.format_exc()}")
+        return json_body({"error": f"{type(exc).__name__}: {exc}"}), 500
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- local-origin gate ------------------------------------------------
@@ -10050,7 +10062,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
-        body = json_body(data)
+        what = f"{getattr(self, 'command', None) or 'request'} {getattr(self, 'path', '?')}"
+        body, status = encode_response(data, status, what)
         try:
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")

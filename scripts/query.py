@@ -10,13 +10,14 @@
 Prints the JSON the endpoint would (`/modifier-search?q=goods_output`,
 `/localize/law_monarchy`, ...), byte for byte: the request goes through the
 server's own routing (`ModStateHandler.get_result`) and serialization
-(`mod_state_server.json_body`), with no HTTP. Arguments of the form
+(`mod_state_server.encode_response`), with no HTTP. Arguments of the form
 `name=value` become query parameters (`limit=20`, `scope=mod`,
 `include_reviewed=true`).
 
-When a server for this checkout is up on :8950 (its `/status` reports this
-checkout's `mod_path`), the lookup goes to it instead, and a line on stderr
-says so; `--offline` skips that. Otherwise the parsed data come from where a
+When a server for this checkout is up on :8950 (its `/status` answers 200
+and reports this checkout's `mod_path`), the lookup goes to it instead, and a
+line on stderr says so; if it stops answering before the lookup, the lookup is
+answered offline, with a note. `--offline` skips the server. Otherwise the parsed data come from where a
 server load takes them: the game files where the game is installed, else the
 committed `vanilla_parsed/` snapshot, plus the mod's working tree as it stands
 (about 10 s; `script-args` and `modifier-grants` scan files and skip it).
@@ -29,6 +30,7 @@ is still printed: 400, 404, 500), 2 for an unknown lookup or bad arguments.
 from __future__ import annotations
 
 import contextlib
+import http.client
 import json
 import os
 import sys
@@ -128,15 +130,17 @@ def build_request(argv: list[str]) -> tuple[str, str, bool]:
 
 
 def server_for_this_checkout(port: int = SERVER_PORT, timeout: float = 2.0) -> str | None:
-    """The base URL of a ready server on `port` whose `/status` names this
-    checkout as its `mod_path`, else None."""
+    """The base URL of the server on `port` when its `/status` answers 200
+    and names this checkout as its `mod_path`, else None: nothing listening,
+    something there that is not this server, a server for another checkout,
+    or one whose `/status` is a 503 (vanilla data not loaded)."""
     import path_constants
 
     base = f"http://127.0.0.1:{port}"
     try:
         with urllib.request.urlopen(f"{base}/status", timeout=timeout) as resp:
             status = json.loads(resp.read())
-    except (urllib.error.URLError, OSError, ValueError):
+    except (urllib.error.URLError, http.client.HTTPException, OSError, ValueError):
         return None
     served = status.get("mod_path") if isinstance(status, dict) else None
     if not served or os.path.realpath(served) != os.path.realpath(path_constants.mod_path):
@@ -144,12 +148,17 @@ def server_for_this_checkout(port: int = SERVER_PORT, timeout: float = 2.0) -> s
     return base
 
 
-def fetch(base: str, path: str) -> tuple[bytes, int]:
+def fetch(base: str, path: str) -> tuple[bytes, int] | None:
+    """(body, status) from the server, an endpoint error included; None when
+    the server could not be reached for this request (it went away after
+    `/status`, or the connection broke)."""
     try:
         with urllib.request.urlopen(base + path, timeout=600) as resp:
             return resp.read(), resp.status
     except urllib.error.HTTPError as exc:
         return exc.read(), exc.code
+    except (urllib.error.URLError, http.client.HTTPException, OSError):
+        return None
 
 
 def _ensure_game_paths() -> None:
@@ -174,7 +183,7 @@ def answer_offline(path: str, needs_mod_state: bool) -> tuple[bytes, int]:
             mss.ms = mss.cli_mod_state()
     handler = object.__new__(mss.ModStateHandler)
     data, status = handler.get_result(path)
-    return mss.json_body(data), status
+    return mss.encode_response(data, status, f"GET {path}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -187,11 +196,15 @@ def main(argv: list[str] | None = None) -> int:
         print(usage(), file=sys.stderr)
         return 2
     base = None if offline else server_for_this_checkout()
-    if base:
+    answer = fetch(base, path) if base else None
+    if answer is not None:
         print(f"[query] answered by the mod state server on :{SERVER_PORT} "
               "(it serves this checkout)", file=sys.stderr)
-        body, status = fetch(base, path)
+        body, status = answer
     else:
+        if base:
+            print(f"[query] the mod state server on :{SERVER_PORT} stopped answering; "
+                  "answering offline", file=sys.stderr)
         needs = LOOKUPS[lookup][3] or "annotate=" in path
         body, status = answer_offline(path, needs)
     sys.stdout.buffer.write(body)

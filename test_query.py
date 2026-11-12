@@ -2,6 +2,7 @@
 the server sends for it, on the same fixtures, for each of the five lookups."""
 from __future__ import annotations
 
+import http.client
 import io
 import json
 import os
@@ -267,9 +268,12 @@ class LiveServerTests(unittest.TestCase):
             with self.subTest(payload=payload), \
                     mock.patch("urllib.request.urlopen", return_value=self._status(payload)):
                 self.assertEqual(query.server_for_this_checkout(), want)
-        with mock.patch("urllib.request.urlopen",
-                        side_effect=urllib.error.URLError("refused")):
-            self.assertIsNone(query.server_for_this_checkout())
+        for exc in (urllib.error.URLError("refused"), ConnectionResetError(),
+                    http.client.BadStatusLine("SSH-2.0-OpenSSH"),
+                    http.client.RemoteDisconnected("closed")):
+            # Nothing listening, or something on :8950 that is not this server.
+            with self.subTest(exc=exc), mock.patch("urllib.request.urlopen", side_effect=exc):
+                self.assertIsNone(query.server_for_this_checkout())
 
     def test_uses_the_server_and_says_so(self):
         body = mss.json_body({"key": "k", "name": "K"})
@@ -290,6 +294,46 @@ class LiveServerTests(unittest.TestCase):
             printed, code, err = run_cli(["references", "law_x"])
         offline.assert_called_once_with("/references/law_x", True)
         self.assertEqual((printed, code, err), (b"{}", 0, ""))
+
+    def test_fetch_passes_endpoint_errors_through(self):
+        error = urllib.error.HTTPError("http://x", 404, "Not Found", {},
+                                       io.BytesIO(b'{"error": "nope"}'))
+        with mock.patch("urllib.request.urlopen", side_effect=error):
+            self.assertEqual(query.fetch("http://x", "/localize/k"), (b'{"error": "nope"}', 404))
+
+    def test_a_server_that_goes_away_falls_back_offline(self):
+        # Up for /status, gone (or not answering HTTP) for the lookup itself.
+        for exc in (urllib.error.URLError("refused"), ConnectionResetError(),
+                    http.client.RemoteDisconnected("closed")):
+            with self.subTest(exc=exc), \
+                    mock.patch.object(query, "server_for_this_checkout",
+                                      return_value="http://127.0.0.1:8950"), \
+                    mock.patch("urllib.request.urlopen", side_effect=exc), \
+                    mock.patch.object(query, "answer_offline",
+                                      return_value=(b"{}", 200)) as offline:
+                printed, code, err = run_cli(["localize", "k"])
+            offline.assert_called_once_with("/localize/k", True)
+            self.assertEqual((printed, code), (b"{}", 0))
+            self.assertIn("answering offline", err)
+            self.assertNotIn("answered by the mod state server", err)
+
+
+class UnserializableResultTests(unittest.TestCase):
+    """A result json cannot encode is the 500 body do_GET gives any other
+    failure, from the server and from the CLI alike."""
+
+    def test_a_set_in_a_result_is_a_500_from_both(self):
+        with mock.patch.object(mss.ModStateHandler, "route", return_value={"a": {1, 2}}), \
+                mock.patch.object(query, "server_for_this_checkout",
+                                  side_effect=AssertionError("--offline must not ask")), \
+                self.assertLogs(mss.logger, level="ERROR") as logs:
+            body, status = served("/script-args")
+            printed, code, _err = run_cli(["--offline", "script-args"])
+        self.assertEqual(status, 500)
+        self.assertEqual(json.loads(body),
+                         {"error": "TypeError: Object of type set is not JSON serializable"})
+        self.assertEqual((printed, code), (body, 1))
+        self.assertTrue(all("/script-args" in line for line in logs.output))
 
 
 if __name__ == "__main__":
