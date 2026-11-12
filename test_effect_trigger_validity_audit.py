@@ -429,6 +429,174 @@ class BootstrapCatalogTests(unittest.TestCase):
         self.assertIn("some_vanilla_value", catalog)
 
 
+def _tree(root: str) -> dict[str, tuple[bytes, int]]:
+    """Every file under `root` with its bytes and mtime, and every directory."""
+    seen: dict[str, tuple[bytes, int]] = {}
+    for dirpath, dirnames, filenames in os.walk(root):
+        for name in dirnames:
+            seen[os.path.join(dirpath, name) + os.sep] = (b"", 0)
+        for name in filenames:
+            path = os.path.join(dirpath, name)
+            with open(path, "rb") as fh:
+                seen[path] = (fh.read(), os.stat(path).st_mtime_ns)
+    return seen
+
+
+def _write_files(root: str, files: dict[str, str], encoding: str = "utf-8") -> None:
+    for rel, text in files.items():
+        p = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        with open(p, "w", encoding=encoding) as f:
+            f.write(text)
+
+
+class BootstrapDryRunTests(unittest.TestCase):
+    """#1403: `bootstrap --dry-run` says what the rewrite would change and
+    writes nothing."""
+
+    CATALOG = "docs/engine/effect_trigger_valid_keys.txt"
+    CONTEXT = "docs/engine/effect_trigger_context_keys.txt"
+
+    def _game(self) -> str:
+        game = tempfile.mkdtemp()
+        _write_files(game, {
+            "game/events/e.txt":
+                "v.1 = {\n\timmediate = {\n\t\tnew_effect = yes\n\t}\n}\n",
+            "game/common/scripted_effects/x.txt":
+                "v_fx = {\n\tset_variable = a\n}\n",
+        }, encoding="utf-8-sig")
+        return game
+
+    def _mod(self, catalog: str | None) -> str:
+        mod = tempfile.mkdtemp()
+        _write_files(mod, {
+            "docs/engine/effects_summary.txt": "country|set_variable|sets it\n",
+            "docs/engine/triggers_summary.txt": "country|has_variable|reads it\n",
+        })
+        if catalog is not None:
+            _write_files(mod, {self.CATALOG: catalog})
+        return mod
+
+    def test_dry_run_reports_the_change_and_writes_nothing(self):
+        game = self._game()
+        mod = self._mod("# old header\nset_variable\ngone_in_this_patch\n")
+        before = _tree(mod)
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertEqual(_tree(mod), before)
+        self.assertIs(info["written"], False)
+        self.assertEqual(info["current"], 2)
+        self.assertEqual(info["removed"], ["gone_in_this_patch"])
+        self.assertEqual(
+            info["added"],
+            ["has_variable", "immediate", "new_effect", "v_fx"],
+        )
+        self.assertEqual(info["keys"], 5)
+        self.assertFalse(info["identical"])
+        # The real run then writes exactly what the dry run announced.
+        eva.bootstrap_catalog(game, mod)
+        self.assertEqual(
+            eva.load_catalog(mod),
+            {"set_variable", "has_variable", "immediate", "new_effect", "v_fx"},
+        )
+
+    def test_dry_run_does_not_create_the_directory(self):
+        game = self._game()
+        mod = tempfile.mkdtemp()
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertEqual(os.listdir(mod), [])
+        self.assertIs(info["exists"], False)
+        self.assertEqual(info["current"], 0)
+        self.assertEqual(info["removed"], [])
+
+    def test_dry_run_after_a_real_run_finds_nothing_to_change(self):
+        game = self._game()
+        mod = self._mod(None)
+        real = eva.bootstrap_catalog(game, mod)
+        self.assertNotIn("written", real)
+        before = _tree(mod)
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertEqual(_tree(mod), before)
+        self.assertTrue(info["identical"])
+        self.assertEqual((info["added"], info["removed"]), ([], []))
+        self.assertIn("would not change", eva.render_dry_run(info, mod, game))
+
+    def test_header_only_change_is_named(self):
+        game = self._game()
+        mod = self._mod(None)
+        eva.bootstrap_catalog(game, mod)
+        path = os.path.join(mod, self.CATALOG)
+        with open(path, encoding="utf-8") as fh:
+            names = [ln for ln in fh.read().splitlines() if not ln.startswith("#")]
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write("# another header\n" + "\n".join(names) + "\n")
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertFalse(info["identical"])
+        self.assertIn("Only its header", eva.render_dry_run(info, mod, game))
+
+    def test_cli_dry_run_without_an_install_warns_of_the_shrink(self):
+        # The container case: no game, so the harvest finds nothing and the
+        # catalog would drop to the two summary names.
+        import path_constants
+        from unittest import mock
+
+        mod = self._mod("set_variable\nhas_variable\nlimit\nevery_scope_state\n")
+        before = _tree(mod)
+        nowhere = os.path.join(tempfile.mkdtemp(), "no_install")
+        out = io.StringIO()
+        with mock.patch.object(path_constants, "base_game_path", nowhere,
+                               create=True), contextlib.redirect_stdout(out):
+            self.assertEqual(eva.main(["bootstrap", "--dry-run"], mod_path=mod), 0)
+        self.assertEqual(_tree(mod), before)
+        text = out.getvalue().splitlines()
+        self.assertEqual(
+            text[0], f"DRY RUN: {os.path.normpath(self.CATALOG)} not written.")
+        self.assertEqual(
+            text[1], "  4 entries now, 2 after: 0 added, 2 removed.")
+        self.assertIn("  - every_scope_state", text)
+        self.assertIn("  - limit", text)
+        self.assertFalse([ln for ln in text if ln.startswith("  + ")])
+        # Before the list and after it.
+        self.assertTrue(text[2].startswith("WARNING: no vanilla script found"))
+        self.assertEqual(text[-1], text[2])
+
+    def test_cli_real_run_still_writes(self):
+        import path_constants
+        from unittest import mock
+
+        game = self._game()
+        mod = self._mod("set_variable\n")
+        with mock.patch.object(path_constants, "base_game_path", game,
+                               create=True), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(eva.main(["bootstrap"], mod_path=mod), 0)
+        self.assertIn("new_effect", eva.load_catalog(mod))
+
+    def test_context_dry_run_writes_nothing_and_names_the_section(self):
+        game = self._game()
+        docs = tempfile.mkdtemp()
+        _write_files(docs, {
+            "effects.log": "## set_variable\n## new_effect\n",
+            "triggers.log": "## has_variable\n",
+        })
+        mod = self._mod(None)
+        _write_files(mod, {self.CONTEXT: (
+            "# header\n[effect_only]\nset_variable\nhas_variable\n"
+            "[trigger_only]\n"
+        )})
+        before = _tree(mod)
+        info = eva.bootstrap_context_catalog(game, mod, docs, dry_run=True)
+        self.assertEqual(_tree(mod), before)
+        self.assertIs(info["written"], False)
+        # `has_variable` changes section: out of one, into the other.
+        self.assertEqual(info["removed"], ["[effect_only] has_variable"])
+        self.assertEqual(info["added"], [
+            "[effect_only] new_effect", "[effect_only] v_fx",
+            "[trigger_only] has_variable",
+        ])
+        rendered = eva.render_dry_run(info, mod, game)
+        self.assertIn("2 entries now, 4 after: 3 added, 1 removed.", rendered)
+        self.assertNotIn("WARNING", rendered)
+
+
 # --- #1142: effects in trigger context and the reverse ----------------------
 
 # A union catalog for the context fixtures below, and the two context sets.

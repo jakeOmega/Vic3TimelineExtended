@@ -769,9 +769,60 @@ def _summary_names(path: str) -> set[str]:
     return names
 
 
-def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
+def _catalog_entries(text: str) -> set[str]:
+    """The entries of a catalog file: its lines, comments and blanks aside. One
+    under a `[section]` header reads `[section] name`, so a name that moves
+    between the context catalog's sections shows as removed and added."""
+    entries: set[str] = set()
+    section = ""
+    for line in text.lstrip("\ufeff").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("[") and line.endswith("]"):
+            section = line + " "
+            continue
+        entries.add(section + line)
+    return entries
+
+
+def _write_catalog(out_path: str, text: str, dry_run: bool) -> dict:
+    """Write a bootstrapped catalog, or with `dry_run` write nothing (not even
+    the directory) and return what the write would change: `written` False,
+    `exists`, `current` (entries in the file now), `added`, `removed`, and
+    `identical` when the file would come out byte for byte the same."""
+    if not dry_run:
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(text)
+        return {}
+    try:
+        with open(out_path, encoding="utf-8") as fh:
+            old_text = fh.read()
+        exists = True
+    except FileNotFoundError:
+        old_text, exists = "", False
+    old, new = _catalog_entries(old_text), _catalog_entries(text)
+    return {
+        "written": False,
+        "exists": exists,
+        "current": len(old),
+        "added": sorted(new - old),
+        "removed": sorted(old - new),
+        "identical": exists and old_text == text,
+    }
+
+
+def bootstrap_catalog(
+    base_game_path: str, mod_path: str, dry_run: bool = False,
+) -> dict:
     """Extract the frozen valid-key catalog from vanilla and write it to
-    `docs/engine/effect_trigger_valid_keys.txt`. Re-run on a vanilla bump."""
+    `docs/engine/effect_trigger_valid_keys.txt`. Re-run on a vanilla bump.
+
+    `dry_run` writes nothing and adds `_write_catalog`'s account of what would
+    change. `vanilla_files` counts the vanilla script files read: at 0 there is
+    no install under `base_game_path`, and the catalog shrinks to the summary
+    names (#1403)."""
     game = os.path.join(base_game_path, "game")
     engine_docs = os.path.join(mod_path, "docs", "engine")
 
@@ -783,6 +834,7 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
     # e.g. `common/journal_entries/` lands in the catalog (and each root's
     # `extra_valid` shrinks), while modifier names inside `modifier = { ... }`
     # blocks stay out of it.
+    vanilla_files = 0
     for root in SCAN_ROOTS:
         base = os.path.join(game, root.rel)
         if not os.path.isdir(base):
@@ -793,6 +845,7 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
                     keys |= extract_lhs_keys(fh.read(), root.skip_blocks)
             except OSError:
                 continue
+            vanilla_files += 1
 
     # Vanilla's own callable helpers. The depth-0 rule above drops their names,
     # and a mod call to one that vanilla never uses at depth > 0 (1.14.5's
@@ -802,22 +855,22 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
         keys |= _top_level_names(os.path.join(game, rel))
 
     out_path = os.path.join(mod_path, _CATALOG_REL)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(
-            "# AUTO-GENERATED valid effect/trigger/scope/control-flow keyword "
-            "catalog.\n# Union of effects_summary.txt + triggers_summary.txt "
-            "names, every LHS keyword\n# vanilla uses in the audit's "
-            "SCAN_ROOTS (events/ + the script-bearing common/ dirs),\n"
-            "# excluding depth-0 entity names and static-modifier block "
-            "bodies, and the top-level\n# names vanilla defines under "
-            "scripted_effects/scripted_triggers/on_actions/script_values."
-            "\n# Regenerate on a vanilla bump: "
-            "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
-        )
-        for k in sorted(keys):
-            f.write(k + "\n")
-    return {"keys": len(keys), "path": out_path}
+    text = (
+        "# AUTO-GENERATED valid effect/trigger/scope/control-flow keyword "
+        "catalog.\n# Union of effects_summary.txt + triggers_summary.txt "
+        "names, every LHS keyword\n# vanilla uses in the audit's "
+        "SCAN_ROOTS (events/ + the script-bearing common/ dirs),\n"
+        "# excluding depth-0 entity names and static-modifier block "
+        "bodies, and the top-level\n# names vanilla defines under "
+        "scripted_effects/scripted_triggers/on_actions/script_values."
+        "\n# Regenerate on a vanilla bump: "
+        "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
+    ) + "".join(k + "\n" for k in sorted(keys))
+    change = _write_catalog(out_path, text, dry_run)
+    return {
+        "keys": len(keys), "path": out_path, "vanilla_files": vanilla_files,
+        **change,
+    }
 
 
 def load_catalog(mod_path: str) -> set[str]:
@@ -914,10 +967,12 @@ def harvest_context_keys(game_dir: str) -> dict[str, set[str]]:
 
 def bootstrap_context_catalog(
     base_game_path: str, mod_path: str, engine_docs_path: str,
+    dry_run: bool = False,
 ) -> dict:
     """Write `docs/engine/effect_trigger_context_keys.txt`: the effect names the
     engine rejects in trigger context and the trigger names it rejects in
-    effect context. Re-run on a vanilla bump, like `bootstrap_catalog`.
+    effect context. Re-run on a vanilla bump, like `bootstrap_catalog`, whose
+    `dry_run` this shares.
 
     effect_only = names in `effects.log`, not in `triggers.log`, and never an
     LHS in trigger context anywhere in vanilla's `common/` or `events/`, plus
@@ -953,38 +1008,37 @@ def bootstrap_context_catalog(
     }
 
     out_path = os.path.join(mod_path, _CONTEXT_CATALOG_REL)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(
-            "# AUTO-GENERATED effect/trigger context catalog (#1142).\n"
-            "# [effect_only]: names the engine reads only as effects, so a "
-            "trigger block rejects them\n# (`Unknown trigger type`). Names in "
-            "effects.log and not in triggers.log, plus\n# vanilla's scripted "
-            "effects that are not also scripted triggers or script values,\n"
-            "# less every LHS keyword vanilla's common/ and events/ use in "
-            "trigger context.\n# [trigger_only]: the mirror image, for effect "
-            "context.\n# Regenerate on a vanilla bump: python3 "
-            "effect_trigger_validity_audit.py bootstrap-context\n"
-            f"# Sizes: {len(sections[_EFFECT_ONLY])} effect-only, "
-            f"{len(sections[_TRIGGER_ONLY])} trigger-only.\n"
+    parts = [
+        "# AUTO-GENERATED effect/trigger context catalog (#1142).\n"
+        "# [effect_only]: names the engine reads only as effects, so a "
+        "trigger block rejects them\n# (`Unknown trigger type`). Names in "
+        "effects.log and not in triggers.log, plus\n# vanilla's scripted "
+        "effects that are not also scripted triggers or script values,\n"
+        "# less every LHS keyword vanilla's common/ and events/ use in "
+        "trigger context.\n# [trigger_only]: the mirror image, for effect "
+        "context.\n# Regenerate on a vanilla bump: python3 "
+        "effect_trigger_validity_audit.py bootstrap-context\n"
+        f"# Sizes: {len(sections[_EFFECT_ONLY])} effect-only, "
+        f"{len(sections[_TRIGGER_ONLY])} trigger-only.\n"
+    ]
+    for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
+        # Names the docs put on one side that vanilla also writes on the
+        # other (effect arguments named like triggers: create_character's
+        # `age`, add_loyalists' `strata`), so they are never checked.
+        parts.append(
+            f"# Left out of [{section}], used by vanilla in the other "
+            f"context: {', '.join(dropped[section]) or 'none'}\n"
         )
-        for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
-            # Names the docs put on one side that vanilla also writes on the
-            # other (effect arguments named like triggers: create_character's
-            # `age`, add_loyalists' `strata`), so they are never checked.
-            f.write(
-                f"# Left out of [{section}], used by vanilla in the other "
-                f"context: {', '.join(dropped[section]) or 'none'}\n"
-            )
-        for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
-            f.write(f"[{section}]\n")
-            for k in sorted(sections[section]):
-                f.write(k + "\n")
+    for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
+        parts.append(f"[{section}]\n")
+        parts.extend(k + "\n" for k in sorted(sections[section]))
+    change = _write_catalog(out_path, "".join(parts), dry_run)
     return {
         "effect_only": len(sections[_EFFECT_ONLY]),
         "trigger_only": len(sections[_TRIGGER_ONLY]),
         "dropped_as_used_by_vanilla": dropped,
         "path": out_path,
+        **change,
     }
 
 
@@ -1296,30 +1350,65 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
+def render_dry_run(info: dict, mod_path: str, base_game_path: str) -> str:
+    """What a bootstrap's `dry_run` found, for the terminal: the totals first,
+    then every entry the write would add (`+`) or drop (`-`)."""
+    rel = os.path.relpath(info["path"], mod_path)
+    added, removed = info["added"], info["removed"]
+    after = info["current"] + len(added) - len(removed)
+    lines = [
+        f"DRY RUN: {rel} not written.",
+        f"  {info['current']} entries now, {after} after: "
+        f"{len(added)} added, {len(removed)} removed.",
+    ]
+    if not info["exists"]:
+        lines.append("  The file does not exist yet.")
+    elif info["identical"]:
+        lines.append("  The file would not change.")
+    elif not added and not removed:
+        lines.append("  Only its header comments would change.")
+    warning = []
+    if info.get("vanilla_files") == 0:
+        warning = [
+            f"WARNING: no vanilla script found under "
+            f"{os.path.join(base_game_path, 'game')}, so the catalog would "
+            "hold only the engine-doc summary names. Run the bootstrap on "
+            "the machine with the game."
+        ]
+    changes = [f"  + {name}" for name in added] + [f"  - {name}" for name in removed]
+    # The list can run to thousands of lines: say it before and after.
+    return "\n".join(lines + warning + changes + (warning if changes else []))
+
+
 def main(argv: list[str] | None = None, mod_path: str | None = None) -> int:
     """The CLI: `bootstrap`, `bootstrap-context`, or the audit, whose report
     goes to stdout. With `--strict` (CI) it returns 1 if any flag lacks a
-    `# REVIEWED ...` exemption."""
+    `# REVIEWED ...` exemption. `--dry-run` after either bootstrap prints what
+    the rewrite would change and writes nothing."""
     import sys
 
     argv = sys.argv[1:] if argv is None else argv
     if mod_path is None:
         from path_constants import mod_path
+    dry_run = "--dry-run" in argv
     if argv[:1] == ["bootstrap"]:
         # Only the bootstrap subcommands read vanilla; keep the default audit
         # runnable on a machine with no Victoria 3 install.
         from path_constants import base_game_path
 
-        print(bootstrap_catalog(base_game_path, mod_path))
+        info = bootstrap_catalog(base_game_path, mod_path, dry_run=dry_run)
+        print(render_dry_run(info, mod_path, base_game_path) if dry_run else info)
         return 0
     if argv[:1] == ["bootstrap-context"]:
         # The effect-only / trigger-only catalog (#1142): engine docs from the
         # pinned snapshot, usage from the live install's game/common + events.
         from path_constants import base_game_path, vanilla_snapshot_docs_path
 
-        print(bootstrap_context_catalog(
+        info = bootstrap_context_catalog(
             base_game_path, mod_path, vanilla_snapshot_docs_path,
-        ))
+            dry_run=dry_run,
+        )
+        print(render_dry_run(info, mod_path, base_game_path) if dry_run else info)
         return 0
     result = audit(mod_path)
     print(render_report(result, mod_path))
