@@ -5928,6 +5928,24 @@ def _local_request_rejection(host, origin, port: int):
     return None
 
 
+def json_body(data) -> bytes:
+    """The bytes of a JSON response: what the server sends and what
+    `scripts/query.py` prints, so the two match byte for byte (#1538)."""
+    return json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+
+
+def encode_response(data, status: int = 200, what: str = "response") -> tuple[bytes, int]:
+    """(bytes, status) for a response body. One json can't encode (a set, a
+    Path) becomes the 500 body do_GET gives any other failure, so the client
+    gets an answer rather than a dropped connection. `what` names the request
+    in the log line."""
+    try:
+        return json_body(data), status
+    except Exception as exc:
+        logger.error(f"Error handling {what}: {exc}\n{traceback.format_exc()}")
+        return json_body({"error": f"{type(exc).__name__}: {exc}"}), 500
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- local-origin gate ------------------------------------------------
@@ -5963,23 +5981,28 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self._local_request_ok("GET"):
             return
-        parsed = urlparse(self.path)
+        data, status = self.get_result(self.path)
+        self._respond_json(data, status)
+
+    def get_result(self, path):
+        """(body, status) for GET `path`, with no socket: do_GET's routing and
+        error mapping, shared with the offline `scripts/query.py` (#1538)."""
+        parsed = urlparse(path)
         parts = [unquote(p) for p in parsed.path.strip("/").split("/") if p]
         params = parse_qs(parsed.query)
         try:
-            data = self.route(parts, params)
-            self._respond_json(data)
+            return self.route(parts, params), 200
         except _EndpointError as exc:
             # NotFound (404) / BadRequest (400) and the richer payload variants.
-            self._respond_json(exc.payload, exc.status)
+            return exc.payload, exc.status
         except _ServiceNotReady as exc:
-            self._respond_json(exc.payload, exc.status)
+            return exc.payload, exc.status
         except Exception as exc:
             # A bare KeyError lands here on purpose since #254: it means a
             # parsed record was missing a field, which is a server bug, not a
             # missing entity. Endpoints signal the latter with NotFound.
-            logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
-            self._respond_json({"error": f"{type(exc).__name__}: {exc}"}, 500)
+            logger.error(f"Error handling GET {path}: {exc}\n{traceback.format_exc()}")
+            return {"error": f"{type(exc).__name__}: {exc}"}, 500
 
     def do_POST(self):
         if not self._local_request_ok("POST"):
@@ -10096,7 +10119,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
-        body = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+        what = f"{getattr(self, 'command', None) or 'request'} {getattr(self, 'path', '?')}"
+        body, status = encode_response(data, status, what)
         try:
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")
