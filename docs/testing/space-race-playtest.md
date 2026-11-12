@@ -61,6 +61,13 @@ The Space Program now stands in its owner's capital (`sr_space_program_site`, `s
 2. **A market capital that is not the capital.** As the USA (market capital New York, capital Washington), found one: it stands in Washington. The build menu lists only the capital, and the greyed reason on other states reads "This state is our capital".
 3. **Space Command's tie.** With two Space Commands of the same size after an annexation, the one in the capital stays.
 
+## One report per loss, one notice per achiever (#448, listed 2026-11-12)
+
+Two checks carried from #448 (the fixes of #441). Since 2026-11-06 a programme loss concludes the milestones it hits (the section below), but the report is still queued once (`sr_report_program_loss`), so the first check stands as it was written.
+
+1. **One Silent Gantry for one loss.** Run two milestones (Suborbital Flight and Orbital Flight), then remove the Space Program (`event te_debug_space_race.1`, option l). Exactly one The Silent Gantry opens, about five days after the first entry fails, and it lists both milestones. Two popups: the entries' failures fell more than five days apart, or `sr_program_loss_report_queued` did not hold.
+2. **Two named notices from a dotted list target.** `event te_debug_space_race.1`, option k: two other powers report Suborbital Flight. Fourteen days later two Eclipsed (`space_race_events.20`) open, each naming its own power. One popup, or a blank name: `add_to_variable_list`'s `target = scope:sr_achiever.capital` did not take the dotted chain (`sr_notify_milestone_achievement`); save the capital as a scope of its own first.
+
 ## An idle Solar System Colonization's approach (2026-11-06, #1472)
 
 Solar System Colonization's entry stays open for its colonies after its programme stops, and its approach declarations now also need the programme billed (`sr_milestone_billed_solar_colonization`), as its cost and funding declarations already did.

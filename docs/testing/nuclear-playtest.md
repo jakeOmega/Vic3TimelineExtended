@@ -109,6 +109,13 @@ What `docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md` phase 1
 64. **The AI's trades.** Over an observer run, `action=crisis_offer_trade` comes only from an issuer at its deadline, and only when the other side would accept by the AI's own rule. `crisis_end; outcome=11` follows only when the target's pressure was 40 or more (an AI target), or the issuer's danger was and its crisis was at least 8 weeks old (an AI issuer). Check that no AI accepts a trade that ends a treaty holding its alliance.
 65. **No trade frees a bar.** Concede a deployment crisis to one rival, then open one with another whose deployment mirrors yours: "Offer a trade" is greyed by the matching line, which names the ten-year bar, and the AI's deadline never offers one.
 
+## Event-sweep follow-ups (#448, #798; listed 2026-11-12)
+
+Two engine behaviours the 2026-10 event sweep rests on, with no vanilla precedent, carried here from the test plans of #448 and #798.
+
+66. **The pledge struck from a law still being enacted.** Armed, at No First Use, enact Humanitarian Regulations or Limited War with the No-First-Strike Pledge amendment, and leave No First Use while the law is still being enacted. The amendment is gone from the enacting law at once (`remove_amendment` on `currently_enacting_law`, in `nd_strike_nfu_amendment`). If it is still there, the fallback marker (`nd_nfu_amendment_repudiated`) must catch it: within a week of the law passing, `nd_weekly_update` strikes it from the passed law, and the doctrine is not pulled back to No First Use. If the law passes with the pledge and the doctrine snaps back to No First Use, neither removal took.
+67. **The referral (`.18` option d with the treaty in force).** With the Non-Proliferation Treaty in force, as a UN member, take d on A Bomb Nearly Built: the proliferator's Our Record → Nuclear weapons gains 20 (30 when it ratified the treaty). A second recipient of the same alert sees d's "already before the General Assembly" line, and the record does not grow again. The tooltip's line with no record added: `un_dossier_record` did not run inside the `custom_tooltip`.
+
 ## Self-checks
 
 | Line | What it tests | If BROKEN |

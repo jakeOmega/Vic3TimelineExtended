@@ -322,6 +322,22 @@ in a Panic, or `te_debug_monetary` to seed headline).
    6% after a recovery with the tool still on, note how far: the simulator puts the median peak at 5.5%, against
    5.8% with the flat point.
 
+## Event-sweep follow-ups (#448, #798; listed 2026-11-12)
+
+Two checks carried from #798's test plan. Neither has a vanilla precedent.
+
+1. **`clear_scaled_debt` takes a script value.** In a market economy with debt over a quarter of its credit limit,
+   fire `banking_cycle_events.10` (Sovereign Debt Scare) and take C, "Default on part of the debt". The debt falls by
+   a quarter, and neither `error.log` nor `debug.log` mentions `clear_scaled_debt`. The sovereign debt crisis's
+   write-offs (`banking_debt_effects.txt`, reprofiling and the deep haircut) rest on the same answer. If the debt
+   does not move, the effect takes only a literal: fall back to a few `scaled_debt` bands with a literal each.
+2. **The peg tooltips follow the controls.** Fire `event te_peg.1` on a gold-standard country with a national bank
+   whose cycle has not started (no Stock Exchange or no level 5 Urban Center), and hover each option: the texts
+   name what its read-only readout shows (Peg Confidence, the Exchange Rate Index) but no control: Defend reads
+   "your central bank holds its rate", not "your rate target" (the `.no_je_tt` versions). On a country whose cycle
+   runs, the options name the dial (the `.tt` versions). Since 2026-10-17 every country holds the entry, so the
+   switch is `te_banking_controls_open`, not the entry.
+
 ## The arrangement events, one namespace to a file (2026-11-12, #1403)
 
 `events/te_monetary_arrangement_events.txt` declared two namespaces, `te_lolr` and then `te_union`; the `te_union`
