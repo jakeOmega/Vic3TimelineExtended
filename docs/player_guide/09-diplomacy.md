@@ -509,9 +509,9 @@ to every identity. It needs a Subjugation Strength of at least 1.0, which means
 roughly that your prestige is twenty times the target's: ten times if your bloc
 is a Sovereign Empire, and about twelve times when your identity's bond applies
 (shared religion, governance principle or culture, economic dependence, or an
-army five times the target's that can get to it). Its infamy grows with the target's population, up
-to 25; a Sovereign Empire pays half as much, so it reaches that cap only against
-far more populous targets.
+army five times the target's that can get to it). Its infamy is a fifth of what
+annexing the target would cost, up to 25, so the cap decides for all but small
+targets; a Sovereign Empire pays half as much.
 
 ## Formable countries
 
