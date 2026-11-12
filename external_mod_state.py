@@ -37,7 +37,7 @@ Scope:
 - Vanilla's definitions come from the game files when installed (with file
   names), else from the server's parsed vanilla (one definition per key, read
   first, as external_mod_overlap's snapshot fallback has it). The server keeps
-  no vanilla for scripted effects, triggers, GUIs and progress bars; without
+  no vanilla for scripted effects, triggers and GUIs; without
   the game, vanilla is taken as absent there (`vanilla_source: unavailable`).
   Without the game files the snapshot names vanilla's files but not their
   keys: a file of theirs at a vanilla path is listed in

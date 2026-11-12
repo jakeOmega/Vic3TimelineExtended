@@ -46,6 +46,12 @@ def _make_vanilla(root, version="1.13.9"):
            "l_english:\n law_x:0 \"Law X\"\n mod_a: \"Modifier \\\"A\\\"\"\n")
     _write(os.path.join(root, "game/localization/english/map/states_l_english.yml"),
            "l_english:\n STATE_X:0 \"State X\"\n")
+    # The start map: effect script that the entity tables cannot hold (#901).
+    _write(os.path.join(root, "game/common/history/states/00_states.txt"),
+           "STATES = {\n\ts:STATE_X = {\n"
+           "\t\tcreate_state = { country = c:AAA owned_provinces = { x0000A1 x0000A2 } }\n"
+           "\t\tcreate_state = { country = c:BBB owned_provinces = { x0000B1 } }\n"
+           "\t\tadd_homeland = cu:alpha\n\t}\n}\n")
     _write(os.path.join(root, "launcher/launcher-settings.json"),
            json.dumps({"rawVersion": version}))
 
@@ -114,6 +120,28 @@ class BuildLoadTests(unittest.TestCase):
         # The mod layer must not leak into the snapshot's vanilla data.
         self.assertNotIn("law_new", fast.base_parsers["Laws"].data)
         self.assertIn("law_new", fast.mod_parsers["Laws"].data)
+
+    def test_state_history_is_stored_beside_the_entity_types(self):
+        manifest = vp.build(self.game, self.out)
+        info = manifest["state_history"]
+        self.assertEqual((info["dir"], info["files"], info["states"], info["parts"], info["split_states"]),
+                         ("game/common/history/states", 1, 1, 2, 1))
+        self.assertIn("game/common/history/states/00_states.txt", manifest["sources"])
+        import state_history
+        live = state_history.parse_dir(os.path.join(self.game, "game/common/history/states"))
+        self.assertEqual(vp.load(self.out).state_history, live)
+        self.assertEqual(vp.load_state_history(self.out), live)
+        self.assertEqual([p["country"] for p in live["00_states.txt"]["STATE_X"]["parts"]], ["AAA", "BBB"])
+        # A rebuild keeps the file: only stray common/*.json files are pruned.
+        vp.build(self.game, self.out)
+        self.assertTrue(os.path.isfile(os.path.join(self.out, vp.STATE_HISTORY_FILE)))
+
+    def test_no_history_folder_is_an_empty_table(self):
+        shutil.rmtree(os.path.join(self.game, "game/common/history"))
+        manifest = vp.build(self.game, self.out)
+        self.assertEqual(manifest["state_history"]["states"], 0)
+        self.assertEqual(vp.load(self.out).state_history, {})
+        self.assertTrue(vp.check(self.out, self.game).fresh)
 
     def test_rebuild_of_unchanged_tree_writes_nothing(self):
         first = vp.build(self.game, self.out)
@@ -211,6 +239,26 @@ class FreshnessTests(unittest.TestCase):
             result = vp.check(self.out, None)
         self.assertFalse(result.fresh)
         self.assertIn("parser changed", result.code_reasons[0])
+
+    def test_snapshot_without_the_state_history_is_stale(self):
+        manifest = vp.read_manifest(self.out)
+        del manifest["state_history"]
+        result = vp.check(self.out, None, manifest=manifest)
+        self.assertFalse(result.fresh)
+        self.assertIn("state history", " ".join(result.code_reasons))
+        self.assertIsNone(vp.load_state_history(self.out, manifest=manifest))
+
+    def test_edited_history_file_is_stale(self):
+        path = os.path.join(self.game, "game/common/history/states/00_states.txt")
+        with open(path, "a", encoding="utf-8") as f:
+            f.write("# a border moved\n")
+        self.assertFalse(vp.check(self.out, self.game).fresh)
+
+    def test_state_history_reader_is_in_the_fingerprint(self):
+        import state_history
+        before = vp.parser_fingerprint()
+        with mock.patch.object(state_history, "parse_text", lambda text: {}):
+            self.assertNotEqual(vp.parser_fingerprint(), before)
 
     def test_new_entity_type_is_stale(self):
         with mock.patch.dict(vp.VANILLA_COMMON_DIRS, {"Brand New": "brand_new"}):
