@@ -45,6 +45,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 @dataclass
 class Flag:
@@ -61,15 +64,12 @@ _KIND_LABEL = {"limit": "`limit`", "always_false": "`always = no`"}
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
 
 _OPENER_RE = re.compile(r"^\s*([A-Za-z_][\w]*)\s*=\s*\{")
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 
 def _split_comment(line: str) -> tuple[str, str | None]:
@@ -77,15 +77,6 @@ def _split_comment(line: str) -> tuple[str, str | None]:
     if idx < 0:
         return line, None
     return line[:idx], line[idx:]
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 _TOKEN_RE = re.compile(r"[{}]|\?=|[<>!=]=?|[^\s{}<>!=?]+")
@@ -122,7 +113,7 @@ def _scan_always_false(lines: list[str], rel_path: str) -> list[Flag]:
         ):
             parent = stack[-1] if stack else None
             if parent and parent["name"] and parent["name"].startswith("any_"):
-                exemption = _parse_reviewed(parent["comment"]) or _parse_reviewed(comment)
+                exemption = parse_reviewed(parent["comment"]) or parse_reviewed(comment)
                 flags.append(Flag(
                     file=rel_path,
                     line=line_num,
@@ -166,7 +157,7 @@ def scan_file(filepath: str, rel_path: str) -> list[Flag]:
                     line=line_num,
                     any_name=parent["name"],
                     any_line=parent["line"],
-                    exemption=_parse_reviewed(parent["comment"]),
+                    exemption=parse_reviewed(parent["comment"]),
                 ))
 
         if net >= 1 and m:
@@ -217,8 +208,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# `any_*` limit audit report",
@@ -298,12 +289,9 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "any_limit_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "any_limit_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
@@ -313,12 +301,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
