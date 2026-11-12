@@ -486,10 +486,13 @@ class _Engine:
     set fails, as does an argument the callee doesn't name (the script_argument_audit rule).
     `fixtures` stand in for engine reads and for script values that read the owner. With
     truncate=True every operation and every stored value is cut to five decimals, toward zero:
-    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails."""
+    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails. Left out, truncate is
+    FIXED_POINT: False, except inside a fixed-point twin's test (_FixedPointTwin, issue #967)."""
 
-    def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
-        self.truncate = truncate
+    FIXED_POINT = False
+
+    def __init__(self, fixtures, triggers=None, effects=None, truncate=None):
+        self.truncate = _Engine.FIXED_POINT if truncate is None else truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
                                     LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS,
@@ -774,6 +777,65 @@ class _Engine:
 
     def call(self, effect):
         self.run(_parse_script(f"{effect} = yes"))
+
+
+class _FixedPointTwin:
+    """Mixin for a fixed-point twin of a script test (issue #967): `class TestXFixedPoint(_FixedPointTwin, TestX)` runs
+    every case of TestX again with each _Engine it builds in the engine's fixed point (truncate=True), and with each
+    near-equality (the class's own close(), assertAlmostEqual) loosened to REL of the wanted value, or to FLOOR, ten
+    units of the last decimal the engine keeps, for a small one. Floats can't see the five-decimal cut: #964's late
+    births took TFR / 100000 first, which the engine stores as 0.00001 or 0, and matched the model at 1e-8 in floats
+    the whole time.
+
+    The cut moves a case's own inputs a little (a TFR of 3.0609164 is stored as 3.06067), which is what REL and FLOOR
+    allow for; a disagreement past them is an early divide or a product of small factors in the script, or a case whose
+    arithmetic multiplies its inputs' cut. Exact comparisons (assertEqual and the rest) stay exact. Where the cut
+    moves a comparison past these, the twin overrides the case and says why, with the bound worked out from the cut,
+    not copied from the run. A new case in TestX gets its twin with no further work. The twins are in
+    test_demographics_fixed_point.py."""
+
+    REL = 1e-3
+    FLOOR = 1e-4
+
+    @classmethod
+    def setUpClass(cls):
+        # what the class builds once (TestCountry's states) is built in fixed point too
+        with unittest.mock.patch.object(_Engine, "FIXED_POINT", True):
+            super().setUpClass()
+
+    def setUp(self):
+        super().setUp()
+        patch = unittest.mock.patch.object(_Engine, "FIXED_POINT", True)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def near(self, got, want):
+        return abs(got - want) <= max(self.REL * abs(want), self.FLOOR)
+
+    def _past(self, check, *args, **kw):
+        """The float case's own comparison (its tolerance may be the looser one), failing with the twin's named."""
+        try:
+            check(*args, **kw)
+        except AssertionError as err:
+            raise self.failureException(
+                f"{err} (in fixed point: past {self.REL:g} of the value and {self.FLOOR:g} too)") from None
+
+    def close(self, got, want, *args, **kw):
+        if not self.near(got, want):
+            self._past(super().close, got, want, *args, **kw)
+
+    def assertAlmostEqual(self, first, second, places=None, msg=None, delta=None):
+        if not self.near(first, second):
+            self._past(super().assertAlmostEqual, first, second, places=places, msg=msg, delta=delta)
+
+    def test_the_twin_runs_in_fixed_point(self):
+        """An engine built with no truncate= cuts to five decimals inside the twin, and outside it does not."""
+        eng = _Engine({})
+        self.assertTrue(eng.truncate)
+        eng.run(_parse_script("set_variable = { name = x value = { value = 2 divide = 3 } }"))
+        self.assertEqual(eng.vars["x"], 0.66666)
+        self.doCleanups()
+        self.assertFalse(_Engine({}).truncate)
 
 
 def _stored(inp):

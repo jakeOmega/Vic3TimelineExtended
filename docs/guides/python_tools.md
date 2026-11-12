@@ -254,6 +254,16 @@ Import a `TestCase` class through its module (`import test_demographics_registry
 file (phase 2 step 3b's family-census tests ran 92 tests where 30 were its own). Plain helpers (`_Engine`, `_block`)
 import by name safely.
 
+A census script test gets a fixed-point twin with one line in `test_demographics_fixed_point.py` (#967):
+`class TestXFixedPoint(_FixedPointTwin, module.TestX)`. The mixin (`test_demographics_registry._FixedPointTwin`) runs
+every case of `TestX` again with each `_Engine` cutting to five decimals, as the game does, and loosens `close()` and
+`assertAlmostEqual` to 1e-3 of the value (1e-4 for a small one); exact comparisons stay exact. It works by patching
+`_Engine.FIXED_POINT`, the default of `truncate=` when a test leaves it out, so a helper that passes `truncate=False`
+itself stays in floats. A float test can't see an early divide (#964 matched its model at 1e-8); the twin of a new
+test of census arithmetic can. When a twin's case fails, find which it is before touching a tolerance: an early divide
+in the script, a fixture on a threshold's edge, or the inputs' cut multiplied by the case's own arithmetic. The file's
+docstring lists what the twins have found.
+
 GUI tests share `gui_test_helpers.py` (not a test file, so nothing collects it): `_read`, `_strip_comments`, `_close`,
 `_block_at`, `_type_body`, `_children` and `_instances` read markup, and `assert_wide_matches_narrow` checks a wide
 composer on `te_ui_columns_three` or `te_ui_columns_two` against the narrow layout it widens: the same sections in
