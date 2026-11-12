@@ -4741,9 +4741,9 @@
  gw_tier_short_significant:0 "#O Significant#!"
  gw_tier_short_slight:0 "#Y Slight#!"
  gw_treaty_source_has_technologies_tt:0 "The country cutting its emissions has researched [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] and [GetTechnology('modern_urban_planning').GetName], which the policies it would be forced to adopt need"
- gw_trend_prefix_cooling:0 "#G -"
- gw_trend_prefix_steady:0 "#grey +"
- gw_trend_prefix_warming:0 "#R +"
+ gw_trend_prefix_cooling:0 "#G -" # REVIEWED 2026-11-12: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
+ gw_trend_prefix_steady:0 "#grey +" # REVIEWED 2026-11-12: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
+ gw_trend_prefix_warming:0 "#R +" # REVIEWED 2026-11-12: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
  gw_world_n_aerosol_injection:0 "#v [Country.MakeScope.ScriptValue('gw_world_n_aerosol_injection_display')|0]#! nations"
  gw_world_n_carbon_removal:0 "#v [Country.MakeScope.ScriptValue('gw_world_n_carbon_removal_display')|0]#! nations"
  gw_world_n_carbon_tax:0 "#v [Country.MakeScope.ScriptValue('gw_world_n_carbon_tax_display')|0]#! nations"
@@ -9818,10 +9818,10 @@
  te_window_tab_tax_code:0 "$je_tax_code$"
  te_window_tab_united_nations:0 "$je_united_nations$"
  te_window_tab_united_nations_locked_tt:0 "#b $te_window_tab_united_nations$#!\nNot open yet. It opens once:\n"
- te_yearly_temp_change_down_blue:0 "#B"
- te_yearly_temp_change_prefix_down_blue:0 "#blue -"
- te_yearly_temp_change_prefix_up_red:0 "#R +"
- te_yearly_temp_change_up_red:0 "#R"
+ te_yearly_temp_change_down_blue:0 "#B" # REVIEWED 2026-11-12: opening fragment of the te_yearly_temp_change_color custom loc, which nothing calls today; a caller has to close it
+ te_yearly_temp_change_prefix_down_blue:0 "#blue -" # REVIEWED 2026-11-12: opening fragment of the te_yearly_temp_change_prefix custom loc, which nothing calls today; a caller has to close it
+ te_yearly_temp_change_prefix_up_red:0 "#R +" # REVIEWED 2026-11-12: opening fragment of the te_yearly_temp_change_prefix custom loc, which nothing calls today; a caller has to close it
+ te_yearly_temp_change_up_red:0 "#R" # REVIEWED 2026-11-12: opening fragment of the te_yearly_temp_change_color custom loc, which nothing calls today; a caller has to close it
  too_much_private_construction:0 "Excess [concept_private_construction]"
  trade_embargo_imposed_modifier:0 "Trade Embargo Imposed"
  trade_embargo_suffered_modifier:0 "Trade Embargo"
