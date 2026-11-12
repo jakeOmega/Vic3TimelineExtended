@@ -22,7 +22,20 @@ game, in English.
 ## Not probed (needs a player or a save)
 
 - **C5**, the rest: how a `progress_condition` factor of 0, and one read from a named script value, show in the
-  panel's Advance and Retreat lists (open an entry that uses one, once one does).
+  panel's Advance and Retreat lists. Civil Rights' Movement Support bar now uses them (#1441): open the entry and
+  check that each of its 13 conditional factors is listed, ticked while it applies and unticked otherwise (Social
+  Justice Movements unresearched, a policy off), and that "States with low-acceptance pops", whose value is
+  `owner.cr_low_acceptance_count` scaled and capped, is listed with its number. If it is counted but not listed,
+  that is the named-script-value case: inline the count or accept it. Check too whether the bar's own hover then
+  repeats the list.
+- **Civil Rights, two-pole bar** (#1434): Movement Support draws green over a red background with the sliding marker
+  at the current value, in the panel and its tooltip. If the marker or the textures don't show, `marker = yes` and
+  the `progressbar_green` / `progressbar_bad` sets didn't take; go back to `default_green = yes`.
+- **Civil Rights, one outcome per ending** (#1431): the panel lists ten endings in order (Victory on Paper, the
+  Civil Rights Mandate, the Movement Carries the Day, A Settlement, Reform on Paper, A New Era of Equality, then the
+  four collapses), each with its header, the shared victory or collapse condition and its own line, exactly one of
+  each kind ticked; run Federal Protection past 18 months and its line ticks while A New Era of Equality's unticks.
+  When one concludes, its event fires and the page shows its `conclusion_desc`.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
@@ -336,6 +349,22 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   India, State of Indonesia, State of China, Intermarium Federation, Union of Dar-Al-Islam; the unions as they
   are). C21: whether a formable under a government-flavored dynamic name shows that name or the `_DEF` one, and what
   a country with no `_DEF` key shows. If a dynamic name shows its key with `_DEF` appended, its 84 names need one each.
+- **Latitude triggers (#1454).** The offline lists in the PR took each state's latitude from the reference place in
+  `scripts/generators/data/local_climate.csv`; the engine reads the state region's centre point, so a state near a
+  tropic may fall the other way. Space Elevator: the construction site is offered in states between the tropics
+  (Cuba, Hawaii, southern Mexico, the Sahel, India up to Calcutta, Rio de Janeiro), the `possible` tooltip shows the
+  engine's own line for `in_tropics`, and no site is offered in Buenos Aires, Egypt or Japan. Disease outbreak
+  (`environmentalism_events.14`): at 2 °C a country with no incorporated tropical state never gets it. Antarctic
+  station AI: smaller powers on a coast south of the tropics (Chile, Argentina, New Zealand, South Africa,
+  Australia) open stations more often than before; well past thirty stations means its +20 needs lowering.
+- **`list_scopes` (#1436).** C10's display half. The United Nations of Earth's requirements (formation, or the
+  unification play) list the great powers under "at most one outside the bloc", "aligned" and "no friction", each
+  passing or failing on its own line; with the UN rule off, see whether the bloc-unanimity line inside its
+  `custom_tooltip` lists them too (that answers C10). The Imperial Federation Act and the Civilizing Mission Compact
+  list the overseas colonies under their four-colonies line. If a list shows every country or every state, add a
+  `filter` (UNE has one; the colony count doesn't). The logic is pinned offline (`test_une_formation_gates.py`), so
+  a gate that passes or fails differently from before means the engine reads `filter` or `count = all` otherwise
+  than vanilla's tsar buttons suggest.
 
 ## 1.15.1 hotfix (2026-11-11)
 
@@ -378,3 +407,11 @@ unless a line names a save.
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 1.15.1 hotfix, "Ports and railways": no country starts with a subsidized port or railway. `decentralized_law_baseline` OK again.
+
+## Infamy ported to `country_infamy_value`, and the naturalization amendment (#387, #1384)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Subjugate's infamy.** As a bloc leader, subjugate a member; read your infamy before and after, and `debug.log`. | `TE_SELF_CHECK OK force_subject_infamy`, and a rise of a fifth of the annexation figure the State Infamy map mode shows for the target (summed over its states), at most 25; half that for a Sovereign Empire. The action's preview shows the same figure. | `BROKEN` (0 infamy): `country_infamy_value` doesn't resolve in a diplomatic action. Sum `state_infamy_value` over the target's states with `every_scope_state` in a script value instead, after `save_temporary_scope_as = target_country` (vanilla's stake-colonial-claim action saves its state first). |
+| **UN mandate goal without a mandate.** Only reachable if `possible` lets one through (a lapsed mandate keeps the goal: `valid` doesn't read it); add the goal and let the mandate lapse, or read the preview. | The goal's infamy equals a plain `return_state` on the same state. | Different: compare the block with vanilla's `21_return_state.txt`. |
+| **Language Requirement for Naturalization.** Under National Supremacy with the amendment and no other restrictiveness (no Migration Controls), hover the migration restrictiveness: 21. Find a culture sharing no language, heritage or tradition (acceptance 20). | It can't migrate in; under Cultural Exclusion (acceptance 40) it can. | It migrates under National Supremacy: restrictiveness isn't compared with the acceptance shown, or not strictly. Record what the tooltip shows. If the engine bars a pop *at* the threshold, 20 would do the same as 21. |

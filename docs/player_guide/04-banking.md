@@ -1050,7 +1050,9 @@ A rescue comes through the random banking events of a possible rescuer: a
 country that has researched Keynesian Economics, holds cycle value 40 or more
 and is not in default. Its event can pick a smaller trading partner in a
 Downturn or Panic, not at war with it, where one of the two markets relies on
-the other for at least 5% of its trade. That partner gets Appeal for a Rescue?;
+the other for at least 5% of its trade. Two countries in the same market, such
+as a customs union or an overlord and its subject, qualify without that. That
+partner gets Appeal for a Rescue?;
 asking costs 5% prestige for a while (Hat in Hand). The rescuer then answers
 A Partner Asks for Help:
 

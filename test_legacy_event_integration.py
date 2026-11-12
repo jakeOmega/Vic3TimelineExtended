@@ -90,6 +90,12 @@ class LegacyIntegrationTests(unittest.TestCase):
                 # `gdp < root.gdp`: the candidate recipient against the donor.
                 self.assertEqual(value, 'root.gdp')
                 answer = {'<': operator.lt, '>': operator.gt}[op](current['gdp'], donor['gdp'])
+            elif key == 'this.market':
+                # `this.market = root.market`: one market, a customs union or
+                # an overlord and its subject. Each country has its own unless
+                # a scenario gives two the same market_id.
+                self.assertEqual(value, 'root.market')
+                answer = current.get('market_id', id(current)) == donor.get('market_id', id(donor))
             elif key in ('market', 'root.market'):
                 # A dotted chain is one scope change: `prev` inside is the
                 # country it was entered from (vanilla trade_route_events.txt).
@@ -164,6 +170,28 @@ class LegacyIntegrationTests(unittest.TestCase):
                 donor = self.country(gdp=1000, name='donor', reliance={'recipient': donor_on_recipient})
                 candidate = self.country(5, name='recipient', reliance={'donor': recipient_on_donor})
                 self.assertEqual(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor), expected)
+
+    def test_same_market_pair_skips_both_trade_checks(self):
+        # No trade route runs inside a market, so a customs union or an
+        # overlord and its subject read 0 on both the trade value and the
+        # reliance; the contagion weights that pair highest, so it may rescue
+        # (#895). A pair in two markets still needs both.
+        for same_market, trade, reliance, expected in [
+            (True, 0, 0.0, True), (True, 100, 0.0, True),
+            (False, 0, 0.0, False), (False, 0, 0.1, False), (False, 100, 0.0, False),
+            (False, 100, 0.1, True),
+        ]:
+            with self.subTest(same_market=same_market, trade=trade, reliance=reliance):
+                donor = self.country(gdp=1000, name='donor', market_id='union', reliance={'recipient': reliance})
+                candidate = self.country(5, name='recipient', trade=trade, reliance={'donor': reliance},
+                                         market_id='union' if same_market else 'own')
+                self.assertEqual(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor), expected)
+        # The other gates still hold for a same-market pair.
+        donor = self.country(gdp=1000, name='donor', market_id='union')
+        for fields in [dict(gdp=2000), dict(has_war_with=True), dict(modifiers={'finreg_banking_stability'})]:
+            with self.subTest(**{k: str(v) for k, v in fields.items()}):
+                candidate = self.country(5, name='recipient', trade=0, reliance=0.0, market_id='union', **fields)
+                self.assertFalse(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor))
 
     def test_protected_recipient_cannot_collect_repeat_bailouts(self):
         candidate = self.country(5, modifiers={'finreg_banking_stability'})

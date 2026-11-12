@@ -210,12 +210,6 @@ je_cultural_hegemony = {
 		}
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_cultural_hegemony = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	# The rule switched off mid-game, from the screen that changes country
 	# (2026-11-08). Nothing else ends this entry, so its nine declared modifiers
 	# and its pulse ran on; the on_actions already stop on the rule. It ends on

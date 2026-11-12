@@ -77,27 +77,6 @@ sr_free_trade_max_units = { value = 5 }
 # The AI supplies at most this many free colonies (sr_free_ai_review).
 sr_free_ai_max = { value = 2 }
 
-# The entry's three modifiers' old multipliers, read through owner from the
-# entry's scope. The entry now declares the three from sr_free_supply_count,
-# sr_free_trade_units and sr_garrison_count (je_space_race.txt), so nothing
-# calls these; a save from before the declarations may still name them on the
-# copy it added, until the old-save strip removes it.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_free_supply_units = {
-	value = 0
-	owner = { add = sr_free_supply_count }
-}
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_free_trade_units_entry = {
-	value = 0
-	owner = { add = sr_free_trade_units }
-}
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_garrison_units = {
-	value = 0
-	owner = { add = sr_garrison_count }
-}
-
 # ---- Covert operations (design § 6) -------------------------------------------------
 # A month, times the operation's phase x priority multiplier (1 to 4):
 # Incite Colonial Autonomy's autonomy at every colony of the target; Sabotage

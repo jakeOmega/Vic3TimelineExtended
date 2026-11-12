@@ -1,8 +1,8 @@
 ﻿# Rules of War infamy (te_row_charge_infamy, common/scripted_effects/rules_of_war_effects.txt).
 
 # The infamy standing already charged: the standing of the Rules of War law
-# last charged, 0 when none has been (the start law, or a save from before the
-# charge). Country scope.
+# last charged, 0 when none has been (a country no law has been charged to
+# yet). Country scope.
 te_row_charged_standing = {
 	value = 0
 	if = {
@@ -14,3 +14,26 @@ te_row_charged_standing = {
 # The share of the difference a move to a stricter law takes off. Below 1, so
 # a move there and back costs infamy (owner, 2026-10-16).
 te_row_infamy_reduction_share = 0.9
+
+# The standing of the Rules of War law the country holds, for the monthly
+# backfill (te_row_backfill_standing). The same figures as each law's
+# on_activate STANDING (test_rules_of_war.py pins them). Country scope.
+te_row_law_standing = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_total_war }
+		value = 25
+	}
+	else_if = {
+		limit = { has_law = law_type:law_war_crimes_forbidden }
+		value = -10
+	}
+	else_if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		value = -15
+	}
+	else_if = {
+		limit = { has_law = law_type:law_limited_war }
+		value = -20
+	}
+}

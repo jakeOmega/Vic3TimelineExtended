@@ -23,6 +23,7 @@ Each later phase adds its own section, newest last, and a fixed item is struck t
 | `TE_SELF_CHECK … judiciary_enacting_law_scope` | once a game, the first time a country whose court law carries an enactment-success line (Constitutional Review or Judicial Supremacy), and not a paper court, starts enacting any law (in 1836, the United States' first enactment) | `currently_enacting_law` resolves at `on_law_enactment_started`, so entrenchment can see which law is under way | the link is missing at that hook: entrenchment never adds its enactment modifier | move `te_jud_enactment_started`'s work into a hidden country event fired from `on_law_enactment_started`, the route Forceful Legislation (`minor_events_timelineextended.2`) takes |
 
 | `TE_SELF_CHECK … judiciary_law_type_variable` | once a game, the first time a Forceful Legislation option is taken under Constitutional Review or Judicial Supremacy (and not a paper court) | a country variable set to a law type reads back as one, so a forced law's case can be filed and compliance can restore the law it replaced | no case is ever filed: the courts never rule on forced laws | file the case from the forced law's own `on_law_activated` (match its type there, as `te_jud_law_activated` does, and fire the ruling on `owner`), and let compliance cost the forced law's legitimacy (`te_jud_ruling_unreversed`, already the fallback branch) instead of restoring the old law |
+| `TE_SELF_CHECK … delayed_trigger_queue_check` | once a game, a week after the first ceiling-law change whose gap still reads under 20 on the day of the change and 20 or more six days later (item 6's Executive Tribunals for the United States does it: −40 on the day, 50 within four days) | a delayed event whose trigger was false when queued was dropped though its trigger held when due (the probe `.9` never ran, its witness `.10` read the gap at 20 or more), so the rule in `scripting_best_practices.md` § "A Delayed `trigger_event` Re-Checks Its Trigger When It Fires" stands, and the events `docs/engine/delayed_event_trigger_report.md` lists as false when queued need the same fix | the probe ran: a delayed event's trigger is read only when it fires, and Court Overhaul's failure had another cause | none for the court events, whose change is right either way: correct the best-practices section and the report's header, and look again at why item 6 failed (#1596) |
 
 No line at all after such a country starts an enactment means the hook's ROOT isn't the country; take the same
 fallback.
@@ -52,6 +53,8 @@ fallback.
    Overhaul, decaying over 5 years, sized by the gap (60 − 10 = 50: about +1pp risk premium and −5 legitimacy),
    with middle-strata radicals (a gap of 40 or more). Then move to Religious Courts while it runs: still exactly
    one Court Overhaul (a smaller gap adds nothing).
+   Since 2026-11-12 (#1596) the event has no trigger and decides on the day; the self-check above says whether
+   that was the cause.
 7. **Secularizing.** As the Ottoman Empire with Rationalism, enact Total Separation: the courts become Statutory
    Courts. Without Rationalism, Executive Tribunals.
 8. **Old save.** A repair ran from 2026-10-17 to vanilla 1.15 (#1022); it is gone. A save from before the group now gives every
@@ -86,6 +89,8 @@ Spec § 14. Built before phase 1's play-test, so read phase 1's items first: the
     by about 1pp. **Pack:** the score falls 15, Packed Court and Packing the Court show, entrenchment stops (start a
     Distribution of Power law: no Constitutional Challenge), and a forced law now opens no case. A year later The
     Enlarged Bench offers Statutory Courts; taking it switches the law at once and ends the packing.
+    Since 2026-11-12 the year is waited out in the hidden `.7` (#1596): before, `.5`'s trigger read the packing
+    modifier added in the same block, and the popup may never have come.
 17. **Lawyers in the Streets.** Repeat phase 1's item 6 (Constitutional Review at 60 to Executive Tribunals, a gap of
     50): a week after the change the event appears instead of bare radicals. Its third option raises the score by 10.
 
@@ -119,7 +124,8 @@ Spec § 14. Built before phase 1's play-test, so read phase 1's items first: the
 28. **The Voided Election** comes right after an election (`on_election_campaign_end`). Declaring the emergency shows
     State of Emergency for three years, and entrenchment and the review of forced laws stop for those three years.
 29. **The Doctrine of Necessity.** As Britain (Statutory Courts, 70), enact Autocracy: a fortnight after it passes the
-    event appears, after the overhaul check.
+    event appears, after the overhaul check. Since 2026-11-12 it is queued through the hidden `.8` (#1596), which
+    reads the paper court on the day: queued directly, its trigger was false while the new law's modifiers lagged.
 30. **Reform paths (`start_enactment`).** As Persia or the Ottoman Empire with Rationalism: A House of Justice
     (unrest) and Courts for a New Code (strong Intelligentsia or modernizers). Their reform answer starts the
     enactment of Statutory Courts on the spot. If nothing is being enacted afterwards, `start_enactment` doesn't work

@@ -38,9 +38,14 @@
 # treaty article, power-bloc principle, GUI. Same idiom as
 # te_aptitude_traits_enabled (common/scripted_triggers/misc_triggers.txt).
 #
-# A GAME RULE CANNOT CHANGE MID-CAMPAIGN, so nothing ever has to strip a
-# modifier this gate turned off: under the simplified setting the modifiers of
-# the advanced steps are never applied in the first place.
+# A GAME RULE CAN CHANGE MID-CAMPAIGN, from the screen that changes country.
+# A game that starts Simplified never applies the advanced steps' modifiers.
+# One switched from Full keeps whatever those steps last applied, since a
+# skipped step removes nothing: te_monetary_settle_rule_switch
+# (te_monetary_rule_switch_effects.txt), first in the monthly update, strips
+# the managed modifiers and forgets the skipped steps' state on the first pulse
+# after the switch, so step 0 seeds it neutral again. Its header lists what it
+# leaves and why.
 te_mon_full_system = {
 	has_game_rule = banking_system_enabled
 }

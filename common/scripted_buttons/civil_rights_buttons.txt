@@ -5,7 +5,7 @@
 # stack with each other; cooptation is compatible with anti buttons (the
 # historical "coopt moderates, jail radicals" stance) but no other pro/anti
 # pair coexists. Each button increments a months-tracker variable read by
-# je_civil_rights' path-dependent on_complete / on_fail.
+# je_civil_rights' path-dependent outcomes (cr_win_ending_now / cr_fail_ending_now).
 #
 # Each modifier is mirrored in a cr_policy_* country variable, set and removed
 # together with it: a revolution's winner inherits variables but no modifiers,
@@ -18,7 +18,7 @@
 # effect adds a cr_btn_*_tt line for what the modifier can't show: the monthly
 # Movement Support push (the policy lines of civil_rights_support_bar in
 # extra_progress_bars.txt; test_civil_rights_buttons checks the figures match),
-# the ending its months count toward (je_civil_rights on_complete / on_fail),
+# the ending its months count toward (je_civil_rights' outcomes),
 # and the buttons it hides. `if` branches render only when their limit holds.
 # ============================================================================
 

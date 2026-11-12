@@ -9,7 +9,9 @@ undo them:
 - the UN's rule-off end is a dissolution's quiet half, with no record, cooldown, event or vacuum;
 - the Space Race's rule-off stop clears a milestone's running variables without marking a programme lost;
 - World War's rule-off helper clears every variable the completion outcome clears, and the latches;
-- Grand Monuments' rule-off pass keeps the upkeep exemption on the building.
+- Grand Monuments' rule-off pass keeps the upkeep exemption on the building;
+- the monetary layer, when the banking rule goes from Full to Simplified (the entry stays), strips its managed modifiers,
+  forgets the skipped steps' state so step 0 seeds it neutral again, and switches off the full-system tools (#1507).
 """
 from __future__ import annotations
 
@@ -160,6 +162,89 @@ class GrandMonumentsRuleOffTest(unittest.TestCase):
         self.assertIn("gm_upkeep", {n.value for n in walk(full.children)})
         pass_ = top("common/on_actions/monument_events_on_actions.txt")["gm_state_rule_off_on_action"]
         self.assertIn(("gm_system_enabled", "no"), pairs(next(c for c in pass_.children if c.key == "trigger").children))
+
+
+class MonetaryRuleSwitchTest(unittest.TestCase):
+    """te_monetary_settle_rule_switch: Full to Simplified mid-game (te_monetary_rule_switch_effects.txt)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = top("common/scripted_effects/te_monetary_effects.txt")
+        cls.effects.update(top("common/scripted_effects/te_monetary_fx_effects.txt"))
+        cls.effects.update(top("common/scripted_effects/te_monetary_arrangement_effects.txt"))
+        cls.effects.update(top("common/scripted_effects/te_monetary_union_effects.txt"))
+        cls.switch = top("common/scripted_effects/te_monetary_rule_switch_effects.txt")
+        cls.leave = cls.switch["te_monetary_leave_full_system"]
+
+    def test_the_switch_runs_before_step_0_and_0b(self):
+        order = [n.key for n in self.effects["te_monetary_monthly_update"].children]
+        self.assertEqual(order[0], "te_monetary_settle_rule_switch")
+        self.assertLess(order.index("te_monetary_settle_rule_switch"), order.index("te_monetary_init_variables"))
+        self.assertLess(order.index("te_monetary_settle_rule_switch"), order.index("te_monetary_settle_modifier_home"))
+
+    def test_only_a_country_that_ran_full_leaves_it(self):
+        settle = self.switch["te_monetary_settle_rule_switch"]
+        full = next(c for c in settle.children if c.key == "if")
+        self.assertIn(("te_mon_full_system", "yes"), pairs(next(c for c in full.children if c.key == "limit").children))
+        self.assertIn(("set_variable", "te_mon_ran_full"), [(n.key, n.value) for n in walk(full.children)])
+        left = next(c for c in settle.children if c.key == "else_if")
+        self.assertIn(("has_variable", "te_mon_ran_full"),
+                      pairs(next(c for c in left.children if c.key == "limit").children))
+        self.assertIn(("remove_variable", "te_mon_ran_full"), pairs(left.children))
+        self.assertIn(("te_monetary_leave_full_system", "yes"), pairs(left.children))
+
+    def seeded(self) -> set[str]:
+        """Every variable step 0 sets only when it is missing, through the init effects it calls."""
+        found: set[str] = set()
+        seen: set[str] = set()
+
+        def visit(name: str) -> None:
+            if name in seen or name not in self.effects:
+                return
+            seen.add(name)
+            for node in walk(self.effects[name].children):
+                if node.key == "if":
+                    limit = next((c for c in node.children if c.key == "limit"), None)
+                    if limit is None:
+                        continue
+                    for nott in (c for c in limit.children if c.key == "NOT"):
+                        found.update(c.value for c in nott.children if c.key == "has_variable")
+                if node.value == "yes":
+                    visit(node.key)
+
+        visit("te_monetary_init_variables")
+        return found
+
+    def test_step_0_seeds_every_variable_the_switch_forgets(self):
+        forgotten = [next(c.value for c in n.children if c.key == "VAR")
+                     for n in walk(self.leave.children) if n.key == "te_mon_forget_variable"]
+        self.assertGreaterEqual(len(forgotten), 20)
+        for name in ("te_inflation", "te_inflation_expected", "te_fx_index", "te_monetisation_level",
+                     "te_mon_stance_band", "te_mon_anchor_kind", "te_peg_suspended_months"):
+            self.assertIn(name, forgotten)
+        missing = set(forgotten) - self.seeded()
+        self.assertEqual(missing, set(), "step 0 would not seed these again, so they would stay unset")
+
+    def test_the_managed_modifiers_go_through_a_change_of_home(self):
+        home = next(n for n in self.leave.children if n.key == "if")
+        self.assertIn("te_mon_mod_home", {c.value for c in walk(home.children) if c.key == "name"})
+        self.assertIn("-1", {c.value for c in walk(home.children) if c.key == "value"})
+        # Step 9 re-adds the rate paid on the same pulse, because it is missing.
+        step9 = self.effects["te_monetary_apply_interest_modifiers"]
+        self.assertIn("te_mon_mod_has", keys(step9))
+
+    def test_every_full_system_tool_is_switched_off(self):
+        buttons = top("common/scripted_buttons/timeline_extended_scripted_buttons.txt")
+        tools = set()
+        for name, node in buttons.items():
+            visible = next((c for c in node.children if c.key == "visible"), None)
+            if visible is not None and ("banking_external_available", "yes") in pairs(visible.children):
+                tools.add(name.removeprefix("cb_"))
+        self.assertEqual(len(tools), 5)
+        called = {n.key for n in walk(self.leave.children)}
+        for tool in sorted(tools):
+            with self.subTest(tool=tool):
+                self.assertIn(f"banking_effect_cb_disable_{tool}", called)
 
 
 if __name__ == "__main__":
