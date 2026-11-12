@@ -558,7 +558,7 @@ class MountTest(unittest.TestCase):
         holder = frame.rindex("flowcontainer = {", 0, entry)
         self.assertIn('block "tab_content"', frame[holder:_close(frame, frame.index("{", holder))])
         for t in gen.TABS:
-            if t.key not in gen.NI_ORDER or t.wide is None:
+            if t.key not in gen.NI_ORDER:
                 continue
             with self.subTest(tab=t.key):
                 body = _strip_comments(types[t.body].body)

@@ -256,12 +256,24 @@ civil_rights_support_bar = {
 	name = "civil_rights_support_bar_name"
 	desc = "civil_rights_support_bar_desc"
 
-	default_green = yes
+	# A tug of war between collapse at 0 and victory at 100 (#1434): green
+	# support over a red background, with 1.15's sliding marker, in the
+	# fields that replaced the ready-made look (default_green before).
+	progress_texture = "gfx/interface/progressbar/progressbar_green.dds"
+	glow_texture = "gfx/interface/progressbar/progressbar_green_glow.dds"
+	glow_line_texture = "gfx/interface/progressbar/progressbar_green_glow_line.dds"
+	background_texture = "gfx/interface/progressbar/progressbar_bad.dds"
+	marker = yes
 
 	start_value = 30
 	min_value = 0
 	max_value = 100
 
+	# Every conditional factor is a progress_condition (1.15, #1441): it counts
+	# like an if, and the journal panel's Advance and Retreat lists show it,
+	# ticked while its limit holds and unticked otherwise, so the player sees
+	# what is moving the bar and what is left. No format = inside one: it
+	# would override the unticked styling.
 	monthly_progress = {
 		# Civil rights movements are generational: the real-world arc from
 		# Brown v. Board to the Fair Housing Act ran ~14 years. The numbers
@@ -278,7 +290,7 @@ civil_rights_support_bar = {
 		}
 
 		# Tech tier: social_justice_movements is the maturity gate
-		if = {
+		progress_condition = {
 			limit = { owner = { has_technology_researched = social_justice_movements } }
 			add = {
 				desc = "cr_social_justice_tech_tt"
@@ -287,7 +299,7 @@ civil_rights_support_bar = {
 		}
 
 		# Severe discriminatory law actively suppresses organizing
-		if = {
+		progress_condition = {
 			limit = { owner = { has_severe_discriminatory_minority_law = yes } }
 			add = {
 				desc = "cr_severe_discrim_law_tt"
@@ -296,7 +308,7 @@ civil_rights_support_bar = {
 		}
 
 		# Progressive minority law accelerates absorption
-		if = {
+		progress_condition = {
 			limit = {
 				owner = {
 					OR = {
@@ -312,7 +324,7 @@ civil_rights_support_bar = {
 		}
 
 		# Per low-acceptance state, capped via max so a 50-state empire doesn't auto-win
-		if = {
+		progress_condition = {
 			limit = { owner = { cr_low_acceptance_count > 0 } }
 			add = {
 				desc = "cr_low_acceptance_states_tt"
@@ -323,14 +335,14 @@ civil_rights_support_bar = {
 		}
 
 		# Radicalization boost: high turmoil feeds recruits
-		if = {
+		progress_condition = {
 			limit = { owner = { radical_fraction = { value >= 0.10 } } }
 			add = {
 				desc = "cr_radicals_tier1_tt"
 				value = 0.15
 			}
 		}
-		if = {
+		progress_condition = {
 			limit = { owner = { radical_fraction = { value >= 0.20 } } }
 			add = {
 				desc = "cr_radicals_tier2_tt"
@@ -339,21 +351,21 @@ civil_rights_support_bar = {
 		}
 
 		# Pro-movement policies (cumulative — stack all three at once for max push)
-		if = {
+		progress_condition = {
 			limit = { owner = { has_modifier = cr_grassroots_modifier } }
 			add = {
 				desc = "cr_grassroots_push_tt"
 				value = 0.2
 			}
 		}
-		if = {
+		progress_condition = {
 			limit = { owner = { has_modifier = cr_federal_protection_modifier } }
 			add = {
 				desc = "cr_federal_push_tt"
 				value = 0.3
 			}
 		}
-		if = {
+		progress_condition = {
 			limit = { owner = { has_modifier = cr_gradualist_modifier } }
 			add = {
 				desc = "cr_gradualist_push_tt"
@@ -363,7 +375,7 @@ civil_rights_support_bar = {
 
 		# Cooptation: short bump (handled by adding cr_cooptation_expired modifier
 		# from the JE on_monthly_pulse once cr_cooptation_months >= 12)
-		if = {
+		progress_condition = {
 			limit = {
 				owner = {
 					has_modifier = cr_cooptation_modifier
@@ -379,14 +391,14 @@ civil_rights_support_bar = {
 		# Anti-movement policies (push the bar DOWN). Repression remains the
 		# faster path — suppression and segregationist crackdowns substantially
 		# outpace any single pro-movement modifier.
-		if = {
+		progress_condition = {
 			limit = { owner = { has_modifier = cr_suppression_modifier } }
 			add = {
 				desc = "cr_suppression_push_tt"
 				value = -0.6
 			}
 		}
-		if = {
+		progress_condition = {
 			limit = { owner = { has_modifier = cr_segregationist_modifier } }
 			add = {
 				desc = "cr_segregationist_push_tt"
@@ -394,9 +406,9 @@ civil_rights_support_bar = {
 			}
 		}
 
-		# Floor relief: pause decay while bar is below 5 so on_fail dispatches
+		# Floor relief: pause decay while bar is below 5 so the failure outcomes resolve
 		# from sustained suppression, not from random decay drift
-		if = {
+		progress_condition = {
 			limit = {
 				scope:journal_entry = {
 					"scripted_bar_progress(civil_rights_support_bar)" < 5

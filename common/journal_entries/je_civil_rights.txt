@@ -133,11 +133,32 @@
 		}
 	}
 
+	# Ten endings, one outcome each (1.15, #1431), so the panel lists every
+	# ending and what leads to it before it happens. Each trigger is the shared
+	# victory or collapse condition plus its branch, which cr_win_ending_now /
+	# cr_fail_ending_now (civil_rights_values.txt) decide: one ordered chain on
+	# which policy ran longest (over 18 months), so exactly one branch holds and
+	# the status line's "if it wins now" names the same ending. Their branches
+	# compare one script value with another inside a script value's limit, as
+	# vanilla's russian_liberal_monthly_change does (russian_liberal_laws_value >
+	# russian_socialist_laws_value). Declared in the
+	# chain's order anyway, victories before collapses: the first declared
+	# outcome whose trigger holds concludes the entry (C3).
+	#
+	# civil_rights_resolved keeps this entry from starting over on a revolution's
+	# winner; the event option records which outcome modifier it granted
+	# (cr_record_outcome_modifier) so on_civil_war_won can give it back. The
+	# cleanup strips the six path modifiers and the cooptation-expired marker,
+	# which are country-scope and outlive the entry otherwise.
+	#
+	# Victory on Paper is checked first: if the bar filled while a discriminatory
+	# law held, the "victory" is on paper only, and an oppressive government
+	# does not get the victory-coded rewards (issue #14).
 	outcome = {
-		header = je_standard_completion_header
+		header = je_civil_rights_hollow_header
 		effect_header = je_standard_on_completion_header
 		color = "gold_positive"
-		conclusion_desc = je_civil_rights_complete_conclusion_desc
+		conclusion_desc = je_civil_rights_hollow_conclusion_desc
 		trigger = {
 			OR = {
 				custom_tooltip = {
@@ -152,65 +173,186 @@
 					has_law = law_type:law_minority_rights_protection
 				}
 			}
+			custom_tooltip = {
+				text = je_civil_rights_hollow_tt
+				cr_win_ending_now = 1
+			}
 		}
-		# Path-dependent victory: dispatch on whichever policy track was dominant
-		# for at least 18 months. Falls through to the existing generic .200 event
-		# when no track took clear lead (e.g. fast law-passage with little policy use).
-		#
-		# Hollow-victory check FIRST: if the bar filled but the regime kept its
-		# discriminatory laws in place, the movement's "victory" is purely on paper.
-		# Fire a separate event so an actively oppressive government doesn't get
-		# the victory-coded rewards (issue #14).
-		#
-		# civil_rights_resolved keeps this entry from starting over on a revolution's
-		# winner; the event option records which outcome modifier it granted
-		# (cr_record_outcome_modifier) so on_civil_war_won can give it back.
 		effect = {
 			set_variable = civil_rights_resolved
 			cr_ensure_tracker_vars_effect = yes
-			if = {
-				limit = { has_discriminatory_minority_law = yes }
-				trigger_event = { id = movement_events_te.240 } # Hollow Victory
-			}
-			else_if = {
-				limit = {
-					var:cr_federal_months >= var:cr_grassroots_months
-					var:cr_federal_months >= var:cr_gradualist_months
-					var:cr_federal_months > 18
-				}
-				trigger_event = { id = movement_events_te.220 } # Federal Mandate
-			}
-			else_if = {
-				limit = {
-					var:cr_grassroots_months >= var:cr_gradualist_months
-					var:cr_grassroots_months > 18
-				}
-				trigger_event = { id = movement_events_te.221 } # Grassroots Triumph
-			}
-			else_if = {
-				limit = { var:cr_gradualist_months > 18 }
-				trigger_event = { id = movement_events_te.222 } # Negotiated Settlement
-			}
-			else_if = {
-				limit = { var:cr_cooptation_months > 18 }
-				trigger_event = { id = movement_events_te.223 } # Coopted Reform (bittersweet)
-			}
-			else = {
-				trigger_event = { id = movement_events_te.200 } # generic fallback
-			}
-
-			# Strip the six path modifiers (cr_grassroots/federal/gradualist/cooptation/
-			# suppression/segregationist) and the timed cooptation-expired marker. They
-			# are country-scope and survive the JE's end unless explicitly removed.
+			trigger_event = { id = movement_events_te.240 } # Victory on Paper
 			cr_je_cleanup_effect = yes
 		}
 	}
 
 	outcome = {
-		header = je_standard_failure_header
+		header = je_civil_rights_federal_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_civil_rights_federal_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = je_civil_rights_complete_bar_tt
+					scope:journal_entry = {
+						"scripted_bar_progress(civil_rights_support_bar)" >= 100
+					}
+				}
+				has_law = law_type:law_minority_rights_affirmative_action
+				AND = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_federal_tt
+				cr_win_ending_now = 2
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.220 } # The Civil Rights Mandate is Signed
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = je_civil_rights_grassroots_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_civil_rights_grassroots_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = je_civil_rights_complete_bar_tt
+					scope:journal_entry = {
+						"scripted_bar_progress(civil_rights_support_bar)" >= 100
+					}
+				}
+				has_law = law_type:law_minority_rights_affirmative_action
+				AND = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_grassroots_tt
+				cr_win_ending_now = 3
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.221 } # The Movement Carries the Day
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = je_civil_rights_gradualist_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_civil_rights_gradualist_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = je_civil_rights_complete_bar_tt
+					scope:journal_entry = {
+						"scripted_bar_progress(civil_rights_support_bar)" >= 100
+					}
+				}
+				has_law = law_type:law_minority_rights_affirmative_action
+				AND = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_gradualist_tt
+				cr_win_ending_now = 4
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.222 } # A Settlement, At Last
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = je_civil_rights_coopted_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_civil_rights_coopted_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = je_civil_rights_complete_bar_tt
+					scope:journal_entry = {
+						"scripted_bar_progress(civil_rights_support_bar)" >= 100
+					}
+				}
+				has_law = law_type:law_minority_rights_affirmative_action
+				AND = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_coopted_tt
+				cr_win_ending_now = 5
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.223 } # Reform on Paper
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = je_civil_rights_equality_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_civil_rights_equality_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = je_civil_rights_complete_bar_tt
+					scope:journal_entry = {
+						"scripted_bar_progress(civil_rights_support_bar)" >= 100
+					}
+				}
+				has_law = law_type:law_minority_rights_affirmative_action
+				AND = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_equality_tt
+				cr_win_ending_now = 6
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.200 } # A New Era of Equality
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	# Collapses: crushed by the crackdowns or a discriminatory law, demobilized by
+	# cooptation, adrift under gradualism, or simply faded.
+	outcome = {
+		header = je_civil_rights_broken_header
 		effect_header = je_standard_on_failure_header
 		color = "blue_negative"
-		conclusion_desc = je_civil_rights_fail_conclusion_desc
+		conclusion_desc = je_civil_rights_broken_conclusion_desc
 		trigger = {
 			OR = {
 				NOT = { has_active_civil_rights_movement = yes }
@@ -218,35 +360,90 @@
 					"scripted_bar_progress(civil_rights_support_bar)" <= 0
 				}
 			}
+			custom_tooltip = {
+				text = je_civil_rights_broken_tt
+				cr_fail_ending_now = 1
+			}
 		}
-		# Path-dependent failure: distinguish suppression (oppressive aftermath),
-		# cooptation (movement demobilized by token reform), gradualist drift, and a
-		# movement that simply lost momentum with no track dominant (.232).
 		effect = {
 			set_variable = civil_rights_resolved
 			cr_ensure_tracker_vars_effect = yes
-			if = {
-				limit = {
-					OR = {
-						var:cr_suppression_months > var:cr_segregationist_months
-						var:cr_segregationist_months > 18
-						has_discriminatory_minority_law = yes
-					}
-				}
-				trigger_event = { id = movement_events_te.100 } # existing oppressive aftermath
-			}
-			else_if = {
-				limit = { var:cr_cooptation_months > 18 }
-				trigger_event = { id = movement_events_te.230 } # demobilized by tokenism
-			}
-			else_if = {
-				limit = { var:cr_gradualist_months > 18 }
-				trigger_event = { id = movement_events_te.231 } # gradualist stagnation
-			}
-			else = {
-				trigger_event = { id = movement_events_te.232 } # lost momentum, no dominant track
-			}
+			trigger_event = { id = movement_events_te.100 } # The Movement Broken
+			cr_je_cleanup_effect = yes
+		}
+	}
 
+	outcome = {
+		header = je_civil_rights_demobilized_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_civil_rights_demobilized_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = { has_active_civil_rights_movement = yes }
+				scope:journal_entry = {
+					"scripted_bar_progress(civil_rights_support_bar)" <= 0
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_demobilized_tt
+				cr_fail_ending_now = 2
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.230 } # The Movement Demobilizes
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = je_civil_rights_drift_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_civil_rights_drift_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = { has_active_civil_rights_movement = yes }
+				scope:journal_entry = {
+					"scripted_bar_progress(civil_rights_support_bar)" <= 0
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_drift_tt
+				cr_fail_ending_now = 3
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.231 } # The Long Drift
+			cr_je_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = je_civil_rights_faded_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_civil_rights_faded_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = { has_active_civil_rights_movement = yes }
+				scope:journal_entry = {
+					"scripted_bar_progress(civil_rights_support_bar)" <= 0
+				}
+			}
+			custom_tooltip = {
+				text = je_civil_rights_faded_tt
+				cr_fail_ending_now = 4
+			}
+		}
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			trigger_event = { id = movement_events_te.232 } # The Movement Fades
 			cr_je_cleanup_effect = yes
 		}
 	}

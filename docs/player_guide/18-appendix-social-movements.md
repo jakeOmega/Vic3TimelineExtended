@@ -13,8 +13,8 @@ fire.
 
 ### What moves Movement Support
 
-Each month Movement Support moves by the sum of these lines, which the bar's
-tooltip lists:
+Each month Movement Support moves by the sum of these lines, which the journal
+panel lists beside the bar:
 
 | Source | Change per month |
 |---|---|
@@ -52,11 +52,11 @@ The bar's level sets a phase, applied as a modifier on the journal entry:
 | Policy | Support per month | While active |
 |---|---|---|
 | Grassroots Organizing | +0.2 | +5% enactment success chance, +10% radicals from political movements |
-| Federal Protection | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority |
+| Federal Protection | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority, +25% enactment speed for Multicultural |
 | Gradualist Accommodation | +0.1 | −5% turmoil penalties, +2 acceptance |
 | Cooptation / Token Reform | +0.15 for 12 months | −10% turmoil penalties, +3 acceptance, +5% legitimacy penalty from ideological incoherence |
 | Suppression / Crackdown | −0.6 | +5% Authority, +10% turmoil penalties |
-| Segregationist Consolidation | −0.9 | +10% Authority, +30% radicals from political movements, −10 acceptance |
+| Segregationist Consolidation | −0.9 | +10% Authority, +30% radicals from political movements, −10 acceptance, −25% enactment speed for Multicultural |
 
 Acceptance figures apply to pops outside their homeland.
 
@@ -130,11 +130,11 @@ faith.
 |---|---|---|
 | The Moral Majority | Television Broadcasting (7) | The Religious Right: +35% Devout political strength, +30% Devout attraction, −50 Authority |
 | Faith in Prime Time | Pop Culture (7) | Televangelism Movement: +20% strength, +50% attraction |
-| Bread and Justice | Civil Rights Movement (7) | Liberation Theology: +30% strength, +25% attraction, +0.5 standard of living |
+| Bread and Justice | Civil Rights Movement (7) | Liberation Theology: +30% strength, +25% attraction, +1 standard of living |
 | Faith and Flag | Globalization (9) | Religious Nationalism: +50% strength, +40% attraction, +10% assimilation, −5% prestige (fading) |
 | Faith Online | Social Media (9) | Digital Faith Movement: +25% strength, +45% attraction |
 | The Culture War | Sexual Revolution (8) | Culture War: +40% strength, +35% attraction, slower research (fading) |
-| The Faithful Hand | Social Justice Movements (9) | Faith-Based Social Services: +25% strength, +30% attraction, +0.5 standard of living (fading) |
+| The Faithful Hand | Social Justice Movements (9) | Faith-Based Social Services: +25% strength, +30% attraction, +1 standard of living (fading) |
 
 The Devout clout ceiling is 15% instead of 10% for Faith and Flag, The
 Culture War and The Faithful Hand.

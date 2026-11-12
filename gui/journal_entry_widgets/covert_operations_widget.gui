@@ -2690,6 +2690,9 @@ types covert_operations_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_covert_warfare')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 
 		blockoverride "tab_content" {
 			block "te_covert_tab_layout" {

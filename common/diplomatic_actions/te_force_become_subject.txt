@@ -9,9 +9,9 @@
 # country_subjugation_*_strength_add modifiers seeded on each identity's
 # leader_modifier) through the te_subjugation_strength script_value.
 #
-# Now that any bloc can subjugate, the action also charges population-
-# scaled infamy on success (see change_infamy block below). Sovereign
-# Empire keeps a flavor edge via the dormant vanilla bool
+# Now that any bloc can subjugate, the action also charges infamy on
+# success, a fifth of the target's annexation figure (see the change_infamy
+# block below). Sovereign Empire keeps a flavor edge via the dormant vanilla bool
 # power_bloc_leader_can_make_subjects_bool — repurposed as a 50% infamy
 # discount flag (the bool is still granted by the vanilla SE identity's
 # power_bloc_modifier; relocalized in te_modifiers_l_english.yml).
@@ -115,26 +115,31 @@ REPLACE:force_become_subject = {
 			}
 		}
 
-		# Population-scaled infamy. Mirrors the vanilla annex shape (base 5 + per-
-		# population multiplier; see vanilla 43_subjects_handle_states.txt:317),
-		# globally scaled to 20% because subjugation leaves the target nominally
-		# sovereign, and capped at INFAMY_THRESHOLD_INFAMOUS (25) so it can never
-		# alone tip the leader into "Infamous" status. Sovereign Empire halves
-		# this further via the repurposed power_bloc_leader_can_make_subjects_bool
-		# flag still granted by the vanilla SE identity.
+		# Infamy: a fifth of what annexing the target would cost, the target's
+		# country_infamy_value (vanilla 1.14+ common/script_values/
+		# 00_infamy_values.txt, the figure 00_annex_country.txt charges; root is
+		# the aggressor here as there). It is a fifth because subjugation leaves
+		# the target nominally sovereign (owner, 2026-11-12, #387). Capped at
+		# INFAMY_THRESHOLD_INFAMOUS (25), so it can never alone tip the leader
+		# into "Infamous"; from a target worth 125 (a mid-sized country in the
+		# 1.14.5 migration's worked cases) the cap decides. Sovereign Empire
+		# halves it via the repurposed power_bloc_leader_can_make_subjects_bool
+		# flag still granted by the vanilla SE identity. Vanilla's subject
+		# multipliers are left out: the target can't be a subject (possible).
+		# Read before the pact would be the same: the value has no subject term.
+		# No vanilla diplomatic action reads country_infamy_value (stake colonial
+		# claim reads state_infamy_value), so the once-a-game
+		# force_subject_infamy self-check says whether it resolves here
+		# (play-test list docs/testing/vanilla-1-15-playtest.md).
 		change_infamy = {
 			value = {
-				add = 5
+				value = 0
 
-				multiply = {
-					value = scope:target_country.total_population
-					divide = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR
-					multiply = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER
-					add = 1
-					max = 50 # was define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL (= 50), removed in 1.14.4
+				scope:target_country = {
+					add = country_infamy_value
 				}
 
-				# Subjugate is 20% as bad as annex globally.
+				# Subjugate is 20% as bad as annex.
 				multiply = 0.2
 
 				# Sovereign Empire discount via repurposed dormant bool.
@@ -145,6 +150,21 @@ REPLACE:force_become_subject = {
 
 				min = 0
 				max = 25
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_global_variable = te_fbs_infamy_checked } }
+				set_global_variable = { name = te_fbs_infamy_checked value = yes }
+				if = {
+					limit = {
+						scope:target_country = { country_infamy_value > 0 }
+					}
+					debug_log = "TE_SELF_CHECK OK force_subject_infamy country=[THIS.GetCountry.GetTagName] (Subjugate read the target's country_infamy_value above 0 in a diplomatic action) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN force_subject_infamy country=[THIS.GetCountry.GetTagName] (Subjugate read the target's country_infamy_value as 0 in a diplomatic action, so it charged no infamy; take the fallback in docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
 			}
 		}
 	}

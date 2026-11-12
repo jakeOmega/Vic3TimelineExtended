@@ -304,12 +304,6 @@ je_space_race_suborbital = {
 		}
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_suborbital = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital } }
 	}
@@ -612,12 +606,6 @@ je_space_race_orbital = {
 		}
 		effect = {
 			sr_stop_for_rule_base = { MILESTONE = orbital }
-		}
-	}
-
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_orbital = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 		}
 	}
 
@@ -937,12 +925,6 @@ je_space_race_moon_landing = {
 		}
 		effect = {
 			sr_stop_for_rule_base = { MILESTONE = moon_landing }
-		}
-	}
-
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_moon_landing = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 		}
 	}
 
@@ -1266,12 +1248,6 @@ je_space_race_probe = {
 		}
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_probe = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe } }
 	}
@@ -1579,12 +1555,6 @@ je_space_race_mars_landing = {
 		}
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_mars_landing = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing } }
 	}
@@ -1849,12 +1819,6 @@ je_space_race_interstellar_probe = {
 		}
 		effect = {
 			sr_stop_for_rule_base = { MILESTONE = interstellar_probe }
-		}
-	}
-
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_interstellar_probe = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 		}
 	}
 
@@ -2319,12 +2283,6 @@ je_space_race_solar_colonization = {
 		}
 		effect = {
 			sr_stop_for_rule_base = { MILESTONE = solar_colonization }
-		}
-	}
-
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_space_race_solar_colonization = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 		}
 	}
 

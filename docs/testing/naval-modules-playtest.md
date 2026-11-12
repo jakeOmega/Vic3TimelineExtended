@@ -44,3 +44,18 @@ submarines, so the Submarine row gives both.
 | ~~**Successors.** Hover Damage Control Teams; read debug.log after loading.~~ | ~~The tooltip names Fire Suppression as incompatible; no `incompatible_with` line in debug.log.~~ | Failed: the engine swallowed each module's effects after the key (eleven utilities showed only goods). The key is removed; the shared slot keeps a successor and its predecessor apart (fix PR, 2026-11-04). |
 | **Effects.** Hover each new utility in the designer. | Its effects are listed (Close-In Weapon System: −20% suffered accuracy, −60% vulnerability), and debug.log has no `Failed to read key reference` line for `extra_utility_modifications.txt`. | Only goods listed: a key in the module is breaking the reader; the debug.log line names the file and line. |
 | **Slots.** Open an Antimatter Battleship's designer, then a Nuclear Supercarrier's. | Three utility slots on the battleship: protection, countermeasures, and weapons, sensors and support. Two on the carrier, with Extended Sick Bay among the protection and countermeasure modules. | |
+
+## Vulnerability and screening rescale (#1625)
+
+The mod's ships moved to vanilla 1.14.5's vulnerability and screening scale (about ×0.56; mapping in the
+`extra_ship_types.txt` header). Vulnerability weights which ship an attacker fires at and screening shields the
+rest, so the offline tests can pin the numbers but not how a battle now goes. Totals below are hull plus medium
+guns; `vulnerability_exploitation` is still unset on every mod ship (it exploits everything).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Designer.** Read an Arsenal Ship's and a Networked Air Defense Cruiser's stats with medium modules. | Arsenal Ship vulnerability 125, screening 5; the cruiser 25 and 278, plus 111 with Aegis Air Defense. | The old 225 / 61: the deploy is stale. |
+| **Mixed battle line.** A fleet of Arsenal Ships and base-game Super Dreadnoughts in battle; count the hits each class takes in the log. | About the same hits per ship (both 125). Before the change the Arsenal Ships drew about 1.8 times as many. | |
+| **Escorts.** A fleet of Networked Air Defense Cruisers and base-game Light Cruisers. | The mod cruisers take about 5 times the hits per ship of a Light Cruiser (25 against 5), down from about 12. | |
+| **Unescorted capitals.** Mod capitals with no escorts against a late attacker (Super Dreadnoughts, which exploit up to 140); then the same with three Pulsed Laser Escorts. | The escorts take a real share of the fire and the capitals' losses drop, as Light Cruisers shield Dreadnoughts. | The capitals lose as much with escorts as without: note the battle log's screening figures for both fleets. |
+| **Transports.** An escorted invasion fleet: 4 capitals, 4 Pulsed Laser Escorts and 4 Marine Assault Ships. Read the formation panel's screening ratio, then send it into battle. | The screening ratio is about what it was before the change (1.12 with medium guns; the troop ships were rescaled with the capitals for this). The transports draw about the share of fire they did before (147 against the capitals' 125, as 245 against 225). | A ratio near 0.84: the troop ships' values did not deploy. Transports lost in nearly every battle: compare with a fleet of base-game Troopships. |

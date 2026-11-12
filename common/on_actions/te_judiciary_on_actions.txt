@@ -151,11 +151,14 @@ te_jud_law_activated = {
 			}
 			owner = {
 				trigger_event = { id = te_judiciary_events.1 days = 7 }
+				te_jud_rule_probe_queue = yes
 			}
 		}
 		# The Doctrine of Necessity (phase 4): a regime that has just put
-		# itself above the courts asks them to call it lawful. The event's
-		# trigger reads the score; nothing here may (ROOT is the law).
+		# itself above the courts asks them to call it lawful. The relay
+		# (.8, no trigger) reads the score and the paper court a fortnight
+		# on; nothing here may (ROOT is the law), and .34's own trigger,
+		# false today while the new law's modifiers lag, would drop it (#1596).
 		if = {
 			limit = {
 				OR = {
@@ -167,7 +170,7 @@ te_jud_law_activated = {
 				}
 			}
 			owner = {
-				trigger_event = { id = te_judiciary_events.34 days = 14 }
+				trigger_event = { id = te_judiciary_events.8 days = 14 }
 			}
 		}
 	}

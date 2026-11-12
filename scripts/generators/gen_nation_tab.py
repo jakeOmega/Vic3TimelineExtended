@@ -472,6 +472,8 @@ NOT_A_ROW = {
                                             "(the Anti-Colonial Policy's hypocrite tax on them)",
     "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
+    "country_enactment_speed_law_multicultural_mult": "the Civil Rights journal entry (Federal Protection, "
+                                                      "Segregationist Consolidation) and the law panel's enactment",
 }
 
 

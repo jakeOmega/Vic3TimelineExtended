@@ -1673,10 +1673,10 @@ war_propaganda_support_script_value = {
 	}
 }
 
-# country_gdp_per_capita is defined later in this file with the simpler
-# country-scope `gdp / total_population` form (the duplicate state-iteration
-# version that lived here previously was silently dropped by the engine's
-# "Duplicated key" rule -- caught by mod_structure_audit).
+# country_gdp_per_capita is vanilla's (1.15, ip5_je_values.txt): the mod's own
+# copy computed the same gdp / total_population and was deleted (#1460). A bare
+# duplicate script value is never an error: the copy read last wins, and
+# vanilla's ip5_ file sorts after this one, so the mod's copy was dead anyway.
 
 # global_gdp_per_capita (world GDP over world population) was deleted in
 # 1.15: nothing read it, and vanilla's global_average_gdp_per_capita event
@@ -2213,14 +2213,6 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	max = 1
 }
 
-# Uncalled since 1.15. An older save's added copy of the modifier, until the
-# monthly strip takes it off, still names it as its multiplier.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-financial_cycle_government_fiscal_policy_effect_size_for_je = {
-	value = 0
-	owner = { add = financial_cycle_government_fiscal_policy_effect_size }
-}
-
 # The momentum the six bubble_inertia_* declarations on je_banking_cycle carry
 # (each in its band and economy there), read from the owning country: none up
 # to 15 bubble pressure, linear to +0.25 at 50, then a gentle curve to +0.45 at
@@ -2273,15 +2265,6 @@ bubble_inertia_curve = {
 			}
 		}
 	}
-}
-
-# The curve read from the entry (JE scope) through its owner: uncalled since
-# 1.15, but an older save's added copies of the six tiers, until the monthly
-# strip takes them off, still name it as their multiplier.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-bubble_inertia_multiplier_script_value = {
-	value = 0
-	owner = { add = bubble_inertia_curve }
 }
 
 # Minimum source GDP for contagion to be possible.
@@ -2480,13 +2463,6 @@ ce_treasury_pool_balance_multiplier = {
 	subtract = investment_pool_net_income
 }
 
-# Uncalled since 1.15; an older save's added copy still names it.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-ce_treasury_pool_balance_multiplier_for_je = {
-	value = 0
-	owner = { add = ce_treasury_pool_balance_multiplier }
-}
-
 # ====================================================================================
 # CONSTRUCTION COST SCALING
 # ====================================================================================
@@ -2549,14 +2525,7 @@ construction_cost_gdppc_ceiling = {
 	multiply = construction_cost_ceiling_ratio
 }
 
-# Country-scope GDP per capita
-country_gdp_per_capita = {
-	value = gdp
-	divide = {
-		value = total_population
-		min = 1
-	}
-}
+# Country-scope GDP per capita is vanilla's country_gdp_per_capita (1.15, ip5_je_values.txt), see #1460.
 
 # The GDP part: 0 at floor, max_mult at ceiling, linear interpolation.
 # Formula: clamp(0, max_mult, (gdppc - floor) / (ceiling - floor) * max_mult)

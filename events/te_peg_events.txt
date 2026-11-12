@@ -270,6 +270,11 @@ te_peg.1 = {
 			days = 730
 			is_decaying = yes
 		}
+		# Its months left, for a revolution's winner (#470): no modifier passes
+		# to the winner, so te_monetary_inherit_central_bank re-adds it from this.
+		hidden_effect = {
+			set_variable = { name = te_mon_peg_devaluation_months value = 24 }
+		}
 
 		change_infamy = { value = 1 }
 		custom_tooltip = {
@@ -396,6 +401,10 @@ te_peg.2 = {
 		add_modifier = {
 			name = te_mon_peg_broken_premium
 			days = 1825
+		}
+		# Its months left, for a revolution's winner (#470).
+		hidden_effect = {
+			set_variable = { name = te_mon_peg_broken_months value = 60 }
 		}
 
 		ai_chance = {
