@@ -74,12 +74,8 @@ PROGRAMMES = (
      "colonial_programme_assimilation_up", "colonial_programme_assimilation_down"),
 )
 # Undated modifiers that need no record, and why.
+# The entry's five band modifiers are declared on it (#1466), never added, so they need none.
 NOT_RECORDED = {
-    # the entry's band modifiers: on the entry itself, re-applied every month
-    "colonial_empire_crumbling_modifier",
-    "colonial_empire_under_pressure_modifier",
-    "colonial_empire_strained_modifier",
-    "colonial_empire_stable_modifier",
     # on subjects and movements, re-applied every month by the entry
     "colonial_overlord_collapsing_subject_ld_modifier",
     "colonial_overlord_crumbling_subject_ld_modifier",
@@ -115,8 +111,9 @@ class CoverageTests(unittest.TestCase):
         found = (_undated_add_modifiers(EFFECTS) | _undated_add_modifiers(EVENTS)
                  | _undated_add_modifiers(JE) | _undated_add_modifiers(_colonial_decisions()))
         # colonial_empire_solidified_modifier is also the entry's top band
-        # modifier (je_colonial_empire.txt); the country copy is the recorded one.
-        # The programmes are declared, never added (no entry in `covered`).
+        # modifier (declared in je_colonial_empire.txt); the country copy is the
+        # recorded one. The programmes and the bands are declared, never added
+        # (no entry in `covered`).
         covered = set(PERMANENT) | NOT_RECORDED
         missing = sorted(found - covered)
         self.assertEqual(missing, [],
@@ -136,9 +133,9 @@ class CoverageTests(unittest.TestCase):
 
     def test_solidified_backfill_waits_for_no_entry(self):
         # colonial_empire_solidified_modifier is also the entry's top band
-        # modifier (on je:je_colonial_empire). Its record may be backfilled only
-        # while no entry runs, so a country-scope has_modifier that saw the band
-        # modifier could never mint the permanent reward.
+        # modifier (declared on je_colonial_empire, #1466, which has_modifier
+        # cannot see). Its record is still backfilled only while no entry runs,
+        # so no reading of the band could mint the permanent reward.
         sync = _block(EFFECTS, "decol_sync_permanent_modifiers")
         pos = sync.index("decol_backfill_permanent_record = { MODIFIER = colonial_empire_solidified_modifier")
         guards = []

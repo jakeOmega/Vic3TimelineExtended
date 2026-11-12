@@ -307,6 +307,13 @@ aerosol injection already have mirror variables, so they convert too and their
 restore effects (`gw_restore_*_policy_effect`) go; the other eight need
 variables (follow-up).
 
+As built (#1466): the other nine (the eight national flats and the leader's
+Fossil-Fuel Tariffs) each got a country variable, `gw_<policy>_policy`, set
+and removed by the adopt and repeal effects, and are declared at 1 while it is
+set. The `gw_policy_*_active` triggers read the variable (the leader's own
+tariffs: `gw_runs_fossil_fuel_tariffs`), and treaty 109 forces its seven
+through the adopt effects. A civil war's winner now keeps every policy.
+
 ### 4.4 Nuclear (3 keys + 7 flats, on the entry)
 
 | Key | Value |
@@ -352,6 +359,19 @@ also the ending's permanent country reward, so declaring it needs an exception
 in the misuse test (the two copies never coexist: the entry ends before the
 grant), and declaring only four would leave two bands or none at the 90 edge
 for up to a month. Follow-up: #1466.
+
+As built (#1466): all five bands are declared, each at 1 in its band of
+`colonial_empire_live_tier`, and the pulse's swap is gone.
+`test_journal_entry_shape.py`'s misuse check allows Solidified's country copy
+(the reward) in the three files that grant, restore and list it, never inside
+a `je:` block (`COUNTRY_COPY`). Unlike the #1404 conversions, these fourteen
+keys were still flat in the released 1.3.0 and 1.3.1, on vanilla 1.15.0, so a
+one-time migration (`te_flat_toggle_migration_effects.txt`, from each entry's
+weekly pulse, PENDING REMOVAL at the next save-breaking vanilla patch) removes
+a 1.3.x save's added copies and sets each policy's variable from its copy (the
+tariffs only for a country still leading its market), remove before set.
+`misuse_sites` lets that file test and remove the keys, never add them
+(`MIGRATION_FILE`).
 
 ### 4.6 Cultural Hegemony (5 keys + 4 programmes)
 
