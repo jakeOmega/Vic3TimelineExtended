@@ -1,0 +1,6 @@
+# probe_a.txt
+set_variable = { name = te_qa_probe_a value = 7 }
+debug_log = "TE_QA_PROBE a ran"
+# probe_b.txt
+set_variable = { name = te_qa_probe_b value = 11 }
+debug_log = "TE_QA_PROBE b ran"

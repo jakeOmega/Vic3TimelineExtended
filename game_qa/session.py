@@ -74,16 +74,22 @@ CONSOLE_READY_S = 180.0                 # the first round trip: a save took abou
 STOP_WAIT_S = 15.0                      # from typing the read event to the debugger's stop (real seconds: dap's clock)
 DATE_WAIT_S = 5.0                       # from the resume to the read event's line in the log
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
-# add-setup (#1600): the game reloads te_qa_effects.txt once it is rewritten. With this mod a reload took about 40 s,
-# dropped the console commands typed during it and rotated every debug.log generation (spec § 3.3).
-RELOAD_FIRST_S = 5.0                    # after the rewrite, before the first look
-RELOAD_RETRY_S = 5.0                    # between looks
-RELOAD_WAIT_S = 180.0                   # for the game to log the new revision, in all
+# add-setup (#1600): the game reloads te_qa_effects.txt once it is rewritten. Live on 1.15.1 (2026-11-12, twice:
+# on the country-select screen and in an entered game) a reload took about 90 s, and for all of it the game's
+# window did not respond; the probes of 2026-11-10 saw 40 s, console commands dropped and every debug.log
+# generation rotated (spec § 3.3).
+RELOAD_FIRST_S = 20.0                   # after the rewrite, before the first look: the window is frozen by then
+RELOAD_RETRY_S = 5.0                    # between looks (a look at a frozen window takes the console's 10 s itself)
+RELOAD_WAIT_S = 300.0                   # for the game to log the new revision, in all
 LOADED_WAIT_S = 5.0                     # from the revision event's command to its line in the log
 LOADED_COMMAND = "event " + overlay.LOADED_EVENT
 # What a look may fail with while the game reloads, and so is tried again: the command was dropped (no_ack),
 # or the reload's burst swallowed its lines (no_reply, log_gap). The event only logs, so a second run costs nothing.
 RELOAD_RETRIED = ("no_ack", "no_reply", "log_gap")
+# The console calls a window that has not responded for 10 s `game_gone`. During a reload that is the game being
+# busy, so it is tried again too, but only while the window is still there (`_reloading`); `watch` is looked at
+# between tries, and ends them when the game really has gone.
+RELOAD_FROZEN = "game_gone"
 LOG_POLL_S = 0.2
 CLICK_SETTLE_S = 1.0                    # after the country click, before Start (unverified)
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
@@ -703,7 +709,7 @@ class Session:
             try:
                 self._look_for_revision()
             except ConsoleError as e:
-                if e.code not in RELOAD_RETRIED:
+                if not self._reloading(e):
                     raise
                 failed = "%s: %s" % (e.code, e)
             out["seen"] = self._loaded_revision
@@ -719,6 +725,19 @@ class Session:
                     revision=revision, seen=self._loaded_revision, tries=tries)
             self._sleep(RELOAD_RETRY_S)
             self._check_watch()
+
+    def _reloading(self, e: ConsoleError) -> bool:
+        """Whether a console error during a look is what a reloading game gives, so the look can be made again:
+        one of RELOAD_RETRIED, or a window that does not respond (RELOAD_FROZEN) while the window still exists.
+        Nothing was typed that could run twice: the look's command only logs."""
+        if e.code in RELOAD_RETRIED:
+            return True
+        if e.code != RELOAD_FROZEN:
+            return False
+        try:
+            return bool(self._helper.window(self._proc.pid).exists)
+        except HelperError:
+            return False
 
     def _look_for_revision(self) -> None:
         """Run the revision event once and take the newest revision the log names into `_loaded_revision`."""
@@ -745,7 +764,7 @@ class Session:
         try:
             self._look_for_revision()
         except ConsoleError as e:
-            if e.code not in RELOAD_RETRIED:
+            if not self._reloading(e):
                 raise
         if self._loaded_revision == before:
             return False
@@ -768,7 +787,8 @@ class Session:
             if added is not None and self._loaded_revision < added[0] + 1:
                 needed = added[0] + 1       # slot n was filled by revision n + 1
                 raise SessionError("setup_not_loaded", "the game has not reloaded %s since setup %s was added "
-                                   "(it logs revision %d, the setup came with %d): wait and run it again"
+                                   "(it logs revision %d, the setup came with %d; a reload takes about 90 s, "
+                                   "and the game's window does not respond during it): wait and run it again"
                                    % (overlay.EFFECTS_FILE, name, self._loaded_revision, needed),
                                    revision=needed, seen=self._loaded_revision)
             self._new_lines()                   # what was logged before is not this setup's

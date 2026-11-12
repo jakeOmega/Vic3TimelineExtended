@@ -15,7 +15,8 @@ The `.txt` files start with one UTF-8 BOM and are indented with tabs; `metadata.
 mod's own has none.
 
 A setup added to a running game (`add_setup`, #1600) goes into a spare slot. The game reloads a scripted-effect
-file that changes while it runs (`-debug_mode`; spec § 3.3: verified, about 40 seconds with this mod), but an
+file that changes while it runs (`-debug_mode`; spec § 3.3: verified, 40 seconds in the probes of 2026-11-10 and about 90 live on 2026-11-12, the
+window not responding meanwhile), but an
 effect file added mid-game did not run until the reload after, and nothing says an event added to a loaded file
 would. So the events are all there from the start: SLOT_COUNT hidden events, each calling its own
 `te_qa_slot_<n>` effect, empty until `add_setup` rewrites `te_qa_effects.txt` with a body in one. That file

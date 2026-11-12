@@ -166,11 +166,14 @@ class Game(fakes.FakeHelper):
         self.dropped_pauses = 0                 # this many pause keys (space, the game running) are lost
         self.logs_date = True                   # the read event logs its date line once resumed
         self.error_log = logs / "error.log"
-        # The game reloads the overlay's effects file `reload_s` after it changes on disk (spec § 3.3: about 40 s
-        # with this mod), drops the console commands entered meanwhile, and the reload drops the breakpoint.
+        # The game reloads the overlay's effects file `reload_s` after it changes on disk. Live (2026-11-12) that
+        # took about 90 s and the window did not respond for all of it (`freezes`); the probes of 2026-11-10 saw
+        # console commands entered meanwhile dropped, which is what happens here with `freezes` off. The reload
+        # drops the breakpoint.
         self.effects_file = user_data / "mod" / overlay.OVERLAY_NAME / overlay.EFFECTS_FILE
         self.reloads = True
-        self.reload_s = 40.0
+        self.reload_s = 90.0
+        self.freezes = True
         self.loaded_revision = 0                # the revision of te_qa_effects.txt in force
         self.reload_due: tuple[float, int] | None = None       # (when, the revision it brings)
         self.dropped: list[str] = []            # the commands entered during a reload
@@ -210,6 +213,12 @@ class Game(fakes.FakeHelper):
         if self.reload_due is not None and self.now >= self.reload_due[0]:
             self.loaded_revision, self.reload_due = self.reload_due[1], None
             self.adapter.breakpoints.clear()
+
+    def window(self, pid):
+        win = super().window(pid)
+        if self.freezes and self.reload_due is not None and win.exists:
+            return type(win)(win.exists, win.foreground, False, win.title, win.client)
+        return win
 
     def _enter(self) -> None:
         if self.reload_due is not None and self.console_open and self.typed:
@@ -911,8 +920,42 @@ class AddSetupTest(SessionTestCase):
         second = self.session.add_setup("later", self.BODY)
         self.assertEqual((second["event"], second["revision"]), ("te_qa.101", 2))
 
+    def test_a_window_frozen_by_the_reload_is_waited_out(self):
+        # Live, 2026-11-12: the window did not respond for the reload's 90 s, and the console called that
+        # game_gone after 10 s. The game was up all along.
+        self.started()
+        typed_before = len(self.typed())
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertTrue(reply["loaded"])
+        self.assertGreaterEqual(reply["waited_s"], self.game.reload_s)
+        self.assertEqual(self.game.dropped, [], "nothing was typed at the frozen window")
+        self.assertEqual(self.typed()[typed_before:].count("event te_qa.3"), 1)
+        self.game.setups = {"te_qa.100": ("late", ["one line"])}
+        self.assertEqual(self.session.run_setup("late"), ["one line"])
+
+    def test_a_window_that_is_gone_is_not_waited_for(self):
+        self.started()
+        self.game.reloads = False
+
+        def gone(seconds):
+            self.game.exists = False
+        self.game.on_sleep = gone
+        with self.assertRaises((session.SessionError, ConsoleError)) as caught:
+            self.session.add_setup("late", self.BODY)
+        self.assertIn(caught.exception.code, ("game_gone", "watch_ended"))
+        self.assertLess(self.game.now, 2 * session.RELOAD_FIRST_S + 30)
+
+    def test_run_setup_during_the_reload_says_the_setup_is_not_loaded_yet(self):
+        self.started()
+        self.game.reload_s = 10_000.0           # still reloading when add-setup gives up
+        self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_reloaded")
+        error = self.session_error(self.session.run_setup, "late")
+        self.assertEqual(error.code, "setup_not_loaded")
+        self.assertIn("does not respond", str(error))
+
     def test_the_first_look_waits_and_dropped_commands_are_tried_again(self):
         self.started()
+        self.game.freezes = False               # the 2026-11-10 behaviour: the console takes keys and drops them
         typed_before = len(self.typed())
         reply = self.session.add_setup("late", self.BODY)
         looks = self.typed()[typed_before:].count("event te_qa.3")

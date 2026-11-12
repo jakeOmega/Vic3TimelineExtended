@@ -140,7 +140,9 @@ its law's rate.
    to, the tax-level buttons are live, and tax income doesn't fall to nothing at any point (check the weekly income the
    week the rule goes off: the amendments must not drop off before the law is replaced).
 2. **Light code.** The entry closes within a week, the relief and the interest groups' reaction modifiers are gone, and
-   the taxation law is unchanged.
+   the taxation law is unchanged. *Partly run through the harness, 2026-11-12 (`game-qa-results-2026-11-12.md`): with
+   the rule switched from Light to Disabled in a copy of a fresh save, the rule-off branch ran for all 291 countries
+   within the month. The entry, the modifiers and the law were not looked at.*
 3. **Both.** No `te_tax_ig_view_*` or relief modifier is left on the country or its states.
 4. **Switched back on**, the full code migrates the country again on the next monthly dispatch, from its base-game law.
 
