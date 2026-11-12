@@ -369,6 +369,21 @@ AUDITS: tuple[Audit, ...] = (
         note="The .gui half is gui_reference_audit's.",
     ),
     Audit(
+        "loc_root_context_audit",
+        "A loc key on a country root that doesn't fit where it renders, reached there by a `$KEY$` splice, "
+        "a named key or a `GetCustom` entry. A `ROOT.`, `SCOPE.` or `THIS.` read in a key a widget renders "
+        "comes out blank. A `JournalEntry.` or `Country.` read in a `status_desc` key or a scripted "
+        "button's text is the unproven root there (not known to fail): use the proven one, "
+        "`ROOT.GetCountry…`. An entry or player read on a public tab shows another country the player's "
+        "figure, or nothing.",
+        where="trailing on the flagged key's loc line (a public-tab flag takes none: a world read goes "
+              "in `WORLD_LOC`)",
+        tags=("loc_root_context",),
+        note="A reload leaves the public-tab kinds to this command and to `BindingTest` "
+             "(`test_te_system_tab_bodies.py`), whose rules they are; it takes about 1.4 s without them, "
+             "this command about 4 s. Each flag gives its path from the line that names the first key.",
+    ),
+    Audit(
         "concept_reference_audit",
         "A loc link to a game concept that doesn't exist. The link breaks and logs three errors a "
         "render (#1257).",
