@@ -1050,7 +1050,7 @@ class ClickTest(SessionTestCase):
 
     def test_a_point_off_the_window_is_refused_and_nothing_is_pressed(self):
         self.started()
-        for bad in (-0.1, 1, 1.0, 2.5, True, "0.5", None):
+        for bad in (-0.1, 1, 1.0, 2.5, True, "0.5", None, float("nan"), float("inf"), float("-inf"), 1e308):
             with self.subTest(bad=bad):
                 self.assertEqual(self.session_error(self.session.click, bad, 0.5).code, "bad_argument")
                 self.assertEqual(self.session_error(self.session.click, 0.5, bad).code, "bad_argument")
@@ -1076,10 +1076,32 @@ class ClickTest(SessionTestCase):
 
     def test_a_refused_click_says_so(self):
         self.started()
-        self.game.click = mock.Mock(side_effect=HelperError("bad_point", "outside"))
-        error = self.session_error(self.session.click, 0.5, 0.5)
-        self.assertEqual(error.code, "click_refused")
-        self.assertIn("bad_point", error.detail)
+        for code in session.CLICK_REFUSED_BEFORE_PRESS:
+            with self.subTest(code=code):
+                self.game.click = mock.Mock(side_effect=HelperError(code, "refused"))
+                error = self.session_error(self.session.click, 0.5, 0.5)
+                self.assertEqual(error.code, "click_refused")
+                self.assertIn(code, error.detail)
+
+    def test_an_error_that_may_follow_the_press_is_not_called_a_refusal(self):
+        # SendInput failing on the press or the release, the helper ending, a timeout: the button may have gone down.
+        self.started()
+        for code in ("backend_error", "helper_gone", "timeout"):
+            with self.subTest(code=code):
+                self.game.click = mock.Mock(side_effect=HelperError(code, "failed"))
+                error = self.session_error(self.session.click, 0.5, 0.5)
+                self.assertEqual(error.code, "click_unknown")
+                self.assertIn(code, error.detail)
+                self.assertEqual(error.info["pixel"], [960, 540])
+
+    def test_a_screenshot_that_fails_after_the_click_still_answers_with_the_click(self):
+        # A refusal here would have the caller click again, undoing what the first click did.
+        self.started()
+        self.game.screenshot = mock.Mock(side_effect=HelperError("no_client_area", "minimized?"))
+        reply = self.session.click(0.5, 0.5)
+        self.assertEqual(self.game.clicks, [(960, 540)])
+        self.assertEqual((reply["pixel"], reply["screenshot"]), ([960, 540], None))
+        self.assertIn("no_client_area", reply["screenshot_error"])
 
 
 class AdvanceTest(SessionTestCase):
