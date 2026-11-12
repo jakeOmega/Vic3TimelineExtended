@@ -8,12 +8,12 @@ te_jmap_set_selector = {
 	set_global_variable = { name = te_jmap_sel value = $SEL$ }
 	# Company Headquarters paints stored figures: store them now, so a first pick of the month has them.
 	if = {
-		limit = { global_var:te_jmap_sel = 34 }
+		limit = { global_var:te_jmap_sel ?= 34 } # false when unset: the map buttons' tooltips walk this writing nothing
 		te_jmap_store_hqs = yes
 	}
 	# Investment paints stored figures too.
 	if = {
-		limit = { global_var:te_jmap_sel = 46 }
+		limit = { global_var:te_jmap_sel ?= 46 }
 		te_jmap_store_invest = yes
 	}
 	# The picked map's colors run over the world as it stands now (te_journal_map_ranges_generated.txt), measured

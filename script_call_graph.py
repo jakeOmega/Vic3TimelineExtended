@@ -8,9 +8,9 @@ This module turns that into a forward graph with typed edges, and adds the
 graph questions an audit asks: what does this entity reach, which nodes lie on
 a cycle, what is the shortest cycle through this edge.
 
-Users: `trigger_event_cycle_audit` (#1012). Written to be shared with the
-tooltip-walk audit of #918, which follows the same call edges (and their
-`params`) from a button's or an option's effect.
+Users: `trigger_event_cycle_audit` (#1012), and `tooltip_walk_variable_audit`
+(#918), which asks which scripted effects are reached from somewhere that is
+not a tooltip root (an on-action, a journal entry, an event's `immediate`).
 
 Nodes
 -----

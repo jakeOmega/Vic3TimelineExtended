@@ -51,22 +51,37 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 	option = {
 		name = te_debug_monetary.1.a
 		default_option = yes
-		te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	# Recompute the neutral rate's growth term against this instant's GDP,
 	# instead of waiting for the next yearly pulse.
 	option = {
 		name = te_debug_monetary.1.b
-		te_monetary_yearly_growth_snapshot = yes
-		te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_yearly_growth_snapshot = yes
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	# Re-read the world reference rate, then pulse.
 	option = {
 		name = te_debug_monetary.1.c
-		te_monetary_refresh_world_era_base = yes
-		te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_refresh_world_era_base = yes
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	option = {
@@ -172,8 +187,13 @@ te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 	# and draws both hidden random walks, same as any pulse.
 	option = {
 		name = te_debug_monetary.2.b
-		set_variable = { name = te_rate_paid_applied value = 0 }
-		te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			set_variable = { name = te_rate_paid_applied value = 0 }
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	option = {
@@ -717,12 +737,17 @@ te_debug_monetary.6 = { # REVIEWED 2026-09-20: console-only test event (`event t
 		name = te_debug_monetary.6.a
 		default_option = yes
 
-		te_monetary_init_variables = yes
-		while = {
-			count = 12
-			if = {
-				limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
-				te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_init_variables = yes
+			while = {
+				count = 12
+				if = {
+					limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
+					te_monetary_monthly_update = yes
+				}
 			}
 		}
 	}
@@ -730,12 +755,17 @@ te_debug_monetary.6 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	option = {
 		name = te_debug_monetary.6.b
 
-		te_monetary_init_variables = yes
-		while = {
-			count = 60
-			if = {
-				limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
-				te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_init_variables = yes
+			while = {
+				count = 60
+				if = {
+					limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
+					te_monetary_monthly_update = yes
+				}
 			}
 		}
 	}
@@ -789,25 +819,30 @@ te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event t
 		name = te_debug_monetary.7.a
 		default_option = yes
 
-		te_monetary_init_variables = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_init_variables = yes
 
-		set_variable = { name = te_inflation value = 2 } # REVIEWED 2026-09-20: console-only; §10's worked example is π = expected = 2
-		set_variable = { name = te_inflation_core value = 2 } # REVIEWED 2026-09-20: console-only seed, see above
-		set_variable = { name = te_inflation_expected value = 2 } # REVIEWED 2026-09-20: console-only seed, see above
-		set_variable = { name = te_cost_push value = 0 }
-		set_variable = { name = te_inflation_noise value = 0 }
+			set_variable = { name = te_inflation value = 2 } # REVIEWED 2026-09-20: console-only; §10's worked example is π = expected = 2
+			set_variable = { name = te_inflation_core value = 2 } # REVIEWED 2026-09-20: console-only seed, see above
+			set_variable = { name = te_inflation_expected value = 2 } # REVIEWED 2026-09-20: console-only seed, see above
+			set_variable = { name = te_cost_push value = 0 }
+			set_variable = { name = te_inflation_noise value = 0 }
 
-		set_variable = { name = te_policy_rate value = 5 } # REVIEWED 2026-09-20: console-only; §10's worked example is policy 5 on a reference rate of 3
-		set_variable = { name = te_policy_rate_target value = 5 } # REVIEWED 2026-09-20: console-only seed, see above
-		set_variable = { name = te_monetisation_level value = 0 }
+			set_variable = { name = te_policy_rate value = 5 } # REVIEWED 2026-09-20: console-only; §10's worked example is policy 5 on a reference rate of 3
+			set_variable = { name = te_policy_rate_target value = 5 } # REVIEWED 2026-09-20: console-only seed, see above
+			set_variable = { name = te_monetisation_level value = 0 }
 
-		set_variable = { name = te_neutral_rate value = var:te_mon_era_base_now }
-		set_variable = { name = te_neutral_error value = 0 }
-		set_variable = { name = te_neutral_walk value = 0 }
-		set_variable = { name = te_mon_growth_term value = 0 }
-		set_variable = { name = te_mon_stance_gap value = 0 }
+			set_variable = { name = te_neutral_rate value = var:te_mon_era_base_now }
+			set_variable = { name = te_neutral_error value = 0 }
+			set_variable = { name = te_neutral_walk value = 0 }
+			set_variable = { name = te_mon_growth_term value = 0 }
+			set_variable = { name = te_mon_stance_gap value = 0 }
 
-		te_monetary_monthly_update = yes
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	# THE WAR. §10: monetise at level 3 for two years with the dial left at 5.
@@ -1047,7 +1082,12 @@ te_debug_monetary.9 = { # REVIEWED 2026-09-21: console-only test event (`event t
 
 	option = {
 		name = te_debug_monetary.9.e
-		te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	option = {
@@ -1146,7 +1186,12 @@ te_debug_monetary.10 = { # REVIEWED 2026-09-21: console-only test event (`event 
 
 	option = {
 		name = te_debug_monetary.10.e
-		te_monetary_monthly_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_monetary_monthly_update = yes
+		}
 	}
 
 	option = {

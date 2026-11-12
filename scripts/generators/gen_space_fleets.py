@@ -1025,8 +1025,10 @@ def render_transfer_effects() -> list[str]:
               *[f"\t{line}" for line in removed],
               "}"]
     out += _chain(cases, else_body=broken)
+    # has_variable: the Transfer step buttons' tooltips walk this writing nothing, so
+    # the amount set above is unset there (tooltip_walk_variable_audit).
     out += ["\tif = {",
-            "\t\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } }",
+            "\t\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } has_variable = sr_det_amt_$ROLE$ }",
             "\t\tset_global_variable = { name = sr_xf_step_checked value = yes }",
             *[f"\t\t{line}" for line in numbers],
             "\t\tset_variable = { name = sr_xf_chk_amount value = var:sr_det_amt_$ROLE$ }",

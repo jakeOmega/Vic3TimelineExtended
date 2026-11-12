@@ -188,7 +188,12 @@ te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event
 			sr_colonies_contested_enabled = yes
 			sr_cf_has_free_slot = yes
 		}
-		sr_cf_debug_dispatch_first = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			sr_cf_debug_dispatch_first = yes
+		}
 	}
 
 	# Every fleet in flight lands now (the colony_fleet_arrival self-check).

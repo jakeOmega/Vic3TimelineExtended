@@ -145,13 +145,23 @@ te_debug_covert.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_
 	option = {
 		name = te_debug_covert.2.i
 		trigger = { covert_operations_active >= 1 }
-		te_debug_covert_set_net_strength = { VALUE = 100 }
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_covert_set_net_strength = { VALUE = 100 }
+		}
 	}
 
 	# ---- Networks: run one monthly network pass now.
 	option = {
 		name = te_debug_covert.2.j
-		te_debug_covert_tick_nets = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_covert_tick_nets = yes
+		}
 	}
 
 	# ---- Network counterintelligence: every country we run an operation
@@ -253,7 +263,12 @@ te_debug_covert.5 = { # REVIEWED 2026-09-24: console-only test event (`event te_
 		name = te_debug_covert.5.a
 		default_option = yes
 		trigger = { has_variable_list = iw_nets }
-		te_debug_covert_set_net_strength = { VALUE = 50 }
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_covert_set_net_strength = { VALUE = 50 }
+		}
 	}
 
 	# ---- Every network to 80, the second tier: the rows also count the
@@ -261,7 +276,12 @@ te_debug_covert.5 = { # REVIEWED 2026-09-24: console-only test event (`event te_
 	option = {
 		name = te_debug_covert.5.b
 		trigger = { has_variable_list = iw_nets }
-		te_debug_covert_set_net_strength = { VALUE = 80 }
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_covert_set_net_strength = { VALUE = 80 }
+		}
 	}
 
 	# ---- Every network's target starts cultivate assets against us, then

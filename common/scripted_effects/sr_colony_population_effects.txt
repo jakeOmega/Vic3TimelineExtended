@@ -89,7 +89,12 @@ sr_emig_self_check = {
 sr_emig_set_level = {
 	set_variable = { name = sr_emig_level value = $LEVEL$ }
 	if = {
-		limit = { var:sr_emig_level <= 0 }
+		# has_variable first: the Settlers buttons' tooltips walk this writing
+		# nothing, so at level 0 the level is unset there (tooltip_walk_variable_audit).
+		limit = {
+			has_variable = sr_emig_level
+			var:sr_emig_level <= 0
+		}
 		remove_variable = sr_emig_level
 	}
 }

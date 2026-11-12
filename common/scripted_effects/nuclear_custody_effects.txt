@@ -172,10 +172,15 @@ nd_custody_lose_warheads = {
 		limit = { NOT = { has_global_variable = nd_loose_warheads } }
 		set_global_variable = { name = nd_loose_warheads value = 0 }
 	}
-	change_global_variable = { name = nd_loose_warheads add = var:nd_clw_amount }
-	nd_ledger_ensure = yes
-	var:nd_arsenal_record ?= {
-		change_variable = { name = nd_ar_loose add = scope:nd_clw_holder.var:nd_clw_amount }
+	# Only once the set above has run: an option's tooltip walks this body
+	# writing nothing, so nd_clw_amount is unset there (tooltip_walk_variable_audit).
+	if = {
+		limit = { has_variable = nd_clw_amount }
+		change_global_variable = { name = nd_loose_warheads add = var:nd_clw_amount }
+		nd_ledger_ensure = yes
+		var:nd_arsenal_record ?= {
+			change_variable = { name = nd_ar_loose add = scope:nd_clw_holder.var:nd_clw_amount }
+		}
 	}
 	remove_variable = nd_clw_amount
 }
@@ -1303,7 +1308,7 @@ nd_bp_answer = {
 		set_variable = { name = nd_bp_answer value = $ANSWER$ }
 		if = {
 			limit = {
-				var:nd_bp_answer = 1
+				var:nd_bp_answer ?= 1 # false when unset: the options' tooltips walk this writing nothing
 				NOT = { scope:nd_bp_answering = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_bp_signer } } }
 			}
 			set_variable = { name = nd_bp_answer value = 3 }

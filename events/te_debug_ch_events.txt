@@ -46,7 +46,12 @@ te_debug_ch.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 	# Fill all ten slots with other countries and put us at rank 14 of 168.
 	option = {
 		name = te_debug_ch.1.c
-		te_debug_ch_push_us_outside = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_ch_push_us_outside = yes
+		}
 	}
 
 	# Empty slot 5, as an annexation between yearly recounts does.
@@ -67,8 +72,13 @@ te_debug_ch.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 	# — instead of waiting up to six months for the next one.
 	option = {
 		name = te_debug_ch.1.g
-		remove_global_variable = ch_ldr_lock
-		ch_yearly_global_update = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			remove_global_variable = ch_ldr_lock
+			ch_yearly_global_update = yes
+		}
 	}
 
 	# Stage Our Model Abroad (cultural_hegemony.17) for us as rank 1.
@@ -81,6 +91,11 @@ te_debug_ch.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 	# follower. Each appears only if the save can meet its trigger.
 	option = {
 		name = te_debug_ch.1.i
-		te_debug_ch_stage_follower_events = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_ch_stage_follower_events = yes
+		}
 	}
 }
