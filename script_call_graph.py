@@ -8,9 +8,9 @@ This module turns that into a forward graph with typed edges, and adds the
 graph questions an audit asks: what does this entity reach, which nodes lie on
 a cycle, what is the shortest cycle through this edge.
 
-Users: `trigger_event_cycle_audit` (#1012). Written to be shared with the
-tooltip-walk audit of #918, which follows the same call edges (and their
-`params`) from a button's or an option's effect.
+Users: `trigger_event_cycle_audit` (#1012), and `tooltip_walk_variable_audit`
+(#918), which asks which scripted effects are reached from somewhere that is
+not a tooltip root (an on-action, a journal entry, an event's `immediate`).
 
 Nodes
 -----
@@ -315,6 +315,32 @@ def _a_caller_fills_zero(g, s, depth: int = 0) -> bool:
     return False
 
 
+def _add_calls(cg: CallGraph, effect_calls: dict) -> None:
+    for callee, calls in effect_calls.items():
+        if "$" in callee:
+            continue  # a dispatcher call: `_dispatch_edges`
+        for (rel, ln, pk, _sw, _conds, entity, kind, params) in calls:
+            cg.add_edge(Edge(Node(kind, entity), Node(EFFECT, callee), "call", rel, ln, tuple(pk),
+                             params=tuple(sorted(params.items()))))
+
+
+def calls_only(effect_file: dict[str, str], effect_calls: dict) -> CallGraph:
+    """The call edges alone, plain and dispatched, from
+    `event_context_audit`'s `effect_calls` ({callee: [call, ...]}, as its
+    `scan_file` gives them) and `effect_file` ({effect: file}): what
+    `from_event_graph` holds without the events. For a caller that keeps the
+    per-file scans between runs (`tooltip_walk_variable_audit`)."""
+    from types import SimpleNamespace
+
+    cg = CallGraph()
+    for name, rel in effect_file.items():
+        cg.add_node(Node(EFFECT, name), rel)
+    _add_calls(cg, effect_calls)
+    for e in _dispatch_edges(SimpleNamespace(effect_file=effect_file, effect_calls=effect_calls)):
+        cg.add_edge(e)
+    return cg
+
+
 def from_event_graph(g) -> CallGraph:
     """Build the forward graph from an `event_context_audit.Graph`."""
     cg = CallGraph()
@@ -325,12 +351,7 @@ def from_event_graph(g) -> CallGraph:
     for name, files in g.on_action_files.items():
         cg.add_node(Node(ON_ACTION, name), files[0] if files else "")
 
-    for callee, calls in g.effect_calls.items():
-        if "$" in callee:
-            continue  # a dispatcher call: `_dispatch_edges`
-        for (rel, ln, pk, _sw, _conds, entity, kind, params) in calls:
-            cg.add_edge(Edge(Node(kind, entity), Node(EFFECT, callee), "call", rel, ln, tuple(pk),
-                             params=tuple(sorted(params.items()))))
+    _add_calls(cg, g.effect_calls)
 
     seen: set[tuple] = set()
     for raw_id, sites in g.sites_by_event.items():

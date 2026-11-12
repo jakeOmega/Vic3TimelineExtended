@@ -285,6 +285,22 @@ AUDITS: tuple[Audit, ...] = (
              "`script_call_graph.py`.",
     ),
     Audit(
+        "tooltip_walk_variable_audit",
+        "A variable read after a `set_variable` of it in one body a tooltip walks (a scripted GUI's or a "
+        "button's `effect`, an event option, a decision's `when_taken`). The walk writes nothing, so the "
+        "read finds it unset and logs every frame the tooltip shows. Compare the values directly, guard the "
+        "read with `has_variable`, use `?=`, or put the body behind a click-only marker; names other code "
+        "keeps set are left out.",
+        where="trailing on the read line; for a read passed as a `$PARAM$` argument, on the line of the "
+              "call that passes it",
+        tags=("tooltip_walk",),
+        post_load=False,
+        report=None,
+        note="`--root <scripted GUI, event id or decision>` lists one root's flags with their call chains. "
+             "It reads `script_call_graph.py` to tell which effects run outside a tooltip. Not on reload: "
+             "a run takes about 25 s cold and 13 to 15 s warm.",
+    ),
+    Audit(
         "faith_scene_audit",
         "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
         "a country of another state religion can be shown: its title, description, flavor, option, "

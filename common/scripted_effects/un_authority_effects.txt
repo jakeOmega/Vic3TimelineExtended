@@ -272,7 +272,12 @@ un_authority_shock_record = {
 			else = {
 				set_global_variable = { name = un_led_stage value = $AMOUNT$ }
 			}
-			change_global_variable = { name = un_authority add = global_var:un_led_stage }
+			# Only once the stage above has run: the buttons' and options'
+			# tooltips walk this writing nothing (tooltip_walk_variable_audit).
+			if = {
+				limit = { has_global_variable = un_led_stage }
+				change_global_variable = { name = un_authority add = global_var:un_led_stage }
+			}
 			un_authority_clamp = yes
 			un_ledger_log_add = { PILLAR = direct REASON = $REASON$ WITH_ACTOR = yes }
 			remove_global_variable = un_led_stage
@@ -386,7 +391,10 @@ un_ledger_record = {
 				limit = { NOT = { has_global_variable = un_ledger_$PILLAR$ } }
 				set_global_variable = { name = un_ledger_$PILLAR$ value = 0 }
 			}
-			change_global_variable = { name = un_ledger_$PILLAR$ add = global_var:un_led_stage }
+			if = {
+				limit = { has_global_variable = un_led_stage }
+				change_global_variable = { name = un_ledger_$PILLAR$ add = global_var:un_led_stage }
+			}
 			un_delivery_ledger_clamp = yes
 			# An option's tooltip evaluates this limit on every frame without
 			# running the set above, so the stage is unset there: without the

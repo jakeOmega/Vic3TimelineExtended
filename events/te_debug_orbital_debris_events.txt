@@ -52,7 +52,12 @@ te_debug_orbital_debris.1 = { # REVIEWED 2026-10-16: console-only test event (`e
 	# Run the world's monthly step and ours now, then log the state.
 	option = {
 		name = te_debug_orbital_debris.1.e
-		te_debug_debris_run_month = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_debug_debris_run_month = yes
+		}
 	}
 
 	# A ribbon strike now (needs a Space Elevator and Hazardous debris).

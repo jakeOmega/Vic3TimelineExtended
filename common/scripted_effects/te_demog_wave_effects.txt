@@ -287,7 +287,7 @@ te_debug_demog_wave_selfcheck_start = {
 			set_variable = { name = te_dg_wv_chk_owner value = ROOT }
 			set_variable = { name = te_dg_wv_chk_before value = modifier:state_sex_ratio_at_birth_add }
 			if = {
-				limit = { var:te_dg_wv_chk_code = 2 }
+				limit = { var:te_dg_wv_chk_code ?= 2 } # false when unset: the options' tooltips walk this writing nothing
 				set_variable = { name = te_dg_wv_chk_before value = modifier:state_desired_fertility_mult }
 			}
 			debug_log = "TE_SELF_CHECK START wave_timed_country_type code=[THIS.Var('te_dg_wv_chk_code').GetValue|0] before=[THIS.Var('te_dg_wv_chk_before').GetValue|4] line=[THIS.Var('te_dg_wv_chk_line').GetValue|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
