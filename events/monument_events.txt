@@ -236,9 +236,9 @@ monument_events.2 = {
 		name = monument_events.2.a
 		trigger = {
 			hidden_trigger = {
-				NOT = {
-					has_variable = gm_ceremony_mode
-					var:gm_ceremony_mode = flag:rededicate
+				trigger_if = {
+					limit = { has_variable = gm_ceremony_mode }
+					NOT = { var:gm_ceremony_mode = flag:rededicate }
 				}
 			}
 			custom_tooltip = {
@@ -259,9 +259,9 @@ monument_events.2 = {
 		name = monument_events.2.a
 		trigger = {
 			hidden_trigger = {
-				NOT = {
-					has_variable = gm_ceremony_mode
-					var:gm_ceremony_mode = flag:rededicate
+				trigger_if = {
+					limit = { has_variable = gm_ceremony_mode }
+					NOT = { var:gm_ceremony_mode = flag:rededicate }
 				}
 			}
 			custom_tooltip = {
