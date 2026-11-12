@@ -357,7 +357,7 @@ have agencies of their own.
 
 | Operation | What it does at base strength | Also needs | Influence |
 |---|---|---|---|
-| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature | 50 |
+| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target holds elections (a voting law, or Anarchy) | 50 |
 | Financial Subversion | Target +2 bubble pressure a month | Computer Networks | 50 |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target | None |
 | Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target | None |

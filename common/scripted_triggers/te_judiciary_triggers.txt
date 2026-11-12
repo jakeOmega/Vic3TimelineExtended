@@ -20,21 +20,6 @@ te_jud_court_can_strike_laws = {
 	NOT = { te_jud_paper_court = yes }
 }
 
-# An elected government (Statutory Courts' two lines, spec § 2.3): a voting
-# law, or Anarchy, which the mod counts as electoral
-# (te_tradition_of_free_elections.txt).
-te_jud_elected_government = {
-	OR = {
-		has_law = law_type:law_landed_voting
-		has_law = law_type:law_wealth_voting
-		has_law = law_type:law_census_voting
-		has_law = law_type:law_universal_suffrage
-		has_law = law_type:law_liquid_democracy
-		has_law = law_type:law_labour_suffrage
-		has_law = law_type:law_anarchy
-	}
-}
-
 # A Sunni, Shia or Ibadi state religion: the three religions with
 # heritage_islamic (extra_history.txt tests the same way for Islamic
 # inheritance).
