@@ -180,7 +180,7 @@ python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions
 python3 scripts/analysis/demographics_regions.py --check   # the demographics practices' strategic-region snapshot; --refresh when it says stale
 python3 scripts/generators/gen_region_area.py         # common/scripted_effects/te_region_area_generated.txt (bump VERSION if the map changed)
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
-python3 texture_reference_audit.py --bootstrap       # docs/engine/vanilla_asset_paths.txt (vanilla + DLC asset paths and media aliases, CI's stand-in for the install)
+python3 texture_reference_audit.py --bootstrap       # docs/engine/vanilla_asset_paths.txt (vanilla + DLC asset paths and media aliases, CI's stand-in for the install; also docs/engine/vanilla_gui_files.txt, the vanilla GUI file names /gui/placeholder-textures reads)
 python3 effect_trigger_validity_audit.py bootstrap-context  # docs/engine/effect_trigger_context_keys.txt (effect-only / trigger-only names, #1142)
 python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count)
 python3 scripts/generators/gen_pb_principle_slots.py # power bloc principle slot limit INJECTs + the remove dispatch (stops on a vanilla principle that gains its own `possible`)

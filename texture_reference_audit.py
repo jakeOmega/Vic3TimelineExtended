@@ -1376,7 +1376,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--strict", action="store_true",
                     help="exit 1 on an unexempted error or a stale tag")
     ap.add_argument("--bootstrap", action="store_true",
-                    help=f"list the game install and rewrite {CATALOG_REL}")
+                    help=f"list the game install and rewrite {CATALOG_REL} and the vanilla GUI file "
+                         "list (docs/engine/vanilla_gui_files.txt)")
     ap.add_argument("--source", choices=("auto", "install", "catalog"), default="auto",
                     help="where vanilla's files come from (default: the install if present)")
     args = ap.parse_args(argv)
@@ -1391,6 +1392,10 @@ def main(argv: list[str] | None = None) -> int:
                   file=sys.stderr)
             return 2
         print(bootstrap_catalog(base, mod_path))
+        # The same run lists vanilla's GUI files, which /gui/placeholder-textures needs to tell
+        # the mod's own widgets from its overrides of vanilla panels (#1484).
+        import gui_placeholder_textures
+        print(gui_placeholder_textures.bootstrap(base, mod_path, _game_version(base)))
         return 0
     try:
         result = audit(mod_path=mod_path, source=args.source)

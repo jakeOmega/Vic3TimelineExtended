@@ -6138,6 +6138,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/event-magnitude-audit", "desc": "Hardcoded fast-scaling event-value audit."},
                 {"path": "/event-dispatch/<event_id>", "desc": "Every site that fires a mod event (trigger_event, on-action lists, via scripted effects incl. $EVENT$ helpers), with scope switches, enclosing limit/trigger guards, whether the recipient chose it, and which mod systems gate it."},
                 {"path": "/event-context-audit?check=&event_id=&show_reviewed=", "desc": "event_context_audit flags: system_ungated / unchosen_self_action / imputed_foreign_action."},
+                {"path": "/gui/placeholder-textures?include_overrides=true&unlisted_only=true&file=<gui/…>&format=text", "desc": "Vanilla textures the mod's own GUI widgets draw (#1484): per file, each texture path with where it resolves (vanilla|missing), its kind (icon|ui_mark|chrome), its lines, and the *_gui_icons.md line that accounts for it. summary.unlisted is the work list: vanilla icons no icons doc names. Overrides of vanilla panels are left out by default."},
                 {"path": "/gui/render-sites/<loc_key>", "desc": "Every GUI file:line that references <loc_key> via text/tooltip/raw_text/... — mod + vanilla."},
                 {"path": "/gui/render-paths/<EntityType>?field=<role>", "desc": "Every GUI file:line that renders <field> of <EntityType> via [DataType.GetX]. Fields: name/desc/icon/tooltip."},
                 {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
@@ -9631,11 +9632,52 @@ class ModStateHandler(BaseHTTPRequestHandler):
     ]
 
     # ---- GUI render-site lookup --------------------------------------------
+    def _gui_placeholder_textures(self, params):
+        """GET /gui/placeholder-textures[?include_overrides=true&unlisted_only=true&file=<gui/…>&format=text]
+        (#1484): vanilla textures the mod's own GUI widgets draw, and the icons doc that accounts for each."""
+        import gui_placeholder_textures as gpt
+        import texture_reference_audit as tra
+
+        def flag(name):
+            return (params.get(name) or ["false"])[0].lower() in ("1", "true", "yes")
+
+        try:
+            vanilla_gui = gpt.load_gui_files(mod_path)
+        except FileNotFoundError:
+            raise _ServiceNotReady({
+                "error": f"{gpt.GUI_FILES_REL} is missing",
+                "hint": "Write it on the machine with the game: python3 texture_reference_audit.py --bootstrap",
+            })
+        index, _stale = tra.build_index(mod_path)
+
+        def resolve(path):
+            status = index.resolve_path(path)[0]
+            return status if status in ("mod", "vanilla") else "vanilla" if status == "dlc_only" else "missing"
+
+        files = params.get("file")
+        if files:
+            known = set(gpt.mod_gui_files(mod_path))
+            unknown = [f for f in files if f not in known]
+            if unknown:
+                raise NotFound(unknown[0], did_you_mean=difflib.get_close_matches(unknown[0], sorted(known), n=5))
+        body = gpt.report(mod_path, vanilla_gui, resolve, include_overrides=flag("include_overrides"),
+                          unlisted_only=flag("unlisted_only"), files=files or None)
+        body["vanilla_source"] = index.source
+        try:
+            body["gui_file_list_stale"] = gpt.list_is_stale(base_game_path if _vanilla_tree_present() else None,
+                                                             mod_path)
+        except RuntimeError:
+            body["gui_file_list_stale"] = None
+        if (params.get("format") or [""])[0] == "text":
+            return {"text": gpt.render_text(body), "summary": body["summary"]}
+        return body
+
     def _gui(self, parts, params):
         """GET /gui/render-sites/<loc_key>
         GET /gui/render-paths/<EntityType>?field=<role>
+        GET /gui/placeholder-textures (#1484, gui_placeholder_textures.py)
 
-        Two endpoints under the /gui/ prefix:
+        The first two endpoints under the /gui/ prefix:
         - render-sites: every GUI file:line that quotes <loc_key> as a known
           localized attr (text/tooltip/raw_text/...).
         - render-paths: every GUI file:line that renders <field> of an entity
@@ -9646,11 +9688,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         if not parts:
             raise BadRequest(
-                "Usage: /gui/render-sites/<loc_key> or /gui/render-paths/<EntityType>?field=<role>",
+                "Usage: /gui/render-sites/<loc_key>, /gui/render-paths/<EntityType>?field=<role> "
+                "or /gui/placeholder-textures",
                 supported_fields=sorted(FIELD_TO_METHODS.keys()),
                 supported_entity_types=sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
             )
         sub = parts[0]
+        if sub == "placeholder-textures":
+            return self._gui_placeholder_textures(params)
         index = _get_gui_render_index()
 
         if sub == "render-sites":
