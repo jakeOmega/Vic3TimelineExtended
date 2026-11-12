@@ -1,16 +1,22 @@
 """Unit tests for pm_balance_lib — classification + index builder.
 
-Pure-unit, tempfile-backed. No server, no real mod data. Run:
+Tempfile-backed, apart from `RealPmDirectoryCoverageTests`, which reads the
+mod's own `common/production_methods/`. No server. Run:
     .venv/bin/python -m unittest test_pm_balance_lib -v
 """
 from __future__ import annotations
 
+import copy
+import re
 import tempfile
 import unittest
 from pathlib import Path
 
 import annotators
 import pm_balance_lib as lib
+import tech_unlocks_lib
+
+REPO = Path(__file__).resolve().parent
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +199,91 @@ class BuildPmBalanceMapTests(unittest.TestCase):
     def test_missing_repo_returns_empty(self) -> None:
         bogus = self.repo_root / "does-not-exist"
         self.assertEqual(lib.build_pm_balance_map(bogus), {})
+        self.assertEqual(lib.pm_file_names(bogus), [])
+
+    def test_reads_a_file_no_list_names(self) -> None:
+        # #1552: the map walked five named files while the directory held
+        # twenty-one, so a PM in a newer file got no annotation at all.
+        pm_dir = self.repo_root / "common" / "production_methods"
+        _write(pm_dir / "zz_brand_new_generated_pms.txt",
+               _pm("pm_new_ok", total_input=100, total_output=120, margin=20,
+                   wage_be=0.05, profit=20)
+               + _pm("pm_new_bare", no_cost_comments=True))
+        _write(pm_dir / "extra_pms.txt", _pm("pm_old", no_cost_comments=True))
+        _write(pm_dir / "notes.md", _pm("pm_not_script", no_cost_comments=True))
+        self.assertEqual(lib.pm_file_names(self.repo_root),
+                         ["extra_pms.txt", "zz_brand_new_generated_pms.txt"])
+        result = lib.build_pm_balance_map(self.repo_root)
+        self.assertEqual(sorted(result), ["pm_new_bare", "pm_new_ok", "pm_old"])
+        self.assertEqual(result["pm_new_ok"]["flag"], "OK")
+        self.assertEqual(result["pm_new_ok"]["file"],
+                         "zz_brand_new_generated_pms.txt")
+        self.assertEqual(result["pm_new_bare"]["flag"], "NO-COSTS")
+
+
+# A top-level definition: `name = {` at the start of a line, with an optional
+# merge directive. Written out here, not borrowed from the library, so the
+# tests below do not agree with the code under test by construction.
+_TOP_LEVEL_RE = re.compile(
+    r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z_][A-Za-z0-9_]*)[ \t]*=[ \t]*\{",
+    re.MULTILINE,
+)
+
+
+def _top_level_definitions(path: Path) -> list[tuple[str, str]]:
+    """`(directive or "", id)` for each top-level block of a PM file."""
+    text = path.read_text(encoding="utf-8-sig")
+    return [(m.group("directive") or "", m.group("id"))
+            for m in _TOP_LEVEL_RE.finditer(text)]
+
+
+class RealPmDirectoryCoverageTests(unittest.TestCase):
+    """The mod's own `common/production_methods/`, read offline (#1552).
+
+    `test_annotator_endpoints.py` asserts that every PM a technology unlocks
+    comes back from `?annotate=balance` with a `flag`, but it needs a live
+    server and so never runs in CI. These are its offline twins: they call
+    what the endpoints call.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.pm_dir = REPO / lib.PM_SUBDIR
+        cls.files = sorted(cls.pm_dir.glob("*.txt"))
+        cls.balance = lib.build_pm_balance_map(REPO)
+        cls.unlocks = tech_unlocks_lib.build_tech_unlock_index(REPO)
+
+    def test_every_file_that_defines_a_pm_is_read(self) -> None:
+        self.assertGreater(len(self.files), 5)
+        read = {row["file"] for row in self.balance.values()}
+        unread = [
+            path.name for path in self.files
+            if path.name not in read
+            and any(d == "" and i.startswith("pm_")
+                    for d, i in _top_level_definitions(path))
+        ]
+        self.assertEqual(
+            unread, [],
+            "the balance map reads none of the PMs these files define, so "
+            "`?annotate=balance` returns them with no `flag`",
+        )
+
+    def _annotated_pms(self, tech_id: str) -> list[dict]:
+        # What `/tech-unlocks/<tech>?annotate=balance` does: the server
+        # copies the index record, then route() runs the post-processor.
+        rec = copy.deepcopy(self.unlocks[tech_id])
+        annotators.apply_to_response(rec, "balance", REPO)
+        return rec["by_type"].get("PMs", [])
+
+    def test_modern_tools_unlocks_all_carry_a_flag(self) -> None:
+        # The two live tests that failed on main: ten of the twenty PMs
+        # `modern_tools` unlocks live in mine_coproduct_generated_pms.txt.
+        entries = self._annotated_pms("modern_tools")
+        self.assertGreater(len(entries), 0)
+        self.assertGreater(len({e["file"] for e in entries}), 1)
+        for e in entries:
+            self.assertIn("flag", e, e)
+            self.assertIn(e["flag"], lib.FLAGS)
 
 
 class AnnotatorRegistrationTests(unittest.TestCase):

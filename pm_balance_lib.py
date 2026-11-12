@@ -22,18 +22,24 @@ import annotators
 
 
 # ---------------------------------------------------------------------------
-# Constants — keep the repo-relative directory list authoritative here so
-# both the audit script and the server agree on what to walk.
+# Constants — keep the repo-relative directory authoritative here so both
+# the audit script and the server agree on what to walk.
 # ---------------------------------------------------------------------------
 
 PM_SUBDIR = Path("common") / "production_methods"
-PM_FILES: list[str] = [
-    "extra_pms.txt",
-    "unique_pms.txt",
-    "strategic_reserve_pms.txt",
-    "resettlement_pms.txt",
-    "te_construction_market_pms.txt",
-]
+
+
+def pm_file_names(repo_root: Path) -> list[str]:
+    """Every `*.txt` under `repo_root/common/production_methods/`, sorted.
+
+    The directory is the list: a hand-kept list of file names here went
+    stale as PM files were added, and a PM in an unlisted file came back
+    from `?annotate=balance` with no `flag` at all (#1552).
+    """
+    pm_dir = repo_root / PM_SUBDIR
+    if not pm_dir.is_dir():
+        return []
+    return sorted(p.name for p in pm_dir.glob("*.txt"))
 
 # Flag values returned by classify_pm. Documented for /annotators consumers.
 #
@@ -213,19 +219,15 @@ def classify_pm(body: str, costs: dict | None) -> str:
 # ---------------------------------------------------------------------------
 
 def build_pm_balance_map(repo_root: Path) -> dict[str, dict]:
-    """Walk PM files under `repo_root/common/production_methods/` and return
-    `{pm_id: {flag, margin_pct, wage_be, profit, file}}` for every PM that
-    has a cost-comment block. PMs without comments are recorded as
+    """Walk every PM file under `repo_root/common/production_methods/` and
+    return `{pm_id: {flag, margin_pct, wage_be, profit, file}}` for every PM
+    the mod defines. PMs without a cost-comment block are recorded as
     `flag = "NO-COSTS"` with the numeric fields as None.
     """
     out: dict[str, dict] = {}
     pm_dir = repo_root / PM_SUBDIR
-    if not pm_dir.exists():
-        return out
-    for fname in PM_FILES:
+    for fname in pm_file_names(repo_root):
         path = pm_dir / fname
-        if not path.exists():
-            continue
         for pm_id, body in iter_pms(path):
             costs = parse_cost_comments(body)
             flag = classify_pm(body, costs)
