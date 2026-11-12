@@ -226,18 +226,30 @@ class TestWorkforceTerm(unittest.TestCase):
                                      max(target, P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX - extra) + 1e-5)
                 self.assertGreaterEqual(eng.vars["te_dg_mw"], target - 1e-5)
 
-    def test_the_lead_matches_the_model(self):
+    LEAD_RATES = (0.0, 1.0, 6.0, 12.0, 38.0)   # births per 1,000 the lead's cases draw
+
+    def _lead_draws(self):
+        """The lead's sixty cases: (working ages, share at work, W in force, the lines on top, the pops' base, the
+        game's figure, births per 1,000). The fixed-point twin runs them too (test_demographics_fixed_point.py)."""
         rng = random.Random(1107)
         for _ in range(60):
             wa, at = rng.uniform(0.4, 0.8), rng.uniform(0.21, 0.77)
             w, extra = rng.uniform(-0.2, 0.3), rng.uniform(-0.2, 0.1)
-            wbase, engine, cbr = rng.uniform(0.22, 0.3), rng.uniform(0.15, 0.6), rng.choice((0.0, 1.0, 6.0, 12.0, 38.0))
-            eng = self._lead_state(wa=wa, at=at, engine=engine, cbr=cbr, read=w + extra, w=w, wbase=wbase)
-            eng.call("te_demog_workforce_refresh")
-            target = _target(wa, at)
-            want = M.workforce_term(target, extra, M.workforce_lead(target, extra, wbase, engine, cbr))
-            self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4, msg=(wa, at, w, extra, wbase, engine, cbr))
-            self.assertAlmostEqual(eng.value("te_demog_wf_pull_share"), M.workforce_pull_share(cbr), places=4)
+            wbase, engine, cbr = rng.uniform(0.22, 0.3), rng.uniform(0.15, 0.6), rng.choice(self.LEAD_RATES)
+            yield wa, at, w, extra, wbase, engine, cbr
+
+    def _lead_run(self, wa, at, w, extra, wbase, engine, cbr):
+        """One case through the script: the engine after its refresh, and the model's W."""
+        eng = self._lead_state(wa=wa, at=at, engine=engine, cbr=cbr, read=w + extra, w=w, wbase=wbase)
+        eng.call("te_demog_workforce_refresh")
+        target = _target(wa, at)
+        return eng, M.workforce_term(target, extra, M.workforce_lead(target, extra, wbase, engine, cbr))
+
+    def test_the_lead_matches_the_model(self):
+        for draw in self._lead_draws():
+            eng, want = self._lead_run(*draw)
+            self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4, msg=draw)
+            self.assertAlmostEqual(eng.value("te_demog_wf_pull_share"), M.workforce_pull_share(draw[-1]), places=4)
 
     def test_a_seed_and_a_state_with_no_walk_take_no_lead(self):
         eng = self._lead_state(wa=0.7, at=0.41, engine=0.257, cbr=38.0, stepped=0.0, read=0.12, w=0.12)

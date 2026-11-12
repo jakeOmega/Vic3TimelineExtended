@@ -782,20 +782,24 @@ class _Engine:
 class _FixedPointTwin:
     """Mixin for a fixed-point twin of a script test (issue #967): `class TestXFixedPoint(_FixedPointTwin, TestX)` runs
     every case of TestX again with each _Engine it builds in the engine's fixed point (truncate=True), and with each
-    near-equality (the class's own close(), assertAlmostEqual) loosened to REL of the wanted value, or to FLOOR, ten
-    units of the last decimal the engine keeps, for a small one. Floats can't see the five-decimal cut: #964's late
-    births took TFR / 100000 first, which the engine stores as 0.00001 or 0, and matched the model at 1e-8 in floats
-    the whole time.
+    near-equality (the class's own close(), assertAlmostEqual) loosened to what the five-decimal cut allows. Floats
+    can't see that cut: #964's late births took TFR / 100000 first, which the engine stores as 0.00001 or 0, and
+    matched the model at 1e-8 in floats the whole time.
 
-    The cut moves a case's own inputs a little (a TFR of 3.0609164 is stored as 3.06067), which is what REL and FLOOR
-    allow for; a disagreement past them is an early divide or a product of small factors in the script, or a case whose
-    arithmetic multiplies its inputs' cut. Exact comparisons (assertEqual and the rest) stay exact. Where the cut
-    moves a comparison past these, the twin overrides the case and says why, with the bound worked out from the cut,
-    not copied from the run. A new case in TestX gets its twin with no further work. The twins are in
-    test_demographics_fixed_point.py."""
+    The tolerance is the larger of FLOOR and REL x the wanted value. Every operation and every stored value is cut by
+    under 1e-5 (UNIT), and a float case's inputs carry sixteen digits where the script keeps five. FLOOR is five
+    units: a figure of a few sums and clamps carries that many cuts at most. REL is one unit per unit of the figure:
+    a figure past 1 is a product, and the cut of one factor weighs the rest of it. A suite whose arithmetic
+    multiplies the cut further (a chain over 300 ages, a quotient of small numbers) gives its twin a looser REL and
+    FLOOR, with the reason and its size worked out from the cut, not copied from the run; a single case overrides
+    the method instead. Exact comparisons (assertEqual and the rest) stay exact. A disagreement past the tolerance
+    is an early divide or a product of small factors in the script, a fixture on a threshold's edge, or a case whose
+    arithmetic multiplies its inputs' cut: find which before loosening anything. A new case in TestX gets its twin
+    with no further work. The twins are in test_demographics_fixed_point.py."""
 
-    REL = 1e-3
-    FLOOR = 1e-4
+    UNIT = 1e-5
+    REL = UNIT
+    FLOOR = 5 * UNIT
 
     @classmethod
     def setUpClass(cls):
@@ -804,10 +808,11 @@ class _FixedPointTwin:
             super().setUpClass()
 
     def setUp(self):
-        super().setUp()
+        # before the float suite's own setUp, so an engine built there cuts too
         patch = unittest.mock.patch.object(_Engine, "FIXED_POINT", True)
         patch.start()
         self.addCleanup(patch.stop)
+        super().setUp()
 
     def near(self, got, want):
         return abs(got - want) <= max(self.REL * abs(want), self.FLOOR)
@@ -829,7 +834,8 @@ class _FixedPointTwin:
             self._past(super().assertAlmostEqual, first, second, places=places, msg=msg, delta=delta)
 
     def test_the_twin_runs_in_fixed_point(self):
-        """An engine built with no truncate= cuts to five decimals inside the twin, and outside it does not."""
+        """An engine built with no truncate= cuts to five decimals inside the twin, and outside it does not. (An
+        engine built in a suite's own setUp: test_demographics_fixed_point.TestTheTwinMixin.)"""
         eng = _Engine({})
         self.assertTrue(eng.truncate)
         eng.run(_parse_script("set_variable = { name = x value = { value = 2 divide = 3 } }"))
@@ -6794,7 +6800,12 @@ class TestCausesInTheStep(unittest.TestCase):
         self.assertLess(demographics_model.infection_adult(drifted), 0.97, "a factor that moves the life table")
         qf, qm, _ = demographics_model.group_rates(drifted)
         e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
-        self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
+        self.life_expectancy_close(eng.vars["te_dg_e0"], e0)
+
+    def life_expectancy_close(self, got, want):
+        """Its own method so the fixed-point twin can give the life table, and nothing else here, its tolerance
+        (test_demographics_fixed_point.py)."""
+        self.assertAlmostEqual(got, want, places=6)
 
     def stepped(self, effects=None):
         """A state seeded on INP0's inputs in 1836, then one whole te_demog_step on INP1's (TestTrend's setup)."""
