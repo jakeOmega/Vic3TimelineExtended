@@ -25,16 +25,24 @@ Edges
   call's depth-1 arguments. A dispatcher call (`helper_$KIND$ = yes`) becomes
   an edge from the caller that names the parameter's value to the effect that
   value picks, with the dispatching helper in `through` (`dispatch = True`).
+  So is a bare `$EFFECT$ = yes`, to each effect a caller names; a caller whose
+  value is no effect's name (`WHO = scope:x` for a `$WHO$ = { … }` block)
+  adds no edge.
 * `event`: the entity fires an event, by `trigger_event` (`via`) or an
   on-action's `events` / `random_events` / `first_valid` list. `delayed` is
   True for a `trigger_event` with a `days` / `weeks` / `months` / `years`
-  other than a literal 0. An id passed as a parameter
+  other than a literal 0 (a range reads as its first value; a `$DAYS$` as
+  its caller's, and as no delay when some caller passes 0). `id = "ns.2"` is
+  `ns.2`. An id passed as a parameter
   (`trigger_event = { id = $EVENT$ }`) is an edge from the **caller that names
   the event**, at the caller's line, with the helper that holds the
   `trigger_event` in `through`. A literal id is an edge from the entity that
   holds the `trigger_event`, at its line, whatever scope parameter surrounds
   it.
 * `on_action`: an on-action lists another under `on_actions = { }`.
+
+A definition under a merge directive (`REPLACE:x`, `INJECT:x`, ...) is node
+`x` (`event_context_audit.build_graph(strip_directives=True)`).
 
 What the graph does not hold: an effect that makes the engine run other
 script at once (`activate_law` runs `on_law_activated` inside the effect, and
@@ -287,6 +295,26 @@ def _dispatch_edges(g) -> list[Edge]:
     return out
 
 
+def _a_caller_fills_zero(g, s, depth: int = 0) -> bool:
+    """A `trigger_event = { id = ns.2 days = $DAYS$ }` left in its helper (the
+    id is literal, so the site did not move to the callers): undelayed when
+    some caller passes 0, or forwards `DAYS = $DAYS$` from a caller that does.
+    A site that moved already carries its caller's value."""
+    if s.entity_kind != EFFECT or not any("$" in d for d in s.delays) or depth > 6:
+        return False
+    import event_context_audit as eca
+
+    for (_rel, _ln, _pk, _sw, _conds, entity, kind, params) in g.effect_calls.get(s.entity, []):
+        delays = tuple(_PARAM_RE.sub(lambda m: params.get(m.group(1), m.group(0)), d) for d in s.delays)
+        if not eca._is_delay(delays):
+            return True
+        if kind == EFFECT and any("$" in d for d in delays) and _a_caller_fills_zero(
+                g, eca.Site(s.event, s.file, s.line, entity, kind, [], [], "", s.via, True,
+                            delays=delays), depth + 1):
+            return True
+    return False
+
+
 def from_event_graph(g) -> CallGraph:
     """Build the forward graph from an `event_context_audit.Graph`."""
     cg = CallGraph()
@@ -305,17 +333,19 @@ def from_event_graph(g) -> CallGraph:
                              params=tuple(sorted(params.items()))))
 
     seen: set[tuple] = set()
-    for eid, sites in g.sites_by_event.items():
+    for raw_id, sites in g.sites_by_event.items():
+        eid = raw_id.strip('"')  # `id = "ns.2"` is `ns.2`
         for s in sites:
+            delayed = s.delayed and not _a_caller_fills_zero(g, s)
             if s.origin and not s.param_event:
                 # A literal id inside `$WHO$ = { … }`: one edge, where the
                 # `trigger_event` is written, not one per caller.
                 file, line, entity = s.origin
                 edge = Edge(Node(EFFECT, entity), Node(EVENT, eid), "event", file, line,
-                            delayed=s.delayed, via=s.via)
+                            delayed=delayed, via=s.via)
             else:
                 edge = Edge(Node(s.entity_kind, s.entity), Node(EVENT, eid), "event", s.file, s.line,
-                            tuple(s.path), delayed=s.delayed, via=s.via,
+                            tuple(s.path), delayed=delayed, via=s.via,
                             through=(s.origin[2],) if s.origin else ())
             key = (edge.src, edge.dst, edge.file, edge.line, edge.delayed)
             if key not in seen:
@@ -336,4 +366,5 @@ def build(mod_path: str, include_console: bool = True) -> CallGraph:
     `te_debug_*` console harnesses, which `event_context_audit` leaves out."""
     import event_context_audit as eca
 
-    return from_event_graph(eca.build_graph(mod_path, include_console=include_console))
+    return from_event_graph(eca.build_graph(mod_path, include_console=include_console,
+                                            strip_directives=True))

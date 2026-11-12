@@ -68,6 +68,41 @@ class CycleTests(unittest.TestCase):
     def test_a_literal_zero_is_no_delay(self):
         self.assertEqual(len(_run(_two_events(" }", " days = 0 }")).flags), 2)
 
+    def test_a_range_from_zero_is_no_delay(self):
+        self.assertEqual(len(_run(_two_events(" }", " days = { 0 1 } }")).flags), 2)
+
+    def test_a_quoted_id_is_read(self):
+        r = _run(_two_events(" }", " }").copy() | {EVENTS: _two_events(" }", " }")[EVENTS].replace(
+            "id = x.1", 'id = "x.1"')})
+        self.assertEqual([(f.line, f.event) for f in r.flags], [(4, "x.2"), (10, "x.1")])
+
+    def test_a_delay_parameter_reads_as_the_callers_value(self):
+        def flags(days_1: str, days_2: str):
+            return _summary(_run({
+                EVENTS: ("x.1 = {\n\timmediate = {\n"
+                         f"\t\tsend = {{ EVENT = x.2 DAYS = {days_1} }}\n\t}}\n}}\n"
+                         "x.2 = {\n\timmediate = {\n"
+                         f"\t\tsend = {{ EVENT = x.1 DAYS = {days_2} }}\n\t}}\n}}\n"),
+                EFFECTS: "send = {\n\ttrigger_event = { id = $EVENT$ days = $DAYS$ }\n}\n",
+            }))
+        self.assertEqual(flags("0", "0"), [(EVENTS, 3, "x.1", "x.2", False), (EVENTS, 8, "x.2", "x.1", False)])
+        self.assertEqual(flags("0", "1"), [])
+
+    def test_a_definition_under_a_merge_directive_is_its_entity(self):
+        # `REPLACE:a`'s body is `a`'s: the event's call to `a` leads into it.
+        for directive in ("REPLACE:", "INJECT:", "REPLACE_OR_CREATE:", "TRY_INJECT:"):
+            with self.subTest(directive=directive):
+                r = _run({
+                    EVENTS: "x.1 = {\n\thidden = yes\n\timmediate = {\n\t\ta = yes\n\t}\n}\n",
+                    EFFECTS: f"{directive}a = {{\n\ttrigger_event = {{ id = x.1 }}\n}}\n",
+                })
+                self.assertEqual(_summary(r), [(EFFECTS, 2, "a", "x.1", False)])
+        r = _run({
+            EVENTS: "REPLACE:x.1 = {\n\thidden = yes\n\timmediate = {\n\t\ta = yes\n\t}\n}\n",
+            EFFECTS: "a = {\n\ttrigger_event = { id = x.1 }\n}\n",
+        })
+        self.assertEqual(r.flags[0].cycle, ["a", "x.1", "a"])
+
     def test_the_bare_form_is_an_undelayed_edge(self):
         files = {EVENTS: ("x.1 = {\n\timmediate = {\n\t\ttrigger_event = x.2\n\t}\n}\n"
                           "x.2 = {\n\timmediate = {\n\t\ttrigger_event = x.1\n\t}\n}\n")}

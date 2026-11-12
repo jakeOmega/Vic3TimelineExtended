@@ -116,6 +116,60 @@ class BuildTests(unittest.TestCase):
         self.assertEqual([(e.src.name, e.dst.name, e.line) for e in cg.edges if e.dispatch],
                          [("pick", "act_go", 2)])
 
+    def test_a_bare_effect_parameter_calls_only_what_a_caller_names(self):
+        # `$EFFECT$ = yes` runs the effect a caller names; the same bare key
+        # holds `$WHO$ = { }` scope blocks, whose values are no effect's name.
+        cg = _build({
+            EVENTS: ("x.1 = {\n\timmediate = {\n\t\trun = { EFFECT = act_go }\n"
+                     "\t\ttell = { WHO = scope:a }\n\t}\n}\n"),
+            EFFECTS: ("run = {\n\t$EFFECT$ = yes\n}\n"
+                      "tell = {\n\t$WHO$ = { add = 1 }\n}\n"
+                      "idle = {\n\t$EFFECT$ = yes\n}\n"
+                      "act_go = {\n\tadd = 1\n}\n"
+                      "act_stop = {\n\tadd = 1\n}\n"),
+        })
+        self.assertEqual(sorted((e.src.name, e.dst.name, e.through) for e in cg.edges if e.dispatch),
+                         [("x.1", "act_go", ("run",))])
+        # Nobody calls `idle`: no edge to every effect a bare name would fit.
+        self.assertEqual(cg.edges_from(_fx("idle")), [])
+        self.assertEqual(cg.edges_from(_fx("tell")), [])
+
+    def test_a_merge_directive_names_the_entity_it_merges_into(self):
+        cg = _build({
+            EVENTS: "REPLACE:x.1 = {\n\timmediate = {\n\t\ta = yes\n\t}\n}\n",
+            EFFECTS: ("REPLACE:a = {\n\tb = yes\n}\n"
+                      "INJECT:b = {\n\ttrigger_event = { id = x.1 }\n}\n"
+                      "REPLACE_OR_CREATE:c = {\n\ta = yes\n}\n"),
+        })
+        self.assertEqual(_edges(cg), [
+            ("a", "b", "call", 2),
+            ("b", "x.1", "event", 5),
+            ("c", "a", "call", 8),
+            ("x.1", "a", "call", 3),
+        ])
+
+    def test_a_quoted_id_is_the_event(self):
+        cg = _build({EVENTS: 'x.1 = {\n\timmediate = { trigger_event = { id = "x.2" } }\n}\n'
+                             "x.2 = {\n\thidden = yes\n}\n"})
+        self.assertEqual(_edges(cg), [("x.1", "x.2", "event", 2)])
+
+    def test_a_delay_a_caller_fills_in(self):
+        # A literal id stays in its helper; `days = $DAYS$` is undelayed when
+        # some caller passes 0, directly or through a forwarding helper.
+        def helper_edge(callers: str) -> bool:
+            cg = _build({
+                EVENTS: f"x.1 = {{\n\timmediate = {{\n{callers}\t}}\n}}\n",
+                EFFECTS: ("send = {\n\ttrigger_event = { id = x.1 days = $DAYS$ }\n}\n"
+                          "fwd = {\n\tsend = { DAYS = $D$ }\n}\n"),
+            })
+            [edge] = [e for e in cg.edges if e.kind == "event"]
+            self.assertEqual((edge.src, edge.line), (_fx("send"), 2))
+            return edge.delayed
+        self.assertTrue(helper_edge("\t\tsend = { DAYS = 1 }\n"))
+        self.assertFalse(helper_edge("\t\tsend = { DAYS = 1 }\n\t\tsend = { DAYS = 0 }\n"))
+        self.assertFalse(helper_edge("\t\tfwd = { D = 0 }\n"))
+        self.assertTrue(helper_edge("\t\tfwd = { D = 2 }\n"))
+
     def test_on_actions_chain_and_fire_events(self):
         cg = _build({
             EVENTS: "x.1 = {\n\thidden = yes\n}\n",

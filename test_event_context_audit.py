@@ -408,6 +408,17 @@ class EventContextAuditTests(unittest.TestCase):
         [call] = g.effect_calls["act_$ACT$"]
         self.assertEqual((call[0], call[1], call[5]), ("common/scripted_effects/h.txt", 5, "pick"))
 
+    def test_a_merge_directive_is_stripped_only_on_request(self):
+        # This audit's own report names the entity as written; the call graph
+        # (script_call_graph) asks for `x`.
+        eff = "REPLACE:send_it = {\n\ttrigger_event = { id = flav.1 days = { 0 2 } }\n}\n"
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/scripted_effects/h.txt": eff})
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual((site.entity, site.delays, site.delayed), ("REPLACE:send_it", ("0",), False))
+        [site] = eca.build_graph(mod, strip_directives=True).sites_by_event["flav.1"]
+        self.assertEqual(site.entity, "send_it")
+
     def test_on_action_cycle_does_not_crash(self):
         oa = ("on_yearly_pulse_country = {\n\ton_actions = { oa_a }\n}\n"
               "oa_a = {\n\ton_actions = { oa_b }\n\teffect = { trigger_event = { id = flav.1 } }\n}\n"

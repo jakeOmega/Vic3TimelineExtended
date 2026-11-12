@@ -351,10 +351,24 @@ _COND_KEYS = {"limit", "trigger", "possible", "is_shown", "potential", "is_valid
               "can_be_enacted", "visible"}
 _NUMERIC_RE = re.compile(r"^-?\d+(?:\.\d+)?$")
 _PARAM_RE = re.compile(r"^\$\w+\$$")
-# A `trigger_event` block's delay keys. A literal 0 is no delay.
+# A `trigger_event` block's delay keys. A literal 0 is no delay, and nor is a
+# range from 0 (`days = { 0 1 }`, read as its first value).
 _DELAY_KEYS = {"days", "weeks", "months", "years"}
 _DISPATCH_NAME_RE = re.compile(r"^[A-Za-z0-9_$]+$")
 _ZERO_RE = re.compile(r"^0+(?:\.0*)?$")
+# `REPLACE:x = { … }` and its kin (the engine's six merge directives,
+# `paradox_file_parser.directive_prefixes`) name the entity `x` (build_graph's
+# `strip_directives`).
+_DIRECTIVE_RE = re.compile(r"^(?:TRY_)?(?:INJECT|REPLACE)(?:_OR_CREATE)?:")
+
+
+def _is_delay(values) -> bool:
+    """A `trigger_event`'s delay values (`days = N` and its kin) queue the
+    event unless every one is a literal 0. A `$DAYS$` its caller has not
+    filled in, or a script value's name, reads as a delay."""
+    return any(not _ZERO_RE.match(v) for v in values)
+
+
 # Console-only test harnesses (`event te_debug_x.1`): skipped as flag targets and
 # as dispatch sources — they are not how anything reaches a player.
 _CONSOLE_FILE_RE = re.compile(r"^te_debug_")
@@ -403,6 +417,9 @@ class Site:
     # (`id = $EVENT$`) or only the scope or guard it runs in.
     origin: tuple[str, int, str] | None = None
     param_event: bool = False
+    # The delay keys' values as written (a range's first value), `$DAYS$`
+    # filled in where the site moved to a caller; `delayed` is `_is_delay` of it.
+    delays: tuple[str, ...] = ()
 
     @property
     def in_option(self) -> bool:
@@ -466,9 +483,10 @@ class FileScan:
     on_action_refs: dict[str, list[tuple[str, int, str]]]  # child -> (parent, line, file)
 
 
-def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
+def scan_file(path: str, rel: str, effect_names: set[str], strip_directives: bool = False) -> FileScan:
     """Walk one script file, recording dispatch sites, scripted-effect calls and
-    on-action chaining, each with its enclosing scope path and guard text."""
+    on-action chaining, each with its enclosing scope path and guard text.
+    `strip_directives` names `REPLACE:x = { … }` (and `INJECT:`, ...) `x`."""
     try:
         with open(path, encoding="utf-8-sig", errors="replace") as fh:
             text = fh.read()
@@ -491,8 +509,12 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                 return fr
         return None
 
+    def top() -> str:
+        key = stack[0].key
+        return _DIRECTIVE_RE.sub("", key) if strip_directives else key
+
     def context():
-        entity = stack[0].key if stack else "<file>"
+        entity = top() if stack else "<file>"
         path_keys = [fr.key for fr in stack[1:]]
         conds = []
         for fr in stack:
@@ -548,7 +570,7 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                     depth = 0
                     k = j
                     found: list[Site] = []
-                    delayed = False
+                    delays: list[str] = []
                     while k < n:
                         tk = toks[k][0]
                         if tk == "{":
@@ -560,12 +582,15 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                         elif tk == "id" and k + 2 < n and toks[k + 1][0] == "=" and depth == 1:
                             entity, pk, sw, conds = context()
                             found.append(Site(toks[k + 2][0], rel, ln, entity, kind, pk, sw, conds))
-                        elif (tk in _DELAY_KEYS and depth == 1 and k + 2 < n
-                              and toks[k + 1][0] == "=" and not _ZERO_RE.match(toks[k + 2][0])):
-                            delayed = True
+                        elif tk in _DELAY_KEYS and depth == 1 and k + 2 < n and toks[k + 1][0] == "=":
+                            v = toks[k + 2][0]
+                            if v == "{" and k + 3 < n:
+                                v = toks[k + 3][0]  # a range: its first value
+                            delays.append(v.strip('"'))
                         k += 1
                     for s in found:
-                        s.delayed = delayed
+                        s.delays = tuple(delays)
+                        s.delayed = _is_delay(delays)
                     sites.extend(found)
             elif (t in effect_names or (kind == "scripted_effect"
                                         and (_PARAM_RE.match(t) or _is_dispatch_name(t)))) and stack:
@@ -609,7 +634,7 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                 entity, pk, sw, conds = context()
                 sites.append(Site(t, rel, ln, entity, kind, pk, sw, conds, via=parent))
             elif parent == "on_actions" and kind == "on_action" and not _NUMERIC_RE.match(t):
-                on_action_refs[t].append((stack[0].key, ln, rel))
+                on_action_refs[t].append((top(), ln, rel))
         pending_key = None
         i += 1
 
@@ -774,7 +799,7 @@ def _collect_defs(mod_path: str, sub: str) -> dict[str, str]:
     base = os.path.join(mod_path, "common", sub)
     if not os.path.isdir(base):
         return out
-    def_re = re.compile(r"^(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([A-Za-z_][\w]*)\s*=\s*\{", re.M)
+    def_re = re.compile(r"^(?:(?:TRY_)?(?:INJECT|REPLACE)(?:_OR_CREATE)?:)?([A-Za-z_][\w]*)\s*=\s*\{", re.M)
     for dirpath, _d, files in os.walk(base):
         for f in sorted(files):
             if f.endswith(".txt"):
@@ -792,7 +817,7 @@ def _collect_def_files(mod_path: str, sub: str) -> dict[str, list[str]]:
     base = os.path.join(mod_path, "common", sub)
     if not os.path.isdir(base):
         return {}
-    def_re = re.compile(r"^(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([A-Za-z_][\w]*)\s*=\s*\{", re.M)
+    def_re = re.compile(r"^(?:(?:TRY_)?(?:INJECT|REPLACE)(?:_OR_CREATE)?:)?([A-Za-z_][\w]*)\s*=\s*\{", re.M)
     for dirpath, _d, files in os.walk(base):
         for f in sorted(files):
             if f.endswith(".txt"):
@@ -805,13 +830,15 @@ def _collect_def_files(mod_path: str, sub: str) -> dict[str, list[str]]:
     return dict(out)
 
 
-def build_graph(mod_path: str, include_console: bool = False) -> Graph:
+def build_graph(mod_path: str, include_console: bool = False, strip_directives: bool = False) -> Graph:
     """The dispatch graph of the mod at `mod_path`. The console-only harness
     files (`te_debug_*`) are left out, since nothing in them reaches a player,
     unless `include_console`: /on-action-callers asks what an on-action runs,
     and a harness can hook a live pulse (te_debug_tax_on_actions.txt), and
     `trigger_event_cycle_audit` reads them because a loop there still crashes
-    the game."""
+    the game. `strip_directives` names a `REPLACE:x` / `INJECT:x` definition
+    `x`, so its calls and events join `x`'s (`script_call_graph`); this
+    audit's own report keeps the name as written."""
     events = load_events(mod_path)
     effect_file = _collect_defs(mod_path, "scripted_effects")
     on_action_files = _collect_def_files(mod_path, "on_actions")
@@ -831,7 +858,7 @@ def build_graph(mod_path: str, include_console: bool = False) -> Graph:
                 rel = os.path.relpath(p, mod_path).replace("\\", "/")
                 if _CONSOLE_FILE_RE.search(f) and not include_console:
                     continue  # console-only harnesses: not how anything reaches a player
-                fs = scan_file(p, rel, effect_names)
+                fs = scan_file(p, rel, effect_names, strip_directives)
                 for s in fs.sites:
                     sites_by_event[s.event].append(s)
                 for name, calls in fs.effect_calls.items():
@@ -877,11 +904,13 @@ def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict
                         return re.sub(r"\$(\w+)\$", lambda m: params.get(m.group(1), m.group(0)), x)
                     event = sub(s.event)
                     inner = [sub(p) for p in s.path]
+                    # `days = $DAYS$`: the caller's value (a 0 is no delay).
+                    delays = tuple(sub(d) for d in s.delays)
                     added[event].append(Site(
                         event, rel, ln, entity, kind, pk + inner,
                         sw + [p for p in inner if _is_switch(p)], conds + " " + sub(s.conds), s.via,
-                        s.delayed, s.origin or (s.file, s.line, s.entity),
-                        s.param_event or bool(_PARAM_RE.match(s.event))))
+                        _is_delay(delays) if s.delays else s.delayed, s.origin or (s.file, s.line, s.entity),
+                        s.param_event or bool(_PARAM_RE.match(s.event)), delays))
             sites_by_event[key] = keep
         for k, v in added.items():
             sites_by_event.setdefault(k, []).extend(v)
@@ -903,6 +932,7 @@ def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict
                 uniq.append(s)
             elif kept.delayed and not s.delayed:
                 kept.delayed, kept.origin, kept.param_event = False, s.origin, s.param_event
+                kept.delays = s.delays
         sites_by_event[key] = uniq
 
 

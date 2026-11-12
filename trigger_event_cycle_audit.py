@@ -18,8 +18,10 @@ strongly connected component of the graph whose edges are scripted-effect
 calls and undelayed `trigger_event`s. The report gives the shortest cycle
 through each.
 
-* **Delayed** (`days = 1` or more, a `$DAYS$` parameter): not an edge. The
-  event is queued and runs on a fresh stack.
+* **Delayed** (`days`, `weeks`, `months` or `years` other than a literal 0):
+  not an edge. The event is queued and runs on a fresh stack. A range reads
+  as its first value (`days = { 0 1 }` is no delay); a `$DAYS$` reads as its
+  caller's value, and is no delay when some caller passes 0.
 * **`random` / `random_list`**: an edge. A branch can be taken on every pass,
   and its weight is not read here.
 * **An event option**: an edge. A player's click runs on a fresh stack, but
@@ -34,8 +36,26 @@ through each.
   names the event, at the caller's line.
 * The `te_debug_*` console harnesses are read too: a loop there crashes the
   game all the same.
+* **`REPLACE:x` / `INJECT:x`** (any of the six merge directives): the
+  definition is `x`'s, so its calls and events are `x`'s edges.
+* **`$EFFECT$ = yes`** in a helper: a call to each effect a caller names
+  (`EFFECT = nd_log_incident_launch_warning`); a caller whose value is no
+  effect (a scope, for `$WHO$ = { … }`) adds nothing.
 
 A cycle of scripted effects alone, with no event in it, is not flagged.
+
+Blind spots
+-----------
+* Edges the engine runs from an effect, which the graph does not hold:
+  `create_building` → `on_building_built` → `monument_events.1` →
+  `monument_events.20` (the one nearest the Grand Monuments' cycles; whether
+  the hook runs inside the effect is not established), `activate_law` →
+  `on_law_activated`, `add_journal_entry` → the entry's `immediate`.
+* A delay written as a script value's name (`days = my_value`) reads as a
+  delay whatever the value; a `$DAYS$` that no caller fills in with a literal
+  does too. The mod has neither (every delay is an integer literal).
+* A `$EFFECT$ = yes` whose effect a caller names only through a scripted
+  value or a scope (no literal name anywhere up the chain): no edge.
 
 Suppression
 -----------
