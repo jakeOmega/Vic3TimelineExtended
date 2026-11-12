@@ -237,7 +237,11 @@ class TheSelfCheck(unittest.TestCase):
     def test_once_a_game_and_only_where_it_can_tell(self):
         self.assertIn("NOT = { has_global_variable = te_unemp_share_check_done }", self.body)
         self.assertIn("local_var:te_unemp_w_wf >= 10000", self.body)
-        self.assertIn("limit = { local_var:te_unemp_c_exact >= 0.02 }", self.body)
+        # the engine's figure must be above 0 (it reads 0 in a game's first days, #1597), and that guard sits in the
+        # limit, ahead of the once-a-game flag, so a read of nothing cannot spend the check
+        self.assertIn("limit = { local_var:te_unemp_c_exact >= 0.02 te_unemp_engine_read > 0 }", self.body)
+        self.assertLess(self.body.index("te_unemp_engine_read > 0"),
+                        self.body.index("set_global_variable = { name = te_unemp_share_check_done"))
         # the flag is set before the line, and the conversion is the one readers use, read after the walk's store
         self.assertLess(self.body.index("set_global_variable = { name = te_unemp_share_check_done"),
                         self.body.index("debug_log"))
