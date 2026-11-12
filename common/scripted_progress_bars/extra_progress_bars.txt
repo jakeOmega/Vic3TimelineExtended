@@ -58,11 +58,24 @@ banking_bubble_pressure_bar = {
 	max_value = 100
 }
 
+# A bar between two poles (1.15, #1434): collapse at 0, where the entry fails,
+# and integration at 100, where a five-year hold completes it. Green fill
+# (stability held) over the red background (what is lost), with the sliding
+# marker, as vanilla's Great Game bar is drawn; no end icons, as Banking's.
+# While the entry is active the panel does not draw this look: the overview
+# draws its own five-layer bar from the same value (colonial_empire_widget.gui,
+# te_ce_ov_bar_row) and the bars-on-top marker hides the stock bar block. The
+# look shows wherever the stock block draws the entry's bars without it.
 colonial_stability_bar = {
 	name = "colonial_stability_bar_name"
 	desc = "colonial_stability_bar_desc"
+	second_desc = "colonial_stability_bar_second"
 
-	default_green = yes
+	progress_texture = "gfx/interface/progressbar/progressbar_green.dds"
+	background_texture = "gfx/interface/progressbar/progressbar_bad.dds"
+	glow_texture = "gfx/interface/progressbar/progressbar_green_glow.dds"
+	glow_line_texture = "gfx/interface/progressbar/progressbar_green_glow_line.dds"
+	marker = yes
 
 	start_value = 50
 	min_value = 0

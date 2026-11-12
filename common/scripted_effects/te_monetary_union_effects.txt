@@ -385,6 +385,8 @@ te_mon_effect_union_exit_costs = {
 		days = 3650
 		is_decaying = yes
 	}
+	# Its months left, for a revolution's winner (#470).
+	set_variable = { name = te_mon_union_exit_months value = 120 }
 	add_investment_pool = te_mon_union_exit_pool_hit
 	add_radicals = {
 		value = 0.05
@@ -421,6 +423,8 @@ te_mon_effect_union_refuse = {
 		name = te_mon_union_independence
 		days = 3650
 	}
+	# Its months left, for a revolution's winner (#470).
+	set_variable = { name = te_mon_union_independence_months value = 120 }
 	if = {
 		limit = { exists = power_bloc }
 		power_bloc = {

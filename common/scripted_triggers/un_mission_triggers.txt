@@ -51,22 +51,6 @@ un_mission_force_serves = {
 	un_mission_is_peace_operation = yes
 }
 
-# The scoped country holds elections: the voting laws Election Interference
-# needs of its target ("Target must have some form of elected legislature",
-# covert_operations.txt). An electoral observer mission needs a host that holds
-# them, and fails if it stops.
-# Scope: country
-un_mission_holds_elections = {
-	OR = {
-		has_law = law_type:law_landed_voting
-		has_law = law_type:law_wealth_voting
-		has_law = law_type:law_census_voting
-		has_law = law_type:law_universal_suffrage
-		has_law = law_type:law_liquid_democracy
-		has_law = law_type:law_labour_suffrage
-	}
-}
-
 # The scoped country contributes to an active mission hosted by
 # scope:un_msn_intel_host: its covert networks there grow faster
 # (covert_nets_sync; §7.4).
@@ -411,7 +395,7 @@ un_mission_slot_served = {
 # mission.
 # Scope: the proposing country
 un_observer_request_case_exists = {
-	un_mission_holds_elections = yes
+	te_holds_elections = yes
 	NOT = { un_mission_hosts = { TYPE = electoral } }
 	NOT = { un_representation_suspended = yes }
 	un_mission_can_join_host = { TYPE = electoral }

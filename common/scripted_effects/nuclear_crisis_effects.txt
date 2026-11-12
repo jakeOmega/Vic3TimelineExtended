@@ -2095,15 +2095,14 @@ nd_crisis_concede_reparations = {
 	scope:nd_target = { save_scope_as = nd_loose_payer }
 	scope:nd_crisis_other_side = { save_scope_as = nd_loose_claimant }
 	scope:nd_target = {
-		# The sum read twice, not stored and read back: the yield's tooltip
-		# walks this and writes nothing. The payer's income does not move with
-		# its treasury, so both reads agree.
-		add_treasury = {
-			value = nd_loose_compensation_value
-			multiply = -1
-		}
-		scope:nd_crisis_other_side = {
-			add_treasury = nd_loose_compensation_value
+		# Under a reparations treaty (#1457), or directly where none can be
+		# made. The sum is read where the helper needs it, not stored and read
+		# back: the yield's tooltip walks this and writes nothing. The payer's
+		# income does not move with its treasury, so the reads agree.
+		te_pay_reparations_by_treaty = {
+			PAYER = scope:nd_target
+			PAYEE = scope:nd_crisis_other_side
+			AMOUNT = nd_loose_compensation_value
 		}
 		set_variable = { name = nd_loose_inspected value = 1 days = 7300 }
 		add_modifier = {

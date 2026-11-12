@@ -119,7 +119,10 @@ class BlockScopeTests(unittest.TestCase):
                 ('can_ratify', 'source_country', False), ('can_ratify', 'target_country', False),
                 ('requirement_to_maintain', 'source_country', False),
                 ('can_ratify', 'other_country', True),
-                ('requirement_to_maintain', 'other_country', True)):
+                ('requirement_to_maintain', 'other_country', True),
+                # 1.15: can_propose sees can_ratify's scopes.
+                ('can_propose', 'source_country', False), ('can_propose', 'target_country', False),
+                ('can_propose', 'other_country', True)):
             with self.subTest(block=block, scope=scope):
                 text = f'a = {{\n kind = directed\n {block} = {{ scope:{scope} = {{ is_ai = yes }} }}\n}}'
                 self.assertEqual(found(text),
@@ -197,6 +200,9 @@ possible = { kind = directed scripted = { scope:source_country = { is_ai = yes }
         directed, = scan_text('a = { kind = directed can_ratify = { exists = scope:other_country } }', 't')
         self.assertEqual(directed.message, 'scope:other_country in can_ratify of a directed article, '
                                            'which binds scope:source_country and scope:target_country')
+        propose, = scan_text('a = { kind = directed can_propose = { exists = scope:other_country } }', 't')
+        self.assertEqual(propose.message, 'scope:other_country in can_propose of a directed article, '
+                                          'which binds scope:source_country and scope:target_country')
         mutual, = scan_text('a = { kind = mutual can_ratify = { exists = scope:source_country } }', 't')
         self.assertIn('of a mutual article, which binds scope:first_country', mutual.message)
         possible, = scan_text('a = { kind = mutual possible = { exists = scope:first_country } }', 't')
@@ -320,6 +326,8 @@ class ModTests(unittest.TestCase):
         self.assertLessEqual({('possible', 'scope:other_country'), ('visible', 'scope:other_country'),
                               ('can_ratify', 'scope:source_country'),
                               ('can_ratify', 'scope:first_country'),
+                              ('can_propose', 'scope:source_country'),
+                              ('can_propose', 'scope:first_country'),
                               ('requirement_to_maintain', 'scope:target_country')}, seen)
 
     def test_formerly_fatal_articles_have_positive_base_chances(self):

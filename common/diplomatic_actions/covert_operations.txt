@@ -141,16 +141,7 @@ covert_election_interference_action = {
 		}
 		custom_tooltip = {
 			text = iw_target_has_elections_tt
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_landed_voting
-					has_law = law_type:law_wealth_voting
-					has_law = law_type:law_census_voting
-					has_law = law_type:law_universal_suffrage
-					has_law = law_type:law_liquid_democracy
-					has_law = law_type:law_labour_suffrage
-				}
-			}
+			scope:target_country = { te_holds_elections = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
@@ -199,16 +190,7 @@ covert_election_interference_action = {
 				# Target must still have elections
 				custom_tooltip = {
 					text = iw_target_has_elections_tt
-					scope:target_country = {
-						OR = {
-							has_law = law_type:law_landed_voting
-							has_law = law_type:law_wealth_voting
-							has_law = law_type:law_census_voting
-							has_law = law_type:law_universal_suffrage
-							has_law = law_type:law_liquid_democracy
-							has_law = law_type:law_labour_suffrage
-						}
-					}
+					scope:target_country = { te_holds_elections = yes }
 				}
 			}
 		}

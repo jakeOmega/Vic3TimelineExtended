@@ -26,7 +26,7 @@
 	}
 
 	immediate = {
-		set_variable = {
+		set_variable = { # REVIEWED 2026-11-12: a re-activation restarts the year (owner, #472), a revolution's winner's too; the bar wraps at 52, so a guard would leave a re-activated record a non-zero baseline
 			name = state_collapse_progress
 			value = 0
 		}

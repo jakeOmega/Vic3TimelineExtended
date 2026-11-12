@@ -27,6 +27,7 @@ grid_interconnection_agreement = {
 	target_involvement_applies_to = mutual
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 		friendly
 	}

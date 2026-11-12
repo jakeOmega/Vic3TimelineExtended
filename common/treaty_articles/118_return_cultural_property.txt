@@ -16,6 +16,7 @@ return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off con
 	cost = 50
 
 	flags = {
+		show_in_lens
 		can_be_enforced
 		giftable		is_one_time
 	}
@@ -25,6 +26,13 @@ return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off con
 	# The country receiving its property back (target) pays, as vanilla's
 	# demands and gifts do (owner, 2026-10-12; the source paid).
 	maintenance_paid_by = target_country
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		gm_system_enabled = yes
+	}
 
 	# Shown only where there is something to return (owner, 2026-10-23): the
 	# prospective source holds a trophy whose origin the other country owns, as
