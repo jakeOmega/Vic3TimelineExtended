@@ -5194,9 +5194,12 @@ to `source_country`. One-off transfers and imposed restrictions build none in va
 money and ship transfers; law commitment, no tariffs), and the mod's follow suit with a
 reviewed reason. `treaty_leverage_side_audit` checks all of it, tagged
 `# REVIEWED YYYY-MM-DD (involvement): why` (`--strict` in CI). Pacts (`diplomatic_actions`
-with a `pact = {}`) carry the same two fields but appear to read the side the other way round
-(a puppet pact's `source_country` 8,000 only makes sense with the overlord gaining), so don't
-carry this rule over to them unverified.
+with a `pact = {}`, fields inside it) carry the same two fields but appear to read the side the
+other way round (a puppet pact's `source_country` 8,000 only makes sense with the overlord
+gaining), so don't carry this rule over to them. Every vanilla directed pact names
+`source_country` and `embargo` alone `mutual`; give a mod pact its nearest vanilla analogue's
+pair exactly, which reads as vanilla's whichever side the engine means (`fund_lobbies` 1,000 for
+interference, `increase_relations` 1,000 for aid). The audit's pact rule holds that (#1380).
 
 ## An "at least tier N" trigger must list every higher tier — extending a ladder breaks the short ones
 

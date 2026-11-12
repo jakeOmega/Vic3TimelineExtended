@@ -265,10 +265,11 @@ AUDITS: tuple[Audit, ...] = (
         "treaty_leverage_side_audit",
         "A treaty article with `country_treaty_leverage_generation_add` on the side that pays, or one "
         "that builds no Involvement because it lacks `max_target_involvement` / "
-        "`target_involvement_applies_to` or names the wrong side.",
+        "`target_involvement_applies_to` or names the wrong side; and a diplomatic action's pact "
+        "that builds none or departs from vanilla's pact convention (`source_country`, or `mutual`).",
         where="trailing on the `country_treaty_leverage_generation_add` line or the article's opening "
-              "line; for an Involvement flag, the `(involvement)` form on the article's opening line "
-              "or either field's line",
+              "line; for an Involvement flag, the `(involvement)` form on the article's or action's "
+              "opening line, a pact's `pact = {` line, or either field's line",
         tags=("", "involvement"),
     ),
     Audit(
