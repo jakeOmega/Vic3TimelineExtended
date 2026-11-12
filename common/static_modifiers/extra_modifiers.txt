@@ -2535,7 +2535,7 @@ bloody_decolonization_legacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_cost_add = 50
 	state_radicals_from_political_movements_mult = 0.10
-	country_prestige_add = 25
+	country_prestige_mult = 0.05
 	character_loyalty_add = -2
 }
 

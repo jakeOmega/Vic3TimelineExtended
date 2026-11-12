@@ -133,7 +133,7 @@ When auditing or rebalancing infamy-related modifiers, read the in-fiction frami
 
 ### Audit + library for fast-scaling event effects
 
-`event_magnitude_audit.py` (endpoint: `GET /event-magnitude-audit`, report: `docs/engine/event_magnitude_report.md`, regenerated on every full `POST /reload`) flags hardcoded fast-scaling deltas in `events/*.txt` and recommends a scaled fix path. Resources currently audited:
+`event_magnitude_audit.py` (endpoint: `GET /event-magnitude-audit`, report: `docs/engine/event_magnitude_report.md`, regenerated on every full `POST /reload`; `--strict` in CI) flags hardcoded fast-scaling deltas in `events/*.txt` and recommends a scaled fix path. Resources currently audited:
 
 | Modifier / effect | Scaled-fix path |
 |---|---|

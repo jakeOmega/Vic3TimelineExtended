@@ -17,6 +17,7 @@ from event_magnitude_audit import (
     AuditFlag,
     audit,
     AuditResult,
+    load_state,
     render_report,
 )
 
@@ -368,6 +369,65 @@ class AuditEntrypointTests(unittest.TestCase):
             result = audit(ms, mod_path=tmp)
             self.assertEqual(result.flags, [])
             self.assertEqual(result.coverage["files_audited"], 0)
+
+
+class StandaloneStateTests(unittest.TestCase):
+    """`audit()` with no ModState builds its own from the mod's static
+    modifiers and the vanilla snapshot, which is how CI runs it (#1593)."""
+
+    EVENT = (
+        "test_events.22 = {\n"
+        "\toption = {\n"
+        "\t\tshow_as_tooltip = {\n"
+        "\t\t\tadd_modifier = {\n"
+        "\t\t\t\tname = te_legacy_modifier%s\n"
+        "\t\t\t\tdays = long_modifier_time\n"
+        "\t\t\t}\n"
+        "\t\t\tadd_modifier = { name = unification_prestige }\n"
+        "\t\t}\n"
+        "\t}\n"
+        "}\n"
+    )
+
+    def _mod(self, tmp, comment=""):
+        os.makedirs(os.path.join(tmp, "events"))
+        os.makedirs(os.path.join(tmp, "common", "static_modifiers"))
+        with open(os.path.join(tmp, "events", "test_events.txt"), "w",
+                  encoding="utf-8-sig") as f:
+            f.write(self.EVENT % comment)
+        with open(os.path.join(tmp, "common", "static_modifiers", "te.txt"), "w",
+                  encoding="utf-8-sig") as f:
+            f.write("te_legacy_modifier = {\n\tcountry_prestige_add = 25\n}\n")
+
+    def test_reads_the_mods_static_modifiers_with_no_mod_state(self):
+        """No ModState and no snapshot in the tempdir: the mod's own modifier
+        is still resolved, and its flat value flags on the `name =` line."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._mod(tmp)
+            flags = audit(mod_path=tmp).flags
+        self.assertEqual(
+            [(f.file, f.line, f.value, f.exemption) for f in flags],
+            [(os.path.join("events", "test_events.txt"), 5,
+              "country_prestige_add=25 (in te_legacy_modifier)", None)])
+
+    def test_resolves_vanilla_modifiers_from_the_data_given(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._mod(tmp)
+            ms = load_state(tmp, vanilla_data={"Modifiers": {
+                "unification_prestige": _eq({"country_prestige_add": _eq("25")}),
+            }})
+            flags = audit(ms, mod_path=tmp).flags
+        self.assertEqual(
+            sorted(f.value for f in flags),
+            ["country_prestige_add=25 (in te_legacy_modifier)",
+             "country_prestige_add=25 (in unification_prestige)"])
+
+    def test_reviewed_on_the_name_line_exempts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._mod(tmp, "\t# REVIEWED 2026-11-12: shown, not applied")
+            flags = audit(mod_path=tmp).flags
+        self.assertEqual([f.exemption for f in flags],
+                         [{"date": "2026-11-12", "rationale": "shown, not applied"}])
 
 
 class ReportRenderTests(unittest.TestCase):
