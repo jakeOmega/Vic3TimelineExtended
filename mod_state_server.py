@@ -9952,6 +9952,7 @@ POST_LOAD_AUDITS = [
     ("empty_effect_audit",            "empty_effect_audit"),
     ("change_variable_clamp_audit",   "change_variable_clamp_audit"),
     ("building_scope_variable_audit", "building_scope_variable_audit"),
+    ("variable_guard_audit",          "variable_guard_audit"),
     ("principle_tier_audit",          "principle_tier_audit"),
     ("prestige_good_roster_audit",    "prestige_good_roster_audit"),
     ("amendment_reachability_audit",  "amendment_reachability_audit"),
