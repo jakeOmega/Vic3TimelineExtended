@@ -1189,8 +1189,9 @@ class MilitaryCovertTabTest(unittest.TestCase):
         wrapped = [ROOTS[name][1] for name in mounted]
         self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections"])
         # the header's map button (te_jmap_covert_map_button, journal_map_modes.md) is not a journal root
-        self.assertEqual([n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M) if not n.startswith("te_jmap_")],
-                         wrapped)
+        # nor is the entry's modifier strip, the frame's (test_te_entry_modifier_strip.py)
+        self.assertEqual([n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+                          if not n.startswith("te_jmap_") and n != "te_je_modifier_strip"], wrapped)
         # The link back to the entry is the frame's, after every section.
         self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
@@ -1205,7 +1206,8 @@ class MilitaryCovertTabTest(unittest.TestCase):
         self.assertEqual(len(names), 2)
         for name in names:
             self.assertRegex(_braced(buttons, rf"^{name} = \{{"), r"visible = \{\s*is_ai = yes\s*\}", name)
-        self.assertNotIn("te_je_", self._content())
+        # the entry's modifier strip is the frame's, every tab's (test_te_entry_modifier_strip.py)
+        self.assertNotIn("te_je_", self._content().replace("te_je_modifier_strip = {}", ""))
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
         body = self._content()

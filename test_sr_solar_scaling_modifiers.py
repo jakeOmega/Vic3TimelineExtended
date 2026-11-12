@@ -31,7 +31,6 @@ import test_journal_entry_shape as shape  # noqa: E402
 ENTRY = "je_space_race_solar_colonization"
 JE = ROOT / "common/journal_entries/je_space_race.txt"
 GENERATED = ROOT / gss.ENTRY_OUT
-LEGACY = "common/scripted_effects/legacy_modifier_cleanup.txt"
 
 # The hand-written seven: modifier -> (the conjuncts of its value's limit, what it adds).
 CONTESTED = "sr_colonies_contested_enabled = yes"
@@ -45,8 +44,8 @@ HAND = {
     "sr_colonial_garrisons": ([CONTESTED, "sr_garrison_count >= 1"], "sr_garrison_count"),
 }
 
-# The old multipliers, read through owner from the entry's scope. Nothing calls them
-# now; an older save's added copy may still name one until the strip removes it.
+# The old multipliers, read through owner from the entry's scope. Only an older save's
+# added copy named one, so they went with the old-save strip (#1429).
 WRAPPERS = {
     "common/script_values/sr_colony_population_values.txt": ("sr_emig_upkeep_units", "sr_offworld_bonus_units"),
     "common/script_values/sr_colony_module_values.txt": ("sr_mod_upkeep_units",),
@@ -54,7 +53,6 @@ WRAPPERS = {
                                                           "sr_garrison_units"),
     str(gss.VALUES_OUT): tuple(f"sr_mod_units_{f.key}_entry" for f in gss.FACILITIES if f.modifier),
 }
-PENDING = '# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)'
 
 
 def _text(path):
@@ -199,23 +197,22 @@ class RetiredCodeTests(unittest.TestCase):
             with self.subTest(file=path.name):
                 self.assertNotIn("sr_emig_refresh_modifiers", _text(path))
 
-    def test_no_solar_key_is_added_removed_or_tested_outside_the_old_save_strip(self):
-        """test_journal_entry_shape's tree rule, outside legacy_modifier_cleanup.txt, whose
-        re-adds of the colony keys the controller turns remove-only (rule 7)."""
+    def test_no_solar_key_is_added_removed_or_tested(self):
+        """test_journal_entry_shape's tree rule, for the solar keys."""
         declared = set(_declaration_texts(_text(GENERATED))) | set(HAND)
         named = re.compile(r"\b(" + "|".join(sorted(declared)) + r")\b")
         found, scanned = [], 0
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
                 rel = path.relative_to(ROOT).as_posix()
-                if rel == LEGACY or not named.search(_text(path)):
+                if not named.search(_text(path)):
                     continue  # only a file that names a key can misuse one
                 scanned += 1
                 found += shape.misuse_sites(shape._parse(path), declared, rel)
         self.assertGreater(scanned, 5)
         self.assertEqual(found, [])
 
-    def test_the_old_multipliers_are_uncalled_and_marked(self):
+    def test_the_old_multipliers_are_gone(self):
         names = [name for group in WRAPPERS.values() for name in group]
         pattern = re.compile(r"\b(" + "|".join(names) + r")\b")
         seen = {name: 0 for name in names}
@@ -224,12 +221,7 @@ class RetiredCodeTests(unittest.TestCase):
                 if path.suffix in (".txt", ".gui"):
                     for m in pattern.finditer(_blank_comments(_text(path))):
                         seen[m.group(1)] += 1
-        for rel, group in WRAPPERS.items():
-            text = _text(ROOT / rel)
-            for name in group:
-                with self.subTest(value=name):
-                    self.assertIn(f"{PENDING}\n{name} = {{", text)
-                    self.assertEqual(seen[name], 1)  # its definition, never a call
+        self.assertEqual({name: n for name, n in seen.items() if n}, {})
 
 
 if __name__ == "__main__":

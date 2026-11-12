@@ -11902,11 +11902,6 @@ sr_mod_units_lab = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_lab_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_lab_staffed_imbrium }
 }
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_mod_units_lab_entry = {
-	value = 0
-	owner = { add = sr_mod_units_lab }
-}
 # Cultural Center
 sr_mod_units_culture = {
 	value = 0
@@ -11950,11 +11945,6 @@ sr_mod_units_culture = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_culture_staffed_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_culture_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_culture_staffed_imbrium }
-}
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_mod_units_culture_entry = {
-	value = 0
-	owner = { add = sr_mod_units_culture }
 }
 # Off-World Resort
 sr_mod_units_resort = {
@@ -12000,11 +11990,6 @@ sr_mod_units_resort = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_resort_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_resort_staffed_imbrium }
 }
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_mod_units_resort_entry = {
-	value = 0
-	owner = { add = sr_mod_units_resort }
-}
 # Black Site
 sr_mod_units_black = {
 	value = 0
@@ -12049,11 +12034,6 @@ sr_mod_units_black = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_black_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_black_staffed_imbrium }
 }
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_mod_units_black_entry = {
-	value = 0
-	owner = { add = sr_mod_units_black }
-}
 # Training Ground
 sr_mod_units_train = {
 	value = 0
@@ -12097,11 +12077,6 @@ sr_mod_units_train = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_train_staffed_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_train_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_train_staffed_imbrium }
-}
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_mod_units_train_entry = {
-	value = 0
-	owner = { add = sr_mod_units_train }
 }
 # Nuclear Command Center
 sr_mod_units_bunker = {
@@ -12190,11 +12165,6 @@ sr_mod_units_foundry = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_foundry_staffed_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_foundry_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_foundry_staffed_imbrium }
-}
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_mod_units_foundry_entry = {
-	value = 0
-	owner = { add = sr_mod_units_foundry }
 }
 # Administration
 sr_mod_units_admin = {

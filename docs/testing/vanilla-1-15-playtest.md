@@ -310,6 +310,22 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   India, State of Indonesia, State of China, Intermarium Federation, Union of Dar-Al-Islam; the unions as they
   are). C21: whether a formable under a government-flavored dynamic name shows that name or the `_DEF` one, and what
   a country with no `_DEF` key shows. If a dynamic name shows its key with `_DEF` appended, its 84 names need one each.
+- **Latitude triggers (#1454).** The offline lists in the PR took each state's latitude from the reference place in
+  `scripts/generators/data/local_climate.csv`; the engine reads the state region's centre point, so a state near a
+  tropic may fall the other way. Space Elevator: the construction site is offered in states between the tropics
+  (Cuba, Hawaii, southern Mexico, the Sahel, India up to Calcutta, Rio de Janeiro), the `possible` tooltip shows the
+  engine's own line for `in_tropics`, and no site is offered in Buenos Aires, Egypt or Japan. Disease outbreak
+  (`environmentalism_events.14`): at 2 °C a country with no incorporated tropical state never gets it. Antarctic
+  station AI: smaller powers on a coast south of the tropics (Chile, Argentina, New Zealand, South Africa,
+  Australia) open stations more often than before; well past thirty stations means its +20 needs lowering.
+- **`list_scopes` (#1436).** C10's display half. The United Nations of Earth's requirements (formation, or the
+  unification play) list the great powers under "at most one outside the bloc", "aligned" and "no friction", each
+  passing or failing on its own line; with the UN rule off, see whether the bloc-unanimity line inside its
+  `custom_tooltip` lists them too (that answers C10). The Imperial Federation Act and the Civilizing Mission Compact
+  list the overseas colonies under their four-colonies line. If a list shows every country or every state, add a
+  `filter` (UNE has one; the colony count doesn't). The logic is pinned offline (`test_une_formation_gates.py`), so
+  a gate that passes or fails differently from before means the engine reads `filter` or `count = all` otherwise
+  than vanilla's tsar buttons suggest.
 
 ## 1.15.1 hotfix (2026-11-11)
 

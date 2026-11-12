@@ -21,6 +21,8 @@ Fire an event from the console with `event <id>` (debug mode). An event fired th
 | The gated description | With Universal Basic Income enacted, `event modern_election_events.29` | The description opens "Universal basic income is already law in ..."; without the law, "Universal basic income has become the most argued-over proposal ..." |
 | The live figure | `event modern_election_events.3` with Global Warming on | The description shows the world's temperature anomaly as a number with °C, not `0` or a raw key |
 | The one-line quotation | `event modern_election_events.19` | "The medium is the message." with its attribution beneath |
+| Option names follow whose candidate blundered (#1551) | Let `modern_election_events.9` fire in a campaign a few times (it picks the blundering side at random) | With our governing party's candidate named in the description, the first two options read "Say nothing, and let the networks run it ..." and "Apologize for it and move on."; with the opposition's, "Let it run as often as the networks like." and "Take the high road." Never both, never a raw key. The own-side names key on `scope:own_gaffe_party`, saved only in the `random_list` branch where our party blundered |
+| The pilot program hides under Universal Basic Income (#1551) | With Universal Basic Income enacted, `event modern_election_events.29` | Two options, no "Propose a limited pilot program."; without the law, three |
 
 ## Space race landing reports (`space_race_events.3`, `.7`)
 
