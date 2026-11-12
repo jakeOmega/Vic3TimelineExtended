@@ -1499,6 +1499,49 @@ VARIANT_LEAD = {
                     "a dead humanoid robot slumped beside a grounded pod vehicle"),
     },
 }
+# The second round: a key whose first four candidates all failed the same way takes its own words
+# for a field of the two tables above; every other key keeps the table's, so its picked render
+# stays the render of its prompt. A reword that a second round of candidates did not bear out is
+# taken out again, and the key goes back to its first candidates.
+#   The small town of 1960: "a few small rounded 1950s cars" drew the small rounded cars of the
+# 2000s in every region but the African one, and "one new plain concrete building" a present-day
+# one. Two-tone paint, chrome and whitewall tires are the 1950s' own.
+#   The North American great city: "stepped stone and art deco towers" over "old brick blocks with
+# water tanks on their roofs" is New York, and three candidates in four drew its towers (or
+# Chicago's, or Toronto's) on every rung. The rewording says what the towers are (plain, flat
+# roofed, of one height) and leaves out what they must not be: naming a thing draws it.
+#   The European great city of 1960: mansard roofs are Paris, and the candidates drew its tower.
+_REGION_FIELDS = ("low", "beyond", "old", "detail", "poor", "rich", "plain")
+_RUNG_FIELDS = ("town", "cars", "poor_cars", "rich_cars", "towers", "traffic", "mega_traffic", "far",
+                "behind", "wreck")
+_NA_OLD = "older low brick warehouses and rail yards"
+_NA_TOWERS = {
+    1: "a dense cluster of plain flat-roofed brick and limestone office blocks of fifteen to twenty "
+       "storeys, all of about the same height",
+    2: "a dense cluster of plain flat-roofed glass and steel office slabs of twenty to thirty "
+       "storeys, all of about the same height",
+    3: "a dense cluster of plain flat-roofed mirrored glass office towers of forty to fifty storeys, "
+       "all of about the same height",
+    4: "a dense cluster of slender supertall glass towers with planted terraces and flat garden "
+       "roofs, all of about the same height",
+    5: "colossal kilometre-high white arcology towers with flat garden roofs, joined by sky bridges "
+       "and hung with gardens",
+}
+VARIANT_REWORD = {
+    **{(_region, 2, "town"): {
+        "town": "a rounded 1950s country bus with a split windscreen, telephone poles, one plain "
+                "concrete building of two storeys",
+        "cars": "two heavy two-tone 1950s sedans with chrome grilles and whitewall tires at the "
+                "kerb, the street otherwise empty"}
+       for _region in VARIANT_ADJ if _region != "african"},
+    **{("north_american", _rung, _size): {"towers": _words, "old": _NA_OLD}
+       for _rung, _words in _NA_TOWERS.items() for _size in ("metropolis", "megacity")
+       if _size == "metropolis" or _rung >= 3},
+    ("european", 2, "metropolis"): {
+        "towers": "a dense cluster of plain flat-roofed glass and concrete office slabs of fifteen to "
+                  "twenty storeys, all of about the same height",
+        "old": "older stone blocks with steep tiled roofs"},
+}
 VARIANT_SHOWS = {
     "town": "the largest city under 100,000 people",
     "metropolis": "the largest city over 1,000,000 people",
@@ -1511,8 +1554,12 @@ VARIANT_SHOWS = {
 
 def variant_prompt(region: str, rung: int, variant: str) -> str:
     adj = VARIANT_ADJ[region]
-    low, beyond, old, detail, poor, rich, plain = VARIANT_REGION[region]
-    town, cars, poor_cars, rich_cars, towers, traffic, mega_traffic, far, behind, wreck = VARIANT_RUNG[rung]
+    words = {**dict(zip(_REGION_FIELDS, VARIANT_REGION[region])),
+             **dict(zip(_RUNG_FIELDS, VARIANT_RUNG[rung])),
+             **VARIANT_REWORD.get((region, rung, variant), {})}
+    low, beyond, old, detail, poor, rich, plain = (words[f] for f in _REGION_FIELDS)
+    town, cars, poor_cars, rich_cars, towers, traffic, mega_traffic, far, behind, wreck = (
+        words[f] for f in _RUNG_FIELDS)
     future = "far-future " if rung == 5 else ""
     a = "an" if (future or adj)[0] in "AEIOU" else "a"      # "an African city", "a far-future African city"
     end = "{landmark} hazy at the end of the street"

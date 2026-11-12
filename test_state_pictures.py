@@ -639,6 +639,25 @@ class TestYearlyPass(unittest.TestCase):
         self.assertEqual(self.prosperity(3, 10, expected=10), (1, False))
         self.assertEqual(self.prosperity(3, 30, expected=34), (3, True))
 
+    def test_a_reword_reaches_the_prompt_of_a_table_variant(self):
+        # a reword of a field its variant's sentence does not use, or of a pilot picture written by
+        # hand, would change nothing and say nothing
+        r = registry
+        fields = set(r._REGION_FIELDS) | set(r._RUNG_FIELDS)
+        self.assertEqual(len(r.VARIANT_REGION["european"]), len(r._REGION_FIELDS))
+        self.assertEqual(len(r.VARIANT_RUNG[1]), len(r._RUNG_FIELDS))
+        for (region, rung, variant), words in r.VARIANT_REWORD.items():
+            key = f"urban_{region}_{rung}_{variant}"
+            with self.subTest(key):
+                entry = r.DRAFTS.get(key) or r.PICTURES[key]
+                self.assertLessEqual(set(words), fields)
+                self.assertTrue(words)
+                self.assertEqual(entry["prompt"],
+                                 r.variant_prompt(region, rung, variant).format(
+                                     when=r.CITY_LADDER[rung][1], landmark=r.CITY_LANDMARK[region]))
+                for text in words.values():
+                    self.assertIn(text, entry["prompt"])
+
     def test_the_variants_take_their_axis_from_their_name(self):
         r = registry
         variants = {k: d for k, d in r.DRAFTS.items() if d["family"] == "variant"}
