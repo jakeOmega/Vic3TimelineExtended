@@ -538,7 +538,12 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                             entity, pk, sw, conds = context()
                             sites.append(Site(toks[k + 2][0], rel, ln, entity, kind, pk, sw, conds))
                         k += 1
-            elif t in effect_names and stack:
+            elif (t in effect_names or (kind == "scripted_effect" and _PARAM_RE.match(t))) and stack:
+                # `$EFFECT$ = yes` inside a helper runs whatever effect a caller
+                # names (kept under the key `$EFFECT$`: no entity is called
+                # that, so the audit's own lookups never see it; a `$WHO$ = { }`
+                # scope block lands there too, and only /on-action-callers
+                # reads these, for a parameter some caller sets to an effect).
                 entity, pk, sw, conds = context()
                 # `helper = { WHO = scope:x EVENT = ns.7 }` — keep simple
                 # depth-1 arguments for `$PARAM$` substitution.
@@ -768,7 +773,11 @@ def _collect_def_files(mod_path: str, sub: str) -> dict[str, list[str]]:
     return dict(out)
 
 
-def build_graph(mod_path: str) -> Graph:
+def build_graph(mod_path: str, include_console: bool = False) -> Graph:
+    """The dispatch graph of the mod at `mod_path`. The console-only harness
+    files (`te_debug_*`) are left out, since nothing in them reaches a player,
+    unless `include_console`: /on-action-callers asks what an on-action runs,
+    and a harness can hook a live pulse (te_debug_tax_on_actions.txt)."""
     events = load_events(mod_path)
     effect_file = _collect_defs(mod_path, "scripted_effects")
     on_action_files = _collect_def_files(mod_path, "on_actions")
@@ -786,7 +795,7 @@ def build_graph(mod_path: str) -> Graph:
                     continue
                 p = os.path.join(dirpath, f)
                 rel = os.path.relpath(p, mod_path).replace("\\", "/")
-                if _CONSOLE_FILE_RE.search(f):
+                if _CONSOLE_FILE_RE.search(f) and not include_console:
                     continue  # console-only harnesses: not how anything reaches a player
                 fs = scan_file(p, rel, effect_names)
                 for s in fs.sites:
