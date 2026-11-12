@@ -65,9 +65,9 @@ flavour read the event's own roll, as the options do.
 6. **No `contagion_roll_scope` BROKEN.** It judges every contagion event now, since one is open at a time
    (below), and logs its OK once. The NO_VERDICT lines are gone: a second copy open is `contagion_one_open`'s
    BROKEN. A BROKEN with `open=1` is real: take the fallback in the table.
-7. **The text matches the options.** A country whose own roll crashed reads "Cascading Financial Collapse" and the
+7. **The text matches the options.** A country whose own roll crashed reads "Their Crash Becomes Ours" and the
    cascade description and sees the crash-only options where its laws and institutions allow; a scare reads
-   "Contagion from Abroad" (or "Financial Contagion" after a severe crash) and gets only "Close the gates" and
+   "Contagion from Abroad" (or "Panic Abroad" after a severe crash) and gets only "Close the gates" and
    "Maintain open markets". Two at once should no longer happen (item 8).
 
 ## One contagion event at a time (2026-10-17)
@@ -99,7 +99,7 @@ floor. **The origin is counted once:** `banking_crisis_wave_init` marks the orig
 contagion event it still holds from an earlier wave cannot count it a second time toward the Great Depression.
 
 11. **A crash shelters a country for a year.** A country that crashed, at home or by contagion, and is reached again
-    within the year gets "Contagion from Abroad" (or "Financial Contagion" after a severe crash) with only "Close the
+    within the year gets "Contagion from Abroad" (or "Panic Abroad" after a severe crash) with only "Close the
     gates" and "Maintain open markets", whatever its bubble. `save_country_probe.py --var '^banking_crashed_last_year'`
     shows the marker on it.
 12. **No contagion crash within a year of a crash.** On any country's history chart, a contagion crash marker never
@@ -200,7 +200,7 @@ cycle drop, no radicals. Every engine fact it rests on is used elsewhere in the 
 `trigger_event`, a timed country variable, saved scopes riding into a triggered event), so there is no self-check line.
 
 30. **One scare popup in two years.** In a long game, a country the player runs that is reached by several spreads
-    that roll scares gets "Contagion from Abroad" (or "Financial Contagion" after a severe crash) at most once in 730 days.
+    that roll scares gets "Contagion from Abroad" (or "Panic Abroad" after a severe crash) at most once in 730 days.
     `save_country_probe.py --var '^banking_contagion_'` shows `banking_contagion_scare_cooldown` after the first.
     *Fallback if a second one still opens inside the window:* the variable is not surviving, or `banking_contagion_decide`
     is not the one sending the popup; look for `minor_events_timelineextended.7` in a `trigger_event` anywhere else.
@@ -209,7 +209,7 @@ cycle drop, no radicals. Every engine fact it rests on is used elsewhere in the 
     `banking_contagion_turned_away`, and its cycle value is unchanged by it. The next wave can reach it again.
 32. **A crash is never held back.** A contagion crash inside the cooldown still opens its popup, and does not move the
     cooldown's date. *Watch the title:* the popup is queued after the roll now, with `contagion_crashed` already
-    saved, so a crash should open as "Cascading Financial Collapse". If it reads "Financial Contagion" or "Contagion
+    saved, so a crash should open as "Their Crash Becomes Ours". If it reads "Panic Abroad" or "Contagion
     from Abroad" instead, the engine takes the title it reads at queue time from before that save
     (`scripting_best_practices.md`, "An event's `title` is read when `trigger_event` queues it"); the options and
     text below it still follow the crash, so that is cosmetic.

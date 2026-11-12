@@ -1035,6 +1035,19 @@ je_space_race_probe = {
 			}
 		}
 	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_tour
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_tour
+				}
+				add = 1
+			}
+		}
+	}
 
 	immediate = {
 		set_variable = { name = sr_active_probe value = yes }

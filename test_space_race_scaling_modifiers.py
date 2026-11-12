@@ -53,7 +53,8 @@ CHOICES = {
                            "sr_choice_site_far_side": "sr_moon_site_far_side"}),
     "probe": ("81", {"sr_choice_probe_venus": "sr_probe_target_venus",
                      "sr_choice_probe_mars": "sr_probe_target_mars",
-                     "sr_choice_probe_asteroid": "sr_probe_target_asteroid"}),
+                     "sr_choice_probe_asteroid": "sr_probe_target_asteroid",
+                     "sr_choice_probe_tour": "sr_probe_target_tour"}),
     "mars_landing": ("83", {"sr_choice_mars_direct": "sr_mars_direct",
                             "sr_choice_mars_orbital": "sr_mars_orbital_first",
                             "sr_choice_mars_robotic": "sr_mars_robotic"}),
@@ -195,7 +196,7 @@ class DeclarationShapeTest(unittest.TestCase):
                                  _read(os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt"))))
         named = {mod for _, choices in CHOICES.values() for mod in choices}
         self.assertEqual(named, defined)
-        self.assertEqual(len(named), 13)
+        self.assertEqual(len(named), 14)
         for m, (_, choices) in CHOICES.items():
             for modifier, var in choices.items():
                 with self.subTest(milestone=m, modifier=modifier):
@@ -333,9 +334,10 @@ class ChoiceEventTest(unittest.TestCase):
     def test_each_option_sets_its_variable_and_previews_the_modifier(self):
         """The option that added the modifier on the entry now sets the variable
         the declaration reads and shows the modifier (design § 4.0, rule 8). The
-        preview keeps the bare `add_modifier = X` form the option had, which the
-        Nation tab's scan of duration-less adds (gen_nation_tab.py, block form
-        only) never counted: these sit on an entry, not the country."""
+        preview keeps the bare `add_modifier = X` form the option had. The
+        Nation tab's scan of duration-less adds (gen_nation_tab.py) reads that
+        form too since #1023, and its registry places these on the entry, not
+        the country (NOT_ON_COUNTRY's `sr_choice_*`)."""
         events = _read(EVENTS)
         for m, (event, choices) in CHOICES.items():
             body = _block(events, f"space_race_events.{event}")

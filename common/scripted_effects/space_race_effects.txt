@@ -840,8 +840,9 @@ sr_fire_ambitious_failure_event = {
 			}
 			trigger_event = { id = space_race_events.12 }
 		}
-		# Deep Space Signal Lost (probe/interstellar). Same gate as the event's
-		# own trigger, so the roll can never pick an event that then refuses to fire.
+		# Deep Space Signal Lost (the Deep-Space Probe; not the interstellar
+		# probe, which is still on the pad). Same gate as the event's own
+		# trigger, so the roll can never pick an event that then refuses to fire.
 		10 = {
 			trigger = { sr_setback_is_deep_space_probe = yes }
 			trigger_event = { id = space_race_events.13 }

@@ -887,3 +887,19 @@ gotcha).
     raw key means `IsValidTooltip` renders nothing for a scripted GUI with no `effect`. Fallback: give each gate
     `effect = { custom_tooltip = sr_fl_not_at_location_tt }` (the target gate: `sr_fl_no_target_tt`), a text-only
     effect that changes nothing.
+
+## Colony politics need 1,000 people (2026-11-12)
+
+Owner's decision, issue #1620: autonomy builds, and a colony demands self-government or breaks away, only with
+`sr_free_colony_minimum` (1,000) people (`sr_site_peopled_<key>`, `docs/systems/mod_systems/space_race.md`).
+
+1. **An empty outpost through a war.** Found an outpost far out (Kuiper Belt or Saturn) and send no settlers, then go to
+   war for a few years. Its autonomy stays at 0, its drift reads 0 and its hover opens with "With fewer than 1,000
+   people it makes no demands" and ends "settles near 0%". No "<World> Demands Self-Government", no break-away, and
+   the overview's Colonies cell reads Loyal. Incite Colonial Autonomy can't be launched against a country holding only
+   such outposts (greyed: "Target must hold a colony of at least 1,000 people").
+2. **The thousandth settler.** With the outpost our first colony, set its autonomy to 80 (`event te_debug_space_race.5`) while it has fewer than
+   1,000 people: the next months it falls (1% a month), with no demand. Send settlers until it passes 1,000: from that
+   month its drift takes its terms again, the hover's note goes, and at 50 or more the demand comes the next month.
+3. **A dip under the minimum.** A colony just over 1,000 that Sabotage Colony takes under it keeps its autonomy,
+   falling 1% a month; nothing resets it, and Sabotage adds no autonomy while it is under.

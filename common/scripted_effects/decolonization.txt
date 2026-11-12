@@ -220,6 +220,42 @@ decol_path_contagion = {
 	}
 }
 
+# decolonization_events.15's largest foreign owner, saved as
+# scope:biggest_foreign_owner for the description. Scope: the new country,
+# which is ROOT. gdp_ownership_ratio is a trigger with no value form, so
+# ordered_country cannot rank by it: the bands run from the top, and the first
+# one an owner reaches names it (the shares sum to at most 1, so the top bands
+# hold one or two countries). Each band asks the test .15's trigger asks, at a
+# higher share; the last is the trigger's own 5%.
+decol_save_biggest_foreign_owner = {
+	clear_saved_scope = biggest_foreign_owner
+	decol_save_foreign_owner_above = { SHARE = 0.5 }
+	decol_save_foreign_owner_above = { SHARE = 0.35 }
+	decol_save_foreign_owner_above = { SHARE = 0.25 }
+	decol_save_foreign_owner_above = { SHARE = 0.15 }
+	decol_save_foreign_owner_above = { SHARE = 0.1 }
+	decol_save_foreign_owner_above = { SHARE = 0.05 }
+}
+
+decol_save_foreign_owner_above = {
+	if = {
+		limit = { NOT = { exists = scope:biggest_foreign_owner } }
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				country_rank >= rank_value:minor_power
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > $SHARE$
+					}
+				}
+			}
+			save_scope_as = biggest_foreign_owner
+		}
+	}
+}
+
 # Mark the scoped country as a former colony of $OVERLORD$, with the two
 # variables, shapes and durations the vanilla release actions set
 # (te_construction_market_on_released_independent in

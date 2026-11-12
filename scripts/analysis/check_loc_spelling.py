@@ -267,14 +267,17 @@ WORDS.update({"dear": "expensive", "dearer": "costlier", "dearest": "costliest"}
 # landmark the text translates ("Roman Theater of Mérida", "Amphitheater of El
 # Djem") or a name the mod made up ("Civil Defense", "National Exhibition
 # Center") goes American. Check each entry against the text it protects. The
-# one phrase that is not a name is "my dear", the affectionate use of a word
-# the list otherwise reads as "expensive".
+# phrases that are not names ("my dear", and the salutations "Dear Mother" and
+# "Dear colleague") keep the affectionate or formal "dear", which the list
+# otherwise reads as "expensive".
 ALLOWLIST: list[str] = [
     "Kenyatta International Convention Centre",  # the wonder (Nairobi's KICC)
     "UN Environment Programme",                  # UNEP's own name
     "United Nations Environment Programme",
     "Tyre",                                      # the Lebanese city; the product is lower case
     "my dear",                                   # affectionate, not "expensive" (UN flavor text)
+    "Dear Mother",                               # a letter's salutation (flavor in the document form)
+    "Dear colleague",
 ]
 
 # Keys whose whole value keeps its spelling, such as a historical text quoted

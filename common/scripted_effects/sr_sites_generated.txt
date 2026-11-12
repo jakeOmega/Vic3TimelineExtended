@@ -45453,7 +45453,8 @@ sr_site_free_step_valles_marineris = {
 		}
 	}
 }
-# THIS holds Valles Marineris: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Valles Marineris: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_valles_marineris = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_valles_marineris } } set_global_variable = { name = sr_site_contact_valles_marineris value = te_history_month_index } }
 	set_global_variable = {
@@ -45472,12 +45473,13 @@ sr_site_aut_step_valles_marineris = {
 		if = { limit = { sr_site_self_value_valles_marineris >= sr_module_points } sr_site_self_build_valles_marineris = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_valles_marineris >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_valles_marineris >= sr_aut_break_level sr_site_peopled_valles_marineris = yes }
 		sr_aut_break_away = { KEY = valles_marineris INDEX = 1 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level
+			sr_site_peopled_valles_marineris = yes
 			NOT = { has_global_variable = sr_site_aut_asked_valles_marineris }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -45611,7 +45613,8 @@ sr_site_free_step_olympus_mons = {
 		}
 	}
 }
-# THIS holds Olympus Mons: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Olympus Mons: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_olympus_mons = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_olympus_mons } } set_global_variable = { name = sr_site_contact_olympus_mons value = te_history_month_index } }
 	set_global_variable = {
@@ -45630,12 +45633,13 @@ sr_site_aut_step_olympus_mons = {
 		if = { limit = { sr_site_self_value_olympus_mons >= sr_module_points } sr_site_self_build_olympus_mons = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_olympus_mons >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_olympus_mons >= sr_aut_break_level sr_site_peopled_olympus_mons = yes }
 		sr_aut_break_away = { KEY = olympus_mons INDEX = 2 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level
+			sr_site_peopled_olympus_mons = yes
 			NOT = { has_global_variable = sr_site_aut_asked_olympus_mons }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -45769,7 +45773,8 @@ sr_site_free_step_hellas_planitia = {
 		}
 	}
 }
-# THIS holds Hellas Planitia: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Hellas Planitia: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_hellas_planitia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_hellas_planitia } } set_global_variable = { name = sr_site_contact_hellas_planitia value = te_history_month_index } }
 	set_global_variable = {
@@ -45788,12 +45793,13 @@ sr_site_aut_step_hellas_planitia = {
 		if = { limit = { sr_site_self_value_hellas_planitia >= sr_module_points } sr_site_self_build_hellas_planitia = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_hellas_planitia >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_hellas_planitia >= sr_aut_break_level sr_site_peopled_hellas_planitia = yes }
 		sr_aut_break_away = { KEY = hellas_planitia INDEX = 3 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level
+			sr_site_peopled_hellas_planitia = yes
 			NOT = { has_global_variable = sr_site_aut_asked_hellas_planitia }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -45927,7 +45933,8 @@ sr_site_free_step_utopia_planitia = {
 		}
 	}
 }
-# THIS holds Utopia Planitia: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Utopia Planitia: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_utopia_planitia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_utopia_planitia } } set_global_variable = { name = sr_site_contact_utopia_planitia value = te_history_month_index } }
 	set_global_variable = {
@@ -45946,12 +45953,13 @@ sr_site_aut_step_utopia_planitia = {
 		if = { limit = { sr_site_self_value_utopia_planitia >= sr_module_points } sr_site_self_build_utopia_planitia = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_utopia_planitia >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_utopia_planitia >= sr_aut_break_level sr_site_peopled_utopia_planitia = yes }
 		sr_aut_break_away = { KEY = utopia_planitia INDEX = 4 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level
+			sr_site_peopled_utopia_planitia = yes
 			NOT = { has_global_variable = sr_site_aut_asked_utopia_planitia }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -46085,7 +46093,8 @@ sr_site_free_step_arcadia_planitia = {
 		}
 	}
 }
-# THIS holds Arcadia Planitia: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Arcadia Planitia: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_arcadia_planitia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_arcadia_planitia } } set_global_variable = { name = sr_site_contact_arcadia_planitia value = te_history_month_index } }
 	set_global_variable = {
@@ -46104,12 +46113,13 @@ sr_site_aut_step_arcadia_planitia = {
 		if = { limit = { sr_site_self_value_arcadia_planitia >= sr_module_points } sr_site_self_build_arcadia_planitia = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_arcadia_planitia >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_arcadia_planitia >= sr_aut_break_level sr_site_peopled_arcadia_planitia = yes }
 		sr_aut_break_away = { KEY = arcadia_planitia INDEX = 5 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level
+			sr_site_peopled_arcadia_planitia = yes
 			NOT = { has_global_variable = sr_site_aut_asked_arcadia_planitia }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -46243,7 +46253,8 @@ sr_site_free_step_ceres = {
 		}
 	}
 }
-# THIS holds Ceres: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Ceres: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_ceres = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_ceres } } set_global_variable = { name = sr_site_contact_ceres value = te_history_month_index } }
 	set_global_variable = {
@@ -46262,12 +46273,13 @@ sr_site_aut_step_ceres = {
 		if = { limit = { sr_site_self_value_ceres >= sr_module_points } sr_site_self_build_ceres = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_ceres >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_ceres >= sr_aut_break_level sr_site_peopled_ceres = yes }
 		sr_aut_break_away = { KEY = ceres INDEX = 6 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_ceres >= sr_aut_ask_level
+			sr_site_peopled_ceres = yes
 			NOT = { has_global_variable = sr_site_aut_asked_ceres }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -46401,7 +46413,8 @@ sr_site_free_step_vesta = {
 		}
 	}
 }
-# THIS holds 4 Vesta: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds 4 Vesta: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_vesta = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_vesta } } set_global_variable = { name = sr_site_contact_vesta value = te_history_month_index } }
 	set_global_variable = {
@@ -46420,12 +46433,13 @@ sr_site_aut_step_vesta = {
 		if = { limit = { sr_site_self_value_vesta >= sr_module_points } sr_site_self_build_vesta = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_vesta >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_vesta >= sr_aut_break_level sr_site_peopled_vesta = yes }
 		sr_aut_break_away = { KEY = vesta INDEX = 7 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_vesta >= sr_aut_ask_level
+			sr_site_peopled_vesta = yes
 			NOT = { has_global_variable = sr_site_aut_asked_vesta }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -46559,7 +46573,8 @@ sr_site_free_step_psyche = {
 		}
 	}
 }
-# THIS holds 16 Psyche: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds 16 Psyche: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_psyche = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_psyche } } set_global_variable = { name = sr_site_contact_psyche value = te_history_month_index } }
 	set_global_variable = {
@@ -46578,12 +46593,13 @@ sr_site_aut_step_psyche = {
 		if = { limit = { sr_site_self_value_psyche >= sr_module_points } sr_site_self_build_psyche = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_psyche >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_psyche >= sr_aut_break_level sr_site_peopled_psyche = yes }
 		sr_aut_break_away = { KEY = psyche INDEX = 8 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_psyche >= sr_aut_ask_level
+			sr_site_peopled_psyche = yes
 			NOT = { has_global_variable = sr_site_aut_asked_psyche }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -46717,7 +46733,8 @@ sr_site_free_step_pallas = {
 		}
 	}
 }
-# THIS holds 2 Pallas: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds 2 Pallas: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_pallas = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_pallas } } set_global_variable = { name = sr_site_contact_pallas value = te_history_month_index } }
 	set_global_variable = {
@@ -46736,12 +46753,13 @@ sr_site_aut_step_pallas = {
 		if = { limit = { sr_site_self_value_pallas >= sr_module_points } sr_site_self_build_pallas = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_pallas >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_pallas >= sr_aut_break_level sr_site_peopled_pallas = yes }
 		sr_aut_break_away = { KEY = pallas INDEX = 9 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_pallas >= sr_aut_ask_level
+			sr_site_peopled_pallas = yes
 			NOT = { has_global_variable = sr_site_aut_asked_pallas }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -46875,7 +46893,8 @@ sr_site_free_step_hygiea = {
 		}
 	}
 }
-# THIS holds 10 Hygiea: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds 10 Hygiea: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_hygiea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_hygiea } } set_global_variable = { name = sr_site_contact_hygiea value = te_history_month_index } }
 	set_global_variable = {
@@ -46894,12 +46913,13 @@ sr_site_aut_step_hygiea = {
 		if = { limit = { sr_site_self_value_hygiea >= sr_module_points } sr_site_self_build_hygiea = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_hygiea >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_hygiea >= sr_aut_break_level sr_site_peopled_hygiea = yes }
 		sr_aut_break_away = { KEY = hygiea INDEX = 10 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_hygiea >= sr_aut_ask_level
+			sr_site_peopled_hygiea = yes
 			NOT = { has_global_variable = sr_site_aut_asked_hygiea }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47033,7 +47053,8 @@ sr_site_free_step_io = {
 		}
 	}
 }
-# THIS holds Io: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Io: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_io = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_io } } set_global_variable = { name = sr_site_contact_io value = te_history_month_index } }
 	set_global_variable = {
@@ -47052,12 +47073,13 @@ sr_site_aut_step_io = {
 		if = { limit = { sr_site_self_value_io >= sr_module_points } sr_site_self_build_io = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_io >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_io >= sr_aut_break_level sr_site_peopled_io = yes }
 		sr_aut_break_away = { KEY = io INDEX = 11 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_io >= sr_aut_ask_level
+			sr_site_peopled_io = yes
 			NOT = { has_global_variable = sr_site_aut_asked_io }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47191,7 +47213,8 @@ sr_site_free_step_europa = {
 		}
 	}
 }
-# THIS holds Europa: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Europa: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_europa = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_europa } } set_global_variable = { name = sr_site_contact_europa value = te_history_month_index } }
 	set_global_variable = {
@@ -47210,12 +47233,13 @@ sr_site_aut_step_europa = {
 		if = { limit = { sr_site_self_value_europa >= sr_module_points } sr_site_self_build_europa = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_europa >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_europa >= sr_aut_break_level sr_site_peopled_europa = yes }
 		sr_aut_break_away = { KEY = europa INDEX = 12 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_europa >= sr_aut_ask_level
+			sr_site_peopled_europa = yes
 			NOT = { has_global_variable = sr_site_aut_asked_europa }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47349,7 +47373,8 @@ sr_site_free_step_ganymede = {
 		}
 	}
 }
-# THIS holds Ganymede: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Ganymede: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_ganymede = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_ganymede } } set_global_variable = { name = sr_site_contact_ganymede value = te_history_month_index } }
 	set_global_variable = {
@@ -47368,12 +47393,13 @@ sr_site_aut_step_ganymede = {
 		if = { limit = { sr_site_self_value_ganymede >= sr_module_points } sr_site_self_build_ganymede = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_ganymede >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_ganymede >= sr_aut_break_level sr_site_peopled_ganymede = yes }
 		sr_aut_break_away = { KEY = ganymede INDEX = 13 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_ganymede >= sr_aut_ask_level
+			sr_site_peopled_ganymede = yes
 			NOT = { has_global_variable = sr_site_aut_asked_ganymede }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47507,7 +47533,8 @@ sr_site_free_step_callisto = {
 		}
 	}
 }
-# THIS holds Callisto: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Callisto: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_callisto = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_callisto } } set_global_variable = { name = sr_site_contact_callisto value = te_history_month_index } }
 	set_global_variable = {
@@ -47526,12 +47553,13 @@ sr_site_aut_step_callisto = {
 		if = { limit = { sr_site_self_value_callisto >= sr_module_points } sr_site_self_build_callisto = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_callisto >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_callisto >= sr_aut_break_level sr_site_peopled_callisto = yes }
 		sr_aut_break_away = { KEY = callisto INDEX = 14 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_callisto >= sr_aut_ask_level
+			sr_site_peopled_callisto = yes
 			NOT = { has_global_variable = sr_site_aut_asked_callisto }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47665,7 +47693,8 @@ sr_site_free_step_himalia = {
 		}
 	}
 }
-# THIS holds Himalia: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Himalia: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_himalia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_himalia } } set_global_variable = { name = sr_site_contact_himalia value = te_history_month_index } }
 	set_global_variable = {
@@ -47684,12 +47713,13 @@ sr_site_aut_step_himalia = {
 		if = { limit = { sr_site_self_value_himalia >= sr_module_points } sr_site_self_build_himalia = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_himalia >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_himalia >= sr_aut_break_level sr_site_peopled_himalia = yes }
 		sr_aut_break_away = { KEY = himalia INDEX = 15 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_himalia >= sr_aut_ask_level
+			sr_site_peopled_himalia = yes
 			NOT = { has_global_variable = sr_site_aut_asked_himalia }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47823,7 +47853,8 @@ sr_site_free_step_amalthea = {
 		}
 	}
 }
-# THIS holds Amalthea: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Amalthea: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_amalthea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_amalthea } } set_global_variable = { name = sr_site_contact_amalthea value = te_history_month_index } }
 	set_global_variable = {
@@ -47842,12 +47873,13 @@ sr_site_aut_step_amalthea = {
 		if = { limit = { sr_site_self_value_amalthea >= sr_module_points } sr_site_self_build_amalthea = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_amalthea >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_amalthea >= sr_aut_break_level sr_site_peopled_amalthea = yes }
 		sr_aut_break_away = { KEY = amalthea INDEX = 16 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_amalthea >= sr_aut_ask_level
+			sr_site_peopled_amalthea = yes
 			NOT = { has_global_variable = sr_site_aut_asked_amalthea }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -47981,7 +48013,8 @@ sr_site_free_step_venus = {
 		}
 	}
 }
-# THIS holds Venus Cloud Habitat: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Venus Cloud Habitat: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_venus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_venus } } set_global_variable = { name = sr_site_contact_venus value = te_history_month_index } }
 	set_global_variable = {
@@ -48000,12 +48033,13 @@ sr_site_aut_step_venus = {
 		if = { limit = { sr_site_self_value_venus >= sr_module_points } sr_site_self_build_venus = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_venus >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_venus >= sr_aut_break_level sr_site_peopled_venus = yes }
 		sr_aut_break_away = { KEY = venus INDEX = 17 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_venus >= sr_aut_ask_level
+			sr_site_peopled_venus = yes
 			NOT = { has_global_variable = sr_site_aut_asked_venus }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -48139,7 +48173,8 @@ sr_site_free_step_mercury = {
 		}
 	}
 }
-# THIS holds Mercury: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Mercury: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_mercury = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_mercury } } set_global_variable = { name = sr_site_contact_mercury value = te_history_month_index } }
 	set_global_variable = {
@@ -48158,12 +48193,13 @@ sr_site_aut_step_mercury = {
 		if = { limit = { sr_site_self_value_mercury >= sr_module_points } sr_site_self_build_mercury = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_mercury >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_mercury >= sr_aut_break_level sr_site_peopled_mercury = yes }
 		sr_aut_break_away = { KEY = mercury INDEX = 18 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_mercury >= sr_aut_ask_level
+			sr_site_peopled_mercury = yes
 			NOT = { has_global_variable = sr_site_aut_asked_mercury }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -48297,7 +48333,8 @@ sr_site_free_step_titan = {
 		}
 	}
 }
-# THIS holds Titan: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Titan: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_titan = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_titan } } set_global_variable = { name = sr_site_contact_titan value = te_history_month_index } }
 	set_global_variable = {
@@ -48316,12 +48353,13 @@ sr_site_aut_step_titan = {
 		if = { limit = { sr_site_self_value_titan >= sr_module_points } sr_site_self_build_titan = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_titan >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_titan >= sr_aut_break_level sr_site_peopled_titan = yes }
 		sr_aut_break_away = { KEY = titan INDEX = 19 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_titan >= sr_aut_ask_level
+			sr_site_peopled_titan = yes
 			NOT = { has_global_variable = sr_site_aut_asked_titan }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -48455,7 +48493,8 @@ sr_site_free_step_enceladus = {
 		}
 	}
 }
-# THIS holds Enceladus: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Enceladus: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_enceladus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_enceladus } } set_global_variable = { name = sr_site_contact_enceladus value = te_history_month_index } }
 	set_global_variable = {
@@ -48474,12 +48513,13 @@ sr_site_aut_step_enceladus = {
 		if = { limit = { sr_site_self_value_enceladus >= sr_module_points } sr_site_self_build_enceladus = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_enceladus >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_enceladus >= sr_aut_break_level sr_site_peopled_enceladus = yes }
 		sr_aut_break_away = { KEY = enceladus INDEX = 20 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_enceladus >= sr_aut_ask_level
+			sr_site_peopled_enceladus = yes
 			NOT = { has_global_variable = sr_site_aut_asked_enceladus }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -48613,7 +48653,8 @@ sr_site_free_step_rhea = {
 		}
 	}
 }
-# THIS holds Rhea: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Rhea: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_rhea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_rhea } } set_global_variable = { name = sr_site_contact_rhea value = te_history_month_index } }
 	set_global_variable = {
@@ -48632,12 +48673,13 @@ sr_site_aut_step_rhea = {
 		if = { limit = { sr_site_self_value_rhea >= sr_module_points } sr_site_self_build_rhea = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_rhea >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_rhea >= sr_aut_break_level sr_site_peopled_rhea = yes }
 		sr_aut_break_away = { KEY = rhea INDEX = 21 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_rhea >= sr_aut_ask_level
+			sr_site_peopled_rhea = yes
 			NOT = { has_global_variable = sr_site_aut_asked_rhea }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -48771,7 +48813,8 @@ sr_site_free_step_mimas = {
 		}
 	}
 }
-# THIS holds Mimas: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Mimas: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_mimas = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_mimas } } set_global_variable = { name = sr_site_contact_mimas value = te_history_month_index } }
 	set_global_variable = {
@@ -48790,12 +48833,13 @@ sr_site_aut_step_mimas = {
 		if = { limit = { sr_site_self_value_mimas >= sr_module_points } sr_site_self_build_mimas = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_mimas >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_mimas >= sr_aut_break_level sr_site_peopled_mimas = yes }
 		sr_aut_break_away = { KEY = mimas INDEX = 22 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_mimas >= sr_aut_ask_level
+			sr_site_peopled_mimas = yes
 			NOT = { has_global_variable = sr_site_aut_asked_mimas }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -48929,7 +48973,8 @@ sr_site_free_step_iapetus = {
 		}
 	}
 }
-# THIS holds Iapetus: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Iapetus: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_iapetus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_iapetus } } set_global_variable = { name = sr_site_contact_iapetus value = te_history_month_index } }
 	set_global_variable = {
@@ -48948,12 +48993,13 @@ sr_site_aut_step_iapetus = {
 		if = { limit = { sr_site_self_value_iapetus >= sr_module_points } sr_site_self_build_iapetus = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_iapetus >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_iapetus >= sr_aut_break_level sr_site_peopled_iapetus = yes }
 		sr_aut_break_away = { KEY = iapetus INDEX = 23 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_iapetus >= sr_aut_ask_level
+			sr_site_peopled_iapetus = yes
 			NOT = { has_global_variable = sr_site_aut_asked_iapetus }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -49087,7 +49133,8 @@ sr_site_free_step_titania = {
 		}
 	}
 }
-# THIS holds Titania: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Titania: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_titania = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_titania } } set_global_variable = { name = sr_site_contact_titania value = te_history_month_index } }
 	set_global_variable = {
@@ -49106,12 +49153,13 @@ sr_site_aut_step_titania = {
 		if = { limit = { sr_site_self_value_titania >= sr_module_points } sr_site_self_build_titania = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_titania >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_titania >= sr_aut_break_level sr_site_peopled_titania = yes }
 		sr_aut_break_away = { KEY = titania INDEX = 24 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_titania >= sr_aut_ask_level
+			sr_site_peopled_titania = yes
 			NOT = { has_global_variable = sr_site_aut_asked_titania }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -49245,7 +49293,8 @@ sr_site_free_step_oberon = {
 		}
 	}
 }
-# THIS holds Oberon: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Oberon: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_oberon = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_oberon } } set_global_variable = { name = sr_site_contact_oberon value = te_history_month_index } }
 	set_global_variable = {
@@ -49264,12 +49313,13 @@ sr_site_aut_step_oberon = {
 		if = { limit = { sr_site_self_value_oberon >= sr_module_points } sr_site_self_build_oberon = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_oberon >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_oberon >= sr_aut_break_level sr_site_peopled_oberon = yes }
 		sr_aut_break_away = { KEY = oberon INDEX = 25 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_oberon >= sr_aut_ask_level
+			sr_site_peopled_oberon = yes
 			NOT = { has_global_variable = sr_site_aut_asked_oberon }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -49403,7 +49453,8 @@ sr_site_free_step_miranda = {
 		}
 	}
 }
-# THIS holds Miranda: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Miranda: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_miranda = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_miranda } } set_global_variable = { name = sr_site_contact_miranda value = te_history_month_index } }
 	set_global_variable = {
@@ -49422,12 +49473,13 @@ sr_site_aut_step_miranda = {
 		if = { limit = { sr_site_self_value_miranda >= sr_module_points } sr_site_self_build_miranda = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_miranda >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_miranda >= sr_aut_break_level sr_site_peopled_miranda = yes }
 		sr_aut_break_away = { KEY = miranda INDEX = 26 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_miranda >= sr_aut_ask_level
+			sr_site_peopled_miranda = yes
 			NOT = { has_global_variable = sr_site_aut_asked_miranda }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -49561,7 +49613,8 @@ sr_site_free_step_ariel = {
 		}
 	}
 }
-# THIS holds Ariel: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Ariel: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_ariel = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_ariel } } set_global_variable = { name = sr_site_contact_ariel value = te_history_month_index } }
 	set_global_variable = {
@@ -49580,12 +49633,13 @@ sr_site_aut_step_ariel = {
 		if = { limit = { sr_site_self_value_ariel >= sr_module_points } sr_site_self_build_ariel = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_ariel >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_ariel >= sr_aut_break_level sr_site_peopled_ariel = yes }
 		sr_aut_break_away = { KEY = ariel INDEX = 27 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_ariel >= sr_aut_ask_level
+			sr_site_peopled_ariel = yes
 			NOT = { has_global_variable = sr_site_aut_asked_ariel }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -49719,7 +49773,8 @@ sr_site_free_step_triton = {
 		}
 	}
 }
-# THIS holds Triton: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Triton: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_triton = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_triton } } set_global_variable = { name = sr_site_contact_triton value = te_history_month_index } }
 	set_global_variable = {
@@ -49738,12 +49793,13 @@ sr_site_aut_step_triton = {
 		if = { limit = { sr_site_self_value_triton >= sr_module_points } sr_site_self_build_triton = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_triton >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_triton >= sr_aut_break_level sr_site_peopled_triton = yes }
 		sr_aut_break_away = { KEY = triton INDEX = 28 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_triton >= sr_aut_ask_level
+			sr_site_peopled_triton = yes
 			NOT = { has_global_variable = sr_site_aut_asked_triton }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -49877,7 +49933,8 @@ sr_site_free_step_proteus = {
 		}
 	}
 }
-# THIS holds Proteus: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Proteus: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_proteus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_proteus } } set_global_variable = { name = sr_site_contact_proteus value = te_history_month_index } }
 	set_global_variable = {
@@ -49896,12 +49953,13 @@ sr_site_aut_step_proteus = {
 		if = { limit = { sr_site_self_value_proteus >= sr_module_points } sr_site_self_build_proteus = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_proteus >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_proteus >= sr_aut_break_level sr_site_peopled_proteus = yes }
 		sr_aut_break_away = { KEY = proteus INDEX = 29 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_proteus >= sr_aut_ask_level
+			sr_site_peopled_proteus = yes
 			NOT = { has_global_variable = sr_site_aut_asked_proteus }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50035,7 +50093,8 @@ sr_site_free_step_pluto = {
 		}
 	}
 }
-# THIS holds Pluto-Charon: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Pluto-Charon: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_pluto = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_pluto } } set_global_variable = { name = sr_site_contact_pluto value = te_history_month_index } }
 	set_global_variable = {
@@ -50054,12 +50113,13 @@ sr_site_aut_step_pluto = {
 		if = { limit = { sr_site_self_value_pluto >= sr_module_points } sr_site_self_build_pluto = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_pluto >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_pluto >= sr_aut_break_level sr_site_peopled_pluto = yes }
 		sr_aut_break_away = { KEY = pluto INDEX = 30 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_pluto >= sr_aut_ask_level
+			sr_site_peopled_pluto = yes
 			NOT = { has_global_variable = sr_site_aut_asked_pluto }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50193,7 +50253,8 @@ sr_site_free_step_eris = {
 		}
 	}
 }
-# THIS holds Eris: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Eris: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_eris = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_eris } } set_global_variable = { name = sr_site_contact_eris value = te_history_month_index } }
 	set_global_variable = {
@@ -50212,12 +50273,13 @@ sr_site_aut_step_eris = {
 		if = { limit = { sr_site_self_value_eris >= sr_module_points } sr_site_self_build_eris = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_eris >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_eris >= sr_aut_break_level sr_site_peopled_eris = yes }
 		sr_aut_break_away = { KEY = eris INDEX = 31 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_eris >= sr_aut_ask_level
+			sr_site_peopled_eris = yes
 			NOT = { has_global_variable = sr_site_aut_asked_eris }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50351,7 +50413,8 @@ sr_site_free_step_makemake = {
 		}
 	}
 }
-# THIS holds Makemake: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Makemake: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_makemake = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_makemake } } set_global_variable = { name = sr_site_contact_makemake value = te_history_month_index } }
 	set_global_variable = {
@@ -50370,12 +50433,13 @@ sr_site_aut_step_makemake = {
 		if = { limit = { sr_site_self_value_makemake >= sr_module_points } sr_site_self_build_makemake = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_makemake >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_makemake >= sr_aut_break_level sr_site_peopled_makemake = yes }
 		sr_aut_break_away = { KEY = makemake INDEX = 32 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_makemake >= sr_aut_ask_level
+			sr_site_peopled_makemake = yes
 			NOT = { has_global_variable = sr_site_aut_asked_makemake }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50509,7 +50573,8 @@ sr_site_free_step_haumea = {
 		}
 	}
 }
-# THIS holds Haumea: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Haumea: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_haumea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_haumea } } set_global_variable = { name = sr_site_contact_haumea value = te_history_month_index } }
 	set_global_variable = {
@@ -50528,12 +50593,13 @@ sr_site_aut_step_haumea = {
 		if = { limit = { sr_site_self_value_haumea >= sr_module_points } sr_site_self_build_haumea = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_haumea >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_haumea >= sr_aut_break_level sr_site_peopled_haumea = yes }
 		sr_aut_break_away = { KEY = haumea INDEX = 33 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_haumea >= sr_aut_ask_level
+			sr_site_peopled_haumea = yes
 			NOT = { has_global_variable = sr_site_aut_asked_haumea }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50667,7 +50733,8 @@ sr_site_free_step_sedna = {
 		}
 	}
 }
-# THIS holds Sedna: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Sedna: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_sedna = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_sedna } } set_global_variable = { name = sr_site_contact_sedna value = te_history_month_index } }
 	set_global_variable = {
@@ -50686,12 +50753,13 @@ sr_site_aut_step_sedna = {
 		if = { limit = { sr_site_self_value_sedna >= sr_module_points } sr_site_self_build_sedna = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_sedna >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_sedna >= sr_aut_break_level sr_site_peopled_sedna = yes }
 		sr_aut_break_away = { KEY = sedna INDEX = 34 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_sedna >= sr_aut_ask_level
+			sr_site_peopled_sedna = yes
 			NOT = { has_global_variable = sr_site_aut_asked_sedna }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50824,7 +50892,8 @@ sr_site_free_step_shackleton = {
 		}
 	}
 }
-# THIS holds Shackleton Crater: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Shackleton Crater: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_shackleton = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_shackleton } } set_global_variable = { name = sr_site_contact_shackleton value = te_history_month_index } }
 	set_global_variable = {
@@ -50843,12 +50912,13 @@ sr_site_aut_step_shackleton = {
 		if = { limit = { sr_site_self_value_shackleton >= sr_module_points } sr_site_self_build_shackleton = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_shackleton >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_shackleton >= sr_aut_break_level sr_site_peopled_shackleton = yes }
 		sr_aut_break_away = { KEY = shackleton INDEX = 35 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_shackleton >= sr_aut_ask_level
+			sr_site_peopled_shackleton = yes
 			NOT = { has_global_variable = sr_site_aut_asked_shackleton }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -50981,7 +51051,8 @@ sr_site_free_step_peary = {
 		}
 	}
 }
-# THIS holds Peary Crater: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Peary Crater: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_peary = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_peary } } set_global_variable = { name = sr_site_contact_peary value = te_history_month_index } }
 	set_global_variable = {
@@ -51000,12 +51071,13 @@ sr_site_aut_step_peary = {
 		if = { limit = { sr_site_self_value_peary >= sr_module_points } sr_site_self_build_peary = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_peary >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_peary >= sr_aut_break_level sr_site_peopled_peary = yes }
 		sr_aut_break_away = { KEY = peary INDEX = 36 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_peary >= sr_aut_ask_level
+			sr_site_peopled_peary = yes
 			NOT = { has_global_variable = sr_site_aut_asked_peary }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -51138,7 +51210,8 @@ sr_site_free_step_tranquility = {
 		}
 	}
 }
-# THIS holds Tranquility Base: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Tranquility Base: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_tranquility = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_tranquility } } set_global_variable = { name = sr_site_contact_tranquility value = te_history_month_index } }
 	set_global_variable = {
@@ -51157,12 +51230,13 @@ sr_site_aut_step_tranquility = {
 		if = { limit = { sr_site_self_value_tranquility >= sr_module_points } sr_site_self_build_tranquility = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_tranquility >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_tranquility >= sr_aut_break_level sr_site_peopled_tranquility = yes }
 		sr_aut_break_away = { KEY = tranquility INDEX = 37 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_tranquility >= sr_aut_ask_level
+			sr_site_peopled_tranquility = yes
 			NOT = { has_global_variable = sr_site_aut_asked_tranquility }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -51295,7 +51369,8 @@ sr_site_free_step_marius_hills = {
 		}
 	}
 }
-# THIS holds Marius Hills: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Marius Hills: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_marius_hills = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_marius_hills } } set_global_variable = { name = sr_site_contact_marius_hills value = te_history_month_index } }
 	set_global_variable = {
@@ -51314,12 +51389,13 @@ sr_site_aut_step_marius_hills = {
 		if = { limit = { sr_site_self_value_marius_hills >= sr_module_points } sr_site_self_build_marius_hills = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_marius_hills >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_marius_hills >= sr_aut_break_level sr_site_peopled_marius_hills = yes }
 		sr_aut_break_away = { KEY = marius_hills INDEX = 38 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_marius_hills >= sr_aut_ask_level
+			sr_site_peopled_marius_hills = yes
 			NOT = { has_global_variable = sr_site_aut_asked_marius_hills }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -51452,7 +51528,8 @@ sr_site_free_step_daedalus = {
 		}
 	}
 }
-# THIS holds Daedalus Crater: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Daedalus Crater: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_daedalus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_daedalus } } set_global_variable = { name = sr_site_contact_daedalus value = te_history_month_index } }
 	set_global_variable = {
@@ -51471,12 +51548,13 @@ sr_site_aut_step_daedalus = {
 		if = { limit = { sr_site_self_value_daedalus >= sr_module_points } sr_site_self_build_daedalus = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_daedalus >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_daedalus >= sr_aut_break_level sr_site_peopled_daedalus = yes }
 		sr_aut_break_away = { KEY = daedalus INDEX = 39 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_daedalus >= sr_aut_ask_level
+			sr_site_peopled_daedalus = yes
 			NOT = { has_global_variable = sr_site_aut_asked_daedalus }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -51609,7 +51687,8 @@ sr_site_free_step_imbrium = {
 		}
 	}
 }
-# THIS holds Mare Imbrium: its autonomy for the month, then its thresholds (design § 2).
+# THIS holds Mare Imbrium: its autonomy for the month, then its thresholds (design § 2),
+# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
 sr_site_aut_step_imbrium = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_imbrium } } set_global_variable = { name = sr_site_contact_imbrium value = te_history_month_index } }
 	set_global_variable = {
@@ -51628,12 +51707,13 @@ sr_site_aut_step_imbrium = {
 		if = { limit = { sr_site_self_value_imbrium >= sr_module_points } sr_site_self_build_imbrium = yes }
 	}
 	if = {
-		limit = { sr_site_autonomy_value_imbrium >= sr_aut_break_level }
+		limit = { sr_site_autonomy_value_imbrium >= sr_aut_break_level sr_site_peopled_imbrium = yes }
 		sr_aut_break_away = { KEY = imbrium INDEX = 40 }
 	}
 	else_if = {
 		limit = {
 			sr_site_autonomy_value_imbrium >= sr_aut_ask_level
+			sr_site_peopled_imbrium = yes
 			NOT = { has_global_variable = sr_site_aut_asked_imbrium }
 			NOT = { has_variable = sr_aut_site }
 		}
@@ -52176,7 +52256,8 @@ sr_site_abandon_ask_from_scope = {
 
 # Incite Colonial Autonomy (covert_ops_apply_all_phase_effects; THIS the target,
 # local_var:sr_cov_mult the operation's phase x priority): every colony THIS holds
-# gains sr_cov_incite_autonomy_base x the multiplier a month.
+# gains sr_cov_incite_autonomy_base x the multiplier a month, one with fewer than
+# sr_free_colony_minimum people nothing (sr_site_aut_add_at).
 sr_cov_incite_autonomy = {
 	set_local_variable = { name = sr_aut_delta value = { value = sr_cov_incite_autonomy_base multiply = local_var:sr_cov_mult } }
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } sr_site_aut_add_at = { KEY = valles_marineris } }
@@ -54121,213 +54202,214 @@ sr_free_debug_full_ties = {
 }
 
 # ===== The colonization overview's lists (audit SPC-6; display only) =====
-# Country scope: one line per colony of ours at or past sr_aut_ask_level, or
+# Country scope: one line per colony of ours at or past sr_aut_ask_level with
+# sr_free_colony_minimum people or more, or
 # the line that none is.
 sr_ov_list_restless = {
 	if = {
-		limit = { global_var:sr_site_holder_shackleton ?= this sr_site_autonomy_value_shackleton >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_shackleton ?= this sr_site_autonomy_value_shackleton >= sr_aut_ask_level sr_site_peopled_shackleton = yes }
 		custom_tooltip = sr_site_name_shackleton
 	}
 	if = {
-		limit = { global_var:sr_site_holder_peary ?= this sr_site_autonomy_value_peary >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_peary ?= this sr_site_autonomy_value_peary >= sr_aut_ask_level sr_site_peopled_peary = yes }
 		custom_tooltip = sr_site_name_peary
 	}
 	if = {
-		limit = { global_var:sr_site_holder_tranquility ?= this sr_site_autonomy_value_tranquility >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_tranquility ?= this sr_site_autonomy_value_tranquility >= sr_aut_ask_level sr_site_peopled_tranquility = yes }
 		custom_tooltip = sr_site_name_tranquility
 	}
 	if = {
-		limit = { global_var:sr_site_holder_marius_hills ?= this sr_site_autonomy_value_marius_hills >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_marius_hills ?= this sr_site_autonomy_value_marius_hills >= sr_aut_ask_level sr_site_peopled_marius_hills = yes }
 		custom_tooltip = sr_site_name_marius_hills
 	}
 	if = {
-		limit = { global_var:sr_site_holder_daedalus ?= this sr_site_autonomy_value_daedalus >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_daedalus ?= this sr_site_autonomy_value_daedalus >= sr_aut_ask_level sr_site_peopled_daedalus = yes }
 		custom_tooltip = sr_site_name_daedalus
 	}
 	if = {
-		limit = { global_var:sr_site_holder_imbrium ?= this sr_site_autonomy_value_imbrium >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_imbrium ?= this sr_site_autonomy_value_imbrium >= sr_aut_ask_level sr_site_peopled_imbrium = yes }
 		custom_tooltip = sr_site_name_imbrium
 	}
 	if = {
-		limit = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level sr_site_peopled_venus = yes }
 		custom_tooltip = sr_site_name_venus
 	}
 	if = {
-		limit = { global_var:sr_site_holder_mercury ?= this sr_site_autonomy_value_mercury >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_mercury ?= this sr_site_autonomy_value_mercury >= sr_aut_ask_level sr_site_peopled_mercury = yes }
 		custom_tooltip = sr_site_name_mercury
 	}
 	if = {
-		limit = { global_var:sr_site_holder_valles_marineris ?= this sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_valles_marineris ?= this sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level sr_site_peopled_valles_marineris = yes }
 		custom_tooltip = sr_site_name_valles_marineris
 	}
 	if = {
-		limit = { global_var:sr_site_holder_olympus_mons ?= this sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_olympus_mons ?= this sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level sr_site_peopled_olympus_mons = yes }
 		custom_tooltip = sr_site_name_olympus_mons
 	}
 	if = {
-		limit = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level sr_site_peopled_hellas_planitia = yes }
 		custom_tooltip = sr_site_name_hellas_planitia
 	}
 	if = {
-		limit = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level sr_site_peopled_utopia_planitia = yes }
 		custom_tooltip = sr_site_name_utopia_planitia
 	}
 	if = {
-		limit = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level sr_site_peopled_arcadia_planitia = yes }
 		custom_tooltip = sr_site_name_arcadia_planitia
 	}
 	if = {
-		limit = { global_var:sr_site_holder_ceres ?= this sr_site_autonomy_value_ceres >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_ceres ?= this sr_site_autonomy_value_ceres >= sr_aut_ask_level sr_site_peopled_ceres = yes }
 		custom_tooltip = sr_site_name_ceres
 	}
 	if = {
-		limit = { global_var:sr_site_holder_vesta ?= this sr_site_autonomy_value_vesta >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_vesta ?= this sr_site_autonomy_value_vesta >= sr_aut_ask_level sr_site_peopled_vesta = yes }
 		custom_tooltip = sr_site_name_vesta
 	}
 	if = {
-		limit = { global_var:sr_site_holder_psyche ?= this sr_site_autonomy_value_psyche >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_psyche ?= this sr_site_autonomy_value_psyche >= sr_aut_ask_level sr_site_peopled_psyche = yes }
 		custom_tooltip = sr_site_name_psyche
 	}
 	if = {
-		limit = { global_var:sr_site_holder_pallas ?= this sr_site_autonomy_value_pallas >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_pallas ?= this sr_site_autonomy_value_pallas >= sr_aut_ask_level sr_site_peopled_pallas = yes }
 		custom_tooltip = sr_site_name_pallas
 	}
 	if = {
-		limit = { global_var:sr_site_holder_hygiea ?= this sr_site_autonomy_value_hygiea >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_hygiea ?= this sr_site_autonomy_value_hygiea >= sr_aut_ask_level sr_site_peopled_hygiea = yes }
 		custom_tooltip = sr_site_name_hygiea
 	}
 	if = {
-		limit = { global_var:sr_site_holder_io ?= this sr_site_autonomy_value_io >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_io ?= this sr_site_autonomy_value_io >= sr_aut_ask_level sr_site_peopled_io = yes }
 		custom_tooltip = sr_site_name_io
 	}
 	if = {
-		limit = { global_var:sr_site_holder_europa ?= this sr_site_autonomy_value_europa >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_europa ?= this sr_site_autonomy_value_europa >= sr_aut_ask_level sr_site_peopled_europa = yes }
 		custom_tooltip = sr_site_name_europa
 	}
 	if = {
-		limit = { global_var:sr_site_holder_ganymede ?= this sr_site_autonomy_value_ganymede >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_ganymede ?= this sr_site_autonomy_value_ganymede >= sr_aut_ask_level sr_site_peopled_ganymede = yes }
 		custom_tooltip = sr_site_name_ganymede
 	}
 	if = {
-		limit = { global_var:sr_site_holder_callisto ?= this sr_site_autonomy_value_callisto >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_callisto ?= this sr_site_autonomy_value_callisto >= sr_aut_ask_level sr_site_peopled_callisto = yes }
 		custom_tooltip = sr_site_name_callisto
 	}
 	if = {
-		limit = { global_var:sr_site_holder_himalia ?= this sr_site_autonomy_value_himalia >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_himalia ?= this sr_site_autonomy_value_himalia >= sr_aut_ask_level sr_site_peopled_himalia = yes }
 		custom_tooltip = sr_site_name_himalia
 	}
 	if = {
-		limit = { global_var:sr_site_holder_amalthea ?= this sr_site_autonomy_value_amalthea >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_amalthea ?= this sr_site_autonomy_value_amalthea >= sr_aut_ask_level sr_site_peopled_amalthea = yes }
 		custom_tooltip = sr_site_name_amalthea
 	}
 	if = {
-		limit = { global_var:sr_site_holder_titan ?= this sr_site_autonomy_value_titan >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_titan ?= this sr_site_autonomy_value_titan >= sr_aut_ask_level sr_site_peopled_titan = yes }
 		custom_tooltip = sr_site_name_titan
 	}
 	if = {
-		limit = { global_var:sr_site_holder_enceladus ?= this sr_site_autonomy_value_enceladus >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_enceladus ?= this sr_site_autonomy_value_enceladus >= sr_aut_ask_level sr_site_peopled_enceladus = yes }
 		custom_tooltip = sr_site_name_enceladus
 	}
 	if = {
-		limit = { global_var:sr_site_holder_rhea ?= this sr_site_autonomy_value_rhea >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_rhea ?= this sr_site_autonomy_value_rhea >= sr_aut_ask_level sr_site_peopled_rhea = yes }
 		custom_tooltip = sr_site_name_rhea
 	}
 	if = {
-		limit = { global_var:sr_site_holder_mimas ?= this sr_site_autonomy_value_mimas >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_mimas ?= this sr_site_autonomy_value_mimas >= sr_aut_ask_level sr_site_peopled_mimas = yes }
 		custom_tooltip = sr_site_name_mimas
 	}
 	if = {
-		limit = { global_var:sr_site_holder_iapetus ?= this sr_site_autonomy_value_iapetus >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_iapetus ?= this sr_site_autonomy_value_iapetus >= sr_aut_ask_level sr_site_peopled_iapetus = yes }
 		custom_tooltip = sr_site_name_iapetus
 	}
 	if = {
-		limit = { global_var:sr_site_holder_titania ?= this sr_site_autonomy_value_titania >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_titania ?= this sr_site_autonomy_value_titania >= sr_aut_ask_level sr_site_peopled_titania = yes }
 		custom_tooltip = sr_site_name_titania
 	}
 	if = {
-		limit = { global_var:sr_site_holder_oberon ?= this sr_site_autonomy_value_oberon >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_oberon ?= this sr_site_autonomy_value_oberon >= sr_aut_ask_level sr_site_peopled_oberon = yes }
 		custom_tooltip = sr_site_name_oberon
 	}
 	if = {
-		limit = { global_var:sr_site_holder_miranda ?= this sr_site_autonomy_value_miranda >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_miranda ?= this sr_site_autonomy_value_miranda >= sr_aut_ask_level sr_site_peopled_miranda = yes }
 		custom_tooltip = sr_site_name_miranda
 	}
 	if = {
-		limit = { global_var:sr_site_holder_ariel ?= this sr_site_autonomy_value_ariel >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_ariel ?= this sr_site_autonomy_value_ariel >= sr_aut_ask_level sr_site_peopled_ariel = yes }
 		custom_tooltip = sr_site_name_ariel
 	}
 	if = {
-		limit = { global_var:sr_site_holder_triton ?= this sr_site_autonomy_value_triton >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_triton ?= this sr_site_autonomy_value_triton >= sr_aut_ask_level sr_site_peopled_triton = yes }
 		custom_tooltip = sr_site_name_triton
 	}
 	if = {
-		limit = { global_var:sr_site_holder_proteus ?= this sr_site_autonomy_value_proteus >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_proteus ?= this sr_site_autonomy_value_proteus >= sr_aut_ask_level sr_site_peopled_proteus = yes }
 		custom_tooltip = sr_site_name_proteus
 	}
 	if = {
-		limit = { global_var:sr_site_holder_pluto ?= this sr_site_autonomy_value_pluto >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_pluto ?= this sr_site_autonomy_value_pluto >= sr_aut_ask_level sr_site_peopled_pluto = yes }
 		custom_tooltip = sr_site_name_pluto
 	}
 	if = {
-		limit = { global_var:sr_site_holder_eris ?= this sr_site_autonomy_value_eris >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_eris ?= this sr_site_autonomy_value_eris >= sr_aut_ask_level sr_site_peopled_eris = yes }
 		custom_tooltip = sr_site_name_eris
 	}
 	if = {
-		limit = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level sr_site_peopled_makemake = yes }
 		custom_tooltip = sr_site_name_makemake
 	}
 	if = {
-		limit = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level sr_site_peopled_haumea = yes }
 		custom_tooltip = sr_site_name_haumea
 	}
 	if = {
-		limit = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level }
+		limit = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level sr_site_peopled_sedna = yes }
 		custom_tooltip = sr_site_name_sedna
 	}
 	if = {
 		limit = {
 			NOT = {
 				OR = {
-					AND = { global_var:sr_site_holder_valles_marineris ?= this sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_olympus_mons ?= this sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_ceres ?= this sr_site_autonomy_value_ceres >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_vesta ?= this sr_site_autonomy_value_vesta >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_psyche ?= this sr_site_autonomy_value_psyche >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_pallas ?= this sr_site_autonomy_value_pallas >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_hygiea ?= this sr_site_autonomy_value_hygiea >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_io ?= this sr_site_autonomy_value_io >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_europa ?= this sr_site_autonomy_value_europa >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_ganymede ?= this sr_site_autonomy_value_ganymede >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_callisto ?= this sr_site_autonomy_value_callisto >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_himalia ?= this sr_site_autonomy_value_himalia >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_amalthea ?= this sr_site_autonomy_value_amalthea >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_mercury ?= this sr_site_autonomy_value_mercury >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_titan ?= this sr_site_autonomy_value_titan >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_enceladus ?= this sr_site_autonomy_value_enceladus >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_rhea ?= this sr_site_autonomy_value_rhea >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_mimas ?= this sr_site_autonomy_value_mimas >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_iapetus ?= this sr_site_autonomy_value_iapetus >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_titania ?= this sr_site_autonomy_value_titania >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_oberon ?= this sr_site_autonomy_value_oberon >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_miranda ?= this sr_site_autonomy_value_miranda >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_ariel ?= this sr_site_autonomy_value_ariel >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_triton ?= this sr_site_autonomy_value_triton >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_proteus ?= this sr_site_autonomy_value_proteus >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_pluto ?= this sr_site_autonomy_value_pluto >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_eris ?= this sr_site_autonomy_value_eris >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_shackleton ?= this sr_site_autonomy_value_shackleton >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_peary ?= this sr_site_autonomy_value_peary >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_tranquility ?= this sr_site_autonomy_value_tranquility >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_marius_hills ?= this sr_site_autonomy_value_marius_hills >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_daedalus ?= this sr_site_autonomy_value_daedalus >= sr_aut_ask_level }
-					AND = { global_var:sr_site_holder_imbrium ?= this sr_site_autonomy_value_imbrium >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_valles_marineris ?= this sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level sr_site_peopled_valles_marineris = yes }
+					AND = { global_var:sr_site_holder_olympus_mons ?= this sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level sr_site_peopled_olympus_mons = yes }
+					AND = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level sr_site_peopled_hellas_planitia = yes }
+					AND = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level sr_site_peopled_utopia_planitia = yes }
+					AND = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level sr_site_peopled_arcadia_planitia = yes }
+					AND = { global_var:sr_site_holder_ceres ?= this sr_site_autonomy_value_ceres >= sr_aut_ask_level sr_site_peopled_ceres = yes }
+					AND = { global_var:sr_site_holder_vesta ?= this sr_site_autonomy_value_vesta >= sr_aut_ask_level sr_site_peopled_vesta = yes }
+					AND = { global_var:sr_site_holder_psyche ?= this sr_site_autonomy_value_psyche >= sr_aut_ask_level sr_site_peopled_psyche = yes }
+					AND = { global_var:sr_site_holder_pallas ?= this sr_site_autonomy_value_pallas >= sr_aut_ask_level sr_site_peopled_pallas = yes }
+					AND = { global_var:sr_site_holder_hygiea ?= this sr_site_autonomy_value_hygiea >= sr_aut_ask_level sr_site_peopled_hygiea = yes }
+					AND = { global_var:sr_site_holder_io ?= this sr_site_autonomy_value_io >= sr_aut_ask_level sr_site_peopled_io = yes }
+					AND = { global_var:sr_site_holder_europa ?= this sr_site_autonomy_value_europa >= sr_aut_ask_level sr_site_peopled_europa = yes }
+					AND = { global_var:sr_site_holder_ganymede ?= this sr_site_autonomy_value_ganymede >= sr_aut_ask_level sr_site_peopled_ganymede = yes }
+					AND = { global_var:sr_site_holder_callisto ?= this sr_site_autonomy_value_callisto >= sr_aut_ask_level sr_site_peopled_callisto = yes }
+					AND = { global_var:sr_site_holder_himalia ?= this sr_site_autonomy_value_himalia >= sr_aut_ask_level sr_site_peopled_himalia = yes }
+					AND = { global_var:sr_site_holder_amalthea ?= this sr_site_autonomy_value_amalthea >= sr_aut_ask_level sr_site_peopled_amalthea = yes }
+					AND = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level sr_site_peopled_venus = yes }
+					AND = { global_var:sr_site_holder_mercury ?= this sr_site_autonomy_value_mercury >= sr_aut_ask_level sr_site_peopled_mercury = yes }
+					AND = { global_var:sr_site_holder_titan ?= this sr_site_autonomy_value_titan >= sr_aut_ask_level sr_site_peopled_titan = yes }
+					AND = { global_var:sr_site_holder_enceladus ?= this sr_site_autonomy_value_enceladus >= sr_aut_ask_level sr_site_peopled_enceladus = yes }
+					AND = { global_var:sr_site_holder_rhea ?= this sr_site_autonomy_value_rhea >= sr_aut_ask_level sr_site_peopled_rhea = yes }
+					AND = { global_var:sr_site_holder_mimas ?= this sr_site_autonomy_value_mimas >= sr_aut_ask_level sr_site_peopled_mimas = yes }
+					AND = { global_var:sr_site_holder_iapetus ?= this sr_site_autonomy_value_iapetus >= sr_aut_ask_level sr_site_peopled_iapetus = yes }
+					AND = { global_var:sr_site_holder_titania ?= this sr_site_autonomy_value_titania >= sr_aut_ask_level sr_site_peopled_titania = yes }
+					AND = { global_var:sr_site_holder_oberon ?= this sr_site_autonomy_value_oberon >= sr_aut_ask_level sr_site_peopled_oberon = yes }
+					AND = { global_var:sr_site_holder_miranda ?= this sr_site_autonomy_value_miranda >= sr_aut_ask_level sr_site_peopled_miranda = yes }
+					AND = { global_var:sr_site_holder_ariel ?= this sr_site_autonomy_value_ariel >= sr_aut_ask_level sr_site_peopled_ariel = yes }
+					AND = { global_var:sr_site_holder_triton ?= this sr_site_autonomy_value_triton >= sr_aut_ask_level sr_site_peopled_triton = yes }
+					AND = { global_var:sr_site_holder_proteus ?= this sr_site_autonomy_value_proteus >= sr_aut_ask_level sr_site_peopled_proteus = yes }
+					AND = { global_var:sr_site_holder_pluto ?= this sr_site_autonomy_value_pluto >= sr_aut_ask_level sr_site_peopled_pluto = yes }
+					AND = { global_var:sr_site_holder_eris ?= this sr_site_autonomy_value_eris >= sr_aut_ask_level sr_site_peopled_eris = yes }
+					AND = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level sr_site_peopled_makemake = yes }
+					AND = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level sr_site_peopled_haumea = yes }
+					AND = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level sr_site_peopled_sedna = yes }
+					AND = { global_var:sr_site_holder_shackleton ?= this sr_site_autonomy_value_shackleton >= sr_aut_ask_level sr_site_peopled_shackleton = yes }
+					AND = { global_var:sr_site_holder_peary ?= this sr_site_autonomy_value_peary >= sr_aut_ask_level sr_site_peopled_peary = yes }
+					AND = { global_var:sr_site_holder_tranquility ?= this sr_site_autonomy_value_tranquility >= sr_aut_ask_level sr_site_peopled_tranquility = yes }
+					AND = { global_var:sr_site_holder_marius_hills ?= this sr_site_autonomy_value_marius_hills >= sr_aut_ask_level sr_site_peopled_marius_hills = yes }
+					AND = { global_var:sr_site_holder_daedalus ?= this sr_site_autonomy_value_daedalus >= sr_aut_ask_level sr_site_peopled_daedalus = yes }
+					AND = { global_var:sr_site_holder_imbrium ?= this sr_site_autonomy_value_imbrium >= sr_aut_ask_level sr_site_peopled_imbrium = yes }
 				}
 			}
 		}

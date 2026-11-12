@@ -135,7 +135,7 @@ IMAGES = {
             "banking_cycle_events.17", "banking_cycle_events.22",
             "banking_cycle_events.33", "banking_cycle_events.35",
             "banking_cycle_events.43", "banking_cycle_events.46",
-            "decolonization_events.50",
+            "decolonization_events.50", "minor_events_timelineextended.7",
         ],
     },
     "bank_run_crowd": {
@@ -178,6 +178,7 @@ IMAGES = {
             "banking_cycle_events.3", "banking_cycle_events.6",
             "banking_cycle_events.11", "banking_cycle_events.28",
             "banking_cycle_events.37", "banking_cycle_events.41",
+            "minor_events_timelineextended.8",
         ],
     },
     "trade_commerce_port": {
@@ -294,7 +295,7 @@ IMAGES = {
         "style": "oil painting, impressionist, warm light",
         "events": [
             "cultural_hegemony.3", "cultural_hegemony.10",
-            "international_relations_events.202",
+            "international_relations_events.202", "repeatable_events.60",
         ],
     },
     "cultural_classroom_influence": {
@@ -845,12 +846,12 @@ IMAGES = {
     "world_exhibition_fair": {
         "prompt": "A grand World's Fair exhibition hall: soaring cast-iron and glass architecture, elaborate national pavilions, crowds marveling at technological wonders — steam engines, electrical displays, exotic goods. Victorian spectacle at its most ambitious.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.7", "monument_events.9"],
+        "events": ["monument_events.9"],
     },
     "foreign_investment_opportunity": {
         "prompt": "A foreign investor and a local businessman shaking hands in a colonial-era trading house. Maps, contracts, and commodity samples spread on the desk between them. Ceiling fan turning slowly. The mechanics of international capital.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.8"],
+        "events": [],
     },
     "minor_event_generic": {
         "prompt": "A 19th-century newspaper office: editors reviewing galley proofs, compositors setting type, a boy running in with a telegram. The smell of ink and the urgency of breaking news in the age before radio.",
@@ -1135,52 +1136,52 @@ IMAGES = {
     "supply_chain_disruption": {
         "prompt": "A chaotic port with backed-up container ships and empty warehouses.",
         "style": "oil painting, contemporary realism, industrial crisis",
-        "events": [],
+        "events": ["repeatable_events.20"],
     },
     "automation_displacement": {
         "prompt": "A factory floor where robots replace human workers.",
         "style": "oil painting, social realism, industrial contrast",
-        "events": ["repeatable_events.20"],
+        "events": ["repeatable_events.30"],
     },
     "media_moral_panic": {
         "prompt": "Television studio with an agitated anchor and anxious viewers gathered in a dim living room.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["repeatable_events.30", "morphological_freedom_events.2"],
+        "events": ["repeatable_events.40", "morphological_freedom_events.2"],
     },
     "cyber_attack_infrastructure": {
         "prompt": "City infrastructure failing under a cyberattack in a dark control room.",
         "style": "oil painting, contemporary realism, emergency light",
-        "events": ["repeatable_events.40"],
+        "events": ["repeatable_events.50"],
     },
     "space_debris_collision": {
         "prompt": "A satellite colliding with space debris, fragmenting in orbit.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["repeatable_events.50", "te_orbital_debris.2"],
+        "events": ["te_orbital_debris.2"],
     },
     "quantum_materials_lab": {
         "prompt": "Researchers examining a levitating quantum sample in a lab.",
         "style": "oil painting, cool clinical light, scientific",
-        "events": ["repeatable_events.60"],
+        "events": ["repeatable_events.90"],
     },
     "ai_ethics_debate": {
         "prompt": "An auditorium debate on AI ethics with a robot panelist.",
         "style": "oil painting, contemporary realism, conference light",
-        "events": ["repeatable_events.70"],
+        "events": [],
     },
     "gig_economy_protest": {
         "prompt": "Gig economy workers protesting outside a tech company campus.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["repeatable_events.80"],
+        "events": [],
     },
     "cultural_festival_revival": {
         "prompt": "A colorful cultural festival reviving traditional arts.",
         "style": "oil painting, impressionist, warm festival light",
-        "events": ["repeatable_events.90"],
+        "events": [],
     },
     "international_development_project": {
         "prompt": "Engineers from multiple countries collaborating on infrastructure.",
         "style": "oil painting, social realism, warm light",
-        "events": ["decolonization_events.202", "repeatable_events.100"],
+        "events": ["decolonization_events.202"],
     },
 
     # =========================================================================
@@ -1364,7 +1365,7 @@ IMAGES = {
     "ai_alignment_failure": {
         "prompt": "Engineers scrambling in a server room during an AI failure.",
         "style": "oil painting, contemporary realism, red warning light",
-        "events": ["society_technology_events.26"],
+        "events": ["society_technology_events.26", "repeatable_events.100"],
     },
     "algorithmic_governance_office": {
         "prompt": "A government office where algorithms render routine decisions.",
@@ -1840,7 +1841,7 @@ IMAGES = {
     "kessler_debris_field": {
         "prompt": "Earth orbit visualized as a deadly debris field: thousands of fragments from destroyed satellites orbiting at lethal velocity. A functioning satellite narrowly dodges debris. The Kessler Syndrome threatening to lock humanity out of orbit.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.31", "space_race_events.47"],
+        "events": ["space_race_events.31", "space_race_events.47", "repeatable_events.70"],
     },
     "astronaut_candidate_training": {
         "prompt": "Astronaut trainees enduring centrifuge and neutral-buoyancy drills in a bright training complex.",
@@ -2146,7 +2147,7 @@ IMAGES = {
     "solar_storm_orbital_threat": {
         "prompt": "A coronal mass ejection heading toward the orbital solar collector: the sun erupting, a wall of charged particles racing toward the fragile orbital infrastructure. Operators initiating emergency shutdown procedures. Nature vs. engineering.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["wonder_events.14"],
+        "events": ["wonder_events.14", "repeatable_events.80"],
     },
     "solar_monopoly_debate": {
         "prompt": "A heated debate about who controls orbital solar power: corporations, governments, and international bodies arguing over the most valuable energy asset ever created. Screens showing power distribution maps. Control of the sun's energy as ultimate power.",

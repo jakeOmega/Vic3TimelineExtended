@@ -76,13 +76,9 @@ augmentation_events.1 = {
 	# Ban non-medical augmentation
 	option = {
 		name = augmentation_events.1.c
-		# Unrestricted and mandatory augmentation are the opposite settlement.
-		trigger = {
-			NOR = {
-				has_law = law_type:law_unrestricted_augmentation
-				has_law = law_type:law_mandatory_augmentation
-			}
-		}
+		# No law gate: Unrestricted and Mandatory Augmentation, the opposite
+		# settlement, complete je_human_augmentation, so its pulse never fires
+		# this event under them (#1616).
 		ai_chance = {
 			base = 1
 		}
@@ -252,28 +248,10 @@ augmentation_events.3 = {
 		}
 	}
 
-	# Mandate augmentation for competitive industries
-	option = {
-		name = augmentation_events.3.c
-		trigger = {
-			OR = {
-				has_law = law_type:law_unrestricted_augmentation
-				has_law = law_type:law_mandatory_augmentation
-			}
-		}
-		ai_chance = {
-			base = 1
-		}
-		add_radicals = {
-			value = medium_radicals
-			strata = lower
-		}
-		add_modifier = {
-			name = augmentation_mandate_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-	}
+	# No third option: "Mandate augmentation for competitive industries" needed
+	# Unrestricted or Mandatory Augmentation, and either law completes
+	# je_human_augmentation, whose monthly pulse is all that fires this event
+	# (#1616). It runs under Medical Augmentation Only.
 }
 
 # Event 4: Religious Condemnation

@@ -22,7 +22,7 @@ Money costs are a share of your yearly gross income.
 |---|---|---|---|
 | Land Rush | Voluntary programs | "Open the land at once": +2,000 settlers a month there for a year, and more pressure on the people already living there | "Survey it first": +10% construction there for two years |
 | The Speculators | Voluntary programs | "Send in the inspectors": −50 authority for two years; Rural Folk approve | "The market will sort it out": 500 fewer settlers a month there for two years; Landowners and Industrialists approve |
-| A Hard Winter on the Frontier | Any program | "Send relief": 1% of yearly income | "They will have to endure": 1,000 lower-strata deaths and radicals there, and −10 migration pull there for a year |
+| A Hard Winter on the Frontier (A Hard First Season where the winters don't freeze) | Any program | "Send relief": 1% of yearly income | "They will have to endure": 1,000 lower-strata deaths and radicals there, and −10 migration pull there for a year |
 | Dust Storms | Homesteads, once per state after ten years | "Fund a conservation program": 2% of yearly income, and −5% farm and ranch throughput there for ten years | "Keep plowing": −20% farm and ranch throughput there, fading over five years |
 | The Reform Campaign | Coercive programs | "End the coercive programs": every coercive program switches to your best voluntary one; +5% prestige for five years; Intelligentsia approve | "These accounts are exaggerated": −5% prestige for five years; Intelligentsia disapprove |
 | Famine in the Settlements | Special Settlements | "Send grain and tools": 2% of yearly income | "Let the settlements fend for themselves": 5,000 farmers die and many turn radical; Rural Folk strongly disapprove |
@@ -107,15 +107,15 @@ These are the events behind [Cultural hegemony
 events](11-influence.md#cultural-hegemony-events) in Cultural hegemony and
 covert warfare.
 
-Rising powers get opportunities as their share climbs, from Soft Power Dividend
-at 8% to Media Dominance and Lingua Franca at 20%, mostly trading authority or
-prestige for pull, research or migration. Two milestones fire once: The World is
+Rising powers get opportunities as their share climbs, from Why They Come
+at 8% to What the World Reads and Lingua Franca at 20%, mostly trading authority or
+prestige for pull, research or migration. Two milestones fire once: The World Is
 Watching when you first pass 10%, and The Cultural Hegemon when you first pass
 25% while ranked first.
 
-Trailing countries under the benchmark get events such as Foreign Cultural
-Infiltration, Brain Drain and Foreign Ideological Influence. The harshest is
-Hegemonic Convergence: when the hegemon holds at least 25% and your share is at
+Trailing countries under the benchmark get events such as Other People's
+Songs, Brain Drain and Ideas from Abroad. The harshest is
+Pressure to Conform: when the hegemon holds at least 25% and your share is at
 most a tenth of its share, you may be pressed to adopt one of its laws. Yielding
 enacts the law at once, with radicals, a decaying −10 legitimacy and +10
 relations with the hegemon. Refusing costs 5 infamy, −10 relations and a
@@ -147,18 +147,18 @@ trade privilege in the new country, whose upkeep you pay.
 
 | Event | When it can fire |
 |---|---|
-| Winds of Change | A colonial subject reaches 50 liberty desire. |
-| The World is Watching (not the cultural hegemony milestone of the same name) | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
+| A Political Fact | A colonial subject reaches 50 liberty desire. |
+| Pressed to Let Go | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
 | The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
 | Trouble in (the colony's name) | A colony has a severely unaccepted population. |
 | Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. Below 40 stability its suppression is a war of independence. |
 | Declaration in (the territory) | Below 40 stability, a colony with severely unaccepted people declares independence; also each declaration of a collapse. See [Wars of independence](12-decolonization.md#wars-of-independence). |
-| The Captains' Revolt, The Republic in Danger | A war of independence has run four years with your war support in it at 25 or below for a year. |
+| The Captains' Revolt, Committee of Public Safety | A war of independence has run four years with your war support in it at 25 or below for a year. |
 | Judged by New Standards | An anti-colonial great power condemns you in international forums. |
 | Powerful Friends | A pro-colonial great power offers its backing. The top-ranked country is never offered it. |
-| These Dark Satanic Mills of Empire, The Intelligentsia Petition | An Anti-Colonialist leads the Intelligentsia. |
+| The Case Against Empire, The Intelligentsia Petition | An Anti-Colonialist leads the Intelligentsia. |
 | The Treasury Says No | Your debt is high while you hold colonies. |
-| Conscription Crisis | You are fighting a war of independence (against a colony's rebels, a rebelling colonial subject or a colony's secessionists), or are at war while Colonial Crackdown runs. |
+| Not Enough Men | You are fighting a war of independence (against a colony's rebels, a rebelling colonial subject or a colony's secessionists), or are at war while Colonial Crackdown runs. |
 | The Universities Speak | The entry has run for ten years and a powerful Intelligentsia is out of government. |
 | The Veterans' Protest | Your garrison has run for more than three years, or you lost a war of independence. |
 
@@ -180,7 +180,7 @@ country that is made a subject and freed again can see them again.
 
 | Event | Who gets it | Choices |
 |---|---|---|
-| Year One | A former colony of minor rank or below | Schools and roads, foreign capital (better relations with the old ruler) or self-reliance (worse relations) |
+| Building the State | A former colony of minor rank or below | Schools and roads, foreign capital (better relations with the old ruler) or self-reliance (worse relations) |
 | The Partition Question | A former colony bordering a newly freed country of shared heritage, or a colonial power that rules people of its heritage | Press territorial claims, propose a fraternal federation (the neighbor may accept a five-year truce in A Fraternal Proposal), or accept the borders |
 | Whose Country Is This? | A former colony bordering another newly freed country | Demand new borders (a claim on the neighbor's border state, and a lasting dispute), ask for mediation (the mediators may find for us, for the neighbor, or split the difference; the higher-ranked country is favored), or recognize the border and offer a five-year truce (the rewards come only if the neighbor accepts in The Line on the Map) |
 | The Strongman's Promise | A former colony with a revolutionary movement, primary cultures below half its population, or radical soldiers | Military rule, democracy or a one-party state |
@@ -203,27 +203,28 @@ entry](13-military.md#the-world-war-journal-entry) in Military and war. The
 Brink of War, The Hour of Decision and the Peace Conference are described in
 that chapter.
 
-Leadup events come at random. In Ideological Demands you decide whether to press
-an opposed great-power rival to renounce its system; if you do, it answers in
-Ideological Confrontation. Border Incident, with an opposed rival on your
+Leadup events come at random. In The Strong Note you decide whether to press
+an opposed great-power rival to renounce its system; if you do, the rival
+answers in A Note to Answer. Shots at the Frontier, with an opposed rival on your
 border, lets you demand an apology, downplay it, or mobilize (Rearmament for
-five years). Diplomatic Crisis fires when an opposed rival opens a play against
+five years). A Friend Under Pressure fires when an opposed rival opens a play against
 a smaller country in your power bloc or under your protection: guarantee its
 independence for five years, abandon it, or mobilize in its defense.
 
-Wartime events include Home Front Rally, Strategic Bombing (once an enemy has
-Bombing Aircraft; air defense costs a spell of Home Front Strain) and Resistance
-Movement (after a year of war, when the enemy holds 5% of your land). From two
-years, War Weariness asks whether to push on or seek terms, and Stalemate on the
-Front, when your war goal has stalled after 24 months and ten large battles,
+Wartime events include The Country Answers (a rally on the home front), Fire
+from the Air (bombing raids, once an enemy has
+Bombing Aircraft; air defense costs a spell of Home Front Strain) and Behind
+Their Lines (resistance, after a year of war, when the enemy holds 5% of your land). From two
+years, The Long Lists asks whether to push on or seek terms, and The Same
+Line, when your war goal has stalled after 24 months and ten large battles,
 offers +5 war support to hold the line or −10 to open armistice talks.
 
-In the 36 months after peace, three events can reach great powers. War Crimes
-Tribunal lets you prosecute (Liberation Hero), move on, or bury the evidence,
-which brings War Crimes Exposed (−30% prestige for ten years). The Post-War
-Order lets a victor take a further spell of Victor's Peace, and any power that
+In the 36 months after peace, three events can reach great powers. What Was
+Done, a war crimes tribunal, lets you prosecute (Liberation Hero), move on, or bury the evidence,
+which brings War Crimes Exposed (−30% prestige for ten years). Dividing the
+Peace lets a victor take a further spell of Victor's Peace, and any power that
 didn't lose champion self-determination (Liberation Hero) or turn to recovery.
-The New Rivalry comes when a great power you fought beside now holds an opposed
+Yesterday's Ally comes when a great power you fought beside now holds an opposed
 ideology; either answer closes the entry at once.
 
 ## Nuclear taboo event list
@@ -310,7 +311,7 @@ handful that connect the space race to other systems:
 | The Private Sector Steps Up | You have the SpaceX company and a milestone under way | 1 to 3 months of progress on every milestone under way, more the more you hand to the company |
 | Tickets to the Stars | You have reached orbit and own a Tourism Industry | Space Tourism Revenue (+5% tourism output, fading over ten years), a research bonus instead, or both for two and a half years |
 | A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | A month of progress on every milestone under way, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
-| Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | Full integration: 2 months of colonization progress, plus research and prestige, fading over ten years. Staying commercial: 1 month, plus Extraplanetary Base throughput and advanced materials output, fading over ten years |
+| Off-World Supply | You are colonizing and own an Extraplanetary Base | Full integration: 2 months of colonization progress, plus research and prestige, fading over ten years. Staying commercial: 1 month, plus Extraplanetary Base throughput and advanced materials output, fading over ten years |
 | The Elevator Advantage | You own a Space Elevator and are landing on Mars or colonizing | 1 or 2 months of progress on those missions |
 | The Kessler Threshold | Orbital Flight is under way, or any milestone is once [orbital debris](16-space.md#orbital-debris) is Cluttered or worse | 1 or 3 months of progress, the larger with radical academics, or better relations with spacefaring powers |
 

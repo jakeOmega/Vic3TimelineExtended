@@ -228,7 +228,10 @@ class EventTest(unittest.TestCase):
                 self.assertIn(key, keys)
 
     def test_legal_clinic_events_skip_natural_form(self):
-        for event in ("morphological_freedom_events.4", "morphological_freedom_events.6"):
+        # .5 too (#1616): its congregations picket legal clinics, and its
+        # options keep their doors open or give their staff a conscience clause.
+        for event in ("morphological_freedom_events.4", "morphological_freedom_events.5",
+                      "morphological_freedom_events.6"):
             with self.subTest(event=event):
                 trigger = _own(_top_level(self.text, event), "trigger")
                 self.assertIn("NOT = { has_law = law_type:law_natural_form }", trigger)

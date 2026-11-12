@@ -1266,7 +1266,13 @@ amendment_petition_events.13 = {
 
 	title = amendment_petition_events.13.t
 	desc = amendment_petition_events.13.d
-	flavor = amendment_petition_events.13.f
+	# The bishop's scene for a Christian country; a faith-neutral voice otherwise (#1531).
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = amendment_petition_events.13.f }
+			triggered_desc = { trigger = { always = yes } desc = amendment_petition_events.13.f_neutral }
+		}
+	}
 
 	event_image = { texture = "gfx/event_pictures/lgbtq_religious_backlash.dds" }
 
