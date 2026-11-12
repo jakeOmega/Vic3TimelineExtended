@@ -1511,6 +1511,8 @@ VARIANT_LEAD = {
 # Chicago's, or Toronto's) on every rung. The rewording says what the towers are (plain, flat
 # roofed, of one height) and leaves out what they must not be: naming a thing draws it.
 #   The European great city of 1960: mansard roofs are Paris, and the candidates drew its tower.
+#   The affluent Middle Eastern street of about 1990: "limousines and sports cars" drew the
+# luxury cars of the 2010s in all four candidates.
 _REGION_FIELDS = ("low", "beyond", "old", "detail", "poor", "rich", "plain")
 _RUNG_FIELDS = ("town", "cars", "poor_cars", "rich_cars", "towers", "traffic", "mega_traffic", "far",
                 "behind", "wreck")
@@ -1537,6 +1539,9 @@ VARIANT_REWORD = {
     **{("north_american", _rung, _size): {"towers": _words, "old": _NA_OLD}
        for _rung, _words in _NA_TOWERS.items() for _size in ("metropolis", "megacity")
        if _size == "metropolis" or _rung >= 3},
+    ("middle_eastern", 3, "affluent"): {
+        "rich_cars": "polished boxy 1980s saloons with square headlamps, one long square-edged 1980s "
+                     "limousine"},
     ("european", 2, "metropolis"): {
         "towers": "a dense cluster of plain flat-roofed glass and concrete office slabs of fifteen to "
                   "twenty storeys, all of about the same height",
