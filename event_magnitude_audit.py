@@ -13,6 +13,12 @@ like `value = prestige`) is available before adding.
 Suppress an intentional hardcoded value with a same-line comment:
 
     multiplier = 2000  # REVIEWED 2026-05-04: tech-gated; intentionally large
+
+Run standalone it builds its own small ModState (the mod's static modifiers
+over the committed `vanilla_parsed/` snapshot), so it needs no game install and
+runs in CI: `python3 event_magnitude_audit.py --strict` exits 1 on any
+unreviewed flag. Until 2026-11-12 only a server reload ran it, and a flag
+reached `main` unseen by the offline gate (#1593).
 """
 import os
 import re
@@ -364,16 +370,50 @@ def _make_static_modifier_lookup(ms) -> Callable[[str], dict | None]:
     return lookup
 
 
-def audit(ms, mod_path: str | None = None) -> AuditResult:
+# The one entity type the audit reads: ModState's label for static modifiers
+# and their directory under `common/`.
+ENTITY_TYPES = {"Modifiers": "static_modifiers"}
+
+
+def load_state(mod_path: str, vanilla_data: dict | None = None):
+    """A ModState holding only static modifiers: vanilla from `vanilla_data`
+    (default: the committed `vanilla_parsed/` snapshot), the mod from
+    `mod_path`. Vanilla's are needed because events reuse them by name
+    (`unification_prestige`)."""
+    from mod_state import ModState
+
+    if vanilla_data is None:
+        import json
+
+        import vanilla_parsed
+
+        snap_dir = os.path.join(mod_path, "vanilla_parsed")
+        manifest = vanilla_parsed.read_manifest(snap_dir) or {}
+        vanilla_data = {}
+        for et in ENTITY_TYPES:
+            info = manifest.get("entity_types", {}).get(et)
+            if not info:
+                continue
+            with open(os.path.join(snap_dir, info["file"]), "r", encoding="utf-8") as fh:
+                vanilla_data[et] = vanilla_parsed.decode(json.load(fh))
+    base = {et: "" for et in ENTITY_TYPES}
+    mod = {et: os.path.join(mod_path, "common", d) for et, d in ENTITY_TYPES.items()}
+    return ModState(base, mod, vanilla_data=vanilla_data)
+
+
+def audit(ms=None, mod_path: str | None = None) -> AuditResult:
     """Walk every events/*.txt file, return all magnitude flags.
 
     `mod_path` defaults to whatever `path_constants.mod_path` resolves to so
     tests can pass a tempdir explicitly without touching the global config.
+    `ms` defaults to `load_state(mod_path)`, for a run with no server.
     """
     if mod_path is None:
         # Lazy import so tests that don't need real paths don't import path_constants.
         from path_constants import mod_path as _default
         mod_path = _default
+    if ms is None:
+        ms = load_state(mod_path)
     lookup = _make_static_modifier_lookup(ms)
     events_dir = os.path.join(mod_path, "events")
     if not os.path.isdir(events_dir):
@@ -490,3 +530,14 @@ def regenerate(mod_state) -> dict:
         "unreviewed": unrev,
         "exempted": exemp,
     }
+
+
+if __name__ == "__main__":
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from path_constants import mod_path
+    result = audit(mod_path=mod_path)
+    print(render_report(result))
+    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    if "--strict" in sys.argv:
+        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)

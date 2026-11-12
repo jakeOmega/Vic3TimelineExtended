@@ -31,13 +31,14 @@ An event that parses can still never fire, draw a magenta blob, show raw keys, o
 
 ```sh
 .venv/bin/python scripts/run_audits.py orphaned_event event_image event_context silent_variable empty_effect \
-    script_loc_reference loc_coverage effect_trigger_validity script_argument modifier_duration kill_character
+    script_loc_reference loc_coverage effect_trigger_validity script_argument modifier_duration kill_character \
+    event_magnitude
 python3 scripts/analysis/check_loc_style.py --check
 python3 scripts/analysis/flavor_forms.py --check
 .venv/bin/python scripts/preflight.py --quick
 ```
 
-A failing audit prints what its flag means and the comment that suppresses an intended one (`docs/guides/audits.md`). With a server up, `POST /reload?mod_only=true&audits_only=true` and read `warnings`: `event_magnitude_audit` (a hardcoded amount for a fast-growing resource) runs only there.
+A failing audit prints what its flag means and the comment that suppresses an intended one (`docs/guides/audits.md`).
 
 ## What only the game shows
 
