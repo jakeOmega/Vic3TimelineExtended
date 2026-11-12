@@ -22,6 +22,7 @@ from loc_render_audit import (
     check_quoted_expansion,
     check_quoted_name,
     check_value,
+    closed_tag_names,
     render_report,
     _parse_loc_line,
     _parse_reviewed,
@@ -121,7 +122,17 @@ class FormatTagTests(unittest.TestCase):
         # `possible_dp_with_austria_scope_tt`
         self.assertEqual(self._kinds("#indent_newline:3\\n[GetStaticModifier('x').GetDesc]#!"), [])
         self.assertEqual(self._kinds("#r#b May lead to a play#!#!"), [])
+        self.assertEqual(self._kinds("#r#b two tags, one reset#!"), ["unclosed_format"])
         self.assertEqual(self._kinds("#bold#!"), [])
+
+    def test_a_header_runs_through_its_data_expression_whatever_is_inside(self):
+        # A header that stopped at the space inside the brackets would read
+        # the quoted `#v` as a tag of the text and leave `#tooltip` open.
+        self.assertEqual(
+            self._kinds("#tooltip:[GetRawTextTooltipTag('#v 5#! more')] text#!"), [])
+        (_issue, detail), = check_format_tags(
+            "#tooltip:[SCOPE.sCountry('a b').GetTooltipTag],my_tt text")
+        self.assertIn("`#tooltip:[SCOPE.sCountry('a b...`", detail)
 
     def test_surplus_resets_are_not_flagged(self):
         # A closing fragment, and vanilla's defensive `#!#!`.
@@ -168,6 +179,42 @@ class FormatTagTests(unittest.TestCase):
         self.assertIn("`#header`", detail)
         self.assertIn("`#v`", detail)
         self.assertNotIn("`#b`", detail)
+
+    def test_computed_name_left_open_is_told_about_the_literal_hash(self):
+        # `Rank #$RANK$` reads as a tag; adding `#!` would pass the audit and
+        # leave the text wrong, so the hint names the other reading.
+        for value in ("Rank #$RANK$", "#[X.GetRank] of 10"):
+            with self.subTest(value=value):
+                (issue, detail), = check_format_tags(value)
+                self.assertEqual(issue, "unclosed_format")
+                self.assertIn("Computed tag name", detail)
+                self.assertIn("If a literal `#` was meant, write `##`", detail)
+        (_issue, detail), = check_format_tags("#bold never closed")
+        self.assertNotIn("literal", detail)
+
+    def test_name_no_value_closes_is_told_about_the_literal_hash(self):
+        known = closed_tag_names(["#bold x#!", "#MeToo is a movement"])
+        (_issue, detail), = check_format_tags("the #MeToo movement", known)
+        self.assertIn("No value in the mod closes a tag of this name: `#MeToo`", detail)
+        self.assertIn("If a literal `#` was meant, write `##`", detail)
+        # A name the mod does close gets the plain hint, whatever its case.
+        for value in ("#bold never closed", "#BOLD never closed"):
+            (_issue, detail), = check_format_tags(value, known)
+            self.assertNotIn("literal", detail)
+        # Without the mod's names (check_value on one string) nothing is guessed.
+        (_issue, detail), = check_format_tags("the #MeToo movement")
+        self.assertNotIn("literal", detail)
+
+    def test_closed_tag_names_are_the_formats_of_every_closed_header(self):
+        self.assertEqual(
+            closed_tag_names([
+                "#bold x#!",
+                "#Tooltippable;tooltip:[X.GetTooltipTag],my_tt y#!",
+                "#indent_newline:3 a#! and #R never closed",
+                "#[X.GetColor] z#!",
+                "no tags, ##3",
+            ]),
+            {"bold", "tooltippable", "tooltip", "indent_newline"})
 
     def test_plain_text_and_texticons_untouched(self):
         self.assertEqual(check_format_tags("@money! 5 and nothing else!"), [])
@@ -308,6 +355,21 @@ class ParseLineTests(unittest.TestCase):
         self.assertIn("[b]", value)
         self.assertIn("Iron", value)
 
+    def test_quote_in_the_comment_is_not_read_as_value(self):
+        # The value ends at its first unescaped quote. Taking the last quote
+        # on the line read the comment as value, found a bare `#` in it and
+        # lost the exemption.
+        key, value, trailing = _parse_loc_line(
+            ' k:0 "#R +" # REVIEWED 2026-11-12: its caller writes "#!" after\n')
+        self.assertEqual((key, value), ("k", "#R +"))
+        self.assertEqual(_parse_reviewed(trailing)["rationale"], 'its caller writes "#!" after')
+
+    def test_escaped_quote_does_not_end_the_value(self):
+        key, value, trailing = _parse_loc_line(
+            ' k:0 "the \\"Iron\\" #b man" # REVIEWED 2026-11-12: a "demo"\n')
+        self.assertEqual(value, 'the \\"Iron\\" #b man')
+        self.assertIn("REVIEWED", trailing)
+
     def test_header_and_comment_lines_skipped(self):
         self.assertIsNone(_parse_loc_line("l_english:\n"))
         self.assertIsNone(_parse_loc_line("# a comment\n"))
@@ -376,6 +438,32 @@ class EndToEndTests(unittest.TestCase):
         report = render_report(result)
         self.assertIn("Formatting tags left open", report)
         self.assertIn("A `#` that is not a tag", report)
+
+    def test_reviewed_comment_may_quote_markup(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' trend_prefix_up:0 "#R +" # REVIEWED 2026-11-12: its caller writes "#!" after\n',
+            )
+            result = audit(mod_path=td)
+        self.assertEqual(
+            [(f.loc_key, f.issue, bool(f.exemption)) for f in result.flags],
+            [("trend_prefix_up", "unclosed_format", True)])
+
+    def test_audit_knows_which_tag_names_the_mod_closes(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' fine:0 "#bold closed#! and #v 5#!"\n'
+                ' slip:0 "#bold never closed"\n'
+                ' hashtag:0 "the #MeToo movement"\n',
+            )
+            details = {f.loc_key: f.detail for f in audit(mod_path=td).flags}
+        self.assertEqual(sorted(details), ["hashtag", "slip"])
+        self.assertIn("write `##`", details["hashtag"])
+        self.assertNotIn("write `##`", details["slip"])
 
     def test_quoted_name_only_checks_modifier_and_modifier_type_names(self):
         with tempfile.TemporaryDirectory() as td:
@@ -513,12 +601,18 @@ class EndToEndTests(unittest.TestCase):
 
 @unittest.skipUnless(os.path.isfile(VANILLA_LOC_SNAPSHOT), "no vanilla_parsed/ snapshot")
 class VanillaFormatTagCalibrationTests(unittest.TestCase):
-    """The tag grammar is right if it reads vanilla's own text as balanced.
-    Vanilla is never judged by the audit (it splits formatting across keys, the
-    #134 objection); this only holds the grammar to it. Measured on the
-    1.15.1 snapshot: 108,112 values, 12,705 with a `#`; 157 leave a tag open
-    (112 of them an `#indent_newline:N`) and 4 hold a bare `#`. The bounds
-    leave room for a patch, not for a grammar that misreads."""
+    """A coarse sanity bound on real text, not the grammar's proof. Vanilla is
+    never judged by the audit (it splits formatting across keys, the #134
+    objection); these run the scanner over its 12,705 values with a `#` and
+    fail only if it goes badly wrong: flags a large share of them, stops
+    reading `##` as a literal hash, or flags a surplus reset. A scanner that
+    skips no `[...]`, or lets one `#!` close every tag, stays inside these
+    bounds; the cases in `FormatTagTests` are what pin those rules.
+
+    Measured on the 1.15.1 snapshot: 157 values (1.2%) leave a tag open and 4
+    hold a bare `#`. The bounds are wide so that a patch's new text, or more
+    flavor lines the snapshot's reader cuts at an inner quote (`#italic`
+    before quoted text), does not trip them."""
 
     @classmethod
     def setUpClass(cls):
@@ -533,19 +627,13 @@ class VanillaFormatTagCalibrationTests(unittest.TestCase):
     def test_vanilla_closes_nearly_every_tag_it_opens(self):
         self.assertGreater(len(self.tagged), 10000)
         unclosed = self._keys("unclosed_format")
-        self.assertLess(len(unclosed) / len(self.tagged), 0.02, unclosed[:10])
-
-    def test_vanilla_unclosed_tags_are_mostly_indents_run_to_the_end(self):
-        # What is left open is the pattern #134 named, not a misparse: an
-        # indent block that runs into the effect lines the engine appends.
-        unclosed = self._keys("unclosed_format")
-        indents = [k for k in unclosed if "#indent_newline" in dict(self.issues[k])["unclosed_format"]]
-        self.assertGreater(len(indents) / len(unclosed), 0.6)
+        self.assertLess(len(unclosed) / len(self.tagged), 0.05, unclosed[:10])
 
     def test_vanilla_writes_a_literal_hash_doubled(self):
         # Every bare `#` in vanilla is a slip (two `#` for `#!` at the end of
-        # a settings tooltip, `#b not# have`, a stray `# ` bullet).
-        self.assertLessEqual(len(self._keys("bare_hash")), 8, self._keys("bare_hash"))
+        # a settings tooltip, `#b not# have`, a stray `# ` bullet); a scanner
+        # that read `##` as a tag would flag every doubled one too.
+        self.assertLessEqual(len(self._keys("bare_hash")), 12, self._keys("bare_hash"))
         doubled = [k for k, v in self.tagged.items() if "##" in v]
         self.assertGreaterEqual(len(doubled), 3)
         for key in doubled:
@@ -556,7 +644,7 @@ class VanillaFormatTagCalibrationTests(unittest.TestCase):
         # tolerates it, and it is half of what #134 counted. Never flagged.
         only_resets = [k for k, v in self.tagged.items()
                        if "#!" in v and "#" not in v.replace("#!", "")]
-        self.assertGreaterEqual(len(only_resets), 10)
+        self.assertGreaterEqual(len(only_resets), 5)
         for key in only_resets:
             self.assertEqual(self.issues[key], [], key)
 

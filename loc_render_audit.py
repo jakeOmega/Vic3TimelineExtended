@@ -116,13 +116,23 @@ end on the opener itself (event flavor ending `#italic`: the snapshot's loc
 reader stops a value at its first unescaped quote, so quoted flavor after
 the tag is cut off), and 31 are slips (`concept_recovery_rate_desc` never
 closes its `#b`) or more such cuts.
-`VanillaFormatTagCalibrationTests` holds the grammar to the committed
-snapshot.
+That share is a coarse sanity bound, not the grammar's proof:
+`VanillaFormatTagCalibrationTests` fails if the scanner flags a large share
+of vanilla or stops reading `##` as literal, but a scanner that skipped no
+`[...]` or let one `#!` close every tag would stay inside it. The unit cases
+in `FormatTagTests` are what pin each rule.
 
 Known limits. A `$key$` or `[X.GetCustom('y')]` that pastes an opening
 fragment is not followed, so a caller that forgets the `#!` for a reviewed
 fragment is not caught. Tag names are not checked against the formats the
-game defines, so `#bolt x#!` passes.
+game defines, so `#bolt x#!` passes (the mod's `#O`, 12 uses, has none in
+the vanilla snapshot). A `[` that never closes, or an odd apostrophe inside
+`[...]`, makes the scan skip the rest of the value.
+
+A tag left open may be a literal hash that was never doubled: `Rank #$RANK$`,
+`#[X.GetRank]`, `the #MeToo movement`. Adding the `#!` would pass the audit
+and leave the text wrong, so the flag says to write `##` instead when the
+tag's name is computed or is one no value in the mod closes.
 
 **A `#` that is not a tag** (`bare_hash`, #266) — a `#` before a digit, a
 space, punctuation or the end of the value, which is none of the three forms
@@ -141,7 +151,11 @@ engine ignores anything after the closing quote:
 import json
 import os
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field
+from typing import NamedTuple
+
+from mod_state import split_loc_line
 
 
 @dataclass
@@ -238,12 +252,21 @@ def _tag_header_end(value: str, start: int) -> int:
     return i
 
 
-def scan_format_tags(value: str) -> tuple[list[str], list[int]]:
-    """Walk one loc value's formatting tags. Returns the headers of the tags
-    still open at its end, outermost first, and the offset of every bare `#`.
-    The grammar is in the module docstring."""
+class TagScan(NamedTuple):
+    open_tags: list[str]
+    """Headers of the tags still open at the end of the value, outermost first."""
+    bare: list[int]
+    """Offset of every `#` that is neither a tag, a `#!` nor a `##`."""
+    closed: list[str]
+    """Headers of the tags a `#!` closed, in the order they closed."""
+
+
+def scan_format_tags(value: str) -> TagScan:
+    """Walk one loc value's formatting tags. The grammar is in the module
+    docstring."""
     open_tags: list[str] = []
     bare: list[int] = []
+    closed: list[str] = []
     i = 0
     n = len(value)
     while i < n:
@@ -259,7 +282,7 @@ def scan_format_tags(value: str) -> tuple[list[str], list[int]]:
             i += 2
         elif nxt == "!":
             if open_tags:
-                open_tags.pop()
+                closed.append(open_tags.pop())
             i += 2
         elif nxt in _TAG_START:
             end = _tag_header_end(value, i + 1)
@@ -268,31 +291,79 @@ def scan_format_tags(value: str) -> tuple[list[str], list[int]]:
         else:
             bare.append(i)
             i += 1
-    return open_tags, bare
+    return TagScan(open_tags, bare, closed)
+
+
+_FORMAT_NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+
+
+def _format_names(header: str) -> list[str]:
+    """The format names a tag header combines, lower-cased: `#bold;red` is
+    bold and red, `#tooltippable;tooltip:[X],key` tooltippable and tooltip.
+    A computed header (`#[GetX]`, `#$COLOR$`) has none."""
+    names = []
+    for part in header[1:].split(";"):
+        m = _FORMAT_NAME_RE.match(part)
+        if m:
+            names.append(m.group(0).lower())
+    return names
+
+
+def closed_tag_names(values: Iterable[str]) -> set[str]:
+    """Every format name that some value opens and closes. A name left open
+    that no value closes anywhere (`#MeToo`) is more likely a literal hash
+    than a format."""
+    names: set[str] = set()
+    for value in values:
+        if "#" in value:
+            for header in scan_format_tags(value).closed:
+                names.update(_format_names(header))
+    return names
 
 
 def _short_tag(header: str) -> str:
     return header if len(header) <= 32 else header[:29] + "..."
 
 
-def check_format_tags(value: str) -> list[tuple[str, str]]:
+def _tag_list(headers: list[str]) -> str:
+    return ", ".join(f"`{_short_tag(h)}`" for h in headers)
+
+
+def check_format_tags(value: str, known_tags: set[str] | None = None) -> list[tuple[str, str]]:
     """Flag a formatting tag left open at the end of the value, and a `#` that
-    is neither a tag, a `#!` nor a `##`. Pure; unit-testable."""
+    is neither a tag, a `#!` nor a `##`. Pure; unit-testable.
+
+    `known_tags` is `closed_tag_names()` over the mod's loc. With it, a tag
+    left open whose name no value closes gets the literal-hash hint that a
+    computed name always gets: `Rank #$RANK$` and `the #MeToo movement` want
+    `##`, and adding the `#!` the plain hint asks for would pass the audit
+    and leave the text wrong."""
     if "#" not in value:
         return []
     out: list[tuple[str, str]] = []
-    open_tags, bare = scan_format_tags(value)
-    if open_tags:
-        names = ", ".join(f"`{_short_tag(t)}`" for t in open_tags)
-        out.append((
-            "unclosed_format",
-            f"{names} opened and never closed: the format runs on into "
-            "whatever follows this value in the same text. Each tag needs its "
-            "own `#!`. If this value is an opening fragment that its caller "
-            "closes, say who closes it in a `# REVIEWED` comment",
-        ))
-    if bare:
-        at = bare[0]
+    scan = scan_format_tags(value)
+    if scan.open_tags:
+        detail = (
+            f"{_tag_list(scan.open_tags)} opened and never closed: the format "
+            "runs on into whatever follows this value in the same text. Each "
+            "tag needs its own `#!`. If this value is an opening fragment "
+            "that its caller closes, say who closes it in a `# REVIEWED` "
+            "comment."
+        )
+        computed = [t for t in scan.open_tags if t[1] in "[$"]
+        unknown = [] if known_tags is None else [
+            t for t in scan.open_tags
+            if t[1] not in "[$" and not set(_format_names(t)[:1]) <= known_tags
+        ]
+        if computed:
+            detail += f" Computed tag name: {_tag_list(computed)}."
+        if unknown:
+            detail += f" No value in the mod closes a tag of this name: {_tag_list(unknown)}."
+        if computed or unknown:
+            detail += " If a literal `#` was meant, write `##`"
+        out.append(("unclosed_format", detail.rstrip(".")))
+    if scan.bare:
+        at = scan.bare[0]
         snippet = value[max(0, at - 12): at + 12]
         out.append((
             "bare_hash",
@@ -524,27 +595,21 @@ def _parse_reviewed(comment: str | None) -> dict | None:
 def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
     """Returns (key, value, trailing-after-closing-quote) or None.
 
-    Mirrors `concept_reference_audit._parse_loc_line`. The trailing segment is
-    where `# REVIEWED …` suppression comments live.
+    `mod_state.split_loc_line`, the rule `ModState.add_localization` and the
+    other loc audits read a line by: the value ends at its first quote that
+    is not escaped. The trailing segment is where `# REVIEWED …` suppression
+    comments live. Until #266 this took the value up to the last quote on the
+    line, so a comment that quoted something (`…writes "#!" after`) was read
+    as part of the value and the exemption was lost. The two rules agree on
+    every line of the mod's loc, where `check_localization_files.py` has
+    every inner quote escaped.
     """
-    line = raw.rstrip("\n")
-    stripped = line.lstrip()
-    if not stripped or stripped.startswith("#") or ":" not in stripped:
-        return None
-    key, rest = line.split(":", 1)
-    key = key.strip()
-    if not key:
-        return None
-    quote_locations = [i for i, c in enumerate(rest) if c == '"']
-    if len(quote_locations) < 2:
-        return None
-    value = rest[quote_locations[0] + 1: quote_locations[-1]]
-    trailing = rest[quote_locations[-1] + 1:]
-    return key, value, trailing
+    return split_loc_line(raw)
 
 
-def check_value(value: str) -> list[tuple[str, str]]:
-    """Return [(issue, detail)] for one loc value. Pure; unit-testable."""
+def check_value(value: str, known_tags: set[str] | None = None) -> list[tuple[str, str]]:
+    """Return [(issue, detail)] for one loc value. Pure; unit-testable.
+    `known_tags` only sharpens the `unclosed_format` hint (check_format_tags)."""
     out: list[tuple[str, str]] = []
     brackets = _BRACKET_FMT_RE.findall(value)
     if brackets:
@@ -564,7 +629,7 @@ def check_value(value: str) -> list[tuple[str, str]]:
             f"(`{snippet}`) — the loc parser does not nest; pass data-function "
             "arguments as bare expressions",
         ))
-    out += check_format_tags(value)
+    out += check_format_tags(value, known_tags)
     return out
 
 
@@ -603,12 +668,13 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
                 pass
 
     loc_values = {key: value for key, value, _t, _f, _l in entries}
+    known_tags = closed_tag_names(value for _k, value, _t, _f, _l in entries)
     quoted_names = _quoted_name_keys(mod_path)
     articles = _treaty_article_keys(mod_path)
 
     flags: list[RenderFlag] = []
     for loc_key, value, trailing, rel_p, line in entries:
-        issues = check_value(value) + check_quoted_expansion(value, loc_values)
+        issues = check_value(value, known_tags) + check_quoted_expansion(value, loc_values)
         if loc_key in quoted_names:
             issues += check_quoted_name(value, loc_values)
         article_text = article_type_text_key(loc_key, articles)
