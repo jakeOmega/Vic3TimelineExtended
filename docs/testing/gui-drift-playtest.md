@@ -70,3 +70,16 @@ been moved into loc for those underlines outside the Space Race. `test_gui_under
 | **Colors without underlines.** Colonial Empire's red table cells, Banking's phase words (green Expansion, red Panic), the UN chamber's "Firmly for" and "firmly against" counts. | Each keeps its color. | A cream value: its color was the underline's; put it back inline in the loc. |
 | **Subheadings.** Grand Monuments' Interest Group Approval and Monument Policy; the Tax Code review's Taxed Goods, Agricultural Relief, Regional Relief and Revenue Estimate. | In the heading style, as before, with no underline. | |
 | **The Tax Code's estimate note.** Budget > Tax Code with a bill under debate, the line above Interest Groups' cards. | The note's own style (`te_tax_note`'s `#lore`), as the panel's other notes; "Estimate out of date:" still red. | It was plain cream, underlined; if the lore color drowns the red, give the line a `default_format` of its own. |
+
+## Game rule descriptions cut short (2026-11-13)
+
+The Game Rules screen prints a setting's description in a fixed box on the rule's card: the type shrinks for a longer
+text down to a floor, then four lines and an ellipsis. Sixteen of the mod's 52 descriptions ran past it, Free Market
+Construction Disabled losing the line that says Construction Sites must be built from the state view. They were cut,
+and `test_game_rule_desc_length.py` now fails a description past four lines at 78 characters, a model calibrated on
+the owner's screenshot only.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Every description whole.** A new game's Game Rules screen. Step each mod rule through every setting, the longest first: Free Market Construction, Space Race, Tax Code, Banking System, Global Commons, Social Movements. | Each description ends on its own full stop, with no ellipsis. Free Market Construction Disabled shows "Construction Sites must currently be built from the state view." in bold. | The model is too generous: lower `WRAP_WIDTH` in `test_game_rule_desc_length.py` until the text that was cut off fails, then cut what it flags. |
+| **Setting names fit the selector.** The same screen: Free Market Construction without AI Retooling Costs (51 characters), without Retooling Costs (48), Internal Resettlement: AI Voluntary Only (40). | The whole name between the arrows; smaller type is fine. | Shorten the name (`setting_<name>`), keep the player guide's rules table (`01-introduction.md`) to the same words, and give the names a check of their own in the test. |

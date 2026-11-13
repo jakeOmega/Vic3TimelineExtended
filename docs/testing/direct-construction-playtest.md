@@ -96,7 +96,8 @@ The harness reads values and takes screenshots; these need a player.
 1. **Queue a site from the lens.** Direct game: production lens, Development, Construction Site, click a state. The
    level queues and builds; the state's site shows it. A state of a country without Urbanization can't take one.
 2. **Two texts changed and not yet seen in the game.** The Disabled setting's description in the Game Rules window
-   ends with what a change in a running game does, naming the Construction Sector and the Construction Site. The
+   ends with "If the rule is changed in a running game, sectors and sites are converted within a day", whole inside
+   its four lines (`test_game_rule_desc_length.py`), where it used to tell the player to build from the state view. The
    construction panel's Direct Construction intro says the sites are built "from the Development tab of the
    Production Lens or from a state's view". A raw `$key$` or `[concept…]` in either is a splice that did not resolve.
 3. **The modifier a player sees.** The country's modifier list shows Base Construction (+5 construction), and the
