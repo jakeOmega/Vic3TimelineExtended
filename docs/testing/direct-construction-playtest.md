@@ -64,7 +64,7 @@ a new game's rules were the owner's last applied (Free Market Construction Disab
 | | Two weeks on | No country holds Base Construction and Greece reads 0 construction; 399 sectors, 357 sites, every site on the market method; the construction good's price is £1,616 |
 | Direct game from before the fix, loaded with it | At load | No country has the modifier, Greece reads 0 (the rule's line is gone) |
 | | Two weeks on | All 290 countries hold it; Greece 5.2 (5 and a fifth of a site level), so nothing is counted twice; the base self-check reads OK |
-| New game under Disabled, made with the fix | Its second day | All 291 countries hold Base Construction and read 5 construction a week; 376 sites, no sector |
+| New game under Disabled, made with the fix (run again on the final files, after the base left country setup: the same) | Its second day | All 291 countries hold Base Construction and read 5 construction a week; 376 sites, no sector |
 | | A month on | Greece's queued site level is 16 weeks from done on 5.4 points; France 42.6, the United Kingdom 62.6; 387 sites; the base self-check reads OK |
 | Market game of three months, never switched (the default most players have) | At load | Nothing converted: 412 sites on the market method, 381 sectors; no country holds Base Construction, and the United Kingdom reads 43.55 construction a week where the old rule line gave it 48.55 |
 | | Two weeks on | A Base Construction added to France by hand is gone (the market's weekly pulse removes it); 414 sites, 382 sectors, the sector constructible and the site not; no `construction_rule_switch` line and no construction error in `error.log` |
