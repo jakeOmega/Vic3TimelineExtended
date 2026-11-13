@@ -22,9 +22,9 @@ te_construction_market_private_share_modifier = {
 # construction for every country, so one without Construction Sites can still
 # build them. Script adds it and takes it away with the rule
 # (te_direct_construction_ensure_base, te_construction_market_direct_effects.txt);
-# until 2026-11-13 the rule setting applied it itself, which followed the
-# player's last lobby and not the save. 10 points a week, the base game's
-# maximum (vanilla country_gdp_construction, which the mod empties in
+# until 2026-11-13 the rule setting applied it itself, which did not follow
+# the save; it seems to follow the last lobby (#1767). 10 points a week, the
+# base game's maximum (vanilla country_gdp_construction, which the mod empties in
 # extra_modifiers.txt): what a player gets there under two of the three
 # settings of its Base Construction Capacity rule, flat for every country here
 # (#1768; 5 until 2026-11-13). Ten wooden site levels' worth
