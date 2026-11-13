@@ -40,7 +40,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from game_qa import addmod, gate, restore, snapshot
+from game_qa import addmod, fixture, gate, restore, snapshot
 from game_qa import client
 
 MIN_FREE_BYTES = 2 * 1024**3
@@ -391,7 +391,7 @@ def cmd_launch(args) -> tuple[dict, int]:
     try:
         _launchable(snap)
         _check_arguments(game_args)
-        _check_end_date(game_args)
+        _check_end_date(game_args, args.long_run)
         _check_mod_paths(args.add_mod)
         left = _unanswered_write(backups, user, exclude=snap.id)
         if left is not None:
@@ -442,7 +442,8 @@ def cmd_launch(args) -> tuple[dict, int]:
                              "`logs/` as it is" if written else
                              "it holds a changed file outside `logs/` and leaves `logs/` as it is")}, 2
     try:
-        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args)
+        long_run = {"long_run": args.long_run} if args.long_run else {}
+        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args, **long_run)
     except OSError as exc:
         return {"refused": "not_recorded", "id": snap.id, "pid": proc.pid, "created": proc.created,
                 "detail": f"the game started (pid {proc.pid}) but its start could not be recorded: {exc}. It "
@@ -509,15 +510,52 @@ def _check_arguments(game_args: list[str]) -> None:
             raise _Refused("bad_argument", f"the game argument {arg!r} has a control character in it")
 
 
-def _check_end_date(game_args: list[str]) -> None:
-    """Raise _Refused for an unattended run without an end date: one runs on and writes autosaves over the
-    owner's (spec § 5.3). `handsoff` is found in any spelling (without its leading `-` or `/`, in any case,
-    before any `=`, also as a word of an argument with spaces in it); it needs an argument that is exactly
-    `-run_until=<y.m.d>`, the only spelling probed against the game."""
+# Launch arguments that start the game on a save rather than a new game (any spelling, as `handsoff` is found).
+_SAVE_LOADING_ARGS = ("loadsave", "continuelastsave")
+
+
+def _check_end_date(game_args: list[str], long_run: str | None = None) -> None:
+    """Raise _Refused for an unattended run without an end date it will keep: one runs on and writes autosaves
+    over the owner's (spec § 5.3). `handsoff` is found in any spelling (without its leading `-` or `/`, in any case,
+    before any `=`, also as a word of an argument with spaces in it); it needs exactly one `run_until` in any
+    spelling, and that one exactly `-run_until=<y.m.d>`, the only spelling probed against the game, naming a day of
+    the game's calendar after its start (no 29 February: a date the game cannot read may be no end at all).
+
+    An unattended run on a save (`-loadsave`, `-continuelastsave`, any spelling) is refused
+    (`handsoff_on_a_save`): the end date is judged for a new game from 1836, so a later save would run past it.
+
+    An end date past `fixture.SHORT_RUN_LAST` is a long run (#1602): it writes the owner's quarterly autosaves
+    and may take hours, so it needs `long_run`, the owner's own grant of it in their words (`--long-run`),
+    which the journal's `started` keeps (`no_long_run_grant`)."""
     names = [word.lstrip("-/").lower().partition("=")[0] for arg in game_args for word in arg.split()]
-    if "handsoff" in names and not any(_END_DATE_ARG.fullmatch(arg) for arg in game_args):
+    if "handsoff" not in names:
+        return
+    loads = sorted({name for name in names if name in _SAVE_LOADING_ARGS})
+    if loads:
+        raise _Refused("handsoff_on_a_save", f"an unattended run (-handsoff) starts a new game: with "
+                                             f"{', '.join('-' + n for n in loads)} its end date would be judged "
+                                             "as a new game's, and a save of a later date would run on past it, "
+                                             "writing the owner's autosaves")
+    ends = [word for arg in game_args for word in arg.split() if word.lstrip("-/").lower().partition("=")[0] == "run_until"]
+    whole = [arg for arg in game_args if _END_DATE_ARG.fullmatch(arg)]
+    if not whole:
         raise _Refused("no_end_date", "an unattended run (-handsoff) must carry -run_until=<year.month.day>, such "
                                       "as -run_until=1836.2.10: without one it runs on and writes autosaves")
+    if len(ends) != 1:
+        raise _Refused("no_end_date", f"an unattended run carries one -run_until, not {len(ends)} "
+                                      f"({', '.join(ends)}): which one the game keeps is not known")
+    try:
+        end = fixture.check_date(tuple(int(part) for part in whole[0].partition("=")[2].split(".")))
+    except ValueError as exc:
+        raise _Refused("no_end_date", f"{whole[0]} names no day of the game's calendar ({exc}): the game may read "
+                                      "it as no end at all") from None
+    if fixture.day_number(end) <= fixture.day_number(fixture.START_DATE):
+        raise _Refused("no_end_date", f"{whole[0]} is not after the game's start, {fixture.dotted(fixture.START_DATE)}"
+                                      ": what an unattended run does with an end already past is not known")
+    if fixture.day_number(end) > fixture.day_number(fixture.SHORT_RUN_LAST) and not (long_run or "").strip():
+        raise _Refused("no_long_run_grant", f"{whole[0]} runs past {fixture.dotted(fixture.SHORT_RUN_LAST)}: the "
+                                            "run writes the owner's quarterly autosaves and may take hours, so it "
+                                            "needs --long-run with the owner's own grant of it, in their words")
 
 
 def _check_unchanged(snap: snapshot.Snapshot, user: Path) -> None:
@@ -975,7 +1013,7 @@ def cmd_restore(args) -> tuple[dict, int]:
     try:
         _settle_playset(snap, user, bool(games), notes)
         started = "started" in _events(snap)    # nothing launched: logs/ and the saves are whoever played since
-        out = _unvouched_hold(snap) or restore.restore(
+        out = _unvouched_hold(snap, notes, user) or restore.restore(
             snap, user, other_game_running=bool(games), logs=started, saves=started,
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
@@ -1068,19 +1106,38 @@ def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple
     return live
 
 
-def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
+def _lexists(path: Path) -> bool:
+    """Whether anything is at `path`, a link included; an error reading it counts as there (the hold stays)."""
+    try:
+        os.lstat(path)
+    except FileNotFoundError:
+        return False
+    except OSError:
+        return True
+    return True
+
+
+def _unvouched_hold(snap: snapshot.Snapshot, notes: dict | None = None,
+                    user: Path | None = None) -> restore.Outcome | None:
     """Hold, changing nothing, a run whose files nothing vouches for: `watch` saw another game (`other_game_ran`:
     its writes cannot be told from the run's), or lost sight of the run's game at a failed look or across a gap
     of more than WATCH_RESUME_GAP_S before a resumed `watch` (`unwatched_stretch`: nobody saw then whether
-    another game ran). None when neither. A run already restored is left as it is, as `restore.restore` leaves
-    one beside a running game."""
+    another game ran), or the harness journaled `fixture.HOLD_ASKED` for it (its `reason`: `save_not_kept`, a
+    dated run's save that could be neither renamed nor copied, which the restore would remove as the harness's
+    own; the hold lasts while one of the entry's `files` is still in `user`, so it clears once the owner has moved
+    the save). None when none. A run already restored is left
+    as it is, as `restore.restore` leaves
+    one beside a running game. For `unwatched_stretch`, `notes` gets `looks_failed`, `looks` (every look `watch`
+    journaled) and `gaps_s`, so that one failed look in thousands can be told from many."""
     journal = snapshot.journal(snap)
     others = [f"pid {e.get('pid')} (started {e.get('created')})" for e in journal if e.get("event") == "other_game"]
+    asked = [e for e in journal if e.get("event") == fixture.HOLD_ASKED
+             and (user is None or any(_lexists(Path(user) / str(f)) for f in e.get("files") or [""]))]
     failed = sum(1 for e in journal if e.get("event") == "look_failed")
     bounds = {"watch_resumed": WATCH_RESUME_GAP_S, "watching": WATCH_FIRST_GAP_S}
     long_gaps = [e.get("gap_s") for e in journal if e.get("event") in bounds
                  and not _gap_within(e.get("gap_s"), bounds[e["event"]])]
-    if not (others or failed or long_gaps):
+    if not (others or asked or failed or long_gaps):
         return None
     verdicts = [e.get("event") for e in journal if e.get("event") in _VERDICTS]
     if verdicts and verdicts[-1] == "restored":
@@ -1088,7 +1145,18 @@ def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
     if others:
         snapshot.record(snap, "held", reason="other_game_ran", games=others)
         return restore.Outcome([], [], True, "other_game_ran")
+    if asked:
+        # The harness asked for it (fixture.HOLD_ASKED): a dated run's save it could not keep under its own name
+        reason = str(asked[-1].get("reason") or fixture.HOLD_ASKED)
+        files = [str(f) for f in asked[-1].get("files") or []]
+        snapshot.record(snap, "held", reason=reason, files=files)
+        if notes is not None:
+            notes["files"] = files
+        return restore.Outcome([], [], True, reason)
     snapshot.record(snap, "held", reason="unwatched_stretch", looks_failed=failed, gaps_s=long_gaps)
+    if notes is not None:
+        looks = sum(1 for e in journal if e.get("event") in ("heartbeat", "look_failed"))
+        notes.update(looks_failed=failed, looks=looks, gaps_s=long_gaps)
     return restore.Outcome([], [], True, "unwatched_stretch")
 
 
@@ -1170,7 +1238,7 @@ def cmd_recover(args) -> tuple[dict, int]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "watch_still_recording")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games))
+            out = _unvouched_hold(snap, notes, user) or restore.restore(snap, user, other_game_running=bool(games))
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
@@ -1211,8 +1279,8 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False,
-                                                           saves=False)
+            out = _unvouched_hold(snap, notes, user) or restore.restore(snap, user, other_game_running=bool(games),
+                                                                        logs=False, saves=False)
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
@@ -1310,6 +1378,9 @@ def main(argv=None) -> int:
                         "deployed folder (mod_deploy_target)")
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a mod folder to enable for the run as well, as Windows names it (repeatable)")
+    p.add_argument("--long-run", metavar="TEXT",
+                   help="the owner's grant of an unattended run past spring 1836 (-run_until after 1836.3.31), in "
+                        "their words; kept in the journal")
     p.set_defaults(run=cmd_launch)
 
     p = sub.add_parser("watch", help="follow the game `launch` started, recording that it is alive and its exit")

@@ -349,5 +349,12 @@ class SwitchedFixtureTest(RulesTestCase):
         self.assertFalse((self.saves / (target.name + rules.STAGED_SUFFIX)).exists())
 
 
+class SwitchedAtTest(unittest.TestCase):
+    def test_a_dated_fixtures_copy_is_switched_on_its_date(self):
+        self.assertEqual(rules.switched_at(), rules.SWITCHED_AT)
+        self.assertEqual(rules.switched_at((1836, 1, 2)), rules.SWITCHED_AT)
+        self.assertTrue(rules.switched_at((1950, 1, 1)).startswith("1 January 1950, the dated fixture's date"))
+
+
 if __name__ == "__main__":
     unittest.main()

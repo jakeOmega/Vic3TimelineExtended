@@ -16,6 +16,7 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
+from game_qa import fixture as fixture_mod
 from game_qa import gate, restore, snapshot
 
 IDLE = [gate.GpuSample(14, 1607, 10240)] * 5
@@ -670,6 +671,21 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(self.starts, [])
         self.assertEqual(self.launch(taken["id"], "-debug_mode", "-handsoff", "-run_until=1836.2.10")[1], 0)
 
+    def test_launch_refuses_a_long_unattended_run_without_its_grant_and_journals_the_grant(self):
+        # #1602: a dated fixture's run to 1900 takes hours and writes the owner's quarterly autosaves.
+        taken, _ = self.run_cli("snapshot")
+        self.start_result = self.game()
+        out, code = self.launch(taken["id"], "-debug_mode", "-handsoff", "-run_until=1900.1.3")
+        self.assertEqual((code, out["refused"], self.starts), (2, "no_long_run_grant", []))
+        self.assertEqual(self.events(), ["armed"])                  # refused before the claim: nothing started
+        self.assertFalse((self.the_snapshot().dir / cli.LAUNCH_CLAIM).exists())
+        grant = "the owner, 21:40: run it to 1900 overnight, up to 8 hours"
+        out, code = self.launch(taken["id"], "-debug_mode", "-handsoff", "-run_until=1900.1.3",
+                                flags=("--long-run", grant))
+        self.assertEqual((code, len(self.starts)), (0, 1), self.why(out))
+        started = snapshot.journal(self.the_snapshot())[-1]
+        self.assertEqual((started["event"], started["long_run"]), ("started", grant))
+
     def test_launch_refuses_an_argument_it_cannot_pass_before_claiming_the_snapshot(self):
         # Break-it review 2026-11-10, (7): a lone surrogate failed inside the start, after the checks. A NUL could
         # cut an argument short on the Windows side, after the end-date check had read all of it.
@@ -1086,9 +1102,17 @@ class CommandLineTest(unittest.TestCase):
                    ["-handsoff", "-run_until", "1836.2.10"], ["-handsoff", "-run_until=1836.2.10 -foo"],
                    ["-handsoff", "-run_until=1836.2"], ["-handsoff", "-run_until=18361.2.10"],
                    ["-handsoff", "-RUN_UNTIL=1836.2.10"], ["--handsoff", "--run_until=1836.12.31"],
-                   ["/handsoff=1", "/run_until=9.1.1"], ["-handsoff", " -run_until=1836.2.10"])
-        allowed = (["-debug_mode"], ["-handsoff", "-run_until=1836.2.10"], ["--handsoff", "-run_until=1836.12.31"],
-                   ["/HANDSOFF=1", "-run_until=9.1.1"])
+                   ["/handsoff=1", "/run_until=9.1.1"], ["-handsoff", " -run_until=1836.2.10"],
+                   # #1602: the date must be one the game keeps: a day of its calendar (no 29 February, no month
+                   # 13), after its start, given once (which of two the game keeps is not known)
+                   ["/HANDSOFF=1", "-run_until=9.1.1"], ["-handsoff", "-run_until=1836.1.1"],
+                   ["-handsoff", "-run_until=1836.2.29"], ["-handsoff", "-run_until=1836.13.1"],
+                   ["-handsoff", "-run_until=1836.0.10"], ["-handsoff", "-run_until=1836.2.0"],
+                   ["-handsoff", "-run_until=1836.2.10", "-run_until=1836.2.11"],
+                   ["-handsoff", "-run_until=1836.2.10", "--RUN_UNTIL=2900.1.1"],
+                   ["-handsoff", "-run_until=1836.2.10", "-debug_mode -run_until=2900.1.1"])
+        allowed = (["-debug_mode"], ["-handsoff", "-run_until=1836.2.10"], ["--handsoff", "-run_until=1836.3.31"],
+                   ["/HANDSOFF=1", "-run_until=1836.1.4"], ["-debug_mode", "-run_until=2900.1.1"])
         for args in refused:
             with self.subTest(args=args):
                 with self.assertRaises(cli._Refused) as raised:
@@ -1097,6 +1121,41 @@ class CommandLineTest(unittest.TestCase):
         for args in allowed:
             with self.subTest(args=args):
                 cli._check_end_date(args)
+
+    def test_an_unattended_run_past_spring_1836_needs_the_owners_grant_of_a_long_run(self):
+        # #1602: an end date anywhere passed the old check, so a typed 2900.1.1 was "an end date". A run past the
+        # first quarterly autosave (1 April 1836) writes the owner's autosaves and may take hours.
+        for end in ("1836.4.1", "1836.7.1", "1900.1.3", "2050.1.3"):
+            with self.subTest(end=end):
+                args = ["-handsoff", "-run_until=" + end]
+                for grant in (None, "", "   "):
+                    with self.assertRaises(cli._Refused) as raised:
+                        cli._check_end_date(args, grant)
+                    self.assertEqual(raised.exception.result["refused"], "no_long_run_grant")
+                cli._check_end_date(args, "the owner, 21:40: run it to 1900 overnight, up to 8 hours")
+        cli._check_end_date(["-handsoff", "-run_until=1836.3.31"])      # the last day of a short run
+        self.assertIn("no_long_run_grant", fixture_mod.NO_GAME_REFUSALS)   # refused before the claim: no game
+
+    def test_an_unattended_run_on_a_save_is_refused_whatever_its_end_date(self):
+        # Review of #1602: the end date is judged for a new game from 1836, so an 1836 end on a 1900 save passed
+        # and would have run on, writing the owner's autosaves, with no grant asked for.
+        save = "te_qa_fixture_0123456789ab_d19000101"
+        grant = "the owner, 21:40: run it to 1900 overnight, up to 8 hours"
+        for args in (["-handsoff", "-run_until=1836.1.4", "-loadsave=" + save],
+                     ["-handsoff", "-run_until=1900.1.3", "--LOADSAVE=" + save],
+                     ["-debug_mode -handsoff", "-run_until=1836.1.4", "/loadsave"],
+                     ["-handsoff", "-run_until=1836.1.4", "-continuelastsave"]):
+            with self.subTest(args=args):
+                with self.assertRaises(cli._Refused) as raised:
+                    cli._check_end_date(args, grant)
+                self.assertEqual(raised.exception.result["refused"], "handsoff_on_a_save")
+        cli._check_end_date(["-debug_mode", "-loadsave=" + save])        # a session's own launch
+        self.assertIn("handsoff_on_a_save", fixture_mod.NO_GAME_REFUSALS)
+        taken, _ = self.run_cli("snapshot")
+        self.start_result = self.game()
+        out, code = self.launch(taken["id"], *fixture_mod.FIXTURE_ARGS, "-loadsave=" + save)
+        self.assertEqual((code, out["refused"], self.starts), (2, "handsoff_on_a_save", []))
+        self.assertEqual(self.events(), ["armed"])
 
     # -- watch ----------------------------------------------------------------
 
@@ -1209,6 +1268,52 @@ class CommandLineTest(unittest.TestCase):
         out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
         self.assertEqual(self.tree(), before)
+        # #1602: the reply says how many looks failed out of how many, so one in thousands shows as such
+        self.assertEqual((out["looks_failed"], out["looks"], out["gaps_s"]), (3, 5, []))
+
+    def test_a_hold_the_fixture_asked_for_keeps_the_runs_save(self):
+        # #1602: a dated run's save that could be neither renamed nor copied must not be removed with the run.
+        taken, _ = self.run_cli("snapshot")
+        game = self.game()
+        snap = self.the_snapshot()
+        snapshot.record(snap, "started", pid=game.pid, created=game.created)
+        save = self.user / "save games" / "TEST_FAIL_te_qa_fixture_1 January, 1900.v3"
+        save.write_bytes(b"64 years of an AI-only game")
+        snapshot.record(snap, "game_exited")
+        snapshot.record(snap, fixture_mod.HOLD_ASKED, reason="save_not_kept", files=["save games/" + save.name])
+        self.games = []
+        before = self.tree()
+        for _ in range(2):                                          # and again: the hold stands
+            out, code = self.run_cli("restore", taken["id"])
+            self.assertEqual((code, out["held"], out["reason"], out["files"]),
+                             (2, True, "save_not_kept", ["save games/" + save.name]))
+            self.assertEqual(self.tree(), before)
+
+    def test_a_hold_the_fixture_asked_for_clears_once_the_owner_has_moved_the_save(self):
+        # Review, 2026-11-13: a hold that outlived the file it kept left the run's autosaves over the owner's.
+        taken, _ = self.run_cli("snapshot")
+        game = self.game()
+        snap = self.the_snapshot()
+        with self.naps_clock():
+            snapshot.record(snap, "started", pid=game.pid, created=game.created)
+            autosave = self.user / "save games" / "autosave.v3"
+            owners = autosave.read_bytes()
+            autosave.write_bytes(b"the run's autosave of 1 October 1899")
+            save = self.user / "save games" / "TEST_FAIL_te_qa_fixture_1 January, 1900.v3"
+            save.write_bytes(b"64 years of an AI-only game")
+            self._nap(5)
+            snapshot.record(snap, "game_exited")
+            snapshot.record(snap, fixture_mod.HOLD_ASKED, reason="save_not_kept", files=["save games/" + save.name])
+            self.games = []
+            out, code = self.run_cli("restore", taken["id"])
+            self.assertEqual((out["held"], out["reason"]), (True, "save_not_kept"))
+            self.assertNotEqual(autosave.read_bytes(), owners)
+            moved = save.with_name("te_qa_fixture_0123456789ab_d19000101.v3")
+            save.rename(moved)                                      # what SKILL.md tells the owner to do
+            out, code = self.run_cli("restore", taken["id"])
+            self.assertEqual((code, out["held"]), (0, False), self.why(out))
+            self.assertEqual(autosave.read_bytes(), owners)
+            self.assertEqual(moved.read_bytes(), b"64 years of an AI-only game")
 
     def test_watch_records_no_exit_when_a_look_failed_since_the_last_heartbeat(self):
         # Break-it review 2026-11-10, (10): four failed looks after the run's game exited, during which the owner

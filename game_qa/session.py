@@ -37,9 +37,12 @@ must agree.
 """
 from __future__ import annotations
 
+import datetime as _dt
+import json as _json
 import math
 import os
 import re
+import shutil
 import subprocess
 import time
 from collections.abc import Callable, Mapping, Sequence
@@ -186,6 +189,8 @@ BUSY_RETRY_TOTAL_S = fixture.BUSY_RETRY_TOTAL_S   # for busy: another session's 
 LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the claim (__main__.LAUNCH_IN_FLIGHT_S); only
                                         # once the game is ended here, which the fixture cannot do
 DRAIN_S = 0.5                           # before a read: a stop left over from an earlier one (real seconds: dap's clock)
+FOUND_LOGS_TRIES = 3                    # a dated run's snapshot manifest, read for the logs its game found at launch
+FOUND_LOGS_RETRY_S = 1.0
 PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
 WATCH_RESPAWNS = 3                      # a watch that failed while the game is proved alive is run again, this often
 
@@ -360,6 +365,10 @@ class Session:
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
+        self._run_logs: fixture.RunLogs | None = None    # a dated fixture's run: its logs copied as it went
+        self._fixture_snap: str | None = None    # the snapshot of the run that made the fixture, once it is made
+        self._fixture_lines: dict | None = None  # the record of the lines kept with it
+        self._dated: dict | None = None     # a dated fixture loaded: its save's own game_date, and whether it matches
         self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
         self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
         self._add_mods_playset = "mod_only"                # the playset they were checked for
@@ -374,8 +383,15 @@ class Session:
     def start(self, permission: str, as_tag: str | None = None, setups: Mapping[str, str] | None = None,
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
               switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
-              add_mods: Sequence[str] | None = None) -> dict:
+              add_mods: Sequence[str] | None = None, fixture_date: str | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
+
+        `fixture_date` ("1900.1.1", or a year) loads the dated fixture of this build instead (#1602): it is never
+        made here, since its run takes hours that need the owner's own grant (`make_fixture`). Missing, it is
+        refused `no_fixture` before anything is done, with what is there for that date under other builds
+        (`stale`) and `next`. Not with `save`. The reply gives the save's own `fixture_game_date` and
+        `date_matches`, with a `date_note` when it is not the date asked for or cannot be read. With `switch_rules`, the copy has the rule switched on the dated
+        fixture's date.
 
         `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
         `game_qa.rules`): a game whose rule changed on 2 January 1836, a day after it began, not one made under
@@ -424,6 +440,7 @@ class Session:
         switch_rules = self._check_switches(switch_rules, save)
         self._game_args = _check_game_args(game_args)
         self._add_mods = self._check_add_mods(add_mods, playset)
+        date = self._check_fixture_date(fixture_date, save, playset)
         self._add_mods_playset = playset
         self._add_mods_digest = fixture.add_mod_digest([Path(mod.wsl) for mod in self._add_mods]) \
             if self._add_mods else None
@@ -437,7 +454,7 @@ class Session:
         self._began = True
         self._permission = permission
         try:
-            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy, switch_rules)
+            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy, switch_rules, date)
             self._check_abort()
             return result
         except BaseException as e:
@@ -454,7 +471,8 @@ class Session:
             self._starting = False
 
     def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
-               busy: bool, switch_rules: dict[str, str] | None = None) -> dict:
+               busy: bool, switch_rules: dict[str, str] | None = None,
+               date: fixture.Date | None = None) -> dict:
         self._check_abort()
         # The profiler window, enlarged (#1710): read from the game's install, never stops a start (`why` says).
         gui, self._profiler_window = overlay.profiler_gui(self._paths.base_game)
@@ -466,7 +484,7 @@ class Session:
             self._profiler_window = dict(self._profiler_window, file=str(self._overlay.profiler_gui))
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events),
                      profiler_window=self._profiler_window)
-        save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {})
+        save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {}, date)
         self._save = save
         self._drop_fixture_lines()
         self._check_abort()
@@ -550,6 +568,9 @@ class Session:
         }
         if pruned:
             result["fixtures_pruned"] = pruned
+        if date is not None:
+            result["fixture_date"] = fixture.dotted(date)
+            result.update(self._dated or {})
         if self._rules is not None:
             result["rules"] = self._rules
         result["profiler_window"] = self._profiler_window
@@ -622,20 +643,38 @@ class Session:
         return dict(switch_rules)
 
     def _the_save(self, save: str | None, permission: str, playset: str, busy: bool,
-                  switch_rules: Mapping[str, str] | None = None) -> tuple[str, bool, list[str]]:
+                  switch_rules: Mapping[str, str] | None = None,
+                  date: fixture.Date | None = None) -> tuple[str, bool, list[str]]:
         """(the save to load, whether the fixture was made now, the fixtures pruned). With `switch_rules` the
-        save is the fixture's copy with those rules switched, made from the fixture if it is not there yet."""
+        save is the fixture's copy with those rules switched, made from the fixture if it is not there yet.
+        With `date` it is the dated fixture of this build, which is only ever found here (`no_fixture`)."""
         if save is not None:
             self._record("fixture", outcome="not_used", save=save)
             return save, False, []
         self._fixture_loaded = True
         user = Path(self._paths.user_data)
-        loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
-                            self._paths.overlay_windows_path, add_mods=[mod.windows for mod in self._add_mods])
-        key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
-                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user),
-                          add_mod_dirs=[Path(mod.wsl) for mod in self._add_mods])
-        stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
+        key = self._fixture_key(playset)
+        if date is not None:
+            key = fixture.dated_key(key, date)
+            found = fixture.find(user, key)
+            if found is None:
+                raise SessionError("no_fixture", "the fixture dated %s for this build (%s) is not there any more"
+                                   % (fixture.dotted(date), fixture.FIXTURE_PREFIX + key), **self._missing(date))
+            game_date = fixture.save_date(found)
+            self._dated = {"fixture_game_date": fixture.dotted(game_date) if game_date is not None else None,
+                           "date_matches": game_date == date}
+            if game_date is None:
+                self._dated["date_note"] = ("the save's own game_date could not be read: it may not be of %s"
+                                            % fixture.dotted(date))
+            elif game_date != date:
+                self._dated["date_note"] = (
+                    "the save's own game_date is %s, not %s, the date it is kept under: the engine wrote its save of "
+                    "the run on another day than asked. The game loaded is of %s" % (
+                        fixture.dotted(game_date), fixture.dotted(date), fixture.dotted(game_date)))
+            self._record("fixture", outcome="found", save=found.stem, date=fixture.dotted(date), **self._dated)
+            stem, made, pruned = found.stem, False, []
+        else:
+            stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
         if switch_rules:
             try:
                 path, changed, settings = rules.switched_fixture(user, key, switch_rules, self._rule_table())
@@ -643,7 +682,7 @@ class Session:
                 self._record("switch_rules", outcome="refused", detail=str(e))
                 raise SessionError("rules_refused", str(e)) from e
             stem = path.stem
-            self._rules = {"settings": settings, "switched": changed, "switched_at": rules.SWITCHED_AT}
+            self._rules = {"settings": settings, "switched": changed, "switched_at": rules.switched_at(date)}
             self._record("switch_rules", outcome="ok", save=stem, switched=changed)
             pruned = pruned + self._prune(user, in_use=(path.name, fixture.FIXTURE_PREFIX + key + ".v3"))
         else:
@@ -654,6 +693,260 @@ class Session:
                 self._record("rules", outcome="unread", detail=str(e))
         return stem, made, pruned
 
+    def _fixture_key(self, playset: str) -> str:
+        """The key of the fixture a run under `playset` loads, as the game, the playset, the DLC set, the owner's
+        last applied rules and the deployed build stand now (`fixture.key`). The one place it is worked out:
+        `start`, `make_fixture` and `fixture_plan` must agree on it, or a dated fixture would never be found."""
+        loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
+                            self._paths.overlay_windows_path, add_mods=[mod.windows for mod in self._add_mods])
+        return fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
+                           disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(Path(self._paths.user_data)),
+                           add_mod_dirs=[Path(mod.wsl) for mod in self._add_mods])
+
+    def _check_fixture_date(self, fixture_date, save: str | None, playset: str) -> fixture.Date | None:
+        """The dated fixture `start` loads, once it is known to be there; None for the plain one (DEFAULT_DATE is
+        the plain one too). Refused with nothing done: with `save` or `--add-mod` (`bad_argument`), a date that is
+        not one, and a fixture that is not there (`no_fixture`)."""
+        if fixture_date is None:
+            return None
+        if save is not None:
+            raise SessionError("bad_argument", "--fixture loads one of the harness's own fresh saves: not with --save")
+        date = self._parse_fixture_date(fixture_date)
+        if date == fixture.DEFAULT_DATE:
+            return None
+        if self._add_mods:
+            # `fixture --until` makes no fixture with a variant, so a key with one is never found: refused here,
+            # rather than a no_fixture whose `next` would make one that still is not it.
+            raise SessionError("bad_argument", "--fixture loads a dated fixture, and those are made without variant "
+                               "mods, so none is keyed on --add-mod's folders. Load the dated fixture as a save "
+                               "instead (`--save te_qa_fixture_<key>_d<date>`, its name in save games/) with "
+                               "--add-mod, or leave --add-mod out")
+        if playset not in PLAYSETS:
+            raise SessionError("bad_argument", "playset is one of %s, not %r" % (", ".join(PLAYSETS), playset))
+        plan = self.fixture_plan(date, playset)
+        if not plan["found"]:
+            raise SessionError("no_fixture", "there is no fixture dated %s for this build (%s): `start` never makes "
+                               "one, since its run takes hours" % (plan["date"], plan["save"]), **self._missing(date))
+        return date
+
+    def _parse_fixture_date(self, text) -> fixture.Date:
+        try:
+            date = fixture.parse_date(text) if isinstance(text, str) else fixture.check_date(text)
+            return fixture.check_fixture_date(date, self._game_end())
+        except ValueError as e:
+            raise SessionError("bad_date", str(e)) from e
+
+    def _game_end(self) -> fixture.Date:
+        return fixture.game_end([Path(self._paths.base_game) / "game" / "common" / "defines",
+                                 Path(self._paths.deploy_dir) / "common" / "defines"])
+
+    def _missing(self, date: fixture.Date) -> dict:
+        """What a refusal for a missing dated fixture carries: the fixtures of that date made on other builds
+        (`stale`), which `--save NAME` loads as an owner's save would be, and `next`."""
+        stale = sorted(path.stem for path in (Path(self._paths.user_data) / fixture.SAVE_FOLDER).glob(fixture.FIXTURE_GLOB)
+                       if fixture.date_of_key(path.stem[len(fixture.FIXTURE_PREFIX):]) == date
+                       and fixture._base_key_of(path.stem[len(fixture.FIXTURE_PREFIX):]) is None)
+        hours = fixture.estimate_s(date) / 3600
+        return {"stale": stale, "next": (
+            "make it with `python3 -m game_qa fixture --until %s --permission \"<the owner's words>\" --max-hours H`: "
+            "an unattended run of about %.1f hours of the owner's desktop, which needs the owner's own grant for "
+            "that run (`--dry-run` gives the estimate first). %s" % (
+                fixture.dotted(date), hours,
+                "Or load one made on an earlier build with `--save %s` (another build's world, which the reply's "
+                "`stale` lists)" % stale[-1] if stale else "No fixture of that date is there for another build"))}
+
+    def fixture_plan(self, date: fixture.Date, playset: str = "mod_only", max_hours: float | None = None) -> dict:
+        """What `make_fixture` would do for `date`, touching nothing: the key and the save's name, whether it is
+        there already, the run's `-run_until`, the estimated wall-clock time and the watch limit (`fixture`'s
+        RATE_ANCHORS say where the figures come from), the autosaves it writes into the owner's `save games/`,
+        and the rules it would be made under (the owner's LastAppliedRules)."""
+        date = fixture.check_fixture_date(fixture.check_date(date), self._game_end())
+        base = self._fixture_key(playset)
+        key = fixture.dated_key(base, date)
+        until = fixture.run_until(date)
+        estimate, limit = fixture.estimate_s(date), fixture.time_limit_s(date)
+        long_run = fixture.day_number(until) > fixture.day_number(fixture.SHORT_RUN_LAST)
+        if max_hours is not None:
+            limit = min(limit, float(max_hours) * 3600)
+        years = (fixture.day_number(until) - fixture.day_number(fixture.START_DATE)) / 365
+        return {"date": fixture.dotted(date), "key": key, "base_key": base, "save": fixture.FIXTURE_PREFIX + key,
+                "found": fixture.find(Path(self._paths.user_data), key) is not None, "playset": playset,
+                "run_until": fixture.dotted(until), "long_run": long_run, "game_end": fixture.dotted(self._game_end()),
+                "estimate_s": round(estimate), "estimate_h": round(estimate / 3600, 2),
+                "limit_s": round(limit), "limit_h": round(limit / 3600, 2), "max_hours": max_hours,
+                "estimate_from": ("archived AI-only observer runs on the owner's machine (game 1.14, October 2026): "
+                                  "0.47 s a game day to 1876, 0.53 to 1904, 0.98 about 1950; past 1953 a guess "
+                                  "(fixture.RATE_ANCHORS)"),
+                "autosaves": ("about %d quarterly autosaves, each 100 MB or more (the 1836 fixture is 133 MB), "
+                              "written into the owner's save games/ (OneDrive syncs it), over their five rotating "
+                              "ones: the restore puts theirs back" % int(years * 4)) if long_run else "none",
+                "rules": {"last_applied": rules.last_applied(Path(self._paths.user_data))}}
+
+    def make_fixture(self, permission: str, until, playset: str = "mod_only", owner_confirmed_busy: bool = False,
+                     max_hours: float | None = None) -> dict:
+        """Make the fixture dated `until` ("1900.1.1", or a year) on this build with one unattended run, then stop
+        the session: the overlay goes, nothing is left running. The run is the 1836 fixture's carried on to the
+        date (game_qa.fixture), its logs copied as it goes (`fixture.RunLogs`), and its lines kept with the
+        fixture once its restore went through (#1601).
+
+        A fixture already there is reused: nothing is started, `made` is false. A run past
+        `fixture.SHORT_RUN_LAST` writes the owner's autosaves and takes hours, so it needs `max_hours`, the
+        hours the owner granted it: refused `no_max_hours` without, and `over_grant` when the estimate is more.
+        Its watch limit is then the smaller of `fixture.time_limit_s` and the grant. Refused with nothing done as
+        `start` refuses (a second call, an overlay left, no permission, a bad playset or date, a hold).
+
+        The reply is `fixture_plan`'s, with `made`, `save_facts` (the name the engine gave the save and its own
+        `game_date`), `rules.settings` (what the save holds), `lines` (the kept lines' record), `logs` (the copy of
+        the run's logs), `timing` (the game's own seconds per day, by year, and the wall time from the journal),
+        `build_changed` when the deployed build changed during the run, and `stop`, the session's stop."""
+        if self._began or self._stopped is not None:
+            raise SessionError("already_started", "a session runs one game: stop it and start a new session")
+        if os.path.lexists(self._paths.overlay_dir):
+            raise SessionError("overlay_left", "%s is there already, left by an earlier run whose playset may still "
+                               "name it: finish that run, then `python3 -m game_qa remove-overlay`. Nothing was done"
+                               % self._paths.overlay_dir)
+        if not isinstance(permission, str) or not permission.strip():
+            raise SessionError("no_permission", "say where the go-ahead to launch came from")
+        if playset not in PLAYSETS:
+            raise SessionError("bad_argument", "playset is one of %s, not %r" % (", ".join(PLAYSETS), playset))
+        date = self._parse_fixture_date(until)
+        if max_hours is not None and (isinstance(max_hours, bool) or not isinstance(max_hours, (int, float))
+                                      or not 0 < max_hours <= 24 * 14):
+            raise SessionError("bad_argument", "max_hours is the hours the owner granted the run, more than 0 and "
+                               "at most two weeks, not %r" % (max_hours,))
+        try:
+            plan = self.fixture_plan(date, playset, max_hours)
+        except ValueError as e:
+            raise SessionError("bad_date", str(e)) from e
+        if plan["found"]:
+            return dict(plan, made=False, detail="%s is there already, made on this build: `start --fixture %s` "
+                        "loads it" % (plan["save"], plan["date"]))
+        if plan["long_run"] and max_hours is None:
+            raise SessionError("no_max_hours", "a run to %s takes about %.1f hours of the owner's desktop and writes "
+                               "over their autosaves: it needs the owner's own grant for it, and --max-hours with "
+                               "the hours they granted" % (plan["date"], plan["estimate_h"]), plan=plan)
+        if max_hours is not None and plan["estimate_s"] > max_hours * 3600:
+            raise SessionError("over_grant", "the run is estimated at %.1f hours, more than the %g granted: it would "
+                               "be ended before it got there" % (plan["estimate_h"], max_hours), plan=plan)
+        self._starting = True
+        try:
+            self._refuse_if_held()
+        except BaseException:
+            self._starting = self._abort = False
+            raise
+        self._began = True
+        self._permission = permission
+        try:
+            result = self._make_fixture(permission, date, plan, playset, owner_confirmed_busy, max_hours)
+            self._check_abort()
+        except BaseException as e:
+            self._starting = False
+            stopped = self.stop()
+            if not isinstance(e, Exception):
+                raise
+            error = e if isinstance(e, SessionError) else SessionError(_code_of(e), str(e))
+            error.info["stop"] = stopped
+            self._write_fixture_record(self._fixture_snap or error.info.get("snapshot"),
+                                       {"refused": error.code, "detail": str(error), **error.info})
+            if error is e:
+                raise
+            raise error from e
+        finally:
+            self._starting = False
+        result["stop"] = self.stop()
+        self._write_fixture_record(result.get("run"), result)
+        return result
+
+    def _make_fixture(self, permission: str, date: fixture.Date, plan: dict, playset: str, busy: bool,
+                      max_hours: float | None) -> dict:
+        self._check_abort()
+        try:
+            self._overlay = overlay.build(self._paths.overlay_dir, {}, self._paths.game_version, fixture_date=date)
+        except overlay.OverlayError as e:
+            raise SessionError("overlay_refused", str(e)) from e
+        self._record("overlay", outcome="built", setups=[], fixture_date=fixture.dotted(date))
+        user = Path(self._paths.user_data)
+        key = fixture.dated_key(self._fixture_key(playset), date)    # again: the build may have moved since the plan
+        long_run = None
+        if plan["long_run"]:
+            long_run = "%s (a run to %s, granted at most %g hours)" % (permission, plan["date"], max_hours)
+        facts: dict = {}
+        stem, made, pruned = self._base_fixture(user, key, permission, playset, busy, date=date,
+                                                limit_s=plan["limit_s"], long_run=long_run, facts=facts)
+        result = dict(plan, key=key, save=stem, made=made, save_facts=facts)
+        if pruned:
+            result["fixtures_pruned"] = pruned
+        if not made:
+            return result
+        try:
+            result["rules"] = {"settings": rules.settings_of((user / fixture.SAVE_FOLDER / (stem + ".v3")).read_bytes())}
+        except (OSError, rules.RulesError) as e:
+            result["rules"] = {"last_applied": plan["rules"]["last_applied"], "unread": str(e)}
+        snap = self._fixture_snap
+        logs = self._run_logs
+        if logs is not None:
+            result["logs"] = logs.record()
+        if self._fixture_lines is not None:
+            result["lines"] = self._fixture_lines
+        if snap is not None:
+            result["run"] = snap
+            result["timing"] = self._fixture_timing(snap)
+        now = fixture.dated_key(self._fixture_key(playset), date)
+        if now != key:
+            result["build_changed"] = (
+                "the deployed build (or the game, the playset or the owner's rules) changed while the run went: the "
+                "key is %s now, so `start --fixture %s` will not find this save, and the game may have hot-reloaded "
+                "script part way. Load it with `--save %s` if a mixed build will do, or make it again"
+                % (now, plan["date"], stem))
+        return result
+
+    def _fixture_timing(self, snap: str) -> dict:
+        """The run's wall time (its journal's `started` to `game_exited`, both by the backup drive's clock) and the
+        game's own timing, from the run's `gametimer_*.tsv`: the one in the snapshot's `run_logs/` that the owner's
+        logs did not hold, copied into the run folder, which is never pruned."""
+        out: dict = {}
+        try:
+            snaps = {s.id: s for s in snapshot.all_snapshots(self._paths.backup_root)}
+            entries = snapshot.journal(snaps[snap])
+            at = {e.get("event"): e.get("at") for e in entries if e.get("event") in ("started", "game_exited")}
+            if "started" in at and "game_exited" in at:
+                parse = lambda text: _dt.datetime.strptime(text, "%Y-%m-%dT%H:%M:%SZ")
+                out["wall_s"] = (parse(at["game_exited"]) - parse(at["started"])).total_seconds()
+            owners = {entry.sha256 for rel, entry in snaps[snap].files.items() if rel.startswith("logs/")}
+            names = set(snaps[snap].listing)
+            found = [path for path in sorted((snaps[snap].dir / "run_logs").glob(fixture.GAMETIMER_GLOB))
+                     if "logs/" + path.name not in names and selfchecks._sha256(path) not in owners]
+        except (OSError, KeyError, ValueError) as e:
+            out["error"] = _describe(e)
+            return out
+        if len(found) != 1:
+            out["gametimer"] = None
+            out["detail"] = "%d gametimer files of the run's own in run_logs/, not one" % len(found)
+            return out
+        try:
+            target = self._paths.run_root / snap / found[0].name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(found[0], target)
+            out["gametimer"] = str(target)
+            out.update(fixture.timing(target.read_text("utf-8", errors="replace")))
+        except OSError as e:
+            out["error"] = _describe(e)
+        if out.get("wall_s") and out.get("days"):
+            out["wall_s_per_day"] = round(out["wall_s"] / out["days"], 3)
+        return out
+
+    def _write_fixture_record(self, snap: str | None, result: dict) -> None:
+        """`fixture.json` in the run's folder: the reply, made or refused, with the session's stop, for whoever reads
+        it after the client that asked has gone (a run of hours outlives most). Never raises."""
+        if not isinstance(snap, str) or not snap:
+            return
+        try:
+            folder = self._paths.run_root / snap
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / "fixture.json").write_text(_json.dumps(result, indent=1, default=str) + "\n", "utf-8")
+        except (OSError, TypeError, ValueError):
+            pass
+
     def _prune(self, user: Path, in_use: Sequence[str] = ()) -> list[str]:
         """Trim the old fixtures, never one of `in_use` (file names): the save about to be loaded, and the
         fixture it was copied from."""
@@ -663,8 +956,9 @@ class Session:
             self._record("fixture_prune", outcome="failed", detail=str(e))
             return []
 
-    def _base_fixture(self, user: Path, key: str, permission: str, playset: str,
-                      busy: bool) -> tuple[str, bool, list[str]]:
+    def _base_fixture(self, user: Path, key: str, permission: str, playset: str, busy: bool,
+                      date: fixture.Date = fixture.DEFAULT_DATE, limit_s: float = fixture.FIXTURE_LIMIT_S,
+                      long_run: str | None = None, facts: dict | None = None) -> tuple[str, bool, list[str]]:
         found = fixture.find(user, key)
         if found is not None:
             self._record("fixture", outcome="found", save=found.stem)
@@ -690,13 +984,28 @@ class Session:
             watch = self._spawn_watch(snapshot_id)
             watches.append(watch)
             return watch
+
+        dated = date != fixture.DEFAULT_DATE
+        self._run_logs = None
+
+        def follow(snapshot_id):
+            # A dated run's logs, copied as the game writes them: they rotate at 512 KB, six generations deep.
+            if self._run_logs is None:
+                found = self._found_logs(snapshot_id)
+                self._run_logs = fixture.RunLogs(self._paths.logs, self._paths.run_root / snapshot_id, found,
+                                                 found_unknown=found is None)
+            self._run_logs.poll()
+
+        def keep(snap):
+            self._fixture_snap = snap
+            self._keep_fixture_lines(key, snap, followed=self._run_logs if dated else None)
         self._forget_fixture_lines(key)
         try:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
-                                clock=self._clock, started=self._journaled_proc,
-                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap),
-                                add_mods=[mod.windows for mod in self._add_mods])
+                                clock=self._clock, started=self._journaled_proc, keep_lines=keep, date=date,
+                                limit_s=limit_s, follow=follow if dated else None, long_run=long_run, facts=facts,
+                                add_mods=[mod.windows for mod in self._add_mods], mark=self._mark)
         except fixture.FixtureError as e:
             up = e.code == fixture.GAME_MAY_BE_UP
             self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
@@ -705,6 +1014,16 @@ class Session:
             if up:
                 info.update(game_may_be_up=True,
                             game={"pid": e.proc.pid, "created": e.proc.created} if e.proc is not None else None)
+            if e.saved is not None:
+                # The run's save has its name: only its restore failed after it. The fixture is there, and loads
+                # once the owner has resolved what the restore left (its lines were not kept: nothing vouches).
+                info["saved"] = e.saved.stem
+            if e.left is not None:
+                # Neither renamed nor copied: left under the engine's name, and the run's restore was asked to
+                # hold over it. The owner moves it to the fixture's name, or deletes it.
+                info["left"] = e.left.name
+            if self._run_logs is not None:
+                info["logs"] = dict(self._run_logs.record(), vouched=False)
             changed = e.step == "launch" and e.reply.get("refused") == fixture.ADD_MOD_CHANGED
             raise SessionError(fixture.ADD_MOD_CHANGED if changed else "fixture_failed", str(e), **info) from e
         except BaseException:
@@ -712,9 +1031,16 @@ class Session:
             self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
                                    if launches else None, watches[-1] if watches else None, None, calls)
             raise
+        if self._fixture_snap is None:
+            self._fixture_snap = _fixture_snapshot(calls)
         pruned = self._prune(user, in_use=(made.name,))
-        self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
+        self._record("fixture", outcome="made", save=made.stem, pruned=pruned,
+                     **({"date": fixture.dotted(date), "facts": facts} if dated else {}))
         return made.stem, True, pruned
+
+    def _mark(self, snap_id: str, event: str, **fields) -> None:
+        """Journal `event` in the snapshot `snap_id` (fixture.make's `mark`: a hold it asks of the run's restore)."""
+        snapshot.record(snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap_id), event, **fields)
 
     def _forget_fixture_lines(self, key: str) -> None:
         """Before a fixture is made under `key`: nothing kept for an earlier fixture of that key, or for one whose
@@ -727,15 +1053,29 @@ class Session:
         except Exception as e:
             self._record("fixture_lines", outcome="forget_failed", key=key, detail=_describe(e))
 
-    def _keep_fixture_lines(self, key: str, snap: str) -> None:
+    def _keep_fixture_lines(self, key: str, snap: str, followed: fixture.RunLogs | None = None) -> None:
         """Once the fixture is made: keep its run's TE_SELF_CHECK and TE_MONUMENTS lines under the backup root
         (`selfchecks.keep_fixture_lines`). Never raises: a fixture whose lines could not be kept is still the
-        fixture, and the step says what went wrong."""
+        fixture, and the step says what went wrong. A dated run's lines come from `followed`, its logs copied as
+        it went; a copy that stopped on an error keeps nothing, since it has a hole in it."""
+        self._fixture_lines = None
         try:
-            record = selfchecks.keep_fixture_lines(self._paths.backup_root, key, snap)
+            if followed is not None and (followed.error is not None or followed.found_unknown):
+                detail = ("the run's log could not be copied as it went (%s), so its lines are not all there"
+                          % followed.error if followed.error is not None else
+                          "the run's snapshot could not be read for the logs the game found at its launch, so the "
+                          "owner's earlier lines could not be told from the run's")
+                selfchecks.forget_fixture_lines(self._paths.backup_root, key, detail)
+                self._fixture_lines = {"kept": False, "detail": detail}
+                self._record("fixture_lines", outcome="failed", snapshot=snap, detail=detail)
+                return
+            record = selfchecks.keep_fixture_lines(self._paths.backup_root, key, snap,
+                                                   followed=followed.copy() if followed is not None else None)
         except Exception as e:
+            self._fixture_lines = {"kept": False, "detail": _describe(e)}
             self._record("fixture_lines", outcome="failed", snapshot=snap, detail=_describe(e))
             return
+        self._fixture_lines = record
         self._record("fixture_lines", outcome="kept", **record)
 
     def _drop_fixture_lines(self) -> None:
@@ -798,6 +1138,28 @@ class Session:
         except (OSError, ValueError):
             return None
         return (entry.size, entry.sha256) if entry is not None else None
+
+    def _found_logs(self, snap: str) -> dict[str, tuple[int, str] | None] | None:
+        """The (size, SHA-256) the run's snapshot recorded for each log `fixture.RunLogs` copies: the logs the
+        game found at its launch. Missing entries are None. None when the snapshot's manifest could not be read
+        in FOUND_LOGS_TRIES tries: the owner's earlier log then cannot be told from the run's, and the copy says
+        so (`RunLogs.found_unknown`), so that no line of it is kept as the run's."""
+        files = None
+        for attempt in range(FOUND_LOGS_TRIES):
+            if attempt:
+                self._sleep(FOUND_LOGS_RETRY_S)
+            try:
+                files = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files
+                break
+            except (OSError, ValueError):
+                continue
+        if files is None:
+            return None
+        out: dict[str, tuple[int, str] | None] = {}
+        for name in fixture.RUN_LOGS:
+            entry = files.get("logs/" + name)
+            out[name] = (entry.size, entry.sha256) if entry is not None else None
+        return out
 
     def _console_when_loaded(self) -> None:
         """Wait for the console to take commands once the window has first answered: `ensure_open` is tried

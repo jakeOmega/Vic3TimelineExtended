@@ -3,12 +3,17 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
-                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]...
+                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE]
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
-                                             # second day (the reply's `rules` says what the save holds); a
-                                             # game arg from session.GAME_ARGS; a variant mod folder, loaded
-                                             # after the playset and before the overlay
+                                             # date (the reply's `rules` says what the save holds); a game
+                                             # arg from session.GAME_ARGS; a variant mod folder, loaded after
+                                             # the playset and before the overlay; --fixture loads the dated
+                                             # fixture of this build, never makes one
+    python3 -m game_qa fixture --until DATE [--dry-run] --permission "<the owner's words>" --max-hours H
+                       [--playset mod_only|current] [--owner-confirmed-busy]
+                                             # one unattended run that makes the fixture dated DATE, then stops:
+                                             # hours of the owner's desktop past spring 1836 (--dry-run first)
     python3 -m game_qa console "<text>"      # one console command, with its reply
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
@@ -70,7 +75,7 @@ from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from game_qa import gate, overlay, restore, server, session, snapshot
+from game_qa import fixture, gate, overlay, restore, server, session, snapshot
 from game_qa.helper import ProcessHelper, to_windows_path
 from game_qa.report import read_steps, utc_now
 from game_qa import profiling, selfchecks
@@ -108,6 +113,9 @@ ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fi
 #   try ending at its deadline, plus a probe round), the debugger (about 30 s), and the stop a failure runs (300 s):
 #   about 2500 s, under START_TIMEOUT_S. A `--save` start makes no fixture and takes 1150 s less.
 START_TIMEOUT_S = 2800.0
+# `fixture`: the run's own watch limit (the plan's `limit_s`) and this much more: its snapshot, launch, restore and
+# rename (about 160 s), its restore's retries (30 + 60 s), and the stop after it (STOP_TIMEOUT_S), with room.
+FIXTURE_MARGIN_S = 1200.0
 STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
 MIN_FREE_BYTES = 2 * 1024**3            # what `snapshot` wants free under the backup root
@@ -199,10 +207,12 @@ def _serving(pid: Any) -> bool:
 # ---- start
 
 def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path], Any],
-                  sleep=time.sleep, clock=time.monotonic) -> tuple[dict, int]:
-    """Spawn a server (`spawn(backup_root, log)`, returning a process handle), wait for it to listen, post `start`.
-    A failed start's server has stopped the session before it answered; this waits for it to exit, unless that
-    stop can be run again (`server.final_stop`): then the server serves on for `stop`, and `next` says so."""
+                  sleep=time.sleep, clock=time.monotonic, verb: str = "start",
+                  timeout: float = START_TIMEOUT_S) -> tuple[dict, int]:
+    """Spawn a server (`spawn(backup_root, log)`, returning a process handle), wait for it to listen, post `start`
+    (or `fixture`, `verb`, waiting `timeout` for it). A failed start's server has stopped the session before it
+    answered; this waits for it to exit, unless that stop can be run again (`server.final_stop`): then the server
+    serves on for `stop`, and `next` says so."""
     backup_root = Path(backup_root)
     notes: dict = {}
     path = backup_root / server.SESSION_FILE
@@ -233,7 +243,7 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
     if "refused" in info:
         return {**info, **notes, "server": where}, 2
     where["port"] = info["port"]
-    reply, code = call(backup_root, "start", body, START_TIMEOUT_S)
+    reply, code = call(backup_root, verb, body, timeout)
     if code != 0 and reply.get("refused") != "no_answer" and server.final_stop(reply.get("stop")):
         try:
             handle.wait(timeout=EXIT_WAIT_S)
@@ -247,6 +257,12 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
         out["next"] = RECOVER_HINT
     elif reply.get("refused") == "overlay_left":
         out["next"] = OVERLAY_LEFT_HINT
+    elif reply.get("refused") == "no_answer" and verb == "fixture":
+        out["next"] = ("the fixture's run may still be going: its server answers nothing until it is done, and then "
+                       "writes the reply to `fixture.json` in the run's folder under the backup root (`runs/<snapshot "
+                       "id>/`, the newest); `fixture --until %s --dry-run` says `found: true` once the save is there. "
+                       "Do not run `recover` or `stop` meanwhile; to end the run early, ask the owner to close the "
+                       "game" % body.get("until"))
     elif reply.get("refused") == "no_answer":
         out["next"] = ("the start may still be running: `status` answers once it is done. Do not run `recover` "
                        "meanwhile: it would finish this start's own snapshot")
@@ -762,7 +778,52 @@ def cmd_start(args) -> tuple[dict, int]:
         body["game_args"] = list(args.game_arg)
     if args.add_mod:
         body["add_mods"] = list(args.add_mod)
+    if args.fixture is not None:
+        body["fixture_date"] = args.fixture
     return start_session(_backup_root(), body, spawn_server)
+
+
+def fixture_verb(args, paths: session.Paths, backup_root: Path, spawn) -> tuple[dict, int]:
+    """`fixture --until DATE`: the plan, worked out here and touching nothing (`Session.fixture_plan`); with
+    `--dry-run`, or when the fixture is there already, that is the reply. Otherwise a server is spawned and asked
+    `fixture`, which makes the fixture and stops; this waits the run's own limit and FIXTURE_MARGIN_S more."""
+    try:
+        date = fixture.parse_date(args.until)
+    except ValueError as e:
+        return {"refused": "bad_date", "detail": str(e)}, 2
+    if args.max_hours is not None and not 0 < args.max_hours <= 24 * 14:
+        return {"refused": "bad_argument", "detail": "--max-hours is the hours the owner granted the run, more "
+                                                     "than 0 and at most two weeks"}, 2
+    try:
+        plan = session.Session(None, None, None, paths).fixture_plan(date, args.playset, args.max_hours)
+    except ValueError as e:
+        return {"refused": "bad_date", "detail": str(e)}, 2
+    if plan["found"]:                   # nothing to make: no server, no permission needed
+        return dict(plan, made=False, **({"dry_run": True} if args.dry_run else {}),
+                    next="%s is there already: `start --fixture %s` loads it" % (plan["save"], plan["date"])), 0
+    if args.dry_run:
+        if not plan["long_run"]:
+            return dict(plan, dry_run=True, next=(
+                "a short run of about %d s (watch limit %d s), ending before the first quarterly autosave: the "
+                "go-ahead that covers `start`'s fresh save covers it; `fixture --until %s --permission \"<where the "
+                "go-ahead came from>\"`, in the background" % (plan["estimate_s"], plan["limit_s"], plan["date"]))), 0
+        return dict(plan, dry_run=True, next=(
+            "a run of about %.1f hours (watch limit %.1f): ask the owner for a grant of that run in their own words, "
+            "leaving room above the estimate (the one live run, to 1836.3.29, took 0.66 s a game day where the "
+            "estimate takes 0.47), then `fixture --until %s --permission \"<their words>\" --max-hours <what they "
+            "granted>`, in the background" % (plan["estimate_h"], plan["limit_h"], plan["date"]))), 0
+    if not args.permission or not args.permission.strip():
+        return {"refused": "no_permission", "detail": "say where the go-ahead to launch came from (--permission): "
+                                                      "for a long run, the owner's own grant of it"}, 2
+    body = {"permission": args.permission, "until": plan["date"], "playset": args.playset,
+            "owner_confirmed_busy": args.owner_confirmed_busy}
+    if args.max_hours is not None:
+        body["max_hours"] = args.max_hours
+    return start_session(backup_root, body, spawn, verb="fixture", timeout=plan["limit_s"] + FIXTURE_MARGIN_S)
+
+
+def cmd_fixture(args) -> tuple[dict, int]:
+    return fixture_verb(args, real_paths(), _backup_root(), spawn_server)
 
 
 def cmd_stop(args) -> tuple[dict, int]:
@@ -919,7 +980,25 @@ def add_verbs(sub) -> None:
                    help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
                         ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "
                         "run (repeatable). Without --save it is part of the fixture's world and key")
+    p.add_argument("--fixture", metavar="DATE",
+                   help="load the fixture dated DATE (1900, or 1900.1.1) made on this build by `fixture --until`; "
+                        "never makes one")
     p.set_defaults(run=cmd_start)
+
+    p = sub.add_parser("fixture", help="make a dated fixture: one unattended run of the game to DATE, which keeps "
+                                       "its save and its log, then stops (hours past spring 1836: --dry-run first)")
+    p.add_argument("--until", required=True, metavar="DATE",
+                   help="the save's date: a year (1900) or year.month.day (1900.1.1)")
+    p.add_argument("--dry-run", action="store_true",
+                   help="say what the run would be (its key, the estimate, the limit, the rules), touching nothing")
+    p.add_argument("--permission", help="where the go-ahead came from: for a long run, the owner's own grant of it")
+    p.add_argument("--max-hours", type=float, metavar="H",
+                   help="the hours the owner granted the run: needed past spring 1836, and the run's limit")
+    p.add_argument("--playset", choices=session.PLAYSETS, default="mod_only",
+                   help="mod_only (the default) or current, as for `start`: a fixture is made under one")
+    p.add_argument("--owner-confirmed-busy", action="store_true",
+                   help="the owner was asked about the busy GPU and said to go ahead")
+    p.set_defaults(run=cmd_fixture)
 
     p = sub.add_parser("console", help="one console command, with its reply")
     p.add_argument("text")
