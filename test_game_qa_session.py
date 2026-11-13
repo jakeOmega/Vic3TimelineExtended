@@ -1137,6 +1137,33 @@ class SwitchRulesTest(SessionTestCase):
         self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
         self.assertEqual(self.saves(), [self.fixture_save.name])
 
+    def test_a_rule_the_save_holds_otherwise_than_the_last_lobby_is_reported_and_presets_are_only_read(self):
+        # #1767: a rule setting's apply_modifier followed the last lobby, not the save, so a session says where
+        # they differ. The fixture's key follows the owner's LastAppliedRules, so the fixture is made under them
+        # and only a switched copy differs.
+        presets = self.user / "player" / "game_rules" / "presets.txt"
+        presets.parent.mkdir(parents=True)
+        presets.write_text('game_rules_preset={\n\tname="LastAppliedRules"\n\tsetting={ no_fantasy tax_light }\n}\n',
+                           encoding="utf-8")
+        before = presets.read_bytes()
+        key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                          playset="mod_only", rules=["no_fantasy", "tax_light"])
+        self.fixture_save.rename(self.user / "save games" / ("te_qa_fixture_%s.v3" % key))
+        reply = self.start(switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(reply["rules"]["lobby_differs"],
+                         [{"rule": "tax_rule", "save": "tax_off", "last_applied": "tax_light"}])
+        self.assertEqual(presets.read_bytes(), before)
+
+    def test_a_save_that_agrees_with_the_last_lobby_reports_no_difference(self):
+        presets = self.user / "player" / "game_rules" / "presets.txt"
+        presets.parent.mkdir(parents=True)
+        presets.write_text('game_rules_preset={\n\tname="LastAppliedRules"\n\tsetting={ no_fantasy tax_light }\n}\n',
+                           encoding="utf-8")
+        key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                          playset="mod_only", rules=["no_fantasy", "tax_light"])
+        self.fixture_save.rename(self.user / "save games" / ("te_qa_fixture_%s.v3" % key))
+        self.assertEqual(self.start()["rules"], {"settings": ["no_fantasy", "tax_light"]})
+
     def test_a_switched_rule_loads_a_copy_and_says_what_it_is(self):
         before = self.fixture_save.read_bytes()
         reply = self.start(switch_rules={"tax_rule": "tax_off"})

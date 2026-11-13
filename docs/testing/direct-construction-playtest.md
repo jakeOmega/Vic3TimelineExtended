@@ -9,9 +9,10 @@ harness (`python3 -m game_qa`), and the build lens now offers the Construction S
 ## What was wrong
 
 **1. Base Construction followed the player's last lobby, not the save.** The Disabled setting applied the modifier with
-`apply_modifier = all:te_direct_construction_base_modifier`. The base game never uses that line. The engine applies it
-by the rules the player last applied in a lobby on their machine (`player/game_rules/presets.txt`,
-`LastAppliedRules`), whatever save is loaded:
+`apply_modifier = all:te_direct_construction_base_modifier`. The base game never uses that line (as read by this
+session; not re-read since). The engine did not apply it by the save's rules; the setting it applied was the one the
+player last applied in a lobby on their machine (`player/game_rules/presets.txt`, `LastAppliedRules`). Every load
+below was a launch of the QA harness straight into the save (`-loadsave`):
 
 | Save loaded | Its rules (`has_game_rule`) | The lobby's last applied rules | What the engine applied |
 |---|---|---|---|
@@ -24,13 +25,11 @@ one of the save's setting, and `has_game_rule` and the setting's production-meth
 that `LastAppliedRules` is the source. It named the applied setting both times (Disabled, and culture merges enabled,
 neither of them the default nor both the last setting defined), and nothing else on the machine did; but the harness
 never writes that file, so it could not be flipped to watch the modifier follow. Also inferred: that a load from the
-main menu behaves as the harness's `-loadsave` launch does. One check by hand settles both, on the released 1.3.1
-build: start a game with the rule Disabled and save it; open New Game, set the rule to Enabled, start and quit; load the
-save. If the construction tooltip has lost Base Construction, the source is the last lobby. Either way the line could
-not be relied on, and script does not use it any more.
+main menu behaves as the harness's `-loadsave` launch does. "The check by hand (#1767)" below settles both, on the
+released 1.3.1 build. Either way the line could not be relied on, and script does not use it any more.
 
-So a player who starts a Disabled game has the 5 points while Disabled is what they last set up. Once they apply other
-rules in any lobby, that game loses its Base Construction at the next load, and a market game loaded after a Disabled
+So, if the inference holds, a player who starts a Disabled game has the 5 points while Disabled is what they last set
+up. Once they apply other rules in any lobby, that game loses its Base Construction at the next load, and a market game loaded after a Disabled
 lobby gains 5 points it should not have. The save holds no trace of the modifier, and `has_modifier` never saw it.
 The production-method flags of a setting are not affected: they followed the save in every run.
 
@@ -113,6 +112,64 @@ element (Württemberg's) in the switched market game, and not again in the four 
 Before the fix, in a new direct game: Greece queued a second site level on its 5.1 points and had it built in 18
 weeks; a country made in play (Byzantium, from a Greek state) had 5 points at once and its AI queued a first site.
 Those hold with the script-owned base, which reaches a new country at its first weekly pulse.
+
+## The check by hand (#1767)
+
+The harness cannot settle where a rule setting's `apply_modifier` comes from: it never writes the owner's
+`presets.txt` (owner, 2026-11-12), its snapshot does not cover `player/game_rules/`, and it always launches straight
+into a save. Since this change, `start`'s reply names a rule whose setting in the loaded save is not the one
+`LastAppliedRules` names (`rules.lobby_differs`), so a later harness reading says when the two disagreed; the
+readings above predate that, and none of the recorded session files holds the presets file's contents.
+
+**What the repo's records add.** A fixture's key follows `LastAppliedRules`, so a `start` that finds one rather than
+making it was under the rules the fixture was made with. The last such start recorded, at 08:57 UTC on 2026-11-13
+(`docs/testing/game_qa_probe/captures/session_2026-11-13_qa_prs/sessionD_steps.jsonl`), found a fixture whose save
+carries `free_market_construction_enabled` and `culture_merges_enabled`; the runs above, later that day, were under a
+last lobby of Disabled. So the owner applied Disabled in a lobby in between. That fits the runs' account and is not
+evidence for the source either way.
+No other recorded session switched a rule that carried an `apply_modifier` line: Base Construction's was the mod's
+only one (added 2026-10-16, removed 2026-11-13).
+
+**What the check needs.** The released 1.3.1 build, which still has the line and a base of 5: a playset that loads
+it (the Workshop release) and not the local development copy, which no longer has the line. No harness, no console.
+About ten minutes.
+
+0. Close the game. Open `player/game_rules/presets.txt` in the user-data folder (the folder that holds `save games/`
+   and `mod/`) and copy down the `setting={ … }` list of the preset named `LastAppliedRules`: at least its
+   `free_market_construction_*` entry. Copy the whole file somewhere first if you like; nothing below writes it by
+   hand.
+1. Launch the game with the 1.3.1 playset. **New Game**, open **Game Rules**, set **Free Market Construction** to
+   **Disabled**, leave the rest, pick any country and start. In the game, hover the construction figure in the top
+   bar (or the construction panel's construction per week): its tooltip lists the sources of construction. Copy
+   down the total and whether **Base Construction +5** is listed (it should be: the lobby just applied Disabled). Save under a name of your own, say `te1767`. Quit to the
+   main menu.
+2. **New Game** again, set **Free Market Construction** to **Enabled**, start (any country), and once the map is up
+   quit to the main menu. Do not save.
+3. Without closing the game, **Load** `te1767`. Hover the top bar's construction figure. Copy down the total and
+   whether Base Construction is listed.
+4. Quit to the desktop. Open `presets.txt` again and copy down `LastAppliedRules`' `free_market_construction_*`
+   entry: it should now say `free_market_construction_enabled`. If it still says Disabled, step 2 did not apply its
+   rules: redo steps 2 to 4.
+5. Launch the game again with the same playset and load `te1767` from the main menu. Hover and copy down as in step 3.
+
+**What each outcome means**, with `LastAppliedRules` at Enabled after step 2 (step 4):
+
+| Step 3 (same session) | Step 5 (fresh launch) | Means |
+|---|---|---|
+| Base Construction gone, total 5 lower | gone | A main-menu load follows the last lobby as `-loadsave` did: inference (2) holds and loses "inferred". The source survives a restart, and `LastAppliedRules` is the one candidate recorded, so (1) is all but settled; the variant below proves it |
+| gone | listed | Inference (1) does not hold as stated: after a fresh launch the main-menu load followed the save, so what step 3 followed was the running game's last lobby, not the file; and a fresh main-menu load differs from the harness's `-loadsave`, which followed the lobby. The lesson is rewritten to that |
+| listed | listed | A main-menu load applies the save's setting: the harness's `-loadsave` differs. The lesson's heading stands (the harness's loads did not follow the save) and its first paragraph is corrected to that launch; players' reports then need another explanation |
+| listed | gone | Unexpected: write down both readings and the presets lines, and say so on #1767 |
+
+If step 1 does not list Base Construction, the 1.3.1 build is not the one loaded: check the playset. Write down
+the presets lines from steps 0 and 4, the three readings, the date and the game's version on #1767.
+
+**A further variant, to prove (1)**, if the owner wants it: with the game closed, copy
+`presets.txt` aside, change only the `free_market_construction_*` entry of `LastAppliedRules` by hand to the other
+setting, launch, load `te1767` from the main menu, read the tooltip, then put the copy back. Base Construction
+following the edit proves the file is the source. It is a write to the owner's own settings file, which the harness
+never makes; the risk is a mistake in the edit (what the game does with an entry it cannot read is not known), which
+putting the copy back undoes.
 
 ## Self-checks
 

@@ -268,11 +268,11 @@ universal_aptitude_traits_rule = {
 # Under the disabled setting script also gives every country Base Construction
 # (te_direct_construction_base_modifier, te_direct_construction_ensure_base): a
 # flat base of construction, so a country without Construction Sites can still
-# build them. It is not an apply_modifier line here: the engine applies such a
-# line by the rules the player last applied in a lobby on their machine, not by
-# the rules of the save being played, so the base came and went with whatever
-# the player had last set up (read live, 2026-11-13;
-# docs/guides/scripting_best_practices.md, "Gating a Mechanic on a Game Rule").
+# build them. It is not an apply_modifier line here: the engine does not apply
+# such a line by the rules of the save being played (read live, 2026-11-13); it
+# seems to follow the rules the player last applied in a lobby (inferred,
+# #1767), so the base came and went with the player's setups
+# (docs/guides/scripting_best_practices.md, "Gating a Mechanic on a Game Rule").
 #
 # The rule can be changed in a running game (the screen that changes country);
 # script then turns the Construction Sectors into Construction Sites or back

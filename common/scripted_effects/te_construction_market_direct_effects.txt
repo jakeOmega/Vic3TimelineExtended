@@ -328,10 +328,10 @@ te_direct_construction_forget_site_record = {
 # pulse for any country that still holds it.
 #
 # Script owns it because the rule cannot: an apply_modifier line in a rule
-# setting is applied by the rules the player last applied in a lobby, whatever
-# save is loaded (read live, 2026-11-13: a save whose rule said Enabled got the
-# Disabled setting's modifier, and one switched to no culture merges got the
-# merges setting's).
+# setting is not applied by the save's rules (read live, 2026-11-13: a save whose
+# rule said Enabled got the Disabled setting's modifier, and one switched to no
+# culture merges got the merges setting's); it seems to follow the rules the
+# player last applied in a lobby (inferred, #1767).
 te_direct_construction_ensure_base = {
 	if = {
 		limit = {

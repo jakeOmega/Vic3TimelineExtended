@@ -88,6 +88,21 @@ def last_applied(user_data: Path) -> list[str]:
     return []
 
 
+def lobby_differs(settings: Sequence[str], last: Sequence[str], table: Mapping[str, dict]) -> list[dict]:
+    """Each rule whose setting in the save loaded (`settings`) is not the one the owner last applied in a lobby
+    (`last`, `last_applied`), as {"rule", "save", "last_applied"}, by rule name. A rule only one of the two lists
+    names, or one `table` (`load_rules`) does not define, is left out.
+
+    Why a session says so (#1767): a rule setting's `apply_modifier` did not follow the save in the game on
+    2026-11-13; the modifier applied was the setting the last lobby named (inferred to come from that preset). So
+    where the two differ, a reading that rests on such a line reads the lobby's setting, not the save's."""
+    owner = {setting: rule for rule, info in table.items() for setting in info.get("settings", ())}
+    saved = {owner[s]: s for s in settings if s in owner}
+    lobby = {owner[s]: s for s in last if s in owner}
+    return [{"rule": rule, "save": saved[rule], "last_applied": lobby[rule]}
+            for rule in sorted(saved) if rule in lobby and lobby[rule] != saved[rule]]
+
+
 def _uncommented(line: str) -> str:
     in_string = False
     for i, char in enumerate(line):
