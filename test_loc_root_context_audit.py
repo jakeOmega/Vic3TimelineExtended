@@ -489,14 +489,14 @@ class RunTests(_Fixture):
             self.assertIn("## Public panel", fh.read())
 
     def test_the_context_is_left_out_aloud_when_its_lists_cannot_be_imported(self):
-        with mock.patch.dict(sys.modules, {"test_te_system_tab_bodies": None}):
+        with mock.patch.dict(sys.modules, {"national_info_binding": None}):
             panels, world, note = audit_module.repo_public_context()
         self.assertEqual((panels, world), ({}, set()))
         self.assertIn("could not be imported", note)
         self.run_audit(fx_public_label="[JournalEntry.GetCountry.GetName]")
         out = io.StringIO()
         with mock.patch.object(audit_module, "_is_repo", return_value=True), \
-                mock.patch.dict(sys.modules, {"test_te_system_tab_bodies": None}), contextlib.redirect_stdout(out):
+                mock.patch.dict(sys.modules, {"national_info_binding": None}), contextlib.redirect_stdout(out):
             self.assertEqual(main(["--strict", "--mod-path", self.root]), 0)
         self.assertIn("Not looked at in this run: the tab registry or `WORLD_LOC` could not be imported", out.getvalue())
         self.assertIn("- public panel: not looked at", out.getvalue())
@@ -535,10 +535,11 @@ class RepoTests(unittest.TestCase):
         self.assertEqual(self.result.public_note, "", "the repo's own run looks at the public tabs")
 
     def test_the_public_tabs_are_the_binding_tests(self):
+        import national_info_binding
         import test_te_system_tab_bodies as binding
         panels, world, note = audit_module.repo_public_context()
         self.assertEqual(set(panels), {t.key for t in binding.PUBLIC})
-        self.assertEqual(world, set(binding.WORLD_LOC))
+        self.assertEqual(world, set(national_info_binding.WORLD_LOC))
         self.assertEqual(note, "")
 
     def test_a_public_flags_path_walks_the_binding_tests_keys(self):

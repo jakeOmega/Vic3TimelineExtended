@@ -49,9 +49,9 @@ public panel    The keys another country's panel renders of a public tab
                 read (`entry_read_on_public_panel`: another country has no
                 entry in reach, gotcha #35) and a read of the player
                 (`player_read_on_public_panel`: the panel would show the
-                player's figure) unless the key is in `WORLD_LOC` in
-                `test_te_system_tab_bodies.py`. These are that file's
-                `BindingTest` rules for loc. **The CLI and CI look at this
+                player's figure) unless the key is in `WORLD_LOC`
+                (`national_info_binding.py`). These are
+                `test_te_system_tab_bodies.py`'s `BindingTest` rules for loc. **The CLI and CI look at this
                 context; a reload does not** (`regenerate()`): walking the
                 tabs' types costs more than the rest of the audit, and
                 `BindingTest` holds the same rule in CI's test step. If the
@@ -409,12 +409,12 @@ def _is_repo(root: str) -> bool:
 def repo_public_context() -> tuple[dict[str, set[str]], set[str], str]:
     """(tabs, world reads, why not): each public tab with the types National
     Info's mount for another country draws for it, from the window's
-    registry, and the loc keys that are world reads, BindingTest's own list.
-    Where either can't be imported (te_rebind_country.py guards the same
-    import), no tab, and the reason, which the output prints."""
+    registry, and the loc keys that are world reads, BindingTest's own list
+    (`national_info_binding.WORLD_LOC`). Where either can't be imported, no
+    tab, and the reason, which the output prints."""
     try:
         from scripts.generators import gen_te_systems_window as gen
-        from test_te_system_tab_bodies import WORLD_LOC
+        from national_info_binding import WORLD_LOC
     except ImportError as exc:
         return {}, set(), (f"the tab registry or `WORLD_LOC` could not be imported ({exc}); "
                            f"`BindingTest` still holds the rule")
