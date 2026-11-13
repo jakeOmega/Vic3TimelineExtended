@@ -152,6 +152,8 @@ class Game(fakes.FakeHelper):
         self.entered = False                    # Start was pressed: time can pass
         self.paused = True
         self.clicks_work = True
+        self.back_enters = True                 # Back on the country-select screen enters the game (#1598)
+        self.back_clicks = 0                    # Back clicks that reached the button
         self.days_per_second = 1.5
         self.elapsed = 0.0                      # game days since START_DATE
         self.stops = True                       # the read event stops at a breakpoint set on its line
@@ -291,6 +293,14 @@ class Game(fakes.FakeHelper):
             self.played = self.selected
             self.adapter.breakpoints.clear()
             self.console_open = False
+        elif abs(x - width * 0.0375) < 2 and abs(y - height * 0.981) < 2 and not self.console_open:
+            # Back (#1598), as the owner expects it and as unverified live: the game is entered as the country
+            # played, with Start's other effects assumed. With the console open its panel takes the click.
+            self.back_clicks += 1
+            if self.back_enters:
+                self.entered = True
+                self.adapter.breakpoints.clear()
+                self.console_open = False
 
     def adopt(self, proc):
         if self.process_gone:                   # as win_helper._op_adopt: the creation time is compared
@@ -1416,6 +1426,64 @@ class EnterGameTest(SessionTestCase):
     def test_enter_game_needs_a_country(self):
         self.started(as_tag=None)
         self.assertEqual(self.session_error(self.session.enter_game).code, "no_country")
+        self.assertEqual(self.game.clicks, [])
+
+    # Back (#1598): one click at the bottom left, the console shut first, then Start's proof.
+
+    def test_back_enters_with_one_click_with_the_console_closed(self):
+        reply = self.started()
+        result = self.session.enter_game("back")
+        self.assertTrue(result["entered"])
+        self.assertEqual(self.game.clicks, [(72, 1059)])             # BACK_CLICK of the 1920x1080 client
+        self.assertEqual(self.game.back_clicks, 1)                     # the console's panel did not take it
+        self.assertEqual(result["clicks"], [[72, 1059]])
+        self.assertTrue(Path(result["back_shot"]).is_file())
+        self.assertEqual(self.game.played, "FRA")
+        self.assertEqual(self.game.adapter.breakpoints, {EVENTS_WIN: [reply["overlay"]["read_line"]]})
+        self.assertEqual(self.typed().count("tag FRA"), 2)
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (True, False, False))
+        step = next(step for step in self.steps() if step["verb"] == "enter_game")
+        self.assertEqual((step["via"], step["outcome"]), ("back", "ok"))
+        self.assertEqual(self.session.enter_game("back"), {"entered": True, "already": True})
+
+    def test_back_that_moves_no_date_locks_nothing(self):
+        # Back did nothing: the game is where it was, so the country path can still be tried.
+        self.started()
+        self.game.back_enters = False
+        error = self.session_error(self.session.enter_game, "back")
+        self.assertEqual(error.code, "not_entered")
+        self.assertNotIn("cause", error.info)
+        self.assertFalse(self.session.status()["left_running"])
+        self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_a_back_click_refused_before_the_press_changes_nothing(self):
+        self.started()
+
+        def covered(pid, x, y):
+            raise HelperError("covered", "another window is under the point")
+        self.game.click = covered
+        error = self.session_error(self.session.enter_game, "back")
+        self.assertEqual(error.code, "click_refused")
+        status = self.session.status()
+        self.assertEqual((status["entered_unproved"], status["left_running"]), (False, False))
+
+    def test_a_back_click_that_may_have_pressed_is_left_running(self):
+        self.started()
+
+        def lost(pid, x, y):
+            raise HelperError("backend_error", "SendInput returned 0")
+        self.game.click = lost
+        error = self.session_error(self.session.enter_game, "back")
+        self.assertEqual((error.code, error.info["cause"]), ("not_entered", "backend_error"))
+        status = self.session.status()
+        self.assertEqual((status["entered_unproved"], status["left_running"]), (True, True))
+        self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+
+    def test_enter_game_by_an_unknown_way_is_a_bad_argument(self):
+        self.started()
+        self.assertEqual(self.session_error(self.session.enter_game, "menu").code, "bad_argument")
         self.assertEqual(self.game.clicks, [])
 
     # After live session 2 (2026-11-11): the clicks entered the game as the country the camera was on, not the

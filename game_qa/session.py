@@ -59,6 +59,13 @@ from game_qa import selfchecks          # the mod's TE_SELF_CHECK lines: kept wi
 
 COUNTRY_CLICK = (0.492, 0.656)          # the country the camera is on, tagged or not (3840x2160, spec § 12.1 A2)
 START_CLICK = (0.9216, 0.975)           # the country-select screen's Start button
+# The country-select screen's Back button, bottom left (#1598). The owner's lead (2026-11-12, "fairly confident,
+# not certain"): on a game loaded at that screen, Back enters the game as the country played, not the main menu.
+# Unverified live. It sits under the open console's left panel, so the console is closed before the click. Measured
+# on shot_04.png of run 20261112T083507Z (1600x900, console closed by `press esc`): the button's centre is about
+# (60, 883).
+BACK_CLICK = (0.0375, 0.981)
+ENTER_VIA = ("country", "back")         # enter-game's ways in: the country and Start clicks, or Back
 SCAN_SPACE = 0x39                       # toggles the pause, with the console closed
 DEBUGGER_PORT = 6111
 SESSION_ARGS = ("-gdpr-compliant", "-debug_mode", "-script_debugger")
@@ -1009,10 +1016,14 @@ class Session:
         with self._step("tag", tag=tag):
             self._tag(tag)
 
-    def enter_game(self) -> dict:
+    def enter_game(self, via: str = "country") -> dict:
         """Click the country the camera is on, then Start, and prove it by the date moving while unpaused. Only
         the fixture opens on the country-select screen: with an owner's save it is refused
         (`not_on_country_select`), and `advance` needs no entering.
+
+        `via="back"` clicks the screen's Back button instead (`_enter_back`, #1598): one click that depends on no
+        camera and no window over the middle of the screen, if Back enters the game as the played country, as the
+        owner thinks (unverified). The proof after it is the same as after Start.
 
         After Start (live, 2026-11-11, the clicks entered the game as the country the camera was on, and no read
         stopped at the breakpoint after them): wait ENTER_SETTLE_S, wait for the console (`_console_after_start`,
@@ -1026,13 +1037,15 @@ class Session:
         had not moved ("the date stayed"). The game is then where it was, on the country-select screen with time
         stopped, as when a window covered the country click (#1598), so `enter_game` may be called again, and
         `advance` calls it again."""
+        if via not in ENTER_VIA:
+            raise SessionError("bad_argument", "enter-game goes in by %s, not %r" % (" or ".join(ENTER_VIA), via))
         self._require_game()
         self._refuse_if_left_running()
         if not self._fixture_loaded:
             raise SessionError("not_on_country_select", "the game was started on a save of the owner's, which "
                                "opens in play: there is no country-select screen to click (advance works as it is)")
-        with self._step("enter_game") as out:
-            result = self._enter()
+        with self._step("enter_game", via=via) as out:
+            result = self._enter() if via == "country" else self._enter_back()
             out.update(result)
         return result
 
@@ -1841,8 +1854,61 @@ class Session:
                     clicks=clicks, screenshot=self._enter_shot_path())
         self._click(START_CLICK, clicks)
         # Start may have been pressed: from here on the game may be entered, and running. Nothing is clicked again.
+        return self._prove_entered(clicks)
+
+    def _enter_back(self) -> dict:
+        """Enter by the country-select screen's Back button (BACK_CLICK, #1598): close the console, which covers
+        the button, click it once, keep a screenshot of what it did (`back_shot`, the probe's evidence), then the
+        same proof as after Start (`_prove_entered`). Unverified live: if Back goes to the main menu instead, the
+        proof fails after the click, which sets `left_running` like any failure after Start, and the session
+        needs `stop`.
+
+        The click is refused before the button went down (CLICK_REFUSED_BEFORE_PRESS) as `click_refused`, with
+        nothing changed; any other helper error may follow the press, so it counts as a failure after Start."""
+        if self._entered:
+            return {"entered": True, "already": True}
+        if self._country is None:
+            raise SessionError("no_country", "tag a country first: Back enters the country played, and the tagged "
+                               "one is tagged again once the game is entered")
+        clicks: list[list[int]] = []
+        self._console.ensure_open()             # its state known, and the game in front
+        self._console.close()                   # the open console's left panel covers Back
+        self._console.front()                   # the presence rule, as before every click; the console stays shut
+        x, y = self._point(BACK_CLICK)
+        try:
+            self._sends.click(self._proc.pid, x, y)
+        except HelperError as e:
+            if e.code in CLICK_REFUSED_BEFORE_PRESS:
+                raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
+            self._left_running = True
+            self._entered_unproved = True
+            raise SessionError("not_entered", "the Back click answered %s: %s, and may have pressed the button: the "
+                               "game may be entered or at the main menu; enter_game and advance are refused until "
+                               "stop" % (e.code, e.detail), cause=e.code, clicks=[[x, y]]) from e
+        clicks.append([x, y])
         try:
             self._sleep(ENTER_SETTLE_S)
+            back_shot: str | None = str(self._shot())
+        except HelperError as e:
+            back_shot = None
+            self._record("back_shot", outcome="failed", detail=str(e)[:200])
+        except BaseException as e:
+            self._left_running = True
+            self._entered_unproved = True
+            if not isinstance(e, Exception):
+                raise
+            raise self._after_start_error(e, clicks) from e
+        result = self._prove_entered(clicks, settle=False)
+        result["back_shot"] = back_shot
+        return result
+
+    def _prove_entered(self, clicks: list[list[int]], settle: bool = True) -> dict:
+        """After the click that may have entered the game (Start, or Back): wait ENTER_SETTLE_S (unless the caller
+        did), wait for the console, attach the debugger again, tag the session's country again, and prove the game
+        in play by the date moving while unpaused. See `enter_game` for what each failure leaves."""
+        try:
+            if settle:
+                self._sleep(ENTER_SETTLE_S)
             self._console_after_start()
             self._attach("reattach")
             with self._step("tag", tag=self._country):

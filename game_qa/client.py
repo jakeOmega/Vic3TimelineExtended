@@ -753,7 +753,7 @@ def cmd_tag(args) -> tuple[dict, int]:
 
 
 def cmd_enter_game(args) -> tuple[dict, int]:
-    return call(_backup_root(), "enter-game", timeout=ENTER_TIMEOUT_S)
+    return call(_backup_root(), "enter-game", {"via": args.via}, timeout=ENTER_TIMEOUT_S)
 
 
 def cmd_advance(args) -> tuple[dict, int]:
@@ -846,8 +846,12 @@ def add_verbs(sub) -> None:
     p = sub.add_parser("tag", help="play another country")
     p.add_argument("tag")
     p.set_defaults(run=cmd_tag)
-    sub.add_parser("enter-game", help="the two clicks past the country-select screen, proven by the date "
-                                      "moving").set_defaults(run=cmd_enter_game)
+    p = sub.add_parser("enter-game", help="the two clicks past the country-select screen, proven by the date "
+                                          "moving")
+    p.add_argument("--via", choices=("country", "back"), default="country",
+                   help="country: click the country the camera is on, then Start (the default); back: click the "
+                        "screen's Back button once (#1598, unverified live)")
+    p.set_defaults(run=cmd_enter_game)
     p = sub.add_parser("advance", help="let at least DAYS game days pass (entering the game first if need be)")
     p.add_argument("days", type=int)
     p.set_defaults(run=cmd_advance)
