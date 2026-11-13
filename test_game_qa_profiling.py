@@ -485,12 +485,14 @@ class HalfFailedRestartTest(unittest.TestCase):
         for restart in ({"clear": ["Discarded 28 recorded frames"], "enable": ["Already enabled"]},  # no `cleared`
                         {"cleared": True, "clear": ["Discarded 28 recorded frames"], "enable": []},
                         {"cleared": None},                                      # the clear's answer was not seen
-                        {"clear": []}):                                         # nor here, before `cleared`
+                        {"clear": []},                                          # nor here, before `cleared`
+                        # before `cleared` too: Enable's answer lost, so its own error is the outcome
+                        {"outcome": "no_reply", "clear": ["Discarded 28 recorded frames"], "entered": True}):
             with self.subTest(restart=restart), self.assertRaises(p.ProfileError) as caught:
                 self.summary(restart, "A", "B")
             self.assertEqual(caught.exception.code, "restarted_between")
-            self.assertIn("that start ended profile_refused, but its clear had gone through, or may have",
-                          caught.exception.detail)
+            self.assertIn("that start ended %s, but its clear had gone through, or may have"
+                          % restart.get("outcome", "profile_refused"), caught.exception.detail)
 
     def test_a_start_whose_clear_did_not_go_through_is_no_restart(self):
         for restart in ({"cleared": False, "clear": ["Unknown command"]}, {"clear": ["Unknown command"]}, {}):

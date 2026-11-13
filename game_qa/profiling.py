@@ -493,13 +493,19 @@ def dump_paths(run_dir: Path, label: str) -> tuple[Path, Path]:
 def start_cleared(step: Mapping) -> bool | None:
     """Whether a `profile_start` step cleared the tick timings: True, False, or None when it may have (the clear was
     typed and its answer was not seen). The session records it as `cleared`. A step recorded without that field
-    says it by its outcome, or by holding Enable's answer, since Enable is typed only once the clear has answered
-    success; an empty answer to the clear is a may-have."""
+    says it by its outcome and the answers it holds. Enable is typed only once the clear has answered success, so
+    a step holding Enable's answer, or holding the clear's and ending otherwise than `profile_refused` (an error of
+    Enable's own, its answer lost), cleared them. One that holds the clear's answer and ended `profile_refused` was
+    refused by the clear itself, and an empty answer there is a may-have."""
     if "cleared" in step:
         return step["cleared"]
     if step.get("outcome") == "ok" or "enable" in step:
         return True
-    return None if step.get("clear") == [] else False
+    if "clear" not in step:
+        return False
+    if step.get("outcome") != "profile_refused":
+        return True
+    return None if step["clear"] == [] else False
 
 
 def profile_steps(steps: Sequence[Mapping]) -> list[Mapping]:
