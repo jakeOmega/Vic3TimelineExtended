@@ -344,7 +344,7 @@ when it is next touched, not in a sweep (wide-mode spec § 9.5).
 
 `panel_view(names, types)` is what another country's panel draws of the named types, for the National Info tests
 (`BindingTest`, `GuardTest` and each system's `PrivateTest`; `markup_reads`, `unguarded_controls` and `panel_loc_keys`
-read through it). It follows a `blockoverride` to the blocks it fills (#1363, #1368): an override is written in the
+read through it). No `visible` hides anything from it, `visible = no` included: each of the mod's 401 (2026-11-13) hides one instance's part, never a type, so what sits under one counts as drawn, the safe way, and what another country must not see goes under `te_own_country_only` (`MutationTest.test_visible_no_hides_nothing_from_the_walk`, #1698). It follows a `blockoverride` to the blocks it fills (#1363, #1368): an override is written in the
 instancing type but drawn where the instanced type puts `block "x"`, so one whose every block sits under
 `te_own_country_only`, in a block default no place draws, or in a type the panel doesn't draw, is skipped with what it
 holds (`View.skip`), as if the guard were written around it. A control or a player-only key fed to a guarded row

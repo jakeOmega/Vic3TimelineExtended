@@ -1222,6 +1222,30 @@ class MutationTest(unittest.TestCase):
         self.assertEqual(self.row_draws(self.row(guard="", second="fx_derived = {}"))[0],
                          [("fx_derived", "Execute"), ("fx_wide", "Execute")])
 
+    def test_visible_no_hides_nothing_from_the_walk(self):
+        """The walk reads no `visible` as hiding, `visible = no` included
+        (#1698; #1368 had named it beside the guard as a dead subtree, and
+        #1639 left it out): what sits under one counts as drawn for another
+        country, the safe way. The mod's `visible = no` lines (401 on
+        2026-11-13, 296 in a blockoverride and 68 in a block default) each hide
+        one instance's part, never a type, so reading them as dead would take
+        a per-instance walk the helpers don't have. What another country must
+        not see goes under te_own_country_only instead. If the walk learns
+        `visible = no`, this test is where that is decided."""
+        hidden = "widget = {\n\t\t\tvisible = no\n\t\t\t@X@\n\t\t}"
+        reads = markup_reads({"fx_wide"}, _fixture(hidden.replace("@X@", 'textbox = { text = "[JournalEntry.IsActive]" }')))
+        self.assertEqual([(f.where, f.what) for f in reads], [("fx_section", "JournalEntry.IsActive")])
+        controls = unguarded_controls({"fx_wide"}, _fixture(hidden.replace("@X@", "fx_controls = {}")))
+        self.assertEqual([(f.where, f.what) for f in controls], [("fx_controls", "Execute")])
+        keys = panel_loc_keys({"fx_wide"}, _fixture(hidden.replace("@X@", 'textbox = { text = "fx_hidden" }')),
+                              {"fx_label": "Arsenal", "fx_hidden": "Hidden"})
+        self.assertEqual(keys, {"fx_label", "fx_hidden"})
+        # in place of the guard, on the widget around the row's block, and set by
+        # the instance's own override of that block: drawn both ways, as with no guard
+        drawn = ([("fx_wide", "Execute")], [("fx_wide", "JournalEntry.IsActive")], {"fx_label", "fx_mine"})
+        self.assertEqual(self.row_draws(self.row(guard="visible = no")), drawn)
+        self.assertEqual(self.row_draws(self.row(guard="", held="visible = no")), drawn)
+
     def test_an_override_that_fills_a_drawn_block_is_drawn(self):
         """One block of the name outside the guard keeps the override drawn:
         in the type itself, or in a type it draws (an override reaches the
