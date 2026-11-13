@@ -9,9 +9,9 @@ Re-Checks Its Trigger When It Fires"). Court Overhaul never fired because of
 it. The rule is the likely reading of a QA session, not yet a closed fact:
 the self-checks `delayed_trigger_queue_check` (judiciary) and
 `delayed_trigger_queue_probe` / `delayed_trigger_fire_probe`
-(`events/te_engine_probe_events.txt`) settle it in ordinary play, and whether
-the trigger is read again on the day the event is due
-(`docs/testing/judiciary-playtest.md`).
+(`te_judiciary_events.11`-`.15`, started by `te_jud_dt_probe_start`) settle it
+in ordinary play, and whether the trigger is read again on the day the event
+is due (`docs/testing/judiciary-playtest.md`).
 
 What is listed
 --------------
@@ -29,9 +29,17 @@ Each target falls in one class:
   is made where a law has just changed (a law's file, an on_action run from
   `on_law_activated`, or after an `activate_law` in the same entity): the
   new law is not in `modifier:` reads that day.
-- `set_before`: every condition of the trigger is restated in the calling
-  entity before every call, or is a `has_variable = X` the entity sets before
-  it (a variable is visible at once). True when queued; not flagged.
+- `set_before`: at every call, each condition of the trigger is either
+  tested by a `limit` the call sits inside (an `if` or an iterator on the
+  way to it, or the calling event's own `trigger` for a call in its
+  `immediate`), or is a `has_variable = X` the entity sets before the call
+  (a variable is visible at once). Both must be about the scope the event is
+  sent to: a block that changes scope on the way to the call starts over,
+  a write inside another scope's block does not count, and neither does a
+  write that only an earlier `if` makes. A condition that merely appears in
+  some earlier block's `limit` proves nothing and is not counted (until
+  2026-11-13 it was, and so was a write on another scope). True when queued;
+  not flagged.
 - `reviewed`: the trigger line carries
   `# REVIEWED YYYY-MM-DD (delayed_trigger): why`. A rationale that starts
   with "cancels" marks a trigger that also stops an event whose premise went
@@ -303,6 +311,75 @@ def _run_before(entity: Node, call: Node) -> list[Node]:
     return out
 
 
+# Blocks that run their children in the scope they are in. Any other block on
+# the way to a call is taken to change scope (`scope:x = { }`, `owner = { }`,
+# an iterator, ...), which is the careful reading: what was tested or set
+# outside it was about another object.
+_SAME_SCOPE = {"immediate", "option", "after", "effect", "if", "else_if", "else", "hidden_effect", "random",
+               "random_list", "switch", "while", "custom_tooltip", "show_as_tooltip"}
+_UNCONDITIONAL = {"hidden_effect", "custom_tooltip", "show_as_tooltip"}
+
+
+def _same_scope(node: Node, parent: Node | None) -> bool:
+    if node.key in _SAME_SCOPE:
+        return True
+    # a random_list's weights and a switch's cases
+    return parent is not None and parent.key in ("random_list", "switch")
+
+
+def _variable_name(node: Node) -> str | None:
+    if node.value is not None:
+        return node.value
+    name = node.child("name")
+    return name.value if name is not None else None
+
+
+def _unconditional_writes(node: Node) -> set[str]:
+    """The variables `node` sets on its own scope whenever it runs: itself, or
+    what an unconditional wrapper holds."""
+    if node.key == "set_variable":
+        name = _variable_name(node)
+        return {name} if name else set()
+    if node.value is None and node.key in _UNCONDITIONAL:
+        out: set[str] = set()
+        for c in node.children:
+            out |= _unconditional_writes(c)
+        return out
+    return set()
+
+
+def _holds_at(entity: Node, call: Node) -> tuple[set[str], set[str]]:
+    """`(conditions, variables)` that hold for the scope `call` sends its
+    event to, on the day it is queued: the conditions (as `canon()`) of every
+    `limit` the call sits inside, and the calling event's own `trigger` for a
+    call in its `immediate`; and the variables set on that scope before the
+    call. A block that changes scope on the way starts both over; an
+    iterator's own `limit` is about the new scope, so it is kept."""
+    path = _path(entity, call) or [entity, call]
+    conditions: set[str] = set()
+    variables: set[str] = set()
+    if len(path) > 1 and path[1].key == "immediate":
+        trigger = entity.child("trigger")
+        if trigger is not None:
+            conditions |= {c.canon() for c in trigger.children}
+    for i, (parent, child) in enumerate(zip(path, path[1:])):
+        if i and not _same_scope(parent, path[i - 1]):
+            conditions, variables = set(), set()
+        if i and parent.key not in _EXCLUSIVE_PARENTS:
+            limit = parent.child("limit")
+            if limit is not None and limit is not child:
+                conditions |= {c.canon() for c in limit.children}
+        if parent.key in _EXCLUSIVE_PARENTS:
+            continue
+        for sib in parent.children:
+            if sib is child:
+                break
+            if sib.key == "option" and parent is entity:
+                continue
+            variables |= _unconditional_writes(sib)
+    return conditions, variables
+
+
 class _Files:
     """Each file parsed once; the entity and the node a call site names."""
 
@@ -383,9 +460,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         before = _run_before(entity, node)
         added = {_modifier_name(m) for m in before if m.key == "add_modifier"}
         removed = {_modifier_name(m) for m in before if m.key == "remove_modifier"}
-        set_vars = {m.value if m.value is not None else (m.child("name").value if m.child("name") else None)
-                    for m in before if m.key == "set_variable"}
-        canon_before = {m.canon() for m in before}
+        held, set_vars = _holds_at(entity, node)
         reasons = []
         for cond in trigger.children:
             if cond.key == "has_modifier" and cond.value in added:
@@ -403,7 +478,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
             reasons.append("law_lag: the trigger reads `modifier:` sums where a law has just changed")
         call.reason = "; ".join(reasons)
         call.set_before = all(
-            c.canon() in canon_before or (c.key == "has_variable" and c.value in set_vars)
+            c.canon() in held or (c.key == "has_variable" and c.value in set_vars)
             for c in trigger.children
         )
 
