@@ -3,9 +3,12 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
+                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]...
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
-                                             # second day (the reply's `rules` says what the save holds)
+                                             # second day (the reply's `rules` says what the save holds); a
+                                             # game arg from session.GAME_ARGS; a variant mod folder, loaded
+                                             # after the playset and before the overlay
     python3 -m game_qa console "<text>"      # one console command, with its reply
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
@@ -697,6 +700,10 @@ def cmd_start(args) -> tuple[dict, int]:
             "playset": args.playset, "owner_confirmed_busy": args.owner_confirmed_busy}
     if switches:
         body["switch_rules"] = switches
+    if args.game_arg:
+        body["game_args"] = list(args.game_arg)
+    if args.add_mod:
+        body["add_mods"] = list(args.add_mod)
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -815,6 +822,13 @@ def add_verbs(sub) -> None:
                         "The overlay is added to either")
     p.add_argument("--owner-confirmed-busy", action="store_true",
                    help="the owner was asked about the busy GPU and said to go ahead")
+    p.add_argument("--game-arg", action="append", default=[], metavar="FLAG",
+                   help="add one of %s to the game's arguments (repeatable). Write it without its dash, or as "
+                        "--game-arg=-FLAG. The fixture's own run never gets it" % ", ".join(session.GAME_ARGS))
+    p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
+                   help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
+                        ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "
+                        "run (repeatable). Without --save it is part of the fixture's world and key")
     p.set_defaults(run=cmd_start)
 
     p = sub.add_parser("console", help="one console command, with its reply")

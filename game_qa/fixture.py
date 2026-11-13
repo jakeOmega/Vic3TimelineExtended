@@ -135,7 +135,7 @@ def restore_retried(run_cli: RunCli, snapshot_id: str, sleep, retries: Mapping[s
 
 
 def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str,
-        disabled_dlc: Sequence = (), rules: Sequence[str] = ()) -> str:
+        disabled_dlc: Sequence = (), rules: Sequence[str] = (), add_mod_dirs: Sequence[Path] = ()) -> str:
     """12 hex digits naming the game a fixture was made for: the game version, the run's playset (its mode,
     `playset`, `enabled_mods`, the mod paths the run loads, in order, and `disabled_dlc`, the DLC the run's
     playset switches off, as a set: launch keeps the owner's `disabledDLC`), `rules`, the rule settings the
@@ -143,8 +143,10 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
     the defaults: game_qa.rules), and the relative path, size and
     modification time of every file under the deployed mod's `common/`, `events/` and `map_data/` (a folder that
     is missing is skipped). A fixture made under another playset, or another DLC set, is another world: a DLC
-    changes what a new game sets up even where the script folders loaded are the same. Not covered: for
-    `current`, the other mods' contents (only their paths are hashed), so an update of one keeps the key."""
+    changes what a new game sets up even where the script folders loaded are the same. `add_mod_dirs`, the
+    session's variant folders (`start --add-mod`, whose Windows paths are among `enabled_mods`), are hashed as the
+    deployed mod is, each by its place in the list, so a variant edited in place is another world too. Not covered:
+    for `current`, the other mods' contents (only their paths are hashed), so an update of one keeps the key."""
     if isinstance(enabled_mods, str):
         raise TypeError("enabled_mods is a list of paths, not one path")
     digest = hashlib.sha256()
@@ -156,7 +158,14 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
         _feed(digest, "dlc_off", dlc)
     for setting in rules:
         _feed(digest, "rule", setting)
-    root = Path(deploy_dir)
+    _feed_folders(digest, "file", Path(deploy_dir))
+    for number, folder in enumerate(add_mod_dirs):
+        _feed_folders(digest, "add_mod_file_%d" % number, Path(folder))
+    return digest.hexdigest()[:12]
+
+
+def _feed_folders(digest, tag: str, root: Path) -> None:
+    """The relative path, size and modification time of every file under `root`'s KEY_FOLDERS, in order."""
     for folder in KEY_FOLDERS:
         records = []
         for where, _, names in os.walk(root / folder):
@@ -168,8 +177,7 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
                     continue
                 records.append((path.relative_to(root).as_posix(), info.st_size, info.st_mtime_ns))
         for record in sorted(records):
-            _feed(digest, "file", *record)
-    return digest.hexdigest()[:12]
+            _feed(digest, tag, *record)
 
 
 def find(user_data: Path, key: str) -> Path | None:
@@ -193,9 +201,11 @@ def make(
     clock=time.monotonic,
     started: Callable[[str], ProcId | None] | None = None,
     keep_lines: Callable[[str], Any] | None = None,
+    add_mods: Sequence[str] = (),
 ) -> Path:
     """Make the fixture for `key` with one unattended run of the game, and return its save. `playset` is the
-    run's (`launch --playset`), so the fixture is made in the world the run will load.
+    run's (`launch --playset`), so the fixture is made in the world the run will load; `add_mods`, the session's
+    variant folders (Windows paths), are loaded too, after the playset and before the overlay, as the run's are.
 
     The order is `snapshot`, `launch`, `watch` (spawned the moment launch returns, and followed until it has
     recorded the game's exit, which `-run_until` brings), the rename of the run's save, and `restore` (retried
@@ -234,7 +244,10 @@ def make(
     if not ok or not isinstance(snapshot, str) or not snapshot:
         raise FixtureError(_message("snapshot", reply, None), "snapshot", reply)
 
-    launch = ["launch", snapshot, "--permission", permission, "--playset", playset, "--add-mod", overlay_windows_path]
+    launch = ["launch", snapshot, "--permission", permission, "--playset", playset]
+    for folder in add_mods:
+        launch += ["--add-mod", folder]
+    launch += ["--add-mod", overlay_windows_path]
     if owner_confirmed_busy:
         launch.append("--owner-confirmed-busy")
     launch += ["--", *FIXTURE_ARGS]

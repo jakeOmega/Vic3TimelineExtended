@@ -70,7 +70,8 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
                                         # client's STATUS_TIMEOUT_S, so `status` and `stop` answer past one
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
-START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules")
+START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
+              "game_args", "add_mods")
 
 
 class ServerError(Exception):

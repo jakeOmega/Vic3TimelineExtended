@@ -21,6 +21,7 @@ from unittest import mock
 
 from game_qa import __main__ as cli
 from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
+from game_qa.report import read_steps
 from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
@@ -2826,6 +2827,28 @@ class RunPlaysetPinTest(unittest.TestCase):
                 self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod,
                                                      OVERLAY_WIN), launched["playset"]["enabled"])
 
+    def test_a_variant_folder_lands_where_launch_puts_it(self):
+        # #1702: `start --add-mod` goes after the run's playset and before the overlay, as launch's --add-mods do
+        variant = r"D:\vic3te-data\qa-addmod-test"
+        cases = {"the owner's mods, this one among them": [self.WORKSHOP + "1", self.this_mod, self.WORKSHOP + "2"],
+                 "this mod alone": [self.this_mod]}
+        runs = [(label, owner, mode) for label, owner in cases.items() for mode in session.PLAYSETS]
+        for n, (label, owner, mode) in enumerate(runs):
+            with self.subTest(owners=label, mode=mode):
+                os.environ["VIC3_QA_BACKUPS"] = str(self.backups) + "v" + str(n)
+                (self.user / "content_load.json").write_text(
+                    json.dumps({"enabledMods": [{"path": m} for m in owner], "disabledDLC": []}), encoding="utf-8")
+                snap, code = self.cli("snapshot")
+                self.assertEqual(code, 0, snap)
+                launched, code = self.cli("launch", snap["id"], "--permission", PERMISSION, "--playset", mode,
+                                          "--add-mod", variant, "--add-mod", OVERLAY_WIN, "--", "-gdpr-compliant")
+                self.assertEqual(code, 0, launched)
+                enabled = launched["playset"]["enabled"]
+                self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod, OVERLAY_WIN,
+                                                     add_mods=[variant]), enabled)
+                self.assertLess(enabled.index(self.this_mod), enabled.index(variant))
+                self.assertEqual(enabled[-2:], [variant, OVERLAY_WIN])
+
 
 class StopsTest(SessionTestCase):
     """I3: a stop left over is released before anything is typed; only a breakpoint stop is evaluated at."""
@@ -3693,6 +3716,113 @@ class SelfChecksTest(SessionTestCase):
         text = Path(reply["report"]).read_text("utf-8")
         self.assertTrue(text.startswith("Restore: restored"))
         self.assertNotIn("## Self-checks", text)
+
+
+
+class GameArgsTest(SessionTestCase):
+    """#1700: `start --game-arg` adds flags from an allow-list after SESSION_ARGS; the fixture's run never gets them."""
+
+    def test_they_follow_the_session_args_and_come_before_the_save(self):
+        reply = self.start(game_args=["no_notifications", "-script_profiling"])
+        self.assertEqual(self.cli.calls[2][self.cli.calls[2].index("--"):], [
+            "--", "-gdpr-compliant", "-debug_mode", "-script_debugger", "-no_notifications", "-script_profiling",
+            "-loadsave=te_qa_fixture_" + self.key])
+        self.assertEqual(reply["game_args"], ["-no_notifications", "-script_profiling"])
+
+    def test_the_fixtures_run_never_gets_them_and_its_key_does_not_name_them(self):
+        self.fixture_save.unlink()
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.start(game_args=["-disable_renderframeifneeded"])
+        self.assertEqual(self.cli.calls[2][-6:], ["--", *fixture.FIXTURE_ARGS])     # the fixture's own launch
+        self.assertIn("-disable_renderframeifneeded", self.cli.calls[5])
+        self.assertTrue(self.fixture_save.is_file())                                # the same key as without them
+
+    def test_one_off_the_list_or_given_twice_is_refused_before_anything(self):
+        for args in (["-script_debugger"], ["-handsoff"], ["--no_notifications"], ["no_notifications", "-no_notifications"],
+                     "-no_notifications", [7]):
+            with self.subTest(args=args):
+                error = self.session_error(self.start, game_args=args)
+                self.assertEqual(error.code, "bad_argument")
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+
+VARIANT_WIN = r"D:\vic3te-data\qa-addmod-test"
+
+
+class AddModStartTest(SessionTestCase):
+    """#1702 item 2: `start --add-mod` loads a variant folder after the run's playset and before the overlay; without
+    `--save` its files are part of the fixture's key and its run loads it too."""
+
+    def setUp(self):
+        super().setUp()
+        self.drive = self.user.parent / "drive_d"
+        self.variant = self.drive / "vic3te-data" / "qa-addmod-test"
+        (self.variant / ".metadata").mkdir(parents=True)
+        (self.variant / ".metadata" / "metadata.json").write_text('{"name": "TE QA add-mod test", "version": "1"}',
+                                                                   encoding="utf-8")
+        (self.variant / "common" / "script_values").mkdir(parents=True)
+        (self.variant / "common" / "script_values" / "te_qa_addmod.txt").write_text("te_qa_addmod_loaded = 1\n")
+        self.paths.wsl_path_of = self.to_wsl
+
+    def to_wsl(self, path: str) -> Path:
+        self.assertEqual(path[:3], "D:\\")
+        return self.drive.joinpath(*path[3:].rstrip("\\").split("\\"))
+
+    def variant_key(self) -> str:
+        loads = session.run_playset("mod_only", self.paths.enabled_mods, DEPLOYED_WIN, OVERLAY_WIN,
+                                    add_mods=[VARIANT_WIN])
+        return fixture.key("1.15.0", loads, self.paths.deploy_dir, playset="mod_only", add_mod_dirs=[self.variant])
+
+    def test_without_a_save_the_fixture_is_made_with_it_under_its_own_key(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start(add_mods=[VARIANT_WIN])
+        self.assertTrue(reply["fixture_made"])          # the plain fixture is not this world
+        key = self.variant_key()
+        self.assertNotEqual(key, self.key)
+        self.assertEqual(reply["save"], "te_qa_fixture_" + key)
+        for launch in (self.cli.calls[2], self.cli.calls[5]):                 # the fixture's run, then the session's
+            self.assertEqual(launch[launch.index("--add-mod"):launch.index("--add-mod") + 4],
+                             ["--add-mod", VARIANT_WIN, "--add-mod", OVERLAY_WIN])
+        self.assertEqual(reply["add_mods"], [{"windows": VARIANT_WIN, "wsl": str(self.variant),
+                                              "name": "TE QA add-mod test", "version": "1"}])
+        steps = read_steps(Path(reply["run_dir"]))
+        self.assertEqual(next(s for s in steps if s["verb"] == "start")["add_mods"][0]["windows"], VARIANT_WIN)
+
+    def test_a_variant_edited_in_place_is_another_fixture(self):
+        before = self.variant_key()
+        script = self.variant / "common" / "script_values" / "te_qa_addmod.txt"
+        script.write_text("te_qa_addmod_loaded = 2\n")
+        os.utime(script, ns=(10**18, 10**18))
+        self.assertNotEqual(self.variant_key(), before)
+        # and a variant changes nothing of a key it is not in: the plain fixture's key is the one it always was
+        self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                     playset="mod_only"), self.key)
+
+    def test_with_a_save_it_is_loaded_and_no_fixture_is_made(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        reply = self.start(save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+        launch = self.cli.calls[2]
+        self.assertEqual(launch[:10], ["launch", SNAP, "--permission", PERMISSION, "--playset", "mod_only",
+                                       "--add-mod", VARIANT_WIN, "--add-mod", OVERLAY_WIN])
+        self.assertEqual(launch[-1], "-loadsave=france_1850")
+        self.assertFalse(reply["fixture_made"])
+
+    def test_a_refused_variant_starts_nothing(self):
+        inside = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\someone_elses"
+        for path, reason in ((inside, "inside_user_data"), (r"D:\vic3te-data\missing", "no_folder"),
+                             (r"D:\vic3te-data\..\x", "bad_argument"), ("/mnt/d/vic3te-data", "bad_argument")):
+            with self.subTest(path=path):
+                error = self.session_error(self.start, add_mods=[path])
+                self.assertEqual((error.code, error.info.get("reason")), ("add_mod_refused", reason))
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_under_current_one_the_owners_playset_enables_is_refused(self):
+        self.paths.enabled_mods = [DEPLOYED_WIN, VARIANT_WIN]
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN], playset="current")
+        self.assertEqual(error.info.get("reason"), "already_enabled")
 
 
 if __name__ == "__main__":

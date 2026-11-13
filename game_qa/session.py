@@ -47,7 +47,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, overlay, pixels, rules, snapshot
+from game_qa import addmod, fixture, overlay, pixels, rules, snapshot
 from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -62,6 +62,9 @@ START_CLICK = (0.9216, 0.975)           # the country-select screen's Start butt
 SCAN_SPACE = 0x39                       # toggles the pause, with the console closed
 DEBUGGER_PORT = 6111
 SESSION_ARGS = ("-gdpr-compliant", "-debug_mode", "-script_debugger")
+# What `start --game-arg` may add after SESSION_ARGS (#1700): flags the binary lists that change how the game runs,
+# not what a new game is, so the fixture (made with fixture.FIXTURE_ARGS alone) and its key never see them.
+GAME_ARGS = ("-disable_renderframeifneeded", "-no_notifications", "-script_profiling")
 PLAYSETS = ("current", "mod_only")
 READ_COMMAND = "event " + overlay.READ_EVENT
 FIRE_COMMAND = "event %s"               # console `event` fires whatever the trigger and cooldown say (spec § 12.1 A6)
@@ -202,6 +205,7 @@ class Paths:
     enabled_mods: Sequence[str]                     # the owner's playset (content_load.json), in order
     deployed_mod_windows_path: str                  # the deployed mod's folder as Windows names it: what mod_only keeps
     disabled_dlc: Sequence = ()                     # the owner's playset's disabledDLC, which launch keeps as it is
+    wsl_path_of: Callable[[str], Path] | None = None    # a Windows path from WSL (`start --add-mod`); None: wslpath -u
 
     @property
     def overlay_dir(self) -> Path:
@@ -307,18 +311,30 @@ class Session:
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
+        self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
+        self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
 
     # ---- start
 
     def start(self, permission: str, as_tag: str | None = None, setups: Mapping[str, str] | None = None,
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
-              switch_rules: Mapping[str, str] | None = None) -> dict:
+              switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
+              add_mods: Sequence[str] | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
 
         `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
         `game_qa.rules`): a game whose rule changed on 2 January 1836, a day after it began, not one made under
         that setting. It is refused with `save` (the owner's save is never edited or copied), and for a rule
         or setting the game's rule files do not define (`bad_rule`), before anything is done.
+
+        `game_args` are added to the game's arguments after SESSION_ARGS: each one of GAME_ARGS (with or without its
+        leading dash), each once (`bad_argument` otherwise). They change how this run's game runs and not what a new
+        game is, so the fixture's own run (fixture.FIXTURE_ARGS) never gets them and its key does not name them.
+        `add_mods` are Windows paths of variant mod folders, loaded after the run's playset (the deployed mod) and
+        before the overlay (#1702), each checked by `addmod.check` before anything is done (`add_mod_refused`, with
+        the check's `reason`): a plain drive path outside the user-data folder, reached through no link, holding a
+        `.metadata/metadata.json`, and under `--playset current` not one the owner's playset enables already.
+        Without `save` they are part of the fixture's world: its run loads them and its key hashes their files.
 
         Refused with nothing done, and the session left as it was: an overlay folder already there (an earlier
         run's playset may still name it: `overlay_left`, and it is neither replaced nor removed), an empty
@@ -351,6 +367,8 @@ class Session:
         if save is not None:
             save = self._check_save(save)
         switch_rules = self._check_switches(switch_rules, save)
+        self._game_args = _check_game_args(game_args)
+        self._add_mods = self._check_add_mods(add_mods, playset)
         self._starting = True                   # from `held` on, a stop() is left to this
         try:
             self._refuse_if_held()
@@ -404,11 +422,13 @@ class Session:
         self._record("snapshot", outcome="ok", reply=reply)
         self._check_abort()
 
-        argv = ["launch", snap, "--permission", permission, "--playset", playset,
-                "--add-mod", self._paths.overlay_windows_path]
+        argv = ["launch", snap, "--permission", permission, "--playset", playset]
+        for mod in self._add_mods:                  # after the run's playset, before the overlay (#1702)
+            argv += ["--add-mod", mod.windows]
+        argv += ["--add-mod", self._paths.overlay_windows_path]
         if busy:
             argv.append("--owner-confirmed-busy")
-        argv += ["--", *SESSION_ARGS, "-loadsave=" + save]
+        argv += ["--", *SESSION_ARGS, *self._game_args, "-loadsave=" + save]
         try:
             reply, code = self._cli(argv)
         except Exception as e:
@@ -465,6 +485,10 @@ class Session:
             result["fixtures_pruned"] = pruned
         if self._rules is not None:
             result["rules"] = self._rules
+        if self._game_args:
+            result["game_args"] = list(self._game_args)
+        if self._add_mods:
+            result["add_mods"] = [asdict(mod) for mod in self._add_mods]
         self._record("start", outcome="ok", **result)
         return result
 
@@ -535,9 +559,10 @@ class Session:
         self._fixture_loaded = True
         user = Path(self._paths.user_data)
         loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
-                            self._paths.overlay_windows_path)
+                            self._paths.overlay_windows_path, add_mods=[mod.windows for mod in self._add_mods])
         key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
-                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user))
+                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user),
+                          add_mod_dirs=[Path(mod.wsl) for mod in self._add_mods])
         stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
         if switch_rules:
             try:
@@ -593,7 +618,8 @@ class Session:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
                                 clock=self._clock, started=self._journaled_proc,
-                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap))
+                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap),
+                                add_mods=[mod.windows for mod in self._add_mods])
         except fixture.FixtureError as e:
             up = e.code == fixture.GAME_MAY_BE_UP
             self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
@@ -1250,6 +1276,26 @@ class Session:
             if "log_not_read" in found:
                 out["log_not_read"] = True
         return found
+
+    def _check_add_mods(self, add_mods: Sequence[str] | None, playset: str) -> list[addmod.AddMod]:
+        """`start`'s add_mods, each checked (`addmod.check`); SessionError `add_mod_refused`, with the check's code as
+        `reason`, else. The user-data folder's Windows name is the overlay's less its last two parts
+        (`mod\\te_qa_overlay`), when it ends so."""
+        if not add_mods:
+            return []
+        if isinstance(add_mods, str) or not isinstance(add_mods, Sequence):
+            raise SessionError("bad_argument", "add_mods is a list of Windows paths, not %r" % (add_mods,))
+        overlay_win = self._paths.overlay_windows_path
+        tail = "\\mod\\" + overlay.OVERLAY_NAME
+        user_windows = overlay_win[:-len(tail)] if overlay_win.lower().endswith(tail.lower()) else None
+        try:
+            return addmod.check_all(list(add_mods), user_data=Path(self._paths.user_data),
+                                    user_data_windows=user_windows,
+                                    to_wsl=self._paths.wsl_path_of or addmod.to_wsl_path, playset=playset,
+                                    owner_mods=list(self._paths.enabled_mods), deployed=Path(self._paths.deploy_dir),
+                                    deployed_windows=self._paths.deployed_mod_windows_path)
+        except addmod.AddModError as e:
+            raise SessionError("add_mod_refused", e.detail, reason=e.code) from e
 
     # ---- stop
 
@@ -2121,6 +2167,24 @@ class Session:
         return self._watch is not None and self._watch.poll() is not None
 
 
+def _check_game_args(game_args: Sequence[str] | None) -> list[str]:
+    """`start`'s game_args as passed: each one of GAME_ARGS, written with its dash or without it, each once."""
+    if not game_args:
+        return []
+    if isinstance(game_args, str) or not isinstance(game_args, Sequence):
+        raise SessionError("bad_argument", "game_args is a list of flags, not %r" % (game_args,))
+    found: list[str] = []
+    for arg in game_args:
+        flag = ("-" + (arg[1:] if arg.startswith("-") else arg)) if isinstance(arg, str) else None
+        if flag not in GAME_ARGS:
+            raise SessionError("bad_argument", "--game-arg takes one of %s (with its dash or without it), not %r"
+                               % (", ".join(GAME_ARGS), arg))
+        if flag in found:
+            raise SessionError("bad_argument", "%s is given twice" % flag)
+        found.append(flag)
+    return found
+
+
 def _names_event(text: str, event: str) -> bool:
     """Whether `text` names `event` as a whole id: x.1 is not named by x.17, x.1.2 or y.x.1 (a full stop after
     it, ending a sentence, still names it)."""
@@ -2134,14 +2198,16 @@ def _new_errors(lines: list[str], burst: list[str]) -> list[str]:
     return [line for line in lines if line.strip() and parse(line).text.strip() not in own]
 
 
-def run_playset(mode: str, owner_mods: Sequence[str], deployed_mod: str, overlay_path: str) -> list[str]:
-    """The mod folders a run loads, in order, as `launch --playset <mode> --add-mod <overlay_path>` writes them
-    (game_qa/__main__.py `_plan_playset`, which cannot be imported from here): the owner's enabled mods (with
-    mod_only, only those at the deployed mod's folder), then the overlay unless it is among them already.
-    Folders are compared as launch compares them (`_folder_key`)."""
+def run_playset(mode: str, owner_mods: Sequence[str], deployed_mod: str, overlay_path: str, *,
+                add_mods: Sequence[str] = ()) -> list[str]:
+    """The mod folders a run loads, in order, as `launch --playset <mode> --add-mod <a> … --add-mod <overlay_path>`
+    writes them (game_qa/__main__.py `_plan_playset`, which cannot be imported from here): the owner's enabled mods
+    (with mod_only, only those at the deployed mod's folder), then each of `add_mods` and the overlay, unless it is
+    among them already. Folders are compared as launch compares them (`_folder_key`)."""
     kept = [m for m in owner_mods if mode != "mod_only" or _folder_key(m) == _folder_key(deployed_mod)]
-    if all(_folder_key(m) != _folder_key(overlay_path) for m in kept):
-        kept.append(overlay_path)
+    for path in (*add_mods, overlay_path):
+        if all(_folder_key(m) != _folder_key(path) for m in kept):
+            kept.append(path)
     return kept
 
 
