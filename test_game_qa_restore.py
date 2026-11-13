@@ -490,6 +490,15 @@ class TickTaskTimingsTests(RestoreTestCase):
         self.assertEqual((out.restored, out.removed), ([], []))
         self.assertEqual(path.read_bytes(), self.RUNS)
 
+    def test_a_snapshot_from_before_the_set_named_it_lists_the_owners_copy_all_the_same(self):
+        # The listing names every file in the root, in the set or not, so a manifest written before this entry
+        # names an owner's copy that was there. One that names nothing means there was none at the snapshot; then
+        # a copy the run wrote is removed and a later one holds (the two tests above), as for an autosave.
+        (self.user / "not_in_the_set.csv").write_bytes(self.OWNERS)
+        snap = self.run_started(at=NOW)
+        self.assertIn("not_in_the_set.csv", snap.listing)
+        self.assertNotIn("not_in_the_set.csv", snap.files)
+
     def test_a_symlink_by_that_name_is_listed_and_never_removed(self):
         (self.user / "elsewhere.csv").write_bytes(self.OWNERS)
         (self.user / self.NAME).symlink_to("elsewhere.csv")

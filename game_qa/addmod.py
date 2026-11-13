@@ -11,8 +11,9 @@ not play. `launch --add-mod` only checks that a path begins like a Windows path 
 - outside the user-data folder, and not holding it: judged on the Windows spellings (case and separators aside) and
   again on the folder itself, by its identity on the drive up every parent, so neither a spelling nor a link gets a
   folder inside it past the check. The deployed mod and the overlay live there; so do the owner's own mods;
-- a real folder, reached through no symbolic link or junction at any part of the path, holding a
-  `.metadata/metadata.json` that reads as a JSON object (the file the game reads a mod by);
+- a real folder, reached through no symbolic link or junction at any part of the path (WSL shows an NTFS junction
+  on a drive as a symlink: a `mklink /J` on D: was refused so on 2026-11-13), holding a `.metadata/metadata.json`
+  that reads as a JSON object (the file the game reads a mod by);
 - under `--playset current`, not a folder the owner's playset already enables: launch would leave it where it is,
   which may be before the deployed mod, and the run would not be the A/B it says it is.
 
@@ -39,8 +40,8 @@ _DEVICE = re.compile(r"(CON|PRN|AUX|NUL|COM\d|LPT\d)(\..*)?\Z", re.I)
 
 
 class AddModError(Exception):
-    """A variant folder `check` refuses. `code`: bad_argument, inside_user_data, holds_user_data, already_enabled,
-    symlink, no_folder, no_metadata, bad_metadata."""
+    """A variant folder `check` refuses. `code`: bad_argument, inside_user_data, holds_user_data, is_deployed_mod,
+    already_enabled, symlink, no_folder, no_metadata, bad_metadata."""
 
     def __init__(self, code: str, detail: str) -> None:
         super().__init__("%s: %s" % (code, detail))
