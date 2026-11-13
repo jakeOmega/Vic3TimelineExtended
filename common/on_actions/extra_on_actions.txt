@@ -1108,6 +1108,9 @@ global_warming_events_on_action = {
 			# TEMPORARY (#1448): does the World Climate entry's Climate Warming
 			# reach a country? Once a game; TE_SELF_CHECK gw_world_climate.
 			gw_world_climate_selfcheck_effect = yes
+			# TEMPORARY (#1681): do the tropics' and high latitudes' states carry
+			# their band's modifier? Once a game; TE_SELF_CHECK gw_regional.
+			gw_regional_selfcheck_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
 			# temperature_anomaly_display crosses each threshold upward. Runs in the
