@@ -1264,8 +1264,9 @@ class Session:
                                        keyboard_away=self._console.keyboard_away) from e
                 self._console.clicked()
                 raise SessionError("drag_unknown", "%s: %s; the button may have gone down (the helper releases "
-                                   "it where the cursor is): take a shot before dragging again" % (e.code, e.detail),
-                                   pixels=[[ax, ay], [bx, by]], pressed=pressed,
+                                   "it where the cursor is, and tries twice): take a shot before dragging again"
+                                   % (e.code, e.detail), pixels=[[ax, ay], [bx, by]], pressed=pressed,
+                                   released=e.reply.get("released"),
                                    keyboard_away=self._console.keyboard_away) from e
             self._console.clicked()
             result = self._shot_after({"pixels": [[ax, ay], [bx, by]]})

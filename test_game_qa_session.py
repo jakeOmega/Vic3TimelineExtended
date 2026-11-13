@@ -1945,6 +1945,11 @@ class WheelAndDragTest(SessionTestCase):
         self.assertEqual((error.code, error.info["pressed"], error.info["keyboard_away"]), ("drag_unknown", True, True))
         self.game.drag = mock.Mock(side_effect=HelperError("helper_gone", "the helper ended"))
         self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "drag_unknown")
+        # Both of the helper's releases failed: the reply says the button may still be down.
+        self.game.drag = mock.Mock(side_effect=HelperError("backend_error", "released twice, may still be down",
+                                                           reply={"pressed": True, "released": False}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["pressed"], error.info["released"]), ("drag_unknown", True, False))
 
     def test_a_game_that_cannot_be_proved_gets_neither(self):
         self.started()

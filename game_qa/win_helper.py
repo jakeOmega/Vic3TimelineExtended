@@ -86,6 +86,7 @@ MAX_NOTCHES = 40                  # what one `wheel` turns at most, either way
 WHEEL_GAP_MS = 40                 # between two notches (a guess: let the game take each one)
 DRAG_MOVES = 12                   # cursor moves from a drag's press to its release
 DRAG_MOVE_MS = 15                 # between them (a guess)
+DRAG_RELEASE_RETRY_MS = 25        # before a drag's button-up goes out again, after SendInput failed it once
 KEYEVENTF_KEYUP = 0x0002
 KEYEVENTF_UNICODE = 0x0004
 KEYEVENTF_SCANCODE = 0x0008
@@ -561,7 +562,7 @@ def _op_drag(req, backend, state):
     there. The press is aimed as a click is; before each move the window must still be in front, unmoved and the
     recorded process's, and after it the cursor where it was put. Once the press has begun the release is always
     sent, after a refusal or a failure too, where the cursor then is (a button left held drags whatever is under
-    it): a refusal from then on carries `pressed: true`."""
+    it): a refusal from then on carries `pressed: true`. A release that fails is sent once more (`_release_left`)."""
     pid = _pid(req)
     x1, y1, x2, y2 = (_int(req, name) for name in ("x1", "y1", "x2", "y2"))
     try:
@@ -588,10 +589,25 @@ def _op_drag(req, backend, state):
                     raise _Refusal("cursor_misplaced", "the cursor is not at %s" % (point,), pressed=True)
             backend.sleep(CLICK_HOLD_MS)
         finally:
-            backend.send_mouse(MOUSEEVENTF_LEFTUP)
+            _release_left(backend)
     finally:
         state.last_sent_tick = backend.tick()
     return {"moves": DRAG_MOVES}
+
+
+def _release_left(backend) -> None:
+    """A drag's button-up. If it fails, it is sent once more after DRAG_RELEASE_RETRY_MS, since a button left down
+    drags whatever is under it; a retry that goes out leaves the drag's own reply (or refusal) as it was. A second
+    failure is `backend_error` with `pressed: true` and `released: false`: the button may still be down."""
+    try:
+        backend.send_mouse(MOUSEEVENTF_LEFTUP)
+    except Exception:
+        backend.sleep(DRAG_RELEASE_RETRY_MS)
+        try:
+            backend.send_mouse(MOUSEEVENTF_LEFTUP)
+        except Exception as e:
+            raise _Refusal("backend_error", "the left button's release failed twice, so it may still be down: %r"
+                           % (e,), pressed=True, released=False) from e
 
 
 def _op_presence(req, backend, state):

@@ -766,6 +766,45 @@ class DragTest(BackendCase):
         self.assertEqual(out["error"], "backend_error")
         self.assertEqual(self.buttons(), [("button", DOWN), ("button", UP)])
 
+    def failing_releases(self, count):
+        """The first `count` button-ups raise, as a refused SendInput does; returns the list of every attempt."""
+        send, attempts = self.backend.send_mouse, []
+
+        def send_mouse(flags, data=0):
+            if flags == UP:
+                attempts.append(flags)
+                if len(attempts) <= count:
+                    raise OSError("SendInput sent 0 of 1 mouse events")
+            return send(flags, data)
+        self.backend.send_mouse = send_mouse
+        return attempts
+
+    def test_a_release_that_fails_once_is_sent_again_and_the_drag_answers_as_it_would(self):
+        attempts = self.failing_releases(1)
+        out = self.drag()
+        self.assertEqual((out["ok"], out["moves"]), (True, win_helper.DRAG_MOVES))
+        self.assertEqual((len(attempts), self.buttons()), (2, [("button", DOWN), ("button", UP)]))
+        self.assertIn(win_helper.DRAG_RELEASE_RETRY_MS, self.backend.slept)
+
+    def test_a_refusal_mid_drag_survives_a_release_sent_twice(self):
+        attempts = self.failing_releases(1)
+
+        def loses_the_front(ms):
+            if ms == win_helper.DRAG_MOVE_MS and len(self.buttons()) == 1:
+                self.backend.foreground = 999
+        self.backend.on_sleep = loses_the_front
+        out = self.drag()
+        self.assertEqual((out["ok"], out["error"], out["pressed"]), (False, "not_foreground", True))
+        self.assertEqual((len(attempts), self.buttons()), (2, [("button", DOWN), ("button", UP)]))
+
+    def test_a_release_that_fails_twice_says_the_button_may_still_be_down(self):
+        attempts = self.failing_releases(2)
+        out = self.drag()
+        self.assertEqual((out["ok"], out["error"], out["pressed"], out["released"]),
+                         (False, "backend_error", True, False))
+        self.assertIn("may still be down", out["detail"])
+        self.assertEqual((len(attempts), self.buttons()), (2, [("button", DOWN)]))
+
     def test_missing_or_mistyped_fields_are_bad_requests(self):
         for fields in ({"pid": 7, "x1": 1, "y1": 1, "x2": 2}, {"pid": 7, "x1": 1, "y1": 1, "x2": 2, "y2": 2.5},
                        {"x1": 1, "y1": 1, "x2": 2, "y2": 2}):
