@@ -293,9 +293,43 @@ country_art_share_pct_diminished = {
 # Early game: absolute limits (high share but tiny global market)
 # Late game: share limits (massive production but fractional global share)
 # Above 33% global share the share cap follows the diminishing-returns curve.
+#
+# The production is a walk over every country's GDP and the world's production
+# one over every market, so each is read once and saved
+# (save_temporary_value_as, vanilla's form in command_values.txt and
+# 00_diplomacy_values.txt). The block computes the share, then the cap,
+# country_art_share_pct_diminished written without a branch:
+#   min(x, 33) + d / (1 + 0.04390 * d),  d = max(x - 33, 0)
+# which is x up to the threshold and the curve above it, the same operations
+# in the same order; then min(cap, production), which is min(production, cap).
+# It used to read the production four times and the world's three per call,
+# and cultural_pull_raw reads it (docs/audits/late_game_performance.md,
+# item 12). test_cultural_hegemony_share.py checks it against the named values.
 cultural_pull_from_art = {
 	value = country_fine_art_production
-	max = country_art_share_pct_diminished
+	save_temporary_value_as = ch_art_production
+	# the share of the world's production, 0-100 (country_art_share_pct)
+	divide = global_fine_art_production
+	multiply = 100
+	save_temporary_value_as = ch_art_share
+	# the cap (country_art_share_pct_diminished)
+	max = cultural_pull_art_dr_threshold
+	add = {
+		value = scope:ch_art_share
+		subtract = cultural_pull_art_dr_threshold
+		min = 0
+		divide = {
+			value = 1
+			add = {
+				value = scope:ch_art_share
+				subtract = cultural_pull_art_dr_threshold
+				min = 0
+				multiply = cultural_pull_art_dr_steepness
+			}
+		}
+	}
+	# min(production, cap)
+	max = scope:ch_art_production
 	# Apply modifier hook for art contribution
 	multiply = {
 		value = 1
@@ -578,12 +612,32 @@ ch_world_raw_live = {
 # Range: 0–100 (percentage of global cultural influence)
 # Returns 0 before the first census populates the global cache (avoids 'none'
 # during the first monthly pulse, which can fire before any yearly pulse).
+# The raw pull is read once and saved: the divisor is ch_world_raw_live written
+# out with the saved raw in place of a second cultural_pull_raw (its else_if is
+# an else here, since the census total exists in this branch). It read the raw
+# pull twice, and that is most of the monthly Cultural Hegemony refresh
+# (docs/audits/late_game_performance.md, item 12).
 cultural_pull_total = {
 	value = 0
 	if = {
 		limit = { has_global_variable = ch_cached_global_raw }
 		add = cultural_pull_raw
-		divide = ch_world_raw_live
+	}
+	save_temporary_value_as = ch_pull_raw_now
+	if = {
+		limit = { has_global_variable = ch_cached_global_raw }
+		divide = {
+			value = 0
+			if = {
+				limit = { has_global_variable = ch_census_own_raw }
+				add = ch_world_raw_others
+				add = scope:ch_pull_raw_now
+			}
+			else = {
+				add = global_var:ch_cached_global_raw
+			}
+			min = 1
+		}
 		multiply = 100
 	}
 	min = 0
