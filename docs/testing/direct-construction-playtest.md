@@ -82,6 +82,12 @@ a new game's rules were the owner's last applied (Free Market Construction Disab
 | Build lens, direct game | Production lens, Development tab | Construction Site is the first option |
 | Build lens, market game | The same | No Construction Site (the lens hides a building whose `can_build_government` is false) |
 
+**Not run in its final form: the weekly pass's cancel.** A sector under construction in a converted game is now
+cancelled by a bare `remove_building`, without rebuilding the state's site. No stray sector appeared in the last
+new-game runs, so that branch has not run in a game. What it rests on was read by hand in the first run
+(`remove_building` on Bornu's level-0 sector took it out of the queue, 2 queued levels to 1), and
+`test_construction_rule_switch.py` pins the wiring.
+
 **One log line to expect at a switch.** A Construction Sector that was queued and had not started building when the
 rule went to Disabled cannot start afterwards. The engine drops it, once, with `Assertion failed: Failed creating
 backing building for Building Type building_construction_sector` and, at the same second, two `Scoped object is not
