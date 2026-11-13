@@ -456,8 +456,8 @@ AUDITS: tuple[Audit, ...] = (
               "in `WORLD_LOC`)",
         tags=("loc_root_context",),
         note="A reload leaves the public-tab kinds to this command and to `BindingTest` "
-             "(`test_te_system_tab_bodies.py`), whose rules they are; it takes about 1.4 s without them, "
-             "this command about 4 s. Each flag gives its path from the line that names the first key.",
+             "(`test_te_system_tab_bodies.py`), whose rules they are; it takes about 2.5 s without them, "
+             "this command about 5 s. Each flag gives its path from the line that names the first key.",
     ),
     Audit(
         "concept_reference_audit",

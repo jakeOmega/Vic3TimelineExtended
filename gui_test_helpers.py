@@ -48,16 +48,19 @@ def _strip_comments(text):
     return "\n".join(out)
 
 
+_BRACE = re.compile(r"[{}]")
+
+
 def _close(text, open_brace):
     """The index of the brace that closes the one at (or first after) open_brace."""
     depth = 0
-    for i in range(open_brace, len(text)):
-        if text[i] == "{":
+    for m in _BRACE.finditer(text, open_brace):  # the braces only: a walk of every character was slow
+        if m.group() == "{":
             depth += 1
-        elif text[i] == "}":
+        else:
             depth -= 1
             if depth == 0:
-                return i
+                return m.start()
     raise AssertionError("unclosed block")
 
 
@@ -1099,9 +1102,6 @@ def unguarded(body, spans=None):
     return "".join(chars)
 
 
-_BRACE = re.compile(r"[{}]")
-
-
 def own_props(text):
     """A block's own properties: its inside with every nested block's contents
     cut (the nested blocks' names and braces kept), so `visible =` or
@@ -1150,6 +1150,11 @@ class View:
     templates  the templates the open types use outside those parts (but the
                guard itself), and the templates those use
     overrides  type -> the blockoverrides among its skip (skipped_overrides)
+
+    No `visible` hides anything from the walk, `visible = no` included: what
+    sits under one counts as drawn, the safe way, since each of the mod's
+    hides one instance's part and never a type (MutationTest's
+    test_visible_no_hides_nothing_from_the_walk, #1698).
     """
     open: set
     skip: dict

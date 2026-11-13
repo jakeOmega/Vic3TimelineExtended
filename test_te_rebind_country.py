@@ -676,16 +676,16 @@ class RepoTest(unittest.TestCase):
         """survey_tab reads WORLD_LOC, as BindingTest does: a key listed there is
         a world read, not one to bind."""
         import gui_test_helpers as h
-        import test_te_system_tab_bodies as bodies
+        import national_info_binding as binding
         keys = h.panel_loc_keys({"te_demog_browser_sections"}, h.mod_types(), h.load_loc())
         key = min(keys)
-        saved = dict(bodies.WORLD_LOC)
+        saved = dict(binding.WORLD_LOC)
         try:
-            bodies.WORLD_LOC[key] = "a fixture"
+            binding.WORLD_LOC[key] = "a fixture"
             self.assertIn(key, tool.survey_tab("demographics").world_loc)
         finally:
-            bodies.WORLD_LOC.clear()
-            bodies.WORLD_LOC.update(saved)
+            binding.WORLD_LOC.clear()
+            binding.WORLD_LOC.update(saved)
 
     def test_survey_tab_walks_the_readout(self):
         """A tab that opens on a readout without its entry (Tab.readout) is

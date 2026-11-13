@@ -68,7 +68,7 @@ Spec: `docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md` (Â
 - **Charts.** Another country's chart opens in a viewer the window holds at its own level (`te_ni_chart`). A country that keeps no history (neither played nor a major power) shows "History is kept only for played countries and major powers" on its empty charts. An old-save repair sorts each history store once, since another country's charts now show a store scrambled before the sort existed (`history_charts.md`).
 - **How a system joins.** Its binding PR:
   1. binds the tab's wide composer, and its readout if it has one, to `Country`, and guards its controls (`test_te_system_tab_bodies.py`'s `BindingTest` and `GuardTest`; `scripts/analysis/te_rebind_country.py <tab>` lists what is left);
-  2. sets its `Tab`'s `public = True` and takes it off `UNBOUND`;
+  2. sets its `Tab`'s `public = True` and takes it off `UNBOUND` (`national_info_binding.py`);
   3. reruns `python3 scripts/generators/gen_te_systems_window.py`, which writes both generated files (on a refresh after another system joined, take `main`'s copies and rerun; never hand-merge them);
   4. passes `BindingTest`, `GuardTest` and `test_national_info.py`, whose `ForeignViewerTest` walks its charts' large wrappers and keys for player and entry reads.
 
