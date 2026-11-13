@@ -610,6 +610,169 @@ class ScreenshotTest(BackendCase):
         self.assertFalse(Path(path).exists())
 
 
+
+DOWN, UP, WHEEL = win_helper.MOUSEEVENTF_LEFTDOWN, win_helper.MOUSEEVENTF_LEFTUP, win_helper.MOUSEEVENTF_WHEEL
+
+
+class WheelTest(BackendCase):
+    """#1710: N notches of the wheel at a point, aimed as a click is and checked again before every notch."""
+
+    def wheel(self, x=300, y=200, notches=3, pid=7):
+        return self.call("wheel", pid=pid, x=x, y=y, notches=notches)
+
+    def test_the_cursor_goes_to_the_point_and_each_notch_is_one_delta(self):
+        out = self.wheel(notches=3)
+        self.assertEqual((out["ok"], out["notches_done"]), (True, 3))
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)] + [("wheel", win_helper.WHEEL_DELTA)] * 3)
+        self.assertEqual(self.wheel(notches=-2)["notches_done"], 2)
+        self.assertEqual(self.backend.mouse[-2:], [("wheel", -win_helper.WHEEL_DELTA)] * 2)
+        self.assertEqual(self.state.helper_cursor, (300, 200))
+
+    def test_the_turn_goes_out_as_the_dword_windows_reads_as_signed(self):
+        self.assertEqual((-win_helper.WHEEL_DELTA) & 0xFFFFFFFF, 0xFFFFFF88)
+        self.assertEqual((WHEEL, win_helper.WHEEL_DELTA), (0x0800, 120))
+
+    def test_nothing_turns_when_it_is_refused_before_the_first_notch(self):
+        cases = {
+            "not_foreground": lambda: setattr(self.backend, "foreground", 999),
+            "covered": lambda: setattr(self.backend, "covered_by", 999),
+            "not_ours": lambda: self.backend.creation.__setitem__(7, fakes.REUSED_CREATED),
+        }
+        for code, arrange in cases.items():
+            with self.subTest(code):
+                self.setUp()
+                arrange()
+                out = self.wheel()
+                self.assertEqual((out["ok"], out["error"], out["notches_done"]), (False, code, 0))
+                self.assertNotIn("wheel", [event[0] for event in self.backend.mouse])
+        self.setUp()
+        out = self.wheel(x=5000)
+        self.assertEqual((out["error"], out["notches_done"]), ("bad_point", 0))
+        self.assertEqual(self.backend.mouse, [])
+
+    def test_a_cursor_moved_by_a_person_between_notches_stops_the_turning(self):
+        def a_hand_on_the_mouse(ms):
+            if ms == win_helper.WHEEL_GAP_MS:
+                self.backend.cursor = (1, 1)
+        self.backend.on_sleep = a_hand_on_the_mouse
+        out = self.wheel(notches=5)
+        self.assertEqual((out["error"], out["notches_done"]), ("cursor_misplaced", 1))
+        self.assertEqual([event for event in self.backend.mouse if event[0] == "wheel"], [("wheel", 120)])
+
+    def test_a_game_replaced_between_notches_gets_no_more(self):
+        def replaced(ms):
+            if ms == win_helper.WHEEL_GAP_MS:
+                self.backend.creation[7] = fakes.REUSED_CREATED
+        self.backend.on_sleep = replaced
+        out = self.wheel(notches=4)
+        self.assertEqual((out["error"], out["notches_done"]), ("not_ours", 1))
+
+    def test_bad_notches_are_bad_requests_and_touch_nothing(self):
+        for notches in (0, win_helper.MAX_NOTCHES + 1, -win_helper.MAX_NOTCHES - 1, True, 1.5, "3"):
+            with self.subTest(notches=notches):
+                self.assertEqual(self.wheel(notches=notches)["error"], "bad_request")
+        self.assertEqual(self.backend.mouse, [])
+
+    def test_a_failed_notch_is_a_backend_error(self):
+        self.backend.fail_mouse_on = WHEEL
+        self.assertEqual(self.wheel()["error"], "backend_error")
+
+
+class DragTest(BackendCase):
+    """#1710: press at one point, move, release at another; the release always goes out once the press has begun."""
+
+    def drag(self, x1=100, y1=100, x2=400, y2=250, pid=7):
+        return self.call("drag", pid=pid, x1=x1, y1=y1, x2=x2, y2=y2)
+
+    def buttons(self):
+        return [event for event in self.backend.mouse if event[0] == "button"]
+
+    def test_press_move_in_steps_and_release_at_the_end(self):
+        out = self.drag()
+        self.assertEqual((out["ok"], out["moves"]), (True, win_helper.DRAG_MOVES))
+        mouse = self.backend.mouse
+        self.assertEqual(mouse[0], ("move", 100, 100))
+        self.assertEqual(mouse[1], ("button", DOWN))
+        self.assertEqual(mouse[-1], ("button", UP))
+        moves = mouse[2:-1]
+        self.assertEqual(len(moves), win_helper.DRAG_MOVES)
+        self.assertEqual(moves[-1], ("move", 400, 250))
+        xs = [event[1] for event in moves]
+        self.assertEqual(xs, sorted(xs))                        # steadily towards the end
+        self.assertEqual(self.state.helper_cursor, (400, 250))
+
+    def test_refused_before_the_press_presses_nothing(self):
+        cases = {
+            "not_foreground": lambda: setattr(self.backend, "foreground", 999),
+            "covered": lambda: setattr(self.backend, "covered_by", 999),
+            "not_ours": lambda: self.backend.creation.__setitem__(7, fakes.REUSED_CREATED),
+        }
+        for code, arrange in cases.items():
+            with self.subTest(code):
+                self.setUp()
+                arrange()
+                out = self.drag()
+                self.assertEqual((out["ok"], out["error"], out["pressed"]), (False, code, False))
+                self.assertEqual(self.buttons(), [])
+        for x1, x2 in ((5000, 400), (100, 5000)):
+            with self.subTest(x1=x1, x2=x2):
+                self.setUp()
+                out = self.drag(x1=x1, x2=x2)
+                self.assertEqual((out["error"], out["pressed"]), ("bad_point", False))
+                self.assertEqual(self.buttons(), [])
+
+    def test_an_end_point_over_another_window_presses_nothing(self):
+        self.backend.window_at = lambda x, y: 80 if x >= 500 else fakes.GAME_HWND     # another window from x 500
+        out = self.drag(x2=600, y2=100)
+        self.assertEqual((out["error"], out["pressed"]), ("covered", False))
+        self.assertEqual(self.buttons(), [])
+
+    def test_the_game_leaving_the_front_mid_drag_still_releases_the_button(self):
+        def loses_the_front(ms):
+            if ms == win_helper.DRAG_MOVE_MS and len(self.buttons()) == 1:
+                self.backend.foreground = 999
+        self.backend.on_sleep = loses_the_front
+        out = self.drag()
+        self.assertEqual((out["ok"], out["error"], out["pressed"]), (False, "not_foreground", True))
+        self.assertEqual(self.buttons(), [("button", DOWN), ("button", UP)])
+
+    def test_a_game_replaced_mid_drag_gets_no_more_moves_and_the_button_is_released(self):
+        def replaced(ms):
+            if ms == win_helper.DRAG_MOVE_MS:
+                self.backend.creation[7] = fakes.REUSED_CREATED
+        self.backend.on_sleep = replaced
+        out = self.drag()
+        self.assertEqual((out["error"], out["pressed"]), ("not_ours", True))
+        self.assertEqual(self.backend.mouse[1:], [("button", DOWN), ("button", UP)])
+
+    def test_a_cursor_that_does_not_land_mid_drag_is_cursor_misplaced_and_released(self):
+        self.backend.cursor_clamp = (300, 2000)                 # the screen stops it short of x 400
+        out = self.drag()
+        self.assertEqual((out["error"], out["pressed"]), ("cursor_misplaced", True))
+        self.assertEqual(self.buttons()[-1], ("button", UP))
+
+    def test_the_button_is_released_when_the_press_raises(self):
+        self.backend.fail_mouse_on = DOWN
+        out = self.drag()
+        self.assertEqual(out["error"], "backend_error")
+        self.assertEqual(self.buttons(), [("button", UP)])
+
+    def test_the_button_is_released_when_a_move_fails(self):
+        def fail_later_moves(ms):
+            if ms == win_helper.DRAG_MOVE_MS:
+                self.backend.fail_move = True
+        self.backend.on_sleep = fail_later_moves
+        out = self.drag()
+        self.assertEqual(out["error"], "backend_error")
+        self.assertEqual(self.buttons(), [("button", DOWN), ("button", UP)])
+
+    def test_missing_or_mistyped_fields_are_bad_requests(self):
+        for fields in ({"pid": 7, "x1": 1, "y1": 1, "x2": 2}, {"pid": 7, "x1": 1, "y1": 1, "x2": 2, "y2": 2.5},
+                       {"x1": 1, "y1": 1, "x2": 2, "y2": 2}):
+            with self.subTest(fields=fields):
+                self.assertEqual(self.call("drag", **fields)["error"], "bad_request")
+        self.assertEqual(self.backend.mouse, [])
+
 class PureFunctionTest(unittest.TestCase):
     def chunks(self, data):
         pos, out = 8, []
@@ -878,6 +1041,19 @@ class ProcessHelperTest(unittest.TestCase):
 
     def sent(self):
         return [json.loads(line) for line in self.popen.proc.stdin.lines]
+
+    def test_wheel_and_drag_are_one_json_line_each(self):
+        ph = self.make(reply_line(notches_done=3), reply_line(moves=12))
+        ph.wheel(7, 120, 340, -3)
+        ph.drag(7, 10, 20, 30, 40)
+        self.assertEqual(self.sent(), [{"id": 1, "op": "wheel", "pid": 7, "x": 120, "y": 340, "notches": -3},
+                                       {"id": 2, "op": "drag", "pid": 7, "x1": 10, "y1": 20, "x2": 30, "y2": 40}])
+
+    def test_a_refused_wheel_keeps_how_far_it_got(self):
+        ph = self.make(json.dumps({"ok": False, "error": "cursor_misplaced", "notches_done": 2}).encode() + b"\n")
+        with self.assertRaises(helper.HelperError) as ctx:
+            ph.wheel(7, 1, 1, 5)
+        self.assertEqual((ctx.exception.code, ctx.exception.reply["notches_done"]), ("cursor_misplaced", 2))
 
     def test_it_starts_the_script_by_its_windows_path(self):
         ph = self.make(reply_line(python="3.11.9"))

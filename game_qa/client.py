@@ -23,6 +23,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa click [X Y] --console [--input-line X Y]
                                              # then a click on the console's input line, which gives the
                                              # keyboard back (a click into a tool window takes it)
+    python3 -m game_qa wheel X Y N           # N notches of the mouse wheel at X, Y (positive scrolls up), then a shot
+    python3 -m game_qa drag X1 Y1 X2 Y2      # press at X1, Y1, move, release at X2, Y2, then a shot
     python3 -m game_qa profiler-roots [--box L T R B]
                                              # the script profiler at its roots, shot at the window's own size,
                                              # and its call graph cropped out of the shot
@@ -779,6 +781,14 @@ def cmd_click(args) -> tuple[dict, int]:
     return call(_backup_root(), "click", body)
 
 
+def cmd_wheel(args) -> tuple[dict, int]:
+    return call(_backup_root(), "wheel", {"x": args.x, "y": args.y, "notches": args.notches})
+
+
+def cmd_drag(args) -> tuple[dict, int]:
+    return call(_backup_root(), "drag", {"x1": args.x1, "y1": args.y1, "x2": args.x2, "y2": args.y2})
+
+
 def cmd_profiler_roots(args) -> tuple[dict, int]:
     return call(_backup_root(), "profiler-roots", {"box": args.box})
 
@@ -879,6 +889,17 @@ def add_verbs(sub) -> None:
                    help="where the console's input line is, as fractions of the window (default: 0.1125 0.544, "
                         "measured live with the console open on the left in a 3840x2160 window)")
     p.set_defaults(run=cmd_click)
+    p = sub.add_parser("wheel", help="turn the mouse wheel N notches at X, Y (fractions of the window; positive "
+                                     "scrolls a list up), then a screenshot: for the engine's own tool windows")
+    p.add_argument("x", type=float)
+    p.add_argument("y", type=float)
+    p.add_argument("notches", type=int, metavar="N")
+    p.set_defaults(run=cmd_wheel)
+    p = sub.add_parser("drag", help="press the left button at X1, Y1, move to X2, Y2 and release (fractions of the "
+                                    "window), then a screenshot: for the engine's own tool windows")
+    for name in ("x1", "y1", "x2", "y2"):
+        p.add_argument(name, type=float)
+    p.set_defaults(run=cmd_drag)
     p = sub.add_parser("profiler-roots", help="open the script profiler at its roots (Script.Profiling.Gui), take "
                                               "a shot at the window's own size and crop the call graph out of it")
     p.add_argument("--box", nargs=4, type=float, metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"),

@@ -124,6 +124,7 @@ CLICK_REFUSED_BEFORE_PRESS = ("not_foreground", "bad_point", "cursor_misplaced",
 # back after a click into the script profiler had taken it (#1710). Another window size or UI scale moves it:
 # `click --console --input-line X Y`, aimed from a shot.
 CONSOLE_INPUT_LINE = (0.1125, 0.544)
+MAX_NOTCHES = 40                        # what one `wheel` turns at most, either way (win_helper.MAX_NOTCHES)
 # profiler-roots (#1701, #1710). `Script.Profiling.Gui` opens the script profiler at its roots ("No parent" as
 # Current, the top-level entries as its callees), even when an entry was Current before (live, 2026-11-12), and
 # the call graph is cropped out of a shot. The box is fractions of the client area, measured on the overlay's
@@ -194,7 +195,7 @@ class SessionError(Exception):
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
     not_on_country_select, click_refused, click_unknown, console_not_open,
-    keyboard_away, keyboard_not_returned, not_entered, left_running, bad_days, stalled, not_started, stopped
+    keyboard_away, keyboard_not_returned, wheel_refused, wheel_unknown, drag_refused, drag_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
@@ -246,9 +247,9 @@ class Paths:
 
 
 class _ProvedHelper:
-    """The helper as everything that sends input sees it (X1): `keys`, `focus` and `click` go out only once
-    `Session._prove_game` has passed, just before each one, since a pid may be another program's once the game
-    has died (the helper compares the start time again before each step it sends, win_helper._prove_ours). Of
+    """The helper as everything that sends input sees it (X1): `keys`, `focus`, `click`, `wheel` and `drag` go out
+    only once `Session._prove_game` has passed, just before each one, since a pid may be another program's once the
+    game has died (the helper compares the start time again before each step it sends, win_helper._prove_ours). Of
     the helper's other calls only those in `_UNPROVED` pass through, to the session's current helper (a fresh one
     from `_new_helper` too): they send nothing. Any other name is an AttributeError, so a call added to the
     helper later reaches the game through here only once someone has decided whether it needs the proof."""
@@ -276,6 +277,14 @@ class _ProvedHelper:
     def click(self, pid: int, x: int, y: int) -> None:
         self._session._prove_game()
         return self._session._helper.click(pid, x, y)
+
+    def wheel(self, pid: int, x: int, y: int, notches: int) -> None:
+        self._session._prove_game()
+        return self._session._helper.wheel(pid, x, y, notches)
+
+    def drag(self, pid: int, x1: int, y1: int, x2: int, y2: int) -> None:
+        self._session._prove_game()
+        return self._session._helper.drag(pid, x1, y1, x2, y2)
 
 
 class Session:
@@ -1168,13 +1177,79 @@ class Session:
                                keyboard_away=self._console.keyboard_away) from e
         if tool:
             self._console.clicked()
-        done: dict[str, Any] = {"pixel": [px, py]}
+        return self._shot_after({"pixel": [px, py]})
+
+    def _shot_after(self, done: dict) -> dict:
+        """`done` with the screenshot that follows a click, a wheel or a drag (`screenshot`, or `screenshot: null`
+        and `screenshot_error`: the input stands either way, so a failed shot is no refusal)."""
         self._sleep(CLICK_SETTLE_S)
         try:
             done["screenshot"] = str(self._shot())
         except HelperError as e:
             done["screenshot"], done["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
         return done
+
+    def wheel(self, x: float, y: float, notches: int) -> dict:
+        """Turn the mouse wheel `notches` notches at (x, y), fractions of the client area: positive away from the
+        user, which scrolls a list up; negative scrolls it down. Then a screenshot. For a list in a tool window that
+        is longer than the window (the script profiler's roots past the 27th, #1710), with `click`'s scope and
+        rules: the presence rule, the pid proof, never the game's own menus (a wheel over the map zooms it). It
+        latches the keyboard away as a click does, since whether a wheel moves the keyboard is not known.
+        `wheel_refused` turned nothing; `wheel_unknown` may have turned some notches (`notches_done` when the
+        helper said)."""
+        self._require_game(keyboard=False)
+        point = (_fraction("x", x), _fraction("y", y))
+        if isinstance(notches, bool) or not isinstance(notches, int) or not 0 < abs(notches) <= MAX_NOTCHES:
+            raise SessionError("bad_argument", "notches is a whole number from -%d to %d other than 0, not %r"
+                               % (MAX_NOTCHES, MAX_NOTCHES, notches))
+        with self._step("wheel", x=x, y=y, notches=notches) as out:
+            self._console.front()
+            px, py = self._point(point)
+            try:
+                self._sends.wheel(self._proc.pid, px, py, notches)
+            except HelperError as e:
+                done = e.reply.get("notches_done")
+                if e.code in CLICK_REFUSED_BEFORE_PRESS and done == 0:
+                    raise SessionError("wheel_refused", "%s: %s" % (e.code, e.detail),
+                                       keyboard_away=self._console.keyboard_away) from e
+                self._console.clicked()
+                raise SessionError("wheel_unknown", "%s: %s; some notches may have turned: take a shot before "
+                                   "turning again" % (e.code, e.detail), pixel=[px, py], notches_done=done,
+                                   keyboard_away=self._console.keyboard_away) from e
+            self._console.clicked()
+            result = self._shot_after({"pixel": [px, py], "notches": notches})
+            result["keyboard_away"] = self._console.keyboard_away
+            out.update(result)
+        return result
+
+    def drag(self, x1: float, y1: float, x2: float, y2: float) -> dict:
+        """Press the left button at (x1, y1), move to (x2, y2) and release there (fractions of the client area),
+        then a screenshot: to resize or scroll a tool window whose `.gui` cannot be overridden (#1710), with
+        `click`'s scope and rules (a drag over the map pans it or draws a selection). It latches the keyboard
+        away as a click does. `drag_refused` pressed nothing; `drag_unknown` may have pressed, and then the
+        helper released the button where the cursor was (`pressed` when the helper said)."""
+        self._require_game(keyboard=False)
+        start, end = (_fraction("x1", x1), _fraction("y1", y1)), (_fraction("x2", x2), _fraction("y2", y2))
+        with self._step("drag", x1=x1, y1=y1, x2=x2, y2=y2) as out:
+            self._console.front()
+            (ax, ay), (bx, by) = self._point(start), self._point(end)
+            try:
+                self._sends.drag(self._proc.pid, ax, ay, bx, by)
+            except HelperError as e:
+                pressed = e.reply.get("pressed")
+                if e.code in CLICK_REFUSED_BEFORE_PRESS and pressed is False:
+                    raise SessionError("drag_refused", "%s: %s" % (e.code, e.detail),
+                                       keyboard_away=self._console.keyboard_away) from e
+                self._console.clicked()
+                raise SessionError("drag_unknown", "%s: %s; the button may have gone down (the helper releases "
+                                   "it where the cursor is): take a shot before dragging again" % (e.code, e.detail),
+                                   pixels=[[ax, ay], [bx, by]], pressed=pressed,
+                                   keyboard_away=self._console.keyboard_away) from e
+            self._console.clicked()
+            result = self._shot_after({"pixels": [[ax, ay], [bx, by]]})
+            result["keyboard_away"] = self._console.keyboard_away
+            out.update(result)
+        return result
 
     def profiler_roots(self, box: Sequence[float] | None = None) -> dict:
         """Open the script profiler at its roots (`Script.Profiling.Gui`, through the console), take a shot at the

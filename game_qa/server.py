@@ -29,7 +29,7 @@ removes the folder (spec § 5.2, Review Focus 1).
                flushed first (`Session.self_checks`)
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
-               profiler-roots
+               profiler-roots, wheel, drag
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -173,6 +173,7 @@ class SessionServer:
             "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
             "profiler-roots": self._profiler_roots,
+            "wheel": self._wheel, "drag": self._drag,
         }
 
     @property
@@ -347,6 +348,12 @@ class SessionServer:
     def _click(self, body: dict) -> tuple[dict, int]:
         return self._session.click(body.get("x"), body.get("y"), console=body.get("console") is True,
                                    input_line=body.get("input_line")), 0
+
+    def _wheel(self, body: dict) -> tuple[dict, int]:
+        return self._session.wheel(_arg(body, "x"), _arg(body, "y"), _arg(body, "notches")), 0
+
+    def _drag(self, body: dict) -> tuple[dict, int]:
+        return self._session.drag(_arg(body, "x1"), _arg(body, "y1"), _arg(body, "x2"), _arg(body, "y2")), 0
 
     def _profiler_roots(self, body: dict) -> tuple[dict, int]:
         return self._session.profiler_roots(body.get("box")), 0

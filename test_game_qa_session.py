@@ -1814,6 +1814,72 @@ class KeyboardAfterClickTest(SessionTestCase):
         self.session.enter_game()
         self.assertFalse(self.session._console.keyboard_away)
 
+
+class WheelAndDragTest(SessionTestCase):
+    """`wheel X Y N` and `drag X1 Y1 X2 Y2` (#1710): click's scope and rules, a shot after, the keyboard latched."""
+
+    def test_wheel_turns_at_its_point_takes_a_shot_and_latches_the_keyboard(self):
+        self.started()
+        reply = self.session.wheel(0.6, 0.5, -3)
+        self.assertEqual(self.game.wheels, [(1152, 540, -3)])
+        self.assertEqual((reply["pixel"], reply["notches"], reply["keyboard_away"]), ([1152, 540], -3, True))
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertEqual(self.session_error(self.session.events).code, "keyboard_away")
+
+    def test_drag_presses_moves_and_releases_and_latches_the_keyboard(self):
+        self.started()
+        reply = self.session.drag(0.5, 0.5, 0.75, 0.25)
+        self.assertEqual(self.game.drags, [(960, 540, 1440, 270)])
+        self.assertEqual((reply["pixels"], reply["keyboard_away"]), ([[960, 540], [1440, 270]], True))
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+
+    def test_bad_arguments_send_nothing(self):
+        self.started()
+        for notches in (0, session.MAX_NOTCHES + 1, -session.MAX_NOTCHES - 1, True, 1.5, "2"):
+            with self.subTest(notches=notches):
+                self.assertEqual(self.session_error(self.session.wheel, 0.5, 0.5, notches).code, "bad_argument")
+        self.assertEqual(self.session_error(self.session.wheel, 1.5, 0.5, 1).code, "bad_argument")
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.5, -0.1).code, "bad_argument")
+        self.assertEqual((self.game.wheels, self.game.drags), ([], []))
+        self.assertFalse(self.session._console.keyboard_away)
+
+    def test_refused_before_anything_went_out_is_refused_and_does_not_latch(self):
+        self.started()
+        self.game.wheel = mock.Mock(side_effect=HelperError("covered", "x", reply={"notches_done": 0}))
+        error = self.session_error(self.session.wheel, 0.5, 0.5, 2)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("wheel_refused", False))
+        self.game.drag = mock.Mock(side_effect=HelperError("not_foreground", "x", reply={"pressed": False}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("drag_refused", False))
+
+    def test_a_refusal_after_something_went_out_is_unknown_and_latches(self):
+        self.started()
+        self.game.wheel = mock.Mock(side_effect=HelperError("cursor_misplaced", "x", reply={"notches_done": 2}))
+        error = self.session_error(self.session.wheel, 0.5, 0.5, 5)
+        self.assertEqual((error.code, error.info["notches_done"], error.info["keyboard_away"]),
+                         ("wheel_unknown", 2, True))
+        self.setUp()
+        self.started()
+        self.game.drag = mock.Mock(side_effect=HelperError("not_foreground", "x", reply={"pressed": True}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["pressed"], error.info["keyboard_away"]), ("drag_unknown", True, True))
+        self.game.drag = mock.Mock(side_effect=HelperError("helper_gone", "the helper ended"))
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "drag_unknown")
+
+    def test_a_game_that_cannot_be_proved_gets_neither(self):
+        self.started()
+        self.game.process_gone = True
+        self.assertEqual(self.session_error(self.session.wheel, 0.5, 0.5, 1).code, "watch_ended")
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "watch_ended")
+        self.assertEqual((self.game.wheels, self.game.drags), ([], []))
+
+    def test_both_work_while_the_keyboard_is_away(self):
+        self.started()
+        self.session.click(0.6, 0.6)
+        self.session.wheel(0.6, 0.6, 1)
+        self.session.drag(0.6, 0.6, 0.7, 0.7)
+        self.assertEqual((len(self.game.wheels), len(self.game.drags)), (1, 1))
+
 class ProfilerRootsTest(SessionTestCase):
     """`profiler-roots` (#1701, #1710): the profiler opened at its roots, a full-size shot, the call graph cropped."""
 

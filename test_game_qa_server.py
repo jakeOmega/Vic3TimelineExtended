@@ -118,6 +118,15 @@ class FakeSession:
             return {"console": {"pixel": [216, 588]}, "keyboard_away": False}
         return {"pixel": [round(1920 * x), round(1080 * y)], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}
 
+    def wheel(self, x, y, notches):
+        self._call("wheel", x, y, notches)
+        return {"pixel": [round(1920 * x), round(1080 * y)], "notches": notches, "keyboard_away": True}
+
+    def drag(self, x1, y1, x2, y2):
+        self._call("drag", x1, y1, x2, y2)
+        return {"pixels": [[round(1920 * x1), round(1080 * y1)], [round(1920 * x2), round(1080 * y2)]],
+                "keyboard_away": True}
+
     def profiler_roots(self, box=None):
         self._call("profiler_roots", box)
         return {"lines": ["Opened Script.Profiling.Gui"], "opened": True, "box": box or [0.2, 0.3, 0.8, 0.9],
@@ -321,6 +330,17 @@ class ClickConsoleVerbTest(ServerTestCase):
         self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25, "console", [0.1, 0.6]))
         self.run_cli("click", "0.5", "0.25")
         self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25))
+
+
+class WheelDragVerbTest(ServerTestCase):
+    def test_wheel_and_drag_pass_their_numbers(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("wheel", "0.5", "0.25", "-3")
+        self.assertEqual((code, reply["notches"]), (0, -3))
+        self.assertEqual(fake.calls[-1], ("wheel", 0.5, 0.25, -3))
+        reply, code = self.run_cli("drag", "0.1", "0.2", "0.3", "0.4")
+        self.assertEqual((code, reply["pixels"]), (0, [[192, 216], [576, 432]]))
+        self.assertEqual(fake.calls[-1], ("drag", 0.1, 0.2, 0.3, 0.4))
 
 
 class ProfilerRootsVerbTest(ServerTestCase):

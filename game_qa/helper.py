@@ -57,6 +57,10 @@ class Helper(Protocol):
     # the window moved), cursor_misplaced or covered, in which cases nothing was pressed.
     # focus, keys and click are refused not_ours unless this helper launched or adopted the process and it still has
     # that creation time, looked at again before every step sent: nothing more goes out after the refusal.
+    def wheel(self, pid: int, x: int, y: int, notches: int) -> None: ...
+    def drag(self, pid: int, x1: int, y1: int, x2: int, y2: int) -> None: ...
+    # wheel and drag: aimed and refused as click is. A wheel's refusal carries `notches_done` (0: nothing turned);
+    # a drag's carries `pressed` (true: the button went down, and was released again where the cursor then was).
     def presence(self) -> Presence: ...
     def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path: ...
     def kill(self, proc: ProcId) -> bool: ...      # True if the process had already exited
@@ -168,6 +172,12 @@ class ProcessHelper:
 
     def click(self, pid: int, x: int, y: int) -> None:
         self._call("click", pid=pid, x=x, y=y)
+
+    def wheel(self, pid: int, x: int, y: int, notches: int) -> None:
+        self._call("wheel", pid=pid, x=x, y=y, notches=notches)
+
+    def drag(self, pid: int, x1: int, y1: int, x2: int, y2: int) -> None:
+        self._call("drag", pid=pid, x1=x1, y1=y1, x2=x2, y2=y2)
 
     def presence(self) -> Presence:
         r = self._call("presence")
