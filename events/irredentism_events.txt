@@ -651,11 +651,11 @@ irredentism.7 = {
 						any_interest_group = {
 							is_in_government = yes
 							OR = {
-								leader = { has_ideology = ideology:ideology_jingoist_leader }
-								leader = { has_ideology = ideology:ideology_fascist }
-								leader = { has_ideology = ideology:ideology_communist_leader }
-								leader = { has_ideology = ideology:ideology_vanguardist }
-								leader = { has_ideology = ideology:ideology_ethno_nationalist }
+								leader ?= { has_ideology = ideology:ideology_jingoist_leader }
+								leader ?= { has_ideology = ideology:ideology_fascist }
+								leader ?= { has_ideology = ideology:ideology_communist_leader }
+								leader ?= { has_ideology = ideology:ideology_vanguardist }
+								leader ?= { has_ideology = ideology:ideology_ethno_nationalist }
 							}
 						}
 					}
@@ -663,11 +663,11 @@ irredentism.7 = {
 						any_interest_group = {
 							is_in_government = yes
 							OR = {
-								leader = { has_ideology = ideology:ideology_jingoist_leader }
-								leader = { has_ideology = ideology:ideology_fascist }
-								leader = { has_ideology = ideology:ideology_communist_leader }
-								leader = { has_ideology = ideology:ideology_vanguardist }
-								leader = { has_ideology = ideology:ideology_ethno_nationalist }
+								leader ?= { has_ideology = ideology:ideology_jingoist_leader }
+								leader ?= { has_ideology = ideology:ideology_fascist }
+								leader ?= { has_ideology = ideology:ideology_communist_leader }
+								leader ?= { has_ideology = ideology:ideology_vanguardist }
+								leader ?= { has_ideology = ideology:ideology_ethno_nationalist }
 							}
 						}
 					}
@@ -908,9 +908,9 @@ irredentism.8 = {
 						any_interest_group = {
 							is_in_government = yes
 							OR = {
-								leader = { has_ideology = ideology:ideology_market_liberal }
-								leader = { has_ideology = ideology:ideology_humanitarian }
-								leader = { has_ideology = ideology:ideology_pacifist }
+								leader ?= { has_ideology = ideology:ideology_market_liberal }
+								leader ?= { has_ideology = ideology:ideology_humanitarian }
+								leader ?= { has_ideology = ideology:ideology_pacifist }
 							}
 						}
 					}

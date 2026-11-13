@@ -38,7 +38,10 @@ left button there, under the same rule as `keys` (the game's window in front),
 and presses only if, after the cursor has settled, the window is still in front
 and has not moved, the cursor is exactly on the point, and the game's own window
 is the one under it. Otherwise nothing is pressed: `not_foreground`, `bad_point`,
-`cursor_misplaced` or `covered`. `presence`
+`cursor_misplaced` or `covered`. `wheel` turns the mouse wheel at a point and
+`drag` presses at one point, moves and releases at another, both aimed as
+`click` is and looked at again before every notch and every move; a drag's
+button is always released once it went down. `presence`
 reports where the cursor and the foreground window are, and where the helper
 last put the cursor, so that a caller comparing two readings can tell its
 own move from a person's.
@@ -77,6 +80,13 @@ INPUT_MOUSE = 0
 INPUT_KEYBOARD = 1
 MOUSEEVENTF_LEFTDOWN = 0x0002     # not the keyboard flags below, whose values these share
 MOUSEEVENTF_LEFTUP = 0x0004
+MOUSEEVENTF_WHEEL = 0x0800
+WHEEL_DELTA = 120                 # one notch of the wheel (winuser.h); positive turns it away from the user
+MAX_NOTCHES = 40                  # what one `wheel` turns at most, either way
+WHEEL_GAP_MS = 40                 # between two notches (a guess: let the game take each one)
+DRAG_MOVES = 12                   # cursor moves from a drag's press to its release
+DRAG_MOVE_MS = 15                 # between them (a guess)
+DRAG_RELEASE_RETRY_MS = 25        # before a drag's button-up goes out again, after SendInput failed it once
 KEYEVENTF_KEYUP = 0x0002
 KEYEVENTF_UNICODE = 0x0004
 KEYEVENTF_SCANCODE = 0x0008
@@ -495,6 +505,111 @@ def _op_click(req, backend, state):
     return {}
 
 
+def _aim(backend, state: State, pid: int, x: int, y: int, **fields) -> tuple[tuple, tuple[int, int]]:
+    """`click`'s checks for a wheel or a drag: the cursor put on (x, y) of the client area, and after it has
+    settled the window still in front, unmoved, the process the recorded one, the cursor exactly there and the game's
+    window the one under it. Returns (the client area, the point on the screen); refusals carry `fields`."""
+    client = tuple(_front_window(backend, state, pid, **fields)["client"])
+    left, top, width, height = client
+    if not (0 <= x < width and 0 <= y < height):
+        raise _Refusal("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height), **fields)
+    target = (left + x, top + y)
+    backend.set_cursor(*target)
+    state.helper_cursor = backend.cursor_pos()
+    state.last_sent_tick = backend.tick()
+    backend.sleep(CLICK_SETTLE_MS)
+    _still_aimed(backend, state, pid, client, target, **fields)
+    return client, target
+
+
+def _still_aimed(backend, state: State, pid: int, client: tuple, target: tuple[int, int], **fields) -> None:
+    """Before each notch or move: the window in front and unmoved, the process the recorded one, the cursor on
+    `target` and the game's window under it."""
+    win = _front_window(backend, state, pid, **fields)
+    if tuple(win["client"]) != client:
+        raise _Refusal("bad_point", "the window moved or was resized", **fields)
+    if backend.cursor_pos() != target:
+        raise _Refusal("cursor_misplaced", "the cursor is not at %s" % (target,), **fields)
+    if backend.window_at(*target) != win["hwnd"]:
+        raise _Refusal("covered", "the game's window is not the one under %s" % (target,), **fields)
+
+
+def _op_wheel(req, backend, state):
+    """Turn the wheel `notches` notches (WHEEL_DELTA each; positive away from the user, which scrolls a list up)
+    at (x, y) of the client area, aimed as a click is and every check made again before each notch. A refusal says
+    how many went out (`notches_done`); 0 means none did."""
+    pid, x, y = _pid(req), _int(req, "x"), _int(req, "y")
+    notches = _int(req, "notches", low=-MAX_NOTCHES, high=MAX_NOTCHES)
+    if notches == 0:
+        raise _Refusal("bad_request", "notches is a non-zero number of notches")
+    turn = WHEEL_DELTA if notches > 0 else -WHEEL_DELTA
+    done = 0
+    try:
+        client, target = _aim(backend, state, pid, x, y, notches_done=0)
+        for _ in range(abs(notches)):
+            if done:
+                backend.sleep(WHEEL_GAP_MS)
+                _still_aimed(backend, state, pid, client, target, notches_done=done)
+            backend.send_mouse(MOUSEEVENTF_WHEEL, turn)
+            done += 1
+    finally:
+        state.last_sent_tick = backend.tick()
+    return {"notches_done": done}
+
+
+def _op_drag(req, backend, state):
+    """Press the left button at (x1, y1) of the client area, move to (x2, y2) in DRAG_MOVES steps and release it
+    there. The press is aimed as a click is; before each move the window must still be in front, unmoved and the
+    recorded process's, and after it the cursor where it was put. Once the press has begun the release is always
+    sent, after a refusal or a failure too, where the cursor then is (a button left held drags whatever is under
+    it): a refusal from then on carries `pressed: true`. A release that fails is sent once more (`_release_left`)."""
+    pid = _pid(req)
+    x1, y1, x2, y2 = (_int(req, name) for name in ("x1", "y1", "x2", "y2"))
+    try:
+        client, start = _aim(backend, state, pid, x1, y1, pressed=False)
+        left, top, width, height = client
+        if not (0 <= x2 < width and 0 <= y2 < height):
+            raise _Refusal("bad_point", "(%d, %d) is outside the %dx%d client area" % (x2, y2, width, height),
+                           pressed=False)
+        end = (left + x2, top + y2)
+        if backend.window_at(*end) != backend.window_at(*start):
+            raise _Refusal("covered", "the game's window is not the one under %s" % (end,), pressed=False)
+        try:
+            backend.send_mouse(MOUSEEVENTF_LEFTDOWN)
+            for step in range(1, DRAG_MOVES + 1):
+                backend.sleep(DRAG_MOVE_MS)
+                win = _front_window(backend, state, pid, pressed=True)
+                if tuple(win["client"]) != client:
+                    raise _Refusal("bad_point", "the window moved or was resized", pressed=True)
+                point = (start[0] + (end[0] - start[0]) * step // DRAG_MOVES,
+                         start[1] + (end[1] - start[1]) * step // DRAG_MOVES)
+                backend.set_cursor(*point)
+                state.helper_cursor = backend.cursor_pos()
+                if state.helper_cursor != point:
+                    raise _Refusal("cursor_misplaced", "the cursor is not at %s" % (point,), pressed=True)
+            backend.sleep(CLICK_HOLD_MS)
+        finally:
+            _release_left(backend)
+    finally:
+        state.last_sent_tick = backend.tick()
+    return {"moves": DRAG_MOVES}
+
+
+def _release_left(backend) -> None:
+    """A drag's button-up. If it fails, it is sent once more after DRAG_RELEASE_RETRY_MS, since a button left down
+    drags whatever is under it; a retry that goes out leaves the drag's own reply (or refusal) as it was. A second
+    failure is `backend_error` with `pressed: true` and `released: false`: the button may still be down."""
+    try:
+        backend.send_mouse(MOUSEEVENTF_LEFTUP)
+    except Exception:
+        backend.sleep(DRAG_RELEASE_RETRY_MS)
+        try:
+            backend.send_mouse(MOUSEEVENTF_LEFTUP)
+        except Exception as e:
+            raise _Refusal("backend_error", "the left button's release failed twice, so it may still be down: %r"
+                           % (e,), pressed=True, released=False) from e
+
+
 def _op_presence(req, backend, state):
     cursor = backend.cursor_pos()
     mine = state.helper_cursor
@@ -593,6 +708,7 @@ def _op_tcp_close(req, backend, state):
 _OPS = {
     "ping": _op_ping, "launch": _op_launch, "adopt": _op_adopt, "window": _op_window,
     "idle_ms": _op_idle_ms, "focus": _op_focus, "keys": _op_keys, "click": _op_click, "presence": _op_presence,
+    "wheel": _op_wheel, "drag": _op_drag,
     "screenshot": _op_screenshot, "kill": _op_kill, "tcp_open": _op_tcp_open, "tcp_send": _op_tcp_send,
     "tcp_recv": _op_tcp_recv, "tcp_close": _op_tcp_close,
 }
@@ -876,11 +992,13 @@ class WindowsBackend:
             return 0
         return int(self._user32.GetAncestor(child, self.GA_ROOT) or 0)
 
-    def send_mouse(self, flags: int) -> None:
-        """One mouse event (a MOUSEEVENTF_* button flag) at the cursor, where it is."""
+    def send_mouse(self, flags: int, data: int = 0) -> None:
+        """One mouse event (a MOUSEEVENTF_* flag) at the cursor, where it is; `data` is the wheel's turn
+        (a multiple of WHEEL_DELTA, negative towards the user), 0 for a button."""
         item = INPUT()
         item.type = INPUT_MOUSE
         item.mi.dwFlags = flags
+        item.mi.mouseData = data & 0xFFFFFFFF     # a DWORD on the wire, read as a signed turn
         sent = self._user32.SendInput(1, ctypes.byref(item), ctypes.sizeof(INPUT))
         if sent != 1:
             raise OSError("SendInput sent %d of 1 mouse events (error %d): is another window's input blocking it?"

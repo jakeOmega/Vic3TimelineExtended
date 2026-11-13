@@ -273,15 +273,17 @@ dar_formation_no_internal_rivalry = {
 # and show_trigger_per_scope, vanilla 1.15): each is a positive count over the
 # great powers other than ROOT (`filter`, as vanilla's tsar buttons write it)
 # rather than "no great power that fails" (vanilla lists only in positive
-# counts; whether a NOT-wrapped count lists is untested). Each
+# counts; whether a NOT-wrapped count lists is untested). The engine takes
+# `filter` only with `count = all` or `percent`, so the supermajority's "all
+# but one" is a share (te_formation_gating_values.txt). Each
 # is exactly the NOT form it replaced; test_une_formation_gates.py pins that.
 # A count over no great power at all is never asked: trigger_if passes when
 # there is nothing to count, as the NOT form did.
 
 une_formation_supermajority = {
 	is_power_bloc_leader = yes
-	# At most one great power exists outside ROOT's power bloc: at least all
-	# the others but one are inside it (te_formation_gating_values.txt).
+	# At most one great power exists outside ROOT's power bloc: all the others
+	# but one are inside it, as a share of them (te_formation_gating_values.txt).
 	trigger_if = {
 		limit = {
 			any_country = {
@@ -298,7 +300,7 @@ une_formation_supermajority = {
 					NOT = { this = ROOT }
 				}
 				is_in_same_power_bloc = ROOT
-				count >= une_supermajority_needed_gp_candidate
+				percent >= une_supermajority_share_gp_candidate
 				list_scopes = yes
 				show_trigger_per_scope = yes
 			}
@@ -310,7 +312,7 @@ une_formation_supermajority = {
 					NOT = { this = ROOT }
 				}
 				is_in_same_power_bloc = ROOT
-				count >= une_supermajority_needed_other_candidate
+				percent >= une_supermajority_share_other_candidate
 				list_scopes = yes
 				show_trigger_per_scope = yes
 			}

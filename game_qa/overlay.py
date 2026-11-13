@@ -15,6 +15,15 @@ follow the probe files that ran against the real game on 2026-11-10 (docs/testin
 The `.txt` files start with one UTF-8 BOM and are indented with tabs; `metadata.json` has no BOM, as the
 mod's own has none.
 
+The overlay also carries a larger script profiler window (#1701, #1710), when the installed game's
+`jomini/gui/script_profiler/script_profiler.gui` can be read and its three sizes found (`profiler_gui`):
+
+    mod/te_qa_overlay/gui/script_profiler/script_profiler.gui   the game's own file with three minimumsizes raised
+
+It is the game's file byte for byte apart from those numbers (no BOM is added: the game's has none), and it is
+built only from the installed file, never kept in the repo. The fixture's key never reads the overlay's contents
+(`fixture.key` hashes the overlay's path, not its files), so this file does not remake the fresh save.
+
 A setup added to a running game (`add_setup`, #1600) goes into a spare slot. The game reloads a scripted-effect
 file that changes while it runs (`-debug_mode`; spec § 3.3: verified, 40 seconds in the probes of 2026-11-10 and about 90 live on 2026-11-12, the
 window not responding meanwhile), but an
@@ -56,6 +65,13 @@ EVENTS_FILE = "events/te_qa_events.txt"
 EFFECTS_FILE = "common/scripted_effects/te_qa_effects.txt"
 SCRIPTED_TEST_FILE = f"tools/scripted_tests/{FIXTURE_TEST}.txt"
 METADATA_FILE = ".metadata/metadata.json"
+PROFILER_GUI_FILE = "gui/script_profiler/script_profiler.gui"     # in the overlay, overriding the game's own
+PROFILER_GUI_SOURCE = "jomini/gui/script_profiler/script_profiler.gui"     # under the game's install folder
+# The three sizes verified live in the performance run of 2026-11-12 (#1710's comment): with them the window opens at
+# about 2,900 x 1,950 pixels of a 3840x2160 window, and the call graph shows every callee with both times.
+PROFILER_WINDOW = (600, 300, 1400, 950)         # the root vbox's minimumsize: from (600, 300) to (1400, 950)
+PROFILER_ROW = (0, 150, 0, 700)                 # the Callers/Current/Callees row's: from (0, 150) to (0, 700)
+PROFILER_CALLEES = (125, 0, 650, 0)             # the Callees frame's: from (125, 0) to (650, 0)
 
 PAD_LINES = 60  # about 9 KB of log: enough to flush the game's block-buffered debug.log (4 KB at a time)
 PAD_TEXT = "TE_QA PAD " + "0123456789" * 7
@@ -91,16 +107,18 @@ class Overlay:
     bodies: dict[str, str] = field(default_factory=dict)    # the setups given at start, cleaned
     added: dict[str, tuple[int, str]] = field(default_factory=dict)     # an added setup -> (its slot, its body)
     revision: int = 0   # of effects_file: 0 as built, one more for each add_setup
+    profiler_gui: Path | None = None    # the enlarged profiler window's file, when the overlay carries one
 
 
-def build(dest: Path, setups: Mapping[str, str], game_version: str,
+def build(dest: Path, setups: Mapping[str, str], game_version: str, profiler_gui: bytes | None = None,
           fixture_date: tuple[int, int, int] | None = None) -> Overlay:
     """Write the overlay into `dest` (a folder named OVERLAY_NAME), replacing an earlier one of ours.
 
     `setups` maps a setup name to the Paradox script of its body, which becomes the scripted effect
-    `te_qa_setup_<name>` and is run by its own hidden event. `fixture_date` is the date the scripted test fails on,
-    so the date of the save an unattended run makes (#1602); None is the plain fixture's, the game's second day,
-    whose text is the one run live. Raises OverlayError, before anything is
+    `te_qa_setup_<name>` and is run by its own hidden event. `profiler_gui`, when given, is written as it is to
+    PROFILER_GUI_FILE (what `profiler_gui()` made of the game's own file). `fixture_date` is the date the
+    scripted test fails on, so the date of the save an unattended run makes (#1602); None is the plain
+    fixture's, the game's second day, whose text is the one run live. Raises OverlayError, before anything is
     written or removed, for a name or body it refuses, a `game_version` that is not text, a `dest`
     that is not named OVERLAY_NAME, a `dest` whose parent folder is not there (no ancestor is ever created,
     since `remove` could not undo it), and a `dest` that exists and is not an overlay of ours."""
@@ -126,12 +144,117 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str,
         _write(temp / EVENTS_FILE, _txt(events_text))
         _write(temp / EFFECTS_FILE, _txt(_effects_text(bodies, {}, 0)))
         _write(temp / SCRIPTED_TEST_FILE, _txt(test_text))
+        if profiler_gui is not None:
+            _write(temp / PROFILER_GUI_FILE, bytes(profiler_gui))
         remove(dest)
         os.rename(temp, dest)
     except BaseException:
         shutil.rmtree(temp, ignore_errors=True)
         raise
-    return Overlay(dest, dest / EVENTS_FILE, read_line, setup_events, dest / EFFECTS_FILE, bodies)
+    return Overlay(dest, dest / EVENTS_FILE, read_line, setup_events, dest / EFFECTS_FILE, bodies,
+                   profiler_gui=dest / PROFILER_GUI_FILE if profiler_gui is not None else None)
+
+
+def profiler_gui(base_game: Path) -> tuple[bytes | None, dict]:
+    """The game's script profiler window with its three sizes raised (`enlarge_profiler_gui`), read from the
+    install folder `base_game` (never written), and what to report: `{"enlarged": True, "source": ...}`, or
+    (None, `{"enlarged": False, "why": ...}`) for a file that is missing or unreadable, or whose sizes are not
+    where they were. That never stops a start: the overlay is then built without it, and the profiler opens at
+    the game's own size."""
+    source = Path(base_game) / PROFILER_GUI_SOURCE
+    try:
+        data = source.read_bytes()
+    except OSError as error:
+        return None, {"enlarged": False, "why": f"{source} could not be read ({error.__class__.__name__}: "
+                                                f"{error.strerror or error})"}
+    try:
+        return enlarge_profiler_gui(data), {"enlarged": True, "source": str(source)}
+    except OverlayError as error:
+        return None, {"enlarged": False, "why": f"{source}: {error}; the profiler opens at the game's own size"}
+
+
+def enlarge_profiler_gui(data: bytes) -> bytes:
+    """`data` (the game's script_profiler.gui) with the three minimumsizes raised, every other byte as it was.
+    Each is found in its context or OverlayError names the one that was not:
+
+      * the window's: PROFILER_WINDOW[:2] on the root block itself (depth 1), once in the file;
+      * the row's: PROFILER_ROW[:2] on a block directly inside the root (depth 2) that holds the "Callees" label,
+        once in the file;
+      * the Callees frame's: PROFILER_CALLEES[:2] on the `editor_frame` block whose label is "Callees", once among
+        that frame's own lines before the label (the scroll area inside it has the same size, deeper down; the
+        Callers frame has the same shape, with its own label)."""
+    depth = _depths(data)
+    labels = [m.start() for m in re.finditer(rb'raw_text\s*=\s*"Callees"', data)]
+    if len(labels) != 1:
+        raise OverlayError(f'the "Callees" label is there {len(labels)} times, not once')
+    label = labels[0]
+    window = _one_size(data, depth, PROFILER_WINDOW, 1, 0, len(data), "the window's minimumsize")
+    row = _one_size(data, depth, PROFILER_ROW, 2, 0, len(data), "the call graph row's minimumsize")
+    if not _opening(depth, row.start()) < label < _closing(depth, row.start()):
+        raise OverlayError("the call graph row's minimumsize is not on the block that holds the Callees label")
+    if depth[label] != 4:
+        raise OverlayError('the "Callees" label is not in a blockoverride of a frame inside the row')
+    frame = _opening(depth, label, 3)           # the frame's own `{`: the label sits in a blockoverride inside it
+    if not re.search(rb"editor_frame\s*=\s*$", data[:frame]):
+        raise OverlayError('the "Callees" label is not in an editor_frame')
+    callees = _one_size(data, depth, PROFILER_CALLEES, 3, frame, label, "the Callees frame's minimumsize")
+    out = bytearray(data)
+    for match, size in sorted(((window, PROFILER_WINDOW), (row, PROFILER_ROW), (callees, PROFILER_CALLEES)),
+                              key=lambda pair: pair[0].start(), reverse=True):
+        for group, number in ((2, size[3]), (1, size[2])):      # the later number first: the earlier one's
+            out[match.start(group):match.end(group)] = str(number).encode("ascii")     # place stays put
+    return bytes(out)
+
+
+def _one_size(data: bytes, depth: list[int], size: tuple[int, int, int, int], at_depth: int, start: int, end: int,
+              what: str) -> re.Match:
+    """The one `minimumsize = { W H }` (size[:2]) between `start` and `end` that sits at `at_depth`, or
+    OverlayError. Spacing may differ; the numbers must be exactly these."""
+    pattern = rb"minimumsize\s*=\s*\{\s*(%d)\s+(%d)\s*\}" % size[:2]
+    found = [m for m in re.compile(pattern).finditer(data, start, end) if depth[m.start()] == at_depth]
+    if len(found) != 1:
+        raise OverlayError(f"{what} {{ {size[0]} {size[1]} }} is there {len(found)} times where it was once "
+                           "(the game's file has changed)")
+    return found[0]
+
+
+def _depths(data: bytes) -> list[int]:
+    """For each byte of a Paradox file, how many blocks are open at it: a `{` counts from the byte after it, a `}`
+    from itself. Braces inside a "quoted string" or after a # (to the end of its line) do not count."""
+    depths = []
+    depth = 0
+    in_string = in_comment = False
+    for byte in data:
+        if in_comment:
+            in_comment = byte != 0x0A
+        elif in_string:
+            in_string = byte != 0x22
+        elif byte == 0x22:
+            in_string = True
+        elif byte == 0x23:
+            in_comment = True
+        elif byte == 0x7D:
+            depth -= 1
+        depths.append(depth)
+        if byte == 0x7B and not (in_string or in_comment):
+            depth += 1
+    return depths
+
+
+def _opening(depth: list[int], pos: int, level: int | None = None) -> int:
+    """Where the `{` is that opens the block of depth `level` (by default the innermost) open at `pos`, or -1."""
+    level = depth[pos] if level is None else level
+    while pos > 0 and not (depth[pos - 1] == level - 1 and depth[pos] == level):
+        pos -= 1
+    return pos - 1
+
+
+def _closing(depth: list[int], pos: int) -> int:
+    """Where the `}` is that closes the innermost block open at `pos` (len(depth) if it is never closed)."""
+    level = depth[pos]
+    while pos < len(depth) and depth[pos] >= level:
+        pos += 1
+    return pos
 
 
 def slot_event(slot: int) -> str:

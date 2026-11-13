@@ -248,6 +248,86 @@ class AlwaysFalseTests(unittest.TestCase):
             self.assertIn("- `always = no` flags: 1", report)
 
 
+class FilterCountTests(unittest.TestCase):
+    """`filter` in an `any_*` needs `percent` or `count = all` beside it."""
+
+    def test_flags_filter_with_plain_count(self):
+        # The United Nations of Earth supermajority as it shipped (2026-11-12).
+        flags = [f for f in _scan(
+            "t = {\n"
+            "\tany_country = {\n"
+            "\t\tfilter = {\n\t\t\tcountry_rank >= rank_value:great_power\n\t\t}\n"
+            "\t\tis_in_same_power_bloc = ROOT\n"
+            "\t\tcount >= une_needed\n"
+            "\t\tlist_scopes = yes\n"
+            "\t}\n"
+            "}\n"
+        ) if f.kind == "filter_count"]
+        self.assertEqual([(f.line, f.any_name, f.any_line) for f in flags],
+                         [(3, "any_country", 2)])
+
+    def test_flags_filter_with_no_count(self):
+        flags = _scan("t = { any_scope_state = { filter = { is_coastal = yes } is_incorporated = yes } }\n")
+        self.assertEqual([f.kind for f in flags], ["filter_count"])
+
+    def test_no_flag_with_percent_or_count_all(self):
+        flags = _scan(
+            "t = {\n"
+            "\tany_country = {\n\t\tfilter = { is_subject_of = ROOT }\n\t\tpercent >= share_value\n\t}\n"
+            "\tany_country = {\n\t\tcount = all\n\t\tfilter = { is_subject_of = ROOT }\n\t\tliberty_desire < 75\n\t}\n"
+            "\tany_scope_state = { filter = { is_coastal = yes } percent > 0.5 }\n"
+            "}\n"
+        )
+        self.assertEqual(flags, [])
+
+    def test_no_flag_with_quoted_count_all(self):
+        flags = _scan('t = { any_country = { count = "all" filter = { is_subject_of = ROOT } liberty_desire < 75 } }\n')
+        self.assertEqual(flags, [])
+
+    def test_count_all_in_a_nested_block_does_not_count(self):
+        # Only the any_* block's own children decide; a count = all one level
+        # down belongs to another trigger.
+        flags = _scan(
+            "t = {\n"
+            "\tany_country = {\n"
+            "\t\tfilter = { is_subject_of = ROOT }\n"
+            "\t\tany_scope_state = { count = all is_incorporated = yes }\n"
+            "\t\tcount >= 2\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual([(f.kind, f.line) for f in flags], [("filter_count", 3)])
+
+    def test_no_flag_for_filter_outside_any(self):
+        # Treaty articles use a `filter` key of their own.
+        flags = _scan("article = {\n\tfilter = { is_subject = no }\n}\nt = { trigger_if = { limit = { always = yes } filter = { x = y } } }\n")
+        self.assertEqual(flags, [])
+
+    def test_reviewed_on_opener_or_filter_line_suppresses(self):
+        flags = _scan(
+            "any_country = { # REVIEWED 2026-11-12: kept for the test\n"
+            "\tfilter = { a = b }\n\tcount >= 2\n"
+            "}\n"
+            "any_country = {\n"
+            "\tfilter = { a = b } # REVIEWED 2026-11-12: second case\n\tcount >= 2\n"
+            "}\n"
+        )
+        self.assertEqual(len(flags), 2)
+        self.assertTrue(all(f.exemption for f in flags))
+        self.assertEqual(flags[1].exemption["rationale"], "second case")
+
+    def test_report_names_the_kind(self):
+        with tempfile.TemporaryDirectory() as td:
+            cdir = os.path.join(td, "common", "scripted_triggers")
+            os.makedirs(cdir)
+            with open(os.path.join(cdir, "x.txt"), "w", encoding="utf-8") as fh:
+                fh.write("st = {\n\tany_country = {\n\t\tfilter = { a = b }\n\t\tcount >= 2\n\t}\n}\n")
+            report = render_report(audit(mod_path=td))
+            self.assertIn("- line 3: `filter` without `percent` or `count = all` inside "
+                          "`any_country` (opened at line 2)", report)
+            self.assertIn("- `filter` flags: 1", report)
+
+
 @unittest.skipUnless(os.path.isdir(VANILLA_GAME), "vanilla install not found")
 class VanillaCleanTests(unittest.TestCase):
     def test_vanilla_has_no_flags(self):
