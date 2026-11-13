@@ -5,7 +5,7 @@ ran from one scratch branch (`scratch/qa-integration-2026-11-13`) that merges al
 to the PR that added the verb, not to `main`. The branch moved during the night: session A (and B's refused
 start) ran with #1739's first review fixes but before those of #1740 and #1742 and before #1737's rework of
 `pick`; B and B′ ran with all of those; C with #1741's fallback to Back too; D with everything up to then. The
-fixes of the second, later review are not run live.
+fixes of the second, later review are not run live. All seven PRs merged later that day, after the second review.
 
 **Game:** Victoria 3 1.15.1. **Build:** the deployed mod folder as it stood (the main checkout was at `9cca92222`;
 not compared with the folder). **Launches:** six sessions (one refused at its start) and two unattended runs, the
