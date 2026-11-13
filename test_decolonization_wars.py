@@ -409,6 +409,21 @@ class EventTests(unittest.TestCase):
         self.assertIn("trigger_event = { id = decolonization_events.77 days = 60 }", step)
         self.assertIn("order_by = decol_iw_rise_order", step)
 
+    def test_a_reconquered_territory_waits_ten_years_in_the_wave_too(self):
+        """Order Restored (.72) promises no declaration from the territory for ten years (decol_declared).
+        The wave's step read only is_decolonization_eligible_state, so a territory won back during a
+        collapse declared again at the next step: .72's large radicals made it the likeliest to rise
+        (a 1932 Singapore game, 2026-11-12: Suzhou won back on May 18, declared again in June)."""
+        cooldown = "NOT = { has_variable = decol_declared }"
+        for trigger in ("decol_iw_can_declare", "decol_wave_candidate"):
+            with self.subTest(trigger=trigger):
+                self.assertIn(cooldown, _def(TRIGGERS, trigger))
+        step = _def(EFFECTS, "decol_wave_step")
+        self.assertEqual(step.count("decol_wave_candidate = yes"), 2)
+        self.assertNotIn("is_decolonization_eligible_state", step)
+        won = _def(EVENTS, "decolonization_events.72")
+        self.assertIn("set_variable = { name = decol_declared days = 3650 }", won)
+
 
 if __name__ == "__main__":
     unittest.main()

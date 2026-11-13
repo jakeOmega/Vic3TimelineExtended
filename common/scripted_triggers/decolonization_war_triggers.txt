@@ -39,9 +39,13 @@ decol_iw_can_declare = {
 
 # A territory the collapse wave (decolonization_events.77) may take: what a
 # release could offer (is_decolonization_eligible_state), as the collapse took
-# before the wave. Scope: state.
+# before the wave, that has not declared, or been reconquered, in the last ten
+# years (decol_declared), the wait Order Restored (.72) promises. Without it a
+# territory won back during the wave declared again at the next step: .72's
+# radicals make it the likeliest to rise. Scope: state.
 decol_wave_candidate = {
 	is_decolonization_eligible_state = yes
+	NOT = { has_variable = decol_declared }
 }
 
 # Our distribution of power lets people vote: the regime crisis (.75) and the
