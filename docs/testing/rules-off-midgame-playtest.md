@@ -167,6 +167,12 @@ its law's rate.
    `TE_TAX full_entry_net` line for each country the net reached. Failing: the tab still greyed with "Its conditions
    are met" after two months: read `has_journal_entry` and `has_inactive_journal_entry` for `je_tax_code` on the
    country; if an inactive copy exists that the engine never activates, the net's last condition is what stops it.
+   **Self-check:** `TE_SELF_CHECK BROKEN tax_entry_inactive_stuck country=… months=3` in `debug.log` (either
+   setting; there is no OK line) says exactly that for the country named: the code in force, the entry not active
+   and an inactive copy held for three months running. The greyed tab's tooltip cannot tell this from a country
+   with no record, which is why the line exists. If it appears, the nets do not cover the reported bug; the fallback
+   is the owner's call (the candidates: take the entry off `disable_evaluation` so the record is never pruned and
+   re-made, or open the tab on the code being in force instead of on the entry).
 
 ## Banking: Full to Simplified
 

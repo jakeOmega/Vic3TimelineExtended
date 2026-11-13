@@ -240,6 +240,8 @@ on_monthly_pulse_country = {
 		te_tax_watchdog_on_action
 		te_tax_light_entry_net
 		te_tax_full_entry_net
+		te_tax_light_entry_stuck
+		te_tax_full_entry_stuck
 		te_tax_rule_off_net
 	}
 }
@@ -351,13 +353,16 @@ te_tax_light_entry_net = {
 # Extended window's open only while it is active (te_budget_tax_tab_sgui), and
 # the tab is where a tax is changed. A Workshop player with the full code had
 # the tab greyed for ten years, its tooltip saying the conditions were met and
-# the entry was not running: the code was in force and the country held no
-# record of the entry, active or inactive. disable_evaluation prunes the
-# inactive record while the rule is off, so a game whose rule was switched on
-# during play is one way there (that this was the player's case is not
-# confirmed); Banking's net found the engine leaving countries without a record
-# in an ordinary game too. Nothing added the entry back, since only the light
-# setting had a net. The conditions are the light net's.
+# the entry was not running: the code was in force and the entry was not
+# active. The tooltip cannot tell the two ways there apart. One is a country
+# with no record of the entry, active or inactive: disable_evaluation prunes
+# the inactive record while the rule is off, so a game whose rule was switched
+# on during play has none, and Banking's net found the engine leaving countries
+# without a record in an ordinary game too. Nothing added the entry back, since
+# only the light setting had a net; this net does, under the light net's
+# conditions. The other is an inactive copy the engine never activates, which
+# no net can add over: te_tax_entry_stuck_check (te_tax_migration_effects.txt)
+# reports that one, so the next report says which it was.
 te_tax_full_entry_net = {
 	effect = {
 		if = {
@@ -370,6 +375,28 @@ te_tax_full_entry_net = {
 			}
 			add_journal_entry = { type = je_tax_code }
 			debug_log = "TE_TAX full_entry_net the safety net added je_tax_code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope. An inactive copy of the entry that the engine never activates,
+# which neither net can add over: te_tax_entry_stuck_check
+# (te_tax_migration_effects.txt) counts the months and reports the third. One
+# handler a setting, each gated on its own.
+te_tax_light_entry_stuck = {
+	effect = {
+		if = {
+			limit = { te_tax_code_light_on = yes }
+			te_tax_entry_stuck_check = { IN_FORCE = te_tax_light_in_force }
+		}
+	}
+}
+
+te_tax_full_entry_stuck = {
+	effect = {
+		if = {
+			limit = { te_tax_code_full = yes }
+			te_tax_entry_stuck_check = { IN_FORCE = te_tax_code_in_force }
 		}
 	}
 }
