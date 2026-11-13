@@ -1022,8 +1022,11 @@ class Session:
         (`not_on_country_select`), and `advance` needs no entering.
 
         `via="back"` clicks the screen's Back button instead (`_enter_back`, #1598): one click that depends on no
-        camera and no window over the middle of the screen, if Back enters the game as the played country, as the
-        owner thinks (unverified). The proof after it is the same as after Start.
+        camera and no window over the middle of the screen. Back enters the game as the played country (live,
+        2026-11-13, twice from the fresh save as FRA, once with a "We now have …" window up). The proof after it is
+        the same as after Start. The country click goes on to Back by itself when it selected no country (the
+        lobby's side panel did not change), before Start: the reply then has `fallback: "back"` and
+        `country_click` (its click and the panel's screenshot), as does an error from Back.
 
         After Start (live, 2026-11-11, the clicks entered the game as the country the camera was on, and no read
         stopped at the breakpoint after them): wait ENTER_SETTLE_S, wait for the console (`_console_after_start`,
@@ -1035,8 +1038,7 @@ class Session:
 
         One not_entered sets neither and has no `cause`: the proof ran to its end, the pause proved, and the date
         had not moved ("the date stayed"). The game is then where it was, on the country-select screen with time
-        stopped, as when a window covered the country click (#1598), so `enter_game` may be called again, and
-        `advance` calls it again."""
+        stopped, so `enter_game` may be called again, and `advance` calls it again."""
         if via not in ENTER_VIA:
             raise SessionError("bad_argument", "enter-game goes in by %s, not %r" % (" or ".join(ENTER_VIA), via))
         self._require_game()
@@ -1843,15 +1845,18 @@ class Session:
         if unselected is not None:
             now = self._panel()
             if now is not None and pixels.changed(unselected, now) < PANEL_CHANGED:
-                # Start is not clicked on a lobby with no country: nothing was entered, nothing is left in doubt,
-                # and the session can go on (a refused click after Start would end `advance` for good).
-                raise SessionError(
-                    "no_country_selected", "the country click selected no country: the lobby's side panel did "
-                    "not change. Something covers the middle of the country-select screen (a setup that changes "
-                    "a law there raises the game's \"We now have …\" window, #1598), or the camera is not on a "
-                    "country. Start was not clicked, so nothing changed and enter-game can be tried again; no "
-                    "verb closes that window, so run such a setup after entering",
-                    clicks=clicks, screenshot=self._enter_shot_path())
+                # Start is not clicked on a lobby with no country: nothing was entered and nothing is left in doubt.
+                # Back enters the played country from there, a window over the middle of the screen or not (live,
+                # 2026-11-13: with a "We now have …" window up, Back entered as FRA), so it goes in that way (#1598).
+                missed = {"clicks": clicks, "screenshot": self._enter_shot_path()}
+                self._record("country_click", outcome="no_country_selected", **missed)
+                try:
+                    result = self._enter_back()
+                except SessionError as e:
+                    e.info.setdefault("country_click", missed)
+                    raise
+                result.update(fallback="back", country_click=missed)
+                return result
         self._click(START_CLICK, clicks)
         # Start may have been pressed: from here on the game may be entered, and running. Nothing is clicked again.
         return self._prove_entered(clicks)
@@ -1859,9 +1864,10 @@ class Session:
     def _enter_back(self) -> dict:
         """Enter by the country-select screen's Back button (BACK_CLICK, #1598): close the console, which covers
         the button, click it once, keep a screenshot of what it did (`back_shot`, the probe's evidence), then the
-        same proof as after Start (`_prove_entered`). Unverified live: if Back goes to the main menu instead, the
-        proof fails after the click, which sets `left_running` like any failure after Start, and the session
-        needs `stop`.
+        same proof as after Start (`_prove_entered`). Live on 2026-11-13 it entered the game as the tagged country
+        twice from the fresh save, once with a law window up (the window stays up in the entered game, and
+        `advance` worked under it). Were it ever to go elsewhere (the main menu), the proof fails after the click,
+        which sets `left_running` like any failure after Start, and the session needs `stop`.
 
         The click is refused before the button went down (CLICK_REFUSED_BEFORE_PRESS) as `click_refused`, with
         nothing changed; any other helper error may follow the press: `click_unknown`, which counts as a failure

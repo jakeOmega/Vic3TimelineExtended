@@ -294,7 +294,7 @@ class Game(fakes.FakeHelper):
             self.adapter.breakpoints.clear()
             self.console_open = False
         elif abs(x - width * 0.0375) < 2 and abs(y - height * 0.981) < 2 and not self.console_open:
-            # Back (#1598), as the owner expects it and as unverified live: the game is entered as the country
+            # Back (#1598), as live (2026-11-13, a law window up or not): the game is entered as the country
             # played, with Start's other effects assumed. With the console open its panel takes the click.
             self.back_clicks += 1
             if self.back_enters:
@@ -1200,37 +1200,68 @@ class AddSetupTest(SessionTestCase):
 class EnterPastAWindowTest(SessionTestCase):
     """#1598: a setup that changes a law on the country-select screen raises the game's "We now have …" window
     where the country click lands. The click then selects nothing, which the lobby's side panel shows. Live,
-    2026-11-12, no key closed the window once the click had landed on it, so nothing is pressed: the miss is
-    refused before Start, and the session goes on."""
+    2026-11-12, no key closed the window; live, 2026-11-13, Back entered the game past it. So Start is never
+    clicked on such a lobby, and enter-game goes in by Back instead."""
 
-    def test_a_covered_screen_is_refused_before_start_and_can_be_tried_again(self):
+    def test_a_covered_screen_goes_in_by_back_and_never_clicks_start(self):
         self.started()
         self.game.law_windows = 2
         steps = len(self.game.steps)
-        error = self.session_error(self.session.enter_game)
-        self.assertEqual(error.code, "no_country_selected")
-        self.assertEqual(len(error.info["clicks"]), 1, "only the country click: Start was never clicked")
-        self.assertTrue(Path(error.info["screenshot"]).is_file())
-        self.assertFalse(self.game.entered)
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(result["fallback"], "back")
+        self.assertEqual(len(result["country_click"]["clicks"]), 1)
+        self.assertTrue(Path(result["country_click"]["screenshot"]).is_file())
+        width = self.game.client[2]
+        self.assertEqual([c for c in self.game.clicks if abs(c[0] - width * 0.9216) < 2], [], "Start never clicked")
+        self.assertEqual((self.game.back_clicks, self.game.played), (1, "FRA"))
+        self.assertEqual(result["clicks"], [[72, 1059]])
         self.assertEqual((self.game.law_windows, self.game.bare_esc), (2, 0), "nothing was pressed to close it")
         self.assertNotIn({"scan": 1}, self.game.steps[steps:])
         status = self.session.status()
-        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, False, False))
-        # The session is not locked: reads still work, and with the window gone it enters.
-        self.game.adapter.values["c:FRA.gdp"] = "12"
-        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
-        self.game.law_windows = 0
-        self.assertTrue(self.session.enter_game()["entered"])
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (True, False, False))
+        recorded = [step for step in self.steps() if step["verb"] in ("country_click", "enter_game")]
+        self.assertEqual([(s["verb"], s["outcome"]) for s in recorded],
+                         [("country_click", "no_country_selected"), ("enter_game", "ok")])
+        self.assertEqual(recorded[1]["fallback"], "back")
 
-    def test_advance_on_a_covered_screen_gets_the_same_refusal_and_is_not_left_running(self):
+    def test_advance_on_a_covered_screen_goes_in_by_back(self):
         self.started()
         self.game.law_windows = 1
-        self.assertEqual(self.session_error(self.session.advance, 3).code, "no_country_selected")
-        self.assertFalse(self.session.status()["left_running"])
-        self.game.law_windows = 0
         start = self.game.date
         self.session.advance(3)
         self.assertGreaterEqual((self.game.date - start).days, 3)
+        self.assertEqual(self.game.back_clicks, 1)
+        self.assertFalse(self.session.status()["left_running"])
+
+    def test_a_back_that_moves_no_date_after_the_miss_locks_nothing_and_says_what_missed(self):
+        self.started()
+        self.game.law_windows = 1
+        self.game.back_enters = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "not_entered")
+        self.assertNotIn("cause", error.info)
+        self.assertEqual(len(error.info["country_click"]["clicks"]), 1)
+        self.assertFalse(self.session.status()["left_running"])
+        self.game.law_windows = 0
+        self.game.back_enters = True
+        self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_a_back_click_refused_after_the_miss_changes_nothing(self):
+        self.started()
+        self.game.law_windows = 1
+        real = self.game.click
+
+        def covered_at_back(pid, x, y):
+            if (x, y) == (72, 1059):
+                raise HelperError("covered", "another window is under the point")
+            real(pid, x, y)
+        self.game.click = covered_at_back
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "click_refused")
+        self.assertIn("country_click", error.info)
+        status = self.session.status()
+        self.assertEqual((status["entered_unproved"], status["left_running"]), (False, False))
 
     def test_the_first_look_at_the_panel_comes_with_the_game_in_front(self):
         # A screenshot is of the screen: with another window over the game the first look would be of that
@@ -1350,13 +1381,17 @@ class EnterGameTest(SessionTestCase):
                 self.assertTrue(self.game.paused)
                 self.assertEqual(self.order.count("space"), 2)
 
-    def test_clicks_that_select_nothing_are_refused_before_start(self):
-        # With the side panel readable (#1598) a country click that selects nothing is seen at once.
+    def test_clicks_that_select_nothing_never_reach_start(self):
+        # With the side panel readable (#1598) a country click that selects nothing is seen at once, and Back is
+        # clicked in Start's place; here no click works, so the date stays and nothing is locked.
         self.started()
         self.game.clicks_work = False
         error = self.session_error(self.session.enter_game)
-        self.assertEqual(error.code, "no_country_selected")
-        self.assertTrue(Path(error.info["screenshot"]).is_file())
+        self.assertEqual(error.code, "not_entered")
+        self.assertTrue(Path(error.info["country_click"]["screenshot"]).is_file())
+        width = self.game.client[2]
+        self.assertEqual([c for c in self.game.clicks if abs(c[0] - width * 0.9216) < 2], [])
+        self.assertEqual(self.game.clicks[-1], (72, 1059))
         self.assertFalse(self.session.status()["entered_unproved"])
 
     def test_enter_game_that_does_not_move_the_date_raises_with_a_screenshot(self):
