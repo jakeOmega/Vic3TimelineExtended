@@ -4,6 +4,7 @@
 # PRODUCTION_METHODS
 #
  pm_3d_printed_buildings:0 "3D Printed Buildings"
+ pm_3d_printed_buildings_nanomaterial:0 "$pm_3d_printed_buildings$"
  pm_3d_printed_porcelain:0 "3D Printed Porcelain"
  pm_ablative_rockets:0 "Ablative Rockets"
  pm_academic_computing:0 "Academic Computing"

@@ -1434,6 +1434,7 @@ REPLACE_OR_CREATE:pmg_construction_automation = {
 		pm_tower_cranes
 		pm_computer_aided_design
 		pm_3d_printed_buildings
+		pm_3d_printed_buildings_nanomaterial
 	}
 }
 

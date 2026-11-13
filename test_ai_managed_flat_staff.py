@@ -9,8 +9,9 @@ The engine logs nothing for a crew that never fills, so a method added or split 
 has to carry the line too. That holds for every method in extra_pms.txt with a flat crew:
 the `pm_ai_managed_*` ones, other robotic or AI-managed methods such as the Trade
 Center's Autonomous Logistics, the low-staff methods given a crew of 1,000 in their place
-(owner, 2026-11-13; Bespoke Alloys, Programmable Plastics and Paper, Artificial
-Personalities, unmarked for the Automation Policy), and the Extraplanetary Base's crews.
+(owner, 2026-11-13, test_flat_crews.py; Bespoke Alloys, Programmable Plastics and Paper,
+Artificial Personalities and 3D Printed Buildings' copy are unmarked for the Automation
+Policy), and the Extraplanetary Base's crews.
 
 Run: python3 test_ai_managed_flat_staff.py
 """
@@ -57,7 +58,7 @@ class FlatCrewAttractivenessTest(unittest.TestCase):
 
     def test_the_flat_crew_methods_are_found(self):
         # Fab, chemical, explosives, arms, artillery, munition x2, motor x2, tooling x2, power x4,
-        # the Trade Center's Autonomous Logistics, the 2026-11-13 low-staff methods (14) and the
+        # the Trade Center's Autonomous Logistics, the 2026-11-13 low-staff methods (21) and the
         # Extraplanetary Base's five.
         self.assertGreaterEqual(len(self.methods), 35, sorted(self.methods))
         for name in ("pm_trade_center_trade_quantity_advanced_4", "pm_bespoke_alloys", "pm_space_mine"):

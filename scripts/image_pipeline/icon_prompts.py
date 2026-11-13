@@ -2738,6 +2738,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_ai_managed_power_plant_hydro": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
         "pm_ai_managed_power_plant_reactor": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
         "pm_robotic_food_processing_synthesis": {"use": f"{_GI}/production_method_icons/pm_robotic_food_processing.dds"},
+        "pm_3d_printed_buildings_nanomaterial": {"use": f"{_GI}/production_method_icons/pm_3d_printed_buildings.dds"},
         "pm_automated_harvesters_and_planters_building_rice_farm": {"use": f"{_GI}/production_method_icons/pm_automated_harvesters_and_planters.dds"},
         "pm_designed_crops_rice_farm": {"use": f"{_GI}/production_method_icons/pm_designed_crops.dds"},
         "pm_laser_excavation_technology_gold_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
