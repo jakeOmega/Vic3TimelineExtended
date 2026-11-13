@@ -658,7 +658,14 @@ class EntityRoutes:
             return self._format_tech_detail(tid, techs[tid])
 
         era_filter = params.get("era", [None])[0]
-        era_filter = int(era_filter) if era_filter else None
+        if era_filter:
+            # The listing's keys are `era_<n>`, so take that spelling too.
+            number = era_filter[len("era_"):] if era_filter.startswith("era_") else era_filter
+            if not number.isdigit():
+                raise srv.BadRequest(f"?era= takes an era number (3 or era_3), not {era_filter!r}")
+            era_filter = int(number)
+        else:
+            era_filter = None
 
         by_era: dict = defaultdict(list)
         for tid, raw in techs.items():

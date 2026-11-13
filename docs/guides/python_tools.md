@@ -800,7 +800,7 @@ A server module holds code only. The state (`ms`, the engine docs, every cache) 
 | `/laws` | GET | All laws grouped by law group |
 | `/laws/<law_id>` | GET | Detailed law data — includes resolved `name` and `description` (the `<law_id>_desc` loc; the field intent / ethnocentrism ordering lives in the description, not the `progressiveness` number). `/decrees/<id>` and `/institutions/<id>` likewise expose `description`. |
 | `/technologies` | GET | All technologies grouped by era |
-| `/technologies?era=<n>` | GET | Technologies for a single era |
+| `/technologies?era=<n>` | GET | Technologies for a single era: `3` or `era_3` (the listing's key); anything else is a 400 |
 | `/technologies/<tech_id>` | GET | Detailed technology data |
 | `/buildings` | GET | All buildings with PM group count |
 | `/buildings?detail=true` | GET | All buildings with full PM group/PM detail |
@@ -830,7 +830,7 @@ A server module holds code only. The state (`ms`, the engine docs, every cache) 
 | `/events/<event_id>` | GET | Event detail with options and raw data |
 | `/events?image=<name>` | GET | Filter events by image/video filename |
 | `/events?type=<type>` | GET | Filter events by type (country_event, etc.) |
-| `/event-balance/<event_id>` | GET | Annotate option effects with modifier polarity. For each `add_modifier` / `add_enactment_modifier`, looks up the static modifier and tags every numeric field with its `color` (good/bad/neutral) and player-perspective `polarity` (positive/negative/neutral). Walks `if`/`random_list`/scope-iterator/scope-change blocks. |
+| `/event-balance/<event_id>` | GET | Annotate option effects with modifier polarity. For each `add_modifier` / `add_enactment_modifier`, looks up the static modifier and tags every numeric field with its `color` (good/bad/neutral) and player-perspective `polarity` (positive/negative/neutral). Walks `if`/`random_list`/scope-iterator/scope-change blocks. An option with triggered names (`name = { trigger = {...} text = KEY }`, once per case) carries `name_variants: [{key, name}]` in source order, and its `name_key` / `name` are the first case's. |
 | `/event-balance?ids=a,b,c` | GET | Annotate a comma-separated list of events |
 | `/event-balance?prefix=<ns>` | GET | Annotate every event whose id starts with `<ns>` (e.g. `banking_cycle_events`) |
 | `/event-balance?file=events/foo.txt` | GET | Annotate every event declared in a file |

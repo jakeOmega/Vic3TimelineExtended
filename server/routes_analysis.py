@@ -1112,6 +1112,29 @@ def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
     return resolved
 
 
+def _option_name_keys(name) -> list[str]:
+    """The loc keys an option's `name` can show, in source order.
+
+    A plain `name = KEY` is one key. A triggered name, `name = { trigger =
+    {...} text = KEY }`, parses as a dict, and written once per case (the
+    engine shows the first whose trigger holds) as a list of `(op, dict)`
+    pairs. Anything without a `text` is left out."""
+    if name is None:
+        return []
+    entries = name if isinstance(name, list) else [name]
+    keys = []
+    for entry in entries:
+        if isinstance(entry, tuple) and len(entry) >= 2:
+            entry = entry[1]
+        if isinstance(entry, dict):
+            entry = entry.get("text")
+            if isinstance(entry, tuple) and len(entry) >= 2:
+                entry = entry[1]
+        if isinstance(entry, str) and entry:
+            keys.append(entry)
+    return keys
+
+
 class AnalysisRoutes:
     """The analytical and annotator routes. A mixin of ModStateHandler."""
 
@@ -1561,7 +1584,8 @@ class AnalysisRoutes:
     def _format_option_balance(self, eid, opt):
         srv = server_state()
         opt_data = srv._flatten_entity_data(opt) if not isinstance(opt, dict) else opt
-        name_key = srv.get_field(opt_data, "name")
+        name_keys = _option_name_keys(srv.get_field(opt_data, "name"))
+        name_key = name_keys[0] if name_keys else None
         default_opt = srv.get_field(opt_data, "default_option")
         ai_chance_block = srv.get_field(opt_data, "ai_chance")
         ai_base = None
@@ -1572,7 +1596,7 @@ class AnalysisRoutes:
         effects = []
         _walk_event_effects(opt_data, [], effects)
         polarity_totals = _summarize_polarity(effects)
-        return {
+        out = {
             "name_key": name_key,
             "name": srv.ms.localize(name_key) if name_key else None,
             "default_option": default_opt == "yes",
@@ -1580,6 +1604,12 @@ class AnalysisRoutes:
             "effects": effects,
             "polarity_totals": polarity_totals,
         }
+        if len(name_keys) > 1:
+            # Triggered names (`name = { trigger = {...} text = KEY }`, once
+            # per case; the first whose trigger holds is shown): every case,
+            # in source order. `name_key` is the first.
+            out["name_variants"] = [{"key": k, "name": srv.ms.localize(k)} for k in name_keys]
+        return out
 
     def _event_balance_issues(self, params, fmt):
         """GET /event-balance/issues[?mode=strict|soft&threshold=&prefix=&file=&format=text&include_reviewed=]

@@ -397,6 +397,64 @@ class SummarizePolarityTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
+# An option's name: plain, or triggered (`name = { trigger = {...} text = KEY }`)
+# ---------------------------------------------------------------------------
+def _triggered(*keys):
+    """An option's `name` as the parser reads it when written once per case."""
+    return [_eq({"trigger": _eq({"always": _eq("yes")}), "text": _eq(k)}) for k in keys]
+
+
+class OptionNameKeysTests(unittest.TestCase):
+    def setUp(self):
+        from server.routes_analysis import _option_name_keys
+        self.keys = _option_name_keys
+
+    def test_a_plain_name_is_one_key(self):
+        self.assertEqual(self.keys("e.1.a"), ["e.1.a"])
+
+    def test_each_triggered_case_in_source_order(self):
+        self.assertEqual(self.keys(_triggered("e.1.a_target", "e.1.a")), ["e.1.a_target", "e.1.a"])
+
+    def test_one_triggered_name_parses_as_a_dict(self):
+        self.assertEqual(self.keys({"trigger": _eq({}), "text": _eq("e.1.a")}), ["e.1.a"])
+
+    def test_nothing_to_show(self):
+        self.assertEqual(self.keys(None), [])
+        self.assertEqual(self.keys([_eq({"trigger": _eq({})})]), [])
+
+
+class FormatOptionBalanceNameTests(unittest.TestCase):
+    """GET /event-balance answered 500 on an option with triggered names: the
+    list reached ModState.localize (22 options in 12 mod events, 2026-11-13)."""
+
+    def setUp(self):
+        self.original = _install_fake_ms({}, {}, loc={"e.1.a": "Refuse", "e.1.a_target": "Refuse, as the target"})
+
+    def tearDown(self):
+        srv.ms = self.original
+
+    def format(self, name):
+        return srv.ModStateHandler._format_option_balance(object(), "e.1", {"name": name})
+
+    def test_triggered_names_list_every_case(self):
+        out = self.format(_triggered("e.1.a_target", "e.1.a"))
+        self.assertEqual((out["name_key"], out["name"]), ("e.1.a_target", "Refuse, as the target"))
+        self.assertEqual(out["name_variants"], [
+            {"key": "e.1.a_target", "name": "Refuse, as the target"},
+            {"key": "e.1.a", "name": "Refuse"},
+        ])
+
+    def test_a_plain_name_is_as_before(self):
+        out = self.format(_eq("e.1.a"))
+        self.assertEqual((out["name_key"], out["name"]), ("e.1.a", "Refuse"))
+        self.assertNotIn("name_variants", out)
+
+    def test_no_name(self):
+        out = srv.ModStateHandler._format_option_balance(object(), "e.1", {})
+        self.assertEqual((out["name_key"], out["name"]), (None, None))
+
+
+# ---------------------------------------------------------------------------
 # _extract_event_ids_from_file
 # ---------------------------------------------------------------------------
 class ExtractEventIdsTests(unittest.TestCase):
