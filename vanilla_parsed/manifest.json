@@ -3,7 +3,7 @@
  "game_version": "1.15.1",
  "game_version_source": "launcher-settings.json",
  "parser_fingerprint": "2c116434d3cf34ed",
- "built_at": "2026-11-13T08:53:16+00:00",
+ "built_at": "2026-11-13T23:06:12+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -314,6 +314,11 @@
    "dir": "game/common/scripted_progress_bars",
    "file": "common/scripted_progress_bars.json",
    "entities": 61
+  },
+  "Game Rules": {
+   "dir": "game/common/game_rules",
+   "file": "common/game_rules.json",
+   "entities": 16
   }
  },
  "localization": {
@@ -960,6 +965,10 @@
   "game/common/game_concepts/01_additional_game_concepts.txt": {
    "size": 448,
    "sha256": "9d62feb4195c96e3a8b71cf631ae41fa0a8e83584cf5a7f3f9dfd9c6a82f8631"
+  },
+  "game/common/game_rules/00_game_rules.txt": {
+   "size": 5380,
+   "sha256": "cb064c997fd7f9110e5975d4a8dfb8eed18d308f2144ff55eb245804e9871b76"
   },
   "game/common/glossary/00_glossary.txt": {
    "size": 702,

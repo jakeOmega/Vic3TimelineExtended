@@ -182,6 +182,9 @@ VANILLA_COMMON_DIRS = {
     "Strategic Regions": "strategic_regions",
     "Prestige Goods": "prestige_goods",
     "Scripted Progress Bars": "scripted_progress_bars",
+    # Vanilla's game rules, so a cloud session can read what each base-game
+    # setting carries (its flags and apply_modifier lines) without the game.
+    "Game Rules": "game_rules",
 }
 
 # Entity types ModState reads from the mod alone, as {entity_type: directory

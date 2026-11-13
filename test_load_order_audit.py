@@ -97,7 +97,7 @@ def build_fixture(tmp):
     _write(mod, c + "scripted_effects/zz_te.txt",
            "v_effect = { add_treasury = 2 }\nte_effect = { add_treasury = 3 }\n")
     _write(mod, c + "on_actions/te.txt", "on_monthly_pulse = { events = { te.1 } }\n")
-    _write(mod, c + "game_rules/te.txt", "te_rule = { }\n")
+    _write(mod, c + "war_goal_types/te.txt", "te_war_goal = { }\n")
     return install, mod
 
 
@@ -399,7 +399,7 @@ class ReportTests(_Fixture):
         self.assertIn("- Decided by: `bare_duplicate` (probed, fact 3)", snap)
         self.assertIn("- Depends on: `try_phase`", snap)
         self.assertIn("`common/on_actions`", snap)
-        self.assertIn("Folders ModState doesn't parse: `common/game_rules`", snap)
+        self.assertIn("Folders ModState doesn't parse: `common/war_goal_types`", snap)
 
     def test_undetermined_keys_group_without_line_numbers(self):
         text = loa.render_report(self.snapshot)
