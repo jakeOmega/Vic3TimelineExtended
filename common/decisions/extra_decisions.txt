@@ -458,8 +458,8 @@ te_decision_establish_strategic_reserve = {
 		}
 		# One line per founding with the class the country held that day, so a
 		# play-test can count founders by class (docs/testing/perf-fixes-playtest.md):
-		# major, leader or minor (st_res_ai_hub_gdp_tier held), player (a human
-		# outside the tier), zero_weight (an AI whose ai_chance read 0).
+		# major (by rank), leader or minor (st_res_ai_hub_gdp_tier held), player
+		# (a human outside both), zero_weight (an AI whose ai_chance read 0).
 		hidden_effect = {
 			if = {
 				limit = { is_great_or_major_power = yes }

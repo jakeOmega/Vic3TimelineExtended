@@ -304,11 +304,19 @@ class StrategicReserveDecisionTest(unittest.TestCase):
             with self.subTest(gate=gate):
                 self.assertNotIn("st_res_ai_hub_gdp_tier", block(decision, gate))
                 self.assertNotIn("is_ai", block(decision, gate))
-        # Each founding logs the class it held, which the play-test counts.
-        when = block(decision, "when_taken")
-        for cls in ("major", "leader", "minor", "player", "zero_weight"):
-            with self.subTest(cls=cls):
-                self.assertIn(f'debug_log = "TE_ST_RES: founded class={cls} country=', when)
+        # Each founding logs the class it held, which the play-test counts. The order and limits matter:
+        # zero_weight must be exactly an AI whose ai_chance reads 0 (not a major, not in the tier).
+        log = " ".join(block(block(decision, "when_taken"), "hidden_effect").split())
+        line = 'debug_log = "TE_ST_RES: founded class={} country=[THIS.GetCountry.GetTagName] ' \
+               'date=[TimeKeeper.GetCurrentDate.GetString]"'
+        self.assertEqual(log, " ".join([
+            "if = { limit = { is_great_or_major_power = yes }", line.format("major"), "}",
+            "else_if = { limit = { st_res_ai_hub_gdp_tier = yes gw_is_market_leader = yes }",
+            line.format("leader"), "}",
+            "else_if = { limit = { st_res_ai_hub_gdp_tier = yes }", line.format("minor"), "}",
+            "else_if = { limit = { is_ai = no }", line.format("player"), "}",
+            "else = {", line.format("zero_weight"), "}",
+        ]))
 
 
 class LocalizationTest(unittest.TestCase):

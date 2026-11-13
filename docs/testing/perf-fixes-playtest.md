@@ -23,10 +23,10 @@ The AI's founding tier (`st_res_ai_hub_gdp_tier`) needs 100 million GDP from a m
 and 10 million from a great or major power or a market leader, as before. For a minor below it the decision's
 `ai_chance` and the hub's `ai_value` read 0. Read in an AI observer run from 1836 to about 1930, or in any new game
 played that long; a save from before the change keeps its hubs. Each founding through the decision logs
-`TE_ST_RES: founded class=… country=TAG date=…` in `debug.log`, with the class it held that day: `major`, `leader` or
-`minor` (the tier held), `player` (a human outside the tier), or `zero_weight` (an AI whose `ai_chance` read 0).
+`TE_ST_RES: founded class=… country=TAG date=…` in `debug.log`, with the class it held that day: `major` (by rank),
+`leader` or `minor` (the tier held), `player` (a human outside both), or `zero_weight` (an AI whose `ai_chance` read 0).
 
 | Check | Expect | If it fails |
 |---|---|---|
 | Who founds a hub | Count the `TE_ST_RES: founded` lines by class. No `zero_weight` line, and `minor` lines few. Holders of `je_strategic_reserve` today may include poorer minors without anything being wrong: a country that founded as a major or a market leader and later lost the rank or joined another's market keeps its hub, and so does a secession that took a hub state and won. Fewer holders than the 55 of the game measured; about 25 by 1931 is the fewest to expect, not the most | A `zero_weight` line: the AI took a decision whose `ai_chance` is 0, against vanilla's `000_decisions_help.txt`. Report it before choosing a fix: a gate in `possible` would bind players too |
-| Majors and leaders still found | Great and major powers hold a hub within a few years of Logistics, and so does a market leader above 10 million | Fewer than before: `gw_is_market_leader` or the `owner` scope in the hub's `ai_value` reads wrong |
+| Majors and leaders still found | Great and major powers hold a hub within a few years of Logistics, and so does a market leader above 10 million | Fewer than before, or no `class=leader` lines: `gw_is_market_leader` or the decision's `ai_chance` reads wrong |
