@@ -127,23 +127,27 @@ irredentist_unifier_can_act = {
 		has_law = law_type:law_council_republic
 		has_law = law_type:law_multicultural
 
-		# Leader-ideology drivers across any ruling IG. `leader = { has_ideology ... }`
-		# fails-soft when the IG has no leader, so no separate `exists = leader` guard
-		# is needed (vanilla 00_liberalism.txt uses the same pattern).
+		# Leader-ideology drivers across any ruling IG. `leader ?=`, read once: a
+		# bare `leader = { }` on an IG with no leader logs "Could not get leader
+		# of interest group" and "Event target link 'leader' returned an unset
+		# scope" for every read (Pudukottai's Zamindars, 220 lines over nine
+		# months, 2026-11-12), though it does come out false.
 		any_interest_group = {
 			is_in_government = yes
-			OR = {
-				leader = { has_ideology = ideology:ideology_jingoist_leader }
-				leader = { has_ideology = ideology:ideology_fascist }
-				leader = { has_ideology = ideology:ideology_ethno_nationalist }
-				leader = { has_ideology = ideology:ideology_communist_leader }
-				leader = { has_ideology = ideology:ideology_vanguardist }
-				leader = { has_ideology = ideology:ideology_market_liberal }
-				leader = { has_ideology = ideology:ideology_humanitarian }
-				leader = { has_ideology = ideology:ideology_republican_leader }
-				leader = { has_ideology = ideology:ideology_pacifist }
-				leader = { has_ideology = ideology:ideology_anarchist }
-				leader = { has_ideology = ideology:ideology_reformer }
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_jingoist_leader
+					has_ideology = ideology:ideology_fascist
+					has_ideology = ideology:ideology_ethno_nationalist
+					has_ideology = ideology:ideology_communist_leader
+					has_ideology = ideology:ideology_vanguardist
+					has_ideology = ideology:ideology_market_liberal
+					has_ideology = ideology:ideology_humanitarian
+					has_ideology = ideology:ideology_republican_leader
+					has_ideology = ideology:ideology_pacifist
+					has_ideology = ideology:ideology_anarchist
+					has_ideology = ideology:ideology_reformer
+				}
 			}
 		}
 

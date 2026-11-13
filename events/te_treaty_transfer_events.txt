@@ -38,7 +38,7 @@ te_treaty_transfer.1 = {
 				if = {
 					limit = { NOT = { has_global_variable = te_sc_treaty_state_transfer_ok } }
 					set_global_variable = te_sc_treaty_state_transfer_ok
-					debug_log = "TE_SELF_CHECK OK treaty_state_transfer (a state_transfer treaty created in force moved the state: [SCOPE.sState('te_tt_state').GetName] from [ROOT.GetCountry.GetNameNoFormatting] to [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]) date=[TimeKeeper.GetCurrentDate.GetString]"
+					debug_log = "TE_SELF_CHECK OK treaty_state_transfer (a state_transfer treaty created in force moved the state: [SCOPE.sState('te_tt_state').GetName] from [THIS.GetCountry.GetNameNoFormatting] to [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]) date=[TimeKeeper.GetCurrentDate.GetString]"
 				}
 			}
 			else_if = {
@@ -62,10 +62,10 @@ te_treaty_transfer.1 = {
 								}
 							}
 						}
-						debug_log = "TE_SELF_CHECK BROKEN treaty_state_transfer treaty=yes (three days after a state_transfer treaty was created in force, [SCOPE.sState('te_tt_state').GetName] is still [ROOT.GetCountry.GetNameNoFormatting]'s, not [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]'s, and the treaty exists: its on_entry_into_force did not run. The check moved it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+						debug_log = "TE_SELF_CHECK BROKEN treaty_state_transfer treaty=yes (three days after a state_transfer treaty was created in force, [SCOPE.sState('te_tt_state').GetName] is still [THIS.GetCountry.GetNameNoFormatting]'s, not [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]'s, and the treaty exists: its on_entry_into_force did not run. The check moved it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 					else = {
-						debug_log = "TE_SELF_CHECK BROKEN treaty_state_transfer treaty=no (three days after create_treaty, [SCOPE.sState('te_tt_state').GetName] is still [ROOT.GetCountry.GetNameNoFormatting]'s, not [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]'s, and no state_transfer treaty binds the two: create_treaty created nothing although can_create_treaty passed. The check moved it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+						debug_log = "TE_SELF_CHECK BROKEN treaty_state_transfer treaty=no (three days after create_treaty, [SCOPE.sState('te_tt_state').GetName] is still [THIS.GetCountry.GetNameNoFormatting]'s, not [SCOPE.sCountry('te_tt_taker').GetNameNoFormatting]'s, and no state_transfer treaty binds the two: create_treaty created nothing although can_create_treaty passed. The check moved it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 				}
 				scope:te_tt_state = { set_state_owner = scope:te_tt_taker }
@@ -101,10 +101,10 @@ te_treaty_transfer.2 = {
 								}
 							}
 						}
-						debug_log = "TE_SELF_CHECK BROKEN treaty_reparations treaty=yes (three days after a te_reparations treaty was created in force, [ROOT.GetCountry.GetNameNoFormatting] still owes due=[THIS.Var('te_reparations_due').GetValue|0] and the treaty exists: its on_entry_into_force did not run. The check paid it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+						debug_log = "TE_SELF_CHECK BROKEN treaty_reparations treaty=yes (three days after a te_reparations treaty was created in force, [THIS.GetCountry.GetNameNoFormatting] still owes due=[THIS.Var('te_reparations_due').GetValue|0] and the treaty exists: its on_entry_into_force did not run. The check paid it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 					else = {
-						debug_log = "TE_SELF_CHECK BROKEN treaty_reparations treaty=no (three days after create_treaty, [ROOT.GetCountry.GetNameNoFormatting] still owes due=[THIS.Var('te_reparations_due').GetValue|0] and no te_reparations treaty binds the payee: create_treaty created nothing although can_create_treaty passed. The check paid it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+						debug_log = "TE_SELF_CHECK BROKEN treaty_reparations treaty=no (three days after create_treaty, [THIS.GetCountry.GetNameNoFormatting] still owes due=[THIS.Var('te_reparations_due').GetValue|0] and no te_reparations treaty binds the payee: create_treaty created nothing although can_create_treaty passed. The check paid it directly; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 				}
 				te_reparations_settle = yes
@@ -114,7 +114,7 @@ te_treaty_transfer.2 = {
 				if = {
 					limit = { NOT = { has_global_variable = te_sc_treaty_reparations_ok } }
 					set_global_variable = te_sc_treaty_reparations_ok
-					debug_log = "TE_SELF_CHECK OK treaty_reparations (a te_reparations treaty created in force paid: [ROOT.GetCountry.GetNameNoFormatting] paid=[THIS.Var('te_reparations_paid').GetValue|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
+					debug_log = "TE_SELF_CHECK OK treaty_reparations (a te_reparations treaty created in force paid: [THIS.GetCountry.GetNameNoFormatting] paid=[THIS.Var('te_reparations_paid').GetValue|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
 				}
 			}
 		}

@@ -166,6 +166,17 @@ state passes the rest of the colony test needs its pops, which the probe does no
 |---|---|---|---|
 | `ce_reentry` | `add_journal_entry` brings back an entry type the country has finished (no vanilla precedent re-adds a finished type of its own). The pass marks each country it adds the entry to, naming the country, and notes whether its entry had run and ended (`colonial_empire_has_ended`, set at every ending since this change). The next monthly pass reads the mark before it can add again. One line per add: OK when the entry is running, BROKEN when it is not though the country is still due it, each with `ended_before=yes` or `ended_before=unknown`. Only `yes` answers the question: `unknown` is a country that may never have held a record (the engine leaves some out), or one whose entry ended before the variable existed (Britain in the 1910 save). A country no longer due it gives no verdict, nor does a revolution's winner holding the loser's mark. | `ce_reentry_monthly`, step 1 | BROKEN with `ended_before=yes`: the entry stays active through a failure, as a dormant phase in place of `fail`. A collapse or the last colony's loss runs its outcome and sets its cooldown as now, then leaves the entry dormant until the country is due it again. Until then every add is wasted: one `TE_CE_REENTRY` line per due country every two months. BROKEN with `ended_before=unknown` only: `add_journal_entry` gave a country no entry at all; read the `debug.log` lines around it. |
 
+
+**2026-11-12: OK, `ended_before=yes`, three times.** A 1.15.1 game, launch of 21:13, `debug.log`: the United
+Netherlands (added 1933.1.28, OK 1933.2.27), Spain (1933.9.15, OK 1933.10.15) and the Commonwealth of Britain
+(1935.10.10, OK 1935.11.9). Each had run the entry and ended it before. So `add_journal_entry` does bring back a type
+the country has finished, and the fallback is not needed. The same session's other two adds gave no verdict, as
+the pass intends for a country no longer due: Bornu (1933.8.6, during its civil war) and Egypt (1934.8.29) each
+ended the new entry within its first month with a voluntary end, so the 1937.10.1 autosave shows both with no
+record of the entry, `colonial_empire_has_ended` and Negotiated Withdrawal (a small bonus, +5 diplomatic reputation among others, for
+ten years, decaying). The colony test did not flicker: each time the AI pressed Planned Full Decolonization seconds after
+the add (`DECOL_DEBUG`), Bornu during the civil war that had made its states look like colonies (#1735, fixed in #1746).
+
 ### Checks
 
 | Check | Expect | If it fails |

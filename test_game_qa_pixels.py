@@ -42,5 +42,35 @@ class PixelsTest(unittest.TestCase):
         self.assertEqual(pixels.changed(plain, image(10, 9, (30, 30, 30))), 1.0)
 
 
+class ScaledUpTest(unittest.TestCase):
+    """`profiler-roots`' crop (#1701): each pixel repeated, nothing made up."""
+
+    def test_each_pixel_becomes_a_square_of_itself(self):
+        rgb = bytes([1, 2, 3, 4, 5, 6,
+                     7, 8, 9, 10, 11, 12])          # 2 x 2: (1,2,3) (4,5,6) / (7,8,9) (10,11,12)
+        width, height, out = pixels.scaled_up((2, 2, rgb), 3)
+        self.assertEqual((width, height), (6, 6))
+        for y in range(6):
+            for x in range(6):
+                source = ((y // 3) * 2 + x // 3) * 3
+                with self.subTest(x=x, y=y):
+                    self.assertEqual(out[(y * 6 + x) * 3:(y * 6 + x) * 3 + 3], rgb[source:source + 3])
+
+    def test_a_factor_of_one_is_the_image_itself(self):
+        picture = image(5, 3, (10, 20, 30), ((1, 1, 3, 2), (200, 100, 50)))
+        self.assertEqual(pixels.scaled_up(picture, 1), picture)
+
+    def test_a_bad_factor_or_image_is_refused(self):
+        for factor in (0, -1, 1.5, True, "2"):
+            with self.subTest(factor=factor), self.assertRaises(pixels.PixelsError):
+                pixels.scaled_up((1, 1, bytes(3)), factor)
+        with self.assertRaises(pixels.PixelsError):
+            pixels.scaled_up((2, 2, bytes(11)), 2)
+
+    def test_the_crop_is_written_as_the_helper_writes_its_shots(self):
+        picture = image(4, 3, (10, 20, 30), ((0, 0, 2, 1), (90, 80, 70)))
+        self.assertEqual(pixels.decode_png(pixels.encode_png(picture)), picture)
+
+
 if __name__ == "__main__":
     unittest.main()

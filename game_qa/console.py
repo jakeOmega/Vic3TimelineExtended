@@ -59,6 +59,18 @@ The console is known to be open after a round trip and known to be closed after 
 `send` open one that is known closed, `send` also one that is not known to be open (it has no retry
 of its own), and `close()` and `hotkey()` act only on what is known.
 
+A click takes the keyboard (live, 2026-11-12): after a click into the script profiler, a command typed
+next never reached the console, and a click on the console's input line gave the keyboard back. What
+would happen to a probe typed then is the trouble: its letters and Enter go to whatever took the
+keyboard (a tool window's search field, or the game's own keys, where a space toggles the pause), and
+when it does not arrive the console key is pressed, which may close the open console. So a click made
+while the console is known open (`clicked()`) latches `keyboard_away`: every method that sends a key
+refuses `keyboard_away` with `entered` False, before any key, until `take_keyboard_back()`, called
+after a click on the console's input line, has typed one probe and seen it arrive. It never presses
+the console key. A click while the console is known closed, or not known, leaves the state as it is, and
+so must not be made: the session's `click`, `wheel` and `drag` refuse `console_not_open` before sending anything
+unless `input_line_there`: with no input line there to click, a keyboard the click took could not be given back.
+
 `Console` consumes the `LogFollower` it is given: a line it has polled is not
 returned to anyone else who polls the same follower.
 """
@@ -96,11 +108,16 @@ HISTORY_RETRY_S = 0.1           # between those reads
 CLEAR_BACKSPACES = 64           # more than any command typed here is long
 
 
+KEYBOARD_AWAY = ("a click since the console last answered may have given the keyboard to another window (a tool "
+                 "window such as the script profiler), so nothing was typed. `python3 -m game_qa click --console` "
+                 "clicks the console's input line and proves the keyboard is back")
+
+
 class ConsoleError(Exception):
     """`code` is one of bad_text, not_foreground, no_ack, no_reply, game_gone, stranded_text,
     history_unreadable, log_gap, console_open (`hotkey` while the console is not known to be closed),
-    console_not_open (`close` while it is not known to be open), or `helper: <code>` for an error of the
-    helper itself.
+    console_not_open (`close` while it is not known to be open), keyboard_away (a key while a click may
+    have taken the keyboard), or `helper: <code>` for an error of the helper itself.
 
     `entered` says whether the command was entered, and only False allows a caller to run it again:
 
@@ -151,12 +168,54 @@ class Console:
         self._enter_unknown = False         # a helper error left it unknown whether an Enter went out (since run began)
         self._open: bool | None = None      # the console: True after a round trip, False after close(), None unknown
         self._sent: dict[str, _Typed] = {}  # for `arrived`: each text `send` typed, as the history stood just before
+        self._keyboard_away = False         # a click while the console was open: no key until take_keyboard_back()
+        self._reclaiming = False            # take_keyboard_back() is typing its probe
 
     # ---- public
+
+    @property
+    def keyboard_away(self) -> bool:
+        """A click may have given the keyboard to another window: every key is refused until it is taken back."""
+        return self._keyboard_away
+
+    @property
+    def input_line_there(self) -> bool:
+        """Whether the console is open as far as is known, so that its input line is there to click: it was known
+        open when the click that latched `keyboard_away` was made, or is known open now."""
+        return self._keyboard_away or self._open is True
+
+    def clicked(self) -> None:
+        """A click went out, or may have, somewhere other than the console's input line. If the console was known
+        open (or the keyboard already away) the keyboard is latched away and the console's state is not known any
+        more; a console known closed or not known is left as it is. The session never clicks then
+        (`Session._refuse_unless_console_open`): the keyboard such a click took could not be given back."""
+        if self._open is True or self._keyboard_away:
+            self._keyboard_away = True
+            self._open = None
+
+    def take_keyboard_back(self) -> bool:
+        """After a click on the console's input line: type the probe once (and the flush, when the history
+        already holds the probe) and see whether the console took it. True: it did, the latch is lifted and the
+        console is known open. False: it did not, the latch is set (whether or not it was before) and the console
+        key was not pressed, since the console may well be open with the keyboard elsewhere. An error while
+        probing leaves the latch set too, and is raised."""
+        self._refuse_if_stranded()
+        self._drop_log()
+        probes: list[_Typed] = []
+        self._reclaiming = True
+        arrived = False
+        try:
+            arrived = self._console_answers(probes) or any(self._landed(typed) for typed in probes)
+        finally:
+            self._reclaiming = False
+            self._keyboard_away = not arrived
+            self._open = True if arrived else None
+        return arrived
 
     def ensure_open(self, timeout: float = 30.0) -> None:
         """Return once the console takes commands. An open console is never toggled: only a probe that does
         not arrive, and did not turn up late either, makes it press the console key."""
+        self._refuse_if_away()
         self._refuse_if_stranded()
         self._drop_log()
         self._open_console(timeout)
@@ -169,6 +228,7 @@ class Console:
     def clear_line(self) -> None:
         """Empty the console's input line with Backspaces, after the usual foreground check, and allow typing
         again after a `stranded_text`. Nothing calls this by itself: whether to is the caller's decision."""
+        self._refuse_if_away()
         self._keys([{"scan": SCAN_BACKSPACE} for _ in range(CLEAR_BACKSPACES)])
         self._stranded = False
 
@@ -180,6 +240,7 @@ class Console:
         Enter may have gone out and False otherwise. Sending proves nothing about the console afterwards: the
         belief is what the check before typing left, and neither a send nor `arrived` changes it."""
         self._check_text(text)
+        self._refuse_if_away()
         self._refuse_if_stranded()
         if self._open is not True:
             self._drop_log()
@@ -222,6 +283,7 @@ class Console:
     def close(self) -> None:
         """Press the console key once, with the usual checks, to close a console known to be open (after a round
         trip). The closing is not proved: a later `run`, `send` or `ensure_open` finds out the state again."""
+        self._refuse_if_away()
         self._refuse_if_stranded()
         if self._open is not True:
             raise ConsoleError("console_not_open", "the console is not known to be open: a command that arrived "
@@ -239,6 +301,7 @@ class Console:
     def hotkey(self, scan: int) -> None:
         """Press one key (a scancode) in the game itself, with the usual checks. With the console open the key
         would go into its input line, so this is refused unless the console is known to be closed."""
+        self._refuse_if_away()
         self._refuse_if_stranded()
         if self._open is not False:
             raise ConsoleError("console_open", "the console is not known to be closed: close() it first")
@@ -265,6 +328,7 @@ class Console:
         A text is one non-blank line of at most `CLEAR_BACKSPACES` ASCII characters.
         """
         self._check_text(text)
+        self._refuse_if_away()
         self._refuse_if_stranded()
         self._enter_unknown = False
         is_flush = text.strip() == FLUSH_COMMAND
@@ -354,6 +418,10 @@ class Console:
             raise ConsoleError("bad_text", "a console command is at most %d characters, so that clear_line() "
                                            "can always empty what was typed" % CLEAR_BACKSPACES)
 
+    def _refuse_if_away(self) -> None:
+        if self._keyboard_away and not self._reclaiming:
+            raise ConsoleError("keyboard_away", KEYBOARD_AWAY, entered=False)
+
     def _refuse_if_stranded(self) -> None:
         if self._stranded:
             raise ConsoleError("stranded_text", "half a command is still in the console's input line; "
@@ -401,8 +469,10 @@ class Console:
 
         A refusal because the window left the front is tried once more, but only if the helper says none of
         the steps went out. If some did and one of them was text, the input line holds half a command: the
-        next call is refused (`stranded_text`) rather than glued onto it.
+        next call is refused (`stranded_text`) rather than glued onto it. While the keyboard is away (a click took
+        it) nothing is sent: the public methods refuse first, and this is the backstop.
         """
+        self._refuse_if_away()
         for attempt in (1, 2):
             self._front()
             try:
