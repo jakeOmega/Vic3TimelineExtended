@@ -1423,19 +1423,47 @@ te_update_pollution_modifier = {
 # of some 700 branches, too dear for a map that evaluates every state as it paints. The
 # appeal is stored first and the output multiplier reads it back
 # (tourism_output_from_stored_appeal), so the chain runs once a refresh, not twice.
-# State scope; the multiplier resolves against ROOT, the state (its one caller is
+#
+# Each modifier is taken off and put back only when its multiplier moved: the one applied is
+# kept in te_tourism_output_applied / te_tourism_throughput_applied, and a refresh that
+# computes the same number leaves the modifier as it is. Re-adding an unchanged modifier
+# changes no number, but every add and remove makes the engine recalculate the modifiers
+# that depend on it (RecalculateModifierNodes, at each day boundary): with this refresh and
+# SoL's switched off, that task fell from 135 to 99 ms a day in a 1931 game
+# (docs/audits/late_game_performance.md). The output (appeal, city rank, monuments) seldom
+# moves; the throughput follows the state's spare infrastructure, which moves most months.
+# This is their one refresh site, so the stored value and the modifier can't part.
+# State scope; the multipliers resolve against ROOT, the state (the one caller is
 # tourism_on_action, on the state's monthly pulse).
 te_update_tourism_modifier = {
 	set_variable = { name = te_tourism_base_appeal value = tourism_bonus_from_base_appeal }
-	remove_modifier = tourism_output
-	remove_modifier = tourism_throughput
-	add_modifier = {
-		name = tourism_output
-		multiplier = tourism_output_from_stored_appeal
+	te_tourism_refresh_modifier = { MODIFIER = tourism_output VALUE = tourism_output_from_stored_appeal }
+	te_tourism_refresh_modifier = { MODIFIER = tourism_throughput VALUE = total_tourism_throughput_bonus_percent }
+}
+
+# Puts $MODIFIER$ on the state at $VALUE$ unless it is already there at that multiplier,
+# kept in te_$MODIFIER$_applied (te_update_tourism_modifier). THIS = ROOT = the state.
+te_tourism_refresh_modifier = {
+	set_local_variable = { name = te_$MODIFIER$_now value = $VALUE$ }
+	set_local_variable = { name = te_$MODIFIER$_same value = 0 }
+	if = {
+		limit = {
+			has_modifier = $MODIFIER$
+			has_variable = te_$MODIFIER$_applied
+		}
+		if = {
+			limit = { var:te_$MODIFIER$_applied = local_var:te_$MODIFIER$_now }
+			set_local_variable = { name = te_$MODIFIER$_same value = 1 }
+		}
 	}
-	add_modifier = {
-		name = tourism_throughput
-		multiplier = total_tourism_throughput_bonus_percent
+	if = {
+		limit = { local_var:te_$MODIFIER$_same = 0 }
+		remove_modifier = $MODIFIER$
+		set_variable = { name = te_$MODIFIER$_applied value = local_var:te_$MODIFIER$_now }
+		add_modifier = {
+			name = $MODIFIER$
+			multiplier = var:te_$MODIFIER$_applied
+		}
 	}
 }
 

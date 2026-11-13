@@ -114,8 +114,31 @@ class MonumentsAreOutput(unittest.TestCase):
         # tourism_output_from_stored_appeal reads var:te_tourism_base_appeal, so the refresh writes it first
         body = squash(block(read(ROOT / "common/scripted_effects/extra_effects.txt"), "te_update_tourism_modifier"))
         store = body.index("set_variable = { name = te_tourism_base_appeal value = tourism_bonus_from_base_appeal }")
-        self.assertLess(store, body.index("multiplier = tourism_output_from_stored_appeal"))
+        out = body.index("te_tourism_refresh_modifier = { MODIFIER = tourism_output VALUE = tourism_output_from_stored_appeal }")
+        self.assertLess(store, out)
+        self.assertIn("te_tourism_refresh_modifier = { MODIFIER = tourism_throughput "
+                      "VALUE = total_tourism_throughput_bonus_percent }", body)
         self.assertNotIn("total_tourism_output_bonus_percent", body)
+
+    def test_a_modifier_is_reapplied_only_when_its_multiplier_moved(self):
+        # Re-adding an unchanged modifier changes no number but makes the engine recalculate what depends on
+        # it (RecalculateModifierNodes). The helper compares the applied value, and applies from it.
+        effects = read(ROOT / "common/scripted_effects/extra_effects.txt")
+        # the definition at the start of a line, not the calls inside te_update_tourism_modifier
+        body = squash(block(effects[effects.index("\nte_tourism_refresh_modifier = {"):], "te_tourism_refresh_modifier"))
+        self.assertIn("limit = { has_modifier = $MODIFIER$ has_variable = te_$MODIFIER$_applied }", body)
+        self.assertIn("limit = { var:te_$MODIFIER$_applied = local_var:te_$MODIFIER$_now }", body)
+        apply = body[body.index("limit = { local_var:te_$MODIFIER$_same = 0 }"):]
+        self.assertLess(apply.index("remove_modifier = $MODIFIER$"),
+                        apply.index("add_modifier = { name = $MODIFIER$ multiplier = var:te_$MODIFIER$_applied }"))
+        self.assertLess(apply.index("set_variable = { name = te_$MODIFIER$_applied value = local_var:te_$MODIFIER$_now }"),
+                        apply.index("add_modifier"))
+        # the one refresh site: nothing else writes either modifier
+        for path in (ROOT / "common").rglob("*.txt"):
+            text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+            for mod in ("tourism_output", "tourism_throughput"):
+                if re.search(rf"(add|remove)_modifier = (\{{ name = )?{mod}\b", text):
+                    self.assertEqual(path.name, "extra_effects.txt", (path, mod))
 
     def test_old_value_is_gone(self):
         for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "gui").rglob("*.gui")):
