@@ -1253,6 +1253,24 @@ class SwitchRulesTest(SessionTestCase):
         self.assertTrue(self.session._fixture_loaded)
         self.assertEqual(self.saves(), sorted([self.fixture_save.name, older.name]))
 
+    def test_a_named_harness_save_says_where_its_rules_differ_from_the_last_lobby(self):
+        # A fixture of another build is the save that can differ from the owner's last lobby (this build's own
+        # is keyed on it). Named with no rule switched it reported nothing: its rules were never read
+        # (review, 2026-11-13).
+        older = self.user / "save games" / "te_qa_fixture_0123456789ab.v3"
+        older.write_bytes(text_save(["allow_fantasy", "tax_light"]))
+        presets = self.user / "player" / "game_rules" / "presets.txt"
+        presets.parent.mkdir(parents=True)
+        presets.write_text('game_rules_preset={\n\tname="LastAppliedRules"\n\tsetting={ no_fantasy tax_light }\n}\n',
+                           encoding="utf-8")
+        before = presets.read_bytes()
+        reply = self.start(save="te_qa_fixture_0123456789ab")
+        self.assertEqual(reply["rules"]["settings"], ["allow_fantasy", "tax_light"])
+        self.assertEqual([d["rule"] for d in reply["rules"]["lobby_differs"]], ["fantasy"])
+        self.assertEqual(reply["rules"]["lobby_differs"][0]["save"], "allow_fantasy")
+        self.assertEqual(reply["rules"]["lobby_differs"][0]["last_applied"], "no_fantasy")
+        self.assertEqual(presets.read_bytes(), before)
+
     def test_a_named_harness_save_is_the_runs_fixture_in_its_steps(self):
         # `selfchecks` reads the last `fixture` step: found, with the save, or it shows none of the lines kept
         # from the run that made the fixture.

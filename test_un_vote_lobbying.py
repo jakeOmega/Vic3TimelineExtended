@@ -121,7 +121,8 @@ class CastingTimingTest(unittest.TestCase):
         self.assertIn("un_vote_refresh_leans = yes", opening)
         self.assertNotIn("un_vote.5", opening)
         last_call = re.search(r"id\s*=\s*un_vote\.6\s+days\s*=\s*(\d+)", opening)
-        decision = re.search(r"id\s*=\s*un_vote\.2\s+days\s*=\s*(\d+)", opening)
+        # The results wait in the hidden relay un_vote.9 (#1596), which opens un_vote.2 on the day.
+        decision = re.search(r"id\s*=\s*un_vote\.9\s+days\s*=\s*(\d+)", opening)
         self.assertIsNotNone(last_call)
         self.assertLess(int(last_call.group(1)), int(decision.group(1)))
 

@@ -385,6 +385,11 @@ te_direct_construction_clear_cost_scaling = {
 # Resolves Against ROOT").
 te_direct_construction_switch_cost_scaling = {
 	every_country = {
+		# As the weekly and game-start passes: a decentralized country has no
+		# events and no economy to scale.
+		limit = {
+			NOT = { is_country_type = decentralized }
+		}
 		trigger_event = { id = te_construction_market_recalc_events.4 }
 	}
 }

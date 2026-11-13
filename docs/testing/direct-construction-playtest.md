@@ -8,7 +8,7 @@ harness (`python3 -m game_qa`), and the build lens now offers the Construction S
 
 ## What was wrong
 
-**1. Base Construction followed the player's last lobby, not the save.** The Disabled setting applied the modifier with
+**1. Base Construction did not follow the save; it seems to follow the player's last lobby.** The Disabled setting applied the modifier with
 `apply_modifier = all:te_direct_construction_base_modifier`. The base game never uses that line (as read by this
 session; not re-read since). The engine did not apply it by the save's rules; the setting it applied was the one the
 player last applied in a lobby on their machine (`player/game_rules/presets.txt`, `LastAppliedRules`). Every load

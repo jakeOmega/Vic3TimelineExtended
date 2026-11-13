@@ -3295,7 +3295,8 @@ world_war_events_on_action = {
 		# The entry back for a country that waited for its gate: one closed when
 		# the early unlock was switched to the late one before Combined Arms
 		# (ww_reopen_at_gate, the invalid outcome), and one whose world war under
-		# the early unlock is over (ww_early_war_resolved), at Combined Arms. A
+		# the early unlock is over (ww_early_war_resolved), at Combined Arms (at
+		# once for a power that already has it, ww_mark_entry_resolved). A
 		# concluded entry doesn't come back on its own; add_journal_entry brings
 		# it back (rules-off-midgame-playtest.md, read OK 2026-11-12).
 		if = {
@@ -3311,6 +3312,14 @@ world_war_events_on_action = {
 				country_rank >= rank_value:great_power
 				NOT = { has_journal_entry = je_world_war }
 				NOT = { has_inactive_journal_entry = je_world_war }
+				# Not while the last world war is still winding down somewhere:
+				# an entry added then would read that war's peace as its own
+				# (the pulse's observer branch) and complete again three years
+				# on. A power that held Combined Arms through an early war is
+				# due its entry back at once, so this is where it waits. Last:
+				# it walks every country, and only a country holding one of
+				# the two markers gets this far.
+				NOT = { any_country = { has_variable = ww_peace_concluded } }
 			}
 			if = {
 				limit = { has_variable = ww_reopen_at_gate }

@@ -18,14 +18,14 @@ when the event is due (self-check `delayed_trigger_fire_probe`).
 
 ## Summary
 
-- delayed calls: 364
-- events they queue: 191
-- with a non-empty top-level trigger: 115
+- delayed calls: 365
+- events they queue: 192
+- with a non-empty top-level trigger: 114
 - likely false when queued: 0
 - not reviewed: read the trigger against each call: 0
 - restated or set by the caller before the call: 16
 - reviewed: true when queued: 44
-- reviewed: true when queued, and also cancels the event: 55
+- reviewed: true when queued, and also cancels the event: 54
 - stale tags: 0
 
 ## Likely false when queued
@@ -967,14 +967,6 @@ Trigger: `je:je_united_nations ?= { has_modifier = un_member_modifier }`; `globa
 - `un_docket_take_up_agenda` in `common/scripted_effects/un_docket_effects.txt`, delay 1, through `un_docket_send_offer`
 - `un_events.9` in `events/un_events.txt`, delay 1, through `un_docket_send_offer` (2 calls)
 
-### `un_vote.2` (visible, `events/un_vote_events.txt`)
-
-**2026-11-13**: cancels: un_resolution_open creates the resolution with its un_res_voting tag before the call; cancels the result of a resolution closed early
-
-Trigger: `je:je_united_nations ?= { has_modifier = un_member_modifier }`; `scope:un_resolution ?= { has_tag = un_res_voting }`
-
-- `un_resolution_open` in `common/scripted_effects/un_vote_effects.txt`, delay 365
-
 ### `un_vote.6` (hidden, `events/un_vote_events.txt`)
 
 **2026-11-13**: cancels: un_resolution_open creates the resolution with its un_res_voting tag before the call; its immediate checks again, so a resolution closed early takes no last call
@@ -985,7 +977,7 @@ Trigger: `OR = { scope:un_resolution ?= { has_tag = un_res_voting } AND = { NOT 
 
 ### `un_vote.7` (hidden, `events/un_vote_events.txt`)
 
-**2026-11-13**: cancels: un_vote_refresh_leans runs while a resolution is voting; cancels if it closes overnight
+**2026-11-13**: cancels: un_vote_refresh_leans runs while a resolution is voting; its immediate checks again, so a resolution closed overnight is not sorted
 
 Trigger: `OR = { scope:un_resolution ?= { has_tag = un_res_voting } AND = { NOT = { exists = scope:…`
 

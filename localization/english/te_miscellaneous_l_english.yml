@@ -4844,7 +4844,7 @@
  iw_exposure_tier_severe_note:0 "#lore If this is exposed, the world treats it as an attempt to bring down a government: heavy infamy, a severe breach with the target, and every country tied to them cools towards us as well.#!"
  iw_exposure_tier_war:0 "wartime sabotage"
  iw_exposure_tier_war_note:0 "#lore If this is exposed once the war has started, the world shrugs — sabotage between belligerents costs nothing at all. Exposed during the run-up, it reads as manufacturing the war, and costs as much infamy as an attempt to bring down a government.#!"
- iw_funding_early_cap_tt:0 "Funding stays at Professional or below until $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or the $law_ministry_of_intelligence_and_security$ law (early unlock)"
+ iw_funding_early_cap_tt:0 "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or the $law_ministry_of_intelligence_and_security$ law (early unlock)"
  iw_funding_name_0:0 "Dormant"
  iw_funding_name_1:0 "Operational"
  iw_funding_name_2:0 "Professional"
