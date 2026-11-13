@@ -47,6 +47,15 @@ buildable and sold a good nobody bought.
 Fix: `te_construction_market_follow_rule` runs every day and converts in either direction when the rule and the
 buildings disagree.
 
+**An independent review of the branch** (a second agent, told to break it, 2026-11-13) found no way for the harness
+change to touch a save that is not the harness's own. Its findings that were fixed: the switch's self-check read OK
+when a switch made nothing (it now compares what stands with what the switch should have made); a site-guard record
+on a state with no site outlived a market period and would have had the guard build a site from nothing at the next
+switch (both switches forget every record first); the weekly pass rebuilt a staffed site to cancel a sector that
+never stood (it only cancels now); a harness save named in another letter case passed as switchable; and a named
+harness save's kept self-check lines were not shown. Its question whether re-created sectors get the retooling
+surcharge was read in the game: they do not (below). One finding is left open as item 7 of the list at the end.
+
 **A side finding, fixed with it.** An AI country (Bornu) queued a Construction Sector on a new direct game's first
 day, before the conversion closed the sector. Its construction never finished: five months later it still had 100
 points left. The weekly pass now cancels a sector under construction in a direct game.
@@ -62,6 +71,8 @@ a new game's rules were the owner's last applied (Free Market Construction Disab
 | | Two weeks and four weeks on | France 14.4, then 42.4 construction a week (5.0 without the fix); the United Kingdom 62.4; 376 of 378 sites still standing (the AI had removed 23 in a week before the conversion set the guard's record); `TE_SELF_CHECK OK direct_base_construction holders=291 under_base=0 missing=0` |
 | Direct game, rule switched to Enabled | The day after load | `TE_SELF_CHECK OK construction_rule_switch to=market sectors=381 sites_left=0`; France's capital has a level 29 sector on Iron-Frame Buildings |
 | | Two weeks on | No country holds Base Construction and Greece reads 0 construction; 399 sectors, 357 sites, every site on the market method; the construction good's price is £1,616 |
+| The switch to Disabled, run again after the review's fixes | The day after load, and three weeks on | `… construction_rule_switch to=direct sites=378 expected=378 sectors_left=0 market_modifiers_left=0`; France 42.4; 376 sites, no sector; the base self-check OK |
+| The switch to Enabled, run again after the review's fixes | Four days and two weeks on | `… construction_rule_switch to=market sectors=375 expected=375 sites_left=0`. No retooling follows the switch: 935 buildings moved from No Maintenance to Maintenance and none of the 375 re-created sectors carries `pm_retooling` (France's capital sector: Iron-Frame Buildings, Maintenance, no Retooling). Retooling buildings in the world went 3, 12, 64, the AI's own method changes |
 | Direct game from before the fix, loaded with it | At load | No country has the modifier, Greece reads 0 (the rule's line is gone) |
 | | Two weeks on | All 290 countries hold it; Greece 5.2 (5 and a fifth of a site level), so nothing is counted twice; the base self-check reads OK |
 | New game under Disabled, made with the fix (run again on the final files, after the base left country setup: the same) | Its second day | All 291 countries hold Base Construction and read 5 construction a week; 376 sites, no sector |
@@ -87,7 +98,7 @@ Those hold with the script-owned base, which reaches a new country at its first 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK … direct_base_construction` | A direct game, once each time the game becomes one: a week after its first weekly pass | Every country that holds Base Construction has 5 construction a week or more, and at most a tenth as many countries are still without it (new ones that have not had a weekly pulse) | `under_base` above 0: the engine does not sum the modifier's `country_construction_add` for a holder. `missing` large: a week of pulses left countries without it | `under_base`: read `modifier:country_construction_add` for one holder in the harness; if a script-added country modifier's construction is not summed, give the points through the Construction Site instead (a free level in the capital). `missing`: `te_direct_construction_on_weekly_pulse` is not reaching those countries; read `te_construction_market_pulse_events.3` for one |
-| `TE_SELF_CHECK … construction_rule_switch` | Once for each time the rule is changed in a running game, the day the buildings follow it | `to=direct`: no Construction Sector is left, standing or under construction, and no site carries the market's capacity modifier. `to=market`: sectors stand | `to=direct` with `sectors_left` or `market_modifiers_left` above 0: `te_direct_construction_convert_state` did not replace the buildings. `to=market` with `sectors=0`: `te_direct_construction_revert_state_site` made none, and nothing sells construction | `to=direct`: check that `remove_building` still removes a site and a sector in one effect (it did on 2026-11-13); otherwise remove in one daily pass and build in the next. `to=market`: `extended_timeline_build_specified_building_level` refused the sector (`create_building` checks its technology and may check `can_build_government`); build it under the `te_cm_placing_site` pattern, with a global the sector's permission accepts |
+| `TE_SELF_CHECK … construction_rule_switch` | Once for each time the rule is changed in a running game, the day the buildings follow it | `to=direct`: as many sites stand as the switch should have made (`expected`), no Construction Sector is left, standing or under construction, and no site carries the market's capacity modifier. `to=market`: as many sectors stand as `expected`, and at least one | `to=direct` with `sites` under `expected`: `create_building` refused a site, and that state's sector levels are lost; with `sectors_left` or `market_modifiers_left` above 0: `te_direct_construction_convert_state` did not replace the buildings. `to=market` with `sectors` under `expected`: `te_direct_construction_revert_state_site` removed a site and its sector was refused | `to=direct`: check that `remove_building` still removes a site and a sector in one effect (it did on 2026-11-13); otherwise remove in one daily pass and build in the next. `to=market`: `extended_timeline_build_specified_building_level` refused the sector (`create_building` checks its technology and may check `can_build_government`); build it under the `te_cm_placing_site` pattern, with a global the sector's permission accepts |
 
 ## Still to look at in a game
 
@@ -115,8 +126,12 @@ The harness reads values and takes screenshots; these need a player.
    a year: the sites a direct game built beyond its sectors' old levels come back as extra supply.
 6. **A game that was already switched before the fix, with site levels its player built since.** After the first day
    on this build: each state's site is its old sector's level plus the levels built on top of the market's own one.
-7. **A late game.** A state with more than 200 sector levels becomes a 200-level site (the cap of
+7. **A sector whose owner has no Urbanization, at a switch to Disabled.** The conversion removes the sector and makes
+   the site without testing the technology (the way back does test it). If `create_building` honours the site's
+   `possible`, which needs Urbanization in a direct game, those levels are lost and the switch's self-check reads
+   BROKEN with `sites` under `expected`. A sector can only reach such an owner by conquest. Not seen.
+8. **A late game.** A state with more than 200 sector levels becomes a 200-level site (the cap of
    `te_construction_market_build_specified_level`), and a site of more than 100 levels becomes a 100-level sector on
    the way back (`extended_timeline_build_specified_building_level`). Say so if a real game gets there.
-8. **Multiplayer.** Not run. Base Construction no longer depends on each machine's last lobby, which under the old
+9. **Multiplayer.** Not run. Base Construction no longer depends on each machine's last lobby, which under the old
    line could have differed between host and client.

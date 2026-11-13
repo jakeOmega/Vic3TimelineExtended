@@ -174,3 +174,13 @@ te_dc_check_missing_tenfold = {
 	value = te_dc_check_missing
 	multiply = 10
 }
+
+# What the switch should have made (te_direct_construction_count_made): 0 when
+# nothing counted.
+te_dc_check_expected = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_switch_expected }
+		value = global_var:te_dc_switch_expected
+	}
+}

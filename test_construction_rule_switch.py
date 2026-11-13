@@ -176,6 +176,32 @@ class FollowRuleTest(unittest.TestCase):
     def test_each_switch_logs_its_self_check(self):
         self.assertEqual(len(re.findall(r"te_direct_construction_switch_self_check\s*=\s*yes", self.follow)), 2)
 
+    def test_each_switch_counts_what_it_should_make(self):
+        # Review, 2026-11-13: the verdicts read only what was left over, so a switch whose create_building was
+        # refused everywhere (no site, or one sector for 381 sites) still read OK.
+        for effect in ("te_direct_construction_convert_all", "te_direct_construction_revert_all"):
+            with self.subTest(effect=effect):
+                raised = re.search(r"set_global_variable\s*=\s*\{\s*name\s*=\s*te_dc_switch_expected\s+value\s*=\s*0"
+                                   r"\s*\}\s*%s\s*=\s*yes\s*te_direct_construction_switch_self_check\s*=\s*yes"
+                                   % effect, self.follow)
+                self.assertIsNotNone(raised, "the counter is up from before %s to the self-check" % effect)
+        count = body(self.effects, "te_direct_construction_count_made")
+        self.assertRegex(count, r"has_global_variable\s*=\s*te_dc_switch_expected")
+        for effect in ("te_direct_construction_convert_state", "te_direct_construction_revert_state_site"):
+            with self.subTest(effect=effect):
+                self.assertTrue(calls(body(self.effects, effect), "te_direct_construction_count_made"))
+        check = body(self.effects, "te_direct_construction_switch_self_check")
+        self.assertRegex(check, r"global_var:te_dc_check_sites\s*>=\s*te_dc_check_expected")
+        self.assertRegex(check, r"global_var:te_dc_check_sectors\s*>=\s*te_dc_check_expected")
+        self.assertRegex(check, r"remove_global_variable\s*=\s*te_dc_switch_expected")
+
+    def test_the_weekly_pass_only_cancels_a_sector_under_construction(self):
+        # A state's staffed site is not rebuilt (and its workers let go) to cancel a sector that never stood.
+        weekly = self.follow[self.follow.index("te_construction_market_pulse_count_modulo_7"):]
+        self.assertRegex(weekly, r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_building\s*=\s*%s\s*\}\s*"
+                                 r"te_direct_construction_convert_state\s*=\s*yes\s*\}\s*"
+                                 r"else\s*=\s*\{\s*remove_building\s*=\s*%s\s*\}" % (SECTOR, SECTOR))
+
 
 class ConversionTest(unittest.TestCase):
     def setUp(self):
@@ -195,8 +221,15 @@ class ConversionTest(unittest.TestCase):
         # has_building is false for a building whose first level is still being built.
         self.assertRegex(self.state, r"any_scope_building\s*=\s*\{\s*is_building_type\s*=\s*%s\s*\}\s*\}\s*"
                                      r"remove_building\s*=\s*%s" % (SECTOR, SECTOR))
+        # ... and a site under construction, so the new site is never made over a building that is there.
+        self.assertRegex(self.state, r"any_scope_building\s*=\s*\{\s*is_building_type\s*=\s*%s\s*\}\s*\}\s*"
+                                     r"remove_building\s*=\s*%s" % (SITE, SITE))
+        self.assertRegex(self.back, r"any_scope_building\s*=\s*\{\s*is_building_type\s*=\s*%s\s*\}\s*\}\s*"
+                                    r"remove_building\s*=\s*%s" % (SECTOR, SECTOR))
+        # The walk finds them the same way: has_building would miss a state whose only sector is at level 0.
         convert = body(self.effects, "te_direct_construction_convert_all")
-        self.assertRegex(convert, r"any_scope_building\s*=\s*\{\s*is_building_type\s*=\s*%s\s*\}" % SECTOR)
+        self.assertRegex(convert, r"any_scope_building\s*=\s*\{\s*OR\s*=\s*\{\s*is_building_type\s*=\s*%s\s+"
+                                  r"is_building_type\s*=\s*%s\s*\}\s*\}" % (SITE, SECTOR))
 
     def test_a_market_sites_own_level_is_not_capacity(self):
         level = body(self.values, "te_direct_construction_convert_target_level")
@@ -254,6 +287,24 @@ class ConversionTest(unittest.TestCase):
         self.assertRegex(self.state, r"name\s*=\s*te_dc_site_tier\s+value\s*=\s*var:te_dc_target_tier")
         # The market has no use for the record, and a stale one would restore levels at the next switch.
         self.assertRegex(self.back, r"remove_variable\s*=\s*te_dc_site_level")
+
+    def test_both_switches_forget_every_states_record(self):
+        # Review, 2026-11-13: only the states a switch walked lost their record. One left on a state with no site
+        # (its AI owner removed it that week, or the owner had no Urbanization) outlived the market period, and at
+        # the next switch to direct construction the guard built a site of the old level from nothing.
+        forget = body(self.effects, "te_direct_construction_forget_site_record")
+        for name in ("te_dc_site_level", "te_dc_site_tier"):
+            self.assertRegex(forget, r"remove_variable\s*=\s*%s\b" % name)
+        every_state = r"every_scope_state\s*=\s*\{\s*te_direct_construction_forget_site_record\s*=\s*yes\s*\}"
+        convert = body(self.effects, "te_direct_construction_convert_all")
+        revert = body(self.effects, "te_direct_construction_revert_all")
+        self.assertRegex(convert, every_state)
+        self.assertRegex(revert, every_state)
+        # Before the conversion writes the new records, and after the way back has read the old ones.
+        self.assertLess(re.search(every_state, convert).start(),
+                        convert.index("te_direct_construction_convert_state = yes"))
+        self.assertGreater(re.search(every_state, revert).start(),
+                           revert.index("te_direct_construction_revert_state_site = yes"))
 
 
 class LensTest(unittest.TestCase):
