@@ -670,6 +670,52 @@ do, so the column to compare is the time outside the tick tasks.
   debug mode is not known, and no launch without it was made to find out. If
   it may, the mod could offer the switch as a button.
 
+### The mod's own window
+
+The one large cost found that is the mod's: the Timeline Extended window,
+open on its Nation tab, with rendering on (the default).
+
+A scripted widget in an add-on mod opened the window twenty seconds after the
+HUD appeared (`GetVariableSystem.Set('com_open_window', 'te_systems_window')`
+from a `trigger_on_create` state), on the tab it opens on, Nation. In one
+session (`20261113T170446Z`) two 14-day blocks ran with it open; then
+`press esc` closed it (a screenshot showed it gone) and two more ran.
+
+| Block | Dates | Wall s/day | Tick tasks s/day | Outside the tasks | Average frame | Shortest frame |
+|---|---|---|---|---|---|---|
+| open | 3–16 July | 2.000 | 0.577 | 1.42 | 18.6 ms | 13.7 ms |
+| open | 16–31 July | 2.467 | 0.630 | 1.84 | 19.1 ms | 14.9 ms |
+| closed | 31 July–14 August | 1.286 | 0.476 | 0.81 | 10.1 ms | 8.2 ms |
+| closed | 14–28 August | 1.429 | 0.587 | 0.84 | 10.1 ms | 8.3 ms |
+
+- **Open, the day is half again as long or more.** An earlier session with
+  the window open read the same (`20261113T163222Z`: 1.857 and 2.500 s a day,
+  frames of 18.3 and 19.2 ms), and the other rendering-on sessions of the day
+  read 1.21–1.36 s a day over 3–17 July and 1.50–1.64 over 17–31 July with it
+  closed. The tick tasks do not change; the time is frames, each twice as
+  dear, drawn while the tick waits.
+- **It is the Nation tab's sections, not the window.** Three sessions each
+  opened the window with part of the tab taken out (two 7-day blocks each;
+  `variants/nat_*`): with no panels at all frames took 10.2 and 9.7 ms
+  (`20261113T173341Z`); with the overview and the five sections but not the
+  two list panels, 18.0 and 18.9 ms (`…173803Z`); with only the two list
+  panels, which open collapsed, 10.3 and 9.7 ms (`…174246Z`).
+- **What the sections read.** Every row is shown or hidden by a count
+  (`te_nation_type_<modifier type>_count`, 83 of them, with a sum for each
+  group and section), and each count is a chain of `has_modifier` tests: 964
+  in `te_nation_generated_values.txt`, all read again whenever the game's
+  state changes, which while it runs is every frame. Which of the six panels
+  carries the cost, and whether it is the counts or the rows' text, was not
+  separated.
+- **This fits the owner's own play**, 1.9 s a day over the same dates
+  ("Measurements, 2026-11-12"), if the window stood open; that is for the
+  owner to say.
+- **Not measured**: any other tab (two probes meant to switch tabs did not
+  work: a `trigger_when` on a scripted GUI never opened the window, and a
+  chain of timed states never left its first); the window full screen;
+  National Info, which mounts the same sections; and the window with
+  sub-tick rendering off, where a frame no longer holds up a tick.
+
 ### Journal entries
 
 With all 29 of the mod's journal-entry files emptied (nojes_r) the three
@@ -1164,3 +1210,17 @@ of those items now opens with its answer.
     and hold 0.02% of the population; far higher consolidation defines removed
     5.5% of pops in 120 days. See "Small pops" for why they stay and what, if
     anything, a define can do.
+16. **The Timeline Extended window's Nation tab** (2026-11-13). Open, it
+    makes every frame twice as dear and a rendering-on day 55% to 70% longer
+    ("The mod's own window"). The cost is in the overview and the five
+    sections, which decide each row's visibility from 83 generated counts of
+    `has_modifier` tests on every frame. To fix (#1760): find which panel and
+    whether it is the counts or the text (the knockout variants and the
+    probe that opens the window are beside the runs), then either gate the
+    rows behind collapsed sections as the two list panels are, or have the
+    generator write counts the tab reads once a month from variables. Other
+    tabs, the full-screen layout and National Info are unmeasured.
+17. **The journal-entry update interval** (2026-11-13). Under 1% of the day
+    by its task; four runs at three times the default read 6% faster and a
+    run at a quarter of it read no slower, which is unresolved ("Journal
+    entries"). Not worth building on without five or more runs each way.
