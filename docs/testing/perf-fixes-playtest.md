@@ -30,3 +30,18 @@ played that long; a save from before the change keeps its hubs. Each founding th
 |---|---|---|
 | Who founds a hub | Count the `TE_ST_RES: founded` lines by class. No `zero_weight` line, and `minor` lines few. Holders of `je_strategic_reserve` today may include poorer minors without anything being wrong: a country that founded as a major or a market leader and later lost the rank or joined another's market keeps its hub, and so does a secession that took a hub state and won. Fewer holders than the 55 of the game measured; about 25 by 1931 is the fewest to expect, not the most | A `zero_weight` line: the AI took a decision whose `ai_chance` is 0, against vanilla's `000_decisions_help.txt`. Report it before choosing a fix: a gate in `possible` would bind players too |
 | Majors and leaders still found | Great and major powers hold a hub within a few years of Logistics, and so does a market leader above 10 million | Fewer than before, or no `class=leader` lines: `gw_is_market_leader` or the decision's `ai_chance` reads wrong |
+
+## Read-once values and the tourism re-add skip (2026-11-12, #1731)
+
+`cultural_pull_from_art`, `cultural_pull_total` and `te_climate_heat_raw` save a value with `save_temporary_value_as`
+and read it back, and tourism's state refresh re-adds `tourism_output` or `tourism_throughput` only when its multiplier
+moved (`te_tourism_refresh_modifier`, with the `te_<modifier>_rooted` marker). The harness runs of 2026-11-12 read the
+script values against the formulas they replaced, for five countries, and found them equal; they read the stored
+tourism values, not the modifiers' strength, and no panel was looked at.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| Cultural Hegemony panel | The art row, its bar and its hover show the same art pull as the overview's breakdown, with no `scope:` error in `error.log` while the panel is open | A 0 or an error naming `ch_art_production` or `ch_pull_raw_now`: the saved value is not read when the GUI evaluates the value; write the share and art pull without the save |
+| Local climate hover | The state panel's Comfort hover gives the heat line it gave before (a state with hot summers: above 0) | 0 heat everywhere: `scope:te_climate_heat_excess_now` reads unset in the GUI |
+| Tourism modifier strength | In a state with a tourism building, the building's output hover lists the tourism output modifier at the state panel's tourism card total (the states panel hides the modifier from its own list), not at the static modifier's base field | The base field (a multiplier of 1): the monthly state pulse's ROOT is not the state. The marker keeps re-adding every month then; reroute the refresh through a hidden state event |
+| Tourism after a change | A state whose city rank or monuments change shows the new output the next month | The old figure kept: the skip compared a stale value; remove `te_tourism_output_applied` from that state and report it |

@@ -175,6 +175,21 @@ class CulturalShareTests(unittest.TestCase):
         self.assertEqual(share(0, tiny, {"ch_raw_at_census": Decimal("0.5")}), 0)
         self.assertEqual(ShareHarness(0, tiny, {"ch_raw_at_census": 2})("ch_world_raw_others"), 0)
 
+    def test_the_share_is_raw_over_the_live_world_total(self):
+        # cultural_pull_total writes ch_world_raw_live out with the raw pull saved; the two must agree, the
+        # denominator's floor of 1 included (a raw pull of 0.2 against a census total of 1)
+        cases = [
+            (Decimal("1074.9"), CENSUS, {"ch_raw_at_census": 700}),
+            (31, CENSUS, {}),
+            (300, {"ch_cached_global_raw": 769}, {}),
+            (Decimal("0.2"), {"ch_cached_global_raw": 1, "ch_census_own_raw": 1}, {"ch_raw_at_census": Decimal("0.5")}),
+            (Decimal("0.2"), {"ch_cached_global_raw": Decimal("0.4"), "ch_census_own_raw": 1}, {}),
+        ]
+        for raw, globals_, variables in cases:
+            harness = ShareHarness(raw, globals_, variables)
+            want = min(max(Decimal(str(raw)) / harness("ch_world_raw_live") * 100, Decimal(0)), Decimal(100))
+            self.assertEqual(ShareHarness(raw, globals_, variables)("cultural_pull_total"), want, (raw, globals_))
+
     def test_the_share_reads_the_raw_pull_once(self):
         harness = ShareHarness(Decimal("1074.9"), CENSUS, {"ch_raw_at_census": 700})
         harness("cultural_pull_total")

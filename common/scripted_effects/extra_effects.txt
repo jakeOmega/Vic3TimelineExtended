@@ -1443,6 +1443,14 @@ te_update_tourism_modifier = {
 
 # Puts $MODIFIER$ on the state at $VALUE$ unless it is already there at that multiplier,
 # kept in te_$MODIFIER$_applied (te_update_tourism_modifier). THIS = ROOT = the state.
+#
+# The skip needs te_$MODIFIER$_rooted, set only by a write made with `root ?= this`, the
+# self-healing marker of scripting_best_practices.md ("Add a self-healing marker when the apply
+# step has a skip threshold"; te_rate_paid_rooted is the first). A multiplier resolves against
+# ROOT, so a write with another ROOT stores the right number beside a wrong modifier; without
+# the marker the comparison would then match for good. With it, such a call re-adds every month,
+# as this refresh did before the skip. The marker is never initialised and is read only through
+# has_variable.
 te_tourism_refresh_modifier = {
 	set_local_variable = { name = te_$MODIFIER$_now value = $VALUE$ }
 	set_local_variable = { name = te_$MODIFIER$_same value = 0 }
@@ -1450,6 +1458,7 @@ te_tourism_refresh_modifier = {
 		limit = {
 			has_modifier = $MODIFIER$
 			has_variable = te_$MODIFIER$_applied
+			has_variable = te_$MODIFIER$_rooted
 		}
 		if = {
 			limit = { var:te_$MODIFIER$_applied = local_var:te_$MODIFIER$_now }
@@ -1463,6 +1472,13 @@ te_tourism_refresh_modifier = {
 		add_modifier = {
 			name = $MODIFIER$
 			multiplier = var:te_$MODIFIER$_applied
+		}
+		if = {
+			limit = { root ?= this }
+			set_variable = te_$MODIFIER$_rooted
+		}
+		else = {
+			remove_variable = te_$MODIFIER$_rooted
 		}
 	}
 }

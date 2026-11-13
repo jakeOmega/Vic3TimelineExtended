@@ -126,19 +126,35 @@ class MonumentsAreOutput(unittest.TestCase):
         effects = read(ROOT / "common/scripted_effects/extra_effects.txt")
         # the definition at the start of a line, not the calls inside te_update_tourism_modifier
         body = squash(block(effects[effects.index("\nte_tourism_refresh_modifier = {"):], "te_tourism_refresh_modifier"))
-        self.assertIn("limit = { has_modifier = $MODIFIER$ has_variable = te_$MODIFIER$_applied }", body)
+        self.assertIn("limit = { has_modifier = $MODIFIER$ has_variable = te_$MODIFIER$_applied "
+                      "has_variable = te_$MODIFIER$_rooted }", body)
         self.assertIn("limit = { var:te_$MODIFIER$_applied = local_var:te_$MODIFIER$_now }", body)
         apply = body[body.index("limit = { local_var:te_$MODIFIER$_same = 0 }"):]
         self.assertLess(apply.index("remove_modifier = $MODIFIER$"),
                         apply.index("add_modifier = { name = $MODIFIER$ multiplier = var:te_$MODIFIER$_applied }"))
         self.assertLess(apply.index("set_variable = { name = te_$MODIFIER$_applied value = local_var:te_$MODIFIER$_now }"),
                         apply.index("add_modifier"))
-        # the one refresh site: nothing else writes either modifier
-        for path in (ROOT / "common").rglob("*.txt"):
-            text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
-            for mod in ("tourism_output", "tourism_throughput"):
-                if re.search(rf"(add|remove)_modifier = (\{{ name = )?{mod}\b", text):
-                    self.assertEqual(path.name, "extra_effects.txt", (path, mod))
+        # the skip needs the self-healing marker, set only by a write whose ROOT is the state
+        self.assertIn("has_variable = te_$MODIFIER$_rooted", body)
+        self.assertIn("if = { limit = { root ?= this } set_variable = te_$MODIFIER$_rooted } "
+                      "else = { remove_variable = te_$MODIFIER$_rooted }", apply)
+        self.assertNotIn("var:te_$MODIFIER$_rooted", body)
+
+    def test_the_refresh_is_the_one_writer(self):
+        # Nothing else adds or removes either modifier, and the helper has no other caller: a second writer would
+        # leave te_<modifier>_applied describing a modifier it didn't put there, and the skip would keep it.
+        writers, callers = [], []
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").rglob("*.txt")):
+            text = squash(path.read_text(encoding="utf-8-sig"))
+            if re.search(r"(add|remove)_modifier = (\{ name = )?(tourism_output|tourism_throughput)(?!\w)",
+                         text):
+                writers.append(path.name)
+            callers += [path.name] * len(re.findall(r"\bte_tourism_refresh_modifier = \{ MODIFIER", text))
+        self.assertEqual(writers, [])  # no literal writer anywhere: only the helper, through $MODIFIER$
+        self.assertEqual(callers, ["extra_effects.txt", "extra_effects.txt"])
+        body = squash(block(read(ROOT / "common/scripted_effects/extra_effects.txt"), "te_update_tourism_modifier"))
+        for mod in ("tourism_output", "tourism_throughput"):
+            self.assertNotIn(f"modifier = {mod}", body.replace(f"MODIFIER = {mod}", ""))
 
     def test_old_value_is_gone(self):
         for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "gui").rglob("*.gui")):
