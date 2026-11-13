@@ -852,7 +852,7 @@ class ReadTest(SessionTestCase):
         self.assertEqual(self.typed().count("event te_qa.1"), 1)
         # it ran (the history gained it), so it is not typed again
         self.assertEqual((error.info["arrived"], error.info["retried"]), (True, False))
-        self.assertIn("holds it now", error.info["not_retried"])
+        self.assertIn("gained a line of it", error.info["not_retried"])
 
     def no_stop(self) -> session.SessionError:
         with mock.patch.object(session, "STOP_WAIT_S", 0.01):
@@ -890,8 +890,24 @@ class ReadTest(SessionTestCase):
         self.assertEqual(self.typed().count("event te_qa.1"), 2)
         self.assertTrue(self.session.status()["maybe_stopped"])
 
-    def test_a_lost_read_the_history_held_already_is_not_typed_again(self):
-        # A repeat is not written to the history again, so its absence there proves nothing.
+    def test_a_read_the_history_holds_from_before_is_typed_again_when_it_was_not_the_last_line(self):
+        # The owner's history held `event te_qa.1` on 2026-11-13: a text is left out only when it repeats the
+        # last line, so a read typed after another command adds a line when it is entered.
+        self.history_path().write_text("event te_qa.1\ncash\n", encoding="utf-8")
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.console_open = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            reads = self.session.read(["c:FRA.gdp"])
+        self.assertEqual([r.value for r in reads], [7.0])
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
+        self.assertEqual(self.read_steps()[-1]["retried"], True)
+
+    def history_path(self) -> Path:
+        return self.user / "console_history.txt"
+
+    def test_a_read_lost_straight_after_a_read_is_not_typed_again(self):
+        # A repeat running is not written to the history, so its absence there proves nothing.
         self.started()
         self.game.adapter.values = {"c:FRA.gdp": "7"}
         self.session.read(["c:FRA.gdp"])
@@ -899,9 +915,20 @@ class ReadTest(SessionTestCase):
         steps = len(self.game.steps)
         error = self.no_stop()
         self.assertEqual((error.code, error.info["retried"], error.info["arrived"]), ("no_stop", False, False))
-        self.assertIn("held the command already", error.info["not_retried"])
+        self.assertIn("its last line was the command already", error.info["not_retried"])
         self.assertEqual([step for step in self.game.steps[steps:] if "text" in step], [{"text": "event te_qa.1"}])
         self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_read_that_ran_straight_after_a_read_unseen_by_the_history_is_not_typed_again(self):
+        # As the game does: the second read is entered and runs (no stop), and the history writes no line for it.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.session.read(["c:FRA.gdp"])
+        self.game.history_skips_repeats = True
+        self.game.stops = False
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"], error.info["arrived"]), ("no_stop", False, False))
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
 
     def test_a_read_that_arrives_late_is_not_typed_again_and_its_stop_is_released(self):
         self.started()

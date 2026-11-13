@@ -1567,20 +1567,33 @@ class NeverEnteredTest(ConsoleTestCase):
         self.console.send("event te_qa.1")
         self.assertFalse(self.console.never_entered("event te_qa.1"))
 
-    def test_a_text_the_history_held_already_is_never_held_so(self):
-        # The history does not write a repeat, so its absence says nothing, even once its old line is gone.
-        self.history.write_text("event te_qa.1\nselect_event_option list\n", encoding="utf-8")
+    def test_a_text_the_history_held_before_another_line_can_be_held_never_entered(self):
+        # The owner's history (2026-11-13) held the read command: only a repeat of the last line is left out.
+        self.history.write_text("event te_qa.1\ncash\n", encoding="utf-8")
         self.open()
         self.game.console_open = False
         self.console.send("event te_qa.1")
-        self.history.write_text("select_event_option list\nhelp ndefines.ngui\nother\n", encoding="utf-8")
+        self.console.ensure_open()
+        self.assertTrue(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_that_was_the_last_line_is_never_held_so(self):
+        # A repeat running is not written, so a history that gained nothing says nothing about it.
+        self.open()
+        with open(self.history, "a", encoding="utf-8") as f:
+            f.write("event te_qa.1\n")
+        self.game.console_open = False
+        self.console.send("event te_qa.1")
+        self.console.ensure_open()
         self.assertFalse(self.console.never_entered("event te_qa.1"))
 
-    def test_a_history_that_shrank_or_cannot_be_read_proves_nothing(self):
+    def test_a_rewritten_shorter_or_unreadable_history_proves_nothing(self):
         self.open()
         self.game.console_open = False
         self.console.send("event te_qa.1")
         self.assertTrue(self.console.never_entered("event te_qa.1"))
+        lines = self.history.read_text(encoding="utf-8").splitlines()
+        self.history.write_text("".join("other %d\n" % n for n in range(len(lines) + 2)), encoding="utf-8")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))       # rewritten, though longer
         self.history.write_text("", encoding="utf-8")
         self.assertFalse(self.console.never_entered("event te_qa.1"))
         self.history.unlink()

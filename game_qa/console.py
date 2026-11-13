@@ -20,8 +20,12 @@ What the game shows of a command (verified on 2026-11-10):
     same command is entered twice running. So for a text the history already
     holds, a short wait that sees no change is "cannot tell", and the proof
     that it arrived has to come from the log: the log proof for repeats is
-    required, not optional. (Whether a repeat that is not the last entry is
-    written is not known; the code needs no answer to that.) The encodings of the history
+    required, not optional. A repeat that is not the last entry is written: the
+    owner's history (2026-11-12, 275 lines) holds texts repeated with other lines
+    between and none twice running, and of the harness's reads recorded to
+    2026-11-13 all 72 typed after another command arrived and all 33 typed
+    straight after a read did not. `run` needs no answer to that;
+    `never_entered` rests on it. The encodings of the history
     file and of the log are not verified either, so a command with a non-ASCII character
     is refused (`bad_text`): if neither echoed it as typed, nothing could prove that it
     arrived, and it would be typed twice.
@@ -198,18 +202,22 @@ class Console:
         return typed is not None and self._landed(typed)
 
     def never_entered(self, text: str) -> bool:
-        """Whether the latest `send` of `text` can be held never entered: the history held no line of it just
-        before that typing, holds none now, and has not shrunk. It only reads. It proves the typing was never
-        entered, and never will be, only once a command typed after it has been seen to arrive (`ensure_open`):
-        keys are taken in order, and a text new to the history is written there as it is entered (both verified
-        2026-11-10), so an entered typing would be in it by then. A text the history already held is never
-        held so (False): a repeat running is not written again, so its absence proves nothing."""
+        """Whether the latest `send` of `text` can be held never entered. It only reads.
+
+        Only when the history's last line just before that typing was another text: the history leaves out a
+        text only when it repeats the last line (see the module's docstring), so an entered typing of it would
+        add a line. Then it is held never entered while the history still begins with exactly the lines it had
+        before the typing and none of the lines added since is the text; a history that cannot be read, was
+        rewritten or is shorter is False. That proves the typing was never entered, and never will be, only
+        once a command typed after it has been seen to arrive (`ensure_open`): keys are taken in order
+        (verified 2026-11-10), so an entered typing would be among the added lines by then."""
         typed = self._sent.get(text.strip())
-        if typed is None or typed.repeat:
+        if typed is None or (typed.before and typed.before[-1].strip() == typed.key):
             return False
         now = self._read_history(HISTORY_TRIES)
-        return (now is not None and len(now) >= len(typed.before)
-                and typed.key not in [line.strip() for line in now])
+        if now is None or now[:len(typed.before)] != typed.before:
+            return False
+        return typed.key not in [line.strip() for line in now[len(typed.before):]]
 
     def close(self) -> None:
         """Press the console key once, with the usual checks, to close a console known to be open (after a round

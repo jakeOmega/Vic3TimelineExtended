@@ -986,10 +986,12 @@ class Session:
         that check does not guard: the pending list can change between the list and the select. The game is
         paused and nothing is typed in between, but a pick under `left_running` has time passing, and
         `Console.run` retypes once a command whose arrival it could not prove after making sure the console is
-        open. By id, a select that comes too late can only answer NO_MATCH. With no id it picks whatever is
-        oldest by then (a follow-up event the first pick's option fired, say), and the refusal comes after that
-        event has been answered: the check reports it, nothing undoes it. The answer names the event id, not the
-        instance, so another instance of the same event would pass."""
+        open. And a select typed into a game frozen at a late debugger stop, or held by a reload, ends the verb
+        with a console error (`entered` None) and can still run after the next resume, unchecked. By id, a
+        select that comes too late can only answer NO_MATCH or pick the named event. With no id it picks
+        whatever is oldest by then (a follow-up event the first pick's option fired, say), and a refusal comes
+        after that event has been answered: the check reports it, nothing undoes it. The answer names the event
+        id, not the instance, so another instance of the same event would pass."""
         self._require_game()
         with self._step("pick", index=index, event=event) as out:
             pending = self._pending()
@@ -1721,14 +1723,17 @@ class Session:
         """After a read command brought no stop and was resumed: None when its typing is proved never entered,
         so that typing it again cannot bring a second stop; else why it is not.
 
-        The proof: the text was new to the history (a repeat is not written again, so the history cannot speak
-        for it); no stop has come since; the console then answers a probe (`ensure_open`, which opens a console
-        that a late load or a click left shut, as on #1702), and keys are taken in order, so the read's keys were
-        taken before the probe's; and the history still has no line of the text, nor has a stop come. The
-        probe's own keys go to the game while the console is shut, as `ensure_open`'s always do. Any stop seen
-        is resumed here, and `_maybe_stopped` stays set either way for the next verb's drain."""
+        The proof: the history's last line before the typing was another command (a repeat running is not
+        written, so the history could not speak for it), and it has gained no line of the text; no stop has come
+        since; the console then answers a probe (`ensure_open`, which opens a console that a late load or a
+        click left shut, as on #1702), and keys are taken in order, so the read's keys were taken before the
+        probe's; and the history has still gained no line of the text, nor has a stop come. The probe's own keys
+        go wherever the keyboard is (the game, while the console is shut; a tool window after a click), as
+        `ensure_open`'s always do. Any stop seen is resumed here, and `_maybe_stopped` stays set either way for
+        the next verb's drain."""
         if not self._console.never_entered(READ_COMMAND):
-            return "the console history held the command already, or holds it now"
+            return ("the console history cannot show it: its last line was the command already (a read straight "
+                    "after a read), or it gained a line of it, or it was rewritten")
         try:
             if dbg.wait_stopped(DRAIN_S):
                 self._resume(dbg)
