@@ -979,12 +979,14 @@ class Session:
             no_id   exactly one event is pending in the list just read: `select_event_option <index>`
             id      an id up to 2^31 - 1: `select_event_option <index> <numeric id>`, the id as the list printed it
             oldest  an id above 2^31 - 1, which no typed form reaches (live, 2026-11-13: the listed form and its
-                    signed form both answered NO_MATCH), when the event is the oldest pending one (first in the
-                    list and the lowest id, the two orders the game was seen to share): `select_event_option
-                    <index>`, as for no_id
+                    signed form both answered NO_MATCH), when the event is first in the list and the lowest id
+                    of all pending: `select_event_option <index>`, as for no_id. Live, the select with no id
+                    took such an event; one that is first but not lowest has not been seen (ids carry a high
+                    byte that changes from game to game, so numeric order need not be age)
 
-        Any other event with an id above 2^31 - 1 is refused `id_unaddressable` before anything is sent: answer
-        the events before it first. One command goes out; `attempts` lists it with its answer.
+        Any other event with an id above 2^31 - 1 is refused `id_unaddressable` before anything is sent; the
+        detail says what to do (answer the events listed before it, or, for a first-listed one, the console
+        verb). One command goes out; `attempts` lists it with its answer.
 
         Each form must be answered `Selected option <index> of <event id>`, or the verb is not_selected. What
         that check does not guard: the pending list can change between the list and the select. The game is
@@ -1022,11 +1024,19 @@ class Session:
             elif chosen is pending[0] and chosen is min(pending, key=lambda p: p.numeric_id):
                 form, command = "oldest", SELECT_NO_ID % index
             else:
+                if chosen is pending[0]:
+                    # Ids carry a high byte that changes from game to game (te_debug_ch.1 was 0xEC000015 on
+                    # 2026-11-12 and 0xCE000014 the next day), so the lowest id need not be the oldest event.
+                    way = ("it is first in the list but not the lowest id, and which event a select with no id takes "
+                           "then has not been seen (live, the one seen was both). `console \"select_event_option "
+                           "%d\"` sends that form unchecked; run `events` after it" % index)
+                else:
+                    way = ("a select with no id takes the first listed (live, 2026-11-13), and it is not first: "
+                           "answer the events listed before it first")
                 raise SessionError(
                     "id_unaddressable", "%s's numeric id %d is above 2^31 - 1, which the console does not take in "
-                    "any typed form (live, 2026-11-13), and it is not the oldest pending event, which a select with "
-                    "no id picks; nothing was sent. Answer the events before it first, oldest first; pending: %s"
-                    % (chosen.event_id, chosen.numeric_id,
+                    "any typed form (live, 2026-11-13); %s. Nothing was sent; pending, as listed: %s"
+                    % (chosen.event_id, chosen.numeric_id, way,
                        ", ".join("%d %s" % (p.numeric_id, p.event_id) for p in pending)),
                     pending=[asdict(p) for p in pending])
             lines = self._select(form, command, attempts, out)

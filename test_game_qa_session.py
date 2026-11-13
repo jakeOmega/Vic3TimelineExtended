@@ -1475,6 +1475,7 @@ class PickTest(SessionTestCase):
         self.assertEqual(error.code, "id_unaddressable")
         self.assertEqual(self.selects(), [])
         self.assertIn("2^31 - 1", error.detail)
+        self.assertIn("answer the events listed before it first", error.detail)
         self.assertIn("2684354595 un_events.4, 3959422997 te_debug_ch.1", error.detail)
         self.assertEqual([p["event_id"] for p in error.info["pending"]], ["un_events.4", "te_debug_ch.1"])
         self.assertEqual(len(self.game.pending_events), 2)
@@ -1488,6 +1489,7 @@ class PickTest(SessionTestCase):
         self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8], [12, "y.1", 2]]
         error = self.session_error(self.session.pick, 0, "te_debug_ch.1")
         self.assertEqual(error.code, "id_unaddressable")
+        self.assertIn('console \"select_event_option 0\"', error.detail)     # the way left, not a dead end
         self.assertEqual(self.selects(), [])
 
     def test_a_high_id_lowest_but_not_first_in_the_list_is_refused(self):
