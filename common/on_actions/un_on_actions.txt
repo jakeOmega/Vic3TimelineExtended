@@ -62,6 +62,24 @@ un_global_authority_on_action = {
 				NOT = { has_global_variable = un_igo_age }
 				any_country = { has_technology_researched = intergovernmental_organizations }
 			}
+			# A standing league becomes the United Nations this month
+			# (un_org_name): its members and every player are told once.
+			# Read before the variable is set, while un_league_stage holds.
+			if = {
+				limit = {
+					un_league_stage = yes
+					has_global_variable = un_founded
+				}
+				every_country = {
+					limit = {
+						OR = {
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
+							is_player = yes
+						}
+					}
+					post_notification = un_league_refounded_notice
+				}
+			}
 			set_global_variable = un_igo_age
 		}
 		if = {

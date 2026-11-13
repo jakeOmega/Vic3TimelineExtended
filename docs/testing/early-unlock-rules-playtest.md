@@ -8,7 +8,9 @@ works through it before any early setting becomes a default.
 
 **What the offline checks hold.** `test_rule_unlock_settings.py`: each rule's three settings and one flag each, the
 defaults unchanged, no bare `has_game_rule` read of the four systems outside `te_rule_setting_triggers.txt`, the late
-gates equal to what they were, the early gates, and what each early setting keeps behind the late gate.
+gates equal to what they were, the early gates, and what each early setting keeps behind the late gate. For the United Nations it also holds the
+League's name (`UnitedNationsLeagueNameTest`): only `un_league_stage` picks it, and outside it each switched name
+reads exactly as before.
 
 **How to run a check.** A setting is chosen on the Game Rules screen of a new game, or changed mid-game from the screen
 that changes country. "Within a week" is a journal entry's next update; "within a month" is the first monthly pulse.
@@ -82,6 +84,24 @@ Alliances.
    pulse) the league line is gone, and a ripe reform can be tabled at once.
 5. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry and no founding before
    Intergovernmental Organizations, and the founding button's line is the bare technology, as before.
+6. **The League's name, before the age.** On *Early Unlock* with Multilateral Alliances and no country with
+   Intergovernmental Organizations, each of these reads "League of Nations" (customizable localization `un_org_name`,
+   reached through `GetPlayer.GetCustom` as the Banking Cycle's title is): the journal entry's title in the journal list
+   and its header; the Timeline Extended window's tab (on two lines, "League of" over "Nations", not elided) and its
+   locked tooltip's heading; the National Info tab; the UN
+   tab's header in the Diplomacy panel; the founding control under the overview's No UN cell ("Found the League", on one line
+   inside the button); and, when founded, the charter event's title ("The League of Nations Covenant"). Body text, event
+   descriptions and "UN" stay as they were. Watch `error.log` for `Object of type 'country' is not valid for
+   'un_org_name'` while the entry is open: the Banking Cycle's title logs a burst of that kind
+   (`docs/audits/mod_known_noise.md`), and this title is expected to do the same; a raw key or a printed
+   `SelectLocalization(...)` instead of a name is a failure.
+7. **The League becomes the United Nations.** Console-research Intergovernmental Organizations for any country with the
+   League founded: within a month every name in item 6 reads "United Nations" again, and the player (member or not)
+   gets one feed notification, The League Becomes the United Nations. It doesn't come again the next month, and it
+   doesn't come at all when no League was founded before the age.
+8. **No League under Late Unlock.** On *Late Unlock*, and in a save from before this change, every name in item 6 reads
+   "United Nations" throughout and no such notification comes. As an observer, open a great power's National Info UN
+   tab: its header reads "United Nations" (the `GetPlayer.IsValid` guard) and `error.log` gains no `un_org_name` line.
 
 ## Cultural Hegemony
 

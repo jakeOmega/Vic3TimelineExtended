@@ -1444,8 +1444,12 @@ class LocTest(unittest.TestCase):
         self.assertEqual(set(FULL_NAMES), {t.key for t in gen.TABS})
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
-                # a label may splice its entry's name ($je_x$), single-sourced
+                # a label may splice its entry's name ($je_x$), single-sourced;
+                # a name guarded for no player reads its plain fallback here
+                # (the United Nations': test_the_league_name_wraps_to_two_lines)
                 name = re.sub(r"\$(\w+)\$", lambda m: loc[m.group(1)], loc[_tab(tab).label])
+                name = re.sub(r"\[SelectLocalization\(GetPlayer\.IsValid,'\w+_ingame','(\w+)'\)\]",
+                              lambda m: loc[m.group(1)], name)
                 self.assertEqual(name, full)
                 words = name.split()
                 self.assertLessEqual(len(words), 2, name)
@@ -1457,6 +1461,30 @@ class LocTest(unittest.TestCase):
                     # call, however long; "Demographics" shrinks toward 12
                     self.assertLessEqual(len(name), len(VANILLA_FIVE_SLOT_NAME), name)
                     self.assertLessEqual(max(len(w) for w in words), vanilla_word, name)
+
+    def test_the_league_name_wraps_to_two_lines(self):
+        """Under Early Unlock, before the age of Intergovernmental
+        Organizations, the United Nations tab reads "League of Nations"
+        (un_org_name): three words, one more than the rule above allows and a
+        character longer than vanilla's longest. At fontsize_min it packs into
+        two lines ("League of" / "Nations"), as a two-word name does, and no
+        word is longer than "Nations"; the play-test checks it in game
+        (early-unlock-rules-playtest.md, United Nations item 6)."""
+        loc = _all_loc()
+        name = loc["un_org_name_league"]
+        self.assertEqual(name, "League of Nations")
+        per_char = TAB_UNITS_PER_CHAR * 1.1 * TAB_FONT_MIN / TAB_FONT
+        width = _name_width(len(STRIP_ORDER[_tab("united_nations").row]))
+        lines = [""]
+        for word in name.split():
+            joined = f"{lines[-1]} {word}".strip()
+            if len(joined) * per_char <= width:
+                lines[-1] = joined
+            else:
+                lines.append(word)
+        self.assertLessEqual(len(lines), 2, lines)
+        vanilla_word = max(len(w) for w in VANILLA_FIVE_SLOT_NAME.split())
+        self.assertLessEqual(max(len(w) for w in name.split()), vanilla_word)
 
 
 class IconsTest(unittest.TestCase):

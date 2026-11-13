@@ -732,7 +732,10 @@ class TestModifierNamesRenderWithNoPlayer(unittest.TestCase):
                 self.assertIn(plain, self.loc, key)
         self.assertEqual(set(guarded), {"te_demog_census_off_name", "te_demog_census_off_desc", "te_demog_line_name",
                                         "te_demog_wf_replaced_name", "te_demog_wf_womens_name",
-                                        "te_demog_wf_womens_desc"})
+                                        "te_demog_wf_womens_desc",
+                                        # the United Nations' name (je_united_nations), which an
+                                        # observer's National Info UN tab draws
+                                        "un_org_name"})
         for entry in guarded:
             self.assertEqual(self.loc[entry + "_ingame"], f"[GetPlayer.GetCustom('{entry}')]", entry)
 

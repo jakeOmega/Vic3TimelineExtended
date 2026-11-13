@@ -233,6 +233,19 @@ un_ov_refounding_sgui = {
 	effect = { }
 }
 
+# The Found button's label under Early Unlock before the age of
+# Intergovernmental Organizations: "Found the League" (un_league_stage, as the
+# entry's title, un_org_name). The full name doesn't fit the button.
+un_ov_league_sgui = {
+	scope = country
+	is_shown = {
+		un_league_stage = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Scope-free gate: a resolution is in session. The General Assembly shows its
 # tally, delegations and ballot, or, when this is false, the proposals.
 un_session_open_sgui = {

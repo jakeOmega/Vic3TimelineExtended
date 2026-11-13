@@ -119,7 +119,7 @@
  setting_united_nations_disabled:0 "United Nations Disabled"
  setting_united_nations_disabled_desc:0 "The United Nations [concept_journal_entry] is disabled. Intergovernmental organization technology can still be researched but the UN founding, membership, voting, and related diplomatic events are inactive."
  setting_united_nations_early_unlock:0 "United Nations: Early Unlock"
- setting_united_nations_early_unlock_desc:0 "As Late Unlock, but a great power can found the organization with $multilateral_alliances$, as the League of Nations was. Until some country has $intergovernmental_organizations$, its charter can't be reformed, which keeps it at Established or below."
+ setting_united_nations_early_unlock_desc:0 "As Late Unlock, but a great power can found the organization with $multilateral_alliances$, as the League of Nations. Until some country has $intergovernmental_organizations$, it keeps that name and its charter can't be reformed, which holds it at Established or below."
  setting_united_nations_enabled:0 "United Nations: Late Unlock"
  setting_united_nations_enabled_desc:0 "The United Nations [concept_journal_entry] opens with $intergovernmental_organizations$. Nations can found and join the UN, vote in the General Assembly, contribute to peacekeeping, and engage with UN-related diplomatic events."
  setting_universal_aptitude_traits_disabled:0 "Universal Aptitude Traits Disabled"

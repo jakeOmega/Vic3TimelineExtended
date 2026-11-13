@@ -6691,6 +6691,7 @@
  un_events.1.d_theocratic:0 "The United Nations has been founded, and its charter awaits our signature. For [ROOT.GetCountry.GetName], guided by divine law, membership would give us a place to speak for that law among the nations. It would also mean accepting as equals states whose laws offend the divine order, in an assembly whose decisions answer to no faith."
  un_events.1.f:0 "To the government, from the legal advisers to our delegation at the signing. We have read the charter in full, as instructed. Signing now would make us a founding member, with a vote in the General Assembly from its first session. In return we would accept the charter's procedures for settling disputes, including cases brought against us before its court, and we would be expected to take part in measures the members agree on together. The charter can be amended later, but only by the members acting together, never by one member alone. We have marked the articles that touch our existing treaties and attach them with our notes. We ask the government for its decision before the signing period closes."
  un_events.1.t:0 "The United Nations Charter"
+ un_events.1.t_league:0 "The League of Nations Covenant"
  un_events.10.a:0 "Stand by the organization."
  un_events.10.a_tt:0 "We spend influence to shore up the UN's credibility. Championing the order from the UN tab of the Diplomacy panel would count for more, for as long as we keep it up."
  un_events.10.b:0 "Wait and see."
