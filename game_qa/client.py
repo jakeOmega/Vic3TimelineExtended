@@ -738,6 +738,11 @@ def fixture_verb(args, paths: session.Paths, backup_root: Path, spawn) -> tuple[
         return dict(plan, made=False, **({"dry_run": True} if args.dry_run else {}),
                     next="%s is there already: `start --fixture %s` loads it" % (plan["save"], plan["date"])), 0
     if args.dry_run:
+        if not plan["long_run"]:
+            return dict(plan, dry_run=True, next=(
+                "a short run of about %d s (watch limit %d s), ending before the first quarterly autosave: the "
+                "go-ahead that covers `start`'s fresh save covers it; `fixture --until %s --permission \"<where the "
+                "go-ahead came from>\"`, in the background" % (plan["estimate_s"], plan["limit_s"], plan["date"]))), 0
         return dict(plan, dry_run=True, next=(
             "a run of about %.1f hours (watch limit %.1f): ask the owner for a grant of that run in their own words, "
             "then `fixture --until %s --permission \"<their words>\" --max-hours <what they granted>`, in the "

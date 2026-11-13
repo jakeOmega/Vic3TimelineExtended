@@ -812,6 +812,16 @@ class FixtureVerbTest(ServerTestCase):
         self.assertIn("--max-hours", reply["next"])
         self.assertIn("grant", reply["next"])
 
+    def test_a_dry_run_of_a_short_run_asks_for_no_grant_of_its_own(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("fixture", "--until", "1836.3.29", "--dry-run")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(spawn.handles, [])
+        self.assertEqual((reply["run_until"], reply["long_run"]), ("1836.3.31", False))
+        self.assertNotIn("--max-hours", reply["next"])
+        self.assertIn("short run", reply["next"])
+
     def test_the_fixture_verb_makes_the_fixture_and_the_server_ends(self):
         fake = FakeSession()
         spawn = ThreadSpawner(lambda: fake)
