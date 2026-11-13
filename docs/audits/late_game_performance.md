@@ -406,7 +406,21 @@ was an add-on mod loaded with `start --add-mod` (a one-key defines file, or
 same-path copies of files), so the deployed folder was never touched. Runs
 named `_r` carried `--game-arg disable_renderframeifneeded` (below). Data,
 variants and scripts: `/mnt/d/vic3te-data/perf-2026-11-13/` (`runs/<name>/`,
-`variants/<name>/`, `scripts/run2.sh`, `an.py`, `tasks.py`, `seg2.py`).
+`variants/<name>/`, `scripts/run2.sh`, `wall2.py`, `tasks.py`, `seg2.py`).
+
+**Reading the wall clock.** Wall time is seconds per game day over 3 July to
+1 September, from the tick stamps of `dedicated_server.log`. `advance` pauses
+the game every two weeks or so to read the date, and the tick being worked
+out when the pause lands is a long weekly tick more often than not. The first
+reading of these runs dropped every gap that spanned a pause, which dropped
+those ticks, and gave figures 1% to 12% too low by how the pauses fell: a run
+that should have been slower read "faster", and four runs looked like a 7%
+gain that was not there. `wall2.py` counts every tick and takes the paused
+seconds off the gaps that span a pause; every figure below is read that way.
+A single run is then good to about ±4% (14 runs with no change, or one that
+left the tick tasks within a few milliseconds: 0.98 to 1.07 s a day). The tick tasks' own figures come from the
+engine's CSV and repeat to a few percent, except `RecalculateModifierNodes`,
+which sits near 96 or near 117 ms a day from one session to the next.
 
 **The world measured** (a script count on 2 July 1931, and the engine's
 `logging.popstats` dump): 263 countries, 160 of them with one state; 870
@@ -417,23 +431,20 @@ states and its power bloc 314. Its investment pool held £1.13 billion, took in
 
 | Run | Change | Wall s/day | Tick tasks ms/day | Snapshot |
 |---|---|---|---|---|
-| B0a | none | 1.447 | 619 | `20261113T121758Z` |
-| B0b | none | 1.266 | 569 | `20261113T124419Z` |
-| guivan | every mod `gui/` file emptied, or vanilla's copy where vanilla has the file | 1.233 | 602 | `20261113T124926Z` |
-| inv_off | `AUTONOMOUS_INVESTMENT_CONSTRUCTION_ENABLED = no` (a bound, not a proposal) | 1.100 | 404 | `20261113T122933Z` |
-| inv_div10 | `AUTONOMOUS_INVESTMENT_UPDATE_COUNT_DIVISOR` 500,000 → 5,000,000 | 1.305 | 553 | `20261113T123413Z` |
-| inv_refresh | `AUTONOMOUS_INVESTMENT_NUM_FAILED_INVESTMENTS_FOR_REFRESH_PLAYER` 20 → 175 | 1.345 | 631 | `20261113T123906Z` |
-| render | sub-tick rendering off | 0.975 | 607 | `20261113T122318Z` |
-| R0b | sub-tick rendering off | 1.000 | 590 | `20261113T131434Z` |
-| noact_r | every mod `common/on_actions/` file emptied | 0.885 | 604 | `20261113T131908Z` |
-| bsp4x_r | `MIN`/`MAX_TICKS_TO_UPDATE_BUILDING_SPENDING_STATE` 100/200 → 400/800 | 0.983 | 577 | `20261113T133005Z` |
+| B0a | none | 1.550 | 619 | `20261113T121758Z` |
+| B0b | none | 1.417 | 569 | `20261113T124419Z` |
+| guivan | every mod `gui/` file emptied, or vanilla's copy where vanilla has the file | 1.300 | 602 | `20261113T124926Z` |
+| inv_off | `AUTONOMOUS_INVESTMENT_CONSTRUCTION_ENABLED = no` (a bound, not a proposal) | 1.133 | 404 | `20261113T122933Z` |
+| inv_div10 | `AUTONOMOUS_INVESTMENT_UPDATE_COUNT_DIVISOR` 500,000 → 5,000,000 | 1.390 | 553 | `20261113T123413Z` |
+| inv_refresh | `AUTONOMOUS_INVESTMENT_NUM_FAILED_INVESTMENTS_FOR_REFRESH_PLAYER` 20 → 175 | 1.483 | 631 | `20261113T123906Z` |
+| render, R0b, R0c, R0d, R0e | sub-tick rendering off, nothing else (five runs) | 0.983, 1.050, 1.067, 1.067, 1.033 | 607, 590, 591, 582, 570 | `20261113T122318Z`, `…131434Z`, `…152700Z`, `…153603Z`, `…154941Z` |
+| noact_r | every mod `common/on_actions/` file emptied | 0.950 | 604 | `20261113T131908Z` |
+| nojes_r | every mod `common/journal_entries/` file emptied | 0.950 | 526 | `20261113T145724Z` |
+| bsp4x_r | `MIN`/`MAX_TICKS_TO_UPDATE_BUILDING_SPENDING_STATE` 100/200 → 400/800 | 1.000 | 577 | `20261113T133005Z` |
 
-**Wall time with rendering on is noisy; with it off it repeats.** Two
-unchanged runs read 1.447 and 1.266 s a day (14% apart), and a third session
-ran 3–17 July at 1.02 s where those two ran 1.36 and 1.29. The engine's task
-time differed by 8% at most, so the spread is in the time outside the tasks.
-With sub-tick rendering off, three unchanged runs read 0.975, 1.000 and 0.979
-s a day. A change to the simulation is therefore read with rendering off.
+The first six rows ran with sub-tick rendering on, the rest with it off. Two
+longer unchanged runs with it off read the same over these dates (1.000 and
+1.017; `runs/B120r`, `runs/B365r`).
 
 **Sub-tick rendering.** The launch argument `-disable_renderframeifneeded`
 ("Sacrifice sub-tick rendering for tick speed" in the binary's own list) and
@@ -443,30 +454,32 @@ rate right through a tick (`measure_frame_time`: 9.7 ms average over 3,656
 frames of a running week, 7.9 ms the shortest, vsync on; 6.3 ms and 159 a
 second with vsync off), and the tick gives way to each. With it off, frames
 come between a tick's steps only. The tick tasks took the same time either
-way (607 and 590 ms a day against 569–619), so the time saved is all outside
-them. "Sub-tick rendering, on and off in one session"
-below has the size of it and what it costs on screen.
+way, so the time saved is all outside them: whole runs read 1.42 and 1.55 s
+a day with rendering on against 0.98 to 1.07 with it off, about 30%. "Sub-tick
+rendering, on and off in one session" below has pairs within one session and
+what the switch costs on screen.
 
-**With rendering off, a day is about 0.98 s**: 0.59–0.61 s of tick tasks,
-about 0.10 s of the mod's on_actions (noact_r: 0.885 s against 0.975–1.000),
-and about 0.28 s that neither names (vanilla's own on_actions and events, the
-frames between ticks, and engine work that is in no task). The mod's journal
-entries sit in both of the last two ("Journal entries" below).
+**With rendering off, a day is about 1.03 s**: 0.57–0.61 s of tick tasks,
+0.07–0.10 s of the mod's on_actions, and about 0.35 s that neither names
+(vanilla's own on_actions and events, the frames between ticks, and engine
+work that is in no task). The mod's journal entries sit in the first and the
+last ("Journal entries" below).
 
-**The mod's on_actions are about a tenth of the simulation.** Emptying all 77
-on_action files (every monthly, yearly and event hook the mod adds) took 0.10
-s off a 0.98 s day and left the tick tasks where they were. That is the
-ceiling for every remaining cut to pulse script together, and it agrees with
-the call graph of 2026-11-12 (about 6 s profiled over 30 days, at the
-profiler's two- to threefold inflation). By that profile the Demographics
-yearly state step is a third of it and the monthly country pulse another
-third.
+**The mod's on_actions are at most a tenth of the simulation.** Emptying all
+77 on_action files (every monthly, yearly and event hook the mod adds) left
+the tick tasks where they were and read 0.950 s a day against 1.03 for the
+unchanged runs: 0.08 s, give or take the 0.04 of a single run. The call graph
+of 2026-11-12 put the same script at about 6 s profiled over 30 days, which
+at the profiler's two- to threefold inflation is 0.07–0.10 s a day. That is
+the ceiling for every remaining cut to pulse script together. By that profile
+the Demographics yearly state step is a third of it and the monthly country
+pulse another third.
 
 **`HandleAutonomousInvestment` is the played country's investment pool.**
 The pass took 163–194 ms a day, the largest task. Frame by frame it is a
 burst on the weekly frame (about 1.6 s in a full week) and 0–2 ms on every
-other frame. With the pass switched off the weekly frame fell from 3.2–3.6 s
-to 1.9 s. What it does:
+other frame. With the pass switched off a rendering-on day read 1.13 s
+against 1.42 and 1.55. What it does:
 
 - Each tick a country makes up to `income ÷ AUTONOMOUS_INVESTMENT_UPDATE_COUNT_DIVISOR`
   investment decisions, at least one. Singapore's £54–59 million a week makes
@@ -476,8 +489,8 @@ to 1.9 s. What it does:
   Singapore made 11 decisions a tick, and the pass ran at 135–175 ms a tick
   for 7 to 14 ticks after each weekly frame, then at 3–12 ms: 77 to 154
   costly decisions a week, at 13 ms each. The week's total was the same
-  within 18% (158 against 194 ms a day); only the weekly frame was shorter
-  (2.1 s against 3.2–3.6).
+  within 18% (158 against 194 ms a day); the weekly frame was shorter and the
+  ticks after it longer.
 - The other 262 countries add little: at the tenfold divisor the weekly
   frame, where every country decides, read 129–174 ms, no more than the ticks
   after it, where Singapore alone still had decisions to make.
@@ -500,41 +513,43 @@ then pile up unspent, which is the outcome the owner warned of. A country's
 cost follows its pool's income; an all-AI world was not measured.
 
 **`RecalculateModifierNodes` is a per-country cost, and no refresh drives
-it.** It ran 96–117 ms at every day boundary in every run, whichever
-countries' pulses fell on the day. The console switch
+it.** It ran 96–119 ms at every day boundary, whichever countries' pulses
+fell on the day. The console switch
 `gamestatetick.forcefullmodifiernoderecalc` showed that this is the engine's
 incremental pass: forced to recalculate everything it took 1,230 ms a day
 (18–25 July in session `20261113T130027Z`), so about a tenth of the graph is
 redone daily. What does not cause that:
 
-- The mod's on_actions: 115 ms a day with all of them emptied, against 101
-  and 117 without (noact_r). That closes open item 13: a refresh that re-adds
-  a modifier at the same strength is not what this task spends its time on.
+- The mod's on_actions: 115 ms a day with all of them emptied (noact_r).
+  That closes open item 13: a refresh that re-adds a modifier at the same
+  strength is not what this task spends its time on.
 - Decaying modifiers, or modifiers as such: in one session
   (`20261113T135321Z`) every country was given a modifier, then the same one
   decaying, then a decaying one with state and building lines, and then every
   state a decaying one. The daily median read 112 (none), 105, 106, 110, 108,
   105 and 105 (cleared) ms. A read confirmed the modifiers were there.
 
-What does move it is the number of countries (next).
+What does move it is the number of countries (next) and, by less, the mod's
+scaling-modifier declarations ("Journal entries").
 
 **Countries.** A setup had every one-state AI country that was at peace and
 not in a revolution annexed by its overlord, or else by a neighbor: 119
 countries went, leaving 151 from 263, with the same pops (90,087) and 12,935
 buildings. Over the same dates (17 July to 14 September, rendering off) the
 tick tasks took 452 ms a day against 603 in the unchanged world, a quarter
-less: `RecalculateModifierNodes` 80 against 116 (unchanged runs of this day
-read 97 to 118 across sessions), `UpdateAI` 33 against 52, the
+less: `RecalculateModifierNodes` 80 against 116, `UpdateAI` 33 against 52, the
 three journal-entry tasks 23 against 36, and the investment pass 101 against
 175 (fewer states to score, or weeks with fewer buildings; not separated).
 That is about 1.3 ms a day of task time for each one-state country, before
-its share of the monthly and yearly pulses. Wall time read 0.927 against 0.996
-s a day, but an event window (`decolonization_events.70`) stood open through
-the annexed run, which costs time on every frame, so the wall figure is not a
-clean one. The 160 one-state countries hold 7% of the world's people and 16%
-of its pops. They are a mix of countries there since 1836 (Nepal, Wallachia,
-Oyo, Hawaii), released ones (California, Formosa, Lithuania, Île-de-France)
-and seven revolts that never ended (#1723), which the setup left alone.
+its share of the monthly and yearly pulses. Wall time read 0.983 against 1.017
+s a day, inside a single run's ±4%, and an event window
+(`decolonization_events.70`) stood open through the annexed run, which costs
+time on every frame; so the task figure is the finding and the wall figure is
+not a clean one. The 160 one-state countries hold 7% of the world's people
+and 16% of its pops. They are a mix of countries there since 1836 (Nepal,
+Wallachia, Oyo, Hawaii), released ones (California, Formosa, Lithuania,
+Île-de-France) and seven revolts that never ended (#1723), which the setup
+left alone.
 
 **Pops.** 83% of the pops hold 4% of the people: 23,366 pops (26%) are under
 100 people and 56,002 (62%) under 2,000. Singapore's own states hold the most
@@ -545,16 +560,19 @@ the engine's micro-pop dissolution asks for, and 17,292 are employed. Raising
 the consolidation defines far past anything shippable (merge at 150 workforce
 under the moderate rule, dissolve under 1,000 people) removed 5.5% of pops in
 120 days (84,710 against 89,658) and 8.4% in a year (83,508 against 91,147),
-and bought no speed: the year ran at 0.994 s a day against 0.971 for the
-unchanged one (snapshots in `runs/pops_x365r` and `runs/B365r`), and the pops
-under 100 people grew from 24,235 to 27,798. The consolidation defines are
-not a lever here. Why the small pops stay is in "Small pops" below.
+and bought no speed: 1.017 s a day against 1.017 over the 120 days, and 1.044
+against 1.000 over the year (`runs/pops_x_r`, `runs/pops_x365r` against
+`runs/B120r`, `runs/B365r`), while the pops under 100 people grew from 24,235
+to 27,798. The consolidation defines are not a lever here. Why the small pops
+stay is in "Small pops" below.
 
-**What moved nothing.** The mod's interface (guivan: 1.233 s against 1.266
-and 1.447, with only the HUD on screen); the AI's building-priority interval
-(bsp4x_r: its task fell from 28 to 17 ms a day and wall time did not move);
-the console's `gamestatetick.minlocktime` (1 by default; at 100 the days were
-no faster) and `graphics.capframerate` (30 and 10 left the frame rate at 105).
+**What moved nothing.** The mod's interface (guivan: 1.30 s a day with only
+the HUD on screen, against 1.42 and 1.55 unchanged and 1.32–1.38 for
+yesterday's build; not a difference a single rendering-on run can show); the
+AI's building-priority interval (bsp4x_r: its task fell from 28 to 17 ms a
+day and wall time read 1.000); the console's `gamestatetick.minlocktime` (1
+by default; at 100 the days were no faster) and `graphics.capframerate` (30
+and 10 left the frame rate at 105).
 
 **Console lessons.**
 - Typing a boolean engine switch toggles it and prints the new state
@@ -566,11 +584,14 @@ no faster) and `graphics.capframerate` (30 and 10 left the frame rate at 105).
   profiler", so there is no engine profile to be had from a release build.
 - `logging.popstats` writes every pop (id, country, state, workplace, type,
   culture, religion, size, workforce and more) to
-  `logs/<a new folder>/pop_stats.csv`. The harness's restore does not know
-  that folder and leaves it.
+  `logs/<a folder>/pop_stats.csv`, appending to the same file each time, with
+  one header. The harness's restore does not know that folder and leaves it
+  (#1758).
 - `measure_frame_time start` and `stop` give the average, shortest and
   longest frame between them. `ticktask.list` opens a window with the same
-  figures as the CSV.
+  figures as the CSV. `camera.settransform X Y Z Zoom Pitch Yaw` moves the
+  view (X and Z are the province map's pixel column and its row counted from
+  the bottom).
 
 ### Sub-tick rendering, on and off in one session
 
@@ -584,42 +605,36 @@ do, so the column to compare is the time outside the tick tasks.
 
 | Block | Dates | Wall s/day | Tick tasks s/day | Outside the tasks | Average frame | Longest frame |
 |---|---|---|---|---|---|---|
-| on | 3–17 July | 0.945 | 0.557 | 0.389 | 10.5 ms | 42 ms |
-| off | 17 July–2 August | 1.032 | 0.810 | 0.222 | 13.1 ms | 180 ms |
-| on | 2–16 August | 1.333 | 0.575 | 0.758 | 10.3 ms | 37 ms |
-| off | 16–30 August | 0.741 | 0.520 | 0.221 | 11.8 ms | 145 ms |
-| on | 30 August–13 September | 1.333 | 0.602 | 0.731 | 10.0 ms | 42 ms |
-| off | 13–27 September | 0.963 | 0.569 | 0.394 | 12.1 ms | 160 ms |
-| on, over Malaya | 3–17 July | 1.018 | 0.564 | 0.455 | 10.7 ms | 40 ms |
-| off, over Malaya | 17 July–1 August | 0.966 | 0.762 | 0.204 | 13.0 ms | 167 ms |
-| on, over Malaya | 1–15 August | 1.057 | 0.544 | 0.512 | 9.8 ms | 31 ms |
-| off, over Malaya | 15–30 August | 0.982 | 0.535 | 0.448 | 11.0 ms | 160 ms |
+| on | 3–17 July | 1.214 | 0.557 | 0.657 | 10.5 ms | 42 ms |
+| off | 17 July–2 August | 1.250 | 0.810 | 0.440 | 13.1 ms | 180 ms |
+| on | 2–16 August | 1.357 | 0.575 | 0.782 | 10.3 ms | 37 ms |
+| off | 16–30 August | 0.929 | 0.520 | 0.409 | 11.8 ms | 145 ms |
+| on | 30 August–13 September | 1.357 | 0.602 | 0.755 | 10.0 ms | 42 ms |
+| off | 13–27 September | 0.929 | 0.569 | 0.360 | 12.1 ms | 160 ms |
+| on, over Malaya | 3–17 July | 1.286 | 0.564 | 0.722 | 10.7 ms | 40 ms |
+| off, over Malaya | 17 July–1 August | 1.267 | 0.762 | 0.505 | 13.0 ms | 167 ms |
+| on, over Malaya | 1–15 August | 1.429 | 0.544 | 0.885 | 9.8 ms | 31 ms |
+| off, over Malaya | 15–30 August | 0.933 | 0.535 | 0.398 | 11.0 ms | 160 ms |
 
-- **Off is faster in every pair, by an amount that varies**: 0.17, 0.54,
-  0.34, 0.25 and 0.06 s a day outside the tasks. Pooled over the five pairs
-  that is 0.57 s a day outside the tasks with rendering on against 0.30 with
-  it off, on a day of about 1.14 s: about a quarter, with single pairs from
-  6% to 40%. The whole-run pairs agree: 1.447 and 1.266 s a day on against
-  0.975 and 1.000 off, 23–33%.
+- **Off is faster in every pair**: by 0.22, 0.37, 0.40, 0.22 and 0.49 s a
+  day outside the tasks. Pooled over the five pairs that is 0.76 s a day
+  outside the tasks with rendering on against 0.42 with it off, on a day of
+  about 1.33 s: about a quarter. The whole runs say 30% (1.42 and 1.55 s a
+  day on, 0.98 to 1.07 off).
 - **What it costs on screen is small.** The game still draws between a
   tick's steps: the average frame went from 10 to 12–13 ms (97 to about 80 a
   second, pauses included) and the longest wait for a frame from about 40 ms
   to 145–180 ms. It is a brief hitch a few times a week of game time, not a
   frozen screen.
-- **With rendering on the cost is not steady.** The first block of this
-  session, and of an earlier one (`20261113T130027Z`: 1.02 s a day over 3–17
-  July), ran nearly as fast as with rendering off, while two whole runs and
-  the later "on" blocks ran 0.7–0.8 s a day outside the tasks. What makes a
-  frame dear at one time and cheap at another was not found; it is not the
-  mod's interface (guivan).
-- **The view is not what makes a frame dear.** Over Malaya, with land,
-  cities, borders and names on screen, frames took what they took over open
-  ocean (9.8–10.7 ms), and rendering cost no more.
+- **The view matters little.** Over Malaya, with land, cities, borders and
+  names on screen, frames took what they took over open ocean (9.8–10.7 ms),
+  and rendering cost 0.72 and 0.89 s a day outside the tasks against 0.66 to
+  0.78 over ocean.
 - **In the owner's own play the same two months ran at 1.9 s a day**
-  (`dedicated_server.1.log`, "Measurements, 2026-11-12"), against 1.0–1.45
-  here with rendering on and 0.98 with it off. What makes real play slower
-  than the harness is not known (panels, tooltips and notifications are
-  candidates; the view is not), so what the switch saves there is for the
+  (`dedicated_server.1.log`, "Measurements, 2026-11-12"), against 1.3–1.55
+  here with rendering on and about 1.03 with it off. What makes real play
+  slower than the harness is not known (panels, tooltips and notifications
+  are candidates; the view is not), so what the switch saves there is for the
   owner to measure: type `gamestatetick.renderframeifneeded` in the console
   (it answers "Disabled"; typing it again turns it back on; it lasts until
   the game is closed), or add `-disable_renderframeifneeded` to the game's
@@ -632,11 +647,60 @@ do, so the column to compare is the time outside the tick tasks.
   command without it is not known, and no launch without debug mode was made
   to find out. If it may, the mod could offer the switch as a button.
 
+### Journal entries
+
+With all 29 of the mod's journal-entry files emptied (nojes_r) the three
+journal-entry tasks fell from 36 ms a day to 6 (`UpdateJournalEntries` 16.0 →
+2.8, the monthly pulses 11.0 → 3.1, the weekly 8.6 → 0.4),
+`RecalculateModifierNodes` read 87, and the day read 0.950 s against 1.03.
+So the mod's entries are about 30 ms of tick tasks a day and, with what their
+pulses do outside the tasks, some 3% to 8% of the simulation. Where it goes:
+
+- **The values of the scaling modifiers.** Since #1404 the systems declare
+  their standing modifiers on their entries (389
+  `scaling_modifiers_while_active` blocks on 18 entries), and the engine reads
+  every block's value again for every holder at each update of an active
+  entry, every 4 days. With the blocks taken out (noscale_r)
+  `UpdateJournalEntries` fell from 16.0 to 4.2 ms a day. With the 18 entries
+  updated every day it rose to 40.5; with the other 48 mod entries updated
+  every day it stayed at 16.3 (`g_scaling1_r`, `g_rest1_r`). The Map Room,
+  one entry with over a hundred map branches, costs nothing while its page is
+  shut: the flat dump of 2026-11-12 holds no call of its selector, and the
+  run without it read 1.017 s a day (maproom_off_r).
+- **The declarations themselves.** `RecalculateModifierNodes` read 87 and 90
+  ms a day in the two runs without the declarations (nojes_r, noscale_r) and
+  96 to 119 in every other run of the day: perhaps 10 to 25 ms a day for 389
+  declarations, most of them at zero.
+- **The pulses.** The weekly and monthly pulses are 16 ms a day of tasks;
+  their parts are in "Merged `main` remeasured" (the Strategic Reserve's
+  weekly pulse the largest).
+
+**The update interval is not worth changing.** An entry's active update can
+be set per entry (`active_update_frequency = <days>`, with
+`inactive_update_frequency`: both keys are in the game binary, vanilla uses
+neither, and the first was read in game: on the 18 entries at 12 days
+`UpdateJournalEntries` fell to 8.6) or for all entries (`NCountry`'s
+`JOURNAL_ENTRY_UPDATE_ACTIVE`, 4 by default; at 12 it fell to 7.3, at 1 it
+rose to 47.0; `JOURNAL_ENTRY_UPDATE_INACTIVE` at three times its 14 saved
+1 ms). That is 9 ms a day, under 1% of the day, for a modifier that follows
+its value 12 days late instead of 4, past the 7-day windows that keep a
+costly step from being clicked twice (`un_influence_pending`,
+`ch_influence_pending`, `colonial_garrison_pending_levels`). Wall time agrees
+that there is no more to it than the task: four runs at 12 days read 0.933 to
+1.000 s a day and one at 1 day read 1.000, all inside the unchanged runs'
+0.98 to 1.07.
+
+Snapshots: nojes_r `20261113T145724Z`, noscale_r `…151725Z`, maproom_off_r
+`…155600Z`; 12 days for all entries `…150426Z`, `…153143Z`, `…154045Z`, and
+with the inactive interval tripled `…151301Z`; inactive alone `…150844Z`; 1
+day for all `…161028Z`; the per-entry key at 12 days on the 18 `…152152Z`
+and on all 67 `…154513Z`, at 1 day on the 18 `…161454Z` and on the other 48
+`…161926Z`.
+
 ### Small pops
 
 Two `logging.popstats` dumps of one session, 2 July and 2 August 1931,
-matched by pop id (`runs/explore4/dump_A.csv`, `dump_B.csv`; the game appends
-each dump to the same file, with one header).
+matched by pop id (`runs/explore4/dump_A.csv`, `dump_B.csv`).
 
 - **They are churn, not leftovers.** Of 24,183 pops under 100 people on 2
   July, 12,821 were gone a month later, and 12,281 new ones had appeared:
@@ -658,7 +722,7 @@ each dump to the same file, with one header).
   slivers are out of the merge's reach by construction.
 - **It would not pay to chase them.** The tasks that walk pops
   (`ProcessEconomicMigration`, `UpdatePopGrowth`, `UpdateEmployment`) take
-  about 70 ms of a 980 ms day, and the year with 8.4% fewer pops ran no
+  about 70 ms of a 1.03 s day, and the year with 8.4% fewer pops ran no
   faster. Halving the pops would buy a few percent at most, at the price of
   changing who a building may hire.
 
@@ -773,9 +837,10 @@ of those items now opens with its answer.
 
 1. **Answered, 2026-11-13.** The time outside the tick tasks is three
    things: frames drawn while the tick is worked out (gone with sub-tick
-   rendering off), the mod's on_actions (0.10 s a day, measured by emptying
-   them), and about 0.28 s a day that is vanilla's pulses, the frames between
-   ticks and engine work in no task. `RecalculateModifierNodes` is not driven
+   rendering off), the mod's on_actions (0.07–0.10 s a day, measured by
+   emptying them), and about 0.35 s a day that is vanilla's pulses, the frames
+   between ticks, engine work in no task, and what the mod's journal entries
+   do outside their tasks. `RecalculateModifierNodes` is not driven
    by the pulses' refreshes. As first written:
    **Unattributed day-boundary time: about 0.43 s of each ordinary day's
    hour 0**, 22% of wall time in 1931, beyond the tick tasks and the
@@ -1013,8 +1078,8 @@ of those items now opens with its answer.
     week (see "Merged `main` remeasured").
 13. **Closed, 2026-11-13: they do not drive it.** With every mod on_action
     emptied, refreshes included, `RecalculateModifierNodes` read 115 ms a day
-    against 101 and 117; and giving every country and state one more
-    modifier, decaying or not, left it at 105–112. No skip-when-unchanged
+    against 96 to 119 in unchanged runs; and giving every country and state
+    one more modifier, decaying or not, left it at 105–112. No skip-when-unchanged
     refresh or dead band is worth building for this task's sake. As first
     written:
     **Refreshes that re-add a modifier at the same strength** (see "Does a

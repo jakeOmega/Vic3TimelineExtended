@@ -49,9 +49,10 @@ they replaced, for five countries, and found them equal; no panel was looked at.
 
 Not a change to the mod. The engine draws frames while a tick is being worked out, and a console switch or a launch
 option stops it doing so (`docs/audits/late_game_performance.md`, "Sub-tick rendering, on and off in one session"). In
-the harness the days ran about a quarter faster with it off (five pairs, 6% to 40%), the average frame went from 10 to
-12–13 ms and the longest wait for a frame from about 40 ms to 150–180 ms. The owner's own play of the same months ran
-slower than the harness (1.9 s a day against 1.0–1.45), so what the switch saves there has to be read there.
+the harness the days ran a quarter to 30% faster with it off (five pairs within a session, and whole runs), the average
+frame went from 10 to 12–13 ms and the longest wait for a frame from about 40 ms to 150–180 ms. The owner's own play of
+the same months ran slower than the harness (1.9 s a day against 1.3–1.55), so what the switch saves there has to be
+read there.
 
 | Check | Expect | If it fails |
 |---|---|---|
