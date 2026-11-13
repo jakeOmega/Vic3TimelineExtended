@@ -334,32 +334,38 @@ wars make `UpdateCivilWars` itself dearer is open (#1723).
 engine task that recalculates modifiers takes about 100–135 ms at each day
 boundary, a tenth of wall time, more than any refresh's own script. A refresh
 that takes a modifier off and puts it back at the same strength changes no
-figure, so it was a suspect. Eight unprofiled runs tested it, 2 July → 1
+figure, so it was a suspect. Ten unprofiled runs tested it, 2 July → 1
 September (62 days, 61 day boundaries), same save, tick-task timings and wall
-clock. Each run on #1731's build (A2 its head) made one deploy-only change:
+clock. A, A3 and A4 ran #1731's final build (the three cuts); E and A2 ran
+it with the tourism re-add skip it carried until `6192c64b3`; each other run
+made one deploy-only change:
 
-| Run | Change | `RecalculateModifierNodes` per day boundary, median | Wall time per day |
+| Run | Build | `RecalculateModifierNodes` per day boundary, median | Wall time per day |
 |---|---|---|---|
-| A | none | 135 ms | 1.39 s |
-| A2 | none | 104 ms | 1.31 s |
-| B | the 325 flagships unbuildable (touches no refresh) | 121 ms | 1.33 s |
-| E | tourism's refresh skips a modifier whose multiplier did not move | 117 ms | 1.37 s |
+| A | the three cuts | 135 ms | 1.39 s |
+| A3 | as A | 101 ms | 1.30 s |
+| A4 | as A | 117 ms | 1.32 s |
+| B | as A, the 325 flagships unbuildable (touches no refresh) | 121 ms | 1.33 s |
+| E | as A, and tourism's refresh skips a modifier whose multiplier did not move | 117 ms | 1.37 s |
+| A2 | as E | 104 ms | 1.31 s |
 | D | as E, and SoL expectations' three country modifiers not refreshed | 114 ms | 1.34 s |
-| F | tourism's two state modifiers not refreshed | 119 ms | 1.34 s |
-| C | neither tourism's nor SoL's refreshed | 99 ms | 1.31 s |
+| F | as A, tourism's two state modifiers not refreshed | 119 ms | 1.34 s |
+| C | as A, neither tourism's nor SoL's refreshed | 99 ms | 1.31 s |
 | C2 | as C (an audit run shared the CPU for part of it) | 123 ms | 1.44 s |
 
-Two runs of the same build read 104 and 135 ms, and C's 99 ms did not
-repeat. Run-to-run spread is about 30%, more than any of these changes moved,
-so the runs neither show the link nor rule it out. The skip that E tested was
-taken out of #1731 for that reason. A test that could settle it needs either
-several runs of each build, or a change much larger than the noise: a
-deploy-only on_action that re-adds an unchanged modifier on every state every
-day, read against the same build without it.
+Three runs of one build read 101, 117 and 135 ms, a spread of about 30%,
+nearly all of the ten runs' range (99–135 ms). So the runs neither show the
+link nor rule it out. The skip builds (E, A2: 117, 104) read below A, but no
+lower than A3, and F, which drops every tourism re-add the skip drops and
+more, read 119. The skip was taken out of #1731 for that reason. A test
+that could settle it needs either many runs of each build, or a change much
+larger than the noise: a deploy-only on_action that re-adds an unchanged
+modifier on every state every day, read against the same build without it.
 
-Snapshots: A `20261113T014825Z`, A2 `20261113T023851Z`, B
-`20261113T015413Z`, C `20261113T020016Z`, C2 `20261113T024333Z`, D
-`20261113T021406Z`, E `20261113T020847Z`, F `20261113T024839Z`. The CSVs and
+Snapshots: A `20261113T014825Z`, A2 `20261113T023851Z`, A3
+`20261113T030656Z`, A4 `20261113T031140Z`, B `20261113T015413Z`, C
+`20261113T020016Z`, C2 `20261113T024333Z`, D `20261113T021406Z`, E
+`20261113T020847Z`, F `20261113T024839Z`. The CSVs and
 logs are in `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`. Open item 13
 carries the lead.
 
@@ -513,9 +519,9 @@ Items 3 and 6 were addressed by #1713.
    made unbuildable) would settle it. The one cost the copies did show:
    `RecalculateModifierNodes` rose from about 100 ms to 120 ms at every hour
    0, about 0.06 ms a day per building type, so the flagships cost about
-   20 ms a day (1.5% of wall time). That was one run each way, and two runs
-   of one build later read 104 and 135 ms for that task (open item 13), so
-   the 20 ms is within run-to-run spread and unproven. Earlier (2026-10-03),
+   20 ms a day (1.5% of wall time). That was one run each way, and three runs
+   of one build later read 101, 117 and 135 ms for that task (open item 13),
+   so the 20 ms is within run-to-run spread and unproven. Earlier (2026-10-03),
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
@@ -699,7 +705,8 @@ Items 3 and 6 were addressed by #1713.
     refresh's re-add drive `RecalculateModifierNodes`?"). The engine's
     modifier recalculation takes about a tenth of wall time. Whether the
     mod's monthly remove-and-re-add refreshes are much of it is unproven:
-    eight runs could not separate it from a 30% spread between runs. If a
+    ten runs could not separate it from a 30% spread between runs of one
+    build. If a
     larger test shows that they are, the exact fix is to keep the applied
     multiplier in a variable and re-add only when it moved, with the
     self-healing ROOT marker of `scripting_best_practices.md`. It would save
