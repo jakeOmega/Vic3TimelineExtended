@@ -1531,5 +1531,91 @@ class PruneTests(RestoreTestCase):
         self.assertEqual(len(snapshot.all_snapshots(self.backups)), 5)
 
 
+class LongRunTest(RestoreTestCase):
+    """A dated fixture's run (#1602): an unattended game of decades writes four quarterly autosaves a year over the
+    owner's rotation (NGame.MAX_NUMBER_OF_AUTOSAVES = 5: autosave.v3, autosave_1.v3 ... autosave_4.v3), repoints
+    `continue_game.json` at the newest, and ends with its own save renamed to a `te_qa_fixture_*` name. Every time
+    here is set by the test (NOW and minutes after it), never read off the machine's clock."""
+
+    ROTATION = ["autosave.v3", "autosave_1.v3", "autosave_2.v3", "autosave_3.v3", "autosave_4.v3"]
+
+    def owners(self, names):
+        saves = self.user / "save games"
+        for path in saves.glob("autosave*.v3"):
+            path.unlink()
+        for k, name in enumerate(names):
+            (saves / name).write_bytes(b"the owner's %s" % name.encode())
+            set_mtime(saves / name, NOW, -86400 + k)
+        return {name: (saves / name).read_bytes() for name in names}
+
+    def autosave(self, n: int) -> None:
+        """One quarterly autosave of the run, at NOW + n minutes: the rotation moves down one and the newest is
+        written as autosave.v3; the fifth falls off the end."""
+        saves = self.user / "save games"
+        for older, newer in zip(reversed(self.ROTATION[1:]), reversed(self.ROTATION[:-1])):
+            if (saves / newer).exists():
+                os.replace(saves / newer, saves / older)
+        (saves / "autosave.v3").write_bytes(b"the run's autosave %d" % n)
+        set_mtime(saves / "autosave.v3", NOW, 60 * n)
+        cont = self.user / "continue_game.json"
+        cont.write_text('{"title": "autosave", "desc": "Observing"}')
+        set_mtime(cont, NOW, 60 * n)
+
+    def long_run(self, autosaves: int, owners=ROTATION, extra_owner=("autosave_exit.v3", "autosave-Manfred.v3")):
+        before = self.owners([*owners, *extra_owner])
+        snap = self.run_started(at=NOW)
+        for n in range(1, autosaves + 1):
+            self.autosave(n)
+        fixture_save = self.user / "save games" / "te_qa_fixture_0123456789ab_d19000101.v3"
+        fixture_save.write_bytes(b"the dated fixture")
+        set_mtime(fixture_save, NOW, 60 * autosaves + 30)
+        finish(snap, at=NOW + timedelta(minutes=autosaves + 1))
+        return snap, before, fixture_save
+
+    def test_the_owners_five_autosaves_come_back_after_the_rotation_turned_over_many_times(self):
+        cont_before = (self.user / "continue_game.json").read_bytes()
+        snap, before, fixture_save = self.long_run(autosaves=256)      # 1836 to 1900, quarterly
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertFalse(out.held, out.reason)
+        saves = self.user / "save games"
+        for name, data in before.items():
+            self.assertEqual((saves / name).read_bytes(), data, name)
+            self.assertEqual((saves / name).stat().st_mtime_ns, snap.files["save games/" + name].mtime_ns, name)
+        self.assertEqual(sorted(p.name for p in saves.glob("autosave*")), sorted(before))
+        self.assertEqual((self.user / "continue_game.json").read_bytes(), cont_before)
+        self.assertEqual(fixture_save.read_bytes(), b"the dated fixture")       # te_qa_fixture_* is kept
+        self.assertEqual(sorted(out.restored), sorted(["continue_game.json", *("save games/" + n for n in self.ROTATION)]))
+        self.assertEqual(out.removed, [])
+
+    def test_an_owner_with_fewer_autosaves_loses_none_and_gets_none_of_the_runs(self):
+        snap, before, _ = self.long_run(autosaves=12, owners=["autosave.v3", "autosave_1.v3"])
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertFalse(out.held, out.reason)
+        saves = self.user / "save games"
+        self.assertEqual(sorted(p.name for p in saves.glob("autosave*")), sorted(before))
+        for name, data in before.items():
+            self.assertEqual((saves / name).read_bytes(), data, name)
+        self.assertEqual(sorted(out.removed), ["save games/autosave_2.v3", "save games/autosave_3.v3",
+                                               "save games/autosave_4.v3"])
+
+    def test_the_exit_autosave_and_a_conflict_copy_are_never_touched(self):
+        snap, before, _ = self.long_run(autosaves=8)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertNotIn("save games/autosave_exit.v3", out.restored + out.removed)
+        self.assertNotIn("save games/autosave-Manfred.v3", out.restored + out.removed)
+        self.assertEqual((self.user / "save games/autosave-Manfred.v3").read_bytes(), before["autosave-Manfred.v3"])
+
+    def test_an_autosave_written_after_the_exit_holds_and_leaves_everything_as_it_is(self):
+        # A late write is someone else's (the owner played since): nothing is put back over it.
+        snap, before, _ = self.long_run(autosaves=8)
+        late = self.user / "save games/autosave.v3"
+        late.write_bytes(b"the owner played after the run")
+        set_mtime(late, NOW, 60 * 9 + 600)
+        tree_before = tree(self.user)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "modified_after_exit"))
+        self.assertEqual(tree(self.user), tree_before)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -40,7 +40,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from game_qa import gate, restore, snapshot
+from game_qa import fixture, gate, restore, snapshot
 from game_qa import client
 
 MIN_FREE_BYTES = 2 * 1024**3
@@ -386,7 +386,7 @@ def cmd_launch(args) -> tuple[dict, int]:
     try:
         _launchable(snap)
         _check_arguments(game_args)
-        _check_end_date(game_args)
+        _check_end_date(game_args, args.long_run)
         _check_mod_paths(args.add_mod)
         left = _unanswered_write(backups, user, exclude=snap.id)
         if left is not None:
@@ -437,7 +437,8 @@ def cmd_launch(args) -> tuple[dict, int]:
                              "`logs/` as it is" if written else
                              "it holds a changed file outside `logs/` and leaves `logs/` as it is")}, 2
     try:
-        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args)
+        long_run = {"long_run": args.long_run} if args.long_run else {}
+        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args, **long_run)
     except OSError as exc:
         return {"refused": "not_recorded", "id": snap.id, "pid": proc.pid, "created": proc.created,
                 "detail": f"the game started (pid {proc.pid}) but its start could not be recorded: {exc}. It "
@@ -504,15 +505,39 @@ def _check_arguments(game_args: list[str]) -> None:
             raise _Refused("bad_argument", f"the game argument {arg!r} has a control character in it")
 
 
-def _check_end_date(game_args: list[str]) -> None:
-    """Raise _Refused for an unattended run without an end date: one runs on and writes autosaves over the
-    owner's (spec § 5.3). `handsoff` is found in any spelling (without its leading `-` or `/`, in any case,
-    before any `=`, also as a word of an argument with spaces in it); it needs an argument that is exactly
-    `-run_until=<y.m.d>`, the only spelling probed against the game."""
+def _check_end_date(game_args: list[str], long_run: str | None = None) -> None:
+    """Raise _Refused for an unattended run without an end date it will keep: one runs on and writes autosaves
+    over the owner's (spec § 5.3). `handsoff` is found in any spelling (without its leading `-` or `/`, in any case,
+    before any `=`, also as a word of an argument with spaces in it); it needs exactly one `run_until` in any
+    spelling, and that one exactly `-run_until=<y.m.d>`, the only spelling probed against the game, naming a day of
+    the game's calendar after its start (no 29 February: a date the game cannot read may be no end at all).
+
+    An end date past `fixture.SHORT_RUN_LAST` is a long run (#1602): it writes the owner's quarterly autosaves
+    and may take hours, so it needs `long_run`, the owner's own grant of it in their words (`--long-run`),
+    which the journal's `started` keeps (`no_long_run_grant`)."""
     names = [word.lstrip("-/").lower().partition("=")[0] for arg in game_args for word in arg.split()]
-    if "handsoff" in names and not any(_END_DATE_ARG.fullmatch(arg) for arg in game_args):
+    if "handsoff" not in names:
+        return
+    ends = [word for arg in game_args for word in arg.split() if word.lstrip("-/").lower().partition("=")[0] == "run_until"]
+    whole = [arg for arg in game_args if _END_DATE_ARG.fullmatch(arg)]
+    if not whole:
         raise _Refused("no_end_date", "an unattended run (-handsoff) must carry -run_until=<year.month.day>, such "
                                       "as -run_until=1836.2.10: without one it runs on and writes autosaves")
+    if len(ends) != 1:
+        raise _Refused("no_end_date", f"an unattended run carries one -run_until, not {len(ends)} "
+                                      f"({', '.join(ends)}): which one the game keeps is not known")
+    try:
+        end = fixture.check_date(tuple(int(part) for part in whole[0].partition("=")[2].split(".")))
+    except ValueError as exc:
+        raise _Refused("no_end_date", f"{whole[0]} names no day of the game's calendar ({exc}): the game may read "
+                                      "it as no end at all") from None
+    if fixture.day_number(end) <= fixture.day_number(fixture.START_DATE):
+        raise _Refused("no_end_date", f"{whole[0]} is not after the game's start, {fixture.dotted(fixture.START_DATE)}"
+                                      ": what an unattended run does with an end already past is not known")
+    if fixture.day_number(end) > fixture.day_number(fixture.SHORT_RUN_LAST) and not (long_run or "").strip():
+        raise _Refused("no_long_run_grant", f"{whole[0]} runs past {fixture.dotted(fixture.SHORT_RUN_LAST)}: the "
+                                            "run writes the owner's quarterly autosaves and may take hours, so it "
+                                            "needs --long-run with the owner's own grant of it, in their words")
 
 
 def _check_unchanged(snap: snapshot.Snapshot, user: Path) -> None:
@@ -1307,6 +1332,9 @@ def main(argv=None) -> int:
                         "deployed folder (mod_deploy_target)")
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a mod folder to enable for the run as well, as Windows names it (repeatable)")
+    p.add_argument("--long-run", metavar="TEXT",
+                   help="the owner's grant of an unattended run past spring 1836 (-run_until after 1836.3.31), in "
+                        "their words; kept in the journal")
     p.set_defaults(run=cmd_launch)
 
     p = sub.add_parser("watch", help="follow the game `launch` started, recording that it is alive and its exit")
