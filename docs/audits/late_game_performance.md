@@ -70,7 +70,8 @@ The owner's save of 1 July 1931 (Singapore; copied as
 2 September at speed V through the harness, with the script debugger
 attached. The owner's own log runs on past it to 6 September 1931
 (`dedicated_server.1.log`), so those frames are a wall clock for the same
-dates: 1.9 s a game day over 3 July to 31 August, pauses included. It was the latest save that 1.15 could load: the 1940 and
+dates: 1.9 s a game day over 3 July to 31 August, with no pause in that
+span. It was the latest save that 1.15 could load: the 1940 and
 2020 saves are 1.14.5. The world held 250–299 countries, 200 or more of them
 UN members. Eras after 1931 (nuclear, space, warming at scale) are
 unmeasured.
@@ -238,7 +239,7 @@ construction-market recalc: about 9 s profiled.
 **Script per frame type** (flat dump, a dump after each step of one or two
 days, 4 August → 3 September): a step of ordinary days ran 0.83–1.6 s of script
 (summed over threads), mean 1.1 s a step; the 33-day windows, weekly days and a
-1st included, average 0.88–0.98 s a day. The one single weekly day ran 1.1 s,
+1st included, average 0.88–0.98 s a day. The one weekly day stepped alone ran 1.1 s,
 so the weekly frame's extra 2.1 s (2.85 s against 0.77 s in the owner's play;
 3.4 s in this session's own frames) is engine work, not script
 (`HandleAutonomousInvestment` 1.05 s, `UpdateCivilWars` 0.26 s, the economy
@@ -247,10 +248,10 @@ little else in the flat dump. Its journal entry pulses are effects
 (`MonthlyPulseJournalEntries`, 1.05 s in the tick tasks).
 
 **The weekly frame grew most.** Over the owner's own play of this game
-(rotated `dedicated_server` logs), five points a year apart put the weekly
-frame at 2.06 s (1916–17), 2.47 s (1922), 2.74 s (1927), 3.13 s (1930) and
-3.67 s (first half of 1931), though not steadily year by year (3.86 s in 1928,
-3.06 s in 1930). An ordinary hour 0 rose too, from 0.61–0.66 s in 1916–19 to
+(rotated `dedicated_server` logs), five year-long samples put the weekly
+frame at 2.06 s (1916–17), 2.47 s (1922), 2.74 s (1927), 3.06 s (1930) and
+3.67 s (first half of 1931), though not steadily year by year (3.86 s in
+1928). An ordinary hour 0 rose too, from 0.61–0.66 s in 1916–19 to
 0.83–1.00 s in 1923–28, and the sub-ticks from 0.11 s to 0.16–0.21 s. The 1st
 ranged from 3.4 to 5.5 s, autosave months included (the frame table's 3.8 s
 leaves them out).
@@ -503,7 +504,9 @@ Items 3 and 6 are addressed by #1713.
 11. **The colonial stability bar** (1.3 ms a read in 1931; 899 ms in 30 days
     in the call graph) evaluates its 22 terms three times per read: the
     bar's lines, then `drift_total` and `drift_uncapped` in the cap term,
-    which took 641 ms of a later run's 1,035 ms.
+    which took 641 ms of the bar's 1,035 ms in a later run (snapshot
+    `20261112T232122Z`, `callgraph/sr_colonial/pc_cb0.png`). #1726 (open)
+    makes the cap a clamp at the end of `monthly_progress`.
 12. **The other serial script** (call graph, 2 July → 1 August 1931; see
     "Which script holds up the day"), by size. The callees were opened in a
     second profiled run over the same dates (snapshot `20261112T215918Z`),
