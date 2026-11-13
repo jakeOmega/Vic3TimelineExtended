@@ -5709,7 +5709,14 @@ decolonization_events.75 = {
 		name = decolonization_events.75.a
 		trigger = { decol_iw_has_voting_law = no }
 		default_option = yes
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
+		}
 		decol_iw_open_all_talks = yes
 		custom_tooltip = {
 			text = decolonization_events.75.a_tt

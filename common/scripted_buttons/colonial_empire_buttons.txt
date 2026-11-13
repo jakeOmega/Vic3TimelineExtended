@@ -90,10 +90,10 @@ ce_planned_decolonization = {
 			add = 30
 		}
 		# A minor gives up its empire more readily, but only once something
-		# presses it. On its own this term was enough for the AI to press the
-		# button: Bornu (1933) liquidated a fresh entry within days at a bar of
-		# 50, and Egypt (1934) did the same (#1735; scripting_best_practices.md,
-		# "ai_chance Flavour Terms on a Base of 0 Are Not Flavour").
+		# presses it. On its own this term gave the button a weight: Bornu
+		# (1933) and Egypt (1934) each pressed it within days of a fresh entry,
+		# at a bar of 50 (#1735; scripting_best_practices.md, "ai_chance
+		# Flavour Terms on a Base of 0 Are Not Flavour").
 		if = {
 			limit = {
 				NOT = { country_rank >= rank_value:great_power }

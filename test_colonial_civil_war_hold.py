@@ -4,8 +4,8 @@ In a 1931–1939 game, Bornu's uprising cut two of its Sahel states off from its
 capital, the colony test read them as overseas colonies, the re-entry pass added
 `je_colonial_empire`, and twelve seconds later the AI pressed Planned Full
 Decolonization and released both. Egypt released Palestine the same way a year
-later, with no civil war: the button gave every minor +30 whatever its state
-(whether Egypt was under pressure as well, for another 30, no save shows).
+later, with no civil war. The button gave every minor +30 whatever its state;
+whether either was under pressure as well, for another 30, no save shows.
 This test pins the four changes:
 
 1. `ce_reentry_due` is false while the country fights a civil war of its own
@@ -17,6 +17,9 @@ This test pins the four changes:
 3. So does every release option of decolonization_events .1, .3, .9 and .13, and
    each of those events keeps an option the AI can still take.
 4. Planned Decolonization's minor term counts only beside a reason to press it.
+
+The civil-war reading has no in-game verdict yet, so two self-checks compare it
+with the civil-war layer's own pointer; the last tests hold their wiring.
 """
 import re
 import unittest
@@ -65,12 +68,14 @@ TRIGGERS = _read("common", "scripted_triggers", "colonial_empire_triggers.txt")
 BUTTONS = _read("common", "scripted_buttons", "colonial_empire_buttons.txt")
 EVENTS = _read("events", "decolonization_events.txt")
 HOLD = "colonial_ai_holds_colonies_in_civil_war = yes"
-RELEASES = ("form_decolonized_country = yes", "make_independent = yes", "decol_record_chosen_release = yes")
+RELEASES = ("form_decolonized_country = yes", "make_independent = yes", "decol_record_chosen_release = yes",
+            "decol_iw_release_all_territories = yes", "decol_chosen_release_rewards = {", "decol_iw_fight = yes")
 # Release options the hold does not read: the buttons' confirmations (the
 # button's weight already did), the player's widget, and the declaration of
-# independence, which comes only below a bar of 40.
+# independence (.70 and .13.e), which comes only below a bar of 40.
 NOT_A_CHOICE = {"decolonization_events.%s" % n for n in
-                ("400.a", "400.b", "400.c", "401.a", "402.a", "402.b", "403.a", "403.b", "70.a", "70.b")}
+                ("400.a", "400.b", "400.c", "401.a", "402.a", "402.b", "403.a", "403.b",
+                 "70.a", "70.b", "70.c", "13.e")}
 
 
 class CivilWarTriggerTests(unittest.TestCase):
@@ -134,14 +139,15 @@ class EventOptionTests(unittest.TestCase):
                     continue
                 seen.add(name)
                 chance = _norm(_block(option, "ai_chance"))
-                self.assertIn("modifier = { trigger = { %s } factor = 0 }" % HOLD, chance, name)
-        for name in ("1.c", "1.d_neo", "3.a", "3.c", "9.c", "9.e", "13.a", "13.c"):
+                # Last, so no modifier after it can lift the zero.
+                self.assertTrue(chance.endswith("modifier = { trigger = { %s } factor = 0 }" % HOLD), name)
+        for name in ("1.c", "1.d_neo", "3.a", "3.c", "9.c", "9.e", "13.a", "13.c", "75.a"):
             self.assertIn("decolonization_events." + name, seen)
 
     def test_each_event_keeps_an_option_the_ai_can_take(self):
         events = dict(self._events())
         for event in ("decolonization_events.1", "decolonization_events.3",
-                      "decolonization_events.9", "decolonization_events.13"):
+                      "decolonization_events.9", "decolonization_events.13", "decolonization_events.75"):
             open_options = []
             for name, option in _options(events[event]):
                 if HOLD in _norm(option):
@@ -157,6 +163,32 @@ class EventOptionTests(unittest.TestCase):
                 if base and int(base.group(1)) > 0:
                     open_options.append(name)
             self.assertTrue(open_options, event)
+
+
+class SelfCheckTests(unittest.TestCase):
+    """The civil-war reading is unverified in game: two self-checks compare it with the layer's pointer."""
+
+    def test_the_monthly_pass_runs_them_after_reentry(self):
+        on_action = _norm(_block(_read("common", "on_actions", "colonial_geography_on_actions.txt"),
+                                 "colonial_geography_on_action"))
+        self.assertIn("ce_reentry_monthly = yes colonial_civil_war_selfcheck = yes", on_action)
+
+    def test_each_check_logs_both_verdicts_and_reads_the_trigger(self):
+        effect = _block(_read("common", "scripted_effects", "decolonization.txt"), "colonial_civil_war_selfcheck")
+        raw = (ROOT / "common" / "scripted_effects" / "decolonization.txt").read_text(encoding="utf-8-sig")
+        for name in ("ce_civil_war_read", "ce_civil_war_over"):
+            for verdict in ("OK", "BROKEN"):
+                self.assertIn("TE_SELF_CHECK %s %s " % (verdict, name), raw)
+        norm = _norm(effect)
+        self.assertIn("var:te_cw_origin = { colonial_in_own_civil_war = yes }", norm)
+        self.assertIn("scope:ce_cwsc_left = { colonial_in_own_civil_war = no }", norm)
+        # A government that beat its rebels can hold the pointer naming itself.
+        self.assertIn("NOT = { var:te_cw_origin ?= scope:ce_cwsc_self }", norm)
+
+    def test_the_play_test_list_names_them(self):
+        text = (ROOT / "docs" / "testing" / "colonial-holdings-playtest.md").read_text(encoding="utf-8")
+        for name in ("ce_civil_war_read", "ce_civil_war_over"):
+            self.assertIn("`%s`" % name, text)
 
 
 if __name__ == "__main__":
