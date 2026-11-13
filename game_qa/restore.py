@@ -125,13 +125,15 @@ def _is_pushed_in(name: str) -> bool:
     return folder != "save games" or bool(_ROTATION_NAME.match(base))
 
 
-def _is_manual_save(rel: str, snap: Snapshot) -> bool:
+def _is_manual_save(rel: str, taken: frozenset[str]) -> bool:
     """Whether `rel` is one of the owner's own saves for the check of `_manual_saves`: a `.v3` file (the ending in any
     case) directly in `save games/` that is not in the manifest's files (the set and a `--save`, which are compared
-    by their hash and put back), matches none of SNAPSHOT_SET's patterns (the autosaves, OneDrive's conflict copies
-    of them among them) and is not the harness's (`_HARNESS_SAVE_PREFIXES`). Restore's temps end in `.tmp`."""
+    by their hash and put back; `taken` is their names casefolded, since the owner's drive is not case-sensitive and
+    a `--save` typed in other letters names the same file as the listing does), matches none of SNAPSHOT_SET's
+    patterns (the autosaves, OneDrive's conflict copies of them among them) and is not the harness's
+    (`_HARNESS_SAVE_PREFIXES`). Restore's temps end in `.tmp`."""
     folder, _, base = rel.rpartition("/")
-    return (folder == snapshot.SAVE_FOLDER and base.lower().endswith(".v3") and rel not in snap.files
+    return (folder == snapshot.SAVE_FOLDER and base.lower().endswith(".v3") and rel.casefold() not in taken
             and not _matches(rel, snapshot.SNAPSHOT_SET) and not base.startswith(_HARNESS_SAVE_PREFIXES))
 
 
@@ -148,9 +150,10 @@ def _manual_saves(snap: Snapshot, user_data: Path) -> dict:
     WSL's clock steps nor the whole seconds of a time set from WSL come in (nothing here sets a save's time). A
     save rewritten with the same size and the same time is not seen. Raises as `os.scandir` does, except for a
     missing folder, which reads as empty (every listed save then `missing`)."""
+    taken = frozenset(name.casefold() for name in snap.files)
     live = {rel: (st.st_size, st.st_mtime_ns)
-            for rel, st in snapshot._scan_folder(user_data, snapshot.SAVE_FOLDER).items() if _is_manual_save(rel, snap)}
-    listed = sorted(rel for rel in snap.listing if _is_manual_save(rel, snap))
+            for rel, st in snapshot._scan_folder(user_data, snapshot.SAVE_FOLDER).items() if _is_manual_save(rel, taken)}
+    listed = sorted(rel for rel in snap.listing if _is_manual_save(rel, taken))
     stats = snap.save_stats
     found = {
         "changed": [rel for rel in listed if stats is not None and rel in live and live[rel] != stats.get(rel)],

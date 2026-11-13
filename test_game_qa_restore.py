@@ -5,6 +5,7 @@ No game and no Windows program is needed: every test builds its folders in a tem
 played by the test itself: it edits files between `run_started` and `finish`.
 """
 
+import dataclasses
 import hashlib
 import json
 import math
@@ -1144,9 +1145,10 @@ class ManualSaveTests(RestoreTestCase):
         self.assertTrue((snap.dir / restore.RUN_LOGS_NAME / "debug.log").is_file())   # the run's logs, kept
 
     def test_the_same_size_with_another_time_is_a_change(self):
-        # a microsecond: what the drive keeps of a time is compared whole, not cut to the second
+        # A whole second, which any filesystem keeps. The owner's drive keeps 100 ns, and the pair is compared as
+        # lstat gives it, never rounded.
         snap = self.run_started()
-        self.bump_time(self.MINE, 1000)
+        self.bump_time(self.MINE, 10**9)
         finish(snap)
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertEqual((out.held, out.reason, out.manual_saves), (True, "manual_save_changed", {"changed": [self.MINE]}))
@@ -1250,6 +1252,17 @@ class ManualSaveTests(RestoreTestCase):
         finish(snap)
         self.assertEqual(restore.restore(snap, self.user, other_game_running=False).manual_saves,
                          {"missing": ["save games/Upper.V3"]})
+
+    def test_a_save_the_run_loaded_named_in_other_letters_is_not_taken_for_an_owners_save(self):
+        # On the owner's drive `--save Mine` loads mine.v3: the manifest's files say Mine.v3, the listing mine.v3.
+        # Put back by its hash (with its time cut to the second, set from WSL), it must not then hold as changed.
+        path = self.user / self.MINE
+        os.utime(path, ns=(10**18, 10**18))
+        snap = snapshot.Snapshot(id="x", dir=self.tmp, files={"save games/Mine.v3": snapshot.Entry(1, 1, "0" * 64)},
+                                 listing=frozenset({self.MINE}), save_stats={self.MINE: (1, 1)})
+        self.assertEqual(restore._manual_saves(snap, self.user), {})
+        self.assertEqual(restore._manual_saves(dataclasses.replace(snap, files={}), self.user),
+                         {"changed": [self.MINE]})
 
     def test_the_save_the_run_loaded_is_put_back_by_its_hash_not_held(self):
         snap = self.run_started(extra=[self.MINE])

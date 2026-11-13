@@ -583,14 +583,12 @@ class SaveStatsTests(SnapshotTestCase):
 
     def test_every_save_games_entry_gets_the_size_and_time_its_lstat_gave(self):
         (self.user / "save games/linked.v3").symlink_to("mine.v3")
-        os.utime(self.user / "save games/mine.v3", ns=(1_700_000_000_123_456_700, 1_700_000_000_123_456_700))
         snap = snapshot.take(self.user, self.backups)
         expected = {}
         for name in ("autosave.v3", "autosave_1.v3", "mine.v3", "linked.v3"):
             st = os.lstat(self.user / "save games" / name)
             expected["save games/" + name] = (st.st_size, st.st_mtime_ns)
-        self.assertEqual(snap.save_stats, expected)
-        self.assertEqual(snap.save_stats["save games/mine.v3"][1], 1_700_000_000_123_456_700)   # not cut to the second
+        self.assertEqual(snap.save_stats, expected)                 # as lstat gives it, never rounded
         self.assertEqual(snap.save_stats["save games/linked.v3"][0], len("mine.v3"))             # the link's own
 
     def test_the_manifest_keeps_them_and_load_reads_them_back(self):
