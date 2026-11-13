@@ -20,6 +20,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import parse_reviewed, write_text
+
 
 @dataclass
 class VisibilityFlag:
@@ -31,11 +34,11 @@ class VisibilityFlag:
     decimals: int
     percent: bool
     min_visible: float  # smallest |value| that renders non-zero
-    exemption: dict | None = None  # {date, rationale} when REVIEWED
+    exemption: dict | None = None  # {date, tag, rationale} when REVIEWED
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[VisibilityFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
@@ -60,20 +63,6 @@ _LINE_RE = re.compile(
 _SCALING_WRAPPER_RE = re.compile(
     r"(?P<key>workforce_scaled|level_scaled|throughput_scaled)\s*=\s*\{"
 )
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-
 
 def _min_visible_abs(decimals: int, percent: bool) -> float:
     """Smallest |value| that displays as non-zero given decimals + percent.
@@ -189,7 +178,7 @@ def _scan_file(file_path: str, rel_path: str, registry: dict[str, tuple[int, boo
                             decimals=decimals,
                             percent=percent,
                             min_visible=min_visible,
-                            exemption=_parse_reviewed(m.group("comment")),
+                            exemption=parse_reviewed(m.group("comment")),
                         ))
 
         depth = new_depth
@@ -290,8 +279,8 @@ def _format_intended(flag: VisibilityFlag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Modifier visibility audit report",
@@ -387,12 +376,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "modifier_visibility_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "modifier_visibility_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.coverage.get("files_audited", 0),
         "modifiers_in_registry_with_decimals": result.coverage.get(
