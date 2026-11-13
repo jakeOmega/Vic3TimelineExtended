@@ -334,7 +334,10 @@ def cmd_snapshot(args) -> tuple[dict, int]:
     if left is not None:
         return _playset_not_restored(left.id, "a snapshot now would record it as the owner's").result, 2
     extra = ["save games/" + (name if name.endswith(".v3") else name + ".v3") for name in args.save]
-    snap = snapshot.take(user, backups, extra=extra)
+    try:
+        snap = snapshot.take(user, backups, extra=extra)
+    except snapshot.SaveNotListed as exc:       # a name the drive answers to but does not list (an 8.3 name)
+        return {"refused": "bad_argument", "detail": str(exc)}, 2
     snapshot.record(snap, "armed")
     pruned = restore.prune(backups, keep=KEEP_SNAPSHOTS, current=snap.id)
     return {"id": snap.id, "files": len(snap.files), "pruned": pruned,

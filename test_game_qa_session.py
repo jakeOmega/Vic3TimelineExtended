@@ -706,6 +706,21 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.cli.verbs, [])
         self.assertFalse(self.paths.overlay_dir.exists())
 
+    def test_a_save_named_by_a_name_the_folder_does_not_list_is_refused_before_anything(self):
+        # #1725: the owner's drive answers to short 8.3 names (`FRENCH~1`) that it does not list; a hard link plays
+        # one here, left out of the scan as the drive leaves it out of the listing.
+        long_name = self.user / "save games" / "french republic_1867_08_16.v3"
+        long_name.write_bytes(b"a long-named save")
+        os.link(long_name, self.user / "save games" / "FRENCH~1.v3")
+        real = snapshot._scan_folder
+        with mock.patch.object(snapshot, "_scan_folder",
+                               lambda user_data, folder: {r: s for r, s in real(user_data, folder).items() if "~" not in r}):
+            error = self.session_error(self.start, save="FRENCH~1")
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("same file as 'french republic_1867_08_16.v3'", error.detail)
+        self.assertEqual(self.cli.verbs, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
     def test_start_refuses_while_a_snapshot_is_held(self):
         self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
         error = self.session_error(self.start)

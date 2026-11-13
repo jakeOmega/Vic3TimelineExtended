@@ -62,6 +62,10 @@ _CHUNK = 1024 * 1024
 _READ_ATTEMPTS = 3
 
 
+class SaveNotListed(ValueError):
+    """A save named for a run (`extra`) that `save games/` does not list under that name (`unlisted_save`)."""
+
+
 class BackupRootError(Exception):
     """The backup folder cannot be used: its parent is missing, it is not a folder, it lies
     inside the user-data folder, or the drive is too full."""
@@ -136,6 +140,34 @@ def _scan_folder(user_data: Path, folder: str) -> dict[str, os.stat_result]:
             except FileNotFoundError:  # gone between the listing and the stat
                 continue
     return found
+
+
+def unlisted_save(user_data: Path, rel: str, scan: dict[str, os.stat_result] | None = None) -> str | None:
+    """Why `rel`, a save directly in `save games/` that a run will load, may not be named so; None if it may.
+
+    It may when the folder lists an entry of that name, compared with str.lower(): the owner's drive matches names
+    in any letter case, so `--save Mine` is mine.v3. The drive also answers to names it does not list, such as a
+    short 8.3 name (`FRENCH~1.V3` for `french republic_1867_08_16.v3`). Such a save would be the run's under one
+    name and an owner's save in the listing under the other, so `restore` would compare it twice: by its hash, and
+    by a size and time that its own put-back (a time set from WSL keeps whole seconds) would then never match. It is
+    refused, naming the listed entry that is the same file (the same device and inode) when there is one. `scan` is
+    `_scan_folder(user_data, SAVE_FOLDER)` when the caller has it. A path not directly in `save games/` is not
+    judged here."""
+    folder, _, name = rel.rpartition("/")
+    if folder != SAVE_FOLDER:
+        return None
+    scan = _scan_folder(user_data, SAVE_FOLDER) if scan is None else scan
+    if name.lower() in {listed.rpartition("/")[2].lower() for listed in scan}:
+        return None
+    why = (f"{rel!r} is not a name {SAVE_FOLDER}/ lists (the drive also answers to names it does not list, such as "
+           "a short 8.3 name): name the save as the folder lists it")
+    try:
+        target = os.lstat(user_data / rel)
+    except OSError:
+        return why
+    same = sorted(listed.rpartition("/")[2] for listed, st in scan.items()
+                  if target.st_ino and (st.st_dev, st.st_ino) == (target.st_dev, target.st_ino))
+    return why + (f": it is the same file as {same[0]!r}" if same else "")
 
 
 def _check_backup_root(user_data: Path, backup_root: Path) -> None:
@@ -241,7 +273,8 @@ def take(
     """Snapshot the files of SNAPSHOT_SET plus `extra` (user-data-relative saves the run will load).
 
     Raises FileNotFoundError if `user_data` or an `extra` file is missing, ValueError if an `extra`
-    path leaves `user_data`, and BackupRootError if the backup folder cannot be used. Every
+    path leaves `user_data`, SaveNotListed (a ValueError) if an `extra` save is not a name `save games/`
+    lists (`unlisted_save`), and BackupRootError if the backup folder cannot be used. Every
     refusal comes before anything is written.
 
     Only regular files are copied. `listing` also names symlinks and other non-directories. `save_stats` gives
@@ -274,6 +307,9 @@ def take(
         target = user_data / rel
         if not target.is_file():
             raise FileNotFoundError(f"cannot snapshot {rel!r}: not a file in {user_data}")
+        problem = unlisted_save(user_data, rel, scans[SAVE_FOLDER])
+        if problem is not None:
+            raise SaveNotListed(f"cannot snapshot {problem}")
         wanted[rel] = target.stat()
     listing = frozenset(rel for found in scans.values() for rel in found)
     save_stats = {rel: (st.st_size, st.st_mtime_ns) for rel, st in scans[SAVE_FOLDER].items()}

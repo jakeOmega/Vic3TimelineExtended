@@ -659,5 +659,54 @@ class SaveStatsTests(SnapshotTestCase):
         self.assertIsNone(snap.save_stats)
 
 
+class UnlistedSaveTests(SnapshotTestCase):
+    """#1725: a save for the run is named as `save games/` lists it, in any letter case. The owner's drive also
+    answers to short 8.3 names it does not list (`FRENCH~1.V3`); here a hard link plays that name, and the scan is
+    made to leave it out, as the drive's listing does."""
+
+    LONG = "french republic_1867_08_16.v3"
+    SHORT = "FRENCH~1.V3"
+
+    def setUp(self):
+        super().setUp()
+        (self.user / "save games" / self.LONG).write_bytes(b"a long-named save")
+        os.link(self.user / "save games" / self.LONG, self.user / "save games" / self.SHORT)
+        real = snapshot._scan_folder
+
+        def scan(user_data, folder):
+            return {rel: st for rel, st in real(user_data, folder).items() if "~" not in rel}
+        patcher = mock.patch.object(snapshot, "_scan_folder", scan)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_a_short_name_is_refused_naming_the_listed_one_and_nothing_is_written(self):
+        with self.assertRaises(snapshot.SaveNotListed) as caught:
+            snapshot.take(self.user, self.backups, extra=["save games/" + self.SHORT])
+        self.assertIsInstance(caught.exception, ValueError)
+        self.assertIn(repr(self.LONG), str(caught.exception))
+        self.assertFalse(self.backups.exists())
+
+    def test_the_listed_name_in_any_letter_case_is_taken(self):
+        for name in (self.LONG, self.LONG.upper(), "save games/mine.v3"):
+            with self.subTest(name=name):
+                rel = name if "/" in name else "save games/" + name
+                self.assertIsNone(snapshot.unlisted_save(self.user, rel))
+        snapshot.take(self.user, self.backups, extra=["save games/" + self.LONG])
+
+    def test_a_name_that_is_no_listed_file_says_so_without_naming_one(self):
+        (self.user / "save games/sub").mkdir()
+        (self.user / "save games/sub/x.v3").write_bytes(b"x")
+        os.link(self.user / "save games/mine.v3", self.user / "save games/MINE~1.V3")
+        problem = snapshot.unlisted_save(self.user, "save games/MINE~1.V3")
+        self.assertIn("same file as 'mine.v3'", problem)
+        os.unlink(self.user / "save games/MINE~1.V3")
+        (self.user / "save games/LOOSE~1.V3").write_bytes(b"listed by nothing, linked to nothing")
+        problem = snapshot.unlisted_save(self.user, "save games/LOOSE~1.V3")
+        self.assertIn("is not a name save games/ lists", problem)
+        self.assertNotIn("same file", problem)
+        self.assertIsNone(snapshot.unlisted_save(self.user, "save games/sub/x.v3"))     # not directly in it
+        self.assertIsNone(snapshot.unlisted_save(self.user, "continue_game.json"))
+
+
 if __name__ == "__main__":
     unittest.main()

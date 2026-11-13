@@ -940,6 +940,21 @@ class CommandLineTest(unittest.TestCase):
                 self.assertNotIn("manual_saves", reply)
                 (self.user / "save games/the_owners_new.v3").unlink()
 
+    def test_snapshot_refuses_a_save_named_by_a_name_the_folder_does_not_list(self):
+        # An 8.3 name (`FRENCH~1`) the drive answers to but does not list; a hard link plays it, hidden from the scan.
+        long_name = self.user / "save games" / "french republic_1867_08_16.v3"
+        long_name.write_bytes(b"a long-named save")
+        os.link(long_name, self.user / "save games" / "FRENCH~1.v3")
+        real = snapshot._scan_folder
+        with mock.patch.object(snapshot, "_scan_folder",
+                               lambda user_data, folder: {r: s for r, s in real(user_data, folder).items() if "~" not in r}):
+            out, code = self.run_cli("snapshot", "--save", "FRENCH~1")
+            self.assertEqual((code, out["refused"]), (2, "bad_argument"))
+            self.assertIn("same file as 'french republic_1867_08_16.v3'", out["detail"])
+            self.assertEqual(snapshot.all_snapshots(self.backups), [])
+            out, code = self.run_cli("snapshot", "--save", "french republic_1867_08_16")     # the listed name
+            self.assertEqual(code, 0, out)
+
     def test_selftest_restore_is_not_held_by_the_owners_saves(self):
         # It restores into an empty scratch folder, where every save of the owner's would read as gone.
         self.assertNotIn("save games/new york_1940_07_29.v3", snapshot.take(self.user, self.backups).files)

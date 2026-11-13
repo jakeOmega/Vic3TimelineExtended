@@ -487,13 +487,17 @@ class Session:
         self._record("held", outcome="none")
 
     def _check_save(self, save: str) -> str:
-        """The save's name as `-loadsave` takes it (no `.v3`), once it is known to be in `save games/`."""
+        """The save's name as `-loadsave` takes it (no `.v3`), once it is known to be in `save games/` under a name
+        the folder lists (`snapshot.unlisted_save`, which `snapshot --save` applies too)."""
         name = save[:-3] if isinstance(save, str) and save.endswith(".v3") else save
         if (not isinstance(name, str) or not name.strip() or name != Path(name).name or name.startswith("-")
                 or not name.isprintable()):
             raise SessionError("bad_argument", "a save is a file name in save games/, not %r" % (save,))
         if not (Path(self._paths.user_data) / fixture.SAVE_FOLDER / (name + ".v3")).is_file():
             raise SessionError("no_save", "there is no save games/%s.v3" % name)
+        problem = snapshot.unlisted_save(Path(self._paths.user_data), "%s/%s.v3" % (fixture.SAVE_FOLDER, name))
+        if problem is not None:                 # as `snapshot --save` refuses it: a short 8.3 name, say
+            raise SessionError("bad_argument", problem)
         return name
 
     def _rule_table(self) -> dict[str, dict]:
