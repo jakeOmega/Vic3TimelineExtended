@@ -36,7 +36,7 @@ class TechnologiesEraTests(unittest.TestCase):
         return self.handler.get_result(path)
 
     def test_an_era_number_or_the_listing_key_picks_one_era(self):
-        for path in ("/technologies?era=2", "/technologies?era=era_2"):
+        for path in ("/technologies?era=2", "/technologies?era=era_2", "/technologies?era=era_02"):
             with self.subTest(path=path):
                 body, status = self.get(path)
                 self.assertEqual(status, 200)
@@ -48,7 +48,8 @@ class TechnologiesEraTests(unittest.TestCase):
         self.assertEqual((status, sorted(body)), (200, ["era_1", "era_2"]))
 
     def test_a_bad_era_is_a_400_not_a_500(self):
-        for value in ("era_x", "first", "-1"):
+        # Non-ASCII digits pass str.isdigit(); `²` then fails int() (a 500).
+        for value in ("era_x", "first", "-1", "era_", "\u00b2", "era_\u00b2", "\u0663"):
             with self.subTest(era=value):
                 body, status = self.get(f"/technologies?era={value}")
                 self.assertEqual(status, 400)

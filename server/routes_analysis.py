@@ -803,6 +803,7 @@ def _summarize_balance_option(opt):
     return {
         "name_key": opt.get("name_key"),
         "name": opt.get("name"),
+        **({"name_variants": opt["name_variants"]} if opt.get("name_variants") else {}),
         "default_option": opt.get("default_option"),
         "polarity_totals": opt.get("polarity_totals"),
         "modifiers": [
@@ -1012,6 +1013,8 @@ def _render_event_balance_text(events, missing=None):
             ai = f" ai_base={opt['ai_chance_base']}" if opt.get("ai_chance_base") is not None else ""
             label = opt.get("name") or opt.get("name_key") or f"option {i+1}"
             lines.append(f"\n  Option {i+1}: {label}{tag}{ai}")
+            for variant in (opt.get("name_variants") or [])[1:]:
+                lines.append(f"    or, by its trigger: {variant.get('name') or variant.get('key')}")
             totals = opt.get("polarity_totals", {})
             lines.append(
                 "    polarity: "
@@ -1584,7 +1587,8 @@ class AnalysisRoutes:
     def _format_option_balance(self, eid, opt):
         srv = server_state()
         opt_data = srv._flatten_entity_data(opt) if not isinstance(opt, dict) else opt
-        name_keys = _option_name_keys(srv.get_field(opt_data, "name"))
+        raw_name = srv.get_field(opt_data, "name")
+        name_keys = _option_name_keys(raw_name)
         name_key = name_keys[0] if name_keys else None
         default_opt = srv.get_field(opt_data, "default_option")
         ai_chance_block = srv.get_field(opt_data, "ai_chance")
@@ -1604,10 +1608,10 @@ class AnalysisRoutes:
             "effects": effects,
             "polarity_totals": polarity_totals,
         }
-        if len(name_keys) > 1:
+        if name_keys and not isinstance(raw_name, str):
             # Triggered names (`name = { trigger = {...} text = KEY }`, once
             # per case; the first whose trigger holds is shown): every case,
-            # in source order. `name_key` is the first.
+            # in source order, even a single one. `name_key` is the first.
             out["name_variants"] = [{"key": k, "name": srv.ms.localize(k)} for k in name_keys]
         return out
 

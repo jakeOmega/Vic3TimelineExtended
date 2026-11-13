@@ -453,6 +453,18 @@ class FormatOptionBalanceNameTests(unittest.TestCase):
         out = srv.ModStateHandler._format_option_balance(object(), "e.1", {})
         self.assertEqual((out["name_key"], out["name"]), (None, None))
 
+    def test_one_triggered_name_still_says_it_is_triggered(self):
+        out = self.format(_eq({"trigger": _eq({"always": _eq("yes")}), "text": _eq("e.1.a")}))
+        self.assertEqual(out["name_variants"], [{"key": "e.1.a", "name": "Refuse"}])
+
+    def test_the_summary_and_the_text_carry_every_case(self):
+        opt = self.format(_triggered("e.1.a_target", "e.1.a"))
+        self.assertEqual(srv._summarize_balance_option(opt)["name_variants"], opt["name_variants"])
+        self.assertNotIn("name_variants", srv._summarize_balance_option(self.format(_eq("e.1.a"))))
+        text = srv._render_event_balance_text([{"id": "e.1", "name": "E", "options": [opt]}])
+        self.assertIn("Option 1: Refuse, as the target", text)
+        self.assertIn("or, by its trigger: Refuse", text)
+
 
 # ---------------------------------------------------------------------------
 # _extract_event_ids_from_file
