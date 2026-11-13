@@ -188,9 +188,12 @@ Construction Site takes the Construction Sector's place. The government builds,
 expands and downsizes Construction Sites like any government building, and each
 level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
-point your queues spend. Construction Sites are built from the state view.
+point your queues spend. Construction Sites are built from the Development tab
+of the production lens or from the state view.
 Every country also gets Base Construction, 5 points a week, so a country without
-any sites can still build its first one. The construction panel
+any sites can still build its first one. If you change the rule in a running
+game, your Construction Sectors become Construction Sites of the same level
+within a day, and the other way when you switch it back. The construction panel
 shows a Direct Construction section with your construction per week and the
 private share, which the economic-system law sets: 25% under Traditionalism, 50%
 under Interventionism, Agrarianism, Extraction Economy and Industry Banned, 75%
