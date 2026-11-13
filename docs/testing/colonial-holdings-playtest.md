@@ -254,3 +254,35 @@ The entry's endings are nine outcomes, one each, so the journal panel lists them
 | **The hover in a capped month.** A country whose drift is past the cap (the overview's "Why Stability Is Moving" shows a Monthly limit row): hover the stability bar on the overview. | The 22 terms, then "Monthly limit" taking off the excess, and a total equal to the "(±1.50/mo)" beside the bar. | "Monthly limit" reads 0 while the terms sum past the cap: the saved sum isn't read in a progress bar (look for `colonial_drift_sum` in `error.log`). The bar still moves by the cap, through the block-level clamp; to get the hover back, restore the old leaf (`git log -S colonial_stability_term_cap`). |
 | **A capped month moves the bar by the cap.** A country whose uncapped drift is 3 or more either way. The overview prints whole percents, so read the value on a 1st and two months later. | It moved by 3 points, the cap twice. | It moved by more: neither the cap line nor the clamp applied. |
 | **An uncapped month is untouched.** A country whose drift is inside the cap. | The hover's Monthly limit reads 0 and the bar moves by the headline figure, as before. | Any other figure: compare with the overview's breakdown. |
+
+## A civil war of its own, and the minor's Planned Decolonization (2026-11-13, #1735)
+
+In the 2026-11-12 game (1.15.1, 1929–1939) the re-entry pass gave Bornu the entry during its civil war (1933.8.6): the
+uprising had cut Timbuktu and Inner Mauritania off from the capital, so both read as colonies. Twelve seconds of play
+later the AI pressed Planned Full Decolonization and released both, at a bar of 50. Egypt released Palestine the same
+way (1934.8.29) with no civil war: the button gave every minor +30 whatever its state (whether either was under
+pressure as well, for another 30, no save shows). Now the pass waits out a
+civil war of the country's own (`colonial_in_own_civil_war`, last in `ce_reentry_due`; a colony's secession, recorded
+as a war of independence, doesn't count), no AI lets a colony go during one while its entry runs with its bar at 40 or
+more (the three release buttons and the release options of `.1`, `.3`, `.9`, `.13` and
+`.75`; `colonial_ai_holds_colonies_in_civil_war`), and the minor's +30 needs three condemners, three badly unaccepted
+colonies or a bar below 40. `test_colonial_civil_war_hold.py` holds the script offline. Search `debug.log` for
+`DECOL_DEBUG` and `TE_CE_REENTRY`.
+
+`colonial_in_own_civil_war` reads a civil war from the rebel country (`civil_war_origin_country` and
+`is_revolutionary` / `is_secessionist`, as `nd_in_civil_war` does); no launch has shown that reading. Two once-a-game
+self-checks compare it with the civil-war layer's own pointer, `te_cw_origin` (`colonial_civil_war_selfcheck`,
+`decolonization.txt`, on every country's monthly pass).
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `ce_civil_war_read` | On a live rebel (the layer's `te_cw_origin` names a live country other than itself): the country it rose against reads a civil war of its own. OK when `colonial_in_own_civil_war` is true there. | `colonial_civil_war_selfcheck`, first branch | The hold and the re-entry wait never apply. First check the `TE_CIVIL_WAR` lines: a rebel whose pointer the layer moved to a revolution's winner (`te_civil_war_repoint_uprisings`) can read BROKEN with nothing wrong. Otherwise read the war from the layer: `var:te_cw_origin ?= scope:ce_cw_self` in place of `civil_war_origin_country` in `colonial_in_own_civil_war`. |
+| `ce_civil_war_over` | On a secession that won (a secessionist the month before, which the country it left then read as its civil war; alive; its `te_cw_origin` removed by the layer at the war's end): the country it left, with no other uprising against it, no longer reads a civil war. OK when `colonial_in_own_civil_war` is false there. | `colonial_civil_war_selfcheck`, second branch | The winner keeps `civil_war_origin_country` and a rebel flag, so the hold never lifts for the country it left. Same fallback: read the layer's pointer, which the layer removes at the war's end. |
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **No entry during a civil war.** An observer game to the 1930s, or a country whose revolution or secession cuts off a state while it holds no entry (`TE_CE_REENTRY` lines). | No `TE_CE_REENTRY: added` for a country while its rebels are in the field; within two months of the war's end, if it still holds a colony. | An add during the war: `colonial_in_own_civil_war` read false. Check in the save that the rebel country's `civil_war_origin_country` is the country (`nd_in_civil_war`, which reads it the same way, would be wrong too). |
+| **No release during a civil war.** An AI empire with its bar at 40 or more whose own civil war breaks out (console `start_civil_war` on a revolution's movement, or wait for one). | No `DECOL_DEBUG` button press and no release option taken while the war runs; the AI takes the events' other options. Below 40 it may still release. | A release: the hold reads false; check `decol_iw_bar_below_40` and the rebel country as above. |
+| **A minor keeps its colony without pressure.** An AI minor holding one colony with no condemners and a bar of 50 (Egypt with Palestine). | It keeps the colony for years, unless three great powers condemn it, three colonies are badly unaccepted or its bar falls below 40. | It still releases within months: another term or event carries it; read the `DECOL_DEBUG` lines for which. |
