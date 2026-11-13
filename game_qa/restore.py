@@ -300,7 +300,9 @@ def _not_the_runs(snap: Snapshot, user_data: Path, diff: Diff) -> list[str]:
     `autosave.v3` to `autosave_2.v3` and on) and is never one of these. Of the rest, after an unattended run from
     1836 (its `started` names a `-run_until` and no save to load): an autosave whose own `game_date` is readable and
     outside 1836.1.1 to that end, and an `autosave_exit.v3` that is not a plain-text save dated inside that span
-    (a run's game writes plain text, `SAV0100`; the owner's are binary). After any other run (a session, which
+    (a run's game writes plain text, `SAV0100`; the owner's autosaves are binary, `SAV0103`, though a game in
+    debug mode writes text, as some of their manual saves are, and such an autosave from another PC passes only
+    with a date inside the run's span). After any other run (a session, which
     loads a save of any date) a new or changed `autosave_exit.v3` is one of these: a session's game is ended by its
     process, and ending it by hand is not the way to stop one."""
     saves = sorted(name for name in {*diff.changed, *diff.added_in_set}
