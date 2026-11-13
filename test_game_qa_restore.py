@@ -153,10 +153,10 @@ class CompareTests(RestoreTestCase):
         self.assertEqual(diff.created, [])
 
     def test_only_rotation_names_count_as_autosaves_the_run_pushed_in(self):
-        # OneDrive makes conflict copies such as autosave-Manfred.v3; they match autosave*.v3 and are the owner's
+        # OneDrive makes conflict copies such as autosave-OtherPC.v3; they match autosave*.v3 and are the owner's
         snap = self.run_started()
-        for name in ("autosave_3.v3", "autosave_12.v3", "autosave_exit.v3", "autosave-Manfred.v3",
-                     "autosave_1-Manfred.v3", "autosave_.v3", "autosave_exit_2.v3", "autosave 2.v3"):
+        for name in ("autosave_3.v3", "autosave_12.v3", "autosave_exit.v3", "autosave-OtherPC.v3",
+                     "autosave_1-OtherPC.v3", "autosave_.v3", "autosave_exit_2.v3", "autosave 2.v3"):
             (self.user / "save games" / name).write_bytes(b"x")
         diff = restore.compare(snap, self.user)
         self.assertEqual(
@@ -342,14 +342,14 @@ class RestoreTests(RestoreTestCase):
 
     def test_the_owners_conflict_copies_of_an_autosave_survive(self):
         snap = self.run_started()
-        for name in ("autosave-Manfred.v3", "autosave_1-Manfred.v3"):
+        for name in ("autosave-OtherPC.v3", "autosave_1-OtherPC.v3"):
             (self.user / "save games" / name).write_bytes(b"made by OneDrive during the run")
         (self.user / "save games/autosave_3.v3").write_bytes(b"pushed in by the run")
         finish(snap)
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertEqual(out.removed, ["save games/autosave_3.v3"])
-        self.assertTrue((self.user / "save games/autosave-Manfred.v3").exists())
-        self.assertTrue((self.user / "save games/autosave_1-Manfred.v3").exists())
+        self.assertTrue((self.user / "save games/autosave-OtherPC.v3").exists())
+        self.assertTrue((self.user / "save games/autosave_1-OtherPC.v3").exists())
 
     def test_leftover_restore_temps_are_cleared_in_every_folder(self):
         snap = self.run_started()
@@ -1341,28 +1341,28 @@ class ManualSaveTests(RestoreTestCase):
     def test_the_sets_files_and_the_harnesss_names_are_not_the_owners_saves(self):
         (self.user / "save games/te_qa_old.v3").write_bytes(b"a harness save from before")
         (self.user / "save games/TEST_FAIL_old.v3").write_bytes(b"a failed test's save from before")
-        (self.user / "save games/autosave-Manfred.v3").write_bytes(b"a OneDrive conflict copy")
+        (self.user / "save games/autosave-OtherPC.v3").write_bytes(b"a OneDrive conflict copy")
         (self.user / "save games/desktop.ini").write_bytes(b"[.ShellClassInfo]")
         snap = self.run_started()
         (self.user / "save games/te_qa_old.v3").unlink()
         (self.user / "save games/TEST_FAIL_old.v3").write_bytes(b"rewritten")
-        (self.user / "save games/autosave-Manfred.v3").write_bytes(b"changed: put back from the store")
+        (self.user / "save games/autosave-OtherPC.v3").write_bytes(b"changed: put back from the store")
         (self.user / "save games/autosave.v3").write_bytes(b"the run's autosave")
         (self.user / "save games/desktop.ini").write_bytes(b"[.ShellClassInfo] rewritten by Explorer")
         for name in ("te_qa_fixture_abc.v3", "te_qa_fixture_abc_s1234abcd.v3.part", "TEST_FAIL_te_qa_fixture_x.v3",
-                     "autosave_3.v3", "autosave_2-Manfred.v3", "notes.txt", "mine.v3" + restore._TEMP_SUFFIX):
+                     "autosave_3.v3", "autosave_2-OtherPC.v3", "notes.txt", "mine.v3" + restore._TEMP_SUFFIX):
             (self.user / "save games" / name).write_bytes(b"x")
         (self.user / "save games/sub").mkdir()
         (self.user / "save games/sub/in_a_folder.v3").write_bytes(b"not looked at, as take does not")
         finish(snap)
         out = restore.restore(snap, self.user, other_game_running=False)
         # A conflict copy made during the run is left in place, so it is named, as any new save is (the next test)
-        self.assertEqual((out.held, out.manual_saves), (False, {"new": ["save games/autosave_2-Manfred.v3"]}))
-        self.assertEqual(sorted(out.restored), ["save games/autosave-Manfred.v3", "save games/autosave.v3"])
+        self.assertEqual((out.held, out.manual_saves), (False, {"new": ["save games/autosave_2-OtherPC.v3"]}))
+        self.assertEqual(sorted(out.restored), ["save games/autosave-OtherPC.v3", "save games/autosave.v3"])
 
     def test_a_new_save_named_like_an_autosave_is_left_and_named_but_a_pushed_in_rotation_name_is_removed(self):
         # A player may type "autosave_before_war" into the save dialog: neither removed nor, before, mentioned.
-        (self.user / "save games/autosave-Manfred.v3").write_bytes(b"a OneDrive conflict copy from before")
+        (self.user / "save games/autosave-OtherPC.v3").write_bytes(b"a OneDrive conflict copy from before")
         snap = self.run_started()
         (self.user / "save games/autosave_before_war.v3").write_bytes(b"saved from the game's menu")
         (self.user / "save games/autosave_3.v3").write_bytes(b"the game's rotation")
@@ -2042,7 +2042,7 @@ class LongRunTest(RestoreTestCase):
         cont.write_text('{"title": "autosave", "desc": "Observing"}')
         set_mtime(cont, NOW, 60 * n)
 
-    def long_run(self, autosaves: int, owners=ROTATION, extra_owner=("autosave_exit.v3", "autosave-Manfred.v3")):
+    def long_run(self, autosaves: int, owners=ROTATION, extra_owner=("autosave_exit.v3", "autosave-OtherPC.v3")):
         before = self.owners([*owners, *extra_owner])
         snap = self.run_started(at=NOW)
         for n in range(1, autosaves + 1):
@@ -2083,8 +2083,8 @@ class LongRunTest(RestoreTestCase):
         snap, before, _ = self.long_run(autosaves=8)
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertNotIn("save games/autosave_exit.v3", out.restored + out.removed)
-        self.assertNotIn("save games/autosave-Manfred.v3", out.restored + out.removed)
-        self.assertEqual((self.user / "save games/autosave-Manfred.v3").read_bytes(), before["autosave-Manfred.v3"])
+        self.assertNotIn("save games/autosave-OtherPC.v3", out.restored + out.removed)
+        self.assertEqual((self.user / "save games/autosave-OtherPC.v3").read_bytes(), before["autosave-OtherPC.v3"])
 
     def test_an_autosave_written_after_the_exit_holds_and_leaves_everything_as_it_is(self):
         # A late write is someone else's (the owner played since): nothing is put back over it.
@@ -2101,7 +2101,7 @@ class LongRunTest(RestoreTestCase):
 
 class NotTheRunsSaveTest(LongRunTest):
     """`save games/` is under OneDrive, and another PC of the owner's writes there too (its conflict copies, such as
-    `continue_game-Manfred.json`, have been seen). OneDrive gives a synced file the time it had where it was
+    `continue_game-<PC name>.json`, have been seen). OneDrive gives a synced file the time it had where it was
     written, so an autosave the owner's game there wrote during a run of hours looks like the run's. No run of the
     harness writes `autosave_exit.v3`, and an unattended run from 1836 writes no autosave of a date past its end:
     either one holds (`not_the_runs_save`), changing nothing."""
