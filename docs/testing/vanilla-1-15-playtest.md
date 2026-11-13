@@ -420,6 +420,11 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   there), so every reparation is paid directly and neither verdict above can appear: fix the article's gate. Also check: the treaty shows in both countries' diplomacy panels, named and with the state or
   Reparations article; the treasuries move by the sum the option's tooltip showed, once; the state does not move
   back, and nothing is paid twice, if the treaty is later withdrawn.
+  **2026-11-12: `treaty_reparations` read OK** (a 1.15.1 game, launch of 21:13, 1938.6.3, `paid=12267`): a
+  Reparations treaty created in force runs its `on_entry_into_force`, so C21 is answered yes for `is_draft = no`.
+  The payer's name printed blank and the engine logged the line twice as a data error: the string read
+  `[ROOT.GetCountry…]`, which `debug_log` can't resolve. The five lines of the two checks now read `THIS` (the
+  event's country). `treaty_state_transfer` has not fired yet.
 
 ## 1.15.1 hotfix (2026-11-11)
 
