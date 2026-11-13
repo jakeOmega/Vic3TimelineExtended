@@ -278,14 +278,14 @@ profiler window file and the scripts.
 ## Merged `main` remeasured, and three more cuts: 2026-11-12, evening
 
 The same save and steps on `main` at `e13d812b4` (#1713, #1721, #1724 and
-#1726 merged; snapshot `20261113T011842Z`), then on `main` plus #PR
+#1726 merged; snapshot `20261113T011842Z`), then on `main` plus #1731
 (`20261113T014004Z`): answer `un_events.4`, profile 2 July → 1 August, read
 the root list and open callees. Both runs ran 119–120 ticks in 96–97 s of
 capture. Data: `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`.
 
 **What is left on `main`.** The serial roots, profiled, 30 days:
 
-| Entry | `main` | + #PR | Largest parts on `main` |
+| Entry | `main` | + #1731 | Largest parts on `main` |
 |---|---|---|---|
 | `on_monthly_pulse_country` (265 pulses) | 2,603 ms | 2,248 ms | Cultural Hegemony 528, monetary 364, SoL 235, Grand Monuments 177, `headlines_on_actions.txt` (vanilla) 126, culture merge 101, space race 84, trade partner 84, decolonization 81, law consistency 80 |
 | `on_yearly_pulse_state` (63 states) | 2,594 ms | 2,528 ms | Demographics 2,106, local climate 430 |
@@ -297,14 +297,14 @@ capture. Data: `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`.
 27 roots shown (#1721, #1726). The harness's read event (`te_qa_events.txt:4`)
 read 500–502 ms in both, as before.
 
-**The three cuts (#PR)**, each read once where it was read several times,
-measured as callees. The profiled run had these three, not #PR's tourism
+**The three cuts (#1731)**, each read once where it was read several times,
+measured as callees. The profiled run had these three, not #1731's tourism
 re-add skip, which came after; its effect is under "What drives
 `RecalculateModifierNodes`" below. The rest of each root moved by 1% or less (monetary
 364 → 364 ms, Grand Monuments 177 → 178, culture merge 101 → 101, trade
 partner 84 → 84):
 
-| Callee | `main` | + #PR | What was read more than once |
+| Callee | `main` | + #1731 | What was read more than once |
 |---|---|---|---|
 | Cultural Hegemony's country pulse | 528 ms | 188 ms | the country's fine-art production (a walk over every country's GDP) 12 times a pulse, the world's (every market) 9 |
 | Tourism's state refresh | 268 ms | 179 ms | the base appeal, a chain of some 670 `state_region` branches, twice |
@@ -335,7 +335,7 @@ wars make `UpdateCivilWars` itself dearer is open (#1723).
 **What drives `RecalculateModifierNodes`: the refreshes' re-adds.** The
 engine task that recalculates modifiers took about 135 ms at every day
 boundary, a tenth of wall time, and more than any refresh's own script. Five
-unprofiled runs on #PR's build, each 2 July → 1 September (62 days, 61 day
+unprofiled runs on #1731's build, each 2 July → 1 September (62 days, 61 day
 boundaries) from the same save, with tick-task timings and the wall clock.
 Each changed one thing, deploy-only:
 
@@ -343,7 +343,7 @@ Each changed one thing, deploy-only:
 |---|---|---|---|
 | A | none | 135 ms | 1.39 s |
 | B | the 325 flagships unbuildable (touches no refresh) | 121 ms | 1.33 s |
-| E | tourism's refresh skips a modifier whose multiplier did not move (#PR) | 117 ms | 1.37 s |
+| E | tourism's refresh skips a modifier whose multiplier did not move (#1731) | 117 ms | 1.37 s |
 | D | as E, and SoL expectations' three country modifiers not refreshed | 114 ms | 1.34 s |
 | C | neither tourism's two state modifiers nor SoL's refreshed | 99 ms | 1.31 s |
 
@@ -515,7 +515,7 @@ Items 3 and 6 were addressed by #1713.
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
-   **The reverse run, 2026-11-12 (#PR's build, deploy-only change):** every
+   **The reverse run, 2026-11-12 (#1731's build, deploy-only change):** every
    one of the 325 real flagships got `always = no` first in its
    `potential`, same save and steps, 62 unprofiled days (snapshots
    `20261113T014825Z` against `20261113T015413Z`, tick-task CSVs in
@@ -648,7 +648,7 @@ Items 3 and 6 were addressed by #1713.
       `ch_art` 143 ms. `cultural_pull_total` evaluates `cultural_pull_raw`
       twice (the share and `ch_world_raw_live`), and `cultural_pull_from_art`
       evaluates `country_fine_art_production`, an `every_country` GDP sum,
-      about four times. Done in #PR: both read once and saved
+      about four times. Done in #1731: both read once and saved
       (`save_temporary_value_as`), 528 → 188 ms (see "Merged `main`
       remeasured").
     - **SoL expectations:** 446 ms, of which 437 ms was
@@ -663,14 +663,14 @@ Items 3 and 6 were addressed by #1713.
       624 ms includes one call from `local_climate_first_on_action`), three
       script values at 180–252 ms each. `te_climate_bonus` is the penalty
       times −1, so the refresh computed the penalty twice. Done in #1724: the
-      bonus is written from the stored penalty. In #PR the heat term reads
+      bonus is written from the stored penalty. In #1731 the heat term reads
       its excess once (430 → 381 ms). What is left is the six raw terms,
       computed once for the penalty and again for its base
       (`te_climate_penalty_raw`); sharing them needs the effect to compute
       them once, a parallel of the two values' formulas.
     - **Tourism's state refresh** (on `main` after #1724): 268 ms, 871 calls:
       the output modifier 151 ms and the stored base appeal 102 ms, each the
-      base appeal's chain of some 670 `state_region` branches. Done in #PR:
+      base appeal's chain of some 670 `state_region` branches. Done in #1731:
       the appeal is stored first and the output reads it back (268 →
       179 ms). The rest is the monuments' walk over every building in the
       state.
@@ -696,7 +696,7 @@ Items 3 and 6 were addressed by #1713.
     off, the engine's modifier recalculation fell from 121–135 ms to 99 ms a
     day boundary, so a re-add costs more in that task than in its own
     script. In order:
-    - **Exact:** skip the re-add when the multiplier did not move. #PR does
+    - **Exact:** skip the re-add when the multiplier did not move. #1731 does
       it for tourism (`te_tourism_refresh_modifier`, which keeps the applied
       value). It saves only where values hold still: tourism's output
       (appeal, city rank, monuments) mostly does, its throughput (spare
