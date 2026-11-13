@@ -525,7 +525,7 @@ Items 3 and 6 were addressed by #1713.
       longest. It is spread over about 40 small calls: the shared refresh
       tail 224 ms (the hub's flow modifiers 110), each good's policy tick
       20–37 ms, each good's preset magnitudes about 14 ms. No world walk and
-      no single fix. Narrowed instead by who holds one, in #PRNUM: the AI's
+      no single fix. Narrowed instead by who holds one, in #1730: the AI's
       founding tier needs 100 million GDP from a minor inside another
       country's market, ten times the 10 million a market leader or a major
       needs (`st_res_ai_hub_gdp_tier`). Of this game's 55 holders, 34 were
