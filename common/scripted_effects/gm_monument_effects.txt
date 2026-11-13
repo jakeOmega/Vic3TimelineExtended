@@ -698,7 +698,7 @@ gm_state_raise_secondary = {
 	}
 	remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_raise }
 	scope:gm_mon_raise = { destroy_container = yes }
-	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): each caller spends what brought it here first: gm_state_settle_newcomer removes gm_newcomer, gm_state_run_mon_orders removes the gm_mon_order, and gm_state_raise_orphan's orphan has its gm_tr_origin (gm_sh_adopt_beside); the container raised is destroyed above
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): each caller spends what brought it here first: gm_state_settle_newcomer removes gm_newcomer, gm_state_run_mon_orders removes the gm_mon_order, and gm_state_raise_orphan's orphan has its gm_tr_origin (gm_sh_adopt_beside, which fires no refresh of its own: issue #1696); the container raised is destroyed above
 }
 
 # State scope, from monument_events.29 once a newcomer (gm_newcomer, a
@@ -1594,6 +1594,9 @@ gm_sh_settle_one = {
 				limit = { scope:gm_sh_target = { has_building = building_grand_monument has_variable = gm_seen } }
 				gm_sh_adopt_beside = yes
 				debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded"
+				scope:gm_sh_target = {
+					owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-13 (trigger_event_cycle): gm_sh_adopt_beside, above, set this orphan's gm_tr_origin, which ends its being an orphan (gm_sh_orphan_of), so the refresh's gm_state_merge_pending -> monument_events.29 -> gm_state_adopt_orphans finds one fewer on every pass
+				}
 			}
 			else_if = {
 				limit = { scope:gm_sh_target = { NOT = { has_building = building_grand_monument } } }
@@ -1622,7 +1625,12 @@ gm_sh_drop_copy = {
 # a monument beside the one there, as a returned trophy does
 # (gm_tr_become_monument): the same container, retagged and moved from
 # gm_shadows to gm_monuments, in the state's and its owner's lists at once, its
-# size its records (sites spec 2026-10-18 §3.3).
+# size its records (sites spec 2026-10-18 §3.3). It fires no refresh: its
+# caller does once it is done with the monument. gm_state_raise_orphan goes on
+# to raise it onto the state's variables, and a refresh before that read the
+# state as still unrecorded: it settled the region's next orphan onto the same
+# building, whose records the raise then cleared, or read the building as a
+# stray and removed it (issue #1696).
 gm_sh_adopt_beside = {
 	save_scope_as = gm_sh_moving
 	gm_sh_log_numbers = yes
@@ -1644,7 +1652,6 @@ gm_sh_adopt_beside = {
 		owner = {
 			add_to_variable_list = { name = gm_monuments_held target = scope:gm_sh_moving }
 			set_variable = gm_mon_listed
-			trigger_event = { id = monument_events.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_tr_origin, set above, ends this shadow's being an orphan (gm_sh_orphan_of), so the refresh's gm_state_merge_pending -> monument_events.29 -> gm_state_adopt_orphans finds one fewer on every pass
 		}
 	}
 	set_global_variable = { name = gm_sh_log_kept_now value = 1 }
@@ -1659,7 +1666,10 @@ gm_sh_adopt_beside = {
 # stands. It stands beside first (the lists), then is raised onto the state's
 # variables as a swap raises a secondary (gm_state_raise_secondary): its
 # records, its dedication put back through gm_restore_pm. Its shadow again at
-# once when its method already reads back.
+# once when its method already reads back. No refresh runs between the two
+# (gm_sh_adopt_beside fires none; the raise fires one once the records are
+# here), so the region's next orphan, at its turn, finds this monument
+# recorded and stands beside it (issue #1696).
 gm_state_raise_orphan = {
 	if = {
 		limit = { NOT = { has_building = building_grand_monument } }

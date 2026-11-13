@@ -845,7 +845,8 @@ DEATH_CAUSE_TAGS = {
     "chr": (
         "state_region_pollution_health", "modifier_radio_opium", "opium_wars_lost", "opium_wars_addiction_modifier",
         "opium_health_focus", "opium_addiction_state_mod", "china_welfare", "ig_trait_the_best_revenge",
-        "global_warming", "climate_adaptation_modifier", "emergency_climate_spending_modifier",
+        "global_warming", "global_warming_tropics", "global_warming_high_latitudes",
+        "climate_adaptation_modifier", "emergency_climate_spending_modifier",
         "climate_crisis_emergency_modifier", "climate_fortress_modifier", "climate_carrying_on_modifier",
         "arctic_melting_modifier", "un_regime_climate_adaptation_modifier", "ste_reactor_leak_coverup",
         "drugs_shortage_rationing", "addiction_public_health_modifier", "institutional_reform_modifier",

@@ -6910,6 +6910,41 @@ class MergeRecordTests(unittest.TestCase):
         beside = self.body(MON_EFFECTS, "gm_sh_adopt_beside")
         self.assertNotIn("gm_sh_room", beside)
 
+    def test_no_refresh_between_an_orphans_adoption_and_its_raise(self):
+        """Issue #1696: gm_sh_adopt_beside fired the refresh before
+        gm_state_raise_secondary had put the orphan's records on the state. The
+        refresh read the building as still unrecorded and settled the region's
+        next orphan onto it as primary; the raise then cleared that orphan's
+        records, its container already destroyed, and logged no loss. Nothing
+        from the adoption to the raise's own refresh may fire an event, through
+        any scripted effect it calls; the beside branch fires the refresh after."""
+        effects = {}
+        for path in sorted(ROOT.glob("common/scripted_effects/*.txt")):
+            effects.update(top_level_blocks(read(path.relative_to(ROOT).as_posix())))
+
+        def fires_an_event(body, seen=()):
+            if "trigger_event" in body:
+                return True
+            for name in re.findall(r"(?<![\w.:$])(\w+)\s*=\s*(?:yes\b|\{)", body):
+                if name in effects and name not in seen:
+                    seen = seen + (name,)
+                    if fires_an_event(effects[name], seen):
+                        return True
+            return False
+
+        raise_ = self.body(MON_EFFECTS, "gm_state_raise_orphan")
+        head = raise_[:raise_.index("gm_state_raise_secondary = yes")]
+        self.assertIn("scope:gm_sh_pick = { gm_sh_adopt_beside = yes }", head)
+        self.assertFalse(fires_an_event(head), head)
+        secondary = self.body(MON_EFFECTS, "gm_state_raise_secondary")
+        refresh = "owner = { trigger_event = { id = monument_events.20 } }"
+        self.assertTrue(secondary.endswith(refresh), secondary)
+        self.assertFalse(fires_an_event(secondary[:-len(refresh)]), secondary)
+        self.assertLess(secondary.index("gm_state_tr_take_records_from_moving = yes"), secondary.index(refresh))
+        one = self.body(MON_EFFECTS, "gm_sh_settle_one")
+        self.assertRegex(one, r"gm_sh_adopt_beside = yes debug_log = \"[^\"]*stands beside the monument there[^\"]*\" "
+                              r"scope:gm_sh_target = \{ owner = \{ trigger_event = \{ id = monument_events\.20 \} \} \} \}")
+
     def test_the_survivor_stands_at_level_1(self):
         region = self.body(MON_EFFECTS, "gm_sh_settle_region")
         self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument "

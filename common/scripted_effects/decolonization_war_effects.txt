@@ -41,6 +41,9 @@
 # decol_iw_condemner_share (the war-support line), decol_iw_next_declaration
 # (two years between declarations outside a collapse),
 # decol_iw_allied_arms_weight / decol_iw_allied_arms_mult (our allied arms).
+# On the other states a Fight's rebels formed with: decol_iw_rose_with (their
+# capital), and on the capital decol_iw_rose_count (how many), from the Fight
+# to Order Restored, which quiets them for ten years (decol_iw_mark_rose_with).
 # On a great power arming either side: decol_iw_arming (the rebels) or
 # decol_iw_allied_arming and decol_iw_allied_arms_left (us, and its months
 # left); decol_iw_offer_* (.74.b's and .79.a's tooltip figures).
@@ -86,7 +89,32 @@ decol_iw_fight = {
 		var:decol_iw_new_rebels = { save_scope_as = decol_iw_slot_rebels }
 		remove_variable = decol_iw_new_rebels
 		decol_iw_open_record = { KIND = 1 }
+		decol_iw_mark_rose_with = yes
 		trigger_event = { id = decolonization_events.71 days = 1 }
+	}
+}
+
+# The lands that rose with the territory: every other state the rebels formed
+# with (form_decolonized_country's flood fill, the neighbouring states where
+# their people are at home), marked with the record's capital
+# (decol_iw_state_N), so Order Restored (.72) quiets them with it for ten
+# years. A whole state keeps its variables through the release and the
+# annexation back (scripting_best_practices.md); the capital holds how many
+# were marked, for .72's self-check (decol_iw_check_rose_with). Fights only:
+# a secession's lands and a colonial subject's states are not marked. Scope:
+# us; scope:decol_iw_slot_rebels and scope:decol_iw_slot_capital from
+# decol_iw_open_slot.
+decol_iw_mark_rose_with = {
+	if = {
+		limit = { exists = scope:decol_iw_slot_capital }
+		scope:decol_iw_slot_capital = { set_variable = { name = decol_iw_rose_count value = 0 } }
+		scope:decol_iw_slot_rebels = {
+			every_scope_state = {
+				limit = { NOT = { this = scope:decol_iw_slot_capital } }
+				set_variable = { name = decol_iw_rose_with value = scope:decol_iw_slot_capital }
+				scope:decol_iw_slot_capital = { change_variable = { name = decol_iw_rose_count add = 1 } }
+			}
+		}
 	}
 }
 
@@ -589,6 +617,49 @@ decol_iw_end_won = {
 	decol_iw_clear_slot = { N = $N$ }
 }
 
+# TE_SELF_CHECK decol_iw_rose_with_kept, once a game, at the first Order
+# Restored (.72) whose rebels formed with more than their capital
+# (decol_iw_mark_rose_with): the lands that rose with the territory came back
+# still marked. OK: some of our states hold the mark, back= of sent= (fewer
+# if a third party took some during the war). BROKEN: none does, so a state's
+# variables did not survive the release and the annexation back, or a third
+# party took them all. The fallback marks the state_region instead. Runs
+# before .72's option removes the marks. Scope: us; scope:decol_iw_end_state.
+decol_iw_check_rose_with = {
+	save_scope_as = decol_iw_rose_self
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_selfcheck_decol_iw_rose_with }
+			scope:decol_iw_end_state ?= {
+				owner = scope:decol_iw_rose_self
+				has_variable = decol_iw_rose_count
+				var:decol_iw_rose_count > 0
+			}
+		}
+		set_global_variable = te_selfcheck_decol_iw_rose_with
+		set_variable = { name = decol_iw_rose_back value = 0 }
+		every_scope_state = {
+			limit = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+			scope:decol_iw_rose_self = { change_variable = { name = decol_iw_rose_back add = 1 } }
+		}
+		# the count sent, copied: a saved scope's variable reads 0 in a debug_log (te_debug_log_arg_effects.txt)
+		set_global_variable = { name = te_log_value value = scope:decol_iw_end_state.var:decol_iw_rose_count }
+		if = {
+			# has_variable: .72's tooltip walks this body and writes nothing (tooltip_walk_variable_audit)
+			limit = {
+				has_variable = decol_iw_rose_back
+				var:decol_iw_rose_back > 0
+			}
+			debug_log = "TE_SELF_CHECK OK decol_iw_rose_with_kept metropole=[THIS.GetCountry.GetNameNoFormatting] back=[THIS.Var('decol_iw_rose_back').GetValue|0] sent=[GetGlobalVariable('te_log_value').GetValue|0] (the states that rose with the territory came back still marked, so Order Restored quiets them for ten years) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN decol_iw_rose_with_kept metropole=[THIS.GetCountry.GetNameNoFormatting] back=0 sent=[GetGlobalVariable('te_log_value').GetValue|0] (none of the states that rose with the territory came back marked: a state's variables did not survive the release and the annexation back, or a third party took them all; mark the state_region instead, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		te_log_args_clear = yes
+		remove_variable = decol_iw_rose_back
+	}
+}
+
 # We lost record $N$: .73 (the deferred aftermath runs in its option), then the
 # record ends.
 decol_iw_end_lost = {
@@ -698,6 +769,18 @@ decol_iw_clear_slot = {
 		remove_variable = decol_iw_backer_count
 		remove_variable = decol_iw_arms_weight
 		remove_variable = decol_iw_arms_mult
+		# Free, they keep the lands that rose with them: the marks go. Won,
+		# they are gone and hold nothing, and .72 reads the marks on ours.
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = decol_iw_rose_with
+					has_variable = decol_iw_rose_count
+				}
+			}
+			remove_variable = decol_iw_rose_with
+			remove_variable = decol_iw_rose_count
+		}
 	}
 	var:decol_iw_state_$N$ ?= {
 		remove_variable = decol_iw_row_months
