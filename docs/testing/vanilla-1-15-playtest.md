@@ -387,9 +387,16 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   passing or failing on its own line; with the UN rule off, see whether the bloc-unanimity line inside its
   `custom_tooltip` lists them too (that answers C10). The Imperial Federation Act and the Civilizing Mission Compact
   list the overseas colonies under their four-colonies line. If a list shows every country or every state, add a
-  `filter` (UNE has one; the colony count doesn't). The logic is pinned offline (`test_une_formation_gates.py`), so
-  a gate that passes or fails differently from before means the engine reads `filter` or `count = all` otherwise
-  than vanilla's tsar buttons suggest.
+  `filter` (UNE has one; the colony count doesn't), but only beside `percent` or `count = all`: the engine refuses
+  `filter` with `count >= N` at load, so the four-colonies count can't take one as it stands. The logic is pinned
+  offline (`test_une_formation_gates.py`), so a gate that passes or fails differently from before means the engine
+  reads `filter`, `percent` or `count = all` otherwise than vanilla's tsar buttons suggest.
+  **2026-11-12:** the supermajority line shipped as `filter` with `count >= <value>`, which the engine refused at every
+  launch (`Filter should only be used if a percent or count = all is specified` and `PostValidate of trigger
+  'any_country' returned false` at `formable_gating_triggers.txt` lines 293 and 305, in error.log and debug.log);
+  what it did in play is unknown. It is now a share, `percent >=` half a great power below all but one. At the next
+  launch, check that neither line comes back, then read the supermajority line in the tooltip: it should say a share
+  of the other great powers and list them.
 
 - **Treaty articles: `can_propose` and the lens (#1440).** In the treaty designer, add Extensive Modernization Aid
   before Modernization Aid, Joint Military Exercises before an alliance, and a Nuclear Guarantee before a Guarantee

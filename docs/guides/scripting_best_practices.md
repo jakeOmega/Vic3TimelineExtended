@@ -5678,13 +5678,19 @@ Probed on 1.15.0 with `-debug_mode`; the evidence and the rest of what the game 
 
 `list_scopes = yes` (and `show_trigger_per_scope = yes`) on an `any_*` trigger make its tooltip name the scopes it
 counted. Every vanilla use (`je_consolidate_colonial_rule`, `je_greek_nationalism`, the tsar scripted buttons) is a
-positive count: `count >= N`, `percent >= x` or `count = all`, with `filter = { ... }` saying which scopes are counted
-(`count = all` and `percent` count against the filtered set). Whether a count wrapped in `NOT = { }` lists anything is
+positive count: `count >= N`, `percent >= x` or `count = all`. `filter = { ... }` names the set that `count = all` and
+`percent` are measured against, and the engine takes it **only** with one of those two: `filter` beside `count >= N`
+fails at every load (`Filter should only be used if a percent or count = all is specified`, then `PostValidate of
+trigger 'any_country' returned false`), and what the trigger then does in play is unknown. A plain count puts its
+condition in the body instead. Whether a count wrapped in `NOT = { }` lists anything is
 untested, so a gate written "no great power that fails" (`NOT = { any_country = { <who> <fails> } }`) becomes
 `any_country = { filter = { <who> } <passes> count = all list_scopes = yes }`. Two things keep it exactly equal:
 put it under `trigger_if = { limit = { any_country = { <who> } } ... }`, since the NOT form passed over an empty set
-and what `count = all` does there is unverified; and "at most one fails" (`NOT = { ... count >= 2 }`) becomes
-`count >= <script value: the size of the set less one>`, since no vanilla trigger uses `count <`. The United Nations
+and what `count = all` does there is unverified; and "at most one fails" (`NOT = { ... count >= 2 }`) becomes a share,
+`percent >= <script value>`, since no vanilla trigger uses `count <` and `filter` refuses `count >=`. Set the share
+half a scope below "all but one", (M − 1.5) / M of M scopes, so it falls between the two shares the trigger can see and
+never rests on two divisions coming out equal (the first version used `count >=` and failed in game, 2026-11-12;
+`any_limit_audit` now flags it). The United Nations
 of Earth gates are the worked example (`formable_gating_triggers.txt`, `te_formation_gating_values.txt`), and
 `test_une_formation_gates.py` checks both forms against each other over random worlds. Whether a list survives inside
 `custom_tooltip = { text = ... }` is C10 (`docs/audits/vanilla_1_15_prep.md`), open.

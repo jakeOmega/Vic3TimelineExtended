@@ -1,12 +1,22 @@
 ﻿# ============================================================================
-# FORMATION GATES — counts read by common/scripted_triggers/formable_gating_triggers.txt
+# FORMATION GATES — shares read by common/scripted_triggers/formable_gating_triggers.txt
 # ============================================================================
 # The United Nations of Earth's supermajority (une_formation_supermajority):
 # at most one great power other than the candidate stands outside its bloc,
-# written as "at least (other great powers - 1) inside it", so the trigger can
-# list the great powers (list_scopes, vanilla 1.15). A trigger can't count, so
-# the threshold is a script value. Neither reads a scope: the trigger picks
-# the one that fits the candidate's own rank.
+# written as "a share of the other great powers inside it", so the trigger
+# can list the great powers (list_scopes, vanilla 1.15). It is a share, not a
+# count, because the engine takes `filter` only with `percent` or
+# `count = all`: a `filter` with `count >= N` fails PostValidate at load
+# ("Filter should only be used if a percent or count = all is specified",
+# 2026-11-12). A trigger can't count, so the share is a script value. Neither
+# reads a scope: the trigger picks the one that fits the candidate's own rank.
+#
+# All but one of M others inside is a share of (M - 1) / M. Each value sits
+# half a great power below that, (M - 1.5) / M, so it falls between the
+# shares the trigger can see, (M - 2) / M and (M - 1) / M, and the gate never
+# rests on two divisions coming out equal. The trigger reads it only with two
+# or more other great powers, so M is at least 2 there; `min = 1` keeps the
+# division defined anywhere else.
 
 # Every great power in the world.
 une_great_power_count = {
@@ -17,15 +27,23 @@ une_great_power_count = {
 	}
 }
 
-# The candidate is a great power: the others are the count less one, and all
-# but one of them must be inside.
-une_supermajority_needed_gp_candidate = {
+# The candidate is a great power: the others are the count less one.
+une_supermajority_share_gp_candidate = {
 	value = une_great_power_count
-	subtract = 2
+	subtract = 2.5
+	divide = {
+		value = une_great_power_count
+		subtract = 1
+		min = 1
+	}
 }
 
 # The candidate is not a great power: every great power is an "other".
-une_supermajority_needed_other_candidate = {
+une_supermajority_share_other_candidate = {
 	value = une_great_power_count
-	subtract = 1
+	subtract = 1.5
+	divide = {
+		value = une_great_power_count
+		min = 1
+	}
 }
