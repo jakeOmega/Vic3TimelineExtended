@@ -901,10 +901,15 @@ class HoldTests(RestoreTestCase):
 
     def test_restoring_a_restored_snapshot_again_with_no_other_game_still_runs(self):
         snap = self.run_started()
-        (self.user / "continue_game.json").write_text("{}")
+        path = self.user / "continue_game.json"
+        path.write_text("{}")
+        written = path.stat().st_mtime      # at or before the exit `finish` stamps
         finish(snap)
         restore.restore(snap, self.user, other_game_running=False)
-        (self.user / "continue_game.json").write_text("{}")  # the run's file is back, say, from a stray process
+        path.write_text("{}")               # the run's file is back, say, from a stray process
+        # Dated as the run wrote it: a real time here is judged against an exit `finish` rounded up to the next
+        # second, so a first restore that crossed that second made this write look later and held (#1693).
+        os.utime(path, (written, written))
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertEqual((out.held, out.restored), (False, ["continue_game.json"]))
 
