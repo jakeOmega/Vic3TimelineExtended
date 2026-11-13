@@ -17,7 +17,7 @@ from unittest import mock
 
 from game_qa import __main__ as cli
 from game_qa import fixture as fixture_mod
-from game_qa import gate, snapshot
+from game_qa import gate, restore, snapshot
 
 IDLE = [gate.GpuSample(14, 1607, 10240)] * 5
 MINE = gate.ProcId(100, "2026-11-10T12:00:00.0000000Z")
@@ -906,6 +906,87 @@ class CommandLineTest(unittest.TestCase):
                     out, code = self.run_cli("recover")
                     self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
                                      (expected[0], [(snap.id, *expected[1:])]))
+
+    # -- the owner's own saves (#1725) ----------------------------------------
+    # A save of the owner's that the run neither loads nor makes is never copied. `restore` compares it by the size
+    # and time the snapshot listed. Files the run changes here get a fixed old time, so that no hold rule compares
+    # them with a clock (#1648).
+
+    OWNERS_SAVE = "save games/byzantium_1942_01_27.v3"
+
+    def the_run_writes(self, rel, data):
+        path = self.user / rel
+        path.write_bytes(data)
+        os.utime(path, ns=(1_700_000_000 * 10**9, 1_700_000_000 * 10**9))
+
+    def test_restore_puts_the_rest_back_then_holds_for_a_save_the_run_overwrote(self):
+        (self.user / self.OWNERS_SAVE).write_bytes(b"the owner's game of October")
+
+        def the_run():
+            self.the_run_writes("continue_game.json", b'{"title": "the run"}')
+            (self.user / self.OWNERS_SAVE).write_bytes(b"saved over from the game's menu")
+
+        snap_id = self.launched_run(the_run)
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["reason"]), (2, True, "manual_save_changed"), self.why(out))
+        self.assertEqual((out["restored"], out["manual_saves"]), (["continue_game.json"], {"changed": [self.OWNERS_SAVE]}))
+        self.assertEqual((self.user / "continue_game.json").read_text(), '{"title": "autosave_exit"}')
+        self.assertEqual((self.user / self.OWNERS_SAVE).read_bytes(), b"saved over from the game's menu")
+        self.assertEqual(self.run_cli("held")[0], {"held": [snap_id]})
+        again, code = self.run_cli("restore", snap_id)               # nothing can put the save back: held again
+        self.assertEqual((code, again["held"], again["reason"], again["restored"]), (2, True, "manual_save_changed", []))
+
+    def test_restore_leaves_a_new_save_where_it_is_and_lists_it(self):
+        snap_id = self.launched_run(lambda: self.the_run_writes("save games/france_1836_01_02.v3", b"a new save"))
+        out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["reason"]), (0, False, ""), self.why(out))
+        self.assertEqual(out["manual_saves"], {"new": ["save games/france_1836_01_02.v3"]})
+        self.assertTrue((self.user / "save games/france_1836_01_02.v3").is_file())
+        self.assertEqual(self.events()[-1], "restored")
+
+    def test_recover_holds_a_started_run_for_a_save_it_deleted(self):
+        snap, _owner = self.run_an_hour_ago()
+        (self.user / "save games/new york_1940_07_29.v3").unlink()
+        out, code = self.run_cli("recover")
+        self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                         (2, [(snap.id, True, "manual_save_changed")]))
+        self.assertEqual(out["runs"][0]["manual_saves"], {"missing": ["save games/new york_1940_07_29.v3"]})
+
+    def test_a_snapshot_nothing_was_launched_under_compares_no_save(self):
+        # With no `started`, no session verb ever reached a game: the saves are whoever played since, as the logs are.
+        for verb in ("restore", "recover"):
+            with self.subTest(verb=verb):
+                (self.user / "save games/new york_1940_07_29.v3").write_bytes(b"a named save")
+                taken, _ = self.run_cli("snapshot")
+                (self.user / "save games/new york_1940_07_29.v3").unlink()
+                (self.user / "save games/the_owners_new.v3").write_bytes(b"saved since")
+                out, code = self.run_cli(*((verb, taken["id"]) if verb == "restore" else (verb,)))
+                reply = out if verb == "restore" else out["runs"][-1]
+                self.assertEqual((code, reply["held"], reply["reason"]), (0, False, ""))
+                self.assertNotIn("manual_saves", reply)
+                (self.user / "save games/the_owners_new.v3").unlink()
+
+    def test_snapshot_refuses_a_save_named_by_a_name_the_folder_does_not_list(self):
+        # An 8.3 name (`FRENCH~1`) the drive answers to but does not list; a hard link plays it, hidden from the scan.
+        long_name = self.user / "save games" / "french republic_1867_08_16.v3"
+        long_name.write_bytes(b"a long-named save")
+        os.link(long_name, self.user / "save games" / "FRENCH~1.v3")
+        real = snapshot._scan_folder
+        with mock.patch.object(snapshot, "_scan_folder",
+                               lambda user_data, folder: {r: s for r, s in real(user_data, folder).items() if "~" not in r}):
+            out, code = self.run_cli("snapshot", "--save", "FRENCH~1")
+            self.assertEqual((code, out["refused"]), (2, "bad_argument"))
+            self.assertIn("same file as 'french republic_1867_08_16.v3'", out["detail"])
+            self.assertEqual(snapshot.all_snapshots(self.backups), [])
+            out, code = self.run_cli("snapshot", "--save", "french republic_1867_08_16")     # the listed name
+            self.assertEqual(code, 0, out)
+
+    def test_selftest_restore_is_not_held_by_the_owners_saves(self):
+        # It restores into an empty scratch folder, where every save of the owner's would read as gone.
+        self.assertNotIn("save games/new york_1940_07_29.v3", snapshot.take(self.user, self.backups).files)
+        out, code = self.run_cli("selftest-restore")
+        self.assertEqual((code, out["match"]), (0, True))
+        self.assertEqual(restore.held(self.backups), [])
 
     # -- the lock -------------------------------------------------------------
     # Round 5 ruling: the verbs that change things take turns, so that no check-then-act of one session can
