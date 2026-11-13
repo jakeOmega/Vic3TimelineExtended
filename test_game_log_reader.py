@@ -397,7 +397,7 @@ class ListLogsTests(unittest.TestCase):
 
     def test_excludes_mp_session_backups_by_default(self):
         with tempfile.TemporaryDirectory() as tmp:
-            for fname in ("error.log", "error-OtherPC.log", "error-pickle.log"):
+            for fname in ("error.log", "error-OtherPC.log", "error-ThirdPC.log"):
                 with open(os.path.join(tmp, fname), "w") as f:
                     f.write("[00:00:00][a.cpp:1]: x\n")
             without = list_logs(tmp, include_mp_sessions=False)
