@@ -315,10 +315,13 @@ CHECKS: tuple[Check, ...] = (
           check_audits, MOD_CONTENT + PYTHON + ("docs/engine/*", "vanilla_parsed/*"),
           fix="Each failing audit prints its own fix and suppression comment above."),
     # --- docs -----------------------------------------------------------------
-    Check("audit-docs", "docs", "docs/guides/audits.md matches the audit registry",
+    Check("audit-docs", "docs",
+          "docs/guides/audits.md and python_tools.md's audit counts match the audit registry",
           command(PY, "audit_registry.py", "--check"),
-          ("audit_registry.py", "docs/guides/audits.md"),
-          fix="Run `python3 audit_registry.py --write` and commit docs/guides/audits.md."),
+          ("audit_registry.py", "docs/guides/audits.md", "docs/guides/python_tools.md",
+           "mod_state_server.py"),
+          fix="Run `python3 audit_registry.py --write`, make the hand edits it prints, and commit "
+              "docs/guides/audits.md and docs/guides/python_tools.md."),
     Check("rosters", "docs", "Post-load rosters are documented",
           command(PY, "scripts/analysis/check_post_load_rosters.py"),
           ("mod_state_server.py", "audit_registry.py", "docs/*", "CLAUDE.md",
