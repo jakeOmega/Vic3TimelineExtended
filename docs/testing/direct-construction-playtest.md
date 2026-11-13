@@ -11,8 +11,9 @@ harness (`python3 -m game_qa`), and the build lens now offers the Construction S
 **1. Base Construction followed the player's last lobby, not the save.** The Disabled setting applied the modifier with
 `apply_modifier = all:te_direct_construction_base_modifier`. The base game never uses that line (as read by this
 session; not re-read since). The engine did not apply it by the save's rules; the setting it applied was the one the
-player last applied in a lobby on their machine (`player/game_rules/presets.txt`, `LastAppliedRules`). Every load
-below was a launch of the QA harness straight into the save (`-loadsave`):
+player last applied in a lobby on their machine (kept, all but certainly, in `player/game_rules/presets.txt`,
+`LastAppliedRules`). Every load below was a launch of the QA harness straight into the save (`-loadsave`); the check
+by hand further down read the same at a load from the main menu:
 
 | Save loaded | Its rules (`has_game_rule`) | The lobby's last applied rules | What the engine applied |
 |---|---|---|---|
@@ -21,16 +22,19 @@ below was a launch of the QA harness straight into the save (`-loadsave`):
 | The owner's own played save, loaded straight into play | Enabled | Disabled | A marker on every setting read 7 for the player and for two AI countries, so the rule's line is read at load on that path too |
 
 **What was read and what is inferred.** Read directly, in two rules: the modifier the engine applied was not the
-one of the save's setting, and `has_game_rule` and the setting's production-method flags did follow the save. Inferred:
-that `LastAppliedRules` is the source. It named the applied setting both times (Disabled, and culture merges enabled,
-neither of them the default nor both the last setting defined), and nothing else on the machine did; but the harness
-never writes that file, so it could not be flipped to watch the modifier follow. Also inferred: that a load from the
-main menu behaves as the harness's `-loadsave` launch does. "The check by hand (#1767)" below settles both, on the
-released 1.3.1 build. Either way the line could not be relied on, and script does not use it any more.
+one of the save's setting, and `has_game_rule` and the setting's production-method flags did follow the save. Read by
+hand on 2026-11-13 ("The check by hand (#1767)" below): a load from the main menu behaves as the harness's
+`-loadsave` launch does, in the same session and after a fresh launch. A Disabled save loaded after a lobby that
+applied Enabled had no Base Construction. Still inferred, though all but settled: that `LastAppliedRules` is where the
+engine keeps the last lobby's setting. It named the applied setting every time (Disabled, and culture merges enabled,
+neither of them the default nor both the last setting defined). It was the one file written when the Enabled lobby's
+game started. No other file in the user-data folder outside `save games/`, `logs/` and `mod/` names the setting. But
+nobody has edited the file by hand to watch the modifier follow. Either way the line could not be relied on, and
+script does not use it any more.
 
-So, if the inference holds, a player who starts a Disabled game has the 5 points while Disabled is what they last set
-up. Once they apply other rules in any lobby, that game loses its Base Construction at the next load, and a market game loaded after a Disabled
-lobby gains 5 points it should not have. The save holds no trace of the modifier, and `has_modifier` never saw it.
+So a player who starts a Disabled game has the 5 points while Disabled is what they last set up. Once they start a
+game under other rules from any lobby, that game loses its Base Construction at the next load (read by hand), and a
+market game loaded after a Disabled lobby gains 5 points it should not have (read through the harness). The save holds no trace of the modifier, and `has_modifier` never saw it.
 The production-method flags of a setting are not affected: they followed the save in every run.
 
 Fix: script adds the modifier under `has_game_rule`, which follows the save
@@ -163,6 +167,44 @@ About ten minutes.
 
 If step 1 does not list Base Construction, the 1.3.1 build is not the one loaded: check the playset. Write down
 the presets lines from steps 0 and 4, the three readings, the date and the game's version on #1767.
+
+### Readings, 2026-11-13
+
+Run by the owner as Greece on Victoria 3 1.15.1, with a session reading the files. A watcher read `presets.txt`, the
+Continue pointer and the `save games/` listing every two seconds from step 0 to the end.
+
+**Build.** The run did not load the Workshop 1.3.1 copy that "What the check needs" asks for. It loaded the owner's
+usual playset: Headlines, GDP Plotline Plus, Global Stats (GDP and POP) and the local `mod/Vic3TimelineExtended`
+folder (the game's log of each launch, at 16:07:33 and 16:25:17). That folder held local `main` at `a0fd0c0bd`
+(#1759), from before #1763, and its 1,164 `common/` and `events/` files all matched that commit. Its
+`extra_game_rules.txt` was byte for byte the same as tag 1.3.1's, `apply_modifier` line included. Base Construction
+was `country_construction_add = 5`, and no script in the folder added or removed the modifier, so the rule's line was
+its only source. The folder did not change during the run. The owner judged a second run on the Workshop copy not
+needed.
+
+| Step | `LastAppliedRules` (`free_market_construction_*`) | Construction (top bar) | Base Construction +5 listed |
+|---|---|---|---|
+| 0. Game closed (16:02) | `disabled` (file of 10:53 that morning) | — | — |
+| 1. New game from a lobby set to Disabled; saved as `te1767` (16:13:37) | `disabled`; the file was not written | 5 | Yes |
+| 2. New game from a lobby set to Enabled, quit at the map | `enabled`, written at 16:13:56 as the game started (the only change: that entry) | — | — |
+| 3. Same session: Load `te1767` from the main menu | `enabled` | 0 at load; 0.1 a week later, all of it from the Construction Site | No, at load or a week later |
+| 4. Quit to the desktop | `enabled`, not written again | — | — |
+| 5. Fresh launch (a new game process), Load `te1767` from the main menu | `enabled` | 0 at load; 0.1 a week later, from the site | No, at load or a week later |
+
+The save `te1767` carries `free_market_construction_disabled` in both its `meta` and its `gamestate`, and no
+`te_direct_construction_base_modifier`. It was a direct game throughout: its only construction was the site's.
+
+**Outcome: the first row of the table above (gone, gone).** Inference (2) holds and is no longer an inference: a load
+from the main menu applied the last lobby's setting (Enabled) to a save whose rule said Disabled, in the same session
+and after a fresh launch, as the harness's `-loadsave` launches did. Inference (1) is all but settled, not proved. What
+was applied survived a restart, so it is kept on disk. In the whole run `presets.txt` was written once, when the
+Enabled lobby's game started, and a load wrote nothing. Searched after the run, no other file in the user-data folder
+outside `save games/`, `logs/` and `mod/` names a `free_market_construction` setting. The variant below, which edits
+the file by hand, was not run.
+
+After the run `presets.txt` was copied back from the copy taken at step 0, and `cmp` found the two byte-identical
+(sha256 `e0b4a91a…`). `te1767` was deleted, and the `save games/` listing (name, size, time) matched the one taken
+before the run; the autosaves matched their copies byte for byte. The Continue pointer was left naming `te1767`.
 
 **A further variant, to prove (1)**, if the owner wants it: with the game closed, copy
 `presets.txt` aside, change only the `free_market_construction_*` entry of `LastAppliedRules` by hand to the other
