@@ -197,6 +197,20 @@ class Console:
         typed = self._sent.get(text.strip())
         return typed is not None and self._landed(typed)
 
+    def never_entered(self, text: str) -> bool:
+        """Whether the latest `send` of `text` can be held never entered: the history held no line of it just
+        before that typing, holds none now, and has not shrunk. It only reads. It proves the typing was never
+        entered, and never will be, only once a command typed after it has been seen to arrive (`ensure_open`):
+        keys are taken in order, and a text new to the history is written there as it is entered (both verified
+        2026-11-10), so an entered typing would be in it by then. A text the history already held is never
+        held so (False): a repeat running is not written again, so its absence proves nothing."""
+        typed = self._sent.get(text.strip())
+        if typed is None or typed.repeat:
+            return False
+        now = self._read_history(HISTORY_TRIES)
+        return (now is not None and len(now) >= len(typed.before)
+                and typed.key not in [line.strip() for line in now])
+
     def close(self) -> None:
         """Press the console key once, with the usual checks, to close a console known to be open (after a round
         trip). The closing is not proved: a later `run`, `send` or `ensure_open` finds out the state again."""

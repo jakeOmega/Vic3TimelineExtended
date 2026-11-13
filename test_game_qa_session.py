@@ -845,11 +845,107 @@ class ReadTest(SessionTestCase):
     def test_read_without_a_stop_resumes_and_raises(self):
         self.started()
         self.game.stops = False
-        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
-            error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        error = self.no_stop()
         self.assertEqual(error.code, "no_stop")
         self.assertEqual(self.game.adapter.commands[-1], "continue")
         self.assertNotIn("evaluate", self.game.adapter.commands)
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        # it ran (the history gained it), so it is not typed again
+        self.assertEqual((error.info["arrived"], error.info["retried"]), (True, False))
+        self.assertIn("holds it now", error.info["not_retried"])
+
+    def no_stop(self) -> session.SessionError:
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            return self.session_error(self.session.read, ["c:FRA.gdp"])
+
+    def read_steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [step for step in map(json.loads, lines) if step["verb"] == "read"]
+
+    def test_a_read_lost_to_a_shut_console_is_typed_again_once_and_evaluated(self):
+        # #1702: `start` answered with the console believed open, and the first read's keys never reached it.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.console_open = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            reads = self.session.read(["c:FRA.gdp"])
+        self.assertEqual([r.value for r in reads], [7.0])
+        typed = self.typed()
+        first, second = [i for i, text in enumerate(typed) if text == "event te_qa.1"]
+        self.assertIn("select_event_option list", typed[first + 1:second])     # a probe proved the console between
+        self.assertTrue(self.game.console_open)
+        self.assertFalse(self.game.adapter.stopped)
+        self.assertFalse(self.session.status()["maybe_stopped"])
+        [step] = self.read_steps()
+        self.assertEqual((step["outcome"], step["retried"], step["values"]), ("ok", True, [["c:FRA.gdp", True, "7"]]))
+
+    def test_a_second_typing_that_brings_no_stop_either_is_the_end(self):
+        self.started()
+        self.game.console_open = False
+        self.game.stops = False
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"], error.info["maybe_stopped"]), ("no_stop", True, True))
+        self.assertNotIn("not_retried", error.info)
+        self.assertIn("second typing", error.detail)
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_lost_read_the_history_held_already_is_not_typed_again(self):
+        # A repeat is not written to the history again, so its absence there proves nothing.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.session.read(["c:FRA.gdp"])
+        self.game.console_open = False
+        steps = len(self.game.steps)
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"], error.info["arrived"]), ("no_stop", False, False))
+        self.assertIn("held the command already", error.info["not_retried"])
+        self.assertEqual([step for step in self.game.steps[steps:] if "text" in step], [{"text": "event te_qa.1"}])
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_read_that_arrives_late_is_not_typed_again_and_its_stop_is_released(self):
+        self.started()
+        self.game.latency = 3.0                 # the keys are taken 3 s late: after the wait for the stop
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"]), ("no_stop", False))
+        self.assertIn("arrived late", error.info["not_retried"])
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        self.assertFalse(self.game.adapter.stopped)                 # its stop came during the probe, and was resumed
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_read_that_reaches_the_history_late_without_a_stop_is_not_typed_again(self):
+        self.started()
+        self.game.stops = False
+        self.game.latency = 3.0                 # taken after the wait, during the probe: the history gains it then
+        error = self.no_stop()
+        self.assertIn("gained the command late", error.info["not_retried"])
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+
+    def test_a_read_whose_stop_comes_after_the_wait_is_not_typed_again(self):
+        self.started()
+        self.game.console_open = False          # the history has no line of it: only the stop says it arrived
+        wait_stopped = dap.Debugger.wait_stopped
+        calls = []
+
+        def stop_after_the_wait(dbg, timeout):
+            calls.append(timeout)
+            if len(calls) == 3:                 # the drain before the read, the wait for its stop, then this look
+                self.game.adapter.stop()
+            return wait_stopped(dbg, timeout)
+        with mock.patch.object(dap.Debugger, "wait_stopped", stop_after_the_wait):
+            error = self.no_stop()
+        self.assertIn("stopped after the wait", error.info["not_retried"])
+        self.assertEqual(self.typed()[-1], "event te_qa.1")                 # nothing after it: no probe
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        self.assertFalse(self.game.adapter.stopped)                         # the stop was resumed
+
+    def test_a_console_that_will_not_open_is_not_typed_again(self):
+        self.started()
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"]), ("no_stop", False))
+        self.assertIn("did not answer a probe", error.info["not_retried"])
         self.assertEqual(self.typed().count("event te_qa.1"), 1)
 
     def test_a_closed_relay_is_an_error_of_the_verb_not_a_crash(self):

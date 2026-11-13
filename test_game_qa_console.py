@@ -1547,6 +1547,51 @@ class OpenStateTest(ConsoleTestCase):
 
 
 
+class NeverEnteredTest(ConsoleTestCase):
+    """`never_entered`: a send can be held never entered only when the history never held its text (#1702)."""
+
+    def open(self):
+        self.game.console_open = True
+        self.console.ensure_open()
+
+    def test_a_new_text_typed_into_a_shut_console_is_never_entered(self):
+        self.open()
+        self.game.console_open = False                      # shut behind the console's back
+        self.console.send("event te_qa.1")
+        self.console.ensure_open()                          # a later command arrives: the read's keys were taken
+        self.assertTrue(self.game.console_open)
+        self.assertTrue(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_that_arrived_was_entered(self):
+        self.open()
+        self.console.send("event te_qa.1")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_the_history_held_already_is_never_held_so(self):
+        # The history does not write a repeat, so its absence says nothing, even once its old line is gone.
+        self.history.write_text("event te_qa.1\nselect_event_option list\n", encoding="utf-8")
+        self.open()
+        self.game.console_open = False
+        self.console.send("event te_qa.1")
+        self.history.write_text("select_event_option list\nhelp ndefines.ngui\nother\n", encoding="utf-8")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+    def test_a_history_that_shrank_or_cannot_be_read_proves_nothing(self):
+        self.open()
+        self.game.console_open = False
+        self.console.send("event te_qa.1")
+        self.assertTrue(self.console.never_entered("event te_qa.1"))
+        self.history.write_text("", encoding="utf-8")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+        self.history.unlink()
+        self.history.mkdir()                                # read_bytes fails: not readable
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_that_was_not_sent_is_not_held_never_entered(self):
+        self.open()
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+
 class FakeSelectEventOptionTest(unittest.TestCase):
     """The fake's own `select_event_option`, which the session's pick tests rest on (#1722, #1732)."""
 

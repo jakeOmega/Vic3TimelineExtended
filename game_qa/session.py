@@ -1625,26 +1625,44 @@ class Session:
     def _fire_read(self, exprs: list[str]) -> tuple[list[Read], dict]:
         """Release any stop left over, fire the read event, evaluate `exprs` at its breakpoint, let the game run
         on. Only a stop whose reason is "breakpoint" is evaluated at. Once the game may have stopped, a resume is
-        always attempted (twice if need be), so no failure leaves it frozen without `_maybe_stopped` saying so."""
+        always attempted (twice if need be), so no failure leaves it frozen without `_maybe_stopped` saying so.
+
+        A command that brought no stop is typed again once, and only when `_why_not_retype` proves that the first
+        typing was never entered (#1702: the first read after `start --save` never reached the console, nor did
+        the next command's first typing, until the console's probe got through). Otherwise it is `no_stop`, with `arrived` (the
+        history gained the text: it ran; false proves nothing, since the history does not write a repeat) and
+        `maybe_stopped` (always: a stop may still come), `retried`, and `not_retried` saying why not."""
         dbg = self._debugger
-        self._drain()
-        self._new_lines()                       # a date line from before is not this read's
-        try:
-            self._console.send(READ_COMMAND)
-        except ConsoleError as e:
-            if e.entered is not False:          # it may have run: release a stop rather than leave the game in it
-                self._release(dbg)
-            raise
-        try:
-            stopped = dbg.wait_stopped(STOP_WAIT_S)
-        except DebuggerError as e:
-            self._maybe_stopped = True
-            raise SessionError("debugger", str(e), maybe_stopped=True) from e
-        if not stopped:
+        retried = False
+        while True:
+            self._drain()                       # before a retry too: resumes whatever stop may have come
+            self._new_lines()                   # a date line from before is not this read's
+            try:
+                self._console.send(READ_COMMAND)
+            except ConsoleError as e:
+                if e.entered is not False:      # it may have run: release a stop rather than leave the game in it
+                    self._release(dbg)
+                raise
+            try:
+                stopped = dbg.wait_stopped(STOP_WAIT_S)
+            except DebuggerError as e:
+                self._maybe_stopped = True
+                raise SessionError("debugger", str(e), maybe_stopped=True) from e
+            if stopped:
+                break
             self._resume(dbg)                   # a stop may come late: a resume answered "not stopped" does no harm
             self._maybe_stopped = True          # and it may come later still: the next verb releases it first
-            raise SessionError("no_stop", "the game did not stop at the read event within %g s" % STOP_WAIT_S,
-                               arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True)
+            if retried:
+                raise SessionError("no_stop", "the game did not stop at the read event within %g s of its second "
+                                   "typing (the first was proved never entered)" % STOP_WAIT_S,
+                                   arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True, retried=True)
+            why = self._why_not_retype(dbg)
+            if why is not None:
+                raise SessionError("no_stop", "the game did not stop at the read event within %g s; it was not "
+                                   "typed again: %s" % (STOP_WAIT_S, why),
+                                   arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True, retried=False,
+                                   not_retried=why)
+            retried = True
         reason = dbg.last_stop_reason
         if reason != "breakpoint":
             self._resume(dbg)
@@ -1677,7 +1695,42 @@ class Session:
         if self._burst is not None:
             self._burst.extend(burst)
         # The stop proved the command ran; a history that did not gain it (it skips a repeat) is only noted.
-        return reads, {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(stray) + len(burst)}
+        info = {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(stray) + len(burst)}
+        if retried:
+            info["retried"] = True
+        return reads, info
+
+    def _why_not_retype(self, dbg: Debugger) -> str | None:
+        """After a read command brought no stop and was resumed: None when its typing is proved never entered,
+        so that typing it again cannot bring a second stop; else why it is not.
+
+        The proof: the text was new to the history (a repeat is not written again, so the history cannot speak
+        for it); no stop has come since; the console then answers a probe (`ensure_open`, which opens a console
+        that a late load or a click left shut, as on #1702), and keys are taken in order, so the read's keys were
+        taken before the probe's; and the history still has no line of the text, nor has a stop come. The
+        probe's own keys go to the game while the console is shut, as `ensure_open`'s always do. Any stop seen
+        is resumed here, and `_maybe_stopped` stays set either way for the next verb's drain."""
+        if not self._console.never_entered(READ_COMMAND):
+            return "the console history held the command already, or holds it now"
+        try:
+            if dbg.wait_stopped(DRAIN_S):
+                self._resume(dbg)
+                return "the game stopped after the wait: the command arrived late"
+        except DebuggerError as e:
+            return "the debugger could not be read (%s)" % e
+        try:
+            self._console.ensure_open()
+        except ConsoleError as e:
+            return "the console did not answer a probe afterwards (%s)" % e
+        try:
+            if dbg.poll_stopped():
+                self._resume(dbg)
+                return "the game stopped during the probe: the command arrived late"
+        except DebuggerError as e:
+            return "the debugger could not be read (%s)" % e
+        if not self._console.never_entered(READ_COMMAND):
+            return "the console history gained the command late"
+        return None
 
     def _drain(self) -> None:
         """Release a stop left over from an earlier read before anything is typed (a frozen game takes no key).
