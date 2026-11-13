@@ -53,6 +53,13 @@
 		# the cooldown runs out, starts the entry within two months.
 		NOT = { has_variable = colonial_empire_completed }
 		NOT = { has_variable = colonial_empire_collapsed_recently }
+		# Not during a civil war of the country's own (a war with another
+		# country doesn't count). A civil war can cut a country's own land off
+		# from its capital, and the colony test reads a state cut off overland
+		# as overseas: Bornu's uprising (1933) made two of its Sahel states
+		# "colonies", and the AI released both within days of getting the
+		# entry (#1735). Last: it walks every country.
+		NOT = { colonial_in_own_civil_war = yes }
 	}
 
 	should_be_pinned_by_default_uninvolved_or_context = yes

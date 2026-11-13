@@ -178,9 +178,15 @@ def forget_fixture_lines(backup_root: Path, key: str, detail: str = BEING_MADE) 
     _say_not_kept(folder, key, detail)
 
 
-def keep_fixture_lines(backup_root: Path, key: str, snapshot_id: str) -> dict:
+def keep_fixture_lines(backup_root: Path, key: str, snapshot_id: str, followed: Path | None = None) -> dict:
     """Keep the TE_SELF_CHECK and TE_MONUMENTS lines of the run that made fixture `key`, from the logs its restore
     copied to `snapshots/<snapshot_id>/run_logs/`, in `fixtures/<key>/`; return the record written.
+
+    With `followed`, the lines come from that file instead: a dated fixture's run (#1602) lasts years, the game
+    rotates `debug.log` at 512 KB through six generations, and `run_logs/` then holds only its last few
+    megabytes. `fixture.RunLogs` copied the log while the run went (the owner's beginning of an appended log
+    skipped there), so the record says `source: followed`, names the `file`, and counts its `gaps`, the times the
+    copy lost lines to a rotation. The snapshot's manifest must still be readable: the run is the snapshot's.
 
     First of all, whatever was kept under `key` before is removed. Whatever then fails (SelfCheckError when the
     folder holds no `debug.log` of the run's, OSError when a log cannot be read or the lines cannot be written)
@@ -198,7 +204,10 @@ def keep_fixture_lines(backup_root: Path, key: str, snapshot_id: str) -> dict:
     folder = _own_folder(backup_root, key)
     _forget(folder)
     try:
-        record, lines = _run_lines(Path(backup_root), key, snapshot_id)
+        if followed is None:
+            record, lines = _run_lines(Path(backup_root), key, snapshot_id)
+        else:
+            record, lines = _followed_lines(Path(backup_root), key, snapshot_id, Path(followed))
         folder.mkdir(parents=True, exist_ok=True)
         _write(folder / LINES_FILE, "".join(line + "\n" for line in lines))
         _write(folder / RECORD_FILE, json.dumps(record, indent=1) + "\n")      # last: it vouches for the lines
@@ -246,6 +255,26 @@ def _run_lines(backup_root: Path, key: str, snapshot_id: str) -> tuple[dict, lis
               "self_checks": sum(1 for line in lines if SELF_CHECK in line)}
     if prefixes:
         record["prefix_skipped"] = prefixes
+    return record, lines
+
+
+def _followed_lines(backup_root: Path, key: str, snapshot_id: str, followed: Path) -> tuple[dict, list[str]]:
+    """(the record to write, the lines to keep) for a dated run whose log `fixture.RunLogs` copied as it went."""
+    if not isinstance(snapshot_id, str) or _RUN_ID.fullmatch(snapshot_id) is None:
+        raise SelfCheckError("bad_argument", "%r is not a snapshot's id" % (snapshot_id,))
+    try:
+        snapshot.load(backup_root / "snapshots" / snapshot_id)
+    except (OSError, ValueError) as error:
+        raise SelfCheckError("no_manifest", "the manifest of snapshot %s cannot be read (%s), so the run cannot be "
+                             "told to be that snapshot's" % (snapshot_id, error)) from error
+    if not followed.is_file():
+        raise SelfCheckError("no_run_log", "%s, the copy of the run's %s, is not there" % (followed, RUN_LOG))
+    lines, _ = marked_lines(followed)
+    with open(followed, "rb") as f:
+        gaps = sum(1 for raw in f if raw.rstrip(b"\r\n") == GAP_MARKER.encode("utf-8"))
+    record = {"key": key, "save": fixture.FIXTURE_PREFIX + key, "kept": True, "snapshot": snapshot_id,
+              "at": stamp(utc_now()), "source": "followed", "file": str(followed), "gaps": gaps,
+              "lines": len(lines), "self_checks": sum(1 for line in lines if SELF_CHECK in line)}
     return record, lines
 
 
@@ -476,4 +505,6 @@ def _fixture_part(backup_root: Path, run_id: str, steps: list[dict]) -> tuple[di
     part.update((name, record.get(name)) for name in ("snapshot", "at", "lines", "self_checks"))
     if record.get("prefix_skipped"):
         part["prefix_skipped"] = record["prefix_skipped"]
+    if record.get("source") == "followed":      # a dated fixture's run: its log copied as it went (#1602)
+        part.update(source="followed", gaps=record.get("gaps"))
     return part, lines

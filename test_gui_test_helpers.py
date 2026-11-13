@@ -1027,7 +1027,7 @@ class ScriptedTooltipTest(unittest.TestCase):
             self.assertIn(key, seabed)
         self.assertEqual(scripted_guis().keys("te_window_colonial_empire_entry_unlock_sgui", "IsValidTooltip", loc),
                          {"ce_unlock_colonies_tt", "ce_unlock_not_secured_tt", "ce_unlock_no_collapse_tt",
-                          "ce_unlock_no_recent_end_tt"})
+                          "ce_unlock_no_civil_war_tt", "ce_unlock_no_recent_end_tt"})
 
 
 if __name__ == "__main__":

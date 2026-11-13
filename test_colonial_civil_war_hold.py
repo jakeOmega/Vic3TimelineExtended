@@ -109,6 +109,23 @@ class ReentryTests(unittest.TestCase):
         self.assertTrue(due.endswith("NOT = { colonial_in_own_civil_war = yes }"))
 
 
+class FirstEntryTests(unittest.TestCase):
+    """The engine starts a country's first entry from its inactive record when
+    `possible` holds; `add_journal_entry` (the re-entry pass) skips `possible`,
+    so both carry the civil-war line."""
+
+    def test_possible_waits_out_a_civil_war_of_its_own(self):
+        entry = _read("common", "journal_entries", "je_colonial_empire.txt")
+        possible = _norm(_block(entry, "possible"))
+        # Last, after the state walk: it walks every country.
+        self.assertTrue(possible.endswith("NOT = { colonial_in_own_civil_war = yes }"))
+
+    def test_the_tab_checklist_lists_it(self):
+        unlocked = _norm(_block(TRIGGERS, "ce_entry_unlocked"))
+        self.assertIn("custom_tooltip = { text = ce_unlock_no_civil_war_tt NOT = { colonial_in_own_civil_war = yes } }",
+                      unlocked)
+
+
 class ButtonTests(unittest.TestCase):
     def test_every_release_button_weighs_zero_under_the_hold(self):
         for button in ("ce_release_colonial_territory", "ce_planned_decolonization", "ce_round_table_conference"):
