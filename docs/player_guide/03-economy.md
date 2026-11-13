@@ -525,10 +525,14 @@ Electrical Capacitors. Its overview counts your stations and how many are on
 a grid, the grids they are on, the Electricity your stations send and receive
 a week, your transmission efficiency, and your Grid Interconnection Agreements,
 with the countries whose undersea cables reach yours but have no agreement with
-you. A card for each grid, named for its hub, gives its stations, its supply
-against its demand, its price, what it sends and delivers a week, and the flags
-of the countries on it. The Stations table lists each of your stations with its
-mode, flow, grid and staffing, those on no grid last. Most figures are the
+you. Generation shows how much Electricity your power plants made a week, by
+kind of plant (coal, oil, hydro, nuclear, renewables, fusion and space solar),
+each with its share of the total, counted at the start of each month; power
+your stations received from a grid isn't counted. A card for each grid, named
+for its hub, gives its stations, its supply against its demand, its price,
+what it sends and delivers a week, and the flags of the countries on it. The
+Stations table lists each of your stations with its mode, flow, grid and
+staffing, those on no grid last. Most figures are the
 last monthly balancing's, so a new station joins them on the 1st. A station's
 building panel shows its own grid in brief,
 with a button to the tab, and National Info shows another country's tab. The

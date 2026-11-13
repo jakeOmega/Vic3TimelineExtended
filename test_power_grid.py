@@ -298,12 +298,14 @@ class BalancingTest(unittest.TestCase):
     def test_global_pulse_dispatches_one_hidden_country_event(self):
         on_actions = _code(_read(ON_ACTIONS))
         # One world-wide run a month: a country pulse that balanced as well would balance every
-        # grid twice. The country pulse only runs the AI's station building.
+        # grid twice. The country pulse runs only the AI's station building and the Power Grids
+        # tab's generation record.
         self.assertEqual(_sub(on_actions, "on_monthly_pulse_country").split(),
-                         ["on_actions", "=", "{", "te_grid_ai_build_on_action", "}"])
-        ai_pass = _top_level(on_actions, "te_grid_ai_build_on_action")
-        self.assertNotIn("te_grid.1", ai_pass)
-        self.assertNotIn("te_grid_world_update_effect", ai_pass)
+                         ["on_actions", "=", "{", "te_grid_ai_build_on_action", "te_grid_mix_on_action", "}"])
+        for hook in ("te_grid_ai_build_on_action", "te_grid_mix_on_action"):
+            country_pass = _top_level(on_actions, hook)
+            self.assertNotIn("te_grid.1", country_pass)
+            self.assertNotIn("te_grid_world_update_effect", country_pass)
         self.assertIn("te_grid_world_dispatch", _sub(on_actions, "on_monthly_pulse"))
         dispatch = _top_level(on_actions, "te_grid_world_dispatch")
         self.assertIn("random_country", dispatch)

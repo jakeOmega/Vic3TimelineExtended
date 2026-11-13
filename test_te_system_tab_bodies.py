@@ -124,7 +124,8 @@ WINDOW_BODIES = [
      None),
     ("te_grid_tab_body", os.path.join(REPO, "gui", "te_grid_widgets.gui"),
      "te_grid_tab_header", "te_window_power_grids_tab_sgui", None,
-     "te_grid_tab_layout", ["te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel"],
+     "te_grid_tab_layout", ["te_grid_overview_panel", "te_grid_mix_panel", "te_grid_grids_panel",
+                            "te_grid_stations_panel"],
      None),
 ]
 

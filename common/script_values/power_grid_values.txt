@@ -1012,6 +1012,280 @@ te_grid_station_staffing_disp = {
 	}
 }
 
+# --- Generation by source (the Power Grids tab's Generation panel) ------------
+#
+# The script can read a state's Electricity production but not a building's,
+# so te_grid_mix_record_effect (power_grid_effects.txt) splits each state's own
+# generation (te_grid_local_production_value: what it made, less what its
+# station delivered) among its power plants by what their methods make at
+# full staff, times their levels and staffing, and keeps the country's sum
+# for each source. The state's total is measured; only the split within a
+# state of more than one source is an estimate (throughput bonuses of one
+# plant type alone, and economies of scale, aren't in it).
+
+# Building scope: the Electricity a level of this building's methods makes a
+# week at full staff, its base method's line and its carbon capture's cut
+# (every one workforce_scaled). test_power_grid_tab.py's GenerationTableTest
+# holds this to every method that makes Electricity: a new one, or a changed
+# figure, fails it.
+te_grid_mix_output_per_level_value = {
+	value = 0
+	if = {
+		limit = { is_building_type = building_power_plant }
+		if = { limit = { has_active_production_method = pm_early_power_plant } add = 25 }
+		if = { limit = { has_active_production_method = pm_coal-fired_plant } add = 50 }
+		if = { limit = { has_active_production_method = pm_oil-fired_plant } add = 80 }
+		if = { limit = { has_active_production_method = pm_modern_coal-fired_plant } add = 90 }
+		if = { limit = { has_active_production_method = pm_modern_oil-fired_plant } add = 140 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal0_oil20 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal0_oil20 } add = -8 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal0_oil20 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal0_oil30 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal0_oil30 } add = -12 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal0_oil30 } add = -13 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal5_oil0 } add = -1 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal5_oil0 } add = -2 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal5_oil0 } add = -3 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal15_oil0 } add = -8 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal20_oil0 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal20_oil0 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal20_oil0 } add = -10 }
+	}
+	else_if = {
+		limit = { is_building_type = building_hydro_plant }
+		if = { limit = { has_active_production_method = pm_base_building_hydro_power } add = 750 }
+	}
+	else_if = {
+		limit = { is_building_type = building_nuclear_plant }
+		if = { limit = { has_active_production_method = pm_base_building_nuclear_power } add = 2000 }
+		if = { limit = { has_active_production_method = pm_base_building_advanced_fission_power } add = 3500 }
+	}
+	else_if = {
+		limit = { is_building_type = building_renewable_energy_plant }
+		if = { limit = { has_active_production_method = pm_base_building_renewable_power } add = 450 }
+		if = { limit = { has_active_production_method = pm_base_building_advanced_renewable_power } add = 1000 }
+	}
+	else_if = {
+		limit = { is_building_type = building_fusion_plant }
+		if = { limit = { has_active_production_method = pm_base_building_tokamak_fusion_power } add = 5000 }
+		if = { limit = { has_active_production_method = pm_base_building_inertial_fusion_power } add = 8000 }
+		if = { limit = { has_active_production_method = pm_base_building_compact_modular_fusion_power } add = 12000 }
+		if = { limit = { has_active_production_method = pm_base_building_aneutronic_fusion_power } add = 16000 }
+	}
+	else_if = {
+		limit = { is_building_type = building_solar_receiver }
+		if = { limit = { has_active_production_method = pm_solar_receiver } add = 1000000 }
+	}
+	# The companies' power stations.
+	else_if = {
+		limit = { is_building_type = building_rosatom_mayak_association }
+		if = { limit = { has_active_production_method = pm_rosatom_mayak_association } add = 300 }
+	}
+	else_if = {
+		limit = { is_building_type = building_generic_power_hub }
+		if = { limit = { has_active_production_method = pm_generic_power_hub } add = 200 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_generic_power_hub_coal20_oil0 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_generic_power_hub_coal20_oil0 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_generic_power_hub_coal20_oil0 } add = -10 }
+	}
+	else_if = {
+		limit = { is_building_type = building_tokyo_electric_asakusa_station }
+		if = { limit = { has_active_production_method = pm_tokyo_electric_asakusa_station } add = 50 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_tokyo_electric_asakusa_station_coal20_oil0 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_tokyo_electric_asakusa_station_coal20_oil0 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_tokyo_electric_asakusa_station_coal20_oil0 } add = -10 }
+	}
+	else_if = {
+		limit = { is_building_type = building_siam_electric_wat_liab_station }
+		if = { limit = { has_active_production_method = pm_siam_electric_wat_liab_station } add = 40 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_siam_electric_wat_liab_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_siam_electric_wat_liab_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_calcutta_electric_victoria_house }
+		if = { limit = { has_active_production_method = pm_calcutta_electric_victoria_house } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_calcutta_electric_victoria_house_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_calcutta_electric_victoria_house_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_calcutta_electric_victoria_house_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_eea_dock_sud_power_station }
+		if = { limit = { has_active_production_method = pm_eea_dock_sud_power_station } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_eea_dock_sud_power_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_eea_dock_sud_power_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_eea_dock_sud_power_station_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_electricidad_caracas_power_house }
+		if = { limit = { has_active_production_method = pm_electricidad_caracas_power_house } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_electricidad_caracas_power_house_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_electricidad_caracas_power_house_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_electricidad_caracas_power_house_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_hanseong_jeongi_gwanghwamun_station }
+		if = { limit = { has_active_production_method = pm_hanseong_jeongi_gwanghwamun_station } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_hanseong_jeongi_gwanghwamun_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_hanseong_jeongi_gwanghwamun_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_hanseong_jeongi_gwanghwamun_station_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_ingolstadt_power_station }
+		if = { limit = { has_active_production_method = pm_ingolstadt_power_station } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_ingolstadt_power_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_ingolstadt_power_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_ingolstadt_power_station_coal15_oil0 } add = -8 }
+	}
+	min = 0
+}
+
+# Building scope: what the building makes a week at its levels and staffing,
+# by its methods (the split's weight), and at full staff (the weight of a
+# state whose plants all read no staff: they made last week's power).
+te_grid_mix_staffed_output_value = {
+	value = te_grid_mix_output_per_level_value
+	multiply = level
+	multiply = occupancy
+}
+
+te_grid_mix_capacity_output_value = {
+	value = te_grid_mix_output_per_level_value
+	multiply = level
+}
+
+# For the tab (country scope, read every frame, so every read is guarded):
+# what each source made a week at the last monthly count, the total, and
+# each source's share of it.
+te_grid_tab_mix_total_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_total }
+		value = var:te_grid_mix_total
+	}
+}
+
+te_grid_tab_mix_coal_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_coal }
+		value = var:te_grid_mix_coal
+	}
+}
+
+te_grid_tab_mix_oil_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_oil }
+		value = var:te_grid_mix_oil
+	}
+}
+
+te_grid_tab_mix_hydro_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_hydro }
+		value = var:te_grid_mix_hydro
+	}
+}
+
+te_grid_tab_mix_nuclear_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_nuclear }
+		value = var:te_grid_mix_nuclear
+	}
+}
+
+te_grid_tab_mix_renewable_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_renewable }
+		value = var:te_grid_mix_renewable
+	}
+}
+
+te_grid_tab_mix_fusion_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_fusion }
+		value = var:te_grid_mix_fusion
+	}
+}
+
+te_grid_tab_mix_space_solar_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_space_solar }
+		value = var:te_grid_mix_space_solar
+	}
+}
+
+te_grid_tab_mix_coal_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_coal_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_oil_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_oil_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_hydro_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_hydro_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_nuclear_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_nuclear_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_renewable_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_renewable_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_fusion_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_fusion_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_space_solar_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_space_solar_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
 # --- AI -----------------------------------------------------------------------
 
 # The building's ai_value, and the order te_grid_ai_build_effect picks the AI's
@@ -1269,3 +1543,8 @@ te_grid_st_quarter_g = { value = global_var:te_grid_st_quarter }
 te_grid_st_half_g = { value = global_var:te_grid_st_half }
 te_grid_st_most_g = { value = global_var:te_grid_st_most }
 te_grid_st_full_g = { value = global_var:te_grid_st_full }
+
+# TE_SELF_CHECK grid_mix_staffing: the first plant state's weighted staffing,
+# and its generation over its staffed weight.
+te_grid_chk_mix_staffed_g = { value = global_var:te_grid_chk_mix_staffed }
+te_grid_chk_mix_scale_g = { value = global_var:te_grid_chk_mix_scale }

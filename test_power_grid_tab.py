@@ -1,9 +1,10 @@
 """The Power Grids tab of the Timeline Extended window and a Grid Transfer
 Station's building panel section (gui/te_grid_widgets.gui): every fixed-width
-cell fits its longest text at its font, the tab's structure (three sections,
+cell fits its longest text at its font, the tab's structure (four sections,
 the full-screen columns), what it reads (the grid record of
 te_grid_record_effect, through guarded script values and the country's and
-hubs' lists), its gates and checklist, and every key defined.
+hubs' lists), its gates and checklist, every key defined, and the Generation
+panel's table of what each power plant method makes (GenerationTableTest).
 
 The width budget is test_banking_layout.py's (the style guide's rule 3): GUI
 units per character for each font, plus 10%, read from this file's own
@@ -27,6 +28,7 @@ VALUES = os.path.join(REPO, "common", "script_values", "power_grid_values.txt")
 TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "power_grid_triggers.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "power_grid_effects.txt")
+ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "power_grid_on_actions.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 # The longest a printed figure can be: a count four digits, a `|K` figure five
 # characters ("99.9K"), a share four ("100%").
@@ -37,6 +39,8 @@ SHARE = "100%"
 # about 20 characters ("North Rhine-Westphalia" is 22, and wraps: the State and
 # Grid columns are multiline).
 STATE = "Mecklenburg-Pomerania"
+# The Generation panel's sources, in the panel's order (te_grid_mix_panel).
+SOURCES = ("coal", "oil", "hydro", "nuclear", "renewable", "fusion", "space_solar")
 
 _SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
     r"template te_grid_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(GUI))}
@@ -126,6 +130,25 @@ class WidthTest(_Budget, unittest.TestCase):
                 self.fits(key, self.type_box("te_grid_heading", "heading_text"))
                 self.fits(right, self.type_box("te_grid_heading", "heading_right"), number)
 
+    def test_generation_rows(self):
+        row = _type_body(self.gui, "te_grid_mix_row")
+        widths = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", row)]
+        icon = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", row).group(1))
+        bar = int(re.search(r"default_progressbar_horizontal = \{\s*size = \{ (\d+) \d+ \}", row).group(1))
+        spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+        self.assertEqual(icon + bar + sum(widths) + 4 * spacing, 480)
+        label, amount, share = (self.box(row, f'block "row_{b}"') for b in ("label", "amount", "share"))
+        for src in SOURCES:
+            with self.subTest(source=src):
+                self.fits(f"te_grid_mix_{src}", label)
+                self.fits(f"te_grid_mix_{src}_amount", amount, KILO)
+                self.fits(f"te_grid_mix_{src}_share", share, SHARE)
+        panel = _type_body(self.gui, "te_grid_mix_panel")
+        self.assertIn('text = "te_grid_mix_header"', panel)
+        self.assertIn('text = "te_grid_mix_total"', panel)
+        self.fits("te_grid_mix_header", self.type_box("te_grid_heading", "heading_text"))
+        self.fits("te_grid_mix_total", self.type_box("te_grid_heading", "heading_right"), KILO)
+
     def test_grid_card(self):
         card = _type_body(self.gui, "te_grid_card")
         self.fits("te_grid_card_name", self.box(card, '"te_grid_card_name"'), STATE)
@@ -189,11 +212,12 @@ class StructureTest(unittest.TestCase):
         self.assertEqual(head[:3], b"\xef\xbb\xbf")
         self.assertNotEqual(head[3:6], b"\xef\xbb\xbf")
 
-    def test_three_sections_in_order(self):
+    def test_four_sections_in_order(self):
         body = _type_body(self.gui, "te_grid_tab_body")
         content = body[body.index('block "te_grid_tab_layout"'):]
         self.assertEqual(re.findall(r"^\t+(te_grid_\w+_panel) = \{\}", content, re.M),
-                         ["te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel"])
+                         ["te_grid_overview_panel", "te_grid_mix_panel", "te_grid_grids_panel",
+                          "te_grid_stations_panel"])
         self.assertIn("GetVariableSystem.Set('te_popup', 'help_power_grids')", body)
         self.assertIn('blockoverride "tab_open_journal" {}', body)
         self.assertIn("te_window_power_grids_tab_sgui", body[body.index('blockoverride "tab_gate"'):])
@@ -201,7 +225,8 @@ class StructureTest(unittest.TestCase):
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_grid_wide_sections",
                                              layout=("te_grid_tab_body", "te_grid_tab_layout"))
-        self.assertEqual(columns, [["te_grid_overview_panel", "te_grid_grids_panel"], ["te_grid_stations_panel"]])
+        self.assertEqual(columns, [["te_grid_overview_panel", "te_grid_mix_panel", "te_grid_grids_panel"],
+                                   ["te_grid_stations_panel"]])
 
     def test_the_registry(self):
         tab = next(t for t in window_gen.TABS if t.key == "power_grids")
@@ -357,12 +382,189 @@ class StructureTest(unittest.TestCase):
     def test_no_control_in_the_tab(self):
         """The tab shows another country all of it (National Info), so it has
         no control: no scripted GUI's Execute, no onclick but the "?"."""
-        for name in ("te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel", "te_grid_card",
-                     "te_grid_station_row", "te_grid_station_cells"):
+        for name in ("te_grid_overview_panel", "te_grid_mix_panel", "te_grid_mix_row", "te_grid_grids_panel",
+                     "te_grid_stations_panel", "te_grid_card", "te_grid_station_row", "te_grid_station_cells"):
             with self.subTest(type=name):
                 body = _type_body(self.gui, name)
                 self.assertNotIn("Execute", body)
                 self.assertNotIn("onclick", body)
+
+
+def _unwrap(value):
+    while isinstance(value, (tuple, list)) and len(value) == 2 and value[0] == "=":
+        value = value[1]
+    return value
+
+
+def _as_list(value):
+    value = _unwrap(value)
+    if value is None:
+        return []
+    return [_unwrap(v) for v in value] if isinstance(value, list) else [value]
+
+
+def _plant_methods():
+    """{building: {method: (block, Electricity a level)}} for every building
+    with a method that makes Electricity, vanilla's and the mod's, but the Grid
+    Transfer Station; and {method: its building_modifiers' goods inputs}."""
+    from mod_state import VANILLA_COMMON_DIRS, ModState
+    from vanilla_parsed import load
+
+    kinds = ("Buildings", "PMs", "PM Groups")
+    state = ModState({kind: "/nonexistent" for kind in kinds},
+                     {kind: os.path.join(REPO, "common", VANILLA_COMMON_DIRS[kind]) for kind in kinds},
+                     vanilla_data=load(os.path.join(REPO, "vanilla_parsed")).data)
+    assert not state.parse_failures, state.parse_failures
+    pms, groups, buildings = (state.get_data(k) for k in ("PMs", "PM Groups", "Buildings"))
+    plants, inputs = {}, {}
+    for building, body in buildings.items():
+        if building == "building_grid_transfer_station":
+            continue
+        for group in _as_list(_unwrap(body).get("production_method_groups")):
+            for pm in _as_list(_unwrap(groups.get(group, {})).get("production_methods")):
+                mods = _unwrap(_unwrap(pms.get(pm, {})).get("building_modifiers", {}))
+                for block, lines in (mods.items() if isinstance(mods, dict) else ()):
+                    lines = _unwrap(lines)
+                    if not isinstance(lines, dict):
+                        continue
+                    inputs.setdefault(pm, set()).update(
+                        k[len("goods_input_"):-len("_add")] for k in lines if k.startswith("goods_input_"))
+                    if "goods_output_electricity_add" in lines:
+                        value = float(_unwrap(lines["goods_output_electricity_add"]))
+                        plants.setdefault(building, {})[pm] = (block, value)
+    return plants, inputs
+
+
+class GenerationTableTest(unittest.TestCase):
+    """The Generation panel splits each state's measured Electricity among its
+    plants by what their methods make (te_grid_mix_output_per_level_value), so
+    the table must hold every method that makes Electricity, at its figure, and
+    every plant must count towards one source (te_grid_mix_add_building_effect)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.plants, cls.inputs = _plant_methods()
+        values = _no_comments(_read(VALUES))
+        cls.table_text = _txt_block(values, "te_grid_mix_output_per_level_value")
+        cls.effects = _no_comments(_read(EFFECTS))
+        cls.add = _txt_block(cls.effects, "te_grid_mix_add_building_effect")
+
+    def table(self):
+        """{building: {method: figure}} as the script value reads it."""
+        table = {}
+        for m in re.finditer(r"limit = \{ is_building_type = (\w+) \}", self.table_text):
+            branch = _block_from(self.table_text, self.table_text.rindex("{", 0, m.start()))
+            for pm, value in re.findall(
+                    r"if = \{ limit = \{ has_active_production_method = (\S+) \} add = (-?\d+(?:\.\d+)?) \}", branch):
+                table.setdefault(m.group(1), {})[pm] = float(value)
+        return table
+
+    def test_every_method_at_its_figure(self):
+        expected = {b: {pm: v for pm, (_, v) in methods.items()} for b, methods in self.plants.items()}
+        self.assertTrue(expected)
+        got = self.table()
+        missing = [f"{b}: if = {{ limit = {{ has_active_production_method = {pm} }} add = {v:g} }}"
+                   for b, methods in sorted(expected.items()) for pm, v in methods.items()
+                   if got.get(b, {}).get(pm) != v]
+        self.assertEqual(missing, [], "te_grid_mix_output_per_level_value lacks or misstates these")
+        self.assertEqual(sorted(got), sorted(expected), "a building in the table makes no Electricity")
+        for b in got:
+            self.assertEqual(sorted(got[b]), sorted(expected[b]), b)
+
+    def test_every_line_is_workforce_scaled(self):
+        """The weight is a level's figure times the levels and the staffing."""
+        for building, methods in self.plants.items():
+            for pm, (block, _) in methods.items():
+                self.assertEqual(block, "workforce_scaled", f"{pm} ({building}): a {block} line needs its own weight")
+        self.assertIn("multiply = level\n\tmultiply = occupancy",
+                      _txt_block(_no_comments(_read(VALUES)), "te_grid_mix_staffed_output_value"))
+
+    def branches(self):
+        """[(local variable, {building types}, {methods})] of te_grid_mix_add_building_effect."""
+        out = []
+        for m in re.finditer(r"change_local_variable = \{ name = te_grid_mix_w_(\w+) add = \$WEIGHT\$ \}", self.add):
+            head = self.add[:m.start()]
+            start = max(head.rfind("\tif = {"), head.rfind("else_if = {"))
+            limit = head[start:]
+            out.append((m.group(1), set(re.findall(r"is_building_type = (\w+)", limit)),
+                        set(re.findall(r"has_active_production_method = (\S+)", limit))))
+        return out
+
+    def test_every_plant_has_a_source(self):
+        branches = self.branches()
+        self.assertEqual([src for src, _, _ in branches], ["oil", "coal", "hydro", "nuclear", "renewable", "fusion",
+                                                          "space_solar"])
+        self.assertNotIn("else = {", self.add)
+        named = [b for _, types, _ in branches for b in types]
+        for building in self.plants:
+            with self.subTest(building=building):
+                # A Power Plant is Oil on an oil-fired method (the first branch), Coal on any other.
+                self.assertEqual(named.count(building), 2 if building == "building_power_plant" else 1)
+        self.assertEqual(set(named), set(self.plants))
+
+    def test_the_fuel_names_the_source(self):
+        """A plant that burns oil is Oil and one that burns coal Coal."""
+        branches = {src: (types, methods) for src, types, methods in self.branches()}
+        oil_types, oil_methods = branches["oil"]
+        self.assertEqual(oil_types, {"building_power_plant"})
+        plant = self.plants["building_power_plant"]
+        self.assertEqual(oil_methods, {pm for pm in plant if "oil" in self.inputs.get(pm, ()) and
+                                       not pm.startswith("pm_carbon_capture")})
+        for src, (types, _) in branches.items():
+            for building in types - {"building_power_plant"}:
+                burns = set().union(*(self.inputs.get(pm, set()) for pm in self.plants[building]))
+                with self.subTest(building=building):
+                    if "coal" in burns:
+                        self.assertEqual(src, "coal")
+                    if "oil" in burns:
+                        self.assertEqual(src, "oil")
+
+    def test_the_sources_agree(self):
+        """The same seven sources in the record, the split, the tab's values and the panel."""
+        record = _txt_block(self.effects, "te_grid_mix_record_effect")
+        state = _txt_block(self.effects, "te_grid_mix_state_effect")
+        clear = _txt_block(self.effects, "te_grid_mix_clear_weights_effect")
+        weights = _txt_block(self.effects, "te_grid_mix_sum_weights_effect")
+        values = _no_comments(_read(VALUES))
+        gui = _read(GUI)
+        self.assertEqual(tuple(re.findall(r"te_grid_mix_split_effect = \{ SOURCE = (\w+) \}", state)), SOURCES)
+        self.assertEqual(tuple(re.findall(r"name = te_grid_mix_sum_(\w+) value = 0", record)), SOURCES)
+        self.assertEqual(tuple(re.findall(r"set_variable = \{ name = te_grid_mix_(\w+) value = local_var:", record)),
+                         SOURCES)
+        total = record[record.index("name = te_grid_mix_total"):]
+        self.assertEqual(tuple(re.findall(r"local_var:te_grid_mix_sum_(\w+)", total)), SOURCES)
+        self.assertEqual(tuple(re.findall(r"name = te_grid_mix_w_(\w+) value = 0", clear)), SOURCES)
+        self.assertEqual(tuple(re.findall(r"local_var:te_grid_mix_w_(\w+)", weights)), SOURCES)
+        panel = _type_body(gui, "te_grid_mix_panel")
+        self.assertEqual(tuple(re.findall(r'text = "te_grid_mix_(\w+)_amount"', panel)), SOURCES)
+        for src in SOURCES:
+            with self.subTest(source=src):
+                self.assertIn(f"te_grid_tab_mix_{src}_disp = {{", values)
+                self.assertIn(f"te_grid_tab_mix_{src}_share_disp = {{", values)
+                self.assertIn(f"ScriptValue('te_grid_tab_mix_{src}_disp'), '(CFixedPoint)0' )]", panel)
+
+    def test_the_split(self):
+        """A share of the state's own generation (its station's delivery taken out), the share
+        first so the product stays under the fixed-point ceiling; a state with no staffed plant
+        falls back to full-staff weights."""
+        state = _txt_block(self.effects, "te_grid_mix_state_effect")
+        self.assertIn("set_local_variable = { name = te_grid_mix_gen value = te_grid_local_production_value }", state)
+        self.assertIn("WEIGHT = te_grid_mix_staffed_output_value", state)
+        self.assertIn("WEIGHT = te_grid_mix_capacity_output_value", state)
+        self.assertLess(state.index("te_grid_mix_staffed_output_value"), state.index("te_grid_mix_capacity_output_value"))
+        split = _txt_block(self.effects, "te_grid_mix_split_effect")
+        self.assertRegex(split, r"value = local_var:te_grid_mix_w_\$SOURCE\$\s*divide = local_var:te_grid_mix_w_all"
+                                r"\s*multiply = local_var:te_grid_mix_gen")
+        # A named script value isn't known to read a caller's local variables.
+        for name in re.findall(r"(?m)^(\w+) = \{", _read(VALUES)):
+            self.assertNotIn("local_var:", _txt_block(_read(VALUES), name), name)
+
+    def test_monthly_once_the_tab_is_open(self):
+        on_actions = _no_comments(_read(ON_ACTIONS))
+        pulse = _txt_block(on_actions, "on_monthly_pulse_country")
+        self.assertIn("te_grid_mix_on_action", pulse)
+        hook = _txt_block(on_actions, "te_grid_mix_on_action")
+        self.assertRegex(hook, r"limit = \{ te_grid_tab_unlocked = yes \}\s*te_grid_mix_record_effect = yes")
 
 
 class BuildingPanelTest(unittest.TestCase):
