@@ -68,6 +68,18 @@ FIRE_COMMAND = "event %s"               # console `event` fires whatever the tri
 READ_PREFIX = "TE_QA read "
 PENDING_COMMAND = "select_event_option list"
 NO_PENDING = "No pending events"
+# pick's forms (#1722, #1732). No id picks the oldest pending event: with one pending, that one (spec § 3.2,
+# verified in an entered game, 2026-11-10). By the id as listed, picks worked for ids up to 50331663 and failed,
+# NO_MATCH, for 2684354595 and 3959422997 (live, 2026-11-12): both above 2^31 - 1. Live on 2026-11-13 (1931 save,
+# un_events.4 at 2684354595 beside te_debug_ch.1 at 3456106516): its signed form (id - 2^32) answered NO_MATCH
+# too, so no typed form reaches such an id; with no id the select picked un_events.4, the first listed and the
+# lowest id. So an id up to 2^31 - 1 always goes as listed, so that no other event can be answered (review,
+# 2026-11-13: under left_running the list can change before the select); a higher one goes with no id when it is
+# alone in the list or first and lowest, and is refused (`id_unaddressable`) otherwise, with nothing sent.
+SELECT_NO_ID = "select_event_option %d"
+SELECT_BY_ID = "select_event_option %d %d"
+NO_MATCH = "No matching pending event"
+INT32_MAX = 2 ** 31 - 1
 FIXTURES_KEPT = 2
 
 WINDOW_WAIT_S = 300.0                   # from launch to a window that responds
@@ -168,7 +180,7 @@ class SessionError(Exception):
     held_unknown, overlay_refused, fixture_failed, snapshot_refused, launch_refused (with `game_may_be_up` when a
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
-    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
+    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, id_unaddressable, no_country,
     not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
@@ -958,12 +970,41 @@ class Session:
         return pending
 
     def pick(self, index: int, event: str | None = None) -> dict:
-        """Pick option `index` of a pending event, always by its numeric id. `event` is an event id or a numeric
-        id; by event id the oldest pending instance is taken (the lowest numeric id: the game hands them out in
-        order, assumed) and `ambiguous` says there was more than one; with no `event`, the oldest of all."""
+        """Pick option `index` of a pending event. `event` is an event id or a numeric id; by event id the oldest
+        pending instance is taken (the lowest numeric id: the game hands them out in order, assumed) and
+        `ambiguous` says there was more than one; with no `event`, the oldest of all. `try_event` picks through
+        here too.
+
+        The command has one of three forms, named by `form` in the reply and in the step:
+
+            id      an id up to 2^31 - 1: `select_event_option <index> <numeric id>`, the id as the list printed it,
+                    so that only the event listed can be answered
+            no_id   an id above 2^31 - 1, and that event the only one in the list just read: `select_event_option
+                    <index>` (live, 2026-11-13, #1732)
+            oldest  an id above 2^31 - 1, which no typed form reaches (live, 2026-11-13: the listed form and its
+                    signed form both answered NO_MATCH), when the event is first in the list and the lowest id
+                    of all pending: `select_event_option <index>`, as for no_id. Live, the select with no id
+                    took such an event; one that is first but not lowest has not been seen (ids carry a high
+                    byte that changes from game to game, so numeric order need not be age)
+
+        Any other event with an id above 2^31 - 1 is refused `id_unaddressable` before anything is sent; the
+        detail says what to do (answer the events listed before it, or, for a first-listed one, the console
+        verb). The two forms with no id need the whole list: a list line that is not an event (`unread`) refuses
+        them `bad_reply`, nothing sent. One command goes out; `attempts` lists it with its answer.
+
+        Each form must be answered `Selected option <index> of <event id>`, or the verb is not_selected. What
+        that check does not guard: the pending list can change between the list and the select. The game is
+        paused and nothing is typed in between, but a pick under `left_running` has time passing, and
+        `Console.run` retypes once a command whose arrival it could not prove after making sure the console is
+        open. And a select typed into a game frozen at a late debugger stop, or held by a reload, ends the verb
+        with a console error (`entered` None) and can still run after the next resume, unchecked. By id, a
+        select that comes too late can only answer NO_MATCH or pick the named event. With no id it picks
+        whatever is oldest by then (a follow-up event the first pick's option fired, say), and a refusal comes
+        after that event has been answered: the check reports it, nothing undoes it. The answer names the event
+        id, not the instance, so another instance of the same event would pass."""
         self._require_game()
         with self._step("pick", index=index, event=event) as out:
-            pending = self._pending()
+            pending, unread = self._pending_read()
             if event is None:
                 matches = pending
             elif str(event).isdigit():
@@ -978,14 +1019,54 @@ class Session:
             if isinstance(index, bool) or not isinstance(index, int) or not 0 <= index < chosen.options:
                 raise SessionError("bad_index", "%s has %d options (0 to %d), not %r"
                                    % (chosen.event_id, chosen.options, chosen.options - 1, index))
-            command = "select_event_option %d %d" % (index, chosen.numeric_id)
-            reply = self._console.run(command)
-            if "Selected option %d of %s" % (index, chosen.event_id) not in [line.strip() for line in reply.lines]:
-                raise SessionError("not_selected", "%r answered %r" % (command, reply.lines), lines=reply.lines)
+            attempts: list[dict] = []
+            out["attempts"] = attempts          # recorded in the step however the verb ends
+            if chosen.numeric_id <= INT32_MAX:
+                form, command = "id", SELECT_BY_ID % (index, chosen.numeric_id)
+            elif unread:
+                # A select with no id takes the first event listed: a list read in part cannot say which that is.
+                raise SessionError(
+                    "bad_reply", "%s's numeric id %d is above 2^31 - 1, so only a select with no id reaches it, "
+                    "and that takes the first event listed; %r answered lines pick could not read (%r), so the "
+                    "list cannot say which is first. Nothing was sent" % (chosen.event_id, chosen.numeric_id,
+                                                                        PENDING_COMMAND, unread), unread=unread)
+            elif len(pending) == 1:
+                form, command = "no_id", SELECT_NO_ID % index
+            elif chosen is pending[0] and chosen is min(pending, key=lambda p: p.numeric_id):
+                form, command = "oldest", SELECT_NO_ID % index
+            else:
+                if chosen is pending[0]:
+                    # Ids carry a high byte that changes from game to game (te_debug_ch.1 was 0xEC000015 on
+                    # 2026-11-12 and 0xCE000014 the next day), so the lowest id need not be the oldest event.
+                    way = ("it is first in the list but not the lowest id, and which event a select with no id takes "
+                           "then has not been seen (live, the one seen was both). `console \"select_event_option "
+                           "%d\"` sends that form unchecked; run `events` after it" % index)
+                else:
+                    way = ("a select with no id takes the first listed (live, 2026-11-13), and it is not first: "
+                           "answer the events listed before it first")
+                raise SessionError(
+                    "id_unaddressable", "%s's numeric id %d is above 2^31 - 1, which the console does not take in "
+                    "any typed form (live, 2026-11-13); %s. Nothing was sent; pending, as listed: %s"
+                    % (chosen.event_id, chosen.numeric_id, way,
+                       ", ".join("%d %s" % (p.numeric_id, p.event_id) for p in pending)),
+                    pending=[asdict(p) for p in pending])
+            lines = self._select(form, command, attempts, out)
+            if not _selected(lines, index, chosen.event_id):
+                raise SessionError("not_selected", "; ".join("%r answered %r" % (a["command"], a["reply"])
+                                                             for a in attempts),
+                                   lines=lines, form=form, attempts=attempts)
             result = {"event": chosen.event_id, "numeric_id": chosen.numeric_id, "index": index,
-                      "options": chosen.options, "ambiguous": len(matches) > 1, "reply": reply.lines}
+                      "options": chosen.options, "ambiguous": len(matches) > 1, "form": form,
+                      "command": command, "reply": lines, "attempts": attempts}
             out.update(result)
         return result
+
+    def _select(self, form: str, command: str, attempts: list[dict], out: dict) -> list[str]:
+        """Send one form of the select and keep its answer in `attempts`; the form is in `out` before it goes."""
+        out["form"] = form
+        lines = self._console.run(command).lines
+        attempts.append({"form": form, "command": command, "reply": lines})
+        return lines
 
     def read(self, exprs: Sequence[str]) -> list[Read]:
         """Each trigger or value evaluated at the read event's breakpoint, in the played country's scope. A
@@ -1008,6 +1089,8 @@ class Session:
             try:
                 when = self._date_in(self._new_lines())
             except SessionError as e:
+                # The proof of life after the poll failed (watch_ended): the values were evaluated before it, and
+                # go with the error, as they do with the "did not take the resume" one.
                 e.info.setdefault("reads", [asdict(r) for r in reads])
                 raise
             out.update(date=when)
@@ -1595,26 +1678,44 @@ class Session:
     def _fire_read(self, exprs: list[str]) -> tuple[list[Read], dict]:
         """Release any stop left over, fire the read event, evaluate `exprs` at its breakpoint, let the game run
         on. Only a stop whose reason is "breakpoint" is evaluated at. Once the game may have stopped, a resume is
-        always attempted (twice if need be), so no failure leaves it frozen without `_maybe_stopped` saying so."""
+        always attempted (twice if need be), so no failure leaves it frozen without `_maybe_stopped` saying so.
+
+        A command that brought no stop is typed again once, and only when `_why_not_retype` proves that the first
+        typing was never entered (#1702: the first read after `start --save` never reached the console, nor did
+        the next command's first typing, until the console's probe got through). Otherwise it is `no_stop`, with `arrived` (the
+        history gained the text: it ran; false proves nothing, since the history does not write a repeat) and
+        `maybe_stopped` (always: a stop may still come), `retried`, and `not_retried` saying why not."""
         dbg = self._debugger
-        self._drain()
-        self._new_lines()                       # a date line from before is not this read's
-        try:
-            self._console.send(READ_COMMAND)
-        except ConsoleError as e:
-            if e.entered is not False:          # it may have run: release a stop rather than leave the game in it
-                self._release(dbg)
-            raise
-        try:
-            stopped = dbg.wait_stopped(STOP_WAIT_S)
-        except DebuggerError as e:
-            self._maybe_stopped = True
-            raise SessionError("debugger", str(e), maybe_stopped=True) from e
-        if not stopped:
+        retried = False
+        while True:
+            self._drain()                       # before a retry too: resumes whatever stop may have come
+            self._new_lines()                   # a date line from before is not this read's
+            try:
+                self._console.send(READ_COMMAND)
+            except ConsoleError as e:
+                if e.entered is not False:      # it may have run: release a stop rather than leave the game in it
+                    self._release(dbg)
+                raise
+            try:
+                stopped = dbg.wait_stopped(STOP_WAIT_S)
+            except DebuggerError as e:
+                self._maybe_stopped = True
+                raise SessionError("debugger", str(e), maybe_stopped=True) from e
+            if stopped:
+                break
             self._resume(dbg)                   # a stop may come late: a resume answered "not stopped" does no harm
             self._maybe_stopped = True          # and it may come later still: the next verb releases it first
-            raise SessionError("no_stop", "the game did not stop at the read event within %g s" % STOP_WAIT_S,
-                               arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True)
+            if retried:
+                raise SessionError("no_stop", "the game did not stop at the read event within %g s of its second "
+                                   "typing (the first was proved never entered)" % STOP_WAIT_S,
+                                   arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True, retried=True)
+            why = self._why_not_retype(dbg)
+            if why is not None:
+                raise SessionError("no_stop", "the game did not stop at the read event within %g s; it was not "
+                                   "typed again: %s" % (STOP_WAIT_S, why),
+                                   arrived=self._console.arrived(READ_COMMAND), maybe_stopped=True, retried=False,
+                                   not_retried=why)
+            retried = True
         reason = dbg.last_stop_reason
         if reason != "breakpoint":
             self._resume(dbg)
@@ -1647,7 +1748,45 @@ class Session:
         if self._burst is not None:
             self._burst.extend(burst)
         # The stop proved the command ran; a history that did not gain it (it skips a repeat) is only noted.
-        return reads, {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(stray) + len(burst)}
+        info = {"arrived": self._console.arrived(READ_COMMAND), "debugger_errors": len(stray) + len(burst)}
+        if retried:
+            info["retried"] = True
+        return reads, info
+
+    def _why_not_retype(self, dbg: Debugger) -> str | None:
+        """After a read command brought no stop and was resumed: None when its typing is proved never entered,
+        so that typing it again cannot bring a second stop; else why it is not.
+
+        The proof: the history's last line before the typing was another command (a repeat running is not
+        written, so the history could not speak for it), and it has gained no line of the text; no stop has come
+        since; the console then answers a probe (`ensure_open`, which opens a console that a late load or a
+        click left shut, as on #1702), and keys are taken in order, so the read's keys were taken before the
+        probe's; and the history has still gained no line of the text, nor has a stop come. The probe's own keys
+        go wherever the keyboard is (the game, while the console is shut; a tool window after a click), as
+        `ensure_open`'s always do. Any stop seen is resumed here, and `_maybe_stopped` stays set either way for
+        the next verb's drain."""
+        if not self._console.never_entered(READ_COMMAND):
+            return ("the console history cannot show it: its last line was the command already (a read straight "
+                    "after a read), or it gained a line of it, or it was rewritten")
+        try:
+            if dbg.wait_stopped(DRAIN_S):
+                self._resume(dbg)
+                return "the game stopped after the wait: the command arrived late"
+        except DebuggerError as e:
+            return "the debugger could not be read (%s)" % e
+        try:
+            self._console.ensure_open()
+        except ConsoleError as e:
+            return "the console did not answer a probe afterwards (%s)" % e
+        try:
+            if dbg.poll_stopped():
+                self._resume(dbg)
+                return "the game stopped during the probe: the command arrived late"
+        except DebuggerError as e:
+            return "the debugger could not be read (%s)" % e
+        if not self._console.never_entered(READ_COMMAND):
+            return "the console history gained the command late"
+        return None
 
     def _drain(self) -> None:
         """Release a stop left over from an earlier read before anything is typed (a frozen game takes no key).
@@ -1817,11 +1956,17 @@ class Session:
             self._sleep(LOG_POLL_S)
 
     def _pending(self) -> list[Pending]:
+        return self._pending_read()[0]
+
+    def _pending_read(self) -> tuple[list[Pending], list[str]]:
+        """The pending events, and the reply's lines that are neither one of them nor NO_PENDING (`unread`)."""
         reply = self._console.run(PENDING_COMMAND)
         found = pending_events(reply.lines)
         if not found and NO_PENDING not in [line.strip() for line in reply.lines]:
             raise SessionError("bad_reply", "%r answered %r" % (PENDING_COMMAND, reply.lines))
-        return found
+        unread = [line for line in reply.lines
+                  if line.strip() and line.strip() != NO_PENDING and not pending_events([line])]
+        return found, unread
 
     def _tag(self, tag: str) -> None:
         _check_tag(tag)
@@ -2137,6 +2282,11 @@ class Session:
 
     def _watch_returned(self) -> bool:
         return self._watch is not None and self._watch.poll() is not None
+
+
+def _selected(lines: list[str], index: int, event: str) -> bool:
+    """Whether a select's answer says it picked option `index` of `event`."""
+    return "Selected option %d of %s" % (index, event) in [line.strip() for line in lines]
 
 
 def _names_event(text: str, event: str) -> bool:
