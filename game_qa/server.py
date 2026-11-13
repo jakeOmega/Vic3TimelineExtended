@@ -27,6 +27,10 @@ removes the folder (spec § 5.2, Review Focus 1).
                known by pid and start time): then it serves on, and `stop` again runs the stop again
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
+    profile-start, profile-dump
+               a profile of the running game (#1700): the tick timings cleared and the script profiler on, then
+               both dumps copied into the run folder (`Session.profile_start`, `Session.profile_dump`); `profile
+               summary` reads the copies and needs no server
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event
 
@@ -172,6 +176,8 @@ class SessionServer:
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
             "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
+            "profile-start": self._profile_start,
+            "profile-dump": self._profile_dump,
         }
 
     @property
@@ -352,6 +358,12 @@ class SessionServer:
 
     def _selfchecks(self, body: dict) -> tuple[dict, int]:
         return self._session.self_checks(), 0
+
+    def _profile_start(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_start(), 0
+
+    def _profile_dump(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_dump(body.get("label")), 0
 
     # ---- session.json
 

@@ -9,6 +9,7 @@ the debugger client's own, which the fakes answer at once.
 """
 import contextlib
 import datetime as dt
+import hashlib
 import io
 import json
 import os
@@ -20,7 +21,7 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
+from game_qa import dap, fakes, fixture, gate, logtail, overlay, profiling, server, session, snapshot
 from game_qa.report import read_steps
 from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
@@ -3823,6 +3824,187 @@ class AddModStartTest(SessionTestCase):
         self.paths.enabled_mods = [DEPLOYED_WIN, VARIANT_WIN]
         error = self.session_error(self.start, add_mods=[VARIANT_WIN], playset="current")
         self.assertEqual(error.info.get("reason"), "already_enabled")
+
+
+SNAP_TIME = dt.datetime(2026, 11, 10, 15, 0, 0, tzinfo=dt.timezone.utc)        # the id SNAP
+ROOT_CSV_REPLY = "Wrote %d rows to C:/Users/someone/Documents/Paradox Interactive/Victoria 3/ticktask_timings.csv"
+
+
+class ProfileTest(SessionTestCase):
+    """#1700: `profile start` and `profile dump` against the fake game, which writes the dumps when their commands
+    run. A real snapshot with the session's id stands under the backup root, since the dump reads its manifest. File
+    times are set with os.utime, never compared with a clock."""
+
+    def setUp(self):
+        super().setUp()
+        self.snap = snapshot.take(self.user, self.paths.backup_root, now=SNAP_TIME)
+        self.assertEqual(self.snap.id, SNAP)
+        self.server_log = self.user / profiling.SERVER_LOG
+        self.log_lines = ["[10:00:00][jominiapplication.cpp:539]: Changing game speed to: 4"]
+        self.write_server_log()
+        self.started()
+        self.game.on(profiling.CLEAR_COMMAND, success=["Discarded 0 recorded frames"])
+        self.game.on(profiling.ENABLE_COMMAND, success=["Enabled"])
+        self.game.on(profiling.SP_DUMP_COMMAND, success=["Wrote logs/script_profiling.txt"])
+        self.mtime = 10**18
+        self.tt_rows = [(profiling.frame_of(1836, 1, 11, 6), "UpdateEmployment", 5, 1)]
+        self.reply_rows: int | None = None          # what the console says it wrote (None: the rows' number)
+        self.writes = {profiling.TT_DUMP_COMMAND: True, profiling.SP_DUMP_COMMAND: True}
+        self.game.on_command = self.dumps
+        self.run_dir = self.paths.backup_root / "runs" / SNAP
+
+    def write_server_log(self) -> None:
+        self.server_log.write_text("\n".join(self.log_lines) + "\n", encoding="utf-8")
+
+    def stamp(self, path: Path) -> None:
+        self.mtime += 1_000_000_000
+        os.utime(path, ns=(self.mtime, self.mtime))
+
+    def dumps(self, text: str) -> None:
+        if text == profiling.TT_DUMP_COMMAND:
+            if self.writes[text]:
+                root = self.user / profiling.TT_FILE
+                root.write_text("\ufeff" + ",".join(profiling.TT_HEADER) + "\n"
+                                + "".join("%d,%s,%d,%d,0\n" % row for row in self.tt_rows), encoding="utf-8")
+                self.stamp(root)
+            rows = len(self.tt_rows) if self.reply_rows is None else self.reply_rows
+            self.game.on(text, success=[ROOT_CSV_REPLY % rows])
+        elif text == profiling.SP_DUMP_COMMAND and self.writes[text]:
+            path = self.user / profiling.SP_FILE
+            path.write_text("# type, location, time (seconds), call count\ntrigger common/x.txt:1 0.5 100\n",
+                            encoding="utf-8")
+            self.stamp(path)
+
+    def steps(self, verb: str) -> list[dict]:
+        return [step for step in read_steps(self.run_dir) if step["verb"] == verb]
+
+    def test_a_dump_needs_a_profile_start_first(self):
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_profiling")
+        self.assertEqual(self.typed(), [])
+
+    def test_the_start_clears_enables_and_begins_the_server_log_copy(self):
+        reply = self.session.profile_start()
+        typed = self.typed()
+        self.assertLess(typed.index(profiling.CLEAR_COMMAND), typed.index(profiling.ENABLE_COMMAND))
+        self.assertEqual((reply["clear"], reply["enable"], reply["starts"]),
+                         (["Discarded 0 recorded frames"], ["Enabled"], 1))
+        self.assertEqual(reply["date"], [1836, 1, 11])
+        step = self.steps("profile_start")[0]
+        self.assertEqual((step["outcome"], step["date"]), ("ok", [1836, 1, 11]))
+        self.assertIn("time", step)                    # the wall time, as every step has it
+        self.assertEqual((self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines(), self.log_lines)
+        self.assertEqual(reply["server_log_lines"], 1)
+
+    def test_a_start_the_game_refuses_is_refused(self):
+        self.game.on(profiling.ENABLE_COMMAND, failure=["Unknown command"])
+        error = self.session_error(self.session.profile_start)
+        self.assertEqual(error.code, "profile_refused")
+        self.assertEqual(self.steps("profile_start")[0]["outcome"], "profile_refused")
+        self.assertEqual(self.session_error(self.session.profile_dump).code, "not_profiling")
+
+    def test_a_dump_copies_both_files_at_once_and_leaves_the_root_csv_for_the_restore(self):
+        self.session.profile_start()
+        self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
+        self.write_server_log()
+        reply = self.session.profile_dump("A")
+        tt, sp = profiling.dump_paths(self.run_dir, "A")
+        self.assertEqual(tt.read_bytes(), (self.user / profiling.TT_FILE).read_bytes())
+        self.assertEqual(sp.read_bytes(), (self.user / profiling.SP_FILE).read_bytes())
+        self.assertEqual((reply["tick_tasks"]["rows"], reply["script"]["entries"]), (1, 1))
+        self.assertIsNone(reply["tick_tasks"]["before"])                   # there was none before the dump
+        self.assertTrue((self.user / profiling.TT_FILE).is_file())         # the restore's to judge
+        self.assertEqual(reply["server_log_lines"], 2)
+        self.assertEqual(self.steps("profile_dump")[0]["outcome"], "ok")
+        summary = profiling.summary(self.run_dir, read_steps(self.run_dir), ["A"], lambda name: "mod")
+        self.assertEqual(summary["window"]["first_frame"], "1836.1.11.6")
+        self.assertEqual(summary["script"]["seconds"], 0.5)
+
+    def test_the_label_defaults_to_the_date_and_a_used_one_is_refused_before_typing(self):
+        self.session.profile_start()
+        self.assertEqual(self.session.profile_dump()["label"], "1836_01_11")
+        self.assertEqual(self.session.profile_dump()["label"], "1836_01_11_2")
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "1836_01_11")
+        self.assertEqual(error.code, "label_used")
+        self.assertNotIn(profiling.TT_DUMP_COMMAND, self.typed())
+        self.assertEqual(self.session_error(self.session.profile_dump, "a/b").code, "bad_argument")
+
+    def test_a_file_the_dump_did_not_rewrite_is_not_copied(self):
+        self.session.profile_start()
+        self.session.profile_dump("A")
+        self.writes[profiling.TT_DUMP_COMMAND] = False         # the old CSV stays, its time and size unchanged
+        error = self.session_error(self.session.profile_dump, "B")
+        self.assertEqual(error.code, "not_written")
+        self.assertEqual(sorted(p.name for p in self.run_dir.glob("[ts][tp]_*")), ["sp_A.txt", "tt_A.csv"])
+        self.assertEqual(self.steps("profile_dump")[-1]["outcome"], "not_written")
+
+    def test_a_csv_with_other_rows_than_the_console_said_is_not_that_dump(self):
+        self.session.profile_start()
+        self.reply_rows = 7
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "rows_mismatch")
+        self.assertEqual(list(self.run_dir.glob("tt_*")), [])
+
+    def test_an_answer_that_names_no_file_is_refused(self):
+        self.session.profile_start()
+        self.game.on(profiling.SP_DUMP_COMMAND, success=["Profiling is not enabled"])
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "dump_refused")
+        self.assertEqual(list(self.run_dir.glob("tt_*")) + list(self.run_dir.glob("sp_*")), [])   # tt_A went too
+
+    def test_a_csv_the_snapshot_listed_without_storing_is_never_dumped_over(self):
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["listing"].append(profiling.TT_FILE)
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.session.profile_start()
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_snapshotted")
+        self.assertEqual(self.typed(), [])
+
+    def test_copies_the_game_cannot_be_proved_alive_after_are_removed(self):
+        self.session.profile_start()
+        real = profiling.copy_written
+
+        def copy_then_die(source, target, written):
+            size = real(source, target, written)
+            if target.name.startswith(profiling.SP_PREFIX):
+                self.game.process_gone = True
+            return size
+        with mock.patch.object(session.profiling, "copy_written", side_effect=copy_then_die):
+            error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(list(self.run_dir.glob("tt_*")) + list(self.run_dir.glob("sp_*")), [])
+        self.assertEqual(self.session_error(self.session.profile_dump, "B").code, "watch_ended")
+
+    def test_the_server_log_is_followed_across_its_rotation(self):
+        self.session.profile_start()
+        os.rename(self.server_log, self.server_log.with_name("dedicated_server.1.log"))
+        self.log_lines = ["[10:01:00][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6"]
+        self.write_server_log()
+        self.assertEqual(self.session.profile_dump("A")["server_log_lines"], 2)
+        copy = (self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines()
+        self.assertEqual(copy[-1], self.log_lines[0])
+
+    def test_a_server_log_the_game_appended_to_has_the_earlier_games_lines_left_out(self):
+        # the snapshot recorded the log the game found; a game that appended to it would hand those lines on as its own
+        found = self.server_log.read_bytes()
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["files"][profiling.SERVER_LOG] = {"size": len(found), "mtime_ns": 0,
+                                               "sha256": hashlib.sha256(found).hexdigest()}
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
+        self.write_server_log()
+        reply = self.session.profile_start()
+        self.assertEqual(reply["server_log_lines"], 1)
+        self.assertEqual((self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines(),
+                         self.log_lines[-1:])
+        skipped = [step for step in read_steps(self.run_dir) if step["verb"] == "found_log"]
+        self.assertEqual((skipped[0]["log"], skipped[0]["bytes"]), (profiling.SERVER_LOG, len(found)))
 
 
 if __name__ == "__main__":

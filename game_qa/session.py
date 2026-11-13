@@ -47,7 +47,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import addmod, fixture, overlay, pixels, rules, snapshot
+from game_qa import addmod, fixture, overlay, pixels, profiling, rules, snapshot
 from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -313,6 +313,9 @@ class Session:
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
         self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
         self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
+        self._profile_starts = 0            # profile starts that went through (#1700)
+        self._server_log: LogFollower | None = None      # dedicated_server.log, followed from the first profile start
+        self._server_lines = 0              # the lines of it the run folder's copy holds
 
     # ---- start
 
@@ -710,13 +713,13 @@ class Session:
             pass
         return None
 
-    def _found_log(self, snap: str) -> tuple[int, str] | None:
-        """The size and hash of the `logs/debug.log` the run's snapshot recorded: the log the game found when it
-        was launched. A game that appended to it would hand the session an earlier game's lines as its own, so
-        the follower skips a beginning with exactly those bytes (`LogFollower`). None when the snapshot's
+    def _found_log(self, snap: str, name: str = selfchecks.OWNERS_LOG) -> tuple[int, str] | None:
+        """The size and hash of the `logs/debug.log` (or `name`) the run's snapshot recorded: the log the game found
+        when it was launched. A game that appended to it would hand the session an earlier game's lines as its own,
+        so the follower skips a beginning with exactly those bytes (`LogFollower`). None when the snapshot's
         manifest cannot be read or holds no such log."""
         try:
-            entry = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files.get(selfchecks.OWNERS_LOG)
+            entry = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files.get(name)
         except (OSError, ValueError):
             return None
         return (entry.size, entry.sha256) if entry is not None else None
@@ -1276,6 +1279,176 @@ class Session:
             if "log_not_read" in found:
                 out["log_not_read"] = True
         return found
+
+    # ---- profiling (#1700)
+
+    def profile_start(self) -> dict:
+        """Start a profile of the running game: the date is read (the window begins there; the step's `time` is the
+        wall time), then `clear_ticktask_timings` and `ScriptProfiling.Enable`. From the first start on, the game's
+        `logs/dedicated_server.log` is followed into the run folder's `dedicated_server.log`, read at each start and
+        dump, and a poll's lines are kept only once the game is proved alive after it (`_vouch_for_polled`), as with
+        every log the session reads. Restore puts `logs/` back, so that copy is the run's record of the wall clock.
+
+        A start may be made again: the tick timings are cleared again, and `profile summary` will not take a window
+        across it. Whether Enable resets the script counts when it is already on is not verified. Refused
+        `profile_refused` when either command answers a failure, or nothing."""
+        self._require_game()
+        with self._step("profile_start") as out:
+            when = self._date()
+            out["date"] = list(when)
+            for key, command in (("clear", profiling.CLEAR_COMMAND), ("enable", profiling.ENABLE_COMMAND)):
+                reply = self._console.run(command)
+                out[key] = reply.lines
+                if reply.ok is not True:
+                    raise SessionError("profile_refused", "%s answered %s" % (command, reply.lines or "nothing"),
+                                       lines=reply.lines)
+            out["server_log_lines"] = self._follow_server_log()
+            self._profile_starts += 1
+            out["starts"] = self._profile_starts
+        return {"date": list(when), "clear": out["clear"], "enable": out["enable"], "starts": self._profile_starts,
+                "server_log_lines": out["server_log_lines"], "run_dir": str(self._report.dir)}
+
+    def profile_dump(self, label: str | None = None) -> dict:
+        """Both dumps, each copied into the run folder the moment it is written: `dump_ticktask_timings` (the
+        user-data root's ticktask_timings.csv) as `tt_<label>.csv` and `ScriptProfiling.Dump`
+        (logs/script_profiling.txt) as `sp_<label>.txt`; then the server log is read on. The label defaults to the
+        game date (`1931_08_02`, then `1931_08_02_2` …).
+
+        Refused before anything is typed: no profile started (`not_profiling`), a bad label (`bad_argument`), a label
+        the run folder holds already (`label_used`), and a run whose snapshot listed a ticktask_timings.csv or a
+        script_profiling.txt without storing it, or cannot be read (`not_snapshotted`): the restore would not put
+        such a file back, so no dump is made over it.
+
+        A dump's file counts as written only when its size or modification time is not what it was just before the
+        command, as its own drive stamps it (never against this machine's clock), and it has then held still for
+        two looks (`profiling.await_written`; `not_written` otherwise). It is copied whole or not at all
+        (`changed`). The CSV must hold the rows the console said it wrote (`rows_mismatch`), and the script dump its
+        header. Then the game must be proved alive by its pid and start time (`watch_ended` otherwise), since a
+        file read from the user-data folder is the run's only if its game was alive after the read. When anything
+        fails, the copies this dump made are removed, so that a dump's files are there exactly when its step went
+        through. The root CSV stays where the game wrote it: the snapshot set names it, so the restore puts the
+        owner's copy back, or removes the run's."""
+        self._require_game()
+        if self._profile_starts == 0:
+            raise SessionError("not_profiling", "no profile has been started in this session: `profile start` first")
+        if label is not None:
+            try:
+                profiling.check_label(label)
+            except profiling.ProfileError as e:
+                raise SessionError("bad_argument", e.detail) from e
+        self._check_snapshotted((profiling.TT_FILE, profiling.SP_FILE))
+        with self._step("profile_dump", label=label) as out:
+            when = self._date()
+            out["date"] = list(when)
+            label = label or self._dump_label(when)
+            out["label"] = label
+            tt_copy, sp_copy = profiling.dump_paths(self._report.dir, label)
+            if os.path.lexists(tt_copy) or os.path.lexists(sp_copy):
+                raise SessionError("label_used", "the run folder already holds a dump labelled %s" % label)
+            user = Path(self._paths.user_data)
+            copies: list[Path] = []
+            try:
+                out["tick_tasks"] = self._dump_one(profiling.TT_DUMP_COMMAND, user / profiling.TT_FILE, tt_copy,
+                                                   copies)
+                out["script"] = self._dump_one(profiling.SP_DUMP_COMMAND, user / profiling.SP_FILE, sp_copy, copies)
+                self._vouch_for_copies()
+                out["server_log_lines"] = self._follow_server_log()
+            except BaseException:
+                for path in copies:
+                    path.unlink(missing_ok=True)
+                raise
+        return {key: out[key] for key in ("label", "date", "tick_tasks", "script", "server_log_lines")}
+
+    def _dump_one(self, command: str, source: Path, target: Path, copies: list[Path]) -> dict:
+        """One dump: its command, its answer checked, its file awaited and copied to `target` (added to `copies`)."""
+        before = profiling.signature(source)
+        reply = self._console.run(command)
+        if reply.ok is not True:
+            raise SessionError("dump_refused", "%s answered %s" % (command, reply.lines or "nothing"),
+                               lines=reply.lines)
+        tick_tasks = command == profiling.TT_DUMP_COMMAND
+        wrote = profiling.rows_written(reply.lines) if tick_tasks else None
+        if tick_tasks and (wrote is None or not profiling.names_file(wrote[1], profiling.TT_FILE)):
+            raise SessionError("dump_refused", "%s did not say it wrote %s: %s" % (command, profiling.TT_FILE,
+                                                                                    reply.lines), lines=reply.lines)
+        if not tick_tasks and not any(profiling.names_file(line, Path(profiling.SP_FILE).name) for line in reply.lines):
+            raise SessionError("dump_refused", "%s did not say it wrote %s: %s" % (command, profiling.SP_FILE,
+                                                                                    reply.lines), lines=reply.lines)
+        try:
+            written = profiling.await_written(source, before, self._sleep, self._clock)
+            size = profiling.copy_written(source, target, written)
+            copies.append(target)
+            text = target.read_text(encoding="utf-8", errors="replace")
+            found = len(profiling.parse_tick_tasks(text)) if tick_tasks else len(profiling.parse_script_profile(text))
+        except profiling.ProfileError as e:
+            raise SessionError(e.code, e.detail) from e
+        if tick_tasks and found != wrote[0]:
+            raise SessionError("rows_mismatch", "%s holds %d rows, and the game said it wrote %d: it is not that "
+                                                "dump" % (target.name, found, wrote[0]))
+        return {"file": target.name, "bytes": size, ("rows" if tick_tasks else "entries"): found,
+                "reply": reply.lines, "before": list(before) if before else None, "written": list(written)}
+
+    def _dump_label(self, when: tuple[int, int, int]) -> str:
+        base = "%04d_%02d_%02d" % when
+        label, number = base, 1
+        while any(os.path.lexists(path) for path in profiling.dump_paths(self._report.dir, label)):
+            number += 1
+            label = "%s_%d" % (base, number)
+        return label
+
+    def _check_snapshotted(self, names: Sequence[str]) -> None:
+        """Refuse `not_snapshotted` unless the run's snapshot can be read and stored each of `names` it listed."""
+        try:
+            snap = snapshot.load(Path(self._paths.backup_root) / "snapshots" / self._snapshot)
+        except (OSError, ValueError) as e:
+            raise SessionError("not_snapshotted", "the run's snapshot cannot be read (%s), so whether it holds the "
+                                                  "files a dump overwrites is not known: nothing was typed"
+                               % _describe(e)) from e
+        for name in names:
+            if name in snap.listing and name not in snap.files:
+                raise SessionError("not_snapshotted", "the snapshot listed %s but did not store it (a link, or a "
+                                                      "snapshot taken before the set named it): the restore would "
+                                                      "not put it back, so no dump is made over it. Nothing was "
+                                                      "typed" % name)
+
+    def _vouch_for_copies(self) -> None:
+        """After a dump's files were copied: the game must still be the run's own, alive (one `adopt`). If not, the
+        verbs end for good (`watch_ended`), as after a log read that cannot be vouched for, and the caller removes
+        the copies."""
+        try:
+            self._helper.adopt(self._proc)
+        except Exception as e:
+            self._logs_closed = True
+            why = ("the game could not be proved alive by its pid and start time after its dumps were copied (%s), "
+                   "so the copies were removed: another game may have written them. Stop the session"
+                   % _describe(e))
+            self._notes.append("at %s a profile dump's copies were removed, since the game could not be proved alive "
+                               "after they were read" % stamp(utc_now()))
+            self._record("profile_copies", outcome="dropped", detail=_describe(e))
+            if self._watch_ended is None:
+                self._watch_ended = why
+            raise SessionError("watch_ended", why) from e
+
+    def _follow_server_log(self) -> int:
+        """Append the dedicated_server.log lines written since the last look to the run folder's copy, and return
+        how many lines the copy holds. The follower is made at the first call, with the snapshot's record of the log
+        the game found (`_found_log`), and keeps its place across the game's rotation of the log."""
+        if self._logs_closed:
+            return self._server_lines
+        if self._server_log is None:
+            self._server_log = LogFollower(Path(self._paths.user_data) / profiling.SERVER_LOG,
+                                           found=self._found_log(self._snapshot, profiling.SERVER_LOG))
+        lines = self._server_log.poll()
+        if lines:
+            self._vouch_for_polled()
+        if self._server_log.skipped:
+            skipped, self._server_log.skipped = self._server_log.skipped, 0
+            self._notes.append("the game appended to the dedicated_server.log it found: its first %d bytes are an "
+                               "earlier game's and were not copied as this run's" % skipped)
+            self._record("found_log", outcome="prefix_skipped", log=profiling.SERVER_LOG, bytes=skipped)
+        self._copy(profiling.RUN_SERVER_LOG, lines)
+        self._server_lines += len(lines)
+        return self._server_lines
 
     def _check_add_mods(self, add_mods: Sequence[str] | None, playset: str) -> list[addmod.AddMod]:
         """`start`'s add_mods, each checked (`addmod.check`); SessionError `add_mod_refused`, with the check's code as
