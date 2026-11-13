@@ -592,7 +592,7 @@ class RetimeTests(RestoreTestCase):
         self.assertEqual((out.held, out.retimed), (False, []))
         self.assertEqual(path.read_bytes(), mine)                   # theirs, untouched
         self.assertNotEqual(path.stat().st_mtime_ns, owners)
-        self.assertGreaterEqual(path.stat().st_mtime, began - 5)   # the present time (the clock may step a little)
+        self.assertGreaterEqual(path.stat().st_mtime, began - 300)  # the present time (WSL steps the clock, #1693)
         again = snapshot.take(self.user, self.backups, now=self.next_time())
         self.assertNotEqual(again.files["pdx_settings.json"].sha256, snap.files["pdx_settings.json"].sha256)
 
@@ -631,7 +631,7 @@ class RetimeTests(RestoreTestCase):
         self.assertEqual((out.held, out.retimed), (False, []))
         self.assertEqual(path.read_bytes(), mine)
         self.assertNotEqual(path.stat().st_mtime_ns, owners)
-        self.assertGreaterEqual(path.stat().st_mtime, began - 5)
+        self.assertGreaterEqual(path.stat().st_mtime, began - 300)
         self.assertEqual(events(snap)[-1], "restored")
         # so the next snapshot reads the file, and a later run's restore leaves the newer bytes alone
         again = snapshot.take(self.user, self.backups, now=self.next_time())
