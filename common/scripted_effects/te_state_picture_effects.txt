@@ -17,7 +17,11 @@
 #   te_sp_means  1 poor, 3 affluent, absent ordinary: the state's standard of living against
 #                the floors of its owner's city rung
 #   te_sp_rundown   present while the standard of living sits well under what its people expect
-# A picture can therefore lag a change by up to a year.
+# A picture can therefore lag a change by up to a year. The banner's hover (te_sp_tt_* loc) gives
+# the figures each tag was judged on, so the pass stores them beside the tags: te_sp_people (the
+# largest city's people), te_sp_sol and te_sp_esol (the standard of living and what its people
+# expect), and while a land or city tag stands, the share it was judged on (te_sp_oil_share,
+# te_sp_coal_share, te_sp_industry_share, te_sp_resort_share).
 # ============================================================================
 
 # State scope, from on_yearly_pulse_state (te_state_picture_on_actions.txt).
@@ -40,6 +44,14 @@ te_state_picture_refresh = {
 	else_if = {
 		limit = { var:te_sp_size > te_state_picture_size_down }
 		set_variable = { name = te_sp_size value = te_state_picture_size_down }
+	}
+	# the figure the size was judged on, for the banner's hover
+	if = {
+		limit = { te_state_picture_city_people >= 0 }
+		set_variable = { name = te_sp_people value = te_state_picture_city_people }
+	}
+	else = {
+		remove_variable = te_sp_people
 	}
 	te_state_picture_refresh_land = yes
 	te_state_picture_refresh_city = yes
@@ -135,6 +147,21 @@ te_state_picture_land_tags = {
 		}
 		remove_variable = te_sp_coal
 	}
+	# the shares the two tags stand on, for the banner's hover
+	if = {
+		limit = { has_variable = te_sp_oil }
+		set_variable = { name = te_sp_oil_share value = { value = local_var:te_sp_oil_lv divide = local_var:te_sp_all } }
+	}
+	else = {
+		remove_variable = te_sp_oil_share
+	}
+	if = {
+		limit = { has_variable = te_sp_coal }
+		set_variable = { name = te_sp_coal_share value = { value = local_var:te_sp_coal_lv divide = local_var:te_sp_mine } }
+	}
+	else = {
+		remove_variable = te_sp_coal_share
+	}
 }
 
 # What a city is known for, beyond its region and size (design section 7). Called after
@@ -178,6 +205,21 @@ te_state_picture_refresh_city = {
 			}
 		}
 		remove_variable = te_sp_resort
+	}
+	# the shares the two tags stand on, for the banner's hover
+	if = {
+		limit = { has_variable = te_sp_industry }
+		set_variable = { name = te_sp_industry_share value = { value = local_var:te_sp_heavy_lv divide = local_var:te_sp_all } }
+	}
+	else = {
+		remove_variable = te_sp_industry_share
+	}
+	if = {
+		limit = { has_variable = te_sp_resort }
+		set_variable = { name = te_sp_resort_share value = { value = local_var:te_sp_tour_lv divide = local_var:te_sp_all } }
+	}
+	else = {
+		remove_variable = te_sp_resort_share
 	}
 
 	# growth: the Demographics walk's people against the walk before's, smoothed over several
@@ -275,8 +317,13 @@ te_state_picture_refresh_prosperity = {
 		limit = { te_state_picture_city_rung < 1 }
 		remove_variable = te_sp_means
 		remove_variable = te_sp_rundown
+		remove_variable = te_sp_sol
+		remove_variable = te_sp_esol
 	}
 	else = {
+		# the figures both tags are judged on, for the banner's hover
+		set_variable = { name = te_sp_sol value = te_state_picture_sol }
+		set_variable = { name = te_sp_esol value = average_expected_sol }
 		# means: poor under the first floor, affluent from the second, each kept a little past it
 		if = {
 			limit = { te_state_picture_sol < te_state_picture_poor_floor }
