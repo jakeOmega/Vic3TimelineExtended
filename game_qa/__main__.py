@@ -247,6 +247,8 @@ def _outcome(out: restore.Outcome) -> dict:
     result = {"restored": out.restored, "removed": out.removed, "held": out.held, "reason": out.reason}
     if out.retimed:         # same bytes as the snapshot, the run's time on them: the snapshot's time put back
         result["retimed"] = out.retimed
+    if out.manual_saves:    # the owner's own saves changed, gone or new (restore._manual_saves)
+        result["manual_saves"] = out.manual_saves
     return result
 
 
@@ -332,7 +334,10 @@ def cmd_snapshot(args) -> tuple[dict, int]:
     if left is not None:
         return _playset_not_restored(left.id, "a snapshot now would record it as the owner's").result, 2
     extra = ["save games/" + (name if name.endswith(".v3") else name + ".v3") for name in args.save]
-    snap = snapshot.take(user, backups, extra=extra)
+    try:
+        snap = snapshot.take(user, backups, extra=extra)
+    except snapshot.SaveNotListed as exc:       # a name the drive answers to but does not list (an 8.3 name)
+        return {"refused": "bad_argument", "detail": str(exc)}, 2
     snapshot.record(snap, "armed")
     pruned = restore.prune(backups, keep=KEEP_SNAPSHOTS, current=snap.id)
     return {"id": snap.id, "files": len(snap.files), "pruned": pruned,
@@ -940,8 +945,9 @@ def cmd_restore(args) -> tuple[dict, int]:
     happened. With no such record, anything that would need judging is held.
     A run during which `watch` saw another game is held (`other_game_ran`),
     changing nothing else, as is one it lost sight of (`unwatched_stretch`). With
-    no `started` nothing was launched, so `logs/` is whoever played since, and
-    is left alone. A snapshot a `launch` may still be on its way to recording
+    no `started` nothing was launched, so `logs/` and the owner's own saves are
+    whoever played since: `logs/` is left alone and the saves are not compared
+    (`manual_save_changed`). A snapshot a `launch` may still be on its way to recording
     a start for gets no verdict (`launch_in_flight`). Before judging, the
     playset `launch` wrote for the run is put back when it is provably still
     the harness's own and no game runs, whatever the verdict
@@ -968,8 +974,9 @@ def cmd_restore(args) -> tuple[dict, int]:
     notes: dict = {}
     try:
         _settle_playset(snap, user, bool(games), notes)
+        started = "started" in _events(snap)    # nothing launched: logs/ and the saves are whoever played since
         out = _unvouched_hold(snap) or restore.restore(
-            snap, user, other_game_running=bool(games), logs="started" in _events(snap),
+            snap, user, other_game_running=bool(games), logs=started, saves=started,
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
         return {"held": False, "refused": "error", "detail": str(exc), **notes}, 2
@@ -1184,7 +1191,7 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
     or its journal write (not_recorded), or a session died between the start and the record. That is still
     safe: any game running may be the owner's, so this holds (`other_game_running`). With none, restore puts
     the folder back when nothing needs judging and holds (`no_reference_time`) otherwise, leaving `logs/`
-    alone: with nothing recorded, the logs are whoever played since. A session's own snapshot, between its
+    alone and the owner's own saves uncompared: with nothing recorded, they are whoever played since. A session's own snapshot, between its
     `snapshot` and `launch`, is finished too: `launch` then refuses `already_finished`, starting nothing.
     A claimed one whose claim is younger than LAUNCH_IN_FLIGHT_S gets no verdict: a `launch` may be about to
     record its start, its game not yet listed. It is reported (`launch_in_flight`) and the unwinding stops. The
@@ -1204,7 +1211,8 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
+            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False,
+                                                           saves=False)
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
@@ -1242,7 +1250,7 @@ def cmd_selftest_restore(args) -> tuple[dict, int]:
         target = Path(tmp)
         for rel in snap.files:
             (target / rel).parent.mkdir(parents=True, exist_ok=True)
-        out = restore.restore(snap, target, other_game_running=False)
+        out = restore.restore(snap, target, other_game_running=False, saves=False)   # the scratch folder holds no saves
         for rel, entry in snap.files.items():
             path = target / rel
             if not path.is_file() or _sha256(path) != entry.sha256:
