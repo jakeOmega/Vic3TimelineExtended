@@ -63,10 +63,13 @@ GAME_MAY_BE_UP = "game_may_be_up"
 # `launch` refusals given before it claims the snapshot: no game was started (game_qa/__main__.py). Any other
 # reply that is not a success (not_recorded, start_unconfirmed, a refusal after the claim, a name not known here,
 # a lost or unreadable reply) may come with a game up.
+# ADD_MOD_CHANGED is the session's own, given in place of a launch it did not run (a variant folder changed).
+ADD_MOD_CHANGED = "add_mod_changed"
 NO_GAME_REFUSALS = frozenset({
     "already_finished", "already_started", "not_armed", "no_end_date", "bad_argument", "no_permission",
     "backup_root", "other_game", "gpu_busy", "game_running", "stale_snapshot", "no_game_binary",
-    "mod_not_in_playset", "playset_not_restored", "busy", "no_long_run_grant", "handsoff_on_a_save"})
+    "mod_not_in_playset", "playset_not_restored", "busy", "no_long_run_grant", ADD_MOD_CHANGED,
+    "handsoff_on_a_save"})
 _CLAIMED = "stays claimed"              # said by every refusal after the claim (__main__._CLAIM_STAYS)
 
 _KEY = re.compile(r"[A-Za-z0-9_]{1,64}")
@@ -473,7 +476,7 @@ def restore_retried(run_cli: RunCli, snapshot_id: str, sleep, retries: Mapping[s
 
 
 def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str,
-        disabled_dlc: Sequence = (), rules: Sequence[str] = ()) -> str:
+        disabled_dlc: Sequence = (), rules: Sequence[str] = (), add_mod_dirs: Sequence[Path] = ()) -> str:
     """12 hex digits naming the game a fixture was made for: the game version, the run's playset (its mode,
     `playset`, `enabled_mods`, the mod paths the run loads, in order, and `disabled_dlc`, the DLC the run's
     playset switches off, as a set: launch keeps the owner's `disabledDLC`), `rules`, the rule settings the
@@ -481,8 +484,13 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
     the defaults: game_qa.rules), and the relative path, size and
     modification time of every file under the deployed mod's `common/`, `events/` and `map_data/` (a folder that
     is missing is skipped). A fixture made under another playset, or another DLC set, is another world: a DLC
-    changes what a new game sets up even where the script folders loaded are the same. Not covered: for
-    `current`, the other mods' contents (only their paths are hashed), so an update of one keeps the key."""
+    changes what a new game sets up even where the script folders loaded are the same. `add_mod_dirs`, the
+    session's variant folders (`start --add-mod`, whose Windows paths are among `enabled_mods`), are hashed as the
+    deployed mod is, each by its place in the list, and with the bytes of its `.metadata/metadata.json` (whose
+    `game_custom_data.replace_paths` changes which vanilla folders load), so a variant edited in place is another
+    world too (`add_mod_digest`). Not covered: for `current`, the other mods' contents (only their paths are
+    hashed), so an update of one keeps the key; and the deployed mod's own metadata.json, which would change
+    every fixture's key."""
     if isinstance(enabled_mods, str):
         raise TypeError("enabled_mods is a list of paths, not one path")
     digest = hashlib.sha256()
@@ -494,7 +502,31 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
         _feed(digest, "dlc_off", dlc)
     for setting in rules:
         _feed(digest, "rule", setting)
-    root = Path(deploy_dir)
+    _feed_folders(digest, "file", Path(deploy_dir))
+    _feed_add_mods(digest, add_mod_dirs)
+    return digest.hexdigest()[:12]
+
+
+def add_mod_digest(add_mod_dirs: Sequence[Path]) -> str:
+    """What `key` reads of the variant folders, alone: the session takes it at `start` and again just before each
+    launch, and refuses a launch when it has changed (the fixture would be keyed on files the game does not load)."""
+    digest = hashlib.sha256()
+    _feed_add_mods(digest, add_mod_dirs)
+    return digest.hexdigest()
+
+
+def _feed_add_mods(digest, add_mod_dirs: Sequence[Path]) -> None:
+    for number, folder in enumerate(add_mod_dirs):
+        _feed_folders(digest, "add_mod_file_%d" % number, Path(folder))
+        try:
+            meta = hashlib.sha256((Path(folder) / ".metadata" / "metadata.json").read_bytes()).hexdigest()
+        except OSError as e:
+            meta = "unreadable: %s" % type(e).__name__
+        _feed(digest, "add_mod_metadata_%d" % number, meta)
+
+
+def _feed_folders(digest, tag: str, root: Path) -> None:
+    """The relative path, size and modification time of every file under `root`'s KEY_FOLDERS, in order."""
     for folder in KEY_FOLDERS:
         records = []
         for where, _, names in os.walk(root / folder):
@@ -506,8 +538,7 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
                     continue
                 records.append((path.relative_to(root).as_posix(), info.st_size, info.st_mtime_ns))
         for record in sorted(records):
-            _feed(digest, "file", *record)
-    return digest.hexdigest()[:12]
+            _feed(digest, tag, *record)
 
 
 def find(user_data: Path, key: str) -> Path | None:
@@ -531,6 +562,7 @@ def make(
     clock=time.monotonic,
     started: Callable[[str], ProcId | None] | None = None,
     keep_lines: Callable[[str], Any] | None = None,
+    add_mods: Sequence[str] = (),
     date: Date = DEFAULT_DATE,
     limit_s: float = FIXTURE_LIMIT_S,
     follow: Callable[[str], Any] | None = None,
@@ -539,7 +571,8 @@ def make(
     mark: Callable[..., Any] | None = None,
 ) -> Path:
     """Make the fixture for `key` with one unattended run of the game, and return its save. `playset` is the
-    run's (`launch --playset`), so the fixture is made in the world the run will load.
+    run's (`launch --playset`), so the fixture is made in the world the run will load; `add_mods`, the session's
+    variant folders (Windows paths), are loaded too, after the playset and before the overlay, as the run's are.
 
     `date` is the save's date (DEFAULT_DATE: the 1836 fixture): the overlay's scripted test must have been built
     for it (`overlay.build(..., fixture_date=date)`), and the launch carries its `-run_until` (`fixture_args`) and,
@@ -590,7 +623,10 @@ def make(
     if not ok or not isinstance(snapshot, str) or not snapshot:
         raise FixtureError(_message("snapshot", reply, None), "snapshot", reply)
 
-    launch = ["launch", snapshot, "--permission", permission, "--playset", playset, "--add-mod", overlay_windows_path]
+    launch = ["launch", snapshot, "--permission", permission, "--playset", playset]
+    for folder in add_mods:
+        launch += ["--add-mod", folder]
+    launch += ["--add-mod", overlay_windows_path]
     if owner_confirmed_busy:
         launch.append("--owner-confirmed-busy")
     if long_run is not None:
