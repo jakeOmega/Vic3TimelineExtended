@@ -1198,6 +1198,32 @@ class CommandLineTest(unittest.TestCase):
                              (2, True, "save_not_kept", ["save games/" + save.name]))
             self.assertEqual(self.tree(), before)
 
+    def test_a_hold_the_fixture_asked_for_clears_once_the_owner_has_moved_the_save(self):
+        # Review, 2026-11-13: a hold that outlived the file it kept left the run's autosaves over the owner's.
+        taken, _ = self.run_cli("snapshot")
+        game = self.game()
+        snap = self.the_snapshot()
+        with self.naps_clock():
+            snapshot.record(snap, "started", pid=game.pid, created=game.created)
+            autosave = self.user / "save games" / "autosave.v3"
+            owners = autosave.read_bytes()
+            autosave.write_bytes(b"the run's autosave of 1 October 1899")
+            save = self.user / "save games" / "TEST_FAIL_te_qa_fixture_1 January, 1900.v3"
+            save.write_bytes(b"64 years of an AI-only game")
+            self._nap(5)
+            snapshot.record(snap, "game_exited")
+            snapshot.record(snap, fixture_mod.HOLD_ASKED, reason="save_not_kept", files=["save games/" + save.name])
+            self.games = []
+            out, code = self.run_cli("restore", taken["id"])
+            self.assertEqual((out["held"], out["reason"]), (True, "save_not_kept"))
+            self.assertNotEqual(autosave.read_bytes(), owners)
+            moved = save.with_name("te_qa_fixture_0123456789ab_d19000101.v3")
+            save.rename(moved)                                      # what SKILL.md tells the owner to do
+            out, code = self.run_cli("restore", taken["id"])
+            self.assertEqual((code, out["held"]), (0, False), self.why(out))
+            self.assertEqual(autosave.read_bytes(), owners)
+            self.assertEqual(moved.read_bytes(), b"64 years of an AI-only game")
+
     def test_watch_records_no_exit_when_a_look_failed_since_the_last_heartbeat(self):
         # Break-it review 2026-11-10, (10): four failed looks after the run's game exited, during which the owner
         # played and quit; the next look stamped game_exited after their writes, and restore undid them. Here

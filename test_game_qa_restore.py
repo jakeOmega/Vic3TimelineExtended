@@ -1696,6 +1696,83 @@ class NotTheRunsSaveTest(LongRunTest):
         finish(snap, at=NOW + timedelta(minutes=2))
         self.assertFalse(restore.restore(snap, self.user, other_game_running=False).held)
 
+    def test_a_continued_save_is_judged_as_a_session_is(self):
+        self.owners(self.ROTATION)
+        snap = self.unattended(extra=("-continuelastsave",))
+        self.autosave(1)
+        path = self.user / "save games" / "autosave.v3"
+        path.write_bytes(b"SAV0100\nmeta_data={\n\tgame_date=1950.4.1\n}\n")
+        set_mtime(path, NOW, 90)
+        finish(snap, at=NOW + timedelta(minutes=2))
+        self.assertFalse(restore.restore(snap, self.user, other_game_running=False).held)
+
+    # Review, 2026-11-13: the rotation moves the owner's own autosaves down a slot, and the run's own game may
+    # write an exit autosave when it is closed by hand. Neither is another game's.
+
+    def owners_text(self, date=b"1931"):
+        """The owner's five autosaves as plain-text saves of their own game (after play in debug mode)."""
+        saves = self.user / "save games"
+        for path in saves.glob("autosave*.v3"):
+            path.unlink()
+        for k, name in enumerate(self.ROTATION):
+            (saves / name).write_bytes(b"SAV0100\nmeta_data={\n\tgame_date=%s.%d.1\n}\nowner %d\n" % (date, 8 - k, k))
+            set_mtime(saves / name, NOW, -86400 + k)
+        return {name: (saves / name).read_bytes() for name in self.ROTATION}
+
+    def run_autosave(self, n, date):
+        self.autosave(n)
+        path = self.user / "save games" / "autosave.v3"
+        path.write_bytes(b"SAV0100\nmeta_data={\n\tgame_date=%s\n}\nrun\n" % date)
+        set_mtime(path, NOW, 60 * n)
+
+    def test_the_owners_autosaves_moved_down_the_rotation_are_put_back(self):
+        before = self.owners_text()
+        snap = self.unattended(until="1836.7.3")
+        self.run_autosave(1, b"1836.4.1")
+        self.run_autosave(2, b"1836.7.1")
+        finish(snap, at=NOW + timedelta(minutes=3))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (False, ""), snapshot.journal(snap)[-1])
+        for name, data in before.items():
+            self.assertEqual((self.user / "save games" / name).read_bytes(), data, name)
+
+    def test_an_exit_autosave_of_the_runs_own_game_is_put_back(self):
+        before = self.owners([*self.ROTATION, "autosave_exit.v3"])
+        snap = self.unattended()
+        for n in range(1, 9):
+            self.autosave(n)
+        path = self.laptop_game(snap, data=b"SAV0100\nmeta_data={\n\tgame_date=1838.2.11\n}\nthe run's game, closed\n")
+        self.assertTrue(path.is_file())
+        finish(snap, at=NOW + timedelta(minutes=9))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (False, ""))
+        for name, data in before.items():
+            self.assertEqual((self.user / "save games" / name).read_bytes(), data, name)
+
+    def test_after_an_unattended_run_an_exit_autosave_not_dated_inside_it_holds(self):
+        for data in (b"SAV0100\nmeta_data={\n\tgame_date=1932.5.1\n}\n", b"SAV0103 the laptop's binary save"):
+            with self.subTest(data=data[:12]):
+                self.setUp()
+                self.owners(self.ROTATION)
+                snap = self.unattended()
+                for n in range(1, 9):
+                    self.autosave(n)
+                self.laptop_game(snap, data=data)
+                finish(snap, at=NOW + timedelta(minutes=9))
+                tree_before = tree(self.user)
+                out = restore.restore(snap, self.user, other_game_running=False)
+                self.assertEqual((out.held, out.reason), (True, "not_the_runs_save"))
+                self.assertEqual(tree(self.user), tree_before)
+
+    def test_after_a_session_any_new_exit_autosave_holds(self):
+        self.owners(self.ROTATION)
+        snap = self.unattended(extra=("-loadsave=te_qa_fixture_0123456789ab",))
+        self.autosave(1)
+        self.laptop_game(snap, data=b"SAV0100\nmeta_data={\n\tgame_date=1836.1.9\n}\n", at=90)
+        finish(snap, at=NOW + timedelta(minutes=2))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "not_the_runs_save"))
+
 
 if __name__ == "__main__":
     unittest.main()

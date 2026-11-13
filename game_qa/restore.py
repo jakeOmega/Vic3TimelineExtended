@@ -61,10 +61,12 @@ _BLOB_NAME = re.compile(r"^[0-9a-f]{64}$")
 # In `save games/` only the game's own rotation names may be taken for something the run pushed in. OneDrive
 # makes conflict copies such as `autosave-Manfred.v3` and `autosave_1-Manfred.v3`; they are the owner's.
 _ROTATION_NAME = re.compile(r"^autosave(_\d+|_exit)?\.v3$")
-# No run of the harness writes `autosave_exit.v3`: an unattended run ends at its `-run_until` without one (the 1836
-# fixture's runs wrote none), and a session's game is ended by its process. One that is new or changed after a run
-# came from another game, such as the owner's on another PC, synced in by OneDrive with that PC's times; and so did
-# an autosave whose own `game_date` an unattended run from 1836 never reached. Either holds (`not_the_runs_save`).
+# An unattended run ends at its `-run_until` without an `autosave_exit.v3` (the 1836 fixture's runs wrote none), and
+# a session's game is ended by its process. One that is new or changed after a run, and not a plain-text save
+# dated inside an unattended run (its game closed by hand), came from another game, such as the owner's on another
+# PC, synced in by OneDrive with that PC's times; and so did an autosave whose own `game_date` an unattended run
+# from 1836 never reached. Either holds (`not_the_runs_save`). The owner's own autosaves, moved down the rotation,
+# carry bytes the manifest has and are not judged.
 _EXIT_AUTOSAVE = "save games/autosave_exit.v3"
 _SAVE_GAME_DATE = re.compile(rb"\n\tgame_date=([0-9]{1,4})\.([0-9]{1,2})\.([0-9]{1,2})\n")
 _RUN_UNTIL = re.compile(r"-run_until=([0-9]{1,4})\.([0-9]{1,2})\.([0-9]{1,2})")
@@ -292,29 +294,43 @@ def _hold_reason(snap: Snapshot, user_data: Path, diff: Diff) -> tuple[str, list
 
 
 def _not_the_runs(snap: Snapshot, user_data: Path, diff: Diff) -> list[str]:
-    """The autosaves, changed or pushed in, that no run of the harness wrote (see _EXIT_AUTOSAVE): a new or
-    changed `autosave_exit.v3`, and, after an unattended run from 1836 (its `started` names a `-run_until` and no
-    `-loadsave`), an autosave whose own `game_date` is readable and outside 1836.1.1 to that end."""
+    """The autosaves, changed or pushed in, that no run of the harness wrote (see _EXIT_AUTOSAVE).
+
+    A file whose bytes are one of the manifest's is the owner's own under another name (the game's rotation moves
+    `autosave.v3` to `autosave_2.v3` and on) and is never one of these. Of the rest, after an unattended run from
+    1836 (its `started` names a `-run_until` and no save to load): an autosave whose own `game_date` is readable and
+    outside 1836.1.1 to that end, and an `autosave_exit.v3` that is not a plain-text save dated inside that span
+    (a run's game writes plain text, `SAV0100`; the owner's are binary). After any other run (a session, which
+    loads a save of any date) a new or changed `autosave_exit.v3` is one of these: a session's game is ended by its
+    process, and ending it by hand is not the way to stop one."""
     saves = sorted(name for name in {*diff.changed, *diff.added_in_set}
                    if name.rpartition("/")[0] == "save games" and _ROTATION_NAME.match(name.rpartition("/")[2]))
     if not saves:
         return []
     until = _run_until(snap)
+    owners = {entry.sha256 for entry in snap.files.values()}
     out = []
     for rel in saves:
+        try:
+            if _sha256(user_data / rel) in owners:
+                continue                        # the owner's own bytes, moved by the rotation
+        except OSError:
+            pass                                # unreadable: judged below as it is
+        date = _save_game_date(user_data / rel) if until is not None else None
+        in_run = date is not None and until is not None and _GAME_START <= date <= until
         if rel == _EXIT_AUTOSAVE:
-            out.append(rel)
-        elif until is not None:
-            date = _save_game_date(user_data / rel)
-            if date is not None and not _GAME_START <= date <= until:
+            if not in_run:
                 out.append(rel)
+        elif date is not None and not in_run:
+            out.append(rel)
     return out
 
 
 def _run_until(snap: Snapshot) -> tuple[int, int, int] | None:
     starts = [e for e in snapshot.journal(snap) if e.get("event") == "started"]
     args = starts[-1].get("args") if starts else None
-    if not isinstance(args, list) or any(str(a).lstrip("-/").lower().startswith("loadsave") for a in args):
+    if not isinstance(args, list) or any(str(a).lstrip("-/").lower().startswith(("loadsave", "continuelastsave"))
+                                         for a in args):
         return None
     for arg in args:
         found = _RUN_UNTIL.fullmatch(str(arg))

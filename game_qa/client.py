@@ -745,8 +745,9 @@ def fixture_verb(args, paths: session.Paths, backup_root: Path, spawn) -> tuple[
                 "go-ahead came from>\"`, in the background" % (plan["estimate_s"], plan["limit_s"], plan["date"]))), 0
         return dict(plan, dry_run=True, next=(
             "a run of about %.1f hours (watch limit %.1f): ask the owner for a grant of that run in their own words, "
-            "then `fixture --until %s --permission \"<their words>\" --max-hours <what they granted>`, in the "
-            "background" % (plan["estimate_h"], plan["limit_h"], plan["date"]))), 0
+            "leaving room above the estimate (the one live run, to 1836.3.29, took 0.66 s a game day where the "
+            "estimate takes 0.47), then `fixture --until %s --permission \"<their words>\" --max-hours <what they "
+            "granted>`, in the background" % (plan["estimate_h"], plan["limit_h"], plan["date"]))), 0
     if not args.permission or not args.permission.strip():
         return {"refused": "no_permission", "detail": "say where the go-ahead to launch came from (--permission): "
                                                       "for a long run, the owner's own grant of it"}, 2

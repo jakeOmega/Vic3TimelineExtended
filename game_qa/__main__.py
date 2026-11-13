@@ -1011,7 +1011,7 @@ def cmd_restore(args) -> tuple[dict, int]:
     notes: dict = {}
     try:
         _settle_playset(snap, user, bool(games), notes)
-        out = _unvouched_hold(snap, notes) or restore.restore(
+        out = _unvouched_hold(snap, notes, user) or restore.restore(
             snap, user, other_game_running=bool(games), logs="started" in _events(snap),
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
@@ -1104,18 +1104,33 @@ def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple
     return live
 
 
-def _unvouched_hold(snap: snapshot.Snapshot, notes: dict | None = None) -> restore.Outcome | None:
+def _lexists(path: Path) -> bool:
+    """Whether anything is at `path`, a link included; an error reading it counts as there (the hold stays)."""
+    try:
+        os.lstat(path)
+    except FileNotFoundError:
+        return False
+    except OSError:
+        return True
+    return True
+
+
+def _unvouched_hold(snap: snapshot.Snapshot, notes: dict | None = None,
+                    user: Path | None = None) -> restore.Outcome | None:
     """Hold, changing nothing, a run whose files nothing vouches for: `watch` saw another game (`other_game_ran`:
     its writes cannot be told from the run's), or lost sight of the run's game at a failed look or across a gap
     of more than WATCH_RESUME_GAP_S before a resumed `watch` (`unwatched_stretch`: nobody saw then whether
     another game ran), or the harness journaled `fixture.HOLD_ASKED` for it (its `reason`: `save_not_kept`, a
-    dated run's save that could be neither renamed nor copied). None when none. A run already restored is left
+    dated run's save that could be neither renamed nor copied, which the restore would remove as the harness's
+    own; the hold lasts while one of the entry's `files` is still in `user`, so it clears once the owner has moved
+    the save). None when none. A run already restored is left
     as it is, as `restore.restore` leaves
     one beside a running game. For `unwatched_stretch`, `notes` gets `looks_failed`, `looks` (every look `watch`
     journaled) and `gaps_s`, so that one failed look in thousands can be told from many."""
     journal = snapshot.journal(snap)
     others = [f"pid {e.get('pid')} (started {e.get('created')})" for e in journal if e.get("event") == "other_game"]
-    asked = [e for e in journal if e.get("event") == fixture.HOLD_ASKED]
+    asked = [e for e in journal if e.get("event") == fixture.HOLD_ASKED
+             and (user is None or any(_lexists(Path(user) / str(f)) for f in e.get("files") or [""]))]
     failed = sum(1 for e in journal if e.get("event") == "look_failed")
     bounds = {"watch_resumed": WATCH_RESUME_GAP_S, "watching": WATCH_FIRST_GAP_S}
     long_gaps = [e.get("gap_s") for e in journal if e.get("event") in bounds
@@ -1221,7 +1236,7 @@ def cmd_recover(args) -> tuple[dict, int]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "watch_still_recording")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap, notes) or restore.restore(snap, user, other_game_running=bool(games))
+            out = _unvouched_hold(snap, notes, user) or restore.restore(snap, user, other_game_running=bool(games))
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
@@ -1262,7 +1277,7 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap, notes) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
+            out = _unvouched_hold(snap, notes, user) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
