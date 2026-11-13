@@ -53,6 +53,9 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+# Re-exported: the other raw-text audits import it from here. (#1698)
+from blanked_text import blank_comments_and_strings  # noqa: F401
+
 # Iterator families that accept `limit = { }`.
 ITERATOR_PREFIXES = ("every_", "random_", "ordered_", "any_")
 
@@ -128,51 +131,6 @@ class Flag:
 class AuditResult:
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
-
-
-def blank_comments_and_strings(text: str) -> tuple[str, dict[int, str]]:
-    """Return (clean_text, comments_by_line).
-
-    `clean_text` has the same length as `text` — comment bodies and quoted
-    string bodies are replaced by spaces — so match offsets still map to real
-    line numbers. `comments_by_line` keeps each line's raw comment text (the
-    last one on the line) for `# REVIEWED` lookups.
-    """
-    out = list(text)
-    comments: dict[int, str] = {}
-    line = 1
-    i = 0
-    n = len(text)
-    in_string = False
-    while i < n:
-        ch = text[i]
-        if ch == "\n":
-            line += 1
-            in_string = False
-            i += 1
-            continue
-        if in_string:
-            if ch == '"':
-                in_string = False
-            else:
-                out[i] = " "
-            i += 1
-            continue
-        if ch == '"':
-            in_string = True
-            i += 1
-            continue
-        if ch == "#":
-            end = text.find("\n", i)
-            if end < 0:
-                end = n
-            comments[line] = text[i:end]
-            for j in range(i, end):
-                out[j] = " "
-            i = end
-            continue
-        i += 1
-    return "".join(out), comments
 
 
 def _line_starts(text: str) -> list[int]:
