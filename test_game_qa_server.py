@@ -26,6 +26,7 @@ from unittest import mock
 
 from game_qa import __main__ as cli
 from game_qa import client, fakes, gate, overlay, server, session, snapshot
+from game_qa import fixture as fixture_mod
 from game_qa.console import ConsoleError, Reply
 from game_qa.dap import DebuggerError
 from game_qa.helper import HelperError
@@ -61,10 +62,15 @@ class FakeSession:
             raise self.raises[verb]
 
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
-              switch_rules=None):
+              switch_rules=None, fixture_date=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
         self.switch_rules = switch_rules
+        self.fixture_date = fixture_date
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
+
+    def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
+        self._call("make_fixture", permission, until, playset, owner_confirmed_busy, max_hours)
+        return {"made": True, "save": "te_qa_fixture_0123456789ab_d19000101", "stop": self.stop()}
 
     def console(self, text):
         self._call("console", text)
@@ -773,6 +779,113 @@ class StartTest(ServerTestCase):
             reply, code = self.run_cli("start", "--permission", PERMISSION)
         self.assertEqual((reply["refused"], code), ("server_failed", 2))
         self.assertIn("cannot read the game version", reply["detail"])
+
+
+class FixtureVerbTest(ServerTestCase):
+    """#1602: `fixture --until DATE` works out its plan in the client (`--dry-run` stops there), then spawns a
+    server and posts `fixture`, which makes the fixture and stops; `start --fixture DATE` passes the date on."""
+
+    def setUp(self):
+        super().setUp()
+        user, deploy = self.root / "user", self.root / "deploy"
+        (user / "save games").mkdir(parents=True)
+        (deploy / "events").mkdir(parents=True)
+        (deploy / "events" / "te_events.txt").write_text("namespace = te\n", encoding="utf-8")
+        self.paths = session.Paths(user_data=user, backup_root=self.backups, deploy_dir=deploy,
+                                   base_game=self.root / "game", overlay_windows_path="C:\\u\\mod\\qa",
+                                   events_file_windows_path=str, game_version="1.15.1",
+                                   enabled_mods=["C:\\u\\mod\\TE"], deployed_mod_windows_path="C:\\u\\mod\\TE")
+        patch = mock.patch.object(client, "real_paths", lambda: self.paths)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_a_dry_run_gives_the_plan_and_spawns_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("fixture", "--until", "1900", "--dry-run")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(spawn.handles, [])
+        self.assertEqual((reply["date"], reply["run_until"], reply["long_run"], reply["found"]),
+                         ("1900.1.1", "1900.1.3", True, False))
+        self.assertTrue(reply["key"].endswith("_d19000101"))
+        self.assertIn("--max-hours", reply["next"])
+        self.assertIn("grant", reply["next"])
+
+    def test_the_fixture_verb_makes_the_fixture_and_the_server_ends(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("fixture", "--until", "1900", "--permission", PERMISSION, "--max-hours", "8")
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(fake.calls[0], ("make_fixture", PERMISSION, "1900.1.1", "mod_only", False, 8.0))
+        self.assertEqual([c[0] for c in fake.calls], ["make_fixture", "stop"])
+        self.assertTrue(reply["made"])
+        spawn.handles[0].thread.join(10)
+        self.assertFalse(spawn.handles[0].thread.is_alive())
+        self.assertFalse(self.info_path.exists())
+
+    def test_the_client_waits_the_runs_own_limit(self):
+        seen = {}
+
+        def start_session(backup_root, body, spawn, verb="start", timeout=None):
+            seen.update(body=body, verb=verb, timeout=timeout)
+            return {"made": True}, 0
+        with mock.patch.object(client, "start_session", start_session):
+            self.run_cli("fixture", "--until", "1900", "--permission", PERMISSION, "--max-hours", "8")
+            self.assertEqual(seen["verb"], "fixture")
+            self.assertEqual(seen["timeout"], 8 * 3600 + client.FIXTURE_MARGIN_S)
+            self.run_cli("fixture", "--until", "1836.2.1", "--permission", PERMISSION)
+        self.assertEqual(seen["timeout"], round(fixture_mod.time_limit_s((1836, 2, 1))) + client.FIXTURE_MARGIN_S)
+        self.assertNotIn("max_hours", seen["body"])
+
+    def test_a_fixture_already_there_spawns_nothing_and_needs_no_permission(self):
+        key = session.Session(None, None, None, self.paths).fixture_plan((1900, 1, 1))["key"]
+        (self.paths.user_data / "save games" / ("te_qa_fixture_%s.v3" % key)).write_bytes(b"made")
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            for argv in ((), ("--dry-run",)):
+                reply, code = self.run_cli("fixture", "--until", "1900", *argv)
+                self.assertEqual((code, reply["found"], reply["made"]), (0, True, False), reply)
+                self.assertIn("start --fixture 1900.1.1", reply["next"])
+        self.assertEqual(spawn.handles, [])
+
+    def test_refusals_in_the_client_spawn_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            for argv, refused in ((["--until", "1900"], "no_permission"),
+                                  (["--until", "1900.2.29", "--dry-run"], "bad_date"),
+                                  (["--until", "1836.1.1", "--dry-run"], "bad_date"),
+                                  (["--until", "1900", "--max-hours", "0", "--permission", PERMISSION],
+                                   "bad_argument")):
+                with self.subTest(argv=argv):
+                    reply, code = self.run_cli("fixture", *argv)
+                    self.assertEqual((reply["refused"], code), (refused, 2))
+        self.assertEqual(spawn.handles, [])
+
+    def test_a_server_takes_fixture_once_and_never_after_start(self):
+        fake, _thread = self.serve()
+        self.assertEqual(client.call(self.backups, "start", {"permission": PERMISSION})[1], 0)
+        reply, code = client.call(self.backups, "fixture", {"permission": PERMISSION, "until": "1900"})
+        self.assertEqual((reply["refused"], code), ("session_running", 2))
+        self.assertNotIn("make_fixture", [c[0] for c in fake.calls])
+
+    def test_a_fixture_body_without_its_date_is_refused_and_stopped(self):
+        fake, thread = self.serve()
+        reply, code = client.call(self.backups, "fixture", {"permission": PERMISSION, "as_tag": "FRA"})
+        self.assertEqual((reply["refused"], code), ("bad_argument", 2))
+        self.assertEqual(fake.stops, 1)
+        thread.join(10)
+        self.assertFalse(thread.is_alive())
+
+    def test_start_passes_the_fixtures_date_on(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("start", "--permission", PERMISSION, "--fixture", "1900")
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(fake.fixture_date, "1900")
 
 
 # A server in a child process, so that it can be killed or signalled. Its double's `start` builds the overlay and

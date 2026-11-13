@@ -13,6 +13,7 @@ import io
 import json
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -394,13 +395,21 @@ class FixtureWatch:
         self.code = test.fixture_watch_code
         self.hangs = test.fixture_watch_hangs
         self.polls = 0
+        self.saved = False
 
     def poll(self):
         self.polls += 1
+        on_poll = getattr(self.test, "on_fixture_poll", None)       # a dated run writes its logs as it goes
+        if on_poll is not None and on_poll(self.polls) is False:
+            return None
         if self.hangs:
             return 0 if self.test.game.killed else None
-        if self.code == 0 and self.polls == 1:
-            (self.test.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"a fresh game")
+        if self.code == 0 and self.polls == 1 or on_poll is not None and self.code == 0:
+            name = getattr(self.test, "fixture_run_save", "TEST_FAIL_te_qa_fixture_2 January, 1836.v3")
+            data = getattr(self.test, "fixture_run_bytes", b"a fresh game")
+            if not (self.test.user / "save games" / name).exists() and not self.saved:
+                (self.test.user / "save games" / name).write_bytes(data)
+                self.saved = True
         return self.code
 
 
@@ -3693,6 +3702,250 @@ class SelfChecksTest(SessionTestCase):
         text = Path(reply["report"]).read_text("utf-8")
         self.assertTrue(text.startswith("Restore: restored"))
         self.assertNotIn("## Self-checks", text)
+
+
+DATED_SAVE_NAME = "TEST_FAIL_te_qa_fixture_1 January, 1900.v3"
+GRANT_WORDS = "the owner, 21:40: run it to 1900 overnight, up to 8 hours"
+
+
+def dated_save(settings, date="1900.1.1") -> bytes:
+    """A dated fixture's save: the shape `text_save` gives, with its date in meta_data as the engine writes it."""
+    listed = (' "" ' + " ".join(settings) + " ").encode()
+    meta = (b"meta_data={\n\tgame_date=" + date.encode() + b"\n\tgame_rules={\n\t\tsettings={" + listed
+            + b"}\n\t}\n}\n")
+    state = b"game_rules={\n\tsetting={" + listed + b"}\n}\ncountry_manager={\n}\n"
+    return b"SAV010000000000%08x" % len(meta) + b"\n" + meta + state
+
+
+class DatedFixtureTest(SessionTestCase):
+    """#1602: a fixture made by an unattended run to a later date (`make_fixture`), and a session started on it
+    (`start(fixture_date=...)`), which never makes one."""
+
+    def setUp(self):
+        super().setUp()
+        base = self.user.parent
+        for rel, text in RULE_FILES.items():
+            path = base / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        defines = self.paths.deploy_dir / "common" / "defines" / "extra_defines.txt"
+        defines.parent.mkdir(parents=True, exist_ok=True)
+        defines.write_text('NGame = {\n\tEND_DATE = "2136.1.1"\n}\n', encoding="utf-8")
+        self.fixture_save.unlink()
+        self.key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                               playset="mod_only")
+        self.fixture_save = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key)
+        self.fixture_save.write_bytes(text_save(["no_fantasy", "tax_light"]))
+        self.dated_key = self.key + "_d19000101"
+        self.dated_path = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.dated_key)
+        self.fixture_run_save = DATED_SAVE_NAME
+        self.fixture_run_bytes = dated_save(["no_fantasy", "tax_light"])
+        self.log = self.user / "logs" / "debug.log"
+        self.log.parent.mkdir(exist_ok=True)
+        self.log.write_text("[10:00:00][x.cpp:1]: the owner's last game\n", encoding="utf-8")
+        self.fixture_snap = None
+
+    def a_dated_run(self, years=6, restore_reply=None):
+        """The run that makes the 1900 fixture: a real snapshot of the folder; while `watch` follows the game, it
+        logs a setup line, then a year at a time, rotating `debug.log` past every generation, and its restore
+        leaves only the last generations and its own `gametimer_*.tsv` in `run_logs/`."""
+        snap = snapshot.take(self.user, self.paths.backup_root,
+                             now=dt.datetime(2026, 11, 10, 14, 55, tzinfo=dt.timezone.utc))
+        self.assertEqual(snap.id, FIXTURE_SNAP)
+        self.fixture_snap = snap
+        self.cli.queue("snapshot", {"id": snap.id}, 0)
+        if restore_reply is not None:
+            self.cli.queue("restore", *restore_reply)
+        logs = self.user / "logs"
+
+        def write(text, mode="a"):
+            with open(self.log, mode, encoding="utf-8", newline="\n") as f:
+                f.write(text)
+
+        def rotate():
+            for k in range(5, 0, -1):
+                older = logs / ("debug.%d.log" % (k - 1)) if k > 1 else self.log
+                if older.exists():
+                    os.replace(older, logs / ("debug.%d.log" % k))
+
+        def on_poll(n):
+            # One poll is two seconds and RunLogs copies every ten, so the game writes a year each five polls.
+            if n == 1:
+                rotate()
+                write("[10:00:01][x.cpp:46]: common/on_actions/x.txt:46: TE_SELF_CHECK OK decentralized_law_baseline"
+                      "\n", "w")
+            elif n % 5 == 0 and n // 5 <= years:
+                rotate()
+                write("[10:01:00][x.cpp:9]: common/x.txt:9: year %d\n" % (n // 5), "w")
+            elif n // 5 > years:
+                write("[10:02:00][x.cpp:3]: common/x.txt:3: TE_SELF_CHECK BROKEN a_late_one\n")
+                return True
+            return False
+        self.on_fixture_poll = on_poll
+
+        def restore(argv):
+            if argv[:2] == ["restore", snap.id]:
+                run_logs = snap.dir / "run_logs"
+                run_logs.mkdir(exist_ok=True)
+                for path in logs.glob("debug*.log"):
+                    shutil.copy2(path, run_logs / path.name)
+                (run_logs / "gametimer_20261112_214000.tsv").write_text(
+                    "Game Date \tTime Unit \tSeconds\n1836_01_01\tDay\t0.5\n1899_12_31\tDay\t0.7\n", encoding="utf-8")
+        self.cli.on_call = restore
+        return snap.id
+
+    def make(self, **kwargs):
+        kwargs.setdefault("max_hours", 8)
+        return self.session.make_fixture(PERMISSION, "1900.1.1", **kwargs)
+
+    # ---- make_fixture
+
+    def test_making_a_dated_fixture_runs_to_its_date_copies_its_log_and_stops(self):
+        snap = self.a_dated_run()
+        reply = self.make()
+        self.assertTrue(reply["made"], reply)
+        self.assertEqual(reply["save"], "te_qa_fixture_" + self.dated_key)
+        self.assertEqual(self.dated_path.read_bytes(), self.fixture_run_bytes)
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertEqual(launch[launch.index("--") + 1:], list(fixture.fixture_args((1900, 1, 1))))
+        self.assertIn("granted at most 8 hours", launch[launch.index("--long-run") + 1])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "restore"])     # the session launches nothing
+        # the copy holds what rotated out of logs/ long before the end, and the owner's line is not in it
+        copy = self.paths.run_root / snap / "fixture_debug.log"
+        text = copy.read_text("utf-8")
+        self.assertIn("decentralized_law_baseline", text)
+        self.assertIn("a_late_one", text)
+        self.assertNotIn("the owner's last game", text)
+        self.assertFalse(any("decentralized" in p.read_text("utf-8")
+                             for p in (self.paths.backup_root / "snapshots" / snap / "run_logs").glob("debug*.log")))
+        lines = reply["lines"]
+        self.assertEqual((lines["kept"], lines["source"], lines["self_checks"]), (True, "followed", 2))
+        kept = (self.paths.backup_root / "fixtures" / self.dated_key / "lines.log").read_text("utf-8")
+        self.assertIn("decentralized_law_baseline", kept)
+        self.assertEqual(reply["logs"]["gaps"], 0)
+        # the game's own timing, copied beside the run's log
+        self.assertEqual((reply["timing"]["days"], reply["timing"]["years"]), (2, {"1836": 0.5, "1899": 0.7}))
+        self.assertTrue((self.paths.run_root / snap / "gametimer_20261112_214000.tsv").is_file())
+        self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+        self.assertEqual((reply["save_facts"]["save_found"], reply["save_facts"]["game_date"],
+                          reply["save_facts"]["date_matches"]), (DATED_SAVE_NAME, "1900.1.1", True))
+        self.assertNotIn("build_changed", reply)
+        # and the session stopped: the overlay is gone, nothing was restored twice
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(reply["stop"]["outcome"], None)
+        on_disk = json.loads((self.paths.run_root / snap / "fixture.json").read_text("utf-8"))
+        self.assertEqual(on_disk["save"], reply["save"])
+
+    def test_the_overlay_carries_the_dated_test_while_the_run_goes(self):
+        self.a_dated_run()
+        seen = []
+        original = self.cli.on_call
+
+        def look(argv):
+            if argv[0] == "launch":
+                seen.append((self.paths.overlay_dir / overlay.SCRIPTED_TEST_FILE).read_text("utf-8-sig"))
+            original(argv)
+        self.cli.on_call = look
+        self.make()
+        self.assertIn('fail = { game_date > "1899.12.31" }', seen[0])
+
+    def test_a_fixture_already_there_is_reused_and_nothing_is_started(self):
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        reply = self.make()
+        self.assertEqual((reply["made"], reply["found"], reply["save"]), (False, True, self.dated_path.stem))
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_long_run_needs_the_hours_granted_and_an_estimate_inside_them(self):
+        for kwargs, code in (({"max_hours": None}, "no_max_hours"), ({"max_hours": 1}, "over_grant"),
+                             ({"max_hours": 0}, "bad_argument"), ({"max_hours": "8"}, "bad_argument")):
+            with self.subTest(kwargs=kwargs):
+                self.assertEqual(self.session_error(self.make, **kwargs).code, code)
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_date_no_run_can_end_on_is_refused_before_anything(self):
+        for until in ("1836.1.1", "2135.12.31", "1900.2.29", "soon"):
+            with self.subTest(until=until):
+                error = self.session_error(self.session.make_fixture, PERMISSION, until, max_hours=8)
+                self.assertEqual(error.code, "bad_date")
+        self.assertEqual(self.cli.calls, [])
+
+    def test_the_watch_limit_is_the_grant_when_the_grant_is_shorter(self):
+        plan = self.session.fixture_plan((1900, 1, 1), max_hours=4)
+        self.assertEqual(plan["limit_s"], 4 * 3600)
+        self.assertGreater(self.session.fixture_plan((1900, 1, 1))["limit_s"], 4 * 3600)
+        self.assertTrue(plan["long_run"])
+        self.assertIn("quarterly autosaves", plan["autosaves"])
+        self.assertEqual(plan["rules"], {"last_applied": []})
+
+    def test_a_restore_that_holds_after_the_rename_says_the_fixture_is_there_and_keeps_no_lines(self):
+        self.a_dated_run(restore_reply=({"held": True, "reason": "unwatched_stretch", "id": FIXTURE_SNAP,
+                                         "restored": [], "removed": []}, 2))
+        error = self.session_error(self.make)
+        self.assertEqual((error.code, error.info["step"], error.info["saved"]),
+                         ("fixture_failed", "restore", self.dated_path.stem))
+        self.assertTrue(self.dated_path.is_file())
+        self.assertFalse(error.info["logs"]["vouched"])
+        self.assertEqual(error.info["stop"]["outcome"], "held")
+        record = json.loads((self.paths.backup_root / "fixtures" / self.dated_key / "record.json").read_text("utf-8"))
+        self.assertFalse(record["kept"])
+
+    def test_a_build_deployed_during_the_run_is_reported(self):
+        self.a_dated_run()
+        original = self.cli.on_call
+
+        def deploy(argv):
+            original(argv)
+            if argv[0] == "restore":
+                (self.paths.deploy_dir / "events" / "te_events.txt").write_text("namespace = te\n# changed\n")
+        self.cli.on_call = deploy
+        reply = self.make()
+        self.assertTrue(reply["made"])
+        self.assertIn("--save " + self.dated_path.stem, reply["build_changed"])
+
+    # ---- start on a dated fixture
+
+    def test_start_on_a_missing_dated_fixture_is_refused_with_nothing_done(self):
+        other = self.user / "save games" / "te_qa_fixture_000000000000_d19000101.v3"
+        other.write_bytes(self.fixture_run_bytes)
+        error = self.session_error(self.start, fixture_date="1900")
+        self.assertEqual(error.code, "no_fixture")
+        self.assertEqual(error.info["stale"], [other.stem])
+        self.assertIn("fixture --until 1900.1.1", error.info["next"])
+        self.assertIn("--save " + other.stem, error.info["next"])
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_start_on_a_dated_fixture_loads_it_and_never_makes_one(self):
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        reply = self.start(fixture_date="1900.1.1")
+        self.assertEqual((reply["save"], reply["fixture_made"], reply["fixture_date"]),
+                         (self.dated_path.stem, False, "1900.1.1"))
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertEqual(launch[-1], "-loadsave=" + self.dated_path.stem)
+        self.assertNotIn("--long-run", launch)
+        self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+
+    def test_the_plain_fixtures_date_is_the_plain_fixture(self):
+        reply = self.start(fixture_date="1836.1.2")
+        self.assertEqual(reply["save"], self.fixture_save.stem)
+        self.assertNotIn("fixture_date", reply)
+
+    def test_a_dated_fixture_with_an_owners_save_is_refused(self):
+        (self.user / "save games" / "mine.v3").write_bytes(b"the owner's")
+        self.assertEqual(self.session_error(self.start, save="mine", fixture_date="1900").code, "bad_argument")
+        self.assertEqual(self.cli.calls, [])
+
+    def test_a_rule_switched_in_a_dated_fixture_is_switched_on_its_date(self):
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        reply = self.start(fixture_date="1900", switch_rules={"tax_rule": "tax_off"})
+        stem = "te_qa_fixture_%s" % rules_key(self.dated_key, {"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], stem)
+        self.assertEqual(reply["rules"]["settings"], ["no_fantasy", "tax_off"])
+        self.assertTrue(reply["rules"]["switched_at"].startswith("1 January 1900"))
+        self.assertEqual(self.dated_path.read_bytes(), self.fixture_run_bytes)
+        self.assertTrue(self.fixture_save.is_file())
 
 
 if __name__ == "__main__":
