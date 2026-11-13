@@ -95,3 +95,11 @@ now about +10%, Hawaii +9%, Cape Colony +8%, Glasgow −2%.
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 "The modifier's size": the amenity side OK (Madeira's pull is exactly its bonus × 0.01, so the multiplier is read from the state); the discomfort side not shown, since a state's total pull mixes every source and only the breakdown separates them. "First application" OK for the USA's states. The breakdown and the tile's rows were not looked at.
+
+## The bonus from the stored penalty (#1724)
+
+The yearly refresh writes `te_climate_bonus_applied` from the stored penalty instead of evaluating `te_climate_bonus`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A mild-winter state.** Madeira, or another state whose penalty is negative, a year in. | The tile's Comfort row and the attraction breakdown show "Local Climate" as a bonus, the same size as before this change. | No bonus where there was one: read `var:te_climate_bonus_applied` and `var:te_climate_penalty_applied` on the state; the first should be the second times −1. |

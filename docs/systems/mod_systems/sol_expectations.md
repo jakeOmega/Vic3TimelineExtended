@@ -51,7 +51,7 @@ All four clamp the shift before re-applying, so an adjustment can't push it past
 - `sol_expectations_gap_value` — (average_sol + target_add) - average_expected_sol
 - `sol_expectations_shift_clamped_value` — the shift variable clamped to [floor, ceiling]
 - `sol_expectations_global_awareness_value` — the literacy-scaled world comparison
-- `sol_expectations_upper_shift_value` / `_middle_shift_value` / `_lower_shift_value` — each stratum's modifier multiplier
+- `sol_expectations_upper_shift_value` / `_middle_shift_value` / `_lower_shift_value` — each stratum's modifier multiplier. `sol_expectations_apply_strata_shifts` reads each once a month into `sol_expectations_<class>_shift_applied`, which the threshold test and `multiplier = var:…` read: each value adds `global_average_sol`, a pass over every country
 
 **Files:**
 - Scripted Effect: `common/scripted_effects/sol_expectations_effects.txt` (`sol_expectations_monthly_update` + utilities)

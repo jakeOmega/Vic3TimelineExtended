@@ -596,12 +596,20 @@ class Modifier(unittest.TestCase):
         self.assertEqual(body, "remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort } "
                                "remove_modifier_if_exists_effect = { MODIFIER = local_climate_amenity } "
                                f"set_variable = {{ name = {APPLIED} value = te_climate_penalty }} "
-                               f"set_variable = {{ name = {BONUS} value = te_climate_bonus }} "
+                               # The bonus from the stored penalty, which is te_climate_bonus's own
+                               # formula: evaluating te_climate_bonus would compute the penalty again.
+                               f"set_variable = {{ name = {BONUS} value = {{ value = var:{APPLIED} "
+                               "multiply = -1 min = 0 } } "
                                f"set_variable = {{ name = {BASE} value = te_climate_penalty_raw }} "
                                f"if = {{ limit = {{ var:{APPLIED} > 0.5 }} "
                                f"add_modifier = {{ name = local_climate_discomfort multiplier = var:{APPLIED} }} }} "
                                f"else_if = {{ limit = {{ var:{BONUS} > 0.5 }} "
                                f"add_modifier = {{ name = local_climate_amenity multiplier = var:{BONUS} }} }}")
+
+    def test_refresh_copies_the_bonus_formula(self):
+        """The refresh writes the bonus from the stored penalty instead of evaluating te_climate_bonus, which
+        would compute the penalty a second time. That is right only while te_climate_bonus is that formula."""
+        self.assertEqual(values_body("te_climate_bonus"), "value = te_climate_penalty multiply = -1 min = 0")
 
     def test_refresh_never_removes_the_variable(self):
         """The modifier's multiplier reads the variable on later ticks too (modifier_multiplier_var_audit)."""

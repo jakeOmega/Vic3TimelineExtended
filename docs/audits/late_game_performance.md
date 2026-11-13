@@ -381,7 +381,7 @@ All are exact: they change no result unless a line says otherwise.
 
 Numbered as first listed, so references from other files hold, not by size:
 the per-frame floor (item 7, 27% of wall time) is the largest after item 1.
-Items 3 and 6 are addressed by #1713.
+Items 3 and 6 were addressed by #1713.
 
 1. **Unattributed day-boundary time: about 0.43 s of each ordinary day's
    hour 0**, 22% of wall time in 1931, beyond the tick tasks and the
@@ -429,7 +429,7 @@ Items 3 and 6 are addressed by #1713.
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
-3. **UN AI propose buttons** (#1713, open, takes them from 136 to 4 ms of
+3. **UN AI propose buttons** (#1713 took them from 136 to 4 ms of
    script a day, with wall time unchanged; the rest of this item is the
    record): 4.48 s per 33 days in 1931 (14% of all script; 2.9% in 2072). `un_propose_credentials_button`'s `visible` costs 2.75 ms a
    call: `un_credentials_case_exists` walks every country. Its comment orders
@@ -468,7 +468,7 @@ Items 3 and 6 are addressed by #1713.
    (25.0 → 24.9 ms a day), so reverted. The two ROOT-dependent walks are the
    cost; EUN's block, with the same shape, costs about 30 µs a call (#1720).
 6. **The month-start error burst**: about 5,700 errors from
-   `extra_script_values.txt:1587` on every 1st (#1703; #1713, open, fixes it:
+   `extra_script_values.txt:1587` on every 1st (#1703; #1713 fixed it:
    none in its after-run).
 7. **The per-frame floor**: about 0.11 s on every frame beyond its tasks,
    27% of wall time (a sub-tick takes 0.15 s against 0.04 s of tasks). It is
@@ -526,11 +526,11 @@ Items 3 and 6 are addressed by #1713.
     - **Covert warfare's monthly pulse:** 776 ms, of which 653 ms was one
       `ordered_country` that every holder ran to store the world's best
       intelligence capacity in `global_max_ic`, which only the panel reads.
-      #1724 (open): one census a month behind a 25-day global lock.
+      Done in #1724: one census each 1st, behind a 25-day global lock.
     - **Cultural Hegemony's monthly pulse:** 661 ms, of which 654 ms was
       `trigger_event` for the milestone events `cultural_hegemony.8` and
-      `.9`, whose triggers read the live `cultural_pull_total`. #1724
-      (open): `.9` is tried only by the leaderboard's #1 (a condition its
+      `.9`, whose triggers read the live `cultural_pull_total`. Done in
+      #1724: `.9` is tried only by the leaderboard's #1 (a condition its
       trigger holds), `.8` once the cache `var:ch_total` reaches 5.
     - **Cultural Hegemony's country pulse:** 526 ms, in
       `ch_monthly_country_update`: `ch_total = cultural_pull_total` 341 ms,
@@ -543,14 +543,14 @@ Items 3 and 6 are addressed by #1713.
       `sol_expectations_apply_strata_shifts`. Each class's shift value adds
       `global_average_sol`, an `every_country` pass, and the limit read it
       twice and the multiplier once: nine world passes per country a month.
-      The `add_modifier` swaps themselves cost little. #1724 (open): each
+      The `add_modifier` swaps themselves cost little. Done in #1724: each
       class's value is read once into a variable.
     - **Monetary:** 359 ms, spread over a dozen steps, the FX and inflation
       block the largest at 114 ms. No hotspot.
     - **Local climate's yearly state pulse:** 612 ms (the refresh effect's
       624 ms includes one call from `local_climate_first_on_action`), three
       script values at 180–252 ms each. `te_climate_bonus` is the penalty
-      times −1, so the refresh computed the penalty twice. #1724 (open): the
+      times −1, so the refresh computed the penalty twice. Done in #1724: the
       bonus is written from the stored penalty.
 
     **#1724, measured** (same save, same steps, 2 July → 1 August under the
