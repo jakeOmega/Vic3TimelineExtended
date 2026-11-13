@@ -423,6 +423,13 @@ class CommandLineTest(unittest.TestCase):
         when = (dt.datetime.now(UTC) - dt.timedelta(minutes=minutes_ago)).timestamp()
         os.utime(path, (when, when))
 
+    def game_writes(self, rel, data: bytes, at: dt.datetime):
+        """The run's game writes `rel`, dated `at`: a time from `naps_clock`, so that the hold rule judges the write
+        against an exit on the same clock (#1693)."""
+        path = self.user / rel
+        path.write_bytes(data)
+        os.utime(path, (at.timestamp(), at.timestamp()))
+
     def armed_snapshot(self, armed: dt.datetime) -> snapshot.Snapshot:
         """A snapshot taken for a run whose journal says it was armed at `armed`."""
         snap = snapshot.take(self.user, self.backups)
@@ -464,37 +471,37 @@ class CommandLineTest(unittest.TestCase):
 
     def test_snapshot_watch_restore_puts_a_changed_file_back(self):
         before = self.tree()
+        with self.naps_clock() as now:      # the run's writes are judged against its exit (#1693)
+            def the_run():
+                self.game_writes("continue_game.json", b'{"title": "autosave"}', now())
+                self.game_writes("save games/TEST_FAIL_te_qa_fixture_2 January, 1836.v3", b"x", now())
 
-        def the_run():
-            (self.user / "continue_game.json").write_text('{"title": "autosave"}')
-            (self.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"x")
-
-        snap_id = self.launched_run(the_run)
-        self.assertIn("save games/new york_1940_07_29.v3", self.the_snapshot().files)
-        self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat", "game_exited"])
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"]), (0, False))
+            snap_id = self.launched_run(the_run)
+            self.assertIn("save games/new york_1940_07_29.v3", self.the_snapshot().files)
+            self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat", "game_exited"])
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
         self.assertEqual(self.tree(), before)
 
     def test_a_file_the_game_wrote_again_with_the_same_bytes_gets_its_time_back(self):
         # #1588: the game writes pdx_settings.json again at launch, byte for byte (here, a file this folder has).
         # Nothing is put back, and the folder still ends exactly as the snapshot found it, times included; the
         # reply says which time moved.
-        before = self.tree()
-
-        def the_run():
-            path = self.user / "continue_game.json"
-            path.write_bytes(path.read_bytes())
-            when = time.time() + 0.5                    # later than the snapshot's, whatever the clock's grain
-            os.utime(path, (when, when))
-
-        snap_id = self.launched_run(the_run)
-        self.assertNotEqual(self.tree(), before)
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["restored"], out["retimed"]), (0, False, [], ["continue_game.json"]))
-        self.assertEqual(self.tree(), before)
-        self.assertEqual(snapshot.journal(self.the_snapshot())[-1]["retimed"], ["continue_game.json"])
-        again, code = self.run_cli("restore", snap_id)
+        path = self.user / "continue_game.json"
+        # The rewrite counts as the run's only if it is later than the snapshot's time and not later than the exit
+        # (restore._retouched), so the owner's copy, the rewrite and the exit all take the naps' clock (#1693).
+        with self.naps_clock() as now:
+            owners = (now() - dt.timedelta(minutes=1)).timestamp()
+            os.utime(path, (owners, owners))            # the owner's copy, a minute before the snapshot
+            before = self.tree()
+            snap_id = self.launched_run(lambda: self.game_writes("continue_game.json", path.read_bytes(), now()))
+            self.assertNotEqual(self.tree(), before)
+            out, code = self.run_cli("restore", snap_id)
+            self.assertEqual((code, out["held"], out["restored"], out.get("retimed")),
+                             (0, False, [], ["continue_game.json"]), self.why(out))
+            self.assertEqual(self.tree(), before)
+            self.assertEqual(snapshot.journal(self.the_snapshot())[-1]["retimed"], ["continue_game.json"])
+            again, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, again["held"]), (0, False))
         self.assertNotIn("retimed", again)              # nothing moved: the key is there only when a time was set
 
@@ -518,7 +525,7 @@ class CommandLineTest(unittest.TestCase):
         snap_id = self.launched_run()
         theirs = self.user / "save games" / "autosave.v3"
         theirs.write_bytes(b"the owner played for an hour after the run")
-        later = dt.datetime.now().timestamp() + 3600
+        later = dt.datetime.now().timestamp() + 3600   # an hour past the exit: no clock step comes near it (#1693)
         os.utime(theirs, (later, later))
         out, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "modified_after_exit"))
@@ -532,7 +539,7 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((code, out["reason"]), (2, "other_game_running"))
         theirs = self.user / "save games" / "autosave.v3"
         theirs.write_bytes(b"their session's autosave")
-        later = dt.datetime.now().timestamp() + 3600
+        later = dt.datetime.now().timestamp() + 3600   # an hour past the exit: no clock step comes near it (#1693)
         os.utime(theirs, (later, later))
         self.games = []
         out, code = self.run_cli("restore", snap_id)
@@ -548,22 +555,24 @@ class CommandLineTest(unittest.TestCase):
         self.assertNotIn("game_exited", self.events())
 
     def test_restore_reports_a_damaged_store_instead_of_a_traceback(self):
-        snap_id = self.launched_run(lambda: (self.user / "continue_game.json").write_text("{}"))
-        entry = self.the_snapshot().files["continue_game.json"]
-        blob = self.backups / "store" / entry.sha256[:2] / entry.sha256
-        blob.write_bytes(bytes(b ^ 1 for b in blob.read_bytes()))
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["refused"]), (2, "error"))
+        with self.naps_clock() as now:      # the run's write is judged against its exit, before the store (#1693)
+            snap_id = self.launched_run(lambda: self.game_writes("continue_game.json", b"{}", now()))
+            entry = self.the_snapshot().files["continue_game.json"]
+            blob = self.backups / "store" / entry.sha256[:2] / entry.sha256
+            blob.write_bytes(bytes(b ^ 1 for b in blob.read_bytes()))
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out.get("refused")), (2, "error"), self.why(out))
         self.assertEqual((self.user / "continue_game.json").read_text(), "{}")
 
     def test_restore_puts_back_a_changed_save_whose_name_has_spaces_and_commas(self):
         name = "save games/Paris, 2 January, 1836.v3"
         (self.user / name).write_bytes(b"the owner's save")
         before = self.tree()
-        snap_id = self.launched_run(lambda: (self.user / name).write_bytes(b"the run saved over it"),
-                                   save="Paris, 2 January, 1836")
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["restored"]), (0, False, [name]))
+        with self.naps_clock() as now:      # the run's save is judged against its exit (#1693)
+            snap_id = self.launched_run(lambda: self.game_writes(name, b"the run saved over it", now()),
+                                        save="Paris, 2 January, 1836")
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["restored"]), (0, False, [name]), self.why(out))
         self.assertEqual(self.tree(), before)
 
     def test_restore_waits_while_watch_is_still_recording(self):
@@ -583,11 +592,12 @@ class CommandLineTest(unittest.TestCase):
     def test_restore_goes_ahead_once_the_last_heartbeat_is_older_than_watch_would_leave_it(self):
         taken, _ = self.run_cli("snapshot")
         game = self.game()
-        long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=20)
-        snapshot.record(self.the_snapshot(), "started", now=long_ago, pid=game.pid, created=game.created)
-        snapshot.record(self.the_snapshot(), "heartbeat", now=long_ago)
-        out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"]), (0, False))
+        with self.naps_clock() as now:      # 20 s against WATCH_RECORDING_S, by the clock restore reads (#1693)
+            long_ago = now() - dt.timedelta(seconds=20)
+            snapshot.record(self.the_snapshot(), "started", now=long_ago, pid=game.pid, created=game.created)
+            snapshot.record(self.the_snapshot(), "heartbeat", now=long_ago)
+            out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((code, out.get("held")), (0, False), self.why(out))
         self.assertEqual(self.events()[-1], "restored")
 
     # -- launch ---------------------------------------------------------------
@@ -1077,19 +1087,19 @@ class CommandLineTest(unittest.TestCase):
     def test_watch_records_no_exit_for_a_recorded_game_gone_at_its_first_look(self):
         taken, _ = self.run_cli("snapshot")
         game = self.game()
-        snapshot.record(self.the_snapshot(), "started", pid=game.pid, created=game.created,
-                        now=dt.datetime.now(UTC) - dt.timedelta(seconds=30))
-        another = self.game(pid=99, seconds_from_now=120)           # a new game, but not the recorded one
-        self.games = [[another], [another], []]
-        out, code = self.run_cli("watch", taken["id"])
-        self.assertEqual((code, out["refused"]), (2, "game_gone_unrecorded"))
-        self.assertIn("last heartbeat", out["detail"])
-        self.assertEqual(self.events(), ["armed", "started", "watching", "other_game"])   # the first look too
-        self.games = []
-        later = dt.datetime.now(UTC) + dt.timedelta(seconds=20)       # past `watching`, a sign of life
-        with mock.patch.object(snapshot, "_drive_clock", lambda folder: later):
+        with self.naps_clock() as now:      # the restore's 20 s past `watching` by the clock it reads (#1693)
+            snapshot.record(self.the_snapshot(), "started", pid=game.pid, created=game.created,
+                            now=now() - dt.timedelta(seconds=30))
+            another = self.game(pid=99, seconds_from_now=120)           # a new game, but not the recorded one
+            self.games = [[another], [another], []]
+            out, code = self.run_cli("watch", taken["id"])
+            self.assertEqual((code, out["refused"]), (2, "game_gone_unrecorded"))
+            self.assertIn("last heartbeat", out["detail"])
+            self.assertEqual(self.events(), ["armed", "started", "watching", "other_game"])   # the first look too
+            self.games = []
+            self._nap(20)                                               # past `watching`, a sign of life
             out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_ran"))
+        self.assertEqual((code, out["held"], out.get("reason")), (2, True, "other_game_ran"), self.why(out))
 
     def test_watch_refuses_a_recorded_start_it_cannot_read(self):
         taken, _ = self.run_cli("snapshot")
@@ -1222,20 +1232,20 @@ class CommandLineTest(unittest.TestCase):
         # exit after the owner's writes, and restore put the snapshot's copy back over them.
         taken, _ = self.run_cli("snapshot")
         game = self.game(seconds_from_now=-120)
-        long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=90)
-        for event, fields in (("started", {"pid": game.pid, "created": game.created}), ("watching", {"gap_s": 1}),
-                              ("heartbeat", {})):
-            snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
-        self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=0.5)   # inside the gap
-        self.games = [[game], [game], []]
-        out, code = self.run_cli("watch", taken["id"])
-        self.assertEqual(code, 0)
-        resumed = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watch_resumed"]
-        self.assertEqual(len(resumed), 1)
-        self.assertGreaterEqual(resumed[0]["gap_s"], 85)
-        before = self.tree()
-        self.games = []
-        out, code = self.run_cli("restore", taken["id"])
+        with self.naps_clock() as now:      # the gap is the drive clock's time since `long_ago` (#1693)
+            long_ago = now() - dt.timedelta(seconds=90)
+            for event, fields in (("started", {"pid": game.pid, "created": game.created}),
+                                  ("watching", {"gap_s": 1}), ("heartbeat", {})):
+                snapshot.record(self.the_snapshot(), event, now=long_ago, **fields)
+            self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=0.5)   # inside the gap
+            self.games = [[game], [game], []]
+            out, code = self.run_cli("watch", taken["id"])
+            self.assertEqual(code, 0)
+            resumed = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watch_resumed"]
+            self.assertEqual([e["gap_s"] for e in resumed], [90.0])
+            before = self.tree()
+            self.games = []
+            out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
         self.assertEqual(self.tree(), before)
 
@@ -1260,19 +1270,20 @@ class CommandLineTest(unittest.TestCase):
         # Final check 2026-11-10: `watch` started two minutes after `launch`; in between the owner's own second
         # instance started, saved and quit; `restore` then judged their writes against the exit and undid them.
         taken, _ = self.run_cli("snapshot")
-        launched = dt.datetime.now(UTC) - dt.timedelta(seconds=150)
-        game = gate.ProcId(4242, launched.strftime("%Y-%m-%dT%H:%M:%S.0000000Z"))
-        snapshot.record(self.the_snapshot(), "started", now=launched, pid=game.pid, created=game.created)
-        self.owner_writes("save games/autosave.v3", b"the owner's progress", minutes_ago=1)
-        self.owner_writes("save games/autosave_1.v3", b"the owner's new autosave", minutes_ago=1)
-        self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=1)
-        self.games = [[game], [game], []]
-        self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
-        watching = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watching"]
-        self.assertGreaterEqual(watching[0]["gap_s"], 145)
-        before = self.tree()
-        self.games = []
-        out, code = self.run_cli("restore", taken["id"])
+        with self.naps_clock() as now:      # the gap is the drive clock's time since `launched` (#1693)
+            launched = now() - dt.timedelta(seconds=150)
+            game = gate.ProcId(4242, launched.strftime("%Y-%m-%dT%H:%M:%S.0000000Z"))
+            snapshot.record(self.the_snapshot(), "started", now=launched, pid=game.pid, created=game.created)
+            self.owner_writes("save games/autosave.v3", b"the owner's progress", minutes_ago=1)
+            self.owner_writes("save games/autosave_1.v3", b"the owner's new autosave", minutes_ago=1)
+            self.owner_writes("continue_game.json", b'{"title": "the owner"}', minutes_ago=1)
+            self.games = [[game], [game], []]
+            self.assertEqual(self.run_cli("watch", taken["id"])[1], 0)
+            watching = [e for e in snapshot.journal(self.the_snapshot()) if e["event"] == "watching"]
+            self.assertEqual([e["gap_s"] for e in watching], [150.0])
+            before = self.tree()
+            self.games = []
+            out, code = self.run_cli("restore", taken["id"])
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "unwatched_stretch"))
         self.assertEqual(self.tree(), before)
 

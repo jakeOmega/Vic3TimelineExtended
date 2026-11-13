@@ -25,6 +25,7 @@ import os
 import pathlib
 import re
 from collections import defaultdict, OrderedDict
+from collections.abc import Iterable, Iterator
 from datetime import datetime, timezone
 
 
@@ -1306,7 +1307,7 @@ MOD_GUI_UNTAG_NO_INSTALL = (
     "(<install>/game/gui) to tell the mod's own .gui files from its overrides of vanilla's, so a mod "
     "GUI that draws a vanilla key, or reads a data type, outside its window stays hidden under the "
     "source-only vanilla entries (pdx_data_callstack.cpp, pdx_gui_localize.cpp, "
-    "pdx_data_localize_helper.cpp); count those entries' payloads by hand (#1269)"
+    "pdx_data_localize_helper.cpp, pdx_data_localize.cpp); count those entries' payloads by hand (#1269)"
 )
 MOD_GUI_UNTAG_NO_VANILLA_LOC = (
     "mod GUI untagging: no vanilla loc snapshot (vanilla_parsed/localization_english.json), so a "
@@ -1327,19 +1328,50 @@ _EXPR_HEAD_RE = re.compile(r"\s*([A-Za-z_]\w*)\s*\.")
 # A chain head that is itself a call, with no object before it: `GetPlayer`,
 # `AccessPlayer`, `GetVariableSystem`. A global function, not a data context.
 _GLOBAL_FUNCTION_RE = re.compile(r"(?:Get|Access)[A-Z]")
+# The global promotes of the 1.15.1 data-types dump (`Definition type: Global
+# promote` in the Modding-Digests checkout's `docs/data_types_*.txt`) that
+# _GLOBAL_FUNCTION_RE misses: spelled in mixed case, and starting with neither
+# Get nor Access. `[LabelingHelper.GetX]` reads the promote, not a context the
+# window holds, so it is matched like `GetPlayer` (see _is_global). Five are
+# also a type's name (`LabelingHelper`, `PopupManager`, `InformationPanelBar`,
+# `MapListPanelManager`, `RightClickMenuManager`); at a chain's head the name is
+# the promote. GlobalPromoteTests compares this with the dump on a machine that
+# has the checkout; refresh it on a vanilla bump.
+GUI_GLOBAL_PROMOTES = frozenset({
+    "Application", "EmptyScope", "GuiScope", "InformationPanelBar", "JominiPlayer", "LabelingHelper",
+    "MapInteractions", "MapListPanelManager", "MultiplayerSynchronizationInfo", "MusicPlayer", "Outliner",
+    "PdxAccount", "PopupManager", "PowerBlocPanel", "RightClickMenuManager", "ShipTemplateList",
+    "SwayCountryPanel", "TimeKeeper", "WarManager",
+})
+
+
+def _is_global(name: str) -> bool:
+    """Whether a chain head `name` is a global function or promote: one any
+    panel can read with no context, so the name alone says nothing about whose
+    expression it is."""
+    return bool(_GLOBAL_FUNCTION_RE.match(name)) or name in GUI_GLOBAL_PROMOTES
+
+
 _WHITESPACE_RE = re.compile(r"\s+")
 _LOC_NEST_RE = re.compile(r"\$([A-Za-z_][\w.\-]*)(?:\|[^$\n]*)?\$")
 # The generators' marks around what the mod changed in a copy of vanilla's
 # markup (MOD_OPEN / MOD_CLOSE in gen_nation_tab.py and gen_law_effects_gui.py).
 _MOD_BLOCK_OPEN_RE = re.compile(r"^\s*#+\s*MOD:")
 _MOD_BLOCK_CLOSE_RE = re.compile(r"^\s*#+\s*END MOD\b")
-# The payload of each of the three lines, by the cpp file that logs it (the
-# line number moves with a patch). `type` is the context the engine wanted.
-_MOD_GUI_FETCH_SHAPES: dict[str, re.Pattern] = {
-    "pdx_data_callstack.cpp": re.compile(
-        r"wanted context of type '(?P<type>[^']*)' for '(?P<payload>.*)'"),
-    "pdx_gui_localize.cpp": re.compile(r"PdxDataFetchLocalizedData failed for '(?P<payload>.*)'"),
-    "pdx_data_localize_helper.cpp": re.compile(r"FetchData failed for '(?P<payload>.*)'"),
+# The payload of each of the five lines, by the cpp file that logs it (the
+# line number moves with a patch). `type` is the context the engine wanted:
+# `wanted context of type` (`pdx_data_callstack.cpp:16`) and `New data types
+# does not contain a '<Type>' data context` (`:325`) are judged by it alone.
+# `Data error in loc string '<key>'` (`pdx_data_localize.cpp:136` / `:151`)
+# names the string the engine gave up on, a key or inline text.
+_MOD_GUI_FETCH_SHAPES: dict[str, tuple[re.Pattern, ...]] = {
+    "pdx_data_callstack.cpp": (
+        re.compile(r"wanted context of type '(?P<type>[^']*)' for '(?P<payload>.*)'"),
+        re.compile(r"New data types does not contain a '(?P<type>[^']*)'"),
+    ),
+    "pdx_gui_localize.cpp": (re.compile(r"PdxDataFetchLocalizedData failed for '(?P<payload>.*)'"),),
+    "pdx_data_localize_helper.cpp": (re.compile(r"FetchData failed for '(?P<payload>.*)'"),),
+    "pdx_data_localize.cpp": (re.compile(r"Data error in loc string '(?P<payload>.*)'"),),
 }
 
 
@@ -1353,22 +1385,27 @@ class ModGuiRefs:
     type at the head of a `[Foo.Bar]` chain -> the mod-owned `.gui` files that
     read it, directly or in the value of a key they draw. `expressions`: each
     `[...]` expression of that markup and those values that reads a global
-    function, without its whitespace -> the same files (see
-    expression_files). `warnings`: what could not be built, and why.
+    function or promote, without its whitespace -> the same files (see
+    expression_files). `vanilla_expressions`: the same of vanilla's loc
+    values (see vanilla_writes). `warnings`: what could not be built, and why.
     """
-    __slots__ = ("keys", "mod_loc_keys", "types", "expressions", "warnings", "_found")
+    __slots__ = ("keys", "mod_loc_keys", "types", "expressions", "vanilla_expressions", "warnings",
+                 "_found", "_vanilla_found")
 
     def __init__(self, keys: dict[str, tuple[str, ...]] | None = None,
                  mod_loc_keys: dict[str, str] | None = None,
                  types: dict[str, tuple[str, ...]] | None = None,
                  warnings: tuple[str, ...] = (),
-                 expressions: dict[str, tuple[str, ...]] | None = None):
+                 expressions: dict[str, tuple[str, ...]] | None = None,
+                 vanilla_expressions: frozenset[str] = frozenset()):
         self.keys = keys or {}
         self.mod_loc_keys = mod_loc_keys or {}
         self.types = types or {}
         self.expressions = expressions or {}
+        self.vanilla_expressions = vanilla_expressions
         self.warnings = tuple(warnings)
         self._found: dict[str, tuple[str, ...]] = {}
+        self._vanilla_found: dict[str, bool] = {}
 
     def expression_files(self, expression: str) -> tuple[str, ...]:
         """The mod files in whose markup `expression` occurs as the engine
@@ -1379,13 +1416,34 @@ class ModGuiRefs:
         hit = self._found.get(wanted)
         if hit is None:
             files: set[str] = set()
-            if wanted:
-                whole = re.compile(r"(?<![\w.])" + re.escape(wanted) + r"(?![\w.])")
-                for written, where in self.expressions.items():
-                    if wanted in written and whole.search(written):
-                        files.update(where)
+            for written in _written_whole(wanted, self.expressions):
+                files.update(self.expressions[written])
             hit = self._found[wanted] = tuple(sorted(files))
         return hit
+
+    def vanilla_writes(self, expression: str) -> bool:
+        """Whether vanilla's loc also writes `expression`, in the same sense as
+        expression_files. Such a line can be vanilla's as well as the mod's,
+        and nothing in it says which (`GetPlayer.GetTooltipTag`, the tag both
+        put on a tooltip link, was 568 of the 568 global-headed vanilla lines
+        the pass let through on 2026-11-13), so it keeps its tag."""
+        wanted = _WHITESPACE_RE.sub("", expression)
+        hit = self._vanilla_found.get(wanted)
+        if hit is None:
+            hit = self._vanilla_found[wanted] = any(
+                True for _ in _written_whole(wanted, self.vanilla_expressions))
+        return hit
+
+
+def _written_whole(wanted: str, writings: Iterable[str]) -> Iterator[str]:
+    """Each of `writings` (expressions without whitespace) in which `wanted`
+    occurs as a whole chain or call (see ModGuiRefs.expression_files)."""
+    if not wanted:
+        return
+    whole = re.compile(r"(?<![\w.])" + re.escape(wanted) + r"(?![\w.])")
+    for written in writings:
+        if wanted in written and whole.search(written):
+            yield written
 
 
 _vanilla_gui_names_cache: dict[str, frozenset[str]] = {}
@@ -1450,30 +1508,30 @@ def _data_types(text: str) -> list[str]:
     holds: no GUI file sets one, and they head two in five of vanilla's own
     expressions, so they never count.
 
-    Nor does a global function (see _GLOBAL_FUNCTION_RE): it needs no context,
-    every panel calls `GetPlayer`, and so reading it says nothing about whose
-    line a failure is. Those are matched by the whole expression instead
-    (_global_expressions, ModGuiRefs.expression_files).
+    Nor does a global function or promote (see _is_global): it needs no
+    context, every panel calls `GetPlayer`, and so reading it says nothing
+    about whose line a failure is. Those are matched by the whole expression
+    instead (_global_expressions, ModGuiRefs.expression_files).
     """
     out: list[str] = []
     if "." not in text:
         return out
     for body in _DATA_EXPR_RE.findall(text):
         for root in _DATA_ROOT_RE.findall(_QUOTED_ARG_RE.sub("''", body)):
-            if root not in out and not root.isupper() and not _GLOBAL_FUNCTION_RE.match(root):
+            if root not in out and not root.isupper() and not _is_global(root):
                 out.append(root)
     return out
 
 
 def _global_expressions(text: str) -> list[str]:
-    """Each `[...]` expression of `text` that reads a global function,
-    without its whitespace."""
+    """Each `[...]` expression of `text` that reads a global function or
+    promote, without its whitespace."""
     out: list[str] = []
     if "." not in text:
         return out
     for body in _DATA_EXPR_RE.findall(text):
         roots = _DATA_ROOT_RE.findall(_QUOTED_ARG_RE.sub("''", body))
-        if any(_GLOBAL_FUNCTION_RE.match(root) for root in roots):
+        if any(_is_global(root) for root in roots):
             out.append(_WHITESPACE_RE.sub("", body))
     return out
 
@@ -1533,6 +1591,18 @@ def _tree_files(mod_root: str, sub: str, ext: str) -> list[tuple[str, str, float
 
 # {mod_root: (vanilla_gui_files, vanilla_loc, stamp, ModGuiRefs)}, the latest only.
 _mod_gui_refs_cache: dict = {}
+# (vanilla_loc, its global-headed expressions), for the latest loc object.
+_vanilla_expressions_cache: list = []
+
+
+def _vanilla_global_expressions(vanilla_loc: dict[str, str]) -> frozenset[str]:
+    """Each `[...]` expression of vanilla's loc values that reads a global
+    function or promote, without its whitespace (see ModGuiRefs.vanilla_writes)."""
+    if _vanilla_expressions_cache and _vanilla_expressions_cache[0] is vanilla_loc:
+        return _vanilla_expressions_cache[1]
+    found = frozenset(x for value in vanilla_loc.values() for x in _global_expressions(value))
+    _vanilla_expressions_cache[:] = [vanilla_loc, found]
+    return found
 
 
 def mod_gui_references(
@@ -1555,7 +1625,9 @@ def mod_gui_references(
       - types: the head of every `[Foo.Bar]` chain in that markup and in the
         values of those keys (see _data_types for what is no data type);
       - expressions: every `[...]` expression there that reads a global
-        function, which only a whole-expression match can attribute.
+        function or promote, which only a whole-expression match can
+        attribute; and `vanilla_expressions`, the same of vanilla's loc, for
+        what such a match cannot attribute.
 
     A type only other mod loc reads is not in `types`: script-side loc
     (events, modifiers, tooltips of effects) reads scopes whichever window
@@ -1678,7 +1750,8 @@ def mod_gui_references(
 
     result = ModGuiRefs({k: tuple(sorted(v)) for k, v in keys.items()}, mod_loc_keys,
                         {t: tuple(sorted(v)) for t, v in types.items()}, tuple(warnings),
-                        {x: tuple(sorted(v)) for x, v in expressions.items()})
+                        {x: tuple(sorted(v)) for x, v in expressions.items()},
+                        _vanilla_global_expressions(vanilla_loc))
     _mod_gui_refs_cache[mod_root] = (vanilla_gui_files, vanilla_loc, stamp, result)
     return result
 
@@ -1686,20 +1759,21 @@ def mod_gui_references(
 def _mod_gui_hit(refs: ModGuiRefs, m: re.Match) -> tuple[dict, tuple[str, ...]] | None:
     """What of the mod's a matched line names: ({key or type}, the files)."""
     wanted = m.groupdict().get("type")
-    payload = m.group("payload").strip()
     if wanted is not None:
         # The engine names the context it lacked. The expression after it is
         # no second chance: a chain passed as an argument is not the subject.
         return ({"type": wanted}, refs.types[wanted]) if wanted in refs.types else None
+    payload = m.group("payload").strip()
     if payload in refs.keys:
         return {"key": payload}, refs.keys[payload]
     if payload in refs.mod_loc_keys:
         return {"key": payload}, (refs.mod_loc_keys[payload],)
     for head, expression in _expressions(payload):
-        if _GLOBAL_FUNCTION_RE.match(head):
-            # Every panel calls GetPlayer: only the expression can say whose.
+        if _is_global(head):
+            # Every panel calls GetPlayer: only the expression can say whose,
+            # and not when vanilla's loc writes it too.
             files = refs.expression_files(expression)
-            if files:
+            if files and not refs.vanilla_writes(expression):
                 return {"expression": expression.strip()}, files
         elif head in refs.types:
             return {"type": head}, refs.types[head]
@@ -1712,18 +1786,21 @@ def untag_mod_gui_fetches(entries: list[LogEntry], refs: ModGuiRefs,
     """Take a generic vanilla entry's tag off a GUI data-context failure the
     mod's own GUI reaches, so it shows as an untagged mod error (#1269).
 
-    An entry qualifies when its message is one of the three lines of
+    An entry qualifies when its message is one of the five lines of
     _MOD_GUI_FETCH_SHAPES, a vanilla registry entry tagged it, and that entry
     is generic: none of its signatures reaches into the quoted part of the
     line. It is the mod's when
 
-      - `PdxDataFetchLocalizedData failed for '<key>'` or `FetchData failed
-        for '<expr>'` names a key in `refs.keys` or `refs.mod_loc_keys`, or an
-        expression whose head is in `refs.types`, or, where the head is a
-        global function (`GetPlayer.…`), an expression the mod's own markup
-        writes (`refs.expression_files`);
-      - `wanted context of type '<Type>' for '<expr>'` names a type in
-        `refs.types` (the wanted type alone).
+      - `PdxDataFetchLocalizedData failed for '<key>'`, `FetchData failed
+        for '<expr>'` or `Data error in loc string '<key>'` names a key in
+        `refs.keys` or `refs.mod_loc_keys`, or an expression whose head is in
+        `refs.types`, or, where the head is a global function or promote
+        (`GetPlayer.…`, `LabelingHelper.…`), an expression the mod's own
+        markup writes (`refs.expression_files`) and vanilla's loc does not
+        (`refs.vanilla_writes`);
+      - `wanted context of type '<Type>' for '<expr>'` or `New data types does
+        not contain a '<Type>' data context` names a type in `refs.types` (the
+        wanted type alone).
 
     Such a line gets `mod_gui_context`: `key`, `type` or `expression`, the mod
     `files` that reach it (the first few, with `file_count`), and `untagged_from`, the
@@ -1735,17 +1812,28 @@ def untag_mod_gui_fetches(entries: list[LogEntry], refs: ModGuiRefs,
     matches the line with a signature that reaches into the quoted part
     (`wanted context of type 'Country' for 'Country.GetFoo`), the line carries
     that entry's tag, whichever kind it is and wherever it sits in its
-    document. That is how a line this pass shows is registered, or watched.
-    `mod_root` is tag_vanilla_bugs': for `- stack: vanilla only` entries.
+    document, and whether or not the mod's GUI still reaches it: a watch
+    entry put on a line this pass showed keeps the line after the mod stops
+    reading that type. That is how a line this pass shows is registered, or
+    watched. `mod_root` is tag_vanilla_bugs': for `- stack: vanilla only`
+    entries.
 
     Run it after the registry passes, on every tagging run: it also clears the
     `mod_gui_context` an earlier run left on a cached entry.
     """
     has_mod_frame = mod_frame_test(mod_root)
     signatures: dict[int, list[str]] = {}
+    seen: dict[tuple, tuple[list[VanillaBugRef], list[VanillaBugRef]]] = {}
 
     def matching(e: LogEntry, quote_at: int) -> tuple[list[VanillaBugRef], list[VanillaBugRef]]:
         """(the generic, the naming) entries that match `e`, in registry order."""
+        key = (e.source, e.message, quote_at, tuple(e.files))
+        hit = seen.get(key)
+        if hit is None:
+            hit = seen[key] = _matching(e, quote_at)
+        return hit
+
+    def _matching(e: LogEntry, quote_at: int) -> tuple[list[VanillaBugRef], list[VanillaBugRef]]:
         norm = _normalize_for_signature_match(e.message)
         generic: list[VanillaBugRef] = []
         naming: list[VanillaBugRef] = []
@@ -1766,22 +1854,22 @@ def untag_mod_gui_fetches(entries: list[LogEntry], refs: ModGuiRefs,
         ref = e.vanilla_bug_ref
         if ref is None or ref.get("kind") not in VANILLA_KINDS:
             continue
-        shape = _MOD_GUI_FETCH_SHAPES.get(e.source_file)
-        if shape is None:
-            continue
         line = e.message.split("\n", 1)[0]
-        m = shape.search(line)
+        m = next(filter(None, (shape.search(line) for shape in _MOD_GUI_FETCH_SHAPES.get(e.source_file, ()))),
+                 None)
         if not m:
-            continue
-        hit = _mod_gui_hit(refs, m)
-        if hit is None:
             continue
         quoted = m.start("type") if m.groupdict().get("type") is not None else m.start("payload")
         generic, naming = matching(e, len(_normalize_for_signature_match(line[:quoted])))
         if not any(g.title == ref.get("title") and g.anchor == ref.get("section") for g in generic):
             continue  # tagged by an entry that names the line, or by a path anchor
         if naming:
+            # Whether or not the mod still reaches it: a watch entry put on a
+            # line this pass showed must not lapse when the mod stops reading.
             e.vanilla_bug_ref = naming[0].to_dict()
+            continue
+        hit = _mod_gui_hit(refs, m)
+        if hit is None:
             continue
         context, files = hit
         context["files"] = list(files[:_MOD_GUI_FILES_SHOWN])

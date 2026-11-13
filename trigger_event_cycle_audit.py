@@ -89,17 +89,14 @@ Report: docs/engine/trigger_event_cycle_report.md. Registered in POST_LOAD_AUDIT
 from __future__ import annotations
 
 import os
-import re
 from dataclasses import dataclass, field
 
 import script_call_graph as scg
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
 
 CHECK = "trigger_event_cycle"
 AUDIT_DIRS = ("common", "events")
-
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 
 @dataclass
@@ -118,28 +115,19 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
+class AuditResult(_AuditResult):
+    """`stale` holds the `(trigger_event_cycle)` tags on a line with no flag."""
 
-
-@dataclass
-class AuditResult:
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     events: int = 0
     effects: int = 0
     undelayed_edges: int = 0
     components: int = 0  # components holding at least one flag
 
-    @property
-    def failing(self) -> int:
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
-
 
 def read_tags(mod_path: str) -> dict[tuple[str, int], dict]:
-    """{(file, line): {date, rationale}} for every `(trigger_event_cycle)` tag
-    in the mod's script."""
+    """{(file, line): {date, tag, rationale}} for every `(trigger_event_cycle)`
+    tag in the mod's script."""
     tags: dict[tuple[str, int], dict] = {}
     for sub in AUDIT_DIRS:
         base = os.path.join(mod_path, sub)
@@ -160,12 +148,9 @@ def read_tags(mod_path: str) -> dict[tuple[str, int], dict]:
                     continue
                 rel = os.path.relpath(path, mod_path).replace("\\", "/")
                 for lineno, raw in enumerate(text.splitlines(), 1):
-                    if "REVIEWED" not in raw:
-                        continue
-                    m = _TAGGED_REVIEWED_RE.search(raw)
-                    if m and CHECK in re.split(r"[\s,]+", m.group("checks").strip()):
-                        tags[(rel, lineno)] = {"date": m.group("date"),
-                                               "rationale": m.group("rationale").strip()}
+                    tag = parse_reviewed(raw, (CHECK,))
+                    if tag:
+                        tags[(rel, lineno)] = tag
     return tags
 
 
@@ -214,7 +199,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         f.exemption = tags.get((f.file, f.line))
         if f.exemption:
             used.add((f.file, f.line))
-    result.stale_tags = [StaleTag(file, line) for (file, line) in sorted(tags) if (file, line) not in used]
+    result.stale = [StaleTag(file, line, CHECK) for (file, line) in sorted(tags) if (file, line) not in used]
     return result
 
 
@@ -248,8 +233,8 @@ def describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Trigger-event cycle audit report",
         "",
@@ -282,9 +267,9 @@ def render_report(result: AuditResult) -> str:
             out += [f"- line {f.line}: {describe(f)}" for f in by_file[fname]]
             out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags on a line with no flag; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -307,7 +292,7 @@ def render_report(result: AuditResult) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         f"- cycles' components: {result.components}",
         "",
     ]
@@ -319,15 +304,13 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "trigger_event_cycle_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags on a line with no flag.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "components": result.components,
         "undelayed_edges": result.undelayed_edges,
         "events": result.events,
@@ -336,24 +319,34 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report, or with `--through` the flagged cycles a name lies
+    on; `--strict` (CI) exits 1 if any flag lacks its check-tagged
+    `# REVIEWED` comment, or any such tag sits on a line with no flag."""
     from path_constants import mod_path
-    res = audit(mod_path=mod_path)
-    if "--through" in sys.argv:
-        i = sys.argv.index("--through")
-        if i + 1 >= len(sys.argv):
+    no_name = object()  # `--through` given with nothing after it
+
+    def add_arguments(parser) -> None:
+        parser.add_argument("--through", nargs="?", const=no_name, metavar="NAME",
+                            help="list the flagged cycles an event or scripted effect lies on")
+
+    def run(args) -> AuditResult:
+        res = audit(mod_path=mod_path)
+        if args.through is no_name:
             raise SystemExit("--through needs an event id or a scripted effect's name")
-        hits = cycles_through(res, sys.argv[i + 1])
-        for f in hits:
-            mark = "reviewed" if f.exemption else "UNREVIEWED"
-            print(f"{f.file}:{f.line} [{mark}] " + " -> ".join(f.cycle))
-        if not hits:
-            print(f"no flagged cycle passes through {sys.argv[i + 1]}")
-    else:
-        print(render_report(res))
-    # --strict: CI mode. Exit 1 if any flag lacks its check-tagged
-    # `# REVIEWED` comment, or any such tag sits on a line with no flag.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if res.failing else 0)
+        return res
+
+    def render(res: AuditResult, args) -> str:
+        if args.through is None:
+            return render_report(res)
+        lines = [f"{f.file}:{f.line} [{'reviewed' if f.exemption else 'UNREVIEWED'}] " + " -> ".join(f.cycle)
+                 for f in cycles_through(res, args.through)]
+        return "\n".join(lines or [f"no flagged cycle passes through {args.through}"])
+
+    return cli_main(run, render, argv=argv, description=__doc__.splitlines()[0],
+                    add_arguments=add_arguments,
+                    strict_help="CI mode: exit 1 on an unreviewed flag or a tag on a line with no flag.")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -18,6 +18,11 @@
 # flat screening values (DEW Point Defense, Aegis Air Defense: 111) and Unmanned
 # Aerial Vehicles' +28 follow the light cruiser's 1.14.5 screening rescale
 # (270 -> 150) from their old 200 and 50 (#1625; header of extra_ship_types.txt).
+# The two vulnerability reducers are sized as a ship's share of vanilla's Torpedo
+# Nets ship: a capital with the Close-In Weapon System keeps 80% of the
+# vulnerability one with Torpedo Nets keeps, with DEW Point Defense 60%. Vanilla
+# 1.15 halved Torpedo Nets (-0.5 -> -0.25), so CIWS went -0.60 -> -0.40 and DEW
+# -0.70 -> -0.55 (#1682); test_ship_modules.py pins the ratio to the snapshot.
 #
 # Roles decide the slot a module goes in on a mod ship (extra_ship_types.txt):
 #   protection      hull and crew damage taken (the base game's Extended Sick
@@ -103,7 +108,7 @@ utility_mod_ciws = {
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.20
-		ship_vulnerability_mult = -0.60
+		ship_vulnerability_mult = -0.40
 	}
 
 	construction_goods = {
@@ -151,7 +156,7 @@ utility_mod_dew_point_defense = {
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.35
-		ship_vulnerability_mult = -0.70
+		ship_vulnerability_mult = -0.55
 		ship_screening_add = 111
 	}
 

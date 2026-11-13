@@ -170,7 +170,7 @@ class RegistrationTests(unittest.TestCase):
         # Read the roster from source: importing mod_state_server needs the
         # per-machine paths, and this test must run in CI without them.
         here = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(here, "mod_state_server.py"), encoding="utf-8") as fh:
+        with open(os.path.join(here, "server", "post_load.py"), encoding="utf-8") as fh:
             src = fh.read()
         roster = src[src.index("POST_LOAD_AUDITS = ["):]
         roster = roster[:roster.index("]")]

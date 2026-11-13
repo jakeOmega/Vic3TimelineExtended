@@ -209,7 +209,7 @@ python3 scripts/generators/gen_region_area.py         # common/scripted_effects/
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
 python3 texture_reference_audit.py --bootstrap       # docs/engine/vanilla_asset_paths.txt (vanilla + DLC asset paths and media aliases, CI's stand-in for the install; also docs/engine/vanilla_gui_files.txt, the vanilla GUI file names /gui/placeholder-textures reads)
 python3 effect_trigger_validity_audit.py bootstrap-context  # docs/engine/effect_trigger_context_keys.txt (effect-only / trigger-only names, #1142)
-python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count); exits 1 while an accessor vanilla chains through waits for its type
+python3 scripts/generators/fold_vanilla_loc_accessors.py --prune  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count); --prune drops what the new vanilla's loc no longer calls (31 on 1.15.1); exits 1 while an accessor vanilla chains through waits for its type
 python3 scripts/generators/gen_pb_principle_slots.py # power bloc principle slot limit INJECTs + the remove dispatch (stops on a vanilla principle that gains its own `possible`)
 python3 scripts/generators/gen_capital_bloc_names.py # capital-city power bloc names, one per state (after resources.py, which rewrites map_data/state_regions)
 python3 scripts/generators/gen_planned_capital.py    # common/scripted_effects/te_demog_capital_generated.txt, one branch per state (after resources.py)

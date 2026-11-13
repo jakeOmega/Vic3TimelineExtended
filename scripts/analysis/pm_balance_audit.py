@@ -26,35 +26,49 @@ sys.path.insert(0, str(REPO))
 
 import pm_balance_lib as lib  # noqa: E402
 
-PM_DIR = REPO / lib.PM_SUBDIR
+def file_heading(fname: str, frows: list[dict]) -> str:
+    """The `## <file>` line of a file whose PMs give no margin range.
+
+    Margin stats leave out throughput PMs, so a file whose costed PMs are
+    all throughput has none to show; saying it has no cost comments was
+    wrong for `sr_colony_module_pms.txt` and `te_orbital_debris_pms.txt`,
+    whose methods carry cost blocks (#1697).
+    """
+    throughput = sum(r["flag"] == "THROUGHPUT" for r in frows)
+    bare = sum(r["margin_pct"] is None for r in frows)
+    if not throughput:
+        return f"## {fname} — {len(frows)} PMs (no cost comments)"
+    parts = [f"{throughput} throughput"]
+    if bare:
+        parts.append(f"{bare} without cost comments")
+    return (f"## {fname} — {len(frows)} PMs ({', '.join(parts)}; "
+            "no margin range)")
 
 
 def main() -> int:
     rows = []
     pm_files = lib.pm_file_names(REPO)
-    for fname in pm_files:
-        path = PM_DIR / fname
-        for pm_id, body in lib.iter_pms(path):
-            costs = lib.parse_cost_comments(body)
-            flag = lib.classify_pm(body, costs)
-            if costs is None:
-                rows.append({
-                    "id": pm_id,
-                    "file": fname,
-                    "profit": None,
-                    "margin_pct": None,
-                    "wage_be": None,
-                    "flag": flag,
-                })
-                continue
+    for fname, pm_id, body in lib.iter_mod_pms(REPO):
+        costs = lib.parse_cost_comments(body)
+        flag = lib.classify_pm(body, costs)
+        if costs is None:
             rows.append({
                 "id": pm_id,
                 "file": fname,
-                "profit": costs.get("profit"),
-                "margin_pct": costs["profit_margin_pct"],
-                "wage_be": costs.get("wage_breakeven"),
+                "profit": None,
+                "margin_pct": None,
+                "wage_be": None,
                 "flag": flag,
             })
+            continue
+        rows.append({
+            "id": pm_id,
+            "file": fname,
+            "profit": costs.get("profit"),
+            "margin_pct": costs["profit_margin_pct"],
+            "wage_be": costs.get("wage_breakeven"),
+            "flag": flag,
+        })
 
     print(f"# PM balance audit — {len(rows)} PMs across {len(pm_files)} files\n")
 
@@ -67,7 +81,7 @@ def main() -> int:
         margins = [r["margin_pct"] for r in frows
                    if r["margin_pct"] is not None and r["flag"] != "THROUGHPUT"]
         if not margins:
-            print(f"## {fname} — {len(frows)} PMs (no cost comments)")
+            print(file_heading(fname, frows))
             continue
         margins_sorted = sorted(margins)
         print(f"## {fname} — {len(frows)} PMs")

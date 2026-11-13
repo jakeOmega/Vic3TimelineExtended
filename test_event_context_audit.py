@@ -293,8 +293,8 @@ class EventContextAuditTests(unittest.TestCase):
                          "mentions", "…text…", ["no mod dispatch site"]),
             ],
             coverage={"events_defined": 784, "visible": 770, "dispatch_sites": 1020},
-            stale_tags=[eca.Tag("old.1", "system_ungated", "events/old.txt", 44,
-                                "2026-09-01", "gone")],
+            stale=[eca.Tag("old.1", "system_ungated", "events/old.txt", 44,
+                           "2026-09-01", "gone")],
         )
         report = eca.render_report(result)
         self.assertIn("- `un_events.2` — events/un_events.txt (REVIEWED 2026-09-25: a real use)",
@@ -305,6 +305,16 @@ class EventContextAuditTests(unittest.TestCase):
         self.assertIn("- `unchosen_self_action`: **0** unreviewed, 1 REVIEWED", report)
         for gone in ("Events defined", "dispatch sites traced", "784", "1020"):
             self.assertNotIn(gone, report)
+
+    def test_the_servers_text_result_fails_on_stale_and_unknown_tags(self):
+        """`/event-context-audit?format=text` rebuilds a result from the
+        filtered flags with `stale=` and `unknown_tags=`."""
+        tag = eca.Tag("old.1", "system_ungated", "events/old.txt", 44, "2026-09-01", "gone")
+        typo = eca.Tag("old.1", "sytem_ungated", "events/old.txt", 45, "2026-09-01", "typo")
+        result = eca.AuditResult(flags=[], coverage={}, stale=[tag], unknown_tags=[typo])
+        self.assertEqual(result.failing, [tag, typo])
+        self.assertEqual(eca.AuditResult().stale, [])
+        self.assertEqual(tag.tag, "system_ungated")
 
     # -- review follow-ups ------------------------------------------------
 
@@ -553,9 +563,9 @@ class EventContextAuditTests(unittest.TestCase):
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
         mod = self._mod({"events/flav.txt": _event("flav.1", body)}, loc)
         res = eca.audit(mod)
-        self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "system_ungated")])
+        self.assertEqual([(t.event_id, t.check) for t in res.stale], [("flav.1", "system_ungated")])
         self.assertEqual([(t.event_id, t.check) for t in res.unknown_tags], [("flav.1", "sytem_ungated")])
-        self.assertEqual(res.failing, 2)
+        self.assertEqual(len(res.failing), 2)
 
     def test_another_audits_check_tag_is_ignored(self):
         # silent_variable_audit uses the same tagged shape inside an option;
@@ -564,14 +574,14 @@ class EventContextAuditTests(unittest.TestCase):
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
         res = eca.audit(self._mod({"events/flav.txt": _event("flav.1", body)}, loc))
         self.assertEqual(res.unknown_tags, [])
-        self.assertEqual(res.failing, 0)
+        self.assertEqual(res.failing, [])
 
     def test_all_tag_on_a_clean_event_is_stale(self):
         body = "\t# REVIEWED 2026-09-25 (all): nothing to hide\n"
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
         res = eca.audit(self._mod({"events/flav.txt": _event("flav.1", body)}, loc))
-        self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "all")])
-        self.assertEqual(res.failing, 1)
+        self.assertEqual([(t.event_id, t.check) for t in res.stale], [("flav.1", "all")])
+        self.assertEqual(len(res.failing), 1)
 
 
 if __name__ == "__main__":

@@ -22,7 +22,8 @@ Suppress an intentional flag with a same-line comment in the format:
 
     unusual_loc_key:0 "Some text [WeirdScope.GetX]"  # REVIEWED 2026-05-08: rationale
 
-Standalone CLI (exits 1 on an unreviewed flag; CI runs it):
+Standalone CLI (exits 1 on an unreviewed flag, with or without `--strict`,
+which it takes as the other audits do; CI runs it):
 
     python3 localization_accessor_audit.py [--loc-dir PATH] [--report | --blind]
 
@@ -36,20 +37,17 @@ the gaps):
 """
 from __future__ import annotations
 
-import argparse
 import os
 import re
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 # ---------------------------------------------------------------------------
 # Regex primitives
 # ---------------------------------------------------------------------------
-
-# Same canonical REVIEWED regex used by event_magnitude_audit.py / modifier_visibility_audit.py.
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 # Loc line: ` key:0 "value"`  or  ` key: "value"`. Comments after the value
 # come after a `#` outside the quoted body. We don't try to parse YAML strictly;
@@ -1699,19 +1697,14 @@ class AuditFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[AuditFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
     blind: "BlindReport | None" = None  # where the check stops; `audit(blind=True)`
 
 
-def parse_reviewed_comment(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+# This audit's old name for the shared parser.
+parse_reviewed_comment = parse_reviewed
 
 
 def _collect_diplo_action_keys(common_dir: str) -> set[str]:
@@ -1791,7 +1784,7 @@ def audit_lines(
                     chain=chain.raw,
                     context=ctx,
                     reason=reason,
-                    exemption=parse_reviewed_comment(ll.comment),
+                    exemption=parse_reviewed(ll.comment),
                 ))
     return AuditResult(flags=flags, coverage={"chains_scanned": chains_scanned})
 
@@ -1981,8 +1974,8 @@ def blind_report(
 # ---------------------------------------------------------------------------
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Localization accessor audit report",
@@ -2119,13 +2112,10 @@ def regenerate(mod_state) -> dict:
 
     result = audit(loc_dir, common_dir=common_dir, engine_docs_dir=engine_docs_dir, blind=True)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "localization_accessor_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
+    write_text(os.path.join(mod_path, "docs", "engine", "localization_accessor_report.md"), report)
 
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.coverage.get("files_audited", 0),
         "chains_scanned": result.coverage.get("chains_scanned", 0),
@@ -2144,70 +2134,83 @@ def regenerate(mod_state) -> dict:
 # Standalone CLI
 # ---------------------------------------------------------------------------
 
-def _main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument(
-        "--loc-dir",
-        default=None,
-        help="Localization directory to scan (default: mod's localization/english/).",
-    )
-    parser.add_argument(
-        "--common-dir",
-        default=None,
-        help="common/ directory for entity-key context hints (default: mod's).",
-    )
-    parser.add_argument(
-        "--engine-docs-dir",
-        default=None,
-        help="docs/engine/ directory for catalog source (default: mod's).",
-    )
-    parser.add_argument(
-        "--report",
-        action="store_true",
-        help="Print the markdown report to stdout (in addition to summary).",
-    )
-    parser.add_argument(
-        "--blind",
-        action="store_true",
-        help="List the `value`-typed accessors that vanilla's chains (from "
-             "vanilla_parsed/) and the scanned loc's own continue past, where "
-             "the check stops. Always part of --report.",
-    )
-    args = parser.parse_args()
+class _NoLocDir(Exception):
+    """`--loc-dir` names no directory: the command line exits 2."""
 
+
+def main(argv=None) -> int:
+    """Print a summary line (and the report with `--report`, the blind spots
+    with `--blind`). Exits 1 on an unreviewed flag, `--strict` or not, and 2
+    when the loc directory does not exist."""
     from path_constants import mod_path
 
-    loc_dir = args.loc_dir or os.path.join(mod_path, "localization", "english")
-    common_dir = args.common_dir or os.path.join(mod_path, "common")
-    engine_docs_dir = args.engine_docs_dir or os.path.join(mod_path, "docs", "engine")
-
-    if not os.path.isdir(loc_dir):
-        print(f"Error: loc-dir does not exist: {loc_dir}")
-        return 2
-
-    result = audit(loc_dir, common_dir=common_dir, engine_docs_dir=engine_docs_dir,
-                   blind=args.report or args.blind)
-
-    if args.report:
-        print(render_report(result))
-    elif args.blind:
-        print("\n".join(_render_blind(result.blind)))
-
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
-    print(
-        f"\n{loc_dir}: "
-        f"files={result.coverage.get('files_audited', 0)} "
-        f"chains={result.coverage.get('chains_scanned', 0)} "
-        f"flags={len(result.flags)} unreviewed={unrev} exempted={exemp}"
-    )
-    if result.blind is not None and result.blind.untyped_folded:
-        print(
-            f"{len(result.blind.untyped_folded)} folded accessor(s) that vanilla chains "
-            "further through are still typed `value`: see \"Where the check stops\"."
+    def add_arguments(parser) -> None:
+        parser.add_argument(
+            "--loc-dir",
+            default=None,
+            help="Localization directory to scan (default: mod's localization/english/).",
         )
-    return 0 if unrev == 0 else 1
+        parser.add_argument(
+            "--common-dir",
+            default=None,
+            help="common/ directory for entity-key context hints (default: mod's).",
+        )
+        parser.add_argument(
+            "--engine-docs-dir",
+            default=None,
+            help="docs/engine/ directory for catalog source (default: mod's).",
+        )
+        parser.add_argument(
+            "--report",
+            action="store_true",
+            help="Print the markdown report to stdout (in addition to summary).",
+        )
+        parser.add_argument(
+            "--blind",
+            action="store_true",
+            help="List the `value`-typed accessors that vanilla's chains (from "
+                 "vanilla_parsed/) and the scanned loc's own continue past, where "
+                 "the check stops. Always part of --report.",
+        )
+
+    def run(args) -> AuditResult:
+        args.loc_dir = args.loc_dir or os.path.join(mod_path, "localization", "english")
+        common_dir = args.common_dir or os.path.join(mod_path, "common")
+        engine_docs_dir = args.engine_docs_dir or os.path.join(mod_path, "docs", "engine")
+        if not os.path.isdir(args.loc_dir):
+            print(f"Error: loc-dir does not exist: {args.loc_dir}")
+            raise _NoLocDir(args.loc_dir)
+        return audit(args.loc_dir, common_dir=common_dir, engine_docs_dir=engine_docs_dir,
+                     blind=args.report or args.blind)
+
+    def render(result: AuditResult, args) -> str:
+        out = []
+        if args.report:
+            out.append(render_report(result))
+        elif args.blind:
+            out.append("\n".join(_render_blind(result.blind)))
+        out.append(
+            f"\n{args.loc_dir}: "
+            f"files={result.coverage.get('files_audited', 0)} "
+            f"chains={result.coverage.get('chains_scanned', 0)} "
+            f"flags={len(result.flags)} unreviewed={len(result.unreviewed)} "
+            f"exempted={len(result.exemptions)}"
+        )
+        if result.blind is not None and result.blind.untyped_folded:
+            out.append(
+                f"{len(result.blind.untyped_folded)} folded accessor(s) that vanilla chains "
+                "further through are still typed `value`: see \"Where the check stops\"."
+            )
+        return "\n".join(out)
+
+    try:
+        return cli_main(run, render, argv=argv, description=__doc__.split("\n\n")[0],
+                        always_strict=True, add_arguments=add_arguments,
+                        strict_help="Accepted for CI's form; the audit always exits 1 on an "
+                                    "unreviewed flag.")
+    except _NoLocDir:
+        return 2
 
 
 if __name__ == "__main__":
-    raise SystemExit(_main())
+    raise SystemExit(main())

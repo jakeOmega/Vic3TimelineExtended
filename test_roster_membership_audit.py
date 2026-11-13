@@ -107,7 +107,9 @@ class _Tree:
         return rma.audit(state, mod_path=self.root)
 
     def flags(self) -> list[tuple[str, str]]:
-        return [(f.kind, f.name) for f in self.audit().flags]
+        """Each flag, then each stale tag, as (kind, name)."""
+        result = self.audit()
+        return [(f.kind, f.name) for f in result.flags] + [("stale_review", t.name) for t in result.stale]
 
     def close(self):
         self._tmp.cleanup()
@@ -272,10 +274,11 @@ class AiShipCategoryTests(_Case):
                 modifications = { ship_mod_slot_guns = { ship_mod_cutter_guns } }
             }
         """)
-        flags = tree.audit().flags
-        self.assertEqual([(f.kind, f.name) for f in flags],
-                         [("missing_ai_category", "ship_type_cutter"), ("stale_review", "ship_type_cutter")])
-        self.assertTrue(all(f.exemption is None for f in flags))
+        result = tree.audit()
+        self.assertEqual([(f.kind, f.name) for f in result.flags], [("missing_ai_category", "ship_type_cutter")])
+        self.assertTrue(all(f.exemption is None for f in result.flags))
+        self.assertEqual([(t.name, t.why) for t in result.stale],
+                         [("ship_type_cutter", "a ship type flag takes no comment")])
 
 
 class FleetEntityTests(_Case):
@@ -392,7 +395,8 @@ class UnlistedModificationTests(_Case):
             comment=" # REVIEWED 2026-11-12 (roster_membership): parked for the carrier rework"))
         (flag,) = tree.audit().flags
         self.assertEqual(flag.kind, "unlisted_modification")
-        self.assertEqual(flag.exemption, {"date": "2026-11-12", "rationale": "parked for the carrier rework"})
+        self.assertEqual(flag.exemption, {"date": "2026-11-12", "tag": "roster_membership",
+                                          "rationale": "parked for the carrier rework"})
 
     def test_an_untagged_comment_does_not(self):
         tree = self.tree(mods=_MODS + self._ORPHAN.format(comment=" # REVIEWED 2026-11-12: parked"))
@@ -402,9 +406,10 @@ class UnlistedModificationTests(_Case):
     def test_a_tag_on_a_listed_modification_is_stale(self):
         tree = self.tree(mods=_MODS.replace(
             "ship_mod_cutter_guns = {", "ship_mod_cutter_guns = { # REVIEWED 2026-11-12 (roster_membership): old"))
-        (flag,) = tree.audit().flags
-        self.assertEqual((flag.kind, flag.name), ("stale_review", "ship_mod_cutter_guns"))
-        self.assertIsNone(flag.exemption)
+        result = tree.audit()
+        self.assertEqual(result.flags, [])
+        (stale,) = result.stale
+        self.assertEqual((stale.name, stale.tag, stale.why), ("ship_mod_cutter_guns", "roster_membership", "remove it"))
 
 
 class UnlistedPmTests(_Case):
@@ -500,6 +505,7 @@ class LiveModTests(unittest.TestCase):
     def test_the_mod_is_clean(self):
         unreviewed = [f for f in self.result.flags if not f.exemption]
         self.assertEqual(unreviewed, [], rma.render_report(self.result))
+        self.assertEqual(self.result.stale, [], rma.render_report(self.result))
 
     def test_the_pass_is_not_vacuous(self):
         self.assertGreaterEqual(self.result.ship_types_checked, 19)

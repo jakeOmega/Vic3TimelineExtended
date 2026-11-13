@@ -509,6 +509,21 @@ class TestShipUtilities(unittest.TestCase):
             with self.subTest(ship=ship):
                 self.assertEqual(have, want)
 
+    def test_point_defense_keeps_its_ratio_to_torpedo_nets(self):
+        """Torpedo Nets are pruned from mod hulls, so the two vulnerability
+        reducers are sized against a vanilla ship that fits them: a ship with
+        the Close-In Weapon System keeps 80% of the vulnerability one with
+        Torpedo Nets keeps, with DEW Point Defense 60% (the 2026-11-03 spec's
+        -0.60 and -0.70 against Torpedo Nets' -0.5). Vanilla 1.15 halved Torpedo
+        Nets to -0.25 and the two followed (#1682). Fails when vanilla moves
+        Torpedo Nets again, so the successors are re-sized with it."""
+        _, mods, _, _, _ = _state()
+        stat = "ship_vulnerability_mult"
+        kept = 1 + _modifier(mods["utility_mod_torpedo_nets"])[stat]
+        for module, share in (("ciws", 0.8), ("dew_point_defense", 0.6)):
+            with self.subTest(module=module):
+                self.assertAlmostEqual(1 + _modifier(mods["utility_mod_" + module])[stat], share * kept, places=6)
+
     def test_no_module_or_technology_on_the_old_screening_scale(self):
         """Flat screening outside the hulls follows the light cruiser's rescale
         (270 -> 150): the utilities' 200 became 111, Unmanned Aerial Vehicles'

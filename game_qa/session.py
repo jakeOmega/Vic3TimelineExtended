@@ -1000,7 +1000,11 @@ class Session:
         trigger is written bare and is checked for the played country (`tag` another to read it):
         `has_technology_researched = railways` works, while `c:FRA.has_technology_researched = railways` answers
         "Unknown trigger type". A variable that is not set reads 0, not an error (`c:FRA.var:x` gave "0", live
-        2026-11-11), so a 0 does not prove the variable set."""
+        2026-11-11), so a 0 does not prove the variable set.
+
+        An error raised once the values are evaluated (the poll for the date line, whose proof of life can end
+        the verbs, `watch_ended`) carries them as `reads`, as a resume that failed after them does, and the
+        step's record holds them."""
         self._require_game()
         self._catch_up_reload()             # a reload still due after add-setup may have dropped the breakpoint
         if isinstance(exprs, str):
@@ -1008,8 +1012,13 @@ class Session:
         exprs = list(exprs)
         with self._step("read", exprs=exprs) as out:
             reads, info = self._fire_read(exprs)
-            when = self._date_in(self._new_lines())
-            out.update(info, values=[[r.expr, r.ok, r.raw] for r in reads], date=when)
+            out.update(info, values=[[r.expr, r.ok, r.raw] for r in reads])
+            try:
+                when = self._date_in(self._new_lines())
+            except SessionError as e:
+                e.info.setdefault("reads", [asdict(r) for r in reads])
+                raise
+            out.update(date=when)
         return reads
 
     def tag(self, tag: str) -> None:
@@ -1131,8 +1140,8 @@ class Session:
         (`shared_state`). A row's `new_errors` are the error-log lines seen during that option, less blank lines
         and less what the debugger reported as its own output while stopped for this call's reads (the
         validator burst each trigger evaluation causes): its file lags its stream, so a burst may land in the
-        next option's lines. An error in a step raises like any verb's, carrying the rows so far (`options`),
-        and nothing is typed again. `complete` is true only when every option fired and was picked."""
+        next option's lines. An error in a step raises like any verb's, carrying the rows so far (`options`, with
+        a read's values when they were evaluated before it), and nothing is typed again. `complete` is true only when every option fired and was picked."""
         self._require_game()
         if isinstance(reads, str) or not all(isinstance(r, str) for r in reads):
             raise SessionError("bad_argument", "reads is a list of expressions, not %r" % (reads,))
@@ -1199,10 +1208,10 @@ class Session:
             row["fired"] = True
             row["pending_options"] = min(mine, key=lambda p: p.numeric_id).options
             if reads:
-                row["before"] = [asdict(r) for r in self.read(reads)]
+                self._read_into(row, "before", reads)
             row["picked"] = self.pick(row["index"], event)
             if reads:
-                row["after"] = [asdict(r) for r in self.read(reads)]
+                self._read_into(row, "after", reads)
         finally:
             try:
                 self._new_lines()               # the option's last lines
@@ -1210,6 +1219,15 @@ class Session:
                 pass                            # an error of its own must not hide the one that ended the option
             seen, self._errors_seen = self._errors_seen, None
             row["new_errors"] = _new_errors(seen, self._burst or [])
+
+    def _read_into(self, row: dict, key: str, reads: list[str]) -> None:
+        """`read` into a try_event row's `before` or `after`. Values evaluated before an error (its `reads`)
+        are the row's all the same, so the error's `options` show them."""
+        try:
+            row[key] = [asdict(r) for r in self.read(reads)]
+        except SessionError as e:
+            row[key] = e.info.get("reads", row[key])
+            raise
 
     def status(self) -> dict:
         """How far this session is, from what it holds: nothing is asked of the game or of a verb. `entered` is

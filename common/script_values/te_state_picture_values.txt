@@ -280,3 +280,143 @@ te_state_picture_size_shown = {
 		value = var:te_sp_size
 	}
 }
+
+# ============================================================================
+# THE BANNER'S HOVER (the te_sp_tt_* lines in te_miscellaneous_l_english.yml, which the banner's
+# tooltip finds by the name of the picture's overlay; gui/states_panel.gui). The figures the yearly
+# pass judged the state on, as it stored them, 0 before its first pass; and for each tag that is
+# kept past its floor (so that a state at a floor doesn't change picture each year), whether it
+# stands now only because it is kept: 1 if so, then the hover gives the figure that keeps it.
+# ============================================================================
+te_state_picture_hover_people = {
+	value = 0
+	if = { limit = { has_variable = te_sp_people } value = var:te_sp_people }
+}
+te_state_picture_hover_sol = {
+	value = 0
+	if = { limit = { has_variable = te_sp_sol } value = var:te_sp_sol }
+}
+te_state_picture_hover_esol = {
+	value = 0
+	if = { limit = { has_variable = te_sp_esol } value = var:te_sp_esol }
+}
+te_state_picture_hover_shortfall = {
+	value = te_state_picture_hover_esol
+	subtract = te_state_picture_hover_sol
+}
+te_state_picture_hover_growth = {
+	value = 0
+	if = { limit = { has_variable = te_sp_growth } value = var:te_sp_growth }
+}
+# a fall, as a positive rate: "fallen 2% a year"
+te_state_picture_hover_fall = {
+	value = te_state_picture_hover_growth
+	multiply = -1
+}
+te_state_picture_k_decline_fall = {
+	value = te_state_picture_k_decline
+	multiply = -1
+}
+te_state_picture_k_decline_keep_fall = {
+	value = te_state_picture_k_decline_keep
+	multiply = -1
+}
+te_state_picture_hover_gini = {
+	value = 0
+	if = { limit = { has_variable = te_dg_gini } value = var:te_dg_gini }
+}
+te_state_picture_hover_oil_share = {
+	value = 0
+	if = { limit = { has_variable = te_sp_oil_share } value = var:te_sp_oil_share }
+}
+te_state_picture_hover_coal_share = {
+	value = 0
+	if = { limit = { has_variable = te_sp_coal_share } value = var:te_sp_coal_share }
+}
+te_state_picture_hover_industry_share = {
+	value = 0
+	if = { limit = { has_variable = te_sp_industry_share } value = var:te_sp_industry_share }
+}
+te_state_picture_hover_resort_share = {
+	value = 0
+	if = { limit = { has_variable = te_sp_resort_share } value = var:te_sp_resort_share }
+}
+# The shares that keep a tag: its floor times te_state_picture_k_keep, as the pass takes them.
+te_state_picture_k_oil_share_keep = {
+	value = te_state_picture_k_oil_share
+	multiply = te_state_picture_k_keep
+}
+te_state_picture_k_coal_share_keep = {
+	value = te_state_picture_k_coal_share
+	multiply = te_state_picture_k_keep
+}
+te_state_picture_k_industry_share_keep = {
+	value = te_state_picture_k_industry_share
+	multiply = te_state_picture_k_keep
+}
+te_state_picture_k_resort_share_keep = {
+	value = te_state_picture_k_resort_share
+	multiply = te_state_picture_k_keep
+}
+# The live figures a weight reads, for the lines that give them: the level of the state's Port
+# (a state has one), and the floors the registry writes into the weights (test_state_pictures.py
+# holds them equal).
+te_state_picture_hover_port_level = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_port }
+		add = level
+	}
+}
+te_state_picture_k_major_port = { value = 20 }
+te_state_picture_k_smog = { value = 150 }
+te_state_picture_k_ruins = { value = 0.5 }
+
+te_state_picture_hover_kept_metropolis = {
+	value = 0
+	if = { limit = { te_state_picture_hover_people < te_state_picture_k_metropolis } value = 1 }
+}
+te_state_picture_hover_kept_megacity = {
+	value = 0
+	if = { limit = { te_state_picture_hover_people < te_state_picture_k_megacity } value = 1 }
+}
+te_state_picture_hover_kept_poor = {
+	value = 0
+	if = { limit = { te_state_picture_hover_sol >= te_state_picture_poor_floor } value = 1 }
+}
+te_state_picture_hover_kept_affluent = {
+	value = 0
+	if = { limit = { te_state_picture_hover_sol < te_state_picture_affluent_floor } value = 1 }
+}
+te_state_picture_hover_kept_rundown = {
+	value = 0
+	if = { limit = { te_state_picture_hover_shortfall < te_state_picture_k_rundown } value = 1 }
+}
+te_state_picture_hover_kept_boomtown = {
+	value = 0
+	if = { limit = { te_state_picture_hover_growth < te_state_picture_k_boom } value = 1 }
+}
+te_state_picture_hover_kept_declining = {
+	value = 0
+	if = { limit = { te_state_picture_hover_growth > te_state_picture_k_decline } value = 1 }
+}
+te_state_picture_hover_kept_divided = {
+	value = 0
+	if = { limit = { te_state_picture_hover_gini < te_state_picture_k_divided } value = 1 }
+}
+te_state_picture_hover_kept_industry = {
+	value = 0
+	if = { limit = { te_state_picture_hover_industry_share < te_state_picture_k_industry_share } value = 1 }
+}
+te_state_picture_hover_kept_resort = {
+	value = 0
+	if = { limit = { te_state_picture_hover_resort_share < te_state_picture_k_resort_share } value = 1 }
+}
+te_state_picture_hover_kept_oil = {
+	value = 0
+	if = { limit = { te_state_picture_hover_oil_share < te_state_picture_k_oil_share } value = 1 }
+}
+te_state_picture_hover_kept_colliery = {
+	value = 0
+	if = { limit = { te_state_picture_hover_coal_share < te_state_picture_k_coal_share } value = 1 }
+}

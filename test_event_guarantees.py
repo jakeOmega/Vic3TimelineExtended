@@ -155,13 +155,14 @@ law_new = {
 	unlocking_laws = { law_b }
 }
 law_b = { unlocking_technologies = { side_tech } }
-law_c = { unlocking_technologies = { side_tech other_late } }
+law_c = { unlocking_technologies = { other_late } unlocking_laws = { law_b } }
+law_pair = { unlocking_technologies = { side_tech other_late } }
 law_free = { }
 law_started = { unlocking_technologies = { late_tech } }
 """,
         "common/scripted_effects/e.txt": "grant_effect = {\n\tstart_enactment = law_type:law_started\n}\n",
         "common/laws/m.txt": "INJECT:law_new = {\n\tunlocking_laws = { law_c }\n}\n",
-        "common/on_actions/o.txt": "on_law_checkpoint_debate = {\n\trandom_events = {\n\t\t10 = fx.1\n\t\t10 = fx.2\n\t\t10 = fx.3\n\t\t10 = fx.4\n\t\t10 = fx.5\n\t}\n}\n",
+        "common/on_actions/o.txt": "on_law_checkpoint_debate = {\n\trandom_events = {\n\t\t10 = fx.1\n\t\t10 = fx.2\n\t\t10 = fx.3\n\t\t10 = fx.4\n\t\t10 = fx.5\n\t\t10 = fx.6\n\t}\n}\n",
         "events/fx.txt": """namespace = fx
 fx.1 = {
 	trigger = { is_enacting_law = law_type:law_new }
@@ -182,6 +183,9 @@ fx.4 = {
 }
 fx.5 = {
 	trigger = { is_enacting_law = law_type:law_started }
+}
+fx.6 = {
+	trigger = { is_enacting_law = law_type:law_pair }
 }
 """,
     }
@@ -209,7 +213,7 @@ fx.5 = {
     def test_one_of_several_laws_guarantees_what_they_share(self):
         data = self.tree.analyze("fx.2")
         # law_new needs late_tech, law_c other_late: neither is sure, their shared prerequisites
-        # are, and both are era 9. side_tech is law_c's own but only law_new's unlocking laws'.
+        # are, and both are era 9. side_tech is behind an unlocking law of each: in play only.
         self.assertEqual(self.guaranteed("fx.2"), {"mid_tech", "old_tech"})
         self.assertEqual(self.in_play("fx.2"), {"side_tech"})
         self.assertEqual(data["guaranteed"]["era"], 9)
@@ -233,6 +237,22 @@ fx.5 = {
         self.assertEqual(self.guaranteed("fx.5"), set())
         self.assertEqual(self.in_play("fx.5"), {"late_tech", "mid_tech", "old_tech"})
         self.assertIn("an effect starts this law's enactment, common/scripted_effects/e.txt:2", self.tree.text("fx.5"))
+
+    def test_several_unlocking_technologies_guarantee_only_what_each_gives(self):
+        # Whether the engine needs all of a law's unlocking technologies or any one is
+        # unverified (#1697), so law_pair is read as either: side_tech (era 6) and
+        # other_late (era 9) share no technology, and the later era is not sure.
+        data = self.tree.analyze("fx.6")
+        self.assertEqual(self.guaranteed("fx.6"), set())
+        self.assertEqual(data["guaranteed"]["era"], 6)
+        (source,) = data["trigger"]["sources"]
+        self.assertEqual(source["technologies"], ["side_tech", "other_late"])
+        self.assertEqual(source["technologies_needed"], "unverified: all or any one")
+        self.assertIn("law law_pair unlocks at: side_tech (era 6) or other_late (era 9) (whether the engine "
+                      "needs all of them or any one is unverified", self.tree.text("fx.6"))
+        # One technology reads as before, with no such note.
+        (one,) = self.tree.analyze("fx.1")["trigger"]["sources"]
+        self.assertNotIn("technologies_needed", one)
 
     def test_a_law_with_no_unlock_guarantees_nothing(self):
         self.assertIn("law law_free unlocks at: no technology", self.tree.text("fx.4"))
@@ -845,6 +865,23 @@ class DocCheckTests(FixtureCase):
         # A law in force: the technology is there only if the law was enacted in play.
         self.assertIn("line 7: hx: the row guarantees `other_late` (era 9), which holds only if a law in force was "
                       "enacted in play", findings[2])
+
+    def test_a_where_cell_s_numbers_are_read_past_its_parentheses(self):
+        # The list went on past the first parenthesis and was cut there (#1697).
+        cases = {
+            "`ch` .43–.48, .58": {43, 44, 45, 46, 47, 48, 58},
+            "`ch.45` / `.68`": {45, 68},
+            "`ch` .8, .9 (milestones, from the pulse) and .19, .20 (fired from .3)": {8, 9, 19, 20},
+            "`ch.1` / `.2` (on country formed (BHA only)); `.10` (monthly)": {1, 2, 10},
+            "`ch` 25–27 (from .25's `after`), 35 (from .25's options)": {25, 26, 27, 35},
+            # Prose after the name: the row is about the whole chain.
+            "`ch` (2026-11-12). .1 is fired by .4; .2 at its target": set(),
+            "`ch` (2026-11-12). Every event but .1 and .101": set(),
+            "`ch`": set(),
+        }
+        for where, numbers in cases.items():
+            with self.subTest(where=where):
+                self.assertEqual(eg._row_numbers(where, ["ch"]), numbers)
 
 
 class RepoTests(unittest.TestCase):
