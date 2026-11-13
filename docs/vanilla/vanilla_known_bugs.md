@@ -2567,7 +2567,7 @@ When a check has come out the same way often enough that the line no longer need
 
 ### `jomini_script_system.cpp:247` — `Invalid owner for scope type 0`, with no script location
 - source: `jomini_script_system.cpp:247`
-- check: read error.log at the same second for an unset scope that an effect ran in. Vanilla's when the only one is a vanilla file's (2026-11-12: two lines beside `poland_events.txt:148`'s unset `scope:polish_agitation_target_1_scope`, entry above); the mod's when a mod file's `scope:`, `var:` or saved scope is the one that came back unset.
+- check: read error.log at the same second for an unset scope that an effect ran in. Vanilla's when the only one is a vanilla file's (2026-11-12: two lines beside poland_events.txt line 148's unset `scope:polish_agitation_target_1_scope`, entry above); the mod's when a mod file's `scope:`, `var:` or saved scope is the one that came back unset.
 
 ```
 Invalid owner for scope type 0
