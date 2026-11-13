@@ -443,8 +443,8 @@ frames while a tick is being worked out. Frames are otherwise drawn at about
 3,656 frames of a running week, 7.9 ms the shortest, vsync on; 6.3 ms and 159
 a second with vsync off), and the tick waits for them. The tick tasks took the
 same time either way (607 and 590 ms a day against 569–619), so the time
-saved is all outside them. See "Sub-tick rendering, on and off in one
-session" below for the size of it.
+saved is all outside them. "Sub-tick rendering, on and off in one session"
+below has the size of it and what it costs on screen.
 
 **With rendering off, a day is about 0.98 s**: 0.59–0.61 s of tick tasks,
 about 0.10 s of the mod's on_actions (noact_r: 0.885 s against 0.975–1.000),
@@ -569,6 +569,86 @@ no faster) and `graphics.capframerate` (30 and 10 left the frame rate at 105).
 - `measure_frame_time start` and `stop` give the average, shortest and
   longest frame between them. `ticktask.list` opens a window with the same
   figures as the CSV.
+
+### Sub-tick rendering, on and off in one session
+
+One session (`20261113T143905Z`) typed the console switch between 14-day
+blocks, three with rendering on and three with it off, reading "Enabled" or
+"Disabled" each time and measuring the frame time through each block. The
+weeks differ in how much the investment pass has to do, so the column to
+compare is the time outside the tick tasks.
+
+| Block | Dates | Wall s/day | Tick tasks s/day | Outside the tasks | Average frame | Longest frame |
+|---|---|---|---|---|---|---|
+| on | 3–17 July | 0.945 | 0.557 | 0.389 | 10.5 ms | 42 ms |
+| off | 17 July–2 August | 1.032 | 0.810 | 0.222 | 13.1 ms | 180 ms |
+| on | 2–16 August | 1.333 | 0.575 | 0.758 | 10.3 ms | 37 ms |
+| off | 16–30 August | 0.741 | 0.520 | 0.221 | 11.8 ms | 145 ms |
+| on | 30 August–13 September | 1.333 | 0.602 | 0.731 | 10.0 ms | 42 ms |
+| off | 13–27 September | 0.963 | 0.569 | 0.394 | 12.1 ms | 160 ms |
+
+- **Off is faster in every pair**, by 0.17, 0.54 and 0.34 s a day outside
+  the tasks: 13% to 40% of the day, about a quarter pooled (0.63 s a day
+  outside the tasks with rendering on, 0.28 with it off, on a day of about
+  1.2 s). The whole-run pairs agree: 1.447 and 1.266 s a day on against 0.975
+  and 1.000 off, 23–33%.
+- **What it costs on screen is small.** The game still draws between a
+  tick's steps: the average frame went from 10 to 12–13 ms (97 to about 80 a
+  second, pauses included) and the longest wait for a frame from about 40 ms
+  to 145–180 ms. It is a brief hitch a few times a week of game time, not a
+  frozen screen.
+- **With rendering on the cost is not steady.** The first block of this
+  session, and of an earlier one (`20261113T130027Z`: 1.02 s a day over 3–17
+  July), ran nearly as fast as with rendering off, while two whole runs and
+  the later "on" blocks ran 0.7–0.8 s a day outside the tasks. What makes a
+  frame dear at one time and cheap at another was not found; it is not the
+  mod's interface (guivan).
+- **The harness's window is a light one**: the HUD over open ocean, no panel
+  open. The owner's own play of the same two months ran at 1.9 s a day
+  (`dedicated_server.1.log`, "Measurements, 2026-11-12"), against 1.27–1.45
+  here with rendering on and 0.98 with it off, so in real play more of the
+  day is frames and the saving is likely larger. That is for the owner to
+  try: type `gamestatetick.renderframeifneeded` in the console (it answers
+  "Disabled"; typing it again turns it back on; it lasts until the game is
+  closed), or add `-disable_renderframeifneeded` to the game's launch
+  options.
+- **A mod widget can flip the switch.** A scripted widget whose state runs
+  `[ExecuteConsoleCommand('popstat')]` twenty seconds after the HUD appears
+  (`trigger_on_create = yes`; a `_show` state did not fire) ran the command:
+  `debug.log` showed `Running console command: popstat` with nobody typing.
+  That was with `-debug_mode`. Whether the interface may run a console
+  command without it is not known, and no launch without debug mode was made
+  to find out. If it may, the mod could offer the switch as a button.
+
+### Small pops
+
+Two `logging.popstats` dumps of one session, 2 July and 2 August 1931,
+matched by pop id (`runs/explore4/dump_A.csv`, `dump_B.csv`; the game appends
+each dump to the same file, with one header).
+
+- **They are churn, not leftovers.** Of 24,183 pops under 100 people on 2
+  July, 12,821 were gone a month later, and 12,281 new ones had appeared:
+  about 410 a day. Across all sizes 15,446 of 90,420 pops went and 14,799
+  came. The engine's merging and dissolving do work; what they remove is
+  replaced as fast.
+- **Where the new ones come from**: 7,357 were employed, in every kind of
+  building (ports 880, urban centers 452, trade centers 422, railways 387),
+  and 4,924 unemployed. For 5,502 of them a pop of the same state, building,
+  profession, culture and religion had existed a month before, under another
+  id: the sliver had been let go and hired again. Only 1,750 were
+  assimilating or converting.
+- **The ones that stay** (10,820 under 100 people on both dates) are mostly
+  employed (9,024), and 7,033 of those work in a building that has fewer than
+  four pops of their profession. The moderate rule merges employed pops only
+  where a building has at least four of a profession
+  (`POP_MERGE_MIN_NUM_POPS_SAME_PROFESSION_MODERATE_CONSOLIDATION`), while a
+  building may always hire into three (`MIN_POPS_PER_PROFESSION`), so those
+  slivers are out of the merge's reach by construction.
+- **It would not pay to chase them.** The tasks that walk pops
+  (`ProcessEconomicMigration`, `UpdatePopGrowth`, `UpdateEmployment`) take
+  about 70 ms of a 980 ms day, and the year with 8.4% fewer pops ran no
+  faster. Halving the pops would buy a few percent at most, at the price of
+  changing who a building may hire.
 
 ## Measurements, 2026-10-03: 2072
 
