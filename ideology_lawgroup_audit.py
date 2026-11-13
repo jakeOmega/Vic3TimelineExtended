@@ -55,8 +55,8 @@ line):
   entry of `ideology_modifications.py`, or on the ideology's
   `"ideology_x": {` line.
 
-A tag that suppresses nothing is reported as `stale_review` and fails
-`--strict`.
+A tag that suppresses nothing is reported as `stale_review` (in
+`AuditResult.stale`) and fails `--strict`.
 
 Data source
 -----------
@@ -70,6 +70,8 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
 
 ENTITY_TYPES = {
@@ -89,19 +91,10 @@ KIND_ORDER = (
 STANCES = ("strongly_approve", "approve", "neutral", "disapprove", "strongly_disapprove")
 
 _OPERATORS = ("=", "?=", "<", ">", "<=", ">=", "!=", "==")
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<check>\w+)\)\s*:\s*(?P<rationale>.+)$"
-)
 _OPEN_RE = re.compile(r"^[ \t]*([A-Za-z0-9_.:\-]+)\s*=\s*\{")
 
 
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m or m.group("check") != CHECK:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+STALE_DETAIL = f"`({CHECK})` REVIEWED tag that suppresses nothing; remove it"
 
 
 def _entity_name(key: str) -> str:
@@ -202,7 +195,7 @@ def scan_sources(mod_path: str) -> tuple[dict, dict, set]:
             scan_text(text, rel, sources)
             if f"({CHECK})" in text:
                 _clean, comments = blank_comments_and_strings(text)
-                tags |= {(rel, line) for line, c in comments.items() if _parse_reviewed(c)}
+                tags |= {(rel, line) for line, c in comments.items() if parse_reviewed(c, (CHECK,))}
     mods: dict = {}
     mod_file = os.path.join(mod_path, MODIFICATIONS_FILE)
     if os.path.isfile(mod_file):
@@ -210,7 +203,7 @@ def scan_sources(mod_path: str) -> tuple[dict, dict, set]:
             text = fh.read()
         mods = scan_modifications(text)
         for i, line in enumerate(text.split("\n"), start=1):
-            if _parse_reviewed(_py_comment(line)):
+            if parse_reviewed(_py_comment(line), (CHECK,)):
                 tags.add((MODIFICATIONS_FILE, i))
     return sources, mods, tags
 
@@ -235,7 +228,9 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """The flags, and in `stale` the `stale_review` tags."""
+
     flags: list = field(default_factory=list)
     ideologies_checked: int = 0
     blocks_checked: int = 0
@@ -286,7 +281,7 @@ def _sites(src_txt: Source | None, src_py: Source | None, lawgroup: str) -> list
 def check(ideologies: dict, laws: dict, vanilla_ideologies: dict, vanilla_laws: set,
           sources: dict, mods: dict, carriers: set = frozenset(), tags: set = frozenset()) -> AuditResult:
     """`tags` holds every (file, line) carrying this audit's REVIEWED tag;
-    those that suppress nothing come back as `stale_review` flags."""
+    those that suppress nothing come back in `stale` (`stale_review`)."""
     result = AuditResult()
     group_of = law_groups(laws)
     parent_of = law_parents(laws)
@@ -323,7 +318,7 @@ def check(ideologies: dict, laws: dict, vanilla_ideologies: dict, vanilla_laws: 
                     f.file, f.line = s[0], s[1]
                     break
                 for s in sites:
-                    rev = _parse_reviewed(s[2])
+                    rev = parse_reviewed(s[2], (CHECK,))
                     if rev:
                         f.exemption, f.exemption_at = rev, (s[0], s[1])
                         break
@@ -366,11 +361,7 @@ def check(ideologies: dict, laws: dict, vanilla_ideologies: dict, vanilla_laws: 
                      f"leaves out {', '.join(f'`{law}`' for law in missing)} ({why})")
 
     used = {f.exemption_at for f in result.flags if f.exemption_at}
-    for file, line in sorted(set(tags) - used):
-        result.flags.append(Flag(
-            "stale_review", "", "", [],
-            f"`({CHECK})` REVIEWED tag that suppresses nothing; remove it", file, line,
-        ))
+    result.stale = [StaleTag(file, line, CHECK) for file, line in sorted(set(tags) - used)]
     return result
 
 
@@ -448,8 +439,8 @@ def audit(mod_state=None, mod_path: str | None = None, vanilla_data: dict | None
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Ideology law-group audit report",
         "",
@@ -481,21 +472,18 @@ def render_report(result: AuditResult) -> str:
         "## Unreviewed Flags",
         "",
     ]
-    if not unrev:
+    if not result.failing:
         out += ["_None._", ""]
     else:
         for kind in KIND_ORDER:
-            rows = [f for f in unrev if f.kind == kind]
-            if not rows:
-                continue
-            out += [f"### {kind} ({len(rows)})", ""]
-            for f in rows:
-                where = f" ({f.file}:{f.line})" if f.file else " (vanilla ideology the mod doesn't touch)"
-                if f.kind == "stale_review":
-                    out.append(f"- {f.file}:{f.line}: {f.detail}")
-                    continue
-                out.append(f"- `{f.ideology}` `{f.lawgroup}`: {f.detail}{where}")
-            out.append("")
+            if kind == "stale_review":
+                rows = [f"- {t.file}:{t.line}: {STALE_DETAIL}" for t in result.stale]
+            else:
+                rows = [f"- `{f.ideology}` `{f.lawgroup}`: {f.detail}"
+                        + (f" ({f.file}:{f.line})" if f.file else " (vanilla ideology the mod doesn't touch)")
+                        for f in unrev if f.kind == kind]
+            if rows:
+                out += [f"### {kind} ({len(rows)})", "", *rows, ""]
 
     out += ["## Reviewed Exemptions", ""]
     if not exemp:
@@ -514,8 +502,9 @@ def render_report(result: AuditResult) -> str:
         f"- mod-defined or mod-touched ideologies checked: {result.ideologies_checked}",
         f"- lawgroup blocks checked (all ideologies): {result.blocks_checked}",
         f"- vanilla laws vanilla blocks leave out, not judged: {result.vanilla_gaps}",
-        f"- total flags: {len(result.flags)}",
-        f"- unreviewed: {len(unrev)}",
+        # A stale tag counts as a flag, and as unreviewed.
+        f"- total flags: {len(result.flags) + len(result.stale)}",
+        f"- unreviewed: {len(result.failing)}",
         f"- exempted: {len(exemp)}",
         "",
     ]
@@ -526,27 +515,23 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
     return {
         "ideologies_checked": result.ideologies_checked,
         "blocks_checked": result.blocks_checked,
-        "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": len(result.flags) - unrev,
+        "total_flags": len(result.flags) + len(result.stale),
+        "unreviewed": len(result.failing),
+        "exempted": len(result.exemptions),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 on any flag without a
+    `# REVIEWED ... (ideology_lawgroup)` exemption, a stale tag included."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ... (ideology_lawgroup)`
-    # exemption, including a stale tag.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

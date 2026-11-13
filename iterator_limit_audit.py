@@ -53,6 +53,11 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+# Re-exported: the other raw-text audits import it from here. (#1698)
+from blanked_text import blank_comments_and_strings  # noqa: F401
+
 # Iterator families that accept `limit = { }`.
 ITERATOR_PREFIXES = ("every_", "random_", "ordered_", "any_")
 
@@ -99,10 +104,6 @@ AUDIT_DIRS = (
     "events",
 )
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
 # One pass over the cleaned text: a closing brace, a `key <op> {` opener, a
 # `key <op> value` statement, or an unattributed `{` (e.g. `50 = {` inside a
 # random_list, whose numeric key the key alternative deliberately skips).
@@ -125,54 +126,9 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
-
-
-def blank_comments_and_strings(text: str) -> tuple[str, dict[int, str]]:
-    """Return (clean_text, comments_by_line).
-
-    `clean_text` has the same length as `text` — comment bodies and quoted
-    string bodies are replaced by spaces — so match offsets still map to real
-    line numbers. `comments_by_line` keeps each line's raw comment text (the
-    last one on the line) for `# REVIEWED` lookups.
-    """
-    out = list(text)
-    comments: dict[int, str] = {}
-    line = 1
-    i = 0
-    n = len(text)
-    in_string = False
-    while i < n:
-        ch = text[i]
-        if ch == "\n":
-            line += 1
-            in_string = False
-            i += 1
-            continue
-        if in_string:
-            if ch == '"':
-                in_string = False
-            else:
-                out[i] = " "
-            i += 1
-            continue
-        if ch == '"':
-            in_string = True
-            i += 1
-            continue
-        if ch == "#":
-            end = text.find("\n", i)
-            if end < 0:
-                end = n
-            comments[line] = text[i:end]
-            for j in range(i, end):
-                out[j] = " "
-            i = end
-            continue
-        i += 1
-    return "".join(out), comments
 
 
 def _line_starts(text: str) -> list[int]:
@@ -184,15 +140,6 @@ def _line_starts(text: str) -> list[int]:
 
 def _line_of(pos: int, starts: list[int]) -> int:
     return bisect_right(starts, pos)
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _is_iterator(name: str | None) -> bool:
@@ -237,8 +184,8 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
                 )
                 if prior is not None:
                     exemption = (
-                        _parse_reviewed(comments.get(line))
-                        or _parse_reviewed(comments.get(parent["line"]))
+                        parse_reviewed(comments.get(line))
+                        or parse_reviewed(comments.get(parent["line"]))
                     )
                     flags.append(Flag(
                         file=rel_path,
@@ -292,8 +239,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Iterator `limit` placement audit report",
@@ -367,26 +314,22 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "iterator_limit_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "iterator_limit_report.md"), report)
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": exemp,
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

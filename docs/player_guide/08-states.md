@@ -21,6 +21,13 @@ tooltip breaks the numbers down.
 
 ![A state panel with the tourism card above the status grid and the Homeland Dynamics, Arable Land and Migration Crowding tiles at the bottom.](images/state_panel.png)
 
+From the 1930s technologies on, the picture at the top of the panel shows the
+state as it would look in the decade of its owner's technology: its city, by
+the size of its largest city and how well its people live, or the land it works.
+Hover the picture to see which one is showing and why, with the figure that
+chose it. Below a metropolis, a city shows only where the game gives the state
+urban terrain, so two states with similar cities can show a street and a farm.
+
 | Tile | Shown | What it tells you |
 |---|---|---|
 | Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |

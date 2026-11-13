@@ -236,6 +236,16 @@ def check_line_endings(ctx: Ctx) -> Result:
     return Result(not problems, "\n".join(problems))
 
 
+# Code whose tests are not named for it: a change to one also runs these. The
+# server's routes moved into server/ (#1537), where no file has a test_<name>.
+RELATED_TESTS = {
+    "mod_state_server.py": ("test_server_split.py", "test_server_routes.py", "test_query.py",
+                            "test_mod_state_server_endpoints.py"),
+    "server/": ("test_server_split.py", "test_server_routes.py", "test_query.py",
+                "test_mod_state_server_endpoints.py"),
+}
+
+
 def check_tests(ctx: Ctx) -> Result:
     tests = sorted(f for f in git("ls-files", "test_*.py").split("\n") if f)
     tests += sorted(
@@ -252,6 +262,9 @@ def check_tests(ctx: Ctx) -> Result:
                 wanted.add(base)
             elif base.endswith(".py") and f"test_{base}" in tests:
                 wanted.add(f"test_{base}")
+            for prefix, related in RELATED_TESTS.items():
+                if path == prefix or (prefix.endswith("/") and path.startswith(prefix)):
+                    wanted.update(t for t in related if t in tests)
         if not wanted:
             return Result(True, skipped="no test is named for a changed file")
         tests = sorted(wanted)
@@ -315,13 +328,16 @@ CHECKS: tuple[Check, ...] = (
           check_audits, MOD_CONTENT + PYTHON + ("docs/engine/*", "vanilla_parsed/*"),
           fix="Each failing audit prints its own fix and suppression comment above."),
     # --- docs -----------------------------------------------------------------
-    Check("audit-docs", "docs", "docs/guides/audits.md matches the audit registry",
+    Check("audit-docs", "docs",
+          "docs/guides/audits.md and python_tools.md's audit counts match the audit registry",
           command(PY, "audit_registry.py", "--check"),
-          ("audit_registry.py", "docs/guides/audits.md"),
-          fix="Run `python3 audit_registry.py --write` and commit docs/guides/audits.md."),
+          ("audit_registry.py", "docs/guides/audits.md", "docs/guides/python_tools.md",
+           "mod_state_server.py"),
+          fix="Run `python3 audit_registry.py --write`, make the hand edits it prints, and commit "
+              "docs/guides/audits.md and docs/guides/python_tools.md."),
     Check("rosters", "docs", "Post-load rosters are documented",
           command(PY, "scripts/analysis/check_post_load_rosters.py"),
-          ("mod_state_server.py", "audit_registry.py", "docs/*", "CLAUDE.md",
+          ("mod_state_server.py", "server/post_load.py", "audit_registry.py", "docs/*", "CLAUDE.md",
            "scripts/analysis/check_post_load_rosters.py")),
     Check("guide-style", "docs", "Player guide style lint",
           command(PY, "scripts/analysis/check_player_guide_style.py", "--strict"),

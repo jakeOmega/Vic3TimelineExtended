@@ -1108,6 +1108,23 @@ global_warming_events_on_action = {
 			# TEMPORARY (#1448): does the World Climate entry's Climate Warming
 			# reach a country? Once a game; TE_SELF_CHECK gw_world_climate.
 			gw_world_climate_selfcheck_effect = yes
+			# Regional warming (#1681) applies once the World Climate entry has
+			# opened, at its 0.1 C, and stays on as the entry does
+			# (gw_regional_target). The unmasked warming, so that a save from
+			# before this, its entry open and a haze holding the felt anomaly
+			# under 0.1, sets it too: Aerosol Injection needs 1 C of felt
+			# warming to start, so a haze implies the entry opened.
+			if = {
+				limit = {
+					NOT = { has_global_variable = gw_g_world_climate_open }
+					gw_unmasked_temperature >= 0.1
+				}
+				set_global_variable = gw_g_world_climate_open
+			}
+			# TEMPORARY (#1681): do the tropics' and high latitudes' states carry
+			# their band's modifier at the right scale? Once a game; TE_SELF_CHECK
+			# gw_regional.
+			gw_regional_selfcheck_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
 			# temperature_anomaly_display crosses each threshold upward. Runs in the

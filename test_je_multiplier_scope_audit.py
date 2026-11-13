@@ -145,7 +145,7 @@ name = m
 multiplier = gdp # REVIEWED 2026-10-03: deliberate probe
 } } }"""
         self.assertEqual(scan(text)[0].exemption,
-                         {"date": "2026-10-03", "rationale": "deliberate probe"})
+                         {"date": "2026-10-03", "tag": "", "rationale": "deliberate probe"})
         for changed in (text.replace("2026-10-03:", ""),
                         text.replace(" # REVIEWED", "\n# REVIEWED")):
             self.assertIsNone(scan(changed)[0].exemption)
@@ -201,7 +201,8 @@ class ScalingModifierTests(unittest.TestCase):
 
     def test_scaling_value_reviewed_comment_suppresses(self):
         text = scaling_entry("{ value = gdp } # REVIEWED 2026-11-06: deliberate", "\tcontext = none\n")
-        self.assertEqual(scan_je(text)[0].exemption, {"date": "2026-11-06", "rationale": "deliberate"})
+        self.assertEqual(scan_je(text)[0].exemption,
+                         {"date": "2026-11-06", "tag": "", "rationale": "deliberate"})
 
 
 class IntegrationTests(unittest.TestCase):

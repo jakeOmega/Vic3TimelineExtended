@@ -7,6 +7,8 @@ mod's own `common/production_methods/`. No server. Run:
 from __future__ import annotations
 
 import copy
+import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -282,18 +284,100 @@ class BuildPmBalanceMapTests(unittest.TestCase):
         self.assertEqual(result["pm_mod_defined"]["flag"], "HIGH-PROFIT")
         self.assertEqual(result["pm_mod_defined"]["file"], "extra_pms.txt")
 
+    def _vanilla_snapshot(self, *pm_ids: str) -> None:
+        snapshot = self.repo_root / "vanilla_parsed"
+        (snapshot / "common").mkdir(parents=True)
+        _write(snapshot / "manifest.json", json.dumps({"entity_types": {
+            "PMs": {"file": "common/pms.json", "entities": len(pm_ids)}}}))
+        _write(snapshot / "common" / "pms.json",
+               json.dumps({pm_id: ["=", {}] for pm_id in pm_ids}))
 
-def _parser_defined_pms(path: Path) -> set[str]:
-    """The PMs a file defines, by the mod's real parser rather than by the
-    library's own line matching: every top-level key but the `INJECT:`
-    family, with any `REPLACE:` directive dropped."""
-    parser = ParadoxFileParser()
-    parser.parse_file(str(path), apply_directives=False)
-    defined = set()
-    for key in parser.data:
-        directive, _, name = key.rpartition(":")
-        if directive not in INJECT_DIRECTIVES:
-            defined.add(name)
+    def test_an_inject_or_create_that_creates_is_a_definition(self) -> None:
+        # #1697: INJECT_OR_CREATE creates a PM nothing else defines, so its
+        # block is the whole PM and needs a row. One that names a PM the mod
+        # or vanilla defines is a patch, as any INJECT is: it neither gets a
+        # row of its own nor replaces the defining block's row, whichever
+        # file sorts first.
+        self._vanilla_snapshot("pm_vanilla_one")
+        pm_dir = self.repo_root / "common" / "production_methods"
+        costs = dict(total_input=100, total_output=300, margin=200,
+                     wage_be=0.05, profit=200)
+        _write(pm_dir / "aa_injects.txt",
+               _pm("INJECT_OR_CREATE:pm_created", **costs)
+               + _pm("INJECT_OR_CREATE:pm_mod_defined", no_cost_comments=True)
+               + _pm("INJECT_OR_CREATE:pm_vanilla_one", no_cost_comments=True))
+        _write(pm_dir / "extra_pms.txt",
+               _pm("pm_mod_defined", **costs)
+               + _pm("INJECT_OR_CREATE:pm_created", no_cost_comments=True))
+        result = lib.build_pm_balance_map(self.repo_root)
+        self.assertEqual(sorted(result), ["pm_created", "pm_mod_defined"])
+        self.assertEqual(result["pm_created"]["flag"], "HIGH-PROFIT")
+        self.assertEqual(result["pm_created"]["file"], "aa_injects.txt")
+        self.assertEqual(result["pm_mod_defined"]["file"], "extra_pms.txt")
+        self.assertEqual(result["pm_mod_defined"]["flag"], "HIGH-PROFIT")
+        # iter_pms, per file, still yields only the outright definitions.
+        self.assertEqual([pm for pm, _ in lib.iter_pms(pm_dir / "aa_injects.txt")], [])
+
+    def test_without_a_snapshot_an_inject_or_create_creates(self) -> None:
+        _write(self.repo_root / "common" / "production_methods" / "extra_pms.txt",
+               _pm("INJECT_OR_CREATE:pm_created", no_cost_comments=True))
+        self.assertEqual(lib.build_pm_balance_map(self.repo_root),
+                         {"pm_created": {"flag": "NO-COSTS", "file": "extra_pms.txt",
+                                         "margin_pct": None, "wage_be": None,
+                                         "profit": None}})
+
+
+class AuditFileHeadingTests(unittest.TestCase):
+    """`scripts/analysis/pm_balance_audit.py`'s line for a file with no
+    margin range (#1697)."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        sys.path.insert(0, str(REPO / "scripts" / "analysis"))
+        import pm_balance_audit
+        cls.heading = staticmethod(pm_balance_audit.file_heading)
+
+    def test_all_throughput_is_not_no_cost_comments(self) -> None:
+        rows = [{"flag": "THROUGHPUT", "margin_pct": -100.0}] * 3 + [
+            {"flag": "NO-COSTS", "margin_pct": None}]
+        self.assertEqual(
+            self.heading("sr_colony_module_pms.txt", rows),
+            "## sr_colony_module_pms.txt — 4 PMs (3 throughput, "
+            "1 without cost comments; no margin range)")
+        self.assertEqual(
+            self.heading("x.txt", rows[:2]),
+            "## x.txt — 2 PMs (2 throughput; no margin range)")
+
+    def test_no_cost_comments_keeps_its_line(self) -> None:
+        self.assertEqual(
+            self.heading("x.txt", [{"flag": "NO-COSTS", "margin_pct": None}]),
+            "## x.txt — 1 PMs (no cost comments)")
+
+
+def _parser_defined_pms(pm_dir: Path) -> dict[str, set[str]]:
+    """The PMs each file defines, by the mod's real parser rather than by
+    the library's own line matching: every top-level key but the `INJECT:`
+    family, with any `REPLACE:` directive dropped, and an `INJECT_OR_CREATE:`
+    key, in the first file that has it, when neither another file nor
+    vanilla's snapshot defines the PM."""
+    defined: dict[str, set[str]] = {}
+    creating: list[tuple[str, str]] = []
+    for path in sorted(pm_dir.glob("*.txt")):
+        parser = ParadoxFileParser()
+        parser.parse_file(str(path), apply_directives=False)
+        defined[path.name] = set()
+        for key in parser.data:
+            directive, _, name = key.rpartition(":")
+            if directive not in INJECT_DIRECTIVES:
+                defined[path.name].add(name)
+            elif directive == "INJECT_OR_CREATE":
+                creating.append((path.name, name))
+    with open(REPO / "vanilla_parsed" / "common" / "pms.json", encoding="utf-8") as f:
+        taken = set(json.load(f)).union(*defined.values())
+    for fname, name in creating:
+        if name not in taken:
+            taken.add(name)
+            defined[fname].add(name)
     return defined
 
 
@@ -308,16 +392,14 @@ class RealPmDirectoryCoverageTests(unittest.TestCase):
     one only: they build the index `tech_unlocks_lib` builds and run the
     post-processor route() runs. `/unlocked-by/<tech>` takes another path,
     `_find_unlocked_by_tech` in `mod_state_server.py`, which walks
-    ModState's merged data, and no offline test calls it. What stands in
-    for it is `test_every_pm_the_mod_defines_is_in_the_map`: whichever PM
+    ModState's merged data; `test_unlocked_by_endpoint.py` calls it offline.
+    `test_every_pm_the_mod_defines_is_in_the_map` covers both: whichever PM
     the mod defines, however an endpoint came to list it, has a row.
     """
 
     @classmethod
     def setUpClass(cls) -> None:
-        pm_dir = REPO / lib.PM_SUBDIR
-        cls.defined = {path.name: _parser_defined_pms(path)
-                       for path in sorted(pm_dir.glob("*.txt"))}
+        cls.defined = _parser_defined_pms(REPO / lib.PM_SUBDIR)
         cls.balance = lib.build_pm_balance_map(REPO)
         cls.unlocks = tech_unlocks_lib.build_tech_unlock_index(REPO)
 

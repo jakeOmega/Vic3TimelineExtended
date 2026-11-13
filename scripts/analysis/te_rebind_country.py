@@ -4,8 +4,8 @@
 National Info (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md
 §§ 6.3-6.8) shows a system's tab for any country, so a public tab's sections read the
 shown country as `Country`: JournalEntry and the player appear only under
-te_own_country_only, or as a world read (a `# world: <why>` line in markup, WORLD_LOC
-in loc). test_te_system_tab_bodies.py's BindingTest and GuardTest hold each public tab
+te_own_country_only, or as a world read (a `# world: <why>` line in markup, an entry in
+national_info_binding.WORLD_LOC in loc). test_te_system_tab_bodies.py's BindingTest and GuardTest hold each public tab
 to that. This tool is what a system's binding PR runs first: it lists what the tab
 still reads, grouped by type and by loc key, with the file:line and the class of
 each read, and --write does the mechanical part.
@@ -70,7 +70,7 @@ one of:
                 that name (Seabed's pool bar) is plain markup.
 
 A loc key another candidate tab's panel renders too (survey_tab's others: public
-tabs and test_te_system_tab_bodies.UNBOUND) says which: if it goes in WORLD_LOC, it
+tabs and national_info_binding.UNBOUND) says which: if it goes in WORLD_LOC, it
 goes once, under the Shared heading, or two systems' PRs would each add it. About
 5 s a tab (10 s for the Space Race), half of it naming those tabs.
 
@@ -724,11 +724,8 @@ def entry_gate(tab, types=None):
 
 
 def world_loc_keys():
-    """test_te_system_tab_bodies.WORLD_LOC: the loc keys that are world reads."""
-    try:
-        from test_te_system_tab_bodies import WORLD_LOC
-    except ImportError:
-        return {}
+    """national_info_binding.WORLD_LOC: the loc keys that are world reads."""
+    from national_info_binding import WORLD_LOC
     return WORLD_LOC
 
 
@@ -741,12 +738,9 @@ def _tab_keys(key):
 
 def candidate_tabs():
     """The tabs another country's panel shows or will: public, and
-    test_te_system_tab_bodies.UNBOUND."""
+    national_info_binding.UNBOUND."""
+    from national_info_binding import UNBOUND
     from scripts.generators import gen_te_systems_window as gen
-    try:
-        from test_te_system_tab_bodies import UNBOUND
-    except ImportError:
-        UNBOUND = set()
     return sorted({t.key for t in gen.TABS if t.public} | set(UNBOUND))
 
 

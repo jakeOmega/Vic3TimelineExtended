@@ -7,12 +7,12 @@ import tempfile
 import unittest
 
 import pm_employment_audit
+from audit_common import parse_reviewed as _parse_reviewed
 from pm_employment_audit import (
     audit,
     employment_by_select,
     employment_combinations,
     render_report,
-    _parse_reviewed,
     _pm_employment,
     strict_exit_code,
     AuditResult,
@@ -62,7 +62,7 @@ class ParseReviewedTests(unittest.TestCase):
     def test_match(self):
         self.assertEqual(
             _parse_reviewed("# REVIEWED 2026-05-22: intentional, base >= 4000"),
-            {"date": "2026-05-22", "rationale": "intentional, base >= 4000"},
+            {"date": "2026-05-22", "tag": "", "rationale": "intentional, base >= 4000"},
         )
 
     def test_no_match(self):
@@ -196,7 +196,7 @@ class AuditTests(unittest.TestCase):
             res = self._run(buildings, pmgs, pms, tmp)
         self.assertEqual(len(res.flags), 1)
         self.assertEqual(res.flags[0].exemption,
-                         {"date": "2026-05-22", "rationale": "deliberate"})
+                         {"date": "2026-05-22", "tag": "", "rationale": "deliberate"})
 
     def test_vanilla_only_not_mod_relevant(self):
         buildings = {"B": {"production_method_groups": ["g_base", "g_auto"]}}

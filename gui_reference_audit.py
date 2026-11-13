@@ -9,12 +9,13 @@ CLI prints only; regenerate() writes docs/engine/gui_reference_report.md.
 """
 from __future__ import annotations
 
-import argparse
 import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, write_text
 from paradox_file_parser import directive_prefixes
 
 BOM = b"\xef\xbb\xbf"
@@ -183,10 +184,21 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     references: dict[str, dict[str, list[dict]]] = field(default_factory=dict)
     files_audited: int = 0
+
+    @property
+    def unreviewed(self) -> list[Flag]:
+        """The errors: what `--strict` fails on and a reload warns on. The
+        audit takes no suppression comment, and a warning is listed, never
+        failed."""
+        return [f for f in self.flags if f.severity == "error"]
+
+    @property
+    def exemptions(self) -> list[Flag]:
+        return []
 
     @property
     def errors(self):
@@ -435,22 +447,22 @@ def regenerate(mod_state) -> dict:
     # Use the same raw-source scanner as CI; no dependency on parsed .gui data.
     import path_constants
     result = audit(path_constants.mod_path)
-    out = Path(path_constants.mod_path) / "docs/engine/gui_reference_report.md"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render_report(result), encoding="utf-8")
+    write_text(str(Path(path_constants.mod_path) / "docs/engine/gui_reference_report.md"),
+               render_report(result))
     return {"files_audited": result.files_audited, "unreviewed": result.errors,
             "warnings": len(result.flags) - result.errors, "total_flags": len(result.flags)}
 
 
-def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--strict", action="store_true")
-    parser.add_argument("--mod-path", type=Path)
-    parser.add_argument("--vanilla-path", type=Path)
-    args = parser.parse_args(argv)
-    result = audit(args.mod_path, args.vanilla_path)
-    print(render_report(result))
-    return int(args.strict and result.errors > 0)
+def main(argv=None) -> int:
+    """Print the report; `--strict` exits 1 on an error."""
+    def add_arguments(parser) -> None:
+        parser.add_argument("--mod-path", type=Path)
+        parser.add_argument("--vanilla-path", type=Path)
+
+    return cli_main(lambda args: audit(args.mod_path, args.vanilla_path),
+                    lambda result, args: render_report(result),
+                    argv=argv, description=__doc__, add_arguments=add_arguments,
+                    strict_help="Exit 1 on an error; warnings never fail.")
 
 
 if __name__ == "__main__":
