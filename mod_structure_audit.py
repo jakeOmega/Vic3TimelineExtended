@@ -31,10 +31,17 @@ Clausewitz engine's normal logging:
 Suppression (INJECT only): inline `# REVIEWED YYYY-MM-DD: rationale` on the
 `INJECT:<name>` line. Brace and collision flags don't accept REVIEWED — they
 are unambiguously bugs in the source.
+
+A reload runs it (`regenerate`). From the command line it prints the report;
+`--strict` exits 1 on an unreviewed flag.
 """
 import os
 import re
+import sys
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 @dataclass
@@ -47,7 +54,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
@@ -55,10 +62,6 @@ class AuditResult:
 _INJECT_RE = re.compile(r"^\s*INJECT:([A-Za-z_][\w]*)\s*=\s*\{")
 _REPLACE_RE = re.compile(r"^\s*REPLACE:([A-Za-z_][\w]*)\s*=\s*\{")
 _BARE_DEF_RE = re.compile(r"^\s*([A-Za-z_][\w]*)\s*=\s*\{")
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 # `file.txt:N` inside a flag's detail; a reviewed entry drops the `:N`.
 _FILE_LINE_RE = re.compile(r"(\.txt):\d+")
@@ -93,15 +96,6 @@ def _split_comment(line: str) -> tuple[str, str | None]:
     if idx < 0:
         return line, None
     return line[:idx], line[idx:]
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _scan_file(filepath: str) -> dict:
@@ -229,7 +223,7 @@ def audit(mod_state, mod_path: str | None = None) -> AuditResult:
         if not (is_replaced or is_mod_only):
             continue
         for file, line, comment in sites:
-            exemption = _parse_reviewed(comment)
+            exemption = parse_reviewed(comment)
             if is_replaced:
                 rsite = all_replaces[name][0]
                 detail = (
@@ -278,8 +272,8 @@ def audit(mod_state, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     by_kind: dict[str, list[Flag]] = {}
     for f in unrev:
@@ -380,12 +374,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "mod_structure_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "mod_structure_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     by_kind: dict[str, int] = {}
     for f in result.flags:
         by_kind[f.kind] = by_kind.get(f.kind, 0) + 1
@@ -398,23 +389,31 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from mod_state import ModState
-    # base_game_paths / mod_paths live in mod_state_script, not path_constants
-    # (path_constants only exports the root paths). Importing them from
-    # path_constants raised ImportError, so this CLI never ran.
-    from mod_state_script import base_game_paths, mod_paths
+def main(argv=None) -> int:
+    """Print the report; `--strict` exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    ms = ModState(base_game_paths, mod_paths)
-    if not any(getattr(p, "data", None) for p in ms.base_parsers.values()):
-        print(
-            "WARNING: no vanilla data parsed (is base_game_path configured?). "
-            "The silent-INJECT check needs the vanilla name index; without it "
-            "every INJECT into a vanilla entity that the mod also declares "
-            "bare will be misreported as mod-only.",
-            file=sys.stderr,
-        )
-    result = audit(ms, mod_path=mod_path)
-    print(render_report(result))
+
+    def run(args) -> AuditResult:
+        from mod_state import ModState
+        # base_game_paths / mod_paths live in mod_state_script, not path_constants
+        # (path_constants only exports the root paths). Importing them from
+        # path_constants raised ImportError, so this CLI never ran.
+        from mod_state_script import base_game_paths, mod_paths
+        ms = ModState(base_game_paths, mod_paths)
+        if not any(getattr(p, "data", None) for p in ms.base_parsers.values()):
+            print(
+                "WARNING: no vanilla data parsed (is base_game_path configured?). "
+                "The silent-INJECT check needs the vanilla name index; without it "
+                "every INJECT into a vanilla entity that the mod also declares "
+                "bare will be misreported as mod-only.",
+                file=sys.stderr,
+            )
+        return audit(ms, mod_path=mod_path)
+
+    return cli_main(run, lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

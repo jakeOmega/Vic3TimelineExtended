@@ -48,7 +48,7 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder (se
 - **Nightly audit**: the `nightly-audit` skill, or `python3 scripts/nightly_audit_select.py [--dry-run]`; documented in `docs/audits/nightly_audit_README.md`.
 - **Cutting a release**: `docs/guides/release_checklist.md`. From 1.2.0 a release ships `main` as it stands, the Demographics census included (owner, 2026-10-26); `scripts/release/comment_out_census_inputs.py` is only for a release cut without it, on a `release/<version>` branch never merged back. Tag the commit you upload and publish its GitHub release the same day (1.1.9 went untagged for a week).
 - **CI** (`.github/workflows/ci.yml`, Python 3.11 + 3.12, on every PR and on pushes to `main`): `scripts/preflight.py`'s five groups, one step each, plus a separate texture-dimension job that needs `gfx/`. Nothing in it needs a Victoria 3 install. Reproduce a failed step with `.venv/bin/python scripts/preflight.py --only <group or check id>`.
-- Other one-shot CLIs (event scaffolding, balance solvers, deposit configs, image pipelines) live under `scripts/generators/`, `scripts/analysis/`, `scripts/image_pipeline/`. The config-driven generators and the audits run on every `POST /reload` (`POST_LOAD_REGENERATORS` and `POST_LOAD_AUDITS` in `mod_state_server.py`; rosters in `docs/guides/python_tools.md` and `docs/auto_generated_files.md`). Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable them while iterating on one.
+- Other one-shot CLIs (event scaffolding, balance solvers, deposit configs, image pipelines) live under `scripts/generators/`, `scripts/analysis/`, `scripts/image_pipeline/`. The config-driven generators and the audits run on every `POST /reload` (`POST_LOAD_REGENERATORS` and `POST_LOAD_AUDITS` in `server/post_load.py`; rosters in `docs/guides/python_tools.md` and `docs/auto_generated_files.md`). Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable them while iterating on one.
 
 ## Where things live
 
@@ -83,7 +83,7 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 ### Python tooling spine
 - `paradox_file_parser.py` — tokenizer + recursive-descent parser for Paradox `.txt`. Handles `REPLACE:`/`INJECT:` merge directives, BOM, comments, brace nesting. Unit-tested.
 - `mod_state.py` — `ModState` class wrapping the parser; loads vanilla + mod data. Bulk Python generators should `from mod_state import ModState` directly rather than going through HTTP.
-- `mod_state_server.py` — HTTP service over `ModState` (port 8950). Events, scripted_effects, scripted_triggers, on_actions are **mod-only**; everything else is mod ∪ vanilla.
+- `mod_state_server.py` — HTTP service over `ModState` (port 8950). Events, scripted_effects, scripted_triggers, on_actions are **mod-only**; everything else is mod ∪ vanilla. Its `ROUTES` table maps each path to a handler in `server/routes_*.py`, one module per endpoint group.
 - `vanilla_parsed.py` — builds, loads and freshness-checks `vanilla_parsed/`, the committed JSON parse of vanilla. The vanilla entity-type list is `mod_state.VANILLA_COMMON_DIRS`.
 - `audit_registry.py` — the one table of the audits; `scripts/run_audits.py`, `scripts/preflight.py`, CI and `docs/guides/audits.md` all read it.
 

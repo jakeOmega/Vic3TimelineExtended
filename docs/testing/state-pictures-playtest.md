@@ -172,3 +172,19 @@ states of several sizes, and run `event te_debug_state_picture.1` so every state
 | **Lettering and flags.** Bus fronts, awnings, tower tops, the bottom corners. | Nothing that reads as writing, no real flag. | A `smudge` box in `VARIANT_PICKS`, and reconvert. |
 | **Painted-out antennas.** The metropolis and megacity of the North American, South Asian, East Asian and Japanese families. | Here and there a wisp of haze over a tower top, where a pair of antennas was painted out; it reads as steam. | A dark blot: make that `smudge` box taller, or drop it and accept the antennas. |
 | **Cars of the period.** The towns of 1960 (every family but the African), the South Asian town of the 1930s, the Japanese town of 1990 and the affluent streets of 1990 of the Middle Eastern, East Asian and Japanese families. | Every car in the foreground of its decade: these were redrawn because the first set had today's cars. A small later car far down the street can remain. | Note the picture; the cars are named in `VARIANT_REWORD`. |
+
+## The banner's hover (2026-11-13)
+
+Hovering the picture at the top of the state panel says which picture shows and why
+(`docs/systems/mod_systems/state_pictures.md`, "The banner's hover"). The engine facts it rests on were
+read in game with stand-in files (`scripting_best_practices.md` § "State pictures"); the hover in the
+state panel itself was not. Load a late save and run `event te_debug_state_picture.1` first, so every
+state has its figures (its `overlay=` names the kind of picture each state shows).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A mod picture.** Hover the banner of a run-down state, a poor one, a metropolis and a farm state. | A bold line naming the picture and its decade ("Run-Down Street, 1990s"), a line giving the state's figure and the floor it crossed, a rule, the owner and the technology the pictures follow, and on a city below a metropolis "Terrain: urban, set by the game". The figures match the debug line's `sol=`, `short=` and `city_people=`. | No hover: the tooltip on the banner button in `gui/states_panel.gui` didn't take. A bare key such as `te_sp_tt_te_sp_fx_…`: the generated loc file isn't loaded. A key inside the text (`$te_sp_tt_why_…$`): a hand-written line is missing. |
+| **A vanilla picture.** Hover the banner of a state before its owner's first 1930s technology. | No hover at all: each vanilla overlay's text is empty. | An empty tooltip box: an empty tooltip text still draws its frame. Give the vanilla overlays a line ("A painting of the land from the base game.", in `gen_state_pictures.py`'s `hover_loc()`) or move the hover to a `tooltipwidget` gated on the lookup. |
+| **Kept past a floor.** A state whose `city_people=` is between 900,000 and 1,000,000 and that shows the metropolis; a poor state whose `sol=` is just above its floor. | "stays one down to 900K", "stays poor until …", not a figure on the wrong side of the floor. | |
+| **The overlays still play.** Watch a city banner of each family and a farm banner for a few seconds. | The same birds and mist, leaves, dust or shimmer as before this change: each picture plays a copy of its old overlay under another name. | Nothing moving: the copies in `gfx/models/particles/te_state_picture_overlays_generated.asset` aren't loaded (`error.log`, `terrain.cpp` or `entity`). The probe saw the picture but couldn't watch the animation. |
+| **A metropolis on its land.** An owner with Modern Tools or Rural Electrification and no Art Deco Architecture, holding a metropolis whose state shows a harbor or a farm. | "Its largest city, about … people, is a metropolis, but city pictures start with Art Deco Architecture." | |

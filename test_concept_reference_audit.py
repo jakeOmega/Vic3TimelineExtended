@@ -11,11 +11,11 @@ import tempfile
 import unittest
 from types import SimpleNamespace
 
+from audit_common import parse_reviewed as _parse_reviewed
 from concept_reference_audit import (
     AuditResult,
     ConceptFlag,
     _parse_loc_line,
-    _parse_reviewed,
     audit,
     render_report,
     strict_exit_code,
@@ -35,7 +35,7 @@ class ParseLocLineTests(unittest.TestCase):
         self.assertEqual(value, r'He said \"go\" [Concept(' + "'concept_x','x')]")
         self.assertEqual(
             _parse_reviewed(trailing),
-            {"date": "2026-05-09", "rationale": "rationale"},
+            {"date": "2026-05-09", "tag": "", "rationale": "rationale"},
         )
 
     def test_plain_line_without_comment_has_empty_trailing(self):
@@ -79,7 +79,8 @@ class ConceptFunctionArgumentTests(unittest.TestCase):
             " k:0 \"[Concept('some_modifier_name','x')]\" # REVIEWED 2026-09-27: why\n"
         )
         self.assertEqual(len(result.flags), 1)
-        self.assertEqual(result.flags[0].exemption, {"date": "2026-09-27", "rationale": "why"})
+        self.assertEqual(result.flags[0].exemption,
+                         {"date": "2026-09-27", "tag": "", "rationale": "why"})
 
 
 class GlossaryLinkTests(unittest.TestCase):

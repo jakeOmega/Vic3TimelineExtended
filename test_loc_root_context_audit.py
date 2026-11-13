@@ -173,7 +173,7 @@ class CleanTests(_Fixture):
     def test_the_fixture_is_clean(self):
         r = self.run_audit(public=FX_PUBLIC)
         self.assertEqual(self.flags(r), [])
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(len(r.failing), 0)
 
     def test_what_each_context_reaches(self):
         r = self.run_audit(public=FX_PUBLIC)
@@ -325,6 +325,32 @@ class NotJudgedTests(_Fixture):
         self.assertTrue(r.flags[0].also_sgui)
         self.assertIn("also a scripted GUI's tooltip key", render_report(r))
 
+    def test_a_scripted_guis_tooltip_follows_the_script_it_calls(self):
+        """The context is what the tooltip prints (gui_test_helpers.ScriptedGuis,
+        the binding tests' walk): the lines of the scripted effects and
+        triggers its `effect`, `is_valid` and `is_shown` call, all the way down,
+        an argument filled in, and not a line of a part no tooltip renders."""
+        _write(self.root, "common/scripted_guis/te_fx_sguis.txt", SGUIS + """\
+fx_called_sgui = {
+\tis_shown = { fx_shown_trigger = yes }
+\tis_valid = { custom_tooltip = { text = fx_valid_line always = yes } }
+\teffect = { fx_outer_effect = { WHICH = deep } }
+\tai_chance = { custom_tooltip = fx_unrendered_line }
+}
+""")
+        _write(self.root, "common/scripted_effects/te_fx_effects.txt",
+               "fx_outer_effect = { fx_inner_effect = { WHICH = $WHICH$ } }\n"
+               "fx_inner_effect = { custom_tooltip = fx_called_$WHICH$_line }\n")
+        _write(self.root, "common/scripted_triggers/te_fx_triggers.txt",
+               "fx_shown_trigger = { custom_tooltip = { text = fx_shown_line always = yes } }\n")
+        lines = ("fx_called_deep_line", "fx_valid_line", "fx_shown_line", "fx_unrendered_line")
+        _write(self.root, WIDGET_FILE, JE_WIDGET + "".join(f'textbox = {{ text = "{k}" }}\n' for k in lines))
+        r = self.run_audit(**dict.fromkeys(lines, "[SCOPE.sState('x').GetName]"))
+        self.assertEqual(r.reach[SGUI], 4)
+        also = {f.key: f.also_sgui for f in r.flags}
+        self.assertEqual(also, {"fx_called_deep_line": True, "fx_valid_line": True, "fx_shown_line": True,
+                                "fx_unrendered_line": False})
+
 
 class PublicPanelTests(_Fixture):
     def test_the_journal_entry_root_on_a_public_tab_is_flagged(self):
@@ -379,9 +405,9 @@ class TagTests(_Fixture):
         self.tags["fx_status_idle"] = f"# REVIEWED 2026-11-12 ({CHECK}): the entry is drawn by a widget only"
         r = self.run_audit(fx_status_idle="[Country.GetName] idles")
         self.assertEqual(self.flags(r), [(WIDGET_ROOT_IN_ENTRY, "fx_status_idle", ("Country.GetName",))])
-        self.assertEqual(r.flags[0].exemption, {"date": "2026-11-12",
+        self.assertEqual(r.flags[0].exemption, {"date": "2026-11-12", "tag": CHECK,
                                                 "rationale": "the entry is drawn by a widget only"})
-        self.assertEqual((r.failing, r.stale_tags), (0, []))
+        self.assertEqual((len(r.failing), r.stale), (0, []))
         report = render_report(r)
         self.assertIn("**2026-11-12**: the entry is drawn by a widget only", report)
         self.assertIn("- unreviewed: 0", report)
@@ -390,21 +416,21 @@ class TagTests(_Fixture):
         for tag in ("# REVIEWED 2026-11-12 (loc_script_value): other", "# REVIEWED 2026-11-12: plain"):
             self.tags["fx_status_idle"] = tag
             r = self.run_audit(fx_status_idle="[Country.GetName] idles")
-            self.assertEqual((r.failing, r.flags[0].exemption), (1, None), tag)
+            self.assertEqual((len(r.failing), r.flags[0].exemption), (1, None), tag)
 
     def test_a_tag_on_a_clean_key_is_stale(self):
         self.tags["fx_status_idle"] = f"# REVIEWED 2026-11-12 ({CHECK}, loc_script_value): nothing here"
         r = self.run_audit()
-        self.assertEqual([(t.file, t.line, t.key) for t in r.stale_tags],
+        self.assertEqual([(t.file, t.line, t.key) for t in r.stale],
                          [(LOC_FILE, self.line("fx_status_idle"), "fx_status_idle")])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
         self.assertIn(f"`{LOC_FILE}:{self.line('fx_status_idle')}` `fx_status_idle`", render_report(r))
 
     def test_a_tag_does_not_cover_a_public_panel_flag(self):
         self.tags["fx_public_label"] = f"# REVIEWED 2026-11-12 ({CHECK}): no"
         r = self.run_audit(public=FX_PUBLIC, fx_public_label="[JournalEntry.GetCountry.GetName]")
         self.assertIsNone(r.flags[0].exemption)
-        self.assertEqual(r.failing, 2, "the flag, and the tag that suppresses nothing")
+        self.assertEqual(len(r.failing), 2, "the flag, and the tag that suppresses nothing")
 
 
 class RunTests(_Fixture):
@@ -489,14 +515,14 @@ class RunTests(_Fixture):
             self.assertIn("## Public panel", fh.read())
 
     def test_the_context_is_left_out_aloud_when_its_lists_cannot_be_imported(self):
-        with mock.patch.dict(sys.modules, {"test_te_system_tab_bodies": None}):
+        with mock.patch.dict(sys.modules, {"national_info_binding": None}):
             panels, world, note = audit_module.repo_public_context()
         self.assertEqual((panels, world), ({}, set()))
         self.assertIn("could not be imported", note)
         self.run_audit(fx_public_label="[JournalEntry.GetCountry.GetName]")
         out = io.StringIO()
         with mock.patch.object(audit_module, "_is_repo", return_value=True), \
-                mock.patch.dict(sys.modules, {"test_te_system_tab_bodies": None}), contextlib.redirect_stdout(out):
+                mock.patch.dict(sys.modules, {"national_info_binding": None}), contextlib.redirect_stdout(out):
             self.assertEqual(main(["--strict", "--mod-path", self.root]), 0)
         self.assertIn("Not looked at in this run: the tab registry or `WORLD_LOC` could not be imported", out.getvalue())
         self.assertIn("- public panel: not looked at", out.getvalue())
@@ -521,7 +547,7 @@ class RepoTests(unittest.TestCase):
 
     def test_the_mod_has_no_failing_flag(self):
         self.assertEqual([f for f in self.result.flags if not f.exemption], [])
-        self.assertEqual(self.result.stale_tags, [])
+        self.assertEqual(self.result.stale, [])
 
     def test_each_context_is_reached(self):
         """Guard the guard: a seed walk that found nothing would pass as clean."""
@@ -535,10 +561,11 @@ class RepoTests(unittest.TestCase):
         self.assertEqual(self.result.public_note, "", "the repo's own run looks at the public tabs")
 
     def test_the_public_tabs_are_the_binding_tests(self):
+        import national_info_binding
         import test_te_system_tab_bodies as binding
         panels, world, note = audit_module.repo_public_context()
         self.assertEqual(set(panels), {t.key for t in binding.PUBLIC})
-        self.assertEqual(world, set(binding.WORLD_LOC))
+        self.assertEqual(world, set(national_info_binding.WORLD_LOC))
         self.assertEqual(note, "")
 
     def test_a_public_flags_path_walks_the_binding_tests_keys(self):
@@ -577,7 +604,7 @@ class RepoTests(unittest.TestCase):
     def test_post_load_roster_and_ci(self):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         self.assertIn("loc_root_context_audit", extract_rosters(
-            os.path.join(self.root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            os.path.join(self.root, "server", "post_load.py"))["POST_LOAD_AUDITS"])
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
         entry = audit_registry.get("loc_root_context_audit")
         self.assertEqual(entry.command, "python3 loc_root_context_audit.py --strict")

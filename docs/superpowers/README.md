@@ -56,6 +56,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 |-----|--------|-------------|
 | [specs/2026-11-01-local-climate-design.md](specs/2026-11-01-local-climate-design.md): a climate record per state region (summer heat and humidity, winter cold, aridity, malaria, latitude) feeding a comfort penalty in migration attraction, eased by technology (cold early, then disease and water, then air conditioning) and moved by global warming; the mass migration arable land minimum removed; a Local Climate state panel tile | Phase 1 merged (#1307); phases 2–3 in the comfort PR | In-game checks (`docs/testing/local-climate-playtest.md`) |
 | [plans/2026-11-01-local-climate.md](plans/2026-11-01-local-climate.md): Tasks 1–9 in two PRs (A: the record, the generator and the tile's readings; B: relief carriers, the comfort formula with warming, the modifier and defines, the Comfort row, docs) | Tasks 1–3 merged (#1307); 4–8 in the comfort PR | Task 9's whole-branch review |
+| [specs/2026-11-13-regional-climate-warming-design.md](specs/2026-11-13-regional-climate-warming-design.md): Climate Warming by latitude band (#1681): Tropical Warming between the tropics and High-Latitude Warming 55° or more from the equator, state modifiers on top of the world's, refreshed from the monthly state pulse; the Warming Penalty hover, the help page and the guide | Built (#1681's PR) | In-game checks (`docs/testing/vanilla-1-15-playtest.md`, "Regional warming"); the AI climate will that reads the bands (§ 2, non-goals) |
 
 ### Interface
 

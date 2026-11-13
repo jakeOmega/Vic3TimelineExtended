@@ -556,8 +556,8 @@
   "de": "#G Stabil#!"
  },
  "je_colonial_empire_band_strained": {
-  "en": "#O Strained#!",
-  "de": "#O Angespannt#!"
+  "en": "#o Strained#!",
+  "de": "#o Angespannt#!"
  },
  "je_colonial_empire_band_unknown": {
   "en": "#lore unknown#!",
@@ -1048,8 +1048,8 @@
   "de": "#header $je_colonial_empire_row_invest$#!\\n#G Läuft#! auf Stufe #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! von 3"
  },
  "je_colonial_empire_ov_isolation": {
-  "en": "#O Isolated#!",
-  "de": "#O Isoliert#!"
+  "en": "#o Isolated#!",
+  "de": "#o Isoliert#!"
  },
  "je_colonial_empire_ov_isolation_tt": {
   "en": "#header Diplomatic Isolation#!\\nThe condemning [Concept('concept_great_power','great powers')] hold a third of the [concept_prestige] of all great powers and ourselves. Until their share falls, [concept_colonial_stability] takes a further loss every month.",
@@ -1268,8 +1268,8 @@
   "de": "Internationaler Druck"
  },
  "je_colonial_empire_pressure_isolation": {
-  "en": "#O Diplomatic isolation#!",
-  "de": "#O Diplomatische Isolation#!"
+  "en": "#o Diplomatic isolation#!",
+  "de": "#o Diplomatische Isolation#!"
  },
  "je_colonial_empire_pressure_isolation_value": {
   "en": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/mo",
@@ -1372,8 +1372,8 @@
   "de": "Unterstützen"
  },
  "je_colonial_empire_stance_force_dormant": {
-  "en": "#O Dormant#!: not a great power",
-  "de": "#O Ruhend#!: keine Großmacht"
+  "en": "#o Dormant#!: not a great power",
+  "de": "#o Ruhend#!: keine Großmacht"
  },
  "je_colonial_empire_stance_force_dormant_tt_ours": {
   "en": "Only a [concept_great_power]'s stance weighs on the colonial empires. Ours lies dormant, costing nothing and moving no one, until we are a great power again.",
@@ -1536,12 +1536,12 @@
   "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_strained_ours', 'je_colonial_empire_status_strained_theirs' )]"
  },
  "je_colonial_empire_status_strained_ours": {
-  "en": "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
-  "de": "#O Das Kolonialreich steht unter Druck.#! Wachsende Spannungen und internationaler Druck bedrohen unsere Kontrolle."
+  "en": "#o Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
+  "de": "#o Das Kolonialreich steht unter Druck.#! Wachsende Spannungen und internationaler Druck bedrohen unsere Kontrolle."
  },
  "je_colonial_empire_status_strained_theirs": {
-  "en": "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten its hold.",
-  "de": "#O Das Kolonialreich steht unter Spannung.#! Steigende Spannungen und internationaler Druck bedrohen seine Herrschaft."
+  "en": "#o Colonial empire is under strain.#! Rising tensions and international pressure threaten its hold.",
+  "de": "#o Das Kolonialreich steht unter Spannung.#! Steigende Spannungen und internationaler Druck bedrohen seine Herrschaft."
  },
  "je_colonial_empire_subject_gdp_tt": {
   "en": "[concept_gdp]: @money! #v [State.GetCountry.MakeScope.ScriptValue('colonial_subject_disp_gdp')|D]#! a year.",
@@ -1936,8 +1936,8 @@
   "de": "#bold Erwärmung:#! #R Schwer#! - Die Klimakrise ist bedrohlich. Hungersnot, ökologischer Zusammenbruch und steigende Sterblichkeit bedrohen die Zivilisation."
  },
  "je_global_warming_status_significant": {
-  "en": "#bold Warming:#! #O Significant#! - Warming has reached dangerous levels. Coastal flooding, drought, and mass displacement accelerate.",
-  "de": "#bold Erwärmung:#! #O Erheblich#! - Die Erwärmung hat gefährliche Werte erreicht. Überflutung der Küsten, Dürre und Massenvertreibung nehmen zu."
+  "en": "#bold Warming:#! #o Significant#! - Warming has reached dangerous levels. Coastal flooding, drought, and mass displacement accelerate.",
+  "de": "#bold Erwärmung:#! #o Erheblich#! - Die Erwärmung hat gefährliche Werte erreicht. Überflutung der Küsten, Dürre und Massenvertreibung nehmen zu."
  },
  "je_global_warming_status_slight": {
   "en": "#bold Warming:#! #Y Slight#! - Global temperatures have risen slightly. Early signs of shifting weather patterns emerge.",
@@ -2680,8 +2680,8 @@
   "de": "#Y Verteidigt.#! Unsere nachrichtendienstlichen Fähigkeiten sind ausreichend, doch entschlossene Gegner könnten Schwachstellen finden.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! der besten der Welt; #bold Gehärtet#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%"
  },
  "je_iw_status_exposed": {
-  "en": "#O Exposed.#! Our intelligence infrastructure has significant gaps. We are vulnerable to sustained covert campaigns.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%",
-  "de": "#O Exponiert.#! Unsere nachrichtendienstliche Infrastruktur weist erhebliche Lücken auf. Wir sind anhaltenden verdeckten Kampagnen gegenüber verwundbar.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! der besten der Welt; #bold Verteidigt#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%"
+  "en": "#o Exposed.#! Our intelligence infrastructure has significant gaps. We are vulnerable to sustained covert campaigns.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%",
+  "de": "#o Exponiert.#! Unsere nachrichtendienstliche Infrastruktur weist erhebliche Lücken auf. Wir sind anhaltenden verdeckten Kampagnen gegenüber verwundbar.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! der besten der Welt; #bold Verteidigt#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%"
  },
  "je_iw_status_fortress": {
   "en": "#G Fortress.#! Our counterintelligence is virtually impenetrable: foreign operations face near-certain detection.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best",
@@ -7244,8 +7244,8 @@
   "de": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_empty_count')|0] leer#!"
  },
  "je_strategic_reserve_ov_held_word_full": {
-  "en": "#O [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] full#!",
-  "de": "#O [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] voll#!"
+  "en": "#o [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] full#!",
+  "de": "#o [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] voll#!"
  },
  "je_strategic_reserve_ov_held_word_none": {
   "en": "#G None#!",

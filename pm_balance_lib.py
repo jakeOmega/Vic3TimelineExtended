@@ -14,12 +14,17 @@ disk, mirroring the audit script's approach.
 """
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 from typing import Iterator
 
 import annotators
 from paradox_file_parser import INJECT_DIRECTIVES
+
+# `INJECT_OR_CREATE:` patches a PM that exists and creates one that does
+# not, so it is a definition exactly when nothing else defines the PM.
+_CREATING_INJECTS = frozenset({"INJECT_OR_CREATE"})
 
 
 # ---------------------------------------------------------------------------
@@ -96,17 +101,13 @@ _TOP_LEVEL_RE = re.compile(
 )
 
 
-def iter_pms(path: Path) -> Iterator[tuple[str, str]]:
-    """Yield (pm_id, body_with_comments) for each PM a file defines.
+def iter_pm_blocks(path: Path) -> Iterator[tuple[str, str | None, str]]:
+    """Yield (pm_id, directive, body_with_comments) for every top-level
+    block in a PM file, merge directive or none (`directive` is None for a
+    bare definition).
 
-    Includes the leading comment block that precedes the PM's `= {` so we
-    can parse the auto-generated cost summary.
-
-    A `REPLACE:` block (and its `TRY_` and `_OR_CREATE` forms) is a whole
-    definition and is yielded under the bare id, as the engine resolves it.
-    An `INJECT:` block is a patch to a PM defined somewhere else, usually in
-    vanilla, and carries no economics of its own: it is skipped, so it can
-    neither stand in for the PM nor overwrite the row of one the mod defines.
+    The body includes the leading comment block that precedes the PM's
+    `= {` so we can parse the auto-generated cost summary.
     """
     text = path.read_text(encoding="utf-8-sig")
     pos = 0
@@ -125,9 +126,70 @@ def iter_pms(path: Path) -> Iterator[tuple[str, str]]:
                 depth -= 1
             i += 1
         pos = i
-        if m.group("directive") in INJECT_DIRECTIVES:
-            continue
-        yield m.group("id"), text[body_start:i - 1]
+        yield m.group("id"), m.group("directive"), text[body_start:i - 1]
+
+
+def iter_pms(path: Path) -> Iterator[tuple[str, str]]:
+    """Yield (pm_id, body_with_comments) for each PM a file defines outright.
+
+    A `REPLACE:` block (and its `TRY_` and `_OR_CREATE` forms) is a whole
+    definition and is yielded under the bare id, as the engine resolves it.
+    An `INJECT:` block is a patch to a PM defined somewhere else, usually in
+    vanilla, and carries no economics of its own: it is skipped, so it can
+    neither stand in for the PM nor overwrite the row of one the mod defines.
+    So is an `INJECT_OR_CREATE:` block, which defines its PM only when
+    nothing else does; `iter_mod_pms` decides that across the directory.
+    """
+    for pm_id, directive, body in iter_pm_blocks(path):
+        if directive not in INJECT_DIRECTIVES:
+            yield pm_id, body
+
+
+def _vanilla_pm_ids(repo_root: Path) -> frozenset[str]:
+    """The PMs vanilla defines, from the committed `vanilla_parsed/`
+    snapshot under `repo_root`; empty when there is none (a temp-dir test
+    tree)."""
+    import vanilla_parsed
+
+    snapshot = repo_root / "vanilla_parsed"
+    manifest = vanilla_parsed.read_manifest(str(snapshot)) or {}
+    info = manifest.get("entity_types", {}).get(PM_ENTITY_TYPE)
+    if not info:
+        return frozenset()
+    try:
+        with open(snapshot / info["file"], encoding="utf-8") as f:
+            return frozenset(json.load(f))
+    except (OSError, ValueError):
+        return frozenset()
+
+
+def iter_mod_pms(repo_root: Path) -> Iterator[tuple[str, str, str]]:
+    """Yield (file_name, pm_id, body_with_comments) for every PM the mod's
+    `common/production_methods/` defines, file by file in load order.
+
+    That is every block `iter_pms` yields, plus an `INJECT_OR_CREATE:`
+    block whose PM neither the mod (bare or `REPLACE:`) nor vanilla defines:
+    the engine creates the PM from it, so it is the PM's whole definition
+    and gets a row (#1697). One that names a PM defined elsewhere is a patch
+    like any `INJECT:`. When several such blocks create the same PM, the
+    first in file order stands for it.
+    """
+    pm_dir = repo_root / PM_SUBDIR
+    files = pm_file_names(repo_root)
+    blocks = [(fname, block) for fname in files
+              for block in iter_pm_blocks(pm_dir / fname)]
+    defined = {pm_id for _, (pm_id, directive, _) in blocks
+               if directive not in INJECT_DIRECTIVES}
+    vanilla: frozenset[str] | None = None
+    for fname, (pm_id, directive, body) in blocks:
+        if directive not in INJECT_DIRECTIVES:
+            yield fname, pm_id, body
+        elif directive in _CREATING_INJECTS and pm_id not in defined:
+            if vanilla is None:
+                vanilla = _vanilla_pm_ids(repo_root)
+            if pm_id not in vanilla:
+                defined.add(pm_id)
+                yield fname, pm_id, body
 
 
 def parse_cost_comments(body: str) -> dict | None:
@@ -246,20 +308,17 @@ def build_pm_balance_map(repo_root: Path) -> dict[str, dict]:
     into a server entry.
     """
     out: dict[str, dict] = {}
-    pm_dir = repo_root / PM_SUBDIR
-    for fname in pm_file_names(repo_root):
-        path = pm_dir / fname
-        for pm_id, body in iter_pms(path):
-            costs = parse_cost_comments(body)
-            flag = classify_pm(body, costs)
-            row: dict = {
-                "flag": flag,
-                "file": fname,
-                "margin_pct": costs.get("profit_margin_pct") if costs else None,
-                "wage_be": costs.get("wage_breakeven") if costs else None,
-                "profit": costs.get("profit") if costs else None,
-            }
-            out[pm_id] = row
+    for fname, pm_id, body in iter_mod_pms(repo_root):
+        costs = parse_cost_comments(body)
+        flag = classify_pm(body, costs)
+        row: dict = {
+            "flag": flag,
+            "file": fname,
+            "margin_pct": costs.get("profit_margin_pct") if costs else None,
+            "wage_be": costs.get("wage_breakeven") if costs else None,
+            "profit": costs.get("profit") if costs else None,
+        }
+        out[pm_id] = row
     return out
 
 

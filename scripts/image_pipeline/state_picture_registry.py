@@ -2226,3 +2226,90 @@ def region_conditions(region: str) -> list:
 def wired() -> dict:
     """The pictures with a picked render: the ones the terrain file lists."""
     return {k: p for k, p in PICTURES.items() if p["seed"] is not None}
+
+
+# The banner's hover (the owner, 2026-11-12: "make it transparent to the player" why one state
+# shows a run-down street and its neighbor an ordinary one). The engine can't say which picture
+# file a banner shows, but `State.GetBestTextureEffect` gives the name of its overlay. So every
+# kind of picture of every technology plays its own copy of the vanilla overlay it would use
+# (the same particle under another name, gfx/models/particles/te_state_picture_overlays_generated.asset),
+# and the banner's tooltip looks up the text of that name (te_sp_tt_<overlay name>,
+# localization/english/te_picture_hover_generated_l_english.yml): what the picture is, why it
+# shows, the technology it follows and, where it decided, the terrain. Seen in game 2026-11-13
+# (scripting_best_practices.md § "State pictures"). A region family has no word in the hover
+# (the owner: leave the geographical variants out), so the families of one kind share a name.
+
+OVERLAY_PREFIX = "te_sp_fx_"
+VANILLA_OVERLAY_PREFIX = "vfx_entity_ui_state_"
+# Each vanilla overlay a picture uses, and the particle its entity plays (game/gfx/models/particles/
+# vfx_entities_ui.asset, 1.15; every one is the same one-event entity, so a copy is that entity
+# under another name). Two particles aren't named after their entity: the forest's and the jungle's.
+OVERLAY_PARTICLES = {
+    f"{VANILLA_OVERLAY_PREFIX}{name}": f"ui/state/{particle}" for name, particle in {
+        "cleared_land": "cleared_land", "desert": "desert", "desert_northamerica": "desert_northamerica",
+        "docks": "docks", "farmland_arabic": "farmland_arabic", "farmland_asian": "farmland_asian",
+        "farmland_generic": "farmland_generic", "farmland_subtropic": "farmland_subtropic",
+        "forest": "biome_forest", "forestry": "forestry", "hills": "hills", "hills_jungle": "hills_jungle",
+        "hills_subtropic": "hills_subtropic", "jungle": "biome_jungle", "mining": "mining",
+        "mountains": "mountains", "mountains_arid": "mountains_arid",
+        "mountains_northamerica": "mountains_northamerica", "pasture": "pasture", "plains": "plains",
+        "plains_arid": "plains_arid", "plains_northamerica": "plains_northamerica",
+        "plantation": "plantation", "tundra": "tundra", "urban_african": "urban_african",
+        "urban_arabic": "urban_arabic", "urban_latin_american": "urban_latin_american",
+        "wetland": "wetland",
+    }.items()
+}
+
+# The kind of a worked-land picture, by the terrain whose list holds it; a natural terrain's own
+# pictures (wave 7: the land with a road, pylons or a pipeline) are land_<terrain>.
+LAND_KINDS = {
+    "docks": "harbor", "mining": "open_pit", "pasture": "ranch", "plantation": "plantation",
+    "forestry": "forestry", "cleared_land": "cleared_land", **{t: "farmland" for t in FARMLAND},
+}
+# The kinds whose picture is a city's: below a metropolis one shows only where the game holds the
+# state's terrain to be urban, so their hover says so then.
+CITY_KINDS = ("city", *SIZES, *MEANS, *UPKEEP, *CHARACTERS, *CONDITIONS)
+# The worked land a special picture needs as its terrain: the hover names it.
+SCALE_TERRAIN = {"major_port": "docks", "colliery": "mining"}
+# The decade a hover gives each technology's pictures (WHEN, the time the prompt painted).
+DECADES = {
+    "in the 1930s": "1930s", "in the early 1930s": "1930s", "around 1960": "1960s",
+    "around 1980": "1980s", "around 1990": "1990s", "around 2000": "2000s", "in the 2020s": "2020s",
+    "in the 2030s": "2030s", "in the 2040s": "2040s", "in the late twenty-first century": "2080s",
+}
+
+
+def hover_kind(key: str, terrain: str = None) -> str:
+    """What the picture is, for the hover: a size, a means or upkeep, a character or a condition
+    of a city, the plain city, or the kind of land of the entry's terrain."""
+    p = PICTURES[key]
+    for field in ("condition", "character", "upkeep", "means", "size", "scale"):
+        if p.get(field):
+            return p[field]
+    if p.get("over"):
+        return "oil"
+    if CITY_TERRAIN in p["terrain"]:
+        return "city"
+    terrain = terrain or p["terrain"][0]
+    return LAND_KINDS.get(terrain, f"land_{terrain}")
+
+
+def decade(tech: str) -> str:
+    return DECADES[WHEN[tech]]
+
+
+def overlay_name(key: str, terrain: str = None) -> str:
+    """The overlay a picture's entry plays: its own copy of the vanilla one, named for the kind and
+    the technology, so the hover can tell them apart (the family is left out)."""
+    p = PICTURES[key]
+    vanilla = p["effect"]
+    return f"{OVERLAY_PREFIX}{hover_kind(key, terrain)}_{p['tech']}_{vanilla[len(VANILLA_OVERLAY_PREFIX):]}"
+
+
+def overlays() -> dict:
+    """{overlay name: (kind, tech, vanilla overlay)} for every entry the terrain file writes."""
+    out = {}
+    for key, p in wired().items():
+        for terrain in terrains(key):
+            out[overlay_name(key, terrain)] = (hover_kind(key, terrain), p["tech"], p["effect"])
+    return dict(sorted(out.items()))

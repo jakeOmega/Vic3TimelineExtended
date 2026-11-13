@@ -239,7 +239,7 @@ TOPICS = {
     ],
     "global_warming": [
         "gw_how_sub_warming", "gw_how_warming_1", "gw_how_warming_2", "gw_how_sub_penalty", "gw_how_penalty",
-        "gw_how_sub_emissions", "gw_how_emissions_1", "gw_how_emissions_2", "gw_how_sub_policies",
+        "gw_how_penalty_2", "gw_how_sub_emissions", "gw_how_emissions_1", "gw_how_emissions_2", "gw_how_sub_policies",
         "gw_how_policies_1", "gw_how_policies_2", "gw_how_policies_3", "gw_how_sub_aerosols",
         "gw_how_aerosols_1", "gw_how_aerosols_2", "rt_how_header", "rt_how_laws_head", "rt_how_laws",
         "rt_how_programmes_head", "rt_how_programmes", "rt_how_emissions_head", "rt_how_emissions",

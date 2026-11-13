@@ -298,14 +298,14 @@ class SuppressionTests(unittest.TestCase):
 
     def test_stale_tags_fail_and_unverifiable_ones_wait_for_vanilla(self):
         r = _run(self.FILES)
-        self.assertEqual([t.line for t in r.stale_tags], [5])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual([t.line for t in r.stale], [5])
+        self.assertEqual(len(r.failing), 2)
         r = _run(self.FILES, {"common/scripted_effects/v.txt": "vanilla_helper = { add = 1 }\n"})
-        self.assertEqual([t.line for t in r.stale_tags], [5])
+        self.assertEqual([t.line for t in r.stale], [5])
         self.assertEqual([(f.line, f.callee, bool(f.exemption)) for f in r.flags if f.line == 6],
                          [(6, "vanilla_helper", True)])
         r = _run(self.FILES, {"common/scripted_effects/v.txt": "vanilla_helper = { add = $X$ }\n"})
-        self.assertEqual([t.line for t in r.stale_tags], [5, 6])
+        self.assertEqual([t.line for t in r.stale], [5, 6])
 
     def test_event_context_audit_leaves_the_tag_alone(self):
         self.assertIn(script_argument_audit.CHECK, event_context_audit.FOREIGN_CHECKS)
@@ -355,7 +355,7 @@ class LiveTreeTests(unittest.TestCase):
         root = os.path.dirname(os.path.abspath(__file__))
         r = audit(mod_path=root, vanilla_game=None)
         self.assertEqual([describe(f) for f in r.flags if not f.exemption], [])
-        self.assertEqual(r.stale_tags, [])
+        self.assertEqual(r.stale, [])
 
 
 if __name__ == "__main__":

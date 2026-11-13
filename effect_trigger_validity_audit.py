@@ -75,6 +75,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 @dataclass(frozen=True)
 class ScanRoot:
@@ -430,9 +433,6 @@ _HELPER_NAME_DIRS = (
     os.path.join("common", "on_actions"),
     os.path.join("common", "script_values"),
 )
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # Top-level entity definition: `name = {` (optionally merge-prefixed).
 _TOP_DEF_RE = re.compile(
     r"^[ \t]*(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([a-z_][a-z0-9_]*)[ \t]*=[ \t]*\{"
@@ -452,7 +452,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
@@ -486,13 +486,8 @@ def _split_code(line: str, in_quote: bool = False) -> tuple[str, str, bool]:
     return "".join(out), "", in_quote
 
 
-def parse_reviewed_comment(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+# This audit's old name for the shared parser.
+parse_reviewed_comment = parse_reviewed
 
 
 def _iter_txt(base: str):
@@ -1138,7 +1133,7 @@ def _run_on_string_flags(path: str, lines: list[str], run_on: list) -> list[Flag
             if span <= _MAX_STRING_LINES:
                 continue
             what = f"string over {span} lines"
-            exemption = parse_reviewed_comment(_split_code(lines[end - 1], True)[1])
+            exemption = parse_reviewed(_split_code(lines[end - 1], True)[1])
         out.append(Flag(
             path, start, what, "unterminated-string",
             lines[start - 1].strip(), exemption,
@@ -1204,7 +1199,7 @@ def audit(
                 continue
             run_on: list = []
             for sl in _scan_lines(lines, root.skip_blocks, root, run_on):
-                exemption = parse_reviewed_comment(sl.comment)
+                exemption = parse_reviewed(sl.comment)
                 for i, m in enumerate(_LHS_RE.finditer(sl.code)):
                     if sl.depth == 0 and i == 0:
                         continue    # the entity being defined
@@ -1272,8 +1267,8 @@ def unresolved_helper_calls(mod_path: str, result: AuditResult | None = None) ->
 
 
 def render_report(result: AuditResult, mod_path: str = "") -> str:
-    unreviewed = [f for f in result.flags if not f.exemption]
-    exempted = [f for f in result.flags if f.exemption]
+    unreviewed = result.unreviewed
+    exempted = result.exemptions
     cov = result.coverage
 
     def _rel(f: Flag) -> str:
@@ -1381,16 +1376,13 @@ def regenerate(mod_state=None) -> dict:
     out_path = os.path.join(
         mod_path, "docs", "engine", "effect_trigger_validity_report.md"
     )
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
+    write_text(out_path, report)
 
     return {
-        "unreviewed": sum(1 for f in result.flags if not f.exemption),
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
         "unresolved_helper_calls": sum(
-            1 for f in result.flags
-            if f.kind == "unresolved-helper-call" and not f.exemption
+            1 for f in result.unreviewed if f.kind == "unresolved-helper-call"
         ),
         # Coverage, which the committed report no longer prints.
         **result.coverage,
@@ -1497,11 +1489,9 @@ def main(argv: list[str] | None = None, mod_path: str | None = None) -> int:
         from path_constants import mod_path
     if argv[:1] in (["bootstrap"], ["bootstrap-context"]):
         return _bootstrap_main(argv, mod_path)
-    result = audit(mod_path)
-    print(render_report(result, mod_path))
-    if "--strict" in argv:
-        return 1 if any(not f.exemption for f in result.flags) else 0
-    return 0
+    return cli_main(lambda args: audit(mod_path),
+                    lambda result, args: render_report(result, mod_path),
+                    argv=argv, description=__doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

@@ -198,6 +198,23 @@ class PlaysetTest(unittest.TestCase):
         self.games = []
         return game
 
+    @contextlib.contextmanager
+    def pinned_clock(self):
+        """Inside, the backup drive's clock stands at the machine's time on entry, to the second (`_sleep` takes no
+        time here), and yields that time. A run's write dated from it is judged against an exit on the same clock,
+        whatever the machine's clock does: WSL steps it by seconds, and a step back between the write and the
+        `game_exited` after it makes the write look later than the exit (#1693; test_game_qa_gate's naps_clock)."""
+        at = dt.datetime.now(UTC).replace(microsecond=0)
+        with mock.patch.object(snapshot, "_drive_clock", lambda folder: at):
+            yield at
+
+    @staticmethod
+    def dated(path: Path, data: bytes, at: dt.datetime | None):
+        """Write `data` to `path`, dated `at` (from `pinned_clock`) when one is given."""
+        path.write_bytes(data)
+        if at is not None:
+            os.utime(path, (at.timestamp(), at.timestamp()))
+
     def is_the_owners_playset(self) -> bool:
         return self.playset.read_bytes() == self.playset_bytes
 
@@ -304,14 +321,15 @@ class PlaysetTest(unittest.TestCase):
         snap_id = self.take_snapshot()
         game = self.game()
         self.start_result = game
-        self.assertEqual(self.launch(snap_id, "--playset", "mod_only", "--add-mod", OVERLAY)[1], 0)
-        self.start_result = None
-        (self.user / "continue_game.json").write_text('{"title": "the run"}')
-        self.games = [[game], [game], []]
-        self.assertEqual(self.run_cli("watch", snap_id)[1], 0)
-        self.games = []
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"]), (0, False))
+        with self.pinned_clock() as at:         # the run's write is judged against its exit (#1693)
+            self.assertEqual(self.launch(snap_id, "--playset", "mod_only", "--add-mod", OVERLAY)[1], 0)
+            self.start_result = None
+            self.dated(self.user / "continue_game.json", b'{"title": "the run"}', at)
+            self.games = [[game], [game], []]
+            self.assertEqual(self.run_cli("watch", snap_id)[1], 0)
+            self.games = []
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), out)
         self.assertEqual(sorted(out["restored"]), [PLAYSET, "continue_game.json"])
         self.assertEqual(self.playset.read_bytes(), self.playset_bytes)
         self.assertEqual(self.tree(), before)
@@ -531,14 +549,15 @@ class PlaysetTest(unittest.TestCase):
         self.start_result = self.game()
         self.assertEqual(self.launch(snap_id)[1], 0)
 
-    def launcher_rewrites_during_the_run(self, snap_id) -> bytes:
-        """A run with --add-mod during which the owner's launcher writes the playset again; returns `launch`'s
-        bytes. Restore then finds the launcher's bytes, not `launch`'s, and puts no playset back of its own."""
+    def launcher_rewrites_during_the_run(self, snap_id, at: dt.datetime | None = None) -> bytes:
+        """A run with --add-mod during which the owner's launcher writes the playset again (dated `at` when given);
+        returns `launch`'s bytes. Restore then finds the launcher's bytes, not `launch`'s, and puts no playset back
+        of its own."""
         launchs = {}
 
         def the_launcher_writes():
             launchs["bytes"] = self.playset.read_bytes()
-            self.playset.write_bytes(json.dumps({"enabledMods": [{"path": WORKSHOP + "1"}]}).encode("utf-8"))
+            self.dated(self.playset, json.dumps({"enabledMods": [{"path": WORKSHOP + "1"}]}).encode("utf-8"), at)
 
         self.started_run(snap_id, "--add-mod", OVERLAY, during=the_launcher_writes)
         return launchs["bytes"]
@@ -554,9 +573,10 @@ class PlaysetTest(unittest.TestCase):
         # snapshot's copy back with no `playset_restored`. The owner later chooses a playset that is byte for byte
         # `launch`'s write. `restored` answers the entry: nothing refuses, and `restore <id>` leaves their choice.
         snap_id = self.take_snapshot()
-        launchs = self.launcher_rewrites_during_the_run(snap_id)
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], "playset_restored" in out), (0, False, False))
+        with self.pinned_clock() as at:         # the launcher's write during the run is judged against its exit (#1693)
+            launchs = self.launcher_rewrites_during_the_run(snap_id, at)
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], "playset_restored" in out), (0, False, False), out)
         self.assertTrue(self.is_the_owners_playset())
         self.the_owner_chooses(launchs)
         out, code = self.run_cli("restore", snap_id)            # judged again: their later write is held, kept
