@@ -211,6 +211,24 @@ class SizingEffectTest(unittest.TestCase):
         self.assertRegex(self.body, r"value\s*=\s*%s\b" % THROUGHPUT)
         self.assertRegex(self.body, r"multiplier\s*=\s*owner\.var:te_cm_capacity_mult")
 
+    def test_a_site_that_never_hires_gets_a_verdict(self):
+        # The delivery check put its read off every week a site was under 10% staffed, so a site that never
+        # hired, the failure the sizing rests on not happening, gave no line at all (review of #1770). The
+        # weeks running are counted and the fourth is BROKEN, once a game.
+        text = "\n".join(line.split("#", 1)[0] for line in EFFECTS.read_text(encoding="utf-8").lstrip("\ufeff").splitlines())
+        start = text.index("te_cm_site_delivery_selfcheck = {")
+        check = " ".join(text[start:text.index("\nte_construction_market_update_price_stabilizer", start)].split())
+        self.assertIn("change_variable = { name = te_cm_chk_skips add = 1 } "
+                      "if = { limit = { var:te_cm_chk_skips >= 4 } "
+                      "set_global_variable = { name = te_cm_site_delivery_check_done value = yes } "
+                      "debug_log = \"TE_SELF_CHECK BROKEN construction_site_unstaffed ", check)
+        # Counted only while a site is under 10% staffed at the read, and the run ends when the country was
+        # not armed the week before or a verdict was given.
+        self.assertIn("else_if = { limit = { is_ai = yes any_scope_building = { is_building_type = "
+                      "te_construction_market_site occupancy < 0.1 } }", check)
+        self.assertGreaterEqual(check.count("remove_variable = te_cm_chk_skips"), 4)
+        self.assertEqual(check.count("TE_SELF_CHECK BROKEN construction_site_unstaffed"), 1)
+
     def test_the_variable_outlives_the_effect(self):
         # The engine re-evaluates the multiplier expression on later ticks.
         self.assertNotIn("remove_variable = te_cm_capacity_mult", self.body)

@@ -218,7 +218,9 @@ class FollowRuleTest(unittest.TestCase):
         # Through a hidden country event, never called from the fan-out: the switch runs in one country's
         # pulse event, and add_modifier's multiplier resolves against ROOT, so a direct call would give every
         # country that one country's scaling until its own yearly pulse.
-        self.assertRegex(switch, r"every_country\s*=\s*\{\s*trigger_event\s*=\s*\{\s*id\s*=\s*"
+        # Not to decentralized countries, as the weekly and game-start passes leave them out.
+        self.assertRegex(switch, r"every_country\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*is_country_type\s*=\s*"
+                                 r"decentralized\s*\}\s*\}\s*trigger_event\s*=\s*\{\s*id\s*=\s*"
                                  r"te_construction_market_recalc_events\.4\s*\}\s*\}")
         self.assertFalse(calls(switch, "te_cc_apply_scaling"))
         events = code(ROOT / "events/te_construction_market_recalc_events.txt")

@@ -2,6 +2,9 @@
 # Based on the third-party "Free Market Construction" mod. See README.md.
 
 te_construction_market_on_weekly_pulse = {
+	# Either setting: a country made during play gets the small-economy factor
+	# now, not at its first yearly pulse (te_construction_cost_effects.txt).
+	te_cc_weekly_new_country = yes
 	# free_market_construction_rule disabled: vanilla-style direct construction
 	# (te_construction_market_direct_effects.txt). The rule's production-method
 	# flags do the construction; the pulse only keeps the law-set private share.

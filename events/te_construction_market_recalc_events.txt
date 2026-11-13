@@ -53,3 +53,16 @@ te_construction_market_recalc_events.4 = {
 		te_cc_apply_scaling = yes
 	}
 }
+
+# The small-economy rule's game-start self-check, two days after the modifier was set (te_cc_small_start_selfcheck
+# queues it; te_construction_cost_effects.txt): the verdict reads the modifier, which is not visible in the effect
+# that set it. No trigger: a delayed event whose trigger is false when queued is dropped (#1596), and the verdict
+# decides on the day.
+te_construction_market_recalc_events.5 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_cc_small_start_verdict = yes
+	}
+}
