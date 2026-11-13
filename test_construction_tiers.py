@@ -121,18 +121,32 @@ class ConstructionTiers(unittest.TestCase):
     def test_tier_lists_name_a_tier_with_its_twin_and_every_later_tier(self):
         """A method that names a tier in unlocking_production_methods names its twin, and
         every later tier: staff falls up the ladder, so a cut that fits one tier fits the
-        next (pm_employment_audit checks the fit itself)."""
+        next (pm_employment_audit checks the fit itself). A method split by tier, so a
+        flat crew's cut is exact on the later tiers (3D Printed Buildings, #1684), stops
+        where its copy starts: both hide when unavailable and the copy runs to the top."""
         checked = 0
         for group in TIER_LISTS:
-            for pm in _list(self.groups[group].get("production_methods")):
+            methods = _list(self.groups[group].get("production_methods"))
+            named_by = {}
+            for pm in methods:
+                names = set(_list(self.pms[pm].get("unlocking_production_methods")))
+                named_by[pm] = [i for i, tier in enumerate(self.tiers) if tier in names]
+            for pm in methods:
                 names = set(_list(self.pms[pm].get("unlocking_production_methods")))
                 if not names:
                     continue
                 checked += 1
                 with self.subTest(group=group, method=pm):
-                    named = [i for i, tier in enumerate(self.tiers) if tier in names]
+                    named = named_by[pm]
                     self.assertTrue(named)
-                    self.assertEqual(named, list(range(named[0], len(self.tiers))))
+                    self.assertEqual(named, list(range(named[0], named[-1] + 1)))
+                    if named[-1] != len(self.tiers) - 1:
+                        copies = [other for other in methods
+                                  if named_by[other] and named_by[other][0] == named[-1] + 1]
+                        self.assertEqual(len(copies), 1, "no copy takes the later tiers")
+                        self.assertEqual(named_by[copies[0]][-1], len(self.tiers) - 1)
+                        for name in (pm, copies[0]):
+                            self.assertEqual(_unwrap(self.pms[name].get("is_hidden_when_unavailable")), "yes", name)
                     self.assertEqual({self.twins[i] for i in named},
                                      {twin for twin in self.twins if twin in names})
                     self.assertNotIn(MARKET_PM, names)

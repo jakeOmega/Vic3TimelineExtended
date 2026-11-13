@@ -25,6 +25,11 @@ ON_ACTIONS = ROOT / "common" / "on_actions" / "te_state_picture_on_actions.txt"
 DEBUG_EVENTS = ROOT / "events" / "te_debug_state_picture_events.txt"
 VANILLA_TERRAINS = ROOT / "vanilla_parsed" / "common" / "terrains.json"
 VANILLA_TECHS = ROOT / "vanilla_parsed" / "common" / "technologies.json"
+VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
+OVERLAYS = ROOT / "gfx" / "models" / "particles" / "te_state_picture_overlays_generated.asset"
+HOVER_LOC = ROOT / "localization" / "english" / "te_picture_hover_generated_l_english.yml"
+STATES_PANEL = ROOT / "gui" / "states_panel.gui"
+CI = ROOT / ".github" / "workflows" / "ci.yml"
 
 
 def _load(name, path):
@@ -386,13 +391,13 @@ class TestGeneratedFile(unittest.TestCase):
         wired = registry.wired()
         entries = sum(len(p["terrain"]) for p in wired.values())
         self.assertEqual(len(re.findall(r'^\t\t\tpath = "gfx/state_pictures/te_\w+\.dds"$', text, re.M)), entries)
-        self.assertEqual(len(re.findall(r'^\t\t\teffect = "vfx_entity_ui_state_\w+"$', text, re.M)), entries)
+        self.assertEqual(len(re.findall(r'^\t\t\teffect = "te_sp_fx_\w+"$', text, re.M)), entries)
         # a great city's entries in the terrains it takes over, one line each
         taken = sum(len(registry.terrains(key)) - len(p["terrain"]) for key, p in wired.items())
         self.assertGreater(taken, 0)
         one_line = (r'^\t\t\{ weight = \{ value = 0 if = \{ limit = \{ scope:state = \{ has_variable = te_sp_size '
                     r'var:te_sp_size >= 3 .+ \} \} add = \d+ \} \} path = "gfx/state_pictures/te_\w+\.dds" '
-                    r'effect = "vfx_entity_ui_state_\w+" \}$')
+                    r'effect = "te_sp_fx_\w+" \}$')
         self.assertEqual(len(re.findall(one_line, text, re.M)), taken)
         self.assertEqual(text.count("path = "), entries + taken)
         # only INJECTs: a bare or REPLACEd terrain would drop vanilla's own pictures and its map fields
@@ -757,6 +762,196 @@ class TestYearlyPass(unittest.TestCase):
                       VALUES.read_text(encoding="utf-8-sig"))
         # no debug_log string takes .MakeScope after THIS (it drops the whole line)
         self.assertNotIn("THIS.MakeScope", text)
+
+
+def _mod_loc():
+    """{key: value} of every English loc file of the mod."""
+    out = {}
+    for path in (ROOT / "localization" / "english").glob("*.yml"):
+        for key, value in re.findall(r'^ ([\w.\-]+):\d* "(.*)"\s*(?:#.*)?$', path.read_text(encoding="utf-8-sig"), re.M):
+            out[key] = value
+    return out
+
+
+class TestBannerHover(unittest.TestCase):
+    """The banner's hover (owner, 2026-11-12): each kind of picture of each technology plays its own copy of its
+    vanilla overlay, and the state panel's tooltip is the text of that overlay's name (te_sp_tt_<overlay>).
+    Seen in game 2026-11-13: State.GetBestTextureEffect gives the mod overlay's name, a copied overlay is accepted
+    with no load error, and Localize(Concatenate(...)) finds a key by it and renders the State's data."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.overlays = registry.overlays()
+        cls.loc = _mod_loc()
+
+    def test_the_committed_overlays_and_hover_text_are_current(self):
+        for path, data in generator.outputs():
+            if path == generator.OVERLAYS_OUT and not OVERLAYS.exists() and "CI" not in __import__("os").environ:
+                continue  # a sparse checkout without gfx/models/ (git sparse-checkout add /gfx/models/)
+            with self.subTest(path):
+                self.assertEqual(open(path, "rb").read(), data, "run scripts/generators/gen_state_pictures.py")
+
+    def test_ci_checks_out_the_overlays(self):
+        # CI's main job leaves gfx/ out; the overlays' staleness check needs gfx/models/
+        self.assertRegex(CI.read_text(encoding="utf-8"), r"!/gfx/\n\s+/gfx/models/\n")
+
+    def test_every_entry_plays_its_own_overlay_and_each_names_one_kind_and_technology(self):
+        text = GENERATED.read_text(encoding="utf-8-sig")
+        used = set(re.findall(r'effect = "(\w+)"', text))
+        self.assertEqual(used, set(self.overlays))
+        for name, (kind, tech, vanilla) in self.overlays.items():
+            with self.subTest(name):
+                self.assertTrue(name.startswith(f"{registry.OVERLAY_PREFIX}{kind}_{tech}_"))
+                self.assertIn(vanilla, registry.OVERLAY_PARTICLES)
+                self.assertLessEqual(len(name), 100)
+        # the hover tells every kind apart, and leaves the region family out
+        kinds = {kind for kind, _t, _v in self.overlays.values()}
+        self.assertEqual(kinds & set(registry.REGION_GROUPS["city"]), set())
+        for key, p in registry.wired().items():
+            for terrain in registry.terrains(key):
+                kind = registry.hover_kind(key, terrain)
+                with self.subTest(key=key, terrain=terrain):
+                    if p.get("upkeep") or p.get("means") or p.get("size") or p.get("character") or p.get("condition"):
+                        self.assertIn(kind, registry.CITY_KINDS)
+                    if registry.takes_over(key, terrain):
+                        self.assertIn(kind, registry.CITY_KINDS)
+
+    def test_the_copies_are_vanillas_entity_under_another_name(self):
+        text = OVERLAYS.read_text(encoding="utf-8") if OVERLAYS.exists() else generator.render_overlays()
+        self.assertFalse(text.startswith("﻿"))          # vanilla's .asset files carry none
+        names = re.findall(r'^\tname = "(\w+)"$', text, re.M)
+        self.assertEqual(names, list(self.overlays))
+        particles = re.findall(r'particle = "([\w/]+)"', text)
+        self.assertEqual(particles, [registry.OVERLAY_PARTICLES[v] for _k, _t, v in self.overlays.values()])
+        # every vanilla overlay a picture names is one of vanilla's, and its particle is the one vanilla plays
+        self.assertLessEqual({v for _k, _t, v in self.overlays.values()}, _vanilla_effects())
+        vanilla_asset = None
+        try:
+            import path_constants
+            vanilla_asset = __import__("pathlib").Path(path_constants.base_game_path) / "game" / "gfx" / "models" / \
+                "particles" / "vfx_entities_ui.asset"
+        except Exception:
+            pass
+        if vanilla_asset and vanilla_asset.exists():
+            vanilla = vanilla_asset.read_text(encoding="utf-8-sig")
+            for entity, particle in registry.OVERLAY_PARTICLES.items():
+                with self.subTest(entity):
+                    block = re.search(r'name = "' + entity + r'".*?particle = "([\w/]+)"', vanilla, re.S)
+                    self.assertIsNotNone(block)
+                    self.assertEqual(block.group(1), particle)
+
+    def test_every_overlay_has_its_hover_and_every_line_it_names_exists(self):
+        vanilla_loc = json.loads(VANILLA_LOC.read_text(encoding="utf-8"))
+        hover = generator.hover_loc()
+        for name, (kind, tech, _v) in self.overlays.items():
+            with self.subTest(name):
+                self.assertIn(f"te_sp_tt_{name}", hover)
+                for ref in re.findall(r"\$(\w+)\$", hover[f"te_sp_tt_{name}"] + hover[f"te_sp_tt_era_{tech}"]):
+                    self.assertTrue(ref in self.loc or ref in vanilla_loc, ref)
+        # the hand-written lines: every key a line splices or selects, and every script value it reads, exists
+        values = _raw_blocks([VALUES])
+        for key, value in self.loc.items():
+            if not key.startswith("te_sp_tt_") or key.startswith(("te_sp_tt_te_sp_fx_", "te_sp_tt_era_")):
+                continue
+            with self.subTest(key):
+                for ref in re.findall(r"\$(\w+)\$", value) + re.findall(r"'(te_sp_tt_\w+)'", value):
+                    self.assertTrue(ref in self.loc or ref in vanilla_loc, ref)
+                for sv in re.findall(r"ScriptValue\('(\w+)'\)", value):
+                    self.assertIn(sv, values)
+        # each kind kept past its floor picks between its two lines by a 0-or-1 value
+        for key, value in self.loc.items():
+            m = re.match(r"te_sp_tt_why_(\w+)_kept$", key)
+            if m:
+                with self.subTest(key):
+                    self.assertIn(f"te_state_picture_hover_kept_{m.group(1)}", values)
+                    self.assertIn(f"te_sp_tt_why_{m.group(1)}_at", self.loc)
+
+    def test_the_floors_the_hover_gives_are_the_ones_the_weights_read(self):
+        values = _raw_blocks([VALUES])
+        self.assertRegex(values["te_state_picture_k_major_port"], rf"value = {registry.PORT_MAJOR_LEVEL}\b")
+        self.assertRegex(values["te_state_picture_k_smog"], rf"value = {registry.SMOG_POLLUTION}\b")
+        self.assertRegex(values["te_state_picture_k_ruins"], rf"value = {registry.RUINS_DEVASTATION}\b")
+
+    def test_the_banner_finds_its_text_by_the_overlay_and_a_vanilla_picture_has_none(self):
+        panel = STATES_PANEL.read_text(encoding="utf-8-sig")
+        banner = panel[panel.index("### STATE IMAGE"):panel.index("### FACTION")]
+        # the form read in game (2026-11-13): one lookup of the overlay's name
+        self.assertIn('tooltip = "[Localize( Concatenate( \'te_sp_tt_\', State.GetBestTextureEffect ) )]"', banner)
+        vanilla = _vanilla_effects()
+        self.assertGreater(len(vanilla), 30)
+        for name in vanilla:
+            with self.subTest(name):
+                self.assertEqual(self.loc[f"te_sp_tt_{name}"], "")
+        self.assertEqual(set(vanilla) & set(self.overlays), set())
+
+    def test_a_land_picture_on_a_great_city_says_why_the_city_waits(self):
+        # a takeover entry asks for the city picture's own technology as well as the size, so an owner with a
+        # 1930s port or farm technology and no Art Deco Architecture shows the land on a metropolis
+        for key, p in registry.wired().items():
+            for terrain in registry.terrains(key):
+                if registry.takes_over(key, terrain):
+                    with self.subTest(key=key, terrain=terrain):
+                        self.assertIn(f"has_technology_researched = {p['tech']}", " ".join(generator.conditions(key, terrain)))
+        land = [k for k in {kind for kind, _t, _v in self.overlays.values()}
+                if k not in registry.CITY_KINDS and k not in registry.SCALE_TERRAIN and k != "oil"]
+        self.assertGreater(len(land), 10)
+        for kind in land:
+            with self.subTest(kind):
+                self.assertIn("$te_sp_tt_land_city$", self.loc[f"te_sp_tt_why_{kind}"])
+        self.assertIn("'(CFixedPoint)3'), 'te_sp_tt_land_city_great', 'te_sp_tt_land_city_small'",
+                      self.loc["te_sp_tt_land_city"])
+        self.assertIn(f"${registry.CITY_LADDER[1][0]}$", self.loc["te_sp_tt_land_city_great"])
+        self.assertEqual(min(p["rung"] for p in registry.wired().values() if p["terrain"] == ["urban"]), 1)
+
+    def stored(self, people=None, sol=None, esol=None, rung=3, levels=0, oil=0, mines=0, coal=0, heavy=0, tour=0,
+               state=None):
+        """The state's variables after a whole pass, the walk's sums stubbed in."""
+        sums = {"te_sp_all": levels, "te_sp_oil_lv": oil, "te_sp_mine": mines, "te_sp_coal_lv": coal,
+                "te_sp_heavy_lv": heavy, "te_sp_tour_lv": tour}
+        stub = "\n".join(f"set_local_variable = {{ name = {k} value = {v} }}" for k, v in sums.items())
+        eng = _Engine({"te_state_picture_city_rung": float(rung), "average_sol": float(sol or 0),
+                       "average_expected_sol": float(esol if esol is not None else (sol or 0))},
+                      effects={**_raw_blocks([EFFECTS]), "te_state_picture_land_sums": stub,
+                               "te_state_picture_land_selfcheck": "", "te_state_picture_selfcheck": ""})
+        eng.values.update(_raw_blocks([VALUES]))
+        eng.triggers.update(_raw_blocks([TRIGGERS]))
+        if people is not None:
+            eng.vars.update({"te_dg_urban": float(people), "te_dg_mt": 100.0})
+        eng.vars.update({k: float(v) for k, v in (state or {}).items()})
+        eng.call("te_state_picture_refresh")
+        return eng
+
+    def test_the_pass_stores_the_figures_each_tag_was_judged_on(self):
+        eng = self.stored(people=950_000, sol=9, esol=12)
+        self.assertEqual(eng.vars["te_sp_people"], 950_000)
+        self.assertEqual((eng.vars["te_sp_sol"], eng.vars["te_sp_esol"]), (9, 12))
+        self.assertNotIn("te_sp_people", self.stored(people=None, sol=9).vars)       # no walk yet, no count
+        self.assertNotIn("te_sp_sol", self.stored(people=1000, sol=9, rung=0).vars)  # before the first city rung
+        eng = self.stored(people=1000, levels=200, oil=14, mines=40, coal=25, heavy=60, tour=6, sol=9)
+        self.assertAlmostEqual(eng.vars["te_sp_oil_share"], 14 / 200)
+        self.assertAlmostEqual(eng.vars["te_sp_coal_share"], 25 / 40)
+        self.assertAlmostEqual(eng.vars["te_sp_industry_share"], 60 / 200)
+        self.assertNotIn("te_sp_resort_share", eng.vars)                              # 3%, but under ten levels
+        # a share goes with its tag
+        eng = self.stored(people=1000, levels=1000, oil=10, sol=9, state={"te_sp_oil_share": 0.07})
+        self.assertNotIn("te_sp_oil", eng.vars)
+        self.assertNotIn("te_sp_oil_share", eng.vars)
+
+    def test_the_hover_says_kept_only_where_the_figure_is_past_its_floor(self):
+        def kept(name, **kw):
+            return self.stored(**kw).value(f"te_state_picture_hover_kept_{name}")
+
+        self.assertEqual(kept("metropolis", people=1_200_000, sol=20), 0)
+        self.assertEqual(kept("metropolis", people=950_000, sol=20, state={"te_sp_size": 3}), 1)
+        self.assertEqual(kept("megacity", people=9_500_000, sol=20, state={"te_sp_size": 4}), 1)
+        self.assertEqual(kept("poor", people=1000, sol=17, rung=3), 0)                # under 18
+        self.assertEqual(kept("poor", people=1000, sol=18.3, rung=3, state={"te_sp_means": 1}), 1)
+        self.assertEqual(kept("affluent", people=1000, sol=27.7, rung=3, state={"te_sp_means": 3}), 1)
+        self.assertEqual(kept("rundown", people=1000, sol=10, esol=13), 0)
+        self.assertEqual(kept("rundown", people=1000, sol=10, esol=11.7, state={"te_sp_rundown": 1}), 1)
+        self.assertEqual(kept("oil", people=1000, levels=1000, oil=46, sol=9, state={"te_sp_oil": 1}), 1)
+        self.assertEqual(kept("oil", people=1000, levels=1000, oil=60, sol=9), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

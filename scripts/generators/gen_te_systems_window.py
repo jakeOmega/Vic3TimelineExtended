@@ -172,7 +172,7 @@ class Tab:
                   (test_te_system_tab_bodies.py's BindingTest and GuardTest,
                   which run over every public tab). Each system's binding PR
                   sets it, on its own line below, and takes the system off
-                  that test's UNBOUND.
+                  national_info_binding.UNBOUND.
     readout       a Readout: what the tab shows without its entry. National
                   Info's mount for another country draws no frame, so it
                   draws the readout and gates the composer itself, as the

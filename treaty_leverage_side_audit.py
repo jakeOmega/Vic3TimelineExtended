@@ -144,6 +144,9 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 # Offset-preserving comment/string blanking, shared with the iterator audit so
 # the two agree on what "a commented-out line" means.
 from iterator_limit_audit import blank_comments_and_strings
@@ -186,18 +189,6 @@ INVOLVEMENT_KINDS = (
     "bad_value", "stale_review",
 )
 
-# `# REVIEWED YYYY-MM-DD (involvement): why`. The untagged regex below does not
-# match it (it wants the colon straight after the date), so an involvement tag
-# never suppresses a leverage flag.
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<check>[a-z_]+)\)\s*:"
-    r"\s*(?P<rationale>.+)$"
-)
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+)$"
-)
-
 _TOKEN_RE = re.compile(
     r"(?P<close>\})"
     r"|(?P<key>[A-Za-z_][A-Za-z0-9_.:|@$\-]*)\s*(?:\?=|[!<>=]=|[=<>])\s*"
@@ -228,7 +219,13 @@ class InvolvementFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`flags` holds the leverage check's flags, `involvement_flags` and
+    `pact_involvement_flags` the two Involvement checks'; `unreviewed` and
+    `exemptions` read all three, so `failing` is what `--strict` fails on. A
+    stale `(involvement)` tag is a `stale_review` involvement flag, never
+    exempt, so `stale` stays empty."""
+
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
     articles_checked: int = 0  # directed articles the heuristic could judge
@@ -240,6 +237,17 @@ class AuditResult:
     pacts_checked: int = 0
     pacts_with_involvement: int = 0
     pacts_reviewed_without_involvement: int = 0
+
+    def _every_flag(self) -> list:
+        return self.flags + self.involvement_flags + self.pact_involvement_flags
+
+    @property
+    def unreviewed(self) -> list:
+        return [f for f in self._every_flag() if not f.exemption]
+
+    @property
+    def exemptions(self) -> list:
+        return [f for f in self._every_flag() if f.exemption]
 
 
 @dataclass
@@ -279,15 +287,6 @@ def _line_of(pos: int, starts: list[int]) -> int:
     return bisect_right(starts, pos)
 
 
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-
-
 def scan_text(text: str, rel_path: str) -> list[Flag]:
     """Scan one file's raw text; return a flag per misplaced leverage line."""
     clean, comments = blank_comments_and_strings(text)
@@ -317,9 +316,11 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
                             article_line=article_line,
                             side=side,
                             maintenance_paid_by=maintenance,
+                            # The plain form only: an `(involvement)` tag never
+                            # suppresses a leverage flag.
                             exemption=(
-                                _parse_reviewed(comments.get(line))
-                                or _parse_reviewed(comments.get(article_line))
+                                parse_reviewed(comments.get(line))
+                                or parse_reviewed(comments.get(article_line))
                             ),
                         )
                     )
@@ -366,15 +367,6 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
         finish()
 
     return flags
-
-
-def _parse_tagged(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _TAGGED_REVIEWED_RE.search(comment)
-    if not m or m.group("check") != INVOLVEMENT_CHECK:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _judge_involvement(a: _Article) -> list[tuple[str, int, str]]:
@@ -479,6 +471,7 @@ def _scan_involvement(text: str, rel_path: str) -> tuple[list[InvolvementFlag], 
 
 def _tagged_flags(rel_path, comments, judged) -> list[InvolvementFlag]:
     """Attach `(involvement)` exemptions and flag the tags that suppress nothing.
+    The tagged form only: a plain comment never suppresses an Involvement flag.
 
     `judged` is (name, opening line, exemption sites, [(kind, line, detail)])
     per entity, in file order."""
@@ -489,13 +482,13 @@ def _tagged_flags(rel_path, comments, judged) -> list[InvolvementFlag]:
         for kind, line, detail in problems:
             exemption = None
             for site in sites:
-                exemption = _parse_tagged(comments.get(site))
+                exemption = parse_reviewed(comments.get(site), (INVOLVEMENT_CHECK,))
                 if exemption:
                     used.add(site)
                     break
             flags.append(InvolvementFlag(rel_path, line, name, kind, detail, exemption))
     for line in sorted(comments):
-        if line in used or not _parse_tagged(comments[line]):
+        if line in used or not parse_reviewed(comments[line], (INVOLVEMENT_CHECK,)):
             continue
         owner = next((name for name, start, _s, _p in reversed(judged) if start <= line), "")
         flags.append(InvolvementFlag(
@@ -731,11 +724,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 def strict_failures(result: AuditResult) -> int:
     """Flags with no REVIEWED exemption, across every check (`--strict` fails on any)."""
-    return (
-        sum(1 for f in result.flags if not f.exemption)
-        + sum(1 for f in result.involvement_flags if not f.exemption)
-        + sum(1 for f in result.pact_involvement_flags if not f.exemption)
-    )
+    return len(result.failing)
 
 
 def render_report(result: AuditResult) -> str:
@@ -939,14 +928,9 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    report = render_report(result)
-    out_path = os.path.join(
-        mod_path, "docs", "engine", "treaty_leverage_side_report.md"
-    )
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "treaty_leverage_side_report.md"),
+               render_report(result))
+    exemp = sum(1 for f in result.flags if f.exemption)  # the leverage check's
     inv_unrev = sum(1 for f in result.involvement_flags if not f.exemption)
     return {
         "files_audited": result.files_audited,
@@ -970,13 +954,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag of either check
+    lacks its REVIEWED exemption (a stale `(involvement)` tag never has one)."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag of either check lacks its REVIEWED
-    # exemption (a stale `(involvement)` tag never has one).
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if strict_failures(result) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -69,7 +69,7 @@ class SetThenReadTests(unittest.TestCase):
         self.assertEqual(_flags(r), [(SGUIS, 5, "var:x_tmp")])
         f = r.flags[0]
         self.assertEqual((f.kind, f.set_at, f.roots), ("limit", f"{SGUIS}:4", ["scripted GUI `x_sgui`"]))
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_a_read_with_no_earlier_set_is_not_ours(self):
         r = _run({SGUIS: _sgui("\t\tif = { limit = { var:x_tmp > 3 } add_treasury = 1 }\n"
@@ -440,13 +440,13 @@ class TagTests(unittest.TestCase):
         r = _run({SGUIS: _sgui(self.BODY + " " + TAG + "never shown")})
         self.assertEqual(len(r.flags), 1)
         self.assertEqual(r.flags[0].exemption["rationale"], "never shown")
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(r.failing, [])
         self.assertIn("never shown", render_report(r))
 
     def test_a_tag_with_no_flag_is_stale(self):
         r = _run({SGUIS: _sgui("\t\tadd_treasury = 1 " + TAG + "old")})
-        self.assertEqual([(t.file, t.line) for t in r.stale_tags], [(SGUIS, 4)])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual([(t.file, t.line) for t in r.stale], [(SGUIS, 4)])
+        self.assertEqual(len(r.failing), 1)
         self.assertIn("## Stale tags", render_report(r))
 
     def test_event_context_audit_leaves_our_tag_alone(self):
@@ -455,7 +455,7 @@ class TagTests(unittest.TestCase):
 
     def test_another_checks_tag_is_not_ours(self):
         r = _run({SGUIS: _sgui(self.BODY + " # REVIEWED 2026-11-12 (variable_guard): x")})
-        self.assertEqual((len(r.flags), r.failing, r.stale_tags), (1, 1, []))
+        self.assertEqual((len(r.flags), len(r.failing), r.stale), (1, 1, []))
 
 
 class CacheTests(unittest.TestCase):

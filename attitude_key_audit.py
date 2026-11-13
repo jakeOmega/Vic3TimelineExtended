@@ -30,7 +30,7 @@ Usage:
   * Standalone:  `python3 attitude_key_audit.py [--strict]`  (pure file scan, no
     ModState; exits nonzero if any unreviewed invalid key is found, with or
     without `--strict`).
-  * Post-load:   registered in `mod_state_server.py` POST_LOAD_AUDITS; the
+  * Post-load:   registered in `server/post_load.py` POST_LOAD_AUDITS; the
     server calls `regenerate(mod_state)` on every `POST /reload`, which writes
     `docs/engine/attitude_key_report.md` and returns a summary dict whose
     `unreviewed` count drives the reload `warnings` array.

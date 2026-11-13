@@ -6,11 +6,11 @@ import os
 import tempfile
 import unittest
 
+from audit_common import parse_reviewed as _parse_reviewed
 from loc_coverage_audit import (
     audit,
     render_report,
     _event_loc_keys,
-    _parse_reviewed,
     _build_entity_locations,
     strict_exit_code,
 )
@@ -50,7 +50,8 @@ def _write(tmp: str, rel: str, content: str) -> str:
 class ParseReviewedTests(unittest.TestCase):
     def test_match(self):
         result = _parse_reviewed("# REVIEWED 2026-05-08: backwards-compat alias")
-        self.assertEqual(result, {"date": "2026-05-08", "rationale": "backwards-compat alias"})
+        self.assertEqual(result, {"date": "2026-05-08", "tag": "",
+                                  "rationale": "backwards-compat alias"})
 
     def test_no_match(self):
         self.assertIsNone(_parse_reviewed("# just a comment"))
@@ -759,7 +760,7 @@ class JournalEntryOutcomeTests(unittest.TestCase):
         result = self._run(text, base={"je_x": ("=", {"group": ("=", "g")})}, opener="REPLACE:je_x")
         [flag] = result.flags
         self.assertEqual((flag.category, flag.line), ("Journal Entry Outcomes", 1))
-        self.assertEqual(flag.exemption, {"date": "2026-11-05", "rationale": "fixture"})
+        self.assertEqual(flag.exemption, {"date": "2026-11-05", "tag": "", "rationale": "fixture"})
 
     def test_unchanged_vanilla_entry_is_not_checked(self):
         data = _je_parse(self.JE.format(comment=""))
@@ -951,7 +952,7 @@ class GameConceptTests(unittest.TestCase):
     def test_opening_line_suppression_is_reported(self):
         result = self._run(set(), reviewed=True)
         self.assertEqual(result.flags[0].exemption, {
-            "date": "2026-10-01", "rationale": "name inherited from vanilla"})
+            "date": "2026-10-01", "tag": "", "rationale": "name inherited from vanilla"})
         report = render_report(result)
         self.assertIn("- unreviewed: 0", report)
         self.assertIn("- exempted: 1", report)

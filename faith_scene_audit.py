@@ -101,13 +101,15 @@ Report: docs/engine/faith_scene_report.md. Registered in POST_LOAD_AUDITS.
 """
 from __future__ import annotations
 
-import argparse
 import json
 import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 from mod_state import split_loc_line
 
 CHECK = "faith_scene"
@@ -674,9 +676,6 @@ def event_sites(root: Path, faiths: Faiths, effects: dict[str, list[Node]]) -> t
 # Loc and matching
 # ---------------------------------------------------------------------------
 
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 _SPLICE_RE = re.compile(r"\$([\w.\-]+)(?:\|[^$]*)?\$")
 _MARKUP_RE = re.compile(r"\$[^$\s]*\$|@\w+!|#[A-Za-z_;:,\[\]().']+\s|#!")
 _NAMES_RE = re.compile("|".join(NAMES))
@@ -688,15 +687,6 @@ class LocEntry:
     file: str
     line: int
     tag: dict | None
-
-
-def parse_tag(trailing: str) -> dict | None:
-    if "REVIEWED" not in trailing:
-        return None
-    m = _TAGGED_REVIEWED_RE.search(trailing)
-    if not m or CHECK not in re.split(r"[\s,]+", m.group("checks").strip()):
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def load_loc(root: Path) -> tuple[dict[str, LocEntry], list[tuple[str, int, str]]]:
@@ -715,7 +705,7 @@ def load_loc(root: Path) -> tuple[dict[str, LocEntry], list[tuple[str, int, str]
             if parsed is None:
                 continue
             key, value, trailing = parsed
-            tag = parse_tag(trailing)
+            tag = parse_reviewed(trailing, (CHECK,))
             if tag:
                 tagged.append((rel, number, key))
             entries[key] = LocEntry(value, rel, number, tag)
@@ -790,26 +780,22 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
-    key: str
+class StaleTag(_StaleTag):
+    """A `(faith_scene)` tag that suppresses nothing, on `key`'s loc line."""
+
+    key: str = ""
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`stale` holds the tags that suppress nothing."""
+
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     events_read: int = 0
     keys_read: int = 0
     gated_uses: int = 0  # (key, place) pairs with a listed word that a gate makes safe
     sites: list[Site] = field(default_factory=list)
     religions: int = 0
-
-    @property
-    def failing(self) -> int:
-        """Flags without a tag, plus tags that suppress nothing."""
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
 
 
 def audit(mod_path: str | Path | None = None, vocabulary: tuple[Term, ...] = VOCABULARY) -> AuditResult:
@@ -859,7 +845,7 @@ def audit(mod_path: str | Path | None = None, vocabulary: tuple[Term, ...] = VOC
     for rel, number, key in tagged:
         winning = loc.get(key)
         if key not in flags or (winning.file, winning.line) != (rel, number):
-            result.stale_tags.append(StaleTag(rel, number, key))
+            result.stale.append(StaleTag(rel, number, CHECK, key=key))
     return result
 
 
@@ -880,8 +866,8 @@ def _words_text(flag: Flag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unreviewed = [f for f in result.flags if not f.exemption]
-    reviewed = [f for f in result.flags if f.exemption]
+    unreviewed = result.unreviewed
+    reviewed = result.exemptions
     out = [
         "# Faith scene audit report",
         "",
@@ -911,9 +897,9 @@ def render_report(result: AuditResult) -> str:
     if unreviewed:
         out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -934,7 +920,7 @@ def render_report(result: AuditResult) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unreviewed)}",
         f"- exempted: {len(reviewed)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     return "\n".join(out) + "\n"
@@ -970,15 +956,13 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_path)
     out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "events_read": result.events_read,
         "keys_read": result.keys_read,
         "path": out_path,
@@ -986,29 +970,36 @@ def regenerate(mod_state=None) -> dict:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--strict", action="store_true",
-                        help="exit 1 on any untagged flag or stale tag (CI mode)")
-    parser.add_argument("--explain", metavar="KEY",
-                        help="list where a loc key is named and the gate read at each place")
-    parser.add_argument("--mod-path", type=Path)
-    args = parser.parse_args(argv)
-    if args.mod_path is None:
-        from path_constants import mod_path
-        args.mod_path = Path(mod_path)
-    result = audit(args.mod_path)
-    if args.explain:
-        print(explain(result, args.mod_path, args.explain))
-        return 0
-    print(render_report(result))
-    if args.strict and result.failing:
-        # The runner shows a failing audit's last lines: say what failed there.
-        for flag in result.flags:
-            if not flag.exemption:
-                print(f"FLAG  {flag.loc_file}:{flag.loc_line}: {flag.key}: {_words_text(flag)}")
-        for tag in result.stale_tags:
-            print(f"STALE {tag.file}:{tag.line}: {tag.key}: the ({CHECK}) comment suppresses nothing")
-    return int(args.strict and result.failing > 0)
+    """Print the report, or with `--explain` where one key is named; `--strict`
+    (CI) exits 1 on any untagged flag or stale tag and names each."""
+    def add_arguments(parser) -> None:
+        parser.add_argument("--explain", metavar="KEY",
+                            help="list where a loc key is named and the gate read at each place")
+        parser.add_argument("--mod-path", type=Path)
+
+    def run(args) -> AuditResult:
+        if args.mod_path is None:
+            from path_constants import mod_path
+            args.mod_path = Path(mod_path)
+        if args.explain:
+            args.strict = False  # `--explain` only lists: it exits 0
+        return audit(args.mod_path)
+
+    def render(result: AuditResult, args) -> str:
+        if args.explain:
+            return explain(result, args.mod_path, args.explain)
+        out = [render_report(result)]
+        if args.strict and result.failed:
+            # The runner shows a failing audit's last lines: say what failed there.
+            out += [f"FLAG  {flag.loc_file}:{flag.loc_line}: {flag.key}: {_words_text(flag)}"
+                    for flag in result.unreviewed]
+            out += [f"STALE {tag.file}:{tag.line}: {tag.key}: the ({CHECK}) comment suppresses nothing"
+                    for tag in result.stale]
+        return "\n".join(out)
+
+    return cli_main(run, render, argv=argv, description=__doc__.splitlines()[0],
+                    add_arguments=add_arguments,
+                    strict_help="exit 1 on any untagged flag or stale tag (CI mode)")
 
 
 if __name__ == "__main__":

@@ -27,8 +27,11 @@ The event's own trigger:
 The gates outside it (#1622), each labeled by where it came from:
 
 * `law X unlocks at`: for `is_enacting_law` / `has_law = law_type:X`, the
-  law's `unlocking_technologies` (all of them) and `unlocking_laws` (one of
-  them, each read the same way). Only a law BEING ENACTED guarantees its
+  law's `unlocking_technologies` and `unlocking_laws` (one of them, each read
+  the same way). Of a law with several unlocking technologies only what
+  every one of them gives is counted: whether the engine needs all of them
+  or any one is unverified (no vanilla law has two; the mod's
+  `law_intrusive_surveillance` does, docs/testing/event-text-playtest.md). Only a law BEING ENACTED guarantees its
   unlocking technologies. A law IN FORCE guarantees none: `has_law`, and
   every law named in `unlocking_laws`, may be a law the country began the
   game with or was handed by `activate_law`, and neither checks the
@@ -630,8 +633,12 @@ class Script:
     # ---- laws -------------------------------------------------------------
 
     def law_gate(self, name: str, in_force: bool, seen: frozenset = frozenset()) -> Gate:
-        """The technology a law's enactment needs: all of its unlocking
+        """The technology a law's enactment needs: its unlocking
         technologies, and what every one of its unlocking laws needed.
+
+        Of several unlocking technologies only what each of them gives is
+        counted, as if any one unlocked the law: whether the engine needs all
+        of them is unverified (see the module docstring).
 
         Only a law BEING ENACTED guarantees its own unlocking technologies.
         A law in force guarantees none: the country may have begun the game
@@ -646,9 +653,7 @@ class Script:
         law = self.laws.get(name)
         if not law:
             return NOTHING
-        gate = NOTHING
-        for tech in law["technologies"]:
-            gate = gate.both(self.tech_gate(tech))
+        gate = _either_of([self.tech_gate(tech) for tech in law["technologies"]])
         if in_force or self.enactment_started_by_effect(name):
             gate = gate.if_in_play()
         if law["laws"] and len(seen) < LAW_DEPTH:
@@ -670,7 +675,14 @@ class Script:
             source["text"] = "not found in the mod's laws or the snapshot: nothing is taken from it"
             return source
         source["technologies"], source["laws"] = list(law["technologies"]), list(law["laws"])
-        parts = [", ".join(self.with_era(t) for t in law["technologies"]) or "no technology"]
+        several = len(law["technologies"]) > 1
+        if several:
+            source["technologies_needed"] = "unverified: all or any one"
+        parts = [(" or ".join if several else ", ".join)(self.with_era(t) for t in law["technologies"])
+                 or "no technology"]
+        if several:
+            parts[0] += (" (whether the engine needs all of them or any one is unverified: only what each "
+                         "of them gives is counted)")
         if law["laws"]:
             one = len(law["laws"]) == 1
             parts.append(("the law " if one else "one of the laws ") + ", ".join(law["laws"]))
@@ -1429,18 +1441,44 @@ def check_doc(text: str, script: Script, analyses) -> list:
     return findings
 
 
-_NUMBER_RANGE = re.compile(r"(?<![\w.])\.?(\d+)(?:\s*(?:–|-|to)\s*\.?(\d+))?")
+_NUMBER_RANGE = re.compile(r"\.?(\d+)(?:\s*(?:–|-|to)\s*\.?(\d+))?(?![\w.])")
+_LIST_SEPARATOR = re.compile(r"(?:\s|[,;/&]|\band\b)*")
+
+
+def _outside_parentheses(text: str) -> str:
+    """`text` without its parenthesized asides, nested ones included; a `(`
+    never closed hides the rest."""
+    out, depth = [], 0
+    for ch in text:
+        if ch == "(":
+            depth += 1
+        elif ch == ")" and depth:
+            depth -= 1
+        elif not depth:
+            out.append(ch)
+    return "".join(out)
 
 
 def _row_numbers(where: str, chains: list) -> set:
-    """The event numbers a Where cell names before its parenthesis:
-    "`chain` .43–.48, .58" and "`chain.45` / `.68`" give {43..48, 58} and {45, 68}."""
-    head = where.split("(")[0].replace("`", " ")
-    for chain in chains:
-        head = head.replace(chain, " ")
+    """The event numbers a Where cell lists right after a chain's name, its
+    parenthesized asides skipped: "`chain` .43–.48, .58" and "`chain.45` /
+    `.68`" give {43..48, 58} and {45, 68}, "`chain` .8, .9 (milestones) and
+    .19, .20 (from the rebuild)" {8, 9, 19, 20}. The list ends at the first
+    word that is not a number, so prose after it ("`chain` (2026-11-12).
+    .1 is fired by ...") names none: the row is about the whole chain."""
+    head = _outside_parentheses(where).replace("`", " ")
     numbers: set = set()
-    for first, last in _NUMBER_RANGE.findall(head):
-        numbers.update(range(int(first), int(last or first) + 1))
+    for chain in chains:
+        for found in re.finditer(rf"(?<![\w\-.]){re.escape(chain)}(?![\w\-])", head):
+            pos = found.end()
+            while True:
+                pos = _LIST_SEPARATOR.match(head, pos).end()
+                number = _NUMBER_RANGE.match(head, pos)
+                if not number:
+                    break
+                first, last = number.groups()
+                numbers.update(range(int(first), int(last or first) + 1))
+                pos = number.end()
     return numbers
 
 

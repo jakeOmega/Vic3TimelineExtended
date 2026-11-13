@@ -57,13 +57,13 @@ class CycleTests(unittest.TestCase):
         self.assertEqual(_summary(r), [(EVENTS, 4, "x.1", "x.2", False), (EVENTS, 10, "x.2", "x.1", False)])
         self.assertEqual(r.flags[0].cycle, ["x.1", "x.2", "x.1"])
         self.assertEqual(r.flags[0].component, r.flags[1].component)
-        self.assertEqual((r.components, r.failing, r.undelayed_edges), (1, 2, 2))
+        self.assertEqual((r.components, len(r.failing), r.undelayed_edges), (1, 2, 2))
 
     def test_a_delay_on_one_edge_breaks_the_cycle(self):
         for delay in (" days = 1 }", " months = 2 }", " years = { 1 2 } }", " weeks = some_value }"):
             with self.subTest(delay=delay):
                 r = _run(_two_events(" }", delay))
-                self.assertEqual((r.flags, r.failing, r.undelayed_edges), ([], 0, 1))
+                self.assertEqual((r.flags, r.failing, r.undelayed_edges), ([], [], 1))
 
     def test_a_literal_zero_is_no_delay(self):
         self.assertEqual(len(_run(_two_events(" }", " days = 0 }")).flags), 2)
@@ -216,26 +216,27 @@ class ReviewTests(unittest.TestCase):
         r = _run(_two_events(" } " + TAG + "x.2's trigger reads the mark set above", " } " + TAG + "as x.1"))
         self.assertEqual([bool(f.exemption) for f in r.flags], [True, True])
         self.assertEqual(r.flags[0].exemption,
-                         {"date": "2026-11-12", "rationale": "x.2's trigger reads the mark set above"})
-        self.assertEqual((r.failing, r.stale_tags), (0, []))
+                         {"date": "2026-11-12", "tag": "trigger_event_cycle",
+                          "rationale": "x.2's trigger reads the mark set above"})
+        self.assertEqual((r.failing, r.stale), ([], []))
 
     def test_one_tag_exempts_one_edge(self):
         r = _run(_two_events(" } " + TAG + "why", " }"))
         self.assertEqual([bool(f.exemption) for f in r.flags], [True, False])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_a_tag_on_a_line_with_no_flag_is_stale(self):
         # The cycle was broken with a delay and the tags stayed.
         r = _run(_two_events(" } " + TAG + "why", " days = 1 } " + TAG + "why"))
         self.assertEqual(r.flags, [])
-        self.assertEqual([(t.file, t.line) for t in r.stale_tags], [(EVENTS, 4), (EVENTS, 10)])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual([(t.file, t.line) for t in r.stale], [(EVENTS, 4), (EVENTS, 10)])
+        self.assertEqual(len(r.failing), 2)
 
     def test_another_audits_tag_and_the_untagged_form_are_not_ours(self):
         r = _run(_two_events(" } # REVIEWED 2026-11-12 (script_argument): theirs",
                              " } # REVIEWED 2026-11-12: untagged"))
         self.assertEqual([bool(f.exemption) for f in r.flags], [False, False])
-        self.assertEqual(r.stale_tags, [])
+        self.assertEqual(r.stale, [])
 
     def test_a_tag_shared_with_another_check_counts(self):
         r = _run(_two_events(" } # REVIEWED 2026-11-12 (script_argument, trigger_event_cycle): both", " }"))
@@ -247,7 +248,7 @@ class ReviewTests(unittest.TestCase):
             EFFECTS: "send = {\n\ttrigger_event = { id = $EVENT$ } " + TAG + "not here\n}\n",
         })
         self.assertEqual(_summary(r), [(EVENTS, 3, "x.1", "x.1", True)])
-        self.assertEqual([(t.file, t.line) for t in r.stale_tags], [(EFFECTS, 2)])
+        self.assertEqual([(t.file, t.line) for t in r.stale], [(EFFECTS, 2)])
 
     def test_event_context_audit_leaves_the_tag_alone(self):
         self.assertIn(tca.CHECK, event_context_audit.FOREIGN_CHECKS)
