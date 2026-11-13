@@ -793,6 +793,22 @@ All are exact: they change no result unless a line says otherwise.
 
 ## Lessons
 
+- **Count the tick a pause lands on.** The harness pauses the game to read
+  the date, and a pause issued at a random moment lands inside a weekly tick
+  about a third of the time, because that tick is a third of the week's wall
+  time. A wall clock that leaves out the gaps spanning a pause leaves out
+  those ticks, and reads a run 1% to 12% fast by luck. On 2026-11-13 that
+  made four runs with a 12-day journal-entry update interval look 7% faster
+  than seven unchanged ones. Take the paused seconds off such a gap and keep
+  it (`wall2.py`).
+- **Push a setting the harmful way before believing a small gain.** The
+  interval that seemed to save 7% at three times its default was set to a
+  quarter of it: the task tripled and wall time did not move, which one run
+  could show where a dozen replicates of the gain could not.
+- **Empty a thing to learn its share before trimming it.** All the mod's
+  on_actions emptied is 0.07–0.10 s of a 1.03 s day, and all its journal
+  entries about 30 ms of tick tasks. Both were knowable in one run each, and
+  both bound what any cut inside them can give.
 - **A cut in script CPU need not move wall time.** #1713 took 136 ms a day
   off the flat dump's script time (15% of it) and left wall time per day
   where it was. The flat dump sums CPU over threads; judge a speed fix by
