@@ -375,7 +375,7 @@ class SessionServer:
         return {"tag": tag}, 0
 
     def _enter_game(self, body: dict) -> tuple[dict, int]:
-        return self._session.enter_game(), 0
+        return self._session.enter_game(body.get("via") or "country"), 0
 
     def _advance(self, body: dict) -> tuple[dict, int]:
         return {"reached": list(self._session.advance(_arg(body, "days")))}, 0

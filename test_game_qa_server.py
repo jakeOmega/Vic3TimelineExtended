@@ -107,8 +107,8 @@ class FakeSession:
     def tag(self, tag):
         self._call("tag", tag)
 
-    def enter_game(self):
-        self._call("enter_game")
+    def enter_game(self, via="country"):
+        self._call("enter_game", via)
         return {"entered": True, "clicks": [[945, 708], [1769, 1053]], "before": (1836, 1, 11), "after": (1836, 1, 15)}
 
     def advance(self, days):
@@ -391,6 +391,9 @@ class VerbTest(ServerTestCase):
         self.assertEqual(self.run_cli("advance", "30"), ({"reached": [1836, 2, 1]}, 0))
         self.assertEqual(fake.calls[-1], ("advance", 30))
         self.assertEqual(self.run_cli("enter-game")[0]["after"], [1836, 1, 15])
+        self.assertEqual(fake.calls[-1], ("enter_game", "country"))
+        self.assertEqual(self.run_cli("enter-game", "--via", "back")[0]["after"], [1836, 1, 15])
+        self.assertEqual(fake.calls[-1], ("enter_game", "back"))
         self.assertEqual(self.run_cli("shot"), ({"path": "/backups/runs/%s/shot_01.png" % SNAP}, 0))
         self.assertEqual(self.run_cli("click", "0.5", "0.25"),
                          ({"pixel": [960, 270], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}, 0))
