@@ -28,7 +28,10 @@ diff doesn't show that; tagging real logs with both versions does.
 
 A mod frame is a path in the line's `files` that exists in the mod checkout
 (`--mod-root`, default path_constants.mod_path; use the full checkout, since a
-sparse worktree has no `gfx/`). Workflow: the log-triage skill, 2026-10-11.
+sparse worktree has no `gfx/`). Lines are tagged as /logs and log_triage.py
+tag them, the mod GUI untagging pass (`untag_mod_gui_fetches`) included, so a
+line that pass shows counts as visible. Workflow: the log-triage skill,
+2026-10-11.
 """
 from __future__ import annotations
 
@@ -86,17 +89,30 @@ def load_corpus(path: str) -> list[dict]:
         return json.load(fh)
 
 
-def tag(rows: list[dict], docs_root: str, mod_root: str) -> list[dict | None]:
+def tag(rows: list[dict], docs_root: str, mod_root: str,
+        base_game_path: str | None = None) -> list[dict | None]:
     """Each row's `vanilla_bug_ref` under the registries in `docs_root`
     (a directory holding docs/vanilla/... and docs/audits/...), as /logs
     tags them. A watch-list entry hides nothing, so its lines count as
-    untagged here."""
+    untagged here.
+
+    That includes the mod GUI untagging pass (#1269), which decides with the
+    registries what triage shows: a generic source-only entry gives up a GUI
+    data-context failure the mod's own GUI reaches, unless an entry names the
+    line. Without it an edit that registers such a line would read as no
+    change. `base_game_path` is the install, which tells the mod's own .gui
+    files from its overrides; without one the pass knows only the keys the
+    mod's loc alone defines, and says so once on stderr."""
     glr._vanilla_bug_cache.clear()
     _, vb, vs, _ = glr.load_vanilla_bug_registry(os.path.join(docs_root, VANILLA_DOC))
     _, mb, ms, _ = glr.load_mod_noise_registry(os.path.join(docs_root, MOD_NOISE_DOC))
     entries = [glr.LogEntry("00:00:00", r["source"], r["message"]) for r in rows]
     glr.tag_vanilla_bugs(entries, vb, vs, mod_root=mod_root)
     glr.tag_vanilla_bugs(entries, mb, ms, mod_root=mod_root)
+    mod_gui = glr.mod_gui_references(mod_root, glr.vanilla_gui_file_names(base_game_path))
+    for warning in glr.new_mod_gui_warnings(mod_gui):
+        print(f"note: {warning}", file=sys.stderr)
+    glr.untag_mod_gui_fetches(entries, mod_gui, (vs, ms), mod_root=mod_root)
     return [None if (e.vanilla_bug_ref or {}).get("kind") == glr.WATCH_KIND else e.vanilla_bug_ref
             for e in entries]
 
@@ -153,8 +169,8 @@ def cmd_diff(args) -> int:
     rows = load_corpus(args.corpus)
     with tempfile.TemporaryDirectory() as base_root:
         export_registries(args.base, base_root)
-        old = tag(rows, base_root, args.mod_root)
-    new = tag(rows, REPO_ROOT, args.mod_root)
+        old = tag(rows, base_root, args.mod_root, args.base_game)
+    new = tag(rows, REPO_ROOT, args.mod_root, args.base_game)
     result = diff(rows, old, new, args.mod_root)
     print(f"lines tagged: {args.base} {result['tagged']['old']}, working tree {result['tagged']['new']} "
           f"({len(rows)} distinct lines)")
@@ -169,7 +185,7 @@ def cmd_diff(args) -> int:
 
 def cmd_modframed(args) -> int:
     rows = load_corpus(args.corpus)
-    refs = tag(rows, REPO_ROOT, args.mod_root)
+    refs = tag(rows, REPO_ROOT, args.mod_root, args.base_game)
     has_mod_frame = glr.mod_frame_test(args.mod_root)
     per: dict = collections.defaultdict(collections.Counter)
     for row, ref in zip(rows, refs):
@@ -205,9 +221,10 @@ def main(argv=None) -> int:
         save_corpus(rows, args.out)
         print(f"{len(rows)} distinct lines -> {args.out}")
         return 0
+    import path_constants
     if args.mod_root is None:
-        from path_constants import mod_path
-        args.mod_root = mod_path
+        args.mod_root = path_constants.mod_path
+    args.base_game = getattr(path_constants, "base_game_path", None)
     return cmd_diff(args) if args.cmd == "diff" else cmd_modframed(args)
 
 

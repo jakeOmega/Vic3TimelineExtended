@@ -118,12 +118,6 @@ je_covert_warfare = {
 		covert_tradecraft_init = yes
 	}
 
-	on_weekly_pulse = {
-		effect = {
-			legacy_scaling_strip_covert_warfare = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
-		}
-	}
-
 	on_monthly_pulse = {
 		effect = {
 			te_scaling_inherited_selfcheck_rebel_entry = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
@@ -151,6 +145,26 @@ je_covert_warfare = {
 					}
 					if = {
 						limit = { covert_operations_active >= 1 }
+						set_variable = { name = iw_funding_level value = 1 }
+					}
+					else = {
+						set_variable = { name = iw_funding_level value = 0 }
+					}
+				}
+				# Borrowing toward bankruptcy: step down to the floor before the
+				# default, keeping running operations (and a war's) at 1.
+				else_if = {
+					limit = {
+						taking_loans = yes
+						weeks_until_bankruptcy < iw_ai_funding_bankruptcy_weeks
+					}
+					if = {
+						limit = {
+							OR = {
+								covert_operations_active >= 1
+								is_at_war = yes
+							}
+						}
 						set_variable = { name = iw_funding_level value = 1 }
 					}
 					else = {

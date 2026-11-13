@@ -641,7 +641,7 @@
  building_sudamericana_valparaiso_pier:0 "Sudamericana Valparaíso Pier"
  building_suez_company_ismailia_hq:0 "Suez Company Ismailia Headquarters"
  building_sumitomo_besshi_mine:0 "Sumitomo Besshi Mine"
- building_sumitomo_besshi_mine_desc:0 "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu."
+ building_sumitomo_besshi_mine_desc:0 "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo [glossary_zaibatsu]."
  building_sunhwaguk_seoul_tobacco_factory:0 "Sunhwaguk Seoul Tobacco Factory"
  building_synthetics_plant_biomass:0 "Integrated Biorefinery"
  building_synthetics_plant_biomass_throughput_add:0 "$building_synthetics_plant_biomass$ [concept_throughput]"

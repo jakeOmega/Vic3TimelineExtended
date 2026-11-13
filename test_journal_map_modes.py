@@ -742,7 +742,7 @@ class NinthPassMapsTest(_RoomBranches, unittest.TestCase):
         self.assertLess(monthly.index("te_jmap_store_hqs = yes"), monthly.index("te_jmap_refresh_range = yes"))
         self.assertLess(monthly.index("te_jmap_store_hqs = yes"), monthly.index("te_jmap_hq_found_selfcheck = yes"))
         pick = " ".join(block(code(EFFECTS), "te_jmap_set_selector").split())
-        self.assertIn("if = { limit = { global_var:te_jmap_sel = 34 } te_jmap_store_hqs = yes }", pick)
+        self.assertIn("if = { limit = { global_var:te_jmap_sel ?= 34 } te_jmap_store_hqs = yes }", pick)
         self.assertLess(pick.index("te_jmap_store_hqs = yes"), pick.index("te_jmap_refresh_range = yes"))
 
     def test_the_hq_store_is_self_checked(self):
@@ -978,7 +978,7 @@ class ClassesAndTradeMapsTest(_RoomBranches, unittest.TestCase):
                           store)
             self.assertIn("remove_variable = te_jmap_inv_%s" % short, store)
         pick = " ".join(block(effects, "te_jmap_set_selector").split())
-        self.assertIn("if = { limit = { global_var:te_jmap_sel = 46 } te_jmap_store_invest = yes }", pick)
+        self.assertIn("if = { limit = { global_var:te_jmap_sel ?= 46 } te_jmap_store_invest = yes }", pick)
         self.assertLess(pick.index("te_jmap_store_invest = yes"), pick.index("te_jmap_refresh_range = yes"))
         # the world's buildings aren't walked for a map nobody is looking at
         monthly = " ".join(block(effects, "te_jmap_monthly_invest").split())

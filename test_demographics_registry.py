@@ -444,7 +444,7 @@ def ALL_OFF(f):
 
 # Phase 2 step 4's once-a-game self-checks, which the census's refresh calls (te_demog_consequences_refresh): they set a
 # global variable, log and fire an event, none of which the interpreter runs; TestConsequencesScript reads their text.
-SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": "",
+SELF_CHECK_STUBS = {"te_debug_demog_conscription_selfcheck_start": "",
                     # phase 3's (te_debug_demog_effects.txt): they read the capital, s:STATE_ULSTER and debug_log
                     "te_debug_demog_fl_selfcheck_start": "", "te_debug_demog_fl_neighbours_check": "",
                     "te_debug_demog_neighbours_selfcheck": "",
@@ -486,10 +486,13 @@ class _Engine:
     set fails, as does an argument the callee doesn't name (the script_argument_audit rule).
     `fixtures` stand in for engine reads and for script values that read the owner. With
     truncate=True every operation and every stored value is cut to five decimals, toward zero:
-    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails."""
+    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails. Left out, truncate is
+    FIXED_POINT: False, except inside a fixed-point twin's test (_FixedPointTwin, issue #967)."""
 
-    def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
-        self.truncate = truncate
+    FIXED_POINT = False
+
+    def __init__(self, fixtures, triggers=None, effects=None, truncate=None):
+        self.truncate = _Engine.FIXED_POINT if truncate is None else truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
                                     LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS,
@@ -545,6 +548,8 @@ class _Engine:
         # and the split read it beside the wealth line since 2026-10-20, and a stubbed walk need not give it; nor the
         # pops' own lines by cause (owner, 2026-10-22), which the refresh and the split read beside severe starvation's
         self.locals["te_dg_w_edw"] = 0.0
+        # and the moved lines' class pairs at the bare deaths (#1046), none unless a test says
+        self.locals["te_dg_w_edl"] = 0.0
         self.locals.update(WALK_CAUSE_DEFAULTS)
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -774,6 +779,71 @@ class _Engine:
 
     def call(self, effect):
         self.run(_parse_script(f"{effect} = yes"))
+
+
+class _FixedPointTwin:
+    """Mixin for a fixed-point twin of a script test (issue #967): `class TestXFixedPoint(_FixedPointTwin, TestX)` runs
+    every case of TestX again with each _Engine it builds in the engine's fixed point (truncate=True), and with each
+    near-equality (the class's own close(), assertAlmostEqual) loosened to what the five-decimal cut allows. Floats
+    can't see that cut: #964's late births took TFR / 100000 first, which the engine stores as 0.00001 or 0, and
+    matched the model at 1e-8 in floats the whole time.
+
+    The tolerance is the larger of FLOOR and REL x the wanted value. Every operation and every stored value is cut by
+    under 1e-5 (UNIT), and a float case's inputs carry sixteen digits where the script keeps five. FLOOR is five
+    units: a figure of a few sums and clamps carries that many cuts at most. REL is one unit per unit of the figure:
+    a figure past 1 is a product, and the cut of one factor weighs the rest of it. A suite whose arithmetic
+    multiplies the cut further (a chain over 300 ages, a quotient of small numbers) gives its twin a looser REL and
+    FLOOR, with the reason and its size worked out from the cut, not copied from the run; a single case overrides
+    the method instead. Exact comparisons (assertEqual and the rest) stay exact. A disagreement past the tolerance
+    is an early divide or a product of small factors in the script, a fixture on a threshold's edge, or a case whose
+    arithmetic multiplies its inputs' cut: find which before loosening anything. A new case in TestX gets its twin
+    with no further work. The twins are in test_demographics_fixed_point.py."""
+
+    UNIT = 1e-5
+    REL = UNIT
+    FLOOR = 5 * UNIT
+
+    @classmethod
+    def setUpClass(cls):
+        # what the class builds once (TestCountry's states) is built in fixed point too
+        with unittest.mock.patch.object(_Engine, "FIXED_POINT", True):
+            super().setUpClass()
+
+    def setUp(self):
+        # before the float suite's own setUp, so an engine built there cuts too
+        patch = unittest.mock.patch.object(_Engine, "FIXED_POINT", True)
+        patch.start()
+        self.addCleanup(patch.stop)
+        super().setUp()
+
+    def near(self, got, want):
+        return abs(got - want) <= max(self.REL * abs(want), self.FLOOR)
+
+    def _past(self, check, *args, **kw):
+        """The float case's own comparison (its tolerance may be the looser one), failing with the twin's named."""
+        try:
+            check(*args, **kw)
+        except AssertionError as err:
+            raise self.failureException(
+                f"{err} (in fixed point: past {self.REL:g} of the value and {self.FLOOR:g} too)") from None
+
+    def close(self, got, want, *args, **kw):
+        if not self.near(got, want):
+            self._past(super().close, got, want, *args, **kw)
+
+    def assertAlmostEqual(self, first, second, places=None, msg=None, delta=None):
+        if not self.near(first, second):
+            self._past(super().assertAlmostEqual, first, second, places=places, msg=msg, delta=delta)
+
+    def test_the_twin_runs_in_fixed_point(self):
+        """An engine built with no truncate= cuts to five decimals inside the twin, and outside it does not. (An
+        engine built in a suite's own setUp: test_demographics_fixed_point.TestTheTwinMixin.)"""
+        eng = _Engine({})
+        self.assertTrue(eng.truncate)
+        eng.run(_parse_script("set_variable = { name = x value = { value = 2 divide = 3 } }"))
+        self.assertEqual(eng.vars["x"], 0.66666)
+        self.doCleanups()
+        self.assertFalse(_Engine({}).truncate)
 
 
 def _stored(inp):
@@ -1614,11 +1684,12 @@ class TestWorkWalk(unittest.TestCase):
         # the engine's figure per person (unemployment_rate_read, 2026-10-17): 50 idle of 1,000 people
         eng = _Engine({"state_unemployment_rate": 0.05}, triggers={"te_demog_cohorts_run": True})
         eng.call("te_demog_work_walk_init")
-        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0, te_dg_w_un=50.0)
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0)
         eng.call("te_demog_work_walk_store")
         self.assertEqual((eng.vars["te_dg_low_share"], eng.vars["te_dg_wbase"], eng.vars["te_dg_wf_engine"]),
                          (0.8, 0.26, 0.25))
-        self.assertEqual(eng.vars["te_dg_unemp_walk"], 0.2)   # the walk's own count: over the workforce, not the people
+        # the walk's own count went with unemployment_rate_read (#1046): unemployment_share_read is the one check
+        self.assertNotIn("te_dg_unemp_walk", eng.vars)
         # the census's figure is the shared conversion (owner, 2026-10-17); a state its own walk hasn't reached takes
         # this walk's workforce share, so the conversion matches the count
         self.assertEqual(eng.vars["te_unemp_wf_share"], 0.25)
@@ -1630,12 +1701,11 @@ class TestWorkWalk(unittest.TestCase):
         eng = _Engine({"state_unemployment_rate": 0.06}, triggers={"te_demog_cohorts_run": True})
         eng.call("te_demog_work_walk_init")
         eng.vars["te_unemp_wf_share"] = 0.3
-        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0, te_dg_w_un=50.0)
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0)
         eng.call("te_demog_work_walk_store")
         self.assertEqual(eng.vars["te_unemp_wf_share"], 0.3)
         self.assertAlmostEqual(eng.vars["te_dg_unemp"], 0.2)
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_unemployment")), 0.2)
-        self.assertEqual(eng.vars["te_dg_unemp_walk"], 0.2)
 
     def test_three_pops_through_the_walk_effects(self):
         """Each pop's sums as te_demog_walks makes them, one pop at a time (TestGini.walk's pattern; the review of #923):
@@ -1652,9 +1722,9 @@ class TestWorkWalk(unittest.TestCase):
 
         eng = _PopEngine({}, triggers={"te_demog_cohorts_run": True})
         eng.call("te_demog_work_walk_init")
-        # the laborers have no workplace: the walk's count (te_dg_unemp_walk, 2026-10-17) is their workforce over all;
-        # the engine's figure is their workforce over all the people (unemployment_rate_read), which the census
-        # stores over the workforce share (te_dg_unemp, te_state_unemployment_share)
+        # the laborers have no workplace: the engine's figure is their workforce over all the people
+        # (unemployment_rate_read, 2026-10-17), which the census stores over the workforce share (te_dg_unemp,
+        # te_state_unemployment_share): their share of the workforce
         eng.fixtures["state_unemployment_rate"] = 130 / 1000
         pops = (("aristocrats", "upper", 100.0, 18.0, "bg_agriculture"), ("slaves", "lower", 400.0, 210.0, "bg_mining"),
                 ("laborers", "lower", 500.0, 130.0, None))
@@ -1667,7 +1737,6 @@ class TestWorkWalk(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_low_share"], (400 + 500) / 1000)
         self.assertAlmostEqual(eng.vars["te_dg_wbase"], (100 * 0.2 + 400 * 0.5 + 500 * 0.25) / 1000)
         self.assertAlmostEqual(eng.vars["te_dg_wf_engine"], (18 + 210 + 130) / 1000)
-        self.assertAlmostEqual(eng.vars["te_dg_unemp_walk"], 130 / (18 + 210 + 130))
         self.assertAlmostEqual(eng.vars["te_dg_unemp"], 130 / (18 + 210 + 130), places=4)
         # what te_demog_unemployment, and so the youth bulge, the wave, the pension AI and the panel, read
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_unemployment")), 130 / (18 + 210 + 130),
@@ -6287,7 +6356,7 @@ class TestFastMode(unittest.TestCase):
         eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_eb0m=eb0,
                           te_dg_w_ed0m=ed0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_rate_prev_b=0.0,
                           te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0,
-                          te_dg_rate_lines_b=0.0, te_dg_rate_lines_d=0.0)
+                          te_dg_rate_lines_b=0.0, te_dg_rate_lines_d=0.0, te_dg_rate_lines_q=0.0)
         eng.call("te_demog_fast_refresh_rates")
 
     # -- phase 2 step 4: fast mode composes with the census's term M -------------------------------
@@ -6377,6 +6446,61 @@ class TestFastMode(unittest.TestCase):
         td = 24.0 * 1000.0 * 100 / 12 / 430e3
         self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * td, places=5)
         self.assertNotIn("te_demog_line_deaths_down", eng.modifiers)
+
+    def test_first_full_step_takes_the_births_pair_off_fast_modes_average(self):
+        """#1046: the births side of the test above (four mutations in fast mode's subtraction survived #892's review).
+        A births pair of -0.08 is in the walk's average and the state read; the refresh clears it, and fast mode's term
+        takes it off, so the engine runs K x the census's births."""
+        eng = self._eng_full()
+        eng.modifiers["te_demog_line_births_down"] = 0.08
+        eng.vars["te_dg_ln_births"] = -0.08
+        eng.fixtures["modifier:state_birth_rate_mult"] = -0.08
+        self._both(eng, eb=0.92 * 475e3, eb0=475e3, ed=430e3, ed0=430e3)
+        tb = 36.0 * 1000.0 * 100 / 12 / 475e3
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * tb, places=5)
+        self.assertNotIn("te_demog_line_births_down", eng.modifiers)
+        # and the deaths term, with no deaths pair, is the plain one
+        td = 24.0 * 1000.0 * 100 / 12 / 430e3
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * td, places=5)
+
+    def test_first_full_step_takes_the_class_pairs_off_fast_modes_average(self):
+        """#1046: a class pair (farmers' -0.1) reaches its class's pops only, so it is in the walk's average at the
+        class's share of the bare deaths (te_dg_w_edl, the walk's sum) and not in the state's general read. The refresh
+        clears it with the rest, and fast mode's term takes that share off (te_dg_rate_lines_q)."""
+        eng = self._eng_full()
+        eng.modifiers["te_demog_line_farmers_deaths_down"] = 0.1
+        eng.vars["te_dg_ln_farmers_deaths"] = -0.1
+        farmers = 0.4 * 430e3                     # the farmers' bare deaths
+        eng.locals["te_dg_w_edl"] = -0.1 * farmers
+        self._both(eng, eb=475e3, eb0=475e3, ed=430e3 - 0.1 * farmers, ed0=430e3)
+        self.assertAlmostEqual(eng.locals["te_dg_rate_lines_q"], -0.04)
+        td = 24.0 * 1000.0 * 100 / 12 / 430e3
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * td, places=5)
+        self.assertNotIn("te_demog_line_farmers_deaths_down", eng.modifiers)
+        # a later step (no pair left to clear) takes nothing off
+        eng.locals["te_dg_w_edl"] = 0.0
+        self._both(eng, eb=475e3, eb0=475e3, ed=430e3, ed0=430e3)
+        self.assertEqual(eng.locals["te_dg_rate_lines_q"], 0.0)
+
+    def test_the_walk_sums_each_class_pair_at_its_pops_bare_deaths(self):
+        """#1046: te_demog_absorbed_walk_init reads each class pair in force once (te_dg_w_lq_<class>) and
+        te_demog_absorbed_walk_pop adds it at each of that class's pops' bare deaths, where the engine doesn't floor
+        the pop's multiplier."""
+        eng = _OwnerEngine({}, triggers={"te_demog_effects_run": True})
+        eng.modifiers["te_demog_line_farmers_deaths_down"] = 0.1
+        eng.vars["te_dg_ln_farmers_deaths"] = -0.1
+        eng.call("te_demog_absorbed_walk_init")
+        self.assertEqual(eng.locals["te_dg_w_lq_farmers"], -0.1)
+        self.assertEqual(eng.locals["te_dg_w_lq_laborers"], 0.0)
+        self.assertEqual(eng.locals["te_dg_w_edl"], 0.0)
+        eng.fixtures.update(food_security=1.0, total_size=1000.0, literacy_rate=0.0)
+        eng.trigger_fixtures.update(is_in_severe_starvation=False, is_in_mild_starvation=False)
+        for pop_type, bare_d, md in (("farmers", 200.0, 0.9), ("laborers", 300.0, 1.0), ("farmers", 50.0, 0.0)):
+            eng.pop_type = pop_type
+            eng.locals.update(te_dg_p_eb=100.0, te_dg_p_ed=bare_d, te_dg_p_mb=1.0, te_dg_p_md=md)
+            eng.call("te_demog_absorbed_walk_pop")
+        # the floored farmers (md 0) add nothing: the engine gives them no deaths to take the pair off
+        self.assertAlmostEqual(eng.locals["te_dg_w_edl"], -0.1 * 200.0)
 
     def test_fast_mode_composes_with_the_absorbed_lines(self):
         """Owner amendment A (final review 2, m5): a state carrying absorbed per-pop terms A (literacy, mild
@@ -6732,7 +6856,12 @@ class TestCausesInTheStep(unittest.TestCase):
         self.assertLess(demographics_model.infection_adult(drifted), 0.97, "a factor that moves the life table")
         qf, qm, _ = demographics_model.group_rates(drifted)
         e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
-        self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
+        self.life_expectancy_close(eng.vars["te_dg_e0"], e0)
+
+    def life_expectancy_close(self, got, want):
+        """Its own method so the fixed-point twin can give the life table, and nothing else here, its tolerance
+        (test_demographics_fixed_point.py)."""
+        self.assertAlmostEqual(got, want, places=6)
 
     def stepped(self, effects=None):
         """A state seeded on INP0's inputs in 1836, then one whole te_demog_step on INP1's (TestTrend's setup)."""
@@ -7773,20 +7902,19 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertIn("te_demog_youth_bulge_shown", names)
         for name in sorted(names):
             self.assertFalse(live(name, set()), name)
-        # the walk stores it under the cohorts, both settings (2026-10-17: the shared conversion from an effect, beside
-        # the walk's own count), and the refresh doesn't write it
+        # the walk stores it under the cohorts, both settings (2026-10-17: the shared conversion from an effect; the
+        # walk's own count beside it went with unemployment_rate_read, #1046), and the refresh doesn't write it
         refresh = _raw_blocks([CONSEQ_EFFECTS])["te_demog_consequences_refresh"]
         self.assertNotIn("name = te_dg_unemp", refresh)
         store = _raw_blocks([EFFECTS])["te_demog_work_walk_store"]
         self.assertIn("set_variable = { name = te_dg_unemp value = te_state_unemployment_share }", store)
-        self.assertIn("set_variable = { name = te_dg_unemp_walk value = { value = local_var:te_dg_w_un divide = "
-                      "{ value = local_var:te_dg_w_wf min = 1 } } }", store)
+        self.assertNotIn("te_dg_unemp_walk", store)
 
     def test_nothing_in_the_census_reads_the_engines_unemployment(self):
         """unemployment_rate_read (2026-10-17): state_unemployment_rate read 0.048 where the pops' share was 0.195, the
         idle workforce over all the people. The youth bulge, the wave, the pension AI and the panel read the shared
-        conversion the census stores (te_state_unemployment_share, owner 2026-10-17); only the self-check reads the
-        engine's figure here, through its wrapper."""
+        conversion the census stores (te_state_unemployment_share, owner 2026-10-17). The self-check that read the
+        engine's figure here, through its wrapper, read OK and was retired (#1046)."""
         readers = []
         for folder in ("script_values", "scripted_effects", "scripted_triggers"):
             for path in sorted((ROOT / "common" / folder).glob("te_demog*.txt")):
@@ -7794,8 +7922,7 @@ class TestConsequencesScript(unittest.TestCase):
                     readers.append(path.name)
         self.assertEqual(readers, [])
         debug = re.sub(r"#[^\n]*", "", _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt"))
-        self.assertEqual(re.findall(r"^(\w+) = \{[^\n]*state_unemployment_rate", debug, re.M),
-                         ["te_debug_demog_unemp_engine_read"])
+        self.assertEqual(re.findall(r"^(\w+) = \{[^\n]*state_unemployment_rate", debug, re.M), [])
 
     def test_a_census_from_before_step_4_takes_nothing(self):
         eng = self._state()
@@ -7956,11 +8083,12 @@ class TestConsequencesScript(unittest.TestCase):
 
     def test_the_self_checks_are_wired(self):
         """Owner, 2026-10-12: once a game each (a global flag), the conscription check reading before the add and
-        judged a week later (te_debug_demog.30), the unemployment check where the census runs."""
+        judged a week later (te_debug_demog.30). The unemployment check that ran where the census runs,
+        unemployment_rate_read, read OK and was retired (#1046)."""
         refresh = _raw_blocks([CONSEQ_EFFECTS])["te_demog_consequences_refresh"]
         self.assertLess(refresh.index("te_debug_demog_conscription_selfcheck_start = yes"),
                         refresh.index("te_demog_consequences_apply = yes"))
-        self.assertIn("te_debug_demog_unemployment_selfcheck = yes", refresh)
+        self.assertNotIn("te_debug_demog_unemployment_selfcheck", refresh)
         debug = _raw_blocks([ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"])
         start = debug["te_debug_demog_conscription_selfcheck_start"]
         for line in ("te_demog_k_conscription_effects > 0",   # held back, it never arms (no false BROKEN)
@@ -7971,10 +8099,7 @@ class TestConsequencesScript(unittest.TestCase):
                      "NOT = { has_modifier = te_demog_census_conscription_down }",
                      "owner = { trigger_event = { id = te_debug_demog.230 days = 7 } }"):
             self.assertIn(line, start)
-        unemp = debug["te_debug_demog_unemployment_selfcheck"]
-        for line in ("te_demog_cohorts_run = yes", "NOT = { has_global_variable = te_demog_selfcheck_unemp_done }",
-                     "TE_SELF_CHECK OK unemployment_rate_read", "TE_SELF_CHECK BROKEN unemployment_rate_read"):
-            self.assertIn(line, unemp)
+        self.assertNotIn("te_debug_demog_unemployment_selfcheck", debug)
         events = _text(ROOT / "events" / "te_debug_demog_events.txt")
         check = _block(events, "te_debug_demog.30")
         self.assertIn("TE_SELF_CHECK OK conscription_term_read", check)

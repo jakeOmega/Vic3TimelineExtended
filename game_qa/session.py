@@ -4,7 +4,8 @@ The session never touches the owner's files itself. The protective verbs of part
 `run_cli` it is given (`python3 -m game_qa <argv>`, returning its JSON reply and exit code): `held`, `snapshot`,
 `launch`, `restore`, and `watch` as the subprocess `spawn_watch` starts. A refusal or a hold from any of them is
 reported, never worked around. Under the user-data folder the session itself writes only the overlay mod
-(`overlay.build` and `overlay.remove`) and, through `fixture`, the `te_qa_fixture_*` saves.
+(`overlay.build` and `overlay.remove`) and, through `fixture`, the `te_qa_fixture_*` saves. Under the backup root
+it writes the run's folder and, through `selfchecks`, the lines kept with a fixture (`fixtures/<key>/`).
 
     start   overlay left?  held?  overlay  fixture  snapshot  launch  watch at once  adopt  window  logs  console
             tag  debugger
@@ -54,6 +55,7 @@ from game_qa.gate import UNKNOWN_START, ProcId
 from game_qa.helper import Helper, HelperError
 from game_qa.logtail import GAP_MARKER, LogFollower, Pending, parse, pending_events
 from game_qa.report import Report, stamp, utc_now
+from game_qa import selfchecks          # the mod's TE_SELF_CHECK lines: kept with the fixture, reported for a run
 
 COUNTRY_CLICK = (0.492, 0.656)          # the country the camera is on, tagged or not (3840x2160, spec § 12.1 A2)
 START_CLICK = (0.9216, 0.975)           # the country-select screen's Start button
@@ -71,6 +73,8 @@ FIXTURES_KEPT = 2
 WINDOW_WAIT_S = 300.0                   # from launch to a window that responds
 WINDOW_POLL_S = 1.0
 CONSOLE_READY_S = 180.0                 # the first round trip: a save took about 2 minutes to a usable console
+LOAD_WAIT_S = 600.0                     # from the first answering window to a console that takes commands, retrying
+                                        # while a late save's load keeps the window from responding (a guess, generous)
 STOP_WAIT_S = 15.0                      # from typing the read event to the debugger's stop (real seconds: dap's clock)
 DATE_WAIT_S = 5.0                       # from the resume to the read event's line in the log
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
@@ -109,15 +113,24 @@ CLICK_SETTLE_S = 1.0                    # after the country click, before Start 
 # console is closed goes to the game, where its letters move the camera off the country.
 PANEL_BOX = (0.87, 0.06, 0.99, 0.80)    # the side panel, clear of the date above and the buttons below
 PANEL_CHANGED = 0.01                    # this share of its pixels differing is a country selected
+
+# The helper's refusals of a click that come before the button goes down (win_helper._op_click: the window in
+# front and the process the recorded one, the point inside the client area, the cursor on it, the game's window
+# under it). Any other error may follow the press.
+CLICK_REFUSED_BEFORE_PRESS = ("not_foreground", "bad_point", "cursor_misplaced", "covered", "not_ours")
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
 ENTER_RETRY_S = 5.0                     # between its tries
 # The console's refusals a game still loading after Start can cause, retried within ENTER_WAIT_S: no command taken
-# (no_ack), and a window that stopped responding for UNRESPONSIVE_S (game_gone). Each key of a try is still proved
-# the game's (`_prove_game`), so a game that really ended stops the tries at its next key (watch_ended), and any
-# other refusal (not_foreground after FOREGROUND_WAIT_S of someone at the machine, stranded_text) is not retried.
+# (no_ack), and a window that stopped responding for UNRESPONSIVE_S (game_gone). `watch` is looked at before each
+# retry, so a game that really ended stops the tries there (watch_ended): once its window is gone `ensure_open`
+# answers game_gone before any key, so the keys' own proof (`_prove_game`) never gets the chance. Any other refusal
+# (not_foreground after FOREGROUND_WAIT_S of someone at the machine, stranded_text) is not retried.
 ENTER_RETRIED = ("no_ack", "game_gone")
+# While a late save loads (`_console_when_loaded`) a no_ack is retried once only: the live evidence (2026-11-12) is
+# game_gone, and a console that never opens would otherwise be pressed for the whole of LOAD_WAIT_S.
+LOAD_NO_ACK_TRIES = 2
 # The errors after Start whose own code `enter_game` keeps (with the clicks added): they say more than not_entered.
 ENTER_KEPT = ("breakpoint_unverified", "tag_failed", "debugger", "watch_ended", "left_running")
 PROOF_S = 3.0                           # unpaused, to prove the game was entered
@@ -156,7 +169,7 @@ class SessionError(Exception):
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
-    not_on_country_select, click_refused, not_entered, left_running, bad_days, stalled, not_started, stopped
+    not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
@@ -274,6 +287,8 @@ class Session:
         self._adopted = False
         self._debug_log: LogFollower | None = None       # the session's own followers: Console consumes its own
         self._error_log: LogFollower | None = None
+        self._logs_closed = False           # the logs are read no more: `logs/` may be another game's by now
+        self._ended_alive = False           # the stop under way ended the game while it was alive
         self._console: Console | None = None
         self._relay_open = False
         self._debugger: Debugger | None = None
@@ -372,6 +387,7 @@ class Session:
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
         save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {})
         self._save = save
+        self._drop_fixture_lines()
         self._check_abort()
         try:
             reply, code = self._cli(["snapshot", "--save", save])
@@ -426,12 +442,11 @@ class Session:
         self._adopted = True
         self._await_window()
 
-        self._debug_log = LogFollower(self._paths.logs / "debug.log")
+        self._debug_log = LogFollower(self._paths.logs / "debug.log", found=self._found_log(snap))
         self._error_log = LogFollower(self._paths.logs / "error.log")
         self._console = Console(self._sends, self._proc, self._paths.history,
                                 LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock)
-        with self._step("console_ready"):
-            self._console.ensure_open(CONSOLE_READY_S)
+        self._console_when_loaded()
         if as_tag is not None:
             with self._step("tag", tag=as_tag):
                 self._tag(as_tag)
@@ -573,10 +588,12 @@ class Session:
             watch = self._spawn_watch(snapshot_id)
             watches.append(watch)
             return watch
+        self._forget_fixture_lines(key)
         try:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
-                                clock=self._clock, started=self._journaled_proc)
+                                clock=self._clock, started=self._journaled_proc,
+                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap))
         except fixture.FixtureError as e:
             up = e.code == fixture.GAME_MAY_BE_UP
             self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
@@ -594,6 +611,40 @@ class Session:
         pruned = self._prune(user, in_use=(made.name,))
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
+
+    def _forget_fixture_lines(self, key: str) -> None:
+        """Before a fixture is made under `key`: nothing kept for an earlier fixture of that key, or for one whose
+        save is gone, may be left to be shown as the new one's (a deleted fixture is made again under its key).
+        The orphans go first, then `key`'s own, which leaves a record that nothing is kept yet. Never raises; a
+        record that could not be removed is a step, and `keep_fixture_lines` removes it again."""
+        self._drop_fixture_lines()
+        try:
+            selfchecks.forget_fixture_lines(self._paths.backup_root, key)
+        except Exception as e:
+            self._record("fixture_lines", outcome="forget_failed", key=key, detail=_describe(e))
+
+    def _keep_fixture_lines(self, key: str, snap: str) -> None:
+        """Once the fixture is made: keep its run's TE_SELF_CHECK and TE_MONUMENTS lines under the backup root
+        (`selfchecks.keep_fixture_lines`). Never raises: a fixture whose lines could not be kept is still the
+        fixture, and the step says what went wrong."""
+        try:
+            record = selfchecks.keep_fixture_lines(self._paths.backup_root, key, snap)
+        except Exception as e:
+            self._record("fixture_lines", outcome="failed", snapshot=snap, detail=_describe(e))
+            return
+        self._record("fixture_lines", outcome="kept", **record)
+
+    def _drop_fixture_lines(self) -> None:
+        """The kept lines go with their fixture: those of a fixture `fixture.prune` has just removed, or that is
+        gone from `save games/` for any other reason. Only files under `<backup root>/fixtures/` are removed.
+        Never raises: lines left behind are swept at the next start."""
+        try:
+            dropped = selfchecks.drop_orphans(self._paths.backup_root, self._paths.user_data)
+        except Exception as e:
+            self._record("fixture_lines", outcome="drop_failed", detail=_describe(e))
+            return
+        if dropped:
+            self._record("fixture_lines", outcome="dropped", keys=dropped)
 
     def _take_fixture_run(self, snap: str | None, may_be_up: bool, proc: ProcId | None, watch: Any,
                           restore: tuple[dict, int] | None, calls: list[tuple[str, dict | None, int | None]]) -> None:
@@ -632,6 +683,44 @@ class Session:
         except OSError:
             pass
         return None
+
+    def _found_log(self, snap: str) -> tuple[int, str] | None:
+        """The size and hash of the `logs/debug.log` the run's snapshot recorded: the log the game found when it
+        was launched. A game that appended to it would hand the session an earlier game's lines as its own, so
+        the follower skips a beginning with exactly those bytes (`LogFollower`). None when the snapshot's
+        manifest cannot be read or holds no such log."""
+        try:
+            entry = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files.get(selfchecks.OWNERS_LOG)
+        except (OSError, ValueError):
+            return None
+        return (entry.size, entry.sha256) if entry is not None else None
+
+    def _console_when_loaded(self) -> None:
+        """Wait for the console to take commands once the window has first answered: `ensure_open` is tried
+        every ENTER_RETRY_S while it refuses game_gone, until LOAD_WAIT_S has passed, and once more after a
+        no_ack (LOAD_NO_ACK_TRIES); any other error is raised at once, and `watch` (and a stop asked meanwhile) is looked at before each retry,
+        so a game that ended stops the tries. A save from late in a game keeps the window from responding for
+        longer than UNRESPONSIVE_S while it loads (live 2026-11-12: a 47 MB save of 1931 ended the first start
+        `game_gone` 75 s after the launch), which one `ensure_open` takes for a game that has gone. Recorded as
+        the step `console_ready`, with the tries made."""
+        deadline = self._clock() + LOAD_WAIT_S
+        with self._step("console_ready") as out:
+            tries = no_acks = 0
+            while True:
+                tries += 1
+                out["tries"] = tries
+                try:
+                    self._console.ensure_open(max(1.0, min(CONSOLE_READY_S, deadline - self._clock())))
+                    return
+                except ConsoleError as e:
+                    no_acks += e.code == "no_ack"
+                    if (e.code not in ENTER_RETRIED or no_acks >= LOAD_NO_ACK_TRIES
+                            or self._clock() + ENTER_RETRY_S > deadline):
+                        raise
+                    out["last_refusal"] = e.code
+                self._sleep(ENTER_RETRY_S)
+                self._check_watch()
+                self._check_abort()
 
     def _await_window(self) -> None:
         deadline = self._clock() + WINDOW_WAIT_S
@@ -969,6 +1058,47 @@ class Session:
             out["path"] = str(path)
         return path
 
+    def click(self, x: float, y: float) -> dict:
+        """One left click at (x, y), fractions of the game window's client area from its top left, then a
+        screenshot of what it did. It is for the engine's own tool windows that no console command reads, such as
+        the script profiler's call graph (#1701, the owner's go-ahead of 2026-11-12); it can press anything a
+        player can, so what it is aimed at is the caller's to know, from a `shot` first.
+
+        The click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
+        (`_ProvedHelper.click`); the console is left as it is. A click the helper refused before the button went
+        down (CLICK_REFUSED_BEFORE_PRESS) is `click_refused` and pressed nothing; any other helper error
+        (`backend_error`, `helper_gone`, a timeout) is `click_unknown`, since it may have come after the press: take
+        a `shot` before clicking again. A screenshot that fails after the click is not a refusal: the reply has
+        `screenshot: null` and `screenshot_error`, as enter-game's does.
+
+        The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
+        must never be aimed at the game's own menus (save, load, settings, exit).
+
+        A click into a tool window takes the keyboard (live, 2026-11-12): the next typed command does not reach the
+        console (a read's `no_stop` with `arrived: false`) until the console's input line is clicked, at
+        (0.1125, 0.544) with the console open on the left. #1710 asks for that to be done here, with drag and
+        wheel verbs for the profiler's window."""
+        self._require_game()
+        fraction = (_fraction("x", x), _fraction("y", y))
+        with self._step("click", x=x, y=y) as out:
+            self._console.front()
+            px, py = self._point(fraction)
+            try:
+                self._sends.click(self._proc.pid, px, py)
+            except HelperError as e:
+                if e.code in CLICK_REFUSED_BEFORE_PRESS:
+                    raise SessionError("click_refused", "%s: %s" % (e.code, e.detail)) from e
+                raise SessionError("click_unknown", "%s: %s; the button may have been pressed: take a shot before "
+                                                    "clicking again" % (e.code, e.detail), pixel=[px, py]) from e
+            out["pixel"] = [px, py]
+            self._sleep(CLICK_SETTLE_S)
+            try:
+                out["screenshot"] = str(self._shot())
+            except HelperError as e:
+                out["screenshot"], out["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
+                return {"pixel": [px, py], "screenshot": None, "screenshot_error": out["screenshot_error"]}
+        return {"pixel": [px, py], "screenshot": out["screenshot"]}
+
     def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:
         """The owner's first check: each option of `event` in turn, fired, read, picked and read again.
 
@@ -1079,6 +1209,48 @@ class Session:
                 "maybe_stopped": self._maybe_stopped, "left_running": self._left_running,
                 "watch_respawns": self._watch_respawns}
 
+    def self_checks(self) -> dict:
+        """The verdicts of the mod's TE_SELF_CHECK lines in this run so far, the fixture's run's included
+        (`selfchecks.of_run`, read from the run folder's copy of the log and the lines kept with the fixture).
+
+        The game's log is pushed out first, since the game writes it in blocks: an empty read fires the read
+        event, whose padding flushes what was logged before it, and its date line is waited for as the proof.
+        `flushed` says whether that worked. When it did not (the game is not in front, the debugger did not
+        stop), `not_flushed` says why, and the lines already in the game's log are taken without typing
+        anything, while `watch` still follows the game and nothing has said it ended. Every line read, here as
+        in any verb, is kept only if the game is proved alive after the read (`_new_lines`). When the logs are
+        not read, or what was read had to be dropped (the game has ended, `watch` recorded its exit, the
+        session is stopped), `log_not_read` says so. The verdicts are given in every case, from what the run
+        folder holds: a line logged since the last verb may then be missing."""
+        if self._snapshot is None or self._report is None:
+            raise SessionError("not_started", "this session has no run folder yet: start() has not got that far")
+        with self._step("selfchecks") as out:
+            found: dict = {"live": True, "flushed": False}
+            try:
+                self._require_game()
+                self._date()
+                found["flushed"] = True
+            except (SessionError, ConsoleError, DebuggerError, HelperError) as e:
+                found["not_flushed"] = {"refused": _code_of(e), "detail": str(e)}
+                watched = (self._stopped is None and not self._stopping and self._watch_ended is None
+                           and not self._watch_returned() and self._debug_log is not None)
+                if watched:
+                    try:
+                        self._new_lines()
+                    except Exception:
+                        pass                    # dropped and closed (`_vouch_for_polled`), or not readable
+                if not watched or self._logs_closed:
+                    found["log_not_read"] = ("the run's game is not proved alive (it has ended, or the session is "
+                                             "stopped), so `logs/` was not read, or what was read was dropped: "
+                                             "another game may have written it since. These are the lines the "
+                                             "run folder already held")
+            found.update(selfchecks.of_run(self._paths.backup_root, self._snapshot))
+            out.update(flushed=found["flushed"], not_flushed=found.get("not_flushed"), counts=found["counts"],
+                       broken=found["broken"])
+            if "log_not_read" in found:
+                out["log_not_read"] = True
+        return found
+
     # ---- stop
 
     def stop(self) -> dict:
@@ -1142,9 +1314,11 @@ class Session:
             notes = kept + [n for n in notes if n not in kept]
             notes.append("stop was run again at %s: the stop before ended %s" % (stamp(utc_now()),
                                                                                  previous.get("outcome")))
+        self._ended_alive = False
         if self._launched and not self._game_ended:
             self._end_game(notes)
         left_up = self._launched and not self._game_ended
+        self._last_log_lines(left_up, notes)
         restore, outcome = None, None
         if left_up:
             outcome = "game_left_up"
@@ -1265,6 +1439,7 @@ class Session:
                 raise
             return
         self._game_ended = True
+        self._ended_alive = not gone        # this call ended a process proved the game by its pid and start time
         self._record("kill", outcome="already_exited" if gone else "ok")
 
     def _found_gone(self, proc: ProcId, notes: list[str], after: str = "") -> bool:
@@ -1381,12 +1556,17 @@ class Session:
         if self._report is None:
             return None
         try:
+            try:
+                found = selfchecks.of_run(self._paths.backup_root, self._snapshot)
+            except Exception as e:              # the summary is written all the same, with a note
+                found = None
+                notes.append("the run's self-check lines could not be read: %s" % _describe(e))
             self._record("stop", outcome=outcome or "not_run", overlay_removed=removed, overlay_kept=kept,
                          notes=list(notes))
             path = self._report.close({"restore": restore, "outcome": outcome, "permission": self._permission,
                                        "snapshot": self._snapshot, "save": self._save, "country": self._country,
                                        "overlay_removed": removed, "overlay_kept": kept, "notes": notes,
-                                       "next": next_step})
+                                       "next": next_step, "self_checks": found})
             return str(path)
         except Exception as e:
             notes.append("writing the report failed: %s" % e)
@@ -1514,15 +1694,80 @@ class Session:
                     return when
         return None
 
-    def _new_lines(self) -> list[str]:
-        """The debug.log lines since the last call; both logs' new lines are copied into the run folder."""
+    def _new_lines(self, ended_here: bool = False) -> list[str]:
+        """The debug.log lines since the last call; both logs' new lines are copied into the run folder.
+
+        Nothing polled is copied, or returned, unless the run's game is proved alive by its pid and start time
+        AFTER the poll that read it (`_vouch_for_polled`; one `adopt`, and none for a poll that read nothing).
+        Alive after the read is alive at the read, so no line of a game started once ours had died can be
+        among them; a proof before the read would leave the time between the two. `ended_here` is the one
+        exception, for the stop's single read right after its own `kill` ended the game alive. Once the logs
+        are closed nothing is read."""
+        if self._logs_closed:
+            return []
         lines = self._debug_log.poll()
-        self._copy("debug.log", lines)
         errors = self._error_log.poll()
+        if (lines or errors) and not ended_here:
+            self._vouch_for_polled()
+        if self._debug_log.skipped:
+            skipped, self._debug_log.skipped = self._debug_log.skipped, 0
+            self._notes.append("the game appended to the debug.log it found: its first %d bytes are an earlier "
+                               "game's (the run's snapshot recorded them) and were not read as this run's" % skipped)
+            self._record("found_log", outcome="prefix_skipped", bytes=skipped)
+        self._copy("debug.log", lines)
         self._copy("error.log", errors)
         if self._errors_seen is not None:
             self._errors_seen.extend(errors)
         return lines
+
+    def _vouch_for_polled(self) -> None:
+        """After a poll that read lines: the game must still be the run's own, alive (`adopt` compares the pid
+        and the start time, and sends nothing). If it cannot be proved, the lines just read are dropped, the
+        logs are closed for good, a note says so, and the verbs end (`watch_ended`): the game died at a time
+        nobody knows, and a game started since may have written what was read."""
+        try:
+            self._helper.adopt(self._proc)
+        except Exception as e:
+            self._logs_closed = True
+            why = ("the game could not be proved alive by its pid and start time after its log was read (%s), so "
+                   "the lines read were dropped: another game may have written them. Stop the session"
+                   % _describe(e))
+            self._notes.append("at %s log lines were read and dropped, since the game could not be proved alive "
+                               "afterwards and they may be another game's; the game's logs were not read again. "
+                               "Self-check lines logged after the verb before are not in the summary"
+                               % stamp(utc_now()))
+            self._record("log_lines", outcome="dropped", detail=_describe(e))
+            if self._watch_ended is None:
+                self._watch_ended = why
+            raise SessionError("watch_ended", why) from e
+
+    def _last_log_lines(self, left_up: bool, notes: list[str]) -> None:
+        """At a stop, before any restore: the last lines the game wrote, for the report's self-checks.
+
+        They are read only when this very call ended the run's game while it was alive (`kill` ended a process
+        it had proved the game by pid and start time), and then the logs are closed: a restore follows, and
+        afterwards `logs/` holds the owner's logs again. A game that had ended before this call (it crashed,
+        the owner closed it, `watch` recorded its exit) ended at a time nobody knows, and another game may have
+        started since: a launch moves the logs on, and the follower would read that game's lines as a rotation
+        of the run's. Then nothing is read, the logs are closed for good, and a note says so. A game left up is
+        not read either, and the logs stay open for the stop that ends it. Never raises."""
+        if self._logs_closed or self._debug_log is None or self._error_log is None:
+            return
+        if self._ended_alive:
+            try:
+                self._new_lines(ended_here=True)
+            except Exception:
+                pass                            # the copy is a convenience
+            self._logs_closed = True
+            return
+        self._logs_closed = not left_up
+        note = ("the game's log was not read at this stop: %s. Self-check lines the game logged after the last "
+                "verb are not in the summary" % (
+                    "the game was left up, and its log is read by the stop that ends it" if left_up else
+                    "the game had ended before the stop came to end it, so another game may have written `logs/` "
+                    "since"))
+        if note not in notes:
+            notes.append(note)
 
     def _copy(self, name: str, lines: list[str]) -> None:
         if not lines or self._report is None:
@@ -1938,6 +2183,14 @@ def _describe(e: BaseException) -> str:
 
 def _text(value) -> str:
     return " ".join(str(value).split())
+
+
+def _fraction(name: str, value) -> float:
+    """A click's coordinate: a fraction of the client area, at least 0 and below 1."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value < 1:
+        raise SessionError("bad_argument", "%s is a fraction of the window, at least 0 and below 1, not %r"
+                           % (name, value))
+    return float(value)
 
 
 def _check_tag(tag: str) -> None:

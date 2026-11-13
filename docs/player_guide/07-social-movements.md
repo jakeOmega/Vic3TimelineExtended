@@ -60,7 +60,8 @@ once.
 
 As support climbs, the bar's phase adds turmoil penalties and radicals from
 political movements, and from 90 it also raises your chance of enacting laws.
-The bar's tooltip lists every line. The full list of what moves the bar, with
+The panel's lists beside the bar show every line, ticking those that apply this
+month, so you can see what is left to switch on. The full list of what moves the bar, with
 the phase effects, is in [Appendix: social movement
 details](18-appendix-social-movements.md#what-moves-movement-support).
 
@@ -73,11 +74,11 @@ groups exclude each other. Cooptation is limited only by its law requirement.
 | Policy | Requires | What it does |
 |---|---|---|
 | Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
-| Federal Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
+| Federal Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance and speeds enacting Multicultural, costs bureaucracy and authority |
 | Gradualist Accommodation | No crackdown | Raises support a little; eases turmoil, raises acceptance slightly |
 | Cooptation / Token Reform | Discrimination, Indifference or Cultural Assimilation | Raises support for 12 months only; eases turmoil, costs legitimacy through ideological incoherence |
 | Suppression / Crackdown | No pro-movement policy | Lowers support; adds authority and turmoil |
-| Segregationist Consolidation | A discriminatory minority law; no pro-movement policy | Lowers support fast; adds authority, but lowers acceptance and brings more radicals |
+| Segregationist Consolidation | A discriminatory minority law; no pro-movement policy | Lowers support fast; adds authority, but lowers acceptance, slows enacting Multicultural and brings more radicals |
 
 The discriminatory minority laws are Violent Hostility, Ghettoization, Cultural
 Assimilation and Discrimination. Cooptation stops pushing the bar after 12
@@ -128,8 +129,10 @@ policy must run more than 18 months to count. Results decay over ten years.
 | The Movement Fades (failure) | Otherwise | Radicals among lower-strata pops |
 
 Ties between pro-movement policies go to Federal Protection, then Grassroots.
-The entry's status lists the months each policy has run and names the ending
-the movement would reach if it won or collapsed now.
+The journal panel lists all ten endings in this order, each with the condition
+that leads to it, ticked when it holds; the first one whose conditions all hold
+is the ending. The entry's status lists the months each policy has run and names
+the ending the movement would reach if it won or collapsed now.
 
 ### How the AI handles civil rights
 

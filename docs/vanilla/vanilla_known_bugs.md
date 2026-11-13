@@ -1135,7 +1135,7 @@ Subject Pact not found for Country
 set_state_religion effect [ 'Country '
 ```
 
-`law_total_separation`'s `on_activate` (line 592) sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898). `law_state_religion`'s (line 37) and `law_freedom_of_conscience`'s (line 493) do the same, so a dynamic country that starts with either law and an atheist state religion logs it too: once each on 2026-11-07 (about 2018), from a vanilla uprising ('H27_ADJ Uprising', State Religion) and a revolution ('Revolutionary PREFIX Entre Douro and Minho', Freedom of Conscience). Twice the same day a country the mod's planned decolonization formed from an atheist metropole (`create_dynamic_country` inherits the origin's laws and religion) logged it with the mod's frame, so those lines stay visible: issue #1499.
+`law_total_separation`'s `on_activate` (line 592) sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898). `law_state_religion`'s (line 37) and `law_freedom_of_conscience`'s (line 493) do the same, so a dynamic country that starts with either law and an atheist state religion logs it too: once each on 2026-11-07 (about 2018), from a vanilla uprising ('H27_ADJ Uprising', State Religion) and a revolution ('Revolutionary PREFIX Entre Douro and Minho', Freedom of Conscience). Twice the same day a country the mod's planned decolonization formed from an atheist metropole (`create_dynamic_country` inherits the origin's laws and religion) logged it with the mod's frame (issue #1499). Since 2026-11-12 `form_decolonized_country` passes the released culture's religion when the metropole is atheist (self-check `decol_new_country_religion`, `docs/testing/colonial-holdings-playtest.md`), so a mod-framed line again is a regression.
 
 ### `common/laws/01_economic_system.txt:694` — Command Economy's `ai_will_do` reads the ruler of a country with none
 - stack: vanilla only
@@ -2049,7 +2049,7 @@ Vanilla naval-battle UI loc accessors (`NAVAL_BATTLE.GetAttackerNumWantedShipsDe
 No context supplied (Use SetDataContext), wanted context of type
 ```
 
-Vanilla loc strings (`INCORPORATION_TIME_SAME_TRAIT_GROUP`, `PRODUCTION_METHOD_OPTIONS_BULK`, etc.) read chained data-system functions (`DiscriminationTraitGroup.GetName`, `BuildingProductionMethodsEntry.GetBuildingType`) without first calling `SetDataContext` to bind the upstream object. Engine emits the context-missing error and falls back to the raw loc value. Cosmetic; loc still renders (with the placeholder visible to the player).
+Vanilla loc strings (`INCORPORATION_TIME_SAME_TRAIT_GROUP`, `PRODUCTION_METHOD_OPTIONS_BULK`, etc.) read chained data-system functions (`DiscriminationTraitGroup.GetName`, `BuildingProductionMethodsEntry.GetBuildingType`) without first calling `SetDataContext` to bind the upstream object. Engine emits the context-missing error and falls back to the raw loc value. Cosmetic; loc still renders (with the placeholder visible to the player). A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
 ### `pdx_data_callstack.cpp:325` — vanilla new-data-types missing context registration
 - source: `pdx_data_callstack.cpp:325`
@@ -2085,7 +2085,7 @@ Downstream cascade from the `pdx_data_callstack.cpp:16` missing-context bug — 
 FetchData failed for
 ```
 
-Final cascade step of the `pdx_data_callstack.cpp` context-missing chain — once the data lookup fails, the helper logs this summary message per failed loc fetch. Companion to the cpp:16 / :325 entries above. Cosmetic.
+Final cascade step of the `pdx_data_callstack.cpp` context-missing chain — once the data lookup fails, the helper logs this summary message per failed loc fetch. Companion to the cpp:16 / :325 entries above. Cosmetic. A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
 ### `pdx_gui_data_model.cpp:95` — vanilla GUI reshape with negative offset
 - source: `pdx_gui_data_model.cpp:95`
@@ -2104,7 +2104,7 @@ Vanilla GUI panel reshape logic occasionally hands the data-model layer a negati
 PdxDataFetchLocalizedData failed for
 ```
 
-Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic.
+Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic. A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
 ### `navy_ai.cpp:3585` — no naval mission type possible for a country
 - source: `navy_ai.cpp:3585`

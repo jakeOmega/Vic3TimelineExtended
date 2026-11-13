@@ -1016,7 +1016,9 @@ class MilitaryTabTest(unittest.TestCase):
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
         # the header's map button (te_jmap_nuclear_map_button, journal_map_modes.md) is not a journal root
-        found = [n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M) if not n.startswith("te_jmap_")]
+        # nor is the entry's modifier strip, the frame's (test_te_entry_modifier_strip.py)
+        found = [n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+                 if not n.startswith("te_jmap_") and n != "te_je_modifier_strip"]
         roots = [wrapped for _, _, wrapped in ROOTS]
         # The journal's roots, with the entry's own bar under The Programme, as in the journal.
         self.assertEqual(found, roots[:2] + ["te_nuclear_programme_bar"] + roots[2:])
@@ -1401,8 +1403,9 @@ class PrivateTest(unittest.TestCase):
 
 class TooltipKeysTest(unittest.TestCase):
     """The keys a scripted GUI's effect prints into a hover (custom_tooltip)
-    are invisible to test_te_system_tab_bodies.py's BindingTest and to the
-    rebinding tool. Every handler another country's panel asks for a tooltip
+    were invisible to test_te_system_tab_bodies.py's BindingTest and to the
+    rebinding tool when this was written (both follow them since #1361; this
+    names the handlers, and checks the true count too). Every handler another country's panel asks for a tooltip
     (ExecuteTooltip, IsValidTooltip, IsShownTooltip) prints keys that read no
     entry and no player (the root is the shown country), and nothing of the
     true count. The private sections' breakdowns are not asked there at all."""

@@ -438,7 +438,8 @@ When a milestone completes, its event plays and every other recognized country
 gets a notice two weeks later, from which it can push every milestone it has
 under way by a month of progress or congratulate you for better relations. The finisher keeps a permanent
 reward. The first country to finish a milestone gets the larger version; anyone
-who finishes it later gets the smaller one.
+who finishes it later gets the smaller one. The milestone's entry lists both
+endings, first and later, each with its reward.
 
 | Milestone | Prestige | Innovation cap | Research speed | Influence | Cultural pull |
 |---|---|---|---|---|---|

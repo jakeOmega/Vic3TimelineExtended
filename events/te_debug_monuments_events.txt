@@ -37,7 +37,12 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 	# Run this month's pass now (contests, ledgers, totals, the log).
 	option = {
 		name = te_debug_monuments.1.b
-		gm_country_monthly = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			gm_country_monthly = yes
+		}
 	}
 
 	# Contest our tallest regime, ruler or faith monument now, as if it had
@@ -129,12 +134,17 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event 
 	# A centenary this year.
 	option = {
 		name = te_debug_monuments.2.c
-		gm_com_clear = yes
-		set_variable = { name = gm_founded_year value = { value = year subtract = 100 } }
-		gm_remove_state_var = { VAR = gm_com_centenary_100 }
-		set_variable = { name = gm_com_age value = 100 }
-		gm_com_track_centenary_n = { N = 100 }
-		remove_variable = gm_com_age
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			gm_com_clear = yes
+			set_variable = { name = gm_founded_year value = { value = year subtract = 100 } }
+			gm_remove_state_var = { VAR = gm_com_centenary_100 }
+			set_variable = { name = gm_com_age value = 100 }
+			gm_com_track_centenary_n = { N = 100 }
+			remove_variable = gm_com_age
+		}
 	}
 
 	# The ruler's death, as if after a long reign (the ruler lives on).
@@ -151,9 +161,14 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event 
 	# A new order: forget last month's regime, so this month's reads as new.
 	option = {
 		name = te_debug_monuments.2.e
-		gm_com_clear = yes
-		set_variable = { name = gm_regime_last value = flag:none }
-		gm_com_track_regime = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			gm_com_clear = yes
+			set_variable = { name = gm_regime_last value = flag:none }
+			gm_com_track_regime = yes
+		}
 	}
 
 	# A space first (the orbital one), without touching the space race.
@@ -220,11 +235,16 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event 
 	# Run it out: the clock ends this month.
 	option = {
 		name = te_debug_monuments.2.l
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
 		if = {
-			limit = { has_variable = gm_com_open }
-			set_variable = { name = gm_com_months_left value = 1 }
-			gm_com_monthly = yes
-			gm_country_refresh = yes
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			if = {
+				limit = { has_variable = gm_com_open }
+				set_variable = { name = gm_com_months_left value = 1 }
+				gm_com_monthly = yes
+				gm_country_refresh = yes
+			}
 		}
 	}
 
@@ -346,7 +366,7 @@ te_debug_monuments.4 = { # REVIEWED 2026-10-11: console-only test event (`event 
 		name = te_debug_monuments.4.a
 		trigger = { exists = scope:gm_dbg_m1 }
 		scope:gm_dbg_m1 = { gm_debug_next_picture = yes }
-		trigger_event = { id = te_debug_monuments.4 }
+		trigger_event = { id = te_debug_monuments.4 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 	}
 
 	option = {
@@ -358,7 +378,7 @@ te_debug_monuments.4 = { # REVIEWED 2026-10-11: console-only test event (`event 
 				gm_debug_next_picture = yes
 			}
 		}
-		trigger_event = { id = te_debug_monuments.4 }
+		trigger_event = { id = te_debug_monuments.4 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 	}
 
 	option = {
@@ -714,7 +734,7 @@ te_debug_monuments.8 = { # REVIEWED 2026-10-16: console-only test event (`event 
 		trigger = { exists = scope:gm_dbg_m1 }
 		scope:gm_dbg_m1 = { gm_debug_next_signature = yes }
 		trigger_event = { id = monument_events.20 }
-		trigger_event = { id = te_debug_monuments.8 }
+		trigger_event = { id = te_debug_monuments.8 } # REVIEWED 2026-11-12 (trigger_event_cycle): a console menu re-opened from its own option: nothing else in script fires it and its immediate fires nothing, so each pass waits on the player's click
 	}
 
 	option = {

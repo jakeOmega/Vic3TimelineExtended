@@ -236,9 +236,9 @@ monument_events.2 = {
 		name = monument_events.2.a
 		trigger = {
 			hidden_trigger = {
-				NOT = {
-					has_variable = gm_ceremony_mode
-					var:gm_ceremony_mode = flag:rededicate
+				trigger_if = {
+					limit = { has_variable = gm_ceremony_mode }
+					NOT = { var:gm_ceremony_mode = flag:rededicate }
 				}
 			}
 			custom_tooltip = {
@@ -259,9 +259,9 @@ monument_events.2 = {
 		name = monument_events.2.a
 		trigger = {
 			hidden_trigger = {
-				NOT = {
-					has_variable = gm_ceremony_mode
-					var:gm_ceremony_mode = flag:rededicate
+				trigger_if = {
+					limit = { has_variable = gm_ceremony_mode }
+					NOT = { var:gm_ceremony_mode = flag:rededicate }
 				}
 			}
 			custom_tooltip = {
@@ -1785,33 +1785,6 @@ monument_events.31 = {
 }
 
 # ============================================================================
-# Event 32: an older save's monument (sites spec 2026-10-18 §3.5)
-# ============================================================================
-# Hidden plumbing, a state event from the refresh (gm_country_refresh), which
-# tooltips walk without writing: a finished monument from before construction
-# sites is recorded and its building reset to level 1, or made a site at its
-# level (gm_state_migrate). Not while levels of it are still being built:
-# removing the building would cancel them; the refresh asks again.
-monument_events.32 = {
-	type = state_event
-	hidden = yes
-
-	trigger = {
-		gm_system_enabled = yes
-		gm_state_needs_migration = yes
-	}
-
-	immediate = {
-		if = {
-			limit = {
-				b:building_grand_monument ?= { is_under_construction = no }
-			}
-			gm_state_migrate = yes
-		}
-	}
-}
-
-# ============================================================================
 # Event 30: choices on a monument beside another (ageing spec 2026-10-16 §4.3)
 # ============================================================================
 # Hidden plumbing, a state event from gm_mon_order_choice: Pull Down and
@@ -2140,7 +2113,7 @@ monument_events.16 = {
 					gm_state_is_contested = yes
 					owner = root
 				}
-				trigger_event = { id = monument_events.17 }
+				trigger_event = { id = monument_events.17 } # REVIEWED 2026-11-12 (trigger_event_cycle): this event goes to a player only (gm_notify_new_contests: is_ai = no) and its immediate removed every gm_new_contest, which that effect reads, so the refresh behind monument_events.17's options does not send this event again
 			}
 		}
 		# A monument beside another is decided on its own row.
@@ -2197,7 +2170,7 @@ monument_events.17 = {
 			limit = { owner = scope:monument_owner }
 			gm_state_choose_tear_down = yes
 			hidden_effect = {
-				owner = { trigger_event = { id = monument_events.20 } }
+				owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh reaches this event again only through gm_notify_new_contests -> monument_events.16, whose immediate removed this state's gm_new_contest before the option that sent this
 			}
 		}
 	}
@@ -2208,7 +2181,7 @@ monument_events.17 = {
 			limit = { owner = scope:monument_owner }
 			gm_state_choose_rededicate = yes
 			hidden_effect = {
-				owner = { trigger_event = { id = monument_events.20 } }
+				owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh reaches this event again only through gm_notify_new_contests -> monument_events.16, whose immediate removed this state's gm_new_contest before the option that sent this
 			}
 		}
 	}
@@ -2219,7 +2192,7 @@ monument_events.17 = {
 			limit = { owner = scope:monument_owner }
 			gm_state_choose_preserve = yes
 			hidden_effect = {
-				owner = { trigger_event = { id = monument_events.20 } }
+				owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh reaches this event again only through gm_notify_new_contests -> monument_events.16, whose immediate removed this state's gm_new_contest before the option that sent this
 			}
 		}
 	}

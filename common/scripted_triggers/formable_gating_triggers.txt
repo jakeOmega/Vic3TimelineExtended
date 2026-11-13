@@ -269,15 +269,51 @@ dar_formation_no_internal_rivalry = {
 # is what makes UNE-formation feel earned: ROOT leads a bloc that contains
 # essentially every great power on earth.
 
+# The four gates below name the great powers in their tooltips (list_scopes
+# and show_trigger_per_scope, vanilla 1.15): each is a positive count over the
+# great powers other than ROOT (`filter`, as vanilla's tsar buttons write it)
+# rather than "no great power that fails" (vanilla lists only in positive
+# counts; whether a NOT-wrapped count lists is untested). Each
+# is exactly the NOT form it replaced; test_une_formation_gates.py pins that.
+# A count over no great power at all is never asked: trigger_if passes when
+# there is nothing to count, as the NOT form did.
+
 une_formation_supermajority = {
 	is_power_bloc_leader = yes
-	# At most one great power exists outside ROOT's power bloc.
-	NOT = {
-		any_country = {
-			country_rank >= rank_value:great_power
-			NOT = { this = ROOT }
-			NOT = { is_in_same_power_bloc = ROOT }
-			count >= 2
+	# At most one great power exists outside ROOT's power bloc: at least all
+	# the others but one are inside it (te_formation_gating_values.txt).
+	trigger_if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				NOT = { this = ROOT }
+				count >= 2
+			}
+		}
+		trigger_if = {
+			limit = { country_rank >= rank_value:great_power }
+			any_country = {
+				filter = {
+					country_rank >= rank_value:great_power
+					NOT = { this = ROOT }
+				}
+				is_in_same_power_bloc = ROOT
+				count >= une_supermajority_needed_gp_candidate
+				list_scopes = yes
+				show_trigger_per_scope = yes
+			}
+		}
+		trigger_else = {
+			any_country = {
+				filter = {
+					country_rank >= rank_value:great_power
+					NOT = { this = ROOT }
+				}
+				is_in_same_power_bloc = ROOT
+				count >= une_supermajority_needed_other_candidate
+				list_scopes = yes
+				show_trigger_per_scope = yes
+			}
 		}
 	}
 }
@@ -285,22 +321,46 @@ une_formation_supermajority = {
 une_formation_bloc_aligned = {
 	# Any great power not already in ROOT's bloc must be aligned via treaty
 	# or customs union (i.e. friendly outliers, not rivals).
-	NOT = {
+	trigger_if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				NOT = { this = ROOT }
+			}
+		}
 		any_country = {
-			country_rank >= rank_value:great_power
-			NOT = { this = ROOT }
-			NOT = { is_in_same_power_bloc = ROOT }
-			NOT = { is_aligned_with_root = yes }
+			filter = {
+				country_rank >= rank_value:great_power
+				NOT = { this = ROOT }
+			}
+			OR = {
+				is_in_same_power_bloc = ROOT
+				is_aligned_with_root = yes
+			}
+			count = all
+			list_scopes = yes
+			show_trigger_per_scope = yes
 		}
 	}
 }
 
 une_formation_no_internal_rivalry = {
-	NOT = {
+	trigger_if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				NOT = { this = ROOT }
+			}
+		}
 		any_country = {
-			country_rank >= rank_value:great_power
-			NOT = { this = ROOT }
-			is_at_friction_with_root = yes
+			filter = {
+				country_rank >= rank_value:great_power
+				NOT = { this = ROOT }
+			}
+			NOT = { is_at_friction_with_root = yes }
+			count = all
+			list_scopes = yes
+			show_trigger_per_scope = yes
 		}
 	}
 }
@@ -311,6 +371,8 @@ une_formation_no_internal_rivalry = {
 # UN to ask, so ROOT's bloc must stand in for it: no great power outside it,
 # where une_formation_supermajority allows one aligned outsider. Also gates
 # dp_unify_united_earth, so a unification play cannot form UNE around it.
+# Whether the list shows inside the custom_tooltip is the C10 question
+# (docs/audits/vanilla_1_15_prep.md); the logic is the same either way.
 # Scope: country (ROOT is the candidate or the play's initiator)
 une_formation_world_order = {
 	trigger_if = {
@@ -323,11 +385,22 @@ une_formation_world_order = {
 	trigger_else = {
 		custom_tooltip = {
 			text = une_formation_bloc_unanimity_tt
-			NOT = {
+			trigger_if = {
+				limit = {
+					any_country = {
+						country_rank >= rank_value:great_power
+						NOT = { this = ROOT }
+					}
+				}
 				any_country = {
-					country_rank >= rank_value:great_power
-					NOT = { this = ROOT }
-					NOT = { is_in_same_power_bloc = ROOT }
+					filter = {
+						country_rank >= rank_value:great_power
+						NOT = { this = ROOT }
+					}
+					is_in_same_power_bloc = ROOT
+					count = all
+					list_scopes = yes
+					show_trigger_per_scope = yes
 				}
 			}
 		}

@@ -86,6 +86,10 @@ VOTE_EVENTS = _path("events", "un_vote_events.txt")
 VOTE_EFFECTS = _path("common", "scripted_effects", "un_vote_effects.txt")
 CAST_EFFECTS = _path("common", "scripted_effects", "un_vote_cast_effects.txt")
 RESOLUTION_TRIGGERS = _path("common", "scripted_triggers", "un_resolution_triggers.txt")
+COURT_EVENTS = _path("events", "un_court_events.txt")
+DOSSIER_VALUES = _path("common", "script_values", "un_dossier_values.txt")
+MISC_TRIGGERS = _path("common", "scripted_triggers", "misc_triggers.txt")
+COVERT_ACTIONS = _path("common", "diplomatic_actions", "covert_operations.txt")
 STANDING_VALUES = _path("common", "script_values", "un_standing_values.txt")
 MISSION_TRIGGERS = _path("common", "scripted_triggers", "un_mission_triggers.txt")
 COVERT_EFFECTS = _path("common", "scripted_effects", "covert_warfare_effects.txt")
@@ -273,16 +277,39 @@ class RefusalMeansSomethingTests(unittest.TestCase):
 
 
 class TargetAcceptanceTests(unittest.TestCase):
-    """Acceptance softens no expulsion, mandate or court referral, so the
-    target's yes on one is not charged as a confession."""
+    """Acceptance softens no expulsion or mandate, so the target's yes on one
+    is not charged as a confession. A court referral may be accepted (issue
+    #978): the holder that voted for it may only obey the ruling."""
 
-    def test_trigger_excludes_the_three(self):
+    def test_trigger_excludes_expulsion_and_mandate_only(self):
         body = _squash(_block(_read(RESOLUTION_TRIGGERS), "un_resolution_target_may_accept"))
         self.assertIn("un_resolution_accuses_target = yes", body)
-        for topic in ("un_topic_expulsion", "un_topic_military_mandate", "un_topic_court_referral"):
+        for topic in ("un_topic_expulsion", "un_topic_military_mandate"):
             with self.subTest(topic=topic):
                 self.assertIn("has_tag = " + topic, body)
         self.assertIn("NOR = {", body)
+        self.assertNotIn("un_topic_court_referral", body)
+        accuses = _block(_read(RESOLUTION_TRIGGERS), "un_resolution_accuses_target")
+        self.assertIn("has_tag = un_topic_court_referral", accuses)
+
+    def test_accepted_referral_leaves_only_obedience(self):
+        court2 = _block(_read(COURT_EVENTS), "un_court.2")
+        options = _children(court2, "option")
+        self.assertEqual(len(options), 2)
+        accepted = "NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }"
+        self.assertNotIn("un_res_target_accepted", options[0])
+        self.assertIn("un_court_comply = yes", options[0])
+        self.assertIn("un_court_defy = yes", options[1])
+        self.assertIn(accepted, _squash(options[1]))
+        loc = _loc_keys()
+        for part in ("desc", "flavor"):
+            with self.subTest(part=part):
+                block = _squash(_children(court2, part)[0])
+                key = "un_court.2.%s_accepted" % part[0]
+                self.assertIn("desc = " + key, block)
+                self.assertIn("has_tag = un_res_target_accepted", block)
+                self.assertIn(key, loc)
+        self.assertIn("World Court ruling", loc["UN_VOTE_ACCEPT_TARGET_TT"])
 
     def test_the_cast_and_the_event_name_use_it(self):
         cast = _block(_read(CAST_EFFECTS), "un_vote_cast_yes")
@@ -306,6 +333,58 @@ class ElectoralObserverTests(unittest.TestCase):
         self.assertIn("has_tag = un_msn_$TYPE$", trigger)
         self.assertIn("var:un_msn_strength > 0", trigger)
         self.assertNotIn("whatever the mission's strength", _loc_keys()["je_un_terms_observer_request"])
+
+
+class ElectionGateTests(unittest.TestCase):
+    """Election Interference and UN observer missions ask one trigger, which
+    counts Anarchy as electoral (issue #896)."""
+
+    LAWS = ("law_landed_voting", "law_wealth_voting", "law_census_voting",
+            "law_universal_suffrage", "law_liquid_democracy", "law_labour_suffrage",
+            "law_anarchy")
+
+    def test_the_shared_trigger_lists_every_electoral_law(self):
+        body = _block(_read(MISC_TRIGGERS), "te_holds_elections")
+        self.assertEqual(set(re.findall(r"law_type:(\w+)", body)), set(self.LAWS))
+
+    def test_interference_asks_it_at_launch_and_to_maintain(self):
+        action = _block(_read(COVERT_ACTIONS), "covert_election_interference_action")
+        gates = [b for b in _children(action, "custom_tooltip") if "iw_target_has_elections_tt" in b]
+        self.assertEqual(len(gates), 2)
+        for gate in gates:
+            with self.subTest(gate=gate):
+                self.assertIn("scope:target_country = { te_holds_elections = yes }", _squash(gate))
+                self.assertNotIn("has_law", gate)
+
+    def test_no_second_list_survives(self):
+        for root, _dirs, files in os.walk(_path("common")):
+            for name in files:
+                if name.endswith(".txt"):
+                    text = _read(os.path.join(root, name))
+                    for old in ("un_mission_holds_elections", "te_jud_elected_government"):
+                        with self.subTest(file=name, trigger=old):
+                            self.assertNotIn(old, text)
+        self.assertIn("te_holds_elections = yes", _read(MISSION_TRIGGERS))
+
+
+class DecolonizationEmpireVoteTests(unittest.TestCase):
+    """An AI colonial empire leans against the Decolonization Resolution and
+    never ratifies one it voted against (issue #1373)."""
+
+    def test_lean_keys_on_the_colonial_empire(self):
+        values = _read(DOSSIER_VALUES)
+        body = _block(values, "un_lean_interests")
+        start = body.index("has_tag = un_topic_decolonization")
+        branch = _squash(body[start:body.index("else_if", start)])
+        self.assertIn("limit = { decol_holds_colonial_empire = yes } add = -40", branch)
+        self.assertNotIn("is_direct_subject_of", branch)
+
+    def test_option_b_is_zero_for_an_empire(self):
+        vote3 = _block(_read(VOTE_EVENTS), "un_vote.3")
+        option_b = _children(vote3, "option")[1]
+        ai = _squash(_children(option_b, "ai_chance")[0])
+        self.assertIn("trigger = { scope:un_resolution ?= { has_tag = un_topic_decolonization } "
+                      "decol_holds_colonial_empire = yes } factor = 0", ai)
 
 
 class DeadReservationModifierTests(unittest.TestCase):

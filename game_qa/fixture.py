@@ -192,6 +192,7 @@ def make(
     spawn_watch: SpawnWatch,
     clock=time.monotonic,
     started: Callable[[str], ProcId | None] | None = None,
+    keep_lines: Callable[[str], Any] | None = None,
 ) -> Path:
     """Make the fixture for `key` with one unattended run of the game, and return its save. `playset` is the
     run's (`launch --playset`), so the fixture is made in the world the run will load.
@@ -209,7 +210,12 @@ def make(
 
     Nothing is started when `save games/` already holds the fixture or a `TEST_FAIL_te_qa_fixture_*` save: the
     second would be taken for this run's. A refused or held verb raises FixtureError carrying its reply; when
-    several steps fail the first is raised and the later ones are added to its message."""
+    several steps fail the first is raised and the later ones are added to its message.
+
+    Once the fixture is made and its run restored, `keep_lines` is called with the run's snapshot id: the
+    restore has copied the run's logs to that snapshot's `run_logs/`, the only place the lines a new game logs
+    at its setup are ever written, and the snapshot is pruned long before the fixture (game_qa.selfchecks,
+    #1601). It must not raise: the fixture is made whatever becomes of its lines."""
     _check_key(key)
     saves = Path(user_data) / SAVE_FOLDER
     target = saves / f"{FIXTURE_PREFIX}{key}.v3"
@@ -249,6 +255,8 @@ def make(
     if failure is not None:
         failure.restore = restored
         raise failure
+    if keep_lines is not None:
+        keep_lines(snapshot)
     return target
 
 

@@ -573,7 +573,7 @@ nd_crisis_notify_guarantors = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					set_variable = { name = nd_guarantee_basis value = 1 }
-					trigger_event = { id = nuclear_crisis.20 }
+					trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 				}
 			}
 		}
@@ -592,7 +592,7 @@ nd_crisis_notify_guarantors = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					set_variable = { name = nd_guarantee_basis value = 2 }
-					trigger_event = { id = nuclear_crisis.20 }
+					trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 				}
 			}
 		}
@@ -612,7 +612,7 @@ nd_crisis_notify_guarantors = {
 				save_scope_as = nd_guarantor
 				set_variable = { name = nd_guarantee_context value = 1 }
 				set_variable = { name = nd_guarantee_basis value = 3 }
-				trigger_event = { id = nuclear_crisis.20 }
+				trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 			}
 		}
 	}
@@ -1858,10 +1858,22 @@ nd_crisis_act_yield = {
 				}
 				else_if = {
 					limit = { var:nd_crisis_dispute = 4 }
+					# The freeze binds the nation, not the regime (#758): a
+					# revolution's winner inherits the countdown but not the
+					# modifier, and nd_crisis_freeze_monthly puts it back.
 					scope:nd_target = {
+						if = {
+							limit = { has_modifier = nd_crisis_programme_freeze }
+							remove_modifier = nd_crisis_programme_freeze
+						}
 						add_modifier = {
 							name = nd_crisis_programme_freeze
 							years = 10
+						}
+						set_variable = { name = nd_crisis_freeze_months value = nd_crisis_freeze_months_value }
+						if = {
+							limit = { has_variable = nd_crisis_freeze_untimed }
+							remove_variable = nd_crisis_freeze_untimed
 						}
 					}
 				}
@@ -2095,15 +2107,14 @@ nd_crisis_concede_reparations = {
 	scope:nd_target = { save_scope_as = nd_loose_payer }
 	scope:nd_crisis_other_side = { save_scope_as = nd_loose_claimant }
 	scope:nd_target = {
-		# The sum read twice, not stored and read back: the yield's tooltip
-		# walks this and writes nothing. The payer's income does not move with
-		# its treasury, so both reads agree.
-		add_treasury = {
-			value = nd_loose_compensation_value
-			multiply = -1
-		}
-		scope:nd_crisis_other_side = {
-			add_treasury = nd_loose_compensation_value
+		# Under a reparations treaty (#1457), or directly where none can be
+		# made. The sum is read where the helper needs it, not stored and read
+		# back: the yield's tooltip walks this and writes nothing. The payer's
+		# income does not move with its treasury, so the reads agree.
+		te_pay_reparations_by_treaty = {
+			PAYER = scope:nd_target
+			PAYEE = scope:nd_crisis_other_side
+			AMOUNT = nd_loose_compensation_value
 		}
 		set_variable = { name = nd_loose_inspected value = 1 days = 7300 }
 		add_modifier = {

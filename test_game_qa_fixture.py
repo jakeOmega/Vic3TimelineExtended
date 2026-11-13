@@ -471,6 +471,25 @@ class MakeTest(FixtureTestCase):
         self.assertEqual(fake.verbs.count("restore"), 1, "a hold is not retried")
         self.assertEqual(self.target.read_bytes(), GAME_SAVE_BYTES, "the save was kept before the hold")
 
+    def test_the_runs_lines_are_kept_once_the_fixture_is_made_and_restored(self):
+        # #1601: the restore has copied the run's logs into its snapshot by then, and nothing else keeps them
+        fake = self.cli()
+        kept: list[tuple[str, list[str], bool]] = []
+        path = self.make(keep_lines=lambda snap: kept.append((snap, list(fake.order), self.target.is_file())))
+        self.assertEqual(path, self.target)
+        self.assertEqual(kept, [(SNAPSHOT, ["snapshot", "launch", "spawn_watch " + SNAPSHOT, "restore"], True)])
+
+    def test_no_lines_are_kept_for_a_fixture_that_was_not_made_or_not_restored(self):
+        for name, kwargs, step in (("no save", {"saves": ()}, "save"),
+                                   ("held", {"replies": {"restore": [(HELD, 2)]}}, "restore"),
+                                   ("refused launch", {"replies": {"launch": [(REFUSED, 2)]}}, "launch")):
+            with self.subTest(name):
+                self.target.unlink(missing_ok=True)
+                self.cli(**kwargs)
+                kept: list[str] = []
+                self.assert_fixture_error(step, keep_lines=kept.append)
+                self.assertEqual(kept, [])
+
     def test_the_first_failure_is_the_one_raised_and_a_later_one_is_added_to_the_message(self):
         fake = self.cli(saves=(), replies={"restore": [(HELD, 2)]})
         error = self.assert_fixture_error("save")

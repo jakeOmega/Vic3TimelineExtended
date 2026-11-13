@@ -86,7 +86,12 @@ gm_state_record_honoree = {
 				}
 			}
 		}
-		set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		# Guarded: the policy buttons' tooltips walk the refresh writing
+		# nothing, so the flag set above is unset there (tooltip_walk_variable_audit).
+		if = {
+			limit = { owner = { has_variable = gm_tmp_ig_flag } }
+			set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		}
 		owner = { remove_variable = gm_tmp_ig_flag }
 	}
 }
@@ -447,7 +452,6 @@ gm_state_monthly = {
 		# Its dedication, read if the building disappears (sites spec
 		# 2026-10-18 §3.7: it is put back on it).
 		gm_state_record_dedication = yes
-		gm_monument_migration_self_check = yes
 		gm_monument_merge_level_self_check = yes
 		# Tourism counts everything standing here; Open to the Public scales
 		# it (policy spec 2026-10-23 § 4.1), To History's share at half (§ 4.5).
@@ -526,6 +530,8 @@ gm_state_monthly = {
 					gm_state_record_teardown = yes
 				}
 				gm_clear_state = { KEEP_LANDMARK = no }
+				# The building is gone, so is script's mark on it (#1409).
+				gm_remove_state_var = { VAR = gm_migrated }
 			}
 		}
 		if = {
@@ -760,12 +766,6 @@ gm_country_refresh = {
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
-		# An older save's monument, once (sites spec 2026-10-18 §3.5): the
-		# hidden event, never here.
-		if = {
-			limit = { gm_state_needs_migration = yes }
-			trigger_event = { id = monument_events.32 }
-		}
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
 		# A landmark's unique dedication (signatures spec §4.4).
@@ -786,7 +786,7 @@ gm_country_refresh = {
 		}
 		if = {
 			limit = { gm_state_merge_pending = yes }
-			trigger_event = { id = monument_events.29 }
+			trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_state_adopt_orphans settles an orphan before each monument_events.20 (gm_sh_adopt_beside sets its gm_tr_origin; gm_state_promote_secondary destroys the container it raised), so each pass leaves one fewer for gm_state_merge_pending to find, or it waits a day (gm_state_tomorrow) while gm_rebuilding stands in the region
 		}
 		# A revolt's part of a monument's state: the engine's copy of its
 		# building, which nothing records and no orphan claims, beside the part
@@ -795,7 +795,7 @@ gm_country_refresh = {
 		# it.
 		else_if = {
 			limit = { gm_state_stray_building = yes }
-			trigger_event = { id = monument_events.29 }
+			trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): on this branch monument_events.29 removes the building and fires nothing (its own chain reads gm_state_merge_pending first, false here); gm_state_stray_building needs the building
 		}
 		# A merge's building before its orphan reads as one (2026-11-06,
 		# Jantar Mantar): not a copy and not a first sight. It waits up to a
@@ -832,7 +832,7 @@ gm_country_refresh = {
 			# back once settled (gm_state_settle_newcomer), from the hidden event.
 			if = {
 				limit = { gm_state_newcomer_settled = yes }
-				trigger_event = { id = monument_events.29 }
+				trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_state_settle_newcomer removes gm_newcomer on its first line, before gm_state_swap_primary's monument_events.20, and gm_state_newcomer_settled reads it
 			}
 		}
 		owner = {
@@ -1520,7 +1520,12 @@ gm_state_tear_down = {
 	}
 	gm_clear_state = { KEEP_LANDMARK = no }
 	# Another monument stood beside it: the building is the largest's now
-	# (gm_state_promote_secondary, gm_monument_effects.txt). Otherwise it goes.
+	# (gm_state_promote_secondary, gm_monument_effects.txt). Otherwise it goes,
+	# and with it the mark that script made this state's building (#1409): a
+	# building a merge brings in later is one no record describes, which waits
+	# for its orphan (gm_state_stray_waits) rather than being first-sighted.
+	# Not in gm_clear_state: Rededicate keeps its building, and every raise
+	# after a clear sets the mark again.
 	if = {
 		limit = { gm_state_has_secondary = yes }
 		gm_state_promote_secondary = yes
@@ -1528,6 +1533,7 @@ gm_state_tear_down = {
 	else = {
 		set_variable = { name = gm_rebuilding days = 1 }
 		remove_building = building_grand_monument
+		gm_remove_state_var = { VAR = gm_migrated }
 	}
 }
 
@@ -1890,7 +1896,7 @@ gm_state_start_ceremony = {
 			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		trigger_event = { id = monument_events.2 popup = yes }
+		trigger_event = { id = monument_events.2 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_ceremony_pending, set on the line above, stops this effect and gm_state_offer_missed_ceremony until the answer; the answer that removes it (gm_state_dedicate) first sets gm_rebuilding for a day (gm_state_finish_site, on both of its branches), which gm_state_offer_missed_ceremony refuses, before gm_state_offer_skins fires the refresh
 	}
 	gm_remove_state_var = { VAR = gm_rededicate_asking }
 }
@@ -1901,10 +1907,16 @@ gm_state_start_ceremony = {
 # for its Dedicate button (owner, 2026-10-18). monument_events.1 is the
 # immediate path, but on_building_built did not fire when five queued levels
 # of a new monument finished on the same day (owner's game, 2026-10-07).
+# Not the day script remade a building here (gm_rebuilding, one day), as in
+# monument_events.1: a ceremony's answer sets it (gm_state_finish_site) before
+# its refresh comes back here, and whether the site it removed still reads as
+# standing in the same effect is not established (#1012). A later refresh
+# asks, normally within a month.
 gm_state_offer_missed_ceremony = {
 	if = {
 		limit = {
 			gm_system_enabled = yes
+			NOT = { has_variable = gm_rebuilding }
 			gm_state_ai_dedicates_now = yes
 			NOT = { has_variable = gm_ceremony_pending }
 		}
@@ -2068,7 +2080,7 @@ gm_notify_new_contests = {
 		}
 		if = {
 			limit = { is_ai = no }
-			trigger_event = { id = monument_events.16 }
+			trigger_event = { id = monument_events.16 } # REVIEWED 2026-11-12 (trigger_event_cycle): monument_events.16's immediate removes every gm_new_contest and gm_tr_new_contest, which this effect's limit reads, before any option; and it goes to a player only (is_ai = no above), so its options' refresh waits on a click
 		}
 		else = {
 			every_scope_state = {
@@ -2210,119 +2222,6 @@ gm_state_put_back_building = {
 	set_variable = { name = gm_restore_pm value = var:gm_dedication }
 }
 
-# ---- Older saves (sites spec 2026-10-18 §3.5) -------------------------------------
-# State scope, from monument_events.32 once nothing is under construction here.
-# A dedicated monument keeps its size in its records (gm_levels, from the old
-# building arithmetic if it had none; its starting grandeur reads as its levels,
-# the 1836 rate) and its building goes back to level 1 on its method. An
-# undedicated one (left undedicated, or a ceremony that was open) becomes a
-# construction site at its level, counted at the 1836 rate; the largest
-# monument beside it, if any, takes the finished building.
-gm_state_migrate = {
-	set_variable = gm_migrated
-	if = {
-		limit = {
-			gm_state_is_dedicated = yes
-			has_variable = gm_seen
-		}
-		set_variable = { name = gm_mig_before value = gm_state_grandeur }
-		if = {
-			limit = { NOT = { has_variable = gm_levels } }
-			set_variable = { name = gm_levels value = gm_state_built_levels }
-		}
-		# Levels finished above its record (queued before construction sites,
-		# when they founded a monument beside it; the AI queued an
-		# opportunity's on its tallest): a construction site of that many,
-		# counted at the 1836 rate as an undedicated monument's are. Read
-		# before the building goes back to level 1.
-		set_variable = { name = gm_mig_excess value = gm_state_built_levels }
-		change_variable = { name = gm_mig_excess subtract = var:gm_levels }
-		gm_state_record_dedication = yes
-		if = {
-			limit = { gm_state_level > 1 }
-			gm_state_mark_restore_pm = yes
-			set_variable = { name = gm_rebuilding days = 1 }
-			remove_building = building_grand_monument
-			create_building = {
-				building = building_grand_monument
-				level = 1
-			}
-		}
-		if = {
-			limit = { var:gm_mig_excess > 0 }
-			te_construction_market_build_specified_level = {
-				SPEC_TYPE = building_grand_monument_site
-				SPEC_LEVEL = var:gm_mig_excess
-			}
-			set_variable = { name = gm_site_counted value = var:gm_mig_excess }
-			set_variable = { name = gm_site_grandeur value = var:gm_mig_excess }
-			owner = { trigger_event = { id = monument_events.20 } }
-		}
-		remove_variable = gm_mig_excess
-	}
-	else = {
-		set_variable = { name = gm_migrate_levels value = gm_state_built_levels }
-		gm_remove_state_var = { VAR = gm_ceremony_pending }
-		gm_remove_state_var = { VAR = gm_ceremony_level }
-		gm_remove_state_var = { VAR = gm_ceremony_mode }
-		set_variable = { name = gm_rebuilding days = 1 }
-		if = {
-			limit = { gm_state_has_secondary = yes }
-			gm_state_promote_secondary = yes
-		}
-		else = {
-			gm_clear_state = { KEEP_LANDMARK = no }
-		}
-		remove_building = building_grand_monument
-		# The monument beside it that rose (its records: gm_seen) keeps the
-		# finished building, at level 1 on its method (gm_restore_pm).
-		if = {
-			limit = { has_variable = gm_seen }
-			create_building = {
-				building = building_grand_monument
-				level = 1
-			}
-		}
-		te_construction_market_build_specified_level = {
-			SPEC_TYPE = building_grand_monument_site
-			SPEC_LEVEL = var:gm_migrate_levels
-		}
-		set_variable = { name = gm_site_counted value = var:gm_migrate_levels }
-		set_variable = { name = gm_site_grandeur value = var:gm_migrate_levels }
-		remove_variable = gm_migrate_levels
-		owner = { trigger_event = { id = monument_events.20 } }
-	}
-}
-
-# State scope, from gm_state_monthly while the building stands: once a game, a
-# month or more after a dedicated monument's migration, whether it kept its
-# grandeur (Review Focus 1 of the plan): within a hundredth below and a
-# twentieth above (a month's ageing). Not the day script remade its building.
-gm_monument_migration_self_check = {
-	if = {
-		limit = {
-			has_variable = gm_mig_before
-			NOT = { has_variable = gm_rebuilding }
-			NOT = { has_variable = gm_restore_pm }
-		}
-		if = {
-			limit = { NOT = { has_global_variable = gm_migration_self_checked } }
-			set_global_variable = gm_migration_self_checked
-			if = {
-				limit = {
-					gm_state_grandeur >= gm_state_mig_low
-					gm_state_grandeur <= gm_state_mig_high
-				}
-				debug_log = "TE_SELF_CHECK OK monument_migrated (an older save's Grand Monument kept its grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1])"
-			}
-			else = {
-				debug_log = "TE_SELF_CHECK BROKEN monument_migrated (an older save's Grand Monument changed grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1]; see docs/testing/grand-monuments-ageing-playtest.md)"
-			}
-		}
-		remove_variable = gm_mig_before
-	}
-}
-
 # ---- A construction site's dedication (sites spec 2026-10-18 §3.1) ----------------
 # State scope, from gm_state_dedicate in the ceremony's answer (mode site; the
 # Dedicate button and the AI ask only with nothing under construction). The
@@ -2430,7 +2329,7 @@ gm_state_offer_skins = {
 			set_variable = gm_unveil_pending
 		}
 	}
-	owner = { trigger_event = { id = monument_events.20 } }
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh starts a ceremony only from gm_state_offer_missed_ceremony, which refuses while gm_rebuilding stands; a site's answer sets it for a day (gm_state_finish_site, from gm_state_dedicate) before it reaches this line, and Rededicate's question needs a ceremony to ask it
 }
 
 gm_state_offer_skins_none = {

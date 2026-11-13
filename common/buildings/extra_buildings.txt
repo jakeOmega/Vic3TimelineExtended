@@ -255,6 +255,9 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 			NOT = { has_building = building_space_elevator }
 			b:building_space_elevator.level < 20
 		}
+		# A hand-kept list of 92 state regions near the equator, not in_tropics:
+		# the engine's band roughly doubled the sites (about 183), which the owner
+		# judged too many (2026-11-12; see #1454, #1672).
 		OR = {
 			state_region = s:STATE_RIFT_VALLEY
 			state_region = s:STATE_IVORY_COAST

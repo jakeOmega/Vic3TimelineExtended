@@ -134,7 +134,7 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(by_key["MISSING_KEY"].file, os.path.join("common", "political_movements", "m.txt"))
         self.assertEqual(by_key["MISSING_KEY"].line, 3)
         self.assertIsNone(by_key["MISSING_KEY"].exemption)
-        self.assertEqual(by_key["WAIVED_KEY"].exemption, {"date": "2026-09-25", "rationale": "test"})
+        self.assertEqual(by_key["WAIVED_KEY"].exemption, {"date": "2026-09-25", "tag": "", "rationale": "test"})
         self.assertEqual(result.files_audited, 2)
         self.assertEqual(result.references_checked, 4)
 

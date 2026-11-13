@@ -319,15 +319,21 @@ covert_op_refresh_detection = {
 			set_variable = { name = iw_det_eff_staging value = covert_detection_efficiency_factor }
 		}
 	}
-	set_variable = { name = iw_detect value = scope:iw_operator.var:iw_detect_staging }
 	set_variable = { name = iw_tgt_ic value = scope:iw_operator.var:target_max_ic }
 	set_variable = { name = iw_tgt_td value = scope:iw_operator.var:target_type_defense }
-	set_variable = { name = iw_det_ci value = scope:iw_operator.var:iw_det_ci_staging }
-	set_variable = { name = iw_det_their_net value = scope:iw_operator.var:iw_det_their_net_staging }
-	set_variable = { name = iw_det_net value = scope:iw_operator.var:iw_det_net_staging }
-	set_variable = { name = iw_det_prio value = scope:iw_operator.var:iw_det_prio_staging }
-	set_variable = { name = iw_det_fund value = scope:iw_operator.var:iw_det_fund_staging }
-	set_variable = { name = iw_det_eff value = scope:iw_operator.var:iw_det_eff_staging }
+	# Only once the staging above has run: the funding buttons' tooltips walk
+	# this body writing nothing, so the staged figures are unset there and
+	# each copy logged an error a frame per operation (tooltip_walk_variable_audit).
+	if = {
+		limit = { scope:iw_operator = { has_variable = iw_detect_staging } }
+		set_variable = { name = iw_detect value = scope:iw_operator.var:iw_detect_staging }
+		set_variable = { name = iw_det_ci value = scope:iw_operator.var:iw_det_ci_staging }
+		set_variable = { name = iw_det_their_net value = scope:iw_operator.var:iw_det_their_net_staging }
+		set_variable = { name = iw_det_net value = scope:iw_operator.var:iw_det_net_staging }
+		set_variable = { name = iw_det_prio value = scope:iw_operator.var:iw_det_prio_staging }
+		set_variable = { name = iw_det_fund value = scope:iw_operator.var:iw_det_fund_staging }
+		set_variable = { name = iw_det_eff value = scope:iw_operator.var:iw_det_eff_staging }
+	}
 	scope:iw_operator = {
 		remove_variable = iw_detect_staging
 		remove_variable = iw_priority_staging
@@ -2208,9 +2214,8 @@ covert_catch_expose = {
 
 # Shore up our counterintelligence: a decaying boost to separatism and coup
 # resistance and +6 intelligence capacity, three times the unit
-# (covert_counterintelligence_alert). Its own modifier:
-# intelligence_capacity_defense at country scope is stripped every month by
-# legacy_je_modifier_cleanup_effect. Removed first: a same-name add_modifier
+# (covert_counterintelligence_alert), not intelligence_capacity_defense, which
+# lives on je_covert_warfare. Removed first: a same-name add_modifier
 # stacks, and with the follow-up chosen at the catch nothing holds it to once
 # in covert_warfare.2's 24 months any more, so a second exposure refreshes it.
 # Shown in an option as it is (covert_warfare.2.a) or under show_as_tooltip

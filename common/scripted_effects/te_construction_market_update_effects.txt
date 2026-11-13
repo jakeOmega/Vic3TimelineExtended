@@ -229,7 +229,10 @@ te_construction_market_change_budget = {
 		add = $AMOUNT$
 	}
 	if = {
+		# has_variable first: the budget buttons' tooltips walk this writing
+		# nothing, so a budget never set is unset there (tooltip_walk_variable_audit).
 		limit = {
+			has_variable = te_construction_market_public_budget
 			var:te_construction_market_public_budget < 1
 		}
 		te_construction_market_clear_budget = yes

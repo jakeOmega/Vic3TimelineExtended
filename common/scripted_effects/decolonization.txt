@@ -285,8 +285,92 @@ decol_save_foreign_owner_above = {
 # Scope: country (the former colony)
 decol_mark_former_colony = {
 	set_variable = { name = former_overlord value = $OVERLORD$ }
+	decol_mark_freed_from = { OVERLORD = $OVERLORD$ }
 	set_variable = { name = recently_decolonized days = 7300 }
 	decol_young_state_reset = yes
+}
+
+# Mark the scoped country, about to be freed, as freed from $OVERLORD$ for a
+# day, for decol_leave_former_overlord_plays (on_become_independent). Every mod
+# make_independent site calls it just before freeing: decol_mark_former_colony
+# (decolonization_events .1 and .3, every country the mod's releases form) and
+# the UN referendum, which frees any direct subject. A day, not untimed: the
+# untimed former_overlord (also set by vanilla's release on-actions) can name
+# an earlier overlord than the one just left.
+# Parameters: $OVERLORD$ = the overlord it is leaving
+# Scope: country (the subject)
+decol_mark_freed_from = {
+	set_variable = { name = decol_freed_from_overlord value = $OVERLORD$ days = 1 }
+}
+
+# A country just become independent leaves every play and war in which it
+# supports the overlord it has just left (1.15 leave_plays_supporting; a war it
+# leads itself stays). From on_become_independent. It reads only the day-long
+# marker decol_mark_freed_from sets, so a freeing the mod did not script (a
+# vanilla independence war, which the subject leads) does nothing here.
+# Whether make_independent already does this is unread (vanilla_1_15_prep.md
+# C21); the self-check reads it: a shared war seen here means it does not.
+# Scope: country (the former subject)
+decol_leave_former_overlord_plays = {
+	if = {
+		limit = {
+			is_subject = no
+			var:decol_freed_from_overlord ?= { is_country_alive = yes }
+		}
+		var:decol_freed_from_overlord = { save_scope_as = decol_freed_from }
+		# Self-check (docs/testing/colonial-wars-playtest.md), once a game, only
+		# when we still fight beside the former overlord: the wars we share
+		# with it before and after.
+		if = {
+			limit = { NOT = { has_global_variable = te_selfcheck_decol_leave_plays } }
+			decol_count_wars_beside_former_overlord = { NAME = decol_shared_wars_before }
+		}
+		leave_plays_supporting = scope:decol_freed_from
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_selfcheck_decol_leave_plays }
+				var:decol_shared_wars_before ?= 0
+			}
+			remove_variable = decol_shared_wars_before
+		}
+		else_if = {
+			limit = {
+				NOT = { has_global_variable = te_selfcheck_decol_leave_plays }
+				has_variable = decol_shared_wars_before
+			}
+			set_global_variable = te_selfcheck_decol_leave_plays
+			decol_count_wars_beside_former_overlord = { NAME = decol_shared_wars_after }
+			if = {
+				limit = { var:decol_shared_wars_after = 0 }
+				debug_log = "TE_SELF_CHECK OK decol_leave_plays country=[THIS.GetCountry.GetTagName] before=[THIS.Var('decol_shared_wars_before').GetValue|0] after=0 (make_independent left us in the former overlord's wars; leave_plays_supporting took us out) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN decol_leave_plays country=[THIS.GetCountry.GetTagName] before=[THIS.Var('decol_shared_wars_before').GetValue|0] after=[THIS.Var('decol_shared_wars_after').GetValue|0] (still beside the former overlord after leave_plays_supporting: read its wars a week later before taking the fallback in docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_variable = decol_shared_wars_before
+			remove_variable = decol_shared_wars_after
+		}
+	}
+}
+
+# The wars we fight in beside scope:decol_freed_from (it is in them and not
+# our enemy there), counted into variable $NAME$ on us.
+# Scope: country; expects scope:decol_freed_from
+decol_count_wars_beside_former_overlord = {
+	save_scope_as = decol_freed_country
+	set_variable = { name = $NAME$ value = 0 }
+	every_scope_war = {
+		limit = {
+			is_war_participant = scope:decol_freed_from
+			NOT = {
+				any_war_participant = {
+					this = scope:decol_freed_country
+					has_war_with = scope:decol_freed_from
+				}
+			}
+		}
+		scope:decol_freed_country = { change_variable = { name = $NAME$ add = 1 } }
+	}
 }
 
 # The young-state events (.4, .7, .16, .17, .18, .21) each fire once per
@@ -523,6 +607,21 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 	# `common/country_definitions/zz_te_extended_dynamic.txt` extends it to 1000.
 	# on_created does not see the scopes saved before the call either, so it only
 	# touches the new country itself; the legacy runs after the random_list.
+	# The new country's religion (#1499). Without `religion =` it inherits the
+	# parent's state religion and laws; from an atheist metropole that is
+	# State Religion with no religion, which vanilla's law_state_religion
+	# on_activate cannot repair (it reads root.country_definition, which a
+	# dynamic tag lacks). So pass the parent's religion, which changes
+	# nothing, or the released culture's when the parent is atheist. Saved
+	# here because create_dynamic_country runs in scope none, and saved on
+	# every call: one option can release several countries, and a saved scope
+	# lasts the whole chain (a country always has a state religion).
+	scope:decolonizing_parent.religion = { save_scope_as = new_country_religion }
+	if = {
+		limit = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+		scope:new_country_culture.religion ?= { save_scope_as = new_country_religion }
+	}
+
 	custom_tooltip = {
 		text = decolonization_form_country_tt
 		random_list = {
@@ -531,6 +630,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 65 65 }
@@ -555,6 +655,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 140 65 }
@@ -579,6 +680,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 216 65 }
@@ -603,6 +705,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 140 216 65 }
@@ -627,6 +730,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 216 65 }
@@ -651,6 +755,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 216 140 }
@@ -675,6 +780,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 216 216 }
@@ -699,6 +805,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 140 216 }
@@ -723,6 +830,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 65 65 216 }
@@ -747,6 +855,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 140 65 216 }
@@ -771,6 +880,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 65 216 }
@@ -795,6 +905,7 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 					origin = scope:decolonizing_parent
 					tier = principality
 					culture = scope:new_country_culture
+					religion = scope:new_country_religion
 					capital = scope:new_country_capital
 					cede_state_trigger = { has_variable = decolonization_cede_marker }
 					color = { 216 65 140 }
@@ -824,6 +935,51 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 			if = {
 				limit = { NOT = { this = scope:decolonizing_parent } }
 				apply_decolonization_path = yes
+				# TE_SELF_CHECK decol_new_country_religion (#1499), once a game
+				# for each kind of parent: the new country holds the religion
+				# passed in (the parent's, read through `.religion`; or, from
+				# an atheist parent, the culture's). An atheist parent under
+				# State Atheism is left out: the new country inherits the law,
+				# whose on_activate sets atheism whatever `religion =` said.
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								NOT = { has_global_variable = te_selfcheck_decol_religion }
+								NOT = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+							}
+							AND = {
+								NOT = { has_global_variable = te_selfcheck_decol_religion_atheist }
+								scope:decolonizing_parent = {
+									country_has_state_religion = rel:atheist
+									NOT = { has_law = law_type:law_state_atheism }
+								}
+							}
+						}
+					}
+					if = {
+						limit = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+						set_global_variable = te_selfcheck_decol_religion_atheist
+					}
+					else = {
+						set_global_variable = te_selfcheck_decol_religion
+					}
+					if = {
+						limit = {
+							country_has_state_religion = scope:new_country_religion
+							# From an atheist parent, a culture religion that did not
+							# resolve leaves the parent's atheism: not a pass.
+							OR = {
+								NOT = { scope:decolonizing_parent = { country_has_state_religion = rel:atheist } }
+								scope:new_country_religion = { NOT = { this = rel:atheist } }
+							}
+						}
+						debug_log = "TE_SELF_CHECK OK decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country holds the religion passed to create_dynamic_country) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN decol_new_country_religion country=[THIS.GetCountry.GetTagName] parent=[SCOPE.sCountry('decolonizing_parent').GetName] (the released country does not hold the religion passed to create_dynamic_country: `religion =` is ignored there, or a country's `.religion` is not its state religion; see docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
 			}
 		}
 	}
@@ -944,6 +1100,72 @@ colonial_empire_clear_path_months = {
 	remove_variable = colonial_invest_months
 	remove_variable = colonial_garrison_months
 	remove_variable = colonial_assimilate_months
+}
+
+# What every success outcome of je_colonial_empire does after its event (the
+# Imperial Federation Act's two and the four paths of a held bar, #1432).
+# Scope: country (the metropole), in the outcome's effect.
+colonial_empire_secured_end = {
+	# Chosen-release count (decol_record_chosen_release) is read only by the
+	# voluntary end's event .206; drop it on every other ending.
+	remove_variable = decol_chosen_releases
+	# Clean up persistent state from this run. Path-tracking variables,
+	# civil-rights movement modifiers and subject-side LD modifiers all need
+	# explicit removal: they are attached to entities that survive the
+	# entry's end and would otherwise stick around indefinitely.
+	colonial_empire_je_cleanup_effect = yes
+	# No success event forms a country, so the programme-month counters can
+	# go now (the collapses keep them for .201 / .204).
+	colonial_empire_clear_path_months = yes
+	# Permanent re-entry block. Any successful completion (bar 100 hold or an
+	# Act) commits the country out of further je_colonial_empire runs even if
+	# colonies are reacquired later.
+	set_variable = { name = colonial_empire_completed value = yes }
+}
+
+# What both collapse outcomes of je_colonial_empire (the bar at 0: Negotiated
+# Withdrawal .204 and The Empire Crumbles .201) do after their event (#1432).
+# Scope: country (the metropole), in the outcome's effect.
+colonial_empire_collapse_end = {
+	remove_variable = decol_chosen_releases   # read only by .206
+	# Bar reached zero: a 10-year cooldown blocks re-entry even if colonies are
+	# reacquired. The voluntary end (bar above 0) does not set it, so a
+	# peaceful decolonizer can re-engage freely: the re-entry pass
+	# (ce_reentry_monthly) adds the entry back a month after the country is
+	# due it, here once the ten years have run out.
+	set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
+
+	# Subject-holders: instead of forced release, every qualifying colonial
+	# subject takes a strong LD spike and a relations hit. Subjects don't
+	# auto-secede but become much harder to hold; the player has to negotiate
+	# releases or weather the LD-driven independence pressure. Direct-state
+	# release (where applicable) happens through the wave of declarations
+	# .204 / .201 start (decol_wave_start, .77 -> .70).
+	# Removed first: the entry can run again after a collapse (the re-entry
+	# pass), a second collapse comes about 13 years after the first (ten
+	# years, up to two months, some 34 months at the drift cap), and a
+	# same-name add_modifier stacks, so a subject through two collapses would
+	# carry the 20-year aftershock twice.
+	# The subject is told why (decol_collapse_aftershock_notice names us).
+	save_scope_as = decol_colonial_power
+	every_subject_or_below = {
+		limit = { is_qualifying_colonial_subject = yes }
+		post_notification = decol_collapse_aftershock_notice
+		remove_modifier_if_exists_effect = { MODIFIER = colonial_collapse_subject_unrest_modifier }
+		add_modifier = {
+			name = colonial_collapse_subject_unrest_modifier
+			days = very_long_modifier_time
+			is_decaying = no
+		}
+		change_relations = { country = ROOT value = -50 }
+	}
+
+	# Clean up persistent entry state. The aftershock just above is
+	# intentionally kept (the failure's consequence): the cleanup helper
+	# removes the bar-band LD modifiers but not the aftershock. It leaves the
+	# programme-month counters, which the wave .201 / .204 start still needs
+	# (decol_wave_end clears them).
+	colonial_empire_je_cleanup_effect = yes
 }
 
 # ============================================================================
@@ -1097,11 +1319,10 @@ ce_reentry_monthly = {
 # - The Imperial Federation Act's imperial_federation_modifier and the Mandate
 #   System's mandate_system_modifier, recorded by the decisions' own
 #   imperial_federation_taken / mandate_system_taken.
-# Not rebuilt: timed modifiers (the remaining time is recorded nowhere), the
-# entry's own band modifiers, which its monthly pulse re-applies, and the three
-# programmes and Investment's expense line, which the entry declares
-# (scaling_modifiers_while_active) from the level variables the winner
-# inherits.
+# Not rebuilt: timed modifiers (the remaining time is recorded nowhere), and
+# what the entry declares (scaling_modifiers_while_active): the five band
+# modifiers, from the bar, and the three programmes and Investment's expense
+# line, from the level variables the winner inherits.
 # ============================================================================
 
 # Grant a permanent ending reward with its record. Country scope. Removed
@@ -1152,11 +1373,10 @@ decol_sync_permanent_modifier = {
 
 decol_sync_permanent_modifiers = {
 	# colonial_empire_solidified_modifier is also the entry's top band modifier,
-	# applied to je:je_colonial_empire each month at bar >= 90. A country-scope
-	# has_modifier should not see an entry's modifier, but that is unobserved;
-	# if it did, the backfill would record a reward the empire never earned, and
-	# a later sync would grant it. So its record is backfilled only while no
-	# entry runs: the reward comes only at completion, after which
+	# declared on je_colonial_empire at bar >= 90 (#1466). has_modifier cannot
+	# see a declared modifier, so the backfill below reads only the reward; its
+	# record is still backfilled only while no entry runs, as it was when the
+	# band was an added copy: the reward comes only at completion, after which
 	# colonial_empire_completed keeps the entry shut for good.
 	if = {
 		limit = { NOT = { has_journal_entry = je_colonial_empire } }

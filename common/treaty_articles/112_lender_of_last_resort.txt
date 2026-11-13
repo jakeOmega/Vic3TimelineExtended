@@ -32,6 +32,7 @@ lender_of_last_resort = {
 	target_involvement_applies_to = target_country
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 		giftable
 		friendly
@@ -71,6 +72,13 @@ lender_of_last_resort = {
 		country_treaty_leverage_generation_add = 300
 	}
 
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		te_mon_full_system = yes
+	}
+
 	# The whole phase-5 toolkit is part of the monetary layer, so the
 	# simplified setting of banking_system_rule hides it: there is no anchored
 	# state to enter when nobody has a dial (te_mon_full_system,
@@ -85,6 +93,28 @@ lender_of_last_resort = {
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	# THE MONETARY SYSTEM MUST BE ON (#1507; owner, 2026-11-12). The banking rule
+	# can be switched from Full to Simplified mid-game, and the monetary steps
+	# that give this article its meaning stop with it. A requirement that fails
+	# invalidates the article: the engine removes it from its treaty
+	# (vanilla's notification_treaty_article_removed, "is no longer valid and
+	# has been removed"), with no withdrawing or breaking party, so nobody pays
+	# infamy, relations or a binding-period penalty, and its source_modifier /
+	# target_modifier go with it. Vanilla ends a guarantee of independence the
+	# same way when the guarantor's rank falls. Read from vanilla, not seen in
+	# game: the TE_SELF_CHECK mon_rule_switch_treaties and the play-test row
+	# check it. te_mon_full_system reads only the rule, so a game never switched
+	# off Full never fails it. The roles the article leaves on its parties are
+	# cleared by te_monetary_leave_full_system (te_monetary_rule_switch_effects.txt).
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_mon_article_needs_full_system_tt
+				te_mon_full_system = yes
+			}
 		}
 	}
 

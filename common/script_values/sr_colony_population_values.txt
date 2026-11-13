@@ -37,16 +37,6 @@ sr_emig_batches_now = {
 	max = sr_emig_level_batches
 }
 
-# The programme's upkeep, sr_emigration_programme's old multiplier: its
-# level, read through owner from the entry's scope. The entry now declares the
-# modifier from sr_emig_level_value (je_space_race.txt), so nothing calls this;
-# a save from before the declarations may still name it on the copy it added.
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_emig_upkeep_units = {
-	value = 0
-	owner = { add = sr_emig_level_value }
-}
-
 # The off-world population's bonus (design § 10.5): one unit per
 # sr_offworld_bonus_people of the nation's people off Earth, at most
 # sr_offworld_bonus_cap; nothing below sr_offworld_bonus_minimum.
@@ -64,14 +54,6 @@ sr_offworld_units = {
 	divide = sr_offworld_bonus_people
 	max = sr_offworld_bonus_cap
 }
-# Journal entry scope: sr_offworld_population's old multiplier, as
-# sr_emig_upkeep_units above (the entry declares it from sr_offworld_units).
-# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
-sr_offworld_bonus_units = {
-	value = 0
-	owner = { add = sr_offworld_units }
-}
-
 # The emigration_batch self-check's reading: how much the Space Program's state
 # fell, and 90% of what was sent. Any scope; the globals are set just before
 # (sr_emig_month).

@@ -1,0 +1,297 @@
+﻿# ============================================================================
+# Monetary policy: the banking rule switched from Full to Simplified (or
+# Disabled) mid-game
+# ============================================================================
+# A game rule can be changed mid-game, from the screen that changes country.
+# Under Simplified the banking entry stays, but te_mon_full_system is false and
+# te_monetary_monthly_update skips every step but the passive rate stack
+# (0, 0b, 1, 1d, 4, 5, 7, 9). A skipped step neither refreshes nor removes
+# what it applied while the rule was Full, so without this its modifiers would
+# stay at their last strength for the rest of the game and its variables at
+# their last value, read by steps that still run: step 7 subtracts te_inflation
+# and adds te_inflation_expected, step 5 prices te_monetisation_level and
+# te_fx_index, step 4 follows an anchor's rate, and the Demographics real rate,
+# the cycle's stance channel, the entry's stance-band modifiers
+# (je_banking.txt, declared on te_mon_stance_band) and the gold-standard laws
+# read the rest.
+#
+# te_monetary_settle_rule_switch runs first in te_monetary_monthly_update.
+# Each Full pulse marks the country (te_mon_ran_full). The first pulse without
+# the full system that finds the mark takes it off and:
+#
+#   1. Strips every managed modifier, by telling step 0b the home changed
+#      (te_mon_mod_home = -1): te_monetary_settle_modifier_home then strips the
+#      whole managed family from the country and the entry and zeroes the
+#      `_applied` bookkeeping, as for a lost entry. Step 9 re-adds
+#      te_monetary_rate_paid on this pulse, because it runs under every
+#      setting; the steps that add the rest do not run, so they stay off.
+#   2. Forgets the economic state the skipped steps own, so step 0 seeds it
+#      again on this pulse to exactly what a country that never ran the full
+#      system holds (the te_mon_full_system contract in
+#      te_monetary_triggers.txt): inflation, expectations and the band; the
+#      exchange rate and its counters; monetisation; the stance; a gold
+#      standard's suspension and defence clocks (a suspension the full system
+#      declared ends with it, so te_mon_is_on_gold holds again for the
+#      simplified gold-standard event, banking_cycle_events.58); and the
+#      anchor, so te_mon_is_anchored is false and step 4 derives the rate.
+#   3. Switches off the five External & Currency tools
+#      (banking_external_available needs the full system). Their monthly
+#      settlement is a skipped step, so an active tool would hold its points
+#      and its weekly bill would go on charging from the last cached sum; the
+#      Disable effects zero the bills and write the history marker.
+#   4. Clears its part in the three backstop treaties. The articles themselves
+#      end on the engine's side: a swap line, a lender of last resort and a
+#      debt receivership each carry requirement_to_maintain
+#      { te_mon_full_system = yes } (owner, 2026-11-12), so the engine removes
+#      the article from its treaty with no withdrawing or breaking party, and
+#      the article's own modifiers go with it (the receivership's -10
+#      legitimacy and every party's leverage). What the article left on the
+#      country the discovery (step 1c, skipped now) would have cleared, so this
+#      does it: a swap line still drawn on is settled in one lump, as every
+#      line that ends is (te_mon_effect_swap_settle, §15C.1), and the recipient,
+#      ward and receivership roles go to 0, so te_mon_has_effective_backstop
+#      stops easing the cycle's contagion (banking_cycle_effects.txt, which runs
+#      under Simplified) and the receivership's exit counter does not wait for
+#      a commission that has gone. The Backstops rows go too.
+#
+# WHAT IT LEAVES, AND WHY (#1507):
+#   - Records and clocks only a skipped step or a full-system panel reads: the
+#     gold vault, peg confidence, LOLR calls (the ward's record, which outlives
+#     any one guarantor), the union's membership and lock, the hyperinflation
+#     cooldown, the neutral rate. Nothing that runs under Simplified reads
+#     them, and if the rule goes back to Full they resume where they were,
+#     rather than rewarding a switch off and on.
+#   - Timed modifiers events put on the country (te_mon_peg_*, the currency
+#     reform's premium, the union exit premium and independence modifier):
+#     they run out on their own clock.
+#   - Amendments the dual mandate and inflation targeting: their mandate is
+#     read only by the dial (step 2), which nobody holds under Simplified.
+#   - Pegs: a currency peg or an imposed peg ends by itself, as its anchor
+#     must hold a dial (te_mon_can_be_anchor), the same engine path as step 4.
+#   - Monetary-union principles stay on a bloc that holds them (hidden from
+#     new picks); their bools are read only by skipped steps, but tiers 2 to 5
+#     keep their cohesion per member. The bloc paid for the slot (owner,
+#     2026-11-12, following #1667's recommendation).
+#
+# Simplified back to Full needs nothing: the skipped steps start again from the
+# neutral seeds, and an ended treaty is not restored (it has to be signed
+# again). A country that never ran a Full pulse after this effect was added
+# carries no mark, so a save already switched before it loads keeps what it
+# had, except the backstop treaties: their articles now end on their
+# requirement, and a country still holding a role runs step 4 alone on its
+# next pulse (the last branch of te_monetary_settle_rule_switch).
+#
+# TE_SELF_CHECK mon_rule_switch_treaties. That a failed requirement_to_maintain
+# ends the article with no breaker is read from vanilla, not seen in game. A
+# country that held a backstop role on its last Full pulse (so its article was
+# in force a month before) is marked in step 4; its next pulse, a month on,
+# logs once a game whether it still stands in such an article: OK when none is
+# left, BROKEN when one is (the requirement did not end it; the fallbacks are
+# in the play-test's Self-checks table). A country that held no role never
+# logs, so OK cannot come from a game with nothing to end. Play-test:
+# docs/testing/rules-off-midgame-playtest.md, "Banking: Full to Simplified".
+# Scope: country, ROOT = this (the monthly update's contract).
+te_monetary_settle_rule_switch = {
+	if = {
+		limit = { te_mon_full_system = yes }
+		if = {
+			limit = { NOT = { has_variable = te_mon_ran_full } }
+			set_variable = te_mon_ran_full
+		}
+		# Back on Full before the self-check read: the requirement holds again.
+		if = {
+			limit = { has_variable = te_mon_switch_treaty_check }
+			remove_variable = te_mon_switch_treaty_check
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_mon_ran_full }
+		remove_variable = te_mon_ran_full
+		te_monetary_leave_full_system = yes
+	}
+	else_if = {
+		limit = { has_variable = te_mon_switch_treaty_check }
+		remove_variable = te_mon_switch_treaty_check
+		te_mon_selfcheck_switch_treaties = yes
+	}
+	# A save switched off Full before step 4 existed (between #1667 and the
+	# treaties' requirement) carries no te_mon_ran_full mark but may still hold
+	# a backstop role. Nothing sets a role off Full (the discovery is a skipped
+	# step), so once step 4 has cleared them this branch never runs again.
+	else_if = {
+		limit = {
+			OR = {
+				te_mon_is_swap_recipient = yes
+				te_mon_is_lolr_ward = yes
+				te_mon_is_under_receivership = yes
+			}
+		}
+		te_mon_leave_backstop_treaties = yes
+	}
+}
+
+# Steps 1 to 4 of the header above (4 in te_mon_leave_backstop_treaties).
+# Called only by te_monetary_settle_rule_switch, before step 0, so step 0 seeds
+# what step 2 forgets on the same pulse.
+te_monetary_leave_full_system = {
+	# 1. The managed modifiers: a changed home strips them all (step 0b).
+	if = {
+		limit = { has_variable = te_mon_mod_home }
+		set_variable = { name = te_mon_mod_home value = -1 }
+	}
+
+	# 2. The economic state, back to step 0's seeds.
+	te_mon_forget_variable = { VAR = te_inflation }
+	te_mon_forget_variable = { VAR = te_inflation_core }
+	te_mon_forget_variable = { VAR = te_inflation_expected }
+	te_mon_forget_variable = { VAR = te_inflation_noise }
+	te_mon_forget_variable = { VAR = te_cost_push }
+	te_mon_forget_variable = { VAR = te_inflation_band }
+	te_mon_forget_variable = { VAR = te_mon_dollarised }
+	te_mon_forget_variable = { VAR = te_fx_index }
+	te_mon_forget_variable = { VAR = te_fx_shadow }
+	te_mon_forget_variable = { VAR = te_fx_avg }
+	te_mon_forget_variable = { VAR = te_fx_shock }
+	te_mon_forget_variable = { VAR = te_fx_imported }
+	te_mon_forget_variable = { VAR = te_mon_overvaluation }
+	te_mon_forget_variable = { VAR = te_fx_devalued_months }
+	te_mon_forget_variable = { VAR = te_capital_controls_months }
+	te_mon_forget_variable = { VAR = te_mon_emergency_controls_months }
+	te_mon_forget_variable = { VAR = te_monetisation_level }
+	te_mon_forget_variable = { VAR = te_mon_deficit_pct }
+	te_mon_forget_variable = { VAR = te_mon_bond_support_months }
+	te_mon_forget_variable = { VAR = te_mon_stance_gap }
+	te_mon_forget_variable = { VAR = te_mon_stance_band }
+	te_mon_forget_variable = { VAR = te_mon_stance_months }
+	te_mon_forget_variable = { VAR = te_peg_suspended_months }
+	te_mon_forget_variable = { VAR = te_peg_defend_months }
+	te_mon_forget_variable = { VAR = te_mon_anchor_kind }
+
+	# 3. The External & Currency tools. Each Disable effect works on the entry,
+	# so only where there is one (under Disabled it has gone, and its
+	# modifiers with it).
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		if = {
+			limit = { banking_tool_restrict_inflows_active = yes }
+			banking_effect_cb_disable_restrict_inflows = yes
+		}
+		if = {
+			limit = { banking_tool_sterilize_inflows_active = yes }
+			banking_effect_cb_disable_sterilize_inflows = yes
+		}
+		if = {
+			limit = { banking_tool_foreign_borrowing_limits_active = yes }
+			banking_effect_cb_disable_foreign_borrowing_limits = yes
+		}
+		if = {
+			limit = { banking_tool_fx_surrender_active = yes }
+			banking_effect_cb_disable_fx_surrender = yes
+		}
+		if = {
+			limit = { banking_tool_emergency_import_financing_active = yes }
+			banking_effect_cb_disable_emergency_import_financing = yes
+		}
+	}
+	# 4. The backstop treaties.
+	te_mon_leave_backstop_treaties = yes
+
+	debug_log = "TE_MONETARY: [THIS.GetCountry.GetNameNoFormatting] left the full monetary system (banking rule switched) date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# Step 4 of the header above: what a swap line, a lender of last resort or a
+# debt receivership left on this country once its article ended with the rule.
+# Called by te_monetary_leave_full_system, and by te_monetary_settle_rule_switch
+# for a country still holding a role off Full without the mark (a save switched
+# before this step existed). Idempotent: off Full nothing sets a role again.
+# The settlement first, while te_mon_swap_provider still names the lender, as
+# in the discovery.
+te_mon_leave_backstop_treaties = {
+	if = {
+		limit = {
+			OR = {
+				te_mon_is_swap_recipient = yes
+				te_mon_is_lolr_ward = yes
+				te_mon_is_under_receivership = yes
+			}
+		}
+		set_variable = te_mon_switch_treaty_check
+	}
+	if = {
+		limit = {
+			te_mon_is_swap_recipient = yes
+			has_variable = te_mon_swap_drawn
+			var:te_mon_swap_drawn > 0
+			has_variable = te_mon_swap_provider
+			exists = var:te_mon_swap_provider
+		}
+		te_mon_effect_swap_settle = yes
+	}
+	if = {
+		limit = { te_mon_is_swap_recipient = yes }
+		set_variable = { name = te_mon_swap_recipient value = 0 }
+	}
+	if = {
+		limit = { te_mon_is_lolr_ward = yes }
+		set_variable = { name = te_mon_lolr_ward value = 0 }
+	}
+	if = {
+		limit = {
+			has_variable = te_mon_receivership
+			var:te_mon_receivership = 1
+		}
+		set_variable = { name = te_mon_receivership value = 0 }
+	}
+	if = {
+		limit = {
+			has_variable = te_mon_receivership_clear_months
+			var:te_mon_receivership_clear_months > 0
+		}
+		set_variable = { name = te_mon_receivership_clear_months value = 0 }
+	}
+	te_mon_clear_backstop_rows = yes
+}
+
+# The header's TE_SELF_CHECK mon_rule_switch_treaties. Called by
+# te_monetary_settle_rule_switch on the pulse after step 4 marked this country
+# (it held a recipient, ward or receivership role on its last Full pulse), with
+# the rule still off Full. Once a game, from the first such country.
+te_mon_selfcheck_switch_treaties = {
+	if = {
+		limit = { NOT = { has_global_variable = te_mon_switch_treaties_selfcheck_logged } }
+		set_global_variable = te_mon_switch_treaties_selfcheck_logged
+		if = {
+			limit = {
+				any_scope_treaty = {
+					any_scope_article = {
+						OR = {
+							AND = {
+								OR = {
+									has_type = swap_line
+									has_type = lender_of_last_resort
+								}
+								target_country = root
+							}
+							AND = {
+								has_type = debt_receivership
+								source_country = root
+							}
+						}
+					}
+				}
+			}
+			debug_log = "TE_SELF_CHECK BROKEN mon_rule_switch_treaties country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a month after the banking rule left Full it still stands in a swap line, lender of last resort or receivership: requirement_to_maintain did not end the article; take the fallback in docs/testing/rules-off-midgame-playtest.md)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK OK mon_rule_switch_treaties country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (it held a backstop role on its last Full pulse and stands in no such article now)"
+		}
+	}
+}
+
+# Remove $VAR$ if it is set; step 0 seeds it again (te_monetary_init_variables).
+te_mon_forget_variable = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		remove_variable = $VAR$
+	}
+}

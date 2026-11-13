@@ -11,12 +11,15 @@ Existing tests move onto it only when they are next touched, not in a sweep.
   generated wrappers (scripts/generators/gen_te_history_charts.py).
 - load_loc, loc_index, gui_keys, loc_closure and type_bodies read the loc a
   panel reaches (moved from test_demographics_census_window.py).
+- scripted_guis gives the loc keys a scripted GUI's tooltip prints
+  (ExecuteTooltip, IsValidTooltip, IsShownTooltip), tooltip_calls the
+  tooltips a markup or loc text asks for (#1361).
 - mod_types and type_closure give the types a panel draws, all the way down;
   guard_spans and open_types the parts of them another country sees (charts-
   help-national-info plan, PR F0; test_te_system_tab_bodies.py's BindingTest).
 """
 import bisect
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import functools
 import glob
 import os
@@ -147,12 +150,20 @@ def _own_gates(items):
 
 # The plain containers a layout may wrap its sections in. Any other widget
 # drawn in a layout is content the check can't follow: make it a te_* section.
+# A wide layout's own wrappers are flowcontainers only (_Walk.check_wrapper).
 WRAPPERS = {"flowcontainer", "widget", "vbox", "hbox", "container"}
 
 # What a wrapper in a wide layout may carry: it gates and spaces its sections,
 # nothing else (no datacontext, margin, position or size of its own).
 WIDE_WRAPPER_PROPS = {"direction", "parentanchor", "ignoreinvisible", "spacing", "minimumsize", "maximumsize", "name",
                       "visible"}
+
+# The one size limit a wide wrapper may carry: a column's width, any height.
+COLUMN_SIZE = ["520", "-1"]
+
+# The spacing of a widget the check can't read: the one around a tab body's
+# layout block (the frame's), or a column's (the column type's).
+_UNKNOWN = object()
 
 
 def _find_block(body, name):
@@ -167,64 +178,121 @@ def _find_block(body, name):
     return None
 
 
+class _Filled(dict):
+    """An instance's blockoverrides, by block name, and how deep in shared
+    composers (_Walk.shared) the instance sits: an override is the markup of
+    the layout that writes it, wherever the block it fills draws."""
+    shared = 0
+
+
 class _Walk:
     """The sections a layout places, in the order they draw, each with the
     gates (visible expressions) on its way down, and whether it sits in a
     column; and its columns, if any. A composer instance expands into its
-    type's sections, under the instance's blockoverrides."""
+    type's sections, under the instance's blockoverrides.
 
-    def __init__(self, test, where, text, composers, skip=(), narrow_spacing=None):
+    The narrow side (`narrow` None) also records the spacing each te_*
+    instance sits at (that of the nearest widget around it that holds two or
+    more, since one that holds a single child draws no spacing), and the
+    composers it expands. The wide side (`narrow` the narrow walk) holds its
+    own wrappers and instances to the rules in assert_wide_matches_narrow's
+    docstring. Inside a composer the narrow layout places too (`shared`),
+    which draws the same in both frames, it only reads the sections, but for
+    what the wide layout itself fills that composer's blocks with."""
+
+    def __init__(self, test, where, text, composers, skip=(), narrow=None):
         self.test, self.where, self.text = test, where, text
         self.composers, self.skip = composers, set(skip)
         self.sections, self.columns, self.skipped = [], [], set()
-        # the narrow side records each gated level's spacing, by the gates down to it;
-        # the wide side checks its wrappers against that record
-        self.narrow_spacing = narrow_spacing
-        self.spacing = {}
+        self.narrow = narrow
+        self.spacing, self.expanded = {}, set()
+        self.rows = 0        # the rows of columns walked
+        self.shared = 0      # the depth inside composers the narrow layout places too
+
+    @property
+    def checking(self):
+        return self.narrow is not None and not self.shared
 
     def is_composer(self, name):
         return name in self.composers if self.composers is not None else name.endswith("_sections")
 
-    def body(self, body, gates, overrides=None, wrapper=None):
+    def body(self, body, gates, overrides=None, widget=None, spacing=_UNKNOWN):
+        """Walk a body and return the te_* instances it holds directly. `widget`
+        says whose it is: a wrapper's (its kind), a composer's ("composer"), or,
+        when None, a block's content, which draws in the widget around the
+        block. `spacing` is the spacing around the body: a block's content
+        sits at it, and so does the one child of a wrapper or composer that
+        holds no second, which draws no spacing of its own."""
         items = _children(body)
-        own = _own_gates(items)
-        gates = gates + own
+        gates = gates + _own_gates(items)
         props = {k: v for kind, k, v in items if kind == "property"}
-        if own and self.narrow_spacing is None:
-            self.spacing.setdefault(frozenset(gates), set()).add(props.get("spacing"))
-        if wrapper and self.narrow_spacing is not None:
-            self.check_wrapper(wrapper, props, own, gates)
+        if widget and self.children(items, overrides) >= 2:
+            spacing = props.get("spacing")
+        held = []
         for kind, name, inner in items:
-            if kind == "block":                       # a block draws its override, or its default content
-                self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides)
+            if kind == "block" and overrides and name in overrides:    # a block draws its override,
+                depth, self.shared = self.shared, overrides.shared      # the instancing layout's markup,
+                held += self.body(overrides[name], gates, overrides, spacing=spacing)
+                self.shared = depth
+            elif kind == "block":                                       # or its default content
+                held += self.body(inner, gates, overrides, spacing=spacing)
             elif kind == "blockoverride":
-                self.body(inner, gates, overrides)
+                held += self.body(inner, gates, overrides, spacing=spacing)
             elif kind != "widget":
                 continue
             elif name in COLUMN_TYPES:
                 self.columns_of(name, inner, gates)
             elif name.startswith("te_"):
-                self.instance(name, inner, gates)
+                self.instance(name, inner, gates, spacing)
+                held.append(name)
             elif name in WRAPPERS:
-                self.body(inner, gates, overrides, wrapper=name)
+                self.body(inner, gates, overrides, widget=name, spacing=spacing)
             else:
                 self.test.fail(f"{self.where} draws {name} inline: make it a te_* section type, so the check can "
                                f"follow it")
+        if widget in WRAPPERS and self.checking:
+            self.check_wrapper(widget, props, held)
+        return held
 
-    def check_wrapper(self, name, props, own, gates):
+    def children(self, items, overrides):
+        """How many widgets a body holds directly, through its blocks."""
+        n = 0
+        for kind, name, inner in items:
+            if kind == "block":
+                n += self.children(_children(overrides[name] if overrides and name in overrides else inner), overrides)
+            elif kind == "blockoverride":
+                n += self.children(_children(inner), overrides)
+            elif kind == "widget":
+                n += 1
+        return n
+
+    def check_wrapper(self, kind, props, held):
+        """A wide layout's own wrapper: `kind` with `props`, holding the te_*
+        instances `held` directly."""
+        self.test.assertEqual(kind, "flowcontainer",
+                              f"{self.where} wraps sections in `{kind}`; a wide layout's wrappers are flowcontainers "
+                              f"(an hbox sets its sections side by side in the 520 column, a widget or a container "
+                              f"draws them over each other, and a column, a flowcontainer, can't hold a vbox)")
         extra = sorted(set(props) - WIDE_WRAPPER_PROPS)
         self.test.assertFalse(extra, f"{self.where}: a wrapper carries {extra}; a wide layout's wrappers only gate and "
                                      f"space their sections")
         self.test.assertEqual(props.get("ignoreinvisible"), "yes",
                               f"{self.where}: a wrapper without ignoreinvisible = yes keeps a hidden section's space")
-        if name == "flowcontainer":
-            self.test.assertEqual(props.get("direction"), "vertical",
-                                  f"{self.where}: a flowcontainer wrapper runs vertically in its column")
-        narrow = self.narrow_spacing.get(frozenset(gates))
-        if own and narrow is not None:
+        self.test.assertEqual(props.get("direction"), "vertical",
+                              f"{self.where}: a flowcontainer wrapper runs vertically in its column")
+        for limit in ("minimumsize", "maximumsize"):
+            if limit in props:
+                self.test.assertEqual(props[limit].strip("{}").split(), COLUMN_SIZE,
+                                      f"{self.where}: a wrapper's {limit} is {props[limit]}; its column is 520 wide, "
+                                      f"so {{ 520 -1 }} or none")
+        # Its spacing draws between the sections it holds, so only two or more
+        # are held to the narrow layout's: the spacing one of them sits at
+        # there (a composer's root's, or a wrapper's).
+        narrow = set().union(*(self.narrow.spacing.get(name, ()) for name in held))
+        if len(held) >= 2 and narrow:
             self.test.assertIn(props.get("spacing"), narrow,
-                               f"{self.where}: a wrapper spaces its sections {props.get('spacing')} apart under "
-                               f"{sorted(set(gates))}, the narrow layout {sorted(narrow, key=str)}")
+                               f"{self.where}: the wrapper around {held} spaces its sections {props.get('spacing')} "
+                               f"apart, the narrow layout {sorted(narrow, key=str)}")
 
     def type_gates(self, name):
         """A type's own root visible, or () when it has none or isn't found."""
@@ -232,18 +300,33 @@ class _Walk:
             return ()
         return _own_gates(_children(_type_body(self.text, name)))
 
-    def instance(self, name, own, gates):
+    def instance(self, name, own, gates, spacing=_UNKNOWN):
         items = _children(own)
         mine = _own_gates(items)
         if mine and self.type_gates(name):
             self.test.fail(f"{self.where}: {name}'s visible replaces its type's own (gotcha #17), so it draws where "
                            f"its own gate hides it; gate a wrapper instead")
+        if self.checking:
+            extra = sorted({k for kind, k, _ in items if kind == "property"} - {"visible"})
+            self.test.assertFalse(extra, f"{self.where}: {name} carries {extra}; an instance in a wide layout takes a "
+                                         f"visible and nothing else of its own: no datacontext, margin, position or "
+                                         f"size, which a wrapper may not carry either")
+        if self.narrow is None and spacing is not _UNKNOWN:
+            self.spacing.setdefault(name, set()).add(spacing)
         gates = gates + mine
         if name in self.skip:
             self.skipped.add(name)
         elif self.is_composer(name):
-            filled = {n: inner for kind, n, inner in items if kind == "blockoverride"}
-            self.body(_type_body(self.text, name), gates, filled)
+            self.expanded.add(name)
+            filled = _Filled((n, inner) for kind, n, inner in items if kind == "blockoverride")
+            filled.shared = self.shared
+            shared = self.narrow is not None and name in self.narrow.expanded
+            self.shared += shared
+            where = self.where
+            if self.checking:                         # the wide layout's own composer: a failure in it names it
+                self.where = f"{where}'s {name}"
+            self.body(_type_body(self.text, name), gates, filled, widget="composer", spacing=spacing)
+            self.shared, self.where = self.shared - shared, where
         else:
             in_column = bool(self.columns) and self.columns[-1] is not None
             self.sections.append((name, gates, in_column))
@@ -252,6 +335,10 @@ class _Walk:
 
     def columns_of(self, column_type, body, gates):
         n = COLUMN_TYPES[column_type]
+        if self.narrow is not None:
+            self.test.assertEqual(self.rows, 0, f"{self.where} places a second row of columns; a wide layout is one "
+                                                f"row, read down each column and then across")
+        self.rows += 1
         items = _children(body)
         gates = gates + _own_gates(items)
         overrides = [(name, inner) for kind, name, inner in items if kind == "blockoverride"]
@@ -317,12 +404,12 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       wrappers (flowcontainer, widget, vbox, hbox, container) and blocks, on
       either side; any other te_* instance is a section. Any other widget
       drawn inline fails: make it a te_* section.
-    - The wide composer, `wide_type`, must lay its sections out on
+    - The wide composer, `wide_type`, must lay its sections out on one row of
       te_ui_columns_three or te_ui_columns_two (spec § 9.4) and place exactly
       the narrow sections, in the same order read down each column and then
-      across. Every column holds at least one section. A section outside the
-      columns (the Census Data window's pending line) must be named in
-      `outside`, and counts where it draws.
+      across. Every column holds at least one section. A second row of
+      columns fails. A section outside the columns (the Census Data window's
+      pending line) must be named in `outside`, and counts where it draws.
     - `extra` names wide-only te_* instances to skip.
     - Each section sits under exactly the gates the narrow layout gives it (a
       composer's or a wrapper's visible, or the instance's own; an And( a, b )
@@ -332,11 +419,24 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       may carry more (the Census Data window's How waits for the first
       census). An instance's visible over a type's own fails either way: in
       game it replaces the type's (gotcha #17).
-    - A wrapper in the wide layout only gates and spaces its sections: it
-      carries nothing but direction, parentanchor, ignoreinvisible = yes,
-      spacing, a size limit, a name and its visible; a flowcontainer runs
-      vertically; and one under the same gates as a narrow composer or wrapper
-      spaces its sections as that one does.
+    - A wrapper in the wide layout only gates and spaces its sections: it is
+      a flowcontainer, running vertically, and carries nothing but direction,
+      parentanchor, ignoreinvisible = yes, spacing, a size limit of its
+      column's width ({ 520 -1 }), a name and its visible. One that holds two
+      or more te_* instances directly (through blocks, not through a wrapper
+      inside it) spaces them as the narrow layout does: the spacing one of
+      them sits at there, that of the nearest composer's root or wrapper
+      around it that holds two or more widgets. A wrapper that holds one
+      draws no spacing, so needs none, on either side; an instance the narrow
+      layout holds in a widget the check can't read (the frame around a tab
+      body's layout block) sets no spacing to match.
+    - A te_* instance in the wide layout carries a visible and nothing else of
+      its own (blockoverrides and child widgets aside): no datacontext,
+      margin, position or size, as its wrappers.
+    - Neither rule reaches inside a composer both layouts place: its type
+      draws the same in both frames. What the wide layout fills such a
+      composer's blocks with is its own markup, and held to both; so is a
+      composer only the wide layout places.
     - `split` maps a wide-only section to the narrow section it draws part
       of (the Space Race's solar colonization tabs, which the narrow layout
       draws inside the milestones and full screen takes a column of their
@@ -371,7 +471,7 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
 
     m = re.search(rf"\btype {wide_type} = (\w+) \{{", text)
     test.assertIsNotNone(m, f"no type {wide_type}")
-    wide = _Walk(test, wide_type, text, composers, skip=extra, narrow_spacing=narrow.spacing)
+    wide = _Walk(test, wide_type, text, composers, skip=extra, narrow=narrow)
     if m.group(1) in COLUMN_TYPES:
         wide.columns_of(m.group(1), _type_body(text, wide_type), ())
     else:
@@ -513,6 +613,264 @@ def custom_keys(text, custom=None):
     return {k for name in _GET_CUSTOM.findall(text) for k in custom.get(name, ())}
 
 
+# --- The text a scripted GUI's tooltip prints (#1361) ----------------------------------------------
+# Markup and loc ask a scripted GUI (common/scripted_guis/) for a tooltip:
+# `GetScriptedGui('x').ExecuteTooltip( ... )` renders x's effect without running
+# it, IsValidTooltip its is_valid, IsShownTooltip its is_shown; `ScriptedGui.`
+# for `GetScriptedGui('x')` under a `datacontext = "[GetScriptedGui('x')]"`.
+# What the player reads there is the script's `custom_tooltip = <key>` lines
+# (custom_tooltip_no_bullet's too, and a `text = <key>` inside either), through
+# the scripted effects and triggers the block calls. Those keys render for
+# whoever hovers, with the scripted GUI's root as their scope.
+
+# The block of a scripted GUI each tooltip function renders.
+SCRIPTED_TOOLTIP = {"ExecuteTooltip": "effect", "IsValidTooltip": "is_valid", "IsShownTooltip": "is_shown"}
+_SCRIPT_TOP = re.compile(r"(?m)^[ \t]*(?:[A-Z_]+:)?([\w.\-]+)\s*=\s*\{")
+_PRINTS = re.compile(r'\b(?:custom_tooltip(?:_no_bullet)?|text)\s*=\s*"?([\w.\-$]+)"?')
+_SCRIPT_CALL = re.compile(r"(?<![\w.$\-])([\w.\-]+)\s*=\s*(yes\b|no\b|\{)")
+_SCRIPT_ARG = re.compile(r'(\w+)\s*=\s*("[^"]*"|[^\s{}]+)')
+_SCRIPT_PART = re.compile(r"\b(effect|is_valid|is_shown)\s*=\s*\{")
+_PARAM = re.compile(r"\$\w+\$")
+
+
+def _script_code(text):
+    """A script file's text with its comments cut (_strip_comments, which is
+    slow on a large file: only a line with both a # and a quote needs it)."""
+    out = []
+    for line in text.split("\n"):
+        if "#" in line:
+            line = _strip_comments(line) if '"' in line else line[:line.index("#")]
+        out.append(line)
+    return "\n".join(out)
+
+
+@functools.lru_cache(maxsize=16)
+def _script_blocks(root, folder):
+    """Each top-level `name = { ... }` of common/<folder>/*.txt, indented or
+    not (build_effects.txt's first): name -> its body, comments cut. A name
+    defined twice keeps both bodies, one after the other (an INJECT:, or a
+    later file's)."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(root, "common", folder, "*.txt"))):
+        code, end = _script_code(_read(path)), 0
+        for m in _SCRIPT_TOP.finditer(code):
+            if m.start() < end:
+                continue  # inside the last one
+            end = _close(code, m.end() - 1)
+            body = code[m.end():end]
+            out[m.group(1)] = out[m.group(1)] + "\n" + body if m.group(1) in out else body
+    return out
+
+
+_SILENT = re.compile(r"\b(custom_tooltip(?:_no_bullet)?|hidden_effect)\s*=\s*\{")
+_OWN_TEXT = re.compile(r'\btext\s*=\s*"?[\w.\-$]+"?')
+
+
+def _rendered(text):
+    """A script block as its tooltip renders it: a `custom_tooltip = { text =
+    <key> ... }` shows its text in place of what it holds, and a
+    `hidden_effect = { ... }` shows nothing (scripting_best_practices.md,
+    "Tooltip Auto-Rendering"), so what each holds is cut, the text kept."""
+    out, last = [], 0
+    for m in _SILENT.finditer(text):
+        if m.start() < last:
+            continue  # inside one already cut
+        end = _close(text, m.end() - 1)
+        out.append(text[last:m.end()])
+        if m.group(1) != "hidden_effect":
+            out.append(" ".join(_OWN_TEXT.findall(own_props(text[m.end():end]))))
+        last = end
+    return "".join(out) + text[last:]
+
+
+def printed_keys(text, calls, _seen=None):
+    """The loc keys a script block's tooltip may print: each
+    `custom_tooltip = <key>`, `custom_tooltip_no_bullet = <key>` and
+    `text = <key>` it renders (_rendered), and those of the scripted effects
+    and triggers it calls (calls: name -> body; `= yes`, `= no`, whose lines
+    print negated, or `= { ... }`), all the way down, a call's `$X$`
+    arguments filled in. It errs wide otherwise: a line under an `if`
+    whose `limit` never holds counts, and so does a call in a `limit`. A key
+    that still holds a `$X$` (a call that leaves the argument out) is kept as
+    written: loc_keys_of matches it against the loc."""
+    seen = set() if _seen is None else _seen
+    text = _rendered(text)
+    out = set(_PRINTS.findall(text))
+    for m in _SCRIPT_CALL.finditer(text):
+        name = m.group(1)
+        if name not in calls:
+            continue
+        args = ()
+        if m.group(2) == "{":
+            inner = text[m.end():_close(text, m.end() - 1)]
+            args = tuple(sorted((k, v.strip('"')) for k, v in _SCRIPT_ARG.findall(own_props(inner))))
+        if (name, args) in seen:
+            continue
+        seen.add((name, args))
+        callee = calls[name]
+        for k, v in args:
+            callee = callee.replace(f"${k}$", v)
+        out |= printed_keys(callee, calls, seen)
+    return out
+
+
+def loc_keys_of(printed, loc):
+    """The loc keys among what a script prints (printed_keys): a plain name
+    that is a key, and for a name that still holds a `$X$` every key it could
+    spell (`a_$B$` is any key that starts with a_). A name that is all
+    arguments spells any key and gives none."""
+    out = {k for k in printed if k in loc}
+    for name in printed:
+        parts = _PARAM.split(name)
+        if len(parts) > 1 and any(parts):
+            pattern = re.compile(r"[\w.\-]+".join(re.escape(part) for part in parts))
+            out.update(k for k in loc if pattern.fullmatch(k))
+    return out
+
+
+class ScriptedGuis:
+    """The scripted GUIs under a root (common/scripted_guis/) and what each
+    one's tooltip prints, through the root's scripted effects and triggers."""
+
+    def __init__(self, root=REPO):
+        """root: a mod's folder; None for no scripted GUIs at all."""
+        self.guis = _script_blocks(root, "scripted_guis") if root else {}
+        self.calls = dict(_script_blocks(root, "scripted_triggers")) if root else {}
+        for name, body in (_script_blocks(root, "scripted_effects") if root else {}).items():
+            self.calls[name] = self.calls[name] + "\n" + body if name in self.calls else body
+        self._printed, self._keys = {}, {}
+
+    def part(self, name, method):
+        """The text of the block a tooltip function renders (SCRIPTED_TOOLTIP):
+        the scripted GUI's own `effect`, `is_valid` or `is_shown`; "" when it
+        has none, or there is no such scripted GUI."""
+        body, want = self.guis.get(name, ""), SCRIPTED_TOOLTIP[method]
+        out = []
+        for m in _SCRIPT_PART.finditer(body):
+            before = body[:m.start()]
+            if m.group(1) == want and before.count("{") == before.count("}"):
+                out.append(body[m.end():_close(body, m.end() - 1)])
+        return "\n".join(out)
+
+    def printed(self, name, method="ExecuteTooltip"):
+        """What scripted GUI `name`'s tooltip prints (printed_keys of its part)."""
+        if (name, method) not in self._printed:
+            self._printed[(name, method)] = frozenset(printed_keys(self.part(name, method), self.calls))
+        return self._printed[(name, method)]
+
+    def keys(self, name, method, loc):
+        """The loc keys scripted GUI `name`'s tooltip prints (loc_keys_of)."""
+        key = (name, method, id(loc))
+        if key not in self._keys or self._keys[key][0] is not loc:
+            self._keys[key] = (loc, frozenset(loc_keys_of(self.printed(name, method), loc)))
+        return self._keys[key][1]
+
+
+@functools.lru_cache(maxsize=4)
+def scripted_guis(root=REPO):
+    """ScriptedGuis(root), kept: the repo's by default."""
+    return ScriptedGuis(root)
+
+
+# A tooltip asked of a scripted GUI: by name, or of the one in context.
+_TOOLTIP_CALL = re.compile(r"(?:GetScriptedGui\(\s*\\?'(\w+)\\?'\s*\)|(?<![\w.'])ScriptedGui)\s*\."
+                           r"(ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
+_SGUI_CONTEXT = re.compile(r"""\bdatacontext\s*=\s*"\[\s*GetScriptedGui\(\s*'(\w+)'\s*\)\s*\]\"""")
+_SELECT = re.compile(r"\b(?:SelectLocalization|AddLocalizationIf)\(")
+_OWN_CONDITION = re.compile(r"(?:And\(\s*)?Country\.IsLocalPlayer\s*(?:,|$)")
+
+
+def own_branch_spans(text):
+    """The parts of a markup or loc text that render only for the player's
+    own country, as (start, end): the second argument of each
+    SelectLocalization or AddLocalizationIf whose first is
+    Country.IsLocalPlayer, alone or first in an And (Tax Code's Pass
+    checklist). Any expression, where _OWN_BRANCH reads a quoted key."""
+    out = []
+    for m in _SELECT.finditer(text):
+        depth, cuts, i = 1, [m.end()], m.end()
+        while i < len(text) and depth and text[i] not in '"\n':
+            if text[i] == "(":
+                depth += 1
+            elif text[i] == ")":
+                depth -= 1
+            elif text[i] == "," and depth == 1:
+                cuts.append(i + 1)
+            i += 1
+        if depth or len(cuts) < 2:
+            continue
+        cuts.append(i)  # one past the closing parenthesis
+        if _OWN_CONDITION.match(text[cuts[0]:cuts[1] - 1].strip()):
+            out.append((cuts[1], cuts[2] - 1))
+    return out
+
+
+def tooltip_calls(text, own=True):
+    """Each scripted GUI's tooltip a markup or loc text asks for: (the
+    scripted GUI, None for the `ScriptedGui` in context; the function, a
+    SCRIPTED_TOOLTIP key; where the call starts). own=False leaves out a call
+    that renders only for the player's own country (own_branch_spans)."""
+    spans = () if own else own_branch_spans(text)
+    return [(m.group(1), m.group(2), m.start()) for m in _TOOLTIP_CALL.finditer(text)
+            if not any(a <= m.start() < b for a, b in spans)]
+
+
+_USES_OR_BLOCKS = re.compile(r'\busing\s*=|\b(?:block|blockoverride)\s+"\w+"')
+
+
+def _context_sguis(body, pos, contexts, types=None):
+    """The scripted GUIs a `ScriptedGui` at a body offset may be: the one of
+    the nearest `datacontext = "[GetScriptedGui('x')]"` on a block around
+    it. `contexts` (every one the panel sets) when there is none in the
+    body, and with it where something the body doesn't spell out may set
+    another on the call's widget or a widget between, the found one's
+    included: a blockoverride lies between (its contents sit where its block
+    is), or one of those widgets instances a mod type (whose root may set
+    one; types: the mod's types by name, mod_types() when None), uses a
+    template, or holds a block or a blockoverride at its own level (whose
+    default or override may set one), or is the body's root (the instance
+    that draws the type may set its own). The engine takes the context on
+    the call's own widget, so one the walk can't see prints other lines."""
+    types = _mod_types(REPO) if types is None else types
+    found = {enclosing_block(body, m.start()): m.group(1) for m in _SGUI_CONTEXT.finditer(body)}
+    a, b = enclosing_block(body, pos)
+    wide = False
+    while True:
+        root = (a, b) == (0, len(body))
+        if root:  # the widget that instances the type (or uses the template), which may set its own
+            wide = True
+        else:  # a widget's braces, or a block's or an override's: the widget holding it says the block is there
+            m = _OPENER.search(body, max(0, a - 120), a + 1)
+            wide = wide or bool(m and m.group(1) in types) or bool(_USES_OR_BLOCKS.search(own_props(body[a + 1:b])))
+        if (a, b) in found:
+            return ({found[(a, b)]} | set(contexts)) if wide else {found[(a, b)]}
+        if root:
+            return set(contexts)
+        a, b = enclosing_block(body, a)
+
+
+class UnresolvedTooltip(AssertionError):
+    """A scripted GUI's tooltip the panel asks for that names no scripted GUI
+    there is: a bare `ScriptedGui` with no datacontext the panel sets (the
+    mount's or a datamodel's), or one that names none in common/scripted_guis/.
+    Its lines can't be judged, so the walk fails rather than drop them."""
+
+
+def scripted_keys(text, loc, scripted=None, contexts=(), own=True, markup=False, types=None):
+    """The loc keys the scripted tooltips a text asks for print
+    (tooltip_calls, ScriptedGuis.keys). scripted: scripted_guis() (the repo's
+    when None). contexts: the scripted GUIs a `ScriptedGui` in context may
+    be; markup=True reads the text as a type's body and takes the nearest
+    datacontext around each such call first (_context_sguis, with types)."""
+    scripted = scripted_guis(REPO) if scripted is None else scripted
+    out = set()
+    for name, method, pos in tooltip_calls(text, own):
+        names = {name} if name else (_context_sguis(text, pos, contexts, types) if markup else set(contexts))
+        for n in names:
+            out |= scripted.keys(n, method, loc)
+    return out
+
+
 # A key shown only for the player's own country: the first branch of a
 # SelectLocalization on Country.IsLocalPlayer (Global Warming's wording), or
 # AddLocalizationIf's. own=False leaves these out of a text's keys.
@@ -533,20 +891,34 @@ def gui_keys(text, loc, own=True, custom=None):
     return {k for k in out if k in loc}
 
 
-def loc_closure(keys, loc, own=True, custom=None):
-    """The keys and every key their values splice ($key$), name ('key') or
-    render through GetCustom, all the way down. own and custom as gui_keys."""
+def value_keys(value, loc, own=True, custom=None, scripted=None, contexts=()):
+    """The loc keys a loc value reaches directly: those it splices ($key$),
+    names ('key') or renders through GetCustom, and those a scripted GUI's
+    tooltip it asks for prints (scripted_keys). own and custom as gui_keys;
+    scripted and contexts as scripted_keys."""
     custom = _custom_loc(REPO) if custom is None else custom
+    out = scripted_keys(value, loc, scripted, contexts, own) if "Tooltip" in value else set()
+    if not own:
+        value = _OWN_BRANCH.sub(r"\1''", value)
+    out.update(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
+    out.update(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
+    return out | custom_keys(value, custom)
+
+
+def loc_closure(keys, loc, own=True, custom=None, scripted=None, contexts=()):
+    """The keys and every key their values splice ($key$), name ('key'),
+    render through GetCustom or have a scripted GUI's tooltip print, all the
+    way down (value_keys). own and custom as gui_keys; scripted and contexts
+    as scripted_keys."""
+    custom = _custom_loc(REPO) if custom is None else custom
+    scripted = scripted_guis(REPO) if scripted is None else scripted
     seen, stack = set(), list(keys)
     while stack:
         key = stack.pop()
         if key in seen or key not in loc:
             continue
         seen.add(key)
-        value = loc[key] if own else _OWN_BRANCH.sub(r"\1''", loc[key])
-        stack.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
-        stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
-        stack.extend(custom_keys(value, custom))
+        stack.extend(value_keys(loc[key], loc, own, custom, scripted, contexts))
     return seen
 
 
@@ -664,6 +1036,12 @@ def mod_templates(root=REPO):
 _CHILD = re.compile(r"(?<![\w.])(\w+) = \{")
 
 
+@functools.lru_cache(maxsize=8192)
+def _child_sites(body):
+    """Each `name = {` in a body: (name, the offset of its brace)."""
+    return tuple((m.group(1), m.end() - 1) for m in _CHILD.finditer(body))
+
+
 def type_closure(names, types):
     """Every type the named types draw, all the way down, the named ones
     included: each type a body instances (a child anywhere in it, a
@@ -675,7 +1053,8 @@ def type_closure(names, types):
         if name in seen:
             continue
         seen.add(name)
-        todo += [c for c in _CHILD.findall(types[name].body) + [types[name].base] if c in types and c not in seen]
+        todo += [c for c in [c for c, _ in _child_sites(types[name].body)] + [types[name].base]
+                 if c in types and c not in seen]
     return seen
 
 
@@ -762,15 +1141,20 @@ class View:
     skip       type -> the parts of its body it doesn't draw, as (start, end):
                its te_own_country_only widgets (less the root's, where an
                instance or a derived type sets its own visible, which replaces
-               the template's: gotcha #17), and each block default that every
+               the template's: gotcha #17), each block default that every
                place the panel draws the type overrides (a blockoverride in the
-               instance, or in a derived type's root or all of its instances)
+               instance, or in a derived type's root or all of its instances),
+               and each blockoverride whose contents land only in such parts
+               (_dead_overrides: every `block "x"` it can fill is one the
+               panel doesn't draw)
     templates  the templates the open types use outside those parts (but the
                guard itself), and the templates those use
+    overrides  type -> the blockoverrides among its skip (skipped_overrides)
     """
     open: set
     skip: dict
     templates: set
+    overrides: dict = field(default_factory=dict)
 
 
 _VIEWS = {}  # (names, id(types), id(templates)) -> (types, templates, View): the dicts held, so no id is reused
@@ -793,17 +1177,20 @@ def panel_view(names, types, templates=None):
 
 
 def _panel_view(names, types, templates):
-    dead, view = {}, None
-    for _ in range(8):  # a dead default can hide an instance, which can kill another default
-        view, sites = _view_walk(names, types, dead, templates)
-        found = _dead_defaults(names, types, sites)
+    dead, view = ({}, {}), None
+    # a dead default can hide an instance, which can kill another default, and
+    # an override into a part not drawn can hold the only place that draws a
+    # type; each round only adds to what isn't drawn
+    for _ in range(8):
+        view, sites = _view_walk(names, types, dead[0], templates, dead[1])
+        found = _dead_defaults(names, types, sites), _dead_overrides(view, types, templates)
         if found == dead:
             break
         dead = found
     return view
 
 
-def _view_walk(names, types, dead, templates):
+def _view_walk(names, types, dead, templates, filled=None):
     seen, skip, sites = {}, {}, {}  # seen: type -> whether a place voids its root guard
     todo = [(n, False) for n in sorted(names) if n in types]
     while todo:
@@ -815,6 +1202,7 @@ def _view_walk(names, types, dead, templates):
         root = (0, len(body))
         spans = [sp for sp in guard_spans(body) if not (sp == root and seen[name])]
         spans += [(a, b) for a, b, x in block_defaults(body) if x in dead.get(name, ())]
+        spans += (filled or {}).get(name, ())
         skip[name] = spans
         if root in spans:
             continue
@@ -838,7 +1226,7 @@ def _view_walk(names, types, dead, templates):
         if t in templates and t not in used:
             used.add(t)
             stack += [u for u in _USING.findall(templates[t].body) if u != GUARD]
-    return View(set(seen), skip, used), sites
+    return View(set(seen), skip, used, dict(filled or {})), sites
 
 
 def _dead_defaults(names, types, sites):
@@ -859,6 +1247,577 @@ def _dead_defaults(names, types, sites):
         if gone:
             out[t] = gone
     return out
+
+
+_OVERRIDE_OPEN = re.compile(r'\bblockoverride\s+"(\w+)"\s*\{')
+_OPENER = re.compile(r"(?<![\w.])(\w+) = \{$")
+_BLOCK_OPENER = re.compile(r'\b(block|blockoverride)\s+"(\w+)"\s*\{$')
+
+
+@functools.lru_cache(maxsize=8192)
+def _block_sites(body):
+    """Each `block "x"` in a body: (name, where the word starts)."""
+    return tuple((m.group(1), m.start()) for m in _BLOCK_DEF.finditer(body))
+
+
+@functools.lru_cache(maxsize=8192)
+def _using_sites(body):
+    return tuple((m.group(1), m.start()) for m in _USING.finditer(body))
+
+
+def _holder(body, pos):
+    """The widget a `block "x"` (or a `using`) at a body offset is written
+    in: (the offset of its brace, 0 for the type's root; the blockoverrides
+    passed on the way out). A block's default and a blockoverride's contents
+    are no widget: what is written in them lands in the widget around them,
+    a blockoverride's wherever its own block is in that instance's type."""
+    a, via = enclosing_block(body, pos)[0], []
+    while a > 0:
+        m = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
+        if not m:
+            break
+        if m.group(1) == "blockoverride":
+            via.append(m.group(2))
+        a = enclosing_block(body, a)[0]
+    return a, tuple(via)
+
+
+def _lands(text):
+    """A blockoverride's contents as its block's widget takes them: its own
+    properties (own_props), a nested `block "x" { }` default's among them."""
+    chars = list(text)
+    for m in _BLOCK_DEF.finditer(text):
+        for i in (*range(m.start(), m.end()), _close(text, m.end() - 1)):
+            chars[i] = " "
+    return own_props("".join(chars))
+
+
+def _own_overrides(body, a, b):
+    """The blockoverrides written directly in the block from a to b (the whole
+    body at a type's root): (name, where the word starts, the offset of its
+    brace, of its end)."""
+    out = []
+    for m in _OVERRIDE_OPEN.finditer(body, a, b):
+        before = body[a + 1 if a else 0:m.start()]
+        if before.count("{") == before.count("}"):
+            out.append((m.group(1), m.start(), m.end() - 1, _close(body, m.end() - 1)))
+    return out
+
+
+def _dead_overrides(view, types, templates):
+    """type -> the blockoverrides in its drawn parts whose contents the panel
+    never draws, as (start, end) of their braces: in game an override's
+    contents sit where its block is, so one that fills only blocks under
+    te_own_country_only (or in any other part the View skips, or in a type it
+    doesn't draw) is the player's own, as if the guard were written around it.
+
+    An override belongs to the instance it is written in (the base type, at a
+    type's root). The blocks it can fill are every `block "x"` of that type,
+    of the mod types its own contents draw (the derived type's whole body, at
+    a root), of all those draw (type_closure: bases, and the types inside
+    them, since an override reaches the blocks of nested types too) and of
+    the templates any of them use, and any the instance's own contents
+    declare. One of them drawn keeps the override drawn. So does finding
+    none: the block is then a type's the mod doesn't define (vanilla's). And
+    so does a drawn block of the name anywhere else in the panel: a block of
+    that name can reach the instance from another level (a slot an outer
+    instance fills, a derived type's instance), which this doesn't trace.
+
+    An override that sets a `visible` (its own, a template's, or a nested
+    block default's) sets it on the widget its block is written in: at a
+    type's root, the widget that instances the type. Where that widget
+    carries the guard, the override's `visible` replaces the guard's (gotcha
+    #17). Every guard so replaced by one of the instance's overrides, or by
+    one at the root of its type or of that type's bases, counts as gone for
+    all of the instance's overrides, and so do the block defaults and
+    overrides the View skips: only the guards left hide a block then.
+
+    Two things keep this from reading a drawn override as not drawn (the
+    unsafe way); neither is redundant with the rules above:
+    - the rule that one drawn block of the name anywhere in the panel keeps
+      an override drawn, which covers every way a block reaches an instance;
+    - guard_visible_overrides, which test_te_system_tab_bodies.py's
+      SkippedOverrideTest holds empty for the whole mod: no override of a
+      block that sits on a guard's widget sets a `visible`. The rules above
+      follow such a `visible` from the instance's own overrides and its
+      type's roots only; one from an instance further out or further in,
+      and one on an instance that itself carries the guard (which
+      guard_spans skips whole, before this is asked), are caught there.
+      So is one beside a guard that guard_spans reads narrower than it is:
+      a guard written in a blockoverride or in a block's default, which
+      guard_spans takes as hiding only what that override or default holds,
+      sits on the block's widget with everything else on it.
+    Two limits are left open, unsafe the same way and not met on main, since
+    vanilla's types are not read: a vanilla type inside the instanced one
+    with a block of the same name as a guarded mod block
+    (SkippedOverrideTest holds the skipped names to ones no vanilla copy
+    under gui/ declares, the part the repo can check); and a blockoverride
+    of a vanilla type's block that sits on a guard's widget, written
+    anywhere but on that widget (on it, guard_visible_overrides fails any
+    that could set a `visible`)."""
+    guards, occ, held, hold, universes, by_block = {}, {}, {}, {}, {}, {}
+
+    def guard_set(name):
+        if name not in guards:
+            guards[name] = frozenset(guard_spans(types[name].body))
+        return guards[name]
+
+    def template_blocks(t):
+        """The block names a template declares, those it uses included."""
+        if t not in held:
+            found, seen, todo = set(), set(), [t]
+            while todo:
+                u = todo.pop()
+                if u in templates and u not in seen:
+                    seen.add(u)
+                    found.update(x for x, _ in _block_sites(templates[u].body))
+                    todo += [v for v, _ in _using_sites(templates[u].body)]
+            held[t] = found
+        return held[t]
+
+    def occurrences(name):
+        """(block name, offset) for each block a type's own body offers an
+        override: a `block "x"`, or one of a template it uses, at the `using`."""
+        if name not in occ:
+            body = types[name].body
+            found = list(_block_sites(body))
+            for t, pos in _using_sites(body):
+                found += [(x, pos) for x in template_blocks(t)]
+            occ[name] = found
+        return occ[name]
+
+    def drawn(name, pos, voided):
+        """Whether the panel draws what lands at a body offset, with the
+        guards in `voided` replaced."""
+        if not voided:
+            return name in view.open and not in_spans(pos, view.skip[name])
+        left = [sp for sp in guard_set(name) if (name, sp) not in voided]
+        if name in view.open:  # less a root guard the walk found replaced
+            left = [sp for sp in left if sp in view.skip[name]]
+        return not in_spans(pos, left)
+
+    def universe(key):
+        """For a set of type names: all they draw; within those, each type's
+        places (type -> [(the type it is in, its brace)]) and derived types."""
+        if key not in universes:
+            names = type_closure(key, types)
+            sites, derived = {}, {}
+            for name in names:
+                for child, brace in _child_sites(types[name].body):
+                    if child in names:
+                        sites.setdefault(child, []).append((name, brace))
+                if types[name].base in names:
+                    derived.setdefault(types[name].base, []).append(name)
+            universes[key] = (names, sites, derived)
+        return universes[key]
+
+    def blocks_in(key, x):
+        """Each `block "x"` in a universe: (type, offset)."""
+        if key not in by_block:
+            found = {}
+            for name in universe(key)[0]:
+                for block, pos in occurrences(name):
+                    found.setdefault(block, []).append((name, pos))
+            by_block[key] = found
+        return by_block[key].get(x, ())
+
+    def root_guards(name):
+        """The guard on a type's root, and on its bases' roots."""
+        out, seen = set(), set()
+        while name in types and name not in seen:
+            seen.add(name)
+            if (0, len(types[name].body)) in guard_set(name):
+                out.add((name, (0, len(types[name].body))))
+            name = types[name].base
+        return out
+
+    def carriers(name, pos, key, seen=frozenset()):
+        """The guards a `visible` replaces when it lands with the block at a
+        body offset, as (type, span): the guard of the widget the block is
+        written in. At a type's root that is the type's own root guard and
+        each place in the universe that instances the type, or a type derived
+        from it, with the guard on the instance."""
+        if (name, pos) not in hold:
+            hold[(name, pos)] = _holder(types[name].body, pos)
+        (w, via), body, out = hold[(name, pos)], types[name].body, set()
+        if w == 0:
+            _, sites, derived = universe(key)
+            inst, todo, done = types[name].base, [name], set()
+            while todo:
+                n = todo.pop()
+                if n in done:
+                    continue
+                done.add(n)
+                out |= root_guards(n)
+                for parent, brace in sites.get(n, ()):
+                    span = (brace, _close(types[parent].body, brace))
+                    if span in guard_set(parent):
+                        out.add((parent, span))
+                todo += derived.get(n, ())
+        else:
+            span = (w, _close(body, w))
+            if span in guard_set(name):
+                out.add((name, span))
+            opener = _OPENER.search(body, max(0, w - 120), w + 1)
+            inst = opener.group(1) if opener else None
+            if inst in types:  # written in an instance: on that type's root
+                out |= root_guards(inst)
+        if inst in types:  # in a blockoverride of that instance: where its block is
+            for y in via:
+                if (inst, y) not in seen:
+                    for other in type_closure({inst}, types):
+                        for block, p in occurrences(other):
+                            if block == y:
+                                out |= carriers(other, p, key, seen | {(inst, y)})
+        return out
+
+    def sets_visible(body, brace, end):
+        props = _lands(body[brace + 1:end])
+        return bool(_OWN_VISIBLE.search(props) or _USING.search(props))
+
+    # the names with a block not drawn somewhere: no other override can be dead;
+    # nor can one whose name has a block the panel draws anywhere
+    maybe = {x for name in type_closure(view.open, types) for x, pos in occurrences(name) if not drawn(name, pos, ())}
+    maybe -= {x for name in view.open for x, pos in occurrences(name) if drawn(name, pos, ())}
+    out = {}
+    for name in view.open:
+        body, skip = types[name].body, view.skip[name]
+        root = (0, len(body))
+        if root in skip:
+            continue
+        instances, spans = set(), []
+        for m in _OVERRIDE_OPEN.finditer(body):
+            if m.group(1) in maybe and not in_spans(m.start(), skip):
+                instances.add(enclosing_block(body, m.start()))
+        for a, b in sorted(instances):
+            if (a, b) == root:
+                target = types[name].base
+            else:
+                opener = _OPENER.search(body, max(0, a - 120), a + 1)
+                target = opener.group(1) if opener else None
+            if target not in types:
+                continue
+            # what this instance draws: its type, and the mod types its own contents hold
+            key = frozenset({target} | {c for c, brace in _child_sites(body)
+                                        if a < brace < b and c in types and not in_spans(brace, skip)})
+            local = [(x, pos) for x, pos in occurrences(name) if a < pos < b]
+            own = _own_overrides(body, a, b)
+            setters, chain = [x for x, _, brace, end in own if sets_visible(body, brace, end)], target
+            for _ in range(8):  # and the overrides its type and that type's bases make at their roots
+                if chain not in types:
+                    break
+                other = types[chain].body
+                setters += [x for x, _, brace, end in _own_overrides(other, 0, len(other))
+                            if sets_visible(other, brace, end)]
+                chain = types[chain].base
+            voided = set()
+            for x in set(setters):
+                for other, pos in list(blocks_in(key, x)) + [(name, pos) for block, pos in local if block == x]:
+                    voided |= carriers(other, pos, key)
+            for x, start, brace, end in own:
+                if x not in maybe or in_spans(start, skip):
+                    continue
+                mine = [pos for block, pos in local if block == x]
+                fills = blocks_in(key, x)
+                if not fills and not mine:
+                    continue  # a block no mod type defines
+                if any(drawn(name, pos, voided) for pos in mine) or any(drawn(t, pos, voided) for t, pos in fills):
+                    continue
+                spans.append((brace, end))
+        if spans:
+            out[name] = tuple(spans)
+    return out
+
+
+def _on_guard_widgets(types, templates):
+    """block name -> (path, line, type) of a widget that carries
+    te_own_country_only, for each `block "x"` that sits on one: written at
+    that widget's own level (in a block default or a blockoverride there
+    too), declared by a template it uses, or at the root of the mod type it
+    instances, that type's bases' roots included; and at the root of any type
+    whose own root, or a base's, carries the guard. Also (block name, the
+    text of its default, its path and line) for each of those blocks, and
+    the widgets whose own blockoverrides may fill a block the mod's types
+    don't place, as (TypeDef, the offset of its brace or 0 for the root, the
+    guard's widget, the block names an override there may fill and stay
+    placed or None, the reason suffix): an instance of a type the mod doesn't
+    define that carries the guard (none: NOT_THE_MODS_TYPE); a guard-carrying
+    instance of a mod type built on such a type, its guarded root and each
+    instance of a type with one (those its own chain declares:
+    NOT_THE_MODS_BASE); and the same of a mod type built on an engine widget
+    (None, any a mod type or template declares: NOT_THE_MODS_BLOCK).
+
+    The guard's widget is the one it is written in. A guard written in a
+    `blockoverride "x"` (the Colonial Empire's `down_action`) sits on the
+    widget `block "x"` is written on, wherever a type or a template declares
+    one: by name, as the seal goes, so each such widget counts as carrying
+    it. One in a block's default sits on the widget around the block."""
+    names, defaults, unread, roots, sites = {}, [], [], {}, {}
+
+    def tmpl_blocks(t, seen):
+        if t not in templates or t in seen:
+            return set()
+        seen.add(t)
+        out = {x for x, _ in _block_sites(templates[t].body)}
+        for u, _ in _using_sites(templates[t].body):
+            out |= tmpl_blocks(u, seen)
+        return out
+
+    def at(td, a, where):
+        """The blocks on the widget whose brace is at a body offset (0: the root)."""
+        body = td.body
+        lo, hi = (0, len(body)) if a == 0 else (a, _close(body, a))
+        for x, pos in _block_sites(body):
+            if lo <= pos <= hi and _holder(body, pos)[0] == a:
+                names.setdefault(x, where)
+                brace = body.index("{", pos)
+                defaults.append((x, body[brace + 1:_close(body, brace)], td.path, td.line + _line_of(td, pos)))
+        for t, pos in _using_sites(body):
+            if lo <= pos <= hi and _holder(body, pos)[0] == a:
+                for x in tmpl_blocks(t, set()):
+                    names.setdefault(x, where)
+
+    def root_of(name, where):
+        seen = set()
+        while name in types and name not in seen:
+            seen.add(name)
+            at(types[name], 0, where)
+            name = types[name].base
+
+    def guarded_root(name):
+        if name not in roots:
+            roots[name] = False  # a loop of bases
+            body = types[name].body
+            roots[name] = (0, len(body)) in guard_spans(body) or (types[name].base in types
+                                                                  and guarded_root(types[name].base))
+        return roots[name]
+
+    def chain(name):
+        seen = []
+        while name in types and name not in seen:
+            seen.append(name)
+            name = types[name].base
+        return seen, name
+
+    def allowed(name):
+        """The rule for a blockoverride written on an instance of `name` that
+        carries the guard (unread's last two): None and NOT_THE_MODS_BLOCK for
+        a mod type built on an engine widget (any block a mod type or template
+        declares is placed by name); for a type the mod doesn't define, no
+        block (NOT_THE_MODS_TYPE); for a mod type built on one, only the
+        blocks its own chain declares, its templates' included
+        (NOT_THE_MODS_BASE): the vanilla root's are not read."""
+        own, end = chain(name)
+        if not own:
+            return frozenset(), NOT_THE_MODS_TYPE
+        if end in _engine_widgets():
+            return None, NOT_THE_MODS_BLOCK
+        return frozenset({x for t in own for x, _ in _block_sites(types[t].body)}
+                         | {x for t in own for u, _ in _using_sites(types[t].body) for x in tmpl_blocks(u, set())}
+                         ), NOT_THE_MODS_BASE
+
+    def derives(name, base):
+        seen = set()
+        while name in types and name not in seen:
+            if name == base:
+                return True
+            seen.add(name)
+            name = types[name].base
+        return False
+
+    def carry(group, name, w, where):
+        """The widget at a body offset carries the guard (0: the root, which
+        for a type is the widget that instances it, or a type derived from it)."""
+        td = group[name]
+        if w == 0:
+            if group is types:
+                for other in types:
+                    if derives(other, name):
+                        root_of(other, where)
+            else:
+                at(td, 0, where)
+            unread.append((td, 0, where) + (allowed(name) if group is types else (None, NOT_THE_MODS_BLOCK)))
+            return
+        at(td, w, where)
+        opener = _OPENER.search(td.body, max(0, w - 120), w + 1)
+        if opener and opener.group(1) in types:
+            root_of(opener.group(1), where)
+        unread.append((td, w, where) + allowed(opener and opener.group(1)))
+
+    def written_on(x):
+        """Each widget a `block "x"` is written on, in any type or template (a
+        template's at each `using`): (group, name, _holder's answer)."""
+        if not sites:
+            sites[None] = ()  # built, even when empty
+            for group in (types, templates):
+                for name, td in group.items():
+                    for y, pos in _block_sites(td.body):
+                        sites.setdefault(y, []).append((group, name, _holder(td.body, pos)))
+                    for t, pos in _using_sites(td.body):
+                        for y in tmpl_blocks(t, set()):
+                            sites.setdefault(y, []).append((group, name, _holder(td.body, pos)))
+        return sites.get(x, ())
+
+    def land(x, where, seen):
+        """A guard written in a `blockoverride "x"` sits where `block "x"` is:
+        each widget one is written on carries it. A block that is itself
+        written in a blockoverride sits where that one's block is, too.
+        Whether the mod declares any."""
+        if x in seen:
+            return True
+        seen.add(x)
+        found = False
+        for group, name, (w, via) in written_on(x):
+            found = True
+            carry(group, name, w, where)
+            if via:
+                land(via[0], where, seen)
+        return found
+
+    for group in (types, templates):
+        for name, td in group.items():
+            body = td.body
+            for a, b in guard_spans(body):
+                where = (td.path, td.line + _line_of(td, a), ("" if group is types else "template ") + name)
+                if (a, b) == (0, len(body)):
+                    if group is templates:  # a type's guarded root: below, with the types derived from it
+                        at(td, 0, where)
+                        unread.append((td, 0, where, None, NOT_THE_MODS_BLOCK))
+                    continue
+                written = _BLOCK_OPENER.search(body, max(0, a - 120), a + 1)
+                if not written:
+                    carry(group, name, a, where)
+                    continue
+                w, via = _holder(body, a + 1)
+                if not via:  # in a block's default: on the widget around the block
+                    carry(group, name, w, where)
+                    continue
+                # in a blockoverride: on its block's widget, in the type the override's widget instances
+                if w:
+                    opener = _OPENER.search(body, max(0, w - 120), w + 1)
+                    instanced = opener.group(1) if opener else None
+                else:
+                    instanced = td.base
+                found = land(via[0], where, set())
+                unread.append((td, w, where) + (allowed(instanced) if found else (frozenset(), NOT_THE_MODS_TYPE)))
+    for name, td in types.items():
+        if guarded_root(name):
+            root_of(name, (td.path, td.line, name))
+            unread.append((td, 0, (td.path, td.line, name)) + allowed(name))
+    for group in (types, templates):
+        for td in group.values():
+            for child, brace in _child_sites(td.body):
+                if child in types and guarded_root(child):
+                    unread.append((td, brace, (types[child].path, types[child].line, child)) + allowed(child))
+    return names, defaults, unread
+
+
+def _landing(text):
+    """What a block's contents put on the widget the block is written in:
+    (why a `visible` may be among it, the blocks declared there), each at
+    the contents' own level or in a block default nested there. The guard
+    itself is no other `visible`."""
+    flat = _lands(text)
+    why = [reason for found, reason in ((_OWN_VISIBLE.search(flat), "sets a visible"),
+                                        (any(t != GUARD for t in _USING.findall(flat)),
+                                         "uses a template, which may set a visible"),
+                                        (_OVERRIDE.search(flat), "holds a blockoverride, which may set a visible"))
+           if found]
+    held = set()
+    for m in _BLOCK_DEF.finditer(text):
+        a, b = enclosing_block(text, m.start())
+        while (a, b) != (0, len(text)):
+            opener = _BLOCK_OPENER.search(text, max(0, a - 120), a + 1)
+            if not opener or opener.group(1) != "block":
+                break
+            a, b = enclosing_block(text, a)
+        else:
+            held.add(m.group(1))
+    return why, held
+
+
+# Why an own blockoverride on a guard's widget fails the seal though no mod type places its block.
+NOT_THE_MODS_TYPE = " on an instance of a type the mod doesn't define, whose blocks may sit on that widget"
+NOT_THE_MODS_BLOCK = (", and no mod type or template declares the block: it is a vanilla type's, which may put it on "
+                      "that widget")
+NOT_THE_MODS_BASE = (" on an instance of a mod type built on a type the mod doesn't define, and the mod type doesn't "
+                     "declare the block: the base's, whose blocks may sit on that widget")
+
+
+@functools.lru_cache(maxsize=1)
+def _engine_widgets():
+    """The engine's own elements (gui_reference_audit.BUILTINS): a mod type
+    built on one has no blocks but the mod's."""
+    from gui_reference_audit import BUILTINS
+    return frozenset(BUILTINS)
+
+
+def guard_visible_overrides(types, templates, texts):
+    """Each place that could put a `visible` on a widget that carries
+    te_own_country_only, where it would replace the guard (gotcha #17), as
+    (path, line, block name, why, the guard's widget as (path, line, type)).
+    Three kinds:
+    - a blockoverride, anywhere in `texts` (path -> a GUI file's text,
+      comments cut), of a block that sits on such a widget
+      (_on_guard_widgets), which sets a `visible`, uses a template or holds
+      another blockoverride at its own level. A block that an override of one
+      of those names declares at its own level sits on the widget as well.
+      By name, so every instance level is covered;
+    - such a block's own default that does (why: "its default ...");
+    - a blockoverride written on the guard's own widget that does, where the
+      mod's types can't say which widget its block is on: any, on an instance
+      of a type the mod doesn't define (vanilla's root blocks are not read:
+      why ends NOT_THE_MODS_TYPE); on an instance or a guarded root of a mod
+      type built on one, one of a block that type's own chain doesn't declare
+      (NOT_THE_MODS_BASE: a name another mod type declares is no proof); and
+      on any other guard-carrying widget one of a block no mod type or
+      template declares (NOT_THE_MODS_BLOCK).
+    The blockoverride walk (_dead_overrides) and the guard itself
+    (guard_spans, which reads a guard as hiding what is written inside the
+    widget, the block default or the blockoverride it is written in) rest on
+    this finding nothing. What it can't see, all for vanilla's types not
+    being read: a vanilla type inside the instanced one with a block of a
+    guarded mod block's name; a block a vanilla-built type's chain declares
+    that its vanilla base declares too; and an override, written anywhere
+    but on the guard's own widget, of a vanilla type's block that sits on
+    that widget."""
+    names, defaults, unread = _on_guard_widgets(types, templates)
+    out = {(path, line, x, f"its default {w}", names[x]) for x, text, path, line in defaults for w in _landing(text)[0]}
+    declared = {x for group in (types, templates) for td in group.values() for x, _ in _block_sites(td.body)}
+    for td, w, where, may, suffix in unread:
+        a, b = (0, len(td.body)) if w == 0 else (w, _close(td.body, w))
+        for x, start, brace, end in _own_overrides(td.body, a, b):
+            if x not in (declared if may is None else may):
+                out |= {(td.path, td.line + _line_of(td, start), x, reason + suffix, where)
+                        for reason in _landing(td.body[brace + 1:end])[0]}
+    by_name = {}
+    for path, text in texts.items():
+        for m in _OVERRIDE_OPEN.finditer(text):
+            by_name.setdefault(m.group(1), []).append((path, text, m))
+    todo, seen = list(names), set()
+    while todo:
+        x = todo.pop()
+        if x in seen:
+            continue
+        seen.add(x)
+        for path, text, m in by_name.get(x, ()):
+            why, held = _landing(text[m.end():_close(text, m.end() - 1)])
+            line = text.count("\n", 0, m.start()) + 1
+            out |= {(path, line, x, w, names[x]) for w in why}
+            for y in held:  # a block declared there lands on the same widget
+                names.setdefault(y, names[x])
+                todo.append(y)
+    return sorted(out)
+
+
+def skipped_overrides(view, types):
+    """The blockoverrides a View skips because they fill no block the panel
+    draws (_dead_overrides), as sorted (type, block name) pairs."""
+    out = set()
+    for name, spans in view.overrides.items():
+        for a, _ in spans:
+            out.add((name, _BLOCK_OPENER.search(types[name].body, max(0, a - 120), a + 1).group(2)))
+    return sorted(out)
 
 
 def open_types(names, types):
@@ -956,6 +1915,88 @@ def markup_reads(names, types, templates=None):
     return out
 
 
+# What hides a world read from an observer, who has no GetPlayer (National Info
+# opens to one; gui_modding_guide.md, "An observer has no GetPlayer"): a
+# `visible` that tests for the observer, or for a player, first: alone or
+# leading an And, whose later arguments are then not read.
+OBSERVER_GATE = re.compile(r'(?<![\w.])visible\s*=\s*"\[(?:And\(\s*)?'
+                           r'(?:Not\(\s*GetMetaPlayer\.IsObserver\s*\)|GetPlayer\.IsValid\b)')
+_IS_VALID = "GetPlayer.IsValid"
+
+
+def _observer_gate(body, pos):
+    """Whether a block around a body offset (the widget it is written in, or
+    one that holds it) has an observer gate as its own `visible`. The type's
+    root is not asked: an instance's own `visible` replaces it (gotcha #17)."""
+    a, b = enclosing_block(body, pos)
+    while (a, b) != (0, len(body)):
+        if OBSERVER_GATE.search(own_props(body[a + 1:b])):
+            return True
+        a, b = enclosing_block(body, a)
+    return False
+
+
+def _observer_open(names, types, view):
+    """The types an observer's panel draws outside every observer gate: the
+    named ones (whose mounts set their own `visible`), and each type a place
+    in one of them draws (View.skip left out) with no gate around the place
+    and none that holds on the type's own root, which an instance that sets
+    its own `visible` replaces. A base type is as open as the type derived
+    from it."""
+    bare, todo, rooted = set(), [n for n in sorted(names) if n in types], {}
+
+    def tests(body):  # most bodies have no gate to look for
+        return "IsObserver" in body or _IS_VALID in body
+
+    while todo:
+        name = todo.pop()
+        if name in bare:
+            continue
+        bare.add(name)
+        body, skip = types[name].body, view.skip.get(name, ())
+        if (0, len(body)) in skip:
+            continue
+        gates = tests(body)
+        for child, brace in _child_sites(body):
+            if child not in types or child in bare or in_spans(brace, skip) or (gates and _observer_gate(body, brace + 1)):
+                continue
+            if child not in rooted:
+                rooted[child] = tests(types[child].body) and bool(OBSERVER_GATE.search(own_props(types[child].body)))
+            if not rooted[child] or _OWN_VISIBLE.search(own_props(body[brace + 1:_close(body, brace)])):
+                todo.append(child)
+        if types[name].base in types:
+            todo.append(types[name].base)
+    return bare
+
+
+def ungated_world_reads(names, types, templates=None):
+    """Each `# world:` read another country's panel draws (markup_reads) that
+    an observer's would evaluate, as a Finding. A read is gated when its own
+    line is an observer gate (OBSERVER_GATE: the test first, the read after
+    it) or has GetPlayer.IsValid before it, when a block around it has the
+    gate (its own widget's `visible`, or a container's), or when every place
+    the panel draws its type sits under one, the type's own root included
+    while no such place sets its own `visible`. A template's read takes a
+    gate inside the template."""
+    templates = _mod_templates(REPO) if templates is None else templates
+    bare = _observer_open(names, types, panel_view(names, types, templates))
+    out = []
+    for f in markup_reads(names, types, templates):
+        if not f.world:
+            continue
+        in_template = f.where.startswith("template ")
+        td = templates[f.where[len("template "):]] if in_template else types[f.where]
+        k = f.line - td.line
+        start = _line_starts(td.body)[k]
+        pos = start + f.col - (td.col if k == 0 else 0)
+        if (OBSERVER_GATE.search(td.body, start, pos) or td.body.find(_IS_VALID, start, pos + len(_IS_VALID)) >= 0
+                or _observer_gate(td.body, pos)):
+            continue
+        if in_template or f.where in bare:
+            out.append(f)
+    return out
+
+
 def popups(types):
     """Each te_popup value and the popup types that show on it."""
     out = {}
@@ -1009,16 +2050,73 @@ def unguarded_controls(names, types, templates=None):
     return out
 
 
-def panel_loc_keys(names, types, loc, templates=None, custom=None):
+def panel_tooltips(names, types, templates=None):
+    """Each scripted GUI's tooltip another country's panel asks for in its
+    markup (tooltip_calls in the drawn parts of the open types and their
+    templates, own-country branches left out), as (where, TypeDef, the body
+    offset of the call, the scripted GUIs it may be, the function), and the
+    scripted GUIs the panel sets as a datacontext: what a `ScriptedGui` in
+    context may be where its own body doesn't say (_context_sguis). A bare
+    call the panel sets no context for may be none: panel_loc_keys fails it."""
+    drawn = [(where, td, unguarded(td.body, spans)) for where, td, spans in _drawn(names, types, templates)]
+    contexts = {name for _, _, text in drawn for name in _SGUI_CONTEXT.findall(text)}
+    out = []
+    for where, td, text in drawn:
+        for name, method, pos in tooltip_calls(text, own=False):
+            out.append((where, td, pos, {name} if name else _context_sguis(text, pos, contexts, types), method))
+    return out, contexts
+
+
+def _unresolved(asked, keys, loc, scripted, contexts):
+    """Each tooltip a panel asks for (in markup: panel_tooltips' calls; in the
+    loc keys it renders) that may be no scripted GUI there is, as "path:line
+    what": a bare `ScriptedGui` the panel sets no datacontext for, or one
+    whose names are none of `scripted`'s."""
+    there = set(scripted.guis)
+    out = []
+    for where, td, pos, sguis, method in asked:
+        if not sguis & there:
+            what = ", ".join(sorted(sguis)) or "ScriptedGui, with no scripted GUI datacontext in the panel"
+            out.append(f"{td.path}:{td.line + _line_of(td, pos)} {where}: {method} of {what}")
+    index = None
+    for key in sorted(keys):
+        for name, method, _ in tooltip_calls(loc[key], own=False):
+            sguis = {name} if name else set(contexts)
+            if not sguis & there:
+                index = _loc_index(LOC_DIR) if index is None else index
+                path, line = index[key][1:] if key in index else ("loc", "?")
+                what = ", ".join(sorted(sguis)) or "ScriptedGui, with no scripted GUI datacontext in the panel"
+                out.append(f"{path}:{line} loc key {key}: {method} of {what}")
+    return out
+
+
+def panel_loc_keys(names, types, loc, templates=None, custom=None, scripted=None):
     """The loc keys another country's panel renders: those the drawn parts of
-    the open types and their templates name (panel_view), and every key they
-    reach, GetCustom's included, less a key shown only for the player's own
-    country (the first branch of a SelectLocalization on Country.IsLocalPlayer,
-    which another country's panel never renders). custom: custom_loc()."""
+    the open types and their templates name (panel_view), those the scripted
+    tooltips they ask for print (panel_tooltips), and every key those reach,
+    GetCustom's and a scripted tooltip's included, less what is shown only
+    for the player's own country (the first branch of a SelectLocalization on
+    Country.IsLocalPlayer, which another country's panel never renders).
+    custom: custom_loc(). scripted: scripted_guis(); one with no scripted
+    GUIs at all (ScriptedGuis(None)) follows no tooltip. Raises
+    UnresolvedTooltip, naming each, where a tooltip asked for may be no
+    scripted GUI there is (_unresolved): its lines would go unjudged."""
+    scripted = scripted_guis(REPO) if scripted is None else scripted
     roots = set()
     for _, td, spans in _drawn(names, types, templates):
         roots |= gui_keys(unguarded(td.body, spans), loc, own=False, custom=custom)
-    return loc_closure(roots, loc, own=False, custom=custom)
+    asked, contexts = panel_tooltips(names, types, templates)
+    for _, _, _, sguis, method in asked:
+        for name in sguis:
+            roots |= scripted.keys(name, method, loc)
+    keys = loc_closure(roots, loc, own=False, custom=custom, scripted=scripted, contexts=contexts)
+    if scripted.guis:
+        bad = _unresolved(asked, keys, loc, scripted, contexts)
+        if bad:
+            raise UnresolvedTooltip("a scripted GUI's tooltip this panel asks for names no scripted GUI there is, so "
+                                    "the lines it prints can't be judged: set the datacontext in the panel (or name "
+                                    "the scripted GUI: GetScriptedGui('x')), or fix the name\n  " + "\n  ".join(bad))
+    return keys
 
 
 def loc_reads(keys, index):

@@ -112,6 +112,10 @@ class FakeSession:
         self._call("shot")
         return Path("/backups/runs/%s/shot_01.png" % SNAP)
 
+    def click(self, x, y):
+        self._call("click", x, y)
+        return {"pixel": [round(1920 * x), round(1080 * y)], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}
+
     def try_event(self, event, setup, reads):
         self._call("try_event", event, setup, list(reads))
         return dict(self.try_event_reply, event=event, setup=setup)
@@ -121,6 +125,12 @@ class FakeSession:
     def status(self):
         self._call("status")
         return {"started": True, "stopped": self._stopped is not None, "snapshot": SNAP}
+
+    def self_checks(self):
+        self._call("self_checks")
+        return {"live": True, "flushed": True, "run": SNAP, "broken": ["flushed_just_now"], "counts": {"BROKEN": 1},
+                "checks": [{"name": "flushed_just_now", "verdict": "BROKEN", "source": "session",
+                            "line": "common/a.txt:1: TE_SELF_CHECK BROKEN flushed_just_now"}]}
 
     def stop(self):
         self._call("stop")
@@ -313,6 +323,9 @@ class VerbTest(ServerTestCase):
         self.assertEqual(fake.calls[-1], ("advance", 30))
         self.assertEqual(self.run_cli("enter-game")[0]["after"], [1836, 1, 15])
         self.assertEqual(self.run_cli("shot"), ({"path": "/backups/runs/%s/shot_01.png" % SNAP}, 0))
+        self.assertEqual(self.run_cli("click", "0.5", "0.25"),
+                         ({"pixel": [960, 270], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}, 0))
+        self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25))
         status, code = self.run_cli("status")
         self.assertEqual(code, 0)
         self.assertEqual(status["server"]["pid"], os.getpid())
@@ -386,6 +399,60 @@ class VerbTest(ServerTestCase):
         self.wait_for(lambda: client.call(self.backups, "status", {}, timeout=2)[1] == 0, "an answer to status")
         self.assertTrue(thread.is_alive())
         self.assertEqual(fake.stops, 0)
+
+
+class SelfChecksVerbTest(ServerTestCase):
+    """`selfchecks` (#1601): the live session is asked, so that it flushes the game's log first; any other run,
+    and a session that does not answer, are read from the files."""
+
+    def run_folder(self, run_id: str, *messages: str) -> None:
+        folder = self.backups / "runs" / run_id
+        folder.mkdir(parents=True)
+        (folder / "steps.jsonl").write_text(json.dumps({"verb": "fixture", "outcome": "not_used", "save": "x"}) + "\n",
+                                            encoding="utf-8")
+        (folder / "debug.log").write_text("".join("[18:27:01][jomini_effect_impl.cpp:459]: %s\n" % m for m in messages),
+                                          encoding="utf-8")
+
+    def live(self) -> FakeSession:
+        fake, _thread = self.serve()
+        self.assertEqual(client.call(self.backups, "start", {"permission": PERMISSION})[1], 0)
+        self.assertEqual(server.read_info(self.backups)["snapshot"], SNAP)
+        return fake
+
+    def test_the_live_sessions_run_is_asked_of_the_session_which_flushes_first(self):
+        fake = self.live()
+        self.run_folder(SNAP, "common/a.txt:1: TE_SELF_CHECK OK on_disk_already")
+        reply, code = self.run_cli("selfchecks")
+        self.assertEqual(code, 0)
+        self.assertEqual(reply, fake.self_checks())
+        self.assertEqual(fake.calls.count(("self_checks",)), 2)        # the verb's, and the line above
+        reply, code = self.run_cli("selfchecks", "--run", SNAP)
+        self.assertEqual((code, reply["flushed"], reply["broken"]), (0, True, ["flushed_just_now"]))
+
+    def test_another_run_is_read_from_its_files_and_the_session_is_left_alone(self):
+        fake = self.live()
+        self.run_folder(SNAP)
+        self.run_folder("20261109T120000Z", "common/a.txt:1: TE_SELF_CHECK BROKEN yesterdays")
+        reply, code = self.run_cli("selfchecks", "--run", "20261109T120000Z")
+        self.assertEqual((code, reply["live"], reply["broken"]), (0, False, ["yesterdays"]))
+        self.assertNotIn("flushed", reply)
+        self.assertNotIn(("self_checks",), fake.calls)
+
+    def test_a_session_that_refuses_still_leaves_the_files_to_read(self):
+        fake = self.live()
+        self.run_folder(SNAP, "common/a.txt:1: TE_SELF_CHECK OK on_disk_already")
+        fake.raises["self_checks"] = session.SessionError("not_started", "no run folder yet")
+        reply, code = self.run_cli("selfchecks")
+        self.assertEqual((code, reply["live"], reply["flushed"]), (0, True, False))
+        self.assertEqual(reply["not_flushed"], {"refused": "not_started", "detail": "no run folder yet"})
+        self.assertEqual([c["name"] for c in reply["checks"]], ["on_disk_already"])
+        self.assertEqual(fake.stops, 0)
+
+    def test_with_no_run_folder_the_verb_is_refused_and_asks_nobody(self):
+        fake = self.live()
+        reply, code = self.run_cli("selfchecks")
+        self.assertEqual((reply["refused"], code), ("no_run", 2))
+        self.assertNotIn(("self_checks",), fake.calls)
 
 
 class ExpiryTest(ServerTestCase):

@@ -402,7 +402,7 @@ switching between them keeps its investment.
 |---|---|
 | Available | From Computer Networks, with Laissez-Faire or Interventionism; not in a Council Republic |
 | Ministry of Public Safety | Costs 40% less bureaucracy, as base-game Private Schools and Private Health Insurance do for theirs |
-| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level; under the Full Demographics rule deaths from accidents and violence −2% a level, against a Dedicated Police Force's 3%; Services output −1% |
+| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.15; the Ministry's turmoil reduction is halved, to 5% a level; under the Full Demographics rule deaths from accidents and violence −2% a level, against a Dedicated Police Force's 3%; Services output −1% |
 | Also | Trade Unions −10% political strength; Labor Movement pop attraction +15%; Legislative Override Capacity −0.5 |
 
 Protection follows money. In every state the wealthy districts are guarded
@@ -1071,14 +1071,15 @@ the old government built. UN membership, seat and programs, the central bank's
 gold and monetary settings, the banking cycle's position, nuclear arsenals,
 space-race rewards and milestone progress, the arable-land bonuses from
 farming breakthroughs, and under the Legislated Tax Code rule the tax code with
-its passed bills and promises (under the Light Tax Code, its rates), all carry
-over. So do UN sanctions on the nation. A Civil
+its passed bills and promises (under the Light Tax Code, its rates), and the
+national climate policies in force all carry over. So do UN sanctions on the
+nation. A Civil
 Rights Movement, Human
 Augmentation Debate, Morphological Freedom Debate or Mental Health Crisis
 journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
-journal-entry buttons, such as banking tools and climate policies, have to be
-switched on again, and history charts start empty. The colonial empire is the
+journal-entry buttons, such as banking tools, have to be switched on again, and
+history charts start empty. The colonial empire is the
 exception: the winner keeps the colonial programs you were running while the
 Colonial Empire entry is open, Colonial Empire Solidified and the path rewards
 of a finished empire, and the Imperial Federation and Mandate System modifiers

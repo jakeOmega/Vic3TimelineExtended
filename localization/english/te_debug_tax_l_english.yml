@@ -179,7 +179,7 @@
  te_tp_metric_record_count:0 "Owned records (cap 2)"
  te_tp_metric_school_expanding:0 "School expansion flag"
  te_tp_metric_school_level:0 "School trigger floor (-1 absent; 5 = 5+)"
- te_tp_metric_snapshot_seq:0 "Snapshot #"
+ te_tp_metric_snapshot_seq:0 "Snapshot ##"
  te_tp_metric_stage:0 "Stage (0 idle; 1 draft; 2 approved; 3 operative; 4 held; 5 expired)"
  te_tp_metric_version:0 "Code version"
  te_tp_section_controls:0 "Controls"
