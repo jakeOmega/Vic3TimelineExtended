@@ -260,13 +260,25 @@ The entry's endings are nine outcomes, one each, so the journal panel lists them
 In the 2026-11-12 game (1.15.1, 1929–1939) the re-entry pass gave Bornu the entry during its civil war (1933.8.6): the
 uprising had cut Timbuktu and Inner Mauritania off from the capital, so both read as colonies. Twelve seconds of play
 later the AI pressed Planned Full Decolonization and released both, at a bar of 50. Egypt released Palestine the same
-way (1934.8.29) with no civil war: the button gave every minor +30 whatever its state (whether Egypt was under
+way (1934.8.29) with no civil war: the button gave every minor +30 whatever its state (whether either was under
 pressure as well, for another 30, no save shows). Now the pass waits out a
 civil war of the country's own (`colonial_in_own_civil_war`, last in `ce_reentry_due`), no AI lets a colony go during
-one while its bar is 40 or more (the three release buttons and the release options of `.1`, `.3`, `.9` and `.13`;
-`colonial_ai_holds_colonies_in_civil_war`), and the minor's +30 needs three condemners, three badly unaccepted
+one while its bar is 40 or more (the three release buttons and the release options of `.1`, `.3`, `.9`, `.13` and
+`.75`; `colonial_ai_holds_colonies_in_civil_war`), and the minor's +30 needs three condemners, three badly unaccepted
 colonies or a bar below 40. `test_colonial_civil_war_hold.py` holds the script offline. Search `debug.log` for
 `DECOL_DEBUG` and `TE_CE_REENTRY`.
+
+`colonial_in_own_civil_war` reads a civil war from the rebel country (`civil_war_origin_country` and
+`is_revolutionary` / `is_secessionist`, as `nd_in_civil_war` does); no launch has shown that reading. Two once-a-game
+self-checks compare it with the civil-war layer's own pointer, `te_cw_origin` (`colonial_civil_war_selfcheck`,
+`decolonization.txt`, on every country's monthly pass).
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `ce_civil_war_read` | On a live rebel (the layer's `te_cw_origin` names a live country other than itself): the country it rose against reads a civil war of its own. OK when `colonial_in_own_civil_war` is true there. | `colonial_civil_war_selfcheck`, first branch | The hold and the re-entry wait never apply. First check the `TE_CIVIL_WAR` lines: a rebel whose pointer the layer moved to a revolution's winner (`te_civil_war_repoint_uprisings`) can read BROKEN with nothing wrong. Otherwise read the war from the layer: `var:te_cw_origin ?= scope:ce_cw_self` in place of `civil_war_origin_country` in `colonial_in_own_civil_war`. |
+| `ce_civil_war_over` | On a secession that won (a secessionist the month before, alive, its `te_cw_origin` removed by the layer at the war's end): the country it left, with no other uprising against it, no longer reads a civil war. OK when `colonial_in_own_civil_war` is false there. | `colonial_civil_war_selfcheck`, second branch | The winner keeps `civil_war_origin_country` and a rebel flag, so the hold never lifts for the country it left. Same fallback: read the layer's pointer, which the layer removes at the war's end. |
 
 | Check | Expect | If it fails |
 |---|---|---|
