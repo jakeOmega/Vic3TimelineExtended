@@ -20,6 +20,9 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa shot                  # a screenshot of the game's window, into the run folder
     python3 -m game_qa click X Y             # one click at fractions of the window (0.5 0.5 is its middle),
                                              # then a screenshot: for the engine's tool windows
+    python3 -m game_qa profiler-roots [--box L T R B]
+                                             # the script profiler at its roots, shot at the window's own size,
+                                             # and its call graph cropped out of the shot
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -768,6 +771,10 @@ def cmd_click(args) -> tuple[dict, int]:
     return call(_backup_root(), "click", {"x": args.x, "y": args.y})
 
 
+def cmd_profiler_roots(args) -> tuple[dict, int]:
+    return call(_backup_root(), "profiler-roots", {"box": args.box})
+
+
 def cmd_try_event(args) -> tuple[dict, int]:
     return call(_backup_root(), "try-event", {"event": args.event, "setup": args.setup, "reads": args.reads},
                 LONG_TIMEOUT_S)
@@ -858,6 +865,12 @@ def add_verbs(sub) -> None:
     p.add_argument("x", type=float)
     p.add_argument("y", type=float)
     p.set_defaults(run=cmd_click)
+    p = sub.add_parser("profiler-roots", help="open the script profiler at its roots (Script.Profiling.Gui), take "
+                                              "a shot at the window's own size and crop the call graph out of it")
+    p.add_argument("--box", nargs=4, type=float, metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"),
+                   help="the crop, as fractions of the window (default: the call graph of the overlay's enlarged "
+                        "window, measured in a 3840x2160 window)")
+    p.set_defaults(run=cmd_profiler_roots)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")
     p.add_argument("event")

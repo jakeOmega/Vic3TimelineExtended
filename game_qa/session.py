@@ -37,6 +37,7 @@ must agree.
 """
 from __future__ import annotations
 
+import math
 import os
 import re
 import subprocess
@@ -118,6 +119,24 @@ PANEL_CHANGED = 0.01                    # this share of its pixels differing is 
 # front and the process the recorded one, the point inside the client area, the cursor on it, the game's window
 # under it). Any other error may follow the press.
 CLICK_REFUSED_BEFORE_PRESS = ("not_foreground", "bad_point", "cursor_misplaced", "covered", "not_ours")
+# profiler-roots (#1701, #1710). `Script.Profiling.Gui` opens the script profiler at its roots ("No parent" as
+# Current, the top-level entries as its callees), even when an entry was Current before (live, 2026-11-12), and
+# the call graph is cropped out of a shot. The box is fractions of the client area, measured on the overlay's
+# enlarged window in the owner's 3840x2160 window at his UI scale: shot_09.png of run 20261112T195545Z, a
+# 1600x900 shot of the roots, where the frames run from y 292 to 845, Current from x 473 (385 once an entry is
+# Current) and Callees to x 1377. The console, open on the left, covers most of the Callers column, so the box
+# starts at Current. Another window size or UI scale moves it: `profiler_roots(box=...)`.
+PROFILER_COMMAND = "Script.Profiling.Gui"
+PROFILER_OPENED = "Opened Script.Profiling.Gui"     # its reply, live
+PROFILER_ROOTS_BOX = (0.235, 0.303, 0.866, 0.945)
+PROFILER_SETTLE_S = 1.0                 # from the command's reply to the shot (a guess: the window was drawn by then)
+# Its shot is taken at the window's own width, not at the 1600 pixels of `shot`: that downscale drops whole pixel
+# columns, and with them the thin stroke of a 1 (2801.163 read 280'.163 in the crops of 2026-11-12). The crop then
+# has at least PROFILER_CROP_RESOLUTION times the 1600-pixel shot's resolution, which is what was legible live,
+# each pixel repeated as often as that takes: not at all at 3840 pixels wide, twice at 1920.
+SHOT_WIDTH = 1600                       # what `shot` takes (the helper's default)
+PROFILER_CROP_RESOLUTION = 2.0
+PROFILER_MAX_SCALE = 4
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -1106,6 +1125,46 @@ class Session:
                 return {"pixel": [px, py], "screenshot": None, "screenshot_error": out["screenshot_error"]}
         return {"pixel": [px, py], "screenshot": out["screenshot"]}
 
+    def profiler_roots(self, box: Sequence[float] | None = None) -> dict:
+        """Open the script profiler at its roots (`Script.Profiling.Gui`, through the console), take a shot at the
+        window's own resolution, and crop the call graph out of it: `screenshot` and `crop` in the run folder.
+
+        The crop is `box` (left, top, right, bottom: fractions of the client area), PROFILER_ROOTS_BOX by default,
+        measured on the overlay's enlarged window (`enlarged` says whether this run's overlay has it; without it the
+        window is small and elsewhere, and the default box shows the map). It is scaled up, a pixel repeated
+        `scale` times, until it has PROFILER_CROP_RESOLUTION times the resolution of a 1600-pixel shot. A shot that
+        fails is not a refusal (`screenshot: null` and `screenshot_error`: the window is open all the same), nor is
+        a crop that cannot be made (`crop: null` and `crop_error`). The command is typed like any other, so after a
+        click into a tool window it is refused until the keyboard is given back (`click --console`)."""
+        self._require_game()
+        box = PROFILER_ROOTS_BOX if box is None else _box(box)
+        with self._step("profiler_roots", box=list(box)) as out:
+            reply = self._console.run(PROFILER_COMMAND)
+            opened = PROFILER_OPENED in [line.strip() for line in reply.lines]
+            result: dict[str, Any] = {"lines": reply.lines, "opened": opened, "box": list(box),
+                                      "enlarged": self._profiler_window.get("enlarged") is True}
+            self._sleep(PROFILER_SETTLE_S)
+            try:
+                width = self._helper.window(self._proc.pid).client[2]
+                shot = self._shot(max_width=max(1, width))
+            except HelperError as e:
+                result.update(screenshot=None, screenshot_error="%s: %s" % (e.code, e.detail), crop=None)
+                out.update(result)
+                return result
+            result["screenshot"] = str(shot)
+            crop = shot.with_name("profiler_roots_%02d.png" % self._shots)
+            try:
+                image = pixels.decode_png(shot.read_bytes())
+                scale = min(PROFILER_MAX_SCALE,
+                            max(1, math.ceil(PROFILER_CROP_RESOLUTION * SHOT_WIDTH / image[0] - 1e-9)))
+                part = pixels.scaled_up(pixels.region(image, box), scale)
+                crop.write_bytes(pixels.encode_png(part))
+                result.update(crop=str(crop), scale=scale, crop_size=[part[0], part[1]])
+            except (OSError, pixels.PixelsError) as e:
+                result.update(crop=None, crop_error=str(e))
+            out.update(result)
+        return result
+
     def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:
         """The owner's first check: each option of `event` in turn, fired, read, picked and read again.
 
@@ -2003,9 +2062,12 @@ class Session:
         raise SessionError("stalled", "%d of %d days passed in %d rounds" % (passed, days, MAX_ROUNDS),
                            start=start, reached=current)
 
-    def _shot(self) -> Path:
+    def _shot(self, max_width: int | None = None) -> Path:
         self._shots += 1
-        return self._helper.screenshot(self._proc.pid, self._report.dir / ("shot_%02d.png" % self._shots))
+        path = self._report.dir / ("shot_%02d.png" % self._shots)
+        if max_width is None:
+            return self._helper.screenshot(self._proc.pid, path)
+        return self._helper.screenshot(self._proc.pid, path, max_width=max_width)
 
     # ---- plumbing
 
@@ -2198,6 +2260,22 @@ def _fraction(name: str, value) -> float:
         raise SessionError("bad_argument", "%s is a fraction of the window, at least 0 and below 1, not %r"
                            % (name, value))
     return float(value)
+
+
+def _box(box) -> tuple[float, float, float, float]:
+    """A crop's box: left, top, right, bottom, fractions of the client area, left below right and top below bottom."""
+    if isinstance(box, (str, bytes)) or not isinstance(box, Sequence) or len(box) != 4:
+        raise SessionError("bad_argument", "a box is four fractions of the window (left top right bottom), not %r"
+                           % (box,))
+    for name, value in zip(("left", "top", "right", "bottom"), box):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value <= 1:
+            raise SessionError("bad_argument", "the box's %s is a fraction of the window from 0 to 1, not %r"
+                               % (name, value))
+    left, top, right, bottom = (float(value) for value in box)
+    if not (left < right and top < bottom):
+        raise SessionError("bad_argument", "a box's left is below its right and its top below its bottom: %r"
+                           % (box,))
+    return left, top, right, bottom
 
 
 def _check_tag(tag: str) -> None:

@@ -116,6 +116,12 @@ class FakeSession:
         self._call("click", x, y)
         return {"pixel": [round(1920 * x), round(1080 * y)], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}
 
+    def profiler_roots(self, box=None):
+        self._call("profiler_roots", box)
+        return {"lines": ["Opened Script.Profiling.Gui"], "opened": True, "box": box or [0.2, 0.3, 0.8, 0.9],
+                "screenshot": "/backups/runs/%s/shot_01.png" % SNAP, "crop": "/backups/runs/%s/profiler_roots_01.png"
+                % SNAP, "scale": 1}
+
     def try_event(self, event, setup, reads):
         self._call("try_event", event, setup, list(reads))
         return dict(self.try_event_reply, event=event, setup=setup)
@@ -301,6 +307,17 @@ class AddSetupVerbTest(ServerTestCase):
         reply, code = self.run_cli("add-setup", "late=%s" % script)
         self.assertEqual((code, reply["refused"], reply["revision"], reply["seen"]), (2, "not_reloaded", 1, 0))
 
+
+
+class ProfilerRootsVerbTest(ServerTestCase):
+    def test_profiler_roots_passes_its_box_or_none(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("profiler-roots")
+        self.assertEqual((code, reply["opened"], reply["crop"]), (0, True, "/backups/runs/%s/profiler_roots_01.png" % SNAP))
+        self.assertEqual(fake.calls[-1], ("profiler_roots", None))
+        reply, code = self.run_cli("profiler-roots", "--box", "0.1", "0.2", "0.9", "0.8")
+        self.assertEqual((code, reply["box"]), (0, [0.1, 0.2, 0.9, 0.8]))
+        self.assertEqual(fake.calls[-1], ("profiler_roots", [0.1, 0.2, 0.9, 0.8]))
 
 class VerbTest(ServerTestCase):
     def test_a_verb_round_trips_json(self):

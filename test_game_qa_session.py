@@ -20,7 +20,7 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
+from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, server, session, snapshot
 from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
@@ -1674,6 +1674,92 @@ class ClickTest(SessionTestCase):
         self.assertEqual((reply["pixel"], reply["screenshot"]), ([960, 540], None))
         self.assertIn("no_client_area", reply["screenshot_error"])
 
+
+
+class ProfilerRootsTest(SessionTestCase):
+    """`profiler-roots` (#1701, #1710): the profiler opened at its roots, a full-size shot, the call graph cropped."""
+
+    def setUp(self):
+        super().setUp()
+        self.game.on(session.PROFILER_COMMAND, success=[session.PROFILER_OPENED])
+
+    def shots_of(self, width, height=12):
+        """The game's screenshots become `width` x `height` pictures in which each pixel says where it is."""
+        def screenshot(pid, path, max_width=1600):
+            rgb = b"".join(bytes((x % 256, y % 256, (x // 256) % 256)) for y in range(height) for x in range(width))
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(fakes.win_helper.encode_png(width, height, rgb))
+            self.game.screenshots.append((pid, path, max_width))
+            return path
+        self.game.screenshot = screenshot
+
+    def test_it_opens_the_window_and_crops_the_call_graph_out_of_a_full_size_shot(self):
+        self.game.client = (0, 0, 3840, 2160)
+        self.started()
+        self.shots_of(3840)
+        reply = self.session.profiler_roots()
+        self.assertIn(session.PROFILER_COMMAND, self.typed())
+        self.assertEqual((reply["opened"], reply["lines"]), (True, [session.PROFILER_OPENED]))
+        self.assertEqual(self.game.screenshots[-1][2], 3840)    # the window's own width, not the 1600 of `shot`
+        shot, crop = Path(reply["screenshot"]), Path(reply["crop"])
+        self.assertEqual((shot.parent, crop.parent), (Path(self.session.status()["run_dir"]),) * 2)
+        self.assertEqual(reply["box"], list(session.PROFILER_ROOTS_BOX))
+        self.assertFalse(reply["enlarged"])                     # no game install in the tests
+        expected = pixels.region(pixels.decode_png(shot.read_bytes()), session.PROFILER_ROOTS_BOX)
+        self.assertEqual(reply["scale"], 1)                     # 3840 is already 2.4 times a 1600-pixel shot
+        self.assertEqual(pixels.decode_png(crop.read_bytes()), expected)
+        self.assertEqual(reply["crop_size"], [expected[0], expected[1]])
+
+    def test_a_narrower_window_has_its_pixels_repeated_up_to_twice_a_1600_pixel_shot(self):
+        self.started()
+        for width, scale in ((3840, 1), (3200, 1), (2560, 2), (1920, 2), (1600, 2), (1280, 3), (800, 4), (100, 4)):
+            with self.subTest(width=width):
+                self.shots_of(width)
+                reply = self.session.profiler_roots()
+                self.assertEqual(reply["scale"], scale)
+                region = pixels.region(pixels.decode_png(Path(reply["screenshot"]).read_bytes()),
+                                       session.PROFILER_ROOTS_BOX)
+                crop = pixels.decode_png(Path(reply["crop"]).read_bytes())
+                self.assertEqual(crop, pixels.scaled_up(region, scale))
+
+    def test_a_box_can_be_given(self):
+        self.started()
+        self.shots_of(400, 40)
+        reply = self.session.profiler_roots([0.5, 0.25, 1, 0.75])
+        self.assertEqual(reply["box"], [0.5, 0.25, 1.0, 0.75])
+        self.assertEqual(reply["crop_size"], [200 * reply["scale"], 20 * reply["scale"]])
+
+    def test_a_bad_box_is_refused_before_anything_is_typed(self):
+        self.started()
+        steps = len(self.game.steps)
+        for box in ([0.5, 0.5, 0.4, 0.9], [0.1, 0.9, 0.5, 0.2], [0, 0, 1.5, 1], [-0.1, 0, 1, 1], [0, 0, 1],
+                    "0 0 1 1", [0, 0, True, 1], [0, 0, "1", 1], [], 5):
+            with self.subTest(box=box):
+                self.assertEqual(self.session_error(self.session.profiler_roots, box).code, "bad_argument")
+        self.assertEqual(len(self.game.steps), steps)
+
+    def test_a_crop_that_cannot_be_made_still_answers_with_the_shot(self):
+        self.started()
+        self.game.panel_shots = False           # a 1x1 shot: the box has nothing in it
+        reply = self.session.profiler_roots()
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertIsNone(reply["crop"])
+        self.assertIn("empty", reply["crop_error"])
+
+    def test_a_shot_that_fails_still_answers_with_the_command(self):
+        self.started()
+        self.game.screenshot = mock.Mock(side_effect=HelperError("no_client_area", "minimized?"))
+        reply = self.session.profiler_roots()
+        self.assertEqual((reply["opened"], reply["screenshot"], reply["crop"]), (True, None, None))
+        self.assertIn("no_client_area", reply["screenshot_error"])
+
+    def test_a_window_that_did_not_say_it_opened_is_reported(self):
+        self.started()
+        self.game.on(session.PROFILER_COMMAND, failure=["Unknown command"])
+        reply = self.session.profiler_roots()
+        self.assertFalse(reply["opened"])
+        self.assertEqual(reply["lines"], ["Unknown command"])
 
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
