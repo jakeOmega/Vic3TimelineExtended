@@ -1546,5 +1546,51 @@ class OpenStateTest(ConsoleTestCase):
         self.assertEqual(self.game.steps, [CONSOLE_KEY])
 
 
+
+class FakeSelectEventOptionTest(unittest.TestCase):
+    """The fake's own `select_event_option`, which the session's pick tests rest on (#1722, #1732)."""
+
+    def setUp(self):
+        self.game = fakes.FakeHelper()
+        self.game.console_open = True
+        self.game.pending_events = [[2684354595, "un_events.4", 3], [10, "x.1", 2]]
+        self.picked = []
+        self.game.on_selected = lambda event, index: self.picked.append((event, index))
+
+    def answer(self, text):
+        return self.game._select_event_option(text)
+
+    def test_list_prints_each_pending_event_with_its_unsigned_id(self):
+        self.assertEqual(self.answer("select_event_option list"),
+                         (["2684354595 un_events.4 options=3", "10 x.1 options=2"], []))
+        self.game.pending_events = []
+        self.assertEqual(self.answer("select_event_option list"), (["No pending events"], []))
+
+    def test_by_default_an_id_matches_as_typed(self):
+        self.assertEqual(self.answer("select_event_option 0 -1610612701"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 2 2684354595"), (["Selected option 2 of un_events.4"], []))
+        self.assertEqual((self.picked, self.game.pending_events), ([("un_events.4", 2)], [[10, "x.1", 2]]))
+
+    def test_read_as_signed_an_id_above_two_to_the_31st_matches_only_in_its_signed_form(self):
+        self.game.signed_event_ids = True
+        self.assertEqual(self.answer("select_event_option 0 2684354595"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 0 2147483647"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 1 10"), (["Selected option 1 of x.1"], []))
+        self.assertEqual(self.answer("select_event_option 0 -1610612701"), (["Selected option 0 of un_events.4"], []))
+        self.assertEqual(self.game.pending_events, [])
+
+    def test_no_id_picks_the_oldest(self):
+        self.assertEqual(self.answer("select_event_option 1"), (["Selected option 1 of un_events.4"], []))
+        self.assertEqual(self.picked, [("un_events.4", 1)])
+
+    def test_a_reply_given_to_on_wins_and_without_a_list_the_fake_answers_nothing_itself(self):
+        self.game.on("select_event_option 0 10", success=["scripted"])
+        self.game.keys(7, [{"text": "select_event_option 0 10"}, ENTER])
+        self.assertIn("console_success: scripted", self.game.unwritten[-1])
+        self.assertEqual(len(self.game.pending_events), 2)
+        self.game.pending_events = None
+        self.assertIsNone(self.answer("select_event_option list"))
+
+
 if __name__ == "__main__":
     unittest.main()

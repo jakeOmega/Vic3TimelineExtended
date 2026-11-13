@@ -68,6 +68,15 @@ FIRE_COMMAND = "event %s"               # console `event` fires whatever the tri
 READ_PREFIX = "TE_QA read "
 PENDING_COMMAND = "select_event_option list"
 NO_PENDING = "No pending events"
+# pick's three forms (#1722, #1732). No id picks the oldest pending event: with one pending, that one (spec § 3.2,
+# verified in an entered game, 2026-11-10). By the id as listed, picks worked for ids up to 50331663 and failed,
+# NO_MATCH, for 2684354595 and 3959422997 (live, 2026-11-12): both above 2^31 - 1. The likely cause, unverified,
+# is that the console reads the id as a signed 32-bit integer and saturates (a wrap would have kept the bits and
+# matched), so such an id is tried once more by its signed form, id - 2^32.
+SELECT_NO_ID = "select_event_option %d"
+SELECT_BY_ID = "select_event_option %d %d"
+NO_MATCH = "No matching pending event"
+INT32_MAX = 2 ** 31 - 1
 FIXTURES_KEPT = 2
 
 WINDOW_WAIT_S = 300.0                   # from launch to a window that responds
@@ -958,9 +967,29 @@ class Session:
         return pending
 
     def pick(self, index: int, event: str | None = None) -> dict:
-        """Pick option `index` of a pending event, always by its numeric id. `event` is an event id or a numeric
-        id; by event id the oldest pending instance is taken (the lowest numeric id: the game hands them out in
-        order, assumed) and `ambiguous` says there was more than one; with no `event`, the oldest of all."""
+        """Pick option `index` of a pending event. `event` is an event id or a numeric id; by event id the oldest
+        pending instance is taken (the lowest numeric id: the game hands them out in order, assumed) and
+        `ambiguous` says there was more than one; with no `event`, the oldest of all. `try_event` picks through
+        here too.
+
+        The command has one of three forms, named by `form` in the reply and in the step:
+
+            no_id   exactly one event is pending in the list just read: `select_event_option <index>`
+            id      otherwise: `select_event_option <index> <numeric id>`, the id as the list printed it
+            signed  an id above 2^31 - 1 that the game answered NO_MATCH by its listed form, sent once more as
+                    its signed 32-bit form (id - 2^32); NO_MATCH again is not_selected with both answers
+
+        Only an answer of exactly NO_MATCH, which picked nothing, lets the signed form go out; any other answer,
+        or a console error, sends nothing more. `attempts` lists each command sent and its answer.
+
+        Each form must be answered `Selected option <index> of <event id>`, or the verb is not_selected. What
+        that check does not guard: the pending list can change between the list and the select. The game is
+        paused and nothing is typed in between, but a pick under `left_running` has time passing, and
+        `Console.run` retypes once a command whose arrival it could not prove after making sure the console is
+        open. By id, a select that comes too late can only answer NO_MATCH. With no id it picks whatever is
+        oldest by then (a follow-up event the first pick's option fired, say), and the refusal comes after that
+        event has been answered: the check reports it, nothing undoes it. The answer names the event id, not the
+        instance, so another instance of the same event would pass."""
         self._require_game()
         with self._step("pick", index=index, event=event) as out:
             pending = self._pending()
@@ -978,14 +1007,33 @@ class Session:
             if isinstance(index, bool) or not isinstance(index, int) or not 0 <= index < chosen.options:
                 raise SessionError("bad_index", "%s has %d options (0 to %d), not %r"
                                    % (chosen.event_id, chosen.options, chosen.options - 1, index))
-            command = "select_event_option %d %d" % (index, chosen.numeric_id)
-            reply = self._console.run(command)
-            if "Selected option %d of %s" % (index, chosen.event_id) not in [line.strip() for line in reply.lines]:
-                raise SessionError("not_selected", "%r answered %r" % (command, reply.lines), lines=reply.lines)
+            attempts: list[dict] = []
+            out["attempts"] = attempts          # recorded in the step however the verb ends
+            if len(pending) == 1:
+                form, command = "no_id", SELECT_NO_ID % index
+            else:
+                form, command = "id", SELECT_BY_ID % (index, chosen.numeric_id)
+            lines = self._select(form, command, attempts, out)
+            if (not _selected(lines, index, chosen.event_id) and form == "id" and INT32_MAX < chosen.numeric_id < 2 ** 32
+                    and [line.strip() for line in lines] == [NO_MATCH]):
+                form, command = "signed", SELECT_BY_ID % (index, chosen.numeric_id - 2 ** 32)
+                lines = self._select(form, command, attempts, out)
+            if not _selected(lines, index, chosen.event_id):
+                raise SessionError("not_selected", "; ".join("%r answered %r" % (a["command"], a["reply"])
+                                                             for a in attempts),
+                                   lines=lines, form=form, attempts=attempts)
             result = {"event": chosen.event_id, "numeric_id": chosen.numeric_id, "index": index,
-                      "options": chosen.options, "ambiguous": len(matches) > 1, "reply": reply.lines}
+                      "options": chosen.options, "ambiguous": len(matches) > 1, "form": form,
+                      "command": command, "reply": lines, "attempts": attempts}
             out.update(result)
         return result
+
+    def _select(self, form: str, command: str, attempts: list[dict], out: dict) -> list[str]:
+        """Send one form of the select and keep its answer in `attempts`; the form is in `out` before it goes."""
+        out["form"] = form
+        lines = self._console.run(command).lines
+        attempts.append({"form": form, "command": command, "reply": lines})
+        return lines
 
     def read(self, exprs: Sequence[str]) -> list[Read]:
         """Each trigger or value evaluated at the read event's breakpoint, in the played country's scope. A
@@ -2119,6 +2167,11 @@ class Session:
 
     def _watch_returned(self) -> bool:
         return self._watch is not None and self._watch.poll() is not None
+
+
+def _selected(lines: list[str], index: int, event: str) -> bool:
+    """Whether a select's answer says it picked option `index` of `event`."""
+    return "Selected option %d of %s" % (index, event) in [line.strip() for line in lines]
 
 
 def _names_event(text: str, event: str) -> bool:

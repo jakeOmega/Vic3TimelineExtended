@@ -1277,19 +1277,101 @@ class PressTest(SessionTestCase):
         self.assertEqual(self.session_error(session.Session.press, self.session, "enter").code, "bad_argument")
 
 
+HIGH_UN = 2684354595                    # 0xA0000023, un_events.4 on the 1931 save (#1722)
+HIGH_CH = 3959422997                    # 0xEC000015, te_debug_ch.1 on the same save (#1732)
+
+
 class PickTest(SessionTestCase):
-    def test_pick_always_passes_the_numeric_id(self):
+    def pick_steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [step for step in map(json.loads, lines) if step["verb"] == "pick"]
+
+    def selects(self) -> list[str]:
+        return [t for t in self.typed() if t.startswith("select_event_option ") and t != "select_event_option list"]
+
+    def test_one_pending_event_is_picked_with_no_id(self):
         self.started()
-        self.game.on("select_event_option list", success=["10 te_qa_probe.2 options=3"])
-        self.game.on("select_event_option 2 10", success=["Selected option 2 of te_qa_probe.2"])
-        self.game.on("select_event_option 1 10", success=["Selected option 1 of te_qa_probe.2"])
-        first = self.session.pick(2)
-        second = self.session.pick(1, "te_qa_probe.2")
-        self.assertIn("select_event_option 2 10", self.typed())
-        self.assertIn("select_event_option 1 10", self.typed())
-        self.assertEqual((first["numeric_id"], first["event"], first["ambiguous"]), (10, "te_qa_probe.2", False))
-        self.assertEqual(second["index"], 1)
-        self.assertEqual(self.session.events(), [logtail.Pending(10, "te_qa_probe.2", 3)])
+        self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.signed_event_ids = True       # the id would not match as listed: no id needs none
+        result = self.session.pick(5, "te_debug_ch.1")
+        self.assertEqual(self.selects(), ["select_event_option 5"])
+        self.assertEqual((result["form"], result["command"], result["numeric_id"], result["event"]),
+                         ("no_id", "select_event_option 5", HIGH_CH, "te_debug_ch.1"))
+        self.assertEqual(result["attempts"], [{"form": "no_id", "command": "select_event_option 5",
+                                               "reply": ["Selected option 5 of te_debug_ch.1"]}])
+        self.assertEqual(self.game.pending_events, [])
+        [step] = self.pick_steps()
+        self.assertEqual((step["outcome"], step["form"]), ("ok", "no_id"))
+
+    def test_with_two_pending_the_id_goes_as_listed(self):
+        self.started()
+        self.game.pending_events = [[10, "x.1", 3], [11, "y.1", 2]]
+        result = self.session.pick(1, "y.1")
+        self.assertEqual(self.selects(), ["select_event_option 1 11"])
+        self.assertEqual((result["form"], result["numeric_id"], result["ambiguous"]), ("id", 11, False))
+        self.assertEqual(self.session.events(), [logtail.Pending(10, "x.1", 3)])
+        self.assertEqual(self.session.pick(2)["form"], "no_id")     # one left: no id
+
+    def test_a_high_id_the_game_answers_no_match_is_sent_again_in_its_signed_form(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.signed_event_ids = True
+        result = self.session.pick(0, "un_events.4")
+        self.assertEqual(self.selects(), ["select_event_option 0 2684354595", "select_event_option 0 -1610612701"])
+        self.assertEqual((result["form"], result["command"]), ("signed", "select_event_option 0 -1610612701"))
+        self.assertEqual([(a["form"], a["reply"]) for a in result["attempts"]],
+                         [("id", ["No matching pending event"]), ("signed", ["Selected option 0 of un_events.4"])])
+        self.assertEqual(self.session.events(), [logtail.Pending(HIGH_CH, "te_debug_ch.1", 8)])
+        [step] = self.pick_steps()
+        self.assertEqual((step["outcome"], step["form"], len(step["attempts"])), ("ok", "signed", 2))
+
+    def test_a_high_id_the_game_matches_as_listed_goes_once(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        result = self.session.pick(2, "te_debug_ch.1")              # the fake's default: an id matches as typed
+        self.assertEqual(self.selects(), ["select_event_option 2 3959422997"])
+        self.assertEqual((result["form"], len(result["attempts"])), ("id", 1))
+
+    def test_a_signed_form_that_fails_too_is_refused_with_both_answers(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.signed_event_ids = True
+        self.game.on("select_event_option 0 -1610612701", failure=["No matching pending event"])
+        error = self.session_error(self.session.pick, 0, "un_events.4")
+        self.assertEqual(error.code, "not_selected")
+        self.assertEqual(self.selects(), ["select_event_option 0 2684354595", "select_event_option 0 -1610612701"])
+        self.assertIn("'select_event_option 0 2684354595' answered ['No matching pending event']", error.detail)
+        self.assertIn("'select_event_option 0 -1610612701' answered ['No matching pending event']", error.detail)
+        self.assertEqual((error.info["form"], len(error.info["attempts"])), ("signed", 2))
+        self.assertEqual(len(self.game.pending_events), 2)         # nothing was picked
+        [step] = self.pick_steps()
+        self.assertEqual((step["outcome"], step["form"], len(step["attempts"])), ("not_selected", "signed", 2))
+        self.assertEqual(server.refusal(error)["attempts"], error.info["attempts"])
+
+    def test_only_no_match_lets_the_signed_form_go(self):
+        # Any other answer may have picked something: nothing more is sent.
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.signed_event_ids = True
+        self.game.on("select_event_option 0 2684354595", success=["Something else happened"])
+        error = self.session_error(self.session.pick, 0, "un_events.4")
+        self.assertEqual((error.code, error.info["form"]), ("not_selected", "id"))
+        self.assertEqual(self.selects(), ["select_event_option 0 2684354595"])
+
+    def test_an_id_up_to_two_to_the_31st_less_one_has_no_signed_form(self):
+        self.started()
+        self.game.pending_events = [[session.INT32_MAX, "x.1", 2], [12, "y.1", 2]]
+        self.game.on("select_event_option 0 2147483647", failure=["No matching pending event"])
+        self.assertEqual(self.session_error(self.session.pick, 0, "x.1").code, "not_selected")
+        self.assertEqual(self.selects(), ["select_event_option 0 2147483647"])
+
+    def test_a_no_id_pick_the_game_refuses_sends_nothing_more(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3]]
+        self.game.on("select_event_option 1", failure=["No matching pending event"])
+        error = self.session_error(self.session.pick, 1)
+        self.assertEqual((error.code, error.info["form"]), ("not_selected", "no_id"))
+        self.assertEqual(self.selects(), ["select_event_option 1"])
 
     def test_pick_by_name_with_two_pending_takes_the_oldest_and_says_so(self):
         self.started()
@@ -1315,7 +1397,8 @@ class PickTest(SessionTestCase):
         self.started()
         self.game.on("select_event_option list", success=["10 x.1 options=2"])
         self.assertEqual(self.session_error(self.session.pick, 1).code, "not_selected")
-        self.assertEqual(self.typed().count("select_event_option 1 10"), 1)
+        self.assertEqual(self.typed().count("select_event_option 1"), 1)
+        self.assertFalse([t for t in self.typed() if t.startswith("select_event_option 1 ")])
 
     def test_a_reply_that_is_not_a_list_is_not_taken_for_nothing_pending(self):
         self.started()
@@ -1714,19 +1797,24 @@ class Events:
     """The game's pending events, for try-event. `event <id>` fires one instance (while `fires`; `fires_left`
     counts down for an event that fires only so often), and so does a setup event in `fired_by`; the console
     answers `Executed "<id>"` only when it fired. A `hidden` event runs (Executed) but is never pending.
-    `select_event_option list` lists the pending ones; `select_event_option <i> <n>` picks one and runs
-    `effects[i]`."""
+    The instances go into the fake's own list (`FakeHelper.pending_events`), which answers `select_event_option`
+    in all its forms; a pick of option i runs `effects[i]`."""
 
     def __init__(self, game: Game, event: str = "x.1", options: int = 3):
         self.game, self.event, self.options = game, event, options
-        self.pending: list[int] = []
         self.next_id = 10
         self.fires = True
         self.fires_left: int | None = None
         self.hidden = False
         self.fired_by: set[str] = set()
         self.effects: dict = {}
+        game.pending_events = []
+        game.on_selected = self.selected
         game.on_command = self.command
+
+    @property
+    def pending(self) -> list[int]:
+        return [n for n, event, _options in self.game.pending_events if event == self.event]
 
     def fire(self) -> bool:
         if not self.fires or self.fires_left == 0:
@@ -1734,7 +1822,7 @@ class Events:
         if self.fires_left is not None:
             self.fires_left -= 1
         if not self.hidden:
-            self.pending.append(self.next_id)
+            self.game.pending_events.append([self.next_id, self.event, self.options])
             self.next_id += 1
         return True
 
@@ -1744,17 +1832,10 @@ class Events:
             self.game.on(text, success=['Executed "%s"' % self.event] if fired else [])
         elif text.startswith("event ") and text[6:] in self.fired_by:
             self.fire()
-        elif text == "select_event_option list":
-            self.game.on(text, success=["%d %s options=%d" % (n, self.event, self.options) for n in self.pending]
-                         or ["No pending events"])
-        else:
-            m = re.fullmatch(r"select_event_option (\d+) (\d+)", text)
-            if m and int(m.group(2)) in self.pending:
-                index = int(m.group(1))
-                self.pending.remove(int(m.group(2)))
-                self.game.on(text, success=["Selected option %d of %s" % (index, self.event)])
-                if index in self.effects:
-                    self.effects[index]()
+
+    def selected(self, event: str, index: int) -> None:
+        if event == self.event and index in self.effects:
+            self.effects[index]()
 
 
 class TryEventTest(SessionTestCase):
@@ -1798,11 +1879,12 @@ class TryEventTest(SessionTestCase):
         self.assertEqual(rows[0]["before"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "5", "value": 5.0}])
         self.assertEqual([(r["picked"]["index"], r["picked"]["numeric_id"]) for r in rows], [(0, 10), (1, 11), (2, 12)])
 
-        def option(i, n):
+        def option(i):                          # one event pending: picked with no id (#1722)
             return ["event x.1", "select_event_option list", "event te_qa.1",
-                    "select_event_option list", "select_event_option %d %d" % (i, n), "event te_qa.1"]
+                    "select_event_option list", "select_event_option %d" % i, "event te_qa.1"]
         # one look before the first firing (nothing of x.1 may be pending), then each option in turn
-        self.assertEqual(self.commands(), ["select_event_option list", *option(0, 10), *option(1, 11), *option(2, 12)])
+        self.assertEqual(self.commands(), ["select_event_option list", *option(0), *option(1), *option(2)])
+        self.assertEqual([r["picked"]["form"] for r in rows], ["no_id"] * 3)
         self.assertEqual(self.events.pending, [])
         # the run folder's record holds the rows, and its summary the table
         [step] = self.try_event_steps()
@@ -1811,6 +1893,19 @@ class TryEventTest(SessionTestCase):
         summary = Path(self.session.stop()["report"]).read_text("utf-8")
         self.assertIn("## try-event x.1", summary)
         self.assertIn("| 1 | yes | c:FRA.infamy = 10 | c:FRA.infamy = 20 | option 1 | 0 |", summary)
+
+    def test_a_high_id_beside_another_pending_event_is_picked_by_its_signed_form(self):
+        # try-event picks through `pick`: with the game's own event pending too, each option goes by id (#1722).
+        self.started()
+        self.game.signed_event_ids = True
+        self.events.next_id = HIGH_UN
+        self.game.pending_events.append([5, "y.1", 1])
+        reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
+        self.assertTrue(reply["complete"])
+        self.assertEqual([(r["picked"]["form"], r["picked"]["numeric_id"]) for r in reply["options"]],
+                         [("signed", HIGH_UN), ("signed", HIGH_UN + 1), ("signed", HIGH_UN + 2)])
+        self.assertEqual([r["after"][0]["raw"] for r in reply["options"]], ["10", "20", "30"])
+        self.assertEqual(self.game.pending_events, [[5, "y.1", 1]])
 
     def test_the_setup_runs_before_each_option(self):
         reply = self.started(setups={"border": "set_variable = te_x"})
@@ -1889,14 +1984,14 @@ class TryEventTest(SessionTestCase):
 
         def second_pick_unconfirmed(text):
             command(text)
-            if text == "select_event_option 1 11":
+            if text == "select_event_option 1":     # a reply given to `on` wins over the fake's own answer
                 self.game.on(text, success=["Something else happened"])
         self.game.on_command = second_pick_unconfirmed
         error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
         self.assertEqual(error.code, "not_selected")
         rows = error.info["options"]
         self.assertEqual([(r["index"], r["fired"], r["picked"] is not None) for r in rows], [(0, True, True), (1, True, False)])
-        self.assertEqual(self.commands().count("select_event_option 1 11"), 1)
+        self.assertEqual(self.commands().count("select_event_option 1"), 1)
         [step] = self.try_event_steps()
         self.assertEqual((step["outcome"], len(step["options"])), ("not_selected", 2))
 
