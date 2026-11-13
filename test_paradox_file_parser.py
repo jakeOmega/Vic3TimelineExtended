@@ -884,14 +884,17 @@ class LinearParserTests(unittest.TestCase):
         # The rest of the file is still read.
         self.assertEqual(data["on_after"], ("=", {"events": ("=", ["b.1"])}))
 
-    def test_mixed_list_keeps_each_entry_operator_and_nested_blocks(self):
+    def test_mixed_list_keeps_every_delay_and_nested_blocks_in_order(self):
+        delay = lambda n: {"delay": ("=", {"days": ("=", n)})}  # noqa: E731
         self.assertEqual(
-            self._parse("x = { a b > 2 { c d } e = { f = 1 } }"),
-            {"x": ("=", ["a", {"b": (">", "2")}, ["c", "d"], {"e": ("=", {"f": ("=", "1")})}])},
+            self._parse("x = { a delay = { days = 5 } { c d } b delay = { days = 7 } e }"),
+            {"x": ("=", ["a", delay("5"), ["c", "d"], "b", delay("7"), "e"])},
         )
-        # A key with nothing after it before the block closes is a bare item.
-        self.assertEqual(self._parse("x = { a = 1 b }"),
-                         {"x": ("=", [{"a": ("=", "1")}, "b"])})
+        # A delay before the first item, and a list that ends on one.
+        self.assertEqual(self._parse("x = { delay = { days = 1 } b }"),
+                         {"x": ("=", [delay("1"), "b"])})
+        self.assertEqual(self._parse("x = { b delay = { days = 1 } }"),
+                         {"x": ("=", ["b", delay("1")])})
 
     def test_list_of_lists_parses(self):
         # `{ x y }` inside a list went through the object parse and raised.
@@ -906,8 +909,13 @@ class LinearParserTests(unittest.TestCase):
 
     def test_what_still_fails_still_fails(self):
         # A bare word at a file's top level, or an operator where a list item
-        # should be, is still an error, raised as a ValueError.
-        for text in ("a b = 1", "x = { a = 1 = }"):
+        # should be, is still an error, raised as a ValueError. So is a bare
+        # word beside any key but `delay` (MIXED_LIST_KEYS): there it is most
+        # likely a missing `=`, and a typo must stay a parse failure.
+        for text in ("a b = 1", "x = { a = 1 = }",
+                     "x = { is_at_war = yes has_law law_x }", "x = { a = b c }",
+                     "x = { a {} b = 1 }", "x = { a b > 2 }", "x = { { p q = 1 } }",
+                     "x = { a.1 delay = { days = 5 } trigger = { always = yes } a.2 }"):
             with self.subTest(text=text), self.assertRaises(ValueError) as ctx, \
                     contextlib.redirect_stdout(io.StringIO()):
                 self._parse(text)
@@ -916,8 +924,7 @@ class LinearParserTests(unittest.TestCase):
     def test_blocks_that_parsed_before_parse_the_same(self):
         # The object parse runs first, so input it accepted is untouched,
         # quirks included: an empty anonymous block in a list is a dict.
-        self.assertEqual(self._parse("x = { a {} b = 1 }"),
-                         {"x": ("=", ["a", {}, {"b": ("=", "1")}])})
+        self.assertEqual(self._parse("x = { a {} }"), {"x": ("=", ["a", {}])})
         self.assertEqual(self._parse("x = { {} }"), {"x": ("=", [{}])})
         self.assertEqual(self._parse("x = { a = 1 b = { c } }"),
                          {"x": ("=", {"a": ("=", "1"), "b": ("=", ["c"])})})

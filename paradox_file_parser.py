@@ -39,6 +39,15 @@ TRY_DIRECTIVES = frozenset({"TRY_INJECT", "TRY_REPLACE"})
 REPEATED_ENTRY_FIELDS = frozenset({"outcome"})
 
 
+# The keys a list of bare items may carry: vanilla's on-actions write
+# `events = { a.1 delay = { days = 5 } a.2 }`, the delay applying to the items
+# after it, and that is the only mix the engine documents
+# (`common/on_actions/_on_actions.md`). Any other key beside a bare word is
+# still an error, so a missing `=` (`{ is_at_war = yes has_law law_x }`)
+# stays a parse failure rather than a silently different shape (#1697).
+MIXED_LIST_KEYS = frozenset({"delay"})
+
+
 class _BareItemError(ValueError):
     """A key in a `{ }` block is followed by no operator. `block` is the token
     index of the block's `{`, so only that block's own parse falls back to a
@@ -206,9 +215,9 @@ class ParadoxFileParser:
         `has_law = ...` stays `>`) and identical duplicates survive
         (`add = 5 add = 5 add = 3` is three entries). `_normalize_data`
         later folds that list into `{key: [(op, v), ...]}`. A nested block
-        that mixes bare items with keyed entries (`{ a.1 delay = { days = 5 }
-        a.2 }`) is a list (_parse_mixed_at); at this outer level a key with
-        no operator after it is a ValueError.
+        of bare items with `delay` entries (`{ a.1 delay = { days = 5 } a.2
+        }`) is a list (_parse_mixed_at); any other key with no operator after
+        it, and at this outer level every one, is a ValueError.
         """
         match = self._match_braces(tokens)
         try:
@@ -288,17 +297,22 @@ class ParadoxFileParser:
         except _BareItemError as err:
             if err.block != pos:
                 raise
-        return self._parse_mixed_at(tokens, match, pos, end)
+            bare_item = err
+        return self._parse_mixed_at(tokens, match, pos, end, bare_item)
 
-    def _parse_mixed_at(self, tokens, match, pos, end):
-        """A block that mixes bare items with `key = value` entries, as
-        vanilla's on-actions do: `events = { a.1 delay = { days = 5 } a.2 }`
-        (the delay applies to the events after it). Returns a list in source
-        order: a bare item is its token, a keyed entry a single-key dict
-        `{key: (op, value)}` (the shape of a repeated-key object's entries),
-        an anonymous `{ }` block its parse, as in any list. An operator
-        where an item should be still raises: a parsed list never starts with
-        an operator token (vanilla_parsed's JSON encoding relies on that)."""
+    def _parse_mixed_at(self, tokens, match, pos, end, bare_item):
+        """A block of bare items, which may carry `delay = { }` entries
+        (MIXED_LIST_KEYS), as vanilla's on-actions do: `events = { a.1 delay =
+        { days = 5 } a.2 }` (the delay applies to the events after it), or a
+        list of lists (`{ { p q } }`). Returns a list in source order: a bare
+        item is its token, a keyed entry a single-key dict `{key: (op,
+        value)}` (the shape of a repeated-key object's entries), an anonymous
+        `{ }` block its parse, as in any list. A key outside MIXED_LIST_KEYS
+        raises `bare_item`, the object parse's own error, which names the
+        bare word: beside `key = value` entries that word is most likely a
+        missing `=`. An operator where an item should be still raises: a
+        parsed list never starts with an operator token (vanilla_parsed's
+        JSON encoding relies on that)."""
         pos += 1
         result = []
         while True:
@@ -319,6 +333,8 @@ class ParadoxFileParser:
                 )
             symbol = tokens[pos + 1] if pos + 1 < end else None
             if symbol in _CONDITIONAL_TOKENS:
+                if token not in MIXED_LIST_KEYS:
+                    raise bare_item
                 value, pos = self._parse_value_at(tokens, match, pos + 2, end)
                 result.append({token: (symbol, value)})
             else:
