@@ -2221,6 +2221,7 @@
  colonial_culture_change_action_notification_name:0 "Colonial Culture Change"
  colonial_development_investment_expense_modifier:0 "Colonial Development Spending"
  colonial_development_investment_modifier:0 "Colonial Development Investment"
+ colonial_drift_cap_tt:0 "Monthly limit: stability moves at most ±[ROOT.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way, however large the sum above"
  colonial_empire_collapsed_modifier:0 "Colonial Empire Collapsed"
  colonial_empire_crumbling_modifier:0 "Colonial Empire Collapsing"
  colonial_empire_solidified_modifier:0 "Colonial Empire Solidified"

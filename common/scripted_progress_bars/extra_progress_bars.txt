@@ -94,8 +94,8 @@ colonial_stability_bar = {
 	# common/script_values/colonial_empire_values.txt
 	# (`colonial_stability_term_*`, country scope). The bar consumes the leaves
 	# one-for-one, each keeping its own `desc` key so the player's hover
-	# breakdown still shows all 22 terms individually; the block ends with the
-	# monthly cap's clamp (max / min). The journal-entry widget
+	# breakdown still shows all 22 terms individually, followed by the monthly
+	# cap's line (clamp of the saved sum, minus the sum). The journal-entry widget
 	# and the history charts consume the group sums (`colonial_stability_drift_*`)
 	# and `colonial_stability_drift_total`, which are built from the SAME leaves.
 	#
@@ -238,13 +238,27 @@ colonial_stability_bar = {
 		}
 
 		# Monthly cap: the net change is clamped to +/- colonial_stability_drift_cap.
-		# MUST stay last, after every add, so it clamps the sum. A clamp, as
-		# vanilla's 00_rlit_progress_bars.txt ends its bars, not a 23rd leaf: that
-		# leaf (capped minus uncapped total) evaluated the 22 leaves twice more,
-		# 641 ms of the bar's 1,035 ms in 30 days of a 1931 game
-		# (docs/audits/late_game_performance.md). colonial_stability_drift_total
-		# clamps with the same two values. See the MONTHLY CAP section of
-		# colonial_empire_values.txt.
+		# MUST stay last, after every add. The sum of the lines above is saved
+		# (save_temporary_value_as, as vanilla's command_values.txt does), and the
+		# cap line is clamp(sum) - sum: 0 inside the cap, otherwise what the cap
+		# takes off, so the player's hover (the overview's stability row shows
+		# this block's breakdown) still adds up to the change. It used to be a
+		# leaf, colonial_stability_drift_total - colonial_stability_drift_uncapped,
+		# which re-summed all 22 leaves twice: 641 ms of the bar's 1,035 ms in 30
+		# days of a 1931 game (docs/audits/late_game_performance.md, item 11).
+		# The block-level max / min after it, as vanilla's 00_rlit_progress_bars.txt
+		# ends its bars, changes nothing while the cap line works; it holds the bar
+		# to the cap if the saved value were ever not read here.
+		# colonial_stability_drift_total clamps with the same two values. See the
+		# MONTHLY CAP section of colonial_empire_values.txt.
+		save_temporary_value_as = colonial_drift_sum
+		add = {
+			desc = "colonial_drift_cap_tt"
+			value = scope:colonial_drift_sum
+			max = colonial_stability_drift_cap
+			min = colonial_stability_drift_floor
+			subtract = scope:colonial_drift_sum
+		}
 		max = colonial_stability_drift_cap
 		min = colonial_stability_drift_floor
 	}

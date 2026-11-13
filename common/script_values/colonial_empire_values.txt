@@ -701,8 +701,8 @@ colonial_state_sol_qualifying_floor = {
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
 # in docs/systems/mod_systems/decolonization.md § Stability Bar Formula.
 #
-# The bar ends with a clamp of the sum of all 22 to +/- colonial_stability_drift_cap
-# (max / min), not a leaf: see the MONTHLY CAP section after the group sums.
+# The bar's 23rd and last line, the monthly cap, is not one of these leaves: it
+# clamps the sum of all 22 (see the MONTHLY CAP section after the group sums).
 #
 # Every leaf returns 0 when its gate is false (the gate moved from the bar's
 # enclosing `if` into the leaf), so the bar's `add` lines are unconditional.
@@ -1021,14 +1021,13 @@ colonial_stability_drift_uncapped = {
 # change the inputs (win the great power over, integrate the colony, release
 # it) to turn the trend around.
 #
-# The bar applies it as a clamp at the end of its monthly_progress (max =
-# colonial_stability_drift_cap, min = colonial_stability_drift_floor), and
-# colonial_stability_drift_total clamps with the same two values. Until
-# 2026-11-12 the bar's last line was a leaf, the capped minus the uncapped sum,
-# whose hover line showed how much the cap absorbed; it evaluated every leaf
-# twice more a month. The panel never showed the bar's own hover (the overview
-# draws the value), and its breakdown shows the cap from
-# colonial_stability_drift_cap_display.
+# The bar saves the sum of its 22 lines and adds clamp(sum) - sum as its last
+# line (colonial_drift_cap_tt), 0 inside the cap, so its hover shows how much the
+# cap absorbed; a block-level max / min with the same two values follows as a
+# safety net. colonial_stability_drift_total clamps with them too. Until
+# 2026-11-12 that line was a leaf, colonial_stability_drift_total minus
+# colonial_stability_drift_uncapped, which evaluated every leaf twice more a
+# month.
 # ============================================================================
 
 colonial_stability_drift_cap = 1.5
@@ -1080,10 +1079,7 @@ colonial_stability_drift_uncapped_display = {
 colonial_stability_drift_total_display = {
 	value = colonial_stability_drift_uncapped_display
 	max = colonial_stability_drift_cap
-	min = {
-		value = colonial_stability_drift_cap
-		multiply = -1
-	}
+	min = colonial_stability_drift_floor
 }
 
 # How much the cap is absorbing this month (0 inside the cap), shown as the
