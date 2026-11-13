@@ -15,21 +15,17 @@ day (`te_judiciary_events.7`, `.8`). Mark one checked with `# REVIEWED YYYY-MM-D
 
 ## Summary
 
-- delayed calls: 287
-- events they queue: 159
-- with a top-level trigger: 105
-- likely false when queued: 1
+- delayed calls: 289
+- events they queue: 161
+- with a top-level trigger: 104
+- likely false when queued: 0
 - not classified: read the trigger against each call: 83
 - restated or set by the caller before the call: 20
 - reviewed: 1
 
 ## Likely false when queued
 
-### `un_events.5` (visible, `events/un_events.txt`)
-
-Trigger: `je:je_united_nations ?= { has_modifier = un_member_modifier }`; `has_modifier = un_sanctions_enforcer_modifier`; `NOT = { has_modifier = un_sanctions_enforcement_modifier }`; `OR = { scope:sanctioned_country ?= { has_variable = un_sanctions_target_on } AND = { NOT …`
-
-- `un_vote.2` in `events/un_vote_events.txt`, days = 90: modifier_same_block: `un_sanctions_enforcer_modifier` is added before the call
+_None._
 
 ## Not classified: read the trigger against each call
 

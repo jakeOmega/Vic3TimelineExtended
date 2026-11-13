@@ -9189,6 +9189,7 @@
  te_mon_arrangement_recipient_desc:0 "Swap lines and guarantees other central banks have extended to us. Lenders price the help we could call on."
  te_mon_arrangement_standing:0 "Anchored Currency"
  te_mon_arrangement_standing_desc:0 "Credit standing earned through a currency peg — by borrowing a credible currency, or by being the currency others borrow."
+ te_mon_article_needs_full_system_tt:0 "The Banking System game rule is set to Enabled, which runs the monetary system this [concept_article] belongs to"
  te_mon_board_seigniorage:0 "Seigniorage from Currency Boards"
  te_mon_board_seigniorage_desc:0 "Half the minting of every subject that runs a currency board on our money. It is worth what their gold mines are worth — for a colony without gold, next to nothing."
  te_mon_board_subject:0 "Currency Board"

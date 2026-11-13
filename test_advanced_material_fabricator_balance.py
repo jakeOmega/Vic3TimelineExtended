@@ -5,9 +5,15 @@ employee. Two things did it: the top base methods paid back their inputs 3.5 tim
 Advanced Materials' price of 4,000, and the automation and orbital methods together cut a
 level's staff from 300 to 10. The good's price stays (combat units, construction methods,
 space methods, companies and the AI read it); the fix raises the base methods' inputs and
-trims the two staff cuts, so every combination keeps a level's staff at 100 or more and
-stays within the range of its high-technology peers (Network Infrastructure's top method
-is about 40 at its base staff and 133 on predictive maintenance).
+trims the two staff cuts, so every combination keeps a level's staff at 100 or more. Its
+high-technology peers sit lower (Network Infrastructure's top method is about 40 at its
+base staff and 133 on predictive maintenance).
+
+The top method, Advanced Self-Replicating Assemblers, then used more of every input per unit
+than Self-Replicating Assemblers below it (about 2,820 against 2,150 at base prices), so it
+was the first to lose money if the good's price fell. Its output was raised from 10 to 15
+(follow-up to #1033 / #1662) so that no input costs more per unit than on the method below,
+and the ceilings below were raised to fit it, by the owner's decision (2026-11-12).
 
 Everything is read from the files: the building's method groups, each method's goods and
 staff, and the goods' base prices as pm_costs.py prices them (vanilla_parsed plus the mod's
@@ -29,9 +35,13 @@ import pm_balance_lib  # noqa: E402
 
 BUILDING = "building_advanced_material_fabricator"
 MIN_STAFF = 100          # a level's staff, whatever the methods
-MAX_VALUE_ADDED = 120.0  # per employee per level at base prices, the stacked best case
+# Per employee per level at base prices, the stacked best case. #1662 set 120, near the
+# peers; the owner accepted more for the top method (2026-11-12): "it is the best production
+# method of the last 'normal' building to unlock". Its best case is 314.8.
+MAX_VALUE_ADDED = 320.0
 # At the base staff (no automation, no orbital), each base method in turn, in tech order.
-BASE_STAFF_CEILING = 45.0
+# Raised from 45 for the same decision: the top method makes 106.0 there.
+BASE_STAFF_CEILING = 110.0
 
 
 def _strip(text):
@@ -74,6 +84,14 @@ class _Data:
         for name in pm_balance_lib.pm_file_names(ROOT):
             for pm_id, body in pm_balance_lib.iter_pms(ROOT / pm_balance_lib.PM_SUBDIR / name):
                 self.bodies[pm_id.split(":")[-1]] = _strip(body)
+
+    def inputs(self, pm):
+        return {good: float(qty) for good, qty in
+                re.findall(r"goods_input_(\w+)_add = (-?[\d.]+)", self.bodies[pm])}
+
+    def output(self, pm, good="advanced_materials"):
+        found = re.findall(rf"goods_output_{good}_add = (-?[\d.]+)", self.bodies[pm])
+        return sum(float(q) for q in found)
 
     def figures(self, combo):
         cost = revenue = staff = 0.0
@@ -130,6 +148,23 @@ class FabricatorBalanceTest(unittest.TestCase):
                 self.assertGreater(value_added, previous)
                 self.assertLessEqual(value_added, BASE_STAFF_CEILING)
             previous = value_added
+
+    def test_the_top_method_uses_no_more_of_any_input_per_unit(self):
+        """Advanced Self-Replicating Assemblers needs no more of any input per unit of Advanced
+        Materials than Self-Replicating Assemblers, so it is not the first to lose money when
+        the good's price falls (follow-up to #1033 / #1662)."""
+        data = _data()
+        *_, below, top = data.methods[data.groups[0]]
+        below_in, top_in = data.inputs(below), data.inputs(top)
+        below_out, top_out = data.output(below), data.output(top)
+        self.assertGreater(below_out, 0)
+        self.assertGreater(top_out, 0)
+        for good in sorted(set(below_in) | set(top_in)):
+            with self.subTest(good=good):
+                self.assertLessEqual(top_in.get(good, 0.0) / top_out,
+                                     below_in.get(good, 0.0) / below_out + 1e-9)
+        self.assertLess(sum(q * data.prices[g] for g, q in top_in.items()) / top_out,
+                        sum(q * data.prices[g] for g, q in below_in.items()) / below_out)
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ from unittest import mock
 from game_qa import __main__ as cli
 from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
 from game_qa.client import enabled_mods
-from game_qa.console import ConsoleError
+from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
 
@@ -527,6 +527,92 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.cli.calls[1], ["snapshot", "--save", "france_1850"])
         self.assertEqual(self.cli.calls[2][-1], "-loadsave=france_1850")
         self.assertEqual((reply["save"], reply["fixture_made"]), ("france_1850", False))
+
+    def test_a_window_that_stops_responding_while_the_save_loads_is_waited_for(self):
+        # Live 2026-11-12: a 47 MB save of 1931 kept the window from responding past UNRESPONSIVE_S once it had
+        # first answered, and one ensure_open took that for a game that had gone.
+        loading = {}
+
+        def load(seconds):
+            if "until" not in loading:
+                loading["until"] = self.game.now + UNRESPONSIVE_S + 30
+            self.game.responding = self.game.now >= loading["until"]
+        self.game.on_sleep = load
+        reply = self.start()
+        self.game.on_sleep = None
+        self.assertEqual(reply["country"], "FRA")
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        ready = next(step for step in map(json.loads, lines) if step["verb"] == "console_ready")
+        self.assertEqual(ready["outcome"], "ok")
+        self.assertGreaterEqual(ready["tries"], 2)
+        self.assertEqual(ready["last_refusal"], "game_gone")
+
+    def test_a_window_that_never_answers_again_ends_the_start_after_the_load_wait(self):
+        def hang(seconds):
+            self.game.responding = False
+        self.game.on_sleep = hang
+        started_at = self.game.now
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual(error.code, "game_gone")
+        self.assertGreaterEqual(self.game.now - started_at, session.LOAD_WAIT_S - session.ENTER_RETRY_S)
+        self.assertLessEqual(self.game.now - started_at, session.LOAD_WAIT_S + session.CONSOLE_READY_S)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def _console_ready(self):
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return next(step for step in map(json.loads, lines) if step["verb"] == "console_ready")
+
+    def test_a_game_that_ends_while_its_save_loads_stops_the_wait_at_once(self):
+        # Once the window is gone, ensure_open answers game_gone before any key, so only the loop's own look at
+        # `watch` ends the wait: without it the start would press on for LOAD_WAIT_S against a dead game.
+        began = {}
+
+        def ends(seconds):
+            began.setdefault("at", self.game.now)
+            if self.game.now - began["at"] > 3:
+                self.game.exited = True
+                self.game.exists = False
+        self.game.on_sleep = ends
+        started_at = self.game.now
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual(error.code, "watch_ended")
+        self.assertLess(self.game.now - started_at, session.LOAD_WAIT_S / 4)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_a_stop_asked_while_the_save_loads_ends_the_wait(self):
+        inner = []
+
+        def hang(seconds):
+            self.game.responding = False
+            if seconds == session.ENTER_RETRY_S and not inner:
+                inner.append(self.session.stop())
+        self.game.on_sleep = hang
+        started_at = self.game.now
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual((error.code, inner[0]["outcome"]), ("stopped", "deferred_to_start"))
+        self.assertLess(self.game.now - started_at, session.LOAD_WAIT_S / 2)
+        self.assertEqual(self._console_ready()["tries"], 1)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_someone_at_the_machine_while_the_save_loads_is_not_retried(self):
+        self.game.foreground = False
+
+        def someone(reading):
+            self.game.cursor = (10 * reading, 5 * reading)
+        self.game.on_presence = someone
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "not_foreground")
+        self.assertEqual(self._console_ready()["tries"], 1)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_a_console_that_never_opens_is_tried_twice_not_for_the_whole_wait(self):
+        self.game.console_never_opens = True
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "no_ack")
+        self.assertEqual(self._console_ready()["tries"], session.LOAD_NO_ACK_TRIES)
 
     def test_a_save_that_is_not_there_is_refused_before_anything(self):
         error = self.session_error(self.start, save="nowhere")

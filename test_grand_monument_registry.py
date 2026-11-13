@@ -627,7 +627,10 @@ class RecordTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }", honoree)
         # Minor 8: gm_tmp_ig_flag is the only temp variable this file leaves on
         # the owner; every other gm_tmp_* is a saved scope, not a variable.
-        self.assertIn("set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag } "
+        # The copy waits on the flag: the policy buttons' tooltips walk the
+        # refresh writing nothing (tooltip_walk_variable_audit).
+        self.assertIn("if = { limit = { owner = { has_variable = gm_tmp_ig_flag } } "
+                      "set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag } } "
                       "owner = { remove_variable = gm_tmp_ig_flag }", honoree)
         faith = squash(block(self.e, "gm_state_record_faith"))
         self.assertIn("religion = { save_scope_as = gm_tmp_faith_scope }", faith)

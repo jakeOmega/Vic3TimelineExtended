@@ -1,4 +1,5 @@
-"""The Colonial Empire's three programmes and Investment's expense line are scaling modifiers on je_colonial_empire.
+"""The Colonial Empire's three programmes, Investment's expense line and the five stability bands are scaling modifiers
+on je_colonial_empire.
 
 Since 1.15 the entry declares each in `scaling_modifiers_while_active` and the
 engine re-reads its value from the owning country about every four days
@@ -8,8 +9,11 @@ country, a programme at the literal multipliers 0.333 / 0.667 / 1 and the
 expense line at the week's cost. These tests pin each declaration, that its
 value gives the old numbers at every level and 0 at level 0 (where the old
 refresh added nothing), and that the refresh, the civil-war rebuild and the
-pre-levels migration are gone. test_journal_entry_shape.py checks the
-tree-wide rule that nothing adds, removes or tests a declared key.
+pre-levels migration are gone. The bands followed in #1466: the monthly pulse
+swapped a plain modifier on the entry, and each is now declared at 1 in its
+band of colonial_empire_live_tier. test_journal_entry_shape.py checks the
+tree-wide rule that nothing adds, removes or tests a declared key (with the
+one allowance for Solidified's country copy, the endings' reward).
 """
 
 import re
@@ -94,9 +98,10 @@ def _ladder(block, reads):
 
 
 class DeclarationTests(unittest.TestCase):
-    def test_the_entry_declares_exactly_the_four(self):
-        # One declaration each, its value the block `value = { value = <name> }`.
-        self.assertEqual(_declarations(), {k: [v] for k, v in KEYS.items()})
+    def test_the_entry_declares_exactly_the_four_and_the_bands(self):
+        # One declaration each, its value the block `value = { value = <name> }`; the bands' values are inline
+        # ladders (BandTests), which _declarations returns as None.
+        self.assertEqual(_declarations(), {**{k: [v] for k, v in KEYS.items()}, **{b: [None] for b in BANDS}})
 
     def test_each_programme_keeps_the_old_ladder(self):
         values = _text(VALUES)
@@ -162,16 +167,71 @@ class DeclarationTests(unittest.TestCase):
                     "colonial_empire_je_cleanup_effect", "colonial_empire_secured_end",
                     "colonial_empire_collapse_end")), 1)
 
-    def test_the_bands_stay_on_the_pulse(self):
-        # Not converted: Solidified is also the endings' permanent country
-        # reward (decol_grant_permanent_modifier), and four bands declared
-        # beside one pulse-added band would overlap or gap at the 90 edge.
-        declared = _declarations()
-        pulse = _strip_comments(_text(JE))
+
+
+class BandTests(unittest.TestCase):
+    """The five stability bands, declared at 1 in their band (#1466). The monthly pulse removed all five and added
+    the one whose band the bar was in; each declaration reads colonial_empire_live_tier, the ladder the panel's band
+    names read, so exactly one is on at every bar value, the same one the pulse chose, within days."""
+
+    # The pulse's edges, kept here as the behaviour to preserve: crumbling < 20 <= under_pressure < 40 <= strained
+    # < 65 <= stable < 90 <= solidified.
+    EDGES = ((None, 20), (20, 40), (40, 65), (65, 90), (90, None))
+
+    @staticmethod
+    def _band_values():
+        """band -> the text of its declaration's value block."""
+        je = _strip_comments(_text(JE))
+        out = {}
+        for m in re.finditer(r"scaling_modifiers_while_active = \{\s*modifier = (\w+)\s*value = \{", je):
+            if m.group(1) in BANDS:
+                depth, i = 1, m.end()
+                while depth:
+                    depth += {"{": 1, "}": -1}.get(je[i], 0)
+                    i += 1
+                out[m.group(1)] = je[m.end():i - 1]
+        return out
+
+    @staticmethod
+    def _tier(bar):
+        """colonial_empire_live_tier at a bar value, evaluated from the script value's own ladder."""
+        block = _strip_comments(_top_level_block(_text(VALUES), "colonial_empire_live_tier = {"))
+        steps = [(int(edge), int(tier)) for edge, tier in re.findall(
+            r'"scripted_bar_progress\(colonial_stability_bar\)" >= (\d+) \} \}\s*value = (\d)', block)]
+        assert [tier for _, tier in steps] == [5, 4, 3, 2], steps
+        return next((tier for edge, tier in steps if bar >= edge), 1)
+
+    def _on(self, body, tier):
+        """The declared value, `value = 0 if = { limit = { <live_tier tests> } add = 1 }`, at a tier."""
+        shape = re.fullmatch(r"\s*value = 0\s*if = \{\s*limit = \{([^{}]*)\}\s*add = 1\s*\}\s*", body)
+        self.assertIsNotNone(shape, body)
+        tests = re.findall(r"(\S+) (>=|<) (\d+)", shape.group(1))
+        self.assertTrue(tests)
+        self.assertEqual(len(tests), len(shape.group(1).split()) // 3, shape.group(1))
+        ok = True
+        for name, op, number in tests:
+            self.assertEqual(name, "colonial_empire_live_tier")
+            ok &= tier >= int(number) if op == ">=" else tier < int(number)
+        return int(ok)
+
+    def test_all_five_are_declared(self):
+        self.assertEqual(set(self._band_values()), set(BANDS))
+
+    def test_exactly_the_pulses_band_is_on_at_every_bar_value(self):
+        values = self._band_values()
+        for bar in range(0, 101):
+            expected = next(band for band, (low, high) in zip(BANDS, self.EDGES)
+                            if (low is None or bar >= low) and (high is None or bar < high))
+            tier = self._tier(bar)
+            with self.subTest(bar=bar):
+                self.assertEqual({band: self._on(values[band], tier) for band in BANDS},
+                                 {band: int(band == expected) for band in BANDS})
+
+    def test_the_pulse_no_longer_swaps_them(self):
+        je = _strip_comments(_text(JE))
         for band in BANDS:
             with self.subTest(band=band):
-                self.assertNotIn(band, declared)
-                self.assertIn("je:je_colonial_empire = { add_modifier = { name = %s } }" % band, pulse)
+                self.assertNotRegex(je, r"(add|remove)_modifier\b[^\n]*\b%s\b" % band)
 
 
 class RefreshGoneTests(unittest.TestCase):

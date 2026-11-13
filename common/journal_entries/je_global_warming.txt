@@ -160,11 +160,10 @@
 	# update (every few days), while the entry is active; at 0 it is off. The
 	# value's root is the owning country. has_modifier cannot see one, on the
 	# entry or the country, so nothing adds, removes or tests these keys: a
-	# reader tests the value's inputs instead (gw_warming_felt,
-	# gw_policy_carbon_removal_active, gw_policy_aerosol_injection_active,
-	# gw_policy_renewable_investment_active, global_warming_triggers.txt).
-	# Each held its own remove/re-add on this pulse or a monthly sweep until
-	# #1404.
+	# reader tests the value's inputs instead (gw_warming_felt and the
+	# gw_policy_*_active triggers, global_warming_triggers.txt). Each held its
+	# own remove/re-add on this pulse or a monthly sweep until #1404, and the
+	# nine flat policies were added and removed by their buttons until #1466.
 
 	# Climate Warming itself (global_warming) is the same for every country, so
 	# the contextless World Climate entry declares it once for the world
@@ -210,9 +209,11 @@
 		}
 	}
 
-	# The two policies mirrored in a country variable, which a civil war's
-	# winner inherits (it inherits no modifiers): on while the variable is set.
-	# The other nine policies are still added to the entry as plain modifiers.
+	# The eleven national policies, each the country variable
+	# gw_<policy>_policy, which a civil war's winner inherits (it inherits no
+	# modifiers): on while the variable is set. Fossil-Fuel Tariffs is the
+	# leader's own; gw_refresh_fossil_fuel_tariffs_effect drops it monthly
+	# from a country that no longer leads its market.
 	scaling_modifiers_while_active = {
 		modifier = carbon_removal_modifier
 		value = {
@@ -235,7 +236,112 @@
 		}
 	}
 
+	scaling_modifiers_while_active = {
+		modifier = carbon_tax_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_carbon_tax_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = renewable_investment_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_renewable_investment_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = climate_adaptation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_climate_adaptation_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = emission_standards_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_emission_standards_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = reforestation_subsidies_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_reforestation_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = public_transit_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_public_transit_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = fossil_fuel_divestment_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_fossil_fuel_divestment_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = green_building_codes_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_green_building_codes_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = fossil_fuel_tariffs_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_fossil_fuel_tariffs_policy }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
+	}
+
+	on_weekly_pulse = {
+		effect = {
+			gw_migrate_flat_policies = yes		# PENDING REMOVAL at the next save-breaking vanilla patch (#1466): a 1.3.x save's flat policies, te_flat_toggle_migration_effects.txt
+		}
 	}
 
 	on_monthly_pulse = {

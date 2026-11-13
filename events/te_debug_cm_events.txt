@@ -35,7 +35,12 @@ te_debug_cm.1 = { # REVIEWED 2026-11-07: console-only test event (event te_debug
 	option = {
 		name = te_debug_cm.1.a
 		trigger = { te_cm_system_enabled = yes }
-		te_cmg_census_all = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_cmg_census_all = yes
+		}
 	}
 
 	# This country's conversion step now.
