@@ -356,7 +356,7 @@ class SessionServer:
         return self._session.drag(_arg(body, "x1"), _arg(body, "y1"), _arg(body, "x2"), _arg(body, "y2")), 0
 
     def _profiler_roots(self, body: dict) -> tuple[dict, int]:
-        return self._session.profiler_roots(body.get("box")), 0
+        return self._session.profiler_roots(body.get("box"), as_shown=body.get("as_shown") is True), 0
 
     def _try_event(self, body: dict) -> tuple[dict, int]:
         reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))

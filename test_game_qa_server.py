@@ -127,8 +127,8 @@ class FakeSession:
         return {"pixels": [[round(1920 * x1), round(1080 * y1)], [round(1920 * x2), round(1080 * y2)]],
                 "keyboard_away": True}
 
-    def profiler_roots(self, box=None):
-        self._call("profiler_roots", box)
+    def profiler_roots(self, box=None, as_shown=False):
+        self._call("profiler_roots", box, *(("as_shown",) if as_shown else ()))
         return {"lines": ["Opened Script.Profiling.Gui"], "opened": True, "box": box or [0.2, 0.3, 0.8, 0.9],
                 "screenshot": "/backups/runs/%s/shot_01.png" % SNAP, "crop": "/backups/runs/%s/profiler_roots_01.png"
                 % SNAP, "scale": 1}
@@ -352,6 +352,8 @@ class ProfilerRootsVerbTest(ServerTestCase):
         reply, code = self.run_cli("profiler-roots", "--box", "0.1", "0.2", "0.9", "0.8")
         self.assertEqual((code, reply["box"]), (0, [0.1, 0.2, 0.9, 0.8]))
         self.assertEqual(fake.calls[-1], ("profiler_roots", [0.1, 0.2, 0.9, 0.8]))
+        self.run_cli("profiler-roots", "--as-shown")
+        self.assertEqual(fake.calls[-1], ("profiler_roots", None, "as_shown"))
 
 class VerbTest(ServerTestCase):
     def test_a_verb_round_trips_json(self):

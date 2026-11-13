@@ -1958,6 +1958,18 @@ class ProfilerRootsTest(SessionTestCase):
         self.assertEqual((reply["opened"], reply["screenshot"], reply["crop"]), (True, None, None))
         self.assertIn("no_client_area", reply["screenshot_error"])
 
+    def test_as_shown_types_nothing_and_works_while_the_keyboard_is_away(self):
+        self.started()
+        self.shots_of(1920)
+        self.session.click(0.6, 0.6)            # a row clicked: the keyboard is away
+        steps = len(self.game.steps)
+        reply = self.session.profiler_roots(as_shown=True)
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertNotIn("lines", reply)
+        self.assertEqual((reply["scale"], self.game.screenshots[-1][2]), (2, 1920))
+        self.assertTrue(Path(reply["crop"]).is_file())
+        self.assertEqual(self.session_error(self.session.profiler_roots).code, "keyboard_away")
+
     def test_a_window_that_did_not_say_it_opened_is_reported(self):
         self.started()
         self.game.on(session.PROFILER_COMMAND, failure=["Unknown command"])

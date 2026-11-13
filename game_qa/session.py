@@ -1251,9 +1251,11 @@ class Session:
             out.update(result)
         return result
 
-    def profiler_roots(self, box: Sequence[float] | None = None) -> dict:
+    def profiler_roots(self, box: Sequence[float] | None = None, as_shown: bool = False) -> dict:
         """Open the script profiler at its roots (`Script.Profiling.Gui`, through the console), take a shot at the
         window's own resolution, and crop the call graph out of it: `screenshot` and `crop` in the run folder.
+        With `as_shown` nothing is typed: the window is shot and cropped as it is, after a click on a row or a
+        `wheel`, and the keyboard need not be given back first.
 
         The crop is `box` (left, top, right, bottom: fractions of the client area), PROFILER_ROOTS_BOX by default,
         measured on the overlay's enlarged window (`enlarged` says whether this run's overlay has it; without it the
@@ -1262,13 +1264,13 @@ class Session:
         fails is not a refusal (`screenshot: null` and `screenshot_error`: the window is open all the same), nor is
         a crop that cannot be made (`crop: null` and `crop_error`). The command is typed like any other, so after a
         click into a tool window it is refused until the keyboard is given back (`click --console`)."""
-        self._require_game()
+        self._require_game(types=not as_shown)
         box = PROFILER_ROOTS_BOX if box is None else _box(box)
-        with self._step("profiler_roots", box=list(box)) as out:
-            reply = self._console.run(PROFILER_COMMAND)
-            opened = PROFILER_OPENED in [line.strip() for line in reply.lines]
-            result: dict[str, Any] = {"lines": reply.lines, "opened": opened, "box": list(box),
-                                      "enlarged": self._profiler_window.get("enlarged") is True}
+        with self._step("profiler_roots", box=list(box), as_shown=as_shown) as out:
+            result: dict[str, Any] = {"box": list(box), "enlarged": self._profiler_window.get("enlarged") is True}
+            if not as_shown:
+                reply = self._console.run(PROFILER_COMMAND)
+                result.update(lines=reply.lines, opened=PROFILER_OPENED in [line.strip() for line in reply.lines])
             self._sleep(PROFILER_SETTLE_S)
             try:
                 width = self._helper.window(self._proc.pid).client[2]

@@ -25,9 +25,10 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                                              # keyboard back (a click into a tool window takes it)
     python3 -m game_qa wheel X Y N           # N notches of the mouse wheel at X, Y (positive scrolls up), then a shot
     python3 -m game_qa drag X1 Y1 X2 Y2      # press at X1, Y1, move, release at X2, Y2, then a shot
-    python3 -m game_qa profiler-roots [--box L T R B]
+    python3 -m game_qa profiler-roots [--box L T R B] [--as-shown]
                                              # the script profiler at its roots, shot at the window's own size,
-                                             # and its call graph cropped out of the shot
+                                             # and its call graph cropped out of the shot (--as-shown: as it is,
+                                             # nothing typed)
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -790,7 +791,10 @@ def cmd_drag(args) -> tuple[dict, int]:
 
 
 def cmd_profiler_roots(args) -> tuple[dict, int]:
-    return call(_backup_root(), "profiler-roots", {"box": args.box})
+    body = {"box": args.box}
+    if args.as_shown:
+        body["as_shown"] = True
+    return call(_backup_root(), "profiler-roots", body)
 
 
 def cmd_try_event(args) -> tuple[dict, int]:
@@ -905,6 +909,8 @@ def add_verbs(sub) -> None:
     p.add_argument("--box", nargs=4, type=float, metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"),
                    help="the crop, as fractions of the window (default: the call graph of the overlay's enlarged "
                         "window, measured in a 3840x2160 window)")
+    p.add_argument("--as-shown", action="store_true",
+                   help="type nothing: shoot and crop the window as it is (after a click on a row, or a wheel)")
     p.set_defaults(run=cmd_profiler_roots)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")

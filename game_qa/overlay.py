@@ -64,7 +64,7 @@ SCRIPTED_TEST_FILE = f"tools/scripted_tests/{FIXTURE_TEST}.txt"
 METADATA_FILE = ".metadata/metadata.json"
 PROFILER_GUI_FILE = "gui/script_profiler/script_profiler.gui"     # in the overlay, overriding the game's own
 PROFILER_GUI_SOURCE = "jomini/gui/script_profiler/script_profiler.gui"     # under the game's install folder
-# The three sizes the owner raised and saw work live (2026-11-12, #1710's comment): with them the window opens at
+# The three sizes verified live in the performance run of 2026-11-12 (#1710's comment): with them the window opens at
 # about 2,900 x 1,950 pixels of a 3840x2160 window, and the call graph shows every callee with both times.
 PROFILER_WINDOW = (600, 300, 1400, 950)         # the root vbox's minimumsize: from (600, 300) to (1400, 950)
 PROFILER_ROW = (0, 150, 0, 700)                 # the Callers/Current/Callees row's: from (0, 150) to (0, 700)
