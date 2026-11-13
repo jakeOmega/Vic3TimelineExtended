@@ -18,7 +18,7 @@ Adding one: a new `###` section at the end of its topic, the rule as its heading
 
 *`scripts/analysis/log_triage.py` does this now: every generation is read.*
 
-Bugs that only fire under specific conditions (certain country exists / specific JE active / particular UI panel open) often appear in older generations but not current. Pattern: `for path in sorted(glob.glob(os.path.join(game_logs_path, 'error*.log'))): if 'Manfred' not in path and 'pickle' not in path: all_entries.extend(parse_log(path))`. Then `tag_vanilla_bugs(...)` and group by basename — the high-volume basenames are the registration targets. Took error-log tagging from 22% → 86% in one session.
+Bugs that only fire under specific conditions (certain country exists / specific JE active / particular UI panel open) often appear in older generations but not current. Pattern: `for path in sorted(glob.glob(os.path.join(game_logs_path, 'error*.log'))): if re.fullmatch(r'error(\.\d)?\.log', os.path.basename(path)): all_entries.extend(parse_log(path))`. Then `tag_vanilla_bugs(...)` and group by basename — the high-volume basenames are the registration targets. Took error-log tagging from 22% → 86% in one session.
 
 ### The canonical `mod_only=true` filter hides errors whose `files` field never resolves to a mod path, even when a mod loc string is the cause (2026-05-09)
 
@@ -60,7 +60,7 @@ The rotating logs keep the *last few launches*, and a `script_docs` dump session
 
 *`scripts/analysis/log_triage.py` does this now: it copies by exact name.*
 
-The folder also holds `debug-Manfred*.log` and `debug-pickle*.log`, other machines' logs from 2024 and January 2026 (OneDrive-synced). A `debug*.log` glob read them in, and they produced a false drift report (six cpp anchors "moved") and hundreds of stale parse errors (`Unexpected token`, `Total startup duration`, `Mounted Data`) that looked like this launch's startup log. Use `re.fullmatch(r'debug(\.\d)?\.log', name)`. Same for `error`. A mod-file error that tracks a window of game time with no change in the mod (here ~190 lines in seven minutes, then none) is usually one odd country, and a co-occurring vanilla line that names a country (`Could not get leader of interest group … in country 'Khiva'`) identifies it faster than decoding a save. See `scripting_best_practices.md` § Guard Scope References in Triggers.
+The folder also holds `debug-<PC name>*.log` files, other machines' logs from 2024 and January 2026 (OneDrive-synced). A `debug*.log` glob read them in, and they produced a false drift report (six cpp anchors "moved") and hundreds of stale parse errors (`Unexpected token`, `Total startup duration`, `Mounted Data`) that looked like this launch's startup log. Use `re.fullmatch(r'debug(\.\d)?\.log', name)`. Same for `error`. A mod-file error that tracks a window of game time with no change in the mod (here ~190 lines in seven minutes, then none) is usually one odd country, and a co-occurring vanilla line that names a country (`Could not get leader of interest group … in country 'Khiva'`) identifies it faster than decoding a save. See `scripting_best_practices.md` § Guard Scope References in Triggers.
 
 ### An observer run's archive holds every rotation and minute copy of the logs, so count each line once (2026-10-10)
 

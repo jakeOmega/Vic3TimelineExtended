@@ -62,7 +62,7 @@ _TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 _BUCKET_NAME = re.compile(r"^[0-9a-f]{2}$")
 _BLOB_NAME = re.compile(r"^[0-9a-f]{64}$")
 # In `save games/` only the game's own rotation names may be taken for something the run pushed in. OneDrive
-# makes conflict copies such as `autosave-Manfred.v3` and `autosave_1-Manfred.v3`; they are the owner's.
+# makes conflict copies such as `autosave-<PC name>.v3` and `autosave_1-<PC name>.v3`; they are the owner's.
 _ROTATION_NAME = re.compile(r"^autosave(_\d+|_exit)?\.v3$")
 # An unattended run ends at its `-run_until` without an `autosave_exit.v3` (the 1836 fixture's runs wrote none), and
 # a session's game is ended by its process. One that is new or changed after a run, and not a plain-text save
