@@ -119,7 +119,7 @@ commit.
 
 ## Not run live
 
-The long dated fixtures (past 31 March 1836: they need `--long-run` and the owner's own grant), the
+The long dated fixtures (past 31 March 1836: `fixture --until` then needs `--max-hours` and the owner's own grant of that run), the
 `not_the_runs_save` and `manual_save_changed` holds, `pick`'s `oldest` form as a verb (the same command ran by
 hand), and the read retry for a lost first typing (#1702 item 1 did not reproduce).
 
