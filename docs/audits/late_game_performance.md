@@ -502,11 +502,14 @@ Items 3 and 6 were addressed by #1713.
    Settle that with an in-game test, then turn the scan into an audit
    next to `je_multiplier_scope_audit` (it walks the same graph).
 11. **The colonial stability bar** (1.3 ms a read in 1931; 899 ms in 30 days
-    in the call graph) evaluates its 22 terms three times per read: the
+    in the call graph) evaluated its 22 terms three times per read: the
     bar's lines, then `drift_total` and `drift_uncapped` in the cap term,
     which took 641 ms of the bar's 1,035 ms in a later run (snapshot
-    `20261112T232122Z`, `callgraph/sr_colonial/pc_cb0.png`). #1726 (open)
-    makes the cap a clamp at the end of `monthly_progress`.
+    `20261112T232122Z`, `callgraph/sr_colonial/pc_cb0.png`). Done in #1726:
+    the bar saves its sum (`save_temporary_value_as`) and the cap line is
+    clamp(sum) − sum, with a block-level clamp after it. A profiled run of
+    a block-clamp-only version put the bar below 442 ms, out of the root
+    list's 27.
 12. **The other serial script** (call graph, 2 July → 1 August 1931; see
     "Which script holds up the day"), by size. The callees were opened in a
     second profiled run over the same dates (snapshot `20261112T215918Z`),
