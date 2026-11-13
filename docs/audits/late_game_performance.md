@@ -42,8 +42,9 @@ current`. Since 2026-11-13 (#1700) `profile start`, `profile dump [LABEL]` and
 copy both dumps and `dedicated_server.log` into the run folder, and give the
 wall time per day and frame type, the top tick tasks and the script time by
 file. `start --game-arg` and `start --add-mod` (a variant mod folder, for an
-A/B on the same save) go with them. They were built against fakes and not yet
-run live; until a run confirms them, the `console` route below still works.
+A/B on the same save) go with them. They ran live on 2026-11-13 on the 1931
+save (`docs/testing/game-qa-results-2026-11-13.md`); the `console` route
+below still works.
 Copy every output out of the user-data folder before `stop`, because the
 restore puts `logs/` back.
 
