@@ -587,10 +587,10 @@ class _Script:
         seen.add((template, effect))
         names = set()
         for args, caller in self.calls.get(effect, ()):
-            name = template
-            for param in params:
-                if param in args:
-                    name = name.replace(f"${param}$", args[param])
+            # One pass, every parameter at once: a value that forwards
+            # another parameter (`A = $B$`) is the caller's text and waits
+            # for the caller's caller, not for this call's own B.
+            name = _PARAM.sub(lambda m: args.get(m.group(1), m.group(0)), template)
             names |= self.expand(name, caller, seen, depth + 1) if "$" in name else {name}
         return names
 
