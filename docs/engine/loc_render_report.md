@@ -35,9 +35,9 @@ not flagged. Fix: close it. An opening fragment that its caller closes
 naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.
 Fix: write a literal hash as `##`.
 
-Also flagged: a tag naming a format (case kept) that no value of
-vanilla's English loc opens, so it may not render. Fix: use the form
-vanilla writes (`#o`, not `#O`).
+Also flagged: a tag naming a format that no value of vanilla's
+English loc opens, in any case, so it may not render (`#bolt`).
+Fix: use a format vanilla writes.
 
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`

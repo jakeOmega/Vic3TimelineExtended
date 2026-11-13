@@ -128,16 +128,16 @@ fragment is not caught. A `[` that never closes, or an odd apostrophe inside
 `[...]`, makes the scan skip the rest of the value.
 
 **A format vanilla's loc never uses** (`unknown_format`, #1698) — a tag
-whose format name, case kept, no value of vanilla's English loc opens (the
-committed `vanilla_parsed/` snapshot; without it the check is off). The
-formats are defined in vanilla's `gui/textformatting.gui`, which the repo
-does not hold, so vanilla's own use is the evidence a name renders: `#bolt
-x#!` would otherwise pass. The mod had one, `#O` (12 values meant orange);
-vanilla writes orange `#o` (`COUNTRY_FOREIGNLY_OWNED_PERCENTAGE`, and the
-test string that spells "colour" `#r c#!#o o#!#yellow l#!#g o#!#U r#!`).
-Vanilla writes both cases of several letters (`#v` / `#V`, `#r` / `#R`), so a
-case is a different name here. A name seen to render in game takes a
-`# REVIEWED` comment saying where.
+whose format name no value of vanilla's English loc opens, in any case (the
+committed `vanilla_parsed/` snapshot; without it the check is off), so `#bolt
+x#!` no longer passes. The formats are defined in the install's
+`game/gui/textformatting.gui` and `jomini/gui/jomini/basetextformatting.gui`,
+which the repo does not hold, so vanilla's own use stands in for them. The
+engine matches a format name whatever its case: those files define only `V`,
+`R` and `O` (gold), and vanilla's loc writes `#v` 3,880 times, `#r` 183 and
+`#o` 3 (1.15.1). A name the files define that vanilla's loc never writes
+(`#purple`, `#cyan`) is flagged all the same; its `# REVIEWED` comment names
+the file that defines it.
 
 A tag left open may be a literal hash that was never doubled: `Rank #$RANK$`,
 `#[X.GetRank]`, `the #MeToo movement`. Adding the `#!` would pass the audit
@@ -322,14 +322,14 @@ def _format_names(header: str, keep_case: bool = False) -> list[str]:
 
 
 def used_format_names(values: Iterable[str]) -> set[str]:
-    """Every format name, case kept, that a tag in `values` opens, closed or
-    not."""
+    """Every format name, lower-cased (the engine ignores the case), that a
+    tag in `values` opens, closed or not."""
     names: set[str] = set()
     for value in values:
         if "#" in value:
             scan = scan_format_tags(value)
             for header in scan.closed + scan.open_tags:
-                names.update(_format_names(header, keep_case=True))
+                names.update(_format_names(header))
     return names
 
 
@@ -413,22 +413,20 @@ def check_format_tags(value: str, known_tags: set[str] | None = None,
             f"(`{snippet}`). Write a literal hash as `##`, as vanilla does",
         ))
     if vanilla_names is not None:
+        # Compared lower-cased, as the engine matches them (`#v` is `V`).
         unknown: list[str] = []
         for header in scan.closed + scan.open_tags:
             unknown += [n for n in _format_names(header, keep_case=True)
-                        if n not in vanilla_names and n not in unknown]
+                        if n.lower() not in vanilla_names and n not in unknown]
         if unknown:
-            lowered = {n.lower(): n for n in sorted(vanilla_names)}
-            hints = [f"`#{lowered[n.lower()]}`" for n in unknown if n.lower() in lowered]
             out.append((
                 "unknown_format",
                 ", ".join(f"`#{n}`" for n in unknown)
                 + (" names a format" if len(unknown) == 1 else " name formats")
-                + " no value of vanilla's English loc opens, so whether the engine defines "
-                + ("it" if len(unknown) == 1 else "them") + " is unverified"
-                + (f" (vanilla writes {', '.join(hints)})" if hints else "")
-                + ". Use a format vanilla writes, or say in a `# REVIEWED` comment where this one "
-                "was seen to render",
+                + " no value of vanilla's English loc opens, in any case, so whether the engine "
+                "defines " + ("it" if len(unknown) == 1 else "them") + " is unverified. Use a "
+                "format vanilla writes, or, for one the install's `gui/textformatting.gui` defines, "
+                "say so in a `# REVIEWED` comment",
             ))
     return out
 
@@ -771,7 +769,7 @@ _ISSUE_LABEL = {
     "article_desc_scope": "Article-instance scope in a treaty article's `_desc` / `_effects_desc`",
     "unclosed_format": "Formatting tags left open (`#bold` with no `#!`)",
     "bare_hash": "A `#` that is not a tag (write `##`)",
-    "unknown_format": "A format vanilla's loc never uses (`#O` for `#o`)",
+    "unknown_format": "A format vanilla's loc never uses (`#bolt` for `#bold`)",
 }
 
 
@@ -817,9 +815,9 @@ def render_report(result: AuditResult) -> str:
         "naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.",
         "Fix: write a literal hash as `##`.",
         "",
-        "Also flagged: a tag naming a format (case kept) that no value of",
-        "vanilla's English loc opens, so it may not render. Fix: use the form",
-        "vanilla writes (`#o`, not `#O`).",
+        "Also flagged: a tag naming a format that no value of vanilla's",
+        "English loc opens, in any case, so it may not render (`#bolt`).",
+        "Fix: use a format vanilla writes.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",

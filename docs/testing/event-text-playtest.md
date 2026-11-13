@@ -224,9 +224,3 @@ The script bugs the batches reported were fixed after the texts. These rows are 
 | Check | How | Expected |
 |---|---|---|
 | A law with two unlocking technologies needs both | As a country with `social_media` researched and `automated_surveillance` not, then the reverse, open the Privacy Rights laws | Intrusive Surveillance (`law_intrusive_surveillance`, the only law with two) is locked both times: the engine needs all of them. `event_guarantees.py` counts only what each gives, the safe reading while this is unknown; if locked, its `law_gate` may count both, and `extra_law_events.41`'s total gains `pop_culture` (era 7). If either one unlocks it, the tool's reading is the engine's: note it in `law_gate` |
-
-## Orange text (#1698)
-
-| Check | How | Expected |
-|---|---|---|
-| `#o` renders orange | Open the Colonial Empire entry of an empire under strain (`je_colonial_empire_status_strained_ours`, the band "Strained"), and the Strategic Reserve entry while it is releasing (`st_res_mode_withdrawing`) | "Strained" and "Releasing" in orange, with no `#o` showing. The twelve values were `#O`, which no vanilla value writes, and were changed to vanilla's `#o` unseen in game. If they show plain or with the tag visible, look up the orange format's name in vanilla's `gui/textformatting.gui` and use that |
