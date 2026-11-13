@@ -38,6 +38,9 @@ of your primary cultures is settled land, not a colony.
 separated from your capital in the same way, none of whose primary cultures
 shares a heritage trait with yours.
 
+It waits while you fight a civil war of your own, which can cut a state off
+from your capital for a while; a war with another country doesn't hold it back.
+
 This is the test the United Nations used in 1960. France's Algeria and its
 Tunisian and Moroccan protectorates, Japan's Korea and Taiwan, and Italy's Libya
 are colonies, across the sea from their capitals. Land empires are not: Russia's
@@ -511,8 +514,9 @@ run, so you can see which one the empire is heading for.
 | Collapse | The bar reaches 0 | Up to three of your territories declare independence, the one most likely to rise first, two months apart, and you can let each go, negotiate or [fight](#wars-of-independence); those that go inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years; after that it starts again within two months if you still hold a colony or colonial subject. |
 | Voluntary end | You no longer hold any colony or colonial subject while the bar is above 0 | A decaying boost to diplomatic reputation; the event's wording depends on whether you freed colonies by choice. There is no ten-year lockout: after a year, the entry starts again within two months of your holding a colony or colonial subject. |
 
-The entry never starts again during a civil war of your own. If you still hold
-a colony or colonial subject when the war ends, the two months count from then.
+As when it first starts, the entry doesn't start again during a civil war of
+your own. If you still hold a colony or colonial subject when the war ends, the
+two months count from then.
 
 | Longest program | If the empire holds | If it collapses | The countries you free |
 |---|---|---|---|

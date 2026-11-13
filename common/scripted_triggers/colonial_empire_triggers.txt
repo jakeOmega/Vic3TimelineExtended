@@ -580,6 +580,10 @@ ce_entry_unlocked = {
 		text = ce_unlock_no_collapse_tt
 		NOT = { has_variable = colonial_empire_collapsed_recently }
 	}
+	custom_tooltip = {
+		text = ce_unlock_no_civil_war_tt
+		NOT = { colonial_in_own_civil_war = yes }
+	}
 	# Not in the entry's possible: the re-entry pass's guard after a voluntary
 	# end (ce_reentry_due), listed so the checklist is true during that year.
 	custom_tooltip = {
@@ -617,12 +621,9 @@ ce_entry_unlocked = {
 #     country whose one colony passes it on two monthly passes and fails it a
 #     few days later would otherwise loop through .206 and a fresh entry every
 #     two months.
-#   - not fighting a civil war of its own (colonial_in_own_civil_war). A
-#     civil war can cut a country's own land off from its capital, and the
-#     colony test reads a state cut off overland as overseas: Bornu's uprising
-#     (1933) made two of its Sahel states "colonies", the pass added the entry,
-#     and the AI released both within days (#1735). The month's wait starts
-#     over once the war ends, since the mark goes when a country stops being due.
+# The possible's last line, no civil war of the country's own
+# (colonial_in_own_civil_war, #1735), restarts the month's wait when the war
+# ends, since the mark goes when a country stops being due.
 # Cheap tests first; the colony test walks the states, and the civil-war test
 # the countries, last.
 ce_reentry_due = {
