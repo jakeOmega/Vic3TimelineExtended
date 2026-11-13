@@ -324,9 +324,10 @@ script value read inside another value and inside an effect's
 (`ch_yearly_global_update`) read `cultural_pull_display`, the whole pull
 chain, twice for every country with any pull (the change since the last
 recount, then the stored share) and a third time for the ten board slots.
-It now reads it once into `ch_board_share_now`. The pass runs about twice a
-year, outside the profiled month, so the saving was not measured; it is
-roughly one more pull evaluation per country per pass. The in-game check of
+It now reads it once into `ch_board_share_now`. The pass runs at most once
+per 180-day lock (`ch_ldr_lock`, also cleared at a war's end), and not in the
+profiled month, so the saving was not measured; it is one to two pull
+evaluations per ranked country per pass. The in-game check of
 the recount was not run: the harness's `pick` of `te_debug_ch.1`'s recount
 option was refused ("No matching pending event"), so it is a play-test row.
 
