@@ -245,7 +245,7 @@ un_events.2 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:condemned_country
 		NOT = { this = scope:condemned_country }
@@ -471,7 +471,7 @@ un_events.3 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_variable = un_human_rights_declaration_modifier_on }
 		NOT = { has_modifier = un_human_rights_refusal_modifier }
@@ -580,7 +580,7 @@ un_events.4 = {
 	# when a state collapses: scope:peacekeeping_target is the host. The host
 	# carries un_peacekeeping_welcomed/resented_modifier (un_events.102) once
 	# peacekeepers are there.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_take_up_collapse picks members that pass these conditions (un_docket_peacekeeping_power, not at war with the target); cancels if that changes in the day
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		exists = scope:peacekeeping_target
@@ -958,7 +958,7 @@ un_events.6 = {
 	# 100), and it can be tabled only once the organisation has outgrown its
 	# charter — the same gate as the chamber and the button
 	# (un_charter_reform_ripe, un_ladder_triggers.txt).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		un_charter_reform_ripe = yes
@@ -1097,7 +1097,7 @@ un_events.7 = {
 	# 8" (always true). The docket (un_docket_take_up_famine, item 5) sends it
 	# to up to three major-power members when a famine strikes:
 	# scope:crisis_country, and scope:crisis_state the worst-hit state.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_take_up_famine picks members that pass these conditions (un_docket_aid_power, not at war with the target); cancels if that changes in the day
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		exists = scope:crisis_country
@@ -1345,7 +1345,7 @@ un_events.8 = {
 	# Redesign phase 4: no longer rolled against anyone at war. A member that
 	# brings its appeal to the World Court (un_events.2 option D) sues the
 	# accused: scope:court_plaintiff.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_events.2 saves scope:court_plaintiff and files against a member that has answered no case; cancels if it leaves the UN or answers in the 30 days
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:court_plaintiff
 		NOT = { this = scope:court_plaintiff }
@@ -1453,7 +1453,7 @@ un_events.9 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		NOT = { has_variable = un_heritage_program_modifier_on }
@@ -1741,7 +1741,7 @@ un_events.11 = {
 	# to the proposer of a resolution a permanent member has just vetoed
 	# (un_docket_veto_consequence, from un_resolution_record_veto), with
 	# scope:veto_power the vetoer. Not at Moribund, where a veto costs nothing.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_veto_consequence's limit restates the trigger; cancels if the proposer leaves the UN or answers in the week
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:veto_power
 		NOT = { this = scope:veto_power }
@@ -1842,7 +1842,7 @@ un_events.12 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_technology_researched = decolonization
 		global_var:un_authority >= 30
@@ -1964,7 +1964,7 @@ un_events.14 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = nuclear_weapons
@@ -2092,7 +2092,7 @@ un_events.15 = {
 	# Redesign phase 4: no longer rolled against any rival. The docket
 	# (un_docket_take_up_embargo, item 12) sends it to the weaker of two
 	# members trading under an embargo, with scope:trade_rival the other.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_take_up_embargo saves scope:trade_rival before the call, for a member the docket found; cancels if it leaves the UN in the day
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:trade_rival
 		NOT = { this = scope:trade_rival }
@@ -2217,7 +2217,7 @@ un_events.16 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		global_var:un_authority >= 20
@@ -2326,7 +2326,7 @@ un_events.17 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		# Raised only by a warming threshold (docket item 7), which the
 		# disabled global warming rule never crosses.
 		has_game_rule = global_warming_enabled
@@ -2442,7 +2442,7 @@ un_events.18 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 20
 		NOT = { has_variable = un_refugee_program_modifier_on }
@@ -2565,7 +2565,7 @@ un_events.19 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = space_exploration
@@ -2671,7 +2671,7 @@ un_events.20 = {
 	# every other great-power member when a great power leaves the UN
 	# (un_docket_walkout_consequence, from un_leave_button), with
 	# scope:walkout_leader the leaver.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_walkout_consequence's limit restates the trigger; cancels if a great power leaves the UN or answers in the week
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		exists = scope:walkout_leader
@@ -2939,7 +2939,7 @@ un_events.103 = {
 	duration = 3
 
 	# A queued 103 from before this change carries no host and does not fire.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:resettlement_host is saved just before the call, and the caller excludes it; a filter
 		exists = scope:resettlement_host
 		NOT = { this = scope:resettlement_host }
 	}
@@ -3008,7 +3008,7 @@ un_events.21 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = international_trade
@@ -3112,7 +3112,7 @@ un_events.22 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = human_rights
@@ -3224,7 +3224,7 @@ un_events.23 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		has_game_rule = nuclear_weapons_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
@@ -3334,7 +3334,7 @@ un_events.37 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		un_charter_has_reform = { LEVEL = 1 }
@@ -3441,7 +3441,7 @@ un_events.38 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		has_game_rule = nuclear_weapons_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
@@ -3768,7 +3768,7 @@ un_events.33 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_regime_icc_note_crime's limit restates the trigger but for an immortal ruler, which never changes; cancels if the UN or the court is gone in the 30 days
 		has_global_variable = un_founded
 		has_global_variable = un_agency_icc
 		exists = ruler
@@ -3897,7 +3897,7 @@ un_events.34 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_regime_sovereignty_leave_check's limit restates the trigger (un_regime_sovereignty_demand); cancels if that lapses in the 30 days
 		has_global_variable = un_founded
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_tier_at_least_strong = yes
@@ -4023,7 +4023,7 @@ un_events.35 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers the loan to a member that passes un_docket_loan_candidate; cancels if a loan starts in the day
 		has_global_variable = un_founded
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_modifier = un_loan_repayment_modifier }
@@ -4258,7 +4258,7 @@ un_events.39 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_narcotics = yes
 		country_rank >= rank_value:major_power
@@ -4359,7 +4359,7 @@ un_events.40 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		has_game_rule = global_commons_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_antarctic = yes
@@ -4468,7 +4468,7 @@ un_events.41 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		sr_space_race_on = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_asat = yes
@@ -4574,7 +4574,7 @@ un_events.42 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		sr_colonies_full_enabled = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_colony_protection = yes

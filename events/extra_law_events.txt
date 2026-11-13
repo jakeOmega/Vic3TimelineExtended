@@ -2541,8 +2541,8 @@ extra_law_events.25 = {
 	}
 
 	after = {
-		trigger_event = { id = extra_law_events.26 days = 30 }
-		trigger_event = { id = extra_law_events.27 days = 60 }
+		trigger_event = { id = extra_law_events.91 days = 30 }
+		trigger_event = { id = extra_law_events.92 days = 60 }
 	}
 }
 
@@ -8400,5 +8400,35 @@ extra_law_events.90 = {
 		scope:intelligentsia_ig ?= {
 			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
 		}
+	}
+}
+
+# ======================================================================
+# 91, 92 – The language reform's delays (#1596)
+#
+#   .25 attaches its amendment in the option and queues .26 and .27 in
+#   `after`, on the same day. Whether a has_amendment read sees an
+#   amendment added that day is unverified, and a delayed event whose
+#   trigger is false when queued seems to be dropped
+#   (scripting_best_practices.md § "A Delayed `trigger_event` Re-Checks
+#   Its Trigger When It Fires"). So each delay is waited out in a hidden
+#   event with no trigger, which opens the popup when due; the popup's
+#   own trigger decides then.
+# ======================================================================
+extra_law_events.91 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = extra_law_events.26 }
+	}
+}
+
+extra_law_events.92 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = extra_law_events.27 }
 	}
 }

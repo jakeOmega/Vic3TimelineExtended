@@ -1300,7 +1300,7 @@ society_technology_events.14 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .32 picks a rival in its campaign (te_ea_ir_election_target) under the covert rule; cancels if the campaign ends in the three days
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:interfering_country
@@ -1701,7 +1701,7 @@ society_technology_events.18 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: sent on the first colony, sr_colony_count set before the call and neither charter modifier nor ste_event_18_fired present; cancels if the charter came another way
 		NOT = { has_modifier = ste_space_colony_national }
 		NOT = { has_modifier = ste_space_colony_international }
 		NOT = { has_variable = ste_event_18_fired }
@@ -3218,7 +3218,7 @@ society_technology_events.33 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:interference_target rides along from .32 through .14; a filter
 		exists = scope:interference_target
 	}
 
@@ -3250,7 +3250,7 @@ society_technology_events.34 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:telepathic_proposer is saved by .21 before its options; a filter
 		exists = scope:telepathic_proposer
 	}
 
@@ -3320,7 +3320,7 @@ society_technology_events.35 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:telepathic_partner is saved by .21 and rides along through .34; a filter
 		exists = scope:telepathic_partner
 	}
 

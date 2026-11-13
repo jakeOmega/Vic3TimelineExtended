@@ -1073,7 +1073,7 @@ un_vote.2 = {
 
 	# scope:un_resolution comes from un_resolution_open. A resolution the
 	# watchdog already lapsed, or a queued event from before containers, fails here.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_resolution_open creates the resolution with its un_res_voting tag before the call; cancels the result of a resolution closed early
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		scope:un_resolution ?= { has_tag = un_res_voting }
 	}
@@ -2766,7 +2766,7 @@ un_vote.6 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_resolution_open creates the resolution with its un_res_voting tag before the call; its immediate checks again, so a resolution closed early takes no last call
 		OR = {
 			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {
@@ -2779,15 +2779,21 @@ un_vote.6 = {
 	immediate = {
 		if = {
 			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
+			global_var:un_active_resolution ?= { save_scope_as = un_resolution }
 		}
-		scope:un_resolution = {
-			if = {
-				limit = { NOT = { has_variable = un_res_last_call } }
-				set_variable = un_res_last_call
+		# The trigger again (#1596): it was read when this was queued, 360
+		# days ago, and whether it is read again when due is unverified. A
+		# resolution closed in the meantime takes no last call.
+		if = {
+			limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			scope:un_resolution = {
+				if = {
+					limit = { NOT = { has_variable = un_res_last_call } }
+					set_variable = un_res_last_call
+				}
 			}
+			un_vote_refresh_leans = yes
 		}
-		un_vote_refresh_leans = yes
 	}
 }
 
@@ -2800,7 +2806,7 @@ un_vote.7 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_vote_refresh_leans runs while a resolution is voting; cancels if it closes overnight
 		OR = {
 			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {

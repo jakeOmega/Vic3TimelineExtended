@@ -73,7 +73,7 @@ te_tax.4 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_full = yes }
+	trigger = { te_tax_code_full = yes } # REVIEWED 2026-11-13 (delayed_trigger): the tax code's game rule, which every caller already runs under; a filter, not a wait
 
 	immediate = {
 		debug_log = "TE_TAX post-migration sync month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -135,7 +135,7 @@ te_tax.7 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_full = yes }
+	trigger = { te_tax_code_full = yes } # REVIEWED 2026-11-13 (delayed_trigger): the tax code's game rule, which every caller already runs under; a filter, not a wait
 
 	immediate = {
 		te_tax_customs_revalidate = yes
@@ -154,7 +154,7 @@ te_tax.8 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_ai_can_act = yes }
+	trigger = { te_tax_ai_can_act = yes } # REVIEWED 2026-11-13 (delayed_trigger): the dispatcher runs for an AI country under the full code, which holds the tax code law; a filter, not a wait
 
 	immediate = {
 		te_tax_ai_step = yes

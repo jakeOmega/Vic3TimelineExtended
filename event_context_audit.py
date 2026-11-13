@@ -112,6 +112,7 @@ FOREIGN_CHECKS = frozenset({
     "texture_reference",  # texture_reference_audit (an asset path's line in an event)
     "trigger_event_cycle",  # trigger_event_cycle_audit (a trigger_event line in an event)
     "tooltip_walk",  # tooltip_walk_variable_audit (a variable read line in an event option)
+    "delayed_trigger",  # delayed_event_trigger_audit (an event's `trigger = {` line)
 })
 
 # ---------------------------------------------------------------------------

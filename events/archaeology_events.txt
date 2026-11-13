@@ -772,7 +772,7 @@ arch_events.12 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the Grand Monuments rule, under which the treaty article queueing it exists; a filter
 		gm_system_enabled = yes
 	}
 
