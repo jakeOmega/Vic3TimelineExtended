@@ -6,7 +6,7 @@ Two faults, both read in the running game on 2026-11-13 (docs/testing/direct-con
   `apply_modifier = all:te_direct_construction_base_modifier`. The engine applies such a line by the rules the
   player last applied in a lobby on their machine, not by the rules of the save being played: a save whose rule
   said Enabled got the Disabled setting's modifier, and a save switched to no culture merges got the merges
-  setting's. So a direct game lost its 5 points once its player had set up any other game, and a market game
+  setting's. So a direct game lost its 5 points (10 since #1768) once its player had set up any other game, and a market game
   gained them. Script adds the modifier now (te_direct_construction_ensure_base), and no rule setting of the mod
   may carry an `apply_modifier` line.
 - **The conversion ran only when a game started.** A rule can be changed in a running game. A market game
@@ -31,6 +31,7 @@ BUILDINGS = ROOT / "common/buildings/te_construction_market_site.txt"
 SITE_BUILDER = ROOT / "common/scripted_effects/te_construction_market_build_effects.txt"
 SECTOR_BUILDER = ROOT / "common/scripted_effects/build_effects.txt"
 PLAYTEST = ROOT / "docs/testing/direct-construction-playtest.md"
+MODIFIERS = ROOT / "common/static_modifiers/te_construction_market_modifiers.txt"
 BASE = "te_direct_construction_base_modifier"
 SITE = "te_construction_market_site"
 SECTOR = "building_construction_sector"
@@ -116,6 +117,18 @@ class BaseConstructionTest(unittest.TestCase):
         # would leave every country the modifier, and nothing converts a game that never was a direct one.
         setup = body(self.effects, "te_direct_construction_country_setup")
         self.assertFalse(calls(setup, "te_direct_construction_ensure_base"))
+
+    def test_the_base_is_the_base_games_maximum_and_the_self_check_reads_it(self):
+        # #1768: vanilla's country_gdp_construction gives 10 at most (the mod empties it), so the direct game's
+        # flat base is 10. The self-check counts a holder under the base as under_base, so its threshold must be
+        # the modifier's own value: under the old 5 a threshold left at 5 would pass a base that gave half.
+        modifier = body(code(MODIFIERS), BASE)
+        value = re.search(r"\bcountry_construction_add\s*=\s*([\d.]+)", modifier)
+        self.assertIsNotNone(value)
+        self.assertEqual(float(value.group(1)), 10.0)
+        check = body(self.effects, "te_direct_construction_base_self_check")
+        thresholds = re.findall(r"modifier:country_construction_add\s*<\s*([\d.]+)", check)
+        self.assertEqual([float(t) for t in thresholds], [float(value.group(1))])
 
     def test_the_market_takes_it_away(self):
         remove = body(self.effects, "te_direct_construction_remove_base")

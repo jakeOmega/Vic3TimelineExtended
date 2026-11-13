@@ -318,7 +318,7 @@ te_direct_construction_forget_site_record = {
 	}
 }
 
-# Country scope. Base Construction (te_direct_construction_base_modifier, 5
+# Country scope. Base Construction (te_direct_construction_base_modifier, 10
 # points a week) for a country in a direct game: added at the conversion and
 # from the weekly pulse, which is what reaches a country made during play and a
 # revolution's winner (it inherits no modifiers). Never stacked: only a country
@@ -604,7 +604,7 @@ te_construction_market_follow_rule = {
 # Any scope, in a country's event, weekly in a direct game. Once for each time
 # the game becomes one, a week after its first weekly pass, so every country's
 # own pulse has had its turn: does every country hold Base Construction, and
-# does the engine give its holders the 5 points? Countries are counted with a
+# does the engine give its holders the 10 points? Countries are counted with a
 # capital and not decentralized. A country made in the last week has not had its
 # pulse yet, so the missing ones break the verdict only when they are more than
 # a tenth of the holders.
@@ -662,7 +662,7 @@ te_direct_construction_base_self_check = {
 					}
 					if = {
 						limit = {
-							modifier:country_construction_add < 5
+							modifier:country_construction_add < 10
 						}
 						change_global_variable = {
 							name = te_dc_check_under_base
@@ -683,10 +683,10 @@ te_direct_construction_base_self_check = {
 					global_var:te_dc_check_under_base = 0
 					te_dc_check_missing_tenfold <= global_var:te_dc_check_countries
 				}
-				debug_log = "TE_SELF_CHECK OK direct_base_construction holders=[THIS.ScriptValue('te_dc_check_countries')|0] under_base=[THIS.ScriptValue('te_dc_check_under_base')|0] missing=[THIS.ScriptValue('te_dc_check_missing')|0] (every country that holds Base Construction has its 5 points a week, and at most a few new countries are still without it) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK OK direct_base_construction holders=[THIS.ScriptValue('te_dc_check_countries')|0] under_base=[THIS.ScriptValue('te_dc_check_under_base')|0] missing=[THIS.ScriptValue('te_dc_check_missing')|0] (every country that holds Base Construction has its 10 points a week, and at most a few new countries are still without it) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN direct_base_construction holders=[THIS.ScriptValue('te_dc_check_countries')|0] under_base=[THIS.ScriptValue('te_dc_check_under_base')|0] missing=[THIS.ScriptValue('te_dc_check_missing')|0] (under_base: holders of Base Construction with under 5 construction a week, so the engine does not sum the modifier; missing: countries a week of pulses left without it, so te_direct_construction_ensure_base did not reach them; docs/testing/direct-construction-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN direct_base_construction holders=[THIS.ScriptValue('te_dc_check_countries')|0] under_base=[THIS.ScriptValue('te_dc_check_under_base')|0] missing=[THIS.ScriptValue('te_dc_check_missing')|0] (under_base: holders of Base Construction with under 10 construction a week, so the engine does not sum the modifier; missing: countries a week of pulses left without it, so te_direct_construction_ensure_base did not reach them; docs/testing/direct-construction-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			remove_global_variable = te_dc_check_countries
 			remove_global_variable = te_dc_check_under_base

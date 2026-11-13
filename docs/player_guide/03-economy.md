@@ -190,8 +190,8 @@ level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
 point your queues spend. Construction Sites are built from the Development tab
 of the production lens or from the state view.
-Every country also gets Base Construction, 5 points a week, so a country without
-any sites can still build its first one. If you change the rule in a running
+Every country also gets Base Construction, 10 points a week (the base game's
+maximum), so a country without any sites can still build its first one. If you change the rule in a running
 game, your Construction Sectors become Construction Sites of the same level
 within a day, and the other way when you switch it back. Either way the levels
 end up owned by the government, whoever owned them before. The construction panel

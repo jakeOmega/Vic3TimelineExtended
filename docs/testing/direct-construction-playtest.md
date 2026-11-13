@@ -70,6 +70,12 @@ points left. The weekly pass now cancels a sector under construction in a direct
 
 ## Live results with the fix (2026-11-13)
 
+**The base is 10 now (#1768, after these runs).** Every reading below was taken when Base Construction was 5 points a
+week, and they stand as read: the 5.0, 5.1, 5.2 and 5.4 figures are 5 plus a fraction of a site level, and a new game's
+countries read 5. On the current build the same rows should read 5 more (10.0, 10.2, 10.4, …; France 47.4 where it read 42.4: expected,
+not read), and the base self-check counts a holder under 10 as `under_base`. Nothing else in the runs depended on the
+figure.
+
 Every run loaded the branch's changed files as a variant mod beside the deployed build. Greece and France were played;
 a new game's rules were the owner's last applied (Free Market Construction Disabled).
 
@@ -112,7 +118,7 @@ Those hold with the script-owned base, which reaches a new country at its first 
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … direct_base_construction` | A direct game, once each time the game becomes one: a week after its first weekly pass | Every country that holds Base Construction has 5 construction a week or more, and at most a tenth as many countries are still without it (new ones that have not had a weekly pulse) | `under_base` above 0: the engine does not sum the modifier's `country_construction_add` for a holder. `missing` large: a week of pulses left countries without it | `under_base`: read `modifier:country_construction_add` for one holder in the harness; if a script-added country modifier's construction is not summed, give the points through the Construction Site instead (a free level in the capital). `missing`: `te_direct_construction_on_weekly_pulse` is not reaching those countries; read `te_construction_market_pulse_events.3` for one |
+| `TE_SELF_CHECK … direct_base_construction` | A direct game, once each time the game becomes one: a week after its first weekly pass | Every country that holds Base Construction has 10 construction a week or more (5 before #1768), and at most a tenth as many countries are still without it (new ones that have not had a weekly pulse) | `under_base` above 0: the engine does not sum the modifier's `country_construction_add` for a holder. `missing` large: a week of pulses left countries without it | `under_base`: read `modifier:country_construction_add` for one holder in the harness; if a script-added country modifier's construction is not summed, give the points through the Construction Site instead (a free level in the capital). `missing`: `te_direct_construction_on_weekly_pulse` is not reaching those countries; read `te_construction_market_pulse_events.3` for one |
 | `TE_SELF_CHECK … construction_rule_switch` | Once for each time the rule is changed in a running game, the day the buildings follow it | `to=direct`: as many sites stand as the switch should have made (`expected`), no Construction Sector is left, standing or under construction, and no site carries the market's capacity modifier. `to=market`: as many sectors stand as `expected`, and at least one. `capped` is the number of states whose levels the switch cut to what the builder can make (200 to a site, 100 back to a sector); it does not change the verdict | `to=direct` with `sites` under `expected`: `create_building` refused a site, and that state's sector levels are lost; with `sectors_left` or `market_modifiers_left` above 0: `te_direct_construction_convert_state` did not replace the buildings. `to=market` with `sectors` under `expected`: `te_direct_construction_revert_state_site` removed a site and its sector was refused | `to=direct`: check that `remove_building` still removes a site and a sector in one effect (it did on 2026-11-13); otherwise remove in one daily pass and build in the next. `to=market`: `extended_timeline_build_specified_building_level` refused the sector (`create_building` checks its technology and may check `can_build_government`); build it under the `te_cm_placing_site` pattern, with a global the sector's permission accepts |
 
 ## Still to look at in a game
@@ -126,7 +132,7 @@ The harness reads values and takes screenshots; these need a player.
    its four lines (`test_game_rule_desc_length.py`), where it used to tell the player to build from the state view. The
    construction panel's Direct Construction intro says the sites are built "from the Development tab of the
    Production Lens or from a state's view". A raw `$key$` or `[concept…]` in either is a splice that did not resolve.
-3. **The modifier a player sees.** The country's modifier list shows Base Construction (+5 construction), and the
+3. **The modifier a player sees.** The country's modifier list shows Base Construction (+10 construction), and the
    Nation tab's Economy section has a Construction row whose hover lists it. Neither appears in a market game.
 4. **A market game switched to Disabled, as its player.** The day after: the construction panel shows the Direct
    Construction section, each state that had a Construction Sector has a Construction Site of the same level on the
