@@ -25,6 +25,7 @@ from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
+from test_game_qa_overlay import PROFILER_GUI
 
 SNAP = "20261110T150000Z"
 FIXTURE_SNAP = "20261110T145500Z"
@@ -2768,6 +2769,46 @@ class FixtureKeyTest(SessionTestCase):
         self.assertEqual(session.run_playset("current", [OTHER_MOD_WIN, OVERLAY_WIN.upper()], DEPLOYED_WIN,
                                              OVERLAY_WIN), [OTHER_MOD_WIN, OVERLAY_WIN.upper()])
 
+
+
+class ProfilerWindowStartTest(SessionTestCase):
+    """#1710: `start` puts the game's profiler window, enlarged, into the overlay, or says why it did not."""
+
+    def install_profiler_gui(self, text: str) -> Path:
+        source = self.paths.base_game / overlay.PROFILER_GUI_SOURCE
+        source.parent.mkdir(parents=True, exist_ok=True)
+        source.write_bytes(text.encode("ascii"))
+        return source
+
+    def test_start_puts_the_enlarged_window_into_the_overlay(self):
+        source = self.install_profiler_gui(PROFILER_GUI)
+        reply = self.start()
+        written = self.paths.overlay_dir / overlay.PROFILER_GUI_FILE
+        self.assertEqual(reply["profiler_window"], {"enlarged": True, "source": str(source), "file": str(written)})
+        self.assertEqual(written.read_bytes(), overlay.enlarge_profiler_gui(PROFILER_GUI.encode("ascii")))
+        self.assertEqual(source.read_bytes(), PROFILER_GUI.encode("ascii"))         # the game's own is untouched
+
+    def test_the_window_does_not_remake_the_fresh_save(self):
+        # fixture.key hashes the overlay's path, never its files: the save made without the window is this run's.
+        self.install_profiler_gui(PROFILER_GUI)
+        reply = self.start()
+        self.assertTrue(reply["profiler_window"]["enlarged"])
+        self.assertFalse(reply["fixture_made"])
+        self.assertEqual(reply["save"], "te_qa_fixture_" + self.key)
+
+    def test_a_start_without_the_games_file_goes_on_without_it(self):
+        reply = self.start()                    # base_game holds no jomini/ folder here, as in CI
+        self.assertFalse(reply["profiler_window"]["enlarged"])
+        self.assertIn("could not be read", reply["profiler_window"]["why"])
+        self.assertFalse((self.paths.overlay_dir / "gui").exists())
+        self.assertEqual(reply["country"], "FRA")
+
+    def test_a_changed_game_file_is_left_out_and_said_so(self):
+        self.install_profiler_gui(PROFILER_GUI.replace("{ 0 150 }", "{ 0 180 }"))
+        reply = self.start()
+        self.assertFalse(reply["profiler_window"]["enlarged"])
+        self.assertIn("{ 0 150 }", reply["profiler_window"]["why"])
+        self.assertFalse((self.paths.overlay_dir / "gui").exists())
 
 class RunPlaysetPinTest(unittest.TestCase):
     """`session.run_playset` copies `launch`'s rule (`__main__._plan_playset`, which the session cannot import):

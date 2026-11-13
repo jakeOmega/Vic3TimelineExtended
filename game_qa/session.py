@@ -307,6 +307,7 @@ class Session:
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
+        self._profiler_window: dict = {"enlarged": False, "why": "the overlay has not been built"}
 
     # ---- start
 
@@ -380,11 +381,16 @@ class Session:
     def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
                busy: bool, switch_rules: dict[str, str] | None = None) -> dict:
         self._check_abort()
+        # The profiler window, enlarged (#1710): read from the game's install, never stops a start (`why` says).
+        gui, self._profiler_window = overlay.profiler_gui(self._paths.base_game)
         try:
-            self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version)
+            self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version, profiler_gui=gui)
         except overlay.OverlayError as e:
             raise SessionError("overlay_refused", str(e)) from e
-        self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
+        if self._overlay.profiler_gui is not None:
+            self._profiler_window = dict(self._profiler_window, file=str(self._overlay.profiler_gui))
+        self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events),
+                     profiler_window=self._profiler_window)
         save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {})
         self._save = save
         self._drop_fixture_lines()
@@ -465,6 +471,7 @@ class Session:
             result["fixtures_pruned"] = pruned
         if self._rules is not None:
             result["rules"] = self._rules
+        result["profiler_window"] = self._profiler_window
         self._record("start", outcome="ok", **result)
         return result
 
