@@ -437,19 +437,21 @@ s a day. A change to the simulation is therefore read with rendering off.
 
 **Sub-tick rendering.** The launch argument `-disable_renderframeifneeded`
 ("Sacrifice sub-tick rendering for tick speed" in the binary's own list) and
-the console switch `gamestatetick.renderframeifneeded` stop the game drawing
-frames while a tick is being worked out. Frames are otherwise drawn at about
-105 a second right through a tick (`measure_frame_time`: 9.7 ms average over
-3,656 frames of a running week, 7.9 ms the shortest, vsync on; 6.3 ms and 159
-a second with vsync off), and the tick waits for them. The tick tasks took the
-same time either way (607 and 590 ms a day against 569–619), so the time
-saved is all outside them. "Sub-tick rendering, on and off in one session"
+the console switch `gamestatetick.renderframeifneeded` stop the game
+breaking into a tick to draw. With the switch on, frames come at the full
+rate right through a tick (`measure_frame_time`: 9.7 ms average over 3,656
+frames of a running week, 7.9 ms the shortest, vsync on; 6.3 ms and 159 a
+second with vsync off), and the tick gives way to each. With it off, frames
+come between a tick's steps only. The tick tasks took the same time either
+way (607 and 590 ms a day against 569–619), so the time saved is all outside
+them. "Sub-tick rendering, on and off in one session"
 below has the size of it and what it costs on screen.
 
 **With rendering off, a day is about 0.98 s**: 0.59–0.61 s of tick tasks,
 about 0.10 s of the mod's on_actions (noact_r: 0.885 s against 0.975–1.000),
 and about 0.28 s that neither names (vanilla's own on_actions and events, the
-frames between ticks, and engine work that is in no task).
+frames between ticks, and engine work that is in no task). The mod's journal
+entries sit in both of the last two ("Journal entries" below).
 
 **The mod's on_actions are about a tenth of the simulation.** Emptying all 77
 on_action files (every monthly, yearly and event hook the mod adds) took 0.10
@@ -572,11 +574,13 @@ no faster) and `graphics.capframerate` (30 and 10 left the frame rate at 105).
 
 ### Sub-tick rendering, on and off in one session
 
-One session (`20261113T143905Z`) typed the console switch between 14-day
-blocks, three with rendering on and three with it off, reading "Enabled" or
-"Disabled" each time and measuring the frame time through each block. The
-weeks differ in how much the investment pass has to do, so the column to
-compare is the time outside the tick tasks.
+Two sessions typed the console switch between 14-day blocks, rendering on
+then off, reading "Enabled" or "Disabled" each time and measuring the frame
+time through each block: three pairs with the camera where the save opens,
+over open ocean (`20261113T143905Z`), and two with it moved over Malaya and
+Singapore at a playing zoom (`camera.settransform 6440 0 1560 300 55 0`;
+`20261113T144931Z`). The weeks differ in how much the investment pass has to
+do, so the column to compare is the time outside the tick tasks.
 
 | Block | Dates | Wall s/day | Tick tasks s/day | Outside the tasks | Average frame | Longest frame |
 |---|---|---|---|---|---|---|
@@ -586,12 +590,17 @@ compare is the time outside the tick tasks.
 | off | 16–30 August | 0.741 | 0.520 | 0.221 | 11.8 ms | 145 ms |
 | on | 30 August–13 September | 1.333 | 0.602 | 0.731 | 10.0 ms | 42 ms |
 | off | 13–27 September | 0.963 | 0.569 | 0.394 | 12.1 ms | 160 ms |
+| on, over Malaya | 3–17 July | 1.018 | 0.564 | 0.455 | 10.7 ms | 40 ms |
+| off, over Malaya | 17 July–1 August | 0.966 | 0.762 | 0.204 | 13.0 ms | 167 ms |
+| on, over Malaya | 1–15 August | 1.057 | 0.544 | 0.512 | 9.8 ms | 31 ms |
+| off, over Malaya | 15–30 August | 0.982 | 0.535 | 0.448 | 11.0 ms | 160 ms |
 
-- **Off is faster in every pair**, by 0.17, 0.54 and 0.34 s a day outside
-  the tasks: 13% to 40% of the day, about a quarter pooled (0.63 s a day
-  outside the tasks with rendering on, 0.28 with it off, on a day of about
-  1.2 s). The whole-run pairs agree: 1.447 and 1.266 s a day on against 0.975
-  and 1.000 off, 23–33%.
+- **Off is faster in every pair, by an amount that varies**: 0.17, 0.54,
+  0.34, 0.25 and 0.06 s a day outside the tasks. Pooled over the five pairs
+  that is 0.57 s a day outside the tasks with rendering on against 0.30 with
+  it off, on a day of about 1.14 s: about a quarter, with single pairs from
+  6% to 40%. The whole-run pairs agree: 1.447 and 1.266 s a day on against
+  0.975 and 1.000 off, 23–33%.
 - **What it costs on screen is small.** The game still draws between a
   tick's steps: the average frame went from 10 to 12–13 ms (97 to about 80 a
   second, pauses included) and the longest wait for a frame from about 40 ms
@@ -603,15 +612,18 @@ compare is the time outside the tick tasks.
   the later "on" blocks ran 0.7–0.8 s a day outside the tasks. What makes a
   frame dear at one time and cheap at another was not found; it is not the
   mod's interface (guivan).
-- **The harness's window is a light one**: the HUD over open ocean, no panel
-  open. The owner's own play of the same two months ran at 1.9 s a day
-  (`dedicated_server.1.log`, "Measurements, 2026-11-12"), against 1.27–1.45
-  here with rendering on and 0.98 with it off, so in real play more of the
-  day is frames and the saving is likely larger. That is for the owner to
-  try: type `gamestatetick.renderframeifneeded` in the console (it answers
-  "Disabled"; typing it again turns it back on; it lasts until the game is
-  closed), or add `-disable_renderframeifneeded` to the game's launch
-  options.
+- **The view is not what makes a frame dear.** Over Malaya, with land,
+  cities, borders and names on screen, frames took what they took over open
+  ocean (9.8–10.7 ms), and rendering cost no more.
+- **In the owner's own play the same two months ran at 1.9 s a day**
+  (`dedicated_server.1.log`, "Measurements, 2026-11-12"), against 1.0–1.45
+  here with rendering on and 0.98 with it off. What makes real play slower
+  than the harness is not known (panels, tooltips and notifications are
+  candidates; the view is not), so what the switch saves there is for the
+  owner to measure: type `gamestatetick.renderframeifneeded` in the console
+  (it answers "Disabled"; typing it again turns it back on; it lasts until
+  the game is closed), or add `-disable_renderframeifneeded` to the game's
+  launch options.
 - **A mod widget can flip the switch.** A scripted widget whose state runs
   `[ExecuteConsoleCommand('popstat')]` twenty seconds after the HUD appears
   (`trigger_on_create = yes`; a `_show` state did not fire) ran the command:
