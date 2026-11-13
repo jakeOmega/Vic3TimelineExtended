@@ -728,6 +728,8 @@ Allows monarchies to shape their heir's education through active focus choices. 
 Simulates an intergovernmental organization with membership, authority, Security Council mechanics, and specialized agencies. Visible when any country has Intergovernmental Organizations tech OR the UN has been founded.
 
 ### Founding Process
+**Early unlock** (`united_nations_rule`'s `united_nations_early_unlock`, 2026-11-13): founding and the entry also open at Multilateral Alliances (`un_founding_tech_reached`), and until some country has Intergovernmental Organizations (`un_igo_age`) the organisation is a league whose charter can't be reformed (`un_league_stage` in `un_charter_reform_ripe`). `mod_systems/game_rules.md` § Early and late unlock.
+
 The UN must be actively founded by a Great Power with Intergovernmental Organizations tech via the `un_found_button`. Founding costs 500 influence, fading over five years (`un_founding_cost_modifier`, gated by `un_found_influence_cost`; 2026-10-12, the price of a power bloc). The founder becomes the first member, hosts the HQ, and gains a permanent Security Council seat + `un_founding_member_modifier`. Sets `un_founded` global variable. After founding, any country that conducts its own foreign policy can join (no tech requirement): an independent country, or a dominion, protectorate or tributary (`un_membership_eligible`, `common/scripted_triggers/un_membership_triggers.txt`).
 
 **Membership and representation** ([`un_redesign_design.md` §0.8](un_redesign_design.md#08-subjects-diplomatic-autonomy-and-suspended-representation)):
@@ -1716,7 +1718,7 @@ Each category uses select/deselect toggle pairs.
 Models a World War lifecycle from rising tensions through active total war to post-war resolution. Great powers track ideological tensions, war phases, and post-war cleanup.
 
 ### Key Mechanics
-- **Trigger:** Combined Arms tech + Great Power + no `ww_fully_resolved` + no `ww_entry_resolved`
+- **Trigger:** Combined Arms tech + Great Power + no `ww_fully_resolved` + no `ww_entry_resolved`. The technology is `ww_era_reached`: under `world_war_rule`'s early unlock also Trench Works, with democratic-against-authoritarian opposition until Combined Arms and a second entry after it (`ww_early_war_resolved`); `mod_systems/game_rules.md` § Early and late unlock
 - **3 phases:** Leadup → Active War → Post-War
 - **Leadup tension tiers:** simmering → rising (30+) → high (50+) → crisis (70+)
 - **War duration tracking:** Months counter → years elapsed

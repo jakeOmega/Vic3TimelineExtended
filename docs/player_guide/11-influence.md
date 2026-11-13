@@ -13,8 +13,9 @@ Hegemony and Covert Warfare, and both are on by default.
 The game scores every country's cultural pull from the first day of the
 campaign, but the Cultural Hegemony journal entry and everything it does wait
 until some country in the world has researched Mass Media (an era 6 society
-technology) and you have Romanticism. Until then the scores run in the
-background and have no effect. The entry never completes. Before it opens, the
+technology) and you have Romanticism. With the game rule set to *Early
+Unlock*, the Electric Telegraph (era 3) takes Mass Media's place. Until then
+the scores run in the background and have no effect. The entry never completes. Before it opens, the
 entry shows only your tier and cultural share; after that, its panels show the
 rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 
@@ -185,7 +186,7 @@ at the next monthly update.
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
 | Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
-| International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
+| International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media (the Electric Telegraph under *Early Unlock*). | The weekly cost of one funding step. |
 | Cultural Institutes | Fund / Defund | +10% pull. | 150 influence. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | 200 influence. |
 | Cultural Protectionism | Enact / End | +10% pull, +100 authority. | −5% society research speed, −10% mass migration attraction. |
@@ -231,6 +232,16 @@ Ministry of Intelligence and Security Established law (unlocked by Mass
 Surveillance), whose institution adds a slot per level. Computer Networks,
 Cyber Warfare and Quantum Computing add a slot each and open it too. Once
 active, the entry stays open. It never completes.
+
+With the game rule set to *Early Unlock*, the entry opens with the era 2
+technology Central Archives instead, a nineteenth-century police and
+intelligence service. Until you reach one of the sources above, funding stops
+at Professional, and you can launch only the operations that need no later
+technology: industrial and military espionage, cultivating assets,
+counterintelligence support and, at war, infrastructure sabotage. Once you
+reach one, the agency works as it does under *Late Unlock*. Switching the rule
+from early to late closes an entry opened early, which comes back when you
+reach a source.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name, which is also its name on your rows.

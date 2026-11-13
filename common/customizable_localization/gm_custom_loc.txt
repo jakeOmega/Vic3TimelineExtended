@@ -3795,7 +3795,7 @@ gm_policy_effects = {
 	}
 	# Cultural Promotion: pull with Cultural Hegemony on, prestige with it off.
 	text = {
-		trigger = { has_game_rule = cultural_hegemony_enabled }
+		trigger = { te_cultural_hegemony_on = yes }
 		localization_key = gm_policy_effects_culture
 	}
 	text = {

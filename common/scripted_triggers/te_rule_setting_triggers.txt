@@ -1,0 +1,83 @@
+﻿# ============================================================================
+# Game rules with an early and a late unlock
+# ============================================================================
+# Each of these rules has three settings: early unlock, late unlock and off
+# (docs/systems/mod_systems/game_rules.md). Late unlock is the system as it
+# was and keeps its old name (<system>_enabled), so a save made before the
+# early setting existed keeps it.
+#
+# Every setting has one flag, named after it. Whether has_game_rule reads a
+# second flag on a setting has never been checked (vanilla's own reads name a
+# setting, allow_monument_effects, whose flags are all disable_pm_*), so the
+# early setting does not borrow the late one's name. Script reads the rule
+# through these triggers, never a bare has_game_rule = <system>_enabled,
+# which would now mean the late setting alone. test_rule_unlock_settings.py
+# fails on a bare one.
+#
+# They read only a game rule, so they work from any scope: country, journal
+# entry, diplomatic action, scripted GUI, customizable localization.
+# ============================================================================
+
+# ---- Covert Warfare (covert_warfare_rule) ----
+# The system runs: either unlock.
+te_covert_warfare_on = {
+	OR = {
+		has_game_rule = covert_warfare_enabled
+		has_game_rule = covert_warfare_early_unlock
+	}
+}
+
+# The early unlock: the agency opens at Central Archives with a limited
+# budget (covert_agency_limited, covert_warfare_triggers.txt).
+te_covert_warfare_early = {
+	has_game_rule = covert_warfare_early_unlock
+}
+
+# ---- World War (world_war_rule) ----
+# The system runs: either unlock.
+te_world_war_on = {
+	OR = {
+		has_game_rule = world_war_enabled
+		has_game_rule = world_war_early_unlock
+	}
+}
+
+# The early unlock: the entry opens at Trench Works, and liberal and autocratic
+# great powers count as opposed until Combined Arms (ww_era_reached,
+# country_has_opposed_ideology, world_war_triggers.txt).
+te_world_war_early = {
+	has_game_rule = world_war_early_unlock
+}
+
+# ---- United Nations (united_nations_rule) ----
+# The system runs: either unlock.
+te_united_nations_on = {
+	OR = {
+		has_game_rule = united_nations_enabled
+		has_game_rule = united_nations_early_unlock
+	}
+}
+
+# The early unlock: a great power can found the organisation at Multilateral
+# Alliances, and until some country has Intergovernmental Organizations it is
+# a league that can't reform its charter (un_founding_tech_reached,
+# un_league_stage, un_membership_triggers.txt).
+te_united_nations_early = {
+	has_game_rule = united_nations_early_unlock
+}
+
+# ---- Cultural Hegemony (cultural_hegemony_rule) ----
+# The system runs: either unlock.
+te_cultural_hegemony_on = {
+	OR = {
+		has_game_rule = cultural_hegemony_enabled
+		has_game_rule = cultural_hegemony_early_unlock
+	}
+}
+
+# The early unlock: the entry opens once some country has the Electric
+# Telegraph, in place of Mass Media (ch_late_gate_met, ch_entry_unlocked,
+# cultural_hegemony_triggers.txt).
+te_cultural_hegemony_early = {
+	has_game_rule = cultural_hegemony_early_unlock
+}

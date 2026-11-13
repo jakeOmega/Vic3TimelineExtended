@@ -2349,6 +2349,7 @@
  je_un_auth_powers_underminers:0 "#R Undermining the order#!"
  je_un_auth_reform_clock:0 "#bold Next charter reform:#! authority at #v [THIS.ScriptValue('un_charter_reform_threshold')|0]#!+ for #v [THIS.ScriptValue('un_disp_charter_pressure_months')|0]#! / #v [THIS.ScriptValue('un_charter_reform_months_needed')|0]#! months"
  je_un_auth_reform_cooldown:0 "#bold Next charter reform:#! may be tabled in #v [THIS.ScriptValue('un_reform_cooldown_months_left')|0]#! months (one came before the Assembly within five years)."
+ je_un_auth_reform_league:0 "#bold No charter reform yet:#! the organization was founded early, and its charter can be reformed only once some country has researched $intergovernmental_organizations$"
  je_un_auth_reform_ripe:0 "#G Charter Reform [THIS.ScriptValue('un_charter_next_stage')|0] can be tabled#! under Propose a Resolution, in the General Assembly: two thirds of all members, no [concept_un_veto], and any member of [concept_major_power] rank or above may table it."
  je_un_auth_saviour_champion:0 "#G Could champion the order#! — [THIS.GetCountry.GetName]: target #G +[THIS.ScriptValue('un_crisis_rescue_gain')|1]#!"
  je_un_auth_saviour_join:0 "#G Could join#! — [THIS.GetCountry.GetName], outside the UN: target #G +[THIS.ScriptValue('un_crisis_rescue_gain')|1]#! by joining"

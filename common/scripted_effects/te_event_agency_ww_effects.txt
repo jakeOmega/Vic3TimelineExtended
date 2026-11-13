@@ -65,6 +65,25 @@ ww_stop_for_rule = {
 	ww_clear_outcome_latches = yes
 }
 
+# Country scope, from je_world_war's completion and failure outcomes: the
+# entry is done for this country. Under the late unlock, for good
+# (ww_entry_resolved). A world war fought under the early unlock before
+# Combined Arms was the first of two: ww_early_war_resolved holds the entry
+# until Combined Arms (ww_resting_after_early_war), and
+# world_war_events_on_action then adds it back for the next one.
+ww_mark_entry_resolved = {
+	if = {
+		limit = {
+			te_world_war_early = yes
+			NOT = { has_technology_researched = combined_arms }
+		}
+		set_variable = ww_early_war_resolved
+	}
+	else = {
+		set_variable = ww_entry_resolved
+	}
+}
+
 # Country scope. The diplomatic play that was meant to start the world war ended
 # without a war (a side backed down, or the play never formed): this country is
 # no longer a belligerent, and the singleton guard in world_war_conditions_met

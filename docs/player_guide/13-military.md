@@ -270,6 +270,13 @@ Combined Arms, present only when the World War game rule is enabled. It follows
 the hostility between great powers of opposed ideologies through a leadup, a
 world war and three post-war years, and it fails if you drop below great power.
 
+With the game rule set to *Early Unlock*, it opens with Trench Works (era 4)
+instead, and until Combined Arms a democratic great power and an authoritarian
+one also count as opposed, as the powers of 1914 did. A great power whose
+world war ends before it has Combined Arms gets the entry again once it does,
+for a second one. Switching the rule from early to late closes the entry of a
+great power without Combined Arms until it researches it.
+
 <!-- screenshot: The Gathering Storm journal entry at high tension, with the Begin Rearmament and Provide Lend-Lease buttons -->
 
 ### Ideological camps
@@ -277,7 +284,9 @@ world war and three post-war years, and it fails if you drop below great power.
 The entry sorts countries into camps by their laws, and its status shows your
 own camp on a second line (Non-Aligned when you are in none). Democratic opposes
 communist and fascist, and communist opposes fascist. Authoritarian countries,
-and those in no camp, oppose nobody, so their entry stays inactive.
+and those in no camp, oppose nobody, so their entry stays inactive, except under
+*Early Unlock*, where democratic and authoritarian oppose each other while
+neither has Combined Arms.
 
 | Camp | Laws |
 |---|---|

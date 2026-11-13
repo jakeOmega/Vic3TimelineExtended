@@ -50,12 +50,23 @@ un_global_authority_on_action = {
 		# nothing below runs, so neither the ladder's decline nor a founding
 		# conference can act on a UN the rule has done away with.
 		if = {
-			limit = { NOT = { has_game_rule = united_nations_enabled } }
+			limit = { NOT = { te_united_nations_on = yes } }
 			un_stop_for_rule = yes
+		}
+		# The age of Intergovernmental Organizations: ends the early unlock's
+		# league stage (un_league_stage). Set under either unlock, so a switch
+		# to the early one later finds it.
+		if = {
+			limit = {
+				te_united_nations_on = yes
+				NOT = { has_global_variable = un_igo_age }
+				any_country = { has_technology_researched = intergovernmental_organizations }
+			}
+			set_global_variable = un_igo_age
 		}
 		if = {
 			limit = {
-				has_game_rule = united_nations_enabled
+				te_united_nations_on = yes
 				has_global_variable = un_founded
 			}
 
@@ -141,7 +152,7 @@ un_global_authority_on_action = {
 		# while the UN is Moribund or dissolved, and a founding conference for a
 		# new UN ages toward its founding. Only with the rule.
 		if = {
-			limit = { has_game_rule = united_nations_enabled }
+			limit = { te_united_nations_on = yes }
 			un_ladder_bloc_vacuum_update = yes
 			un_conference_monthly_update = yes
 

@@ -412,7 +412,11 @@ un_propose_reform_possible = {
 	}
 	custom_tooltip = {
 		text = un_charter_reform_ripe_tt
-		un_charter_reform_ripe = yes
+		un_charter_pressure_met = yes
+	}
+	custom_tooltip = {
+		text = un_charter_league_tt
+		NOT = { un_league_stage = yes }
 	}
 	NOT = { has_modifier = un_ga_resolution_modifier }
 	NOT = { has_modifier = un_request_cooldown }
