@@ -1629,12 +1629,14 @@ class FakeSelectEventOptionTest(unittest.TestCase):
         self.assertEqual(self.answer("select_event_option 2 2684354595"), (["Selected option 2 of un_events.4"], []))
         self.assertEqual((self.picked, self.game.pending_events), ([("un_events.4", 2)], [[10, "x.1", 2]]))
 
-    def test_read_as_signed_an_id_above_two_to_the_31st_matches_only_in_its_signed_form(self):
-        self.game.signed_event_ids = True
+    def test_with_high_ids_refused_no_typed_form_reaches_an_id_above_two_to_the_31st(self):
+        # As live, 2026-11-13: the listed id and its signed form both answered NO_MATCH.
+        self.game.high_ids_refused = True
         self.assertEqual(self.answer("select_event_option 0 2684354595"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 0 -1610612701"), ([], [fakes.NO_MATCH]))
         self.assertEqual(self.answer("select_event_option 0 2147483647"), ([], [fakes.NO_MATCH]))
         self.assertEqual(self.answer("select_event_option 1 10"), (["Selected option 1 of x.1"], []))
-        self.assertEqual(self.answer("select_event_option 0 -1610612701"), (["Selected option 0 of un_events.4"], []))
+        self.assertEqual(self.answer("select_event_option 0"), (["Selected option 0 of un_events.4"], []))
         self.assertEqual(self.game.pending_events, [])
 
     def test_no_id_picks_the_oldest(self):

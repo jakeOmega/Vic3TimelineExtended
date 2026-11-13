@@ -1431,7 +1431,7 @@ class PickTest(SessionTestCase):
     def test_one_pending_event_is_picked_with_no_id(self):
         self.started()
         self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8]]
-        self.game.signed_event_ids = True       # the id would not match as listed: no id needs none
+        self.game.high_ids_refused = True       # the id would not match as listed: no id needs none
         result = self.session.pick(5, "te_debug_ch.1")
         self.assertEqual(self.selects(), ["select_event_option 5"])
         self.assertEqual((result["form"], result["command"], result["numeric_id"], result["event"]),
@@ -1451,58 +1451,75 @@ class PickTest(SessionTestCase):
         self.assertEqual(self.session.events(), [logtail.Pending(10, "x.1", 3)])
         self.assertEqual(self.session.pick(2)["form"], "no_id")     # one left: no id
 
-    def test_a_high_id_the_game_answers_no_match_is_sent_again_in_its_signed_form(self):
+    def test_a_high_id_that_is_the_oldest_pending_is_picked_with_no_id(self):
+        # Live, 2026-11-13: un_events.4 at 2684354595 beside te_debug_ch.1 at 3456106516; the listed id and its
+        # signed form both answered NO_MATCH, and `select_event_option 0` picked un_events.4, first and lowest.
         self.started()
         self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
-        self.game.signed_event_ids = True
+        self.game.high_ids_refused = True
         result = self.session.pick(0, "un_events.4")
-        self.assertEqual(self.selects(), ["select_event_option 0 2684354595", "select_event_option 0 -1610612701"])
-        self.assertEqual((result["form"], result["command"]), ("signed", "select_event_option 0 -1610612701"))
-        self.assertEqual([(a["form"], a["reply"]) for a in result["attempts"]],
-                         [("id", ["No matching pending event"]), ("signed", ["Selected option 0 of un_events.4"])])
+        self.assertEqual(self.selects(), ["select_event_option 0"])
+        self.assertEqual((result["form"], result["command"]), ("oldest", "select_event_option 0"))
+        self.assertEqual(result["attempts"], [{"form": "oldest", "command": "select_event_option 0",
+                                               "reply": ["Selected option 0 of un_events.4"]}])
         self.assertEqual(self.session.events(), [logtail.Pending(HIGH_CH, "te_debug_ch.1", 8)])
         [step] = self.pick_steps()
-        self.assertEqual((step["outcome"], step["form"], len(step["attempts"])), ("ok", "signed", 2))
+        self.assertEqual((step["outcome"], step["form"], len(step["attempts"])), ("ok", "oldest", 1))
+        self.assertEqual(self.session.pick(5)["form"], "no_id")        # one left: no id
 
-    def test_a_high_id_the_game_matches_as_listed_goes_once(self):
+    def test_a_high_id_that_is_not_the_oldest_is_refused_with_nothing_sent(self):
         self.started()
         self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
-        result = self.session.pick(2, "te_debug_ch.1")              # the fake's default: an id matches as typed
-        self.assertEqual(self.selects(), ["select_event_option 2 3959422997"])
-        self.assertEqual((result["form"], len(result["attempts"])), ("id", 1))
-
-    def test_a_signed_form_that_fails_too_is_refused_with_both_answers(self):
-        self.started()
-        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
-        self.game.signed_event_ids = True
-        self.game.on("select_event_option 0 -1610612701", failure=["No matching pending event"])
-        error = self.session_error(self.session.pick, 0, "un_events.4")
-        self.assertEqual(error.code, "not_selected")
-        self.assertEqual(self.selects(), ["select_event_option 0 2684354595", "select_event_option 0 -1610612701"])
-        self.assertIn("'select_event_option 0 2684354595' answered ['No matching pending event']", error.detail)
-        self.assertIn("'select_event_option 0 -1610612701' answered ['No matching pending event']", error.detail)
-        self.assertEqual((error.info["form"], len(error.info["attempts"])), ("signed", 2))
-        self.assertEqual(len(self.game.pending_events), 2)         # nothing was picked
+        self.game.high_ids_refused = True
+        error = self.session_error(self.session.pick, 2, "te_debug_ch.1")
+        self.assertEqual(error.code, "id_unaddressable")
+        self.assertEqual(self.selects(), [])
+        self.assertIn("2^31 - 1", error.detail)
+        self.assertIn("2684354595 un_events.4, 3959422997 te_debug_ch.1", error.detail)
+        self.assertEqual([p["event_id"] for p in error.info["pending"]], ["un_events.4", "te_debug_ch.1"])
+        self.assertEqual(len(self.game.pending_events), 2)
         [step] = self.pick_steps()
-        self.assertEqual((step["outcome"], step["form"], len(step["attempts"])), ("not_selected", "signed", 2))
-        self.assertEqual(server.refusal(error)["attempts"], error.info["attempts"])
+        self.assertEqual(step["outcome"], "id_unaddressable")
+        self.assertEqual((server.refusal(error)["refused"], len(server.refusal(error)["pending"])), ("id_unaddressable", 2))
 
-    def test_only_no_match_lets_the_signed_form_go(self):
-        # Any other answer may have picked something: nothing more is sent.
+    def test_a_high_id_first_in_the_list_but_not_the_lowest_is_refused(self):
+        # The two orders were seen to agree; where they do not, which one a select with no id takes is unknown.
         self.started()
-        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
-        self.game.signed_event_ids = True
-        self.game.on("select_event_option 0 2684354595", success=["Something else happened"])
-        error = self.session_error(self.session.pick, 0, "un_events.4")
-        self.assertEqual((error.code, error.info["form"]), ("not_selected", "id"))
-        self.assertEqual(self.selects(), ["select_event_option 0 2684354595"])
+        self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8], [12, "y.1", 2]]
+        error = self.session_error(self.session.pick, 0, "te_debug_ch.1")
+        self.assertEqual(error.code, "id_unaddressable")
+        self.assertEqual(self.selects(), [])
 
-    def test_an_id_up_to_two_to_the_31st_less_one_has_no_signed_form(self):
+    def test_a_high_id_lowest_but_not_first_in_the_list_is_refused(self):
+        self.started()
+        self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8], [HIGH_UN, "un_events.4", 3]]
+        self.assertEqual(self.session_error(self.session.pick, 0, "un_events.4").code, "id_unaddressable")
+        self.assertEqual(self.selects(), [])
+
+    def test_a_low_id_beside_a_high_one_still_goes_by_id(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [12, "y.1", 2]]
+        self.game.high_ids_refused = True
+        result = self.session.pick(1, "y.1")
+        self.assertEqual(self.selects(), ["select_event_option 1 12"])
+        self.assertEqual(result["form"], "id")
+
+    def test_an_id_of_two_to_the_31st_less_one_goes_by_id_once(self):
         self.started()
         self.game.pending_events = [[session.INT32_MAX, "x.1", 2], [12, "y.1", 2]]
         self.game.on("select_event_option 0 2147483647", failure=["No matching pending event"])
-        self.assertEqual(self.session_error(self.session.pick, 0, "x.1").code, "not_selected")
+        error = self.session_error(self.session.pick, 0, "x.1")
+        self.assertEqual((error.code, error.info["form"]), ("not_selected", "id"))
         self.assertEqual(self.selects(), ["select_event_option 0 2147483647"])
+
+    def test_a_refused_oldest_pick_sends_nothing_more(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.on("select_event_option 0", failure=["No matching pending event"])
+        error = self.session_error(self.session.pick, 0, "un_events.4")
+        self.assertEqual((error.code, error.info["form"], len(error.info["attempts"])), ("not_selected", "oldest", 1))
+        self.assertEqual(self.selects(), ["select_event_option 0"])
+        self.assertEqual(server.refusal(error)["attempts"], error.info["attempts"])
 
     def test_a_no_id_pick_the_game_refuses_sends_nothing_more(self):
         self.started()
@@ -2033,18 +2050,28 @@ class TryEventTest(SessionTestCase):
         self.assertIn("## try-event x.1", summary)
         self.assertIn("| 1 | yes | c:FRA.infamy = 10 | c:FRA.infamy = 20 | option 1 | 0 |", summary)
 
-    def test_a_high_id_beside_another_pending_event_is_picked_by_its_signed_form(self):
-        # try-event picks through `pick`: with the game's own event pending too, each option goes by id (#1722).
+    def test_a_high_id_beside_an_older_pending_event_is_refused_before_anything_is_sent(self):
+        # try-event picks through `pick`: with an older event of the game's own pending, a high id cannot be
+        # reached (#1722), and the first option stops there.
         self.started()
-        self.game.signed_event_ids = True
+        self.game.high_ids_refused = True
         self.events.next_id = HIGH_UN
         self.game.pending_events.append([5, "y.1", 1])
+        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
+        self.assertEqual(error.code, "id_unaddressable")
+        [row] = error.info["options"]
+        self.assertEqual((row["fired"], row["picked"]), (True, None))
+        self.assertEqual([c for c in self.commands() if c.startswith("select_event_option ")
+                          and c != "select_event_option list"], [])
+        self.assertEqual(len(self.game.pending_events), 2)
+
+    def test_a_high_id_that_is_the_oldest_pending_goes_with_no_id_in_try_event(self):
+        self.started()
+        self.game.high_ids_refused = True
+        self.events.next_id = HIGH_UN
         reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
         self.assertTrue(reply["complete"])
-        self.assertEqual([(r["picked"]["form"], r["picked"]["numeric_id"]) for r in reply["options"]],
-                         [("signed", HIGH_UN), ("signed", HIGH_UN + 1), ("signed", HIGH_UN + 2)])
-        self.assertEqual([r["after"][0]["raw"] for r in reply["options"]], ["10", "20", "30"])
-        self.assertEqual(self.game.pending_events, [[5, "y.1", 1]])
+        self.assertEqual([r["picked"]["form"] for r in reply["options"]], ["no_id"] * 3)
 
     def test_the_setup_runs_before_each_option(self):
         reply = self.started(setups={"border": "set_variable = te_x"})

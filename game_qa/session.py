@@ -68,11 +68,13 @@ FIRE_COMMAND = "event %s"               # console `event` fires whatever the tri
 READ_PREFIX = "TE_QA read "
 PENDING_COMMAND = "select_event_option list"
 NO_PENDING = "No pending events"
-# pick's three forms (#1722, #1732). No id picks the oldest pending event: with one pending, that one (spec § 3.2,
+# pick's forms (#1722, #1732). No id picks the oldest pending event: with one pending, that one (spec § 3.2,
 # verified in an entered game, 2026-11-10). By the id as listed, picks worked for ids up to 50331663 and failed,
-# NO_MATCH, for 2684354595 and 3959422997 (live, 2026-11-12): both above 2^31 - 1. The likely cause, unverified,
-# is that the console reads the id as a signed 32-bit integer and saturates (a wrap would have kept the bits and
-# matched), so such an id is tried once more by its signed form, id - 2^32.
+# NO_MATCH, for 2684354595 and 3959422997 (live, 2026-11-12): both above 2^31 - 1. Live on 2026-11-13 (1931 save,
+# un_events.4 at 2684354595 beside te_debug_ch.1 at 3456106516): its signed form (id - 2^32) answered NO_MATCH
+# too, so no typed form reaches such an id; with no id the select picked un_events.4, the first listed and the
+# lowest id. So an id above 2^31 - 1 is picked with no id when it is the oldest pending event, and refused
+# (`id_unaddressable`) otherwise, with nothing sent.
 SELECT_NO_ID = "select_event_option %d"
 SELECT_BY_ID = "select_event_option %d %d"
 NO_MATCH = "No matching pending event"
@@ -177,7 +179,7 @@ class SessionError(Exception):
     held_unknown, overlay_refused, fixture_failed, snapshot_refused, launch_refused (with `game_may_be_up` when a
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
-    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
+    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, id_unaddressable, no_country,
     not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
@@ -975,12 +977,14 @@ class Session:
         The command has one of three forms, named by `form` in the reply and in the step:
 
             no_id   exactly one event is pending in the list just read: `select_event_option <index>`
-            id      otherwise: `select_event_option <index> <numeric id>`, the id as the list printed it
-            signed  an id above 2^31 - 1 that the game answered NO_MATCH by its listed form, sent once more as
-                    its signed 32-bit form (id - 2^32); NO_MATCH again is not_selected with both answers
+            id      an id up to 2^31 - 1: `select_event_option <index> <numeric id>`, the id as the list printed it
+            oldest  an id above 2^31 - 1, which no typed form reaches (live, 2026-11-13: the listed form and its
+                    signed form both answered NO_MATCH), when the event is the oldest pending one (first in the
+                    list and the lowest id, the two orders the game was seen to share): `select_event_option
+                    <index>`, as for no_id
 
-        Only an answer of exactly NO_MATCH, which picked nothing, lets the signed form go out; any other answer,
-        or a console error, sends nothing more. `attempts` lists each command sent and its answer.
+        Any other event with an id above 2^31 - 1 is refused `id_unaddressable` before anything is sent: answer
+        the events before it first. One command goes out; `attempts` lists it with its answer.
 
         Each form must be answered `Selected option <index> of <event id>`, or the verb is not_selected. What
         that check does not guard: the pending list can change between the list and the select. The game is
@@ -1013,13 +1017,19 @@ class Session:
             out["attempts"] = attempts          # recorded in the step however the verb ends
             if len(pending) == 1:
                 form, command = "no_id", SELECT_NO_ID % index
-            else:
+            elif chosen.numeric_id <= INT32_MAX:
                 form, command = "id", SELECT_BY_ID % (index, chosen.numeric_id)
+            elif chosen is pending[0] and chosen is min(pending, key=lambda p: p.numeric_id):
+                form, command = "oldest", SELECT_NO_ID % index
+            else:
+                raise SessionError(
+                    "id_unaddressable", "%s's numeric id %d is above 2^31 - 1, which the console does not take in "
+                    "any typed form (live, 2026-11-13), and it is not the oldest pending event, which a select with "
+                    "no id picks; nothing was sent. Answer the events before it first, oldest first; pending: %s"
+                    % (chosen.event_id, chosen.numeric_id,
+                       ", ".join("%d %s" % (p.numeric_id, p.event_id) for p in pending)),
+                    pending=[asdict(p) for p in pending])
             lines = self._select(form, command, attempts, out)
-            if (not _selected(lines, index, chosen.event_id) and form == "id" and INT32_MAX < chosen.numeric_id < 2 ** 32
-                    and [line.strip() for line in lines] == [NO_MATCH]):
-                form, command = "signed", SELECT_BY_ID % (index, chosen.numeric_id - 2 ** 32)
-                lines = self._select(form, command, attempts, out)
             if not _selected(lines, index, chosen.event_id):
                 raise SessionError("not_selected", "; ".join("%r answered %r" % (a["command"], a["reply"])
                                                              for a in attempts),

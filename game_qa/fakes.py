@@ -276,9 +276,8 @@ class FakeHelper:
     `<index>` picks the oldest; `<index> <id>` picks the one with that id, else answers NO_MATCH (a failure
     line, as live). A reply given to `on` for the very text still wins over the fake's own. A pick
     answers `Selected option <index> of <event>`, takes the event off the list and calls `on_selected` with
-    (event id, index). With `signed_event_ids` the typed id is read as a signed 32-bit integer, saturating
-    (the likely cause of #1722 and #1732, unverified): an id above 2^31 - 1 typed as listed reads as 2^31 - 1
-    and matches nothing, and only its signed form (id - 2^32) matches. Off, a typed id matches as written.
+    (event id, index). With `high_ids_refused`, as live (2026-11-13), a typed id above 2^31 - 1 matches nothing,
+    and neither does its signed form (id - 2^32): both answer NO_MATCH. Off, a typed id matches as written.
     """
 
     def __init__(self, history: Path | None = None, log: Path | None = None) -> None:
@@ -314,7 +313,7 @@ class FakeHelper:
         self.now = 0.0
         self.replies: dict[str, tuple[list[str], list[str], list[str]]] = {}
         self.pending_events: list[list] | None = None   # [numeric id, event id, options], oldest first (see above)
-        self.signed_event_ids = False           # a typed numeric id is read as a signed 32-bit integer, saturating
+        self.high_ids_refused = False           # a typed id above 2^31 - 1, or its signed form, matches nothing
         self.on_selected = None                 # called with (event id, option index) when an option is picked
         self.unwritten: list[str] = []          # log lines the game has made but not yet written to the file
         self.launched: list[tuple[str, list, str]] = []
@@ -467,9 +466,8 @@ class FakeHelper:
             return [], ["select_event_option: bad arguments (the fake's own words)"]
         if not ids:
             found = self.pending_events[:1]                 # no id: the oldest pending event
-        elif self.signed_event_ids:
-            typed = max(INT32_MIN, min(INT32_MAX, ids[0]))  # the parse saturates rather than wraps
-            found = [e for e in self.pending_events if (e[0] - 2 ** 32 if e[0] > INT32_MAX else e[0]) == typed]
+        elif self.high_ids_refused and not 0 <= ids[0] <= INT32_MAX:
+            found = []                                      # live: neither the listed nor the signed form matches
         else:
             found = [e for e in self.pending_events if e[0] == ids[0]]
         if not found:
