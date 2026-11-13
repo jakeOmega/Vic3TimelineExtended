@@ -10,6 +10,12 @@ by hand reads this table instead:
 * `scripts/preflight.py` and `.github/workflows/ci.yml` call that runner.
 * `docs/guides/audits.md` is generated from it (`python3 audit_registry.py
   --write`; `--check` fails when the committed file is stale).
+* `docs/guides/python_tools.md` spells out figures taken from it ("the 49
+  read-only audits", how many run in CI, how many are pure file scans), names
+  the audits outside CI and has a row per CI command. `--check` holds each to
+  this table (`PROSE_FIGURES`, `PROSE_NAMES`) and `--write` corrects the
+  figures. Two PRs that each add an audit raise a figure to the same value,
+  and git merges the identical edits without a conflict, one short (#1695).
 * `test_audit_registry.py` holds it to `POST_LOAD_AUDITS` in
   `server/post_load.py` and to the `*_audit.py` files on disk.
 
@@ -24,8 +30,10 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 from dataclasses import dataclass
+from typing import Callable
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 DOC_PATH = os.path.join("docs", "guides", "audits.md")
@@ -52,6 +60,10 @@ class Audit:
     """Report under docs/engine/. "" means `<stem>_report.md`; None, no report."""
     note: str = ""
     """Anything else a reader running it should know."""
+    builds_mod_state: bool = False
+    """Builds a `ModState` of its own when run from the command line, small or
+    full. False: a pure file scan. `test_audit_registry.py` holds it to the
+    module's source; `python_tools.md` counts the pure scans from it."""
 
     @property
     def report_path(self) -> str | None:
@@ -146,6 +158,7 @@ AUDITS: tuple[Audit, ...] = (
         note="Builds a small ModState from vanilla_parsed/. A type only the mod registers is "
              "`loc_coverage_audit`'s to name. `/validate/engine-coverage` makes the registration "
              "judgment interactively; this is the copy that fails a reload and CI.",
+        builds_mod_state=True,
     ),
     Audit(
         "mod_structure_audit",
@@ -154,6 +167,7 @@ AUDITS: tuple[Audit, ...] = (
         "one top-level name (only one survives).",
         ci=None,
         where="trailing on the `INJECT:<name>` line (brace and collision flags take none)",
+        builds_mod_state=True,
     ),
     Audit(
         "load_order_audit",
@@ -165,6 +179,7 @@ AUDITS: tuple[Audit, ...] = (
              "(#1191). CI has no game files, so a mod bare copy of a vanilla key is decided only when "
              "its file sorts before or after every vanilla file of the folder; the rest are listed as "
              "undetermined, and a reload on a machine with the game decides them.",
+        builds_mod_state=True,
     ),
     Audit(
         "attitude_key_audit",
@@ -334,6 +349,7 @@ AUDITS: tuple[Audit, ...] = (
         where=VALUE_LINE,
         note="Reads `events/` only: an amount granted from a scripted effect is flagged only where an "
              "event repeats it, as in a `show_as_tooltip` (#1593).",
+        builds_mod_state=True,
     ),
     # --- treaties, blocs, companies, laws ------------------------------------
     Audit(
@@ -367,6 +383,7 @@ AUDITS: tuple[Audit, ...] = (
         "other, so each restates everything below it.",
         where="trailing on the higher tier's opening line (covers the whole tier) or the modifier's "
               "line in either tier",
+        builds_mod_state=True,
     ),
     Audit(
         "prestige_good_roster_audit",
@@ -375,6 +392,7 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the prestige good's line in `possible_prestige_goods` or the company's "
               "opening line (covers the whole company); for a `local` or cap flag, the prestige "
               "good's opening line",
+        builds_mod_state=True,
     ),
     Audit(
         "amendment_reachability_audit",
@@ -391,6 +409,7 @@ AUDITS: tuple[Audit, ...] = (
               "for the generated `modified.txt`, on the `\"lawgroup_x\":` or `\"ideology_x\": {` line "
               "in `ideology_modifications.py`",
         tags=("ideology_lawgroup",),
+        builds_mod_state=True,
     ),
     Audit(
         "roster_membership_audit",
@@ -403,6 +422,7 @@ AUDITS: tuple[Audit, ...] = (
         note="Builds a small ModState from vanilla_parsed/. The fleet entity check reads the `SHIPS` "
              "table of `scripts/generators/gen_fleet_entities.py`, and the generated blocks too where "
              "gfx/ is on disk.",
+        builds_mod_state=True,
     ),
     Audit(
         "pm_employment_audit",
@@ -412,6 +432,7 @@ AUDITS: tuple[Audit, ...] = (
               "(a method's comment covers every building that uses it)",
         note="Builds a ModState from vanilla_parsed/ (about 7 s). Also fails when a building is "
              "skipped for exceeding the combination cap, since it went unaudited (#681).",
+        builds_mod_state=True,
     ),
     # --- localization --------------------------------------------------------
     Audit(
@@ -421,6 +442,7 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the entity's opening `<name> = {` line",
         note="Builds a ModState from vanilla_parsed/ (about 7 s); a stale snapshot can flag or hide a "
              "vanilla key.",
+        builds_mod_state=True,
     ),
     Audit(
         "script_loc_reference_audit",
@@ -464,6 +486,7 @@ AUDITS: tuple[Audit, ...] = (
         "render (#1257).",
         where="trailing on the loc line",
         note="Builds a ModState from vanilla_parsed/ (about 7 s).",
+        builds_mod_state=True,
     ),
     Audit(
         "localization_accessor_audit",
@@ -528,6 +551,222 @@ def ci_audits() -> tuple[Audit, ...]:
 
 def post_load_audits() -> tuple[Audit, ...]:
     return tuple(a for a in AUDITS if a.post_load)
+
+
+# --- the figures python_tools.md spells out (#1695) ---------------------------
+
+TOOLS_DOC_PATH = os.path.join("docs", "guides", "python_tools.md")
+ROSTER_PATH = os.path.join("server", "post_load.py")  # POST_LOAD_REGENERATORS, POST_LOAD_AUDITS
+
+_ONES = ("zero one two three four five six seven eight nine ten eleven twelve thirteen "
+         "fourteen fifteen sixteen seventeen eighteen nineteen").split()
+_TENS = "twenty thirty forty fifty sixty seventy eighty ninety".split()
+
+
+def spell(n: int) -> str:
+    """`n` in words, as the prose writes it ("forty-six"); digits from 100."""
+    if n < 20:
+        return _ONES[n]
+    if n < 100:
+        tens, ones = divmod(n, 10)
+        return _TENS[tens - 2] + (f"-{_ONES[ones]}" if ones else "")
+    return str(n)
+
+
+_WORDS = {spell(n): n for n in range(100)}
+_NUM = r"(\d+|(?i:" + "|".join(sorted(_WORDS, key=len, reverse=True)) + r"))"
+
+
+def _read_number(text: str) -> int:
+    return int(text) if text.isdigit() else _WORDS[text.lower()]
+
+
+def _write_number(n: int, like: str) -> str:
+    """`n` in the form `like` has: digits, or words with its capital."""
+    if like.isdigit():
+        return str(n)
+    word = spell(n)
+    return word[:1].upper() + word[1:] if like[:1].isupper() else word
+
+
+def _named(text: str) -> list[str]:
+    return re.findall(r"`([a-z0-9_]+_audit)`", text)
+
+
+def _rosters() -> dict[str, list[str]]:
+    from scripts.analysis.check_post_load_rosters import extract_rosters
+    return extract_rosters(os.path.join(REPO_ROOT, ROSTER_PATH))
+
+
+def _ci_only() -> list[Audit]:
+    return [a for a in AUDITS if a.ci is not None and not a.post_load]
+
+
+def _out_of_ci() -> list[Audit]:
+    return [a for a in AUDITS if a.post_load and a.ci is None]
+
+
+def _ci_builders() -> list[Audit]:
+    return [a for a in ci_audits() if a.builds_mod_state]
+
+
+@dataclass(frozen=True)
+class Figure:
+    """A sentence of python_tools.md that spells out figures. `{N}` in `template`
+    is a figure, digits or words; `{NAMES}` is free text up to a `)`. `expect`
+    takes that text (or "") and gives the figures, in order."""
+    template: str
+    expect: Callable[[str], tuple[int, ...]]
+    what: str
+
+    def regex(self) -> re.Pattern:
+        parts = re.split(r"(\{N\}|\{NAMES\})", self.template)
+        out = []
+        for part in parts:
+            if part == "{N}":
+                out.append(_NUM)
+            elif part == "{NAMES}":
+                out.append(r"(?P<names>[^)]*)")
+            else:
+                out.append(re.escape(part))
+        return re.compile("".join(out))
+
+
+PROSE_FIGURES: tuple[Figure, ...] = (
+    Figure("`POST_LOAD_REGENERATORS` (the {N} file-rewriting generators)",
+           lambda _: (len(_rosters()["POST_LOAD_REGENERATORS"]),),
+           "entries in POST_LOAD_REGENERATORS"),
+    Figure("`POST_LOAD_AUDITS` (the {N} read-only audits)",
+           lambda _: (len(post_load_audits()),),
+           "post-load audits"),
+    Figure("{N} of these post-load audits, plus {N} CI-only audits",
+           lambda _: (sum(1 for a in post_load_audits() if a.ci is not None), len(_ci_only())),
+           "post-load audits CI runs, then audits only CI runs"),
+    Figure("Of those {N}, {N} are pure file scans that never build a `ModState`",
+           lambda _: (len(ci_audits()), len(ci_audits()) - len(_ci_builders())),
+           "CI audits, then those whose `builds_mod_state` is False"),
+    Figure("The other {N} build one.",
+           lambda _: (len(_ci_builders()),),
+           "CI audits whose `builds_mod_state` is True"),
+    Figure("The other {N} post-load audits stay out of CI.",
+           lambda _: (len(_out_of_ci()),),
+           "post-load audits with no CI command"),
+    Figure("the {N} offline audit CLIs (the {N} in CI plus {NAMES})",
+           lambda names: (len(ci_audits()) + len(_named(names)), len(ci_audits())),
+           "CI audits plus the ones named after `plus`, then CI audits"),
+)
+
+
+@dataclass(frozen=True)
+class Names:
+    """Audits named between `start` and the next `end`: `exact` holds them to
+    `expect()`; otherwise every expected audit must be among them."""
+    start: str
+    end: str
+    expect: Callable[[], list[Audit]]
+    what: str
+    exact: bool = True
+
+
+PROSE_NAMES: tuple[Names, ...] = (
+    Names("CI-only audits (", ")", _ci_only, "the audits only CI runs"),
+    Names("build one.", "Each prints its report", _ci_builders,
+          "the CI audits whose `builds_mod_state` is True", exact=False),
+    Names("post-load audits stay out of CI.", "settles its rule", _out_of_ci,
+          "the post-load audits with no CI command"),
+)
+
+
+def _table_rows(text: str, heading: str) -> list[str]:
+    """The first column of the table under `heading`, backticks stripped."""
+    start = text.find(heading)
+    if start < 0:
+        return []
+    rows, seen_table = [], False
+    for line in text[start:].splitlines()[1:]:
+        if line.startswith("|"):
+            seen_table = True
+            m = re.match(r"\| `([^`]+)` \|", line)
+            if m:
+                rows.append(m.group(1))
+        elif seen_table:
+            break
+    return rows
+
+
+def check_tools_doc(text: str) -> tuple[str, list[str]]:
+    """Hold python_tools.md's audit figures, names and tables to the registry.
+    Returns the text with every figure corrected, and what is wrong (figures
+    included, so a caller that writes nothing still fails)."""
+    problems = []
+    for fig in PROSE_FIGURES:
+        regex = fig.regex()
+        matches = list(regex.finditer(text))
+        if len(matches) != 1:
+            problems.append(
+                f"{TOOLS_DOC_PATH}: found {len(matches)} sentences like `{fig.template}` "
+                "where one was expected. If you reworded it, change its `Figure` in "
+                "audit_registry.py's PROSE_FIGURES to match.")
+            continue
+        m = matches[0]
+        names = m.groupdict().get("names") or ""
+        expected = fig.expect(names)
+        groups = [g for g in range(1, len(m.groups()) + 1) if m.re.groupindex.get("names") != g]
+        wrong = [(g, want) for g, want in zip(groups, expected) if _read_number(m.group(g)) != want]
+        if wrong:
+            said = ", ".join(m.group(g) for g in groups)
+            right = ", ".join(_write_number(want, m.group(g)) for g, want in zip(groups, expected))
+            problems.append(f"{TOOLS_DOC_PATH}: \"{m.group(0)}\" gives {said} ({fig.what}); "
+                            f"the registry gives {right}.")
+        new = m.group(0)
+        for g, want in reversed(wrong):
+            lo, hi = m.start(g) - m.start(0), m.end(g) - m.start(0)
+            new = new[:lo] + _write_number(want, m.group(g)) + new[hi:]
+        if fig.template.endswith("{NAMES})"):
+            for name in _named(names):
+                audit = BY_NAME.get(name)
+                if audit is None or audit.ci is not None:
+                    problems.append(
+                        f"{TOOLS_DOC_PATH}: \"{m.group(0)}\" counts `{name}` beside the CI "
+                        "audits, but it is no audit outside CI.")
+        text = text[:m.start(0)] + new + text[m.end(0):]
+    for spec in PROSE_NAMES:
+        start = text.find(spec.start)
+        end = text.find(spec.end, start + len(spec.start)) if start >= 0 else -1
+        if start < 0 or end < 0 or text.count(spec.start) > 1:
+            problems.append(
+                f"{TOOLS_DOC_PATH}: no one text from `{spec.start}` to `{spec.end}`. If you "
+                "reworded it, change its `Names` in audit_registry.py's PROSE_NAMES to match.")
+            continue
+        named = set(_named(text[start + len(spec.start):end]))
+        want = {a.name for a in spec.expect()}
+        for name in sorted(want - named):
+            problems.append(f"{TOOLS_DOC_PATH}: the text after `{spec.start}` names "
+                            f"{spec.what} but leaves out `{name}`.")
+        if spec.exact:
+            for name in sorted(named - want):
+                problems.append(f"{TOOLS_DOC_PATH}: the text after `{spec.start}` names "
+                                f"`{name}`, which is not one of {spec.what}.")
+    heading = "#### `POST_LOAD_AUDITS`"
+    rows, roster = _table_rows(text, heading), _rosters()["POST_LOAD_AUDITS"]
+    if rows != list(roster):
+        first = next((i for i, (a, b) in enumerate(zip(rows, roster)) if a != b),
+                     min(len(rows), len(roster)))
+        problems.append(
+            f"{TOOLS_DOC_PATH}: the table under {heading} is not POST_LOAD_AUDITS in run "
+            f"order; row {first + 1} is {rows[first] if first < len(rows) else 'missing'}, "
+            f"the roster has {roster[first] if first < len(roster) else 'nothing more'}.")
+    rows = [r for r in re.findall(r"^\| `(python3 [^`]+)` \|", text, re.M) if "_audit.py" in r]
+    commands = [a.command for a in ci_audits()]
+    for command in commands:
+        if rows.count(command) != 1:
+            problems.append(
+                f"{TOOLS_DOC_PATH}: the CI command table has {rows.count(command)} rows for "
+                f"`{command}`; it needs one, saying when the command exits 1.")
+    for row in sorted(set(rows) - set(commands)):
+        problems.append(f"{TOOLS_DOC_PATH}: the CI command table has a row for `{row}`, which is "
+                        "not a command CI runs (audit_registry.py gives each audit's).")
+    return text, problems
 
 
 def suppression_hint(name: str) -> str:
@@ -626,25 +865,44 @@ def render_markdown() -> str:
         "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array "
         "(`audit_common.summary` builds it).",
         "2. Add it to `POST_LOAD_AUDITS` in `server/post_load.py` if a reload should run it.",
-        "3. Add one `Audit(...)` entry to `audit_registry.py`.",
-        "4. Run `python3 audit_registry.py --write` and commit this file with the rest.",
+        "3. Add one `Audit(...)` entry to `audit_registry.py`, with `builds_mod_state=True` if its "
+        "command line builds a `ModState`.",
+        "4. Run `python3 audit_registry.py --write` and commit this file with the rest. It also "
+        "corrects the audit counts `docs/guides/python_tools.md` spells out, and prints what is left "
+        "there for you to write: a CI audit's row in the command table, its row in the reload table, "
+        "its name where a sentence lists audits by where they run.",
         "",
-        "CI, `scripts/preflight.py` and this page all read the registry, and "
-        "`test_audit_registry.py` fails on an audit file the registry leaves out.",
+        "CI, `scripts/preflight.py` and this page all read the registry, "
+        "`test_audit_registry.py` fails on an audit file the registry leaves out, and "
+        "`audit_registry.py --check` fails on a count in `python_tools.md` that disagrees with it.",
         "",
     ]
     return "\n".join(out)
 
 
+def _read(path: str) -> str:
+    try:
+        with open(os.path.join(REPO_ROOT, path), encoding="utf-8", newline="") as fh:
+            return fh.read()
+    except FileNotFoundError:
+        return ""
+
+
+def _write(path: str, text: str) -> None:
+    with open(os.path.join(REPO_ROOT, path), "w", encoding="utf-8", newline="") as fh:
+        fh.write(text)
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--write", action="store_true", help=f"Regenerate {DOC_PATH}.")
-    group.add_argument("--check", action="store_true", help=f"Exit 1 if {DOC_PATH} is stale.")
+    group.add_argument("--write", action="store_true",
+                       help=f"Regenerate {DOC_PATH} and correct the figures in {TOOLS_DOC_PATH}.")
+    group.add_argument("--check", action="store_true",
+                       help=f"Exit 1 if {DOC_PATH} is stale or {TOOLS_DOC_PATH} disagrees.")
     group.add_argument("--hint", metavar="AUDIT", help="Print an audit's suppression hint.")
     args = parser.parse_args(argv)
 
-    path = os.path.join(REPO_ROOT, DOC_PATH)
     text = render_markdown()
     if args.hint:
         name = args.hint if args.hint.endswith("_audit") else args.hint + "_audit"
@@ -652,20 +910,35 @@ def main(argv=None) -> int:
         print(hint or f"No audit named {name}.")
         return 0 if hint else 1
     if args.write:
-        with open(path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(text)
+        _write(DOC_PATH, text)
         print(f"Wrote {DOC_PATH} ({len(AUDITS)} audits).")
-        return 0
+        tools = _read(TOOLS_DOC_PATH)
+        fixed, problems = check_tools_doc(tools)
+        if fixed != tools:
+            _write(TOOLS_DOC_PATH, fixed)
+            print(f"Corrected the figures in {TOOLS_DOC_PATH}.")
+        left = check_tools_doc(fixed)[1]
+        for problem in left:
+            print(problem)
+        if left:
+            print(f"{len(left)} problem(s) in {TOOLS_DOC_PATH} need a hand edit.")
+        return 1 if left else 0
     if args.check:
-        try:
-            with open(path, encoding="utf-8") as fh:
-                current = fh.read()
-        except FileNotFoundError:
-            current = ""
-        if current != text:
+        failed = False
+        if _read(DOC_PATH) != text:
             print(f"{DOC_PATH} is stale: run `python3 audit_registry.py --write` and commit it.")
+            failed = True
+        problems = check_tools_doc(_read(TOOLS_DOC_PATH))[1]
+        for problem in problems:
+            print(problem)
+        if problems:
+            print("Run `python3 audit_registry.py --write` to correct the figures; it prints "
+                  "what needs a hand edit.")
+            failed = True
+        if failed:
             return 1
-        print(f"OK: {DOC_PATH} matches audit_registry.py ({len(AUDITS)} audits).")
+        print(f"OK: {DOC_PATH} and the figures in {TOOLS_DOC_PATH} match audit_registry.py "
+              f"({len(AUDITS)} audits).")
         return 0
     for a in AUDITS:
         print(f"{a.name:34} {'CI ' if a.ci is not None else '   '} {'reload' if a.post_load else ''}")

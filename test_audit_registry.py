@@ -50,6 +50,23 @@ class RosterTests(unittest.TestCase):
                     continue
                 self.assertIn(f'"{arg}"', source, f"{audit.name} does not define {arg}")
 
+    def test_builds_mod_state_matches_the_source(self):
+        """`builds_mod_state` is what python_tools.md counts the pure file scans
+        from: an audit that calls `ModState(...)` or `cli_mod_state()` builds one."""
+        builders = {"ModState", "cli_mod_state"}
+        for audit in audit_registry.AUDITS:
+            tree = ast.parse(read(f"{audit.name}.py"))
+            calls = {
+                node.func.id if isinstance(node.func, ast.Name) else node.func.attr
+                for node in ast.walk(tree)
+                if isinstance(node, ast.Call) and isinstance(node.func, (ast.Name, ast.Attribute))
+            }
+            self.assertEqual(
+                audit.builds_mod_state, bool(calls & builders),
+                f"{audit.name}: `builds_mod_state` disagrees with whether it calls "
+                "ModState( or cli_mod_state(",
+            )
+
     def test_reports_named_exist(self):
         tracked = set(os.listdir(os.path.join(ROOT, "docs", "engine")))
         for audit in audit_registry.AUDITS:
@@ -105,6 +122,80 @@ class GeneratedPageTests(unittest.TestCase):
         page = audit_registry.render_markdown()
         for audit in audit_registry.AUDITS:
             self.assertEqual(page.count(f"| `{audit.name}` |"), 3, audit.name)
+
+
+class ToolsDocTests(unittest.TestCase):
+    """python_tools.md spells out figures from the registry (#1695)."""
+
+    def setUp(self):
+        self.text = read(audit_registry.TOOLS_DOC_PATH)
+
+    def test_tools_doc_agrees_with_the_registry(self):
+        fixed, problems = audit_registry.check_tools_doc(self.text)
+        self.assertEqual(problems, [], "run `python3 audit_registry.py --write`")
+        self.assertEqual(fixed, self.text)
+
+    def test_a_figure_one_short_is_named_and_corrected(self):
+        """Two PRs that each add an audit both write the same figure; the merged
+        text is one short and nothing conflicts."""
+        n = len(audit_registry.post_load_audits())
+        right = f"`POST_LOAD_AUDITS` (the {n} read-only audits)"
+        self.assertIn(right, self.text)
+        stale = self.text.replace(right, f"`POST_LOAD_AUDITS` (the {n - 1} read-only audits)")
+        fixed, problems = audit_registry.check_tools_doc(stale)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn(f"gives {n - 1} ", problems[0])
+        self.assertIn(f"the registry gives {n}.", problems[0])
+        self.assertEqual(fixed, self.text)
+
+    def test_spelled_figures_keep_their_form(self):
+        ci = len(audit_registry.ci_audits())
+        right = f"Of those {audit_registry.spell(ci)}, "
+        self.assertIn(right, self.text)
+        stale = self.text.replace(right, "Of those twelve, ")
+        fixed, problems = audit_registry.check_tools_doc(stale)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertEqual(fixed, self.text)
+        lead = audit_registry.spell(
+            sum(1 for a in audit_registry.post_load_audits() if a.ci is not None))
+        right = lead.capitalize() + " of these post-load audits"
+        self.assertIn(right, self.text)
+        fixed, _ = audit_registry.check_tools_doc(self.text.replace(right, "Seven of these post-load audits"))
+        self.assertEqual(fixed, self.text)
+
+    def test_a_reworded_sentence_fails_rather_than_passing_unread(self):
+        stale = self.text.replace("file-rewriting generators", "generators that rewrite files")
+        problems = audit_registry.check_tools_doc(stale)[1]
+        self.assertTrue(any("PROSE_FIGURES" in p for p in problems), problems)
+
+    def test_an_audit_out_of_ci_left_unnamed(self):
+        stale = self.text.replace("Two, `mod_structure_audit` and `modifier_visibility_audit`, need",
+                                  "Two, `mod_structure_audit` and another, need")
+        self.assertNotEqual(stale, self.text)
+        problems = audit_registry.check_tools_doc(stale)[1]
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("`modifier_visibility_audit`", problems[0])
+
+    def test_a_ci_command_without_a_row(self):
+        row = next(line for line in self.text.splitlines()
+                   if line.startswith("| `python3 sol_fraction_audit.py --strict` |"))
+        problems = audit_registry.check_tools_doc(self.text.replace(row + "\n", ""))[1]
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("0 rows for `python3 sol_fraction_audit.py --strict`", problems[0])
+
+    def test_the_reload_table_in_run_order(self):
+        lines = self.text.split("\n")
+        i = next(n for n, line in enumerate(lines) if line.startswith("| `event_magnitude_audit` |"))
+        lines[i], lines[i + 1] = lines[i + 1], lines[i]
+        problems = audit_registry.check_tools_doc("\n".join(lines))[1]
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("run order", problems[0])
+
+    def test_spell(self):
+        self.assertEqual(
+            [audit_registry.spell(n) for n in (0, 3, 19, 20, 46, 99, 120)],
+            ["zero", "three", "nineteen", "twenty", "forty-six", "ninety-nine", "120"],
+        )
 
 
 class WiringTests(unittest.TestCase):
