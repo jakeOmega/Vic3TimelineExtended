@@ -5701,4 +5701,6 @@ is used in vanilla 1.15's `common/`. Offline, the closest stand-in for that poin
 weights and the Antarctic station AI were checked (#1454); a state within a degree or two of a tropic can fall either
 way in the game. A building's `possible` is in state scope, so `in_tropics = yes` could go there bare, but the band is
 wide: on the space elevator's site it roughly doubled the eligible states (about 183 against the hand-kept 92), and
-the owner kept the list (2026-11-12, #1672).
+the owner kept the list (2026-11-12, #1672). No trigger tests a latitude beyond the tropics' edge: for one, read the record's
+`te_climate_abs_latitude` (whole degrees, an if-chain over every state region, so read it once and store the answer),
+as Regional Climate Warming's high-latitude band does (`gw_regional_band_value`, #1681).
