@@ -725,11 +725,17 @@ closed it (a screenshot showed it gone) and two more ran.
   August at 1.60: July beside the open sessions' 2.18–2.25, August beside the
   closed runs' 1.40–1.57. Whether the window stood open in July and not in
   August is for the owner to say.
-- **Not measured**: any other tab (two probes meant to switch tabs did not
-  work: a `trigger_when` on a scripted GUI never opened the window, and a
-  chain of timed states never left its first); the window full screen;
-  National Info, which mounts the same sections; and the window with
-  sub-tick rendering off, where a frame no longer holds up a tick.
+- **Not measured**: any other tab. Two probes were meant to switch tabs. A
+  `trigger_when` on a scripted GUI never opened the window. A chain of timed
+  states opened it and was to step through five more tabs and then close
+  it (`20261113T171317Z`): frames read 16–20 ms through all 22 blocks, the
+  window never closed, and none of the steps' `popstat` stamps reached
+  `debug.log`, the first step's included, so the log cannot say whether the
+  tabs changed. Either the chain stopped at its first step or five other
+  tabs cost what Nation does: not shown either way. Also unmeasured: the
+  window full screen; National Info, which mounts the same sections; and
+  the window with sub-tick rendering off, where a frame no longer holds up
+  a tick.
 
 ### Journal entries
 
