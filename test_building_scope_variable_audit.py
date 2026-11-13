@@ -177,7 +177,7 @@ class IntegrationTests(unittest.TestCase):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         root = Path(__file__).resolve().parent
         self.assertIn("building_scope_variable_audit", extract_rosters(
-            str(root / "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            str(root / "server" / "post_load.py"))["POST_LOAD_AUDITS"])
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
         self.assertEqual(audit_registry.get("building_scope_variable_audit").command,
                          "python3 building_scope_variable_audit.py --strict")

@@ -82,6 +82,8 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
 
 CHECK = "variable_guard"
@@ -108,10 +110,6 @@ CONDITIONAL_KEYS = {"trigger_if", "trigger_else_if", "if", "else_if"}
 
 ITERATOR_PREFIXES = ("every_", "random_", "ordered_", "any_")
 NON_ITERATOR_KEYS = {"random_list"}
-
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 _WORD = r"""[^\s={}<>!?#"]+"""
 # One pass over the cleaned text: a closing brace, `key <op> {`, `key <op>
@@ -180,7 +178,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
@@ -220,18 +218,6 @@ def _is_scope_change(key: str | None, links: set[str]) -> bool:
     if ":" in key or "." in key:
         return True
     return low in links
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _TAGGED_REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    checks = {c.strip() for c in m.group("checks").split(",")}
-    if CHECK not in checks:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _reads_in(token: str | None, scoped: bool) -> list[tuple[str, str]]:
@@ -372,7 +358,7 @@ def scan_text(text: str, rel_path: str, links: set[str] | None = None) -> list[F
                     guard_line=guard_line,
                     variable=f"{var[0]}:{var[1]}",
                     reads=reads,
-                    exemption=_parse_reviewed(comments.get(node.line)),
+                    exemption=parse_reviewed(comments.get(node.line), (CHECK,)),
                 ))
         for child in node.children:
             if child[0] == "block":
@@ -420,8 +406,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Variable guard audit report",
@@ -503,27 +489,22 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "variable_guard_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "variable_guard_report.md"), render_report(result))
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": exemp,
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks its
+    `(variable_guard)` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

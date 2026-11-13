@@ -47,7 +47,7 @@ intended. The two `unlisted_*` flags take a check-tagged comment,
 `# REVIEWED YYYY-MM-DD (roster_membership): rationale`, trailing on the
 opening `<name> = {` line of the modification or production method (content
 parked for a later release, say). A tag that suppresses nothing is reported
-as `stale_review` and fails `--strict`.
+as `stale_review` (in `AuditResult.stale`) and fails `--strict`.
 
 Data source
 -----------
@@ -71,6 +71,10 @@ import os
 import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 
 # Offset-preserving comment/string blanking, shared with the iterator audit so
 # the audits agree on what "a commented-out line" means.
@@ -103,10 +107,6 @@ KIND_ORDER = (
 )
 # The kinds a `# REVIEWED` comment can cover.
 SUPPRESSIBLE = ("unlisted_modification", "unlisted_pm")
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\(\s*" + CHECK + r"\s*\)\s*:\s*(?P<rationale>.+)$"
-)
 
 _TOKEN_RE = re.compile(
     r"(?P<close>\})"
@@ -261,22 +261,24 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class StaleTag(_StaleTag):
+    """A `(roster_membership)` tag that suppresses nothing (`stale_review`),
+    on the opening line of the block `name`; `why` says what to do."""
+
+    name: str = ""
+    why: str = ""
+
+
+@dataclass
+class AuditResult(_AuditResult):
+    """The flags, and in `stale` the `stale_review` tags."""
+
     flags: list[Flag] = field(default_factory=list)
     ship_types_checked: int = 0
     modifications_checked: int = 0
     pms_checked: int = 0
     # False when the SHIPS table could not be read, so no ship was judged on it.
     fleet_entities_checked: bool = False
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _blocks(v):
@@ -420,9 +422,9 @@ def check(
             if o.name in listed:
                 continue
             # A copy of the entity in another file may carry the comment.
-            tagged = [x for x in openers if x.name == o.name and _parse_reviewed(x.comment)]
+            tagged = [x for x in openers if x.name == o.name and parse_reviewed(x.comment, (CHECK,))]
             used.update(id(x) for x in tagged)
-            reviewed = _parse_reviewed(tagged[0].comment) if tagged else None
+            reviewed = parse_reviewed(tagged[0].comment, (CHECK,)) if tagged else None
             result.flags.append(Flag(kind, o.name, describe(o.name), o.file, o.line, reviewed))
         return count
 
@@ -445,12 +447,8 @@ def check(
         (pm_openers, "remove it"),
     ):
         for o in openers:
-            if _parse_reviewed(o.comment) and id(o) not in used:
-                result.flags.append(Flag(
-                    "stale_review", o.name,
-                    f"a `({CHECK})` comment that suppresses nothing: {why}",
-                    o.file, o.line,
-                ))
+            if parse_reviewed(o.comment, (CHECK,)) and id(o) not in used:
+                result.stale.append(StaleTag(o.file, o.line, CHECK, o.name, why))
     return result
 
 
@@ -512,8 +510,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Roster membership audit report",
@@ -544,17 +542,17 @@ def render_report(result: AuditResult) -> str:
         "## Unreviewed Flags",
         "",
     ]
-    if not unrev:
+    if not result.failing:
         out += ["_None._", ""]
     else:
         for kind in KIND_ORDER:
-            rows = [f for f in unrev if f.kind == kind]
-            if not rows:
-                continue
-            out += [f"### {kind}", ""]
-            for f in rows:
-                out.append(f"- `{f.name}` — {f.detail} ({f.file}:{f.line})")
-            out.append("")
+            if kind == "stale_review":
+                rows = [f"- `{t.name}` — a `({CHECK})` comment that suppresses nothing: {t.why} "
+                        f"({t.file}:{t.line})" for t in result.stale]
+            else:
+                rows = [f"- `{f.name}` — {f.detail} ({f.file}:{f.line})" for f in unrev if f.kind == kind]
+            if rows:
+                out += [f"### {kind}", "", *rows, ""]
 
     out += ["## Reviewed Exemptions", ""]
     if not exemp:
@@ -582,34 +580,26 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
     return {
         "ship_types_checked": result.ship_types_checked,
         "modifications_checked": result.modifications_checked,
         "pms_checked": result.pms_checked,
         "fleet_entities_checked": result.fleet_entities_checked,
-        "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": len(result.flags) - unrev,
+        # A stale tag counts as a flag, and as unreviewed.
+        "total_flags": len(result.flags) + len(result.stale),
+        "unreviewed": len(result.failing),
+        "exempted": len(result.exemptions),
     }
 
 
 def main(argv=None, mod_path: str | None = None) -> int:
     """Print the report. With `--strict` (CI), exit 1 on any flag without a
     `# REVIEWED ...` exemption, a stale tag included."""
-    import sys
-    argv = sys.argv[1:] if argv is None else argv
     if mod_path is None:
         from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    if "--strict" in argv:
-        return 1 if any(not f.exemption for f in result.flags) else 0
-    return 0
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

@@ -135,7 +135,6 @@ Report: docs/engine/loc_root_context_report.md. Registered in POST_LOAD_AUDITS.
 """
 from __future__ import annotations
 
-import argparse
 import collections
 import glob
 import os
@@ -143,6 +142,9 @@ import re
 from dataclasses import dataclass, field
 
 import gui_test_helpers as h
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 from mod_state import split_loc_line
 from script_loc_reference_audit import iter_references
 
@@ -179,7 +181,6 @@ _TOP = re.compile(r"(?m)^(?:\w+:)?([\w.\-]+)\s*=\s*\{")
 _FIELD = re.compile(r'[{}]|(?<![\w.])(\w+)\s*=\s*(?:"([\w.\-]+)"|([\w.\-]+)(?![\w.\-"]))')
 _DESC_FIELD = re.compile(r'(?<![\w.])(status_desc|progress_desc)\s*=\s*(\{|"?[\w.\-]+"?)')
 _JOURNAL_SUFFIXES = ("", "_reason", "_goal", "_status")
-_TAG = re.compile(r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$")
 
 
 @dataclass
@@ -199,26 +200,22 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
-    key: str
+class StaleTag(_StaleTag):
+    """A tag that suppresses nothing, on the loc line of `key`."""
+
+    key: str = ""
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`failing`: flags without a tag, plus tags that suppress nothing (`stale`)."""
+
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     reach: dict[str, int] = field(default_factory=dict)
     """Context -> the loc keys it renders."""
     public_tabs: int = 0
     public_note: str = ""
     """Why the public-panel context was left out of this run; "" when it was looked at."""
-
-    @property
-    def failing(self) -> int:
-        """Flags without a tag, plus tags that suppress nothing."""
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
 
 
 def _end(code: str, brace: int) -> int:
@@ -404,9 +401,9 @@ def _tags(root: str) -> dict[str, tuple[str, int, dict]]:
             if "REVIEWED" not in raw:
                 continue
             got = split_loc_line(raw)
-            m = got and _TAG.search(got[2])
-            if m and CHECK in re.split(r"[\s,]+", m.group("checks").strip()):
-                out[got[0]] = (rel, n, {"date": m.group("date"), "rationale": m.group("rationale").strip()})
+            tag = got and parse_reviewed(got[2], (CHECK,))
+            if tag:
+                out[got[0]] = (rel, n, tag)
     return out
 
 
@@ -554,7 +551,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
     result.reach[PUBLIC] = len(public)
 
     flagged = {f.key for f in result.flags if f.kind in TAGGABLE}
-    result.stale_tags = [StaleTag(rel, n, key) for key, (rel, n, _) in sorted(tags.items()) if key not in flagged]
+    result.stale = [StaleTag(rel, n, CHECK, key) for key, (rel, n, _) in sorted(tags.items()) if key not in flagged]
     result.flags.sort(key=lambda f: (f.file, f.line, f.kind))
     return result
 
@@ -571,8 +568,8 @@ def _describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult, reach: bool = False) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Loc root context audit report",
         "",
@@ -609,9 +606,9 @@ def render_report(result: AuditResult, reach: bool = False) -> str:
             out += [f"- line {f.line}: {_describe(f)}" for f in by_file[fname]]
             out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -631,7 +628,7 @@ def render_report(result: AuditResult, reach: bool = False) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     if result.public_note:
@@ -663,15 +660,13 @@ def regenerate(mod_state=None) -> dict:
     result = audit(mod_path, public_panels={}, world_loc=set())
     result.public_note = RELOAD_NOTE
     out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "entry_text_keys": result.reach[ENTRY],
         "entry_frame_keys": result.reach[FRAME],
         "widget_keys": result.reach[WIDGET],
@@ -681,14 +676,12 @@ def regenerate(mod_state=None) -> dict:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--strict", action="store_true",
-                        help="exit 1 on any untagged flag or stale tag (CI mode)")
-    parser.add_argument("--mod-path")
-    args = parser.parse_args(argv)
-    result = audit(args.mod_path)
-    print(render_report(result, reach=True))
-    return int(args.strict and result.failing > 0)
+    def add_arguments(parser):
+        parser.add_argument("--mod-path")
+
+    return cli_main(lambda args: audit(args.mod_path), lambda result, args: render_report(result, reach=True),
+                    argv=argv, description=__doc__.splitlines()[0], add_arguments=add_arguments,
+                    strict_help="exit 1 on any untagged flag or stale tag (CI mode)")
 
 
 if __name__ == "__main__":
