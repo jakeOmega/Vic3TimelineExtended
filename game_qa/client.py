@@ -862,7 +862,7 @@ def add_verbs(sub) -> None:
     p.add_argument("key", choices=["esc"])
     p.set_defaults(run=cmd_press)
     sub.add_parser("events", help="the pending events").set_defaults(run=cmd_events)
-    p = sub.add_parser("pick", help="pick an option of a pending event, by its numeric id")
+    p = sub.add_parser("pick", help="pick an option of a pending event")
     p.add_argument("index", type=int)
     p.add_argument("event", nargs="?", help="an event id (its oldest pending instance) or a numeric id")
     p.set_defaults(run=cmd_pick)
