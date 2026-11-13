@@ -44,3 +44,18 @@ they replaced, for five countries, and found them equal; no panel was looked at.
 | Local climate hover | The state panel's Comfort hover gives the heat line it gave before (a state with hot summers: above 0) | 0 heat everywhere: `scope:te_climate_heat_excess_now` reads unset in the GUI |
 | Tourism output | A state's tourism card total is what it was before the change (the same appeal, city rank and monuments) | A total missing its base appeal: the refresh read `var:te_tourism_base_appeal` before writing it |
 | Cultural Hegemony board after a recount | After `event te_debug_ch.1`, option Recount now: each board row's score equals that country's share, its change equals the share minus last recount's, and no country keeps `ch_board_share_now` | A 0 score or change: the saved share was not read back |
+
+## Sub-tick rendering: a switch to try in your own play (2026-11-13)
+
+Not a change to the mod. The engine draws frames while a tick is being worked out, and a console switch or a launch
+option stops it doing so (`docs/audits/late_game_performance.md`, "Sub-tick rendering, on and off in one session"). In
+the harness the days ran a quarter to 30% faster with it off (five pairs within a session, and whole runs), the average
+frame went from 10 to 11–13 ms and the longest wait for a frame from about 40 ms to 145–180 ms. The owner's own play of
+the same months ran slower than the harness (1.9 s a day against 1.3–1.55), so what the switch saves there has to be
+read there.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| Speed with the switch off | In a late game at speed 5, type `gamestatetick.renderframeifneeded` in the console (it answers "Disabled"; typing it again answers "Enabled"; the setting lasts until the game closes). Days pass visibly faster, and `dedicated_server.log`'s tick stamps show fewer seconds per game day than before the switch | No difference: in real play the day is spent elsewhere than in frames drawn mid-tick; note the seconds per day either way |
+| What the screen does | The map and panels stay usable while the game runs: a brief hitch a few times a game week, no frozen screen | Long freezes: leave the switch on and say so; the harness's window never showed one |
+| The launch option | With `-disable_renderframeifneeded` in the game's launch options the switch should start off, so that typing it once answers "Enabled". Untried: the harness runs that carried the option never typed the switch, and all ran with `-debug_mode` | It answers "Disabled": either the option was not read, or the option and the switch are separate settings; say which the speed suggests |
