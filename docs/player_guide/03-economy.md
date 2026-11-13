@@ -805,8 +805,10 @@ Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 ### How the AI uses the reserve
 
 The AI founds its reserve through Establish a Strategic Reserve: great and major
-powers take it, more readily in peacetime, and so does any country with a GDP
-above 10 million. AI reserves add silos once any good passes 75% of capacity.
+powers take it, more readily in peacetime, and so does a country that leads its
+own market with a GDP above 10 million. A smaller country inside another
+country's market founds one only above 100 million. AI reserves add silos once
+any good passes 75% of capacity.
 An AI reserve runs grain, chemicals and conductive metals on Stabilize Prices
 with the Conservative preset: it buys below −20% and releases above +30%. Its
 ammunition, oil, small arms, artillery, aeroplanes and tanks go on Stockpile

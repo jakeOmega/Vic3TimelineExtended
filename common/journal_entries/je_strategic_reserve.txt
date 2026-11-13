@@ -76,8 +76,9 @@ je_strategic_reserve = {
 	# a hub the entry stays open and waits: the weekly pulse moves nothing
 	# (st_res_weekly_update_effect's no-hub branch), the clamp leaves the
 	# stock alone (st_res_clamp_stockpiles_effect), and the status line and
-	# the decision Establish a Strategic Reserve offer a new hub. A captured
-	# hub still costs the stock (st_res_on_state_owner_change).
+	# the decision Establish a Strategic Reserve offer a new hub (which an AI
+	# minor below st_res_ai_hub_gdp_tier does not take). A captured hub still
+	# costs the stock (st_res_on_state_owner_change).
 
 	# The panel, in two parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
 	# the overview at the top, with the "?" to the Help page above it, and the

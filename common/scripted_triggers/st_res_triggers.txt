@@ -111,6 +111,38 @@ st_res_ai_wants_stockpile = {
 }
 
 # ============================================================================
+# AI founding — country scope
+# ============================================================================
+# The AI's reason to found a reserve beyond its rank: te_decision_establish_strategic_reserve's
+# ai_chance adds 100 for it and building_strategic_reserve_hub's ai_value 10000
+# (from the hub's state, through owner). A GDP above st_res_ai_hub_min_gdp, and
+# one of:
+#   - a great or major power, whose rank already scores (both blocks);
+#   - the leader of its own market: the reserve buys and sells in its owner's
+#     market, so the leader's is the one that steadies that market's prices;
+#   - a minor inside another's market above st_res_ai_minor_hub_min_gdp, ten
+#     times the first bar.
+# A country none of these holds scores 0 in both, and an ai_chance of 0 means
+# the AI never takes the decision (vanilla's 000_decisions_help.txt). A lower
+# weight would only have delayed the hub: the decision stays open for as long
+# as the country has none.
+# The reason is speed (docs/audits/late_game_performance.md): every holder
+# runs the reserve's weekly pulse, about 15 ms of profiled script a holder in
+# 30 days, and in a 1931 game 34 of 55 holders were minors in another
+# country's market, 30 of them below the second bar. Players are untouched:
+# ai_chance and ai_value only steer the AI.
+# A market leader's tier still needs the first GDP bar: every country outside
+# another's market leads one of its own, however small.
+st_res_ai_hub_gdp_tier = {
+	gdp > st_res_ai_hub_min_gdp
+	OR = {
+		is_great_or_major_power = yes
+		gw_is_market_leader = yes
+		gdp > st_res_ai_minor_hub_min_gdp
+	}
+}
+
+# ============================================================================
 # Hub capture — state scope, from st_res_on_state_owner_change
 # (common/on_actions/st_res_on_actions.txt)
 # ============================================================================
