@@ -3965,6 +3965,19 @@ class ProfileTest(SessionTestCase):
         self.assertEqual(error.code, "not_snapshotted")
         self.assertEqual(self.typed(), [])
 
+    def test_a_csv_listed_in_another_case_without_storing_is_never_dumped_over(self):
+        # NTFS: the game's write to ticktask_timings.csv would go into the owner's TickTask_Timings.csv
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["listing"].append("TickTask_Timings.csv")
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.session.profile_start()
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_snapshotted")
+        self.assertIn("TickTask_Timings.csv", error.detail)
+        self.assertEqual(self.typed(), [])
+
     def test_copies_the_game_cannot_be_proved_alive_after_are_removed(self):
         self.session.profile_start()
         real = profiling.copy_written

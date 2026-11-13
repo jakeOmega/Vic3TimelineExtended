@@ -158,6 +158,15 @@ class TakeTests(SnapshotTestCase):
         self.assertIn("ticktask_timings.csv", snap.files)
         self.assertIn("ticktask_timings.csv", snap.listing)
 
+    def test_the_set_is_matched_in_any_case_and_stored_under_the_name_there(self):
+        # The folder is on NTFS: the game's write to ticktask_timings.csv goes into an owner's TickTask_Timings.csv
+        (self.user / "TickTask_Timings.csv").write_bytes(b"\xef\xbb\xbfframe,task,milliseconds,calls,longest_lock\n")
+        (self.user / "save games" / "AutoSave.v3").write_bytes(b"save")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertIn("TickTask_Timings.csv", snap.files)
+        self.assertIn("save games/AutoSave.v3", snap.files)
+        self.assertNotIn("ticktask_timings.csv", snap.files)
+
     def test_the_listing_covers_every_folder_the_set_reads_from(self):
         for pattern in snapshot.SNAPSHOT_SET:
             self.assertIn(pattern.rpartition("/")[0], snapshot.LISTED_FOLDERS, pattern)

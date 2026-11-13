@@ -499,6 +499,20 @@ class TickTaskTimingsTests(RestoreTestCase):
         self.assertIn("not_in_the_set.csv", snap.listing)
         self.assertNotIn("not_in_the_set.csv", snap.files)
 
+    def test_an_owners_copy_in_another_case_is_stored_and_put_back(self):
+        # On NTFS the game's dump goes into TickTask_Timings.csv, which keeps its name; here, the same path
+        path = self.user / "TickTask_Timings.csv"
+        path.write_bytes(self.OWNERS)
+        set_mtime(path, NOW, -86400)
+        snap = self.run_started(at=NOW)
+        self.assertIn("TickTask_Timings.csv", snap.files)
+        path.write_bytes(self.RUNS)
+        set_mtime(path, NOW, 30)
+        finish(snap, at=NOW + timedelta(seconds=60))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertIn("TickTask_Timings.csv", out.restored)
+        self.assertEqual(path.read_bytes(), self.OWNERS)
+
     def test_a_symlink_by_that_name_is_listed_and_never_removed(self):
         (self.user / "elsewhere.csv").write_bytes(self.OWNERS)
         (self.user / self.NAME).symlink_to("elsewhere.csv")

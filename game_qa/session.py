@@ -1397,7 +1397,8 @@ class Session:
         return label
 
     def _check_snapshotted(self, names: Sequence[str]) -> None:
-        """Refuse `not_snapshotted` unless the run's snapshot can be read and stored each of `names` it listed."""
+        """Refuse `not_snapshotted` unless the run's snapshot can be read and stored each of `names` it listed, in
+        any case: on NTFS the game's write to one of `names` goes into a file whose name differs only in case."""
         try:
             snap = snapshot.load(Path(self._paths.backup_root) / "snapshots" / self._snapshot)
         except (OSError, ValueError) as e:
@@ -1405,11 +1406,12 @@ class Session:
                                                   "files a dump overwrites is not known: nothing was typed"
                                % _describe(e)) from e
         for name in names:
-            if name in snap.listing and name not in snap.files:
-                raise SessionError("not_snapshotted", "the snapshot listed %s but did not store it (a link, or a "
-                                                      "snapshot taken before the set named it): the restore would "
-                                                      "not put it back, so no dump is made over it. Nothing was "
-                                                      "typed" % name)
+            for listed in sorted(snap.listing):
+                if listed.lower() == name.lower() and listed not in snap.files:
+                    raise SessionError("not_snapshotted", "the snapshot listed %s but did not store it (a link, or a "
+                                                          "snapshot taken before the set named it): the restore "
+                                                          "would not put it back, so no dump is made over it. "
+                                                          "Nothing was typed" % listed)
 
     def _vouch_for_copies(self) -> None:
         """After a dump's files were copied: the game must still be the run's own, alive (one `adopt`). If not, the
