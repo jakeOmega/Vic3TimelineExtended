@@ -80,6 +80,10 @@ DATE_WAIT_S = 5.0                       # from the resume to the read event's li
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
 LOG_POLL_S = 0.2
 CLICK_SETTLE_S = 1.0                    # after the country click, before Start (unverified)
+# The helper's refusals of a click that come before the button goes down (win_helper._op_click: the window in
+# front and the process the recorded one, the point inside the client area, the cursor on it, the game's window
+# under it). Any other error may follow the press.
+CLICK_REFUSED_BEFORE_PRESS = ("not_foreground", "bad_point", "cursor_misplaced", "covered", "not_ours")
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -131,7 +135,7 @@ class SessionError(Exception):
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
-    not_on_country_select, click_refused, not_entered, left_running, bad_days, stalled, not_started, stopped
+    not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
@@ -798,6 +802,47 @@ class Session:
             path = self._shot()
             out["path"] = str(path)
         return path
+
+    def click(self, x: float, y: float) -> dict:
+        """One left click at (x, y), fractions of the game window's client area from its top left, then a
+        screenshot of what it did. It is for the engine's own tool windows that no console command reads, such as
+        the script profiler's call graph (#1701, the owner's go-ahead of 2026-11-12); it can press anything a
+        player can, so what it is aimed at is the caller's to know, from a `shot` first.
+
+        The click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
+        (`_ProvedHelper.click`); the console is left as it is. A click the helper refused before the button went
+        down (CLICK_REFUSED_BEFORE_PRESS) is `click_refused` and pressed nothing; any other helper error
+        (`backend_error`, `helper_gone`, a timeout) is `click_unknown`, since it may have come after the press: take
+        a `shot` before clicking again. A screenshot that fails after the click is not a refusal: the reply has
+        `screenshot: null` and `screenshot_error`, as enter-game's does.
+
+        The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
+        must never be aimed at the game's own menus (save, load, settings, exit).
+
+        A click into a tool window takes the keyboard (live, 2026-11-12): the next typed command does not reach the
+        console (a read's `no_stop` with `arrived: false`) until the console's input line is clicked, at
+        (0.1125, 0.544) with the console open on the left. #1710 asks for that to be done here, with drag and
+        wheel verbs for the profiler's window."""
+        self._require_game()
+        fraction = (_fraction("x", x), _fraction("y", y))
+        with self._step("click", x=x, y=y) as out:
+            self._console.front()
+            px, py = self._point(fraction)
+            try:
+                self._sends.click(self._proc.pid, px, py)
+            except HelperError as e:
+                if e.code in CLICK_REFUSED_BEFORE_PRESS:
+                    raise SessionError("click_refused", "%s: %s" % (e.code, e.detail)) from e
+                raise SessionError("click_unknown", "%s: %s; the button may have been pressed: take a shot before "
+                                                    "clicking again" % (e.code, e.detail), pixel=[px, py]) from e
+            out["pixel"] = [px, py]
+            self._sleep(CLICK_SETTLE_S)
+            try:
+                out["screenshot"] = str(self._shot())
+            except HelperError as e:
+                out["screenshot"], out["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
+                return {"pixel": [px, py], "screenshot": None, "screenshot_error": out["screenshot_error"]}
+        return {"pixel": [px, py], "screenshot": out["screenshot"]}
 
     def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:
         """The owner's first check: each option of `event` in turn, fired, read, picked and read again.
@@ -1848,6 +1893,14 @@ def _describe(e: BaseException) -> str:
 
 def _text(value) -> str:
     return " ".join(str(value).split())
+
+
+def _fraction(name: str, value) -> float:
+    """A click's coordinate: a fraction of the client area, at least 0 and below 1."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value < 1:
+        raise SessionError("bad_argument", "%s is a fraction of the window, at least 0 and below 1, not %r"
+                           % (name, value))
+    return float(value)
 
 
 def _check_tag(tag: str) -> None:

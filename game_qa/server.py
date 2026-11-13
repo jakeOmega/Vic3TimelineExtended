@@ -28,7 +28,7 @@ removes the folder (spec § 5.2, Review Focus 1).
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
     status     the server and the session, answered here without asking the game anything
-    the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, try-event
+    the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, click, try-event
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -168,7 +168,7 @@ class SessionServer:
         self._verbs: dict[str, Callable[[dict], tuple[dict, int]]] = {
             "console": self._console, "run-setup": self._run_setup, "events": self._events, "pick": self._pick,
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
-            "shot": self._shot, "try-event": self._try_event,
+            "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
         }
 
@@ -334,6 +334,9 @@ class SessionServer:
 
     def _shot(self, body: dict) -> tuple[dict, int]:
         return {"path": str(self._session.shot())}, 0
+
+    def _click(self, body: dict) -> tuple[dict, int]:
+        return self._session.click(_arg(body, "x"), _arg(body, "y")), 0
 
     def _try_event(self, body: dict) -> tuple[dict, int]:
         reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))
