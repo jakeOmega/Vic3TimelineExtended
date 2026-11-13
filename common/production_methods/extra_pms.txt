@@ -5111,15 +5111,19 @@ pm_robotic_service_providers = {
 			# Profit: 7755.0
 			# Profit margin: 134.99%
 			# Zero profit price multiplier: 0.43
-			# Employment: 10
-			# Wage breakeven: 775.50
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
-		level_scaled = {
-			building_employment_academics_add = 10
-		}
-
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): a fixed crew
+		# runs the building at any size, where this method hired 10 academics a
+		# level. Clerks, the amenities' own trade, as Autonomous Logistics keeps
+		# clerks.
 		unscaled = {
+			building_employment_clerks_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -6186,14 +6190,25 @@ pm_programmable_paper = {
 			# Profit: -1600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3890
+			# Employment: -3900
 			# Wage breakeven: 0.41
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# Self-Growing Paper's per-level workforce (Bleached Paper keeps 1,000
+		# machinists and 100 shopkeepers), and a fixed crew runs the building at any
+		# size. It left 10 engineers a level.
 		level_scaled = {
 			building_employment_laborers_add = -3000
 			building_employment_shopkeepers_add = -400
-			building_employment_engineers_add = -490
+			building_employment_engineers_add = -500
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -6398,14 +6413,25 @@ pm_bespoke_alloys = {
 			# Profit: -1400.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -2990
+			# Employment: -3000
 			# Wage breakeven: 0.47
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# the engineers and laborers of every base method (machinists and
+		# shopkeepers stay on the older ones), and a fixed crew runs the building at
+		# any size. It left 10 engineers a level.
 		level_scaled = {
 			# employment
 			building_employment_laborers_add = -2000
-			building_employment_engineers_add = -990
+			building_employment_engineers_add = -1000
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -6699,6 +6725,7 @@ pm_mass_produced_packaged_food = {
 
 pm_robotic_food_processing = {
 	texture = "gfx/interface/icons/production_method_icons/pm_robotic_food_processing.dds"
+	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
 		supply_chain_management
@@ -6706,12 +6733,14 @@ pm_robotic_food_processing = {
 
 	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
-	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	# Gated to base PMs that employ enough to keep employment non-negative
+	# (pm_employment_audit). Programmable Food Synthesis has its own copy,
+	# pm_robotic_food_processing_synthesis, with a flat crew; hidden when
+	# unavailable, so a building shows one Robotic Food Processing.
 	unlocking_production_methods = {
 		pm_baking_powder
 		pm_food_additives
 		pm_sweeteners
-		pm_programmable_food_synthesis
 	}
 
 	building_modifiers = {
@@ -6738,6 +6767,60 @@ pm_robotic_food_processing = {
 		}
 
 		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
+	}
+}
+
+pm_robotic_food_processing_synthesis = {
+	texture = "gfx/interface/icons/production_method_icons/pm_robotic_food_processing.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		supply_chain_management
+	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
+	# Split from pm_robotic_food_processing so the cut is exact on Programmable
+	# Food Synthesis, the one base it left only 10 engineers a level on (#996's
+	# pattern); hidden when unavailable, so a building shows one copy.
+	unlocking_production_methods = {
+		pm_programmable_food_synthesis
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (10.32%)
+			goods_input_copper_add = 1                           # Price:   40, Total cost:    40.0 (2.58%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (9.68%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (25.81%)
+			goods_input_robotics_add = 10                        # Price:   80, Total cost:   800.0 (51.61%)
+			# Output goods
+			# Total input cost: 1550.0
+			# Total output cost: 0
+			# Profit: -1550.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -4010
+			# Wage breakeven: 0.39
+		}
+
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# Programmable Food Synthesis' whole per-level workforce, and a fixed crew
+		# runs the building at any size. It left 10 engineers a level.
+		level_scaled = {
+			building_employment_laborers_add = -3500
+			building_employment_machinists_add = -500
+			building_employment_engineers_add = -10
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -7003,15 +7086,25 @@ pm_programmable_plastics = {
 			# Profit: -1600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -4990
+			# Employment: -5000
 			# Wage breakeven: 0.32
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# every base method's per-level workforce, and a fixed crew runs the
+		# building at any size. It left 10 engineers a level.
 		level_scaled = {
 			building_employment_laborers_add = -2500
 			building_employment_machinists_add = -1250
-			building_employment_engineers_add = -740
+			building_employment_engineers_add = -750
 			building_employment_shopkeepers_add = -500
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -10217,17 +10310,25 @@ pm_automated_harvesters_and_planters = {
 			# Profit: -550.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3490
+			# Employment: -3500
 			# Wage breakeven: 0.16
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# Designed Crops' whole per-level workforce (Modern Farming keeps 1,500
+		# farmers), and a fixed crew runs the building at any size. It left 10
+		# engineers a level.
 		level_scaled = {
 			building_employment_laborers_add = -2500
 			building_employment_farmers_add = -500
-			building_employment_engineers_add = -490
+			building_employment_engineers_add = -500
 		}
 
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -10349,17 +10450,25 @@ pm_automated_harvesters_and_planters_building_rice_farm = {
 			# Profit: -1100.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -6980
+			# Employment: -7000
 			# Wage breakeven: 0.16
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# Designed Crops' whole per-level workforce (Modern Farming keeps 1,000
+		# farmers), and a fixed crew runs the building at any size. It left 20
+		# engineers a level.
 		level_scaled = {
 			building_employment_laborers_add = -5000
 			building_employment_farmers_add = -1000
-			building_employment_engineers_add = -980
+			building_employment_engineers_add = -1000
 		}
 
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -11116,18 +11225,25 @@ pm_self_optimizing_production  = {
 			# Profit: -1910.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -4990
+			# Employment: -5000
 			# Wage breakeven: 0.38
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# every base method's per-level workforce, and a fixed crew runs the
+		# building at any size. It left 10 shopkeepers a level.
 		level_scaled = {
 			building_employment_laborers_add = -1500
 			building_employment_machinists_add = -1500
-			building_employment_shopkeepers_add = -490
+			building_employment_shopkeepers_add = -500
 			building_employment_engineers_add = -1500
 		}
 
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -11548,15 +11664,17 @@ pm_autonomous_highway = {
 			# Profit: 3100.0
 			# Profit margin: 40.26%
 			# Zero profit price multiplier: 0.71
-			# Employment: 20
-			# Wage breakeven: 155.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
-		level_scaled = {
-			# employment
-			building_employment_engineers_add = 20
-		}
-
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): a fixed crew
+		# runs the building at any size, where this method hired 20 engineers a
+		# level.
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -12787,11 +12905,17 @@ pm_artificial_personalities = {
 			# Profit: 1060.0
 			# Profit margin: 79.10%
 			# Zero profit price multiplier: 0.56
-			# Employment: 10
-			# Wage breakeven: 106.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
-		level_scaled = {
-			building_employment_shopkeepers_add = 10
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): a fixed crew
+		# runs the building at any size, where this method hired 10 shopkeepers a
+		# level.
+		unscaled = {
+			building_employment_shopkeepers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13370,7 +13494,7 @@ pm_ai_managed_building_furniture_manufactory = {
 	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Gated to base PMs that employ enough to absorb this PM's employment
-	# cut (laborers -3000 / machinists -1250 / engineers -740). Without the
+	# cut (laborers -3000 / machinists -1250 / engineers -750). Without the
 	# gate, low-tier base PMs drive employment negative. See pm_employment_audit.
 	unlocking_production_methods = {
 		pm_mechanized_workshops
@@ -13392,17 +13516,25 @@ pm_ai_managed_building_furniture_manufactory = {
 			# Profit: -1870.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -4990
+			# Employment: -5000
 			# Wage breakeven: 0.37
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# the base method's engineers, laborers and machinists (the shopkeepers
+		# stay), and a fixed crew runs the building at any size. It left 10
+		# engineers a level.
 		level_scaled = {
 			building_employment_laborers_add = -3000
 			building_employment_machinists_add = -1250
-			building_employment_engineers_add = -740
+			building_employment_engineers_add = -750
 		}
 
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -14048,7 +14180,7 @@ pm_ai_managed_textile_factory = {
 	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Gated to base PMs that employ enough to absorb this PM's employment
-	# cut (laborers -3000 / machinists -1000 / engineers -490). See pm_employment_audit.
+	# cut (laborers -3000 / machinists -1000 / engineers -500). See pm_employment_audit.
 	unlocking_production_methods = {
 		pm_electric_sewing_machines
 		pm_programmable_matter_clothing
@@ -14069,17 +14201,25 @@ pm_ai_managed_textile_factory = {
 			# Profit: -1600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -4490
+			# Employment: -4500
 			# Wage breakeven: 0.36
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): the cut cancels
+		# the base method's engineers, laborers and machinists (the shopkeepers
+		# stay), and a fixed crew runs the building at any size. It left 10
+		# engineers a level.
 		level_scaled = {
 			building_employment_laborers_add = -3000
 			building_employment_machinists_add = -1000
-			building_employment_engineers_add = -490
+			building_employment_engineers_add = -500
 		}
 
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -15133,14 +15273,16 @@ pm_autonomous_trains = {
 			# Profit: 785.0
 			# Profit margin: 24.38%
 			# Zero profit price multiplier: 0.80
-			# Employment: 10
-			# Wage breakeven: 78.50
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
-		level_scaled = {
-			building_employment_clerks_add = 10
-		}
-
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): a fixed crew
+		# runs the building at any size, where this method hired 10 clerks a level.
 		unscaled = {
+			building_employment_clerks_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
@@ -15184,14 +15326,17 @@ pm_vactrain_freight = {
 			# Profit: 1400.0
 			# Profit margin: 37.84%
 			# Zero profit price multiplier: 0.73
-			# Employment: 10
-			# Wage breakeven: 140.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
-		level_scaled = {
-			building_employment_engineers_add = 10
-		}
-
+		# Flat crew (as pm_ai_managed_fab, #993; owner, 2026-11-13): a fixed crew
+		# runs the building at any size, where this method hired 10 engineers a
+		# level.
 		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: the crew takes these jobs over
+			# others, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}

@@ -23,6 +23,12 @@ price of a late save, not a staff floor. The AI-managed methods' flat crews
 (pm_ai_managed_*, a fixed crew at any level by design, docs/superpowers/archive/specs/
 2026-10-16-ai-managed-flat-staff-design.md) aren't per-level staff and are left out too.
 
+The low-staff methods elsewhere hire a flat crew instead (owner, 2026-11-13): an
+automation method cancels its base method's per-level workforce exactly and a fixed crew
+of 1,000 runs the building at any size, as the AI-managed tier does. TokenCrewTest holds
+that across the whole mod: no combination of any building's methods leaves a level 1 to
+99 staff, so a new method either keeps a real crew a level or hires a flat one.
+
 Everything is read from the files: the buildings' method groups (vanilla_parsed under the
 mod, as ModState merges them), each method's goods and staff, the methods each one needs
 (unlocking_production_methods), and the goods' base prices as pm_costs.py prices them. The
@@ -52,6 +58,21 @@ BUILDINGS = {
     "building_aerospace_industry": "pmg_automation_building_aerospace_industry",
     "building_construction_sector": "pmg_construction_automation",
     "building_ocean_mine": "pmg_base_building_ocean_mine",
+}
+# Buildings whose levels keep a token staff by design, and groups whose staff is not the
+# building's workforce. Everything else keeps 0 or at least MIN_STAFF a level.
+TOKEN_CREW_EXEMPT = {
+    "building_company_headquarter": "an ownership building: its owners, a few a level",
+    "building_company_regional_headquarter": "an ownership building",
+    "building_financial_district": "an ownership building",
+    "building_manor_house": "an ownership building",
+    "building_manila_cathedral_ruins": "a monument's ruins",
+    "te_construction_market_site": "the construction market's marker building",
+}
+TOKEN_CREW_IGNORED_GROUPS = {
+    # The state's clergy (Decentralized Religious Structures keeps 50 a level), not the
+    # Urban Center's amenities staff, which Robotic Service Providers hires flat.
+    "pmg_urban_clergy",
 }
 OCEAN_STEPS = (("pm_advanced_ocean_mine", "pm_automated_ocean_mine"),
                ("pm_advanced_ocean_mine_uncapped", "pm_automated_ocean_mine_uncapped"))
@@ -117,6 +138,12 @@ class _Data:
                              if k.startswith("building_employment_") and k.endswith("_add"))
             self._figures[name] = (cost, revenue, staff)
         return self._figures[name]
+
+    def staff(self, name):
+        """Per-level staff of one method (level_scaled), without pricing its goods."""
+        modifiers = _body(self.pms[name].get("building_modifiers")) or {}
+        return sum(float(_body(q)) for block in _blocks(modifiers, "level_scaled")
+                   for k, q in block.items() if k.startswith("building_employment_") and k.endswith("_add"))
 
     def valid(self, combo):
         chosen = set(combo)
@@ -201,6 +228,42 @@ class AutomatedMethodsBalanceTest(unittest.TestCase):
                 with self.subTest(building=building, before=before, after=after):
                     self.assertLess(staff_after, staff_before)
                     self.assertLessEqual(extra / (staff_before - staff_after), MAX_BREAKEVEN_WAGE)
+
+
+class TokenCrewTest(unittest.TestCase):
+    """No level keeps a token crew: every combination of a building's methods leaves 0 or at
+    least MIN_STAFF a level (owner, 2026-11-13: low-staff methods hire a flat crew instead)."""
+
+    def test_no_combination_keeps_a_token_crew_a_level(self):
+        data = _data()
+        checked = 0
+        for building in sorted(data.buildings):
+            if building in TOKEN_CREW_EXEMPT:
+                continue
+            groups = [g for g in data.groups(building)
+                      if g not in TOKEN_CREW_IGNORED_GROUPS and g in data.groups_by_name]
+            methods = [[m for m in data.methods(g) if m in data.pms] for g in groups]
+            if not groups or not all(methods):
+                continue
+            for combo in itertools.product(*methods):
+                if not data.valid(combo):
+                    continue
+                checked += 1
+                staff = sum(data.staff(m) for m in combo)
+                if 0 < staff < MIN_STAFF:
+                    self.fail(f"{building}: {' + '.join(combo)} keeps {staff:.0f} a level; "
+                              f"keep {MIN_STAFF} or more, or hire a flat crew in unscaled")
+        self.assertGreater(checked, 10000)
+
+    def test_the_exemptions_still_need_it(self):
+        """An exempt building that no longer keeps a token crew comes off the list."""
+        data = _data()
+        for building in TOKEN_CREW_EXEMPT:
+            with self.subTest(building=building):
+                self.assertIn(building, data.buildings)
+                groups = [g for g in data.groups(building) if g not in TOKEN_CREW_IGNORED_GROUPS]
+                combos = [c for c in itertools.product(*(data.methods(g) for g in groups)) if data.valid(c)]
+                self.assertTrue(any(0 < sum(data.staff(m) for m in c) < MIN_STAFF for c in combos))
 
 
 if __name__ == "__main__":
