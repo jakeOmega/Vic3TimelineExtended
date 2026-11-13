@@ -175,7 +175,7 @@ the pass intends for a country no longer due: Bornu (1933.8.6, during its civil 
 ended the new entry within its first month with a voluntary end, so the 1937.10.1 autosave shows both with no
 record of the entry, `colonial_empire_has_ended` and Negotiated Withdrawal (a small bonus, +5 diplomatic reputation among others, for
 ten years, decaying). The month's wait was meant to stop a colony test that holds for one pass from starting an entry that
-ends at once; here it held for two passes and failed in the third, twice in five adds (issue to follow).
+ends at once; here it held for two passes and failed in the third, twice in five adds (#1735).
 
 ### Checks
 
