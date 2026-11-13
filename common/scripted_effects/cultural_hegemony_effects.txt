@@ -997,65 +997,70 @@ ch_yearly_global_update = {
 			# column (CH-2). The board used to print a slot's change, so a new
 			# occupant was measured against whoever held the rank before.
 			# Display bookkeeping; ch_board_rebuild copies it onto the row.
+			# The share is read once (ch_board_share_now): the change, the stored
+			# share and a board slot's score all take it, and each read runs the
+			# whole pull chain, fine-art walks included.
+			set_variable = { name = ch_board_share_now value = cultural_pull_display }
 			set_variable = { name = ch_board_delta_now value = 0 }
 			if = {
 				limit = { has_variable = ch_board_share_prev }
-				set_variable = { name = ch_board_delta_now value = cultural_pull_display }
+				set_variable = { name = ch_board_delta_now value = var:ch_board_share_now }
 				change_variable = { name = ch_board_delta_now subtract = var:ch_board_share_prev }
 			}
-			set_variable = { name = ch_board_share_prev value = cultural_pull_display }
+			set_variable = { name = ch_board_share_prev value = var:ch_board_share_now }
 
 			if = {
 				limit = { global_var:ch_ldr_idx < 1 }
 				set_global_variable = { name = ch_rank_1 value = THIS }
-				set_global_variable = { name = ch_rank_1_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_1_score value = var:ch_board_share_now }
 				set_global_variable = { name = ch_top_cultural_pull value = cultural_pull_total }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 2 }
 				set_global_variable = { name = ch_rank_2 value = THIS }
-				set_global_variable = { name = ch_rank_2_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_2_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 3 }
 				set_global_variable = { name = ch_rank_3 value = THIS }
-				set_global_variable = { name = ch_rank_3_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_3_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 4 }
 				set_global_variable = { name = ch_rank_4 value = THIS }
-				set_global_variable = { name = ch_rank_4_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_4_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 5 }
 				set_global_variable = { name = ch_rank_5 value = THIS }
-				set_global_variable = { name = ch_rank_5_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_5_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 6 }
 				set_global_variable = { name = ch_rank_6 value = THIS }
-				set_global_variable = { name = ch_rank_6_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_6_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 7 }
 				set_global_variable = { name = ch_rank_7 value = THIS }
-				set_global_variable = { name = ch_rank_7_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_7_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 8 }
 				set_global_variable = { name = ch_rank_8 value = THIS }
-				set_global_variable = { name = ch_rank_8_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_8_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 9 }
 				set_global_variable = { name = ch_rank_9 value = THIS }
-				set_global_variable = { name = ch_rank_9_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_9_score value = var:ch_board_share_now }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 10 }
 				set_global_variable = { name = ch_rank_10 value = THIS }
-				set_global_variable = { name = ch_rank_10_score value = cultural_pull_display }
+				set_global_variable = { name = ch_rank_10_score value = var:ch_board_share_now }
 			}
+			remove_variable = ch_board_share_now
 			change_global_variable = { name = ch_ldr_idx add = 1 }
 		}
 		set_global_variable = { name = ch_ranked_total value = global_var:ch_ldr_idx }
