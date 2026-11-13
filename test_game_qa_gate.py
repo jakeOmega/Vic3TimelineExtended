@@ -423,6 +423,13 @@ class CommandLineTest(unittest.TestCase):
         when = (dt.datetime.now(UTC) - dt.timedelta(minutes=minutes_ago)).timestamp()
         os.utime(path, (when, when))
 
+    def game_writes(self, rel, data: bytes, at: dt.datetime):
+        """The run's game writes `rel`, dated `at`: a time from `naps_clock`, so that the hold rule judges the write
+        against an exit on the same clock (#1693)."""
+        path = self.user / rel
+        path.write_bytes(data)
+        os.utime(path, (at.timestamp(), at.timestamp()))
+
     def armed_snapshot(self, armed: dt.datetime) -> snapshot.Snapshot:
         """A snapshot taken for a run whose journal says it was armed at `armed`."""
         snap = snapshot.take(self.user, self.backups)
@@ -464,37 +471,37 @@ class CommandLineTest(unittest.TestCase):
 
     def test_snapshot_watch_restore_puts_a_changed_file_back(self):
         before = self.tree()
+        with self.naps_clock() as now:      # the run's writes are judged against its exit (#1693)
+            def the_run():
+                self.game_writes("continue_game.json", b'{"title": "autosave"}', now())
+                self.game_writes("save games/TEST_FAIL_te_qa_fixture_2 January, 1836.v3", b"x", now())
 
-        def the_run():
-            (self.user / "continue_game.json").write_text('{"title": "autosave"}')
-            (self.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"x")
-
-        snap_id = self.launched_run(the_run)
-        self.assertIn("save games/new york_1940_07_29.v3", self.the_snapshot().files)
-        self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat", "game_exited"])
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"]), (0, False))
+            snap_id = self.launched_run(the_run)
+            self.assertIn("save games/new york_1940_07_29.v3", self.the_snapshot().files)
+            self.assertEqual(self.events(), ["armed", "started", "watching", "heartbeat", "game_exited"])
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
         self.assertEqual(self.tree(), before)
 
     def test_a_file_the_game_wrote_again_with_the_same_bytes_gets_its_time_back(self):
         # #1588: the game writes pdx_settings.json again at launch, byte for byte (here, a file this folder has).
         # Nothing is put back, and the folder still ends exactly as the snapshot found it, times included; the
         # reply says which time moved.
-        before = self.tree()
-
-        def the_run():
-            path = self.user / "continue_game.json"
-            path.write_bytes(path.read_bytes())
-            when = time.time() + 0.5                    # later than the snapshot's, whatever the clock's grain
-            os.utime(path, (when, when))
-
-        snap_id = self.launched_run(the_run)
-        self.assertNotEqual(self.tree(), before)
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["restored"], out["retimed"]), (0, False, [], ["continue_game.json"]))
-        self.assertEqual(self.tree(), before)
-        self.assertEqual(snapshot.journal(self.the_snapshot())[-1]["retimed"], ["continue_game.json"])
-        again, code = self.run_cli("restore", snap_id)
+        path = self.user / "continue_game.json"
+        # The rewrite counts as the run's only if it is later than the snapshot's time and not later than the exit
+        # (restore._retouched), so the owner's copy, the rewrite and the exit all take the naps' clock (#1693).
+        with self.naps_clock() as now:
+            owners = (now() - dt.timedelta(minutes=1)).timestamp()
+            os.utime(path, (owners, owners))            # the owner's copy, a minute before the snapshot
+            before = self.tree()
+            snap_id = self.launched_run(lambda: self.game_writes("continue_game.json", path.read_bytes(), now()))
+            self.assertNotEqual(self.tree(), before)
+            out, code = self.run_cli("restore", snap_id)
+            self.assertEqual((code, out["held"], out["restored"], out.get("retimed")),
+                             (0, False, [], ["continue_game.json"]), self.why(out))
+            self.assertEqual(self.tree(), before)
+            self.assertEqual(snapshot.journal(self.the_snapshot())[-1]["retimed"], ["continue_game.json"])
+            again, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, again["held"]), (0, False))
         self.assertNotIn("retimed", again)              # nothing moved: the key is there only when a time was set
 
@@ -518,7 +525,7 @@ class CommandLineTest(unittest.TestCase):
         snap_id = self.launched_run()
         theirs = self.user / "save games" / "autosave.v3"
         theirs.write_bytes(b"the owner played for an hour after the run")
-        later = dt.datetime.now().timestamp() + 3600
+        later = dt.datetime.now().timestamp() + 3600   # an hour past the exit: no clock step comes near it (#1693)
         os.utime(theirs, (later, later))
         out, code = self.run_cli("restore", snap_id)
         self.assertEqual((code, out["held"], out["reason"]), (2, True, "modified_after_exit"))
@@ -532,7 +539,7 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((code, out["reason"]), (2, "other_game_running"))
         theirs = self.user / "save games" / "autosave.v3"
         theirs.write_bytes(b"their session's autosave")
-        later = dt.datetime.now().timestamp() + 3600
+        later = dt.datetime.now().timestamp() + 3600   # an hour past the exit: no clock step comes near it (#1693)
         os.utime(theirs, (later, later))
         self.games = []
         out, code = self.run_cli("restore", snap_id)
@@ -548,22 +555,24 @@ class CommandLineTest(unittest.TestCase):
         self.assertNotIn("game_exited", self.events())
 
     def test_restore_reports_a_damaged_store_instead_of_a_traceback(self):
-        snap_id = self.launched_run(lambda: (self.user / "continue_game.json").write_text("{}"))
-        entry = self.the_snapshot().files["continue_game.json"]
-        blob = self.backups / "store" / entry.sha256[:2] / entry.sha256
-        blob.write_bytes(bytes(b ^ 1 for b in blob.read_bytes()))
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["refused"]), (2, "error"))
+        with self.naps_clock() as now:      # the run's write is judged against its exit, before the store (#1693)
+            snap_id = self.launched_run(lambda: self.game_writes("continue_game.json", b"{}", now()))
+            entry = self.the_snapshot().files["continue_game.json"]
+            blob = self.backups / "store" / entry.sha256[:2] / entry.sha256
+            blob.write_bytes(bytes(b ^ 1 for b in blob.read_bytes()))
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out.get("refused")), (2, "error"), self.why(out))
         self.assertEqual((self.user / "continue_game.json").read_text(), "{}")
 
     def test_restore_puts_back_a_changed_save_whose_name_has_spaces_and_commas(self):
         name = "save games/Paris, 2 January, 1836.v3"
         (self.user / name).write_bytes(b"the owner's save")
         before = self.tree()
-        snap_id = self.launched_run(lambda: (self.user / name).write_bytes(b"the run saved over it"),
-                                   save="Paris, 2 January, 1836")
-        out, code = self.run_cli("restore", snap_id)
-        self.assertEqual((code, out["held"], out["restored"]), (0, False, [name]))
+        with self.naps_clock() as now:      # the run's save is judged against its exit (#1693)
+            snap_id = self.launched_run(lambda: self.game_writes(name, b"the run saved over it", now()),
+                                        save="Paris, 2 January, 1836")
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["restored"]), (0, False, [name]), self.why(out))
         self.assertEqual(self.tree(), before)
 
     def test_restore_waits_while_watch_is_still_recording(self):
