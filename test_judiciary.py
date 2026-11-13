@@ -558,6 +558,18 @@ class ShockTest(unittest.TestCase):
             self.assertIn("TE_SELF_CHECK OK " + name, verdict)
             self.assertIn("TE_SELF_CHECK BROKEN " + name, verdict)
         self.assertIn("te_jud_dt_probe_start = yes", _block(_read(ON_ACTIONS), "te_jud_monthly"))
+        # A run with no verdict starts again a month later, three times at most: the fourth start logs the
+        # control's failure once and stops (it restarted every month for the rest of the game, review 2026-11-13).
+        self.assertIn("global_var:te_jud_dt_probe_runs >= 3", start)
+        self.assertLess(start.index("has_global_variable = te_jud_dt_probe_runs"),
+                        start.index("global_var:te_jud_dt_probe_runs >= 3"), "guarded before it is read")
+        self.assertIn("TE_SELF_CHECK BROKEN delayed_trigger_control", start)
+        self.assertLess(start.index("TE_SELF_CHECK BROKEN delayed_trigger_control"),
+                        start.index("te_judiciary_events.11"), "the stop comes instead of a fourth run")
+        self.assertRegex(start, r"set_global_variable = te_jud_dt_probe_done\s+remove_global_variable = "
+                                r"te_jud_dt_probe_runs")
+        self.assertIn("change_global_variable = { name = te_jud_dt_probe_runs add = 1 }", start)
+        self.assertIn("remove_global_variable = te_jud_dt_probe_runs", verdict)
 
 
 MINOR_EVENTS = os.path.join(REPO, "events", "minor_events.txt")
