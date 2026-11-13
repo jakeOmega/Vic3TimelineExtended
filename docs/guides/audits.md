@@ -190,7 +190,7 @@ One comment on an event's opening line is read by every audit that reads that li
 
 1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit is the function that finds flags; `audit_common.py` gives it the rest: `parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that exits 1 on an unreviewed flag or a stale tag. A reload audit also needs `regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array (`audit_common.summary` builds it).
 2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.
-3. Add one `Audit(...)` entry to `audit_registry.py`.
-4. Run `python3 audit_registry.py --write` and commit this file with the rest.
+3. Add one `Audit(...)` entry to `audit_registry.py`, with `builds_mod_state=True` if its command line builds a `ModState`.
+4. Run `python3 audit_registry.py --write` and commit this file with the rest. It also corrects the audit counts `docs/guides/python_tools.md` spells out, and prints what is left there for you to write: a CI audit's row in the command table, its row in the reload table, its name where a sentence lists audits by where they run.
 
-CI, `scripts/preflight.py` and this page all read the registry, and `test_audit_registry.py` fails on an audit file the registry leaves out.
+CI, `scripts/preflight.py` and this page all read the registry, `test_audit_registry.py` fails on an audit file the registry leaves out, and `audit_registry.py --check` fails on a count in `python_tools.md` that disagrees with it.
