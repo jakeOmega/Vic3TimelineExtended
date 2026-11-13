@@ -703,10 +703,15 @@ session (`20261113T170446Z`) two 14-day blocks ran with it open; then
 - **What the sections read.** Every row is shown or hidden by a count
   (`te_nation_type_<modifier type>_count`, 83 of them, with a sum for each
   group and section), and each count is a chain of `has_modifier` tests: 964
-  in `te_nation_generated_values.txt`, all read again whenever the game's
-  state changes, which while it runs is every frame. Which of the six panels
-  carries the cost, and whether it is the counts or the rows' text, was not
-  separated.
+  in `te_nation_generated_values.txt`, all read again on every frame while
+  the game runs. And each row that shows is a line of text built with
+  `Country.GetModifier.GetValueWithBreakdownFor('<type>')` (81 rows in
+  `te_nation_generated_l_english.yml`), which has the engine assemble that
+  modifier type's whole breakdown to draw the figure; vanilla uses the
+  accessor 21 times in all its interface, one or two to a panel. Which of
+  the six panels carries the cost, and whether it is the counts or the
+  breakdowns, was not separated; the breakdowns are the likelier, since 964
+  `has_modifier` tests should cost far less than 9 ms (#1760 has the test).
 - **This fits the owner's own play**, 1.9 s a day over the same dates
   ("Measurements, 2026-11-12"), if the window stood open; that is for the
   owner to say.
@@ -1213,12 +1218,14 @@ of those items now opens with its answer.
 16. **The Timeline Extended window's Nation tab** (2026-11-13). Open, it
     makes every frame twice as dear and a rendering-on day 55% to 70% longer
     ("The mod's own window"). The cost is in the overview and the five
-    sections, which decide each row's visibility from 83 generated counts of
-    `has_modifier` tests on every frame. To fix (#1760): find which panel and
-    whether it is the counts or the text (the knockout variants and the
-    probe that opens the window are beside the runs), then either gate the
-    rows behind collapsed sections as the two list panels are, or have the
-    generator write counts the tab reads once a month from variables. Other
+    sections, whose rows are shown or hidden by 83 generated counts of
+    `has_modifier` tests and drawn with the engine's breakdown accessor, up
+    to 81 at once, on every frame. To fix (#1760): test whether the
+    breakdowns are the cost (a variant whose rows read `GetValueFor`; the
+    probe that opens the window is beside the runs), and if so keep the plain
+    figure in the row and move the breakdown to its tooltip; otherwise gate
+    the rows behind collapsed sections, as the two list panels are, or have
+    the generator write the counts into variables once a month. Other
     tabs, the full-screen layout and National Info are unmeasured.
 17. **The journal-entry update interval** (2026-11-13). Under 1% of the day
     by its task; four runs at three times the default read 6% faster and a
