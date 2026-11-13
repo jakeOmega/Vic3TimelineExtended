@@ -1093,9 +1093,9 @@ voluntary_union = {
 					any_interest_group = {
 						is_in_government = yes
 						OR = {
-							leader = { has_ideology = ideology:ideology_pacifist }
-							leader = { has_ideology = ideology:ideology_humanitarian }
-							leader = { has_ideology = ideology:ideology_anarchist }
+							leader ?= { has_ideology = ideology:ideology_pacifist }
+							leader ?= { has_ideology = ideology:ideology_humanitarian }
+							leader ?= { has_ideology = ideology:ideology_anarchist }
 						}
 					}
 				}
@@ -1109,9 +1109,9 @@ voluntary_union = {
 					any_interest_group = {
 						is_in_government = yes
 						OR = {
-							leader = { has_ideology = ideology:ideology_jingoist_leader }
-							leader = { has_ideology = ideology:ideology_fascist }
-							leader = { has_ideology = ideology:ideology_ethno_nationalist }
+							leader ?= { has_ideology = ideology:ideology_jingoist_leader }
+							leader ?= { has_ideology = ideology:ideology_fascist }
+							leader ?= { has_ideology = ideology:ideology_ethno_nationalist }
 						}
 					}
 				}
