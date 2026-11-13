@@ -275,6 +275,92 @@ profiler.
 Data: `/mnt/d/vic3te-data/perf-2026-11-12/callgraph/`, which also holds the
 profiler window file and the scripts.
 
+## Merged `main` remeasured, and three more cuts: 2026-11-12, evening
+
+The same save and steps on `main` at `e13d812b4` (#1713, #1721, #1724 and
+#1726 merged; snapshot `20261113T011842Z`), then on `main` plus #PR
+(`20261113T014004Z`): answer `un_events.4`, profile 2 July → 1 August, read
+the root list and open callees. Both runs ran 119–120 ticks in 96–97 s of
+capture. Data: `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`.
+
+**What is left on `main`.** The serial roots, profiled, 30 days:
+
+| Entry | `main` | + #PR | Largest parts on `main` |
+|---|---|---|---|
+| `on_monthly_pulse_country` (265 pulses) | 2,603 ms | 2,248 ms | Cultural Hegemony 528, monetary 364, SoL 235, Grand Monuments 177, `headlines_on_actions.txt` (vanilla) 126, culture merge 101, space race 84, trade partner 84, decolonization 81, law consistency 80 |
+| `on_yearly_pulse_state` (63 states) | 2,594 ms | 2,528 ms | Demographics 2,106, local climate 430 |
+| Journal-entry pulses | 1,698 ms | 1,566 ms | Strategic Reserve weekly 887 (#1730), nuclear programme weekly 181, UN monthly 142, covert warfare monthly 130, banking 97, nuclear monthly 69 |
+| `on_monthly_pulse_state` (871 calls) | 584 ms | 496 ms | tourism 268, Grand Monuments 136, `extra_on_actions.txt:3874` 43, Demographics 33 |
+| `on_monthly_pulse`, global | 560 ms | 605 ms | power grid 144, UN 108, tax 88, journal map 86, launch windows 39 |
+
+`on_revolution_start` and the colonial stability bar are no longer among the
+27 roots shown (#1721, #1726). The harness's read event (`te_qa_events.txt:4`)
+read 500–502 ms in both, as before.
+
+**The three cuts (#PR)**, each read once where it was read several times,
+measured as callees. The profiled run had these three, not #PR's tourism
+re-add skip, which came after; its effect is under "What drives
+`RecalculateModifierNodes`" below. The rest of each root moved by 1% or less (monetary
+364 → 364 ms, Grand Monuments 177 → 178, culture merge 101 → 101, trade
+partner 84 → 84):
+
+| Callee | `main` | + #PR | What was read more than once |
+|---|---|---|---|
+| Cultural Hegemony's country pulse | 528 ms | 188 ms | the country's fine-art production (a walk over every country's GDP) 12 times a pulse, the world's (every market) 9 |
+| Tourism's state refresh | 268 ms | 179 ms | the base appeal, a chain of some 670 `state_region` branches, twice |
+| Local climate's yearly state refresh | 430 ms | 381 ms | the heat excess (the summer and humidity chains), twice in each of the six reads of the heat term |
+
+That is 478 ms profiled over 30 days, about 0.14–0.18 s unprofiled at the
+profiler's 2.6–3.5×, or 0.4% of wall time. In game, before and after the
+profiled month, `cultural_pull_from_art` equalled min(production,
+`country_art_share_pct_diminished`) × (1 + the art modifier) for Singapore,
+France, Japan, Italy and Britain, `cultural_pull_total` equalled raw ÷
+`ch_world_raw_live` × 100, and the stored-appeal output equalled
+`total_tourism_output_bonus_percent` in each capital; the heat term matched
+its curve (Singapore: (0.36 × 3.572 + 4.1) × 3.572 = 19.2385). No error
+named the saved values. So `save_temporary_value_as` works in a named
+script value read inside another value and inside an effect's
+`set_variable`, not only at the top of a progress bar.
+
+**What fires `on_revolution_start` (#1723).** A deploy-only on_action logged
+each call in the `main` run: 126 starts and no ends in 30 days. 125 were 25
+dynamic-tag countries, five times each on the weekly day (3, 10, 17, 24 and
+31 July), with no `scope:target`. Each of the 25 has one state, and the one
+read (F31, Zambezia) is recognized, at peace and in a civil war. A
+revolution that cannot take a state is tried again at every weekly
+`UpdateCivilWars`. The mod's handlers now cost little there (#1721; the
+others skip when there is no `scope:target`). Whether these stuck civil
+wars make `UpdateCivilWars` itself dearer is open (#1723).
+
+**What drives `RecalculateModifierNodes`: the refreshes' re-adds.** The
+engine task that recalculates modifiers took about 135 ms at every day
+boundary, a tenth of wall time, and more than any refresh's own script. Five
+unprofiled runs on #PR's build, each 2 July → 1 September (62 days, 61 day
+boundaries) from the same save, with tick-task timings and the wall clock.
+Each changed one thing, deploy-only:
+
+| Run | Change | `RecalculateModifierNodes` per day boundary, median | Wall time per day |
+|---|---|---|---|
+| A | none | 135 ms | 1.39 s |
+| B | the 325 flagships unbuildable (touches no refresh) | 121 ms | 1.33 s |
+| E | tourism's refresh skips a modifier whose multiplier did not move (#PR) | 117 ms | 1.37 s |
+| D | as E, and SoL expectations' three country modifiers not refreshed | 114 ms | 1.34 s |
+| C | neither tourism's two state modifiers nor SoL's refreshed | 99 ms | 1.31 s |
+
+A and B change nothing that bears on modifiers, so between two runs read
+about 10% (121–135 ms) as noise. Only C falls clear of it: 36 ms a day
+boundary below A, 22 below B, about 2–3% of wall time. A refresh that takes a
+modifier off and puts it back makes the engine recalculate everything that
+depends on it, even when the number is the same. On these runs the state
+refresh weighs more than the country one. Tourism re-adds two modifiers on
+each of about 29 states a day, and SoL three on about 9 countries a day. Run
+D, with SoL off and tourism's throughput still re-added most months, did not
+leave the noise. Single runs, so read the split as a lead.
+
+Snapshots `20261113T014825Z` (A), `20261113T015413Z` (B), `20261113T020016Z`
+(C), `20261113T021406Z` (D) and `20261113T020847Z` (E); CSVs and logs in
+`/mnt/d/vic3te-data/perf-2026-11-12/batch3/`. Open item 13 has what follows.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
@@ -429,6 +515,19 @@ Items 3 and 6 were addressed by #1713.
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
+   **The reverse run, 2026-11-12 (#PR's build, deploy-only change):** every
+   one of the 325 real flagships got `always = no` first in its
+   `potential`, same save and steps, 62 unprofiled days (snapshots
+   `20261113T014825Z` against `20261113T015413Z`, tick-task CSVs in
+   `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`).
+   `HandleAutonomousInvestment` over the nine weekly frames was 9,144 ms
+   against 9,185 ms. So the flagships are not this pass's cost either way:
+   not as extra types, not through the company's own country. What the pass
+   spends its second on is still unknown. A clue: it ran 1,016 ms a weekly
+   frame and also 15 ms on each other frame. The same pair of runs put
+   `RecalculateModifierNodes` at 9,206 ms against 8,240 ms and wall time at
+   1.39 s against 1.33 s a day, with no change that touches either, so read
+   about 10% between two runs as noise.
 3. **UN AI propose buttons** (#1713 took them from 136 to 4 ms of
    script a day, with wall time unchanged; the rest of this item is the
    record): 4.48 s per 33 days in 1931 (14% of all script; 2.9% in 2072). `un_propose_credentials_button`'s `visible` costs 2.75 ms a
@@ -549,8 +648,9 @@ Items 3 and 6 were addressed by #1713.
       `ch_art` 143 ms. `cultural_pull_total` evaluates `cultural_pull_raw`
       twice (the share and `ch_world_raw_live`), and `cultural_pull_from_art`
       evaluates `country_fine_art_production`, an `every_country` GDP sum,
-      about four times. Caching the raw pull once would halve the first; the
-      second needs the art share restructured. Not done.
+      about four times. Done in #PR: both read once and saved
+      (`save_temporary_value_as`), 528 → 188 ms (see "Merged `main`
+      remeasured").
     - **SoL expectations:** 446 ms, of which 437 ms was
       `sol_expectations_apply_strata_shifts`. Each class's shift value adds
       `global_average_sol`, an `every_country` pass, and the limit read it
@@ -563,7 +663,23 @@ Items 3 and 6 were addressed by #1713.
       624 ms includes one call from `local_climate_first_on_action`), three
       script values at 180–252 ms each. `te_climate_bonus` is the penalty
       times −1, so the refresh computed the penalty twice. Done in #1724: the
-      bonus is written from the stored penalty.
+      bonus is written from the stored penalty. In #PR the heat term reads
+      its excess once (430 → 381 ms). What is left is the six raw terms,
+      computed once for the penalty and again for its base
+      (`te_climate_penalty_raw`); sharing them needs the effect to compute
+      them once, a parallel of the two values' formulas.
+    - **Tourism's state refresh** (on `main` after #1724): 268 ms, 871 calls:
+      the output modifier 151 ms and the stored base appeal 102 ms, each the
+      base appeal's chain of some 670 `state_region` branches. Done in #PR:
+      the appeal is stored first and the output reads it back (268 →
+      179 ms). The rest is the monuments' walk over every building in the
+      state.
+    - **Smaller, spread, no single fix (on `main` after #1724):** the
+      nuclear programme's weekly pulse 181 ms over 1,274 calls
+      (`nd_weekly_update` 108, its reach and basing refreshes 49 of that);
+      monetary 364 ms over a dozen steps; the global monthly pulse's power
+      grid 144, UN 108, tax 88 and journal map 86 ms; the Grand Monuments
+      state pulse 136 ms, all inside `gm_state_monthly`.
 
     **#1724, measured** (same save, same steps, 2 July → 1 August under the
     profiler): the Cultural Hegemony entry's pulse 661 → 8 ms, covert
@@ -572,4 +688,27 @@ Items 3 and 6 were addressed by #1713.
     6%. At the profiler's 2.6–3.5× (above) that is about 0.5–0.65 s over 30
     days unprofiled, about 1.5% of wall time.
 
-    `on_revolution_start` fired 126 times in those 30 days (#1723).
+    `on_revolution_start` fired 126 times in those 30 days (#1723): 125 of
+    them were 25 one-state countries whose revolution is tried again each
+    week (see "Merged `main` remeasured").
+13. **Refreshes that re-add a modifier at the same strength** (see "What
+    drives `RecalculateModifierNodes`"). With tourism's and SoL's refreshes
+    off, the engine's modifier recalculation fell from 121–135 ms to 99 ms a
+    day boundary, so a re-add costs more in that task than in its own
+    script. In order:
+    - **Exact:** skip the re-add when the multiplier did not move. #PR does
+      it for tourism (`te_tourism_refresh_modifier`, which keeps the applied
+      value). It saves only where values hold still: tourism's output
+      (appeal, city rank, monuments) mostly does, its throughput (spare
+      infrastructure) mostly doesn't. Other monthly refreshes would take the
+      same helper once their own one-refresh-site rule is checked.
+    - **Owner call:** a dead band, so that a multiplier that moved less than
+      a set step is left alone, or a multiplier rounded to that step.
+      Tourism's throughput and SoL's three shifts move a little every month.
+      At a step of half a percentage point, few would be re-added. That
+      changes figures by less than the step.
+    - **To measure:** which other refreshes re-add most, and whether a
+      state modifier costs more than a country one per re-add. The pollution
+      refresh re-adds `pollution_generation_mult_effect` on every owned state
+      each month (871 a month), at a multiplier that follows the state's
+      pollution. Repeat runs would narrow the 10% noise.
