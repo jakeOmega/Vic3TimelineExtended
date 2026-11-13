@@ -1087,19 +1087,19 @@ class CommandLineTest(unittest.TestCase):
     def test_watch_records_no_exit_for_a_recorded_game_gone_at_its_first_look(self):
         taken, _ = self.run_cli("snapshot")
         game = self.game()
-        snapshot.record(self.the_snapshot(), "started", pid=game.pid, created=game.created,
-                        now=dt.datetime.now(UTC) - dt.timedelta(seconds=30))
-        another = self.game(pid=99, seconds_from_now=120)           # a new game, but not the recorded one
-        self.games = [[another], [another], []]
-        out, code = self.run_cli("watch", taken["id"])
-        self.assertEqual((code, out["refused"]), (2, "game_gone_unrecorded"))
-        self.assertIn("last heartbeat", out["detail"])
-        self.assertEqual(self.events(), ["armed", "started", "watching", "other_game"])   # the first look too
-        self.games = []
-        later = dt.datetime.now(UTC) + dt.timedelta(seconds=20)       # past `watching`, a sign of life
-        with mock.patch.object(snapshot, "_drive_clock", lambda folder: later):
+        with self.naps_clock() as now:      # the restore's 20 s past `watching` by the clock it reads (#1693)
+            snapshot.record(self.the_snapshot(), "started", pid=game.pid, created=game.created,
+                            now=now() - dt.timedelta(seconds=30))
+            another = self.game(pid=99, seconds_from_now=120)           # a new game, but not the recorded one
+            self.games = [[another], [another], []]
+            out, code = self.run_cli("watch", taken["id"])
+            self.assertEqual((code, out["refused"]), (2, "game_gone_unrecorded"))
+            self.assertIn("last heartbeat", out["detail"])
+            self.assertEqual(self.events(), ["armed", "started", "watching", "other_game"])   # the first look too
+            self.games = []
+            self._nap(20)                                               # past `watching`, a sign of life
             out, code = self.run_cli("restore", taken["id"])
-        self.assertEqual((code, out["held"], out["reason"]), (2, True, "other_game_ran"))
+        self.assertEqual((code, out["held"], out.get("reason")), (2, True, "other_game_ran"), self.why(out))
 
     def test_watch_refuses_a_recorded_start_it_cannot_read(self):
         taken, _ = self.run_cli("snapshot")
