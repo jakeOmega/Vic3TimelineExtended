@@ -10,6 +10,10 @@ staffed got ten times its share. A site is placed unstaffed wherever constructio
 hires at a rate of 1.0, so a site sized before its first hiring was full within days and delivered ten times
 its share until the next pulse (a Workshop report: construction costing millions on a purchase of 50,000).
 
+Now every site carries one throughput, the purchase over the country's site levels, and staffing is not read
+(owner, 2026-11-13): a site is taken to be fully staffed or about to be, which its hiring rate and a large job
+attractiveness on its method are there to make true. The sites can then never deliver more than the purchase.
+
 This runs the script's own text (common/script_values/te_construction_market_sector_placement_values.txt) with
 the evaluator of test_construction_market_budget_step, extended with the one building iterator the chain uses,
 and checks what the sites deliver once their staffing has moved, against the purchase.
@@ -27,6 +31,7 @@ ROOT = Path(__file__).resolve().parent
 VALUES = ROOT / "common/script_values/te_construction_market_sector_placement_values.txt"
 EFFECTS = ROOT / "common/scripted_effects/te_construction_market_update_effects.txt"
 GROUPS = ROOT / "common/building_groups/te_construction_market_groups.txt"
+PMS = ROOT / "common/production_methods/te_construction_market_pms.txt"
 SITE = "te_construction_market_site"
 THROUGHPUT = "te_construction_market_site_throughput"
 # The staffing a site can show at a pulse, and what it can reach before the next one.
@@ -131,11 +136,25 @@ class SiteSizingTest(unittest.TestCase):
     def setUpClass(cls):
         cls.values = load_values()
 
-    def test_the_site_group_hires_at_once(self):
-        # The premise: a site goes from empty to full in one employment update, between two pulses.
+    def test_the_site_fills_and_stays_filled(self):
+        # What the sizing rests on, since it reads no staffing: the group hires a site from empty to full in
+        # one employment update, and the market method makes the job very attractive, as the Grid Transfer
+        # Station's does.
         text = GROUPS.read_text(encoding="utf-8")
         self.assertRegex(text, r"min_hiring_rate\s*=\s*1\.0")
         self.assertRegex(text, r"max_hiring_rate\s*=\s*1\.0")
+        pms = "\n".join(line.split("#", 1)[0] for line in PMS.read_text(encoding="utf-8").splitlines())
+        start = pms.index("pm_te_construction_market_base = {")
+        market = pms[start:pms.index("\npm_te_direct_construction_wooden = {")]
+        self.assertRegex(market, r"unscaled\s*=\s*\{\s*building_job_attractiveness_mult\s*=\s*5\s*\}")
+        # Not the direct methods: there the site is a sector with a real workforce.
+        self.assertEqual(pms.count("building_job_attractiveness_mult"), 1)
+
+    def test_the_sizing_reads_no_staffing(self):
+        # Owner, 2026-11-13: no scaling with employment.
+        text = "\n".join(line.split("#", 1)[0] for line in VALUES.read_text(encoding="utf-8").splitlines())
+        self.assertNotIn("occupancy", text)
+        self.assertNotIn("has_employee_slots_filled", text)
 
     def test_fully_staffed_sites_deliver_the_purchase(self):
         for count, purchase in itertools.product((1, 2, 5), (0.5, 50, 5000)):
@@ -145,31 +164,23 @@ class SiteSizingTest(unittest.TestCase):
 
     def test_a_site_sized_before_it_hires_delivers_its_share_once_full(self):
         # The reported case: construction starts in a new state, the capital's site leaves, and the pulse
-        # sizes the one new site before its first hiring.
+        # sizes the one new site before its first hiring. It used to deliver ten times the purchase.
         self.assertAlmostEqual(delivered(self.values, 50, [0.0], [1.0]), 50, places=2)
         # And beside established sites.
         self.assertAlmostEqual(delivered(self.values, 50, [1.0, 0.0, 0.0], [1.0, 1.0, 1.0]), 50, places=2)
 
-    def test_no_change_in_staffing_within_the_week_delivers_more_than_twice_the_purchase(self):
+    def test_the_sites_never_deliver_more_than_the_purchase(self):
         for count in (1, 2, 3):
             for at_pulse in itertools.product(STAFFINGS, repeat=count):
-                # The worst week: every site full before the next pulse.
-                full = [1.0] * count
-                with self.subTest(at_pulse=at_pulse):
-                    self.assertLessEqual(delivered(self.values, 100, list(at_pulse), full), 200.01)
+                for later in ([1.0] * count, list(at_pulse)):
+                    with self.subTest(at_pulse=at_pulse, later=later):
+                        self.assertLessEqual(delivered(self.values, 100, list(at_pulse), later), 100.01)
 
-    def test_steady_staffing_never_delivers_much_more_than_the_purchase(self):
-        # The staircase reads a site's staffing down to the tenth below, so a site between two steps is made
-        # up for a little too much: at most the 0.59 a 0.5 reading can hide.
-        for count in (1, 2, 3):
-            for staffing in itertools.product(STAFFINGS, repeat=count):
-                with self.subTest(staffing=staffing):
-                    self.assertLessEqual(delivered(self.values, 100, list(staffing), list(staffing)), 120)
-
-    def test_a_site_short_of_laborers_is_made_up_for(self):
-        # Half staffed and staying so: the purchase still arrives.
-        self.assertAlmostEqual(delivered(self.values, 50, [0.5], [0.5]), 50, places=2)
-        self.assertAlmostEqual(delivered(self.values, 50, [1.0, 0.5], [1.0, 0.5]), 50, places=2)
+    def test_a_site_short_of_laborers_delivers_in_proportion(self):
+        # Nothing makes up for a site that stays short: its share arrives by its staffing, and what does not
+        # arrive is not paid for.
+        self.assertAlmostEqual(delivered(self.values, 50, [0.5], [0.5]), 25, places=2)
+        self.assertAlmostEqual(delivered(self.values, 50, [1.0, 0.5], [1.0, 0.5]), 37.5, places=2)
 
     def test_a_site_of_several_levels_counts_each_level(self):
         # The market places level-1 sites, but one kept from a direct game (an owner without Urbanization,

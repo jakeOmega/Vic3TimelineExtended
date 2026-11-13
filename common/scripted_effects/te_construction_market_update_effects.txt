@@ -79,9 +79,10 @@ te_construction_market_country_update_private_share = {
 # Country scope, the weekly pulse: size the country's Construction Sites for
 # the week's purchase. Every site gets te_construction_market_capacity_modifier
 # (building_throughput_add = 1) at the same multiplier,
-# te_construction_market_site_throughput: the purchase over the staffing the
-# sites are assumed to have (te_construction_market_sector_placement_values.txt,
-# which says why a site is never sized at ten times its share any more).
+# te_construction_market_site_throughput: the purchase over the country's site
+# levels, every site taken to be fully staffed
+# (te_construction_market_sector_placement_values.txt, which says why staffing
+# is not read and a site is never sized at ten times its share any more).
 #
 # The multiplier goes through a country variable, read as owner.var:, because
 # of how the engine treats the slot (docs/guides/scripting_best_practices.md,
@@ -121,18 +122,21 @@ te_construction_market_apply_per_site_modifier = {
 #        staffed) for a purchase of at least 40 points stores the purchase
 #        (var:te_cm_chk_target). That is the case that used to deliver ten times
 #        the purchase once the site had hired.
-#   Read, a week later: if every site is now at least 90% staffed, compare the
-#        construction the country's sites deliver (modifier:country_construction_add,
-#        which in a market game the sites give; 40 leaves room for a few
-#        points from anywhere else) with the stored purchase.
-#          OK      within a quarter of it: the new site hired and the sites
-#                  together deliver what was bought.
-#          BROKEN  anything else. Far above: a site is still sized past its
-#                  share. Far below with every site staffed: the sum or the
-#                  throughput is not what the values say.
-#        A week in which a site is still short of staff decides nothing (a site
-#        that never hires delivers nothing, and proves nothing); the country
-#        arms again when it next sizes an unstaffed site.
+#   Read, a week later: unless a site is again under 10% staffed (another new
+#        one), compare the construction the country's sites deliver
+#        (modifier:country_construction_add, which in a market game the sites
+#        give; 40 leaves room for a few points from anywhere else) with the
+#        stored purchase.
+#          OK      within a quarter of it: the new site hired in its first week
+#                  and the sites together deliver what was bought. That is what
+#                  the sizing assumes (it reads no staffing).
+#          BROKEN  anything else. Far above: a site is sized past its share.
+#                  Far below: a site has not filled a week after it was placed
+#                  (its hiring rate of 1.0 and its job attractiveness are not
+#                  holding it), or the levels' sum or the throughput is not
+#                  what the values say.
+#        A week with another unstaffed site decides nothing: the country arms
+#        again and reads the week after.
 te_cm_site_delivery_selfcheck = {
 	if = {
 		limit = {
@@ -149,7 +153,7 @@ te_cm_site_delivery_selfcheck = {
 					NOT = {
 						any_scope_building = {
 							is_building_type = te_construction_market_site
-							occupancy < 0.9
+							occupancy < 0.1
 						}
 					}
 				}

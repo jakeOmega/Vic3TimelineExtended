@@ -35,9 +35,9 @@ te_construction_market_place_site = {
 # remove a market site. Capacity only needs one staffed site (the pulse spreads
 # the week's purchase over whichever remain), so this only restores the last one,
 # in the capital. It runs after the pulse has sized the sites, so the
-# replacement hires (at a rate of 1.0) before it is first sized; a site sized
-# unstaffed is sized as full (te_construction_market_site_assumed_staffing),
-# so the order no longer costs anything either way. A country that has lost
+# replacement hires (at a rate of 1.0) before it is first sized; every site is
+# sized as full (te_construction_market_site_throughput), so the order no
+# longer costs anything either way. A country that has lost
 # every state stays alive while its war goes on, with no capital to place in.
 te_construction_market_ensure_site = {
 	if = {

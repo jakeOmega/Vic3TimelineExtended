@@ -10,89 +10,53 @@
 
 # ---- Sizing the sites: how the week's purchase becomes each site's throughput ----
 #
-# Every site carries the same throughput: the week's purchase over the staffing
-# the country's sites are assumed to have, summed. A site delivers its
-# throughput times its real staffing, so together they deliver the purchase
-# when the assumption holds, and less when a site is short of it. Paying for
-# more than the purchase is the failure to avoid: the government queue spends
-# whatever the sites deliver, at the treasury's cost.
+# Every site carries the same throughput: the week's purchase over the
+# country's site levels. Staffing is not read (owner, 2026-11-13): a site is
+# taken to be fully staffed, or about to be. Its group hires at a rate of 1.0
+# and its method makes it a very attractive job
+# (building_job_attractiveness_mult on pm_te_construction_market_base), so a new
+# site fills within the week and keeps its ten laborers. A site delivers its
+# throughput times its real staffing, so the sites together deliver the
+# purchase when they are staffed and less while one is hiring; what is not
+# delivered is not paid for. They never deliver more than the purchase, which
+# is the failure to avoid: the government queue spends whatever the sites
+# deliver, at the treasury's cost.
 #
 # Until 2026-11-13 each site had its own throughput, its share of the purchase
 # divided by its staffing, with a site under 10% staffed sized at ten times
-# its share. A site is placed unstaffed wherever construction starts and its
-# group hires at a rate of 1.0, so a site sized before its first hiring (by the
-# weekly pulse, or by the player's purchase buttons, which size the sites at
-# once) was full days later and delivered ten times its share until the next pulse: the
-# purchase bought ten times over, on the treasury (Workshop report: the cost
-# of construction in the millions on a purchase of 50,000, the throughput
-# 5,000%, 2,000%, then 15,000% in three weeks). A country whose one site had
-# just moved to a new state got the full ten times.
+# its share. A site is placed unstaffed wherever construction starts, so a site
+# sized before its first hiring (by the weekly pulse, or by the player's
+# purchase buttons, which size the sites at once) was full days later and
+# delivered ten times its share until the next pulse: the purchase bought ten
+# times over, on the treasury (Workshop report: the cost of construction in the
+# millions on a purchase of 50,000, the throughput 5,000%, 2,000%, then 15,000%
+# in three weeks). A country whose one site had just moved to a new state got
+# the full ten times.
 
-# Building scope: the staffing the sizing assumes of this site, 0-1.
-#   under 10% staffed: 1. The site has not hired yet and will be full within
-#     the week if the state has the laborers, so it is sized as full. If it
-#     stays empty its share is not delivered, and not paid for.
-#   otherwise: the staircase below, but at least a half. A site that stays
-#     short of laborers is made up for, up to twice over, and one that fills
-#     during the week delivers at most twice its share.
-te_construction_market_site_assumed_staffing = {
-	value = 1
-	if = {
-		limit = { occupancy >= 0.1 }
-		value = te_construction_market_employee_slots_filled
-		min = 0.5
-	}
-}
-
-# Country scope: the assumed staffing of the country's sites, summed over
-# their levels.
-te_construction_market_sites_staffing = {
+# Country scope: the levels of the country's sites, summed. The market places
+# its sites at level 1, but a site kept from a direct game can have more, and
+# each level has its own ten laborers and delivers the throughput again.
+te_construction_market_site_levels = {
 	value = 0
 	every_scope_building = {
 		limit = {
 			is_building_type = te_construction_market_site
 		}
-		# By level: the market places its sites at level 1, but a site kept
-		# from a direct game can have more, and each level has its own ten
-		# laborers and delivers the throughput again.
-		add = {
-			value = te_construction_market_site_assumed_staffing
-			multiply = level
-		}
+		add = level
 	}
 }
 
 # Country scope: the multiplier of te_construction_market_capacity_modifier
-# (building_throughput_add = 1) on every site. The purchase over the summed
-# staffing, less the engine's own 1; 0 for a country with no site.
+# (building_throughput_add = 1) on every site. The purchase over the site
+# levels, less the engine's own 1; 0 for a country with no site.
 te_construction_market_site_throughput = {
 	value = 0
 	if = {
 		limit = {
-			te_construction_market_sites_staffing > 0
+			te_construction_market_site_levels > 0
 		}
 		value = te_construction_market_total_use_target
-		divide = te_construction_market_sites_staffing
+		divide = te_construction_market_site_levels
 		subtract = 1
 	}
-}
-
-# Building-scope staircase approximating fill fraction. 10 buckets of +0.1,
-# so a fully-staffed site reads 1.0 and an empty one reads 0.0.
-# Uses `occupancy` (filled slots / max slots, any pop type) rather than
-# `has_employee_slots_filled = { pop_type = laborers ... }`: before 1.15 that
-# trigger compared its operands in the wrong order (fixed in 1.15, per its
-# changelog), and a fully staffed site in a Yemen save read below 20%.
-te_construction_market_employee_slots_filled = {
-	value = 0
-	if = { limit = { occupancy >= 0.1 } add = 0.1 }
-	if = { limit = { occupancy >= 0.2 } add = 0.1 }
-	if = { limit = { occupancy >= 0.3 } add = 0.1 }
-	if = { limit = { occupancy >= 0.4 } add = 0.1 }
-	if = { limit = { occupancy >= 0.5 } add = 0.1 }
-	if = { limit = { occupancy >= 0.6 } add = 0.1 }
-	if = { limit = { occupancy >= 0.7 } add = 0.1 }
-	if = { limit = { occupancy >= 0.8 } add = 0.1 }
-	if = { limit = { occupancy >= 0.9 } add = 0.1 }
-	if = { limit = { occupancy >= 1 } add = 0.1 }
 }
