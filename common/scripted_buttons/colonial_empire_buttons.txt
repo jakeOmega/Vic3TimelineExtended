@@ -51,6 +51,11 @@ ce_release_colonial_territory = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
+		# Not through our own civil war while the empire holds (#1735)
+		if = {
+			limit = { colonial_ai_holds_colonies_in_civil_war = yes }
+			multiply = 0
+		}
 	}
 
 	possible = {
@@ -84,14 +89,31 @@ ce_planned_decolonization = {
 			limit = { colonial_low_acceptance_count >= 3 }
 			add = 30
 		}
+		# A minor gives up its empire more readily, but only once something
+		# presses it. On its own this term was enough for the AI to press the
+		# button: Bornu (1933) liquidated a fresh entry within days at a bar of
+		# 50, and Egypt (1934) did the same (#1735; scripting_best_practices.md,
+		# "ai_chance Flavour Terms on a Base of 0 Are Not Flavour").
 		if = {
-			limit = { NOT = { country_rank >= rank_value:great_power } }
+			limit = {
+				NOT = { country_rank >= rank_value:great_power }
+				OR = {
+					colonial_gp_condemners_count >= 3
+					colonial_low_acceptance_count >= 3
+					decol_iw_bar_below_40 = yes
+				}
+			}
 			add = 30
 		}
 		# Never if things are going well
 		if = {
 			limit = { colonial_high_acceptance_count >= 2 }
 			add = -100
+		}
+		# Not through our own civil war while the empire holds (#1735)
+		if = {
+			limit = { colonial_ai_holds_colonies_in_civil_war = yes }
+			multiply = 0
 		}
 	}
 
@@ -143,6 +165,11 @@ ce_round_table_conference = {
 				}
 			}
 			add = 20
+		}
+		# Not through our own civil war while the empire holds (#1735)
+		if = {
+			limit = { colonial_ai_holds_colonies_in_civil_war = yes }
+			multiply = 0
 		}
 	}
 
