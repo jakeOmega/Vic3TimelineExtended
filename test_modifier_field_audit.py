@@ -420,7 +420,8 @@ class LocTests(unittest.TestCase):
         )
         result = run(text, sources(vanilla=["country_je_korea_action_cost"]), mode="direct")
         self.assertEqual(kinds(result), [("no_loc", "country_je_korea_action_cost")])
-        self.assertEqual(result.flags[0].exemption, {"date": "2026-11-12", "rationale": "shown nowhere"})
+        self.assertEqual(result.flags[0].exemption,
+                         {"date": "2026-11-12", "tag": "modifier_field_loc", "rationale": "shown nowhere"})
         self.assertEqual(len(result.flags[0].sites), 2)
 
     def test_untagged_or_other_tag_does_not_suppress(self):

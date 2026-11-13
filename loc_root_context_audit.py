@@ -49,9 +49,9 @@ public panel    The keys another country's panel renders of a public tab
                 read (`entry_read_on_public_panel`: another country has no
                 entry in reach, gotcha #35) and a read of the player
                 (`player_read_on_public_panel`: the panel would show the
-                player's figure) unless the key is in `WORLD_LOC` in
-                `test_te_system_tab_bodies.py`. These are that file's
-                `BindingTest` rules for loc. **The CLI and CI look at this
+                player's figure) unless the key is in `WORLD_LOC`
+                (`national_info_binding.py`). These are
+                `test_te_system_tab_bodies.py`'s `BindingTest` rules for loc. **The CLI and CI look at this
                 context; a reload does not** (`regenerate()`): walking the
                 tabs' types costs more than the rest of the audit, and
                 `BindingTest` holds the same rule in CI's test step. If the
@@ -76,17 +76,18 @@ entry frame     A journal entry's implicit keys (`<je>`, `<je>_reason`,
                 ScriptedProgressBar.Self)]`; it reads `ROOT` and `SCOPE` there
                 too, and `Country` in eight `_goal` and `_reason` keys. No
                 root can be called wrong.
-scripted GUI    The keys a scripted GUI's own `custom_tooltip` lines name
-tooltip         (`common/scripted_guis/`), which a widget renders through
-                `ExecuteTooltip`. Script builds the text, so `ROOT`, `SCOPE`
-                and `THIS` (inside a scope change) are right there, and the
-                widget's data context seems to reach it too (the UN's
+scripted GUI    The keys a scripted GUI's tooltip prints (`common/scripted_guis/`),
+tooltip         which a widget renders through `ExecuteTooltip`,
+                `IsValidTooltip` or `IsShownTooltip`: the lines its `effect`,
+                `is_valid` or `is_shown` renders and those of the scripted
+                effects and triggers it calls, all the way down
+                (`gui_test_helpers.ScriptedGuis`, the binding tests' walk).
+                Script builds the text, so `ROOT`, `SCOPE` and `THIS` (inside
+                a scope change) are right there, and the widget's data
+                context seems to reach it too (the UN's
                 `je_un_ov_motions_wait_tt` reads `JournalEntry.GetCountry`).
                 Exempt. A finding on a key that is also one of these says so:
-                split the key. The helper here reads only the scripted GUI's
-                own lines, not the scripted effects it calls; the shared
-                walker #1361 added (`gui_test_helpers.ScriptedGuis`) is not
-                used here yet. The other contexts' walks don't follow a
+                split the key. The other contexts' walks don't follow a
                 tooltip a key asks of a scripted GUI: its lines are this
                 context's. The public panel's does, as `panel_loc_keys`
                 does.
@@ -123,17 +124,17 @@ and fails `--strict`.
 No game install is needed. A scan that finds no loc file or no `.gui` file
 raises, so a wrong path can't pass as clean.
 
-Cost, measured on the shared 4-core cloud container: the reload entry about
-1.4 s, half of it reading the English loc through
-`gui_test_helpers.loc_index` and most of the rest every `.gui` file, so it is
-not one of the post-load entries that finish well under a second; the CLI's
-full run about 4.3 s, the public-panel context being the difference.
+Cost, measured on the shared 4-core cloud container (2026-11-13): the reload
+entry about 2.5 s, two fifths of it reading the English loc through
+`gui_test_helpers.loc_index`, as much again walking the scripted GUIs'
+tooltips through the script they call, and most of the rest every `.gui`
+file; the CLI's full run about 5 s, the public-panel context being the
+difference.
 
 Report: docs/engine/loc_root_context_report.md. Registered in POST_LOAD_AUDITS.
 """
 from __future__ import annotations
 
-import argparse
 import collections
 import glob
 import os
@@ -141,6 +142,9 @@ import re
 from dataclasses import dataclass, field
 
 import gui_test_helpers as h
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 from mod_state import split_loc_line
 from script_loc_reference_audit import iter_references
 
@@ -177,8 +181,6 @@ _TOP = re.compile(r"(?m)^(?:\w+:)?([\w.\-]+)\s*=\s*\{")
 _FIELD = re.compile(r'[{}]|(?<![\w.])(\w+)\s*=\s*(?:"([\w.\-]+)"|([\w.\-]+)(?![\w.\-"]))')
 _DESC_FIELD = re.compile(r'(?<![\w.])(status_desc|progress_desc)\s*=\s*(\{|"?[\w.\-]+"?)')
 _JOURNAL_SUFFIXES = ("", "_reason", "_goal", "_status")
-_TOOLTIP_FIELDS = frozenset({"custom_tooltip", "custom_tooltip_no_bullet", "text"})
-_TAG = re.compile(r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$")
 
 
 @dataclass
@@ -198,26 +200,22 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
-    key: str
+class StaleTag(_StaleTag):
+    """A tag that suppresses nothing, on the loc line of `key`."""
+
+    key: str = ""
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`failing`: flags without a tag, plus tags that suppress nothing (`stale`)."""
+
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     reach: dict[str, int] = field(default_factory=dict)
     """Context -> the loc keys it renders."""
     public_tabs: int = 0
     public_note: str = ""
     """Why the public-panel context was left out of this run; "" when it was looked at."""
-
-    @property
-    def failing(self) -> int:
-        """Flags without a tag, plus tags that suppress nothing."""
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
 
 
 def _end(code: str, brace: int) -> int:
@@ -297,16 +295,23 @@ def block_seeds(root: str, sub: str, fields, loc) -> dict[str, str]:
     return out
 
 
-def _scripted_gui_tooltip_seeds(root: str, loc) -> dict[str, str]:
-    """Each key a scripted GUI's own `custom_tooltip` lines name. Private and
-    shallow on purpose: it doesn't follow the scripted effects a GUI calls.
-    #1361 is to add the shared "scripted GUI -> tooltip keys" walker; move
-    onto it then."""
-    out: dict[str, str] = {}
+def scripted_gui_tooltip_seeds(root: str, loc) -> dict[str, str]:
+    """Each key a scripted GUI's tooltip prints, with where: for each of its
+    `effect`, `is_valid` and `is_shown` (ExecuteTooltip, IsValidTooltip,
+    IsShownTooltip), the lines the part renders and those of the scripted
+    effects and triggers it calls, all the way down
+    (`gui_test_helpers.ScriptedGuis`, the walk the binding tests use, #1361).
+    """
+    scripted = h.scripted_guis(root)  # the public seeds' too, on the repo
+    defined: dict[str, str] = {}
     for rel, code in _script_files(root, "scripted_guis"):
-        for n, fld, key, _ in iter_references(code):
-            if fld in _TOOLTIP_FIELDS and key in loc:
-                out.setdefault(key, f"{rel}:{n} {fld}")
+        for top in _TOP.finditer(code):
+            defined.setdefault(top.group(1), f"{rel}:{_line(code, top.start())}")
+    out: dict[str, str] = {}
+    for name in sorted(scripted.guis):
+        for method, part in h.SCRIPTED_TOOLTIP.items():
+            for key in sorted(scripted.keys(name, method, loc)):
+                out.setdefault(key, f"{defined.get(name, 'common/scripted_guis')} {name}'s {part}")
     return out
 
 
@@ -396,9 +401,9 @@ def _tags(root: str) -> dict[str, tuple[str, int, dict]]:
             if "REVIEWED" not in raw:
                 continue
             got = split_loc_line(raw)
-            m = got and _TAG.search(got[2])
-            if m and CHECK in re.split(r"[\s,]+", m.group("checks").strip()):
-                out[got[0]] = (rel, n, {"date": m.group("date"), "rationale": m.group("rationale").strip()})
+            tag = got and parse_reviewed(got[2], (CHECK,))
+            if tag:
+                out[got[0]] = (rel, n, tag)
     return out
 
 
@@ -409,12 +414,12 @@ def _is_repo(root: str) -> bool:
 def repo_public_context() -> tuple[dict[str, set[str]], set[str], str]:
     """(tabs, world reads, why not): each public tab with the types National
     Info's mount for another country draws for it, from the window's
-    registry, and the loc keys that are world reads, BindingTest's own list.
-    Where either can't be imported (te_rebind_country.py guards the same
-    import), no tab, and the reason, which the output prints."""
+    registry, and the loc keys that are world reads, BindingTest's own list
+    (`national_info_binding.WORLD_LOC`). Where either can't be imported, no
+    tab, and the reason, which the output prints."""
     try:
         from scripts.generators import gen_te_systems_window as gen
-        from test_te_system_tab_bodies import WORLD_LOC
+        from national_info_binding import WORLD_LOC
     except ImportError as exc:
         return {}, set(), (f"the tab registry or `WORLD_LOC` could not be imported ({exc}); "
                            f"`BindingTest` still holds the rule")
@@ -458,7 +463,8 @@ def _drawn_seeds(names, types, templates, loc, custom) -> dict[str, str]:
 
 def _fresh():
     """gui_test_helpers keeps what it read; a reload must read the files again."""
-    for cached in (h._loc_index, h._custom_loc, h._mod_types, h._mod_templates):
+    for cached in (h._loc_index, h._custom_loc, h._mod_types, h._mod_templates, h._script_blocks,
+                   h.scripted_guis):
         cached.cache_clear()
 
 
@@ -491,7 +497,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
     gui_seeds, gui_files = widget_seeds(root, loc, custom)
     if not gui_files:
         raise FileNotFoundError(f"no .gui file under {os.path.join(root, 'gui')}")
-    sgui_seeds = _scripted_gui_tooltip_seeds(root, loc)
+    sgui_seeds = scripted_gui_tooltip_seeds(root, loc)
 
     entry = reach.closure(entry_seeds)
     widget = reach.closure(gui_seeds)
@@ -545,7 +551,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
     result.reach[PUBLIC] = len(public)
 
     flagged = {f.key for f in result.flags if f.kind in TAGGABLE}
-    result.stale_tags = [StaleTag(rel, n, key) for key, (rel, n, _) in sorted(tags.items()) if key not in flagged]
+    result.stale = [StaleTag(rel, n, CHECK, key) for key, (rel, n, _) in sorted(tags.items()) if key not in flagged]
     result.flags.sort(key=lambda f: (f.file, f.line, f.kind))
     return result
 
@@ -562,8 +568,8 @@ def _describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult, reach: bool = False) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Loc root context audit report",
         "",
@@ -600,9 +606,9 @@ def render_report(result: AuditResult, reach: bool = False) -> str:
             out += [f"- line {f.line}: {_describe(f)}" for f in by_file[fname]]
             out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -622,7 +628,7 @@ def render_report(result: AuditResult, reach: bool = False) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     if result.public_note:
@@ -654,15 +660,13 @@ def regenerate(mod_state=None) -> dict:
     result = audit(mod_path, public_panels={}, world_loc=set())
     result.public_note = RELOAD_NOTE
     out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "entry_text_keys": result.reach[ENTRY],
         "entry_frame_keys": result.reach[FRAME],
         "widget_keys": result.reach[WIDGET],
@@ -672,14 +676,12 @@ def regenerate(mod_state=None) -> dict:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--strict", action="store_true",
-                        help="exit 1 on any untagged flag or stale tag (CI mode)")
-    parser.add_argument("--mod-path")
-    args = parser.parse_args(argv)
-    result = audit(args.mod_path)
-    print(render_report(result, reach=True))
-    return int(args.strict and result.failing > 0)
+    def add_arguments(parser):
+        parser.add_argument("--mod-path")
+
+    return cli_main(lambda args: audit(args.mod_path), lambda result, args: render_report(result, reach=True),
+                    argv=argv, description=__doc__.splitlines()[0], add_arguments=add_arguments,
+                    strict_help="exit 1 on any untagged flag or stale tag (CI mode)")
 
 
 if __name__ == "__main__":

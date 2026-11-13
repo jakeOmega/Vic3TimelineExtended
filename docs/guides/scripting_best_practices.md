@@ -1175,7 +1175,7 @@ A permanent saved scope also blocks a temporary one of the same name. `save_temp
 
 **Silent-drop symptom**: a tooltip with missing chunks ("Norway will annex without war.") usually means a chain failed and the renderer chopped at the failure point, eating intermediate text. The engine doesn't log it, so static analysis is the only signal.
 
-**Audit**: `localization_accessor_audit.py` (in CI, and in `mod_state_server.py:POST_LOAD_AUDITS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass with `scripts/generators/fold_vanilla_loc_accessors.py` — vanilla loc is the authoritative source for what the engine accepts. The catalog holds what vanilla's loc calls, so an accessor the engine has and vanilla's loc never uses flags too: check it in the engine's data types and add it to the audit's hand table (`docs/guides/python_tools.md`, the audit's row).
+**Audit**: `localization_accessor_audit.py` (in CI, and in `POST_LOAD_AUDITS` in `server/post_load.py`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass with `scripts/generators/fold_vanilla_loc_accessors.py` — vanilla loc is the authoritative source for what the engine accepts. The catalog holds what vanilla's loc calls, so an accessor the engine has and vanilla's loc never uses flags too: check it in the engine's data types and add it to the audit's hand table (`docs/guides/python_tools.md`, the audit's row).
 
 ## Entity Name Keys Render as Raw Text: No Data Functions in Them
 
@@ -2651,6 +2651,8 @@ The loader reads a loc file's language from its `_l_<language>.yml` suffix, and 
 | `#B text#!` | Blue text |
 | `#white text#!` | White text |
 | `#o text#!` | Orange text |
+
+**A format name matches whatever its case; look it up in the install before using a new one.** The formats are defined in `game/gui/textformatting.gui` and `jomini/gui/jomini/basetextformatting.gui`, which the repo does not hold. They define `V`, `R`, `N` and `O` (gold), and no lowercase single letter but `b`, while vanilla's loc writes `#v` 3,880 times, `#r` 183 and `#o` 3 (1.15.1): the engine ignores the case, so `#O` and `#o` are the same gold. (#1698 changed the mod's twelve `#O` to `#o` on the belief that `#O` was undefined; both render alike.) `loc_render_audit` (`unknown_format`) flags a name no value of the `vanilla_parsed/` loc snapshot opens in any case (`#bolt`); a name those files define that vanilla's loc never writes (`#purple`, `#cyan`) takes a `# REVIEWED` comment naming the file.
 
 **A literal `#` is written `##`.** Vanilla's `BUILDING_RANK` writes `##[Building.GetProfitabilityRankInType]` for "#3", and the mod's `te_pb_slot_source_rank_3_tt` writes `#v ##3#!`. A `#` before a digit, a space or the end of the value is none of the three forms vanilla writes (`#tag`, `#!`, `##`): it has four in 108,112 English values, all slips. What the engine draws for one has not been seen in game. `loc_render_audit` (`bare_hash`) flags it; three were fixed with the check (#266), the cultural board's `#` column head among them.
 
@@ -5701,4 +5703,6 @@ is used in vanilla 1.15's `common/`. Offline, the closest stand-in for that poin
 weights and the Antarctic station AI were checked (#1454); a state within a degree or two of a tropic can fall either
 way in the game. A building's `possible` is in state scope, so `in_tropics = yes` could go there bare, but the band is
 wide: on the space elevator's site it roughly doubled the eligible states (about 183 against the hand-kept 92), and
-the owner kept the list (2026-11-12, #1672).
+the owner kept the list (2026-11-12, #1672). No trigger tests a latitude beyond the tropics' edge: for one, read the record's
+`te_climate_abs_latitude` (whole degrees, an if-chain over every state region, so read it once and store the answer),
+as Regional Climate Warming's high-latitude band does (`gw_regional_band_value`, #1681).

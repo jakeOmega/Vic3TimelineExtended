@@ -1710,6 +1710,9 @@ types global_warming_widget_types
 			gw_note = {
 				text = "gw_how_penalty"
 			}
+			gw_note = {
+				text = "gw_how_penalty_2"
+			}
 			gw_subheader = {
 				blockoverride "subheader_text" {
 					text = "gw_how_sub_emissions"

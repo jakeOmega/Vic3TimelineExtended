@@ -2058,7 +2058,7 @@ Vanilla loc strings (`INCORPORATION_TIME_SAME_TRAIT_GROUP`, `PRODUCTION_METHOD_O
 New data types does not contain a
 ```
 
-Companion to `pdx_data_callstack.cpp:16` — same root cause (vanilla loc context not registered for chained accessors), different cpp emit point. Most-frequent payload is `'DiscriminationTraitGroup'`.
+Companion to `pdx_data_callstack.cpp:16` — same root cause (vanilla loc context not registered for chained accessors), different cpp emit point. Most-frequent payload is `'DiscriminationTraitGroup'`. A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
 ### `pdx_data_localize.cpp:136` — vanilla "Data error in loc string" naval-battle UI
 - source: `pdx_data_localize.cpp:136`
@@ -2067,7 +2067,7 @@ Companion to `pdx_data_callstack.cpp:16` — same root cause (vanilla loc contex
 Data error in loc string
 ```
 
-Downstream cascade from the `pdx_data_factory.cpp:1662` non-const-promote bug — the loc-string evaluator fails to resolve the call, then emits this generic "data error" for the affected key (`BATTLE_SHIPS_BREAKDOWN_HEADER_ATTACKER`, `BATTLE_SHIPS_BREAKDOWN_HEADER_DEFENDER`, with/without `_START_OF_BATTLE`). One vanilla bug, four log lines per render.
+Downstream cascade from the `pdx_data_factory.cpp:1662` non-const-promote bug — the loc-string evaluator fails to resolve the call, then emits this generic "data error" for the affected key (`BATTLE_SHIPS_BREAKDOWN_HEADER_ATTACKER`, `BATTLE_SHIPS_BREAKDOWN_HEADER_DEFENDER`, with/without `_START_OF_BATTLE`). One vanilla bug, four log lines per render. A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
 ### `pdx_data_localize.cpp:151` — vanilla "Data error in loc string" incorporation tooltip
 - source: `pdx_data_localize.cpp:151`
@@ -2076,7 +2076,7 @@ Downstream cascade from the `pdx_data_factory.cpp:1662` non-const-promote bug �
 Data error in loc string
 ```
 
-Downstream cascade from the `pdx_data_callstack.cpp:16` missing-context bug — vanilla `INCORPORATION_TIME_SAME_TRAIT_GROUP` loc string fails its chained `DiscriminationTraitGroup.GetName` lookup, then emits this generic data-error message. Cosmetic.
+Downstream cascade from the `pdx_data_callstack.cpp:16` missing-context bug — vanilla `INCORPORATION_TIME_SAME_TRAIT_GROUP` loc string fails its chained `DiscriminationTraitGroup.GetName` lookup, then emits this generic data-error message. Cosmetic. A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
 ### `pdx_data_localize_helper.cpp:286` — vanilla "FetchData failed" cascade
 - source: `pdx_data_localize_helper.cpp:286`

@@ -592,7 +592,7 @@ class RetimeTests(RestoreTestCase):
         self.assertEqual((out.held, out.retimed), (False, []))
         self.assertEqual(path.read_bytes(), mine)                   # theirs, untouched
         self.assertNotEqual(path.stat().st_mtime_ns, owners)
-        self.assertGreaterEqual(path.stat().st_mtime, began - 5)   # the present time (the clock may step a little)
+        self.assertGreaterEqual(path.stat().st_mtime, began - 300)  # the present time (WSL steps the clock, #1693)
         again = snapshot.take(self.user, self.backups, now=self.next_time())
         self.assertNotEqual(again.files["pdx_settings.json"].sha256, snap.files["pdx_settings.json"].sha256)
 
@@ -631,7 +631,7 @@ class RetimeTests(RestoreTestCase):
         self.assertEqual((out.held, out.retimed), (False, []))
         self.assertEqual(path.read_bytes(), mine)
         self.assertNotEqual(path.stat().st_mtime_ns, owners)
-        self.assertGreaterEqual(path.stat().st_mtime, began - 5)
+        self.assertGreaterEqual(path.stat().st_mtime, began - 300)
         self.assertEqual(events(snap)[-1], "restored")
         # so the next snapshot reads the file, and a later run's restore leaves the newer bytes alone
         again = snapshot.take(self.user, self.backups, now=self.next_time())
@@ -901,10 +901,15 @@ class HoldTests(RestoreTestCase):
 
     def test_restoring_a_restored_snapshot_again_with_no_other_game_still_runs(self):
         snap = self.run_started()
-        (self.user / "continue_game.json").write_text("{}")
+        path = self.user / "continue_game.json"
+        path.write_text("{}")
+        written = path.stat().st_mtime      # at or before the exit `finish` stamps
         finish(snap)
         restore.restore(snap, self.user, other_game_running=False)
-        (self.user / "continue_game.json").write_text("{}")  # the run's file is back, say, from a stray process
+        path.write_text("{}")               # the run's file is back, say, from a stray process
+        # Dated as the run wrote it: a real time here is judged against an exit `finish` rounded up to the next
+        # second, so a first restore that crossed that second made this write look later and held (#1693).
+        os.utime(path, (written, written))
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertEqual((out.held, out.restored), (False, ["continue_game.json"]))
 

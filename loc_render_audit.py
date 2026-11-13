@@ -124,10 +124,20 @@ in `FormatTagTests` are what pin each rule.
 
 Known limits. A `$key$` or `[X.GetCustom('y')]` that pastes an opening
 fragment is not followed, so a caller that forgets the `#!` for a reviewed
-fragment is not caught. Tag names are not checked against the formats the
-game defines, so `#bolt x#!` passes (the mod's `#O`, 12 uses, has none in
-the vanilla snapshot). A `[` that never closes, or an odd apostrophe inside
+fragment is not caught. A `[` that never closes, or an odd apostrophe inside
 `[...]`, makes the scan skip the rest of the value.
+
+**A format vanilla's loc never uses** (`unknown_format`, #1698) — a tag
+whose format name no value of vanilla's English loc opens, in any case (the
+committed `vanilla_parsed/` snapshot; without it the check is off), so `#bolt
+x#!` no longer passes. The formats are defined in the install's
+`game/gui/textformatting.gui` and `jomini/gui/jomini/basetextformatting.gui`,
+which the repo does not hold, so vanilla's own use stands in for them. The
+engine matches a format name whatever its case: those files define only `V`,
+`R` and `O` (gold), and vanilla's loc writes `#v` 3,880 times, `#r` 183 and
+`#o` 3 (1.15.1). A name the files define that vanilla's loc never writes
+(`#purple`, `#cyan`) is flagged all the same; its `# REVIEWED` comment names
+the file that defines it.
 
 A tag left open may be a literal hash that was never doubled: `Rank #$RANK$`,
 `#[X.GetRank]`, `the #MeToo movement`. Adding the `#!` would pass the audit
@@ -155,6 +165,8 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import NamedTuple
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from mod_state import split_loc_line
 
 
@@ -162,7 +174,8 @@ from mod_state import split_loc_line
 class RenderFlag:
     loc_key: str
     # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" |
-    # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash"
+    # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash" |
+    # "unknown_format"
     issue: str
     detail: str
     file: str
@@ -171,15 +184,12 @@ class RenderFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[RenderFlag] = field(default_factory=list)
     loc_files_scanned: int = 0
     values_checked: int = 0
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # `[b] [i] [u]` and their closing forms, plus any other `[/x]` closing tag.
 # Valid Vic3 loc never opens a bare single-letter bracket nor uses a `[/` slash;
 # accessor chains are `[Scope.Method]` and concept links are `[concept_x]`.
@@ -297,16 +307,44 @@ def scan_format_tags(value: str) -> TagScan:
 _FORMAT_NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
 
-def _format_names(header: str) -> list[str]:
-    """The format names a tag header combines, lower-cased: `#bold;red` is
-    bold and red, `#tooltippable;tooltip:[X],key` tooltippable and tooltip.
-    A computed header (`#[GetX]`, `#$COLOR$`) has none."""
+def _format_names(header: str, keep_case: bool = False) -> list[str]:
+    """The format names a tag header combines, lower-cased unless
+    `keep_case`: `#bold;red` is bold and red, `#tooltippable;tooltip:[X],key`
+    tooltippable and tooltip. A computed header (`#[GetX]`, `#$COLOR$`) has
+    none."""
     names = []
     for part in header[1:].split(";"):
         m = _FORMAT_NAME_RE.match(part)
         if m:
-            names.append(m.group(0).lower())
+            names.append(m.group(0) if keep_case else m.group(0).lower())
     return names
+
+
+def used_format_names(values: Iterable[str]) -> set[str]:
+    """Every format name, lower-cased (the engine ignores the case), that a
+    tag in `values` opens, closed or not."""
+    names: set[str] = set()
+    for value in values:
+        if "#" in value:
+            scan = scan_format_tags(value)
+            for header in scan.closed + scan.open_tags:
+                names.update(_format_names(header))
+    return names
+
+
+_VANILLA_LOC_JSON = os.path.join("vanilla_parsed", "localization_english.json")
+
+
+def vanilla_format_names(mod_path: str) -> set[str] | None:
+    """used_format_names over vanilla's English loc, from the committed
+    `vanilla_parsed/` snapshot under `mod_path`; None without one (a temp-dir
+    test tree), which turns the `unknown_format` check off."""
+    try:
+        with open(os.path.join(mod_path, _VANILLA_LOC_JSON), encoding="utf-8") as fh:
+            loc = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    return used_format_names(loc.values())
 
 
 def closed_tag_names(values: Iterable[str]) -> set[str]:
@@ -329,9 +367,12 @@ def _tag_list(headers: list[str]) -> str:
     return ", ".join(f"`{_short_tag(h)}`" for h in headers)
 
 
-def check_format_tags(value: str, known_tags: set[str] | None = None) -> list[tuple[str, str]]:
-    """Flag a formatting tag left open at the end of the value, and a `#` that
-    is neither a tag, a `#!` nor a `##`. Pure; unit-testable.
+def check_format_tags(value: str, known_tags: set[str] | None = None,
+                      vanilla_names: set[str] | None = None) -> list[tuple[str, str]]:
+    """Flag a formatting tag left open at the end of the value, a `#` that
+    is neither a tag, a `#!` nor a `##`, and, given `vanilla_names`
+    (vanilla_format_names), a tag naming a format vanilla's loc never uses.
+    Pure; unit-testable.
 
     `known_tags` is `closed_tag_names()` over the mod's loc. With it, a tag
     left open whose name no value closes gets the literal-hash hint that a
@@ -370,6 +411,22 @@ def check_format_tags(value: str, known_tags: set[str] | None = None) -> list[tu
             f"a `#` that is not a tag, a `#!` or a `##` at offset {at} "
             f"(`{snippet}`). Write a literal hash as `##`, as vanilla does",
         ))
+    if vanilla_names is not None:
+        # Compared lower-cased, as the engine matches them (`#v` is `V`).
+        unknown: list[str] = []
+        for header in scan.closed + scan.open_tags:
+            unknown += [n for n in _format_names(header, keep_case=True)
+                        if n.lower() not in vanilla_names and n not in unknown]
+        if unknown:
+            out.append((
+                "unknown_format",
+                ", ".join(f"`#{n}`" for n in unknown)
+                + (" names a format" if len(unknown) == 1 else " name formats")
+                + " no value of vanilla's English loc opens, in any case, so whether the engine "
+                "defines " + ("it" if len(unknown) == 1 else "them") + " is unverified. Use a "
+                "format vanilla writes, or, for one the install's `gui/textformatting.gui` defines, "
+                "say so in a `# REVIEWED` comment",
+            ))
     return out
 
 
@@ -583,15 +640,6 @@ def check_article_scope(value: str, article: str, suffix: str) -> list[tuple[str
     )]
 
 
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-
-
 def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
     """Returns (key, value, trailing-after-closing-quote) or None.
 
@@ -607,9 +655,11 @@ def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
     return split_loc_line(raw)
 
 
-def check_value(value: str, known_tags: set[str] | None = None) -> list[tuple[str, str]]:
+def check_value(value: str, known_tags: set[str] | None = None,
+                vanilla_names: set[str] | None = None) -> list[tuple[str, str]]:
     """Return [(issue, detail)] for one loc value. Pure; unit-testable.
-    `known_tags` only sharpens the `unclosed_format` hint (check_format_tags)."""
+    `known_tags` only sharpens the `unclosed_format` hint, and `vanilla_names`
+    turns on `unknown_format` (check_format_tags)."""
     out: list[tuple[str, str]] = []
     brackets = _BRACKET_FMT_RE.findall(value)
     if brackets:
@@ -629,7 +679,7 @@ def check_value(value: str, known_tags: set[str] | None = None) -> list[tuple[st
             f"(`{snippet}`) — the loc parser does not nest; pass data-function "
             "arguments as bare expressions",
         ))
-    out += check_format_tags(value, known_tags)
+    out += check_format_tags(value, known_tags, vanilla_names)
     return out
 
 
@@ -669,12 +719,13 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
 
     loc_values = {key: value for key, value, _t, _f, _l in entries}
     known_tags = closed_tag_names(value for _k, value, _t, _f, _l in entries)
+    vanilla_names = vanilla_format_names(mod_path)
     quoted_names = _quoted_name_keys(mod_path)
     articles = _treaty_article_keys(mod_path)
 
     flags: list[RenderFlag] = []
     for loc_key, value, trailing, rel_p, line in entries:
-        issues = check_value(value, known_tags) + check_quoted_expansion(value, loc_values)
+        issues = check_value(value, known_tags, vanilla_names) + check_quoted_expansion(value, loc_values)
         if loc_key in quoted_names:
             issues += check_quoted_name(value, loc_values)
         article_text = article_type_text_key(loc_key, articles)
@@ -682,7 +733,7 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
             issues += check_article_scope(value, *article_text)
         if not issues:
             continue
-        exemption = _parse_reviewed(trailing)
+        exemption = parse_reviewed(trailing)
         for issue, detail in issues:
             flags.append(RenderFlag(
                 loc_key=loc_key,
@@ -708,12 +759,13 @@ _ISSUE_LABEL = {
     "article_desc_scope": "Article-instance scope in a treaty article's `_desc` / `_effects_desc`",
     "unclosed_format": "Formatting tags left open (`#bold` with no `#!`)",
     "bare_hash": "A `#` that is not a tag (write `##`)",
+    "unknown_format": "A format vanilla's loc never uses (`#bolt` for `#bold`)",
 }
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Localization render audit report",
@@ -752,6 +804,10 @@ def render_report(result: AuditResult) -> str:
         "(a color prefix from customizable localization) takes a `# REVIEWED`",
         "naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.",
         "Fix: write a literal hash as `##`.",
+        "",
+        "Also flagged: a tag naming a format that no value of vanilla's",
+        "English loc opens, in any case, so it may not render (`#bolt`).",
+        "Fix: use a format vanilla writes.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",
@@ -806,12 +862,9 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "loc_render_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "loc_render_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "loc_files_scanned": result.loc_files_scanned,
         "values_checked": result.values_checked,
@@ -821,12 +874,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

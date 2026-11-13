@@ -39,6 +39,26 @@ TRY_DIRECTIVES = frozenset({"TRY_INJECT", "TRY_REPLACE"})
 REPEATED_ENTRY_FIELDS = frozenset({"outcome"})
 
 
+# The keys a list of bare items may carry: vanilla's on-actions write
+# `events = { a.1 delay = { days = 5 } a.2 }`, the delay applying to the items
+# after it, and that is the only mix the engine documents
+# (`common/on_actions/_on_actions.md`). Any other key beside a bare word is
+# still an error, so a missing `=` (`{ is_at_war = yes has_law law_x }`)
+# stays a parse failure rather than a silently different shape (#1697).
+MIXED_LIST_KEYS = frozenset({"delay"})
+
+
+class _BareItemError(ValueError):
+    """A key in a `{ }` block is followed by no operator. `block` is the token
+    index of the block's `{`, so only that block's own parse falls back to a
+    mixed list (see ParadoxFileParser._parse_block_at); an error from a block
+    nested inside it propagates as before."""
+
+    def __init__(self, message, block):
+        super().__init__(message)
+        self.block = block
+
+
 class ParadoxFileParser:
     def __init__(self, script_values=False):
         """`script_values`: the entities are script values
@@ -194,10 +214,18 @@ class ParadoxFileParser:
         each entry keeps its OWN operator (`gdp > 1000` next to two
         `has_law = ...` stays `>`) and identical duplicates survive
         (`add = 5 add = 5 add = 3` is three entries). `_normalize_data`
-        later folds that list into `{key: [(op, v), ...]}`.
+        later folds that list into `{key: [(op, v), ...]}`. A nested block
+        of bare items with `delay` entries (`{ a.1 delay = { days = 5 } a.2
+        }`) is a list (_parse_mixed_at); any other key with no operator after
+        it, and at this outer level every one, is a ValueError.
         """
         match = self._match_braces(tokens)
-        value, pos = self._parse_object_at(tokens, match, 0, len(tokens))
+        try:
+            value, pos = self._parse_object_at(tokens, match, 0, len(tokens))
+        except _BareItemError as err:
+            # A bare word at the outer level, such as a file's top level:
+            # still an error, reported as the ValueError it always was.
+            raise ValueError(str(err)) from None
         return value, tokens[pos:]
 
     @staticmethod
@@ -239,7 +267,7 @@ class ParadoxFileParser:
             return tok, pos + 1
         inner_end = min(match[pos], end)
         if self._has_top_level_operator(tokens, match, pos + 1, inner_end):
-            return self._parse_object_at(tokens, match, pos, end)
+            return self._parse_block_at(tokens, match, pos, end)
         items = self._parse_list_at(tokens, match, pos + 1, inner_end)
         return items, min(inner_end + 1, end)
 
@@ -251,7 +279,7 @@ class ParadoxFileParser:
             if tok == "{":
                 # The block's own range ends at its `}` (or at `stop`).
                 j = min(match[i] + 1, stop)
-                nested, _ = self._parse_object_at(tokens, match, i, j)
+                nested, _ = self._parse_block_at(tokens, match, i, j)
                 result.append(nested)
                 i = j
             else:
@@ -259,12 +287,67 @@ class ParadoxFileParser:
                 i += 1
         return result
 
+    def _parse_block_at(self, tokens, match, pos, end):
+        """A nested `{ }` block parsed as an object, or, when a key in it has
+        no operator after it, as a mixed list (_parse_mixed_at). Only input
+        the object parse rejects takes the second path, so every block that
+        parsed before parses the same."""
+        try:
+            return self._parse_object_at(tokens, match, pos, end)
+        except _BareItemError as err:
+            if err.block != pos:
+                raise
+            bare_item = err
+        return self._parse_mixed_at(tokens, match, pos, end, bare_item)
+
+    def _parse_mixed_at(self, tokens, match, pos, end, bare_item):
+        """A block of bare items, which may carry `delay = { }` entries
+        (MIXED_LIST_KEYS), as vanilla's on-actions do: `events = { a.1 delay =
+        { days = 5 } a.2 }` (the delay applies to the events after it), or a
+        list of lists (`{ { p q } }`). Returns a list in source order: a bare
+        item is its token, a keyed entry a single-key dict `{key: (op,
+        value)}` (the shape of a repeated-key object's entries), an anonymous
+        `{ }` block its parse, as in any list. A key outside MIXED_LIST_KEYS
+        raises `bare_item`, the object parse's own error, which names the
+        bare word: beside `key = value` entries that word is most likely a
+        missing `=`. An operator where an item should be still raises: a
+        parsed list never starts with an operator token (vanilla_parsed's
+        JSON encoding relies on that)."""
+        pos += 1
+        result = []
+        while True:
+            token = tokens[pos] if pos < end else None
+            if token is None or token == "}":
+                if token is not None:
+                    pos += 1
+                return result, pos
+            if token == "{":
+                j = min(match[pos] + 1, end)
+                nested, _ = self._parse_block_at(tokens, match, pos, j)
+                result.append(nested)
+                pos = j
+                continue
+            if token in _CONDITIONAL_TOKENS:
+                raise ValueError(
+                    f"Expected a key or an item in a list, got the operator '{token}'"
+                )
+            symbol = tokens[pos + 1] if pos + 1 < end else None
+            if symbol in _CONDITIONAL_TOKENS:
+                if token not in MIXED_LIST_KEYS:
+                    raise bare_item
+                value, pos = self._parse_value_at(tokens, match, pos + 2, end)
+                result.append({token: (symbol, value)})
+            else:
+                result.append(token)
+                pos += 1
+
     def _parse_object_at(self, tokens, match, pos, end):
         first_token = tokens[pos] if pos < end else None
         if first_token != "{":
             raise ValueError(
                 f"Expected '{first_token}' to be '{{' when parsing object, got '{first_token}'"
             )
+        block = pos
         pos += 1
         entries = []
         seen = set()
@@ -281,8 +364,9 @@ class ParadoxFileParser:
             pos += 1
             symbol = tokens[pos] if pos < end else None
             if symbol not in _CONDITIONAL_TOKENS:
-                raise ValueError(
-                    f"Expected a valid symbol after key in object, got: '{symbol}' after '{key}'"
+                raise _BareItemError(
+                    f"Expected a valid symbol after key in object, got: '{symbol}' after '{key}'",
+                    block,
                 )
             value, pos = self._parse_value_at(tokens, match, pos + 1, end)
             if key in seen:

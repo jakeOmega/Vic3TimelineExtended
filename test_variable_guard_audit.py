@@ -254,7 +254,7 @@ class SuppressionTests(unittest.TestCase):
             comment=" # REVIEWED 2026-11-12 (variable_guard): a verbatim vanilla copy"))
         self.assertEqual(len(flags), 1)
         self.assertEqual(flags[0].exemption,
-                         {"date": "2026-11-12", "rationale": "a verbatim vanilla copy"})
+                         {"date": "2026-11-12", "tag": "variable_guard", "rationale": "a verbatim vanilla copy"})
 
     def test_one_line_block(self):
         flags = _scan("x = { NAND = { has_variable = v var:v > 0 } "

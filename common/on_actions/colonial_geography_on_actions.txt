@@ -13,6 +13,9 @@
 # a country whose entry has ended the entry back once it qualifies again. It
 # runs here, after the step, so the colony test it asks reads this month's
 # cache; another file's on_action may run before this one.
+#
+# Last, the self-checks of the civil-war reading the re-entry pass and the AI's
+# hold rest on (colonial_civil_war_selfcheck, decolonization.txt; #1735).
 # ============================================================================
 
 on_game_started = {
@@ -39,5 +42,6 @@ colonial_geography_on_action = {
 	effect = {
 		ce_separation_step = yes
 		ce_reentry_monthly = yes
+		colonial_civil_war_selfcheck = yes
 	}
 }

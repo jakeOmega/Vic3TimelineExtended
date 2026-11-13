@@ -31,10 +31,10 @@ class RosterTests(unittest.TestCase):
         self.assertEqual(len(audit_registry.AUDITS), len(audit_registry.BY_NAME))
 
     def test_reload_roster_matches_the_server(self):
-        server = extract_rosters(os.path.join(ROOT, "mod_state_server.py"))["POST_LOAD_AUDITS"]
+        server = extract_rosters(os.path.join(ROOT, "server", "post_load.py"))["POST_LOAD_AUDITS"]
         self.assertEqual(
             {a.name for a in audit_registry.post_load_audits()}, set(server),
-            "an audit's `post_load` disagrees with POST_LOAD_AUDITS in mod_state_server.py",
+            "an audit's `post_load` disagrees with POST_LOAD_AUDITS in server/post_load.py",
         )
 
     def test_every_audit_runs_somewhere(self):

@@ -82,7 +82,7 @@ class FlagTests(_Fixture):
         self.assertEqual([(f.file, f.line, f.text_key) for f in r.flags],
                          [("common/scripted_effects/te_test_effects.txt", 2, "te_plain_tt")])
         self.assertEqual([(h.modifier, h.line) for h in r.flags[0].hidden], [("te_bonus", 4)])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_rendered_modifier_passes_directly_through_splice_and_select(self):
         for key in ("te_rendered_tt", "te_splice_tt", "te_select_tt"):
@@ -141,8 +141,8 @@ class SuppressionTests(_Fixture):
         self.script(f"e = {{\n\tcustom_tooltip = {{ # REVIEWED 2026-10-27 ({CHECK}): a hidden helper\n"
                     "\t\ttext = te_plain_tt\n\t\tadd_modifier = te_bonus\n\t}\n}\n")
         r = audit(self.root)
-        self.assertEqual(r.flags[0].exemption, {"date": "2026-10-27", "rationale": "a hidden helper"})
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(r.flags[0].exemption, {"date": "2026-10-27", "tag": CHECK, "rationale": "a hidden helper"})
+        self.assertEqual(len(r.failing), 0)
 
     def test_tag_on_another_line_is_stale_and_the_flag_stands(self):
         self.script(f"e = {{\n\tcustom_tooltip = {{\n"
@@ -150,15 +150,15 @@ class SuppressionTests(_Fixture):
                     "\t\tadd_modifier = te_bonus\n\t}\n}\n")
         r = audit(self.root)
         self.assertIsNone(r.flags[0].exemption)
-        self.assertEqual([t.line for t in r.stale_tags], [3])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual([t.line for t in r.stale], [3])
+        self.assertEqual(len(r.failing), 2)
 
     def test_tag_on_a_clean_block_is_stale(self):
         self.script(f"e = {{ custom_tooltip = {{ # REVIEWED 2026-10-27 ({CHECK}): was hidden\n"
                     "\ttext = te_rendered_tt add_modifier = te_bonus } }\n")
         r = audit(self.root)
         self.assertEqual(r.flags, [])
-        self.assertEqual(len(r.stale_tags), 1)
+        self.assertEqual(len(r.stale), 1)
 
 
 class CliTests(_Fixture):
@@ -186,7 +186,7 @@ class RepoTests(unittest.TestCase):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         root = os.path.dirname(os.path.abspath(__file__))
         self.assertIn("hidden_modifier_audit", extract_rosters(
-            os.path.join(root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            os.path.join(root, "server", "post_load.py"))["POST_LOAD_AUDITS"])
 
     def test_the_mod_has_no_failing_flag(self):
         # CI runs it --strict (#1213): every flag is fixed or carries its
@@ -194,7 +194,7 @@ class RepoTests(unittest.TestCase):
         from path_constants import mod_path
         result = audit(mod_path)
         self.assertEqual([f for f in result.flags if not f.exemption], [])
-        self.assertEqual(result.stale_tags, [])
+        self.assertEqual(result.stale, [])
 
     def test_ci_runs_it_strict(self):
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
