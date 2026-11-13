@@ -579,13 +579,17 @@ class Session:
         self._record("held", outcome="none")
 
     def _check_save(self, save: str) -> str:
-        """The save's name as `-loadsave` takes it (no `.v3`), once it is known to be in `save games/`."""
+        """The save's name as `-loadsave` takes it (no `.v3`), once it is known to be in `save games/` under a name
+        the folder lists (`snapshot.unlisted_save`, which `snapshot --save` applies too)."""
         name = save[:-3] if isinstance(save, str) and save.endswith(".v3") else save
         if (not isinstance(name, str) or not name.strip() or name != Path(name).name or name.startswith("-")
                 or not name.isprintable()):
             raise SessionError("bad_argument", "a save is a file name in save games/, not %r" % (save,))
         if not (Path(self._paths.user_data) / fixture.SAVE_FOLDER / (name + ".v3")).is_file():
             raise SessionError("no_save", "there is no save games/%s.v3" % name)
+        problem = snapshot.unlisted_save(Path(self._paths.user_data), "%s/%s.v3" % (fixture.SAVE_FOLDER, name))
+        if problem is not None:                 # as `snapshot --save` refuses it: a short 8.3 name, say
+            raise SessionError("bad_argument", problem)
         return name
 
     def _rule_table(self) -> dict[str, dict]:
@@ -1200,7 +1204,8 @@ class Session:
         again (`tag`), and only then read the date and run the unpaused proof. Any failure from the Start click on
         sets `left_running` and `entered_unproved`, clicks nothing more, and carries the clicks: its own code for
         breakpoint_unverified, tag_failed, debugger, watch_ended or left_running, else not_entered with the code as
-        `cause`.
+        `cause`. A helper error on either click is split as `click`'s is (`_click`): `click_refused` pressed nothing
+        and sets nothing; `click_unknown` may have pressed, and on Start sets both flags too.
 
         One not_entered sets neither and has no `cause`: the proof ran to its end, the pause proved, and the date
         had not moved ("the date stayed"). The game is then where it was, on the country-select screen with time
@@ -1264,7 +1269,8 @@ class Session:
         `console_not_open` otherwise): with it shut, the input line's point is the map, and a click into a tool
         window would take the keyboard with no way to give it back.
 
-        The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
+        The restore cannot put back one of the owner's manual saves (only the autosaves and a `--save` file are
+        copied): `stop` holds when one was changed or deleted (`manual_save_changed`) and notes a new one, so a click
         must never be aimed at the game's own menus (save, load, settings, exit)."""
         self._require_game(keyboard=False)
         if (x is None) != (y is None) or (x is None and not console):
@@ -1926,6 +1932,7 @@ class Session:
                 restore, outcome = self._fixture_verdict()
             elif self._snapshot is not None:
                 restore, outcome = self._restore(notes)
+            notes.extend(n for n in _save_notes(restore) if n not in notes)
         if left_up and (self._watch is None or self._watch_returned()):
             notes.append("no `watch` follows that game: its exit will not be recorded, so a restore of snapshot %s "
                          "will likely be held for the owner" % self._snapshot)
@@ -2497,7 +2504,7 @@ class Session:
                     "country. Start was not clicked, so nothing changed and enter-game can be tried again; no "
                     "verb closes that window, so run such a setup after entering",
                     clicks=clicks, screenshot=self._enter_shot_path())
-        self._click(START_CLICK, clicks)
+        self._click(START_CLICK, clicks, enters=True)
         # Start may have been pressed: from here on the game may be entered, and running. Nothing is clicked again.
         try:
             self._sleep(ENTER_SETTLE_S)
@@ -2523,14 +2530,41 @@ class Session:
         self._entered = True
         return {"entered": True, "clicks": clicks, "before": before, "after": after}
 
-    def _click(self, where: tuple[float, float], clicks: list[list[int]]) -> None:
+    def _click(self, where: tuple[float, float], clicks: list[list[int]], enters: bool = False) -> None:
+        """One of enter-game's clicks, appended to `clicks` once the helper has answered. A helper refusal from
+        before the button went down (CLICK_REFUSED_BEFORE_PRESS) is `click_refused`: nothing was pressed, so
+        nothing is latched. Any other helper error (`backend_error`, `helper_gone`, a timeout) may have come after
+        the press: `click_unknown`, with the point as `pixel`. On Start (`enters`) the game may then be entered and
+        running unpaused, so `left_running` and `entered_unproved` are set before it is raised, as for any failure
+        after Start, and enter-game and advance refuse until stop. A country click cannot enter the game, so after
+        one nothing is latched either. The proof and the point (`_prove_game`, `_point`) raise before the press and
+        pass through as they are.
+
+        What is not latched is not always clean: once the country click has selected a country (after it went
+        through, and perhaps after a `click_unknown` on it), the next enter-game's side-panel check starts from a
+        selected panel, reads no change and answers `no_country_selected` without clicking Start (seen in the
+        fakes; the detail says so)."""
         # The console's own front check, so the presence rule decides whether the foreground may be taken.
         self._console.ensure_open()
         x, y = self._point(where)
         try:
             self._sends.click(self._proc.pid, x, y)
-        except HelperError as e:            # refused before the button went down: nothing was pressed
-            raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
+        except HelperError as e:
+            if e.code in CLICK_REFUSED_BEFORE_PRESS:        # refused before the button went down: nothing was pressed
+                kept = ("; Start was not pressed, but the country click before it stands, so the next enter_game's "
+                        "side-panel check may read no change (no_country_selected)" if enters else "")
+                raise SessionError("click_refused", "%s: %s%s" % (e.code, e.detail, kept), clicks=clicks) from e
+            if enters:
+                self._left_running = True
+                self._entered_unproved = True
+                after = ("Start may have been pressed, so the game may be entered and running unpaused (nothing proved "
+                         "it either way); enter_game and advance are refused until stop")
+            else:
+                after = ("the country click may have been pressed, so a country may be selected, and the next "
+                         "enter_game's side-panel check may then see no change (no_country_selected); Start was not "
+                         "clicked, so the game was not entered: take a shot before entering again")
+            raise SessionError("click_unknown", "%s: %s. %s" % (e.code, e.detail, after), clicks=clicks,
+                               pixel=[x, y]) from e
         clicks.append([x, y])
 
     def _enter_shot_path(self) -> str:
@@ -2855,6 +2889,34 @@ def _reply_lost(reply: dict | None, code: int | None) -> bool:
     if not isinstance(reply, dict) or reply.get("refused") == "bad_reply":
         return True
     return code == 0 and not reply.get("id")
+
+
+def _save_notes(restore: Mapping | None) -> list[str]:
+    """The stop's notes on the owner's own saves, from the restore's `manual_saves` (restore._manual_saves): new
+    saves left in place; saves changed or gone when another hold's reason was given (`manual_save_changed`'s own
+    line in summary.md names them); and a snapshot that recorded no sizes and times, which never holds."""
+    saves = restore.get("manual_saves") if isinstance(restore, Mapping) else None
+    if not isinstance(saves, Mapping):
+        return []
+
+    def names(key: str) -> str:
+        value = saves.get(key)
+        return ", ".join(map(str, value)) if isinstance(value, list) else str(value)
+
+    notes = []
+    differ = [key for key in ("changed", "missing") if saves.get(key)]
+    if differ and restore.get("reason") != "manual_save_changed":
+        notes.append("the owner's own saves in save games/ differ from the snapshot's listing (%s); no snapshot copies "
+                     "them, so nothing can put them back: tell the owner"
+                     % "; ".join("%s: %s" % ("gone" if key == "missing" else key, names(key)) for key in differ))
+    if saves.get("new"):
+        notes.append("new saves in save games/ that match no name of the harness's were left in place, since they may "
+                     "be the owner's: %s" % names("new"))
+    if saves.get("unrecorded"):
+        notes.append("the snapshot was taken before the sizes and times of the owner's saves were recorded, so a save "
+                     "overwritten during the run cannot be told from one left alone, and a gone one is noted rather "
+                     "than held")
+    return notes
 
 
 def _clears_by_waiting(restore: Mapping | None) -> bool:

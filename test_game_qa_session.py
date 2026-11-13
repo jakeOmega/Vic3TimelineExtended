@@ -709,6 +709,21 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.cli.verbs, [])
         self.assertFalse(self.paths.overlay_dir.exists())
 
+    def test_a_save_named_by_a_name_the_folder_does_not_list_is_refused_before_anything(self):
+        # #1725: the owner's drive answers to short 8.3 names (`FRENCH~1`) that it does not list; a hard link plays
+        # one here, left out of the scan as the drive leaves it out of the listing.
+        long_name = self.user / "save games" / "french republic_1867_08_16.v3"
+        long_name.write_bytes(b"a long-named save")
+        os.link(long_name, self.user / "save games" / "FRENCH~1.v3")
+        real = snapshot._scan_folder
+        with mock.patch.object(snapshot, "_scan_folder",
+                               lambda user_data, folder: {r: s for r, s in real(user_data, folder).items() if "~" not in r}):
+            error = self.session_error(self.start, save="FRENCH~1")
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("same file as 'french republic_1867_08_16.v3'", error.detail)
+        self.assertEqual(self.cli.verbs, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
     def test_start_refuses_while_a_snapshot_is_held(self):
         self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
         error = self.session_error(self.start)
@@ -1978,6 +1993,162 @@ class ClickTest(SessionTestCase):
         self.assertIn("no_client_area", reply["screenshot_error"])
 
 
+class ManualSavesStopTest(SessionTestCase):
+    """#1725: what `stop` says about the owner's own saves, from the restore's `manual_saves`."""
+
+    MINE = "save games/byzantium_1942_01_27.v3"
+
+    def stop_with(self, reply, code):
+        self.started()
+        self.cli.queue("restore", reply, code)
+        out = self.session.stop()
+        return out, Path(out["report"]).read_text("utf-8")
+
+    def test_a_changed_save_is_a_hold_that_names_it_and_says_everything_else_is_back(self):
+        out, summary = self.stop_with({"restored": ["content_load.json", "console_history.txt"], "removed": [],
+                                       "held": True, "reason": "manual_save_changed",
+                                       "manual_saves": {"changed": [self.MINE], "missing": ["save games/x.v3"]},
+                                       "playset_restored": True}, 2)
+        self.assertEqual((out["outcome"], out["reason"], out["stop_again"]), ("held", "manual_save_changed", False))
+        self.assertEqual(out["manual_saves"], {"changed": [self.MINE], "missing": ["save games/x.v3"]})
+        self.assertNotIn("next", out)
+        first = summary.split("\n")[0]
+        self.assertIn("HELD (manual_save_changed)", first)
+        self.assertIn("changed: " + self.MINE, first)
+        self.assertIn("gone: save games/x.v3", first)
+        self.assertIn("Everything the snapshot holds was put back (2 files put back", first)
+        self.assertNotIn("waits", first)
+        self.assertNotIn("differ from the snapshot's listing", " ".join(out.get("notes") or []))   # said once
+        self.assertTrue(out["overlay_removed"])                     # the playset is back, so the overlay goes
+
+    def test_a_new_save_is_a_note_in_the_reply_and_the_summary_and_the_stop_restored(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": False, "reason": "",
+                                       "manual_saves": {"new": ["save games/france_1836_01_02.v3"]}}, 0)
+        self.assertEqual(out["outcome"], "restored")
+        note = [n for n in out["notes"] if "new saves" in n]
+        self.assertEqual(len(note), 1)
+        self.assertIn("save games/france_1836_01_02.v3", note[0])
+        self.assertIn("- Note: " + note[0], summary)
+        self.assertTrue(summary.startswith("Restore: restored"))
+
+    def test_saves_listed_with_another_holds_reason_are_a_note(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": True, "reason": "modified_after_exit",
+                                       "manual_saves": {"missing": [self.MINE]}}, 2)
+        self.assertEqual((out["outcome"], out["reason"]), ("held", "modified_after_exit"))
+        note = [n for n in out["notes"] if "differ from the snapshot's listing" in n]
+        self.assertEqual(len(note), 1)
+        self.assertIn("gone: " + self.MINE, note[0])
+        self.assertIn("- Note: " + note[0], summary)
+
+    def test_a_snapshot_without_sizes_and_times_says_so(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": False, "reason": "",
+                                       "manual_saves": {"missing": [self.MINE], "unrecorded": True}}, 0)
+        self.assertEqual(out["outcome"], "restored")
+        notes = " | ".join(out["notes"])
+        self.assertIn("gone: " + self.MINE, notes)
+        self.assertIn("before the sizes and times of the owner's saves were recorded", notes)
+
+    def test_nothing_is_said_when_there_is_nothing_to_say(self):
+        out, _summary = self.stop_with(*RESTORED)
+        self.assertNotIn("manual_saves", out)
+        self.assertFalse([n for n in out.get("notes") or [] if "save games/" in n])
+
+
+class EnterClickErrorTest(SessionTestCase):
+    """#1725: a helper error on one of enter-game's clicks is split as `click`'s is (CLICK_REFUSED_BEFORE_PRESS)."""
+
+    def fail_click(self, number, code):
+        """The helper raises `code` on the `number`th click (1: the country, 2: Start); the others go through."""
+        real, made = self.game.click, []
+
+        def click(pid, x, y):
+            made.append((x, y))
+            if len(made) == number:
+                raise HelperError(code, "failed")
+            return real(pid, x, y)
+        self.game.click = click
+
+    def test_start_refused_before_the_press_latches_nothing_and_enter_game_can_be_run_again(self):
+        for code in session.CLICK_REFUSED_BEFORE_PRESS:
+            with self.subTest(code=code):
+                self.setUp()
+                self.started()
+                self.fail_click(2, code)
+                error = self.session_error(self.session.enter_game)
+                self.assertEqual(error.code, "click_refused")
+                self.assertIn("no_country_selected", error.detail)
+                self.assertEqual(len(error.info["clicks"]), 1)          # the country click alone was made
+                status = self.session.status()
+                self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]),
+                                 (False, False, False))
+                self.game.click = type(self.game).click.__get__(self.game)
+                # The country the first try selected stays selected, so the panel cannot change: the gap the detail
+                # names. With the lobby back as it was before the first try, enter-game goes through.
+                self.assertEqual(self.session_error(self.session.enter_game).code, "no_country_selected")
+                self.game.selected = None
+                self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_start_that_may_have_been_pressed_leaves_the_session_maybe_in_play(self):
+        for code in ("backend_error", "helper_gone", "timeout"):
+            with self.subTest(code=code):
+                self.setUp()
+                self.started()
+                self.fail_click(2, code)
+                error = self.session_error(self.session.enter_game)
+                self.assertEqual(error.code, "click_unknown")
+                self.assertIn(code, error.detail)
+                self.assertIn("Start may have been pressed", error.detail)
+                self.assertEqual(len(error.info["clicks"]), 1)
+                self.assertEqual(len(error.info["pixel"]), 2)
+                status = self.session.status()
+                self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]),
+                                 (False, True, True))
+                clicks = len(self.game.clicks)
+                self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+                self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+                self.assertEqual(len(self.game.clicks), clicks)           # no third click
+
+    def test_advance_through_a_start_that_may_have_been_pressed_is_left_running_too(self):
+        self.started()
+        self.fail_click(2, "backend_error")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "click_unknown")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+
+    def test_a_country_click_that_may_have_been_pressed_latches_nothing_and_clicks_no_start(self):
+        self.started()
+        self.fail_click(1, "backend_error")
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "click_unknown")
+        self.assertIn("Start was not clicked", error.detail)
+        self.assertIn("no_country_selected", error.detail)          # what a selected panel does to the next try
+        self.assertEqual(error.info["clicks"], [])
+        status = self.session.status()
+        self.assertEqual((status["entered_unproved"], status["left_running"]), (False, False))
+        self.assertEqual(self.game.clicks, [])                      # the fake's own record: neither click landed
+        self.game.click = type(self.game).click.__get__(self.game)
+        self.assertTrue(self.session.enter_game()["entered"])       # nothing locked: enter-game can be run again
+
+    def test_a_country_click_refused_before_the_press_is_click_refused(self):
+        self.started()
+        self.fail_click(1, "covered")
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual((error.code, error.info["clicks"]), ("click_refused", []))
+        self.assertFalse(self.session.status()["left_running"])
+
+    def test_the_proof_before_start_is_not_taken_for_a_click_error(self):
+        # `_prove_game` raises before the press: watch_ended, as before, and nothing latched beyond it.
+        self.started()
+        real, made = self.game.click, []
+
+        def click(pid, x, y):
+            made.append((x, y))
+            real(pid, x, y)
+            self.game.process_gone = True                           # the game is gone before Start's proof
+        self.game.click = click
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(len(made), 1)
+        self.assertFalse(self.session.status()["left_running"])
 
 
 class KeyboardAfterClickTest(SessionTestCase):
@@ -2364,6 +2535,8 @@ class ProfilerRootsTest(SessionTestCase):
         reply = self.session.profiler_roots()
         self.assertFalse(reply["opened"])
         self.assertEqual(reply["lines"], ["Unknown command"])
+
+
 
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
