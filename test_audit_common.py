@@ -148,19 +148,25 @@ EDGES = [
 ]
 
 # Shapes where the shared tagged form differs from an audit's own, pinned so a
-# change to either is deliberate. None occurs in the repository, and no
-# migrated audit passes `tags`; they are settled when the tagged audits move
-# onto audit_common. (rule, comment, old parser takes it, shared one takes it),
-# for the tag `t_ag`.
+# change to either is deliberate. None occurs in the repository
+# (`test_the_most_used_tagged_form_agrees_exactly_on_the_repo` and
+# `test_tagged_forms_agree_on_the_corpus_or_widen_to_another_form` prove it).
+# Settled when the tagged audits moved onto audit_common (#1536): each reading
+# below is the wider one. (rule, comment, old parser takes it, shared one takes
+# it), for the tag `t_ag`.
 _A = "# REVIEWED 2026-01-01"
 _B = "# REVIEWED 2026-01-02 (t_ag): y"
 TAGGED_DIVERGENCES = [
-    # Two tagged comments on a line: the first decides in the shared parser; the
-    # stricter old forms skipped one that their pattern did not match.
-    ("tagged_word", f"{_A} (a, b): x {_B}", True, False),
-    ("tagged_lower", f"{_A} (a, b): x {_B}", True, False),
-    ("tagged_spaced", f"{_A} (a, b): x {_B}", True, False),
-    ("tagged_spaced", f"{_A} (other): x {_B}", True, False),
+    # Two tagged comments on a line, the first naming only another audit's tag:
+    # the first comment that names `t_ag` decides in the shared parser, as the
+    # fixed form's did. The split, comma, one-word and lowercase forms read
+    # only the first tagged comment their pattern matched, so it hid the second.
+    ("tagged_split", f"{_A} (other): x {_B}", False, True),
+    ("tagged_comma", f"{_A} (other): x {_B}", False, True),
+    ("tagged_word", f"{_A} (other): x {_B}", False, True),
+    ("tagged_lower", f"{_A} (other): x {_B}", False, True),
+    ("tagged_split", f"{_A} (a, b): x {_B}", False, True),
+    ("tagged_comma", f"{_A} (a, b): x {_B}", False, True),
     # A list naming the tag, which only the split and comma forms took.
     ("tagged_word", f"{_A} (t_ag,): x", False, True),
     ("tagged_word", f"{_A} (t_ag, other): x", False, True),
