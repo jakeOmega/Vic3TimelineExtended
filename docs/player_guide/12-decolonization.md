@@ -621,6 +621,6 @@ those reasons. No AI plans full decolonization while two of its colonies are
 well accepted. No AI lets a colony go, by decision or in an event, during a
 civil war of its own while its bar is 40 or more: a civil war is often short,
 and it can cut a state off from the capital long enough to make it look like a
-colony. In events, AI empires lean toward negotiation and release, and an AI
+colony. A colony's own secession doesn't count; it is a war of independence. In events, AI empires lean toward negotiation and release, and an AI
 takes the Imperial Federation Act or Civilizing Mission Compact whenever it
 qualifies.
