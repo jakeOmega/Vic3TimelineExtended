@@ -8,6 +8,15 @@ hand. Each list's own row carries a one-line pointer here.
 **Launches:** three, with the owner's go-ahead for up to three; each restored the owner's files (`outcome:
 restored`, nothing held).
 
+**Game rules (added 2026-11-12).** These rows did not run under the default rules, as was assumed at the time.
+An unattended new game takes the rules the owner last applied in a lobby, and the save names them:
+`te_tax_code_light` (the default is `te_tax_code_disabled`), `culture_merges_enabled` (default
+`culture_merges_disabled`) and `no_fantastical_content` (default `allow_fantastical_content`); every other
+rule was at its default. One row below rests on one of them: the Culture merges self-check
+(`cm_definition_inject`) was read with culture merges on, which is not the default. No row reads the Tax Code
+or fantastical content. A row that would give another answer under the defaults should be run again with the
+rule named (`docs/guides/python_tools.md`, "Game rules and the fresh save").
+
 | Session | Run folder (under the backup root) | What it was |
 |---|---|---|
 | 1 | `runs/20261111T181801Z/` | Country-select screen, 2 January 1836, time stopped. USA, then the Ottoman Empire |

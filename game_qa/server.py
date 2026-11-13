@@ -28,7 +28,7 @@ removes the folder (spec § 5.2, Review Focus 1).
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
     status     the server and the session, answered here without asking the game anything
-    the rest   console, run-setup, events, pick, read, tag, enter-game, advance, shot, click, try-event
+    the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -70,7 +70,7 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
                                         # client's STATUS_TIMEOUT_S, so `status` and `stop` answer past one
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
-START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy")
+START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules")
 
 
 class ServerError(Exception):
@@ -166,7 +166,8 @@ class SessionServer:
         self._stop_reply: dict | None = None    # the last stop's reply, from the `stop` verb or a failed start
         self._served = 0
         self._verbs: dict[str, Callable[[dict], tuple[dict, int]]] = {
-            "console": self._console, "run-setup": self._run_setup, "events": self._events, "pick": self._pick,
+            "console": self._console, "run-setup": self._run_setup, "add-setup": self._add_setup,
+            "events": self._events, "pick": self._pick, "press": self._press,
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
             "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
@@ -311,6 +312,12 @@ class SessionServer:
     def _run_setup(self, body: dict) -> tuple[dict, int]:
         name = _arg(body, "name")
         return {"name": name, "lines": self._session.run_setup(name)}, 0
+
+    def _add_setup(self, body: dict) -> tuple[dict, int]:
+        return self._session.add_setup(_arg(body, "name"), _arg(body, "script")), 0
+
+    def _press(self, body: dict) -> tuple[dict, int]:
+        return self._session.press(_arg(body, "key")), 0
 
     def _events(self, body: dict) -> tuple[dict, int]:
         return {"pending": [asdict(p) for p in self._session.events()]}, 0

@@ -60,8 +60,10 @@ class FakeSession:
         if verb in self.raises:
             raise self.raises[verb]
 
-    def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False):
+    def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
+              switch_rules=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
+        self.switch_rules = switch_rules
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
 
     def console(self, text):
@@ -71,6 +73,15 @@ class FakeSession:
     def run_setup(self, name):
         self._call("run_setup", name)
         return ["first line", "second line"]
+
+    def add_setup(self, name, script):
+        self._call("add_setup", name, script)
+        return {"name": name, "event": "te_qa.100", "revision": 1, "loaded": True, "tries": 3, "waited_s": 42.0,
+                "slots_left": 29}
+
+    def press(self, key):
+        self._call("press", key)
+        return {"key": key, "scan": 1}
 
     def events(self):
         self._call("events")
@@ -257,6 +268,38 @@ class ServerTestCase(unittest.TestCase):
         info = {"port": port, "pid": pid, "started": "2026-11-10T15:00:00Z", "token": "0" * 32}
         self.info_path.write_text(json.dumps(info), encoding="utf-8")
         return info
+
+
+class AddSetupVerbTest(ServerTestCase):
+    def test_add_setup_sends_the_files_text_under_its_name(self):
+        fake, _thread = self.serve()
+        script = self.backups / "late.txt"
+        script.write_text("\ufeffset_variable = te_late\n", encoding="utf-8")
+        reply, code = self.run_cli("add-setup", "late=%s" % script)
+        self.assertEqual((code, reply["event"], reply["loaded"], reply["slots_left"]), (0, "te_qa.100", True, 29))
+        self.assertEqual(fake.calls[-1], ("add_setup", "late", "set_variable = te_late\n"))
+
+    def test_press_sends_the_key_named(self):
+        fake, _thread = self.serve()
+        self.assertEqual(self.run_cli("press", "esc"), ({"key": "esc", "scan": 1}, 0))
+        self.assertEqual(fake.calls[-1], ("press", "esc"))
+
+    def test_a_bad_argument_is_refused_before_the_server_is_asked(self):
+        fake, _thread = self.serve()
+        for spec in ("late", "late=%s" % (self.backups / "missing.txt")):
+            reply, code = self.run_cli("add-setup", spec)
+            self.assertEqual((code, reply["refused"]), (2, "bad_argument"), spec)
+            self.assertNotIn("--setup", reply["detail"])
+        self.assertEqual([c for c in fake.calls if c[0] == "add_setup"], [])
+
+    def test_a_refusal_from_the_session_keeps_its_fields(self):
+        fake = FakeSession()
+        fake.raises["add_setup"] = session.SessionError("not_reloaded", "no reload", revision=1, seen=0, tries=30)
+        self.serve(fake)
+        script = self.backups / "late.txt"
+        script.write_text("x = yes\n", encoding="utf-8")
+        reply, code = self.run_cli("add-setup", "late=%s" % script)
+        self.assertEqual((code, reply["refused"], reply["revision"], reply["seen"]), (2, "not_reloaded", 1, 0))
 
 
 class VerbTest(ServerTestCase):
@@ -616,6 +659,25 @@ class StartTest(ServerTestCase):
         self.assertEqual(server.read_info(self.backups)["snapshot"], SNAP)      # session.json names the run now
         self.threads.extend(h.thread for h in spawn.handles)
         self.assertEqual(self.run_cli("events")[1], 0)
+
+    def test_switch_rule_reaches_the_session_as_a_mapping(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("start", "--permission", PERMISSION, "--switch-rule", "tax_rule=tax_off",
+                                       "--switch-rule", "merges_rule=merges_on")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(fake.switch_rules, {"tax_rule": "tax_off", "merges_rule": "merges_on"})
+        self.threads.extend(h.thread for h in spawn.handles)
+
+    def test_a_malformed_or_repeated_switch_rule_spawns_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            for specs in (["tax_rule"], ["=tax_off"], ["tax_rule="], ["tax_rule=a", "tax_rule=b"]):
+                argv = [arg for spec in specs for arg in ("--switch-rule", spec)]
+                reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.assertEqual((reply["refused"], code), ("bad_argument", 2), specs)
+        self.assertEqual(spawn.handles, [])
 
     def test_a_setup_file_that_cannot_be_read_spawns_nothing(self):
         spawn = ThreadSpawner(FakeSession)

@@ -166,6 +166,22 @@ class Game(fakes.FakeHelper):
         self.dropped_pauses = 0                 # this many pause keys (space, the game running) are lost
         self.logs_date = True                   # the read event logs its date line once resumed
         self.error_log = logs / "error.log"
+        # The game reloads the overlay's effects file `reload_s` after it changes on disk. Live (2026-11-12) that
+        # took about 90 s and the window did not respond for all of it (`freezes`); the probes of 2026-11-10 saw
+        # console commands entered meanwhile dropped, which is what happens here with `freezes` off. The reload
+        # drops the breakpoint.
+        self.effects_file = user_data / "mod" / overlay.OVERLAY_NAME / overlay.EFFECTS_FILE
+        self.reloads = True
+        self.reload_s = 90.0
+        self.freezes = True
+        self.stops_after_reload = True          # the reload ends with the game stopped at the debugger
+        self.law_windows = 0                    # "We now have <law>!" windows over the country-select screen
+        self.bare_esc = 0                       # Esc presses with no such window to close
+        self.panel_shots = True                 # a screenshot shows the lobby's side panel (else 1x1, unreadable)
+        self.reload_stopped = False             # it is at that stop: its window does not respond
+        self.loaded_revision = 0                # the revision of te_qa_effects.txt in force
+        self.reload_due: tuple[float, int] | None = None       # (when, the revision it brings)
+        self.dropped: list[str] = []            # the commands entered during a reload
         self.on("tag FRA", success=["Now Playing - France"])
 
     def error(self, message: str, streamed: bool = False) -> None:
@@ -189,10 +205,46 @@ class Game(fakes.FakeHelper):
         if self.entered and not self.paused:
             self.elapsed += seconds * self.days_per_second
         super().sleep(seconds)
+        self._reload_tick()
+
+    def _reload_tick(self) -> None:
+        try:
+            found = re.search(r"TE_QA overlay rev (\d+)", self.effects_file.read_text(encoding="utf-8-sig"))
+        except OSError:
+            found = None
+        on_disk = int(found.group(1)) if found else self.loaded_revision
+        if self.reloads and on_disk != self.loaded_revision and (self.reload_due or (0, None))[1] != on_disk:
+            self.reload_due = (self.now + self.reload_s, on_disk)
+        if self.reload_due is not None and self.now >= self.reload_due[0]:
+            self.loaded_revision, self.reload_due = self.reload_due[1], None
+            self.adapter.breakpoints.clear()
+            if self.stops_after_reload:         # live, 2026-11-12: frozen until the debugger resumes it
+                self.adapter.stop("pause")
+                self.reload_stopped = True
+
+    def window(self, pid):
+        win = super().window(pid)
+        frozen = self.freezes and self.reload_due is not None
+        self.reload_stopped = self.reload_stopped and self.adapter.stopped
+        if (frozen or self.reload_stopped) and win.exists:
+            return type(win)(win.exists, win.foreground, False, win.title, win.client)
+        return win
+
+    def _enter(self) -> None:
+        if self.reload_due is not None and self.console_open and self.typed:
+            self.dropped.append(self.typed)     # "You can't add new commands while the console is still running"
+            self.typed = ""
+            return
+        super()._enter()
 
     def keys(self, pid, steps):
         super().keys(pid, steps)
         for step in steps:
+            if step.get("scan") == 1 and not self.console_open:
+                if self.law_windows:
+                    self.law_windows -= 1
+                else:
+                    self.bare_esc += 1
             if step.get("scan") == SPACE:
                 self.order.append("space")
                 if not self.console_open:
@@ -201,6 +253,27 @@ class Game(fakes.FakeHelper):
                         continue
                     self.paused = not self.paused
 
+    def screenshot(self, pid, path, max_width=1600):
+        """A small picture of the country-select screen: the side panel on the right is dark until a country is
+        selected, and a law window sits in the middle while one is up."""
+        if not self.panel_shots:
+            return super().screenshot(pid, path, max_width)
+        width, height = 100, 60
+        rows = []
+        for y in range(height):
+            for x in range(width):
+                if x >= 85:
+                    rows.append(bytes((120, 90, 60)) if self.selected and 10 <= y < 40 else bytes((30, 30, 30)))
+                elif self.law_windows and 36 <= x < 64 and 15 <= y < 45:
+                    rows.append(bytes((80, 20, 20)))
+                else:
+                    rows.append(bytes((10, 40, 90)))
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(fakes.win_helper.encode_png(width, height, b"".join(rows)))
+        self.screenshots.append((pid, path, max_width))
+        return path
+
     def click(self, pid, x, y):
         super().click(pid, x, y)
         self.order.append("click")
@@ -208,6 +281,8 @@ class Game(fakes.FakeHelper):
             return
         _left, _top, width, height = self.client
         if abs(x - width * 0.492) < 2 and abs(y - height * 0.656) < 2:
+            if self.law_windows:                # the click lands on the window, not on the map
+                return
             self.selected = self.camera
         elif abs(x - width * 0.9216) < 2 and abs(y - height * 0.975) < 2 and self.selected:
             # As live (2026-11-11): the game is the selected country's, the script reloads and drops the
@@ -273,6 +348,17 @@ class Game(fakes.FakeHelper):
                 self.adapter.stop()
             else:
                 self.finish_read()
+        elif text == "event " + overlay.LOADED_EVENT:
+            self.script("TE_QA overlay rev %d" % self.loaded_revision)
+            self.pad()
+        elif text.startswith("event te_qa.") and int(text[12:]) >= overlay.FIRST_SLOT_EVENT:
+            slot = int(text[12:]) - overlay.FIRST_SLOT_EVENT
+            if self.loaded_revision > slot and text[6:] in self.setups:     # the slot's body is in force
+                name, lines = self.setups[text[6:]]
+                self.script("TE_QA setup %s start" % name, *lines, "TE_QA setup %s done" % name)
+            else:
+                self.script("TE_QA slot %d is empty" % slot)
+            self.pad()
         elif text.startswith("event ") and text[6:] in self.setups:
             name, lines = self.setups[text[6:]]
             self.script("TE_QA setup %s start" % name, *lines, "TE_QA setup %s done" % name)
@@ -806,6 +892,391 @@ class ReadTest(SessionTestCase):
         self.assertEqual(self.session_error(self.session.run_setup, "nothing").code, "unknown_setup")
 
 
+RULE_FILES = {
+    "game/game/common/game_rules/00_rules.txt": "fantasy = {\n\tdefault = allow_fantasy\n\tallow_fantasy = { }\n"
+                                                 "\tno_fantasy = { }\n}\n",
+    "deploy/common/game_rules/extra.txt": "tax_rule = {\n\tdefault = tax_off\n\ttax_off = { }\n\ttax_light = { }\n}\n",
+}
+
+
+def text_save(settings) -> bytes:
+    """A fresh save in the real one's shape (test_game_qa_rules.save_bytes)."""
+    listed = (' "" ' + " ".join(settings) + " ").encode()
+    meta = b"meta_data={\n\tgame_rules={\n\t\tsettings={" + listed + b"}\n\t}\n}\n"
+    state = b"game_rules={\n\tsetting={" + listed + b"}\n}\ncountry_manager={\n}\n"
+    return b"SAV010000000000%08x" % len(meta) + b"\n" + meta + state
+
+
+class SwitchRulesTest(SessionTestCase):
+    """`start --switch-rule` loads a copy of the fixture with a rule switched (#1599)."""
+
+    def setUp(self):
+        super().setUp()
+        base = self.user.parent
+        for rel, text in RULE_FILES.items():
+            path = base / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        # The rule file is part of the deployed mod's script, so the fixture's key follows it.
+        self.fixture_save.unlink()
+        self.key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                               playset="mod_only")
+        self.fixture_save = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key)
+        self.fixture_save.write_bytes(text_save(["no_fantasy", "tax_light"]))
+
+    def saves(self) -> list[str]:
+        return sorted(p.name for p in (self.user / "save games").iterdir())
+
+    def test_a_plain_start_reports_the_rules_the_fixture_holds(self):
+        reply = self.start()
+        self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+        self.assertEqual(self.saves(), [self.fixture_save.name])
+
+    def test_a_switched_rule_loads_a_copy_and_says_what_it_is(self):
+        before = self.fixture_save.read_bytes()
+        reply = self.start(switch_rules={"tax_rule": "tax_off"})
+        stem = "te_qa_fixture_%s" % rules_key(self.key, {"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], stem)
+        self.assertEqual(reply["rules"]["settings"], ["no_fantasy", "tax_off"])
+        self.assertEqual(reply["rules"]["switched"], {"tax_rule": {"from": "tax_light", "to": "tax_off"}})
+        self.assertIn("2 January 1836", reply["rules"]["switched_at"])
+        self.assertFalse(reply["fixture_made"])
+        self.assertEqual(self.fixture_save.read_bytes(), before)
+        self.assertEqual(self.saves(), [self.fixture_save.name, stem + ".v3"])
+        # The game was started on the copy, and the snapshot took it by name.
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertIn("-loadsave=" + stem, launch)
+        self.assertEqual(next(c for c in self.cli.calls if c[0] == "snapshot"), ["snapshot", "--save", stem])
+
+    def test_the_copy_about_to_load_survives_the_prune(self):
+        # Review finding: with three copies and the oldest asked for, prune removed the save the reply named.
+        first = self.start(switch_rules={"tax_rule": "tax_off"})["save"]
+        saves = self.user / "save games"
+        os.utime(saves / (first + ".v3"), (1_600_000_000,) * 2)
+        for n in (1, 2):
+            other = saves / ("te_qa_fixture_%s_s%08x.v3" % (self.key, n))
+            other.write_bytes(text_save(["no_fantasy", "tax_off"]))
+        self.setUp_second_session()
+        reply = self.start(switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], first)
+        self.assertTrue((saves / (first + ".v3")).is_file())
+        self.assertTrue(self.fixture_save.is_file())
+        self.assertNotIn(first + ".v3", reply.get("fixtures_pruned", []))
+
+    def setUp_second_session(self):
+        """A new session over the same folders (a session runs one game)."""
+        self.session.stop()
+        self.game = Game(self.user, self.order)
+        self.cli = Cli(self)
+        self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
+                                       sleep=self.game.sleep, clock=self.game.clock, helper_factory=self.new_helper)
+
+    def test_a_rule_or_setting_the_game_does_not_define_starts_nothing(self):
+        for switches, code in (({"nope": "x"}, "bad_rule"), ({"tax_rule": "no_fantasy"}, "bad_rule"),
+                               ({"tax rule": "tax_off"}, "bad_rule"), ("tax_rule=tax_off", "bad_argument")):
+            with self.subTest(switches=switches):
+                self.assertEqual(self.session_error(self.start, switch_rules=switches).code, code)
+        self.assertEqual((self.cli.calls, self.saves()), ([], [self.fixture_save.name]))
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertTrue(self.start()["rules"])      # and the session can still be started
+
+    def test_a_switch_with_the_owners_save_is_refused(self):
+        (self.user / "save games" / "mine.v3").write_bytes(b"the owner's")
+        error = self.session_error(self.start, save="mine", switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("never edited or copied", str(error))
+        self.assertEqual(self.cli.calls, [])
+        self.assertEqual((self.user / "save games" / "mine.v3").read_bytes(), b"the owner's")
+
+    def test_a_fixture_whose_rules_cannot_be_switched_stops_the_start(self):
+        self.fixture_save.write_bytes(b"a fresh game")       # not a plain-text save
+        error = self.session_error(self.start, switch_rules={"tax_rule": "tax_off"})
+        self.assertEqual(error.code, "rules_refused")
+        self.assertEqual(self.saves(), [self.fixture_save.name])
+        self.assertNotIn("launch", self.cli.verbs)
+
+    def test_the_fixture_key_follows_the_owners_last_applied_rules(self):
+        presets = self.user / "player" / "game_rules" / "presets.txt"
+        presets.parent.mkdir(parents=True)
+        presets.write_text('game_rules_preset={\n\tname="LastAppliedRules"\n\tsetting={ no_fantasy tax_light }\n}\n',
+                           encoding="utf-8")
+        before = presets.read_bytes()
+        # The fixture in the folder was made under other rules (none recorded): a new one is made for these.
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start()
+        self.assertTrue(reply["fixture_made"])
+        with_rules = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                 playset="mod_only", rules=["no_fantasy", "tax_light"])
+        self.assertEqual(reply["save"], "te_qa_fixture_%s" % with_rules)
+        self.assertNotEqual(with_rules, self.key)
+        self.assertEqual(presets.read_bytes(), before)
+
+
+def rules_key(base: str, switches: dict) -> str:
+    from game_qa import rules
+    return rules.switched_key(base, switches)
+
+
+class AddSetupTest(SessionTestCase):
+    """A setup added to a running game (#1600): the overlay's effects file is rewritten, the game reloads it,
+    and the verb returns once the game has logged the new revision."""
+
+    BODY = "set_variable = te_late"
+
+    def effects(self) -> str:
+        return (self.paths.overlay_dir / overlay.EFFECTS_FILE).read_text(encoding="utf-8-sig")
+
+    def test_an_added_setup_runs_once_the_game_has_reloaded(self):
+        self.started(setups={"border": "set_variable = te_x"})
+        before = self.game.now
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertEqual((reply["name"], reply["event"], reply["revision"], reply["loaded"]),
+                         ("late", "te_qa.100", 1, True))
+        self.assertEqual(reply["slots_left"], overlay.SLOT_COUNT - 1)
+        self.assertGreaterEqual(self.game.now - before, self.game.reload_s)
+        self.assertGreater(reply["tries"], 1)
+        self.assertIn("TE_QA setup late start", self.effects())
+        # The reload dropped the breakpoint; it is set again, so a read still stops.
+        self.assertEqual(self.game.adapter.breakpoints, {EVENTS_WIN: [self.session._overlay.read_line]})
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+        self.game.setups = {"te_qa.100": ("late", ["one line"])}
+        self.assertEqual(self.session.run_setup("late"), ["one line"])
+        # A second one takes the next slot and the next revision.
+        second = self.session.add_setup("later", self.BODY)
+        self.assertEqual((second["event"], second["revision"]), ("te_qa.101", 2))
+
+    def test_a_window_frozen_by_the_reload_is_waited_out(self):
+        # Live, 2026-11-12: the window did not respond for the reload's 90 s, and the console called that
+        # game_gone after 10 s. The game was up all along.
+        self.started()
+        typed_before = len(self.typed())
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertTrue(reply["loaded"])
+        self.assertGreaterEqual(reply["waited_s"], self.game.reload_s)
+        self.assertEqual(self.game.dropped, [], "nothing was typed at the frozen window")
+        self.assertEqual(self.typed()[typed_before:].count("event te_qa.3"), 1)
+        self.game.setups = {"te_qa.100": ("late", ["one line"])}
+        self.assertEqual(self.session.run_setup("late"), ["one line"])
+
+    def test_the_stop_a_reload_ends_with_is_released(self):
+        # Live, 2026-11-12: after its reload the game stayed frozen for four minutes, until a verb resumed it.
+        self.started()
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertTrue(reply["loaded"])
+        self.assertLess(reply["waited_s"], self.game.reload_s + 60)
+        self.assertFalse(self.game.adapter.stopped)
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        step = [s for s in map(json.loads, lines) if s["verb"] == "add_setup"][-1]
+        self.assertEqual(step["released"], ["pause"])
+
+    def test_a_window_that_is_gone_is_not_waited_for(self):
+        self.started()
+        self.game.reloads = False
+
+        def gone(seconds):
+            self.game.exists = False
+        self.game.on_sleep = gone
+        with self.assertRaises((session.SessionError, ConsoleError)) as caught:
+            self.session.add_setup("late", self.BODY)
+        self.assertIn(caught.exception.code, ("game_gone", "watch_ended"))
+        self.assertLess(self.game.now, 2 * session.RELOAD_FIRST_S + 30)
+
+    def test_run_setup_during_the_reload_says_the_setup_is_not_loaded_yet(self):
+        self.started()
+        self.game.reload_s = 10_000.0           # still reloading when add-setup gives up
+        self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_reloaded")
+        error = self.session_error(self.session.run_setup, "late")
+        self.assertEqual(error.code, "setup_not_loaded")
+        self.assertIn("does not respond", str(error))
+
+    def test_the_first_look_waits_and_dropped_commands_are_tried_again(self):
+        self.started()
+        self.game.freezes = False               # the 2026-11-10 behaviour: the console takes keys and drops them
+        typed_before = len(self.typed())
+        reply = self.session.add_setup("late", self.BODY)
+        looks = self.typed()[typed_before:].count("event te_qa.3")
+        self.assertGreaterEqual(looks, reply["tries"])      # the console types a command that did not arrive again
+        self.assertGreater(reply["tries"], 1)
+        self.assertTrue(self.game.dropped, "the game dropped the looks made while it reloaded")
+        # Its own looks, and the console's flush and probe commands around them: nothing else was typed.
+        self.assertIn("event te_qa.3", self.game.dropped)
+        self.assertLessEqual(set(self.game.dropped),
+                             {"event te_qa.3", fakes.FLUSH_COMMAND, session.PENDING_COMMAND})
+        self.assertTrue(reply["loaded"])
+
+    def test_a_reload_that_is_already_done_takes_one_look(self):
+        self.started()
+        self.game.reload_s = 1.0
+        reply = self.session.add_setup("late", self.BODY)
+        self.assertLessEqual(reply["tries"], 2)     # one more when the stop the reload ends with is seen late
+        self.assertLess(reply["waited_s"], 60)
+
+    def test_a_name_or_body_the_overlay_refuses_writes_and_types_nothing(self):
+        self.started(setups={"border": "set_variable = te_x"})
+        before, steps = self.effects(), len(self.game.steps)
+        for name, body in (("border", self.BODY), ("Bad Name", self.BODY), ("late", "x = {")):
+            with self.subTest(name=name, body=body):
+                self.assertEqual(self.session_error(self.session.add_setup, name, body).code, "overlay_refused")
+        self.assertEqual((self.effects(), len(self.game.steps)), (before, steps))
+
+    def test_a_game_that_never_reloads_is_not_reloaded_and_the_setup_is_refused_until_it_has(self):
+        self.started()
+        self.game.reloads = False
+        before = self.game.now
+        error = self.session_error(self.session.add_setup, "late", self.BODY)
+        self.assertEqual(error.code, "not_reloaded")
+        self.assertEqual((error.info["revision"], error.info["seen"]), (1, 0))
+        self.assertGreaterEqual(self.game.now - before, session.RELOAD_WAIT_S - session.RELOAD_RETRY_S)
+        self.assertLess(self.game.now - before, session.RELOAD_WAIT_S + 60)
+        # The setup is in the file, but the game still runs the old one: its slot would log nothing.
+        self.assertIn("TE_QA setup late start", self.effects())
+        self.game.setups = {"te_qa.100": ("late", ["one line"])}
+        typed = len(self.typed())
+        self.assertEqual(self.session_error(self.session.run_setup, "late").code, "setup_not_loaded")
+        self.assertNotIn("event te_qa.100", self.typed()[typed:])
+        # Once the game has reloaded, run-setup's own look sees it, sets the breakpoint again and runs the setup.
+        self.game.loaded_revision = 1
+        self.game.adapter.breakpoints.clear()
+        self.assertEqual(self.session.run_setup("late"), ["one line"])
+        self.assertIn(EVENTS_WIN, self.game.adapter.breakpoints)
+
+    def test_a_read_after_a_late_reload_attaches_again_first(self):
+        # Review finding: after not_reloaded nothing attached the debugger again once the reload came, and every
+        # read failed.
+        self.started()
+        self.game.reloads = False
+        self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_reloaded")
+        self.game.loaded_revision = 1               # the reload lands, and drops the breakpoint
+        self.game.adapter.breakpoints.clear()
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+        self.assertIn(EVENTS_WIN, self.game.adapter.breakpoints)
+
+    def test_a_revision_the_overlay_never_wrote_is_not_believed(self):
+        # Review finding: a log line naming a later revision latched "loaded" for every setup after it.
+        self.started()
+        self.game.reloads = False
+        real = self.game._run
+
+        def forged(text):
+            real(text)
+            if text == "event te_qa.3":
+                self.game.script("TE_QA overlay rev 99")
+                self.game.pad()
+        self.game._run = forged
+        error = self.session_error(self.session.add_setup, "late", self.BODY)
+        self.assertEqual((error.code, error.info["seen"]), ("not_reloaded", 0))
+        self.assertEqual(self.session._loaded_revision, 0)
+
+    def test_a_game_that_ends_during_the_wait_stops_the_looks(self):
+        self.started()
+        self.game.reloads = False
+
+        def gone(seconds):
+            if self.game.now > 60 and self.watches:
+                self.watches[-1].returned = True
+                self.game.exists = False
+        self.game.on_sleep = gone
+        with self.assertRaises((session.SessionError, ConsoleError)) as caught:
+            self.session.add_setup("late", self.BODY)
+        self.assertIn(caught.exception.code, ("game_gone", "watch_ended"))
+        self.assertLess(self.game.now, session.RELOAD_WAIT_S)
+
+    def test_add_setup_needs_a_started_session(self):
+        self.assertEqual(self.session_error(self.session.add_setup, "late", self.BODY).code, "not_started")
+
+
+class EnterPastAWindowTest(SessionTestCase):
+    """#1598: a setup that changes a law on the country-select screen raises the game's "We now have …" window
+    where the country click lands. The click then selects nothing, which the lobby's side panel shows. Live,
+    2026-11-12, no key closed the window once the click had landed on it, so nothing is pressed: the miss is
+    refused before Start, and the session goes on."""
+
+    def test_a_covered_screen_is_refused_before_start_and_can_be_tried_again(self):
+        self.started()
+        self.game.law_windows = 2
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "no_country_selected")
+        self.assertEqual(len(error.info["clicks"]), 1, "only the country click: Start was never clicked")
+        self.assertTrue(Path(error.info["screenshot"]).is_file())
+        self.assertFalse(self.game.entered)
+        self.assertEqual((self.game.law_windows, self.game.bare_esc), (2, 0), "nothing was pressed to close it")
+        self.assertNotIn({"scan": 1}, self.game.steps[steps:])
+        status = self.session.status()
+        self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]), (False, False, False))
+        # The session is not locked: reads still work, and with the window gone it enters.
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+        self.game.law_windows = 0
+        self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_advance_on_a_covered_screen_gets_the_same_refusal_and_is_not_left_running(self):
+        self.started()
+        self.game.law_windows = 1
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "no_country_selected")
+        self.assertFalse(self.session.status()["left_running"])
+        self.game.law_windows = 0
+        start = self.game.date
+        self.session.advance(3)
+        self.assertGreaterEqual((self.game.date - start).days, 3)
+
+    def test_the_first_look_at_the_panel_comes_with_the_game_in_front(self):
+        # A screenshot is of the screen: with another window over the game the first look would be of that
+        # window, and every later look would differ from it.
+        self.started()
+        self.game.foreground = False
+        in_front = []
+        real = self.game.screenshot
+
+        def shot(pid, path, max_width=1600):
+            in_front.append(self.game.foreground)
+            return real(pid, path, max_width)
+        self.game.screenshot = shot
+        self.assertTrue(self.session.enter_game()["entered"])
+        self.assertTrue(in_front and all(in_front))
+
+    def test_a_selected_country_goes_on_to_start(self):
+        self.started()
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(len(result["clicks"]), 2)
+        self.assertEqual(self.game.bare_esc, 0)
+
+    def test_a_screenshot_that_cannot_be_read_goes_on_as_before(self):
+        self.started()
+        self.game.panel_shots = False           # a 1x1 picture: the panel cannot be found in it
+        result = self.session.enter_game()
+        self.assertTrue(result["entered"])
+        self.assertEqual(len(result["clicks"]), 2)
+        self.assertIn("enter_panel", [s["verb"] for s in self.steps()])
+
+    def steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [json.loads(line) for line in lines]
+
+
+class PressTest(SessionTestCase):
+    def test_press_closes_the_console_and_sends_the_key_to_the_game(self):
+        self.started()
+        before = len(self.game.steps)
+        self.assertEqual(self.session.press("esc"), {"key": "esc", "scan": 1})
+        sent = self.game.steps[before:]
+        self.assertEqual(sent[-1], {"scan": 1})
+        self.assertFalse(self.game.console_open, "the key did not go into the console's input line")
+        # The next verb that types opens the console again.
+        self.game.adapter.values["c:FRA.gdp"] = "12"
+        self.assertEqual(self.session.read(["c:FRA.gdp"])[0].raw, "12")
+
+    def test_any_other_key_is_refused_and_nothing_is_sent(self):
+        self.started()
+        before = len(self.game.steps)
+        self.assertEqual(self.session_error(self.session.press, "f4").code, "bad_argument")
+        self.assertEqual(len(self.game.steps), before)
+        self.assertEqual(self.session_error(session.Session.press, self.session, "enter").code, "bad_argument")
+
+
 class PickTest(SessionTestCase):
     def test_pick_always_passes_the_numeric_id(self):
         self.started()
@@ -869,9 +1340,19 @@ class EnterGameTest(SessionTestCase):
                 self.assertTrue(self.game.paused)
                 self.assertEqual(self.order.count("space"), 2)
 
+    def test_clicks_that_select_nothing_are_refused_before_start(self):
+        # With the side panel readable (#1598) a country click that selects nothing is seen at once.
+        self.started()
+        self.game.clicks_work = False
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "no_country_selected")
+        self.assertTrue(Path(error.info["screenshot"]).is_file())
+        self.assertFalse(self.session.status()["entered_unproved"])
+
     def test_enter_game_that_does_not_move_the_date_raises_with_a_screenshot(self):
         self.started()
         self.game.clicks_work = False
+        self.game.panel_shots = False           # the panel cannot be read: only the date can tell
         error = self.session_error(self.session.enter_game)
         self.assertEqual(error.code, "not_entered")
         shot = Path(error.info["screenshot"])
@@ -882,9 +1363,11 @@ class EnterGameTest(SessionTestCase):
     def test_a_date_that_stayed_locks_nothing_and_enter_game_can_be_tried_again(self):
         # #1598: a window over the country-select screen took the country click, so Start did nothing. The proof
         # ran to its end (unpaused 3 s, paused again, the pause proved) and the date had not moved: the game is
-        # where it was, so the session is not left refusing enter_game and advance until stop.
+        # where it was, so the session is not left refusing enter_game and advance until stop. (With the side
+        # panel readable the miss is seen before Start, EnterPastAWindowTest; this is the path when it is not.)
         self.started()
         self.game.clicks_work = False
+        self.game.panel_shots = False
         error = self.session_error(self.session.enter_game)
         self.assertEqual(error.code, "not_entered")
         self.assertIn("the date stayed", error.detail)
@@ -908,6 +1391,7 @@ class EnterGameTest(SessionTestCase):
     def test_advance_after_a_date_that_stayed_enters_again_instead_of_refusing(self):
         self.started()
         self.game.clicks_work = False
+        self.game.panel_shots = False           # the panel cannot tell, so the date has to
         self.assertEqual(self.session_error(self.session.advance, 3).code, "not_entered")
         self.assertEqual(self.session_error(self.session.advance, 3).code, "not_entered")     # not left_running
         self.assertEqual(len(self.game.clicks), 4)
@@ -1983,7 +2467,8 @@ class StopAgainTest(SessionTestCase):
     def test_no_verb_reaches_the_game_after_a_stop_that_can_be_run_again(self):
         # The server now serves on after such a stop, so verbs can arrive: each is refused before any key, watch,
         # adopt or debugger call (the helper and the relay are closed, and the pid may be another program's).
-        verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("events", ()), ("pick", (0,)),
+        verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("add_setup", ("late", "x = 1")),
+                 ("events", ()), ("pick", (0,)),
                  ("read", (["c:FRA.gdp"],)), ("tag", ("GBR",)), ("enter_game", ()), ("advance", (5,)), ("shot", ()),
                  ("click", (0.5, 0.5)), ("try_event", ("x.1", None, ["c:FRA.gdp"])))
         for state in ("game_left_up", "refused"):

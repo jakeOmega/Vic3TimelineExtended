@@ -2,7 +2,8 @@
 
     mod/te_qa_overlay/.metadata/metadata.json                 carries MARKER, which is what lets `remove` delete the folder
     mod/te_qa_overlay/events/te_qa_events.txt                 hidden country events: the read event, the pad event, one per setup
-    mod/te_qa_overlay/common/scripted_effects/te_qa_effects.txt   te_qa_pad and te_qa_setup_<name>
+    mod/te_qa_overlay/common/scripted_effects/te_qa_effects.txt   te_qa_pad, te_qa_loaded, te_qa_setup_<name>
+                                                              and the spare te_qa_slot_<n> effects
     mod/te_qa_overlay/tools/scripted_tests/te_qa_fixture.txt  the scripted test that makes a fresh save (game_qa.fixture)
 
 Nothing here touches anything but that one folder, by its exact path, and a sibling temp folder
@@ -12,6 +13,15 @@ deletes under the same checks as `remove` (`python3 -m game_qa remove-overlay` r
 follow the probe files that ran against the real game on 2026-11-10 (docs/testing/game_qa_probe/overlay/).
 The `.txt` files start with one UTF-8 BOM and are indented with tabs; `metadata.json` has no BOM, as the
 mod's own has none.
+
+A setup added to a running game (`add_setup`, #1600) goes into a spare slot. The game reloads a scripted-effect
+file that changes while it runs (`-debug_mode`; spec § 3.3: verified, 40 seconds in the probes of 2026-11-10 and about 90 live on 2026-11-12, the
+window not responding meanwhile), but an
+effect file added mid-game did not run until the reload after, and nothing says an event added to a loaded file
+would. So the events are all there from the start: SLOT_COUNT hidden events, each calling its own
+`te_qa_slot_<n>` effect, empty until `add_setup` rewrites `te_qa_effects.txt` with a body in one. That file
+carries a revision, logged by `te_qa_loaded` through LOADED_EVENT, which is how the session tells that the
+game has taken the rewrite.
 """
 
 from __future__ import annotations
@@ -22,7 +32,7 @@ import re
 import shutil
 import tempfile
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 OVERLAY_NAME = "te_qa_overlay"
@@ -31,7 +41,12 @@ NAMESPACE = "te_qa"
 READ_EVENT = "te_qa.1"
 PAD_EVENT = "te_qa.2"
 FIXTURE_TEST = "te_qa_fixture"
+LOADED_EVENT = "te_qa.3"
 FIRST_SETUP_EVENT = 10  # setup events are te_qa.10, te_qa.11, ... in the sorted order of the setup names
+FIRST_SLOT_EVENT = 100  # the spare events are te_qa.100 ... te_qa.129, slot 0 first
+SLOT_COUNT = 30
+MAX_START_SETUPS = FIRST_SLOT_EVENT - FIRST_SETUP_EVENT
+LOADED_PREFIX = "TE_QA overlay rev "    # then the revision of te_qa_effects.txt the game has loaded
 _BUILD_TEMP = re.compile(r"\.%s\.tmp-[A-Za-z0-9_]+" % OVERLAY_NAME)  # the temp folders `build` makes (mkdtemp)
 
 EVENTS_FILE = "events/te_qa_events.txt"
@@ -68,7 +83,11 @@ class Overlay:
     dir: Path
     events_file: Path
     read_line: int  # 1-based line of te_qa.1's debug_log in events_file: the debugger's breakpoint
-    setup_events: dict[str, str]  # setup name -> event id ("te_qa.10", "te_qa.11", ...)
+    setup_events: dict[str, str]  # setup name -> event id ("te_qa.10", ...; "te_qa.100", ... for an added one)
+    effects_file: Path | None = None
+    bodies: dict[str, str] = field(default_factory=dict)    # the setups given at start, cleaned
+    added: dict[str, tuple[int, str]] = field(default_factory=dict)     # an added setup -> (its slot, its body)
+    revision: int = 0   # of effects_file: 0 as built, one more for each add_setup
 
 
 def build(dest: Path, setups: Mapping[str, str], game_version: str) -> Overlay:
@@ -85,6 +104,8 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str) -> Overlay:
     if not isinstance(game_version, str) or not game_version.strip():
         raise OverlayError("the game version must be text, such as '1.15.0'")
     bodies = {name: _clean_body(name, body) for name, body in setups.items()}
+    if len(bodies) > MAX_START_SETUPS:
+        raise OverlayError(f"{len(bodies)} setups: at most {MAX_START_SETUPS} can be given at start")
     if not dest.parent.is_dir():
         raise OverlayError(f"{dest.parent} is not a folder: the overlay goes into an existing mod folder")
     if os.path.lexists(dest) and not _is_overlay(dest):
@@ -96,14 +117,67 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str) -> Overlay:
         os.chmod(temp, 0o755)
         _write(temp / METADATA_FILE, _metadata_text(game_version).encode("utf-8"))
         _write(temp / EVENTS_FILE, _txt(events_text))
-        _write(temp / EFFECTS_FILE, _txt(_effects_text(bodies)))
+        _write(temp / EFFECTS_FILE, _txt(_effects_text(bodies, {}, 0)))
         _write(temp / SCRIPTED_TEST_FILE, _txt(_scripted_test_text()))
         remove(dest)
         os.rename(temp, dest)
     except BaseException:
         shutil.rmtree(temp, ignore_errors=True)
         raise
-    return Overlay(dest, dest / EVENTS_FILE, read_line, setup_events)
+    return Overlay(dest, dest / EVENTS_FILE, read_line, setup_events, dest / EFFECTS_FILE, bodies)
+
+
+def slot_event(slot: int) -> str:
+    return f"{NAMESPACE}.{FIRST_SLOT_EVENT + slot}"
+
+
+def add_setup(ov: Overlay, name: str, body: str) -> tuple[str, int]:
+    """Put a new setup into the next spare slot of a built overlay by rewriting its `te_qa_effects.txt`, and
+    return (the slot's event id, the file's new revision). The game runs the setup only once it has reloaded the
+    file: LOADED_EVENT then logs that revision.
+
+    Raises OverlayError, with nothing written, for a name or body `build` would refuse, a name already used (a
+    setup's name is used once: its markers in the log are how its lines are found), no spare slot left, and an
+    overlay folder that is no longer one of ours. The file is rewritten in place, as an editor saves it, which
+    is the write the reload was verified with; if the write fails the overlay's record is left as it was."""
+    body = _clean_body(name, body)
+    if name in ov.setup_events:
+        raise OverlayError(f"setup {name} is there already (event {ov.setup_events[name]}): a setup's name is "
+                           "used once, so give the changed one a new name")
+    if len(ov.added) >= SLOT_COUNT:
+        raise OverlayError(f"all {SLOT_COUNT} spare slots are used: a new session starts with them empty")
+    if ov.effects_file is None or not _is_overlay(ov.dir) or not ov.effects_file.is_file():
+        raise OverlayError(f"{ov.dir} is not this session's overlay any more, so nothing was written")
+    slot = len(ov.added)
+    added = {**ov.added, name: (slot, body)}
+    revision = ov.revision + 1
+    text = _effects_text(ov.bodies, added, revision)
+    try:
+        before = ov.effects_file.read_bytes()
+    except OSError as error:
+        raise OverlayError(f"{ov.effects_file} could not be read ({error}); nothing was written") from error
+    try:
+        ov.effects_file.write_bytes(_txt(text))
+    except OSError as error:
+        # A write cut short leaves half a file, which the game would reload: put the old one back.
+        try:
+            ov.effects_file.write_bytes(before)
+            state = "the file was put back as it was"
+        except OSError as again:
+            state = f"and the old file could not be put back ({again}): the overlay's effects may be cut short"
+        raise OverlayError(f"{ov.effects_file} could not be rewritten ({error}); the setup was not added, "
+                           f"{state}") from error
+    ov.added, ov.revision = added, revision
+    ov.setup_events[name] = slot_event(slot)
+    return ov.setup_events[name], revision
+
+
+def loaded_revision(line_text: str) -> int | None:
+    """The revision a LOADED_EVENT log line names, or None for any other line: the message must end with the
+    prefix and plain digits, nothing after."""
+    _, found, rest = line_text.partition(LOADED_PREFIX)
+    rest = rest.strip()
+    return int(rest) if found and re.fullmatch(r"[0-9]{1,6}", rest) else None
 
 
 def check_setups(setups: Mapping[str, str]) -> None:
@@ -277,6 +351,8 @@ def _events_text(names: list[str]) -> tuple[str, int, dict[str, str]]:
     read_line = lines.index(f"\t\t{READ_LOG_LINE}") + 1
     lines += ["", "# Pads the log so the game flushes it."]
     lines += _event(PAD_EVENT, ["te_qa_pad = yes"])
+    lines += ["", "# Says which revision of te_qa_effects.txt the game has loaded (add-setup rewrites that file)."]
+    lines += _event(LOADED_EVENT, ["te_qa_loaded = yes", "te_qa_pad = yes"])
     setup_events: dict[str, str] = {}
     for number, name in enumerate(names, start=FIRST_SETUP_EVENT):
         event = f"{NAMESPACE}.{number}"
@@ -291,6 +367,10 @@ def _events_text(names: list[str]) -> tuple[str, int, dict[str, str]]:
                 "te_qa_pad = yes",
             ],
         )
+    lines += ["", "# Spare events for setups added to a running session: each slot's effect is empty until then,",
+              "# and logs the setup's own start and done markers once it is filled."]
+    for slot in range(SLOT_COUNT):
+        lines += _event(slot_event(slot), [f"te_qa_slot_{slot} = yes", "te_qa_pad = yes"])
     return "\n".join(lines) + "\n", read_line, setup_events
 
 
@@ -300,7 +380,9 @@ def _event(event_id: str, immediate: list[str]) -> list[str]:
     return lines + ["\t}", "}"]
 
 
-def _effects_text(bodies: Mapping[str, str]) -> str:
+def _effects_text(bodies: Mapping[str, str], added: Mapping[str, tuple[int, str]], revision: int) -> str:
+    """`te_qa_effects.txt`: the pad, the revision line, the setups given at start, and every slot, the ones in
+    `added` (name -> (slot, body)) with their body between the setup's markers."""
     lines = [
         "# Writes sixty log lines, so the game flushes its block-buffered debug.log.",
         "te_qa_pad = {",
@@ -309,14 +391,33 @@ def _effects_text(bodies: Mapping[str, str]) -> str:
         f'\t\tdebug_log = "{PAD_TEXT}"',
         "\t}",
         "}",
+        "",
+        "# The revision of this file, one more for each setup added while the game runs.",
+        "te_qa_loaded = {",
+        f'\tdebug_log = "{LOADED_PREFIX}{revision}"',
+        "}",
     ]
     for name in sorted(bodies):
         lines += ["", f"te_qa_setup_{name} = {{"]
-        text = bodies[name].rstrip().lstrip("\n")
-        for line in text.split("\n"):
-            lines.append(f"\t{line.rstrip()}" if line.strip() else "")
+        lines += _body_lines(bodies[name])
+        lines.append("}")
+    by_slot = {slot: (name, body) for name, (slot, body) in added.items()}
+    for slot in range(SLOT_COUNT):
+        lines += ["", f"te_qa_slot_{slot} = {{"]
+        if slot in by_slot:
+            name, body = by_slot[slot]
+            lines.append(f'\tdebug_log = "TE_QA setup {name} start"')
+            lines += _body_lines(body)
+            lines.append(f'\tdebug_log = "TE_QA setup {name} done"')
+        else:
+            lines.append(f'\tdebug_log = "TE_QA slot {slot} is empty"')
         lines.append("}")
     return "\n".join(lines) + "\n"
+
+
+def _body_lines(body: str) -> list[str]:
+    text = body.rstrip().lstrip("\n")
+    return [f"\t{line.rstrip()}" if line.strip() else "" for line in text.split("\n")]
 
 
 def _scripted_test_text() -> str:

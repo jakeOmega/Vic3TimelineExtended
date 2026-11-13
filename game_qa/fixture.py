@@ -45,6 +45,7 @@ SpawnWatch = Callable[[str], Any]
 SAVE_FOLDER = "save games"
 FIXTURE_PREFIX = "te_qa_fixture_"
 FIXTURE_GLOB = f"{FIXTURE_PREFIX}*.v3"
+SWITCHED_MARK = "_s"                    # in the key of a fixture copy with a rule switched (game_qa.rules)
 RUN_SAVE_GLOB = "TEST_FAIL_te_qa_fixture_*.v3"
 KEY_FOLDERS = ("common", "events", "map_data")  # the folders of the deployed mod that shape a new game
 FIXTURE_LIMIT_S = 900.0     # from the launch's return to watch's: the run itself takes two or three minutes
@@ -134,10 +135,12 @@ def restore_retried(run_cli: RunCli, snapshot_id: str, sleep, retries: Mapping[s
 
 
 def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, playset: str,
-        disabled_dlc: Sequence = ()) -> str:
+        disabled_dlc: Sequence = (), rules: Sequence[str] = ()) -> str:
     """12 hex digits naming the game a fixture was made for: the game version, the run's playset (its mode,
     `playset`, `enabled_mods`, the mod paths the run loads, in order, and `disabled_dlc`, the DLC the run's
-    playset switches off, as a set: launch keeps the owner's `disabledDLC`), and the relative path, size and
+    playset switches off, as a set: launch keeps the owner's `disabledDLC`), `rules`, the rule settings the
+    owner last applied in a lobby, in the file's order (an unattended new game is made under them, not under
+    the defaults: game_qa.rules), and the relative path, size and
     modification time of every file under the deployed mod's `common/`, `events/` and `map_data/` (a folder that
     is missing is skipped). A fixture made under another playset, or another DLC set, is another world: a DLC
     changes what a new game sets up even where the script folders loaded are the same. Not covered: for
@@ -151,6 +154,8 @@ def key(game_version: str, enabled_mods: Sequence[str], deploy_dir: Path, *, pla
         _feed(digest, "mod", mod)
     for dlc in sorted(json.dumps(entry, sort_keys=True) for entry in disabled_dlc):
         _feed(digest, "dlc_off", dlc)
+    for setting in rules:
+        _feed(digest, "rule", setting)
     root = Path(deploy_dir)
     for folder in KEY_FOLDERS:
         records = []
@@ -255,20 +260,51 @@ def make(
     return target
 
 
-def prune(user_data: Path, keep: int = 2) -> list[str]:
+_SWITCHED_KEY = re.compile(r"(.+)_s[0-9a-f]{8}")     # SWITCHED_MARK and the eight hex digits rules.switched_key adds
+
+
+def prune(user_data: Path, keep: int = 2, keep_switched: int = 2, in_use: Sequence[str] = ()) -> list[str]:
     """Remove all but the `keep` newest `te_qa_fixture_*.v3` files directly in `save games/` (newest by
-    modification time, equal times by name) and return the names removed, oldest first. Nothing else is touched."""
-    if keep < 0:
+    modification time, equal times by name) and return the names removed, oldest first. Nothing else is touched.
+
+    A copy with a rule switched (its key ends in SWITCHED_MARK and eight hex digits) is not counted among
+    those: it is removed with the fixture it was made from, and of the ones whose fixture stays only the
+    `keep_switched` newest are kept. Counted together, two switched copies would push out the fixture they came
+    from, and the next plain start would pay for a new run.
+
+    `in_use` names files (as in the folder) that are never removed, whatever their age: the save a session is
+    about to load, and the fixture it was copied from. A copy used again keeps its old time, so age alone
+    could remove the very save the reply names."""
+    if keep < 0 or keep_switched < 0:
         raise ValueError("keep is a count of fixtures, not negative")
     found = sorted(
         (path.stat().st_mtime_ns, path.name, path)
         for path in (Path(user_data) / SAVE_FOLDER).glob(FIXTURE_GLOB)
         if path.is_file() and not path.is_symlink()
     )
-    doomed = found[: max(len(found) - keep, 0)]
+    protected = set(in_use)
+    plain = [entry for entry in found if _base_key(entry[1]) is None]
+    switched = [entry for entry in found if _base_key(entry[1]) is not None]
+    doomed = [entry for entry in plain[: max(len(plain) - keep, 0)] if entry[1] not in protected]
+    going = {entry[1] for entry in doomed}
+    kept_keys = {_key_of(entry[1]) for entry in plain if entry[1] not in going}
+    orphans = [entry for entry in switched if _base_key(entry[1]) not in kept_keys and entry[1] not in protected]
+    living = [entry for entry in switched if entry not in orphans]
+    extra = [entry for entry in living[: max(len(living) - keep_switched, 0)] if entry[1] not in protected]
+    doomed = sorted(doomed + orphans + extra)
     for _, _, path in doomed:
         path.unlink()
     return [name for _, name, _ in doomed]
+
+
+def _base_key(name: str) -> str | None:
+    """The key of the fixture a switched copy was made from, or None for a file that is not one."""
+    found = _SWITCHED_KEY.fullmatch(_key_of(name))
+    return found.group(1) if found else None
+
+
+def _key_of(name: str) -> str:
+    return name[len(FIXTURE_PREFIX):-len(".v3")]
 
 
 def _check_key(key: str) -> None:

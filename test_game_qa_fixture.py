@@ -247,6 +247,16 @@ class KeyTest(unittest.TestCase):
         self.assertNotEqual(self.key(mods=["ab", "c"]), self.key(mods=["a", "bc"]))
         self.assertNotEqual(self.key(mods=["a", "b"]), self.key(mods=["a\nmod\u0000b"]))
 
+    def test_key_changes_with_the_rules_the_owner_last_applied(self):
+        # An unattended new game is made under them, not under the defaults (game_qa.rules).
+        plain = fixture.key("1.15.0", self.mods, self.deploy, playset="mod_only")
+        self.assertEqual(fixture.key("1.15.0", self.mods, self.deploy, playset="mod_only", rules=[]), plain)
+        light = fixture.key("1.15.0", self.mods, self.deploy, playset="mod_only", rules=["a", "tax_light"])
+        off = fixture.key("1.15.0", self.mods, self.deploy, playset="mod_only", rules=["a", "tax_off"])
+        self.assertEqual(len({plain, light, off}), 3)
+        self.assertEqual(fixture.key("1.15.0", self.mods, self.deploy, playset="mod_only", rules=("a", "tax_light")),
+                         light)
+
     def test_key_wants_a_list_of_mods_not_one_path_and_the_playset_by_name(self):
         with self.assertRaises(TypeError):
             fixture.key("1.15.0", r"C:\mods\one", self.deploy, playset="current")
@@ -642,6 +652,49 @@ class PruneTest(FixtureTestCase):
             ["te_qa_fixture_aaaaaaaaaaaa.v3", "te_qa_fixture_a.v3", "te_qa_fixture_b.v3"],
         )
         self.assertEqual(fixture.prune(self.user), [])
+
+    def test_switched_copies_are_not_counted_among_the_fixtures(self):
+        # Two copies with a rule switched must not push out the fixture they were made from.
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        times = {"te_qa_fixture_old.v3": 1, "te_qa_fixture_base.v3": 2, "te_qa_fixture_new.v3": 3,
+                 "te_qa_fixture_old_s11111111.v3": 4, "te_qa_fixture_base_s22222222.v3": 5,
+                 "te_qa_fixture_base_s33333333.v3": 6, "te_qa_fixture_base_s44444444.v3": 7}
+        for name, age in times.items():
+            (self.save_dir / name).write_bytes(b"x")
+            os.utime(self.save_dir / name, (1_700_000_000 + age * 1000,) * 2)
+        removed = fixture.prune(self.user)
+        # The oldest fixture goes, with the copy made from it; of base's three copies the two newest stay.
+        self.assertEqual(removed, ["te_qa_fixture_old.v3", "te_qa_fixture_old_s11111111.v3",
+                                   "te_qa_fixture_base_s22222222.v3"])
+        left = sorted(name for name in os.listdir(self.save_dir) if name.startswith("te_qa_fixture_"))
+        self.assertEqual(left, ["te_qa_fixture_base.v3", "te_qa_fixture_base_s33333333.v3",
+                                "te_qa_fixture_base_s44444444.v3", "te_qa_fixture_new.v3"])
+        self.assertEqual(fixture.prune(self.user), [])
+
+    def test_a_file_in_use_is_never_removed_whatever_its_age(self):
+        # Review finding: a copy used again keeps its old time, so prune removed the save the reply named.
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        names = ["te_qa_fixture_base.v3", "te_qa_fixture_base_s11111111.v3", "te_qa_fixture_base_s22222222.v3",
+                 "te_qa_fixture_base_s33333333.v3", "te_qa_fixture_mid.v3", "te_qa_fixture_new.v3"]
+        for age, name in enumerate(names):
+            (self.save_dir / name).write_bytes(b"x")
+            os.utime(self.save_dir / name, (1_700_000_000 + age * 1000,) * 2)
+        in_use = ("te_qa_fixture_base_s11111111.v3", "te_qa_fixture_base.v3")
+        removed = fixture.prune(self.user, in_use=in_use)
+        self.assertEqual(removed, [])       # the base is in use, so its copies have a fixture; the oldest is in use
+        os.utime(self.save_dir / "te_qa_fixture_base_s11111111.v3", (1_600_000_000,) * 2)
+        (self.save_dir / "te_qa_fixture_base_s44444444.v3").write_bytes(b"x")
+        removed = fixture.prune(self.user, in_use=in_use)
+        self.assertNotIn("te_qa_fixture_base_s11111111.v3", removed)
+        self.assertNotIn("te_qa_fixture_base.v3", removed)
+        self.assertTrue(all((self.save_dir / name).exists() for name in in_use))
+
+    def test_a_hand_named_fixture_with_an_underscore_s_is_a_plain_fixture(self):
+        # Review finding: `_s` anywhere in the key read as a switched copy, and the file went as an orphan.
+        path = self.save_dir / "te_qa_fixture_my_seed.v3"
+        path.write_bytes(b"x")
+        self.assertEqual(fixture.prune(self.user), [])
+        self.assertTrue(path.exists())
 
     def test_a_negative_keep_is_refused_and_removes_nothing(self):
         with self.assertRaises(ValueError):

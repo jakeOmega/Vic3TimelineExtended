@@ -2,10 +2,15 @@
 real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
-                       [--playset mod_only|current] [--owner-confirmed-busy]
-                                             # a game on the deployed build, on the fixture or on NAME
+                       [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
+                                             # a game on the deployed build, on the fixture or on NAME; a
+                                             # switched rule is switched in a copy of the fixture, as of its
+                                             # second day (the reply's `rules` says what the save holds)
     python3 -m game_qa console "<text>"      # one console command, with its reply
-    python3 -m game_qa run-setup NAME        # a setup given at start, through its event: its log lines
+    python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
+    python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
+                                             # (about 90 s), and the reply says the game logged the new revision
+    python3 -m game_qa press esc             # one key in the game itself (a probe's verb: shot before and after)
     python3 -m game_qa events                # the pending events
     python3 -m game_qa pick INDEX [EVENT]    # an option of a pending event (the oldest, or EVENT's)
     python3 -m game_qa read "<expr>"...      # triggers and values, evaluated at the debugger's breakpoint
@@ -61,6 +66,9 @@ POLL_S = 0.2
 STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status` by then is busy, not dead
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
 ENTER_TIMEOUT_S = 1500.0
+# add-setup waits session.RELOAD_WAIT_S (300 s) for the reload (about 90 s, live), a last look may take a console
+# command's 30 s and LOADED_WAIT_S more, and the debugger is attached again: about 350 s, with room.
+ADD_SETUP_TIMEOUT_S = 600.0
 LONG_TIMEOUT_S = 900.0                  # try-event, and advance's rounds
 ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fixture's game first if need be
 # The worst cases, from the waits the session and the fixture allow themselves:
@@ -678,8 +686,17 @@ def cmd_start(args) -> tuple[dict, int]:
         setups = _read_setups(args.setup)
     except ValueError as e:
         return {"refused": "bad_argument", "detail": str(e)}, 2
+    switches: dict[str, str] = {}
+    for spec in args.switch_rule:
+        rule, eq, setting = spec.partition("=")
+        if not eq or not rule or not setting or rule in switches:
+            return {"refused": "bad_argument", "detail": "--switch-rule takes RULE=SETTING, each rule once, not %r"
+                                                         % spec}, 2
+        switches[rule] = setting
     body = {"permission": args.permission, "as_tag": args.as_tag, "save": args.save, "setups": setups,
             "playset": args.playset, "owner_confirmed_busy": args.owner_confirmed_busy}
+    if switches:
+        body["switch_rules"] = switches
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -704,6 +721,19 @@ def cmd_console(args) -> tuple[dict, int]:
 
 def cmd_run_setup(args) -> tuple[dict, int]:
     return call(_backup_root(), "run-setup", {"name": args.name})
+
+
+def cmd_add_setup(args) -> tuple[dict, int]:
+    try:
+        setups = _read_setups([args.setup])
+    except ValueError as e:
+        return {"refused": "bad_argument", "detail": str(e).replace("--setup", "add-setup")}, 2
+    (name, script), = setups.items()
+    return call(_backup_root(), "add-setup", {"name": name, "script": script}, ADD_SETUP_TIMEOUT_S)
+
+
+def cmd_press(args) -> tuple[dict, int]:
+    return call(_backup_root(), "press", {"key": args.key})
 
 
 def cmd_events(args) -> tuple[dict, int]:
@@ -777,6 +807,9 @@ def add_verbs(sub) -> None:
     p.add_argument("--save", metavar="NAME", help="load this save from save games/ instead of the fixture")
     p.add_argument("--setup", action="append", default=[], metavar="NAME=FILE",
                    help="a setup effect: its name, and the file (a WSL path) holding its script (repeatable)")
+    p.add_argument("--switch-rule", action="append", default=[], metavar="RULE=SETTING",
+                   help="load a copy of the fresh save with this game rule switched (repeatable; not with "
+                        "--save). The rule changes on the save's second day, after the game's setup ran")
     p.add_argument("--playset", choices=session.PLAYSETS, default="mod_only",
                    help="mod_only (the default): only this mod's deployed folder; current: the owner's playset. "
                         "The overlay is added to either")
@@ -787,9 +820,18 @@ def add_verbs(sub) -> None:
     p = sub.add_parser("console", help="one console command, with its reply")
     p.add_argument("text")
     p.set_defaults(run=cmd_console)
-    p = sub.add_parser("run-setup", help="run a setup given at start, through its event; its log lines")
+    p = sub.add_parser("add-setup", help="add a setup to the running game: the overlay's effects file is "
+                                         "rewritten and the game reloads it (about 90 s)")
+    p.add_argument("setup", metavar="NAME=FILE", help="its name, and the file (a WSL path) holding its script")
+    p.set_defaults(run=cmd_add_setup)
+    p = sub.add_parser("run-setup", help="run a setup, given at start or added since, through its event; its "
+                                         "log lines")
     p.add_argument("name")
     p.set_defaults(run=cmd_run_setup)
+    p = sub.add_parser("press", help="press one key in the game itself, the console closed first (a probe: "
+                                     "take a shot before and after)")
+    p.add_argument("key", choices=["esc"])
+    p.set_defaults(run=cmd_press)
     sub.add_parser("events", help="the pending events").set_defaults(run=cmd_events)
     p = sub.add_parser("pick", help="pick an option of a pending event, by its numeric id")
     p.add_argument("index", type=int)

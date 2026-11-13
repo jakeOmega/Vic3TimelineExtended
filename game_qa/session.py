@@ -47,7 +47,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, overlay, snapshot
+from game_qa import fixture, overlay, pixels, rules, snapshot
 from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -78,8 +78,42 @@ LOAD_WAIT_S = 600.0                     # from the first answering window to a c
 STOP_WAIT_S = 15.0                      # from typing the read event to the debugger's stop (real seconds: dap's clock)
 DATE_WAIT_S = 5.0                       # from the resume to the read event's line in the log
 SETUP_WAIT_S = 10.0                     # from a setup's command to its done marker in the log
+# add-setup (#1600): the game reloads te_qa_effects.txt once it is rewritten. Live on 1.15.1 (2026-11-12, twice:
+# on the country-select screen and in an entered game) a reload took about 90 s, and for all of it the game's
+# window did not respond; the probes of 2026-11-10 saw 40 s, console commands dropped and every debug.log
+# generation rotated (spec § 3.3).
+RELOAD_FIRST_S = 20.0                   # after the rewrite, before the first look: the window is frozen by then
+RELOAD_RETRY_S = 5.0                    # between looks (a look at a frozen window takes the console's 10 s itself)
+RELOAD_WAIT_S = 300.0                   # for the game to log the new revision, in all
+LOADED_WAIT_S = 5.0                     # from the revision event's command to its line in the log
+LOADED_COMMAND = "event " + overlay.LOADED_EVENT
+# What a look may fail with while the game reloads, and so is tried again: the command was dropped (no_ack),
+# or the reload's burst swallowed its lines (no_reply, log_gap). The event only logs, so a second run costs nothing.
+RELOAD_RETRIED = ("no_ack", "no_reply", "log_gap")
+# The console calls a window that has not responded for 10 s `game_gone`. During a reload that is the game being
+# busy, so it is tried again too, but only while the window is still there (`_reloading`); `watch` is looked at
+# between tries, and ends them when the game really has gone.
+RELOAD_FROZEN = "game_gone"
+# Live, 2026-11-12: in the second session the game stayed frozen for four minutes after its reload, its log
+# silent, until a verb that reads the debugger's connection was run; then it answered at once. In the third,
+# with the connection read before every look, the wait ended after 66 s and no stop was ever reported. So the
+# game is most likely held by a debugger connection nobody reads (it streams every error-log line there, and a
+# reload writes tens of thousands), not stopped at a breakpoint; the mechanism was not looked at further. The
+# wait reads the connection before each look, and resumes a stop if it does find one.
+PRESS_KEYS = {"esc": 0x01}              # what `press` may send: a probe's key, in the game itself
 LOG_POLL_S = 0.2
 CLICK_SETTLE_S = 1.0                    # after the country click, before Start (unverified)
+# enter-game's check that the country click selected a country (#1598). The country-select screen's side panel
+# reads "Click on a country to select it." until one is selected, then shows that country; a click that lands on
+# a window (the game's "We now have <law>!" after a setup changed a law there) changes nothing in it: across the
+# real shots of 2026-11-12, with and without such a window, the panel did not differ by one pixel.
+# Nothing is pressed to close the window. Live, the same day: after the click had landed on it, neither Esc nor
+# Enter closed it (three and two presses), though in an earlier session, with the cursor elsewhere, two windows
+# went after two `press esc`; what closed them there is not established. And a console probe typed while the
+# console is closed goes to the game, where its letters move the camera off the country.
+PANEL_BOX = (0.87, 0.06, 0.99, 0.80)    # the side panel, clear of the date above and the buttons below
+PANEL_CHANGED = 0.01                    # this share of its pixels differing is a country selected
+
 # The helper's refusals of a click that come before the button goes down (win_helper._op_click: the window in
 # front and the process the recorded one, the point inside the client area, the cursor on it, the game's window
 # under it). Any other error may follow the press.
@@ -271,12 +305,20 @@ class Session:
         self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
+        self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
+        self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
 
     # ---- start
 
     def start(self, permission: str, as_tag: str | None = None, setups: Mapping[str, str] | None = None,
-              save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False) -> dict:
+              save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
+              switch_rules: Mapping[str, str] | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
+
+        `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
+        `game_qa.rules`): a game whose rule changed on 2 January 1836, a day after it began, not one made under
+        that setting. It is refused with `save` (the owner's save is never edited or copied), and for a rule
+        or setting the game's rule files do not define (`bad_rule`), before anything is done.
 
         Refused with nothing done, and the session left as it was: an overlay folder already there (an earlier
         run's playset may still name it: `overlay_left`, and it is neither replaced nor removed), an empty
@@ -308,6 +350,7 @@ class Session:
             raise SessionError("overlay_refused", str(e)) from e
         if save is not None:
             save = self._check_save(save)
+        switch_rules = self._check_switches(switch_rules, save)
         self._starting = True                   # from `held` on, a stop() is left to this
         try:
             self._refuse_if_held()
@@ -318,7 +361,7 @@ class Session:
         self._began = True
         self._permission = permission
         try:
-            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy)
+            result = self._start(permission, as_tag, setups, save, playset, owner_confirmed_busy, switch_rules)
             self._check_abort()
             return result
         except BaseException as e:
@@ -335,14 +378,14 @@ class Session:
             self._starting = False
 
     def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
-               busy: bool) -> dict:
+               busy: bool, switch_rules: dict[str, str] | None = None) -> dict:
         self._check_abort()
         try:
             self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version)
         except overlay.OverlayError as e:
             raise SessionError("overlay_refused", str(e)) from e
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
-        save, made, pruned = self._the_save(save, permission, playset, busy)
+        save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {})
         self._save = save
         self._drop_fixture_lines()
         self._check_abort()
@@ -420,6 +463,8 @@ class Session:
         }
         if pruned:
             result["fixtures_pruned"] = pruned
+        if self._rules is not None:
+            result["rules"] = self._rules
         self._record("start", outcome="ok", **result)
         return result
 
@@ -451,8 +496,39 @@ class Session:
             raise SessionError("no_save", "there is no save games/%s.v3" % name)
         return name
 
-    def _the_save(self, save: str | None, permission: str, playset: str, busy: bool) -> tuple[str, bool, list[str]]:
-        """(the save to load, whether the fixture was made now, the fixtures pruned)."""
+    def _rule_table(self) -> dict[str, dict]:
+        """The rules the run's game loads: vanilla's, then the deployed mod's (another mod's, under `--playset
+        current`, are not read, so a rule of theirs cannot be switched)."""
+        return rules.load_rules([Path(self._paths.base_game) / "game" / rules.RULES_FOLDER,
+                                 Path(self._paths.deploy_dir) / rules.RULES_FOLDER])
+
+    def _check_switches(self, switch_rules: Mapping[str, str] | None, save: str | None) -> dict[str, str]:
+        if switch_rules is None or switch_rules == {}:
+            return {}
+        if not isinstance(switch_rules, Mapping):
+            raise SessionError("bad_argument", "switch_rules maps a rule to a setting, not %r" % (switch_rules,))
+        if save is not None:
+            raise SessionError("bad_argument", "a rule is switched in a copy of the harness's own fresh save: with "
+                               "--save the game is the owner's save, which is never edited or copied")
+        try:
+            rules.check_switches(switch_rules)
+            table = self._rule_table()
+        except rules.RulesError as e:
+            raise SessionError("bad_rule", str(e)) from e
+        for rule, option in switch_rules.items():
+            if rule not in table:
+                raise SessionError("bad_rule", "no rule %r in the game's rule files; the rules are %s"
+                                   % (rule, ", ".join(sorted(table))), rules=sorted(table))
+            if option not in table[rule]["settings"]:
+                raise SessionError("bad_rule", "%r is not a setting of %s; its settings are %s"
+                                   % (option, rule, ", ".join(table[rule]["settings"])),
+                                   settings=list(table[rule]["settings"]))
+        return dict(switch_rules)
+
+    def _the_save(self, save: str | None, permission: str, playset: str, busy: bool,
+                  switch_rules: Mapping[str, str] | None = None) -> tuple[str, bool, list[str]]:
+        """(the save to load, whether the fixture was made now, the fixtures pruned). With `switch_rules` the
+        save is the fixture's copy with those rules switched, made from the fixture if it is not there yet."""
         if save is not None:
             self._record("fixture", outcome="not_used", save=save)
             return save, False, []
@@ -461,7 +537,37 @@ class Session:
         loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
                             self._paths.overlay_windows_path)
         key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
-                          disabled_dlc=self._paths.disabled_dlc)
+                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user))
+        stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
+        if switch_rules:
+            try:
+                path, changed, settings = rules.switched_fixture(user, key, switch_rules, self._rule_table())
+            except rules.RulesError as e:
+                self._record("switch_rules", outcome="refused", detail=str(e))
+                raise SessionError("rules_refused", str(e)) from e
+            stem = path.stem
+            self._rules = {"settings": settings, "switched": changed, "switched_at": rules.SWITCHED_AT}
+            self._record("switch_rules", outcome="ok", save=stem, switched=changed)
+            pruned = pruned + self._prune(user, in_use=(path.name, fixture.FIXTURE_PREFIX + key + ".v3"))
+        else:
+            try:
+                self._rules = {"settings": rules.settings_of((user / fixture.SAVE_FOLDER / (stem + ".v3"))
+                                                             .read_bytes())}
+            except (OSError, rules.RulesError) as e:
+                self._record("rules", outcome="unread", detail=str(e))
+        return stem, made, pruned
+
+    def _prune(self, user: Path, in_use: Sequence[str] = ()) -> list[str]:
+        """Trim the old fixtures, never one of `in_use` (file names): the save about to be loaded, and the
+        fixture it was copied from."""
+        try:
+            return fixture.prune(user, keep=FIXTURES_KEPT, in_use=in_use)
+        except OSError as e:
+            self._record("fixture_prune", outcome="failed", detail=str(e))
+            return []
+
+    def _base_fixture(self, user: Path, key: str, permission: str, playset: str,
+                      busy: bool) -> tuple[str, bool, list[str]]:
         found = fixture.find(user, key)
         if found is not None:
             self._record("fixture", outcome="found", save=found.stem)
@@ -502,11 +608,7 @@ class Session:
             self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
                                    if launches else None, watches[-1] if watches else None, None, calls)
             raise
-        try:
-            pruned = fixture.prune(user, keep=FIXTURES_KEPT)
-        except OSError as e:
-            pruned = []
-            self._record("fixture_prune", outcome="failed", detail=str(e))
+        pruned = self._prune(user, in_use=(made.name,))
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned)
         return made.stem, True, pruned
 
@@ -682,19 +784,171 @@ class Session:
             out.update(ok=reply.ok, lines=reply.lines)
         return reply
 
+    def add_setup(self, name: str, body: str) -> dict:
+        """Add a setup to the running game (#1600): its body goes into a spare slot of the overlay's
+        `te_qa_effects.txt`, and the verb returns once the game has logged that file's new revision, which is the
+        proof that it reloaded the file. `run_setup(name)` then runs it like a setup given at start.
+
+        A name or body the overlay refuses is `overlay_refused`, with nothing written. When the game has not
+        logged the new revision within RELOAD_WAIT_S the error is `not_reloaded`: the setup is in the file, and
+        `run_setup` looks once more before it would run it, so a slow reload costs a wait and not the setup.
+        The debugger is attached again once the reload is seen, because a reload of the script may drop the
+        read event's breakpoint (as entering the game does)."""
+        self._require_game()
+        with self._step("add_setup", name=name) as out:
+            try:
+                event, revision = overlay.add_setup(self._overlay, name, body)
+            except overlay.OverlayError as e:
+                raise SessionError("overlay_refused", str(e)) from e
+            out.update(event=event, revision=revision)
+            began = self._clock()
+            self._sleep(RELOAD_FIRST_S)
+            self._await_revision(revision, began + RELOAD_WAIT_S, out)
+            out["waited_s"] = round(self._clock() - began, 1)
+            result = {"name": name, "event": event, "revision": revision, "loaded": True,
+                      "tries": out["tries"], "waited_s": out["waited_s"],
+                      "slots_left": overlay.SLOT_COUNT - len(self._overlay.added)}
+        self._attach("reattach")
+        return result
+
+    def _await_revision(self, revision: int, deadline: float, out: dict) -> None:
+        """Ask the game which revision of `te_qa_effects.txt` it has loaded, every RELOAD_RETRY_S, until it says
+        `revision` or later; `not_reloaded` once `deadline` has passed. `out` gets the tries made and the last
+        revision seen."""
+        tries = 0
+        while True:
+            tries += 1
+            out.update(tries=tries, seen=self._loaded_revision)
+            failed = None
+            self._resume_after_reload(out)
+            try:
+                self._look_for_revision()
+            except ConsoleError as e:
+                if not self._reloading(e):
+                    raise
+                failed = "%s: %s" % (e.code, e)
+            out["seen"] = self._loaded_revision
+            if self._loaded_revision >= revision:
+                return
+            if self._clock() + RELOAD_RETRY_S > deadline:
+                raise SessionError(
+                    "not_reloaded", "the game had not loaded revision %d of %s after %d looks (it last logged "
+                    "revision %d%s). The setup is in the file: run-setup and read look again before they run, "
+                    "and attach the debugger again once the reload has come"
+                    % (revision, overlay.EFFECTS_FILE, tries, self._loaded_revision,
+                       "; the last look failed with " + failed if failed else ""),
+                    revision=revision, seen=self._loaded_revision, tries=tries)
+            self._sleep(RELOAD_RETRY_S)
+            self._check_watch()
+
+    def _resume_after_reload(self, out: dict) -> None:
+        """Read what the debugger's connection holds, which is what lets a game frozen after a reload go on (see
+        the note above PRESS_KEYS), and resume a stop if one is there. `out` gets the reason of each stop
+        released (`released`; none was, live), and what the debugger said if the look itself failed
+        (`debugger`): the relay may not survive a reload, and the wait goes on either way, since the debugger
+        is attached again at its end."""
+        dbg = self._debugger
+        try:
+            stopped = dbg.poll_stopped()
+        except DebuggerError as e:
+            out.setdefault("debugger", []).append(str(e)[:200])
+            return
+        if not stopped:
+            return
+        out.setdefault("released", []).append(dbg.last_stop_reason)
+        if not self._resume(dbg):
+            self._maybe_stopped = True
+            raise SessionError("maybe_stopped", "the reload left the game stopped at the debugger, and it did not "
+                               "take a resume, twice", maybe_stopped=True)
+
+    def _reloading(self, e: ConsoleError) -> bool:
+        """Whether a console error during a look is what a reloading game gives, so the look can be made again:
+        one of RELOAD_RETRIED, or a window that does not respond (RELOAD_FROZEN) while the window still exists.
+        Nothing was typed that could run twice: the look's command only logs."""
+        if e.code in RELOAD_RETRIED:
+            return True
+        if e.code != RELOAD_FROZEN:
+            return False
+        try:
+            return bool(self._helper.window(self._proc.pid).exists)
+        except HelperError:
+            return False
+
+    def _look_for_revision(self) -> None:
+        """Run the revision event once and take the newest revision the log names into `_loaded_revision`."""
+        self._new_lines()
+        self._console.run(LOADED_COMMAND, reply=False)
+        deadline = self._clock() + LOADED_WAIT_S
+        while True:
+            found = [overlay.loaded_revision(parse(line).text) for line in self._new_lines() if line != GAP_MARKER]
+            # Only a revision this overlay has written counts: a setup's own log line could carry the text.
+            found = [rev for rev in found if rev is not None and rev <= self._overlay.revision]
+            if found:
+                self._loaded_revision = max(self._loaded_revision, found[-1])
+                return
+            if self._clock() >= deadline:
+                return
+            self._sleep(LOG_POLL_S)
+
+    def _catch_up_reload(self) -> bool:
+        """After an `add_setup` whose reload was not seen: look once more, and when the game has moved on to a
+        newer revision attach the debugger again (the reload may have dropped the breakpoint). True when it had."""
+        if self._loaded_revision >= self._overlay.revision:
+            return False
+        before = self._loaded_revision
+        self._resume_after_reload({})
+        try:
+            self._look_for_revision()
+        except ConsoleError as e:
+            if not self._reloading(e):
+                raise
+        if self._loaded_revision == before:
+            return False
+        self._attach("reattach")
+        return True
+
     def run_setup(self, name: str) -> list[str]:
-        """Run a setup through its event; return its log lines between its start and done markers."""
+        """Run a setup through its event; return its log lines between its start and done markers. A setup added
+        with `add_setup` whose reload was never seen is looked for once more first, and refused
+        (`setup_not_loaded`) while the game still runs the older file: its slot would log nothing."""
         self._require_game()
         with self._step("run_setup", name=name) as out:
             event = self._overlay.setup_events.get(name)
             if event is None:
                 raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
                                    % (name, sorted(self._overlay.setup_events) or "none"))
+            if self._catch_up_reload():
+                out["reloaded"] = True
+            added = self._overlay.added.get(name)
+            if added is not None and self._loaded_revision < added[0] + 1:
+                needed = added[0] + 1       # slot n was filled by revision n + 1
+                raise SessionError("setup_not_loaded", "the game has not reloaded %s since setup %s was added "
+                                   "(it logs revision %d, the setup came with %d; a reload takes about 90 s, "
+                                   "and the game's window does not respond during it): wait and run it again"
+                                   % (overlay.EFFECTS_FILE, name, self._loaded_revision, needed),
+                                   revision=needed, seen=self._loaded_revision)
             self._new_lines()                   # what was logged before is not this setup's
             self._console.run("event " + event, reply=False)
             lines = self._setup_lines(name)
             out["lines"] = len(lines)
         return lines
+
+    def press(self, key: str) -> dict:
+        """Press one key of PRESS_KEYS in the game itself, the console closed first so the key does not go into
+        its input line. A probe's verb: what the key does is for the caller to see (`shot` before and after).
+        The console is left closed, and the next verb that types finds that out by typing: its first probe goes
+        to the game, where the letters move the camera (seen live, 2026-11-12), before the console key is
+        pressed. So take the `shot` first, and expect the view to have moved afterwards."""
+        self._require_game()
+        with self._step("press", key=key) as out:
+            scan = PRESS_KEYS.get(str(key).lower())
+            if scan is None:
+                raise SessionError("bad_argument", "press takes one of %s, not %r" % (", ".join(sorted(PRESS_KEYS)), key))
+            self._console.ensure_open()         # so its state is known, and the game is in front
+            self._console.close()
+            self._console.hotkey(scan)
+            out["scan"] = scan
+        return {"key": str(key).lower(), "scan": scan}
 
     def events(self) -> list[Pending]:
         self._require_game()
@@ -740,6 +994,7 @@ class Session:
         "Unknown trigger type". A variable that is not set reads 0, not an error (`c:FRA.var:x` gave "0", live
         2026-11-11), so a 0 does not prove the variable set."""
         self._require_game()
+        self._catch_up_reload()             # a reload still due after add-setup may have dropped the breakpoint
         if isinstance(exprs, str):
             raise SessionError("bad_argument", "read takes a list of expressions, not one string")
         exprs = list(exprs)
@@ -1566,17 +1821,25 @@ class Session:
             raise SessionError("no_country", "tag a country first: the click enters whichever country the camera is "
                                "on, and the tagged one is tagged again once the game is entered")
         clicks: list[list[int]] = []
-        for n, where in enumerate((COUNTRY_CLICK, START_CLICK)):
-            if n:
-                self._sleep(CLICK_SETTLE_S)
-            # The console's own front check, so the presence rule decides whether the foreground may be taken.
-            self._console.ensure_open()
-            x, y = self._point(where)
-            try:
-                self._sends.click(self._proc.pid, x, y)
-            except HelperError as e:        # refused before the button went down: nothing was pressed
-                raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
-            clicks.append([x, y])
+        # The game in front first (the console's own check, as before each click): a screenshot of the screen
+        # with another window over the game would be that window, and any later look would differ from it.
+        self._console.ensure_open()
+        unselected = self._panel()              # the side panel with no country selected, or None: cannot tell
+        self._click(COUNTRY_CLICK, clicks)
+        self._sleep(CLICK_SETTLE_S)
+        if unselected is not None:
+            now = self._panel()
+            if now is not None and pixels.changed(unselected, now) < PANEL_CHANGED:
+                # Start is not clicked on a lobby with no country: nothing was entered, nothing is left in doubt,
+                # and the session can go on (a refused click after Start would end `advance` for good).
+                raise SessionError(
+                    "no_country_selected", "the country click selected no country: the lobby's side panel did "
+                    "not change. Something covers the middle of the country-select screen (a setup that changes "
+                    "a law there raises the game's \"We now have …\" window, #1598), or the camera is not on a "
+                    "country. Start was not clicked, so nothing changed and enter-game can be tried again; no "
+                    "verb closes that window, so run such a setup after entering",
+                    clicks=clicks, screenshot=self._enter_shot_path())
+        self._click(START_CLICK, clicks)
         # Start may have been pressed: from here on the game may be entered, and running. Nothing is clicked again.
         try:
             self._sleep(ENTER_SETTLE_S)
@@ -1601,6 +1864,33 @@ class Session:
                                screenshot=shot, before=before, after=after, clicks=clicks)
         self._entered = True
         return {"entered": True, "clicks": clicks, "before": before, "after": after}
+
+    def _click(self, where: tuple[float, float], clicks: list[list[int]]) -> None:
+        # The console's own front check, so the presence rule decides whether the foreground may be taken.
+        self._console.ensure_open()
+        x, y = self._point(where)
+        try:
+            self._sends.click(self._proc.pid, x, y)
+        except HelperError as e:            # refused before the button went down: nothing was pressed
+            raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
+        clicks.append([x, y])
+
+    def _enter_shot_path(self) -> str:
+        return str(self._report.dir / "enter_panel.png") if self._report is not None else ""
+
+    def _panel(self) -> tuple[int, int, bytes] | None:
+        """The country-select screen's side panel as it looks now (PANEL_BOX of a screenshot kept as
+        `enter_panel.png` in the run folder), or None when it cannot be had: a screenshot that fails or cannot
+        be read is not a reason to stop entering, only to go on without the check."""
+        if self._report is None:
+            return None
+        path = self._report.dir / "enter_panel.png"
+        try:
+            self._helper.screenshot(self._proc.pid, path)
+            return pixels.region(pixels.decode_png(path.read_bytes()), PANEL_BOX)
+        except (HelperError, OSError, pixels.PixelsError) as e:
+            self._record("enter_panel", outcome="unread", detail=str(e)[:200])
+            return None
 
     def _console_after_start(self) -> None:
         """Wait for the console to take commands again once Start is pressed: `ensure_open` is tried every
