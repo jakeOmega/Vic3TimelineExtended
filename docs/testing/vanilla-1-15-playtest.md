@@ -396,11 +396,15 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   'any_country' returned false` at `formable_gating_triggers.txt` lines 293 and 305, in error.log and debug.log);
   what it did in play is unknown. It is now a share, `percent >=` half a great power below all but one. At the next
   launch, check that neither line comes back, then read the supermajority line in the tooltip: it should say a share
-  of the other great powers and list them. Two once-a-game self-checks compare the gate with the count it replaced on
-  a real bloc leader with two or more other great powers (`common/on_actions/te_une_selfcheck_on_actions.txt`):
-  `TE_SELF_CHECK OK|BROKEN une_supermajority_pass` (at most one outside: both must pass) and `une_supermajority_fail`
-  (exactly two outside: both must fail). Either BROKEN: the engine reads `filter` with `percent`, or the share,
-  otherwise than modelled; go back to the `NOT` form, which counts right and lists nothing.
+  of the other great powers and list them. Three once-a-game self-checks compare the gate with the count it replaced
+  on a real bloc leader with two or more other great powers (`common/on_actions/te_une_selfcheck_on_actions.txt`):
+  `TE_SELF_CHECK OK|BROKEN une_supermajority_pass` (at most one outside: both must pass), `une_supermajority_fail`
+  (exactly two outside: both must fail) and `une_supermajority_fail_wide` (three or more outside: the gate must fail;
+  this one fires in the first year of almost any game, the first two perhaps only near the endgame). A lone `_pass`
+  OK is no verdict, since an always-true gate prints it too: the gate reads right when `_pass` and one of the `_fail`
+  checks read OK, and `_fail_wide` OK alone already rules out an always-true gate. Any BROKEN: the engine reads
+  `filter` with `percent`, or the share, otherwise than modelled; go back to the `NOT` form, which counts right and
+  lists nothing.
 
 - **Treaty articles: `can_propose` and the lens (#1440).** In the treaty designer, add Extensive Modernization Aid
   before Modernization Aid, Joint Military Exercises before an alliance, and a Nuclear Guarantee before a Guarantee

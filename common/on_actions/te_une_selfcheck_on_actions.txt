@@ -10,12 +10,18 @@
 # which the engine has always taken.
 #
 # Judged only for a bloc leader with two or more other great powers, where the
-# gate reads the share at all, and only at the boundary, so that an answer the
-# share gets wrong one way can't read OK:
-#   une_supermajority_pass  one or no other great power outside: the old form
-#                           passes. OK when the gate passes too.
-#   une_supermajority_fail  exactly two outside: the old form fails. OK when
-#                           the gate fails too.
+# gate reads the share at all. The first two sit at the boundary, so that an
+# answer the share gets wrong one way can't read OK; the third fires early in
+# almost any game, where the first two may not fire for decades:
+#   une_supermajority_pass       one or no other great power outside: the old
+#                                form passes. OK when the gate passes too.
+#   une_supermajority_fail       exactly two outside: the old form fails. OK
+#                                when the gate fails too.
+#   une_supermajority_fail_wide  three or more outside. OK when the gate fails:
+#                                an always-true gate, or a share read as 0,
+#                                reads BROKEN here.
+# A lone _pass OK is no verdict: an always-true gate prints it too. The gate
+# reads right when _pass and one of the _fail checks read OK.
 # BROKEN on either: the engine reads `filter` with `percent`, or the share,
 # otherwise than vanilla's tsar buttons suggest. Fallback: drop the share and
 # the list, and go back to the NOT form (`une_formation_supermajority` in
@@ -34,6 +40,7 @@ te_une_supermajority_selfcheck = {
 				OR = {
 					NOT = { has_global_variable = te_sc_une_supermajority_pass }
 					NOT = { has_global_variable = te_sc_une_supermajority_fail }
+					NOT = { has_global_variable = te_sc_une_supermajority_fail_wide }
 				}
 				is_power_bloc_leader = yes
 				any_country = {
@@ -88,6 +95,25 @@ te_une_supermajority_selfcheck = {
 				}
 				else = {
 					debug_log = "TE_SELF_CHECK BROKEN une_supermajority_fail country=[THIS.GetCountry.GetTagName] (a bloc leader with exactly two other great powers outside its bloc passes the share gate though the count it replaced fails: the engine reads filter with percent, or the share, otherwise; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_global_variable = te_sc_une_supermajority_fail_wide }
+					any_country = {
+						country_rank >= rank_value:great_power
+						NOT = { this = ROOT }
+						NOT = { is_in_same_power_bloc = ROOT }
+						count >= 3
+					}
+				}
+				set_global_variable = te_sc_une_supermajority_fail_wide
+				if = {
+					limit = { une_formation_supermajority = no }
+					debug_log = "TE_SELF_CHECK OK une_supermajority_fail_wide country=[THIS.GetCountry.GetTagName] (a bloc leader with three or more other great powers outside its bloc fails the share gate, as the count it replaced does) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN une_supermajority_fail_wide country=[THIS.GetCountry.GetTagName] (a bloc leader with three or more other great powers outside its bloc passes the share gate: the gate passes whatever the share, or reads it as 0; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 				}
 			}
 		}

@@ -186,7 +186,7 @@ def _scan_filter_count(lines: list[str], rel_path: str) -> list[Flag]:
             if tok == "percent" and op in _COMPARE_OPS:
                 parent["share"] = True
             elif (tok == "count" and op == "=" and i + 2 < len(toks)
-                    and toks[i + 2][0] == "all"):
+                    and toks[i + 2][0].strip('"') == "all"):
                 parent["share"] = True
     return flags
 

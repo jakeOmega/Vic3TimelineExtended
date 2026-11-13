@@ -280,6 +280,10 @@ class FilterCountTests(unittest.TestCase):
         )
         self.assertEqual(flags, [])
 
+    def test_no_flag_with_quoted_count_all(self):
+        flags = _scan('t = { any_country = { count = "all" filter = { is_subject_of = ROOT } liberty_desire < 75 } }\n')
+        self.assertEqual(flags, [])
+
     def test_count_all_in_a_nested_block_does_not_count(self):
         # Only the any_* block's own children decide; a count = all one level
         # down belongs to another trigger.
