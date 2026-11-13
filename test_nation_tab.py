@@ -367,6 +367,22 @@ class FinderTest(unittest.TestCase):
         })
         self.assertEqual(sorted(found), ["te_iron_reward", "te_loop_reward"])
 
+    def test_a_forwarded_parameter_is_substituted_once(self):
+        # The call passes A = $B$ and B = gold: A takes the caller's B
+        # (silver), not this call's. Substituting one parameter after another
+        # gave te_gold_gold (#1697).
+        found = self._candidates({
+            "common/static_modifiers/pairs.txt": "".join(
+                f"te_{a}_{b}_reward = {{ country_prestige_add = 1 }}\n"
+                for a in ("gold", "silver") for b in ("gold", "silver")),
+            "common/scripted_effects/effects.txt": (
+                "te_leaf = {\n\tadd_modifier = { name = te_$A$_$B$_reward }\n}\n"
+                "te_middle = {\n\tte_leaf = { A = $B$ B = gold }\n}\n"
+            ),
+            "events/events.txt": "te_finder.1 = {\n\timmediate = { te_middle = { B = silver } }\n}\n",
+        })
+        self.assertEqual(sorted(found), ["te_silver_gold_reward"])
+
     def test_a_chain_past_the_cap_raises(self):
         # Never an empty answer: one call more than the cap, and a name that
         # grows each time its effect calls itself.

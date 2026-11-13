@@ -1629,8 +1629,8 @@ Barracks (bg_army):
 		Neural Grafting
 		Reserve Cadre
 		Political Commissars
-	Engineering and Logisitics [concept_power_bloc_principle_group]:
-		Engineering and Logisitics [concept_power_bloc_principle] 1
+	Engineering and Logistics [concept_power_bloc_principle_group]:
+		Engineering and Logistics [concept_power_bloc_principle] 1
 		No Effect
 		$pm_principle_engineering_and_logistics$
 		$pm_engineering_and_logistics_no_effect$
@@ -5778,7 +5778,7 @@ Jardine Princeps House (bg_company_buildings):
 		Jardine Princeps House
 
 Sumitomo Besshi Mine (bg_company_buildings):
-	The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.
+	The Besshi copper mine and smelter, the industrial cradle of the Sumitomo [glossary_zaibatsu].
 	Sumitomo Besshi Mine:
 		Sumitomo Besshi Mine
 	Carbon Capture ($pmg_sumitomo_besshi_mine$):

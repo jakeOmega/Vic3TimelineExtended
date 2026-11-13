@@ -219,6 +219,7 @@ from server.post_load import (  # noqa: F401 — re-exported
     _POST_LOAD_WARN_KEYS,
     _reparse_mod_after_writes,
     _run_generator_chain,
+    _run_generator_chain_steps,
     _run_post_load_generators,
     _snapshot_mod_text_files,
     _WRITER_WATCH_DIRS,

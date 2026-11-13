@@ -135,7 +135,43 @@ class PlanTests(unittest.TestCase):
     def test_the_inputs_are_not_modified(self):
         before = {typ: dict(accessors) for typ, accessors in EXTRAS.items()}
         plan()
+        plan(prune=True)
         self.assertEqual(EXTRAS, before)
+
+    def test_prune_drops_the_entries_vanilla_never_calls(self):
+        # GetOldThing is in the extras and in no chain of LOC; the others are
+        # called (GetBloc only on the way to GetLeader). Without --prune the
+        # fold keeps it, as folds always did (#1697).
+        self.assertIn("GetOldThing", plan().extras["country"])
+        self.assertEqual(plan().pruned, [])
+        p = plan(prune=True)
+        self.assertEqual(p.pruned, ["country.GetOldThing"])
+        self.assertNotIn("GetOldThing", p.extras["country"])
+        self.assertEqual(set(p.extras["country"]), {"GetRank", "GetBloc", "GetFlag"})
+        self.assertEqual(p.extras["state"], {"GetPopulation": "value", "GetArea": "value"})
+        self.assertTrue(p.changed)
+        text = fold.render_plan(p, "fixture", None, dry_run=True)
+        self.assertIn("1 by --prune", text)
+        self.assertIn("  - country.GetOldThing", text)
+
+    def test_prune_empties_a_type_whose_entries_are_all_unused(self):
+        p = plan(loc={"ui.1.d": "[COUNTRY.GetName]"},
+                 extras={"country": {"GetRank": "value"}, "state": {"GetPopulation": "value"}},
+                 prune=True)
+        self.assertEqual(p.extras, {})
+        self.assertEqual(p.pruned, ["country.GetRank", "state.GetPopulation"])
+
+    def test_a_pruned_entry_the_mod_still_calls_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "x_l_english.yml"), "w", encoding="utf-8-sig") as f:
+                f.write('l_english:\n ui.9.d: "[COUNTRY.GetOldThing] [COUNTRY.GetName]"\n')
+            uses = fold.mod_calls(["country.GetOldThing", "state.GetUnused"], tmp)
+        self.assertEqual(uses, {"country.GetOldThing": "ui.9.d"})
+        p = plan(prune=True)
+        text = fold.render_plan(p, "fixture", None, dry_run=True, mod_uses=uses)
+        self.assertIn("the mod's loc still calls them", text)
+        self.assertIn("! country.GetOldThing   e.g. ui.9.d", text)
+        self.assertEqual(fold.mod_calls([]), {})
 
 
 class RenderTests(unittest.TestCase):
@@ -274,13 +310,14 @@ class CommittedExtrasTests(unittest.TestCase):
         self.assertIn("vanilla_parsed/ snapshot", source)
         p = fold.plan_fold(lines, audit_mod.HAND_TYPED_ACCESSORS,
                            audit_mod.VANILLA_EXTRACTED_ACCESSORS,
-                           engine_docs_dir=str(fold.ENGINE_DOCS))
+                           engine_docs_dir=str(fold.ENGINE_DOCS), prune=True)
         self.assertEqual(
             ([g.name for g in p.terminal], [g.name for g in p.chained], p.shadowed,
-             [(f.key, f.chain) for f in p.residual], [b.name for b in p.untyped_blind]),
-            ([], [], [], [], []),
+             [(f.key, f.chain) for f in p.residual], [b.name for b in p.untyped_blind],
+             p.pruned),
+            ([], [], [], [], [], []),
             "localization_accessor_vanilla_extras.py is behind vanilla_parsed/: run "
-            "python3 scripts/generators/fold_vanilla_loc_accessors.py and follow its report")
+            "python3 scripts/generators/fold_vanilla_loc_accessors.py --prune and follow its report")
         self.assertEqual(p.extras, audit_mod.VANILLA_EXTRACTED_ACCESSORS)
         self.assertEqual(p.known, len(audit_mod.KNOWN_VANILLA_FLAGS))
 
@@ -294,11 +331,9 @@ class CommittedExtrasTests(unittest.TestCase):
                          [g.name for g in p.chained] + [b.name for b in p.untyped_blind])
         self.assertEqual(sorted((g.type, g.accessor) for g in p.undetermined),
                          sorted(audit_mod.BLIND_UNDETERMINED))
-        # Every entry it writes is committed; the committed file also keeps
-        # some the snapshot's loc no longer calls (folds add, never prune).
-        committed = {(t, a) for t, accs in audit_mod.VANILLA_EXTRACTED_ACCESSORS.items()
-                     for a in accs}
-        self.assertLessEqual({(t, a) for t, accs in p.extras.items() for a in accs}, committed)
+        # It writes exactly what is committed: since the --prune run (#1697)
+        # the file holds no entry the snapshot's loc no longer calls.
+        self.assertEqual(p.extras, audit_mod.VANILLA_EXTRACTED_ACCESSORS)
 
     def test_the_committed_file_is_what_the_fold_writes(self):
         with open(fold.EXTRAS, encoding="utf-8") as f:

@@ -82,6 +82,9 @@ from dataclasses import dataclass, field
 
 from audit_common import AuditResult as _AuditResult
 from audit_common import cli_main, parse_reviewed, write_text
+# Shared with the other raw-text audits; `je_multiplier_scope_audit` imports
+# it from here. (#1698)
+from blanked_text import blank_comments_and_strings
 
 # Directories scanned, relative to the mod root (issue #250).
 AUDIT_DIRS = (
@@ -135,49 +138,6 @@ class Flag:
 class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
-
-
-def blank_comments_and_strings(text: str) -> tuple[str, dict[int, str]]:
-    """Return (clean_text, comments_by_line).
-
-    `clean_text` is the same length as `text` — comment bodies and quoted
-    string bodies become spaces — so offsets still map to real line numbers.
-    """
-    out = list(text)
-    comments: dict[int, str] = {}
-    line = 1
-    i = 0
-    n = len(text)
-    in_string = False
-    while i < n:
-        ch = text[i]
-        if ch == "\n":
-            line += 1
-            in_string = False
-            i += 1
-            continue
-        if in_string:
-            if ch == '"':
-                in_string = False
-            else:
-                out[i] = " "
-            i += 1
-            continue
-        if ch == '"':
-            in_string = True
-            i += 1
-            continue
-        if ch == "#":
-            end = text.find("\n", i)
-            if end < 0:
-                end = n
-            comments[line] = text[i:end]
-            for j in range(i, end):
-                out[j] = " "
-            i = end
-            continue
-        i += 1
-    return "".join(out), comments
 
 
 def _line_starts(text: str) -> list[int]:

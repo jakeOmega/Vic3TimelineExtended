@@ -344,7 +344,7 @@ MOVED = {
     ],
     "server.post_load": [
         "_changed_files", "_failure_warning", "_POST_LOAD_TRACEBACK_TAIL_LINES",
-        "_POST_LOAD_WARN_KEYS", "_reparse_mod_after_writes", "_run_generator_chain",
+        "_POST_LOAD_WARN_KEYS", "_reparse_mod_after_writes", "_run_generator_chain", "_run_generator_chain_steps",
         "_run_post_load_generators", "_snapshot_mod_text_files", "_WRITER_WATCH_DIRS",
         "_WRITER_WATCH_SUFFIXES", "PARTIAL_VANILLA_FILE_REGENERATORS", "POST_LOAD_AUDITS",
         "POST_LOAD_GENERATORS", "POST_LOAD_REGENERATORS", "VANILLA_FILE_REGENERATORS",
