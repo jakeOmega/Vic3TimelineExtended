@@ -1344,7 +1344,7 @@ colonial_civil_war_selfcheck = {
 				debug_log = "TE_SELF_CHECK OK ce_civil_war_read rebels=[THIS.GetCountry.GetNameNoFormatting] (the country these rebels rose against reads a civil war of its own through civil_war_origin_country, as the civil-war layer's pointer says) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN ce_civil_war_read rebels=[THIS.GetCountry.GetNameNoFormatting] (the civil-war layer's pointer says these rebels rose against a live country, but colonial_in_own_civil_war is false there: civil_war_origin_country or the rebel flags don't read as expected, so the Colonial Empire's civil-war hold never applies; see docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN ce_civil_war_read rebels=[THIS.GetCountry.GetNameNoFormatting] (the civil-war layer's pointer says these rebels rose against a live country, but colonial_in_own_civil_war is false there: civil_war_origin_country or the rebel flags don't read as expected, so the Colonial Empire's civil-war hold never applies to a civil war of its own; see docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 		# Remember a secession, naming itself, so a winner can be told from a

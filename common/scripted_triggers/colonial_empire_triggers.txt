@@ -655,7 +655,9 @@ ce_reentry_due = {
 # A colony's secession is not one: decol_iw_on_secession_start
 # (decolonization_war_effects.txt) records it as a war of independence and
 # marks the rebels with decol_iw_metropole, and holding the colonies through
-# that war would block the very releases (.75.a) the war is about.
+# that war would block the very releases (.75.a) the war is about. A fourth
+# colony secession, with all three war records in use, gets no record and no
+# marker, so it counts here as a civil war; rare, and accepted (2026-11-13).
 # Country scope. It walks every country, so put it after the cheap tests.
 # Unverified in game (2026-11-13): colonial_civil_war_selfcheck
 # (decolonization.txt) compares it with the civil-war layer's te_cw_origin.
