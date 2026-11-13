@@ -73,8 +73,9 @@ NO_PENDING = "No pending events"
 # NO_MATCH, for 2684354595 and 3959422997 (live, 2026-11-12): both above 2^31 - 1. Live on 2026-11-13 (1931 save,
 # un_events.4 at 2684354595 beside te_debug_ch.1 at 3456106516): its signed form (id - 2^32) answered NO_MATCH
 # too, so no typed form reaches such an id; with no id the select picked un_events.4, the first listed and the
-# lowest id. So an id above 2^31 - 1 is picked with no id when it is the oldest pending event, and refused
-# (`id_unaddressable`) otherwise, with nothing sent.
+# lowest id. So an id up to 2^31 - 1 always goes as listed, so that no other event can be answered (review,
+# 2026-11-13: under left_running the list can change before the select); a higher one goes with no id when it is
+# alone in the list or first and lowest, and is refused (`id_unaddressable`) otherwise, with nothing sent.
 SELECT_NO_ID = "select_event_option %d"
 SELECT_BY_ID = "select_event_option %d %d"
 NO_MATCH = "No matching pending event"
@@ -976,8 +977,10 @@ class Session:
 
         The command has one of three forms, named by `form` in the reply and in the step:
 
-            no_id   exactly one event is pending in the list just read: `select_event_option <index>`
-            id      an id up to 2^31 - 1: `select_event_option <index> <numeric id>`, the id as the list printed it
+            id      an id up to 2^31 - 1: `select_event_option <index> <numeric id>`, the id as the list printed it,
+                    so that only the event listed can be answered
+            no_id   an id above 2^31 - 1, and that event the only one in the list just read: `select_event_option
+                    <index>` (live, 2026-11-13, #1732)
             oldest  an id above 2^31 - 1, which no typed form reaches (live, 2026-11-13: the listed form and its
                     signed form both answered NO_MATCH), when the event is first in the list and the lowest id
                     of all pending: `select_event_option <index>`, as for no_id. Live, the select with no id
@@ -986,7 +989,8 @@ class Session:
 
         Any other event with an id above 2^31 - 1 is refused `id_unaddressable` before anything is sent; the
         detail says what to do (answer the events listed before it, or, for a first-listed one, the console
-        verb). One command goes out; `attempts` lists it with its answer.
+        verb). The two forms with no id need the whole list: a list line that is not an event (`unread`) refuses
+        them `bad_reply`, nothing sent. One command goes out; `attempts` lists it with its answer.
 
         Each form must be answered `Selected option <index> of <event id>`, or the verb is not_selected. What
         that check does not guard: the pending list can change between the list and the select. The game is
@@ -1000,7 +1004,7 @@ class Session:
         id, not the instance, so another instance of the same event would pass."""
         self._require_game()
         with self._step("pick", index=index, event=event) as out:
-            pending = self._pending()
+            pending, unread = self._pending_read()
             if event is None:
                 matches = pending
             elif str(event).isdigit():
@@ -1017,10 +1021,17 @@ class Session:
                                    % (chosen.event_id, chosen.options, chosen.options - 1, index))
             attempts: list[dict] = []
             out["attempts"] = attempts          # recorded in the step however the verb ends
-            if len(pending) == 1:
-                form, command = "no_id", SELECT_NO_ID % index
-            elif chosen.numeric_id <= INT32_MAX:
+            if chosen.numeric_id <= INT32_MAX:
                 form, command = "id", SELECT_BY_ID % (index, chosen.numeric_id)
+            elif unread:
+                # A select with no id takes the first event listed: a list read in part cannot say which that is.
+                raise SessionError(
+                    "bad_reply", "%s's numeric id %d is above 2^31 - 1, so only a select with no id reaches it, "
+                    "and that takes the first event listed; %r answered lines pick could not read (%r), so the "
+                    "list cannot say which is first. Nothing was sent" % (chosen.event_id, chosen.numeric_id,
+                                                                        PENDING_COMMAND, unread), unread=unread)
+            elif len(pending) == 1:
+                form, command = "no_id", SELECT_NO_ID % index
             elif chosen is pending[0] and chosen is min(pending, key=lambda p: p.numeric_id):
                 form, command = "oldest", SELECT_NO_ID % index
             else:
@@ -1942,11 +1953,17 @@ class Session:
             self._sleep(LOG_POLL_S)
 
     def _pending(self) -> list[Pending]:
+        return self._pending_read()[0]
+
+    def _pending_read(self) -> tuple[list[Pending], list[str]]:
+        """The pending events, and the reply's lines that are neither one of them nor NO_PENDING (`unread`)."""
         reply = self._console.run(PENDING_COMMAND)
         found = pending_events(reply.lines)
         if not found and NO_PENDING not in [line.strip() for line in reply.lines]:
             raise SessionError("bad_reply", "%r answered %r" % (PENDING_COMMAND, reply.lines))
-        return found
+        unread = [line for line in reply.lines
+                  if line.strip() and line.strip() != NO_PENDING and not pending_events([line])]
+        return found, unread
 
     def _tag(self, tag: str) -> None:
         _check_tag(tag)

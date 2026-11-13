@@ -1449,7 +1449,39 @@ class PickTest(SessionTestCase):
         self.assertEqual(self.selects(), ["select_event_option 1 11"])
         self.assertEqual((result["form"], result["numeric_id"], result["ambiguous"]), ("id", 11, False))
         self.assertEqual(self.session.events(), [logtail.Pending(10, "x.1", 3)])
-        self.assertEqual(self.session.pick(2)["form"], "no_id")     # one left: no id
+        self.assertEqual(self.session.pick(2)["form"], "id")        # one left, still by id: only it can be answered
+        self.assertEqual(self.selects()[-1], "select_event_option 2 10")
+
+    def test_a_low_id_listed_alone_goes_by_id_so_no_other_event_can_be_answered(self):
+        # Review, 2026-11-13: under left_running time passes between the list and the select; with no id the
+        # select would answer whatever was oldest by then.
+        self.started()
+        self.game.pending_events = [[10, "x.1", 2]]
+
+        def moved_on(text):
+            if text.startswith("select_event_option 0"):
+                self.game.pending_events[:] = [[11, "y.1", 2]]
+        self.game.on_command = moved_on
+        self.assertEqual(self.session_error(self.session.pick, 0, "x.1").code, "not_selected")
+        self.assertEqual(self.game.pending_events, [[11, "y.1", 2]])
+        self.assertEqual(self.selects(), ["select_event_option 0 10"])
+
+    def test_a_list_line_that_is_not_an_event_leaves_the_id_form_alone(self):
+        self.started()
+        self.game.on("select_event_option list", success=["-1610612701 un_events.4 options=3", "12 y.1 options=2"])
+        self.game.on("select_event_option 1 12", success=["Selected option 1 of y.1"])
+        self.assertEqual(self.session.pick(1, "y.1")["form"], "id")
+        self.assertEqual(self.selects(), ["select_event_option 1 12"])
+
+    def test_a_list_line_that_is_not_an_event_refuses_the_forms_with_no_id(self):
+        # With no id the select takes the first event listed: a list read in part cannot say which that is.
+        self.started()
+        self.game.on("select_event_option list", success=["-1610612701 un_events.4 options=3",
+                                                          "3959422997 te_debug_ch.1 options=8"])
+        error = self.session_error(self.session.pick, 0, "te_debug_ch.1")
+        self.assertEqual(error.code, "bad_reply")
+        self.assertEqual(error.info["unread"], ["-1610612701 un_events.4 options=3"])
+        self.assertEqual(self.selects(), [])
 
     def test_a_high_id_that_is_the_oldest_pending_is_picked_with_no_id(self):
         # Live, 2026-11-13: un_events.4 at 2684354595 beside te_debug_ch.1 at 3456106516; the listed id and its
@@ -1555,8 +1587,7 @@ class PickTest(SessionTestCase):
         self.started()
         self.game.on("select_event_option list", success=["10 x.1 options=2"])
         self.assertEqual(self.session_error(self.session.pick, 1).code, "not_selected")
-        self.assertEqual(self.typed().count("select_event_option 1"), 1)
-        self.assertFalse([t for t in self.typed() if t.startswith("select_event_option 1 ")])
+        self.assertEqual([t for t in self.typed() if t.startswith("select_event_option 1")], ["select_event_option 1 10"])
 
     def test_a_reply_that_is_not_a_list_is_not_taken_for_nothing_pending(self):
         self.started()
@@ -2037,12 +2068,12 @@ class TryEventTest(SessionTestCase):
         self.assertEqual(rows[0]["before"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "5", "value": 5.0}])
         self.assertEqual([(r["picked"]["index"], r["picked"]["numeric_id"]) for r in rows], [(0, 10), (1, 11), (2, 12)])
 
-        def option(i):                          # one event pending: picked with no id (#1722)
+        def option(i):                          # one event pending, its id up to 2^31 - 1: picked by id
             return ["event x.1", "select_event_option list", "event te_qa.1",
-                    "select_event_option list", "select_event_option %d" % i, "event te_qa.1"]
+                    "select_event_option list", "select_event_option %d %d" % (i, 10 + i), "event te_qa.1"]
         # one look before the first firing (nothing of x.1 may be pending), then each option in turn
         self.assertEqual(self.commands(), ["select_event_option list", *option(0), *option(1), *option(2)])
-        self.assertEqual([r["picked"]["form"] for r in rows], ["no_id"] * 3)
+        self.assertEqual([r["picked"]["form"] for r in rows], ["id"] * 3)
         self.assertEqual(self.events.pending, [])
         # the run folder's record holds the rows, and its summary the table
         [step] = self.try_event_steps()
@@ -2152,14 +2183,14 @@ class TryEventTest(SessionTestCase):
 
         def second_pick_unconfirmed(text):
             command(text)
-            if text == "select_event_option 1":     # a reply given to `on` wins over the fake's own answer
+            if text == "select_event_option 1 11":  # a reply given to `on` wins over the fake's own answer
                 self.game.on(text, success=["Something else happened"])
         self.game.on_command = second_pick_unconfirmed
         error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
         self.assertEqual(error.code, "not_selected")
         rows = error.info["options"]
         self.assertEqual([(r["index"], r["fired"], r["picked"] is not None) for r in rows], [(0, True, True), (1, True, False)])
-        self.assertEqual(self.commands().count("select_event_option 1"), 1)
+        self.assertEqual(self.commands().count("select_event_option 1 11"), 1)
         [step] = self.try_event_steps()
         self.assertEqual((step["outcome"], len(step["options"])), ("not_selected", 2))
 
