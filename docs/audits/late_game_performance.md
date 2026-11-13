@@ -485,7 +485,7 @@ pulse another third.
 
 **`HandleAutonomousInvestment` is the played country's investment pool.**
 The pass took 160–202 ms a day, the largest task. Frame by frame it is a
-burst on the weekly frame (0.4 to 1.6 s; 1.05 s on average over B0a's nine
+burst on the weekly frame (0.4 to 1.6 s; 1.08 s on average over B0a's nine
 weeks) and usually 0–2 ms on every other frame; in two of the nine weeks it
 ran on into the following frames (769 ms, then 32–99 ms for 14 frames, after
 the frame of 17 July). With the pass switched off a rendering-on day read
@@ -678,43 +678,53 @@ open on its Nation tab, with rendering on (the default).
 A scripted widget in an add-on mod opened the window twenty seconds after the
 HUD appeared (`GetVariableSystem.Set('com_open_window', 'te_systems_window')`
 from a `trigger_on_create` state), on the tab it opens on, Nation. In one
-session (`20261113T170446Z`) two 14-day blocks ran with it open; then
-`press esc` closed it (a screenshot showed it gone) and two more ran.
+session (`20261113T170446Z`) two blocks ran with it open; then `press esc`
+closed it (a screenshot showed it gone) and two more ran.
 
 | Block | Dates | Wall s/day | Tick tasks s/day | Outside the tasks | Average frame | Shortest frame |
 |---|---|---|---|---|---|---|
 | open | 3–16 July | 2.000 | 0.577 | 1.42 | 18.6 ms | 13.7 ms |
 | open | 16–31 July | 2.467 | 0.630 | 1.84 | 19.1 ms | 14.9 ms |
 | closed | 31 July–14 August | 1.286 | 0.476 | 0.81 | 10.1 ms | 8.2 ms |
-| closed | 14–28 August | 1.429 | 0.587 | 0.84 | 10.1 ms | 8.3 ms |
+| closed | 14–30 August | 1.438 | 0.633 | 0.80 | 10.1 ms | 8.3 ms |
 
-- **Open, the day is half again as long or more.** An earlier session with
-  the window open read the same (`20261113T163222Z`: 1.857 and 2.500 s a day,
-  frames of 18.3 and 19.2 ms), and the other rendering-on sessions of the day
-  read 1.21–1.36 s a day over 3–17 July and 1.50–1.64 over 17–31 July with it
-  closed. The tick tasks do not change; the time is frames, each twice as
-  dear, drawn while the tick waits.
+- **Open, the day is about half again as long.** July (3–31) read 2.25 s a
+  day in this session and 2.18 in an earlier one with the window open
+  (`20261113T163222Z`, frames of 18.3 and 19.2 ms), against 1.39 and 1.50 in
+  the day's two rendering-on runs with it closed: 45% to 62% more. The tick
+  tasks do not change, task by task; the time is frames, each twice as dear,
+  drawn while the tick waits.
+- **A frame costs the same paused.** The shortest frame of an open block
+  was 13.7–14.9 ms against 8.2–8.3 closed, the blocks' frame counts leave no
+  room for paused frames at the closed rate, and the paused screenshots show
+  about 60 frames a second with the window open and 105–120 after it closed.
+  So the tab's bindings are read on every frame, whether or not anything
+  changed, and the check needs no running game: open the window paused and
+  read the frame rate.
 - **It is the Nation tab's sections, not the window.** Three sessions each
-  opened the window with part of the tab taken out (two 7-day blocks each;
-  `variants/nat_*`): with no panels at all frames took 10.2 and 9.7 ms
-  (`20261113T173341Z`); with the overview and the five sections but not the
-  two list panels, 18.0 and 18.9 ms (`…173803Z`); with only the two list
-  panels, which open collapsed, 10.3 and 9.7 ms (`…174246Z`).
+  opened the window with part of the tab taken out (two blocks each of 7 to
+  13 days; `variants/nat_*`): with no panels at all frames took 10.2 and
+  9.7 ms (`20261113T173341Z`); with the overview and the five sections but
+  not the two list panels, 18.0 and 18.9 ms (`…173803Z`); with only the two
+  list panels, which open collapsed, 10.3 and 9.7 ms (`…174246Z`). Wall time
+  over 3–17 July agrees: 1.36, 2.00 and 1.36 s a day.
 - **What the sections read.** Every row is shown or hidden by a count
-  (`te_nation_type_<modifier type>_count`, 83 of them, with a sum for each
-  group and section), and each count is a chain of `has_modifier` tests: 964
-  in `te_nation_generated_values.txt`, all read again on every frame while
-  the game runs. And each row that shows is a line of text built with
-  `Country.GetModifier.GetValueWithBreakdownFor('<type>')` (81 rows in
-  `te_nation_generated_l_english.yml`), which has the engine assemble that
-  modifier type's whole breakdown to draw the figure; vanilla uses the
-  accessor 21 times in all its interface, one or two to a panel. Which of
-  the six panels carries the cost, and whether it is the counts or the
-  breakdowns, was not separated; the breakdowns are the likelier, since 964
-  `has_modifier` tests should cost far less than 9 ms (#1760 has the test).
-- **This fits the owner's own play**, 1.9 s a day over the same dates
-  ("Measurements, 2026-11-12"), if the window stood open; that is for the
-  owner to say.
+  (`te_nation_type_<modifier type>_count`, 83 of them, holding 340
+  `has_modifier` tests, with a sum for each group and section: 964 tests in
+  `te_nation_generated_values.txt`). And each row that shows is a line of
+  text built with `Country.GetModifier.GetValueWithBreakdownFor('<type>')`
+  (81 rows in `te_nation_generated_l_english.yml`), which has the engine
+  assemble that modifier type's whole breakdown to draw the figure; vanilla
+  uses the accessor 21 times in all its interface, one or two to a panel.
+  Which of the six panels carries the cost, and whether it is the counts or
+  the breakdowns, was not separated; the breakdowns are the likelier, since
+  964 `has_modifier` tests should cost far less than 9 ms (#1760 has the
+  test).
+- **The owner's own play fits, month by month.** Their log of the same game
+  (`dedicated_server.1.log`, read the same way) ran July at 2.07 s a day and
+  August at 1.60: July beside the open sessions' 2.18–2.25, August beside the
+  closed runs' 1.40–1.57. Whether the window stood open in July and not in
+  August is for the owner to say.
 - **Not measured**: any other tab (two probes meant to switch tabs did not
   work: a `trigger_when` on a scripted GUI never opened the window, and a
   chain of timed states never left its first); the window full screen;
@@ -744,7 +754,7 @@ inside a single run's error of the task figure. Where it goes:
   run without it read 1.017 s a day (maproom_off_r).
 - **The declarations themselves.** `RecalculateModifierNodes` read 87 and 90
   ms a day in the two runs without the declarations (nojes_r, noscale_r) and
-  96 to 119 in every other run of the day: perhaps 10 to 25 ms a day for 389
+  96 to 119 in every other rendering-off run of the day: perhaps 10 to 25 ms a day for 389
   declarations, most of them at zero.
 - **The pulses.** The weekly and monthly pulses are 16 ms a day of tasks;
   their parts are in "Merged `main` remeasured" (the Strategic Reserve's
@@ -934,8 +944,8 @@ All are exact: they change no result unless a line says otherwise.
 
 Numbered as first listed, so references from other files hold, not by size.
 Items 3 and 6 were addressed by #1713. The knockout runs of 2026-11-13
-("Where the day goes") answered items 1, 2, 7 and 13 and added 14 and 15; each
-of those items now opens with its answer.
+("Where the day goes") answered items 1, 2 and 13, half answered 7 and added
+14 to 17; each of the first four now opens with its answer.
 
 1. **Answered, 2026-11-13.** The time outside the tick tasks is three
    things: frames drawn while the tick is worked out (gone with sub-tick
@@ -1202,25 +1212,26 @@ of those items now opens with its answer.
     owner's call. The pollution refresh re-adds on every owned state each
     month (871 a month).
 14. **The number of countries** (2026-11-13). Each one-state country costs
-    about 0.7 ms of tick-task time a day (`RecalculateModifierNodes`,
-    `UpdateAI`, the journal-entry tasks), before its share of the monthly and
-    yearly pulses, and 160 of the 263 countries of 1931 have one state. With
+    about 0.7 ms of tick-task time a day (0.5–0.6 of it in
+    `RecalculateModifierNodes`, `UpdateAI` and the journal-entry tasks),
+    before its share of the monthly and yearly pulses, and 160 of the 263 countries of 1931 have one state. With
     119 of them annexed (and 48 states and 6% of the buildings merged away
     with them) the tick tasks took 16% less. Whether the world
     should hold fewer of them (fewer releases, unions of small neighbors, the
     revolts of #1723 ended) is a design question for the owner. Not measured:
-    the wall-time gain without an event window open, and what the seven
+    the wall-time gain without an event window open, and what the six
     unfinished revolts cost.
 15. **Small pops** (2026-11-13). A quarter of the pops are under 100 people
     and hold 0.02% of the population; far higher consolidation defines removed
     5.5% of pops in 120 days. See "Small pops" for why they stay and what, if
     anything, a define can do.
 16. **The Timeline Extended window's Nation tab** (2026-11-13). Open, it
-    makes every frame twice as dear and a rendering-on day 55% to 70% longer
-    ("The mod's own window"). The cost is in the overview and the five
-    sections, whose rows are shown or hidden by 83 generated counts of
-    `has_modifier` tests and drawn with the engine's breakdown accessor, up
-    to 81 at once, on every frame. To fix (#1760): test whether the
+    makes every frame twice as dear, paused or running, and a rendering-on
+    day about half again as long ("The mod's own window"). The cost is in
+    the overview and the five sections. Their rows are shown or hidden by 83
+    generated counts of `has_modifier` tests and drawn with the engine's
+    breakdown accessor, up to 81 at once, on every frame; which of the two
+    it is has not been separated. To fix (#1760): test whether the
     breakdowns are the cost (a variant whose rows read `GetValueFor`; the
     probe that opens the window is beside the runs), and if so keep the plain
     figure in the row and move the breakdown to its tooltip; otherwise gate

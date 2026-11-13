@@ -60,13 +60,15 @@ read there.
 | What the screen does | The map and panels stay usable while the game runs: a brief hitch a few times a game week, no frozen screen | Long freezes: leave the switch on and say so; the harness's window never showed one |
 | The launch option | With `-disable_renderframeifneeded` in the game's launch options the switch should start off, so that typing it once answers "Enabled". Untried: the harness runs that carried the option never typed the switch, and all ran with `-debug_mode` | It answers "Disabled": either the option was not read, or the option and the switch are separate settings; say which the speed suggests |
 
-## The Timeline Extended window while the game runs (2026-11-13)
+## The Timeline Extended window's Nation tab (2026-11-13)
 
-Not a change yet. With the window open on its Nation tab the harness's days ran 55% to 70% longer than with it closed
-(2.0–2.5 s against 1.3–1.4, frames of 19 ms against 10; `docs/audits/late_game_performance.md`, "The mod's own
-window"; the fix is #1760). Until it is fixed, the check is whether that is what slows the owner's own play.
+Not a change yet. With the window open on its Nation tab the harness drew frames of 19 ms against 10, paused or
+running, and its July ran about half again as long as with the window closed (2.18–2.25 s a day against 1.39–1.50;
+`docs/audits/late_game_performance.md`, "The mod's own window"; the fix is #1760). The owner's own log of that game
+ran July at 2.07 s a day and August at 1.60. Until it is fixed, the check is whether the window is what slowed July.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| Window open against closed | In a late game at speed 5 with the Timeline Extended window open on Nation, days pass visibly slower than with it closed; the FPS counter (debug mode) roughly halves while the game runs | No difference: the cost is specific to the harness's setup; say what was open in the session whose log read 1.9 s a day |
-| Other tabs | The same comparison on the tabs kept open most (Banking, Demographics, the United Nations) | A tab as slow as Nation: add it to #1760 |
+| Window open against closed, paused | In a late game, paused, with the FPS counter showing (debug mode): opening the Timeline Extended window on Nation roughly halves the frame rate, and closing it brings it back | No difference: the cost is specific to the harness's setup; say what was on screen in July 1931 |
+| Other tabs | The same look on the tabs kept open most (Banking, Demographics, the United Nations) | A tab as slow as Nation: add it to #1760 |
+| Running | At speed 5, days pass visibly slower with the window open on Nation than with it closed | Slower paused but not running: sub-tick rendering was off, or the day is spent elsewhere |
