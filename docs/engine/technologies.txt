@@ -207,7 +207,7 @@
 		Unlocking Technologies:
 			Intensive Agriculture
 			Prospecting
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
 	Bessemer Process - The Bessemer process is a technique for the mass production of steel from pig iron.
 		Unlocking Technologies:
 			Steelworking
@@ -571,6 +571,7 @@
 	Steam Turbine - Using the power of steam to drive large rotors, turbines create tremendous amounts of energy that serve equally well as stationary machines in a plant and as the driving engines of seagoing vessels.
 		Unlocking Technologies:
 			Electrical Generation
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Plastics - There's a great future in plastics. They're moldable, malleable, able to be shaped and kept in any form anyone wants. Soon, it will be a plastic world.
 		Unlocking Technologies:
 			Reinforced Concrete
@@ -709,7 +710,7 @@
 	Oil Turbine - The power of a turbine can be amplified with the use of oil, a far more energy-rich fuel than coal.
 		Unlocking Technologies:
 			Steam Turbine
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Arc Welding - By generating a large amount of electricity, it is possible to create enough heat to melt two pieces of metal together.
 		Unlocking Technologies:
 			Electric Arc Process
@@ -963,7 +964,7 @@
 		Unlocks Buildings: Hoover Dam, Hydro Plant
 		Unlocks Laws: Pro-Labor Ministry of Labor Established
 		Unlocks Decrees: Subsidize Immigration
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Art Deco Architecture - A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and [concept_prestige], making our cities look a bit more glamorous.
 		Unlocking Technologies:
 			Marketing Research
@@ -1118,7 +1119,7 @@
 	Modern Urban Planning - By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.
 		Unlocking Technologies:
 			Art Deco Architecture
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
 	Satellite Communications - Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.
 		Unlocking Technologies:
 			Space Exploration
@@ -1289,7 +1290,7 @@
 		Unlocking Technologies:
 			World Wide Web
 			Supply Chain Management
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Wireless Internet (Wi-Fi) - Wi-Fi has made it possible to connect to the internet without cables. It has made our lives more convenient and has revolutionized the way we work, communicate, and entertain ourselves.
 		Unlocking Technologies:
 			World Wide Web
@@ -1526,7 +1527,7 @@
 		Unlocking Technologies:
 			Genetic Engineering
 			Modern Material Science
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 8 (listed under their buildings in buildings.txt)
 	AI Agents - Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise.
 		Unlocking Technologies:
 			Generative AI
