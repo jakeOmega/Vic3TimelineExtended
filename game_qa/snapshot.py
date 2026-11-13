@@ -38,6 +38,9 @@ SNAPSHOT_SET = (
     "console_history.txt",
     "pdx_settings.json",
     "content_load.json",
+    # Console `dump_ticktask_timings` overwrites this in place in the user-data root (#1700): an owner's copy is
+    # put back, and one the run's game wrote where there was none is removed, by restore's rules for the set.
+    "ticktask_timings.csv",
     "logs/*",
 )
 
