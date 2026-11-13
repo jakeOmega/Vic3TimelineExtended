@@ -1,11 +1,13 @@
 """The engine-docs routes: GET /engine-docs and its sub-routes (origin,
-usage, loc-functions, <type>, <type>/<name>). Moved out of mod_state_server.py
-unchanged (#1537, stage 1).
+usage, loc-functions, <type>, <type>/<name>), and GET /dev-docs, vanilla's
+developer reference docs. Moved out of mod_state_server.py unchanged (#1537,
+stage 1; /dev-docs in stage 2).
 
 The code moved; the state did not. Everything module-level that these
 functions read or rebind (`engine_docs`, `engine_docs_source_label`,
-`pattern_index`, `base_game_path`, `_BASE_COMMON`, the `_LOC_FUNCTION_INDEX`
-and `_USAGE_TARGET_RE_CACHE` caches, the `_LOC_EXPR_RE` the GUI index shares)
+`pattern_index`, `dev_reference_docs`, `base_game_path`, `_BASE_COMMON`, the
+`_LOC_FUNCTION_INDEX` and `_USAGE_TARGET_RE_CACHE` caches, the `_LOC_EXPR_RE`
+the GUI index shares)
 stays defined in mod_state_server and is read through `server_state()` at
 call time, never imported into this module, so a reload's rebinding and a
 test's `mock.patch.object(mod_state_server, ...)` reach it as before. The
@@ -603,3 +605,70 @@ class EngineDocsRoutes:
             "truncated": len(page) < len(filtered),
             "entries": page,
         }
+
+    # ---- developer reference docs -----------------------------------------
+    def _dev_docs(self, parts, params):
+        """GET /dev-docs                       - list available docs by directory
+        GET /dev-docs/<directory>           - get all docs in a directory
+        GET /dev-docs/<dir>/<file>          - get specific doc content
+        GET /dev-docs?q=<search>            - search doc contents
+        """
+        srv = server_state()
+        query = params.get("q", [""])[0].lower()
+
+        if not parts and not query:
+            # List all docs grouped by directory
+            by_dir: dict[str, list] = {}
+            for path, doc in srv.dev_reference_docs.items():
+                d = doc["directory"]
+                if d not in by_dir:
+                    by_dir[d] = []
+                by_dir[d].append({"filename": doc["filename"], "path": path, "size": doc["size"]})
+            return {
+                "directories": sorted(by_dir.keys()),
+                "count": len(srv.dev_reference_docs),
+                "docs_by_directory": {k: by_dir[k] for k in sorted(by_dir.keys())},
+            }
+
+        if not parts and query:
+            # Search across all docs
+            results = []
+            for path, doc in srv.dev_reference_docs.items():
+                if query in doc["content"].lower():
+                    # Find matching lines for context
+                    matching_lines = []
+                    for i, line in enumerate(doc["content"].splitlines(), 1):
+                        if query in line.lower():
+                            matching_lines.append({"line": i, "text": line.rstrip()})
+                    results.append({
+                        "path": path,
+                        "directory": doc["directory"],
+                        "match_count": len(matching_lines),
+                        "matches": matching_lines[:20],
+                    })
+            return {"query": query, "count": len(results), "results": results}
+
+        # /dev-docs/<path...> — reconstruct path from parts
+        req_path = "/".join(parts)
+
+        # Exact match
+        if req_path in srv.dev_reference_docs:
+            doc = srv.dev_reference_docs[req_path]
+            return {"path": doc["path"], "directory": doc["directory"], "content": doc["content"]}
+
+        # Try as directory — list all docs in that dir
+        matches = {
+            p: d for p, d in srv.dev_reference_docs.items()
+            if d["directory"] == req_path or d["directory"].startswith(req_path + "/")
+        }
+        if matches:
+            docs = []
+            for p, d in matches.items():
+                docs.append({"path": p, "filename": d["filename"], "size": d["size"]})
+            # If only one doc in the directory, return its content directly
+            if len(docs) == 1:
+                single = srv.dev_reference_docs[docs[0]["path"]]
+                return {"path": single["path"], "directory": single["directory"], "content": single["content"]}
+            return {"directory": req_path, "count": len(docs), "docs": docs}
+
+        raise srv.NotFound(f"No dev doc found for: {req_path}")
