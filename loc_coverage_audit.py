@@ -41,6 +41,9 @@ import re
 from dataclasses import dataclass, field
 from typing import Callable
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 @dataclass
 class LocFlag:
@@ -53,23 +56,9 @@ class LocFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[LocFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
-
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 # The Paradox parser wraps every assignment as `('=', value)`. Strip that
@@ -589,7 +578,7 @@ def _scan_category(
             missing_keys=missing,
             file=rel_p,
             line=line,
-            exemption=_parse_reviewed(comment),
+            exemption=parse_reviewed(comment),
         ))
     files_seen = {loc[0] for loc in locations.values()}
     return flags, files_seen
@@ -623,7 +612,7 @@ def _scan_je_outcomes(ms, mod_path: str) -> tuple[list[LocFlag], set[str]]:
         if name not in locations:
             continue
         rel_p, line, comment = locations[name]
-        flags.append(LocFlag(JE_OUTCOMES, name, found, rel_p, line, _parse_reviewed(comment)))
+        flags.append(LocFlag(JE_OUTCOMES, name, found, rel_p, line, parse_reviewed(comment)))
     return flags, {loc[0] for loc in locations.values()}
 
 
@@ -667,12 +656,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
 def strict_exit_code(result: AuditResult) -> int:
     """Exit status for `--strict` (CI mode): 1 if any flag lacks a
     `# REVIEWED` exemption."""
-    return 1 if any(not f.exemption for f in result.flags) else 0
+    return 1 if result.failed else 0
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Localization coverage audit report",
@@ -788,12 +777,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "loc_coverage_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "loc_coverage_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.coverage.get("files_audited", 0),
         "by_category": result.coverage.get("by_category", {}),
@@ -803,18 +789,21 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    # CLI entry: run against the live mod state.
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    import mod_state_server
-    # Vanilla from where a server load takes it (the vanilla_parsed/ snapshot
-    # without a game install), and the English loc loaded, as the server loads
-    # it: a bare ModState has none, so every entity false-flags.
-    ms = mod_state_server.cli_mod_state()
-    result = audit(ms, mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(strict_exit_code(result))
+
+    def run(args) -> AuditResult:
+        import mod_state_server
+        # Vanilla from where a server load takes it (the vanilla_parsed/ snapshot
+        # without a game install), and the English loc loaded, as the server loads
+        # it: a bare ModState has none, so every entity false-flags.
+        return audit(mod_state_server.cli_mod_state(), mod_path=mod_path)
+
+    return cli_main(run, lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

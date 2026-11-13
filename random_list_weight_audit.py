@@ -34,8 +34,10 @@ from __future__ import annotations
 
 import os
 import re
-import sys
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main
 
 
 @dataclass
@@ -47,9 +49,18 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
+
+    @property
+    def unreviewed(self) -> list[Flag]:
+        """Every flag: the audit takes no suppression comment."""
+        return list(self.flags)
+
+    @property
+    def exemptions(self) -> list[Flag]:
+        return []
 
 
 _TOKEN_RE = re.compile(r'"[^"\n]*"|[{}]|\?=|[<>!=]=?|[^\s{}<>!=?"]+')
@@ -133,14 +144,11 @@ def render(result: AuditResult) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    argv = sys.argv[1:] if argv is None else argv
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    """Print the flags; `--strict` exits 1 on any."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render(result))
-    if "--strict" in argv:
-        return 1 if result.flags else 0
-    return 0
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render(result),
+                    argv=argv, description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on any flag.")
 
 
 if __name__ == "__main__":

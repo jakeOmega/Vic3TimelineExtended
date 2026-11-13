@@ -372,7 +372,8 @@ class SuppressionTests(unittest.TestCase):
         out = parse_reviewed_comment(
             '# REVIEWED 2026-05-08: testing the suppression flow'
         )
-        self.assertEqual(out, {"date": "2026-05-08", "rationale": "testing the suppression flow"})
+        self.assertEqual(out, {"date": "2026-05-08", "tag": "",
+                               "rationale": "testing the suppression flow"})
 
     def test_parse_reviewed_missing_date(self):
         # Date must be YYYY-MM-DD; bare REVIEWED rejects.

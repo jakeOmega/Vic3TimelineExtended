@@ -6,9 +6,12 @@ flat-staff-design.md) asks for 1,000 engineers a building, and the game hires sm
 groups unevenly. Like the Grid Transfer Station (power_grid_pms.txt), the crew's job
 is made very attractive (`building_job_attractiveness_mult`) so it fills and stays.
 The engine logs nothing for a crew that never fills, so a method added or split later
-has to carry the line too. That holds for any robotic or AI-managed method
-(`building_robotic_or_ai_managed_bool`) with a flat crew, such as the Trade Center's
-Autonomous Logistics, not only the `pm_ai_managed_*` ones.
+has to carry the line too. That holds for every method in extra_pms.txt with a flat crew:
+the `pm_ai_managed_*` ones, other robotic or AI-managed methods such as the Trade
+Center's Autonomous Logistics, the low-staff methods given a crew of 1,000 in their place
+(owner, 2026-11-13, test_flat_crews.py; Bespoke Alloys, Programmable Plastics and Paper,
+Artificial Personalities and 3D Printed Buildings' copy are unmarked for the Automation
+Policy), and the Extraplanetary Base's crews.
 
 Run: python3 test_ai_managed_flat_staff.py
 """
@@ -20,7 +23,6 @@ from paradox_file_parser import ParadoxFileParser
 REPO = os.path.dirname(os.path.abspath(__file__))
 PMS = os.path.join(REPO, "common", "production_methods", "extra_pms.txt")
 MIN_ATTRACTIVENESS = 5  # +500%, as pm_grid_transfer_base
-MARKER = "building_robotic_or_ai_managed_bool"
 
 
 def _unwrap(value):
@@ -31,8 +33,7 @@ def _unwrap(value):
 
 
 def _flat_crew_methods():
-    """{method: its unscaled block} for each pm_ai_managed_* or marked method that
-    hires in unscaled."""
+    """{method: its unscaled block} for each method that hires in unscaled."""
     parser = ParadoxFileParser()
     parser.parse_file(PMS)
     methods = {}
@@ -42,7 +43,7 @@ def _flat_crew_methods():
             continue
         modifiers = _unwrap(body.get("building_modifiers"))
         unscaled = _unwrap(modifiers.get("unscaled")) if isinstance(modifiers, dict) else None
-        if not isinstance(unscaled, dict) or not (name.startswith("pm_ai_managed_") or MARKER in unscaled):
+        if not isinstance(unscaled, dict):
             continue
         if any(
                 key.startswith("building_employment_") for key in unscaled):
@@ -57,9 +58,11 @@ class FlatCrewAttractivenessTest(unittest.TestCase):
 
     def test_the_flat_crew_methods_are_found(self):
         # Fab, chemical, explosives, arms, artillery, munition x2, motor x2, tooling x2, power x4,
-        # and the Trade Center's Autonomous Logistics.
-        self.assertGreaterEqual(len(self.methods), 16, sorted(self.methods))
-        self.assertIn("pm_trade_center_trade_quantity_advanced_4", self.methods)
+        # the Trade Center's Autonomous Logistics, the 2026-11-13 low-staff methods (21) and the
+        # Extraplanetary Base's five.
+        self.assertGreaterEqual(len(self.methods), 35, sorted(self.methods))
+        for name in ("pm_trade_center_trade_quantity_advanced_4", "pm_bespoke_alloys", "pm_space_mine"):
+            self.assertIn(name, self.methods)
 
     def test_every_flat_crew_is_a_very_attractive_job(self):
         for name, unscaled in sorted(self.methods.items()):

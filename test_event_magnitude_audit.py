@@ -119,6 +119,13 @@ class SuppressionCommentTests(unittest.TestCase):
         line = "    multiplier = 2000  # just a regular comment"
         self.assertIsNone(parse_reviewed_comment(line))
 
+    def test_old_name_keeps_its_shape(self):
+        """`mod_state_server`'s event-balance scan returns this dict as it is,
+        so the old name keeps `{date, rationale}`; the audit's own exemptions
+        come from `audit_common.parse_reviewed`, with `tag`."""
+        line = "x = 1 # REVIEWED 2026-05-04: why"
+        self.assertEqual(parse_reviewed_comment(line), {"date": "2026-05-04", "rationale": "why"})
+
 
 class DirectEffectScannerTests(unittest.TestCase):
     def test_flags_literal(self):
@@ -427,7 +434,7 @@ class StandaloneStateTests(unittest.TestCase):
             self._mod(tmp, "\t# REVIEWED 2026-11-12: shown, not applied")
             flags = audit(mod_path=tmp).flags
         self.assertEqual([f.exemption for f in flags],
-                         [{"date": "2026-11-12", "rationale": "shown, not applied"}])
+                         [{"date": "2026-11-12", "tag": "", "rationale": "shown, not applied"}])
 
 
 class ReportRenderTests(unittest.TestCase):

@@ -25,6 +25,9 @@ import re
 from dataclasses import dataclass, field
 from typing import Callable
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 @dataclass(frozen=True)
 class ResourceMeta:
@@ -128,21 +131,20 @@ def _is_literal_number(token: str) -> bool:
         return False
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
-
 def parse_reviewed_comment(line: str) -> dict | None:
     """Look for `# REVIEWED YYYY-MM-DD: rationale` on the given line.
 
     Returns {date, rationale} or None. Both date and rationale are required
     so that suppressions stay accountable — drive-by `# REVIEWED` doesn't work.
+
+    `audit_common.parse_reviewed` reads it; this keeps the old name and shape
+    (no `tag`) for `mod_state_server`'s event-balance scan, which returns the
+    dict as it is.
     """
-    m = _REVIEWED_RE.search(line)
-    if not m:
+    rev = parse_reviewed(line)
+    if rev is None:
         return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+    return {"date": rev["date"], "rationale": rev["rationale"]}
 
 
 def find_event_id_at_line(text: str, line_no: int) -> str | None:
@@ -251,7 +253,7 @@ def scan_named_modifiers(
 
         anchor_line = _offset_to_line(line_starts, anchor_offset)
         line_text = lines[anchor_line - 1] if 0 < anchor_line <= len(lines) else ""
-        exemption = parse_reviewed_comment(line_text)
+        exemption = parse_reviewed(line_text)
 
         for field_name, field_value, meta in fast_fields:
             shown = display_value if mult_m else f"{field_name}={field_value} (in {name})"
@@ -300,7 +302,7 @@ def scan_inline_modifier_types(text: str, file_path: str) -> list[AuditFlag]:
                 value=value,
                 resource=meta.resource,
                 fix_hint=meta.fix_hint,
-                exemption=parse_reviewed_comment(line),
+                exemption=parse_reviewed(line),
             ))
     return flags
 
@@ -328,7 +330,7 @@ def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
                 value=value,
                 resource=meta.resource,
                 fix_hint=meta.fix_hint,
-                exemption=parse_reviewed_comment(line),
+                exemption=parse_reviewed(line),
             ))
     return flags
 
@@ -339,7 +341,7 @@ def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[AuditFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
@@ -438,8 +440,8 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
 
 def render_report(result: AuditResult) -> str:
     """Render a markdown report. Top section is the actionable inbox."""
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Event magnitude audit report",
@@ -518,12 +520,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "event_magnitude_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
-    unrev = sum(1 for f_ in result.flags if not f_.exemption)
-    exemp = sum(1 for f_ in result.flags if f_.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "event_magnitude_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.coverage.get("files_audited", 0),
         "total_flags": len(result.flags),
@@ -532,12 +531,13 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

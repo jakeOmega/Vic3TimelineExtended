@@ -45,8 +45,10 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
-from prev_scope_audit import _TOKEN_RE, _is_scope_change, _parse_reviewed, load_links
+from prev_scope_audit import _TOKEN_RE, _is_scope_change, load_links
 
 # Directories scanned, relative to the mod root: every scripted surface.
 AUDIT_DIRS = ("common", "events")
@@ -104,7 +106,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
     container_var_names: int = 0
@@ -232,8 +234,8 @@ def evaluate(scans: list[ScanResult]) -> list[Flag]:
                 time_key=ts.time_key,
                 reason=reason,
                 exemption=(
-                    _parse_reviewed(scan.comments.get(ts.line))
-                    or _parse_reviewed(scan.comments.get(ts.time_line))
+                    parse_reviewed(scan.comments.get(ts.line))
+                    or parse_reviewed(scan.comments.get(ts.time_line))
                 ),
             ))
     return flags
@@ -279,8 +281,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Container timed variable audit report",
@@ -352,27 +354,23 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "container_timed_variable_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "container_timed_variable_report.md"), report)
     return {
         "files_audited": result.files_audited,
         "container_var_names": result.container_var_names,
         "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": exemp,
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
