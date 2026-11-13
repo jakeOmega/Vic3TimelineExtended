@@ -85,7 +85,7 @@ class FlagTests(_Fixture):
         self.assertEqual([(f.key, f.length, f.gui_files) for f in r.flags],
                          [("te_long_tt", THRESHOLD + 1, ["gui/te_test.gui"])])
         self.assertEqual(r.flags[0].loc_line, 2)
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_at_threshold_passes(self):
         self.loc(f'te_tt:0 "{"x" * THRESHOLD}"')
@@ -172,22 +172,22 @@ class SuppressionTests(_Fixture):
         self.gui('widget = { tooltip = "te_tt" }\n')
         r = audit(self.root)
         self.assertEqual(len(r.flags), 1)
-        self.assertEqual(r.flags[0].exemption, {"date": "2026-10-27", "rationale": "a reference card"})
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(r.flags[0].exemption, {"date": "2026-10-27", "tag": CHECK, "rationale": "a reference card"})
+        self.assertEqual(len(r.failing), 0)
 
     def test_stale_tag_fails(self):
         self.loc(f'te_tt:0 "short" # REVIEWED 2026-10-27 ({CHECK}): was long')
         self.gui('widget = { tooltip = "te_tt" }\n')
         r = audit(self.root)
-        self.assertEqual([(t.key, t.line) for t in r.stale_tags], [("te_tt", 2)])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual([(t.key, t.line) for t in r.stale], [("te_tt", 2)])
+        self.assertEqual(len(r.failing), 1)
 
     def test_tag_for_another_check_does_not_exempt(self):
         self.loc(f'te_tt:0 "{LONG}" # REVIEWED 2026-10-27 (loc_script_value): other')
         self.gui('widget = { tooltip = "te_tt" }\n')
         r = audit(self.root)
         self.assertIsNone(r.flags[0].exemption)
-        self.assertEqual(r.stale_tags, [])
+        self.assertEqual(r.stale, [])
 
     def test_tag_on_an_overridden_copy_is_stale(self):
         self.loc(f'te_tt:0 "{LONG}" # REVIEWED 2026-10-27 ({CHECK}): first copy', name="a_l_english.yml")
@@ -195,7 +195,7 @@ class SuppressionTests(_Fixture):
         self.gui('widget = { tooltip = "te_tt" }\n')
         r = audit(self.root)
         self.assertIsNone(r.flags[0].exemption)
-        self.assertEqual(len(r.stale_tags), 1)
+        self.assertEqual(len(r.stale), 1)
 
 
 class CliTests(_Fixture):
@@ -245,7 +245,7 @@ class RepoTests(unittest.TestCase):
         from path_constants import mod_path
         result = audit(mod_path)
         self.assertEqual([f for f in result.flags if not f.exemption], [])
-        self.assertEqual(result.stale_tags, [])
+        self.assertEqual(result.stale, [])
 
     def test_ci_runs_it_strict(self):
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)

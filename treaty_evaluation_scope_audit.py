@@ -58,12 +58,13 @@ Neither expands a scripted trigger or value the block calls, so review what
 those read too. Suppress an intended read of check 2 with a trailing
 `# REVIEWED YYYY-MM-DD (treaty_scope): rationale` on the flagged line.
 """
-import argparse
 import re
 from bisect import bisect_right
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed
 from iterator_limit_audit import blank_comments_and_strings
 from paradox_file_parser import ParadoxFileParser
 
@@ -75,7 +76,7 @@ _TOKEN = re.compile(
 _SCOPE = re.compile(r"\bscope:[A-Za-z_][A-Za-z0-9_]*", re.IGNORECASE)
 _SAVE = re.compile(r"\bsave_(?:temporary_)?scope_as\s*=\s*([A-Za-z_][A-Za-z0-9_]*)")
 _KIND = re.compile(r'"?([^\s{}"]*)')
-_REVIEWED = re.compile(r"#\s*REVIEWED\s+\d{4}-\d{2}-\d{2}\s*\(treaty_scope\)\s*:\s*\S")
+CHECK = "treaty_scope"
 
 EVALUATION_CHANCE = "ai.evaluation_chance"
 
@@ -109,7 +110,12 @@ class Flag:
     scope: str
     block: str = EVALUATION_CHANCE
     kind: str | None = None
-    reviewed: bool = False
+    # Left out of the hash, so a flag stays hashable.
+    exemption: dict | None = field(default=None, hash=False)
+
+    @property
+    def reviewed(self) -> bool:
+        return bool(self.exemption)
 
     @property
     def message(self) -> str:
@@ -161,10 +167,10 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
                 name = scope.split(":", 1)[1].lower()
                 if name in saved or name not in _unbound(block, kind):
                     continue
-            reviewed = block != EVALUATION_CHANCE and bool(_REVIEWED.search(comments.get(line, "")))
+            exemption = None if block == EVALUATION_CHANCE else parse_reviewed(comments.get(line), (CHECK,))
             flags.append(Flag(rel_path, line, stack[0] if stack else "?", scope, block,
                               kind if block in _RATIFY_BLOCKS else None,
-                              reviewed))
+                              exemption))
         pending.clear()
 
     for token in _TOKEN.finditer(clean):
@@ -213,19 +219,29 @@ def unreviewed(flags: list[Flag]) -> list[Flag]:
     return [flag for flag in flags if not flag.reviewed]
 
 
+@dataclass
+class AuditResult(_AuditResult):
+    """`audit()`'s flags, for the command line."""
+
+    flags: list[Flag] = field(default_factory=list)
+
+
+def render(result: AuditResult) -> str:
+    failing = result.unreviewed
+    lines = [f"{flag.file}:{flag.line}: {flag.article}: {flag.message}" for flag in failing]
+    lines.append(f"Treaty evaluation scope audit: {len(failing)} invalid named-scope reads"
+                 f" ({len(result.exemptions)} reviewed)")
+    return "\n".join(lines)
+
+
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("--mod-path", type=Path, default=Path(__file__).resolve().parent)
-    parser.add_argument("--strict", action="store_true",
-                        help="Fail if an unsuppressed named-scope read is found")
-    args = parser.parse_args(argv)
-    flags = audit(args.mod_path)
-    failing = unreviewed(flags)
-    for flag in failing:
-        print(f"{flag.file}:{flag.line}: {flag.article}: {flag.message}")
-    print(f"Treaty evaluation scope audit: {len(failing)} invalid named-scope reads"
-          f" ({len(flags) - len(failing)} reviewed)")
-    return int(args.strict and bool(failing))
+    def add_arguments(parser):
+        parser.add_argument("--mod-path", type=Path, default=Path(__file__).resolve().parent)
+
+    return cli_main(lambda args: AuditResult(flags=audit(args.mod_path)),
+                    lambda result, args: render(result),
+                    argv=argv, description=__doc__.split("\n\n")[0], add_arguments=add_arguments,
+                    strict_help="Fail if an unsuppressed named-scope read is found")
 
 
 if __name__ == "__main__":

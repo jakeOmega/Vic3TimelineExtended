@@ -269,7 +269,7 @@ class SuppressionTests(_Fixture):
                  '}\n')
         r = audit(self.root)
         flags = [f for f in r.flags if f.check == "missing_reason"]
-        self.assertEqual(flags[0].exemption, {"date": "2026-10-27", "rationale": "obvious"})
+        self.assertEqual(flags[0].exemption, {"date": "2026-10-27", "tag": "missing_reason", "rationale": "obvious"})
 
     def test_raw_condition_tag_on_the_block_line_and_stale_tags(self):
         _write(self.root, "common/scripted_buttons/te_test_buttons.txt", BUTTONS.replace(
@@ -281,7 +281,7 @@ class SuppressionTests(_Fixture):
         r = audit(self.root)
         button = [f for f in r.flags if f.owner == "te_button possible"][0]
         self.assertEqual(button.exemption["rationale"], "debug only")
-        self.assertEqual([(t.check, t.line) for t in r.stale_tags], [("raw_condition", 9)])
+        self.assertEqual([(t.check, t.line) for t in r.stale], [("raw_condition", 9)])
 
     def test_a_tag_for_the_other_check_is_stale(self):
         self.gui('button = {\n'
@@ -289,7 +289,7 @@ class SuppressionTests(_Fixture):
                  '}\n')
         r = audit(self.root)
         self.assertIsNone([f for f in r.flags if f.check == "missing_reason"][0].exemption)
-        self.assertEqual([(t.check, t.file) for t in r.stale_tags], [("raw_condition", "gui/te_test.gui")])
+        self.assertEqual([(t.check, t.file) for t in r.stale], [("raw_condition", "gui/te_test.gui")])
 
 
 class CliTests(_Fixture):
@@ -323,7 +323,7 @@ class RepoTests(unittest.TestCase):
         from path_constants import mod_path
         result = audit(mod_path)
         self.assertEqual([f for f in result.flags if not f.exemption], [])
-        self.assertEqual(result.stale_tags, [])
+        self.assertEqual(result.stale, [])
 
     def test_ci_runs_it_strict(self):
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
