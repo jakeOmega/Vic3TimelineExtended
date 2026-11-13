@@ -382,7 +382,9 @@ intelligence_capacity_total = {
 }
 
 # Relative IC: your IC as a percentage of the global best
-# global_max_ic is set each month by the JE monthly pulse (ordered_country)
+# global_max_ic is set about once a month, by the first JE monthly pulse after
+# iw_max_ic_lock lapses (ordered_country). A country that outgrows it before the
+# next census reads 100.
 intelligence_capacity_relative = {
 	value = intelligence_capacity_total
 	divide = {

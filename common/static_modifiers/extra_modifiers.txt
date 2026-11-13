@@ -8286,7 +8286,8 @@ te_mon_peg_devaluation_pressure = {
 # country_sol_expectations_lower_offset_add is consumed CONTINUOUSLY, which is
 # why it works where the SoL key does not. It is summed into
 # sol_expectations_lower_shift_value (common/script_values/extra_script_values.txt),
-# which is then the `multiplier` on sol_expectations_lower_strata_shift — a
+# stored each month in sol_expectations_lower_shift_applied, which is then the
+# `multiplier` on sol_expectations_lower_strata_shift — a
 # unit modifier carrying state_lower_strata_expected_sol_add = 1
 # (common/scripted_effects/sol_expectations_effects.txt). Vanilla ships
 # fractional values on that same expected-SoL key from its tax modifiers

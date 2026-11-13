@@ -19,7 +19,18 @@ te_update_local_climate_modifier = {
 	remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort }
 	remove_modifier_if_exists_effect = { MODIFIER = local_climate_amenity }
 	set_variable = { name = te_climate_penalty_applied value = te_climate_penalty }
-	set_variable = { name = te_climate_bonus_applied value = te_climate_bonus }
+	# te_climate_bonus is the penalty's negative part as a positive percent, read here from the
+	# penalty just stored: evaluating it would compute the penalty again, a pass over eight
+	# state_region chains on every state each year (a third of this refresh's time in a 1931
+	# game, docs/audits/late_game_performance.md).
+	set_variable = {
+		name = te_climate_bonus_applied
+		value = {
+			value = var:te_climate_penalty_applied
+			multiply = -1
+			min = 0
+		}
+	}
 	set_variable = { name = te_climate_base_penalty value = te_climate_penalty_raw }
 	if = {
 		limit = { var:te_climate_penalty_applied > 0.5 }

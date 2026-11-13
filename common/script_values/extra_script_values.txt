@@ -1580,11 +1580,18 @@ tmp_tst = {
 	value = var:arable_land_added
 }
 
+# State scope. The land this system has added to the state's region, summed over
+# the region's states with the state's owner. It names the state it was asked
+# about, not ROOT: building ai_values and other callers evaluate it with a ROOT
+# that has no owner, and `owner = ROOT.owner` logged about 5,700 errors at each
+# month start and read 0 for them (#1703). Vanilla's state_infamy_base saves its
+# scope the same way.
 same_owner_state_region_arable_land_added = {
 	value = 0
+	save_temporary_scope_as = te_arable_land_state
 	state_region = {
 		every_scope_state = {
-			limit = { owner = ROOT.owner }
+			limit = { owner = scope:te_arable_land_state.owner }
 			if = {
 				limit = { has_variable = arable_land_added }
 				add = var:arable_land_added
