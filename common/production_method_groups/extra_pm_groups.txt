@@ -14,6 +14,7 @@ INJECT:pmg_automation_building_food_industry = {
 	production_methods = {
 		pm_mass_produced_packaged_food
 		pm_robotic_food_processing
+		pm_robotic_food_processing_synthesis
 	}
 }
 INJECT:pmg_base_building_textile_mill = {
@@ -1433,6 +1434,7 @@ REPLACE_OR_CREATE:pmg_construction_automation = {
 		pm_tower_cranes
 		pm_computer_aided_design
 		pm_3d_printed_buildings
+		pm_3d_printed_buildings_nanomaterial
 	}
 }
 

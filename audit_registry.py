@@ -17,7 +17,7 @@ by hand reads this table instead:
   figures. Two PRs that each add an audit raise a figure to the same value,
   and git merges the identical edits without a conflict, one short (#1695).
 * `test_audit_registry.py` holds it to `POST_LOAD_AUDITS` in
-  `mod_state_server.py` and to the `*_audit.py` files on disk.
+  `server/post_load.py` and to the `*_audit.py` files on disk.
 
 Adding an audit: write the module (on `audit_common.py`) and its test, add it
 to `POST_LOAD_AUDITS` if a reload should run it, add one `Audit(...)` here, and run
@@ -97,9 +97,11 @@ AUDITS: tuple[Audit, ...] = (
     # --- script: syntax the engine reads differently from how it looks -------
     Audit(
         "any_limit_audit",
-        "An `any_*` trigger with a `limit = { }` child. `any_*` takes its conditions directly; the engine "
-        "rejects the block.",
-        where="trailing on the `any_*` opener line or on the `limit = {` line",
+        "An `any_*` trigger with a `limit = { }` child, an `always = no` child, or a `filter = { }` child "
+        "with neither `percent` nor `count = all` beside it. `any_*` takes its conditions directly; the "
+        "engine rejects a `limit`, matches nothing against `always = no`, and fails a `filter` with a plain "
+        "count at load.",
+        where="trailing on the `any_*` opener line, or on the `limit = {`, `always = no` or `filter = {` line",
     ),
     Audit(
         "iterator_limit_audit",
@@ -493,7 +495,6 @@ AUDITS: tuple[Audit, ...] = (
         "localization_accessor_audit",
         "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. The engine "
         "renders it as nothing.",
-        ci=(),
         where="trailing on the loc line",
         note="The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's "
              "loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing "
@@ -558,7 +559,7 @@ def post_load_audits() -> tuple[Audit, ...]:
 # --- the figures python_tools.md spells out (#1695) ---------------------------
 
 TOOLS_DOC_PATH = os.path.join("docs", "guides", "python_tools.md")
-SERVER_PATH = "mod_state_server.py"
+ROSTER_PATH = os.path.join("server", "post_load.py")  # POST_LOAD_REGENERATORS, POST_LOAD_AUDITS
 
 _ONES = ("zero one two three four five six seven eight nine ten eleven twelve thirteen "
          "fourteen fifteen sixteen seventeen eighteen nineteen").split()
@@ -597,7 +598,7 @@ def _named(text: str) -> list[str]:
 
 def _rosters() -> dict[str, list[str]]:
     from scripts.analysis.check_post_load_rosters import extract_rosters
-    return extract_rosters(os.path.join(REPO_ROOT, SERVER_PATH))
+    return extract_rosters(os.path.join(REPO_ROOT, ROSTER_PATH))
 
 
 def _ci_only() -> list[Audit]:
@@ -866,7 +867,7 @@ def render_markdown() -> str:
         "exits 1 on an unreviewed flag or a stale tag. A reload audit also needs "
         "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array "
         "(`audit_common.summary` builds it).",
-        "2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.",
+        "2. Add it to `POST_LOAD_AUDITS` in `server/post_load.py` if a reload should run it.",
         "3. Add one `Audit(...)` entry to `audit_registry.py`, with `builds_mod_state=True` if its "
         "command line builds a `ModState`.",
         "4. Run `python3 audit_registry.py --write` and commit this file with the rest. It also "

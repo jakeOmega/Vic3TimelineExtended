@@ -422,7 +422,7 @@ class ExemptionTests(unittest.TestCase):
         ))
         self.assertEqual([(f.name, f.category) for f in res.flags],
                          [("part", OTHER_GUARD), ("other", OTHER_GUARD)])
-        self.assertEqual(_names(res.exempted), ["part"])
+        self.assertEqual(_names(res.exemptions), ["part"])
         self.assertEqual(_names(res.warnings), ["other"])
         self.assertEqual(res.unreviewed, [])
 

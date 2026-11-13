@@ -62,6 +62,8 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
 from iterator_limit_audit import (
     ITERATOR_PROPERTY_KEYS,
     SCALAR_ITERATOR_PROPERTY_KEYS,
@@ -111,9 +113,6 @@ _DISPLAY_ONLY_KEYS = {"custom_tooltip", "custom_description", "show_as_tooltip"}
 
 _EVENT_ID_RE = re.compile(r"^[A-Za-z_][\w]*\.\d+$")
 _CONSOLE_FILE_RE = re.compile(r"^te_debug_")
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # A closing brace, a `key <op> {` opener, a `key <op> value` statement (the
 # value consumed, so it is never re-read as a key), or an unattributed `{`
 # (`50 = {` inside a random_list).
@@ -156,28 +155,23 @@ class OptionFlag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
-    check: str
+class AuditResult(_AuditResult):
+    """`flags` holds both checks' flags; `block_flags` and `option_flags`
+    read them by kind. `stale` holds the tags that suppress nothing, each
+    `StaleTag.tag` naming its check."""
 
-
-@dataclass
-class AuditResult:
-    block_flags: list[BlockFlag] = field(default_factory=list)
-    option_flags: list[OptionFlag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
+    flags: list[BlockFlag | OptionFlag] = field(default_factory=list)
     files_audited: int = 0
     events_scanned: int = 0
     options_scanned: int = 0
 
     @property
-    def failing(self) -> int:
-        return (
-            sum(1 for f in self.block_flags if not f.exemption)
-            + sum(1 for f in self.option_flags if not f.exemption)
-            + len(self.stale_tags)
-        )
+    def block_flags(self) -> list[BlockFlag]:
+        return [f for f in self.flags if isinstance(f, BlockFlag)]
+
+    @property
+    def option_flags(self) -> list[OptionFlag]:
+        return [f for f in self.flags if isinstance(f, OptionFlag)]
 
 
 def parse_tree(text: str) -> tuple[list[Node], dict[int, str]]:
@@ -307,17 +301,14 @@ def option_executes(option: Node) -> bool:
 
 
 def _tag_lines(comments: dict[int, str]) -> dict[int, list[tuple[str, dict]]]:
-    """line -> [(check, {"date", "rationale"})] for this audit's checks."""
+    """line -> [(check, {"date", "tag", "rationale"})] for this audit's
+    checks. A comment suppresses a check's flag only if it names that check."""
     out: dict[int, list[tuple[str, dict]]] = {}
     for line, comment in comments.items():
-        m = _TAGGED_REVIEWED_RE.search(comment)
-        if not m:
-            continue
-        for chk in re.split(r"[\s,]+", m.group("checks").strip()):
-            if chk in CHECKS:
-                out.setdefault(line, []).append(
-                    (chk, {"date": m.group("date"), "rationale": m.group("rationale").strip()})
-                )
+        for chk in CHECKS:
+            tag = parse_reviewed(comment, (chk,))
+            if tag:
+                out.setdefault(line, []).append((chk, tag))
     return out
 
 
@@ -408,15 +399,15 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
                     options=in_events and not _CONSOLE_FILE_RE.match(fname),
                 )
                 result.files_audited += 1
-                result.block_flags.extend(blocks)
-                result.option_flags.extend(opts)
-                result.stale_tags.extend(stale)
+                result.flags.extend(blocks)
+                result.flags.extend(opts)
+                result.stale.extend(stale)
                 result.events_scanned += events
                 result.options_scanned += n_opts
 
-    result.block_flags.sort(key=lambda f: (f.file, f.line))
-    result.option_flags.sort(key=lambda f: (f.file, f.line))
-    result.stale_tags.sort(key=lambda s: (s.file, s.line))
+    # A stable sort: each kind keeps its own (file, line) order.
+    result.flags.sort(key=lambda f: (f.file, f.line))
+    result.stale.sort(key=lambda s: (s.file, s.line))
     return result
 
 
@@ -472,10 +463,10 @@ def render_report(result: AuditResult) -> str:
             out.append(f"- `{f.file}:{f.line}` — `{f.event_id}` option `{f.option}`")
         out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        for s in result.stale_tags:
-            out.append(f"- `{s.file}:{s.line}` ({s.check})")
+        for s in result.stale:
+            out.append(f"- `{s.file}:{s.line}` ({s.tag})")
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -504,7 +495,7 @@ def render_report(result: AuditResult) -> str:
         "",
         f"- empty blocks: {len(result.block_flags)} ({len(unrev_b)} unreviewed)",
         f"- no-effect options: {len(result.option_flags)} ({len(unrev_o)} unreviewed)",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     return "\n".join(out) + "\n"
@@ -515,16 +506,14 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "empty_effect_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "empty_blocks": len(result.block_flags),
         "no_effect_options": len(result.option_flags),
-        "stale_tags": len(result.stale_tags),
-        "exempted": sum(1 for f in result.block_flags + result.option_flags if f.exemption),
+        "stale_tags": len(result.stale),
+        "exempted": len(result.exemptions),
         # Coverage lives here (and in the server's "ok" log line), not in the
         # committed report, where it would re-diff on every new event.
         "files_audited": result.files_audited,
@@ -534,13 +523,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks its
+    check-tagged `# REVIEWED` comment, or any such tag suppresses nothing."""
     from path_constants import mod_path
-    res = audit(mod_path=mod_path)
-    print(render_report(res))
-    # --strict: CI mode. Exit 1 if any flag lacks its check-tagged
-    # `# REVIEWED` comment, or any such tag suppresses nothing.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if res.failing else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda res, args: render_report(res),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

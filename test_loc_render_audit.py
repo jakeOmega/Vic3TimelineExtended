@@ -27,8 +27,8 @@ from loc_render_audit import (
     used_format_names,
     vanilla_format_names,
     _parse_loc_line,
-    _parse_reviewed,
 )
+from audit_common import parse_reviewed as _parse_reviewed
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 VANILLA_LOC_SNAPSHOT = os.path.join(REPO, "vanilla_parsed", "localization_english.json")

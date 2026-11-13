@@ -44,14 +44,15 @@ from __future__ import annotations
 
 import os
 import re
-import sys
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 REPORT = os.path.join("docs", "engine", "delayed_event_trigger_report.md")
 DELAY_KEYS = {"days", "months", "years"}
 
 _TOKEN_RE = re.compile(r'"[^"\n]*"|[{}]|\?=|[<>!=]=?|[^\s{}<>!=?"]+')
-_REVIEWED_RE = re.compile(r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<why>.+?)\s*$")
 _OPS = {"=", "?=", "<", ">", "<=", ">=", "!="}
 
 
@@ -165,11 +166,23 @@ class Target:
 
 
 @dataclass
-class AuditResult:
-    targets: list[Target] = field(default_factory=list)
+class AuditResult(_AuditResult):
+    # The flags are the delayed targets with a top-level trigger.
+    flags: list[Target] = field(default_factory=list)
     delayed_targets: int = 0  # every delayed target, with a trigger or not
     calls: int = 0
     unresolved: list[str] = field(default_factory=list)  # ids naming no mod event
+
+    @property
+    def targets(self) -> list[Target]:
+        """This audit's own name for `flags`."""
+        return self.flags
+
+    @property
+    def failing(self) -> list:
+        """Nothing: a report, not a gate, until the self-check
+        `delayed_trigger_queue_check` confirms the rule."""
+        return []
 
 
 def _defined_names(mod_path: str, sub: str) -> dict[str, Node]:
@@ -337,9 +350,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
             conditions=[c.canon() for c in trigger.children],
             calls=calls,
         )
-        m = _REVIEWED_RE.search(trigger.comment or "")
-        if m:
-            t.exemption = {"date": m.group("date"), "why": m.group("why")}
+        t.exemption = parse_reviewed(trigger.comment)
+        if t.exemption:
             t.cls = "reviewed"
         elif any(c.reason for c in calls):
             t.cls = "likely_false"
@@ -401,7 +413,7 @@ def render_report(result: AuditResult) -> str:
             out.append(f"### `{t.event}` ({kind}, `{t.file}`)")
             out.append("")
             if t.exemption:
-                out.append(f"**{t.exemption['date']}**: {t.exemption['why']}")
+                out.append(f"**{t.exemption['date']}**: {t.exemption['rationale']}")
                 out.append("")
             out.append("Trigger: " + "; ".join(f"`{_short(c)}`" for c in t.conditions))
             out.append("")
@@ -427,9 +439,7 @@ def regenerate(mod_state=None) -> dict:
     key: the list is not enforced until the rule is confirmed in game."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(os.path.join(mod_path, REPORT), render_report(result))
     return {
         "delayed_calls": result.calls,
         "with_trigger": len(result.targets),
@@ -438,17 +448,24 @@ def regenerate(mod_state=None) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    argv = sys.argv[1:] if argv is None else argv
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    """Print the report, or with `--write` write it. Exits 0: the report
+    fails nothing (`--strict` too, see `AuditResult.failing`)."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    report = render_report(result)
-    if "--write" in argv:
-        with open(os.path.join(mod_path, REPORT), "w", encoding="utf-8") as fh:
-            fh.write(report)
-    else:
-        print(report)
-    return 0
+
+    def add_arguments(parser) -> None:
+        parser.add_argument("--write", action="store_true",
+                            help=f"Write {REPORT} instead of printing it.")
+
+    def render(result: AuditResult, args) -> str | None:
+        report = render_report(result)
+        if args.write:
+            write_text(os.path.join(mod_path, REPORT), report)
+            return None
+        return report
+
+    return cli_main(lambda args: audit(mod_path=mod_path), render, argv=argv,
+                    description=__doc__.splitlines()[0], add_arguments=add_arguments,
+                    strict_help="Accepted like the other audits'; this report fails nothing.")
 
 
 if __name__ == "__main__":

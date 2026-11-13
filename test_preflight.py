@@ -49,6 +49,19 @@ class SelectionTests(unittest.TestCase):
         self.assertNotIn("tabs", ids)
         self.assertNotIn("audits", ids)
 
+    def test_a_server_route_module_runs_the_server_tests(self):
+        def tests_run(changed):
+            listed = "test_server_split.py\ntest_server_routes.py\ntest_query.py\ntest_paths.py\n"
+            with mock.patch.object(preflight, "git", side_effect=lambda *a: listed if a[0] == "ls-files" and "--others" not in a else ""), \
+                    mock.patch.object(preflight, "sh", side_effect=lambda c, argv: preflight.Result(True, " ".join(argv))):
+                result = preflight.check_tests(ctx(changed))
+            return [a for a in result.output.split() if a.startswith("test_")]
+        self.assertEqual(tests_run(["server/routes_entities.py"]),
+                         ["test_query.py", "test_server_routes.py", "test_server_split.py"])
+        self.assertEqual(tests_run(["mod_state_server.py"]),
+                         ["test_query.py", "test_server_routes.py", "test_server_split.py"])
+        self.assertEqual(tests_run(["paths.py"]), ["test_paths.py"])
+
     def test_script_change_runs_the_audits(self):
         ids = [c.id for c in preflight.select(args(), ["events/banking_events.txt"])]
         self.assertIn("audits", ids)

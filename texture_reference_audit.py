@@ -209,6 +209,9 @@ import re
 import subprocess
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
+
 # Merge directives (`INJECT:x`, `REPLACE:x`, ...); `_final_definition` says
 # how the engine applies them.
 from paradox_file_parser import directive_prefixes
@@ -333,9 +336,6 @@ SKIP_KINDS = ("templated", "other_extension")
 # bare words, which stop at an operator character.
 _TOKEN_RE = re.compile(r'"[^"\n]*"?|#[^\n]*|\?=|[!<>=]=|[{}=<>!]|[^\s{}="#?<>!]+')
 _OPS = frozenset({"=", "?=", "==", "!=", "<", ">", "<=", ">="})
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 _ALIAS_RE = re.compile(r"[A-Za-z0-9_]+")
 _DLC_PATH_RE = re.compile(r"dlc/([^/]+)/(gfx/.+)", re.I)
 
@@ -363,12 +363,6 @@ class Skipped:
     key: str | None
     value: str
     kind: str  # SKIP_KINDS
-
-
-@dataclass
-class StaleTag:
-    file: str
-    line: int
 
 
 @dataclass
@@ -458,10 +452,9 @@ class AssetIndex:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     skipped: list[Skipped] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     files_audited: int = 0
     references_checked: int = 0
     resolved: dict[str, int] = field(default_factory=dict)  # mod / vanilla / alias
@@ -472,22 +465,13 @@ class AuditResult:
     vanilla_precedent: list[tuple[str, str, str]] = field(default_factory=list)
 
     @property
-    def failing(self) -> int:
-        """Flags `--strict` fails on: unexempted errors, plus stale tags."""
-        return (sum(1 for f in self.flags if f.kind in ERROR_KINDS and not f.exemption)
-                + len(self.stale_tags))
+    def failing(self) -> list:
+        """What `--strict` fails on: unexempted errors (a DLC-only warning is
+        not one), plus stale tags."""
+        return [f for f in self.flags if f.kind in ERROR_KINDS and not f.exemption] + list(self.stale)
 
 
 # --- scanning --------------------------------------------------------------
-
-def _parse_tag(comment: str) -> dict | None:
-    if "REVIEWED" not in comment:
-        return None
-    m = _TAGGED_REVIEWED_RE.search(comment)
-    if m and CHECK in re.split(r"[\s,]+", m.group("checks").strip()):
-        return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-    return None
-
 
 def iter_values(text: str):
     """Yield `(line, key, value)` for every scalar value in a Paradox script
@@ -518,7 +502,7 @@ def iter_tags(text: str):
         m = _TOKEN_RE.finditer(raw)
         for t in m:
             if t.group()[0] == "#":
-                tag = _parse_tag(t.group())
+                tag = parse_reviewed(t.group(), (CHECK,))
                 if tag:
                     yield lineno, tag
                 break
@@ -611,7 +595,7 @@ def scan_text(text: str, rel: str, index: AssetIndex, result: AuditResult,
         result.flags.append(Flag(rel, line, key, value, status, detail, exemption, fixed))
     if own:
         for line in sorted(set(tags) - used):
-            result.stale_tags.append(StaleTag(rel, line))
+            result.stale.append(StaleTag(rel, line, CHECK))
 
 
 # --- declarations ------------------------------------------------------------
@@ -1175,10 +1159,10 @@ def audit(mod_path: str | None = None, index: AssetIndex | None = None,
     check_declarations(defs, vanilla, tags, used, result)
     for rel in sorted(tags):
         for line in sorted(set(tags[rel]) - used[rel]):
-            result.stale_tags.append(StaleTag(rel, line))
+            result.stale.append(StaleTag(rel, line, CHECK))
     result.flags.sort(key=lambda f: (f.file, f.line, f.value))
     result.skipped.sort(key=lambda s: (s.file, s.line, s.value))
-    result.stale_tags.sort(key=lambda t: (t.file, t.line))
+    result.stale.sort(key=lambda t: (t.file, t.line))
     return result
 
 
@@ -1217,7 +1201,7 @@ def flag_dict(f: Flag) -> dict:
 def render_report(result: AuditResult) -> str:
     errors = [f for f in result.flags if f.kind in ERROR_KINDS and not f.exemption]
     warns = [f for f in result.flags if f.kind in WARN_KINDS and not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    exemp = result.exemptions
     out = [
         "# Texture reference audit report",
         "",
@@ -1274,9 +1258,9 @@ def render_report(result: AuditResult) -> str:
         out += [f"- `{f.file}:{f.line}` — {describe(f)}" for f in warns]
         out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -1330,7 +1314,7 @@ def render_report(result: AuditResult) -> str:
             f"- unreviewed errors: {len(errors)}",
             f"- unreviewed DLC-only: {len(warns)}",
             f"- exempted: {len(exemp)}",
-            f"- stale tags: {len(result.stale_tags)}"]
+            f"- stale tags: {len(result.stale)}"]
     out += [f"- skipped {k}: {sum(1 for s in result.skipped if s.kind == k)}" for k in SKIP_KINDS]
     out.append("")
     return "\n".join(out) + "\n"
@@ -1339,11 +1323,11 @@ def render_report(result: AuditResult) -> str:
 def summary(result: AuditResult) -> dict:
     return {
         # Unexempted errors, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "exempted": len(result.exemptions),
         "dlc_only": sum(1 for f in result.flags if f.kind == "dlc_only" and not f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "stale_tags": len(result.stale),
         **{f"skipped_{k}": sum(1 for s in result.skipped if s.kind == k) for k in SKIP_KINDS},
         "files_audited": result.files_audited,
         "references_checked": result.references_checked,
@@ -1362,54 +1346,64 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_path=mod_path)
     out_path = os.path.join(mod_path, REPORT_REL)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {**summary(result), "path": out_path}
 
 
+class _Exit(Exception):
+    """Ends `main` early with an exit code of its own: `--bootstrap`, or no
+    vanilla to resolve against (2)."""
+
+    def __init__(self, code: int):
+        super().__init__(code)
+        self.code = code
+
+
 def main(argv: list[str] | None = None) -> int:
-    import argparse
     import sys
 
-    ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
-    ap.add_argument("--strict", action="store_true",
-                    help="exit 1 on an unexempted error or a stale tag")
-    ap.add_argument("--bootstrap", action="store_true",
-                    help=f"list the game install and rewrite {CATALOG_REL} and the vanilla GUI file "
-                         "list (docs/engine/vanilla_gui_files.txt)")
-    ap.add_argument("--source", choices=("auto", "install", "catalog"), default="auto",
-                    help="where vanilla's files come from (default: the install if present)")
-    args = ap.parse_args(argv)
+    def add_arguments(ap):
+        ap.add_argument("--bootstrap", action="store_true",
+                        help=f"list the game install and rewrite {CATALOG_REL} and the vanilla GUI file "
+                             "list (docs/engine/vanilla_gui_files.txt)")
+        ap.add_argument("--source", choices=("auto", "install", "catalog"), default="auto",
+                        help="where vanilla's files come from (default: the install if present)")
 
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from path_constants import mod_path
+    def run(args) -> AuditResult:
+        from path_constants import mod_path
 
-    if args.bootstrap:
-        base = install_root()
-        if base is None:
-            print("no game install found (base_game_path/game/gfx); nothing to bootstrap from",
-                  file=sys.stderr)
-            return 2
-        print(bootstrap_catalog(base, mod_path))
-        # The same run lists vanilla's GUI files, which /gui/placeholder-textures needs to tell
-        # the mod's own widgets from its overrides of vanilla panels (#1484).
-        import gui_placeholder_textures
-        print(gui_placeholder_textures.bootstrap(base, mod_path, _game_version(base)))
-        return 0
+        if args.bootstrap:
+            base = install_root()
+            if base is None:
+                print("no game install found (base_game_path/game/gfx); nothing to bootstrap from",
+                      file=sys.stderr)
+                raise _Exit(2)
+            print(bootstrap_catalog(base, mod_path))
+            # The same run lists vanilla's GUI files, which /gui/placeholder-textures needs to tell
+            # the mod's own widgets from its overrides of vanilla panels (#1484).
+            import gui_placeholder_textures
+            print(gui_placeholder_textures.bootstrap(base, mod_path, _game_version(base)))
+            raise _Exit(0)
+        try:
+            return audit(mod_path=mod_path, source=args.source)
+        except FileNotFoundError as e:
+            print(f"texture_reference_audit: {e}", file=sys.stderr)
+            raise _Exit(2) from None
+
+    def render(result: AuditResult, args) -> None:
+        # The report, then where vanilla came from on stderr.
+        print(render_report(result))
+        note = f"(vanilla from the {result.source}"
+        if result.catalog_stale:
+            note += f"; {CATALOG_REL} differs from the install: run --bootstrap"
+        print(note + ")", file=sys.stderr)
+
     try:
-        result = audit(mod_path=mod_path, source=args.source)
-    except FileNotFoundError as e:
-        print(f"texture_reference_audit: {e}", file=sys.stderr)
-        return 2
-    print(render_report(result))
-    note = f"(vanilla from the {result.source}"
-    if result.catalog_stale:
-        note += f"; {CATALOG_REL} differs from the install: run --bootstrap"
-    print(note + ")", file=sys.stderr)
-    if args.strict:
-        return 1 if result.failing else 0
-    return 0
+        return cli_main(run, render, argv=argv, description=__doc__.split("\n", 1)[0],
+                        add_arguments=add_arguments,
+                        strict_help="exit 1 on an unexempted error or a stale tag")
+    except _Exit as done:
+        return done.code
 
 
 if __name__ == "__main__":

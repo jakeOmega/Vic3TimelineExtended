@@ -16,7 +16,7 @@
 # ungated first method, so no building is left without one. A new method
 # takes both lines, and its building joins te_ap_automatable_building;
 # test_automation_policy.py checks the two lines name the same methods, the
-# ladder, every group's fallback and the building list. The 40 methods:
+# ladder, every group's fallback and the building list. The 41 methods:
 #
 #   Factory automation, the robotic tier up (Robotics, era 8, and later):
 #     Tooling Workshop, Furniture Manufactory, Motor Industry: Robotic
@@ -25,7 +25,8 @@
 #       Systems (Supply Chain Management, above robotic assembly in the same
 #       group), Self-Optimizing Production.
 #     Aerospace Industry: Robotic Assembly Handling, AI-Optimized Operations.
-#     Food Industry: Robotic Food Processing.
+#     Food Industry: Robotic Food Processing (two copies: Programmable Food
+#       Synthesis has its own, with a flat crew).
 #   Factory automation, the AI-managed tier (Artificial General Intelligence):
 #     Arms Industry and Artillery Foundry, Munition Plant, Chemical Plant and
 #     the Synthetics Plants, Explosives Factory, Electronics (the fab), Textile

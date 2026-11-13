@@ -19,7 +19,7 @@ One comment on an event's opening line is read by every audit that reads that li
 
 | Audit | A flag means | Runs |
 |---|---|---|
-| `any_limit_audit` | An `any_*` trigger with a `limit = { }` child. `any_*` takes its conditions directly; the engine rejects the block. | CI, reload |
+| `any_limit_audit` | An `any_*` trigger with a `limit = { }` child, an `always = no` child, or a `filter = { }` child with neither `percent` nor `count = all` beside it. `any_*` takes its conditions directly; the engine rejects a `limit`, matches nothing against `always = no`, and fails a `filter` with a plain count at load. | CI, reload |
 | `iterator_limit_audit` | An iterator whose `limit = { }` is not its first child. The limit filters the whole iteration wherever it sits, so the lines written above it are gated by it too. | CI, reload |
 | `delayed_event_trigger_audit` | Not a gate: lists the events queued with a delay whose `trigger` may be false when queued, which seems to drop them (#1596), for the play-test that settles the rule. | reload |
 | `random_list_weight_audit` | A `trigger = { }` in a `random_list` branch's weight `modifier`: the engine rejects the token and the tilt is lost. Use `if = { limit = { ... } add = N }`; the `ai_chance` form is valid. | CI |
@@ -76,7 +76,7 @@ One comment on an event's opening line is read by every audit that reads that li
 
 | Audit | Comment | Where it goes |
 |---|---|---|
-| `any_limit_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the `any_*` opener line or on the `limit = {` line |
+| `any_limit_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the `any_*` opener line, or on the `limit = {`, `always = no` or `filter = {` line |
 | `iterator_limit_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the `limit = {` line or the iterator's opener line |
 | `delayed_event_trigger_audit` | `# REVIEWED YYYY-MM-DD: why` | trailing on the target event's `trigger = {` line |
 | `random_list_weight_audit` | none | Fix the flag. |
@@ -179,7 +179,7 @@ One comment on an event's opening line is read by every audit that reads that li
 | `loc_script_value_audit` | `python3 loc_script_value_audit.py --strict` | `docs/engine/loc_script_value_report.md` | The .gui half is gui_reference_audit's. |
 | `loc_root_context_audit` | `python3 loc_root_context_audit.py --strict` | `docs/engine/loc_root_context_report.md` | A reload leaves the public-tab kinds to this command and to `BindingTest` (`test_te_system_tab_bodies.py`), whose rules they are; it takes about 2.5 s without them, this command about 5 s. Each flag gives its path from the line that names the first key. |
 | `concept_reference_audit` | `python3 concept_reference_audit.py --strict` | `docs/engine/concept_reference_report.md` | Builds a ModState from vanilla_parsed/ (about 7 s). |
-| `localization_accessor_audit` | `python3 localization_accessor_audit.py` | `docs/engine/localization_accessor_report.md` | The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing (#348; its row in python_tools.md). |
+| `localization_accessor_audit` | `python3 localization_accessor_audit.py --strict` | `docs/engine/localization_accessor_report.md` | The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing (#348; its row in python_tools.md). |
 | `gui_reference_audit` | `python3 gui_reference_audit.py --strict` | `docs/engine/gui_reference_report.md` | Takes no suppression: fix the reference. Vanilla-unavailable categories and dynamic saved-scope bindings are warnings. |
 | `texture_reference_audit` | `python3 texture_reference_audit.py --strict` | `docs/engine/texture_reference_report.md` | Vanilla's files come from docs/engine/vanilla_asset_paths.txt, the mod's from `git ls-files gfx/`, so it runs in a checkout without gfx/. |
 | `long_tooltip_audit` | `python3 long_tooltip_audit.py --strict` | `docs/engine/long_tooltip_report.md` |  |
@@ -189,7 +189,7 @@ One comment on an event's opening line is read by every audit that reads that li
 ## Adding an audit
 
 1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit is the function that finds flags; `audit_common.py` gives it the rest: `parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that exits 1 on an unreviewed flag or a stale tag. A reload audit also needs `regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array (`audit_common.summary` builds it).
-2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.
+2. Add it to `POST_LOAD_AUDITS` in `server/post_load.py` if a reload should run it.
 3. Add one `Audit(...)` entry to `audit_registry.py`, with `builds_mod_state=True` if its command line builds a `ModState`.
 4. Run `python3 audit_registry.py --write` and commit this file with the rest. It also corrects the audit counts `docs/guides/python_tools.md` spells out, and prints what is left there for you to write: a CI audit's row in the command table, its row in the reload table, its name where a sentence lists audits by where they run.
 

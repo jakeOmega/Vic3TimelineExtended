@@ -4,6 +4,7 @@
 # PRODUCTION_METHODS
 #
  pm_3d_printed_buildings:0 "3D Printed Buildings"
+ pm_3d_printed_buildings_nanomaterial:0 "$pm_3d_printed_buildings$"
  pm_3d_printed_porcelain:0 "3D Printed Porcelain"
  pm_ablative_rockets:0 "Ablative Rockets"
  pm_academic_computing:0 "Academic Computing"
@@ -2144,6 +2145,7 @@
  pm_robotic_assembly_lines_building_motor_industry:0 "Robotic Assembly Lines"
  pm_robotic_assembly_lines_building_tooling_workshop:0 "Robotic Assembly Lines"
  pm_robotic_food_processing:0 "Robotic Food Processing"
+ pm_robotic_food_processing_synthesis:0 "$pm_robotic_food_processing$"
  pm_robotic_service_providers:0 "Robotic Service Providers"
  pm_robotic_ship_assembly:0 "Robotic Ship Assembly"
  pm_robots:0 "Robots"

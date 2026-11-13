@@ -29,7 +29,9 @@ from bisect import bisect_right
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from modifier_multiplier_var_audit import blank_comments_and_strings, _parse_reviewed
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+from modifier_multiplier_var_audit import blank_comments_and_strings
 from prev_scope_audit import load_links
 
 _TOKEN_RE = re.compile(
@@ -61,7 +63,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
@@ -189,7 +191,7 @@ def scan_nodes(nodes: list[Node], comments: dict[int, str],
                     flags.append(Flag(
                         node.file, mult.line, journal_entry, modifier, read,
                         source.file, source.line, chain,
-                        _parse_reviewed(comments.get(mult.line)),
+                        parse_reviewed(comments.get(mult.line)),
                     ))
         flags.extend(scan_nodes(node.children, comments, definitions, country_triggers,
                                 links, _scope(node.key, journal_entry, links)))
@@ -242,7 +244,7 @@ def scan_journal_entries(nodes: list[Node], comments: dict[int, str],
                     flags.append(Flag(
                         entry.file, value.line, entry.key, modifier, read,
                         source.file, source.line, chain,
-                        _parse_reviewed(comments.get(value.line)),
+                        parse_reviewed(comments.get(value.line)),
                     ))
     return flags
 
@@ -293,7 +295,7 @@ def render_report(result: AuditResult) -> str:
     ]
     for title, reviewed in (("Unreviewed Flags", False), ("Reviewed Exemptions", True)):
         out.extend((f"## {title}", ""))
-        flags = [f for f in result.flags if bool(f.exemption) == reviewed]
+        flags = result.exemptions if reviewed else result.unreviewed
         if not flags:
             out.append("_None._")
         for f in flags:
@@ -305,28 +307,26 @@ def render_report(result: AuditResult) -> str:
             out.append(row)
         out.append("")
     out.extend(("## Coverage", "", f"- total flags: {len(result.flags)}",
-                f"- unreviewed: {sum(not f.exemption for f in result.flags)}",
-                f"- exempted: {sum(bool(f.exemption) for f in result.flags)}", ""))
+                f"- unreviewed: {len(result.unreviewed)}",
+                f"- exempted: {len(result.exemptions)}", ""))
     return "\n".join(out)
 
 
 def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path)
-    out = Path(mod_path) / "docs/engine/je_multiplier_scope_report.md"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render_report(result), encoding="utf-8")
+    write_text(str(Path(mod_path) / "docs/engine/je_multiplier_scope_report.md"),
+               render_report(result))
     return {"files_audited": result.files_audited, "total_flags": len(result.flags),
-            "unreviewed": sum(not f.exemption for f in result.flags),
-            "exempted": sum(bool(f.exemption) for f in result.flags)}
+            "unreviewed": len(result.unreviewed),
+            "exempted": len(result.exemptions)}
 
 
 def main(argv: list[str] | None = None) -> int:
-    import sys
-    result = audit()
-    print(render_report(result))
-    strict = "--strict" in (sys.argv[1:] if argv is None else argv)
-    return int(strict and any(not f.exemption for f in result.flags))
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
+    return cli_main(lambda args: audit(), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

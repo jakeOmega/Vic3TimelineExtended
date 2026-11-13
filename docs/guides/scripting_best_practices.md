@@ -1175,7 +1175,7 @@ A permanent saved scope also blocks a temporary one of the same name. `save_temp
 
 **Silent-drop symptom**: a tooltip with missing chunks ("Norway will annex without war.") usually means a chain failed and the renderer chopped at the failure point, eating intermediate text. The engine doesn't log it, so static analysis is the only signal.
 
-**Audit**: `localization_accessor_audit.py` (in CI, and in `mod_state_server.py:POST_LOAD_AUDITS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass with `scripts/generators/fold_vanilla_loc_accessors.py` — vanilla loc is the authoritative source for what the engine accepts. The catalog holds what vanilla's loc calls, so an accessor the engine has and vanilla's loc never uses flags too: check it in the engine's data types and add it to the audit's hand table (`docs/guides/python_tools.md`, the audit's row).
+**Audit**: `localization_accessor_audit.py` (in CI, and in `POST_LOAD_AUDITS` in `server/post_load.py`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass with `scripts/generators/fold_vanilla_loc_accessors.py` — vanilla loc is the authoritative source for what the engine accepts. The catalog holds what vanilla's loc calls, so an accessor the engine has and vanilla's loc never uses flags too: check it in the engine's data types and add it to the audit's hand table (`docs/guides/python_tools.md`, the audit's row).
 
 ## Entity Name Keys Render as Raw Text: No Data Functions in Them
 
@@ -1451,6 +1451,7 @@ Don't apply ministry laws via broad filters like `is_country_type = recognized` 
 - **For `var:X` holding an object reference (country, character, state), `has_variable` is NOT sufficient — also add `exists = var:X`.** `has_variable` only confirms the variable was set; the referenced object can be destroyed (country annexed, character died) while the variable still points at the now-invalid index. The engine logs `Event target link 'var' returned an invalid object` + `save_scope_as effect [ Scoped object is not valid. Type: Country (NNN) ]` (with NNN = the dead object's index). Pattern: `limit = { has_variable = my_country  exists = var:my_country }`.
 - **A country with no states can stay in the game, so a per-country `capital = { }` or `market_capital.owner` needs `exists`.** A country that loses its last state while it is still at war stays in the game until that war ends (though `is_country_alive` is false for it, below), with no `capital` and no `market_capital`, and `every_country` pulses, journal entries and GUI rows still reach it. Every read logs `Event target link 'capital' returned an invalid object` (then the next link in the chain, then `Scoped object is not valid. Type: State NULL_STATE` for the effect inside). 2026-10-04: Khiva for about 70 game weeks, about 190 mod lines from the construction-market weekly pulse and the global-warming market-role row. Guard with `exists = capital` (vanilla does, `00_dynamic_country_names.txt`) or `exists = market_capital.owner`. Its interest groups lose their leaders too, so the same window shows `Could not get leader of interest group '…' in country '<name>'`, which is how to tell which country it is.
 - **Such a country's `capital` can also still resolve, to the state it lost, and it still takes decisions.** In the 2026-10-10 observer run Anhui (`game_over_date=1885.3.11` in the save, 0 states) kept `capital=925`, a state now another country's. `adopt_local_culture` was `is_shown = { NOT = { any_scope_state = { … } } }`, which is true for a country with no states, and its `possible` read that capital, so the AI took the decision every month for five game years while `add_primary_culture` / `remove_primary_culture` refused with `non existing country Anhui`. So `exists = capital` is not enough to know a country holds land; ask `is_country_alive = yes` ("at least one state on the map"), which the decision now does. The same goes for a diplomatic catalyst or `change_relations` aimed at such a country: the catalyst makes vanilla's AI strategies read its capital (`un_vote_relations_reachable`, 2026-10-10).
+- **An interest group's `leader = { }` is not fail-soft: write `leader ?= { }`.** An IG can be without a leader for months, in government too (a stateless country's groups, above; Pudukottai's Zamindars in 1938–1939). The bare link comes out false there, but every read logs `Could not get leader of interest group '<IG>' in country '<country>'` and `Event target link 'leader' returned an unset scope`. `irredentist_unifier_can_act` read it eleven times in one `OR` from a monthly pulse, 220 lines in nine game months (2026-11-12), under a comment that called it fail-soft. `leader ?= { OR = { has_ideology = … } }` reads the link once and logs nothing; the mod's 43 one-line `leader = { has_ideology … }` reads were converted that day. The one bare `leader = {` left is an effect in a vanilla journal entry the tax code restates as vanilla wrote it (`te_tax_vanilla_je_overrides.txt`).
 - **Pattern:**
   ```
   evaluation_chance = {
@@ -5683,13 +5684,19 @@ Probed on 1.15.0 with `-debug_mode`; the evidence and the rest of what the game 
 
 `list_scopes = yes` (and `show_trigger_per_scope = yes`) on an `any_*` trigger make its tooltip name the scopes it
 counted. Every vanilla use (`je_consolidate_colonial_rule`, `je_greek_nationalism`, the tsar scripted buttons) is a
-positive count: `count >= N`, `percent >= x` or `count = all`, with `filter = { ... }` saying which scopes are counted
-(`count = all` and `percent` count against the filtered set). Whether a count wrapped in `NOT = { }` lists anything is
+positive count: `count >= N`, `percent >= x` or `count = all`. `filter = { ... }` names the set that `count = all` and
+`percent` are measured against, and the engine takes it **only** with one of those two: `filter` beside `count >= N`
+fails at every load (`Filter should only be used if a percent or count = all is specified`, then `PostValidate of
+trigger 'any_country' returned false`), and what the trigger then does in play is unknown. A plain count puts its
+condition in the body instead. Whether a count wrapped in `NOT = { }` lists anything is
 untested, so a gate written "no great power that fails" (`NOT = { any_country = { <who> <fails> } }`) becomes
 `any_country = { filter = { <who> } <passes> count = all list_scopes = yes }`. Two things keep it exactly equal:
 put it under `trigger_if = { limit = { any_country = { <who> } } ... }`, since the NOT form passed over an empty set
-and what `count = all` does there is unverified; and "at most one fails" (`NOT = { ... count >= 2 }`) becomes
-`count >= <script value: the size of the set less one>`, since no vanilla trigger uses `count <`. The United Nations
+and what `count = all` does there is unverified; and "at most one fails" (`NOT = { ... count >= 2 }`) becomes a share,
+`percent >= <script value>`, since no vanilla trigger uses `count <` and `filter` refuses `count >=`. Set the share
+half a scope below "all but one", (M − 1.5) / M of M scopes, so it falls between the two shares the trigger can see and
+never rests on two divisions coming out equal (the first version used `count >=` and failed in game, 2026-11-12;
+`any_limit_audit` now flags it). The United Nations
 of Earth gates are the worked example (`formable_gating_triggers.txt`, `te_formation_gating_values.txt`), and
 `test_une_formation_gates.py` checks both forms against each other over random worlds. Whether a list survives inside
 `custom_tooltip = { text = ... }` is C10 (`docs/audits/vanilla_1_15_prep.md`), open.

@@ -388,9 +388,24 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   passing or failing on its own line; with the UN rule off, see whether the bloc-unanimity line inside its
   `custom_tooltip` lists them too (that answers C10). The Imperial Federation Act and the Civilizing Mission Compact
   list the overseas colonies under their four-colonies line. If a list shows every country or every state, add a
-  `filter` (UNE has one; the colony count doesn't). The logic is pinned offline (`test_une_formation_gates.py`), so
-  a gate that passes or fails differently from before means the engine reads `filter` or `count = all` otherwise
-  than vanilla's tsar buttons suggest.
+  `filter` (UNE has one; the colony count doesn't), but only beside `percent` or `count = all`: the engine refuses
+  `filter` with `count >= N` at load, so the four-colonies count can't take one as it stands. The logic is pinned
+  offline (`test_une_formation_gates.py`), so a gate that passes or fails differently from before means the engine
+  reads `filter`, `percent` or `count = all` otherwise than vanilla's tsar buttons suggest.
+  **2026-11-12:** the supermajority line shipped as `filter` with `count >= <value>`, which the engine refused at every
+  launch (`Filter should only be used if a percent or count = all is specified` and `PostValidate of trigger
+  'any_country' returned false` at `formable_gating_triggers.txt` lines 293 and 305, in error.log and debug.log);
+  what it did in play is unknown. It is now a share, `percent >=` half a great power below all but one. At the next
+  launch, check that neither line comes back, then read the supermajority line in the tooltip: it should say a share
+  of the other great powers and list them. Three once-a-game self-checks compare the gate with the count it replaced
+  on a real bloc leader with two or more other great powers (`common/on_actions/te_une_selfcheck_on_actions.txt`):
+  `TE_SELF_CHECK OK|BROKEN une_supermajority_pass` (at most one outside: both must pass), `une_supermajority_fail`
+  (exactly two outside: both must fail) and `une_supermajority_fail_wide` (three or more outside: the gate must fail;
+  this one fires in the first year of almost any game, the first two perhaps only near the endgame). A lone `_pass`
+  OK is no verdict, since an always-true gate prints it too: the gate reads right when `_pass` and one of the `_fail`
+  checks read OK, and `_fail_wide` OK alone already rules out an always-true gate. Any BROKEN: the engine reads
+  `filter` with `percent`, or the share, otherwise than modelled; go back to the `NOT` form, which counts right and
+  lists nothing.
 
 - **Treaty articles: `can_propose` and the lens (#1440).** In the treaty designer, add Extensive Modernization Aid
   before Modernization Aid, Joint Military Exercises before an alliance, and a Nuclear Guarantee before a Guarantee
@@ -414,6 +429,11 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   there), so every reparation is paid directly and neither verdict above can appear: fix the article's gate. Also check: the treaty shows in both countries' diplomacy panels, named and with the state or
   Reparations article; the treasuries move by the sum the option's tooltip showed, once; the state does not move
   back, and nothing is paid twice, if the treaty is later withdrawn.
+  **2026-11-12: `treaty_reparations` read OK** (a 1.15.1 game, launch of 21:13, 1938.6.3, `paid=12267`): a
+  Reparations treaty created in force runs its `on_entry_into_force`, so C21 is answered yes for `is_draft = no`.
+  The payer's name printed blank and the engine logged the line twice as a data error: the string read
+  `[ROOT.GetCountry…]`, which `debug_log` can't resolve. The five lines of the two checks now read `THIS` (the
+  event's country). `treaty_state_transfer` has not fired yet.
 
 ## 1.15.1 hotfix (2026-11-11)
 

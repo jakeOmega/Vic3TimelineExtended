@@ -173,7 +173,7 @@ class CleanTests(_Fixture):
     def test_the_fixture_is_clean(self):
         r = self.run_audit(public=FX_PUBLIC)
         self.assertEqual(self.flags(r), [])
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(len(r.failing), 0)
 
     def test_what_each_context_reaches(self):
         r = self.run_audit(public=FX_PUBLIC)
@@ -405,9 +405,9 @@ class TagTests(_Fixture):
         self.tags["fx_status_idle"] = f"# REVIEWED 2026-11-12 ({CHECK}): the entry is drawn by a widget only"
         r = self.run_audit(fx_status_idle="[Country.GetName] idles")
         self.assertEqual(self.flags(r), [(WIDGET_ROOT_IN_ENTRY, "fx_status_idle", ("Country.GetName",))])
-        self.assertEqual(r.flags[0].exemption, {"date": "2026-11-12",
+        self.assertEqual(r.flags[0].exemption, {"date": "2026-11-12", "tag": CHECK,
                                                 "rationale": "the entry is drawn by a widget only"})
-        self.assertEqual((r.failing, r.stale_tags), (0, []))
+        self.assertEqual((len(r.failing), r.stale), (0, []))
         report = render_report(r)
         self.assertIn("**2026-11-12**: the entry is drawn by a widget only", report)
         self.assertIn("- unreviewed: 0", report)
@@ -416,21 +416,21 @@ class TagTests(_Fixture):
         for tag in ("# REVIEWED 2026-11-12 (loc_script_value): other", "# REVIEWED 2026-11-12: plain"):
             self.tags["fx_status_idle"] = tag
             r = self.run_audit(fx_status_idle="[Country.GetName] idles")
-            self.assertEqual((r.failing, r.flags[0].exemption), (1, None), tag)
+            self.assertEqual((len(r.failing), r.flags[0].exemption), (1, None), tag)
 
     def test_a_tag_on_a_clean_key_is_stale(self):
         self.tags["fx_status_idle"] = f"# REVIEWED 2026-11-12 ({CHECK}, loc_script_value): nothing here"
         r = self.run_audit()
-        self.assertEqual([(t.file, t.line, t.key) for t in r.stale_tags],
+        self.assertEqual([(t.file, t.line, t.key) for t in r.stale],
                          [(LOC_FILE, self.line("fx_status_idle"), "fx_status_idle")])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
         self.assertIn(f"`{LOC_FILE}:{self.line('fx_status_idle')}` `fx_status_idle`", render_report(r))
 
     def test_a_tag_does_not_cover_a_public_panel_flag(self):
         self.tags["fx_public_label"] = f"# REVIEWED 2026-11-12 ({CHECK}): no"
         r = self.run_audit(public=FX_PUBLIC, fx_public_label="[JournalEntry.GetCountry.GetName]")
         self.assertIsNone(r.flags[0].exemption)
-        self.assertEqual(r.failing, 2, "the flag, and the tag that suppresses nothing")
+        self.assertEqual(len(r.failing), 2, "the flag, and the tag that suppresses nothing")
 
 
 class RunTests(_Fixture):
@@ -547,7 +547,7 @@ class RepoTests(unittest.TestCase):
 
     def test_the_mod_has_no_failing_flag(self):
         self.assertEqual([f for f in self.result.flags if not f.exemption], [])
-        self.assertEqual(self.result.stale_tags, [])
+        self.assertEqual(self.result.stale, [])
 
     def test_each_context_is_reached(self):
         """Guard the guard: a seed walk that found nothing would pass as clean."""
@@ -604,7 +604,7 @@ class RepoTests(unittest.TestCase):
     def test_post_load_roster_and_ci(self):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         self.assertIn("loc_root_context_audit", extract_rosters(
-            os.path.join(self.root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            os.path.join(self.root, "server", "post_load.py"))["POST_LOAD_AUDITS"])
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
         entry = audit_registry.get("loc_root_context_audit")
         self.assertEqual(entry.command, "python3 loc_root_context_audit.py --strict")

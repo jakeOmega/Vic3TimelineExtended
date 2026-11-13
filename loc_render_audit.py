@@ -165,6 +165,8 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import NamedTuple
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from mod_state import split_loc_line
 
 
@@ -182,15 +184,12 @@ class RenderFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[RenderFlag] = field(default_factory=list)
     loc_files_scanned: int = 0
     values_checked: int = 0
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # `[b] [i] [u]` and their closing forms, plus any other `[/x]` closing tag.
 # Valid Vic3 loc never opens a bare single-letter bracket nor uses a `[/` slash;
 # accessor chains are `[Scope.Method]` and concept links are `[concept_x]`.
@@ -641,15 +640,6 @@ def check_article_scope(value: str, article: str, suffix: str) -> list[tuple[str
     )]
 
 
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-
-
 def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
     """Returns (key, value, trailing-after-closing-quote) or None.
 
@@ -743,7 +733,7 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
             issues += check_article_scope(value, *article_text)
         if not issues:
             continue
-        exemption = _parse_reviewed(trailing)
+        exemption = parse_reviewed(trailing)
         for issue, detail in issues:
             flags.append(RenderFlag(
                 loc_key=loc_key,
@@ -774,8 +764,8 @@ _ISSUE_LABEL = {
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Localization render audit report",
@@ -872,12 +862,9 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "loc_render_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "loc_render_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "loc_files_scanned": result.loc_files_scanned,
         "values_checked": result.values_checked,
@@ -887,12 +874,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

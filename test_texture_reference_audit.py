@@ -116,7 +116,7 @@ class ResolutionTests(_Fixture):
             '}\n')})
         self.assertEqual(self.kinds(r), [("common/static_modifiers/m.txt", 2, "missing")])
         self.assertEqual(r.flags[0].key, "icon")
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_path_without_gfx_root_is_unrooted(self):
         r = self.run_audit({"events/e.txt": 'e.1 = { event_image = { texture = "interface/icons/a.dds" } }\n'})
@@ -140,7 +140,7 @@ class ResolutionTests(_Fixture):
             ("gfx/interface/icons/a.dds", "vanilla"), ("gfx/interface/icons/nope.dds", "missing")])
         self.assertIn("which resolves", tra.describe(r.flags[4]))
         self.assertIn("doesn't resolve either", tra.describe(r.flags[5]))
-        self.assertEqual(r.failing, 6)
+        self.assertEqual(len(r.failing), 6)
 
     def test_coat_of_arms_bare_names(self):
         r = self.run_audit({
@@ -178,7 +178,7 @@ class ResolutionTests(_Fixture):
             ("case_mismatch", "gfx/interface/icons/Mixed_Case.dds"),
             ("case_mismatch", "gfx/interface/icons/TE_Upper.dds"),
         ])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual(len(r.failing), 2)
 
     def test_dlc_only_warns_without_failing(self):
         r = self.run_audit({"events/e.txt": (
@@ -186,7 +186,7 @@ class ResolutionTests(_Fixture):
             '\tevent_image = { video = "gfx/event_pictures/dlc_video.bk2" }\n'
             '}\n')})
         self.assertEqual([(f.kind, f.detail) for f in r.flags], [("dlc_only", "dlc001_pack")])
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(len(r.failing), 0)
 
     def test_path_in_base_and_dlc_is_vanilla(self):
         r = self.run_audit({"common/x.txt": 'a = "gfx/interface/icons/a.dds"\n'})
@@ -311,9 +311,9 @@ class SuppressionTests(_Fixture):
         self.assertEqual([(f.line, bool(f.exemption)) for f in r.flags],
                          [(1, True), (2, False), (3, False)])
         self.assertEqual(r.flags[0].exemption,
-                         {"date": "2026-10-26", "rationale": "art lands in #9999"})
-        self.assertEqual(r.failing, 2)
-        self.assertEqual(r.stale_tags, [])
+                         {"date": "2026-10-26", "tag": "texture_reference", "rationale": "art lands in #9999"})
+        self.assertEqual(len(r.failing), 2)
+        self.assertEqual(r.stale, [])
 
     def test_tag_lines_count_newlines_only(self):
         # A stray form feed is a line break to str.splitlines(), not to the value scan.
@@ -321,21 +321,21 @@ class SuppressionTests(_Fixture):
             'a = 1 \x0c b = 2\n'
             'c = "gfx/nope.dds" # REVIEWED 2026-10-26 (texture_reference): art pending\n')})
         self.assertEqual([(f.line, bool(f.exemption)) for f in r.flags], [(2, True)])
-        self.assertEqual(r.stale_tags, [])
+        self.assertEqual(r.stale, [])
 
     def test_multi_check_tag(self):
         r = self.run_audit({"common/x.txt":
                             'a = "gfx/nope.dds" # REVIEWED 2026-10-26 (script_argument, texture_reference): both\n'})
         self.assertTrue(r.flags[0].exemption)
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(len(r.failing), 0)
 
     def test_stale_tag_fails(self):
         r = self.run_audit({"common/x.txt": (
             'a = "gfx/interface/icons/a.dds" # REVIEWED 2026-10-26 (texture_reference): was broken\n'
             '# REVIEWED 2026-10-26 (texture_reference): on a line with no path\n')})
         self.assertEqual(r.flags, [])
-        self.assertEqual([(t.file, t.line) for t in r.stale_tags], [("common/x.txt", 1), ("common/x.txt", 2)])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual([(t.file, t.line) for t in r.stale], [("common/x.txt", 1), ("common/x.txt", 2)])
+        self.assertEqual(len(r.failing), 2)
         self.assertEqual(tra.summary(r)["unreviewed"], 2)
         self.assertEqual(tra.summary(r)["stale_tags"], 2)
         self.assertIn("## Stale tags", tra.render_report(r))
@@ -345,7 +345,7 @@ class SuppressionTests(_Fixture):
             'e.1 = { event_image = { video = "dlc_alias" } } '
             '# REVIEWED 2026-10-26 (texture_reference): DLC-gated\n')})
         self.assertEqual([(f.kind, bool(f.exemption)) for f in r.flags], [("dlc_only", True)])
-        self.assertEqual(r.stale_tags, [])
+        self.assertEqual(r.stale, [])
 
     def test_event_context_audit_ignores_the_tag(self):
         self.assertIn(tra.CHECK, event_context_audit.FOREIGN_CHECKS)
@@ -403,7 +403,7 @@ class DeclarationTests(_Fixture):
         self.assertEqual(self.undeclared(r), [
             ("common/buildings/b.txt", 6, "building_none", "background", False),
             ("common/buildings/b.txt", 10, "building_empty", "background", False)])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual(len(r.failing), 2)
         self.assertEqual(r.entities_checked, 3)
         self.assertIn("`building_none` declares no `background`", tra.render_report(r))
         self.assertEqual(tra.summary(r)["undeclared"], 2)
@@ -578,22 +578,22 @@ class DeclarationTests(_Fixture):
                           ("building_untagged", False)])
         self.assertEqual(r.flags[0].exemption["rationale"], "never shown")
         # The tag inside the body suppresses nothing.
-        self.assertEqual([(t.file, t.line) for t in r.stale_tags], [("common/buildings/b.txt", 5)])
-        self.assertEqual(r.failing, 3)
+        self.assertEqual([(t.file, t.line) for t in r.stale], [("common/buildings/b.txt", 5)])
+        self.assertEqual(len(r.failing), 3)
 
     def test_stale_tag_on_an_entity_that_declares(self):
         r = self.run_audit({"common/buildings/b.txt": (
             f'building_fixed = {{ # REVIEWED 2026-10-26 (texture_reference): art pending\n\t{BG}\n}}\n')})
         self.assertEqual(r.flags, [])
-        self.assertEqual([t.line for t in r.stale_tags], [1])
-        self.assertEqual(r.failing, 1)
+        self.assertEqual([t.line for t in r.stale], [1])
+        self.assertEqual(len(r.failing), 1)
 
     def test_one_tag_covers_a_path_and_a_declaration_on_its_line(self):
         r = self.run_audit({"common/buildings/b.txt": (
             'building_x = { icon = "gfx/nope.dds" } # REVIEWED 2026-10-26 (texture_reference): both pending\n')})
         self.assertEqual(sorted(f.kind for f in r.flags), ["missing", "undeclared"])
         self.assertTrue(all(f.exemption for f in r.flags))
-        self.assertEqual((r.failing, r.stale_tags), (0, []))
+        self.assertEqual((len(r.failing), r.stale), (0, []))
 
     def test_load_vanilla_snapshot(self):
         snap = os.path.join(self.mod, "vanilla_parsed")

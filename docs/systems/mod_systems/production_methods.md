@@ -39,6 +39,14 @@ Building-local effects sit in the PM. A national or state effect is a count in a
 
 Any other source can declare these types (a law, a decree, a building) and the same pulse converts it; the tooltip breaks the count down by source. The reserve conversion assumes the engine sizes conscription from population (the `CONSCRIPTION_CENTER_LEVEL_POPULATION_DIVISOR` define says civilian population; the modifier text says workforce). If a reserve battalion turns out to buy only about half a conscription center in game, the engine uses workforce and the 1000 needs raising.
 
+### Flat crews: no level keeps a token staff (#1684; owner, 2026-11-13)
+
+No combination of a building's methods leaves a level 1 to 99 staff: a level keeps a real crew, or the building hires a flat one. `test_flat_crews.py`'s `TokenCrewTest` checks every building. It exempts the ownership buildings (company headquarters, financial district, manor house), the Manila Cathedral's ruins and the construction market's marker building, and it leaves out the Urban Center's clergy group.
+
+A flat crew is the AI-managed tier's pattern (`docs/superpowers/archive/specs/2026-10-16-ai-managed-flat-staff-design.md`). The method cancels its base method's per-level workforce exactly and hires 1,000 in `unscaled`, with `building_job_attractiveness_mult = 5`, so the building's size is no longer limited by the people available to staff it. Where the base methods' crews differ, the method is split by base and hidden when unavailable. Robotic Food Processing has `pm_robotic_food_processing_synthesis` for Programmable Food Synthesis. 3D Printed Buildings has `pm_3d_printed_buildings_nanomaterial` for Nanomaterial and Self-Replicating Construction and their Construction Site twins; the original keeps its per-level cut on the older tiers.
+
+Twenty-one methods that left 10 to 200 a level took a flat crew on 2026-11-13: Automated Harvesters and Planters (and the rice farm's copy), the Textile Mill's and Furniture Manufactory's AI-managed tier, Self-Optimizing Production, Bespoke Alloys, Programmable Plastics, Programmable Paper, Robotic Food Processing's copy, Robotic Service Providers, Autonomous Trains, Vactrain Freight, the Autonomous Highway, Artificial Personalities, Autonomous Networks, Fully Automated Content Creation, AI-Mediated Mind Sharing, AI-Optimized Operations, Automated Deep-Sea Mining (both families) and 3D Printed Buildings' copy. Most crews are engineers. Robotic Service Providers and Autonomous Trains hire clerks, Artificial Personalities shopkeepers, and Automated Deep-Sea Mining one advanced level's 800 engineers and 200 academics. Older base methods keep the staff a cut never covered, such as Modern Farming's 1,500 farmers. `FlatCrewTest` checks that every flat crew cancels some combination exactly and that these are 1,000 strong. In-game checks: `docs/testing/ai-managed-flat-staff-playtest.md` item 8.
+
 ### Deep-Sea Mine and Extraplanetary Base logistics (Global Commons § 1)
 
 The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building_space_mine`) both mine the five metal and mineral goods. Seabed licences cap the first, so each of its levels earns more than an Extraplanetary Base level until era 12's propulsion (spec `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 1). Per level at base prices, the shared `pmg_maintenance_intensive` left out; a Deep-Sea profit is on Motor Ship Tenders / Magnetic Drive Tenders (support vessels, below):
@@ -47,7 +55,7 @@ The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building
 |---|---|---|---|---|---|
 | Deep-Sea Mining (11) | 5,000 | 1,000 | 22,700 (103%) / 23,700 (113%) | | |
 | Advanced Deep-Sea Mining (12, Advanced Nanofabrication) | | 1,000 | 63,400 (244%) / 64,400 (258%) | | |
-| Automated Deep-Sea Mining (12, Artificial General Intelligence) | | 10 | 58,600 (190%) / 59,600 (200%) | | |
+| Automated Deep-Sea Mining (12, Artificial General Intelligence) | | 1,000 flat | 58,600 (190%) / 59,600 (200%) | | |
 | Asteroid Mine (11) | 20,000 | 1,000 flat | 7,250 (24%) | 14,450 | 21,650 |
 | Mining Colony (12, Space Colonization) | | 1,000 flat | 37,000 (33%) | 65,800 | 94,600 |
 | Resort Colony (12, Space Colonization) | | 1,000 flat | 38,000 (34%) | 66,800 | 95,600 |

@@ -18,9 +18,16 @@ false for every scope and the block holding it can never pass. For
 "there is no X" write `NOT = { any_X = { } }`. A bare `always = no`
 outside an `any_*` (a retired `potential`) is not flagged.
 
+Also flagged: a `filter = { }` child of an `any_*` trigger with
+neither `percent` nor `count = all` beside it. The engine takes
+`filter` only with one of those and refuses the trigger at load
+("Filter should only be used if a percent or count = all is
+specified"). For a count, write the condition into the body; for
+"all but N", use a `percent` share.
+
 Suppress a rare legitimate case with a trailing comment on the
 `any_*` opener line: `any_scope_state = { # REVIEWED YYYY-MM-DD: why`
-(for `always = no`, the comment may also sit on that line).
+(for `always = no` or `filter`, the comment may also sit on that line).
 
 ## Unreviewed Flags
 
@@ -34,6 +41,7 @@ _None._
 
 - total flags: 0
 - `always = no` flags: 0
+- `filter` flags: 0
 - unreviewed: 0
 - exempted: 0
 

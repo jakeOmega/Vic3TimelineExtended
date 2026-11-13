@@ -140,6 +140,8 @@ import re
 from dataclasses import dataclass, field
 
 import variable_guard_audit as vga
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
 
 CHECK = "tooltip_walk"
@@ -175,9 +177,6 @@ _EVENT_ID_RE = re.compile(r"^[A-Za-z_][\w]*\.\d+$")
 _PARAM_RE = re.compile(r"\$(\w+)\$")
 _DISPATCH_RE = re.compile(r"^[A-Za-z0-9_$]+$")
 _SEG_VAR_RE = re.compile(r"^(var|global_var):([A-Za-z0-9_$\-]+)$", re.I)
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 _ANY_WRITE_RE = re.compile(r"\b(?:set|change|remove)_(?:global_)?variable\b")
 
 ROOT_SCOPE = "ROOT"
@@ -242,20 +241,11 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
+class AuditResult(_AuditResult):
+    """`stale` holds the `(tooltip_walk)` tags on a line with no flag."""
 
-
-@dataclass
-class AuditResult:
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     roots: int = 0
-
-    @property
-    def failing(self) -> int:
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
 
 
 # ---------------------------------------------------------------------------
@@ -1336,7 +1326,7 @@ class Walker:
 
 
 def read_tags(mod_path: str) -> dict[tuple[str, int], dict]:
-    """{(file, line): {date, rationale}} for every `(tooltip_walk)` tag."""
+    """{(file, line): {date, tag, rationale}} for every `(tooltip_walk)` tag."""
     tags: dict[tuple[str, int], dict] = {}
     for path, rel in _files(mod_path):
         try:
@@ -1347,11 +1337,9 @@ def read_tags(mod_path: str) -> dict[tuple[str, int], dict]:
         if CHECK not in text:
             continue
         for lineno, raw in enumerate(text.splitlines(), 1):
-            if "REVIEWED" not in raw:
-                continue
-            m = _TAGGED_REVIEWED_RE.search(raw)
-            if m and CHECK in re.split(r"[\s,]+", m.group("checks").strip()):
-                tags[(rel, lineno)] = {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+            tag = parse_reviewed(raw, (CHECK,))
+            if tag:
+                tags[(rel, lineno)] = tag
     return tags
 
 
@@ -1402,7 +1390,7 @@ def audit(mod_state=None, mod_path: str | None = None, only_root: str | None = N
         if f.exemption:
             used.add((f.file, f.line))
     if not only_root:
-        result.stale_tags = [StaleTag(file, line) for (file, line) in sorted(tags) if (file, line) not in used]
+        result.stale = [StaleTag(file, line, CHECK) for (file, line) in sorted(tags) if (file, line) not in used]
     return result
 
 
@@ -1420,8 +1408,8 @@ def flag_dict(f: Flag) -> dict:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Tooltip walk variable audit report",
         "",
@@ -1455,9 +1443,9 @@ def render_report(result: AuditResult) -> str:
             out += [f"### `{fname}`", ""]
             out += [f"- line {f.line}: {describe(f)}" for f in by_file[fname]]
             out.append("")
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags on a line with no flag; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale]
         out.append("")
     out += ["## Reviewed exemptions", ""]
     if not exemp:
@@ -1473,7 +1461,7 @@ def render_report(result: AuditResult) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     return "\n".join(out) + "\n"
@@ -1484,44 +1472,46 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     out_path = os.path.join(mod_path, REPORT)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags on a line with no flag.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "roots": result.roots,
         "path": out_path,
     }
 
 
-def main(argv: list[str], mod_path: str | None = None) -> int:
+def main(argv: list[str] | None = None, mod_path: str | None = None) -> int:
+    """Print the report, or with `--root` one root's flags; `--strict` (CI)
+    exits 1 if any flag lacks its check-tagged `# REVIEWED` comment, or any
+    such tag sits on a line with no flag."""
     if mod_path is None:
         from path_constants import mod_path
-    only = None
-    if "--root" in argv:
-        i = argv.index("--root")
-        if i + 1 >= len(argv):
+    no_name = object()  # `--root` given with nothing after it
+
+    def add_arguments(parser) -> None:
+        parser.add_argument("--root", nargs="?", const=no_name, metavar="ROOT",
+                            help="list one scripted GUI's, event's or decision's flags with their call chains")
+
+    def run(args) -> AuditResult:
+        if args.root is no_name:
             raise SystemExit("--root needs a scripted GUI, an event id or a decision")
-        only = argv[i + 1]
-    res = audit(mod_path=mod_path, only_root=only)
-    if only:
-        for f in res.flags:
-            mark = "reviewed" if f.exemption else "UNREVIEWED"
-            print(f"{f.file}:{f.line} [{mark}] {describe(f)}")
-        if not res.flags:
-            print(f"no flagged read in the walk of {only} ({res.roots} root(s) walked)")
-    else:
-        print(render_report(res))
-    # --strict: CI mode. Exit 1 if any flag lacks its check-tagged
-    # `# REVIEWED` comment, or any such tag sits on a line with no flag.
-    return 1 if "--strict" in argv and res.failing else 0
+        return audit(mod_path=mod_path, only_root=args.root)
+
+    def render(res: AuditResult, args) -> str:
+        if not args.root:
+            return render_report(res)
+        lines = [f"{f.file}:{f.line} [{'reviewed' if f.exemption else 'UNREVIEWED'}] {describe(f)}"
+                 for f in res.flags]
+        return "\n".join(lines or [f"no flagged read in the walk of {args.root} ({res.roots} root(s) walked)"])
+
+    return cli_main(run, render, argv=argv, description=__doc__.splitlines()[0],
+                    add_arguments=add_arguments,
+                    strict_help="CI mode: exit 1 on an unreviewed flag or a tag on a line with no flag.")
 
 
 if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    raise SystemExit(main(sys.argv[1:]))
+    raise SystemExit(main())

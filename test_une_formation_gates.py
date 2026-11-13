@@ -5,16 +5,20 @@
 `une_formation_world_order` were `NOT = { any_country = { ... } }` tests,
 which vanilla 1.15's `list_scopes` cannot list. They are now positive counts
 over the great powers other than ROOT (`filter`, then `count = all` or a
-`count >=` threshold from te_formation_gating_values.txt). This test runs both
+`percent >=` share from te_formation_gating_values.txt). This test runs both
 forms through a small evaluator of the triggers as written, over random
 worlds, and fails if any world tells them apart: the rewrite must not change
 who can form the union. It also pins the tooltip keys, which the engine
 checks nowhere.
 
-The evaluator knows `filter` and `count = all` in the meaning vanilla's tsar
-buttons give them (a count over the filtered scopes) and treats a
-`trigger_if` whose limit fails as true. The pre-rewrite triggers are kept
-below as text so the comparison doesn't need git.
+The evaluator knows `filter`, `count = all` and `percent` in the meaning
+vanilla's tsar buttons give them (a count or share over the filtered scopes)
+and treats a `trigger_if` whose limit fails as true. It refuses `filter` with
+any other count, as the engine does at load ("Filter should only be used if a
+percent or count = all is specified", PostValidate false): the first rewrite
+used `count >= <value>` there, passed this test, and failed in game
+(2026-11-12). `any_limit_audit` checks the same rule over the whole mod. The
+pre-rewrite triggers are kept below as text so the comparison doesn't need git.
 """
 import random
 import tempfile
@@ -129,11 +133,14 @@ class Evaluator:
         self.sv = script_values
 
     def value(self, token):
-        try:
-            return float(token)
-        except ValueError:
-            pass
-        _, body = self.sv[token]
+        if isinstance(token, dict):
+            body = token
+        else:
+            try:
+                return float(token)
+            except ValueError:
+                pass
+            _, body = self.sv[token]
         total = 0.0
         for key, _, val in entries(body):
             if key == "value":
@@ -142,6 +149,12 @@ class Evaluator:
                 total -= self.value(val)
             elif key == "add":
                 total += self.value(val)
+            elif key == "divide":
+                divisor = self.value(val)
+                assert divisor != 0, "script value divides by zero"
+                total /= divisor
+            elif key == "min":
+                total = max(total, self.value(val))
             elif key == "every_country":
                 limit = val["limit"][1]
                 add = self.value(val["add"][1])
@@ -207,9 +220,18 @@ class Evaluator:
     def any_country(self, body):
         filt = body.get("filter")
         count = body.get("count")
-        cond = {k: v for k, v in body.items() if k not in ("filter", "count")}
+        percent = body.get("percent")
+        if filt is not None:
+            assert percent is not None or count == ("=", "all"), (
+                "the engine takes `filter` only with `percent` or `count = all`")
+        cond = {k: v for k, v in body.items() if k not in ("filter", "count", "percent")}
         pool = [c for c in self.w.countries if filt is None or self.block(filt[1], c)]
         hits = sum(1 for c in pool if self.block(cond, c))
+        if percent is not None:
+            op, n = percent
+            assert op == ">=", op
+            assert pool, "a share of no scopes"
+            return hits / len(pool) >= self.value(n)
         if count is None:
             return hits >= 1
         op, n = count
