@@ -1073,7 +1073,11 @@ class Session:
         trigger is written bare and is checked for the played country (`tag` another to read it):
         `has_technology_researched = railways` works, while `c:FRA.has_technology_researched = railways` answers
         "Unknown trigger type". A variable that is not set reads 0, not an error (`c:FRA.var:x` gave "0", live
-        2026-11-11), so a 0 does not prove the variable set."""
+        2026-11-11), so a 0 does not prove the variable set.
+
+        An error raised once the values are evaluated (the poll for the date line, whose proof of life can end
+        the verbs, `watch_ended`) carries them as `reads`, as a resume that failed after them does, and the
+        step's record holds them."""
         self._require_game()
         self._catch_up_reload()             # a reload still due after add-setup may have dropped the breakpoint
         if isinstance(exprs, str):
@@ -1083,13 +1087,13 @@ class Session:
             reads, info = self._fire_read(exprs)
             out.update(info, values=[[r.expr, r.ok, r.raw] for r in reads])
             try:
-                lines = self._new_lines()
+                when = self._date_in(self._new_lines())
             except SessionError as e:
                 # The proof of life after the poll failed (watch_ended): the values were evaluated before it, and
                 # go with the error, as they do with the "did not take the resume" one.
                 e.info.setdefault("reads", [asdict(r) for r in reads])
                 raise
-            out["date"] = self._date_in(lines)
+            out.update(date=when)
         return reads
 
     def tag(self, tag: str) -> None:
@@ -1203,8 +1207,8 @@ class Session:
         (`shared_state`). A row's `new_errors` are the error-log lines seen during that option, less blank lines
         and less what the debugger reported as its own output while stopped for this call's reads (the
         validator burst each trigger evaluation causes): its file lags its stream, so a burst may land in the
-        next option's lines. An error in a step raises like any verb's, carrying the rows so far (`options`),
-        and nothing is typed again. `complete` is true only when every option fired and was picked."""
+        next option's lines. An error in a step raises like any verb's, carrying the rows so far (`options`, with
+        a read's values when they were evaluated before it), and nothing is typed again. `complete` is true only when every option fired and was picked."""
         self._require_game()
         if isinstance(reads, str) or not all(isinstance(r, str) for r in reads):
             raise SessionError("bad_argument", "reads is a list of expressions, not %r" % (reads,))
@@ -1284,13 +1288,12 @@ class Session:
             row["new_errors"] = _new_errors(seen, self._burst or [])
 
     def _read_into(self, row: dict, key: str, reads: list[str]) -> None:
-        """`row[key]` = the values of `reads`, also when the read ends in an error that carries them (`reads`:
-        the game did not take the resume, or the proof of life after the poll failed)."""
+        """`read` into a try_event row's `before` or `after`. Values evaluated before an error (its `reads`)
+        are the row's all the same, so the error's `options` show them."""
         try:
             row[key] = [asdict(r) for r in self.read(reads)]
         except SessionError as e:
-            if "reads" in e.info:
-                row[key] = e.info["reads"]
+            row[key] = e.info.get("reads", row[key])
             raise
 
     def status(self) -> dict:

@@ -24,6 +24,8 @@ from loc_render_audit import (
     check_value,
     closed_tag_names,
     render_report,
+    used_format_names,
+    vanilla_format_names,
     _parse_loc_line,
     _parse_reviewed,
 )
@@ -215,6 +217,39 @@ class FormatTagTests(unittest.TestCase):
                 "no tags, ##3",
             ]),
             {"bold", "tooltippable", "tooltip", "indent_newline"})
+
+    def test_a_format_vanillas_loc_never_uses_is_flagged(self):
+        """#1698: a format name no vanilla value opens, in any case. The
+        engine ignores the case: the install defines `V`, `R` and `O`, and
+        vanilla's loc writes `#v`, `#r` and `#o`, so `#O` and `#o` are one
+        name (gold) and neither is flagged."""
+        vanilla = used_format_names(["#o x#!", "#b y#!", "#V 1#!", "#tooltippable;tooltip:[X],k z#!",
+                                     "#indent_newline:3 a#!"])
+        self.assertEqual(vanilla, {"o", "b", "v", "tooltippable", "tooltip", "indent_newline"})
+        (issue, detail), = check_format_tags("#bolt Strained#!", vanilla_names=vanilla)
+        self.assertEqual(issue, "unknown_format")
+        self.assertIn("`#bolt` names a format no value of vanilla's English loc opens, in any case", detail)
+        (_issue, detail), = check_format_tags("#bolt x#! and #Bold;v y#!", vanilla_names=vanilla)
+        self.assertIn("`#bolt`, `#Bold` name formats no value", detail)
+        for value in ("#o Strained#!", "#O Strained#!", "#v 5#!", "#B #V 5#!#!",
+                      "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],k x#!",
+                      "#[X.GetColor] computed#!", "#$COLOR$ computed#!", "##bolt is a literal hash"):
+            with self.subTest(value=value):
+                self.assertEqual(check_format_tags(value, vanilla_names=vanilla), [])
+        # A tag left open is judged too, beside the unclosed flag.
+        self.assertEqual([i for i, _d in check_format_tags("#bolt open", vanilla_names=vanilla)],
+                         ["unclosed_format", "unknown_format"])
+        # Without vanilla's names the check is off.
+        self.assertEqual(check_format_tags("#bolt Strained#!"), [])
+
+    def test_vanillas_own_names_come_from_the_committed_snapshot(self):
+        names = vanilla_format_names(REPO)
+        if names is None:
+            self.skipTest("no vanilla_parsed/localization_english.json")
+        self.assertTrue({"o", "b", "v", "r", "bold", "tooltippable", "indent_newline"} <= names)
+        self.assertEqual(names, {n.lower() for n in names})
+        with tempfile.TemporaryDirectory() as td:
+            self.assertIsNone(vanilla_format_names(td))
 
     def test_plain_text_and_texticons_untouched(self):
         self.assertEqual(check_format_tags("@money! 5 and nothing else!"), [])
@@ -464,6 +499,26 @@ class EndToEndTests(unittest.TestCase):
         self.assertEqual(sorted(details), ["hashtag", "slip"])
         self.assertIn("write `##`", details["hashtag"])
         self.assertNotIn("write `##`", details["slip"])
+
+    def test_a_format_vanilla_never_uses_with_the_snapshot_and_its_review(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' typo:0 "#bolt Strained#!"\n'
+                ' upper:0 "#O Strained#!"\n'
+                ' orange:0 "#o Strained#!"\n'
+                ' seen:0 "#purple Seen#!" # REVIEWED 2026-11-13: game/gui/textformatting.gui defines purple\n',
+            )
+            self.assertEqual(audit(mod_path=td).flags, [])  # no snapshot: the check is off
+            os.makedirs(os.path.join(td, "vanilla_parsed"))
+            with open(os.path.join(td, "vanilla_parsed", "localization_english.json"), "w",
+                      encoding="utf-8") as fh:
+                json.dump({"COLOUR": "#r c#!#o o#!#yellow l#!"}, fh)
+            result = audit(mod_path=td)
+        self.assertEqual(sorted((f.loc_key, f.issue, bool(f.exemption)) for f in result.flags),
+                         [("seen", "unknown_format", True), ("typo", "unknown_format", False)])
+        self.assertIn("A format vanilla's loc never uses", render_report(result))
 
     def test_quoted_name_only_checks_modifier_and_modifier_type_names(self):
         with tempfile.TemporaryDirectory() as td:

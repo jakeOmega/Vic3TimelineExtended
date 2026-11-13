@@ -10153,7 +10153,16 @@ def _run_generator_chain(mod_state, generators, *, vanilla_files=True) -> None:
     """Import and run each (label, module) in order, appending both actionable
     findings and hard failures to _post_load_warnings. One bad generator never
     stops the chain. With `vanilla_files=False` a PARTIAL_VANILLA_FILE_REGENERATORS
-    member is told so (`regenerate(mod_state, vanilla_files=False)`)."""
+    member is told so (`regenerate(mod_state, vanilla_files=False)`).
+
+    The chain shares one blanking per file text among the raw-text audits
+    (`blanked_text.shared()`, #1698); it is dropped when the chain ends."""
+    import blanked_text
+    with blanked_text.shared():
+        _run_generator_chain_steps(mod_state, generators, vanilla_files=vanilla_files)
+
+
+def _run_generator_chain_steps(mod_state, generators, *, vanilla_files) -> None:
     for label, module_name in generators:
         t0 = time.monotonic()
         try:

@@ -1016,6 +1016,35 @@ class ReadTest(SessionTestCase):
         self.assertFalse(self.game.adapter.stopped)
         self.assertEqual(self.game.adapter.commands[-1], "continue")
 
+    def dies_after_the_read_event(self) -> None:
+        """The game takes the resume and logs the read event's lines, then dies: the poll after the reads finds
+        lines, and the proof of life after it fails (`_vouch_for_polled`)."""
+        finish = self.game.finish_read
+
+        def finish_then_die():
+            finish()
+            self.game.process_gone = True
+        self.game.finish_read = finish_then_die
+
+    def test_a_proof_of_life_that_fails_after_the_reads_carries_their_values(self):
+        # #1697: the reads were evaluated before the poll; the error says what they were, as the "did not take
+        # the resume" one does, and so does the step's record.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.dies_after_the_read_event()
+        error = self.session_error(self.session.read, ["c:FRA.gdp", "gdp"])
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(error.info["reads"], [
+            {"expr": "c:FRA.gdp", "ok": True, "raw": "7", "value": 7.0},
+            {"expr": "gdp", "ok": False, "raw": "not a valid trigger or script value", "value": None}])
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        step = [json.loads(line) for line in lines if json.loads(line)["verb"] == "read"][-1]
+        self.assertEqual((step["outcome"], step["values"]), ("watch_ended", [["c:FRA.gdp", True, "7"],
+                                                                            ["gdp", False, "not a valid trigger "
+                                                                             "or script value"]]))
+        self.assertNotIn("date", step)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "watch_ended")
+
     def test_the_console_verb_refuses_the_read_event(self):
         self.started()
         for text in ("event te_qa.1", "event te_qa.1 FRA", "EVENT TE_QA.1", "  event   te_qa.1x", "Event Te_Qa.1 c:FRA"):
@@ -2106,6 +2135,23 @@ class TryEventTest(SessionTestCase):
         self.assertTrue(reply["complete"])
         self.assertEqual([r["picked"]["form"] for r in reply["options"]], ["no_id"] * 3)
 
+    def test_a_proof_of_life_that_fails_after_a_rows_reads_leaves_them_in_the_row(self):
+        self.started()
+        finish = self.game.finish_read
+        resumes = self.game.adapter.commands.count("continue")
+
+        def finish_then_die():                  # the game dies after the second read event: option 0's after
+            finish()
+            if self.game.adapter.commands.count("continue") >= resumes + 2:
+                self.game.process_gone = True
+        self.game.finish_read = finish_then_die
+        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
+        self.assertEqual(error.code, "watch_ended")
+        (row,) = error.info["options"]
+        self.assertEqual(row["before"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "5", "value": 5.0}])
+        self.assertEqual(row["after"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "10", "value": 10.0}])
+        self.assertEqual(error.info["reads"], row["after"])
+
     def test_the_setup_runs_before_each_option(self):
         reply = self.started(setups={"border": "set_variable = te_x"})
         setup_event = reply["overlay"]["setup_events"]["border"]
@@ -2193,24 +2239,6 @@ class TryEventTest(SessionTestCase):
         self.assertEqual(self.commands().count("select_event_option 1 11"), 1)
         [step] = self.try_event_steps()
         self.assertEqual((step["outcome"], len(step["options"])), ("not_selected", 2))
-
-    def test_a_row_keeps_the_values_of_a_read_whose_proof_of_life_failed(self):
-        # #1697: the read after option 0's pick evaluates, then the proof after its poll fails.
-        self.started()
-        command, reads = self.events.command, []
-
-        def dies_at_the_second_read(text):
-            command(text)
-            if text == "event " + overlay.READ_EVENT:
-                reads.append(text)
-                if len(reads) == 2:
-                    self.game.process_gone = True
-        self.game.on_command = dies_at_the_second_read
-        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
-        self.assertEqual(error.code, "watch_ended")
-        [row] = error.info["options"]
-        self.assertEqual(row["after"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "10", "value": 10.0}])
-        self.assertEqual(error.info["reads"], row["after"])
 
     def test_new_errors_leave_out_the_debuggers_own_burst(self):
         self.started()

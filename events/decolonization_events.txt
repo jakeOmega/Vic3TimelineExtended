@@ -132,6 +132,11 @@ decolonization_events.1 = {
 				trigger = { colonial_gp_condemners_count >= 3 }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:restless_subject = {
 			post_notification = colonial_independence_granted_notice
@@ -170,6 +175,11 @@ decolonization_events.1 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 4
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:restless_subject = {
 			post_notification = colonial_neocolonial_terms_notice
@@ -450,6 +460,11 @@ decolonization_events.3 = {
 				trigger = { NOT = { country_rank >= rank_value:great_power } }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:rebellious_subject = {
 			post_notification = colonial_ceasefire_granted_notice
@@ -558,6 +573,11 @@ decolonization_events.3 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:rebellious_subject = {
 			post_notification = colonial_neocolonial_terms_notice
@@ -1165,6 +1185,11 @@ decolonization_events.9 = {
 				trigger = { colonial_low_acceptance_count >= 3 }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:unrest_colony = {
 			set_variable = decolonization_marker
@@ -1191,6 +1216,11 @@ decolonization_events.9 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:unrest_colony = {
 			set_variable = decolonization_marker
@@ -1572,6 +1602,11 @@ decolonization_events.13 = {
 				trigger = { NOT = { country_rank >= rank_value:great_power } }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:uprising_colony = {
 			set_variable = decolonization_marker
@@ -1663,6 +1698,11 @@ decolonization_events.13 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:uprising_colony = {
 			set_variable = decolonization_marker
@@ -5418,6 +5458,26 @@ decolonization_events.72 = {
 				}
 			}
 		}
+		# The lands that rose with it (decol_iw_mark_rose_with, at the Fight),
+		# ours again with it: quiet as long.
+		hidden_effect = { decol_iw_check_rose_with = yes }
+		if = {
+			limit = {
+				exists = scope:decol_iw_end_state
+				any_scope_state = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+			}
+			custom_tooltip = {
+				text = decolonization_events.72.declared_neighbors_tt
+				every_scope_state = {
+					limit = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+					set_variable = { name = decol_declared days = 3650 }
+					remove_variable = decol_iw_rose_with
+				}
+			}
+		}
+		hidden_effect = {
+			scope:decol_iw_end_state ?= { remove_variable = decol_iw_rose_count }
+		}
 	}
 }
 
@@ -5649,7 +5709,14 @@ decolonization_events.75 = {
 		name = decolonization_events.75.a
 		trigger = { decol_iw_has_voting_law = no }
 		default_option = yes
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
+		}
 		decol_iw_open_all_talks = yes
 		custom_tooltip = {
 			text = decolonization_events.75.a_tt

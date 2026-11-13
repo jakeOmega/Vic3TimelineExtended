@@ -16424,8 +16424,8 @@
   "es": "#R Grave#!"
  },
  "gw_tier_short_significant": {
-  "en": "#O Significant#!",
-  "es": "#O Significativa#!"
+  "en": "#o Significant#!",
+  "es": "#o Significativa#!"
  },
  "gw_tier_short_slight": {
   "en": "#Y Slight#!",
@@ -24748,8 +24748,8 @@
   "es": "#G Almacenando#!"
  },
  "st_res_mode_withdrawing": {
-  "en": "#O Releasing#!",
-  "es": "#O Liberando#!"
+  "en": "#o Releasing#!",
+  "es": "#o Liberando#!"
  },
  "st_res_oil_store_flow": {
   "en": "Strategic Reserve Oil Intake",
@@ -25024,8 +25024,8 @@
   "es": "#R En pausa#! — no hay ningún Centro de reserva estratégica en funcionamiento."
  },
  "st_res_policy_reason_releasing": {
-  "en": "#O Releasing#! — the averaged market price is above your release threshold.",
-  "es": "#O Liberando#! — el precio promedio del mercado está por encima de tu umbral de liberación."
+  "en": "#o Releasing#! — the averaged market price is above your release threshold.",
+  "es": "#o Liberando#! — el precio promedio del mercado está por encima de tu umbral de liberación."
  },
  "st_res_policy_reason_understaffed": {
   "en": "#R Paused#! — the hub is understaffed, so it trades nothing this week.",

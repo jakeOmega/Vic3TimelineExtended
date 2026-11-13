@@ -189,6 +189,30 @@ At 2 °C every line doubles, and at 3 °C it triples. The Warming Penalty box at
 the top of the entry shows today's standard of living and mortality lines; hover
 it for every line and the multiplier.
 
+Warming does not fall on every state alike. On top of Climate Warming, and at
+the same multiplier, a state between the tropics carries Tropical Warming and a
+state 55° or more from the equator carries High-Latitude Warming; a state
+between the two carries neither. The high latitudes are in practice the far
+north: Scandinavia, Finland, the Baltic, Scotland and Ulster, Iceland,
+Greenland, Russia from Moscow and Kazan northward, Siberia, Alaska and northern
+Canada. With Climate Warming, each degree comes to the figures below; the
+throughput rows count the −2.5% every building takes:
+
+| Per 1 °C | Tropics | Mid-latitudes | High latitudes |
+|---|---|---|---|
+| Mortality | +7.5% | +5% | +2% |
+| Standard of living | −1.5 | −1 | −0.5 |
+| Farm throughput | −17.5% | −12.5% | +2% |
+| Plantation throughput | −7.5% | −2.5% | −2.5% |
+| Heatwaves | 75% worse | 50% worse | 25% worse |
+| Frost | 15% milder | 15% milder | 30% milder |
+| Wildfire impact | 50% worse | 50% worse | 75% worse |
+
+Each state lists its band's modifier among its own. The Warming Penalty hover
+gives both bands' lines and how many of your states carry each. A country whose
+people live mostly between the tropics feels warming first and hardest, and has
+the most reason to adopt Climate Adaptation early.
+
 Warming also moves every state's [local climate](08-states.md#local-climate):
 hot days and winters rise, winters most near the poles, so hot states lose
 more migration pull to heat and cold states less to cold.
