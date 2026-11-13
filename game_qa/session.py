@@ -701,8 +701,8 @@ class Session:
 
     def _check_fixture_date(self, fixture_date, save: str | None, playset: str) -> fixture.Date | None:
         """The dated fixture `start` loads, once it is known to be there; None for the plain one (DEFAULT_DATE is
-        the plain one too). Refused with nothing done: with `save`, a date that is not one, and a fixture that is
-        not there (`no_fixture`)."""
+        the plain one too). Refused with nothing done: with `save` or `--add-mod` (`bad_argument`), a date that is
+        not one, and a fixture that is not there (`no_fixture`)."""
         if fixture_date is None:
             return None
         if save is not None:
@@ -710,6 +710,13 @@ class Session:
         date = self._parse_fixture_date(fixture_date)
         if date == fixture.DEFAULT_DATE:
             return None
+        if self._add_mods:
+            # `fixture --until` makes no fixture with a variant, so a key with one is never found: refused here,
+            # rather than a no_fixture whose `next` would make one that still is not it.
+            raise SessionError("bad_argument", "--fixture loads a dated fixture, and those are made without variant "
+                               "mods, so none is keyed on --add-mod's folders. Load the dated fixture as a save "
+                               "instead (`--save te_qa_fixture_<key>_d<date>`, its name in save games/) with "
+                               "--add-mod, or leave --add-mod out")
         if playset not in PLAYSETS:
             raise SessionError("bad_argument", "playset is one of %s, not %r" % (", ".join(PLAYSETS), playset))
         plan = self.fixture_plan(date, playset)

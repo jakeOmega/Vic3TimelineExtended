@@ -4954,6 +4954,13 @@ class AddModStartTest(SessionTestCase):
         self.assertEqual(launch[-1], "-loadsave=france_1850")
         self.assertFalse(reply["fixture_made"])
 
+    def test_a_dated_fixture_with_a_variant_is_refused_before_anything_is_done(self):
+        # `fixture --until` makes none with a variant, so its key would never be found
+        error = self.session_error(self.start, fixture_date="1900", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("--save te_qa_fixture_", error.detail)
+        self.assertEqual(self.cli.verbs, [])
+
     def test_a_refused_variant_starts_nothing(self):
         inside = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\someone_elses"
         for path, reason in ((inside, "inside_user_data"), (r"D:\vic3te-data\missing", "no_folder"),
