@@ -64,6 +64,18 @@ NEW_FLAT_CREWS = (
     "pm_3d_printed_buildings_nanomaterial",
 )
 
+# Methods split by base, with every base the single method ran on before the split.
+SPLITS = {
+    ("pm_robotic_food_processing", "pm_robotic_food_processing_synthesis"): {
+        "pm_baking_powder", "pm_food_additives", "pm_sweeteners", "pm_programmable_food_synthesis"},
+    ("pm_3d_printed_buildings", "pm_3d_printed_buildings_nanomaterial"): {
+        "pm_reinforced_concrete_buildings", "pm_arc_welded_buildings", "pm_advanced_construction",
+        "pm_nanomaterial_buildings", "pm_self_replicating_construction",
+        "pm_te_direct_construction_reinforced_concrete", "pm_te_direct_construction_arc_welded",
+        "pm_te_direct_construction_advanced", "pm_te_direct_construction_nanomaterial",
+        "pm_te_direct_construction_self_replicating"},
+}
+
 # Buildings whose levels keep a token staff by design, and groups whose staff is not the
 # building's workforce. Everything else keeps 0 or at least MIN_STAFF a level.
 TOKEN_CREW_EXEMPT = {
@@ -131,6 +143,17 @@ class _Data:
         """Per-level staff of one method (level_scaled)."""
         return self._staff(name, "level_scaled")
 
+    def staff_by_type(self, combo):
+        """{profession: per-level staff} of one combination, every profession it names."""
+        out = {}
+        for name in combo:
+            modifiers = _body(self.pms[name].get("building_modifiers")) or {}
+            for block in _blocks(modifiers, "level_scaled"):
+                for k, q in block.items():
+                    if k.startswith("building_employment_") and k.endswith("_add"):
+                        out[k] = out.get(k, 0.0) + float(_body(q))
+        return out
+
     def crew(self, name):
         """The method's flat crew (unscaled)."""
         return self._staff(name, "unscaled")
@@ -180,7 +203,11 @@ class TokenCrewTest(unittest.TestCase):
                 continue
             for combo in data.combos(building, TOKEN_CREW_IGNORED_GROUPS):
                 checked += 1
-                staff = sum(data.staff(m) for m in combo)
+                by_type = data.staff_by_type(combo)
+                negative = {k: v for k, v in by_type.items() if v < 0}
+                if negative:  # pm_employment_audit's rule; checked here so a sum can't hide it
+                    self.fail(f"{building}: {' + '.join(combo)} goes negative: {negative}")
+                staff = sum(by_type.values())
                 if 0 < staff < MIN_STAFF:
                     self.fail(f"{building}: {' + '.join(combo)} keeps {staff:.0f} a level; "
                               f"keep {MIN_STAFF} or more, or hire a flat crew in unscaled")
@@ -199,13 +226,13 @@ class TokenCrewTest(unittest.TestCase):
 class FlatCrewTest(unittest.TestCase):
     def test_every_flat_crew_cancels_a_level_exactly_somewhere(self):
         """A flat crew isn't hired on top of a per-level staff everywhere it runs: some
-        combination with it keeps no one a level."""
+        combination with it keeps no one of any profession a level."""
         data = _data()
         crews = data.flat_crews()
         self.assertGreaterEqual(len(crews), 50)
         for name, buildings in sorted(crews.items()):
             with self.subTest(method=name):
-                self.assertTrue(any(name in c and sum(data.staff(m) for m in c) == 0
+                self.assertTrue(any(name in c and not any(data.staff_by_type(c).values())
                                     for b in buildings for c in data.combos(b)))
 
     def test_the_new_crews_are_a_thousand_strong(self):
@@ -217,16 +244,17 @@ class FlatCrewTest(unittest.TestCase):
                 self.assertEqual(data.crew(name), CREW)
 
     def test_the_split_copies_hide_when_unavailable(self):
-        """A building shows one copy of a method split by base (#996's pattern)."""
+        """A building shows one copy of a method split by base (#996's pattern), and the two
+        copies together still run on every base the single method did."""
         data = _data()
-        for pair in (("pm_robotic_food_processing", "pm_robotic_food_processing_synthesis"),
-                     ("pm_3d_printed_buildings", "pm_3d_printed_buildings_nanomaterial")):
+        for pair, bases in SPLITS.items():
             for name in pair:
                 with self.subTest(method=name):
                     self.assertEqual(_body(data.pms[name].get("is_hidden_when_unavailable")), "yes")
             first, second = (set(_list(data.pms[n].get("unlocking_production_methods"))) for n in pair)
             self.assertTrue(first and second)
             self.assertFalse(first & second, pair)
+            self.assertEqual(first | second, bases, pair)
 
 
 if __name__ == "__main__":
