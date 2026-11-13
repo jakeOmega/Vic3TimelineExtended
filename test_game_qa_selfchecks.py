@@ -387,6 +387,42 @@ class VerdictTest(unittest.TestCase):
         self.assertEqual((check["name"], check["line"]), ("bare", "TE_SELF_CHECK OK bare (a line with no prefix)"))
 
 
+class FollowedTest(SelfCheckTestCase):
+    """A dated fixture's run (#1602): its log was copied as it went (`fixture.RunLogs`), since the game rotates it at
+    512 KB through six generations and a run of years leaves only its last few megabytes in `run_logs/`."""
+
+    def followed_run(self, lines) -> tuple[str, Path]:
+        snap = self.fixture_run(logged(["common/x.txt:9: TE_SELF_CHECK OK only_the_last_generation"]))
+        copy = self.backups / "runs" / snap / "fixture_debug.log"
+        write_log(copy, lines)
+        return snap, copy
+
+    def test_the_lines_come_from_the_copy_not_from_run_logs(self):
+        setup = logged(["common/x.txt:1: TE_SELF_CHECK OK decentralized_law_baseline"])
+        later = logged(["common/x.txt:2: TE_MONUMENTS landmark", "common/x.txt:3: TE_SELF_CHECK BROKEN a_late_one"])
+        snap, copy = self.followed_run([NOISE, *setup, logtail.GAP_MARKER, NOISE, *later])
+        record = selfchecks.keep_fixture_lines(self.backups, KEY, snap, followed=copy)
+        kept = (self.backups / "fixtures" / KEY / "lines.log").read_text("utf-8").splitlines()
+        self.assertEqual(kept, [*setup, *later])
+        self.assertNotIn("only_the_last_generation", "\n".join(kept))
+        self.assertEqual((record["source"], record["file"], record["gaps"], record["lines"], record["self_checks"]),
+                         ("followed", str(copy), 1, 3, 2))
+        self.run_folder()
+        found = selfchecks.of_run(self.backups, RUN)
+        self.assertEqual((found["fixture"]["source"], found["fixture"]["gaps"]), ("followed", 1))
+        self.assertEqual(found["broken"], ["a_late_one"])
+
+    def test_a_missing_copy_keeps_nothing_and_says_why(self):
+        snap, copy = self.followed_run([])
+        copy.unlink()
+        with self.assertRaises(selfchecks.SelfCheckError) as raised:
+            selfchecks.keep_fixture_lines(self.backups, KEY, snap, followed=copy)
+        self.assertEqual(raised.exception.code, "no_run_log")
+        record = selfchecks.fixture_record(self.backups, KEY)
+        self.assertEqual(record["kept"], False)
+        self.assertIn("fixture_debug.log", record["detail"])
+
+
 class RunTest(SelfCheckTestCase):
     def kept_fixture(self) -> str:
         snap = self.fixture_run(logged(captured("fixture_run_self_checks_and_monuments.txt")))
