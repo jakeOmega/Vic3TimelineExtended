@@ -1299,6 +1299,7 @@
  WW_REQ_NO_ENTRY_COOLDOWN_TT:0 "No attempt to enter it in the past year"
  WW_REQ_TENSION_20_TT:0 "Ideological tension of #v 20%#! or more (now #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)"
  WW_REQ_TENSION_30_TT:0 "Ideological tension of #v 30%#! or more (now #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)"
+ WW_REQ_TRENCH_WORKS_TT:0 "[GetTechnology('trench_works').GetName] or [GetTechnology('combined_arms').GetName] researched"
  WW_STOP_APPEASE_BUTTON:0 "End Appeasement"
  WW_STOP_APPEASE_BUTTON_DESC:0 "Abandon the policy of diplomatic accommodation. [concept_political_lobby_appeasement] has failed."
  WW_STOP_LEND_LEASE_BUTTON:0 "End Lend-Lease"

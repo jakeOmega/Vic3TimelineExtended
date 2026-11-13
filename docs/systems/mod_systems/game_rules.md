@@ -11,7 +11,7 @@ Twenty-one mod systems can be toggled or set at game setup via `common/game_rule
 | `custom_religions_allowed_rule` | `custom_religions_allowed` | **disabled** | Custom religion events, JE visibility |
 | `banking_system_rule` | `banking_system_enabled` | enabled | Banking cycle, crash contagion. **Three settings, not two** — see below |
 | `global_warming_rule` | `global_warming_enabled` | enabled | CO₂ tracking, GW modifiers |
-| `world_war_rule` | `world_war_enabled` | **disabled** | World war escalation, related JEs |
+| `world_war_rule` | `world_war_enabled` (late unlock), `world_war_early_unlock` | **disabled** | World war escalation, related JEs. **Three settings**, read through `te_world_war_on` / `te_world_war_early` (§ Early and late unlock) |
 | `cultural_hegemony_rule` | `cultural_hegemony_enabled` | enabled | Cultural pull calculation, hegemony JE, hegemony on-action |
 | `covert_warfare_rule` | `covert_warfare_enabled` (late unlock, default), `covert_warfare_early_unlock` | late unlock | Covert operations command-centre JE (`je_covert_warfare`), all 18 covert diplomatic actions (secure loose material also needs `nuclear_weapons_enabled`). **Three settings**, read through `te_covert_warfare_on` / `te_covert_warfare_early` (§ Early and late unlock) |
 | `heir_education_rule` | `heir_education_enabled` | **disabled** | Heir education JE and focus modifiers; aptitude traits for rulers and heirs |
@@ -61,6 +61,7 @@ which would now mean the late setting alone. The early settings are new and not 
 | Rule | Late unlock (as before) | Early unlock | Kept behind the late gate under early | Early to late mid-game |
 |---|---|---|---|---|
 | `covert_warfare_rule` | `mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing` or the Ministry of Intelligence and Security law (`covert_warfare_slot_source`) | also `central_archives` (era 2, the technology vanilla's Secret Police law needs) | funding above Professional (`covert_agency_limited`, `covert_agency_funding_cap`); the operations keep their own gates, which leave espionage, wartime sabotage, cultivate assets and counterintelligence support | an entry opened early (`iw_opened_early`) and still short of the late gate ends through its invalid outcome with the rule-off teardown, and `covert_warfare_monthly_country` adds it back at the late gate (`iw_reopen_at_gate`) |
+| `world_war_rule` | `combined_arms` and great power rank | also `trench_works` (era 4: the general staff, the telegraph, entrenched fronts), through `ww_era_reached` in the entry's `is_shown_when_inactive` and `possible`, `world_war_conditions_met` and the Rearmament and Total War Economy buttons (`ww_era_reached_tt`); until Combined Arms a democratic and an authoritarian great power also count as opposed (`country_has_opposed_ideology`, `ww_before_ideological_age`) | nothing by hand: Strategic Bombing (`.11`) already waits for the enemy's `bombing_aircraft`. A world war ended before Combined Arms sets `ww_early_war_resolved`, not `ww_entry_resolved` (`ww_mark_entry_resolved`), so the entry comes back at Combined Arms for a second | a great power without Combined Arms: the entry ends through its invalid outcome (`ww_era_reached` false) with `ww_stop_for_rule`, and `world_war_events_on_action` adds it back at Combined Arms (`ww_reopen_at_gate`) |
 
 **Gating pattern:** Each rule sets a flag checked via `has_game_rule = <flag>`:
 - **Journal entries:** `is_shown_when_inactive = { has_game_rule = X_enabled }`, `disable_evaluation = { NOT = { has_game_rule = X_enabled } }`, and an invalid outcome on the rule off (below)
@@ -80,6 +81,8 @@ which would now mean the late setting alone. The early settings are new and not 
 | Grand Monuments | the states' local modifiers, not the upkeep exemption (`gm_state_rule_off_on_action`); the two cultural-pull values and the state cards read the rule | yes (`gm_country_refresh`) |
 | Cultural Hegemony | programs shut down, the hegemon's pressure off our movements | no |
 | World War | its variables and latches on every country (`ww_stop_for_rule`, `world_war_events_on_action`) | no |
+| World War, Early to Late | a great power without Combined Arms: its entry, as above, for its own country only; a war under way goes on as an ordinary war | yes, at Combined Arms (`ww_reopen_at_gate`) |
+| World War, Late to Early | nothing; great powers with Trench Works get the entry | — |
 | Colonial Empire | `colonial_empire_je_cleanup_effect`; a stance lies dormant (`decol_stance_*_counts` read the rule) | yes (`ce_reentry_monthly`) |
 | Covert Warfare | funding to 0 (every operation's pact breaks), the networks (`covert_stop_for_rule`) | no |
 | Covert Warfare, Early to Late | an entry opened early and short of the late gate: the same teardown; one past it stays | yes, at the late gate (`iw_reopen_at_gate`) |

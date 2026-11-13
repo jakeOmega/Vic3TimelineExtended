@@ -39,7 +39,7 @@ ww_on_wargoal_enforced = {
 	# Not with the rule switched off mid-game (world_war_events_on_action has
 	# cleared the latches by the month's end).
 	trigger = {
-		has_game_rule = world_war_enabled
+		te_world_war_on = yes
 	}
 	effect = {
 		if = {

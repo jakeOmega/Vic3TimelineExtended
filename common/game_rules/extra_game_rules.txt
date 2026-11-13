@@ -53,8 +53,16 @@ global_warming_rule = {
 	}
 }
 
+# Three settings: early unlock, late unlock and off, as covert_warfare_rule
+# (below): late unlock keeps the name world_war_enabled, and script reads the
+# rule through te_world_war_on / te_world_war_early
+# (te_rule_setting_triggers.txt).
 world_war_rule = {
 	default = world_war_disabled
+
+	world_war_early_unlock = {
+		flag = world_war_early_unlock
+	}
 
 	world_war_enabled = {
 		flag = world_war_enabled

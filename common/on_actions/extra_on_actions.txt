@@ -3328,9 +3328,39 @@ free_port_tariff_update_on_action = {
 # ============================================================================
 world_war_events_on_action = {
 	effect = {
+		# The entry back for a country that waited for its gate: one closed when
+		# the early unlock was switched to the late one before Combined Arms
+		# (ww_reopen_at_gate, the invalid outcome), and one whose world war under
+		# the early unlock is over (ww_early_war_resolved), at Combined Arms. A
+		# concluded entry doesn't come back on its own; add_journal_entry brings
+		# it back (rules-off-midgame-playtest.md, read OK 2026-11-12).
 		if = {
 			limit = {
-				NOT = { has_game_rule = world_war_enabled }
+				OR = {
+					has_variable = ww_reopen_at_gate
+					has_variable = ww_early_war_resolved
+				}
+				te_world_war_on = yes
+				ww_era_reached = yes
+				NOT = { ww_resting_after_early_war = yes }
+				NOT = { has_variable = ww_entry_resolved }
+				country_rank >= rank_value:great_power
+				NOT = { has_journal_entry = je_world_war }
+				NOT = { has_inactive_journal_entry = je_world_war }
+			}
+			if = {
+				limit = { has_variable = ww_reopen_at_gate }
+				remove_variable = ww_reopen_at_gate
+			}
+			if = {
+				limit = { has_variable = ww_early_war_resolved }
+				remove_variable = ww_early_war_resolved
+			}
+			add_journal_entry = { type = je_world_war }
+		}
+		if = {
+			limit = {
+				NOT = { te_world_war_on = yes }
 				OR = {
 					has_variable = ww_active_phase
 					has_variable = ww_peace_concluded

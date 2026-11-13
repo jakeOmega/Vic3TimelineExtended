@@ -32,3 +32,19 @@ te_covert_warfare_on = {
 te_covert_warfare_early = {
 	has_game_rule = covert_warfare_early_unlock
 }
+
+# ---- World War (world_war_rule) ----
+# The system runs: either unlock.
+te_world_war_on = {
+	OR = {
+		has_game_rule = world_war_enabled
+		has_game_rule = world_war_early_unlock
+	}
+}
+
+# The early unlock: the entry opens at Trench Works, and liberal and autocratic
+# great powers count as opposed until Combined Arms (ww_era_reached,
+# country_has_opposed_ideology, world_war_triggers.txt).
+te_world_war_early = {
+	has_game_rule = world_war_early_unlock
+}

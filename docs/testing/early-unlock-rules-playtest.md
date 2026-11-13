@@ -41,3 +41,25 @@ Central Archives early.
    Archives open the entry within a week, capped as in 2. A country that had the entry before keeps it uncapped.
 9. **Late unlock is unchanged.** A game on *Late Unlock* (or a save from before this change, which reads as it): no
    entry before Mainframe Computers or the Ministry, and funding goes to 5.
+
+## World War
+
+Setup: a new 1836 game with World War on *Early Unlock*, observed or played as Great Britain, run with the console
+researching Trench Works for two or three great powers of each camp (democratic: Great Britain, France; authoritarian:
+Russia, Austria, Prussia).
+
+1. **The entry opens with Trench Works.** A great power with Trench Works and a rivalry with an opposed great power
+   holds The Gathering Storm within a week; its status names its camp (Democratic or Authoritarian). Without Trench
+   Works it has none.
+2. **Democratic against authoritarian counts until Combined Arms.** With Great Britain rivaling Russia, its status
+   reaches "Tensions are rising" and Begin Rearmament's tooltip asks for "Trench Works or Combined Arms researched".
+   Console-research Combined Arms for Russia: within a month that pair no longer raises Britain's tension.
+3. **A war can start and end.** Let tension reach the crisis band: The Brink of War (`.5`) fires for one side, the play
+   becomes a war, and after it the peace conference and the post-war years run as under *Late Unlock*. Strategic
+   Bombing (`.11`) never fires while no enemy has Bombing Aircraft.
+4. **A second world war.** After the early war's entry completes (or fails), the country has no entry until Combined
+   Arms; console-research it and, within a month, the entry is back (inactive or active).
+5. **Early to late, mid-game.** With an entry open for a great power without Combined Arms, switch to *Late Unlock*:
+   within a week the entry is gone, and it comes back within a month of researching Combined Arms.
+6. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry before Combined Arms,
+   and an authoritarian great power's entry stays inactive.

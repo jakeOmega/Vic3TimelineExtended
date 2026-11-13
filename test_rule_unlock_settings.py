@@ -26,6 +26,7 @@ RULES_LOC = ROOT / "localization/english/te_game_rules_l_english.yml"
 # rule: (system prefix, gate trigger prefix)
 SYSTEMS = {
     "covert_warfare_rule": ("covert_warfare", "te_covert_warfare"),
+    "world_war_rule": ("world_war", "te_world_war"),
 }
 
 
@@ -231,6 +232,80 @@ class CovertEarlyUnlockTest(unittest.TestCase):
         rules = loc(RULES_LOC)
         self.assertIn("$central_archives$", rules["setting_covert_warfare_early_unlock_desc"])
         self.assertIn("$mainframe_computers$", rules["setting_covert_warfare_enabled_desc"])
+
+
+# --- World War -----------------------------------------------------------------------------------------------------
+
+WW_JE = ROOT / "common/journal_entries/world_war_je.txt"
+WW_TRIGGERS = ROOT / "common/scripted_triggers/world_war_triggers.txt"
+WW_BUTTONS = ROOT / "common/scripted_buttons/world_war_buttons.txt"
+WW_EFFECTS = ROOT / "common/scripted_effects/te_event_agency_ww_effects.txt"
+WW_ON_ACTIONS = ROOT / "common/on_actions/extra_on_actions.txt"
+
+
+class WorldWarEarlyUnlockTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = code(WW_TRIGGERS)
+        cls.je = code(WW_JE)
+
+    def test_late_is_combined_arms_early_adds_trench_works(self):
+        self.assertEqual(words(braced(self.triggers, r"^ww_era_reached = \{")),
+                         "OR = { has_technology_researched = combined_arms AND = { te_world_war_early = yes "
+                         "has_technology_researched = trench_works } }")
+
+    def test_every_gate_that_named_combined_arms_reads_the_era(self):
+        for block in (r"^\tis_shown_when_inactive = \{", r"^\tpossible = \{"):
+            body = words(braced(self.je, block))
+            self.assertIn("ww_era_reached = yes", body)
+            self.assertNotIn("combined_arms", body)
+            self.assertIn("country_rank >= rank_value:great_power", body)
+        conditions = words(braced(self.triggers, r"^world_war_conditions_met = \{"))
+        self.assertIn("ww_era_reached = yes", conditions)
+        self.assertNotIn("combined_arms", conditions)
+        buttons = code(WW_BUTTONS)
+        self.assertNotIn("has_technology_researched = combined_arms", buttons)
+        self.assertEqual(buttons.count("ww_era_reached_tt = yes"), 2)
+        # The late unlock's tooltip line is the one the buttons always showed.
+        tt = words(braced(self.triggers, r"^ww_era_reached_tt = \{"))
+        self.assertIn("trigger_else = { custom_tooltip = { text = WW_REQ_COMBINED_ARMS_TT "
+                      "has_technology_researched = combined_arms } }", tt)
+
+    def test_the_early_opposition_is_gated_and_symmetric(self):
+        opposed = words(braced(self.triggers, r"^country_has_opposed_ideology = \{"))
+        self.assertIn("AND = { te_world_war_early = yes ww_before_ideological_age = { TARGET = $TARGET$ } OR = { "
+                      "AND = { country_is_democratic = yes $TARGET$ = { country_is_authoritarian = yes } } "
+                      "AND = { country_is_authoritarian = yes $TARGET$ = { country_is_democratic = yes } } } }",
+                      opposed)
+        self.assertEqual(words(braced(self.triggers, r"^ww_before_ideological_age = \{")),
+                         "NOT = { has_technology_researched = combined_arms } "
+                         "$TARGET$ = { NOT = { has_technology_researched = combined_arms } }")
+
+    def test_an_early_war_leaves_room_for_a_second(self):
+        self.assertNotIn("set_variable = ww_entry_resolved", self.je)
+        self.assertEqual(self.je.count("ww_mark_entry_resolved = yes"), 2)
+        mark = words(braced(code(WW_EFFECTS), r"^ww_mark_entry_resolved = \{"))
+        self.assertEqual(mark, "if = { limit = { te_world_war_early = yes NOT = { has_technology_researched = "
+                               "combined_arms } } set_variable = ww_early_war_resolved } "
+                               "else = { set_variable = ww_entry_resolved }")
+        for block in (r"^\tis_shown_when_inactive = \{", r"^\tpossible = \{"):
+            self.assertIn("NOT = { ww_resting_after_early_war = yes }", words(braced(self.je, block)))
+
+    def test_switched_to_late_the_entry_closes_and_the_net_brings_it_back(self):
+        outcomes = re.findall(r"^\toutcome = \{", self.je, re.M)
+        self.assertEqual(len(outcomes), 3)
+        invalid = words(self.je[self.je.index("flags = { hidden invalid_outcome }"):])
+        self.assertIn("OR = { NOT = { te_world_war_on = yes } NOT = { ww_era_reached = yes } }", invalid)
+        self.assertIn("set_variable = ww_reopen_at_gate", invalid)
+        net = words(braced(code(WW_ON_ACTIONS), r"^world_war_events_on_action = \{"))
+        self.assertIn("te_world_war_on = yes ww_era_reached = yes NOT = { ww_resting_after_early_war = yes }", net)
+        self.assertIn("add_journal_entry = { type = je_world_war }", net)
+
+    def test_the_setting_descriptions_name_their_technology(self):
+        rules = loc(RULES_LOC)
+        self.assertIn("$trench_works$", rules["setting_world_war_early_unlock_desc"])
+        self.assertIn("$combined_arms$", rules["setting_world_war_enabled_desc"])
 
 
 if __name__ == "__main__":

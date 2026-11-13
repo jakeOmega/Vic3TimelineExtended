@@ -902,7 +902,9 @@ class RepoTests(unittest.TestCase):
         self.assertEqual(data["guaranteed"]["assume_through_era"], 6)
 
     def test_an_entry_s_events_inherit_its_gate(self):
-        self.assertIn("combined_arms", self.analyze("world_war_events.2")["guaranteed"]["technologies"])
+        # World War opens at Combined Arms, or at Trench Works under its early unlock (ww_era_reached), so a text may
+        # assume only the earlier.
+        self.assertIn("trench_works", self.analyze("world_war_events.2")["guaranteed"]["technologies"])
         data = self.analyze("augmentation_events.1")  # has_augmentation_tech: either era 11 technology
         self.assertIn("brain_computer_interfaces", data["guaranteed"]["technologies"])
         self.assertEqual(data["guaranteed"]["assume_through_era"], 8)
