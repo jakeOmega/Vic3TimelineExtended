@@ -124,10 +124,20 @@ in `FormatTagTests` are what pin each rule.
 
 Known limits. A `$key$` or `[X.GetCustom('y')]` that pastes an opening
 fragment is not followed, so a caller that forgets the `#!` for a reviewed
-fragment is not caught. Tag names are not checked against the formats the
-game defines, so `#bolt x#!` passes (the mod's `#O`, 12 uses, has none in
-the vanilla snapshot). A `[` that never closes, or an odd apostrophe inside
+fragment is not caught. A `[` that never closes, or an odd apostrophe inside
 `[...]`, makes the scan skip the rest of the value.
+
+**A format vanilla's loc never uses** (`unknown_format`, #1698) — a tag
+whose format name, case kept, no value of vanilla's English loc opens (the
+committed `vanilla_parsed/` snapshot; without it the check is off). The
+formats are defined in vanilla's `gui/textformatting.gui`, which the repo
+does not hold, so vanilla's own use is the evidence a name renders: `#bolt
+x#!` would otherwise pass. The mod had one, `#O` (12 values meant orange);
+vanilla writes orange `#o` (`COUNTRY_FOREIGNLY_OWNED_PERCENTAGE`, and the
+test string that spells "colour" `#r c#!#o o#!#yellow l#!#g o#!#U r#!`).
+Vanilla writes both cases of several letters (`#v` / `#V`, `#r` / `#R`), so a
+case is a different name here. A name seen to render in game takes a
+`# REVIEWED` comment saying where.
 
 A tag left open may be a literal hash that was never doubled: `Rank #$RANK$`,
 `#[X.GetRank]`, `the #MeToo movement`. Adding the `#!` would pass the audit
@@ -162,7 +172,8 @@ from mod_state import split_loc_line
 class RenderFlag:
     loc_key: str
     # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" |
-    # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash"
+    # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash" |
+    # "unknown_format"
     issue: str
     detail: str
     file: str
@@ -297,16 +308,44 @@ def scan_format_tags(value: str) -> TagScan:
 _FORMAT_NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
 
-def _format_names(header: str) -> list[str]:
-    """The format names a tag header combines, lower-cased: `#bold;red` is
-    bold and red, `#tooltippable;tooltip:[X],key` tooltippable and tooltip.
-    A computed header (`#[GetX]`, `#$COLOR$`) has none."""
+def _format_names(header: str, keep_case: bool = False) -> list[str]:
+    """The format names a tag header combines, lower-cased unless
+    `keep_case`: `#bold;red` is bold and red, `#tooltippable;tooltip:[X],key`
+    tooltippable and tooltip. A computed header (`#[GetX]`, `#$COLOR$`) has
+    none."""
     names = []
     for part in header[1:].split(";"):
         m = _FORMAT_NAME_RE.match(part)
         if m:
-            names.append(m.group(0).lower())
+            names.append(m.group(0) if keep_case else m.group(0).lower())
     return names
+
+
+def used_format_names(values: Iterable[str]) -> set[str]:
+    """Every format name, case kept, that a tag in `values` opens, closed or
+    not."""
+    names: set[str] = set()
+    for value in values:
+        if "#" in value:
+            scan = scan_format_tags(value)
+            for header in scan.closed + scan.open_tags:
+                names.update(_format_names(header, keep_case=True))
+    return names
+
+
+_VANILLA_LOC_JSON = os.path.join("vanilla_parsed", "localization_english.json")
+
+
+def vanilla_format_names(mod_path: str) -> set[str] | None:
+    """used_format_names over vanilla's English loc, from the committed
+    `vanilla_parsed/` snapshot under `mod_path`; None without one (a temp-dir
+    test tree), which turns the `unknown_format` check off."""
+    try:
+        with open(os.path.join(mod_path, _VANILLA_LOC_JSON), encoding="utf-8") as fh:
+            loc = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    return used_format_names(loc.values())
 
 
 def closed_tag_names(values: Iterable[str]) -> set[str]:
@@ -329,9 +368,12 @@ def _tag_list(headers: list[str]) -> str:
     return ", ".join(f"`{_short_tag(h)}`" for h in headers)
 
 
-def check_format_tags(value: str, known_tags: set[str] | None = None) -> list[tuple[str, str]]:
-    """Flag a formatting tag left open at the end of the value, and a `#` that
-    is neither a tag, a `#!` nor a `##`. Pure; unit-testable.
+def check_format_tags(value: str, known_tags: set[str] | None = None,
+                      vanilla_names: set[str] | None = None) -> list[tuple[str, str]]:
+    """Flag a formatting tag left open at the end of the value, a `#` that
+    is neither a tag, a `#!` nor a `##`, and, given `vanilla_names`
+    (vanilla_format_names), a tag naming a format vanilla's loc never uses.
+    Pure; unit-testable.
 
     `known_tags` is `closed_tag_names()` over the mod's loc. With it, a tag
     left open whose name no value closes gets the literal-hash hint that a
@@ -370,6 +412,24 @@ def check_format_tags(value: str, known_tags: set[str] | None = None) -> list[tu
             f"a `#` that is not a tag, a `#!` or a `##` at offset {at} "
             f"(`{snippet}`). Write a literal hash as `##`, as vanilla does",
         ))
+    if vanilla_names is not None:
+        unknown: list[str] = []
+        for header in scan.closed + scan.open_tags:
+            unknown += [n for n in _format_names(header, keep_case=True)
+                        if n not in vanilla_names and n not in unknown]
+        if unknown:
+            lowered = {n.lower(): n for n in sorted(vanilla_names)}
+            hints = [f"`#{lowered[n.lower()]}`" for n in unknown if n.lower() in lowered]
+            out.append((
+                "unknown_format",
+                ", ".join(f"`#{n}`" for n in unknown)
+                + (" names a format" if len(unknown) == 1 else " name formats")
+                + " no value of vanilla's English loc opens, so whether the engine defines "
+                + ("it" if len(unknown) == 1 else "them") + " is unverified"
+                + (f" (vanilla writes {', '.join(hints)})" if hints else "")
+                + ". Use a format vanilla writes, or say in a `# REVIEWED` comment where this one "
+                "was seen to render",
+            ))
     return out
 
 
@@ -607,9 +667,11 @@ def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
     return split_loc_line(raw)
 
 
-def check_value(value: str, known_tags: set[str] | None = None) -> list[tuple[str, str]]:
+def check_value(value: str, known_tags: set[str] | None = None,
+                vanilla_names: set[str] | None = None) -> list[tuple[str, str]]:
     """Return [(issue, detail)] for one loc value. Pure; unit-testable.
-    `known_tags` only sharpens the `unclosed_format` hint (check_format_tags)."""
+    `known_tags` only sharpens the `unclosed_format` hint, and `vanilla_names`
+    turns on `unknown_format` (check_format_tags)."""
     out: list[tuple[str, str]] = []
     brackets = _BRACKET_FMT_RE.findall(value)
     if brackets:
@@ -629,7 +691,7 @@ def check_value(value: str, known_tags: set[str] | None = None) -> list[tuple[st
             f"(`{snippet}`) — the loc parser does not nest; pass data-function "
             "arguments as bare expressions",
         ))
-    out += check_format_tags(value, known_tags)
+    out += check_format_tags(value, known_tags, vanilla_names)
     return out
 
 
@@ -669,12 +731,13 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
 
     loc_values = {key: value for key, value, _t, _f, _l in entries}
     known_tags = closed_tag_names(value for _k, value, _t, _f, _l in entries)
+    vanilla_names = vanilla_format_names(mod_path)
     quoted_names = _quoted_name_keys(mod_path)
     articles = _treaty_article_keys(mod_path)
 
     flags: list[RenderFlag] = []
     for loc_key, value, trailing, rel_p, line in entries:
-        issues = check_value(value, known_tags) + check_quoted_expansion(value, loc_values)
+        issues = check_value(value, known_tags, vanilla_names) + check_quoted_expansion(value, loc_values)
         if loc_key in quoted_names:
             issues += check_quoted_name(value, loc_values)
         article_text = article_type_text_key(loc_key, articles)
@@ -708,6 +771,7 @@ _ISSUE_LABEL = {
     "article_desc_scope": "Article-instance scope in a treaty article's `_desc` / `_effects_desc`",
     "unclosed_format": "Formatting tags left open (`#bold` with no `#!`)",
     "bare_hash": "A `#` that is not a tag (write `##`)",
+    "unknown_format": "A format vanilla's loc never uses (`#O` for `#o`)",
 }
 
 
@@ -752,6 +816,10 @@ def render_report(result: AuditResult) -> str:
         "(a color prefix from customizable localization) takes a `# REVIEWED`",
         "naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.",
         "Fix: write a literal hash as `##`.",
+        "",
+        "Also flagged: a tag naming a format (case kept) that no value of",
+        "vanilla's English loc opens, so it may not render. Fix: use the form",
+        "vanilla writes (`#o`, not `#O`).",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",
