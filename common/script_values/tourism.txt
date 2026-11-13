@@ -2880,9 +2880,26 @@ tourism_bonus_from_monuments = {
 
 total_tourism_output_bonus_percent = {
 	value = tourism_bonus_from_base_appeal
-	add = tourism_bonus_from_urban_centers
-	add = tourism_bonus_from_monuments
+	add = tourism_output_bonus_besides_appeal
 	# Airports, laws, turmoil, pollution, obstinance now handled via direct modifiers
+}
+
+# What the output bonus adds to the base appeal: total_tourism_output_bonus_percent's
+# other terms, shared with tourism_output_from_stored_appeal so the two cannot drift.
+tourism_output_bonus_besides_appeal = {
+	value = tourism_bonus_from_urban_centers
+	add = tourism_bonus_from_monuments
+}
+
+# total_tourism_output_bonus_percent with the base appeal read from
+# var:te_tourism_base_appeal, which te_update_tourism_modifier writes just
+# before it applies tourism_output at this. The base appeal is a state_region
+# chain of some 670 branches, and the monthly refresh read it twice: about 100
+# of its 268 ms in 30 days of a 1931 game, profiled
+# (docs/audits/late_game_performance.md, item 12). State scope, ROOT the state.
+tourism_output_from_stored_appeal = {
+	value = var:te_tourism_base_appeal
+	add = tourism_output_bonus_besides_appeal
 }
 
 total_tourism_throughput_bonus_percent = {

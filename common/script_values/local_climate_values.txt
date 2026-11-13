@@ -163,11 +163,17 @@ te_climate_heat_excess = {
 }
 
 # Each term before relief, in percent. Heat is (b x + a) x x = a x + b x^2.
+# The excess is read once and saved (save_temporary_value_as, vanilla's form in
+# command_values.txt): it reads the state's summer and humidity chains, and the
+# refresh reads this value six times, through the heat term and both mild-weather
+# shares, once for the penalty and once for its base
+# (docs/audits/late_game_performance.md, item 12).
 te_climate_heat_raw = {
 	value = te_climate_heat_excess
+	save_temporary_value_as = te_climate_heat_excess_now
 	multiply = te_climate_heat_quadratic
 	add = te_climate_heat_linear
-	multiply = te_climate_heat_excess
+	multiply = scope:te_climate_heat_excess_now
 }
 te_climate_cold_raw = {
 	value = te_climate_cold_start

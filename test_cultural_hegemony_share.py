@@ -30,18 +30,26 @@ def entries(node):
 class ShareHarness:
     """The script-value subset these values use, for one country."""
 
-    def __init__(self, raw, globals_=None, variables=None):
+    def __init__(self, raw, globals_=None, variables=None, stubs=None):
         parser = ParadoxFileParser()
         tree = parser.parse_object(parser.tokenize("{" + read(VALUES) + "}"))[0]
         self.values = {key: value for key, _, value in entries(tree)}
         self.raw = Decimal(str(raw))
         self.globals = {k: Decimal(str(v)) for k, v in (globals_ or {}).items()}
         self.variables = {k: Decimal(str(v)) for k, v in (variables or {}).items()}
+        # leaf values and modifier reads given as numbers (the engine's walks)
+        self.stubs = {k: Decimal(str(v)) for k, v in (stubs or {}).items()}
+        self.calls = {}
+        self.saved = {}  # save_temporary_value_as
 
     def __call__(self, name):
+        self.calls[name] = self.calls.get(name, 0) + 1
+        if name in self.stubs:
+            return self.stubs[name]
         if name == "cultural_pull_raw":
             return self.raw
-        return self.block(self.values[name])
+        value = self.values[name]
+        return self.operand(value) if isinstance(value, str) else self.block(value)
 
     def operand(self, item):
         if isinstance(item, (dict, list)):
@@ -50,17 +58,25 @@ class ShareHarness:
             return self.globals[item[11:]]
         if item.startswith("var:"):
             return self.variables[item[4:]]
+        if item.startswith("scope:"):
+            return self.saved[item[6:]]
+        if item.startswith("modifier:"):
+            return self.stubs[item]
         if re.fullmatch(r"-?[\d.]+", item):
             return Decimal(item)
         return self(item)
 
     def limit(self, node):
         results = []
-        for key, _, item in entries(node):
+        for key, op, item in entries(node):
             if key == "has_global_variable":
                 results.append(item in self.globals)
             elif key == "has_variable":
                 results.append(item in self.variables)
+            elif op in (">", "<", ">=", "<="):
+                left, right = self.operand(key), self.operand(item)
+                results.append({">": left > right, "<": left < right,
+                                ">=": left >= right, "<=": left <= right}[op])
             else:
                 raise AssertionError(f"unsupported trigger: {key}")
         return all(results)
@@ -95,6 +111,8 @@ class ShareHarness:
                 acc = min(acc, self.operand(item))
             elif key == "round":
                 acc = acc.quantize(Decimal(1))
+            elif key == "save_temporary_value_as":
+                self.saved[item] = acc
             else:
                 raise AssertionError(f"unsupported script-value op: {key}")
         return acc
@@ -109,6 +127,22 @@ def world(raw, globals_=None, variables=None):
 
 
 CENSUS = {"ch_cached_global_raw": 769, "ch_census_own_raw": 1}
+
+
+def art(production, world, mult=0):
+    """cultural_pull_from_art and the named values it was written from, at a
+    country's fine-art production and the world's."""
+    stubs = {
+        "country_fine_art_production": production,
+        "global_fine_art_production": world,
+        "modifier:country_cultural_hegemony_art_mult": mult,
+    }
+    new = ShareHarness(0, stubs=stubs)
+    got = new("cultural_pull_from_art")
+    old = ShareHarness(0, stubs=stubs)
+    cap = old("country_art_share_pct_diminished")
+    want = max(min(Decimal(str(production)), cap) * (1 + Decimal(str(mult))), Decimal(0))
+    return got, want, new.calls
 
 
 class CulturalShareTests(unittest.TestCase):
@@ -140,6 +174,42 @@ class CulturalShareTests(unittest.TestCase):
         tiny = {"ch_cached_global_raw": 1, "ch_census_own_raw": 1}
         self.assertEqual(share(0, tiny, {"ch_raw_at_census": Decimal("0.5")}), 0)
         self.assertEqual(ShareHarness(0, tiny, {"ch_raw_at_census": 2})("ch_world_raw_others"), 0)
+
+    def test_the_share_is_raw_over_the_live_world_total(self):
+        # cultural_pull_total writes ch_world_raw_live out with the raw pull saved; the two must agree, the
+        # denominator's floor of 1 included (a raw pull of 0.2 against a census total of 1)
+        cases = [
+            (Decimal("1074.9"), CENSUS, {"ch_raw_at_census": 700}),
+            (31, CENSUS, {}),
+            (300, {"ch_cached_global_raw": 769}, {}),
+            (Decimal("0.2"), {"ch_cached_global_raw": 1, "ch_census_own_raw": 1}, {"ch_raw_at_census": Decimal("0.5")}),
+            (Decimal("0.2"), {"ch_cached_global_raw": Decimal("0.4"), "ch_census_own_raw": 1}, {}),
+        ]
+        for raw, globals_, variables in cases:
+            harness = ShareHarness(raw, globals_, variables)
+            want = min(max(Decimal(str(raw)) / harness("ch_world_raw_live") * 100, Decimal(0)), Decimal(100))
+            self.assertEqual(ShareHarness(raw, globals_, variables)("cultural_pull_total"), want, (raw, globals_))
+
+    def test_the_share_reads_the_raw_pull_once(self):
+        harness = ShareHarness(Decimal("1074.9"), CENSUS, {"ch_raw_at_census": 700})
+        harness("cultural_pull_total")
+        self.assertEqual(harness.calls["cultural_pull_raw"], 1)
+
+    def test_art_pull_equals_the_named_share_cap_on_both_sides_of_the_threshold(self):
+        # early game, the production below the cap (a small world: share 40%, 75%,
+        # 20%); late game, the cap below it: share 2%, 20% (below the threshold),
+        # 33% (on it), 60% and 95% (on the curve); with and without the modifier hook
+        cases = [(2, 5), (3, 4), (Decimal("0.5"), Decimal("2.5")),
+                 (2, 100), (20, 100), (330, 1000), (600, 1000), (95, 100), (5000, 9000)]
+        for production, world in cases:
+            for mult in (0, Decimal("0.25"), -2):
+                got, want, _ = art(production, world, mult)
+                self.assertEqual(got, want, (production, world, mult))
+
+    def test_art_pull_reads_each_walk_once(self):
+        _, _, calls = art(600, 1000)
+        self.assertEqual(calls["country_fine_art_production"], 1)
+        self.assertEqual(calls["global_fine_art_production"], 1)
 
     def test_census_stores_each_countrys_pull_before_ranking_and_model_totals(self):
         effects = read(EFFECTS)

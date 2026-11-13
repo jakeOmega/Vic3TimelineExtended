@@ -957,10 +957,23 @@ class BoardTest(unittest.TestCase):
         # The board printed a slot's change, so a new occupant was measured
         # against whoever held the rank before.
         census = _block(self.effects, "ch_yearly_global_update")
-        self.assertIn("set_variable = { name = ch_board_share_prev value = cultural_pull_display }", census)
+        self.assertIn("set_variable = { name = ch_board_share_prev value = var:ch_board_share_now }", census)
         self.assertLess(census.index("subtract = var:ch_board_share_prev"),
-                        census.index("set_variable = { name = ch_board_share_prev value = cultural_pull_display }"))
+                        census.index("set_variable = { name = ch_board_share_prev value = var:ch_board_share_now }"))
         self.assertNotIn("_delta", re.sub(r"ch_board_delta\w*", "", census))
+
+    def test_the_census_reads_each_share_once(self):
+        # Each read of cultural_pull_display runs the whole pull chain, so the
+        # ranked pass reads it once per country and the change, the stored
+        # share and the board slots take the saved copy.
+        census = _block(self.effects, "ch_yearly_global_update")
+        self.assertEqual(census.count("cultural_pull_display"), 1)
+        read = census.index("set_variable = { name = ch_board_share_now value = cultural_pull_display }")
+        self.assertLess(read, census.index("value = var:ch_board_share_now"))
+        self.assertEqual(
+            re.findall(r"ch_rank_(\d+)_score value = var:ch_board_share_now", census),
+            [str(n) for n in range(1, 11)])
+        self.assertLess(census.rindex("var:ch_board_share_now"), census.index("remove_variable = ch_board_share_now"))
 
     def test_how_describes_the_table(self):
         how = self.loc["je_ch_how_board"]
