@@ -197,7 +197,12 @@ un_request_peacekeepers_button = {
 	name = "UN_REQUEST_PEACEKEEPERS"
 	desc = "UN_REQUEST_PEACEKEEPERS_DESC"
 
-	visible = { is_ai = yes un_propose_peacekeepers_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = peacekeeping_request } }
+		un_propose_peacekeepers_available = yes
+	}
 
 	possible = { un_propose_peacekeepers_possible = yes }
 
@@ -221,7 +226,12 @@ un_request_humanitarian_aid_button = {
 	name = "UN_REQUEST_AID"
 	desc = "UN_REQUEST_AID_DESC"
 
-	visible = { is_ai = yes un_propose_aid_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = aid_request } }
+		un_propose_aid_available = yes
+	}
 
 	possible = { un_propose_aid_possible = yes }
 
@@ -248,7 +258,14 @@ un_propose_condemn_button = {
 	name = "UN_PROPOSE_CONDEMN"
 	desc = "UN_PROPOSE_CONDEMN_DESC"
 
-	visible = { is_ai = yes un_propose_condemn_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
+		un_propose_condemn_available = yes
+	}
 
 	possible = { un_propose_condemn_possible = yes }
 
@@ -380,7 +397,13 @@ un_propose_expulsion_button = {
 	name = "UN_PROPOSE_EXPULSION"
 	desc = "UN_PROPOSE_EXPULSION_DESC"
 
-	visible = { is_ai = yes un_propose_expulsion_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		un_propose_can_afford_sponsor_punitive = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = expulsion } }
+		un_propose_expulsion_available = yes
+	}
 
 	possible = { un_propose_expulsion_possible = yes }
 
@@ -441,7 +464,15 @@ un_propose_charter_reform_button = {
 	name = "UN_PROPOSE_CHARTER_REFORM"
 	desc = "UN_PROPOSE_CHARTER_REFORM_DESC"
 
-	visible = { is_ai = yes un_propose_reform_available = yes }
+	visible = {
+		is_ai = yes
+		country_rank >= rank_value:major_power
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
+		un_propose_reform_available = yes
+	}
 
 	possible = { un_propose_reform_possible = yes }
 
@@ -503,7 +534,16 @@ un_propose_mandate_button = {
 	name = "UN_PROPOSE_MANDATE"
 	desc = "UN_PROPOSE_MANDATE_DESC"
 
-	visible = { is_ai = yes un_propose_mandate_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor_punitive = yes
+		NOT = { has_variable = un_mandate_proposal_cooldown }
+		has_global_variable = un_authority
+		global_var:un_authority >= 40
+		un_propose_mandate_available = yes
+	}
 
 	possible = { un_propose_mandate_possible = yes }
 
@@ -527,7 +567,15 @@ un_propose_sanctions_button = {
 	name = "UN_PROPOSE_SANCTIONS"
 	desc = "UN_PROPOSE_SANCTIONS_DESC"
 
-	visible = { is_ai = yes un_propose_sanctions_available = yes }
+	visible = {
+		is_ai = yes
+		country_rank >= rank_value:major_power
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor_punitive = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
+		un_propose_sanctions_available = yes
+	}
 
 	possible = { un_propose_sanctions_possible = yes }
 
@@ -1263,7 +1311,15 @@ un_propose_court_referral_button = {
 	name = "UN_PROPOSE_COURT_REFERRAL"
 	desc = "UN_PROPOSE_COURT_REFERRAL_DESC"
 
-	visible = { is_ai = yes un_propose_court_referral_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor_punitive = yes
+		un_charter_has_reform = { LEVEL = 1 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = court_referral } }
+		un_propose_court_referral_available = yes
+	}
 
 	possible = { un_propose_court_referral_possible = yes }
 
@@ -1278,7 +1334,15 @@ un_propose_arms_embargo_button = {
 	name = "UN_PROPOSE_ARMS_EMBARGO"
 	desc = "UN_PROPOSE_ARMS_EMBARGO_DESC"
 
-	visible = { is_ai = yes un_propose_arms_embargo_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor_punitive = yes
+		un_charter_has_reform = { LEVEL = 1 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = arms_embargo } }
+		un_propose_arms_embargo_available = yes
+	}
 
 	possible = { un_propose_arms_embargo_possible = yes }
 
@@ -1293,7 +1357,15 @@ un_propose_credentials_button = {
 	name = "UN_PROPOSE_CREDENTIALS"
 	desc = "UN_PROPOSE_CREDENTIALS_DESC"
 
-	visible = { is_ai = yes un_propose_credentials_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor_punitive = yes
+		un_charter_has_reform = { LEVEL = 1 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = credentials } }
+		un_propose_credentials_available = yes
+	}
 
 	possible = { un_propose_credentials_possible = yes }
 
@@ -1308,7 +1380,15 @@ un_propose_standing_force_button = {
 	name = "UN_PROPOSE_STANDING_FORCE"
 	desc = "UN_PROPOSE_STANDING_FORCE_DESC"
 
-	visible = { is_ai = yes un_propose_standing_force_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		un_charter_has_reform = { LEVEL = 1 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = standing_force } }
+		un_propose_standing_force_available = yes
+	}
 
 	possible = { un_propose_standing_force_possible = yes }
 
@@ -1323,7 +1403,13 @@ un_propose_observer_request_button = {
 	name = "UN_PROPOSE_OBSERVER_REQUEST"
 	desc = "UN_PROPOSE_OBSERVER_REQUEST_DESC"
 
-	visible = { is_ai = yes un_propose_observer_request_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		un_charter_has_reform = { LEVEL = 1 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = observer_request } }
+		un_propose_observer_request_available = yes
+	}
 
 	possible = { un_propose_observer_request_possible = yes }
 
@@ -1338,7 +1424,14 @@ un_propose_food_reserve_button = {
 	name = "UN_PROPOSE_FOOD_RESERVE"
 	desc = "UN_PROPOSE_FOOD_RESERVE_DESC"
 
-	visible = { is_ai = yes un_propose_food_reserve_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = food_reserve } }
+		un_propose_food_reserve_available = yes
+	}
 
 	possible = { un_propose_food_reserve_possible = yes }
 
@@ -1356,6 +1449,11 @@ un_propose_ceasefire_button = {
 	visible = {
 		is_ai = yes
 		un_charter_reform_ii_in_view = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		un_charter_has_reform = { LEVEL = 2 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = ceasefire } }
 		un_propose_ceasefire_available = yes
 	}
 
@@ -1372,7 +1470,14 @@ un_propose_development_fund_button = {
 	name = "UN_PROPOSE_DEVELOPMENT_FUND"
 	desc = "UN_PROPOSE_DEVELOPMENT_FUND_DESC"
 
-	visible = { is_ai = yes un_propose_development_fund_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = development_fund } }
+		un_propose_development_fund_available = yes
+	}
 
 	possible = { un_propose_development_fund_possible = yes }
 
@@ -1390,6 +1495,11 @@ un_propose_referendum_button = {
 	visible = {
 		is_ai = yes
 		un_charter_reform_ii_in_view = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		un_charter_has_reform = { LEVEL = 2 }
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = referendum } }
 		un_propose_referendum_available = yes
 	}
 
@@ -1408,7 +1518,14 @@ un_propose_lift_sanctions_button = {
 	name = "UN_PROPOSE_LIFT_SANCTIONS"
 	desc = "UN_PROPOSE_LIFT_SANCTIONS_DESC"
 
-	visible = { is_ai = yes un_propose_lift_sanctions_available = yes }
+	visible = {
+		is_ai = yes
+		un_propose_ai_floor_open = yes	# possible's cheap gates before the case scan
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		un_propose_can_afford_sponsor = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = lift_sanctions } }
+		un_propose_lift_sanctions_available = yes
+	}
 
 	possible = { un_propose_lift_sanctions_possible = yes }
 
