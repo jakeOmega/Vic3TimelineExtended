@@ -48,6 +48,10 @@ machine with the game and classify what is new in
 
     python3 scripts/generators/culture_merge_primary_reads.py --write
     python3 scripts/generators/culture_merge_primary_reads.py --check    # exit 1 when the JSON is stale
+
+The same scan answers for any culture and any name on the machine with the
+game, through the mod state server: ``/culture-reads/<culture>``,
+``/vanilla-refs/<name>`` and ``/formables`` (``vanilla_refs.py``, #1563).
 """
 
 from __future__ import annotations

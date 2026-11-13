@@ -5877,6 +5877,10 @@ class ModStateHandler(EngineDocsRoutes, BaseHTTPRequestHandler):
             # Prestige goods per base good, against the engine's cap (#749)
             "prestige-goods": lambda: self._prestige_goods(params),
             "references": lambda: self._references(rest),
+            # Vanilla's own script, read from the installed game (#1563)
+            "vanilla-refs": lambda: self._vanilla_refs(rest, params),
+            "culture-reads": lambda: self._culture_reads(rest, params),
+            "formables": lambda: self._formables(params),
             "diff": lambda: self._diff(rest, params),
             # Another mod's entries that land on ours, and which side wins (#1170)
             "external-mod-overlap": lambda: self._external_mod_overlap(rest, params),
@@ -6007,6 +6011,9 @@ class ModStateHandler(EngineDocsRoutes, BaseHTTPRequestHandler):
                 {"path": "/companies?flavored=yes|no&source=mod|vanilla|all", "desc": "Merged company rosters, prosperity effects, flagships and per-flavored-bucket statistics."},
                 {"path": "/building-companies/<building_id>", "desc": "Companies listing a building in their roster or extension roster."},
                 {"path": "/goods", "desc": "Goods catalog."},
+                {"path": "/vanilla-refs/<name>?depth=N", "desc": "Vanilla's own script, read from the installed game (#1563; 503 without one): the top-level vanilla entities in common/ and events/ whose body mentions <name>, N steps up, and the journal entries, on-actions and decisions among them. The first call reads the install (half a minute or more)."},
+                {"path": "/culture-reads/<culture>?as=primary|pop|homeland|any", "desc": "Where vanilla tests cu:<culture> (#1563, needs the game): one row per file and entity with count, the keys the tests sit under, and the journal entries the entity belongs to or is reached from."},
+                {"path": "/formables?lists_culture=<culture>", "desc": "country_formation tags, vanilla's and the mod's (#1563, needs the game): the cultures the tag's country definition lists, exists_at_start, use_culture_states, source vanilla|mod|both."},
                 {"path": "/combat-units", "desc": "Combat unit type/group catalog."},
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
@@ -7829,6 +7836,54 @@ class ModStateHandler(EngineDocsRoutes, BaseHTTPRequestHandler):
                         {"type": etype, "id": eid, "name": ms.localize(eid)}
                     )
         return dict(results) if results else {"message": f"No references found for '{key}'"}
+
+    def _vanilla_script(self):
+        """The installed game's script for the /vanilla-refs family (#1563), read once per install state. A
+        machine without the game gets a 503 that says so: these folders are not in vanilla_parsed/."""
+        import vanilla_refs
+
+        try:
+            game = Path(base_game_path) / "game" if _vanilla_tree_present() else None
+            return vanilla_refs, vanilla_refs.cached(game)
+        except (vanilla_refs.NoGame, RuntimeError) as exc:
+            raise _ServiceNotReady({
+                "error": "needs the installed game",
+                "detail": str(exc),
+                "hint": "Run this on the machine with Victoria 3 installed. For the culture merges' part "
+                        "cultures, scripts/generators/culture_merge_primary_reads.json holds a committed scan.",
+            })
+
+    def _vanilla_refs(self, parts, params):
+        """GET /vanilla-refs/<name>[?depth=N] (#1563): the vanilla entities whose body mentions <name>, N steps
+        up, and the journal entries, on-actions and decisions among them."""
+        if not parts:
+            raise BadRequest("Provide a name, e.g. /vanilla-refs/je_meiji_restoration?depth=3")
+        vanilla_refs, vs = self._vanilla_script()
+        try:
+            depth = int((params.get("depth") or [vanilla_refs.DEFAULT_DEPTH])[0])
+        except ValueError:
+            raise BadRequest("?depth= is a whole number")
+        return vanilla_refs.refs(vs, parts[0], depth)
+
+    def _culture_reads(self, parts, params):
+        """GET /culture-reads/<culture>[?as=primary|pop|homeland|any] (#1563): the vanilla entities that test
+        cu:<culture> that way, with the journal entries each belongs to or is reached from."""
+        if not parts:
+            raise BadRequest("Provide a culture, e.g. /culture-reads/north_german?as=primary")
+        vanilla_refs, vs = self._vanilla_script()
+        mode = (params.get("as") or ["primary"])[0]
+        try:
+            rows = vanilla_refs.culture_reads(vs, parts[0], mode)
+        except ValueError as exc:
+            raise BadRequest(str(exc))
+        return {"culture": parts[0], "as": mode, "count": sum(r["count"] for r in rows), "reads": rows}
+
+    def _formables(self, params):
+        """GET /formables[?lists_culture=<culture>] (#1563): country_formation tags, vanilla's and the mod's,
+        with the cultures their country definition lists and whether the tag owns a state at the start."""
+        vanilla_refs, vs = self._vanilla_script()
+        culture = (params.get("lists_culture") or [None])[0]
+        return vanilla_refs.formables(vs, culture, Path(mod_path))
 
     # ---- analytical: tech tree --------------------------------------------
     def _tech_tree(self, parts):
