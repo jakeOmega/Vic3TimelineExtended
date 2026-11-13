@@ -12,7 +12,8 @@
 #             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22, 23, 37, 38, 39, 40, 41
 #             (topics to table),
 #             4 (a collapsing state), 7 (a famine), 15 (an embargo)
-#   hooks     5 (sanctions adopted), 8 (a court case from event 2),
+#   hooks     5 (sanctions adopted, through the hidden relay 43),
+#             8 (a court case from event 2),
 #             10 (the crisis opens), 11 (a veto), 20 (a great power leaves),
 #             30-32 (dissolution and refounding), 101-103 (notifications),
 #             36 (our representation restored, with conventions passed meanwhile)
@@ -778,10 +779,12 @@ un_events.5 = {
 
 	duration = 3
 
-	# Redesign phase 4: no longer rolled. un_vote.2 fires it to the proposer of
+	# Redesign phase 4: no longer rolled. un_vote.2 sends it to the proposer of
 	# adopted sanctions (the enforcer) three months on, with
-	# scope:sanctioned_country the target. A queued event from an older save
-	# has no saved target and picks one, as the rolled event used to.
+	# scope:sanctioned_country the target, through the hidden un_events.43,
+	# which waits out the three months and opens this on the day if this
+	# trigger holds (#1596). A queued event from an older save has no saved
+	# target and picks one, as the rolled event used to.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_modifier = un_sanctions_enforcer_modifier
@@ -831,8 +834,8 @@ un_events.5 = {
 		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1.5 REASON = 1051 SUBJECT = scope:sanctioned_country }
 		# International standing: enforcing a sanctions regime at cost to
 		# yourself is compliance with a binding decision, not mere agreement.
-		# One payout per firing of this event, which is gated by the
-		# un_sanctions_enforcer_modifier trigger and a five-year event cooldown.
+		# One payout per firing of this event, which un_vote.2 sends once per
+		# adopted regime (through un_events.43), to its enforcer only.
 		custom_tooltip = {
 			text = un_standing_complied_tt
 			un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
@@ -888,6 +891,38 @@ un_events.5 = {
 		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_busting }
 		change_relations = { country = scope:sanctioned_country value = 10 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	}
+}
+
+# Event 43: the sanctions' three months (un_vote.2), for un_events.5 (#1596).
+# un_vote.2 adds the enforcer modifier and sets the target's regime in the
+# same block as it queues the enforcement choice, so un_events.5's trigger is
+# false on the day it is queued, and a delayed event whose trigger is false
+# then seems to be dropped (scripting_best_practices.md § "A Delayed
+# `trigger_event` Re-Checks Its Trigger When It Fires"). This waits with no
+# trigger and opens un_events.5 when due if its trigger holds, restated here
+# (test_un_lift_sanctions.py pins the two together). scope:sanctioned_country
+# rides along to the popup.
+un_events.43 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				has_modifier = un_sanctions_enforcer_modifier
+				NOT = { has_modifier = un_sanctions_enforcement_modifier }
+				OR = {
+					scope:sanctioned_country ?= { has_variable = un_sanctions_target_on }
+					AND = {
+						NOT = { exists = scope:sanctioned_country }
+						any_country = { has_variable = un_sanctions_target_on }
+					}
+				}
+			}
+			trigger_event = { id = un_events.5 }
+		}
 	}
 }
 

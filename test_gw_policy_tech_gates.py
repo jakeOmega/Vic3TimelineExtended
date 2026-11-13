@@ -53,12 +53,11 @@ def _techs(body):
     return {value} if isinstance(value, str) else set(value)
 
 
-def _possible_modifier(body):
-    """The policy modifier whose absence the adoption test's first line checks
+def _possible_in_force(body):
+    """The in-force trigger whose failure the adoption test's first line checks
     (a hidden_trigger since GW-16: the widget only offers Adopt out of force)."""
-    first = body["hidden_trigger"]
-    # Tariffs test their own trigger (they follow the market leader), not a modifier.
-    return first.get("NOT", {}).get("je:je_global_warming", {}).get("has_modifier")
+    (name, _), = body["hidden_trigger"]["NOT"].items()
+    return name
 
 
 class PolicyTechGates(unittest.TestCase):
@@ -94,18 +93,15 @@ class EmissionsTreatyTechGate(unittest.TestCase):
         self.article = load(TREATY)["enforce_emissions_reduction"]
 
     def test_treaty_needs_the_union_of_its_forced_policies_gates(self):
-        by_modifier = {}
-        for policy in GATES:
-            modifier = _possible_modifier(self.triggers[f"gw_possible_{policy}"])
-            if modifier:
-                by_modifier[modifier] = policy
+        by_trigger = {_possible_in_force(self.triggers[f"gw_possible_{policy}"]): policy for policy in GATES}
         text = (ROOT / TREATY).read_text(encoding="utf-8-sig")
         freeze = text[text.index("non_fulfillment"):text.index("\tai = {")]
-        forced = set(re.findall(r"has_modifier = (\w+)", freeze))
+        # The policies whose repeal freezes the treaty, by their in-force triggers (#1466).
+        forced = set(re.findall(r"(gw_policy_\w+_active) = yes", freeze))
         self.assertEqual(len(forced), 7)
         expected = set()
-        for modifier in forced:
-            tech = GATES[by_modifier[modifier]]
+        for trigger in forced:
+            tech = GATES[by_trigger[trigger]]
             if tech:
                 expected.add(tech)
         self.assertEqual(_techs(self.triggers["gw_has_emissions_treaty_technologies"]), expected)

@@ -34,12 +34,12 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 _SOL_RE = re.compile(
     r"^[ \t]*(?P<key>[a-z_][a-z0-9_]*standard_of_living_add)[ \t]*=[ \t]*"
     r"(?P<value>-?\d+(?:\.\d+)?)\b(?P<rest>.*)$"
-)
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
 _OPENER_RE = re.compile(r"(?P<key>[A-Za-z0-9_:.$\-]+)[ \t]*=[ \t]*\{")
 _TOP_RE = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_:.\-]*)[ \t]*=[ \t]*\{")
@@ -64,18 +64,13 @@ class SolFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[SolFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
 
-def parse_reviewed_comment(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+# This audit's old name for the shared parser.
+parse_reviewed_comment = parse_reviewed
 
 
 def _strip_comments(text: str) -> str:
@@ -253,8 +248,8 @@ def audit(mod_path: str) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Fractional standard of living audit report",
         "",
@@ -310,23 +305,23 @@ def regenerate(mod_state=None) -> dict:
 
     result = audit(mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "sol_fraction_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
-        "unreviewed": sum(1 for f in result.flags if not f.exemption),
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
         **result.coverage,
         "path": out_path,
     }
 
 
-if __name__ == "__main__":
-    import sys
-
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path as _mp
 
-    res = audit(_mp)
-    print(render_report(res))
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in res.flags) else 0)
+    return cli_main(lambda args: audit(_mp), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

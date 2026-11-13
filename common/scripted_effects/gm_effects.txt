@@ -86,7 +86,12 @@ gm_state_record_honoree = {
 				}
 			}
 		}
-		set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		# Guarded: the policy buttons' tooltips walk the refresh writing
+		# nothing, so the flag set above is unset there (tooltip_walk_variable_audit).
+		if = {
+			limit = { owner = { has_variable = gm_tmp_ig_flag } }
+			set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		}
 		owner = { remove_variable = gm_tmp_ig_flag }
 	}
 }

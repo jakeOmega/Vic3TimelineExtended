@@ -157,6 +157,11 @@ class Console:
         self._drop_log()
         self._open_console(timeout)
 
+    def front(self) -> None:
+        """Return with the game's window responding and in front, by the same presence rule as every key, without
+        touching the console: for a click (`Session.click`), whose point an opened console could cover."""
+        self._front()
+
     def clear_line(self) -> None:
         """Empty the console's input line with Backspaces, after the usual foreground check, and allow typing
         again after a `stranded_text`. Nothing calls this by itself: whether to is the caller's decision."""

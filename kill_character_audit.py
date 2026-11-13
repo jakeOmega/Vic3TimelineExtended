@@ -20,16 +20,18 @@ Suppress an intentional flag with a same-line comment in the format:
 
 CLI:
     python kill_character_audit.py            # write the report
-    python kill_character_audit.py --check    # exit non-zero on issues
+    python kill_character_audit.py --strict   # exit non-zero on issues (alias: --check)
 """
 from __future__ import annotations
 
-import argparse
 import bisect
 import os
 import re
 import sys
 from dataclasses import dataclass
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 @dataclass
@@ -44,22 +46,32 @@ class AuditFlag:
     exemption: dict | None = None
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
+def hard_fails(flags: list[AuditFlag]) -> list[AuditFlag]:
+    """Unreviewed kills with neither guard: what `--strict` fails on. A kill
+    with one guard is a defense-in-depth gap, reported but not failed."""
+    return [f for f in flags if not f.exemption
+            and not (f.has_void6 and f.has_exists_guard)
+            and not (f.has_void6 or f.has_exists_guard)]
+
+
+@dataclass
+class AuditResult(_AuditResult):
+    """The flags `audit()` returns, for the command line."""
+
+    @property
+    def failing(self) -> list[AuditFlag]:
+        return hard_fails(self.flags)
+
+
+# `parse_reviewed_comment` is this audit's old name for the shared parser.
+parse_reviewed_comment = parse_reviewed
+
 _EVENT_HEADER_RE = re.compile(
     r"^(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([A-Za-z_]\w*\.\w+)\s*=\s*\{"
 )
 _KILL_CHARACTER_RE = re.compile(r"(?<!\w)kill_character\b")
 _KILL_TARGET_INLINE_RE = re.compile(r"kill_character\s*=\s*scope:([A-Za-z_]\w*)")
 _SCOPE_HEADER_RE = re.compile(r"^scope:([A-Za-z_]\w*)\s*=\s*$")
-
-
-def parse_reviewed_comment(line: str) -> dict | None:
-    m = _REVIEWED_RE.search(line)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def find_event_id_at_line(lines: list[str], line_no: int) -> str | None:
@@ -298,8 +310,7 @@ def render_report(flags: list[AuditFlag], files_audited: int) -> str:
     # `files_audited` is no longer printed (it moves with every new event
     # file, churning the report); the parameter stays for the two callers,
     # and regenerate() still returns it.
-    fails = [f for f in flags if not f.exemption and not (f.has_void6 and f.has_exists_guard)
-             and not (f.has_void6 or f.has_exists_guard)]
+    fails = hard_fails(flags)
     partial = [f for f in flags if not f.exemption and (f.has_void6 ^ f.has_exists_guard)]
     exempted = [f for f in flags if f.exemption]
 
@@ -377,64 +388,51 @@ def regenerate(mod_state) -> dict:  # noqa: ARG001 — protocol arg unused
     from path_constants import mod_path
     events_dir = os.path.join(mod_path, "events")
     flags = audit(events_dir)
-    files_audited = sum(
-        1 for fname in os.listdir(events_dir)
-        if fname.endswith(".txt") and os.path.isfile(os.path.join(events_dir, fname))
-    ) if os.path.isdir(events_dir) else 0
+    files_audited = _files_audited(events_dir)
     report = render_report(flags, files_audited)
-    out_path = os.path.join(mod_path, "docs", "engine", "kill_character_audit.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
-    fails = sum(1 for f in flags if not f.exemption
-                and not (f.has_void6 and f.has_exists_guard)
-                and not (f.has_void6 or f.has_exists_guard))
+    write_text(os.path.join(mod_path, "docs", "engine", "kill_character_audit.md"), report)
     return {
         "files_audited": files_audited,
         "total_flags": len(flags),
-        "hard_fails": fails,
+        "hard_fails": len(hard_fails(flags)),
     }
 
 
-def _main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true",
-                        help="Exit non-zero on hard fails (no report written).")
-    parser.add_argument("--events-dir",
-                        help="Override events/ directory (defaults to repo events/).")
-    args = parser.parse_args()
-
-    if args.events_dir:
-        events_dir = args.events_dir
-        repo_root = os.path.dirname(os.path.abspath(events_dir))
-    else:
-        repo_root = os.path.dirname(os.path.abspath(__file__))
-        events_dir = os.path.join(repo_root, "events")
-
-    flags = audit(events_dir)
-    files_audited = sum(
+def _files_audited(events_dir: str) -> int:
+    return sum(
         1 for fname in os.listdir(events_dir)
         if fname.endswith(".txt") and os.path.isfile(os.path.join(events_dir, fname))
     ) if os.path.isdir(events_dir) else 0
 
-    if args.check:
-        fails = [f for f in flags if not f.exemption
-                 and not (f.has_void6 and f.has_exists_guard)
-                 and not (f.has_void6 or f.has_exists_guard)]
-        if fails:
-            for f in fails:
+
+def _main(argv=None) -> int:
+    def add_arguments(parser):
+        parser.add_argument("--events-dir",
+                            help="Override events/ directory (defaults to repo events/).")
+
+    def run(args) -> AuditResult:
+        if args.events_dir:
+            args.repo_root = os.path.dirname(os.path.abspath(args.events_dir))
+        else:
+            args.repo_root = os.path.dirname(os.path.abspath(__file__))
+            args.events_dir = os.path.join(args.repo_root, "events")
+        return AuditResult(flags=audit(args.events_dir))
+
+    def render(result: AuditResult, args) -> str | None:
+        if args.strict:
+            # No report in this mode: the hard fails, on stderr.
+            for f in result.failing:
                 print(f"FAIL {f.file}:{f.line} event={f.event_id or '?'} "
                       f"scope:{f.target_scope or '?'} — {f.reason}", file=sys.stderr)
-            return 1
-        return 0
+            return None
+        files_audited = _files_audited(args.events_dir)
+        out_path = os.path.join(args.repo_root, "docs", "engine", "kill_character_audit.md")
+        write_text(out_path, render_report(result.flags, files_audited))
+        return f"Wrote {out_path} — {len(result.flags)} flags across {files_audited} files."
 
-    report = render_report(flags, files_audited)
-    out_path = os.path.join(repo_root, "docs", "engine", "kill_character_audit.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
-    print(f"Wrote {out_path} — {len(flags)} flags across {files_audited} files.")
-    return 0
+    return cli_main(run, render, argv=argv, description=__doc__, aliases=("--check",),
+                    add_arguments=add_arguments,
+                    strict_help="Exit non-zero on hard fails (no report written).")
 
 
 if __name__ == "__main__":

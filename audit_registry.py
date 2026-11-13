@@ -13,8 +13,8 @@ by hand reads this table instead:
 * `test_audit_registry.py` holds it to `POST_LOAD_AUDITS` in
   `mod_state_server.py` and to the `*_audit.py` files on disk.
 
-Adding an audit: write the module and its test, add it to `POST_LOAD_AUDITS`
-if a reload should run it, add one `Audit(...)` here, and run
+Adding an audit: write the module (on `audit_common.py`) and its test, add it
+to `POST_LOAD_AUDITS` if a reload should run it, add one `Audit(...)` here, and run
 `python3 audit_registry.py --write`. Nothing else restates the roster.
 
 Stdlib only, and it imports no audit: a reader needs neither numpy nor a game
@@ -134,6 +134,20 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the duplicate's line",
     ),
     Audit(
+        "modifier_field_audit",
+        "A modifier type name no definition registers: written as a field in a modifier block (the "
+        "engine drops the line) or read as `modifier:<name>` (it reads nothing). A name that fits a "
+        "dynamic family, or that `modifiers.log` lists, still needs its own definition in "
+        "`common/modifier_type_definitions/`. Also a field whose type vanilla registers without a loc "
+        "key, so its line shows the raw key.",
+        where="for a missing loc key only, trailing on a modifier block's line that writes the field (one "
+              "comment covers every use); an unregistered name takes none",
+        tags=("modifier_field_loc",),
+        note="Builds a small ModState from vanilla_parsed/. A type only the mod registers is "
+             "`loc_coverage_audit`'s to name. `/validate/engine-coverage` makes the registration "
+             "judgment interactively; this is the copy that fails a reload and CI.",
+    ),
+    Audit(
         "mod_structure_audit",
         "Unbalanced braces in a `common/` file (the engine drops the rest of the file), an `INJECT:` on "
         "an entity the mod itself defines or REPLACEs (it never applies), and two bare declarations of "
@@ -142,11 +156,21 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `INJECT:<name>` line (brace and collision flags take none)",
     ),
     Audit(
+        "load_order_audit",
+        "A key whose value in ModState differs from what the engine loads: a bare copy the engine drops "
+        "for an earlier one (the first bare definition wins, and vanilla's and the mod's files sort "
+        "together), an `INJECT:` lost to a `REPLACE:` of its key, or a directive on a key nothing "
+        "defines. Every tool built on ModState then reads a definition the game doesn't use.",
+        note="Replays `external_mod_overlap`'s load-order model against the values ModState holds "
+             "(#1191). CI has no game files, so a mod bare copy of a vanilla key is decided only when "
+             "its file sorts before or after every vanilla file of the folder; the rest are listed as "
+             "undetermined, and a reload on a machine with the game decides them.",
+    ),
+    Audit(
         "attitude_key_audit",
         "An `attitude = <key>` that is not one of the engine's fifteen attitude keys.",
-        ci=(),
         where=VALUE_LINE,
-        note="Runs bare in CI: it has no flag, and `main()` returns the exit code.",
+        note="The bare run fails on a flag too, as it did before it took `--strict`.",
     ),
     Audit(
         "prev_scope_audit",
@@ -261,6 +285,22 @@ AUDITS: tuple[Audit, ...] = (
              "`script_call_graph.py`.",
     ),
     Audit(
+        "tooltip_walk_variable_audit",
+        "A variable read after a `set_variable` of it in one body a tooltip walks (a scripted GUI's or a "
+        "button's `effect`, an event option, a decision's `when_taken`). The walk writes nothing, so the "
+        "read finds it unset and logs every frame the tooltip shows. Compare the values directly, guard the "
+        "read with `has_variable`, use `?=`, or put the body behind a click-only marker; names other code "
+        "keeps set are left out.",
+        where="trailing on the read line; for a read passed as a `$PARAM$` argument, on the line of the "
+              "call that passes it",
+        tags=("tooltip_walk",),
+        post_load=False,
+        report=None,
+        note="`--root <scripted GUI, event id or decision>` lists one root's flags with their call chains. "
+             "It reads `script_call_graph.py` to tell which effects run outside a tooltip. Not on reload: "
+             "a run takes about 25 s cold and 13 to 15 s warm.",
+    ),
+    Audit(
         "faith_scene_audit",
         "An event text with one faith's word in it (a priest, a mosque, a guru, the faith's name) that "
         "a country of another state religion can be shown: its title, description, flavor, option, "
@@ -282,9 +322,10 @@ AUDITS: tuple[Audit, ...] = (
     Audit(
         "kill_character_audit",
         "A `kill_character` in an event with no guard that the character exists.",
-        ci=("--check",),
         where="trailing on the `kill_character` line or the line above it",
         report="kill_character_audit.md",
+        note="`--strict` (alias `--check`) fails on a kill with neither guard and writes no report; "
+             "the bare run writes the report.",
     ),
     Audit(
         "event_magnitude_audit",
@@ -577,9 +618,14 @@ def render_markdown() -> str:
         "",
         "## Adding an audit",
         "",
-        "1. Write `<name>_audit.py` at the repo root, with a `--strict` mode that exits 1 on an "
-        "unreviewed flag, and `test_<name>_audit.py` beside it. A reload audit also needs "
-        "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array.",
+        "1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit "
+        "is the function that finds flags; `audit_common.py` gives it the rest: "
+        "`parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` "
+        "hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report "
+        "with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that "
+        "exits 1 on an unreviewed flag or a stale tag. A reload audit also needs "
+        "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array "
+        "(`audit_common.summary` builds it).",
         "2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.",
         "3. Add one `Audit(...)` entry to `audit_registry.py`.",
         "4. Run `python3 audit_registry.py --write` and commit this file with the rest.",

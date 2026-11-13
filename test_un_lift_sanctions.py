@@ -10,8 +10,9 @@ Sanctions, which might never happen. The monthly update now lapses it.
 
 The topic's wiring as a charter-business topic (gates, hooks, classification,
 loc) is in test_un_charter_business.py's TOPICS. This file checks what is
-particular to it: the lift itself, the monthly upkeep of every regime, and the
-paths that must forget a regime's months.
+particular to it: the lift itself, the monthly upkeep of every regime, the
+paths that must forget a regime's months, and how the enforcer's choice
+(un_events.5) is sent when a regime starts.
 
 Run: python3 -m unittest test_un_lift_sanctions -v
 """
@@ -34,6 +35,7 @@ DOSSIER_TRIGGERS = _path("common", "scripted_triggers", "un_dossier_triggers.txt
 BUTTONS = _path("common", "scripted_buttons", "un_buttons.txt")
 LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
 VOTE_EVENTS = _path("events", "un_vote_events.txt")
+UN_EVENTS = _path("events", "un_events.txt")
 MESSAGES = _path("common", "messages", "un_justice_messages.txt")
 LOC_DIR = _path("localization", "english")
 
@@ -242,6 +244,80 @@ class VoteThreeTests(unittest.TestCase):
                 head = event[:event.index(f"text = {tt}")]
                 gate = head[head.rindex("if = { limit = {"):]
                 self.assertIn("NOT = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }", gate)
+
+
+def _inner(body, opener):
+    """The inside of the first block in `body` whose opening line matches
+    `opener` (a regex anchored at a line start, tabs included)."""
+    m = re.search(opener, body, re.M)
+    if m is None:
+        raise AssertionError(f"{opener!r} not found")
+    depth = 0
+    for i in range(m.end() - 1, len(body)):
+        if body[i] == "{":
+            depth += 1
+        elif body[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return body[m.end():i]
+    raise AssertionError(f"{opener!r} is not closed")
+
+
+class EnforcementRelayTests(unittest.TestCase):
+    """#1596: un_vote.2 adds the enforcer modifier and sets the target's regime
+    in the block that queues the enforcer's choice, so un_events.5's trigger is
+    false on the day it is queued, and a delayed event whose trigger is false
+    then seems to be dropped. The three months wait in the hidden un_events.43,
+    which has no trigger and opens un_events.5 on the day if its trigger holds
+    (the pattern of te_judiciary_events.7 and .8)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.events = _read(UN_EVENTS)
+        cls.relay = _block(cls.events, "un_events.43")
+
+    def test_the_vote_queues_the_relay_with_the_target_saved(self):
+        vote = _flat(_read(VOTE_EVENTS))
+        self.assertIn("add_modifier = { name = un_sanctions_enforcer_modifier } hidden_effect = { "
+                      "scope:un_vote_target = { save_scope_as = sanctioned_country } "
+                      "trigger_event = { id = un_events.43 days = 90 } }", vote)
+
+    def test_the_relay_has_no_trigger_and_opens_the_popup_at_once(self):
+        self.assertNotRegex(self.relay, r"(?m)^\ttrigger\s*=")
+        self.assertIn("hidden = yes", self.relay)
+        immediate = _flat(_inner(self.relay, r"^\timmediate\s*=\s*\{"))
+        self.assertTrue(immediate.strip().startswith("if = { limit = {"), immediate[:60])
+        self.assertIn("trigger_event = { id = un_events.5 }", immediate)
+
+    def test_the_relay_restates_the_popups_trigger(self):
+        popup = _block(self.events, "un_events.5")
+        trigger = _flat(_inner(popup, r"^\ttrigger\s*=\s*\{")).strip()
+        limit = _flat(_inner(self.relay, r"^\t\t\tlimit\s*=\s*\{")).strip()
+        self.assertEqual(limit, trigger, "un_events.43's limit must be un_events.5's trigger")
+
+    @staticmethod
+    def _sends(event_id):
+        sites = []
+        pattern = r"trigger_event\s*=\s*\{[^}]*\b" + re.escape(event_id) + r"(?![0-9])[^}]*\}"
+        for root in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(root)):
+                for name in sorted(files):
+                    if name.endswith(".txt"):
+                        path = os.path.join(dirpath, name)
+                        for m in re.finditer(pattern, _read(path)):
+                            sites.append((os.path.relpath(path, REPO), _flat(m.group(0))))
+        return sites
+
+    def test_one_site_sends_each(self):
+        # un_vote.2 alone queues the relay, once per adopted regime, and the
+        # relay alone sends un_events.5, undelayed: the popup comes once per
+        # regime and never waits in the queue on a trigger read too early.
+        self.assertEqual(self._sends("un_events.43"),
+                         [(os.path.join("events", "un_vote_events.txt"),
+                           "trigger_event = { id = un_events.43 days = 90 }")])
+        self.assertEqual(self._sends("un_events.5"),
+                         [(os.path.join("events", "un_events.txt"),
+                           "trigger_event = { id = un_events.5 }")])
 
 
 class NoticeTests(unittest.TestCase):

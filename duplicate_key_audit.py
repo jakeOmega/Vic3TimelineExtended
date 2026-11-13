@@ -33,6 +33,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 # Block-opener keys whose bodies are modifier *maps* (duplicate scalar key =
 # bug). An explicit set — NOT suffix matching — so effect blocks like
@@ -71,9 +74,21 @@ class DuplicateKeyFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[DuplicateKeyFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
+
+    @property
+    def failing(self) -> list[DuplicateKeyFlag]:
+        """`--strict` fails only on an unexempted **error** (a key repeated
+        inside one block with a *differing* value: the engine silently
+        last-wins, so one of the two was meant to do something and doesn't).
+        A "warn" flag is an identical repeat (`add = 5 add = 5`), which the
+        engine runs twice on purpose; the ones in the tree today come from
+        non-idempotent generators re-emitting a line (#191) and would redden
+        CI on a file nobody hand-edits. They still appear in the report and
+        still feed the reload `warnings` array via `unreviewed`. (#247)"""
+        return [f for f in self.unreviewed if f.severity == "error"]
 
 
 # A line that is *exactly* a scalar assignment: `key = <number|yes|no>` with an
@@ -89,18 +104,6 @@ _SCALAR_LINE_RE = re.compile(
 # `key = {` — captures the opener key for a block.
 _BLOCK_OPEN_RE = re.compile(r"(?P<key>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{")
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 @dataclass
@@ -167,7 +170,7 @@ def scan_text(text: str, rel_path: str) -> tuple[list[DuplicateKeyFlag], int]:
                         first_value=first_value,
                         block_key=frame.block_key,
                         severity=severity,
-                        exemption=_parse_reviewed(sm.group("comment")),
+                        exemption=parse_reviewed(sm.group("comment")),
                     ))
                 else:
                     frame.seen[key] = (i, value)
@@ -224,8 +227,8 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     errors = [f for f in unrev if f.severity == "error"]
     warns = [f for f in unrev if f.severity == "warn"]
 
@@ -318,12 +321,9 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "duplicate_key_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
+    write_text(os.path.join(mod_path, "docs", "engine", "duplicate_key_report.md"), report)
 
-    unrev = [f for f in result.flags if not f.exemption]
+    unrev = result.unreviewed
     errors = sum(1 for f in unrev if f.severity == "error")
     warns = sum(1 for f in unrev if f.severity == "warn")
     return {
@@ -338,25 +338,22 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
+def main(argv=None) -> int:
+    """Print the report and a JSON count line; `--strict` (CI) exits 1 on an
+    unexempted error (see `AuditResult.failing`)."""
     import json
-    import sys
-    res = audit()
-    print(render_report(res))
-    print(json.dumps({
-        "total": len(res.flags),
-        "errors": sum(1 for f in res.flags if f.severity == "error" and not f.exemption),
-        "warns": sum(1 for f in res.flags if f.severity == "warn" and not f.exemption),
-    }))
-    # --strict: CI mode. Exit 1 only on unexempted **error**-severity flags (a
-    # key repeated inside one block with a *differing* value — the engine silently
-    # last-wins, so one of the two was meant to do something and doesn't).
-    # "warn"-severity flags are identical repeats (`add = 5 add = 5`), which the
-    # engine runs twice on purpose; the ones in the tree today come from
-    # non-idempotent generators re-emitting a line (#191) and would redden CI on
-    # a file nobody hand-edits. They still appear in the report and still feed
-    # the reload `warnings` array via `unreviewed`. (#247)
-    if "--strict" in sys.argv:
-        raise SystemExit(
-            1 if any(not f.exemption and f.severity == "error" for f in res.flags) else 0
-        )
+
+    def render(res: AuditResult, args) -> str:
+        return render_report(res) + "\n" + json.dumps({
+            "total": len(res.flags),
+            "errors": sum(1 for f in res.unreviewed if f.severity == "error"),
+            "warns": sum(1 for f in res.unreviewed if f.severity == "warn"),
+        })
+
+    return cli_main(lambda args: audit(), render, argv=argv,
+                    description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on an unexempted error-severity flag.")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

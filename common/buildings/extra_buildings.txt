@@ -255,10 +255,104 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 			NOT = { has_building = building_space_elevator }
 			b:building_space_elevator.level < 20
 		}
-		# The ribbon needs a site near the equator: the engine's band between the
-		# tropics (vanilla 1.15, the state region's centre point). Replaced a
-		# hand-kept list of 92 state regions, all inside the band (#1454).
-		in_tropics = yes
+		# A hand-kept list of 92 state regions near the equator, not in_tropics:
+		# the engine's band roughly doubled the sites (about 183), which the owner
+		# judged too many (2026-11-12; see #1454, #1672).
+		OR = {
+			state_region = s:STATE_RIFT_VALLEY
+			state_region = s:STATE_IVORY_COAST
+			state_region = s:STATE_SIERRA_LEONE
+			state_region = s:STATE_AMHARA
+			state_region = s:STATE_LIBERIA
+			state_region = s:STATE_BENIN
+			state_region = s:STATE_NIGER_DELTA
+			state_region = s:STATE_NIGERIA
+			state_region = s:STATE_GOLD_COAST
+			state_region = s:STATE_TOGO
+			state_region = s:STATE_DAHOMEY
+			state_region = s:STATE_LINDI
+			state_region = s:STATE_ZANZIBAR
+			state_region = s:STATE_TANGANYIKA
+			state_region = s:STATE_KENYA
+			state_region = s:STATE_OROMIA
+			state_region = s:STATE_KAZEMBE
+			state_region = s:STATE_SOMALILAND
+			state_region = s:STATE_NORTH_MADAGASCAR
+			state_region = s:STATE_UGANDA
+			state_region = s:STATE_EQUATORIA
+			state_region = s:STATE_NORTH_CAMEROON
+			state_region = s:STATE_SOUTH_CAMEROON
+			state_region = s:STATE_CONGO
+			state_region = s:STATE_CONGO_ORIENTALE
+			state_region = s:STATE_KASAI
+			state_region = s:STATE_BAS_CONGO
+			state_region = s:STATE_EQUATEUR
+			state_region = s:STATE_KATANGA
+			state_region = s:STATE_GABON
+			state_region = s:STATE_PANAMA
+			state_region = s:STATE_ECUADOR
+			state_region = s:STATE_GUAYANA
+			state_region = s:STATE_ANTIOQUIA
+			state_region = s:STATE_GUAVIARE
+			state_region = s:STATE_CUNDINAMARCA
+			state_region = s:STATE_CAUCA
+			state_region = s:STATE_PASTAZA
+			state_region = s:STATE_CAJAMARCA
+			state_region = s:STATE_YORUBA_STATES
+			state_region = s:STATE_UBANGI_SHARI
+			state_region = s:STATE_PARA
+			state_region = s:STATE_MARANHAO
+			state_region = s:STATE_AMAZONAS
+			state_region = s:STATE_ACRE
+			state_region = s:STATE_RIO_GRANDE_DO_NORTE
+			state_region = s:STATE_CEARA
+			state_region = s:STATE_PIAUI
+			state_region = s:STATE_PARAIBA
+			state_region = s:STATE_PERNAMBUCO
+			state_region = s:STATE_MADRAS
+			state_region = s:STATE_CEYLON
+			state_region = s:STATE_INDIAN_OCEAN_TERRITORY
+			state_region = s:STATE_WEST_BORNEO
+			state_region = s:STATE_WEST_JAVA
+			state_region = s:STATE_EAST_JAVA
+			state_region = s:STATE_CENTRAL_JAVA
+			state_region = s:STATE_NORTH_SUMATRA
+			state_region = s:STATE_SOUTH_SUMATRA
+			state_region = s:STATE_ACEH
+			state_region = s:STATE_WESTERN_NEW_GUINEA
+			state_region = s:STATE_MOLUCCAS
+			state_region = s:STATE_CELEBES
+			state_region = s:STATE_SUNDA_ISLANDS
+			state_region = s:STATE_MINDANAO
+			state_region = s:STATE_SOLOMON_ISLANDS
+			state_region = s:STATE_NAURU
+			state_region = s:STATE_ZULIA
+			state_region = s:STATE_MIRANDA
+			state_region = s:STATE_BOLIVAR
+			state_region = s:STATE_WEST_INDIES
+			state_region = s:STATE_LIMA
+			state_region = s:STATE_GUINEA
+			state_region = s:STATE_WINDWARD_COAST
+			state_region = s:STATE_YEMEN
+			state_region = s:STATE_TRAVANCORE
+			state_region = s:STATE_MEKONG
+			state_region = s:STATE_TENASSERIM
+			state_region = s:STATE_MALAYA
+			state_region = s:STATE_NORTH_BORNEO
+			state_region = s:STATE_EAST_BORNEO
+			state_region = s:STATE_EASTERN_NEW_GUINEA
+			state_region = s:STATE_EAST_MICRONESIA
+			state_region = s:STATE_TONGA
+			state_region = s:STATE_HAUSALAND
+			state_region = s:STATE_EAST_HAUSALAND
+			state_region = s:STATE_NORTH_ANGOLA
+			state_region = s:STATE_LUZON
+			state_region = s:STATE_VISAYAS
+			state_region = s:STATE_BOUGAINVILLE
+			state_region = s:STATE_WEST_MICRONESIA
+			state_region = s:STATE_VANUATU
+
+		}
 	}
 	ownership_type = no_ownership
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"

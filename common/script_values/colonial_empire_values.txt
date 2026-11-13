@@ -1125,10 +1125,11 @@ colonial_assim_effectiveness_display = {
 # STABILITY BANDS — THE ONE LADDER
 #
 # The five bands, read LIVE from the bar: collapsing 0-20, crumbling 20-40,
-# strained 40-65, stable 65-90, solidified 90+ (the edges of
-# je_colonial_empire's phase-modifier ladder). Every display of the band reads
+# strained 40-65, stable 65-90, solidified 90+. Every display of the band reads
 # these: the overview, the customizable loc (status line, band names, phase
-# modifier) and "Next band". colonial_empire_refresh_display snapshots both
+# modifier) and "Next band"; and je_colonial_empire's five band modifiers are
+# declared from colonial_empire_live_tier (#1466), so a declared value reads
+# the bar through je: from the owning country. colonial_empire_refresh_display snapshots both
 # into var:colonial_empire_tier / var:colonial_empire_next_boundary for any
 # other reader.
 #

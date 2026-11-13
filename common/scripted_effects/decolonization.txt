@@ -1319,11 +1319,10 @@ ce_reentry_monthly = {
 # - The Imperial Federation Act's imperial_federation_modifier and the Mandate
 #   System's mandate_system_modifier, recorded by the decisions' own
 #   imperial_federation_taken / mandate_system_taken.
-# Not rebuilt: timed modifiers (the remaining time is recorded nowhere), the
-# entry's own band modifiers, which its monthly pulse re-applies, and the three
-# programmes and Investment's expense line, which the entry declares
-# (scaling_modifiers_while_active) from the level variables the winner
-# inherits.
+# Not rebuilt: timed modifiers (the remaining time is recorded nowhere), and
+# what the entry declares (scaling_modifiers_while_active): the five band
+# modifiers, from the bar, and the three programmes and Investment's expense
+# line, from the level variables the winner inherits.
 # ============================================================================
 
 # Grant a permanent ending reward with its record. Country scope. Removed
@@ -1374,11 +1373,10 @@ decol_sync_permanent_modifier = {
 
 decol_sync_permanent_modifiers = {
 	# colonial_empire_solidified_modifier is also the entry's top band modifier,
-	# applied to je:je_colonial_empire each month at bar >= 90. A country-scope
-	# has_modifier should not see an entry's modifier, but that is unobserved;
-	# if it did, the backfill would record a reward the empire never earned, and
-	# a later sync would grant it. So its record is backfilled only while no
-	# entry runs: the reward comes only at completion, after which
+	# declared on je_colonial_empire at bar >= 90 (#1466). has_modifier cannot
+	# see a declared modifier, so the backfill below reads only the reward; its
+	# record is still backfilled only while no entry runs, as it was when the
+	# band was an added copy: the reward comes only at completion, after which
 	# colonial_empire_completed keeps the entry shut for good.
 	if = {
 		limit = { NOT = { has_journal_entry = je_colonial_empire } }
