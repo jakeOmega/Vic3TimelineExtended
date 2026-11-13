@@ -153,7 +153,7 @@ class SuppressionTests(unittest.TestCase):
     def test_reviewed_on_the_duration_line(self):
         flags = _flags("\t\tadd_modifier = {\n\t\t\tname = x\n"
                        "\t\t\tdays = block_days # REVIEWED 2026-10-23: test\n\t\t}\n")
-        self.assertEqual(flags[0].exemption, {"date": "2026-10-23", "rationale": "test"})
+        self.assertEqual(flags[0].exemption, {"date": "2026-10-23", "tag": "", "rationale": "test"})
 
     def test_reviewed_on_the_opener_line(self):
         flags = _flags("\t\tadd_modifier = { name = x days = block_days } # REVIEWED 2026-10-23: test\n")
