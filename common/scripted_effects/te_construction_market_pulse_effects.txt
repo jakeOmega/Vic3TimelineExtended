@@ -44,10 +44,9 @@ te_construction_market_on_border_changes = {
 			#this = market.owner
 		}
 		# Places sites only. Capacity is left to the weekly pulse, its one
-		# refresh site: re-running it here, right after sites are created,
-		# would size a not-yet-staffed site at 10x (see
-		# te_construction_market_employment_adjusted_per_site). Direct games
-		# have nothing to place: their sites are built by their owners.
+		# refresh site (te_construction_market_apply_per_site_modifier).
+		# Direct games have nothing to place: their sites are built by
+		# their owners.
 		te_construction_market_country_update_sites = yes
 	}
 }

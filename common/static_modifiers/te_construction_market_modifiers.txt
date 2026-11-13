@@ -1,9 +1,10 @@
 ﻿# Construction-market subsystem.
 # Based on the third-party "Free Market Construction" mod. See README.md.
 
-# Per-site throughput multiplier. Re-applied each weekly pulse with
-# `multiplier = te_construction_market_per_site` so each construction site
-# absorbs its share of the country's total construction-use target.
+# The Construction Sites' throughput. Re-applied to every site each weekly
+# pulse (te_construction_market_apply_per_site_modifier) at one multiplier,
+# te_construction_market_site_throughput, so the country's sites together
+# deliver the week's purchase.
 te_construction_market_capacity_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 1
