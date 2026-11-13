@@ -82,3 +82,21 @@ Alliances.
    pulse) the league line is gone, and a ripe reform can be tabled at once.
 5. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry and no founding before
    Intergovernmental Organizations, and the founding button's line is the bare technology, as before.
+
+## Cultural Hegemony
+
+Setup: a new 1836 game with Cultural Hegemony on *Early Unlock*, as France (Romanticism), console-researching the
+Electric Telegraph for any country.
+
+1. **The entry opens with the telegraph.** Before it, the Society panel's Hegemony tab is grayed and its tooltip reads
+   "Any country has researched the Electric Telegraph or Mass Media". Within a week of the research, the Cultural
+   Hegemony entry is active for countries with Romanticism, with their tiers and shares.
+2. **What waits for Mass Media.** With the Ministry of Culture enacted (console Mass Propaganda), Begin International
+   Cultural Outreach is offered with the telegraph; Launch Global Media Campaign is refused with "Requires Mass Media".
+   No event about radio, film or broadcasts fires before Mass Media; The World Is Watching (`.8`) and The Touring
+   Collection (`.10`) can.
+3. **Early to late, mid-game.** With the entry open and no country holding Mass Media, switch to *Late Unlock*: within
+   a week the entry is gone and its programs end. Console-research Mass Media for some country: within a month the entry
+   is back.
+4. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry before some country has
+   Mass Media, and International Cultural Outreach needs Mass Media.

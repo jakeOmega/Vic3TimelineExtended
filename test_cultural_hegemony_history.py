@@ -80,6 +80,9 @@ class StoreHarness:
                 result = any(checks) if key == "OR" else not all(checks)
             elif key == "has_game_rule":
                 result = self.enabled
+            elif key == "te_cultural_hegemony_on":
+                # The rule's gate (te_rule_setting_triggers.txt): either unlock.
+                result = self.enabled == (item == "yes")
             elif key == "has_global_variable":
                 result = item in self.globals
             elif key == "has_variable_list":

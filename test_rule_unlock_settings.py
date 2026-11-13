@@ -28,6 +28,7 @@ SYSTEMS = {
     "covert_warfare_rule": ("covert_warfare", "te_covert_warfare"),
     "world_war_rule": ("world_war", "te_world_war"),
     "united_nations_rule": ("united_nations", "te_united_nations"),
+    "cultural_hegemony_rule": ("cultural_hegemony", "te_cultural_hegemony"),
 }
 
 
@@ -370,6 +371,88 @@ class UnitedNationsEarlyUnlockTest(unittest.TestCase):
         rules = loc(RULES_LOC)
         self.assertIn("$multilateral_alliances$", rules["setting_united_nations_early_unlock_desc"])
         self.assertIn("$intergovernmental_organizations$", rules["setting_united_nations_enabled_desc"])
+
+
+# --- Cultural Hegemony ---------------------------------------------------------------------------------------------
+
+CH_TRIGGERS = ROOT / "common/scripted_triggers/cultural_hegemony_triggers.txt"
+CH_JE = ROOT / "common/journal_entries/je_cultural_hegemony.txt"
+CH_ON_ACTIONS = ROOT / "common/on_actions/cultural_hegemony_on_actions.txt"
+CH_EVENTS = ROOT / "events/cultural_hegemony_events.txt"
+EVENTS_LOC = ROOT / "localization/english/te_events_l_english.yml"
+
+
+class CulturalHegemonyEarlyUnlockTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = code(CH_TRIGGERS)
+        cls.je = code(CH_JE)
+
+    def test_late_is_todays_gate(self):
+        unlocked = braced(self.triggers, r"^ch_entry_unlocked = \{")
+        self.assertEqual(words(braced(unlocked, r"trigger_else = \{")),
+                         "custom_tooltip = { text = ch_unlock_any_mass_media_tt any_country = { "
+                         "has_technology_researched = mass_media } }")
+        self.assertTrue(words(unlocked).endswith("has_technology_researched = romanticism"))
+        self.assertEqual(words(braced(self.triggers, r"^ch_late_gate_met = \{")),
+                         "any_country = { has_technology_researched = mass_media } "
+                         "has_technology_researched = romanticism")
+        self.assertEqual(words(braced(self.je, r"^\tpossible = \{")), "ch_entry_unlocked = yes")
+
+    def test_early_opens_at_the_electric_telegraph(self):
+        unlocked = braced(self.triggers, r"^ch_entry_unlocked = \{")
+        self.assertEqual(words(braced(unlocked, r"trigger_if = \{")),
+                         "limit = { te_cultural_hegemony_early = yes } custom_tooltip = { text = "
+                         "ch_unlock_any_telegraph_tt any_country = { OR = { has_technology_researched = "
+                         "electric_telegraph has_technology_researched = mass_media } } }")
+
+    def test_outreach_comes_with_the_telegraph_the_media_campaign_waits_for_mass_media(self):
+        exposition = words(braced(self.triggers, r"^ch_possible_world_exposition = \{"))
+        self.assertIn("ch_world_exposition_tech = yes", exposition)
+        self.assertNotIn("mass_media", exposition)
+        tech = words(braced(self.triggers, r"^ch_world_exposition_tech = \{"))
+        self.assertIn("trigger_else = { custom_tooltip = { text = CH_REQUIRES_MASS_MEDIA_TT "
+                      "has_technology_researched = mass_media } }", tech)
+        self.assertIn("electric_telegraph", tech)
+        media = words(braced(self.triggers, r"^ch_possible_global_media_campaign = \{"))
+        self.assertIn("custom_tooltip = { text = CH_REQUIRES_MASS_MEDIA_TT has_technology_researched = mass_media }",
+                      media)
+
+    def test_events_that_need_no_mass_media_name_none(self):
+        """The events with no Mass Media test of their own fire for an entry opened early, so their text must not
+        assume broadcast media (radio, film, television)."""
+        text = code(CH_EVENTS)
+        events = list(re.finditer(r"^(cultural_hegemony\.\d+) = \{", text, re.M))
+        texts = loc(EVENTS_LOC)
+        ungated = []
+        for i, m in enumerate(events):
+            body = text[m.start():events[i + 1].start() if i + 1 < len(events) else len(text)]
+            if "mass_media" not in body:
+                ungated.append(m.group(1))
+        self.assertTrue(ungated)
+        for event in ungated:
+            for key, value in texts.items():
+                if key.startswith(event + "."):
+                    with self.subTest(key=key):
+                        self.assertNotRegex(value.lower(), r"\b(radio|television|broadcast|cinema|film|internet)\b")
+
+    def test_switched_to_late_the_early_entry_closes_and_comes_back_at_the_gate(self):
+        immediate = words(braced(self.je, r"^\timmediate = \{"))
+        self.assertIn("if = { limit = { te_cultural_hegemony_early = yes NOT = { ch_late_gate_met = yes } } "
+                      "set_variable = ch_opened_early }", immediate)
+        outcome = words(self.je[self.je.index("flags = { hidden invalid_outcome }"):])
+        self.assertIn("OR = { NOT = { te_cultural_hegemony_on = yes } AND = { has_variable = ch_opened_early "
+                      "NOT = { te_cultural_hegemony_early = yes } NOT = { ch_late_gate_met = yes } } }", outcome)
+        self.assertIn("set_variable = ch_reopen_at_gate", outcome)
+        net = words(braced(code(CH_ON_ACTIONS), r"^ch_monthly_pulse_on_action = \{"))
+        self.assertIn("has_variable = ch_reopen_at_gate te_cultural_hegemony_on = yes ch_entry_unlocked = yes", net)
+        self.assertIn("add_journal_entry = { type = je_cultural_hegemony }", net)
+
+    def test_the_setting_descriptions_name_their_technology(self):
+        rules = loc(RULES_LOC)
+        self.assertIn("$electric_telegraph$", rules["setting_cultural_hegemony_early_unlock_desc"])
+        self.assertIn("$mass_media$", rules["setting_cultural_hegemony_enabled_desc"])
 
 
 if __name__ == "__main__":

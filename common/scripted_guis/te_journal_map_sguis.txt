@@ -501,7 +501,7 @@ te_jmap_pick_political_models_sgui = {
 	scope = country
 	is_shown = {
 		is_player = yes
-		has_game_rule = cultural_hegemony_enabled
+		te_cultural_hegemony_on = yes
 	}
 	ai_is_valid = { always = no }
 	is_valid = { NOT = { te_jmap_selector = 22 } }

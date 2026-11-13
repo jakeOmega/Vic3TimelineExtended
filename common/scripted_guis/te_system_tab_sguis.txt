@@ -109,7 +109,7 @@ te_budget_tax_tab_unlock_sgui = {
 te_society_ch_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = cultural_hegemony_enabled
+		te_cultural_hegemony_on = yes
 		has_journal_entry = je_cultural_hegemony
 	}
 	ai_is_valid = { always = no }
@@ -119,7 +119,7 @@ te_society_ch_tab_sgui = {
 
 te_society_ch_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = cultural_hegemony_enabled }
+	is_shown = { te_cultural_hegemony_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { ch_entry_unlocked = yes }
 	effect = { }

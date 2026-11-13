@@ -65,3 +65,19 @@ te_united_nations_on = {
 te_united_nations_early = {
 	has_game_rule = united_nations_early_unlock
 }
+
+# ---- Cultural Hegemony (cultural_hegemony_rule) ----
+# The system runs: either unlock.
+te_cultural_hegemony_on = {
+	OR = {
+		has_game_rule = cultural_hegemony_enabled
+		has_game_rule = cultural_hegemony_early_unlock
+	}
+}
+
+# The early unlock: the entry opens once some country has the Electric
+# Telegraph, in place of Mass Media (ch_late_gate_met, ch_entry_unlocked,
+# cultural_hegemony_triggers.txt).
+te_cultural_hegemony_early = {
+	has_game_rule = cultural_hegemony_early_unlock
+}

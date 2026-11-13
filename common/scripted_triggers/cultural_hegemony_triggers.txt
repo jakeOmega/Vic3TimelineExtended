@@ -16,15 +16,65 @@
 # `possible` (its is_shown_when_inactive is the game rule alone). Also the
 # checklist in the Society panel's greyed Hegemony tab
 # (te_society_ch_tab_unlock_sgui's is_valid), which is why the all-countries
-# test carries its own tooltip line.
+# test carries its own tooltip line. Under the early unlock the world needs
+# the Electric Telegraph (era 3: the wire services that carried one
+# country's papers, serials and fashions to every other) in place of Mass
+# Media.
 ch_entry_unlocked = {
-	custom_tooltip = {
-		text = ch_unlock_any_mass_media_tt
-		any_country = {
-			has_technology_researched = mass_media
+	trigger_if = {
+		limit = { te_cultural_hegemony_early = yes }
+		custom_tooltip = {
+			text = ch_unlock_any_telegraph_tt
+			any_country = {
+				OR = {
+					has_technology_researched = electric_telegraph
+					has_technology_researched = mass_media
+				}
+			}
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = ch_unlock_any_mass_media_tt
+			any_country = {
+				has_technology_researched = mass_media
+			}
 		}
 	}
 	has_technology_researched = romanticism
+}
+
+# The late unlock's gate, without its tooltip: some country has Mass Media and
+# this one Romanticism. An entry opened early (ch_opened_early) and short of
+# it closes when the rule is switched to the late unlock.
+ch_late_gate_met = {
+	any_country = {
+		has_technology_researched = mass_media
+	}
+	has_technology_researched = romanticism
+}
+
+# The technology International Cultural Outreach (the world exposition
+# programme) needs: Mass Media, or under the early unlock the Electric
+# Telegraph, since world's fairs and touring exhibitions came long before
+# broadcasting. The Global Media Campaign keeps Mass Media under both.
+ch_world_exposition_tech = {
+	trigger_if = {
+		limit = { te_cultural_hegemony_early = yes }
+		custom_tooltip = {
+			text = CH_REQUIRES_TELEGRAPH_TT
+			OR = {
+				has_technology_researched = electric_telegraph
+				has_technology_researched = mass_media
+			}
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = CH_REQUIRES_MASS_MEDIA_TT
+			has_technology_researched = mass_media
+		}
+	}
 }
 
 ch_possible_increase_program_funding = {
@@ -54,10 +104,7 @@ ch_possible_world_exposition = {
 		text = CH_REQUIRES_MINISTRY_TT
 		has_law = law_type:law_ministry_of_culture
 	}
-	custom_tooltip = {
-		text = CH_REQUIRES_MASS_MEDIA_TT
-		has_technology_researched = mass_media
-	}
+	ch_world_exposition_tech = yes
 }
 
 # The four ch_possible_disable_<programme> below test the programme's variable

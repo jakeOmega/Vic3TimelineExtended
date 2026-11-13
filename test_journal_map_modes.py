@@ -42,7 +42,7 @@ SYSTEM_MAPS = (
     (21, "common/journal_entries/je_united_nations.txt", "je_united_nations", "united_nations", "un",
      "gui/journal_entry_widgets/un_layout_widget.gui", "te_united_nations_on = yes"),
     (22, "common/journal_entries/je_cultural_hegemony.txt", "je_cultural_hegemony", "political_models", "ch",
-     "gui/journal_entry_widgets/cultural_hegemony_widget.gui", "has_game_rule = cultural_hegemony_enabled"),
+     "gui/journal_entry_widgets/cultural_hegemony_widget.gui", "te_cultural_hegemony_on = yes"),
     (23, None, None, "ocean_basins", "seabed", "gui/te_seabed_widgets.gui", "te_global_commons_enabled = yes"),
     (24, "common/journal_entries/je_grand_monuments.txt", "je_grand_monuments", "grandeur", "gm",
      "gui/journal_entry_widgets/grand_monuments_widget.gui", "gm_system_enabled = yes"),
