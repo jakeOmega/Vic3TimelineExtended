@@ -174,8 +174,8 @@ the country has finished, and the fallback is not needed. The same session's oth
 the pass intends for a country no longer due: Bornu (1933.8.6, during its civil war) and Egypt (1934.8.29) each
 ended the new entry within its first month with a voluntary end, so the 1937.10.1 autosave shows both with no
 record of the entry, `colonial_empire_has_ended` and Negotiated Withdrawal (a small bonus, +5 diplomatic reputation among others, for
-ten years, decaying). The month's wait was meant to stop a colony test that holds for one pass from starting an entry that
-ends at once; here it held for two passes and failed in the third, twice in five adds (#1735).
+ten years, decaying). The colony test did not flicker: each time the AI pressed Planned Full Decolonization seconds after
+the add (`DECOL_DEBUG`), Bornu during the civil war that had made its states look like colonies (#1735, fixed in #1746).
 
 ### Checks
 
