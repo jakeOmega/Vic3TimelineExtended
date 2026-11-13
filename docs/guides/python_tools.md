@@ -247,7 +247,8 @@ whoever writes its text. From the event's own trigger: the technologies it requi
 prerequisites all the way down, the era at or before which every technology may be assumed (three or more eras behind
 the latest required; owner, 2026-11-09), technologies it requires to be absent, and the trigger's other top-level
 lines. From outside it (#1622), each labeled by where it came from: `law X unlocks at` (`is_enacting_law` / `has_law`:
-the law's `unlocking_technologies` and one of its `unlocking_laws`; only a law being enacted counts toward the total,
+the law's `unlocking_technologies` (of several, only what each gives: all or any is unverified) and one of its
+`unlocking_laws`; only a law being enacted counts toward the total,
 since a law in force can be one the country began with or was handed, and that technology is printed apart as `if
 enacted in play`, JSON `if_enacted_in_play`), `scripted trigger X tests` (opened one level),
 and under `fired by` one entry per route that reaches the event: `journal entry Y requires` (`possible`,
