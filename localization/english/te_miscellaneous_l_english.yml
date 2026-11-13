@@ -9986,6 +9986,7 @@
  un_fund_development_pays_dues_tt:0 "We pay our [concept_un_dues]: while we withhold them, a contribution's money would not reach the [concept_un_development_fund]"
  un_ga_resolution_modifier:0 "General Assembly Resolution Participant"
  un_grounds_condemn_tt:0 "A rival prosecuting a war of its own making has a record that supports a censure (case strength 30 or more)"
+ un_grounds_expulsion_tt:0 "A [concept_un_permanent_member] that is not our ally, overlord or subject has used its [concept_un_veto] in the last five years"
  un_grounds_sanctions_tt:0 "A rival not already under sanctions has a record that supports them (case strength 50 or more)"
  un_heritage_program_modifier:0 "UNESCO Heritage Program"
  un_heritage_refusal_modifier:0 "Refused World Heritage Convention"
