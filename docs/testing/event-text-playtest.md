@@ -218,3 +218,9 @@ The script bugs the batches reported were fixed after the texts. These rows are 
 | Buying power abroad is paid for (#1616) | Fire `repeatable_events.80` and take "Buy power from abroad" | The tooltip lists "Imported Power Costs" beside the import modifier, and the Budget breakdown shows a weekly amount under Energy and Industry Programs for five years |
 | Air Raid Relief does not stand in for Home Front Strain (#1617) | In a world war's first year take `world_war_events.11.a`; look at the World War entry at year two, and take the option again after it | Home Front Strain arrives at year two on time; after it the entry shows one Home Front Strain and one Air Raid Relief, never two strains |
 | The women's work events reach suffrage countries (#1616) | Research Second-Wave Feminism as a country already under Women's Suffrage | `society_technology_events.1` and `.2` can both arrive |
+
+## What the guarantees tool assumes (#1697)
+
+| Check | How | Expected |
+|---|---|---|
+| A law with two unlocking technologies needs both | As a country with `social_media` researched and `automated_surveillance` not, then the reverse, open the Privacy Rights laws | Intrusive Surveillance (`law_intrusive_surveillance`, the only law with two) is locked both times: the engine needs all of them. `event_guarantees.py` counts only what each gives, the safe reading while this is unknown; if locked, its `law_gate` may count both, and `extra_law_events.41`'s total gains `pop_culture` (era 7). If either one unlocks it, the tool's reading is the engine's: note it in `law_gate` |

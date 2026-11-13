@@ -39,6 +39,8 @@ from game_log_reader import (
     mod_uses,
     apply_known_noise_modes,
     WATCH_KIND,
+    GUI_GLOBAL_PROMOTES,
+    ModGuiRefs,
     MOD_GUI_UNTAG_NO_INSTALL,
     MOD_GUI_UNTAG_NO_VANILLA_LOC,
     mod_gui_references,
@@ -1129,6 +1131,8 @@ class ModGuiFetchUntagTests(unittest.TestCase):
     WANTED = "No context supplied (Use SetDataContext), wanted context of type '{}' for '{} '"
     FETCH = "FetchData failed for '{}'"
     LOCALIZED = "PdxDataFetchLocalizedData failed for '{}'"
+    NEW_TYPES = "New data types does not contain a '{}' data context"
+    DATA_ERROR = "Data error in loc string '{}'"
 
     OWN = "gui/te_census_widgets.gui"
     COPY = "gui/00_te_country_panel_information.gui"
@@ -1339,6 +1343,89 @@ class ModGuiFetchUntagTests(unittest.TestCase):
                     self.assertEqual(e.mod_gui_context["files"], [file])
                     self.assertIn("GetPlayer.", e.mod_gui_context["expression"])
 
+    def test_a_global_expression_vanillas_loc_also_writes_keeps_its_tag(self):
+        """The mod's own markup writes it, but so does vanilla's loc, and the
+        line can't say which drew it: it stays tagged (2026-11-13: 568 vanilla
+        lines, all `GetPlayer.GetTooltipTag`, came through before)."""
+        vanilla_loc = dict(self.VANILLA_LOC, TOOLTIP_LINK="#tooltippable [GetPlayer.GetName]#!",
+                           LONGER="[GetPlayer.MakeScope.Var('te_census_on').IsSet.Not]")
+        refs = mod_gui_references(self.mod, vanilla_gui_file_names(self.install), vanilla_loc)
+        self.assertIn("GetPlayer.GetName", refs.expressions)
+        rows = [
+            (self.FETCH.format("GetPlayer.GetName"), False),
+            (self.LOCALIZED.format("#b [GetPlayer.GetName]#!"), False),
+            # Vanilla writes a longer chain only: the mod's whole expression is still its own.
+            (self.FETCH.format("GetPlayer.MakeScope.Var( 'te_census_on' ).IsSet"), True),
+            (self.FETCH.format("GetPlayer.GetCapital.GetStateRegion.GetName"), True),
+        ]
+        entries = self._tagged([("pdx_gui_localize.cpp:140" if "Localized" in message
+                                 else "pdx_data_localize_helper.cpp:286", message) for message, _ in rows])
+        self._untag(entries, refs)
+        for e, (_, shown) in zip(entries, rows):
+            with self.subTest(message=e.message):
+                self.assertEqual(e.vanilla_bug_ref is None, shown)
+                self.assertEqual(e.mod_gui_context is not None, shown)
+        self.assertTrue(refs.vanilla_writes("GetPlayer.GetName "))
+        self.assertFalse(refs.vanilla_writes("GetPlayer.MakeScope.Var('te_census_on').IsSet"))
+        # The default snapshot is read once per loc object, not per reference build.
+        self.assertIs(refs.vanilla_expressions, mod_gui_references(
+            self.mod, vanilla_gui_file_names(self.install), vanilla_loc).vanilla_expressions)
+
+    def test_a_global_promote_head_is_no_data_type(self):
+        """`LabelingHelper`, `GuiScope`, `PopupManager`: global promotes read
+        with no context. Some share a type's name, but at a chain's head they
+        say nothing about whose line it is, as GetPlayer doesn't."""
+        self._write(self.mod, "gui/te_labels.gui", (
+            "textbox = { text = \"[LabelingHelper.CapitalizeOnlyFirst( GetPlayer.GetName )]\"\n"
+            "\ttooltip = \"[GuiScope.SetRoot( GetPlayer.MakeScope ).GetValue]\" }\n"
+            "textbox = { visible = \"[PopupManager.IsOpen]\" }\n"))
+        refs = self._refs()
+        for name in ("LabelingHelper", "GuiScope", "PopupManager"):
+            self.assertIn(name, GUI_GLOBAL_PROMOTES)
+            self.assertNotIn(name, refs.types)
+        self.assertIn("LabelingHelper.CapitalizeOnlyFirst(GetPlayer.GetName)", refs.expressions)
+        self.assertIn("PopupManager.IsOpen", refs.expressions)
+        rows = self._tagged([
+            ("pdx_data_localize_helper.cpp:286", self.FETCH.format("LabelingHelper.CapitalizeOnlyFirst( GetPlayer.GetName )")),
+            ("pdx_data_localize_helper.cpp:286", self.FETCH.format("PopupManager.IsOpen")),
+            # Another expression on the same promote is vanilla's for all the line says.
+            ("pdx_data_localize_helper.cpp:286", self.FETCH.format("LabelingHelper.GetLabelForTimeframe")),
+            ("pdx_data_callstack.cpp:16", self.WANTED.format("LabelingHelper", "LabelingHelper.GetLabelForTimeframe")),
+        ])
+        self._untag(rows, refs)
+        self.assertEqual([e.vanilla_bug_ref is None for e in rows], [True, True, False, False])
+        self.assertEqual(rows[0].mod_gui_context["files"], ["gui/te_labels.gui"])
+        self.assertIn("expression", rows[0].mod_gui_context)
+
+    def test_the_new_data_types_and_data_error_lines_of_the_same_cascade(self):
+        """pdx_data_callstack.cpp:325 names the type the engine wanted, and
+        pdx_data_localize.cpp:136 / :151 the loc string it gave up on: the
+        history-chart marker tooltip's 2,239 lines (te_hist_tt_markers)."""
+        rows = [
+            ("pdx_data_callstack.cpp:325", self.NEW_TYPES.format("JournalEntry"), "type"),
+            ("pdx_data_callstack.cpp:325", self.NEW_TYPES.format("DiscriminationTraitGroup"), None),
+            ("pdx_data_localize.cpp:151", self.DATA_ERROR.format("te_census_ai"), "key"),
+            ("pdx_data_localize.cpp:136", self.DATA_ERROR.format("te_event_desc"), "key"),  # only the mod's loc has it
+            ("pdx_data_localize.cpp:151", self.DATA_ERROR.format("INCORPORATION_TIME_SAME_TRAIT_GROUP"), None),
+            ("pdx_data_localize.cpp:136", self.DATA_ERROR.format("BATTLE_SHIPS_BREAKDOWN_HEADER_ATTACKER"), None),
+            # A debug_log template that failed: no key, and SCOPE is no data type.
+            ("pdx_data_localize.cpp:136", self.DATA_ERROR.format("TE_SELF_CHECK OK x [SCOPE.ScriptValue('y')]"), None),
+        ]
+        entries = self._tagged([(source, message) for source, message, _ in rows])
+        for e in entries:
+            self.assertEqual((e.vanilla_bug_ref or {}).get("kind"), "vanilla_noise", e.message)
+        self._untag(entries)
+        for e, (_, _, expected) in zip(entries, rows):
+            with self.subTest(message=e.message):
+                if expected is None:
+                    self.assertIsNotNone(e.vanilla_bug_ref)
+                    self.assertIsNone(e.mod_gui_context)
+                else:
+                    self.assertIsNone(e.vanilla_bug_ref)
+                    self.assertIn(expected, e.mod_gui_context)
+        self.assertEqual(entries[0].mod_gui_context["type"], "JournalEntry")
+        self.assertEqual(entries[3].mod_gui_context["files"], [self.LOC])
+
     def test_script_loc_scope_names_and_types_only_other_mod_loc_reads_are_no_data_types(self):
         refs = self._refs()
         # te_census_scopes is drawn by the mod's own file, and its value reads
@@ -1440,9 +1527,9 @@ class ModGuiFetchUntagTests(unittest.TestCase):
                     self.assertIsNone(e.vanilla_bug_ref)
                     self.assertIn(expected, e.mod_gui_context)
 
-    def _registered(self, vanilla_doc, noise_doc="## Entries\n"):
+    def _registered(self, vanilla_doc, noise_doc="## Entries\n", refs=None):
         """A `wanted context of type 'Country'` line through both registries
-        and the pass, with a mod-owned GUI that reads Country."""
+        and the pass, with a mod-owned GUI that reads Country (or `refs`)."""
         docs = os.path.join(self._tmp.name, "repo")
         self._write(docs, "docs/audits/open_issues.md", "## LOW\n\n### L1 thing\n", "utf-8")
         vanilla = self._write(docs, "docs/vanilla/vanilla_known_bugs.md",
@@ -1455,7 +1542,7 @@ class ModGuiFetchUntagTests(unittest.TestCase):
         e = LogEntry("01:00:00", "pdx_data_callstack.cpp:16", self.WANTED.format("Country", "Country.GetFoo"))
         tag_vanilla_bugs([e], vb, vs, mod_root=self.mod)
         tag_vanilla_bugs([e], mb, ms, mod_root=self.mod)
-        untag_mod_gui_fetches([e], self._refs(), (vs, ms), mod_root=self.mod)
+        untag_mod_gui_fetches([e], refs or self._refs(), (vs, ms), mod_root=self.mod)
         return e, bool(apply_known_noise_modes([e], "hide", "hide"))
 
     def test_a_line_the_pass_shows_can_be_registered_or_watched(self):
@@ -1489,6 +1576,27 @@ class ModGuiFetchUntagTests(unittest.TestCase):
                 self.assertEqual(in_clean_view, shown)
                 # Only the line nothing names carries the mod's files.
                 self.assertEqual(e.mod_gui_context is not None, kind is None)
+
+    def test_a_naming_entry_keeps_the_line_after_the_mod_stops_reading_its_type(self):
+        """A watch entry put on a line the pass showed must not lapse, filed
+        back under the generic entry before it, once no mod GUI reads Country."""
+        self.assertEqual(ModGuiRefs().types, {})
+        watch = "\n## Watch list (tagged, never hidden)\n" + self.NAMING.format(
+            title="Country.GetFoo, vanilla's or ours", field="- check: read the lens\n")
+        vanilla_named = self.NAMING.format(title="vanilla's lens reads Country.GetFoo", field="")
+        for label, doc, kind, title, shown in (
+                ("a watch-list entry after the generic one", self.GENERIC + watch,
+                 WATCH_KIND, "Country.GetFoo, vanilla's or ours", True),
+                ("a naming vanilla entry after the generic one", self.GENERIC + vanilla_named,
+                 "vanilla_noise", "vanilla's lens reads Country.GetFoo", False),
+                ("the generic entry alone", self.GENERIC, "vanilla_noise", None, False)):
+            with self.subTest(layout=label):
+                e, in_clean_view = self._registered(doc, refs=ModGuiRefs())
+                self.assertEqual(e.vanilla_bug_ref["kind"], kind)
+                if title:
+                    self.assertEqual(e.vanilla_bug_ref["title"], title)
+                self.assertEqual(in_clean_view, shown)
+                self.assertIsNone(e.mod_gui_context)
 
     def test_only_a_vanilla_tag_on_one_of_the_three_lines_is_cleared(self):
         refs = self._refs()
@@ -1582,6 +1690,38 @@ class ModGuiFetchUntagTests(unittest.TestCase):
         refs = mod_gui_references(self.mod, vanilla_gui_file_names(self.install))
         self.assertEqual(refs.warnings, ())
         self.assertEqual(refs.types.get("PopsOverviewPanel"), (self.OWN,))
+
+
+class GlobalPromoteTests(unittest.TestCase):
+    """GUI_GLOBAL_PROMOTES is the data-types dump's mixed-case global promotes
+    that start with neither Get nor Access. Checked where the Modding-Digests
+    checkout is on disk; refresh the list on a vanilla bump."""
+
+    def test_the_list_matches_the_data_types_dump(self):
+        import glob
+        import re
+        import path_constants
+        docs = None
+        for name in ("vanilla_snapshot_docs_path", "vanilla_snapshot_docs_path_default"):
+            try:
+                path = getattr(path_constants, name)
+            except (RuntimeError, AttributeError):
+                path = None
+            if path and glob.glob(os.path.join(path, "data_types_*.txt")):
+                docs = path
+                break
+        if docs is None:
+            self.skipTest("no data_types_*.txt dump (the Modding-Digests checkout) on this machine")
+        promotes = set()
+        for path in glob.glob(os.path.join(docs, "data_types_*.txt")):
+            with open(path, encoding="utf-8", errors="replace") as f:
+                for block in f.read().split("-----------------------"):
+                    lines = [line.strip() for line in block.strip().splitlines() if line.strip()]
+                    if lines and "Definition type: Global promote" in lines:
+                        name = lines[0].split("(")[0].strip()
+                        if not name.isupper() and not re.match(r"(?:Get|Access)[A-Z]", name):
+                            promotes.add(name)
+        self.assertEqual(set(GUI_GLOBAL_PROMOTES), promotes, docs)
 
 
 class HelperAnchorTests(unittest.TestCase):
