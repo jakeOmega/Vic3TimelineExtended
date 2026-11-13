@@ -1864,7 +1864,8 @@ class Session:
         needs `stop`.
 
         The click is refused before the button went down (CLICK_REFUSED_BEFORE_PRESS) as `click_refused`, with
-        nothing changed; any other helper error may follow the press, so it counts as a failure after Start."""
+        nothing changed; any other helper error may follow the press: `click_unknown`, which counts as a failure
+        after Start (`left_running`)."""
         if self._entered:
             return {"entered": True, "already": True}
         if self._country is None:
@@ -1880,11 +1881,12 @@ class Session:
         except HelperError as e:
             if e.code in CLICK_REFUSED_BEFORE_PRESS:
                 raise SessionError("click_refused", "%s: %s" % (e.code, e.detail), clicks=clicks) from e
+            # It may have come after the press, as a Start click's may (#1725): the game may be entered.
             self._left_running = True
             self._entered_unproved = True
-            raise SessionError("not_entered", "the Back click answered %s: %s, and may have pressed the button: the "
-                               "game may be entered or at the main menu; enter_game and advance are refused until "
-                               "stop" % (e.code, e.detail), cause=e.code, clicks=[[x, y]]) from e
+            raise SessionError("click_unknown", "the Back click answered %s: %s, and may have pressed the button: "
+                               "the game may be entered or at the main menu; enter_game and advance are refused "
+                               "until stop" % (e.code, e.detail), pixel=[x, y], clicks=[[x, y]]) from e
         clicks.append([x, y])
         try:
             self._sleep(ENTER_SETTLE_S)

@@ -1475,7 +1475,7 @@ class EnterGameTest(SessionTestCase):
             raise HelperError("backend_error", "SendInput returned 0")
         self.game.click = lost
         error = self.session_error(self.session.enter_game, "back")
-        self.assertEqual((error.code, error.info["cause"]), ("not_entered", "backend_error"))
+        self.assertEqual((error.code, error.info["pixel"]), ("click_unknown", [72, 1059]))
         status = self.session.status()
         self.assertEqual((status["entered_unproved"], status["left_running"]), (True, True))
         self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
