@@ -47,7 +47,7 @@ The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building
 |---|---|---|---|---|---|
 | Deep-Sea Mining (11) | 5,000 | 1,000 | 22,700 (103%) / 23,700 (113%) | | |
 | Advanced Deep-Sea Mining (12, Advanced Nanofabrication) | | 1,000 | 63,400 (244%) / 64,400 (258%) | | |
-| Automated Deep-Sea Mining (12, Artificial General Intelligence) | | 10 | 58,600 (190%) / 59,600 (200%) | | |
+| Automated Deep-Sea Mining (12, Artificial General Intelligence) | | 250 | 58,600 (190%) / 59,600 (200%) | | |
 | Asteroid Mine (11) | 20,000 | 1,000 flat | 7,250 (24%) | 14,450 | 21,650 |
 | Mining Colony (12, Space Colonization) | | 1,000 flat | 37,000 (33%) | 65,800 | 94,600 |
 | Resort Colony (12, Space Colonization) | | 1,000 flat | 38,000 (34%) | 66,800 | 95,600 |
