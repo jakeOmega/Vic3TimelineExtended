@@ -9,9 +9,11 @@
 # marker te_tax_light_on >= 1). The engine
 # activates it on its next check once both `is_shown_when_inactive` and
 # `possible` hold, as it does je_banking_cycle, so the migration flow (te_tax.3)
-# is unchanged. Under the light setting a monthly safety net
-# (te_tax_light_entry_net, common/on_actions/te_tax_on_actions.txt) adds it to a
-# country in force that the engine left without a record of it. It never
+# is unchanged. A monthly safety net (te_tax_light_entry_net and
+# te_tax_full_entry_net, common/on_actions/te_tax_on_actions.txt) adds it to a
+# country in force that has no record of it, active or inactive: the engine
+# leaves some countries without one, and disable_evaluation prunes the inactive
+# record while the rule is off, so a rule switched on during play finds none. It never
 # completes, fails or times out: the code is permanent.
 #
 # It holds no state, writes nothing and has no `immediate`: the code lives in

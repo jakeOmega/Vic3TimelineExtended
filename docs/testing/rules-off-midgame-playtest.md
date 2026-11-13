@@ -160,6 +160,13 @@ its law's rate.
    within the month. The entry, the modifiers and the law were not looked at.*
 3. **Both.** No `te_tax_ig_view_*` or relief modifier is left on the country or its states.
 4. **Switched back on**, the full code migrates the country again on the next monthly dispatch, from its base-game law.
+5. **The Tax Code tab after the rule is switched on during play** (2026-11-13, a Workshop report: the tab greyed for
+   ten years under the full code, its tooltip saying the conditions were met and the entry was not running). A game
+   started with the rule Disabled, switched to Tax Code Enabled a few months in; and the game of item 4. Within two
+   months the Budget panel's Tax Code tab opens, the Tax Code entry is in the journal, and `debug.log` has a
+   `TE_TAX full_entry_net` line for each country the net reached. Failing: the tab still greyed with "Its conditions
+   are met" after two months: read `has_journal_entry` and `has_inactive_journal_entry` for `je_tax_code` on the
+   country; if an inactive copy exists that the engine never activates, the net's last condition is what stops it.
 
 ## Banking: Full to Simplified
 

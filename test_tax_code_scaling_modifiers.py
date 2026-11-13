@@ -186,6 +186,25 @@ class SafetyNetTest(unittest.TestCase):
             "NOT = { has_journal_entry = je_tax_code } NOT = { has_inactive_journal_entry = je_tax_code } } "
             "add_journal_entry = { type = je_tax_code } debug_log = \"TE_TAX light_entry_net "), net)
 
+    def test_the_full_code_has_the_same_net(self):
+        # The full code's entry is display only, but the Tax Code tab, where a tax is changed, opens only while
+        # the entry is active. A Workshop player's tab stayed greyed for ten years with the code in force and no
+        # record of the entry (2026-11-13): only the light setting had a net.
+        text = flat(strip_comments(read(ON_ACTIONS)))
+        pulse = re.search(r"on_monthly_pulse_country = \{ on_actions = \{ ([^}]*) \} \}", text)
+        self.assertIn("te_tax_full_entry_net", pulse.group(1).split())
+        net = flat(block(read(ON_ACTIONS), "te_tax_full_entry_net"))
+        self.assertTrue(net.startswith(
+            "effect = { if = { limit = { te_tax_code_full = yes te_tax_code_in_force = yes "
+            "NOT = { is_country_type = decentralized } "
+            "NOT = { has_journal_entry = je_tax_code } NOT = { has_inactive_journal_entry = je_tax_code } } "
+            "add_journal_entry = { type = je_tax_code } debug_log = \"TE_TAX full_entry_net "), net)
+        # The tab's two gates are what the net restores: the entry active, on a code in force.
+        sguis = flat(strip_comments(read("common/scripted_guis/te_system_tab_sguis.txt")))
+        self.assertIn("te_budget_tax_tab_sgui = { scope = country is_shown = { te_tax_code_on = yes "
+                      "has_journal_entry = je_tax_code }", sguis)
+        self.assertIn("te_tax_code_in_force = yes", flat(block(read(TRIGGERS), "te_tax_entry_unlocked")))
+
     def test_in_force_is_enough_for_the_entrys_own_gates(self):
         triggers = read(TRIGGERS)
         self.assertIn("has_game_rule = te_tax_code_light", flat(block(triggers, "te_tax_code_on")))
