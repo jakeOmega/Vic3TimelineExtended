@@ -285,7 +285,7 @@ te_seabed_itlos_party_sgui = {
 # Read-only: the ITLOS party line shows while the UN can regulate the seabed.
 te_seabed_un_line_sgui = {
 	scope = country
-	is_shown = { has_game_rule = united_nations_enabled }
+	is_shown = { te_united_nations_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

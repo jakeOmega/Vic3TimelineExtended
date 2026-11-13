@@ -136,7 +136,7 @@ law_international_ai_oversight = {
 
 	# The United Nations administers the inspections: no UN, no law.
 	is_visible = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 	}
 
 	can_enact = {

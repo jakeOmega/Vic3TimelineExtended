@@ -488,7 +488,7 @@ te_jmap_pick_united_nations_sgui = {
 	scope = country
 	is_shown = {
 		is_player = yes
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 	}
 	ai_is_valid = { always = no }
 	is_valid = { NOT = { te_jmap_selector = 21 } }

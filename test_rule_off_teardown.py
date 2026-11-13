@@ -122,7 +122,7 @@ class UnitedNationsQuietEndTest(unittest.TestCase):
         for block in effect.children[1:]:
             limit = next(c for c in block.children if c.key == "limit")
             with self.subTest(line=block.line):
-                self.assertIn(("has_game_rule", "united_nations_enabled"), pairs(limit.children))
+                self.assertIn(("te_united_nations_on", "yes"), pairs(limit.children))
 
 
 class SpaceRaceStopTest(unittest.TestCase):

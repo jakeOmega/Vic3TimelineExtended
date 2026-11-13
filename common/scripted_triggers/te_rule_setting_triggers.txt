@@ -48,3 +48,20 @@ te_world_war_on = {
 te_world_war_early = {
 	has_game_rule = world_war_early_unlock
 }
+
+# ---- United Nations (united_nations_rule) ----
+# The system runs: either unlock.
+te_united_nations_on = {
+	OR = {
+		has_game_rule = united_nations_enabled
+		has_game_rule = united_nations_early_unlock
+	}
+}
+
+# The early unlock: a great power can found the organisation at Multilateral
+# Alliances, and until some country has Intergovernmental Organizations it is
+# a league that can't reform its charter (un_founding_tech_reached,
+# un_league_stage, un_membership_triggers.txt).
+te_united_nations_early = {
+	has_game_rule = united_nations_early_unlock
+}

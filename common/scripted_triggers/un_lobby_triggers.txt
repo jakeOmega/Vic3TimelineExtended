@@ -224,7 +224,7 @@ un_lobby_ai_stakeholder_against = {
 # resolution is voting.
 # Scope: the lobbyist
 un_lobby_campaign_selectable = {
-	has_game_rule = united_nations_enabled
+	te_united_nations_on = yes
 	has_global_variable = un_active_resolution
 	global_var:un_active_resolution ?= { has_tag = un_res_voting }
 	je:je_united_nations ?= { has_modifier = un_member_modifier }

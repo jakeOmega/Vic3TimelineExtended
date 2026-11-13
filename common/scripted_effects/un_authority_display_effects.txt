@@ -101,6 +101,15 @@ un_authority_ladder_block = {
 			limit = { un_charter_can_be_reformed = yes }
 			custom_tooltip_no_bullet = je_un_auth_reform_clock
 		}
+		# The early unlock's league: the clock runs, but no reform until the age
+		# of Intergovernmental Organizations (un_league_stage).
+		if = {
+			limit = {
+				un_league_stage = yes
+				un_charter_can_be_reformed = yes
+			}
+			custom_tooltip_no_bullet = je_un_auth_reform_league
+		}
 		if = {
 			limit = {
 				un_charter_can_be_reformed = yes

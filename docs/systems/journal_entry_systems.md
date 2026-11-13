@@ -728,6 +728,8 @@ Allows monarchies to shape their heir's education through active focus choices. 
 Simulates an intergovernmental organization with membership, authority, Security Council mechanics, and specialized agencies. Visible when any country has Intergovernmental Organizations tech OR the UN has been founded.
 
 ### Founding Process
+**Early unlock** (`united_nations_rule`'s `united_nations_early_unlock`, 2026-11-13): founding and the entry also open at Multilateral Alliances (`un_founding_tech_reached`), and until some country has Intergovernmental Organizations (`un_igo_age`) the organisation is a league whose charter can't be reformed (`un_league_stage` in `un_charter_reform_ripe`). `mod_systems/game_rules.md` § Early and late unlock.
+
 The UN must be actively founded by a Great Power with Intergovernmental Organizations tech via the `un_found_button`. Founding costs 500 influence, fading over five years (`un_founding_cost_modifier`, gated by `un_found_influence_cost`; 2026-10-12, the price of a power bloc). The founder becomes the first member, hosts the HQ, and gains a permanent Security Council seat + `un_founding_member_modifier`. Sets `un_founded` global variable. After founding, any country that conducts its own foreign policy can join (no tech requirement): an independent country, or a dominion, protectorate or tributary (`un_membership_eligible`, `common/scripted_triggers/un_membership_triggers.txt`).
 
 **Membership and representation** ([`un_redesign_design.md` §0.8](un_redesign_design.md#08-subjects-diplomatic-autonomy-and-suspended-representation)):

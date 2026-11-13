@@ -27,6 +27,7 @@ RULES_LOC = ROOT / "localization/english/te_game_rules_l_english.yml"
 SYSTEMS = {
     "covert_warfare_rule": ("covert_warfare", "te_covert_warfare"),
     "world_war_rule": ("world_war", "te_world_war"),
+    "united_nations_rule": ("united_nations", "te_united_nations"),
 }
 
 
@@ -306,6 +307,69 @@ class WorldWarEarlyUnlockTest(unittest.TestCase):
         rules = loc(RULES_LOC)
         self.assertIn("$trench_works$", rules["setting_world_war_early_unlock_desc"])
         self.assertIn("$combined_arms$", rules["setting_world_war_enabled_desc"])
+
+
+# --- United Nations ------------------------------------------------------------------------------------------------
+
+UN_MEMBERSHIP = ROOT / "common/scripted_triggers/un_membership_triggers.txt"
+UN_LADDER = ROOT / "common/scripted_triggers/un_ladder_triggers.txt"
+UN_PROPOSE = ROOT / "common/scripted_triggers/un_propose_triggers.txt"
+UN_BUTTONS = ROOT / "common/scripted_buttons/un_buttons.txt"
+UN_ACTION_SGUIS = ROOT / "common/scripted_guis/un_action_sguis.txt"
+UN_ON_ACTIONS = ROOT / "common/on_actions/un_on_actions.txt"
+
+
+class UnitedNationsEarlyUnlockTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.membership = code(UN_MEMBERSHIP)
+
+    def test_late_is_todays_gate(self):
+        unlocked = braced(self.membership, r"^un_entry_unlocked = \{")
+        self.assertEqual(words(braced(unlocked, r"trigger_else = \{")),
+                         "custom_tooltip = { text = un_unlock_tt OR = { has_technology_researched = "
+                         "intergovernmental_organizations has_global_variable = un_founded } }")
+        founding = words(braced(self.membership, r"^un_founding_tech_reached_tt = \{"))
+        self.assertIn("trigger_else = { has_technology_researched = intergovernmental_organizations }", founding)
+
+    def test_early_founds_at_multilateral_alliances(self):
+        self.assertEqual(words(braced(self.membership, r"^un_founding_tech_reached = \{")),
+                         "OR = { has_technology_researched = intergovernmental_organizations AND = { "
+                         "te_united_nations_early = yes has_technology_researched = multilateral_alliances } }")
+        unlocked = braced(self.membership, r"^un_entry_unlocked = \{")
+        self.assertIn("limit = { te_united_nations_early = yes } custom_tooltip = { text = un_unlock_early_tt OR = { "
+                      "un_founding_tech_reached = yes has_global_variable = un_founded } }",
+                      words(braced(unlocked, r"trigger_if = \{")))
+
+    def test_both_founding_controls_read_the_founding_technology(self):
+        for path, header in ((UN_BUTTONS, r"^un_found_button = \{"), (UN_ACTION_SGUIS, r"^un_act_found_sgui = \{")):
+            with self.subTest(control=header):
+                body = braced(code(path), header)
+                self.assertNotIn("intergovernmental_organizations", body)
+                self.assertIn("un_founding_tech_reached = yes", body)
+                self.assertIn("un_founding_tech_reached_tt = yes", body)
+
+    def test_the_league_reforms_nothing_until_the_age_of_intergovernmental_organizations(self):
+        self.assertEqual(words(braced(self.membership, r"^un_league_stage = \{")),
+                         "te_united_nations_early = yes NOT = { has_global_variable = un_igo_age }")
+        ladder = code(UN_LADDER)
+        self.assertEqual(words(braced(ladder, r"^un_charter_reform_ripe = \{")),
+                         "un_charter_pressure_met = yes NOT = { un_league_stage = yes }")
+        possible = words(braced(code(UN_PROPOSE), r"^un_propose_reform_possible = \{"))
+        self.assertIn("custom_tooltip = { text = un_charter_league_tt NOT = { un_league_stage = yes } }", possible)
+        pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
+        self.assertIn("any_country = { has_technology_researched = intergovernmental_organizations } } "
+                      "set_global_variable = un_igo_age", pulse)
+        # Nothing ever removes the mark.
+        for folder in ("common", "events"):
+            for path in (ROOT / folder).rglob("*.txt"):
+                self.assertNotRegex(code(path), r"remove_global_variable\s*=\s*un_igo_age\b", path)
+
+    def test_the_setting_descriptions_name_their_technology(self):
+        rules = loc(RULES_LOC)
+        self.assertIn("$multilateral_alliances$", rules["setting_united_nations_early_unlock_desc"])
+        self.assertIn("$intergovernmental_organizations$", rules["setting_united_nations_enabled_desc"])
 
 
 if __name__ == "__main__":

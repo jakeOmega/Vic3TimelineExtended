@@ -317,7 +317,7 @@ class DerivedStateTest(unittest.TestCase):
     def test_the_un_rule_keeps_the_seabed_open(self):
         triggers = _strip(_read("common", "scripted_triggers", "te_global_commons_un_triggers.txt"))
         governs = _block(triggers, "te_seabed_itlos_governs")
-        self.assertIn("has_game_rule = united_nations_enabled", governs)
+        self.assertIn("te_united_nations_on = yes", governs)
         self.assertIn("has_global_variable = un_agency_itlos", governs)
         hooks = _strip(_read("common", "scripted_effects", "te_seabed_un_hooks.txt"))
         update = _block(hooks, "te_seabed_un_update_regime")

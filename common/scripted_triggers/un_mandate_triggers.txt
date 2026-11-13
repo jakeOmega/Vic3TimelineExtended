@@ -102,7 +102,7 @@ un_mandate_is_closed = {
 # safe: a variable that is gone fails here before any stale scope is read.
 # Scope: mandate container
 un_mandate_still_valid = {
-	has_game_rule = united_nations_enabled
+	te_united_nations_on = yes
 	exists = var:un_mnd_actor
 	exists = var:un_mnd_target
 	exists = var:un_mnd_beneficiary
@@ -317,7 +317,7 @@ un_mandate_began_other_war = {
 # un_mandate_create saves before calling it.
 # Scope: the resolution's proposer (the prospective actor)
 un_mandate_can_create = {
-	has_game_rule = united_nations_enabled
+	te_united_nations_on = yes
 	un_mandate_actor_in_good_standing = yes
 	NOT = { un_mandate_has_live_mandate = yes }
 	exists = scope:un_mnd_target_scope

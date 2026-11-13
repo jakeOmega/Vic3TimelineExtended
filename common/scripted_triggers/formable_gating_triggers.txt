@@ -378,7 +378,7 @@ une_formation_no_internal_rivalry = {
 # Scope: country (ROOT is the candidate or the play's initiator)
 une_formation_world_order = {
 	trigger_if = {
-		limit = { has_game_rule = united_nations_enabled }
+		limit = { te_united_nations_on = yes }
 		custom_tooltip = {
 			text = une_formation_un_supranational_tt
 			un_tier_is_supranational = yes

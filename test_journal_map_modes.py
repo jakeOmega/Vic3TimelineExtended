@@ -40,7 +40,7 @@ SYSTEM_MAPS = (
     (20, "common/journal_entries/je_covert_warfare.txt", "je_covert_warfare", "networks", "covert",
      "gui/journal_entry_widgets/covert_operations_widget.gui", "te_covert_warfare_on = yes"),
     (21, "common/journal_entries/je_united_nations.txt", "je_united_nations", "united_nations", "un",
-     "gui/journal_entry_widgets/un_layout_widget.gui", "has_game_rule = united_nations_enabled"),
+     "gui/journal_entry_widgets/un_layout_widget.gui", "te_united_nations_on = yes"),
     (22, "common/journal_entries/je_cultural_hegemony.txt", "je_cultural_hegemony", "political_models", "ch",
      "gui/journal_entry_widgets/cultural_hegemony_widget.gui", "has_game_rule = cultural_hegemony_enabled"),
     (23, None, None, "ocean_basins", "seabed", "gui/te_seabed_widgets.gui", "te_global_commons_enabled = yes"),

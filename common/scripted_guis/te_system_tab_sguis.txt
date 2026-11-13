@@ -133,7 +133,7 @@ te_society_ch_tab_unlock_sgui = {
 te_diplomacy_un_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_journal_entry = je_united_nations
 	}
 	ai_is_valid = { always = no }
@@ -143,7 +143,7 @@ te_diplomacy_un_tab_sgui = {
 
 te_diplomacy_un_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = united_nations_enabled }
+	is_shown = { te_united_nations_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { un_entry_unlocked = yes }
 	effect = { }

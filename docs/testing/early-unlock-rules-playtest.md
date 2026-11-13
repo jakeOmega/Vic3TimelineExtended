@@ -63,3 +63,22 @@ Russia, Austria, Prussia).
    within a week the entry is gone, and it comes back within a month of researching Combined Arms.
 6. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry before Combined Arms,
    and an authoritarian great power's entry stays inactive.
+
+## United Nations
+
+Setup: a new 1836 game with United Nations on *Early Unlock*, as a great power, console-researching Multilateral
+Alliances.
+
+1. **The entry opens with Multilateral Alliances.** Before it, the Diplomacy panel's UN tab is grayed and its tooltip
+   names Multilateral Alliances and Intergovernmental Organizations. With it, the UN entry is shown and Found the United
+   Nations is offered, its tooltip naming the same two technologies.
+2. **Founding works.** Found it: the charter event reaches other countries, the founder holds a permanent seat, and
+   authority starts at 50.
+3. **The league can't reform.** Play (or console-raise authority) until it has held near 70 for 24 months: Why UN
+   Authority Is Moving shows the month count and the line "No charter reform yet"; Propose a Resolution's Charter
+   Reform row and the AI's button are refused with the line naming Intergovernmental Organizations; no The Charter Has
+   Been Outgrown docket event fires.
+4. **The age arrives.** Console-research Intergovernmental Organizations for any country: within a month (the global
+   pulse) the league line is gone, and a ripe reform can be tabled at once.
+5. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry and no founding before
+   Intergovernmental Organizations, and the founding button's line is the bare technology, as before.
