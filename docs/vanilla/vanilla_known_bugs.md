@@ -1565,7 +1565,18 @@ add_loyalists_in_state effect [ Scoped object is not valid. Type: State NULL_STA
 Error: Event target link 'capital' returned an invalid object
 ```
 
-`italian_unification.5`'s trigger (`je_risorgimento`, weekly) reads `capital = { radical_fraction = { value >= 0.10 } }` with no `exists = capital`. Nine lines, 1937.12.12 to 1938.2.6 of a 1931–1938 game (2026-11-12), no mod frame. Modena held the only running `je_risorgimento` (1938.7.1 autosave); it owned Emilia on 1937.10.1, no state on 1938.1.1 and 1938.4.1, and Emilia again (a new state record) on 1938.7.1. So it lived through those months with no state and no capital.
+`italian_unification.5`'s trigger (`je_risorgimento`, weekly) reads `capital = { radical_fraction = { value >= 0.10 } }` with no `exists = capital`. Seventeen lines, weekly from 1937.12.12 to about 1938.4.1 of a 1931–1939 game (2026-11-12), no mod frame. Modena held the only running `je_risorgimento` (1938.7.1 autosave); it owned Emilia on 1937.10.1, no state on 1938.1.1 and 1938.4.1, and Emilia again (a new state record) on 1938.7.1. So it lived through those months with no state and no capital.
+
+### `events/poland_events.txt:148, 290` — Polish agitation sends its second event to a target it never found
+- stack: vanilla only
+
+```
+Undefined event target 'polish_agitation_target_1_scope'
+Event target link 'scope' returned an unset scope
+random_scope_state effect [ Wrong scope for effect: none, expected country
+```
+
+`poland_events.1` picks up to four `random_country` targets that own a Polish homeland state and are not Polish themselves, and its option a (the default) runs `scope:polish_agitation_target_1_scope = { trigger_event = { id = poland_events.2 … } }` with no `exists`. With no such country the scope is unset (line 148, plus `Event target link 'scope' returned an unset scope` there), and `poland_events.2`'s `immediate` then runs `random_scope_state` in no scope (line 290). The same second logs two `Invalid owner for scope type 0` lines with no file (watch list). One firing, 1938.6.24 of a 1931–1938 game (2026-11-12), no mod frame. The mod's optional Pan-Slavic merge can take in Polish, but a merge would make more countries non-Polish owners of Polish homelands, not fewer; whether it ran in that game wasn't checked.
 
 ## Expected mod-override noise
 
@@ -2553,6 +2564,16 @@ One line at every launch of 1.15.1 (three on 2026-11-12). The port (`xD0EF40`) a
 A message that is usually vanilla's and can also be the mod's, with nothing in the line to tell which: an assert with no script frame, a character or country the engine could not build. Registering it above would hide the mod's case. Leaving it bare makes each triage work out again why it is there. An entry here tags the line and leaves it in every view (`/logs` keeps it under `vanilla_bugs=hide`; `scripts/analysis/log_triage.py` prints it in its own section), and its `- check:` line, which is required, says what settles the question. Give the check the mod's case as well as vanilla's.
 
 When a check has come out the same way often enough that the line no longer needs a look, move the entry up to a section that hides it, with the signature or stack line that keeps the mod's case out. When a line here turns out to be the mod's, fix the cause and write the tell into the check.
+
+### `jomini_script_system.cpp:247` — `Invalid owner for scope type 0`, with no script location
+- source: `jomini_script_system.cpp:247`
+- check: read error.log at the same second for an unset scope that an effect ran in. Vanilla's when the only one is a vanilla file's (2026-11-12: two lines beside `poland_events.txt:148`'s unset `scope:polish_agitation_target_1_scope`, entry above); the mod's when a mod file's `scope:`, `var:` or saved scope is the one that came back unset.
+
+```
+Invalid owner for scope type 0
+```
+
+`Script location: <unknown>:0`: the engine names no file. Two lines, 2026-11-12, in the same second as a vanilla event ran its effects in an unset scope.
 
 ### `character_templates_utils.cpp:40` — `Invalid Culture scope when creating Character`
 - source: `character_templates_utils.cpp:40`
