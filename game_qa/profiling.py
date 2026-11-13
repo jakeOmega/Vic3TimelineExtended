@@ -271,29 +271,71 @@ def parse_server_log(lines: Iterable[str]) -> list[LogEvent]:
 def wall_clock(events: Sequence[LogEvent], window: tuple[int, int], weekly: int) -> dict:
     """Wall time for the frames in `window` (its first and last frame, inclusive), whole seconds as the log has them.
 
-    `running` is the time the game ran: the stretches from a run line to the pause after it that hold ticks of the
-    window (`segments`, each with its first and last tick and the seconds between the two lines), per game day of
-    the ticks in them. It is the headline, since a pause key tends to land during a long frame.
+    `running` is the time the game was seen running, per game day of the frames whose time it holds. It is the
+    headline, since a pause key tends to land during a long frame. It adds up the `segments`, the unbroken
+    stretches of play that hold ticks of the window. A stretch opens at a run line (`opened_by` run) and closes at
+    the pause line after it (`closed_by` pause), holding every tick between. A break (lines lost in the log's
+    rotation, or its clock stepping back) or a gap of MAX_GAP_S or more between two ticks cuts it: the stretch
+    closes at its last tick before the cut, and that tick's frame, whose end is not seen, leaves its `ticks`
+    (`closed_by` break or long_gap). Play resumes as a new stretch at the first tick after the cut (`opened_by`
+    break or long_gap), so the time across a cut never counts. After a break, ticks before any run line are play
+    seen from the first of them, since the lines lost may hold the run line. `breaks` counts the breaks between
+    the window's first and last ticks.
 
     `kinds` splits it by frame type from the gaps: a frame's time is the gap from its tick to the next tick, taken
     only when no pause, run or break lies between them, so time paused never counts. A frame whose gap was not
     taken (the game was paused after it, or the log lost lines) is `uncounted`: the weekly and monthly frames are
     the ones a pause most often follows, so `each` is a mean over the counted ones and `gaps` undercounts them. A
-    gap of MAX_GAP_S or more is not a frame's: it is listed in `long_gaps`. `speeds` are the speed changes logged
-    between the window's first and last ticks, and `speed_before` the last one before the first. `covered` gives the
-    first and last tick of the window the log holds; a last tick before the window's end leaves `short_by` frames
-    unread."""
+    gap of MAX_GAP_S or more is not a frame's: it is listed in `long_gaps`, and is out of `running` too. `speeds`
+    are the speed changes logged between the window's first and last ticks, and `speed_before` the last one before
+    the first. `covered` gives the first and last tick of the window the log holds; a last tick before the window's
+    end leaves `short_by` frames unread."""
     lo, hi = window
     stats: dict[str, list] = {kind: [0, 0] for kind in KINDS}
     ticks: dict[str, int] = dict.fromkeys(KINDS, 0)
     long_gaps: list[dict] = []
     prev: LogEvent | None = None
     seen: list[int] = []
-    segments, current = [], None
+    segments: list[dict] = []
+    # The open stretch of play: `since` is the second it opened (None until the first tick, after a cut), `ticks`
+    # the window's ticks in it, `last` its last tick of any frame.
+    current: dict | None = None
+    breaks: list[int] = []                  # len(seen) at each break
     speeds: list[tuple[int, dict]] = []
     speed_before: int | None = None
+
+    def opened(by: str, since: int | None) -> dict:
+        return {"by": by, "since": since, "ticks": 0, "last": None}
+
+    def close(by: str, at: int | None = None) -> None:
+        """Close the open stretch at the pause line's second `at`, or at its last tick (a cut, `at` None), whose
+        frame then leaves the count: its time runs past the cut."""
+        if current is None or current["since"] is None or current["last"] is None:
+            return
+        counted = current["ticks"]
+        if at is None:
+            at = current["last"].second
+            if lo <= current["last"].frame <= hi:
+                counted -= 1
+        if counted > 0:
+            segments.append({"from": current["from"], "to": current["to"], "ticks": counted,
+                             "seconds": at - current["since"], "opened_by": current["by"], "closed_by": by})
+
     for event in events:
         if event.kind == "tick":
+            gap = event.second - prev.second if prev is not None else None
+            if gap is not None and lo <= prev.frame <= hi:
+                if 0 <= gap < MAX_GAP_S:
+                    entry = stats[frame_kind(prev.frame, weekly)]
+                    entry[0] += 1
+                    entry[1] += gap
+                else:
+                    long_gaps.append({"frame": frame_text(prev.frame), "seconds": gap})
+            if gap is not None and not 0 <= gap < MAX_GAP_S and current is not None:
+                close("long_gap")
+                current = opened("long_gap", None)
+            if current is not None and current["since"] is None:
+                current["since"] = event.second
             if lo <= event.frame <= hi:
                 seen.append(event.frame)
                 ticks[frame_kind(event.frame, weekly)] += 1
@@ -301,14 +343,8 @@ def wall_clock(events: Sequence[LogEvent], window: tuple[int, int], weekly: int)
                     current["ticks"] += 1
                     current.setdefault("from", frame_text(event.frame))
                     current["to"] = frame_text(event.frame)
-            if prev is not None and lo <= prev.frame <= hi:
-                gap = event.second - prev.second
-                if 0 <= gap < MAX_GAP_S:
-                    entry = stats[frame_kind(prev.frame, weekly)]
-                    entry[0] += 1
-                    entry[1] += gap
-                else:
-                    long_gaps.append({"frame": frame_text(prev.frame), "seconds": gap})
+            if current is not None:
+                current["last"] = event
             prev = event
             continue
         if event.kind == "speed":
@@ -319,12 +355,14 @@ def wall_clock(events: Sequence[LogEvent], window: tuple[int, int], weekly: int)
             continue
         prev = None
         if event.kind == "run":
-            current = {"ticks": 0, "began": event.second}
-        elif event.kind == "pause" and current is not None:
-            if current["ticks"]:
-                segments.append({"from": current["from"], "to": current["to"], "ticks": current["ticks"],
-                                 "seconds": event.second - current["began"]})
+            current = opened("run", event.second)
+        elif event.kind == "pause":
+            close("pause", event.second)
             current = None
+        elif event.kind == "break":
+            breaks.append(len(seen))
+            close("break")
+            current = opened("break", None)
     counted = sum(n for n, _ in stats.values())
     seconds = sum(s for _, s in stats.values())
     run_ticks = sum(segment["ticks"] for segment in segments)
@@ -339,7 +377,8 @@ def wall_clock(events: Sequence[LogEvent], window: tuple[int, int], weekly: int)
                          "share": _round(s / seconds, 4) if seconds else None}
                   for kind, (n, s) in stats.items() if ticks[kind] or n},
         "segments": segments, "long_gaps": long_gaps,
-        "covered": {"first": frame_text(min(seen)), "last": frame_text(max(seen)), "ticks": len(seen)}
+        "breaks": sum(1 for count in breaks if 0 < count < len(seen)),
+        "covered":{"first": frame_text(min(seen)), "last": frame_text(max(seen)), "ticks": len(seen)}
         if seen else None,
         # a change logged after the window's last tick is not the window's
         "speed_before": speed_before, "speeds": [change for count, change in speeds if count < len(seen)],
@@ -543,8 +582,12 @@ def summary(run_dir: Path, steps: Sequence[Mapping], labels: Sequence[str], orig
         notes.append("the server log copy ends %d frames before the window does (its last lines were not read at "
                      "the dump)" % clock["short_by"])
     if clock is not None and clock["long_gaps"]:
-        notes.append("%d gaps of %d s or more inside a segment are left out of the wall clock"
-                     % (len(clock["long_gaps"]), MAX_GAP_S))
+        notes.append("%d gaps of %d s or more between two ticks are left out of the wall clock, with the frame "
+                     "before each" % (len(clock["long_gaps"]), MAX_GAP_S))
+    if clock is not None and clock["breaks"]:
+        notes.append("the server log copy breaks %d times inside the window (lines lost in its rotation, or its "
+                     "clock stepping back): no time across a break is counted, and the frame before one that cut a "
+                     "stretch of play is left out of `running`" % clock["breaks"])
     script = script_by_file(script_rows, origin, tasks["days"], since, top)
     if script["counts_fell"]:
         notes.append("%d script entries count fewer calls in %s than in %s: the profile was restarted between them, "

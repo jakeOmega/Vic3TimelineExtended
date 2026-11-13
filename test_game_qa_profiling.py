@@ -195,6 +195,61 @@ class WallClockTest(unittest.TestCase):
         self.assertEqual(out["long_gaps"], [{"frame": p.frame_text(w + 12), "seconds": 70}])
         self.assertEqual(out["kinds"]["sub"]["uncounted"], 1)              # the long gap's frame
 
+    def test_a_long_gap_is_out_of_running_too(self):
+        # #1742 review: the note said a long gap was left out of the wall clock, and `running` still held it
+        f = self.first
+        lines = [log_line(0, "Pause Toggled! Paused: false, PlayerID: 0"), log_line(1, tick(f)),
+                 log_line(1, tick(f + 6)), log_line(301, tick(f + 12)), log_line(301, tick(f + 18)),
+                 log_line(302, "Pause Toggled! Paused: true, PlayerID: 1")]
+        out = p.wall_clock(p.parse_server_log(lines), (f, f + 18), p.WEEKLY_PHASE)
+        self.assertEqual(out["long_gaps"], [{"frame": "1931.7.3.6", "seconds": 300}])
+        # cut at f+6, whose frame is the gap's; play resumes at f+12
+        self.assertEqual(out["segments"], [
+            {"from": "1931.7.3", "to": "1931.7.3.6", "ticks": 1, "seconds": 1, "opened_by": "run",
+             "closed_by": "long_gap"},
+            {"from": "1931.7.3.12", "to": "1931.7.3.18", "ticks": 2, "seconds": 1, "opened_by": "long_gap",
+             "closed_by": "pause"}])
+        self.assertEqual(out["running"], {"seconds": 2, "ticks": 3, "seconds_per_day": 2.667})
+        self.assertEqual(out["breaks"], 0)
+
+    def test_lines_lost_in_rotation_cut_a_stretch_at_the_tick_before_them(self):
+        # #1742 review: the stretch ran on across the gap marker, 600 s for 8 ticks, and nothing said so
+        f, g = self.first, self.first + 18 * 24
+        lines = [log_line(0, "Pause Toggled! Paused: false, PlayerID: 0")]
+        lines += [log_line(1, tick(f + 6 * n)) for n in range(4)] + [GAP_MARKER]
+        lines += [log_line(599, tick(g + 6 * n)) for n in range(4)]
+        lines += [log_line(600, "Pause Toggled! Paused: true, PlayerID: 1")]
+        out = p.wall_clock(p.parse_server_log(lines), (f, g + 18), p.WEEKLY_PHASE)
+        self.assertEqual([(s["from"], s["to"], s["ticks"], s["seconds"], s["opened_by"], s["closed_by"])
+                          for s in out["segments"]],
+                         [("1931.7.3", "1931.7.3.18", 3, 1, "run", "break"),
+                          ("1931.7.21", "1931.7.21.18", 4, 1, "break", "pause")])
+        self.assertEqual(out["running"], {"seconds": 2, "ticks": 7, "seconds_per_day": 1.143})
+        self.assertEqual(out["breaks"], 1)
+
+    def test_a_clock_step_back_cuts_a_stretch_too(self):
+        # the pause line's stamp is on the stepped-back clock: across the step it gave -47 s
+        f = self.first
+        lines = [log_line(100, "Pause Toggled! Paused: false, PlayerID: 0")]
+        lines += [log_line(101 + n, tick(f + 6 * n)) for n in range(4)]
+        lines += [log_line(50, tick(f + 24)), log_line(51, tick(f + 30)),
+                  log_line(53, "Pause Toggled! Paused: true, PlayerID: 1")]
+        out = p.wall_clock(p.parse_server_log(lines), (f, f + 30), p.WEEKLY_PHASE)
+        self.assertEqual([(s["ticks"], s["seconds"], s["closed_by"]) for s in out["segments"]],
+                         [(3, 4, "break"), (2, 3, "pause")])
+        self.assertEqual(out["running"], {"seconds": 7, "ticks": 5, "seconds_per_day": 5.6})
+        self.assertEqual(out["breaks"], 1)
+
+    def test_ticks_after_a_break_are_play_and_a_break_outside_the_window_is_not_counted(self):
+        # the lines lost may hold the run line: the ticks after the break are play from the first of them
+        f = self.first
+        lines = [GAP_MARKER, log_line(10, tick(f)), log_line(11, tick(f + 6)), log_line(12, tick(f + 12)),
+                 log_line(13, "Pause Toggled! Paused: true, PlayerID: 1"), GAP_MARKER]
+        out = p.wall_clock(p.parse_server_log(lines), (f, f + 12), p.WEEKLY_PHASE)
+        self.assertEqual([(s["ticks"], s["seconds"], s["opened_by"]) for s in out["segments"]], [(3, 3, "break")])
+        self.assertEqual(out["running"]["seconds_per_day"], 4.0)
+        self.assertEqual(out["breaks"], 0)                  # one before the window's first tick, one after its last
+
     def test_a_log_that_ends_early_says_by_how_much(self):
         f = self.first
         out = p.wall_clock(self.run_log([[(f, 1), (f + 6, 1)]]), (f, f + 30), p.WEEKLY_PHASE)
@@ -375,6 +430,25 @@ class SummaryTest(unittest.TestCase):
         out = self.summary("A")
         self.assertIsNone(out["wall_clock"])
         self.assertIn("no dedicated_server.log", out["notes"][0])
+
+    def test_a_break_and_a_long_gap_are_noted(self):
+        # one stretch of play, 1 s a frame, with lines lost after its 20th tick and 191 s between its 30th and 31st
+        d = self.days
+        lines = [log_line(10, "Pause Toggled! Paused: false, PlayerID: 0")]
+        lines += [log_line(10 + n, tick(f)) for n, f in enumerate(d[:20])] + [GAP_MARKER]
+        lines += [log_line(100 + n, tick(f)) for n, f in enumerate(d[20:30])]
+        lines += [log_line(300 + n, tick(f)) for n, f in enumerate(d[30:40])]
+        lines += [log_line(310, "Pause Toggled! Paused: true, PlayerID: 1")]
+        (self.run / p.RUN_SERVER_LOG).write_text("\n".join(lines) + "\n", encoding="utf-8")
+        self.dump("A", 40, 1000)
+        out = self.summary("A")
+        self.assertEqual((out["wall_clock"]["breaks"], len(out["wall_clock"]["long_gaps"])), (1, 1))
+        self.assertEqual(out["wall_clock"]["running"], {"seconds": 38, "ticks": 38, "seconds_per_day": 4.0})
+        self.assertEqual(out["notes"], [
+            "1 gaps of 60 s or more between two ticks are left out of the wall clock, with the frame before each",
+            "the server log copy breaks 1 times inside the window (lines lost in its rotation, or its clock "
+            "stepping back): no time across a break is counted, and the frame before one that cut a stretch of "
+            "play is left out of `running`"])
 
 
 class CopyTest(unittest.TestCase):
