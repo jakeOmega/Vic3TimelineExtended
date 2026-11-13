@@ -84,7 +84,9 @@ gw_policy_green_building_codes_active = {
 	has_variable = gw_green_building_codes_policy
 }
 
-# Does this country lead its own market? Used for the role icon and tariffs.
+# Does this country lead its own market? Used for the role icon and tariffs,
+# and outside Global Warming by the UN regime triggers (un_regime_triggers.txt)
+# and the Strategic Reserve's AI founding tier (st_res_ai_hub_gdp_tier).
 # A country that has lost every state stays alive while its war goes on, with
 # no market capital; unguarded, the panel's market-leader checks logged an
 # error every time they rendered for one.

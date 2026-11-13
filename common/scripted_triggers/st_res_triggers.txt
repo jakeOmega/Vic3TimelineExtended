@@ -118,10 +118,10 @@ st_res_ai_wants_stockpile = {
 # (from the hub's state, through owner). A GDP above st_res_ai_hub_min_gdp, and
 # one of:
 #   - a great or major power, whose rank already scores (both blocks);
-#   - the leader of its own market, which buys and sells at its own prices and
-#     has no larger market's leader to hold the stock for it;
-#   - a minor inside another's market rich enough to be near a major, above
-#     st_res_ai_minor_hub_min_gdp.
+#   - the leader of its own market: the reserve buys and sells in its owner's
+#     market, so the leader's is the one that steadies that market's prices;
+#   - a minor inside another's market above st_res_ai_minor_hub_min_gdp, ten
+#     times the first bar.
 # A country none of these holds scores 0 in both, and an ai_chance of 0 means
 # the AI never takes the decision (vanilla's 000_decisions_help.txt). A lower
 # weight would only have delayed the hub: the decision stays open for as long

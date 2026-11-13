@@ -398,7 +398,9 @@ nd_taboo_resume_programme = {
 #
 # It is also how a reserve that lost its hub (to the rebels of a civil war,
 # or to a foreign power) gets one back: the journal entry stays open without
-# a hub and keeps its stock, unless the hub was captured.
+# a hub and keeps its stock, unless the hub was captured. An AI minor below
+# st_res_ai_hub_gdp_tier scores 0 here, so its entry waits without a hub
+# until the country qualifies again.
 #
 # The one-per-country rule is the hub's own (is_shown: no hub anywhere).
 # create_building checks the unlocking technology since 1.13.9; whether it
@@ -453,6 +455,34 @@ te_decision_establish_strategic_reserve = {
 				set_variable = { name = st_res_hub_holder value = ROOT }
 			}
 			remove_variable = st_res_hub_relocating
+		}
+		# One line per founding with the class the country held that day, so a
+		# play-test can count founders by class (docs/testing/perf-fixes-playtest.md):
+		# major, leader or minor (st_res_ai_hub_gdp_tier held), player (a human
+		# outside the tier), zero_weight (an AI whose ai_chance read 0).
+		hidden_effect = {
+			if = {
+				limit = { is_great_or_major_power = yes }
+				debug_log = "TE_ST_RES: founded class=major country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = {
+					st_res_ai_hub_gdp_tier = yes
+					gw_is_market_leader = yes
+				}
+				debug_log = "TE_ST_RES: founded class=leader country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = { st_res_ai_hub_gdp_tier = yes }
+				debug_log = "TE_ST_RES: founded class=minor country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = { is_ai = no }
+				debug_log = "TE_ST_RES: founded class=player country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_ST_RES: founded class=zero_weight country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 		}
 	}
 

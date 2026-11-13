@@ -293,6 +293,10 @@ class StrategicReserveDecisionTest(unittest.TestCase):
         values = strip_comments(read(ROOT / "common/script_values/st_res_script_values.txt"))
         bars = {name: int(n) for name, n in re.findall(r"^(st_res_ai_(?:minor_)?hub_min_gdp) = (\d+)$", values, re.M)}
         self.assertEqual(bars, {"st_res_ai_hub_min_gdp": 10_000_000, "st_res_ai_minor_hub_min_gdp": 100_000_000})
+        # The market-leader test the tier leans on (global_warming_triggers.txt).
+        leader = " ".join(block(strip_comments(read(ROOT / "common/scripted_triggers/global_warming_triggers.txt")),
+                                "gw_is_market_leader").split())
+        self.assertEqual(leader, "exists = market_capital.owner market_capital.owner = THIS")
         # Players are untouched: only the AI's weights read the tier.
         body = strip_comments(read(DECISIONS))
         decision = block(body, "te_decision_establish_strategic_reserve")
@@ -300,6 +304,11 @@ class StrategicReserveDecisionTest(unittest.TestCase):
             with self.subTest(gate=gate):
                 self.assertNotIn("st_res_ai_hub_gdp_tier", block(decision, gate))
                 self.assertNotIn("is_ai", block(decision, gate))
+        # Each founding logs the class it held, which the play-test counts.
+        when = block(decision, "when_taken")
+        for cls in ("major", "leader", "minor", "player", "zero_weight"):
+            with self.subTest(cls=cls):
+                self.assertIn(f'debug_log = "TE_ST_RES: founded class={cls} country=', when)
 
 
 class LocalizationTest(unittest.TestCase):

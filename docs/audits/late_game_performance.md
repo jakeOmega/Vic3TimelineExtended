@@ -530,8 +530,11 @@ Items 3 and 6 were addressed by #1713.
       country's market, ten times the 10 million a market leader or a major
       needs (`st_res_ai_hub_gdp_tier`). Of this game's 55 holders, 34 were
       such minors and 30 of them below 100 million, so a new game would
-      carry at most 25 by 1931's measure, about 55% less of this pulse, or
-      0.25–0.3% of wall time. Hubs already built stay.
+      carry no fewer than about 25 by 1931's measure: at most about 55%
+      less of this pulse, or 0.25–0.3% of wall time. More stay in practice,
+      since a country that qualified at any time since Logistics (as a
+      market leader, a major, or above the bar) keeps its hub. Hubs already
+      built stay.
     - **Covert warfare's monthly pulse:** 776 ms, of which 653 ms was one
       `ordered_country` that every holder ran to store the world's best
       intelligence capacity in `global_max_ic`, which only the panel reads.
