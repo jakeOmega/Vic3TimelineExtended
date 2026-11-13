@@ -27,6 +27,10 @@ removes the folder (spec § 5.2, Review Focus 1).
                known by pid and start time): then it serves on, and `stop` again runs the stop again
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
+    profile-start, profile-dump
+               a profile of the running game (#1700): the tick timings cleared and the script profiler on, then
+               both dumps copied into the run folder (`Session.profile_start`, `Session.profile_dump`); `profile
+               summary` reads the copies and needs no server
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
                profiler-roots, wheel, drag
@@ -71,7 +75,8 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
                                         # client's STATUS_TIMEOUT_S, so `status` and `stop` answer past one
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
-START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules")
+START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
+              "game_args", "add_mods")
 
 
 class ServerError(Exception):
@@ -174,6 +179,8 @@ class SessionServer:
             "selfchecks": self._selfchecks,
             "profiler-roots": self._profiler_roots,
             "wheel": self._wheel, "drag": self._drag,
+            "profile-start": self._profile_start,
+            "profile-dump": self._profile_dump,
         }
 
     @property
@@ -364,6 +371,12 @@ class SessionServer:
 
     def _selfchecks(self, body: dict) -> tuple[dict, int]:
         return self._session.self_checks(), 0
+
+    def _profile_start(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_start(), 0
+
+    def _profile_dump(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_dump(body.get("label")), 0
 
     # ---- session.json
 

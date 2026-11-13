@@ -3,9 +3,12 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
+                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]...
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
-                                             # second day (the reply's `rules` says what the save holds)
+                                             # second day (the reply's `rules` says what the save holds); a
+                                             # game arg from session.GAME_ARGS; a variant mod folder, loaded
+                                             # after the playset and before the overlay
     python3 -m game_qa console "<text>"      # one console command, with its reply
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
@@ -37,6 +40,11 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa status                # the server and its session
     python3 -m game_qa selfchecks [--run ID] # the verdicts of the mod's TE_SELF_CHECK lines in a run (the newest
                                              # by default), the fixture's run's included; needs no session
+    python3 -m game_qa profile start         # clear the tick timings and turn the script profiler on
+    python3 -m game_qa profile dump [LABEL]  # both dumps, copied into the run folder as tt_LABEL.csv, sp_LABEL.txt
+    python3 -m game_qa profile summary [LABEL [LABEL2]] [--run ID] [--top N]
+                                             # wall clock per frame type, top tick tasks, script by file, for the
+                                             # window up to LABEL or between the two; needs no session
     python3 -m game_qa doctor                # is this machine ready for a session? (starts nothing)
     python3 -m game_qa remove-overlay        # the overlay folder an earlier run left, once nothing can use it
 
@@ -64,8 +72,8 @@ from typing import Any
 
 from game_qa import gate, overlay, restore, server, session, snapshot
 from game_qa.helper import ProcessHelper, to_windows_path
-from game_qa.report import utc_now
-from game_qa import selfchecks
+from game_qa.report import read_steps, utc_now
+from game_qa import profiling, selfchecks
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS = "runs"
@@ -344,6 +352,50 @@ def self_checks(backup_root: Path, run: str | None = None) -> tuple[dict, int]:
     except OSError as e:
         return {"refused": "unreadable_run", "run": run_id,
                 "detail": "a file of run %s is there and cannot be read (%s: %s)" % (run_id, type(e).__name__, e)}, 2
+
+
+# ---- profile summary
+
+def profile_summary(backup_root: Path, run: str | None, labels: Sequence[str], top: int = 25,
+                    roots: Callable[[], Sequence[tuple[str, Path]]] | None = None) -> tuple[dict, int]:
+    """`profile summary [LABEL [LABEL2]] [--run ID] [--top N]`: what a run's profile says (`profiling.summary`), read
+    from the run folder alone, the newest session's run by default, so it needs no session and works after `stop`.
+    A script file is told apart by where such a file is now: among the run's variant folders (as its `start`
+    recorded them), the deployed mod (`mod`), vanilla's `game/`, else `other` (`roots` gives the last two; by
+    default from path_constants, and a path that is not set is left out). Refused `no_run` and `unreadable_run` as
+    `selfchecks` is, and with `profiling.ProfileError`'s code otherwise."""
+    backup_root = Path(backup_root)
+    if not isinstance(top, int) or top < 1:
+        return {"refused": "bad_argument", "detail": "--top takes a positive number, not %r" % (top,)}, 2
+    try:
+        run_id = selfchecks.resolve_run(backup_root, run)
+    except selfchecks.SelfCheckError as e:
+        return {"refused": e.code, "detail": e.detail}, 2
+    run_dir = backup_root / RUNS / run_id
+    steps = read_steps(run_dir)
+    start = next((step for step in steps if step.get("verb") == "start" and step.get("outcome") == "ok"), {})
+    folders = [("add_mod", Path(mod["wsl"])) for mod in start.get("add_mods") or ()
+               if isinstance(mod, dict) and isinstance(mod.get("wsl"), str)]
+    folders += list(roots() if roots is not None else _profile_roots())
+    try:
+        out = profiling.summary(run_dir, steps, list(labels), profiling.origin_of(folders), top)
+    except profiling.ProfileError as e:
+        return {"refused": e.code, "detail": e.detail, "run": run_id}, 2
+    except OSError as e:
+        return {"refused": "unreadable_run", "run": run_id,
+                "detail": "a file of run %s is there and cannot be read (%s: %s)" % (run_id, type(e).__name__, e)}, 2
+    return {"run": run_id, **out}, 0
+
+
+def _profile_roots() -> list[tuple[str, Path]]:
+    roots = []
+    for label, name, below in (("mod", "mod_deploy_target", ""), ("vanilla", "base_game_path", "game")):
+        try:
+            path = _resolve(name)
+        except Exception:
+            continue
+        roots.append((label, path / below if below else path))
+    return roots
 
 
 # ---- doctor
@@ -706,6 +758,10 @@ def cmd_start(args) -> tuple[dict, int]:
             "playset": args.playset, "owner_confirmed_busy": args.owner_confirmed_busy}
     if switches:
         body["switch_rules"] = switches
+    if args.game_arg:
+        body["game_args"] = list(args.game_arg)
+    if args.add_mod:
+        body["add_mods"] = list(args.add_mod)
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -810,6 +866,18 @@ def cmd_selfchecks(args) -> tuple[dict, int]:
     return self_checks(_backup_root(), args.run_id)
 
 
+def cmd_profile_start(args) -> tuple[dict, int]:
+    return call(_backup_root(), "profile-start")
+
+
+def cmd_profile_dump(args) -> tuple[dict, int]:
+    return call(_backup_root(), "profile-dump", {"label": args.label})
+
+
+def cmd_profile_summary(args) -> tuple[dict, int]:
+    return profile_summary(_backup_root(), args.run_id, args.labels, args.top)
+
+
 def cmd_doctor(args) -> tuple[dict, int]:
     return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1))
 
@@ -844,6 +912,13 @@ def add_verbs(sub) -> None:
                         "The overlay is added to either")
     p.add_argument("--owner-confirmed-busy", action="store_true",
                    help="the owner was asked about the busy GPU and said to go ahead")
+    p.add_argument("--game-arg", action="append", default=[], metavar="FLAG",
+                   help="add one of %s to the game's arguments (repeatable). Write it without its dash, or as "
+                        "--game-arg=-FLAG. The fixture's own run never gets it" % ", ".join(session.GAME_ARGS))
+    p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
+                   help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
+                        ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "
+                        "run (repeatable). Without --save it is part of the fixture's world and key")
     p.set_defaults(run=cmd_start)
 
     p = sub.add_parser("console", help="one console command, with its reply")
@@ -938,6 +1013,22 @@ def add_verbs(sub) -> None:
     p.add_argument("--run", dest="run_id", metavar="ID",       # not `run`: that is the verb's function
                    help="a run's snapshot id (default: the newest session's run)")
     p.set_defaults(run=cmd_selfchecks)
+    p = sub.add_parser("profile", help="profile the running game (#1700): `start`, `dump [LABEL]`, then `summary "
+                                       "[LABEL [LABEL2]]`, which needs no session")
+    actions = p.add_subparsers(dest="action", required=True, metavar="ACTION")
+    actions.add_parser("start", help="clear the tick-task timings and turn the script profiler on, noting the "
+                                     "game date").set_defaults(run=cmd_profile_start)
+    q = actions.add_parser("dump", help="dump the tick-task timings and the script profile, and copy both into the "
+                                        "run folder at once")
+    q.add_argument("label", nargs="?", help="what to call the dump (default: the game date)")
+    q.set_defaults(run=cmd_profile_dump)
+    q = actions.add_parser("summary", help="the wall clock per frame type, the top tick tasks and the script time by "
+                                           "file, mod against vanilla: up to LABEL (default: the newest dump) from "
+                                           "the profile's start, or between LABEL and LABEL2")
+    q.add_argument("labels", nargs="*", metavar="LABEL")
+    q.add_argument("--run", dest="run_id", metavar="ID", help="a run's snapshot id (default: the newest session's run)")
+    q.add_argument("--top", type=int, default=25, help="how many tasks and files to list (default 25)")
+    q.set_defaults(run=cmd_profile_summary)
     p = sub.add_parser("session-serve", help="the session server (`start` runs it detached; not for direct use)")
     p.add_argument("--port", type=int, default=server.PORT)
     p.set_defaults(run=cmd_session_serve)
