@@ -948,6 +948,22 @@ class ReadTest(SessionTestCase):
         self.assertIn("did not answer a probe", error.info["not_retried"])
         self.assertEqual(self.typed().count("event te_qa.1"), 1)
 
+    def test_values_read_before_a_failed_proof_of_life_go_with_its_error(self):
+        # #1697: the proof of life after the poll fails, and the values evaluated before it are kept.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+
+        def dies(text):                         # as the game takes the read event's command
+            if text == "event " + overlay.READ_EVENT:
+                self.game.process_gone = True
+        self.game.on_command = dies
+        error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(error.info["reads"], [{"expr": "c:FRA.gdp", "ok": True, "raw": "7", "value": 7.0}])
+        self.assertEqual(server.refusal(error)["reads"], error.info["reads"])
+        [step] = self.read_steps()
+        self.assertEqual((step["outcome"], step["values"]), ("watch_ended", [["c:FRA.gdp", True, "7"]]))
+
     def test_a_closed_relay_is_an_error_of_the_verb_not_a_crash(self):
         self.started()
         self.game.tcp_error = HelperError("tcp_closed", "the peer closed the connection")
@@ -2090,6 +2106,24 @@ class TryEventTest(SessionTestCase):
         self.assertEqual(self.commands().count("select_event_option 1"), 1)
         [step] = self.try_event_steps()
         self.assertEqual((step["outcome"], len(step["options"])), ("not_selected", 2))
+
+    def test_a_row_keeps_the_values_of_a_read_whose_proof_of_life_failed(self):
+        # #1697: the read after option 0's pick evaluates, then the proof after its poll fails.
+        self.started()
+        command, reads = self.events.command, []
+
+        def dies_at_the_second_read(text):
+            command(text)
+            if text == "event " + overlay.READ_EVENT:
+                reads.append(text)
+                if len(reads) == 2:
+                    self.game.process_gone = True
+        self.game.on_command = dies_at_the_second_read
+        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
+        self.assertEqual(error.code, "watch_ended")
+        [row] = error.info["options"]
+        self.assertEqual(row["after"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "10", "value": 10.0}])
+        self.assertEqual(error.info["reads"], row["after"])
 
     def test_new_errors_leave_out_the_debuggers_own_burst(self):
         self.started()
