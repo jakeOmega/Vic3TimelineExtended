@@ -1,8 +1,11 @@
 # In-game QA harness results: 2026-11-13, the Game QA PRs of the day
 
 The first live runs of what PRs #1737 to #1742 add (#1736 changes tests only and has nothing to run). Everything
-ran from one scratch branch (`scratch/qa-integration-2026-11-13`) that merges all seven after their review fixes,
-so a result here belongs to the PR that added the verb, not to `main`.
+ran from one scratch branch (`scratch/qa-integration-2026-11-13`) that merges all seven, so a result here belongs
+to the PR that added the verb, not to `main`. The branch moved during the night: session A (and B's refused
+start) ran with #1739's first review fixes but before those of #1740 and #1742 and before #1737's rework of
+`pick`; B and B′ ran with all of those; C with #1741's fallback to Back too; D with everything up to then. The
+fixes of the second, later review are not run live.
 
 **Game:** Victoria 3 1.15.1. **Build:** the deployed mod folder as it stood (the main checkout was at `9cca92222`;
 not compared with the folder). **Launches:** six sessions (one refused at its start) and two unattended runs, the
