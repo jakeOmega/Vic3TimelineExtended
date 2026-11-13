@@ -49,10 +49,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           # gfx/ is ~1.7 GB of textures that nothing in this job reads; the
-          # dds-dimensions job below fetches the ones it scans.
+          # dds-dimensions job below fetches the ones it scans. gfx/models/
+          # holds only generated text (the state pictures' overlay copies,
+          # whose staleness test_state_pictures.py checks).
           sparse-checkout: |
             /*
             !/gfx/
+            /gfx/models/
           sparse-checkout-cone-mode: false
           filter: blob:none
 

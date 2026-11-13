@@ -1030,6 +1030,10 @@ types state_panel_types
 			button = {
 				size = { @panel_width_plus_14 274 }
 				texture = "[State.GetBestTexture]"
+				### TIMELINE EXTENDED - what the picture is and why it shows (docs/systems/mod_systems/state_pictures.md,
+				### "The banner's hover"). Each mod picture plays an overlay of its own name, and the hover is the text of
+				### that name (te_sp_tt_<overlay>); each vanilla overlay's text is empty, so a vanilla picture has none.
+				tooltip = "[Localize( Concatenate( 'te_sp_tt_', State.GetBestTextureEffect ) )]"
 				onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
 				effectname = "NoHighlight"
 				distribute_visual_state = no

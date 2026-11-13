@@ -15,6 +15,7 @@ Several mod systems use a common pattern for continuously-scaling modifiers:
 
 Systems using this pattern:
 - **Global Warming** — `global_warming` modifier × `temperature_anomaly_display` (applied from JE `on_monthly_pulse`)
+- **Regional Climate Warming** — `global_warming_tropics` / `global_warming_high_latitudes` state modifiers × the felt anomaly, Climate Warming's own scale (`gw_regional_refresh_effect`, from `on_monthly_pulse_state` when the stored scale differs, with a `root ?= this` self-healing marker; #1681)
 - **Construction Cost Scaling** — `construction_cost_scaling` modifier × `construction_cost_scaling_mult` (applied yearly, country scope; GDP part × the share that applies, from slack)
 - **Migration Crowding** — `migration_crowding` modifier × `migration_crowding_mult` (applied yearly, state scope)
 - **Excess Private Construction** — `too_much_private_construction` modifier × `var:too_much_private_construction_cached`, set yearly from `too_much_private_construction_script_value` (country scope; § Excess Private Construction)
