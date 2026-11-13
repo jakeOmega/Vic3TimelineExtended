@@ -505,6 +505,10 @@ def _check_arguments(game_args: list[str]) -> None:
             raise _Refused("bad_argument", f"the game argument {arg!r} has a control character in it")
 
 
+# Launch arguments that start the game on a save rather than a new game (any spelling, as `handsoff` is found).
+_SAVE_LOADING_ARGS = ("loadsave", "continuelastsave")
+
+
 def _check_end_date(game_args: list[str], long_run: str | None = None) -> None:
     """Raise _Refused for an unattended run without an end date it will keep: one runs on and writes autosaves
     over the owner's (spec § 5.3). `handsoff` is found in any spelling (without its leading `-` or `/`, in any case,
@@ -512,12 +516,21 @@ def _check_end_date(game_args: list[str], long_run: str | None = None) -> None:
     spelling, and that one exactly `-run_until=<y.m.d>`, the only spelling probed against the game, naming a day of
     the game's calendar after its start (no 29 February: a date the game cannot read may be no end at all).
 
+    An unattended run on a save (`-loadsave`, `-continuelastsave`, any spelling) is refused
+    (`handsoff_on_a_save`): the end date is judged for a new game from 1836, so a later save would run past it.
+
     An end date past `fixture.SHORT_RUN_LAST` is a long run (#1602): it writes the owner's quarterly autosaves
     and may take hours, so it needs `long_run`, the owner's own grant of it in their words (`--long-run`),
     which the journal's `started` keeps (`no_long_run_grant`)."""
     names = [word.lstrip("-/").lower().partition("=")[0] for arg in game_args for word in arg.split()]
     if "handsoff" not in names:
         return
+    loads = sorted({name for name in names if name in _SAVE_LOADING_ARGS})
+    if loads:
+        raise _Refused("handsoff_on_a_save", f"an unattended run (-handsoff) starts a new game: with "
+                                             f"{', '.join('-' + n for n in loads)} its end date would be judged "
+                                             "as a new game's, and a save of a later date would run on past it, "
+                                             "writing the owner's autosaves")
     ends = [word for arg in game_args for word in arg.split() if word.lstrip("-/").lower().partition("=")[0] == "run_until"]
     whole = [arg for arg in game_args if _END_DATE_ARG.fullmatch(arg)]
     if not whole:
@@ -998,7 +1011,7 @@ def cmd_restore(args) -> tuple[dict, int]:
     notes: dict = {}
     try:
         _settle_playset(snap, user, bool(games), notes)
-        out = _unvouched_hold(snap) or restore.restore(
+        out = _unvouched_hold(snap, notes) or restore.restore(
             snap, user, other_game_running=bool(games), logs="started" in _events(snap),
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
     except OSError as exc:
@@ -1091,19 +1104,23 @@ def _launchs_live_write(snap: snapshot.Snapshot, user: Path) -> tuple[str, tuple
     return live
 
 
-def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
+def _unvouched_hold(snap: snapshot.Snapshot, notes: dict | None = None) -> restore.Outcome | None:
     """Hold, changing nothing, a run whose files nothing vouches for: `watch` saw another game (`other_game_ran`:
     its writes cannot be told from the run's), or lost sight of the run's game at a failed look or across a gap
     of more than WATCH_RESUME_GAP_S before a resumed `watch` (`unwatched_stretch`: nobody saw then whether
-    another game ran). None when neither. A run already restored is left as it is, as `restore.restore` leaves
-    one beside a running game."""
+    another game ran), or the harness journaled `fixture.HOLD_ASKED` for it (its `reason`: `save_not_kept`, a
+    dated run's save that could be neither renamed nor copied). None when none. A run already restored is left
+    as it is, as `restore.restore` leaves
+    one beside a running game. For `unwatched_stretch`, `notes` gets `looks_failed`, `looks` (every look `watch`
+    journaled) and `gaps_s`, so that one failed look in thousands can be told from many."""
     journal = snapshot.journal(snap)
     others = [f"pid {e.get('pid')} (started {e.get('created')})" for e in journal if e.get("event") == "other_game"]
+    asked = [e for e in journal if e.get("event") == fixture.HOLD_ASKED]
     failed = sum(1 for e in journal if e.get("event") == "look_failed")
     bounds = {"watch_resumed": WATCH_RESUME_GAP_S, "watching": WATCH_FIRST_GAP_S}
     long_gaps = [e.get("gap_s") for e in journal if e.get("event") in bounds
                  and not _gap_within(e.get("gap_s"), bounds[e["event"]])]
-    if not (others or failed or long_gaps):
+    if not (others or asked or failed or long_gaps):
         return None
     verdicts = [e.get("event") for e in journal if e.get("event") in _VERDICTS]
     if verdicts and verdicts[-1] == "restored":
@@ -1111,7 +1128,18 @@ def _unvouched_hold(snap: snapshot.Snapshot) -> restore.Outcome | None:
     if others:
         snapshot.record(snap, "held", reason="other_game_ran", games=others)
         return restore.Outcome([], [], True, "other_game_ran")
+    if asked:
+        # The harness asked for it (fixture.HOLD_ASKED): a dated run's save it could not keep under its own name
+        reason = str(asked[-1].get("reason") or fixture.HOLD_ASKED)
+        files = [str(f) for f in asked[-1].get("files") or []]
+        snapshot.record(snap, "held", reason=reason, files=files)
+        if notes is not None:
+            notes["files"] = files
+        return restore.Outcome([], [], True, reason)
     snapshot.record(snap, "held", reason="unwatched_stretch", looks_failed=failed, gaps_s=long_gaps)
+    if notes is not None:
+        looks = sum(1 for e in journal if e.get("event") in ("heartbeat", "look_failed"))
+        notes.update(looks_failed=failed, looks=looks, gaps_s=long_gaps)
     return restore.Outcome([], [], True, "unwatched_stretch")
 
 
@@ -1193,7 +1221,7 @@ def cmd_recover(args) -> tuple[dict, int]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "watch_still_recording")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games))
+            out = _unvouched_hold(snap, notes) or restore.restore(snap, user, other_game_running=bool(games))
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break
@@ -1234,7 +1262,7 @@ def _recover_never_started(backups: Path, user: Path) -> list[dict]:
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "launch_in_flight")), id=snap.id))
                 break
             _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
+            out = _unvouched_hold(snap, notes) or restore.restore(snap, user, other_game_running=bool(games), logs=False)
         except Exception as exc:
             runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
             break

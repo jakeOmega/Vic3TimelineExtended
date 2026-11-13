@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import time
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
@@ -65,7 +66,7 @@ GAME_MAY_BE_UP = "game_may_be_up"
 NO_GAME_REFUSALS = frozenset({
     "already_finished", "already_started", "not_armed", "no_end_date", "bad_argument", "no_permission",
     "backup_root", "other_game", "gpu_busy", "game_running", "stale_snapshot", "no_game_binary",
-    "mod_not_in_playset", "playset_not_restored", "busy", "no_long_run_grant"})
+    "mod_not_in_playset", "playset_not_restored", "busy", "no_long_run_grant", "handsoff_on_a_save"})
 _CLAIMED = "stays claimed"              # said by every refusal after the claim (__main__._CLAIM_STAYS)
 
 _KEY = re.compile(r"[A-Za-z0-9_]{1,64}")
@@ -88,7 +89,7 @@ MONTH_NAMES = ("January", "February", "March", "April", "May", "June", "July", "
                "November", "December")
 RUN_ON_DAYS = 2                                 # from the save's date to `-run_until`, as for the 1836 fixture
 DATED_MARK = "_d"                               # in the key of a dated fixture: then eight digits, YYYYMMDD
-DATED_KEPT = 4                                  # dated fixtures kept, the newest of each date (`prune`)
+DATED_KEPT = 4                                  # dated fixtures kept, the newest, whatever their dates (`prune`)
 # The owner's autosave setting is quarterly ("quarteryear" in pdx_settings.json); the first quarterly autosave of a
 # new game is 1 April 1836. An unattended run that ends before it writes none; one that runs past it writes four a
 # year into the owner's `save games/`, so `launch` asks for a grant of its own (`--long-run`) past this date.
@@ -111,6 +112,11 @@ LOAD_S = 90.0               # launch to the save of the 1836 fixture's three-day
 # since the rates above vary by about a factor of two between runs and past 1953 they are a guess.
 LIMIT_FACTOR = 3.0
 FOLLOW_S = 10.0             # a dated run's logs are copied this often (they rotate at 512 KB, six generations)
+# The run's save is renamed again every RENAME_RETRY_S while the rename fails, RENAME_TRIES times in all (about a
+# minute): OneDrive, or a scanner, may hold a new file of 100 MB or more open for a while. Then it is copied.
+RENAME_TRIES = 30
+RENAME_RETRY_S = 2.0
+HOLD_ASKED = "hold_asked"   # a journal event: the run's restore holds with its `reason` (__main__._unvouched_hold)
 RUN_LOG_COPY = "fixture_%s"             # the run's own copy of each log, in its run folder: fixture_debug.log
 RUN_LOGS = ("debug.log", "error.log")
 GAMETIMER_GLOB = "gametimer_*.tsv"      # the game's own seconds per game day, written by an unattended run
@@ -342,14 +348,17 @@ class RunLogs:
     game logs at its setup are long gone: they survive only in this copy.
 
     Each log is followed by its inode across rotation (`LogFollower`); `found` gives, per log, the (size, SHA-256)
-    the run's snapshot recorded, so a log the game appended to has the owner's beginning skipped. A rotation the
+    the run's snapshot recorded, so a log the game appended to has the owner's beginning skipped.
+    `found_unknown` says that record could not be read: everything is copied, and the record says so. A rotation the
     follower missed is written as GAP_MARKER and counted in `gaps`. `poll` never raises: the first error stops the
     copying for good and is kept in `error` (a copy with a hole in it would pass for a whole one).
 
     Whose lines these are is vouched for by the run's restore, not here: a game beside the run's (which `watch`
     journals) holds the restore, and the fixture's lines are kept only after a restore that went through."""
 
-    def __init__(self, logs_dir: Path, out_dir: Path, found: Mapping[str, tuple[int, str] | None] | None = None):
+    def __init__(self, logs_dir: Path, out_dir: Path, found: Mapping[str, tuple[int, str] | None] | None = None,
+                 found_unknown: bool = False):
+        self.found_unknown = found_unknown      # the snapshot gave no record of the logs: nothing could be skipped
         found = dict(found or {})
         self.out_dir = Path(out_dir)
         self.followers = {name: LogFollower(Path(logs_dir) / name, found=found.get(name)) for name in RUN_LOGS}
@@ -388,6 +397,8 @@ class RunLogs:
             out["prefix_skipped"] = dict(self.skipped)
         if self.error is not None:
             out["error"] = self.error
+        if self.found_unknown:
+            out["found_unknown"] = True
         return out
 
 
@@ -403,12 +414,15 @@ class FixtureError(Exception):
     handle of the `watch` following it (None when none could be started), which may still be running. `restore`
     is the (reply, exit code) of the fixture's own restore, None when it was not run. `saved` is the fixture's save
     when the run's save had been given its name before the failure (a restore that held or was refused after it):
-    the save is there, and a later start can load it once the owner has resolved the hold."""
+    the save is there, and a later start can load it once the owner has resolved the hold. `left` is the run's
+    save under the engine's name when it could be neither renamed nor copied: the run's restore was asked to hold
+    (HOLD_ASKED) so that it is not removed, and the owner moves it."""
 
     def __init__(self, message: str, step: str, reply: dict | None = None, snapshot: str | None = None, *,
                  code: str | None = None, proc: ProcId | None = None, watch: Any = None,
-                 restore: tuple[dict, int] | None = None, saved: Path | None = None):
+                 restore: tuple[dict, int] | None = None, saved: Path | None = None, left: Path | None = None):
         super().__init__(message)
+        self.left = left
         self.step = step
         self.reply = reply if reply is not None else {}
         self.snapshot = snapshot
@@ -522,6 +536,7 @@ def make(
     follow: Callable[[str], Any] | None = None,
     long_run: str | None = None,
     facts: dict | None = None,
+    mark: Callable[..., Any] | None = None,
 ) -> Path:
     """Make the fixture for `key` with one unattended run of the game, and return its save. `playset` is the
     run's (`launch --playset`), so the fixture is made in the world the run will load.
@@ -534,7 +549,9 @@ def make(
     save is renamed (a dated run copies its logs so: `RunLogs`); it must not raise. `facts`, when given, is
     filled with what was found of the run's save: `save_found` (the name the engine gave it), `save_expected`,
     `game_date` (from the save's own meta_data) and `date_matches`. A name or a date other than the expected is
-    reported there, never refused: one save is the only test, since the restore would remove it.
+    reported there, never refused: one save is the only test, since the restore would remove it. `mark(snapshot_id,
+    event, **fields)` journals an event in the run's snapshot: when the save could be neither renamed nor copied,
+    HOLD_ASKED, so that the restore holds rather than remove it.
 
     The order is `snapshot`, `launch`, `watch` (spawned the moment launch returns, and followed until it has
     recorded the game's exit, which `-run_until` brings), the rename of the run's save, and `restore` (retried
@@ -587,13 +604,16 @@ def make(
         raise FixtureError(f"the fixture's run (snapshot {snapshot}) may have left its game up: {run.up}, so it was "
                            f"not restored. {failure}", failure.step, failure.reply, snapshot, code=GAME_MAY_BE_UP,
                            proc=run.proc, watch=run.watch)
+    if run.failure is not None and run.failure.left is not None:
+        _ask_hold(mark, snapshot, run.failure)
     restored = restore_retried(run_cli, snapshot, sleep, RESTORE_RETRIES)
     restore_failure = None if restored[1] == 0 else _failure("restore", restored[0], snapshot)
     failure = run.failure
     if failure is None:
         failure = restore_failure
     elif restore_failure is not None:
-        failure = FixtureError(f"{failure}. Then {restore_failure}", failure.step, failure.reply, snapshot)
+        failure = FixtureError(f"{failure}. Then {restore_failure}", failure.step, failure.reply, snapshot,
+                               left=failure.left)
     if failure is not None:
         failure.restore = restored
         if run.failure is None and target.is_file():
@@ -602,6 +622,18 @@ def make(
     if keep_lines is not None:
         keep_lines(snapshot)
     return target
+
+
+def _ask_hold(mark, snapshot: str, failure: FixtureError) -> None:
+    """Journal HOLD_ASKED for the run's save that could not be kept under the fixture's name, so that the restore
+    leaves it; when that cannot be journaled the message says the restore may remove it."""
+    name = f"{SAVE_FOLDER}/{failure.left.name}"
+    try:
+        if mark is None:
+            raise RuntimeError("no way to journal it was given")
+        mark(snapshot, HOLD_ASKED, reason="save_not_kept", files=[name])
+    except Exception as error:
+        failure.args = (f"{failure}. The hold could not be asked for ({error!r}): the restore may remove {name}",)
 
 
 _SWITCHED_KEY = re.compile(r"(.+)_s[0-9a-f]{8}")     # SWITCHED_MARK and the eight hex digits rules.switched_key adds
@@ -613,8 +645,10 @@ def prune(user_data: Path, keep: int = 2, keep_switched: int = 2, in_use: Sequen
     modification time, equal times by name) and return the names removed, oldest first. Nothing else is touched.
 
     A dated fixture (its key ends in DATED_MARK and eight digits) is not counted among those: it cost a run of
-    hours, so two cheap 1836 fixtures must never push it out. Of the dated ones, only the newest of each date
-    stays (a newer one of that date was made on a newer build), and of those the `keep_dated` newest.
+    hours, so two cheap 1836 fixtures must never push it out. Of the dated ones the `keep_dated` newest stay,
+    whatever their dates. A newer fixture of the same date does not make an older one go: the key cannot say
+    whether the older one is of an earlier build or of the other playset, and a fixture of the other playset is
+    no less in use.
 
     A copy with a rule switched (its key ends in SWITCHED_MARK and eight hex digits) is not counted among
     either: it is removed with the fixture it was made from, plain or dated, and of the ones whose fixture stays
@@ -636,12 +670,7 @@ def prune(user_data: Path, keep: int = 2, keep_switched: int = 2, in_use: Sequen
     dated = [entry for entry in found if _base_key(entry[1]) is None and date_of_key(_key_of(entry[1])) is not None]
     plain = [entry for entry in found if entry not in switched and entry not in dated]
     doomed = [entry for entry in plain[: max(len(plain) - keep, 0)] if entry[1] not in protected]
-    newest = {date_of_key(_key_of(entry[1])): entry for entry in dated}      # sorted oldest first: the last wins
-    superseded = [entry for entry in dated if newest[date_of_key(_key_of(entry[1]))] is not entry
-                  and entry[1] not in protected]
-    standing = [entry for entry in dated if entry not in superseded]
-    doomed += superseded + [entry for entry in standing[: max(len(standing) - keep_dated, 0)]
-                            if entry[1] not in protected]
+    doomed += [entry for entry in dated[: max(len(dated) - keep_dated, 0)] if entry[1] not in protected]
     going = {entry[1] for entry in doomed}
     kept_keys = {_key_of(entry[1]) for entry in plain + dated if entry[1] not in going}
     orphans = [entry for entry in switched if _base_key(entry[1]) not in kept_keys and entry[1] not in protected]
@@ -751,7 +780,7 @@ def _run(run_cli: RunCli, launch: list[str], snapshot: str, saves: Path, target:
     if failure is not None:
         return _Run(failure)        # the game launch started has quit and watch recorded it: restore judges the rest
     try:
-        _keep_the_save(saves, target, date, facts)
+        _keep_the_save(saves, target, date, facts, sleep)
     except FixtureError as error:
         error.snapshot = snapshot
         return _Run(error)
@@ -772,10 +801,13 @@ def _named_proc(reply: dict) -> ProcId | None:
         return None
 
 
-def _keep_the_save(saves: Path, target: Path, date: Date = DEFAULT_DATE, facts: dict | None = None) -> None:
+def _keep_the_save(saves: Path, target: Path, date: Date = DEFAULT_DATE, facts: dict | None = None,
+                   sleep=time.sleep) -> None:
     """Give the run's one `TEST_FAIL_te_qa_fixture_*.v3` save the fixture's name. Exactly one such save is the only
     test (`make` refused to start beside one, so it is the run's): its name and its own date are reported in
-    `facts`, never refused, since the restore that follows would remove it with the run's hours."""
+    `facts`, never refused, since the restore that follows would remove it with the run's hours. A rename that
+    fails is tried again (RENAME_TRIES, RENAME_RETRY_S), then the save is copied to the name; one that can be
+    neither is raised with `left`, the save, for the restore to be held over it."""
     made = _run_saves(saves)
     if not made:
         raise FixtureError(f"the run left no {RUN_SAVE_GLOB} in save games/", "save")
@@ -784,14 +816,47 @@ def _keep_the_save(saves: Path, target: Path, date: Date = DEFAULT_DATE, facts: 
         raise FixtureError(f"the run left {len(made)} saves, {', '.join(names)}: which is the fixture?", "save", {"saves": names})
     if target.exists():
         raise FixtureError(f"{target.name} appeared during the run and is left as it is", "rename")
-    try:
-        os.rename(made[0], target)
-    except OSError as error:
-        raise FixtureError(f"{made[0].name} could not be renamed to {target.name}: {error}", "rename", {"error": str(error)}) from error
+    error: OSError | None = None
+    tries = 0
+    for tries in range(1, RENAME_TRIES + 1):
+        try:
+            os.rename(made[0], target)
+            error = None
+            break
+        except OSError as failed:
+            error = failed
+        if tries < RENAME_TRIES:
+            sleep(RENAME_RETRY_S)
+    kept_by = "rename"
+    if error is not None:
+        try:
+            _copy_to(made[0], target)
+            kept_by = "copy"                # the run's own copy stays under its name: the restore removes it
+        except OSError as copy_error:
+            raise FixtureError(
+                f"{made[0].name} could not be renamed to {target.name} in {tries} tries over about "
+                f"{(tries - 1) * RENAME_RETRY_S:g} s ({error}), nor copied ({copy_error}): it is left in save games/ "
+                "under its own name, and the run's restore holds so that it is not removed", "rename",
+                {"error": str(error), "copy_error": str(copy_error), "left": made[0].name}, left=made[0]) from error
     if facts is not None:
         found = save_date(target)
         facts.update(save_found=made[0].name, save_expected=expected_save(date), name_date=_dotted_or_none(
-            written_date(made[0].name)), game_date=_dotted_or_none(found), date_matches=found == check_date(date))
+            written_date(made[0].name)), game_date=_dotted_or_none(found), date_matches=found == check_date(date),
+            kept_by=kept_by, rename_tries=tries)
+
+
+def _copy_to(source: Path, target: Path) -> None:
+    """Copy `source` to `target` through a `.part` beside it, so that a copy cut short never has the name."""
+    part = target.with_name(target.name + ".part")
+    try:
+        shutil.copy2(source, part)
+        os.replace(part, target)
+    except OSError:
+        try:
+            part.unlink()
+        except OSError:
+            pass
+        raise
 
 
 def _dotted_or_none(date: Date | None) -> str | None:

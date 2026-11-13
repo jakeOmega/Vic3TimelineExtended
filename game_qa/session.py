@@ -149,6 +149,8 @@ BUSY_RETRY_TOTAL_S = fixture.BUSY_RETRY_TOTAL_S   # for busy: another session's 
 LAUNCH_IN_FLIGHT_RETRY_TOTAL_S = 95.0   # for launch_in_flight: 90 s from the claim (__main__.LAUNCH_IN_FLIGHT_S); only
                                         # once the game is ended here, which the fixture cannot do
 DRAIN_S = 0.5                           # before a read: a stop left over from an earlier one (real seconds: dap's clock)
+FOUND_LOGS_TRIES = 3                    # a dated run's snapshot manifest, read for the logs its game found at launch
+FOUND_LOGS_RETRY_S = 1.0
 PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
 WATCH_RESPAWNS = 3                      # a watch that failed while the game is proved alive is run again, this often
 
@@ -313,6 +315,7 @@ class Session:
         self._run_logs: fixture.RunLogs | None = None    # a dated fixture's run: its logs copied as it went
         self._fixture_snap: str | None = None    # the snapshot of the run that made the fixture, once it is made
         self._fixture_lines: dict | None = None  # the record of the lines kept with it
+        self._dated: dict | None = None     # a dated fixture loaded: its save's own game_date, and whether it matches
 
     # ---- start
 
@@ -324,7 +327,8 @@ class Session:
         `fixture_date` ("1900.1.1", or a year) loads the dated fixture of this build instead (#1602): it is never
         made here, since its run takes hours that need the owner's own grant (`make_fixture`). Missing, it is
         refused `no_fixture` before anything is done, with what is there for that date under other builds
-        (`stale`) and `next`. Not with `save`. With `switch_rules`, the copy has the rule switched on the dated
+        (`stale`) and `next`. Not with `save`. The reply gives the save's own `fixture_game_date` and
+        `date_matches`, with a `date_note` when it is not the date asked for or cannot be read. With `switch_rules`, the copy has the rule switched on the dated
         fixture's date.
 
         `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
@@ -479,6 +483,7 @@ class Session:
             result["fixtures_pruned"] = pruned
         if date is not None:
             result["fixture_date"] = fixture.dotted(date)
+            result.update(self._dated or {})
         if self._rules is not None:
             result["rules"] = self._rules
         self._record("start", outcome="ok", **result)
@@ -559,7 +564,18 @@ class Session:
             if found is None:
                 raise SessionError("no_fixture", "the fixture dated %s for this build (%s) is not there any more"
                                    % (fixture.dotted(date), fixture.FIXTURE_PREFIX + key), **self._missing(date))
-            self._record("fixture", outcome="found", save=found.stem, date=fixture.dotted(date))
+            game_date = fixture.save_date(found)
+            self._dated = {"fixture_game_date": fixture.dotted(game_date) if game_date is not None else None,
+                           "date_matches": game_date == date}
+            if game_date is None:
+                self._dated["date_note"] = ("the save's own game_date could not be read: it may not be of %s"
+                                            % fixture.dotted(date))
+            elif game_date != date:
+                self._dated["date_note"] = (
+                    "the save's own game_date is %s, not %s, the date it is kept under: the engine wrote its save of "
+                    "the run on another day than asked. The game loaded is of %s" % (
+                        fixture.dotted(game_date), fixture.dotted(date), fixture.dotted(game_date)))
+            self._record("fixture", outcome="found", save=found.stem, date=fixture.dotted(date), **self._dated)
             stem, made, pruned = found.stem, False, []
         else:
             stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
@@ -866,8 +882,9 @@ class Session:
         def follow(snapshot_id):
             # A dated run's logs, copied as the game writes them: they rotate at 512 KB, six generations deep.
             if self._run_logs is None:
-                self._run_logs = fixture.RunLogs(self._paths.logs, self._paths.run_root / snapshot_id,
-                                                 self._found_logs(snapshot_id))
+                found = self._found_logs(snapshot_id)
+                self._run_logs = fixture.RunLogs(self._paths.logs, self._paths.run_root / snapshot_id, found,
+                                                 found_unknown=found is None)
             self._run_logs.poll()
 
         def keep(snap):
@@ -878,7 +895,8 @@ class Session:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
                                 clock=self._clock, started=self._journaled_proc, keep_lines=keep, date=date,
-                                limit_s=limit_s, follow=follow if dated else None, long_run=long_run, facts=facts)
+                                limit_s=limit_s, follow=follow if dated else None, long_run=long_run, facts=facts,
+                                mark=self._mark)
         except fixture.FixtureError as e:
             up = e.code == fixture.GAME_MAY_BE_UP
             self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
@@ -891,6 +909,10 @@ class Session:
                 # The run's save has its name: only its restore failed after it. The fixture is there, and loads
                 # once the owner has resolved what the restore left (its lines were not kept: nothing vouches).
                 info["saved"] = e.saved.stem
+            if e.left is not None:
+                # Neither renamed nor copied: left under the engine's name, and the run's restore was asked to
+                # hold over it. The owner moves it to the fixture's name, or deletes it.
+                info["left"] = e.left.name
             if self._run_logs is not None:
                 info["logs"] = dict(self._run_logs.record(), vouched=False)
             raise SessionError("fixture_failed", str(e), **info) from e
@@ -905,6 +927,10 @@ class Session:
         self._record("fixture", outcome="made", save=made.stem, pruned=pruned,
                      **({"date": fixture.dotted(date), "facts": facts} if dated else {}))
         return made.stem, True, pruned
+
+    def _mark(self, snap_id: str, event: str, **fields) -> None:
+        """Journal `event` in the snapshot `snap_id` (fixture.make's `mark`: a hold it asks of the run's restore)."""
+        snapshot.record(snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap_id), event, **fields)
 
     def _forget_fixture_lines(self, key: str) -> None:
         """Before a fixture is made under `key`: nothing kept for an earlier fixture of that key, or for one whose
@@ -924,9 +950,11 @@ class Session:
         it went; a copy that stopped on an error keeps nothing, since it has a hole in it."""
         self._fixture_lines = None
         try:
-            if followed is not None and followed.error is not None:
-                detail = "the run's log could not be copied as it went (%s), so its lines are not all there" % (
-                    followed.error)
+            if followed is not None and (followed.error is not None or followed.found_unknown):
+                detail = ("the run's log could not be copied as it went (%s), so its lines are not all there"
+                          % followed.error if followed.error is not None else
+                          "the run's snapshot could not be read for the logs the game found at its launch, so the "
+                          "owner's earlier lines could not be told from the run's")
                 selfchecks.forget_fixture_lines(self._paths.backup_root, key, detail)
                 self._fixture_lines = {"kept": False, "detail": detail}
                 self._record("fixture_lines", outcome="failed", snapshot=snap, detail=detail)
@@ -1001,13 +1029,22 @@ class Session:
             return None
         return (entry.size, entry.sha256) if entry is not None else None
 
-    def _found_logs(self, snap: str) -> dict[str, tuple[int, str] | None]:
+    def _found_logs(self, snap: str) -> dict[str, tuple[int, str] | None] | None:
         """The (size, SHA-256) the run's snapshot recorded for each log `fixture.RunLogs` copies: the logs the
-        game found at its launch. Missing entries are None."""
-        try:
-            files = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files
-        except (OSError, ValueError):
-            return {}
+        game found at its launch. Missing entries are None. None when the snapshot's manifest could not be read
+        in FOUND_LOGS_TRIES tries: the owner's earlier log then cannot be told from the run's, and the copy says
+        so (`RunLogs.found_unknown`), so that no line of it is kept as the run's."""
+        files = None
+        for attempt in range(FOUND_LOGS_TRIES):
+            if attempt:
+                self._sleep(FOUND_LOGS_RETRY_S)
+            try:
+                files = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files
+                break
+            except (OSError, ValueError):
+                continue
+        if files is None:
+            return None
         out: dict[str, tuple[int, str] | None] = {}
         for name in fixture.RUN_LOGS:
             entry = files.get("logs/" + name)

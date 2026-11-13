@@ -1617,5 +1617,85 @@ class LongRunTest(RestoreTestCase):
         self.assertEqual(tree(self.user), tree_before)
 
 
+
+class NotTheRunsSaveTest(LongRunTest):
+    """`save games/` is under OneDrive, and another PC of the owner's writes there too (its conflict copies, such as
+    `continue_game-Manfred.json`, have been seen). OneDrive gives a synced file the time it had where it was
+    written, so an autosave the owner's game there wrote during a run of hours looks like the run's. No run of the
+    harness writes `autosave_exit.v3`, and an unattended run from 1836 writes no autosave of a date past its end:
+    either one holds (`not_the_runs_save`), changing nothing."""
+
+    def laptop_game(self, snap, name="autosave_exit.v3", data=b"the owner's game on the laptop, 1932", at=60 * 8 + 30):
+        path = self.user / "save games" / name
+        path.write_bytes(data)
+        set_mtime(path, NOW, at)
+        cont = self.user / "continue_game.json"
+        cont.write_text('{"title": "autosave_exit", "desc": "Playing as Singapore"}')
+        set_mtime(cont, NOW, at)
+        return path
+
+    def unattended(self, until="1900.1.3", extra=()):
+        snap = self.run_started(at=NOW)
+        snapshot.record(snap, "started", now=NOW, pid=4242, created="2026-11-10T12:00:00Z",
+                        args=["-debug_mode", "-handsoff", "-scripted_tests", "-run_until=" + until, *extra])
+        return snap
+
+    def test_an_exit_autosave_synced_in_during_the_run_holds_and_nothing_changes(self):
+        self.owners(self.ROTATION)
+        snap = self.run_started(at=NOW)
+        for n in range(1, 9):
+            self.autosave(n)
+        self.laptop_game(snap)
+        finish(snap, at=NOW + timedelta(minutes=9))
+        tree_before = tree(self.user)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "not_the_runs_save"))
+        self.assertEqual(tree(self.user), tree_before)
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], ["save games/autosave_exit.v3"])
+
+    def test_a_changed_exit_autosave_holds_too(self):
+        snap, _before, _ = self.long_run(autosaves=8)        # the owner had one when the snapshot was taken
+        self.laptop_game(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "not_the_runs_save"))
+
+    def test_after_an_unattended_run_an_autosave_of_a_date_it_never_reached_holds(self):
+        self.owners(self.ROTATION)
+        snap = self.unattended()
+        for n in range(1, 9):
+            self.autosave(n)
+        self.laptop_game(snap, name="autosave.v3", data=b"SAV0100\nmeta_data={\n\tgame_date=1932.5.1\n}\n")
+        finish(snap, at=NOW + timedelta(minutes=9))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "not_the_runs_save"))
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], ["save games/autosave.v3"])
+
+    def test_the_runs_own_dated_autosaves_and_unreadable_ones_do_not_hold(self):
+        for data in (b"SAV0100\nmeta_data={\n\tgame_date=1899.10.1\n}\n", b"SAV0103 a binary save, no date in sight"):
+            with self.subTest(data=data[:12]):
+                self.setUp()
+                self.owners(self.ROTATION)
+                snap = self.unattended()
+                for n in range(1, 9):
+                    self.autosave(n)
+                path = self.user / "save games" / "autosave.v3"
+                path.write_bytes(data)
+                set_mtime(path, NOW, 60 * 8 + 30)
+                finish(snap, at=NOW + timedelta(minutes=9))
+                out = restore.restore(snap, self.user, other_game_running=False)
+                self.assertFalse(out.held, out.reason)
+
+    def test_a_session_on_a_save_is_judged_by_its_exit_autosave_alone(self):
+        # A session's game is loaded from a save of any date: its autosaves' dates say nothing.
+        self.owners(self.ROTATION)
+        snap = self.unattended(extra=("-loadsave=te_qa_fixture_0123456789ab_d19500101",))
+        self.autosave(1)
+        path = self.user / "save games" / "autosave.v3"
+        path.write_bytes(b"SAV0100\nmeta_data={\n\tgame_date=1950.4.1\n}\n")
+        set_mtime(path, NOW, 90)
+        finish(snap, at=NOW + timedelta(minutes=2))
+        self.assertFalse(restore.restore(snap, self.user, other_game_running=False).held)
+
+
 if __name__ == "__main__":
     unittest.main()

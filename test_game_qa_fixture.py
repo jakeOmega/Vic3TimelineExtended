@@ -12,6 +12,7 @@ import fnmatch
 import os
 import tempfile
 import unittest
+from unittest import mock
 import unittest.mock
 from pathlib import Path
 
@@ -1018,6 +1019,79 @@ class RunLogsTest(unittest.TestCase):
         self.assertIn("error", logs.record())
 
 
+class RenameTest(FixtureTestCase):
+    """Review of #1602: one failed rename of the run's save (OneDrive uploading 140 MB, say) and the restore removed
+    it with the run's hours. The rename is tried again, then the save is copied; one that can be neither is left
+    under its own name with the run's restore asked to hold (fixture.HOLD_ASKED)."""
+
+    def setUp(self):
+        super().setUp()
+        self.target = self.save_dir / f"te_qa_fixture_{DATED_KEY}.v3"
+
+    dated = DatedMakeTest.dated
+
+    def rename_failing(self, times):
+        real = os.rename
+        tries = []
+
+        def rename(src, dst, *a, **k):
+            tries.append(str(dst))
+            if len(tries) <= times:
+                raise PermissionError(13, "The process cannot access the file because it is being used by another "
+                                          "process", str(src))
+            return real(src, dst, *a, **k)
+        return mock.patch.object(fixture.os, "rename", rename), tries
+
+    def test_a_rename_that_fails_for_a_while_is_tried_again(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        patch, tries = self.rename_failing(3)
+        facts = {}
+        with patch:
+            self.assertEqual(self.dated(facts=facts), self.target)
+        self.assertEqual(len(tries), 4)
+        self.assertEqual(self.sleeps.count(fixture.RENAME_RETRY_S), 3)
+        self.assertEqual((facts["kept_by"], facts["rename_tries"]), ("rename", 4))
+        self.assertEqual(fake.saves_at_restore[0].count(SAVE_1900), 0)
+
+    def test_a_save_that_cannot_be_renamed_is_copied_to_its_name(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        patch, tries = self.rename_failing(10_000)
+        facts = {}
+        with patch:
+            self.assertEqual(self.dated(facts=facts), self.target)
+        self.assertEqual(len(tries), fixture.RENAME_TRIES)
+        self.assertEqual(self.target.read_bytes(), GAME_SAVE_BYTES)
+        self.assertEqual(facts["kept_by"], "copy")
+        self.assertFalse(self.target.with_name(self.target.name + ".part").exists())
+        self.assertIn(SAVE_1900, fake.saves_at_restore[0])        # the engine's copy: the restore removes it
+        self.assertNotIn(SAVE_1900, os.listdir(self.save_dir))
+
+    def test_a_save_that_can_be_neither_renamed_nor_copied_asks_the_restore_to_hold(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        patch, _tries = self.rename_failing(10_000)
+        marks = []
+        with patch, mock.patch.object(fixture.shutil, "copy2", side_effect=OSError(28, "No space left on device")):
+            with self.assertRaises(fixture.FixtureError) as caught:
+                self.dated(mark=lambda snap, event, **fields: marks.append((snap, event, fields, list(fake.verbs))))
+        error = caught.exception
+        self.assertEqual((error.step, error.left.name, error.reply["left"]), ("rename", SAVE_1900, SAVE_1900))
+        # journaled before the restore ran, naming the save
+        self.assertEqual(marks, [(SNAPSHOT, fixture.HOLD_ASKED, {"reason": "save_not_kept",
+                                                                 "files": ["save games/" + SAVE_1900]},
+                                  ["snapshot", "launch"])])
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
+        self.assertFalse(self.target.exists())
+        self.assertEqual([p for p in os.listdir(self.save_dir) if p.endswith(".part")], [])
+
+    def test_without_a_way_to_ask_the_hold_the_message_says_what_may_happen(self):
+        self.cli(saves=(SAVE_1900,))
+        patch, _tries = self.rename_failing(10_000)
+        with patch, mock.patch.object(fixture.shutil, "copy2", side_effect=OSError(28, "No space left on device")):
+            with self.assertRaises(fixture.FixtureError) as caught:
+                self.dated()
+        self.assertIn("the restore may remove save games/" + SAVE_1900, str(caught.exception))
+
+
 class DatedPruneTest(FixtureTestCase):
     def put(self, name, age):
         path = self.save_dir / name
@@ -1037,18 +1111,31 @@ class DatedPruneTest(FixtureTestCase):
         self.assertEqual(removed, ["te_qa_fixture_p1.v3", "te_qa_fixture_p2.v3"])
         self.assertIn("te_qa_fixture_old_d19000101.v3", self.left())
 
-    def test_of_one_date_the_newest_stays_and_of_the_dates_the_newest_few(self):
+    def test_the_newest_few_stay_whatever_their_dates(self):
+        # Review of #1602: a newer fixture of the same date may be the other playset's, not a newer build's (the
+        # key cannot say which), so it never makes an older one go: only the count does.
         (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
         self.put("te_qa_fixture_old_d19000101.v3", 1)
         self.put("te_qa_fixture_old_d19500101.v3", 2)
-        self.put("te_qa_fixture_new_d19000101.v3", 3)      # 1900 made again on a newer build
-        removed = fixture.prune(self.user)
-        self.assertEqual(removed, ["te_qa_fixture_old_d19000101.v3"])
-        for age, year in enumerate((2000, 2050), start=4):
-            self.put(f"te_qa_fixture_new_d{year}0701.v3", age)
-        self.assertEqual(fixture.prune(self.user, keep_dated=4), [])           # four dates, one each
-        self.put("te_qa_fixture_new_d18360701.v3", 9)                         # a fifth: the oldest date goes
-        self.assertEqual(fixture.prune(self.user, keep_dated=4), ["te_qa_fixture_old_d19500101.v3"])
+        self.put("te_qa_fixture_new_d19000101.v3", 3)      # 1900 made again: a newer build, or the other playset
+        self.assertEqual(fixture.prune(self.user), [])
+        self.put("te_qa_fixture_new_d20000701.v3", 4)
+        self.assertEqual(fixture.prune(self.user, keep_dated=4), [])
+        self.put("te_qa_fixture_new_d18360701.v3", 9)                         # a fifth: the oldest goes
+        self.assertEqual(fixture.prune(self.user, keep_dated=4), ["te_qa_fixture_old_d19000101.v3"])
+
+    def test_a_current_playset_fixture_never_pushes_out_the_mod_only_one_of_its_date(self):
+        deploy = self.base / "deploy"
+        (deploy / "common").mkdir(parents=True)
+        (deploy / "common" / "a.txt").write_text("x")
+        mod_only = fixture.key("1.15.1", [r"C:\mod\TE", r"C:\mod\te_qa_overlay"], deploy, playset="mod_only")
+        current = fixture.key("1.15.1", [r"C:\mod\TE", r"C:\mod\Other", r"C:\mod\te_qa_overlay"], deploy,
+                              playset="current")
+        first = self.put("te_qa_fixture_%s.v3" % fixture.dated_key(mod_only, (1900, 1, 1)), 1)
+        second = self.put("te_qa_fixture_%s.v3" % fixture.dated_key(current, (1900, 1, 1)), 2)
+        for in_use in ((second.name,), (first.name,), ()):
+            self.assertEqual(fixture.prune(self.user, in_use=in_use), [])
+        self.assertTrue(first.exists() and second.exists())
 
     def test_a_dated_fixtures_switched_copies_go_with_it_and_count_with_the_others(self):
         (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
@@ -1056,18 +1143,17 @@ class DatedPruneTest(FixtureTestCase):
         self.put("te_qa_fixture_old_d19000101_s11111111.v3", 2)
         self.put("te_qa_fixture_new_d19000101.v3", 3)
         self.put("te_qa_fixture_new_d19000101_s22222222.v3", 4)
-        removed = fixture.prune(self.user)
+        removed = fixture.prune(self.user, keep_dated=1)
         self.assertEqual(removed, ["te_qa_fixture_old_d19000101.v3", "te_qa_fixture_old_d19000101_s11111111.v3"])
         self.assertEqual(self.left(), ["te_qa_fixture_new_d19000101.v3", "te_qa_fixture_new_d19000101_s22222222.v3"])
 
-    def test_a_dated_fixture_in_use_stays_though_a_newer_one_of_its_date_is_there(self):
+    def test_a_dated_fixture_in_use_stays_past_the_count(self):
         (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
         self.put("te_qa_fixture_old_d19000101.v3", 1)
         self.put("te_qa_fixture_new_d19000101.v3", 2)
-        self.assertEqual(fixture.prune(self.user, in_use=("te_qa_fixture_old_d19000101.v3",)), [])
+        self.assertEqual(fixture.prune(self.user, keep_dated=1, in_use=("te_qa_fixture_old_d19000101.v3",)), [])
         with self.assertRaises(ValueError):
             fixture.prune(self.user, keep_dated=-1)
-
 
 if __name__ == "__main__":
     unittest.main()

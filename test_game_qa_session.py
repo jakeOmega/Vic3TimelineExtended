@@ -472,19 +472,19 @@ class Cli:
         if verb == self.raise_on:
             raise OSError("python3 could not be started")
         saves = self.test.user / "save games"
-        if verb == "restore":
-            self.overlay_at_restore.append(self.test.paths.overlay_dir.exists())
-            for path in saves.glob("TEST_FAIL_*.v3"):
-                path.unlink()
         queued = self.queued.get(verb)
-        if queued:
-            return queued.pop(0)
-        return {
+        reply = queued.pop(0) if queued else {
             "held": ({"held": []}, 0),
             "snapshot": ({"id": SNAP, "files": 12, "pruned": [], "held": []}, 0),
             "launch": ({"id": SNAP, "pid": PID, "created": CREATED, "args": []}, 0),
             "restore": RESTORED,
         }[verb]
+        if verb == "restore":
+            self.overlay_at_restore.append(self.test.paths.overlay_dir.exists())
+            if not (isinstance(reply[0], dict) and reply[0].get("held") is True):      # a hold changes nothing
+                for path in saves.glob("TEST_FAIL_*.v3"):
+                    path.unlink()
+        return reply
 
 
 class SessionTestCase(unittest.TestCase):
@@ -3963,6 +3963,80 @@ class DatedFixtureTest(SessionTestCase):
         found = self.dated_session_lines({"tax_rule": "tax_off"})
         self.assertEqual([(c["name"], c["source"]) for c in found["checks"]], [("the_1900_runs_check", "fixture")])
         self.assertEqual(found["fixture"]["key"], self.dated_key)
+
+    def test_start_says_the_saves_own_date_and_flags_another(self):
+        for written, matches in (("1900.1.1", True), ("1900.1.2", False), (None, False)):
+            with self.subTest(written=written):
+                self.setUp()
+                data = dated_save(["no_fantasy", "tax_light"], date=written) if written else b"SAV0103 binary"
+                self.dated_path.write_bytes(data)
+                reply = self.start(fixture_date="1900")
+                self.assertEqual((reply["fixture_game_date"], reply["date_matches"]), (written, matches))
+                if matches:
+                    self.assertNotIn("date_note", reply)
+                else:
+                    self.assertIn("1900.1.1", reply["date_note"])
+                    if written:
+                        self.assertIn("The game loaded is of 1900.1.2", reply["date_note"])
+
+    def test_a_manifest_that_cannot_be_read_keeps_no_lines_and_says_so(self):
+        # Review of #1602: the owner's earlier log could not be skipped, so its lines would have passed for the run's.
+        self.log.write_text("[10:00:00][x.cpp:1]: common/x.txt:1: TE_SELF_CHECK BROKEN owners_own_1931_game\n",
+                            encoding="utf-8")
+        self.a_dated_run()
+        real = snapshot.load
+        tries = []
+
+        def load(path, *a, **k):
+            if Path(path).name == FIXTURE_SNAP and len(tries) < 3:
+                tries.append(path)
+                raise OSError("the backup drive did not answer")
+            return real(path, *a, **k)
+        with mock.patch.object(snapshot, "load", load):
+            reply = self.make()
+        self.assertEqual(len(tries), 3)                                     # tried again before giving up
+        self.assertTrue(reply["made"])
+        self.assertTrue(reply["logs"]["found_unknown"])
+        self.assertFalse(reply["lines"]["kept"])
+        self.assertIn("could not be told from the run's", reply["lines"]["detail"])
+        self.assertFalse((self.paths.backup_root / "fixtures" / self.dated_key / "lines.log").exists())
+
+    def test_a_manifest_read_on_the_second_try_keeps_the_lines(self):
+        self.a_dated_run()
+        real = snapshot.load
+        tries = []
+
+        def load(path, *a, **k):
+            if Path(path).name == FIXTURE_SNAP and not tries:
+                tries.append(path)
+                raise OSError("the backup drive did not answer")
+            return real(path, *a, **k)
+        with mock.patch.object(snapshot, "load", load):
+            reply = self.make()
+        self.assertTrue(reply["lines"]["kept"])
+        self.assertNotIn("found_unknown", reply["logs"])
+
+    def test_a_save_that_could_be_neither_renamed_nor_copied_holds_the_run_for_the_owner(self):
+        self.a_dated_run(restore_reply=({"held": True, "reason": "save_not_kept", "id": FIXTURE_SNAP,
+                                         "restored": [], "removed": []}, 2))
+        real_rename, real_copy = os.rename, shutil.copy2
+
+        def rename(src, dst, *a, **k):              # only the run's save is held open (os is every module's os)
+            if Path(src).name == DATED_SAVE_NAME:
+                raise PermissionError(13, "in use", str(src))
+            return real_rename(src, dst, *a, **k)
+
+        def copy2(src, dst, *a, **k):
+            if Path(src).name == DATED_SAVE_NAME:
+                raise OSError(28, "No space left on device")
+            return real_copy(src, dst, *a, **k)
+        with mock.patch.object(os, "rename", rename), mock.patch.object(shutil, "copy2", copy2):
+            error = self.session_error(self.make)
+        self.assertEqual((error.code, error.info["step"], error.info["left"]), ("fixture_failed", "rename",
+                                                                                 DATED_SAVE_NAME))
+        asked = [e for e in snapshot.journal(self.fixture_snap) if e.get("event") == fixture.HOLD_ASKED]
+        self.assertEqual(asked[-1]["files"], ["save games/" + DATED_SAVE_NAME])
+        self.assertTrue((self.user / "save games" / DATED_SAVE_NAME).is_file())
 
     def test_the_plain_fixtures_date_is_the_plain_fixture(self):
         reply = self.start(fixture_date="1836.1.2")

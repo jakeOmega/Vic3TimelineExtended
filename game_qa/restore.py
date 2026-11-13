@@ -61,6 +61,14 @@ _BLOB_NAME = re.compile(r"^[0-9a-f]{64}$")
 # In `save games/` only the game's own rotation names may be taken for something the run pushed in. OneDrive
 # makes conflict copies such as `autosave-Manfred.v3` and `autosave_1-Manfred.v3`; they are the owner's.
 _ROTATION_NAME = re.compile(r"^autosave(_\d+|_exit)?\.v3$")
+# No run of the harness writes `autosave_exit.v3`: an unattended run ends at its `-run_until` without one (the 1836
+# fixture's runs wrote none), and a session's game is ended by its process. One that is new or changed after a run
+# came from another game, such as the owner's on another PC, synced in by OneDrive with that PC's times; and so did
+# an autosave whose own `game_date` an unattended run from 1836 never reached. Either holds (`not_the_runs_save`).
+_EXIT_AUTOSAVE = "save games/autosave_exit.v3"
+_SAVE_GAME_DATE = re.compile(rb"\n\tgame_date=([0-9]{1,4})\.([0-9]{1,2})\.([0-9]{1,2})\n")
+_RUN_UNTIL = re.compile(r"-run_until=([0-9]{1,4})\.([0-9]{1,2})\.([0-9]{1,2})")
+_GAME_START = (1836, 1, 1)
 
 
 @dataclass
@@ -76,7 +84,8 @@ class Outcome:
     restored: list[str]
     removed: list[str]
     held: bool  # True only if this call recorded the snapshot as held
-    # "" | "other_game_running" | "modified_after_exit" | "no_reference_time" | "modified_during_restore"
+    # "" | "other_game_running" | "modified_after_exit" | "no_reference_time" | "not_the_runs_save"
+    # | "modified_during_restore"
     # | "retime_unverified" (everything was put back, but one file, named in the journal entry, carries the
     # snapshot's time over bytes that could not be read back, and the time could not be moved off again)
     # | "already_restored" (another game is running and the journal already ends in `restored`: left as it is,
@@ -280,6 +289,49 @@ def _hold_reason(snap: Snapshot, user_data: Path, diff: Diff) -> tuple[str, list
         if modified is not None and modified > limit:
             late.append(rel)
     return ("modified_after_exit", late) if late else ("", [])
+
+
+def _not_the_runs(snap: Snapshot, user_data: Path, diff: Diff) -> list[str]:
+    """The autosaves, changed or pushed in, that no run of the harness wrote (see _EXIT_AUTOSAVE): a new or
+    changed `autosave_exit.v3`, and, after an unattended run from 1836 (its `started` names a `-run_until` and no
+    `-loadsave`), an autosave whose own `game_date` is readable and outside 1836.1.1 to that end."""
+    saves = sorted(name for name in {*diff.changed, *diff.added_in_set}
+                   if name.rpartition("/")[0] == "save games" and _ROTATION_NAME.match(name.rpartition("/")[2]))
+    if not saves:
+        return []
+    until = _run_until(snap)
+    out = []
+    for rel in saves:
+        if rel == _EXIT_AUTOSAVE:
+            out.append(rel)
+        elif until is not None:
+            date = _save_game_date(user_data / rel)
+            if date is not None and not _GAME_START <= date <= until:
+                out.append(rel)
+    return out
+
+
+def _run_until(snap: Snapshot) -> tuple[int, int, int] | None:
+    starts = [e for e in snapshot.journal(snap) if e.get("event") == "started"]
+    args = starts[-1].get("args") if starts else None
+    if not isinstance(args, list) or any(str(a).lstrip("-/").lower().startswith("loadsave") for a in args):
+        return None
+    for arg in args:
+        found = _RUN_UNTIL.fullmatch(str(arg))
+        if found:
+            return int(found.group(1)), int(found.group(2)), int(found.group(3))
+    return None
+
+
+def _save_game_date(path: Path) -> tuple[int, int, int] | None:
+    """The `game_date` in a plain-text save's `meta_data` (near its start), or None: a binary save, or none read."""
+    try:
+        with open(path, "rb") as handle:
+            head = handle.read(64 * 1024)
+    except OSError:
+        return None
+    found = _SAVE_GAME_DATE.search(head)
+    return (int(found.group(1)), int(found.group(2)), int(found.group(3))) if found else None
 
 
 def _hold(snap: Snapshot, reason: str, now: datetime | None, **fields: list[str]) -> Outcome:
@@ -501,7 +553,8 @@ def restore(
     Holds, changing nothing, if another game is running (checked before any file is read) or a changed,
     added or created file, logs excepted, was modified more than SLACK_SECONDS after the run's end, or such a
     file exists and the journal gives no end at all (reasons `other_game_running`, `modified_after_exit`,
-    `no_reference_time`). A hold records `held` with the reason, and the late files when there are some.
+    `no_reference_time`), or an autosave no run of the harness writes is new or changed (`not_the_runs_save`,
+    `_not_the_runs`). A hold records `held` with the reason, and the late or foreign files when there are some.
 
     Otherwise: clears the leftover temp files of a killed restore; copies the live `logs/*` to `run_logs_dir`
     (by default `<snapshot folder>/run_logs`); copies the changed and missing files back from the store with
@@ -533,6 +586,9 @@ def restore(
     reason, late = _hold_reason(snap, user_data, diff)
     if reason:
         return _hold(snap, reason, now, files=late)
+    foreign = _not_the_runs(snap, user_data, diff)
+    if foreign:
+        return _hold(snap, "not_the_runs_save", now, files=foreign)
 
     _remove_stale_temps(user_data)
     to_restore = sorted([*diff.changed, *diff.missing])
