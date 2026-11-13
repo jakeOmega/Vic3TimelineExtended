@@ -391,6 +391,181 @@ Snapshots: A `20261113T014825Z`, A2 `20261113T023851Z`, A3
 logs are in `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`. Open item 13
 carries the lead.
 
+## Where the day goes: engine knockouts, 2026-11-13: 1931, 1.15.1
+
+The script cuts of 2026-11-12 each moved wall time by less than the spread
+between runs, so this pass asked a different question: which large part of
+the day is the mod's to change at all. Each run switched one thing off or
+changed one engine setting and read the whole day.
+
+**Method.** The same save and steps (`start --save
+perf_bench_sgp_1931_08_12 --playset current`, one day, answer `un_events.4`
+with its first option through `pick`, `clear_ticktask_timings`, 60 days,
+`dump_ticktask_timings`), with `main` at `fd29ed9f2` deployed. Every change
+was an add-on mod loaded with `start --add-mod` (a one-key defines file, or
+same-path copies of files), so the deployed folder was never touched. Runs
+named `_r` carried `--game-arg disable_renderframeifneeded` (below). Data,
+variants and scripts: `/mnt/d/vic3te-data/perf-2026-11-13/` (`runs/<name>/`,
+`variants/<name>/`, `scripts/run2.sh`, `an.py`, `tasks.py`, `seg2.py`).
+
+**The world measured** (a script count on 2 July 1931, and the engine's
+`logging.popstats` dump): 263 countries, 160 of them with one state; 870
+states; 89,646 pops holding 2.66 billion people; 13,770 buildings. Singapore,
+the played country, owns 7 states and 365 buildings, but its market holds 313
+states and its power bloc 314. Its investment pool held £1.13 billion, took in
+£54–59 million a week and paid out as much.
+
+| Run | Change | Wall s/day | Tick tasks ms/day | Snapshot |
+|---|---|---|---|---|
+| B0a | none | 1.447 | 619 | `20261113T121758Z` |
+| B0b | none | 1.266 | 569 | `20261113T124419Z` |
+| guivan | every mod `gui/` file emptied, or vanilla's copy where vanilla has the file | 1.233 | 602 | `20261113T124926Z` |
+| inv_off | `AUTONOMOUS_INVESTMENT_CONSTRUCTION_ENABLED = no` (a bound, not a proposal) | 1.100 | 404 | `20261113T122933Z` |
+| inv_div10 | `AUTONOMOUS_INVESTMENT_UPDATE_COUNT_DIVISOR` 500,000 → 5,000,000 | 1.305 | 553 | `20261113T123413Z` |
+| inv_refresh | `AUTONOMOUS_INVESTMENT_NUM_FAILED_INVESTMENTS_FOR_REFRESH_PLAYER` 20 → 175 | 1.345 | 631 | `20261113T123906Z` |
+| render | sub-tick rendering off | 0.975 | 607 | `20261113T122318Z` |
+| R0b | sub-tick rendering off | 1.000 | 590 | `20261113T131434Z` |
+| noact_r | every mod `common/on_actions/` file emptied | 0.885 | 604 | `20261113T131908Z` |
+| bsp4x_r | `MIN`/`MAX_TICKS_TO_UPDATE_BUILDING_SPENDING_STATE` 100/200 → 400/800 | 0.983 | 577 | `20261113T133005Z` |
+
+**Wall time with rendering on is noisy; with it off it repeats.** Two
+unchanged runs read 1.447 and 1.266 s a day (14% apart), and a third session
+ran 3–17 July at 1.02 s where those two ran 1.36 and 1.29. The engine's task
+time differed by 8% at most, so the spread is in the time outside the tasks.
+With sub-tick rendering off, three unchanged runs read 0.975, 1.000 and 0.979
+s a day. A change to the simulation is therefore read with rendering off.
+
+**Sub-tick rendering.** The launch argument `-disable_renderframeifneeded`
+("Sacrifice sub-tick rendering for tick speed" in the binary's own list) and
+the console switch `gamestatetick.renderframeifneeded` stop the game drawing
+frames while a tick is being worked out. Frames are otherwise drawn at about
+105 a second right through a tick (`measure_frame_time`: 9.7 ms average over
+3,656 frames of a running week, 7.9 ms the shortest, vsync on; 6.3 ms and 159
+a second with vsync off), and the tick waits for them. The tick tasks took the
+same time either way (607 and 590 ms a day against 569–619), so the time
+saved is all outside them. See "Sub-tick rendering, on and off in one
+session" below for the size of it.
+
+**With rendering off, a day is about 0.98 s**: 0.59–0.61 s of tick tasks,
+about 0.10 s of the mod's on_actions (noact_r: 0.885 s against 0.975–1.000),
+and about 0.28 s that neither names (vanilla's own on_actions and events, the
+frames between ticks, and engine work that is in no task).
+
+**The mod's on_actions are about a tenth of the simulation.** Emptying all 77
+on_action files (every monthly, yearly and event hook the mod adds) took 0.10
+s off a 0.98 s day and left the tick tasks where they were. That is the
+ceiling for every remaining cut to pulse script together, and it agrees with
+the call graph of 2026-11-12 (about 6 s profiled over 30 days, at the
+profiler's two- to threefold inflation). By that profile the Demographics
+yearly state step is a third of it and the monthly country pulse another
+third.
+
+**`HandleAutonomousInvestment` is the played country's investment pool.**
+The pass took 163–194 ms a day, the largest task. Frame by frame it is a
+burst on the weekly frame (about 1.6 s in a full week) and 0–2 ms on every
+other frame. With the pass switched off the weekly frame fell from 3.2–3.6 s
+to 1.9 s. What it does:
+
+- Each tick a country makes up to `income ÷ AUTONOMOUS_INVESTMENT_UPDATE_COUNT_DIVISOR`
+  investment decisions, at least one. Singapore's £54–59 million a week makes
+  that 108–118; Britain's £0.7 million and Russia's £1.0 million make 1 and 2.
+- A decision costs about 13 ms while the pool is still placing buildings, and
+  almost nothing once it has stopped. With the divisor raised tenfold
+  Singapore made 11 decisions a tick, and the pass ran at 135–175 ms a tick
+  for 7 to 14 ticks after each weekly frame, then at 3–12 ms: 77 to 154
+  costly decisions a week, at 13 ms each. The week's total was the same
+  within 18% (158 against 194 ms a day); only the weekly frame was shorter
+  (2.1 s against 3.2–3.6).
+- The other 262 countries add little: at the tenfold divisor the weekly
+  frame, where every country decides, read 129–174 ms, no more than the ticks
+  after it, where Singapore alone still had decisions to make.
+- The 13 ms is presumably the engine scoring every building type in every
+  state the country may build in, and Singapore may build across its bloc's
+  314 states. It is not the buildings' script: with every `ai_value` block
+  taken out of all 36 building files (P1r against P0r, both at the tenfold
+  divisor) a tick of 11 decisions still took 115–165 ms against 135–175. The
+  runs of 2026-11-12 had already shown that building types failing
+  `potential` cost nothing.
+- The refresh threshold for a player's country (20 failed decisions) changed
+  nothing (inv_refresh).
+
+So the pass costs what a week's decisions cost, and a mod has no setting that
+makes a decision cheaper. A larger divisor spreads the same work over the
+week's ticks. It would cut the work only if set so high that the week's 28
+ticks could not hold the decisions the pool has money for (for this pool,
+fewer than 3 to 5 a tick: a divisor above £10–20 million), and the pool would
+then pile up unspent, which is the outcome the owner warned of. A country's
+cost follows its pool's income; an all-AI world was not measured.
+
+**`RecalculateModifierNodes` is a per-country cost, and no refresh drives
+it.** It ran 96–117 ms at every day boundary in every run, whichever
+countries' pulses fell on the day. The console switch
+`gamestatetick.forcefullmodifiernoderecalc` showed that this is the engine's
+incremental pass: forced to recalculate everything it took 1,230 ms a day
+(18–25 July in session `20261113T130027Z`), so about a tenth of the graph is
+redone daily. What does not cause that:
+
+- The mod's on_actions: 115 ms a day with all of them emptied, against 101
+  and 117 without (noact_r). That closes open item 13: a refresh that re-adds
+  a modifier at the same strength is not what this task spends its time on.
+- Decaying modifiers, or modifiers as such: in one session
+  (`20261113T135321Z`) every country was given a modifier, then the same one
+  decaying, then a decaying one with state and building lines, and then every
+  state a decaying one. The daily median read 112 (none), 105, 106, 110, 108,
+  105 and 105 (cleared) ms. A read confirmed the modifiers were there.
+
+What does move it is the number of countries (next).
+
+**Countries.** A setup had every one-state AI country that was at peace and
+not in a revolution annexed by its overlord, or else by a neighbor: 119
+countries went, leaving 151 from 263, with the same pops (90,087) and 12,935
+buildings. Over the same dates (17 July to 14 September, rendering off) the
+tick tasks took 452 ms a day against 603 in the unchanged world, a quarter
+less: `RecalculateModifierNodes` 80 against 116, `UpdateAI` 33 against 52, the
+three journal-entry tasks 23 against 36, and the investment pass 101 against
+175 (fewer states to score, or weeks with fewer buildings; not separated).
+That is about 1.3 ms a day of task time for each one-state country, before
+its share of the monthly and yearly pulses. Wall time read 0.927 against 0.996
+s a day, but an event window (`decolonization_events.70`) stood open through
+the annexed run, which costs time on every frame, so the wall figure is not a
+clean one. The 160 one-state countries hold 7% of the world's people and 16%
+of its pops. They are a mix of countries there since 1836 (Nepal, Wallachia,
+Oyo, Hawaii), released ones (California, Formosa, Lithuania, Île-de-France)
+and seven revolts that never ended (#1723), which the setup left alone.
+
+**Pops.** 83% of the pops hold 4% of the people: 23,366 pops (26%) are under
+100 people and 56,002 (62%) under 2,000. Singapore's own states hold the most
+small pops (`print_states_with_most_small_pops`: Singapore 852, Kundur 469,
+Goa 401, Shanghai 388). Of the pops under 100, 21,725 have a pop of their own
+culture and religion with at least 100 people in the same state, which is what
+the engine's micro-pop dissolution asks for, and 17,292 are employed. Raising
+the consolidation defines far past anything shippable (merge at 150 workforce
+under the moderate rule, dissolve under 1,000 people) removed 5.5% of pops in
+120 days (84,710 against 89,658) and read 3–5% faster, which is inside two
+runs' spread. Why the small pops stay is not yet known (see "Small pops" below).
+
+**What moved nothing.** The mod's interface (guivan: 1.233 s against 1.266
+and 1.447, with only the HUD on screen); the AI's building-priority interval
+(bsp4x_r: its task fell from 28 to 17 ms a day and wall time did not move);
+the console's `gamestatetick.minlocktime` (1 by default; at 100 the days were
+no faster) and `graphics.capframerate` (30 and 10 left the frame rate at 105).
+
+**Console lessons.**
+- Typing a boolean engine switch toggles it and prints the new state
+  ("Enabled", "Disabled"); there is no read without a write. A number switch
+  prints its value when typed bare.
+- `threading.enabletaskthreads`, toggled, hung the game at once (the session
+  was stopped and restored).
+- `optick_capture` answers "This build was compiled without an instrumented
+  profiler", so there is no engine profile to be had from a release build.
+- `logging.popstats` writes every pop (id, country, state, workplace, type,
+  culture, religion, size, workforce and more) to
+  `logs/<a new folder>/pop_stats.csv`. The harness's restore does not know
+  that folder and leaves it.
+- `measure_frame_time start` and `stop` give the average, shortest and
+  longest frame between them. `ticktask.list` opens a window with the same
+  figures as the CSV.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
