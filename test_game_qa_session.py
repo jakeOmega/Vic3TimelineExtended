@@ -1263,6 +1263,34 @@ class EnterPastAWindowTest(SessionTestCase):
         status = self.session.status()
         self.assertEqual((status["entered_unproved"], status["left_running"]), (False, False))
 
+    def test_a_console_error_before_the_back_click_keeps_the_country_click(self):
+        # Review, 2026-11-13: an error from the console's probe, close or front before Back came back bare.
+        self.started()
+        self.game.law_windows = 1
+        real_click = self.game.click
+
+        def click_then_someone_takes_the_front(pid, x, y):
+            real_click(pid, x, y)
+            self.game.foreground, self.game.focus_succeeds = False, False
+        self.game.click = click_then_someone_takes_the_front
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(len(self.game.clicks), 1)                  # the country click went out, Back did not
+        reply = server.refusal(error)
+        self.assertEqual((reply["fallback"], reply["country_click"]["clicks"]), ("back", reply["clicks"]))
+        self.assertEqual(len(reply["clicks"]), 1)                   # the country click alone
+        self.assertFalse(self.session.status()["left_running"])
+
+    def test_an_error_after_the_back_click_names_back_and_the_fallback(self):
+        self.started()
+        self.game.law_windows = 1
+        self.game.on("tag FRA", failure=["nope"])
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(self.game.back_clicks, 1)
+        self.assertNotIn("Start was clicked", error.detail)
+        self.assertIn("Back was clicked", error.detail)
+        self.assertEqual((error.info["fallback"], len(error.info["country_click"]["clicks"])), ("back", 1))
+        self.assertTrue(self.session.status()["left_running"])
+
     def test_the_first_look_at_the_panel_comes_with_the_game_in_front(self):
         # A screenshot is of the screen: with another window over the game the first look would be of that
         # window, and every later look would differ from it.

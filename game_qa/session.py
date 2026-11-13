@@ -61,7 +61,8 @@ COUNTRY_CLICK = (0.492, 0.656)          # the country the camera is on, tagged o
 START_CLICK = (0.9216, 0.975)           # the country-select screen's Start button
 # The country-select screen's Back button, bottom left (#1598). The owner's lead (2026-11-12, "fairly confident,
 # not certain"): on a game loaded at that screen, Back enters the game as the country played, not the main menu.
-# Unverified live. It sits under the open console's left panel, so the console is closed before the click. Measured
+# Live, 2026-11-13: it did, three times from the fresh save, twice with a law window up, once as enter-game's own
+# fallback. It sits under the open console's left panel, so the console is closed before the click. Measured
 # on shot_04.png of run 20261112T083507Z (1600x900, console closed by `press esc`): the button's centre is about
 # (60, 883).
 BACK_CLICK = (0.0375, 0.981)
@@ -1854,7 +1855,13 @@ class Session:
                     result = self._enter_back()
                 except SessionError as e:
                     e.info.setdefault("country_click", missed)
+                    e.info.setdefault("fallback", "back")
                     raise
+                except (ConsoleError, HelperError) as e:
+                    # Before the Back click (the console's probe, close or front): its own code, with what was clicked.
+                    extra = {"entered": e.entered} if isinstance(e, ConsoleError) else {}
+                    raise SessionError(_code_of(e), str(e), clicks=clicks, country_click=missed, fallback="back",
+                                       **extra) from e
                 result.update(fallback="back", country_click=missed)
                 return result
         self._click(START_CLICK, clicks)
@@ -1905,12 +1912,12 @@ class Session:
             self._entered_unproved = True
             if not isinstance(e, Exception):
                 raise
-            raise self._after_start_error(e, clicks) from e
-        result = self._prove_entered(clicks, settle=False)
+            raise self._after_start_error(e, clicks, "Back") from e
+        result = self._prove_entered(clicks, settle=False, button="Back")
         result["back_shot"] = back_shot
         return result
 
-    def _prove_entered(self, clicks: list[list[int]], settle: bool = True) -> dict:
+    def _prove_entered(self, clicks: list[list[int]], settle: bool = True, button: str = "Start") -> dict:
         """After the click that may have entered the game (Start, or Back): wait ENTER_SETTLE_S (unless the caller
         did), wait for the console, attach the debugger again, tag the session's country again, and prove the game
         in play by the date moving while unpaused. See `enter_game` for what each failure leaves."""
@@ -1928,7 +1935,7 @@ class Session:
             self._entered_unproved = True
             if not isinstance(e, Exception):
                 raise
-            raise self._after_start_error(e, clicks) from e
+            raise self._after_start_error(e, clicks, button) from e
         if _game_day(after) <= _game_day(before):
             try:
                 shot = str(self._shot())
@@ -1986,17 +1993,17 @@ class Session:
                 self._sleep(ENTER_RETRY_S)
                 self._check_watch()
 
-    def _after_start_error(self, e: Exception, clicks: list[list[int]]) -> SessionError:
-        """What a failure after the Start click raises: its own code when it says more (ENTER_KEPT), else
-        not_entered with the code as `cause`; with the clicks, and the warning that nothing proved the game in
-        play or not."""
+    def _after_start_error(self, e: Exception, clicks: list[list[int]], button: str = "Start") -> SessionError:
+        """What a failure after the click that may have entered the game (`button`, Start or Back) raises: its own
+        code when it says more (ENTER_KEPT), else not_entered with the code as `cause`; with the clicks, and the
+        warning that nothing proved the game in play or not."""
         code = _code_of(e)
         info = dict(e.info) if isinstance(e, SessionError) else {}
         info["clicks"] = clicks
         if isinstance(e, ConsoleError):
             info["entered"] = e.entered
-        warning = ("Start was clicked before this, so the game may be entered and running unpaused (nothing proved "
-                   "it either way); enter_game and advance are refused until stop")
+        warning = ("%s was clicked before this, so the game may be entered and running unpaused (nothing proved "
+                   "it either way); enter_game and advance are refused until stop" % button)
         if isinstance(e, SessionError) and code in ENTER_KEPT:
             detail = e.detail if code == "left_running" else "%s. %s" % (e.detail, warning)
             return SessionError(code, detail, **info)       # left_running keeps the `cause` _run_for gave it

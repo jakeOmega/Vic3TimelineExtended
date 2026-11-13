@@ -850,7 +850,7 @@ def add_verbs(sub) -> None:
                                           "moving")
     p.add_argument("--via", choices=("country", "back"), default="country",
                    help="country: click the country the camera is on, then Start (the default); back: click the "
-                        "screen's Back button once (#1598, unverified live)")
+                        "screen's Back button once (#1598; run live 2026-11-13)")
     p.set_defaults(run=cmd_enter_game)
     p = sub.add_parser("advance", help="let at least DAYS game days pass (entering the game first if need be)")
     p.add_argument("days", type=int)
