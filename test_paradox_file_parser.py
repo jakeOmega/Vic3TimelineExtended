@@ -1,4 +1,6 @@
+import contextlib
 import io
+import json
 import os
 import sys
 import tempfile
@@ -859,6 +861,66 @@ class LinearParserTests(unittest.TestCase):
 
     def parser_value(self, tokens):
         return ParadoxFileParser().parse_value(tokens)
+
+    # A list that mixes names with keyed entries: vanilla's on-actions write
+    # `events = { a.1 delay = { days = 5 } a.2 }`. The object parse rejected
+    # it and the whole file was dropped from the store (#1697).
+
+    def test_on_action_list_with_a_delay_parses_in_source_order(self):
+        text = (
+            "on_x = {\n"
+            "\tevents = { a.1 delay = { days = 5 } a.2 }\n"
+            "\ton_actions = { on_y delay = { days = 1 } on_z }\n"
+            "\ttrigger = { always = yes }\n"
+            "}\n"
+            "on_after = { events = { b.1 } }\n"
+        )
+        data = self._parse(text)
+        delay5 = {"delay": ("=", {"days": ("=", "5")})}
+        delay1 = {"delay": ("=", {"days": ("=", "1")})}
+        self.assertEqual(data["on_x"][1]["events"], ("=", ["a.1", delay5, "a.2"]))
+        self.assertEqual(data["on_x"][1]["on_actions"], ("=", ["on_y", delay1, "on_z"]))
+        self.assertEqual(data["on_x"][1]["trigger"], ("=", {"always": ("=", "yes")}))
+        # The rest of the file is still read.
+        self.assertEqual(data["on_after"], ("=", {"events": ("=", ["b.1"])}))
+
+    def test_mixed_list_keeps_each_entry_operator_and_nested_blocks(self):
+        self.assertEqual(
+            self._parse("x = { a b > 2 { c d } e = { f = 1 } }"),
+            {"x": ("=", ["a", {"b": (">", "2")}, ["c", "d"], {"e": ("=", {"f": ("=", "1")})}])},
+        )
+        # A key with nothing after it before the block closes is a bare item.
+        self.assertEqual(self._parse("x = { a = 1 b }"),
+                         {"x": ("=", [{"a": ("=", "1")}, "b"])})
+
+    def test_list_of_lists_parses(self):
+        # `{ x y }` inside a list went through the object parse and raised.
+        self.assertEqual(self._parse("x = { { p q } { r s } }"),
+                         {"x": ("=", [["p", "q"], ["r", "s"]])})
+
+    def test_mixed_list_survives_the_snapshot_json_round_trip(self):
+        import vanilla_parsed
+        value = self._parse("x = { a.1 delay = { days = 5 } a.2 }")
+        self.assertTrue(vanilla_parsed._strict_equal(
+            vanilla_parsed.decode(json.loads(json.dumps(vanilla_parsed.encode(value)))), value))
+
+    def test_what_still_fails_still_fails(self):
+        # A bare word at a file's top level, or an operator where a list item
+        # should be, is still an error, raised as a ValueError.
+        for text in ("a b = 1", "x = { a = 1 = }"):
+            with self.subTest(text=text), self.assertRaises(ValueError) as ctx, \
+                    contextlib.redirect_stdout(io.StringIO()):
+                self._parse(text)
+            self.assertIs(type(ctx.exception), ValueError)
+
+    def test_blocks_that_parsed_before_parse_the_same(self):
+        # The object parse runs first, so input it accepted is untouched,
+        # quirks included: an empty anonymous block in a list is a dict.
+        self.assertEqual(self._parse("x = { a {} b = 1 }"),
+                         {"x": ("=", ["a", {}, {"b": ("=", "1")}])})
+        self.assertEqual(self._parse("x = { {} }"), {"x": ("=", [{}])})
+        self.assertEqual(self._parse("x = { a = 1 b = { c } }"),
+                         {"x": ("=", {"a": ("=", "1"), "b": ("=", ["c"])})})
 
     def test_inject_later_in_the_same_file_sees_the_raw_value(self):
         # merge_data normalizes only after every key of the file is written,
