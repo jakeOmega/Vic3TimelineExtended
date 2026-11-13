@@ -407,9 +407,11 @@ nd_taboo_resume_programme = {
 # the hub's one-per-country guard accepts it.
 #
 # ai_chance mirrors the hub's ai_value shape (common/buildings/07_zz_te_strategic_reserve.txt):
-# great and major powers, more at peace, and any country above
-# st_res_ai_hub_min_gdp whether at war or not. A smaller country gets 0, as
-# it gets no ai_value.
+# great and major powers, more at peace, and st_res_ai_hub_gdp_tier whether
+# at war or not: above st_res_ai_hub_min_gdp for a great or major power or a
+# market leader, above st_res_ai_minor_hub_min_gdp for a minor inside another
+# country's market. Anyone else gets 0, as it gets no ai_value, and never
+# takes the decision; the trigger's comment says why (speed).
 # ============================================================================
 te_decision_establish_strategic_reserve = {
 	is_shown = {
@@ -465,7 +467,7 @@ te_decision_establish_strategic_reserve = {
 			}
 		}
 		if = {
-			limit = { gdp > st_res_ai_hub_min_gdp }
+			limit = { st_res_ai_hub_gdp_tier = yes }
 			add = 100
 		}
 	}

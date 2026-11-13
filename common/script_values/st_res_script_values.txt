@@ -11,11 +11,16 @@
 # consumed by the JE, buttons, or hub-flow refresh helpers.
 # ============================================================================
 
-# Yearly GDP (gbp) above which a country badly wants a Strategic Reserve Hub:
-# building_strategic_reserve_hub's ai_value adds 10000 for it, so the AI builds
-# the hub (common/buildings/07_zz_te_strategic_reserve.txt). Read as `owner = { gdp > ... }`
-# from the hub's state-scoped ai_value; the value is a constant, so scope is moot.
+# Yearly GDP (gbp) above which a country badly wants a Strategic Reserve Hub, if
+# it is a great or major power or leads its own market: the AI's founding tier,
+# st_res_ai_hub_gdp_tier (st_res_triggers.txt), which the decision's ai_chance
+# and building_strategic_reserve_hub's ai_value read.
 st_res_ai_hub_min_gdp = 10000000
+
+# The same tier's bar for a minor country inside another country's market, ten
+# times the first: below it the AI never founds a reserve (st_res_ai_hub_gdp_tier
+# says why). A constant, so the scope it is read from is moot.
+st_res_ai_minor_hub_min_gdp = 100000000
 
 # Hub level — 0 if no hub exists.
 st_res_hub_level = {

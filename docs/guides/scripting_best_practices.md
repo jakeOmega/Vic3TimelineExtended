@@ -3953,6 +3953,12 @@ each threshold once and derive the repeal margin from the adopt margin, so the p
 the pairing. Example: `common/script_values/global_warming_ai_values.txt` and `test_gw_ai_policy_table.py`.
 Before adding an enable button's `ai_chance`, ask what makes its disable button score.
 
+A one-shot decision that stays shown until taken is the same ratchet with no repeal at all. A lower
+`ai_chance` for a class of countries only delays the day they take it. To keep a class out, give it 0
+under a condition it can grow out of: vanilla's `000_decisions_help.txt` says an `ai_chance` of 0 means
+the AI never takes the decision. Example: Establish a Strategic Reserve and `st_res_ai_hub_gdp_tier`
+(`st_res_triggers.txt`).
+
 ## Triggered Option Names: `name = { trigger=... text=... }`
 
 Event option labels can be conditional on context. Repeat the `name` field with each variant gated by a `trigger`; first match wins. No `else` / fallback syntax — use `trigger = { always = yes }` as the catch-all.

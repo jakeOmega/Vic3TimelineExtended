@@ -75,10 +75,13 @@ building_strategic_reserve_hub = {
 	# counts double: one begun during a war finishes too late to fill before
 	# the peace, when barracks already take every round the market makes.
 	#
-	# On top of that, any country whose GDP is above st_res_ai_hub_min_gdp
-	# (a great power or not) gets +10000, the value vanilla gives a monument:
-	# an economy that size can afford the reserve many times over, and at 100
-	# points the hub is done within a build cycle, so war does not discount it.
+	# On top of that, a country in st_res_ai_hub_gdp_tier gets +10000, the
+	# value vanilla gives a monument: GDP above st_res_ai_hub_min_gdp for a
+	# great or major power or a market leader, above
+	# st_res_ai_minor_hub_min_gdp for a minor inside another's market (the
+	# trigger says why). An economy that size can afford the reserve many
+	# times over, and at 100 points the hub is done within a build cycle, so
+	# war does not discount it.
 	# No "does not have one yet" test is needed: possible allows one hub per
 	# country, so the building is only ever evaluated for a country without one.
 	# Not borne out in game: in an observer run to 2015, 1 of 157 countries built
@@ -104,7 +107,7 @@ building_strategic_reserve_hub = {
 		}
 		if = {
 			limit = {
-				owner = { gdp > st_res_ai_hub_min_gdp }
+				owner = { st_res_ai_hub_gdp_tier = yes }
 			}
 			add = 10000
 		}

@@ -268,10 +268,38 @@ class StrategicReserveDecisionTest(unittest.TestCase):
         self.assertIn("owner = { has_variable = st_res_hub_relocating }", hub_possible)
 
     def test_ai_mirrors_the_hubs_ai_value(self):
-        ai = block(block(strip_comments(read(DECISIONS)), "te_decision_establish_strategic_reserve"), "ai_chance")
-        self.assertIn("is_great_or_major_power = yes", ai)
-        self.assertIn("is_at_war = no", ai)
-        self.assertIn("gdp > st_res_ai_hub_min_gdp", ai)
+        """Rank first, then the founding tier, in both the decision and the hub (strategic_reserve_system.md §7)."""
+        def flat(text):
+            return " ".join(text.split())
+        ai = flat(block(block(strip_comments(read(DECISIONS)), "te_decision_establish_strategic_reserve"),
+                        "ai_chance"))
+        self.assertEqual(ai, "value = 0 "
+                             "if = { limit = { is_great_or_major_power = yes } add = 50 "
+                             "if = { limit = { is_at_war = no } add = 50 } } "
+                             "if = { limit = { st_res_ai_hub_gdp_tier = yes } add = 100 }")
+        hub = flat(block(block(strip_comments(read(HUB)), "building_strategic_reserve_hub"), "ai_value"))
+        self.assertEqual(hub, "value = 0 "
+                              "if = { limit = { owner = { is_great_or_major_power = yes } } add = 1000 "
+                              "if = { limit = { owner = { is_at_war = no } } add = 1000 } } "
+                              "if = { limit = { owner = { st_res_ai_hub_gdp_tier = yes } } add = 10000 }")
+
+    def test_a_minor_in_another_market_needs_the_higher_bar(self):
+        """The tier is the old GDP test and more, so no country scores higher than before (2026-11-12, for speed)."""
+        triggers = strip_comments(read(ROOT / "common/scripted_triggers/st_res_triggers.txt"))
+        tier = " ".join(block(triggers, "st_res_ai_hub_gdp_tier").split())
+        self.assertEqual(tier, "gdp > st_res_ai_hub_min_gdp "
+                               "OR = { is_great_or_major_power = yes gw_is_market_leader = yes "
+                               "gdp > st_res_ai_minor_hub_min_gdp }")
+        values = strip_comments(read(ROOT / "common/script_values/st_res_script_values.txt"))
+        bars = {name: int(n) for name, n in re.findall(r"^(st_res_ai_(?:minor_)?hub_min_gdp) = (\d+)$", values, re.M)}
+        self.assertEqual(bars, {"st_res_ai_hub_min_gdp": 10_000_000, "st_res_ai_minor_hub_min_gdp": 100_000_000})
+        # Players are untouched: only the AI's weights read the tier.
+        body = strip_comments(read(DECISIONS))
+        decision = block(body, "te_decision_establish_strategic_reserve")
+        for gate in ("is_shown", "possible"):
+            with self.subTest(gate=gate):
+                self.assertNotIn("st_res_ai_hub_gdp_tier", block(decision, gate))
+                self.assertNotIn("is_ai", block(decision, gate))
 
 
 class LocalizationTest(unittest.TestCase):
