@@ -94,7 +94,10 @@ from __future__ import annotations
 import os
 import re
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import InitVar, dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import REVIEWED_RE, cli_main, comment_tags, parse_reviewed, write_text
 
 CHECKS = ("system_ungated", "unchosen_self_action", "imputed_foreign_action")
 # Check-tagged REVIEWED comments that belong to other audits, which use the
@@ -308,10 +311,6 @@ _PRE_ATTRIBUTION_RE = re.compile(
 _TOKEN_RE = re.compile(r'"[^"\n]*"|[{}]|\?=|[<>!]=|[=<>]|[^\s{}=<>!?"]+')
 _EVENT_ID_RE = re.compile(r"^[a-z_][a-z0-9_]*\.\d+$")
 _DEF_RE = re.compile(r"^[ \t]*([a-z_][a-z0-9_]*\.\d+)[ \t]*=[ \t]*\{", re.M)
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$",
-    re.M,
-)
 
 # Block keys that do not change the scope a trigger_event fires in.
 _CONTROL_KEYS = {
@@ -681,6 +680,11 @@ class Tag:
     date: str
     rationale: str
 
+    @property
+    def tag(self) -> str:
+        """The check it names: a stale `Tag` reads as an `audit_common.StaleTag`."""
+        return self.check
+
 
 @dataclass
 class EventDef:
@@ -692,12 +696,24 @@ class EventDef:
     title_keys: list[str]
     desc_keys: list[str]
     flavor_keys: list[str]
-    reviewed: dict[str, dict]  # check -> {date, rationale}
+    reviewed: dict[str, dict]  # check -> {date, tag, rationale}
     tags: list[Tag] = field(default_factory=list)
 
     @property
     def code(self) -> str:
         return _strip_comments(self.block)
+
+
+def _tag_names(line: str) -> list[str]:
+    """Every name the line's check-tagged comments list, in order, whoever's
+    check it is: a name that is no check is reported."""
+    names: list[str] = []
+    pos = 0
+    while (m := REVIEWED_RE.search(line, pos)) is not None:
+        if m.group("tags") is not None:
+            names += [t for t in comment_tags(m.group("tags")) if t not in names]
+        pos = m.start() + 1
+    return names
 
 
 def _sub_block(code: str, key: str) -> list[str]:
@@ -733,13 +749,15 @@ def load_events(mod_path: str) -> dict[str, EventDef]:
                 start_line = text.count("\n", 0, m.start()) + 1
                 reviewed: dict[str, dict] = {}
                 tags: list[Tag] = []
-                for rm in _TAGGED_REVIEWED_RE.finditer(block):
-                    for chk in re.split(r"[\s,]+", rm.group("checks").strip()):
-                        if chk and chk not in FOREIGN_CHECKS:
-                            reviewed[chk] = {"date": rm.group("date"),
-                                             "rationale": rm.group("rationale").strip()}
-                            tags.append(Tag(eid, chk, rel, start_line + block.count("\n", 0, rm.start()),
-                                            rm.group("date"), rm.group("rationale").strip()))
+                for offset, raw in enumerate(block.split("\n")):
+                    if "REVIEWED" not in raw:
+                        continue
+                    for chk in _tag_names(raw):
+                        if chk in FOREIGN_CHECKS:
+                            continue
+                        # A flag of one check is suppressed only by a comment naming it.
+                        reviewed[chk] = rev = parse_reviewed(raw, (chk,))
+                        tags.append(Tag(eid, chk, rel, start_line + offset, rev["date"], rev["rationale"]))
                 events[eid] = EventDef(
                     eid, rel, start_line, block,
                     bool(_HIDDEN_RE.search(code)), title, desc, flavor, reviewed, tags,
@@ -1137,20 +1155,31 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`stale` holds the tags whose check no longer fires on their event (the
+    event was fixed, or the heuristic moved): delete them, or they will hide
+    the next regression."""
+
     flags: list[Flag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
-    # A tag whose check no longer fires on its event (the event was fixed, or
-    # the heuristic moved): delete it, or it will hide the next regression.
-    stale_tags: list[Tag] = field(default_factory=list)
+    # `stale_tags` is the old name for `stale`, which the server's
+    # `/event-context-audit?format=text` still passes; read back by the
+    # property below.
+    stale_tags: InitVar[list[Tag] | None] = None
     # A tag naming no check (a typo): it suppresses nothing.
     unknown_tags: list[Tag] = field(default_factory=list)
 
+    def __post_init__(self, stale_tags: list[Tag] | None) -> None:
+        if stale_tags is not None:
+            self.stale = stale_tags
+
     @property
-    def failing(self) -> int:
-        """What --strict and the reload warning count."""
-        return (sum(1 for f in self.flags if not f.exemption)
-                + len(self.stale_tags) + len(self.unknown_tags))
+    def failing(self) -> list:
+        """What --strict and the reload warning count: a misspelled tag too."""
+        return self.unreviewed + self.stale + self.unknown_tags
+
+
+AuditResult.stale_tags = property(lambda self: self.stale, doc="The old name for `stale`.")
 
 
 def _dispatch_summary(g: Graph, r: Resolver, eid: str) -> list[str]:
@@ -1311,7 +1340,7 @@ def audit(mod_path: str, graph: Graph | None = None) -> AuditResult:
         "visible": visible,
         "dispatch_sites": sum(len(v) for v in g.sites_by_event.values()),
         **{c: sum(1 for f in flags if f.check == c) for c in CHECKS},
-    }, sorted(stale, key=key), sorted(unknown, key=key))
+    }, stale=sorted(stale, key=key), unknown_tags=sorted(unknown, key=key))
 
 
 # ---------------------------------------------------------------------------
@@ -1360,7 +1389,7 @@ def render_report(result: AuditResult) -> str:
         un = sum(1 for f in result.flags if f.check == c and not f.exemption)
         ex = sum(1 for f in result.flags if f.check == c and f.exemption)
         out.append(f"- `{c}`: **{un}** unreviewed, {ex} REVIEWED")
-    out.append(f"- Tags to remove: **{len(result.stale_tags) + len(result.unknown_tags)}**")
+    out.append(f"- Tags to remove: **{len(result.stale) + len(result.unknown_tags)}**")
     out.append("")
 
     for c in CHECKS:
@@ -1393,7 +1422,7 @@ def render_report(result: AuditResult) -> str:
                 out.append(f"- `{f.event_id}` — {f.file} (REVIEWED {e.get('date', '?')}: "
                            f"{e.get('rationale', '')})")
             out.append("")
-    if result.stale_tags or result.unknown_tags:
+    if result.stale or result.unknown_tags:
         out.append("## Tags to remove")
         out.append("")
         out.append("Check-tagged REVIEWED comments that suppress nothing: the check no longer "
@@ -1401,7 +1430,7 @@ def render_report(result: AuditResult) -> str:
                    "not one of " + ", ".join(f"`{c}`" for c in CHECKS) + " / `all`. "
                    "`--strict` fails on these so suppressions cannot outlive their flags.")
         out.append("")
-        for t in result.stale_tags:
+        for t in result.stale:
             out.append(f"- stale: `{t.event_id}` ({t.check}) — {t.file}:{t.line}")
         for t in result.unknown_tags:
             out.append(f"- unknown check `{t.check}`: `{t.event_id}` — {t.file}:{t.line}")
@@ -1419,14 +1448,12 @@ def regenerate(mod_state=None) -> dict:
 
     result = audit(mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "event_context_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
-        "stale_tags": len(result.stale_tags) + len(result.unknown_tags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "unreviewed": len(result.failing),
+        "stale_tags": len(result.stale) + len(result.unknown_tags),
+        "exempted": len(result.exemptions),
         # Per-check counts plus coverage (events defined, dispatch sites, ...),
         # which the committed report no longer prints.
         **result.coverage,
@@ -1434,14 +1461,15 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    check-tagged REVIEWED comment, or any such comment suppresses nothing
+    (stale or misspelled)."""
     from path_constants import mod_path as _mp
+    return cli_main(lambda args: audit(_mp), lambda res, args: render_report(res), argv=argv,
+                    description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on an unreviewed flag, a stale tag or a misspelled one.")
 
-    res = audit(_mp)
-    print(render_report(res))
-    # --strict: CI mode. Exit 1 if any flag lacks a check-tagged REVIEWED
-    # comment, or any such comment suppresses nothing (stale or misspelled).
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if res.failing else 0)
+
+if __name__ == "__main__":
+    raise SystemExit(main())

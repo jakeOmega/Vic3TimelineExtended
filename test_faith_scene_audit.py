@@ -383,13 +383,13 @@ class AuditTests(_Fixture):
         self.events("x.1 = {\n\ttype = country_event\n\tflavor = x.1.f\n}\n")
         result = audit(self.root)
         self.assertEqual([f.exemption["rationale"] for f in result.flags], ["a real quotation"])
-        self.assertEqual((result.failing, result.stale_tags), (0, []))
+        self.assertEqual((result.failing, result.stale), ([], []))
 
     def test_another_checks_tag_is_not_ours(self):
         self.loc('x.1.f:0 "The priest spoke." # REVIEWED 2026-11-12 (loc_style): something else')
         self.events("x.1 = {\n\ttype = country_event\n\tflavor = x.1.f\n}\n")
         result = audit(self.root)
-        self.assertEqual((result.failing, len(result.stale_tags)), (1, 0))
+        self.assertEqual((len(result.failing), len(result.stale)), (1, 0))
 
     def test_a_tag_that_suppresses_nothing_is_stale(self):
         tag = f"# REVIEWED 2026-11-12 ({CHECK}): was a priest once"
@@ -399,8 +399,8 @@ class AuditTests(_Fixture):
         self.events(f"x.1 = {{\n\ttype = country_event\n\ttrigger = {{ {CHRISTIAN} }}\n"
                     "\tflavor = x.1.f\n\tdesc = x.1.g\n}\n")
         result = audit(self.root)
-        self.assertEqual(sorted(t.key for t in result.stale_tags), ["orphan", "x.1.f", "x.1.g"])
-        self.assertEqual(result.failing, 3)
+        self.assertEqual(sorted(t.key for t in result.stale), ["orphan", "x.1.f", "x.1.g"])
+        self.assertEqual(len(result.failing), 3)
 
     def test_a_tag_on_an_overridden_copy_is_stale(self):
         tag = f"# REVIEWED 2026-11-12 ({CHECK}): reviewed"
@@ -408,9 +408,9 @@ class AuditTests(_Fixture):
         self.loc('x.1.f:0 "The priest spoke again."', name="te_b_l_english.yml")
         self.events("x.1 = {\n\ttype = country_event\n\tflavor = x.1.f\n}\n")
         result = audit(self.root)
-        self.assertEqual([(t.file, t.key) for t in result.stale_tags],
-                         [("localization/english/te_a_l_english.yml", "x.1.f")])
-        self.assertEqual(result.failing, 2)  # the winning copy is flagged and untagged
+        self.assertEqual([(t.file, t.key, t.tag) for t in result.stale],
+                         [("localization/english/te_a_l_english.yml", "x.1.f", CHECK)])
+        self.assertEqual(len(result.failing), 2)  # the winning copy is flagged and untagged
 
     def test_unused_loc_is_not_read(self):
         self.loc('x.1.f:0 "The elder spoke."')
@@ -466,6 +466,9 @@ class CliTests(_Fixture):
         self.assertIn("x.1 flavor (events/x_events.txt:4): any state religion", out)
         self.assertIn("x.2 flavor (events/x_events.txt:9): state religion one of: hindu", out)
         self.assertIn("not a key", self.run_main("--explain", "no_such_key")[1])
+        # `--explain` only lists: a flagged key does not fail it under `--strict`.
+        self.assertEqual(self.run_main("--strict")[0], 1)
+        self.assertEqual(self.run_main("--explain", "x.1.f", "--strict")[0], 0)
 
     def test_regenerate_writes_the_report(self):
         with mock.patch("path_constants.mod_path", self.root):
@@ -490,7 +493,7 @@ class RepoTests(unittest.TestCase):
         # CI runs it --strict: every flag is fixed or carries its tagged
         # REVIEWED comment, and no tag is stale.
         self.assertEqual([f.key for f in self.result.flags if not f.exemption], [])
-        self.assertEqual(self.result.stale_tags, [])
+        self.assertEqual(self.result.stale, [])
 
     def test_the_gated_ladders_are_read_as_gated(self):
         """The patterns the guide points to: a faith's rung under its gate."""
