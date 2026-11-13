@@ -6,6 +6,7 @@ played by the test itself: it edits files between `run_started` and `finish`.
 """
 
 import hashlib
+import json
 import math
 import os
 import tempfile
@@ -709,6 +710,21 @@ class RetimeTests(RestoreTestCase):
         self.assertEqual([s.id for s in restore.held(self.backups)], [snap.id])
         self.assertEqual(log.stat().st_mtime_ns, log_owners)        # done before it (in name order), and kept
 
+    def test_retime_unverified_is_the_reason_given_beside_a_changed_save_which_is_still_listed(self):
+        # Both holds come after everything is back; the file the harness touched is the one the reason names.
+        snap, path, owners = self.rewritten()
+        (self.user / "save games/mine.v3").write_bytes(b"overwritten")
+        sha, entry_time = self.failing_hash(path, PermissionError(13, "sharing violation"))
+        entry_time["ns"] = owners
+        utime = self.unsettable(path, owners, lambda kwargs: True)
+        with mock.patch.object(restore.os, "utime", utime), mock.patch.object(restore, "_sha256", sha):
+            out = restore.restore(snap, self.user, other_game_running=False, now=NOW)
+        self.assertEqual((out.held, out.reason), (True, "retime_unverified"))
+        self.assertEqual(out.manual_saves, {"changed": ["save games/mine.v3"]})
+        entry = snapshot.journal(snap)[-1]
+        self.assertEqual((entry["reason"], entry["files"], entry["manual_saves"]),
+                         ("retime_unverified", ["pdx_settings.json"], {"changed": ["save games/mine.v3"]}))
+
     def test_a_file_gone_once_its_time_was_set_is_nothing_to_hold_for(self):
         snap, path, owners = self.rewritten()
         real = restore._sha256
@@ -1066,16 +1082,325 @@ class HoldTests(RestoreTestCase):
         self.assertTrue(p.exists())
 
     def test_a_file_the_run_never_touched_does_not_hold_however_new_it_is(self):
-        # only files that differ from the snapshot count; the owner's other files do not
+        # only files that differ from the snapshot count; the owner's other files do not (a save of theirs is
+        # compared by its size and time instead, ManualSaveTests)
         snap = self.run_started(at=NOW)
         finish(snap, at=NOW)
-        set_mtime(self.user / "save games/mine.v3", NOW, 600)
         (self.user / "notes.txt").write_text("not in any set")
         set_mtime(self.user / "notes.txt", NOW, 600)
         (self.user / "console_history.txt").write_text("event x\n")
         set_mtime(self.user / "console_history.txt", NOW, 1)  # the run's own change, just before its exit
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertEqual((out.held, out.restored), (False, ["console_history.txt"]))
+
+
+class ManualSaveTests(RestoreTestCase):
+    """#1725: the owner's own saves in `save games/` are never copied, so they cannot be put back. They are compared
+    by the size and time the snapshot listed: one changed or gone holds once everything else is back
+    (`manual_save_changed`), a new one is left and listed. Times are set from the file's own recorded time, never
+    from the machine's clock, and compared for equality only."""
+
+    MINE = "save games/mine.v3"
+
+    def a_run_that_also_changes_the_set(self):
+        """A run that changed what the restore does put back: the console history, a log, and an autosave pushed in."""
+        snap = self.run_started()
+        (self.user / "console_history.txt").write_text("event x\n")
+        (self.user / "logs/debug.log").write_text("the run's log\n")
+        (self.user / "save games/autosave_3.v3").write_bytes(b"pushed in by the run")
+        return snap
+
+    def bump_time(self, rel, ns):
+        path = self.user / rel
+        st = path.stat()
+        os.utime(path, ns=(st.st_atime_ns, st.st_mtime_ns + ns))
+
+    def test_saves_left_alone_hold_nothing_and_say_nothing(self):
+        snap = self.a_run_that_also_changes_the_set()
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.manual_saves), (False, "", {}))
+        self.assertNotIn("manual_saves", snapshot.journal(snap)[-1])
+
+    def test_a_save_overwritten_during_the_run_holds_once_everything_else_is_back(self):
+        snap = self.a_run_that_also_changes_the_set()
+        (self.user / self.MINE).write_bytes(b"overwritten from the game's save menu")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False, now=NOW)
+        self.assertEqual((out.held, out.reason), (True, "manual_save_changed"))
+        self.assertEqual(out.manual_saves, {"changed": [self.MINE]})
+        # everything the snapshot holds went back first: the hold leaves nothing waiting that could be put back
+        self.assertEqual((out.restored, out.removed), (["console_history.txt", "logs/debug.log"],
+                                                       ["save games/autosave_3.v3"]))
+        self.assertEqual((self.user / "console_history.txt").read_bytes(), b"set_variable x\n")
+        self.assertFalse((self.user / "save games/autosave_3.v3").exists())
+        self.assertEqual(restore.compare(snap, self.user), restore.Diff([], [], [], []))
+        self.assertEqual((self.user / self.MINE).read_bytes(), b"overwritten from the game's save menu")   # untouched
+        self.assertEqual(snapshot.journal(snap)[-1], {
+            "event": "held", "at": "2026-11-10T12:00:00Z", "reason": "manual_save_changed", "files": [self.MINE],
+            "restored": ["console_history.txt", "logs/debug.log"], "removed": ["save games/autosave_3.v3"],
+            "manual_saves": {"changed": [self.MINE]}})
+        self.assertEqual([s.id for s in restore.held(self.backups)], [snap.id])
+        self.assertTrue((snap.dir / restore.RUN_LOGS_NAME / "debug.log").is_file())   # the run's logs, kept
+
+    def test_the_same_size_with_another_time_is_a_change(self):
+        # a microsecond: what the drive keeps of a time is compared whole, not cut to the second
+        snap = self.run_started()
+        self.bump_time(self.MINE, 1000)
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.manual_saves), (True, "manual_save_changed", {"changed": [self.MINE]}))
+
+    def test_an_earlier_time_is_a_change_too(self):
+        # no clock is read: a time stepped back (a copy of an older version put there) differs as much as a later one
+        snap = self.run_started()
+        self.bump_time(self.MINE, -86400 * 10**9)
+        finish(snap)
+        self.assertEqual(restore.restore(snap, self.user, other_game_running=False).reason, "manual_save_changed")
+
+    def test_the_same_size_and_time_over_other_bytes_is_not_seen(self):
+        # the limit of comparing without reading 50 MB saves: a writer that puts the size and the time back
+        snap = self.run_started()
+        path = self.user / self.MINE
+        st = path.stat()
+        path.write_bytes(bytes(b ^ 1 for b in path.read_bytes()))
+        os.utime(path, ns=(st.st_atime_ns, st.st_mtime_ns))
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.manual_saves), (False, {}))
+
+    def test_a_deleted_save_holds_and_is_named(self):
+        snap = self.a_run_that_also_changes_the_set()
+        (self.user / self.MINE).unlink()
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.manual_saves), (True, "manual_save_changed", {"missing": [self.MINE]}))
+        self.assertEqual(out.removed, ["save games/autosave_3.v3"])
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], [self.MINE])
+
+    def test_changed_and_gone_saves_are_all_named(self):
+        (self.user / "save games/other.v3").write_bytes(b"another of the owner's")
+        (self.user / "save games/third.v3").write_bytes(b"and a third")
+        snap = self.run_started()
+        (self.user / self.MINE).unlink()
+        (self.user / "save games/third.v3").write_bytes(b"and a third, saved again")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.manual_saves, {"changed": ["save games/third.v3"], "missing": [self.MINE]})
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], [self.MINE, "save games/third.v3"])
+
+    def test_a_save_folder_the_run_deleted_comes_back_with_the_autosaves_and_holds_for_the_rest(self):
+        snap = self.run_started()
+        for path in (self.user / "save games").iterdir():
+            path.unlink()
+        (self.user / "save games").rmdir()
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.manual_saves), (True, "manual_save_changed", {"missing": [self.MINE]}))
+        self.assertEqual(out.restored, ["save games/autosave.v3", "save games/autosave_1.v3"])
+        self.assertEqual((self.user / "save games/autosave.v3").read_bytes(), b"autosave zero")
+
+    def test_a_new_save_is_left_in_place_and_listed_without_a_hold(self):
+        snap = self.a_run_that_also_changes_the_set()
+        new = self.user / "save games/france_1836_01_02.v3"
+        new.write_bytes(b"saved from the game's menu")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (False, ""))
+        self.assertEqual(out.manual_saves, {"new": ["save games/france_1836_01_02.v3"]})
+        self.assertEqual(out.removed, ["save games/autosave_3.v3"])
+        self.assertEqual(new.read_bytes(), b"saved from the game's menu")
+        entry = snapshot.journal(snap)[-1]
+        self.assertEqual((entry["event"], entry["manual_saves"]), ("restored", {"new": ["save games/france_1836_01_02.v3"]}))
+
+    def test_a_new_save_beside_a_changed_one_is_listed_with_the_hold(self):
+        snap = self.run_started()
+        (self.user / self.MINE).write_bytes(b"overwritten")
+        (self.user / "save games/new.v3").write_bytes(b"new")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.manual_saves, {"changed": [self.MINE], "new": ["save games/new.v3"]})
+        self.assertEqual(snapshot.journal(snap)[-1]["files"], [self.MINE])     # the hold is for the changed one only
+
+    def test_the_sets_files_and_the_harnesss_names_are_not_the_owners_saves(self):
+        (self.user / "save games/te_qa_old.v3").write_bytes(b"a harness save from before")
+        (self.user / "save games/TEST_FAIL_old.v3").write_bytes(b"a failed test's save from before")
+        (self.user / "save games/autosave-Manfred.v3").write_bytes(b"a OneDrive conflict copy")
+        (self.user / "save games/desktop.ini").write_bytes(b"[.ShellClassInfo]")
+        snap = self.run_started()
+        (self.user / "save games/te_qa_old.v3").unlink()
+        (self.user / "save games/TEST_FAIL_old.v3").write_bytes(b"rewritten")
+        (self.user / "save games/autosave-Manfred.v3").write_bytes(b"changed: put back from the store")
+        (self.user / "save games/autosave.v3").write_bytes(b"the run's autosave")
+        (self.user / "save games/desktop.ini").write_bytes(b"[.ShellClassInfo] rewritten by Explorer")
+        for name in ("te_qa_fixture_abc.v3", "te_qa_fixture_abc_s1234abcd.v3.part", "TEST_FAIL_te_qa_fixture_x.v3",
+                     "autosave_3.v3", "autosave_2-Manfred.v3", "notes.txt", "mine.v3" + restore._TEMP_SUFFIX):
+            (self.user / "save games" / name).write_bytes(b"x")
+        (self.user / "save games/sub").mkdir()
+        (self.user / "save games/sub/in_a_folder.v3").write_bytes(b"not looked at, as take does not")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.manual_saves), (False, {}))
+        self.assertEqual(sorted(out.restored), ["save games/autosave-Manfred.v3", "save games/autosave.v3"])
+
+    def test_the_ending_counts_in_any_case(self):
+        (self.user / "save games/Upper.V3").write_bytes(b"the owner's")
+        snap = self.run_started()
+        (self.user / "save games/Upper.V3").unlink()
+        finish(snap)
+        self.assertEqual(restore.restore(snap, self.user, other_game_running=False).manual_saves,
+                         {"missing": ["save games/Upper.V3"]})
+
+    def test_the_save_the_run_loaded_is_put_back_by_its_hash_not_held(self):
+        snap = self.run_started(extra=[self.MINE])
+        (self.user / self.MINE).write_bytes(b"the game saved over the save it loaded")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.restored, out.manual_saves), (False, [self.MINE], {}))
+        self.assertEqual((self.user / self.MINE).read_bytes(), b"the owner's own save")
+
+    def test_a_save_changed_after_the_runs_end_holds_too_and_the_runs_changes_go_back(self):
+        # The run's own change is put back as before; the save's new time may be the owner's own play since. Either
+        # way no copy exists, so the owner decides.
+        snap = self.run_started(at=NOW)
+        finish(snap, at=NOW)
+        (self.user / "console_history.txt").write_text("event x\n")
+        set_mtime(self.user / "console_history.txt", NOW, 1)
+        set_mtime(self.user / self.MINE, NOW, 600)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.restored), (True, "manual_save_changed", ["console_history.txt"]))
+
+    def test_an_earlier_hold_is_the_reason_given_and_still_lists_the_saves(self):
+        snap = self.run_started(at=NOW)
+        finish(snap, at=NOW)
+        (self.user / "continue_game.json").write_text("{}")
+        set_mtime(self.user / "continue_game.json", NOW, 600)        # the owner played since
+        (self.user / self.MINE).unlink()
+        before = tree(self.user)
+        out = restore.restore(snap, self.user, other_game_running=False, now=NOW)
+        self.assertEqual((out.held, out.reason, out.restored), (True, "modified_after_exit", []))
+        self.assertEqual(out.manual_saves, {"missing": [self.MINE]})
+        self.assertEqual(tree(self.user), before)                   # that hold still changes nothing
+        self.assertEqual(snapshot.journal(snap)[-1], {
+            "event": "held", "at": "2026-11-10T12:00:00Z", "reason": "modified_after_exit",
+            "files": ["continue_game.json"], "manual_saves": {"missing": [self.MINE]}})
+
+    def test_a_hold_during_the_restore_is_the_reason_given_and_still_lists_the_saves(self):
+        snap = self.run_started()
+        (self.user / "console_history.txt").write_text("event x\n")
+        (self.user / "continue_game.json").write_text("{}")
+        (self.user / self.MINE).write_bytes(b"overwritten")
+        finish(snap)
+        real_replace, renamed = os.replace, []
+
+        def replace_then_interfere(source, target):
+            real_replace(source, target)
+            renamed.append(Path(target).name)
+            if len(renamed) == 1:
+                (self.user / "continue_game.json").write_text("the owner played")
+
+        with mock.patch("os.replace", replace_then_interfere):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (True, "modified_during_restore"))
+        self.assertEqual(out.manual_saves, {"changed": [self.MINE]})
+        self.assertEqual(snapshot.journal(snap)[-1]["manual_saves"], {"changed": [self.MINE]})
+
+    def test_another_game_running_holds_before_the_saves_are_read(self):
+        snap = self.run_started()
+        (self.user / self.MINE).unlink()
+        finish(snap)
+        with mock.patch.object(snapshot, "_scan_folder", side_effect=AssertionError("read")):
+            out = restore.restore(snap, self.user, other_game_running=True)
+        self.assertEqual((out.held, out.reason, out.manual_saves), (True, "other_game_running", {}))
+
+    def test_a_save_folder_that_cannot_be_read_raises_before_anything_changes(self):
+        snap = self.a_run_that_also_changes_the_set()
+        finish(snap)
+        before = tree(self.user)
+        real = snapshot._scan_folder
+
+        def scan(user_data, folder):
+            if folder == "save games":
+                raise PermissionError(13, "access denied")
+            return real(user_data, folder)
+
+        with mock.patch.object(snapshot, "_scan_folder", scan):
+            with self.assertRaises(PermissionError):
+                restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual(events(snap), ["started", "game_exited"])
+
+    def test_restoring_again_holds_again_while_the_save_differs(self):
+        snap = self.a_run_that_also_changes_the_set()
+        (self.user / self.MINE).write_bytes(b"overwritten")
+        finish(snap)
+        restore.restore(snap, self.user, other_game_running=False)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.restored, out.removed), (True, "manual_save_changed", [], []))
+        self.assertEqual(events(snap)[-2:], ["held", "held"])
+
+    def test_told_not_to_look_it_compares_no_save(self):
+        snap = self.run_started()
+        (self.user / self.MINE).unlink()
+        (self.user / "save games/new.v3").write_bytes(b"new")
+        finish(snap)
+        with mock.patch.object(snapshot, "_scan_folder", wraps=snapshot._scan_folder) as scan:
+            out = restore.restore(snap, self.user, other_game_running=False, saves=False)
+        self.assertEqual((out.held, out.manual_saves), (False, {}))
+        self.assertNotIn(mock.call(self.user, "save games"), scan.call_args_list)
+        self.assertNotIn("manual_saves", snapshot.journal(snap)[-1])
+
+    def test_an_empty_folder_holds_for_every_save_unless_told_not_to_look(self):
+        # why the self-test, which restores into a scratch folder, passes saves=False
+        snap = snapshot.take(self.user, self.backups, now=NOW)
+        for saves, held in ((True, True), (False, False)):
+            with self.subTest(saves=saves):
+                empty = self.tmp / ("empty %s" % saves)
+                empty.mkdir()
+                out = restore.restore(snap, empty, other_game_running=False, saves=saves)
+                self.assertEqual(out.held, held)
+                self.assertEqual(sorted(out.restored), sorted(snap.files))
+                self.assertEqual(out.manual_saves, {"missing": [self.MINE]} if saves else {})
+
+    def old_manifest(self, snap):
+        """`snap` as a manifest from before #1725 has it: no `save_stats`."""
+        path = snap.dir / snapshot.MANIFEST_NAME
+        manifest = json.loads(path.read_text("utf-8"))
+        del manifest["save_stats"]
+        path.write_text(json.dumps(manifest), "utf-8")
+        return snapshot.load(snap.dir)
+
+    def test_an_old_manifest_notes_gone_and_new_saves_and_never_holds_for_them(self):
+        (self.user / "save games/other.v3").write_bytes(b"another of the owner's")
+        snap = self.old_manifest(self.a_run_that_also_changes_the_set())
+        self.assertIsNone(snap.save_stats)
+        (self.user / self.MINE).unlink()
+        (self.user / "save games/other.v3").write_bytes(b"overwritten: cannot be told without a size and time")
+        (self.user / "save games/new.v3").write_bytes(b"new")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason), (False, ""))
+        self.assertEqual(out.manual_saves, {"missing": [self.MINE], "new": ["save games/new.v3"], "unrecorded": True})
+        self.assertEqual(out.removed, ["save games/autosave_3.v3"])
+        self.assertEqual(snapshot.journal(snap)[-1]["event"], "restored")
+
+    def test_an_old_manifest_with_the_saves_left_alone_says_only_that_it_could_not_tell(self):
+        snap = self.old_manifest(self.run_started())
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.manual_saves), (False, {"unrecorded": True}))
+
+    def test_recover_stops_its_unwinding_at_the_hold(self):
+        older = self.run_started()
+        finish(older)
+        newer = self.run_started()
+        (self.user / "console_history.txt").write_text("event x\n")
+        (self.user / self.MINE).write_bytes(b"overwritten")
+        finish(newer)
+        results = restore.recover(self.backups, self.user, other_game_running=False, own_game_up=lambda entry: False)
+        self.assertEqual([(i, o.held, o.reason) for i, o in results], [(newer.id, True, "manual_save_changed")])
+        self.assertEqual(results[0][1].restored, ["console_history.txt"])
+        self.assertEqual([s.id for s in restore.unfinished(self.backups)], [older.id])   # for a later call
 
 
 class ReferenceTimeTests(RestoreTestCase):
@@ -1126,11 +1451,12 @@ class ReferenceTimeTests(RestoreTestCase):
         self.assertEqual((out.held, out.restored, out.removed), (False, ["console_history.txt", "logs/debug.log"], ["logs/game.log"]))
 
     def test_a_snapshot_with_no_journal_restores_into_an_empty_folder(self):
-        # what the command line's self-test does
+        # what the command line's self-test does: a scratch folder holds none of the owner's saves, so it does not
+        # look at them (ManualSaveTests: an empty folder otherwise holds for every one of them)
         snap = snapshot.take(self.user, self.backups, now=NOW)
         empty = self.tmp / "empty"
         empty.mkdir()
-        out = restore.restore(snap, empty, other_game_running=False)
+        out = restore.restore(snap, empty, other_game_running=False, saves=False)
         self.assertEqual((out.held, sorted(out.restored)), (False, sorted(snap.files)))
         self.assertEqual({rel: (empty / rel).read_bytes() for rel in snap.files},
                          {rel: (self.user / rel).read_bytes() for rel in snap.files})
@@ -1363,7 +1689,7 @@ class PruneTests(RestoreTestCase):
             # and the whole snapshot comes back out of the store, byte for byte, with its recorded times
             target = self.tmp / ("restored " + snap.id)
             target.mkdir()
-            out = restore.restore(snap, target, other_game_running=False)
+            out = restore.restore(snap, target, other_game_running=False, saves=False)   # a scratch folder
             self.assertEqual((out.held, sorted(out.restored)), (False, sorted(snap.files)))
             for rel, entry in snap.files.items():
                 self.assertEqual(hashlib.sha256((target / rel).read_bytes()).hexdigest(), entry.sha256, rel)

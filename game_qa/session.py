@@ -1071,7 +1071,8 @@ class Session:
         a `shot` before clicking again. A screenshot that fails after the click is not a refusal: the reply has
         `screenshot: null` and `screenshot_error`, as enter-game's does.
 
-        The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
+        The restore cannot put back one of the owner's manual saves (only the autosaves and a `--save` file are
+        copied): `stop` holds when one was changed or deleted (`manual_save_changed`) and notes a new one, so a click
         must never be aimed at the game's own menus (save, load, settings, exit).
 
         A click into a tool window takes the keyboard (live, 2026-11-12): the next typed command does not reach the
@@ -1330,6 +1331,7 @@ class Session:
                 restore, outcome = self._fixture_verdict()
             elif self._snapshot is not None:
                 restore, outcome = self._restore(notes)
+            notes.extend(n for n in _save_notes(restore) if n not in notes)
         if left_up and (self._watch is None or self._watch_returned()):
             notes.append("no `watch` follows that game: its exit will not be recorded, so a restore of snapshot %s "
                          "will likely be held for the owner" % self._snapshot)
@@ -2165,6 +2167,34 @@ def _reply_lost(reply: dict | None, code: int | None) -> bool:
     if not isinstance(reply, dict) or reply.get("refused") == "bad_reply":
         return True
     return code == 0 and not reply.get("id")
+
+
+def _save_notes(restore: Mapping | None) -> list[str]:
+    """The stop's notes on the owner's own saves, from the restore's `manual_saves` (restore._manual_saves): new
+    saves left in place; saves changed or gone when another hold's reason was given (`manual_save_changed`'s own
+    line in summary.md names them); and a snapshot that recorded no sizes and times, which never holds."""
+    saves = restore.get("manual_saves") if isinstance(restore, Mapping) else None
+    if not isinstance(saves, Mapping):
+        return []
+
+    def names(key: str) -> str:
+        value = saves.get(key)
+        return ", ".join(map(str, value)) if isinstance(value, list) else str(value)
+
+    notes = []
+    differ = [key for key in ("changed", "missing") if saves.get(key)]
+    if differ and restore.get("reason") != "manual_save_changed":
+        notes.append("the owner's own saves in save games/ differ from the snapshot's listing (%s); no snapshot copies "
+                     "them, so nothing can put them back: tell the owner"
+                     % "; ".join("%s: %s" % ("gone" if key == "missing" else key, names(key)) for key in differ))
+    if saves.get("new"):
+        notes.append("new saves in save games/ that match no name of the harness's were left in place, since they may "
+                     "be the owner's: %s" % names("new"))
+    if saves.get("unrecorded"):
+        notes.append("the snapshot was taken before the sizes and times of the owner's saves were recorded, so a save "
+                     "overwritten during the run cannot be told from one left alone, and a gone one is noted rather "
+                     "than held")
+    return notes
 
 
 def _clears_by_waiting(restore: Mapping | None) -> bool:

@@ -1674,6 +1674,67 @@ class ClickTest(SessionTestCase):
         self.assertIn("no_client_area", reply["screenshot_error"])
 
 
+class ManualSavesStopTest(SessionTestCase):
+    """#1725: what `stop` says about the owner's own saves, from the restore's `manual_saves`."""
+
+    MINE = "save games/byzantium_1942_01_27.v3"
+
+    def stop_with(self, reply, code):
+        self.started()
+        self.cli.queue("restore", reply, code)
+        out = self.session.stop()
+        return out, Path(out["report"]).read_text("utf-8")
+
+    def test_a_changed_save_is_a_hold_that_names_it_and_says_everything_else_is_back(self):
+        out, summary = self.stop_with({"restored": ["content_load.json", "console_history.txt"], "removed": [],
+                                       "held": True, "reason": "manual_save_changed",
+                                       "manual_saves": {"changed": [self.MINE], "missing": ["save games/x.v3"]},
+                                       "playset_restored": True}, 2)
+        self.assertEqual((out["outcome"], out["reason"], out["stop_again"]), ("held", "manual_save_changed", False))
+        self.assertEqual(out["manual_saves"], {"changed": [self.MINE], "missing": ["save games/x.v3"]})
+        self.assertNotIn("next", out)
+        first = summary.split("\n")[0]
+        self.assertIn("HELD (manual_save_changed)", first)
+        self.assertIn("changed: " + self.MINE, first)
+        self.assertIn("gone: save games/x.v3", first)
+        self.assertIn("Everything the snapshot holds was put back (2 files put back", first)
+        self.assertNotIn("waits", first)
+        self.assertNotIn("differ from the snapshot's listing", " ".join(out.get("notes") or []))   # said once
+        self.assertTrue(out["overlay_removed"])                     # the playset is back, so the overlay goes
+
+    def test_a_new_save_is_a_note_in_the_reply_and_the_summary_and_the_stop_restored(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": False, "reason": "",
+                                       "manual_saves": {"new": ["save games/france_1836_01_02.v3"]}}, 0)
+        self.assertEqual(out["outcome"], "restored")
+        note = [n for n in out["notes"] if "new saves" in n]
+        self.assertEqual(len(note), 1)
+        self.assertIn("save games/france_1836_01_02.v3", note[0])
+        self.assertIn("- Note: " + note[0], summary)
+        self.assertTrue(summary.startswith("Restore: restored"))
+
+    def test_saves_listed_with_another_holds_reason_are_a_note(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": True, "reason": "modified_after_exit",
+                                       "manual_saves": {"missing": [self.MINE]}}, 2)
+        self.assertEqual((out["outcome"], out["reason"]), ("held", "modified_after_exit"))
+        note = [n for n in out["notes"] if "differ from the snapshot's listing" in n]
+        self.assertEqual(len(note), 1)
+        self.assertIn("gone: " + self.MINE, note[0])
+        self.assertIn("- Note: " + note[0], summary)
+
+    def test_a_snapshot_without_sizes_and_times_says_so(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": False, "reason": "",
+                                       "manual_saves": {"missing": [self.MINE], "unrecorded": True}}, 0)
+        self.assertEqual(out["outcome"], "restored")
+        notes = " | ".join(out["notes"])
+        self.assertIn("gone: " + self.MINE, notes)
+        self.assertIn("before the sizes and times of the owner's saves were recorded", notes)
+
+    def test_nothing_is_said_when_there_is_nothing_to_say(self):
+        out, _summary = self.stop_with(*RESTORED)
+        self.assertNotIn("manual_saves", out)
+        self.assertFalse([n for n in out.get("notes") or [] if "save games/" in n])
+
+
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
         self.started()

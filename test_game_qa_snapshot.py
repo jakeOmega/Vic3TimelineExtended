@@ -577,5 +577,89 @@ class JournalTests(SnapshotTestCase):
         self.assertIn(name, snapshot.load(snap.dir).listing)
 
 
+class SaveStatsTests(SnapshotTestCase):
+    """#1725: the size and time of everything listed in `save games/`, so that `restore` can tell a changed save of
+    the owner's (which is never copied) from one left alone."""
+
+    def test_every_save_games_entry_gets_the_size_and_time_its_lstat_gave(self):
+        (self.user / "save games/linked.v3").symlink_to("mine.v3")
+        os.utime(self.user / "save games/mine.v3", ns=(1_700_000_000_123_456_700, 1_700_000_000_123_456_700))
+        snap = snapshot.take(self.user, self.backups)
+        expected = {}
+        for name in ("autosave.v3", "autosave_1.v3", "mine.v3", "linked.v3"):
+            st = os.lstat(self.user / "save games" / name)
+            expected["save games/" + name] = (st.st_size, st.st_mtime_ns)
+        self.assertEqual(snap.save_stats, expected)
+        self.assertEqual(snap.save_stats["save games/mine.v3"][1], 1_700_000_000_123_456_700)   # not cut to the second
+        self.assertEqual(snap.save_stats["save games/linked.v3"][0], len("mine.v3"))             # the link's own
+
+    def test_the_manifest_keeps_them_and_load_reads_them_back(self):
+        snap = snapshot.take(self.user, self.backups)
+        manifest = json.loads((snap.dir / snapshot.MANIFEST_NAME).read_text("utf-8"))
+        self.assertEqual(manifest["version"], 1)                    # older checkouts still load it
+        self.assertEqual(manifest["save_stats"]["save games/mine.v3"],
+                         {"size": len(b"the owner's own save"),
+                          "mtime_ns": os.lstat(self.user / "save games/mine.v3").st_mtime_ns})
+        self.assertEqual(snapshot.load(snap.dir).save_stats, snap.save_stats)
+
+    def test_an_empty_save_folder_records_none_and_a_missing_one_too(self):
+        for path in (self.user / "save games").iterdir():
+            path.unlink()
+        self.assertEqual(snapshot.take(self.user, self.backups).save_stats, {})
+        (self.user / "save games").rmdir()
+        self.assertEqual(snapshot.take(self.user, self.backups).save_stats, {})
+
+    def rewrite(self, snap, change):
+        path = snap.dir / snapshot.MANIFEST_NAME
+        manifest = json.loads(path.read_text("utf-8"))
+        change(manifest)
+        path.write_text(json.dumps(manifest), "utf-8")
+        return snapshot.load(snap.dir)
+
+    def test_a_manifest_from_before_has_none_and_loads_whole(self):
+        snap = snapshot.take(self.user, self.backups)
+        loaded = self.rewrite(snap, lambda manifest: manifest.pop("save_stats"))
+        self.assertIsNone(loaded.save_stats)
+        self.assertEqual((loaded.files, loaded.listing), (snap.files, snap.listing))
+
+    def test_a_record_that_does_not_read_is_none_and_the_rest_still_loads(self):
+        def name(manifest, value):
+            manifest["save_stats"]["save games/mine.v3"] = value
+
+        def drop(manifest):
+            del manifest["save_stats"]["save games/mine.v3"]
+
+        def extra(manifest):
+            manifest["save_stats"]["save games/unlisted.v3"] = {"size": 1, "mtime_ns": 1}
+
+        def outside(manifest):
+            manifest["save_stats"]["continue_game.json"] = {"size": 1, "mtime_ns": 1}
+
+        cases = {
+            "a list": lambda m: m.update(save_stats=[]),
+            "null": lambda m: m.update(save_stats=None),
+            "a name missing": drop,
+            "a name not listed": extra,
+            "a name outside save games/": outside,
+            "a bool size": lambda m: name(m, {"size": True, "mtime_ns": 1}),
+            "a text time": lambda m: name(m, {"size": 1, "mtime_ns": "1"}),
+            "a float time": lambda m: name(m, {"size": 1, "mtime_ns": 1.5}),
+            "a pair": lambda m: name(m, [1, 1]),
+            "no time": lambda m: name(m, {"size": 1}),
+        }
+        for label, change in cases.items():
+            with self.subTest(label):
+                snap = snapshot.take(self.user, self.backups)
+                loaded = self.rewrite(snap, change)
+                self.assertIsNone(loaded.save_stats)
+                self.assertEqual((loaded.files, loaded.listing), (snap.files, snap.listing))
+                self.assertIn(snap.id, [s.id for s in snapshot.all_snapshots(self.backups)])
+
+    def test_a_snapshot_built_without_them_has_none(self):
+        # as selfchecks.py builds one for a run's folder
+        snap = snapshot.Snapshot(id="x", dir=self.base, files={}, listing=frozenset())
+        self.assertIsNone(snap.save_stats)
+
+
 if __name__ == "__main__":
     unittest.main()

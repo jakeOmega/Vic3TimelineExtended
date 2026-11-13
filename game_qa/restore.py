@@ -18,6 +18,9 @@ The rules (spec section 5.3):
 - Journal times come from the backup drive's clock (see `snapshot.record`), as file times do.
 - A snapshot is never deleted unless its journal ends in `restored` (or says nothing at all), and never by
   the run that made it.
+- The owner's own saves in `save games/` are never copied, so they cannot be put back (#1725). They are compared by
+  the size and time `snapshot.take` listed: one changed or gone holds (`manual_save_changed`), but only once
+  everything else is back; a new one is left where it is and listed (`Outcome.manual_saves`).
 """
 
 from __future__ import annotations
@@ -61,6 +64,9 @@ _BLOB_NAME = re.compile(r"^[0-9a-f]{64}$")
 # In `save games/` only the game's own rotation names may be taken for something the run pushed in. OneDrive
 # makes conflict copies such as `autosave-Manfred.v3` and `autosave_1-Manfred.v3`; they are the owner's.
 _ROTATION_NAME = re.compile(r"^autosave(_\d+|_exit)?\.v3$")
+# Names in `save games/` that are the harness's, whatever they end in: the fixture, its switched-rule copies and the
+# `.part` they are staged as (`te_qa_*`), a failed scripted test's save (`TEST_FAIL_*`). Never one of the owner's saves.
+_HARNESS_SAVE_PREFIXES = ("te_qa_", "TEST_FAIL_")
 
 
 @dataclass
@@ -79,6 +85,8 @@ class Outcome:
     # "" | "other_game_running" | "modified_after_exit" | "no_reference_time" | "modified_during_restore"
     # | "retime_unverified" (everything was put back, but one file, named in the journal entry, carries the
     # snapshot's time over bytes that could not be read back, and the time could not be moved off again)
+    # | "manual_save_changed" (everything was put back, but one of the owner's own saves, which no snapshot copies,
+    # was changed or is gone: `manual_saves` names it)
     # | "already_restored" (another game is running and the journal already ends in `restored`: left as it is,
     # nothing recorded, held False). recover() adds "game_still_up" (left alone, nothing recorded) and
     # "error: <message>" (restore, or own_game_up, raised). The command line (game_qa/__main__.py) builds
@@ -87,6 +95,10 @@ class Outcome:
     reason: str
     # Files left as they were, bytes and all, that got the snapshot's modification time back (`_retime`).
     retimed: list[str] = field(default_factory=list)
+    # The owner's own saves as `_manual_saves` found them: `changed`, `missing`, `new` (lists, each only when not
+    # empty) and `unrecorded` (True: the manifest has no sizes and times to tell a changed save by). Empty when there
+    # is nothing to say, and when the check was not made (another game running, `saves=False`).
+    manual_saves: dict = field(default_factory=dict)
 
 
 # A file's size and mtime_ns as compare saw them, or None if it was absent.
@@ -111,6 +123,52 @@ def _is_pushed_in(name: str) -> bool:
         return False
     folder, _, base = name.rpartition("/")
     return folder != "save games" or bool(_ROTATION_NAME.match(base))
+
+
+def _is_manual_save(rel: str, snap: Snapshot) -> bool:
+    """Whether `rel` is one of the owner's own saves for the check of `_manual_saves`: a `.v3` file (the ending in any
+    case) directly in `save games/` that is not in the manifest's files (the set and a `--save`, which are compared
+    by their hash and put back), matches none of SNAPSHOT_SET's patterns (the autosaves, OneDrive's conflict copies
+    of them among them) and is not the harness's (`_HARNESS_SAVE_PREFIXES`). Restore's temps end in `.tmp`."""
+    folder, _, base = rel.rpartition("/")
+    return (folder == snapshot.SAVE_FOLDER and base.lower().endswith(".v3") and rel not in snap.files
+            and not _matches(rel, snapshot.SNAPSHOT_SET) and not base.startswith(_HARNESS_SAVE_PREFIXES))
+
+
+def _manual_saves(snap: Snapshot, user_data: Path) -> dict:
+    """How the owner's own saves (`_is_manual_save`) differ from what the snapshot listed, as `Outcome.manual_saves`.
+
+    `changed`: listed then and there now, with another size or mtime_ns than `save_stats` recorded; `missing`:
+    listed then, gone now; `new`: not listed then (left where it is: it may be the owner's). Each is sorted and given
+    only when not empty. With no `save_stats` (a manifest written before they were recorded, or one whose record
+    does not read) nothing can be `changed`, and `unrecorded` is True; the names still tell `missing` and `new`.
+
+    The folder is read with the lstat `take` used (`snapshot._scan_folder`), and the pair compared for equality only:
+    both times are the drive's own stamps on the same file, read the same way, so no clock is read, and neither
+    WSL's clock steps nor the whole seconds of a time set from WSL come in (nothing here sets a save's time). A
+    save rewritten with the same size and the same time is not seen. Raises as `os.scandir` does, except for a
+    missing folder, which reads as empty (every listed save then `missing`)."""
+    live = {rel: (st.st_size, st.st_mtime_ns)
+            for rel, st in snapshot._scan_folder(user_data, snapshot.SAVE_FOLDER).items() if _is_manual_save(rel, snap)}
+    listed = sorted(rel for rel in snap.listing if _is_manual_save(rel, snap))
+    stats = snap.save_stats
+    found = {
+        "changed": [rel for rel in listed if stats is not None and rel in live and live[rel] != stats.get(rel)],
+        "missing": [rel for rel in listed if rel not in live],
+        "new": sorted(rel for rel in live if rel not in snap.listing),
+    }
+    found = {key: names for key, names in found.items() if names}
+    if stats is None:
+        found["unrecorded"] = True
+    return found
+
+
+def _saves_hold(found: dict) -> list[str]:
+    """The saves `manual_save_changed` holds for (changed and missing, sorted); none when the manifest recorded no
+    sizes and times (`unrecorded`): a run from before #1725 gets a note, not a hold."""
+    if found.get("unrecorded"):
+        return []
+    return sorted([*found.get("changed", []), *found.get("missing", [])])
 
 
 def _sha256(path: Path) -> str:
@@ -282,11 +340,13 @@ def _hold_reason(snap: Snapshot, user_data: Path, diff: Diff) -> tuple[str, list
     return ("modified_after_exit", late) if late else ("", [])
 
 
-def _hold(snap: Snapshot, reason: str, now: datetime | None, **fields: list[str]) -> Outcome:
+def _hold(snap: Snapshot, reason: str, now: datetime | None, saves: dict | None = None, **fields: list[str]) -> Outcome:
+    """Record `held` with the reason, the non-empty `fields` and `saves` (as `manual_saves`), and return it."""
     fields = {name: value for name, value in fields.items() if value}
-    snapshot.record(snap, "held", now=now, reason=reason, **fields)
+    entry = {**fields, "manual_saves": saves} if saves else fields
+    snapshot.record(snap, "held", now=now, reason=reason, **entry)
     restored, removed, retimed = (list(fields.get(name, [])) for name in ("restored", "removed", "retimed"))
-    return Outcome(restored, removed, True, reason, retimed)
+    return Outcome(restored, removed, True, reason, retimed, dict(saves or {}))
 
 
 def _remove_stale_temps(user_data: Path) -> None:
@@ -492,6 +552,7 @@ def restore(
     run_logs_dir: Path | None = None,
     now: datetime | None = None,
     logs: bool = True,
+    saves: bool = True,
 ) -> Outcome:
     """Put `user_data` back as `snap` found it, or hold.
 
@@ -513,14 +574,23 @@ def restore(
     stops, records `held` with the reason `modified_during_restore` and the file, and returns what it had
     done so far; those files stay put back, since they are the owner's own bytes.
 
-    The one hold that comes after everything is back is `retime_unverified` (`_retime`): a file was given the
-    snapshot's time, could then not be read back to prove it still holds the snapshot's bytes, and would not take
-    another time either. The entry names it. Its bytes may be someone's newer ones, which a later `restore` of
-    this snapshot or of the next would take for the run's and write over, so the owner looks at it first.
+    Two holds come after everything is back. `retime_unverified` (`_retime`): a file was given the snapshot's time,
+    could then not be read back to prove it still holds the snapshot's bytes, and would not take another time
+    either. The entry names it. Its bytes may be someone's newer ones, which a later `restore` of this snapshot or
+    of the next would take for the run's and write over, so the owner looks at it first. Then
+    `manual_save_changed`: one of the owner's own saves (`_manual_saves`, read once, right after the comparison and
+    before any change) was changed or is gone. No copy of it exists, so nothing can put it back, and holding before
+    the rest would only leave the autosaves, the playset and the logs as the run left them as well; the entry names
+    the saves (`files`) and the Outcome's `manual_saves` gives them. A later `restore` holds again for as long as
+    the save differs. When `retime_unverified` holds, it is the reason given, and `manual_saves` still says what
+    the saves did; every verdict after the comparison carries `manual_saves` (in the Outcome and the entry) when
+    there is something in it, a new save or `unrecorded` alone included, which never hold.
 
     Raises, recording neither `restored` nor `held`, if the folder is missing or a stored file is missing,
     the wrong size or damaged. The store is checked before the first change. `now` stamps the journal entry.
-    With `logs` False, `logs/` is left alone entirely: nothing is copied out, put back or removed there.
+    With `logs` False, `logs/` is left alone entirely: nothing is copied out, put back or removed there. With
+    `saves` False the owner's own saves are not looked at (the self-test restores into an empty folder, and a run
+    that never recorded a start launched nothing a session could have driven).
     """
     user_data = Path(user_data)
     if other_game_running:
@@ -528,11 +598,12 @@ def restore(
             return Outcome([], [], False, "already_restored")  # finished: another game does not make it held
         return _hold(snap, "other_game_running", now)
     diff, seen = _compare(snap, user_data)
+    found = _manual_saves(snap, user_data) if saves else {}     # before any change: a read that fails changes nothing
     if not logs:
         diff = Diff(*([n for n in part if not n.startswith("logs/")] for part in vars(diff).values()))
     reason, late = _hold_reason(snap, user_data, diff)
     if reason:
-        return _hold(snap, reason, now, files=late)
+        return _hold(snap, reason, now, found, files=late)
 
     _remove_stale_temps(user_data)
     to_restore = sorted([*diff.changed, *diff.missing])
@@ -546,14 +617,20 @@ def restore(
     if changed_file is None:
         removed, changed_file = _remove(to_remove, user_data, seen)
     if changed_file is not None:
-        return _hold(snap, "modified_during_restore", now, files=[changed_file], restored=restored, removed=removed)
+        return _hold(snap, "modified_during_restore", now, found, files=[changed_file], restored=restored,
+                     removed=removed)
     retimed, unverified = _retime(snap, _retouched(snap, diff, seen, logs), user_data, seen)
     if unverified is not None:
-        return _hold(snap, "retime_unverified", now, files=[unverified], restored=restored, removed=removed,
+        return _hold(snap, "retime_unverified", now, found, files=[unverified], restored=restored, removed=removed,
                      retimed=retimed)
-    done = {"restored": restored, "removed": removed, **({"retimed": retimed} if retimed else {})}
+    changed_saves = _saves_hold(found)
+    if changed_saves:
+        return _hold(snap, "manual_save_changed", now, found, files=changed_saves, restored=restored, removed=removed,
+                     retimed=retimed)
+    done = {"restored": restored, "removed": removed, **({"retimed": retimed} if retimed else {}),
+            **({"manual_saves": found} if found else {})}
     snapshot.record(snap, "restored", now=now, **done)
-    return Outcome(restored, removed, False, "", retimed)
+    return Outcome(restored, removed, False, "", retimed, found)
 
 
 # --- unfinished runs -------------------------------------------------------------------------
