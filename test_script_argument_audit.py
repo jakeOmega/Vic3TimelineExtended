@@ -300,8 +300,6 @@ class SuppressionTests(unittest.TestCase):
         r = _run(self.FILES)
         self.assertEqual([t.line for t in r.stale], [5])
         self.assertEqual(len(r.failing), 2)
-        # `GET /script-args` reads the old name.
-        self.assertIs(r.stale_tags, r.stale)
         r = _run(self.FILES, {"common/scripted_effects/v.txt": "vanilla_helper = { add = 1 }\n"})
         self.assertEqual([t.line for t in r.stale], [5])
         self.assertEqual([(f.line, f.callee, bool(f.exemption)) for f in r.flags if f.line == 6],

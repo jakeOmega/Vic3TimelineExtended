@@ -469,7 +469,6 @@ AUDITS: tuple[Audit, ...] = (
         "localization_accessor_audit",
         "A loc accessor chain (`[X.Y.Z]`) the engine's data-type catalog doesn't allow. The engine "
         "renders it as nothing.",
-        ci=(),
         where="trailing on the loc line",
         note="The catalog knows what vanilla's loc calls. An accessor the engine has and vanilla's "
              "loc never uses flags too: add it to `_BUILTIN_ACCESSORS_BY_TYPE` instead of suppressing "

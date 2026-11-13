@@ -1706,7 +1706,7 @@ class AnalysisRoutes:
             "include_reviewed": include_reviewed,
             "count": len(flags),
             "flags": [script_argument_audit.flag_dict(f) for f in flags],
-            "stale_tags": [{"file": t.file, "line": t.line} for t in result.stale_tags],
+            "stale_tags": [{"file": t.file, "line": t.line} for t in result.stale],
         }
 
     def _loc_accessors(self, parts, params):

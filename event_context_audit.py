@@ -94,7 +94,7 @@ from __future__ import annotations
 import os
 import re
 from collections import defaultdict
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 
 from audit_common import AuditResult as _AuditResult
 from audit_common import REVIEWED_RE, cli_main, comment_tags, parse_reviewed, write_text
@@ -1162,24 +1162,13 @@ class AuditResult(_AuditResult):
 
     flags: list[Flag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
-    # `stale_tags` is the old name for `stale`, which the server's
-    # `/event-context-audit?format=text` still passes; read back by the
-    # property below.
-    stale_tags: InitVar[list[Tag] | None] = None
     # A tag naming no check (a typo): it suppresses nothing.
     unknown_tags: list[Tag] = field(default_factory=list)
-
-    def __post_init__(self, stale_tags: list[Tag] | None) -> None:
-        if stale_tags is not None:
-            self.stale = stale_tags
 
     @property
     def failing(self) -> list:
         """What --strict and the reload warning count: a misspelled tag too."""
         return self.unreviewed + self.stale + self.unknown_tags
-
-
-AuditResult.stale_tags = property(lambda self: self.stale, doc="The old name for `stale`.")
 
 
 def _dispatch_summary(g: Graph, r: Resolver, eid: str) -> list[str]:

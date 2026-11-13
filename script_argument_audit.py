@@ -130,11 +130,6 @@ class AuditResult(_AuditResult):
     helpers: dict[str, list[Definition]] = field(default_factory=dict, repr=False)
     call_sites: dict[str, list[Call]] = field(default_factory=dict, repr=False)
 
-    @property
-    def stale_tags(self) -> list[StaleTag]:
-        """The old name for `stale`, which `GET /script-args` reads."""
-        return self.stale
-
 
 @dataclass
 class _FileScan:

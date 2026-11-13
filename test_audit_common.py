@@ -18,13 +18,16 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 # The audits' own parsers as they stood on main before #1536 (frozen here, so
-# the comparison survives an audit's move onto audit_common). Each entry:
-# (pattern, how the tag list is read, the audits that used it).
+# the comparison survives the audits' move onto audit_common, which every
+# audit has now made). Each entry: (pattern, how the tag list is read, the
+# audits that used it).
 #   "plain":  no tag; the result is the match.
 #   "split":  tags split on spaces and commas (`re.split(r"[\s,]+")`).
 #   "comma":  tags split on commas, each stripped.
 #   "equal":  one tag, compared whole.
 #   "fixed":  the tag is written into the pattern.
+#   "presence": the tag is written into the pattern, which captures no
+#             rationale: the audit only asked whether the comment is there.
 # The shared parser's plain form is exactly the old plain forms. Its tagged form
 # agrees with every old form on every line in the repository, but not on every
 # shape: `TAGGED_DIVERGENCES` pins the shapes where it differs.
@@ -32,12 +35,9 @@ _DATE = r"(?P<date>\d{4}-\d{2}-\d{2})"
 LEGACY = {
     "plain_lazy": (
         r"#\s*REVIEWED\s+" + _DATE + r"\s*:\s*(?P<rationale>.+?)\s*$", "plain",
-        # Migrated in #1536's first stage: the agreement test below covers them.
         ("attitude_key_audit", "kill_character_audit", "any_limit_audit", "event_image_audit",
          "orphaned_event_audit", "sol_fraction_audit", "duplicate_key_audit",
-         "script_loc_reference_audit",
-         # Not yet migrated.
-         "concept_reference_audit", "delayed_event_trigger_audit",
+         "script_loc_reference_audit", "concept_reference_audit", "delayed_event_trigger_audit",
          "effect_trigger_validity_audit", "event_magnitude_audit", "iterator_limit_audit",
          "loc_coverage_audit", "loc_render_audit", "localization_accessor_audit",
          "mod_structure_audit", "modifier_multiplier_var_audit", "modifier_visibility_audit",
@@ -75,18 +75,39 @@ LEGACY = {
         "fixed",
         ("roster_membership_audit",),
     ),
+    # The same with a lazy rationale (`modifier_field_loc`).
+    "tagged_spaced_lazy": (
+        r"#\s*REVIEWED\s+" + _DATE + r"\s*\(\s*{tag}\s*\)\s*:\s*(?P<rationale>.+?)\s*$",
+        "fixed",
+        ("modifier_field_audit",),
+    ),
+    # `treaty_scope`: `\(treaty_scope\)\s*:\s*\S`, a yes/no. The rationale group
+    # here is what follows the colon, which is what the shared parser reads.
+    "tagged_presence": (
+        r"#\s*REVIEWED\s+" + _DATE + r"\s*\({tag}\)\s*:\s*(?P<rationale>\S.*?)\s*$",
+        "presence",
+        ("treaty_evaluation_scope_audit",),
+    ),
 }
 
-# The rules whose audits have moved onto audit_common.
-MIGRATED_RULES = ("plain_lazy",)
-MIGRATED = LEGACY["plain_lazy"][2][:8]
+# The plain rules: the shared parser reads every comment exactly as they did.
+MIGRATED_RULES = ("plain_lazy", "plain_greedy")
+
+
+def _registry_audits() -> tuple[str, ...]:
+    import audit_registry
+    return tuple(a.name for a in audit_registry.AUDITS)
+
+
+# Every audit is on audit_common (#1536).
+MIGRATED = _registry_audits()
 
 
 def legacy_parse(rule: str, comment: str, tag: str = ""):
     pattern, kind, _ = LEGACY[rule]
     if not comment:
         return None
-    if kind == "fixed":
+    if kind in ("fixed", "presence"):
         if not tag:
             return None
         pattern = pattern.replace("{tag}", re.escape(tag))
@@ -174,6 +195,16 @@ TAGGED_DIVERGENCES = [
     ("tagged_lower", f"{_A} (t_ag, other): x", False, True),
     ("tagged_spaced", f"{_A} (t_ag,): x", False, True),
     ("tagged_spaced", f"{_A} (t_ag, other): x", False, True),
+    # treaty_scope's form took the one name, written tight, and anything after
+    # the colon: the shared one takes spaces, a tab or a list in the
+    # parentheses, and a colon with only a carriage return after it (as the
+    # plain form always has).
+    ("tagged_presence", f"{_A} ( t_ag ): x", False, True),
+    ("tagged_presence", f"{_A} (\tt_ag): x", False, True),
+    ("tagged_presence", f"{_A} (t_ag, other): x", False, True),
+    ("tagged_presence", f"{_A} (t_ag):\r", False, True),
+    # modifier_field_loc's form took one name: the shared one takes a list.
+    ("tagged_spaced_lazy", f"{_A} (t_ag, other): x", False, True),
     # Tabs inside the parentheses, which only the fixed form took.
     ("tagged_split", f"{_A} (\tt_ag\t): x", False, True),
     ("tagged_comma", f"{_A} (\tt_ag\t): x", False, True),
@@ -226,11 +257,9 @@ class AgreementTests(unittest.TestCase):
             self.assertEqual(LEGACY[rule][1], "plain")
             self._check(rule, [""], exact=True)
 
-    def test_plain_audits_not_yet_migrated_agree_exactly_too(self):
-        self._check("plain_greedy", [""], exact=True)
-
     def test_tagged_forms_agree_on_the_corpus_or_widen_to_another_form(self):
-        for rule in ("tagged_split", "tagged_comma", "tagged_word", "tagged_lower", "tagged_spaced"):
+        for rule in ("tagged_split", "tagged_comma", "tagged_word", "tagged_lower", "tagged_spaced",
+                     "tagged_spaced_lazy", "tagged_presence"):
             with self.subTest(rule=rule):
                 self._check(rule, self.tags, exact=False)
 
@@ -252,12 +281,22 @@ class AgreementTests(unittest.TestCase):
         self.assertEqual(extra, [])
 
     def test_migrated_audits_lost_their_own_parser(self):
+        self.assertEqual(len(MIGRATED), 52)
         for name in MIGRATED:
             with open(os.path.join(ROOT, f"{name}.py"), encoding="utf-8") as fh:
                 source = fh.read()
-            self.assertNotIn("re.compile(\n    r\"#\\s*REVIEWED", source, name)
-            self.assertNotIn("_REVIEWED_RE", source, name)
-            self.assertIn("audit_common", source, name)
+            with self.subTest(audit=name):
+                self.assertNotIn("#\\s*REVIEWED", source)
+                self.assertNotIn("_REVIEWED_RE", source)
+                self.assertIn("audit_common", source)
+
+    def test_every_legacy_rule_names_audits_in_the_registry(self):
+        """One plain rule and one tagged rule at most per audit (treaty_leverage_side
+        takes both forms), each an audit the registry lists."""
+        for plain in (True, False):
+            named = [a for _, kind, audits in LEGACY.values() if (kind == "plain") == plain for a in audits]
+            self.assertEqual(len(named), len(set(named)), "an audit in two rules of one form")
+            self.assertLessEqual(set(named), set(MIGRATED))
 
     def test_tagged_divergences_are_as_pinned(self):
         for rule, comment, old, new in TAGGED_DIVERGENCES:

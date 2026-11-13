@@ -1818,7 +1818,7 @@ class ValidationRoutes:
         if (params.get("format") or ["json"])[0] == "text":
             return {"text": eca.render_report(eca.AuditResult(
                 flags=flags, coverage=result.coverage,
-                stale_tags=result.stale_tags, unknown_tags=result.unknown_tags))}
+                stale=result.stale, unknown_tags=result.unknown_tags))}
         return {
             "flags": [
                 {"check": f.check, "event_id": f.event_id, "file": f.file, "line": f.line,
@@ -1828,7 +1828,7 @@ class ValidationRoutes:
             ],
             "coverage": result.coverage,
             "stale_tags": [{"event_id": t.event_id, "check": t.check, "file": t.file, "line": t.line}
-                           for t in result.stale_tags + result.unknown_tags],
+                           for t in result.stale + result.unknown_tags],
         }
 
     def _event_magnitude_audit(self, params):

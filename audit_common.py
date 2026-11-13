@@ -14,8 +14,8 @@ An audit is a function that finds flags. Everything around it is here:
   exits 1 when the result fails.
 
 `docs/guides/audits.md` § "Adding an audit" says how a new audit uses these.
-The older audits are moving onto this module one batch at a time; each keeps
-its own report format, so its committed report does not change.
+Every audit in `audit_registry` is on this module (#1536). The ones older than
+it kept their own report format, so no committed report changed in the move.
 
 Stdlib only, like `audit_registry`.
 """
@@ -147,9 +147,10 @@ class AuditResult:
 
 
 def write_text(path: str, text: str) -> None:
-    """Write a report, creating its directory."""
+    """Write a report, creating its directory. LF line ends on every platform,
+    as several audits wrote theirs before they moved onto this module."""
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    with open(path, "w", encoding="utf-8") as fh:
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
 
 

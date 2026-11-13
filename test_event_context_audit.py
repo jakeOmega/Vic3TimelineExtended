@@ -306,15 +306,14 @@ class EventContextAuditTests(unittest.TestCase):
         for gone in ("Events defined", "dispatch sites traced", "784", "1020"):
             self.assertNotIn(gone, report)
 
-    def test_the_servers_stale_tags_keyword_still_works(self):
-        """`/event-context-audit?format=text` builds a result with `stale_tags=`
-        and reads `.stale_tags`, the old name for `stale`."""
+    def test_the_servers_text_result_fails_on_stale_and_unknown_tags(self):
+        """`/event-context-audit?format=text` rebuilds a result from the
+        filtered flags with `stale=` and `unknown_tags=`."""
         tag = eca.Tag("old.1", "system_ungated", "events/old.txt", 44, "2026-09-01", "gone")
         typo = eca.Tag("old.1", "sytem_ungated", "events/old.txt", 45, "2026-09-01", "typo")
-        result = eca.AuditResult(flags=[], coverage={}, stale_tags=[tag], unknown_tags=[typo])
-        self.assertEqual((result.stale, result.stale_tags), ([tag], [tag]))
+        result = eca.AuditResult(flags=[], coverage={}, stale=[tag], unknown_tags=[typo])
         self.assertEqual(result.failing, [tag, typo])
-        self.assertEqual(eca.AuditResult().stale_tags, [])
+        self.assertEqual(eca.AuditResult().stale, [])
         self.assertEqual(tag.tag, "system_ungated")
 
     # -- review follow-ups ------------------------------------------------
