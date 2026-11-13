@@ -155,6 +155,7 @@ The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fi
 ### `event.cpp:358` — Grand Monuments v2 load-time notices
 - source: `event.cpp:358`
 - source: `event.cpp:410`
+- source: `event.cpp:425`
 - source: `jomini_effect.cpp:1139`
 - source: `jomini_effect.cpp:1144`
 - tracked: `docs/audits/open_issues.md#l26-grand-monuments-v2-load-time-notices`
