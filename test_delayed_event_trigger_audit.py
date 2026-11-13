@@ -48,7 +48,7 @@ t.3 = {
 t.4 = {
 	type = country_event
 	hidden = yes
-	trigger = { is_at_war = yes } # REVIEWED 2026-11-12: checked by hand
+	trigger = { is_at_war = yes } # REVIEWED 2026-11-12 (delayed_trigger): checked by hand
 	immediate = { }
 }
 t.5 = {
@@ -123,7 +123,80 @@ t_law_hook = { effect = { owner = { trigger_event = { id = t.3 days = 7 } } } }
         report = render_report(self.result)
         for event in ("t.1", "t.2", "t.3", "t.4", "t.6"):
             self.assertIn(f"`{event}`", report)
-        self.assertIn("- with a top-level trigger: 5", report)
+        self.assertIn("- with a non-empty top-level trigger: 5", report)
+
+
+    def test_strict_fails_on_the_unreviewed(self):
+        self.assertEqual(sorted(t.event for t in self.result.unreviewed), ["t.1", "t.3", "t.6"],
+                         "likely_false and review fail; set_before and reviewed do not")
+        self.assertTrue(self.result.failed)
+
+
+class GraphTests(unittest.TestCase):
+    """Sites through helpers, empty triggers, stale tags, the cancels class."""
+
+    @classmethod
+    def setUpClass(cls):
+        root = _mod({
+            "events/t_events.txt": """namespace = t
+t.1 = {
+	type = country_event
+	hidden = yes
+	trigger = { is_at_war = yes } # REVIEWED 2026-11-13 (delayed_trigger): cancels: the war ends
+	immediate = { }
+}
+t.2 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		# fired by the pulse
+	}
+	immediate = { }
+}
+t.3 = {
+	type = country_event
+	hidden = yes
+	trigger = { is_at_war = yes } # REVIEWED 2026-11-13 (delayed_trigger): nothing queues this any more
+	immediate = { }
+}
+t.4 = {
+	type = country_event
+	hidden = yes
+	trigger = { is_at_war = yes }
+	immediate = { }
+}
+""",
+            "common/scripted_effects/t.txt": """send_later = {
+	trigger_event = { id = $EVENT$ days = 5 }
+}
+caller = {
+	send_later = { EVENT = t.4 }
+	trigger_event = { id = t.1 days = 2 }
+	trigger_event = { id = t.2 days = 2 }
+}
+""",
+        })
+        cls.result = audit(mod_path=root)
+        cls.by_event = {t.event: t for t in cls.result.targets}
+
+    def test_an_id_passed_to_a_helper_counts_at_its_caller(self):
+        t = self.by_event["t.4"]
+        self.assertEqual(t.cls, "review")
+        self.assertEqual(t.calls[0].entity, "caller")
+        self.assertIn("through `send_later`", t.calls[0].delay)
+        self.assertNotIn("$EVENT$", self.result.unresolved)
+
+    def test_an_empty_trigger_is_not_listed(self):
+        self.assertNotIn("t.2", self.by_event)
+
+    def test_a_tag_on_an_event_nothing_delays_is_stale(self):
+        self.assertEqual([s.event for s in self.result.stale], ["t.3"])
+
+    def test_cancels(self):
+        t = self.by_event["t.1"]
+        self.assertEqual(t.cls, "reviewed")
+        self.assertTrue(t.cancels)
+        self.assertIn("also cancels the event: 1", render_report(self.result))
 
 
 class BranchTests(unittest.TestCase):
@@ -171,6 +244,11 @@ class ModTests(unittest.TestCase):
         for event in ("te_judiciary_events.1", "te_judiciary_events.5", "te_judiciary_events.34"):
             self.assertNotIn(event, by_event, f"{event} is queued with a delay again, with its trigger")
         self.assertEqual(by_event["te_judiciary_events.9"].cls, "reviewed", "the self-check's probe")
+
+    def test_the_mod_is_clean(self):
+        result = audit()
+        self.assertEqual([t.event for t in result.unreviewed], [])
+        self.assertEqual([s.event for s in result.stale], [])
 
     def test_the_report_is_committed(self):
         from path_constants import mod_path

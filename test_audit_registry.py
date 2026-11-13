@@ -169,8 +169,8 @@ class ToolsDocTests(unittest.TestCase):
         self.assertTrue(any("PROSE_FIGURES" in p for p in problems), problems)
 
     def test_an_audit_out_of_ci_left_unnamed(self):
-        stale = self.text.replace("Two, `mod_structure_audit` and `modifier_visibility_audit`, need",
-                                  "Two, `mod_structure_audit` and another, need")
+        stale = self.text.replace("Both, `mod_structure_audit` and `modifier_visibility_audit`, need",
+                                  "Both, `mod_structure_audit` and another, need")
         self.assertNotEqual(stale, self.text)
         problems = audit_registry.check_tools_doc(stale)[1]
         self.assertEqual(len(problems), 1, problems)
