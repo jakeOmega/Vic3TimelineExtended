@@ -76,6 +76,8 @@ class ColonialBarCapClamp(unittest.TestCase):
         for statement in self.statements[:-len(CAP_TAIL)]:
             with self.subTest(statement=statement):
                 self.assertRegex(statement, "^" + LEAF_LINE.pattern + "$")
+        descs = re.findall(r'desc = "(\w+)"', " ".join(self.statements[:-len(CAP_TAIL)]))
+        self.assertEqual(len(descs), len(set(descs)), "each term has its own hover line")
 
     def test_the_cap_line_keeps_its_hover_text(self):
         self.assertRegex(_read(LOC), r'(?m)^ colonial_drift_cap_tt:0 "')
