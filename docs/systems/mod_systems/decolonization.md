@@ -93,7 +93,7 @@ The owner's request (2026-10-24): the colonizer should be able to fight to keep 
 
 | Ending | How | We get | The territory and the rebels |
 |---|---|---|---|
-| Won (`.72` Order Restored) | goal enforced, or rebels gone and their capital ours, or a subject still ours | 12 months of +1 stability, 12 months on the Garrison counter, Armed Forces approve, Intelligentsia disapprove | Back to us, large radicals, `decol_declared` for ten years |
+| Won (`.72` Order Restored) | goal enforced, or rebels gone and their capital ours, or a subject still ours | 12 months of +1 stability, 12 months on the Garrison counter, Armed Forces approve, Intelligentsia disapprove | Back to us, large radicals, `decol_declared` for ten years; so are the other states a Fight's rebels formed with, marked at the Fight (`decol_iw_rose_with`, the record's capital) and quieted when ours again (since 2026-11-13; self-check `decol_iw_rose_with_kept`) |
 | Lost (`.73` The Flag Comes Down) | war over, rebels alive | `decol_iw_lost_modifier` (prestige −15%, legitimacy −10, decaying over five years), Armed Forces very negative for three years, 12 months of −1 stability, `.54` (veterans) gains weight | `decol_iw_aftermath_bloody`: former colony, Bloody Decolonization's modifier, junta laws and relations −50 whatever programme ran (owner ruling D16); `.15` a week later |
 | Accords (`.76`) | talks conceded, then the war ended | `decol_iw_accords_modifier` (prestige −15%, legitimacy −5; without the legitimacy under the general's mandate), Armed Forces negative for a year, Neocolonialism's extraction if we hold the law | `decol_path_legacy` with the Round Table's +25 (our longest programme's legacy), `.15` |
 
