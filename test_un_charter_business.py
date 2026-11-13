@@ -262,6 +262,22 @@ class HookTests(unittest.TestCase):
         self.assertIn("un_charter_on_dissolve = yes", _block(_read(LADDER), "un_dissolve_quiet"))
 
 
+def _inner(text, name):
+    """The body of the first `name = { ... }` anywhere in text, not only at a line's start."""
+    m = re.search(r"\b" + re.escape(name) + r"\s*=\s*\{", text)
+    if m is None:
+        raise AssertionError(f"{name} not found")
+    depth = 0
+    for i in range(m.end() - 1, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[m.end():i]
+    raise AssertionError(f"{name} is not closed")
+
+
 class ButtonTests(unittest.TestCase):
     def test_every_topic_has_an_ai_button_on_the_journal_entry(self):
         buttons = _read(BUTTONS)
@@ -271,12 +287,16 @@ class ButtonTests(unittest.TestCase):
                 body = _flat(_block(buttons, f"un_propose_{t.key}_button"))
                 # The AI's alone (is_ai, the 2026-10-27 audit's UN-9): a human
                 # tables from the chamber's Propose row.
+                visible = _flat(_inner(body, "visible")).strip()
                 if t.reform == 2:
                     # Out of view until Reform I carries, like its chamber row.
-                    self.assertIn(f"visible = {{ is_ai = yes un_charter_reform_ii_in_view = yes "
-                                  f"un_propose_{t.key}_available = yes }}", body)
+                    self.assertTrue(visible.startswith("is_ai = yes un_charter_reform_ii_in_view = yes "), visible)
                 else:
-                    self.assertIn(f"visible = {{ is_ai = yes un_propose_{t.key}_available = yes }}", body)
+                    self.assertTrue(visible.startswith("is_ai = yes "), visible)
+                # possible's cheap gates come before the case scan
+                # (test_un_propose_ai_gates.py checks each is possible's).
+                self.assertIn("un_propose_ai_floor_open = yes", visible)
+                self.assertTrue(visible.endswith(f"un_propose_{t.key}_available = yes"), visible)
                 self.assertIn(f"possible = {{ un_propose_{t.key}_possible = yes }}", body)
                 self.assertIn(f"value = un_{t.key}_ai_chance", body)
                 self.assertIn(f"effect = {{ un_propose_{t.key}_effect = yes }}", body)

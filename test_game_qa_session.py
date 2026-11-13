@@ -22,7 +22,7 @@ from unittest import mock
 from game_qa import __main__ as cli
 from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
 from game_qa.client import enabled_mods
-from game_qa.console import ConsoleError
+from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
 
@@ -528,6 +528,92 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.cli.calls[2][-1], "-loadsave=france_1850")
         self.assertEqual((reply["save"], reply["fixture_made"]), ("france_1850", False))
 
+    def test_a_window_that_stops_responding_while_the_save_loads_is_waited_for(self):
+        # Live 2026-11-12: a 47 MB save of 1931 kept the window from responding past UNRESPONSIVE_S once it had
+        # first answered, and one ensure_open took that for a game that had gone.
+        loading = {}
+
+        def load(seconds):
+            if "until" not in loading:
+                loading["until"] = self.game.now + UNRESPONSIVE_S + 30
+            self.game.responding = self.game.now >= loading["until"]
+        self.game.on_sleep = load
+        reply = self.start()
+        self.game.on_sleep = None
+        self.assertEqual(reply["country"], "FRA")
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        ready = next(step for step in map(json.loads, lines) if step["verb"] == "console_ready")
+        self.assertEqual(ready["outcome"], "ok")
+        self.assertGreaterEqual(ready["tries"], 2)
+        self.assertEqual(ready["last_refusal"], "game_gone")
+
+    def test_a_window_that_never_answers_again_ends_the_start_after_the_load_wait(self):
+        def hang(seconds):
+            self.game.responding = False
+        self.game.on_sleep = hang
+        started_at = self.game.now
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual(error.code, "game_gone")
+        self.assertGreaterEqual(self.game.now - started_at, session.LOAD_WAIT_S - session.ENTER_RETRY_S)
+        self.assertLessEqual(self.game.now - started_at, session.LOAD_WAIT_S + session.CONSOLE_READY_S)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def _console_ready(self):
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return next(step for step in map(json.loads, lines) if step["verb"] == "console_ready")
+
+    def test_a_game_that_ends_while_its_save_loads_stops_the_wait_at_once(self):
+        # Once the window is gone, ensure_open answers game_gone before any key, so only the loop's own look at
+        # `watch` ends the wait: without it the start would press on for LOAD_WAIT_S against a dead game.
+        began = {}
+
+        def ends(seconds):
+            began.setdefault("at", self.game.now)
+            if self.game.now - began["at"] > 3:
+                self.game.exited = True
+                self.game.exists = False
+        self.game.on_sleep = ends
+        started_at = self.game.now
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual(error.code, "watch_ended")
+        self.assertLess(self.game.now - started_at, session.LOAD_WAIT_S / 4)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_a_stop_asked_while_the_save_loads_ends_the_wait(self):
+        inner = []
+
+        def hang(seconds):
+            self.game.responding = False
+            if seconds == session.ENTER_RETRY_S and not inner:
+                inner.append(self.session.stop())
+        self.game.on_sleep = hang
+        started_at = self.game.now
+        error = self.session_error(self.start)
+        self.game.on_sleep = None
+        self.assertEqual((error.code, inner[0]["outcome"]), ("stopped", "deferred_to_start"))
+        self.assertLess(self.game.now - started_at, session.LOAD_WAIT_S / 2)
+        self.assertEqual(self._console_ready()["tries"], 1)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_someone_at_the_machine_while_the_save_loads_is_not_retried(self):
+        self.game.foreground = False
+
+        def someone(reading):
+            self.game.cursor = (10 * reading, 5 * reading)
+        self.game.on_presence = someone
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "not_foreground")
+        self.assertEqual(self._console_ready()["tries"], 1)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_a_console_that_never_opens_is_tried_twice_not_for_the_whole_wait(self):
+        self.game.console_never_opens = True
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "no_ack")
+        self.assertEqual(self._console_ready()["tries"], session.LOAD_NO_ACK_TRIES)
+
     def test_a_save_that_is_not_there_is_refused_before_anything(self):
         error = self.session_error(self.start, save="nowhere")
         self.assertEqual(error.code, "no_save")
@@ -1026,6 +1112,82 @@ class EnterGameTest(SessionTestCase):
         error = self.session_error(self.session.enter_game)
         self.assert_left_after_start(error, "left_running")
         self.assertIn("still moved after a second pause key", error.detail)     # _run_for's own words
+
+
+class ClickTest(SessionTestCase):
+    """`click X Y`: one click at fractions of the client area, for the engine's tool windows (#1701)."""
+
+    def test_a_click_lands_at_its_fraction_of_the_client_area_and_takes_a_screenshot(self):
+        for client, at, pixel in (((0, 0, 3840, 2160), (0.5, 0.25), (1920, 540)),
+                                  ((40, 30, 1920, 1080), (0.1, 0.9), (192, 972)),
+                                  ((0, 0, 1920, 1080), (0.9999, 0.0), (1919, 0))):
+            with self.subTest(client=client, at=at):
+                self.setUp()
+                self.game.client = client
+                self.started()
+                console_open = self.game.console_open
+                steps = len(self.game.steps)
+                reply = self.session.click(*at)
+                self.assertEqual(self.game.clicks, [pixel])
+                self.assertEqual(reply["pixel"], list(pixel))
+                self.assertTrue(Path(reply["screenshot"]).is_file())
+                # The console is neither opened nor closed for it: no key went out.
+                self.assertEqual((len(self.game.steps), self.game.console_open), (steps, console_open))
+
+    def test_a_point_off_the_window_is_refused_and_nothing_is_pressed(self):
+        self.started()
+        for bad in (-0.1, 1, 1.0, 2.5, True, "0.5", None, float("nan"), float("inf"), float("-inf"), 1e308):
+            with self.subTest(bad=bad):
+                self.assertEqual(self.session_error(self.session.click, bad, 0.5).code, "bad_argument")
+                self.assertEqual(self.session_error(self.session.click, 0.5, bad).code, "bad_argument")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_a_click_waits_for_the_presence_rule_and_never_focuses_on_its_own(self):
+        self.started()
+        self.game.foreground = False
+
+        def someone_moves_the_mouse(reading):
+            self.game.cursor = (10 * reading, 5 * reading)
+        self.game.on_presence = someone_moves_the_mouse
+        with self.assertRaises(ConsoleError) as caught:
+            self.session.click(0.5, 0.5)
+        self.assertEqual(caught.exception.code, "not_foreground")
+        self.assertEqual((self.game.clicks, self.game.focus_calls), ([], 0))
+
+    def test_a_game_that_cannot_be_proved_gets_no_click(self):
+        self.started()
+        self.game.process_gone = True
+        self.assertEqual(self.session_error(self.session.click, 0.5, 0.5).code, "watch_ended")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_a_refused_click_says_so(self):
+        self.started()
+        for code in session.CLICK_REFUSED_BEFORE_PRESS:
+            with self.subTest(code=code):
+                self.game.click = mock.Mock(side_effect=HelperError(code, "refused"))
+                error = self.session_error(self.session.click, 0.5, 0.5)
+                self.assertEqual(error.code, "click_refused")
+                self.assertIn(code, error.detail)
+
+    def test_an_error_that_may_follow_the_press_is_not_called_a_refusal(self):
+        # SendInput failing on the press or the release, the helper ending, a timeout: the button may have gone down.
+        self.started()
+        for code in ("backend_error", "helper_gone", "timeout"):
+            with self.subTest(code=code):
+                self.game.click = mock.Mock(side_effect=HelperError(code, "failed"))
+                error = self.session_error(self.session.click, 0.5, 0.5)
+                self.assertEqual(error.code, "click_unknown")
+                self.assertIn(code, error.detail)
+                self.assertEqual(error.info["pixel"], [960, 540])
+
+    def test_a_screenshot_that_fails_after_the_click_still_answers_with_the_click(self):
+        # A refusal here would have the caller click again, undoing what the first click did.
+        self.started()
+        self.game.screenshot = mock.Mock(side_effect=HelperError("no_client_area", "minimized?"))
+        reply = self.session.click(0.5, 0.5)
+        self.assertEqual(self.game.clicks, [(960, 540)])
+        self.assertEqual((reply["pixel"], reply["screenshot"]), ([960, 540], None))
+        self.assertIn("no_client_area", reply["screenshot_error"])
 
 
 class AdvanceTest(SessionTestCase):
@@ -1823,7 +1985,7 @@ class StopAgainTest(SessionTestCase):
         # adopt or debugger call (the helper and the relay are closed, and the pid may be another program's).
         verbs = (("console", ("money 1000",)), ("run_setup", ("border",)), ("events", ()), ("pick", (0,)),
                  ("read", (["c:FRA.gdp"],)), ("tag", ("GBR",)), ("enter_game", ()), ("advance", (5,)), ("shot", ()),
-                 ("try_event", ("x.1", None, ["c:FRA.gdp"])))
+                 ("click", (0.5, 0.5)), ("try_event", ("x.1", None, ["c:FRA.gdp"])))
         for state in ("game_left_up", "refused"):
             with self.subTest(state=state):
                 self.setUp()

@@ -5,9 +5,11 @@
 # initiative, each with the two gates its journal-entry scripted button used to
 # carry inline:
 #
-#   un_propose_<key>_available   the button's `visible` — whether the topic is
-#                                on the table at all for us right now (there is
-#                                a case, we are not already enforcing it, ...)
+#   un_propose_<key>_available   whether the topic is on the table at all for
+#                                us right now (there is a case, we are not
+#                                already enforcing it, ...); the button's
+#                                `visible` asks it last, after possible's cheap
+#                                gates (un_propose_ai_floor_open below)
 #   un_propose_<key>_possible    the button's `possible` — every cost, cooldown,
 #                                lock and standing gate, with the custom_tooltip
 #                                lines that explain a refusal
@@ -680,6 +682,30 @@ un_propose_own_motion_gates = {
 		text = un_representation_table_tt
 		NOT = { un_representation_suspended = yes }
 	}
+}
+
+# The gates every AI tabling button's `possible` asks that cost next to nothing,
+# for the button's `visible` to ask before its case scan (un_buttons.txt).
+# The 2026-11-12 profile of a 1931 game (docs/audits/late_game_performance.md):
+# the AI asked each button's `visible` over 1,100 times in 33 days, the case
+# scans in the _available triggers cost up to 3 ms a call (credentials,
+# mandate, arms embargo, court referral), 136 ms of script CPU a game day in
+# all (summed over threads; 4 ms after this, and wall time per day did not
+# measurably change), and these gates refused nearly every tabling that got as
+# far as `possible`: a vote holds the floor for a year and a recess closes it
+# to the AI for three months after. Each
+# is a gate of every one of the seventeen buttons' `possible`, so asking it
+# early refuses only what `possible` would have refused. No tooltips: a human
+# never sees these buttons. test_un_propose_ai_gates.py fails when a button's
+# `visible` asks a gate its `possible` does not.
+# Scope: the proposing country, an AI
+un_propose_ai_floor_open = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_global_variable = un_vote_active }
+	un_may_table_now = yes
+	NOT = { has_modifier = un_request_cooldown }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
 }
 
 # The influence tabling on our own motion uses (un_propose_sponsor_cost and

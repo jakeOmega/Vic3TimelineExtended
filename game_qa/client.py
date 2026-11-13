@@ -13,6 +13,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa enter-game            # the two clicks past the country-select screen, proven
     python3 -m game_qa advance DAYS          # let at least DAYS game days pass
     python3 -m game_qa shot                  # a screenshot of the game's window, into the run folder
+    python3 -m game_qa click X Y             # one click at fractions of the window (0.5 0.5 is its middle),
+                                             # then a screenshot: for the engine's tool windows
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -77,9 +79,10 @@ ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fi
 #   (30 + 60 + 95 s), the restore itself and the closes (about 35 s): about 300 s, under STOP_TIMEOUT_S.
 #   start: the fixture's run (FIXTURE_LIMIT_S 900, its restore's retries 30 + 60 s, and its snapshot, launch,
 #   restore and rename, about 160 s: 1150 s), the session's snapshot and launch (about 120 s), the window
-#   (WINDOW_WAIT_S 300), the console's first answer (CONSOLE_READY_S 180), the debugger (about 30 s), and the
-#   stop a failure runs (300 s): about 2080 s, under START_TIMEOUT_S.
-START_TIMEOUT_S = 2400.0
+#   (WINDOW_WAIT_S 300), the console's first answer, retried while a late save loads (LOAD_WAIT_S 600, the last
+#   try ending at its deadline, plus a probe round), the debugger (about 30 s), and the stop a failure runs (300 s):
+#   about 2500 s, under START_TIMEOUT_S. A `--save` start makes no fixture and takes 1150 s less.
+START_TIMEOUT_S = 2800.0
 STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
 MIN_FREE_BYTES = 2 * 1024**3            # what `snapshot` wants free under the backup root
@@ -731,6 +734,10 @@ def cmd_shot(args) -> tuple[dict, int]:
     return call(_backup_root(), "shot")
 
 
+def cmd_click(args) -> tuple[dict, int]:
+    return call(_backup_root(), "click", {"x": args.x, "y": args.y})
+
+
 def cmd_try_event(args) -> tuple[dict, int]:
     return call(_backup_root(), "try-event", {"event": args.event, "setup": args.setup, "reads": args.reads},
                 LONG_TIMEOUT_S)
@@ -803,6 +810,12 @@ def add_verbs(sub) -> None:
     p.add_argument("days", type=int)
     p.set_defaults(run=cmd_advance)
     sub.add_parser("shot", help="a screenshot of the game's window, into the run folder").set_defaults(run=cmd_shot)
+    p = sub.add_parser("click", help="one left click at X, Y (fractions of the game window's client area from its "
+                                     "top left), then a screenshot: for the engine's own tool windows, such as the "
+                                     "script profiler's")
+    p.add_argument("x", type=float)
+    p.add_argument("y", type=float)
+    p.set_defaults(run=cmd_click)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")
     p.add_argument("event")

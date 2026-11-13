@@ -50,3 +50,12 @@ game can show. Strike a fixed item through with the commit that fixed it.
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 `ch_board_rows` OK (`ranked=70`).
+
+## Milestones tried only where they could pass (#1724)
+
+The entry's monthly pulse tries `cultural_hegemony.8` once the cached share (`var:ch_total`) reaches 5, and `.9` only for the leaderboard's #1. Both events still check the live share.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The 10% milestone.** A game where a country's share passes 10% (or read `has_variable = ch_total` and `var:ch_total` on a country above 10). | `cultural_hegemony.8` within two months of the share passing 10%. | No event while `var:ch_total` reads 10 or more: the gate's `var:ch_total >= 5` isn't evaluated as written; read it with `read "var:ch_total"` on that country. |
+| **The 25% milestone.** The leaderboard's #1 at 25% or more. | `cultural_hegemony.9` within a month. | No event: read `THIS = global_var:ch_rank_1` on that country; the gate in the pulse holds the same three conditions as the event's trigger. |

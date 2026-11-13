@@ -101,6 +101,10 @@ class FakeSession:
         self._call("shot")
         return Path("/backups/runs/%s/shot_01.png" % SNAP)
 
+    def click(self, x, y):
+        self._call("click", x, y)
+        return {"pixel": [round(1920 * x), round(1080 * y)], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}
+
     def try_event(self, event, setup, reads):
         self._call("try_event", event, setup, list(reads))
         return dict(self.try_event_reply, event=event, setup=setup)
@@ -276,6 +280,9 @@ class VerbTest(ServerTestCase):
         self.assertEqual(fake.calls[-1], ("advance", 30))
         self.assertEqual(self.run_cli("enter-game")[0]["after"], [1836, 1, 15])
         self.assertEqual(self.run_cli("shot"), ({"path": "/backups/runs/%s/shot_01.png" % SNAP}, 0))
+        self.assertEqual(self.run_cli("click", "0.5", "0.25"),
+                         ({"pixel": [960, 270], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}, 0))
+        self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25))
         status, code = self.run_cli("status")
         self.assertEqual(code, 0)
         self.assertEqual(status["server"]["pid"], os.getpid())

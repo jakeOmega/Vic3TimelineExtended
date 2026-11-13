@@ -248,11 +248,30 @@ je_cultural_hegemony = {
 				set_variable = { name = ch_benchmark_applied value = 0 }
 			}
 
-			# Milestone events — self-gated by ch_milestone_* variables, fire
-			# at most once per country when cultural_pull_total crosses 10 / 25
-			# (.9 at 25 also needs the world's #1 rank).
-			trigger_event = { id = cultural_hegemony.8 }
-			trigger_event = { id = cultural_hegemony.9 }
+			# Milestone events: fire_only_once, when cultural_pull_total
+			# crosses 10 / 25 (.9 at 25 also needs the world's #1 rank).
+			# Their triggers read the live share, a pass over every state's
+			# buildings and every country's GDP, so each is tried only where it
+			# could pass: .8 once this month's cached share (var:ch_total,
+			# ch_monthly_country_update) is half the threshold, and .9 only by
+			# the leaderboard's #1, the condition its trigger already holds.
+			# Tried by every holder, the two were the entry's whole monthly
+			# cost in a 1931 game (docs/audits/late_game_performance.md).
+			if = {
+				limit = {
+					has_variable = ch_total
+					var:ch_total >= 5
+				}
+				trigger_event = { id = cultural_hegemony.8 }
+			}
+			if = {
+				limit = {
+					has_global_variable = ch_rank_1
+					exists = global_var:ch_rank_1
+					THIS = global_var:ch_rank_1
+				}
+				trigger_event = { id = cultural_hegemony.9 }
+			}
 		}
 	}
 
