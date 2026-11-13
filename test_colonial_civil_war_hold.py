@@ -10,12 +10,13 @@ This test pins the four changes:
 
 1. `ce_reentry_due` is false while the country fights a civil war of its own
    (`colonial_in_own_civil_war`, read from a live rebel country, never from
-   `any_civil_war`, which iterates the civil wars still brewing).
+   `any_civil_war`, which iterates the civil wars still brewing). A colony's
+   secession, which the mod records as a war of independence, doesn't count.
 2. The Planned Decolonization, Release Territory and Round Table buttons weigh 0
-   in such a war while the bar is 40 or more
+   in such a war while the entry runs with its bar at 40 or more
    (`colonial_ai_holds_colonies_in_civil_war`).
-3. So does every release option of decolonization_events .1, .3, .9 and .13, and
-   each of those events keeps an option the AI can still take.
+3. So does every release option of decolonization_events .1, .3, .9, .13 and
+   .75, and each of those events keeps an option the AI can still take.
 4. Planned Decolonization's minor term counts only beside a reason to press it.
 
 The civil-war reading has no in-game verdict yet, so two self-checks compare it
@@ -72,7 +73,8 @@ RELEASES = ("form_decolonized_country = yes", "make_independent = yes", "decol_r
             "decol_iw_release_all_territories = yes", "decol_chosen_release_rewards = {", "decol_iw_fight = yes")
 # Release options the hold does not read: the buttons' confirmations (the
 # button's weight already did), the player's widget, and the declaration of
-# independence (.70 and .13.e), which comes only below a bar of 40.
+# independence (.70 and .13.e), which comes only below a bar of 40 or in a
+# collapse's wave, with no entry: the hold never reads true there.
 NOT_A_CHOICE = {"decolonization_events.%s" % n for n in
                 ("400.a", "400.b", "400.c", "401.a", "402.a", "402.b", "403.a", "403.b",
                  "70.a", "70.b", "70.c", "13.e")}
@@ -85,10 +87,15 @@ class CivilWarTriggerTests(unittest.TestCase):
         self.assertIn("civil_war_origin_country ?= scope:ce_cw_self", body)
         self.assertIn("is_revolutionary = yes", body)
         self.assertIn("is_secessionist = yes", body)
+        # A colony's secession is a war of independence (decol_iw_on_secession_start).
+        self.assertIn("NOT = { var:decol_iw_metropole ?= scope:ce_cw_self }", body)
 
-    def test_the_hold_is_the_bar_at_40_and_our_civil_war(self):
+    def test_the_hold_is_the_entry_at_40_and_our_civil_war(self):
+        # decol_iw_bar_below_40 reads the entry with ?=: false with no entry, so
+        # the hold needs the entry itself, or a collapsed empire would hold.
         body = _norm(_block(TRIGGERS, "colonial_ai_holds_colonies_in_civil_war"))
-        self.assertEqual(body, "decol_iw_bar_below_40 = no colonial_in_own_civil_war = yes")
+        self.assertEqual(body, "has_journal_entry = je_colonial_empire decol_iw_bar_below_40 = no "
+                               "colonial_in_own_civil_war = yes")
 
 
 class ReentryTests(unittest.TestCase):
@@ -184,6 +191,12 @@ class SelfCheckTests(unittest.TestCase):
         self.assertIn("scope:ce_cwsc_left = { colonial_in_own_civil_war = no }", norm)
         # A government that beat its rebels can hold the pointer naming itself.
         self.assertIn("NOT = { var:te_cw_origin ?= scope:ce_cwsc_self }", norm)
+        # A colony's secession is left out, as the trigger leaves it out.
+        self.assertIn("NOT = { has_variable = decol_iw_metropole }", norm)
+        # A secession is tracked only while the country it left reads the war,
+        # so OK after the war can't come from a reading that never held.
+        self.assertIn("is_secessionist = yes NOT = { has_global_variable = te_sc_ce_civil_war_over } "
+                      "var:te_cw_origin = { colonial_in_own_civil_war = yes } }", norm)
 
     def test_the_play_test_list_names_them(self):
         text = (ROOT / "docs" / "testing" / "colonial-holdings-playtest.md").read_text(encoding="utf-8")

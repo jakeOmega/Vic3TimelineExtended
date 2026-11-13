@@ -1310,10 +1310,13 @@ ce_reentry_monthly = {
 # does any work.
 #   ce_civil_war_read  a live rebel: the country it rose against reads the war.
 #                      OK when the trigger is true there.
-#   ce_civil_war_over  a secession that won (a secessionist last month, alive,
-#                      the layer's pointer gone): the country it left no longer
-#                      reads a civil war, so the hold lifts. Judged only when
-#                      no other uprising against that country is live.
+#   ce_civil_war_over  a secession that won (a secessionist last month that the
+#                      country it left read as its civil war, alive, the
+#                      layer's pointer gone): that country no longer reads a
+#                      civil war, so the hold lifts. Judged only when no other
+#                      uprising against it is live.
+# Both leave out a colony's secession (decol_iw_metropole on the rebels), as
+# the trigger does.
 # BROKEN on either: read the war from the layer's pointer instead, with
 # `var:te_cw_origin ?= scope:ce_cw_self` in place of civil_war_origin_country
 # in colonial_in_own_civil_war. A BROKEN _read can also be a rebel whose
@@ -1329,6 +1332,9 @@ colonial_civil_war_selfcheck = {
 			# after the merge.
 			NOT = { var:te_cw_origin ?= scope:ce_cwsc_self }
 			var:te_cw_origin ?= { is_country_alive = yes }
+			# A colony's secession is a war of independence, which the
+			# trigger leaves out.
+			NOT = { has_variable = decol_iw_metropole }
 		}
 		if = {
 			limit = { NOT = { has_global_variable = te_sc_ce_civil_war_read } }
@@ -1342,11 +1348,14 @@ colonial_civil_war_selfcheck = {
 			}
 		}
 		# Remember a secession, naming itself, so a winner can be told from a
-		# government that inherited the variable by beating it.
+		# government that inherited the variable by beating it; and only while
+		# the country it left reads the war, so that OK after the war means the
+		# reading went from true to false, not that it never held.
 		if = {
 			limit = {
 				is_secessionist = yes
 				NOT = { has_global_variable = te_sc_ce_civil_war_over }
+				var:te_cw_origin = { colonial_in_own_civil_war = yes }
 			}
 			var:te_cw_origin = { save_temporary_scope_as = ce_cwsc_origin }
 			set_variable = { name = ce_cwsc_secession value = scope:ce_cwsc_self }

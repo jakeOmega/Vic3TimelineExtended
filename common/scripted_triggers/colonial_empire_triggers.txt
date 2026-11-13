@@ -652,6 +652,10 @@ ce_reentry_due = {
 # us still stand as rebels? The rebel country is the test, not any_civil_war,
 # which iterates the civil wars still brewing (scripting_best_practices.md,
 # "Is a civil war still being fought?"); nd_in_civil_war asks the same.
+# A colony's secession is not one: decol_iw_on_secession_start
+# (decolonization_war_effects.txt) records it as a war of independence and
+# marks the rebels with decol_iw_metropole, and holding the colonies through
+# that war would block the very releases (.75.a) the war is about.
 # Country scope. It walks every country, so put it after the cheap tests.
 # Unverified in game (2026-11-13): colonial_civil_war_selfcheck
 # (decolonization.txt) compares it with the civil-war layer's te_cw_origin.
@@ -663,22 +667,28 @@ colonial_in_own_civil_war = {
 			is_revolutionary = yes
 			is_secessionist = yes
 		}
+		NOT = { var:decol_iw_metropole ?= scope:ce_cw_self }
 	}
 }
 
 # The AI keeps its colonies through a civil war of its own while the empire
-# holds (the bar at 40 or more, above the line where colonies declare
-# independence, decol_iw_bar_below_40). A civil war is often brief, and it can
-# make a state look like a colony by cutting it off from the capital (#1735).
-# Every AI choice to let a colony go reads it as a zero: the Planned
-# Decolonization, Release Territory and Round Table buttons (confirmed by .400
-# and .401), and the release options of decolonization_events .1, .3, .9, .13
-# and .75. Not read where the AI has no choice to make: a declaration of independence (.70) comes only below 40, and
-# a lost war of independence or a UN ruling frees a colony whatever the AI
-# would weigh; .402 and .403 are the player's widget. Below 40, or once the
-# war ends, the options' own weights apply. Country scope (the metropole); the
-# bar test is first, as the cheap one.
+# holds: the entry running and its bar at 40 or more, above the line where
+# colonies declare independence. decol_iw_bar_below_40 reads the entry with
+# ?=, so it is false with no entry; the entry test keeps an empire that has
+# collapsed (.75 fires in its wave's wars) out of the hold. A civil war is
+# often brief, and it can make a state look like a colony by cutting it off
+# from the capital (#1735). Every AI choice to let a colony go reads it as a
+# zero: the Planned Decolonization, Release Territory and Round Table buttons
+# (confirmed by .400 and .401), and the release options of
+# decolonization_events .1, .3, .9, .13 and .75. Not read where the AI has no
+# choice to make: a declaration of independence (.70, .13.e) comes only below
+# 40 or in a collapse's wave, with no entry, and a lost war of independence or
+# a UN ruling frees a colony whatever the AI would weigh; .402 and .403 are
+# the player's widget. Below 40, with no entry, or once the war ends, the
+# options' own weights apply. Country scope (the metropole); the cheap tests
+# first.
 colonial_ai_holds_colonies_in_civil_war = {
+	has_journal_entry = je_colonial_empire
 	decol_iw_bar_below_40 = no
 	colonial_in_own_civil_war = yes
 }
