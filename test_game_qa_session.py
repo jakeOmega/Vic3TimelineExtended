@@ -1193,6 +1193,48 @@ class SwitchRulesTest(SessionTestCase):
         self.assertEqual(self.cli.calls, [])
         self.assertEqual((self.user / "save games" / "mine.v3").read_bytes(), b"the owner's")
 
+    def test_a_rule_is_switched_in_a_fresh_save_of_another_build_named_by_save(self):
+        # 2026-11-13: a market game's fixture from the day before, switched to direct construction. This build's
+        # own fixture was made under other rules, and only a named save reaches the older one.
+        saves = self.user / "save games"
+        older = saves / "te_qa_fixture_0123456789ab.v3"
+        older.write_bytes(text_save(["allow_fantasy", "tax_light"]))
+        os.utime(older, (1_600_000_000,) * 2)       # the oldest fixture there is: a prune would take it
+        for n in (1, 2):
+            (saves / ("te_qa_fixture_%012x.v3" % n)).write_bytes(text_save(["no_fantasy", "tax_light"]))
+        before = older.read_bytes()
+        reply = self.start(save="te_qa_fixture_0123456789ab", switch_rules={"tax_rule": "tax_off"})
+        stem = "te_qa_fixture_%s" % rules_key("0123456789ab", {"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], stem)
+        self.assertEqual(reply["rules"]["settings"], ["allow_fantasy", "tax_off"])
+        self.assertEqual(reply["rules"]["switched"], {"tax_rule": {"from": "tax_light", "to": "tax_off"}})
+        self.assertFalse(reply["fixture_made"])
+        self.assertEqual(reply.get("fixtures_pruned", []), [])
+        self.assertEqual(older.read_bytes(), before)
+        self.assertTrue(self.fixture_save.is_file())
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertIn("-loadsave=" + stem, launch)
+        self.assertEqual(next(c for c in self.cli.calls if c[0] == "snapshot"), ["snapshot", "--save", stem])
+        # It is a fresh save all the same: the country-select screen, so enter-game is not refused for it.
+        self.assertTrue(self.session._fixture_loaded)
+
+    def test_a_named_harness_save_opens_on_the_country_select_screen(self):
+        older = self.user / "save games" / "te_qa_fixture_0123456789ab.v3"
+        older.write_bytes(text_save(["allow_fantasy", "tax_light"]))
+        reply = self.start(save="te_qa_fixture_0123456789ab")
+        self.assertEqual(reply["save"], "te_qa_fixture_0123456789ab")
+        self.assertTrue(self.session._fixture_loaded)
+        self.assertEqual(self.saves(), sorted([self.fixture_save.name, older.name]))
+
+    def test_a_copy_with_a_rule_switched_is_not_switched_again(self):
+        copy = self.user / "save games" / "te_qa_fixture_0123456789ab_s0000abcd.v3"
+        copy.write_bytes(text_save(["allow_fantasy", "tax_off"]))
+        error = self.session_error(self.start, save="te_qa_fixture_0123456789ab_s0000abcd",
+                                   switch_rules={"fantasy": "no_fantasy"})
+        self.assertEqual(error.code, "bad_argument")
+        self.assertEqual(self.cli.calls, [])
+        self.assertEqual(self.saves(), sorted([self.fixture_save.name, copy.name]))
+
     def test_a_fixture_whose_rules_cannot_be_switched_stops_the_start(self):
         self.fixture_save.write_bytes(b"a fresh game")       # not a plain-text save
         error = self.session_error(self.start, switch_rules={"tax_rule": "tax_off"})
