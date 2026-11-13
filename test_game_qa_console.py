@@ -1546,5 +1546,111 @@ class OpenStateTest(ConsoleTestCase):
         self.assertEqual(self.game.steps, [CONSOLE_KEY])
 
 
+
+class NeverEnteredTest(ConsoleTestCase):
+    """`never_entered`: a send can be held never entered only when the history never held its text (#1702)."""
+
+    def open(self):
+        self.game.console_open = True
+        self.console.ensure_open()
+
+    def test_a_new_text_typed_into_a_shut_console_is_never_entered(self):
+        self.open()
+        self.game.console_open = False                      # shut behind the console's back
+        self.console.send("event te_qa.1")
+        self.console.ensure_open()                          # a later command arrives: the read's keys were taken
+        self.assertTrue(self.game.console_open)
+        self.assertTrue(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_that_arrived_was_entered(self):
+        self.open()
+        self.console.send("event te_qa.1")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_the_history_held_before_another_line_can_be_held_never_entered(self):
+        # The owner's history (2026-11-13) held the read command: only a repeat of the last line is left out.
+        self.history.write_text("event te_qa.1\ncash\n", encoding="utf-8")
+        self.open()
+        self.game.console_open = False
+        self.console.send("event te_qa.1")
+        self.console.ensure_open()
+        self.assertTrue(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_that_was_the_last_line_is_never_held_so(self):
+        # A repeat running is not written, so a history that gained nothing says nothing about it.
+        self.open()
+        with open(self.history, "a", encoding="utf-8") as f:
+            f.write("event te_qa.1\n")
+        self.game.console_open = False
+        self.console.send("event te_qa.1")
+        self.console.ensure_open()
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+    def test_a_rewritten_shorter_or_unreadable_history_proves_nothing(self):
+        self.open()
+        self.game.console_open = False
+        self.console.send("event te_qa.1")
+        self.assertTrue(self.console.never_entered("event te_qa.1"))
+        lines = self.history.read_text(encoding="utf-8").splitlines()
+        self.history.write_text("".join("other %d\n" % n for n in range(len(lines) + 2)), encoding="utf-8")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))       # rewritten, though longer
+        self.history.write_text("", encoding="utf-8")
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+        self.history.unlink()
+        self.history.mkdir()                                # read_bytes fails: not readable
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+    def test_a_text_that_was_not_sent_is_not_held_never_entered(self):
+        self.open()
+        self.assertFalse(self.console.never_entered("event te_qa.1"))
+
+
+class FakeSelectEventOptionTest(unittest.TestCase):
+    """The fake's own `select_event_option`, which the session's pick tests rest on (#1722, #1732)."""
+
+    def setUp(self):
+        self.game = fakes.FakeHelper()
+        self.game.console_open = True
+        self.game.pending_events = [[2684354595, "un_events.4", 3], [10, "x.1", 2]]
+        self.picked = []
+        self.game.on_selected = lambda event, index: self.picked.append((event, index))
+
+    def answer(self, text):
+        return self.game._select_event_option(text)
+
+    def test_list_prints_each_pending_event_with_its_unsigned_id(self):
+        self.assertEqual(self.answer("select_event_option list"),
+                         (["2684354595 un_events.4 options=3", "10 x.1 options=2"], []))
+        self.game.pending_events = []
+        self.assertEqual(self.answer("select_event_option list"), (["No pending events"], []))
+
+    def test_by_default_an_id_matches_as_typed(self):
+        self.assertEqual(self.answer("select_event_option 0 -1610612701"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 2 2684354595"), (["Selected option 2 of un_events.4"], []))
+        self.assertEqual((self.picked, self.game.pending_events), ([("un_events.4", 2)], [[10, "x.1", 2]]))
+
+    def test_with_high_ids_refused_no_typed_form_reaches_an_id_above_two_to_the_31st(self):
+        # As live, 2026-11-13: the listed id and its signed form both answered NO_MATCH.
+        self.game.high_ids_refused = True
+        self.assertEqual(self.answer("select_event_option 0 2684354595"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 0 -1610612701"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 0 2147483647"), ([], [fakes.NO_MATCH]))
+        self.assertEqual(self.answer("select_event_option 1 10"), (["Selected option 1 of x.1"], []))
+        self.assertEqual(self.answer("select_event_option 0"), (["Selected option 0 of un_events.4"], []))
+        self.assertEqual(self.game.pending_events, [])
+
+    def test_no_id_picks_the_oldest(self):
+        self.assertEqual(self.answer("select_event_option 1"), (["Selected option 1 of un_events.4"], []))
+        self.assertEqual(self.picked, [("un_events.4", 1)])
+
+    def test_a_reply_given_to_on_wins_and_without_a_list_the_fake_answers_nothing_itself(self):
+        self.game.on("select_event_option 0 10", success=["scripted"])
+        self.game.keys(7, [{"text": "select_event_option 0 10"}, ENTER])
+        self.assertIn("console_success: scripted", self.game.unwritten[-1])
+        self.assertEqual(len(self.game.pending_events), 2)
+        self.game.pending_events = None
+        self.assertIsNone(self.answer("select_event_option list"))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -25,6 +25,8 @@ SCAN_BACKSPACE = 0x0E
 FLUSH_COMMAND = "help ndefines.ngui"        # the command whose long output pushes the game's buffered log out
 _HELP_LINES = 500                           # what it prints, about
 _HELD_BACK = 120                            # the last of it that the game is still holding when the file is written
+INT32_MIN, INT32_MAX = -2 ** 31, 2 ** 31 - 1
+NO_MATCH = "No matching pending event"      # the game's answer to an id it has no pending event for (live, 2026-11-12)
 
 
 class FakeSocket:
@@ -267,6 +269,15 @@ class FakeHelper:
     helper sends is taken by the game that many fake seconds later, in order, and
     until then the history and the log show nothing of it. With `busy_while_late` the
     window also reports not responding while any key is waiting, as Windows does.
+
+    `select_event_option` answers what a test gives `on`, unless `pending_events` is set (a list of
+    `[numeric id, event id, options]`, oldest first): then the fake answers it from that list itself. `list`
+    prints one `<id> <event> options=<n>` line each, the id unsigned, or "No pending events";
+    `<index>` picks the oldest; `<index> <id>` picks the one with that id, else answers NO_MATCH (a failure
+    line, as live). A reply given to `on` for the very text still wins over the fake's own. A pick
+    answers `Selected option <index> of <event>`, takes the event off the list and calls `on_selected` with
+    (event id, index). With `high_ids_refused`, as live (2026-11-13), a typed id above 2^31 - 1 matches nothing,
+    and neither does its signed form (id - 2^32): both answer NO_MATCH. Off, a typed id matches as written.
     """
 
     def __init__(self, history: Path | None = None, log: Path | None = None) -> None:
@@ -301,6 +312,9 @@ class FakeHelper:
         self.steps: list[dict] = []             # every step sent, as given
         self.now = 0.0
         self.replies: dict[str, tuple[list[str], list[str], list[str]]] = {}
+        self.pending_events: list[list] | None = None   # [numeric id, event id, options], oldest first (see above)
+        self.high_ids_refused = False           # a typed id above 2^31 - 1, or its signed form, matches nothing
+        self.on_selected = None                 # called with (event id, option index) when an option is picked
         self.unwritten: list[str] = []          # log lines the game has made but not yet written to the file
         self.launched: list[tuple[str, list, str]] = []
         self.adopted: list[ProcId] = []
@@ -418,6 +432,9 @@ class FakeHelper:
     def _run(self, text: str) -> None:
         """The game runs a command: its lines go to the buffer, and a flush writes the buffer out."""
         success, failure, script = self.replies.get(text, ([], [], []))
+        answer = None if text in self.replies else self._select_event_option(text)
+        if answer is not None:
+            success, failure = answer
         self._logged("console.cpp:1175", "Running console command: " + text)
         for line in success:
             self._logged("console.cpp:1203", "console_success: " + line)
@@ -433,6 +450,35 @@ class FakeHelper:
         if self.log is not None:
             with open(self.log, "a", encoding="utf-8", newline="\n") as f:
                 f.write("".join(line + "\n" for line in out))
+
+    def _select_event_option(self, text: str) -> tuple[list[str], list[str]] | None:
+        """(success lines, failure lines) for a `select_event_option` the fake answers itself, else None."""
+        words = text.split()
+        if self.pending_events is None or not words or words[0] != "select_event_option":
+            return None
+        if words[1:] == ["list"]:
+            return ["%d %s options=%d" % tuple(e) for e in self.pending_events] or ["No pending events"], []
+        try:
+            index, ids = int(words[1]), [int(w) for w in words[2:]]
+        except (IndexError, ValueError):
+            return [], ["select_event_option: bad arguments (the fake's own words)"]
+        if len(ids) > 1:
+            return [], ["select_event_option: bad arguments (the fake's own words)"]
+        if not ids:
+            found = self.pending_events[:1]                 # no id: the oldest pending event
+        elif self.high_ids_refused and not 0 <= ids[0] <= INT32_MAX:
+            found = []                                      # live: neither the listed nor the signed form matches
+        else:
+            found = [e for e in self.pending_events if e[0] == ids[0]]
+        if not found:
+            return [], [NO_MATCH]
+        numeric, event, options = found[0]
+        if not 0 <= index < options:
+            return [], ["select_event_option: no option %d (the fake's own words)" % index]
+        self.pending_events.remove(found[0])
+        if self.on_selected is not None:
+            self.on_selected(event, index)
+        return ["Selected option %d of %s" % (index, event)], []
 
     def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path:
         path = Path(path)
