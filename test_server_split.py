@@ -1,18 +1,24 @@
-"""#1537 moves mod_state_server.py's routes into `server/` modules, one group per
-PR, as moves with no behaviour change. This file is the proof each stage keeps:
+"""#1537 moved mod_state_server.py's routes into `server/` modules as moves with
+no behaviour change: the engine-docs group first (stage 1), then the entity,
+analysis, validation, vocabulary, log and GUI routes and the post-load chain
+(stage 2). This file keeps what each stage proved:
 
 * `GoldenResponseTests` sends every request of a moved group through the real
   `do_GET` (routing, error mapping, JSON encoding; no socket) against a fixed
   fixture and compares the bytes and the status with a golden recorded on the
   commit before the move (`test_fixtures/server_split/<group>.json`). Its
   cases include the error paths: 404, 400, 503, and a handler exception (500).
-* `MovedNamesTests` checks that every name the move took out of
-  mod_state_server stays importable from it, as the same object, and that the
-  moved code reads the server's state through the live module at call time.
+  Stage 1's engine-docs group has one; stage 2 was checked against the real
+  mod instead (its PR says how).
+* `MovedNamesTests` checks that every name the moves took out of
+  mod_state_server stays importable from it, as the same object, that each
+  route module's mixin answers its routes, and that the moved code reads the
+  server's state through the live module at call time.
 
-The next stage adds its group: a `<GROUP>_CASES` list, a fixture, an entry in
-`GROUPS`, and a golden recorded with `--record <group>` on the commit BEFORE
-its move (record after the move and the test proves nothing):
+`test_server_routes.py` holds the route table to the handlers, `/help` and
+the docs. A golden for another group: a `<GROUP>_CASES` list, a fixture, an
+entry in `GROUPS`, and a golden recorded with `--record <group>` on a commit
+whose code is the one to pin:
 
     python3 test_server_split.py --record engine_docs
 """
@@ -284,13 +290,64 @@ class GoldenResponseTests(unittest.TestCase):
 # importable from mod_state_server (tests and tools import them from there).
 MOVED = {
     "server.routes_engine_docs": [
-        "EngineDocsRoutes",
-        "_engine_docs_find_usage",
-        "_get_loc_function_index",
-        "_build_loc_function_index",
-        "_is_function_like_ident",
-        "_LOC_IDENT_RE",
-        "_group_similar_entries",
+        "EngineDocsRoutes", "_LOC_IDENT_RE", "_build_loc_function_index", "_engine_docs_find_usage",
+        "_get_loc_function_index", "_group_similar_entries", "_is_function_like_ident",
+    ],
+    "server.routes_logs": [
+        "LogRoutes",
+    ],
+    "server.routes_gui": [
+        "GuiRoutes", "_build_gui_render_index", "_get_gui_render_index", "_GUI_DATAREF_RE",
+        "_GUI_LOC_ATTRS", "_GUI_TEXT_ATTR_RE", "ENTITY_TYPE_TO_DATATYPE", "FIELD_TO_METHODS",
+    ],
+    "server.routes_vocabulary": [
+        "VocabularyRoutes",
+    ],
+    "server.routes_validation": [
+        "ValidationRoutes", "_ALLOWLIST_TYPE_SLUGS", "_code_part", "_collect_image_uses",
+        "_entity_image", "_extract_define_names", "_extract_surface_keys", "_extract_toplevel_keys",
+        "_find_duplicate_images", "_find_placeholder_icons", "_flagships_on_company_logo",
+        "_git_diff_names", "_git_log_touched", "_git_lstree_at_ref", "_git_show_at_ref",
+        "_icon_definition_sites", "_image_content_hash", "_image_entity_uses",
+        "_IMAGE_FIELDS_BY_TYPE", "_image_origin", "_iter_loc_at_ref", "_live_vanilla_loc_map",
+        "_load_image_allowlist", "_load_standin_patterns", "_migration_gui_at_risk",
+        "_migration_loc_drift", "_MIGRATION_SURFACE_CATEGORIES", "_migration_surface_diff",
+        "_MOD_GREP_DIRS", "_mod_grep_mentions", "_mod_loc_keys", "_overlap_state",
+        "_OVERLAP_STATE_CACHE_SIZE", "_overlap_vanilla_index", "_parse_loc_lines",
+        "_PLACEHOLDER_STATUSES", "_principle_group_of", "_read_live_file",
+        "_render_duplicate_images_text", "_render_placeholder_icons_text", "_resolve_image_path",
+        "_SHARED_BY_DESIGN_ICON_FIELDS", "_SHARED_WITH_LIMIT", "_TOP_LEVEL_OPENER_RE",
+        "_TOPLEVEL_KEY_RE", "_validate_git_ref",
+    ],
+    "server.routes_analysis": [
+        "AnalysisRoutes", "_BAG_CONTAINERS", "_classify_option_polarity", "_data_contains_string",
+        "_describe_add_modifier", "_describe_change_variable", "_emit_event_effect",
+        "_EVENT_HEADER_RE", "_event_ids_from_mod_file", "_extract_event_ids_from_file",
+        "_extract_modifier_fields", "_find_dominance_issues", "_find_modifier_grants",
+        "_find_soft_dominance_issues", "_format_value", "_get_loc_accessor_index",
+        "_get_script_args_result", "_get_variable_usage_index", "_grant_block_label",
+        "_grant_entity_dirs", "_grant_entity_type_name", "_GRANT_LINE_RE", "_GRANT_NESTED_PARENTS",
+        "_GRANT_OPENER_RE", "_GRANT_REPLACE_RE", "_grant_scan_plan", "_GRANT_SKIP_DIRS",
+        "_grant_type_key", "_iter_field_values", "_mod_replaced_entity_ids",
+        "_modifier_color_lookup", "_polarity", "_POLARITY_GLYPHS", "_render_effect_text",
+        "_render_event_balance_issues_text", "_render_event_balance_text",
+        "_resolve_mod_relative_path", "_resolve_static_modifier", "_SCALING_WRAPPERS",
+        "_scan_events_for_reviewed_dominance", "_scan_file_for_grants", "_summarize_balance_option",
+        "_summarize_polarity", "_try_float", "_walk_event_effects", "EVENT_BALANCE_CONTAINER_KEYS",
+        "EVENT_BALANCE_OPTION_META_KEYS", "MODIFIER_GRANT_SOURCES",
+    ],
+    "server.routes_entities": [
+        "EntityRoutes", "_company_catalog", "_diff_entity_fields", "_extract_parameters",
+        "_loc_keys_for", "_normalize_entity_type", "_paradox_text", "_PARAM_RE", "_party_catalog",
+        "_resolve_entity_type", "_singularize_word", "_state_history_tables", "_unwrap_modifiers",
+        "_unwrap_val", "LOC_KEY_FAMILIES",
+    ],
+    "server.post_load": [
+        "_changed_files", "_failure_warning", "_POST_LOAD_TRACEBACK_TAIL_LINES",
+        "_POST_LOAD_WARN_KEYS", "_reparse_mod_after_writes", "_run_generator_chain",
+        "_run_post_load_generators", "_snapshot_mod_text_files", "_WRITER_WATCH_DIRS",
+        "_WRITER_WATCH_SUFFIXES", "PARTIAL_VANILLA_FILE_REGENERATORS", "POST_LOAD_AUDITS",
+        "POST_LOAD_GENERATORS", "POST_LOAD_REGENERATORS", "VANILLA_FILE_REGENERATORS",
     ],
 }
 
@@ -299,7 +356,24 @@ MOVED = {
 STATE_LEFT_IN_SERVER = [
     "engine_docs", "engine_docs_source_label", "pattern_index", "base_game_path",
     "_BASE_COMMON", "_LOC_FUNCTION_INDEX", "_USAGE_TARGET_RE_CACHE", "_LOC_EXPR_RE",
+    # stage 2
+    "ms", "mod_path", "dev_reference_docs", "_GUI_RENDER_INDEX", "_VANILLA_LOC_CACHE",
+    "_last_validation_report", "_overlap_state_cache", "_overlap_vanilla_cache",
+    "_tech_unlocks_index_cache", "_company_catalog_cache", "_party_catalog_cache",
+    "_state_history_cache", "_script_args_cache", "_variable_usage_cache", "_loc_accessor_cache",
+    "_post_load_warnings", "_post_load_wrote_files", "_post_load_reparsed",
 ]
+
+# The handler mixin each route module adds to ModStateHandler.
+MIXINS = {
+    "server.routes_engine_docs": "EngineDocsRoutes",
+    "server.routes_entities": "EntityRoutes",
+    "server.routes_analysis": "AnalysisRoutes",
+    "server.routes_validation": "ValidationRoutes",
+    "server.routes_vocabulary": "VocabularyRoutes",
+    "server.routes_logs": "LogRoutes",
+    "server.routes_gui": "GuiRoutes",
+}
 
 
 class MovedNamesTests(unittest.TestCase):
@@ -316,15 +390,39 @@ class MovedNamesTests(unittest.TestCase):
         from server import routes_engine_docs
         self.assertIs(mss.ModStateHandler._engine_docs, routes_engine_docs.EngineDocsRoutes._engine_docs)
         self.assertNotIn("_engine_docs", vars(mss.ModStateHandler))
+        import importlib
+        for module_name, mixin_name in MIXINS.items():
+            mixin = getattr(importlib.import_module(module_name), mixin_name)
+            self.assertIn(mixin, mss.ModStateHandler.__mro__)
+            methods = [n for n, v in vars(mixin).items() if callable(v) or isinstance(v, staticmethod)]
+            self.assertTrue(methods, mixin_name)
+            for name in methods:
+                with self.subTest(mixin=mixin_name, method=name):
+                    self.assertNotIn(name, vars(mss.ModStateHandler))
+                    self.assertIs(getattr(mss.ModStateHandler, name), getattr(mixin, name))
+
+    def test_no_two_mixins_define_one_method(self):
+        import importlib
+        seen = {}
+        for module_name, mixin_name in MIXINS.items():
+            mixin = getattr(importlib.import_module(module_name), mixin_name)
+            for name in vars(mixin):
+                if name.startswith("__"):
+                    continue
+                with self.subTest(method=name):
+                    self.assertNotIn(name, seen, f"{name} in both {seen.get(name)} and {mixin_name}")
+                seen[name] = mixin_name
 
     def test_state_stays_in_the_server_module(self):
-        from server import routes_engine_docs
+        import importlib
         for name in STATE_LEFT_IN_SERVER:
-            with self.subTest(name=name):
-                self.assertTrue(hasattr(mss, name))
-                self.assertFalse(hasattr(routes_engine_docs, name),
-                                 f"{name} copied into the route module: a rebinding in "
-                                 "mod_state_server would no longer reach it")
+            self.assertTrue(hasattr(mss, name), name)
+            for module_name in MOVED:
+                module = importlib.import_module(module_name)
+                with self.subTest(name=name, module=module_name):
+                    self.assertFalse(hasattr(module, name),
+                                     f"{name} copied into {module_name}: a rebinding in "
+                                     "mod_state_server would no longer reach it")
 
     def test_state_is_read_at_call_time(self):
         # A rebinding after import (what _load_engine_docs and the tests do) is seen.

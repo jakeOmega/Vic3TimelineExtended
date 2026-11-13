@@ -11,7 +11,7 @@ by hand reads this table instead:
 * `docs/guides/audits.md` is generated from it (`python3 audit_registry.py
   --write`; `--check` fails when the committed file is stale).
 * `test_audit_registry.py` holds it to `POST_LOAD_AUDITS` in
-  `mod_state_server.py` and to the `*_audit.py` files on disk.
+  `server/post_load.py` and to the `*_audit.py` files on disk.
 
 Adding an audit: write the module (on `audit_common.py`) and its test, add it
 to `POST_LOAD_AUDITS` if a reload should run it, add one `Audit(...)` here, and run
@@ -626,7 +626,7 @@ def render_markdown() -> str:
         "exits 1 on an unreviewed flag or a stale tag. A reload audit also needs "
         "`regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array "
         "(`audit_common.summary` builds it).",
-        "2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.",
+        "2. Add it to `POST_LOAD_AUDITS` in `server/post_load.py` if a reload should run it.",
         "3. Add one `Audit(...)` entry to `audit_registry.py`.",
         "4. Run `python3 audit_registry.py --write` and commit this file with the rest.",
         "",

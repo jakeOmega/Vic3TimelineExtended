@@ -189,7 +189,7 @@ One comment on an event's opening line is read by every audit that reads that li
 ## Adding an audit
 
 1. Write `<name>_audit.py` at the repo root, and `test_<name>_audit.py` beside it. The audit is the function that finds flags; `audit_common.py` gives it the rest: `parse_reviewed(comment, tags)` reads the `# REVIEWED` comment, `Flag` and `AuditResult` hold the findings (`unreviewed`, `exemptions`, `stale`), `write_report` writes the report with this page's suppression text, and `cli_main(audit_fn)` gives the `--strict` mode that exits 1 on an unreviewed flag or a stale tag. A reload audit also needs `regenerate(mod_state)` returning a dict whose `unreviewed` count feeds the `warnings` array (`audit_common.summary` builds it).
-2. Add it to `POST_LOAD_AUDITS` in `mod_state_server.py` if a reload should run it.
+2. Add it to `POST_LOAD_AUDITS` in `server/post_load.py` if a reload should run it.
 3. Add one `Audit(...)` entry to `audit_registry.py`.
 4. Run `python3 audit_registry.py --write` and commit this file with the rest.
 

@@ -24,6 +24,7 @@ import threading
 import time
 import traceback
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
@@ -3052,7 +3053,160 @@ def encode_response(data, status: int = 200, what: str = "response") -> tuple[by
         return json_body({"error": f"{type(exc).__name__}: {exc}"}), 500
 
 
-class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, VocabularyRoutes, ValidationRoutes, AnalysisRoutes, EntityRoutes, BaseHTTPRequestHandler):
+# ---- the route table -------------------------------------------------------
+# GET /<prefix>/... -> the ModStateHandler method that answers it. The methods
+# live in the server/ route modules (EntityRoutes, AnalysisRoutes, ...; #1537),
+# and test_server_routes.py holds this table to them, to /help and to the
+# endpoint tables in docs/guides/python_tools.md. GET / and GET /status are
+# answered before the table is read; POST is do_POST's.
+
+
+@dataclass(frozen=True)
+class Route:
+    """How one prefix is answered: `method(*fixed, *[rest | params ...])`.
+    `takes` names what the method gets after `fixed`, in order: "rest" (the
+    path segments after the prefix) and "params" (the parsed query)."""
+
+    method: str
+    takes: tuple = ()
+    fixed: tuple = ()
+
+
+ROUTES: dict[str, Route] = {
+    # --- This file
+    "help": Route("_help"),
+
+    # --- server/routes_entities.py: lookups and listings over the parsed data
+    "entity-types": Route("_entity_types", ("params",)),
+    "keys": Route("_keys", ("rest", "params")),
+    "raw": Route("_raw", ("rest",)),
+    "loc-keys": Route("_loc_keys", ("rest",)),
+    "localize": Route("_localize", ("rest",)),
+    "unlocalize": Route("_unlocalize", ("rest", "params")),
+    "search": Route("_search", ("params",)),
+    "laws": Route("_laws", ("rest",)),
+    "technologies": Route("_technologies", ("rest", "params")),
+    "buildings": Route("_buildings", ("rest", "params")),
+    "companies": Route("_companies", ("rest", "params")),
+    "building-companies": Route("_building_companies", ("rest",)),
+    "goods": Route("_goods"),
+    "combat-units": Route("_combat_units"),
+    "ideologies": Route("_ideologies", ("rest",)),
+    "movements": Route("_movements", ("rest",)),
+    # Party types and their merged join_weight terms (#1164)
+    "parties": Route("_parties", ("rest", "params")),
+    # Strategic region <-> state region (#917)
+    "strategic-regions": Route("_strategic_regions", ("rest",)),
+    "state-region": Route("_state_region", ("rest",)),
+    # Who owns each state at game start (#901)
+    "state-history": Route("_state_history", ("rest", "params")),
+    # Prestige goods per base good, against the engine's cap (#749)
+    "prestige-goods": Route("_prestige_goods", ("params",)),
+    # Vanilla's own script, read from the installed game (#1563)
+    "vanilla-refs": Route("_vanilla_refs", ("rest", "params")),
+    "culture-reads": Route("_culture_reads", ("rest", "params")),
+    "formables": Route("_formables", ("params",)),
+    "diff": Route("_diff", ("rest", "params")),
+    "filter": Route("_filter", ("rest", "params")),
+    "events": Route("_events", ("rest", "params")),
+    "institutions": Route("_institutions", ("rest",)),
+    "production-methods": Route("_production_methods", ("rest", "params")),
+    "journal-entries": Route("_journal_entries", ("rest",)),
+    "treaty-articles": Route("_treaty_articles", ("rest",)),
+    "diplomatic-actions": Route("_diplomatic_actions", ("rest",)),
+    "decisions": Route("_decisions", ("rest",)),
+    "script-values": Route("_script_values", ("rest",)),
+    "scripted-effects": Route("_scripted_effects", ("rest",)),
+    "scripted-triggers": Route("_scripted_triggers", ("rest",)),
+    "decrees": Route("_decrees", ("rest",)),
+    "principles": Route("_principles", ("rest",)),
+    "amendments": Route("_amendments", ("rest",)),
+    "on-actions": Route("_on_actions", ("rest",)),
+
+    # --- server/routes_analysis.py: the analytical endpoints
+    "movement-stances": Route("_movement_stances", ("rest", "params")),
+    "references": Route("_references", ("rest",)),
+    "tech-tree": Route("_tech_tree", ("rest",)),
+    "modifier-search": Route("_modifier_search", ("params",)),
+    "modifier-grants": Route("_modifier_grants", ("rest", "params")),
+    "unlocked-by": Route("_unlocked_by", ("rest",)),
+    "tech-unlocks": Route("_tech_unlocks", ("rest", "params")),
+    "annotators": Route("_annotators"),
+    "event-balance": Route("_event_balance", ("rest", "params")),
+    # Employment per valid PM combination, by profession (#990)
+    "pm-employment": Route("_pm_employment", ("rest", "params")),
+    # Inverse of the callers index: call sites whose callee is gone
+    "scripted-helpers": Route("_scripted_helpers", ("rest", "params")),
+    # Calls whose arguments don't match the callee's $X$ names (#732)
+    "script-args": Route("_script_args", ("rest", "params")),
+    # How each site uses a variable or variable list (#973)
+    "variable-usage": Route("_variable_usage", ("rest", "params")),
+    # Which accessors vanilla loc and GUI chain on a data type (#1246)
+    "loc-accessors": Route("_loc_accessors", ("rest", "params")),
+    # Inverse: the on-actions that run an effect / fire an event (#333)
+    "on-action-callers": Route("_on_action_callers", ("rest",)),
+    "technology-effects": Route("_technology_effects", ("rest",)),
+    # Missing localization detection
+    "unlocalized": Route("_unlocalized", ("params",)),
+
+    # --- server/routes_engine_docs.py: engine and developer reference docs
+    "engine-docs": Route("_engine_docs", ("rest", "params")),
+    # Developer reference docs (.md files from base game)
+    "dev-docs": Route("_dev_docs", ("rest", "params")),
+
+    # --- server/routes_validation.py: validation and mod hygiene
+    # Another mod's entries that land on ours, and which side wins (#1170)
+    "external-mod-overlap": Route("_external_mod_overlap", ("rest", "params")),
+    # Event magnitude audit (hardcoded fast-scaling values)
+    "event-magnitude-audit": Route("_event_magnitude_audit", ("params",)),
+    # Event dispatch graph + context audit (system gating, unchosen actions)
+    "event-dispatch": Route("_event_dispatch", ("rest",)),
+    "event-context-audit": Route("_event_context_audit", ("params",)),
+    # Mod-vs-engine validation
+    "validate": Route("_validate", ("rest", "params")),
+    # Duplicate-image detector for unique-per-entity image fields
+    "duplicate-images": Route("_duplicate_images", ("params",)),
+    "placeholder-icons": Route("_placeholder_icons", ("params",)),
+    # Generator-ownership map for auto-generated mod files
+    "auto-generated": Route("_auto_generated"),
+
+    # --- server/routes_vocabulary.py: vocabularies and modifier patterns
+    # Vocabularies (placeholder → values used by pattern matching / validation)
+    "vocabularies": Route("_vocabularies", ("rest",)),
+    # Modifier pattern catalog + auto-discovered families
+    "modifier-patterns": Route("_modifier_patterns", ("rest", "params")),
+    # Convenience endpoints — thin wrappers over /keys/<EntityType>.
+    "cultures": Route("_vocab_endpoint", fixed=("culture",)),
+    "religions": Route("_vocab_endpoint", fixed=("religion",)),
+    "interest-groups": Route("_vocab_endpoint", fixed=("ig",)),
+    "law-groups": Route("_vocab_endpoint", fixed=("law_group",)),
+    # The vocab wrapper plus the parent_group hierarchy (#383)
+    "building-groups": Route("_building_groups", ("rest",)),
+    "pop-types": Route("_vocab_endpoint", fixed=("poptype",)),
+    "country-ranks": Route("_vocab_endpoint", fixed=("country_rank",)),
+    "terrain": Route("_vocab_endpoint", fixed=("terrain",)),
+    "discrimination-traits": Route("_vocab_endpoint", fixed=("discrimination_trait",)),
+
+    # --- server/routes_logs.py: game logs
+    # Game logs (debug.log, error.log, game.log, …)
+    "logs": Route("_logs", ("rest", "params")),
+
+    # --- server/routes_gui.py: GUI render sites
+    # GUI render-site lookup (loc key -> GUI files; entity field -> GUI files)
+    "gui": Route("_gui", ("rest", "params")),
+}
+
+
+class ModStateHandler(
+    EngineDocsRoutes,
+    LogRoutes,
+    GuiRoutes,
+    VocabularyRoutes,
+    ValidationRoutes,
+    AnalysisRoutes,
+    EntityRoutes,
+    BaseHTTPRequestHandler,
+):
 
     # ---- local-origin gate ------------------------------------------------
     def _bind_port(self) -> int:
@@ -3202,122 +3356,11 @@ class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, VocabularyRoutes, 
             return self._status()
         ep = parts[0]
         rest = parts[1:]
-        dispatch = {
-            "help": lambda: self._help(),
-            "entity-types": lambda: self._entity_types(params),
-            "keys": lambda: self._keys(rest, params),
-            "raw": lambda: self._raw(rest),
-            "loc-keys": lambda: self._loc_keys(rest),
-            "localize": lambda: self._localize(rest),
-            "unlocalize": lambda: self._unlocalize(rest, params),
-            "search": lambda: self._search(params),
-            "laws": lambda: self._laws(rest),
-            "technologies": lambda: self._technologies(rest, params),
-            "buildings": lambda: self._buildings(rest, params),
-            "companies": lambda: self._companies(rest, params),
-            "building-companies": lambda: self._building_companies(rest),
-            "goods": lambda: self._goods(),
-            "combat-units": lambda: self._combat_units(),
-            "ideologies": lambda: self._ideologies(rest),
-            "movements": lambda: self._movements(rest),
-            # Analytical endpoints
-            "movement-stances": lambda: self._movement_stances(rest, params),
-            # Party types and their merged join_weight terms (#1164)
-            "parties": lambda: self._parties(rest, params),
-            # Strategic region <-> state region (#917)
-            "strategic-regions": lambda: self._strategic_regions(rest),
-            "state-region": lambda: self._state_region(rest),
-            # Who owns each state at game start (#901)
-            "state-history": lambda: self._state_history(rest, params),
-            # Prestige goods per base good, against the engine's cap (#749)
-            "prestige-goods": lambda: self._prestige_goods(params),
-            "references": lambda: self._references(rest),
-            # Vanilla's own script, read from the installed game (#1563)
-            "vanilla-refs": lambda: self._vanilla_refs(rest, params),
-            "culture-reads": lambda: self._culture_reads(rest, params),
-            "formables": lambda: self._formables(params),
-            "diff": lambda: self._diff(rest, params),
-            # Another mod's entries that land on ours, and which side wins (#1170)
-            "external-mod-overlap": lambda: self._external_mod_overlap(rest, params),
-            "tech-tree": lambda: self._tech_tree(rest),
-            "modifier-search": lambda: self._modifier_search(params),
-            "modifier-grants": lambda: self._modifier_grants(rest, params),
-            "unlocked-by": lambda: self._unlocked_by(rest),
-            "tech-unlocks": lambda: self._tech_unlocks(rest, params),
-            "annotators": lambda: self._annotators(),
-            "filter": lambda: self._filter(rest, params),
-            # New structured endpoints
-            "events": lambda: self._events(rest, params),
-            "event-balance": lambda: self._event_balance(rest, params),
-            # Event magnitude audit (hardcoded fast-scaling values)
-            "event-magnitude-audit": lambda: self._event_magnitude_audit(params),
-            # Event dispatch graph + context audit (system gating, unchosen actions)
-            "event-dispatch": lambda: self._event_dispatch(rest),
-            "event-context-audit": lambda: self._event_context_audit(params),
-            "institutions": lambda: self._institutions(rest),
-            "production-methods": lambda: self._production_methods(rest, params),
-            # Employment per valid PM combination, by profession (#990)
-            "pm-employment": lambda: self._pm_employment(rest, params),
-            "journal-entries": lambda: self._journal_entries(rest),
-            "treaty-articles": lambda: self._treaty_articles(rest),
-            "diplomatic-actions": lambda: self._diplomatic_actions(rest),
-            "decisions": lambda: self._decisions(rest),
-            "script-values": lambda: self._script_values(rest),
-            "scripted-effects": lambda: self._scripted_effects(rest),
-            "scripted-triggers": lambda: self._scripted_triggers(rest),
-            # Inverse of the callers index: call sites whose callee is gone
-            "scripted-helpers": lambda: self._scripted_helpers(rest, params),
-            # Calls whose arguments don't match the callee's $X$ names (#732)
-            "script-args": lambda: self._script_args(rest, params),
-            # How each site uses a variable or variable list (#973)
-            "variable-usage": lambda: self._variable_usage(rest, params),
-            # Which accessors vanilla loc and GUI chain on a data type (#1246)
-            "loc-accessors": lambda: self._loc_accessors(rest, params),
-            "decrees": lambda: self._decrees(rest),
-            "principles": lambda: self._principles(rest),
-            "amendments": lambda: self._amendments(rest),
-            "on-actions": lambda: self._on_actions(rest),
-            # Inverse: the on-actions that run an effect / fire an event (#333)
-            "on-action-callers": lambda: self._on_action_callers(rest),
-            # Technology effects endpoint
-            "technology-effects": lambda: self._technology_effects(rest),
-            # Engine docs endpoints
-            "engine-docs": lambda: self._engine_docs(rest, params),
-            # Developer reference docs (.md files from base game)
-            "dev-docs": lambda: self._dev_docs(rest, params),
-            # GUI render-site lookup (loc key -> GUI files; entity field -> GUI files)
-            "gui": lambda: self._gui(rest, params),
-            # Missing localization detection
-            "unlocalized": lambda: self._unlocalized(params),
-            # Vocabularies (placeholder → values used by pattern matching / validation)
-            "vocabularies": lambda: self._vocabularies(rest),
-            # Modifier pattern catalog + auto-discovered families
-            "modifier-patterns": lambda: self._modifier_patterns(rest, params),
-            # Mod-vs-engine validation
-            "validate": lambda: self._validate(rest, params),
-            # Duplicate-image detector for unique-per-entity image fields
-            "duplicate-images": lambda: self._duplicate_images(params),
-            "placeholder-icons": lambda: self._placeholder_icons(params),
-            # Generator-ownership map for auto-generated mod files
-            "auto-generated": lambda: self._auto_generated(),
-            # Game logs (debug.log, error.log, game.log, …)
-            "logs": lambda: self._logs(rest, params),
-            # Convenience endpoints — thin wrappers over /keys/<EntityType>.
-            "cultures": lambda: self._vocab_endpoint("culture"),
-            "religions": lambda: self._vocab_endpoint("religion"),
-            "interest-groups": lambda: self._vocab_endpoint("ig"),
-            "law-groups": lambda: self._vocab_endpoint("law_group"),
-            # The vocab wrapper plus the parent_group hierarchy (#383)
-            "building-groups": lambda: self._building_groups(rest),
-            "pop-types": lambda: self._vocab_endpoint("poptype"),
-            "country-ranks": lambda: self._vocab_endpoint("country_rank"),
-            "terrain": lambda: self._vocab_endpoint("terrain"),
-            "discrimination-traits": lambda: self._vocab_endpoint("discrimination_trait"),
-        }
-        handler = dispatch.get(ep)
-        if handler is None:
+        spec = ROUTES.get(ep)
+        if spec is None:
             raise NotFound(ep)
-        result = handler()
+        given = {"rest": rest, "params": params}
+        result = getattr(self, spec.method)(*spec.fixed, *(given[name] for name in spec.takes))
         # Optional post-process: ?annotate=<name>[,<name>...] enriches every
         # entity entry shaped like {type, id, ...} in the response. When the
         # param is absent or empty the post-processor never runs — pure
@@ -3385,10 +3428,16 @@ class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, VocabularyRoutes, 
                 {"path": "/diplomatic-actions/<id?>", "desc": "Diplomatic-action catalog with category (subject_relation/power_bloc/general) + pact metadata."},
                 {"path": "/decisions/<id?>", "desc": "Decisions catalog."},
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
+                {"path": "/scripted-effects/<id?>", "desc": "Scripted effects with their $X$ parameters; with an id, every call site (mod and vanilla) with file:line and parsed args."},
+                {"path": "/scripted-triggers/<id?>", "desc": "Scripted triggers, the same shape as /scripted-effects."},
+                {"path": "/scripted-helpers/unresolved", "desc": "Call sites whose callee is missing: a scripted effect or trigger neither vanilla nor the mod defines, which the engine silently ignores (#288)."},
                 {"path": "/script-args/<helper?>", "desc": "Scripted effect/trigger calls whose arguments don't match the callee's $X$ names (#732); with a helper, its params and every caller's unknown/missing args."},
                 {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
                 {"path": "/loc-accessors/<Type?>?context=&examples=&min_uses=", "desc": "Which accessors vanilla loc (and vanilla .gui when the game is installed) chains on a data type (#1246): each with its use count, per-context counts (events, notification, ui, gui, ...), the type it returns, and example expressions, plus the SCOPE.sX / gsX saved-scope accessor for the type. <Type> is PoliticalLobby, political_lobby or politicallobby. ?context= keeps only uses in that context. Bare: every type with its use count."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
+                {"path": "/principles/<id?>", "desc": "Power bloc principles; with an id, its group, tier and modifier blocks."},
+                {"path": "/amendments/<id?>", "desc": "Amendments; with an id, its parent law, allowed laws and modifiers."},
+                {"path": "/diff/<EntityType>/<id>", "desc": "What the mod changes in an entity against vanilla, field by field: {in_vanilla, added, removed, changed}."},
                 {"path": "/on-actions/<id?>", "desc": "On-actions as the engine merges them (#333): every declaration of <id> in load order (sources: file, line, on_actions, events, random_events, chance_to_happen, fields), merged (on_actions and events added up; random_events only when one declaration sets it; null under a directive), fields_set_more_than_once (effect: the later file's wins, a documented rule), fired_by, warnings, and raw (the store's last-read block). Vanilla's declarations are read only with a game install: check vanilla_indexed / origin. Bare: the on-actions the mod declares, with their files."},
                 {"path": "/on-action-callers/<scripted_effect|event_id|on_action>", "desc": "The mod on-actions that reach a scripted effect, an event or an on-action, through any chain of scripted effects and events, each with file:line, per-hop guards and the roots it hangs from (#333). Callers of other kinds (journal-entry pulses, buttons, decisions) are not followed: they are in not_followed, so count 0 is 'nothing calls it' only when not_followed, unreached and passed_as_parameter are empty. A row is the shortest route, not the only one: guards_complete false means other_routes exist. Mod script only; several seconds a call."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
