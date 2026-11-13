@@ -320,6 +320,16 @@ named the saved values. So `save_temporary_value_as` works in a named
 script value read inside another value and inside an effect's
 `set_variable`, not only at the top of a progress bar.
 
+**A fourth, unmeasured (#1731).** The yearly leaderboard pass
+(`ch_yearly_global_update`) read `cultural_pull_display`, the whole pull
+chain, twice for every country with any pull (the change since the last
+recount, then the stored share) and a third time for the ten board slots.
+It now reads it once into `ch_board_share_now`. The pass runs about twice a
+year, outside the profiled month, so the saving was not measured; it is
+roughly one more pull evaluation per country per pass. The in-game check of
+the recount was not run: the harness's `pick` of `te_debug_ch.1`'s recount
+option was refused ("No matching pending event"), so it is a play-test row.
+
 **What fires `on_revolution_start` (#1723).** A deploy-only on_action logged
 each call in the `main` run: 126 starts and no ends in 30 days. 125 were 25
 dynamic-tag countries, five times each on the weekly day (3, 10, 17, 24 and
