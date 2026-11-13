@@ -1110,11 +1110,14 @@ global_warming_events_on_action = {
 			gw_world_climate_selfcheck_effect = yes
 			# Regional warming (#1681) applies once the World Climate entry has
 			# opened, at its 0.1 C, and stays on as the entry does
-			# (gw_regional_target).
+			# (gw_regional_target). The unmasked warming, so that a save from
+			# before this, its entry open and a haze holding the felt anomaly
+			# under 0.1, sets it too: Aerosol Injection needs 1 C of felt
+			# warming to start, so a haze implies the entry opened.
 			if = {
 				limit = {
 					NOT = { has_global_variable = gw_g_world_climate_open }
-					temperature_anomaly_display >= 0.1
+					gw_unmasked_temperature >= 0.1
 				}
 				set_global_variable = gw_g_world_climate_open
 			}

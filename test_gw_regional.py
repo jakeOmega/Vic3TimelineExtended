@@ -164,7 +164,7 @@ class BandTest(unittest.TestCase):
         self.assertIn("possible = { temperature_anomaly_display >= 0.1 }", world)
         pulse = _squash(_text(EXTRA_ON_ACTIONS))
         self.assertIn("if = { limit = { NOT = { has_global_variable = gw_g_world_climate_open } "
-                      "temperature_anomaly_display >= 0.1 } set_global_variable = gw_g_world_climate_open }", pulse)
+                      "gw_unmasked_temperature >= 0.1 } set_global_variable = gw_g_world_climate_open }", pulse)
         self.assertNotIn("remove_global_variable = gw_g_world_climate_open", pulse)
 
     def test_the_gap_is_zero_where_no_scale_was_applied(self):
@@ -232,9 +232,14 @@ class RefreshTest(unittest.TestCase):
         #1747). Heatwave duration's only other carrier is the termination shock, whose owners are skipped."""
         check = self.effect[self.effect.index("gw_regional_selfcheck_effect = {"):]
         self.assertIn("modifier:state_harvest_condition_heatwave_duration_mult", check)
-        self.assertIn("owner = { NOT = { has_modifier = gw_termination_shock_modifier } }", check)
-        self.assertIn("OR = { gw_regional_target < 0.9 gw_regional_target > 1.1 }", check)
-        self.assertIn("gw_rg_chk_scale_gap < 0.03 gw_rg_chk_scale_gap > -0.03", check)
+        self.assertIn("owner = { is_involved_in_journal_entry = je_world_climate "
+                      "NOT = { has_modifier = gw_termination_shock_modifier } }", check)
+        skip = re.search(r"OR = \{ gw_regional_target < ([\d.]+) gw_regional_target > ([\d.]+) \}", check)
+        tolerance = float(re.search(r"gw_rg_chk_scale_gap < ([\d.]+) gw_rg_chk_scale_gap > -", check).group(1))
+        # A modifier stuck at x1 reads 0.25 x |1 - scale| off: outside the skipped window that must exceed the
+        # tolerance, or x1 could pass (second review of #1747: 0.9-1.1 against 0.03 let 0.89 through).
+        for edge in (float(skip.group(1)), float(skip.group(2))):
+            self.assertGreater(0.25 * abs(1 - edge), tolerance, edge)
         self.assertEqual(_lines("global_warming")["state_harvest_condition_heatwave_duration_mult"], 0.5)
         self.assertEqual(TROPICS["state_harvest_condition_heatwave_duration_mult"], 0.25)
         carriers = []

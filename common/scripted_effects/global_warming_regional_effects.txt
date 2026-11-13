@@ -51,14 +51,16 @@ gw_regional_refresh_effect = {
 # TEMPORARY (#1681): once a game, does every band's state carry its modifier at the
 # right scale, and does in_tropics read a band? Global scope, from
 # global_warming_events_on_action under the rule, monthly. Waits for three months in a
-# row at 0.5 C or more and not within 0.1 of 1 C (where a modifier stuck at x1 would
-# read right), so every banded state has refreshed (a refresh follows the target within
+# row at 0.5 C or more and not within 0.2 of 1 C (a modifier stuck at x1 reads
+# 0.25 x |1 - scale| off, so at least 0.05 there, beyond the 0.03 tolerance), so
+# every banded state has refreshed (a refresh follows the target within
 # a month). OK needs at least 100 tropical states and no more than half of all states
 # (in_tropics reads neither nothing nor everything), at least 20 high-latitude states,
 # nine in ten of each band's states carrying its modifier (a state split off this month
 # may not have yet), and one tropical state's heatwave duration within 0.03 of Climate
 # Warming's 0.5 a degree plus the band's 0.25 at its applied scale (an owner under the
-# termination shock, the field's one other carrier, is skipped). Fallbacks: tropics
+# termination shock, the field's one other carrier, is skipped, and so is one not yet
+# involved in the World Climate entry, whose Climate Warming is not there to read). Fallbacks: tropics
 # under 100 or over half the states, band the tropics by the record's latitude
 # (te_climate_abs_latitude under 23.5) as the north is; a scale off, refresh from a
 # hidden state event, whose ROOT is the state. Play-test row:
@@ -69,8 +71,8 @@ gw_regional_selfcheck_effect = {
 			NOT = { has_global_variable = gw_rg_selfcheck_done }
 			gw_regional_target >= 0.5
 			OR = {
-				gw_regional_target < 0.9
-				gw_regional_target > 1.1
+				gw_regional_target < 0.8
+				gw_regional_target > 1.2
 			}
 		}
 		if = {
@@ -103,7 +105,10 @@ gw_regional_selfcheck_effect = {
 			limit = {
 				var:gw_regional_band ?= 1
 				has_modifier = global_warming_tropics
-				owner = { NOT = { has_modifier = gw_termination_shock_modifier } }
+				owner = {
+					is_involved_in_journal_entry = je_world_climate
+					NOT = { has_modifier = gw_termination_shock_modifier }
+				}
 			}
 			set_global_variable = { name = gw_rg_chk_reading value = modifier:state_harvest_condition_heatwave_duration_mult }
 			set_global_variable = {

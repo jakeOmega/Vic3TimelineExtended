@@ -155,9 +155,13 @@ pattern on the state (`dynamic_modifier_pattern.md`):
   anomaly (`temperature_anomaly_display`, after any aerosol mask, already in
   hundredths) floored at 0, once the World Climate entry has opened, and 0
   before. The opening is the global flag `gw_g_world_climate_open`, set in
-  `global_warming_events_on_action` the first month at 0.1 °C and never
-  removed, as the entry never closes; so an aerosol mask that takes the anomaly
-  back under 0.1 leaves the bands on with Climate Warming. A first draft
+  `global_warming_events_on_action` the first month the unmasked warming
+  (`gw_unmasked_temperature`) reaches 0.1 °C and never removed, as the entry
+  never closes; so an aerosol mask that takes the anomaly back under 0.1 leaves
+  the bands on with Climate Warming. It reads the unmasked warming so that a
+  save from before this, its entry open under such a haze, sets it too:
+  Aerosol Injection needs 1 °C of felt warming to start, so any haze means the
+  entry has opened. A first draft
   rounded to 0.05 and cut off below 0.1, which made "the same scale" only
   roughly true (review of #1747).
 - **The cadence.** `on_monthly_pulse_state` runs the refresh on a state without
@@ -177,7 +181,7 @@ pattern on the state (`dynamic_modifier_pattern.md`):
   and the band is the region's, so nothing needs redoing.
 
 **Self-check** (once a game, under the rule, after three months in a row at
-0.5 °C or more and not within 0.1 of 1 °C): `TE_SELF_CHECK OK|BROKEN
+0.5 °C or more and not within 0.2 of 1 °C): `TE_SELF_CHECK OK|BROKEN
 gw_regional` with the counts of states in each band, of those carrying their
 band's modifier, and one tropical state's heatwave duration against its
 expected value. OK needs at least 100 tropical states and no more than half of
@@ -185,9 +189,12 @@ all states (`in_tropics` reads a band, not everything or nothing), at least 20
 high-latitude states, 90% of each band carrying its modifier (the refresh
 runs), and the heatwave duration within 0.03 of Climate Warming's 0.5 a degree
 plus the band's 0.25 at the state's applied scale (the multiplier reads the
-state's variable; a modifier stuck at ×1 reads 0.25 × (1 − scale) away, which
-is why a scale near 1 is skipped). Heatwave duration's only other carrier is
-the termination shock, so a state whose owner carries it is not read.
+state's variable; a modifier stuck at ×1 reads 0.25 × |1 − scale| away, at
+least 0.05 outside the skipped 0.8–1.2, beyond the tolerance). Heatwave
+duration's only other carrier is the termination shock, so a state whose owner
+carries it is not read, nor one whose owner is not yet involved in the World
+Climate entry (a country created this month), which has no Climate Warming to
+read.
 Fallbacks: a wrong tropical count, band the tropics by the record's latitude
 (under 23.5°) as the north is; a scale off, refresh from a hidden state event,
 whose ROOT is the state. Play-test row: `docs/testing/vanilla-1-15-playtest.md`, "1.15

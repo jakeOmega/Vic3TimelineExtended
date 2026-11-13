@@ -36,9 +36,10 @@ gw_regional_band_value = {
 
 # Any scope. The scale the band's modifier applies at: Climate Warming's own, the
 # felt anomaly (after any aerosol mask, already to 0.01) floored at 0, once the
-# World Climate entry has opened (gw_g_world_climate_open: the first month at
-# 0.1 C under the rule, set in global_warming_events_on_action and never removed,
-# as the entry never closes), and 0 before. Reads globals only.
+# World Climate entry has opened (gw_g_world_climate_open: the first month the
+# unmasked warming reaches 0.1 C under the rule, set in
+# global_warming_events_on_action and never removed, as the entry never closes),
+# and 0 before. Reads globals only.
 gw_regional_target = {
 	value = 0
 	if = {
@@ -101,8 +102,8 @@ gw_rg_chk_high_mod_min_g = {
 }
 # The scale check: one tropical state's heatwave duration, and what Climate Warming
 # (0.5 a degree) and Tropical Warming (0.25 at the state's applied scale) should
-# give. A band modifier stuck at x1 (the multiplier misread) reads 0.25 x (1 -
-# scale) away, so the check skips a scale within 0.1 of 1.
+# give. A band modifier stuck at x1 (the multiplier misread) reads 0.25 x |1 -
+# scale| away, so the check skips a scale within 0.2 of 1.
 gw_rg_chk_reading_g = { value = global_var:gw_rg_chk_reading }
 gw_rg_chk_expected_g = { value = global_var:gw_rg_chk_expected }
 gw_rg_chk_scale_gap = {
