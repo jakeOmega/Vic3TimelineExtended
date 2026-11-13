@@ -203,7 +203,14 @@ un_propose_expulsion_possible = {
 		text = un_representation_table_tt
 		NOT = { un_representation_suspended = yes }
 	}
-	any_country = { un_expulsion_candidate = yes }
+	# In a custom_tooltip, as the other topics' grounds are: drawn bare, the
+	# candidate test's ROOT reads (un_justice_not_proposer_bloc) log a
+	# "Scope dependent values in localization inside an any trigger" line per
+	# country each time the tooltip is drawn (132 in one second, 2026-11-12).
+	custom_tooltip = {
+		text = un_grounds_expulsion_tt
+		any_country = { un_expulsion_candidate = yes }
+	}
 	un_propose_can_afford_sponsor_punitive = yes
 }
 

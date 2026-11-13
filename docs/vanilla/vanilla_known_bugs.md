@@ -305,14 +305,15 @@ Error: add_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 
 Iberia DLC (IP4) coup-resolution scripted effects call `abandon_revolution` / `remove_ruling_interest_group` on IGs whose state doesn't match the effect's preconditions (no growing revolution to abandon, IG already insurrectionary), and line 462 puts an insurrectionary golpista IG back in government with `add_ruling_interest_group` (from `ip4_coup_events.txt:456`). Vanilla bug — the effects should be guarded but aren't.
 
-### `common/diplomatic_catalysts/00_diplomatic_catalysts.txt:2334, 2414` — the event catalysts offer the overlord lobbies an appeasement factor they do not list
+### `common/diplomatic_catalysts/00_diplomatic_catalysts.txt:2333, 2413` — the event catalysts offer the overlord lobbies an appeasement factor they do not list
+- reviewed: mod frame, the mod's own events create the catalyst; the factor the overlord lobbies reject is the catalyst's
 
 ```
 is a valid appeasement reason for political lobby 'lobby_pro_overlord'
 is a valid appeasement reason for political lobby 'lobby_anti_overlord'
 ```
 
-`change_appeasement` takes only a factor the lobby type lists for the sign of the amount (`appeasement_factors_pro` for a gain, `appeasement_factors_anti` for a loss; `scripting_best_practices.md` § `change_appeasement`'s `appeasement_special_events_*` Factor). `catalyst_event_positive` (line 2334) and `catalyst_event_negative` (line 2414) pass `appeasement_special_events_positive` / `_negative` to both `add_lobby_appeasement_from_diplomacy_unidirectional` and `add_overlord_lobby_appeasement_from_diplomacy`. The country lobbies list both factors. Neither overlord lobby lists either one, on either side, so the overlord half of every event catalyst is rejected. That includes catalysts the mod creates from its own events (28 `create_diplomatic_catalyst` calls in nine files), and it's still the catalyst's defect. Once, 2026-10-04, for `lobby_pro_overlord`.
+`change_appeasement` takes only a factor the lobby type lists for the sign of the amount (`appeasement_factors_pro` for a gain, `appeasement_factors_anti` for a loss; `scripting_best_practices.md` § `change_appeasement`'s `appeasement_special_events_*` Factor). `catalyst_event_positive` (line 2333; 2334 before 1.15.1) and `catalyst_event_negative` (line 2413; 2414 before) pass `appeasement_special_events_positive` / `_negative` to both `add_lobby_appeasement_from_diplomacy_unidirectional` and `add_overlord_lobby_appeasement_from_diplomacy`. The country lobbies list both factors. Neither overlord lobby lists either one, on either side, so the overlord half of every event catalyst is rejected. That includes catalysts the mod creates from its own events (28 `create_diplomatic_catalyst` calls in nine files), and it's still the catalyst's defect. Once, 2026-10-04, for `lobby_pro_overlord`.
 
 This entry used to blame vanilla's lines 285 and 292 for `appeasement_relations_decreased` failures, anchored on the lobby effects file (00_lobby_effects.txt) and read as a `factor`/`reason` field mix-up. Those vanilla calls are signed correctly. The failures were five mod event options that passed the factor with the signs reversed (fixed 2026-10-04), and the anchor hid them, because the mod's calls go through the same scripted effect and error.log lists every file in the call stack. Keep this entry anchored on the catalyst and its signature on the lobby type.
 
@@ -955,15 +956,16 @@ Error setting properties for '' (widget)
 
 Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `margin_top` and `margin_left`, which a plain widget does not take. The mod's override keeps vanilla's block as it is (mod lines 16428–16430). One set per opening of the unassigned-generals or admirals menu; cosmetic.
 
-### `gui/building_details_panel.gui:4723` — a building its workforce owns, with no pops, reads the first pop of an empty list
+### `gui/building_details_panel.gui:4780` — a building its workforce owns, with no pops, reads the first pop of an empty list
 - source: `pdx_gui_data_model.h:421`
+- reviewed: mod frame, the mod's override of the panel keeps vanilla's ownership-icon block unchanged, diffed 2026-11-12
 
 ```
 FetchData failed for 'PopListItem.GetPopType.GetTexture'
 Could not get datacontext of type PopListItem from model
 ```
 
-The ownership icon's `#local workforce` branch (vanilla line 4725) takes `datacontext_from_model` index 0 of the owned building's pop list, which is empty when the building has no workers. The mod's override keeps vanilla's block as it is (mod line 4723). The second line names no file, so the entry also anchors on its source. 2026-10-24: 12 and 4 lines while a building panel was open; cosmetic.
+The ownership icon's `#local workforce` branch (vanilla 1.15.1 line 4753, the icon below it) takes `datacontext_from_model` index 0 of the owned building's pop list, which is empty when the building has no workers. The mod's override keeps vanilla's block as it is (mod line 4780 in 1.15.1; 4723 before). The second line names no file, so the entry also anchors on its source. 2026-10-24: 12 and 4 lines while a building panel was open; cosmetic. 2026-11-12: 92 lines in four bursts between 21:45 and 22:03, as long as the panel showed such a building.
 
 ### `gui/politics_panel_types.gui:2080, 2294` — the trend chart's single line drawn from a one-point trend
 
@@ -1518,6 +1520,63 @@ religion_percent_state trigger [ Invalid target religion for
 ```
 
 `decree_establish_missions`'s `state_trigger` runs `religion_percent_state = { target = owner.religion … }` with no `exists = owner`. When two parts of a split state merge, the absorbed part still resolves for a while with no owner, and the decree's state check reads it. Two lines in the 2026-11-08 observer game, each about 45 seconds after French Guinée took in more provinces (17:35:50 and 17:43:05, 1878 and 1880), on two different state ids that share an index. The mod doesn't touch this decree.
+
+### `events/russia_events/russian_civil_war_events.txt:1012` — a new Transcaucasia is handed the Transcaucasian states it already owns
+- stack: vanilla only
+
+```
+Error: set_state_owner effect [ Cannot set ownership of state Armenia to country Transcaucasia: Transcaucasia already owns Armenia ]
+```
+
+The civil war's national-state step (event line 1012) calls `create_russian_national_state_for_culture` (05_russia_scripted_effects.txt, line 1195), which runs `create_independent_national_state_in_russia`. Its Transcaucasia branch does `change_tag = CAU` and then hands `ROOT`'s Transcaucasian states to `c:CAU` (file line 862), and the country that has just become Transcaucasia owns one of them already. The log calls that line 846: in a scripted effect the engine counts from the definition's line (717) and skips blank and comment lines. One line, 1934.8.1 of a 1931–1938 game (2026-11-12), with no mod frame; nothing changes but the log line.
+
+### `common/ai_strategies/00_default_strategy.txt:10563` — Russia's Balkan-client score asks whether a country is the Ottomans' subject after the Ottomans are gone
+- stack: vanilla only
+
+```
+Error: is_subject_of trigger [ Invalid Country! ]
+```
+
+The default strategy's subject score adds 100 when Russia (`c:RUS ?= this`) looks at an Orthodox Balkan client that `is_subject_of = c:TUR`, with no `?=` on Turkey. With no TUR in the world the trigger logs. 29 lines between 1935.2 and 1937.1 of a 1931–1938 game (2026-11-12), none with a mod frame; that game's 1937.10.1 autosave has Russia and no TUR. `- stack: vanilla only` because mod effects can set off an AI evaluation.
+
+### `common/journal_entries/00_player_objectives_great_game.txt:481` — the Great Game's outcome runs its cleanup in a scope with no variables (1.15)
+- stack: vanilla only
+
+```
+Error: remove_variable effect [ This scope does not have variables ]
+```
+
+`je_great_game_control`'s `outcome` block (line 325) ends with `je_great_game_control_cleanup = yes` (00_victoria_cleanup_scripted_effects.txt), whose `hidden_effect` removes `great_game_no_longer_power_bloc_leader_var` and `great_game_subjected_var` in whatever scope the outcome runs it in, and that scope holds no variables. Which scope that is wasn't checked. Two lines, one per variable, 1936.7.14 of a 1931–1938 game (2026-11-12), no mod frame; the two variables stay set wherever they were set.
+
+### `events/russia_events/ip5_favorites_events.txt:267, 268` — a favorite's dismissal adds loyalists in the capital of a country that has none
+- stack: vanilla only
+
+```
+Error: Event target link 'capital' returned an invalid object
+add_loyalists_in_state effect [ Scoped object is not valid. Type: State NULL_STATE
+```
+
+`favorites.2`'s option b dismisses the current favorite, then runs `capital = { add_loyalists_in_state = { value = medium_radicals } }` with no `exists = capital`. One line each, 1936.11.11 of a 1931–1938 game (2026-11-12), no mod frame. Which country it was isn't checked: the game's autosaves from 1936 had rotated out. A country with no states is the likely case (the Italian unification entry below has one).
+
+### `events/italian_unification.txt:226` — the Risorgimento's weekly event reads a stateless country's capital
+- stack: vanilla only
+
+```
+Error: Event target link 'capital' returned an invalid object
+```
+
+`italian_unification.5`'s trigger (`je_risorgimento`, weekly) reads `capital = { radical_fraction = { value >= 0.10 } }` with no `exists = capital`. Seventeen lines, weekly from 1937.12.12 to about 1938.4.1 of a 1931–1939 game (2026-11-12), no mod frame. Modena held the only running `je_risorgimento` (1938.7.1 autosave); it owned Emilia on 1937.10.1, no state on 1938.1.1 and 1938.4.1, and Emilia again (a new state record) on 1938.7.1. So it lived through those months with no state and no capital.
+
+### `events/poland_events.txt:148, 290` — Polish agitation sends its second event to a target it never found
+- stack: vanilla only
+
+```
+Undefined event target 'polish_agitation_target_1_scope'
+Event target link 'scope' returned an unset scope
+random_scope_state effect [ Wrong scope for effect: none, expected country
+```
+
+`poland_events.1` picks up to four `random_country` targets that own a Polish homeland state and are not Polish themselves, and its option a (the default) runs `scope:polish_agitation_target_1_scope = { trigger_event = { id = poland_events.2 … } }` with no `exists`. With no such country the scope is unset (line 148, plus `Event target link 'scope' returned an unset scope` there), and `poland_events.2`'s `immediate` then runs `random_scope_state` in no scope (line 290). The same second logs two `Invalid owner for scope type 0` lines with no file (watch list). One firing, 1938.6.24 of a 1931–1938 game (2026-11-12), no mod frame. The mod's optional Pan-Slavic merge can take in Polish, but a merge would make more countries non-Polish owners of Polish homelands, not fewer; whether it ran in that game wasn't checked.
 
 ## Expected mod-override noise
 
@@ -2131,12 +2190,13 @@ Engine assertions fired when formation bookkeeping (exile-status update, `loiter
 ### `building_manager.cpp:1575` — building level reduced to fit support cap
 - source: `building_manager.cpp:1575`
 - source: `building_manager.cpp:1580`
+- source: `building_manager.cpp:1579`
 
 ```
 and can only support
 ```
 
-Engine reports that a state has more levels of a building type than the state can support (e.g. `Building in Natalia has 10 of building type Barracks and can only support 5, its level will be reduced`) and auto-downsizes. Normal vanilla rebalancing, not an error. Cosmetic. 1.15 logs it at `:1580` (2026-11-07). The mod's Grid Transfer Station shows up here when two parts of a split state merge: it is one level a state (a flat `state_building_grid_transfer_station_max_level_add = 1` in `base_values`), so the merged state holds two and the engine takes one away, once (Gujarat and Bundelkhand, 2026-11-07).
+Engine reports that a state has more levels of a building type than the state can support (e.g. `Building in Natalia has 10 of building type Barracks and can only support 5, its level will be reduced`) and auto-downsizes. Normal vanilla rebalancing, not an error. Cosmetic. 1.15 logs it at `:1580` (2026-11-07). The mod's Grid Transfer Station shows up here when two parts of a split state merge: it is one level a state (a flat `state_building_grid_transfer_station_max_level_add = 1` in `base_values`), so the merged state holds two and the engine takes one away, once (Gujarat and Bundelkhand, 2026-11-07). 1.15.1 logs it at `:1579` (2026-11-12). The mod's Highway shows up here too: its cap is a per-state maximum that the owner's technologies, power-bloc principle and company raise (`state_building_highway_max_level_add`), so a state that changes hands or loses one of those keeps levels the new cap can't carry. Seven lines over four launches of one 1931–1938 game: Shanghai and Goa (6 of 5), Kyiv and Moscow (6 of 4) and Kazan (5 of 4), the Russian three in 1936–1937.
 
 ### `pdx_data_callstack.cpp:52` — vanilla GUI `interest_group_top` animation on missing widget
 - source: `pdx_data_callstack.cpp:52`
@@ -2490,11 +2550,30 @@ Attempted to create relations between a country and itself
 
 The assert behind `events/brazil/peru_bolivia.txt`'s same-country `change_relations` (above). Once in the first 1.15 observer game (2026-11-05).
 
+### `travel_network_definition.cpp:371` — Panama's port hub province lies outside its port spline anchor
+- source: `travel_network_definition.cpp:371`
+
+```
+State Region STATE_PANAMA, port hub province xD0EF40 does not contain the port spline anchor, which lies in province x8A8A20
+```
+
+One line at every launch of 1.15.1 (three on 2026-11-12). The port (`xD0EF40`) and city (`x8A8A20`) are vanilla's: the mod's copy of 06_central_america.txt keeps STATE_PANAMA's provinces, city and port as vanilla has them (it adds deposits elsewhere in the file; diffed 2026-11-12), and the mod ships no map splines. Not seen in a mod-off launch yet. The signature names the province pair, so another state's line still shows up.
+
 ## Watch list (tagged, never hidden)
 
 A message that is usually vanilla's and can also be the mod's, with nothing in the line to tell which: an assert with no script frame, a character or country the engine could not build. Registering it above would hide the mod's case. Leaving it bare makes each triage work out again why it is there. An entry here tags the line and leaves it in every view (`/logs` keeps it under `vanilla_bugs=hide`; `scripts/analysis/log_triage.py` prints it in its own section), and its `- check:` line, which is required, says what settles the question. Give the check the mod's case as well as vanilla's.
 
 When a check has come out the same way often enough that the line no longer needs a look, move the entry up to a section that hides it, with the signature or stack line that keeps the mod's case out. When a line here turns out to be the mod's, fix the cause and write the tell into the check.
+
+### `jomini_script_system.cpp:247` — `Invalid owner for scope type 0`, with no script location
+- source: `jomini_script_system.cpp:247`
+- check: read error.log at the same second for an unset scope that an effect ran in. Vanilla's when the only one is a vanilla file's (2026-11-12: two lines beside poland_events.txt line 148's unset `scope:polish_agitation_target_1_scope`, entry above); the mod's when a mod file's `scope:`, `var:` or saved scope is the one that came back unset.
+
+```
+Invalid owner for scope type 0
+```
+
+`Script location: <unknown>:0`: the engine names no file. Two lines, 2026-11-12, in the same second as a vanilla event ran its effects in an unset scope.
 
 ### `character_templates_utils.cpp:40` — `Invalid Culture scope when creating Character`
 - source: `character_templates_utils.cpp:40`

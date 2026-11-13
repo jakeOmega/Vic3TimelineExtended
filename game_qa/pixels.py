@@ -3,13 +3,16 @@
 `decode_png` reads what `win_helper.encode_png` writes (8-bit RGB, no interlace, every row unfiltered) and
 nothing else: the harness compares its own shots, it is not an image library. `changed` answers one question,
 for `enter-game` (#1598): did the country-select screen's side panel change after the country click, which it
-does when a country is selected and does not when a window covers the click.
+does when a country is selected and does not when a window covers the click. `scaled_up` and `encode_png` make
+`profiler-roots`' crop (#1701): a part of a shot, each pixel repeated, so that its small text can be read.
 """
 
 from __future__ import annotations
 
 import struct
 import zlib
+
+from game_qa import win_helper
 
 _SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
@@ -79,3 +82,28 @@ def changed(before: tuple[int, int, bytes], after: tuple[int, int, bytes], toler
                 or abs(a[i + 2] - b[i + 2]) > tolerance):
             count += 1
     return count / (len(a) // 3)
+
+
+def scaled_up(image: tuple[int, int, bytes], factor: int) -> tuple[int, int, bytes]:
+    """`image` with each pixel repeated `factor` times across and down (nearest neighbour: no pixel is made up)."""
+    width, height, rgb = image
+    if isinstance(factor, bool) or not isinstance(factor, int) or factor < 1:
+        raise PixelsError("the factor is a whole number of at least 1, not %r" % (factor,))
+    stride = width * 3
+    if width < 1 or height < 1 or len(rgb) != stride * height:
+        raise PixelsError("%d bytes is not a %dx%d RGB image" % (len(rgb), width, height))
+    rows = []
+    for y in range(height):
+        row = rgb[y * stride:(y + 1) * stride]
+        wide = bytearray(stride * factor)
+        for copy in range(factor):
+            for channel in range(3):
+                wide[3 * copy + channel::3 * factor] = row[channel::3]
+        rows.append(bytes(wide) * factor)
+    return width * factor, height * factor, b"".join(rows)
+
+
+def encode_png(image: tuple[int, int, bytes]) -> bytes:
+    """A PNG of `image`, as the helper writes its shots (`win_helper.encode_png`), so `decode_png` reads it back."""
+    width, height, rgb = image
+    return win_helper.encode_png(width, height, rgb)

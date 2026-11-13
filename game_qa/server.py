@@ -28,7 +28,8 @@ removes the folder (spec § 5.2, Review Focus 1).
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
     status     the server and the session, answered here without asking the game anything
-    the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event
+    the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
+               profiler-roots, wheel, drag
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -171,6 +172,8 @@ class SessionServer:
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
             "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
+            "profiler-roots": self._profiler_roots,
+            "wheel": self._wheel, "drag": self._drag,
         }
 
     @property
@@ -343,7 +346,17 @@ class SessionServer:
         return {"path": str(self._session.shot())}, 0
 
     def _click(self, body: dict) -> tuple[dict, int]:
-        return self._session.click(_arg(body, "x"), _arg(body, "y")), 0
+        return self._session.click(body.get("x"), body.get("y"), console=body.get("console") is True,
+                                   input_line=body.get("input_line")), 0
+
+    def _wheel(self, body: dict) -> tuple[dict, int]:
+        return self._session.wheel(_arg(body, "x"), _arg(body, "y"), _arg(body, "notches")), 0
+
+    def _drag(self, body: dict) -> tuple[dict, int]:
+        return self._session.drag(_arg(body, "x1"), _arg(body, "y1"), _arg(body, "x2"), _arg(body, "y2")), 0
+
+    def _profiler_roots(self, body: dict) -> tuple[dict, int]:
+        return self._session.profiler_roots(body.get("box"), as_shown=body.get("as_shown") is True), 0
 
     def _try_event(self, body: dict) -> tuple[dict, int]:
         reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))

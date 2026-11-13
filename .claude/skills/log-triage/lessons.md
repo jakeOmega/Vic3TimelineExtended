@@ -88,6 +88,10 @@ That night error.log's six generations reached back only to 21:32, but `game.3`â
 
 Triage read gui.log by `grep`, so eight lines a launch looked new at every read: `gui/country_panel.gui:379 - Type 'â€¦' already registered at 'gui/00_te_country_panel_information.gui:19'`, the engine dropping vanilla's copy of a type the mod defines first (gui_modding_guide.md, gotcha #30). The report now tags gui.log like the other families and counts a line error.log also holds once. The entry's signature is the kept file's prefix, `already registered at 'gui/00_te_`, so the reverse case stays visible: a line that starts with a `00_te_` file and names a vanilla file as the one kept means the mod's override lost.
 
+### A line in a scripted effect file is the definition's line plus the code lines after it, so find the statement by counting, not by opening the file at that line (2026-11-12)
+
+`Script location: common/scripted_effects/05_russia_scripted_effects.txt:846` named no `set_state_owner`, though the error was one: line 846 of the file is an `add_primary_culture`. The effect it sat in, `create_independent_national_state_in_russia`, opens at file line 717, and the `set_state_owner = c:CAU` the message describes is file line 862, the 129th non-blank, non-comment line after the definition (846 = 717 + 129). The same count gave the stack's other frame, line 1195, exactly, in an effect with no blank lines. Event, journal entry and AI strategy files give file lines. The profiler labels scripted effects the same way (`docs/audits/late_game_performance.md`). So for a scripted effect or trigger frame: find the definition above the logged line, then count code lines from it.
+
 ## Mod, vanilla or third party
 
 ### A path in neither the mod nor vanilla is a third-party Workshop mod (2026-05-02)

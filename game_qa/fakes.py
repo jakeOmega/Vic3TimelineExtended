@@ -70,7 +70,7 @@ class FakeBackend:
     last saw any input, which the fake sets to `now` whenever the helper sends a
     key or a mouse button (or taps ALT to take the foreground), as Windows would.
     The cursor is `cursor`; `mouse` is the log of what the helper did with it:
-    ("move", x, y) as asked, and ("button", flags), in order.
+    ("move", x, y) as asked, ("button", flags) and ("wheel", turn), in order.
 
     The game is process GAME_PID, live and created at GAME_CREATED, with its window
     in front. The game dying and another program taking its id is a new creation
@@ -210,10 +210,10 @@ class FakeBackend:
                 return win["hwnd"]
         return 0
 
-    def send_mouse(self, flags: int) -> None:
+    def send_mouse(self, flags: int, data: int = 0) -> None:
         if flags == self.fail_mouse_on:
             raise OSError("SendInput sent 0 of 1 mouse events")
-        self.mouse.append(("button", flags))
+        self.mouse.append(("button", flags) if not data else ("wheel", data))
         self.last_input = self.now
 
     def tick(self) -> int:
@@ -265,6 +265,11 @@ class FakeHelper:
     `other_hwnd_script` (one value for each reading, then the last one holds) or by setting
     `on_presence`, which is called with the reading's number before each reading is made.
 
+    A click into a tool window takes the keyboard (live, 2026-11-12), when `click_takes_keyboard` is set: from
+    then on (`keyboard_elsewhere`) typed text, Enter and Backspace go to that window, recorded in `elsewhere`, and
+    the console key still toggles the console (the worst case: it reached the game's own keys). A click at
+    `input_line` (client pixels) gives the keyboard back to the console.
+
     A stalled game (a monthly pulse can hold it for seconds) is `latency`: each key the
     helper sends is taken by the game that many fake seconds later, in order, and
     until then the history and the log show nothing of it. With `busy_while_late` the
@@ -298,6 +303,8 @@ class FakeHelper:
         self.on_presence = None                 # called with the number of the reading, before it is made
         self.presence_calls = 0
         self.clicks: list[tuple[int, int]] = []         # client pixels, as given
+        self.wheels: list[tuple[int, int, int]] = []    # (x, y, notches), client pixels
+        self.drags: list[tuple[int, int, int, int]] = []        # (x1, y1, x2, y2), client pixels
         self.focus_succeeds = True
         self.focus_calls = 0
         self.console_open = False               # Enter runs the typed text while this is set
@@ -309,6 +316,10 @@ class FakeHelper:
         self.busy_while_late = False            # the window does not respond while a key is waiting
         self._inbox: list[tuple[float, dict]] = []      # keys sent and not yet taken: (due time, step)
         self.typed = ""                         # text typed since the last Enter
+        self.click_takes_keyboard = False       # a click (not at input_line) gives the keyboard to a tool window
+        self.input_line: tuple[int, int] | None = None  # client pixels: a click here gives it back to the console
+        self.keyboard_elsewhere = False         # the keys go to a tool window, not the console
+        self.elsewhere: list[dict] = []         # the keys that went there
         self.steps: list[dict] = []             # every step sent, as given
         self.now = 0.0
         self.replies: dict[str, tuple[list[str], list[str], list[str]]] = {}
@@ -387,6 +398,32 @@ class FakeHelper:
             raise HelperError("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height))
         self.clicks.append((x, y))
         self.cursor = self.helper_cursor = (left + x, top + y)
+        if self.input_line is not None and (x, y) == tuple(self.input_line):
+            self.keyboard_elsewhere = False
+        elif self.click_takes_keyboard:
+            self.keyboard_elsewhere = True
+
+    def _aimed(self, *points: int, **reply) -> None:
+        """The real helper's refusals before anything goes out, for a wheel or a drag aimed at `points` (x, y, ...)."""
+        if not (self.exists and self.foreground):
+            raise HelperError("not_foreground", "the game's window is not in front", reply=reply)
+        _left, _top, width, height = self.client
+        for x, y in zip(points[::2], points[1::2]):
+            if not (0 <= x < width and 0 <= y < height):
+                raise HelperError("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height),
+                                  reply=reply)
+
+    def wheel(self, pid: int, x: int, y: int, notches: int) -> None:
+        self._aimed(x, y, notches_done=0)
+        self.wheels.append((x, y, notches))
+        left, top, _width, _height = self.client
+        self.cursor = self.helper_cursor = (left + x, top + y)
+
+    def drag(self, pid: int, x1: int, y1: int, x2: int, y2: int) -> None:
+        self._aimed(x1, y1, x2, y2, pressed=False)
+        self.drags.append((x1, y1, x2, y2))
+        left, top, _width, _height = self.client
+        self.cursor = self.helper_cursor = (left + x2, top + y2)
 
     def presence(self) -> Presence:
         self.presence_calls += 1
@@ -403,7 +440,9 @@ class FakeHelper:
         """The game takes the keys that are due, in the order they were sent."""
         while self._inbox and self._inbox[0][0] <= self.now:
             _due, step = self._inbox.pop(0)
-            if "text" in step:
+            if self.keyboard_elsewhere and step.get("scan") != SCAN_CONSOLE:
+                self.elsewhere.append(step)
+            elif "text" in step:
                 self.typed += step["text"]
             elif step.get("scan") == SCAN_ENTER:
                 self._enter()
