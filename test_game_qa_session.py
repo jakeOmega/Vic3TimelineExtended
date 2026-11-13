@@ -1226,6 +1226,44 @@ class SwitchRulesTest(SessionTestCase):
         self.assertTrue(self.session._fixture_loaded)
         self.assertEqual(self.saves(), sorted([self.fixture_save.name, older.name]))
 
+    def test_a_named_harness_save_is_the_runs_fixture_in_its_steps(self):
+        # `selfchecks` reads the last `fixture` step: found, with the save, or it shows none of the lines kept
+        # from the run that made the fixture.
+        saves = self.user / "save games"
+        (saves / "te_qa_fixture_0123456789ab.v3").write_bytes(text_save(["allow_fantasy", "tax_light"]))
+        self.start(save="te_qa_fixture_0123456789ab", switch_rules={"tax_rule": "tax_off"})
+        steps = [json.loads(line) for line in (self.paths.backup_root / "runs" / SNAP / "steps.jsonl")
+                 .read_text(encoding="utf-8").splitlines()]
+        step = next(s for s in reversed(steps) if s.get("verb") == "fixture")
+        self.assertEqual((step["outcome"], step["save"]), ("found", "te_qa_fixture_0123456789ab"))
+        # One new file, the copy, and nothing staged left behind.
+        stem = "te_qa_fixture_%s" % rules_key("0123456789ab", {"tax_rule": "tax_off"})
+        self.assertEqual(self.saves(), sorted([self.fixture_save.name, "te_qa_fixture_0123456789ab.v3",
+                                               stem + ".v3"]))
+
+    def test_an_owners_save_keeps_its_not_used_step(self):
+        (self.user / "save games" / "mine.v3").write_bytes(b"the owner's")
+        self.start(save="mine")
+        steps = [json.loads(line) for line in (self.paths.backup_root / "runs" / SNAP / "steps.jsonl")
+                 .read_text(encoding="utf-8").splitlines()]
+        step = next(s for s in reversed(steps) if s.get("verb") == "fixture")
+        self.assertEqual(step["outcome"], "not_used")
+        self.assertFalse(self.session._fixture_loaded)
+
+    def test_a_harness_name_in_another_letter_case_is_not_the_harnesss(self):
+        # The drive answers to any letter case, the harness's marks are lower case: an upper-case `_S` would not
+        # read as a switched copy, and an upper-case key's copy would be an orphan to the next prune.
+        saves = self.user / "save games"
+        for name in ("te_qa_fixture_0123456789ab_S0000abcd", "te_qa_fixture_0123456789AB",
+                     "te_qa_fixture_0123456789ab_s0000ABCD"):
+            (saves / (name + ".v3")).write_bytes(text_save(["allow_fantasy", "tax_light"]))
+            with self.subTest(name=name):
+                before = self.saves()
+                error = self.session_error(self.start, save=name, switch_rules={"tax_rule": "tax_off"})
+                self.assertEqual(error.code, "bad_argument")
+                self.assertEqual(self.cli.calls, [])
+                self.assertEqual(self.saves(), before)
+
     def test_a_copy_with_a_rule_switched_is_not_switched_again(self):
         copy = self.user / "save games" / "te_qa_fixture_0123456789ab_s0000abcd.v3"
         copy.write_bytes(text_save(["allow_fantasy", "tax_off"]))

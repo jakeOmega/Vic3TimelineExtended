@@ -636,7 +636,12 @@ class Session:
     def _own_fixture_key(save: str | None) -> str | None:
         """The fixture key in `save` when it names one of the harness's own saves (`te_qa_fixture_<key>`: a fresh
         save, a dated one, or a copy with a rule switched), else None. A name is all there is to go by: the
-        harness keeps that prefix to itself (`fixture.prune` removes by it)."""
+        harness keeps that prefix to itself (`fixture.prune` removes by it).
+
+        Only in the spelling the harness writes, all lower case. The drive finds a save under any letter case,
+        and `fixture`'s marks are lower case: `…_S0000abcd` would not read as a copy with a rule switched and
+        would get a copy made of it, and an upper-case key would get its copy under a spelling the next prune
+        takes for an orphan (review, 2026-11-13). Such a name is refused as any save not the harness's is."""
         if not isinstance(save, str) or not save.startswith(fixture.FIXTURE_PREFIX):
             return None
         key = save[len(fixture.FIXTURE_PREFIX):]
@@ -644,7 +649,7 @@ class Session:
             fixture._check_key(key)
         except ValueError:
             return None
-        return key
+        return key if key == key.lower() else None
 
     @classmethod
     def _switchable_fixture_key(cls, save: str | None) -> str | None:
@@ -688,9 +693,12 @@ class Session:
         if save is not None:
             # One of the harness's own fresh saves, named (another build's, say: `stale` lists them): it opens on
             # the country-select screen as this build's does, and a rule can be switched in a copy of it.
-            self._fixture_loaded = self._own_fixture_key(save) is not None
+            own = self._own_fixture_key(save) is not None
+            self._fixture_loaded = own
+            # A named harness save is a fixture found: `selfchecks` then shows the lines kept from the run that
+            # made it, as for this build's own (it read "a save of the owner's" and showed none, review 2026-11-13).
+            self._record("fixture", outcome="found" if own else "not_used", save=save, **({"named": True} if own else {}))
             if not switch_rules:
-                self._record("fixture", outcome="not_used", save=save)
                 return save, False, []
             try:
                 path, changed, settings = rules.switched_fixture(user, self._switchable_fixture_key(save),
