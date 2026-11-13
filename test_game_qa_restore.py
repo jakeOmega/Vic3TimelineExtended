@@ -1153,6 +1153,17 @@ class ManualSaveTests(RestoreTestCase):
         out = restore.restore(snap, self.user, other_game_running=False)
         self.assertEqual((out.held, out.reason, out.manual_saves), (True, "manual_save_changed", {"changed": [self.MINE]}))
 
+    def test_another_size_with_the_time_put_back_is_a_change(self):
+        # the size counts on its own: a check of the time alone would pass this
+        snap = self.run_started()
+        path = self.user / self.MINE
+        st = path.stat()
+        path.write_bytes(path.read_bytes() + b" and more")
+        os.utime(path, ns=(st.st_atime_ns, st.st_mtime_ns))
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.reason, out.manual_saves), (True, "manual_save_changed", {"changed": [self.MINE]}))
+
     def test_an_earlier_time_is_a_change_too(self):
         # no clock is read: a time stepped back (a copy of an older version put there) differs as much as a later one
         snap = self.run_started()
@@ -1242,8 +1253,21 @@ class ManualSaveTests(RestoreTestCase):
         (self.user / "save games/sub/in_a_folder.v3").write_bytes(b"not looked at, as take does not")
         finish(snap)
         out = restore.restore(snap, self.user, other_game_running=False)
-        self.assertEqual((out.held, out.manual_saves), (False, {}))
+        # A conflict copy made during the run is left in place, so it is named, as any new save is (the next test)
+        self.assertEqual((out.held, out.manual_saves), (False, {"new": ["save games/autosave_2-Manfred.v3"]}))
         self.assertEqual(sorted(out.restored), ["save games/autosave-Manfred.v3", "save games/autosave.v3"])
+
+    def test_a_new_save_named_like_an_autosave_is_left_and_named_but_a_pushed_in_rotation_name_is_removed(self):
+        # A player may type "autosave_before_war" into the save dialog: neither removed nor, before, mentioned.
+        (self.user / "save games/autosave-Manfred.v3").write_bytes(b"a OneDrive conflict copy from before")
+        snap = self.run_started()
+        (self.user / "save games/autosave_before_war.v3").write_bytes(b"saved from the game's menu")
+        (self.user / "save games/autosave_3.v3").write_bytes(b"the game's rotation")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.removed), (False, ["save games/autosave_3.v3"]))
+        self.assertEqual(out.manual_saves, {"new": ["save games/autosave_before_war.v3"]})
+        self.assertTrue((self.user / "save games/autosave_before_war.v3").is_file())
 
     def test_the_ending_counts_in_any_case(self):
         (self.user / "save games/Upper.V3").write_bytes(b"the owner's")
@@ -1263,6 +1287,21 @@ class ManualSaveTests(RestoreTestCase):
         self.assertEqual(restore._manual_saves(snap, self.user), {})
         self.assertEqual(restore._manual_saves(dataclasses.replace(snap, files={}), self.user),
                          {"changed": [self.MINE]})
+
+    def test_a_save_whose_name_only_casefolds_like_the_loaded_one_is_still_the_owners(self):
+        # NTFS matches names through its upcase table, one unit for one: straße and strasse, or the ligature ﬁ and
+        # fi, are two files there. str.casefold() would make them one and drop the owner's save from the check.
+        for loaded, other in (("strasse_1900.v3", "straße_1900.v3"), ("finland_1900.v3", "ﬁnland_1900.v3")):
+            with self.subTest(other=other):
+                self.setUp()
+                (self.user / "save games" / loaded).write_bytes(b"the save the run loads")
+                (self.user / "save games" / other).write_bytes(b"another of the owner's saves")
+                snap = self.run_started(extra=["save games/" + loaded])
+                (self.user / "save games" / other).unlink()
+                finish(snap)
+                out = restore.restore(snap, self.user, other_game_running=False)
+                self.assertEqual((out.held, out.reason, out.manual_saves),
+                                 (True, "manual_save_changed", {"missing": ["save games/" + other]}))
 
     def test_the_save_the_run_loaded_is_put_back_by_its_hash_not_held(self):
         snap = self.run_started(extra=[self.MINE])

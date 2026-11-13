@@ -125,40 +125,47 @@ def _is_pushed_in(name: str) -> bool:
     return folder != "save games" or bool(_ROTATION_NAME.match(base))
 
 
-def _is_manual_save(rel: str, taken: frozenset[str]) -> bool:
-    """Whether `rel` is one of the owner's own saves for the check of `_manual_saves`: a `.v3` file (the ending in any
-    case) directly in `save games/` that is not in the manifest's files (the set and a `--save`, which are compared
-    by their hash and put back; `taken` is their names casefolded, since the owner's drive is not case-sensitive and
-    a `--save` typed in other letters names the same file as the listing does), matches none of SNAPSHOT_SET's
-    patterns (the autosaves, OneDrive's conflict copies of them among them) and is not the harness's
-    (`_HARNESS_SAVE_PREFIXES`). Restore's temps end in `.tmp`."""
+def _is_owners_save(rel: str, taken: frozenset[str]) -> bool:
+    """Whether `rel` may be one of the owner's own saves (`_manual_saves`): a `.v3` file (the ending in any case)
+    directly in `save games/` that is not in the manifest's files (the set and a `--save`, which are compared by
+    their hash and put back) and is not the harness's (`_HARNESS_SAVE_PREFIXES`). Restore's temps end in `.tmp`.
+
+    `taken` is the files' names in str.lower(): the owner's drive matches names in any letter case, so a `--save`
+    typed in other letters is the file the listing names. Not str.casefold(): NTFS compares names through its upcase
+    table, one UTF-16 unit for one, so `straße_1900.v3` and `strasse_1900.v3`, or `ﬁnland` and `finland`, are two
+    files there, which casefold() would make one."""
     folder, _, base = rel.rpartition("/")
-    return (folder == snapshot.SAVE_FOLDER and base.lower().endswith(".v3") and rel.casefold() not in taken
-            and not _matches(rel, snapshot.SNAPSHOT_SET) and not base.startswith(_HARNESS_SAVE_PREFIXES))
+    return (folder == snapshot.SAVE_FOLDER and base.lower().endswith(".v3") and rel.lower() not in taken
+            and not base.startswith(_HARNESS_SAVE_PREFIXES))
 
 
 def _manual_saves(snap: Snapshot, user_data: Path) -> dict:
-    """How the owner's own saves (`_is_manual_save`) differ from what the snapshot listed, as `Outcome.manual_saves`.
+    """How the owner's own saves (`_is_owners_save`) differ from what the snapshot listed, as `Outcome.manual_saves`.
 
     `changed`: listed then and there now, with another size or mtime_ns than `save_stats` recorded; `missing`:
-    listed then, gone now; `new`: not listed then (left where it is: it may be the owner's). Each is sorted and given
-    only when not empty. With no `save_stats` (a manifest written before they were recorded, or one whose record
-    does not read) nothing can be `changed`, and `unrecorded` is True; the names still tell `missing` and `new`.
+    listed then, gone now. Both leave out the names SNAPSHOT_SET's patterns take (the autosaves, OneDrive's conflict
+    copies of them among them), which the snapshot copied. `new`: not listed then, and not a name of the game's
+    autosave rotation, which `restore` removes as pushed in; it is left where it is, since it may be the owner's,
+    a save named like an autosave (`autosave_before_war.v3`) or a conflict copy made during the run included. Each
+    is sorted and given only when not empty. With no `save_stats` (a manifest written before they were recorded,
+    or one whose record does not read) nothing can be `changed`, and `unrecorded` is True; the names still tell
+    `missing` and `new`.
 
     The folder is read with the lstat `take` used (`snapshot._scan_folder`), and the pair compared for equality only:
     both times are the drive's own stamps on the same file, read the same way, so no clock is read, and neither
     WSL's clock steps nor the whole seconds of a time set from WSL come in (nothing here sets a save's time). A
     save rewritten with the same size and the same time is not seen. Raises as `os.scandir` does, except for a
     missing folder, which reads as empty (every listed save then `missing`)."""
-    taken = frozenset(name.casefold() for name in snap.files)
+    taken = frozenset(name.lower() for name in snap.files)
     live = {rel: (st.st_size, st.st_mtime_ns)
-            for rel, st in snapshot._scan_folder(user_data, snapshot.SAVE_FOLDER).items() if _is_manual_save(rel, taken)}
-    listed = sorted(rel for rel in snap.listing if _is_manual_save(rel, taken))
+            for rel, st in snapshot._scan_folder(user_data, snapshot.SAVE_FOLDER).items() if _is_owners_save(rel, taken)}
+    listed = sorted(rel for rel in snap.listing
+                    if _is_owners_save(rel, taken) and not _matches(rel, snapshot.SNAPSHOT_SET))
     stats = snap.save_stats
     found = {
         "changed": [rel for rel in listed if stats is not None and rel in live and live[rel] != stats.get(rel)],
         "missing": [rel for rel in listed if rel not in live],
-        "new": sorted(rel for rel in live if rel not in snap.listing),
+        "new": sorted(rel for rel in live if rel not in snap.listing and not _is_pushed_in(rel)),
     }
     found = {key: names for key, names in found.items() if names}
     if stats is None:
