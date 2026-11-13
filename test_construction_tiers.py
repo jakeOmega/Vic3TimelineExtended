@@ -153,8 +153,11 @@ class ConstructionTiers(unittest.TestCase):
         self.assertGreaterEqual(checked, 5)
 
     def test_the_direct_tier_helpers_know_every_tier(self):
-        """te_dc_target_tier numbers the twins from 1 in the site group's order: the sector
-        conversion reads the sector's tier, the site guard records and restores the site's."""
+        """te_dc_target_tier numbers the twins from 1 in the site group's order. The conversion to
+        direct construction reads the sector's tier, or the site's where a site is the capacity
+        (te_direct_construction_convert_state), and sets the new site's; the conversion back reads the
+        site's and sets the sector's (te_direct_construction_revert_state_site); the site guard records
+        and restores the site's."""
         text = self.direct_effects
 
         def count(pattern):
@@ -163,10 +166,12 @@ class ConstructionTiers(unittest.TestCase):
         for i, (tier, twin) in enumerate(zip(self.tiers, self.twins), start=1):
             with self.subTest(tier=i):
                 self.assertEqual(count(rf"te_direct_construction_activate_site_tier = \{{ TIER = {i} PM = {twin} \}}"), 2)
+                self.assertEqual(count(rf"te_direct_construction_activate_sector_tier = \{{ TIER = {i} PM = {tier} \}}"), 1)
                 if i > 1:  # tier 1 is the starting value, not read
                     self.assertEqual(count(rf"BUILDING = building_construction_sector TIER = {i} PM = {tier} \}}"), 1)
-                    self.assertEqual(count(rf"BUILDING = te_construction_market_site TIER = {i} PM = {twin} \}}"), 1)
-        self.assertEqual(count(r"TIER = \d+ PM ="), 4 * len(self.tiers) - 2)
+                    self.assertEqual(count(rf"BUILDING = te_construction_market_site TIER = {i} PM = {twin} \}}"), 3)
+        # Two site activations and one sector activation a tier; one sector read and three site reads a tier above 1.
+        self.assertEqual(count(r"TIER = \d+ PM ="), 7 * len(self.tiers) - 4)
 
 
 def _value(value):

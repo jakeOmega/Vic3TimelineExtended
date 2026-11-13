@@ -3211,8 +3211,10 @@ construction_cost_scaling_on_action = {
 		# free_market_construction_rule disabled: there is no construction good
 		# to scale, so the scaling goes on vanilla's own lever for the cost of
 		# the goods construction consumes (construction_cost_scaling_direct).
-		# The rule is fixed for the whole game, so the two branches never share
-		# var:prior_construction_scaling.
+		# The two branches never share var:prior_construction_scaling: when the
+		# rule is changed in a running game, both modifiers and the variable are
+		# cleared (te_direct_construction_clear_cost_scaling), and each branch
+		# then starts from its first run.
 		if = {
 			limit = { te_free_market_construction_off = yes }
 			# Compute before removing, so the modifier read certainly still holds

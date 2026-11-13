@@ -1,6 +1,10 @@
-﻿
+﻿# The Construction Site (common/buildings/te_construction_market_site.txt). The
+# lens puts it in the production lens's Development tab beside the base game's
+# government buildings, which is where a direct game builds it from; in a market
+# game its can_build_government is false, so the lens can queue none.
 te_construction_market_bg = {
 	category = development
+	lens = development
 	is_shown_in_outliner = yes
 	always_possible = yes
 	#stateregion_max_level = yes

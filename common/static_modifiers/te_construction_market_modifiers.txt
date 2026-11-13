@@ -18,11 +18,13 @@ te_construction_market_private_share_modifier = {
 }
 
 # Direct construction (free_market_construction_rule disabled): a flat base of
-# construction for every country, applied by the rule setting itself
-# (apply_modifier = all:..., common/game_rules/extra_game_rules.txt), so a
-# country without Construction Sites can still build them. Five wooden site
-# levels' worth (pm_te_direct_construction_wooden, 1 point a level): small beside
-# a working construction sector. The points carry no wages.
+# construction for every country, so one without Construction Sites can still
+# build them. Script adds it and takes it away with the rule
+# (te_direct_construction_ensure_base, te_construction_market_direct_effects.txt);
+# until 2026-11-13 the rule setting applied it itself, which followed the
+# player's last lobby and not the save. Five wooden site levels' worth
+# (pm_te_direct_construction_wooden, 1 point a level): small beside a working
+# construction sector. The points carry no wages.
 te_direct_construction_base_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_construction_add = 5

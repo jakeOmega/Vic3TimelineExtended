@@ -5,8 +5,10 @@
 #
 # The rule's production methods do the construction itself (the Construction
 # Site is the buildable Construction Sector, te_construction_market_pms.txt), so
-# script only restores the law-set private share and keeps the AI's sites
-# (te_direct_construction_keep_ai_sites).
+# script only restores the law-set private share, keeps the AI's sites
+# (te_direct_construction_keep_ai_sites) and turns Construction Sectors into
+# Construction Sites and back when the rule changes
+# (te_construction_market_follow_rule).
 
 # Private share of construction (0-100) under direct construction: the
 # economic-system law's vanilla allocation. These are the values
@@ -65,4 +67,110 @@ te_direct_construction_state_site_level = {
 		}
 		value = b:te_construction_market_site.level
 	}
+}
+
+# State scope. The level of the Construction Site that takes over this state's
+# Construction Sector and any site it has (te_direct_construction_convert_state):
+# the sector's levels plus the site's. While the market's own sites are being
+# retired (te_dc_from_market, raised by te_direct_construction_convert_all), a
+# site counts one level less: the market places its sites at level 1, a
+# converter and not capacity, so only what an owner built on top is kept.
+# Capped at 200, the largest te_construction_market_build_specified_level can
+# create.
+te_direct_construction_convert_target_level = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_construction_sector
+		}
+		add = b:building_construction_sector.level
+	}
+	if = {
+		limit = {
+			has_building = te_construction_market_site
+		}
+		add = b:te_construction_market_site.level
+		if = {
+			limit = {
+				has_global_variable = te_dc_from_market
+			}
+			subtract = 1
+		}
+	}
+	min = 0
+	max = 200
+}
+
+# State scope. The level of the Construction Sector this state's Construction
+# Site becomes when the market is switched back on
+# (te_direct_construction_revert_state_site): the site's levels, plus those of a
+# sector that finished after the conversion. Capped at 100, the largest
+# extended_timeline_build_specified_building_level can create.
+te_direct_construction_revert_target_level = {
+	value = te_direct_construction_state_site_level
+	if = {
+		limit = {
+			has_building = building_construction_sector
+		}
+		add = b:building_construction_sector.level
+	}
+	max = 100
+}
+
+# The self-checks' counts (te_direct_construction_base_self_check,
+# te_direct_construction_switch_self_check): globals, read back for the log
+# line. Any scope.
+te_dc_check_countries = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_check_countries }
+		value = global_var:te_dc_check_countries
+	}
+}
+
+te_dc_check_under_base = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_check_under_base }
+		value = global_var:te_dc_check_under_base
+	}
+}
+
+te_dc_check_sites = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_check_sites }
+		value = global_var:te_dc_check_sites
+	}
+}
+
+te_dc_check_sectors = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_check_sectors }
+		value = global_var:te_dc_check_sectors
+	}
+}
+
+te_dc_check_stale = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_check_stale }
+		value = global_var:te_dc_check_stale
+	}
+}
+
+te_dc_check_missing = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_check_missing }
+		value = global_var:te_dc_check_missing
+	}
+}
+
+# Ten times the countries without Base Construction: the verdict lets a tenth
+# of the holders be new countries that have not had their weekly pulse.
+te_dc_check_missing_tenfold = {
+	value = te_dc_check_missing
+	multiply = 10
 }

@@ -4,44 +4,95 @@
 #
 # The rule's production-method flags do the work (common/game_rules/extra_game_rules.txt):
 # the Construction Site is the buildable Construction Sector, its tiers turn
-# goods into points, and nothing makes or uses the construction good. The rule
-# also gives every country a flat base of construction, so one without sites can
-# still build them (apply_modifier = all:te_direct_construction_base_modifier).
-# Script has three jobs:
-#   - convert the Construction Sectors the history places into Construction
-#     Sites, once, when the game starts (te_direct_construction_convert_sectors);
+# goods into points, and nothing makes or uses the construction good.
+# Script has five jobs:
+#   - give every country Base Construction, so one without sites can still
+#     build them (te_direct_construction_ensure_base);
+#   - convert the Construction Sectors into Construction Sites when the game
+#     starts under the rule (te_direct_construction_convert_sectors), and in
+#     either direction when the rule is changed in a running game
+#     (te_construction_market_follow_rule, daily);
 #   - restore the law-set private share, weekly
 #     (te_direct_construction_on_weekly_pulse, as is the next one);
 #   - put back the Construction Site levels an AI country removes
-#     (te_direct_construction_keep_ai_sites).
+#     (te_direct_construction_keep_ai_sites);
+#   - log two self-checks (te_direct_construction_base_self_check,
+#     te_direct_construction_switch_self_check).
 
-# State scope. Replace this state's Construction Sector with a Construction Site
-# of the same level on the matching direct tier. A direct game places no sites
-# of its own, so none is there already (if one were, create_building would keep
-# the larger of the two levels, per the engine's effects.log). Levels above 100
-# are capped at 100, the largest te_construction_market_build_specified_level
-# can create.
-te_direct_construction_convert_state_sector = {
+# State scope. This state's Construction Sector, and any Construction Site it
+# has, become one Construction Site: te_direct_construction_convert_target_level
+# levels (the sector's plus the site's own) on the matching direct tier. Both
+# buildings are removed and the site is made new, so the result does not rest on
+# what create_building does to a building that is already there, and a market
+# site's capacity modifier (te_construction_market_capacity_modifier, sized for
+# the market's weekly purchase and never refreshed in a direct game) goes with
+# the site that carried it. The site's workers are let go and hired back within
+# a week (its hiring rate is 1.0).
+#
+# The tier is the sector's, except where a site stands that is real capacity
+# (an established direct game's, or one with no sector beside it): then the
+# site's own.
+#
+# A sector whose first level is still under construction is cancelled: nothing
+# can use it, and a construction its can_build_government no longer allows
+# stays in the queue unfinished (an AI's, queued on a new game's first day,
+# stood at 100 points left five months later, 2026-11-13).
+#
+# The AI site guard's record of the state is set to what was made, so the guard
+# holds from the conversion on and not from the next weekly pulse: AI countries
+# removed 23 of 378 new sites in the week after a conversion (read live,
+# 2026-11-13).
+te_direct_construction_convert_state = {
 	set_variable = {
 		name = te_dc_convert_level
-		value = {
-			value = b:building_construction_sector.level
-			max = 100
-		}
+		value = te_direct_construction_convert_target_level
 	}
 	set_variable = {
 		name = te_dc_target_tier
 		value = 1
 	}
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 2 PM = pm_iron_frame_buildings }
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 3 PM = pm_steel_frame_buildings }
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 4 PM = pm_arc_welded_buildings }
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 5 PM = pm_reinforced_concrete_buildings }
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 6 PM = pm_advanced_construction }
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 7 PM = pm_nanomaterial_buildings }
-	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 8 PM = pm_self_replicating_construction }
+	if = {
+		limit = {
+			has_building = te_construction_market_site
+			OR = {
+				NOT = { has_global_variable = te_dc_from_market }
+				NOT = { has_building = building_construction_sector }
+			}
+		}
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 2 PM = pm_te_direct_construction_iron_frame }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 3 PM = pm_te_direct_construction_steel_frame }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 4 PM = pm_te_direct_construction_arc_welded }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 6 PM = pm_te_direct_construction_advanced }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 8 PM = pm_te_direct_construction_self_replicating }
+	}
+	else = {
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 2 PM = pm_iron_frame_buildings }
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 3 PM = pm_steel_frame_buildings }
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 4 PM = pm_arc_welded_buildings }
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 5 PM = pm_reinforced_concrete_buildings }
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 6 PM = pm_advanced_construction }
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 7 PM = pm_nanomaterial_buildings }
+		te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 8 PM = pm_self_replicating_construction }
+	}
 
-	remove_building = building_construction_sector
+	if = {
+		limit = {
+			has_building = te_construction_market_site
+		}
+		remove_building = te_construction_market_site
+	}
+	# has_building is false for a sector whose first level is still being built;
+	# remove_building cancels that construction (read live, 2026-11-13).
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_construction_sector
+			}
+		}
+		remove_building = building_construction_sector
+	}
 	if = {
 		limit = {
 			var:te_dc_convert_level >= 1
@@ -61,6 +112,80 @@ te_direct_construction_convert_state_sector = {
 	te_direct_construction_activate_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
 	te_direct_construction_activate_site_tier = { TIER = 8 PM = pm_te_direct_construction_self_replicating }
 
+	if = {
+		limit = {
+			var:te_dc_convert_level >= 1
+		}
+		set_variable = {
+			name = te_dc_site_level
+			value = var:te_dc_convert_level
+		}
+		set_variable = {
+			name = te_dc_site_tier
+			value = var:te_dc_target_tier
+		}
+	}
+	else = {
+		remove_variable = te_dc_site_level
+		remove_variable = te_dc_site_tier
+	}
+	remove_variable = te_dc_convert_level
+	remove_variable = te_dc_target_tier
+}
+
+# State scope. The other way, when the market is switched back on in a game
+# that ran direct construction: this state's Construction Site (with a sector
+# that finished after the conversion, if one stands beside it) becomes a
+# Construction Sector of the same level on the same tier, owned by the
+# government as the history's sectors are. The site is removed: the market
+# places its own, at level 1, where construction is under way
+# (te_construction_market_ensure_site and the building hooks).
+te_direct_construction_revert_state_site = {
+	set_variable = {
+		name = te_dc_convert_level
+		value = te_direct_construction_revert_target_level
+	}
+	set_variable = {
+		name = te_dc_target_tier
+		value = 1
+	}
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 2 PM = pm_te_direct_construction_iron_frame }
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 3 PM = pm_te_direct_construction_steel_frame }
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 4 PM = pm_te_direct_construction_arc_welded }
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 6 PM = pm_te_direct_construction_advanced }
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+	te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 8 PM = pm_te_direct_construction_self_replicating }
+
+	remove_building = te_construction_market_site
+	if = {
+		limit = {
+			has_building = building_construction_sector
+		}
+		remove_building = building_construction_sector
+	}
+	if = {
+		limit = {
+			var:te_dc_convert_level >= 1
+		}
+		extended_timeline_build_specified_building_level = {
+			SPEC_TYPE = building_construction_sector
+			SPEC_LEVEL = var:te_dc_convert_level
+			SPEC_OWNER = owner
+		}
+	}
+
+	te_direct_construction_activate_sector_tier = { TIER = 1 PM = pm_wooden_buildings }
+	te_direct_construction_activate_sector_tier = { TIER = 2 PM = pm_iron_frame_buildings }
+	te_direct_construction_activate_sector_tier = { TIER = 3 PM = pm_steel_frame_buildings }
+	te_direct_construction_activate_sector_tier = { TIER = 4 PM = pm_arc_welded_buildings }
+	te_direct_construction_activate_sector_tier = { TIER = 5 PM = pm_reinforced_concrete_buildings }
+	te_direct_construction_activate_sector_tier = { TIER = 6 PM = pm_advanced_construction }
+	te_direct_construction_activate_sector_tier = { TIER = 7 PM = pm_nanomaterial_buildings }
+	te_direct_construction_activate_sector_tier = { TIER = 8 PM = pm_self_replicating_construction }
+
+	remove_variable = te_dc_site_level
+	remove_variable = te_dc_site_tier
 	remove_variable = te_dc_convert_level
 	remove_variable = te_dc_target_tier
 }
@@ -105,35 +230,414 @@ te_direct_construction_activate_site_tier = {
 	}
 }
 
-# Global. Convert every Construction Sector in the world, once, then close the
-# sector to new construction (building_construction_sector's can_build_* read
-# te_direct_construction_converted). Runs from on_game_started_after_lobby, when
-# the game rules are final: a rule read during history could still be changed
-# in the lobby. No-op in market games.
+# The same for a Construction Sector the market gets back
+# (te_direct_construction_revert_state_site).
+te_direct_construction_activate_sector_tier = {
+	if = {
+		limit = {
+			var:te_dc_target_tier = $TIER$
+			any_scope_building = {
+				is_building_type = building_construction_sector
+				NOT = { has_active_production_method = $PM$ }
+			}
+		}
+		activate_production_method = {
+			building_type = building_construction_sector
+			production_method = $PM$
+		}
+	}
+}
+
+# Country scope. Base Construction (te_direct_construction_base_modifier, 5
+# points a week) for a country in a direct game: added at the conversion and
+# from the weekly pulse, which is what reaches a country made during play and a
+# revolution's winner (it inherits no modifiers). Never stacked: only a country
+# without it gets it. Not added at country setup, which runs from history, when
+# the lobby can still change the rule. te_direct_construction_remove_base takes
+# it away: when the market is switched back on, and from the market's weekly
+# pulse for any country that still holds it.
+#
+# Script owns it because the rule cannot: an apply_modifier line in a rule
+# setting is applied by the rules the player last applied in a lobby, whatever
+# save is loaded (read live, 2026-11-13: a save whose rule said Enabled got the
+# Disabled setting's modifier, and one switched to no culture merges got the
+# merges setting's).
+te_direct_construction_ensure_base = {
+	if = {
+		limit = {
+			NOT = { is_country_type = decentralized }
+			NOT = { has_modifier = te_direct_construction_base_modifier }
+		}
+		add_modifier = {
+			name = te_direct_construction_base_modifier
+		}
+	}
+}
+
+# Country scope. A market game has no Base Construction.
+te_direct_construction_remove_base = {
+	if = {
+		limit = {
+			has_modifier = te_direct_construction_base_modifier
+		}
+		remove_modifier = te_direct_construction_base_modifier
+	}
+}
+
+# Country scope. Construction Cost Scaling rides a different modifier in each
+# model (construction_cost_scaling_on_action, extra_on_actions.txt), and each
+# branch backs its own last contribution out of var:prior_construction_scaling.
+# When the model changes, both modifiers and the variable go, and the country's
+# next yearly pulse applies the new model's from its first-run branch. Until
+# then the country builds without the scaling, for a year at most.
+te_direct_construction_clear_cost_scaling = {
+	remove_modifier = construction_cost_scaling
+	remove_modifier = construction_cost_scaling_direct
+	remove_variable = prior_construction_scaling
+}
+
+# Any scope. Every Construction Sector in the world becomes a Construction Site,
+# and the market's own sites are retired with it; then the sector is closed to
+# new construction (building_construction_sector's can_build_* read
+# te_direct_construction_converted). te_dc_from_market is up while it runs, so
+# a market site's own level, which is a converter and not capacity, is not
+# carried over (te_direct_construction_convert_target_level). In a state with a
+# site and no sector, only what its owner built on top of that level is kept.
+te_direct_construction_convert_all = {
+	set_global_variable = {
+		name = te_dc_from_market
+		value = 1
+	}
+	every_country = {
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_building = te_construction_market_site
+					any_scope_building = {
+						is_building_type = building_construction_sector
+					}
+				}
+			}
+			te_direct_construction_convert_state = yes
+		}
+		te_direct_construction_clear_cost_scaling = yes
+		te_direct_construction_ensure_base = yes
+	}
+	remove_global_variable = te_dc_from_market
+	set_global_variable = {
+		name = te_direct_construction_converted
+		value = 1
+	}
+	# The base's self-check is owed again (te_direct_construction_base_self_check).
+	if = {
+		limit = {
+			has_global_variable = te_dc_base_checked
+		}
+		remove_global_variable = te_dc_base_checked
+	}
+	if = {
+		limit = {
+			has_global_variable = te_dc_base_check_passes
+		}
+		remove_global_variable = te_dc_base_check_passes
+	}
+}
+
+# Any scope. The way back: every Construction Site becomes a Construction
+# Sector, the sector is open to construction again, Base Construction goes, and
+# every country has the purchase variables the market reads. No site is placed
+# here: each country's weekly pulse ends by placing one in its capital, after
+# it has sized the sites (te_construction_market_ensure_site), and the building
+# hooks place the rest.
+# A site whose owner has no Urbanization is left as it is (the sector needs the
+# technology, and create_building checks it): it serves as a market site.
+te_direct_construction_revert_all = {
+	every_country = {
+		every_scope_state = {
+			limit = {
+				has_building = te_construction_market_site
+				owner = {
+					has_technology_researched = urbanization
+				}
+			}
+			te_direct_construction_revert_state_site = yes
+		}
+		# A site whose first level is still being built: the market allows
+		# nobody to build one, so the construction would never finish.
+		every_scope_state = {
+			limit = {
+				NOT = { has_building = te_construction_market_site }
+				any_scope_building = {
+					is_building_type = te_construction_market_site
+				}
+			}
+			remove_building = te_construction_market_site
+		}
+		te_direct_construction_clear_cost_scaling = yes
+		te_construction_market_init_target = yes
+		te_direct_construction_remove_base = yes
+	}
+	remove_global_variable = te_direct_construction_converted
+}
+
+# Any scope. The conversion at game start: from on_game_started_after_lobby,
+# when the game rules are final (a rule read during history could still be
+# changed in the lobby). A no-op in market games, and once the conversion has
+# run.
 te_direct_construction_convert_sectors = {
 	if = {
 		limit = {
 			te_free_market_construction_off = yes
 			NOT = { has_global_variable = te_direct_construction_converted }
 		}
-		every_country = {
-			every_scope_state = {
-				limit = {
-					has_building = building_construction_sector
+		te_direct_construction_convert_all = yes
+	}
+}
+
+# Any scope, daily (te_construction_market_pulse_events.1), before the weekly
+# bodies. The rule can be changed in a running game: the screen that changes
+# country, which is also what a save with no player opens on, has the Game Rules
+# button. Until 2026-11-13 the conversion ran only when a game started, so a
+# market game switched to Disabled kept its sectors and its market sites, each
+# site still carrying the capacity modifier of the market's last week. In a
+# three-month-old game switched that way France's sites stood at -100%
+# throughput, which left the country the 5 points of Base Construction and
+# nothing from any site level it then built (read live, 2026-11-13;
+# docs/testing/direct-construction-playtest.md).
+#
+# te_direct_construction_converted says which model the buildings are in. When
+# it and the rule disagree, the buildings follow the rule:
+#   - rule off, not converted: te_direct_construction_convert_all. A game that
+#     started under the rule was converted at its start, so this is a rule
+#     changed since, or a save from before this effect.
+#   - rule on, converted: te_direct_construction_revert_all.
+# Weekly, in a converted game, any Construction Sector that has appeared is
+# taken into its state's site, and one still under construction is cancelled
+# (an AI queued one on a new game's first day, before the conversion closed
+# the sector, 2026-11-13).
+te_construction_market_follow_rule = {
+	if = {
+		limit = {
+			te_free_market_construction_off = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_direct_construction_converted }
+			}
+			te_direct_construction_convert_all = yes
+			te_direct_construction_switch_self_check = yes
+		}
+		else_if = {
+			limit = {
+				te_construction_market_pulse_count_modulo_7 = 0
+			}
+			every_country = {
+				every_scope_state = {
+					limit = {
+						any_scope_building = {
+							is_building_type = building_construction_sector
+						}
+					}
+					te_direct_construction_convert_state = yes
 				}
-				te_direct_construction_convert_state_sector = yes
+			}
+			te_direct_construction_base_self_check = yes
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_variable = te_direct_construction_converted
+		}
+		te_direct_construction_revert_all = yes
+		te_direct_construction_switch_self_check = yes
+	}
+}
+
+# Any scope, in a country's event, weekly in a direct game. Once for each time
+# the game becomes one, a week after its first weekly pass, so every country's
+# own pulse has had its turn: does every country hold Base Construction, and
+# does the engine give its holders the 5 points? Countries are counted with a
+# capital and not decentralized. A country made in the last week has not had its
+# pulse yet, so the missing ones break the verdict only when they are more than
+# a tenth of the holders.
+te_direct_construction_base_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_dc_base_checked }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_dc_base_check_passes }
+			}
+			set_global_variable = {
+				name = te_dc_base_check_passes
+				value = 0
 			}
 		}
-		set_global_variable = {
-			name = te_direct_construction_converted
-			value = 1
+		change_global_variable = {
+			name = te_dc_base_check_passes
+			add = 1
+		}
+		if = {
+			limit = {
+				global_var:te_dc_base_check_passes >= 2
+			}
+			set_global_variable = {
+				name = te_dc_base_checked
+				value = 1
+			}
+			remove_global_variable = te_dc_base_check_passes
+			set_global_variable = {
+				name = te_dc_check_countries
+				value = 0
+			}
+			set_global_variable = {
+				name = te_dc_check_under_base
+				value = 0
+			}
+			set_global_variable = {
+				name = te_dc_check_missing
+				value = 0
+			}
+			every_country = {
+				limit = {
+					NOT = { is_country_type = decentralized }
+					exists = capital
+				}
+				if = {
+					limit = {
+						has_modifier = te_direct_construction_base_modifier
+					}
+					change_global_variable = {
+						name = te_dc_check_countries
+						add = 1
+					}
+					if = {
+						limit = {
+							modifier:country_construction_add < 5
+						}
+						change_global_variable = {
+							name = te_dc_check_under_base
+							add = 1
+						}
+					}
+				}
+				else = {
+					change_global_variable = {
+						name = te_dc_check_missing
+						add = 1
+					}
+				}
+			}
+			if = {
+				limit = {
+					global_var:te_dc_check_countries >= 1
+					global_var:te_dc_check_under_base = 0
+					te_dc_check_missing_tenfold <= global_var:te_dc_check_countries
+				}
+				debug_log = "TE_SELF_CHECK OK direct_base_construction holders=[THIS.ScriptValue('te_dc_check_countries')|0] under_base=[THIS.ScriptValue('te_dc_check_under_base')|0] missing=[THIS.ScriptValue('te_dc_check_missing')|0] (every country that holds Base Construction has its 5 points a week, and at most a few new countries are still without it) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN direct_base_construction holders=[THIS.ScriptValue('te_dc_check_countries')|0] under_base=[THIS.ScriptValue('te_dc_check_under_base')|0] missing=[THIS.ScriptValue('te_dc_check_missing')|0] (under_base: holders of Base Construction with under 5 construction a week, so the engine does not sum the modifier; missing: countries a week of pulses left without it, so te_direct_construction_ensure_base did not reach them; docs/testing/direct-construction-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_global_variable = te_dc_check_countries
+			remove_global_variable = te_dc_check_under_base
+			remove_global_variable = te_dc_check_missing
 		}
 	}
 }
 
+# Any scope, in a country's event. After the rule was changed in a running game
+# and the buildings followed it: one line a switch, with what stands now. To
+# direct construction it is BROKEN when a Construction Sector is left, standing
+# or under construction, or a site still carries the market's capacity modifier;
+# to the market, when no sector stands.
+te_direct_construction_switch_self_check = {
+	set_global_variable = {
+		name = te_dc_check_sites
+		value = 0
+	}
+	set_global_variable = {
+		name = te_dc_check_sectors
+		value = 0
+	}
+	set_global_variable = {
+		name = te_dc_check_stale
+		value = 0
+	}
+	every_country = {
+		every_scope_state = {
+			if = {
+				limit = {
+					has_building = te_construction_market_site
+				}
+				change_global_variable = {
+					name = te_dc_check_sites
+					add = 1
+				}
+				if = {
+					limit = {
+						any_scope_building = {
+							is_building_type = te_construction_market_site
+							has_modifier = te_construction_market_capacity_modifier
+						}
+					}
+					change_global_variable = {
+						name = te_dc_check_stale
+						add = 1
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_construction_sector
+					}
+				}
+				change_global_variable = {
+					name = te_dc_check_sectors
+					add = 1
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			te_free_market_construction_off = yes
+		}
+		if = {
+			limit = {
+				global_var:te_dc_check_sectors = 0
+				global_var:te_dc_check_stale = 0
+			}
+			debug_log = "TE_SELF_CHECK OK construction_rule_switch to=direct sites=[THIS.ScriptValue('te_dc_check_sites')|0] sectors_left=[THIS.ScriptValue('te_dc_check_sectors')|0] market_modifiers_left=[THIS.ScriptValue('te_dc_check_stale')|0] (the rule was switched to Disabled in a running game: every Construction Sector became a Construction Site and the market's sites were retired) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN construction_rule_switch to=direct sites=[THIS.ScriptValue('te_dc_check_sites')|0] sectors_left=[THIS.ScriptValue('te_dc_check_sectors')|0] market_modifiers_left=[THIS.ScriptValue('te_dc_check_stale')|0] (a Construction Sector or a market site's capacity modifier outlived the switch to Disabled: te_direct_construction_convert_state did not replace the buildings; docs/testing/direct-construction-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				global_var:te_dc_check_sectors >= 1
+			}
+			debug_log = "TE_SELF_CHECK OK construction_rule_switch to=market sectors=[THIS.ScriptValue('te_dc_check_sectors')|0] sites_left=[THIS.ScriptValue('te_dc_check_sites')|0] (the rule was switched to a market setting in a running game: the Construction Sites became Construction Sectors; a site left belongs to a country without Urbanization) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN construction_rule_switch to=market sectors=[THIS.ScriptValue('te_dc_check_sectors')|0] sites_left=[THIS.ScriptValue('te_dc_check_sites')|0] (no Construction Sector stands after the switch to a market setting: te_direct_construction_revert_state_site made none, so nothing sells construction; docs/testing/direct-construction-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	remove_global_variable = te_dc_check_sites
+	remove_global_variable = te_dc_check_sectors
+	remove_global_variable = te_dc_check_stale
+}
+
 # Country scope. Direct-construction setup (te_construction_market_country_setup):
 # the law-set private share from day one. The site guard starts at the first
-# weekly pulse, its one refresh site.
+# weekly pulse, its one refresh site. Base Construction is not added here: this
+# runs from history, where a rule read is not final, and a game whose lobby then
+# picked a market setting would keep the modifier. The conversion after the
+# lobby adds it (te_direct_construction_convert_all).
 te_direct_construction_country_setup = {
 	if = {
 		limit = {
@@ -148,6 +652,8 @@ te_direct_construction_country_setup = {
 #     (te_direct_construction_law_private_share, through
 #     te_construction_market_private_share_target); its one refresh site after
 #     setup;
+#   - Base Construction, for a country that has none
+#     (te_direct_construction_ensure_base);
 #   - the AI site guard (te_direct_construction_keep_ai_sites).
 te_direct_construction_on_weekly_pulse = {
 	if = {
@@ -155,6 +661,7 @@ te_direct_construction_on_weekly_pulse = {
 			NOT = { is_country_type = decentralized }
 		}
 		te_construction_market_country_update_private_share = yes
+		te_direct_construction_ensure_base = yes
 		te_direct_construction_keep_ai_sites = yes
 	}
 }
@@ -192,7 +699,7 @@ te_direct_construction_keep_ai_sites = {
 	}
 }
 
-# State scope. Put the site back to its recorded level (capped at 100, the
+# State scope. Put the site back to its recorded level (capped at 200, the
 # largest te_construction_market_build_specified_level can create) if it has
 # lost levels.
 #
@@ -213,7 +720,7 @@ te_direct_construction_restore_state_site = {
 			name = te_dc_restore_level
 			value = {
 				value = var:te_dc_site_level
-				max = 100
+				max = 200
 			}
 		}
 		if = {

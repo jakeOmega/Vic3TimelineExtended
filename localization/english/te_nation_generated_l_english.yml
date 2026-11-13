@@ -38,6 +38,8 @@
  te_nation_type_country_bureaucracy_mult_tt:0 "$country_bureaucracy_mult_desc$"
  te_nation_type_country_colonial_stability_drift_add:0 "$country_colonial_stability_drift_add$: #v [Country.GetModifier.GetValueWithBreakdownFor('country_colonial_stability_drift_add')]#!"
  te_nation_type_country_colonial_stability_drift_add_tt:0 "$country_colonial_stability_drift_add_desc$"
+ te_nation_type_country_construction_add:0 "$country_construction_add$: #v [Country.GetModifier.GetValueWithBreakdownFor('country_construction_add')]#!"
+ te_nation_type_country_construction_add_tt:0 "$country_construction_add_desc$"
  te_nation_type_country_covert_defense_economic_add:0 "$country_covert_defense_economic_add$: #v [Country.GetModifier.GetValueWithBreakdownFor('country_covert_defense_economic_add')]#!"
  te_nation_type_country_covert_defense_economic_add_tt:0 "$country_covert_defense_economic_add_desc$"
  te_nation_type_country_covert_defense_ideological_add:0 "$country_covert_defense_ideological_add$: #v [Country.GetModifier.GetValueWithBreakdownFor('country_covert_defense_ideological_add')]#!"
