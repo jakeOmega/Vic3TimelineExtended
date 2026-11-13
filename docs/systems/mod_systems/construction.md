@@ -55,7 +55,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 **Sizing the sites** (`te_construction_market_apply_per_site_modifier`, values in `te_construction_market_sector_placement_values.txt`). A site delivers its throughput times its staffing, and the government queue spends whatever the sites deliver at the treasury's cost, so the rule is never to size past the purchase.
 
-- Every site gets the same throughput, `te_construction_market_site_throughput`: the purchase over the staffing the country's sites are assumed to have, summed (`te_construction_market_sites_staffing`).
+- Every site gets the same throughput, `te_construction_market_site_throughput`: the purchase over the staffing the country's sites are assumed to have, summed over their levels (`te_construction_market_sites_staffing`; the market places level-1 sites, but one kept from a direct game can have more).
 - A site under 10% staffed is assumed full. Sites are placed unstaffed wherever construction starts and the group hires at a rate of 1.0, so such a site is full within the week. If it stays empty, its share is not delivered and not paid for.
 - Any other site is assumed to have its staffing (`occupancy`, read down to the tenth), but at least a half. A site that stays short of laborers is made up for, up to twice over; a site that fills during the week delivers at most twice its share.
 - One value for all the sites also ends the leak the old per-site value had: the multiplier is read from one country variable (`te_cm_capacity_mult`) that the engine re-reads between pulses.

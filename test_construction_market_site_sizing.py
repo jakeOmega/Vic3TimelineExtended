@@ -41,17 +41,23 @@ def load_values():
 class Evaluator:
     """Script values over a country whose sites have the given staffing (occupancy)."""
 
-    def __init__(self, values, purchase, sites):
+    def __init__(self, values, purchase, sites, levels=None):
         self.values = values
         self.purchase = purchase
         self.sites = sites
-        self.site = None  # the building in scope, inside the iterator
+        self.levels = levels or [1] * len(sites)
+        self.site = None  # the staffing of the building in scope, inside the iterator
+        self.level = None  # and its level
 
     def number(self, token):
         if isinstance(token, list):
             return self.block(token)
         if token == "te_construction_market_total_use_target":
             return self.purchase
+        if token == "level":
+            if self.level is None:
+                raise AssertionError("level read outside a building's scope")
+            return self.level
         if token in self.values:
             return self.number(self.values[token])
         return float(token)
@@ -101,22 +107,23 @@ class Evaluator:
             elif key == "every_scope_building":
                 limit = next((v for k, _o, v in value if k == "limit"), [])
                 rest = [item for item in value if item[0] != "limit"]
-                for staffing in self.sites:
-                    self.site = staffing
+                for staffing, level in zip(self.sites, self.levels):
+                    self.site, self.level = staffing, level
                     if self.trigger(limit):
                         total = self.block([("value", "=", repr(total))] + rest)
-                    self.site = None
+                    self.site = self.level = None
             else:
                 raise AssertionError("the evaluator does not know %r" % key)
             total = round(total, 5)
         return total
 
 
-def delivered(values, purchase, at_pulse, later):
+def delivered(values, purchase, at_pulse, later, levels=None):
     """Points the sites deliver, sized at the pulse with staffing `at_pulse`, once staffing is `later`."""
-    throughput = Evaluator(values, purchase, at_pulse).number(THROUGHPUT)
-    # building_throughput_add on top of the engine's 1; a level-1 site makes 1 point at full staff.
-    return sum((1 + throughput) * staffing for staffing in later)
+    levels = levels or [1] * len(later)
+    throughput = Evaluator(values, purchase, at_pulse, levels).number(THROUGHPUT)
+    # building_throughput_add on top of the engine's 1; a site makes 1 point a level at full staff.
+    return sum((1 + throughput) * staffing * level for staffing, level in zip(later, levels))
 
 
 class SiteSizingTest(unittest.TestCase):
@@ -163,6 +170,13 @@ class SiteSizingTest(unittest.TestCase):
         # Half staffed and staying so: the purchase still arrives.
         self.assertAlmostEqual(delivered(self.values, 50, [0.5], [0.5]), 50, places=2)
         self.assertAlmostEqual(delivered(self.values, 50, [1.0, 0.5], [1.0, 0.5]), 50, places=2)
+
+    def test_a_site_of_several_levels_counts_each_level(self):
+        # The market places level-1 sites, but one kept from a direct game (an owner without Urbanization,
+        # when the rule is switched back) has more: each level has its own laborers and delivers again.
+        self.assertAlmostEqual(delivered(self.values, 50, [1.0], [1.0], levels=[7]), 50, places=2)
+        self.assertAlmostEqual(delivered(self.values, 50, [1.0, 1.0], [1.0, 1.0], levels=[7, 1]), 50, places=2)
+        self.assertAlmostEqual(delivered(self.values, 50, [1.0, 0.0], [1.0, 1.0], levels=[1, 12]), 50, places=2)
 
     def test_no_site_and_no_purchase(self):
         self.assertEqual(Evaluator(self.values, 50, []).number(THROUGHPUT), 0)

@@ -44,14 +44,21 @@ te_construction_market_site_assumed_staffing = {
 	}
 }
 
-# Country scope: the assumed staffing of the country's sites, summed.
+# Country scope: the assumed staffing of the country's sites, summed over
+# their levels.
 te_construction_market_sites_staffing = {
 	value = 0
 	every_scope_building = {
 		limit = {
 			is_building_type = te_construction_market_site
 		}
-		add = te_construction_market_site_assumed_staffing
+		# By level: the market places its sites at level 1, but a site kept
+		# from a direct game can have more, and each level has its own ten
+		# laborers and delivers the throughput again.
+		add = {
+			value = te_construction_market_site_assumed_staffing
+			multiply = level
+		}
 	}
 }
 
