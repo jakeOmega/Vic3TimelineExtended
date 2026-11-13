@@ -511,6 +511,9 @@ run, so you can see which one the empire is heading for.
 | Collapse | The bar reaches 0 | Up to three of your territories declare independence, the one most likely to rise first, two months apart, and you can let each go, negotiate or [fight](#wars-of-independence); those that go inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years; after that it starts again within two months if you still hold a colony or colonial subject. |
 | Voluntary end | You no longer hold any colony or colonial subject while the bar is above 0 | A decaying boost to diplomatic reputation; the event's wording depends on whether you freed colonies by choice. There is no ten-year lockout: after a year, the entry starts again within two months of your holding a colony or colonial subject. |
 
+The entry never starts again during a civil war of your own. If you still hold
+a colony or colonial subject when the war ends, the two months count from then.
+
 | Longest program | If the empire holds | If it collapses | The countries you free |
 |---|---|---|---|
 | Military Garrison | The Iron Fist Holds | The Empire Crumbles | Bloody Decolonization Legacy; they start under autocracy with outlawed dissent, and their relations with you fall by 50 |
@@ -611,9 +614,13 @@ power with no settlers and two condemners about one time in four. A country
 that isn't a great power is much less likely to fight, and one in default or
 already at war with a great power never does.
 
-An AI that isn't a great power leans strongly toward Planned Full Decolonization,
-more so when three great powers condemn it or three of its colonies are badly
-unaccepted. AI great powers are less willing, and no AI plans full
-decolonization while two of its colonies are well accepted. In events, AI
-empires lean toward negotiation and release, and an AI takes the Imperial
-Federation Act or Civilizing Mission Compact whenever it qualifies.
+An AI leans toward Planned Full Decolonization when three great powers condemn
+it or three of its colonies are badly unaccepted. One that isn't a great power
+leans more strongly, and also when its bar is below 40, but never without one of
+those reasons. No AI plans full decolonization while two of its colonies are
+well accepted. No AI lets a colony go, by decision or in an event, during a
+civil war of its own while its bar is 40 or more: a civil war is often short,
+and it can cut a state off from the capital long enough to make it look like a
+colony. In events, AI empires lean toward negotiation and release, and an AI
+takes the Imperial Federation Act or Civilizing Mission Compact whenever it
+qualifies.
