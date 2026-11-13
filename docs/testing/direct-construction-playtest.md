@@ -131,7 +131,11 @@ The harness reads values and takes screenshots; these need a player.
 4. **A market game switched to Disabled, as its player.** The day after: the construction panel shows the Direct
    Construction section, each state that had a Construction Sector has a Construction Site of the same level on the
    same tier, and the capital's site hires within a week. Construction Cost Scaling shows as Construction Goods
-   Cost from the same day, for a country rich and fully employed enough to have any.
+   Cost from the same day, for a country rich and fully employed enough to have any. Compare two countries of very
+   different GDP per capita in the Nation tab's Construction row: each must show its own figure. The switch runs in
+   one country's event, and until 2026-11-13 it set every country's modifier there, where the multiplier reads that
+   one country; it now goes through a hidden event for each country (`te_construction_market_recalc_events.4`).
+   Not run in the game.
 5. **Back to the market.** The sectors return at the same level and tier, owned by the government. On the way to
    Disabled the opposite holds: a sector's levels become government Construction Site levels whoever owned them
    (investors, a company, a foreign owner), with no payment. The runs here were AI games of three months, and who owned their

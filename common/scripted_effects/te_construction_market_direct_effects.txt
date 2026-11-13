@@ -376,9 +376,16 @@ te_direct_construction_clear_cost_scaling = {
 # review of the PR, checked against te_construction_market_price and
 # te_construction_market_goods_per_point). A direct game would have built
 # without the scaling for as long.
+#
+# Through a hidden country event (te_construction_market_recalc_events.4), not
+# called here: this runs in one country's pulse event, and add_modifier's
+# multiplier resolves against ROOT, so a direct call would give every country
+# that one country's scaling until its own yearly pulse
+# (docs/guides/scripting_best_practices.md, "add_modifier { multiplier = var:X }
+# Resolves Against ROOT").
 te_direct_construction_switch_cost_scaling = {
 	every_country = {
-		te_cc_apply_scaling = yes
+		trigger_event = { id = te_construction_market_recalc_events.4 }
 	}
 }
 
@@ -465,7 +472,7 @@ te_direct_construction_revert_all = {
 		}
 		# A site kept because its owner has no Urbanization serves as a market
 		# site, and the market's sites are level 1: each is sized for a share
-		# of the week's purchase (te_construction_market_per_site) and gives
+		# of the week's purchase (te_construction_market_site_throughput) and gives
 		# that times its level.
 		every_scope_state = {
 			limit = {

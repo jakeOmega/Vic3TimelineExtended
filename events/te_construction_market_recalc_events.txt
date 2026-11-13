@@ -40,3 +40,16 @@ te_construction_market_recalc_events.3 = {
 		te_cc_game_start_country = yes
 	}
 }
+
+# Construction Cost Scaling after free_market_construction_rule was switched in a running game
+# (te_direct_construction_switch_cost_scaling): the new model's modifier for this country. A country event so that
+# the modifier's multiplier resolves against the country: the switch runs in one country's pulse event, whose
+# ROOT every country's add_modifier would otherwise read.
+te_construction_market_recalc_events.4 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_cc_apply_scaling = yes
+	}
+}

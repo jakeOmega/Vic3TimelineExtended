@@ -13,7 +13,7 @@
 # a state stays until the new owner's next recalc, at most a year, or until a
 # construction ends there. That costs a site's wages, not capacity, since the
 # purchase is split over however many sites there are
-# (te_construction_market_per_site). In a 1931 game the world walk cost about
+# (te_construction_market_site_throughput). In a 1931 game the world walk cost about
 # 20 ms a call, on the main thread: 152 calls and 3 s in 30 days, mostly from
 # on_revolution_start (docs/audits/late_game_performance.md).
 te_construction_market_country_update_sites = {

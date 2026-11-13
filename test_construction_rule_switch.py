@@ -202,7 +202,17 @@ class FollowRuleTest(unittest.TestCase):
         # not the modifier is in force, so a switch that only cleared the modifiers left a rich country's Fixed
         # Budget buying fewer points than it paid for until its yearly pulse (a second session's review of #1763).
         switch = body(self.effects, "te_direct_construction_switch_cost_scaling")
-        self.assertRegex(switch, r"every_country\s*=\s*\{\s*te_cc_apply_scaling\s*=\s*yes\s*\}")
+        # Through a hidden country event, never called from the fan-out: the switch runs in one country's
+        # pulse event, and add_modifier's multiplier resolves against ROOT, so a direct call would give every
+        # country that one country's scaling until its own yearly pulse.
+        self.assertRegex(switch, r"every_country\s*=\s*\{\s*trigger_event\s*=\s*\{\s*id\s*=\s*"
+                                 r"te_construction_market_recalc_events\.4\s*\}\s*\}")
+        self.assertFalse(calls(switch, "te_cc_apply_scaling"))
+        events = code(ROOT / "events/te_construction_market_recalc_events.txt")
+        event = body(events, "te_construction_market_recalc_events.4")
+        self.assertRegex(event, r"type\s*=\s*country_event")
+        self.assertRegex(event, r"immediate\s*=\s*\{\s*te_cc_apply_scaling\s*=\s*yes\s*\}")
+        self.assertNotRegex(event, r"\btrigger\s*=")
         cost = code(ROOT / "common/scripted_effects/te_construction_cost_effects.txt")
         apply = body(cost, "te_cc_apply_scaling")
         for modifier in ("construction_cost_scaling", "construction_cost_scaling_direct"):
