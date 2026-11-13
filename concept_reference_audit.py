@@ -45,6 +45,8 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from mod_state import split_loc_line
 
 
@@ -60,16 +62,13 @@ class ConceptFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[ConceptFlag] = field(default_factory=list)
     loc_files_scanned: int = 0
     refs_checked: int = 0
     registered_concepts: int = 0
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # Plain hyperlink form: `[concept_foo]`. Excluded character class on the
 # closing side prevents accidental matches against `[concept_foo.GetX]` etc.
 _PATTERN_PLAIN = re.compile(r"\[(concept_[A-Za-z0-9_]+)\]")
@@ -88,15 +87,6 @@ _PATTERN_GLOSSARY_PLAIN = re.compile(r"\[(glossary_[A-Za-z0-9_]+)\]")
 _PATTERN_GLOSSARY_FN = re.compile(
     r"(?<![A-Za-z0-9_.])Glossary\(\s*['\"]([A-Za-z0-9_]+)['\"]"
 )
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
@@ -179,7 +169,7 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
                         ]
                         if not per_line_refs:
                             continue
-                        exemption = _parse_reviewed(trailing)
+                        exemption = parse_reviewed(trailing)
                         seen_in_line: set[tuple[str, str]] = set()
                         for concept, kind in per_line_refs:
                             refs_checked += 1
@@ -212,12 +202,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
 def strict_exit_code(result: AuditResult) -> int:
     """Exit status for `--strict` (CI mode): 1 if any flag lacks a
     `# REVIEWED` exemption."""
-    return 1 if any(not f.exemption for f in result.flags) else 0
+    return 1 if result.failed else 0
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Concept reference audit report",
@@ -301,12 +291,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "concept_reference_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "concept_reference_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "loc_files_scanned": result.loc_files_scanned,
         "refs_checked": result.refs_checked,
@@ -317,18 +304,21 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    # CLI entry: run against the live mod state.
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    import mod_state_server
-    # Vanilla's concepts from where a server load takes them (the
-    # vanilla_parsed/ snapshot without a game install): a bare ModState has
-    # none, so every reference to one false-flags.
-    ms = mod_state_server.cli_mod_state()
-    result = audit(ms, mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(strict_exit_code(result))
+
+    def run(args) -> AuditResult:
+        import mod_state_server
+        # Vanilla's concepts from where a server load takes them (the
+        # vanilla_parsed/ snapshot without a game install): a bare ModState has
+        # none, so every reference to one false-flags.
+        return audit(mod_state_server.cli_mod_state(), mod_path=mod_path)
+
+    return cli_main(run, lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
