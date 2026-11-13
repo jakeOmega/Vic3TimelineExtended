@@ -159,7 +159,7 @@ the mod.
 
 ### Game rules
 
-The mod adds twenty-one game rules to the game setup screen. Each one turns a
+The mod adds twenty-two game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 
@@ -205,6 +205,7 @@ turn a default system off.
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
 | Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Dynastic Wealth keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
 | Culture Merges | Disabled | Closely related cultures merging into one national culture. A game saved before it was added keeps it off. Turned off mid-game, every merge pauses where it stands and carries on when the rule is turned back on. | [States and population](08-states.md#culture-merges) |
+| Small-Economy Construction | Full Cost for Every Country | *Cheaper for Small Economies* (experimental): construction and construction maintenance cost a small economy less, a tenth of the price with almost no GDP, rising to the full price at a GDP of 10 million. Switched in a running game, it reaches each country within a year. | [Economy and construction](03-economy.md) |
 | Global Commons | Enabled | *Enabled*: seabed licenses that cap the Deep-Sea Mine, the Law of the Sea's seabed terms at the UN, Antarctic research stations and the Antarctic Treaty. *Disabled*: the Deep-Sea Mine has no cap. | [The extended timeline](02-timeline.md#seabed-licenses) |
 | Power Bloc Principle Slots | Up to Eight | *Up to Eight*: four technologies the bloc leader researches each add a principle slot, up to eight. *Four (Base Game)*: the base game's slots only. | [Diplomacy](09-diplomacy.md#principle-slots) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. *Late Unlock*: it opens with Combined Arms. *Early Unlock*: it opens with Trench Works, democratic and authoritarian powers also count as opposed until Combined Arms, and a power can fight a second world war after it. | [Military and war](13-military.md) |

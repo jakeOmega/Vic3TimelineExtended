@@ -2494,6 +2494,12 @@ ce_treasury_pool_balance_multiplier = {
 # 4. slack_full and slack_none set the applying share: all of the GDP part at slack_full or less,
 #    none at slack_none or more, a straight line between. slack_ease is how far the share moves toward
 #    that each year (1 = at once), so the cost doesn't swing with a year's hiring.
+# 5. max_yearly_move caps how far the scaling's own factor (one plus the GDP part times the applying
+#    share) moves at a yearly pulse, up or down: a rich country whose share steps moves every
+#    building's use of the construction good on one day, and the price with it.
+# 6. small_economy_min_factor and small_economy_full_gdp are the optional rule's
+#    (te_small_economy_construction_rule): construction as cheap as the min factor for a country with
+#    almost no GDP, at full cost from full_gdp, a straight line between. Not capped by 5.
 # The scripts/analysis tools read every constant here (econ_sim_data.read_numbers): re-run
 # econ_construction_counterfactual.py after a change.
 #
@@ -2521,6 +2527,14 @@ construction_cost_slack_none = 0.15
 
 # How far the applying share moves toward its target each year (a third)
 construction_cost_slack_ease = 0.33333
+
+# The most the scaling's own factor (te_cc_scale) moves at one yearly pulse, either way (a tenth)
+construction_cost_max_yearly_move = 0.1
+
+# Small-economy rule (te_small_economy_construction_rule, off by default): the cost factor of a country
+# with almost no GDP (0.1 = ten times cheaper) and the GDP from which construction costs its full price
+construction_cost_small_economy_min_factor = 0.1
+construction_cost_small_economy_full_gdp = 10000000
 
 # Derived thresholds (do not edit - change the ratios above instead)
 construction_cost_gdppc_floor = {
@@ -2628,11 +2642,90 @@ te_cc_slack_factor_eased = {
 	min = 0
 }
 
-# The construction cost penalty X: the GDP part times the share of it that applies.
+# ---- The scaling's own factor, capped a year (te_cc_scale) ----
+
+# Where the factor is heading: one plus the GDP part times the applying share, both as the pulse last stored
+# them. Read before te_cc_yearly_update moves the share, it is the scaling in force for a country with no
+# stored factor yet (1 in a new game; the carried figure on a save from before the cap).
+te_cc_scale_target = {
+	value = te_cc_gdp_part_now
+	multiply = te_cc_slack_factor_now
+	add = 1
+}
+
+# The factor in force: as the pulse last stored it (var:te_cc_scale), or where it is heading before one has.
+te_cc_scale_now = {
+	value = te_cc_scale_target
+	if = {
+		limit = { has_variable = te_cc_scale }
+		value = var:te_cc_scale
+	}
+}
+
+# The factor after this year's move: its target, but at most max_yearly_move above or below the factor in
+# force. The share goes on easing toward its own target whatever the cap does, so the factor arrives where it
+# would have, later.
+te_cc_scale_next = {
+	value = te_cc_scale_target
+	max = {
+		value = 1
+		add = construction_cost_max_yearly_move
+		multiply = te_cc_scale_now
+	}
+	min = {
+		value = 1
+		subtract = construction_cost_max_yearly_move
+		multiply = te_cc_scale_now
+	}
+	min = 1
+}
+
+# ---- The small-economy factor (te_small_economy_construction_rule) ----
+
+# Today's: 1 with the rule off; with it on, min_factor at no GDP rising in a straight line to 1 at full_gdp.
+# Only the pulse and the game-start pass read it (te_cc_yearly_update); everything else reads the stored one.
+te_cc_small_economy_factor = {
+	value = 1
+	if = {
+		limit = { te_small_economy_construction_on = yes }
+		value = gdp
+		divide = construction_cost_small_economy_full_gdp
+		multiply = {
+			value = 1
+			subtract = construction_cost_small_economy_min_factor
+		}
+		add = construction_cost_small_economy_min_factor
+		max = 1
+		min = construction_cost_small_economy_min_factor
+	}
+}
+
+# The factor in force: as last stored (var:te_cc_small_factor), 1 before that. A rule switched in a running
+# game therefore reaches a country at its next yearly pulse, with the modifier.
+te_cc_small_factor_now = {
+	value = 1
+	if = {
+		limit = { has_variable = te_cc_small_factor }
+		value = var:te_cc_small_factor
+	}
+}
+
+# 1 while the small-economy factor in force is below 1, for the tooltip's choice of sentence.
+te_cc_small_factor_applies = {
+	value = 0
+	if = {
+		limit = { te_cc_small_factor_now < 1 }
+		value = 1
+	}
+}
+
+# The construction cost change X: the scaling's factor in force times the small-economy factor in force, less
+# one. Positive where the scaling outweighs, negative (down to min_factor - 1) for a small economy under the rule.
 # Every reader takes this (the construction market's goods per point and price, the adjusted multipliers below).
 construction_cost_scaling_mult = {
-	value = construction_cost_scaling_gdp_mult
-	multiply = te_cc_slack_factor_now
+	value = te_cc_scale_now
+	multiply = te_cc_small_factor_now
+	subtract = 1
 }
 
 # ---- The Nation tab's breakdown (te_nation_construction_row_tt). GUI-read: stored figures only. ----
@@ -2680,8 +2773,8 @@ te_cc_gdp_part_now = {
 }
 
 # A point's cost as a multiple of its base, in force now (one plus every construction-cost modifier), and its two
-# factors: the scaling (1 + the GDP part x the applying share, as the pulse set it; before the country's first
-# reading under this rule, today's GDP part x the carried share, the X in force), and the rest, their quotient. The pulse sets the scaling to multiply with
+# factors: the scaling (its own factor in force, te_cc_scale_now, which follows 1 + the GDP part x the applying
+# share at no more than a tenth a year, times the small-economy factor in force), and the rest, their quotient. The pulse sets the scaling to multiply with
 # the other sources as they stood then, so after one of them changes the quotient is not exactly one plus them,
 # but the product is always the cost in force, and the engine's breakdown adds up to it less one.
 te_cc_total_factor = {
@@ -2690,13 +2783,12 @@ te_cc_total_factor = {
 	min = 0
 }
 te_cc_scaling_factor = {
-	value = te_cc_gdp_part_now
-	multiply = te_cc_slack_factor_now
+	value = construction_cost_scaling_mult
 	add = 1
 }
 te_cc_others_factor = {
 	value = te_cc_total_factor
-	divide = { value = te_cc_scaling_factor min = 1 }
+	divide = { value = te_cc_scaling_factor min = construction_cost_small_economy_min_factor }
 }
 
 # 1 once the country's slack has been read at a pulse under this rule, for the tooltip's choice of sentence.
@@ -2728,6 +2820,8 @@ te_cc_direct_rule = {
 # own prior contribution (stored in var:prior_construction_scaling).
 # Result: total = adjusted + other_mults = (1 + base_scaling) * (1 + other_mults) - 1
 # which is the correct multiplicative combination.
+# base_scaling can be negative (the small-economy rule), so there is no floor at 0: the total stays above -1
+# because both factors of the product are positive.
 construction_cost_scaling_adjusted_mult = {
 	value = construction_cost_scaling_mult
 	multiply = {
@@ -2737,8 +2831,8 @@ construction_cost_scaling_adjusted_mult = {
 			limit = { has_variable = prior_construction_scaling }
 			subtract = var:prior_construction_scaling
 		}
+		min = 0
 	}
-	min = 0
 }
 
 # The same adjustment for games with free_market_construction_rule disabled,
@@ -2758,7 +2852,6 @@ construction_cost_scaling_direct_adjusted_mult = {
 		}
 		min = 0
 	}
-	min = 0
 }
 
 # ====================================================================================

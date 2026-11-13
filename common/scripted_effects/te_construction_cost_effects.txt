@@ -3,16 +3,24 @@
 # construction_cost_scaling_on_action (common/on_actions/extra_on_actions.txt), which calls te_cc_yearly_update
 # before it sets the modifier. Why: docs/systems/economy_growth_sim.md (#1034).
 
-# THIS = a country, its yearly pulse. Store its slack and peasants from its states' last walks (te_unemp_share_refresh)
-# and move the share of the GDP part that applies (var:te_cc_slack_factor) a third of the way toward its target. A
-# country none of whose states has been walked yet keeps the share it had (te_cc_slack_factor_now: on a save from
-# before the rule, the share that reproduces the scaling in force). Then store the GDP per capita and the GDP part
-# the scaling uses this year, for the Nation tab's tooltip. te_cc_had_reading tells the self-check whether the
-# country had a reading before this one.
+# THIS = a country, its yearly pulse (and the game-start pass, te_cc_game_start_country). Store its slack and
+# peasants from its states' last walks (te_unemp_share_refresh) and move the share of the GDP part that applies
+# (var:te_cc_slack_factor) a third of the way toward its target. A country none of whose states has been walked
+# yet keeps the share it had (te_cc_slack_factor_now: on a save from before the rule, the share that reproduces
+# the scaling in force). Then store the GDP per capita and the GDP part the scaling uses this year, for the Nation
+# tab's tooltip, and move the scaling's own factor (var:te_cc_scale) toward one plus the GDP part times the share,
+# by at most construction_cost_max_yearly_move of itself. A country with no stored factor first gets the scaling
+# in force, read before the share moves, so a save from before the cap moves from where it stood. Last, the
+# small-economy factor (var:te_cc_small_factor, 1 unless te_small_economy_construction_rule is on), which the cap
+# does not touch. te_cc_had_reading tells the self-check whether the country had a reading before this one.
 te_cc_yearly_update = {
 	if = {
 		limit = { has_variable = te_cc_slack }
 		set_local_variable = { name = te_cc_had_reading value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_cc_scale } }
+		set_variable = { name = te_cc_scale value = te_cc_scale_target }
 	}
 	if = {
 		limit = { te_country_walked_workforce > 0 }
@@ -22,7 +30,135 @@ te_cc_yearly_update = {
 	}
 	set_variable = { name = te_cc_gdppc value = country_gdp_per_capita }
 	set_variable = { name = te_cc_gdp_part value = construction_cost_scaling_gdp_mult }
+	set_variable = { name = te_cc_scale value = te_cc_scale_next }
+	set_variable = { name = te_cc_small_factor value = te_cc_small_economy_factor }
 	te_cc_slack_selfcheck = yes
+}
+
+# THIS = ROOT = a country (its yearly pulse, or the hidden game-start event: the multipliers below resolve against
+# ROOT). The two halves of construction_cost_scaling_on_action (extra_on_actions.txt), which picks one by the
+# rule after te_cc_yearly_update. Each is its modifier's one refresh site. X (construction_cost_scaling_mult) can
+# be negative under the small-economy rule, so a modifier is added whenever its multiplier is not 0.
+
+# free_market_construction_rule disabled: the scaling rides country_construction_goods_cost_mult.
+te_cc_apply_direct = {
+	# Compute before removing, so the modifier read certainly still holds
+	# the contribution var:prior_construction_scaling backs out.
+	set_variable = { name = prior_construction_scaling value = construction_cost_scaling_direct_adjusted_mult }
+	remove_modifier = construction_cost_scaling_direct
+	if = {
+		limit = { NOT = { var:prior_construction_scaling = 0 } }
+		add_modifier = { name = construction_cost_scaling_direct multiplier = var:prior_construction_scaling }
+	}
+}
+
+# The market: the scaling rides goods_input_construction_mult.
+te_cc_apply_market = {
+	remove_modifier = construction_cost_scaling
+	if = {
+		limit = { NOT = { has_variable = prior_construction_scaling } }
+		# First run (new save or pre-adjustment saves) - use raw scaling
+		if = {
+			limit = { NOT = { construction_cost_scaling_mult = 0 } }
+			add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
+			set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
+		}
+	}
+	else = {
+		# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
+		if = {
+			limit = { NOT = { construction_cost_scaling_adjusted_mult = 0 } }
+			add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
+			set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
+		}
+		else = {
+			set_variable = { name = prior_construction_scaling value = 0 }
+		}
+	}
+}
+
+# Any scope, from on_game_started_after_lobby (te_construction_market_on_actions.txt), when the game rules are
+# final. With te_small_economy_construction_rule on, every country gets the scaling at once, so a small economy
+# builds cheaply from the first day and not from its first yearly pulse, up to a year on. ROOT is none there and
+# add_modifier's multiplier resolves against ROOT, so each country is reached through a hidden country event
+# (te_construction_market_recalc_events.3; scripting_best_practices.md, "add_modifier { multiplier = var:X }
+# Resolves Against ROOT"). With the rule off there is nothing to apply in a new game: the scaling starts at 0.
+te_cc_game_start = {
+	if = {
+		limit = { te_small_economy_construction_on = yes }
+		every_country = {
+			limit = {
+				NOT = { is_country_type = decentralized }
+			}
+			trigger_event = { id = te_construction_market_recalc_events.3 }
+		}
+	}
+}
+
+# THIS = ROOT = a country, in te_construction_market_recalc_events.3. The yearly pulse's own steps, once, for a
+# country the scaling has not reached yet. Its GDP must be known: the small-economy factor is read from it, and
+# a GDP of 0 would give the largest discount to every country. Whether gdp reads before the first day is not
+# established, so a country whose GDP reads 0 tries again a week later, and the self-check says which happened.
+te_cc_game_start_country = {
+	if = {
+		limit = {
+			te_small_economy_construction_on = yes
+			NOT = { has_variable = te_cc_small_factor }
+		}
+		if = {
+			limit = { gdp > 0 }
+			te_cc_yearly_update = yes
+			if = {
+				limit = { te_free_market_construction_off = yes }
+				te_cc_apply_direct = yes
+			}
+			else = {
+				te_cc_apply_market = yes
+			}
+			te_cc_small_start_selfcheck = yes
+		}
+		else = {
+			set_variable = { name = te_cc_start_retried value = 1 }
+			trigger_event = { id = te_construction_market_recalc_events.3 days = 7 }
+		}
+	}
+}
+
+# TE_SELF_CHECK small_economy_start (docs/testing/ai-economy-playtest.md, "Construction Cost Scaling: the yearly
+# cap and the small-economy rule"). Once a game, the first country the game-start pass applies the small-economy
+# factor to whose factor is below 1 (a GDP under construction_cost_small_economy_full_gdp, so the modifier is
+# there to see) and above the minimum (so its GDP was not read as nothing).
+#   OK      applied at the first try and the scaling it stored is a discount: gdp reads at game start, the
+#           hidden event had the country as ROOT, and the cost is in force from the first day.
+#   BROKEN  the country had to try again (gdp read 0 on the first day, so small economies paid full price for
+#           the first week), or what it stored is not a discount.
+te_cc_small_start_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cc_small_start_check_done }
+			var:te_cc_small_factor < 1
+			var:te_cc_small_factor > construction_cost_small_economy_min_factor
+		}
+		set_global_variable = { name = te_cc_small_start_check_done value = yes }
+		set_variable = { name = te_cc_chk_gdp value = gdp }
+		if = {
+			limit = {
+				NOT = { has_variable = te_cc_start_retried }
+				has_variable = prior_construction_scaling
+				var:prior_construction_scaling < 0
+			}
+			debug_log = "TE_SELF_CHECK OK small_economy_start country=[THIS.GetCountry.GetTagName] gdp=[THIS.Var('te_cc_chk_gdp').GetValue|0] factor=[THIS.Var('te_cc_small_factor').GetValue|3] applied=[THIS.Var('prior_construction_scaling').GetValue|3]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN small_economy_start country=[THIS.GetCountry.GetTagName] gdp=[THIS.Var('te_cc_chk_gdp').GetValue|0] factor=[THIS.Var('te_cc_small_factor').GetValue|3] (the country tried again a week later, or what it stored is not a discount)"
+		}
+		debug_log_scopes = yes
+		remove_variable = te_cc_chk_gdp
+	}
+	if = {
+		limit = { has_variable = te_cc_start_retried }
+		remove_variable = te_cc_start_retried
+	}
 }
 
 # TE_SELF_CHECK construction_slack_read (docs/testing/ai-economy-playtest.md, Self-checks). Once a game, the first

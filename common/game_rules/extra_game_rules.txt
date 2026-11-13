@@ -587,3 +587,28 @@ culture_merges_rule = {
 		flag = culture_merges_disabled
 	}
 }
+
+# Cheaper construction for small economies (owner, 2026-11-13, after Workshop
+# reports that a minor country could hardly build): the mod has no free base of
+# construction in a market game, so a country with a small budget pays the full
+# price of every point. Enabled, Construction Cost Scaling is multiplied by a
+# factor that is 0.1 for a country with almost no GDP and rises in a straight
+# line to 1 at a GDP of 10 million (extra_script_values.txt, CONSTRUCTION COST
+# SCALING: construction_cost_small_economy_min_factor / _full_gdp). It rides
+# the scaling's modifier, so it also cuts what a small economy's buildings pay
+# in construction maintenance, and it applies under every setting of
+# free_market_construction_rule. Off by default: it is new and has not been
+# play-tested. Checked as has_game_rule = te_small_economy_construction_enabled
+# (te_small_economy_construction_on), so a save from before the rule stays off.
+# Switched in a running game, it reaches each country at its next yearly pulse.
+te_small_economy_construction_rule = {
+	default = te_small_economy_construction_disabled
+
+	te_small_economy_construction_enabled = {
+		flag = te_small_economy_construction_enabled
+	}
+
+	te_small_economy_construction_disabled = {
+		flag = te_small_economy_construction_disabled
+	}
+}

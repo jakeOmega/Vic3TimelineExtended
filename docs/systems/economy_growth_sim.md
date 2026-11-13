@@ -83,6 +83,7 @@ Why the slack part rather than a cap:
   - Without it, France's cost per point would swing between 1.3× and 15× its base from 1976 on (at its own share), moving up to 62% in a year.
   - Eased, the range is 1.5–14× and the largest yearly move 23%, with little change to the outcomes. At the EU's share it is 1.2–12.5×, at most 21% a year.
   - In the game, construction takes years to turn into jobs, and the script reads counts up to a year old. So the swings would be larger than this arithmetic shows. The band and the easing are starting values for a play-test.
+  - Since 2026-11-13 the script also caps the yearly move of the scaling's own factor at a tenth (`construction_cost_max_yearly_move`) and has an optional small-economy factor (`docs/systems/mod_systems/construction.md`). The tools model neither: `econ_growth_sim` and `econ_construction_counterfactual.py` still move the cost by the eased share alone, so their yearly moves are the uncapped ones.
 
 This arithmetic flatters any rule aimed at a band of slack: points become jobs in a straight line, so the end figures land in the band almost by definition. It does show four things:
 - an unemployment-only share fails;

@@ -3215,37 +3215,13 @@ construction_cost_scaling_on_action = {
 		# var:prior_construction_scaling.
 		if = {
 			limit = { te_free_market_construction_off = yes }
-			# Compute before removing, so the modifier read certainly still holds
-			# the contribution var:prior_construction_scaling backs out.
-			set_variable = { name = prior_construction_scaling value = construction_cost_scaling_direct_adjusted_mult }
-			remove_modifier = construction_cost_scaling_direct
-			if = {
-				limit = { var:prior_construction_scaling > 0 }
-				add_modifier = { name = construction_cost_scaling_direct multiplier = var:prior_construction_scaling }
-			}
+			te_cc_apply_direct = yes
 		}
 		else = {
-			remove_modifier = construction_cost_scaling
-			if = {
-				limit = { NOT = { has_variable = prior_construction_scaling } }
-				# First run (new save or pre-adjustment saves) - use raw scaling
-				if = {
-					limit = { construction_cost_scaling_mult > 0 }
-					add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
-					set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
-				}
-			}
-			else = {
-				# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
-				if = {
-					limit = { construction_cost_scaling_adjusted_mult > 0 }
-					add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
-					set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
-				}
-				else = {
-					set_variable = { name = prior_construction_scaling value = 0 }
-				}
-			}
+			# The market's own lever, goods_input_construction_mult. Both
+			# halves are in te_construction_cost_effects.txt, which the
+			# game-start pass also calls (te_cc_game_start_country).
+			te_cc_apply_market = yes
 		}
 	}
 }
