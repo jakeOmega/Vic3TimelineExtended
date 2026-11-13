@@ -137,6 +137,7 @@ Lengths are in words, counting a scope reference or a spliced name as one. "Now"
 | Button | `*_button`, `*_button_desc` | Name: the action as a verb. Description: what pressing it does, then what it costs or ends | name 2–5; description 1–2 sentences | 15, 21 |
 | Tooltip | `*_tt`, `*_tooltip` | Answer the question the hover asks: what is this, why this value, why greyed | 1–3 sentences; a breakdown is one "Label: value" line each | 13, 46 |
 | Concept description | `concept_*_desc` | The rule, complete enough to plan around, with links to the concepts it touches | 40–120 | 54, 145 |
+| Game rule setting description | `setting_*_desc` | What the setting switches on or off, and anything the player must do differently | four lines of 78 characters, about 50 words (`test_game_rule_desc_length.py`); the screen cuts off the rest | |
 | Journal entry text | `je_*_reason`, `_goal`, outcome keys | What is happening, what ends it, what each ending does | as long as the rules need; lists for lists | |
 | Notification | `notification_*_desc` | What just happened and what it changes for us | 1–2 sentences | |
 | Event title | `<ns>.<n>.t` | Hint at the theme | 2–5, Title Case | 3, 5 |
