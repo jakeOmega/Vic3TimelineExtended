@@ -62,6 +62,8 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
 from script_helper_index import (
     _MERGE_PREFIX_RE,
     PARAM_RE,
@@ -83,9 +85,6 @@ _TOKEN_RE = re.compile(
     r"|(?P<key>[A-Za-z_$][A-Za-z0-9_.:|@$\-]*)\s*(?P<op>\?=|[!<>=]=|[=<>])\s*"
     r"(?:(?P<open>\{)|(?P<value>[^\s{}]+))?"
     r"|(?P<anon>\{)"
-)
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
 )
 _FORWARD_RE = re.compile(r"\$([A-Za-z0-9_]+)\$")
 _LITERAL_RE = re.compile(r"[A-Za-z0-9_]+")
@@ -118,15 +117,10 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
+class AuditResult(_AuditResult):
+    """`stale` holds the `(script_argument)` tags that suppress nothing."""
 
-
-@dataclass
-class AuditResult:
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     files_audited: int = 0
     calls_checked: int = 0
     helpers_indexed: int = 0
@@ -137,8 +131,9 @@ class AuditResult:
     call_sites: dict[str, list[Call]] = field(default_factory=dict, repr=False)
 
     @property
-    def failing(self) -> int:
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
+    def stale_tags(self) -> list[StaleTag]:
+        """The old name for `stale`, which `GET /script-args` reads."""
+        return self.stale
 
 
 @dataclass
@@ -154,11 +149,9 @@ class _FileScan:
 def _parse_tags(text: str) -> dict[int, dict]:
     tags: dict[int, dict] = {}
     for lineno, raw in enumerate(text.splitlines(), 1):
-        if "REVIEWED" not in raw:
-            continue
-        m = _TAGGED_REVIEWED_RE.search(raw)
-        if m and CHECK in re.split(r"[\s,]+", m.group("checks").strip()):
-            tags[lineno] = {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+        tag = parse_reviewed(raw, (CHECK,))
+        if tag:
+            tags[lineno] = tag
     return tags
 
 
@@ -417,10 +410,10 @@ def audit(mod_state=None, mod_path: str | None = None,
                 continue
             if not result.vanilla_indexed and s.unindexed.get(line):
                 continue
-            result.stale_tags.append(StaleTag(s.file, line))
+            result.stale.append(StaleTag(s.file, line, CHECK))
 
     result.flags.sort(key=lambda f: (f.file, f.line, f.callee))
-    result.stale_tags.sort(key=lambda t: (t.file, t.line))
+    result.stale.sort(key=lambda t: (t.file, t.line))
     return result
 
 
@@ -482,8 +475,8 @@ def describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Script argument audit report",
         "",
@@ -523,9 +516,9 @@ def render_report(result: AuditResult) -> str:
             out += [f"- line {f.line}: {describe(f)}" for f in by_file[fname]]
             out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -548,7 +541,7 @@ def render_report(result: AuditResult) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     return "\n".join(out) + "\n"
@@ -559,15 +552,13 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "script_argument_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "files_audited": result.files_audited,
         "calls_checked": result.calls_checked,
         "helpers_indexed": result.helpers_indexed,
@@ -576,15 +567,21 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks its
+    check-tagged `# REVIEWED` comment, or any such tag suppresses nothing."""
     import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
     from path_constants import mod_path
-    res = audit(mod_path=mod_path)
-    print(render_report(res))
-    if not res.vanilla_indexed:
-        print("(no vanilla game files: calls to vanilla helpers were not checked)", file=sys.stderr)
-    # --strict: CI mode. Exit 1 if any flag lacks its check-tagged
-    # `# REVIEWED` comment, or any such tag suppresses nothing.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if res.failing else 0)
+
+    def render(res: AuditResult, args) -> None:
+        print(render_report(res))
+        if not res.vanilla_indexed:
+            print("(no vanilla game files: calls to vanilla helpers were not checked)", file=sys.stderr)
+
+    return cli_main(lambda args: audit(mod_path=mod_path), render, argv=argv,
+                    description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

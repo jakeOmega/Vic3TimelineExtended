@@ -336,7 +336,7 @@ class SuppressionTests(unittest.TestCase):
             "}\n",
             "events/test.txt", options=True,
         )
-        self.assertEqual([(s.line, s.check) for s in stale], [(4, "no_effect_option")])
+        self.assertEqual([(s.line, s.tag) for s in stale], [(4, "no_effect_option")])
 
     def test_tagged_form_is_invisible_to_untagged_audits(self):
         # An `every_x = {` opener carries both this audit's and
@@ -374,7 +374,7 @@ class AuditTests(unittest.TestCase):
             os.path.join("events", "space_race_events.txt"),
             os.path.join("events", "te_debug_x_events.txt"),
         ])
-        self.assertEqual(result.failing, 4)
+        self.assertEqual(len(result.failing), 4)
         report = render_report(result)
         self.assertIn("space_race_events.20.a", report)
         self.assertIn("## Coverage", report)
@@ -385,17 +385,15 @@ class AuditTests(unittest.TestCase):
         Unreviewed flags and stale tags keep their lines."""
         from empty_effect_audit import AuditResult, BlockFlag, OptionFlag, StaleTag
         result = AuditResult(
-            block_flags=[
+            flags=[
                 BlockFlag("events/a.txt", 12, "if", "chain-end"),
                 BlockFlag("events/a.txt", 40, "else", "else",
                           {"date": "2026-09-26", "rationale": "claims the default"}),
-            ],
-            option_flags=[
                 OptionFlag("events/banking_cycle_events.txt", 4236, "banking_cycle_events.68",
                            "banking_cycle_events.68.b",
                            {"date": "2026-09-26", "rationale": "the decline"}),
             ],
-            stale_tags=[StaleTag("events/a.txt", 77, "empty_block")],
+            stale=[StaleTag("events/a.txt", 77, "empty_block")],
             files_audited=515, events_scanned=820, options_scanned=2029,
         )
         report = render_report(result)
@@ -417,7 +415,7 @@ class AuditTests(unittest.TestCase):
 
     def test_clean_tree_passes(self):
         root = self._tree({"events/e.txt": "ev.1 = {\n\toption = { name = a x = yes }\n}\n"})
-        self.assertEqual(audit(mod_path=root).failing, 0)
+        self.assertEqual(audit(mod_path=root).failing, [])
 
 
 if __name__ == "__main__":
