@@ -37,15 +37,26 @@ BOM" below).
 The harness (`python3 -m game_qa`, skill `game-qa`) runs all of the above
 without anyone at the keyboard. Copy the save to a fixed name first (the next
 exit autosave overwrites the original), then `start --save <copy> --playset
-current`, and use `console` for each command below. Copy every output out of
-the user-data folder before `stop`, because the restore puts `logs/` back.
+current`. Since 2026-11-13 (#1700) `profile start`, `profile dump [LABEL]` and
+`profile summary` do what the list below describes: they clear and enable,
+copy both dumps and `dedicated_server.log` into the run folder, and give the
+wall time per day and frame type, the top tick tasks and the script time by
+file. `start --game-arg` and `start --add-mod` (a variant mod folder, for an
+A/B on the same save) go with them. The profile verbs, `--game-arg
+no_notifications` and one `--add-mod` ran live on 2026-11-13 on the 1931
+save, before the PR's review fixes
+(`docs/testing/game-qa-results-2026-11-13.md`); the other flags and a run
+without `--add-mod` have not. The `console` route below still works.
+Copy every output out of the user-data folder before `stop`, because the
+restore puts `logs/` back.
 
 - **Engine tick tasks**: `clear_ticktask_timings`, play, then
   `dump_ticktask_timings`. It writes `ticktask_timings.csv` to the user-data
   root, with one row per engine task per frame (`frame,task,milliseconds,
   calls,longest_lock`). The frame is the game date in hours, four frames a
-  day (hours 0, 6, 12 and 18), and every frame since the clear is kept. Remove
-  the file after copying it, since restore doesn't know it. There is no task
+  day (hours 0, 6, 12 and 18), and every frame since the clear is kept. The
+  restore puts back the owner's copy of the file, or removes one the run
+  created (the snapshot set has held it since 2026-11-13). There is no task
   for on_actions or events: they run outside every task, and only the GUI
   profiler sees them.
 - **Wall clock**: `logs/dedicated_server.log` stamps each frame with the

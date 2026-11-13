@@ -38,6 +38,9 @@ SNAPSHOT_SET = (
     "console_history.txt",
     "pdx_settings.json",
     "content_load.json",
+    # Console `dump_ticktask_timings` overwrites this in place in the user-data root (#1700): an owner's copy is
+    # put back, and one the run's game wrote where there was none is removed, by restore's rules for the set.
+    "ticktask_timings.csv",
     "logs/*",
 )
 
@@ -255,7 +258,9 @@ def take(
     for pattern in SNAPSHOT_SET:
         folder, _, name_pattern = pattern.rpartition("/")
         for rel, st in scans[folder].items():
-            if stat.S_ISREG(st.st_mode) and fnmatch.fnmatchcase(rel.rpartition("/")[2], name_pattern):
+            # In any case: the folder is on NTFS, where the game's write to `ticktask_timings.csv` goes into an
+            # owner's `TickTask_Timings.csv`, which keeps its name. Stored under the name it has, it is put back.
+            if stat.S_ISREG(st.st_mode) and fnmatch.fnmatchcase(rel.rpartition("/")[2].lower(), name_pattern.lower()):
                 wanted[rel] = st
     for rel in extra_paths:
         target = user_data / rel
