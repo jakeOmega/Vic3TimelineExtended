@@ -9,6 +9,7 @@ the debugger client's own, which the fakes answer at once.
 """
 import contextlib
 import datetime as dt
+import hashlib
 import io
 import json
 import os
@@ -20,7 +21,8 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, server, session, snapshot
+from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, profiling, server, session, snapshot
+from game_qa.report import read_steps
 from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
@@ -3767,6 +3769,28 @@ class RunPlaysetPinTest(unittest.TestCase):
                 self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod,
                                                      OVERLAY_WIN), launched["playset"]["enabled"])
 
+    def test_a_variant_folder_lands_where_launch_puts_it(self):
+        # #1702: `start --add-mod` goes after the run's playset and before the overlay, as launch's --add-mods do
+        variant = r"D:\vic3te-data\qa-addmod-test"
+        cases = {"the owner's mods, this one among them": [self.WORKSHOP + "1", self.this_mod, self.WORKSHOP + "2"],
+                 "this mod alone": [self.this_mod]}
+        runs = [(label, owner, mode) for label, owner in cases.items() for mode in session.PLAYSETS]
+        for n, (label, owner, mode) in enumerate(runs):
+            with self.subTest(owners=label, mode=mode):
+                os.environ["VIC3_QA_BACKUPS"] = str(self.backups) + "v" + str(n)
+                (self.user / "content_load.json").write_text(
+                    json.dumps({"enabledMods": [{"path": m} for m in owner], "disabledDLC": []}), encoding="utf-8")
+                snap, code = self.cli("snapshot")
+                self.assertEqual(code, 0, snap)
+                launched, code = self.cli("launch", snap["id"], "--permission", PERMISSION, "--playset", mode,
+                                          "--add-mod", variant, "--add-mod", OVERLAY_WIN, "--", "-gdpr-compliant")
+                self.assertEqual(code, 0, launched)
+                enabled = launched["playset"]["enabled"]
+                self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod, OVERLAY_WIN,
+                                                     add_mods=[variant]), enabled)
+                self.assertLess(enabled.index(self.this_mod), enabled.index(variant))
+                self.assertEqual(enabled[-2:], [variant, OVERLAY_WIN])
+
 
 class StopsTest(SessionTestCase):
     """I3: a stop left over is released before anything is typed; only a breakpoint stop is evaluated at."""
@@ -4634,6 +4658,415 @@ class SelfChecksTest(SessionTestCase):
         text = Path(reply["report"]).read_text("utf-8")
         self.assertTrue(text.startswith("Restore: restored"))
         self.assertNotIn("## Self-checks", text)
+
+
+
+class GameArgsTest(SessionTestCase):
+    """#1700: `start --game-arg` adds flags from an allow-list after SESSION_ARGS; the fixture's run never gets them."""
+
+    def test_they_follow_the_session_args_and_come_before_the_save(self):
+        reply = self.start(game_args=["no_notifications", "-script_profiling"])
+        self.assertEqual(self.cli.calls[2][self.cli.calls[2].index("--"):], [
+            "--", "-gdpr-compliant", "-debug_mode", "-script_debugger", "-no_notifications", "-script_profiling",
+            "-loadsave=te_qa_fixture_" + self.key])
+        self.assertEqual(reply["game_args"], ["-no_notifications", "-script_profiling"])
+
+    def test_the_fixtures_run_never_gets_them_and_its_key_does_not_name_them(self):
+        self.fixture_save.unlink()
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.start(game_args=["-disable_renderframeifneeded"])
+        self.assertEqual(self.cli.calls[2][-6:], ["--", *fixture.FIXTURE_ARGS])     # the fixture's own launch
+        self.assertIn("-disable_renderframeifneeded", self.cli.calls[5])
+        self.assertTrue(self.fixture_save.is_file())                                # the same key as without them
+
+    def test_one_off_the_list_or_given_twice_is_refused_before_anything(self):
+        for args in (["-script_debugger"], ["-handsoff"], ["--no_notifications"], ["no_notifications", "-no_notifications"],
+                     "-no_notifications", [7]):
+            with self.subTest(args=args):
+                error = self.session_error(self.start, game_args=args)
+                self.assertEqual(error.code, "bad_argument")
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+
+VARIANT_WIN = r"D:\vic3te-data\qa-addmod-test"
+
+
+class AddModStartTest(SessionTestCase):
+    """#1702 item 2: `start --add-mod` loads a variant folder after the run's playset and before the overlay; without
+    `--save` its files are part of the fixture's key and its run loads it too."""
+
+    def setUp(self):
+        super().setUp()
+        self.drive = self.user.parent / "drive_d"
+        self.variant = self.drive / "vic3te-data" / "qa-addmod-test"
+        (self.variant / ".metadata").mkdir(parents=True)
+        (self.variant / ".metadata" / "metadata.json").write_text('{"name": "TE QA add-mod test", "version": "1"}',
+                                                                   encoding="utf-8")
+        (self.variant / "common" / "script_values").mkdir(parents=True)
+        (self.variant / "common" / "script_values" / "te_qa_addmod.txt").write_text("te_qa_addmod_loaded = 1\n")
+        self.paths.wsl_path_of = self.to_wsl
+
+    def to_wsl(self, path: str) -> Path:
+        self.assertEqual(path[:3], "D:\\")
+        return self.drive.joinpath(*path[3:].rstrip("\\").split("\\"))
+
+    def variant_key(self) -> str:
+        loads = session.run_playset("mod_only", self.paths.enabled_mods, DEPLOYED_WIN, OVERLAY_WIN,
+                                    add_mods=[VARIANT_WIN])
+        return fixture.key("1.15.0", loads, self.paths.deploy_dir, playset="mod_only", add_mod_dirs=[self.variant])
+
+    def test_without_a_save_the_fixture_is_made_with_it_under_its_own_key(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start(add_mods=[VARIANT_WIN])
+        self.assertTrue(reply["fixture_made"])          # the plain fixture is not this world
+        key = self.variant_key()
+        self.assertNotEqual(key, self.key)
+        self.assertEqual(reply["save"], "te_qa_fixture_" + key)
+        for launch in (self.cli.calls[2], self.cli.calls[5]):                 # the fixture's run, then the session's
+            self.assertEqual(launch[launch.index("--add-mod"):launch.index("--add-mod") + 4],
+                             ["--add-mod", VARIANT_WIN, "--add-mod", OVERLAY_WIN])
+        self.assertEqual(reply["add_mods"], [{"windows": VARIANT_WIN, "wsl": str(self.variant),
+                                              "name": "TE QA add-mod test", "version": "1"}])
+        steps = read_steps(Path(reply["run_dir"]))
+        self.assertEqual(next(s for s in steps if s["verb"] == "start")["add_mods"][0]["windows"], VARIANT_WIN)
+
+    def test_a_variant_edited_in_place_is_another_fixture(self):
+        before = self.variant_key()
+        script = self.variant / "common" / "script_values" / "te_qa_addmod.txt"
+        script.write_text("te_qa_addmod_loaded = 2\n")
+        os.utime(script, ns=(10**18, 10**18))
+        self.assertNotEqual(self.variant_key(), before)
+        # and a variant changes nothing of a key it is not in: the plain fixture's key is the one it always was
+        self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                     playset="mod_only"), self.key)
+
+    def test_a_variant_whose_metadata_changed_is_another_fixture(self):
+        # game_custom_data.replace_paths changes which vanilla folders load; the deployed mod's metadata is not read
+        before, digest = self.variant_key(), fixture.add_mod_digest([self.variant])
+        meta = self.variant / ".metadata" / "metadata.json"
+        meta.write_text('{"name": "TE QA add-mod test", "version": "1", "game_custom_data": '
+                        '{"replace_paths": ["common/history/states"]}}', encoding="utf-8")
+        self.assertNotEqual(self.variant_key(), before)
+        self.assertNotEqual(fixture.add_mod_digest([self.variant]), digest)
+        (self.paths.deploy_dir / ".metadata").mkdir()
+        (self.paths.deploy_dir / ".metadata" / "metadata.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                     playset="mod_only"), self.key)
+
+    def test_with_a_save_it_is_loaded_and_no_fixture_is_made(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        reply = self.start(save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+        launch = self.cli.calls[2]
+        self.assertEqual(launch[:10], ["launch", SNAP, "--permission", PERMISSION, "--playset", "mod_only",
+                                       "--add-mod", VARIANT_WIN, "--add-mod", OVERLAY_WIN])
+        self.assertEqual(launch[-1], "-loadsave=france_1850")
+        self.assertFalse(reply["fixture_made"])
+
+    def test_a_refused_variant_starts_nothing(self):
+        inside = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\someone_elses"
+        for path, reason in ((inside, "inside_user_data"), (r"D:\vic3te-data\missing", "no_folder"),
+                             (r"D:\vic3te-data\..\x", "bad_argument"), ("/mnt/d/vic3te-data", "bad_argument")):
+            with self.subTest(path=path):
+                error = self.session_error(self.start, add_mods=[path])
+                self.assertEqual((error.code, error.info.get("reason")), ("add_mod_refused", reason))
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_under_current_one_the_owners_playset_enables_is_refused(self):
+        self.paths.enabled_mods = [DEPLOYED_WIN, VARIANT_WIN]
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN], playset="current")
+        self.assertEqual(error.info.get("reason"), "already_enabled")
+
+    def edit_variant_at(self, verb: str, nth: int = 1, edit=None):
+        """Edit the variant when the `nth` call of `verb` is made (before it is answered)."""
+        seen = []
+
+        def edit_script():
+            script = self.variant / "common" / "script_values" / "te_qa_addmod.txt"
+            script.write_text("te_qa_addmod_loaded = 22\n")
+            os.utime(script, ns=(10**18, 10**18))
+
+        def on_call(argv):
+            if argv[0] == verb:
+                seen.append(argv)
+                if len(seen) == nth:
+                    (edit or edit_script)()
+        self.cli.on_call = on_call
+
+    def test_a_variant_edited_before_the_sessions_launch_launches_nothing(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot")
+        error = self.session_error(self.start, save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("before the session's launch", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+        self.assertEqual(self.cli.verbs[-1], "restore")            # the stop puts the snapshot back
+
+    def test_a_variant_edited_during_the_fixtures_run_refuses_the_sessions_launch(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.edit_variant_at("launch")                  # the fixture's launch went through the check first
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertEqual(self.cli.verbs.count("launch"), 1)
+
+    def test_a_variant_edited_before_the_fixtures_launch_starts_no_game(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.edit_variant_at("snapshot")
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("before the fixture's launch", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+        self.assertEqual(self.cli.verbs[:3], ["held", "snapshot", "restore"])      # restored at once
+        steps = read_steps(self.paths.backup_root / "runs" / FIXTURE_SNAP)
+        self.assertEqual([s["outcome"] for s in steps if s["verb"] == "add_mods"], ["changed"])
+
+    def test_a_variant_refused_by_the_time_of_the_launch_launches_nothing(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot", edit=lambda: (self.variant / ".metadata" / "metadata.json").unlink())
+        error = self.session_error(self.start, save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("no_metadata", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+
+    def test_a_variant_left_alone_is_launched_as_before(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot", edit=lambda: None)
+        self.start(save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+
+
+SNAP_TIME = dt.datetime(2026, 11, 10, 15, 0, 0, tzinfo=dt.timezone.utc)        # the id SNAP
+ROOT_CSV_REPLY = "Wrote %d rows to C:/Users/someone/Documents/Paradox Interactive/Victoria 3/ticktask_timings.csv"
+
+
+class ProfileTest(SessionTestCase):
+    """#1700: `profile start` and `profile dump` against the fake game, which writes the dumps when their commands
+    run. A real snapshot with the session's id stands under the backup root, since the dump reads its manifest. File
+    times are set with os.utime, never compared with a clock."""
+
+    def setUp(self):
+        super().setUp()
+        self.snap = snapshot.take(self.user, self.paths.backup_root, now=SNAP_TIME)
+        self.assertEqual(self.snap.id, SNAP)
+        self.server_log = self.user / profiling.SERVER_LOG
+        self.log_lines = ["[10:00:00][jominiapplication.cpp:539]: Changing game speed to: 4"]
+        self.write_server_log()
+        self.started()
+        self.game.on(profiling.CLEAR_COMMAND, success=["Discarded 0 recorded frames"])
+        self.game.on(profiling.ENABLE_COMMAND, success=["Enabled"])
+        self.game.on(profiling.SP_DUMP_COMMAND, success=["Wrote logs/script_profiling.txt"])
+        self.mtime = 10**18
+        self.tt_rows = [(profiling.frame_of(1836, 1, 11, 6), "UpdateEmployment", 5, 1)]
+        self.reply_rows: int | None = None          # what the console says it wrote (None: the rows' number)
+        self.writes = {profiling.TT_DUMP_COMMAND: True, profiling.SP_DUMP_COMMAND: True}
+        self.game.on_command = self.dumps
+        self.run_dir = self.paths.backup_root / "runs" / SNAP
+
+    def write_server_log(self) -> None:
+        self.server_log.write_text("\n".join(self.log_lines) + "\n", encoding="utf-8")
+
+    def stamp(self, path: Path) -> None:
+        self.mtime += 1_000_000_000
+        os.utime(path, ns=(self.mtime, self.mtime))
+
+    def dumps(self, text: str) -> None:
+        if text == profiling.TT_DUMP_COMMAND:
+            if self.writes[text]:
+                root = self.user / profiling.TT_FILE
+                root.write_text("\ufeff" + ",".join(profiling.TT_HEADER) + "\n"
+                                + "".join("%d,%s,%d,%d,0\n" % row for row in self.tt_rows), encoding="utf-8")
+                self.stamp(root)
+            rows = len(self.tt_rows) if self.reply_rows is None else self.reply_rows
+            self.game.on(text, success=[ROOT_CSV_REPLY % rows])
+        elif text == profiling.SP_DUMP_COMMAND and self.writes[text]:
+            path = self.user / profiling.SP_FILE
+            path.write_text("# type, location, time (seconds), call count\ntrigger common/x.txt:1 0.5 100\n",
+                            encoding="utf-8")
+            self.stamp(path)
+
+    def steps(self, verb: str) -> list[dict]:
+        return [step for step in read_steps(self.run_dir) if step["verb"] == verb]
+
+    def test_a_dump_needs_a_profile_start_first(self):
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_profiling")
+        self.assertEqual(self.typed(), [])
+
+    def test_the_start_clears_enables_and_begins_the_server_log_copy(self):
+        reply = self.session.profile_start()
+        typed = self.typed()
+        self.assertLess(typed.index(profiling.CLEAR_COMMAND), typed.index(profiling.ENABLE_COMMAND))
+        self.assertEqual((reply["clear"], reply["enable"], reply["starts"]),
+                         (["Discarded 0 recorded frames"], ["Enabled"], 1))
+        self.assertEqual(reply["date"], [1836, 1, 11])
+        step = self.steps("profile_start")[0]
+        self.assertEqual((step["outcome"], step["date"]), ("ok", [1836, 1, 11]))
+        self.assertIn("time", step)                    # the wall time, as every step has it
+        self.assertEqual((self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines(), self.log_lines)
+        self.assertEqual(reply["server_log_lines"], 1)
+
+    def test_a_start_the_game_refuses_is_refused(self):
+        self.game.on(profiling.ENABLE_COMMAND, failure=["Unknown command"])
+        error = self.session_error(self.session.profile_start)
+        self.assertEqual(error.code, "profile_refused")
+        self.assertEqual(self.steps("profile_start")[0]["outcome"], "profile_refused")
+        self.assertEqual(self.session_error(self.session.profile_dump).code, "not_profiling")
+
+    def test_a_start_refused_at_enable_after_its_clear_still_ends_a_window(self):
+        # #1742 review: the step was profile_refused, and summary counted ok starts alone, so it took A to B across it
+        self.session.profile_start()
+        self.session.profile_dump("A")
+        self.game.on(profiling.ENABLE_COMMAND, failure=["Already enabled"])
+        error = self.session_error(self.session.profile_start)
+        self.assertEqual(error.code, "profile_refused")
+        self.assertIn("takes no window across this start", error.detail)
+        step = self.steps("profile_start")[-1]
+        self.assertEqual((step["outcome"], step["cleared"], step["enable"]), ("profile_refused", True,
+                                                                              ["Already enabled"]))
+        self.session.profile_dump("B")
+        with self.assertRaises(profiling.ProfileError) as caught:
+            profiling.summary(self.run_dir, read_steps(self.run_dir), ["A", "B"], lambda name: "mod")
+        self.assertEqual(caught.exception.code, "restarted_between")
+
+    def test_a_start_records_how_far_its_clear_got(self):
+        self.session.profile_start()
+        self.assertIs(self.steps("profile_start")[-1]["cleared"], True)
+        self.game.on(profiling.CLEAR_COMMAND, failure=["Unknown command"])
+        self.assertEqual(self.session_error(self.session.profile_start).code, "profile_refused")
+        self.assertIs(self.steps("profile_start")[-1]["cleared"], False)
+        self.game.on(profiling.CLEAR_COMMAND)                  # it ran and answered nothing: it may have cleared
+        self.assertEqual(self.session_error(self.session.profile_start).code, "profile_refused")
+        self.assertEqual(self.steps("profile_start")[-1]["clear"], [])
+        self.assertIsNone(self.steps("profile_start")[-1]["cleared"])
+        real = self.session._console.run
+        for entered, cleared in ((False, False), (None, None), (True, None)):
+            def run(text, *args, **kwargs):
+                if text == profiling.CLEAR_COMMAND:
+                    raise ConsoleError("no_reply", "lost", entered=entered)
+                return real(text, *args, **kwargs)
+            with self.subTest(entered=entered), mock.patch.object(self.session._console, "run", side_effect=run):
+                with self.assertRaises(ConsoleError):
+                    self.session.profile_start()
+                step = self.steps("profile_start")[-1]
+                self.assertEqual((step["outcome"], step["cleared"]), ("no_reply", cleared))
+
+    def test_a_dump_copies_both_files_at_once_and_leaves_the_root_csv_for_the_restore(self):
+        self.session.profile_start()
+        self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
+        self.write_server_log()
+        reply = self.session.profile_dump("A")
+        tt, sp = profiling.dump_paths(self.run_dir, "A")
+        self.assertEqual(tt.read_bytes(), (self.user / profiling.TT_FILE).read_bytes())
+        self.assertEqual(sp.read_bytes(), (self.user / profiling.SP_FILE).read_bytes())
+        self.assertEqual((reply["tick_tasks"]["rows"], reply["script"]["entries"]), (1, 1))
+        self.assertIsNone(reply["tick_tasks"]["before"])                   # there was none before the dump
+        self.assertTrue((self.user / profiling.TT_FILE).is_file())         # the restore's to judge
+        self.assertEqual(reply["server_log_lines"], 2)
+        self.assertEqual(self.steps("profile_dump")[0]["outcome"], "ok")
+        summary = profiling.summary(self.run_dir, read_steps(self.run_dir), ["A"], lambda name: "mod")
+        self.assertEqual(summary["window"]["first_frame"], "1836.1.11.6")
+        self.assertEqual(summary["script"]["seconds"], 0.5)
+
+    def test_the_label_defaults_to_the_date_and_a_used_one_is_refused_before_typing(self):
+        self.session.profile_start()
+        self.assertEqual(self.session.profile_dump()["label"], "1836_01_11")
+        self.assertEqual(self.session.profile_dump()["label"], "1836_01_11_2")
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "1836_01_11")
+        self.assertEqual(error.code, "label_used")
+        self.assertNotIn(profiling.TT_DUMP_COMMAND, self.typed())
+        self.assertEqual(self.session_error(self.session.profile_dump, "a/b").code, "bad_argument")
+
+    def test_a_file_the_dump_did_not_rewrite_is_not_copied(self):
+        self.session.profile_start()
+        self.session.profile_dump("A")
+        self.writes[profiling.TT_DUMP_COMMAND] = False         # the old CSV stays, its time and size unchanged
+        error = self.session_error(self.session.profile_dump, "B")
+        self.assertEqual(error.code, "not_written")
+        self.assertEqual(sorted(p.name for p in self.run_dir.glob("[ts][tp]_*")), ["sp_A.txt", "tt_A.csv"])
+        self.assertEqual(self.steps("profile_dump")[-1]["outcome"], "not_written")
+
+    def test_a_csv_with_other_rows_than_the_console_said_is_not_that_dump(self):
+        self.session.profile_start()
+        self.reply_rows = 7
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "rows_mismatch")
+        self.assertEqual(list(self.run_dir.glob("tt_*")), [])
+
+    def test_an_answer_that_names_no_file_is_refused(self):
+        self.session.profile_start()
+        self.game.on(profiling.SP_DUMP_COMMAND, success=["Profiling is not enabled"])
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "dump_refused")
+        self.assertEqual(list(self.run_dir.glob("tt_*")) + list(self.run_dir.glob("sp_*")), [])   # tt_A went too
+
+    def test_a_csv_the_snapshot_listed_without_storing_is_never_dumped_over(self):
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["listing"].append(profiling.TT_FILE)
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.session.profile_start()
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_snapshotted")
+        self.assertEqual(self.typed(), [])
+
+    def test_a_csv_listed_in_another_case_without_storing_is_never_dumped_over(self):
+        # NTFS: the game's write to ticktask_timings.csv would go into the owner's TickTask_Timings.csv
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["listing"].append("TickTask_Timings.csv")
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.session.profile_start()
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_snapshotted")
+        self.assertIn("TickTask_Timings.csv", error.detail)
+        self.assertEqual(self.typed(), [])
+
+    def test_copies_the_game_cannot_be_proved_alive_after_are_removed(self):
+        self.session.profile_start()
+        real = profiling.copy_written
+
+        def copy_then_die(source, target, written):
+            size = real(source, target, written)
+            if target.name.startswith(profiling.SP_PREFIX):
+                self.game.process_gone = True
+            return size
+        with mock.patch.object(session.profiling, "copy_written", side_effect=copy_then_die):
+            error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(list(self.run_dir.glob("tt_*")) + list(self.run_dir.glob("sp_*")), [])
+        self.assertEqual(self.session_error(self.session.profile_dump, "B").code, "watch_ended")
+
+    def test_the_server_log_is_followed_across_its_rotation(self):
+        self.session.profile_start()
+        os.rename(self.server_log, self.server_log.with_name("dedicated_server.1.log"))
+        self.log_lines = ["[10:01:00][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6"]
+        self.write_server_log()
+        self.assertEqual(self.session.profile_dump("A")["server_log_lines"], 2)
+        copy = (self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines()
+        self.assertEqual(copy[-1], self.log_lines[0])
+
+    def test_a_server_log_the_game_appended_to_has_the_earlier_games_lines_left_out(self):
+        # the snapshot recorded the log the game found; a game that appended to it would hand those lines on as its own
+        found = self.server_log.read_bytes()
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["files"][profiling.SERVER_LOG] = {"size": len(found), "mtime_ns": 0,
+                                               "sha256": hashlib.sha256(found).hexdigest()}
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
+        self.write_server_log()
+        reply = self.session.profile_start()
+        self.assertEqual(reply["server_log_lines"], 1)
+        self.assertEqual((self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines(),
+                         self.log_lines[-1:])
+        skipped = [step for step in read_steps(self.run_dir) if step["verb"] == "found_log"]
+        self.assertEqual((skipped[0]["log"], skipped[0]["bytes"]), (profiling.SERVER_LOG, len(found)))
 
 
 if __name__ == "__main__":

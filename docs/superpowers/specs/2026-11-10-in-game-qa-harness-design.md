@@ -240,7 +240,8 @@ Before every launch the driver takes a **snapshot** into the backup root (defaul
 `/mnt/d/vic3_qa_backups/`, since the WSL disk shares `C:`):
 
 - `save games/autosave*.v3`, `continue_game.json`, `console_history.txt`,
-  `pdx_settings.json`, `content_load.json`;
+  `pdx_settings.json`, `content_load.json`, and the root `ticktask_timings.csv` that
+  `dump_ticktask_timings` writes (added 2026-11-13 for the profiling verbs, #1700);
 - any save the run will load;
 - every file in the game's `logs/` folder (a whole copy: `log_triage.py`'s `snapshot()`
   takes seven families and skips empty files, which is not enough to put the folder

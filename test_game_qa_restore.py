@@ -427,6 +427,104 @@ class RestoreTests(RestoreTestCase):
         self.assertEqual(events(snap), ["started", "game_exited"])
 
 
+class TickTaskTimingsTests(RestoreTestCase):
+    """#1700: console `dump_ticktask_timings` overwrites `ticktask_timings.csv` in the user-data root in place.
+    It is in the snapshot set, so the restore's rules for the set decide it: the owner's copy is put back, one the
+    run wrote where there was none is removed, and one written after the run's end holds the snapshot. A copy the
+    manifest lists but did not store (a symlink, or a snapshot taken before the set named the file) is never the
+    run's, so it is neither put back nor removed."""
+
+    NAME = "ticktask_timings.csv"
+    OWNERS = b"\xef\xbb\xbfframe,task,milliseconds,calls,longest_lock\n60719946,MoveArmies,0,1,0\n"
+    RUNS = b"\xef\xbb\xbfframe,task,milliseconds,calls,longest_lock\n60720000,MoveArmies,1,1,0\n"
+
+    def run_writes_it(self, at_seconds: float = 30.0, exited_after: float = 60.0):
+        """A run from NOW, exited `exited_after` seconds later, whose game dumped the timings `at_seconds` in."""
+        snap = self.run_started(at=NOW)
+        (self.user / self.NAME).write_bytes(self.RUNS)
+        set_mtime(self.user / self.NAME, NOW, at_seconds)
+        finish(snap, at=NOW + timedelta(seconds=exited_after))
+        return snap
+
+    def test_the_owners_copy_is_put_back_with_its_time(self):
+        path = self.user / self.NAME
+        path.write_bytes(self.OWNERS)
+        set_mtime(path, NOW, -86400)
+        owners_time = path.stat().st_mtime_ns
+        snap = self.run_writes_it()
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertFalse(out.held)
+        self.assertIn(self.NAME, out.restored)
+        self.assertEqual(path.read_bytes(), self.OWNERS)
+        self.assertEqual(path.stat().st_mtime_ns // 10**9, owners_time // 10**9)
+
+    def test_one_the_run_wrote_where_there_was_none_is_removed(self):
+        snap = self.run_writes_it()
+        self.assertEqual(restore.compare(snap, self.user).added_in_set, [self.NAME])
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.removed, [self.NAME])
+        self.assertFalse((self.user / self.NAME).exists())
+
+    def test_one_written_after_the_runs_end_holds_and_stays(self):
+        snap = self.run_writes_it(at_seconds=70.0, exited_after=60.0)     # later than the end and its slack
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertTrue(out.held)
+        self.assertEqual(out.reason, "modified_after_exit")
+        self.assertEqual((self.user / self.NAME).read_bytes(), self.RUNS)
+
+    def test_one_the_manifest_lists_but_did_not_store_is_left_alone(self):
+        # a snapshot taken before the set named the file: it is in the listing, not in the files
+        path = self.user / self.NAME
+        path.write_bytes(self.OWNERS)
+        snap = self.run_started(at=NOW)
+        manifest = snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        del data["files"][self.NAME]
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        snap = snapshot.load(snap.dir)
+        self.assertIn(self.NAME, snap.listing)
+        path.write_bytes(self.RUNS)
+        set_mtime(path, NOW, 30)
+        finish(snap, at=NOW + timedelta(seconds=60))
+        self.assertEqual(restore.compare(snap, self.user), restore.Diff([], [], [], []))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.restored, out.removed), ([], []))
+        self.assertEqual(path.read_bytes(), self.RUNS)
+
+    def test_a_snapshot_from_before_the_set_named_it_lists_the_owners_copy_all_the_same(self):
+        # The listing names every file in the root, in the set or not, so a manifest written before this entry
+        # names an owner's copy that was there. One that names nothing means there was none at the snapshot; then
+        # a copy the run wrote is removed and a later one holds (the two tests above), as for an autosave.
+        (self.user / "not_in_the_set.csv").write_bytes(self.OWNERS)
+        snap = self.run_started(at=NOW)
+        self.assertIn("not_in_the_set.csv", snap.listing)
+        self.assertNotIn("not_in_the_set.csv", snap.files)
+
+    def test_an_owners_copy_in_another_case_is_stored_and_put_back(self):
+        # On NTFS the game's dump goes into TickTask_Timings.csv, which keeps its name; here, the same path
+        path = self.user / "TickTask_Timings.csv"
+        path.write_bytes(self.OWNERS)
+        set_mtime(path, NOW, -86400)
+        snap = self.run_started(at=NOW)
+        self.assertIn("TickTask_Timings.csv", snap.files)
+        path.write_bytes(self.RUNS)
+        set_mtime(path, NOW, 30)
+        finish(snap, at=NOW + timedelta(seconds=60))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertIn("TickTask_Timings.csv", out.restored)
+        self.assertEqual(path.read_bytes(), self.OWNERS)
+
+    def test_a_symlink_by_that_name_is_listed_and_never_removed(self):
+        (self.user / "elsewhere.csv").write_bytes(self.OWNERS)
+        (self.user / self.NAME).symlink_to("elsewhere.csv")
+        snap = self.run_started(at=NOW)
+        self.assertNotIn(self.NAME, snap.files)
+        finish(snap, at=NOW + timedelta(seconds=60))
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.removed, [])
+        self.assertTrue((self.user / self.NAME).is_symlink())
+
+
 class RetimeTests(RestoreTestCase):
     """#1588: a file the run wrote again with the same bytes (the game writes `pdx_settings.json` at every launch)
     is not rewritten, and gets the time the snapshot recorded back, but only a time the run can have set."""

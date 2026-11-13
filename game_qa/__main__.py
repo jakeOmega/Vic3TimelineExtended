@@ -40,7 +40,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from game_qa import gate, restore, snapshot
+from game_qa import addmod, gate, restore, snapshot
 from game_qa import client
 
 MIN_FREE_BYTES = 2 * 1024**3
@@ -84,7 +84,7 @@ _END_DATE_ARG = re.compile(r"-run_until=[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}")
 PLAYSET_FILE = "content_load.json"
 PLAYSET_MODES = ("current", "mod_only")
 # An --add-mod path: a drive path (`C:\…`) or a UNC path (`\\server\…`), as the launcher writes them.
-_WINDOWS_PATH = re.compile(r"[A-Za-z]:\\|\\\\[^\\]")
+_WINDOWS_PATH = addmod.WINDOWS_PATH
 _SHA256_HEX = re.compile(r"[0-9a-f]{64}")
 # Where `launch` writes the playset before renaming it over the file: restore's own temp name, so `compare` skips it.
 _PLAYSET_TEMP = PLAYSET_FILE + restore._TEMP_SUFFIX
@@ -636,17 +636,12 @@ def _folder_key(path: str) -> str:
 def _check_mod_paths(paths: list[str]) -> None:
     """Raise _Refused for an --add-mod that is not a Windows path (`C:\\…` or `\\\\server\\…`, as the launcher
     writes them: the caller converts a WSL path with `wslpath -w`) or that cannot be written whole (a control
-    character, or a lone surrogate, which UTF-8 cannot hold)."""
+    character, or a lone surrogate, which UTF-8 cannot hold). The rule is `addmod.path_problem`, which a session's
+    `start --add-mod` applies too, before its own stricter checks (`addmod.check`)."""
     for path in paths:
-        try:
-            path.encode("utf-8")
-        except UnicodeEncodeError:
-            raise _Refused("bad_argument", f"the --add-mod path {path!r} cannot be written as UTF-8") from None
-        if any(ord(c) < 32 or ord(c) == 127 for c in path):
-            raise _Refused("bad_argument", f"the --add-mod path {path!r} has a control character in it")
-        if not _WINDOWS_PATH.match(path):
-            raise _Refused("bad_argument", f"the --add-mod path {path!r} is not a Windows path (C:\\… or "
-                                           "\\\\server\\…): convert a WSL path with `wslpath -w`")
+        problem = addmod.path_problem(path)
+        if problem is not None:
+            raise _Refused("bad_argument", f"the --add-mod path {path!r} {problem}")
 
 
 def _check_playset_present(snap: snapshot.Snapshot, user: Path) -> None:

@@ -48,7 +48,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, overlay, pixels, rules, snapshot
+from game_qa import addmod, fixture, overlay, pixels, profiling, rules, snapshot
 from game_qa.console import CLEAR_BACKSPACES, KEYBOARD_AWAY, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
@@ -63,6 +63,9 @@ START_CLICK = (0.9216, 0.975)           # the country-select screen's Start butt
 SCAN_SPACE = 0x39                       # toggles the pause, with the console closed
 DEBUGGER_PORT = 6111
 SESSION_ARGS = ("-gdpr-compliant", "-debug_mode", "-script_debugger")
+# What `start --game-arg` may add after SESSION_ARGS (#1700): flags the binary lists that change how the game runs,
+# not what a new game is, so the fixture (made with fixture.FIXTURE_ARGS alone) and its key never see them.
+GAME_ARGS = ("-disable_renderframeifneeded", "-no_notifications", "-script_profiling")
 PLAYSETS = ("current", "mod_only")
 READ_COMMAND = "event " + overlay.READ_EVENT
 FIRE_COMMAND = "event %s"               # console `event` fires whatever the trigger and cooldown say (spec § 12.1 A6)
@@ -206,9 +209,12 @@ class SessionError(Exception):
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, id_unaddressable,
-    no_country, not_on_country_select, click_refused, click_unknown, console_not_open,
-    keyboard_away, keyboard_not_returned, wheel_refused, wheel_unknown, drag_refused, drag_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
-    (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
+    no_country, not_on_country_select, click_refused, click_unknown, console_not_open, keyboard_away,
+    keyboard_not_returned, wheel_refused, wheel_unknown, drag_refused, drag_unknown, not_entered, left_running,
+    bad_days, stalled, not_started, stopped
+    (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending, add_mod_refused (with
+    `reason`, addmod's code), add_mod_changed, and the profile verbs' profile_refused, not_profiling,
+    not_snapshotted, label_used, dump_refused, not_written, changed, rows_mismatch. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
     not_foreground, …) and `entered`, as does one that ended `try_event` (whose error also carries the rows so
@@ -240,6 +246,7 @@ class Paths:
     enabled_mods: Sequence[str]                     # the owner's playset (content_load.json), in order
     deployed_mod_windows_path: str                  # the deployed mod's folder as Windows names it: what mod_only keeps
     disabled_dlc: Sequence = ()                     # the owner's playset's disabledDLC, which launch keeps as it is
+    wsl_path_of: Callable[[str], Path] | None = None    # a Windows path from WSL (`start --add-mod`); None: wslpath -u
 
     @property
     def overlay_dir(self) -> Path:
@@ -353,19 +360,36 @@ class Session:
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
+        self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
+        self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
+        self._add_mods_playset = "mod_only"                # the playset they were checked for
+        self._add_mods_digest: str | None = None           # fixture.add_mod_digest of them, at that check
+        self._profile_starts = 0            # profile starts that went through (#1700)
+        self._server_log: LogFollower | None = None      # dedicated_server.log, followed from the first profile start
+        self._server_lines = 0              # the lines of it the run folder's copy holds
         self._profiler_window: dict = {"enlarged": False, "why": "the overlay has not been built"}
 
     # ---- start
 
     def start(self, permission: str, as_tag: str | None = None, setups: Mapping[str, str] | None = None,
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
-              switch_rules: Mapping[str, str] | None = None) -> dict:
+              switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
+              add_mods: Sequence[str] | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
 
         `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
         `game_qa.rules`): a game whose rule changed on 2 January 1836, a day after it began, not one made under
         that setting. It is refused with `save` (the owner's save is never edited or copied), and for a rule
         or setting the game's rule files do not define (`bad_rule`), before anything is done.
+
+        `game_args` are added to the game's arguments after SESSION_ARGS: each one of GAME_ARGS (with or without its
+        leading dash), each once (`bad_argument` otherwise). They change how this run's game runs and not what a new
+        game is, so the fixture's own run (fixture.FIXTURE_ARGS) never gets them and its key does not name them.
+        `add_mods` are Windows paths of variant mod folders, loaded after the run's playset (the deployed mod) and
+        before the overlay (#1702), each checked by `addmod.check` before anything is done (`add_mod_refused`, with
+        the check's `reason`): a plain drive path outside the user-data folder, reached through no link, holding a
+        `.metadata/metadata.json`, and under `--playset current` not one the owner's playset enables already.
+        Without `save` they are part of the fixture's world: its run loads them and its key hashes their files.
 
         Refused with nothing done, and the session left as it was: an overlay folder already there (an earlier
         run's playset may still name it: `overlay_left`, and it is neither replaced nor removed), an empty
@@ -398,6 +422,11 @@ class Session:
         if save is not None:
             save = self._check_save(save)
         switch_rules = self._check_switches(switch_rules, save)
+        self._game_args = _check_game_args(game_args)
+        self._add_mods = self._check_add_mods(add_mods, playset)
+        self._add_mods_playset = playset
+        self._add_mods_digest = fixture.add_mod_digest([Path(mod.wsl) for mod in self._add_mods]) \
+            if self._add_mods else None
         self._starting = True                   # from `held` on, a stop() is left to this
         try:
             self._refuse_if_held()
@@ -456,11 +485,17 @@ class Session:
         self._record("snapshot", outcome="ok", reply=reply)
         self._check_abort()
 
-        argv = ["launch", snap, "--permission", permission, "--playset", playset,
-                "--add-mod", self._paths.overlay_windows_path]
+        argv = ["launch", snap, "--permission", permission, "--playset", playset]
+        for mod in self._add_mods:                  # after the run's playset, before the overlay (#1702)
+            argv += ["--add-mod", mod.windows]
+        argv += ["--add-mod", self._paths.overlay_windows_path]
         if busy:
             argv.append("--owner-confirmed-busy")
-        argv += ["--", *SESSION_ARGS, "-loadsave=" + save]
+        argv += ["--", *SESSION_ARGS, *self._game_args, "-loadsave=" + save]
+        changed = self._add_mods_changed("the session's launch")
+        if changed is not None:
+            self._record("launch", outcome="refused", reply={"refused": fixture.ADD_MOD_CHANGED, "detail": changed})
+            raise SessionError(fixture.ADD_MOD_CHANGED, changed)
         try:
             reply, code = self._cli(argv)
         except Exception as e:
@@ -518,6 +553,10 @@ class Session:
         if self._rules is not None:
             result["rules"] = self._rules
         result["profiler_window"] = self._profiler_window
+        if self._game_args:
+            result["game_args"] = list(self._game_args)
+        if self._add_mods:
+            result["add_mods"] = [asdict(mod) for mod in self._add_mods]
         self._record("start", outcome="ok", **result)
         return result
 
@@ -592,9 +631,10 @@ class Session:
         self._fixture_loaded = True
         user = Path(self._paths.user_data)
         loads = run_playset(playset, self._paths.enabled_mods, self._paths.deployed_mod_windows_path,
-                            self._paths.overlay_windows_path)
+                            self._paths.overlay_windows_path, add_mods=[mod.windows for mod in self._add_mods])
         key = fixture.key(self._paths.game_version, loads, self._paths.deploy_dir, playset=playset,
-                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user))
+                          disabled_dlc=self._paths.disabled_dlc, rules=rules.last_applied(user),
+                          add_mod_dirs=[Path(mod.wsl) for mod in self._add_mods])
         stem, made, pruned = self._base_fixture(user, key, permission, playset, busy)
         if switch_rules:
             try:
@@ -633,6 +673,11 @@ class Session:
         watches: list[Any] = []                                     # the watch it spawned
 
         def run_cli(argv):
+            changed = self._add_mods_changed("the fixture's launch") if argv[:1] == ["launch"] else None
+            if changed is not None:             # a refusal before any claim: make restores its snapshot at once
+                reply = {"refused": fixture.ADD_MOD_CHANGED, "detail": changed}
+                calls.append((argv[0], reply, 2))
+                return reply, 2
             try:
                 reply, code = self._run_cli(argv)
             except BaseException:
@@ -650,7 +695,8 @@ class Session:
             made = fixture.make(run_cli, user, key, self._paths.overlay_windows_path, permission, playset,
                                 owner_confirmed_busy=busy, sleep=self._sleep, spawn_watch=spawn_watch,
                                 clock=self._clock, started=self._journaled_proc,
-                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap))
+                                keep_lines=lambda snap: self._keep_fixture_lines(key, snap),
+                                add_mods=[mod.windows for mod in self._add_mods])
         except fixture.FixtureError as e:
             up = e.code == fixture.GAME_MAY_BE_UP
             self._take_fixture_run(e.snapshot or _fixture_snapshot(calls), up, e.proc, e.watch, e.restore, calls)
@@ -659,7 +705,8 @@ class Session:
             if up:
                 info.update(game_may_be_up=True,
                             game={"pid": e.proc.pid, "created": e.proc.created} if e.proc is not None else None)
-            raise SessionError("fixture_failed", str(e), **info) from e
+            changed = e.step == "launch" and e.reply.get("refused") == fixture.ADD_MOD_CHANGED
+            raise SessionError(fixture.ADD_MOD_CHANGED if changed else "fixture_failed", str(e), **info) from e
         except BaseException:
             launches = [reply for verb, reply, _code in calls if verb == "launch"]
             self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
@@ -741,13 +788,13 @@ class Session:
             pass
         return None
 
-    def _found_log(self, snap: str) -> tuple[int, str] | None:
-        """The size and hash of the `logs/debug.log` the run's snapshot recorded: the log the game found when it
-        was launched. A game that appended to it would hand the session an earlier game's lines as its own, so
-        the follower skips a beginning with exactly those bytes (`LogFollower`). None when the snapshot's
+    def _found_log(self, snap: str, name: str = selfchecks.OWNERS_LOG) -> tuple[int, str] | None:
+        """The size and hash of the `logs/debug.log` (or `name`) the run's snapshot recorded: the log the game found
+        when it was launched. A game that appended to it would hand the session an earlier game's lines as its own,
+        so the follower skips a beginning with exactly those bytes (`LogFollower`). None when the snapshot's
         manifest cannot be read or holds no such log."""
         try:
-            entry = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files.get(selfchecks.OWNERS_LOG)
+            entry = snapshot.load(Path(self._paths.backup_root) / "snapshots" / snap).files.get(name)
         except (OSError, ValueError):
             return None
         return (entry.size, entry.sha256) if entry is not None else None
@@ -1574,6 +1621,237 @@ class Session:
             if "log_not_read" in found:
                 out["log_not_read"] = True
         return found
+
+    # ---- profiling (#1700)
+
+    def profile_start(self) -> dict:
+        """Start a profile of the running game: the date is read (the window begins there; the step's `time` is the
+        wall time), then `clear_ticktask_timings` and `ScriptProfiling.Enable`. From the first start on, the game's
+        `logs/dedicated_server.log` is followed into the run folder's `dedicated_server.log`, read at each start and
+        dump, and a poll's lines are kept only once the game is proved alive after it (`_vouch_for_polled`), as with
+        every log the session reads. Restore puts `logs/` back, so that copy is the run's record of the wall clock.
+
+        A start may be made again: the tick timings are cleared again, and `profile summary` will not take a window
+        across it. Whether Enable resets the script counts when it is already on is not verified. Refused
+        `profile_refused` when either command answers a failure, or nothing.
+
+        The step records `cleared`, whatever its outcome: True once the clear answered success, None while it may
+        have gone through (it was typed, and its answer was not seen), False when it answered a failure or never
+        arrived. A start refused at Enable after its clear has still cleared the tick timings, so `profile summary`
+        takes any start but a False one as a restart."""
+        self._require_game()
+        with self._step("profile_start", cleared=False) as out:
+            when = self._date()
+            out["date"] = list(when)
+            for key, command in (("clear", profiling.CLEAR_COMMAND), ("enable", profiling.ENABLE_COMMAND)):
+                if key == "clear":
+                    out["cleared"] = None           # typed from here on: it may go through, whatever follows
+                try:
+                    reply = self._console.run(command)
+                except ConsoleError as e:
+                    if key == "clear" and e.entered is False:
+                        out["cleared"] = False
+                    raise
+                out[key] = reply.lines
+                if key == "clear":
+                    out["cleared"] = reply.ok
+                if reply.ok is not True:
+                    after = (", after %s had cleared the tick timings: `profile summary` takes no window across this "
+                             "start" % profiling.CLEAR_COMMAND) if key == "enable" else ""
+                    raise SessionError("profile_refused", "%s answered %s%s" % (command, reply.lines or "nothing",
+                                                                                 after), lines=reply.lines)
+            out["server_log_lines"] = self._follow_server_log()
+            self._profile_starts += 1
+            out["starts"] = self._profile_starts
+        return {"date": list(when), "clear": out["clear"], "enable": out["enable"], "starts": self._profile_starts,
+                "server_log_lines": out["server_log_lines"], "run_dir": str(self._report.dir)}
+
+    def profile_dump(self, label: str | None = None) -> dict:
+        """Both dumps, each copied into the run folder the moment it is written: `dump_ticktask_timings` (the
+        user-data root's ticktask_timings.csv) as `tt_<label>.csv` and `ScriptProfiling.Dump`
+        (logs/script_profiling.txt) as `sp_<label>.txt`; then the server log is read on. The label defaults to the
+        game date (`1931_08_02`, then `1931_08_02_2` …).
+
+        Refused before anything is typed: no profile started (`not_profiling`), a bad label (`bad_argument`), a label
+        the run folder holds already (`label_used`), and a run whose snapshot listed a ticktask_timings.csv or a
+        script_profiling.txt without storing it, or cannot be read (`not_snapshotted`): the restore would not put
+        such a file back, so no dump is made over it.
+
+        A dump's file counts as written only when its size or modification time is not what it was just before the
+        command, as its own drive stamps it (never against this machine's clock), and it has then held still for
+        two looks (`profiling.await_written`; `not_written` otherwise). It is copied whole or not at all
+        (`changed`). The CSV must hold the rows the console said it wrote (`rows_mismatch`), and the script dump its
+        header. Then the game must be proved alive by its pid and start time (`watch_ended` otherwise), since a
+        file read from the user-data folder is the run's only if its game was alive after the read. When anything
+        fails, the copies this dump made are removed, so that a dump's files are there exactly when its step went
+        through. The root CSV stays where the game wrote it: the snapshot set names it, so the restore puts the
+        owner's copy back, or removes the run's."""
+        self._require_game()
+        if self._profile_starts == 0:
+            raise SessionError("not_profiling", "no profile has been started in this session: `profile start` first")
+        if label is not None:
+            try:
+                profiling.check_label(label)
+            except profiling.ProfileError as e:
+                raise SessionError("bad_argument", e.detail) from e
+        self._check_snapshotted((profiling.TT_FILE, profiling.SP_FILE))
+        with self._step("profile_dump", label=label) as out:
+            when = self._date()
+            out["date"] = list(when)
+            label = label or self._dump_label(when)
+            out["label"] = label
+            tt_copy, sp_copy = profiling.dump_paths(self._report.dir, label)
+            if os.path.lexists(tt_copy) or os.path.lexists(sp_copy):
+                raise SessionError("label_used", "the run folder already holds a dump labelled %s" % label)
+            user = Path(self._paths.user_data)
+            copies: list[Path] = []
+            try:
+                out["tick_tasks"] = self._dump_one(profiling.TT_DUMP_COMMAND, user / profiling.TT_FILE, tt_copy,
+                                                   copies)
+                out["script"] = self._dump_one(profiling.SP_DUMP_COMMAND, user / profiling.SP_FILE, sp_copy, copies)
+                self._vouch_for_copies()
+                out["server_log_lines"] = self._follow_server_log()
+            except BaseException:
+                for path in copies:
+                    path.unlink(missing_ok=True)
+                raise
+        return {key: out[key] for key in ("label", "date", "tick_tasks", "script", "server_log_lines")}
+
+    def _dump_one(self, command: str, source: Path, target: Path, copies: list[Path]) -> dict:
+        """One dump: its command, its answer checked, its file awaited and copied to `target` (added to `copies`)."""
+        before = profiling.signature(source)
+        reply = self._console.run(command)
+        if reply.ok is not True:
+            raise SessionError("dump_refused", "%s answered %s" % (command, reply.lines or "nothing"),
+                               lines=reply.lines)
+        tick_tasks = command == profiling.TT_DUMP_COMMAND
+        wrote = profiling.rows_written(reply.lines) if tick_tasks else None
+        if tick_tasks and (wrote is None or not profiling.names_file(wrote[1], profiling.TT_FILE)):
+            raise SessionError("dump_refused", "%s did not say it wrote %s: %s" % (command, profiling.TT_FILE,
+                                                                                    reply.lines), lines=reply.lines)
+        if not tick_tasks and not any(profiling.names_file(line, Path(profiling.SP_FILE).name) for line in reply.lines):
+            raise SessionError("dump_refused", "%s did not say it wrote %s: %s" % (command, profiling.SP_FILE,
+                                                                                    reply.lines), lines=reply.lines)
+        try:
+            written = profiling.await_written(source, before, self._sleep, self._clock)
+            size = profiling.copy_written(source, target, written)
+            copies.append(target)
+            text = target.read_text(encoding="utf-8", errors="replace")
+            found = len(profiling.parse_tick_tasks(text)) if tick_tasks else len(profiling.parse_script_profile(text))
+        except profiling.ProfileError as e:
+            raise SessionError(e.code, e.detail) from e
+        if tick_tasks and found != wrote[0]:
+            raise SessionError("rows_mismatch", "%s holds %d rows, and the game said it wrote %d: it is not that "
+                                                "dump" % (target.name, found, wrote[0]))
+        return {"file": target.name, "bytes": size, ("rows" if tick_tasks else "entries"): found,
+                "reply": reply.lines, "before": list(before) if before else None, "written": list(written)}
+
+    def _dump_label(self, when: tuple[int, int, int]) -> str:
+        base = "%04d_%02d_%02d" % when
+        label, number = base, 1
+        while any(os.path.lexists(path) for path in profiling.dump_paths(self._report.dir, label)):
+            number += 1
+            label = "%s_%d" % (base, number)
+        return label
+
+    def _check_snapshotted(self, names: Sequence[str]) -> None:
+        """Refuse `not_snapshotted` unless the run's snapshot can be read and stored each of `names` it listed, in
+        any case: on NTFS the game's write to one of `names` goes into a file whose name differs only in case."""
+        try:
+            snap = snapshot.load(Path(self._paths.backup_root) / "snapshots" / self._snapshot)
+        except (OSError, ValueError) as e:
+            raise SessionError("not_snapshotted", "the run's snapshot cannot be read (%s), so whether it holds the "
+                                                  "files a dump overwrites is not known: nothing was typed"
+                               % _describe(e)) from e
+        for name in names:
+            for listed in sorted(snap.listing):
+                if listed.lower() == name.lower() and listed not in snap.files:
+                    raise SessionError("not_snapshotted", "the snapshot listed %s but did not store it (a link, or a "
+                                                          "snapshot taken before the set named it): the restore "
+                                                          "would not put it back, so no dump is made over it. "
+                                                          "Nothing was typed" % listed)
+
+    def _vouch_for_copies(self) -> None:
+        """After a dump's files were copied: the game must still be the run's own, alive (one `adopt`). If not, the
+        verbs end for good (`watch_ended`), as after a log read that cannot be vouched for, and the caller removes
+        the copies."""
+        try:
+            self._helper.adopt(self._proc)
+        except Exception as e:
+            self._logs_closed = True
+            why = ("the game could not be proved alive by its pid and start time after its dumps were copied (%s), "
+                   "so the copies were removed: another game may have written them. Stop the session"
+                   % _describe(e))
+            self._notes.append("at %s a profile dump's copies were removed, since the game could not be proved alive "
+                               "after they were read" % stamp(utc_now()))
+            self._record("profile_copies", outcome="dropped", detail=_describe(e))
+            if self._watch_ended is None:
+                self._watch_ended = why
+            raise SessionError("watch_ended", why) from e
+
+    def _follow_server_log(self) -> int:
+        """Append the dedicated_server.log lines written since the last look to the run folder's copy, and return
+        how many lines the copy holds. The follower is made at the first call, with the snapshot's record of the log
+        the game found (`_found_log`), and keeps its place across the game's rotation of the log."""
+        if self._logs_closed:
+            return self._server_lines
+        if self._server_log is None:
+            self._server_log = LogFollower(Path(self._paths.user_data) / profiling.SERVER_LOG,
+                                           found=self._found_log(self._snapshot, profiling.SERVER_LOG))
+        lines = self._server_log.poll()
+        if lines:
+            self._vouch_for_polled()
+        if self._server_log.skipped:
+            skipped, self._server_log.skipped = self._server_log.skipped, 0
+            self._notes.append("the game appended to the dedicated_server.log it found: its first %d bytes are an "
+                               "earlier game's and were not copied as this run's" % skipped)
+            self._record("found_log", outcome="prefix_skipped", log=profiling.SERVER_LOG, bytes=skipped)
+        self._copy(profiling.RUN_SERVER_LOG, lines)
+        self._server_lines += len(lines)
+        return self._server_lines
+
+    def _add_mods_changed(self, where: str) -> str | None:
+        """Why the variant folders are no longer what `start` checked, or None: `addmod.check_all` run again, and
+        `fixture.add_mod_digest` taken again, just before `where` (a launch), since a fixture's whole run may have
+        come between. A change refuses that launch: the fixture's key, and the run's record, would name files
+        the game does not load."""
+        if not self._add_mods:
+            return None
+        try:
+            again = self._check_add_mods([mod.windows for mod in self._add_mods], self._add_mods_playset)
+        except SessionError as e:
+            why = "a variant folder is refused now (%s: %s)" % (e.info.get("reason"), e.detail)
+        else:
+            if again != self._add_mods:
+                why = "a variant folder now converts or reads otherwise (%s, not %s)" % (
+                    [asdict(mod) for mod in again], [asdict(mod) for mod in self._add_mods])
+            elif fixture.add_mod_digest([Path(mod.wsl) for mod in again]) != self._add_mods_digest:
+                why = "a file in a variant folder's common/, events/ or map_data/, or its metadata.json, changed"
+            else:
+                return None
+        why = "since `start` checked them, %s, before %s: start again. Nothing was launched" % (why, where)
+        self._record("add_mods", outcome="changed", where=where, detail=why)
+        return why
+
+    def _check_add_mods(self, add_mods: Sequence[str] | None, playset: str) -> list[addmod.AddMod]:
+        """`start`'s add_mods, each checked (`addmod.check`); SessionError `add_mod_refused`, with the check's code as
+        `reason`, else. The user-data folder's Windows name is the overlay's less its last two parts
+        (`mod\\te_qa_overlay`), when it ends so."""
+        if not add_mods:
+            return []
+        if isinstance(add_mods, str) or not isinstance(add_mods, Sequence):
+            raise SessionError("bad_argument", "add_mods is a list of Windows paths, not %r" % (add_mods,))
+        overlay_win = self._paths.overlay_windows_path
+        tail = "\\mod\\" + overlay.OVERLAY_NAME
+        user_windows = overlay_win[:-len(tail)] if overlay_win.lower().endswith(tail.lower()) else None
+        try:
+            return addmod.check_all(list(add_mods), user_data=Path(self._paths.user_data),
+                                    user_data_windows=user_windows,
+                                    to_wsl=self._paths.wsl_path_of or addmod.to_wsl_path, playset=playset,
+                                    owner_mods=list(self._paths.enabled_mods), deployed=Path(self._paths.deploy_dir),
+                                    deployed_windows=self._paths.deployed_mod_windows_path)
+        except addmod.AddModError as e:
+            raise SessionError("add_mod_refused", e.detail, reason=e.code) from e
 
     # ---- stop
 
@@ -2542,6 +2820,24 @@ class Session:
         return self._watch is not None and self._watch.poll() is not None
 
 
+def _check_game_args(game_args: Sequence[str] | None) -> list[str]:
+    """`start`'s game_args as passed: each one of GAME_ARGS, written with its dash or without it, each once."""
+    if not game_args:
+        return []
+    if isinstance(game_args, str) or not isinstance(game_args, Sequence):
+        raise SessionError("bad_argument", "game_args is a list of flags, not %r" % (game_args,))
+    found: list[str] = []
+    for arg in game_args:
+        flag = ("-" + (arg[1:] if arg.startswith("-") else arg)) if isinstance(arg, str) else None
+        if flag not in GAME_ARGS:
+            raise SessionError("bad_argument", "--game-arg takes one of %s (with its dash or without it), not %r"
+                               % (", ".join(GAME_ARGS), arg))
+        if flag in found:
+            raise SessionError("bad_argument", "%s is given twice" % flag)
+        found.append(flag)
+    return found
+
+
 def _selected(lines: list[str], index: int, event: str) -> bool:
     """Whether a select's answer says it picked option `index` of `event`."""
     return "Selected option %d of %s" % (index, event) in [line.strip() for line in lines]
@@ -2560,14 +2856,16 @@ def _new_errors(lines: list[str], burst: list[str]) -> list[str]:
     return [line for line in lines if line.strip() and parse(line).text.strip() not in own]
 
 
-def run_playset(mode: str, owner_mods: Sequence[str], deployed_mod: str, overlay_path: str) -> list[str]:
-    """The mod folders a run loads, in order, as `launch --playset <mode> --add-mod <overlay_path>` writes them
-    (game_qa/__main__.py `_plan_playset`, which cannot be imported from here): the owner's enabled mods (with
-    mod_only, only those at the deployed mod's folder), then the overlay unless it is among them already.
-    Folders are compared as launch compares them (`_folder_key`)."""
+def run_playset(mode: str, owner_mods: Sequence[str], deployed_mod: str, overlay_path: str, *,
+                add_mods: Sequence[str] = ()) -> list[str]:
+    """The mod folders a run loads, in order, as `launch --playset <mode> --add-mod <a> … --add-mod <overlay_path>`
+    writes them (game_qa/__main__.py `_plan_playset`, which cannot be imported from here): the owner's enabled mods
+    (with mod_only, only those at the deployed mod's folder), then each of `add_mods` and the overlay, unless it is
+    among them already. Folders are compared as launch compares them (`_folder_key`)."""
     kept = [m for m in owner_mods if mode != "mod_only" or _folder_key(m) == _folder_key(deployed_mod)]
-    if all(_folder_key(m) != _folder_key(overlay_path) for m in kept):
-        kept.append(overlay_path)
+    for path in (*add_mods, overlay_path):
+        if all(_folder_key(m) != _folder_key(path) for m in kept):
+            kept.append(path)
     return kept
 
 
