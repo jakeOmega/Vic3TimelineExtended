@@ -3834,7 +3834,7 @@ class DatedFixtureTest(SessionTestCase):
         self.assertFalse(self.paths.overlay_dir.exists())
         self.assertEqual(reply["stop"]["outcome"], None)
         on_disk = json.loads((self.paths.run_root / snap / "fixture.json").read_text("utf-8"))
-        self.assertEqual(on_disk["save"], reply["save"])
+        self.assertEqual((on_disk["save"], on_disk["stop"]), (reply["save"], reply["stop"]))
 
     def test_the_overlay_carries_the_dated_test_while_the_run_goes(self):
         self.a_dated_run()
@@ -3890,6 +3890,10 @@ class DatedFixtureTest(SessionTestCase):
         self.assertEqual(error.info["stop"]["outcome"], "held")
         record = json.loads((self.paths.backup_root / "fixtures" / self.dated_key / "record.json").read_text("utf-8"))
         self.assertFalse(record["kept"])
+        # the run's folder says so for whoever reads it after the client has gone
+        on_disk = json.loads((self.paths.run_root / FIXTURE_SNAP / "fixture.json").read_text("utf-8"))
+        self.assertEqual((on_disk["refused"], on_disk["saved"], on_disk["stop"]["outcome"]),
+                         ("fixture_failed", self.dated_path.stem, "held"))
 
     def test_a_build_deployed_during_the_run_is_reported(self):
         self.a_dated_run()
@@ -3926,6 +3930,39 @@ class DatedFixtureTest(SessionTestCase):
         self.assertEqual(launch[-1], "-loadsave=" + self.dated_path.stem)
         self.assertNotIn("--long-run", launch)
         self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+
+    def kept_lines(self, key, *messages, source=None):
+        """Lines kept with the fixture `key`, from the run of FIXTURE_SNAP, as `selfchecks.keep_fixture_lines`
+        leaves them."""
+        folder = self.paths.backup_root / "fixtures" / key
+        folder.mkdir(parents=True)
+        (folder / "lines.log").write_text("".join("[10:00:01][x.cpp:1]: %s\n" % m for m in messages), "utf-8")
+        record = {"key": key, "kept": True, "snapshot": FIXTURE_SNAP, "lines": len(messages), "self_checks":
+                  len(messages), "at": "2026-11-10T14:56:00Z"}
+        if source:
+            record.update(source=source, gaps=0)
+        (folder / "record.json").write_text(json.dumps(record), "utf-8")
+
+    def dated_session_lines(self, switch=None) -> dict:
+        """`self_checks` of a session on the 1900 fixture (or a switched copy of it), with lines kept for both it
+        and the 1836 fixture of the same build."""
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        self.kept_lines(self.key, "common/a.txt:1: TE_SELF_CHECK BROKEN the_1836_runs_check")
+        self.kept_lines(self.dated_key, "common/b.txt:2: TE_SELF_CHECK OK the_1900_runs_check", source="followed")
+        self.started(fixture_date="1900", switch_rules=switch)
+        return self.session.self_checks()
+
+    def test_a_session_on_a_dated_fixture_shows_the_lines_of_the_run_that_made_it(self):
+        found = self.dated_session_lines()
+        self.assertEqual([(c["name"], c["source"]) for c in found["checks"]], [("the_1900_runs_check", "fixture")])
+        self.assertEqual((found["fixture"]["key"], found["fixture"]["kept"], found["fixture"]["source"]),
+                         (self.dated_key, True, "followed"))
+        self.assertEqual(found["broken"], [])
+
+    def test_a_switched_copy_of_a_dated_fixture_shows_the_dated_runs_lines(self):
+        found = self.dated_session_lines({"tax_rule": "tax_off"})
+        self.assertEqual([(c["name"], c["source"]) for c in found["checks"]], [("the_1900_runs_check", "fixture")])
+        self.assertEqual(found["fixture"]["key"], self.dated_key)
 
     def test_the_plain_fixtures_date_is_the_plain_fixture(self):
         reply = self.start(fixture_date="1836.1.2")

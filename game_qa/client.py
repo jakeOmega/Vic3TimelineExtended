@@ -243,8 +243,10 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
         out["next"] = OVERLAY_LEFT_HINT
     elif reply.get("refused") == "no_answer" and verb == "fixture":
         out["next"] = ("the fixture's run may still be going: its server answers nothing until it is done, and then "
-                       "writes the reply to `fixture.json` in the run's folder under the backup root. Do not run "
-                       "`recover` or `stop` meanwhile; to end the run early, ask the owner to close the game")
+                       "writes the reply to `fixture.json` in the run's folder under the backup root (`runs/<snapshot "
+                       "id>/`, the newest); `fixture --until %s --dry-run` says `found: true` once the save is there. "
+                       "Do not run `recover` or `stop` meanwhile; to end the run early, ask the owner to close the "
+                       "game" % body.get("until"))
     elif reply.get("refused") == "no_answer":
         out["next"] = ("the start may still be running: `status` answers once it is done. Do not run `recover` "
                        "meanwhile: it would finish this start's own snapshot")

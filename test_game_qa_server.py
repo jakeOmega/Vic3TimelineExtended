@@ -70,6 +70,7 @@ class FakeSession:
 
     def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
         self._call("make_fixture", permission, until, playset, owner_confirmed_busy, max_hours)
+        self.release.wait(10)
         return {"made": True, "save": "te_qa_fixture_0123456789ab_d19000101", "stop": self.stop()}
 
     def console(self, text):
@@ -862,6 +863,22 @@ class FixtureVerbTest(ServerTestCase):
                     reply, code = self.run_cli("fixture", *argv)
                     self.assertEqual((reply["refused"], code), (refused, 2))
         self.assertEqual(spawn.handles, [])
+
+    def test_a_client_that_stops_waiting_leaves_the_run_to_end_and_the_server_with_it(self):
+        fake = FakeSession()
+        fake.release.clear()
+        spawn = ThreadSpawner(lambda: fake)
+        body = {"permission": PERMISSION, "until": "1900.1.1", "max_hours": 8}
+        reply, code = client.start_session(self.backups, body, spawn, verb="fixture", timeout=0.3)
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual((reply["refused"], code), ("no_answer", 2))
+        self.assertIn("fixture.json", reply["next"])
+        self.assertTrue(spawn.handles[0].thread.is_alive())          # the run goes on
+        fake.release.set()
+        spawn.handles[0].thread.join(10)
+        self.assertFalse(spawn.handles[0].thread.is_alive())
+        self.assertEqual([c[0] for c in fake.calls], ["make_fixture", "stop"])
+        self.assertFalse(self.info_path.exists())
 
     def test_a_server_takes_fixture_once_and_never_after_start(self):
         fake, _thread = self.serve()

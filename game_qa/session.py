@@ -724,13 +724,17 @@ class Session:
             stopped = self.stop()
             if not isinstance(e, Exception):
                 raise
-            if isinstance(e, SessionError):
-                e.info["stop"] = stopped
+            error = e if isinstance(e, SessionError) else SessionError(_code_of(e), str(e))
+            error.info["stop"] = stopped
+            self._write_fixture_record(self._fixture_snap or error.info.get("snapshot"),
+                                       {"refused": error.code, "detail": str(error), **error.info})
+            if error is e:
                 raise
-            raise SessionError(_code_of(e), str(e), stop=stopped) from e
+            raise error from e
         finally:
             self._starting = False
         result["stop"] = self.stop()
+        self._write_fixture_record(result.get("run"), result)
         return result
 
     def _make_fixture(self, permission: str, date: fixture.Date, plan: dict, playset: str, busy: bool,
@@ -774,7 +778,6 @@ class Session:
                 "key is %s now, so `start --fixture %s` will not find this save, and the game may have hot-reloaded "
                 "script part way. Load it with `--save %s` if a mixed build will do, or make it again"
                 % (now, plan["date"], stem))
-        self._write_fixture_record(snap, result)
         return result
 
     def _fixture_timing(self, snap: str) -> dict:
@@ -813,9 +816,9 @@ class Session:
         return out
 
     def _write_fixture_record(self, snap: str | None, result: dict) -> None:
-        """`fixture.json` in the run's folder: the reply, for whoever reads it after the client that asked has gone
-        (a run of hours outlives most). Never raises."""
-        if snap is None:
+        """`fixture.json` in the run's folder: the reply, made or refused, with the session's stop, for whoever reads
+        it after the client that asked has gone (a run of hours outlives most). Never raises."""
+        if not isinstance(snap, str) or not snap:
             return
         try:
             folder = self._paths.run_root / snap
