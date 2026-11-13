@@ -1480,6 +1480,242 @@ te_grid_clear_state_effect = {
 	te_grid_clear_cross_market_effect = yes
 }
 
+# ---- Generation by source --------------------------------------------------------
+
+# Country scope, monthly (te_grid_mix_on_action, power_grid_on_actions.txt),
+# once the Power Grids tab is open: the Electricity the country's power plants
+# made last week, by source, for the tab's Generation panel
+# (te_grid_tab_mix_*_disp). Each state's own generation is measured (what it
+# made, less what its station delivered); te_grid_mix_state_effect splits it
+# among its plants. A state with no plant, whose power is all its station's,
+# adds nothing.
+te_grid_mix_record_effect = {
+	set_local_variable = { name = te_grid_mix_sum_coal value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_oil value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_hydro value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_nuclear value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_renewable value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_fusion value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_space_solar value = 0 }
+	every_scope_state = {
+		limit = { te_grid_electricity_production > 0 }
+		te_grid_mix_state_effect = yes
+	}
+	set_variable = { name = te_grid_mix_coal value = local_var:te_grid_mix_sum_coal }
+	set_variable = { name = te_grid_mix_oil value = local_var:te_grid_mix_sum_oil }
+	set_variable = { name = te_grid_mix_hydro value = local_var:te_grid_mix_sum_hydro }
+	set_variable = { name = te_grid_mix_nuclear value = local_var:te_grid_mix_sum_nuclear }
+	set_variable = { name = te_grid_mix_renewable value = local_var:te_grid_mix_sum_renewable }
+	set_variable = { name = te_grid_mix_fusion value = local_var:te_grid_mix_sum_fusion }
+	set_variable = { name = te_grid_mix_space_solar value = local_var:te_grid_mix_sum_space_solar }
+	set_variable = {
+		name = te_grid_mix_total
+		value = {
+			value = local_var:te_grid_mix_sum_coal
+			add = local_var:te_grid_mix_sum_oil
+			add = local_var:te_grid_mix_sum_hydro
+			add = local_var:te_grid_mix_sum_nuclear
+			add = local_var:te_grid_mix_sum_renewable
+			add = local_var:te_grid_mix_sum_fusion
+			add = local_var:te_grid_mix_sum_space_solar
+		}
+	}
+}
+
+# State scope, in te_grid_mix_record_effect: splits the state's own generation
+# among its sources in proportion to what their plants make at their methods,
+# levels and staffing (te_grid_mix_staffed_output_value), and adds each part
+# to the country's sum. Where every plant reads no staff although the state
+# made power last week (a strike, or staff gone this week), it splits by what
+# they make at full staff instead.
+te_grid_mix_state_effect = {
+	te_grid_mix_clear_weights_effect = yes
+	every_scope_building = {
+		limit = { te_grid_mix_output_per_level_value > 0 }
+		te_grid_mix_add_building_effect = { WEIGHT = te_grid_mix_staffed_output_value }
+	}
+	te_grid_mix_sum_weights_effect = yes
+	set_local_variable = { name = te_grid_mix_gen value = te_grid_local_production_value }
+	te_grid_mix_selfcheck_effect = yes
+	if = {
+		limit = { local_var:te_grid_mix_w_all <= 0 }
+		te_grid_mix_clear_weights_effect = yes
+		every_scope_building = {
+			limit = { te_grid_mix_output_per_level_value > 0 }
+			te_grid_mix_add_building_effect = { WEIGHT = te_grid_mix_capacity_output_value }
+		}
+		te_grid_mix_sum_weights_effect = yes
+	}
+	if = {
+		limit = { local_var:te_grid_mix_w_all > 0 }
+		te_grid_mix_split_effect = { SOURCE = coal }
+		te_grid_mix_split_effect = { SOURCE = oil }
+		te_grid_mix_split_effect = { SOURCE = hydro }
+		te_grid_mix_split_effect = { SOURCE = nuclear }
+		te_grid_mix_split_effect = { SOURCE = renewable }
+		te_grid_mix_split_effect = { SOURCE = fusion }
+		te_grid_mix_split_effect = { SOURCE = space_solar }
+	}
+}
+
+# Any scope, in te_grid_mix_state_effect.
+te_grid_mix_clear_weights_effect = {
+	set_local_variable = { name = te_grid_mix_w_coal value = 0 }
+	set_local_variable = { name = te_grid_mix_w_oil value = 0 }
+	set_local_variable = { name = te_grid_mix_w_hydro value = 0 }
+	set_local_variable = { name = te_grid_mix_w_nuclear value = 0 }
+	set_local_variable = { name = te_grid_mix_w_renewable value = 0 }
+	set_local_variable = { name = te_grid_mix_w_fusion value = 0 }
+	set_local_variable = { name = te_grid_mix_w_space_solar value = 0 }
+}
+
+# Any scope, in te_grid_mix_state_effect: the state's plants' weights, all
+# sources (inline: a named script value isn't known to read a caller's local
+# variables).
+te_grid_mix_sum_weights_effect = {
+	set_local_variable = {
+		name = te_grid_mix_w_all
+		value = {
+			value = local_var:te_grid_mix_w_coal
+			add = local_var:te_grid_mix_w_oil
+			add = local_var:te_grid_mix_w_hydro
+			add = local_var:te_grid_mix_w_nuclear
+			add = local_var:te_grid_mix_w_renewable
+			add = local_var:te_grid_mix_w_fusion
+			add = local_var:te_grid_mix_w_space_solar
+		}
+	}
+}
+
+# Building scope, a plant (te_grid_mix_output_per_level_value above 0): adds
+# its weight ($WEIGHT$, a building-scope value) to its source's. A Power Plant
+# on an oil-fired method is Oil, on any other Coal; the companies' power
+# stations burn coal, but for Mayak's reactors. test_power_grid_tab.py's
+# GenerationTableTest holds every plant in the table to one branch here.
+te_grid_mix_add_building_effect = {
+	if = {
+		limit = {
+			is_building_type = building_power_plant
+			OR = {
+				has_active_production_method = pm_oil-fired_plant
+				has_active_production_method = pm_modern_oil-fired_plant
+			}
+		}
+		change_local_variable = { name = te_grid_mix_w_oil add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				is_building_type = building_power_plant
+				is_building_type = building_generic_power_hub
+				is_building_type = building_tokyo_electric_asakusa_station
+				is_building_type = building_siam_electric_wat_liab_station
+				is_building_type = building_calcutta_electric_victoria_house
+				is_building_type = building_eea_dock_sud_power_station
+				is_building_type = building_electricidad_caracas_power_house
+				is_building_type = building_hanseong_jeongi_gwanghwamun_station
+				is_building_type = building_ingolstadt_power_station
+			}
+		}
+		change_local_variable = { name = te_grid_mix_w_coal add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_hydro_plant }
+		change_local_variable = { name = te_grid_mix_w_hydro add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				is_building_type = building_nuclear_plant
+				is_building_type = building_rosatom_mayak_association
+			}
+		}
+		change_local_variable = { name = te_grid_mix_w_nuclear add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_renewable_energy_plant }
+		change_local_variable = { name = te_grid_mix_w_renewable add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_fusion_plant }
+		change_local_variable = { name = te_grid_mix_w_fusion add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_solar_receiver }
+		change_local_variable = { name = te_grid_mix_w_space_solar add = $WEIGHT$ }
+	}
+}
+
+# State scope, in te_grid_mix_state_effect: the state's generation times
+# $SOURCE$'s share of its weight, onto the country's sum. The share is taken
+# first, so a large state's product stays under the fixed-point ceiling.
+te_grid_mix_split_effect = {
+	change_local_variable = {
+		name = te_grid_mix_sum_$SOURCE$
+		add = {
+			value = local_var:te_grid_mix_w_$SOURCE$
+			divide = local_var:te_grid_mix_w_all
+			multiply = local_var:te_grid_mix_gen
+		}
+	}
+}
+
+# State scope, in te_grid_mix_state_effect with its staffed weights summed.
+# TE_SELF_CHECK grid_mix_staffing, once a game, at the first state that made
+# 100 or more Electricity on its own last week and has a plant: its plants'
+# staffed weight over their full-staff weight (staffed=, the weighted
+# occupancy), which must be above 0 (the bare occupancy read returns a value)
+# and at most 1 (it is a share), and its generation over the staffed weight
+# (measured_over_estimate=, the throughput and output bonuses the table leaves
+# out), 0.2 to 5 where the table's figures are a week's goods at full staff.
+te_grid_mix_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_mix_checked }
+			local_var:te_grid_mix_gen >= 100
+		}
+		set_local_variable = { name = te_grid_mix_chk_capacity value = 0 }
+		every_scope_building = {
+			limit = { te_grid_mix_output_per_level_value > 0 }
+			change_local_variable = { name = te_grid_mix_chk_capacity add = te_grid_mix_capacity_output_value }
+		}
+		if = {
+			limit = { local_var:te_grid_mix_chk_capacity > 0 }
+			set_global_variable = te_grid_mix_checked
+			set_global_variable = {
+				name = te_grid_chk_mix_staffed
+				value = {
+					value = local_var:te_grid_mix_w_all
+					divide = local_var:te_grid_mix_chk_capacity
+				}
+			}
+			set_global_variable = { name = te_grid_chk_mix_scale value = 0 }
+			if = {
+				limit = { local_var:te_grid_mix_w_all > 0 }
+				set_global_variable = {
+					name = te_grid_chk_mix_scale
+					value = {
+						value = local_var:te_grid_mix_gen
+						divide = local_var:te_grid_mix_w_all
+					}
+				}
+			}
+			if = {
+				limit = {
+					global_var:te_grid_chk_mix_staffed > 0
+					global_var:te_grid_chk_mix_staffed <= 1.001
+					global_var:te_grid_chk_mix_scale >= 0.2
+					global_var:te_grid_chk_mix_scale <= 5
+				}
+				debug_log = "TE_SELF_CHECK OK grid_mix_staffing (staffed=[SCOPE.ScriptValue('te_grid_chk_mix_staffed_g')|2] measured_over_estimate=[SCOPE.ScriptValue('te_grid_chk_mix_scale_g')|2]: a power plant's occupancy reads its staffed share, and the Generation panel's table is a week's Electricity at full staff)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_mix_staffing (staffed=[SCOPE.ScriptValue('te_grid_chk_mix_staffed_g')|2] measured_over_estimate=[SCOPE.ScriptValue('te_grid_chk_mix_scale_g')|2], against above 0 to 1 and 0.2 to 5: the Generation panel splits a state's power on a bad weight; see docs/testing/power-grid-playtest.md)"
+			}
+		}
+	}
+}
+
 # ---- Self-checks and info ------------------------------------------------------
 
 # Any scope. Once a game, the date and month index of the first run (the global
