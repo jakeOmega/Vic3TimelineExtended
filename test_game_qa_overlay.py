@@ -702,5 +702,157 @@ class ParseDateTest(unittest.TestCase):
                 self.assertIsNone(overlay.parse_date(line))
 
 
+
+# A profiler window of the same shape as the game's script_profiler.gui, invented here (no copy of the game's file
+# is kept in the repo, and CI has no game). It carries the decoys the real file has: the root's size again deeper
+# down, the Callers frame and the scroll areas with the Callees frame's size, a brace in a comment and in a string,
+# and lines indented with spaces beside lines indented with tabs.
+PROFILER_GUI = """vbox = {
+	name = "script_profiler"
+
+    minimumsize = { 600 300 }
+
+	hbox = {
+		size = { 0 24 }
+		widget = { minimumsize = { 600 300 } }
+	}
+
+	hbox = {
+		minimumsize = { 0 150 }
+		layoutpolicy_vertical = fixed
+
+		editor_frame = {
+			minimumsize = { 125 0 }
+			blockoverride "label" { raw_text = "Callers" }
+			blockoverride "content" {
+				scrollarea = {
+					minimumsize = { 125 0 }
+				}
+			}
+		}
+
+		editor_frame = {
+			blockoverride "label" { raw_text = "Current" }
+			blockoverride "content" {
+				vbox = { minimumsize = { 125 0 } }
+			}
+		}
+
+		editor_frame = {
+			# a brace { in a comment
+			minimumsize = { 125 0 }
+			layoutpolicy_vertical = expanding
+			blockoverride "label" { raw_text = "Callees" }
+			blockoverride "content" {
+				scrollarea = {
+					minimumsize = { 125 0 }
+					raw_tooltip = "a } in a string"
+				}
+			}
+		}
+	}
+}
+"""
+
+
+def enlarged_by_hand(text: str) -> str:
+    """PROFILER_GUI with the three sizes changed at their own places, written out without the code under test."""
+    lines = text.split("\n")
+    for number, old, new in ((3, "{ 600 300 }", "{ 1400 950 }"), (11, "{ 0 150 }", "{ 0 700 }"),
+                             (33, "{ 125 0 }", "{ 650 0 }")):
+        assert old in lines[number], (number, lines[number])
+        lines[number] = lines[number].replace(old, new)
+    return "\n".join(lines)
+
+
+class ProfilerWindowTest(OverlayTestCase):
+    """#1710: the overlay carries the game's script profiler window with three minimumsizes raised."""
+
+    def install(self, data: bytes | None) -> Path:
+        """A game install folder holding `data` as its script_profiler.gui (none if None)."""
+        game = self.base / "game"
+        game.mkdir(exist_ok=True)
+        if data is not None:
+            path = game / overlay.PROFILER_GUI_SOURCE
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        return game
+
+    def test_the_three_sizes_are_raised_and_nothing_else_changes(self):
+        out = overlay.enlarge_profiler_gui(PROFILER_GUI.encode("ascii"))
+        self.assertEqual(out.decode("ascii"), enlarged_by_hand(PROFILER_GUI))
+
+    def test_the_source_bytes_are_kept_a_bom_and_crlf_included(self):
+        crlf = PROFILER_GUI.replace("\n", "\r\n").encode("ascii")
+        self.assertEqual(overlay.enlarge_profiler_gui(crlf),
+                         enlarged_by_hand(PROFILER_GUI).replace("\n", "\r\n").encode("ascii"))
+        out = overlay.enlarge_profiler_gui(BOM + PROFILER_GUI.encode("ascii"))
+        self.assertEqual(out, BOM + enlarged_by_hand(PROFILER_GUI).encode("ascii"))     # one BOM, as it came
+        self.assertFalse(overlay.enlarge_profiler_gui(PROFILER_GUI.encode("ascii")).startswith(BOM))
+
+    def test_spacing_inside_a_size_may_differ(self):
+        text = PROFILER_GUI.replace("{ 600 300 }", "{600  300}", 1)
+        out = overlay.enlarge_profiler_gui(text.encode("ascii")).decode("ascii")
+        self.assertIn("minimumsize = {1400  950}", out)
+        self.assertEqual(out.count("{ 0 700 }") + out.count("{ 650 0 }"), 2)
+
+    def test_a_size_that_is_not_found_once_in_its_place_writes_nothing(self):
+        cases = {
+            "the window's size changed": PROFILER_GUI.replace("    minimumsize = { 600 300 }", "    minimumsize = { 610 300 }"),
+            "the window's size twice on the root": PROFILER_GUI.replace(
+                '\tname = "script_profiler"', '\tname = "script_profiler"\n\tminimumsize = { 600 300 }'),
+            "the row's size gone": PROFILER_GUI.replace("{ 0 150 }", "{ 0 160 }"),
+            "the row's size on another block": PROFILER_GUI.replace(
+                "\t\tminimumsize = { 0 150 }\n", "", 1).replace("\t\tsize = { 0 24 }", "\t\tminimumsize = { 0 150 }"),
+            "the Callees frame's size gone": PROFILER_GUI.replace(
+                "\t\t\t# a brace { in a comment\n\t\t\tminimumsize = { 125 0 }\n", "\t\t\t# a brace { in a comment\n"),
+            "the Callees frame's size twice": PROFILER_GUI.replace(
+                "\t\t\t# a brace { in a comment\n", "\t\t\t# a brace { in a comment\n\t\t\tminimumsize = { 125 0 }\n"),
+            "no Callees label": PROFILER_GUI.replace('"Callees"', '"Children"'),
+            "two Callees labels": PROFILER_GUI.replace('"Current"', '"Callees"'),
+            "the label outside a frame": PROFILER_GUI.replace("\t\teditor_frame = {\n\t\t\t# a brace",
+                                                              "\t\tsome_frame = {\n\t\t\t# a brace"),
+        }
+        for name, text in cases.items():
+            with self.subTest(name):
+                self.assertNotEqual(text, PROFILER_GUI)
+                with self.assertRaises(overlay.OverlayError):
+                    overlay.enlarge_profiler_gui(text.encode("ascii"))
+                data, info = overlay.profiler_gui(self.install(text.encode("ascii")))
+                self.assertIsNone(data)
+                self.assertFalse(info["enlarged"])
+                self.assertIn("own size", info["why"])
+
+    def test_a_missing_or_unreadable_file_says_why(self):
+        data, info = overlay.profiler_gui(self.base / "no game here")
+        self.assertEqual((data, info["enlarged"]), (None, False))
+        self.assertIn("FileNotFoundError", info["why"])
+        game = self.install(None)
+        (game / overlay.PROFILER_GUI_SOURCE).mkdir(parents=True)        # a folder where the file should be
+        data, info = overlay.profiler_gui(game)
+        self.assertEqual((data, info["enlarged"]), (None, False))
+        self.assertIn("could not be read", info["why"])
+
+    def test_the_installed_file_is_read_and_left_as_it_was(self):
+        game = self.install(PROFILER_GUI.encode("ascii"))
+        data, info = overlay.profiler_gui(game)
+        self.assertEqual(data, enlarged_by_hand(PROFILER_GUI).encode("ascii"))
+        self.assertEqual(info, {"enlarged": True, "source": str(game / overlay.PROFILER_GUI_SOURCE)})
+        self.assertEqual((game / overlay.PROFILER_GUI_SOURCE).read_bytes(), PROFILER_GUI.encode("ascii"))
+
+    def test_build_writes_it_as_given_and_remove_takes_it_away(self):
+        data = overlay.enlarge_profiler_gui(PROFILER_GUI.encode("ascii"))
+        ov = overlay.build(self.dest, {}, "1.15.0", profiler_gui=data)
+        self.assertEqual(ov.profiler_gui, self.dest / overlay.PROFILER_GUI_FILE)
+        self.assertEqual((self.dest / overlay.PROFILER_GUI_FILE).read_bytes(), data)     # no BOM added
+        self.assertTrue(overlay.remove(self.dest))
+        self.assertFalse(self.dest.exists())
+
+    def test_without_it_the_overlay_has_no_gui_folder(self):
+        ov = overlay.build(self.dest, {}, "1.15.0")
+        self.assertIsNone(ov.profiler_gui)
+        self.assertFalse((self.dest / "gui").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

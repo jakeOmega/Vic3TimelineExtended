@@ -440,7 +440,7 @@ ideology_anti_colonialist = {
 	}
 }
 
-# The leader half. Every `leader = { has_ideology = ... }` check in the
+# The leader half. Every `leader ?= { has_ideology = ... }` check in the
 # decolonization content asks for this one, and movement_anti_war hands it to
 # the leaders of the groups it pressures. Same colonial stances as the group
 # ideology. Weighted toward the two groups that carry the group ideology, and

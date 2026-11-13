@@ -12,9 +12,10 @@ interstellar probe's transit pause instead.
 in each section), save, then set the rule off from the screen that changes country and play on. "Within a week" is the
 entry's next update; "within a month" is the first monthly pulse. Each section's last check sets the rule on again.
 
-**What this list can't settle offline.** That `add_journal_entry` brings back a type the country has concluded is
-unverified (the Colonial Empire's `ce_reentry` self-check and Banking's "Switched back on" row ask the same thing).
-Every "switched back on" check below that expects the entry back depends on it.
+**What this list can't settle offline.** That `add_journal_entry` brings back a type the country has concluded was
+unverified until 2026-11-12, when the Colonial Empire's `ce_reentry` self-check read OK with `ended_before=yes` three
+times in one game (`colonial-holdings-playtest.md`). Every "switched back on" check below that expects the entry
+back rests on it; Banking's "Switched back on" row still checks its own entry.
 
 ## Social movements (Social Movements)
 

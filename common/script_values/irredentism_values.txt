@@ -59,7 +59,7 @@ irredentist_war_tilt = {
 		limit = {
 			any_interest_group = {
 				is_in_government = yes
-				leader = { has_ideology = ideology:ideology_fascist }
+				leader ?= { has_ideology = ideology:ideology_fascist }
 			}
 		}
 		add = 4
@@ -68,7 +68,7 @@ irredentist_war_tilt = {
 		limit = {
 			any_interest_group = {
 				is_in_government = yes
-				leader = { has_ideology = ideology:ideology_jingoist_leader }
+				leader ?= { has_ideology = ideology:ideology_jingoist_leader }
 			}
 		}
 		add = 3
@@ -77,7 +77,7 @@ irredentist_war_tilt = {
 		limit = {
 			any_interest_group = {
 				is_in_government = yes
-				leader = { has_ideology = ideology:ideology_ethno_nationalist }
+				leader ?= { has_ideology = ideology:ideology_ethno_nationalist }
 			}
 		}
 		add = 3
@@ -97,8 +97,8 @@ irredentist_war_tilt = {
 			any_interest_group = {
 				is_in_government = yes
 				OR = {
-					leader = { has_ideology = ideology:ideology_communist_leader }
-					leader = { has_ideology = ideology:ideology_vanguardist }
+					leader ?= { has_ideology = ideology:ideology_communist_leader }
+					leader ?= { has_ideology = ideology:ideology_vanguardist }
 				}
 			}
 			NOT = {
@@ -122,7 +122,7 @@ irredentist_war_tilt = {
 		limit = {
 			any_interest_group = {
 				is_in_government = yes
-				leader = { has_ideology = ideology:ideology_pacifist }
+				leader ?= { has_ideology = ideology:ideology_pacifist }
 			}
 		}
 		add = -3
@@ -131,7 +131,7 @@ irredentist_war_tilt = {
 		limit = {
 			any_interest_group = {
 				is_in_government = yes
-				leader = { has_ideology = ideology:ideology_anarchist }
+				leader ?= { has_ideology = ideology:ideology_anarchist }
 			}
 		}
 		add = -3
@@ -141,8 +141,8 @@ irredentist_war_tilt = {
 			any_interest_group = {
 				is_in_government = yes
 				OR = {
-					leader = { has_ideology = ideology:ideology_humanitarian }
-					leader = { has_ideology = ideology:ideology_market_liberal }
+					leader ?= { has_ideology = ideology:ideology_humanitarian }
+					leader ?= { has_ideology = ideology:ideology_market_liberal }
 				}
 			}
 		}
@@ -152,7 +152,7 @@ irredentist_war_tilt = {
 		limit = {
 			any_interest_group = {
 				is_in_government = yes
-				leader = { has_ideology = ideology:ideology_republican_leader }
+				leader ?= { has_ideology = ideology:ideology_republican_leader }
 			}
 		}
 		add = -2
