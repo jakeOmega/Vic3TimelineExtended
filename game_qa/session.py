@@ -1308,17 +1308,33 @@ class Session:
 
         A start may be made again: the tick timings are cleared again, and `profile summary` will not take a window
         across it. Whether Enable resets the script counts when it is already on is not verified. Refused
-        `profile_refused` when either command answers a failure, or nothing."""
+        `profile_refused` when either command answers a failure, or nothing.
+
+        The step records `cleared`, whatever its outcome: True once the clear answered success, None while it may
+        have gone through (it was typed, and its answer was not seen), False when it answered a failure or never
+        arrived. A start refused at Enable after its clear has still cleared the tick timings, so `profile summary`
+        takes any start but a False one as a restart."""
         self._require_game()
-        with self._step("profile_start") as out:
+        with self._step("profile_start", cleared=False) as out:
             when = self._date()
             out["date"] = list(when)
             for key, command in (("clear", profiling.CLEAR_COMMAND), ("enable", profiling.ENABLE_COMMAND)):
-                reply = self._console.run(command)
+                if key == "clear":
+                    out["cleared"] = None           # typed from here on: it may go through, whatever follows
+                try:
+                    reply = self._console.run(command)
+                except ConsoleError as e:
+                    if key == "clear" and e.entered is False:
+                        out["cleared"] = False
+                    raise
                 out[key] = reply.lines
+                if key == "clear":
+                    out["cleared"] = reply.ok
                 if reply.ok is not True:
-                    raise SessionError("profile_refused", "%s answered %s" % (command, reply.lines or "nothing"),
-                                       lines=reply.lines)
+                    after = (", after %s had cleared the tick timings: `profile summary` takes no window across this "
+                             "start" % profiling.CLEAR_COMMAND) if key == "enable" else ""
+                    raise SessionError("profile_refused", "%s answered %s%s" % (command, reply.lines or "nothing",
+                                                                                 after), lines=reply.lines)
             out["server_log_lines"] = self._follow_server_log()
             self._profile_starts += 1
             out["starts"] = self._profile_starts

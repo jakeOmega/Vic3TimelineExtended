@@ -490,10 +490,25 @@ def dump_paths(run_dir: Path, label: str) -> tuple[Path, Path]:
     return run_dir / (TT_PREFIX + label + TT_SUFFIX), run_dir / (SP_PREFIX + label + SP_SUFFIX)
 
 
+def start_cleared(step: Mapping) -> bool | None:
+    """Whether a `profile_start` step cleared the tick timings: True, False, or None when it may have (the clear was
+    typed and its answer was not seen). The session records it as `cleared`. A step recorded without that field
+    says it by its outcome, or by holding Enable's answer, since Enable is typed only once the clear has answered
+    success; an empty answer to the clear is a may-have."""
+    if "cleared" in step:
+        return step["cleared"]
+    if step.get("outcome") == "ok" or "enable" in step:
+        return True
+    return None if step.get("clear") == [] else False
+
+
 def profile_steps(steps: Sequence[Mapping]) -> list[Mapping]:
-    """The run's `profile_start` and `profile_dump` steps that went through, in order."""
-    return [step for step in steps if step.get("verb") in ("profile_start", "profile_dump")
-            and step.get("outcome") == "ok"]
+    """The run's steps a window depends on, in order: each `profile_dump` that went through, and each
+    `profile_start` that cleared the tick timings or may have, whatever its outcome. A start refused at
+    `ScriptProfiling.Enable` once its clear had gone through still cleared them, so no window spans it."""
+    return [step for step in steps
+            if (step.get("verb") == "profile_dump" and step.get("outcome") == "ok")
+            or (step.get("verb") == "profile_start" and start_cleared(step) is not False)]
 
 
 def summary(run_dir: Path, steps: Sequence[Mapping], labels: Sequence[str], origin: Callable[[str], str],
@@ -504,7 +519,8 @@ def summary(run_dir: Path, steps: Sequence[Mapping], labels: Sequence[str], orig
     before it. With two: the window between them, the later minus the earlier (both after one profile start, the
     first dumped first). Raises ProfileError: `no_profile` (nothing was profiled in the run), `no_dump` (no such
     label, or its files are gone), `bad_label`, `restarted_between` (a profile start lies between the two dumps:
-    the tick timings were cleared, so there is no window between them), `unreadable` (a copy that cannot be read).
+    the tick timings were cleared, so there is no window between them; a start refused once its clear had gone
+    through, or may have, is one), `unreadable` (a copy that cannot be read).
 
     The reply: `window` (from and to, the labels, the frames' first and last), `tick_tasks` (`tick_tasks`),
     `wall_clock` (`wall_clock`, from the run's copy of dedicated_server.log, joined to the tt file by game date),
@@ -534,10 +550,13 @@ def summary(run_dir: Path, steps: Sequence[Mapping], labels: Sequence[str], orig
             raise ProfileError("bad_label", "%s was dumped after %s: give the earlier one first" % (first, last))
         if first == last:
             raise ProfileError("bad_label", "the two labels are the same")
-        if any(step["verb"] == "profile_start" for step in done[at[first] + 1:at[last]]):
+        between = [step for step in done[at[first] + 1:at[last]] if step["verb"] == "profile_start"]
+        if between:
+            refused = [step for step in between if step.get("outcome") != "ok"]
             raise ProfileError("restarted_between", "a profile start between %s and %s cleared the tick timings, so "
-                                                    "there is no window between them: summarize each by itself"
-                               % (first, last))
+                                                    "there is no window between them: summarize each by itself%s"
+                               % (first, last, " (that start ended %s, but its clear had gone through, or may have)"
+                                  % refused[0].get("outcome") if refused else ""))
     else:
         first, last = None, wanted[0]
     starts = [i for i, step in enumerate(done[:at[last]]) if step["verb"] == "profile_start"]
@@ -548,6 +567,11 @@ def summary(run_dir: Path, steps: Sequence[Mapping], labels: Sequence[str], orig
         notes.append("the profile was started %d times in this run; the tick timings count from the last start, and "
                      "whether ScriptProfiling.Enable resets the script counts when it is already on is not verified, "
                      "so the script figures may count from the first start" % len(starts))
+    if first is None and start_step.get("outcome") != "ok":
+        notes.append("the window counts from the profile start of %s, which ended %s once its clear had gone through "
+                     "(or may have): the tick timings count from it, but the script counts may run from an earlier "
+                     "start, so the script's per-day figures may be too high"
+                     % (_date_text(start_step.get("date")), start_step.get("outcome")))
 
     tt_last, sp_last = dump_paths(run_dir, last)
     rows = _read(tt_last, parse_tick_tasks)
@@ -599,6 +623,13 @@ def summary(run_dir: Path, steps: Sequence[Mapping], labels: Sequence[str], orig
         "weekly_phase": {"phase": phase, "source": phase_source},
         "wall_clock": clock, "tick_tasks": tasks, "script": script, "notes": notes,
     }
+
+
+def _date_text(date) -> str:
+    """A step's `date` ([year, month, day]) as the log writes a day, or "an unknown date"."""
+    if isinstance(date, (list, tuple)) and len(date) == 3 and all(isinstance(n, int) for n in date):
+        return "%d.%d.%d" % tuple(date)
+    return "an unknown date"
 
 
 def _read(path: Path, parse):

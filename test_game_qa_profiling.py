@@ -451,6 +451,63 @@ class SummaryTest(unittest.TestCase):
             "play is left out of `running`"])
 
 
+class HalfFailedRestartTest(unittest.TestCase):
+    """#1742 review: a `profile start` whose clear went through and whose Enable was then refused, or answered
+    nothing, is a `profile_refused` step. It still cleared the tick timings, so no window may span it."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.run = Path(tmp.name)
+        # A holds day 2; the second start's clear wiped days 3 to 9, so B holds day 10 alone
+        tt, sp = p.dump_paths(self.run, "A")
+        tt.write_text(tt_text([(f, "Task", 10, 1) for f in frames(1836, 1, 2, 1)]), encoding="utf-8")
+        sp.write_text(SP_HEAD + "trigger common/x.txt:1 1.0 100\n", encoding="utf-8")
+        tt, sp = p.dump_paths(self.run, "B")
+        tt.write_text(tt_text([(f, "Task", 10, 1) for f in frames(1836, 1, 10, 1)]), encoding="utf-8")
+        sp.write_text(SP_HEAD + "trigger common/x.txt:1 9.0 900\n", encoding="utf-8")   # eight more days of script
+        (self.run / p.RUN_SERVER_LOG).write_text("\n".join(
+            [log_line(0, "Pause Toggled! Paused: false, PlayerID: 0")]
+            + [log_line(1 + n, tick(f)) for n, f in enumerate(frames(1836, 1, 10, 1))]
+            + [log_line(9, "Pause Toggled! Paused: true, PlayerID: 1")]) + "\n", encoding="utf-8")
+
+    def steps(self, restart: dict) -> list[dict]:
+        return [{"verb": "profile_start", "outcome": "ok", "date": [1836, 1, 1]},
+                {"verb": "profile_dump", "outcome": "ok", "label": "A"},
+                {"verb": "profile_start", "outcome": "profile_refused", "date": [1836, 1, 9], **restart},
+                {"verb": "profile_dump", "outcome": "ok", "label": "B"}]
+
+    def summary(self, restart: dict, *labels):
+        return p.summary(self.run, self.steps(restart), labels, lambda name: "mod")
+
+    def test_a_window_across_one_is_refused(self):
+        # it reported 8 s of script over 8 days as 8,000 ms a day over 1 day, with no note
+        for restart in ({"clear": ["Discarded 28 recorded frames"], "enable": ["Already enabled"]},  # no `cleared`
+                        {"cleared": True, "clear": ["Discarded 28 recorded frames"], "enable": []},
+                        {"cleared": None},                                      # the clear's answer was not seen
+                        {"clear": []}):                                         # nor here, before `cleared`
+            with self.subTest(restart=restart), self.assertRaises(p.ProfileError) as caught:
+                self.summary(restart, "A", "B")
+            self.assertEqual(caught.exception.code, "restarted_between")
+            self.assertIn("that start ended profile_refused, but its clear had gone through, or may have",
+                          caught.exception.detail)
+
+    def test_a_start_whose_clear_did_not_go_through_is_no_restart(self):
+        for restart in ({"cleared": False, "clear": ["Unknown command"]}, {"clear": ["Unknown command"]}, {}):
+            with self.subTest(restart=restart):
+                self.assertEqual(self.summary(restart, "A", "B")["window"]["from"], "A")
+
+    def test_one_label_after_one_counts_from_it_and_says_the_script_may_not(self):
+        out = self.summary({"cleared": True}, "B")
+        self.assertEqual(out["window"]["start_date"], [1836, 1, 9])
+        self.assertEqual(out["window"]["days"], 1.0)
+        self.assertIn("started 2 times", out["notes"][0])
+        self.assertEqual(out["notes"][1], "the window counts from the profile start of 1836.1.9, which ended "
+                                          "profile_refused once its clear had gone through (or may have): the tick "
+                                          "timings count from it, but the script counts may run from an earlier "
+                                          "start, so the script's per-day figures may be too high")
+
+
 class CopyTest(unittest.TestCase):
     """The dump's copy: the file must be newly written (its own signature against what was there before), then
     held still, then copied whole. Times are set with os.utime and the clock is a fake one."""

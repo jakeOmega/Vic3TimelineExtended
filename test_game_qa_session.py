@@ -3974,6 +3974,44 @@ class ProfileTest(SessionTestCase):
         self.assertEqual(self.steps("profile_start")[0]["outcome"], "profile_refused")
         self.assertEqual(self.session_error(self.session.profile_dump).code, "not_profiling")
 
+    def test_a_start_refused_at_enable_after_its_clear_still_ends_a_window(self):
+        # #1742 review: the step was profile_refused, and summary counted ok starts alone, so it took A to B across it
+        self.session.profile_start()
+        self.session.profile_dump("A")
+        self.game.on(profiling.ENABLE_COMMAND, failure=["Already enabled"])
+        error = self.session_error(self.session.profile_start)
+        self.assertEqual(error.code, "profile_refused")
+        self.assertIn("takes no window across this start", error.detail)
+        step = self.steps("profile_start")[-1]
+        self.assertEqual((step["outcome"], step["cleared"], step["enable"]), ("profile_refused", True,
+                                                                              ["Already enabled"]))
+        self.session.profile_dump("B")
+        with self.assertRaises(profiling.ProfileError) as caught:
+            profiling.summary(self.run_dir, read_steps(self.run_dir), ["A", "B"], lambda name: "mod")
+        self.assertEqual(caught.exception.code, "restarted_between")
+
+    def test_a_start_records_how_far_its_clear_got(self):
+        self.session.profile_start()
+        self.assertIs(self.steps("profile_start")[-1]["cleared"], True)
+        self.game.on(profiling.CLEAR_COMMAND, failure=["Unknown command"])
+        self.assertEqual(self.session_error(self.session.profile_start).code, "profile_refused")
+        self.assertIs(self.steps("profile_start")[-1]["cleared"], False)
+        self.game.on(profiling.CLEAR_COMMAND)                  # it ran and answered nothing: it may have cleared
+        self.assertEqual(self.session_error(self.session.profile_start).code, "profile_refused")
+        self.assertEqual(self.steps("profile_start")[-1]["clear"], [])
+        self.assertIsNone(self.steps("profile_start")[-1]["cleared"])
+        real = self.session._console.run
+        for entered, cleared in ((False, False), (None, None), (True, None)):
+            def run(text, *args, **kwargs):
+                if text == profiling.CLEAR_COMMAND:
+                    raise ConsoleError("no_reply", "lost", entered=entered)
+                return real(text, *args, **kwargs)
+            with self.subTest(entered=entered), mock.patch.object(self.session._console, "run", side_effect=run):
+                with self.assertRaises(ConsoleError):
+                    self.session.profile_start()
+                step = self.steps("profile_start")[-1]
+                self.assertEqual((step["outcome"], step["cleared"]), ("no_reply", cleared))
+
     def test_a_dump_copies_both_files_at_once_and_leaves_the_root_csv_for_the_restore(self):
         self.session.profile_start()
         self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
