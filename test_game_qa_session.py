@@ -20,11 +20,12 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
+from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, server, session, snapshot
 from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
+from test_game_qa_overlay import PROFILER_GUI
 
 SNAP = "20261110T150000Z"
 FIXTURE_SNAP = "20261110T145500Z"
@@ -1975,6 +1976,393 @@ class ClickTest(SessionTestCase):
         self.assertIn("no_client_area", reply["screenshot_error"])
 
 
+
+
+class KeyboardAfterClickTest(SessionTestCase):
+    """#1710 item 3 and #1725 point 3: a click into a tool window takes the keyboard (live, 2026-11-12), so the verbs
+    that type refuse until `click --console` has clicked the console's input line and a probe got through."""
+
+    def setUp(self):
+        super().setUp()
+        self.started()                          # the console is known open: start's round trips
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)       # CONSOLE_INPUT_LINE of the fake's 1920x1080 client area
+        self.game.adapter.values["c:FRA.gdp"] = "1.5"
+
+    def typing_verbs(self):
+        script = Path(self.paths.backup_root) / "late.txt"
+        script.write_text("set_variable = te_late\n", encoding="utf-8")
+        return {
+            "read": lambda: self.session.read(["c:FRA.gdp"]),
+            "console": lambda: self.session.console("money 1"),
+            "events": self.session.events,
+            "pick": lambda: self.session.pick(0),
+            "tag": lambda: self.session.tag("FRA"),
+            "run_setup": lambda: self.session.run_setup("anything"),
+            "add_setup": lambda: self.session.add_setup("late", "set_variable = te_late"),
+            "press": lambda: self.session.press("esc"),
+            "enter_game": self.session.enter_game,
+            "advance": lambda: self.session.advance(1),
+            "try_event": lambda: self.session.try_event("x.1", None, ["c:FRA.gdp"]),
+            "profiler_roots": self.session.profiler_roots,
+        }
+
+    def test_a_click_latches_and_every_verb_that_types_is_refused_before_it_types(self):
+        reply = self.session.click(0.6, 0.6)
+        self.assertTrue(reply["keyboard_away"])
+        effects = self.paths.overlay_dir / overlay.EFFECTS_FILE
+        before = (len(self.game.steps), effects.read_bytes())
+        for name, verb in self.typing_verbs().items():
+            with self.subTest(name):
+                error = self.session_error(verb)
+                self.assertEqual(error.code, "keyboard_away")
+                self.assertEqual(error.info["next"], "python3 -m game_qa click --console")
+        self.assertEqual((len(self.game.steps), effects.read_bytes()), before)   # no key, and add-setup wrote nothing
+        self.assertEqual(self.game.elsewhere, [])
+        self.assertTrue(self.session.shot().is_file())          # a shot types nothing
+        self.assertNotIn("keyboard_away", session.ENTER_RETRIED + session.RELOAD_RETRIED)
+
+    def test_click_console_gives_the_keyboard_back(self):
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        reply = self.session.click(console=True)
+        self.assertEqual(self.game.clicks[-1], (216, 588))
+        self.assertEqual(reply["console"]["pixel"], [216, 588])
+        self.assertTrue(Path(reply["console"]["screenshot"]).is_file())
+        self.assertFalse(reply["keyboard_away"])
+        self.assertNotIn({"scan": fakes.SCAN_CONSOLE}, self.game.steps[steps:])
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_a_click_and_the_input_line_in_one_verb(self):
+        reply = self.session.click(0.6, 0.6, console=True)
+        self.assertEqual(self.game.clicks, [(1152, 648), (216, 588)])
+        self.assertEqual(reply["pixel"], [1152, 648])
+        self.assertNotEqual(reply["screenshot"], reply["console"]["screenshot"])
+        self.assertFalse(reply["keyboard_away"])
+        self.assertEqual(self.session.console("tag FRA").lines, ["Now Playing - France"])
+
+    def test_an_input_line_click_that_misses_keeps_the_latch_and_says_so(self):
+        self.game.input_line = (5, 5)           # the line is elsewhere in this window
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.click, console=True)
+        self.assertEqual(error.code, "keyboard_not_returned")
+        self.assertTrue(error.info["keyboard_away"])
+        self.assertEqual(error.info["console"]["pixel"], [216, 588])
+        self.assertNotIn({"scan": fakes.SCAN_CONSOLE}, self.game.steps[steps:])
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "keyboard_away")
+        # Aimed from a shot, the line's own point gives it back.
+        reply = self.session.click(console=True, input_line=(5 / 1920, 5 / 1080))
+        self.assertEqual((self.game.clicks[-1], reply["keyboard_away"]), ((5, 5), False))
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+
+    def test_the_input_line_is_not_clicked_while_the_console_is_not_known_open(self):
+        self.session.press("esc")               # closes the console: known closed
+        clicks, steps = len(self.game.clicks), len(self.game.steps)
+        for args, kwargs in (((), {"console": True}), ((0.6, 0.6), {}), ((0.6, 0.6), {"console": True})):
+            with self.subTest(args=args, kwargs=kwargs):
+                error = self.session_error(self.session.click, *args, **kwargs)
+                self.assertEqual(error.code, "console_not_open")
+                self.assertIn("`events`", error.detail)
+                self.assertEqual((error.info["keyboard_away"], error.info["next"]),
+                                 (False, "python3 -m game_qa events"))
+        # A click with the console shut is refused, not made: it would take the keyboard with no way back.
+        self.assertEqual((len(self.game.clicks), len(self.game.steps)), (clicks, steps))
+        self.assertFalse(self.game.keyboard_elsewhere)
+
+    def test_a_refused_click_does_not_latch_and_one_that_may_have_pressed_does(self):
+        real_click = self.game.click
+        self.game.click = mock.Mock(side_effect=HelperError("covered", "another window"))
+        error = self.session_error(self.session.click, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("click_refused", False))
+        self.game.click = mock.Mock(side_effect=HelperError("backend_error", "SendInput failed"))
+        error = self.session_error(self.session.click, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("click_unknown", True))
+        self.game.click = real_click
+        self.assertEqual(self.session_error(self.session.events).code, "keyboard_away")
+
+    def test_a_refused_input_line_click_keeps_the_first_click_in_the_reply(self):
+        real_click = self.game.click
+        calls = []
+
+        def second_refused(pid, x, y):
+            calls.append((x, y))
+            if len(calls) == 2:
+                raise HelperError("cursor_misplaced", "a hand on the mouse")
+            return real_click(pid, x, y)
+        self.game.click = second_refused
+        error = self.session_error(self.session.click, 0.6, 0.6, console=True)
+        self.assertEqual(error.code, "click_refused")
+        self.assertEqual(error.info["first"]["pixel"], [1152, 648])
+        self.assertTrue(error.info["keyboard_away"])
+
+    def test_bad_arguments_click_nothing(self):
+        for args, kwargs in (((), {}), ((0.5,), {}), ((None, 0.5), {}), ((0.5, 0.5), {"input_line": (0.1, 0.5)}),
+                             ((), {"console": True, "input_line": (2, 0.5)}),
+                             ((), {"console": True, "input_line": "0.1 0.5"}),
+                             ((), {"console": True, "input_line": (0.1,)})):
+            with self.subTest(args=args, kwargs=kwargs):
+                self.assertEqual(self.session_error(self.session.click, *args, **kwargs).code, "bad_argument")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_stop_and_selfchecks_work_while_latched(self):
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        found = self.session.self_checks()
+        self.assertEqual(found["not_flushed"]["refused"], "keyboard_away")
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
+    def test_enter_games_own_clicks_do_not_latch(self):
+        self.game.click_takes_keyboard = False  # as live: the lobby's clicks left the console answering
+        self.session.enter_game()
+        self.assertFalse(self.session._console.keyboard_away)
+
+
+class PointerWithTheConsoleShutTest(SessionTestCase):
+    """`click`, `wheel` and `drag` send nothing unless the console is known open (or a click made while it was has
+    latched the keyboard away). A click with it shut took the keyboard without latching, and the next `read` typed
+    its lines into the tool window and pressed the console key, while `click --console` was refused
+    `console_not_open`: no safe way forward."""
+
+    def setUp(self):
+        super().setUp()
+        self.started()
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)
+        self.game.adapter.values["c:FRA.gdp"] = "1.5"
+
+    def pointer_verbs(self):
+        return {"click": lambda: self.session.click(0.6, 0.6),
+                "click_and_console": lambda: self.session.click(0.6, 0.6, console=True),
+                "click_console": lambda: self.session.click(console=True),
+                "wheel": lambda: self.session.wheel(0.6, 0.6, -3),
+                "drag": lambda: self.session.drag(0.6, 0.6, 0.6, 0.4)}
+
+    def shut(self):
+        self.session.press("esc")               # known closed: to see the profiler's Callers column, say
+
+    def not_known(self):
+        self.session._console._open = None      # as after a no_ack, or a close() whose key may not have gone out
+
+    def test_each_is_refused_before_anything_goes_out_while_the_console_is_shut_or_not_known(self):
+        for state in (self.shut, self.not_known):
+            for name, verb in self.pointer_verbs().items():
+                with self.subTest(state=state.__name__, verb=name):
+                    self.setUp()
+                    state()
+                    sent = (len(self.game.clicks), len(self.game.wheels), len(self.game.drags), len(self.game.steps))
+                    error = self.session_error(verb)
+                    self.assertEqual((error.code, error.info["keyboard_away"]), ("console_not_open", False))
+                    self.assertEqual(error.info["next"], "python3 -m game_qa events")
+                    self.assertEqual((len(self.game.clicks), len(self.game.wheels), len(self.game.drags),
+                                      len(self.game.steps)), sent)
+                    self.assertFalse(self.game.keyboard_elsewhere)
+                    self.assertFalse(self.session._console.keyboard_away)
+
+    def test_after_press_esc_a_tool_click_does_not_let_the_next_verb_type_elsewhere(self):
+        self.shut()
+        self.assertEqual(self.session_error(self.session.click, 0.6, 0.6).code, "console_not_open")
+        self.assertFalse(self.game.keyboard_elsewhere)
+        steps = len(self.game.steps)
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)       # opens the console, as after any press
+        self.assertEqual(self.game.elsewhere, [])
+        # Opening it is the one console key: the probe went to the game, not into a tool window.
+        self.assertEqual([s for s in self.game.steps[steps:] if s.get("scan") == fakes.SCAN_CONSOLE],
+                         [{"scan": fakes.SCAN_CONSOLE}])
+
+    def test_a_verb_that_types_opens_the_way_and_click_console_gives_the_keyboard_back(self):
+        self.shut()
+        self.assertEqual(self.session_error(self.session.click, 0.6, 0.6).code, "console_not_open")
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.session.events(), [])     # the detail's advice: it opens the console
+        self.assertTrue(self.session.click(0.6, 0.6)["keyboard_away"])
+        self.assertTrue(self.game.keyboard_elsewhere)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "keyboard_away")
+        self.assertFalse(self.session.click(console=True)["keyboard_away"])
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_once_latched_the_pointer_verbs_go_on_with_the_console_state_not_known(self):
+        self.session.click(0.6, 0.6)            # the console was known open: latched, and its state not known now
+        self.assertIsNone(self.session._console._open)
+        self.session.click(0.5, 0.5)
+        self.session.wheel(0.6, 0.6, -3)
+        self.session.drag(0.6, 0.6, 0.6, 0.4)
+        self.assertEqual((len(self.game.clicks), len(self.game.wheels), len(self.game.drags)), (2, 1, 1))
+        self.assertTrue(self.session._console.keyboard_away)
+        self.assertFalse(self.session.click(console=True)["keyboard_away"])
+
+
+class WheelAndDragTest(SessionTestCase):
+    """`wheel X Y N` and `drag X1 Y1 X2 Y2` (#1710): click's scope and rules, a shot after, the keyboard latched."""
+
+    def test_wheel_turns_at_its_point_takes_a_shot_and_latches_the_keyboard(self):
+        self.started()
+        reply = self.session.wheel(0.6, 0.5, -3)
+        self.assertEqual(self.game.wheels, [(1152, 540, -3)])
+        self.assertEqual((reply["pixel"], reply["notches"], reply["keyboard_away"]), ([1152, 540], -3, True))
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertEqual(self.session_error(self.session.events).code, "keyboard_away")
+
+    def test_drag_presses_moves_and_releases_and_latches_the_keyboard(self):
+        self.started()
+        reply = self.session.drag(0.5, 0.5, 0.75, 0.25)
+        self.assertEqual(self.game.drags, [(960, 540, 1440, 270)])
+        self.assertEqual((reply["pixels"], reply["keyboard_away"]), ([[960, 540], [1440, 270]], True))
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+
+    def test_bad_arguments_send_nothing(self):
+        self.started()
+        for notches in (0, session.MAX_NOTCHES + 1, -session.MAX_NOTCHES - 1, True, 1.5, "2"):
+            with self.subTest(notches=notches):
+                self.assertEqual(self.session_error(self.session.wheel, 0.5, 0.5, notches).code, "bad_argument")
+        self.assertEqual(self.session_error(self.session.wheel, 1.5, 0.5, 1).code, "bad_argument")
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.5, -0.1).code, "bad_argument")
+        self.assertEqual((self.game.wheels, self.game.drags), ([], []))
+        self.assertFalse(self.session._console.keyboard_away)
+
+    def test_refused_before_anything_went_out_is_refused_and_does_not_latch(self):
+        self.started()
+        self.game.wheel = mock.Mock(side_effect=HelperError("covered", "x", reply={"notches_done": 0}))
+        error = self.session_error(self.session.wheel, 0.5, 0.5, 2)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("wheel_refused", False))
+        self.game.drag = mock.Mock(side_effect=HelperError("not_foreground", "x", reply={"pressed": False}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("drag_refused", False))
+
+    def test_a_refusal_after_something_went_out_is_unknown_and_latches(self):
+        self.started()
+        self.game.wheel = mock.Mock(side_effect=HelperError("cursor_misplaced", "x", reply={"notches_done": 2}))
+        error = self.session_error(self.session.wheel, 0.5, 0.5, 5)
+        self.assertEqual((error.code, error.info["notches_done"], error.info["keyboard_away"]),
+                         ("wheel_unknown", 2, True))
+        self.setUp()
+        self.started()
+        self.game.drag = mock.Mock(side_effect=HelperError("not_foreground", "x", reply={"pressed": True}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["pressed"], error.info["keyboard_away"]), ("drag_unknown", True, True))
+        self.game.drag = mock.Mock(side_effect=HelperError("helper_gone", "the helper ended"))
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "drag_unknown")
+        # Both of the helper's releases failed: the reply says the button may still be down.
+        self.game.drag = mock.Mock(side_effect=HelperError("backend_error", "released twice, may still be down",
+                                                           reply={"pressed": True, "released": False}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["pressed"], error.info["released"]), ("drag_unknown", True, False))
+
+    def test_a_game_that_cannot_be_proved_gets_neither(self):
+        self.started()
+        self.game.process_gone = True
+        self.assertEqual(self.session_error(self.session.wheel, 0.5, 0.5, 1).code, "watch_ended")
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "watch_ended")
+        self.assertEqual((self.game.wheels, self.game.drags), ([], []))
+
+    def test_both_work_while_the_keyboard_is_away(self):
+        self.started()
+        self.session.click(0.6, 0.6)
+        self.session.wheel(0.6, 0.6, 1)
+        self.session.drag(0.6, 0.6, 0.7, 0.7)
+        self.assertEqual((len(self.game.wheels), len(self.game.drags)), (1, 1))
+
+class ProfilerRootsTest(SessionTestCase):
+    """`profiler-roots` (#1701, #1710): the profiler opened at its roots, a full-size shot, the call graph cropped."""
+
+    def setUp(self):
+        super().setUp()
+        self.game.on(session.PROFILER_COMMAND, success=[session.PROFILER_OPENED])
+
+    def shots_of(self, width, height=12):
+        """The game's screenshots become `width` x `height` pictures in which each pixel says where it is."""
+        def screenshot(pid, path, max_width=1600):
+            rgb = b"".join(bytes((x % 256, y % 256, (x // 256) % 256)) for y in range(height) for x in range(width))
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(fakes.win_helper.encode_png(width, height, rgb))
+            self.game.screenshots.append((pid, path, max_width))
+            return path
+        self.game.screenshot = screenshot
+
+    def test_it_opens_the_window_and_crops_the_call_graph_out_of_a_full_size_shot(self):
+        self.game.client = (0, 0, 3840, 2160)
+        self.started()
+        self.shots_of(3840)
+        reply = self.session.profiler_roots()
+        self.assertIn(session.PROFILER_COMMAND, self.typed())
+        self.assertEqual((reply["opened"], reply["lines"]), (True, [session.PROFILER_OPENED]))
+        self.assertEqual(self.game.screenshots[-1][2], 3840)    # the window's own width, not the 1600 of `shot`
+        shot, crop = Path(reply["screenshot"]), Path(reply["crop"])
+        self.assertEqual((shot.parent, crop.parent), (Path(self.session.status()["run_dir"]),) * 2)
+        self.assertEqual(reply["box"], list(session.PROFILER_ROOTS_BOX))
+        self.assertFalse(reply["enlarged"])                     # no game install in the tests
+        expected = pixels.region(pixels.decode_png(shot.read_bytes()), session.PROFILER_ROOTS_BOX)
+        self.assertEqual(reply["scale"], 1)                     # 3840 is already 2.4 times a 1600-pixel shot
+        self.assertEqual(pixels.decode_png(crop.read_bytes()), expected)
+        self.assertEqual(reply["crop_size"], [expected[0], expected[1]])
+
+    def test_a_narrower_window_has_its_pixels_repeated_up_to_twice_a_1600_pixel_shot(self):
+        self.started()
+        for width, scale in ((3840, 1), (3200, 1), (2560, 2), (1920, 2), (1600, 2), (1280, 3), (800, 4), (100, 4)):
+            with self.subTest(width=width):
+                self.shots_of(width)
+                reply = self.session.profiler_roots()
+                self.assertEqual(reply["scale"], scale)
+                region = pixels.region(pixels.decode_png(Path(reply["screenshot"]).read_bytes()),
+                                       session.PROFILER_ROOTS_BOX)
+                crop = pixels.decode_png(Path(reply["crop"]).read_bytes())
+                self.assertEqual(crop, pixels.scaled_up(region, scale))
+
+    def test_a_box_can_be_given(self):
+        self.started()
+        self.shots_of(400, 40)
+        reply = self.session.profiler_roots([0.5, 0.25, 1, 0.75])
+        self.assertEqual(reply["box"], [0.5, 0.25, 1.0, 0.75])
+        self.assertEqual(reply["crop_size"], [200 * reply["scale"], 20 * reply["scale"]])
+
+    def test_a_bad_box_is_refused_before_anything_is_typed(self):
+        self.started()
+        steps = len(self.game.steps)
+        for box in ([0.5, 0.5, 0.4, 0.9], [0.1, 0.9, 0.5, 0.2], [0, 0, 1.5, 1], [-0.1, 0, 1, 1], [0, 0, 1],
+                    "0 0 1 1", [0, 0, True, 1], [0, 0, "1", 1], [], 5):
+            with self.subTest(box=box):
+                self.assertEqual(self.session_error(self.session.profiler_roots, box).code, "bad_argument")
+        self.assertEqual(len(self.game.steps), steps)
+
+    def test_a_crop_that_cannot_be_made_still_answers_with_the_shot(self):
+        self.started()
+        self.game.panel_shots = False           # a 1x1 shot: the box has nothing in it
+        reply = self.session.profiler_roots()
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertIsNone(reply["crop"])
+        self.assertIn("empty", reply["crop_error"])
+
+    def test_a_shot_that_fails_still_answers_with_the_command(self):
+        self.started()
+        self.game.screenshot = mock.Mock(side_effect=HelperError("no_client_area", "minimized?"))
+        reply = self.session.profiler_roots()
+        self.assertEqual((reply["opened"], reply["screenshot"], reply["crop"]), (True, None, None))
+        self.assertIn("no_client_area", reply["screenshot_error"])
+
+    def test_as_shown_types_nothing_and_works_while_the_keyboard_is_away(self):
+        self.started()
+        self.shots_of(1920)
+        self.session.click(0.6, 0.6)            # a row clicked: the keyboard is away
+        steps = len(self.game.steps)
+        reply = self.session.profiler_roots(as_shown=True)
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertNotIn("lines", reply)
+        self.assertEqual((reply["scale"], self.game.screenshots[-1][2]), (2, 1920))
+        self.assertTrue(Path(reply["crop"]).is_file())
+        self.assertEqual(self.session_error(self.session.profiler_roots).code, "keyboard_away")
+
+    def test_a_window_that_did_not_say_it_opened_is_reported(self):
+        self.started()
+        self.game.on(session.PROFILER_COMMAND, failure=["Unknown command"])
+        reply = self.session.profiler_roots()
+        self.assertFalse(reply["opened"])
+        self.assertEqual(reply["lines"], ["Unknown command"])
+
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
         self.started()
@@ -3108,6 +3496,46 @@ class FixtureKeyTest(SessionTestCase):
         self.assertEqual(session.run_playset("current", [OTHER_MOD_WIN, OVERLAY_WIN.upper()], DEPLOYED_WIN,
                                              OVERLAY_WIN), [OTHER_MOD_WIN, OVERLAY_WIN.upper()])
 
+
+
+class ProfilerWindowStartTest(SessionTestCase):
+    """#1710: `start` puts the game's profiler window, enlarged, into the overlay, or says why it did not."""
+
+    def install_profiler_gui(self, text: str) -> Path:
+        source = self.paths.base_game / overlay.PROFILER_GUI_SOURCE
+        source.parent.mkdir(parents=True, exist_ok=True)
+        source.write_bytes(text.encode("ascii"))
+        return source
+
+    def test_start_puts_the_enlarged_window_into_the_overlay(self):
+        source = self.install_profiler_gui(PROFILER_GUI)
+        reply = self.start()
+        written = self.paths.overlay_dir / overlay.PROFILER_GUI_FILE
+        self.assertEqual(reply["profiler_window"], {"enlarged": True, "source": str(source), "file": str(written)})
+        self.assertEqual(written.read_bytes(), overlay.enlarge_profiler_gui(PROFILER_GUI.encode("ascii")))
+        self.assertEqual(source.read_bytes(), PROFILER_GUI.encode("ascii"))         # the game's own is untouched
+
+    def test_the_window_does_not_remake_the_fresh_save(self):
+        # fixture.key hashes the overlay's path, never its files: the save made without the window is this run's.
+        self.install_profiler_gui(PROFILER_GUI)
+        reply = self.start()
+        self.assertTrue(reply["profiler_window"]["enlarged"])
+        self.assertFalse(reply["fixture_made"])
+        self.assertEqual(reply["save"], "te_qa_fixture_" + self.key)
+
+    def test_a_start_without_the_games_file_goes_on_without_it(self):
+        reply = self.start()                    # base_game holds no jomini/ folder here, as in CI
+        self.assertFalse(reply["profiler_window"]["enlarged"])
+        self.assertIn("could not be read", reply["profiler_window"]["why"])
+        self.assertFalse((self.paths.overlay_dir / "gui").exists())
+        self.assertEqual(reply["country"], "FRA")
+
+    def test_a_changed_game_file_is_left_out_and_said_so(self):
+        self.install_profiler_gui(PROFILER_GUI.replace("{ 0 150 }", "{ 0 180 }"))
+        reply = self.start()
+        self.assertFalse(reply["profiler_window"]["enlarged"])
+        self.assertIn("{ 0 150 }", reply["profiler_window"]["why"])
+        self.assertFalse((self.paths.overlay_dir / "gui").exists())
 
 class RunPlaysetPinTest(unittest.TestCase):
     """`session.run_playset` copies `launch`'s rule (`__main__._plan_playset`, which the session cannot import):

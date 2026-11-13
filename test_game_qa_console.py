@@ -1547,6 +1547,97 @@ class OpenStateTest(ConsoleTestCase):
 
 
 
+class KeyboardAwayTest(ConsoleTestCase):
+    """#1710, #1725: a click takes the keyboard. While it may have, no key goes out, and the way back is one probe
+    after a click on the console's input line, never the console key."""
+
+    def setUp(self):
+        super().setUp()
+        self.game.console_open = True
+        self.game.history_skips_repeats = True  # as the real game's history does
+        self.console.run("select_event_option list", reply=False)      # a round trip: known open, probe in history
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)
+
+    def click(self, at=(1000, 500)):
+        self.game.click(self.game.proc.pid, *at)
+        self.console.clicked()
+
+    def refused(self, fn, *args):
+        with self.assertRaises(console.ConsoleError) as caught:
+            fn(*args)
+        return caught.exception
+
+    def test_after_a_click_every_key_is_refused_before_it_goes_out(self):
+        self.click()
+        self.assertTrue(self.console.keyboard_away)
+        steps = len(self.game.steps)
+        for name, call in (("run", lambda: self.console.run("tag FRA")), ("send", lambda: self.console.send("tag FRA")),
+                           ("ensure_open", self.console.ensure_open), ("close", self.console.close),
+                           ("hotkey", lambda: self.console.hotkey(0x39)), ("clear_line", self.console.clear_line),
+                           ("keys", lambda: self.console._keys([{"scan": 0x39}]))):
+            with self.subTest(name):
+                error = self.refused(call)
+                self.assertEqual((error.code, error.entered), ("keyboard_away", False))
+                self.assertIn("click --console", error.detail)
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_a_click_while_the_console_is_closed_or_not_known_changes_nothing(self):
+        self.console.close()                    # known closed
+        self.click()
+        self.assertFalse(self.console.keyboard_away)
+        self.assertIs(self.console._open, False)
+        self.console._open = None               # not known
+        self.click()
+        self.assertFalse(self.console.keyboard_away)
+        self.assertIsNone(self.console._open)
+        self.assertFalse(self.console.input_line_there)
+
+    def test_the_probe_after_the_input_line_click_lifts_the_latch(self):
+        self.click()
+        self.assertTrue(self.console.input_line_there)
+        self.click(self.game.input_line)
+        steps = len(self.game.steps)
+        self.assertTrue(self.console.take_keyboard_back())
+        self.assertFalse(self.console.keyboard_away)
+        self.assertIs(self.console._open, True)
+        typed = [step["text"] for step in self.game.steps[steps:] if "text" in step]
+        self.assertEqual(typed, ["select_event_option list", "help ndefines.ngui"])    # a repeat: the flush proves it
+        self.assertNotIn(CONSOLE_KEY, self.game.steps[steps:])
+        self.game.on("tag FRA", success=["Now Playing - France"])
+        self.assertEqual(self.console.run("tag FRA").lines, ["Now Playing - France"])
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_a_probe_that_does_not_arrive_keeps_the_latch_and_never_presses_the_console_key(self):
+        self.click()
+        self.click((5, 5))                      # it missed the input line: the keyboard is still elsewhere
+        steps = len(self.game.steps)
+        self.assertFalse(self.console.take_keyboard_back())
+        self.assertTrue(self.console.keyboard_away)
+        self.assertNotIn(CONSOLE_KEY, self.game.steps[steps:])
+        self.assertTrue(self.game.console_open)
+        # What went astray is the probe and its flush, each with its Enter, and nothing more.
+        self.assertEqual(self.game.elsewhere, [{"text": "select_event_option list"}, ENTER,
+                                               {"text": "help ndefines.ngui"}, ENTER])
+        self.assertEqual(self.refused(self.console.run, "tag FRA").code, "keyboard_away")
+
+    def test_an_error_while_probing_keeps_the_latch(self):
+        self.click()
+        self.click(self.game.input_line)
+        self.game.foreground = False
+        self.a_person_moves_the_mouse()
+        self.assertEqual(self.refused(self.console.take_keyboard_back).code, "not_foreground")
+        self.assertTrue(self.console.keyboard_away)
+
+    def test_a_probe_after_an_input_line_click_with_no_click_before_it_proves_the_keyboard_too(self):
+        self.assertFalse(self.console.keyboard_away)
+        self.assertTrue(self.console.input_line_there)          # known open after the round trip
+        self.click(self.game.input_line)                        # the session does not call clicked() for this one
+        self.assertTrue(self.console.take_keyboard_back())
+        self.assertFalse(self.console.keyboard_away)
+
+
 class NeverEnteredTest(ConsoleTestCase):
     """`never_entered`: a send can be held never entered only when the history never held its text (#1702)."""
 

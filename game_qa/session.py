@@ -37,6 +37,7 @@ must agree.
 """
 from __future__ import annotations
 
+import math
 import os
 import re
 import subprocess
@@ -48,7 +49,7 @@ from pathlib import Path
 from typing import Any
 
 from game_qa import fixture, overlay, pixels, rules, snapshot
-from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
+from game_qa.console import CLEAR_BACKSPACES, KEYBOARD_AWAY, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
 from game_qa.gate import UNKNOWN_START, ProcId
@@ -130,6 +131,30 @@ PANEL_CHANGED = 0.01                    # this share of its pixels differing is 
 # front and the process the recorded one, the point inside the client area, the cursor on it, the game's window
 # under it). Any other error may follow the press.
 CLICK_REFUSED_BEFORE_PRESS = ("not_foreground", "bad_point", "cursor_misplaced", "covered", "not_ours")
+# Where the console's input line is, as fractions of the client area: measured, not derived. Live on 2026-11-12, in
+# the owner's 3840x2160 window at his UI scale with the console open on the left, a click here gave the keyboard
+# back after a click into the script profiler had taken it (#1710). Another window size or UI scale moves it:
+# `click --console --input-line X Y`, aimed from a shot.
+CONSOLE_INPUT_LINE = (0.1125, 0.544)
+MAX_NOTCHES = 40                        # what one `wheel` turns at most, either way (win_helper.MAX_NOTCHES)
+# profiler-roots (#1701, #1710). `Script.Profiling.Gui` opens the script profiler at its roots ("No parent" as
+# Current, the top-level entries as its callees), even when an entry was Current before (live, 2026-11-12), and
+# the call graph is cropped out of a shot. The box is fractions of the client area, measured on the overlay's
+# enlarged window in the owner's 3840x2160 window at his UI scale: shot_09.png of run 20261112T195545Z, a
+# 1600x900 shot of the roots, where the frames run from y 292 to 845, Current from x 473 (385 once an entry is
+# Current) and Callees to x 1377. The console, open on the left, covers most of the Callers column, so the box
+# starts at Current. Another window size or UI scale moves it: `profiler_roots(box=...)`.
+PROFILER_COMMAND = "Script.Profiling.Gui"
+PROFILER_OPENED = "Opened Script.Profiling.Gui"     # its reply, live
+PROFILER_ROOTS_BOX = (0.235, 0.303, 0.866, 0.945)
+PROFILER_SETTLE_S = 1.0                 # from the command's reply to the shot (a guess: the window was drawn by then)
+# Its shot is taken at the window's own width, not at the 1600 pixels of `shot`: that downscale drops whole pixel
+# columns, and with them the thin stroke of a 1 (2801.163 read 280'.163 in the crops of 2026-11-12). The crop then
+# has at least PROFILER_CROP_RESOLUTION times the 1600-pixel shot's resolution, which is what was legible live,
+# each pixel repeated as often as that takes: not at all at 3840 pixels wide, twice at 1920.
+SHOT_WIDTH = 1600                       # what `shot` takes (the helper's default)
+PROFILER_CROP_RESOLUTION = 2.0
+PROFILER_MAX_SCALE = 4
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -180,8 +205,9 @@ class SessionError(Exception):
     held_unknown, overlay_refused, fixture_failed, snapshot_refused, launch_refused (with `game_may_be_up` when a
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
-    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, id_unaddressable, no_country,
-    not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
+    use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, id_unaddressable,
+    no_country, not_on_country_select, click_refused, click_unknown, console_not_open,
+    keyboard_away, keyboard_not_returned, wheel_refused, wheel_unknown, drag_refused, drag_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
@@ -233,9 +259,9 @@ class Paths:
 
 
 class _ProvedHelper:
-    """The helper as everything that sends input sees it (X1): `keys`, `focus` and `click` go out only once
-    `Session._prove_game` has passed, just before each one, since a pid may be another program's once the game
-    has died (the helper compares the start time again before each step it sends, win_helper._prove_ours). Of
+    """The helper as everything that sends input sees it (X1): `keys`, `focus`, `click`, `wheel` and `drag` go out
+    only once `Session._prove_game` has passed, just before each one, since a pid may be another program's once the
+    game has died (the helper compares the start time again before each step it sends, win_helper._prove_ours). Of
     the helper's other calls only those in `_UNPROVED` pass through, to the session's current helper (a fresh one
     from `_new_helper` too): they send nothing. Any other name is an AttributeError, so a call added to the
     helper later reaches the game through here only once someone has decided whether it needs the proof."""
@@ -263,6 +289,14 @@ class _ProvedHelper:
     def click(self, pid: int, x: int, y: int) -> None:
         self._session._prove_game()
         return self._session._helper.click(pid, x, y)
+
+    def wheel(self, pid: int, x: int, y: int, notches: int) -> None:
+        self._session._prove_game()
+        return self._session._helper.wheel(pid, x, y, notches)
+
+    def drag(self, pid: int, x1: int, y1: int, x2: int, y2: int) -> None:
+        self._session._prove_game()
+        return self._session._helper.drag(pid, x1, y1, x2, y2)
 
 
 class Session:
@@ -319,6 +353,7 @@ class Session:
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
+        self._profiler_window: dict = {"enlarged": False, "why": "the overlay has not been built"}
 
     # ---- start
 
@@ -392,11 +427,16 @@ class Session:
     def _start(self, permission: str, as_tag: str | None, setups: dict[str, str], save: str | None, playset: str,
                busy: bool, switch_rules: dict[str, str] | None = None) -> dict:
         self._check_abort()
+        # The profiler window, enlarged (#1710): read from the game's install, never stops a start (`why` says).
+        gui, self._profiler_window = overlay.profiler_gui(self._paths.base_game)
         try:
-            self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version)
+            self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version, profiler_gui=gui)
         except overlay.OverlayError as e:
             raise SessionError("overlay_refused", str(e)) from e
-        self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events))
+        if self._overlay.profiler_gui is not None:
+            self._profiler_window = dict(self._profiler_window, file=str(self._overlay.profiler_gui))
+        self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events),
+                     profiler_window=self._profiler_window)
         save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {})
         self._save = save
         self._drop_fixture_lines()
@@ -477,6 +517,7 @@ class Session:
             result["fixtures_pruned"] = pruned
         if self._rules is not None:
             result["rules"] = self._rules
+        result["profiler_window"] = self._profiler_window
         self._record("start", outcome="ok", **result)
         return result
 
@@ -1150,46 +1191,222 @@ class Session:
             out["path"] = str(path)
         return path
 
-    def click(self, x: float, y: float) -> dict:
+    def click(self, x: float | None = None, y: float | None = None, console: bool = False,
+              input_line: Sequence[float] | None = None) -> dict:
         """One left click at (x, y), fractions of the game window's client area from its top left, then a
-        screenshot of what it did. It is for the engine's own tool windows that no console command reads, such as
-        the script profiler's call graph (#1701, the owner's go-ahead of 2026-11-12); it can press anything a
-        player can, so what it is aimed at is the caller's to know, from a `shot` first.
+        screenshot of what it did; with `console`, then a click on the console's input line, which gives the
+        keyboard back. It is for the engine's own tool windows that no console command reads, such as the script
+        profiler's call graph (#1701), and for the console's input line (the owner's go-ahead of 2026-11-12); it
+        can press anything a player can, so what it is aimed at is the caller's to know, from a `shot` first.
 
-        The click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
-        (`_ProvedHelper.click`); the console is left as it is. A click the helper refused before the button went
-        down (CLICK_REFUSED_BEFORE_PRESS) is `click_refused` and pressed nothing; any other helper error
-        (`backend_error`, `helper_gone`, a timeout) is `click_unknown`, since it may have come after the press: take
-        a `shot` before clicking again. A screenshot that fails after the click is not a refusal: the reply has
-        `screenshot: null` and `screenshot_error`, as enter-game's does.
+        Each click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
+        (`_ProvedHelper.click`). A click the helper refused before the button went down (CLICK_REFUSED_BEFORE_PRESS)
+        is `click_refused` and pressed nothing; any other helper error (`backend_error`, `helper_gone`, a timeout)
+        is `click_unknown`, since it may have come after the press: take a `shot` before clicking again. A
+        screenshot that fails after a click is not a refusal: the reply has `screenshot: null` and
+        `screenshot_error`, as enter-game's does.
+
+        A click takes the keyboard (live, 2026-11-12: after a click into the profiler, the next typed command never
+        reached the console, a read's `no_stop` with `arrived: false`, until the console's input line was clicked).
+        So a click made while the console is known open latches the keyboard away (`Console.clicked`; the reply's
+        `keyboard_away`): every verb that types is refused `keyboard_away`, before anything is typed or written,
+        until `console` gives it back. That clicks `input_line` (CONSOLE_INPUT_LINE by default, measured live) and
+        types the console's probe once: arrived, the latch is lifted; not arrived, `keyboard_not_returned`, the
+        latch stays, and the console key is not pressed. Nothing is clicked unless the console is open as far as is
+        known, or a click made while it was has latched the keyboard away (`_refuse_unless_console_open`;
+        `console_not_open` otherwise): with it shut, the input line's point is the map, and a click into a tool
+        window would take the keyboard with no way to give it back.
 
         The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
-        must never be aimed at the game's own menus (save, load, settings, exit).
+        must never be aimed at the game's own menus (save, load, settings, exit)."""
+        self._require_game(keyboard=False)
+        if (x is None) != (y is None) or (x is None and not console):
+            raise SessionError("bad_argument", "click takes X and Y, --console, or both")
+        target = None if x is None else (_fraction("x", x), _fraction("y", y))
+        if input_line is not None and not console:
+            raise SessionError("bad_argument", "an input line's point goes with --console")
+        line = CONSOLE_INPUT_LINE if input_line is None else _pair("the input line", input_line)
+        self._refuse_unless_console_open("click", line if console else None)
+        with self._step("click", x=x, y=y, console=console) as out:
+            result: dict[str, Any] = {}
+            if target is not None:
+                result.update(self._one_click(target))
+                out.update(result)
+            if console:
+                try:
+                    result["console"] = out["console"] = self._one_click(line, tool=False)
+                except SessionError as e:
+                    e.info.update(first=result or None, keyboard_away=self._console.keyboard_away)
+                    raise
+                if not self._console.take_keyboard_back():
+                    out["keyboard_away"] = True
+                    raise SessionError(
+                        "keyboard_not_returned", "the console's probe, typed after the click on its input line at "
+                        "%s, did not reach the console: the click missed the line (another window size or UI scale "
+                        "moves it: aim --input-line X Y from the shot), or something else holds the keyboard. The "
+                        "console key was not pressed; every verb that types is refused until a `click --console` "
+                        "gets the probe through" % (list(line),), **result, keyboard_away=True)
+            result["keyboard_away"] = out["keyboard_away"] = self._console.keyboard_away
+        return result
 
-        A click into a tool window takes the keyboard (live, 2026-11-12): the next typed command does not reach the
-        console (a read's `no_stop` with `arrived: false`) until the console's input line is clicked, at
-        (0.1125, 0.544) with the console open on the left. #1710 asks for that to be done here, with drag and
-        wheel verbs for the profiler's window."""
-        self._require_game()
-        fraction = (_fraction("x", x), _fraction("y", y))
-        with self._step("click", x=x, y=y) as out:
+    def _refuse_unless_console_open(self, verb: str, line: tuple[float, float] | None = None) -> None:
+        """Before `click`, `wheel` or `drag` sends anything: the console is open as far as is known, or a click made
+        while it was has latched the keyboard away (`Console.input_line_there`). Otherwise `console_not_open`,
+        nothing sent. A click into a tool window takes the keyboard, and `Console.clicked` latches it away only
+        while the console is known open, since only then can `click --console` click the input line to give it
+        back. With the console shut or not known, the next verb that types would type into that window and press
+        the console key (`press esc`, a click on a profiler row, then a `read`).
+        `line`: the input line's point, when the verb would click it. enter-game's own clicks do not come here."""
+        if self._console.input_line_there:
+            return
+        if line is not None:
+            why = ("its input line may not be at %s: with the console shut that point is the map" % (list(line),))
+        else:
+            why = ("a %s into a tool window would take the keyboard with no way to give it back: the verbs that "
+                   "type would type into that window, and `click --console` clicks the input line only while the "
+                   "console is open" % verb)
+        raise SessionError("console_not_open", "the console is not known to be open, so %s. Nothing was sent. Run "
+                           "a verb that types first, such as `events`, which opens the console, then the %s again"
+                           % (why, verb), keyboard_away=False, next="python3 -m game_qa events")
+
+    def _one_click(self, fraction: tuple[float, float], tool: bool = True) -> dict:
+        """One click at `fraction` of the client area, then its shot: {"pixel", "screenshot"} (and
+        `screenshot_error`). A click that went out latches the keyboard away (`Console.clicked`), unless it was on
+        the console's input line (`tool` false), whose probe decides; a click that may have gone out latches it
+        either way."""
+        self._console.front()
+        px, py = self._point(fraction)
+        try:
+            self._sends.click(self._proc.pid, px, py)
+        except HelperError as e:
+            if e.code in CLICK_REFUSED_BEFORE_PRESS:
+                raise SessionError("click_refused", "%s: %s" % (e.code, e.detail),
+                                   keyboard_away=self._console.keyboard_away) from e
+            self._console.clicked()
+            raise SessionError("click_unknown", "%s: %s; the button may have been pressed: take a shot before "
+                                                "clicking again" % (e.code, e.detail), pixel=[px, py],
+                               keyboard_away=self._console.keyboard_away) from e
+        if tool:
+            self._console.clicked()
+        return self._shot_after({"pixel": [px, py]})
+
+    def _shot_after(self, done: dict) -> dict:
+        """`done` with the screenshot that follows a click, a wheel or a drag (`screenshot`, or `screenshot: null`
+        and `screenshot_error`: the input stands either way, so a failed shot is no refusal)."""
+        self._sleep(CLICK_SETTLE_S)
+        try:
+            done["screenshot"] = str(self._shot())
+        except HelperError as e:
+            done["screenshot"], done["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
+        return done
+
+    def wheel(self, x: float, y: float, notches: int) -> dict:
+        """Turn the mouse wheel `notches` notches at (x, y), fractions of the client area: positive away from the
+        user, which scrolls a list up; negative scrolls it down. Then a screenshot. For a list in a tool window that
+        is longer than the window (the script profiler's roots past the 27th, #1710), with `click`'s scope and
+        rules: the presence rule, the pid proof, never the game's own menus (a wheel over the map zooms it). It
+        latches the keyboard away as a click does, since whether a wheel moves the keyboard is not known.
+        `wheel_refused` turned nothing; `wheel_unknown` may have turned some notches (`notches_done` when the
+        helper said). Like a click, it is refused `console_not_open` unless the console is open as far as is known."""
+        self._require_game(keyboard=False)
+        point = (_fraction("x", x), _fraction("y", y))
+        if isinstance(notches, bool) or not isinstance(notches, int) or not 0 < abs(notches) <= MAX_NOTCHES:
+            raise SessionError("bad_argument", "notches is a whole number from -%d to %d other than 0, not %r"
+                               % (MAX_NOTCHES, MAX_NOTCHES, notches))
+        self._refuse_unless_console_open("wheel")
+        with self._step("wheel", x=x, y=y, notches=notches) as out:
             self._console.front()
-            px, py = self._point(fraction)
+            px, py = self._point(point)
             try:
-                self._sends.click(self._proc.pid, px, py)
+                self._sends.wheel(self._proc.pid, px, py, notches)
             except HelperError as e:
-                if e.code in CLICK_REFUSED_BEFORE_PRESS:
-                    raise SessionError("click_refused", "%s: %s" % (e.code, e.detail)) from e
-                raise SessionError("click_unknown", "%s: %s; the button may have been pressed: take a shot before "
-                                                    "clicking again" % (e.code, e.detail), pixel=[px, py]) from e
-            out["pixel"] = [px, py]
-            self._sleep(CLICK_SETTLE_S)
+                done = e.reply.get("notches_done")
+                if e.code in CLICK_REFUSED_BEFORE_PRESS and done == 0:
+                    raise SessionError("wheel_refused", "%s: %s" % (e.code, e.detail),
+                                       keyboard_away=self._console.keyboard_away) from e
+                self._console.clicked()
+                raise SessionError("wheel_unknown", "%s: %s; some notches may have turned: take a shot before "
+                                   "turning again" % (e.code, e.detail), pixel=[px, py], notches_done=done,
+                                   keyboard_away=self._console.keyboard_away) from e
+            self._console.clicked()
+            result = self._shot_after({"pixel": [px, py], "notches": notches})
+            result["keyboard_away"] = self._console.keyboard_away
+            out.update(result)
+        return result
+
+    def drag(self, x1: float, y1: float, x2: float, y2: float) -> dict:
+        """Press the left button at (x1, y1), move to (x2, y2) and release there (fractions of the client area),
+        then a screenshot: to resize or scroll a tool window whose `.gui` cannot be overridden (#1710), with
+        `click`'s scope and rules (a drag over the map pans it or draws a selection). It latches the keyboard
+        away as a click does. `drag_refused` pressed nothing; `drag_unknown` may have pressed, and then the
+        helper released the button where the cursor was (`pressed` when the helper said). Like a click, it is
+        refused `console_not_open` unless the console is open as far as is known."""
+        self._require_game(keyboard=False)
+        start, end = (_fraction("x1", x1), _fraction("y1", y1)), (_fraction("x2", x2), _fraction("y2", y2))
+        self._refuse_unless_console_open("drag")
+        with self._step("drag", x1=x1, y1=y1, x2=x2, y2=y2) as out:
+            self._console.front()
+            (ax, ay), (bx, by) = self._point(start), self._point(end)
             try:
-                out["screenshot"] = str(self._shot())
+                self._sends.drag(self._proc.pid, ax, ay, bx, by)
             except HelperError as e:
-                out["screenshot"], out["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
-                return {"pixel": [px, py], "screenshot": None, "screenshot_error": out["screenshot_error"]}
-        return {"pixel": [px, py], "screenshot": out["screenshot"]}
+                pressed = e.reply.get("pressed")
+                if e.code in CLICK_REFUSED_BEFORE_PRESS and pressed is False:
+                    raise SessionError("drag_refused", "%s: %s" % (e.code, e.detail),
+                                       keyboard_away=self._console.keyboard_away) from e
+                self._console.clicked()
+                raise SessionError("drag_unknown", "%s: %s; the button may have gone down (the helper releases "
+                                   "it where the cursor is, and tries twice): take a shot before dragging again"
+                                   % (e.code, e.detail), pixels=[[ax, ay], [bx, by]], pressed=pressed,
+                                   released=e.reply.get("released"),
+                                   keyboard_away=self._console.keyboard_away) from e
+            self._console.clicked()
+            result = self._shot_after({"pixels": [[ax, ay], [bx, by]]})
+            result["keyboard_away"] = self._console.keyboard_away
+            out.update(result)
+        return result
+
+    def profiler_roots(self, box: Sequence[float] | None = None, as_shown: bool = False) -> dict:
+        """Open the script profiler at its roots (`Script.Profiling.Gui`, through the console), take a shot at the
+        window's own resolution, and crop the call graph out of it: `screenshot` and `crop` in the run folder.
+        With `as_shown` nothing is typed: the window is shot and cropped as it is, after a click on a row or a
+        `wheel`, and the keyboard need not be given back first.
+
+        The crop is `box` (left, top, right, bottom: fractions of the client area), PROFILER_ROOTS_BOX by default,
+        measured on the overlay's enlarged window (`enlarged` says whether this run's overlay has it; without it the
+        window is small and elsewhere, and the default box shows the map). It is scaled up, a pixel repeated
+        `scale` times, until it has PROFILER_CROP_RESOLUTION times the resolution of a 1600-pixel shot. A shot that
+        fails is not a refusal (`screenshot: null` and `screenshot_error`: the window is open all the same), nor is
+        a crop that cannot be made (`crop: null` and `crop_error`). The command is typed like any other, so after a
+        click into a tool window it is refused until the keyboard is given back (`click --console`)."""
+        self._require_game(types=not as_shown)
+        box = PROFILER_ROOTS_BOX if box is None else _box(box)
+        with self._step("profiler_roots", box=list(box), as_shown=as_shown) as out:
+            result: dict[str, Any] = {"box": list(box), "enlarged": self._profiler_window.get("enlarged") is True}
+            if not as_shown:
+                reply = self._console.run(PROFILER_COMMAND)
+                result.update(lines=reply.lines, opened=PROFILER_OPENED in [line.strip() for line in reply.lines])
+            self._sleep(PROFILER_SETTLE_S)
+            try:
+                width = self._helper.window(self._proc.pid).client[2]
+                shot = self._shot(max_width=max(1, width))
+            except HelperError as e:
+                result.update(screenshot=None, screenshot_error="%s: %s" % (e.code, e.detail), crop=None)
+                out.update(result)
+                return result
+            result["screenshot"] = str(shot)
+            crop = shot.with_name("profiler_roots_%02d.png" % self._shots)
+            try:
+                image = pixels.decode_png(shot.read_bytes())
+                scale = min(PROFILER_MAX_SCALE,
+                            max(1, math.ceil(PROFILER_CROP_RESOLUTION * SHOT_WIDTH / image[0] - 1e-9)))
+                part = pixels.scaled_up(pixels.region(image, box), scale)
+                crop.write_bytes(pixels.encode_png(part))
+                result.update(crop=str(crop), scale=scale, crop_size=[part[0], part[1]])
+            except (OSError, pixels.PixelsError) as e:
+                result.update(crop=None, crop_error=str(e))
+            out.update(result)
+        return result
 
     def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:
         """The owner's first check: each option of `event` in turn, fired, read, picked and read again.
@@ -2159,18 +2376,22 @@ class Session:
         raise SessionError("stalled", "%d of %d days passed in %d rounds" % (passed, days, MAX_ROUNDS),
                            start=start, reached=current)
 
-    def _shot(self) -> Path:
+    def _shot(self, max_width: int | None = None) -> Path:
         self._shots += 1
-        return self._helper.screenshot(self._proc.pid, self._report.dir / ("shot_%02d.png" % self._shots))
+        path = self._report.dir / ("shot_%02d.png" % self._shots)
+        if max_width is None:
+            return self._helper.screenshot(self._proc.pid, path)
+        return self._helper.screenshot(self._proc.pid, path, max_width=max_width)
 
     # ---- plumbing
 
-    def _require_game(self, types: bool = True) -> None:
+    def _require_game(self, types: bool = True, keyboard: bool = True) -> None:
         """Before any verb: the session is running and watched, and the game is not left stopped at the
         breakpoint. When it may be (`_maybe_stopped`) the stop is drained first; otherwise a verb that `types`
         (or clicks) still takes one look, without waiting, for a stop the game made since the last verb (a read's
         own command run once the game was resumed) and releases it: a frozen game takes no key, and the keys
-        would run later."""
+        would run later. A verb that types (`keyboard`: all but `click`) is then refused `keyboard_away` while a
+        click may have taken the keyboard, before it types or writes anything (`Console` refuses the keys too)."""
         if self._stopped is not None or self._stopping:
             raise SessionError("stopped", "this session's game has been stopped")
         if not self._ready:
@@ -2180,6 +2401,9 @@ class Session:
             self._drain()
         elif types:
             self._release_pending()
+        if types and keyboard and self._console is not None and self._console.keyboard_away:
+            raise SessionError("keyboard_away", KEYBOARD_AWAY, keyboard_away=True,
+                               next="python3 -m game_qa click --console")
 
     def _release_pending(self) -> None:
         dbg = self._debugger
@@ -2359,6 +2583,29 @@ def _fraction(name: str, value) -> float:
         raise SessionError("bad_argument", "%s is a fraction of the window, at least 0 and below 1, not %r"
                            % (name, value))
     return float(value)
+
+
+def _box(box) -> tuple[float, float, float, float]:
+    """A crop's box: left, top, right, bottom, fractions of the client area, left below right and top below bottom."""
+    if isinstance(box, (str, bytes)) or not isinstance(box, Sequence) or len(box) != 4:
+        raise SessionError("bad_argument", "a box is four fractions of the window (left top right bottom), not %r"
+                           % (box,))
+    for name, value in zip(("left", "top", "right", "bottom"), box):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value <= 1:
+            raise SessionError("bad_argument", "the box's %s is a fraction of the window from 0 to 1, not %r"
+                               % (name, value))
+    left, top, right, bottom = (float(value) for value in box)
+    if not (left < right and top < bottom):
+        raise SessionError("bad_argument", "a box's left is below its right and its top below its bottom: %r"
+                           % (box,))
+    return left, top, right, bottom
+
+
+def _pair(name: str, value) -> tuple[float, float]:
+    """A point given as two fractions of the client area (x, y)."""
+    if isinstance(value, (str, bytes)) or not isinstance(value, Sequence) or len(value) != 2:
+        raise SessionError("bad_argument", "%s is two fractions of the window (x y), not %r" % (name, value))
+    return _fraction(name + "'s x", value[0]), _fraction(name + "'s y", value[1])
 
 
 def _check_tag(tag: str) -> None:
