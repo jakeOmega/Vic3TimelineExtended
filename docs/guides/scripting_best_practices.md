@@ -2652,6 +2652,8 @@ The loader reads a loc file's language from its `_l_<language>.yml` suffix, and 
 | `#white text#!` | White text |
 | `#o text#!` | Orange text |
 
+**A format name matches whatever its case; look it up in the install before using a new one.** The formats are defined in `game/gui/textformatting.gui` and `jomini/gui/jomini/basetextformatting.gui`, which the repo does not hold. They define `V`, `R`, `N` and `O` (gold), and no lowercase single letter but `b`, while vanilla's loc writes `#v` 3,880 times, `#r` 183 and `#o` 3 (1.15.1): the engine ignores the case, so `#O` and `#o` are the same gold. (#1698 changed the mod's twelve `#O` to `#o` on the belief that `#O` was undefined; both render alike.) `loc_render_audit` (`unknown_format`) flags a name no value of the `vanilla_parsed/` loc snapshot opens in any case (`#bolt`); a name those files define that vanilla's loc never writes (`#purple`, `#cyan`) takes a `# REVIEWED` comment naming the file.
+
 **A literal `#` is written `##`.** Vanilla's `BUILDING_RANK` writes `##[Building.GetProfitabilityRankInType]` for "#3", and the mod's `te_pb_slot_source_rank_3_tt` writes `#v ##3#!`. A `#` before a digit, a space or the end of the value is none of the three forms vanilla writes (`#tag`, `#!`, `##`): it has four in 108,112 English values, all slips. What the engine draws for one has not been seen in game. `loc_render_audit` (`bare_hash`) flags it; three were fixed with the check (#266), the cultural board's `#` column head among them.
 
 ### Layout
