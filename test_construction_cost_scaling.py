@@ -13,7 +13,7 @@ at most construction_cost_max_yearly_move of itself a year: a step in the share 
 building's use of the construction good on one day. Under te_small_economy_construction_rule (off by default) the
 factor is multiplied by one that runs from construction_cost_small_economy_min_factor at no GDP to 1 at
 construction_cost_small_economy_full_gdp, which the cap does not touch. TheCapAndTheSmallEconomy runs the script's
-own text (the values, te_cc_yearly_update and te_cc_apply_market) with the evaluator of
+own text (the values, te_cc_yearly_update and te_cc_apply_scaling) with the evaluator of
 test_construction_market_budget_step.
 """
 
@@ -145,25 +145,21 @@ class TheWiring(unittest.TestCase):
         self.assertLess(body.index("name = te_cc_gdp_part"), body.index(move))
         self.assertIn("set_variable = { name = te_cc_small_factor value = te_cc_small_economy_factor }", body)
 
-    def test_the_pulse_and_the_game_start_share_the_two_apply_effects(self):
-        # One refresh site a modifier: the on_action picks a half by the rule, and the game-start pass calls the
-        # same two.
+    def test_the_pulse_and_the_game_start_share_the_apply_effect(self):
+        # One refresh site: the pulse, the rule switch (test_construction_rule_switch.py) and the game-start pass
+        # all call te_cc_apply_scaling.
         body = _squash(_body(_read(ON_ACTIONS), "construction_cost_scaling_on_action"))
-        self.assertTrue(body.endswith("if = { limit = { te_free_market_construction_off = yes } "
-                                      "te_cc_apply_direct = yes } else = { te_cc_apply_market = yes } }"), body[-160:])
+        self.assertTrue(body.endswith("te_cc_apply_scaling = yes }"), body[-80:])
         self.assertNotIn("add_modifier", body)
         effects = _top_blocks(_read(EFFECTS))
-        for name, modifier in (("te_cc_apply_direct", "construction_cost_scaling_direct"),
-                               ("te_cc_apply_market", "construction_cost_scaling")):
-            block = _squash(effects[name])
+        block = _squash(effects["te_cc_apply_scaling"])
+        for modifier in ("construction_cost_scaling_direct", "construction_cost_scaling"):
             self.assertIn("remove_modifier = " + modifier + " ", block)
             self.assertIn("add_modifier = { name = " + modifier + " ", block)
-            # a negative multiplier (the small-economy rule) must reach the modifier
-            self.assertNotIn("> 0", block)
+        # a negative multiplier (the small-economy rule) must reach the modifier
+        self.assertNotIn("> 0", block)
         start = _squash(effects["te_cc_game_start_country"])
-        self.assertIn("te_cc_yearly_update = yes", start)
-        self.assertIn("te_cc_apply_direct = yes", start)
-        self.assertIn("te_cc_apply_market = yes", start)
+        self.assertIn("te_cc_yearly_update = yes te_cc_apply_scaling = yes", start)
 
     def test_the_tooltip_reads_stored_figures_only(self):
         # A GUI read that iterated every state would run every frame: the tooltip's values read variables.
@@ -206,7 +202,8 @@ def _parse(text):
 class Country:
     """A country's variables, modifiers and engine figures, with the script's values and effects run over them."""
 
-    def __init__(self, rule=False, gdp=50e6, gdppc=1.0, slack=0.5, walked=1e6, others=0.0, **variables):
+    def __init__(self, rule=False, gdp=50e6, gdppc=1.0, slack=0.5, walked=1e6, others=0.0, direct=False,
+                 **variables):
         text = _read(VALUES)
         self.constants = {name: float(re.search(r"^%s\s*=\s*([\d.]+)" % name, text, re.M).group(1))
                           for name in CONSTANTS}
@@ -215,8 +212,9 @@ class Country:
             _body(_read(MARKET_TARGETS), "te_construction_market_goods_per_point"))
         blocks = _top_blocks(_read(EFFECTS))  # not the self-checks: their log lines are not script
         self.effects = {name: _parse(blocks[name])
-                        for name in ("te_cc_yearly_update", "te_cc_apply_market", "te_cc_apply_direct")}
+                        for name in ("te_cc_yearly_update", "te_cc_apply_scaling")}
         self.rule, self.gdp, self.gdppc, self.slack, self.walked, self.others = rule, gdp, gdppc, slack, walked, others
+        self.direct = direct  # free_market_construction_rule disabled
         self.variables = dict(variables)
         self.modifiers = {}  # the scaling's two modifiers: name -> multiplier
         self.seen = None     # what a modifier: read returns while an effect runs
@@ -234,7 +232,7 @@ class Country:
             "modifier:country_construction_goods_cost_mult": self.others + own,
         }
         env.variables = self.variables
-        env.flags = {"te_small_economy_construction_on": self.rule, "te_free_market_construction_off": False}
+        env.flags = {"te_small_economy_construction_on": self.rule, "te_free_market_construction_off": self.direct}
         env.triggers = {}
         return env
 
@@ -276,7 +274,7 @@ class Country:
 
     def pulse(self):
         self.run("te_cc_yearly_update")
-        self.run("te_cc_apply_market")
+        self.run("te_cc_apply_scaling")
         return self.variables["te_cc_scale"]
 
 
@@ -377,6 +375,15 @@ class TheCapAndTheSmallEconomy(unittest.TestCase):
         total = country.others + country.modifiers["construction_cost_scaling"]
         self.assertAlmostEqual(total, 1.2 * 0.19 - 1, places=4)
         self.assertAlmostEqual(country.value("te_cc_scaling_factor"), 0.19, places=4)
+
+    def test_a_small_economy_in_a_direct_game(self):
+        # free_market_construction_rule disabled: the same discount, on the direct lever.
+        country = Country(rule=True, gdp=1e6, gdppc=0.4, slack=0.6, direct=True, others=0.2)
+        country.pulse()
+        country.pulse()
+        self.assertNotIn("construction_cost_scaling", country.modifiers)
+        total = country.others + country.modifiers["construction_cost_scaling_direct"]
+        self.assertAlmostEqual(total, 1.2 * 0.19 - 1, places=4)
 
     def test_the_discount_and_the_scaling_multiply(self):
         # A small rich country at full employment: the scaling's factor 1.5 in force, the small factor 0.55.

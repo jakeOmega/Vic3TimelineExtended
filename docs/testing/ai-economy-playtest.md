@@ -252,7 +252,7 @@ No line in a new game with the rule on means the game-start pass reached no coun
 | **Rule on, a large country.** Great Britain or France on the same day. | No change: a GDP above 10 million gives a factor of 1 and no modifier in a new game. | A discount on a large country: its `gdp` read low at game start; the self-check's line shows which GDP was read |
 | **Rule on, AI minors after ten years** (observer). | Small countries build more than in a game with the rule off, without the construction good's price collapsing in their markets; their factor rises toward 1 as their GDP grows. | Small AI economies growing implausibly fast, or a market's construction price pinned at its floor: raise the minimum factor or lower the full-price GDP; the owner's call |
 | **The rule switched in a running game.** On, then a year later off. | Each country's cost changes at its own next yearly pulse, not on the day of the switch; after a year every country has followed. | Countries that never follow: their yearly pulse does not store `te_cc_small_factor` |
-| **Rule on, Free Market Construction disabled.** A small country in a direct game. | The discount shows as a negative Construction Goods Cost from Construction Cost Scaling. | No discount in a direct game: `te_cc_apply_direct` is not adding a negative value |
+| **Rule on, Free Market Construction disabled.** A small country in a direct game. | The discount shows as a negative Construction Goods Cost from Construction Cost Scaling. | No discount in a direct game: `te_cc_apply_scaling`'s direct branch is not adding a negative value |
 
 ## Construction Sites deliver the purchase (2026-11-13)
 

@@ -3,6 +3,58 @@
 # construction_cost_scaling_on_action (common/on_actions/extra_on_actions.txt), which calls te_cc_yearly_update
 # before it sets the modifier. Why: docs/systems/economy_growth_sim.md (#1034).
 
+# THIS = a country. Set the scaling's modifier for the construction model the game is in. From the yearly pulse
+# (construction_cost_scaling_on_action, after te_cc_yearly_update), and from a switch of
+# free_market_construction_rule in a running game (te_construction_market_follow_rule), right after
+# te_direct_construction_clear_cost_scaling has removed both modifiers and the variable: without that call the
+# market's price and goods per point (te_construction_market_price, te_construction_market_goods_per_point), which
+# multiply by construction_cost_scaling_mult, would run up to a year ahead of what the sites consume.
+#
+# free_market_construction_rule disabled: there is no construction good to scale, so the scaling goes on vanilla's
+# own lever for the cost of the goods construction consumes (construction_cost_scaling_direct). The two branches
+# never share var:prior_construction_scaling: a switch clears it, so each branch starts from its first run, which
+# reads no modifier the same effect has just removed.
+#
+# X (construction_cost_scaling_mult) is negative for a small economy under te_small_economy_construction_rule, so
+# a modifier is added whenever its multiplier is not 0. The game-start pass calls this too
+# (te_cc_game_start_country). The multipliers resolve against ROOT, so every caller has the country as ROOT.
+te_cc_apply_scaling = {
+	if = {
+		limit = { te_free_market_construction_off = yes }
+		# Compute before removing, so the modifier read certainly still holds
+		# the contribution var:prior_construction_scaling backs out.
+		set_variable = { name = prior_construction_scaling value = construction_cost_scaling_direct_adjusted_mult }
+		remove_modifier = construction_cost_scaling_direct
+		if = {
+			limit = { NOT = { var:prior_construction_scaling = 0 } }
+			add_modifier = { name = construction_cost_scaling_direct multiplier = var:prior_construction_scaling }
+		}
+	}
+	else = {
+		remove_modifier = construction_cost_scaling
+		if = {
+			limit = { NOT = { has_variable = prior_construction_scaling } }
+			# First run (new save or pre-adjustment saves) - use raw scaling
+			if = {
+				limit = { NOT = { construction_cost_scaling_mult = 0 } }
+				add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
+				set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
+			}
+		}
+		else = {
+			# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
+			if = {
+				limit = { NOT = { construction_cost_scaling_adjusted_mult = 0 } }
+				add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
+				set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
+			}
+			else = {
+				set_variable = { name = prior_construction_scaling value = 0 }
+			}
+		}
+	}
+}
+
 # THIS = a country, its yearly pulse (and the game-start pass, te_cc_game_start_country). Store its slack and
 # peasants from its states' last walks (te_unemp_share_refresh) and move the share of the GDP part that applies
 # (var:te_cc_slack_factor) a third of the way toward its target. A country none of whose states has been walked
@@ -33,48 +85,6 @@ te_cc_yearly_update = {
 	set_variable = { name = te_cc_scale value = te_cc_scale_next }
 	set_variable = { name = te_cc_small_factor value = te_cc_small_economy_factor }
 	te_cc_slack_selfcheck = yes
-}
-
-# THIS = ROOT = a country (its yearly pulse, or the hidden game-start event: the multipliers below resolve against
-# ROOT). The two halves of construction_cost_scaling_on_action (extra_on_actions.txt), which picks one by the
-# rule after te_cc_yearly_update. Each is its modifier's one refresh site. X (construction_cost_scaling_mult) can
-# be negative under the small-economy rule, so a modifier is added whenever its multiplier is not 0.
-
-# free_market_construction_rule disabled: the scaling rides country_construction_goods_cost_mult.
-te_cc_apply_direct = {
-	# Compute before removing, so the modifier read certainly still holds
-	# the contribution var:prior_construction_scaling backs out.
-	set_variable = { name = prior_construction_scaling value = construction_cost_scaling_direct_adjusted_mult }
-	remove_modifier = construction_cost_scaling_direct
-	if = {
-		limit = { NOT = { var:prior_construction_scaling = 0 } }
-		add_modifier = { name = construction_cost_scaling_direct multiplier = var:prior_construction_scaling }
-	}
-}
-
-# The market: the scaling rides goods_input_construction_mult.
-te_cc_apply_market = {
-	remove_modifier = construction_cost_scaling
-	if = {
-		limit = { NOT = { has_variable = prior_construction_scaling } }
-		# First run (new save or pre-adjustment saves) - use raw scaling
-		if = {
-			limit = { NOT = { construction_cost_scaling_mult = 0 } }
-			add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
-			set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
-		}
-	}
-	else = {
-		# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
-		if = {
-			limit = { NOT = { construction_cost_scaling_adjusted_mult = 0 } }
-			add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
-			set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
-		}
-		else = {
-			set_variable = { name = prior_construction_scaling value = 0 }
-		}
-	}
 }
 
 # Any scope, from on_game_started_after_lobby (te_construction_market_on_actions.txt), when the game rules are
@@ -108,13 +118,7 @@ te_cc_game_start_country = {
 		if = {
 			limit = { gdp > 0 }
 			te_cc_yearly_update = yes
-			if = {
-				limit = { te_free_market_construction_off = yes }
-				te_cc_apply_direct = yes
-			}
-			else = {
-				te_cc_apply_market = yes
-			}
+			te_cc_apply_scaling = yes
 			te_cc_small_start_selfcheck = yes
 		}
 		else = {

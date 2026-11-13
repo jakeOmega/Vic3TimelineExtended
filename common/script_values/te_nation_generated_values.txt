@@ -10,6 +10,10 @@ te_nation_src_construction_count = {
 		limit = { has_modifier = te_construction_market_private_share_modifier }
 		add = 1
 	}
+	if = {
+		limit = { has_modifier = te_direct_construction_base_modifier }
+		add = 1
+	}
 }
 
 # Used by: the monthly pulse, for te_nation_src_living_standards
@@ -3028,6 +3032,10 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_direct_construction_base_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_fx_strong }
 		add = 1
 	}
@@ -3137,6 +3145,10 @@ te_nation_group_production_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_direct_construction_base_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = too_much_private_construction }
 		add = 1
 	}
@@ -3172,6 +3184,15 @@ te_nation_type_state_construction_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = too_much_private_construction }
+		add = 1
+	}
+}
+
+# Used by: the country_construction_add row
+te_nation_type_country_construction_add_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_direct_construction_base_modifier }
 		add = 1
 	}
 }

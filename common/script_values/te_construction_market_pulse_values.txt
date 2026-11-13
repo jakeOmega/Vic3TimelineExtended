@@ -18,3 +18,10 @@ te_construction_market_pulse_count_modulo_7 = {
 	value = global_var:te_construction_market_pulse_count
 	modulo = 7
 }
+
+# Every fourth weekly tick: the direct game's walk for stray Construction
+# Sectors (te_construction_market_follow_rule).
+te_construction_market_pulse_count_modulo_28 = {
+	value = global_var:te_construction_market_pulse_count
+	modulo = 28
+}

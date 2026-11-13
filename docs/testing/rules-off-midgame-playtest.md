@@ -30,6 +30,20 @@ a policy button.
 4. **Switched back on**, the debate does not return in this game (no outcome set the resolved variable, but the concluded
    record is gone).
 
+## Free Market Construction (switched to Disabled, and back)
+
+This rule switches between two construction models, so nothing closes: the buildings are converted. Read live through
+the harness on 2026-11-13 in both directions (`direct-construction-playtest.md`, which also lists what is left for a
+player to look at). Setup: a market game with Construction Sectors and construction under way.
+
+1. **Switched to Disabled**, within a day: every Construction Sector is a Construction Site of the same level and
+   tier, the market's own level-1 sites are gone, no site carries the market's capacity modifier, and every country
+   holds Base Construction. `debug.log` has `TE_SELF_CHECK OK construction_rule_switch to=direct`.
+2. **A week later** the sites are staffed and construction is what the levels give plus 5.
+3. **Switched back on**, within a day: the sites are government-owned Construction Sectors again, Base Construction
+   is gone, and each country's capital gets a market site at its next weekly pulse. A player's government purchase
+   is 0 until they set it.
+
 ## Heir Education
 
 Setup: a monarchy with an heir and the entry running; turn on two focuses.

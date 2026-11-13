@@ -121,8 +121,9 @@ SECTIONS = {
     "economy": (
         # Agricultural diffusion: arable land and yields a farming technology spreads
         "agdiff_*",
-        # The private share of construction
-        "te_construction_market_private_share_modifier",
+        # The private share of construction, and Base Construction (games with
+        # Free Market Construction off, te_direct_construction_ensure_base)
+        "te_construction_market_private_share_modifier", "te_direct_construction_base_modifier",
         # The tax code: interest groups' views, relief (the light code's reactions
         # and relief are its entry's scaling modifiers since #1404)
         "te_tax_ig_view_*", "te_tax_relief_*",
@@ -298,7 +299,7 @@ NOT_ON_COUNTRY = {
 # share a group (a list matches the text, a count the key); a new one fails
 # the suite until it has a line here.
 SOURCE_GROUPS = {
-    "construction": ("te_construction_market_private_share_modifier",),
+    "construction": ("te_construction_market_private_share_modifier", "te_direct_construction_base_modifier"),
     "living_standards": ("sol_expectations_*",),
     "agriculture": ("agdiff_*",),
     # The health bill, family limitation, the life-expectancy gap, pension positions
@@ -404,7 +405,7 @@ TYPE_ROWS = {
         ),
     },
     "economy": {
-        "production": ("state_arable_land_mult", "state_construction_mult"),
+        "production": ("state_arable_land_mult", "state_construction_mult", "country_construction_add"),
         "taxes": (
             "state_tax_collection_mult", "state_tax_waste_add", "building_group_bg_agriculture_tax_mult",
             "country_minting_add", "country_minting_mult",
