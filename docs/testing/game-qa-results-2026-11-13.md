@@ -5,14 +5,15 @@ ran from one scratch branch (`scratch/qa-integration-2026-11-13`) that merges al
 so a result here belongs to the PR that added the verb, not to `main`.
 
 **Game:** Victoria 3 1.15.1. **Build:** the deployed mod folder as it stood (the main checkout was at `9cca92222`;
-not compared with the folder). **Launches:** five sessions and one unattended run, on the owner's go-ahead for
-this session (2026-11-12 23:07 MST: "You will be able to run the game to test but I would like this to be as late
+not compared with the folder). **Launches:** six sessions (one refused at its start) and two unattended runs, the
+fresh 1836 save for this build and a dated one, on the owner's go-ahead for this session (2026-11-12 23:07 MST: "You will be able to run the game to test but I would like this to be as late
 in the process as possible - do what you can first, please"), after the offline work. Before each start `doctor`
 was clean, `gate --permission probe` answered ok, and the GPU load was 18 to 38%. Every stop restored the owner's
 files (`outcome: restored`, nothing held) and left no overlay; `player/game_rules/presets.txt` was never touched.
 
 **Run folders** (under the backup root): `runs/20261113T075605Z/` (session A), `…080833Z/` (B, refused at
-start), `…081657Z/` (B), `…082316Z/` (B′), `…083721Z/` (the dated fixture's run) and `…084215Z/` (C). Each
+start, after the run that made the fresh save, `…080524Z`), `…081657Z/` (B), `…082316Z/` (B′), `…083721Z/` (the
+dated fixture's run), `…084215Z/` (C) and `…085554Z/` (D). Each
 session's `steps.jsonl` and `summary.md`, and the fixture run's `fixture.json`, are copied to
 `docs/testing/game_qa_probe/captures/session_2026-11-13_qa_prs/` with the Windows user name replaced by `<user>`.
 
@@ -73,8 +74,7 @@ filed for.
 | The stop | #1739 | **Restored**, 52 files, no `manual_saves` |
 
 After this session, #1741 gained a second commit: the default country click, when the side panel shows it
-selected nothing, now clicks Back in Start's place instead of refusing `no_country_selected`. Its two halves each
-ran live (the panel check on 2026-11-12, Back past the window here); the two together as one verb have not.
+selected nothing, now clicks Back in Start's place instead of refusing `no_country_selected`. Session D ran it.
 
 ## Session C: a dated fixture (`runs/20261113T083721Z/`, `runs/20261113T084215Z/`)
 
@@ -88,7 +88,18 @@ ran live (the panel check on 2026-11-12, Back past the window here); the two tog
 | The game's own scripted tests | #1740 | **Unsettled.** No `TEST_FAIL_*` save of another test appeared (theirs fail from 1836.1.7 on), so they did not run or they passed. `tests.txt` would say, but the restore removes it without a copy |
 | `start --fixture 1836.3.29 --as FRA` | #1740 | **OK.** `fixture_game_date` 1836.3.29, `date_matches: true`; `game_date >= 1836.3.29` and `game_date < 1836.3.30` read yes. `enter-game` by the country click went from 29 March to 1 April |
 | An autosave written inside a session | (restore, on `main`) | **Restored.** Crossing 1 April the game wrote its quarterly `autosave.v3` (151 MB) and rotated the owner's five down a place, dropping the oldest. The stop restored 58 files, the five autosaves and `continue_game.json` among them; each autosave had the owner's size and time again, the dropped one included |
-| `selfchecks` | (on `main`) | The dated fixture's lines: 30 OK, one START (`cm_census_yearly`, due at the next yearly census), one BROKEN: `delayed_state_event`, the known canary for "a delayed state event never runs" (`docs/guides/scripting_best_practices.md`) |
+| `selfchecks`, before the stop (it flushes the log first) | (on `main`) | The dated fixture's lines: 30 OK, one START (`cm_census_yearly`, due at the next yearly census), one BROKEN: `delayed_state_event`, the known canary for "a delayed state event never runs" (`docs/guides/scripting_best_practices.md`) |
+
+## Session D: the fallback to Back as one verb (`runs/20261113T085554Z/`)
+
+The same start and setup as B′, then a plain `enter-game`, the default route, on the branch with #1741's second
+commit.
+
+| Check | PR | Result |
+|---|---|---|
+| The country click lands on the law window | #1741 | **As expected.** A shot before showed the "We now have State as Universal Heir!" window over the click's point (1889, 1417) and the panel reading "Click on a country to select it". The step `country_click` recorded `no_country_selected` |
+| `enter-game` goes in by Back by itself | #1741 | **OK.** The reply had `fallback: "back"`, `country_click` with the first click and `enter_panel.png`, and one more click at (144, 2119). Start was never clicked. The date went from 2 to 5 January; `is_player` and `c:FRA = root` read yes. The console's probe and close between the two clicks worked: the click on the law window did not take the keyboard away from them |
+| The stop | #1739 | **Restored**, 52 files, no `manual_saves`; `doctor` clean |
 
 ## What these settle
 
@@ -107,5 +118,8 @@ ran live (the panel check on 2026-11-12, Back past the window here); the two tog
 
 The long dated fixtures (past 31 March 1836: they need `--long-run` and the owner's own grant), the
 `not_the_runs_save` and `manual_save_changed` holds, `pick`'s `oldest` form as a verb (the same command ran by
-hand), the read retry for a lost first typing (#1702 item 1 did not reproduce), and `enter-game`'s fallback to
-Back as one verb.
+hand), and the read retry for a lost first typing (#1702 item 1 did not reproduce).
+
+The dated run measured 0.664 s a game day in 1836 where the estimate (`fixture.RATE_ANCHORS`, from AI-only
+observer runs of game 1.14) assumes 0.47, so the hour estimates a long run's grant is asked against are likely
+about 40% low until a long run is measured.
