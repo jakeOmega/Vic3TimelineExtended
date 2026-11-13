@@ -108,7 +108,7 @@ class FlagTests(_Fixture):
             [(f.file, f.line, f.key, f.name) for f in r.flags],
             [("localization/english/te_test_l_english.yml", 3, "k_hit", "gone_sv")],
         )
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_vanilla_name_resolves(self):
         self.loc("k:0 \"[ScriptValue('vanilla_sv')]\"")
@@ -186,7 +186,7 @@ class FlagTests(_Fixture):
             name="te_unused_l_english.yml",
         )
         r = self.run_audit()
-        self.assertEqual((r.flags, r.stale_tags, r.loc_files_scanned), ([], [], 1))
+        self.assertEqual((r.flags, r.stale, r.loc_files_scanned), ([], [], 1))
 
     def test_replace_folder_is_scanned(self):
         _write(self.root, "localization/english/replace/te_over_l_english.yml",
@@ -202,13 +202,13 @@ class SuppressionTests(_Fixture):
         r = self.run_audit()
         self.assertEqual(len(r.flags), 1)
         self.assertEqual(r.flags[0].exemption,
-                         {"date": "2026-10-26", "rationale": "defined by a later PR"})
-        self.assertEqual((r.stale_tags, r.failing), ([], 0))
+                         {"date": "2026-10-26", "tag": CHECK, "rationale": "defined by a later PR"})
+        self.assertEqual((r.stale, len(r.failing)), ([], 0))
 
     def test_tag_listing_several_checks_suppresses(self):
         self.loc("k:0 \"[ScriptValue('gone_sv')]\" "
                  "# REVIEWED 2026-10-26 (concept, loc_script_value): why")
-        self.assertEqual(self.run_audit().failing, 0)
+        self.assertEqual(len(self.run_audit().failing), 0)
 
     def test_untagged_or_foreign_tag_does_not_suppress(self):
         self.loc(
@@ -217,7 +217,7 @@ class SuppressionTests(_Fixture):
         )
         r = self.run_audit()
         self.assertEqual([f.exemption for f in r.flags], [None, None])
-        self.assertEqual((r.stale_tags, r.failing), ([], 2))
+        self.assertEqual((r.stale, len(r.failing)), ([], 2))
 
     def test_stale_tag_fails_strict(self):
         self.loc(
@@ -226,8 +226,8 @@ class SuppressionTests(_Fixture):
         )
         r = self.run_audit()
         self.assertEqual(r.flags, [])
-        self.assertEqual([(t.line, t.key) for t in r.stale_tags], [(2, "k1"), (3, "k2")])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual([(t.line, t.key) for t in r.stale], [(2, "k1"), (3, "k2")])
+        self.assertEqual(len(r.failing), 2)
         report = render_report(r)
         self.assertIn("## Stale tags", report)
         self.assertIn(f"`localization/english/te_test_l_english.yml:2` `k1` ({CHECK})", report)
@@ -262,7 +262,7 @@ class ScriptStringTests(_Fixture):
         r = self.run_audit()
         self.assertEqual(self.flags(r), [(self.EVENTS, 5, "te_test.1", "gone_sv")])
         self.assertEqual((r.script_refs_checked, r.script_dynamic_skipped), (2, 0))
-        self.assertEqual(r.failing, 1)
+        self.assertEqual(len(r.failing), 1)
 
     def test_common_is_scanned_and_names_resolve(self):
         rel = "common/scripted_effects/te_test_effects.txt"
@@ -334,8 +334,8 @@ class ScriptStringTests(_Fixture):
         r = self.run_audit()
         self.assertEqual(len(r.flags), 1)
         self.assertEqual(r.flags[0].exemption,
-                         {"date": "2026-10-26", "rationale": "defined by a later PR"})
-        self.assertEqual((r.stale_tags, r.failing), ([], 0))
+                         {"date": "2026-10-26", "tag": CHECK, "rationale": "defined by a later PR"})
+        self.assertEqual((r.stale, len(r.failing)), ([], 0))
         self.assertIn("`e` reads `gone_sv` — **2026-10-26**: defined by a later PR",
                       render_report(r))
 
@@ -344,7 +344,7 @@ class ScriptStringTests(_Fixture):
                     "\t\tmore\" # REVIEWED 2026-10-26 (loc_script_value): why\n}\n")
         r = self.run_audit()
         self.assertEqual([(f.line, f.exemption is not None) for f in r.flags], [(2, True)])
-        self.assertEqual(r.failing, 0)
+        self.assertEqual(len(r.failing), 0)
 
     def test_tag_inside_a_string_or_for_another_check_does_not_suppress(self):
         self.script(
@@ -356,7 +356,7 @@ class ScriptStringTests(_Fixture):
         )
         r = self.run_audit()
         self.assertEqual([f.exemption for f in r.flags], [None, None, None])
-        self.assertEqual((r.stale_tags, r.failing), ([], 3))
+        self.assertEqual((r.stale, len(r.failing)), ([], 3))
 
     def test_stale_tag_fails_strict(self):
         self.script(
@@ -367,9 +367,9 @@ class ScriptStringTests(_Fixture):
         )
         r = self.run_audit()
         self.assertEqual(r.flags, [])
-        self.assertEqual([(t.file, t.line, t.key) for t in r.stale_tags],
+        self.assertEqual([(t.file, t.line, t.key) for t in r.stale],
                          [(self.EVENTS, 2, "e"), (self.EVENTS, 3, "e")])
-        self.assertEqual(r.failing, 2)
+        self.assertEqual(len(r.failing), 2)
         self.assertIn(f"`{self.EVENTS}:2` `e` ({CHECK})", render_report(r))
 
     def test_strict_exit_codes(self):
@@ -434,7 +434,7 @@ class RepoTests(unittest.TestCase):
         from path_constants import mod_path
         result = audit(mod_path)
         self.assertEqual([f for f in result.flags if not f.exemption], [])
-        self.assertEqual(result.stale_tags, [])
+        self.assertEqual(result.stale, [])
 
     def test_post_load_roster_and_ci(self):
         from scripts.analysis.check_post_load_rosters import extract_rosters

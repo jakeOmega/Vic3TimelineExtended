@@ -71,13 +71,15 @@ Report: docs/engine/loc_script_value_report.md. Registered in POST_LOAD_AUDITS.
 """
 from __future__ import annotations
 
-import argparse
 import json
 import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 from gui_reference_audit import IDENT, LEX, defined_names, masks
 from mod_state import split_loc_line
 
@@ -100,9 +102,6 @@ _NAME_RE = re.compile(r"[A-Za-z_]\w*")
 # Depth-0 keys of a script file, directive prefix kept (`INJECT:foo`): the
 # entry a script flag sits in, named in the report.
 _ENTRY_RE = re.compile(rf"[{{}}]|(?<![@\w:])((?:\w+:)?{IDENT})\s*=")
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 
 @dataclass
@@ -115,16 +114,18 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    file: str
-    line: int
-    key: str
+class StaleTag(_StaleTag):
+    """A tag that suppresses nothing, on the loc line of `key` or in script
+    inside the entry `key`."""
+
+    key: str = ""
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`failing`: flags without a tag, plus tags that suppress nothing (`stale`)."""
+
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     loc_files_scanned: int = 0
     refs_checked: int = 0
     dynamic_skipped: int = 0
@@ -133,11 +134,6 @@ class AuditResult:
     script_refs_checked: int = 0
     script_dynamic_skipped: int = 0
     script_values_indexed: int = 0
-
-    @property
-    def failing(self) -> int:
-        """Flags without a tag, plus tags that suppress nothing."""
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
 
 
 def mod_script_value_names(mod_path: str | Path) -> set[str]:
@@ -158,15 +154,6 @@ def vanilla_script_value_names(mod_path: str | Path) -> set[str]:
             "on a machine with the game (without it every vanilla name would be flagged)"
         )
     return set(json.loads(path.read_text(encoding="utf-8")))
-
-
-def _parse_tag(trailing: str) -> dict | None:
-    if "REVIEWED" not in trailing:
-        return None
-    m = _TAGGED_REVIEWED_RE.search(trailing)
-    if not m or CHECK not in re.split(r"[\s,]+", m.group("checks").strip()):
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _loc_files(mod_path: Path):
@@ -196,7 +183,7 @@ def audit(mod_path: str | Path | None = None) -> AuditResult:
             if parsed is None:
                 continue
             key, value, trailing = parsed
-            tag = _parse_tag(trailing)
+            tag = parse_reviewed(trailing, (CHECK,))
             missing: list[str] = []
             for m in _CALL_RE.finditer(value):
                 name = m.group("arg")
@@ -209,7 +196,7 @@ def audit(mod_path: str | Path | None = None) -> AuditResult:
             for name in missing:
                 result.flags.append(Flag(rel, lineno, key, name, exemption=tag))
             if tag and not missing:
-                result.stale_tags.append(StaleTag(rel, lineno, key))
+                result.stale.append(StaleTag(rel, lineno, CHECK, key))
     if not result.loc_files_scanned:
         # A wrong mod path or an emptied loc folder would otherwise pass as clean.
         raise FileNotFoundError(
@@ -270,7 +257,7 @@ def _audit_script_file(root: Path, path: Path, script_values: set[str], result: 
     for tok in LEX.finditer(text):
         lexeme = tok[0]
         if lexeme.startswith("#"):
-            tag = _parse_tag(lexeme)
+            tag = parse_reviewed(lexeme, (CHECK,))
             if tag:
                 tags[line_of(tok.start())] = (tag, tok.start())
             continue
@@ -300,12 +287,12 @@ def _audit_script_file(root: Path, path: Path, script_values: set[str], result: 
             result.flags.append(Flag(rel, line, _entry_at(syntax, offset), name, exemption=tag))
     for tag_line, (_, offset) in tags.items():
         if tag_line not in missing:
-            result.stale_tags.append(StaleTag(rel, tag_line, _entry_at(syntax, offset)))
+            result.stale.append(StaleTag(rel, tag_line, CHECK, _entry_at(syntax, offset)))
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Loc script value audit report",
         "",
@@ -342,9 +329,9 @@ def render_report(result: AuditResult) -> str:
             out += [f"- line {f.line}: `{f.key}` reads `{f.name}`" for f in by_file[fname]]
             out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` `{t.key}` ({CHECK})" for t in result.stale]
         out.append("")
 
     out += ["## Reviewed exemptions", ""]
@@ -368,7 +355,7 @@ def render_report(result: AuditResult) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     return "\n".join(out) + "\n"
@@ -380,15 +367,13 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_path)
     out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "loc_files_scanned": result.loc_files_scanned,
         "refs_checked": result.refs_checked,
         "dynamic_skipped": result.dynamic_skipped,
@@ -401,14 +386,12 @@ def regenerate(mod_state=None) -> dict:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--strict", action="store_true",
-                        help="exit 1 on any untagged flag or stale tag (CI mode)")
-    parser.add_argument("--mod-path", type=Path)
-    args = parser.parse_args(argv)
-    result = audit(args.mod_path)
-    print(render_report(result))
-    return int(args.strict and result.failing > 0)
+    def add_arguments(parser):
+        parser.add_argument("--mod-path", type=Path)
+
+    return cli_main(lambda args: audit(args.mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0], add_arguments=add_arguments,
+                    strict_help="exit 1 on any untagged flag or stale tag (CI mode)")
 
 
 if __name__ == "__main__":
