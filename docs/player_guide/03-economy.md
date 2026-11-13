@@ -193,7 +193,8 @@ of the production lens or from the state view.
 Every country also gets Base Construction, 5 points a week, so a country without
 any sites can still build its first one. If you change the rule in a running
 game, your Construction Sectors become Construction Sites of the same level
-within a day, and the other way when you switch it back. The construction panel
+within a day, and the other way when you switch it back. Either way the levels
+end up owned by the government, whoever owned them before. The construction panel
 shows a Direct Construction section with your construction per week and the
 private share, which the economic-system law sets: 25% under Traditionalism, 50%
 under Interventionism, Agrarianism, Extraction Economy and Industry Banned, 75%

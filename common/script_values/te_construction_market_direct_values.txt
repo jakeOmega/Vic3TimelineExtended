@@ -75,9 +75,9 @@ te_direct_construction_state_site_level = {
 # retired (te_dc_from_market, raised by te_direct_construction_convert_all), a
 # site counts one level less: the market places its sites at level 1, a
 # converter and not capacity, so only what an owner built on top is kept.
-# Capped at 200, the largest te_construction_market_build_specified_level can
-# create.
-te_direct_construction_convert_target_level = {
+# te_direct_construction_convert_target_level caps it at 200, the largest
+# te_construction_market_build_specified_level can create.
+te_direct_construction_convert_uncapped_level = {
 	value = 0
 	if = {
 		limit = {
@@ -98,15 +98,20 @@ te_direct_construction_convert_target_level = {
 		}
 	}
 	min = 0
+}
+
+te_direct_construction_convert_target_level = {
+	value = te_direct_construction_convert_uncapped_level
 	max = 200
 }
 
 # State scope. The level of the Construction Sector this state's Construction
 # Site becomes when the market is switched back on
 # (te_direct_construction_revert_state_site): the site's levels, plus those of a
-# sector that finished after the conversion. Capped at 100, the largest
+# sector that finished after the conversion.
+# te_direct_construction_revert_target_level caps it at 100, the largest
 # extended_timeline_build_specified_building_level can create.
-te_direct_construction_revert_target_level = {
+te_direct_construction_revert_uncapped_level = {
 	value = te_direct_construction_state_site_level
 	if = {
 		limit = {
@@ -114,6 +119,10 @@ te_direct_construction_revert_target_level = {
 		}
 		add = b:building_construction_sector.level
 	}
+}
+
+te_direct_construction_revert_target_level = {
+	value = te_direct_construction_revert_uncapped_level
 	max = 100
 }
 
@@ -182,5 +191,15 @@ te_dc_check_expected = {
 	if = {
 		limit = { has_global_variable = te_dc_switch_expected }
 		value = global_var:te_dc_switch_expected
+	}
+}
+
+# The states whose levels the switch cut to the builder's cap
+# (te_direct_construction_count_capped).
+te_dc_check_capped = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_dc_switch_capped }
+		value = global_var:te_dc_switch_capped
 	}
 }

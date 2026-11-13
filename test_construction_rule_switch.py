@@ -182,9 +182,11 @@ class FollowRuleTest(unittest.TestCase):
         for effect in ("te_direct_construction_convert_all", "te_direct_construction_revert_all"):
             with self.subTest(effect=effect):
                 raised = re.search(r"set_global_variable\s*=\s*\{\s*name\s*=\s*te_dc_switch_expected\s+value\s*=\s*0"
-                                   r"\s*\}\s*%s\s*=\s*yes\s*te_direct_construction_switch_self_check\s*=\s*yes"
-                                   % effect, self.follow)
-                self.assertIsNotNone(raised, "the counter is up from before %s to the self-check" % effect)
+                                   r"\s*\}\s*set_global_variable\s*=\s*\{\s*name\s*=\s*te_dc_switch_capped\s+"
+                                   r"value\s*=\s*0\s*\}\s*%s\s*=\s*yes\s*"
+                                   r"te_direct_construction_switch_cost_scaling\s*=\s*yes\s*"
+                                   r"te_direct_construction_switch_self_check\s*=\s*yes" % effect, self.follow)
+                self.assertIsNotNone(raised, "the counters are up from before %s to the self-check" % effect)
         count = body(self.effects, "te_direct_construction_count_made")
         self.assertRegex(count, r"has_global_variable\s*=\s*te_dc_switch_expected")
         for effect in ("te_direct_construction_convert_state", "te_direct_construction_revert_state_site"):
@@ -194,6 +196,48 @@ class FollowRuleTest(unittest.TestCase):
         self.assertRegex(check, r"global_var:te_dc_check_sites\s*>=\s*te_dc_check_expected")
         self.assertRegex(check, r"global_var:te_dc_check_sectors\s*>=\s*te_dc_check_expected")
         self.assertRegex(check, r"remove_global_variable\s*=\s*te_dc_switch_expected")
+
+    def test_a_switch_applies_the_new_models_cost_scaling_at_once(self):
+        # The market's price and goods per point multiply by the live construction_cost_scaling_mult whether or
+        # not the modifier is in force, so a switch that only cleared the modifiers left a rich country's Fixed
+        # Budget buying fewer points than it paid for until its yearly pulse (a second session's review of #1763).
+        switch = body(self.effects, "te_direct_construction_switch_cost_scaling")
+        self.assertRegex(switch, r"every_country\s*=\s*\{\s*te_cc_apply_scaling\s*=\s*yes\s*\}")
+        cost = code(ROOT / "common/scripted_effects/te_construction_cost_effects.txt")
+        apply = body(cost, "te_cc_apply_scaling")
+        for modifier in ("construction_cost_scaling", "construction_cost_scaling_direct"):
+            self.assertRegex(apply, r"add_modifier\s*=\s*\{\s*name\s*=\s*%s\s" % modifier)
+        # The yearly pulse sets the modifier through the same effect, after its reading of the slack.
+        pulse = body(code(ROOT / "common/on_actions/extra_on_actions.txt"), "construction_cost_scaling_on_action")
+        self.assertRegex(pulse, r"te_cc_yearly_update\s*=\s*yes\s*te_cc_apply_scaling\s*=\s*yes")
+        # Not from the conversion itself, which also runs at game start, before any country's first reading.
+        for effect in ("te_direct_construction_convert_all", "te_direct_construction_revert_all"):
+            self.assertFalse(calls(body(self.effects, effect), "te_cc_apply_scaling"))
+        # What the reader multiplies by is the live value.
+        target = code(ROOT / "common/script_values/te_construction_market_target_values.txt")
+        self.assertRegex(body(target, "te_construction_market_goods_per_point"),
+                         r"add\s*=\s*construction_cost_scaling_mult")
+
+    def test_the_stray_sector_walk_is_every_fourth_week(self):
+        # It reads every building in the world, and nothing can queue a sector once the conversion has closed it.
+        weekly = self.follow[self.follow.index("te_construction_market_pulse_count_modulo_7"):]
+        walk = weekly.index("every_country")
+        self.assertRegex(weekly[:walk], r"te_construction_market_pulse_count_modulo_28\s*=\s*0")
+        pulse_values = code(ROOT / "common/script_values/te_construction_market_pulse_values.txt")
+        self.assertRegex(body(pulse_values, "te_construction_market_pulse_count_modulo_28"), r"modulo\s*=\s*28")
+        # The base's self-check stays weekly: it is not inside the walk's test.
+        month = re.search(r"if\s*=\s*\{\s*limit\s*=\s*\{\s*te_construction_market_pulse_count_modulo_28", weekly)
+        depth, i = 0, month.end()
+        while True:                     # to the end of the `if` that opened at month.start()
+            if weekly[i] == "{":
+                depth += 1
+            elif weekly[i] == "}":
+                if depth == 0:
+                    break
+                depth -= 1
+            i += 1
+        self.assertNotIn("te_direct_construction_base_self_check", weekly[month.start():i])
+        self.assertIn("te_direct_construction_base_self_check", weekly[i:])
 
     def test_the_weekly_pass_only_cancels_a_sector_under_construction(self):
         # A state's staffed site is not rebuilt (and its workers let go) to cancel a sector that never stood.
@@ -232,8 +276,10 @@ class ConversionTest(unittest.TestCase):
                                   r"is_building_type\s*=\s*%s\s*\}\s*\}" % (SITE, SECTOR))
 
     def test_a_market_sites_own_level_is_not_capacity(self):
-        level = body(self.values, "te_direct_construction_convert_target_level")
+        level = body(self.values, "te_direct_construction_convert_uncapped_level")
         self.assertRegex(level, r"has_global_variable\s*=\s*te_dc_from_market\s*\}\s*subtract\s*=\s*1")
+        self.assertRegex(body(self.values, "te_direct_construction_convert_target_level"),
+                         r"value\s*=\s*te_direct_construction_convert_uncapped_level")
         convert = body(self.effects, "te_direct_construction_convert_all")
         raised = convert.index("name = te_dc_from_market")
         lowered = convert.index("remove_global_variable = te_dc_from_market")
@@ -263,6 +309,33 @@ class ConversionTest(unittest.TestCase):
                                    body(self.values, "te_direct_construction_revert_target_level")).group(1))
         self.assertEqual(site_cap, max(site_cases))
         self.assertEqual(sector_cap, max(sector_cases))
+
+    def test_a_state_cut_to_the_builders_cap_is_counted(self):
+        # The self-check counts buildings, so a capped state read OK with nothing to say what the switch cost.
+        for effect, uncapped, capped in (
+                ("te_direct_construction_convert_state", "te_direct_construction_convert_uncapped_level",
+                 "te_direct_construction_convert_target_level"),
+                ("te_direct_construction_revert_state_site", "te_direct_construction_revert_uncapped_level",
+                 "te_direct_construction_revert_target_level")):
+            with self.subTest(effect=effect):
+                text = body(self.effects, effect)
+                counted = re.search(r"%s\s*>\s*%s\s*\}\s*te_direct_construction_count_capped\s*=\s*yes"
+                                    % (uncapped, capped), text)
+                self.assertIsNotNone(counted)
+                # Read while the buildings still stand: both values read their levels.
+                self.assertLess(counted.start(), text.index("remove_building"))
+        check = body(self.effects, "te_direct_construction_switch_self_check")
+        self.assertEqual(check.count("capped=[THIS.ScriptValue('te_dc_check_capped')|0]"), 4)
+        self.assertRegex(check, r"remove_global_variable\s*=\s*te_dc_switch_capped")
+
+    def test_a_site_kept_for_want_of_urbanization_is_a_level_one_market_site(self):
+        # The market sizes each site for a share of the week's purchase, and a site gives that times its level.
+        revert = body(self.effects, "te_direct_construction_revert_all")
+        kept = re.search(r"b:%s\.level\s*>\s*1\s*\}\s*remove_building\s*=\s*%s\s*"
+                         r"te_construction_market_place_site\s*=\s*yes" % (SITE, SITE), revert)
+        self.assertIsNotNone(kept)
+        # After the walk that turns every other site into a sector: only a kept one is left to find.
+        self.assertGreater(kept.start(), revert.index("te_direct_construction_revert_state_site = yes"))
 
     def test_the_way_back_makes_a_government_owned_sector(self):
         self.assertRegex(self.back, r"extended_timeline_build_specified_building_level\s*=\s*\{\s*"
