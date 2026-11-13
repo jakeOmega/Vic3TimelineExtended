@@ -513,7 +513,7 @@ class RepoTests(unittest.TestCase):
 
     def test_post_load_roster(self):
         from scripts.analysis.check_post_load_rosters import extract_rosters
-        self.assertIn("faith_scene_audit", extract_rosters(str(ROOT / "mod_state_server.py"))["POST_LOAD_AUDITS"])
+        self.assertIn("faith_scene_audit", extract_rosters(str(ROOT / "server" / "post_load.py"))["POST_LOAD_AUDITS"])
 
     def test_ci_runs_it_strict(self):
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)

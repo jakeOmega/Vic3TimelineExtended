@@ -237,7 +237,7 @@ class RepoTests(unittest.TestCase):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         root = os.path.dirname(os.path.abspath(__file__))
         self.assertIn("long_tooltip_audit", extract_rosters(
-            os.path.join(root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            os.path.join(root, "server", "post_load.py"))["POST_LOAD_AUDITS"])
 
     def test_the_mod_has_no_failing_flag(self):
         # CI runs it --strict (#1213): every flag is fixed or carries its

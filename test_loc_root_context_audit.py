@@ -577,7 +577,7 @@ class RepoTests(unittest.TestCase):
     def test_post_load_roster_and_ci(self):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         self.assertIn("loc_root_context_audit", extract_rosters(
-            os.path.join(self.root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            os.path.join(self.root, "server", "post_load.py"))["POST_LOAD_AUDITS"])
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
         entry = audit_registry.get("loc_root_context_audit")
         self.assertEqual(entry.command, "python3 loc_root_context_audit.py --strict")

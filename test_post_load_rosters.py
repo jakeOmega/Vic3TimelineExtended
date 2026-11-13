@@ -141,7 +141,7 @@ class RealTreeTest(unittest.TestCase):
 
     def test_rosters_are_fully_documented(self):
         rosters = checker.extract_rosters(
-            os.path.join(checker.REPO_ROOT, checker.SERVER_FILE)
+            os.path.join(checker.REPO_ROOT, checker.ROSTER_FILE)
         )
         self.assertTrue(rosters["POST_LOAD_REGENERATORS"])
         self.assertTrue(rosters["POST_LOAD_AUDITS"])

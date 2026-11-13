@@ -200,7 +200,7 @@ class RepoTests(unittest.TestCase):
         from scripts.analysis.check_post_load_rosters import extract_rosters
         root = os.path.dirname(os.path.abspath(__file__))
         self.assertIn("modifier_duration_audit", extract_rosters(
-            os.path.join(root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+            os.path.join(root, "server", "post_load.py"))["POST_LOAD_AUDITS"])
         import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
         self.assertEqual(audit_registry.get("modifier_duration_audit").command,
                          "python3 modifier_duration_audit.py --strict")
