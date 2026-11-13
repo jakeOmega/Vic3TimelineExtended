@@ -197,7 +197,7 @@ class TestRegistry(unittest.TestCase):
             for terrain in r.terrains(key):
                 self.assertLess(r.weight(key, terrain), 2 ** 24, key)
         # a great city's takeover stands above the oil field's and under the lowest condition
-        most = 9 * r.W_RUNG + 9 * r.W_CHAR + 99
+        most = 9 * r.W_RUNG + 9 * r.W_CHAR + 9 * r.W_UPKEEP + 9 * r.W_MEANS + 99
         self.assertLess(r.W_OVER + most, r.W_CITY_OVER)
         self.assertLess(r.W_CITY_OVER + most, r.W_OVER + r.W_COND * min(d for _l, d in r.CONDITIONS.values()))
 
@@ -454,7 +454,8 @@ class TestYearlyPass(unittest.TestCase):
 
     def refresh(self, urban, share=None, size=None):
         eng = _Engine({}, effects={**_raw_blocks([EFFECTS]), "te_state_picture_selfcheck": "",
-                                   "te_state_picture_refresh_land": "", "te_state_picture_refresh_city": ""})
+                                   "te_state_picture_refresh_land": "", "te_state_picture_refresh_city": "",
+                                   "te_state_picture_refresh_prosperity": ""})
         eng.values.update(_raw_blocks([VALUES]))
         if urban is not None:
             eng.vars["te_dg_urban"] = float(urban)
@@ -594,6 +595,88 @@ class TestYearlyPass(unittest.TestCase):
         order = ["housing_blocks", "boomtown", "declining", "divided", "smog", "industry", "resort"]
         digits = [registry.CHARACTERS[name][1] for name in order]
         self.assertEqual(digits, sorted(digits, reverse=True))
+
+    def prosperity(self, rung, sol, expected=None, state=None):
+        """The means (1 poor, 2 ordinary, 3 affluent) and whether run-down, after a pass in a state of that
+        standard of living whose owner is on that city rung."""
+        eng = _Engine({"te_state_picture_city_rung": float(rung), "average_sol": float(sol),
+                       "average_expected_sol": float(sol if expected is None else expected)},
+                      effects=_raw_blocks([EFFECTS]))
+        eng.values.update(_raw_blocks([VALUES]))
+        eng.vars.update({k: float(v) for k, v in (state or {}).items()})
+        eng.call("te_state_picture_refresh_prosperity")
+        return eng.vars.get("te_sp_means", 2.0), "te_sp_rundown" in eng.vars
+
+    def test_means_follow_the_owners_floors_by_rung(self):
+        # the owner's first-pass figures (2026-11-11), at the era of each city rung
+        floors = {1: (12, 20), 2: (14, 22), 3: (18, 28), 4: (26, 36), 5: (35, 45)}
+        for rung, (poor, rich) in floors.items():
+            with self.subTest(rung=rung):
+                self.assertEqual(self.prosperity(rung, poor - 0.1)[0], 1)
+                self.assertEqual(self.prosperity(rung, poor)[0], 2)
+                self.assertEqual(self.prosperity(rung, rich - 0.1)[0], 2)
+                self.assertEqual(self.prosperity(rung, rich)[0], 3)
+        # the same standard of living is ordinary in 1930 and poor in 1990
+        self.assertEqual((self.prosperity(1, 15)[0], self.prosperity(3, 15)[0]), (2, 1))
+        # before the first city technology there is nothing to tag, and a tag is taken away
+        self.assertEqual(self.prosperity(0, 3, expected=30), (2, False))
+        self.assertEqual(self.prosperity(0, 3, expected=30, state={"te_sp_means": 1, "te_sp_rundown": 1}), (2, False))
+
+    def test_a_means_tag_is_kept_half_a_point_past_its_floor(self):
+        self.assertEqual(self.prosperity(1, 12.3, state={"te_sp_means": 1})[0], 1)     # poor until 12.5
+        self.assertEqual(self.prosperity(1, 12.5, state={"te_sp_means": 1})[0], 2)
+        self.assertEqual(self.prosperity(1, 19.6, state={"te_sp_means": 3})[0], 3)     # affluent down to 19.5
+        self.assertEqual(self.prosperity(1, 19.4, state={"te_sp_means": 3})[0], 2)
+        self.assertEqual(self.prosperity(1, 25, state={"te_sp_means": 1})[0], 3)       # straight from poor to rich
+
+    def test_run_down_is_the_standard_of_living_against_expectations(self):
+        self.assertFalse(self.prosperity(3, 20, expected=21.9)[1])
+        self.assertTrue(self.prosperity(3, 20, expected=22)[1])
+        self.assertTrue(self.prosperity(3, 20, expected=21.6, state={"te_sp_rundown": 1})[1])   # kept to 1.5 under
+        self.assertFalse(self.prosperity(3, 20, expected=21.4, state={"te_sp_rundown": 1})[1])
+        # the owner's split: a poor state that never had more is poor and kept; a rich one in decline is
+        # affluent and run-down
+        self.assertEqual(self.prosperity(3, 10, expected=10), (1, False))
+        self.assertEqual(self.prosperity(3, 30, expected=34), (3, True))
+
+    def test_a_reword_reaches_the_prompt_of_a_table_variant(self):
+        # a reword of a field its variant's sentence does not use, or of a pilot picture written by
+        # hand, would change nothing and say nothing
+        r = registry
+        fields = set(r._REGION_FIELDS) | set(r._RUNG_FIELDS)
+        self.assertEqual(len(r.VARIANT_REGION["european"]), len(r._REGION_FIELDS))
+        self.assertEqual(len(r.VARIANT_RUNG[1]), len(r._RUNG_FIELDS))
+        for (region, rung, variant), words in r.VARIANT_REWORD.items():
+            key = f"urban_{region}_{rung}_{variant}"
+            with self.subTest(key):
+                entry = r.DRAFTS.get(key) or r.PICTURES[key]
+                self.assertLessEqual(set(words), fields)
+                self.assertTrue(words)
+                self.assertEqual(entry["prompt"],
+                                 r.variant_prompt(region, rung, variant).format(
+                                     when=r.CITY_LADDER[rung][1], landmark=r.CITY_LANDMARK[region]))
+                for text in words.values():
+                    self.assertIn(text, entry["prompt"])
+
+    def test_the_variants_take_their_axis_from_their_name(self):
+        r = registry
+        variants = {k: d for k, d in r.DRAFTS.items() if d["family"] == "variant"}
+        self.assertEqual(len(variants) + len(r.VARIANT_PICKS), 223)
+        for key, d in variants.items():
+            with self.subTest(key):
+                self.assertEqual(key, f"urban_{d['region']}_{d['rung']}_{d['variant']}")
+                axis = r.VARIANT_AXIS[d["variant"]]
+                self.assertIn(d["variant"], {"size": r.SIZES, "means": r.MEANS, "upkeep": r.UPKEEP}[axis])
+                self.assertIn(r.CITY_LANDMARK[d["region"]], d["prompt"])
+                self.assertFalse(d["variant"] == "megacity" and d["rung"] < 3)
+        # run-down over poor or affluent over any size over the plain street, all under a character
+        self.assertLess(9 * r.W_SIZE + 9 * r.W_REGION, r.W_MEANS)
+        self.assertLess(9 * r.W_MEANS + 9 * r.W_SIZE + 9 * r.W_REGION, r.W_UPKEEP)
+        self.assertLess(9 * r.W_UPKEEP + 9 * r.W_MEANS + 9 * r.W_SIZE + 9 * r.W_REGION, r.W_CHAR)
+        effects = EFFECTS.read_text(encoding="utf-8-sig")
+        for tag in ("te_sp_means", "te_sp_rundown"):
+            self.assertIn(f"name = {tag} value", effects)
+            self.assertIn(f"remove_variable = {tag}", effects)
 
     def test_oil_country_is_a_share_of_the_states_levels(self):
         # the owner's case: many rigs beside a great city is not an oil state

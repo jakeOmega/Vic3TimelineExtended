@@ -192,6 +192,19 @@ W_OVER = 10000000
 # A city's character (housing blocks, smog) sits between the rung and the size: the right
 # technology still comes first, but a smog-bound metropolis shows the smog.
 W_CHAR = 10000  # times the character's digit
+# Prosperity (design section 6) sits between a city's character and its size: a run-down street
+# over a poor or an affluent one over a town or a metropolis.
+W_UPKEEP = 1000
+W_MEANS = 100  # times the level's digit
+# The yearly pass's tags: te_sp_means is 1 poor, 3 affluent, absent ordinary; te_sp_rundown is
+# present while the standard of living sits well under what the state's people expect.
+MEANS = {
+    "poor": (["has_variable = te_sp_means", "var:te_sp_means <= 1"], 1),
+    "affluent": (["has_variable = te_sp_means", "var:te_sp_means >= 3"], 3),
+}
+UPKEEP = {
+    "rundown": (["has_variable = te_sp_rundown"], 1),
+}
 # A condition (ruins, a nuclear strike) outranks every rung, like a takeover, and the conditions
 # rank among themselves by their digit. Conditions are city pictures and takeovers stand on open
 # land, so they share the place above the rung without meeting. The largest weight stays under
@@ -1223,6 +1236,399 @@ DRAFTS = {
 }
 
 
+# --- Waves 4 and 5, a pilot (2026-11-11): the size and the prosperity variants of two regional
+# streets on one rung, to settle how such a prompt is written before the other 212 are. Each
+# leads with its verdict ("a small provincial town", "a poor, shabby quarter"), as the ruins
+# had to, and keeps the family's landmark so the variant reads as the same place.
+def _variant(region, rung, variant, shows, prompt):
+    tech, _when = CITY_LADDER[rung]
+    return {**_draft("variant", ["urban"], "urban_european", tech, rung, shows,
+                     prompt.replace("{landmark}", CITY_LANDMARK[region])),
+            "region": region, "variant": variant}
+
+
+DRAFTS.update({
+    "urban_european_3_town": _variant(
+        "european", 3, "town", "the largest city under 100,000 people",
+        "A small European provincial town {when}: a quiet main street of two- and three-storey "
+        "plastered houses with steep tiled roofs, a few boxy 1980s cars parked at the kerb, a "
+        "country bus, a small paved square with a fountain and young trees, a few people, "
+        "{landmark} at the end of the street, wooded hills beyond the roofs"),
+    "urban_european_3_metropolis": _variant(
+        "european", 3, "metropolis", "the largest city over 1,000,000 people",
+        "The center of a great European metropolis {when}, seen from above a wide boulevard: a "
+        "dense cluster of mirrored glass skyscrapers of forty to sixty storeys rising over older "
+        "stone blocks with mansard roofs, a multi-lane avenue packed with boxy 1980s cars and "
+        "articulated buses, an elevated expressway, crowds, {landmark} small among the towers"),
+    "urban_european_3_megacity": _variant(
+        "european", 3, "megacity", "the largest city over 10,000,000 people",
+        "An endless European megacity {when}, seen from a high rooftop: glass skyscrapers and "
+        "dense city blocks stretching to the horizon in every direction under a haze, stacked "
+        "expressway interchanges full of boxy 1980s cars, elevated railway lines, older stone "
+        "blocks with mansard roofs below, {landmark} tiny in the foreground"),
+    "urban_european_3_poor": _variant(
+        "european", 3, "poor", "a low standard of living",
+        "A poor, shabby quarter of a European city {when}: grimy stone apartment buildings with "
+        "cracked plaster and patched windows, washing hung on balconies, a potholed street with "
+        "a few rusty boxy 1980s cars and an old bus, tangled overhead wires, handcarts, street "
+        "vendors with crates, people in worn coats, mirrored office towers far in the "
+        "background, {landmark} hazy at the end of the street"),
+    "urban_european_3_affluent": _variant(
+        "european", 3, "affluent", "a high standard of living",
+        "A wealthy, immaculate quarter of a European city {when}: restored stone apartment "
+        "buildings with gilded balconies and flower boxes below gleaming mirrored towers, a "
+        "spotless tree-lined boulevard, a fountain, expensive polished boxy 1980s limousines and "
+        "sports cars, terraces under plain parasols, elegantly dressed people, {landmark} hazy "
+        "at the end of the street"),
+    "urban_european_3_rundown": _variant(
+        "european", 3, "rundown", "a standard of living well under what its people expect",
+        "A neglected, decaying quarter of a European city in hard times {when}: stone apartment "
+        "buildings with peeling paint, broken and boarded-up windows and shuttered ground "
+        "floors, litter and overflowing bins along the kerb, a burnt-out boxy 1980s car, weeds "
+        "in the cracked pavement, a queue of idle people in drab coats, dull mirrored towers "
+        "behind, {landmark} hazy at the end of the street"),
+    "urban_south_asian_3_town": _variant(
+        "south_asian", 3, "town", "the largest city under 100,000 people",
+        "A small South Asian provincial town {when}: a dusty main street of two-storey "
+        "whitewashed brick houses with flat roofs and wooden balconies, a few auto rickshaws and "
+        "motor scooters, an old country bus, stalls under plain parasols, cattle wandering, a "
+        "banyan tree, {landmark} at the end of the street, palm groves and fields beyond the "
+        "roofs"),
+    "urban_south_asian_3_metropolis": _variant(
+        "south_asian", 3, "metropolis", "the largest city over 1,000,000 people",
+        "The center of a great South Asian metropolis {when}, seen from above a wide avenue: a "
+        "dense cluster of concrete and glass towers of thirty to fifty storeys rising over old "
+        "red sandstone arcades, a multi-lane road packed with boxy 1980s cars, auto rickshaws "
+        "and crowded buses, a concrete flyover, dense crowds in bright clothes, {landmark} small "
+        "among the towers"),
+    "urban_south_asian_3_megacity": _variant(
+        "south_asian", 3, "megacity", "the largest city over 10,000,000 people",
+        "An endless South Asian megacity {when}, seen from a high rooftop: concrete towers and "
+        "dense low blocks stretching to the horizon in every direction under a haze, flyovers "
+        "jammed with boxy 1980s cars, buses and auto rickshaws, elevated railway lines, water "
+        "tanks and washing on a sea of flat roofs, {landmark} tiny in the foreground"),
+    "urban_south_asian_3_poor": _variant(
+        "south_asian", 3, "poor", "a low standard of living",
+        "A poor, makeshift quarter of a South Asian city {when}: crumbling brick tenements "
+        "patched with corrugated iron and tarpaulin, an unpaved lane with open drains, "
+        "handcarts, bicycles and one battered auto rickshaw, washing strung across the street, a "
+        "tangle of overhead cables, barefoot children, a dense crowd in faded clothes, concrete "
+        "towers far in the background, {landmark} hazy at the end of the street"),
+    "urban_south_asian_3_affluent": _variant(
+        "south_asian", 3, "affluent", "a high standard of living",
+        "A wealthy, immaculate quarter of a South Asian city {when}: white villas and "
+        "marble-fronted apartment blocks with deep verandas behind garden walls, a spotless "
+        "avenue of flowering trees, a fountain, polished boxy 1980s limousines with drivers, "
+        "well-dressed people in silk, new glass office towers behind, {landmark} hazy at the end "
+        "of the street"),
+    "urban_south_asian_3_rundown": _variant(
+        "south_asian", 3, "rundown", "a standard of living well under what its people expect",
+        "A neglected, decaying quarter of a South Asian city in hard times {when}: concrete "
+        "blocks streaked black with damp, broken windows and shuttered ground floors, heaps of "
+        "rubbish in the street, a stripped abandoned bus, stray dogs, a long queue of idle men, "
+        "a tangle of dead overhead cables, {landmark} hazy at the end of the street"),
+})
+
+
+# --- Waves 4 and 5 in full: the size and prosperity variants of every regional street, written
+# from tables the way the pilot's twelve were by hand (which stay as they are). A variant leads
+# with its verdict, takes its houses from the region and its vehicles and towers from the rung,
+# and keeps the family's landmark. Megacities exist from rung 3; the European metropolis of
+# rung 1 is the pilot's own picture.
+VARIANT_ADJ = {
+    "european": "European", "north_american": "North American", "latin_american": "Latin American",
+    "african": "African", "south_asian": "South Asian", "middle_eastern": "Middle Eastern",
+    "east_asian": "East Asian", "japanese": "Japanese",
+}
+# (the low houses of a small town; what lies beyond it; the old quarter seen from above; a street
+#  detail of the region; the houses of the poor; of the rich; the ordinary street's buildings)
+VARIANT_REGION = {
+    "european": (
+        "two- and three-storey plastered houses with steep tiled roofs",
+        "wooded hills beyond the roofs",
+        "older stone blocks with mansard roofs",
+        "iron street lamps",
+        "grimy stone apartment buildings with cracked plaster and patched windows",
+        "restored stone apartment buildings with gilded balconies and flower boxes",
+        "stone apartment buildings"),
+    "north_american": (
+        "two-storey brick and clapboard buildings with flat roofs and wooden porches",
+        "a grain elevator and open prairie beyond the roofs",
+        "old brick blocks with water tanks on their roofs",
+        "wooden utility poles",
+        "run-down brick tenements with rusty fire escapes beside weedy empty lots",
+        "elegant limestone and brick apartment houses with plain striped awnings and doormen",
+        "brick commercial blocks with iron fire escapes"),
+    "latin_american": (
+        "one- and two-storey colonial houses in ochre, pink and white with red tile roofs",
+        "green hills behind",
+        "old colonial fronts with red tile roofs",
+        "palm trees",
+        "unplastered brick houses with tin roofs stacked up a steep hillside",
+        "white villas and balconied mansions behind garden walls hung with bougainvillea",
+        "colonial fronts and plain concrete apartment blocks"),
+    "african": (
+        "single-storey whitewashed houses with verandas and corrugated iron roofs",
+        "acacia trees and red earth beyond",
+        "older whitewashed arcaded buildings with iron roofs",
+        "flame trees",
+        "tin-roofed shacks and half-built concrete-block houses",
+        "white villas with deep verandas in walled gardens of flame trees",
+        "arcaded buildings and weathered concrete blocks"),
+    "south_asian": (
+        "two-storey whitewashed brick houses with flat roofs and wooden balconies",
+        "palm groves and fields beyond the roofs",
+        "old red sandstone arcades and carved balconies",
+        "a spreading banyan tree",
+        "crumbling brick tenements patched with corrugated iron and tarpaulin",
+        "white villas and marble-fronted apartment blocks with deep verandas behind garden walls",
+        "concrete blocks and old houses with carved balconies"),
+    "middle_eastern": (
+        "flat-roofed two-storey stone and plaster houses with wooden lattice windows",
+        "date palms and dry hills behind",
+        "the flat roofs and courtyards of the old quarter",
+        "date palms",
+        "crumbling mud-brick and bare concrete-block houses with flat roofs",
+        "pale stone villas with arched loggias in walled gardens of date palms",
+        "sand-colored apartment blocks with deep balconies"),
+    "east_asian": (
+        "two-storey arcaded row houses with grey tiled roofs",
+        "rice fields and misty hills beyond the roofs",
+        "old tiled-roof row houses and courtyards",
+        "streams of bicycles",
+        "crowded old tiled-roof row houses with makeshift brick lean-tos",
+        "courtyard mansions with glazed tile roofs and round moon gates behind high walls",
+        "plain brick and concrete blocks and old tiled row houses"),
+    "japanese": (
+        "two-storey wooden town houses with grey tiled roofs",
+        "wooded mountains beyond the roofs",
+        "low tiled wooden houses in narrow lanes",
+        "utility poles strung with many wires",
+        "cramped weathered wooden row houses with patched tiled roofs",
+        "large walled wooden villas with tiled gates and pine gardens",
+        "plain concrete buildings and wooden town houses"),
+}
+# By rung: (what the time puts in a small town; ordinary vehicles; the poor's; the rich's; the
+#  towers of a great city; what carries its traffic; the same for a megacity; towers seen far
+#  off from a poor street; behind a rich one; a wreck at the kerb of a neglected one)
+VARIANT_RUNG = {
+    1: ("an old 1920s bus, a horse cart",
+        "a few rounded 1930s automobiles",
+        "handcarts, bicycles and one old 1920s truck",
+        "polished 1930s limousines with chauffeurs",
+        "a dense cluster of stepped stone and art deco towers of twenty to thirty storeys",
+        "trams, double-deck buses and rounded 1930s automobiles on a wide boulevard, an iron "
+        "railway viaduct",
+        "",
+        "factory chimneys far in the background",
+        "an art deco apartment tower behind",
+        "a broken-down 1920s truck"),
+    2: ("a rounded 1950s country bus, telephone poles, one new plain concrete building",
+        "a few small rounded 1950s cars",
+        "handcarts, bicycles and a battered rounded 1950s bus",
+        "gleaming finned 1950s limousines and convertibles",
+        "a dense cluster of flat-topped glass and steel slab towers of twenty to thirty storeys",
+        "a wide avenue packed with rounded 1950s cars and buses, an elevated concrete expressway",
+        "",
+        "new concrete slab towers far in the background",
+        "new glass slab towers behind",
+        "a rounded 1950s car without wheels"),
+    3: ("a country bus, one concrete block of four storeys, young trees",
+        "a few boxy 1980s cars",
+        "a few rusty boxy 1980s cars and an old bus",
+        "polished boxy 1980s limousines and sports cars",
+        "a dense cluster of flat-topped mirrored glass towers of forty to sixty storeys",
+        "a multi-lane avenue packed with boxy 1980s cars and articulated buses, an elevated "
+        "expressway",
+        "stacked expressway interchanges full of boxy 1980s cars, elevated railway lines",
+        "mirrored towers far in the background",
+        "gleaming mirrored towers behind",
+        "a burnt-out boxy 1980s car"),
+    4: ("solar panels on every roof, a small electric bus, wind turbines on the heights",
+        "a few smooth electric cars",
+        "worn electric scooters, cargo bicycles and a patched old electric bus",
+        "sleek silent electric limousines and driverless shuttles",
+        "a dense cluster of slender supertall glass towers with planted terraces, some over a "
+        "hundred storeys",
+        "sleek trains on elevated viaducts, avenues of smooth electric cars, green roofs",
+        "elevated train viaducts crossing in layers, roads of smooth electric cars, green roofs",
+        "slender supertall towers far in the background",
+        "slender supertall towers with sky gardens behind",
+        "a stripped electric car on blocks"),
+    5: ("a small transparent vacuum-train stop on slender pylons, two garden towers of twenty "
+        "storeys, a flying craft overhead",
+        "small pod vehicles and humanoid robots",
+        "battered old pod vehicles and patched-up robots",
+        "gleaming private flying craft and attendant humanoid robots",
+        "colossal kilometre-high arcology towers joined by sky bridges and hung with gardens",
+        "streams of flying craft between the towers, transparent vacuum-train tubes on tall pylons",
+        "swarms of flying craft, transparent vacuum-train tubes crossing on tall pylons",
+        "colossal kilometre-high arcology towers far above in the background",
+        "kilometre-high garden towers behind",
+        "a dead humanoid robot slumped beside a grounded pod vehicle"),
+}
+# On the last two rungs the time leads the picture, straight after the verdict: what stands over
+# the street, then what stands in it. With the time left to the end of the prompt, as on rungs 1
+# to 3, the first renders of the 2030s and of the far future were the 1950s street again (a poor
+# lane, a fountain square, a wreck at the kerb) with a different car. (what looms; what is in the
+# street), by variant; the small town is only rewritten on rung 5. "A wall of ... towers that rise
+# close behind the roofs" is the wording that draws them; "in the shadow of kilometre-high
+# arcology towers that fill the sky" drew none.
+VARIANT_LEAD = {
+    4: {
+        "poor": ("under a wall of slender supertall glass towers that rise close behind the roofs",
+                 "worn electric scooters and a patched old electric bus, old solar panels and "
+                 "satellite dishes on the roofs"),
+        "affluent": ("below slender supertall glass towers with sky gardens that rise close behind the roofs",
+                     "sleek silent electric limousines and driverless shuttles"),
+        "rundown": ("under dull, stained supertall glass towers that rise close behind the roofs",
+                    "a stripped electric car on blocks, dead solar panels hanging from the roofs"),
+    },
+    5: {
+        "town": ("a transparent vacuum-train tube on slender pylons passing over the roofs, two garden "
+                 "towers of twenty storeys rising behind, a flying craft overhead",
+                 "small pod vehicles and humanoid robots"),
+        "poor": ("under a wall of colossal white futuristic towers joined by sky bridges that rise close "
+                 "behind the roofs, flying craft between them",
+                 "battered pod vehicles and patched-up humanoid robots"),
+        "affluent": ("below a wall of colossal white futuristic garden towers joined by sky bridges that "
+                     "rise close behind the roofs",
+                     "gleaming private flying craft landing, attendant humanoid robots"),
+        "rundown": ("under a wall of colossal stained white futuristic towers that rise close behind the "
+                    "roofs",
+                    "a dead humanoid robot slumped beside a grounded pod vehicle"),
+    },
+}
+# The second round: a key whose first four candidates all failed the same way takes its own words
+# for a field of the two tables above; every other key keeps the table's, so its picked render
+# stays the render of its prompt. A reword that a second round of candidates did not bear out is
+# taken out again, and the key goes back to its first candidates.
+#   The small town of 1960: "a few small rounded 1950s cars" drew the small rounded cars of the
+# 2000s in every region but the African one, and "one new plain concrete building" a present-day
+# one. Two-tone paint, chrome and whitewall tires are the 1950s' own.
+#   The North American great city: "stepped stone and art deco towers" over "old brick blocks with
+# water tanks on their roofs" is New York, and three candidates in four drew its towers (or
+# Chicago's, or Toronto's) on every rung. The rewording says what the towers are (plain, flat
+# roofed, of one height) and leaves out what they must not be: naming a thing draws it.
+#   The European great city of 1960: mansard roofs are Paris, and the candidates drew its tower.
+#   The affluent Middle Eastern street of about 1990: "limousines and sports cars" drew the
+# luxury cars of the 2010s in all four candidates.
+_REGION_FIELDS = ("low", "beyond", "old", "detail", "poor", "rich", "plain")
+_RUNG_FIELDS = ("town", "cars", "poor_cars", "rich_cars", "towers", "traffic", "mega_traffic", "far",
+                "behind", "wreck")
+_NA_OLD = "older low brick warehouses and rail yards"
+_NA_TOWERS = {
+    1: "a dense cluster of plain flat-roofed brick and limestone office blocks of fifteen to twenty "
+       "storeys, all of about the same height",
+    2: "a dense cluster of plain flat-roofed glass and steel office slabs of twenty to thirty "
+       "storeys, all of about the same height",
+    3: "a dense cluster of plain flat-roofed mirrored glass office towers of forty to fifty storeys, "
+       "all of about the same height",
+    4: "a dense cluster of slender supertall glass towers with planted terraces and flat garden "
+       "roofs, all of about the same height",
+    5: "colossal kilometre-high white arcology towers with flat garden roofs, joined by sky bridges "
+       "and hung with gardens",
+}
+VARIANT_REWORD = {
+    **{(_region, 2, "town"): {
+        "town": "a rounded 1950s country bus with a split windscreen, telephone poles, one plain "
+                "concrete building of two storeys",
+        "cars": "two heavy two-tone 1950s sedans with chrome grilles and whitewall tires at the "
+                "kerb, the street otherwise empty"}
+       for _region in VARIANT_ADJ if _region != "african"},
+    **{("north_american", _rung, _size): {"towers": _words, "old": _NA_OLD}
+       for _rung, _words in _NA_TOWERS.items() for _size in ("metropolis", "megacity")
+       if _size == "metropolis" or _rung >= 3},
+    ("european", 2, "metropolis"): {
+        "towers": "a dense cluster of plain flat-roofed glass and concrete office slabs of fifteen to "
+                  "twenty storeys, all of about the same height",
+        "old": "older stone blocks with steep tiled roofs"},
+    ("south_asian", 1, "town"): {
+        "town": "a boxy 1920s country bus with a rounded roof, a horse cart",
+        "cars": "two tall black 1930s saloons with running boards and spoked wheels at the kerb, "
+                "the street otherwise empty"},
+    ("japanese", 3, "town"): {
+        "town": "a boxy square-edged 1980s country bus, one concrete block of four storeys, young trees",
+        "cars": "two small boxy square-edged 1980s saloons with flat bonnets and rectangular "
+                "headlamps at the kerb, the street otherwise empty"},
+    **{(_region, 3, "affluent"): {
+        "rich_cars": "polished boxy 1980s saloons with square headlamps, one long square-edged 1980s "
+                     "limousine"} for _region in ("middle_eastern", "east_asian", "japanese")},
+}
+VARIANT_SHOWS = {
+    "town": "the largest city under 100,000 people",
+    "metropolis": "the largest city over 1,000,000 people",
+    "megacity": "the largest city over 10,000,000 people",
+    "poor": "a low standard of living",
+    "affluent": "a high standard of living",
+    "rundown": "a standard of living well under what its people expect",
+}
+
+
+def variant_prompt(region: str, rung: int, variant: str) -> str:
+    adj = VARIANT_ADJ[region]
+    words = {**dict(zip(_REGION_FIELDS, VARIANT_REGION[region])),
+             **dict(zip(_RUNG_FIELDS, VARIANT_RUNG[rung])),
+             **VARIANT_REWORD.get((region, rung, variant), {})}
+    low, beyond, old, detail, poor, rich, plain = (words[f] for f in _REGION_FIELDS)
+    town, cars, poor_cars, rich_cars, towers, traffic, mega_traffic, far, behind, wreck = (
+        words[f] for f in _RUNG_FIELDS)
+    future = "far-future " if rung == 5 else ""
+    a = "an" if (future or adj)[0] in "AEIOU" else "a"      # "an African city", "a far-future African city"
+    end = "{landmark} hazy at the end of the street"
+    if variant in VARIANT_LEAD.get(rung, {}):
+        looms, street = VARIANT_LEAD[rung][variant]
+        if variant == "town":
+            return (f"A small {future}{adj} provincial town {{when}}, {looms}: a quiet main street of "
+                    f"{low}, {street}, {detail}, a few people, {{landmark}} at the end of the street, "
+                    f"{beyond}")
+        if variant == "poor":
+            return (f"A poor, shabby quarter of {a} {future}{adj} city {{when}}, {looms}: {street}, "
+                    f"{poor}, washing hung across a potholed unpaved lane, tangled overhead wires, "
+                    f"{detail}, street vendors with crates, people in worn clothes, {end}")
+        if variant == "affluent":
+            return (f"A wealthy, immaculate quarter of {a} {future}{adj} city {{when}}, {looms}: "
+                    f"{street}, {rich}, a spotless tree-lined boulevard, a fountain, terraces under "
+                    f"plain parasols, elegantly dressed people, {end}")
+        return (f"A neglected, decaying quarter of {a} {future}{adj} city in hard times {{when}}, "
+                f"{looms}: {street}, {plain} with peeling paint, boarded-up windows and shuttered "
+                f"ground floors, litter and overflowing bins, weeds in the cracked pavement, a queue "
+                f"of idle people, {end}")
+    if variant == "town":
+        return (f"A small {future}{adj} provincial town {{when}}: a quiet main street of {low}, {town}, "
+                f"{cars}, {detail}, a few people, {{landmark}} at the end of the street, {beyond}")
+    if variant == "metropolis":
+        return (f"The center of a great {future}{adj} metropolis {{when}}, seen from above a wide avenue: "
+                f"{towers}, rising over {old}, {traffic}, crowds, {{landmark}} small among the towers")
+    if variant == "megacity":
+        return (f"An endless {future}{adj} megacity {{when}}, seen from a high rooftop: {towers} and dense "
+                f"city blocks stretching to the horizon in every direction under a haze, {mega_traffic}, "
+                f"{old} below, {{landmark}} small in the foreground")
+    if variant == "poor":
+        return (f"A poor, shabby quarter of {a} {future}{adj} city {{when}}: {poor}, washing hung across a "
+                f"potholed unpaved lane, {poor_cars}, tangled overhead wires, {detail}, street vendors with "
+                f"crates, people in worn clothes, {far}, {end}")
+    if variant == "affluent":
+        return (f"A wealthy, immaculate quarter of {a} {future}{adj} city {{when}}: {rich}, a spotless "
+                f"tree-lined boulevard, a fountain, {rich_cars}, terraces under plain parasols, elegantly "
+                f"dressed people, {behind}, {end}")
+    assert variant == "rundown", variant
+    return (f"A neglected, decaying quarter of {a} {future}{adj} city in hard times {{when}}: {plain} with "
+            f"peeling paint, broken and boarded-up windows and shuttered ground floors, litter and "
+            f"overflowing bins, {wreck}, weeds in the cracked pavement, a queue of idle people in drab "
+            f"clothes, {far}, {end}")
+
+
+for _region in REGIONS:
+    for _rung in CITY_LADDER:
+        for _name in VARIANT_SHOWS:
+            _key = f"urban_{_region}_{_rung}_{_name}"
+            if _key in DRAFTS or _key in PICTURES or (_name == "megacity" and _rung < 3):
+                continue
+            DRAFTS[_key] = _variant(_region, _rung, _name, VARIANT_SHOWS[_name],
+                                    variant_prompt(_region, _rung, _name))
+
+
 # --- Wave 3: worked land. A draft becomes a picture here once it has a picked render: its
 # prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
 # picture it is like, and this table adds what decides between it and its neighbors.
@@ -1400,6 +1806,336 @@ WAVE6_PICKS = {
     "resort_4": {"seed": 0},
 }
 
+# --- Waves 4 and 5: a variant's wiring is its own name. A town, metropolis or megacity is a
+# size; poor and affluent are means; run-down is upkeep. Each keeps its family's region and
+# overlay. The picked render of each goes in VARIANT_PICKS.
+VARIANT_AXIS = {"town": "size", "metropolis": "size", "megacity": "size",
+                "poor": "means", "affluent": "means", "rundown": "upkeep"}
+VARIANT_PICKS = {
+    "urban_european_1_town": {"seed": 1, "smudge": [(1118, 692, 1158, 706)]},
+    "urban_european_1_poor": {"seed": 1,
+                             "smudge": [(1352, 348, 1408, 404), (1220, 652, 1273, 670), (0, 385, 47, 448), (851, 507, 890, 524)]},
+    "urban_european_1_affluent": {"seed": 3},
+    "urban_european_1_rundown": {"seed": 3},
+    "urban_european_2_town": {"seed": 3, "smudge": [(236, 538, 300, 560), (1018, 650, 1064, 670)]},
+    "urban_european_2_metropolis": {"seed": 1},
+    "urban_european_2_poor": {"seed": 3,
+                             "smudge": [(918, 474, 978, 496), (988, 474, 1050, 496), (948, 447, 1003, 465), (1190, 466, 1228, 550)]},
+    "urban_european_2_affluent": {"seed": 1, "smudge": [(124, 694, 182, 716), (1142, 674, 1197, 694)]},
+    "urban_european_2_rundown": {"seed": 1, "smudge": [(1252, 531, 1308, 546), (1262, 546, 1310, 568)]},
+    "urban_european_3_town": {"seed": 2, "smudge": [(60, 580, 130, 630), (1371, 696, 1424, 716)]},
+    "urban_european_3_metropolis": {"seed": 0, "smudge": [(1432, 352, 1490, 390), (483, 174, 538, 186)]},
+    "urban_european_3_megacity": {"seed": 1, "smudge": [(460, 30, 500, 78)]},
+    "urban_european_3_poor": {"seed": 3, "smudge": [(224, 536, 272, 584)]},
+    "urban_european_3_affluent": {"seed": 3},
+    "urban_european_3_rundown": {"seed": 2, "smudge": [(722, 522, 760, 538), (1388, 586, 1428, 604)]},
+    "urban_european_4_town": {"seed": 3, "smudge": [(1030, 714, 1070, 752), (462, 678, 506, 732)]},
+    "urban_european_4_metropolis": {"seed": 0, "smudge": [(229, 216, 268, 230)]},
+    "urban_european_4_megacity": {"seed": 0, "smudge": [(499, 176, 529, 212), (246, 227, 281, 240)]},
+    "urban_european_4_poor": {"seed": 1,
+                             "smudge": [(1436, 622, 1488, 738), (1424, 722, 1450, 746), (106, 684, 140, 697)]},
+    "urban_european_4_affluent": {"seed": 3, "smudge": [(302, 654, 366, 670), (416, 680, 438, 716)]},
+    "urban_european_4_rundown": {"seed": 0,
+                                "smudge": [(1299, 449, 1393, 474), (1271, 445, 1298, 477), (1506, 466, 1532, 537), (71, 595, 104, 613)]},
+    "urban_european_5_town": {"seed": 0},
+    "urban_european_5_metropolis": {"seed": 2},
+    "urban_european_5_megacity": {"seed": 0},
+    "urban_european_5_poor": {"seed": 1, "crop": (30, 0, 1507, 724), "smudge": [(930, 651, 957, 692)]},
+    "urban_european_5_affluent": {"seed": 1},
+    "urban_european_5_rundown": {"seed": 3, "smudge": [(1284, 535, 1332, 556), (471, 538, 516, 558)]},
+    "urban_north_american_1_town": {"seed": 3, "smudge": [(10, 605, 52, 684)]},
+    "urban_north_american_1_metropolis": {"seed": 1},
+    "urban_north_american_1_poor": {"seed": 0,
+                                   "smudge": [(1130, 236, 1178, 274), (1126, 384, 1184, 430), (1326, 450, 1420, 476), (1213, 452, 1236, 490)]},
+    "urban_north_american_1_affluent": {"seed": 1,
+                                       "smudge": [(1085, 28, 1121, 62), (517, 462, 560, 515), (314, 508, 386, 546), (95, 697, 133, 718), (1162, 673, 1198, 692)]},
+    "urban_north_american_1_rundown": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                      "smudge": [(172, 0, 292, 66), (1360, 428, 1440, 478), (1447, 406, 1518, 445), (1328, 455, 1358, 496)]},
+    "urban_north_american_2_town": {"seed": 3,
+                                   "smudge": [(285, 522, 365, 545), (295, 652, 335, 668), (1055, 632, 1092, 652), (1205, 586, 1232, 604)]},
+    "urban_north_american_2_metropolis": {"seed": 1, "smudge": [(312, 195, 345, 212)]},
+    "urban_north_american_2_poor": {"seed": 1,
+                                   "smudge": [(1174, 454, 1286, 484), (1222, 647, 1264, 673), (1100, 34, 1124, 68), (8, 382, 42, 438), (538, 427, 636, 444)]},
+    "urban_north_american_2_affluent": {"seed": 3, "smudge": [(265, 669, 295, 688), (516, 488, 543, 550)]},
+    "urban_north_american_2_rundown": {"seed": 0, "crop": (0, 0, 1470, 720),
+                                      "smudge": [(1074, 420, 1154, 502), (1405, 370, 1475, 396), (1335, 384, 1402, 404), (159, 397, 194, 421), (412, 508, 490, 542), (1213, 452, 1238, 492), (1280, 394, 1330, 414)]},
+    "urban_north_american_3_town": {"seed": 3, "smudge": [(198, 576, 257, 600), (546, 595, 592, 609)]},
+    "urban_north_american_3_metropolis": {"seed": 2, "smudge": [(845, 85, 893, 168)]},
+    "urban_north_american_3_megacity": {"seed": 0, "smudge": [(494, 152, 530, 205)]},
+    "urban_north_american_3_poor": {"seed": 3, "smudge": [(60, 496, 98, 514)]},
+    "urban_north_american_3_affluent": {"seed": 2, "smudge": [(401, 681, 434, 700), (1143, 645, 1181, 667)]},
+    "urban_north_american_3_rundown": {"seed": 1,
+                                      "smudge": [(93, 346, 163, 417), (273, 448, 314, 480), (1393, 72, 1472, 122), (1458, 38, 1536, 97), (796, 500, 890, 537)]},
+    "urban_north_american_4_town": {"seed": 0, "smudge": [(736, 562, 798, 580)]},
+    "urban_north_american_4_metropolis": {"seed": 1, "smudge": [(436, 0, 484, 36), (976, 48, 1010, 120)]},
+    "urban_north_american_4_megacity": {"seed": 0, "smudge": [(504, 130, 527, 178)]},
+    "urban_north_american_4_poor": {"seed": 1,
+                                   "smudge": [(574, 553, 636, 571), (755, 544, 812, 562), (576, 588, 634, 606)]},
+    "urban_north_american_4_affluent": {"seed": 0, "smudge": [(763, 240, 792, 264), (704, 336, 758, 428)]},
+    "urban_north_american_4_rundown": {"seed": 1,
+                                      "smudge": [(0, 403, 64, 464), (408, 462, 450, 514), (285, 497, 342, 545), (804, 516, 890, 544)]},
+    "urban_north_american_5_town": {"seed": 3, "smudge": [(58, 686, 172, 708), (1036, 166, 1066, 190)]},
+    "urban_north_american_5_metropolis": {"seed": 0},
+    "urban_north_american_5_megacity": {"seed": 0,
+                                       "smudge": [(266, 168, 290, 202), (0, 165, 14, 206), (506, 184, 524, 212)]},
+    "urban_north_american_5_poor": {"seed": 0,
+                                   "smudge": [(762, 236, 794, 266), (726, 360, 746, 400), (1288, 482, 1328, 532), (1430, 490, 1536, 548)]},
+    "urban_north_american_5_affluent": {"seed": 3},
+    "urban_north_american_5_rundown": {"seed": 0,
+                                      "smudge": [(1318, 362, 1405, 414), (1400, 362, 1492, 414), (1464, 446, 1536, 552), (1218, 412, 1272, 432), (1152, 428, 1192, 446), (940, 436, 1015, 458), (758, 236, 790, 266)]},
+    "urban_latin_american_1_town": {"seed": 1,
+                                   "smudge": [(20, 676, 56, 696), (228, 655, 256, 675), (6, 590, 88, 608), (348, 524, 400, 546), (1315, 478, 1390, 515), (1020, 637, 1044, 650)]},
+    "urban_latin_american_1_metropolis": {"seed": 0, "smudge": [(1296, 452, 1428, 472)]},
+    "urban_latin_american_1_poor": {"seed": 0,
+                                   "smudge": [(115, 522, 198, 585), (118, 585, 155, 665), (222, 556, 255, 640), (788, 606, 812, 618)]},
+    "urban_latin_american_1_affluent": {"seed": 1, "smudge": [(116, 688, 148, 706), (1132, 672, 1166, 688)]},
+    "urban_latin_american_1_rundown": {"seed": 0, "smudge": [(1335, 590, 1370, 604), (1514, 72, 1536, 152)]},
+    "urban_latin_american_2_town": {"seed": 3,
+                                   "smudge": [(325, 530, 380, 552), (322, 660, 358, 678), (1015, 642, 1052, 660), (882, 560, 935, 596)]},
+    "urban_latin_american_2_metropolis": {"seed": 0},
+    "urban_latin_american_2_poor": {"seed": 2, "crop": (36, 0, 1500, 718),
+                                   "smudge": [(200, 366, 268, 428), (168, 562, 204, 655), (1338, 589, 1384, 630), (1448, 670, 1512, 740), (1092, 674, 1118, 688)]},
+    "urban_latin_american_2_affluent": {"seed": 3, "smudge": [(284, 668, 314, 684), (1474, 680, 1506, 694)]},
+    "urban_latin_american_2_rundown": {"seed": 2},
+    "urban_latin_american_3_town": {"seed": 0, "smudge": [(1110, 638, 1136, 654), (506, 584, 538, 598)]},
+    "urban_latin_american_3_metropolis": {"seed": 3, "smudge": [(556, 240, 604, 258), (1176, 700, 1254, 716)]},
+    "urban_latin_american_3_megacity": {"seed": 1},
+    "urban_latin_american_3_poor": {"seed": 3,
+                                   "smudge": [(944, 529, 1011, 550), (970, 633, 997, 648), (319, 675, 349, 694), (722, 658, 754, 675)]},
+    "urban_latin_american_3_affluent": {"seed": 0, "smudge": [(496, 180, 548, 262), (1480, 180, 1536, 204)]},
+    "urban_latin_american_3_rundown": {"seed": 3, "crop": (170, 50, 1536, 720), "smudge": [(1506, 536, 1536, 566)]},
+    "urban_latin_american_4_town": {"seed": 3, "smudge": [(144, 714, 164, 752)]},
+    "urban_latin_american_4_metropolis": {"seed": 0, "smudge": [(606, 254, 652, 272)]},
+    "urban_latin_american_4_megacity": {"seed": 0, "smudge": [(644, 406, 690, 428), (1430, 416, 1472, 442)]},
+    "urban_latin_american_4_poor": {"seed": 3,
+                                   "smudge": [(722, 108, 750, 142), (692, 72, 714, 104), (742, 660, 765, 674)]},
+    "urban_latin_american_4_affluent": {"seed": 0},
+    "urban_latin_american_4_rundown": {"seed": 0,
+                                      "smudge": [(1318, 448, 1380, 474), (1378, 478, 1394, 518), (1504, 476, 1536, 522), (38, 598, 96, 620), (182, 484, 206, 512)]},
+    "urban_latin_american_5_town": {"seed": 0,
+                                   "smudge": [(64, 214, 106, 249), (192, 260, 222, 276), (333, 306, 354, 320)]},
+    "urban_latin_american_5_metropolis": {"seed": 2},
+    "urban_latin_american_5_megacity": {"seed": 0,
+                                       "smudge": [(1448, 194, 1518, 302), (1418, 360, 1494, 390), (500, 188, 524, 212), (246, 222, 290, 240)]},
+    "urban_latin_american_5_poor": {"seed": 1},
+    "urban_latin_american_5_affluent": {"seed": 3},
+    "urban_latin_american_5_rundown": {"seed": 0, "crop": (10, 0, 1490, 725),
+                                      "smudge": [(136, 190, 180, 238), (576, 571, 630, 591), (1138, 441, 1197, 461), (1222, 431, 1283, 453), (1052, 448, 1082, 466), (1374, 474, 1392, 500)]},
+    "urban_african_1_town": {"seed": 3,
+                            "smudge": [(1390, 472, 1446, 538), (1140, 484, 1162, 516), (286, 628, 318, 652)]},
+    "urban_african_1_metropolis": {"seed": 1},
+    "urban_african_1_poor": {"seed": 3, "smudge": [(952, 594, 1003, 614)]},
+    "urban_african_1_affluent": {"seed": 0},
+    "urban_african_1_rundown": {"seed": 2, "crop": (30, 0, 1507, 724),
+                               "smudge": [(356, 428, 398, 448), (1458, 374, 1494, 412)]},
+    "urban_african_2_town": {"seed": 0,
+                            "smudge": [(203, 592, 238, 632), (1008, 468, 1092, 512), (210, 636, 236, 651)]},
+    "urban_african_2_metropolis": {"seed": 2, "crop": (236, 54, 1536, 691), "smudge": [(1056, 450, 1120, 466)]},
+    "urban_african_2_poor": {"seed": 0, "smudge": [(733, 460, 812, 484), (751, 570, 790, 585), (646, 460, 692, 482)]},
+    "urban_african_2_affluent": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                "smudge": [(612, 284, 650, 302), (1372, 76, 1398, 104), (1166, 648, 1198, 668)]},
+    "urban_african_2_rundown": {"seed": 1,
+                               "smudge": [(594, 384, 644, 404), (1244, 372, 1318, 406), (1328, 357, 1407, 417), (1248, 567, 1303, 588)]},
+    "urban_african_3_town": {"seed": 3, "smudge": [(292, 628, 340, 642), (954, 592, 992, 608)]},
+    "urban_african_3_metropolis": {"seed": 0, "smudge": [(1386, 485, 1475, 506)]},
+    "urban_african_3_megacity": {"seed": 0},
+    "urban_african_3_poor": {"seed": 1,
+                            "smudge": [(468, 520, 502, 572), (583, 588, 620, 604), (740, 497, 810, 512), (1229, 650, 1300, 675)]},
+    "urban_african_3_affluent": {"seed": 0},
+    "urban_african_3_rundown": {"seed": 1, "smudge": [(40, 436, 74, 484), (614, 587, 648, 603)]},
+    "urban_african_4_town": {"seed": 2, "smudge": [(583, 673, 607, 688)]},
+    "urban_african_4_metropolis": {"seed": 0},
+    "urban_african_4_megacity": {"seed": 1, "smudge": [(445, 10, 485, 72)]},
+    "urban_african_4_poor": {"seed": 0,
+                            "smudge": [(760, 580, 780, 600), (1138, 634, 1170, 676), (1498, 448, 1536, 510)]},
+    "urban_african_4_affluent": {"seed": 1},
+    "urban_african_4_rundown": {"seed": 1, "smudge": [(0, 392, 52, 454), (1386, 544, 1406, 586)]},
+    "urban_african_5_town": {"seed": 2, "smudge": [(1096, 392, 1113, 418), (146, 636, 198, 672)]},
+    "urban_african_5_metropolis": {"seed": 0},
+    "urban_african_5_megacity": {"seed": 0},
+    "urban_african_5_poor": {"seed": 2},
+    "urban_african_5_affluent": {"seed": 3},
+    "urban_african_5_rundown": {"seed": 2, "crop": (0, 0, 1490, 730),
+                               "smudge": [(1038, 540, 1098, 552), (1174, 516, 1198, 530)]},
+    "urban_middle_eastern_1_town": {"seed": 1,
+                                   "smudge": [(440, 528, 504, 572), (104, 682, 146, 714), (196, 676, 238, 708)]},
+    "urban_middle_eastern_1_metropolis": {"seed": 1, "smudge": [(312, 192, 336, 214)]},
+    "urban_middle_eastern_1_poor": {"seed": 1, "smudge": [(756, 556, 794, 572), (890, 602, 926, 618)]},
+    "urban_middle_eastern_1_affluent": {"seed": 0, "smudge": [(1150, 338, 1226, 358)]},
+    "urban_middle_eastern_1_rundown": {"seed": 1, "crop": (0, 0, 1469, 720),
+                                      "smudge": [(80, 442, 146, 468), (596, 592, 644, 608)]},
+    "urban_middle_eastern_2_town": {"seed": 3,
+                                   "smudge": [(285, 528, 368, 550), (272, 652, 324, 672), (1014, 643, 1052, 662), (1203, 594, 1232, 610), (945, 500, 986, 527), (643, 496, 678, 556)]},
+    "urban_middle_eastern_2_metropolis": {"seed": 0},
+    "urban_middle_eastern_2_poor": {"seed": 0, "crop": (0, 0, 1477, 724),
+                                   "smudge": [(728, 462, 816, 486), (420, 512, 476, 548), (570, 516, 628, 544), (890, 460, 930, 482)]},
+    "urban_middle_eastern_2_affluent": {"seed": 3,
+                                       "smudge": [(274, 672, 304, 692), (1204, 612, 1238, 630), (1468, 676, 1502, 696)]},
+    "urban_middle_eastern_2_rundown": {"seed": 1,
+                                      "smudge": [(1268, 604, 1328, 628), (604, 592, 646, 610), (416, 492, 448, 514)]},
+    "urban_middle_eastern_3_town": {"seed": 3,
+                                   "smudge": [(280, 682, 320, 704), (306, 712, 350, 728), (408, 684, 426, 700)]},
+    "urban_middle_eastern_3_metropolis": {"seed": 1, "smudge": [(518, 456, 558, 496)]},
+    "urban_middle_eastern_3_megacity": {"seed": 0},
+    "urban_middle_eastern_3_poor": {"seed": 1,
+                                   "smudge": [(598, 593, 632, 607), (754, 516, 797, 529), (766, 574, 786, 584), (1229, 652, 1301, 674)]},
+    "urban_middle_eastern_3_affluent": {"seed": 1, "smudge": [(1164, 672, 1216, 690)]},
+    "urban_middle_eastern_3_rundown": {"seed": 2,
+                                      "smudge": [(682, 536, 724, 556), (752, 531, 794, 552), (1456, 416, 1506, 440)]},
+    "urban_middle_eastern_4_town": {"seed": 3,
+                                   "smudge": [(54, 282, 104, 338), (258, 334, 304, 376), (306, 711, 354, 729), (578, 711, 612, 727)]},
+    "urban_middle_eastern_4_metropolis": {"seed": 1},
+    "urban_middle_eastern_4_megacity": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_middle_eastern_4_poor": {"seed": 0, "smudge": [(742, 514, 812, 534), (764, 599, 794, 620)]},
+    "urban_middle_eastern_4_affluent": {"seed": 1, "smudge": [(130, 314, 154, 348), (440, 644, 474, 666)]},
+    "urban_middle_eastern_4_rundown": {"seed": 0, "crop": (0, 0, 1477, 724),
+                                      "smudge": [(136, 206, 180, 230), (1296, 484, 1338, 527), (982, 494, 1008, 518), (1372, 464, 1392, 497)]},
+    "urban_middle_eastern_5_town": {"seed": 3,
+                                   "smudge": [(146, 304, 236, 334), (1282, 660, 1304, 724), (594, 728, 624, 742)]},
+    "urban_middle_eastern_5_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_middle_eastern_5_megacity": {"seed": 0},
+    "urban_middle_eastern_5_poor": {"seed": 2},
+    "urban_middle_eastern_5_affluent": {"seed": 3},
+    "urban_middle_eastern_5_rundown": {"seed": 2,
+                                      "smudge": [(272, 318, 304, 392), (556, 634, 606, 662), (1342, 604, 1374, 627), (1308, 594, 1328, 627)]},
+    "urban_south_asian_1_town": {"seed": 3,
+                                "smudge": [(100, 518, 175, 545), (230, 540, 295, 560), (238, 612, 280, 660), (464, 622, 504, 640), (1000, 647, 1042, 666)]},
+    "urban_south_asian_1_metropolis": {"seed": 0,
+                                      "smudge": [(24, 118, 68, 164), (134, 196, 170, 232), (276, 198, 292, 212), (326, 218, 354, 240), (1228, 190, 1246, 212), (1458, 190, 1480, 216), (1364, 656, 1420, 690)]},
+    "urban_south_asian_1_poor": {"seed": 1, "smudge": [(514, 455, 566, 504), (602, 597, 632, 612)]},
+    "urban_south_asian_1_affluent": {"seed": 1, "smudge": [(1126, 673, 1176, 691), (920, 596, 948, 610)]},
+    "urban_south_asian_1_rundown": {"seed": 1,
+                                   "smudge": [(28, 86, 82, 210), (372, 388, 430, 415), (750, 528, 800, 575)]},
+    "urban_south_asian_2_town": {"seed": 0,
+                                "smudge": [(160, 584, 268, 636), (46, 645, 80, 664), (613, 633, 644, 649), (712, 575, 745, 624), (1045, 38, 1065, 60), (1184, 637, 1226, 657), (1350, 448, 1390, 505), (864, 618, 902, 636)]},
+    "urban_south_asian_2_metropolis": {"seed": 1, "smudge": [(204, 18, 256, 66)]},
+    "urban_south_asian_2_poor": {"seed": 0,
+                                "smudge": [(1008, 132, 1106, 148), (1068, 410, 1162, 458), (1052, 474, 1162, 498), (756, 492, 822, 511), (774, 608, 822, 624)]},
+    "urban_south_asian_2_affluent": {"seed": 2, "smudge": [(1144, 678, 1178, 694), (352, 647, 394, 660)]},
+    "urban_south_asian_2_rundown": {"seed": 1,
+                                   "smudge": [(28, 88, 72, 210), (468, 510, 502, 590), (424, 490, 446, 556), (1274, 604, 1322, 627), (1274, 480, 1312, 536), (598, 586, 634, 602)]},
+    "urban_south_asian_3_town": {"seed": 1,
+                                "smudge": [(0, 396, 52, 452), (1062, 82, 1088, 112), (748, 518, 806, 534), (1124, 556, 1176, 574), (1138, 672, 1182, 690)]},
+    "urban_south_asian_3_metropolis": {"seed": 0},
+    "urban_south_asian_3_megacity": {"seed": 1, "smudge": [(528, 650, 582, 672)]},
+    "urban_south_asian_3_poor": {"seed": 1, "smudge": [(1104, 178, 1154, 194)]},
+    "urban_south_asian_3_affluent": {"seed": 1,
+                                    "smudge": [(1054, 232, 1106, 246), (86, 672, 144, 690), (1184, 670, 1242, 690)]},
+    "urban_south_asian_3_rundown": {"seed": 1,
+                                   "smudge": [(0, 390, 62, 452), (1244, 652, 1290, 672), (780, 604, 808, 618), (604, 584, 636, 600)]},
+    "urban_south_asian_4_town": {"seed": 0, "smudge": [(404, 714, 444, 738), (760, 624, 792, 640)]},
+    "urban_south_asian_4_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724), "smudge": [(836, 30, 884, 62)]},
+    "urban_south_asian_4_megacity": {"seed": 0, "smudge": [(496, 184, 524, 216)]},
+    "urban_south_asian_4_poor": {"seed": 1,
+                                "smudge": [(570, 558, 656, 580), (590, 640, 630, 660), (1080, 28, 1122, 84)]},
+    "urban_south_asian_4_affluent": {"seed": 0},
+    "urban_south_asian_4_rundown": {"seed": 0, "crop": (0, 0, 1478, 724),
+                                   "smudge": [(766, 248, 794, 284), (1204, 464, 1246, 504)]},
+    "urban_south_asian_5_town": {"seed": 0, "smudge": [(44, 236, 90, 254)]},
+    "urban_south_asian_5_metropolis": {"seed": 3,
+                                      "smudge": [(1030, 36, 1090, 94), (748, 614, 778, 636), (748, 646, 778, 684)]},
+    "urban_south_asian_5_megacity": {"seed": 0, "smudge": [(1452, 184, 1508, 302)]},
+    "urban_south_asian_5_poor": {"seed": 0, "smudge": [(1464, 476, 1536, 566)]},
+    "urban_south_asian_5_affluent": {"seed": 3},
+    "urban_south_asian_5_rundown": {"seed": 2, "smudge": [(1448, 408, 1512, 466)]},
+    "urban_east_asian_1_town": {"seed": 1,
+                               "smudge": [(1204, 584, 1274, 636), (252, 652, 362, 706), (105, 702, 152, 722)]},
+    "urban_east_asian_1_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_east_asian_1_poor": {"seed": 1,
+                               "smudge": [(604, 594, 632, 609), (772, 571, 792, 585), (584, 429, 618, 444)]},
+    "urban_east_asian_1_affluent": {"seed": 3, "smudge": [(284, 682, 326, 698), (1026, 644, 1060, 661)]},
+    "urban_east_asian_1_rundown": {"seed": 0, "smudge": [(1368, 444, 1392, 484)]},
+    "urban_east_asian_2_town": {"seed": 3,
+                               "smudge": [(268, 616, 292, 638), (258, 661, 294, 680), (1013, 644, 1046, 663), (956, 499, 984, 557), (653, 498, 676, 556), (1440, 436, 1480, 474)]},
+    "urban_east_asian_2_metropolis": {"seed": 1, "smudge": [(498, 464, 568, 492), (512, 158, 530, 204)]},
+    "urban_east_asian_2_poor": {"seed": 2, "crop": (0, 0, 1477, 724),
+                               "smudge": [(130, 550, 206, 612), (126, 628, 210, 664), (1093, 662, 1134, 678)]},
+    "urban_east_asian_2_affluent": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                   "smudge": [(406, 661, 444, 685), (498, 638, 537, 653), (1126, 668, 1170, 692), (1237, 641, 1259, 659)]},
+    "urban_east_asian_2_rundown": {"seed": 3, "smudge": [(1280, 534, 1336, 574)]},
+    "urban_east_asian_3_town": {"seed": 1,
+                               "smudge": [(270, 536, 318, 584), (134, 698, 218, 750), (426, 572, 464, 594), (928, 648, 958, 678), (612, 648, 642, 662), (420, 713, 446, 729), (1144, 676, 1176, 690)]},
+    "urban_east_asian_3_metropolis": {"seed": 0},
+    "urban_east_asian_3_megacity": {"seed": 0, "smudge": [(496, 170, 532, 214)]},
+    "urban_east_asian_3_poor": {"seed": 3, "crop": (136, 0, 1536, 686),
+                               "smudge": [(192, 520, 274, 584), (948, 498, 982, 542), (804, 530, 866, 546), (316, 681, 347, 698), (720, 659, 752, 676), (825, 590, 847, 601), (939, 633, 963, 646)]},
+    "urban_east_asian_3_affluent": {"seed": 0},
+    "urban_east_asian_3_rundown": {"seed": 1,
+                                  "smudge": [(530, 428, 562, 504), (592, 474, 610, 526), (468, 516, 504, 600), (616, 592, 640, 610), (624, 352, 664, 424)]},
+    "urban_east_asian_4_town": {"seed": 3,
+                               "smudge": [(16, 636, 46, 670), (1030, 716, 1072, 752), (748, 650, 772, 664)]},
+    "urban_east_asian_4_metropolis": {"seed": 0, "smudge": [(996, 28, 1036, 90), (496, 140, 526, 188)]},
+    "urban_east_asian_4_megacity": {"seed": 3,
+                                   "smudge": [(306, 150, 338, 212), (1208, 508, 1228, 556), (1482, 550, 1500, 572), (482, 192, 512, 248)]},
+    "urban_east_asian_4_poor": {"seed": 1,
+                               "smudge": [(592, 644, 616, 658), (762, 528, 804, 542), (772, 577, 790, 588), (785, 689, 801, 701), (928, 670, 954, 688)]},
+    "urban_east_asian_4_affluent": {"seed": 0,
+                                   "smudge": [(264, 530, 328, 550), (720, 360, 746, 420), (1390, 689, 1416, 703)]},
+    "urban_east_asian_4_rundown": {"seed": 0,
+                                  "smudge": [(406, 513, 482, 540), (494, 548, 530, 594), (1494, 440, 1534, 556), (1366, 446, 1394, 506), (906, 494, 926, 530), (886, 528, 910, 544)]},
+    "urban_east_asian_5_town": {"seed": 0,
+                               "smudge": [(474, 218, 524, 240), (58, 238, 80, 254), (474, 720, 520, 752), (914, 724, 944, 744)]},
+    "urban_east_asian_5_metropolis": {"seed": 0, "smudge": [(658, 688, 690, 724)]},
+    "urban_east_asian_5_megacity": {"seed": 0, "crop": (0, 20, 1456, 734), "smudge": [(256, 162, 296, 206)]},
+    "urban_east_asian_5_poor": {"seed": 2,
+                               "smudge": [(254, 76, 270, 138), (724, 620, 752, 644), (1128, 626, 1178, 650)]},
+    "urban_east_asian_5_affluent": {"seed": 2, "smudge": [(322, 654, 354, 682)]},
+    "urban_east_asian_5_rundown": {"seed": 0, "crop": (0, 0, 1490, 730),
+                                  "smudge": [(580, 570, 648, 588), (308, 116, 410, 182), (484, 186, 528, 242), (626, 206, 664, 296), (162, 572, 200, 602), (1334, 478, 1360, 596), (1370, 442, 1392, 488), (32, 92, 54, 136), (30, 156, 92, 214), (106, 204, 126, 224)]},
+    "urban_japanese_1_town": {"seed": 1,
+                             "smudge": [(94, 604, 158, 622), (100, 734, 132, 750), (778, 662, 808, 680), (1116, 690, 1144, 706), (1484, 704, 1510, 752)]},
+    "urban_japanese_1_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                   "smudge": [(110, 128, 166, 160), (290, 118, 352, 180)]},
+    "urban_japanese_1_poor": {"seed": 3, "crop": (0, 20, 1404, 708)},
+    "urban_japanese_1_affluent": {"seed": 2, "crop": (86, 56, 1450, 724)},
+    "urban_japanese_1_rundown": {"seed": 3, "smudge": [(998, 228, 1026, 296), (944, 596, 980, 614)]},
+    "urban_japanese_2_town": {"seed": 1,
+                             "smudge": [(362, 522, 436, 541), (380, 620, 412, 640), (598, 578, 646, 620), (1190, 645, 1236, 670), (1489, 488, 1517, 556)]},
+    "urban_japanese_2_metropolis": {"seed": 0, "smudge": [(905, 180, 950, 285), (500, 195, 524, 222)]},
+    "urban_japanese_2_poor": {"seed": 1,
+                             "smudge": [(518, 462, 560, 504), (634, 485, 694, 505), (652, 580, 680, 598), (1140, 648, 1200, 672)]},
+    "urban_japanese_2_affluent": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                 "smudge": [(396, 662, 436, 690), (1138, 648, 1178, 690)]},
+    "urban_japanese_2_rundown": {"seed": 0, "smudge": [(918, 578, 946, 600)]},
+    "urban_japanese_3_town": {"seed": 3,
+                             "smudge": [(150, 550, 185, 585), (310, 662, 345, 683), (735, 656, 770, 672), (1008, 648, 1038, 665), (1134, 494, 1172, 537), (1424, 534, 1467, 572), (963, 488, 988, 552), (540, 550, 570, 575), (650, 515, 675, 545), (1124, 578, 1152, 618)]},
+    "urban_japanese_3_metropolis": {"seed": 1, "smudge": [(444, 8, 506, 98)]},
+    "urban_japanese_3_megacity": {"seed": 0, "smudge": [(500, 190, 532, 216), (1216, 176, 1250, 252)]},
+    "urban_japanese_3_poor": {"seed": 3, "smudge": [(1010, 476, 1064, 506), (946, 626, 974, 644)]},
+    "urban_japanese_3_affluent": {"seed": 3, "smudge": [(300, 666, 330, 686)]},
+    "urban_japanese_3_rundown": {"seed": 2,
+                                "smudge": [(172, 564, 196, 608), (458, 502, 484, 538), (546, 500, 580, 524), (536, 582, 560, 604)]},
+    "urban_japanese_4_town": {"seed": 3, "smudge": [(546, 640, 604, 660), (754, 666, 782, 680)]},
+    "urban_japanese_4_metropolis": {"seed": 1},
+    "urban_japanese_4_megacity": {"seed": 0, "smudge": [(488, 118, 538, 206), (1460, 200, 1484, 262)]},
+    "urban_japanese_4_poor": {"seed": 0,
+                             "smudge": [(44, 68, 90, 106), (648, 234, 702, 304), (756, 544, 808, 562), (616, 628, 642, 644), (772, 602, 798, 642), (1136, 536, 1154, 594), (158, 558, 182, 588)]},
+    "urban_japanese_4_affluent": {"seed": 0, "smudge": [(200, 620, 218, 654)]},
+    "urban_japanese_4_rundown": {"seed": 0,
+                                "smudge": [(34, 450, 112, 532), (58, 572, 82, 594), (650, 556, 676, 586), (1510, 496, 1530, 560)]},
+    "urban_japanese_5_town": {"seed": 2, "smudge": [(208, 684, 272, 712)]},
+    "urban_japanese_5_metropolis": {"seed": 2},
+    "urban_japanese_5_megacity": {"seed": 0,
+                                 "smudge": [(488, 132, 534, 206), (264, 172, 290, 214), (1174, 280, 1226, 300), (1464, 204, 1492, 270)]},
+    "urban_japanese_5_poor": {"seed": 0, "smudge": [(160, 44, 222, 66)]},
+    "urban_japanese_5_affluent": {"seed": 3, "smudge": [(958, 490, 982, 546)]},
+    "urban_japanese_5_rundown": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                "smudge": [(700, 538, 724, 558), (1108, 510, 1150, 536)]},
+}
+for _key, _pick in VARIANT_PICKS.items():
+    _draft_entry = DRAFTS.pop(_key)
+    PICTURES[_key] = {
+        "terrain": ["urban"],
+        "tech": _draft_entry["tech"],
+        "rung": _draft_entry["rung"],
+        "region": _draft_entry["region"],
+        "size": None,
+        VARIANT_AXIS[_draft_entry["variant"]]: _draft_entry["variant"],
+        "effect": CITY_EFFECT[_draft_entry["region"]],
+        "prompt": _draft_entry["prompt"],
+        **_pick,
+    }
+
 for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
     for _key, _pick in _picks.items():
         _draft_entry = DRAFTS.pop(_key)
@@ -1456,6 +2192,10 @@ def weight(key: str, terrain: str = None) -> int:
         w += W_OVER
     if p.get("character"):
         w += W_CHAR * CHARACTERS[p["character"]][1]
+    if p.get("upkeep"):
+        w += W_UPKEEP * UPKEEP[p["upkeep"]][1]
+    if p.get("means"):
+        w += W_MEANS * MEANS[p["means"]][1]
     if p.get("condition"):
         w += W_OVER + W_COND * CONDITIONS[p["condition"]][1]
     return w

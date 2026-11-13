@@ -15,10 +15,12 @@ Vanilla's state pictures are 1020 x 500 with a full mip chain, uncompressed
 (2.7 MB each). These are BC7 with mips (about 0.7 MB): both sides are multiples
 of 4, which block compression needs (scripts/analysis/check_dds_dimensions.py).
 Needs Pillow, numpy and texconv.exe, as convert_event_image.py does (it finds or
-downloads texconv).
+downloads texconv). Set TE_TEXCONV_NOGPU=1 to compress on the CPU (texconv -nogpu) while the
+card is busy.
 """
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
@@ -143,6 +145,8 @@ def convert(key: str, source: Path, texconv: Path) -> Path:
         paint(source, key).convert("RGBA").save(png, format="PNG")
         cmd = [str(texconv), "-f", "BC7_UNORM_SRGB", "-srgb", "-m", "0", "-y",
                "-o", _exe_path(OUT_DIR), _exe_path(png)]
+        if os.environ.get("TE_TEXCONV_NOGPU"):     # compress on the CPU while the card is busy
+            cmd.insert(1, "-nogpu")
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0 or not out.exists():
             raise RuntimeError(f"texconv failed for {key}: {result.stdout}{result.stderr}")

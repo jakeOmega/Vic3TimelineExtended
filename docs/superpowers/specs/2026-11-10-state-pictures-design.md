@@ -63,6 +63,11 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
     The owner: "This sounds like a good idea - let's do it". Not the owner's words, and open to overruling:
     the takeover covers every land terrain, the port's and the mine's included, and a metropolis outranks
     an oil field.
+13. **The two axes of prosperity stand** ("I am happy with your two axes", 2026-11-11), and the means
+    floors are the owner's first-pass figures, poor below the first and affluent from the second, by era:
+    6: 12, 20; 7: 14, 22; 8: 18, 28; 9: 22, 32; 10: 26, 36; 11: 30, 40; 12: 35, 45; 13: 40, 60. "Very
+    rough values for the first pass": the calibration game was put off ("we just run the generation and
+    leave the calibration for later"), since the game and a render don't fit on the card together.
 
 ## 2. What the engine does (read in game, 2026-11-10)
 
@@ -105,8 +110,8 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 
 So the right technology beats the right size, and a devastated city beats everything. The weight is a number
 in place value (a takeover 10,000,000, and a condition its digit × 1,000,000 on top of that; rung × 100,000;
-a character its digit × 10,000; size or scale × 10; a named region its family's digit; 1,000 and 100 are
-reserved for upkeep and means), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
+a character its digit × 10,000; upkeep 1,000; means its digit × 100; size or scale × 10; a named region its
+family's digit), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
 any mod picture that applies wins. Conditions and takeovers share the place above the rung without meeting:
 a condition is a city picture and a takeover stands on open land. That keeps the largest weight (13,400,000
 so far) under 16,777,216, the last whole number a 32-bit float holds exactly, in case the engine keeps a
@@ -251,13 +256,28 @@ Two axes, because they draw different things.
 afford, so it draws amenities and build quality: how many motor cars, shop fronts and street lighting, paved
 or dirt streets, parks, the housing stock (shacks and tenements, or villas and glass). Three levels: poor,
 ordinary, affluent. The floors are fixed numbers for each rung, since an affluent street of 1930 and one of
-2030 are different pictures; they are not relative to the world of the day. § 9 sets them from an observer
-game, so that roughly a fifth of the city states of countries on a rung sit in each extreme.
+2030 are different pictures; they are not relative to the world of the day. They are the owner's figures
+(§ 1 item 13), taken at the era of the rung's technology, because the rung is the street the picture shows:
+
+| City rung | Era | Poor below | Affluent from |
+|---|---|---|---|
+| 1 (Art Deco Architecture) | 6 | 12 | 20 |
+| 2 (Modern Urban Planning) | 7 | 14 | 22 |
+| 3 (Computer-Aided Design) | 8 | 18 | 28 |
+| 4 (Advanced Structural Engineering) | 10 | 26 | 36 |
+| 5 (Vactrains) | 12 | 35 | 45 |
+
+The figures for eras 9, 11 and 13 have no rung of their own and aren't used: a country on rung 3 is judged by
+era 8's floors until it reaches rung 4. Reading the floors off the owner's actual era instead needs a
+country-era value the mod doesn't have. The pass stores `te_sp_means` (1 poor, 3 affluent, absent
+ordinary), and a state leaves a level only half a point past its floor.
 
 **Upkeep** is relative: `average_sol` minus `average_expected_sol`, the game's own measure of whether people
 have what they expect. It decides how the place is kept, so it draws neglect: litter, shuttered shops,
-broken windows, peeling paint, queues and idle crowds. Two levels: ordinary and run-down, run-down when the
-standard of living sits a set margin under expectations. Under the mod's Standard of Living Expectations
+broken windows, peeling paint, queues and idle crowds. Two levels: ordinary and run-down, run-down (`te_sp_rundown`) when the
+standard of living sits 2 points or more under expectations, until it is within 1.5. That margin is this
+design's and unchecked: the mod's welfare laws put a floor under expectations, so a generous welfare state
+may sit a long way under what its people expect, and the calibration game is to say how common that is. Under the mod's Standard of Living Expectations
 system, expectations lag a fall and rise with a richer world, so a rich city in decline reads run-down while
 a poor one that never had more doesn't. That is the split the owner asked for: a poor but content town is
 drawn modest and tidy, a wealthy but aggrieved one prosperous and neglected.
@@ -328,8 +348,13 @@ would be over 1 GB.
    46, each picked from four candidates (the two port pictures of the 2040s from a later set, § 10). With the pilot's port and mine that is every
    worked-land picture of § 8. What it designed: the scales and the takeover of § 3, the farmland and
    forestry families of § 5, and the three provisional levels there.
-4. **Town, metropolis, megacity (104).**
-5. **Means and upkeep (120),** with their part of the yearly pass.
+4. **Town, metropolis, megacity (103),** and
+5. **Means and upkeep (120).** All 223 prompts are written (`DRAFTS`, family `variant`: twelve by hand as
+   a pilot, the rest from one table a region and one a rung, `variant_prompt()`), the pass stores the two
+   prosperity tags, and the weight has their places (upkeep 1,000, means its digit × 100). A variant is
+   wired by picking its render (`VARIANT_PICKS`): its name says its axis. **Painted and wired
+   2026-11-12:** all 223, each picked from four candidates, 21 of them from a later set with words of
+   their own (`VARIANT_REWORD`, § 10).
 6. **Character, function, conditions (31). Painted and wired:** on 2026-11-10 the 11 a weight reads live
    (housing blocks on three rungs, smog on four, ruins and a nuclear strike on two spans each; § 7); on
    2026-11-11 the 18 that read the yearly pass's tags (boomtown and declining on four rungs, divided on
@@ -422,8 +447,54 @@ upkeep limited to rungs 2 to 4.
     intact building anywhere") and, for the strike, the one object nothing else has: a mushroom cloud on
     the horizon. All 24 candidates read as destroyed. Towers still stand in the later ruins and the later
     strike: FLUX won't draw a skyline of stumps.
+- **What the variants taught** (2026-11-11, four candidates each of 223 pictures written from two tables):
+  - *Size reads at the first try.* A town, a metropolis and a megacity came out distinct from the street
+    and from one another in all eight regions: the low houses and the country beyond for a town, the view
+    from above for a great city, "stretching to the horizon in every direction under a haze" for a megacity.
+  - *On the last two rungs the time has to lead.* The poor, affluent and run-down streets of the 2030s and
+    of the far future first came out as the 1950s street with a different car: one composition a column
+    (the washing lane, the fountain square, the wreck at the kerb), whatever the rung. The time stood at
+    the end of the prompt ("slender supertall towers far in the background"). Moved to the front, straight
+    after the verdict (the registry's `VARIANT_LEAD`), it shows. The wording matters as much as the place:
+    "under a wall of slender supertall glass towers that rise close behind the roofs" draws the towers;
+    "in the shadow of colossal kilometre-high arcology towers that fill the sky" drew none.
+  - *A great city seen from above is a real city.* The North American metropolis and megacity drew New
+    York's, Chicago's or Toronto's towers in three candidates of four on every rung, from "stepped stone and
+    art deco towers" over "old brick blocks with water tanks on their roofs". Towers with a pair of
+    antennas and stepped spires turned up in the other regions' skylines too, on two of the four seeds. A
+    small one is smudged away; a skyline that is plainly one city is rejected. The second round's words
+    (`VARIANT_REWORD`) say what the towers are (plain, flat-roofed, of one height) and don't name what
+    they must not be.
+  - *"A few small rounded 1950s cars" are the cars of the 2000s.* The small town of 1960 had them in
+    every candidate of seven regions, beside a correct 1950s bus; the African town alone came out in
+    period. The same words in a crowded avenue ("packed with rounded 1950s cars") rendered in period, and
+    so did "finned 1950s limousines". Small and rounded is today's car: the second round asks for "heavy
+    two-tone 1950s sedans with chrome grilles and whitewall tires".
+  - *One table, one composition.* Pictures written from the same sentence repeat: the megacities of two
+    rungs of a region can be the same view with different towers, and a run-down street the same street
+    with a later wreck. Between two clean candidates the pick is the one unlike its column's others.
+  - *A reword must not move a picked render.* A region's and a rung's words are shared by every variant
+    that uses them, so the second round changes one key's words for one field and a comparison of all the
+    prompts before and after shows that only the keys meant changed.
+  - *Count the vehicles and empty the street* (the second and third rounds, 2026-11-12). Naming each
+    vehicle by its shape and its decade, giving how many, and saying "the street otherwise empty" fixed
+    the cars: "a rounded 1950s country bus with a split windscreen ... two heavy two-tone 1950s sedans
+    with chrome grilles and whitewall tires at the kerb, the street otherwise empty" put period
+    vehicles in the foreground of every candidate of the seven towns of 1960; a later car still turns up
+    far down the street in some, a smudge's work. The same pattern fixed the South Asian town of the 1930s
+    (all four candidates) and the Japanese town of 1990 (two of four). "Polished boxy 1980s saloons with
+    square headlamps, one long square-edged 1980s limousine" was weaker: about one candidate in four on
+    the affluent streets of 1990, the rest still the luxury cars of the 2010s (the East Asian pick has no
+    car at all). Saying what the towers are
+    did not keep New York out of the North American skyline: two or three candidates of four on every rung
+    still drew an Empire State spire, a broadcast needle or a pair of antennas. Each rung's pick is the one
+    that didn't, its antennas smudged into what reads as a wisp of haze over a roof.
 - **Review.** As for icons: a sheet a batch with vanilla's picture beside the candidates and the pick marked,
-  every pick zoomed for lettering, signatures and broken anatomy.
+  every pick zoomed for lettering, signatures and broken anatomy. The variants are picked a region at a
+  time: a sheet a rung with the wired street on top and a row a variant, so a candidate is judged beside
+  the picture it replaces and its siblings, and at the end one sheet of the region's picks as the game
+  shows them (smudged, cropped, filtered, 1020 × 500), where a smudge that shows as a patch or a crop
+  that cut too much is caught.
 - **One landmark a family.** Vanilla's city pictures close the street with a building. Each family keeps one
   through all five rungs (the registry's `CITY_LANDMARK`: the European church, a North American courthouse
   with a clock tower, a Japanese castle keep, and so on), so the street changes around a fixed point and a
