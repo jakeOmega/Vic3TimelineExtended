@@ -298,9 +298,7 @@ capture. Data: `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`.
 read 500–502 ms in both, as before.
 
 **The three cuts (#1731)**, each read once where it was read several times,
-measured as callees. The profiled run had these three, not #1731's tourism
-re-add skip, which came after; its effect is under "What drives
-`RecalculateModifierNodes`" below. The rest of each root moved by 1% or less (monetary
+measured as callees. The rest of each root moved by 1% or less (monetary
 364 → 364 ms, Grand Monuments 177 → 178, culture merge 101 → 101, trade
 partner 84 → 84):
 
@@ -332,34 +330,38 @@ revolution that cannot take a state is tried again at every weekly
 others skip when there is no `scope:target`). Whether these stuck civil
 wars make `UpdateCivilWars` itself dearer is open (#1723).
 
-**What drives `RecalculateModifierNodes`: the refreshes' re-adds.** The
-engine task that recalculates modifiers took about 135 ms at every day
-boundary, a tenth of wall time, and more than any refresh's own script. Five
-unprofiled runs on #1731's build, each 2 July → 1 September (62 days, 61 day
-boundaries) from the same save, with tick-task timings and the wall clock.
-Each changed one thing, deploy-only:
+**Does a refresh's re-add drive `RecalculateModifierNodes`? Not shown.** The
+engine task that recalculates modifiers takes about 100–135 ms at each day
+boundary, a tenth of wall time, more than any refresh's own script. A refresh
+that takes a modifier off and puts it back at the same strength changes no
+figure, so it was a suspect. Eight unprofiled runs tested it, 2 July → 1
+September (62 days, 61 day boundaries), same save, tick-task timings and wall
+clock. Each run on #1731's build (A2 its head) made one deploy-only change:
 
 | Run | Change | `RecalculateModifierNodes` per day boundary, median | Wall time per day |
 |---|---|---|---|
 | A | none | 135 ms | 1.39 s |
+| A2 | none | 104 ms | 1.31 s |
 | B | the 325 flagships unbuildable (touches no refresh) | 121 ms | 1.33 s |
-| E | tourism's refresh skips a modifier whose multiplier did not move (#1731) | 117 ms | 1.37 s |
+| E | tourism's refresh skips a modifier whose multiplier did not move | 117 ms | 1.37 s |
 | D | as E, and SoL expectations' three country modifiers not refreshed | 114 ms | 1.34 s |
-| C | neither tourism's two state modifiers nor SoL's refreshed | 99 ms | 1.31 s |
+| F | tourism's two state modifiers not refreshed | 119 ms | 1.34 s |
+| C | neither tourism's nor SoL's refreshed | 99 ms | 1.31 s |
+| C2 | as C (an audit run shared the CPU for part of it) | 123 ms | 1.44 s |
 
-A and B change nothing that bears on modifiers, so between two runs read
-about 10% (121–135 ms) as noise. Only C falls clear of it: 36 ms a day
-boundary below A, 22 below B, about 2–3% of wall time. A refresh that takes a
-modifier off and puts it back makes the engine recalculate everything that
-depends on it, even when the number is the same. On these runs the state
-refresh weighs more than the country one. Tourism re-adds two modifiers on
-each of about 29 states a day, and SoL three on about 9 countries a day. Run
-D, with SoL off and tourism's throughput still re-added most months, did not
-leave the noise. Single runs, so read the split as a lead.
+Two runs of the same build read 104 and 135 ms, and C's 99 ms did not
+repeat. Run-to-run spread is about 30%, more than any of these changes moved,
+so the runs neither show the link nor rule it out. The skip that E tested was
+taken out of #1731 for that reason. A test that could settle it needs either
+several runs of each build, or a change much larger than the noise: a
+deploy-only on_action that re-adds an unchanged modifier on every state every
+day, read against the same build without it.
 
-Snapshots `20261113T014825Z` (A), `20261113T015413Z` (B), `20261113T020016Z`
-(C), `20261113T021406Z` (D) and `20261113T020847Z` (E); CSVs and logs in
-`/mnt/d/vic3te-data/perf-2026-11-12/batch3/`. Open item 13 has what follows.
+Snapshots: A `20261113T014825Z`, A2 `20261113T023851Z`, B
+`20261113T015413Z`, C `20261113T020016Z`, C2 `20261113T024333Z`, D
+`20261113T021406Z`, E `20261113T020847Z`, F `20261113T024839Z`. The CSVs and
+logs are in `/mnt/d/vic3te-data/perf-2026-11-12/batch3/`. Open item 13
+carries the lead.
 
 ## Measurements, 2026-10-03: 2072
 
@@ -511,7 +513,9 @@ Items 3 and 6 were addressed by #1713.
    made unbuildable) would settle it. The one cost the copies did show:
    `RecalculateModifierNodes` rose from about 100 ms to 120 ms at every hour
    0, about 0.06 ms a day per building type, so the flagships cost about
-   20 ms a day (1.5% of wall time). Earlier (2026-10-03),
+   20 ms a day (1.5% of wall time). That was one run each way, and two runs
+   of one build later read 104 and 135 ms for that task (open item 13), so
+   the 20 ms is within run-to-run spread and unproven. Earlier (2026-10-03),
    after #679 the AI asked buildings' `possible`, `can_build_private` and
    `ai_value` about 7× more often (`01_industry.txt` 62k → 459k calls per
    tick-equivalent). The owner expected that to settle.
@@ -524,10 +528,10 @@ Items 3 and 6 were addressed by #1713.
    against 9,185 ms. So the flagships are not this pass's cost either way:
    not as extra types, not through the company's own country. What the pass
    spends its second on is still unknown. A clue: it ran 1,016 ms a weekly
-   frame and also 15 ms on each other frame. The same pair of runs put
-   `RecalculateModifierNodes` at 9,206 ms against 8,240 ms and wall time at
-   1.39 s against 1.33 s a day, with no change that touches either, so read
-   about 10% between two runs as noise.
+   frame and also 15 ms on each other frame. The pass's own figures agree to
+   0.5% between the runs; the day-boundary task `RecalculateModifierNodes`
+   and wall time do not (9,206 against 8,240 ms; 1.39 against 1.33 s a day),
+   which is run-to-run spread (open item 13).
 3. **UN AI propose buttons** (#1713 took them from 136 to 4 ms of
    script a day, with wall time unchanged; the rest of this item is the
    record): 4.48 s per 33 days in 1931 (14% of all script; 2.9% in 2072). `un_propose_credentials_button`'s `visible` costs 2.75 ms a
@@ -691,24 +695,16 @@ Items 3 and 6 were addressed by #1713.
     `on_revolution_start` fired 126 times in those 30 days (#1723): 125 of
     them were 25 one-state countries whose revolution is tried again each
     week (see "Merged `main` remeasured").
-13. **Refreshes that re-add a modifier at the same strength** (see "What
-    drives `RecalculateModifierNodes`"). With tourism's and SoL's refreshes
-    off, the engine's modifier recalculation fell from 121–135 ms to 99 ms a
-    day boundary, so a re-add costs more in that task than in its own
-    script. In order:
-    - **Exact:** skip the re-add when the multiplier did not move. #1731 does
-      it for tourism (`te_tourism_refresh_modifier`, which keeps the applied
-      value). It saves only where values hold still: tourism's output
-      (appeal, city rank, monuments) mostly does, its throughput (spare
-      infrastructure) mostly doesn't. Other monthly refreshes would take the
-      same helper once their own one-refresh-site rule is checked.
-    - **Owner call:** a dead band, so that a multiplier that moved less than
-      a set step is left alone, or a multiplier rounded to that step.
-      Tourism's throughput and SoL's three shifts move a little every month.
-      At a step of half a percentage point, few would be re-added. That
-      changes figures by less than the step.
-    - **To measure:** which other refreshes re-add most, and whether a
-      state modifier costs more than a country one per re-add. The pollution
-      refresh re-adds `pollution_generation_mult_effect` on every owned state
-      each month (871 a month), at a multiplier that follows the state's
-      pollution. Repeat runs would narrow the 10% noise.
+13. **Refreshes that re-add a modifier at the same strength** (see "Does a
+    refresh's re-add drive `RecalculateModifierNodes`?"). The engine's
+    modifier recalculation takes about a tenth of wall time. Whether the
+    mod's monthly remove-and-re-add refreshes are much of it is unproven:
+    eight runs could not separate it from a 30% spread between runs. If a
+    larger test shows that they are, the exact fix is to keep the applied
+    multiplier in a variable and re-add only when it moved, with the
+    self-healing ROOT marker of `scripting_best_practices.md`. It would save
+    only where values hold still: tourism's output (appeal, city rank,
+    monuments) mostly does; its throughput and SoL's shifts move a little
+    every month, so a dead band or a rounded multiplier would be the
+    owner's call. The pollution refresh re-adds on every owned state each
+    month (871 a month).
