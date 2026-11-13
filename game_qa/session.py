@@ -173,7 +173,9 @@ class SessionError(Exception):
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
     not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
-    (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
+    (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending, add_mod_refused (with
+    `reason`, addmod's code), add_mod_changed, and the profile verbs' profile_refused, not_profiling,
+    not_snapshotted, label_used, dump_refused, not_written, changed, rows_mismatch. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
     not_foreground, …) and `entered`, as does one that ended `try_event` (whose error also carries the rows so
@@ -313,6 +315,8 @@ class Session:
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
         self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
         self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
+        self._add_mods_playset = "mod_only"                # the playset they were checked for
+        self._add_mods_digest: str | None = None           # fixture.add_mod_digest of them, at that check
         self._profile_starts = 0            # profile starts that went through (#1700)
         self._server_log: LogFollower | None = None      # dedicated_server.log, followed from the first profile start
         self._server_lines = 0              # the lines of it the run folder's copy holds
@@ -372,6 +376,9 @@ class Session:
         switch_rules = self._check_switches(switch_rules, save)
         self._game_args = _check_game_args(game_args)
         self._add_mods = self._check_add_mods(add_mods, playset)
+        self._add_mods_playset = playset
+        self._add_mods_digest = fixture.add_mod_digest([Path(mod.wsl) for mod in self._add_mods]) \
+            if self._add_mods else None
         self._starting = True                   # from `held` on, a stop() is left to this
         try:
             self._refuse_if_held()
@@ -432,6 +439,10 @@ class Session:
         if busy:
             argv.append("--owner-confirmed-busy")
         argv += ["--", *SESSION_ARGS, *self._game_args, "-loadsave=" + save]
+        changed = self._add_mods_changed("the session's launch")
+        if changed is not None:
+            self._record("launch", outcome="refused", reply={"refused": fixture.ADD_MOD_CHANGED, "detail": changed})
+            raise SessionError(fixture.ADD_MOD_CHANGED, changed)
         try:
             reply, code = self._cli(argv)
         except Exception as e:
@@ -604,6 +615,11 @@ class Session:
         watches: list[Any] = []                                     # the watch it spawned
 
         def run_cli(argv):
+            changed = self._add_mods_changed("the fixture's launch") if argv[:1] == ["launch"] else None
+            if changed is not None:             # a refusal before any claim: make restores its snapshot at once
+                reply = {"refused": fixture.ADD_MOD_CHANGED, "detail": changed}
+                calls.append((argv[0], reply, 2))
+                return reply, 2
             try:
                 reply, code = self._run_cli(argv)
             except BaseException:
@@ -631,7 +647,8 @@ class Session:
             if up:
                 info.update(game_may_be_up=True,
                             game={"pid": e.proc.pid, "created": e.proc.created} if e.proc is not None else None)
-            raise SessionError("fixture_failed", str(e), **info) from e
+            changed = e.step == "launch" and e.reply.get("refused") == fixture.ADD_MOD_CHANGED
+            raise SessionError(fixture.ADD_MOD_CHANGED if changed else "fixture_failed", str(e), **info) from e
         except BaseException:
             launches = [reply for verb, reply, _code in calls if verb == "launch"]
             self._take_fixture_run(_fixture_snapshot(calls), bool(launches), _named_proc(launches[-1] or {})
@@ -1451,6 +1468,29 @@ class Session:
         self._copy(profiling.RUN_SERVER_LOG, lines)
         self._server_lines += len(lines)
         return self._server_lines
+
+    def _add_mods_changed(self, where: str) -> str | None:
+        """Why the variant folders are no longer what `start` checked, or None: `addmod.check_all` run again, and
+        `fixture.add_mod_digest` taken again, just before `where` (a launch), since a fixture's whole run may have
+        come between. A change refuses that launch: the fixture's key, and the run's record, would name files
+        the game does not load."""
+        if not self._add_mods:
+            return None
+        try:
+            again = self._check_add_mods([mod.windows for mod in self._add_mods], self._add_mods_playset)
+        except SessionError as e:
+            why = "a variant folder is refused now (%s: %s)" % (e.info.get("reason"), e.detail)
+        else:
+            if again != self._add_mods:
+                why = "a variant folder now converts or reads otherwise (%s, not %s)" % (
+                    [asdict(mod) for mod in again], [asdict(mod) for mod in self._add_mods])
+            elif fixture.add_mod_digest([Path(mod.wsl) for mod in again]) != self._add_mods_digest:
+                why = "a file in a variant folder's common/, events/ or map_data/, or its metadata.json, changed"
+            else:
+                return None
+        why = "since `start` checked them, %s, before %s: start again. Nothing was launched" % (why, where)
+        self._record("add_mods", outcome="changed", where=where, detail=why)
+        return why
 
     def _check_add_mods(self, add_mods: Sequence[str] | None, playset: str) -> list[addmod.AddMod]:
         """`start`'s add_mods, each checked (`addmod.check`); SessionError `add_mod_refused`, with the check's code as

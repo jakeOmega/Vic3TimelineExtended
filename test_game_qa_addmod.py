@@ -105,6 +105,26 @@ class AddModTest(unittest.TestCase):
         self.mnt.joinpath("d", "into_user").symlink_to(self.user / "mod", target_is_directory=True)
         self.assertEqual(self.refused(r"D:\into_user\Vic3TimelineExtended").code, "symlink")
 
+    def test_a_link_inside_the_variant_is_refused(self):
+        # the game follows it, and the fixture key's walk does not
+        deployed_common = self.user / "mod" / "Vic3TimelineExtended" / "common"
+        deployed_common.mkdir()
+        linked = self.make_mod(r"D:\linked_common")
+        (linked / "common").symlink_to(deployed_common, target_is_directory=True)
+        error = self.refused(r"D:\linked_common")
+        self.assertEqual(error.code, "symlink")
+        self.assertIn("common", error.detail)
+        deep = self.make_mod(r"D:\deep_file_link")
+        (deep / "common" / "history" / "states").mkdir(parents=True)
+        (deep / "common" / "history" / "states" / "00_states.txt").symlink_to(self.variant / ".metadata"
+                                                                             / "metadata.json")
+        self.assertEqual(self.refused(r"D:\deep_file_link").code, "symlink")
+        broken = self.make_mod(r"D:\broken_link")
+        (broken / "gfx").symlink_to(self.mnt / "nowhere", target_is_directory=True)
+        self.assertEqual(self.refused(r"D:\broken_link").code, "symlink")
+        (self.variant / "common" / "history").mkdir(parents=True)          # plain folders inside are fine
+        self.assertEqual(self.check(VARIANT_WIN).windows, VARIANT_WIN)
+
     def test_a_folder_that_is_not_there_or_is_a_file(self):
         self.assertEqual(self.refused(r"D:\nothing\here").code, "no_folder")
         self.to_wsl(r"D:\a_file").write_text("x")
@@ -122,6 +142,8 @@ class AddModTest(unittest.TestCase):
         (linked / ".metadata").mkdir(parents=True)
         (linked / ".metadata" / "metadata.json").symlink_to(self.variant / ".metadata" / "metadata.json")
         self.assertEqual(self.refused(r"D:\linked_meta").code, "no_metadata")
+        self.make_mod(r"D:\too_deep", meta="[" * 100000 + "]" * 100000)          # RecursionError in json
+        self.assertEqual(self.refused(r"D:\too_deep").code, "bad_metadata")
         self.make_mod(r"D:\odd_fields", meta={"name": 7})
         self.assertEqual(self.check(r"D:\odd_fields").name, None)
 

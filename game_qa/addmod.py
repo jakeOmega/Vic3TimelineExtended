@@ -13,7 +13,9 @@ not play. `launch --add-mod` only checks that a path begins like a Windows path 
   folder inside it past the check. The deployed mod and the overlay live there; so do the owner's own mods;
 - a real folder, reached through no symbolic link or junction at any part of the path (WSL shows an NTFS junction
   on a drive as a symlink: a `mklink /J` on D: was refused so on 2026-11-13), holding a `.metadata/metadata.json`
-  that reads as a JSON object (the file the game reads a mod by);
+  that reads as a JSON object (the file the game reads a mod by), and with no link or junction anywhere inside it
+  either: the game follows one (a `common/` linked to the deployed mod's would load the user-data folder's files
+  as the variant's), and the fixture key's walk does not, so an edit behind it would keep the key;
 - under `--playset current`, not a folder the owner's playset already enables: launch would leave it where it is,
   which may be before the deployed mod, and the run would not be the A/B it says it is.
 
@@ -128,6 +130,30 @@ def _same(a: Path, b: Path) -> bool:
         return False
 
 
+def _refuse_links_inside(path: str, wsl: Path) -> None:
+    """AddModError `symlink` for the first link or junction anywhere below the variant's folder, and `no_folder` for
+    a folder in it that cannot be read. Every entry is looked at without following one (a copy of the whole mod
+    on D:, about 5,000 entries, took 1.3 s on 2026-11-13)."""
+    pending = [wsl]
+    while pending:
+        folder = pending.pop()
+        try:
+            with os.scandir(folder) as entries:
+                found = list(entries)
+        except OSError as e:
+            raise AddModError("no_folder", "%s: the folder %s in it cannot be read (%s)" % (path, folder, e)) from None
+        for entry in found:
+            try:
+                if entry.is_symlink():
+                    raise AddModError("symlink", "%s holds a link or a junction at %s, which the game would follow "
+                                                 "and the fixture key would not: copy the files in instead"
+                                      % (path, entry.path))
+                if entry.is_dir(follow_symlinks=False):
+                    pending.append(Path(entry.path))
+            except OSError as e:
+                raise AddModError("no_folder", "%s: %s cannot be looked at (%s)" % (path, entry.path, e)) from None
+
+
 def check(path: str, user_data: Path, user_data_windows: str | None, *, to_wsl: Callable[[str], Path] = to_wsl_path,
           playset: str = "mod_only", owner_mods: Sequence[str] = (), deployed: Path | None = None,
           deployed_windows: str | None = None) -> AddMod:
@@ -183,10 +209,11 @@ def check(path: str, user_data: Path, user_data_windows: str | None, *, to_wsl: 
         raise AddModError("no_metadata", "%s has no %s (a real file): the game reads a mod by it" % (path, METADATA))
     try:
         data = json.loads(meta.read_text(encoding="utf-8-sig"))
-    except (OSError, ValueError) as e:
+    except (OSError, ValueError, RecursionError) as e:     # RecursionError: nested deeper than the parser goes
         raise AddModError("bad_metadata", "%s does not read as JSON: %s" % (meta, e)) from None
     if not isinstance(data, dict):
         raise AddModError("bad_metadata", "%s is not a JSON object" % meta)
+    _refuse_links_inside(path, wsl)
 
     def text(key):
         value = data.get(key)

@@ -3800,6 +3800,19 @@ class AddModStartTest(SessionTestCase):
         self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
                                      playset="mod_only"), self.key)
 
+    def test_a_variant_whose_metadata_changed_is_another_fixture(self):
+        # game_custom_data.replace_paths changes which vanilla folders load; the deployed mod's metadata is not read
+        before, digest = self.variant_key(), fixture.add_mod_digest([self.variant])
+        meta = self.variant / ".metadata" / "metadata.json"
+        meta.write_text('{"name": "TE QA add-mod test", "version": "1", "game_custom_data": '
+                        '{"replace_paths": ["common/history/states"]}}', encoding="utf-8")
+        self.assertNotEqual(self.variant_key(), before)
+        self.assertNotEqual(fixture.add_mod_digest([self.variant]), digest)
+        (self.paths.deploy_dir / ".metadata").mkdir()
+        (self.paths.deploy_dir / ".metadata" / "metadata.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                     playset="mod_only"), self.key)
+
     def test_with_a_save_it_is_loaded_and_no_fixture_is_made(self):
         (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
         reply = self.start(save="france_1850", add_mods=[VARIANT_WIN])
@@ -3824,6 +3837,63 @@ class AddModStartTest(SessionTestCase):
         self.paths.enabled_mods = [DEPLOYED_WIN, VARIANT_WIN]
         error = self.session_error(self.start, add_mods=[VARIANT_WIN], playset="current")
         self.assertEqual(error.info.get("reason"), "already_enabled")
+
+    def edit_variant_at(self, verb: str, nth: int = 1, edit=None):
+        """Edit the variant when the `nth` call of `verb` is made (before it is answered)."""
+        seen = []
+
+        def edit_script():
+            script = self.variant / "common" / "script_values" / "te_qa_addmod.txt"
+            script.write_text("te_qa_addmod_loaded = 22\n")
+            os.utime(script, ns=(10**18, 10**18))
+
+        def on_call(argv):
+            if argv[0] == verb:
+                seen.append(argv)
+                if len(seen) == nth:
+                    (edit or edit_script)()
+        self.cli.on_call = on_call
+
+    def test_a_variant_edited_before_the_sessions_launch_launches_nothing(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot")
+        error = self.session_error(self.start, save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("before the session's launch", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+        self.assertEqual(self.cli.verbs[-1], "restore")            # the stop puts the snapshot back
+
+    def test_a_variant_edited_during_the_fixtures_run_refuses_the_sessions_launch(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.edit_variant_at("launch")                  # the fixture's launch went through the check first
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertEqual(self.cli.verbs.count("launch"), 1)
+
+    def test_a_variant_edited_before_the_fixtures_launch_starts_no_game(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.edit_variant_at("snapshot")
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("before the fixture's launch", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+        self.assertEqual(self.cli.verbs[:3], ["held", "snapshot", "restore"])      # restored at once
+        steps = read_steps(self.paths.backup_root / "runs" / FIXTURE_SNAP)
+        self.assertEqual([s["outcome"] for s in steps if s["verb"] == "add_mods"], ["changed"])
+
+    def test_a_variant_refused_by_the_time_of_the_launch_launches_nothing(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot", edit=lambda: (self.variant / ".metadata" / "metadata.json").unlink())
+        error = self.session_error(self.start, save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("no_metadata", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+
+    def test_a_variant_left_alone_is_launched_as_before(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot", edit=lambda: None)
+        self.start(save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
 
 
 SNAP_TIME = dt.datetime(2026, 11, 10, 15, 0, 0, tzinfo=dt.timezone.utc)        # the id SNAP
