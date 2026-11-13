@@ -872,12 +872,36 @@ class TestBannerHover(unittest.TestCase):
         self.assertRegex(values["te_state_picture_k_smog"], rf"value = {registry.SMOG_POLLUTION}\b")
         self.assertRegex(values["te_state_picture_k_ruins"], rf"value = {registry.RUINS_DEVASTATION}\b")
 
-    def test_the_banner_finds_its_text_by_the_overlay_and_is_empty_for_any_other(self):
+    def test_the_banner_finds_its_text_by_the_overlay_and_a_vanilla_picture_has_none(self):
         panel = STATES_PANEL.read_text(encoding="utf-8-sig")
         banner = panel[panel.index("### STATE IMAGE"):panel.index("### FACTION")]
-        self.assertIn("Localize( Concatenate( 'te_sp_tt_', State.GetBestTextureEffect ) )", banner)
-        self.assertIn("'te_sp_tt_none'", banner)
-        self.assertEqual(self.loc["te_sp_tt_none"], "")
+        # the form read in game (2026-11-13): one lookup of the overlay's name
+        self.assertIn('tooltip = "[Localize( Concatenate( \'te_sp_tt_\', State.GetBestTextureEffect ) )]"', banner)
+        vanilla = _vanilla_effects()
+        self.assertGreater(len(vanilla), 30)
+        for name in vanilla:
+            with self.subTest(name):
+                self.assertEqual(self.loc[f"te_sp_tt_{name}"], "")
+        self.assertEqual(set(vanilla) & set(self.overlays), set())
+
+    def test_a_land_picture_on_a_great_city_says_why_the_city_waits(self):
+        # a takeover entry asks for the city picture's own technology as well as the size, so an owner with a
+        # 1930s port or farm technology and no Art Deco Architecture shows the land on a metropolis
+        for key, p in registry.wired().items():
+            for terrain in registry.terrains(key):
+                if registry.takes_over(key, terrain):
+                    with self.subTest(key=key, terrain=terrain):
+                        self.assertIn(f"has_technology_researched = {p['tech']}", " ".join(generator.conditions(key, terrain)))
+        land = [k for k in {kind for kind, _t, _v in self.overlays.values()}
+                if k not in registry.CITY_KINDS and k not in registry.SCALE_TERRAIN and k != "oil"]
+        self.assertGreater(len(land), 10)
+        for kind in land:
+            with self.subTest(kind):
+                self.assertIn("$te_sp_tt_land_city$", self.loc[f"te_sp_tt_why_{kind}"])
+        self.assertIn("'(CFixedPoint)3'), 'te_sp_tt_land_city_great', 'te_sp_tt_land_city_small'",
+                      self.loc["te_sp_tt_land_city"])
+        self.assertIn(f"${registry.CITY_LADDER[1][0]}$", self.loc["te_sp_tt_land_city_great"])
+        self.assertEqual(min(p["rung"] for p in registry.wired().values() if p["terrain"] == ["urban"]), 1)
 
     def stored(self, people=None, sol=None, esol=None, rung=3, levels=0, oil=0, mines=0, coal=0, heavy=0, tour=0,
                state=None):

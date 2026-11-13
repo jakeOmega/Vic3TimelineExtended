@@ -678,9 +678,9 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     if key.startswith(("te_nation_type_", "te_nation_status_")):
         return "NATION_GENERATED"
     # The state banner's hover (gen_state_pictures.py): its text for each picture overlay, read only
-    # through the overlay's name, and each technology's line; the other te_sp_tt_ lines it strings
-    # together are hand-written and file in MISCELLANEOUS.
-    if key.startswith(("te_sp_tt_te_sp_fx_", "te_sp_tt_era_")):
+    # through the overlay's name (empty for vanilla's), and each technology's line; the other te_sp_tt_
+    # lines it strings together are hand-written and file in MISCELLANEOUS.
+    if key.startswith(("te_sp_tt_te_sp_fx_", "te_sp_tt_vfx_entity_ui_state_", "te_sp_tt_era_")):
         return "PICTURE_HOVER_GENERATED"
     # Capital-city power bloc names ("Berlin Pact"), one per state and family.
     if key.startswith("te_pb_name_"):

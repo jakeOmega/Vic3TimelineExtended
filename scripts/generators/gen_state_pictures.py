@@ -28,6 +28,7 @@ test_state_pictures.py fails CI when a committed file is stale:
 import argparse
 import importlib.util
 import os
+import re
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,6 +36,7 @@ OUT = os.path.join(REPO, "common", "terrain", "te_state_pictures_generated.txt")
 OVERLAYS_OUT = os.path.join(REPO, "gfx", "models", "particles", "te_state_picture_overlays_generated.asset")
 LOC_OUT = os.path.join(REPO, "localization", "english", "te_picture_hover_generated_l_english.yml")
 LOC_CATEGORY = "PICTURE_HOVER_GENERATED"
+VANILLA_TERRAINS = os.path.join(REPO, "vanilla_parsed", "common", "terrains.json")
 
 _spec = importlib.util.spec_from_file_location(
     "state_picture_registry",
@@ -179,9 +181,17 @@ def era_text(tech):
     return f"$te_sp_tt_e_{registry.decade(tech)}$: [State.GetOwner.GetName] has researched ${tech}$."
 
 
+def vanilla_overlays():
+    """Every overlay a vanilla terrain's pictures play (the committed vanilla_parsed/ snapshot)."""
+    with open(VANILLA_TERRAINS, encoding="utf-8") as f:
+        return sorted(set(re.findall(rf"{registry.VANILLA_OVERLAY_PREFIX}\w+", f.read())))
+
+
 def hover_loc():
-    """The hover of each overlay (te_sp_tt_<overlay>) and the line of each technology (te_sp_tt_era_<tech>)."""
-    out = {}
+    """The hover of each overlay (te_sp_tt_<overlay>) and the line of each technology (te_sp_tt_era_<tech>).
+    A vanilla overlay's hover is empty, so a vanilla picture shows none: the banner's tooltip is the bare lookup,
+    the form read in game, and a key that doesn't exist would come back as itself."""
+    out = {f"te_sp_tt_{name}": "" for name in vanilla_overlays()}
     for name, (kind, tech, _vanilla) in registry.overlays().items():
         out[f"te_sp_tt_{name}"] = hover_text(kind, tech)
         out[f"te_sp_tt_era_{tech}"] = era_text(tech)
