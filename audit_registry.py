@@ -97,9 +97,11 @@ AUDITS: tuple[Audit, ...] = (
     # --- script: syntax the engine reads differently from how it looks -------
     Audit(
         "any_limit_audit",
-        "An `any_*` trigger with a `limit = { }` child. `any_*` takes its conditions directly; the engine "
-        "rejects the block.",
-        where="trailing on the `any_*` opener line or on the `limit = {` line",
+        "An `any_*` trigger with a `limit = { }` child, an `always = no` child, or a `filter = { }` child "
+        "with neither `percent` nor `count = all` beside it. `any_*` takes its conditions directly; the "
+        "engine rejects a `limit`, matches nothing against `always = no`, and fails a `filter` with a plain "
+        "count at load.",
+        where="trailing on the `any_*` opener line, or on the `limit = {`, `always = no` or `filter = {` line",
     ),
     Audit(
         "iterator_limit_audit",

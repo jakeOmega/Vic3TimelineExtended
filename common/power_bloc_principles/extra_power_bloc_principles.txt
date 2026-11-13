@@ -1351,7 +1351,11 @@ principle_exploit_members_4 = {
 
 		if = {
 			limit = {
-				current_cohesion_number < 50
+				# The weight is read in the country's scope: reach the bloc for
+				# its cohesion. Vanilla's tiers 2 and 3 read it bare and log
+				# "Wrong scope for trigger: country, expected power_bloc"
+				# (docs/vanilla/vanilla_known_bugs.md).
+				power_bloc ?= { current_cohesion_number < 50 }
 			}
 			multiply = 0.0
 		}
@@ -1393,7 +1397,11 @@ principle_exploit_members_5 = {
 
 		if = {
 			limit = {
-				current_cohesion_number < 50
+				# The weight is read in the country's scope: reach the bloc for
+				# its cohesion. Vanilla's tiers 2 and 3 read it bare and log
+				# "Wrong scope for trigger: country, expected power_bloc"
+				# (docs/vanilla/vanilla_known_bugs.md).
+				power_bloc ?= { current_cohesion_number < 50 }
 			}
 			multiply = 0.0
 		}
