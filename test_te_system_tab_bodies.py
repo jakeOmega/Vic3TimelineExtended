@@ -23,6 +23,7 @@ from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _stri
                               guard_visible_overrides, mod_templates, _on_guard_widgets, WORLD, READ, ScriptedGuis,
                               NOT_THE_MODS_BASE, NOT_THE_MODS_BLOCK, NOT_THE_MODS_TYPE, UnresolvedTooltip)
 from scripts.generators import gen_te_systems_window as gen
+from national_info_binding import UNBOUND, WORLD_LOC, WORLD_LOC_BY_HEADING, world_loc_headings
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
@@ -588,21 +589,8 @@ class MountContextTest(unittest.TestCase):
 # it draws all the way down (gui_test_helpers.type_closure over the mod's own GUI files), and the loc that reaches.
 PUBLIC = [t for t in gen.TABS if t.public]
 
-# The systems National Info is to show (spec § 6.4) whose panels aren't bound yet: off the binding tests until their
-# PR binds them. A system's PR sets its Tab's public=True and deletes its own `"key",` line here, and only that line:
-# keep the blank lines, or two parallel PRs' deletions touch and conflict. One still here that passes every check
-# fails test_unbound_is_honest, so this list only shrinks. A set() call, not a {...} literal, so it stays a set when
-# the last system goes.
-UNBOUND = set([
-
-
-
-
-
-
-
-
-])
+# UNBOUND (the systems still to bind) and WORLD_LOC (the loc keys that are world reads) are in
+# national_info_binding.py, which loc_root_context_audit.py and te_rebind_country.py read too.
 
 # The systems National Info doesn't show in this work (spec § 6.4): never public.
 PRIVATE = {
@@ -613,77 +601,15 @@ PRIVATE = {
     "covert_warfare",
 }
 
-# A world read in loc (spec § 6.7): a key a public panel renders that reads the player's copy of what is the same
-# for every country (a world list written for players only), with why. Markup marks its world reads with a
-# `# world: <why>` line over the read instead. An entry read is never a world read. Each system's PR adds its keys
-# under its own heading, one a line, in order, so parallel PRs merge cleanly. A key that more than one system's
-# panel reaches goes under Shared, once (two PRs adding it under their own headings would repeat a dict key, which
-# ruff's F601 fails on main): test_a_shared_world_key_is_under_shared. A key no public or unbound panel renders, or
-# that reads no player, fails test_world_loc_is_live. te_rebind_country.py names the other tabs that reach a key.
-WORLD_LOC = {
-    # Shared: keys more than one system's panel reaches.
-    "te_hist_tt_markers": "a chart bar's tooltip has only the bar's context (gotcha #24), and the scripted GUI it "
-                          "asks roots on GetPlayer only to have a root: its handler reads scope:te_hist_sample. The "
-                          "keys that scripted GUI prints read no root today; one that later reads SCOPE.GetRootScope "
-                          "would read the player, and with this key exempt nothing would flag it",
-
-    # Demographics: none.
-
-    # Nation (F2)
-    "state_birth_limit_relief_add": "a modifier type's name, which the engine renders wherever it names the type, "
-                                    "mostly with no Country in context (breakdowns, law tooltips, loading tips): "
-                                    "GetPlayer is a root, behind vanilla's GetPlayer.IsValid guard, only to ask a "
-                                    "game rule, the same for every country (te_demog_custom_loc.txt's header)",
-    "state_birth_limit_relief_add_desc": "its description: as state_birth_limit_relief_add",
-    "state_demog_womens_work_ratio_add": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_demog_womens_work_ratio_add_desc": "its description: as state_birth_limit_relief_add",
-    "state_desired_fertility_mult": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_desired_fertility_mult_desc": "its description: as state_birth_limit_relief_add",
-    "state_fertility_means_add": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_fertility_means_add_desc": "its description: as state_birth_limit_relief_add",
-    "state_maternal_mortality_mult": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_maternal_mortality_mult_desc": "its description: as state_birth_limit_relief_add",
-    "state_means_literacy_add": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_means_literacy_add_desc": "its description: as state_birth_limit_relief_add",
-    "state_sex_ratio_at_birth_add": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_sex_ratio_at_birth_add_desc": "its description: as state_birth_limit_relief_add",
-    "state_urban_fertility_relief_add": "a modifier type's name: as state_birth_limit_relief_add",
-    "state_urban_fertility_relief_add_desc": "its description: as state_birth_limit_relief_add",
-    "te_demog_census_off_name_ingame": "those names' custom loc, which asks the Demographics rule "
-                                       "(te_demog_cohorts_run)",
-    "te_demog_census_off_desc_ingame": "those descriptions' custom loc, which asks the Demographics rule "
-                                       "(te_demog_cohorts_run)",
-    "te_demog_wf_womens_name_ingame": "a name's custom loc, which asks the Demographics rule (te_demog_effects_run)",
-    "te_demog_wf_womens_desc_ingame": "a description's custom loc, which asks the Demographics rule "
-                                      "(te_demog_effects_run)",
-    "te_demog_wf_womens_desc_full": "that description's text under the rule: a constant "
-                                    "(te_demog_k_womens_work_full), read through GetPlayer for a root",
-
-    # Banking (F2)
-
-    # Tax Code (F2)
-
-    # Grand Monuments (F3)
-
-    # Colonial Empire (F3)
-
-    # Seabed (F3)
-
-    # Cultural Hegemony (F4)
-
-    # Nuclear Weapons (F4)
-
-    # Space Race (F5)
-}
-
 HOW_TO_BIND = (
     "Each line: file:line, the type (or loc key), the read, the line. Bind each: run "
     "`python3 scripts/analysis/te_rebind_country.py {key}` for the list by class, and --write for the mechanical "
     "reads (JournalEntry.GetCountry. and GetPlayer. to Country.); put an entry-only part or a control under "
     "`using = te_own_country_only` (on a wrapper where the widget has its own visible; gui/te_system_tab_widgets.gui); "
     "a read of the player's copy of what is the same for every country takes a `# world: <why>` line over it "
-    "(a loc key: an entry in WORLD_LOC, under Shared if another system's panel reaches it too). Then set its Tab's "
-    "public=True and delete only its `\"{key}\",` line from UNBOUND, keeping the blank lines.")
+    "(a loc key: an entry in national_info_binding.WORLD_LOC_BY_HEADING, under Shared if another system's panel "
+    "reaches it too). Then set its Tab's public=True and delete only its `\"{key}\",` line from "
+    "national_info_binding.UNBOUND, keeping the blank lines.")
 
 
 def _report(findings, key, limit=60):
@@ -696,24 +622,6 @@ def _report(findings, key, limit=60):
 def _candidates():
     """The tabs another country's panel shows or will: public, and UNBOUND."""
     return sorted({t.key for t in PUBLIC} | UNBOUND)
-
-
-def _world_loc_headings():
-    """Each WORLD_LOC key and the heading comment it sits under, from this
-    file's source."""
-    src = _read(os.path.abspath(__file__))
-    block = src[src.index("\nWORLD_LOC = {"):]
-    block = block[:block.index("\n}\n")]
-    heads, head = {}, None
-    for line in block.split("\n"):
-        m = re.match(r"\s*#\s*(.+)", line)
-        if m:
-            head = m.group(1).strip()
-            continue
-        m = re.match(r'\s*"([\w.\-]+)"\s*:', line)
-        if m:
-            heads[m.group(1)] = head
-    return heads
 
 
 @functools.lru_cache(maxsize=None)
@@ -813,14 +721,28 @@ class BindingTest(unittest.TestCase):
     def test_a_shared_world_key_is_under_shared(self):
         """A WORLD_LOC key more than one system's panel reaches sits under the
         Shared heading, so two systems' PRs can't each add it."""
-        heads = _world_loc_headings()
+        heads = world_loc_headings()
         for key in WORLD_LOC:
             tabs = [t for t in _candidates() if key in _panel(t)["keys"]]
             with self.subTest(key=key):
-                self.assertIn(key, heads, "a WORLD_LOC key sits under a heading comment")
+                self.assertIn(key, heads, "a WORLD_LOC key sits under a heading")
                 if len(tabs) > 1:
-                    self.assertTrue(heads[key].startswith("Shared"),
-                                    f"{key}: {', '.join(tabs)} reach it, so it goes under Shared, not {heads[key]!r}")
+                    self.assertEqual(heads[key], "Shared",
+                                     f"{key}: {', '.join(tabs)} reach it, so it goes under Shared, not {heads[key]!r}")
+
+    def test_a_world_key_is_listed_once(self):
+        """Under one heading only: two systems' PRs that each add a key both
+        their panels reach would list it twice, and the flat WORLD_LOC would
+        keep one of the two whys without a word (a repeat under one heading is
+        ruff's F601)."""
+        seen = {}
+        for heading, keys in WORLD_LOC_BY_HEADING.items():
+            for key in keys:
+                with self.subTest(key=key):
+                    self.assertNotIn(key, seen, f"{key} is under {seen.get(key)!r} and {heading!r}: "
+                                                "list it once, under Shared")
+                seen[key] = heading
+        self.assertEqual(set(seen), set(WORLD_LOC))
 
     def test_the_walk_reaches_a_scripted_tooltips_lines(self):
         """The lines a scripted GUI's tooltip prints are the panel's text too
@@ -974,7 +896,7 @@ class PublicTest(unittest.TestCase):
                 panel = _panel(key)
                 left = len(panel["markup"]) + len(panel["loc"]) + len(panel["controls"]) + len(panel["text"])
                 self.assertGreater(left, 0, f"{key} passes BindingTest and GuardTest: set its Tab's public=True in "
-                                            f"gen_te_systems_window.TABS and take it off UNBOUND")
+                                            f"gen_te_systems_window.TABS and take it off national_info_binding.UNBOUND")
 
 
 # A panel's fixture: a wide layout, a section, a control row and a popup, as test_unbound_is_honest's mutation
@@ -1299,6 +1221,30 @@ class MutationTest(unittest.TestCase):
         self.assertEqual(self.row_draws(self.row(second="fx_derived = {}"))[0], [])
         self.assertEqual(self.row_draws(self.row(guard="", second="fx_derived = {}"))[0],
                          [("fx_derived", "Execute"), ("fx_wide", "Execute")])
+
+    def test_visible_no_hides_nothing_from_the_walk(self):
+        """The walk reads no `visible` as hiding, `visible = no` included
+        (#1698; #1368 had named it beside the guard as a dead subtree, and
+        #1639 left it out): what sits under one counts as drawn for another
+        country, the safe way. The mod's `visible = no` lines (401 on
+        2026-11-13, 296 in a blockoverride and 68 in a block default) each hide
+        one instance's part, never a type, so reading them as dead would take
+        a per-instance walk the helpers don't have. What another country must
+        not see goes under te_own_country_only instead. If the walk learns
+        `visible = no`, this test is where that is decided."""
+        hidden = "widget = {\n\t\t\tvisible = no\n\t\t\t@X@\n\t\t}"
+        reads = markup_reads({"fx_wide"}, _fixture(hidden.replace("@X@", 'textbox = { text = "[JournalEntry.IsActive]" }')))
+        self.assertEqual([(f.where, f.what) for f in reads], [("fx_section", "JournalEntry.IsActive")])
+        controls = unguarded_controls({"fx_wide"}, _fixture(hidden.replace("@X@", "fx_controls = {}")))
+        self.assertEqual([(f.where, f.what) for f in controls], [("fx_controls", "Execute")])
+        keys = panel_loc_keys({"fx_wide"}, _fixture(hidden.replace("@X@", 'textbox = { text = "fx_hidden" }')),
+                              {"fx_label": "Arsenal", "fx_hidden": "Hidden"})
+        self.assertEqual(keys, {"fx_label", "fx_hidden"})
+        # in place of the guard, on the widget around the row's block, and set by
+        # the instance's own override of that block: drawn both ways, as with no guard
+        drawn = ([("fx_wide", "Execute")], [("fx_wide", "JournalEntry.IsActive")], {"fx_label", "fx_mine"})
+        self.assertEqual(self.row_draws(self.row(guard="visible = no")), drawn)
+        self.assertEqual(self.row_draws(self.row(guard="", held="visible = no")), drawn)
 
     def test_an_override_that_fills_a_drawn_block_is_drawn(self):
         """One block of the name outside the guard keeps the override drawn:
@@ -1877,7 +1823,7 @@ template fx_tmpl_mine {
     def test_unbound_stays_a_set_when_it_empties(self):
         """The last system's PR leaves UNBOUND with no entries: still a set
         (a bare {} would be a dict, and UNBOUND | PRIVATE would raise)."""
-        src = _read(os.path.abspath(__file__))
+        src = _read(os.path.join(REPO, "national_info_binding.py"))
         block = src[src.index("\nUNBOUND = ") + 1:]
         block = block[:block.index("\n])\n") + 3]
         emptied = re.sub(r'(?m)^\s*"\w+",\n', "", block)
