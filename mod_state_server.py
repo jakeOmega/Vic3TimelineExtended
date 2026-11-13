@@ -102,6 +102,9 @@ from server.routes_gui import (  # noqa: F401 — re-exported
     ENTITY_TYPE_TO_DATATYPE,
     FIELD_TO_METHODS,
 )
+from server.routes_vocabulary import (  # noqa: F401 — re-exported
+    VocabularyRoutes,
+)
 
 _server_pkg.register_state(globals())
 
@@ -5580,7 +5583,7 @@ def encode_response(data, status: int = 200, what: str = "response") -> tuple[by
         return json_body({"error": f"{type(exc).__name__}: {exc}"}), 500
 
 
-class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, BaseHTTPRequestHandler):
+class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, VocabularyRoutes, BaseHTTPRequestHandler):
 
     # ---- local-origin gate ------------------------------------------------
     def _bind_port(self) -> int:
@@ -6175,177 +6178,6 @@ class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, BaseHTTPRequestHan
             for eid in data.keys()
         ]
 
-    # ---- vocabularies -----------------------------------------------------
-    def _vocabularies(self, parts):
-        """GET /vocabularies            — full {placeholder: [values]} map.
-        GET /vocabularies/<placeholder>  — list for a single placeholder."""
-        if not parts:
-            return {
-                p: {
-                    "entity_type": VOCABULARY_TYPES[p],
-                    "count": len(values),
-                    "values": values,
-                }
-                for p, values in _vocabulary_index().items()
-            }
-        placeholder = parts[0]
-        if placeholder not in VOCABULARY_TYPES:
-            raise NotFound(placeholder)
-        values = _vocabulary_values(placeholder)
-        return {
-            "placeholder": placeholder,
-            "entity_type": VOCABULARY_TYPES[placeholder],
-            "count": len(values),
-            "values": values,
-        }
-
-    def _vocab_endpoint(self, placeholder: str):
-        """Convenience endpoint behind /cultures, /religions, etc."""
-        values = _vocabulary_values(placeholder)
-        return {
-            "placeholder": placeholder,
-            "entity_type": VOCABULARY_TYPES[placeholder],
-            "count": len(values),
-            "entries": [{"id": v, "name": ms.localize(v)} for v in values],
-        }
-
-    def _building_groups(self, parts):
-        """GET /building-groups[/<id>[/reach]] (#383)
-
-        Bare: the vocabulary wrapper (`{placeholder, entity_type, count,
-        entries: [{id, name}]}`), each real group also carrying `parent_group`
-        (merged: after the mod's REPLACE / INJECT), `origin` (vanilla | mod |
-        mod-injected, a vanilla group the mod only INJECTs into | mod-replaced,
-        one a mod file redefines) and `construction_efficiency_modifier` (whether
-        it registers its own building_group_<id>_construction_efficiency_add). The
-        prefix-less spellings the vocabulary lists (`manufacturing`) carry
-        `alias_of` instead; `group_count` counts the real groups.
-
-        /<id>: that group with `ancestors` (nearest first), `children`,
-        `descendants`, the `buildings` directly in it and `mod_definitions`
-        (each mod file's line and directive). /<id>/reach: every building a
-        building_group_<id>_* modifier applies to, the group's own and its
-        descendants'. <id> may be the prefix-less spelling."""
-        import building_group_tree as bgt
-
-        groups = (ms.get_data(bgt.ENTITY_TYPE) if ms else None) or {}
-        if not groups:
-            if parts:
-                raise DataNotLoaded(bgt.ENTITY_TYPE)
-            return self._vocab_endpoint("bg")
-        vanilla_parser = ms.base_parsers.get(bgt.ENTITY_TYPE)
-        definitions = bgt.definitions(mod_path)
-        tree = bgt.Tree(groups, vanilla_parser.data if vanilla_parser is not None else None,
-                        ms.get_data("Buildings"), definitions)
-
-        if not parts:
-            out = self._vocab_endpoint("bg")
-            for entry in out["entries"]:
-                if entry["id"] in groups:
-                    entry.update(tree.row(entry["id"]))
-                else:
-                    entry["alias_of"] = tree.resolve(entry["id"])
-            out["group_count"] = len(groups)
-            return out
-
-        gid = tree.resolve(parts[0])
-        if gid is None or len(parts) > 2 or (len(parts) == 2 and parts[1] != "reach"):
-            raise NotFound("/".join(parts))
-        out = {"type": bgt.ENTITY_TYPE, "id": gid, "name": ms.localize(gid), **tree.row(gid)}
-        if len(parts) == 2:
-            reach = tree.reach(gid)
-            out.update({
-                "groups": [gid, *tree.descendants(gid)],
-                "count": len(reach),
-                "buildings": [{"id": bid, "name": ms.localize(bid), "building_group": group}
-                              for bid, group in reach],
-                "note": bgt.REACH_NOTE,
-            })
-            return out
-        out.update({
-            "ancestors": tree.ancestors(gid),
-            "children": list(tree.children[gid]),
-            "descendants": tree.descendants(gid),
-            "buildings": [{"id": bid, "name": ms.localize(bid)} for bid in tree.buildings[gid]],
-            "mod_definitions": definitions.get(gid, []),
-        })
-        return out
-
-    # ---- modifier patterns -----------------------------------------------
-    def _modifier_patterns(self, parts, params):
-        """GET /modifier-patterns                — list all patterns.
-        GET /modifier-patterns?source=catalog|discovered|all
-        GET /modifier-patterns?expand=<pattern>&<placeholder>=<value>
-        GET /modifier-patterns/<pattern>        — detail for one pattern."""
-        source_filter = (params.get("source") or ["all"])[0]
-        expand_pattern = (params.get("expand") or [None])[0]
-
-        if expand_pattern:
-            return self._modifier_pattern_expand(expand_pattern, params)
-
-        catalog_set = {entry["pattern"] for entry in pattern_catalog}
-        discovered_set = {d["pattern"] for d in discovered_patterns}
-        catalog_meta = {entry["pattern"]: entry for entry in pattern_catalog}
-        discovered_meta = {d["pattern"]: d for d in discovered_patterns}
-        vocabularies = _vocabulary_index()
-
-        if parts:
-            pattern = parts[0]
-            return self._modifier_pattern_detail(
-                pattern, catalog_meta, discovered_meta, vocabularies
-            )
-
-        out = []
-        for pattern, members in sorted(pattern_index.items()):
-            origin = "catalog" if pattern in catalog_set else (
-                "discovered" if pattern in discovered_set else "unknown"
-            )
-            if source_filter != "all" and origin != source_filter:
-                continue
-            entry_meta = catalog_meta.get(pattern) or discovered_meta.get(pattern) or {}
-            placeholder = entry_meta.get("placeholder", "?")
-            vocab = entry_meta.get("vocab", placeholder)
-            vocab_size = len(vocabularies.get(vocab, []) or [])
-            out.append({
-                "pattern": pattern,
-                "source": origin,
-                "placeholder": placeholder,
-                "vocab": vocab,
-                "members": len(members),
-                "vocab_size": vocab_size,
-                "missing_count": max(0, vocab_size - len(members)),
-            })
-        return {"count": len(out), "patterns": out}
-
-    def _modifier_pattern_detail(self, pattern, catalog_meta, discovered_meta, vocabularies):
-        if pattern not in pattern_index:
-            raise NotFound(pattern)
-        members = pattern_index[pattern]
-        meta = catalog_meta.get(pattern) or discovered_meta.get(pattern) or {}
-        placeholder = meta.get("placeholder", "?")
-        vocab_name = meta.get("vocab", placeholder)
-        vocab_values = set(vocabularies.get(vocab_name, []) or [])
-        present = set(members.keys())
-        missing = sorted(vocab_values - present) if vocab_values else []
-        origin = "catalog" if pattern in catalog_meta else (
-            "discovered" if pattern in discovered_meta else "unknown"
-        )
-        return {
-            "pattern": pattern,
-            "source": origin,
-            "placeholder": placeholder,
-            "vocab": vocab_name,
-            "notes": meta.get("notes", ""),
-            "members": [
-                {"value": v, "name": pattern.replace("{" + placeholder + "}", v),
-                 "display_name": entry.get("display_name", ""),
-                 "mask": entry.get("mask", "")}
-                for v, entry in sorted(members.items())
-            ],
-            "missing": missing,
-            "missing_count": len(missing),
-        }
-
     def _auto_generated(self):
         """GET /auto-generated — return the file → generator-script ownership map.
 
@@ -6763,27 +6595,6 @@ class ModStateHandler(EngineDocsRoutes, LogRoutes, GuiRoutes, BaseHTTPRequestHan
             return {"text": _render_placeholder_icons_text(
                 report, list_unique=bool(statuses and "unique_mod" in statuses))}
         return report
-
-    def _modifier_pattern_expand(self, pattern, params):
-        """Instantiate a pattern with a given placeholder value."""
-        compiled = _compile_pattern(pattern)
-        if not compiled:
-            raise BadRequest(f"Pattern lacks a {{placeholder}} token: {pattern}")
-        prefix, placeholder, suffix = compiled
-        value = (params.get(placeholder) or [None])[0]
-        if not value:
-            raise BadRequest(f"Provide ?{placeholder}=<value>")
-        concrete = pattern.replace("{" + placeholder + "}", value)
-        members = pattern_index.get(pattern, {})
-        existing = members.get(value)
-        return {
-            "pattern": pattern,
-            "placeholder": placeholder,
-            "value": value,
-            "concrete_name": concrete,
-            "exists_in_engine_docs": existing is not None,
-            "engine_doc_entry": existing,
-        }
 
     def _raw(self, parts):
         """GET /raw/<EntityType>[/<id>]  - raw parsed data."""
