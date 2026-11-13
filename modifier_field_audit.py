@@ -126,6 +126,8 @@ from bisect import bisect_right
 from dataclasses import dataclass, field
 from typing import Callable
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from loc_coverage_audit import _culture_names, engine_named_culture_type
 from paradox_file_parser import INJECT_DIRECTIVES, REPLACE_DIRECTIVES
 
@@ -154,10 +156,6 @@ READ = "modifier: read"
 READ_DIRS = ("common", "events")
 
 _RELIGION_SOL_RE = re.compile(r"state_(?P<r>\w+)_standard_of_living_add")
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\(\s*" + CHECK + r"\s*\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 # A quoted string (kept, its body blanked) or a comment (blanked).
 _STRING_OR_COMMENT_RE = re.compile(r'"[^"\n]*"|#[^\n]*')
@@ -220,19 +218,15 @@ class Sources:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """A tag that suppresses nothing is a `stale_review` flag, so `stale`
+    stays empty and `failing` is every unreviewed flag."""
+
     flags: list = field(default_factory=list)
     files_audited: int = 0
     uses: int = 0     # lines written in a modifier block or a cost block
     reads: int = 0    # `modifier:<name>` reads
     fields: int = 0   # distinct names, written or read
-
-
-def _parse_reviewed(raw_line: str) -> dict | None:
-    m = _REVIEWED_RE.search(raw_line)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale")}
 
 
 # ---------------------------------------------------------------------------
@@ -309,10 +303,10 @@ def scan_text(text: str, rel_path: str, mode: str, rules=None) -> tuple[list, li
             if label is None:
                 continue
             line = bisect_right(starts, m.start())
-            sites.append(Site(key, rel_path, line, label, stack[0], _parse_reviewed(raw_lines[line - 1])))
+            sites.append(Site(key, rel_path, line, label, stack[0], parse_reviewed(raw_lines[line - 1], (CHECK,))))
     tag_lines = []
     if "REVIEWED" in text:
-        tag_lines = [i for i, raw in enumerate(raw_lines, 1) if _parse_reviewed(raw)]
+        tag_lines = [i for i, raw in enumerate(raw_lines, 1) if parse_reviewed(raw, (CHECK,))]
     return sites, tag_lines
 
 
@@ -644,11 +638,8 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
+    unrev = len(result.unreviewed)
     return {
         "files_audited": result.files_audited,
         "fields_checked": result.fields,
@@ -664,19 +655,21 @@ def main(argv=None, mod_path: str | None = None) -> int:
     """Print the report. With `--strict` (CI), exit 1 on any flag without a
     `# REVIEWED ...` exemption: every `unregistered` flag, an unreviewed
     `no_loc`, a stale tag."""
-    argv = sys.argv[1:] if argv is None else argv
     if mod_path is None:
         from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    print(
-        f"{result.fields} distinct names: {result.uses} lines written in {result.files_audited} entity files, "
-        f"{result.reads} reads.",
-        file=sys.stderr,
-    )
-    if "--strict" in argv:
-        return 1 if any(not f.exemption for f in result.flags) else 0
-    return 0
+
+    def render(result: AuditResult, args) -> None:
+        print(render_report(result))
+        print(
+            f"{result.fields} distinct names: {result.uses} lines written in {result.files_audited} entity files, "
+            f"{result.reads} reads.",
+            file=sys.stderr,
+        )
+
+    return cli_main(lambda args: audit(mod_path=mod_path), render, argv=argv,
+                    description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on any flag without a `# REVIEWED` exemption, "
+                                "a stale tag included.")
 
 
 if __name__ == "__main__":

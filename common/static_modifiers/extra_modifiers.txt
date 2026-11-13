@@ -1334,8 +1334,9 @@ banking_crash_intervention_capital_controls = {
 	country_influence_add = -100
 }
 
-# ----- Global Warming severity stage (a scaling modifier on every country's je_global_warming) -----
-# Per degree: the entry declares it at the felt temperature anomaly, floored at 0 (je_global_warming.txt).
+# ----- Global Warming severity stage (a scaling modifier the World Climate entry declares for every country) -----
+# Per degree: the entry declares it at the felt temperature anomaly, floored at 0 (je_world_climate.txt).
+# A state in the tropics or the high latitudes also carries its band's modifier below (#1681).
 global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
@@ -1365,6 +1366,48 @@ global_warming = {
 	state_harvest_condition_frost_impact_mult = -0.15
 	state_harvest_condition_frost_duration_mult = -0.15
 
+}
+
+# ----- Regional Climate Warming (#1681) -----
+# docs/superpowers/specs/2026-11-13-regional-climate-warming-design.md § 4.
+# On top of global_warming, per degree of the felt anomaly, on a state between the
+# tropics or 55 degrees or more from the equator; a mid-latitude state carries
+# neither. State modifiers, refreshed from the monthly state pulse by
+# gw_regional_refresh_effect (global_warming_regional_effects.txt), their one
+# refresh site, at multiplier = var:gw_regional_applied, the anomaly Climate Warming
+# applies at. The self-check reads heatwave duration (global_warming 0.5 and a band's
+# 0.25 or -0.25; the termination shock the only other carrier). Each mortality line has its
+# Causes of Death tag beside it at the same value (demographics_params.DEATH_CAUSE_TAGS,
+# "chr", as global_warming's). test_gw_regional.py pins the lines.
+
+# The tropics: heat already near what people and crops can bear.
+global_warming_tropics = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.025
+	state_death_cause_chr_mult = 0.025
+	state_standard_of_living_add = -0.5
+	building_group_bg_agriculture_throughput_add = -0.05
+	building_group_bg_plantations_throughput_add = -0.05     # global_warming leaves plantations alone
+	state_harvest_condition_heatwave_impact_mult = 0.25
+	state_harvest_condition_heatwave_duration_mult = 0.25
+}
+
+# The high latitudes: milder winters and a longer growing season, and more forest fire.
+# Totals with global_warming: mortality +2%, SoL -0.5, farms +2% a degree (its -10% farm
+# line and -2.5% on every building against +14.5% here).
+global_warming_high_latitudes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds
+	state_mortality_mult = -0.03
+	state_death_cause_chr_mult = -0.03
+	state_standard_of_living_add = 0.5
+	building_group_bg_agriculture_throughput_add = 0.145
+	state_harvest_condition_frost_impact_mult = -0.15
+	state_harvest_condition_frost_duration_mult = -0.15
+	state_harvest_condition_heatwave_impact_mult = -0.25
+	state_harvest_condition_heatwave_duration_mult = -0.25
+	state_harvest_condition_wildfire_impact_mult = 0.25
+	# No wildfire duration: that field stays Climate Warming's alone, which the World
+	# Climate self-check reads (gw_world_climate_selfcheck_effect).
 }
 
 # ----- Climate mitigation and adaptation policies -----

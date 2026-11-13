@@ -207,7 +207,7 @@
 		Unlocking Technologies:
 			Intensive Agriculture
 			Prospecting
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
 	Bessemer Process - The Bessemer process is a technique for the mass production of steel from pig iron.
 		Unlocking Technologies:
 			Steelworking
@@ -571,6 +571,7 @@
 	Steam Turbine - Using the power of steam to drive large rotors, turbines create tremendous amounts of energy that serve equally well as stationary machines in a plant and as the driving engines of seagoing vessels.
 		Unlocking Technologies:
 			Electrical Generation
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Plastics - There's a great future in plastics. They're moldable, malleable, able to be shaped and kept in any form anyone wants. Soon, it will be a plastic world.
 		Unlocking Technologies:
 			Reinforced Concrete
@@ -709,7 +710,7 @@
 	Oil Turbine - The power of a turbine can be amplified with the use of oil, a far more energy-rich fuel than coal.
 		Unlocking Technologies:
 			Steam Turbine
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Arc Welding - By generating a large amount of electricity, it is possible to create enough heat to melt two pieces of metal together.
 		Unlocking Technologies:
 			Electric Arc Process
@@ -963,7 +964,7 @@
 		Unlocks Buildings: Hoover Dam, Hydro Plant
 		Unlocks Laws: Pro-Labor Ministry of Labor Established
 		Unlocks Decrees: Subsidize Immigration
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Art Deco Architecture - A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and [concept_prestige], making our cities look a bit more glamorous.
 		Unlocking Technologies:
 			Marketing Research
@@ -1118,7 +1119,7 @@
 	Modern Urban Planning - By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.
 		Unlocking Technologies:
 			Art Deco Architecture
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
 	Satellite Communications - Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.
 		Unlocking Technologies:
 			Space Exploration
@@ -1289,7 +1290,7 @@
 		Unlocking Technologies:
 			World Wide Web
 			Supply Chain Management
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Wireless Internet (Wi-Fi) - Wi-Fi has made it possible to connect to the internet without cables. It has made our lives more convenient and has revolutionized the way we work, communicate, and entertain ourselves.
 		Unlocking Technologies:
 			World Wide Web
@@ -1526,7 +1527,7 @@
 		Unlocking Technologies:
 			Genetic Engineering
 			Modern Material Science
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 8 (listed under their buildings in buildings.txt)
 	AI Agents - Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise.
 		Unlocking Technologies:
 			Generative AI
@@ -1698,3 +1699,71 @@
 		Unlocking Technologies:
 			Environmental Movement
 			Globalization
+13: 13 technologies
+	Molecular Assemblers - Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.
+		Unlocking Technologies:
+			Advanced Nanofabrication
+		Unlocks Buildings: Nanofabrication Center Construction Site
+		Unlocks Combat Unit Types: Utility Fog Phalanx
+		Unlocks Mobilization Options: Molecular Scanners
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+	Programmable Matter - Imagine materials that can change their shape, color, or texture on command. Programmable matter could be the next great leap in materials science, with endless possibilities.
+		Unlocking Technologies:
+			Molecular Assemblers
+			Quantum Materials
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+	Von Neumann Machines - John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched.
+		Unlocking Technologies:
+			Molecular Assemblers
+			Orbital Manufacturing
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+	Aneutronic Fusion - Fusing protons with boron releases its energy as charged particles instead of neutrons, so the current can be drawn straight from the plasma with no boiler and no turbine. The reactors barely irradiate their own walls and leave no radioactive waste behind, though the fuel has to burn at temperatures that make an ordinary fusion plant look lukewarm.
+		Unlocking Technologies:
+			Compact Fusion Reactors
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+	Microfusion Cells - Imagine a battery that never needs recharging, because it isn't a battery at all. Microfusion cells are fusion reactors made small and safe enough to sit where a battery once did, running our vehicles, motors and appliances for years on a sip of fuel.
+		Unlocking Technologies:
+			Aneutronic Fusion
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+	Space Elevator - A hypothetical structure that would allow us to travel between Earth and space with ease. It would make space travel much cheaper and could accelerate our exploration of the cosmos.
+		Unlocking Technologies:
+			Asteroid Mining
+			Compact Fusion Reactors
+		Unlocks Buildings: Space Elevator Construction Site
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Antimatter Production - We can now create antimatter on a large scale, a fuel source with an incredible energy density. This unlocks unprecedented power for our spacecraft and military hardware, revolutionizing how we operate.
+		Unlocking Technologies:
+			Fusion Power
+			Quantum Communications
+		Unlocks Buildings: Antimatter Engine, Antimatter Facility Construction Site, Antimatter Warhead Plant
+		Unlocks Combat Unit Types: Orbital Precision Antimatter Strikes
+		Unlocks Ship Types: Antimatter Battleship
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Biological Immortality - The idea of living forever is no longer just a dream. Through advancements in medicine and genetic engineering, we might just be able to cheat death itself.
+		Unlocking Technologies:
+			Human Augmentation
+			Rejuvenation Therapies
+	Self-Directed Evolution - Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.
+		Unlocking Technologies:
+			Morphological Freedom
+			Rejuvenation Therapies
+		Unlocks Laws: Clade Citizenship
+	Mind Backups - The ability to store our memories and consciousness in digital form. It's a path to a kind of immortality, allowing us to live on long after our physical bodies have failed.
+		Unlocking Technologies:
+			Biological Immortality
+			Neural Lace
+		Unlocks Buildings: Mind Upload Nexus Construction Site
+	Telepathic Communities - What if we could communicate directly from mind to mind? Telepathic communities, connected by brain-computer interfaces, could foster a new level of empathy and understanding.
+		Unlocking Technologies:
+			Neural Lace
+			Mental Health Awareness
+		Unlocks Buildings: Consciousness Network Construction Site
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+	Post-Scarcity Economy - What if we lived in a world where there was enough for everyone? A post-scarcity economy, made possible by advanced technology, could eliminate material want and redefine the very meaning of work.
+		Unlocking Technologies:
+			Post-Work Society
+		Unlocks Laws: Post-Scarcity Economy
+	Terraforming - Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.
+		Unlocking Technologies:
+			Space Colonization
+			Geoengineering

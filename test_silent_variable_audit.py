@@ -117,8 +117,8 @@ class SilentVariableAuditTests(unittest.TestCase):
         mod = self._mod({"events/e.txt": _event("my.1", [tag + self.WRITE, tag])}, self.SHOWN)
         res = sva.audit(mod)
         self.assertEqual([(f.option, bool(f.exemption)) for f in res.flags], [("my.1.a", True)])
-        self.assertEqual([s.option for s in res.stale_tags], ["my.1.b"])
-        self.assertEqual(res.failing, 1)
+        self.assertEqual([s.option for s in res.stale], ["my.1.b"])
+        self.assertEqual(len(res.failing), 1)
 
     def test_untagged_reviewed_comment_does_not_suppress(self):
         opt = "\t\t# REVIEWED 2026-09-25: read by other audits\n" + self.WRITE
@@ -143,7 +143,7 @@ class RenderReportTests(unittest.TestCase):
                                exemption={"date": "2026-09-25", "rationale": "modifier shows it"}),
                 sva.OptionFlag("my.1", "my.1.a", "/mod/events/e.txt", 5, w),
             ],
-            stale_tags=[sva.StaleTag("my.2", "my.2.b", "/mod/events/e.txt", 30)],
+            stale=[sva.StaleTag("/mod/events/e.txt", 30, sva.CHECK, event_id="my.2", option="my.2.b")],
             coverage={"events_scanned": 797, "options_scanned": 1974,
                       "displayed_scope_variables": 370, "displayed_global_variables": 158},
         )

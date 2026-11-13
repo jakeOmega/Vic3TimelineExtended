@@ -74,6 +74,8 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 # Offset-preserving comment/string blanking, shared with the iterator audit so
 # the audits agree on what "a commented-out line" means.
 from iterator_limit_audit import blank_comments_and_strings
@@ -104,10 +106,6 @@ KIND_ORDER = (
     "institution_changed",
     "wrong_block",
     "duplicate_block",
-)
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+)$"
 )
 
 _TOKEN_RE = re.compile(
@@ -314,21 +312,12 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     groups_checked: int = 0
     pairs_checked: int = 0
     pairs_vanilla_only: int = 0
     principles_touched: int = 0
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _resolve(flag: Flag, locate: list, exempt: list) -> Flag:
@@ -338,7 +327,7 @@ def _resolve(flag: Flag, locate: list, exempt: list) -> Flag:
         flag.file, flag.line = site[0], site[1]
         break
     for site in exempt:
-        reviewed = _parse_reviewed(site[2])
+        reviewed = parse_reviewed(site[2])
         if reviewed:
             flag.exemption = reviewed
             break
@@ -487,8 +476,8 @@ def _describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Principle tier audit report",
@@ -560,11 +549,8 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
+    unrev = len(result.unreviewed)
     return {
         "groups_checked": result.groups_checked,
         "pairs_checked": result.pairs_checked,
@@ -574,12 +560,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

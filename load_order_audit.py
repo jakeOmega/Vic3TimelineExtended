@@ -78,6 +78,8 @@ from typing import Optional
 
 import external_mod_overlap as emo
 import external_mod_state as ems
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, write_text
 from external_mod_overlap import OURS, VANILLA, Op
 from mod_state import VANILLA_COMMON_DIRS
 
@@ -175,7 +177,9 @@ class Row:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """The rows by kind. `flags` stays empty: a row is not a flag (nothing
+    suppresses one), and the differences are what `--strict` fails on."""
     mode: str = SNAPSHOT_MODE
     rows: list = field(default_factory=list)
     keys_checked: int = 0      # keys replayed (a lone bare definition vanilla lacks is skipped)
@@ -191,11 +195,20 @@ class AuditResult:
     def of(self, kind: str) -> list:
         return [r for r in self.rows if r.kind == kind]
 
+    @property
+    def unreviewed(self) -> list:
+        """The differences: what `--strict` fails on and a reload warns on."""
+        return self.of(DIFFERENCE)
+
+    @property
+    def exemptions(self) -> list:
+        return []
+
     def summary(self) -> dict:
         out = {"mode": self.mode, "keys_defined": self.keys_defined,
                "keys_checked": self.keys_checked,
                # The server's warning key: differences are what a reload should flag.
-               "unreviewed": len(self.of(DIFFERENCE))}
+               "unreviewed": len(self.unreviewed)}
         for kind in KINDS[1:]:
             out[kind] = len(self.of(kind))
         return out
@@ -892,21 +905,16 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path,
                    vanilla=_server_vanilla() if mod_state is not None else None)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_report(result))
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
     return result.summary()
 
 
 def main(argv=None, mod_path: Optional[str] = None) -> int:
     """Print the report. With `--strict` (CI), exit 1 on any difference."""
-    argv = sys.argv[1:] if argv is None else argv
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    if "--strict" in argv:
-        return 1 if result.of(DIFFERENCE) else 0
-    return 0
+    return cli_main(lambda args: audit(mod_path=mod_path),
+                    lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on any difference.")
 
 
 if __name__ == "__main__":

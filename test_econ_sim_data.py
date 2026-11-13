@@ -61,9 +61,11 @@ class TestNumbers(unittest.TestCase):
             self.assertEqual([s[0] for s in steps], sorted(s[0] for s in steps))
 
     def test_load_is_fast(self):
-        start = time.perf_counter()
+        # CPU time, not wall time: a loaded machine (pytest -n auto) stretches the wall clock, not the work.
+        # load_mod_data runs in this process, on this thread, so process_time counts all of it (#1693).
+        start = time.process_time()
         D.load_mod_data()
-        self.assertLess(time.perf_counter() - start, 15.0)       # about 2 s on the dev machine; this only catches a blow-up
+        self.assertLess(time.process_time() - start, 15.0)       # about 4 s on the dev machine; this only catches a blow-up
 
 
 class TestReaders(unittest.TestCase):

@@ -14,8 +14,8 @@ An audit is a function that finds flags. Everything around it is here:
   exits 1 when the result fails.
 
 `docs/guides/audits.md` § "Adding an audit" says how a new audit uses these.
-The older audits are moving onto this module one batch at a time; each keeps
-its own report format, so its committed report does not change.
+Every audit in `audit_registry` is on this module (#1536). The ones older than
+it kept their own report format, so no committed report changed in the move.
 
 Stdlib only, like `audit_registry`.
 """
@@ -30,9 +30,10 @@ from typing import Callable, Sequence
 # Both forms in one pattern. `tags` is None for the plain form. The plain form
 # reads exactly as the audits' own patterns did. The tag list takes names
 # separated by spaces or commas, or one name with any whitespace around it
-# (`roster_membership_audit`'s form). The tagged half is not yet exactly any
-# old audit's: `test_audit_common.TAGGED_DIVERGENCES` names the shapes where it
-# differs, to be settled when the tagged audits move onto this module.
+# (`roster_membership_audit`'s form). The tagged half reads every comment in
+# the repository as each tagged audit's own pattern did;
+# `test_audit_common.TAGGED_DIVERGENCES` names the shapes outside it where it
+# differs from one of them.
 REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*"
     r"(?:\((?P<tags>[\w ,]+|\s*\w+\s*)\)\s*)?"
@@ -58,10 +59,10 @@ def parse_reviewed(comment: str | None, tags: Sequence[str] = ()) -> dict | None
 
     `comment` may be a whole line: the pattern is searched for. The first
     comment of the plain form decides for the plain form, as every plain
-    audit's pattern did. The first comment of the tagged form decides for the
-    tagged one, as the split-form audits did, so a tagged comment naming only
-    another audit's tag hides a later one on the same line (see
-    `test_audit_common.TAGGED_DIVERGENCES`).
+    audit's pattern did. For the tagged form, the first comment that names one
+    of `tags` decides, as the one-word and fixed forms did: a line can carry
+    one tagged comment per audit, and a comment naming only another audit's
+    tag does not hide a later one that names this audit's.
     """
     if not comment or "REVIEWED" not in comment:
         return None
@@ -69,6 +70,7 @@ def parse_reviewed(comment: str | None, tags: Sequence[str] = ()) -> dict | None
     plain_ok = "" in wanted
     named = [t for t in wanted if t]
     plain = tagged = None
+    hit = ""
     pos = 0
     while (plain is None and plain_ok) or (tagged is None and named):
         m = REVIEWED_RE.search(comment, pos)
@@ -76,16 +78,16 @@ def parse_reviewed(comment: str | None, tags: Sequence[str] = ()) -> dict | None
             break
         if m.group("tags") is None:
             plain = plain or m
-        else:
-            tagged = tagged or m
+        elif tagged is None:
+            hit = next((t for t in comment_tags(m.group("tags")) if t in named), "")
+            if hit:
+                tagged = m
         pos = m.start() + 1
     found = []
     if plain is not None and plain_ok:
         found.append((plain, ""))
-    if tagged is not None and named:
-        hit = next((t for t in comment_tags(tagged.group("tags")) if t in named), None)
-        if hit is not None:
-            found.append((tagged, hit))
+    if tagged is not None:
+        found.append((tagged, hit))
     if not found:
         return None
     # An audit taking both forms reads whichever comes first.
@@ -145,9 +147,10 @@ class AuditResult:
 
 
 def write_text(path: str, text: str) -> None:
-    """Write a report, creating its directory."""
+    """Write a report, creating its directory. LF line ends on every platform,
+    as several audits wrote theirs before they moved onto this module."""
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    with open(path, "w", encoding="utf-8") as fh:
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
 
 

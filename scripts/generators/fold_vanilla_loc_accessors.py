@@ -25,6 +25,10 @@ what the engine says it returns.
 Besides folding, a run drops every extras entry the hand table now defines
 (the hand-typed pair wins anyway) and every `--drop TYPE.ACCESSOR`, then lists
 the folded accessors that vanilla chains further through all the same.
+`--prune` also drops every entry no chain in vanilla's loc calls: the fold
+only ever adds, so an accessor an older vanilla used stays after vanilla stops
+using it, and nothing then backs its typing. The report lists each pruned
+entry the mod's own loc still calls, which the audit flags from then on.
 
 Re-run after every vanilla patch (runbook § 4). `--dry-run` reports and writes
 nothing. Exit code 1 when a chained-further accessor is waiting for its type,
@@ -34,7 +38,7 @@ folded as `"value"` and listed, so a fold from an empty extras file settles.
 
 Usage: python3 scripts/generators/fold_vanilla_loc_accessors.py [--dry-run]
            [--source auto|install|snapshot] [--data-types DIR]
-           [--drop TYPE.ACCESSOR ...]
+           [--drop TYPE.ACCESSOR ...] [--prune]
 """
 from __future__ import annotations
 
@@ -210,6 +214,7 @@ class FoldPlan:
     undetermined: list[Gap] = field(default_factory=list)
     shadowed: list[str] = field(default_factory=list)   # dropped: the hand table has them
     dropped: list[str] = field(default_factory=list)    # dropped by --drop
+    pruned: list[str] = field(default_factory=list)     # dropped by --prune: vanilla never calls them
     known: int = 0                                      # flags in KNOWN_VANILLA_FLAGS
     residual: list = field(default_factory=list)        # flags that name no accessor
     blind: list = field(default_factory=list)           # folded pairs vanilla chains past
@@ -222,7 +227,8 @@ class FoldPlan:
 
     @property
     def changed(self) -> bool:
-        return bool(self.terminal or self.undetermined or self.shadowed or self.dropped)
+        return bool(self.terminal or self.undetermined or self.shadowed or self.dropped
+                    or self.pruned)
 
     @property
     def needs_hand_typing(self) -> bool:
@@ -238,12 +244,14 @@ def plan_fold(
     known_flags: dict | None = None,
     undetermined: dict | None = None,
     drop: tuple[str, ...] = (),
+    prune: bool = False,
 ) -> FoldPlan:
     """What a fold of vanilla's `lines` would do to `extras`, given the
     hand-typed table `hand`. Writes nothing. `known_flags` and `undetermined`
     default to the audit's `KNOWN_VANILLA_FLAGS` and `BLIND_UNDETERMINED`; a
     chained-further gap the latter explains is folded as `"value"`, since
-    nothing says what else to type it."""
+    nothing says what else to type it. `prune` drops every extras entry no
+    chain in `lines` calls (see called_pairs)."""
     known_flags = audit_mod.KNOWN_VANILLA_FLAGS if known_flags is None else known_flags
     if undetermined is None:
         undetermined = audit_mod.BLIND_UNDETERMINED
@@ -300,9 +308,57 @@ def plan_fold(
 
     catalog = audit_mod._load_engine_catalog(
         engine_docs_dir, audit_mod.merge_folded(hand, plan.extras))
+    if prune:
+        called = called_pairs(lines, catalog)
+        for typ in sorted(plan.extras):
+            for accessor in sorted(plan.extras[typ]):
+                if (typ, accessor) not in called:
+                    plan.pruned.append(f"{typ}.{accessor}")
+                    del plan.extras[typ][accessor]
+        plan.extras = {typ: accs for typ, accs in plan.extras.items() if accs}
+        catalog = audit_mod._load_engine_catalog(
+            engine_docs_dir, audit_mod.merge_folded(hand, plan.extras))
     plan.blind = [p for p in audit_mod.find_blind_pairs(lines, catalog, hand_typed=hand)
                   if not p.hand_typed]
     return plan
+
+
+def called_pairs(lines: list, catalog: dict[str, dict[str, str]]) -> set[tuple[str, str]]:
+    """Every `(type, accessor)` some chain in `lines` calls, as far as
+    `catalog` lets the audit follow the chain. Every extras entry is `value`,
+    so the walk stops at one: dropping an entry never hides another."""
+    called: set[tuple[str, str]] = set()
+    for ll in lines:
+        if "[" not in ll.value:
+            continue
+        ctx = audit_mod.classify_context(ll.key)
+        for chain in audit_mod.extract_chains(ll.value):
+            for step in audit_mod.walk_chain(chain, ctx, catalog):
+                called.add((step.receiver, step.name))
+    return called
+
+
+def mod_calls(pruned: list[str], mod_loc_dir: str | None = None) -> dict[str, str]:
+    """`{"type.accessor": an example loc key}` for each pruned entry the mod's
+    own English loc still calls: the audit flags those once they are pruned.
+    Empty when there is no mod loc to read."""
+    if not pruned:
+        return {}
+    loc_dir = mod_loc_dir or str(REPO / "localization" / "english")
+    if not os.path.isdir(loc_dir):
+        return {}
+    wanted = {tuple(name.split(".", 1)) for name in pruned}
+    catalog = audit_mod._load_engine_catalog(str(ENGINE_DOCS), audit_mod._BUILTIN_ACCESSORS_BY_TYPE)
+    found: dict[str, str] = {}
+    for ll in audit_mod.read_all_loc(loc_dir):
+        if "[" not in ll.value:
+            continue
+        ctx = audit_mod.classify_context(ll.key)
+        for chain in audit_mod.extract_chains(ll.value):
+            for step in audit_mod.walk_chain(chain, ctx, catalog):
+                if (step.receiver, step.name) in wanted:
+                    found.setdefault(f"{step.receiver}.{step.name}", ll.key)
+    return dict(sorted(found.items()))
 
 
 def render_extras(extras: dict[str, dict[str, str]]) -> str:
@@ -317,7 +373,8 @@ def render_extras(extras: dict[str, dict[str, str]]) -> str:
     return "\n".join(lines)
 
 
-def render_plan(plan: FoldPlan, source: str, data_types: dict | None, *, dry_run: bool) -> str:
+def render_plan(plan: FoldPlan, source: str, data_types: dict | None, *, dry_run: bool,
+                mod_uses: dict[str, str] | None = None) -> str:
     out = [f"vanilla loc: {source}"]
     out.append("data types: " + ("read" if data_types is not None else
                                  "none found (set vic3_modding_digests_path or pass --data-types "
@@ -344,12 +401,19 @@ def render_plan(plan: FoldPlan, source: str, data_types: dict | None, *, dry_run
                    f"explains them: {len(plan.undetermined)}")
         for gap in plan.undetermined:
             out.append(f"  ~ {gap.name}, then {', '.join(gap.continuations)}")
-    if plan.shadowed or plan.dropped:
+    if plan.shadowed or plan.dropped or plan.pruned:
         out.append("")
         out.append(f"Dropped from the extras: {len(plan.shadowed)} the hand table defines, "
-                   f"{len(plan.dropped)} by --drop")
-        for name in plan.shadowed + plan.dropped:
+                   f"{len(plan.dropped)} by --drop, {len(plan.pruned)} by --prune "
+                   "(vanilla's loc never calls them)")
+        for name in plan.shadowed + plan.dropped + plan.pruned:
             out.append(f"  - {name}")
+    if mod_uses:
+        out.append("")
+        out.append(f"Pruned, but the mod's loc still calls them (the audit flags these now): "
+                   f"{len(mod_uses)}")
+        for name, key in mod_uses.items():
+            out.append(f"  ! {name}   e.g. {key}")
     if plan.residual:
         out.append("")
         out.append("Flags that name no accessor to add (a vanilla typo belongs in "
@@ -381,14 +445,17 @@ def main(argv=None) -> int:
     parser.add_argument("--drop", metavar="TYPE.ACCESSOR", action="append", default=[],
                         help="remove this entry from the extras (repeatable): one the fold "
                              "added through a wrong type upstream")
+    parser.add_argument("--prune", action="store_true",
+                        help="also remove every entry no chain in vanilla's loc calls")
     args = parser.parse_args(argv)
 
     lines, source = load_vanilla_lines(args.source)
     data_types = load_data_types(args.data_types or default_data_types_dir())
     plan = plan_fold(
         lines, audit_mod.HAND_TYPED_ACCESSORS, audit_mod.VANILLA_EXTRACTED_ACCESSORS,
-        engine_docs_dir=str(ENGINE_DOCS), drop=tuple(args.drop))
-    print(render_plan(plan, source, data_types, dry_run=args.dry_run))
+        engine_docs_dir=str(ENGINE_DOCS), drop=tuple(args.drop), prune=args.prune)
+    print(render_plan(plan, source, data_types, dry_run=args.dry_run,
+                      mod_uses=mod_calls(plan.pruned)))
 
     if args.dry_run:
         print("\ndry run: nothing written")
