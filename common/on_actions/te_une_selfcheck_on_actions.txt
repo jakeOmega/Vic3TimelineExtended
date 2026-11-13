@@ -1,4 +1,4 @@
-﻿# United Nations of Earth supermajority: two once-a-game self-checks.
+﻿# United Nations of Earth supermajority: three once-a-game self-checks.
 #
 # une_formation_supermajority (formable_gating_triggers.txt) asks "at most one
 # great power other than the candidate stands outside its bloc" as a share:
@@ -22,7 +22,7 @@
 #                                reads BROKEN here.
 # A lone _pass OK is no verdict: an always-true gate prints it too. The gate
 # reads right when _pass and one of the _fail checks read OK.
-# BROKEN on either: the engine reads `filter` with `percent`, or the share,
+# BROKEN on any: the engine reads `filter` with `percent`, or the share,
 # otherwise than vanilla's tsar buttons suggest. Fallback: drop the share and
 # the list, and go back to the NOT form (`une_formation_supermajority` in
 # git history before #1672), which lists nothing but counts right.
