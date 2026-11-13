@@ -152,5 +152,19 @@ class SolStrataShifts(unittest.TestCase):
                                     path.name)
 
 
+class LocalClimateHeat(unittest.TestCase):
+    """The heat term's excess: read once per evaluation and saved, not twice."""
+
+    def test_heat_raw_reads_the_excess_once(self):
+        values = _read("common/script_values/local_climate_values.txt")
+        body = _flat(re.search(r"^te_climate_heat_raw = \{(.*?)^\}", values, re.S | re.M).group(1))
+        self.assertEqual(
+            body,
+            "value = te_climate_heat_excess save_temporary_value_as = te_climate_heat_excess_now "
+            "multiply = te_climate_heat_quadratic add = te_climate_heat_linear "
+            "multiply = scope:te_climate_heat_excess_now",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

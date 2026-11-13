@@ -209,9 +209,11 @@ class Formula(unittest.TestCase):
         a little over twice the 1st, a moderate curve (owner, 2026-11-01)."""
         self.assertEqual(values_body("te_climate_heat_excess"),
                          "value = te_climate_heat_index_eff subtract = te_climate_heat_start min = 0")
+        # the excess read once and saved (test_world_pass_once.py), then the same curve
         self.assertEqual(values_body("te_climate_heat_raw"),
-                         "value = te_climate_heat_excess multiply = te_climate_heat_quadratic "
-                         "add = te_climate_heat_linear multiply = te_climate_heat_excess")
+                         "value = te_climate_heat_excess save_temporary_value_as = te_climate_heat_excess_now "
+                         "multiply = te_climate_heat_quadratic add = te_climate_heat_linear "
+                         "multiply = scope:te_climate_heat_excess_now")
         a, b = CONSTANTS["te_climate_heat_linear"], CONSTANTS["te_climate_heat_quadratic"]
         self.assertAlmostEqual((a + 2 * b * 7.5) / (a + 2 * b * 0.5), 2.2, delta=0.3)
 
@@ -396,7 +398,7 @@ class ScriptValues:
     at the point they stand, inline { } operands, and if with a limit of comparisons. Anything else raises, so a
     new operation in the file fails the test until the interpreter learns it."""
 
-    OPS = ("value", "add", "subtract", "multiply", "divide", "min", "max", "if")
+    OPS = ("value", "add", "subtract", "multiply", "divide", "min", "max", "if", "save_temporary_value_as")
     TOKEN = re.compile(r"[{}]|[<>]=?|=|[^\s{}=<>]+")
 
     def __init__(self, path=VALUES):
@@ -444,6 +446,10 @@ class ScriptValues:
                 limit = [v for k, _, v in value if k == "limit"]
                 if self._limit(limit[0], env):
                     acc = self._block([x for x in value if x[0] != "limit"], env, acc)
+                continue
+            if key == "save_temporary_value_as":
+                # the running value, read back as scope:<name> later in the evaluation
+                env[f"scope:{value}"] = acc
                 continue
             operand = self.read(value, env)
             if key == "value":
