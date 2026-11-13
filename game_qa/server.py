@@ -345,7 +345,8 @@ class SessionServer:
         return {"path": str(self._session.shot())}, 0
 
     def _click(self, body: dict) -> tuple[dict, int]:
-        return self._session.click(_arg(body, "x"), _arg(body, "y")), 0
+        return self._session.click(body.get("x"), body.get("y"), console=body.get("console") is True,
+                                   input_line=body.get("input_line")), 0
 
     def _profiler_roots(self, body: dict) -> tuple[dict, int]:
         return self._session.profiler_roots(body.get("box")), 0

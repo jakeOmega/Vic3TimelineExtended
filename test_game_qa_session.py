@@ -1676,6 +1676,144 @@ class ClickTest(SessionTestCase):
 
 
 
+
+class KeyboardAfterClickTest(SessionTestCase):
+    """#1710 item 3 and #1725 point 3: a click into a tool window takes the keyboard (live, 2026-11-12), so the verbs
+    that type refuse until `click --console` has clicked the console's input line and a probe got through."""
+
+    def setUp(self):
+        super().setUp()
+        self.started()                          # the console is known open: start's round trips
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)       # CONSOLE_INPUT_LINE of the fake's 1920x1080 client area
+        self.game.adapter.values["c:FRA.gdp"] = "1.5"
+
+    def typing_verbs(self):
+        script = Path(self.paths.backup_root) / "late.txt"
+        script.write_text("set_variable = te_late\n", encoding="utf-8")
+        return {
+            "read": lambda: self.session.read(["c:FRA.gdp"]),
+            "console": lambda: self.session.console("money 1"),
+            "events": self.session.events,
+            "pick": lambda: self.session.pick(0),
+            "tag": lambda: self.session.tag("FRA"),
+            "run_setup": lambda: self.session.run_setup("anything"),
+            "add_setup": lambda: self.session.add_setup("late", "set_variable = te_late"),
+            "press": lambda: self.session.press("esc"),
+            "enter_game": self.session.enter_game,
+            "advance": lambda: self.session.advance(1),
+            "try_event": lambda: self.session.try_event("x.1", None, ["c:FRA.gdp"]),
+            "profiler_roots": self.session.profiler_roots,
+        }
+
+    def test_a_click_latches_and_every_verb_that_types_is_refused_before_it_types(self):
+        reply = self.session.click(0.6, 0.6)
+        self.assertTrue(reply["keyboard_away"])
+        effects = self.paths.overlay_dir / overlay.EFFECTS_FILE
+        before = (len(self.game.steps), effects.read_bytes())
+        for name, verb in self.typing_verbs().items():
+            with self.subTest(name):
+                error = self.session_error(verb)
+                self.assertEqual(error.code, "keyboard_away")
+                self.assertEqual(error.info["next"], "python3 -m game_qa click --console")
+        self.assertEqual((len(self.game.steps), effects.read_bytes()), before)   # no key, and add-setup wrote nothing
+        self.assertEqual(self.game.elsewhere, [])
+        self.assertTrue(self.session.shot().is_file())          # a shot types nothing
+        self.assertNotIn("keyboard_away", session.ENTER_RETRIED + session.RELOAD_RETRIED)
+
+    def test_click_console_gives_the_keyboard_back(self):
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        reply = self.session.click(console=True)
+        self.assertEqual(self.game.clicks[-1], (216, 588))
+        self.assertEqual(reply["console"]["pixel"], [216, 588])
+        self.assertTrue(Path(reply["console"]["screenshot"]).is_file())
+        self.assertFalse(reply["keyboard_away"])
+        self.assertNotIn({"scan": fakes.SCAN_CONSOLE}, self.game.steps[steps:])
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_a_click_and_the_input_line_in_one_verb(self):
+        reply = self.session.click(0.6, 0.6, console=True)
+        self.assertEqual(self.game.clicks, [(1152, 648), (216, 588)])
+        self.assertEqual(reply["pixel"], [1152, 648])
+        self.assertNotEqual(reply["screenshot"], reply["console"]["screenshot"])
+        self.assertFalse(reply["keyboard_away"])
+        self.assertEqual(self.session.console("tag FRA").lines, ["Now Playing - France"])
+
+    def test_an_input_line_click_that_misses_keeps_the_latch_and_says_so(self):
+        self.game.input_line = (5, 5)           # the line is elsewhere in this window
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.click, console=True)
+        self.assertEqual(error.code, "keyboard_not_returned")
+        self.assertTrue(error.info["keyboard_away"])
+        self.assertEqual(error.info["console"]["pixel"], [216, 588])
+        self.assertNotIn({"scan": fakes.SCAN_CONSOLE}, self.game.steps[steps:])
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "keyboard_away")
+        # Aimed from a shot, the line's own point gives it back.
+        reply = self.session.click(console=True, input_line=(5 / 1920, 5 / 1080))
+        self.assertEqual((self.game.clicks[-1], reply["keyboard_away"]), ((5, 5), False))
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+
+    def test_the_input_line_is_not_clicked_while_the_console_is_not_known_open(self):
+        self.session.press("esc")               # closes the console: known closed
+        clicks = len(self.game.clicks)
+        error = self.session_error(self.session.click, console=True)
+        self.assertEqual(error.code, "console_not_open")
+        self.assertEqual(len(self.game.clicks), clicks)
+        # A click with the console shut does not latch: the verbs that type open the console as before.
+        self.assertFalse(self.session.click(0.6, 0.6)["keyboard_away"])
+
+    def test_a_refused_click_does_not_latch_and_one_that_may_have_pressed_does(self):
+        real_click = self.game.click
+        self.game.click = mock.Mock(side_effect=HelperError("covered", "another window"))
+        error = self.session_error(self.session.click, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("click_refused", False))
+        self.game.click = mock.Mock(side_effect=HelperError("backend_error", "SendInput failed"))
+        error = self.session_error(self.session.click, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("click_unknown", True))
+        self.game.click = real_click
+        self.assertEqual(self.session_error(self.session.events).code, "keyboard_away")
+
+    def test_a_refused_input_line_click_keeps_the_first_click_in_the_reply(self):
+        real_click = self.game.click
+        calls = []
+
+        def second_refused(pid, x, y):
+            calls.append((x, y))
+            if len(calls) == 2:
+                raise HelperError("cursor_misplaced", "a hand on the mouse")
+            return real_click(pid, x, y)
+        self.game.click = second_refused
+        error = self.session_error(self.session.click, 0.6, 0.6, console=True)
+        self.assertEqual(error.code, "click_refused")
+        self.assertEqual(error.info["first"]["pixel"], [1152, 648])
+        self.assertTrue(error.info["keyboard_away"])
+
+    def test_bad_arguments_click_nothing(self):
+        for args, kwargs in (((), {}), ((0.5,), {}), ((None, 0.5), {}), ((0.5, 0.5), {"input_line": (0.1, 0.5)}),
+                             ((), {"console": True, "input_line": (2, 0.5)}),
+                             ((), {"console": True, "input_line": "0.1 0.5"}),
+                             ((), {"console": True, "input_line": (0.1,)})):
+            with self.subTest(args=args, kwargs=kwargs):
+                self.assertEqual(self.session_error(self.session.click, *args, **kwargs).code, "bad_argument")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_stop_and_selfchecks_work_while_latched(self):
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        found = self.session.self_checks()
+        self.assertEqual(found["not_flushed"]["refused"], "keyboard_away")
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
+    def test_enter_games_own_clicks_do_not_latch(self):
+        self.game.click_takes_keyboard = False  # as live: the lobby's clicks left the console answering
+        self.session.enter_game()
+        self.assertFalse(self.session._console.keyboard_away)
+
 class ProfilerRootsTest(SessionTestCase):
     """`profiler-roots` (#1701, #1710): the profiler opened at its roots, a full-size shot, the call graph cropped."""
 

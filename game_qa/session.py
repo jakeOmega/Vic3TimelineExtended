@@ -49,7 +49,7 @@ from pathlib import Path
 from typing import Any
 
 from game_qa import fixture, overlay, pixels, rules, snapshot
-from game_qa.console import CLEAR_BACKSPACES, Console, ConsoleError, Reply
+from game_qa.console import CLEAR_BACKSPACES, KEYBOARD_AWAY, Console, ConsoleError, Reply
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
 from game_qa.gate import UNKNOWN_START, ProcId
@@ -119,6 +119,11 @@ PANEL_CHANGED = 0.01                    # this share of its pixels differing is 
 # front and the process the recorded one, the point inside the client area, the cursor on it, the game's window
 # under it). Any other error may follow the press.
 CLICK_REFUSED_BEFORE_PRESS = ("not_foreground", "bad_point", "cursor_misplaced", "covered", "not_ours")
+# Where the console's input line is, as fractions of the client area: measured, not derived. Live on 2026-11-12, in
+# the owner's 3840x2160 window at his UI scale with the console open on the left, a click here gave the keyboard
+# back after a click into the script profiler had taken it (#1710). Another window size or UI scale moves it:
+# `click --console --input-line X Y`, aimed from a shot.
+CONSOLE_INPUT_LINE = (0.1125, 0.544)
 # profiler-roots (#1701, #1710). `Script.Profiling.Gui` opens the script profiler at its roots ("No parent" as
 # Current, the top-level entries as its callees), even when an entry was Current before (live, 2026-11-12), and
 # the call graph is cropped out of a shot. The box is fractions of the client area, measured on the overlay's
@@ -188,7 +193,8 @@ class SessionError(Exception):
     game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, no_country,
-    not_on_country_select, click_refused, click_unknown, not_entered, left_running, bad_days, stalled, not_started, stopped
+    not_on_country_select, click_refused, click_unknown, console_not_open,
+    keyboard_away, keyboard_not_returned, not_entered, left_running, bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending. A read-side error carries
     `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
     or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
@@ -1084,46 +1090,91 @@ class Session:
             out["path"] = str(path)
         return path
 
-    def click(self, x: float, y: float) -> dict:
+    def click(self, x: float | None = None, y: float | None = None, console: bool = False,
+              input_line: Sequence[float] | None = None) -> dict:
         """One left click at (x, y), fractions of the game window's client area from its top left, then a
-        screenshot of what it did. It is for the engine's own tool windows that no console command reads, such as
-        the script profiler's call graph (#1701, the owner's go-ahead of 2026-11-12); it can press anything a
-        player can, so what it is aimed at is the caller's to know, from a `shot` first.
+        screenshot of what it did; with `console`, then a click on the console's input line, which gives the
+        keyboard back. It is for the engine's own tool windows that no console command reads, such as the script
+        profiler's call graph (#1701), and for the console's input line (the owner's go-ahead of 2026-11-12); it
+        can press anything a player can, so what it is aimed at is the caller's to know, from a `shot` first.
 
-        The click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
-        (`_ProvedHelper.click`); the console is left as it is. A click the helper refused before the button went
-        down (CLICK_REFUSED_BEFORE_PRESS) is `click_refused` and pressed nothing; any other helper error
-        (`backend_error`, `helper_gone`, a timeout) is `click_unknown`, since it may have come after the press: take
-        a `shot` before clicking again. A screenshot that fails after the click is not a refusal: the reply has
-        `screenshot: null` and `screenshot_error`, as enter-game's does.
+        Each click waits for the presence rule as a key does, and goes through the pid proof as enter-game's do
+        (`_ProvedHelper.click`). A click the helper refused before the button went down (CLICK_REFUSED_BEFORE_PRESS)
+        is `click_refused` and pressed nothing; any other helper error (`backend_error`, `helper_gone`, a timeout)
+        is `click_unknown`, since it may have come after the press: take a `shot` before clicking again. A
+        screenshot that fails after a click is not a refusal: the reply has `screenshot: null` and
+        `screenshot_error`, as enter-game's does.
+
+        A click takes the keyboard (live, 2026-11-12: after a click into the profiler, the next typed command never
+        reached the console, a read's `no_stop` with `arrived: false`, until the console's input line was clicked).
+        So a click made while the console is known open latches the keyboard away (`Console.clicked`; the reply's
+        `keyboard_away`): every verb that types is refused `keyboard_away`, before anything is typed or written,
+        until `console` gives it back. That clicks `input_line` (CONSOLE_INPUT_LINE by default, measured live) and
+        types the console's probe once: arrived, the latch is lifted; not arrived, `keyboard_not_returned`, the
+        latch stays, and the console key is not pressed. The input line is clicked only while the console is open
+        as far as is known (`console_not_open` otherwise, nothing clicked): with it shut, that point is the map.
 
         The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
-        must never be aimed at the game's own menus (save, load, settings, exit).
+        must never be aimed at the game's own menus (save, load, settings, exit)."""
+        self._require_game(keyboard=False)
+        if (x is None) != (y is None) or (x is None and not console):
+            raise SessionError("bad_argument", "click takes X and Y, --console, or both")
+        target = None if x is None else (_fraction("x", x), _fraction("y", y))
+        if input_line is not None and not console:
+            raise SessionError("bad_argument", "an input line's point goes with --console")
+        line = CONSOLE_INPUT_LINE if input_line is None else _pair("the input line", input_line)
+        if console and not self._console.input_line_there:
+            raise SessionError("console_not_open", "the console is not known to be open, so its input line may not "
+                               "be at %s: with the console shut that point is the map. Nothing was clicked. A verb "
+                               "that types opens the console as before" % (list(line),), keyboard_away=False)
+        with self._step("click", x=x, y=y, console=console) as out:
+            result: dict[str, Any] = {}
+            if target is not None:
+                result.update(self._one_click(target))
+                out.update(result)
+            if console:
+                try:
+                    result["console"] = out["console"] = self._one_click(line, tool=False)
+                except SessionError as e:
+                    e.info.update(first=result or None, keyboard_away=self._console.keyboard_away)
+                    raise
+                if not self._console.take_keyboard_back():
+                    out["keyboard_away"] = True
+                    raise SessionError(
+                        "keyboard_not_returned", "the console's probe, typed after the click on its input line at "
+                        "%s, did not reach the console: the click missed the line (another window size or UI scale "
+                        "moves it: aim --input-line X Y from the shot), or something else holds the keyboard. The "
+                        "console key was not pressed; every verb that types is refused until a `click --console` "
+                        "gets the probe through" % (list(line),), **result, keyboard_away=True)
+            result["keyboard_away"] = out["keyboard_away"] = self._console.keyboard_away
+        return result
 
-        A click into a tool window takes the keyboard (live, 2026-11-12): the next typed command does not reach the
-        console (a read's `no_stop` with `arrived: false`) until the console's input line is clicked, at
-        (0.1125, 0.544) with the console open on the left. #1710 asks for that to be done here, with drag and
-        wheel verbs for the profiler's window."""
-        self._require_game()
-        fraction = (_fraction("x", x), _fraction("y", y))
-        with self._step("click", x=x, y=y) as out:
-            self._console.front()
-            px, py = self._point(fraction)
-            try:
-                self._sends.click(self._proc.pid, px, py)
-            except HelperError as e:
-                if e.code in CLICK_REFUSED_BEFORE_PRESS:
-                    raise SessionError("click_refused", "%s: %s" % (e.code, e.detail)) from e
-                raise SessionError("click_unknown", "%s: %s; the button may have been pressed: take a shot before "
-                                                    "clicking again" % (e.code, e.detail), pixel=[px, py]) from e
-            out["pixel"] = [px, py]
-            self._sleep(CLICK_SETTLE_S)
-            try:
-                out["screenshot"] = str(self._shot())
-            except HelperError as e:
-                out["screenshot"], out["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
-                return {"pixel": [px, py], "screenshot": None, "screenshot_error": out["screenshot_error"]}
-        return {"pixel": [px, py], "screenshot": out["screenshot"]}
+    def _one_click(self, fraction: tuple[float, float], tool: bool = True) -> dict:
+        """One click at `fraction` of the client area, then its shot: {"pixel", "screenshot"} (and
+        `screenshot_error`). A click that went out latches the keyboard away (`Console.clicked`), unless it was on
+        the console's input line (`tool` false), whose probe decides; a click that may have gone out latches it
+        either way."""
+        self._console.front()
+        px, py = self._point(fraction)
+        try:
+            self._sends.click(self._proc.pid, px, py)
+        except HelperError as e:
+            if e.code in CLICK_REFUSED_BEFORE_PRESS:
+                raise SessionError("click_refused", "%s: %s" % (e.code, e.detail),
+                                   keyboard_away=self._console.keyboard_away) from e
+            self._console.clicked()
+            raise SessionError("click_unknown", "%s: %s; the button may have been pressed: take a shot before "
+                                                "clicking again" % (e.code, e.detail), pixel=[px, py],
+                               keyboard_away=self._console.keyboard_away) from e
+        if tool:
+            self._console.clicked()
+        done: dict[str, Any] = {"pixel": [px, py]}
+        self._sleep(CLICK_SETTLE_S)
+        try:
+            done["screenshot"] = str(self._shot())
+        except HelperError as e:
+            done["screenshot"], done["screenshot_error"] = None, "%s: %s" % (e.code, e.detail)
+        return done
 
     def profiler_roots(self, box: Sequence[float] | None = None) -> dict:
         """Open the script profiler at its roots (`Script.Profiling.Gui`, through the console), take a shot at the
@@ -2071,12 +2122,13 @@ class Session:
 
     # ---- plumbing
 
-    def _require_game(self, types: bool = True) -> None:
+    def _require_game(self, types: bool = True, keyboard: bool = True) -> None:
         """Before any verb: the session is running and watched, and the game is not left stopped at the
         breakpoint. When it may be (`_maybe_stopped`) the stop is drained first; otherwise a verb that `types`
         (or clicks) still takes one look, without waiting, for a stop the game made since the last verb (a read's
         own command run once the game was resumed) and releases it: a frozen game takes no key, and the keys
-        would run later."""
+        would run later. A verb that types (`keyboard`: all but `click`) is then refused `keyboard_away` while a
+        click may have taken the keyboard, before it types or writes anything (`Console` refuses the keys too)."""
         if self._stopped is not None or self._stopping:
             raise SessionError("stopped", "this session's game has been stopped")
         if not self._ready:
@@ -2086,6 +2138,9 @@ class Session:
             self._drain()
         elif types:
             self._release_pending()
+        if types and keyboard and self._console is not None and self._console.keyboard_away:
+            raise SessionError("keyboard_away", KEYBOARD_AWAY, keyboard_away=True,
+                               next="python3 -m game_qa click --console")
 
     def _release_pending(self) -> None:
         dbg = self._debugger
@@ -2276,6 +2331,13 @@ def _box(box) -> tuple[float, float, float, float]:
         raise SessionError("bad_argument", "a box's left is below its right and its top below its bottom: %r"
                            % (box,))
     return left, top, right, bottom
+
+
+def _pair(name: str, value) -> tuple[float, float]:
+    """A point given as two fractions of the client area (x, y)."""
+    if isinstance(value, (str, bytes)) or not isinstance(value, Sequence) or len(value) != 2:
+        raise SessionError("bad_argument", "%s is two fractions of the window (x y), not %r" % (name, value))
+    return _fraction(name + "'s x", value[0]), _fraction(name + "'s y", value[1])
 
 
 def _check_tag(tag: str) -> None:

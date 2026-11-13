@@ -112,8 +112,10 @@ class FakeSession:
         self._call("shot")
         return Path("/backups/runs/%s/shot_01.png" % SNAP)
 
-    def click(self, x, y):
-        self._call("click", x, y)
+    def click(self, x, y, console=False, input_line=None):
+        self._call("click", x, y, *(("console", input_line) if console or input_line is not None else ()))
+        if x is None:
+            return {"console": {"pixel": [216, 588]}, "keyboard_away": False}
         return {"pixel": [round(1920 * x), round(1080 * y)], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}
 
     def profiler_roots(self, box=None):
@@ -307,6 +309,18 @@ class AddSetupVerbTest(ServerTestCase):
         reply, code = self.run_cli("add-setup", "late=%s" % script)
         self.assertEqual((code, reply["refused"], reply["revision"], reply["seen"]), (2, "not_reloaded", 1, 0))
 
+
+
+class ClickConsoleVerbTest(ServerTestCase):
+    def test_click_passes_console_and_its_input_line(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("click", "--console")
+        self.assertEqual((code, reply["keyboard_away"]), (0, False))
+        self.assertEqual(fake.calls[-1], ("click", None, None, "console", None))
+        self.run_cli("click", "0.5", "0.25", "--console", "--input-line", "0.1", "0.6")
+        self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25, "console", [0.1, 0.6]))
+        self.run_cli("click", "0.5", "0.25")
+        self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25))
 
 
 class ProfilerRootsVerbTest(ServerTestCase):

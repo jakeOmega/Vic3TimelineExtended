@@ -263,6 +263,11 @@ class FakeHelper:
     `other_hwnd_script` (one value for each reading, then the last one holds) or by setting
     `on_presence`, which is called with the reading's number before each reading is made.
 
+    A click into a tool window takes the keyboard (live, 2026-11-12), when `click_takes_keyboard` is set: from
+    then on (`keyboard_elsewhere`) typed text, Enter and Backspace go to that window, recorded in `elsewhere`, and
+    the console key still toggles the console (the worst case: it reached the game's own keys). A click at
+    `input_line` (client pixels) gives the keyboard back to the console.
+
     A stalled game (a monthly pulse can hold it for seconds) is `latency`: each key the
     helper sends is taken by the game that many fake seconds later, in order, and
     until then the history and the log show nothing of it. With `busy_while_late` the
@@ -298,6 +303,10 @@ class FakeHelper:
         self.busy_while_late = False            # the window does not respond while a key is waiting
         self._inbox: list[tuple[float, dict]] = []      # keys sent and not yet taken: (due time, step)
         self.typed = ""                         # text typed since the last Enter
+        self.click_takes_keyboard = False       # a click (not at input_line) gives the keyboard to a tool window
+        self.input_line: tuple[int, int] | None = None  # client pixels: a click here gives it back to the console
+        self.keyboard_elsewhere = False         # the keys go to a tool window, not the console
+        self.elsewhere: list[dict] = []         # the keys that went there
         self.steps: list[dict] = []             # every step sent, as given
         self.now = 0.0
         self.replies: dict[str, tuple[list[str], list[str], list[str]]] = {}
@@ -373,6 +382,10 @@ class FakeHelper:
             raise HelperError("bad_point", "(%d, %d) is outside the %dx%d client area" % (x, y, width, height))
         self.clicks.append((x, y))
         self.cursor = self.helper_cursor = (left + x, top + y)
+        if self.input_line is not None and (x, y) == tuple(self.input_line):
+            self.keyboard_elsewhere = False
+        elif self.click_takes_keyboard:
+            self.keyboard_elsewhere = True
 
     def presence(self) -> Presence:
         self.presence_calls += 1
@@ -389,7 +402,9 @@ class FakeHelper:
         """The game takes the keys that are due, in the order they were sent."""
         while self._inbox and self._inbox[0][0] <= self.now:
             _due, step = self._inbox.pop(0)
-            if "text" in step:
+            if self.keyboard_elsewhere and step.get("scan") != SCAN_CONSOLE:
+                self.elsewhere.append(step)
+            elif "text" in step:
                 self.typed += step["text"]
             elif step.get("scan") == SCAN_ENTER:
                 self._enter()
