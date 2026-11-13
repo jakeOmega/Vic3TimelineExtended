@@ -38,7 +38,13 @@ Central Archives early.
    Unlock*: within a week the entry is gone, the operations end (funding 0) and the agent networks are cleared. Research
    Mainframe Computers: within a month the entry is back, at funding 0, Tradecraft kept.
 8. **Late to early, mid-game.** In a game started on *Late Unlock*, switch to *Early Unlock*: countries with Central
-   Archives open the entry within a week, capped as in 2. A country that had the entry before keeps it uncapped.
+   Archives open the entry within a week, capped as in 2. A country that had the entry before keeps it uncapped while
+   it still holds a late source.
+8a. **The cap follows the source (intended).** On *Early Unlock*, a country whose only late source is the Ministry of
+   Intelligence and Security law, funded above Professional: repeal the law (or console-activate another law of the
+   group). At the next monthly pulse its funding is 2, the stepper's plus is grayed again with the line "Funding above
+   Professional needs …", and operations keep running at the lower level. With one of the four technologies as well,
+   nothing changes.
 9. **Late unlock is unchanged.** A game on *Late Unlock* (or a save from before this change, which reads as it): no
    entry before Mainframe Computers or the Ministry, and funding goes to 5.
 
@@ -59,6 +65,19 @@ Russia, Austria, Prussia).
    Bombing (`.11`) never fires while no enemy has Bombing Aircraft.
 4. **A second world war.** After the early war's entry completes (or fails), the country has no entry until Combined
    Arms; console-research it and, within a month, the entry is back (inactive or active).
+4a. **The war is classed at the outbreak, not when the entry closes** (review fix, 2026-11-13). Start an early war
+   between two powers without Combined Arms; the console shows global `ww_last_war_early` = 1 from the launch.
+   (i) Console-research Combined Arms for one belligerent during the war or its three post-war years: when its entry
+   completes it holds `ww_early_war_resolved`, not `ww_entry_resolved`, and the entry is back within a month or two.
+   (ii) A great power that held Combined Arms and only watched: the same. In both cases the new entry does not
+   complete again three years later (it waits until no country still has `ww_peace_concluded`). Failing: a power
+   with `ww_entry_resolved` after an early war, or an entry that completes twice on one war.
+4b. **A war begun with Combined Arms is the last.** Launch a war where the launcher or its target has Combined Arms:
+   `ww_last_war_early` = 0, and every entry that closes on it sets `ww_entry_resolved`, also for a power still
+   without Combined Arms.
+4c. **Yesterday's Ally** (`world_war_events.105`). After an early war in which a democratic and an authoritarian
+   great power fought on the same side, neither communist nor fascist: the event does not fire between them in the
+   post-war years. It still fires between former allies of opposed ideologies (democratic and communist, say).
 5. **Early to late, mid-game.** With an entry open for a great power without Combined Arms, switch to *Late Unlock*:
    within a week the entry is gone, and it comes back within a month of researching Combined Arms.
 6. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry before Combined Arms,

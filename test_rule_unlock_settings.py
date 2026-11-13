@@ -243,6 +243,7 @@ WW_TRIGGERS = ROOT / "common/scripted_triggers/world_war_triggers.txt"
 WW_BUTTONS = ROOT / "common/scripted_buttons/world_war_buttons.txt"
 WW_EFFECTS = ROOT / "common/scripted_effects/te_event_agency_ww_effects.txt"
 WW_ON_ACTIONS = ROOT / "common/on_actions/extra_on_actions.txt"
+WW_EVENTS = ROOT / "events/world_war_events.txt"
 
 
 class WorldWarEarlyUnlockTest(unittest.TestCase):
@@ -284,15 +285,97 @@ class WorldWarEarlyUnlockTest(unittest.TestCase):
                          "NOT = { has_technology_researched = combined_arms } "
                          "$TARGET$ = { NOT = { has_technology_researched = combined_arms } }")
 
+    def test_the_late_opposition_is_the_three_ideological_pairs(self):
+        # country_has_opposed_ideology is the ideological pairs or the early pairing, and the early pairing needs
+        # the early setting, so under the late unlock it is what it was before the setting existed.
+        opposed = words(braced(self.triggers, r"^country_has_opposed_ideology = \{"))
+        self.assertTrue(opposed.startswith(
+            "OR = { country_has_ideological_opposition = { TARGET = $TARGET$ } AND = { te_world_war_early = yes "),
+            opposed[:120])
+        pairs = words(braced(self.triggers, r"^country_has_ideological_opposition = \{"))
+        self.assertNotIn("te_world_war_early", pairs)
+        self.assertNotIn("authoritarian", pairs)
+        for a, b in (("democratic", "communist"), ("democratic", "fascist"), ("communist", "fascist")):
+            for x, y in ((a, b), (b, a)):
+                self.assertIn("AND = { country_is_%s = yes $TARGET$ = { country_is_%s = yes } }" % (x, y), pairs)
+        self.assertEqual(pairs.count("AND = {"), 6)
+
+    def test_yesterdays_ally_needs_an_ideological_opposition(self):
+        # Review, 2026-11-13: a liberal and an autocratic great power that fought the war on one side are
+        # "opposed" by the early pairing all through it, so world_war_events.105 (an ally turning into the next
+        # rival) would fire between them, take 30 relations and close the war early. It asks for the ideological
+        # pairs alone, in its trigger and where it picks the rival.
+        event = words(braced(code(WW_EVENTS), r"^world_war_events\.105 = \{"))
+        self.assertEqual(event.count("ROOT = { country_has_ideological_opposition = { TARGET = prev } }"), 2)
+        self.assertNotIn("country_has_opposed_ideology", event)
+        self.assertEqual(event.count("ww_fought_alongside = { COUNTRY = root }"), 2)
+
     def test_an_early_war_leaves_room_for_a_second(self):
         self.assertNotIn("set_variable = ww_entry_resolved", self.je)
         self.assertEqual(self.je.count("ww_mark_entry_resolved = yes"), 2)
-        mark = words(braced(code(WW_EFFECTS), r"^ww_mark_entry_resolved = \{"))
-        self.assertEqual(mark, "if = { limit = { te_world_war_early = yes NOT = { has_technology_researched = "
-                               "combined_arms } } set_variable = ww_early_war_resolved } "
-                               "else = { set_variable = ww_entry_resolved }")
         for block in (r"^\tis_shown_when_inactive = \{", r"^\tpossible = \{"):
             self.assertIn("NOT = { ww_resting_after_early_war = yes }", words(braced(self.je, block)))
+
+    def test_the_war_is_classed_when_it_breaks_out(self):
+        # Review, 2026-11-13: the entry's outcomes tested the country's own Combined Arms on the day the entry
+        # closed, 36 months after the peace. Which of the two wars it was is settled at the outbreak, once, for
+        # the whole world.
+        effects = code(WW_EFFECTS)
+        self.assertEqual(words(braced(effects, r"^ww_record_war_kind = \{")),
+                         "if = { limit = { te_world_war_early = yes ww_before_ideological_age = { TARGET = "
+                         "scope:war_target } } set_global_variable = { name = ww_last_war_early value = 1 } } "
+                         "else = { set_global_variable = { name = ww_last_war_early value = 0 } }")
+        launch = words(braced(code(WW_EVENTS), r"^world_war_events\.5 = \{"))
+        self.assertEqual(launch.count("ww_record_war_kind = yes"), 1)
+        # In the launch option, where the two belligerents are marked, and after scope:war_target is saved.
+        self.assertLess(launch.index("save_scope_as = war_target"), launch.index("ww_record_war_kind = yes"))
+        self.assertLess(launch.index("ww_record_war_kind = yes"), launch.index("set_variable = ww_aggressor_side"))
+        self.assertEqual(code(WW_EVENTS).count("ww_record_war_kind = yes"), 1)
+        self.assertEqual(effects.count("ww_last_war_early"), 5)     # two writes, two guards and the read
+
+    def test_the_entry_closes_on_the_war_not_on_the_countrys_research(self):
+        mark = words(braced(code(WW_EFFECTS), r"^ww_mark_entry_resolved = \{"))
+        self.assertEqual(mark, "if = { limit = { te_world_war_early = yes OR = { "
+                               "AND = { has_global_variable = ww_last_war_early global_var:ww_last_war_early >= 1 } "
+                               "AND = { NOT = { has_global_variable = ww_last_war_early } "
+                               "NOT = { has_technology_researched = combined_arms } } } } "
+                               "set_variable = ww_early_war_resolved } else = { set_variable = ww_entry_resolved }")
+
+        def resolved(early_setting, last_war_early, combined_arms):
+            """What ww_mark_entry_resolved sets, by the rule the string above pins. last_war_early is None while
+            no world war has broken out in the game."""
+            if early_setting and (last_war_early == 1 or (last_war_early is None and not combined_arms)):
+                return "ww_early_war_resolved"
+            return "ww_entry_resolved"
+
+        # The review's two scenarios: a power that researched Combined Arms during an early war or its
+        # aftermath, and one that held it while others fought an early war. Both keep the later war.
+        self.assertEqual(resolved(True, 1, True), "ww_early_war_resolved")
+        # A power without it after an early war, as before.
+        self.assertEqual(resolved(True, 1, False), "ww_early_war_resolved")
+        # A war begun with Combined Arms on either side is the last one, whoever lacks the technology.
+        self.assertEqual(resolved(True, 0, False), "ww_entry_resolved")
+        self.assertEqual(resolved(True, 0, True), "ww_entry_resolved")
+        # No war yet (the entry failed on rank): the old test.
+        self.assertEqual(resolved(True, None, False), "ww_early_war_resolved")
+        self.assertEqual(resolved(True, None, True), "ww_entry_resolved")
+        # The late unlock: for good, whatever else holds, as before the setting existed.
+        for last, tech in ((1, True), (1, False), (0, False), (None, False), (None, True)):
+            self.assertEqual(resolved(False, last, tech), "ww_entry_resolved")
+
+    def test_a_power_with_combined_arms_gets_its_entry_back_once_the_early_war_has_wound_down(self):
+        # ww_early_war_resolved with Combined Arms is not "resting", so the monthly net adds the entry back; it
+        # waits until no country still carries the old war's peace, or the new entry's observer branch would
+        # read that peace as its own and complete again three years on.
+        self.assertEqual(words(braced(self.triggers, r"^ww_resting_after_early_war = \{")),
+                         "has_variable = ww_early_war_resolved NOT = { has_technology_researched = combined_arms }")
+        net = words(braced(code(WW_ON_ACTIONS), r"^world_war_events_on_action = \{"))
+        add = net[:net.index("add_journal_entry = { type = je_world_war }")]
+        self.assertIn("OR = { has_variable = ww_reopen_at_gate has_variable = ww_early_war_resolved }", add)
+        self.assertIn("NOT = { has_inactive_journal_entry = je_world_war } "
+                      "NOT = { any_country = { has_variable = ww_peace_concluded } } }", add)
+        # The walk over every country comes last, after the tests only a marked country passes.
+        self.assertLess(add.index("has_variable = ww_early_war_resolved"), add.index("any_country"))
 
     def test_switched_to_late_the_entry_closes_and_the_net_brings_it_back(self):
         outcomes = re.findall(r"^\toutcome = \{", self.je, re.M)
@@ -358,7 +441,12 @@ class UnitedNationsEarlyUnlockTest(unittest.TestCase):
         self.assertEqual(words(braced(ladder, r"^un_charter_reform_ripe = \{")),
                          "un_charter_pressure_met = yes NOT = { un_league_stage = yes }")
         possible = words(braced(code(UN_PROPOSE), r"^un_propose_reform_possible = \{"))
-        self.assertIn("custom_tooltip = { text = un_charter_league_tt NOT = { un_league_stage = yes } }", possible)
+        # The league's line shows only under the early setting (review, 2026-11-13: under the late unlock it was a
+        # new, always-met tooltip line about a setting the game is not in). un_league_stage needs the early flag,
+        # so the late unlock's test is unchanged.
+        self.assertIn("trigger_if = { limit = { te_united_nations_early = yes } custom_tooltip = { "
+                      "text = un_charter_league_tt NOT = { un_league_stage = yes } } }", possible)
+        self.assertEqual(possible.count("un_charter_league_tt"), 1)
         pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
         self.assertIn("any_country = { has_technology_researched = intergovernmental_organizations } } "
                       "set_global_variable = un_igo_age", pulse)

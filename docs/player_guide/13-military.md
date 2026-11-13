@@ -272,10 +272,11 @@ world war and three post-war years, and it fails if you drop below great power.
 
 With the game rule set to *Early Unlock*, it opens with Trench Works (era 4)
 instead, and until Combined Arms a democratic great power and an authoritarian
-one also count as opposed, as the powers of 1914 did. A great power whose
-world war ends before it has Combined Arms gets the entry again once it does,
-for a second one. Switching the rule from early to late closes the entry of a
-great power without Combined Arms until it researches it.
+one also count as opposed, as the powers of 1914 did. A world war that breaks
+out while neither of the two powers that start it has Combined Arms is the
+first of two: once it is over, every great power gets the entry again when it
+has Combined Arms, for a second one. Switching the rule from early to late
+closes the entry of a great power without Combined Arms until it researches it.
 
 <!-- screenshot: The Gathering Storm journal entry at high tension, with the Begin Rearmament and Provide Lend-Lease buttons -->
 

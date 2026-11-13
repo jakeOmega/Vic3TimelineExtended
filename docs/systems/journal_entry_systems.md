@@ -1718,7 +1718,7 @@ Each category uses select/deselect toggle pairs.
 Models a World War lifecycle from rising tensions through active total war to post-war resolution. Great powers track ideological tensions, war phases, and post-war cleanup.
 
 ### Key Mechanics
-- **Trigger:** Combined Arms tech + Great Power + no `ww_fully_resolved` + no `ww_entry_resolved`. The technology is `ww_era_reached`: under `world_war_rule`'s early unlock also Trench Works, with democratic-against-authoritarian opposition until Combined Arms and a second entry after it (`ww_early_war_resolved`); `mod_systems/game_rules.md` § Early and late unlock
+- **Trigger:** Combined Arms tech + Great Power + no `ww_fully_resolved` + no `ww_entry_resolved`. The technology is `ww_era_reached`: under `world_war_rule`'s early unlock also Trench Works, with democratic-against-authoritarian opposition until Combined Arms and a second entry after a war begun before it (`ww_last_war_early`, set at the outbreak; `ww_early_war_resolved`); `mod_systems/game_rules.md` § Early and late unlock
 - **3 phases:** Leadup → Active War → Post-War
 - **Leadup tension tiers:** simmering → rising (30+) → high (50+) → crisis (70+)
 - **War duration tracking:** Months counter → years elapsed

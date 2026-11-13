@@ -129,6 +129,6 @@
  setting_world_war_disabled:0 "World War Disabled"
  setting_world_war_disabled_desc:0 "The world war [concept_journal_entry] is disabled. Ideological tensions and world war events will not occur."
  setting_world_war_early_unlock:0 "World War: Early Unlock"
- setting_world_war_early_unlock_desc:0 "As Late Unlock, but the [concept_journal_entry] opens with $trench_works$, and until $combined_arms$ a liberal great power and an autocratic one count as opposed, as in 1914. A great power that fought a world war before $combined_arms$ can fight another after it."
+ setting_world_war_early_unlock_desc:0 "As Late Unlock, but the [concept_journal_entry] opens with $trench_works$, and until $combined_arms$ a liberal great power and an autocratic one count as opposed, as in 1914. A world war begun before $combined_arms$ leaves room for another once a great power has it."
  setting_world_war_enabled:0 "World War: Late Unlock"
  setting_world_war_enabled_desc:0 "The world war [concept_journal_entry] opens for [Concept('concept_great_power', 'great powers')] with $combined_arms$. Ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases."

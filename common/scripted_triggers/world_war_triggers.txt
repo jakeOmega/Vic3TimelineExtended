@@ -65,7 +65,40 @@ country_is_authoritarian = {
 }
 
 # --- True if this country's ideology is opposed to SCOPE country ---
+# The opposition the world war is fought over: one of the three ideological
+# pairs, or, under the early unlock, the liberal-against-autocratic quarrel of
+# 1914 while neither power has reached Combined Arms.
 country_has_opposed_ideology = {
+	OR = {
+		country_has_ideological_opposition = { TARGET = $TARGET$ }
+		# The early unlock's opposition (world_war_rule's early setting): a
+		# liberal power against an autocratic one, while neither has reached
+		# Combined Arms. Symmetric, as the ideological pairs.
+		AND = {
+			te_world_war_early = yes
+			ww_before_ideological_age = { TARGET = $TARGET$ }
+			OR = {
+				AND = {
+					country_is_democratic = yes
+					$TARGET$ = { country_is_authoritarian = yes }
+				}
+				AND = {
+					country_is_authoritarian = yes
+					$TARGET$ = { country_is_democratic = yes }
+				}
+			}
+		}
+	}
+}
+
+# The three ideological pairs alone, which is all country_has_opposed_ideology
+# was before the early unlock and all it is under the late one. Yesterday's
+# Ally (world_war_events.105) asks this: a liberal and an autocratic power that
+# fought the war side by side were "opposed" by the early pairing from its first
+# day, so the event, which is about an ally turning into the next rival, would
+# fire between them and close the war early.
+# Scope: country. Parameters: $TARGET$ = country
+country_has_ideological_opposition = {
 	OR = {
 		# Democratic vs communist
 		AND = {
@@ -93,23 +126,6 @@ country_has_opposed_ideology = {
 		AND = {
 			country_is_fascist = yes
 			$TARGET$ = { country_is_communist = yes }
-		}
-		# The early unlock's opposition (world_war_rule's early setting): a
-		# liberal power against an autocratic one, the quarrel of 1914, while
-		# neither has reached Combined Arms. Symmetric, as the pairs above.
-		AND = {
-			te_world_war_early = yes
-			ww_before_ideological_age = { TARGET = $TARGET$ }
-			OR = {
-				AND = {
-					country_is_democratic = yes
-					$TARGET$ = { country_is_authoritarian = yes }
-				}
-				AND = {
-					country_is_authoritarian = yes
-					$TARGET$ = { country_is_democratic = yes }
-				}
-			}
 		}
 	}
 }
@@ -158,10 +174,11 @@ ww_era_reached_tt = {
 	}
 }
 
-# A world war this country fought under the early unlock is over (the
-# entry's outcomes set ww_early_war_resolved in place of ww_entry_resolved
-# while it lacks Combined Arms). The entry waits for Combined Arms, when
-# world_war_events_on_action adds it back for the next one.
+# A world war fought under the early unlock before Combined Arms is over for
+# this country (the entry's outcomes set ww_early_war_resolved in place of
+# ww_entry_resolved, ww_mark_entry_resolved). The entry waits for Combined
+# Arms, when world_war_events_on_action adds it back for the next one; a
+# country that already has the technology gets it back at once.
 # Scope: country
 ww_resting_after_early_war = {
 	has_variable = ww_early_war_resolved
