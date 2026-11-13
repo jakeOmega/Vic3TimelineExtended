@@ -5418,6 +5418,26 @@ decolonization_events.72 = {
 				}
 			}
 		}
+		# The lands that rose with it (decol_iw_mark_rose_with, at the Fight),
+		# ours again with it: quiet as long.
+		hidden_effect = { decol_iw_check_rose_with = yes }
+		if = {
+			limit = {
+				exists = scope:decol_iw_end_state
+				any_scope_state = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+			}
+			custom_tooltip = {
+				text = decolonization_events.72.declared_neighbors_tt
+				every_scope_state = {
+					limit = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+					set_variable = { name = decol_declared days = 3650 }
+					remove_variable = decol_iw_rose_with
+				}
+			}
+		}
+		hidden_effect = {
+			scope:decol_iw_end_state ?= { remove_variable = decol_iw_rose_count }
+		}
 	}
 }
 
