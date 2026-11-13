@@ -1374,7 +1374,9 @@ global_warming = {
 # tropics or 55 degrees or more from the equator; a mid-latitude state carries
 # neither. State modifiers, refreshed from the monthly state pulse by
 # gw_regional_refresh_effect (global_warming_regional_effects.txt), their one
-# refresh site, at multiplier = var:gw_regional_applied. Each mortality line has its
+# refresh site, at multiplier = var:gw_regional_applied, the anomaly Climate Warming
+# applies at. The self-check reads heatwave duration (global_warming 0.5 and a band's
+# 0.25 or -0.25; the termination shock the only other carrier). Each mortality line has its
 # Causes of Death tag beside it at the same value (demographics_params.DEATH_CAUSE_TAGS,
 # "chr", as global_warming's). test_gw_regional.py pins the lines.
 
@@ -1391,13 +1393,14 @@ global_warming_tropics = {
 }
 
 # The high latitudes: milder winters and a longer growing season, and more forest fire.
-# Totals with global_warming: mortality +2%, SoL -0.5, farms +2% a degree.
+# Totals with global_warming: mortality +2%, SoL -0.5, farms +2% a degree (its -10% farm
+# line and -2.5% on every building against +14.5% here).
 global_warming_high_latitudes = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds
 	state_mortality_mult = -0.03
 	state_death_cause_chr_mult = -0.03
 	state_standard_of_living_add = 0.5
-	building_group_bg_agriculture_throughput_add = 0.12
+	building_group_bg_agriculture_throughput_add = 0.145
 	state_harvest_condition_frost_impact_mult = -0.15
 	state_harvest_condition_frost_duration_mult = -0.15
 	state_harvest_condition_heatwave_impact_mult = -0.25

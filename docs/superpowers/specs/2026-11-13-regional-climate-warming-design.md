@@ -82,7 +82,8 @@ degree.
 
 Two state modifiers, per degree of the felt anomaly, **on top of** Climate
 Warming; the mid-latitudes carry neither. The totals column is Climate Warming
-plus the band.
+plus the band. The throughput rows count Climate Warming's −2.5% on every
+building, which reaches farms and plantations too.
 
 **Tropical Warming** (`global_warming_tropics`): heat near the limit.
 
@@ -90,12 +91,12 @@ plus the band.
 |---|---|---|---|
 | Mortality | +2.5% | +7.5% | +5% |
 | Standard of living | −0.5 | −1.5 | −1 |
-| Farm throughput (`bg_agriculture`) | −5% | −15% | −10% |
-| Plantation throughput (`bg_plantations`) | −5% | −5% | none |
+| Farm throughput (`bg_agriculture`) | −5% | −17.5% | −12.5% |
+| Plantation throughput (`bg_plantations`) | −5% | −7.5% | −2.5% |
 | Heatwave impact and duration | +25% | +75% | +50% |
 
 Plantations (coffee, cocoa, tea, sugar, rubber, cotton) are where the tropics'
-cash crops grow, and Climate Warming leaves them alone; heat-sensitive crops
+cash crops grow, and Climate Warming has no line of its own for them; heat-sensitive crops
 such as coffee and cocoa are among the most exposed.
 
 **High-Latitude Warming** (`global_warming_high_latitudes`): warmer winters,
@@ -105,7 +106,7 @@ longer seasons, more fire.
 |---|---|---|---|
 | Mortality | −3% | +2% | +5% |
 | Standard of living | +0.5 | −0.5 | −1 |
-| Farm throughput | +12% | +2% | −10% |
+| Farm throughput | +14.5% | +2% | −12.5% |
 | Frost impact and duration | −15% | −30% | −15% |
 | Heatwave impact and duration | −25% | +25% | +50% |
 | Wildfire impact | +25% | +75% | +50% |
@@ -115,7 +116,10 @@ Climate self-check reads that field to tell whether Climate Warming reached a
 country, and `test_vanilla_1_15_opportunities.py` holds it to one carrier.
 
 **The gain.** The issue asked whether the high latitudes gain anything: yes,
-farms, a little (+2% a degree, +8% at 4 °C), with frost halved again. The gain
+farms, a little (+2% a degree with everything counted, +8% at 4 °C), with frost
+halved again. The band's farm line is +14.5% because Climate Warming takes
+12.5% from a farm a degree (10% from farms and 2.5% from every building); the
+first draft's +12% left a net loss of 0.5%, which the review of #1747 caught. The gain
 stays small because the same summers dry the soil and burn the forest; the
 literature's high-latitude gains turn to losses somewhere past 2–3 °C, which a
 modifier scaled linearly can't follow, so the per-degree gain is set low enough
@@ -143,18 +147,28 @@ pattern on the state (`dynamic_modifier_pattern.md`):
   at `multiplier = var:gw_regional_applied` when it is above 0. On a state's
   first refresh it also stores the band in `gw_regional_band` (0 mid-latitudes,
   1 tropics, 2 high latitudes), so the latitude chain is read once per state.
-- **The target**, `gw_regional_target`: the felt anomaly
-  (`temperature_anomaly_display`, after any aerosol mask, as Climate Warming
-  reads it) rounded to 0.05 °C, and 0 below 0.1 °C, where the World Climate
-  entry opens.
-- **The cadence.** `on_monthly_pulse_state` runs the refresh on a state with no
-  band yet (a new game's first month, an old save, a newly split state) and on
-  a banded state whose stored value is more than 0.01 from the target. A
-  mid-latitude state is never touched again. At late-game rates (a few
-  hundredths of a degree a year) a banded state refreshes once every year or
-  two, and never runs more than 0.025 °C from the world's reading. A yearly
-  refresh would be cheaper still but could run a year behind the aerosol mask,
-  which moves within months (§ Geoengineering: 63% of the way in a year).
+  It ends by setting the self-healing marker `gw_regional_rooted` when
+  `root ?= this` (`scripting_best_practices.md`, "Add a self-healing marker when
+  the apply step has a skip threshold"), so a call with the wrong ROOT is
+  redone the next month instead of holding a wrong scale.
+- **The target**, `gw_regional_target`: Climate Warming's own scale, the felt
+  anomaly (`temperature_anomaly_display`, after any aerosol mask, already in
+  hundredths) floored at 0, once the World Climate entry has opened, and 0
+  before. The opening is the global flag `gw_g_world_climate_open`, set in
+  `global_warming_events_on_action` the first month at 0.1 °C and never
+  removed, as the entry never closes; so an aerosol mask that takes the anomaly
+  back under 0.1 leaves the bands on with Climate Warming. A first draft
+  rounded to 0.05 and cut off below 0.1, which made "the same scale" only
+  roughly true (review of #1747).
+- **The cadence.** `on_monthly_pulse_state` runs the refresh on a state without
+  the marker (a new game's first month, an old save, a newly split state) and
+  on a banded state whose stored value differs from the target by more than
+  0.005, half the anomaly's step. A mid-latitude state is never touched again.
+  A banded state (a few hundred state objects) refreshes in a month when the
+  anomaly has moved, every few months at late-game rates, and never runs a
+  month behind Climate Warming. A yearly refresh would be cheaper but could run
+  a year behind the aerosol mask, which moves within months (§ Geoengineering:
+  63% of the way in a year).
 - **The rule.** With the Global Warming rule off, the anomaly is held at 0
   (`global_warming_events_on_action`), so the target is 0 and a state that
   carries a band modifier drops it within a month. That is the teardown when
@@ -162,14 +176,21 @@ pattern on the state (`dynamic_modifier_pattern.md`):
 - **Owners.** A state modifier stays with the state through a change of owner,
   and the band is the region's, so nothing needs redoing.
 
-**Self-check** (once a game, under the rule, after three months at 0.5 °C or
-more): `TE_SELF_CHECK OK|BROKEN gw_regional` with the counts of states in each
-band and of those carrying their band's modifier. OK needs at least 100
-tropical states and no more than half of all states (`in_tropics` reads a
-band, not everything or nothing), at least 20 high-latitude states, and 90% of
-each band carrying its modifier (the refresh runs). Fallback if the tropical
-count is wrong: band the tropics by the record's latitude (under 23.5°) as the
-north is. Play-test row: `docs/testing/vanilla-1-15-playtest.md`, "1.15
+**Self-check** (once a game, under the rule, after three months in a row at
+0.5 °C or more and not within 0.1 of 1 °C): `TE_SELF_CHECK OK|BROKEN
+gw_regional` with the counts of states in each band, of those carrying their
+band's modifier, and one tropical state's heatwave duration against its
+expected value. OK needs at least 100 tropical states and no more than half of
+all states (`in_tropics` reads a band, not everything or nothing), at least 20
+high-latitude states, 90% of each band carrying its modifier (the refresh
+runs), and the heatwave duration within 0.03 of Climate Warming's 0.5 a degree
+plus the band's 0.25 at the state's applied scale (the multiplier reads the
+state's variable; a modifier stuck at ×1 reads 0.25 × (1 − scale) away, which
+is why a scale near 1 is skipped). Heatwave duration's only other carrier is
+the termination shock, so a state whose owner carries it is not read.
+Fallbacks: a wrong tropical count, band the tropics by the record's latitude
+(under 23.5°) as the north is; a scale off, refresh from a hidden state event,
+whose ROOT is the state. Play-test row: `docs/testing/vanilla-1-15-playtest.md`, "1.15
 opportunities".
 
 ## 6. How it reads to the player

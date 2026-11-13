@@ -15,6 +15,12 @@
 # gw_regional_applied is never removed, since the modifier's multiplier reads it on
 # later ticks. A mid-latitude state stores band 0 and nothing else, and the on-action
 # never calls this on it again.
+#
+# gw_regional_rooted is the self-healing marker (scripting_best_practices.md, "Add a
+# self-healing marker when the apply step has a skip threshold"): set only when ROOT is
+# this state, so a call with another ROOT, whose multiplier would read the wrong
+# variable, leaves the state to be refreshed again next month instead of keeping a
+# wrong scale until the anomaly next moves. Read only through has_variable.
 gw_regional_refresh_effect = {
 	if = {
 		limit = { NOT = { has_variable = gw_regional_band } }
@@ -36,23 +42,36 @@ gw_regional_refresh_effect = {
 			}
 		}
 	}
+	if = {
+		limit = { root ?= this }
+		set_variable = gw_regional_rooted
+	}
 }
 
-# TEMPORARY (#1681): once a game, does every band's state carry its modifier, and
-# does in_tropics read a band? Global scope, from global_warming_events_on_action
-# under the rule, monthly. Waits for three months at 0.5 C or more, so every banded
-# state has refreshed (a refresh follows the target within a month). OK needs at
-# least 100 tropical states and no more than half of all states (in_tropics reads
-# neither nothing nor everything), at least 20 high-latitude states, and nine in ten
-# of each band's states carrying its modifier (a state split off this month may not
-# have yet). Fallback if the tropical count is wrong: band the tropics by the
-# record's latitude (te_climate_abs_latitude under 23.5) as the north is. Play-test
-# row: docs/testing/vanilla-1-15-playtest.md, "1.15 opportunities".
+# TEMPORARY (#1681): once a game, does every band's state carry its modifier at the
+# right scale, and does in_tropics read a band? Global scope, from
+# global_warming_events_on_action under the rule, monthly. Waits for three months in a
+# row at 0.5 C or more and not within 0.1 of 1 C (where a modifier stuck at x1 would
+# read right), so every banded state has refreshed (a refresh follows the target within
+# a month). OK needs at least 100 tropical states and no more than half of all states
+# (in_tropics reads neither nothing nor everything), at least 20 high-latitude states,
+# nine in ten of each band's states carrying its modifier (a state split off this month
+# may not have yet), and one tropical state's heatwave duration within 0.03 of Climate
+# Warming's 0.5 a degree plus the band's 0.25 at its applied scale (an owner under the
+# termination shock, the field's one other carrier, is skipped). Fallbacks: tropics
+# under 100 or over half the states, band the tropics by the record's latitude
+# (te_climate_abs_latitude under 23.5) as the north is; a scale off, refresh from a
+# hidden state event, whose ROOT is the state. Play-test row:
+# docs/testing/vanilla-1-15-playtest.md, "1.15 opportunities".
 gw_regional_selfcheck_effect = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = gw_rg_selfcheck_done }
 			gw_regional_target >= 0.5
+			OR = {
+				gw_regional_target < 0.9
+				gw_regional_target > 1.1
+			}
 		}
 		if = {
 			limit = { has_global_variable = gw_rg_chk_months }
@@ -61,6 +80,10 @@ gw_regional_selfcheck_effect = {
 		else = {
 			set_global_variable = { name = gw_rg_chk_months value = 1 }
 		}
+	}
+	else_if = {
+		limit = { has_global_variable = gw_rg_chk_months }
+		remove_global_variable = gw_rg_chk_months
 	}
 	if = {
 		limit = {
@@ -74,6 +97,27 @@ gw_regional_selfcheck_effect = {
 		set_global_variable = { name = gw_rg_chk_tropics_mod value = 0 }
 		set_global_variable = { name = gw_rg_chk_high value = 0 }
 		set_global_variable = { name = gw_rg_chk_high_mod value = 0 }
+		set_global_variable = { name = gw_rg_chk_reading value = 0 }
+		set_global_variable = { name = gw_rg_chk_expected value = -1 }
+		random_state = {
+			limit = {
+				var:gw_regional_band ?= 1
+				has_modifier = global_warming_tropics
+				owner = { NOT = { has_modifier = gw_termination_shock_modifier } }
+			}
+			set_global_variable = { name = gw_rg_chk_reading value = modifier:state_harvest_condition_heatwave_duration_mult }
+			set_global_variable = {
+				name = gw_rg_chk_expected
+				value = {
+					value = gw_warming_penalty_scale_display
+					multiply = 0.5
+					add = {
+						value = var:gw_regional_applied
+						multiply = 0.25
+					}
+				}
+			}
+		}
 		every_state = {
 			change_global_variable = { name = gw_rg_chk_states add = 1 }
 			if = {
@@ -100,11 +144,13 @@ gw_regional_selfcheck_effect = {
 				global_var:gw_rg_chk_high >= 20
 				global_var:gw_rg_chk_tropics_mod >= gw_rg_chk_tropics_mod_min_g
 				global_var:gw_rg_chk_high_mod >= gw_rg_chk_high_mod_min_g
+				gw_rg_chk_scale_gap < 0.03
+				gw_rg_chk_scale_gap > -0.03
 			}
-			debug_log = "TE_SELF_CHECK OK gw_regional (states=[SCOPE.ScriptValue('gw_rg_chk_states_g')|0] tropics=[SCOPE.ScriptValue('gw_rg_chk_tropics_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_tropics_mod_g')|0] high_latitudes=[SCOPE.ScriptValue('gw_rg_chk_high_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_high_mod_g')|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK gw_regional (states=[SCOPE.ScriptValue('gw_rg_chk_states_g')|0] tropics=[SCOPE.ScriptValue('gw_rg_chk_tropics_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_tropics_mod_g')|0] high_latitudes=[SCOPE.ScriptValue('gw_rg_chk_high_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_high_mod_g')|0] heatwave_duration=[SCOPE.ScriptValue('gw_rg_chk_reading_g')|2] expected=[SCOPE.ScriptValue('gw_rg_chk_expected_g')|2]) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN gw_regional (states=[SCOPE.ScriptValue('gw_rg_chk_states_g')|0] tropics=[SCOPE.ScriptValue('gw_rg_chk_tropics_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_tropics_mod_g')|0] high_latitudes=[SCOPE.ScriptValue('gw_rg_chk_high_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_high_mod_g')|0]. Tropics under 100 or over half the states: in_tropics misreads, so band the tropics by te_climate_abs_latitude under 23.5. A band's with_modifier short of its count: the monthly refresh isn't reaching it. See docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN gw_regional (states=[SCOPE.ScriptValue('gw_rg_chk_states_g')|0] tropics=[SCOPE.ScriptValue('gw_rg_chk_tropics_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_tropics_mod_g')|0] high_latitudes=[SCOPE.ScriptValue('gw_rg_chk_high_g')|0] with_modifier=[SCOPE.ScriptValue('gw_rg_chk_high_mod_g')|0] heatwave_duration=[SCOPE.ScriptValue('gw_rg_chk_reading_g')|2] expected=[SCOPE.ScriptValue('gw_rg_chk_expected_g')|2]. Tropics under 100 or over half the states: in_tropics misreads, so band the tropics by te_climate_abs_latitude under 23.5. A band's with_modifier short of its count: the monthly refresh isn't reaching it. heatwave_duration off expected (expected -1: no tropical state to read): the band's multiplier misreads, so refresh from a hidden state event. See docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

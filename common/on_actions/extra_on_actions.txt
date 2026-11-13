@@ -1108,8 +1108,19 @@ global_warming_events_on_action = {
 			# TEMPORARY (#1448): does the World Climate entry's Climate Warming
 			# reach a country? Once a game; TE_SELF_CHECK gw_world_climate.
 			gw_world_climate_selfcheck_effect = yes
+			# Regional warming (#1681) applies once the World Climate entry has
+			# opened, at its 0.1 C, and stays on as the entry does
+			# (gw_regional_target).
+			if = {
+				limit = {
+					NOT = { has_global_variable = gw_g_world_climate_open }
+					temperature_anomaly_display >= 0.1
+				}
+				set_global_variable = gw_g_world_climate_open
+			}
 			# TEMPORARY (#1681): do the tropics' and high latitudes' states carry
-			# their band's modifier? Once a game; TE_SELF_CHECK gw_regional.
+			# their band's modifier at the right scale? Once a game; TE_SELF_CHECK
+			# gw_regional.
 			gw_regional_selfcheck_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when

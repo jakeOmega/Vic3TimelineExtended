@@ -41,7 +41,7 @@ HIGH_LATITUDES = {
     "state_mortality_mult": -0.03,
     "state_death_cause_chr_mult": -0.03,
     "state_standard_of_living_add": 0.5,
-    "building_group_bg_agriculture_throughput_add": 0.12,
+    "building_group_bg_agriculture_throughput_add": 0.145,
     "state_harvest_condition_frost_impact_mult": -0.15,
     "state_harvest_condition_frost_duration_mult": -0.15,
     "state_harvest_condition_heatwave_impact_mult": -0.25,
@@ -94,9 +94,12 @@ class ModifierTest(unittest.TestCase):
     def test_the_high_latitudes_gain_a_little_from_their_farms_and_the_tropics_lose_most(self):
         world = _lines("global_warming")
         farm = "building_group_bg_agriculture_throughput_add"
-        high = world[farm] + HIGH_LATITUDES[farm]
-        tropics = world[farm] + TROPICS[farm]
-        self.assertGreater(high, 0)
+        # Climate Warming's -2.5% on every building reaches farms too (review of #1747: without it the
+        # "gain" was -0.5% a degree).
+        every = world["building_throughput_add"]
+        high = world[farm] + every + HIGH_LATITUDES[farm]
+        tropics = world[farm] + every + TROPICS[farm]
+        self.assertAlmostEqual(high, 0.02)
         self.assertLessEqual(high, 0.025, "the gain stays modest at 4 C (spec § 4)")
         self.assertLess(tropics, world[farm])
         # Mortality stays a harm everywhere: the high latitudes take less of it, not none.
@@ -148,11 +151,21 @@ class BandTest(unittest.TestCase):
         for state in ("STATE_HOME_COUNTIES", "STATE_BRANDENBURG", "STATE_KIEV", "STATE_ALBERTA"):
             self.assertNotIn(state, high)
 
-    def test_the_target_is_the_felt_anomaly_rounded_to_a_twentieth_and_none_below_a_tenth(self):
+    def test_the_target_is_climate_warmings_scale_once_the_world_entry_has_opened(self):
+        """Climate Warming applies at the felt anomaly floored at 0 from the World Climate entry's opening at 0.1 C
+        until the end of the game, under any mask; the bands apply at the same figure, not rounded and not cut off
+        below 0.1 (review of #1747)."""
         body = _squash(_text(VALUES))
         target = re.search(r"gw_regional_target = \{(.*?)\} \} gw_regional_gap = ", body).group(1)
-        self.assertEqual(target.strip(), "value = 0 if = { limit = { temperature_anomaly_display >= 0.1 } "
-                                 "value = temperature_anomaly_display multiply = 20 round = yes divide = 20")
+        self.assertEqual(target.strip(), "value = 0 if = { limit = { has_global_variable = gw_g_world_climate_open } "
+                                         "value = temperature_anomaly_display min = 0")
+        world = _squash(_text("common/journal_entries/je_world_climate.txt"))
+        self.assertIn("value = { value = temperature_anomaly_display min = 0 }", world)
+        self.assertIn("possible = { temperature_anomaly_display >= 0.1 }", world)
+        pulse = _squash(_text(EXTRA_ON_ACTIONS))
+        self.assertIn("if = { limit = { NOT = { has_global_variable = gw_g_world_climate_open } "
+                      "temperature_anomaly_display >= 0.1 } set_global_variable = gw_g_world_climate_open }", pulse)
+        self.assertNotIn("remove_global_variable = gw_g_world_climate_open", pulse)
 
     def test_the_gap_is_zero_where_no_scale_was_applied(self):
         body = _squash(_text(VALUES))
@@ -177,6 +190,9 @@ class RefreshTest(unittest.TestCase):
         self.assertIn("limit = { NOT = { has_variable = gw_regional_band } } set_variable = { name = "
                       "gw_regional_band value = gw_regional_band_value }", refresh)
         self.assertNotIn("remove_variable = gw_regional_applied", body)
+        # The self-healing marker: set only when ROOT is the state, after the write.
+        self.assertTrue(refresh.rstrip().endswith("if = { limit = { root ?= this } set_variable = gw_regional_rooted } }"),
+                        refresh[-200:])
 
     def test_one_refresh_site(self):
         callers, adders = [], []
@@ -195,8 +211,8 @@ class RefreshTest(unittest.TestCase):
         self.assertEqual(on["on_monthly_pulse_state"], {"on_actions": ["gw_regional_monthly_on_action"]})
         body = _squash(_text(ON_ACTIONS))
         action = body[body.index("gw_regional_monthly_on_action = {"):]
-        self.assertIn("trigger = { OR = { NOT = { has_variable = gw_regional_band } gw_regional_gap > 0.01 "
-                      "gw_regional_gap < -0.01 } }", action)
+        self.assertIn("trigger = { OR = { NOT = { has_variable = gw_regional_rooted } gw_regional_gap > 0.005 "
+                      "gw_regional_gap < -0.005 } }", action)
         self.assertIn("effect = { gw_regional_refresh_effect = yes }", action)
         # No rule gate: with the rule off the anomaly is held at 0, which takes the modifiers off (spec § 5).
         self.assertNotIn("has_game_rule", action)
@@ -209,6 +225,63 @@ class RefreshTest(unittest.TestCase):
         self.assertGreater(body.index("gw_regional_selfcheck_effect = yes"), rule)
         self.assertIn("TE_SELF_CHECK OK gw_regional", self.effect)
         self.assertIn("TE_SELF_CHECK BROKEN gw_regional", self.effect)
+
+    def test_the_self_check_reads_the_scale_not_only_the_presence(self):
+        """A band modifier stuck at x1 is present: the check reads a tropical state's heatwave duration against
+        Climate Warming's 0.5 and the band's 0.25 at its scale, away from 1 C where x1 reads right (review of
+        #1747). Heatwave duration's only other carrier is the termination shock, whose owners are skipped."""
+        check = self.effect[self.effect.index("gw_regional_selfcheck_effect = {"):]
+        self.assertIn("modifier:state_harvest_condition_heatwave_duration_mult", check)
+        self.assertIn("owner = { NOT = { has_modifier = gw_termination_shock_modifier } }", check)
+        self.assertIn("OR = { gw_regional_target < 0.9 gw_regional_target > 1.1 }", check)
+        self.assertIn("gw_rg_chk_scale_gap < 0.03 gw_rg_chk_scale_gap > -0.03", check)
+        self.assertEqual(_lines("global_warming")["state_harvest_condition_heatwave_duration_mult"], 0.5)
+        self.assertEqual(TROPICS["state_harvest_condition_heatwave_duration_mult"], 0.25)
+        carriers = []
+        for path in sorted((ROOT / "common").rglob("*.txt")):
+            text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+            for m in re.finditer(r"(?m)^(\w+) = \{", text):
+                end = text.find("\n}", m.end())
+                if "state_harvest_condition_heatwave_duration_mult =" in text[m.end():end]:
+                    carriers.append(m.group(1))
+        self.assertEqual(sorted(carriers), sorted(["global_warming", "gw_termination_shock_modifier"] + list(BANDS)))
+
+
+class GuideTableTest(unittest.TestCase):
+    """Chapter 15's table of totals is Climate Warming plus each band (review of #1747: a farm cell missed
+    Climate Warming's -2.5% on every building)."""
+
+    def test_the_totals(self):
+        text = (ROOT / "docs/player_guide/15-climate.md").read_text(encoding="utf-8")
+        rows = {}
+        for line in text.splitlines():
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) == 4 and cells[0] and not cells[0].startswith("-"):
+                rows[cells[0]] = cells[1:]
+        world = _lines("global_warming")
+        every = world["building_throughput_add"]
+        order = (TROPICS, {}, HIGH_LATITUDES)  # the table's columns: tropics, mid-latitudes, high latitudes
+
+        def total(field, band, plus=0.0):
+            return world.get(field, 0) + band.get(field, 0) + plus
+
+        def pct(x):
+            return ("+" if x > 0 else "−") + f"{abs(x) * 100:.1f}".rstrip("0").rstrip(".") + "%"
+
+        for label, field, plus in (("Mortality", "state_mortality_mult", 0.0),
+                                   ("Farm throughput", "building_group_bg_agriculture_throughput_add", every),
+                                   ("Plantation throughput", "building_group_bg_plantations_throughput_add", every)):
+            with self.subTest(label):
+                self.assertEqual(rows[label], [pct(total(field, b, plus)) for b in order])
+        with self.subTest("Standard of living"):
+            self.assertEqual(rows["Standard of living"],
+                             [("+" if x > 0 else "−") + f"{abs(x):g}"
+                              for x in (total("state_standard_of_living_add", b) for b in order)])
+        for label, field, word in (("Heatwaves", "state_harvest_condition_heatwave_impact_mult", "worse"),
+                                   ("Wildfire impact", "state_harvest_condition_wildfire_impact_mult", "worse"),
+                                   ("Frost", "state_harvest_condition_frost_impact_mult", "milder")):
+            with self.subTest(label):
+                self.assertEqual(rows[label], [f"{abs(total(field, b)) * 100:g}% {word}" for b in order])
 
 
 class TextTest(unittest.TestCase):

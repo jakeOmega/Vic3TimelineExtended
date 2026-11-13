@@ -195,14 +195,15 @@ state 55° or more from the equator carries High-Latitude Warming; a state
 between the two carries neither. The high latitudes are in practice the far
 north: Scandinavia, Finland, the Baltic, Scotland and Ulster, Iceland,
 Greenland, Russia from Moscow and Kazan northward, Siberia, Alaska and northern
-Canada. With Climate Warming, each degree comes to:
+Canada. With Climate Warming, each degree comes to the figures below; the
+throughput rows count the −2.5% every building takes:
 
 | Per 1 °C | Tropics | Mid-latitudes | High latitudes |
 |---|---|---|---|
 | Mortality | +7.5% | +5% | +2% |
 | Standard of living | −1.5 | −1 | −0.5 |
-| Farm throughput | −15% | −10% | +2% |
-| Plantation throughput | −5% | none | none |
+| Farm throughput | −17.5% | −12.5% | +2% |
+| Plantation throughput | −7.5% | −2.5% | −2.5% |
 | Heatwaves | 75% worse | 50% worse | 25% worse |
 | Frost | 15% milder | 15% milder | 30% milder |
 | Wildfire impact | 50% worse | 50% worse | 75% worse |
