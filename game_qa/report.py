@@ -130,6 +130,20 @@ def _restore_line(restore: Mapping | None, outcome: str | None, snapshot: str | 
                     "time is no longer the snapshot's; only the owner resolves a hold (`python3 -m game_qa held` "
                     "lists it)."
                     % (reason, len(restored), len(removed), len(restore.get("retimed") or [])))
+        if restore.get("reason") == "manual_save_changed":
+            # The other hold that comes after everything is back (restore._manual_saves): the saves were never
+            # copied, so nothing waits that the harness could put back.
+            saves = restore.get("manual_saves") if isinstance(restore.get("manual_saves"), Mapping) else {}
+            parts = ["%s: %s" % (label, _names(saves.get(key))) for key, label in (("changed", "changed"),
+                                                                                   ("missing", "gone"))
+                     if saves.get(key)]
+            return ("Restore: HELD (%s). Everything the snapshot holds was put back (%d files put back, %d removed, "
+                    "%d given the snapshot's time again), but the owner's own saves in save games/ differ from "
+                    "the snapshot's listing (%s). No snapshot copies them, so nothing can put them back: tell the "
+                    "owner which, since only the owner resolves a hold (`python3 -m game_qa held` lists it), and a "
+                    "later restore of this snapshot holds again while the save differs."
+                    % (reason, len(restored), len(removed), len(restore.get("retimed") or []),
+                       "; ".join(parts) or "the reply's manual_saves names them"))
         if restore.get("playset_restored") is True:
             done = " (%d files put back and %d removed in all)" % (len(restored), len(removed)) if (
                 len(restored) > 1 or removed) else ""
@@ -259,3 +273,13 @@ def _text(value) -> str:
 
 def _cell(value) -> str:
     return _text("" if value is None else value).replace("|", "\\|")
+
+
+NAMES_SHOWN = 10        # a list of saves in the summary's first line names this many, then counts the rest
+
+
+def _names(value) -> str:
+    """A list of file names for a sentence: the first NAMES_SHOWN, then how many more."""
+    names = [_text(name) for name in value] if isinstance(value, (list, tuple)) else [_text(value)]
+    shown = ", ".join(names[:NAMES_SHOWN])
+    return shown + (" and %d more" % (len(names) - NAMES_SHOWN) if len(names) > NAMES_SHOWN else "")

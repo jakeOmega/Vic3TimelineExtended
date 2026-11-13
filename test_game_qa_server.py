@@ -25,7 +25,8 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import client, fakes, gate, overlay, server, session, snapshot
+from game_qa import client, fakes, gate, overlay, profiling, server, session, snapshot
+from game_qa import fixture as fixture_mod
 from game_qa.console import ConsoleError, Reply
 from game_qa.dap import DebuggerError
 from game_qa.helper import HelperError
@@ -61,10 +62,17 @@ class FakeSession:
             raise self.raises[verb]
 
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
-              switch_rules=None):
+              switch_rules=None, game_args=None, add_mods=None, fixture_date=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
         self.switch_rules = switch_rules
+        self.game_args, self.add_mods = game_args, add_mods
+        self.fixture_date = fixture_date
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
+
+    def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
+        self._call("make_fixture", permission, until, playset, owner_confirmed_busy, max_hours)
+        self.release.wait(10)
+        return {"made": True, "save": "te_qa_fixture_0123456789ab_d19000101", "stop": self.stop()}
 
     def console(self, text):
         self._call("console", text)
@@ -112,15 +120,40 @@ class FakeSession:
         self._call("shot")
         return Path("/backups/runs/%s/shot_01.png" % SNAP)
 
-    def click(self, x, y):
-        self._call("click", x, y)
+    def click(self, x, y, console=False, input_line=None):
+        self._call("click", x, y, *(("console", input_line) if console or input_line is not None else ()))
+        if x is None:
+            return {"console": {"pixel": [216, 588]}, "keyboard_away": False}
         return {"pixel": [round(1920 * x), round(1080 * y)], "screenshot": "/backups/runs/%s/shot_01.png" % SNAP}
+
+    def wheel(self, x, y, notches):
+        self._call("wheel", x, y, notches)
+        return {"pixel": [round(1920 * x), round(1080 * y)], "notches": notches, "keyboard_away": True}
+
+    def drag(self, x1, y1, x2, y2):
+        self._call("drag", x1, y1, x2, y2)
+        return {"pixels": [[round(1920 * x1), round(1080 * y1)], [round(1920 * x2), round(1080 * y2)]],
+                "keyboard_away": True}
+
+    def profiler_roots(self, box=None, as_shown=False):
+        self._call("profiler_roots", box, *(("as_shown",) if as_shown else ()))
+        return {"lines": ["Opened Script.Profiling.Gui"], "opened": True, "box": box or [0.2, 0.3, 0.8, 0.9],
+                "screenshot": "/backups/runs/%s/shot_01.png" % SNAP, "crop": "/backups/runs/%s/profiler_roots_01.png"
+                % SNAP, "scale": 1}
 
     def try_event(self, event, setup, reads):
         self._call("try_event", event, setup, list(reads))
         return dict(self.try_event_reply, event=event, setup=setup)
 
     try_event_reply = {"shared_state": True, "option_count": 2, "complete": True, "options": []}
+
+    def profile_start(self):
+        self._call("profile_start")
+        return {"date": [1931, 7, 3], "clear": ["Discarded 0 recorded frames"], "enable": ["Enabled"], "starts": 1}
+
+    def profile_dump(self, label=None):
+        self._call("profile_dump", label)
+        return {"label": label or "1931_08_02", "date": [1931, 8, 2]}
 
     def status(self):
         self._call("status")
@@ -302,6 +335,42 @@ class AddSetupVerbTest(ServerTestCase):
         self.assertEqual((code, reply["refused"], reply["revision"], reply["seen"]), (2, "not_reloaded", 1, 0))
 
 
+
+class ClickConsoleVerbTest(ServerTestCase):
+    def test_click_passes_console_and_its_input_line(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("click", "--console")
+        self.assertEqual((code, reply["keyboard_away"]), (0, False))
+        self.assertEqual(fake.calls[-1], ("click", None, None, "console", None))
+        self.run_cli("click", "0.5", "0.25", "--console", "--input-line", "0.1", "0.6")
+        self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25, "console", [0.1, 0.6]))
+        self.run_cli("click", "0.5", "0.25")
+        self.assertEqual(fake.calls[-1], ("click", 0.5, 0.25))
+
+
+class WheelDragVerbTest(ServerTestCase):
+    def test_wheel_and_drag_pass_their_numbers(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("wheel", "0.5", "0.25", "-3")
+        self.assertEqual((code, reply["notches"]), (0, -3))
+        self.assertEqual(fake.calls[-1], ("wheel", 0.5, 0.25, -3))
+        reply, code = self.run_cli("drag", "0.1", "0.2", "0.3", "0.4")
+        self.assertEqual((code, reply["pixels"]), (0, [[192, 216], [576, 432]]))
+        self.assertEqual(fake.calls[-1], ("drag", 0.1, 0.2, 0.3, 0.4))
+
+
+class ProfilerRootsVerbTest(ServerTestCase):
+    def test_profiler_roots_passes_its_box_or_none(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("profiler-roots")
+        self.assertEqual((code, reply["opened"], reply["crop"]), (0, True, "/backups/runs/%s/profiler_roots_01.png" % SNAP))
+        self.assertEqual(fake.calls[-1], ("profiler_roots", None))
+        reply, code = self.run_cli("profiler-roots", "--box", "0.1", "0.2", "0.9", "0.8")
+        self.assertEqual((code, reply["box"]), (0, [0.1, 0.2, 0.9, 0.8]))
+        self.assertEqual(fake.calls[-1], ("profiler_roots", [0.1, 0.2, 0.9, 0.8]))
+        self.run_cli("profiler-roots", "--as-shown")
+        self.assertEqual(fake.calls[-1], ("profiler_roots", None, "as_shown"))
+
 class VerbTest(ServerTestCase):
     def test_a_verb_round_trips_json(self):
         fake, _thread = self.serve()
@@ -453,6 +522,79 @@ class SelfChecksVerbTest(ServerTestCase):
         reply, code = self.run_cli("selfchecks")
         self.assertEqual((reply["refused"], code), ("no_run", 2))
         self.assertNotIn(("self_checks",), fake.calls)
+
+
+class ProfileVerbTest(ServerTestCase):
+    """#1700: `profile start` and `profile dump` go to the session; `profile summary` reads the run folder alone."""
+
+    def test_start_and_dump_reach_the_session(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("profile", "start")
+        self.assertEqual((code, reply["starts"]), (0, 1))
+        self.assertEqual(fake.calls[-1], ("profile_start",))
+        self.assertEqual(self.run_cli("profile", "dump", "A")[0]["label"], "A")
+        self.assertEqual(fake.calls[-1], ("profile_dump", "A"))
+        self.assertEqual(self.run_cli("profile", "dump")[0]["label"], "1931_08_02")
+        self.assertEqual(fake.calls[-1], ("profile_dump", None))
+
+    def test_a_refusal_keeps_its_fields(self):
+        fake = FakeSession()
+        fake.raises["profile_dump"] = session.SessionError("rows_mismatch", "not that dump")
+        self.serve(fake)
+        self.assertEqual(self.run_cli("profile", "dump", "A"),
+                         ({"refused": "rows_mismatch", "detail": "not that dump"}, 2))
+
+    def run_folder(self, run_id: str) -> Path:
+        """A run folder as a session leaves it: a start with a variant folder, a profile start, dump A."""
+        folder = self.backups / "runs" / run_id
+        folder.mkdir(parents=True)
+        variant = self.root / "variant"
+        (variant / "common").mkdir(parents=True)
+        (variant / "common" / "x.txt").write_text("x")
+        steps = [{"verb": "start", "outcome": "ok", "add_mods": [{"windows": r"D:\variant", "wsl": str(variant),
+                                                                  "name": "v", "version": "1"}]},
+                 {"verb": "profile_start", "outcome": "ok", "date": [1931, 7, 3]},
+                 {"verb": "profile_dump", "outcome": "ok", "label": "A", "date": [1931, 7, 4]}]
+        (folder / "steps.jsonl").write_text("".join(json.dumps(step) + "\n" for step in steps), encoding="utf-8")
+        first = profiling.frame_of(1931, 7, 3, 6)
+        tt, sp = profiling.dump_paths(folder, "A")
+        tt.write_text(",".join(profiling.TT_HEADER) + "\n" + "".join("%d,MoveArmies,1,1,0\n" % (first + 6 * n)
+                                                                      for n in range(4)), encoding="utf-8")
+        sp.write_text("# type, location, time (seconds), call count\ntrigger common/x.txt:1 0.25 10\n"
+                      "trigger common/y.txt:1 0.5 10\n", encoding="utf-8")
+        (folder / profiling.RUN_SERVER_LOG).write_text(
+            "[10:00:00][jominiapplication.cpp:539]: Pause Toggled! Paused: false, PlayerID: 0\n"
+            + "".join("[10:00:%02d][jominiapplication.cpp:539]: Processing Tick: %s\n"
+                      % (n, profiling.frame_text(first + 6 * n)) for n in range(4))
+            + "[10:00:04][jominiapplication.cpp:539]: Pause Toggled! Paused: true, PlayerID: 1\n", encoding="utf-8")
+        return folder
+
+    def test_summary_reads_the_newest_run_with_no_session(self):
+        self.run_folder(SNAP)
+        reply, code = self.run_cli("profile", "summary")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual((reply["run"], reply["window"]["to"], reply["window"]["first_frame"]), (SNAP, "A", "1931.7.3.6"))
+        self.assertEqual(reply["wall_clock"]["running"]["seconds_per_day"], 4.0)
+        reply, code = self.run_cli("profile", "summary", "A", "--run", SNAP, "--top", "1")
+        self.assertEqual((code, len(reply["script"]["top"])), (0, 1))
+
+    def test_summary_tells_the_variants_files_from_the_mods_and_vanillas(self):
+        self.run_folder(SNAP)
+        game = self.root / "game"
+        (game / "common").mkdir(parents=True)
+        (game / "common" / "y.txt").write_text("y")
+        reply, code = client.profile_summary(self.backups, None, ["A"], roots=lambda: [("vanilla", game)])
+        self.assertEqual(code, 0, reply)
+        self.assertEqual({row["file"]: row["origin"] for row in reply["script"]["top"]},
+                         {"common/x.txt": "add_mod", "common/y.txt": "vanilla"})
+
+    def test_summary_refusals(self):
+        self.assertEqual(self.run_cli("profile", "summary")[0]["refused"], "no_run")
+        self.run_folder(SNAP)
+        reply, code = self.run_cli("profile", "summary", "B")
+        self.assertEqual((reply["refused"], reply["run"], code), ("no_dump", SNAP, 2))
+        self.assertEqual(self.run_cli("profile", "summary", "--top", "0")[0]["refused"], "bad_argument")
+        self.assertEqual(self.run_cli("profile", "summary", "--run", "20991231T000000Z")[0]["refused"], "no_run")
 
 
 class ExpiryTest(ServerTestCase):
@@ -660,6 +802,16 @@ class StartTest(ServerTestCase):
         self.threads.extend(h.thread for h in spawn.handles)
         self.assertEqual(self.run_cli("events")[1], 0)
 
+    def test_game_args_and_variant_folders_reach_the_session_as_lists(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("start", "--permission", PERMISSION, "--game-arg", "no_notifications",
+                                       "--game-arg=-script_profiling", "--add-mod", r"D:\variant")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual((fake.game_args, fake.add_mods), (["no_notifications", "-script_profiling"], [r"D:\variant"]))
+        self.threads.extend(h.thread for h in spawn.handles)
+
     def test_switch_rule_reaches_the_session_as_a_mapping(self):
         fake = FakeSession()
         spawn = ThreadSpawner(lambda: fake)
@@ -773,6 +925,139 @@ class StartTest(ServerTestCase):
             reply, code = self.run_cli("start", "--permission", PERMISSION)
         self.assertEqual((reply["refused"], code), ("server_failed", 2))
         self.assertIn("cannot read the game version", reply["detail"])
+
+
+class FixtureVerbTest(ServerTestCase):
+    """#1602: `fixture --until DATE` works out its plan in the client (`--dry-run` stops there), then spawns a
+    server and posts `fixture`, which makes the fixture and stops; `start --fixture DATE` passes the date on."""
+
+    def setUp(self):
+        super().setUp()
+        user, deploy = self.root / "user", self.root / "deploy"
+        (user / "save games").mkdir(parents=True)
+        (deploy / "events").mkdir(parents=True)
+        (deploy / "events" / "te_events.txt").write_text("namespace = te\n", encoding="utf-8")
+        self.paths = session.Paths(user_data=user, backup_root=self.backups, deploy_dir=deploy,
+                                   base_game=self.root / "game", overlay_windows_path="C:\\u\\mod\\qa",
+                                   events_file_windows_path=str, game_version="1.15.1",
+                                   enabled_mods=["C:\\u\\mod\\TE"], deployed_mod_windows_path="C:\\u\\mod\\TE")
+        patch = mock.patch.object(client, "real_paths", lambda: self.paths)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_a_dry_run_gives_the_plan_and_spawns_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("fixture", "--until", "1900", "--dry-run")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(spawn.handles, [])
+        self.assertEqual((reply["date"], reply["run_until"], reply["long_run"], reply["found"]),
+                         ("1900.1.1", "1900.1.3", True, False))
+        self.assertTrue(reply["key"].endswith("_d19000101"))
+        self.assertIn("--max-hours", reply["next"])
+        self.assertIn("grant", reply["next"])
+
+    def test_a_dry_run_of_a_short_run_asks_for_no_grant_of_its_own(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("fixture", "--until", "1836.3.29", "--dry-run")
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(spawn.handles, [])
+        self.assertEqual((reply["run_until"], reply["long_run"]), ("1836.3.31", False))
+        self.assertNotIn("--max-hours", reply["next"])
+        self.assertIn("short run", reply["next"])
+
+    def test_the_fixture_verb_makes_the_fixture_and_the_server_ends(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("fixture", "--until", "1900", "--permission", PERMISSION, "--max-hours", "8")
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(fake.calls[0], ("make_fixture", PERMISSION, "1900.1.1", "mod_only", False, 8.0))
+        self.assertEqual([c[0] for c in fake.calls], ["make_fixture", "stop"])
+        self.assertTrue(reply["made"])
+        spawn.handles[0].thread.join(10)
+        self.assertFalse(spawn.handles[0].thread.is_alive())
+        self.assertFalse(self.info_path.exists())
+
+    def test_the_client_waits_the_runs_own_limit(self):
+        seen = {}
+
+        def start_session(backup_root, body, spawn, verb="start", timeout=None):
+            seen.update(body=body, verb=verb, timeout=timeout)
+            return {"made": True}, 0
+        with mock.patch.object(client, "start_session", start_session):
+            self.run_cli("fixture", "--until", "1900", "--permission", PERMISSION, "--max-hours", "8")
+            self.assertEqual(seen["verb"], "fixture")
+            self.assertEqual(seen["timeout"], 8 * 3600 + client.FIXTURE_MARGIN_S)
+            self.run_cli("fixture", "--until", "1836.2.1", "--permission", PERMISSION)
+        self.assertEqual(seen["timeout"], round(fixture_mod.time_limit_s((1836, 2, 1))) + client.FIXTURE_MARGIN_S)
+        self.assertNotIn("max_hours", seen["body"])
+
+    def test_a_fixture_already_there_spawns_nothing_and_needs_no_permission(self):
+        key = session.Session(None, None, None, self.paths).fixture_plan((1900, 1, 1))["key"]
+        (self.paths.user_data / "save games" / ("te_qa_fixture_%s.v3" % key)).write_bytes(b"made")
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            for argv in ((), ("--dry-run",)):
+                reply, code = self.run_cli("fixture", "--until", "1900", *argv)
+                self.assertEqual((code, reply["found"], reply["made"]), (0, True, False), reply)
+                self.assertIn("start --fixture 1900.1.1", reply["next"])
+        self.assertEqual(spawn.handles, [])
+
+    def test_refusals_in_the_client_spawn_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        with mock.patch.object(client, "spawn_server", spawn):
+            for argv, refused in ((["--until", "1900"], "no_permission"),
+                                  (["--until", "1900.2.29", "--dry-run"], "bad_date"),
+                                  (["--until", "1836.1.1", "--dry-run"], "bad_date"),
+                                  (["--until", "1900", "--max-hours", "0", "--permission", PERMISSION],
+                                   "bad_argument")):
+                with self.subTest(argv=argv):
+                    reply, code = self.run_cli("fixture", *argv)
+                    self.assertEqual((reply["refused"], code), (refused, 2))
+        self.assertEqual(spawn.handles, [])
+
+    def test_a_client_that_stops_waiting_leaves_the_run_to_end_and_the_server_with_it(self):
+        fake = FakeSession()
+        fake.release.clear()
+        spawn = ThreadSpawner(lambda: fake)
+        body = {"permission": PERMISSION, "until": "1900.1.1", "max_hours": 8}
+        reply, code = client.start_session(self.backups, body, spawn, verb="fixture", timeout=0.3)
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual((reply["refused"], code), ("no_answer", 2))
+        self.assertIn("fixture.json", reply["next"])
+        self.assertTrue(spawn.handles[0].thread.is_alive())          # the run goes on
+        fake.release.set()
+        spawn.handles[0].thread.join(10)
+        self.assertFalse(spawn.handles[0].thread.is_alive())
+        self.assertEqual([c[0] for c in fake.calls], ["make_fixture", "stop"])
+        self.assertFalse(self.info_path.exists())
+
+    def test_a_server_takes_fixture_once_and_never_after_start(self):
+        fake, _thread = self.serve()
+        self.assertEqual(client.call(self.backups, "start", {"permission": PERMISSION})[1], 0)
+        reply, code = client.call(self.backups, "fixture", {"permission": PERMISSION, "until": "1900"})
+        self.assertEqual((reply["refused"], code), ("session_running", 2))
+        self.assertNotIn("make_fixture", [c[0] for c in fake.calls])
+
+    def test_a_fixture_body_without_its_date_is_refused_and_stopped(self):
+        fake, thread = self.serve()
+        reply, code = client.call(self.backups, "fixture", {"permission": PERMISSION, "as_tag": "FRA"})
+        self.assertEqual((reply["refused"], code), ("bad_argument", 2))
+        self.assertEqual(fake.stops, 1)
+        thread.join(10)
+        self.assertFalse(thread.is_alive())
+
+    def test_start_passes_the_fixtures_date_on(self):
+        fake = FakeSession()
+        spawn = ThreadSpawner(lambda: fake)
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("start", "--permission", PERMISSION, "--fixture", "1900")
+        self.threads.extend(h.thread for h in spawn.handles)
+        self.assertEqual(code, 0, reply)
+        self.assertEqual(fake.fixture_date, "1900")
 
 
 # A server in a child process, so that it can be killed or signalled. Its double's `start` builds the overlay and

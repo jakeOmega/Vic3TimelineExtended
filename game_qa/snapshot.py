@@ -3,7 +3,8 @@
 Layout under the backup root:
 
     store/<sha256[:2]>/<sha256>     one copy of each distinct file content, shared by every snapshot
-    snapshots/<id>/manifest.json    the files taken (size, mtime, hash) and the listing of the folders
+    snapshots/<id>/manifest.json    the files taken (size, mtime, hash), the listing of the folders, and the size
+                                    and mtime of everything listed in `save games/` (`save_stats`)
     snapshots/<id>/journal.jsonl    what the run did: armed, playset, playset_written, started, watching,
                                     watch_resumed, heartbeat, look_failed, other_game, game_exited,
                                     playset_restored, restored, held
@@ -38,11 +39,17 @@ SNAPSHOT_SET = (
     "console_history.txt",
     "pdx_settings.json",
     "content_load.json",
+    # Console `dump_ticktask_timings` overwrites this in place in the user-data root (#1700): an owner's copy is
+    # put back, and one the run's game wrote where there was none is removed, by restore's rules for the set.
+    "ticktask_timings.csv",
     "logs/*",
 )
 
 # `Snapshot.listing` holds every file directly in these folders ("" is the user-data root).
 LISTED_FOLDERS = ("", "save games", "logs")
+# The folder whose listed entries also get their size and time recorded (`Snapshot.save_stats`): the owner's own
+# saves there are never copied (they run to hundreds of MB), so a change to one is told by these alone (#1725).
+SAVE_FOLDER = "save games"
 
 # take() refuses unless the backup drive has the bytes it must copy plus this much to spare.
 FREE_SPACE_MARGIN = 1024**3
@@ -56,6 +63,10 @@ _ID_PATTERN = re.compile(r"^(\d{8}T\d{6}Z)(?:-(\d+))?$")
 _SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 _CHUNK = 1024 * 1024
 _READ_ATTEMPTS = 3
+
+
+class SaveNotListed(ValueError):
+    """A save named for a run (`extra`) that `save games/` does not list under that name (`unlisted_save`)."""
 
 
 class BackupRootError(Exception):
@@ -76,6 +87,9 @@ class Snapshot:
     dir: Path  # <backup_root>/snapshots/<id>
     files: dict[str, Entry]  # user-data-relative POSIX path -> entry
     listing: frozenset[str]  # every file directly in user_data, save games/ and logs/ when taken
+    # (st_size, st_mtime_ns) of each `listing` name in save games/, from the same lstat as the listing; None for a
+    # manifest written before they were recorded, or one whose record does not read (see `load`).
+    save_stats: dict[str, tuple[int, int]] | None = None
 
 
 # --- small helpers ---------------------------------------------------------------------------
@@ -129,6 +143,46 @@ def _scan_folder(user_data: Path, folder: str) -> dict[str, os.stat_result]:
             except FileNotFoundError:  # gone between the listing and the stat
                 continue
     return found
+
+
+def unlisted_save(user_data: Path, rel: str, scan: dict[str, os.stat_result] | None = None) -> str | None:
+    """Why `rel`, a save directly in `save games/` that a run will load, may not be named so; None if it may.
+
+    It may when the folder lists an entry of that name, compared with str.lower(): the owner's drive matches names
+    in any letter case, so `--save Mine` is mine.v3. The drive also answers to names it does not list, such as a
+    short 8.3 name (`FRENCH~1.V3` for `french republic_1867_08_16.v3`). Such a save would be the run's under one
+    name and an owner's save in the listing under the other, so `restore` would compare it twice: by its hash, and
+    by a size and time that its own put-back (a time set from WSL keeps whole seconds) would then never match. It is
+    refused, naming the listed entry that is the same file (the same device and inode) when there is one. `scan` is
+    `_scan_folder(user_data, SAVE_FOLDER)` when the caller has it. A path not directly in `save games/` is not
+    judged here."""
+    folder, _, name = rel.rpartition("/")
+    if folder != SAVE_FOLDER:
+        return None
+    scan = _scan_folder(user_data, SAVE_FOLDER) if scan is None else scan
+    if name.lower() in {listed.rpartition("/")[2].lower() for listed in scan}:
+        return None
+    why = (f"{rel!r} is not a name {SAVE_FOLDER}/ lists (the drive also answers to names it does not list, such as "
+           "a short 8.3 name): name the save as the folder lists it")
+    try:
+        target = os.lstat(user_data / rel)
+    except OSError:
+        return why
+    same = sorted(listed.rpartition("/")[2] for listed, st in scan.items()
+                  if target.st_ino and (st.st_dev, st.st_ino) == (target.st_dev, target.st_ino))
+    return why + (f": it is the same file as {same[0]!r}" if same else "")
+
+
+def listed_spelling(rel: str, scan: dict[str, os.stat_result]) -> str:
+    """`rel` as the folder's listing `scan` spells it, when it lists `rel` in another letter case; else `rel`.
+
+    A `--save` is stored under the listed name, not as typed: put back as typed on a drive that matches any letter
+    case, `--save Mine` would rename the owner's mine.v3, and `--save Autosave` would take autosave.v3 twice
+    (review, 2026-11-13). An exact match wins over one in another case."""
+    if rel in scan:
+        return rel
+    lower = rel.lower()
+    return next((listed for listed in sorted(scan) if listed.lower() == lower), rel)
 
 
 def _check_backup_root(user_data: Path, backup_root: Path) -> None:
@@ -199,7 +253,8 @@ def _ordered_id(taken: datetime, previous: Sequence[Snapshot]) -> tuple[str, int
     return base_id, 1
 
 
-def _write_manifest(folder: Path, taken: datetime, files: dict[str, Entry], listing: frozenset[str]) -> None:
+def _write_manifest(folder: Path, taken: datetime, files: dict[str, Entry], listing: frozenset[str],
+                    save_stats: dict[str, tuple[int, int]]) -> None:
     manifest = {
         "version": MANIFEST_VERSION,
         "created": taken.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -208,6 +263,10 @@ def _write_manifest(folder: Path, taken: datetime, files: dict[str, Entry], list
             for name, entry in files.items()
         },
         "listing": sorted(listing),
+        # A key older code does not read, so the manifest version stays 1 and every checkout still loads it.
+        "save_stats": {
+            name: {"size": size, "mtime_ns": mtime_ns} for name, (size, mtime_ns) in sorted(save_stats.items())
+        },
     }
     temp = folder / (MANIFEST_NAME + ".tmp")
     with open(temp, "w", encoding="utf-8") as handle:
@@ -229,10 +288,12 @@ def take(
     """Snapshot the files of SNAPSHOT_SET plus `extra` (user-data-relative saves the run will load).
 
     Raises FileNotFoundError if `user_data` or an `extra` file is missing, ValueError if an `extra`
-    path leaves `user_data`, and BackupRootError if the backup folder cannot be used. Every
+    path leaves `user_data`, SaveNotListed (a ValueError) if an `extra` save is not a name `save games/`
+    lists (`unlisted_save`), and BackupRootError if the backup folder cannot be used. Every
     refusal comes before anything is written.
 
-    Only regular files are copied. `listing` also names symlinks and other non-directories.
+    Only regular files are copied. `listing` also names symlinks and other non-directories. `save_stats` gives
+    the size and mtime_ns of every `listing` name in `save games/`, as the scan's lstat saw it (a link's own).
 
     A file whose size and mtime_ns both match the previous snapshot's entry, and whose content is
     still in the store, keeps that entry's hash without being read. Every other file is hashed.
@@ -255,14 +316,21 @@ def take(
     for pattern in SNAPSHOT_SET:
         folder, _, name_pattern = pattern.rpartition("/")
         for rel, st in scans[folder].items():
-            if stat.S_ISREG(st.st_mode) and fnmatch.fnmatchcase(rel.rpartition("/")[2], name_pattern):
+            # In any case: the folder is on NTFS, where the game's write to `ticktask_timings.csv` goes into an
+            # owner's `TickTask_Timings.csv`, which keeps its name. Stored under the name it has, it is put back.
+            if stat.S_ISREG(st.st_mode) and fnmatch.fnmatchcase(rel.rpartition("/")[2].lower(), name_pattern.lower()):
                 wanted[rel] = st
     for rel in extra_paths:
         target = user_data / rel
         if not target.is_file():
             raise FileNotFoundError(f"cannot snapshot {rel!r}: not a file in {user_data}")
+        problem = unlisted_save(user_data, rel, scans[SAVE_FOLDER])
+        if problem is not None:
+            raise SaveNotListed(f"cannot snapshot {problem}")
+        rel = listed_spelling(rel, scans[SAVE_FOLDER])
         wanted[rel] = target.stat()
     listing = frozenset(rel for found in scans.values() for rel in found)
+    save_stats = {rel: (st.st_size, st.st_mtime_ns) for rel, st in scans[SAVE_FOLDER].items()}
 
     store, snapshots = backup_root / "store", backup_root / "snapshots"
     previous = all_snapshots(backup_root)
@@ -295,7 +363,7 @@ def take(
     base_id, first_number = _ordered_id(taken, previous)
     snapshot_id, folder = _new_snapshot_dir(snapshots, base_id, first_number)
     try:
-        _write_manifest(folder, taken, files, listing)
+        _write_manifest(folder, taken, files, listing, save_stats)
     except BaseException:
         # Clear our own unfinished folder. rmdir cannot remove one that holds a manifest, so
         # a snapshot that was committed before the failure is never deleted by the run that made it.
@@ -304,11 +372,35 @@ def take(
         with contextlib.suppress(OSError):
             folder.rmdir()
         raise
-    return Snapshot(id=snapshot_id, dir=folder, files=files, listing=listing)
+    return Snapshot(id=snapshot_id, dir=folder, files=files, listing=listing, save_stats=save_stats)
+
+
+def _int(value) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _read_save_stats(raw, listing: frozenset[str]) -> dict[str, tuple[int, int]] | None:
+    """The manifest's `save_stats` as `Snapshot.save_stats`, or None when there is none (a manifest written before
+    #1725) or it does not read: not a mapping of exactly the listing's `save games/` names to whole-number sizes and
+    times. It never makes a manifest unloadable, since the rest of the snapshot restores without it; `restore`
+    then says it could not tell a changed save."""
+    if not isinstance(raw, dict):
+        return None
+    folder = SAVE_FOLDER + "/"
+    if set(raw) != {name for name in listing if name.startswith(folder) and "/" not in name[len(folder):]}:
+        return None
+    stats = {}
+    for name, value in raw.items():
+        if not isinstance(value, dict) or not _int(value.get("size")) or not _int(value.get("mtime_ns")):
+            return None
+        stats[name] = (value["size"], value["mtime_ns"])
+    return stats
 
 
 def load(snapshot_dir: Path) -> Snapshot:
-    """Read a finished snapshot. FileNotFoundError if it has no manifest, ValueError if it is unreadable."""
+    """Read a finished snapshot. FileNotFoundError if it has no manifest, ValueError if it is unreadable.
+
+    A `save_stats` that is missing or does not read leaves `save_stats` None and is no reason to refuse the rest."""
     snapshot_dir = Path(snapshot_dir)
     text = (snapshot_dir / MANIFEST_NAME).read_text(encoding="utf-8")
     try:
@@ -325,7 +417,8 @@ def load(snapshot_dir: Path) -> Snapshot:
             raise ValueError("bad manifest listing")
     except (KeyError, TypeError, AttributeError, ValueError) as error:
         raise ValueError(f"unreadable manifest in {snapshot_dir}: {error!r}") from error
-    return Snapshot(id=snapshot_dir.name, dir=snapshot_dir, files=files, listing=listing)
+    save_stats = _read_save_stats(manifest.get("save_stats"), listing)
+    return Snapshot(id=snapshot_dir.name, dir=snapshot_dir, files=files, listing=listing, save_stats=save_stats)
 
 
 def all_snapshots(backup_root: Path) -> list[Snapshot]:

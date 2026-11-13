@@ -9,10 +9,12 @@ the debugger client's own, which the fakes answer at once.
 """
 import contextlib
 import datetime as dt
+import hashlib
 import io
 import json
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -20,11 +22,13 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import dap, fakes, fixture, gate, logtail, overlay, server, session, snapshot
+from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, profiling, server, session, snapshot
+from game_qa.report import read_steps
 from game_qa.client import enabled_mods
 from game_qa.console import UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
+from test_game_qa_overlay import PROFILER_GUI
 
 SNAP = "20261110T150000Z"
 FIXTURE_SNAP = "20261110T145500Z"
@@ -394,13 +398,21 @@ class FixtureWatch:
         self.code = test.fixture_watch_code
         self.hangs = test.fixture_watch_hangs
         self.polls = 0
+        self.saved = False
 
     def poll(self):
         self.polls += 1
+        on_poll = getattr(self.test, "on_fixture_poll", None)       # a dated run writes its logs as it goes
+        if on_poll is not None and on_poll(self.polls) is False:
+            return None
         if self.hangs:
             return 0 if self.test.game.killed else None
-        if self.code == 0 and self.polls == 1:
-            (self.test.user / "save games" / "TEST_FAIL_te_qa_fixture_2 January, 1836.v3").write_bytes(b"a fresh game")
+        if self.code == 0 and self.polls == 1 or on_poll is not None and self.code == 0:
+            name = getattr(self.test, "fixture_run_save", "TEST_FAIL_te_qa_fixture_2 January, 1836.v3")
+            data = getattr(self.test, "fixture_run_bytes", b"a fresh game")
+            if not (self.test.user / "save games" / name).exists() and not self.saved:
+                (self.test.user / "save games" / name).write_bytes(data)
+                self.saved = True
         return self.code
 
 
@@ -463,19 +475,19 @@ class Cli:
         if verb == self.raise_on:
             raise OSError("python3 could not be started")
         saves = self.test.user / "save games"
-        if verb == "restore":
-            self.overlay_at_restore.append(self.test.paths.overlay_dir.exists())
-            for path in saves.glob("TEST_FAIL_*.v3"):
-                path.unlink()
         queued = self.queued.get(verb)
-        if queued:
-            return queued.pop(0)
-        return {
+        reply = queued.pop(0) if queued else {
             "held": ({"held": []}, 0),
             "snapshot": ({"id": SNAP, "files": 12, "pruned": [], "held": []}, 0),
             "launch": ({"id": SNAP, "pid": PID, "created": CREATED, "args": []}, 0),
             "restore": RESTORED,
         }[verb]
+        if verb == "restore":
+            self.overlay_at_restore.append(self.test.paths.overlay_dir.exists())
+            if not (isinstance(reply[0], dict) and reply[0].get("held") is True):      # a hold changes nothing
+                for path in saves.glob("TEST_FAIL_*.v3"):
+                    path.unlink()
+        return reply
 
 
 class SessionTestCase(unittest.TestCase):
@@ -706,6 +718,21 @@ class StartTest(SessionTestCase):
         self.assertEqual(self.cli.verbs, [])
         self.assertFalse(self.paths.overlay_dir.exists())
 
+    def test_a_save_named_by_a_name_the_folder_does_not_list_is_refused_before_anything(self):
+        # #1725: the owner's drive answers to short 8.3 names (`FRENCH~1`) that it does not list; a hard link plays
+        # one here, left out of the scan as the drive leaves it out of the listing.
+        long_name = self.user / "save games" / "french republic_1867_08_16.v3"
+        long_name.write_bytes(b"a long-named save")
+        os.link(long_name, self.user / "save games" / "FRENCH~1.v3")
+        real = snapshot._scan_folder
+        with mock.patch.object(snapshot, "_scan_folder",
+                               lambda user_data, folder: {r: s for r, s in real(user_data, folder).items() if "~" not in r}):
+            error = self.session_error(self.start, save="FRENCH~1")
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("same file as 'french republic_1867_08_16.v3'", error.detail)
+        self.assertEqual(self.cli.verbs, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
     def test_start_refuses_while_a_snapshot_is_held(self):
         self.cli.queue("held", {"held": ["20261109T100000Z"]}, 0)
         error = self.session_error(self.start)
@@ -845,12 +872,151 @@ class ReadTest(SessionTestCase):
     def test_read_without_a_stop_resumes_and_raises(self):
         self.started()
         self.game.stops = False
-        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
-            error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        error = self.no_stop()
         self.assertEqual(error.code, "no_stop")
         self.assertEqual(self.game.adapter.commands[-1], "continue")
         self.assertNotIn("evaluate", self.game.adapter.commands)
         self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        # it ran (the history gained it), so it is not typed again
+        self.assertEqual((error.info["arrived"], error.info["retried"]), (True, False))
+        self.assertIn("gained a line of it", error.info["not_retried"])
+
+    def no_stop(self) -> session.SessionError:
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            return self.session_error(self.session.read, ["c:FRA.gdp"])
+
+    def read_steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [step for step in map(json.loads, lines) if step["verb"] == "read"]
+
+    def test_a_read_lost_to_a_shut_console_is_typed_again_once_and_evaluated(self):
+        # #1702: `start` answered with the console believed open, and the first read's keys never reached it.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.console_open = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            reads = self.session.read(["c:FRA.gdp"])
+        self.assertEqual([r.value for r in reads], [7.0])
+        typed = self.typed()
+        first, second = [i for i, text in enumerate(typed) if text == "event te_qa.1"]
+        self.assertIn("select_event_option list", typed[first + 1:second])     # a probe proved the console between
+        self.assertTrue(self.game.console_open)
+        self.assertFalse(self.game.adapter.stopped)
+        self.assertFalse(self.session.status()["maybe_stopped"])
+        [step] = self.read_steps()
+        self.assertEqual((step["outcome"], step["retried"], step["values"]), ("ok", True, [["c:FRA.gdp", True, "7"]]))
+
+    def test_a_second_typing_that_brings_no_stop_either_is_the_end(self):
+        self.started()
+        self.game.console_open = False
+        self.game.stops = False
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"], error.info["maybe_stopped"]), ("no_stop", True, True))
+        self.assertNotIn("not_retried", error.info)
+        self.assertIn("second typing", error.detail)
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_read_the_history_holds_from_before_is_typed_again_when_it_was_not_the_last_line(self):
+        # The owner's history held `event te_qa.1` on 2026-11-13: a text is left out only when it repeats the
+        # last line, so a read typed after another command adds a line when it is entered.
+        self.history_path().write_text("event te_qa.1\ncash\n", encoding="utf-8")
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.game.console_open = False
+        with mock.patch.object(session, "STOP_WAIT_S", 0.01):
+            reads = self.session.read(["c:FRA.gdp"])
+        self.assertEqual([r.value for r in reads], [7.0])
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
+        self.assertEqual(self.read_steps()[-1]["retried"], True)
+
+    def history_path(self) -> Path:
+        return self.user / "console_history.txt"
+
+    def test_a_read_lost_straight_after_a_read_is_not_typed_again(self):
+        # A repeat running is not written to the history, so its absence there proves nothing.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.session.read(["c:FRA.gdp"])
+        self.game.console_open = False
+        steps = len(self.game.steps)
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"], error.info["arrived"]), ("no_stop", False, False))
+        self.assertIn("its last line was the command already", error.info["not_retried"])
+        self.assertEqual([step for step in self.game.steps[steps:] if "text" in step], [{"text": "event te_qa.1"}])
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_read_that_ran_straight_after_a_read_unseen_by_the_history_is_not_typed_again(self):
+        # As the game does: the second read is entered and runs (no stop), and the history writes no line for it.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+        self.session.read(["c:FRA.gdp"])
+        self.game.history_skips_repeats = True
+        self.game.stops = False
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"], error.info["arrived"]), ("no_stop", False, False))
+        self.assertEqual(self.typed().count("event te_qa.1"), 2)
+
+    def test_a_read_that_arrives_late_is_not_typed_again_and_its_stop_is_released(self):
+        self.started()
+        self.game.latency = 3.0                 # the keys are taken 3 s late: after the wait for the stop
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"]), ("no_stop", False))
+        self.assertIn("arrived late", error.info["not_retried"])
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        self.assertFalse(self.game.adapter.stopped)                 # its stop came during the probe, and was resumed
+        self.assertTrue(self.session.status()["maybe_stopped"])
+
+    def test_a_read_that_reaches_the_history_late_without_a_stop_is_not_typed_again(self):
+        self.started()
+        self.game.stops = False
+        self.game.latency = 3.0                 # taken after the wait, during the probe: the history gains it then
+        error = self.no_stop()
+        self.assertIn("gained the command late", error.info["not_retried"])
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+
+    def test_a_read_whose_stop_comes_after_the_wait_is_not_typed_again(self):
+        self.started()
+        self.game.console_open = False          # the history has no line of it: only the stop says it arrived
+        wait_stopped = dap.Debugger.wait_stopped
+        calls = []
+
+        def stop_after_the_wait(dbg, timeout):
+            calls.append(timeout)
+            if len(calls) == 3:                 # the drain before the read, the wait for its stop, then this look
+                self.game.adapter.stop()
+            return wait_stopped(dbg, timeout)
+        with mock.patch.object(dap.Debugger, "wait_stopped", stop_after_the_wait):
+            error = self.no_stop()
+        self.assertIn("stopped after the wait", error.info["not_retried"])
+        self.assertEqual(self.typed()[-1], "event te_qa.1")                 # nothing after it: no probe
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+        self.assertFalse(self.game.adapter.stopped)                         # the stop was resumed
+
+    def test_a_console_that_will_not_open_is_not_typed_again(self):
+        self.started()
+        self.game.console_open = False
+        self.game.console_never_opens = True
+        error = self.no_stop()
+        self.assertEqual((error.code, error.info["retried"]), ("no_stop", False))
+        self.assertIn("did not answer a probe", error.info["not_retried"])
+        self.assertEqual(self.typed().count("event te_qa.1"), 1)
+
+    def test_values_read_before_a_failed_proof_of_life_go_with_its_error(self):
+        # #1697: the proof of life after the poll fails, and the values evaluated before it are kept.
+        self.started()
+        self.game.adapter.values = {"c:FRA.gdp": "7"}
+
+        def dies(text):                         # as the game takes the read event's command
+            if text == "event " + overlay.READ_EVENT:
+                self.game.process_gone = True
+        self.game.on_command = dies
+        error = self.session_error(self.session.read, ["c:FRA.gdp"])
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(error.info["reads"], [{"expr": "c:FRA.gdp", "ok": True, "raw": "7", "value": 7.0}])
+        self.assertEqual(server.refusal(error)["reads"], error.info["reads"])
+        [step] = self.read_steps()
+        self.assertEqual((step["outcome"], step["values"]), ("watch_ended", [["c:FRA.gdp", True, "7"]]))
 
     def test_a_closed_relay_is_an_error_of_the_verb_not_a_crash(self):
         self.started()
@@ -1306,19 +1472,152 @@ class PressTest(SessionTestCase):
         self.assertEqual(self.session_error(session.Session.press, self.session, "enter").code, "bad_argument")
 
 
+HIGH_UN = 2684354595                    # 0xA0000023, un_events.4 on the 1931 save (#1722)
+HIGH_CH = 3959422997                    # 0xEC000015, te_debug_ch.1 on the same save (#1732)
+
+
 class PickTest(SessionTestCase):
-    def test_pick_always_passes_the_numeric_id(self):
+    def pick_steps(self) -> list[dict]:
+        lines = (self.paths.backup_root / "runs" / SNAP / "steps.jsonl").read_text("utf-8").splitlines()
+        return [step for step in map(json.loads, lines) if step["verb"] == "pick"]
+
+    def selects(self) -> list[str]:
+        return [t for t in self.typed() if t.startswith("select_event_option ") and t != "select_event_option list"]
+
+    def test_one_pending_event_is_picked_with_no_id(self):
         self.started()
-        self.game.on("select_event_option list", success=["10 te_qa_probe.2 options=3"])
-        self.game.on("select_event_option 2 10", success=["Selected option 2 of te_qa_probe.2"])
-        self.game.on("select_event_option 1 10", success=["Selected option 1 of te_qa_probe.2"])
-        first = self.session.pick(2)
-        second = self.session.pick(1, "te_qa_probe.2")
-        self.assertIn("select_event_option 2 10", self.typed())
-        self.assertIn("select_event_option 1 10", self.typed())
-        self.assertEqual((first["numeric_id"], first["event"], first["ambiguous"]), (10, "te_qa_probe.2", False))
-        self.assertEqual(second["index"], 1)
-        self.assertEqual(self.session.events(), [logtail.Pending(10, "te_qa_probe.2", 3)])
+        self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.high_ids_refused = True       # the id would not match as listed: no id needs none
+        result = self.session.pick(5, "te_debug_ch.1")
+        self.assertEqual(self.selects(), ["select_event_option 5"])
+        self.assertEqual((result["form"], result["command"], result["numeric_id"], result["event"]),
+                         ("no_id", "select_event_option 5", HIGH_CH, "te_debug_ch.1"))
+        self.assertEqual(result["attempts"], [{"form": "no_id", "command": "select_event_option 5",
+                                               "reply": ["Selected option 5 of te_debug_ch.1"]}])
+        self.assertEqual(self.game.pending_events, [])
+        [step] = self.pick_steps()
+        self.assertEqual((step["outcome"], step["form"]), ("ok", "no_id"))
+
+    def test_with_two_pending_the_id_goes_as_listed(self):
+        self.started()
+        self.game.pending_events = [[10, "x.1", 3], [11, "y.1", 2]]
+        result = self.session.pick(1, "y.1")
+        self.assertEqual(self.selects(), ["select_event_option 1 11"])
+        self.assertEqual((result["form"], result["numeric_id"], result["ambiguous"]), ("id", 11, False))
+        self.assertEqual(self.session.events(), [logtail.Pending(10, "x.1", 3)])
+        self.assertEqual(self.session.pick(2)["form"], "id")        # one left, still by id: only it can be answered
+        self.assertEqual(self.selects()[-1], "select_event_option 2 10")
+
+    def test_a_low_id_listed_alone_goes_by_id_so_no_other_event_can_be_answered(self):
+        # Review, 2026-11-13: under left_running time passes between the list and the select; with no id the
+        # select would answer whatever was oldest by then.
+        self.started()
+        self.game.pending_events = [[10, "x.1", 2]]
+
+        def moved_on(text):
+            if text.startswith("select_event_option 0"):
+                self.game.pending_events[:] = [[11, "y.1", 2]]
+        self.game.on_command = moved_on
+        self.assertEqual(self.session_error(self.session.pick, 0, "x.1").code, "not_selected")
+        self.assertEqual(self.game.pending_events, [[11, "y.1", 2]])
+        self.assertEqual(self.selects(), ["select_event_option 0 10"])
+
+    def test_a_list_line_that_is_not_an_event_leaves_the_id_form_alone(self):
+        self.started()
+        self.game.on("select_event_option list", success=["-1610612701 un_events.4 options=3", "12 y.1 options=2"])
+        self.game.on("select_event_option 1 12", success=["Selected option 1 of y.1"])
+        self.assertEqual(self.session.pick(1, "y.1")["form"], "id")
+        self.assertEqual(self.selects(), ["select_event_option 1 12"])
+
+    def test_a_list_line_that_is_not_an_event_refuses_the_forms_with_no_id(self):
+        # With no id the select takes the first event listed: a list read in part cannot say which that is.
+        self.started()
+        self.game.on("select_event_option list", success=["-1610612701 un_events.4 options=3",
+                                                          "3959422997 te_debug_ch.1 options=8"])
+        error = self.session_error(self.session.pick, 0, "te_debug_ch.1")
+        self.assertEqual(error.code, "bad_reply")
+        self.assertEqual(error.info["unread"], ["-1610612701 un_events.4 options=3"])
+        self.assertEqual(self.selects(), [])
+
+    def test_a_high_id_that_is_the_oldest_pending_is_picked_with_no_id(self):
+        # Live, 2026-11-13: un_events.4 at 2684354595 beside te_debug_ch.1 at 3456106516; the listed id and its
+        # signed form both answered NO_MATCH, and `select_event_option 0` picked un_events.4, first and lowest.
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.high_ids_refused = True
+        result = self.session.pick(0, "un_events.4")
+        self.assertEqual(self.selects(), ["select_event_option 0"])
+        self.assertEqual((result["form"], result["command"]), ("oldest", "select_event_option 0"))
+        self.assertEqual(result["attempts"], [{"form": "oldest", "command": "select_event_option 0",
+                                               "reply": ["Selected option 0 of un_events.4"]}])
+        self.assertEqual(self.session.events(), [logtail.Pending(HIGH_CH, "te_debug_ch.1", 8)])
+        [step] = self.pick_steps()
+        self.assertEqual((step["outcome"], step["form"], len(step["attempts"])), ("ok", "oldest", 1))
+        self.assertEqual(self.session.pick(5)["form"], "no_id")        # one left: no id
+
+    def test_a_high_id_that_is_not_the_oldest_is_refused_with_nothing_sent(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.high_ids_refused = True
+        error = self.session_error(self.session.pick, 2, "te_debug_ch.1")
+        self.assertEqual(error.code, "id_unaddressable")
+        self.assertEqual(self.selects(), [])
+        self.assertIn("2^31 - 1", error.detail)
+        self.assertIn("answer the events listed before it first", error.detail)
+        self.assertIn("2684354595 un_events.4, 3959422997 te_debug_ch.1", error.detail)
+        self.assertEqual([p["event_id"] for p in error.info["pending"]], ["un_events.4", "te_debug_ch.1"])
+        self.assertEqual(len(self.game.pending_events), 2)
+        [step] = self.pick_steps()
+        self.assertEqual(step["outcome"], "id_unaddressable")
+        self.assertEqual((server.refusal(error)["refused"], len(server.refusal(error)["pending"])), ("id_unaddressable", 2))
+
+    def test_a_high_id_first_in_the_list_but_not_the_lowest_is_refused(self):
+        # The two orders were seen to agree; where they do not, which one a select with no id takes is unknown.
+        self.started()
+        self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8], [12, "y.1", 2]]
+        error = self.session_error(self.session.pick, 0, "te_debug_ch.1")
+        self.assertEqual(error.code, "id_unaddressable")
+        self.assertIn('console \"select_event_option 0\"', error.detail)     # the way left, not a dead end
+        self.assertEqual(self.selects(), [])
+
+    def test_a_high_id_lowest_but_not_first_in_the_list_is_refused(self):
+        self.started()
+        self.game.pending_events = [[HIGH_CH, "te_debug_ch.1", 8], [HIGH_UN, "un_events.4", 3]]
+        self.assertEqual(self.session_error(self.session.pick, 0, "un_events.4").code, "id_unaddressable")
+        self.assertEqual(self.selects(), [])
+
+    def test_a_low_id_beside_a_high_one_still_goes_by_id(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [12, "y.1", 2]]
+        self.game.high_ids_refused = True
+        result = self.session.pick(1, "y.1")
+        self.assertEqual(self.selects(), ["select_event_option 1 12"])
+        self.assertEqual(result["form"], "id")
+
+    def test_an_id_of_two_to_the_31st_less_one_goes_by_id_once(self):
+        self.started()
+        self.game.pending_events = [[session.INT32_MAX, "x.1", 2], [12, "y.1", 2]]
+        self.game.on("select_event_option 0 2147483647", failure=["No matching pending event"])
+        error = self.session_error(self.session.pick, 0, "x.1")
+        self.assertEqual((error.code, error.info["form"]), ("not_selected", "id"))
+        self.assertEqual(self.selects(), ["select_event_option 0 2147483647"])
+
+    def test_a_refused_oldest_pick_sends_nothing_more(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3], [HIGH_CH, "te_debug_ch.1", 8]]
+        self.game.on("select_event_option 0", failure=["No matching pending event"])
+        error = self.session_error(self.session.pick, 0, "un_events.4")
+        self.assertEqual((error.code, error.info["form"], len(error.info["attempts"])), ("not_selected", "oldest", 1))
+        self.assertEqual(self.selects(), ["select_event_option 0"])
+        self.assertEqual(server.refusal(error)["attempts"], error.info["attempts"])
+
+    def test_a_no_id_pick_the_game_refuses_sends_nothing_more(self):
+        self.started()
+        self.game.pending_events = [[HIGH_UN, "un_events.4", 3]]
+        self.game.on("select_event_option 1", failure=["No matching pending event"])
+        error = self.session_error(self.session.pick, 1)
+        self.assertEqual((error.code, error.info["form"]), ("not_selected", "no_id"))
+        self.assertEqual(self.selects(), ["select_event_option 1"])
 
     def test_pick_by_name_with_two_pending_takes_the_oldest_and_says_so(self):
         self.started()
@@ -1344,7 +1643,7 @@ class PickTest(SessionTestCase):
         self.started()
         self.game.on("select_event_option list", success=["10 x.1 options=2"])
         self.assertEqual(self.session_error(self.session.pick, 1).code, "not_selected")
-        self.assertEqual(self.typed().count("select_event_option 1 10"), 1)
+        self.assertEqual([t for t in self.typed() if t.startswith("select_event_option 1")], ["select_event_option 1 10"])
 
     def test_a_reply_that_is_not_a_list_is_not_taken_for_nothing_pending(self):
         self.started()
@@ -1703,6 +2002,551 @@ class ClickTest(SessionTestCase):
         self.assertIn("no_client_area", reply["screenshot_error"])
 
 
+class ManualSavesStopTest(SessionTestCase):
+    """#1725: what `stop` says about the owner's own saves, from the restore's `manual_saves`."""
+
+    MINE = "save games/byzantium_1942_01_27.v3"
+
+    def stop_with(self, reply, code):
+        self.started()
+        self.cli.queue("restore", reply, code)
+        out = self.session.stop()
+        return out, Path(out["report"]).read_text("utf-8")
+
+    def test_a_changed_save_is_a_hold_that_names_it_and_says_everything_else_is_back(self):
+        out, summary = self.stop_with({"restored": ["content_load.json", "console_history.txt"], "removed": [],
+                                       "held": True, "reason": "manual_save_changed",
+                                       "manual_saves": {"changed": [self.MINE], "missing": ["save games/x.v3"]},
+                                       "playset_restored": True}, 2)
+        self.assertEqual((out["outcome"], out["reason"], out["stop_again"]), ("held", "manual_save_changed", False))
+        self.assertEqual(out["manual_saves"], {"changed": [self.MINE], "missing": ["save games/x.v3"]})
+        self.assertNotIn("next", out)
+        first = summary.split("\n")[0]
+        self.assertIn("HELD (manual_save_changed)", first)
+        self.assertIn("changed: " + self.MINE, first)
+        self.assertIn("gone: save games/x.v3", first)
+        self.assertIn("Everything the snapshot holds was put back (2 files put back", first)
+        self.assertNotIn("waits", first)
+        self.assertNotIn("differ from the snapshot's listing", " ".join(out.get("notes") or []))   # said once
+        self.assertTrue(out["overlay_removed"])                     # the playset is back, so the overlay goes
+
+    def test_a_new_save_is_a_note_in_the_reply_and_the_summary_and_the_stop_restored(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": False, "reason": "",
+                                       "manual_saves": {"new": ["save games/france_1836_01_02.v3"]}}, 0)
+        self.assertEqual(out["outcome"], "restored")
+        note = [n for n in out["notes"] if "new saves" in n]
+        self.assertEqual(len(note), 1)
+        self.assertIn("save games/france_1836_01_02.v3", note[0])
+        self.assertIn("- Note: " + note[0], summary)
+        self.assertTrue(summary.startswith("Restore: restored"))
+
+    def test_saves_listed_with_another_holds_reason_are_a_note(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": True, "reason": "modified_after_exit",
+                                       "manual_saves": {"missing": [self.MINE]}}, 2)
+        self.assertEqual((out["outcome"], out["reason"]), ("held", "modified_after_exit"))
+        note = [n for n in out["notes"] if "differ from the snapshot's listing" in n]
+        self.assertEqual(len(note), 1)
+        self.assertIn("gone: " + self.MINE, note[0])
+        self.assertIn("- Note: " + note[0], summary)
+
+    def test_a_snapshot_without_sizes_and_times_says_so(self):
+        out, summary = self.stop_with({"restored": [], "removed": [], "held": False, "reason": "",
+                                       "manual_saves": {"missing": [self.MINE], "unrecorded": True}}, 0)
+        self.assertEqual(out["outcome"], "restored")
+        notes = " | ".join(out["notes"])
+        self.assertIn("gone: " + self.MINE, notes)
+        self.assertIn("before the sizes and times of the owner's saves were recorded", notes)
+
+    def test_nothing_is_said_when_there_is_nothing_to_say(self):
+        out, _summary = self.stop_with(*RESTORED)
+        self.assertNotIn("manual_saves", out)
+        self.assertFalse([n for n in out.get("notes") or [] if "save games/" in n])
+
+
+class EnterClickErrorTest(SessionTestCase):
+    """#1725: a helper error on one of enter-game's clicks is split as `click`'s is (CLICK_REFUSED_BEFORE_PRESS)."""
+
+    def fail_click(self, number, code):
+        """The helper raises `code` on the `number`th click (1: the country, 2: Start); the others go through."""
+        real, made = self.game.click, []
+
+        def click(pid, x, y):
+            made.append((x, y))
+            if len(made) == number:
+                raise HelperError(code, "failed")
+            return real(pid, x, y)
+        self.game.click = click
+
+    def test_start_refused_before_the_press_latches_nothing_and_enter_game_can_be_run_again(self):
+        for code in session.CLICK_REFUSED_BEFORE_PRESS:
+            with self.subTest(code=code):
+                self.setUp()
+                self.started()
+                self.fail_click(2, code)
+                error = self.session_error(self.session.enter_game)
+                self.assertEqual(error.code, "click_refused")
+                self.assertIn("no_country_selected", error.detail)
+                self.assertEqual(len(error.info["clicks"]), 1)          # the country click alone was made
+                status = self.session.status()
+                self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]),
+                                 (False, False, False))
+                self.game.click = type(self.game).click.__get__(self.game)
+                # The country the first try selected stays selected, so the panel cannot change: the gap the detail
+                # names. With the lobby back as it was before the first try, enter-game goes through.
+                self.assertEqual(self.session_error(self.session.enter_game).code, "no_country_selected")
+                self.game.selected = None
+                self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_start_that_may_have_been_pressed_leaves_the_session_maybe_in_play(self):
+        for code in ("backend_error", "helper_gone", "timeout"):
+            with self.subTest(code=code):
+                self.setUp()
+                self.started()
+                self.fail_click(2, code)
+                error = self.session_error(self.session.enter_game)
+                self.assertEqual(error.code, "click_unknown")
+                self.assertIn(code, error.detail)
+                self.assertIn("Start may have been pressed", error.detail)
+                self.assertEqual(len(error.info["clicks"]), 1)
+                self.assertEqual(len(error.info["pixel"]), 2)
+                status = self.session.status()
+                self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]),
+                                 (False, True, True))
+                clicks = len(self.game.clicks)
+                self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+                self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+                self.assertEqual(len(self.game.clicks), clicks)           # no third click
+
+    def test_advance_through_a_start_that_may_have_been_pressed_is_left_running_too(self):
+        self.started()
+        self.fail_click(2, "backend_error")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "click_unknown")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+
+    def test_a_country_click_that_may_have_been_pressed_latches_nothing_and_clicks_no_start(self):
+        self.started()
+        self.fail_click(1, "backend_error")
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "click_unknown")
+        self.assertIn("Start was not clicked", error.detail)
+        self.assertIn("no_country_selected", error.detail)          # what a selected panel does to the next try
+        self.assertEqual(error.info["clicks"], [])
+        status = self.session.status()
+        self.assertEqual((status["entered_unproved"], status["left_running"]), (False, False))
+        self.assertEqual(self.game.clicks, [])                      # the fake's own record: neither click landed
+        self.game.click = type(self.game).click.__get__(self.game)
+        self.assertTrue(self.session.enter_game()["entered"])       # nothing locked: enter-game can be run again
+
+    def test_a_country_click_refused_before_the_press_is_click_refused(self):
+        self.started()
+        self.fail_click(1, "covered")
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual((error.code, error.info["clicks"]), ("click_refused", []))
+        self.assertFalse(self.session.status()["left_running"])
+
+    def test_the_proof_before_start_is_not_taken_for_a_click_error(self):
+        # `_prove_game` raises before the press: watch_ended, as before, and nothing latched beyond it.
+        self.started()
+        real, made = self.game.click, []
+
+        def click(pid, x, y):
+            made.append((x, y))
+            real(pid, x, y)
+            self.game.process_gone = True                           # the game is gone before Start's proof
+        self.game.click = click
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(len(made), 1)
+        self.assertFalse(self.session.status()["left_running"])
+
+
+class KeyboardAfterClickTest(SessionTestCase):
+    """#1710 item 3 and #1725 point 3: a click into a tool window takes the keyboard (live, 2026-11-12), so the verbs
+    that type refuse until `click --console` has clicked the console's input line and a probe got through."""
+
+    def setUp(self):
+        super().setUp()
+        self.started()                          # the console is known open: start's round trips
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)       # CONSOLE_INPUT_LINE of the fake's 1920x1080 client area
+        self.game.adapter.values["c:FRA.gdp"] = "1.5"
+
+    def typing_verbs(self):
+        script = Path(self.paths.backup_root) / "late.txt"
+        script.write_text("set_variable = te_late\n", encoding="utf-8")
+        return {
+            "read": lambda: self.session.read(["c:FRA.gdp"]),
+            "console": lambda: self.session.console("money 1"),
+            "events": self.session.events,
+            "pick": lambda: self.session.pick(0),
+            "tag": lambda: self.session.tag("FRA"),
+            "run_setup": lambda: self.session.run_setup("anything"),
+            "add_setup": lambda: self.session.add_setup("late", "set_variable = te_late"),
+            "press": lambda: self.session.press("esc"),
+            "enter_game": self.session.enter_game,
+            "advance": lambda: self.session.advance(1),
+            "try_event": lambda: self.session.try_event("x.1", None, ["c:FRA.gdp"]),
+            "profiler_roots": self.session.profiler_roots,
+        }
+
+    def test_a_click_latches_and_every_verb_that_types_is_refused_before_it_types(self):
+        reply = self.session.click(0.6, 0.6)
+        self.assertTrue(reply["keyboard_away"])
+        effects = self.paths.overlay_dir / overlay.EFFECTS_FILE
+        before = (len(self.game.steps), effects.read_bytes())
+        for name, verb in self.typing_verbs().items():
+            with self.subTest(name):
+                error = self.session_error(verb)
+                self.assertEqual(error.code, "keyboard_away")
+                self.assertEqual(error.info["next"], "python3 -m game_qa click --console")
+        self.assertEqual((len(self.game.steps), effects.read_bytes()), before)   # no key, and add-setup wrote nothing
+        self.assertEqual(self.game.elsewhere, [])
+        self.assertTrue(self.session.shot().is_file())          # a shot types nothing
+        self.assertNotIn("keyboard_away", session.ENTER_RETRIED + session.RELOAD_RETRIED)
+
+    def test_click_console_gives_the_keyboard_back(self):
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        reply = self.session.click(console=True)
+        self.assertEqual(self.game.clicks[-1], (216, 588))
+        self.assertEqual(reply["console"]["pixel"], [216, 588])
+        self.assertTrue(Path(reply["console"]["screenshot"]).is_file())
+        self.assertFalse(reply["keyboard_away"])
+        self.assertNotIn({"scan": fakes.SCAN_CONSOLE}, self.game.steps[steps:])
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_a_click_and_the_input_line_in_one_verb(self):
+        reply = self.session.click(0.6, 0.6, console=True)
+        self.assertEqual(self.game.clicks, [(1152, 648), (216, 588)])
+        self.assertEqual(reply["pixel"], [1152, 648])
+        self.assertNotEqual(reply["screenshot"], reply["console"]["screenshot"])
+        self.assertFalse(reply["keyboard_away"])
+        self.assertEqual(self.session.console("tag FRA").lines, ["Now Playing - France"])
+
+    def test_an_input_line_click_that_misses_keeps_the_latch_and_says_so(self):
+        self.game.input_line = (5, 5)           # the line is elsewhere in this window
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        error = self.session_error(self.session.click, console=True)
+        self.assertEqual(error.code, "keyboard_not_returned")
+        self.assertTrue(error.info["keyboard_away"])
+        self.assertEqual(error.info["console"]["pixel"], [216, 588])
+        self.assertNotIn({"scan": fakes.SCAN_CONSOLE}, self.game.steps[steps:])
+        self.assertTrue(self.game.console_open)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "keyboard_away")
+        # Aimed from a shot, the line's own point gives it back.
+        reply = self.session.click(console=True, input_line=(5 / 1920, 5 / 1080))
+        self.assertEqual((self.game.clicks[-1], reply["keyboard_away"]), ((5, 5), False))
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+
+    def test_the_input_line_is_not_clicked_while_the_console_is_not_known_open(self):
+        self.session.press("esc")               # closes the console: known closed
+        clicks, steps = len(self.game.clicks), len(self.game.steps)
+        for args, kwargs in (((), {"console": True}), ((0.6, 0.6), {}), ((0.6, 0.6), {"console": True})):
+            with self.subTest(args=args, kwargs=kwargs):
+                error = self.session_error(self.session.click, *args, **kwargs)
+                self.assertEqual(error.code, "console_not_open")
+                self.assertIn("`events`", error.detail)
+                self.assertEqual((error.info["keyboard_away"], error.info["next"]),
+                                 (False, "python3 -m game_qa events"))
+        # A click with the console shut is refused, not made: it would take the keyboard with no way back.
+        self.assertEqual((len(self.game.clicks), len(self.game.steps)), (clicks, steps))
+        self.assertFalse(self.game.keyboard_elsewhere)
+
+    def test_a_refused_click_does_not_latch_and_one_that_may_have_pressed_does(self):
+        real_click = self.game.click
+        self.game.click = mock.Mock(side_effect=HelperError("covered", "another window"))
+        error = self.session_error(self.session.click, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("click_refused", False))
+        self.game.click = mock.Mock(side_effect=HelperError("backend_error", "SendInput failed"))
+        error = self.session_error(self.session.click, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("click_unknown", True))
+        self.game.click = real_click
+        self.assertEqual(self.session_error(self.session.events).code, "keyboard_away")
+
+    def test_a_refused_input_line_click_keeps_the_first_click_in_the_reply(self):
+        real_click = self.game.click
+        calls = []
+
+        def second_refused(pid, x, y):
+            calls.append((x, y))
+            if len(calls) == 2:
+                raise HelperError("cursor_misplaced", "a hand on the mouse")
+            return real_click(pid, x, y)
+        self.game.click = second_refused
+        error = self.session_error(self.session.click, 0.6, 0.6, console=True)
+        self.assertEqual(error.code, "click_refused")
+        self.assertEqual(error.info["first"]["pixel"], [1152, 648])
+        self.assertTrue(error.info["keyboard_away"])
+
+    def test_bad_arguments_click_nothing(self):
+        for args, kwargs in (((), {}), ((0.5,), {}), ((None, 0.5), {}), ((0.5, 0.5), {"input_line": (0.1, 0.5)}),
+                             ((), {"console": True, "input_line": (2, 0.5)}),
+                             ((), {"console": True, "input_line": "0.1 0.5"}),
+                             ((), {"console": True, "input_line": (0.1,)})):
+            with self.subTest(args=args, kwargs=kwargs):
+                self.assertEqual(self.session_error(self.session.click, *args, **kwargs).code, "bad_argument")
+        self.assertEqual(self.game.clicks, [])
+
+    def test_stop_and_selfchecks_work_while_latched(self):
+        self.session.click(0.6, 0.6)
+        steps = len(self.game.steps)
+        found = self.session.self_checks()
+        self.assertEqual(found["not_flushed"]["refused"], "keyboard_away")
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertEqual(self.session.stop()["outcome"], "restored")
+
+    def test_enter_games_own_clicks_do_not_latch(self):
+        self.game.click_takes_keyboard = False  # as live: the lobby's clicks left the console answering
+        self.session.enter_game()
+        self.assertFalse(self.session._console.keyboard_away)
+
+
+class PointerWithTheConsoleShutTest(SessionTestCase):
+    """`click`, `wheel` and `drag` send nothing unless the console is known open (or a click made while it was has
+    latched the keyboard away). A click with it shut took the keyboard without latching, and the next `read` typed
+    its lines into the tool window and pressed the console key, while `click --console` was refused
+    `console_not_open`: no safe way forward."""
+
+    def setUp(self):
+        super().setUp()
+        self.started()
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)
+        self.game.adapter.values["c:FRA.gdp"] = "1.5"
+
+    def pointer_verbs(self):
+        return {"click": lambda: self.session.click(0.6, 0.6),
+                "click_and_console": lambda: self.session.click(0.6, 0.6, console=True),
+                "click_console": lambda: self.session.click(console=True),
+                "wheel": lambda: self.session.wheel(0.6, 0.6, -3),
+                "drag": lambda: self.session.drag(0.6, 0.6, 0.6, 0.4)}
+
+    def shut(self):
+        self.session.press("esc")               # known closed: to see the profiler's Callers column, say
+
+    def not_known(self):
+        self.session._console._open = None      # as after a no_ack, or a close() whose key may not have gone out
+
+    def test_each_is_refused_before_anything_goes_out_while_the_console_is_shut_or_not_known(self):
+        for state in (self.shut, self.not_known):
+            for name, verb in self.pointer_verbs().items():
+                with self.subTest(state=state.__name__, verb=name):
+                    self.setUp()
+                    state()
+                    sent = (len(self.game.clicks), len(self.game.wheels), len(self.game.drags), len(self.game.steps))
+                    error = self.session_error(verb)
+                    self.assertEqual((error.code, error.info["keyboard_away"]), ("console_not_open", False))
+                    self.assertEqual(error.info["next"], "python3 -m game_qa events")
+                    self.assertEqual((len(self.game.clicks), len(self.game.wheels), len(self.game.drags),
+                                      len(self.game.steps)), sent)
+                    self.assertFalse(self.game.keyboard_elsewhere)
+                    self.assertFalse(self.session._console.keyboard_away)
+
+    def test_after_press_esc_a_tool_click_does_not_let_the_next_verb_type_elsewhere(self):
+        self.shut()
+        self.assertEqual(self.session_error(self.session.click, 0.6, 0.6).code, "console_not_open")
+        self.assertFalse(self.game.keyboard_elsewhere)
+        steps = len(self.game.steps)
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)       # opens the console, as after any press
+        self.assertEqual(self.game.elsewhere, [])
+        # Opening it is the one console key: the probe went to the game, not into a tool window.
+        self.assertEqual([s for s in self.game.steps[steps:] if s.get("scan") == fakes.SCAN_CONSOLE],
+                         [{"scan": fakes.SCAN_CONSOLE}])
+
+    def test_a_verb_that_types_opens_the_way_and_click_console_gives_the_keyboard_back(self):
+        self.shut()
+        self.assertEqual(self.session_error(self.session.click, 0.6, 0.6).code, "console_not_open")
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.session.events(), [])     # the detail's advice: it opens the console
+        self.assertTrue(self.session.click(0.6, 0.6)["keyboard_away"])
+        self.assertTrue(self.game.keyboard_elsewhere)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "keyboard_away")
+        self.assertFalse(self.session.click(console=True)["keyboard_away"])
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_once_latched_the_pointer_verbs_go_on_with_the_console_state_not_known(self):
+        self.session.click(0.6, 0.6)            # the console was known open: latched, and its state not known now
+        self.assertIsNone(self.session._console._open)
+        self.session.click(0.5, 0.5)
+        self.session.wheel(0.6, 0.6, -3)
+        self.session.drag(0.6, 0.6, 0.6, 0.4)
+        self.assertEqual((len(self.game.clicks), len(self.game.wheels), len(self.game.drags)), (2, 1, 1))
+        self.assertTrue(self.session._console.keyboard_away)
+        self.assertFalse(self.session.click(console=True)["keyboard_away"])
+
+
+class WheelAndDragTest(SessionTestCase):
+    """`wheel X Y N` and `drag X1 Y1 X2 Y2` (#1710): click's scope and rules, a shot after, the keyboard latched."""
+
+    def test_wheel_turns_at_its_point_takes_a_shot_and_latches_the_keyboard(self):
+        self.started()
+        reply = self.session.wheel(0.6, 0.5, -3)
+        self.assertEqual(self.game.wheels, [(1152, 540, -3)])
+        self.assertEqual((reply["pixel"], reply["notches"], reply["keyboard_away"]), ([1152, 540], -3, True))
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertEqual(self.session_error(self.session.events).code, "keyboard_away")
+
+    def test_drag_presses_moves_and_releases_and_latches_the_keyboard(self):
+        self.started()
+        reply = self.session.drag(0.5, 0.5, 0.75, 0.25)
+        self.assertEqual(self.game.drags, [(960, 540, 1440, 270)])
+        self.assertEqual((reply["pixels"], reply["keyboard_away"]), ([[960, 540], [1440, 270]], True))
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+
+    def test_bad_arguments_send_nothing(self):
+        self.started()
+        for notches in (0, session.MAX_NOTCHES + 1, -session.MAX_NOTCHES - 1, True, 1.5, "2"):
+            with self.subTest(notches=notches):
+                self.assertEqual(self.session_error(self.session.wheel, 0.5, 0.5, notches).code, "bad_argument")
+        self.assertEqual(self.session_error(self.session.wheel, 1.5, 0.5, 1).code, "bad_argument")
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.5, -0.1).code, "bad_argument")
+        self.assertEqual((self.game.wheels, self.game.drags), ([], []))
+        self.assertFalse(self.session._console.keyboard_away)
+
+    def test_refused_before_anything_went_out_is_refused_and_does_not_latch(self):
+        self.started()
+        self.game.wheel = mock.Mock(side_effect=HelperError("covered", "x", reply={"notches_done": 0}))
+        error = self.session_error(self.session.wheel, 0.5, 0.5, 2)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("wheel_refused", False))
+        self.game.drag = mock.Mock(side_effect=HelperError("not_foreground", "x", reply={"pressed": False}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["keyboard_away"]), ("drag_refused", False))
+
+    def test_a_refusal_after_something_went_out_is_unknown_and_latches(self):
+        self.started()
+        self.game.wheel = mock.Mock(side_effect=HelperError("cursor_misplaced", "x", reply={"notches_done": 2}))
+        error = self.session_error(self.session.wheel, 0.5, 0.5, 5)
+        self.assertEqual((error.code, error.info["notches_done"], error.info["keyboard_away"]),
+                         ("wheel_unknown", 2, True))
+        self.setUp()
+        self.started()
+        self.game.drag = mock.Mock(side_effect=HelperError("not_foreground", "x", reply={"pressed": True}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["pressed"], error.info["keyboard_away"]), ("drag_unknown", True, True))
+        self.game.drag = mock.Mock(side_effect=HelperError("helper_gone", "the helper ended"))
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "drag_unknown")
+        # Both of the helper's releases failed: the reply says the button may still be down.
+        self.game.drag = mock.Mock(side_effect=HelperError("backend_error", "released twice, may still be down",
+                                                           reply={"pressed": True, "released": False}))
+        error = self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6)
+        self.assertEqual((error.code, error.info["pressed"], error.info["released"]), ("drag_unknown", True, False))
+
+    def test_a_game_that_cannot_be_proved_gets_neither(self):
+        self.started()
+        self.game.process_gone = True
+        self.assertEqual(self.session_error(self.session.wheel, 0.5, 0.5, 1).code, "watch_ended")
+        self.assertEqual(self.session_error(self.session.drag, 0.5, 0.5, 0.6, 0.6).code, "watch_ended")
+        self.assertEqual((self.game.wheels, self.game.drags), ([], []))
+
+    def test_both_work_while_the_keyboard_is_away(self):
+        self.started()
+        self.session.click(0.6, 0.6)
+        self.session.wheel(0.6, 0.6, 1)
+        self.session.drag(0.6, 0.6, 0.7, 0.7)
+        self.assertEqual((len(self.game.wheels), len(self.game.drags)), (1, 1))
+
+class ProfilerRootsTest(SessionTestCase):
+    """`profiler-roots` (#1701, #1710): the profiler opened at its roots, a full-size shot, the call graph cropped."""
+
+    def setUp(self):
+        super().setUp()
+        self.game.on(session.PROFILER_COMMAND, success=[session.PROFILER_OPENED])
+
+    def shots_of(self, width, height=12):
+        """The game's screenshots become `width` x `height` pictures in which each pixel says where it is."""
+        def screenshot(pid, path, max_width=1600):
+            rgb = b"".join(bytes((x % 256, y % 256, (x // 256) % 256)) for y in range(height) for x in range(width))
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(fakes.win_helper.encode_png(width, height, rgb))
+            self.game.screenshots.append((pid, path, max_width))
+            return path
+        self.game.screenshot = screenshot
+
+    def test_it_opens_the_window_and_crops_the_call_graph_out_of_a_full_size_shot(self):
+        self.game.client = (0, 0, 3840, 2160)
+        self.started()
+        self.shots_of(3840)
+        reply = self.session.profiler_roots()
+        self.assertIn(session.PROFILER_COMMAND, self.typed())
+        self.assertEqual((reply["opened"], reply["lines"]), (True, [session.PROFILER_OPENED]))
+        self.assertEqual(self.game.screenshots[-1][2], 3840)    # the window's own width, not the 1600 of `shot`
+        shot, crop = Path(reply["screenshot"]), Path(reply["crop"])
+        self.assertEqual((shot.parent, crop.parent), (Path(self.session.status()["run_dir"]),) * 2)
+        self.assertEqual(reply["box"], list(session.PROFILER_ROOTS_BOX))
+        self.assertFalse(reply["enlarged"])                     # no game install in the tests
+        expected = pixels.region(pixels.decode_png(shot.read_bytes()), session.PROFILER_ROOTS_BOX)
+        self.assertEqual(reply["scale"], 1)                     # 3840 is already 2.4 times a 1600-pixel shot
+        self.assertEqual(pixels.decode_png(crop.read_bytes()), expected)
+        self.assertEqual(reply["crop_size"], [expected[0], expected[1]])
+
+    def test_a_narrower_window_has_its_pixels_repeated_up_to_twice_a_1600_pixel_shot(self):
+        self.started()
+        for width, scale in ((3840, 1), (3200, 1), (2560, 2), (1920, 2), (1600, 2), (1280, 3), (800, 4), (100, 4)):
+            with self.subTest(width=width):
+                self.shots_of(width)
+                reply = self.session.profiler_roots()
+                self.assertEqual(reply["scale"], scale)
+                region = pixels.region(pixels.decode_png(Path(reply["screenshot"]).read_bytes()),
+                                       session.PROFILER_ROOTS_BOX)
+                crop = pixels.decode_png(Path(reply["crop"]).read_bytes())
+                self.assertEqual(crop, pixels.scaled_up(region, scale))
+
+    def test_a_box_can_be_given(self):
+        self.started()
+        self.shots_of(400, 40)
+        reply = self.session.profiler_roots([0.5, 0.25, 1, 0.75])
+        self.assertEqual(reply["box"], [0.5, 0.25, 1.0, 0.75])
+        self.assertEqual(reply["crop_size"], [200 * reply["scale"], 20 * reply["scale"]])
+
+    def test_a_bad_box_is_refused_before_anything_is_typed(self):
+        self.started()
+        steps = len(self.game.steps)
+        for box in ([0.5, 0.5, 0.4, 0.9], [0.1, 0.9, 0.5, 0.2], [0, 0, 1.5, 1], [-0.1, 0, 1, 1], [0, 0, 1],
+                    "0 0 1 1", [0, 0, True, 1], [0, 0, "1", 1], [], 5):
+            with self.subTest(box=box):
+                self.assertEqual(self.session_error(self.session.profiler_roots, box).code, "bad_argument")
+        self.assertEqual(len(self.game.steps), steps)
+
+    def test_a_crop_that_cannot_be_made_still_answers_with_the_shot(self):
+        self.started()
+        self.game.panel_shots = False           # a 1x1 shot: the box has nothing in it
+        reply = self.session.profiler_roots()
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertIsNone(reply["crop"])
+        self.assertIn("empty", reply["crop_error"])
+
+    def test_a_shot_that_fails_still_answers_with_the_command(self):
+        self.started()
+        self.game.screenshot = mock.Mock(side_effect=HelperError("no_client_area", "minimized?"))
+        reply = self.session.profiler_roots()
+        self.assertEqual((reply["opened"], reply["screenshot"], reply["crop"]), (True, None, None))
+        self.assertIn("no_client_area", reply["screenshot_error"])
+
+    def test_as_shown_types_nothing_and_works_while_the_keyboard_is_away(self):
+        self.started()
+        self.shots_of(1920)
+        self.session.click(0.6, 0.6)            # a row clicked: the keyboard is away
+        steps = len(self.game.steps)
+        reply = self.session.profiler_roots(as_shown=True)
+        self.assertEqual(len(self.game.steps), steps)
+        self.assertNotIn("lines", reply)
+        self.assertEqual((reply["scale"], self.game.screenshots[-1][2]), (2, 1920))
+        self.assertTrue(Path(reply["crop"]).is_file())
+        self.assertEqual(self.session_error(self.session.profiler_roots).code, "keyboard_away")
+
+    def test_a_window_that_did_not_say_it_opened_is_reported(self):
+        self.started()
+        self.game.on(session.PROFILER_COMMAND, failure=["Unknown command"])
+        reply = self.session.profiler_roots()
+        self.assertFalse(reply["opened"])
+        self.assertEqual(reply["lines"], ["Unknown command"])
+
+
+
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
         self.started()
@@ -1743,19 +2587,24 @@ class Events:
     """The game's pending events, for try-event. `event <id>` fires one instance (while `fires`; `fires_left`
     counts down for an event that fires only so often), and so does a setup event in `fired_by`; the console
     answers `Executed "<id>"` only when it fired. A `hidden` event runs (Executed) but is never pending.
-    `select_event_option list` lists the pending ones; `select_event_option <i> <n>` picks one and runs
-    `effects[i]`."""
+    The instances go into the fake's own list (`FakeHelper.pending_events`), which answers `select_event_option`
+    in all its forms; a pick of option i runs `effects[i]`."""
 
     def __init__(self, game: Game, event: str = "x.1", options: int = 3):
         self.game, self.event, self.options = game, event, options
-        self.pending: list[int] = []
         self.next_id = 10
         self.fires = True
         self.fires_left: int | None = None
         self.hidden = False
         self.fired_by: set[str] = set()
         self.effects: dict = {}
+        game.pending_events = []
+        game.on_selected = self.selected
         game.on_command = self.command
+
+    @property
+    def pending(self) -> list[int]:
+        return [n for n, event, _options in self.game.pending_events if event == self.event]
 
     def fire(self) -> bool:
         if not self.fires or self.fires_left == 0:
@@ -1763,7 +2612,7 @@ class Events:
         if self.fires_left is not None:
             self.fires_left -= 1
         if not self.hidden:
-            self.pending.append(self.next_id)
+            self.game.pending_events.append([self.next_id, self.event, self.options])
             self.next_id += 1
         return True
 
@@ -1773,17 +2622,10 @@ class Events:
             self.game.on(text, success=['Executed "%s"' % self.event] if fired else [])
         elif text.startswith("event ") and text[6:] in self.fired_by:
             self.fire()
-        elif text == "select_event_option list":
-            self.game.on(text, success=["%d %s options=%d" % (n, self.event, self.options) for n in self.pending]
-                         or ["No pending events"])
-        else:
-            m = re.fullmatch(r"select_event_option (\d+) (\d+)", text)
-            if m and int(m.group(2)) in self.pending:
-                index = int(m.group(1))
-                self.pending.remove(int(m.group(2)))
-                self.game.on(text, success=["Selected option %d of %s" % (index, self.event)])
-                if index in self.effects:
-                    self.effects[index]()
+
+    def selected(self, event: str, index: int) -> None:
+        if event == self.event and index in self.effects:
+            self.effects[index]()
 
 
 class TryEventTest(SessionTestCase):
@@ -1827,11 +2669,12 @@ class TryEventTest(SessionTestCase):
         self.assertEqual(rows[0]["before"], [{"expr": "c:FRA.infamy", "ok": True, "raw": "5", "value": 5.0}])
         self.assertEqual([(r["picked"]["index"], r["picked"]["numeric_id"]) for r in rows], [(0, 10), (1, 11), (2, 12)])
 
-        def option(i, n):
+        def option(i):                          # one event pending, its id up to 2^31 - 1: picked by id
             return ["event x.1", "select_event_option list", "event te_qa.1",
-                    "select_event_option list", "select_event_option %d %d" % (i, n), "event te_qa.1"]
+                    "select_event_option list", "select_event_option %d %d" % (i, 10 + i), "event te_qa.1"]
         # one look before the first firing (nothing of x.1 may be pending), then each option in turn
-        self.assertEqual(self.commands(), ["select_event_option list", *option(0, 10), *option(1, 11), *option(2, 12)])
+        self.assertEqual(self.commands(), ["select_event_option list", *option(0), *option(1), *option(2)])
+        self.assertEqual([r["picked"]["form"] for r in rows], ["id"] * 3)
         self.assertEqual(self.events.pending, [])
         # the run folder's record holds the rows, and its summary the table
         [step] = self.try_event_steps()
@@ -1840,6 +2683,29 @@ class TryEventTest(SessionTestCase):
         summary = Path(self.session.stop()["report"]).read_text("utf-8")
         self.assertIn("## try-event x.1", summary)
         self.assertIn("| 1 | yes | c:FRA.infamy = 10 | c:FRA.infamy = 20 | option 1 | 0 |", summary)
+
+    def test_a_high_id_beside_an_older_pending_event_is_refused_before_anything_is_sent(self):
+        # try-event picks through `pick`: with an older event of the game's own pending, a high id cannot be
+        # reached (#1722), and the first option stops there.
+        self.started()
+        self.game.high_ids_refused = True
+        self.events.next_id = HIGH_UN
+        self.game.pending_events.append([5, "y.1", 1])
+        error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
+        self.assertEqual(error.code, "id_unaddressable")
+        [row] = error.info["options"]
+        self.assertEqual((row["fired"], row["picked"]), (True, None))
+        self.assertEqual([c for c in self.commands() if c.startswith("select_event_option ")
+                          and c != "select_event_option list"], [])
+        self.assertEqual(len(self.game.pending_events), 2)
+
+    def test_a_high_id_that_is_the_oldest_pending_goes_with_no_id_in_try_event(self):
+        self.started()
+        self.game.high_ids_refused = True
+        self.events.next_id = HIGH_UN
+        reply = self.session.try_event("x.1", None, ["c:FRA.infamy"])
+        self.assertTrue(reply["complete"])
+        self.assertEqual([r["picked"]["form"] for r in reply["options"]], ["no_id"] * 3)
 
     def test_a_proof_of_life_that_fails_after_a_rows_reads_leaves_them_in_the_row(self):
         self.started()
@@ -1935,7 +2801,7 @@ class TryEventTest(SessionTestCase):
 
         def second_pick_unconfirmed(text):
             command(text)
-            if text == "select_event_option 1 11":
+            if text == "select_event_option 1 11":  # a reply given to `on` wins over the fake's own answer
                 self.game.on(text, success=["Something else happened"])
         self.game.on_command = second_pick_unconfirmed
         error = self.session_error(self.session.try_event, "x.1", None, ["c:FRA.infamy"])
@@ -2815,6 +3681,46 @@ class FixtureKeyTest(SessionTestCase):
                                              OVERLAY_WIN), [OTHER_MOD_WIN, OVERLAY_WIN.upper()])
 
 
+
+class ProfilerWindowStartTest(SessionTestCase):
+    """#1710: `start` puts the game's profiler window, enlarged, into the overlay, or says why it did not."""
+
+    def install_profiler_gui(self, text: str) -> Path:
+        source = self.paths.base_game / overlay.PROFILER_GUI_SOURCE
+        source.parent.mkdir(parents=True, exist_ok=True)
+        source.write_bytes(text.encode("ascii"))
+        return source
+
+    def test_start_puts_the_enlarged_window_into_the_overlay(self):
+        source = self.install_profiler_gui(PROFILER_GUI)
+        reply = self.start()
+        written = self.paths.overlay_dir / overlay.PROFILER_GUI_FILE
+        self.assertEqual(reply["profiler_window"], {"enlarged": True, "source": str(source), "file": str(written)})
+        self.assertEqual(written.read_bytes(), overlay.enlarge_profiler_gui(PROFILER_GUI.encode("ascii")))
+        self.assertEqual(source.read_bytes(), PROFILER_GUI.encode("ascii"))         # the game's own is untouched
+
+    def test_the_window_does_not_remake_the_fresh_save(self):
+        # fixture.key hashes the overlay's path, never its files: the save made without the window is this run's.
+        self.install_profiler_gui(PROFILER_GUI)
+        reply = self.start()
+        self.assertTrue(reply["profiler_window"]["enlarged"])
+        self.assertFalse(reply["fixture_made"])
+        self.assertEqual(reply["save"], "te_qa_fixture_" + self.key)
+
+    def test_a_start_without_the_games_file_goes_on_without_it(self):
+        reply = self.start()                    # base_game holds no jomini/ folder here, as in CI
+        self.assertFalse(reply["profiler_window"]["enlarged"])
+        self.assertIn("could not be read", reply["profiler_window"]["why"])
+        self.assertFalse((self.paths.overlay_dir / "gui").exists())
+        self.assertEqual(reply["country"], "FRA")
+
+    def test_a_changed_game_file_is_left_out_and_said_so(self):
+        self.install_profiler_gui(PROFILER_GUI.replace("{ 0 150 }", "{ 0 180 }"))
+        reply = self.start()
+        self.assertFalse(reply["profiler_window"]["enlarged"])
+        self.assertIn("{ 0 150 }", reply["profiler_window"]["why"])
+        self.assertFalse((self.paths.overlay_dir / "gui").exists())
+
 class RunPlaysetPinTest(unittest.TestCase):
     """`session.run_playset` copies `launch`'s rule (`__main__._plan_playset`, which the session cannot import):
     pinned against the `enabled` list a real in-process `launch` journals, so a drift fails here. gate's
@@ -2871,6 +3777,28 @@ class RunPlaysetPinTest(unittest.TestCase):
                 self.assertEqual(code, 0, launched)
                 self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod,
                                                      OVERLAY_WIN), launched["playset"]["enabled"])
+
+    def test_a_variant_folder_lands_where_launch_puts_it(self):
+        # #1702: `start --add-mod` goes after the run's playset and before the overlay, as launch's --add-mods do
+        variant = r"D:\vic3te-data\qa-addmod-test"
+        cases = {"the owner's mods, this one among them": [self.WORKSHOP + "1", self.this_mod, self.WORKSHOP + "2"],
+                 "this mod alone": [self.this_mod]}
+        runs = [(label, owner, mode) for label, owner in cases.items() for mode in session.PLAYSETS]
+        for n, (label, owner, mode) in enumerate(runs):
+            with self.subTest(owners=label, mode=mode):
+                os.environ["VIC3_QA_BACKUPS"] = str(self.backups) + "v" + str(n)
+                (self.user / "content_load.json").write_text(
+                    json.dumps({"enabledMods": [{"path": m} for m in owner], "disabledDLC": []}), encoding="utf-8")
+                snap, code = self.cli("snapshot")
+                self.assertEqual(code, 0, snap)
+                launched, code = self.cli("launch", snap["id"], "--permission", PERMISSION, "--playset", mode,
+                                          "--add-mod", variant, "--add-mod", OVERLAY_WIN, "--", "-gdpr-compliant")
+                self.assertEqual(code, 0, launched)
+                enabled = launched["playset"]["enabled"]
+                self.assertEqual(session.run_playset(mode, enabled_mods(self.user), self.this_mod, OVERLAY_WIN,
+                                                     add_mods=[variant]), enabled)
+                self.assertLess(enabled.index(self.this_mod), enabled.index(variant))
+                self.assertEqual(enabled[-2:], [variant, OVERLAY_WIN])
 
 
 class StopsTest(SessionTestCase):
@@ -3739,6 +4667,776 @@ class SelfChecksTest(SessionTestCase):
         text = Path(reply["report"]).read_text("utf-8")
         self.assertTrue(text.startswith("Restore: restored"))
         self.assertNotIn("## Self-checks", text)
+
+
+DATED_SAVE_NAME = "TEST_FAIL_te_qa_fixture_1 January, 1900.v3"
+GRANT_WORDS = "the owner, 21:40: run it to 1900 overnight, up to 8 hours"
+
+
+def dated_save(settings, date="1900.1.1") -> bytes:
+    """A dated fixture's save: the shape `text_save` gives, with its date in meta_data as the engine writes it."""
+    listed = (' "" ' + " ".join(settings) + " ").encode()
+    meta = (b"meta_data={\n\tgame_date=" + date.encode() + b"\n\tgame_rules={\n\t\tsettings={" + listed
+            + b"}\n\t}\n}\n")
+    state = b"game_rules={\n\tsetting={" + listed + b"}\n}\ncountry_manager={\n}\n"
+    return b"SAV010000000000%08x" % len(meta) + b"\n" + meta + state
+
+
+class DatedFixtureTest(SessionTestCase):
+    """#1602: a fixture made by an unattended run to a later date (`make_fixture`), and a session started on it
+    (`start(fixture_date=...)`), which never makes one."""
+
+    def setUp(self):
+        super().setUp()
+        base = self.user.parent
+        for rel, text in RULE_FILES.items():
+            path = base / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        defines = self.paths.deploy_dir / "common" / "defines" / "extra_defines.txt"
+        defines.parent.mkdir(parents=True, exist_ok=True)
+        defines.write_text('NGame = {\n\tEND_DATE = "2136.1.1"\n}\n', encoding="utf-8")
+        self.fixture_save.unlink()
+        self.key = fixture.key(self.paths.game_version, [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                               playset="mod_only")
+        self.fixture_save = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.key)
+        self.fixture_save.write_bytes(text_save(["no_fantasy", "tax_light"]))
+        self.dated_key = self.key + "_d19000101"
+        self.dated_path = self.user / "save games" / ("te_qa_fixture_%s.v3" % self.dated_key)
+        self.fixture_run_save = DATED_SAVE_NAME
+        self.fixture_run_bytes = dated_save(["no_fantasy", "tax_light"])
+        self.log = self.user / "logs" / "debug.log"
+        self.log.parent.mkdir(exist_ok=True)
+        self.log.write_text("[10:00:00][x.cpp:1]: the owner's last game\n", encoding="utf-8")
+        self.fixture_snap = None
+
+    def a_dated_run(self, years=6, restore_reply=None):
+        """The run that makes the 1900 fixture: a real snapshot of the folder; while `watch` follows the game, it
+        logs a setup line, then a year at a time, rotating `debug.log` past every generation, and its restore
+        leaves only the last generations and its own `gametimer_*.tsv` in `run_logs/`."""
+        snap = snapshot.take(self.user, self.paths.backup_root,
+                             now=dt.datetime(2026, 11, 10, 14, 55, tzinfo=dt.timezone.utc))
+        self.assertEqual(snap.id, FIXTURE_SNAP)
+        self.fixture_snap = snap
+        self.cli.queue("snapshot", {"id": snap.id}, 0)
+        if restore_reply is not None:
+            self.cli.queue("restore", *restore_reply)
+        logs = self.user / "logs"
+
+        def write(text, mode="a"):
+            with open(self.log, mode, encoding="utf-8", newline="\n") as f:
+                f.write(text)
+
+        def rotate():
+            for k in range(5, 0, -1):
+                older = logs / ("debug.%d.log" % (k - 1)) if k > 1 else self.log
+                if older.exists():
+                    os.replace(older, logs / ("debug.%d.log" % k))
+
+        def on_poll(n):
+            # One poll is two seconds and RunLogs copies every ten, so the game writes a year each five polls.
+            if n == 1:
+                rotate()
+                write("[10:00:01][x.cpp:46]: common/on_actions/x.txt:46: TE_SELF_CHECK OK decentralized_law_baseline"
+                      "\n", "w")
+            elif n % 5 == 0 and n // 5 <= years:
+                rotate()
+                write("[10:01:00][x.cpp:9]: common/x.txt:9: year %d\n" % (n // 5), "w")
+            elif n // 5 > years:
+                write("[10:02:00][x.cpp:3]: common/x.txt:3: TE_SELF_CHECK BROKEN a_late_one\n")
+                return True
+            return False
+        self.on_fixture_poll = on_poll
+
+        def restore(argv):
+            if argv[:2] == ["restore", snap.id]:
+                run_logs = snap.dir / "run_logs"
+                run_logs.mkdir(exist_ok=True)
+                for path in logs.glob("debug*.log"):
+                    shutil.copy2(path, run_logs / path.name)
+                (run_logs / "gametimer_20261112_214000.tsv").write_text(
+                    "Game Date \tTime Unit \tSeconds\n1836_01_01\tDay\t0.5\n1899_12_31\tDay\t0.7\n", encoding="utf-8")
+        self.cli.on_call = restore
+        return snap.id
+
+    def make(self, **kwargs):
+        kwargs.setdefault("max_hours", 8)
+        return self.session.make_fixture(PERMISSION, "1900.1.1", **kwargs)
+
+    # ---- make_fixture
+
+    def test_making_a_dated_fixture_runs_to_its_date_copies_its_log_and_stops(self):
+        snap = self.a_dated_run()
+        reply = self.make()
+        self.assertTrue(reply["made"], reply)
+        self.assertEqual(reply["save"], "te_qa_fixture_" + self.dated_key)
+        self.assertEqual(self.dated_path.read_bytes(), self.fixture_run_bytes)
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertEqual(launch[launch.index("--") + 1:], list(fixture.fixture_args((1900, 1, 1))))
+        self.assertIn("granted at most 8 hours", launch[launch.index("--long-run") + 1])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch", "restore"])     # the session launches nothing
+        # the copy holds what rotated out of logs/ long before the end, and the owner's line is not in it
+        copy = self.paths.run_root / snap / "fixture_debug.log"
+        text = copy.read_text("utf-8")
+        self.assertIn("decentralized_law_baseline", text)
+        self.assertIn("a_late_one", text)
+        self.assertNotIn("the owner's last game", text)
+        self.assertFalse(any("decentralized" in p.read_text("utf-8")
+                             for p in (self.paths.backup_root / "snapshots" / snap / "run_logs").glob("debug*.log")))
+        lines = reply["lines"]
+        self.assertEqual((lines["kept"], lines["source"], lines["self_checks"]), (True, "followed", 2))
+        kept = (self.paths.backup_root / "fixtures" / self.dated_key / "lines.log").read_text("utf-8")
+        self.assertIn("decentralized_law_baseline", kept)
+        self.assertEqual(reply["logs"]["gaps"], 0)
+        # the game's own timing, copied beside the run's log
+        self.assertEqual((reply["timing"]["days"], reply["timing"]["years"]), (2, {"1836": 0.5, "1899": 0.7}))
+        self.assertTrue((self.paths.run_root / snap / "gametimer_20261112_214000.tsv").is_file())
+        self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+        self.assertEqual((reply["save_facts"]["save_found"], reply["save_facts"]["game_date"],
+                          reply["save_facts"]["date_matches"]), (DATED_SAVE_NAME, "1900.1.1", True))
+        self.assertNotIn("build_changed", reply)
+        # and the session stopped: the overlay is gone, nothing was restored twice
+        self.assertFalse(self.paths.overlay_dir.exists())
+        self.assertEqual(reply["stop"]["outcome"], None)
+        on_disk = json.loads((self.paths.run_root / snap / "fixture.json").read_text("utf-8"))
+        self.assertEqual((on_disk["save"], on_disk["stop"]), (reply["save"], reply["stop"]))
+
+    def test_the_overlay_carries_the_dated_test_while_the_run_goes(self):
+        self.a_dated_run()
+        seen = []
+        original = self.cli.on_call
+
+        def look(argv):
+            if argv[0] == "launch":
+                seen.append((self.paths.overlay_dir / overlay.SCRIPTED_TEST_FILE).read_text("utf-8-sig"))
+            original(argv)
+        self.cli.on_call = look
+        self.make()
+        self.assertIn('fail = { game_date > "1899.12.31" }', seen[0])
+
+    def test_a_fixture_already_there_is_reused_and_nothing_is_started(self):
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        reply = self.make()
+        self.assertEqual((reply["made"], reply["found"], reply["save"]), (False, True, self.dated_path.stem))
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_long_run_needs_the_hours_granted_and_an_estimate_inside_them(self):
+        for kwargs, code in (({"max_hours": None}, "no_max_hours"), ({"max_hours": 1}, "over_grant"),
+                             ({"max_hours": 0}, "bad_argument"), ({"max_hours": "8"}, "bad_argument")):
+            with self.subTest(kwargs=kwargs):
+                self.assertEqual(self.session_error(self.make, **kwargs).code, code)
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_a_date_no_run_can_end_on_is_refused_before_anything(self):
+        for until in ("1836.1.1", "2135.12.31", "1900.2.29", "soon"):
+            with self.subTest(until=until):
+                error = self.session_error(self.session.make_fixture, PERMISSION, until, max_hours=8)
+                self.assertEqual(error.code, "bad_date")
+        self.assertEqual(self.cli.calls, [])
+
+    def test_the_watch_limit_is_the_grant_when_the_grant_is_shorter(self):
+        plan = self.session.fixture_plan((1900, 1, 1), max_hours=4)
+        self.assertEqual(plan["limit_s"], 4 * 3600)
+        self.assertGreater(self.session.fixture_plan((1900, 1, 1))["limit_s"], 4 * 3600)
+        self.assertTrue(plan["long_run"])
+        self.assertIn("quarterly autosaves", plan["autosaves"])
+        self.assertEqual(plan["rules"], {"last_applied": []})
+
+    def test_a_restore_that_holds_after_the_rename_says_the_fixture_is_there_and_keeps_no_lines(self):
+        self.a_dated_run(restore_reply=({"held": True, "reason": "unwatched_stretch", "id": FIXTURE_SNAP,
+                                         "restored": [], "removed": []}, 2))
+        error = self.session_error(self.make)
+        self.assertEqual((error.code, error.info["step"], error.info["saved"]),
+                         ("fixture_failed", "restore", self.dated_path.stem))
+        self.assertTrue(self.dated_path.is_file())
+        self.assertFalse(error.info["logs"]["vouched"])
+        self.assertEqual(error.info["stop"]["outcome"], "held")
+        record = json.loads((self.paths.backup_root / "fixtures" / self.dated_key / "record.json").read_text("utf-8"))
+        self.assertFalse(record["kept"])
+        # the run's folder says so for whoever reads it after the client has gone
+        on_disk = json.loads((self.paths.run_root / FIXTURE_SNAP / "fixture.json").read_text("utf-8"))
+        self.assertEqual((on_disk["refused"], on_disk["saved"], on_disk["stop"]["outcome"]),
+                         ("fixture_failed", self.dated_path.stem, "held"))
+
+    def test_a_build_deployed_during_the_run_is_reported(self):
+        self.a_dated_run()
+        original = self.cli.on_call
+
+        def deploy(argv):
+            original(argv)
+            if argv[0] == "restore":
+                (self.paths.deploy_dir / "events" / "te_events.txt").write_text("namespace = te\n# changed\n")
+        self.cli.on_call = deploy
+        reply = self.make()
+        self.assertTrue(reply["made"])
+        self.assertIn("--save " + self.dated_path.stem, reply["build_changed"])
+
+    # ---- start on a dated fixture
+
+    def test_start_on_a_missing_dated_fixture_is_refused_with_nothing_done(self):
+        other = self.user / "save games" / "te_qa_fixture_000000000000_d19000101.v3"
+        other.write_bytes(self.fixture_run_bytes)
+        error = self.session_error(self.start, fixture_date="1900")
+        self.assertEqual(error.code, "no_fixture")
+        self.assertEqual(error.info["stale"], [other.stem])
+        self.assertIn("fixture --until 1900.1.1", error.info["next"])
+        self.assertIn("--save " + other.stem, error.info["next"])
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_start_on_a_dated_fixture_loads_it_and_never_makes_one(self):
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        reply = self.start(fixture_date="1900.1.1")
+        self.assertEqual((reply["save"], reply["fixture_made"], reply["fixture_date"]),
+                         (self.dated_path.stem, False, "1900.1.1"))
+        launch = next(c for c in self.cli.calls if c[0] == "launch")
+        self.assertEqual(launch[-1], "-loadsave=" + self.dated_path.stem)
+        self.assertNotIn("--long-run", launch)
+        self.assertEqual(reply["rules"], {"settings": ["no_fantasy", "tax_light"]})
+
+    def kept_lines(self, key, *messages, source=None):
+        """Lines kept with the fixture `key`, from the run of FIXTURE_SNAP, as `selfchecks.keep_fixture_lines`
+        leaves them."""
+        folder = self.paths.backup_root / "fixtures" / key
+        folder.mkdir(parents=True)
+        (folder / "lines.log").write_text("".join("[10:00:01][x.cpp:1]: %s\n" % m for m in messages), "utf-8")
+        record = {"key": key, "kept": True, "snapshot": FIXTURE_SNAP, "lines": len(messages), "self_checks":
+                  len(messages), "at": "2026-11-10T14:56:00Z"}
+        if source:
+            record.update(source=source, gaps=0)
+        (folder / "record.json").write_text(json.dumps(record), "utf-8")
+
+    def dated_session_lines(self, switch=None) -> dict:
+        """`self_checks` of a session on the 1900 fixture (or a switched copy of it), with lines kept for both it
+        and the 1836 fixture of the same build."""
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        self.kept_lines(self.key, "common/a.txt:1: TE_SELF_CHECK BROKEN the_1836_runs_check")
+        self.kept_lines(self.dated_key, "common/b.txt:2: TE_SELF_CHECK OK the_1900_runs_check", source="followed")
+        self.started(fixture_date="1900", switch_rules=switch)
+        return self.session.self_checks()
+
+    def test_a_session_on_a_dated_fixture_shows_the_lines_of_the_run_that_made_it(self):
+        found = self.dated_session_lines()
+        self.assertEqual([(c["name"], c["source"]) for c in found["checks"]], [("the_1900_runs_check", "fixture")])
+        self.assertEqual((found["fixture"]["key"], found["fixture"]["kept"], found["fixture"]["source"]),
+                         (self.dated_key, True, "followed"))
+        self.assertEqual(found["broken"], [])
+
+    def test_a_switched_copy_of_a_dated_fixture_shows_the_dated_runs_lines(self):
+        found = self.dated_session_lines({"tax_rule": "tax_off"})
+        self.assertEqual([(c["name"], c["source"]) for c in found["checks"]], [("the_1900_runs_check", "fixture")])
+        self.assertEqual(found["fixture"]["key"], self.dated_key)
+
+    def test_start_says_the_saves_own_date_and_flags_another(self):
+        for written, matches in (("1900.1.1", True), ("1900.1.2", False), (None, False)):
+            with self.subTest(written=written):
+                self.setUp()
+                data = dated_save(["no_fantasy", "tax_light"], date=written) if written else b"SAV0103 binary"
+                self.dated_path.write_bytes(data)
+                reply = self.start(fixture_date="1900")
+                self.assertEqual((reply["fixture_game_date"], reply["date_matches"]), (written, matches))
+                if matches:
+                    self.assertNotIn("date_note", reply)
+                else:
+                    self.assertIn("1900.1.1", reply["date_note"])
+                    if written:
+                        self.assertIn("The game loaded is of 1900.1.2", reply["date_note"])
+
+    def test_a_manifest_that_cannot_be_read_keeps_no_lines_and_says_so(self):
+        # Review of #1602: the owner's earlier log could not be skipped, so its lines would have passed for the run's.
+        self.log.write_text("[10:00:00][x.cpp:1]: common/x.txt:1: TE_SELF_CHECK BROKEN owners_own_1931_game\n",
+                            encoding="utf-8")
+        self.a_dated_run()
+        real = snapshot.load
+        tries = []
+
+        def load(path, *a, **k):
+            if Path(path).name == FIXTURE_SNAP and len(tries) < 3:
+                tries.append(path)
+                raise OSError("the backup drive did not answer")
+            return real(path, *a, **k)
+        with mock.patch.object(snapshot, "load", load):
+            reply = self.make()
+        self.assertEqual(len(tries), 3)                                     # tried again before giving up
+        self.assertTrue(reply["made"])
+        self.assertTrue(reply["logs"]["found_unknown"])
+        self.assertFalse(reply["lines"]["kept"])
+        self.assertIn("could not be told from the run's", reply["lines"]["detail"])
+        self.assertFalse((self.paths.backup_root / "fixtures" / self.dated_key / "lines.log").exists())
+
+    def test_a_manifest_read_on_the_second_try_keeps_the_lines(self):
+        self.a_dated_run()
+        real = snapshot.load
+        tries = []
+
+        def load(path, *a, **k):
+            if Path(path).name == FIXTURE_SNAP and not tries:
+                tries.append(path)
+                raise OSError("the backup drive did not answer")
+            return real(path, *a, **k)
+        with mock.patch.object(snapshot, "load", load):
+            reply = self.make()
+        self.assertTrue(reply["lines"]["kept"])
+        self.assertNotIn("found_unknown", reply["logs"])
+
+    def test_a_save_that_could_be_neither_renamed_nor_copied_holds_the_run_for_the_owner(self):
+        self.a_dated_run(restore_reply=({"held": True, "reason": "save_not_kept", "id": FIXTURE_SNAP,
+                                         "restored": [], "removed": []}, 2))
+        real_rename, real_copy = os.rename, shutil.copy2
+
+        def rename(src, dst, *a, **k):              # only the run's save is held open (os is every module's os)
+            if Path(src).name == DATED_SAVE_NAME:
+                raise PermissionError(13, "in use", str(src))
+            return real_rename(src, dst, *a, **k)
+
+        def copy2(src, dst, *a, **k):
+            if Path(src).name == DATED_SAVE_NAME:
+                raise OSError(28, "No space left on device")
+            return real_copy(src, dst, *a, **k)
+        with mock.patch.object(os, "rename", rename), mock.patch.object(shutil, "copy2", copy2):
+            error = self.session_error(self.make)
+        self.assertEqual((error.code, error.info["step"], error.info["left"]), ("fixture_failed", "rename",
+                                                                                 DATED_SAVE_NAME))
+        asked = [e for e in snapshot.journal(self.fixture_snap) if e.get("event") == fixture.HOLD_ASKED]
+        self.assertEqual(asked[-1]["files"], ["save games/" + DATED_SAVE_NAME])
+        self.assertTrue((self.user / "save games" / DATED_SAVE_NAME).is_file())
+
+    def test_the_plain_fixtures_date_is_the_plain_fixture(self):
+        reply = self.start(fixture_date="1836.1.2")
+        self.assertEqual(reply["save"], self.fixture_save.stem)
+        self.assertNotIn("fixture_date", reply)
+
+    def test_a_dated_fixture_with_an_owners_save_is_refused(self):
+        (self.user / "save games" / "mine.v3").write_bytes(b"the owner's")
+        self.assertEqual(self.session_error(self.start, save="mine", fixture_date="1900").code, "bad_argument")
+        self.assertEqual(self.cli.calls, [])
+
+    def test_a_rule_switched_in_a_dated_fixture_is_switched_on_its_date(self):
+        self.dated_path.write_bytes(self.fixture_run_bytes)
+        reply = self.start(fixture_date="1900", switch_rules={"tax_rule": "tax_off"})
+        stem = "te_qa_fixture_%s" % rules_key(self.dated_key, {"tax_rule": "tax_off"})
+        self.assertEqual(reply["save"], stem)
+        self.assertEqual(reply["rules"]["settings"], ["no_fantasy", "tax_off"])
+        self.assertTrue(reply["rules"]["switched_at"].startswith("1 January 1900"))
+        self.assertEqual(self.dated_path.read_bytes(), self.fixture_run_bytes)
+        self.assertTrue(self.fixture_save.is_file())
+
+
+class GameArgsTest(SessionTestCase):
+    """#1700: `start --game-arg` adds flags from an allow-list after SESSION_ARGS; the fixture's run never gets them."""
+
+    def test_they_follow_the_session_args_and_come_before_the_save(self):
+        reply = self.start(game_args=["no_notifications", "-script_profiling"])
+        self.assertEqual(self.cli.calls[2][self.cli.calls[2].index("--"):], [
+            "--", "-gdpr-compliant", "-debug_mode", "-script_debugger", "-no_notifications", "-script_profiling",
+            "-loadsave=te_qa_fixture_" + self.key])
+        self.assertEqual(reply["game_args"], ["-no_notifications", "-script_profiling"])
+
+    def test_the_fixtures_run_never_gets_them_and_its_key_does_not_name_them(self):
+        self.fixture_save.unlink()
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.start(game_args=["-disable_renderframeifneeded"])
+        self.assertEqual(self.cli.calls[2][-6:], ["--", *fixture.FIXTURE_ARGS])     # the fixture's own launch
+        self.assertIn("-disable_renderframeifneeded", self.cli.calls[5])
+        self.assertTrue(self.fixture_save.is_file())                                # the same key as without them
+
+    def test_one_off_the_list_or_given_twice_is_refused_before_anything(self):
+        for args in (["-script_debugger"], ["-handsoff"], ["--no_notifications"], ["no_notifications", "-no_notifications"],
+                     "-no_notifications", [7]):
+            with self.subTest(args=args):
+                error = self.session_error(self.start, game_args=args)
+                self.assertEqual(error.code, "bad_argument")
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+
+VARIANT_WIN = r"D:\vic3te-data\qa-addmod-test"
+
+
+class AddModStartTest(SessionTestCase):
+    """#1702 item 2: `start --add-mod` loads a variant folder after the run's playset and before the overlay; without
+    `--save` its files are part of the fixture's key and its run loads it too."""
+
+    def setUp(self):
+        super().setUp()
+        self.drive = self.user.parent / "drive_d"
+        self.variant = self.drive / "vic3te-data" / "qa-addmod-test"
+        (self.variant / ".metadata").mkdir(parents=True)
+        (self.variant / ".metadata" / "metadata.json").write_text('{"name": "TE QA add-mod test", "version": "1"}',
+                                                                   encoding="utf-8")
+        (self.variant / "common" / "script_values").mkdir(parents=True)
+        (self.variant / "common" / "script_values" / "te_qa_addmod.txt").write_text("te_qa_addmod_loaded = 1\n")
+        self.paths.wsl_path_of = self.to_wsl
+
+    def to_wsl(self, path: str) -> Path:
+        self.assertEqual(path[:3], "D:\\")
+        return self.drive.joinpath(*path[3:].rstrip("\\").split("\\"))
+
+    def variant_key(self) -> str:
+        loads = session.run_playset("mod_only", self.paths.enabled_mods, DEPLOYED_WIN, OVERLAY_WIN,
+                                    add_mods=[VARIANT_WIN])
+        return fixture.key("1.15.0", loads, self.paths.deploy_dir, playset="mod_only", add_mod_dirs=[self.variant])
+
+    def test_without_a_save_the_fixture_is_made_with_it_under_its_own_key(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        reply = self.start(add_mods=[VARIANT_WIN])
+        self.assertTrue(reply["fixture_made"])          # the plain fixture is not this world
+        key = self.variant_key()
+        self.assertNotEqual(key, self.key)
+        self.assertEqual(reply["save"], "te_qa_fixture_" + key)
+        for launch in (self.cli.calls[2], self.cli.calls[5]):                 # the fixture's run, then the session's
+            self.assertEqual(launch[launch.index("--add-mod"):launch.index("--add-mod") + 4],
+                             ["--add-mod", VARIANT_WIN, "--add-mod", OVERLAY_WIN])
+        self.assertEqual(reply["add_mods"], [{"windows": VARIANT_WIN, "wsl": str(self.variant),
+                                              "name": "TE QA add-mod test", "version": "1"}])
+        steps = read_steps(Path(reply["run_dir"]))
+        self.assertEqual(next(s for s in steps if s["verb"] == "start")["add_mods"][0]["windows"], VARIANT_WIN)
+
+    def test_a_variant_edited_in_place_is_another_fixture(self):
+        before = self.variant_key()
+        script = self.variant / "common" / "script_values" / "te_qa_addmod.txt"
+        script.write_text("te_qa_addmod_loaded = 2\n")
+        os.utime(script, ns=(10**18, 10**18))
+        self.assertNotEqual(self.variant_key(), before)
+        # and a variant changes nothing of a key it is not in: the plain fixture's key is the one it always was
+        self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                     playset="mod_only"), self.key)
+
+    def test_a_variant_whose_metadata_changed_is_another_fixture(self):
+        # game_custom_data.replace_paths changes which vanilla folders load; the deployed mod's metadata is not read
+        before, digest = self.variant_key(), fixture.add_mod_digest([self.variant])
+        meta = self.variant / ".metadata" / "metadata.json"
+        meta.write_text('{"name": "TE QA add-mod test", "version": "1", "game_custom_data": '
+                        '{"replace_paths": ["common/history/states"]}}', encoding="utf-8")
+        self.assertNotEqual(self.variant_key(), before)
+        self.assertNotEqual(fixture.add_mod_digest([self.variant]), digest)
+        (self.paths.deploy_dir / ".metadata").mkdir()
+        (self.paths.deploy_dir / ".metadata" / "metadata.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(fixture.key("1.15.0", [DEPLOYED_WIN, OVERLAY_WIN], self.paths.deploy_dir,
+                                     playset="mod_only"), self.key)
+
+    def test_with_a_save_it_is_loaded_and_no_fixture_is_made(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        reply = self.start(save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+        launch = self.cli.calls[2]
+        self.assertEqual(launch[:10], ["launch", SNAP, "--permission", PERMISSION, "--playset", "mod_only",
+                                       "--add-mod", VARIANT_WIN, "--add-mod", OVERLAY_WIN])
+        self.assertEqual(launch[-1], "-loadsave=france_1850")
+        self.assertFalse(reply["fixture_made"])
+
+    def test_a_dated_fixture_with_a_variant_is_refused_before_anything_is_done(self):
+        # `fixture --until` makes none with a variant, so its key would never be found
+        error = self.session_error(self.start, fixture_date="1900", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "bad_argument")
+        self.assertIn("--save te_qa_fixture_", error.detail)
+        self.assertEqual(self.cli.verbs, [])
+
+    def test_a_refused_variant_starts_nothing(self):
+        inside = r"C:\Users\someone\Documents\Paradox Interactive\Victoria 3\mod\someone_elses"
+        for path, reason in ((inside, "inside_user_data"), (r"D:\vic3te-data\missing", "no_folder"),
+                             (r"D:\vic3te-data\..\x", "bad_argument"), ("/mnt/d/vic3te-data", "bad_argument")):
+            with self.subTest(path=path):
+                error = self.session_error(self.start, add_mods=[path])
+                self.assertEqual((error.code, error.info.get("reason")), ("add_mod_refused", reason))
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+    def test_under_current_one_the_owners_playset_enables_is_refused(self):
+        self.paths.enabled_mods = [DEPLOYED_WIN, VARIANT_WIN]
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN], playset="current")
+        self.assertEqual(error.info.get("reason"), "already_enabled")
+
+    def edit_variant_at(self, verb: str, nth: int = 1, edit=None):
+        """Edit the variant when the `nth` call of `verb` is made (before it is answered)."""
+        seen = []
+
+        def edit_script():
+            script = self.variant / "common" / "script_values" / "te_qa_addmod.txt"
+            script.write_text("te_qa_addmod_loaded = 22\n")
+            os.utime(script, ns=(10**18, 10**18))
+
+        def on_call(argv):
+            if argv[0] == verb:
+                seen.append(argv)
+                if len(seen) == nth:
+                    (edit or edit_script)()
+        self.cli.on_call = on_call
+
+    def test_a_variant_edited_before_the_sessions_launch_launches_nothing(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot")
+        error = self.session_error(self.start, save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("before the session's launch", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+        self.assertEqual(self.cli.verbs[-1], "restore")            # the stop puts the snapshot back
+
+    def test_a_variant_edited_during_the_fixtures_run_refuses_the_sessions_launch(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.edit_variant_at("launch")                  # the fixture's launch went through the check first
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertEqual(self.cli.verbs.count("launch"), 1)
+
+    def test_a_variant_edited_before_the_fixtures_launch_starts_no_game(self):
+        self.cli.queue("snapshot", {"id": FIXTURE_SNAP}, 0)
+        self.edit_variant_at("snapshot")
+        error = self.session_error(self.start, add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("before the fixture's launch", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+        self.assertEqual(self.cli.verbs[:3], ["held", "snapshot", "restore"])      # restored at once
+        steps = read_steps(self.paths.backup_root / "runs" / FIXTURE_SNAP)
+        self.assertEqual([s["outcome"] for s in steps if s["verb"] == "add_mods"], ["changed"])
+
+    def test_a_variant_refused_by_the_time_of_the_launch_launches_nothing(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot", edit=lambda: (self.variant / ".metadata" / "metadata.json").unlink())
+        error = self.session_error(self.start, save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(error.code, "add_mod_changed")
+        self.assertIn("no_metadata", error.detail)
+        self.assertNotIn("launch", self.cli.verbs)
+
+    def test_a_variant_left_alone_is_launched_as_before(self):
+        (self.user / "save games" / "france_1850.v3").write_bytes(b"the owner's own save")
+        self.edit_variant_at("snapshot", edit=lambda: None)
+        self.start(save="france_1850", add_mods=[VARIANT_WIN])
+        self.assertEqual(self.cli.verbs, ["held", "snapshot", "launch"])
+
+
+SNAP_TIME = dt.datetime(2026, 11, 10, 15, 0, 0, tzinfo=dt.timezone.utc)        # the id SNAP
+ROOT_CSV_REPLY = "Wrote %d rows to C:/Users/someone/Documents/Paradox Interactive/Victoria 3/ticktask_timings.csv"
+
+
+class ProfileTest(SessionTestCase):
+    """#1700: `profile start` and `profile dump` against the fake game, which writes the dumps when their commands
+    run. A real snapshot with the session's id stands under the backup root, since the dump reads its manifest. File
+    times are set with os.utime, never compared with a clock."""
+
+    def setUp(self):
+        super().setUp()
+        self.snap = snapshot.take(self.user, self.paths.backup_root, now=SNAP_TIME)
+        self.assertEqual(self.snap.id, SNAP)
+        self.server_log = self.user / profiling.SERVER_LOG
+        self.log_lines = ["[10:00:00][jominiapplication.cpp:539]: Changing game speed to: 4"]
+        self.write_server_log()
+        self.started()
+        self.game.on(profiling.CLEAR_COMMAND, success=["Discarded 0 recorded frames"])
+        self.game.on(profiling.ENABLE_COMMAND, success=["Enabled"])
+        self.game.on(profiling.SP_DUMP_COMMAND, success=["Wrote logs/script_profiling.txt"])
+        self.mtime = 10**18
+        self.tt_rows = [(profiling.frame_of(1836, 1, 11, 6), "UpdateEmployment", 5, 1)]
+        self.reply_rows: int | None = None          # what the console says it wrote (None: the rows' number)
+        self.writes = {profiling.TT_DUMP_COMMAND: True, profiling.SP_DUMP_COMMAND: True}
+        self.game.on_command = self.dumps
+        self.run_dir = self.paths.backup_root / "runs" / SNAP
+
+    def write_server_log(self) -> None:
+        self.server_log.write_text("\n".join(self.log_lines) + "\n", encoding="utf-8")
+
+    def stamp(self, path: Path) -> None:
+        self.mtime += 1_000_000_000
+        os.utime(path, ns=(self.mtime, self.mtime))
+
+    def dumps(self, text: str) -> None:
+        if text == profiling.TT_DUMP_COMMAND:
+            if self.writes[text]:
+                root = self.user / profiling.TT_FILE
+                root.write_text("\ufeff" + ",".join(profiling.TT_HEADER) + "\n"
+                                + "".join("%d,%s,%d,%d,0\n" % row for row in self.tt_rows), encoding="utf-8")
+                self.stamp(root)
+            rows = len(self.tt_rows) if self.reply_rows is None else self.reply_rows
+            self.game.on(text, success=[ROOT_CSV_REPLY % rows])
+        elif text == profiling.SP_DUMP_COMMAND and self.writes[text]:
+            path = self.user / profiling.SP_FILE
+            path.write_text("# type, location, time (seconds), call count\ntrigger common/x.txt:1 0.5 100\n",
+                            encoding="utf-8")
+            self.stamp(path)
+
+    def steps(self, verb: str) -> list[dict]:
+        return [step for step in read_steps(self.run_dir) if step["verb"] == verb]
+
+    def test_a_dump_needs_a_profile_start_first(self):
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_profiling")
+        self.assertEqual(self.typed(), [])
+
+    def test_the_start_clears_enables_and_begins_the_server_log_copy(self):
+        reply = self.session.profile_start()
+        typed = self.typed()
+        self.assertLess(typed.index(profiling.CLEAR_COMMAND), typed.index(profiling.ENABLE_COMMAND))
+        self.assertEqual((reply["clear"], reply["enable"], reply["starts"]),
+                         (["Discarded 0 recorded frames"], ["Enabled"], 1))
+        self.assertEqual(reply["date"], [1836, 1, 11])
+        step = self.steps("profile_start")[0]
+        self.assertEqual((step["outcome"], step["date"]), ("ok", [1836, 1, 11]))
+        self.assertIn("time", step)                    # the wall time, as every step has it
+        self.assertEqual((self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines(), self.log_lines)
+        self.assertEqual(reply["server_log_lines"], 1)
+
+    def test_a_start_the_game_refuses_is_refused(self):
+        self.game.on(profiling.ENABLE_COMMAND, failure=["Unknown command"])
+        error = self.session_error(self.session.profile_start)
+        self.assertEqual(error.code, "profile_refused")
+        self.assertEqual(self.steps("profile_start")[0]["outcome"], "profile_refused")
+        self.assertEqual(self.session_error(self.session.profile_dump).code, "not_profiling")
+
+    def test_a_start_refused_at_enable_after_its_clear_still_ends_a_window(self):
+        # #1742 review: the step was profile_refused, and summary counted ok starts alone, so it took A to B across it
+        self.session.profile_start()
+        self.session.profile_dump("A")
+        self.game.on(profiling.ENABLE_COMMAND, failure=["Already enabled"])
+        error = self.session_error(self.session.profile_start)
+        self.assertEqual(error.code, "profile_refused")
+        self.assertIn("takes no window across this start", error.detail)
+        step = self.steps("profile_start")[-1]
+        self.assertEqual((step["outcome"], step["cleared"], step["enable"]), ("profile_refused", True,
+                                                                              ["Already enabled"]))
+        self.session.profile_dump("B")
+        with self.assertRaises(profiling.ProfileError) as caught:
+            profiling.summary(self.run_dir, read_steps(self.run_dir), ["A", "B"], lambda name: "mod")
+        self.assertEqual(caught.exception.code, "restarted_between")
+
+    def test_a_start_records_how_far_its_clear_got(self):
+        self.session.profile_start()
+        self.assertIs(self.steps("profile_start")[-1]["cleared"], True)
+        self.game.on(profiling.CLEAR_COMMAND, failure=["Unknown command"])
+        self.assertEqual(self.session_error(self.session.profile_start).code, "profile_refused")
+        self.assertIs(self.steps("profile_start")[-1]["cleared"], False)
+        self.game.on(profiling.CLEAR_COMMAND)                  # it ran and answered nothing: it may have cleared
+        self.assertEqual(self.session_error(self.session.profile_start).code, "profile_refused")
+        self.assertEqual(self.steps("profile_start")[-1]["clear"], [])
+        self.assertIsNone(self.steps("profile_start")[-1]["cleared"])
+        real = self.session._console.run
+        for entered, cleared in ((False, False), (None, None), (True, None)):
+            def run(text, *args, **kwargs):
+                if text == profiling.CLEAR_COMMAND:
+                    raise ConsoleError("no_reply", "lost", entered=entered)
+                return real(text, *args, **kwargs)
+            with self.subTest(entered=entered), mock.patch.object(self.session._console, "run", side_effect=run):
+                with self.assertRaises(ConsoleError):
+                    self.session.profile_start()
+                step = self.steps("profile_start")[-1]
+                self.assertEqual((step["outcome"], step["cleared"]), ("no_reply", cleared))
+
+    def test_a_dump_copies_both_files_at_once_and_leaves_the_root_csv_for_the_restore(self):
+        self.session.profile_start()
+        self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
+        self.write_server_log()
+        reply = self.session.profile_dump("A")
+        tt, sp = profiling.dump_paths(self.run_dir, "A")
+        self.assertEqual(tt.read_bytes(), (self.user / profiling.TT_FILE).read_bytes())
+        self.assertEqual(sp.read_bytes(), (self.user / profiling.SP_FILE).read_bytes())
+        self.assertEqual((reply["tick_tasks"]["rows"], reply["script"]["entries"]), (1, 1))
+        self.assertIsNone(reply["tick_tasks"]["before"])                   # there was none before the dump
+        self.assertTrue((self.user / profiling.TT_FILE).is_file())         # the restore's to judge
+        self.assertEqual(reply["server_log_lines"], 2)
+        self.assertEqual(self.steps("profile_dump")[0]["outcome"], "ok")
+        summary = profiling.summary(self.run_dir, read_steps(self.run_dir), ["A"], lambda name: "mod")
+        self.assertEqual(summary["window"]["first_frame"], "1836.1.11.6")
+        self.assertEqual(summary["script"]["seconds"], 0.5)
+
+    def test_the_label_defaults_to_the_date_and_a_used_one_is_refused_before_typing(self):
+        self.session.profile_start()
+        self.assertEqual(self.session.profile_dump()["label"], "1836_01_11")
+        self.assertEqual(self.session.profile_dump()["label"], "1836_01_11_2")
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "1836_01_11")
+        self.assertEqual(error.code, "label_used")
+        self.assertNotIn(profiling.TT_DUMP_COMMAND, self.typed())
+        self.assertEqual(self.session_error(self.session.profile_dump, "a/b").code, "bad_argument")
+
+    def test_a_file_the_dump_did_not_rewrite_is_not_copied(self):
+        self.session.profile_start()
+        self.session.profile_dump("A")
+        self.writes[profiling.TT_DUMP_COMMAND] = False         # the old CSV stays, its time and size unchanged
+        error = self.session_error(self.session.profile_dump, "B")
+        self.assertEqual(error.code, "not_written")
+        self.assertEqual(sorted(p.name for p in self.run_dir.glob("[ts][tp]_*")), ["sp_A.txt", "tt_A.csv"])
+        self.assertEqual(self.steps("profile_dump")[-1]["outcome"], "not_written")
+
+    def test_a_csv_with_other_rows_than_the_console_said_is_not_that_dump(self):
+        self.session.profile_start()
+        self.reply_rows = 7
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "rows_mismatch")
+        self.assertEqual(list(self.run_dir.glob("tt_*")), [])
+
+    def test_an_answer_that_names_no_file_is_refused(self):
+        self.session.profile_start()
+        self.game.on(profiling.SP_DUMP_COMMAND, success=["Profiling is not enabled"])
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "dump_refused")
+        self.assertEqual(list(self.run_dir.glob("tt_*")) + list(self.run_dir.glob("sp_*")), [])   # tt_A went too
+
+    def test_a_csv_the_snapshot_listed_without_storing_is_never_dumped_over(self):
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["listing"].append(profiling.TT_FILE)
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.session.profile_start()
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_snapshotted")
+        self.assertEqual(self.typed(), [])
+
+    def test_a_csv_listed_in_another_case_without_storing_is_never_dumped_over(self):
+        # NTFS: the game's write to ticktask_timings.csv would go into the owner's TickTask_Timings.csv
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["listing"].append("TickTask_Timings.csv")
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.session.profile_start()
+        self.game.steps.clear()
+        error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "not_snapshotted")
+        self.assertIn("TickTask_Timings.csv", error.detail)
+        self.assertEqual(self.typed(), [])
+
+    def test_copies_the_game_cannot_be_proved_alive_after_are_removed(self):
+        self.session.profile_start()
+        real = profiling.copy_written
+
+        def copy_then_die(source, target, written):
+            size = real(source, target, written)
+            if target.name.startswith(profiling.SP_PREFIX):
+                self.game.process_gone = True
+            return size
+        with mock.patch.object(session.profiling, "copy_written", side_effect=copy_then_die):
+            error = self.session_error(self.session.profile_dump, "A")
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(list(self.run_dir.glob("tt_*")) + list(self.run_dir.glob("sp_*")), [])
+        self.assertEqual(self.session_error(self.session.profile_dump, "B").code, "watch_ended")
+
+    def test_the_server_log_is_followed_across_its_rotation(self):
+        self.session.profile_start()
+        os.rename(self.server_log, self.server_log.with_name("dedicated_server.1.log"))
+        self.log_lines = ["[10:01:00][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6"]
+        self.write_server_log()
+        self.assertEqual(self.session.profile_dump("A")["server_log_lines"], 2)
+        copy = (self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines()
+        self.assertEqual(copy[-1], self.log_lines[0])
+
+    def test_a_server_log_the_game_appended_to_has_the_earlier_games_lines_left_out(self):
+        # the snapshot recorded the log the game found; a game that appended to it would hand those lines on as its own
+        found = self.server_log.read_bytes()
+        manifest = self.snap.dir / snapshot.MANIFEST_NAME
+        data = json.loads(manifest.read_text("utf-8"))
+        data["files"][profiling.SERVER_LOG] = {"size": len(found), "mtime_ns": 0,
+                                               "sha256": hashlib.sha256(found).hexdigest()}
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        self.log_lines.append("[10:00:05][jominiapplication.cpp:539]: Processing Tick: 1836.1.11.6")
+        self.write_server_log()
+        reply = self.session.profile_start()
+        self.assertEqual(reply["server_log_lines"], 1)
+        self.assertEqual((self.run_dir / profiling.RUN_SERVER_LOG).read_text("utf-8").splitlines(),
+                         self.log_lines[-1:])
+        skipped = [step for step in read_steps(self.run_dir) if step["verb"] == "found_log"]
+        self.assertEqual((skipped[0]["log"], skipped[0]["bytes"]), (profiling.SERVER_LOG, len(found)))
 
 
 if __name__ == "__main__":

@@ -3,9 +3,17 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
+                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE]
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
-                                             # second day (the reply's `rules` says what the save holds)
+                                             # date (the reply's `rules` says what the save holds); a game
+                                             # arg from session.GAME_ARGS; a variant mod folder, loaded after
+                                             # the playset and before the overlay; --fixture loads the dated
+                                             # fixture of this build, never makes one
+    python3 -m game_qa fixture --until DATE [--dry-run] --permission "<the owner's words>" --max-hours H
+                       [--playset mod_only|current] [--owner-confirmed-busy]
+                                             # one unattended run that makes the fixture dated DATE, then stops:
+                                             # hours of the owner's desktop past spring 1836 (--dry-run first)
     python3 -m game_qa console "<text>"      # one console command, with its reply
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
@@ -20,6 +28,15 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa shot                  # a screenshot of the game's window, into the run folder
     python3 -m game_qa click X Y             # one click at fractions of the window (0.5 0.5 is its middle),
                                              # then a screenshot: for the engine's tool windows
+    python3 -m game_qa click [X Y] --console [--input-line X Y]
+                                             # then a click on the console's input line, which gives the
+                                             # keyboard back (a click into a tool window takes it)
+    python3 -m game_qa wheel X Y N           # N notches of the mouse wheel at X, Y (positive scrolls up), then a shot
+    python3 -m game_qa drag X1 Y1 X2 Y2      # press at X1, Y1, move, release at X2, Y2, then a shot
+    python3 -m game_qa profiler-roots [--box L T R B] [--as-shown]
+                                             # the script profiler at its roots, shot at the window's own size,
+                                             # and its call graph cropped out of the shot (--as-shown: as it is,
+                                             # nothing typed)
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -28,6 +45,11 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa status                # the server and its session
     python3 -m game_qa selfchecks [--run ID] # the verdicts of the mod's TE_SELF_CHECK lines in a run (the newest
                                              # by default), the fixture's run's included; needs no session
+    python3 -m game_qa profile start         # clear the tick timings and turn the script profiler on
+    python3 -m game_qa profile dump [LABEL]  # both dumps, copied into the run folder as tt_LABEL.csv, sp_LABEL.txt
+    python3 -m game_qa profile summary [LABEL [LABEL2]] [--run ID] [--top N]
+                                             # wall clock per frame type, top tick tasks, script by file, for the
+                                             # window up to LABEL or between the two; needs no session
     python3 -m game_qa doctor                # is this machine ready for a session? (starts nothing)
     python3 -m game_qa remove-overlay        # the overlay folder an earlier run left, once nothing can use it
 
@@ -53,10 +75,10 @@ from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from game_qa import gate, overlay, restore, server, session, snapshot
+from game_qa import fixture, gate, overlay, restore, server, session, snapshot
 from game_qa.helper import ProcessHelper, to_windows_path
-from game_qa.report import utc_now
-from game_qa import selfchecks
+from game_qa.report import read_steps, utc_now
+from game_qa import profiling, selfchecks
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS = "runs"
@@ -91,6 +113,9 @@ ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fi
 #   try ending at its deadline, plus a probe round), the debugger (about 30 s), and the stop a failure runs (300 s):
 #   about 2500 s, under START_TIMEOUT_S. A `--save` start makes no fixture and takes 1150 s less.
 START_TIMEOUT_S = 2800.0
+# `fixture`: the run's own watch limit (the plan's `limit_s`) and this much more: its snapshot, launch, restore and
+# rename (about 160 s), its restore's retries (30 + 60 s), and the stop after it (STOP_TIMEOUT_S), with room.
+FIXTURE_MARGIN_S = 1200.0
 STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
 MIN_FREE_BYTES = 2 * 1024**3            # what `snapshot` wants free under the backup root
@@ -182,10 +207,12 @@ def _serving(pid: Any) -> bool:
 # ---- start
 
 def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path], Any],
-                  sleep=time.sleep, clock=time.monotonic) -> tuple[dict, int]:
-    """Spawn a server (`spawn(backup_root, log)`, returning a process handle), wait for it to listen, post `start`.
-    A failed start's server has stopped the session before it answered; this waits for it to exit, unless that
-    stop can be run again (`server.final_stop`): then the server serves on for `stop`, and `next` says so."""
+                  sleep=time.sleep, clock=time.monotonic, verb: str = "start",
+                  timeout: float = START_TIMEOUT_S) -> tuple[dict, int]:
+    """Spawn a server (`spawn(backup_root, log)`, returning a process handle), wait for it to listen, post `start`
+    (or `fixture`, `verb`, waiting `timeout` for it). A failed start's server has stopped the session before it
+    answered; this waits for it to exit, unless that stop can be run again (`server.final_stop`): then the server
+    serves on for `stop`, and `next` says so."""
     backup_root = Path(backup_root)
     notes: dict = {}
     path = backup_root / server.SESSION_FILE
@@ -216,7 +243,7 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
     if "refused" in info:
         return {**info, **notes, "server": where}, 2
     where["port"] = info["port"]
-    reply, code = call(backup_root, "start", body, START_TIMEOUT_S)
+    reply, code = call(backup_root, verb, body, timeout)
     if code != 0 and reply.get("refused") != "no_answer" and server.final_stop(reply.get("stop")):
         try:
             handle.wait(timeout=EXIT_WAIT_S)
@@ -230,6 +257,12 @@ def start_session(backup_root: Path, body: Mapping, spawn: Callable[[Path, Path]
         out["next"] = RECOVER_HINT
     elif reply.get("refused") == "overlay_left":
         out["next"] = OVERLAY_LEFT_HINT
+    elif reply.get("refused") == "no_answer" and verb == "fixture":
+        out["next"] = ("the fixture's run may still be going: its server answers nothing until it is done, and then "
+                       "writes the reply to `fixture.json` in the run's folder under the backup root (`runs/<snapshot "
+                       "id>/`, the newest); `fixture --until %s --dry-run` says `found: true` once the save is there. "
+                       "Do not run `recover` or `stop` meanwhile; to end the run early, ask the owner to close the "
+                       "game" % body.get("until"))
     elif reply.get("refused") == "no_answer":
         out["next"] = ("the start may still be running: `status` answers once it is done. Do not run `recover` "
                        "meanwhile: it would finish this start's own snapshot")
@@ -335,6 +368,50 @@ def self_checks(backup_root: Path, run: str | None = None) -> tuple[dict, int]:
     except OSError as e:
         return {"refused": "unreadable_run", "run": run_id,
                 "detail": "a file of run %s is there and cannot be read (%s: %s)" % (run_id, type(e).__name__, e)}, 2
+
+
+# ---- profile summary
+
+def profile_summary(backup_root: Path, run: str | None, labels: Sequence[str], top: int = 25,
+                    roots: Callable[[], Sequence[tuple[str, Path]]] | None = None) -> tuple[dict, int]:
+    """`profile summary [LABEL [LABEL2]] [--run ID] [--top N]`: what a run's profile says (`profiling.summary`), read
+    from the run folder alone, the newest session's run by default, so it needs no session and works after `stop`.
+    A script file is told apart by where such a file is now: among the run's variant folders (as its `start`
+    recorded them), the deployed mod (`mod`), vanilla's `game/`, else `other` (`roots` gives the last two; by
+    default from path_constants, and a path that is not set is left out). Refused `no_run` and `unreadable_run` as
+    `selfchecks` is, and with `profiling.ProfileError`'s code otherwise."""
+    backup_root = Path(backup_root)
+    if not isinstance(top, int) or top < 1:
+        return {"refused": "bad_argument", "detail": "--top takes a positive number, not %r" % (top,)}, 2
+    try:
+        run_id = selfchecks.resolve_run(backup_root, run)
+    except selfchecks.SelfCheckError as e:
+        return {"refused": e.code, "detail": e.detail}, 2
+    run_dir = backup_root / RUNS / run_id
+    steps = read_steps(run_dir)
+    start = next((step for step in steps if step.get("verb") == "start" and step.get("outcome") == "ok"), {})
+    folders = [("add_mod", Path(mod["wsl"])) for mod in start.get("add_mods") or ()
+               if isinstance(mod, dict) and isinstance(mod.get("wsl"), str)]
+    folders += list(roots() if roots is not None else _profile_roots())
+    try:
+        out = profiling.summary(run_dir, steps, list(labels), profiling.origin_of(folders), top)
+    except profiling.ProfileError as e:
+        return {"refused": e.code, "detail": e.detail, "run": run_id}, 2
+    except OSError as e:
+        return {"refused": "unreadable_run", "run": run_id,
+                "detail": "a file of run %s is there and cannot be read (%s: %s)" % (run_id, type(e).__name__, e)}, 2
+    return {"run": run_id, **out}, 0
+
+
+def _profile_roots() -> list[tuple[str, Path]]:
+    roots = []
+    for label, name, below in (("mod", "mod_deploy_target", ""), ("vanilla", "base_game_path", "game")):
+        try:
+            path = _resolve(name)
+        except Exception:
+            continue
+        roots.append((label, path / below if below else path))
+    return roots
 
 
 # ---- doctor
@@ -697,7 +774,56 @@ def cmd_start(args) -> tuple[dict, int]:
             "playset": args.playset, "owner_confirmed_busy": args.owner_confirmed_busy}
     if switches:
         body["switch_rules"] = switches
+    if args.game_arg:
+        body["game_args"] = list(args.game_arg)
+    if args.add_mod:
+        body["add_mods"] = list(args.add_mod)
+    if args.fixture is not None:
+        body["fixture_date"] = args.fixture
     return start_session(_backup_root(), body, spawn_server)
+
+
+def fixture_verb(args, paths: session.Paths, backup_root: Path, spawn) -> tuple[dict, int]:
+    """`fixture --until DATE`: the plan, worked out here and touching nothing (`Session.fixture_plan`); with
+    `--dry-run`, or when the fixture is there already, that is the reply. Otherwise a server is spawned and asked
+    `fixture`, which makes the fixture and stops; this waits the run's own limit and FIXTURE_MARGIN_S more."""
+    try:
+        date = fixture.parse_date(args.until)
+    except ValueError as e:
+        return {"refused": "bad_date", "detail": str(e)}, 2
+    if args.max_hours is not None and not 0 < args.max_hours <= 24 * 14:
+        return {"refused": "bad_argument", "detail": "--max-hours is the hours the owner granted the run, more "
+                                                     "than 0 and at most two weeks"}, 2
+    try:
+        plan = session.Session(None, None, None, paths).fixture_plan(date, args.playset, args.max_hours)
+    except ValueError as e:
+        return {"refused": "bad_date", "detail": str(e)}, 2
+    if plan["found"]:                   # nothing to make: no server, no permission needed
+        return dict(plan, made=False, **({"dry_run": True} if args.dry_run else {}),
+                    next="%s is there already: `start --fixture %s` loads it" % (plan["save"], plan["date"])), 0
+    if args.dry_run:
+        if not plan["long_run"]:
+            return dict(plan, dry_run=True, next=(
+                "a short run of about %d s (watch limit %d s), ending before the first quarterly autosave: the "
+                "go-ahead that covers `start`'s fresh save covers it; `fixture --until %s --permission \"<where the "
+                "go-ahead came from>\"`, in the background" % (plan["estimate_s"], plan["limit_s"], plan["date"]))), 0
+        return dict(plan, dry_run=True, next=(
+            "a run of about %.1f hours (watch limit %.1f): ask the owner for a grant of that run in their own words, "
+            "leaving room above the estimate (the one live run, to 1836.3.29, took 0.66 s a game day where the "
+            "estimate takes 0.47), then `fixture --until %s --permission \"<their words>\" --max-hours <what they "
+            "granted>`, in the background" % (plan["estimate_h"], plan["limit_h"], plan["date"]))), 0
+    if not args.permission or not args.permission.strip():
+        return {"refused": "no_permission", "detail": "say where the go-ahead to launch came from (--permission): "
+                                                      "for a long run, the owner's own grant of it"}, 2
+    body = {"permission": args.permission, "until": plan["date"], "playset": args.playset,
+            "owner_confirmed_busy": args.owner_confirmed_busy}
+    if args.max_hours is not None:
+        body["max_hours"] = args.max_hours
+    return start_session(backup_root, body, spawn, verb="fixture", timeout=plan["limit_s"] + FIXTURE_MARGIN_S)
+
+
+def cmd_fixture(args) -> tuple[dict, int]:
+    return fixture_verb(args, real_paths(), _backup_root(), spawn_server)
 
 
 def cmd_stop(args) -> tuple[dict, int]:
@@ -765,7 +891,27 @@ def cmd_shot(args) -> tuple[dict, int]:
 
 
 def cmd_click(args) -> tuple[dict, int]:
-    return call(_backup_root(), "click", {"x": args.x, "y": args.y})
+    body = {"x": args.x, "y": args.y}
+    if args.console:
+        body["console"] = True
+    if args.input_line is not None:
+        body["input_line"] = args.input_line
+    return call(_backup_root(), "click", body)
+
+
+def cmd_wheel(args) -> tuple[dict, int]:
+    return call(_backup_root(), "wheel", {"x": args.x, "y": args.y, "notches": args.notches})
+
+
+def cmd_drag(args) -> tuple[dict, int]:
+    return call(_backup_root(), "drag", {"x1": args.x1, "y1": args.y1, "x2": args.x2, "y2": args.y2})
+
+
+def cmd_profiler_roots(args) -> tuple[dict, int]:
+    body = {"box": args.box}
+    if args.as_shown:
+        body["as_shown"] = True
+    return call(_backup_root(), "profiler-roots", body)
 
 
 def cmd_try_event(args) -> tuple[dict, int]:
@@ -779,6 +925,18 @@ def cmd_status(args) -> tuple[dict, int]:
 
 def cmd_selfchecks(args) -> tuple[dict, int]:
     return self_checks(_backup_root(), args.run_id)
+
+
+def cmd_profile_start(args) -> tuple[dict, int]:
+    return call(_backup_root(), "profile-start")
+
+
+def cmd_profile_dump(args) -> tuple[dict, int]:
+    return call(_backup_root(), "profile-dump", {"label": args.label})
+
+
+def cmd_profile_summary(args) -> tuple[dict, int]:
+    return profile_summary(_backup_root(), args.run_id, args.labels, args.top)
 
 
 def cmd_doctor(args) -> tuple[dict, int]:
@@ -815,7 +973,32 @@ def add_verbs(sub) -> None:
                         "The overlay is added to either")
     p.add_argument("--owner-confirmed-busy", action="store_true",
                    help="the owner was asked about the busy GPU and said to go ahead")
+    p.add_argument("--game-arg", action="append", default=[], metavar="FLAG",
+                   help="add one of %s to the game's arguments (repeatable). Write it without its dash, or as "
+                        "--game-arg=-FLAG. The fixture's own run never gets it" % ", ".join(session.GAME_ARGS))
+    p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
+                   help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
+                        ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "
+                        "run (repeatable). Without --save it is part of the fixture's world and key")
+    p.add_argument("--fixture", metavar="DATE",
+                   help="load the fixture dated DATE (1900, or 1900.1.1) made on this build by `fixture --until`; "
+                        "never makes one")
     p.set_defaults(run=cmd_start)
+
+    p = sub.add_parser("fixture", help="make a dated fixture: one unattended run of the game to DATE, which keeps "
+                                       "its save and its log, then stops (hours past spring 1836: --dry-run first)")
+    p.add_argument("--until", required=True, metavar="DATE",
+                   help="the save's date: a year (1900) or year.month.day (1900.1.1)")
+    p.add_argument("--dry-run", action="store_true",
+                   help="say what the run would be (its key, the estimate, the limit, the rules), touching nothing")
+    p.add_argument("--permission", help="where the go-ahead came from: for a long run, the owner's own grant of it")
+    p.add_argument("--max-hours", type=float, metavar="H",
+                   help="the hours the owner granted the run: needed past spring 1836, and the run's limit")
+    p.add_argument("--playset", choices=session.PLAYSETS, default="mod_only",
+                   help="mod_only (the default) or current, as for `start`: a fixture is made under one")
+    p.add_argument("--owner-confirmed-busy", action="store_true",
+                   help="the owner was asked about the busy GPU and said to go ahead")
+    p.set_defaults(run=cmd_fixture)
 
     p = sub.add_parser("console", help="one console command, with its reply")
     p.add_argument("text")
@@ -833,7 +1016,7 @@ def add_verbs(sub) -> None:
     p.add_argument("key", choices=["esc"])
     p.set_defaults(run=cmd_press)
     sub.add_parser("events", help="the pending events").set_defaults(run=cmd_events)
-    p = sub.add_parser("pick", help="pick an option of a pending event, by its numeric id")
+    p = sub.add_parser("pick", help="pick an option of a pending event")
     p.add_argument("index", type=int)
     p.add_argument("event", nargs="?", help="an event id (its oldest pending instance) or a numeric id")
     p.set_defaults(run=cmd_pick)
@@ -855,9 +1038,34 @@ def add_verbs(sub) -> None:
     p = sub.add_parser("click", help="one left click at X, Y (fractions of the game window's client area from its "
                                      "top left), then a screenshot: for the engine's own tool windows, such as the "
                                      "script profiler's")
+    p.add_argument("x", type=float, nargs="?")
+    p.add_argument("y", type=float, nargs="?")
+    p.add_argument("--console", action="store_true",
+                   help="then click the console's input line, which gives the keyboard back after a click into a "
+                        "tool window took it, and prove it with one probe (alone: only that click)")
+    p.add_argument("--input-line", nargs=2, type=float, metavar=("X", "Y"),
+                   help="where the console's input line is, as fractions of the window (default: 0.1125 0.544, "
+                        "measured live with the console open on the left in a 3840x2160 window)")
+    p.set_defaults(run=cmd_click)
+    p = sub.add_parser("wheel", help="turn the mouse wheel N notches at X, Y (fractions of the window; positive "
+                                     "scrolls a list up), then a screenshot: for the engine's own tool windows")
     p.add_argument("x", type=float)
     p.add_argument("y", type=float)
-    p.set_defaults(run=cmd_click)
+    p.add_argument("notches", type=int, metavar="N")
+    p.set_defaults(run=cmd_wheel)
+    p = sub.add_parser("drag", help="press the left button at X1, Y1, move to X2, Y2 and release (fractions of the "
+                                    "window), then a screenshot: for the engine's own tool windows")
+    for name in ("x1", "y1", "x2", "y2"):
+        p.add_argument(name, type=float)
+    p.set_defaults(run=cmd_drag)
+    p = sub.add_parser("profiler-roots", help="open the script profiler at its roots (Script.Profiling.Gui), take "
+                                              "a shot at the window's own size and crop the call graph out of it")
+    p.add_argument("--box", nargs=4, type=float, metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"),
+                   help="the crop, as fractions of the window (default: the call graph of the overlay's enlarged "
+                        "window, measured in a 3840x2160 window)")
+    p.add_argument("--as-shown", action="store_true",
+                   help="type nothing: shoot and crop the window as it is (after a click on a row, or a wheel)")
+    p.set_defaults(run=cmd_profiler_roots)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")
     p.add_argument("event")
@@ -880,6 +1088,22 @@ def add_verbs(sub) -> None:
     p.add_argument("--run", dest="run_id", metavar="ID",       # not `run`: that is the verb's function
                    help="a run's snapshot id (default: the newest session's run)")
     p.set_defaults(run=cmd_selfchecks)
+    p = sub.add_parser("profile", help="profile the running game (#1700): `start`, `dump [LABEL]`, then `summary "
+                                       "[LABEL [LABEL2]]`, which needs no session")
+    actions = p.add_subparsers(dest="action", required=True, metavar="ACTION")
+    actions.add_parser("start", help="clear the tick-task timings and turn the script profiler on, noting the "
+                                     "game date").set_defaults(run=cmd_profile_start)
+    q = actions.add_parser("dump", help="dump the tick-task timings and the script profile, and copy both into the "
+                                        "run folder at once")
+    q.add_argument("label", nargs="?", help="what to call the dump (default: the game date)")
+    q.set_defaults(run=cmd_profile_dump)
+    q = actions.add_parser("summary", help="the wall clock per frame type, the top tick tasks and the script time by "
+                                           "file, mod against vanilla: up to LABEL (default: the newest dump) from "
+                                           "the profile's start, or between LABEL and LABEL2")
+    q.add_argument("labels", nargs="*", metavar="LABEL")
+    q.add_argument("--run", dest="run_id", metavar="ID", help="a run's snapshot id (default: the newest session's run)")
+    q.add_argument("--top", type=int, default=25, help="how many tasks and files to list (default 25)")
+    q.set_defaults(run=cmd_profile_summary)
     p = sub.add_parser("session-serve", help="the session server (`start` runs it detached; not for direct use)")
     p.add_argument("--port", type=int, default=server.PORT)
     p.set_defaults(run=cmd_session_serve)

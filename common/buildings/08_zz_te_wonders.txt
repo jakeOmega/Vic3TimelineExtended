@@ -23,7 +23,7 @@ building_un_headquarters = {
 	# modifiers. HQs the host no longer owns (a former host's, a conquered one)
 	# can't be blocked from here; un_hq_enforce_single_building removes them.
 	potential = {
-		owner = { un_hq_is_host = yes }
+		owner ?= { un_hq_is_host = yes }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_un_headquarters }
 	}
 }
@@ -48,7 +48,7 @@ building_power_bloc_hq = {
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
-		owner = {
+		owner ?= {
 			is_power_bloc_leader = yes
 			has_technology_researched = intergovernmental_organizations
 		}
@@ -800,7 +800,7 @@ building_wonder_large_hadron_collider = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = world_wide_web }
+		owner ?= { has_technology_researched = world_wide_web }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_large_hadron_collider }
 	}
 }
@@ -831,7 +831,7 @@ building_wonder_international_space_station = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = satellite_communications }
+		owner ?= { has_technology_researched = satellite_communications }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_international_space_station }
 	}
 }
@@ -862,7 +862,7 @@ building_wonder_iter = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = fusion_power }
+		owner ?= { has_technology_researched = fusion_power }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_iter }
 	}
 }
@@ -892,7 +892,7 @@ building_wonder_svalbard_seed_vault = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = biotechnology }
+		owner ?= { has_technology_researched = biotechnology }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_svalbard_seed_vault }
 	}
 }
@@ -922,7 +922,7 @@ building_wonder_ligo = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = fiber_optics }
+		owner ?= { has_technology_researched = fiber_optics }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_ligo }
 	}
 }
@@ -953,7 +953,7 @@ building_wonder_continental_union_hq = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = globalization }
+		owner ?= { has_technology_researched = globalization }
 		OR = {
 			any_scope_building = {
 				is_building_type = building_wonder_continental_union_hq
@@ -993,7 +993,7 @@ building_wonder_peace_palace = {
 		}
 	}
 	potential = {
-		owner = { has_technology_researched = intergovernmental_organizations }
+		owner ?= { has_technology_researched = intergovernmental_organizations }
 		building_unique_per_owner_potential = { BUILDING_TYPE = building_wonder_peace_palace }
 	}
 }

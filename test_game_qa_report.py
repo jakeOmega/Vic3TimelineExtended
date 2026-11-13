@@ -104,6 +104,32 @@ class ReportTest(unittest.TestCase):
         other = self.report.close(self.summary(dict(done, reason="modified_during_restore"), "held")).read_text("utf-8")
         self.assertIn("the rest waits", other.split("\n")[0])
 
+    def test_a_hold_for_the_owners_own_saves_names_them_and_does_not_say_the_rest_waits(self):
+        # manual_save_changed (#1725) also comes after everything was put back: the saves were never copied
+        done = {"restored": ["content_load.json"], "removed": ["save games/autosave_3.v3"], "retimed": [],
+                "held": True, "reason": "manual_save_changed",
+                "manual_saves": {"changed": ["save games/a.v3"], "missing": ["save games/b.v3"],
+                                 "new": ["save games/c.v3"]}}
+        for restore in (done, dict(done, playset_restored=True)):
+            with self.subTest(restore=restore):
+                first = self.report.close(self.summary(restore, "held")).read_text("utf-8").split("\n")[0]
+                self.assertTrue(first.startswith("Restore: HELD (manual_save_changed)"), first)
+                self.assertIn("Everything the snapshot holds was put back (1 files put back, 1 removed, 0 given",
+                              first)
+                self.assertIn("changed: save games/a.v3; gone: save games/b.v3", first)
+                self.assertNotIn("c.v3", first)                     # a new save holds nothing: the stop notes it
+                self.assertNotIn("waits", first)
+                self.assertIn("only the owner resolves a hold", first)
+                self.assertIn("holds again", first)
+
+    def test_a_long_list_of_saves_is_cut_and_counted(self):
+        names = ["save games/s%02d.v3" % n for n in range(13)]
+        restore = {"restored": [], "removed": [], "held": True, "reason": "manual_save_changed",
+                   "manual_saves": {"missing": names}}
+        first = self.report.close(self.summary(restore, "held")).read_text("utf-8").split("\n")[0]
+        self.assertIn(", ".join(names[:report.NAMES_SHOWN]) + " and 3 more", first)
+        self.assertNotIn(names[report.NAMES_SHOWN], first)
+
     def test_a_game_left_up_says_restore_was_not_run_and_how_to_finish(self):
         summary = dict(self.summary(None, "game_left_up"), overlay_removed=False,
                        overlay_kept="the game may still be up, and the run's playset names the overlay")

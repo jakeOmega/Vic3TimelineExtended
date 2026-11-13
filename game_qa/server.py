@@ -22,13 +22,21 @@ removes the folder (spec § 5.2, Review Focus 1).
 
     start      the session's start. Any error stops the session; the server then ends as after `stop`. A second
                `start` is refused `session_running`, touching nothing
+    fixture    instead of `start`: one unattended run that makes a dated fixture (`Session.make_fixture`, #1602),
+               then the session's stop, whatever happened; the server then ends as after `stop`. It may run for
+               hours, and nothing else is answered meanwhile (`status` included: a client sees `no_answer`)
     stop       the session's stop. The server answers with its reply, then exits, unless the stop can be run again
                to effect (`final_stop`: a restore refused for a reason waiting can clear, a game left up that is
                known by pid and start time): then it serves on, and `stop` again runs the stop again
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
+    profile-start, profile-dump
+               a profile of the running game (#1700): the tick timings cleared and the script profiler on, then
+               both dumps copied into the run folder (`Session.profile_start`, `Session.profile_dump`); `profile
+               summary` reads the copies and needs no server
     status     the server and the session, answered here without asking the game anything
-    the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event
+    the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
+               profiler-roots, wheel, drag
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -70,7 +78,9 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
                                         # client's STATUS_TIMEOUT_S, so `status` and `stop` answer past one
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
-START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules")
+START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
+              "game_args", "add_mods", "fixture_date")
+FIXTURE_ARGS = ("permission", "until", "playset", "owner_confirmed_busy", "max_hours")
 
 
 class ServerError(Exception):
@@ -171,6 +181,10 @@ class SessionServer:
             "read": self._read, "tag": self._tag, "enter-game": self._enter_game, "advance": self._advance,
             "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
+            "profiler-roots": self._profiler_roots,
+            "wheel": self._wheel, "drag": self._drag,
+            "profile-start": self._profile_start,
+            "profile-dump": self._profile_dump,
         }
 
     @property
@@ -252,6 +266,8 @@ class SessionServer:
             return self._status(), 0
         if verb == "start":
             return self._start(body)
+        if verb == "fixture":
+            return self._fixture(body)
         if verb == "stop":
             reply = self._stop_reply = self._stop_session()
             self._done = final_stop(reply)
@@ -261,7 +277,7 @@ class SessionServer:
         run = self._verbs.get(verb)
         if run is None:
             return {"refused": "unknown_verb", "detail": "%r is not a verb of the session server; it has %s" % (
-                verb, ", ".join(sorted(["start", "stop", "status", *self._verbs])))}, 2
+                verb, ", ".join(sorted(["start", "fixture", "stop", "status", *self._verbs])))}, 2
         try:
             return run(body)
         except _BadBody as e:
@@ -289,6 +305,31 @@ class SessionServer:
         if isinstance(reply, dict) and reply.get("snapshot"):
             self._update_info(snapshot=reply["snapshot"])
         return reply, 0
+
+    def _fixture(self, body: dict) -> tuple[dict, int]:
+        """`make_fixture`, once per server and only instead of `start`; the session is stopped after it either
+        way, and the server ends as after a final stop."""
+        if self._start_posted:
+            return {"refused": "session_running", "detail": "this server's session has had its start: one server "
+                                                            "holds one session, for one game"}, 2
+        self._start_posted = True
+        code = 0
+        try:
+            unknown = sorted(set(body) - set(FIXTURE_ARGS))
+            if unknown or "permission" not in body or "until" not in body:
+                raise _BadBody("fixture takes %s (permission and until required), not %s"
+                               % (", ".join(FIXTURE_ARGS), unknown))
+            out = self._session.make_fixture(**{k: body[k] for k in FIXTURE_ARGS if k in body})
+        except Exception as e:
+            out = {"refused": "bad_argument", "detail": str(e)} if isinstance(e, _BadBody) else refusal(e)
+            code = 2
+        if "stop" not in out:
+            out["stop"] = self._stop_session()
+        self._stop_reply = out["stop"] if isinstance(out["stop"], dict) else None
+        self._done = final_stop(out["stop"])
+        if code == 0 and not clean_stop(out["stop"] if isinstance(out["stop"], dict) else {}):
+            code = 2
+        return out, code
 
     def _status(self) -> dict:
         try:
@@ -343,7 +384,17 @@ class SessionServer:
         return {"path": str(self._session.shot())}, 0
 
     def _click(self, body: dict) -> tuple[dict, int]:
-        return self._session.click(_arg(body, "x"), _arg(body, "y")), 0
+        return self._session.click(body.get("x"), body.get("y"), console=body.get("console") is True,
+                                   input_line=body.get("input_line")), 0
+
+    def _wheel(self, body: dict) -> tuple[dict, int]:
+        return self._session.wheel(_arg(body, "x"), _arg(body, "y"), _arg(body, "notches")), 0
+
+    def _drag(self, body: dict) -> tuple[dict, int]:
+        return self._session.drag(_arg(body, "x1"), _arg(body, "y1"), _arg(body, "x2"), _arg(body, "y2")), 0
+
+    def _profiler_roots(self, body: dict) -> tuple[dict, int]:
+        return self._session.profiler_roots(body.get("box"), as_shown=body.get("as_shown") is True), 0
 
     def _try_event(self, body: dict) -> tuple[dict, int]:
         reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))
@@ -351,6 +402,12 @@ class SessionServer:
 
     def _selfchecks(self, body: dict) -> tuple[dict, int]:
         return self._session.self_checks(), 0
+
+    def _profile_start(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_start(), 0
+
+    def _profile_dump(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_dump(body.get("label")), 0
 
     # ---- session.json
 

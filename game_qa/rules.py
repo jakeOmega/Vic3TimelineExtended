@@ -16,7 +16,8 @@ So a rule can be switched with no click and no write to a file of the owner's: `
 of the fixture, under its own fixture name, with one setting of each named rule replaced in both lists.
 
 What that is and is not: the save is from 2 January 1836, so the copy is a game whose rule was switched a day
-after it began, the same thing the change-country screen does mid-game. Whatever the game's setup decided
+after it began, the same thing the change-country screen does mid-game. A dated fixture's copy (#1602) is a
+game whose rule was switched on that fixture's date, decades in, with every system the old setting ran. Whatever the game's setup decided
 from the old setting has already happened. Rules that must hold from the first day need a fixture made under
 them, which only a lobby of the owner's (or a write to their `presets.txt`, which nothing here does) gives.
 Whether the mod treats an edited save exactly as it treats a rule changed in game is not verified.
@@ -45,6 +46,15 @@ STAGED_SUFFIX = ".part"
 SWITCHED_AT = "2 January 1836, the day after the game began: its setup ran under the old setting"
 
 _NAME = re.compile(r"[A-Za-z0-9_]{1,80}")
+
+
+def switched_at(date: tuple[int, int, int] | None = None) -> str:
+    """When a switched copy of the fixture dated `date` (None: the 1836 fixture) has its rule switched: the
+    fixture's own date, since the copy is the fixture's save with one setting changed (#1602)."""
+    if date is None or tuple(date) == fixture.DEFAULT_DATE:
+        return SWITCHED_AT
+    return (f"{fixture.written(date).replace(',', '')}, the dated fixture's date: the game ran unattended to then "
+            "under the old setting, and everything it built under it is still there")
 _PRESET_OPEN = re.compile(r"game_rules_preset\s*=\s*\{")
 _PRESET_NAME = re.compile(r'(?<![A-Za-z0-9_])name\s*=\s*"([^"]*)"')
 _PRESET_SETTING = re.compile(r"(?<![A-Za-z0-9_])setting\s*=\s*\{([^{}]*)\}")

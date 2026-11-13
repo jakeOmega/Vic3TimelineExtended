@@ -149,6 +149,24 @@ class TakeTests(SnapshotTestCase):
         self.assertIn("logs/latest.log", snap.listing)
         self.assertNotIn("logs/latest.log", snap.files)
 
+    def test_the_root_tick_task_timings_are_taken_when_there(self):
+        # #1700: dump_ticktask_timings overwrites the root ticktask_timings.csv in place
+        snap = snapshot.take(self.user, self.backups)
+        self.assertNotIn("ticktask_timings.csv", snap.files)
+        (self.user / "ticktask_timings.csv").write_bytes(b"\xef\xbb\xbfframe,task,milliseconds,calls,longest_lock\n")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertIn("ticktask_timings.csv", snap.files)
+        self.assertIn("ticktask_timings.csv", snap.listing)
+
+    def test_the_set_is_matched_in_any_case_and_stored_under_the_name_there(self):
+        # The folder is on NTFS: the game's write to ticktask_timings.csv goes into an owner's TickTask_Timings.csv
+        (self.user / "TickTask_Timings.csv").write_bytes(b"\xef\xbb\xbfframe,task,milliseconds,calls,longest_lock\n")
+        (self.user / "save games" / "AutoSave.v3").write_bytes(b"save")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertIn("TickTask_Timings.csv", snap.files)
+        self.assertIn("save games/AutoSave.v3", snap.files)
+        self.assertNotIn("ticktask_timings.csv", snap.files)
+
     def test_the_listing_covers_every_folder_the_set_reads_from(self):
         for pattern in snapshot.SNAPSHOT_SET:
             self.assertIn(pattern.rpartition("/")[0], snapshot.LISTED_FOLDERS, pattern)
@@ -575,6 +593,153 @@ class JournalTests(SnapshotTestCase):
         snap = snapshot.take(self.user, self.backups, extra=[name])
         self.assertEqual(snapshot.load(snap.dir).files[name].size, 3)
         self.assertIn(name, snapshot.load(snap.dir).listing)
+
+
+class SaveStatsTests(SnapshotTestCase):
+    """#1725: the size and time of everything listed in `save games/`, so that `restore` can tell a changed save of
+    the owner's (which is never copied) from one left alone."""
+
+    def test_every_save_games_entry_gets_the_size_and_time_its_lstat_gave(self):
+        (self.user / "save games/linked.v3").symlink_to("mine.v3")
+        snap = snapshot.take(self.user, self.backups)
+        expected = {}
+        for name in ("autosave.v3", "autosave_1.v3", "mine.v3", "linked.v3"):
+            st = os.lstat(self.user / "save games" / name)
+            expected["save games/" + name] = (st.st_size, st.st_mtime_ns)
+        self.assertEqual(snap.save_stats, expected)                 # as lstat gives it, never rounded
+        self.assertEqual(snap.save_stats["save games/linked.v3"][0], len("mine.v3"))             # the link's own
+
+    def test_the_manifest_keeps_them_and_load_reads_them_back(self):
+        snap = snapshot.take(self.user, self.backups)
+        manifest = json.loads((snap.dir / snapshot.MANIFEST_NAME).read_text("utf-8"))
+        self.assertEqual(manifest["version"], 1)                    # older checkouts still load it
+        self.assertEqual(manifest["save_stats"]["save games/mine.v3"],
+                         {"size": len(b"the owner's own save"),
+                          "mtime_ns": os.lstat(self.user / "save games/mine.v3").st_mtime_ns})
+        self.assertEqual(snapshot.load(snap.dir).save_stats, snap.save_stats)
+
+    def test_an_empty_save_folder_records_none_and_a_missing_one_too(self):
+        for path in (self.user / "save games").iterdir():
+            path.unlink()
+        self.assertEqual(snapshot.take(self.user, self.backups).save_stats, {})
+        (self.user / "save games").rmdir()
+        self.assertEqual(snapshot.take(self.user, self.backups).save_stats, {})
+
+    def rewrite(self, snap, change):
+        path = snap.dir / snapshot.MANIFEST_NAME
+        manifest = json.loads(path.read_text("utf-8"))
+        change(manifest)
+        path.write_text(json.dumps(manifest), "utf-8")
+        return snapshot.load(snap.dir)
+
+    def test_a_manifest_from_before_has_none_and_loads_whole(self):
+        snap = snapshot.take(self.user, self.backups)
+        loaded = self.rewrite(snap, lambda manifest: manifest.pop("save_stats"))
+        self.assertIsNone(loaded.save_stats)
+        self.assertEqual((loaded.files, loaded.listing), (snap.files, snap.listing))
+
+    def test_a_record_that_does_not_read_is_none_and_the_rest_still_loads(self):
+        def name(manifest, value):
+            manifest["save_stats"]["save games/mine.v3"] = value
+
+        def drop(manifest):
+            del manifest["save_stats"]["save games/mine.v3"]
+
+        def extra(manifest):
+            manifest["save_stats"]["save games/unlisted.v3"] = {"size": 1, "mtime_ns": 1}
+
+        def outside(manifest):
+            manifest["save_stats"]["continue_game.json"] = {"size": 1, "mtime_ns": 1}
+
+        cases = {
+            "a list": lambda m: m.update(save_stats=[]),
+            "null": lambda m: m.update(save_stats=None),
+            "a name missing": drop,
+            "a name not listed": extra,
+            "a name outside save games/": outside,
+            "a bool size": lambda m: name(m, {"size": True, "mtime_ns": 1}),
+            "a text time": lambda m: name(m, {"size": 1, "mtime_ns": "1"}),
+            "a float time": lambda m: name(m, {"size": 1, "mtime_ns": 1.5}),
+            "a pair": lambda m: name(m, [1, 1]),
+            "no time": lambda m: name(m, {"size": 1}),
+        }
+        for label, change in cases.items():
+            with self.subTest(label):
+                snap = snapshot.take(self.user, self.backups)
+                loaded = self.rewrite(snap, change)
+                self.assertIsNone(loaded.save_stats)
+                self.assertEqual((loaded.files, loaded.listing), (snap.files, snap.listing))
+                self.assertIn(snap.id, [s.id for s in snapshot.all_snapshots(self.backups)])
+
+    def test_a_snapshot_built_without_them_has_none(self):
+        # as selfchecks.py builds one for a run's folder
+        snap = snapshot.Snapshot(id="x", dir=self.base, files={}, listing=frozenset())
+        self.assertIsNone(snap.save_stats)
+
+
+class UnlistedSaveTests(SnapshotTestCase):
+    """#1725: a save for the run is named as `save games/` lists it, in any letter case. The owner's drive also
+    answers to short 8.3 names it does not list (`FRENCH~1.V3`); here a hard link plays that name, and the scan is
+    made to leave it out, as the drive's listing does."""
+
+    LONG = "french republic_1867_08_16.v3"
+    SHORT = "FRENCH~1.V3"
+
+    def setUp(self):
+        super().setUp()
+        (self.user / "save games" / self.LONG).write_bytes(b"a long-named save")
+        os.link(self.user / "save games" / self.LONG, self.user / "save games" / self.SHORT)
+        real = snapshot._scan_folder
+
+        def scan(user_data, folder):
+            return {rel: st for rel, st in real(user_data, folder).items() if "~" not in rel}
+        patcher = mock.patch.object(snapshot, "_scan_folder", scan)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_a_short_name_is_refused_naming_the_listed_one_and_nothing_is_written(self):
+        with self.assertRaises(snapshot.SaveNotListed) as caught:
+            snapshot.take(self.user, self.backups, extra=["save games/" + self.SHORT])
+        self.assertIsInstance(caught.exception, ValueError)
+        self.assertIn(repr(self.LONG), str(caught.exception))
+        self.assertFalse(self.backups.exists())
+
+    def test_the_listed_name_in_any_letter_case_is_taken(self):
+        for name in (self.LONG, self.LONG.upper(), "save games/mine.v3"):
+            with self.subTest(name=name):
+                rel = name if "/" in name else "save games/" + name
+                self.assertIsNone(snapshot.unlisted_save(self.user, rel))
+        snapshot.take(self.user, self.backups, extra=["save games/" + self.LONG])
+
+    def test_a_name_that_is_no_listed_file_says_so_without_naming_one(self):
+        (self.user / "save games/sub").mkdir()
+        (self.user / "save games/sub/x.v3").write_bytes(b"x")
+        os.link(self.user / "save games/mine.v3", self.user / "save games/MINE~1.V3")
+        problem = snapshot.unlisted_save(self.user, "save games/MINE~1.V3")
+        self.assertIn("same file as 'mine.v3'", problem)
+        os.unlink(self.user / "save games/MINE~1.V3")
+        (self.user / "save games/LOOSE~1.V3").write_bytes(b"listed by nothing, linked to nothing")
+        problem = snapshot.unlisted_save(self.user, "save games/LOOSE~1.V3")
+        self.assertIn("is not a name save games/ lists", problem)
+        self.assertNotIn("same file", problem)
+        self.assertIsNone(snapshot.unlisted_save(self.user, "save games/sub/x.v3"))     # not directly in it
+        self.assertIsNone(snapshot.unlisted_save(self.user, "continue_game.json"))
+
+
+
+class ListedSpellingTest(unittest.TestCase):
+    """A `--save` is stored as the folder lists it (review, 2026-11-13). ext4 cannot answer `Mine.v3` for mine.v3
+    as the owner's NTFS drive does, so the mapping is tested on its own."""
+
+    def test_a_save_typed_in_another_case_takes_the_listed_spelling(self):
+        scan = {"save games/mine.v3": None, "save games/autosave.v3": None}
+        self.assertEqual(snapshot.listed_spelling("save games/Mine.v3", scan), "save games/mine.v3")
+        self.assertEqual(snapshot.listed_spelling("save games/Autosave.v3", scan), "save games/autosave.v3")
+
+    def test_an_exact_listing_wins_and_an_unlisted_name_is_left_as_it_is(self):
+        scan = {"save games/Mine.v3": None, "save games/mine.v3": None}
+        self.assertEqual(snapshot.listed_spelling("save games/mine.v3", scan), "save games/mine.v3")
+        self.assertEqual(snapshot.listed_spelling("save games/other.v3", {}), "save games/other.v3")
 
 
 if __name__ == "__main__":

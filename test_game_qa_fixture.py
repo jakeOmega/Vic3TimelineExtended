@@ -12,10 +12,13 @@ import fnmatch
 import os
 import tempfile
 import unittest
+from unittest import mock
+import unittest.mock
 from pathlib import Path
 
 from game_qa import fixture
 from game_qa.gate import ProcId
+from game_qa.logtail import GAP_MARKER
 
 KEY = "0123456789ab"
 SNAPSHOT = "20261110T120000Z"
@@ -701,6 +704,456 @@ class PruneTest(FixtureTestCase):
             fixture.prune(self.user, keep=-1)
         self.assertTrue((self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").exists())
 
+
+DATE_1900 = (1900, 1, 1)
+SAVE_1900 = "TEST_FAIL_te_qa_fixture_1 January, 1900.v3"
+DATED_KEY = KEY + "_d19000101"
+GRANT = "the owner, 21:40: run it to 1900 overnight, up to 8 hours"
+
+
+def plain_text_save(date: str) -> bytes:
+    """The start of a harness save as the engine writes one: the header line, then meta_data with its date."""
+    return ("SAV01001b3624cd0000078e\nmeta_data={\n\tsave_game_version=1794310339\n\tversion=\"1.15.1\"\n"
+            f"\tgame_date={date}\n\treal_date=126.11.12\n}}\n").encode()
+
+
+class DateTest(unittest.TestCase):
+    def test_a_date_is_a_year_or_year_month_day_of_the_games_calendar(self):
+        self.assertEqual(fixture.parse_date("1900"), (1900, 1, 1))
+        self.assertEqual(fixture.parse_date(" 1950.7.15 "), (1950, 7, 15))
+        for bad in ("", "1900.1", "1900.2.29", "1900.13.1", "1900.0.1", "1900.4.31", "nineteen hundred", "19000",
+                    "1900.1.1.1", "-1900"):
+            with self.subTest(text=bad):
+                with self.assertRaises(ValueError):
+                    fixture.parse_date(bad)
+
+    def test_days_are_counted_on_a_year_of_365_days(self):
+        self.assertEqual(fixture.shift((1899, 12, 31), 1), (1900, 1, 1))
+        self.assertEqual(fixture.shift((1900, 2, 28), 1), (1900, 3, 1))       # no leap day, in 1900 or 2000
+        self.assertEqual(fixture.shift((2000, 2, 28), 1), (2000, 3, 1))
+        self.assertEqual(fixture.shift((1900, 1, 1), -1), (1899, 12, 31))
+        self.assertEqual(fixture.day_number((1901, 1, 1)) - fixture.day_number((1900, 1, 1)), 365)
+        for number in range(fixture.day_number((1836, 1, 1)), fixture.day_number((1838, 1, 1))):
+            self.assertEqual(fixture.day_number(fixture.from_day_number(number)), number)
+
+    def test_the_plain_fixtures_date_gives_the_1836_runs_arguments_and_name(self):
+        self.assertEqual(fixture.fixture_args(), fixture.FIXTURE_ARGS)
+        self.assertEqual(fixture.fixture_args(fixture.DEFAULT_DATE), fixture.FIXTURE_ARGS)
+        self.assertEqual(fixture.expected_save(fixture.DEFAULT_DATE), GAME_SAVE)
+        self.assertEqual(fixture.dated_key(KEY, fixture.DEFAULT_DATE), KEY)
+        self.assertIsNone(fixture.date_of_key(KEY))
+
+    def test_a_dated_fixture_runs_two_days_past_its_date_as_the_1836_one_does(self):
+        self.assertEqual(fixture.fixture_args(DATE_1900)[-1], "-run_until=1900.1.3")
+        self.assertEqual(fixture.fixture_args(DATE_1900)[:-1], fixture.FIXTURE_ARGS[:-1])
+        self.assertEqual(fixture.expected_save(DATE_1900), SAVE_1900)
+        self.assertEqual(fixture.dated_key(KEY, DATE_1900), DATED_KEY)
+        self.assertEqual(fixture.date_of_key(DATED_KEY), DATE_1900)
+        self.assertEqual(fixture.date_of_key(DATED_KEY + "_s0123abcd"), DATE_1900)   # its switched copy
+        self.assertIsNone(fixture.date_of_key(KEY + "_d19000231"))                    # not a date
+        self.assertEqual(fixture.written_date(SAVE_1900), DATE_1900)
+        self.assertEqual(fixture.written_date(GAME_SAVE), fixture.DEFAULT_DATE)
+        self.assertIsNone(fixture.written_date("TEST_FAIL_te_qa_fixture_1 Smarch, 1900.v3"))
+
+    def test_a_fixture_date_must_leave_the_run_inside_the_game(self):
+        end = (2136, 1, 1)
+        self.assertEqual(fixture.check_fixture_date((1836, 1, 2), end), (1836, 1, 2))
+        self.assertEqual(fixture.check_fixture_date((2135, 12, 29), end), (2135, 12, 29))
+        for date in ((1836, 1, 1), (1835, 12, 31), (2135, 12, 30), (2200, 1, 1)):
+            with self.subTest(date=date):
+                with self.assertRaises(ValueError):
+                    fixture.check_fixture_date(date, end)
+
+    def test_the_games_end_date_is_read_from_the_defines_the_mod_last(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vanilla, mod = Path(tmp) / "vanilla", Path(tmp) / "mod"
+            vanilla.mkdir()
+            mod.mkdir()
+            self.assertEqual(fixture.game_end([vanilla, mod]), fixture.VANILLA_END_DATE)
+            (vanilla / "00_defines.txt").write_text('NGame = {\n\tSTART_DATE = "1836.1.1"\n\tEND_DATE = "1936.1.1"\n}\n',
+                                                    encoding="utf-8-sig")
+            self.assertEqual(fixture.game_end([vanilla, mod]), (1936, 1, 1))
+            (mod / "extra_defines.txt").write_text('NGame = {\n\t# END_DATE = "1999.1.1"\n\tEND_DATE = "2136.1.1"\n}\n',
+                                                   encoding="utf-8")
+            self.assertEqual(fixture.game_end([vanilla, mod]), (2136, 1, 1))
+
+
+class EstimateTest(unittest.TestCase):
+    def test_the_1836_fixtures_limit_is_unchanged(self):
+        self.assertEqual(fixture.time_limit_s(fixture.DEFAULT_DATE), fixture.FIXTURE_LIMIT_S)
+        self.assertLess(fixture.estimate_s(fixture.DEFAULT_DATE), 120)      # 90 s, live (spec § 3.6)
+
+    def test_a_run_to_1904_is_estimated_at_the_overnight_observer_runs_pace(self):
+        # vic3te-demog-overnight-2026-10-12: 1836.2.1 to 1876.1.1 in 1.89 h, 1877.1.1 to 1904.1.1 in 1.44 h.
+        hours = fixture.estimate_s((1904, 1, 1)) / 3600
+        self.assertGreater(hours, 3.33 * 0.85)
+        self.assertLess(hours, 3.33 * 1.25)
+
+    def test_the_estimate_and_the_limit_grow_with_the_span_and_the_limit_stays_well_above(self):
+        dates = [(1836, 7, 1), (1850, 1, 1), (1900, 1, 1), (1950, 1, 1), (2000, 1, 1), (2050, 1, 1)]
+        estimates = [fixture.estimate_s(date) for date in dates]
+        limits = [fixture.time_limit_s(date) for date in dates]
+        self.assertEqual(estimates, sorted(estimates))
+        self.assertEqual(limits, sorted(limits))
+        for date, estimate, limit in zip(dates, estimates, limits):
+            with self.subTest(date=date):
+                self.assertGreater(limit, fixture.FIXTURE_LIMIT_S + 2.5 * (estimate - fixture.LOAD_S))
+        self.assertGreater(fixture.seconds_per_day(2050), fixture.seconds_per_day(1951))   # rising past the last anchor
+
+
+class TimingTest(unittest.TestCase):
+    def test_the_games_timing_file_gives_seconds_per_day_and_its_month_rows_are_not_counted(self):
+        text = ("Game Date \tTime Unit \tSeconds\n"
+                "1836_03_01\tMonth\t17.889766\n"
+                "1836_01_01\tDay\t2.0\n1836_01_01\tDay\t0.5\n"
+                "1836_01_02\tDay\t0.25\n1836_01_02\tDay\t0.25\n"
+                "1837_01_01\tDay\t1.0\n"
+                "\t\t0.070176\nnot a row\n")
+        out = fixture.timing(text)
+        self.assertEqual((out["days"], out["seconds"], out["seconds_per_day"]), (3, 4.0, 1.333))
+        self.assertEqual(out["years"], {"1836": 1.5, "1837": 1.0})
+        self.assertEqual(fixture.timing("Game Date \tTime Unit \tSeconds\n")["seconds_per_day"], None)
+
+    def test_a_saves_own_date_is_read_from_its_meta_data(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "save.v3"
+            path.write_bytes(plain_text_save("1900.1.1"))
+            self.assertEqual(fixture.save_date(path), (1900, 1, 1))
+            path.write_bytes(b"SAV0103\x00binary")
+            self.assertIsNone(fixture.save_date(path))
+            self.assertIsNone(fixture.save_date(Path(tmp) / "gone.v3"))
+
+
+class DatedMakeTest(FixtureTestCase):
+    def setUp(self):
+        super().setUp()
+        self.target = self.save_dir / f"te_qa_fixture_{DATED_KEY}.v3"
+        self.follows: list[tuple[str, int]] = []
+
+    def dated(self, fake=None, **kwargs):
+        kwargs.setdefault("date", DATE_1900)
+        kwargs.setdefault("limit_s", fixture.time_limit_s(DATE_1900))
+        kwargs.setdefault("long_run", GRANT)
+        return fixture.make(fake or self.fake, self.user, DATED_KEY, OVERLAY, PERMISSION, "mod_only", sleep=self.sleep,
+                            spawn_watch=self.fake.spawn_watch, clock=lambda: self.now, started=self.journaled.get,
+                            **kwargs)
+
+    def follow(self, snapshot_id):
+        self.follows.append((snapshot_id, self.fake.watches[-1].polls if self.fake.watches else 0))
+
+    def test_the_launch_carries_the_dates_end_and_the_owners_grant(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        fake.watch_code = 0
+        made = self.dated()
+        self.assertEqual(made, self.target)
+        launch = fake.calls[1]
+        self.assertEqual(launch[launch.index("--") + 1:], list(fixture.fixture_args(DATE_1900)))
+        self.assertEqual(launch[launch.index("--long-run") + 1], GRANT)
+        self.assertLess(launch.index("--long-run"), launch.index("--"))
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
+
+    def test_the_plain_fixtures_launch_carries_no_grant(self):
+        fake = self.cli()
+        self.make()
+        self.assertNotIn("--long-run", fake.calls[1])
+
+    def test_the_watch_waits_the_dated_limit_not_the_1836_one(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        fake.watch_hangs = True
+        limit = fixture.time_limit_s(DATE_1900)
+        with self.assertRaises(fixture.FixtureError) as caught:
+            self.dated()
+        self.assertEqual(caught.exception.code, fixture.GAME_MAY_BE_UP)
+        self.assertGreaterEqual(self.now, limit)
+        self.assertLess(self.now, limit + fixture.WATCH_POLL_S + 1)
+        self.assertNotIn("restore", fake.verbs)                     # never beside a game that may be up
+
+    def test_the_logs_are_followed_while_watch_follows_and_once_more_at_the_exit(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        fake.watch_hangs = True
+        watches = []
+
+        def spawn(snapshot_id):
+            watch = fake.spawn_watch(snapshot_id)
+            watches.append(watch)
+            return watch
+
+        original = FakeWatch.poll
+
+        def poll(watch):
+            if watch.polls >= 30:       # the game quits by itself on its date: the save, then watch returns 0
+                watch.hangs = False
+                watch.polls = 0
+            return original(watch)
+
+        with unittest.mock.patch.object(FakeWatch, "poll", poll):
+            fixture.make(fake, self.user, DATED_KEY, OVERLAY, PERMISSION, "mod_only", sleep=self.sleep,
+                         spawn_watch=spawn, clock=lambda: self.now, date=DATE_1900, limit_s=10_000, long_run=GRANT,
+                         follow=self.follow)
+        times = [polls for _, polls in self.follows]
+        self.assertTrue(all(snap == SNAPSHOT for snap, _ in self.follows))
+        self.assertGreaterEqual(len(times), 30 * fixture.WATCH_POLL_S / fixture.FOLLOW_S)   # every FOLLOW_S
+        self.assertLessEqual(len(times), 30 * fixture.WATCH_POLL_S / fixture.FOLLOW_S + 2)
+        self.assertEqual(self.follows[0][1], 1)                     # from the first poll on
+        self.assertEqual(self.follows[-1][1], 1)                    # and once after watch returned, before the rename
+        self.assertTrue(self.target.exists())
+
+    def test_a_follow_that_raises_costs_the_run_nothing(self):
+        fake = self.cli(saves=(SAVE_1900,))
+
+        def broken(_snapshot_id):
+            raise OSError("the backup drive is full")
+        self.assertEqual(self.dated(follow=broken), self.target)
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
+
+    def test_the_saves_name_and_own_date_are_reported_and_never_refused(self):
+        # The name of a later save rests on one data point (2 January, 1836): a surprise must not cost the run,
+        # since the restore would remove an unrenamed save.
+        for name, date, matches in ((SAVE_1900, "1900.1.1", True),
+                                    ("TEST_FAIL_te_qa_fixture_2 January, 1900.v3", "1900.1.2", False),
+                                    ("TEST_FAIL_te_qa_fixture_1900.01.01.v3", "1900.1.1", True)):
+            with self.subTest(name=name):
+                for path in self.save_dir.glob("te_qa_fixture_*_d*.v3"):
+                    path.unlink()
+                fake = self.cli(saves=(name,))
+                fake.write_saves = lambda fake=fake, name=name, date=date: (fake.save_dir / name).write_bytes(
+                    plain_text_save(date))
+                facts: dict = {}
+                self.assertEqual(self.dated(facts=facts), self.target)
+                self.assertEqual(facts["save_found"], name)
+                self.assertEqual(facts["save_expected"], SAVE_1900)
+                self.assertEqual((facts["game_date"], facts["date_matches"]), (date, matches))
+
+    def test_a_restore_that_holds_after_the_rename_leaves_the_fixture_and_says_so(self):
+        # A run of hours ends held when one of its thousands of looks failed (`unwatched_stretch`): the save has
+        # its name already, so the fixture is there for once the owner has resolved the hold.
+        self.cli(saves=(SAVE_1900,), replies={"restore": [({"held": True, "reason": "unwatched_stretch",
+                                                            "id": SNAPSHOT}, 2)]})
+        kept = []
+        with self.assertRaises(fixture.FixtureError) as caught:
+            self.dated(keep_lines=kept.append)
+        self.assertEqual(caught.exception.step, "restore")
+        self.assertEqual(caught.exception.saved, self.target)
+        self.assertEqual(self.target.read_bytes(), GAME_SAVE_BYTES)
+        self.assertEqual(kept, [])                                  # nothing vouches for its lines
+        self.assertIsNone(caught.exception.code)                    # the game is known to have quit
+
+    def test_no_save_when_the_owner_closes_the_game_early_restores_and_keeps_nothing(self):
+        # How the owner takes the desktop back during a long run: they close the game; `watch` records the exit,
+        # no save is found, and the run is restored.
+        fake = self.cli(saves=())
+        error = self.assert_fixture_error_dated("save")
+        self.assertIsNone(error.saved)
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
+        self.assertFalse(self.target.exists())
+
+    def assert_fixture_error_dated(self, step, **kwargs):
+        with self.assertRaises(fixture.FixtureError) as caught:
+            self.dated(**kwargs)
+        self.assertEqual(caught.exception.step, step)
+        return caught.exception
+
+
+class RunLogsTest(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.logs = Path(tmp.name) / "logs"
+        self.logs.mkdir()
+        self.out = Path(tmp.name) / "backups" / "runs" / SNAPSHOT
+
+    def write(self, name, text, mode="a"):
+        with open(self.logs / name, mode, encoding="utf-8", newline="\n") as f:
+            f.write(text)
+
+    def rotate(self, name):
+        stem, suffix = name.split(".")
+        for k in range(5, 0, -1):
+            older = self.logs / f"{stem}.{k - 1}.{suffix}" if k > 1 else self.logs / name
+            if older.exists():
+                os.replace(older, self.logs / f"{stem}.{k}.{suffix}")
+
+    def test_the_copy_holds_every_line_across_rotations_and_skips_the_owners_beginning(self):
+        owner = "the owner's last game\n"
+        self.write("debug.log", owner, "w")
+        found = {"debug.log": (len(owner), __import__("hashlib").sha256(owner.encode()).hexdigest())}
+        logs = fixture.RunLogs(self.logs, self.out, found)
+        self.write("debug.log", "TE_SELF_CHECK OK setup_line\n")      # the game appended to the log it found
+        logs.poll()
+        for round_ in range(8):                                      # more rotations than there are generations
+            self.rotate("debug.log")
+            self.write("debug.log", f"year {round_}\n", "w")
+            logs.poll()
+        self.write("error.log", "an error\n", "w")
+        logs.poll()
+        copy = (self.out / "fixture_debug.log").read_text(encoding="utf-8")
+        self.assertNotIn("the owner's", copy)
+        self.assertEqual(copy.splitlines(), ["TE_SELF_CHECK OK setup_line", *(f"year {k}" for k in range(8))])
+        self.assertEqual((self.out / "fixture_error.log").read_text(encoding="utf-8"), "an error\n")
+        record = logs.record()
+        self.assertEqual((record["lines"], record["gaps"], record["prefix_skipped"]),
+                         ({"debug.log": 9, "error.log": 1}, 0, {"debug.log": len(owner)}))
+        self.assertNotIn("error", record)
+
+    def test_a_rotation_it_missed_is_marked_and_counted(self):
+        self.write("debug.log", "first\n", "w")
+        logs = fixture.RunLogs(self.logs, self.out)
+        logs.poll()
+        for k in range(7):                       # the game wrote and rotated past every generation between polls
+            self.rotate("debug.log")
+            self.write("debug.log", f"line {k}\n", "w")
+        logs.poll()
+        self.assertEqual(logs.gaps, 1)
+        self.assertIn(GAP_MARKER, (self.out / "fixture_debug.log").read_text(encoding="utf-8"))
+
+    def test_an_error_stops_the_copy_for_good_and_never_raises(self):
+        self.write("debug.log", "first\n", "w")
+        self.out.parent.mkdir(parents=True)
+        self.out.write_text("a file where the run folder should be")
+        logs = fixture.RunLogs(self.logs, self.out)
+        logs.poll()
+        self.assertIsNotNone(logs.error)
+        polls = logs.polls
+        logs.poll()
+        self.assertEqual(logs.polls, polls)
+        self.assertIn("error", logs.record())
+
+
+class RenameTest(FixtureTestCase):
+    """Review of #1602: one failed rename of the run's save (OneDrive uploading 140 MB, say) and the restore removed
+    it with the run's hours. The rename is tried again, then the save is copied; one that can be neither is left
+    under its own name with the run's restore asked to hold (fixture.HOLD_ASKED)."""
+
+    def setUp(self):
+        super().setUp()
+        self.target = self.save_dir / f"te_qa_fixture_{DATED_KEY}.v3"
+
+    dated = DatedMakeTest.dated
+
+    def rename_failing(self, times):
+        real = os.rename
+        tries = []
+
+        def rename(src, dst, *a, **k):
+            tries.append(str(dst))
+            if len(tries) <= times:
+                raise PermissionError(13, "The process cannot access the file because it is being used by another "
+                                          "process", str(src))
+            return real(src, dst, *a, **k)
+        return mock.patch.object(fixture.os, "rename", rename), tries
+
+    def test_a_rename_that_fails_for_a_while_is_tried_again(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        patch, tries = self.rename_failing(3)
+        facts = {}
+        with patch:
+            self.assertEqual(self.dated(facts=facts), self.target)
+        self.assertEqual(len(tries), 4)
+        self.assertEqual(self.sleeps.count(fixture.RENAME_RETRY_S), 3)
+        self.assertEqual((facts["kept_by"], facts["rename_tries"]), ("rename", 4))
+        self.assertEqual(fake.saves_at_restore[0].count(SAVE_1900), 0)
+
+    def test_a_save_that_cannot_be_renamed_is_copied_to_its_name(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        patch, tries = self.rename_failing(10_000)
+        facts = {}
+        with patch:
+            self.assertEqual(self.dated(facts=facts), self.target)
+        self.assertEqual(len(tries), fixture.RENAME_TRIES)
+        self.assertEqual(self.target.read_bytes(), GAME_SAVE_BYTES)
+        self.assertEqual(facts["kept_by"], "copy")
+        self.assertFalse(self.target.with_name(self.target.name + ".part").exists())
+        self.assertIn(SAVE_1900, fake.saves_at_restore[0])        # the engine's copy: the restore removes it
+        self.assertNotIn(SAVE_1900, os.listdir(self.save_dir))
+
+    def test_a_save_that_can_be_neither_renamed_nor_copied_asks_the_restore_to_hold(self):
+        fake = self.cli(saves=(SAVE_1900,))
+        patch, _tries = self.rename_failing(10_000)
+        marks = []
+        with patch, mock.patch.object(fixture.shutil, "copy2", side_effect=OSError(28, "No space left on device")):
+            with self.assertRaises(fixture.FixtureError) as caught:
+                self.dated(mark=lambda snap, event, **fields: marks.append((snap, event, fields, list(fake.verbs))))
+        error = caught.exception
+        self.assertEqual((error.step, error.left.name, error.reply["left"]), ("rename", SAVE_1900, SAVE_1900))
+        # journaled before the restore ran, naming the save
+        self.assertEqual(marks, [(SNAPSHOT, fixture.HOLD_ASKED, {"reason": "save_not_kept",
+                                                                 "files": ["save games/" + SAVE_1900]},
+                                  ["snapshot", "launch"])])
+        self.assertEqual(fake.verbs, ["snapshot", "launch", "restore"])
+        self.assertFalse(self.target.exists())
+        self.assertEqual([p for p in os.listdir(self.save_dir) if p.endswith(".part")], [])
+
+    def test_without_a_way_to_ask_the_hold_the_message_says_what_may_happen(self):
+        self.cli(saves=(SAVE_1900,))
+        patch, _tries = self.rename_failing(10_000)
+        with patch, mock.patch.object(fixture.shutil, "copy2", side_effect=OSError(28, "No space left on device")):
+            with self.assertRaises(fixture.FixtureError) as caught:
+                self.dated()
+        self.assertIn("the restore may remove save games/" + SAVE_1900, str(caught.exception))
+
+
+class DatedPruneTest(FixtureTestCase):
+    def put(self, name, age):
+        path = self.save_dir / name
+        path.write_bytes(b"x")
+        os.utime(path, (1_700_000_000 + age * 1000,) * 2)
+        return path
+
+    def left(self):
+        return sorted(name for name in os.listdir(self.save_dir) if name.startswith("te_qa_fixture_"))
+
+    def test_cheap_1836_fixtures_never_push_out_a_dated_one(self):
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        self.put("te_qa_fixture_old_d19000101.v3", 1)
+        for age, key in enumerate(("p1", "p2", "p3", "p4"), start=2):
+            self.put(f"te_qa_fixture_{key}.v3", age)
+        removed = fixture.prune(self.user)
+        self.assertEqual(removed, ["te_qa_fixture_p1.v3", "te_qa_fixture_p2.v3"])
+        self.assertIn("te_qa_fixture_old_d19000101.v3", self.left())
+
+    def test_the_newest_few_stay_whatever_their_dates(self):
+        # Review of #1602: a newer fixture of the same date may be the other playset's, not a newer build's (the
+        # key cannot say which), so it never makes an older one go: only the count does.
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        self.put("te_qa_fixture_old_d19000101.v3", 1)
+        self.put("te_qa_fixture_old_d19500101.v3", 2)
+        self.put("te_qa_fixture_new_d19000101.v3", 3)      # 1900 made again: a newer build, or the other playset
+        self.assertEqual(fixture.prune(self.user), [])
+        self.put("te_qa_fixture_new_d20000701.v3", 4)
+        self.assertEqual(fixture.prune(self.user, keep_dated=4), [])
+        self.put("te_qa_fixture_new_d18360701.v3", 9)                         # a fifth: the oldest goes
+        self.assertEqual(fixture.prune(self.user, keep_dated=4), ["te_qa_fixture_old_d19000101.v3"])
+
+    def test_a_current_playset_fixture_never_pushes_out_the_mod_only_one_of_its_date(self):
+        deploy = self.base / "deploy"
+        (deploy / "common").mkdir(parents=True)
+        (deploy / "common" / "a.txt").write_text("x")
+        mod_only = fixture.key("1.15.1", [r"C:\mod\TE", r"C:\mod\te_qa_overlay"], deploy, playset="mod_only")
+        current = fixture.key("1.15.1", [r"C:\mod\TE", r"C:\mod\Other", r"C:\mod\te_qa_overlay"], deploy,
+                              playset="current")
+        first = self.put("te_qa_fixture_%s.v3" % fixture.dated_key(mod_only, (1900, 1, 1)), 1)
+        second = self.put("te_qa_fixture_%s.v3" % fixture.dated_key(current, (1900, 1, 1)), 2)
+        for in_use in ((second.name,), (first.name,), ()):
+            self.assertEqual(fixture.prune(self.user, in_use=in_use), [])
+        self.assertTrue(first.exists() and second.exists())
+
+    def test_a_dated_fixtures_switched_copies_go_with_it_and_count_with_the_others(self):
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        self.put("te_qa_fixture_old_d19000101.v3", 1)
+        self.put("te_qa_fixture_old_d19000101_s11111111.v3", 2)
+        self.put("te_qa_fixture_new_d19000101.v3", 3)
+        self.put("te_qa_fixture_new_d19000101_s22222222.v3", 4)
+        removed = fixture.prune(self.user, keep_dated=1)
+        self.assertEqual(removed, ["te_qa_fixture_old_d19000101.v3", "te_qa_fixture_old_d19000101_s11111111.v3"])
+        self.assertEqual(self.left(), ["te_qa_fixture_new_d19000101.v3", "te_qa_fixture_new_d19000101_s22222222.v3"])
+
+    def test_a_dated_fixture_in_use_stays_past_the_count(self):
+        (self.save_dir / "te_qa_fixture_aaaaaaaaaaaa.v3").unlink()
+        self.put("te_qa_fixture_old_d19000101.v3", 1)
+        self.put("te_qa_fixture_new_d19000101.v3", 2)
+        self.assertEqual(fixture.prune(self.user, keep_dated=1, in_use=("te_qa_fixture_old_d19000101.v3",)), [])
+        with self.assertRaises(ValueError):
+            fixture.prune(self.user, keep_dated=-1)
 
 if __name__ == "__main__":
     unittest.main()
