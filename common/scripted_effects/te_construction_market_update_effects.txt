@@ -2,12 +2,26 @@
 # re-place the sites after the map changes. te_cm_placing_site lets the site's
 # can_build_government accept these create_building calls (see
 # common/buildings/te_construction_market_site.txt).
+#
+# The country's own states, not every state in the world. The walk came from
+# the Free Market Construction mod as `every_state`, which made each call
+# re-place the sites of every country on the map. Each country already gets
+# its own call (te_construction_market_recalc_events.1, from its yearly pulse
+# and from the border changes te_construction_market_on_actions.txt hooks).
+# Some transfers fire none of those hooks (subject state grants, treaty
+# transfers, annexation by diplomatic action, ...): a site that came with such
+# a state stays until the new owner's next recalc, at most a year, or until a
+# construction ends there. That costs a site's wages, not capacity, since the
+# purchase is split over however many sites there are
+# (te_construction_market_per_site). In a 1931 game the world walk cost about
+# 20 ms a call, on the main thread: 152 calls and 3 s in 30 days, mostly from
+# on_revolution_start (docs/audits/late_game_performance.md).
 te_construction_market_country_update_sites = {
 	set_global_variable = {
 		name = te_cm_placing_site
 		value = 1
 	}
-	every_state = {
+	every_scope_state = {
 		if = {
 			limit = {
 				any_scope_building = {
