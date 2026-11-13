@@ -521,7 +521,8 @@ not in a revolution annexed by its overlord, or else by a neighbor: 119
 countries went, leaving 151 from 263, with the same pops (90,087) and 12,935
 buildings. Over the same dates (17 July to 14 September, rendering off) the
 tick tasks took 452 ms a day against 603 in the unchanged world, a quarter
-less: `RecalculateModifierNodes` 80 against 116, `UpdateAI` 33 against 52, the
+less: `RecalculateModifierNodes` 80 against 116 (unchanged runs of this day
+read 97 to 118 across sessions), `UpdateAI` 33 against 52, the
 three journal-entry tasks 23 against 36, and the investment pass 101 against
 175 (fewer states to score, or weeks with fewer buildings; not separated).
 That is about 1.3 ms a day of task time for each one-state country, before
@@ -541,8 +542,11 @@ culture and religion with at least 100 people in the same state, which is what
 the engine's micro-pop dissolution asks for, and 17,292 are employed. Raising
 the consolidation defines far past anything shippable (merge at 150 workforce
 under the moderate rule, dissolve under 1,000 people) removed 5.5% of pops in
-120 days (84,710 against 89,658) and read 3–5% faster, which is inside two
-runs' spread. Why the small pops stay is not yet known (see "Small pops" below).
+120 days (84,710 against 89,658) and 8.4% in a year (83,508 against 91,147),
+and bought no speed: the year ran at 0.994 s a day against 0.971 for the
+unchanged one (snapshots in `runs/pops_x365r` and `runs/B365r`), and the pops
+under 100 people grew from 24,235 to 27,798. The consolidation defines are
+not a lever here. Why the small pops stay is in "Small pops" below.
 
 **What moved nothing.** The mod's interface (guivan: 1.233 s against 1.266
 and 1.447, with only the HUD on screen); the AI's building-priority interval
@@ -668,13 +672,20 @@ All are exact: they change no result unless a line says otherwise.
   2026-10-03 matched one on 2026-09-30, on the same build. It followed
   loading a different save, and `autosave_exit` ran cleanly.
 
-## Open (2026-11-12)
+## Open (2026-11-12, with the answers of 2026-11-13)
 
-Numbered as first listed, so references from other files hold, not by size:
-the per-frame floor (item 7, 27% of wall time) is the largest after item 1.
-Items 3 and 6 were addressed by #1713.
+Numbered as first listed, so references from other files hold, not by size.
+Items 3 and 6 were addressed by #1713. The knockout runs of 2026-11-13
+("Where the day goes") answered items 1, 2, 7 and 13 and added 14 and 15; each
+of those items now opens with its answer.
 
-1. **Unattributed day-boundary time: about 0.43 s of each ordinary day's
+1. **Answered, 2026-11-13.** The time outside the tick tasks is three
+   things: frames drawn while the tick is worked out (gone with sub-tick
+   rendering off), the mod's on_actions (0.10 s a day, measured by emptying
+   them), and about 0.28 s a day that is vanilla's pulses, the frames between
+   ticks and engine work in no task. `RecalculateModifierNodes` is not driven
+   by the pulses' refreshes. As first written:
+   **Unattributed day-boundary time: about 0.43 s of each ordinary day's
    hour 0**, 22% of wall time in 1931, beyond the tick tasks and the
    per-frame floor. The day-spread serial script in "Which script holds up
    the day" is part of it, about 9 s profiled in 30 days, so roughly 0.1 s a
@@ -697,7 +708,12 @@ Items 3 and 6 were addressed by #1713.
    Those captures differ in date, open panels and machine load. Other 2072
    items: Cultural Hegemony `ch_monthly_pulse_on_action` 303 ms, monetary
    191 ms, combined arms 118 ms, `sol_expectations_on_actions.txt:9` 117 ms.
-2. **The weekly investment pass**: `HandleAutonomousInvestment` takes 1.1 s of
+2. **Answered, 2026-11-13: the pass is the played country's investment
+   pool.** Singapore's pool makes 77 to 154 costly decisions a week at about
+   13 ms each, scored across its bloc's 314 states; the other 262 countries
+   add little. No define makes a decision cheaper, and the buildings' script
+   is not the cost ("Where the day goes"). As first written:
+   **The weekly investment pass**: `HandleAutonomousInvestment` takes 1.1 s of
    each weekly tick (about 10% of wall time in 1931). Building triggers are
    23% of script time, 64% of it in mod files; this pass and the construction
    AI are the likely askers, though the dump doesn't say which. The mod
@@ -776,7 +792,12 @@ Items 3 and 6 were addressed by #1713.
 6. **The month-start error burst**: about 5,700 errors from
    `extra_script_values.txt:1587` on every 1st (#1703; #1713 fixed it:
    none in its after-run).
-7. **The per-frame floor**: about 0.11 s on every frame beyond its tasks,
+7. **Answered, 2026-11-13: it is sub-tick rendering**, frames drawn while a
+   tick is worked out, which `-disable_renderframeifneeded` or the console's
+   `gamestatetick.renderframeifneeded` switches off ("Where the day goes").
+   The mod's interface is not what makes those frames dear (guivan). As first
+   written:
+   **The per-frame floor**: about 0.11 s on every frame beyond its tasks,
    27% of wall time (a sub-tick takes 0.15 s against 0.04 s of tasks). It is
    probably rendering or speed pacing, not script. Test with
    `-disable_renderframeifneeded` (#1700). Script the interface evaluates
@@ -898,7 +919,13 @@ Items 3 and 6 were addressed by #1713.
     `on_revolution_start` fired 126 times in those 30 days (#1723): 125 of
     them were 25 one-state countries whose revolution is tried again each
     week (see "Merged `main` remeasured").
-13. **Refreshes that re-add a modifier at the same strength** (see "Does a
+13. **Closed, 2026-11-13: they do not drive it.** With every mod on_action
+    emptied, refreshes included, `RecalculateModifierNodes` read 115 ms a day
+    against 101 and 117; and giving every country and state one more
+    modifier, decaying or not, left it at 105–112. No skip-when-unchanged
+    refresh or dead band is worth building for this task's sake. As first
+    written:
+    **Refreshes that re-add a modifier at the same strength** (see "Does a
     refresh's re-add drive `RecalculateModifierNodes`?"). The engine's
     modifier recalculation takes about a tenth of wall time. Whether the
     mod's monthly remove-and-re-add refreshes are much of it is unproven:
@@ -912,3 +939,16 @@ Items 3 and 6 were addressed by #1713.
     every month, so a dead band or a rounded multiplier would be the
     owner's call. The pollution refresh re-adds on every owned state each
     month (871 a month).
+14. **The number of countries** (2026-11-13). Each one-state country costs
+    about 1.3 ms of tick-task time a day (`RecalculateModifierNodes`,
+    `UpdateAI`, the journal-entry tasks), before its share of the monthly and
+    yearly pulses, and 160 of the 263 countries of 1931 have one state. With
+    119 of them annexed the tick tasks took a quarter less. Whether the world
+    should hold fewer of them (fewer releases, unions of small neighbors, the
+    revolts of #1723 ended) is a design question for the owner. Not measured:
+    the wall-time gain without an event window open, and what the seven
+    unfinished revolts cost.
+15. **Small pops** (2026-11-13). A quarter of the pops are under 100 people
+    and hold 0.02% of the population; far higher consolidation defines removed
+    5.5% of pops in 120 days. See "Small pops" for why they stay and what, if
+    anything, a define can do.
