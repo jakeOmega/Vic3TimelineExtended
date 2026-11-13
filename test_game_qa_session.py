@@ -1735,6 +1735,103 @@ class ManualSavesStopTest(SessionTestCase):
         self.assertFalse([n for n in out.get("notes") or [] if "save games/" in n])
 
 
+class EnterClickErrorTest(SessionTestCase):
+    """#1725: a helper error on one of enter-game's clicks is split as `click`'s is (CLICK_REFUSED_BEFORE_PRESS)."""
+
+    def fail_click(self, number, code):
+        """The helper raises `code` on the `number`th click (1: the country, 2: Start); the others go through."""
+        real, made = self.game.click, []
+
+        def click(pid, x, y):
+            made.append((x, y))
+            if len(made) == number:
+                raise HelperError(code, "failed")
+            return real(pid, x, y)
+        self.game.click = click
+
+    def test_start_refused_before_the_press_latches_nothing_and_enter_game_can_be_run_again(self):
+        for code in session.CLICK_REFUSED_BEFORE_PRESS:
+            with self.subTest(code=code):
+                self.setUp()
+                self.started()
+                self.fail_click(2, code)
+                error = self.session_error(self.session.enter_game)
+                self.assertEqual(error.code, "click_refused")
+                self.assertIn("no_country_selected", error.detail)
+                self.assertEqual(len(error.info["clicks"]), 1)          # the country click alone was made
+                status = self.session.status()
+                self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]),
+                                 (False, False, False))
+                self.game.click = type(self.game).click.__get__(self.game)
+                # The country the first try selected stays selected, so the panel cannot change: the gap the detail
+                # names. With the lobby back as it was before the first try, enter-game goes through.
+                self.assertEqual(self.session_error(self.session.enter_game).code, "no_country_selected")
+                self.game.selected = None
+                self.assertTrue(self.session.enter_game()["entered"])
+
+    def test_start_that_may_have_been_pressed_leaves_the_session_maybe_in_play(self):
+        for code in ("backend_error", "helper_gone", "timeout"):
+            with self.subTest(code=code):
+                self.setUp()
+                self.started()
+                self.fail_click(2, code)
+                error = self.session_error(self.session.enter_game)
+                self.assertEqual(error.code, "click_unknown")
+                self.assertIn(code, error.detail)
+                self.assertIn("Start may have been pressed", error.detail)
+                self.assertEqual(len(error.info["clicks"]), 1)
+                self.assertEqual(len(error.info["pixel"]), 2)
+                status = self.session.status()
+                self.assertEqual((status["entered"], status["entered_unproved"], status["left_running"]),
+                                 (False, True, True))
+                clicks = len(self.game.clicks)
+                self.assertEqual(self.session_error(self.session.enter_game).code, "left_running")
+                self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+                self.assertEqual(len(self.game.clicks), clicks)           # no third click
+
+    def test_advance_through_a_start_that_may_have_been_pressed_is_left_running_too(self):
+        self.started()
+        self.fail_click(2, "backend_error")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "click_unknown")
+        self.assertEqual(self.session_error(self.session.advance, 3).code, "left_running")
+
+    def test_a_country_click_that_may_have_been_pressed_latches_nothing_and_clicks_no_start(self):
+        self.started()
+        self.fail_click(1, "backend_error")
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "click_unknown")
+        self.assertIn("Start was not clicked", error.detail)
+        self.assertIn("no_country_selected", error.detail)          # what a selected panel does to the next try
+        self.assertEqual(error.info["clicks"], [])
+        status = self.session.status()
+        self.assertEqual((status["entered_unproved"], status["left_running"]), (False, False))
+        self.assertEqual(self.game.clicks, [])                      # the fake's own record: neither click landed
+        self.game.click = type(self.game).click.__get__(self.game)
+        self.assertTrue(self.session.enter_game()["entered"])       # nothing locked: enter-game can be run again
+
+    def test_a_country_click_refused_before_the_press_is_click_refused(self):
+        self.started()
+        self.fail_click(1, "covered")
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual((error.code, error.info["clicks"]), ("click_refused", []))
+        self.assertFalse(self.session.status()["left_running"])
+
+    def test_the_proof_before_start_is_not_taken_for_a_click_error(self):
+        # `_prove_game` raises before the press: watch_ended, as before, and nothing latched beyond it.
+        self.started()
+        real, made = self.game.click, []
+
+        def click(pid, x, y):
+            made.append((x, y))
+            real(pid, x, y)
+            self.game.process_gone = True                           # the game is gone before Start's proof
+        self.game.click = click
+        error = self.session_error(self.session.enter_game)
+        self.assertEqual(error.code, "watch_ended")
+        self.assertEqual(len(made), 1)
+        self.assertFalse(self.session.status()["left_running"])
+
+
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
         self.started()
