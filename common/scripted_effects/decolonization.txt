@@ -1298,6 +1298,106 @@ ce_reentry_monthly = {
 	}
 }
 
+# Two once-a-game self-checks of colonial_in_own_civil_war
+# (colonial_empire_triggers.txt), which the re-entry pass and the AI's civil-war
+# hold read. It finds a civil war through the rebel country's
+# civil_war_origin_country and its is_revolutionary / is_secessionist, a
+# reading no launch had shown by 2026-11-13. The reference is the civil-war
+# layer's own pointer, te_cw_origin (te_civil_war_effects.txt): set on the rebel
+# at the outbreak, naming the country it rose against, removed from the winner
+# when the war ends. Run from the rebel's side on every country's monthly pass
+# (colonial_geography_on_action), so only a rebel, or a secession that was one,
+# does any work.
+#   ce_civil_war_read  a live rebel: the country it rose against reads the war.
+#                      OK when the trigger is true there.
+#   ce_civil_war_over  a secession that won (a secessionist last month that the
+#                      country it left read as its civil war, alive, the
+#                      layer's pointer gone): that country no longer reads a
+#                      civil war, so the hold lifts. Judged only when no other
+#                      uprising against it is live.
+# Both leave out a colony's secession (decol_iw_metropole on the rebels), as
+# the trigger does.
+# BROKEN on either: read the war from the layer's pointer instead, with
+# `var:te_cw_origin ?= scope:ce_cw_self` in place of civil_war_origin_country
+# in colonial_in_own_civil_war. A BROKEN _read can also be a rebel whose
+# pointer the layer moved to a revolution's winner (te_civil_war_repoint_uprisings):
+# check the TE_CIVIL_WAR lines before acting on it.
+# Play-test rows: docs/testing/colonial-holdings-playtest.md.
+colonial_civil_war_selfcheck = {
+	save_temporary_scope_as = ce_cwsc_self
+	if = {
+		limit = {
+			has_variable = te_cw_origin
+			# A government that beat its rebels can hold one naming itself
+			# after the merge.
+			NOT = { var:te_cw_origin ?= scope:ce_cwsc_self }
+			var:te_cw_origin ?= { is_country_alive = yes }
+			# A colony's secession is a war of independence, which the
+			# trigger leaves out.
+			NOT = { has_variable = decol_iw_metropole }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_sc_ce_civil_war_read } }
+			set_global_variable = te_sc_ce_civil_war_read
+			if = {
+				limit = { var:te_cw_origin = { colonial_in_own_civil_war = yes } }
+				debug_log = "TE_SELF_CHECK OK ce_civil_war_read rebels=[THIS.GetCountry.GetNameNoFormatting] (the country these rebels rose against reads a civil war of its own through civil_war_origin_country, as the civil-war layer's pointer says) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ce_civil_war_read rebels=[THIS.GetCountry.GetNameNoFormatting] (the civil-war layer's pointer says these rebels rose against a live country, but colonial_in_own_civil_war is false there: civil_war_origin_country or the rebel flags don't read as expected, so the Colonial Empire's civil-war hold never applies to a civil war of its own; see docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		# Remember a secession, naming itself, so a winner can be told from a
+		# government that inherited the variable by beating it; and only while
+		# the country it left reads the war, so that OK after the war means the
+		# reading went from true to false, not that it never held.
+		if = {
+			limit = {
+				is_secessionist = yes
+				NOT = { has_global_variable = te_sc_ce_civil_war_over }
+				var:te_cw_origin = { colonial_in_own_civil_war = yes }
+			}
+			var:te_cw_origin = { save_temporary_scope_as = ce_cwsc_origin }
+			set_variable = { name = ce_cwsc_secession value = scope:ce_cwsc_self }
+			set_variable = { name = ce_cwsc_seceded_from value = scope:ce_cwsc_origin }
+		}
+	}
+	else_if = {
+		limit = { has_variable = ce_cwsc_secession }
+		if = {
+			limit = {
+				var:ce_cwsc_secession ?= scope:ce_cwsc_self
+				NOT = { has_variable = te_cw_origin }
+				NOT = { has_global_variable = te_sc_ce_civil_war_over }
+				var:ce_cwsc_seceded_from ?= { is_country_alive = yes }
+			}
+			var:ce_cwsc_seceded_from = { save_temporary_scope_as = ce_cwsc_left }
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							var:te_cw_origin ?= scope:ce_cwsc_left
+						}
+					}
+				}
+				set_global_variable = te_sc_ce_civil_war_over
+				if = {
+					limit = { scope:ce_cwsc_left = { colonial_in_own_civil_war = no } }
+					debug_log = "TE_SELF_CHECK OK ce_civil_war_over country=[THIS.GetCountry.GetNameNoFormatting] (a secession that won: the country it left no longer reads a civil war of its own, so the Colonial Empire's civil-war hold lifts) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN ce_civil_war_over country=[THIS.GetCountry.GetNameNoFormatting] (a secession that won, but the country it left still reads a civil war of its own: the winner keeps civil_war_origin_country and a rebel flag, so the Colonial Empire's civil-war hold never lifts there; see docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+		}
+		remove_variable = ce_cwsc_secession
+		if = {
+			limit = { has_variable = ce_cwsc_seceded_from }
+			remove_variable = ce_cwsc_seceded_from
+		}
+	}
+}
+
 # ============================================================================
 # COLONIAL EMPIRE — WHAT A REVOLUTION'S WINNER KEEPS
 #
