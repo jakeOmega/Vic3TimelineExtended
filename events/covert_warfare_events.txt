@@ -602,7 +602,7 @@ covert_warfare.2 = {
 			NOT = { this = scope:iw_exposed_by }
 			custom_tooltip = {
 				text = covert_warfare.2.b_needs_service_tt
-				has_game_rule = covert_warfare_enabled
+				te_covert_warfare_on = yes
 				has_journal_entry = je_covert_warfare
 			}
 		}

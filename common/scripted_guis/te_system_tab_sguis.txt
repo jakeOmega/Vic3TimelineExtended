@@ -206,7 +206,7 @@ te_ni_nuclear_tab_sgui = {
 te_military_covert_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		has_journal_entry = je_covert_warfare
 	}
 	ai_is_valid = { always = no }
@@ -216,7 +216,7 @@ te_military_covert_tab_sgui = {
 
 te_military_covert_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = covert_warfare_enabled }
+	is_shown = { te_covert_warfare_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { covert_warfare_entry_unlocked = yes }
 	effect = { }

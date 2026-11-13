@@ -232,6 +232,16 @@ Surveillance), whose institution adds a slot per level. Computer Networks,
 Cyber Warfare and Quantum Computing add a slot each and open it too. Once
 active, the entry stays open. It never completes.
 
+With the game rule set to *Early Unlock*, the entry opens with the era 2
+technology Central Archives instead, a nineteenth-century police and
+intelligence service. Until you reach one of the sources above, funding stops
+at Professional, and you can launch only the operations that need no later
+technology: industrial and military espionage, cultivating assets,
+counterintelligence support and, at war, infrastructure sabotage. Once you
+reach one, the agency works as it does under *Late Unlock*. Switching the rule
+from early to late closes an entry opened early, which comes back when you
+reach a source.
+
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name, which is also its name on your rows.
 Everything else is on the Covert tab

@@ -43,6 +43,23 @@ on_monthly_pulse_country = {
 
 covert_warfare_monthly_country = {
 	effect = {
+		# The early unlock switched to the late one closed an entry opened early
+		# (je_covert_warfare's invalid outcome, which set iw_reopen_at_gate):
+		# add it back once the gate of the setting now in force is met. An
+		# ended entry doesn't come back on its own; add_journal_entry brings a
+		# concluded type back (rules-off-midgame-playtest.md, Colonial Empire's
+		# ce_reentry, read OK 2026-11-12).
+		if = {
+			limit = {
+				has_variable = iw_reopen_at_gate
+				te_covert_warfare_on = yes
+				covert_warfare_entry_unlocked = yes
+				NOT = { has_journal_entry = je_covert_warfare }
+				NOT = { has_inactive_journal_entry = je_covert_warfare }
+			}
+			remove_variable = iw_reopen_at_gate
+			add_journal_entry = { type = je_covert_warfare }
+		}
 		if = {
 			limit = { has_variable = iw_last_exposed_age }
 			change_variable = { name = iw_last_exposed_age add = 1 }

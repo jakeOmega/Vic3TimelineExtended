@@ -77,8 +77,18 @@ cultural_hegemony_rule = {
 	}
 }
 
+# Three settings: early unlock, late unlock and off. Late unlock is the
+# original system and keeps the name covert_warfare_enabled, so a save from
+# before the early setting keeps it. Each setting has one flag named after it;
+# script reads the rule through te_covert_warfare_on / te_covert_warfare_early
+# (common/scripted_triggers/te_rule_setting_triggers.txt), never a bare
+# has_game_rule = covert_warfare_enabled, which is the late setting alone.
 covert_warfare_rule = {
 	default = covert_warfare_enabled
+
+	covert_warfare_early_unlock = {
+		flag = covert_warfare_early_unlock
+	}
 
 	covert_warfare_enabled = {
 		flag = covert_warfare_enabled

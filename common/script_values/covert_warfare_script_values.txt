@@ -122,6 +122,12 @@ covert_exposure_infamy_max = 25
 # Maximum funding level (0 = dormant, max = deep state)
 iw_funding_level_max = 5
 
+# The early unlock's budget cap (covert_warfare_rule's early setting): an agency
+# opened before the late gate funds up to Professional (2) until it reaches it
+# (covert_agency_limited, covert_warfare_triggers.txt). Covert Network, Black
+# Budget and Deep State wait for the late gate.
+covert_agency_funding_cap = 2
+
 # An AI borrowing with bankruptcy closer than this many weeks steps its
 # funding down to the floor before it defaults (je_covert_warfare's AI funding;
 # weeks_until_bankruptcy read behind taking_loans, as vanilla's own

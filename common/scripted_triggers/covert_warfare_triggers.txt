@@ -2,24 +2,60 @@
 # COVERT WARFARE — Scripted Triggers
 # ============================================================================
 
-# Country scope: je_covert_warfare's `possible` as one tooltip line: the
-# checklist in the Military panel's greyed Covert tab
+# Country scope: the late gate, every named source of an operation slot beyond
+# the base slot and the rank bonus. Each source is named, not counted: until
+# 2026-11-08 the entry compared the slot count with the rank's (4 for a great
+# power, 3 major, 2 otherwise), and Two Sicilies opened it in 1836 (Workshop
+# report), most likely a drop in rank read before the old rank's slot bonus
+# lapsed, and an entry never closes. test_covert_warfare_gate.py fails when a
+# slot source is added or removed and this list doesn't follow. Under the late
+# unlock it is the whole gate; under the early unlock it is where the agency's
+# budget cap lifts (covert_agency_limited).
+covert_warfare_slot_source = {
+	OR = {
+		has_technology_researched = mainframe_computers
+		has_technology_researched = computer_networks
+		has_technology_researched = cyber_warfare
+		has_technology_researched = quantum_computing
+		has_law = law_type:law_ministry_of_intelligence_and_security
+	}
+}
+
+# Country scope: je_covert_warfare's `possible`, as one tooltip line, which is
+# also the checklist in the Military panel's greyed Covert tab
 # (te_military_covert_tab_unlock_sgui's is_valid, te_system_tab_sguis.txt).
 # One line because the test is an OR, and a bare OR prints there as an empty
-# "All of these:" (gui_modding_guide.md gotcha #31, the UN tab). The OR is the
-# entry's own, copied verbatim, since the entry itself is left as it is;
-# MilitaryCovertTabTest in test_covert_layout.py fails if the two differ.
+# "All of these:" (gui_modding_guide.md gotcha #31, the UN tab). Under the
+# early unlock Central Archives (era 2, the technology vanilla's Secret Police
+# law needs) also opens the entry.
 covert_warfare_entry_unlocked = {
-	custom_tooltip = {
-		text = covert_warfare_unlock_tt
-		OR = {
-			has_technology_researched = mainframe_computers
-			has_technology_researched = computer_networks
-			has_technology_researched = cyber_warfare
-			has_technology_researched = quantum_computing
-			has_law = law_type:law_ministry_of_intelligence_and_security
+	trigger_if = {
+		limit = { te_covert_warfare_early = yes }
+		custom_tooltip = {
+			text = covert_warfare_unlock_early_tt
+			OR = {
+				has_technology_researched = central_archives
+				covert_warfare_slot_source = yes
+			}
 		}
 	}
+	trigger_else = {
+		custom_tooltip = {
+			text = covert_warfare_unlock_tt
+			covert_warfare_slot_source = yes
+		}
+	}
+}
+
+# Country scope: an agency opened early that has not yet reached the late gate.
+# Its funding stops at Professional (covert_agency_funding_cap); the operations
+# it can launch are the ones whose own technology it has, which before the
+# late gate leaves espionage, wartime sabotage, cultivating assets and
+# counterintelligence support (the rest need an era 6 or later technology or
+# a nuclear programme, a space race or a colony to aim at).
+covert_agency_limited = {
+	te_covert_warfare_early = yes
+	NOT = { covert_warfare_slot_source = yes }
 }
 
 # Check if a diplomatic pact is a covert operation pact (any type; the list is
@@ -179,6 +215,18 @@ covert_possible_increase_funding = {
 		OR = {
 			NOT = { has_variable = iw_funding_level }
 			var:iw_funding_level < iw_funding_level_max
+		}
+	}
+	# The early unlock's cap: shown only to an agency it binds, so the late
+	# unlock's tooltip is as it was.
+	trigger_if = {
+		limit = { covert_agency_limited = yes }
+		custom_tooltip = {
+			text = iw_funding_early_cap_tt
+			OR = {
+				NOT = { has_variable = iw_funding_level }
+				var:iw_funding_level < covert_agency_funding_cap
+			}
 		}
 	}
 }
@@ -456,7 +504,7 @@ covert_backlash_pro_lobby_of = {
 # "Retaliate in kind" applies. Without it a catch goes straight to the exposure.
 # Scope: country (the target of the caught operation)
 covert_can_watch = {
-	has_game_rule = covert_warfare_enabled
+	te_covert_warfare_on = yes
 	has_journal_entry = je_covert_warfare
 }
 

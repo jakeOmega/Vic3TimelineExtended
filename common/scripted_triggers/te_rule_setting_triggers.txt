@@ -1,0 +1,34 @@
+﻿# ============================================================================
+# Game rules with an early and a late unlock
+# ============================================================================
+# Each of these rules has three settings: early unlock, late unlock and off
+# (docs/systems/mod_systems/game_rules.md). Late unlock is the system as it
+# was and keeps its old name (<system>_enabled), so a save made before the
+# early setting existed keeps it.
+#
+# Every setting has one flag, named after it. Whether has_game_rule reads a
+# second flag on a setting has never been checked (vanilla's own reads name a
+# setting, allow_monument_effects, whose flags are all disable_pm_*), so the
+# early setting does not borrow the late one's name. Script reads the rule
+# through these triggers, never a bare has_game_rule = <system>_enabled,
+# which would now mean the late setting alone. test_rule_unlock_settings.py
+# fails on a bare one.
+#
+# They read only a game rule, so they work from any scope: country, journal
+# entry, diplomatic action, scripted GUI, customizable localization.
+# ============================================================================
+
+# ---- Covert Warfare (covert_warfare_rule) ----
+# The system runs: either unlock.
+te_covert_warfare_on = {
+	OR = {
+		has_game_rule = covert_warfare_enabled
+		has_game_rule = covert_warfare_early_unlock
+	}
+}
+
+# The early unlock: the agency opens at Central Archives with a limited
+# budget (covert_agency_limited, covert_warfare_triggers.txt).
+te_covert_warfare_early = {
+	has_game_rule = covert_warfare_early_unlock
+}

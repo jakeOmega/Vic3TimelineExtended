@@ -1327,7 +1327,7 @@ un_events.8 = {
 			triggered_desc = {
 				desc = un_events.8.d_covert
 				trigger = {
-					has_game_rule = covert_warfare_enabled
+					te_covert_warfare_on = yes
 					has_variable = un_court_case_covert
 				}
 			}

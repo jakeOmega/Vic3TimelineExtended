@@ -38,7 +38,7 @@ SYSTEM_MAPS = (
     (19, "common/journal_entries/je_nuclear_program.txt", "je_nuclear_program", "nuclear", "nuclear",
      "gui/journal_entry_widgets/nuclear_layout_widget.gui", "has_game_rule = nuclear_weapons_enabled"),
     (20, "common/journal_entries/je_covert_warfare.txt", "je_covert_warfare", "networks", "covert",
-     "gui/journal_entry_widgets/covert_operations_widget.gui", "has_game_rule = covert_warfare_enabled"),
+     "gui/journal_entry_widgets/covert_operations_widget.gui", "te_covert_warfare_on = yes"),
     (21, "common/journal_entries/je_united_nations.txt", "je_united_nations", "united_nations", "un",
      "gui/journal_entry_widgets/un_layout_widget.gui", "has_game_rule = united_nations_enabled"),
     (22, "common/journal_entries/je_cultural_hegemony.txt", "je_cultural_hegemony", "political_models", "ch",

@@ -1,6 +1,7 @@
 """The Covert Warfare entry opens on a named slot source, and the list stays whole.
 
-je_covert_warfare's `possible` names every source of an operation slot
+The late gate, `covert_warfare_slot_source` (the entry's `possible` under the late unlock, and where the
+early unlock's budget cap lifts), names every source of an operation slot
 (`country_covert_operation_slot_add`) beyond the base slot every country holds
 (`base_values`) and its rank's bonus (`common/country_ranks`): a technology by
 `has_technology_researched`, a law by `has_law`, an institution by the law that
@@ -9,9 +10,9 @@ and Two Sicilies opened the entry in 1836 (Workshop report).
 
 This fails when a slot source is added that the gate doesn't name, when the gate
 names something that grants no slot, and on a source of a kind it can't map to
-a trigger: then add the kind to `source_tests` and its trigger to the gate, its
-verbatim copy (`covert_warfare_entry_unlocked`) and the unlock tooltip
-(`covert_warfare_unlock_tt`, which test_covert_layout.py holds to the names).
+a trigger: then add the kind to `source_tests` and its trigger to the gate, and name it in
+the unlock tooltips (`covert_warfare_unlock_tt` and `_early_tt`, which
+test_covert_layout.py holds to the names).
 
 Run: python3 -m unittest test_covert_warfare_gate -v
 """
@@ -23,7 +24,7 @@ from pathlib import Path
 from paradox_file_parser import ParadoxFileParser
 
 ROOT = Path(__file__).resolve().parent
-JE = ROOT / "common/journal_entries/je_covert_warfare.txt"
+TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
 VANILLA_LAWS = ROOT / "vanilla_parsed/common/laws.json"
 MODIFIER = "country_covert_operation_slot_add"
 # The definition of the modifier type, not a source.
@@ -116,9 +117,12 @@ def source_tests(sources):
 
 
 def gate_tests():
-    possible = parse(JE)["je_covert_warfare"][1]["possible"][1]
-    assert list(possible) == ["OR"], f"possible should be one OR of the sources, not {list(possible)}"
-    return {(key, value) for key, inner in possible["OR"][1].items() for _, value in pairs(inner)}
+    """The late gate, covert_warfare_slot_source, which the entry's `possible` reaches through
+    covert_warfare_entry_unlocked under either unlock (test_covert_layout.py and test_rule_unlock_settings.py
+    hold that wiring)."""
+    gate = parse(TRIGGERS)["covert_warfare_slot_source"][1]
+    assert list(gate) == ["OR"], f"covert_warfare_slot_source should be one OR of the sources, not {list(gate)}"
+    return {(key, value) for key, inner in gate["OR"][1].items() for _, value in pairs(inner)}
 
 
 class CovertGateTest(unittest.TestCase):
@@ -134,13 +138,13 @@ class CovertGateTest(unittest.TestCase):
 
     def test_every_source_is_of_a_known_kind(self):
         self.assertEqual(self.unknown, [], "a slot source this test can't map to a trigger: add the kind to "
-                                           "source_tests, and the trigger to je_covert_warfare's possible")
+                                           "source_tests, and the trigger to covert_warfare_slot_source")
 
     def test_the_gate_names_every_source_and_nothing_else(self):
         gate = gate_tests()
         self.assertEqual(sorted(self.tests - gate), [],
-                         "these grant an operation slot but don't open the entry: add them to je_covert_warfare's "
-                         "possible, covert_warfare_entry_unlocked and covert_warfare_unlock_tt")
+                         "these grant an operation slot but don't open the entry: add them to "
+                         "covert_warfare_slot_source and the two unlock tooltips")
         self.assertEqual(sorted(gate - self.tests), [],
                          "the entry opens on these, but they grant no operation slot: take them out")
 
