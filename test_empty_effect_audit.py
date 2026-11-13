@@ -341,8 +341,9 @@ class SuppressionTests(unittest.TestCase):
     def test_tagged_form_is_invisible_to_untagged_audits(self):
         # An `every_x = {` opener carries both this audit's and
         # iterator_limit_audit's comments; neither may read the other's.
+        # iterator_limit_audit reads the plain form with the shared parser.
         c = "# REVIEWED 2026-09-26 (empty_block): why"
-        self.assertIsNone(iterator_limit_audit._REVIEWED_RE.search(c))
+        self.assertIsNone(iterator_limit_audit.parse_reviewed(c))
 
     def test_event_context_audit_treats_our_tags_as_foreign(self):
         self.assertIn("empty_block", event_context_audit.FOREIGN_CHECKS)
