@@ -708,5 +708,21 @@ class UnlistedSaveTests(SnapshotTestCase):
         self.assertIsNone(snapshot.unlisted_save(self.user, "continue_game.json"))
 
 
+
+class ListedSpellingTest(unittest.TestCase):
+    """A `--save` is stored as the folder lists it (review, 2026-11-13). ext4 cannot answer `Mine.v3` for mine.v3
+    as the owner's NTFS drive does, so the mapping is tested on its own."""
+
+    def test_a_save_typed_in_another_case_takes_the_listed_spelling(self):
+        scan = {"save games/mine.v3": None, "save games/autosave.v3": None}
+        self.assertEqual(snapshot.listed_spelling("save games/Mine.v3", scan), "save games/mine.v3")
+        self.assertEqual(snapshot.listed_spelling("save games/Autosave.v3", scan), "save games/autosave.v3")
+
+    def test_an_exact_listing_wins_and_an_unlisted_name_is_left_as_it_is(self):
+        scan = {"save games/Mine.v3": None, "save games/mine.v3": None}
+        self.assertEqual(snapshot.listed_spelling("save games/mine.v3", scan), "save games/mine.v3")
+        self.assertEqual(snapshot.listed_spelling("save games/other.v3", {}), "save games/other.v3")
+
+
 if __name__ == "__main__":
     unittest.main()

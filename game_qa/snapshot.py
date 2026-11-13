@@ -170,6 +170,18 @@ def unlisted_save(user_data: Path, rel: str, scan: dict[str, os.stat_result] | N
     return why + (f": it is the same file as {same[0]!r}" if same else "")
 
 
+def listed_spelling(rel: str, scan: dict[str, os.stat_result]) -> str:
+    """`rel` as the folder's listing `scan` spells it, when it lists `rel` in another letter case; else `rel`.
+
+    A `--save` is stored under the listed name, not as typed: put back as typed on a drive that matches any letter
+    case, `--save Mine` would rename the owner's mine.v3, and `--save Autosave` would take autosave.v3 twice
+    (review, 2026-11-13). An exact match wins over one in another case."""
+    if rel in scan:
+        return rel
+    lower = rel.lower()
+    return next((listed for listed in sorted(scan) if listed.lower() == lower), rel)
+
+
 def _check_backup_root(user_data: Path, backup_root: Path) -> None:
     if not backup_root.parent.is_dir():
         raise BackupRootError(f"the folder that should hold the backups does not exist: {backup_root.parent}")
@@ -310,6 +322,7 @@ def take(
         problem = unlisted_save(user_data, rel, scans[SAVE_FOLDER])
         if problem is not None:
             raise SaveNotListed(f"cannot snapshot {problem}")
+        rel = listed_spelling(rel, scans[SAVE_FOLDER])
         wanted[rel] = target.stat()
     listing = frozenset(rel for found in scans.values() for rel in found)
     save_stats = {rel: (st.st_size, st.st_mtime_ns) for rel, st in scans[SAVE_FOLDER].items()}
