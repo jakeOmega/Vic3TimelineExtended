@@ -76,17 +76,18 @@ entry frame     A journal entry's implicit keys (`<je>`, `<je>_reason`,
                 ScriptedProgressBar.Self)]`; it reads `ROOT` and `SCOPE` there
                 too, and `Country` in eight `_goal` and `_reason` keys. No
                 root can be called wrong.
-scripted GUI    The keys a scripted GUI's own `custom_tooltip` lines name
-tooltip         (`common/scripted_guis/`), which a widget renders through
-                `ExecuteTooltip`. Script builds the text, so `ROOT`, `SCOPE`
-                and `THIS` (inside a scope change) are right there, and the
-                widget's data context seems to reach it too (the UN's
+scripted GUI    The keys a scripted GUI's tooltip prints (`common/scripted_guis/`),
+tooltip         which a widget renders through `ExecuteTooltip`,
+                `IsValidTooltip` or `IsShownTooltip`: the lines its `effect`,
+                `is_valid` or `is_shown` renders and those of the scripted
+                effects and triggers it calls, all the way down
+                (`gui_test_helpers.ScriptedGuis`, the binding tests' walk).
+                Script builds the text, so `ROOT`, `SCOPE` and `THIS` (inside
+                a scope change) are right there, and the widget's data
+                context seems to reach it too (the UN's
                 `je_un_ov_motions_wait_tt` reads `JournalEntry.GetCountry`).
                 Exempt. A finding on a key that is also one of these says so:
-                split the key. The helper here reads only the scripted GUI's
-                own lines, not the scripted effects it calls; the shared
-                walker #1361 added (`gui_test_helpers.ScriptedGuis`) is not
-                used here yet. The other contexts' walks don't follow a
+                split the key. The other contexts' walks don't follow a
                 tooltip a key asks of a scripted GUI: its lines are this
                 context's. The public panel's does, as `panel_loc_keys`
                 does.
@@ -123,11 +124,12 @@ and fails `--strict`.
 No game install is needed. A scan that finds no loc file or no `.gui` file
 raises, so a wrong path can't pass as clean.
 
-Cost, measured on the shared 4-core cloud container: the reload entry about
-1.4 s, half of it reading the English loc through
-`gui_test_helpers.loc_index` and most of the rest every `.gui` file, so it is
-not one of the post-load entries that finish well under a second; the CLI's
-full run about 4.3 s, the public-panel context being the difference.
+Cost, measured on the shared 4-core cloud container (2026-11-13): the reload
+entry about 2.5 s, two fifths of it reading the English loc through
+`gui_test_helpers.loc_index`, as much again walking the scripted GUIs'
+tooltips through the script they call, and most of the rest every `.gui`
+file; the CLI's full run about 5 s, the public-panel context being the
+difference.
 
 Report: docs/engine/loc_root_context_report.md. Registered in POST_LOAD_AUDITS.
 """
@@ -177,7 +179,6 @@ _TOP = re.compile(r"(?m)^(?:\w+:)?([\w.\-]+)\s*=\s*\{")
 _FIELD = re.compile(r'[{}]|(?<![\w.])(\w+)\s*=\s*(?:"([\w.\-]+)"|([\w.\-]+)(?![\w.\-"]))')
 _DESC_FIELD = re.compile(r'(?<![\w.])(status_desc|progress_desc)\s*=\s*(\{|"?[\w.\-]+"?)')
 _JOURNAL_SUFFIXES = ("", "_reason", "_goal", "_status")
-_TOOLTIP_FIELDS = frozenset({"custom_tooltip", "custom_tooltip_no_bullet", "text"})
 _TAG = re.compile(r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$")
 
 
@@ -297,16 +298,23 @@ def block_seeds(root: str, sub: str, fields, loc) -> dict[str, str]:
     return out
 
 
-def _scripted_gui_tooltip_seeds(root: str, loc) -> dict[str, str]:
-    """Each key a scripted GUI's own `custom_tooltip` lines name. Private and
-    shallow on purpose: it doesn't follow the scripted effects a GUI calls.
-    #1361 is to add the shared "scripted GUI -> tooltip keys" walker; move
-    onto it then."""
-    out: dict[str, str] = {}
+def scripted_gui_tooltip_seeds(root: str, loc) -> dict[str, str]:
+    """Each key a scripted GUI's tooltip prints, with where: for each of its
+    `effect`, `is_valid` and `is_shown` (ExecuteTooltip, IsValidTooltip,
+    IsShownTooltip), the lines the part renders and those of the scripted
+    effects and triggers it calls, all the way down
+    (`gui_test_helpers.ScriptedGuis`, the walk the binding tests use, #1361).
+    """
+    scripted = h.scripted_guis(root)  # the public seeds' too, on the repo
+    defined: dict[str, str] = {}
     for rel, code in _script_files(root, "scripted_guis"):
-        for n, fld, key, _ in iter_references(code):
-            if fld in _TOOLTIP_FIELDS and key in loc:
-                out.setdefault(key, f"{rel}:{n} {fld}")
+        for top in _TOP.finditer(code):
+            defined.setdefault(top.group(1), f"{rel}:{_line(code, top.start())}")
+    out: dict[str, str] = {}
+    for name in sorted(scripted.guis):
+        for method, part in h.SCRIPTED_TOOLTIP.items():
+            for key in sorted(scripted.keys(name, method, loc)):
+                out.setdefault(key, f"{defined.get(name, 'common/scripted_guis')} {name}'s {part}")
     return out
 
 
@@ -458,7 +466,8 @@ def _drawn_seeds(names, types, templates, loc, custom) -> dict[str, str]:
 
 def _fresh():
     """gui_test_helpers keeps what it read; a reload must read the files again."""
-    for cached in (h._loc_index, h._custom_loc, h._mod_types, h._mod_templates):
+    for cached in (h._loc_index, h._custom_loc, h._mod_types, h._mod_templates, h._script_blocks,
+                   h.scripted_guis):
         cached.cache_clear()
 
 
@@ -491,7 +500,7 @@ def audit(mod_path: str | None = None, public_panels=None, world_loc=None) -> Au
     gui_seeds, gui_files = widget_seeds(root, loc, custom)
     if not gui_files:
         raise FileNotFoundError(f"no .gui file under {os.path.join(root, 'gui')}")
-    sgui_seeds = _scripted_gui_tooltip_seeds(root, loc)
+    sgui_seeds = scripted_gui_tooltip_seeds(root, loc)
 
     entry = reach.closure(entry_seeds)
     widget = reach.closure(gui_seeds)

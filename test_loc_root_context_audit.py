@@ -325,6 +325,32 @@ class NotJudgedTests(_Fixture):
         self.assertTrue(r.flags[0].also_sgui)
         self.assertIn("also a scripted GUI's tooltip key", render_report(r))
 
+    def test_a_scripted_guis_tooltip_follows_the_script_it_calls(self):
+        """The context is what the tooltip prints (gui_test_helpers.ScriptedGuis,
+        the binding tests' walk): the lines of the scripted effects and
+        triggers its `effect`, `is_valid` and `is_shown` call, all the way down,
+        an argument filled in, and not a line of a part no tooltip renders."""
+        _write(self.root, "common/scripted_guis/te_fx_sguis.txt", SGUIS + """\
+fx_called_sgui = {
+\tis_shown = { fx_shown_trigger = yes }
+\tis_valid = { custom_tooltip = { text = fx_valid_line always = yes } }
+\teffect = { fx_outer_effect = { WHICH = deep } }
+\tai_chance = { custom_tooltip = fx_unrendered_line }
+}
+""")
+        _write(self.root, "common/scripted_effects/te_fx_effects.txt",
+               "fx_outer_effect = { fx_inner_effect = { WHICH = $WHICH$ } }\n"
+               "fx_inner_effect = { custom_tooltip = fx_called_$WHICH$_line }\n")
+        _write(self.root, "common/scripted_triggers/te_fx_triggers.txt",
+               "fx_shown_trigger = { custom_tooltip = { text = fx_shown_line always = yes } }\n")
+        lines = ("fx_called_deep_line", "fx_valid_line", "fx_shown_line", "fx_unrendered_line")
+        _write(self.root, WIDGET_FILE, JE_WIDGET + "".join(f'textbox = {{ text = "{k}" }}\n' for k in lines))
+        r = self.run_audit(**dict.fromkeys(lines, "[SCOPE.sState('x').GetName]"))
+        self.assertEqual(r.reach[SGUI], 4)
+        also = {f.key: f.also_sgui for f in r.flags}
+        self.assertEqual(also, {"fx_called_deep_line": True, "fx_valid_line": True, "fx_shown_line": True,
+                                "fx_unrendered_line": False})
+
 
 class PublicPanelTests(_Fixture):
     def test_the_journal_entry_root_on_a_public_tab_is_flagged(self):

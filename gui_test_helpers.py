@@ -48,16 +48,19 @@ def _strip_comments(text):
     return "\n".join(out)
 
 
+_BRACE = re.compile(r"[{}]")
+
+
 def _close(text, open_brace):
     """The index of the brace that closes the one at (or first after) open_brace."""
     depth = 0
-    for i in range(open_brace, len(text)):
-        if text[i] == "{":
+    for m in _BRACE.finditer(text, open_brace):  # the braces only: a walk of every character was slow
+        if m.group() == "{":
             depth += 1
-        elif text[i] == "}":
+        else:
             depth -= 1
             if depth == 0:
-                return i
+                return m.start()
     raise AssertionError("unclosed block")
 
 
