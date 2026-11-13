@@ -404,7 +404,12 @@ class Session:
         `switch_rules` ({rule: setting}) loads a copy of the fixture in which those rules are switched (#1599,
         `game_qa.rules`): a game whose rule changed on 2 January 1836, a day after it began, not one made under
         that setting. It is refused with `save` (the owner's save is never edited or copied), and for a rule
-        or setting the game's rule files do not define (`bad_rule`), before anything is done.
+        or setting the game's rule files do not define (`bad_rule`), before anything is done. One `save` takes
+        it: a fresh save of the harness's own named in full (`te_qa_fixture_<key>`, dated or not, a copy with a
+        rule already switched excepted), which is how a fixture made under other rules or by an earlier build
+        gets a rule switched (a market game switched to direct construction, 2026-11-13). The copy is that
+        save's, switched on its own date, and nothing is pruned. A harness save named by `save` also opens on
+        the country-select screen, so `enter_game` works on it.
 
         `game_args` are added to the game's arguments after SESSION_ARGS: each one of GAME_ARGS (with or without its
         leading dash), each once (`bad_argument` otherwise). They change how this run's game runs and not what a new
@@ -627,14 +632,42 @@ class Session:
         return rules.load_rules([Path(self._paths.base_game) / "game" / rules.RULES_FOLDER,
                                  Path(self._paths.deploy_dir) / rules.RULES_FOLDER])
 
+    @staticmethod
+    def _own_fixture_key(save: str | None) -> str | None:
+        """The fixture key in `save` when it names one of the harness's own saves (`te_qa_fixture_<key>`: a fresh
+        save, a dated one, or a copy with a rule switched), else None. A name is all there is to go by: the
+        harness keeps that prefix to itself (`fixture.prune` removes by it).
+
+        Only in the spelling the harness writes, all lower case. The drive finds a save under any letter case,
+        and `fixture`'s marks are lower case: `…_S0000abcd` would not read as a copy with a rule switched and
+        would get a copy made of it, and an upper-case key would get its copy under a spelling the next prune
+        takes for an orphan (review, 2026-11-13). Such a name is refused as any save not the harness's is."""
+        if not isinstance(save, str) or not save.startswith(fixture.FIXTURE_PREFIX):
+            return None
+        key = save[len(fixture.FIXTURE_PREFIX):]
+        try:
+            fixture._check_key(key)
+        except ValueError:
+            return None
+        return key if key == key.lower() else None
+
+    @classmethod
+    def _switchable_fixture_key(cls, save: str | None) -> str | None:
+        """`_own_fixture_key`, but None for a copy with a rule already switched: its rules are switched in the
+        save it was made from, so that one copy never stands on another."""
+        key = cls._own_fixture_key(save)
+        return None if key is None or fixture._base_key_of(key) is not None else key
+
     def _check_switches(self, switch_rules: Mapping[str, str] | None, save: str | None) -> dict[str, str]:
         if switch_rules is None or switch_rules == {}:
             return {}
         if not isinstance(switch_rules, Mapping):
             raise SessionError("bad_argument", "switch_rules maps a rule to a setting, not %r" % (switch_rules,))
-        if save is not None:
+        if save is not None and self._switchable_fixture_key(save) is None:
             raise SessionError("bad_argument", "a rule is switched in a copy of the harness's own fresh save: with "
-                               "--save the game is the owner's save, which is never edited or copied")
+                               "--save the game is the owner's save, which is never edited or copied (a fresh save "
+                               "of the harness's own, %s<key>, can be named, a copy with a rule already switched "
+                               "excepted)" % fixture.FIXTURE_PREFIX)
         try:
             rules.check_switches(switch_rules)
             table = self._rule_table()
@@ -656,11 +689,29 @@ class Session:
         """(the save to load, whether the fixture was made now, the fixtures pruned). With `switch_rules` the
         save is the fixture's copy with those rules switched, made from the fixture if it is not there yet.
         With `date` it is the dated fixture of this build, which is only ever found here (`no_fixture`)."""
-        if save is not None:
-            self._record("fixture", outcome="not_used", save=save)
-            return save, False, []
-        self._fixture_loaded = True
         user = Path(self._paths.user_data)
+        if save is not None:
+            # One of the harness's own fresh saves, named (another build's, say: `stale` lists them): it opens on
+            # the country-select screen as this build's does, and a rule can be switched in a copy of it.
+            own = self._own_fixture_key(save) is not None
+            self._fixture_loaded = own
+            # A named harness save is a fixture found: `selfchecks` then shows the lines kept from the run that
+            # made it, as for this build's own (it read "a save of the owner's" and showed none, review 2026-11-13).
+            self._record("fixture", outcome="found" if own else "not_used", save=save, **({"named": True} if own else {}))
+            if not switch_rules:
+                return save, False, []
+            try:
+                path, changed, settings = rules.switched_fixture(user, self._switchable_fixture_key(save),
+                                                                 switch_rules, self._rule_table())
+            except rules.RulesError as e:
+                self._record("switch_rules", outcome="refused", detail=str(e))
+                raise SessionError("rules_refused", str(e)) from e
+            self._rules = {"settings": settings, "switched": changed,
+                           "switched_at": rules.switched_at(fixture.save_date(user / fixture.SAVE_FOLDER
+                                                                              / (save + ".v3")))}
+            self._record("switch_rules", outcome="ok", save=path.stem, switched=changed, named=save)
+            return path.stem, False, []         # nothing pruned: the named save may be the oldest there is
+        self._fixture_loaded = True
         key = self._fixture_key(playset)
         if date is not None:
             key = fixture.dated_key(key, date)

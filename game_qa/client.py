@@ -966,8 +966,9 @@ def add_verbs(sub) -> None:
     p.add_argument("--setup", action="append", default=[], metavar="NAME=FILE",
                    help="a setup effect: its name, and the file (a WSL path) holding its script (repeatable)")
     p.add_argument("--switch-rule", action="append", default=[], metavar="RULE=SETTING",
-                   help="load a copy of the fresh save with this game rule switched (repeatable; not with "
-                        "--save). The rule changes on the save's second day, after the game's setup ran")
+                   help="load a copy of the fresh save with this game rule switched (repeatable; with --save "
+                        "only when it names a fresh save of the harness's own, te_qa_fixture_<key>). The rule "
+                        "changes on the save's own date, after the game's setup ran")
     p.add_argument("--playset", choices=session.PLAYSETS, default="mod_only",
                    help="mod_only (the default): only this mod's deployed folder; current: the owner's playset. "
                         "The overlay is added to either")

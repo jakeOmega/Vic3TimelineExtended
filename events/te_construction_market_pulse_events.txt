@@ -7,8 +7,9 @@ namespace = te_construction_market_pulse_events
 # only one country's on_yearly_pulse_country actually advances the global tick.
 # Schedules a couple of relay copies in random countries to give the engine a
 # chance to fire the body even if the original origin country is decentralized
-# or otherwise skipped. Every 7th tick fans out to every country to run the
-# weekly pulse body.
+# or otherwise skipped. Every tick checks that the construction buildings match
+# free_market_construction_rule (te_construction_market_follow_rule); every 7th
+# fans out to every country to run the weekly pulse body.
 te_construction_market_pulse_events.1 = {
 	type = country_event
 	hidden = yes
@@ -69,6 +70,10 @@ te_construction_market_pulse_events.1 = {
 				days = 2
 			}
 		}
+		# Before the weekly bodies: the buildings follow free_market_construction_rule
+		# when it was changed in a running game (the test is two reads on any
+		# other day).
+		te_construction_market_follow_rule = yes
 		if = {
 			limit = {
 				te_construction_market_pulse_count_modulo_7 = 0

@@ -56,7 +56,7 @@
  setting_demographics_full:0 "Full"
  setting_demographics_full_desc:0 "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel. The census sets births, deaths and workforce in place of most law and technology effects on them; severe starvation, war and other shocks still apply."
  setting_free_market_construction_disabled:0 "Free Market Construction Disabled"
- setting_free_market_construction_disabled_desc:0 "Construction works as in the base game, with the $te_construction_market_site$ as the construction sector. There is no construction good and no construction maintenance, and your economic-system law sets the private share. #b Construction Sites must currently be built from the state view.#!"
+ setting_free_market_construction_disabled_desc:0 "Construction works as in the base game, with the $te_construction_market_site$ as the construction sector. There is no construction good and no construction maintenance, and your economic-system law sets the private share. If the rule is changed in a running game, sectors and sites are converted within a day."
  setting_free_market_construction_enabled:0 "Free Market Construction Enabled"
  setting_free_market_construction_enabled_desc:0 "[concept_construction] is a traded good. $building_construction_sector$ buildings sell it, the government buys what you set in the construction panel, and investors buy from the [concept_investment_pool]. Industry and infrastructure use some as maintenance, and more after changing production methods. See [concept_te_construction_market]."
  setting_free_market_construction_no_ai_retooling:0 "Free Market Construction without AI Retooling Costs"

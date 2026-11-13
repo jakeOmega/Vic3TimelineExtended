@@ -111,12 +111,14 @@ class GameRuleDescriptionLengthTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertGreater(len(self.lines(text)), MAX_LINES)
 
-    def test_direct_construction_says_where_sites_are_built(self):
-        """With the market off, Construction Sites must be built from the state view (03-economy.md says so too).
-        The setting's description says it inside the four lines the card shows: it used to come last, and was
-        cut off."""
+    def test_direct_construction_no_longer_sends_the_player_to_the_state_view(self):
+        """With the market off, Construction Sites could be queued only from the state view, and the description
+        said so inside its four lines. Since 2026-11-13 the production lens's Development tab offers them
+        (`lens = development` on te_construction_market_bg, test_construction_rule_switch.py), so the note is
+        gone. What a player choosing the setting does need is that it can be chosen in a running game."""
         text = render(self.mod_loc["setting_free_market_construction_disabled_desc"], self.loc)
-        self.assertIn("Construction Sites must currently be built from the state view", text)
+        self.assertNotIn("state view", text)
+        self.assertIn("changed in a running game", text)
 
 
 # The descriptions as the 2026-11-13 screenshot showed them.

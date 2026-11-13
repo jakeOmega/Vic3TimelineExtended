@@ -231,10 +231,18 @@ universal_aptitude_traits_rule = {
 # Each setting disables the other mode's methods; groups with a single method
 # per mode force it. Method families: te_construction_market_pms.txt.
 #
-# The disabled setting also applies te_direct_construction_base_modifier to
-# every country (apply_modifier = <player|ai|all>:<static modifier>, vanilla
-# game_rules.md): a flat base of construction, so a country without
-# Construction Sites can still build them.
+# Under the disabled setting script also gives every country Base Construction
+# (te_direct_construction_base_modifier, te_direct_construction_ensure_base): a
+# flat base of construction, so a country without Construction Sites can still
+# build them. It is not an apply_modifier line here: the engine applies such a
+# line by the rules the player last applied in a lobby on their machine, not by
+# the rules of the save being played, so the base came and went with whatever
+# the player had last set up (read live, 2026-11-13;
+# docs/guides/scripting_best_practices.md, "Gating a Mechanic on a Game Rule").
+#
+# The rule can be changed in a running game (the screen that changes country);
+# script then turns the Construction Sectors into Construction Sites or back
+# (te_construction_market_follow_rule).
 #
 # Script reads the rule through te_free_market_construction_on / _off and
 # te_building_retooling_waived (common/scripted_triggers/
@@ -355,9 +363,6 @@ free_market_construction_rule = {
 
 	free_market_construction_disabled = {
 		flag = free_market_construction_disabled
-
-		# Base construction for every country, player and AI
-		apply_modifier = all:te_direct_construction_base_modifier
 
 		# Construction Site: direct tiers only (whichever are researched)
 		flag = disable_pm_te_construction_market_base
