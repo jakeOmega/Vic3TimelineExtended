@@ -377,7 +377,7 @@ te_pb_summit.2 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the leader scope is saved and the _told variable set just before the call; a filter
 		exists = scope:te_pb_summit_leader
 		OR = {
 			has_variable = te_pb_summit_drills_told

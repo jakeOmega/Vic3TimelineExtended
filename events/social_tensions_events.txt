@@ -135,7 +135,7 @@ social_tensions_events.2 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the covert rule, and scope:terror_linked_country saved by .17; a filter
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:terror_linked_country
@@ -1565,7 +1565,7 @@ social_tensions_events.18 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:terror_cell_target rides along from .2, which saved it; a filter
 		exists = scope:terror_cell_target
 	}
 

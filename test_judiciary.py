@@ -534,6 +534,31 @@ class ShockTest(unittest.TestCase):
         self.assertIn("var:te_jud_rule_probe_due_gap >= 20", verdict, "no OK unless the probe's trigger held when due")
         self.assertIn("te_jud_rule_probe_verdict = yes", _block(_read(EVENTS), "te_judiciary_events.1"))
 
+    def test_the_ordinary_play_probes(self):
+        # #1596: delayed_trigger_queue_probe and delayed_trigger_fire_probe.
+        # The flip lands a day before the probes are due and the verdict a
+        # day after, and no verdict is given unless the flip and the control
+        # (a delayed event whose trigger always holds) both ran.
+        effects, events = _read(EFFECTS), _read(EVENTS)
+        start = _block(effects, "te_jud_dt_probe_start")
+        for event, days in ((11, 1), (12, 2), (13, 2), (14, 2), (15, 3)):
+            self.assertIn("trigger_event = { id = te_judiciary_events.%d days = %d }" % (event, days), start)
+        self.assertIn("NOT = { has_variable = te_jud_dt_queue_armed }", start, "the queue probe is false when queued")
+        self.assertLess(start.index("te_jud_dt_fire_armed"), start.index("te_judiciary_events.13"),
+                        "the fire probe is true when queued")
+        flip = _block(events, "te_judiciary_events.11")
+        self.assertIn("set_variable = { name = te_jud_dt_queue_armed", flip)
+        self.assertIn("remove_variable = te_jud_dt_fire_armed", flip)
+        self.assertIn("has_variable = te_jud_dt_queue_armed", _block(events, "te_judiciary_events.12"))
+        self.assertIn("has_variable = te_jud_dt_fire_armed", _block(events, "te_judiciary_events.13"))
+        verdict = _block(effects, "te_jud_dt_probe_verdict")
+        self.assertIn("has_variable = te_jud_dt_flipped", verdict)
+        self.assertIn("has_variable = te_jud_dt_control_ran", verdict)
+        for name in ("delayed_trigger_queue_probe", "delayed_trigger_fire_probe"):
+            self.assertIn("TE_SELF_CHECK OK " + name, verdict)
+            self.assertIn("TE_SELF_CHECK BROKEN " + name, verdict)
+        self.assertIn("te_jud_dt_probe_start = yes", _block(_read(ON_ACTIONS), "te_jud_monthly"))
+
 
 MINOR_EVENTS = os.path.join(REPO, "events", "minor_events.txt")
 TAX_OFFER = os.path.join(REPO, "common", "scripted_effects", "te_tax_offer_effects.txt")

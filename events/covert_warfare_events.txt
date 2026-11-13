@@ -854,7 +854,7 @@ covert_warfare.4 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the target's iw_known_ops list holds the record of the operation it caught, which exists before the catch queues this
 		has_variable_list = iw_known_ops
 	}
 
