@@ -117,6 +117,29 @@ class BuildTest(OverlayTestCase):
         self.assertIn("TEST_FAIL_te_qa_fixture_2 January, 1836.v3", text)
         self.assertIn('success = { game_date > "1836.1.1" }\n\t\tfail = { always = no }', text)
 
+    def test_a_dated_scripted_test_fails_on_its_date_and_its_suite_ends_the_day_after(self):
+        # #1602: the 1836 test's offsets carried to a later date, in the fail trigger's form run live.
+        overlay.build(self.dest, {}, "1.15.1", fixture_date=(1900, 1, 1))
+        text = "\n".join(lines_of(self.dest / "tools" / "scripted_tests" / "te_qa_fixture.txt"))
+        self.assertIn('\t\tsuccess = { always = no }\n\t\tfail = { game_date > "1899.12.31" }\n', text)
+        self.assertIn('last_date = "1900.1.2"', text)
+        self.assertIn("-scripted_tests -run_until=1900.1.3", text)
+        self.assertIn("TEST_FAIL_te_qa_fixture_1 January, 1900.v3", text)
+        self.assertIn('success = { game_date > "1899.12.31" }\n\t\tfail = { always = no }', text)
+
+    def test_the_plain_fixtures_date_writes_the_1836_test_byte_for_byte(self):
+        overlay.build(self.dest, {}, "1.15.1")
+        plain = (self.dest / overlay.SCRIPTED_TEST_FILE).read_bytes()
+        overlay.build(self.dest, {}, "1.15.1", fixture_date=(1836, 1, 2))
+        self.assertEqual((self.dest / overlay.SCRIPTED_TEST_FILE).read_bytes(), plain)
+
+    def test_a_fixture_date_the_test_cannot_fail_on_is_refused_before_anything_is_written(self):
+        for date in ((1836, 1, 1), (1900, 2, 29), (1900, 13, 1)):
+            with self.subTest(date=date):
+                with self.assertRaises(overlay.OverlayError):
+                    overlay.build(self.dest, {}, "1.15.1", fixture_date=date)
+                self.assertFalse(self.dest.exists())
+
     def test_the_pad_effect_logs_sixty_lines(self):
         self.build()
         text = "\n".join(lines_of(self.dest / "common" / "scripted_effects" / "te_qa_effects.txt"))
