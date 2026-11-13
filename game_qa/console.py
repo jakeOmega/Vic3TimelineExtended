@@ -63,7 +63,9 @@ when it does not arrive the console key is pressed, which may close the open con
 while the console is known open (`clicked()`) latches `keyboard_away`: every method that sends a key
 refuses `keyboard_away` with `entered` False, before any key, until `take_keyboard_back()`, called
 after a click on the console's input line, has typed one probe and seen it arrive. It never presses
-the console key. A click while the console is known closed, or not known, leaves the state as it is.
+the console key. A click while the console is known closed, or not known, leaves the state as it is, and
+so must not be made: the session's `click`, `wheel` and `drag` refuse `console_not_open` before sending anything
+unless `input_line_there`: with no input line there to click, a keyboard the click took could not be given back.
 
 `Console` consumes the `LogFollower` it is given: a line it has polled is not
 returned to anyone else who polls the same follower.
@@ -181,7 +183,8 @@ class Console:
     def clicked(self) -> None:
         """A click went out, or may have, somewhere other than the console's input line. If the console was known
         open (or the keyboard already away) the keyboard is latched away and the console's state is not known any
-        more; a console known closed or not known is left as it is, and found out as before."""
+        more; a console known closed or not known is left as it is. The session never clicks then
+        (`Session._refuse_unless_console_open`): the keyboard such a click took could not be given back."""
         if self._open is True or self._keyboard_away:
             self._keyboard_away = True
             self._open = None

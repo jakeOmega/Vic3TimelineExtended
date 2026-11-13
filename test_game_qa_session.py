@@ -1759,12 +1759,17 @@ class KeyboardAfterClickTest(SessionTestCase):
 
     def test_the_input_line_is_not_clicked_while_the_console_is_not_known_open(self):
         self.session.press("esc")               # closes the console: known closed
-        clicks = len(self.game.clicks)
-        error = self.session_error(self.session.click, console=True)
-        self.assertEqual(error.code, "console_not_open")
-        self.assertEqual(len(self.game.clicks), clicks)
-        # A click with the console shut does not latch: the verbs that type open the console as before.
-        self.assertFalse(self.session.click(0.6, 0.6)["keyboard_away"])
+        clicks, steps = len(self.game.clicks), len(self.game.steps)
+        for args, kwargs in (((), {"console": True}), ((0.6, 0.6), {}), ((0.6, 0.6), {"console": True})):
+            with self.subTest(args=args, kwargs=kwargs):
+                error = self.session_error(self.session.click, *args, **kwargs)
+                self.assertEqual(error.code, "console_not_open")
+                self.assertIn("`events`", error.detail)
+                self.assertEqual((error.info["keyboard_away"], error.info["next"]),
+                                 (False, "python3 -m game_qa events"))
+        # A click with the console shut is refused, not made: it would take the keyboard with no way back.
+        self.assertEqual((len(self.game.clicks), len(self.game.steps)), (clicks, steps))
+        self.assertFalse(self.game.keyboard_elsewhere)
 
     def test_a_refused_click_does_not_latch_and_one_that_may_have_pressed_does(self):
         real_click = self.game.click
@@ -1813,6 +1818,81 @@ class KeyboardAfterClickTest(SessionTestCase):
         self.game.click_takes_keyboard = False  # as live: the lobby's clicks left the console answering
         self.session.enter_game()
         self.assertFalse(self.session._console.keyboard_away)
+
+
+class PointerWithTheConsoleShutTest(SessionTestCase):
+    """`click`, `wheel` and `drag` send nothing unless the console is known open (or a click made while it was has
+    latched the keyboard away). A click with it shut took the keyboard without latching, and the next `read` typed
+    its lines into the tool window and pressed the console key, while `click --console` was refused
+    `console_not_open`: no safe way forward."""
+
+    def setUp(self):
+        super().setUp()
+        self.started()
+        self.game.click_takes_keyboard = True
+        self.game.input_line = (216, 588)
+        self.game.adapter.values["c:FRA.gdp"] = "1.5"
+
+    def pointer_verbs(self):
+        return {"click": lambda: self.session.click(0.6, 0.6),
+                "click_and_console": lambda: self.session.click(0.6, 0.6, console=True),
+                "click_console": lambda: self.session.click(console=True),
+                "wheel": lambda: self.session.wheel(0.6, 0.6, -3),
+                "drag": lambda: self.session.drag(0.6, 0.6, 0.6, 0.4)}
+
+    def shut(self):
+        self.session.press("esc")               # known closed: to see the profiler's Callers column, say
+
+    def not_known(self):
+        self.session._console._open = None      # as after a no_ack, or a close() whose key may not have gone out
+
+    def test_each_is_refused_before_anything_goes_out_while_the_console_is_shut_or_not_known(self):
+        for state in (self.shut, self.not_known):
+            for name, verb in self.pointer_verbs().items():
+                with self.subTest(state=state.__name__, verb=name):
+                    self.setUp()
+                    state()
+                    sent = (len(self.game.clicks), len(self.game.wheels), len(self.game.drags), len(self.game.steps))
+                    error = self.session_error(verb)
+                    self.assertEqual((error.code, error.info["keyboard_away"]), ("console_not_open", False))
+                    self.assertEqual(error.info["next"], "python3 -m game_qa events")
+                    self.assertEqual((len(self.game.clicks), len(self.game.wheels), len(self.game.drags),
+                                      len(self.game.steps)), sent)
+                    self.assertFalse(self.game.keyboard_elsewhere)
+                    self.assertFalse(self.session._console.keyboard_away)
+
+    def test_after_press_esc_a_tool_click_does_not_let_the_next_verb_type_elsewhere(self):
+        self.shut()
+        self.assertEqual(self.session_error(self.session.click, 0.6, 0.6).code, "console_not_open")
+        self.assertFalse(self.game.keyboard_elsewhere)
+        steps = len(self.game.steps)
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)       # opens the console, as after any press
+        self.assertEqual(self.game.elsewhere, [])
+        # Opening it is the one console key: the probe went to the game, not into a tool window.
+        self.assertEqual([s for s in self.game.steps[steps:] if s.get("scan") == fakes.SCAN_CONSOLE],
+                         [{"scan": fakes.SCAN_CONSOLE}])
+
+    def test_a_verb_that_types_opens_the_way_and_click_console_gives_the_keyboard_back(self):
+        self.shut()
+        self.assertEqual(self.session_error(self.session.click, 0.6, 0.6).code, "console_not_open")
+        self.game.on("select_event_option list", success=["No pending events"])
+        self.assertEqual(self.session.events(), [])     # the detail's advice: it opens the console
+        self.assertTrue(self.session.click(0.6, 0.6)["keyboard_away"])
+        self.assertTrue(self.game.keyboard_elsewhere)
+        self.assertEqual(self.session_error(self.session.read, ["c:FRA.gdp"]).code, "keyboard_away")
+        self.assertFalse(self.session.click(console=True)["keyboard_away"])
+        self.assertTrue(self.session.read(["c:FRA.gdp"])[0].ok)
+        self.assertEqual(self.game.elsewhere, [])
+
+    def test_once_latched_the_pointer_verbs_go_on_with_the_console_state_not_known(self):
+        self.session.click(0.6, 0.6)            # the console was known open: latched, and its state not known now
+        self.assertIsNone(self.session._console._open)
+        self.session.click(0.5, 0.5)
+        self.session.wheel(0.6, 0.6, -3)
+        self.session.drag(0.6, 0.6, 0.6, 0.4)
+        self.assertEqual((len(self.game.clicks), len(self.game.wheels), len(self.game.drags)), (2, 1, 1))
+        self.assertTrue(self.session._console.keyboard_away)
+        self.assertFalse(self.session.click(console=True)["keyboard_away"])
 
 
 class WheelAndDragTest(SessionTestCase):

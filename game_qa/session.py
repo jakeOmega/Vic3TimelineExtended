@@ -1120,8 +1120,10 @@ class Session:
         `keyboard_away`): every verb that types is refused `keyboard_away`, before anything is typed or written,
         until `console` gives it back. That clicks `input_line` (CONSOLE_INPUT_LINE by default, measured live) and
         types the console's probe once: arrived, the latch is lifted; not arrived, `keyboard_not_returned`, the
-        latch stays, and the console key is not pressed. The input line is clicked only while the console is open
-        as far as is known (`console_not_open` otherwise, nothing clicked): with it shut, that point is the map.
+        latch stays, and the console key is not pressed. Nothing is clicked unless the console is open as far as is
+        known, or a click made while it was has latched the keyboard away (`_refuse_unless_console_open`;
+        `console_not_open` otherwise): with it shut, the input line's point is the map, and a click into a tool
+        window would take the keyboard with no way to give it back.
 
         The restore does not cover the owner's manual saves (only the autosaves and a `--save` file), so a click
         must never be aimed at the game's own menus (save, load, settings, exit)."""
@@ -1132,10 +1134,7 @@ class Session:
         if input_line is not None and not console:
             raise SessionError("bad_argument", "an input line's point goes with --console")
         line = CONSOLE_INPUT_LINE if input_line is None else _pair("the input line", input_line)
-        if console and not self._console.input_line_there:
-            raise SessionError("console_not_open", "the console is not known to be open, so its input line may not "
-                               "be at %s: with the console shut that point is the map. Nothing was clicked. A verb "
-                               "that types opens the console as before" % (list(line),), keyboard_away=False)
+        self._refuse_unless_console_open("click", line if console else None)
         with self._step("click", x=x, y=y, console=console) as out:
             result: dict[str, Any] = {}
             if target is not None:
@@ -1157,6 +1156,26 @@ class Session:
                         "gets the probe through" % (list(line),), **result, keyboard_away=True)
             result["keyboard_away"] = out["keyboard_away"] = self._console.keyboard_away
         return result
+
+    def _refuse_unless_console_open(self, verb: str, line: tuple[float, float] | None = None) -> None:
+        """Before `click`, `wheel` or `drag` sends anything: the console is open as far as is known, or a click made
+        while it was has latched the keyboard away (`Console.input_line_there`). Otherwise `console_not_open`,
+        nothing sent. A click into a tool window takes the keyboard, and `Console.clicked` latches it away only
+        while the console is known open, since only then can `click --console` click the input line to give it
+        back. With the console shut or not known, the next verb that types would type into that window and press
+        the console key (`press esc`, a click on a profiler row, then a `read`).
+        `line`: the input line's point, when the verb would click it. enter-game's own clicks do not come here."""
+        if self._console.input_line_there:
+            return
+        if line is not None:
+            why = ("its input line may not be at %s: with the console shut that point is the map" % (list(line),))
+        else:
+            why = ("a %s into a tool window would take the keyboard with no way to give it back: the verbs that "
+                   "type would type into that window, and `click --console` clicks the input line only while the "
+                   "console is open" % verb)
+        raise SessionError("console_not_open", "the console is not known to be open, so %s. Nothing was sent. Run "
+                           "a verb that types first, such as `events`, which opens the console, then the %s again"
+                           % (why, verb), keyboard_away=False, next="python3 -m game_qa events")
 
     def _one_click(self, fraction: tuple[float, float], tool: bool = True) -> dict:
         """One click at `fraction` of the client area, then its shot: {"pixel", "screenshot"} (and
@@ -1196,12 +1215,13 @@ class Session:
         rules: the presence rule, the pid proof, never the game's own menus (a wheel over the map zooms it). It
         latches the keyboard away as a click does, since whether a wheel moves the keyboard is not known.
         `wheel_refused` turned nothing; `wheel_unknown` may have turned some notches (`notches_done` when the
-        helper said)."""
+        helper said). Like a click, it is refused `console_not_open` unless the console is open as far as is known."""
         self._require_game(keyboard=False)
         point = (_fraction("x", x), _fraction("y", y))
         if isinstance(notches, bool) or not isinstance(notches, int) or not 0 < abs(notches) <= MAX_NOTCHES:
             raise SessionError("bad_argument", "notches is a whole number from -%d to %d other than 0, not %r"
                                % (MAX_NOTCHES, MAX_NOTCHES, notches))
+        self._refuse_unless_console_open("wheel")
         with self._step("wheel", x=x, y=y, notches=notches) as out:
             self._console.front()
             px, py = self._point(point)
@@ -1227,9 +1247,11 @@ class Session:
         then a screenshot: to resize or scroll a tool window whose `.gui` cannot be overridden (#1710), with
         `click`'s scope and rules (a drag over the map pans it or draws a selection). It latches the keyboard
         away as a click does. `drag_refused` pressed nothing; `drag_unknown` may have pressed, and then the
-        helper released the button where the cursor was (`pressed` when the helper said)."""
+        helper released the button where the cursor was (`pressed` when the helper said). Like a click, it is
+        refused `console_not_open` unless the console is open as far as is known."""
         self._require_game(keyboard=False)
         start, end = (_fraction("x1", x1), _fraction("y1", y1)), (_fraction("x2", x2), _fraction("y2", y2))
+        self._refuse_unless_console_open("drag")
         with self._step("drag", x1=x1, y1=y1, x2=x2, y2=y2) as out:
             self._console.front()
             (ax, ay), (bx, by) = self._point(start), self._point(end)
