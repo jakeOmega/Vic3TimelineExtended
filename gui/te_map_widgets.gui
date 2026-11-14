@@ -18,6 +18,10 @@
 ### (a quarter second worked, sixth session), and open it again a fifth of a second later (a tenth worked; the fifth
 ### pass's twentieth for each sometimes left the page closed, 2026-11-07).
 ###
+### te_jmap_options is the Map Room's options (2026-11-14), on the same page below the picks: where the maps are
+### drawn and measured (Area) and what a fitted map's range leaves out (Outliers). Scripted GUIs too, and each option
+### fires the picks' own repaint, so a paused map repaints on it.
+###
 ### Any journal page can be made see-through (the eye in its header, gui/journal_entry.gui), to look at its map. The
 ### flag outlives a pick's reopen, so a faded Map Room stays faded from map to map.
 

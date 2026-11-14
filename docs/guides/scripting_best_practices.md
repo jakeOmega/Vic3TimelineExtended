@@ -3707,6 +3707,15 @@ ordered_scope_state = {
 
 `position = N` does work for tooltip-only contexts (see vanilla `04_india_buttons.txt:748-770`) — the issue is specifically actual mutation/save-scope passes against shorter-than-N lists.
 
+## An `ordered_*` List's `position` Is a Literal: Count the List First, Then Pass the Place as an Argument
+
+`effects.log` gives every `ordered_*` list the same signature: `position = int`, `min = int`, `max = script_value`. Only `max` takes a script value, so "the kth from the top, k worked out at run time" can't be written `position = <script value>`. The Map Room's range measure needs it (the state k places from each end, k from an option and the list's length; `scripts/generators/gen_journal_map_scales.py`, 2026-11-14) and does two things:
+
+- **Count the list before taking a place in it**, with the same `limit` the `ordered_*` block will use (`every_state = { limit = { … } change_global_variable = { name = n add = 1 } }`), and cap the place by the count. A place past the end takes the last element and logs (the section above), and two ends taken at one k cross once k passes the middle: with five to eight states, `position = 4` from the top and from the bottom returned the range upside down, with no log line, from 2026-11-07 until the count went in. For a pair of ends, k is at most `(n − 2) / 2`, rounded down.
+- **Pass the place as a literal argument.** A scripted effect whose body says `position = $K$` (`un_deleg_assign_row` does this with `$N$`), called from a ladder: `if = { limit = { k < 1 } list_take = { K = 0 } } else_if = { limit = { k < 2 } list_take = { K = 1 } } …`. The callee's name can be built from an argument too (`te_jmap_measure_$MAP$ = { K = 4 }`, as `te_bulk_tariff_good_$KIND$`), so one ladder serves every list. `script_argument_audit` follows the built name.
+
+Not seen in game yet: play-test check 29 of `docs/testing/journal-map-modes-playtest.md` and `TE_SELF_CHECK range_count` cover it. Not tried: `min = 0  max = <script value>` with a counter in the body, stopping at the kth, which the signature allows and which would need no ladder.
+
 ## Conditional `debug_log` for Trustworthy Scope Diagnostics
 
 `debug_log = "... [SCOPE.sState('name').GetName] ..."` can render `NULL_STATE`-style placeholder strings even when the underlying scope IS set — particularly for scopes saved inside the same scripted effect or inside an inner iterator scope. Don't take a `NULL` rendering as proof the scope is missing; use a conditional trip-wire instead:
