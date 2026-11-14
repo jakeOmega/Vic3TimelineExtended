@@ -170,7 +170,12 @@ def rules_in(text: str) -> dict[str, dict]:
 
 def load_rules(folders: Sequence[Path]) -> dict[str, dict]:
     """The rules of every `.txt` file in `folders` (each a `common/game_rules` folder, vanilla's first), a later
-    file of the same name replacing an earlier folder's, as the game loads a mod over vanilla."""
+    file of the same name replacing an earlier folder's, as the game loads a mod over vanilla.
+
+    The files are read as one list in name order, and a rule two files define keeps the first file's copy: the
+    engine keeps a key's first bare definition in the folders probed (`scripting_best_practices.md` § Load Order,
+    facts 1-3), and the mod's `00_a_te_free_construction.txt` cuts vanilla's `free_construction` to one setting
+    that way, by sorting before vanilla's `00_game_rules.txt` (#1768)."""
     files: dict[str, Path] = {}
     for folder in folders:
         try:
@@ -186,7 +191,8 @@ def load_rules(folders: Sequence[Path]) -> dict[str, dict]:
             text = files[name].read_text(encoding="utf-8-sig")
         except (OSError, UnicodeDecodeError) as error:
             raise RulesError(f"{files[name]} could not be read ({error})") from error
-        rules.update(rules_in(text))
+        for rule, entry in rules_in(text).items():
+            rules.setdefault(rule, entry)
     return rules
 
 

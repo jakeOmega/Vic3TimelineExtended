@@ -297,6 +297,15 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
 **Fix:** none wanted while the override stands (`docs/systems/mod_systems/culture_merges.md` § Leaving the Primary Cultures). It goes when the trigger leaves `culture_merge_primary_ledger.TRIGGER_OVERRIDES`.
 
+### L32. Base Construction Capacity: the one-setting copy logs a duplicated key
+**Files:** `common/game_rules/00_a_te_free_construction.txt`
+
+**Problem (2026-11-13):** the mod cuts vanilla's `free_construction` rule to one setting with a bare copy in a file that sorts before vanilla's `00_game_rules.txt` (#1768). The engine keeps the first copy and logs `Duplicated key free_construction will not be created from file: common/game_rules/00_game_rules.txt:42` (`gamedatabase.h:394`, in `error.log` and `debug.log`), once a launch. Read in the harness run of 2026-11-13.
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** none wanted while the copy stands (`docs/systems/mod_systems/game_rules.md` § A base-game rule the mod cuts down).
+
 ---
 
 ## Vanilla 1.13.7 patch impact (2026-05-27)

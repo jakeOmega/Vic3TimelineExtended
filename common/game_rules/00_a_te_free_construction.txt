@@ -1,0 +1,31 @@
+﻿# The base game's Base Construction Capacity rule (vanilla common/game_rules/00_game_rules.txt),
+# cut to one setting. It scaled vanilla's country_gdp_construction (+10 construction) to GDP,
+# and the mod empties that modifier in every game (REPLACE:country_gdp_construction = {},
+# static_modifiers/extra_modifiers.txt), so no setting did anything to a country's construction.
+# Base Construction comes from the Free Market Construction rule instead: a flat 10 from script
+# with the market off (te_direct_construction_ensure_base), none with it on.
+#
+# How this overrides vanilla's rule. common/game_rules takes no REPLACE:/INJECT: (it is not on
+# the Modding-Digests 1.12.0 inject_types.md list), so this is a bare copy. A bare copy in the
+# other probed folders keeps the first definition read, in ASCII order of file name with
+# vanilla's files and the mod's in one list (scripting_best_practices.md, Load Order, facts 1-3),
+# so this file's name sorts before vanilla's 00_game_rules.txt ('a' before 'g'). Read in game
+# 2026-11-13 (#1768): the launch logged "Duplicated key free_construction will not be created
+# from file: common/game_rules/00_game_rules.txt:42", once a launch (docs/audits/mod_known_noise.md).
+#
+# The one setting keeps the name, and the flag, of vanilla's default, which most saves carry.
+# A save made under Scaled (All) or Maximum names a setting no file defines, which the engine
+# drops at load (debug.log: Failed to read key reference); what that save's screen then shows is
+# unread. A has_game_rule naming a setting no file defines passes (scripting_best_practices.md,
+# "has_game_rule on a Setting No File Defines Is True"), and vanilla's one script reader,
+# ai_strategy_default's wanted_construction_output (00_default_strategy.txt), names
+# free_construction_unscaled. It logged no error at load, so whether it now takes Maximum's
+# branch (+10 for every country) is unread; the mod's INJECT may replace that field anyway (#1771).
+# test_free_construction_rule.py keeps this file in step with vanilla's.
+free_construction = {
+	default = free_construction_scaled_player_exemption
+
+	free_construction_scaled_player_exemption = {
+		flag = free_construction_scaled_player_exemption
+	}
+}

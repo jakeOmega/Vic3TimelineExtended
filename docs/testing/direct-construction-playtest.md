@@ -272,3 +272,9 @@ The harness reads values and takes screenshots; these need a player.
    the way back (`extended_timeline_build_specified_building_level`). Say so if a real game gets there.
 9. **Multiplayer.** Not run. Base Construction no longer depends on each machine's last lobby, which under the old
    line could have differed between host and client.
+10. **The base game's Base Construction Capacity rule, cut to one setting (#1768).** The copy won: the harness run of
+   2026-11-13 logged `Duplicated key free_construction will not be created from file:
+   common/game_rules/00_game_rules.txt:42`, and `has_game_rule = free_construction_scaled_player_exemption` read yes.
+   Still to see: in a New Game lobby the card reads No Effect, its arrows offer nothing else, and the text naming
+   Free Market Construction fits its four lines. And a save made under Scaled (All) or Maximum, if one exists: what
+   its rules screen shows.

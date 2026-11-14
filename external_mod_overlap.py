@@ -118,7 +118,7 @@ LOAD_ORDER_MODEL = {
                  "`Duplicated key X will not be created from file:`, line 378 on 1.14.5 and 394 "
                  "on 1.15): the first one wins.",
         "see": f"{LOAD_ORDER_DOC}, fact 3 (static_modifiers, scripted_effects, scripted_triggers, "
-               "scripted_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, "
+               "scripted_rules, game_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, "
                "breaking_changes.md (no implicit overwrites). Setting: BARE_DUPLICATE_RULES.",
     },
     "directives": {
@@ -176,7 +176,7 @@ LOAD_ORDER_MODEL = {
     "bare_duplicate_other": {
         "status": "unknown",
         "claim": "Which bare definition wins in a folder not probed and not in inject_types.md "
-                 "(game_rules, ...): both are simulated.",
+                 "(messages, ...): both are simulated.",
         "see": f"{LOAD_ORDER_DOC} (not probed). Setting: BARE_DUPLICATE_RULES.",
     },
     "same_path": {
@@ -295,13 +295,14 @@ BARE_DUPLICATE_RULES = {
     "scripted_triggers": FIRST_WINS,                 # probed (round 2)
     "scripted_rules": FIRST_WINS,                    # probed (round 2)
     "script_values": LAST_WINS,                      # probed (round 2): ["bare_duplicate_script_values"]
+    "game_rules": FIRST_WINS,                        # read 2026-11-13 (#1768), fact 3
 }
 # The folders whose rule above was read in game: facts 3 and 5, and for
 # decisions the control of fact 7's round 5. In the other DIGEST_INJECT_DIRS
 # the rule is the digest's word (LOAD_ORDER_MODEL["bare_duplicate"]).
 BARE_DUPLICATE_PROBED = frozenset({
     "static_modifiers", "scripted_effects", "scripted_triggers", "scripted_rules",
-    "script_values", "decisions",
+    "script_values", "decisions", "game_rules",
 })
 
 # `common/` folders whose subfolders are separate databases.

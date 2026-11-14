@@ -27,12 +27,28 @@ import json
 import os
 import unittest
 
+from mod_state import split_loc_line
 from paradox_file_parser import ParadoxFileParser
 from test_law_desc_length import _mod_loc, render, wrapped_lines
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 RULES_DIR = os.path.join(REPO, "common", "game_rules")
 VANILLA_LOC = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
+REPLACE_LOC_DIR = os.path.join(REPO, "localization", "english", "replace")
+
+
+def _mod_loc_with_overrides():
+    """The mod's English loc with its `replace/` overrides on top, as the engine reads it. A vanilla rule the mod
+    redefines (`00_a_te_free_construction.txt`) keeps vanilla's setting name, so its text is a `replace/` key."""
+    out = _mod_loc()
+    for fname in sorted(os.listdir(REPLACE_LOC_DIR)):
+        if fname.endswith(".yml"):
+            with open(os.path.join(REPLACE_LOC_DIR, fname), encoding="utf-8-sig") as f:
+                for line in f:
+                    parsed = split_loc_line(line)
+                    if parsed:
+                        out[parsed[0]] = parsed[1]
+    return out
 
 WRAP_WIDTH = 78
 MAX_LINES = 4
@@ -68,7 +84,7 @@ class GameRuleDescriptionLengthTests(unittest.TestCase):
     def setUpClass(cls):
         with open(VANILLA_LOC, encoding="utf-8") as f:
             cls.vanilla_loc = json.load(f)
-        cls.mod_loc = _mod_loc()
+        cls.mod_loc = _mod_loc_with_overrides()
         cls.loc = {**cls.vanilla_loc, **cls.mod_loc}
         cls.settings = mod_rule_settings()
 
