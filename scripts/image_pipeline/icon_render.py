@@ -1694,6 +1694,53 @@ def compose_strip(raw: Image.Image, spec: dict, target) -> Image.Image:
     return Image.fromarray(np.dstack([np.clip(out + 0.5, 0, 255), np.full((H, W), 255.0)]).astype(np.uint8), "RGBA")
 
 
+def compose_banner(raw: Image.Image, spec: dict) -> Image.Image:
+    """A wide render scaled to cover the banner's size and cropped about its centre.
+
+    The render is made close to the banner's shape (`gen_size`), so the crop
+    takes a few rows off the top and bottom at most. Nothing is graded: no
+    vanilla folder holds pictures of this kind to grade against.
+    """
+    W, H = spec["size"]
+    k = max(W / raw.width, H / raw.height)
+    w, h = max(W, round(raw.width * k)), max(H, round(raw.height * k))
+    scene = raw.convert("RGB").resize((w, h), Image.LANCZOS)
+    left, top = (w - W) // 2, (h - H) // 2
+    return scene.crop((left, top, left + W, top + H)).convert("RGBA")
+
+
+def banner_sheet(rows: list, out: Path, gap: int = 14) -> None:
+    """A block per banner: the picture it replaces, cropped as the game crops it, then each candidate
+    below it, all at the size they are written."""
+    from PIL import ImageFont
+
+    font = ImageFont.load_default()
+    blocks = []
+    for label, now, cands in rows:
+        tiles = list(cands)
+        if Path(now).is_file():
+            tiles.insert(0, ("now", load_rgba(now)))
+        blocks.append((label.splitlines()[0], [(cap, im.convert("RGB")) for cap, im in tiles]))
+    W, H = max((im.size for _, tiles in blocks for cap, im in tiles if cap != "now"), default=(960, 220))
+    left, line = 70, H + gap
+    height = gap + sum(20 + line * len(tiles) for _, tiles in blocks)
+    sheet = Image.new("RGB", (left + W + gap, height), (33, 34, 40))
+    d = ImageDraw.Draw(sheet)
+    y = gap
+    for label, tiles in blocks:
+        d.text((gap, y), label, font=font, fill=(235, 235, 235))
+        y += 20
+        for cap, im in tiles:
+            if im.size != (W, H):   # the placeholder: scaled to cover, cropped about its centre
+                im = compose_banner(im, {"size": (W, H)}).convert("RGB")
+            d.text((gap, y + H // 2), cap, font=font, fill=(225, 200, 130))
+            sheet.paste(im, (left, y))
+            y += line
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out)
+    print(f"wrote {out}")
+
+
 def _nine_slice(m: Image.Image, size: tuple[int, int], borders: tuple[int, int, int, int],
                 density: float) -> Image.Image:
     """`spriteType = Corneredstretched`: fixed borders (texels / density), stretched middle."""
@@ -1789,6 +1836,8 @@ class Composer:
         raw = raw.convert("RGB")
         if mode == "strip":
             return compose_strip(raw, spec, self._target[cat])
+        if mode == "banner":
+            return compose_banner(raw, spec)
         if mode == "tinted":
             return compose_tinted(raw, spec, self._tmpl[cat])
         if mode == "card":

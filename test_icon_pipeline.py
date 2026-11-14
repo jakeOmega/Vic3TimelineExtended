@@ -503,6 +503,37 @@ class StripTests(unittest.TestCase):
                          "gfx/interface/icons/institution_icons/institution_ministry_of_war.dds")
 
 
+class BannerTests(unittest.TestCase):
+    """compose_banner fits a wide render to the banner's own size; the category is written where the GUI reads it."""
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+
+    def test_the_render_covers_the_banner_and_is_cropped_about_its_centre(self):
+        spec = ip.CATEGORIES["space_banner"]
+        w, h = spec["gen_size"]
+        raw = np.zeros((h, w, 3), dtype=np.uint8)
+        raw[:, :, 0] = np.linspace(0, 255, w).astype(np.uint8)[None, :]    # red runs left to right
+        raw[h // 2 - 8:h // 2 + 8, :, 1] = 255                            # a green band across the middle
+        out = np.asarray(self.r.compose_banner(Image.fromarray(raw), spec))
+        self.assertEqual(out.shape, (spec["size"][1], spec["size"][0], 4))
+        self.assertTrue((out[..., 3] == 255).all())
+        self.assertLess(out[:, :8, 0].mean(), 8)                           # the full width is kept
+        self.assertGreater(out[:, -8:, 0].mean(), 247)
+        rows = np.where(out[:, out.shape[1] // 2, 1] > 128)[0]
+        self.assertAlmostEqual(rows.mean(), (spec["size"][1] - 1) / 2, delta=1)   # the middle stays in the middle
+
+    def test_the_shape_is_the_render_s_and_block_compression_s(self):
+        spec = ip.CATEGORIES["space_banner"]
+        (w, h), (gw, gh) = spec["size"], spec["gen_size"]
+        self.assertEqual((w % 4, h % 4), (0, 0))            # BC7 works in 4 x 4 blocks
+        self.assertEqual((gw % 16, gh % 16), (0, 0))        # FLUX renders in 16 px patches
+        self.assertLess(abs(gw / gh - w / h), 0.1)          # so the crop takes a few rows at most
+        self.assertEqual(ip.icon_path("space_banner", "fleet_banner_chemical"),
+                         "gfx/interface/illustrations/space_race/fleet_banner_chemical.dds")
+
+
 class BackdropPlumbingTests(unittest.TestCase):
     """The backed category's shared backdrop: which jobs render, where finals go, when writing is refused."""
 

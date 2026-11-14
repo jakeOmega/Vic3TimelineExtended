@@ -1074,16 +1074,16 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 "gfx/interface/icons/generic_icons/down_down.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
 # Space Fleets' banner (space_race_gui_icons.md, "Space Fleets: the banner"): the
-# picture for each drive level, event pictures standing in until the banners
-# are painted (style guide rule 10). Swapping one in changes its path here.
-FLEET_BANNERS = {0: "gfx/event_pictures/orbital_arms_race.dds",
-                 1: "gfx/event_pictures/orbital_battlestation_construction.dds",
-                 2: "gfx/event_pictures/interstellar_probe_departure.dds",
-                 3: "gfx/event_pictures/antimatter_propulsion_drive.dds"}
-# Earth Orbit has no world icon of its own yet: the Earth-orbit production
-# method's icon stands in, in a fleet card's head (space_race_gui_icons.md,
-# "Locations and a card's world"; gen_space_fleets.LOCATION_ICONS).
-EARTH_ORBIT_PLACEHOLDER = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
+# picture for each drive level, painted for the slot (icon_prompts.py, category
+# `space_banner`); event pictures stood in for them at first.
+SR_BANNERS = "gfx/interface/illustrations/space_race/"
+FLEET_BANNERS = {0: f"{SR_BANNERS}fleet_banner_chemical.dds",
+                 1: f"{SR_BANNERS}fleet_banner_fusion.dds",
+                 2: f"{SR_BANNERS}fleet_banner_torch.dds",
+                 3: f"{SR_BANNERS}fleet_banner_antimatter.dds"}
+# The event pictures that stood in for the banners, and the Earth-orbit
+# production method's icon that stood in for Earth Orbit's world: gone from the widget.
+FLEET_PLACEHOLDERS_GONE = ("gfx/event_pictures/", "production_method_icons/pm_earth_orbit.dds")
 # The fleet cards' pictograms (space_race_gui_icons.md, "Space Fleets: the fleet
 # cards"): the block or loc key that sits in the same cell or button, and its file.
 FLEET_CARD_ICONS = (
@@ -1183,12 +1183,13 @@ class SpaceRaceIconsTest(unittest.TestCase):
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
             with self.subTest(path=path):
                 self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT
-                                or path in PAGE_KEPT or path == EARTH_ORBIT_PLACEHOLDER,
+                                or path in PAGE_KEPT or path in FLEET_BANNERS.values(),
                                 f"placeholder left: {path}")
-        # The one set of placeholders the panel holds: Space Fleets' banner, listed in the doc.
-        banner = _type_body(self.gui, "te_sr_fleet_banner")
+        # Nothing outside gfx/interface: the banner's event pictures were the only such textures.
         self.assertEqual(set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui)) - set(re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui)),
-                         set(re.findall(r'texture = "(gfx/[^"]+)"', banner)))
+                         set())
+        for gone in FLEET_PLACEHOLDERS_GONE:
+            self.assertNotIn(gone, self.gui)
 
     def test_a_colony_page_s_own_icons(self):
         """Icon batch 8: each tile and module row on a colony's page draws its own
@@ -1257,10 +1258,22 @@ class FleetBannerTest(unittest.TestCase):
         doc = _read(ICONS_DOC)
         for level, path in FLEET_BANNERS.items():
             with self.subTest(level=level):
-                self.assertRegex(doc, rf"(?m)^\| .*\({level}\) \| `{re.escape(path)}` \| .* \| `gfx/interface/illustrations/"
-                                      rf"space_race/fleet_banner_\w+\.dds` \|$")
+                self.assertRegex(doc, rf"(?m)^\| .*\({level}\) \| .* \| `{re.escape(os.path.basename(path))}` \|$")
                 tracked = subprocess.run(["git", "-C", REPO, "ls-files", "--error-unmatch", path], capture_output=True)
                 self.assertEqual(tracked.returncode, 0, f"{path} is not in the repository")
+
+    def test_each_picture_is_the_slot_s_shape(self):
+        """Painted at twice the slot, so the game crops nothing, and both sides
+        multiples of 4, which block compression needs."""
+        from scripts.image_pipeline import icon_prompts
+        spec = icon_prompts.CATEGORIES["space_banner"]
+        width, height = map(int, re.search(r"size = \{ (\d+) (\d+) \}", self.banner).groups())
+        self.assertEqual(spec["size"], (2 * width, 2 * height))
+        self.assertEqual((spec["size"][0] % 4, spec["size"][1] % 4), (0, 0))
+        # a subject still under review (seed None) ships nothing
+        picked = {icon_prompts.icon_path("space_banner", key) for key, entry in icon_prompts.ICONS["space_banner"].items()
+                  if isinstance(entry.get("seed"), int)}
+        self.assertEqual(picked, set(FLEET_BANNERS.values()))
 
 
 class FleetCardTest(unittest.TestCase):
@@ -1367,7 +1380,7 @@ class FleetCardTest(unittest.TestCase):
         self.assertEqual(re.findall(r'texture = "([^"]+)"\s*block "fl_place_(\w+)" \{\}', head),
                          [(path, key) for key, path in gsf.LOCATION_ICONS.items()])
         self.assertEqual(list(gsf.LOCATION_ICONS), [lc.key for lc in gsf.LOCATIONS])
-        self.assertEqual(gsf.LOCATION_ICONS["earth"], EARTH_ORBIT_PLACEHOLDER)
+        self.assertEqual(gsf.LOCATION_ICONS["earth"], f"{SR_ICONS}location_earth.dds")
         display = _read(os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
         for n, row in enumerate(self.rows, 1):
             place = display[display.index(f"\nsr_disp_fl_{n}_place = {{"):]
@@ -1388,6 +1401,21 @@ class FleetCardTest(unittest.TestCase):
         check = subprocess.run([sys.executable, os.path.join(REPO, "scripts", "image_pipeline", "gen_space_fleet_pictograms.py"),
                                 "--check"], capture_output=True, text=True)
         self.assertEqual(check.returncode, 0, check.stdout)
+
+    def test_each_icon_is_drawn_or_painted_never_both(self):
+        """The orders and the transit marker are signs, drawn by the script; the
+        emblems, the roles, the postures and Locations' statuses are painted
+        (icon_prompts.py). A file with both sources would be written twice."""
+        from scripts.image_pipeline import gen_space_fleet_pictograms as drawn
+        from scripts.image_pipeline import icon_prompts
+        painted = {key for cat in ("space", "space_state") for key in icon_prompts.ICONS[cat]}
+        self.assertEqual(set(drawn.ICONS), {"order_go", "order_transfer", "order_land", "order_embark", "order_seize",
+                                            "order_destroy", "track_ship"})
+        self.assertEqual(set(drawn.ICONS) & painted, set())
+        for stem in ("fleet", "fleet_other", "status_battle", "status_blockaded", "status_interdicted", "location_earth",
+                     *(f[:-4] for _, f in FLEET_CARD_ICONS if not f.startswith("order_"))):
+            with self.subTest(icon=stem):
+                self.assertIn(stem, painted)
 
 
 class LocationsStripTest(unittest.TestCase):
