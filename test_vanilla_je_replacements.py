@@ -1,11 +1,13 @@
-"""The two vanilla journal entries the mod restates whole (REPLACE:) outside the tax code.
+"""The vanilla journal entries the mod restates whole (REPLACE:) outside the tax code.
 
 te_vanilla_opium.txt closes The Opium Trade at the International Opium Convention;
 te_vanilla_turtle_island.txt keeps The Nations of Turtle Island off North American
-unions. Each is vanilla's entry (vanilla_parsed, 1.15) plus lines marked MOD, so
-once those come out the entry must equal vanilla's: a vanilla patch that moves the
-entry fails here, and the copy is rebuilt from the new text (the tax code's three
-have the same test, test_tax_code_bypass.VanillaJournalEntryTest)."""
+unions; te_vanilla_war_nursing.txt lets War Wounded count Medevac Helicopters. Each
+is vanilla's entry (vanilla_parsed, 1.15) plus lines marked MOD, so once those come
+out (or, where a MOD line edits one of vanilla's, vanilla's line goes back) the entry
+must equal vanilla's: a vanilla patch that moves the entry fails here, and the copy
+is rebuilt from the new text (the tax code's three have the same test,
+test_tax_code_bypass.VanillaJournalEntryTest)."""
 
 import copy
 import json
@@ -19,8 +21,11 @@ from test_tax_code_rule import load, plain
 ROOT = Path(__file__).resolve().parent
 OPIUM = "common/journal_entries/te_vanilla_opium.txt"
 TURTLE = "common/journal_entries/te_vanilla_turtle_island.txt"
+WAR_NURSING = "common/journal_entries/te_vanilla_war_nursing.txt"
 VANILLA_JES = "vanilla_parsed/common/journal_entries.json"
 UNION = {"te_is_north_american_capable_union": "yes"}
+FIRST_AID = "mobilization_option:mobilization_option_first_aid"
+FIELD_HOSPITALS = "mobilization_option:mobilization_option_field_hospitals"
 
 
 def remove(block, key, value):
@@ -87,6 +92,51 @@ class ReplacementTest(unittest.TestCase):
         for gate in ("is_shown_in_lobby", "is_shown_when_inactive"):
             remove(mine[gate], "NOT", UNION)
         self.assertEqual(mine, self.vanilla["je_unite_the_nations"])
+
+    def test_war_wounded_is_vanilla_but_for_the_medical_options(self):
+        """Three of vanilla's tests read the medical triggers, and one block is added.
+
+        Each MOD line is swapped back for the vanilla text it stands in for, written
+        out here, so a vanilla patch to those lines fails the comparison too."""
+        mine = self.entry(WAR_NURSING, "je_war_nursing")
+
+        def formation(block):
+            """The general test under a country-scope block, or under a war-scope one."""
+            general = block["any_scope_front"]["any_scope_general"] if "any_scope_front" in block \
+                else block["any_scope_war"]["any_scope_front"]["any_scope_general"]
+            self.assertEqual(general["owner"], "ROOT")
+            return general
+
+        start = formation(mine["possible"])
+        self.assertEqual(start["this.commander_military_formation"], {"te_formation_has_medic_support": "no"})
+        start["this.commander_military_formation"] = {
+            "NOR": {"has_mobilization_option": [FIRST_AID, FIELD_HOSPITALS]}}
+
+        done = outcome(mine, "complete")
+        self.assertEqual(done["trigger"].pop("te_army_has_field_hospitals_or_better_share"), "yes")
+        done["trigger"] = {
+            "army_mobilization_option_fraction": {"target": FIELD_HOSPITALS, "value": "0.2"},
+            **done["trigger"]}
+        general = formation(done["trigger"])
+        self.assertEqual(general["this.commander_military_formation"],
+                         {"te_formation_has_field_hospitals_or_better": "yes"})
+        general["this.commander_military_formation"] = {"has_mobilization_option": FIELD_HOSPITALS}
+
+        saved = done["effect"].pop("hidden_effect")
+        war = saved["random_scope_war"]
+        self.assertEqual(formation(war["limit"])["this.commander_military_formation"],
+                         {"te_formation_has_field_hospitals_or_better": "yes"})
+        self.assertEqual(war["save_scope_as"], "complete_nursing_war")
+        self.assertEqual(war["random_scope_front"],
+                         {"random_scope_state": {"save_scope_as": "ongoing_war_state"}})
+
+        self.assertEqual(mine, self.vanilla["je_war_nursing"])
+
+    def test_war_wounded_saves_its_scopes_before_the_event(self):
+        """nursing_events.4 reads the scopes the outcome saves, so the save comes first."""
+        text = (ROOT / WAR_NURSING).read_text(encoding="utf-8-sig")
+        self.assertLess(text.index("save_scope_as = complete_nursing_war"),
+                        text.index("trigger_event = { id = nursing_events.4 }"))
 
 
 if __name__ == "__main__":

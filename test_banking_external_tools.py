@@ -217,6 +217,9 @@ class Script:
                 # other systems' calls (the history chart, Wealth Concentration's crash shock):
                 # no banking state
                 continue
+            elif key in ('add_radicals', 'add_loyalists'):
+                # the toggle friction (test_banking_toggle_costs.py holds its size): pops only
+                continue
             elif key == 'custom_tooltip':
                 # Records the line the tooltip would draw; a block still runs.
                 if isinstance(val, list):
