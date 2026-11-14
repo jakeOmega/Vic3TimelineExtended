@@ -39,7 +39,9 @@ weekly income, more when the pool has built up and less when it runs low, and
 they keep spending when the income stops.
 4. Construction Sites turn the purchased good into construction points. They
 appear on their own in every state where construction is under way, and in your
-capital when nothing is under way anywhere else. Nobody builds them.
+capital when nothing is under way anywhere else. Nobody builds them. A new site
+starts working once it has hired its laborer, a week or two after it appears,
+and the sites that already have theirs deliver your whole purchase meanwhile.
 
 Each purchase is capped at what its queue can use that week: at most one week's
 maximum progress for each level in the queue. The share of points that goes to
