@@ -31,10 +31,13 @@ Callout keys:
     from, to       arrow ends: l r t b tl tr bl br, on the caption and the target
 
 Counts in the text were taken from the mod files on 2026-11-06: 191
-technologies in eras VI to XIII; 165 laws, 15 of them in base-game groups, and
-39 new law groups; about 1,035 visible events outside the debug files; 93
-standing monuments and 50 buried sites (player guide 02-timeline.md); 29 Map
-Room maps; 34 history charts. Recount before reusing a figure.
+technologies in eras VI to XIII; 39 new law groups; about 1,035 visible events
+outside the debug files; 93 standing monuments and 50 buried sites (player guide
+02-timeline.md); 29 Map Room maps; 34 history charts. The laws were recounted on
+2026-11-13: 166, 16 of them in base-game groups (the first count, 165, missed
+law_post-scarcity, whose key has a hyphen). workshop_composites.mod_counts() counts
+the technologies, laws and law groups, and test_workshop_composites.py checks the
+figures here against it; recount the others before reusing one.
 """
 
 IMAGE_KEYS = {"src", "title", "subtitle", "u", "scale", "crop", "column", "column_region",
@@ -203,7 +206,7 @@ SPECS['08_space_race'] = dict(
 
 SPECS['09_laws'] = dict(
     src='Screenshot 2026-11-06 170524.png', scale=0.68, u=1.05, column=720, gap=22,
-    title='165 New Laws', subtitle='and 39 new law groups',
+    title='166 New Laws', subtitle='and 39 new law groups',
     callouts=[
         dict(box=(15, 658, 953, 881), title='New technology',
              body='Internet, frontier AI, genetic rights, automation'),
