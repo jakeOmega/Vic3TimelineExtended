@@ -54,13 +54,33 @@ un_global_authority_on_action = {
 			un_stop_for_rule = yes
 		}
 		# The age of Intergovernmental Organizations: ends the early unlock's
-		# league stage (un_league_stage). Set under either unlock, so a switch
-		# to the early one later finds it.
+		# league stage (un_league_stage). Set whatever the rule, so a switch
+		# to the early unlock later, from Late or from Disabled, finds it and
+		# never shows a league the age has already passed.
 		if = {
 			limit = {
-				te_united_nations_on = yes
 				NOT = { has_global_variable = un_igo_age }
 				any_country = { has_technology_researched = intergovernmental_organizations }
+			}
+			# A standing league takes the name United Nations this month
+			# (un_ov_league_sgui): its members and every player are told once.
+			# Read before the variable is set, while un_league_stage holds;
+			# un_league_stage asks the early unlock, so neither Late Unlock
+			# nor Disabled sends it, and un_founded asks for a league.
+			if = {
+				limit = {
+					un_league_stage = yes
+					has_global_variable = un_founded
+				}
+				every_country = {
+					limit = {
+						OR = {
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
+							is_player = yes
+						}
+					}
+					post_notification = un_league_becomes_un_notice
+				}
 			}
 			set_global_variable = un_igo_age
 		}

@@ -95,8 +95,10 @@ class WidthTest(unittest.TestCase):
         v = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", v)
         v = re.sub(r"\[(concept_\w+)\]", lambda m: self.shown(m.group(1), depth + 1), v)
 
+        # A choice at its longest; the organization's name (un_org_name_*)
+        # at its longest reading, the League's.
         def choice(m):
-            keys = re.findall(r"'(je_\w+)'", m.group(0))
+            keys = re.findall(r"'((?:je|un_org_name)_\w+)'", m.group(0))
             return max((self.shown(k, depth + 1) for k in keys), key=len)
         v = re.sub(r"\[SelectLocalization\(.*?\)\]", choice, v)
         v = re.sub(r"\[[^\[\]]*\]", NUMBER, v)
