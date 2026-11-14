@@ -16,8 +16,9 @@
 # success outcome saves the two scopes nursing_events.4 names (the war and a
 # state for its placement): the event's own immediate saves them only from a
 # war with a Field Hospitals general, so after a Medevac completion they were
-# unset. An event reads the scopes its caller saved (vanilla's Ryukyu rivalry
-# does the same), and the event's own save, when it finds such a war, wins.
+# unset. An event reads the scopes its caller saved (vanilla's German
+# unification entry saves german_unifier_candidate for german_unification.5
+# the same way), and the event's own save, when it finds such a war, wins.
 #
 # nursing_events.2 and .3, the entry's monthly events, still test First Aid or
 # Field Hospitals (and Field Hospitals alone) in vanilla's
