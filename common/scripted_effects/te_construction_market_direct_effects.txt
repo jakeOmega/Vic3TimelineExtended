@@ -486,13 +486,15 @@ te_direct_construction_revert_all = {
 			remove_building = te_construction_market_site
 		}
 		# A site kept because its owner has no Urbanization serves as a market
-		# site, and the market's sites are level 1: each is sized for a share
-		# of the week's purchase (te_construction_market_site_throughput) and gives
-		# that times its level.
+		# site, and is made new for it, whatever its level: the market's sites
+		# are level 1, each sized for a share of the week's purchase
+		# (te_construction_market_site_throughput), and a kept site would hold
+		# its direct tier's workforce on the market method's ten jobs, at the
+		# engine's own throughput, until the first weekly pass saw it. Until
+		# 2026-11-14 only a site above level 1 was made new.
 		every_scope_state = {
 			limit = {
 				has_building = te_construction_market_site
-				b:te_construction_market_site.level > 1
 			}
 			remove_building = te_construction_market_site
 			te_construction_market_place_site = yes

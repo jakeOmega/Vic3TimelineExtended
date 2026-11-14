@@ -49,21 +49,7 @@ te_construction_market_country_update_sites = {
 		}
 		te_construction_market_state_on_end = yes
 	}
-	# A country that has lost every state stays alive while its war goes on,
-	# with no capital to place in.
-	if = {
-		limit = {
-			exists = capital
-			NOT = {
-				any_scope_building = {
-					is_building_type = te_construction_market_site
-				}
-			}
-		}
-		capital = {
-			te_construction_market_place_site = yes
-		}
-	}
+	te_construction_market_ensure_site = yes
 	remove_global_variable = te_cm_placing_site
 }
 
@@ -105,6 +91,9 @@ te_construction_market_country_update_private_share = {
 # with the others it would thin their share now and add to it once it hired.
 # A site the crew pass has cut but not yet counted (settling) gets -100%.
 #
+# Between the two, te_construction_market_capital_site_standby decides whether
+# the capital's site is one of the counted ones this week.
+#
 # The multiplier goes through a country variable, read as owner.var:, because
 # of how the engine treats the slot (docs/guides/scripting_best_practices.md,
 # "Scope Chain Issues with add_modifier + Script Values"):
@@ -123,6 +112,7 @@ te_construction_market_apply_per_site_modifier = {
 		}
 		te_construction_market_site_crew = yes
 	}
+	te_construction_market_capital_site_standby = yes
 	set_variable = {
 		name = te_cm_capacity_mult
 		value = te_construction_market_site_throughput
@@ -143,6 +133,7 @@ te_construction_market_apply_per_site_modifier = {
 			limit = {
 				state = {
 					has_variable = te_cm_site_crew
+					NOT = { has_variable = te_cm_site_standby }
 				}
 			}
 			add_modifier = {
@@ -150,17 +141,69 @@ te_construction_market_apply_per_site_modifier = {
 				multiplier = owner.var:te_cm_capacity_mult
 			}
 		}
-		# Waiting to be counted, and perhaps holding more laborers than jobs:
-		# no throughput at all, so that it delivers nothing meanwhile.
+		# Waiting to be counted, and perhaps holding more laborers than jobs,
+		# or the capital's site standing by: no throughput at all, so that it
+		# delivers, and buys, nothing meanwhile. It keeps its laborer: in three
+		# saves of 1945, sites at -100% for want of a purchase were as well
+		# staffed as the rest (19 of 23 full on 1 April).
 		else_if = {
 			limit = {
 				state = {
-					has_variable = te_cm_site_crew_settling
+					OR = {
+						has_variable = te_cm_site_crew_settling
+						has_variable = te_cm_site_standby
+					}
 				}
 			}
 			add_modifier = {
 				name = te_construction_market_capacity_modifier
 				multiplier = -1
+			}
+		}
+	}
+}
+
+# Country scope, between the crews and the count. The capital always has a
+# site (te_construction_market_ensure_site), and it keeps its laborer, so the
+# country always has a site ready to work: when construction starts in a new
+# state, the capital's site carries the purchase while the new one hires. So
+# that it does not then take a share from the sites where the building is, it
+# stands by (var:te_cm_site_standby on the capital: not counted, at -100%
+# throughput) while another site has a crew and nothing is being built in the
+# capital itself (owner, 2026-11-14). It comes off standby only here, at the
+# next sizing: so after the last other crewed site goes with its construction,
+# nothing is delivered until the next weekly pass, a week at most.
+te_construction_market_capital_site_standby = {
+	if = {
+		limit = {
+			exists = capital
+		}
+		capital = {
+			if = {
+				limit = {
+					has_variable = te_cm_site_crew
+					NOT = {
+						any_scope_building = {
+							is_under_construction = yes
+						}
+					}
+					owner = {
+						any_scope_building = {
+							is_building_type = te_construction_market_site
+							state = {
+								has_variable = te_cm_site_crew
+								NOT = { is_capital = yes }
+							}
+						}
+					}
+				}
+				set_variable = te_cm_site_standby
+			}
+			else_if = {
+				limit = {
+					has_variable = te_cm_site_standby
+				}
+				remove_variable = te_cm_site_standby
 			}
 		}
 	}
@@ -217,7 +260,9 @@ te_construction_market_apply_per_site_modifier = {
 #                          market site): it waits.
 #   marked, over 105%      the mark goes and it settles again. Checked before
 #                          the sizing, so it is not sized that week.
-#   marked 3, under 11%    down to its first hires: the cut is safe again.
+#   marked, not cut,       a site counted on its ten jobs (marked 3, or one
+#   under 11%              that arrived with a state that did not bring the
+#                          cut) and down to its first hires: the cut is safe.
 #
 # The reads (the two self-checks and the settling verdict) are made only from
 # the weekly pulse (owner.var:te_cm_weekly_pass), not from the purchase
@@ -241,6 +286,16 @@ te_construction_market_apply_per_site_modifier = {
 #   A site under 90% decides nothing: with the cut not taking it reads there
 #   too, and the crew check is the one that says so.
 te_construction_market_site_crew = {
+	# The capital has moved: its old site is a site like any other.
+	state = {
+		if = {
+			limit = {
+				has_variable = te_cm_site_standby
+				NOT = { is_capital = yes }
+			}
+			remove_variable = te_cm_site_standby
+		}
+	}
 	if = {
 		limit = {
 			occupancy > 0
@@ -478,11 +533,16 @@ te_construction_market_site_crew = {
 			limit = {
 				occupancy < 0.11
 				state = {
-					var:te_cm_site_crew ?= 3
+					NOT = { has_variable = te_cm_site_crew_cut }
 				}
 			}
 			state = {
-				remove_variable = te_cm_site_crew_nocut
+				if = {
+					limit = {
+						has_variable = te_cm_site_crew_nocut
+					}
+					remove_variable = te_cm_site_crew_nocut
+				}
 				te_construction_market_add_crew_cut = yes
 				set_variable = {
 					name = te_cm_site_crew
@@ -559,6 +619,12 @@ te_construction_market_clear_crew = {
 			has_variable = te_cm_site_crew_fresh
 		}
 		remove_variable = te_cm_site_crew_fresh
+	}
+	if = {
+		limit = {
+			has_variable = te_cm_site_standby
+		}
+		remove_variable = te_cm_site_standby
 	}
 }
 

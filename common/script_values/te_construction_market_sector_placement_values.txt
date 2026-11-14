@@ -28,11 +28,15 @@
 # They never deliver more than the purchase, which is the failure to avoid: the
 # government queue spends whatever the sites deliver, at the treasury's cost.
 # They deliver less in two cases, and what is not delivered is not paid for:
-#   - no site has a crew yet (a country's only site has just moved to a new
-#     state): nothing until the new site's first hire and the pulse after it,
-#     a week or two;
+#   - no site has a crew yet (a new country, or one whose capital's site has
+#     lost its laborer): nothing until a site's first hire and the pulse after
+#     it, a week or two. Construction moving to a new state is not such a
+#     case: the capital's site always stands and carries the purchase while
+#     the new one hires;
 #   - a crewed site was removed since the pulse (construction ended in its
-#     state): the others keep their share until the next pulse.
+#     state): the others keep their share until the next pulse, and if it was
+#     the only one beside the capital's, which is then standing by, nothing is
+#     delivered until that pulse.
 #
 # How it got here. Until 2026-11-13 each site had its own throughput, its share
 # of the purchase divided by its staffing, with a site under 10% staffed sized
@@ -44,7 +48,9 @@
 # country whose construction moved between states got a fifth of its purchase
 # (docs/testing/ai-economy-playtest.md, "First verdict").
 
-# Country scope: the levels of the country's crewed sites, summed. The market
+# Country scope: the levels of the country's crewed sites, summed, the capital's
+# left out while it stands by (te_construction_market_capital_site_standby in
+# te_construction_market_update_effects.txt). The market
 # places its sites at level 1, but a site kept from a direct game can have more,
 # and each level has its own laborer and delivers the throughput again.
 te_construction_market_site_levels = {
@@ -54,6 +60,7 @@ te_construction_market_site_levels = {
 			is_building_type = te_construction_market_site
 			state = {
 				has_variable = te_cm_site_crew
+				NOT = { has_variable = te_cm_site_standby }
 			}
 		}
 		add = level
