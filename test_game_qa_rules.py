@@ -42,7 +42,6 @@ fantasy = {
 	allow_fantasy = { }
 	no_fantasy = { }
 }
-tax_rule = { default = old old = { } }
 """
 PRESETS = """﻿game_rules_preset={
 	name="My favourites"
@@ -155,6 +154,16 @@ class RuleTableTest(RulesTestCase):
         table = rules.load_rules([self.vanilla, self.mod])
         self.assertNotIn("fantasy", table)
         self.assertIn("only", table)
+
+    def test_a_rule_two_files_define_keeps_the_first_file_s_copy(self):
+        # As the engine keeps a key's first bare definition, files in name order: a mod file that sorts before
+        # vanilla's cuts a vanilla rule down (00_a_te_free_construction.txt, #1768).
+        (self.mod / "00_a_cut.txt").write_text("fantasy = { default = only_one only_one = { } }\n", encoding="utf-8")
+        table = rules.load_rules([self.vanilla, self.mod])
+        self.assertEqual(table["fantasy"]["settings"], ["only_one"])
+        (self.mod / "zz_late.txt").write_text("tax_rule = { late = { } }\n", encoding="utf-8")
+        table = rules.load_rules([self.vanilla, self.mod])
+        self.assertNotIn("late", table["tax_rule"]["settings"])
 
     def test_a_missing_folder_is_skipped(self):
         self.assertEqual(sorted(rules.load_rules([self.base / "nowhere", self.mod])), ["merges_rule", "tax_rule"])
