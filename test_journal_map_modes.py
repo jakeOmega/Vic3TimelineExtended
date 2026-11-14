@@ -17,7 +17,11 @@ number no branch reads all fail silently on the map. So this holds the pieces to
 - the systems' maps (selectors 18-25): each system entry's map and the Map Room's branch for it ask the same triggers
   in the same order (the parity test), each pick waits for its system's rule, each system tab's button picks its map
   and opens the Map Room, and the "your" maps follow the viewer the picks note;
-- the Timeline Extended window's Map Room button opens the page before it closes the window.
+- the Timeline Extended window's Map Room button opens the page before it closes the window;
+- the Map Room's options (Area and Outliers, 2026-11-14): a state outside the area is greyed by one stored mark the
+  paint reads first, the mark is put on by an effect (never asked for in a paint), every state region belongs to
+  exactly one continent, each option button runs its scripted GUI and then the picks' own repaint, and no system's
+  own entry reads the mark or the Map Room's ranges.
 """
 import os
 import re
@@ -252,8 +256,8 @@ class CauseColorsTest(unittest.TestCase):
         # the only other stripes: Power Grids' hubs and Company Headquarters' regional headquarters (Trade Capacity
         # striped its Trade Centers only while it painted the owner's trade)
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
-        self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_grid_hub = yes",
-                                  "te_jmap_selector = 34 has_variable = te_jmap_rhq_n"])
+        self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_in_area = yes te_jmap_grid_hub = yes",
+                                  "te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -491,6 +495,10 @@ class SystemMapsTest(unittest.TestCase):
                     if rel is None:
                         continue
                     mine = branches_of(block(entry(rel, key), part))
+                    # Emissions' and Grandeur's lerp reads the Map Room's own factor here (te_jmap_<map>_room_factor,
+                    # whose range follows the Map Room's options) and the entry's there; the rest is one text
+                    room = [(limit, re.sub(r"\b(te_jmap_\w+)_room_factor\b", r"\1_factor", body))
+                            for limit, body in room]
                     self.assertEqual(mine, room)
 
     def test_the_systems_maps_read_only_shared_triggers(self):
@@ -843,7 +851,7 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
 
     def test_regional_headquarters_stripe_and_are_named(self):
         stripes = branches_of(block(self.room, "map_color_second"))
-        self.assertIn(("te_jmap_selector = 34 has_variable = te_jmap_rhq_n",
+        self.assertIn(("te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n",
                        'value = "te_jmap_hq_regional"'), stripes)
         self.assertIn("custom_tooltip_no_bullet = te_jmap_tt_hq_regional", block(self.room, "map_tooltip"))
         body = block(code(VALUES), "te_jmap_rhq_walk_count")
@@ -913,7 +921,8 @@ class ClassesAndTradeMapsTest(_RoomBranches, unittest.TestCase):
         self.assertEqual(colors[1][1], 'value = "te_jmap_none"', "a state with no Trade Capacity is pale")
         # the map's two lines, then the Trade Center's level
         self.assertEqual([limit for limit, _ in self.of(self.hover, 45)],
-                         [limit for limit, _ in colors] + ["te_jmap_selector = 45 has_building = building_trade_center"])
+                         [limit for limit, _ in colors] +
+                         ["te_jmap_selector = 45 te_jmap_in_area = yes has_building = building_trade_center"])
         values = code(VALUES)
         capacity = " ".join(block(values, "te_jmap_trade_capacity").split())
         self.assertTrue(capacity.startswith("value = modifier:state_trade_capacity_add"), capacity)
@@ -1051,6 +1060,416 @@ class CategoriesTest(unittest.TestCase):
         classes = self.bodies()[self.CATEGORIES.index("classes")]
         for key in ("capitalists", "aristocrats", "clergy", "academics"):
             self.assertIn(f'text = "te_jmap_pick_{key}"', classes, key)
+
+
+def option_buttons():
+    """[(scripted GUI, button body)] for every option button on the Map Room's page."""
+    section = block(code(WIDGETS), "te_jmap_options")
+    out = []
+    for m in re.finditer(r"\bte_jmap_option_button\s*=\s*\{", section):
+        body = enclosing(section, m.end())
+        names = set(re.findall(r"GetScriptedGui\('(\w+)'\)", body))
+        assert len(names) == 1, f"one scripted GUI per option button: {names}"
+        out.append((names.pop(), body))
+    return out
+
+
+class OptionsTest(unittest.TestCase):
+    """The Map Room's options (owner, 2026-11-14): Area and Outliers."""
+
+    # scripted GUI -> (the effect it runs, its argument, the script value its button draws pressed from)
+    OPTIONS = {
+        "te_jmap_area_world_sgui": ("te_jmap_set_area", "AREA", 0, "te_jmap_area"),
+        "te_jmap_area_continent_sgui": ("te_jmap_set_area", "AREA", 1, "te_jmap_area"),
+        "te_jmap_area_market_sgui": ("te_jmap_set_area", "AREA", 2, "te_jmap_area"),
+        "te_jmap_area_bloc_sgui": ("te_jmap_set_area", "AREA", 3, "te_jmap_area"),
+        "te_jmap_area_country_sgui": ("te_jmap_set_area", "AREA", 4, "te_jmap_area"),
+        "te_jmap_continent_europe_sgui": ("te_jmap_set_continent", "CONT", 1, "te_jmap_continent"),
+        "te_jmap_continent_asia_sgui": ("te_jmap_set_continent", "CONT", 2, "te_jmap_continent"),
+        "te_jmap_continent_africa_sgui": ("te_jmap_set_continent", "CONT", 3, "te_jmap_continent"),
+        "te_jmap_continent_north_america_sgui": ("te_jmap_set_continent", "CONT", 4, "te_jmap_continent"),
+        "te_jmap_continent_south_america_sgui": ("te_jmap_set_continent", "CONT", 5, "te_jmap_continent"),
+        "te_jmap_continent_oceania_sgui": ("te_jmap_set_continent", "CONT", 6, "te_jmap_continent"),
+        "te_jmap_trim_default_sgui": ("te_jmap_set_trim", "TRIM", 0, "te_jmap_trim"),
+        "te_jmap_trim_none_sgui": ("te_jmap_set_trim", "TRIM", 1, "te_jmap_trim"),
+        "te_jmap_trim_percent_sgui": ("te_jmap_set_trim", "TRIM", 2, "te_jmap_trim"),
+    }
+    # the options that can be greyed, each with the reason its tooltip then gives
+    GREYED = {
+        "te_jmap_area_bloc_sgui": ("is_in_power_bloc = yes", "te_jmap_area_bloc_none_tt"),
+        "te_jmap_trim_default_sgui": ("te_jmap_pick_fitted = 1", "te_jmap_trim_no_range_tt"),
+        "te_jmap_trim_none_sgui": ("te_jmap_pick_fitted = 1", "te_jmap_trim_no_range_tt"),
+        "te_jmap_trim_percent_sgui": ("te_jmap_pick_fitted = 1", "te_jmap_trim_no_range_tt"),
+    }
+
+    def setUp(self):
+        self.room = entry(HOST, "je_te_map_room")
+        self.sguis = code(SGUIS)
+        self.effects = code(EFFECTS)
+        self.triggers = code(TRIGGERS)
+
+    # ---- the paint ----
+    def test_a_state_outside_the_area_is_greyed_first_whatever_the_map(self):
+        # one stored mark, read before any selector: the cheapest test a paint can make, and under the world (no
+        # state marked, as in a save from before the options) it is the only cost
+        colors = branches_of(block(self.room, "map_color"))
+        hover = branches_of(block(self.room, "map_tooltip"))
+        self.assertEqual(colors[0], ("has_variable = te_jmap_out", 'value = "te_jmap_outside"'))
+        self.assertEqual(hover[0], ("has_variable = te_jmap_out", "custom_tooltip_no_bullet = te_jmap_tt_outside"))
+        for part in (colors, hover):
+            self.assertEqual([i for i, (limit, _) in enumerate(part) if "te_jmap_out" in limit], [0])
+        self.assertIn("te_jmap_outside", named_colors())
+        # apart from "no data" grey, from the pale "nothing here" and from Power Grids' offline grey, each of which
+        # can lie inside the area beside it
+        colors_text = code(COLORS)
+        hsv = {name: tuple(int(x) for x in re.search(
+            r"\b" + name + r"\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)", colors_text).groups())
+            for name in ("te_jmap_outside", "te_jmap_no_data", "te_jmap_none", "te_jmap_grid_offline")}
+        for other in ("te_jmap_no_data", "te_jmap_none", "te_jmap_grid_offline"):
+            self.assertGreaterEqual(hsv[other][2] - hsv["te_jmap_outside"][2], 12, f"as dark as {other}")
+
+    def test_no_stripes_and_no_second_line_outside_the_area(self):
+        stripes = branches_of(block(self.room, "map_color_second"))
+        self.assertEqual(len(stripes), 9)
+        for limit, _body in stripes:
+            self.assertRegex(limit, r"^te_jmap_selector = \d+ te_jmap_in_area = yes ", limit)
+        # the hover's second chain starts at the second top-level `if`
+        hover = block(self.room, "map_tooltip")
+        second = hover[hover.index("custom_tooltip_no_bullet = te_jmap_tt_no_pick"):]
+        lines = branches_of(second[second.index("if = {"):])
+        self.assertEqual(len(lines), 9)
+        for limit, _body in lines:
+            self.assertRegex(limit, r"^te_jmap_selector = \d+ te_jmap_in_area = yes ", limit)
+        self.assertEqual(" ".join(block(self.triggers, "te_jmap_in_area").split()),
+                         "NOT = { has_variable = te_jmap_out }")
+
+    def test_the_paint_asks_only_for_the_mark(self):
+        # what the area is (a continent's regions, a market, a power bloc) is asked by the marking effect, once per
+        # state per click or month; a paint, which may run per state per frame, never reaches for it
+        for key in ("map_color", "map_color_second", "map_tooltip"):
+            part = block(self.room, key)
+            for word in ("te_jmap_state_in_area", "te_jmap_in_continent", "te_jmap_state_in_continent",
+                         "is_in_same_power_bloc", "is_in_geographic_region", "region =", "market", "te_jmap_area",
+                         "te_jmap_trim", "te_jmap_continent"):
+                self.assertNotIn(word, part, f"{key} asks about the area: {word}")
+        # nor do the factors: the area and the trim reach a paint only through the range's two stored globals
+        scales = code(SCALES)
+        factors = scales[:scales.index("te_jmap_states = {")]
+        for word in ("te_jmap_out", "te_jmap_in_area", "te_jmap_area", "te_jmap_trim", "te_jmap_states"):
+            self.assertNotIn(word, factors, word)
+
+    def test_the_options_are_the_map_room_s_alone(self):
+        # a player who limits the Map Room to Europe must not find Global Warming's own page greyed outside Europe,
+        # nor its colors squeezed into Europe's range (test_journal_map_scales.py holds the ranges apart)
+        for rel, key in SYSTEM_ENTRIES + ((BANKING, "je_banking_cycle"),):
+            body = entry(rel, key)
+            for word in ("te_jmap_out", "te_jmap_in_area", "te_jmap_outside", "_room_factor", "te_jmap_area"):
+                self.assertNotIn(word, body, f"{key} reads the Map Room's options: {word}")
+
+    # ---- the marks ----
+    def test_the_mark_is_put_on_by_one_effect_at_a_click_a_pick_and_each_month(self):
+        writers = [name for name in re.findall(r"^(\w+)\s*=\s*\{", self.effects, re.M)
+                   if re.search(r"(set|remove)_variable\s*=\s*(\{\s*name\s*=\s*)?te_jmap_out\b", block(self.effects, name))]
+        self.assertEqual(writers, ["te_jmap_mark_area"])
+        mark = block(self.effects, "te_jmap_mark_area")
+        # under the world nothing is walked unless some state may still carry a mark
+        world = " ".join(mark[mark.index("te_jmap_area = 0"):mark.index("else = {")].split())
+        self.assertIn("limit = { has_global_variable = te_jmap_marks } every_state = { limit = { has_variable = "
+                      "te_jmap_out } remove_variable = te_jmap_out } remove_global_variable = te_jmap_marks", world)
+        other = " ".join(mark[mark.index("else = {"):].split())
+        self.assertIn("set_global_variable = te_jmap_marks", other)
+        self.assertIn("limit = { te_jmap_state_in_area = yes }", other)
+        self.assertIn("else = { set_variable = te_jmap_out }", other)
+        for caller in ("te_jmap_set_selector", "te_jmap_apply_options"):
+            self.assertIn("te_jmap_mark_area = yes", block(self.effects, caller), caller)
+        monthly = block(code(ON_ACTIONS), "te_jmap_monthly_ranges")
+        self.assertLess(monthly.index("te_jmap_mark_area = yes"), monthly.index("te_jmap_refresh_range = yes"))
+
+    def test_an_area_that_lost_its_anchor_goes_back_to_the_world(self):
+        # the viewer left its power bloc, or holds no state: every state would be outside, a map that looks broken
+        mark = " ".join(block(self.effects, "te_jmap_mark_area").split())
+        self.assertRegex(mark, r"^if = \{ limit = \{ te_jmap_area_holds = no \} debug_log = \"TE_JMAP area reset[^\"]*\" "
+                         r"set_global_variable = \{ name = te_jmap_opt_area value = 0 \} \}")
+        holds = " ".join(block(self.triggers, "te_jmap_area_holds").split())
+        for area, test in ((1, "te_jmap_continent > 0"), (2, "global_var:te_jmap_viewer ?= { exists = market }"),
+                           (3, "global_var:te_jmap_viewer ?= { is_in_power_bloc = yes }"),
+                           (4, "global_var:te_jmap_viewer ?= { exists = capital }")):
+            self.assertIn(f"limit = {{ te_jmap_area = {area} }} {test}", holds)
+        self.assertTrue(holds.endswith("trigger_else = { always = yes }"))
+
+    def test_each_area_is_tested_against_the_viewer(self):
+        area = " ".join(block(self.triggers, "te_jmap_state_in_area").split())
+        self.assertIn("limit = { te_jmap_area = 1 } te_jmap_state_in_continent = yes", area)
+        self.assertIn("limit = { te_jmap_area = 2 } global_var:te_jmap_viewer ?= { market ?= { save_temporary_scope_as"
+                      " = te_jmap_viewer_market } } market ?= { this = scope:te_jmap_viewer_market }", area)
+        self.assertIn("limit = { te_jmap_area = 3 } global_var:te_jmap_viewer ?= { save_temporary_scope_as = "
+                      "te_jmap_viewer_scope } owner ?= { OR = { this = scope:te_jmap_viewer_scope "
+                      "is_in_same_power_bloc = scope:te_jmap_viewer_scope } }", area)
+        self.assertIn("limit = { te_jmap_area = 4 } te_jmap_owner_is_viewer = yes", area)
+        self.assertTrue(area.endswith("trigger_else = { always = yes }"), "the world takes every state")
+        # the viewer is the player who clicks: every option notes it before it marks
+        apply = block(self.effects, "te_jmap_apply_options")
+        self.assertLess(apply.index("te_jmap_note_viewer = yes"), apply.index("te_jmap_mark_area = yes"))
+
+    # ---- the options' values, scripted GUIs and buttons ----
+    def test_the_options_default_to_what_the_map_room_showed(self):
+        values = code(VALUES)
+        for value, var in (("te_jmap_area", "te_jmap_opt_area"), ("te_jmap_continent", "te_jmap_opt_cont"),
+                           ("te_jmap_trim", "te_jmap_opt_trim")):
+            self.assertEqual(" ".join(block(values, value).split()),
+                             f"value = 0 if = {{ limit = {{ has_global_variable = {var} }} value = global_var:{var} }}")
+        # globals, as the pick: they survive a save, and nothing else writes them
+        for effect, arg, var in (("te_jmap_set_area", "AREA", "te_jmap_opt_area"),
+                                 ("te_jmap_set_continent", "CONT", "te_jmap_opt_cont"),
+                                 ("te_jmap_set_trim", "TRIM", "te_jmap_opt_trim")):
+            self.assertRegex(block(self.effects, effect),
+                             r"^\s*set_global_variable = \{ name = " + var + r" value = \$" + arg + r"\$ \}")
+
+    def test_each_option_runs_its_effect_as_the_player(self):
+        found = set(re.findall(r"^(te_jmap_(?:area|continent|trim)_\w+_sgui)\s*=\s*\{", self.sguis, re.M))
+        self.assertEqual(found, set(self.OPTIONS))
+        for name, (effect, arg, number, _value) in self.OPTIONS.items():
+            body = block(self.sguis, name)
+            with self.subTest(option=name):
+                self.assertRegex(body, r"scope\s*=\s*country")
+                self.assertEqual(" ".join(block(body, "is_shown").split()), "is_player = yes")
+                self.assertEqual(" ".join(block(body, "effect").split()), f"{effect} = {{ {arg} = {number} }}")
+                valid = block(body, "is_valid")
+                if name in self.GREYED:
+                    self.assertEqual(" ".join(valid.split()), self.GREYED[name][0])
+                else:
+                    self.assertIsNone(valid, "nothing greys this option")
+
+    def test_each_option_has_a_button_that_repaints_as_a_pick_does(self):
+        buttons = option_buttons()
+        self.assertEqual(sorted(name for name, _ in buttons), sorted(self.OPTIONS))
+        for name, body in buttons:
+            _effect, _arg, number, value = self.OPTIONS[name]
+            key = name[:-len("_sgui")]
+            scope = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
+            with self.subTest(option=name):
+                self.assertIn(f'text = "{key}"', body)
+                clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', body)
+                # the picks' own repaint, exactly: the option's effect, then the repainter's close and reopen
+                self.assertEqual(clicks, [f"[GetScriptedGui('{name}').Execute( {scope} )]",
+                                          "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"])
+                self.assertIn(f"visible = \"[GetScriptedGui('{name}').IsShown( {scope} )]\"", body)
+                # pressed while it is the option in force, read from the option itself
+                self.assertIn(f"down = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{value}'), "
+                              f"'(CFixedPoint){number}' )]\"", body)
+                if name in self.GREYED:
+                    reason = self.GREYED[name][1]
+                    self.assertIn(f"enabled = \"[GetScriptedGui('{name}').IsValid( {scope} )]\"", body)
+                    self.assertIn(f"tooltip = \"[SelectLocalization( GetScriptedGui('{name}').IsValid( {scope} ), "
+                                  f"'{key}_tt', '{reason}' )]\"", body)
+                else:
+                    self.assertNotIn("enabled =", body)
+                    self.assertIn(f'tooltip = "{key}_tt"', body)
+        # no repaint state on the button: TriggerAllAnimations would fire it too, and it dies with the page
+        self.assertNotRegex(block(code(WIDGETS), "te_jmap_option_button"), r"\bstate\s*=")
+
+    def test_the_repainter_is_the_picks_own(self):
+        # one close-and-reopen for picks and options: no second repaint state anywhere
+        widgets = code(WIDGETS)
+        self.assertEqual(sorted(set(re.findall(r"PdxGuiTriggerAllAnimations\('(\w+)'\)", widgets))), ["te_jmap_repaint"])
+        self.assertEqual(sorted(re.findall(r"^\s*name\s*=\s*(te_jmap_repaint\w*)", widgets, re.M)),
+                         ["te_jmap_repaint", "te_jmap_repaint_open"])
+
+    def test_the_section_is_below_the_picks_and_says_what_is_set(self):
+        page = code(ROOM_WIDGET)
+        self.assertLess(page.index("te_jmap_pick_row = {}"), page.index("te_jmap_options = {}"))
+        section = block(code(WIDGETS), "te_jmap_options")
+        header = enclosing(section, re.search(r"\bte_jmap_category_header\s*=\s*\{", section).end())
+        flag = "te_jmap_options_open"    # _open: it starts collapsed (gui_style_guide.md, Sections)
+        self.assertIn(f"onclick = \"[GetVariableSystem.Toggle('{flag}')]\"", header)
+        self.assertIn(f"visible = \"[Not(GetVariableSystem.Exists('{flag}'))]\"", override(header, "onclick_showmore"))
+        self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", override(header, "onclick_showless"))
+        # the options in force show on the header while the section is closed
+        self.assertIn('text = "te_jmap_options_now"', override(header, "right_text"))
+        body = enclosing(section, re.search(r"\bte_jmap_category\s*=\s*\{", section).end())
+        self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", body)
+        # the continents show only while the area is one
+        rows = body[body.index('text = "te_jmap_area_country"'):body.index('text = "te_jmap_options_outliers"')]
+        self.assertIn("visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), "
+                      "'(CFixedPoint)1' )]\"", rows)
+        self.assertEqual(rows.count("te_jmap_option_button = {"), 6)
+        # and at the top of the page while any option is off its default
+        notice = page[page.index('text = "te_jmap_room_pick_heading"'):page.index("te_jmap_pick_row = {}")]
+        self.assertIn('text = "te_jmap_options_in_use"', notice)
+        self.assertIn("visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_options_set'), "
+                      "'(CFixedPoint)1' )]\"", notice)
+        self.assertEqual(" ".join(block(code(VALUES), "te_jmap_options_set").split()),
+                         "value = 0 if = { limit = { OR = { te_jmap_area > 0 te_jmap_trim > 0 } } value = 1 }")
+
+    def test_the_area_row_fits_the_page(self):
+        # five buttons of their labels' widths in one row, inside the header's 470
+        section = block(code(WIDGETS), "te_jmap_options")
+        row = section[section.index('text = "te_jmap_area_world"') - 200:section.index('text = "te_jmap_area_country"')]
+        widths = [int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", row)]
+        self.assertEqual(len(widths), 5)
+        self.assertLessEqual(sum(widths) + 4 * 4, 470)
+
+    # ---- the words ----
+    def test_the_options_have_their_words(self):
+        keys = loc_keys()
+        wanted = {"te_jmap_tt_outside", "te_jmap_measured_area", "te_jmap_measured_trim"}
+        for name in self.OPTIONS:
+            key = name[:-len("_sgui")]
+            wanted |= {key, key + "_tt"}
+        wanted |= {reason for _valid, reason in self.GREYED.values()}
+        custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
+        named = set(re.findall(r"localization_key\s*=\s*(\w+)", custom))
+        self.assertEqual(sorted(re.findall(r"^(\w+)\s*=\s*\{", custom, re.M)),
+                         ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_trim_name", "te_jmap_trim_text"])
+        self.assertEqual((wanted | named) - keys, set(), "loc keys missing")
+        # every custom text is read somewhere, as [GetPlayer.GetCustom('<key>')]
+        loc = "\n".join(loc_values().values())
+        for text in ("te_jmap_area_name", "te_jmap_area_text", "te_jmap_trim_name", "te_jmap_trim_text"):
+            self.assertIn(f"[GetPlayer.GetCustom('{text}')]", loc, text)
+            body = block(custom, text)
+            self.assertRegex(" ".join(body.split()), r"text = \{ localization_key = \w+ \} *$",
+                             f"{text} ends on a default with no trigger")
+
+    def test_names_come_from_scopes_and_vanilla_s_keys(self):
+        # a market's, a power bloc's and a country's names are read from the viewer, never typed; the continents'
+        # and the three kinds of area carry vanilla's own names
+        values = loc_values()
+        self.assertEqual(values["te_jmap_area_text_market"],
+                         "the [GetGlobalVariable('te_jmap_viewer').GetCountry.GetMarket.GetNameNoFormatting]")
+        self.assertEqual(values["te_jmap_area_text_bloc"],
+                         "[GetGlobalVariable('te_jmap_viewer').GetCountry.GetPowerBloc.GetNameNoFormatting]")
+        self.assertEqual(values["te_jmap_area_text_country"],
+                         "[GetGlobalVariable('te_jmap_viewer').GetCountry.GetNameNoFlag]")
+        self.assertEqual((values["te_jmap_area_market"], values["te_jmap_area_bloc"], values["te_jmap_area_country"]),
+                         ("$concept_market$", "$concept_power_bloc$", "$concept_country$"))
+        # the bloc's name is asked for only while the viewer is in one
+        custom = " ".join(block(code("common/customizable_localization/te_journal_map_custom_loc.txt"),
+                                "te_jmap_area_text").split())
+        self.assertIn("trigger = { te_jmap_area = 3 global_var:te_jmap_viewer ?= { is_in_power_bloc = yes } } "
+                      "localization_key = te_jmap_area_text_bloc", custom)
+
+    # ---- what only the game can show ----
+    def test_the_unverified_reads_are_self_checked(self):
+        monthly = block(code(ON_ACTIONS), "te_jmap_monthly_ranges")
+        doc = read(PLAYTEST)
+        for name, effect in (("area_mark", "te_jmap_area_selfcheck"), ("range_count", "te_jmap_range_selfcheck")):
+            body = block(self.effects, effect)
+            with self.subTest(check=name):
+                self.assertIn(f"{effect} = yes", monthly)
+                self.assertIn(f'"TE_SELF_CHECK OK {name} ', body)
+                self.assertIn(f'"TE_SELF_CHECK BROKEN {name} ', body)
+                self.assertIn(f"set_global_variable = {effect}_done", body, "once a game")
+                self.assertIn(f"TE_SELF_CHECK OK {name}", doc)
+                self.assertIn(f"TE_SELF_CHECK BROKEN {name}", doc)
+        # each arms on enough states that an all-one-side answer means something
+        self.assertRegex(block(self.effects, "te_jmap_area_selfcheck"), r"any_state = \{\s*count >= 20")
+        self.assertRegex(block(self.effects, "te_jmap_range_selfcheck"), r"any_state = \{\s*count >= 20\s*gdp_per_capita > 0")
+        # not from a click: a tooltip that walked an option's effect would read the counts unset
+        for caller in ("te_jmap_apply_options", "te_jmap_set_area", "te_jmap_set_selector", "te_jmap_mark_area"):
+            self.assertNotIn("selfcheck", block(self.effects, caller), caller)
+
+
+class AreaTest(unittest.TestCase):
+    """The continents: every state region in exactly one."""
+
+    CONTINENTS = ("europe", "asia", "africa", "north_america", "south_america", "oceania")
+
+    def setUp(self):
+        self.triggers = code(TRIGGERS)
+
+    def regions(self, continent):
+        return re.findall(r"region = sr:(\w+)", block(self.triggers, f"te_jmap_in_continent_{continent}"))
+
+    @staticmethod
+    def strategic_regions():
+        """{strategic region: [state regions]}: vanilla's snapshot with the mod's REPLACE: blocks over it."""
+        import json
+        with open(os.path.join(REPO, "vanilla_parsed", "common", "strategic_regions.json"), encoding="utf-8") as f:
+            out = {name: body[1]["states"][1] for name, body in json.load(f).items()}
+        folder = os.path.join(REPO, "common", "strategic_regions")
+        for name in sorted(os.listdir(folder)):
+            text = code(os.path.join("common", "strategic_regions", name))
+            for m in re.finditer(r"^(?:REPLACE:|INJECT:)?(region_\w+)\s*=\s*\{", text, re.M):
+                states = re.search(r"\bstates\s*=\s*\{([^{}]*)\}", enclosing(text, m.end()))
+                out[m.group(1)] = states.group(1).split()
+        return out
+
+    @staticmethod
+    def land_state_regions():
+        """Every state region on land: the mod's map_data/state_regions, the seas' file left out."""
+        folder = os.path.join(REPO, "map_data", "state_regions")
+        out = set()
+        for name in sorted(os.listdir(folder)):
+            if name.endswith(".txt") and "seas" not in name:
+                out |= set(re.findall(r"^(STATE_\w+)\s*=\s*\{", code(os.path.join("map_data", "state_regions", name)),
+                                      re.M))
+        return out
+
+    def test_every_state_region_is_in_exactly_one_continent(self):
+        home = {}
+        for sr, states in self.strategic_regions().items():
+            for state in states:
+                self.assertNotIn(state, home, f"{state} in two strategic regions")
+                home[state] = sr
+        of = {}
+        for continent in self.CONTINENTS:
+            for sr in self.regions(continent):
+                self.assertNotIn(sr, of, f"{sr} in two continents")
+                of[sr] = continent
+        land = self.land_state_regions()
+        self.assertGreater(len(land), 600)
+        for state in sorted(land):
+            self.assertIn(state, home, f"{state} is in no strategic region")
+            self.assertIn(home[state], of, f"{state} ({home[state]}) is in no continent")
+        # and nothing but land: no sea region, no region that doesn't exist
+        for sr, continent in of.items():
+            self.assertIn(sr, self.strategic_regions(), f"{continent}: no such strategic region")
+            self.assertTrue(set(self.strategic_regions()[sr]) <= land, f"{sr} holds a sea")
+        counts = {c: sum(len(self.strategic_regions()[sr]) for sr in self.regions(c)) for c in self.CONTINENTS}
+        self.assertEqual(sum(counts.values()), len(land))
+        self.assertTrue(all(counts.values()), counts)
+
+    def test_the_border_cases_fall_where_the_doc_says(self):
+        home = {state: sr for sr, states in self.strategic_regions().items() for state in states}
+        of = {sr: c for c in self.CONTINENTS for sr in self.regions(c)}
+        where = {state: of[home[state]] for state in (
+            "STATE_PALESTINE", "STATE_ARMENIA", "STATE_TOBOLSK", "STATE_WESTERN_NEW_GUINEA", "STATE_MOSCOW",
+            "STATE_ICELAND", "STATE_GREENLAND", "STATE_SINAI", "STATE_MEXICO", "STATE_HAITI", "STATE_PANAMA",
+            "STATE_HAWAIIAN_ISLANDS", "STATE_ALASKA")}
+        self.assertEqual(where, {
+            "STATE_PALESTINE": "asia", "STATE_ARMENIA": "asia", "STATE_TOBOLSK": "asia",
+            "STATE_WESTERN_NEW_GUINEA": "asia", "STATE_MOSCOW": "europe", "STATE_ICELAND": "europe",
+            "STATE_GREENLAND": "europe", "STATE_SINAI": "africa", "STATE_MEXICO": "north_america",
+            "STATE_HAITI": "north_america", "STATE_PANAMA": "north_america", "STATE_HAWAIIAN_ISLANDS": "oceania",
+            "STATE_ALASKA": "north_america"})
+
+    def test_the_continents_numbers_agree_everywhere(self):
+        # te_jmap_continent's 1-6 mean one continent in the marking trigger, the default (the capital's), the buttons
+        # and the words
+        pick = " ".join(block(self.triggers, "te_jmap_state_in_continent").split())
+        default = " ".join(block(code(EFFECTS), "te_jmap_default_continent").split())
+        custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
+        for number, continent in enumerate(self.CONTINENTS, 1):
+            with self.subTest(continent=continent):
+                self.assertIn(f"limit = {{ te_jmap_continent = {number} }} te_jmap_in_continent_{continent} = yes", pick)
+                self.assertEqual(OptionsTest.OPTIONS[f"te_jmap_continent_{continent}_sgui"][2], number)
+                if number == 1:
+                    self.assertTrue(default.startswith("set_global_variable = { name = te_jmap_opt_cont value = 1 }"),
+                                    "Europe where the capital is in none of the others")
+                else:
+                    self.assertIn(f"limit = {{ capital ?= {{ te_jmap_in_continent_{continent} = yes }} }} "
+                                  f"set_global_variable = {{ name = te_jmap_opt_cont value = {number} }}", default)
+                for text in ("te_jmap_area_name", "te_jmap_area_text"):
+                    self.assertIn(f"trigger = {{ te_jmap_area = 1 te_jmap_continent = {number} }} localization_key = "
+                                  f"te_jmap_continent_{continent}", " ".join(block(custom, text).split()))
+        self.assertTrue(pick.endswith("trigger_else = { always = no }"))
+
+    def test_each_continent_s_tooltip_lists_its_regions(self):
+        # the tooltip says exactly what the trigger tests, each region by vanilla's own name
+        values = loc_values()
+        for continent in self.CONTINENTS:
+            listed = re.findall(r"\$(region_\w+)\$", values[f"te_jmap_continent_{continent}_tt"].split("\\n", 1)[1])
+            self.assertEqual(listed, self.regions(continent), continent)
 
 
 class WindowButtonTest(unittest.TestCase):
