@@ -398,7 +398,7 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Environmental Sustainability | Environmental Movement | Less coal and oil use, fewer emissions. |
 | Urban Planning | Urbanization | More room in crowded cities, better urban services. |
 | Rural Development | Nothing | Arable land, farm throughput. |
-| Monetary Union | Central Banking | A shared currency; see [Banking and monetary policy](04-banking.md). |
+| Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
 
 ### Principle tiers IV and V
 

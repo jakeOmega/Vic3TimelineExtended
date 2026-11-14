@@ -8,6 +8,8 @@
 
 > **A road off gold (2026-10-05):** a deep slump the peg is prolonging (a Downturn or Panic with the stance Tight or Very Tight) now drains Peg Confidence 3 a month whatever the vault holds, so `te_peg.1` comes about two years into it; a suspension of convertibility ends in a choice (`te_peg.3`: resume at 50, or Fiat Money); and the AI's currency weights favour fiat once it is on offer. See [§0.13](#013-a-road-off-gold--2026-10-05).
 
+> **What the Monetary Union hands its leader (2026-11-14):** the leader of a bloc whose common currency a member has adopted now carries what its adopters carry, earns seigniorage and a cut of *risk premium* (not credit standing, which its floor swallowed) in proportion to its currency's **reach**, runs up to four more banking interventions at once, and shares a common capital market with its adopters. The costs are unchanged. An overdrawn intervention budget now lifts the standing tools too. See [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14).
+
 > **Mandates set by law (2026-10-07, #799):** Price Stability is renamed the **Dual Mandate** (its rule unchanged) and a fourth mandate, **Inflation Targeting**, is the same rule with no cycle lean and +0.1 credibility. Under central bank independence the mandate is an act on the law (the Inflation Targeting Act or the Dual Mandate Act) that the bank follows after the 12-month delay, AI and player alike; `te_mandate.1` asks for one whenever the law has none. Without independence the dashboard switch stays but each change locks it for a year, and a looser rule raises expected inflation and the risk premium. See [§6](#6-delegation-mandates-independence-ai) and `docs/audits/banking_cycle_simulation.md` §26.
 
 > **Borrowed gold costs the treasury nothing (2026-10-06):** owner decision I is reversed. The carry (`te_gold_carry`, the *Interest on Borrowed Gold* budget expense `te_mon_gold_carry_expense` and the dashboard's *Interest on It* row) is gone; hot money still leaves first, at double speed, once the gap is ≤ 0. Under gold the interest on balances a high rate drew in was paid by the private borrowers whose bills they bought, and a high rate already costs the treasury through its own market yield (step 7). If tight credit is too cheap, the fix belongs in the stance terms, not in a budget line. See decision I in [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks).
@@ -2118,6 +2120,219 @@ doubles it (1.24).
 
 ---
 
+### 0.14 What the Monetary Union hands its leader — 2026-11-14
+
+**The owner, 2026-11-14:** "The Monetary Union feels weak - how can we strengthen it?" Asked when:
+"Leading. I have never taken it as it has felt weak until my current game, where I took it as an
+experiment. It did indeed feel weak - it is in lieu of another group, so even if it cost nothing,
+the opportunity cost is significant. As is, it feels like it is net negative as the leader, very
+far from competitive with the other principle groups." Of three directions offered the owner chose
+the first, "the issuer shares the currency's benefits and earns on it", and added two things of
+the second kind: "Maybe intervention points (normally pretty limited - I'm thinking up to ~3 or 4
+at principle V) to the leader? Maybe investment pool benefits (i.e. easier access to credit and
+more stability for private investors)?" The third direction, cutting the leader's costs, was not
+chosen: **the costs are as they were.** Three later rulings the same day: intervention points are a
+budget ("each active intervention uses points, so having extra points allows using more options at
+once - e.g. doing raise reserve requirements and counter cyclical buffer and raise margin
+requirements at once, to pull harder against a bubble"); the investment pool benefits go to the
+currency's users, the leader and the adopters, not to every member; and the leader gets the
+adopters' benefits only once at least one member has adopted.
+
+Built the same day on §0.11's five tiers. **Nothing below has been seen in a running game.**
+
+#### What the owner's game showed
+
+The save is Singapore on 1957.1.1, leading a trade league of 153 members with eight principle
+groups at tier V, the Monetary Union among them. Read with `save_country_probe.py` and a scratch
+reader of the budget block; pounds are from the save. The interest slot was checked against
+principal × rate paid ÷ 52 on the save's 25 largest debtors: 1.00 for seventeen and 0.79 to 0.93 for
+eight, Singapore among them at 0.79 (an interest multiplier from elsewhere).
+
+| | |
+|---|---|
+| GDP | 128.7bn, 78% of the world's 164.6bn |
+| Weekly income, without the investment pool's transfer to construction | 821M |
+| Debt | 17.4bn, 13% of GDP; interest 13.2M a week at 5.0 points, so **one point is worth 2.6M a week, 0.32% of income** |
+| Members | 153, GDP 27.3bn (21% of Singapore's). Adopters 5.5bn (4.3%); with two treaty peggers, 7.6bn anchored |
+| What leading cost | 0.135 points of risk premium for the union (0.169 with its treaties): 0.36M a week |
+| What leading paid | Seigniorage **98 pounds a week**. A reserve-currency cut of 0.098 points of credit standing, **worth nothing**: Singapore's standing was 0.05, its floor |
+| Intervention budget | 8 (central bank independence 7, national bank 1), 7 in use |
+| Investment pool | 357bn against 281M a week of private building, under Excess Private Construction at 340: it cannot be spent |
+
+Three things follow, and each changed the design.
+
+1. **The interest cut was credit standing, and a leader is at its floor.** `te_mon_reserve_currency_cut`
+   goes to `country_credit_standing_add`; standing is floored (`te_mon_standing_floor`, 0.5pp, 0.05
+   with central bank independence and the two late technologies), "standing earned past the floor
+   buys nothing" (§7.1). A mature great power, which is who leads a bloc, sits there already. The
+   costs are cyclical and bite in full. That asymmetry is most of why leading read as a net loss. And
+   the caps never bound: at 0.1pp per 5% of world GDP, the whole of Singapore's bloc adopting is 18%
+   of the world, 0.36pp, under the 0.5 cap. Raising caps by tier, as first proposed, would have
+   changed nothing.
+2. **No rate on the adopters' GDP serves both a typical bloc and a large one, and no share of world
+   GDP serves a small leader.** Blocs in three of the owner's saves (this one, Byzantium 2020, New
+   York 1940):
+
+   | Bloc | Members | Their GDP, of the leader's | Leader's income, of its GDP a year | Leader's debt, of GDP |
+   |---|---|---|---|---|
+   | Russia, India, France, Brazil, Germany (five AI blocs) | 3 to 13 | 1%, 1%, 1%, 6%, 7% | 7% to 22% | 23% to 84% |
+   | Byzantium (the owner, 91% of the world) | 12 | 3% | 24% | none |
+   | Singapore (the owner) | 153 | 21% | 33% | 13% |
+   | Prussia, the USA (its bloc holds the owner's New York), Spain | 3, 33, 16 | 35%, 57%, 57% | 17% to 41% | 0 to 79% |
+
+   A typical AI bloc's members come to a few percent of the leader's economy and a large bloc's to
+   half of it, and the leader is anything from 1% to 90% of the world. So the money terms follow
+   **reach** (ruling L3).
+3. **More deposits would have hurt Singapore.** Excess Private Construction's value is the overflow
+   of a pool the private queue cannot spend, and its price is construction efficiency (−3.4% there).
+   A contribution bonus raises the overflow. So the capital market's credit is withheld where the
+   pool is saturated (ruling L7).
+
+#### What shipped
+
+The leader of a bloc at tier 2 or above, with a currency it can issue and at least one member that
+has adopted, is the **issuer** (`te_mon_union_is_issuer`). Tiers do not stack; each row is the whole.
+
+| Tier | Shares with its adopters | Seigniorage, of own GDP a year, × reach | Risk premium, × reach | Interventions (the banking union's point included) | Common capital market (issuer and adopters) |
+|---|---|---|---|---|---|
+| 1 | — | — | — | — | — |
+| 2 | `te_mon_union_adopter` (+5% export and import advantage) | 0.5% | −0.5pp | +1 | capitalists' pool contribution +0.02 |
+| 3 | the same | 0.75% | −0.75pp | +2 | +0.02 |
+| 4 | + `te_mon_union_banking_union` | 1.0% | −1.0pp | +3 | +0.03 |
+| 5 | + `te_mon_union_reserve` | 1.5% | −1.5pp | +4 | +0.05 |
+
+`reach = base ÷ (base + 15% of the leader's own GDP)`, where the base is the adopters' GDP and, at
+tier 5, everything anchored on the leader's money (treaty peggers too: ruling T4's base). The
+credit doubles in a downturn or panic. Everything is script, applied in step 9b by
+`te_monetary_update_union` through managed modifiers (`te_mon_union_seigniorage`, and the new
+`te_mon_union_issuer_premium`, `te_mon_union_issuer_bank`, `te_mon_union_credit`); the principle's
+`leader_modifier` carries display fields that print the tier's figures.
+
+#### Rulings (the leader's benefits)
+
+| # | Ruling | Why |
+|---|---|---|
+| **L1** | **The issuer carries the adopters' own three modifiers**, not copies: the three blocks in step 9b apply on `te_mon_uses_common_currency` (adopter or issuer) | one modifier, one set of figures, so the leader's can never drift from its adopters'. The adopters' −0.25pp of standing at tier 5 is not copied: the leader's own cut is L4's |
+| **L2** | **"At least one adopter" is a live walk of the members**, not the leader's stored count | each of the leader's own conditions (leading, the tier, the dial, the rule) then clears on its next pulse without waiting for a discovery. The count (`te_mon_union_adopters`) is for the panel |
+| **L3** | **Seigniorage and the cut are a tier's figure × reach**, a saturating share of the leader's *own* economy, not a rate on the adopters' GDP and not a share of the world's | a rate that paid a typical bloc's leader "a few percent of its income" (members 6% of its GDP) would pay a large bloc's (57%) a second treasury; the old world-share base pays a 2%-of-the-world leader nothing whatever its bloc does. Reach is 0.29 at 6%, a half at 15%, 0.77 at 50% and never 1: every adopter adds, the first ones most, and no union is worth more than the tier's figure. One number, shown on the leader's Monetary Union row |
+| **L4** | **The cut is cyclical (`country_risk_premium_add`)**, a new managed modifier; the reserve-currency standing cut stays as it was | finding 1. G8 holds: it goes through a managed scaled modifier refreshed in the monthly update, and reaches step 5 a month late like every modifier-borne term |
+| **L5** | **Four interventions at tier 5, 1 / 2 / 3 / 4 by tier**, of which the banking union's own point (shared under L1) is the fourth step's | the table below. The cycle simulator (`banking_cycle_sim.py --points`, 150 runs a cell, fiat, price stability) finds no AI-side reason against either figure: under Free & Mutual 4 / 7 / 8 points give 10.5 / 7.4 / 6.8 crashes a century, Universal 5 / 8 / 9 gives 8.1 / 6.0 / 6.1, Directed Credit 6 / 9 / 10 gives 8.3 / 7.3 / 7.1, Prudential 8 / 11 / 12 gives 5.8 / 5.1 / 5.3, independence 8 / 11 / 12 gives 6.4 / 6.3 / 6.3, and the months in a slump halve at +3 and hold at +4 |
+| **L6** | **None of it under Unregulated Banking**: neither the leader's extra points nor its place in the banking union (which carries a point) | that law's budget is its identity. With the national bank a leader must have it holds 2, and its unlocked tools cost 3 (Bail-in Regime, whose trigger says "no law lock: the budget is below the cost already", Infrastructure and Armaments credit, Emergency Import Financing) and 4 (Open-Market Operations, the Deposit Guarantee, Emergency Liquidity, Heavy Industry credit). One point more hands it tools the law is meant to deny, and the banking union's stability would cancel the law's own +25% crash chance. Every other law (4, 5, 6, 8, 8 with the bank) can already afford every tool its locks leave open, so points there are concurrency only. A hard gate, because any softer shape still crosses the 3-point line |
+| **L7** | **The capital market is capitalists' pool contribution, doubled in a slump, and withheld under Excess Private Construction** | that key is what credit is to private investors in the cycle: the phases move it (+0.05 expansion, −0.10 downturn, −0.25 panic) and a loose stance band adds 0.02 / 0.04. "Easier credit" is the standing figure; "more stability" is the doubling, when the home banks stop lending and the rest of the currency area has not (at tier 5 it cancels a downturn's cut). Finding 3 is the gate |
+| **L8** | **An overdrawn intervention budget lifts the standing tools too**, one a month, cheapest first, after the crash interventions and the External & Currency tools; the Bank Holiday is left to expire | until now the chain ended at the external tools, so a budget cut left every other tool running on points the country no longer had: enact Prudential Banking, switch the tools on, go back to Unregulated and keep them. The issuer's points come and go with the bloc, so they would have run through the same hole. **This changes a law downgrade too**, for market, command and cooperative economies alike. Each is lifted as a law lifts it (`banking_strip_tool`: the history marker, none of the Disable's reactions); Emergency Liquidity through its own Disable, for the refund |
+| **L9** | **The principle prints figures, not prose**: `leader_modifier` carries four display fields (`country_te_mon_issuer_*`) | a static block cannot test an adopter, a dial, a banking law or the banking rule, and a mid-game switch to Simplified leaves the principle on its bloc, so real intervention points there would leak into a game with no monetary layer. Display fields print natively, rise by tier as the tier audit wants, and `test_monetary_union_leader.py` holds each to the script value |
+| **L10** | **AI weights**: tier 1 is 100 for a leader that could issue (50 on metal), tier 2 is 100 +50 where a member's money could adopt +50 at scaled debt 0.25, tier 3 is 100 +50 for an issuer; 4 and 5 keep 1000. The adoption score gains +5 for the capital market, except on a saturated pool | the low 5b numbers "exist because the principle is inert for most leaders" (T3); it no longer is. No `is_ai` test: the same weights serve any bloc |
+
+#### What four points buy, by banking law
+
+The leader always has the national bank's point. The leaning set is Reserve Requirements, the
+Countercyclical Buffer and Margin Requirements (2 each) with Moral Suasion (1): 7. The crisis
+programs are Emergency Liquidity, the Deposit Guarantee and Open-Market Operations at 4, the
+Bail-in at 3, Asset Relief at 5.
+
+| Law | Budget | +3 | +4 |
+|---|---|---|---|
+| Unregulated | 2 | no points (L6) | no points |
+| Free & Mutual | 4 | 7: the whole leaning set, or one 4-point program and the Bail-in | 8: Emergency Liquidity and the Deposit Guarantee together |
+| Universal, Light Prudence | 5 | 8: both 4-point programs, or the leaning set and a point | 9: the leaning set and Export Credit or a cheap credit sector |
+| Directed Credit | 6 | 9: Emergency Liquidity and Asset Relief | 10: the leaning set and an Infrastructure or Armaments sector |
+| Prudential, Central Bank Independence | 8 | 11: a standing Deposit Guarantee and the whole leaning set, exactly | 12: all three 4-point programs at once (independence only: Prudential locks Open-Market Operations), or the guarantee, the leaning set and a point to spare |
+
+Four, because the fourth point is the one that changes what a law can do in a crash: the weakest
+regulated law gets both crisis programs together, and the strongest gets all three.
+
+#### Sizing
+
+Singapore, weekly, in millions (one point = 2.64M; income 821M). Before, the cut was 0.098pp of
+standing at the floor, worth nothing.
+
+| Tier | Before: seigniorage | cost | **net** | After: reach | seigniorage | cut | cost | **net** | of income |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 0 | 0.101pp = 0.27 | **−0.27** | — | 0 | 0 | 0.27 | **−0.27** | −0.03% |
+| 2 | 0 | 0.27 | **−0.27** | 0.22 | 2.75 | 0.11pp = 0.29 | 0.27 | **+2.78** | +0.34% |
+| 3 | 0 | 0.124pp = 0.33 | **−0.33** | 0.22 | 4.13 | 0.17pp = 0.44 | 0.33 | **+4.24** | +0.52% |
+| 4 | 0 | 0.135pp = 0.36 | **−0.36** | 0.22 | 5.51 | 0.22pp = 0.59 | 0.36 | **+5.74** | +0.70% |
+| 5 | 0.0001 | 0.36 | **−0.36** | 0.28 | 10.51 | 0.42pp = 1.12 | 0.36 | **+11.28** | +1.37% |
+
+With the whole bloc adopted at tier 5: reach 0.60, seigniorage 22.4M a week (2.7% of income), cut
+0.9pp (2.4M). The cost by tier is an estimate from the save's 0.135 (cooperation 0.101, the
+backstop 0.023, supervision 0.011).
+
+Beside it, a rival group for the same country, which spends 395M a week on construction goods:
+Construction III's +10% efficiency is about 36M a week of construction it need not buy (4.4% of
+income), and Construction V's +15% with −10% goods cost about 91M (11%). **In money the union is now
+a gain where it was a loss, and still well short of Construction for a country that spends half
+its budget building.** What it adds beside the money, on Singapore's own economy: +10% export and
+import advantage, a quarter off crash chance and random momentum, and four intervention points on
+a budget of eight. The capital market pays Singapore nothing (finding 3).
+
+For a typical AI leader the money is larger beside its income, because it borrows: the same save's
+Germany (debt 82% of GDP, one point worth 4.4% of income, members 7% of its GDP) with all of them
+adopted has reach 0.32 and nets +1.4% of income at tier 2 and +4.3% at tier 5.
+
+**One more adopter.** Per pound of an adopter's GDP a year, for a leader with debt at 60% of GDP: at
+tier 5 and reach 0.29 a typical adopter (scaled debt 0.4) brings about 5.1% in seigniorage and 3.1%
+in the cut against 0.4% of cost; at reach 0.77 it brings 0.5% and 0.3% against the same 0.4%, and a
+pressed, debt-heavy one (scaled debt 0.9, cost 1.5%) is a loss. A default still calls 5% to 15% of
+the ward's GDP. So the first adopters are worth pressing for, a large union gains little from a
+weak one, and the backstop is still what makes it expensive to lead.
+
+**The levers.** `te_mon_union_seigniorage_pct_N`, `te_mon_union_issuer_cut_max_N` and
+`te_mon_union_reach_half_share` in `te_monetary_union_script_values.txt`; the principle's display
+fields and the loc follow by test.
+
+#### Where each benefit is strongest
+
+| Case | What bounds it |
+|---|---|
+| A small leader with huge adopters | reach saturates: no union pays more than the tier's figure, 1.5% of the leader's own GDP and 1.5pp at tier 5 (about 7% of a typical income) |
+| A giant leader with one tiny adopter | reach is near zero, so the money is too. The flat gains (trade, the banking union, the points, the credit) do arrive with a single adopter: the owner's ruling, and an AI minor in the leader's market adopts readily |
+| A leader with no debt | the cut is worth nothing and so are the costs, which are premium points; seigniorage is cash either way. The strongest case for the group as a whole, and bounded by the row above |
+| A bloc of puppets | cannot adopt: a currency board outranks the union (`te_mon_union_regime_fits`) |
+| Adopters that adopt and leave | every term is a monthly flow re-derived from who uses the money now; an exit costs the leader 5% cohesion and relations |
+| Imposed peggers at tier 5 | a forced peg counts toward the tier-5 base (T4's base counts every kind-1 anchor). Each takes a war against a country in default, and reach saturates |
+| A laissez-faire leader | L6 |
+| A leader whose pool cannot be spent | L7 |
+| Switching tools on under borrowed points | L8 |
+
+#### When the leader stops qualifying
+
+| What happens | What goes, and when |
+|---|---|
+| The leader loses its dial (a law, a command economy, dollarization) | `te_mon_can_lead_union` is false: reach, the points and the issuer test are false on its next pulse, and every modifier comes off then. Its adopters exit as before |
+| The bloc drops a tier | each value reads the tier through the `_plus` gates, so each figure steps down on the next pulse; below tier 2 everything goes. Adopters stay while tier 2 holds |
+| The leader stops leading, or the bloc ends | the issuer test and reach need `is_power_bloc_leader`; the discovery zeroes its sums |
+| The last adopter exits | the member's kind is 0 at once; the leader's live walk sees it on its own next pulse, **up to a month later** |
+| The leader enacts Unregulated Banking | the points and the banking union come off on its next pulse |
+| The banking rule leaves Full | `te_monetary_leave_full_system` strips every managed modifier through the change of home; the three new ones are in the strip list |
+| A revolution | the winner inherits the trackers and no modifiers; `te_monetary_apply_fx_one` re-adds a missing one. Nothing is kept only in a modifier |
+| Points lost with tools running | L8: the banking entry's monthly pulse lifts one tool a month until the budget balances |
+
+#### Known roughnesses (the leader's benefits)
+
+- **A tier-5 leader's reach counts imposed peggers** (above). Excluding them needs a second sum in
+  the global anchored-GDP pass.
+- **An adopter under Unregulated Banking still gets the banking union's point**, as it has since
+  tier 4 shipped, so it reaches 3 and the tools L6 names. Closing it is a change to the adopters'
+  side, which this work left alone.
+- **The standing reserve-currency cut is still paid in standing**, to treaty anchors and to leaders
+  alike, and is still swallowed at the floor. The tier-5 line of the tooltip names it as credit
+  standing.
+- **The seigniorage is minting**, so the leader's own `country_minting_mult` scales it: an issuer in
+  the Very High inflation band keeps 70% of it.
+- **The cut reaches the premium a month late**, like every modifier-borne term.
+- **Moral Suasion was stacked three times on Singapore's entry** in the save, holding 3 points. Not
+  this work's: the dashboard's Enable tests "not already on" in `is_shown` only.
+
+#### IN-GAME VERIFICATION CHECKLIST (the leader's benefits)
+
+In `docs/testing/banking-playtest.md` § "A common currency pays its issuer", with
+`TE_SELF_CHECK mon_union_issuer` and its fallbacks.
+
+**Not verified in a running game**, like everything else in §0.
+
+---
+
 ## 1. Goals, non-goals, principles
 
 **Goal.** Replace the two on/off toggles that currently stand in for monetary policy
@@ -3761,6 +3976,16 @@ or the mod, so the slot is free.
 | **3 — Fiscal backstop** | tier 2 + the leader is `lender_of_last_resort` to every adopter (GDP-scaled cost, the honour / renege event) and adopters' overvaluation premium (below) is **halved**. The "whatever it takes" tier — what makes the union safe is what makes it expensive to lead |
 | **4 — Banking union** | tier 3 + one supervisor and one deposit guarantee over every **adopter's** banks: `country_banking_crash_chance_mult` and `country_banking_random_momentum_mult` **−0.25**, `country_banking_intervention_max_add` **+1**, and the shared-currency contagion channel in `banking_cycle_spread_contagion` damped by **−6** of its **+10**. The leader pays **0.25pp** of provider premium per adopter, GDP-scaled like every other tier's cost. Supervision is the tier that makes tier 3's backstop less likely to be called, and it costs less than the backstop because examining somebody's banks is cheaper than standing behind their debts |
 | **5 — Reserve currency** | tier 4 + the money is held outside the bloc. The **leader's** reserve-currency standing cut may reach **−1.0pp** instead of −0.5 (the cap, not the rate — same `te_mon_anchored_gdp_m` base), and it mints against the balances the world parks in its currency: `country_minting_add` = world-GDP share × 2000, capped 1000 a week, against vanilla's flat base of 500. **Adopters** get a second `te_mon_union_adopter`'s worth of trade edge (+0.05 export / import advantage, so +0.10 in total) and **−0.25pp** of structural premium. Cohesion per member goes to **+2** |
+
+**What the leader gets (2026-11-14, [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14)).**
+The table above is the members' side and the leader's costs. Since 2026-11-14 the leader of a bloc
+at tier 2 or above whose currency a member has adopted (the issuer) also carries its adopters'
+three modifiers, earns seigniorage (0.5 / 0.75 / 1.0 / 1.5% of its own GDP a year by tier) and a
+cut of *risk premium* (0.5 / 0.75 / 1.0 / 1.5pp) in proportion to its currency's reach, and holds
+1 / 2 / 3 / 4 more banking intervention points; issuer and adopters share a common capital market
+(capitalists' pool contribution +0.02 / +0.02 / +0.03 / +0.05, doubled in a slump). The tier-5
+seigniorage in the table's last row (world-GDP share × 2000, capped 1000 a week) is superseded:
+that formula paid the owner's Singapore 98 pounds a week.
 
 Tiers 4 and 5 are gated twice: the group's own `has_technology_researched = central_banking`,
 carried down from tier 1, and the mod's ordinary tier-4/5 pacing gate —
