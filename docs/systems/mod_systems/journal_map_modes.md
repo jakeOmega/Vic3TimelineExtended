@@ -258,6 +258,10 @@ entry, in no country's journal.
   second's close and a tenth's reopen (sixth session); the fifth pass's twentieth each sometimes left the page closed
   (the owner, 2026-11-07), so the close now waits a tenth and the reopen a fifth (check 1).
 - **Nothing to inherit.** `transferable = no`, `can_revolution_inherit = no`; the pick is global.
+- **Two options** (2026-11-14), below the picks on the page and global as the pick is: the area the maps are drawn
+  and measured over, and the outliers a fitted map's range leaves out. A state outside the area is greyed by
+  `map_color`'s first branch, before any selector, and the Map Room reads its own ranges for the two fitted maps a
+  system's entry also draws. § The Map Room's Options has both.
 
 ### Why not a country entry added by a button
 
