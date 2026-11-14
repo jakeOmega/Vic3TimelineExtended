@@ -183,7 +183,7 @@ of the upper strata. If your intervention budget goes negative, for example
 after a law downgrade, the game switches off one crash response a month. Once
 those are gone, it lifts one of the five monetary interventions in External &
 Currency each month, and then your other tools, the cheapest first, until the
-budget balances. Lift a dearer tool yourself if you would rather keep a cheap
+budget balances. Lift a costlier tool yourself if you would rather keep a cheap
 one. A Bank Holiday is left to run out.
 
 ### Banking contagion
