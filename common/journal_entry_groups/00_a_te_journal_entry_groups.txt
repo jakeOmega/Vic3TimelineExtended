@@ -1,0 +1,54 @@
+﻿# The mod's own journal entry groups: two sections of the journal (owner, 2026-11-14).
+# Timeline Extended Systems holds every entry the player works through with its own
+# panel, tab, bar or buttons; Rights and Society holds the social debates. Everything
+# else, and every vanilla entry the mod replaces or injects into, keeps its group.
+# test_journal_entry_groups.py pins who is in each, so a new entry is placed on purpose.
+#
+# The fields (vanilla 1.15, <game>/common/journal_entry_groups/00_journal_entries.txt):
+# - themed = yes gives the group a section of its own in the journal list: a card with
+#   the illustration and the group's name over its entries (gui/journal.gui,
+#   journal_entry_group_with_illustration). An entry of a group that isn't themed is
+#   listed under "Additional Journal Entries" with no group name: in 1.15, Domestic
+#   Affairs and Foreign Affairs are not sections, only a picture on each entry's page.
+# - context is the default context of the group's entries: an entry without its own
+#   `context` takes the group's (<game>/common/journal_entries/journal_entries.md).
+#   Both groups are `country`, as Domestic and Foreign Affairs were, so no entry's
+#   context changes. je_world_climate keeps its own `context = none`, as vanilla's
+#   contextless je_reform_or_revolution sits in the country group je_group_socialism.
+# - illustration (required since 1.15, 1108x200) heads the section and every member
+#   entry's page. Until the mod has art of its own, both borrow a vanilla picture from a
+#   group that isn't themed, so no other section in the list shows the same one.
+# - updates_strategic_region_stances is left out (no), as in Domestic Affairs and the two
+#   groups these replace. It is undocumented; vanilla sets it on groups whose entries
+#   its AI's region stance scores read with has_journal_entry (the Scramble for Africa,
+#   German unification), so an entry there has the AI re-score its stances. No stance
+#   score, vanilla's or the mod's, reads a mod entry, so the flag would buy only work.
+#   The eleven entries that came from Foreign Affairs (Colonial Empire, Nuclear Weapons,
+#   the United Nations, the Space Race) had it.
+#
+# Order: the journal lists themed sections in the order the groups were defined, and the
+# engine reads vanilla's and the mods' files in one ASCII-ordered list
+# (scripting_best_practices.md § Load Order). This file's name sorts before vanilla's
+# 00_journal_entries.txt, so the two sections come first, Systems on top. Unverified in
+# game: docs/testing/vanilla-1-15-playtest.md, "Journal sections".
+
+# Every system: Banking, the Tax Code, the Strategic Reserve, Global Warming and World
+# Climate, the Space Race, Nuclear Weapons, the United Nations, Covert Warfare, Cultural
+# Hegemony, the Colonial Empire, Monuments, Heir Education, the Post-Scarcity Transition
+# and the culture merges (gen_culture_merges.py). The picture is vanilla's Development:
+# an engine hall, the machinery a country runs.
+je_group_te_systems = {
+	context = country
+	illustration = "gfx/interface/illustrations/journal/je_group_illu_technology.dds"
+	themed = yes
+}
+
+# The debates: the Civil Rights Movement, Digital Rights & Surveillance, the Human
+# Augmentation and Morphological Freedom debates and the Mental Health Crisis. The
+# picture is vanilla's Domestic Affairs, a chamber in uproar, which their pages showed
+# before.
+je_group_te_rights_and_society = {
+	context = country
+	illustration = "gfx/interface/illustrations/journal/je_group_illu_internal_affairs.dds"
+	themed = yes
+}
