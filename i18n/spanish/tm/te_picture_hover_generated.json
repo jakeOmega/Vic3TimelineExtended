@@ -1,0 +1,74 @@
+{
+ "te_sp_tt_era_advanced_structural_engineering": {
+  "en": "$te_sp_tt_e_2030s$: [State.GetOwner.GetName] has researched $advanced_structural_engineering$.",
+  "es": "$te_sp_tt_e_2030s$: [State.GetOwner.GetName] ha investigado la tecnología $advanced_structural_engineering$."
+ },
+ "te_sp_tt_era_art_deco_architecture": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $art_deco_architecture$.",
+  "es": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] ha investigado la tecnología $art_deco_architecture$."
+ },
+ "te_sp_tt_era_autonomous_vehicles": {
+  "en": "$te_sp_tt_e_2040s$: [State.GetOwner.GetName] has researched $autonomous_vehicles$.",
+  "es": "$te_sp_tt_e_2040s$: [State.GetOwner.GetName] ha investigado la tecnología $autonomous_vehicles$."
+ },
+ "te_sp_tt_era_computer_aided_design": {
+  "en": "$te_sp_tt_e_1990s$: [State.GetOwner.GetName] has researched $computer_aided_design$.",
+  "es": "$te_sp_tt_e_1990s$: [State.GetOwner.GetName] ha investigado la tecnología $computer_aided_design$."
+ },
+ "te_sp_tt_era_containerization": {
+  "en": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] has researched $containerization$.",
+  "es": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] ha investigado la tecnología $containerization$."
+ },
+ "te_sp_tt_era_green_revolution": {
+  "en": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] has researched $green_revolution$.",
+  "es": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] ha investigado la tecnología $green_revolution$."
+ },
+ "te_sp_tt_era_hydraulic_fracturing": {
+  "en": "$te_sp_tt_e_2000s$: [State.GetOwner.GetName] has researched $hydraulic_fracturing$.",
+  "es": "$te_sp_tt_e_2000s$: [State.GetOwner.GetName] ha investigado la tecnología $hydraulic_fracturing$."
+ },
+ "te_sp_tt_era_integrated_circuits": {
+  "en": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] has researched $integrated_circuits$.",
+  "es": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] ha investigado la tecnología $integrated_circuits$."
+ },
+ "te_sp_tt_era_internet_of_things": {
+  "en": "$te_sp_tt_e_2020s$: [State.GetOwner.GetName] has researched $internet_of_things$.",
+  "es": "$te_sp_tt_e_2020s$: [State.GetOwner.GetName] ha investigado la tecnología $internet_of_things$."
+ },
+ "te_sp_tt_era_microprocessor": {
+  "en": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] has researched $microprocessor$.",
+  "es": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] ha investigado la tecnología $microprocessor$."
+ },
+ "te_sp_tt_era_modern_chemical_processes": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $modern_chemical_processes$.",
+  "es": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] ha investigado la tecnología $modern_chemical_processes$."
+ },
+ "te_sp_tt_era_modern_tools": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $modern_tools$.",
+  "es": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] ha investigado la tecnología $modern_tools$."
+ },
+ "te_sp_tt_era_modern_urban_planning": {
+  "en": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] has researched $modern_urban_planning$.",
+  "es": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] ha investigado la tecnología $modern_urban_planning$."
+ },
+ "te_sp_tt_era_robotics": {
+  "en": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] has researched $robotics$.",
+  "es": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] ha investigado la tecnología $robotics$."
+ },
+ "te_sp_tt_era_rural_electrification": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $rural_electrification$.",
+  "es": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] ha investigado la tecnología $rural_electrification$."
+ },
+ "te_sp_tt_era_supply_chain_management": {
+  "en": "$te_sp_tt_e_2000s$: [State.GetOwner.GetName] has researched $supply_chain_management$.",
+  "es": "$te_sp_tt_e_2000s$: [State.GetOwner.GetName] ha investigado la tecnología $supply_chain_management$."
+ },
+ "te_sp_tt_era_synthetic_biology": {
+  "en": "$te_sp_tt_e_2040s$: [State.GetOwner.GetName] has researched $synthetic_biology$.",
+  "es": "$te_sp_tt_e_2040s$: [State.GetOwner.GetName] ha investigado la tecnología $synthetic_biology$."
+ },
+ "te_sp_tt_era_vactrains": {
+  "en": "$te_sp_tt_e_2080s$: [State.GetOwner.GetName] has researched $vactrains$.",
+  "es": "$te_sp_tt_e_2080s$: [State.GetOwner.GetName] ha investigado la tecnología $vactrains$."
+ }
+}
