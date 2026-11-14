@@ -58,14 +58,14 @@ on a rule nobody has read in game. Not a finding until a probe settles it.
 
 ### `common/game_rules` `free_construction`
 
-- Definitions: vanilla (its file isn't in the snapshot); `common/game_rules/00_a_te_free_construction.txt:22` (bare)
-- ModState holds: the definition at `common/game_rules/00_a_te_free_construction.txt:22`
+- Definitions: vanilla (its file isn't in the snapshot); `common/game_rules/00_a_te_free_construction.txt:25` (bare)
+- ModState holds: the definition at `common/game_rules/00_a_te_free_construction.txt:25`
 - Depends on: `bare_duplicate` (LOAD_ORDER_MODEL entry `bare_duplicate_other`)
-- If bare_duplicate is first_wins: the engine reads the definition at `common/game_rules/00_a_te_free_construction.txt:22` (agrees with ModState)
-  - `common/game_rules/00_a_te_free_construction.txt:22` (bare): creates the entry
+- If bare_duplicate is first_wins: the engine reads the definition at `common/game_rules/00_a_te_free_construction.txt:25` (agrees with ModState)
+  - `common/game_rules/00_a_te_free_construction.txt:25` (bare): creates the entry
   - vanilla's entry (bare): dropped, the key already exists
 - If bare_duplicate is last_wins: the engine reads vanilla's entry (differs)
-  - `common/game_rules/00_a_te_free_construction.txt:22` (bare): creates the entry
+  - `common/game_rules/00_a_te_free_construction.txt:25` (bare): creates the entry
   - vanilla's entry (bare): read later, takes the key's place
 
 ## Undetermined without the game files

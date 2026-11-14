@@ -218,3 +218,10 @@ The harness reads values and takes screenshots; these need a player.
    the way back (`extended_timeline_build_specified_building_level`). Say so if a real game gets there.
 9. **Multiplayer.** Not run. Base Construction no longer depends on each machine's last lobby, which under the old
    line could have differed between host and client.
+10. **The base game's Base Construction Capacity rule, cut to one setting (#1768).** New Game lobby, Game Rules:
+   the card reads No Effect with the text naming Free Market Construction. Click its arrows. If they stay on No
+   Effect, the mod's copy (`common/game_rules/00_a_te_free_construction.txt`) won, which shows that `game_rules`
+   keeps a key's first bare definition. If Scaled (All) or Maximum appear, vanilla's copy won; the fallback is a
+   copy of vanilla's whole `00_game_rules.txt` at its path. That session's `debug.log` should name the dropped copy
+   (`Duplicated key free_construction will not be created from file`), and nothing else about `free_construction`.
+   A save made under Scaled (All) or Maximum, if one exists: what its rules screen shows.

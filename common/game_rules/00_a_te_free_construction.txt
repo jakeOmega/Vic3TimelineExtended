@@ -13,11 +13,14 @@
 # game_rules follows that rule is unprobed: the Game Rules screen shows it, one setting if this
 # copy won and vanilla's three if it didn't (#1768).
 #
-# The one setting keeps the name, and the flag, of vanilla's default, which most saves carry:
-# a save made under Scaled (All) or Maximum loses that setting at load (debug.log: Failed to read
-# key reference) and takes this one. The flag keeps vanilla's one script reader,
-# ai_strategy_default's wanted_construction_output (00_default_strategy.txt), on the branch the
-# default gave it; the mod's INJECT of that field may replace it anyway (#1771).
+# The one setting keeps the name, and the flag, of vanilla's default, which most saves carry.
+# A save made under Scaled (All) or Maximum names a setting no file defines: the engine drops it
+# at load (debug.log: Failed to read key reference), so has_game_rule is false for every setting
+# of this rule in that save. Whether its screen then shows No Effect is unread (a save from
+# before a rule existed doesn't take the rule's default: game_rules.md, Global Commons). The flag
+# keeps vanilla's one script reader, ai_strategy_default's wanted_construction_output
+# (00_default_strategy.txt), on the default's branch for AI countries either way; the mod's
+# INJECT of that field may replace it anyway (#1771).
 # test_free_construction_rule.py keeps this file in step with vanilla's.
 free_construction = {
 	default = free_construction_scaled_player_exemption
