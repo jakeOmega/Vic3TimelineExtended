@@ -35,15 +35,18 @@ Callout keys:
 
 When a callout earns its place (owner, 2026-11-13: "sometimes the image speaks for
 itself and the annotations are more noise than anything"):
-    keep   one whose caption says what the shot doesn't show: a mechanic (trophies add
-           to your grandeur), an encoding (stripes mean a close second), a fact that
-           holds across systems (every system has a tab)
-    cut    one whose title repeats the heading inside its own frame or the image's
-           header, or whose body lists the rows it frames
-    none   for a shot of one thing: a map, an event, a list, a chart
-A dense panel takes two or three, and four at most. Where the shot has an empty part,
-stack the captions over it (column_region): an added column with two captions in it is
-mostly blank. A narrow panel shot with no captions takes a margin, not a column.
+    none   for a shot of one thing: a map, an event, a list, a chart, or a small panel
+           whose own text explains it
+    cut    a caption that repeats the image's header or a tooltip in the shot
+    few    on a dense panel: two or three, four at most, for the features a viewer
+           can't pick out at carousel size. Prefer a caption that adds a rule (trophies
+           add to your grandeur; each permanent seat has a veto) to one that lists what
+           its frame holds. The ones that only list were kept where the panel had
+           nothing better (05's "Causes of death", 08's "Space fleets"), and are the
+           first to go if the set is cut again.
+Where the shot has an empty part, stack the captions over it (column_region): an added
+column with two captions in it is mostly blank. A narrow panel shot with no captions
+takes a margin, not a column. A lone caption has no number, so give it an arrow.
 
 Counts in the text were taken from the mod files on 2026-11-06: 191
 technologies in eras VI to XIII; 39 new law groups; about 1,035 visible events
@@ -109,14 +112,15 @@ SPECS['01_state_panel'] = dict(
         dict(box=(343, 1083, 652, 1326), pad=4),   # Local Climate
     ])
 
-# The tooltip in the shot gives the cause; only the stripes need saying.
+# The tooltip in the shot gives the cause; only the stripes need saying. The rule is the
+# player guide's (01-introduction.md): at least half as many deaths as the leading cause.
 SPECS['02_leading_cause_map'] = dict(
     src='Screenshot 2026-11-06 140822.png', u=0.8,
     title='Leading Cause of Death', subtitle='one of 29 maps in the Map Room',
     callouts=[
         dict(pt=(480, 830), at=(630, 776), w=760,
              title='Stripes: a close second',
-             body='Another cause with half the deaths or more',
+             body='At least half as many deaths as the leader',
              **{'from': 'l'}),
     ])
 
