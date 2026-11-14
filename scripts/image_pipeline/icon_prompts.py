@@ -129,6 +129,17 @@ defaults (September 2026, ~350 icons):
   masks) or one object on a small base.
 - A drawn `damage` crack is dark, and vanishes on a dark surface (a deep-blue
   dome): derive the damaged state from a lighter candidate.
+- A colour that is also a thing can be drawn as the thing: "two big round orange
+  propellant tank spheres" drew an orange with a cap on one seed in four (the fleet
+  cards, 2026-11-14).
+- A plain pale face inside a rim cuts out to the rim alone (a bare steel shield,
+  three seeds in four): pick the candidate whose face is a solid mid-tone.
+- A long ship seen from the side is a sliver at 24 px. Of the candidates, the one
+  drawn at an angle, with the most bulk, reads best; a dark grey one sinks into the
+  panel's dark ground and is gone when the panel fades it (the Warships role is the
+  warship in silver).
+- Fire loses its reds to the folder's grade: an explosion came out salmon, weaker
+  at 20 px than the drawn red burst it replaced. On a drawn red disc it reads.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
