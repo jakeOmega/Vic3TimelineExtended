@@ -8,12 +8,6 @@ Status was checked on 2026-10-19 against `main` at `67dca09`, and again on 2026-
 
 ## Active
 
-### Banking and monetary policy
-
-| Doc | Status | What's left |
-|-----|--------|-------------|
-| [specs/2026-11-14-external-currency-tools-design.md](specs/2026-11-14-external-currency-tools-design.md): the five External & Currency exchange tools given one promise each on every currency, Capital Controls and Sterilization renamed, floating versions of Sterilization and Foreign Exchange Surrender, Limit Foreign-Currency Borrowing hidden on metal at par | Design and PR 1 (what the player reads) | PR 2 (the mechanics) |
-
 ### Demographics
 
 | Doc | Status | What's left |
@@ -129,6 +123,7 @@ Everything below has shipped. PR numbers are the main build first, then follow-u
 | [plans/2026-09-20-monetary-policy-phase2.md](archive/plans/2026-09-20-monetary-policy-phase2.md): inflation, monetisation, wage pressure, stance politics | #339 |
 | [specs/2026-09-23-banking-tools-expansion-design.md](archive/specs/2026-09-23-banking-tools-expansion-design.md): Directed Credit sectors, Reserve Requirements, Bank Holiday, Bail-in | #381, #382 (#716) |
 | [specs/2026-10-17-banking-always-on-design.md](archive/specs/2026-10-17-banking-always-on-design.md): the banking entry for every country, its cycle dormant until it starts | #1020, #1027 |
+| [specs/2026-11-14-external-currency-tools-design.md](archive/specs/2026-11-14-external-currency-tools-design.md): the five External & Currency exchange tools given one promise each on every currency, Capital Controls and Sterilization renamed, floating versions of Sterilization and Foreign Exchange Surrender, Limit Foreign-Currency Borrowing hidden on metal at par | #1800, PR2NUM |
 
 ### Tax code, laws and drugs
 

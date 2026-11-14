@@ -61,6 +61,7 @@ class Script:
         self.inputs = dict(gdp=1e6, gold_reserves=cash, export_reliance=.2,
                            te_mon_full_system=True, banking_is_market_economy=True,
                            journal=True, cycle=True, bank=True, dial=True, gold=True, crisis=True,
+                           floats=False, pinned=False, anchored=False,
                            at_war=False, controls_locked=False, points=10)
         self.inputs.update(inputs)
         self.deferred = deferred
@@ -119,6 +120,10 @@ class Script:
                 answer = self.check(val, key)
             elif key in ('custom_tooltip', 'hidden_trigger', 'market'):
                 answer = self.check(val)
+            elif key == 'trigger_if':
+                # The rest is tested only where the limit holds.
+                answer = (not self.check(self.field(val, 'limit'))
+                          or self.check([x for x in val if x[0] != 'limit']))
             elif key == 'has_variable':
                 answer = val in self.vars
             elif key == 'exists':
@@ -138,10 +143,15 @@ class Script:
             elif key.startswith('banking_tool_') and key.endswith('_active'):
                 answer = (key[len('banking_tool_'):-len('_active')] in self.tools) == (val == 'yes')
             elif key in ('te_mon_has_gold_flows', 'te_mon_has_dial', 'te_mon_in_financial_crisis',
+                         'te_mon_fx_floats', 'te_mon_fx_pinned_at_par', 'te_mon_is_anchored',
                          'is_at_war', 'modifier:country_banking_lock_capital_controls_bool'):
-                name = dict(te_mon_has_gold_flows='gold', te_mon_has_dial='dial',
-                            te_mon_in_financial_crisis='crisis', is_at_war='at_war',
-                            **{'modifier:country_banking_lock_capital_controls_bool': 'controls_locked'})[key]
+                # A test that stubs the trigger under its own name wins.
+                name = key if key in self.inputs else dict(
+                    te_mon_has_gold_flows='gold', te_mon_has_dial='dial',
+                    te_mon_in_financial_crisis='crisis', te_mon_fx_floats='floats',
+                    te_mon_fx_pinned_at_par='pinned', te_mon_is_anchored='anchored',
+                    is_at_war='at_war',
+                    **{'modifier:country_banking_lock_capital_controls_bool': 'controls_locked'})[key]
                 answer = self.inputs[name] == (val == 'yes')
             elif key == 'modifier:country_banking_intervention_max_add':
                 answer = self.compare(self.inputs['points'], op, self.number(val))
@@ -254,6 +264,15 @@ class ExternalPolicyScenarios(unittest.TestCase):
         s = Script(gold=False, dial=False)
         for tool in ('sterilize_inflows', 'fx_surrender', 'restrict_inflows'):
             self.assertFalse(s.check(s.triggers['banking_possible_cb_'+tool]))
+        # 2026-11-14: the three flow tools need a rate of the country's own that
+        # moves money: gold flows, or a floating currency with a dial. Commodity
+        # money (a dial, neither) gets none of them.
+        for gold, floats, dial, expected in ((True, False, True, True), (False, True, True, True),
+                                             (False, False, True, False), (False, True, False, False)):
+            s = Script(gold=gold, floats=floats, dial=dial)
+            for tool in ('sterilize_inflows', 'fx_surrender', 'restrict_inflows'):
+                with self.subTest(gold=gold, floats=floats, dial=dial, tool=tool):
+                    self.assertEqual(s.check(s.triggers['banking_external_eligible_'+tool]), expected)
         s = Script(controls_locked=True)
         for tool in ('restrict_inflows', 'fx_surrender'):
             self.assertFalse(s.check(s.triggers['banking_external_eligible_'+tool]))
@@ -410,6 +429,100 @@ class ExternalPolicyScenarios(unittest.TestCase):
         s.effect('banking_external_monthly_update')
         self.assertFalse(s.tools)
 
+    # --- the floating versions (2026-11-14) ---------------------------------
+    @staticmethod
+    def floating(**inputs):
+        s = Script(**{'gold': False, 'floats': True, 'te_mon_fx_inflation_read': 2.0,
+                      'te_mon_capital_controls_in_force': False, **inputs})
+        s.vars.update(te_policy_rate=8.0, te_mon_world_rate_now=3.0, te_fx_shadow=90.0, te_fx_index=90.0)
+        return s
+
+    def test_floating_sterilization_halves_the_index_step_while_funded(self):
+        s = self.floating()
+        plain = s.number('te_mon_fx_shadow_step')
+        self.assertGreater(plain, 0)
+        s.effect('banking_effect_cb_sterilize_inflows')
+        self.assertIn('banking_nonmod_sterilize_float_tt', s.shown)
+        self.assertNotIn('banking_nonmod_sterilize_inflows_tt', s.shown)
+        self.assertAlmostEqual(s.number('te_mon_fx_shadow_step'), plain * s.number('banking_external_fx_sterilized_speed'))
+        s.vars['te_fx_shadow'] = 110.0  # a fall is slowed as much as a rise
+        falling = s.number('te_mon_fx_shadow_step')
+        s.vars['banking_external_sterilization_funded'] = 0
+        self.assertLess(falling, 0)
+        self.assertAlmostEqual(s.number('te_mon_fx_shadow_step'), falling * 2)
+        # It costs what it costs on gold, and stops when the treasury cannot pay.
+        s.vars['banking_external_sterilization_funded'] = 1
+        s.inputs['gold_reserves'] = 0
+        s.effect('banking_external_monthly_update')
+        self.assertNotIn('sterilize_inflows', s.tools)
+        self.assertEqual(s.number('banking_external_fx_adjust_factor'), 1)
+
+    def test_gold_sterilization_leaves_the_index_alone(self):
+        s = Script(te_mon_fx_inflation_read=2.0)
+        s.effect('banking_effect_cb_sterilize_inflows')
+        self.assertIn('banking_nonmod_sterilize_inflows_tt', s.shown)
+        self.assertEqual(s.number('banking_external_fx_adjust_factor'), 1)
+
+    def test_floating_surrender_lifts_the_target_by_export_share_and_buys_nothing(self):
+        points = Script().number('banking_external_surrender_fx_points')
+        for reliance, share in ((0.5, 1), (0.2, .5), (0.05, .25), (0, 0)):
+            with self.subTest(reliance=reliance):
+                s = self.floating(export_reliance=reliance)
+                s.vars['te_bank_gold'] = 0
+                before = s.number('te_mon_fx_target_value')
+                s.effect('banking_effect_cb_fx_surrender')
+                self.assertIn('banking_nonmod_fx_surrender_float_tt', s.shown)
+                self.assertAlmostEqual(s.number('te_mon_fx_target_value') - before, points * share)
+                cash = s.inputs['gold_reserves']
+                s.effect('banking_external_purchase_reserves')
+                self.assertEqual(s.inputs['gold_reserves'], cash)
+                self.assertEqual(s.vars['te_bank_gold'], 0)
+                self.assertEqual(s.number('banking_external_surrender_purchase_display'), 0)
+        s = Script(te_mon_fx_inflation_read=2.0)  # gold: the vault, not the target
+        s.tools.add('fx_surrender')
+        self.assertEqual(s.number('banking_external_surrender_fx_term'), 0)
+
+    def test_floating_surrender_needs_exports_but_no_cash_or_vault(self):
+        self.assertTrue(Script(gold=False, floats=True, cash=0).check(
+            Script().triggers['banking_possible_cb_fx_surrender']))
+        s = Script(gold=False, floats=True, export_reliance=0)
+        self.assertFalse(s.check(s.triggers['banking_possible_cb_fx_surrender']))
+        s = Script(cash=0)  # on gold the treasury pays
+        self.assertFalse(s.check(s.triggers['banking_possible_cb_fx_surrender']))
+
+    def test_borrowing_limits_are_hidden_and_lifted_on_metal_at_par(self):
+        s = Script(pinned=True)
+        self.assertFalse(s.check(s.triggers['banking_possible_cb_foreign_borrowing_limits']))
+        s.tools.add('foreign_borrowing_limits')
+        s.vars['banking_external_fx_protection'] = .3
+        s.effect('banking_external_monthly_update')
+        self.assertNotIn('foreign_borrowing_limits', s.tools)
+        # The protection unwinds as after any repeal; it is not reset.
+        self.assertAlmostEqual(s.vars['banking_external_fx_protection'],
+                               .3 - s.number('banking_external_fx_protection_step'))
+        self.assertTrue(Script().check(Script().triggers['banking_possible_cb_foreign_borrowing_limits']))
+        sgui = (ROOT/'common/scripted_guis/banking_dashboard_scripted_gui.txt').read_text(encoding='utf-8-sig')
+        row = sgui.split('banking_dash_enable_cb_foreign_borrowing_limits = {', 1)[1].split('\n}', 1)[0]
+        buttons = (ROOT/'common/scripted_buttons/timeline_extended_scripted_buttons.txt').read_text(encoding='utf-8-sig')
+        ai = buttons.split('\ncb_foreign_borrowing_limits = {', 1)[1].split('\n}', 1)[0]
+        for block in (row, ai):
+            shown = re.search(r'(?:is_shown|visible) = \{([^}]*)\}', block).group(1)
+            self.assertIn('te_mon_fx_pinned_at_par = no', shown)
+
+    def test_the_floating_ai_reasons(self):
+        s = Script(gold=False, floats=True, te_mon_fx_index_display=90)
+        self.assertTrue(s.check(s.triggers['banking_ai_core_cb_fx_surrender']))
+        s.inputs['te_mon_fx_index_display'] = 98
+        self.assertFalse(s.check(s.triggers['banking_ai_core_cb_fx_surrender']))
+        for distance, expected in ((9, True), (8, True), (5, False)):
+            s = Script(gold=False, floats=True, banking_external_fx_target_distance=distance)
+            self.assertEqual(s.check(s.triggers['banking_ai_core_cb_sterilize_inflows']), expected)
+        for index in (80.0, 120.0):
+            s = self.floating()
+            s.vars['te_fx_index'] = index
+            self.assertAlmostEqual(s.number('banking_external_fx_target_distance'),
+                                   abs(s.number('te_mon_fx_target_value') - index))
+
     def test_flow_restriction_halves_inflows_but_does_not_trap_exiting_gold(self):
         from scripts.analysis.banking_cycle_sim import Config, State, monetary_update_gold
         cfg = Config(currency='gold', points=6)
@@ -424,6 +537,13 @@ class ExternalPolicyScenarios(unittest.TestCase):
             self.assertAlmostEqual(restricted.gold_flow, expected)
             self.assertAlmostEqual(restricted.gold_hot_money,
                                    100000+restricted.gold_flow)
+
+    def test_the_simulator_offers_restrict_inflows_where_the_script_does(self):
+        from scripts.analysis.banking_cycle_sim import Config, State, tool_possible
+        for currency, expected in (('gold', True), ('fiat', True), ('commodity', False)):
+            with self.subTest(currency=currency):
+                cfg = Config(currency=currency, points=6)
+                self.assertEqual(tool_possible(cfg, State(), 'restrict_inflows'), expected)
 
     def test_new_flow_tools_are_unavailable_in_simplified_simulations(self):
         from scripts.analysis.banking_cycle_sim import Config, State, tool_possible
@@ -493,10 +613,11 @@ NONMOD_LINES = {
     'banking_effect_cb_disable_capital_controls_outflow': ('banking_nonmod_capital_controls_off_tt',),
     'banking_effect_cb_restrict_inflows': ('banking_nonmod_restrict_inflows_tt',
                                            'banking_nonmod_war_end_lift_tt'),
-    'banking_effect_cb_sterilize_inflows': ('banking_nonmod_sterilize_inflows_tt',),
+    'banking_effect_cb_sterilize_inflows': ('banking_nonmod_sterilize_inflows_tt', 'banking_nonmod_sterilize_float_tt'),
     'banking_effect_cb_foreign_borrowing_limits': ('banking_nonmod_foreign_borrowing_limits_tt',),
     'banking_effect_cb_disable_foreign_borrowing_limits': ('banking_nonmod_foreign_borrowing_limits_off_tt',),
-    'banking_effect_cb_fx_surrender': ('banking_nonmod_fx_surrender_tt', 'banking_nonmod_war_end_lift_tt'),
+    'banking_effect_cb_fx_surrender': ('banking_nonmod_fx_surrender_tt', 'banking_nonmod_fx_surrender_float_tt',
+                                       'banking_nonmod_war_end_lift_tt'),
     'banking_effect_cb_emergency_import_financing': ('banking_nonmod_emergency_import_financing_tt',),
     'banking_effect_cb_disable_emergency_import_financing': ('banking_nonmod_emergency_import_financing_off_tt',),
 }
@@ -507,10 +628,10 @@ ROW_LINES = {
     'open_market_ops': ('banking_nonmod_open_market_ops_tt',),
     'capital_controls_outflow': ('banking_nonmod_capital_controls_tt',),
     'restrict_inflows': ('banking_nonmod_restrict_inflows_tt',),
-    'sterilize_inflows': ('banking_nonmod_sterilize_inflows_tt',),
+    'sterilize_inflows': ('banking_nonmod_sterilize_inflows_tt', 'banking_nonmod_sterilize_float_tt'),
     'foreign_borrowing_limits': ('banking_nonmod_foreign_borrowing_limits_tt',
                                  'banking_nonmod_foreign_borrowing_limits_off_tt'),
-    'fx_surrender': ('banking_nonmod_fx_surrender_tt',),
+    'fx_surrender': ('banking_nonmod_fx_surrender_tt', 'banking_nonmod_fx_surrender_float_tt'),
     'emergency_import_financing': ('banking_nonmod_emergency_import_financing_tt',
                                    'banking_nonmod_emergency_import_financing_off_tt'),
 }
@@ -544,12 +665,20 @@ class NonModifierTooltipTest(unittest.TestCase):
                 self.assertRegex(self.loc[key], r'^\$(%s)\$(?: |\\n)' % '|'.join(LABELS))
 
     def test_dashboard_rows_splice_the_lines_under_the_modifier(self):
+        # A line that differs by currency is spliced through a custom loc
+        # (banking_ext_monthly_<tool>) whose branches are the keys.
+        custom = definitions('common/customizable_localization/banking_dash_custom_loc.txt')
         for tool, keys in ROW_LINES.items():
             row = self.loc['banking_dash_tt_cb_' + tool]
             for key in keys:
                 with self.subTest(tool=tool, key=key):
-                    self.assertIn('$%s$' % key, row)
-                    self.assertGreater(row.index('$%s$' % key), row.index('.GetDesc]'))
+                    splice = '$%s$' % key
+                    if splice not in row:
+                        splice = "[Country.GetCustom('banking_ext_monthly_%s')]" % tool
+                        branches = [Script.field(b, 'localization_key') for k, _, b in custom['banking_ext_monthly_' + tool] if k == 'text']
+                        self.assertIn(key, branches)
+                    self.assertIn(splice, row)
+                    self.assertGreater(row.index(splice), row.index('.GetDesc]'))
 
     def test_war_end_line_shows_exactly_when_peace_would_lift_the_tool(self):
         for tool in ('restrict_inflows', 'fx_surrender'):
@@ -592,8 +721,8 @@ class NonModifierTooltipTest(unittest.TestCase):
         self.assertIn('to #v %g%%#! after #v %d#! months' % (100 * cap, months),
                       t('banking_nonmod_foreign_borrowing_limits_tt'))
 
-        self.assertIn('#v %.2f%%#! of annual GDP a month' % (100 * v('banking_external_sterilization_share')),
-                      t('banking_nonmod_sterilize_inflows_tt'))
+        for key in ('banking_nonmod_sterilize_inflows_tt', 'banking_nonmod_sterilize_float_tt'):
+            self.assertIn('#v %.2f%%#! of annual GDP a month' % (100 * v('banking_external_sterilization_share')), t(key))
 
         gdp, fatigue_cap = s.inputs['gdp'], v('banking_external_import_fatigue_cap')
         costs = []
@@ -603,7 +732,8 @@ class NonModifierTooltipTest(unittest.TestCase):
         del s.vars['banking_external_import_months']
         self.assertIn('costs #v %.2f%%#! of annual GDP, rising to #v %.2f%%#! after #v %d#! funded months'
                       % (*costs, fatigue_cap), t('banking_nonmod_emergency_import_financing_tt'))
-        for key in ('banking_nonmod_sterilize_inflows_tt', 'banking_nonmod_emergency_import_financing_tt'):
+        for key in ('banking_nonmod_sterilize_inflows_tt', 'banking_nonmod_sterilize_float_tt',
+                    'banking_nonmod_emergency_import_financing_tt'):
             self.assertIn('weekly government expense, a quarter of it a week', t(key))
 
         holiday = s.effects['banking_effect_cb_bank_holiday']
@@ -640,6 +770,10 @@ class DisplayModifierTest(unittest.TestCase):
               v('banking_external_fx_protection_step'))
         close(m['banking_monthly_fx_surrender']['country_te_mon_reserve_purchase_gdp_add'],
               v('banking_external_surrender_share'))
+        close(m['banking_monthly_sterilize_float']['country_te_mon_fx_adjust_speed_mult'],
+              v('banking_external_fx_sterilized_speed') - 1)
+        close(m['banking_monthly_fx_surrender_float']['country_te_mon_fx_target_support_add'],
+              v('banking_external_surrender_fx_points'))
         close(m['te_mon_monetisation_step']['country_te_mon_minting_gdp_add'], v('te_mon_monetisation_gdp_share'))
         close(m['te_mon_monetisation_step']['country_te_mon_printing_pressure_add'],
               v('te_mon_monetisation_pressure') / 100)
@@ -675,6 +809,8 @@ class DisplayModifierTest(unittest.TestCase):
             'banking_monthly_sterilize_inflows': 'banking_nonmod_sterilize_inflows_tt',
             'banking_monthly_foreign_borrowing_limits': 'banking_nonmod_foreign_borrowing_limits_tt',
             'banking_monthly_fx_surrender': 'banking_nonmod_fx_surrender_tt',
+            'banking_monthly_sterilize_float': 'banking_nonmod_sterilize_float_tt',
+            'banking_monthly_fx_surrender_float': 'banking_nonmod_fx_surrender_float_tt',
             'te_mon_monetisation_step': 'banking_mon_monetise_step_tt',
             'te_mon_mandate_loosen_step': 'banking_mon_mandate_cost_tt',
         }
@@ -686,7 +822,7 @@ class DisplayModifierTest(unittest.TestCase):
 
 class OnYourCurrencyTest(unittest.TestCase):
     """Each exchange tool's dashboard tooltip has an "On this currency" line
-    (2026-11-14, docs/superpowers/specs/2026-11-14-external-currency-tools-design.md)
+    (2026-11-14, docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md)
     whose figures are display values: the pulse's own formula with the tool's
     factor taken out or put in. Each "with the tool" figure is held to what the
     pulse computes with the tool on, and each "without" to what it computes
@@ -784,6 +920,19 @@ class OnYourCurrencyTest(unittest.TestCase):
                 s.vars['banking_external_fx_protection'] = protection
                 self.close(s.number('banking_ext_disp_fx_premium_protected'), s.number('te_mon_premium_fx'))
         self.assertEqual(Script().number('banking_ext_disp_fx_weak_points'), 0)  # unset index reads 0
+
+    def test_the_index_step_pair_is_the_shadow_step_unsterilized_and_sterilized(self):
+        for shadow in (80.0, 120.0):
+            with self.subTest(shadow=shadow):
+                s = self.script(gold=False, floats=True)
+                s.vars.update(te_fx_shadow=shadow, te_fx_index=shadow)
+                self.close(s.number('banking_ext_disp_fx_step'), s.number('te_mon_fx_shadow_step'))
+                s.tools.add('sterilize_inflows')
+                s.vars['banking_external_sterilization_funded'] = 1
+                self.close(s.number('banking_ext_disp_fx_step_sterilized'), s.number('te_mon_fx_shadow_step'))
+                # ...and the surrender requirement's reach is its target term.
+                s.tools.add('fx_surrender')
+                self.close(s.number('banking_external_surrender_fx_reach'), s.number('banking_external_surrender_fx_term'))
 
 
 if __name__ == '__main__':
