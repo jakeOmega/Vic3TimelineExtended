@@ -340,9 +340,11 @@ default, the world and four states left out at each end, which is what the Map R
   `position` takes no script value (`effects.log`: `position = int`), so `te_jmap_measure_at` is a ladder of literal
   positions, 0 to `TRIM_MAX` (80: 5% of 1,600 states), each a call of `te_jmap_measure_<map> = { K = n }`. The trim
   never passes the middle (`te_jmap_trim_most`: two states are always left to span), and where no state has a figure
-  nothing is measured and the fixed curve's ends serve. The count matters twice. With five to eight figures the
-  eighth pass's two ends crossed (the fifth highest of eight is below the fifth lowest), so the range came out upside
-  down and every state painted at the low color. With fewer than five, "the extremes where fewer have a figure"
+  nothing is measured and the fixed curve's ends serve. The count matters twice, both worked out from the script and
+  neither seen in game. With five to eight figures the eighth pass's two ends crossed (the fifth highest of eight is
+  below the fifth lowest), so the stored low was above the stored high; the high then floored at the low plus the
+  map's narrowest span, and the range ran for that one span up from the fifth lowest state: every state at five
+  figures, and most at eight, took the low color. With fewer than five, "the extremes where fewer have a figure"
   rested on a fallback that runs only if a `position` past the end takes nothing, where the lesson says it takes the
   last state and logs (`scripting_best_practices.md`, "`position = N` + `check_range_bounds = no` Clamps
   Out-of-Range"; seen on `ordered_scope_state`, unverified on `ordered_state`). A world map has hundreds of figures,
@@ -356,7 +358,10 @@ default, the world and four states left out at each end, which is what the Map R
   options, each month; the Map Room reads a twin of each (`te_jmap_range_gw_room`, `te_jmap_gw_room_factor`, the
   generator's `_room_twin`), measured under the options, since a script value can't tell which page asks. A twin's
   range is the entry's until its own first measure, so a save from before paints the same. The parity test compares
-  the two pages' ladders with the twin's name folded back. The other five entry maps are categorical.
+  the two pages' ladders with the twin's name folded back. The other five entry maps are categorical. The options
+  don't reach an entry's range; the count does, since all the ranges are written by one generator: an entry's range
+  with under ten figures (a world with few monuments) no longer takes its ends past the middle, so that page and the
+  Map Room's still agree under the default options.
 - **A change repaints at once.** Each option button (`te_jmap_option_button`) runs its scripted GUI and then fires
   `te_jmap_repaint`, the picks' own state on `te_jmap_repainter`, unchanged: the option's effect has marked the area
   and measured the pick's range before the page reopens, so a paused map repaints on them.
