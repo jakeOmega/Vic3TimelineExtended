@@ -40,8 +40,8 @@
   "es": "Los miembros pueden dar ayuda sanitaria"
  },
  "power_bloc_can_give_healthcare_aid_bool_desc": {
-  "en": "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], decreasing mortality, increasing [concept_sol], and reducing [concept_pollution_impact] in the target country.",
-  "es": "Puede dar ayuda sanitaria a otro país, con un coste de [concept_bureaucracy|l], reduciendo la mortalidad, aumentando el [concept_sol|l] y reduciendo el [concept_pollution_impact|l] en el país objetivo."
+  "en": "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], widening [concept_health_care_access], decreasing mortality and increasing [concept_sol] in the target country.",
+  "es": "Puede dar ayuda sanitaria a otro país, con un coste de [concept_bureaucracy|l], ampliando el [concept_health_care_access|l], reduciendo la mortalidad y aumentando el [concept_sol|l] en el país objetivo."
  },
  "power_bloc_can_give_humanitarian_aid_bool": {
   "en": "Members Can Give Humanitarian Aid",

@@ -26583,6 +26583,10 @@
   "en": "Construction Expansion",
   "es": "Expansión de la construcción"
  },
+ "te_construction_market_crew_modifier": {
+  "en": "Construction Site Crew",
+  "es": "Cuadrilla de la obra de construcción"
+ },
  "te_construction_market_private_share_modifier": {
   "en": "Private-Public Construction Share",
   "es": "Cuota de construcción público-privada"
@@ -27376,8 +27380,8 @@
   "es": "Muertes por causa"
  },
  "te_demog_hist_e0_legend": {
-  "en": "#lore Years at birth, one bar a census, on a scale to the longest of them: 100 at least, 10,000 at most.#!",
-  "es": "#lore Años al nacer, una barra por censo, en una escala que llega hasta la más larga: 100 como mínimo, 10 000 como máximo.#!"
+  "en": "#lore Years at birth, one bar a census, on a scale to the longest of them, 10,000 at most.#!",
+  "es": "#lore Años al nacer, una barra por censo, en una escala que llega hasta la más larga, con 10 000 como máximo.#!"
  },
  "te_demog_hist_e0_on": {
   "en": "Life expectancy: #v [ScriptContainer.GetVariableValue('te_dg_h_e0')|1]#! years",

@@ -20,6 +20,7 @@ docs/
 ├── archive/                  (deferred / completed / orphaned reference)
 ├── testing/                  (probe runbooks, capability ledgers and play-test runbooks for in-game checks)
 ├── releases/                 (release notes: each GitHub release's body as <version>.md, from 1.1.9)
+├── workshop/                 (the six images the Steam Workshop description embeds, linked from it at the release's tag)
 └── superpowers/              (specs/ design specs and plans/ implementation plans; finished ones in archive/; index in README.md)
 ```
 
@@ -47,7 +48,7 @@ Build with `scripts/build_player_guide.py` (pandoc + Typst from `requirements-do
 | [`guides/gui_modding_guide.md`](guides/gui_modding_guide.md) | Widget types, layout, data binding, scripted GUIs, standalone panels, tooltips, format specifiers, GetVariableSystem | Creating or modifying GUI panels |
 | [`guides/python_tools.md`](guides/python_tools.md) | All Python scripts, mod state server API, every endpoint, AI-agent workflow | Using Python tools or the mod state server |
 | [`guides/vanilla_patch_runbook.md`](guides/vanilla_patch_runbook.md) | Step-by-step process for absorbing a new vanilla patch into the mod | Updating the mod after a vanilla version bump |
-| [`guides/release_checklist.md`](guides/release_checklist.md) | Cutting a release: pre-release checks, what ships (`main`, or a branch that strips the Demographics census), deploy and upload, tag and GitHub release, the Workshop description's guide link and length | Before a release |
+| [`guides/release_checklist.md`](guides/release_checklist.md) | Cutting a release: pre-release checks, what ships (`main`, or a branch that strips the Demographics census), how to write the notes, the Workshop description's images and links, deploy and upload, tag and GitHub release | Before a release |
 | [`guides/quick_reference_ids.md`](guides/quick_reference_ids.md) | Vanilla law / IG / pop / strata IDs, script values, modifier durations | Looking up game IDs or script-value names quickly |
 | [`guides/audits.md`](guides/audits.md) | `[auto-gen]` Every offline audit: what a flag means, how CI runs it, the suppression comment and where it goes. Generated from `audit_registry.py` | An audit flagged your change; adding an audit |
 | [`guides/git_workflow.md`](guides/git_workflow.md) | Sparse worktrees, stacked PRs and squash-merged stacks, multi-branch agent waves, play-testing unmerged work, `gh` traps | Before opening a stacked PR, merging a stack, dispatching sub-agents on branches, or deploying an unmerged branch |
@@ -208,7 +209,7 @@ All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Mo
 | [`audits/pm_building_balance_review.md`](audits/pm_building_balance_review.md) | Per-building production-method balance audit | Tuning a PM's input/output ratios or unlocking conditions |
 | [`audits/mod_only_tech_modifier_baseline.md`](audits/mod_only_tech_modifier_baseline.md) | User-supplied baseline targets for mod-only tech modifiers | Re-tuning tech modifier targets or refreshing the audit anchor |
 | [`audits/script_parameterization_audit.md`](audits/script_parameterization_audit.md) | Catalog of helper scripted_effects / scripted_triggers and the parameterization pattern used | Considering whether to introduce a new helper vs. inlining |
-| [`audits/steam_workshop_description.md`](audits/steam_workshop_description.md) | Draft Steam Workshop description maintained per release | Updating the Workshop listing copy |
+| [`audits/steam_workshop_description.md`](audits/steam_workshop_description.md) | The Steam Workshop description as of the last release (BBCode, with its length), how images are embedded in it and hosted (`docs/workshop/`), and what changed from the text before | Updating the Workshop listing copy; before a release |
 | [`audits/grand_monument_buried_sites_audit.md`](audits/grand_monument_buried_sites_audit.md) | The buried archaeological sites by region, checks on the existing rows, and proposals: real sites to fill the gaps (no sub-Saharan Africa, Iran, Central Asia, Southeast Asia, North America) and plausible speculative ones (Genghis Khan's tomb, Cleopatra's, the lost army of Cambyses) | Adding a buried site; choosing which to build next |
 | [`audits/tech_era_appropriateness_audit.md`](audits/tech_era_appropriateness_audit.md) | Manual review of every mod-added tech against real-world invention/adoption years vs its assigned era (issue #40) | Adding a tech, or re-checking an era assignment |
 | [`audits/strata_social_axis_report.md`](audits/strata_social_axis_report.md) | Generated report (manual run only, not in the reload chain): events using mirrored upper/lower-strata radicals+loyalists as a stand-in for the social-progressivism axis. Regen: `scripts/analysis/strata_social_axis_audit.py` | Writing or reviewing an event's strata effects |

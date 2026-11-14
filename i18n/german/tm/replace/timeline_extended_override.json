@@ -511,6 +511,14 @@
   "en": "Provisional Acceptance",
   "de": "Vorläufige Akzeptanz"
  },
+ "setting_free_construction_scaled_player_exemption": {
+  "en": "No Effect",
+  "de": "Kein Effekt"
+ },
+ "setting_free_construction_scaled_player_exemption_desc": {
+  "en": "Does nothing in Timeline Extended, which removes the base [concept_construction] this rule scales. Base construction comes from the $rule_free_market_construction_rule$ rule instead: a flat 10 a week with it disabled. With it enabled, construction is bought on the market.",
+  "de": "Bewirkt in Timeline Extended nichts, denn die Mod entfernt den Basis-[concept_construction], den diese Regel skaliert. Der Basisbau kommt stattdessen aus der Regel $rule_free_market_construction_rule$: pauschal 10 pro Woche, wenn sie deaktiviert ist. Ist sie aktiviert, wird Bau auf dem Markt gekauft."
+ },
  "state_building_construction_sector_max_level_add_desc": {
   "en": "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.",
   "de": "Jeder Punkt lässt einen [concept_state] #v 1.000#! mehr Menschen aufnehmen, bevor [concept_migration_crowding] die [concept_migration_pull] senkt, wie wenig [concept_arable_land] er auch hat. Die $state_migration_crowding_density_mult$ des Staates vervielfacht diese Menschen ebenso wie seine Fläche."

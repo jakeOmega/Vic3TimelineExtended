@@ -383,6 +383,14 @@
   "en": "How readily a people who nearly all read take up family limitation, stopping at the family size they want by methods older than any modern one. A state church slows it; a secular state speeds it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "es": "Con qué facilidad adopta la limitación familiar un pueblo en el que casi todos saben leer, deteniéndose en el tamaño de familia que desea mediante métodos más antiguos que cualquiera moderno. Una iglesia estatal la frena; un Estado laico la acelera. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
+ "country_family_policy_upkeep_mult": {
+  "en": "Family Policy Upkeep[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "es": "Mantenimiento de la política familiar[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_family_policy_upkeep_mult_desc": {
+  "en": "The money upkeep of the Family Policy measures that cost money: $te_demog_ms_child_allowance$, $te_demog_ms_family_housing$, $te_demog_ms_parental_leave$ and $te_demog_ms_free_contraception$. A running measure's upkeep follows a change at the country's next yearly count. Used by the Family Policy section of the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "es": "El mantenimiento en dinero de las medidas de política familiar que cuestan dinero: $te_demog_ms_child_allowance$, $te_demog_ms_family_housing$, $te_demog_ms_parental_leave$ y $te_demog_ms_free_contraception$. El mantenimiento de una medida en marcha refleja un cambio en el siguiente recuento anual del país. Lo usa la sección Política familiar de la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "country_finance_momentum_monthly_add": {
   "en": "Monthly [concept_banking_momentum]",
   "es": "[concept_banking_momentum] mensual"
@@ -5560,8 +5568,8 @@
   "es": "Acceso a la atención sanitaria[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_health_care_access_add_desc": {
-  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, and a health law adds more with each level of its institution. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
-  "es": "Cuántas personas pueden acceder a un médico, una enfermera o un hospital. La medicina solo salva vidas hasta donde llega. Los mercados y la beneficencia dan algo de acceso en todas partes, y una ley sanitaria añade más con cada nivel de su institución. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, a health law adds more with each level of its institution, and a [concept_power_bloc]'s Healthcare principle a little more with each level. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "es": "Cuántas personas pueden acceder a un médico, una enfermera o un hospital. La medicina solo salva vidas hasta donde llega. Los mercados y la beneficencia dan algo de acceso en todas partes, una ley sanitaria añade más con cada nivel de su institución, y el principio de Sanidad de un [concept_power_bloc|l] un poco más con cada nivel. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_homeland_change_speed_mult": {
   "en": "[concept_homeland] Change Speed",
@@ -5704,8 +5712,8 @@
   "es": "Difusión de la medicina[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_medical_diffusion_add_desc": {
-  "en": "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications, medical training and the World Health Organization add more. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
-  "es": "Con qué rapidez llega la nueva medicina a cada estado: la parte de la distancia entre su [concept_health_care_access|l] y sus tratamientos y el punto al que se dirigen que se cierra en cada recuento anual. Un 10% en todas partes; las comunicaciones, la formación médica y la Organización Mundial de la Salud añaden más. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+  "en": "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications, medical training, the World Health Organization and a [concept_power_bloc]'s Healthcare principle add more. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "es": "Con qué rapidez llega la nueva medicina a cada estado: la parte de la distancia entre su [concept_health_care_access|l] y sus tratamientos y el punto al que se dirigen que se cierra en cada recuento anual. Un 10% en todas partes; las comunicaciones, la formación médica, la Organización Mundial de la Salud y el principio de Sanidad de un [concept_power_bloc|l] añaden más. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_metro_share_add": {
   "en": "Metropolitan Share Target[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",

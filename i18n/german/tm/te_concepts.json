@@ -6420,12 +6420,12 @@
   "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')] wird das Gesundheitswesen [TARGET_COUNTRY.GetAltNameNoFormatting('IN')] finanzieren"
  },
  "healthcare_aid_desc": {
-  "en": "Healthcare Aid is a [concept_diplomatic_action] that allows a country to provide healthcare assistance to another country, at the cost of [concept_bureaucracy], decreasing mortality, increasing [concept_sol], and reducing [concept_pollution_impact] in the target country.",
-  "de": "Gesundheitshilfe ist eine [concept_diplomatic_action], die es einem Land erlaubt, einem anderen Land Gesundheitsunterstützung zu leisten, auf Kosten der [concept_bureaucracy], wodurch die Sterblichkeit im Zielland sinkt, der [concept_sol] steigt und die [concept_pollution_impact] verringert werden."
+  "en": "Healthcare Aid is a [concept_diplomatic_action] that allows a country to provide healthcare assistance to another country, at the cost of [concept_bureaucracy], widening [concept_health_care_access], decreasing mortality and increasing [concept_sol] in the target country.",
+  "de": "Gesundheitshilfe ist eine [concept_diplomatic_action], die es einem Land erlaubt, einem anderen Land Gesundheitsunterstützung zu leisten, auf Kosten der [concept_bureaucracy], wodurch im Zielland der [concept_health_care_access] ausgeweitet wird, die Sterblichkeit sinkt und der [concept_sol] steigt."
  },
  "healthcare_aid_effects_desc": {
-  "en": "• Reduces mortality and improves [concept_sol] in the target country.\\n• Source country pays increased health system costs.\\n• Improves relations over time.",
-  "de": "• Verringert die Sterblichkeit und verbessert den [concept_sol] im Zielland.\\n• Das Ausgangsland zahlt erhöhte Kosten für das Gesundheitssystem.\\n• Verbessert die Beziehungen im Laufe der Zeit."
+  "en": "• Widens [concept_health_care_access], speeds the spread of medicine and improves [concept_sol] in the target country; where the census doesn't set births and deaths, it reduces mortality instead.\\n• Source country pays increased health system costs.\\n• Improves relations over time.",
+  "de": "• Weitet den [concept_health_care_access] aus, beschleunigt die Verbreitung von Medizin und verbessert den [concept_sol] im Zielland; wo die Volkszählung Geburten und Todesfälle nicht festlegt, wird stattdessen die Sterblichkeit gesenkt.\\n• Das Ausgangsland zahlt erhöhte Kosten für das Gesundheitssystem.\\n• Verbessert die Beziehungen im Laufe der Zeit."
  },
  "heir_ed_ideology_focus_active_desc": {
   "en": "Ideological tutors are guiding the [concept_heir]'s political worldview. This costs [concept_authority] to maintain.",
@@ -11682,6 +11682,10 @@
  "te_construction_market_capacity_modifier_desc": {
   "en": "Applies the effects of this construction-focused modifier.",
   "de": "Wendet die Effekte dieses baubezogenen Modifikators an."
+ },
+ "te_construction_market_crew_modifier_desc": {
+  "en": "The $te_construction_market_site$ here has hired its crew and keeps no more jobs than that, so it works at full strength with one laborer.",
+  "de": "Die $te_construction_market_site$ hier hat ihre Mannschaft angeheuert und hält nicht mehr Stellen vor, sodass sie schon mit einem einzigen Arbeiter auf voller Leistung läuft."
  },
  "te_construction_market_private_share_modifier_desc": {
   "en": "Adjusts the share of construction handled by the private sector versus public investment.",

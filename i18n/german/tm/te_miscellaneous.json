@@ -26827,6 +26827,10 @@
   "en": "Construction Expansion",
   "de": "Bauexpansion"
  },
+ "te_construction_market_crew_modifier": {
+  "en": "Construction Site Crew",
+  "de": "Baustellenmannschaft"
+ },
  "te_construction_market_private_share_modifier": {
   "en": "Private-Public Construction Share",
   "de": "Privat-öffentlicher Bauanteil"
@@ -27620,8 +27624,8 @@
   "de": "Todesfälle nach Ursache"
  },
  "te_demog_hist_e0_legend": {
-  "en": "#lore Years at birth, one bar a census, on a scale to the longest of them: 100 at least, 10,000 at most.#!",
-  "de": "#lore Jahre bei der Geburt, ein Balken je Volkszählung, auf einer Skala bis zum längsten von ihnen: mindestens 100, höchstens 10.000.#!"
+  "en": "#lore Years at birth, one bar a census, on a scale to the longest of them, 10,000 at most.#!",
+  "de": "#lore Jahre bei der Geburt, ein Balken je Volkszählung, auf einer Skala bis zum längsten von ihnen, höchstens 10.000.#!"
  },
  "te_demog_hist_e0_on": {
   "en": "Life expectancy: #v [ScriptContainer.GetVariableValue('te_dg_h_e0')|1]#! years",

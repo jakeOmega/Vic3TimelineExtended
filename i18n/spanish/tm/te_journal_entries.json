@@ -4756,8 +4756,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_1_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_1_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_1_target_price')]"
  },
  "je_space_race_widget_fl_1_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_2_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_tgt_marines')|0]#!.",
@@ -4780,8 +4780,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_2_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_2_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_2_target_price')]"
  },
  "je_space_race_widget_fl_2_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_3_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_tgt_marines')|0]#!.",
@@ -4804,8 +4804,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_3_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_3_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_3_target_price')]"
  },
  "je_space_race_widget_fl_3_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_4_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_tgt_marines')|0]#!.",
@@ -4828,8 +4828,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_4_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_4_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_4_target_price')]"
  },
  "je_space_race_widget_fl_4_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_5_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_tgt_marines')|0]#!.",
@@ -4852,8 +4852,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_5_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_5_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_5_target_price')]"
  },
  "je_space_race_widget_fl_5_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_6_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_tgt_marines')|0]#!.",
@@ -4876,8 +4876,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_6_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_6_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_6_target_price')]"
  },
  "je_space_race_widget_fl_6_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_7_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_tgt_marines')|0]#!.",
@@ -4900,8 +4900,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_7_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_7_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_7_target_price')]"
  },
  "je_space_race_widget_fl_7_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_8_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_tgt_marines')|0]#!.",
@@ -4924,8 +4924,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_8_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_8_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_8_target_price')]"
  },
  "je_space_race_widget_fl_8_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_months_left')|0]#! meses."
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_9_intel_known": {
   "en": "Defenses #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_tgt_def')|0]#!, integrity #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_tgt_integrity')|0]%#!, marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_tgt_marines')|0]#!.",
@@ -4948,12 +4948,8 @@
   "es": "[GetScriptedGui('sr_fleet_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]$te_tt_break$#header [JournalEntry.GetCountry.GetCustom('sr_fl_9_target_name')]#!\\n[JournalEntry.GetCountry.GetCustom('sr_fl_9_target_intel')]\\nHaz clic para elegir su objetivo entre los emplazamientos de aquí.[JournalEntry.GetCountry.GetCustom('sr_fl_9_target_price')]"
  },
  "je_space_race_widget_fl_9_transit": {
-  "en": "  In transit: lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_months_left')|0]#! months.",
-  "es": "  En tránsito: aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_months_left')|0]#! meses."
- },
- "je_space_race_widget_fl_col_drive": {
-  "en": "Drive",
-  "es": "Propulsión"
+  "en": "Lands in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_months_left')|0]#! months.",
+  "es": "Aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_months_left')|0]#! meses."
  },
  "je_space_race_widget_fl_col_dv": {
   "en": "km/s",
@@ -5000,8 +4996,8 @@
   "es": "Desembarcar"
  },
  "je_space_race_widget_fl_marines_tt": {
-  "en": "#header Marines#!\\n[concept_sr_marines] aboard: assault carriers hold #v 2#! battalions a point of strength, and fill up at Earth.",
-  "es": "#header Infantes de marina#!\\n[concept_sr_marines] a bordo: los portanaves de asalto llevan #v 2#! batallones por punto de fuerza, y se llenan en la Tierra."
+  "en": "#header Marines#!\\n[concept_sr_marines] aboard, of the most it can carry: assault carriers hold #v 2#! battalions a point of strength, and fill up at Earth.",
+  "es": "#header Infantes de marina#!\\n[concept_sr_marines] a bordo y el máximo que la flota puede transportar: los portanaves de asalto llevan #v 2#! batallones por punto de fuerza, y se llenan en la Tierra."
  },
  "je_space_race_widget_fl_posture_1": {
   "en": "Station",
@@ -5039,17 +5035,45 @@
   "en": "Refit",
   "es": "Reacondicionar"
  },
+ "je_space_race_widget_fl_role_carrier": {
+  "en": "Carriers",
+  "es": "Portanaves"
+ },
+ "je_space_race_widget_fl_role_rapid": {
+  "en": "Rapid",
+  "es": "Rápidas"
+ },
+ "je_space_race_widget_fl_role_siege": {
+  "en": "Siege",
+  "es": "Asedio"
+ },
+ "je_space_race_widget_fl_role_tender": {
+  "en": "Tenders",
+  "es": "Nodrizas"
+ },
+ "je_space_race_widget_fl_role_war": {
+  "en": "Warships",
+  "es": "Naves de guerra"
+ },
+ "je_space_race_widget_fl_roll_down_tt": {
+  "en": "Show this fleet's ships, readings and orders.",
+  "es": "Muestra las naves, los indicadores y las órdenes de esta flota."
+ },
+ "je_space_race_widget_fl_roll_up_tt": {
+  "en": "Roll this fleet up to one line.",
+  "es": "Contrae esta flota a una sola línea."
+ },
  "je_space_race_widget_fl_seize": {
   "en": "Seize",
   "es": "Tomar"
  },
  "je_space_race_widget_fl_strength_tt": {
-  "en": "#header Strength#!\\nThe fleet's strength now, and at full. A battle's losses are half ships destroyed and half damage that a dock repairs. Hover a fleet's figure for its [concept_sr_ship_role]s.",
-  "es": "#header Fuerza#!\\nLa fuerza actual de la flota y la que tiene al completo. Las pérdidas de una batalla son mitad naves destruidas y mitad daños que repara un muelle. Pasa el cursor por la cifra de una flota para ver sus [Concept('concept_sr_ship_role', 'funciones de las naves')]."
+  "en": "#header Strength#!\\nThe fleet's strength now, and at full. A battle's losses are half ships destroyed and half damage that a dock repairs. The icons above it are its [concept_sr_ship_role]s.",
+  "es": "#header Fuerza#!\\nLa fuerza actual de la flota y la que tiene al completo. Las pérdidas de una batalla son mitad naves destruidas y mitad daños que repara un muelle. Los iconos de encima son sus [Concept('concept_sr_ship_role', 'funciones de las naves')]."
  },
  "je_space_race_widget_fl_supply_tt": {
-  "en": "#header Supply#!\\nMonths of supply left. It counts down away from a dock and refills when the fleet docks. With none left the fleet loses #v 5%#! of its strength a month. [concept_sr_role_tender]s lengthen it.",
-  "es": "#header Suministros#!\\nMeses de suministros que quedan. La cuenta atrás avanza lejos de un muelle y se rellena cuando la flota atraca. Sin suministros, la flota pierde un #v 5%#! de su fuerza al mes. Las [Concept('concept_sr_role_tender', 'naves nodriza')] lo alargan."
+  "en": "#header Supply#!\\nMonths of supply left, of the months it carries when full. It counts down away from a dock and refills when the fleet docks. With none left the fleet loses #v 5%#! of its strength a month. [concept_sr_role_tender]s lengthen it.",
+  "es": "#header Suministros#!\\nMeses de suministros que quedan y los que la flota lleva a plena carga. La cuenta atrás avanza lejos de un muelle y se rellena cuando la flota atraca. Sin suministros, la flota pierde un #v 5%#! de su fuerza al mes. Las [Concept('concept_sr_role_tender', 'naves nodriza')] lo alargan."
  },
  "je_space_race_widget_fl_transfer": {
   "en": "Transfer",
@@ -5247,25 +5271,9 @@
   "en": "#header Blockading#!\\nOur fleet stands off here and blockades an enemy's colonies.",
   "es": "#header Bloqueando#!\\nNuestra flota mantiene distancia aquí y bloquea las colonias de un enemigo."
  },
- "je_space_race_widget_loc_col_inbound": {
-  "en": "Inbound",
-  "es": "En camino"
- },
- "je_space_race_widget_loc_col_others": {
-  "en": "Others",
-  "es": "Otras"
- },
  "je_space_race_widget_loc_col_ours": {
   "en": "Ours",
   "es": "Nuestras"
- },
- "je_space_race_widget_loc_col_status": {
-  "en": "Status",
-  "es": "Estado"
- },
- "je_space_race_widget_loc_col_where": {
-  "en": "Location",
-  "es": "Ubicación"
  },
  "je_space_race_widget_loc_earth_blockaded_tt": {
   "en": "#header Earth Blockaded#!\\nA fleet at war with us is in Earth orbit and none of ours is: a [concept_sr_blockade] of Earth. Nothing of ours leaves Earth, our colonies on the Moon are blockaded, and our colonies have no contact from home. Launch the reserve to put a fleet up; any fleet of ours at Earth breaks it.",
@@ -5290,34 +5298,6 @@
  "je_space_race_widget_loc_others_tt": {
   "en": "#header Other Powers' Fleets#!\\nEvery other country's fleet strength at this location, and the strongest one's flag. Fleets in space are seen by all.",
   "es": "#header Flotas de otras potencias#!\\nLa fuerza de la flota de cada otro país en este lugar, y la bandera de la más fuerte. Las flotas en el espacio las ven todos."
- },
- "je_space_race_widget_loc_status_battle": {
-  "en": "#R Battle#!",
-  "es": "#R Batalla#!"
- },
- "je_space_race_widget_loc_status_blockaded": {
-  "en": "#R Blockaded#!",
-  "es": "#R Bloqueado#!"
- },
- "je_space_race_widget_loc_status_blockading": {
-  "en": "#v Blockading#!",
-  "es": "#v Bloqueando#!"
- },
- "je_space_race_widget_loc_status_earth_blockaded": {
-  "en": "#R Blockaded#!",
-  "es": "#R Bloqueado#!"
- },
- "je_space_race_widget_loc_status_earth_blockading": {
-  "en": "#v Blockading#!",
-  "es": "#v Bloqueando#!"
- },
- "je_space_race_widget_loc_status_interdicted": {
-  "en": "#R Interdicted#!",
-  "es": "#R Bajo interdicción#!"
- },
- "je_space_race_widget_loc_status_interdicting": {
-  "en": "#v Interdicting#!",
-  "es": "#v Interdicción#!"
  },
  "je_space_race_widget_locations_header": {
   "en": "Locations",
@@ -5895,6 +5875,26 @@
   "en": "#v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! queued",
   "es": "#v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! en cola"
  },
+ "je_space_race_widget_ovc_sc_rate_cap": {
+  "en": "Built a month",
+  "es": "Construido al mes"
+ },
+ "je_space_race_widget_ovc_sc_rate_word_paused": {
+  "en": "Paused",
+  "es": "En pausa"
+ },
+ "je_space_race_widget_ovc_sc_reserve_cap": {
+  "en": "Reserve",
+  "es": "Reserva"
+ },
+ "je_space_race_widget_ovc_sc_strength_cap": {
+  "en": "Fleet strength",
+  "es": "Fuerza de la flota"
+ },
+ "je_space_race_widget_ovc_sc_upkeep_cap": {
+  "en": "Upkeep",
+  "es": "Mantenimiento"
+ },
  "je_space_race_widget_ovc_window_cap": {
   "en": "Next Window",
   "es": "Próxima ventana"
@@ -6351,14 +6351,6 @@
   "en": "Pause",
   "es": "Pausar"
  },
- "je_space_race_widget_sc_rate_label": {
-  "en": "Built a month",
-  "es": "Construcción al mes"
- },
- "je_space_race_widget_sc_rate_paused": {
-  "en": "Paused",
-  "es": "En pausa"
- },
  "je_space_race_widget_sc_rate_paused_tt": {
   "en": "#header Fleet Strength Built a Month#!\\nNothing while construction is paused: our $building_space_command$ builds no fleet strength, nor do our colonies' Orbital Yards, and its yards buy no $launch_capacity$, $advanced_materials$ or $electricity$. It still uses its maintenance goods, and the fleets' upkeep is still paid. Resume ends the pause at the next month's construction, which builds nothing; the month after builds again.",
   "es": "#header Fuerza de flota construida al mes#!\\nNada mientras la construcción está en pausa: nuestro $building_space_command$ no construye fuerza de flota, ni tampoco los Astilleros orbitales de nuestras colonias, y sus astilleros no compran $launch_capacity$, $advanced_materials$ ni $electricity$. Sigue usando sus bienes de mantenimiento, y el mantenimiento de las flotas se sigue pagando. «Reanudar» pone fin a la pausa con la construcción del mes siguiente, que no construye nada; la del mes posterior vuelve a construir."
@@ -6366,10 +6358,6 @@
  "je_space_race_widget_sc_rate_tt": {
   "en": "#header Fleet Strength Built a Month#!\\nWhat our $building_space_command$ buildings built last month, from #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_levels')|0]#! levels in states we control. Each level builds by its production method, scaled by its staffing: #v 0.5#! with Orbital Shipyards, #v 1#! with Fusion Yards, #v 1.5#! with Torch Yards, #v 2#! with Antimatter Yards. A Space Command in an occupied state builds nothing.",
   "es": "#header Fuerza de la flota construida al mes#!\\nLo que construyeron nuestros edificios de $building_space_command$ el mes pasado, a partir de #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_levels')|0]#! niveles en estados que controlamos. Cada nivel construye según su método de producción, en función de su dotación de personal: #v 0,5#! con Astilleros orbitales, #v 1#! con Astilleros de fusión, #v 1,5#! con Astilleros de antorcha, #v 2#! con Astilleros de antimateria. Un Mando espacial en un estado ocupado no construye nada."
- },
- "je_space_race_widget_sc_reserve_label": {
-  "en": "Reserve",
-  "es": "Reserva"
  },
  "je_space_race_widget_sc_reserve_tt": {
   "en": "#header Ground Reserve#!\\nHulls built and still on the ground: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_war')|0]#! warships, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_rapid')|0]#! rapid response, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_siege')|0]#! siege ships, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_carrier')|0]#! assault carriers, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_tender')|0]#! tenders. They go up together as one fleet, so an enemy holding Earth orbit faces them all at once rather than a month's worth at a time. With Auto on they join the home fleet each month while no hostile fleet is at Earth; Launch sends them up at any time, through a blockade too. Nothing leaves while our launch site is occupied.",
@@ -6387,17 +6375,9 @@
   "en": "#R Our launch site is occupied.#! Nothing leaves Earth, no module is fabricated and the reserve can't launch until we control the state of our $building_space_program$ again.",
   "es": "#R Nuestro centro de lanzamiento está ocupado.#! No sale nada de la Tierra, no se fabrica ningún módulo y la reserva no puede lanzarse hasta que volvamos a controlar el estado de nuestro $building_space_program$."
  },
- "je_space_race_widget_sc_strength_label": {
-  "en": "Fleet strength",
-  "es": "Fuerza de la flota"
- },
  "je_space_race_widget_sc_strength_tt": {
   "en": "#header Fleet Strength#!\\nAll our fleets' strength now, and at full. Damage is repaired at a dock while we have a $building_space_command$: #v 20%#! of the gap a month at Earth, #v 10%#! a Spaceport level at a colony.",
   "es": "#header Fuerza de la flota#!\\nLa fuerza actual de todas nuestras flotas y su fuerza máxima. Los daños se reparan en un muelle mientras tengamos un $building_space_command$: #v 20%#! de la diferencia al mes en la Tierra, #v 10%#! por nivel de Puerto espacial en una colonia."
- },
- "je_space_race_widget_sc_upkeep_label": {
-  "en": "Upkeep",
-  "es": "Mantenimiento"
  },
  "je_space_race_widget_sc_upkeep_tt": {
   "en": "#header Fleet Upkeep#!\\nMore of the maintenance goods our $building_space_command$ uses: #v +900%#! for every 10 strength at full, the reserve included. The line itself is #v 20#! $electronic_components$, #v 20#! $telephones$, #v 20#! $radios$, #v 10#! $digital_assets$, #v 20#! $robotics$ and #v 40#! $fertilizer$ a week at full staff, whatever the method and levels. It slows construction only if those goods can't be bought. A nation runs one: of two, the smaller goes (on a tie, the capital's stays).",

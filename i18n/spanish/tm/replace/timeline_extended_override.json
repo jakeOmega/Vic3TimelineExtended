@@ -511,6 +511,14 @@
   "en": "Provisional Acceptance",
   "es": "Aceptación provisional"
  },
+ "setting_free_construction_scaled_player_exemption": {
+  "en": "No Effect",
+  "es": "Sin efecto"
+ },
+ "setting_free_construction_scaled_player_exemption_desc": {
+  "en": "Does nothing in Timeline Extended, which removes the base [concept_construction] this rule scales. Base construction comes from the $rule_free_market_construction_rule$ rule instead: a flat 10 a week with it disabled. With it enabled, construction is bought on the market.",
+  "es": "No hace nada en Timeline Extended, que elimina la [concept_construction|l] base que esta regla escala. La construcción base procede en su lugar de la regla $rule_free_market_construction_rule$: 10 fijos a la semana si está desactivada. Si está activada, la construcción se compra en el mercado."
+ },
  "state_building_construction_sector_max_level_add_desc": {
   "en": "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.",
   "es": "Cada punto permite que un [concept_state|l] aloje a #v 1 000#! personas más antes de que el [concept_migration_crowding|l] reduzca su [concept_migration_pull|l], por poca [concept_arable_land|l] que tenga. El $state_migration_crowding_density_mult$ del Estado multiplica a estas personas igual que a su tierra."
