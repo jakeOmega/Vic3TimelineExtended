@@ -123,9 +123,10 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   culture of the merge is a primary culture here, or a state here is a homeland of one: ``involving_cultures``); the
   effects file ``te_cmg_<m>_tell``, which ``te_cmg_dominance_all`` runs at the end of a merge's pass when a culture
   switched in it, and a ``te_cm_tell_start`` call at the end of each ``te_cmg_start_<m>``. The loc file gains
-  ``te_cmg_<m>_core_names`` and ``common/customizable_localization/te_culture_merges_generated_custom_loc.txt`` the
-  culture-typed ``te_cm_core_names`` that picks it by result (``render_custom_loc``), so one generic text names the
-  cultures a merge folds into its result.
+  ``te_cmg_<m>_core_names`` and ``te_cmg_<m>_core_switched``, and
+  ``common/customizable_localization/te_culture_merges_generated_custom_loc.txt`` the culture-typed ``te_cm_core_names``
+  and ``te_cm_core_switched`` that pick them by result (``render_custom_loc``), so one generic text names the cultures a
+  merge folds into its result, and says they have switched with the verb their number takes.
 * The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
   complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
   starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
@@ -2986,7 +2987,11 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             _part_labels([p for p in merge.core if p.cultures[0] != merge.result]), result)
         # The cultures the merge folds into its result, for the notices' "to merge <these> into <result>"
         # (te_cm_core_names, the generated custom loc keyed on the result).
-        out[core_names_key(merge)] = _part_labels([p for p in merge.core if p.cultures[0] != merge.result])
+        folded = [p for p in merge.core if p.cultures[0] != merge.result]
+        out[core_names_key(merge)] = _part_labels(folded)
+        # The same cultures, and the verb their number takes, for the completion's "<these> have all switched to
+        # <result>": an absorb merge with one other core culture reads "$occitan$ has switched".
+        out[core_switched_key(merge)] = _core_switched_phrase(folded)
         out[entry + "_complete_conclusion_desc"] = (
             "The merge is complete. %s is the national culture across the sphere, and the cultures it brought in are one people." % result
         )
@@ -3043,6 +3048,7 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
                 % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0"))
             )
     out[CORE_NAMES_FALLBACK] = "its constituent cultures"
+    out[CORE_SWITCHED_FALLBACK] = "its constituent cultures have all switched"
     for text_key, text in out.items():
         if '"' in text or "\n" in text:
             raise ValueError("%s: a loc text can't hold a quote mark or a newline" % text_key)
@@ -3051,35 +3057,55 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
 
 CORE_NAMES = "te_cm_core_names"
 CORE_NAMES_FALLBACK = "te_cmg_core_names_none"
+CORE_SWITCHED = "te_cm_core_switched"
+CORE_SWITCHED_FALLBACK = "te_cmg_core_switched_none"
 
 
 def core_names_key(merge: cfg.Merge) -> str:
     return "te_cmg_%s_core_names" % merge.key
 
 
+def core_switched_key(merge: cfg.Merge) -> str:
+    return "te_cmg_%s_core_switched" % merge.key
+
+
+def _core_switched_phrase(parts) -> str:
+    """The cultures a merge folds in, with the verb their number takes: ``$occitan$ has switched``, ``$north_german$ and
+    $south_german$ have all switched``. One slot is one culture, whatever alternatives it lists."""
+    if not parts:
+        raise ValueError("a merge folds no culture into its result")
+    names = _part_labels(parts)
+    return "%s has switched" % names if len(parts) == 1 else "%s have all switched" % names
+
+
 def render_custom_loc(merges: tuple[cfg.Merge, ...] | None = None) -> str:
-    """``te_cm_core_names``, a culture-typed custom loc: called on a merge's result culture, it gives the core cultures
+    """Two culture-typed custom locs, called on a merge's result culture. ``te_cm_core_names`` gives the core cultures
     the merge folds into it (``$north_german$ and $south_german$``), so one generic event or notice can say "to merge
-    <these> into <result>" for any merge (the notices, events/te_culture_merge_events.txt). Vanilla calls its demonyms
-    the same way (``[SCOPE.sCulture('x').GetCustom('getPluralDemonym')]``). Every merge's result is its own, so the
-    result names the merge; the last text, with no trigger, is the fallback for any other culture."""
+    <these> into <result>" for any merge (the notices, events/te_culture_merge_events.txt); ``te_cm_core_switched`` gives
+    them with the verb their number takes (``$occitan$ has switched``), for "<these> have all switched to <result>".
+    Vanilla calls its demonyms the same way (``[SCOPE.sCulture('x').GetCustom('getPluralDemonym')]``). Every merge's
+    result is its own, so the result names the merge; the last text, with no trigger, is the fallback for any other
+    culture."""
     merges = cfg.MERGES if merges is None else merges
     results = [m.result for m in merges]
     if len(set(results)) != len(results):
         raise ValueError("two merges share a result, which then can't name its merge")
     out = _Script()
     out.line(HEADER)
-    out.line("# Culture scope = a merge's result: the core cultures the merge folds into it, for the culture merge notices.")
-    out.line()
-    with out.block(CORE_NAMES):
-        out.line("type = culture")
-        out.line("random_valid = no")
-        for merge in merges:
+    out.line("# Culture scope = a merge's result: the core cultures the merge folds into it, for the culture merge notices;")
+    out.line("# te_cm_core_switched gives them with the verb their number takes (one culture \"has switched\").")
+    for name, key_of, fallback in ((CORE_NAMES, core_names_key, CORE_NAMES_FALLBACK),
+                                   (CORE_SWITCHED, core_switched_key, CORE_SWITCHED_FALLBACK)):
+        out.line()
+        with out.block(name):
+            out.line("type = culture")
+            out.line("random_valid = no")
+            for merge in merges:
+                with out.block("text"):
+                    out.line("trigger = { cu:%s ?= this }" % merge.result)
+                    out.line("localization_key = %s" % key_of(merge))
             with out.block("text"):
-                out.line("trigger = { cu:%s ?= this }" % merge.result)
-                out.line("localization_key = %s" % core_names_key(merge))
-        with out.block("text"):
-            out.line("localization_key = %s" % CORE_NAMES_FALLBACK)
+                out.line("localization_key = %s" % fallback)
     return out.text()
 
 

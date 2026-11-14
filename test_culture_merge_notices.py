@@ -17,8 +17,10 @@ Files under test:
   te_cm_tell_complete, te_cm_ev_clear_part, te_cm_ev_note_part)
 * common/scripted_triggers/te_culture_merge_triggers.txt (te_cm_tied_to)
 * the generated te_cmg_<m>_involves, te_cmg_<m>_tell, te_cmg_dominance_all's marks and te_cmg_start_<m>'s call, the
-  custom loc te_cm_core_names and the loc te_cmg_<m>_core_names (scripts/generators/gen_culture_merges.py)
+  custom locs te_cm_core_names and te_cm_core_switched and the loc te_cmg_<m>_core_names and te_cmg_<m>_core_switched
+  (scripts/generators/gen_culture_merges.py)
 * events/te_culture_merge_events.txt (.2, .3, .4), common/messages/extra_messages.txt (the two notices) and their loc
+* events/te_debug_cm_events.txt (option C runs the tells, so it is click-only)
 
 The script can't run offline. The tell effects are run here through a small interpreter of the forms they use, over
 made-up countries, so a test asks who hears what rather than what the text looks like.
@@ -393,29 +395,59 @@ class GeneratedTest(unittest.TestCase):
         self.assertEqual(squash(everything).count("id = te_culture_merge.2 }"), 1)
         self.assertEqual(squash(everything).count("id = te_culture_merge.3 popup = yes"), 1)
 
-    def test_the_custom_loc_names_each_merges_core_by_its_result(self):
+    def test_the_custom_locs_name_each_merges_core_by_its_result(self):
         self.assertTrue(CUSTOM_LOC.read_bytes().startswith(BOM))
         nodes, _ = parse_text(CUSTOM_LOC.read_text(encoding="utf-8-sig"), CUSTOM_LOC.name)
         names = {n.key: n for n in nodes}
-        self.assertEqual(list(names), ["te_cm_core_names"])
-        node = names["te_cm_core_names"]
-        self.assertEqual(child(node, "type").value, "culture")
-        self.assertEqual(child(node, "random_valid").value, "no")
-        texts = children(node, "text")
-        self.assertEqual(len(texts), len(cfg.MERGES) + 1)
-        for merge, text in zip(cfg.MERGES, texts):
-            self.assertEqual(child(text, "localization_key").value, "te_cmg_%s_core_names" % merge.key)
-            key = "te_cmg_%s_core_names" % merge.key
-            self.assertIn(key, LOC)
-            # The core cultures but an absorb merge's own result, each spliced, never spelled.
-            for part in merge.core:
-                if part.cultures[0] == merge.result:
-                    self.assertNotIn("$%s$" % merge.result, LOC[key], merge.key)
-                else:
-                    self.assertIn("$%s$" % part.cultures[0], LOC[key], merge.key)
+        self.assertEqual(list(names), ["te_cm_core_names", "te_cm_core_switched"])
+        for name, suffix in (("te_cm_core_names", "core_names"), ("te_cm_core_switched", "core_switched")):
+            node = names[name]
+            self.assertEqual(child(node, "type").value, "culture", name)
+            self.assertEqual(child(node, "random_valid").value, "no", name)
+            texts = children(node, "text")
+            self.assertEqual(len(texts), len(cfg.MERGES) + 1, name)
+            for merge, text in zip(cfg.MERGES, texts):
+                self.assertEqual(child(text, "trigger").children[0].key, "cu:%s" % merge.result, merge.key)
+                key = "te_cmg_%s_%s" % (merge.key, suffix)
+                self.assertEqual(child(text, "localization_key").value, key)
+                self.assertIn(key, LOC)
+                # The core cultures but an absorb merge's own result, each spliced, never spelled.
+                for part in merge.core:
+                    if part.cultures[0] == merge.result:
+                        self.assertNotIn("$%s$" % merge.result, LOC[key], merge.key)
+                    else:
+                        self.assertIn("$%s$" % part.cultures[0], LOC[key], merge.key)
+            self.assertIsNone(child(texts[-1], "trigger"), name)
+            self.assertIn(child(texts[-1], "localization_key").value, LOC, name)
         self.assertIn("cu:cm_german ?= this", squash(CUSTOM_LOC.read_text(encoding="utf-8-sig")))
-        self.assertIsNone(child(texts[-1], "trigger"))
-        self.assertIn(child(texts[-1], "localization_key").value, LOC)
+
+    def test_the_switched_phrase_takes_the_verb_its_number_takes(self):
+        # One culture folded in (seven absorb merges: French takes in Occitan) "has switched"; several "have all switched".
+        self.assertEqual(LOC["te_cmg_french_core_switched"], "$occitan$ has switched")
+        self.assertEqual(LOC["te_cmg_german_core_switched"], "$north_german$ and $south_german$ have all switched")
+        self.assertEqual(LOC["te_cmg_core_switched_none"], "its constituent cultures have all switched")
+        singles = []
+        for merge in cfg.MERGES:
+            folded = [p for p in merge.core if p.cultures[0] != merge.result]
+            names = LOC["te_cmg_%s_core_names" % merge.key]
+            phrase = LOC["te_cmg_%s_core_switched" % merge.key]
+            if len(folded) == 1:
+                singles.append(merge.key)
+                self.assertEqual(phrase, names + " has switched", merge.key)
+            else:
+                self.assertEqual(phrase, names + " have all switched", merge.key)
+        self.assertEqual(sorted(singles), ["british", "dutch", "finnish", "french", "hungarian", "japanese", "persian"])
+
+    def test_the_completion_lines_read_the_switched_phrase(self):
+        lines = ["te_culture_merge.4.d", "te_culture_merge.4.d_homeland", "te_culture_merge.4.d_primary",
+                 "notification_te_cm_merge_complete_notice_desc"]
+        phrase = "[SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName]"
+        for key in lines:
+            self.assertIn(phrase, LOC[key], key)
+        # No line pairs the bare names with a plural verb any more, which a one-culture merge would misread.
+        for key, text in LOC.items():
+            self.assertNotIn("GetCustom('te_cm_core_names')] have", text, key)
+            self.assertNotIn("GetCustom('te_cm_core_names')] has", text, key)
 
 
 class HelperTest(unittest.TestCase):
@@ -492,7 +524,8 @@ class EventsTest(unittest.TestCase):
             text = LOC[key]
             used = set(re.findall(r"SCOPE\.s(?:Culture|Country)\('(\w+)'\)", text))
             self.assertEqual(used - allowed, set(), key)
-            self.assertNotIn("GetCustom", text.replace("GetCustom('te_cm_core_names')", ""), key)
+            bare = text.replace("GetCustom('te_cm_core_names')", "").replace("GetCustom('te_cm_core_switched')", "")
+            self.assertNotIn("GetCustom", bare, key)
             # Only .3 and .4's branches that name it read the culture of ours; only those are sent with it saved.
             if "te_cm_ev_own_part" in text:
                 self.assertTrue(key.startswith(("te_culture_merge.3.", "te_culture_merge.4.d_")), key)
@@ -514,6 +547,17 @@ class EventsTest(unittest.TestCase):
                                    'notification_type = feed color = neutral', name)
             for suffix in ("name", "desc", "tooltip"):
                 self.assertIn("notification_%s_%s" % (name, suffix), LOC)
+
+
+
+class DebugConsoleTest(unittest.TestCase):
+    def test_option_c_runs_the_tells_only_on_a_click(self):
+        # Option C runs te_cmg_dominance_all, whose tells send events and notices; its tooltip walk must not reach them.
+        body = squash(block(text_of(ROOT / "events/te_debug_cm_events.txt"), "te_debug_cm.1"))
+        option_c = body[body.index("name = te_debug_cm.1.c"):body.index("name = te_debug_cm.1.d_option")]
+        self.assertIn("set_variable = te_dbg_click if = { limit = { has_variable = te_dbg_click } "
+                      "remove_variable = te_dbg_click te_cmg_dominance_all = yes }", option_c)
+        self.assertEqual(body.count("te_cmg_dominance_all = yes"), 1)
 
 
 if __name__ == "__main__":
