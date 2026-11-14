@@ -12,16 +12,21 @@ Image keys:
     scale          resize the screenshot first (the 2941 px laws shot uses 0.68)
     crop           (x0, y0, x1, y1) to crop the screenshot first
     column         width of a caption column added at the right
+    margin         blank canvas added at each side, so a narrow panel shot is wide enough
+                   for its header without a caption column
     column_region  (x0, y0, x1, y1): stack the captions over an empty part of the shot instead
     gap            space between stacked captions (default 26, times u)
-    callouts       list of callouts, below; numbered top to bottom when rendered
+    callouts       list of callouts, below; may be empty (the header alone). Two or more
+                   captions are numbered top to bottom when rendered; a lone one has no number
     stats          list of headline cards: at, w, big, lines, big_size, line_size
     brand          the small corner label (default "Timeline Extended"; None hides it)
 
 Callout keys:
     box            (x0, y0, x1, y1): frame this, with its number at a corner
     pt             (x, y): point an arrow here instead of framing anything
-    title, body    the caption
+    title, body    the caption. The title is required: a frame with no caption says nothing
+                   (owner, 2026-11-13: "I don't think the frames without the annotations
+                   make sense")
     pad            frame padding (default 6)
     badge_at       the frame corner for the number: tl (default), tr, bl, br
     badge          False hides the frame's number
@@ -29,6 +34,26 @@ Callout keys:
     y              pin a column caption's top
     arrow          draw an arrow from the caption (default: only for `at` captions)
     from, to       arrow ends: l r t b tl tr bl br, on the caption and the target
+
+When a callout earns its place (owner, 2026-11-13: "sometimes the image speaks for
+itself and the annotations are more noise than anything"):
+    none   for a shot of one thing: a map, an event, a list, a chart, or a small panel
+           whose own text explains it
+    cut    a caption that repeats the image's header or a tooltip in the shot
+    few    on a dense panel, and only on what the system is mainly about. Take the
+           header's own terms where its subtitle lists them: 01 (tourism, climate,
+           wealth), 05 (a census by age and sex: the census and the pyramid), 07 (hold,
+           release or lose: stability and the colony list). Otherwise take the panel's
+           top-level parts: 06's two lists, 08's sub-tabs.
+Never caption a side panel while a main one goes unmarked. A first cut of 05 skipped the
+pyramid as self-evident and captioned Causes of Death and Family Policy, and the owner
+asked why those two: "some of this feels arbitrary". "Obvious" is a reason to drop an
+image's captions altogether, not to skip its centerpiece and caption around it.
+Where the shot has an empty part, stack the captions over it (column_region): an added
+column with two captions in it is mostly blank. A narrow panel shot with no captions
+takes a margin, not a column. A lone caption has no number, so give it an arrow.
+A frame never stands without a caption: 01 was tried with its four frames alone, and
+the owner's answer is quoted under the callout keys.
 
 Counts in the text were taken from the mod files on 2026-11-06: 191
 technologies in eras VI to XIII; 39 new law groups; about 1,035 visible events
@@ -40,8 +65,8 @@ the technologies, laws and law groups, and test_workshop_composites.py checks th
 figures here against it; recount the others before reusing one.
 """
 
-IMAGE_KEYS = {"src", "title", "subtitle", "u", "scale", "crop", "column", "column_region",
-              "gap", "callouts", "stats", "brand"}
+IMAGE_KEYS = {"src", "title", "subtitle", "u", "scale", "crop", "column", "margin",
+              "column_region", "gap", "callouts", "stats", "brand"}
 CALLOUT_KEYS = {"box", "pt", "title", "body", "pad", "badge_at", "badge", "at", "w", "y",
                 "arrow", "from", "to"}
 STAT_KEYS = {"at", "w", "big", "lines", "big_size", "line_size"}
@@ -54,8 +79,6 @@ def validate(spec: dict) -> list[str]:
     for k in ("src", "title"):
         if not spec.get(k):
             out.append(f"missing {k!r}")
-    if not spec.get("callouts") and not spec.get("stats"):
-        out.append("no callouts and no stats")
     placed_in_column = False
     for i, co in enumerate(spec.get("callouts", []), 1):
         where = f"callout {i} ({co.get('title', '?')})"
@@ -67,7 +90,7 @@ def validate(spec: dict) -> list[str]:
             if not (x0 < x1 and y0 < y1):
                 out.append(f"{where}: box {co['box']} is not (x0, y0, x1, y1)")
         if not co.get("title"):
-            out.append(f"{where}: missing 'title'")
+            out.append(f"{where}: missing 'title' (a frame always has a caption)")
         for k in ("from", "to", "badge_at"):
             if k in co and co[k] not in SIDES:
                 out.append(f"{where}: {k} {co[k]!r} is not one of {sorted(SIDES)}")
@@ -82,48 +105,40 @@ def validate(spec: dict) -> list[str]:
 
 SPECS = {}
 
+# The one shot where pointing is the point: a mostly base-game panel with the mod's
+# blocks in it. The three captions are the subtitle's three (tourism, wealth, climate);
+# Arable Land lost its frame with its caption.
 SPECS['01_state_panel'] = dict(
     src='Screenshot 2026-11-06 140931.png', u=0.95, column=700,
     title='State Panels', subtitle='tourism, climate and wealth in every state',
     callouts=[
         dict(box=(18, 325, 652, 568), title='Tourism',
              body='Output and throughput by source, each with a bar toward its cap'),
-        dict(box=(343, 943, 652, 1068), title='Arable Land',
-             body='What technology and regional effects add to the land'),
         dict(box=(20, 1083, 330, 1240), title='Dynastic Wealth',
              body="The state's score, heading for its target, and the property effects it brings"),
         dict(box=(343, 1083, 652, 1326), pad=4, title='Local Climate',
              body='Heat, winter, sun, water and malaria; Comfort weighs on migration'),
     ])
 
+# The tooltip in the shot gives the cause; only the stripes need saying. The rule is the
+# player guide's (01-introduction.md): at least half as many deaths as the leading cause.
 SPECS['02_leading_cause_map'] = dict(
     src='Screenshot 2026-11-06 140822.png', u=0.8,
     title='Leading Cause of Death', subtitle='one of 29 maps in the Map Room',
     callouts=[
-        dict(box=(450, 612, 996, 772), pad=3, at=(560, 175), w=500,
-             title='Colored by cause',
-             body='Each state takes the color of what killed most of its people',
-             **{'from': 'b', 'to': 't'}),
         dict(pt=(480, 830), at=(630, 776), w=760,
              title='Stripes: a close second',
-             body='Another cause with half the deaths or more',
+             body='At least half as many deaths as the leader',
              **{'from': 'l'}),
     ])
 
 SPECS['03_map_room'] = dict(
     src='Screenshot 2026-11-06 134136.png', u=1.0,
     title='The Map Room', subtitle='29 world maps, one click each',
-    callouts=[
-        dict(box=(50, 316, 602, 762), at=(720, 450), w=560,
-             title='29 world maps',
-             body='The economy, the climate, the census, and a map for each system',
-             **{'from': 'l', 'to': 'r'}),
-        dict(box=(1155, 970, 1502, 1083), pad=3, at=(686, 790), w=360,
-             title='Hover any state',
-             body="for its figure: Hawaii's Base Appeal is +100%",
-             **{'from': 'r', 'to': 'tl'}),
-    ])
+    callouts=[])
 
+# Kept at four: the owner called this one "great" (2026-11-06), and each caption gives
+# a rule (the veto, what builds a case) that the panel's headings don't.
 SPECS['04_united_nations'] = dict(
     src='Screenshot 2026-11-06 134035.png', u=1.15, column=640,
     title='The United Nations', subtitle='resolutions, vetoes, missions and dues',
@@ -138,22 +153,20 @@ SPECS['04_united_nations'] = dict(
              body='Infamy, aggression and defiance build the case for a condemnation or sanctions'),
     ])
 
+# The subtitle's two: the census and the pyramid. The captions lie over the History
+# charts, which are empty a year into the game.
 SPECS['05_demographics'] = dict(
-    src='Screenshot 2026-11-06 134003.png', u=1.15, column=640,
+    src='Screenshot 2026-11-06 134003.png', u=1.0, gap=20,
+    column_region=(690, 932, 1290, 1425),
     title='Demographics', subtitle='a census by age and sex in every state',
     callouts=[
         dict(box=(18, 85, 628, 470), title='The census',
              body='Births, deaths, life expectancy, fertility and migration'),
         dict(box=(678, 132, 1290, 790), title='Population pyramid',
              body='Men and women by age, with an outline twenty years ahead'),
-        dict(box=(1338, 132, 1950, 428), title='Causes of death',
-             body='Infection, chronic illness, accidents, work, childbirth and war'),
-        dict(box=(1338, 455, 1950, 1046), title='Family policy',
-             body='The measures your family law allows, each with its cost'),
-        dict(box=(18, 690, 628, 1312), title='Wealth and inheritance',
-             body='What each law adds to the Dynastic Wealth target'),
     ])
 
+# The panel's two lists. Monument policy and the opportunities were left out: a judgment.
 SPECS['06_grand_monuments'] = dict(
     src='Screenshot 2026-11-06 133913.png', u=0.9, gap=14,
     column_region=(716, 424, 1300, 1132),
@@ -161,32 +174,25 @@ SPECS['06_grand_monuments'] = dict(
     callouts=[
         dict(box=(698, 205, 1308, 402), title='Your monuments',
              body='Raise more to your crown, faith or nation; grandeur grows with age'),
-        dict(box=(1358, 240, 1965, 905), arrow=True, title='Carry off trophies',
-             body="A rival's treasures add to your grandeur; their homeland wants them back",
-             **{'from': 'r', 'to': 'l'}),
-        dict(box=(38, 475, 648, 600), arrow=True, title='Monument policy',
-             body='Tourism, legitimacy, culture or education', **{'from': 'l', 'to': 'r'}),
-        dict(box=(38, 1000, 648, 1138), pad=3, arrow=True, title='Opportunities',
-             body='Interest groups ask for monuments of their own', **{'from': 'l', 'to': 'r'}),
+        dict(box=(1358, 240, 1965, 905), title='Carry off trophies',
+             body="A rival's treasures add to your grandeur; their homeland wants them back"),
     ])
 
+# The subtitle's terms: stability is what holds or loses them, the list is where you
+# release them. The tab bar's caption ("Every system, one window") was about the window,
+# not this system, and went.
 SPECS['07_colonial_empire'] = dict(
     src='Screenshot 2026-11-06 133839.png', u=0.9, gap=30,
     column_region=(18, 180, 410, 960),
     title='Colonial Empire', subtitle='hold your colonies, release them, or lose them',
     callouts=[
-        dict(box=(428, 110, 2040, 156), pad=4, title='Every system, one window',
-             body='Each system has a tab in the Timeline Extended window'),
         dict(box=(426, 217, 935, 502), title='Colonial stability',
              body='Programs prop it up; condemnation by great powers drags it down'),
-        dict(box=(1471, 392, 2071, 732), pad=3, at=(1505, 752), w=575,
-             title='Hover for the full cost',
-             body="Each program's upkeep and effects, level by level",
-             **{'from': 't', 'to': 'b'}),
         dict(box=(426, 522, 935, 868), title='Your colonies',
              body='Living standard and GDP of each, with a Release button'),
     ])
 
+# Three of the Space Race tab's four sub-tabs: Mission Control, Fleets, Colonies.
 SPECS['08_space_race'] = dict(
     src='Screenshot 2026-11-06 152026.png', u=0.95, gap=18,
     column_region=(1362, 462, 1975, 1432),
@@ -194,29 +200,16 @@ SPECS['08_space_race'] = dict(
     callouts=[
         dict(box=(85, 240, 612, 326), title='Eight milestones',
              body='A flag marks each one your country reached first'),
-        dict(box=(40, 398, 640, 444), title='Standard, Safe or Ambitious',
-             body='Trade speed against the risk of a setback'),
         dict(box=(40, 885, 650, 1442), pad=3, title='Colonize the solar system',
              body='Race rivals for 40 sites, from the Moon outward'),
         dict(box=(700, 592, 1310, 818), title='Space fleets',
              body='Station, blockade and interdict; land marines to seize a colony'),
-        dict(box=(1360, 285, 1972, 442), title='Orbit',
-             body='Debris, satellites and anti-satellite strikes'),
     ])
 
 SPECS['09_laws'] = dict(
-    src='Screenshot 2026-11-06 170524.png', scale=0.68, u=1.05, column=720, gap=22,
+    src='Screenshot 2026-11-06 170524.png', scale=0.68, u=1.05,
     title='166 New Laws', subtitle='and 39 new law groups',
-    callouts=[
-        dict(box=(15, 658, 953, 881), title='New technology',
-             body='Internet, frontier AI, genetic rights, automation'),
-        dict(box=(15, 890, 953, 1527), title='Ministries',
-             body='Science, intelligence, the environment and more'),
-        dict(box=(1000, 890, 1936, 997), title='Amendments',
-             body="Attach amendments to the mod's laws"),
-        dict(box=(1983, 425, 2920, 765), title='Rights and society',
-             body='LGBTQ+ rights to human augmentation'),
-    ])
+    callouts=[])
 
 SPECS['10_technology'] = dict(
     src='Screenshot 2026-11-06 170438.png', u=1.0,
@@ -228,34 +221,17 @@ SPECS['10_technology'] = dict(
 )
 
 SPECS['11_banking'] = dict(
-    src='Screenshot 2026-11-06 170342.png', u=0.85, gap=14,
-    column_region=(240, 410, 900, 800),
+    src='Screenshot 2026-11-06 170342.png', u=0.85,
     title='Boom & Bust Cycle', subtitle='34 history charts, each opens full size',
-    callouts=[
-        dict(box=(15, 89, 597, 302), pad=4, arrow=True, title='The cycle at a glance',
-             body='Cycle value, momentum, policy stance, bubble', **{'from': 't', 'to': 'b'}),
-        dict(box=(985, 390, 1328, 412), pad=6, arrow=True, title='Markers flag policies and crashes',
-             body='Hover a bar for what happened that month', **{'from': 'tr', 'to': 'bl'}),
-        dict(box=(906, 532, 1680, 801), pad=4, badge_at='tr', title='Every month, colored by phase',
-             body='From Panic and Downturn to Boom and Frenzy'),
-    ])
+    callouts=[])
 
 SPECS['12_construction_market'] = dict(
-    src='Screenshot 2026-11-06 170858.png', u=0.75, column=600,
+    src='Screenshot 2026-11-06 170858.png', u=0.75, margin=300,
     title='Construction Market', subtitle="based on TOGFan's mod",
-    callouts=[
-        dict(box=(85, 322, 572, 360), pad=4, title='Fix the amount or the budget',
-             body='Buy a set number of points, or spend a set sum each week'),
-        dict(box=(22, 458, 642, 592), pad=3, title='A market for construction',
-             body='The state and private investors buy points; demand drives the price'),
-    ])
+    callouts=[])
 
+# No callouts, and none on the picture: never highlight art (it is AI-generated).
 SPECS['13_nuclear_event'] = dict(
-    src='Screenshot 2026-11-06 170716.png', u=1.0, column=600,
+    src='Screenshot 2026-11-06 170716.png', u=1.0,
     title='Over 1,000 New Events', subtitle='nuclear crises, elections, the space race',
-    callouts=[
-        dict(box=(735, 138, 1322, 298), title='Nuclear crises',
-             body='Threats, alerts and stand-downs between armed powers'),
-        dict(box=(740, 792, 1314, 954), title='Every choice costs',
-             body='Raise the alert, offer a stand-down, or back down'),
-    ])
+    callouts=[])
