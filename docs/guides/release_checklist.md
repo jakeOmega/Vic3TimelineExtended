@@ -34,4 +34,4 @@ Expected on such a branch, by design: `organize_loc.py --check` wants to move th
    git tag <version> && git push origin <version>
    gh release create <version> --title <version> --notes-file docs/releases/<version>.md
    ```
-3. Workshop description: point the player guide link at the tag (`.../tree/<version>/docs/player_guide/README.md`), so it shows the guide that shipped, and keep the text under Steam's 8,000-character limit. Record it in `docs/audits/steam_workshop_description.md`.
+3. Workshop description: point the player guide link at the tag (`.../tree/<version>/docs/player_guide/README.md`), so it shows the guide that shipped, and keep the text under Steam's 8,000-character limit. Record it in `docs/audits/steam_workshop_description.md`. Redraw the description's images first (`scripts/image_pipeline/workshop_composites.py --preview`): their figures are counted when they are drawn, so an old upload can be out of date.

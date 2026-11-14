@@ -5,18 +5,16 @@ The description for the Workshop as of 1.3.1 (2026-11-09; the text is 1.3.0's wi
 - **Length.** Steam caps a description at 8,000 characters. This one is 7,848 characters (7,902 UTF-8 bytes, 7,941 counting each line break as two), so it fits however Steam counts. Measure after an edit: `python3 -c "import sys;t=open(sys.argv[1],encoding='utf-8').read().strip();print(len(t),len(t.encode()),len(t)+t.count(chr(10)))" <file>`.
 - **Player guide link.** Point it at the release's tag (`/tree/<version>/docs/player_guide/README.md`), not `main`, so it shows the guide that shipped. See `docs/guides/release_checklist.md`.
 
-## Images to add
+## Images in the description
 
-The Workshop page's screenshots (2026-11-06) are annotated by `scripts/image_pipeline/workshop_screenshots.py`: a header naming the system, numbered callouts, and headline counts on the overview shots. Their counts come from the mod files; the description below still gives older ones (about 160 technologies in 7 eras, 36 buried sites, against 191, eras VI to XIII, and 50), so bring it in line when it is next published.
+Steam shows `[img]URL[/img]` in a description, the URL a direct link to the image file, and `[url=...][img]...[/img][/url]` makes one a link. Read 2026-11-13:
 
-When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these locations in the BBCode block below:
+- **Width.** Steam's `workshop.css` caps a description image at 630 px (`.workshopItemDescription img { max-width: 630px; }`), so draw them 1260 px wide, sharp on high-DPI screens, and judge each at 630.
+- **Length.** The URL counts toward the 8,000 characters: with its tags, a Steam-hosted image (`images.steamusercontent.com/ugc/...`) takes about 114, a GitHub raw link about 115, an imgur one about 43.
+- **Hosts.** Of the 60 most-subscribed Victoria 3 mods, 23 embed images: imgur in 14 of them, then postimg, ibb, seeusercontent and Steam's own host; 33 of the images are links. Imgur has blocked visitors from the UK since 2025-09-30, its images embedded elsewhere included, so don't host there. A GitHub raw link (`https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/<path>`) keeps the images with the release they describe and is served as an image that other sites may embed; whether Steam shows one is untested, so try one in the description editor's preview first. Another mod's raw BBCode, to see how it embeds: `POST https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/` with `itemcount=N&publishedfileids[0]=<id>...` (no key; item pages rate-limit).
+- **Text in an image** isn't searchable or translated, and vanishes with its host. The draft below keeps the systems' names as text.
 
-1. **Hero image** — between the tagline italic and the `[hr]` above "At a glance". Strongest candidates: Saturn V / lunar landing, a flooded-coastline or wildfire climate scene, or a UN founding scene. Pick whichever best matches the timeline framing.
-2. **Banking Cycle JE** — after the Banking Cycle bullet. Mid-cycle screenshot with the phase indicator on a non-stable phase (Boom or Downturn) and the policy buttons + progress bar in frame.
-3. **Space Race JE** — after the Space Race bullet. Milestone progress and the contested-site map; mid-game with a couple of milestones already claimed by other countries reads more dramatic than an empty start.
-4. **UN panel** — after the United Nations bullet. Authority bar, Security Council seats, and ideally an active vote / resolution. Bonus if a specialized agency tab is visible.
-5. **Civil Rights JE** — after the Social Movements bullet. Support progress bar plus the pro/anti/coopt policy button grid. Alternative: an event image from a movement event chain (feminist / LGBTQ+ / environmental).
-6. **Laws panel** — under the "Laws and ideologies" header. Filtered to a uniquely-modern lawgroup (cryptocurrency / surveillance / AI governance / post-scarcity) so the visible options are obviously not vanilla. Alternative: a single-law detail view for a flagship law like UBI or Mass Surveillance.
+`scripts/image_pipeline/workshop_composites.py` draws the description images (a hero, an at-a-glance card, the eras, the systems as cards, a section heading) and the carousel's state-picture image, with their figures counted from the mod files when they are drawn; `workshop_screenshots.py` annotates the carousel's screenshots (2026-11-06). See `docs/guides/python_tools.md`.
 
 ```bbcode
 [h1]Vic3TimelineExtended[/h1]
@@ -107,6 +105,74 @@ The mod changes vanilla ideologies, production methods, state-region data, and s
 Report bugs here or on the [url=https://github.com/jakeOmega/Vic3TimelineExtended/issues]issue tracker[/url], ideally with steps to reproduce, [i]error.log[/i] or [i]debug.log[/i] snippets, and a save. Feedback on unclear mechanics is welcome.
 
 The mod contains AI-generated event images, icons, and some flavor text. Hand-written text and hand-drawn art are welcome through issues or pull requests.
+
+[h1]Links and credits[/h1]
+[list]
+[*][url=https://github.com/jakeOmega/Vic3TimelineExtended]Source repository[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3257202613]Free Market Construction[/url] by [b]TOGFan[/b] — the basis for the construction-market subsystem; recommended on its own if you want just that mechanic.
+[/list]
+```
+
+## Draft for the next release
+
+Not yet published. The description above with six images from `workshop_composites.py` in place of the at-a-glance list, the systems' paragraphs and the technology paragraph, and these changes to the text: Victoria 3 1.15.1, 50 buried sites (not 36), a State Pictures line, state pictures in the AI disclosure, and American spelling (program, licenses, programs). With six Steam-hosted URLs it is 4,781 characters counting each line break as two, so about 3,200 are free. Moving only the hero, the at-a-glance card and the eras into images saves nothing: 8,124, over the limit. `desc_hero_eras` is a hero with no pictures in it, for `desc_hero_ages`. Before publishing, point the guide link at the release's tag and put each image's URL in place of its `<... URL>`.
+
+```bbcode
+[h1]Vic3TimelineExtended[/h1]
+
+[b]Updated for Victoria 3: 1.15.1.[/b]
+
+[i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
+
+[img]<desc_hero_ages.jpg URL>[/img]
+
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.1/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
+
+[img]<desc_at_a_glance.jpg URL>[/img]
+[list]
+[*]New goods, production chains, company buildings, and megastructures
+[*]New combat units, ship classes, treaty articles, decrees, and companies
+[*]Visual dashboards and dedicated controls, with new tabs in the Budget, Society, Diplomacy, Military, and Market panels
+[*]Toggleable game rules for the major systems
+[*]English, plus machine-translated German and Spanish; English fallback for other languages
+[/list]
+
+[hr][/hr]
+
+[img]<desc_systems_1.jpg URL>[/img]
+[img]<desc_systems_2.jpg URL>[/img]
+[img]<desc_systems_3.jpg URL>[/img]
+Banking and Monetary Policy, Space Race, Global Warming, Demographics, United Nations, Global Commons, Nuclear Weapons, Decolonization, Covert Warfare, Cultural Hegemony, Modern Military, Social Movements, Free Market Construction, Power Grids, Courts and Judiciary, Grand Monuments and Archaeology, Legislated Tax Code (experimental), Healthcare and Biotechnology, Internal Resettlement.
+
+[h2]More ways to shape your country[/h2]
+
+[b]Tourism[/b] — Historic sites, pollution, turmoil, infrastructure, and air travel shape demand.
+[b]Strategic Reserves[/b] — Stockpile food, fuel, and military supplies; buy low, release in shortages.
+[b]Dynastic Wealth[/b] — Inheritance laws decide who inherits; great fortunes strengthen elites and feed bubbles.
+[b]Migration and Homelands[/b] — Crowded states attract fewer migrants, and homelands form or dissolve with acceptance and population.
+[b]Living-Standard Expectations[/b] — A long boom makes a later downturn harder to accept.
+[b]Power Blocs[/b] — New principles and identities, with names that reflect your bloc's members.
+[b]State Pictures[/b] — The state banner follows technology, city size, and wealth: 356 new pictures of cities, ports, mines, farms, smog, and ruins.
+[b]Personal Play Options[/b] — Heir education, custom religions, aptitude traits for all adults, and a World War system.
+
+[hr][/hr]
+
+[h1]Technology, laws, and society[/h1]
+
+[img]<desc_eras.jpg URL>[/img]
+Build space elevators, orbital solar collectors, and antimatter facilities.
+
+Shape inheritance, minority rights, the courts, financial regulation, family policy, internet governance, genetic modification, and universal basic income, or entrench two parties with first past the post. New ministries cover science, the environment, intelligence, and urban planning. New ideologies include environmentalists, anti-colonialists, transhumanists, and business-interest movements, alongside Green, Populist, and Technocratic parties.
+
+[h1]Compatibility[/h1]
+
+The mod changes vanilla ideologies, production methods, state-region data, and several interface panels, so mods editing the same content may conflict. Load this mod [b]last[/b]. Major systems can be switched off at game setup, but the baseline technologies, laws, and buildings remain.
+
+[h1]Feedback and AI-generated content[/h1]
+
+Report bugs here or on the [url=https://github.com/jakeOmega/Vic3TimelineExtended/issues]issue tracker[/url], ideally with steps to reproduce, [i]error.log[/i] or [i]debug.log[/i] snippets, and a save. Feedback on unclear mechanics is welcome.
+
+The mod contains AI-generated event images, state pictures, icons, and some flavor text. Hand-written text and hand-drawn art are welcome through issues or pull requests.
 
 [h1]Links and credits[/h1]
 [list]
