@@ -913,7 +913,7 @@ lists the art. Needs Full Colonies and at least two fleets (`event te_debug_spac
    months), and the roll-up arrow at the right edge. Nothing overlaps and no label ends in "...".
 2. **Ships by role.** Five cells: Warships, Rapid, Siege, Carriers, Tenders, each with its icon, its count beside it
    and its word beneath. A role the fleet has none of shows its icon faint and a 0. Hovering any cell gives the
-   fleet's ships, each role of its full number. The icons are painted (the dark grey warship, a silver dart, a bronze
+   fleet's ships, each role of its full number. The icons are painted (the silver warship, a pale dart, a bronze
    gunship behind one big gun, a grey carrier with three orange bays, an orange tank): can the five be told apart at
    24 px, lit and faint?
 3. **The bars.** Strength, km/s, Supply and Marines, each a caption, a bar and "now/full" under it. A fleet fresh from

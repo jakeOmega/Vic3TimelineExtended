@@ -2393,15 +2393,16 @@ ICONS: dict[str, dict[str, dict]] = {
             "subject": "a squadron of four armed military rocket spacecraft in low orbit seen from the side, flying "
                        "from left to right, each a dark grey cylindrical rocket stage with no wings, gun turrets "
                        "and missile pods along its hull and a cluster of engine bells at the stern trailing a long "
-                       "bright orange flame, plain unmarked hulls, the dark night side of the Earth with scattered "
-                       "city lights curving along the bottom under a thin blue horizon glow, black starry space above",
+                       "bright orange flame that lights its hull, plain unmarked hulls, the dark night side of the "
+                       "Earth with scattered warm city lights curving along the bottom, black starry space above",
             "seed": None, "now": "gfx/event_pictures/orbital_arms_race.dds"},
         "fleet_banner_chemical_v3": {
             "subject": "three heavy grey armoured space cruisers of the near future in low orbit seen from the "
                        "side, flying from left to right, each built of cylindrical rocket fuel tanks and boxy "
                        "modules bolted together, bristling with gun turrets and radar dishes, big rocket engine "
-                       "bells at the stern trailing long bright orange flames, plain unmarked hulls, sunrise "
-                       "breaking gold over the curved edge of the Earth behind them, black starry space above",
+                       "bells at the stern trailing long bright orange flames that light their hulls, plain "
+                       "unmarked hulls, the dark curve of the night side of the Earth below them with one thin line "
+                       "of orange dawn along its edge, black starry space above",
             "seed": None, "now": "gfx/event_pictures/orbital_arms_race.dds"},
         "fleet_banner_torch_v2": {
             "subject": "three needle-thin silver warships seen exactly from the side, flying level from left to "
@@ -4242,8 +4243,9 @@ ICONS.update({
                         "marks": [{"icon": f"{_GI}/generic_icons/population.dds", "at": (0.74, 0.74), "scale": 0.46}],
                         "now": f"{_GI}/generic_icons/employment_not_full.dds"},
         # The fleet cards (2026-11-14), each on the line pictogram of its own name until now. The
-        # Warships role is the Locations warship itself, already seen from the side.
-        "role_war": {"from": "space/warship", "now": f"{_GI}/space_race_icons/role_war.dds"},
+        # Warships role is the Locations warship in silver: as it is, dark grey, it sank into the
+        # card's dark ground at 24 px and was gone at the 30% of a role the fleet has none of.
+        "role_war": {"from": "space/warship", "tint": "silver", "now": f"{_GI}/space_race_icons/role_war.dds"},
         # A fleet's four postures (20 px, over the word on its button): one world, and what the fleet
         # does about it. The list's scenes (a ship parked on an orbit ring, a line of ships held off,
         # ships diving, a stopped freighter) are specks at that size, so each is the world under one

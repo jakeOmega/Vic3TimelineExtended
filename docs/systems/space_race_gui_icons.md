@@ -124,7 +124,7 @@ Each fleet in Space Fleets is a card (`te_sr_fleet_row`; owner, 2026-11-14): its
 | Where | Shows | File |
 |---|---|---|
 | A card's emblem (24 px, in the head's inset box) | a gold shield badge, a silver chevron band across it under a small silver star | `fleet.dds` |
-| Warships (24 px, lit with any, 30% with none, as every role) | the Locations warship (`warship.dds`), which is already seen from the side | `role_war.dds` |
+| Warships (24 px, lit with any, 30% with none, as every role) | the Locations warship (`warship.dds`) in silver: dark grey, it sank into the card's ground at 24 px | `role_war.dds` |
 | Rapid response | a slim silver dart of an interceptor, its swept fins tipped in blue | `role_rapid.dds` |
 | Siege ships | a bronze armored gunship built around one huge grey cannon barrel | `role_siege.dds` |
 | Assault carriers | a wide grey hull with three open hangar bays lit orange | `role_carrier.dds` |
@@ -141,7 +141,7 @@ Each fleet in Space Fleets is a card (`te_sr_fleet_row`; owner, 2026-11-14): its
 | Destroy (in Seize's place while the order is to destroy) | a burst (drawn) | `order_destroy.dds` |
 | The transit track's marker (18 px, on the bar at the share of the leg flown) | a filled dart (drawn) | `track_ship.dds` |
 
-The five roles sit side by side, lit or at 30%, so each has a silhouette and a color of its own: the dark grey warship, a silver dart, a bronze hull behind one gun, a grey box with orange bays, an orange tank. Four of the list's subjects changed, each for a reason the pipeline's notes already give (`icon_prompts.py`'s docstring):
+The five roles sit side by side, lit or at 30%, so each has a silhouette and a color of its own: the silver warship, a silver dart, a bronze hull behind one gun, a grey box with orange bays, an orange tank. Four of the list's subjects changed, each for a reason the pipeline's notes already give (`icon_prompts.py`'s docstring):
 
 - **Rapid response** was to trail a long blue exhaust. A glow cuts out to a grey blob, so the interceptor has none; its blue is on its fins and its nozzle.
 - **Siege ships** were to be dark grey, the warship's color; the hull is bronze, and the candidate with the most bulk was picked, since a long ship seen from the side is a sliver at 24 px.
