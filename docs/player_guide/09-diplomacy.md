@@ -131,7 +131,7 @@ gains leverage over it, and relations improve.
 | Extend Influence | Bloc leader | The leader gains leverage over the other country. |
 | Crisis Resolution | Bloc leader | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws. |
 | Education Aid | A more literate member | +10% education access for a recipient with a weak Ministry of Education or none. |
-| Healthcare Aid | A member with a Ministry of Health at level 3+ | For a recipient with a weak health system: +1 standard of living and, under Demographics' Full setting, 10 points of health care access and faster spread of medicine; without it, −5% mortality. |
+| Healthcare Aid | A member with a Ministry of Health at level 3+ | For a recipient with a weak health system: +1 standard of living and, under Demographics' Full setting, 10 points of health care access, faster spread of medicine and some treatment of infection even without the technologies; without it, −5% mortality. |
 | Security Aid | A member with a Ministry of Public Safety at level 3+ | −20% turmoil effects and lower liberty desire for a recipient with weak policing. |
 | Development Assistance | A member | +2 standard of living for the lower strata of a recipient whose primary cultures average below 15. |
 | Modernization Aid | A member with more technologies and a Ministry of Science at level 2+ | The recipient gains technology spread; the donor loses weekly innovation. |

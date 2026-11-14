@@ -1809,5 +1809,5 @@ country type off a principle too (`country_cultural_pull_add`, Cultural Hegemony
 5. **Malaria** (any rule). A member without Malaria Prevention owning a malarial state at tier III: the state's Local
    Climate tooltip shows its malaria part eased by a quarter; under Full its infection hover's Malaria line shrinks.
 6. **Healthcare Aid** (Full, then Disabled). A recipient's state heads for 10 points more Health Care Access, with no
-   health system too, and its mortality tooltip shows no line from the article; with the rule off, Laws and
+   health system too, its infection hover's treatment heads 10 points higher, and its mortality tooltip shows no line from the article; with the rule off, Laws and
    Institutions is 5% lower, as the article's own line was.

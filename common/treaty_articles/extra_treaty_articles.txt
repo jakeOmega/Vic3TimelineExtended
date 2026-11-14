@@ -455,10 +455,13 @@ healthcare_aid = {
 	# Healthcare principles' pair, flat, so it reaches a country with no health system. Under Full the census reads
 	# Health Care Access (40% + it) and Spread of Medicine and drops the absorbed mortality line; outside Full the moved
 	# lines' pair applies that line as the -5% mortality the article always gave (te_demog_lines_refresh).
+	# Treatment of Infection (owner, 2026-11-14): the aid brings the medicine, so a recipient without the technologies
+	# gains too. The one treatment line off a technology; the target's cap (0.99) holds it for an advanced recipient.
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200
 		state_health_care_access_add = 0.1
 		state_medical_diffusion_add = 0.1
+		state_infection_treatment_add = 0.1
 		state_demog_absorbed_mortality_mult = -0.05
 		state_standard_of_living_add = 1
 	}

@@ -112,14 +112,16 @@ class TestHealthcarePrinciples(unittest.TestCase):
 
 
 class TestHealthcareAid(unittest.TestCase):
-    """The article tiers IV and V unlock gives its recipient the ladder's pair, flat (owner, 2026-11-14)."""
+    """The article tiers IV and V unlock gives its recipient the ladder's pair, flat, and the one treatment line off
+    a technology: the aid brings the medicine (owner, 2026-11-14)."""
 
     ARTICLES = ROOT / "common" / "treaty_articles" / "extra_treaty_articles.txt"
 
     def test_the_recipient_takes_access_and_the_absorbed_line(self):
         body = _entry(self.ARTICLES.read_text(encoding="utf-8-sig"), "healthcare_aid")
         self.assertEqual(_block(body, "target_modifier"), {
-            "country_treaty_leverage_generation_add": 200.0, ACCESS: 0.1, SPREAD: 0.1, ABSORBED: -0.05,
+            "country_treaty_leverage_generation_add": 200.0, ACCESS: 0.1, SPREAD: 0.1,
+            "state_infection_treatment_add": 0.1, ABSORBED: -0.05,
             "state_standard_of_living_add": 1.0})
         self.assertEqual(_block(body, "source_modifier"), {COST: 0.1})
 
