@@ -13,7 +13,7 @@
  power_bloc_can_give_education_aid_bool:0 "Members Can Give Education Aid"
  power_bloc_can_give_education_aid_bool_desc:0 "Can give educational assistance to another country, at the cost of [concept_bureaucracy], increasing [concept_education_access] in the target country."
  power_bloc_can_give_healthcare_aid_bool:0 "Members Can Give Healthcare Aid"
- power_bloc_can_give_healthcare_aid_bool_desc:0 "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], decreasing mortality, increasing [concept_sol], and reducing [concept_pollution_impact] in the target country."
+ power_bloc_can_give_healthcare_aid_bool_desc:0 "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], widening [concept_health_care_access], decreasing mortality and increasing [concept_sol] in the target country."
  power_bloc_can_give_humanitarian_aid_bool:0 "Members Can Give Humanitarian Aid"
  power_bloc_can_give_humanitarian_aid_bool_desc:0 "Can give humanitarian aid to assist the poor in another country, increasing [concept_influence] and improving relations."
  power_bloc_can_give_science_aid_2_bool:0 "Members Can Give Large Science Aid"

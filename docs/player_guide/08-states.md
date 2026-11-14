@@ -842,7 +842,10 @@ count: a tenth of the gap at first, and up to just over a third once the
 Electric Telegraph, Modern Nursing, Radio, the World Wide Web and Telemedicine
 are researched. A party to the Global Pandemic Response, the convention that
 founds the World Health Organization, closes a further share, larger as the
-UN's enforcement rises. Under Full, the Medical Outreach decree closes a
+UN's enforcement rises. A power bloc's Healthcare principle closes a further
+twentieth from tier II and a tenth from tier IV, and adds a little health care
+access with each Ministry of Health level: half a point at tiers I and II, one
+point at III and IV, one and a half at V. Under Full, the Medical Outreach decree closes a
 further fifth of the gap at each count in one state. It can be issued only in a
 state whose next count would leave its medicine short of the targets, and it
 ends once the state has caught up. Turmoil raises deaths from accidents and
@@ -850,7 +853,9 @@ violence, by half at full turmoil. Where the map marks a state with malaria
 (most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
 from infection run higher, more so with severe malaria, until Malaria
 Prevention; Quinine protected colonists, not the people who lived there, so it
-changes nothing here.
+changes nothing here. A power bloc's Healthcare principle brings a quarter of
+malaria's toll under control at tier III and half from tier IV, for members
+still without Malaria Prevention.
 
 The Causes of Death section, on the tab for your country and on the subtab for
 one state, splits last year's deaths in a pie: infection and hunger, chronic
@@ -1074,6 +1079,11 @@ Contraception, Birth Limit and the Crash Campaign move births further, at their
 political price. The Children per Woman tooltips list family policy beside the
 other terms. Parental Leave's women's work counts toward the workforce as the
 women's rights laws' does.
+
+A power bloc's Healthcare principle cuts the money upkeep of Child Allowance,
+Family Housing, Parental Leave and Free Contraception for its members: by 10%
+at tier III, 20% at IV and 30% at V. A running measure's upkeep follows at your
+next yearly count. The authority upkeeps stay as they are.
 
 The AI starts the measures that raise births when its population shrinks or
 many of its people are old, and the ones that lower births in a famine, when

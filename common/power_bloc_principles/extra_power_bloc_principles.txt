@@ -3249,6 +3249,18 @@ principle_global_security_5 = {
 	}
 }
 
+# Healthcare (owner, 2026-11-14): the ladder works through the census (docs/systems/mod_systems/demographics.md,
+# "The Healthcare principles"). Technology decides what medicine can do (the treatment types stay on the
+# technologies); the bloc decides how far and how fast it reaches. Every tier restates the tier below.
+#   member_modifier (flat): the Health System's cost, which under Full offsets the census's health bill;
+#     Spread of Medicine and Malaria Control (census inputs; Malaria Control also eases Local Climate's malaria
+#     part, whatever the rule); Family Policy Upkeep (the measures' money upkeep, te_demog_ms_cost_*); Longevity
+#     Care Price Fall (the late game's market threshold).
+#   institution_modifier (a level of the Health System): Health Care Access under Full, paired with the absorbed
+#     mortality line the health laws carry, which the census drops under Full and the moved lines' pair applies
+#     outside it (te_demog_lines_refresh), so a tier still lowers deaths with the census off.
+# Access and the absorbed line show one decimal for the half-percent steps (owner, 2026-11-14).
+# test_healthcare_principles.py pins every line.
 principle_healthcare_1 = {
 	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
@@ -3269,6 +3281,8 @@ principle_healthcare_1 = {
 	institution = institution_health_system
 	institution_modifier = {
 		unit_recovery_rate_add = 0.05
+		state_health_care_access_add = 0.005
+		state_demog_absorbed_mortality_mult = -0.005
 	}
 
 	ai_weight = {
@@ -3298,13 +3312,17 @@ principle_healthcare_2 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.2
+		state_medical_diffusion_add = 0.05
 	}
 
 	institution = institution_health_system
 	institution_modifier = {
+		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		country_loyalism_increases_full_acceptance_mult = 0.02
+		state_health_care_access_add = 0.005
+		state_demog_absorbed_mortality_mult = -0.005
 	}
 
 	ai_weight = {
@@ -3322,15 +3340,19 @@ principle_healthcare_3 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.3
+		state_medical_diffusion_add = 0.05
+		state_malaria_control_add = 0.25
+		country_family_policy_upkeep_mult = -0.1
 	}
 
 	institution = institution_health_system
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
-		country_loyalism_increases_full_acceptance_mult = 0.02
+		state_health_care_access_add = 0.01
+		state_demog_absorbed_mortality_mult = -0.01
 	}
 
 	ai_weight = {
@@ -3348,7 +3370,11 @@ principle_healthcare_4 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.4
+		state_medical_diffusion_add = 0.1
+		state_malaria_control_add = 0.5
+		country_family_policy_upkeep_mult = -0.2
 	}
 
 	power_bloc_modifier = {
@@ -3359,9 +3385,8 @@ principle_healthcare_4 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
-		country_loyalism_increases_full_acceptance_mult = 0.02
-		country_authority_add = 50
+		state_health_care_access_add = 0.01
+		state_demog_absorbed_mortality_mult = -0.01
 	}
 
 	ai_weight = {
@@ -3379,7 +3404,12 @@ principle_healthcare_5 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.5
+		state_medical_diffusion_add = 0.1
+		state_malaria_control_add = 0.5
+		country_family_policy_upkeep_mult = -0.3
+		country_longevity_care_price_fall_mult = 0.25
 	}
 
 	power_bloc_modifier = {
@@ -3390,10 +3420,8 @@ principle_healthcare_5 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
-		country_loyalism_increases_full_acceptance_mult = 0.02
-		country_authority_add = 100
-		country_sol_expectations_target_add = -0.25
+		state_health_care_access_add = 0.015
+		state_demog_absorbed_mortality_mult = -0.015
 	}
 
 	ai_weight = {
