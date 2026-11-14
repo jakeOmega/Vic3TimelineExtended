@@ -139,6 +139,17 @@ Invalid left side during comparison 'var'
 
 `je_free_state` is shown while inactive (`is_shown_when_inactive`: a monarchy, `scramble_for_africa_complete`, no `free_state_created`), and its `status_desc` compares `var:free_state_international_opinion` with 90 and 45, a variable only the entry's own activation sets. So every frame the journal draws the inactive entry logs these three lines at each of the three `triggered_desc`s. In the owner's 1910 game (2026-11-03) it was 13,720 lines in 18 seconds with the journal open, enough to rotate all six error.log generations. The mod doesn't override the file. Vanilla bug; cosmetic, apart from the log volume.
 
+### `common/journal_entries/00_negotiation_quests_je.txt:973` — `je_negotiate_sol`'s timeout reads the interest group's promise variable with no guard
+- stack: vanilla only
+
+```
+Failed to fetch variable for 'promise_quest_degree' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+```
+
+The timeout of `je_negotiate_sol` (an interest group's promise to raise the standard of living, from the Iberian negotiation events) adds two and a half years when `scope:ig.var:promise_quest_degree = 4`, with a bare `=` and no `has_variable`. The variable is set on the interest group by vanilla's negotiation event (events/iberia_events/negotiation_events, in its `immediate`) and removed by vanilla's own promise clean-up (common/scripted_effects/04_negotiation_scripted_effects), so a timeout read after the clean-up, or for an interest group that never had it, logs these three lines; which of the two it was is not traced. 2026-11-13: five sets in four seconds of a 1945 game (7 and 8 February 1946), while the game ran. The mod has no file at this path and names neither the entry, the variable nor the promise effects anywhere. Vanilla bug; the timeout then takes its base seven and a half years.
+
 ### `common/journal_entries/00_communism.txt`, `events/communism.txt`, `events/election_events/*.txt`, `common/political_movements/02_cultural_movement.txt` — `leader = { ... }` without `has_leader` guard
 - stack: vanilla only
 
@@ -838,6 +849,15 @@ Invalid left side during comparison 'c'
 ```
 
 Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`, the Sick Man's `c:TUR`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries. 2026-10-25: the Sick Man's too, in a 1988 save without the Ottomans.
+
+### `common/journal_entries/00_acw_entries.txt:30` — `je_acw_countdown`'s completion removes the Missouri Compromise with no guard
+- stack: vanilla only
+
+```
+Timed modifier missouri_compromise in scope object
+```
+
+The entry's completion effect has a bare `remove_modifier = missouri_compromise`. The United States start with the modifier for fifty years, decaying (the country's history file), so it is gone by 1886 at the latest, while the entry stays active until slavery is banned or a civil war starts. From then on, drawing the completion effect's tooltip logs this line every frame: 1,947 lines in 17 seconds with the game paused (2026-11-13, 15 January 1947; the entry was held by the North American Union, the mod's formable that continues the United States). The mod does not override the file, and its one removal of the modifier (Algorithmic Governance's `on_activate`, in the mod's extra laws) is guarded with `has_modifier`. Vanilla bug; a flood only while that tooltip is open, but enough to rotate error.log in a minute.
 
 ### `common/political_movements/00_ideological_movements.txt:4947` — Div/0 in a movement's `state_weight`
 

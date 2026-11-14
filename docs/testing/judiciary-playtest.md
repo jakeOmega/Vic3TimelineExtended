@@ -29,6 +29,12 @@ Each later phase adds its own section, newest last, and a fixed item is struck t
 
 | `TE_SELF_CHECK BROKEN delayed_trigger_control` | once a game, at the fourth start of the two probes above: three runs, a month apart, gave no verdict | (it has no OK: a run that gives its verdicts never reaches it) | the control, a delayed event whose trigger held throughout, did not run, or the verdict event did not. A country lost three times over does not explain three runs. The two probes are unsettled, and delayed events may not be firing at all | read `debug.log` for `te_judiciary_events.11`–`.15` and run the issue's closing test by hand (below); until then treat no "cancels" trigger and no relay as proven |
 
+**First verdicts, 2026-11-13 (log triage of a 1945 game on 1.15.1): both OK.** `delayed_trigger_queue_probe` and
+`delayed_trigger_fire_probe` wrote OK for country D18 on 1 February 1945, four days after the save was loaded (the
+probe starts in the first country to pulse, in a loaded game as in a new one). Both halves of the delayed-event rule
+hold: an event whose trigger is false when it is queued is dropped, and the trigger is read again when the event is
+due. Nothing to change: the relays of #1596 are needed, and the "cancels" triggers cancel.
+
 No line from the two probes after a run means its flip or its control did not run (the country was gone); the probe
 starts again in another country a month later, three times at most, and then logs the line above and stops. The issue's own closing test, by hand with the QA harness, is the same
 pair: as any country, `set_variable` a flag the event's trigger reads after queueing the event with the trigger

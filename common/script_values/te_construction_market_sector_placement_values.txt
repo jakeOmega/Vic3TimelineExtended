@@ -10,45 +10,68 @@
 
 # ---- Sizing the sites: how the week's purchase becomes each site's throughput ----
 #
-# Every site carries the same throughput: the week's purchase over the
-# country's site levels. Staffing is not read (owner, 2026-11-13): a site is
-# taken to be fully staffed, or about to be. Its group hires at a rate of 1.0
-# and its method makes it a very attractive job
-# (building_job_attractiveness_mult on pm_te_construction_market_base), so a new
-# site fills within the week and keeps its ten laborers. A site delivers its
-# throughput times its real staffing, so the sites together deliver the
-# purchase when they are staffed and less while one is hiring; what is not
-# delivered is not paid for. They never deliver more than the purchase, which
-# is the failure to avoid: the government queue spends whatever the sites
-# deliver, at the treasury's cost.
+# Every site that has its crew carries the same throughput: the week's purchase
+# over the levels of the country's crewed sites. Staffing is not read (owner,
+# 2026-11-13); what is read is the mark the crew pass leaves on a site's state
+# (var:te_cm_site_crew, te_construction_market_site_crew in
+# te_construction_market_update_effects.txt). A crewed site is fully staffed:
+# it was placed with ten laborer jobs a level, took one laborer a level in its
+# first week, which is all a building may hire in a week, had its jobs cut to
+# that one (te_construction_market_crew_modifier), and was counted once a
+# weekly pass after the cut found it at 105% staffed or less. So the crewed
+# sites together deliver the purchase. A site still waiting for its first
+# laborer gets no throughput and is not counted, so it neither thins the
+# others' share nor adds to it once it hires. A site that has just been cut is
+# not counted either, and delivers nothing: it takes one more laborer at the
+# engine's next employment update, and a site of a save from before this rule
+# holds up to ten, and the engine lets them go only an update or two later.
+# A site is only ever counted at 105% staffed or less.
 #
-# Until 2026-11-13 each site had its own throughput, its share of the purchase
-# divided by its staffing, with a site under 10% staffed sized at ten times
-# its share. A site is placed unstaffed wherever construction starts, so a site
-# sized before its first hiring (by the weekly pulse, or by the player's
-# purchase buttons, which size the sites at once) was full days later and
-# delivered ten times its share until the next pulse: the purchase bought ten
-# times over, on the treasury (Workshop report: the cost of construction in the
+# They never deliver more than the purchase, which is the failure to avoid: the
+# government queue spends whatever the sites deliver, at the treasury's cost.
+# They deliver less in two cases, and what is not delivered is not paid for:
+#   - no site has a crew yet (a new country, or one whose capital's site has
+#     lost its laborer): nothing until a site has hired, been cut and settled,
+#     three or four weeks. Construction moving to a new state is not such a
+#     case: the capital's site always stands and carries the purchase while
+#     the new one hires;
+#   - a crewed site was removed since the pulse (construction ended in its
+#     state): the others keep their share until the next pulse, and if it was
+#     the only one beside the capital's, which is then standing by, nothing is
+#     delivered until that pulse.
+#
+# How it got here. Until 2026-11-13 each site had its own throughput, its share
+# of the purchase divided by its staffing, with a site under 10% staffed sized
+# at ten times its share, each written to one country variable that every site
+# re-read between pulses (Workshop report: the cost of construction in the
 # millions on a purchase of 50,000, the throughput 5,000%, 2,000%, then 15,000%
-# in three weeks). A country whose one site had just moved to a new state got
-# the full ten times.
+# in three weeks). #1770 gave every site one throughput and took each to be
+# full within the week; a site in fact hires one laborer in ten a week, so a
+# country whose construction moved between states got a fifth of its purchase
+# (docs/testing/ai-economy-playtest.md, "First verdict").
 
-# Country scope: the levels of the country's sites, summed. The market places
-# its sites at level 1, but a site kept from a direct game can have more, and
-# each level has its own ten laborers and delivers the throughput again.
+# Country scope: the levels of the country's crewed sites, summed, the capital's
+# left out while it stands by (te_construction_market_capital_site_standby in
+# te_construction_market_update_effects.txt). The market
+# places its sites at level 1, but a site kept from a direct game can have more,
+# and each level has its own laborer and delivers the throughput again.
 te_construction_market_site_levels = {
 	value = 0
 	every_scope_building = {
 		limit = {
 			is_building_type = te_construction_market_site
+			state = {
+				has_variable = te_cm_site_crew
+				NOT = { has_variable = te_cm_site_standby }
+			}
 		}
 		add = level
 	}
 }
 
 # Country scope: the multiplier of te_construction_market_capacity_modifier
-# (building_throughput_add = 1) on every site. The purchase over the site
-# levels, less the engine's own 1; 0 for a country with no site.
+# (building_throughput_add = 1) on every crewed site. The purchase over their
+# levels, less the engine's own 1; 0 for a country with no crewed site.
 te_construction_market_site_throughput = {
 	value = 0
 	if = {
