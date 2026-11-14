@@ -1476,7 +1476,7 @@ sr_disp_site_landing_daedalus = {
 }
 
 # Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,
-# the year it lands.
+# the share of its flight behind it, the year it lands.
 sr_disp_cf_slot_1 = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_1_site has_variable = sr_cf_1_arrive } value = 1 }
@@ -1485,6 +1485,18 @@ sr_disp_cf_slot_1_months = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_1_arrive } value = var:sr_cf_1_arrive subtract = te_history_month_index }
 	min = 0
+}
+sr_disp_cf_slot_1_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_1_arrive has_variable = sr_cf_1_depart }
+		value = te_history_month_index
+		subtract = var:sr_cf_1_depart
+		# a lunar fleet lands the month it leaves: never a division by nothing
+		divide = { value = var:sr_cf_1_arrive subtract = var:sr_cf_1_depart min = 1 }
+	}
+	min = 0
+	max = 1
 }
 sr_disp_cf_slot_1_year = {
 	value = 0
@@ -1500,6 +1512,18 @@ sr_disp_cf_slot_2_months = {
 	if = { limit = { has_variable = sr_cf_2_arrive } value = var:sr_cf_2_arrive subtract = te_history_month_index }
 	min = 0
 }
+sr_disp_cf_slot_2_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_2_arrive has_variable = sr_cf_2_depart }
+		value = te_history_month_index
+		subtract = var:sr_cf_2_depart
+		# a lunar fleet lands the month it leaves: never a division by nothing
+		divide = { value = var:sr_cf_2_arrive subtract = var:sr_cf_2_depart min = 1 }
+	}
+	min = 0
+	max = 1
+}
 sr_disp_cf_slot_2_year = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_2_arrive } value = var:sr_cf_2_arrive divide = 12 }
@@ -1513,6 +1537,18 @@ sr_disp_cf_slot_3_months = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_3_arrive } value = var:sr_cf_3_arrive subtract = te_history_month_index }
 	min = 0
+}
+sr_disp_cf_slot_3_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_3_arrive has_variable = sr_cf_3_depart }
+		value = te_history_month_index
+		subtract = var:sr_cf_3_depart
+		# a lunar fleet lands the month it leaves: never a division by nothing
+		divide = { value = var:sr_cf_3_arrive subtract = var:sr_cf_3_depart min = 1 }
+	}
+	min = 0
+	max = 1
 }
 sr_disp_cf_slot_3_year = {
 	value = 0
@@ -1528,6 +1564,18 @@ sr_disp_cf_slot_4_months = {
 	if = { limit = { has_variable = sr_cf_4_arrive } value = var:sr_cf_4_arrive subtract = te_history_month_index }
 	min = 0
 }
+sr_disp_cf_slot_4_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_4_arrive has_variable = sr_cf_4_depart }
+		value = te_history_month_index
+		subtract = var:sr_cf_4_depart
+		# a lunar fleet lands the month it leaves: never a division by nothing
+		divide = { value = var:sr_cf_4_arrive subtract = var:sr_cf_4_depart min = 1 }
+	}
+	min = 0
+	max = 1
+}
 sr_disp_cf_slot_4_year = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_4_arrive } value = var:sr_cf_4_arrive divide = 12 }
@@ -1542,6 +1590,18 @@ sr_disp_cf_slot_5_months = {
 	if = { limit = { has_variable = sr_cf_5_arrive } value = var:sr_cf_5_arrive subtract = te_history_month_index }
 	min = 0
 }
+sr_disp_cf_slot_5_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_5_arrive has_variable = sr_cf_5_depart }
+		value = te_history_month_index
+		subtract = var:sr_cf_5_depart
+		# a lunar fleet lands the month it leaves: never a division by nothing
+		divide = { value = var:sr_cf_5_arrive subtract = var:sr_cf_5_depart min = 1 }
+	}
+	min = 0
+	max = 1
+}
 sr_disp_cf_slot_5_year = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_5_arrive } value = var:sr_cf_5_arrive divide = 12 }
@@ -1555,6 +1615,18 @@ sr_disp_cf_slot_6_months = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_6_arrive } value = var:sr_cf_6_arrive subtract = te_history_month_index }
 	min = 0
+}
+sr_disp_cf_slot_6_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_6_arrive has_variable = sr_cf_6_depart }
+		value = te_history_month_index
+		subtract = var:sr_cf_6_depart
+		# a lunar fleet lands the month it leaves: never a division by nothing
+		divide = { value = var:sr_cf_6_arrive subtract = var:sr_cf_6_depart min = 1 }
+	}
+	min = 0
+	max = 1
 }
 sr_disp_cf_slot_6_year = {
 	value = 0

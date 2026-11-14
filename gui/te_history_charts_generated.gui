@@ -2286,9 +2286,11 @@ types te_history_charts_generated_types
 							skip_initial_animation = yes
 							alwaystransparent = yes
 							color = { 0.42 0.70 0.48 1.0 }
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.6', ScriptContainer.GetVariableValue('te_dg_h_cbr') ) )]"
+							### the axis runs to the year with the most births or deaths, 10 at least (te_demog_hist_bd_axis_shown); the
+							### floor is 1% of the axis, as 0.6 was of 60
+							value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown'), '(CFixedPoint)0.01' ), ScriptContainer.GetVariableValue('te_dg_h_cbr') ) )]"
 							min = 0
-							max = 60
+							max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown') )]"
 						}
 					}
 					widget = {
@@ -2304,9 +2306,9 @@ types te_history_charts_generated_types
 							skip_initial_animation = yes
 							alwaystransparent = yes
 							color = { 0.82 0.40 0.36 1.0 }
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.6', ScriptContainer.GetVariableValue('te_dg_h_cdr') ) )]"
+							value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown'), '(CFixedPoint)0.01' ), ScriptContainer.GetVariableValue('te_dg_h_cdr') ) )]"
 							min = 0
-							max = 60
+							max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown') )]"
 						}
 					}
 				}
@@ -2343,7 +2345,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "60"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -2429,9 +2431,9 @@ types te_history_charts_generated_types
 							skip_initial_animation = yes
 							alwaystransparent = yes
 							color = { 0.42 0.70 0.48 1.0 }
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.15', ScriptContainer.GetVariableValue('te_dg_h_cbr') ) )]"
+							value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown'), '(CFixedPoint)0.003' ), ScriptContainer.GetVariableValue('te_dg_h_cbr') ) )]"
 							min = 0
-							max = 60
+							max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown') )]"
 						}
 					}
 					widget = {
@@ -2447,9 +2449,9 @@ types te_history_charts_generated_types
 							skip_initial_animation = yes
 							alwaystransparent = yes
 							color = { 0.82 0.40 0.36 1.0 }
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.15', ScriptContainer.GetVariableValue('te_dg_h_cdr') ) )]"
+							value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown'), '(CFixedPoint)0.003' ), ScriptContainer.GetVariableValue('te_dg_h_cdr') ) )]"
 							min = 0
-							max = 60
+							max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown') )]"
 						}
 					}
 				}
@@ -2485,7 +2487,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "60"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -2569,28 +2571,30 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_signed = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_mig')]"
+					### the axis runs as far each way as the year with the largest net move, 2 at least
+					### (te_demog_hist_mig_axis_shown); the cap is 5% of the axis, as 1 was of 20
 					blockoverride "positive_values" {
 						min = 0
-						max = 20
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') )]"
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue('te_dg_h_mig') ) )]"
 					}
 					blockoverride "positive_cover_values" {
 						min = 0
-						max = 20
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), '(CFixedPoint)1' ) ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown'), '(CFixedPoint)0.05' ) ) ) )]"
 					}
 					blockoverride "positive_color" {
 						color = { 0.42 0.62 0.85 1.0 }
 					}
 					blockoverride "negative_values" {
-						min = -20
+						min = "[Negate_float( FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') ) )]"
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue('te_dg_h_mig') ) )]"
 					}
 					blockoverride "negative_cover_values" {
-						min = -20
+						min = "[Negate_float( FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') ) )]"
 						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), '(CFixedPoint)1' ) ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown'), '(CFixedPoint)0.05' ) ) ) )]"
 					}
 					blockoverride "negative_color" {
 						color = { 0.82 0.52 0.48 1.0 }
@@ -2629,14 +2633,14 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "+20"
+						raw_text = "+[Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
 						position = { 8 -6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "-20"
+						raw_text = "-[Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown')|0]"
 					}
 				}
 			}
@@ -2720,26 +2724,26 @@ types te_history_charts_generated_types
 					visible = "[ScriptContainer.HasVariable('te_dg_h_mig')]"
 					blockoverride "positive_values" {
 						min = 0
-						max = 20
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') )]"
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue('te_dg_h_mig') ) )]"
 					}
 					blockoverride "positive_cover_values" {
 						min = 0
-						max = 20
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), '(CFixedPoint)0.25' ) ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown'), '(CFixedPoint)0.013' ) ) ) )]"
 					}
 					blockoverride "positive_color" {
 						color = { 0.42 0.62 0.85 1.0 }
 					}
 					blockoverride "negative_values" {
-						min = -20
+						min = "[Negate_float( FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') ) )]"
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue('te_dg_h_mig') ) )]"
 					}
 					blockoverride "negative_cover_values" {
-						min = -20
+						min = "[Negate_float( FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown') ) )]"
 						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), '(CFixedPoint)0.25' ) ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown'), '(CFixedPoint)0.013' ) ) ) )]"
 					}
 					blockoverride "negative_color" {
 						color = { 0.82 0.52 0.48 1.0 }
@@ -2777,14 +2781,14 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "+20"
+						raw_text = "+[Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
 						position = { 8 -6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "-20"
+						raw_text = "-[Country.MakeScope.ScriptValue('te_demog_hist_mig_axis_shown')|0]"
 					}
 				}
 			}
@@ -2842,8 +2846,8 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_e0')]"
-					### the axis runs to the largest figure the samples hold, 100 to 10,000 (te_demog_hist_e0_axis_shown), and a bar
-					### stops at 10,000; the cap is 4% of the axis, as 4 was of 100
+					### the axis runs to the largest figure the samples hold, 10 to 10,000 (te_demog_hist_e0_axis_shown, which the
+					### axis's label prints), and a bar stops at 10,000; the cap is 4% of the axis, as 4 was of 100
 					blockoverride "values" {
 						min = 0
 						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown') )]"
@@ -2891,7 +2895,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "100"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -3008,7 +3012,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "100"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -3073,15 +3077,17 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_tfr')]"
+					### the axis runs to the largest figure the samples hold, 2 at least (te_demog_hist_tfr_axis_shown);
+					### the cap is 4% of the axis, as 0.32 was of 8
 					blockoverride "values" {
 						min = 0
-						max = 8
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.16', ScriptContainer.GetVariableValue('te_dg_h_tfr') ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown'), '(CFixedPoint)0.02' ), ScriptContainer.GetVariableValue('te_dg_h_tfr') ) )]"
 					}
 					blockoverride "cover_values" {
 						min = 0
-						max = 8
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_tfr'), '(CFixedPoint)0.32' ) ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_tfr'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown'), '(CFixedPoint)0.04' ) ) ) )]"
 					}
 					blockoverride "color" {
 						color = { 0.82 0.52 0.48 1.0 }
@@ -3120,7 +3126,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "8"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -3193,13 +3199,13 @@ types te_history_charts_generated_types
 					visible = "[ScriptContainer.HasVariable('te_dg_h_tfr')]"
 					blockoverride "values" {
 						min = 0
-						max = 8
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.04', ScriptContainer.GetVariableValue('te_dg_h_tfr') ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown'), '(CFixedPoint)0.005' ), ScriptContainer.GetVariableValue('te_dg_h_tfr') ) )]"
 					}
 					blockoverride "cover_values" {
 						min = 0
-						max = 8
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_tfr'), '(CFixedPoint)0.08' ) ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_tfr'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown'), '(CFixedPoint)0.01' ) ) ) )]"
 					}
 					blockoverride "color" {
 						color = { 0.82 0.52 0.48 1.0 }
@@ -3237,7 +3243,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "8"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_tfr_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -3302,15 +3308,17 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_median')]"
+					### the axis runs to the largest figure the samples hold, 10 at least (te_demog_hist_median_axis_shown);
+					### the cap is 4% of the axis, as 2.4 was of 60
 					blockoverride "values" {
 						min = 0
-						max = 60
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)1.2', ScriptContainer.GetVariableValue('te_dg_h_median') ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown'), '(CFixedPoint)0.02' ), ScriptContainer.GetVariableValue('te_dg_h_median') ) )]"
 					}
 					blockoverride "cover_values" {
 						min = 0
-						max = 60
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_median'), '(CFixedPoint)2.4' ) ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_median'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown'), '(CFixedPoint)0.04' ) ) ) )]"
 					}
 					blockoverride "color" {
 						color = { 0.55 0.62 0.78 1.0 }
@@ -3349,7 +3357,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "60"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom
@@ -3422,13 +3430,13 @@ types te_history_charts_generated_types
 					visible = "[ScriptContainer.HasVariable('te_dg_h_median')]"
 					blockoverride "values" {
 						min = 0
-						max = 60
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.3', ScriptContainer.GetVariableValue('te_dg_h_median') ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown'), '(CFixedPoint)0.005' ), ScriptContainer.GetVariableValue('te_dg_h_median') ) )]"
 					}
 					blockoverride "cover_values" {
 						min = 0
-						max = 60
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_median'), '(CFixedPoint)0.6' ) ) )]"
+						max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown') )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_median'), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown'), '(CFixedPoint)0.01' ) ) ) )]"
 					}
 					blockoverride "color" {
 						color = { 0.55 0.62 0.78 1.0 }
@@ -3466,7 +3474,7 @@ types te_history_charts_generated_types
 						position = { 8 6 }
 						autoresize = yes
 						using = fontsize_medium
-						raw_text = "60"
+						raw_text = "[Country.MakeScope.ScriptValue('te_demog_hist_median_axis_shown')|0]"
 					}
 					textbox = {
 						parentanchor = left|bottom

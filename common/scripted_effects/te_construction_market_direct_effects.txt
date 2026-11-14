@@ -26,8 +26,11 @@
 # what create_building does to a building that is already there, and a market
 # site's capacity modifier (te_construction_market_capacity_modifier, sized for
 # the market's weekly purchase and never refreshed in a direct game) goes with
-# the site that carried it. The site's workers are let go and hired back within
-# a week (its hiring rate is 1.0).
+# the site that carried it. The state's crew modifier goes too
+# (te_construction_market_clear_crew): it cuts the group's jobs by 90%, and a
+# direct game's site is a sector in that group. The site's workers are let go
+# and hired back a tenth of its jobs a week, as any building hires (measured on
+# market sites, 2026-11-13; the group's hiring rate of 1.0 has no effect).
 #
 # The tier is the sector's, except where a site stands that is real capacity
 # (an established direct game's, or one with no sector beside it): then the
@@ -43,6 +46,7 @@
 # removed 23 of 378 new sites in the week after a conversion (read live,
 # 2026-11-13).
 te_direct_construction_convert_state = {
+	te_construction_market_clear_crew = yes
 	if = {
 		limit = {
 			te_direct_construction_convert_uncapped_level > te_direct_construction_convert_target_level
@@ -410,6 +414,12 @@ te_direct_construction_convert_all = {
 		every_scope_state = {
 			te_direct_construction_forget_site_record = yes
 		}
+		# Every state, not only those converted below: a state whose market
+		# site was downsized away still carries its crew's cut, which would
+		# run a sector built there later on a tenth of its workers.
+		every_scope_state = {
+			te_construction_market_clear_crew = yes
+		}
 		every_scope_state = {
 			limit = {
 				any_scope_building = {
@@ -476,13 +486,15 @@ te_direct_construction_revert_all = {
 			remove_building = te_construction_market_site
 		}
 		# A site kept because its owner has no Urbanization serves as a market
-		# site, and the market's sites are level 1: each is sized for a share
-		# of the week's purchase (te_construction_market_site_throughput) and gives
-		# that times its level.
+		# site, and is made new for it, whatever its level: the market's sites
+		# are level 1, each sized for a share of the week's purchase
+		# (te_construction_market_site_throughput), and a kept site would hold
+		# its direct tier's workforce on the market method's ten jobs, at the
+		# engine's own throughput, until the first weekly pass saw it. Until
+		# 2026-11-14 only a site above level 1 was made new.
 		every_scope_state = {
 			limit = {
 				has_building = te_construction_market_site
-				b:te_construction_market_site.level > 1
 			}
 			remove_building = te_construction_market_site
 			te_construction_market_place_site = yes
@@ -705,7 +717,8 @@ te_direct_construction_base_self_check = {
 # against what the switch should have made (te_dc_switch_expected, counted by
 # te_direct_construction_count_made). To direct construction it is BROKEN when
 # fewer sites stand than expected, a Construction Sector is left, standing or
-# under construction, or a site still carries the market's capacity modifier;
+# under construction, or a site still carries the market's capacity modifier or
+# a state its crew modifier (both counted as stale);
 # to the market, when fewer sectors stand than expected, or none. capped is the
 # number of states whose levels the switch cut to what the builder can make: it
 # does not change the verdict, and tells what the switch cost.
@@ -724,6 +737,19 @@ te_direct_construction_switch_self_check = {
 	}
 	every_country = {
 		every_scope_state = {
+			if = {
+				# The variable, not has_modifier: the switch has just taken the
+				# modifier off in this same effect, where has_modifier still
+				# sees it (te_construction_market_remove_crew_cut).
+				limit = {
+					te_free_market_construction_off = yes
+					has_variable = te_cm_site_crew_cut
+				}
+				change_global_variable = {
+					name = te_dc_check_stale
+					add = 1
+				}
+			}
 			if = {
 				limit = {
 					has_building = te_construction_market_site

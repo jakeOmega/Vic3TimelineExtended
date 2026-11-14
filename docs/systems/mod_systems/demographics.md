@@ -243,9 +243,30 @@ Each acts only through the census, so nothing changes outside Full; under Displa
   drops "years" to fit): a `GreaterThan_CFixedPoint` switch at each,
   between a key holding the figure and the "over" text. The stored figures and `debug_log` lines stay exact. Past 100 the
   hover's note says what so long a figure means. The Life Expectancy chart's axis runs to the largest figure its samples
-  hold, at least 100 and at most 10,000 (`te_dg_h_e0_max`, `te_demog_history_e0_axis` in the history store; the chart
+  hold, at most 10,000 (`te_dg_h_e0_max`, `te_demog_history_axes` in the history store, next bullet; the chart
   reads `te_demog_hist_e0_axis_shown`, 100 while an old save holds none), and a bar
   stops at 10,000; the hover says so.
+- **The history charts' axes span what they show, and fit it** (owner, 2026-11-14). Five of the eight charts draw
+  figures with no fixed top, and each one's axis follows its samples up and down: Births and Deaths (the larger of the
+  two rates), Net Migration (the rate's size either way, the reach above and below the zero line), Life Expectancy
+  (10,000 at most), Children per Woman and Median Age. They were fixed at 0 to 60, ±20, 0 to 100, 0 to 8 and 0 to 60,
+  which cut off a late game's long lives and left its 1.3 children per woman at a sixth of the frame. At each census
+  `te_demog_history_axes` reads every sample once and stores `te_dg_h_<bd|mig|e0|tfr|median>_max` on the country: the
+  largest figure, never under a small minimum (`te_demog_hist_<axis>_axis_min` in `te_demog_display_values.txt`: 10
+  for births and deaths, life expectancy and median age, 2 for net migration and children per woman, so a chart of
+  near-zero figures doesn't draw its noise at full height), rounded up to a multiple of a step that grows with it (1
+  to 20, 5 to 50, 10 to 200, 50 to 500, 100 to 2,000, 500 to 5,000, then 1,000), so the label is a whole round number
+  and the axis stands at most a quarter over its tallest bar from 4 up. Figures like an 1836 country's (38 births per 1,000,
+  a life expectancy of 37, 5.3 children per woman, a median age of 22) draw on 40, 40, 6 and 25. The
+  bars' `max` (and Net Migration's lower `min`), their floor and cap (parts of the axis, so they keep their thickness)
+  and the axis's label all read `te_demog_hist_<axis>_axis_shown`. On a save whose census hasn't set the variable that
+  gives the old fixed axis (`te_demog_hist_<axis>_axis_unset`), not the minimum, which would cut most of its bars
+  off for up to a year. The axis is the whole store's, 100 years, whichever range is shown, so one extreme year (a war's
+  deaths) flattens the others until it leaves the store; an axis per range was left out for the bars' cost (three
+  script values a bar in place of one). Deaths by Cause, the Gini and Dynastic Wealth cannot pass their tops and keep
+  fixed axes. A revolution's winner reads its axes again over the joined list
+  (`te_history_repair_after_civil_war`). `test_demographics_chart_axes.py` runs the script over lists of samples and
+  holds both sizes of each chart to the one script value.
 - **Tests and checks**: `test_demographics_life_tail.py` (the script's tail in the fixed point, which rate each table
   takes, every shown figure behind the switch, the chart's axis); the model's tail and bounds in
   `test_demographics_model.py`; the golden's `SAFEGUARDS_DIGESTS`. In-game checks: `docs/testing/demographics-playtest.md`

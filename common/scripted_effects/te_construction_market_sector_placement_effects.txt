@@ -1,5 +1,9 @@
 ﻿# Construction-site placement, market games only: a site follows construction
-# into each state and leaves when it is done, with a fallback in the capital.
+# into each state and leaves when it is done, and one always stands in the
+# capital (owner, 2026-11-14). The capital's site keeps its laborer, so a
+# country never waits for a new site's first hire; it stands by, doing nothing,
+# while another site has a crew and nothing is being built in the capital
+# (te_construction_market_apply_per_site_modifier).
 # In direct games the sites are the Construction Sectors, built and expanded by
 # their owner, so on_start / on_end do nothing there.
 
@@ -7,7 +11,11 @@
 # can_build_government accept this create_building in a market game (see
 # common/buildings/te_construction_market_site.txt). A caller that already
 # raised it (te_construction_market_country_update_sites) keeps it raised.
+# A new site has no crew: whatever an earlier site left on the state goes
+# first, so this one starts with its ten jobs and can hire its laborer
+# (te_construction_market_site_crew).
 te_construction_market_place_site = {
+	te_construction_market_clear_crew = yes
 	if = {
 		limit = {
 			has_global_variable = te_cm_placing_site
@@ -30,22 +38,24 @@ te_construction_market_place_site = {
 	}
 }
 
-# Country scope, market games (te_construction_market_on_weekly_pulse). Sites
-# can be downsized, because direct games need that, so the player or the AI can
-# remove a market site. Capacity only needs one staffed site (the pulse spreads
-# the week's purchase over whichever remain), so this only restores the last one,
-# in the capital. It runs after the pulse has sized the sites, so the
-# replacement hires (at a rate of 1.0) before it is first sized; every site is
-# sized as full (te_construction_market_site_throughput), so the order no
-# longer costs anything either way. A country that has lost
+# Country scope, market games (te_construction_market_on_weekly_pulse, and
+# wherever a site is removed). The capital always has a site. Sites can be
+# downsized, because direct games need that, so the player or the AI can remove
+# a market site, the capital's too; this puts the capital's back. It runs after
+# the pulse has sized the sites; the new one takes its laborer in the week and
+# is counted at the next pulse (te_construction_market_site_crew). A state
+# whose site was downsized away keeps the crew's mark until a site stands there
+# again (te_construction_market_place_site clears it). A country that has lost
 # every state stays alive while its war goes on, with no capital to place in.
 te_construction_market_ensure_site = {
 	if = {
 		limit = {
 			exists = capital
-			NOT = {
-				any_scope_building = {
-					is_building_type = te_construction_market_site
+			capital = {
+				NOT = {
+					any_scope_building = {
+						is_building_type = te_construction_market_site
+					}
 				}
 			}
 		}
@@ -75,33 +85,9 @@ te_construction_market_state_on_start_market = {
 		}
 		te_construction_market_place_site = yes
 	}
-
-	owner = {
-		if = {
-			limit = {
-				capital = {
-					AND = {
-						any_scope_building = {
-							is_building_type = te_construction_market_site
-						}
-						NOT = {
-							any_scope_building = {
-								is_under_construction = yes
-							}
-						}
-					}
-				}
-			}
-			capital = {
-				remove_building = te_construction_market_site
-			}
-		}
-	}
-
-
-	# owner = {
-	# 	te_construction_market_apply_per_site_modifier = yes
-	# }
+	# The capital's site stays when construction starts elsewhere. Until
+	# 2026-11-14 it was removed here, and the country then built nothing until
+	# the new state's site had hired.
 }
 
 te_construction_market_state_on_end = {
@@ -129,20 +115,69 @@ te_construction_market_state_on_end_market = {
 			}
 		}
 		remove_building = te_construction_market_site
+		te_construction_market_clear_crew = yes
 	}
 	owner = {
+		te_construction_market_ensure_site = yes
+	}
+}
+
+# State scope, market games (te_construction_market_on_state_owner_change): the
+# state has just changed hands, by any path, with a Construction Site in it.
+# The site arrives with its laborer, its crew's mark and the old owner's
+# throughput, which the engine reads from now on off its new owner's variable:
+# with n sites of its own and k arrived ones the new owner would get
+# (n + k) / n times its purchase until its next weekly sizing. So the site is
+# taken out of the count here, at once: it goes if nothing is being built in
+# the state and the state is not the new owner's capital, and otherwise it
+# settles, at no throughput, until the new owner's next weekly pass counts it
+# (te_construction_market_site_crew). Nothing is sized here: one peace deal
+# changes many states' owners, and the sizing has one place.
+te_construction_market_site_arrived = {
+	te_construction_market_state_on_end_market = yes
+	if = {
+		limit = {
+			has_building = te_construction_market_site
+		}
+		# With its cut (the state kept its modifier and variables): settling,
+		# so the next weekly pass counts it if it is at 105% staffed or less.
 		if = {
 			limit = {
-				NOT = {
-					any_scope_building = {
-						is_building_type = te_construction_market_site
-					}
+				has_variable = te_cm_site_crew_cut
+			}
+			if = {
+				limit = {
+					has_variable = te_cm_site_crew
 				}
+				remove_variable = te_cm_site_crew
 			}
-			capital = {
-				te_construction_market_place_site = yes
+			if = {
+				limit = {
+					has_variable = te_cm_site_standby
+				}
+				remove_variable = te_cm_site_standby
 			}
-
+			set_variable = {
+				name = te_cm_site_crew_settling
+				value = 3
+			}
+		}
+		# Without it (whether a state keeps them through a transfer is not
+		# known): a site with no crew, which the next pass cuts like any other.
+		else = {
+			te_construction_market_clear_crew = yes
+		}
+		b:te_construction_market_site = {
+			if = {
+				limit = {
+					has_modifier = te_construction_market_capacity_modifier
+				}
+				remove_modifier = te_construction_market_capacity_modifier
+			}
+			add_modifier = {
+				name = te_construction_market_capacity_modifier
+				multiplier = -1
+			}
 		}
 	}
 }

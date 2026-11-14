@@ -49,6 +49,8 @@ show here. Each PR adds its own section, newest last, and a fixed item is struck
 | `TE_SELF_CHECK OK grid_mix_staffing` | At the first state that made 100 or more Electricity on its own last week and has a power plant, its plants' staffed weight over their full-staff weight (`staffed=`) is above 0 and at most 1, and its generation over its staffed weight (`measured_over_estimate=`) is 0.2 to 5: `occupancy` reads a power plant's staffed share, and the Generation panel's table (`te_grid_mix_output_per_level_value`) is a week's Electricity at full staff. | — |
 | `TE_SELF_CHECK BROKEN grid_mix_staffing` | `staffed=0.00`: the bare `occupancy` read returns nothing, so every state splits by full-staff weights (the panel still adds up, but a state's idle plants count as running). `staffed=` above 1: occupancy isn't a share. `measured_over_estimate=` outside 0.2 to 5: the table's figures aren't a week's goods a level (or that state's plants were struck or short of inputs; read a second game before acting). | `staffed=0.00`: read occupancy as `prev.occupancy` from a `root = { }` inside the building, as `te_grid_read_throughput_effect` reads the throughput, or drop the staffing from `te_grid_mix_staffed_output_value`. Above 1: divide by the read's scale. A scale far off in every game: check the table against a plant's panel output at full staff. |
 
+Verdicts read in log triages: `grid_mix_staffing` OK on 2026-11-13 (a 1945 game on 1.15.1, `staffed=0.80 measured_over_estimate=2.62`: inside the check's 0.2 to 5, though the state made more than two and a half times the table's full-staff figure).
+
 ## Phase 1: the Grid Transfer Station and the balancing (2026-10-22)
 
 | Check | Expect | If it fails |

@@ -128,8 +128,9 @@ def snapshot(logs_dir: str, out_dir: str, now: dt.datetime | None = None) -> dic
         "logs_dir": logs_dir,
         "files": copied,
         "unreadable": unreadable,
-        # The game flushes gui.log when it quits; a log written within a
-        # minute of the snapshot means it was probably still running.
+        # A log written within a minute of the snapshot means the game was
+        # probably still running. Not the reverse: a paused game writes
+        # nothing, and only the process list says it has quit.
         "game_running": bool(newest) and (now.timestamp() - newest) < 60,
         "crashes": list_crashes(os.path.join(os.path.dirname(os.path.normpath(logs_dir)), "crashes")),
     }
@@ -192,8 +193,29 @@ def stamp(entries: list, mtime: float) -> list:
     return out
 
 
-def read_snapshot(snap_dir: str) -> dict:
-    """{family: [Line]} in the order logged, oldest generation first."""
+def cut_off_line(path: str) -> str | None:
+    """The file's last line when the file does not end at a line break, else
+    None. The engine writes a log out a buffer at a time, so a log that is
+    still growing can stop in the middle of a line (gui.log, written out when
+    the game quits, sits at one 4,096-byte buffer until then), and a crash
+    leaves the last line wherever it got to."""
+    try:
+        with open(path, "rb") as fh:
+            size = fh.seek(0, os.SEEK_END)
+            fh.seek(max(0, size - 4096))
+            tail = fh.read()
+    except OSError:
+        return None
+    if not tail or tail.endswith((b"\n", b"\r")):  # "\r": whole, its "\n" is in the next buffer
+        return None
+    return tail.rsplit(b"\n", 1)[-1].decode("utf-8", errors="replace").rstrip("\r")
+
+
+def read_snapshot(snap_dir: str, cut: dict | None = None) -> dict:
+    """{family: [Line]} in the order logged, oldest generation first. A file
+    that stops in the middle of a line has its last entry left out, since
+    half a message matches no registry entry and reads as a new finding;
+    `cut[file]` gets the line as far as it was written."""
     families: dict[str, list[Line]] = collections.defaultdict(list)
     names = [n for n in os.listdir(snap_dir) if LOG_NAME_RE.fullmatch(n)]
 
@@ -205,6 +227,11 @@ def read_snapshot(snap_dir: str) -> dict:
         path = os.path.join(snap_dir, name)
         family = LOG_NAME_RE.fullmatch(name).group("family")
         entries = glr.parse_log(path)
+        unfinished = cut_off_line(path)
+        if unfinished is not None and entries:
+            entries = entries[:-1]  # a copy: parse_log caches the list
+            if cut is not None:
+                cut[name] = unfinished
         for e in entries:
             e.vanilla_bug_ref = None  # parse_log caches; tag afresh each run
         for entry, when in zip(entries, stamp(entries, os.path.getmtime(path))):
@@ -681,7 +708,8 @@ def report(snap_dir: str, docs_root: str = REPO_ROOT, mod_root: str | None = Non
            vanilla_game: str | None = None, git_ref: str | None = "origin/main",
            full: bool = False) -> str:
     mod_root = mod_root or docs_root
-    families = read_snapshot(snap_dir)
+    cut: dict[str, str] = {}
+    families = read_snapshot(snap_dir, cut)
     registries = Registries(docs_root, mod_root, vanilla_game)
     clock = Clock(families)
     lines = error_lines(families, registries)
@@ -695,10 +723,12 @@ def report(snap_dir: str, docs_root: str = REPO_ROOT, mod_root: str | None = Non
     out = [f"Log triage of {snap_dir}"
            + (f" (taken {manifest['taken_at']})" if manifest.get("taken_at") else "")]
     if manifest.get("game_running"):
-        out.append("The game was still running: gui.log is written when it quits, so read it "
-                   "again after, and the newest generation is still growing.")
+        out.append("A log was written in the last minute, so the game was probably running: the newest "
+                   "generation is still growing, and gui.log, written a buffer at a time, lags the rest.")
     for name in manifest.get("unreadable", []):
         out.append(f"UNREADABLE {name} (a OneDrive placeholder? no hits there is not evidence)")
+    for name in sorted(cut):
+        out.append(f"CUT OFF {name} stops in the middle of a line, which is not judged: {cut[name][:160]}")
 
     out.append("\n== Launches")
     out += launch_rows(families, clock, git_ref)

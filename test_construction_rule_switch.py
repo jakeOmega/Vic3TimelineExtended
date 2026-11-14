@@ -355,10 +355,13 @@ class ConversionTest(unittest.TestCase):
 
     def test_a_site_kept_for_want_of_urbanization_is_a_level_one_market_site(self):
         # The market sizes each site for a share of the week's purchase, and a site gives that times its level.
+        # Every kept site is made new, a level-1 one too (2026-11-14): it would otherwise hold its direct
+        # tier's workforce on the market method's ten jobs until the first weekly pass saw it.
         revert = body(self.effects, "te_direct_construction_revert_all")
-        kept = re.search(r"b:%s\.level\s*>\s*1\s*\}\s*remove_building\s*=\s*%s\s*"
+        kept = re.search(r"limit\s*=\s*\{\s*has_building\s*=\s*%s\s*\}\s*remove_building\s*=\s*%s\s*"
                          r"te_construction_market_place_site\s*=\s*yes" % (SITE, SITE), revert)
         self.assertIsNotNone(kept)
+        self.assertNotRegex(revert, r"b:%s\.level\s*>\s*1" % SITE)
         # After the walk that turns every other site into a sector: only a kept one is left to find.
         self.assertGreater(kept.start(), revert.index("te_direct_construction_revert_state_site = yes"))
 

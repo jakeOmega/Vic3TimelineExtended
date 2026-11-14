@@ -22,7 +22,7 @@ About four seconds, no server, safe while the game runs. It copies every generat
 
 From a worktree the script reads that worktree's registries and the main checkout's mod files, which is what you want. Don't `POST /reload` from a worktree.
 
-**Start with debug.log's view of things, but read all of it.** `error.log` holds script errors and some load-time validation that debug.log lacks; `game.log` repeats error.log's script errors and rotates later; `gui.log` holds layout and template lines and is only written out when the game quits. The report merges them and counts a line once.
+**Start with debug.log's view of things, but read all of it.** `error.log` holds script errors and some load-time validation that debug.log lacks; `game.log` repeats error.log's script errors and rotates later; `gui.log` holds layout and template lines and is written a buffer at a time, so it lags the session and can stop in the middle of a line. The report merges them and counts a line once.
 
 ## 2. Read the report, section by section
 

@@ -3,7 +3,7 @@
 The life tables sum person-years over the age groups, which end at 145-149; the survivors at 150 now live on at the death
 rate past 150 (demographics_model.tail_years, te_demog_lt_tail), in e0 and e65 alone. The panel shows e0 and e65 as they
 are up to 10,000 years and "over 10,000" past that; the stored figures stay exact. The Life Expectancy chart's axis runs to
-the largest figure its samples hold, 100 to 10,000, and a bar stops at 10,000. demographics-playtest.md has the in-game
+the largest figure its samples hold, 10 to 10,000, and a bar stops at 10,000. demographics-playtest.md has the in-game
 checks."""
 
 import re
@@ -207,7 +207,7 @@ class TestE0DisplayCap(unittest.TestCase):
 
 
 class TestE0ChartAxis(unittest.TestCase):
-    """The Life Expectancy chart: its axis te_dg_h_e0_max (100 to 10,000, the largest sample), a bar stopping at 10,000."""
+    """The Life Expectancy chart: its axis te_dg_h_e0_max (10 to 10,000, the largest sample), a bar stopping at 10,000."""
 
     def test_the_bars_read_the_axis_and_stop_at_the_cap(self):
         # the chart is its generated wrapper's (gen_te_history_charts.py)
@@ -224,19 +224,29 @@ class TestE0ChartAxis(unittest.TestCase):
     def test_the_axis_falls_back_where_no_census_has_set_it(self):
         eng = _Engine({})
         value = eng._tree(eng.values, "te_demog_hist_e0_axis_shown")
-        self.assertEqual(eng.value(value), P.E0_AXIS_MIN)          # a save from before: no te_dg_h_e0_max
+        # a save from before holds no te_dg_h_e0_max: the chart's old fixed axis, not the small minimum
+        self.assertEqual(eng.value(value), eng.number("te_demog_hist_e0_axis_unset"))
+        self.assertEqual(eng.number("te_demog_hist_e0_axis_unset"), 100)
+        self.assertLess(P.E0_AXIS_MIN, 100)
         eng.vars["te_dg_h_e0_max"] = 1708.9
         self.assertEqual(eng.value(value), 1708.9)
 
     def test_the_store_sets_the_axis_after_the_samples(self):
+        # the five axes are set together (test_demographics_chart_axes.py runs them); life expectancy's alone has a top
         text = _text(HISTORY_EFFECTS)
         record = _block(text, "te_demog_history_record")
-        self.assertGreater(record.index("te_demog_history_e0_axis = yes"), record.index("te_demog_history_markers = yes"))
-        axis = _block(text, "te_demog_history_e0_axis")
-        self.assertIn("set_local_variable = { name = te_dg_h_ax value = te_demog_k_e0_axis_min }", axis)
-        self.assertIn("variable = te_dg_hist", axis)
-        self.assertIn("max = te_demog_k_e0_shown_max", axis)
+        self.assertGreater(record.index("te_demog_history_axes = yes"), record.index("te_demog_history_markers = yes"))
+        axes = _block(text, "te_demog_history_axes")
+        self.assertIn("set_local_variable = { name = te_dg_hax_e0 value = te_demog_k_e0_axis_min }", axes)
+        self.assertIn("variable = te_dg_hist", axes)
+        self.assertIn("te_demog_history_axis_take = { AXIS = e0 VAR = te_dg_h_e0 }", axes)
+        cap = "value = { value = local_var:te_dg_hax_e0 max = te_demog_k_e0_shown_max }"
+        self.assertLess(axes.index(cap), axes.index("te_demog_history_axis_set = { AXIS = e0 }"))
 
+    def test_the_label_prints_the_axis(self):
+        (chart,) = [c for c in history_charts(_text(GUI)) if 'text = "te_demog_hist_e0_title"' in c]
+        self.assertIn("raw_text = \"[Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')|0]\"", chart)
+        self.assertNotIn('raw_text = "100"', chart)
 
 if __name__ == "__main__":
     unittest.main()

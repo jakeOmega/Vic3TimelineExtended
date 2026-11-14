@@ -408,3 +408,30 @@ on_building_built = {
 		te_construction_market_building_events.2
 	}
 }
+
+# ============================================================================
+# A STATE CHANGES HANDS (Root = the state, already its new owner's)
+# ============================================================================
+
+# Every path by which a state changes owner fires this, including those the
+# border hooks above do not see (a subject's state grant, a treaty transfer, an
+# annexation by diplomatic action). A Construction Site that came with the
+# state is taken out of its new owner's count at once
+# (te_construction_market_site_arrived). Market games only: in a direct game
+# the site is the sector and goes with the state like any building.
+on_state_owner_change = {
+	on_actions = {
+		te_construction_market_on_state_owner_change
+	}
+}
+
+te_construction_market_on_state_owner_change = {
+	trigger = {
+		te_free_market_construction_on = yes
+		has_building = te_construction_market_site
+		exists = owner
+	}
+	effect = {
+		te_construction_market_site_arrived = yes
+	}
+}
