@@ -10,7 +10,11 @@
 #   te_monetary_discover_union          from te_monetary_discover_arrangements:
 #                                       a leader's holdout count and costs
 #   te_monetary_update_union            step 9b: clocks, the AI's choices, The
-#                                       Question, the two union modifiers
+#                                       Question, the union's managed modifiers
+#                                       (the adopters' three, which the issuer
+#                                       shares; the common capital market; the
+#                                       issuer's seigniorage, premium cut and
+#                                       extra interventions; the pressure)
 #   te_mon_effect_union_adopt / _exit   the dashboard buttons, The Question,
 #                                       the AI — and _exit also from the
 #                                       discovery, when the ground goes from
@@ -76,6 +80,39 @@ te_monetary_init_union_variables = {
 		limit = { NOT = { has_variable = te_mon_union_seigniorage_applied } }
 		set_variable = { name = te_mon_union_seigniorage_applied value = 0 }
 	}
+	# [2026-11-14] The issuer's books and the common capital market.
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_adopters } }
+		set_variable = { name = te_mon_union_adopters value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_adopter_gdp_m } }
+		set_variable = { name = te_mon_union_adopter_gdp_m value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_issuer_cut_pts } }
+		set_variable = { name = te_mon_union_issuer_cut_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_issuer_cut_applied } }
+		set_variable = { name = te_mon_union_issuer_cut_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_issuer_bank_pts } }
+		set_variable = { name = te_mon_union_issuer_bank_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_issuer_bank_applied } }
+		set_variable = { name = te_mon_union_issuer_bank_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_credit_pts } }
+		set_variable = { name = te_mon_union_credit_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_credit_applied } }
+		set_variable = { name = te_mon_union_credit_applied value = 0 }
+	}
 }
 
 
@@ -90,9 +127,17 @@ te_monetary_init_union_variables = {
 # how many holdouts there are, and how many of those would refuse today — the
 # two figures the leader's dashboard shows, so a human leader sees the cohesion
 # cost of pressing before paying it. Everybody else: zeroes.
+#
+# [2026-11-14] ...and what the currency earns it: how many members have adopted
+# and their GDP in millions, the base its seigniorage is paid on below tier 5
+# (te_mon_union_seigniorage_base_m). The same walk, and zeroed for everybody
+# else like the rest, so a country that stops leading mints nothing more on the
+# pulse it stops.
 te_monetary_discover_union = {
 	set_variable = { name = te_mon_union_holdouts value = 0 }
 	set_variable = { name = te_mon_union_refusers value = 0 }
+	set_variable = { name = te_mon_union_adopters value = 0 }
+	set_variable = { name = te_mon_union_adopter_gdp_m value = 0 }
 	# The leader's members' sum, for the Backstops rows (GUI audit BNK-13); each
 	# member's own share is on it, for the Monetary Union member rows.
 	set_variable = { name = te_mon_bs_union_pts value = 0 }
@@ -108,6 +153,16 @@ te_monetary_discover_union = {
 				root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
 				root = { change_variable = { name = te_mon_bs_union_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
 				set_variable = { name = te_mon_bs_cost_union value = te_mon_union_cost_to_root }
+				if = {
+					limit = { te_mon_is_union_adopter = yes }
+					# GDP in millions through the named value the global anchored-GDP
+					# pass uses (an op slot cannot take a bare `gdp`), read on the
+					# member as the cost two lines up is.
+					root = {
+						change_variable = { name = te_mon_union_adopters add = 1 }
+						change_variable = { name = te_mon_union_adopter_gdp_m add = scope:te_mon_arr_party.te_mon_world_rate_weight }
+					}
+				}
 				if = {
 					limit = { te_mon_union_is_holdout = yes }
 					root = { change_variable = { name = te_mon_union_holdouts add = 1 } }
@@ -256,9 +311,13 @@ te_monetary_update_union = {
 	}
 	set_variable = { name = te_mon_union_q_state value = var:te_mon_work }
 
-	# --- the adopter's trade advantage --------------------------------------
+	# --- the common currency's trade advantage ------------------------------
+	# [2026-11-14] ON ADOPTERS AND ON THE ISSUER (te_mon_uses_common_currency):
+	# the leader uses its own currency, so once a member has adopted it shares
+	# what its adopters get, here and in the two blocks below. One modifier for
+	# both sides, so the leader's figures can never drift from the adopters'.
 	if = {
-		limit = { te_mon_is_union_adopter = yes }
+		limit = { te_mon_uses_common_currency = yes }
 		if = {
 			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_union_adopter } } }
 			te_mon_mod_add = { NAME = te_mon_union_adopter }
@@ -273,13 +332,25 @@ te_monetary_update_union = {
 		set_variable = { name = te_mon_union_adopter_applied value = 0 }
 	}
 
-	# --- tier 4: the banking union, on ADOPTERS -----------------------------
+	# --- tier 4: the banking union, on ADOPTERS and the issuer --------------
 	# Not on holdouts. A supervisor examines the banks inside the currency area;
 	# a member that kept its own money kept its own supervisor with it.
+	#
+	# [2026-11-14] The issuer's own banks are inside it too, UNLESS ITS LAW IS
+	# UNREGULATED BANKING (te_mon_union_issuer_has_regulator): the modifier
+	# carries an intervention point, and one point more is what opens that law
+	# the tools its budget denies it. An adopter under the same law keeps the
+	# modifier, as it always has.
 	if = {
 		limit = {
-			te_mon_is_union_adopter = yes
 			te_mon_bloc_union_tier_4_plus = yes
+			OR = {
+				te_mon_is_union_adopter = yes
+				AND = {
+					te_mon_union_is_issuer = yes
+					te_mon_union_issuer_has_regulator = yes
+				}
+			}
 		}
 		if = {
 			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_union_banking_union } } }
@@ -295,10 +366,10 @@ te_monetary_update_union = {
 		set_variable = { name = te_mon_union_banking_applied value = 0 }
 	}
 
-	# --- tier 5: the reserve currency, on ADOPTERS --------------------------
+	# --- tier 5: the reserve currency, on ADOPTERS and the issuer -----------
 	if = {
 		limit = {
-			te_mon_is_union_adopter = yes
+			te_mon_uses_common_currency = yes
 			te_mon_bloc_union_tier_5 = yes
 		}
 		if = {
@@ -315,15 +386,42 @@ te_monetary_update_union = {
 		set_variable = { name = te_mon_union_reserve_applied value = 0 }
 	}
 
-	# --- tier 5: the LEADER'S seigniorage -----------------------------------
-	# Pounds a week off the share of world GDP anchored on this money, re-derived
-	# every pulse and stepped like every other scaled modifier. The value is
-	# zero for everyone who is not a tier-5 leader, so the else-branch of
-	# te_monetary_apply_fx_one takes the modifier off by itself.
+	# --- the LEADER'S seigniorage, from tier 2 ------------------------------
+	# Pounds a week off the GDP that uses this money (the adopters'; at tier 5
+	# everything anchored on it), re-derived every pulse and stepped like every
+	# other scaled modifier. The value is zero for everyone who does not lead a
+	# tier-2 bloc with a currency it can issue and somebody using it, so the
+	# else-branch of te_monetary_apply_fx_one takes the modifier off by itself.
+	#
+	# THESE CALLS COME AFTER te_mon_union_q_state IS WRITTEN, and must:
+	# te_monetary_apply_fx_one uses te_mon_work, which is the scratch the
+	# signature above is built in.
 	set_variable = { name = te_mon_union_seigniorage_pts value = te_mon_union_seigniorage_value }
 	if = {
 		limit = { root ?= this }
-		te_monetary_apply_fx_one = { NAME = te_mon_union_seigniorage VALUE = var:te_mon_union_seigniorage_pts APPLIED = te_mon_union_seigniorage_applied STEP = 25 STEP_NEG = -25 }
+		te_monetary_apply_fx_one = { NAME = te_mon_union_seigniorage VALUE = var:te_mon_union_seigniorage_pts APPLIED = te_mon_union_seigniorage_applied STEP = te_mon_union_seigniorage_step STEP_NEG = te_mon_union_seigniorage_step_neg }
+	}
+
+	# --- [2026-11-14] the ISSUER'S premium cut and its central bank ---------
+	# Cyclical points off for every 5% of world GDP anchored on its money, and
+	# more banking interventions in force at once. Both zero for everyone who
+	# is not the issuer of a currency somebody has adopted, and the points zero
+	# under Unregulated Banking as well, so each modifier comes off the pulse
+	# its condition fails. An intervention budget this leaves overdrawn is
+	# worked off by the banking entry's own monthly pulse, one tool a month
+	# (banking_crash_check_overdrawn_interventions).
+	set_variable = { name = te_mon_union_issuer_cut_pts value = te_mon_union_issuer_cut_value }
+	set_variable = { name = te_mon_union_issuer_bank_pts value = te_mon_union_issuer_bank_value }
+
+	# --- [2026-11-14] the common capital market, on ADOPTERS and the issuer -
+	# Capitalists' investment pool contribution, in hundredths; twice as much
+	# in a downturn or panic; nothing where the pool cannot be spent.
+	set_variable = { name = te_mon_union_credit_pts value = te_mon_union_credit_value }
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_union_issuer_premium VALUE = var:te_mon_union_issuer_cut_pts APPLIED = te_mon_union_issuer_cut_applied STEP = 0.05 STEP_NEG = -0.05 }
+		te_monetary_apply_fx_one = { NAME = te_mon_union_issuer_bank VALUE = var:te_mon_union_issuer_bank_pts APPLIED = te_mon_union_issuer_bank_applied STEP = 0.5 STEP_NEG = -0.5 }
+		te_monetary_apply_fx_one = { NAME = te_mon_union_credit VALUE = var:te_mon_union_credit_pts APPLIED = te_mon_union_credit_applied STEP = 0.5 STEP_NEG = -0.5 }
 	}
 
 	# --- the leader's pressure: influence, scaled by the number of holdouts -

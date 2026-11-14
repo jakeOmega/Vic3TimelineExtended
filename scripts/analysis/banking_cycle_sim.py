@@ -3046,31 +3046,39 @@ def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0
             return
 
 
-def prune_overdrawn_tools(cfg: Config, state: State) -> None:
-    """banking_crash_check_overdrawn_interventions, for the dashboard tools."""
-    order = [
+# banking_crash_check_overdrawn_interventions' chain after the crash interventions, by
+# economy: the tool lifted first comes first. The five External & Currency tools, then
+# (since 2026-11-14, when the script's chain was extended to them) the standing tools,
+# cheapest first. Until then the script stopped at the external tools and this port shed
+# the rest in an order of its own. The Bank Holiday is not in the chain: it runs out its
+# ninety days. test_banking_overdraft_shed.py holds each list to the script's order.
+OVERDRAFT_SHED_ORDER = {
+    "market": (
         "emergency_import_financing", "sterilize_inflows", "fx_surrender",
         "restrict_inflows", "foreign_borrowing_limits",
-        "capital_controls",
-        "eliq",
-        "bank_holiday",
+        "moral_suasion", "dc_elec",
+        "export_credit", "dc_agri", "capital_controls", "reserve_requirements", "margin", "buffer",
+        "directed", "dc_arms", "bail_in",
+        "dc_heavy", "omo", "deposit", "eliq",
         "asset_relief",
-        "bail_in",
-        "deposit",
-        "omo",
-        "directed",
-        "dc_heavy",
-        "dc_agri",
-        "dc_arms",
-        "dc_elec",
-        "export_credit",
-        "buffer",
-        "reserve_requirements",
-        "margin",
-        "moral_suasion",
-    ]
-    if cfg.economy != "market":
-        order = []  # actual overdraw effect has no ce/cw disable branch
+    ),
+    "command": (
+        "ce_coordination",
+        "ce_target_cut", "ce_stockpile", "ce_consolidation",
+        "ce_plan_revision", "ce_allocation", "ce_admin_campaign",
+        "ce_distribution",
+    ),
+    "coop": (
+        "cw_solidarity", "cw_directive",
+        "cw_dividend", "cw_ceiling",
+        "cw_credit", "cw_buyout",
+        "cw_mutual_aid", "cw_capital_plan",
+    ),
+}
+
+
+def prune_overdrawn_tools(cfg: Config, state: State) -> None:
+    """banking_crash_check_overdrawn_interventions, for the dashboard tools."""
     if intervention_points(cfg, state) < 0:
         # Family interventions are shed first (the timed crash modifiers), then
         # the per-law base options — banking_crash_check_overdrawn_interventions.
@@ -3084,11 +3092,9 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
         for name in list(state.timed):
             del state.timed[name]
             return
-        for tool in order:
+        for tool in OVERDRAFT_SHED_ORDER[cfg.economy]:
             if tool in state.tools and tool not in cfg.hold_tools:
                 state.tools.discard(tool)
-                if tool == "bank_holiday":
-                    state.holiday_reopening = False
                 break
 
 
