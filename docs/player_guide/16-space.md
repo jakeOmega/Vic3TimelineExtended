@@ -1102,9 +1102,11 @@ last month's construction, so pause just after Built a month changes.
 
 ### Moving fleets
 
-The Space Fleets section lists your fleets, up to nine, with where each is, its
-strength now and at full (hover it for its ships), its drive, its propellant in
-km/s, its months of supply and its marines. A fleet can be at one of nine
+The Space Fleets section shows your fleets, up to nine, each as a card: where it
+is, its drive, its ships by role, and bars for its strength, its propellant in
+km/s, its months of supply and its marines, each now and at full. The arrow at
+a card's right rolls it up to one line. A fleet on its way shows how much of
+the trip is behind it and the months until it lands. A fleet can be at one of nine
 locations: Earth Orbit, Mercury & Venus, Mars, the Asteroid Belt, Jupiter,
 Saturn, Uranus, Neptune and the Kuiper Belt.
 

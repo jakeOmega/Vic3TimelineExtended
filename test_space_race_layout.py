@@ -1070,7 +1070,27 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 "gfx/interface/icons/generic_icons/transparent.dds",
                 # the module queue's move-up button, the base game's ship construction queue's (#1159)
                 "gfx/interface/icons/generic_icons/up_up.dds",
+                # a fleet card's roll-down button, beside up_up as its roll-up (the fleet cards)
+                "gfx/interface/icons/generic_icons/down_down.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
+# Space Fleets' banner (space_race_gui_icons.md, "Space Fleets: the banner"): the
+# picture for each drive level, event pictures standing in until the banners
+# are painted (style guide rule 10). Swapping one in changes its path here.
+FLEET_BANNERS = {0: "gfx/event_pictures/orbital_arms_race.dds",
+                 1: "gfx/event_pictures/orbital_battlestation_construction.dds",
+                 2: "gfx/event_pictures/interstellar_probe_departure.dds",
+                 3: "gfx/event_pictures/antimatter_propulsion_drive.dds"}
+# The fleet cards' pictograms (space_race_gui_icons.md, "Space Fleets: the fleet
+# cards"): the block or loc key that sits in the same cell or button, and its file.
+FLEET_CARD_ICONS = (
+    *((f'text = "je_space_race_widget_fl_role_{r}"', f"role_{r}.dds") for r in ("war", "rapid", "siege", "carrier", "tender")),
+    ('text = "je_space_race_widget_fl_go"', "order_go.dds"),
+    ('text = "je_space_race_widget_fl_transfer"', "order_transfer.dds"),
+    ('text = "je_space_race_widget_fl_land"', "order_land.dds"),
+    ('text = "je_space_race_widget_fl_embark"', "order_embark.dds"),
+    *((f'text = "je_space_race_widget_fl_posture_{n}"', f"posture_{p}.dds")
+      for n, p in enumerate(("station", "standoff", "closein", "interdict"), 1)),
+)
 # A colony's page (space_race_gui_icons.md, "A colony's page"): art that already
 # shows the thing, vanilla's or the mod's, and the page's own icons (icon batch 8).
 PAGE_KEPT = {f"gfx/interface/icons/{p}" for p in (
@@ -1160,6 +1180,10 @@ class SpaceRaceIconsTest(unittest.TestCase):
                 self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT
                                 or path in PAGE_KEPT,
                                 f"placeholder left: {path}")
+        # The one set of placeholders the panel holds: Space Fleets' banner, listed in the doc.
+        banner = _type_body(self.gui, "te_sr_fleet_banner")
+        self.assertEqual(set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui)) - set(re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui)),
+                         set(re.findall(r'texture = "(gfx/[^"]+)"', banner)))
 
     def test_a_colony_page_s_own_icons(self):
         """Icon batch 8: each tile and module row on a colony's page draws its own
@@ -1195,6 +1219,150 @@ class SpaceRaceIconsTest(unittest.TestCase):
         for path in sorted(set(re.findall(rf'texture = "{re.escape(SR_ICONS)}([^"]+)"', self.gui))):
             with self.subTest(file=path):
                 self.assertRegex(doc, rf"(?m)^\|.*\| `{re.escape(path)}` \|$")
+
+
+class FleetBannerTest(unittest.TestCase):
+    """Space Fleets opens on a picture of a fleet of the day (owner,
+    2026-11-14): one slot, a picture per drive level, the one shown chosen by
+    sr_drive_level."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.banner = _type_body(cls.gui, "te_sr_fleet_banner")
+
+    def test_one_picture_per_drive_level(self):
+        shown = re.findall(r"visible = \"\[(EqualTo|GreaterThanOrEqualTo)_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\."
+                           r"ScriptValue\('sr_drive_level'\), '\(CFixedPoint\)(\d)' \)\]\"\s*background = \{\s*"
+                           r"texture = \"([^\"]+)\"\s*fittype = centercrop", self.banner)
+        self.assertEqual({int(level): path for _, level, path in shown}, FLEET_BANNERS)
+        # the last drive's picture also covers any level a later drive adds
+        self.assertEqual([test for test, _, _ in shown], ["EqualTo"] * 3 + ["GreaterThanOrEqualTo"])
+        values = _read(os.path.join(REPO, "common", "script_values", "sr_launch_window_values.txt"))
+        level = values[values.index("\nsr_drive_level = {"):]
+        self.assertEqual(sorted(set(re.findall(r"value = (\d)", level[:level.index("\n}")]))), ["0", "1", "2", "3"])
+
+    def test_the_banner_heads_the_section_and_cannot_widen_it(self):
+        self.assertIn("size = { 480 110 }", self.banner)
+        sec = _type_body(self.gui, "te_sr_sec_space_fleets")
+        self.assertLess(sec.index("te_sr_fleet_banner = {}"), sec.index("te_sr_fleet_rows = {}"))
+        self.assertNotIn("te_sr_fleet_header_row", self.gui)   # the cards carry their own captions
+
+    def test_each_picture_is_listed_and_tracked(self):
+        doc = _read(ICONS_DOC)
+        for level, path in FLEET_BANNERS.items():
+            with self.subTest(level=level):
+                self.assertRegex(doc, rf"(?m)^\| .*\({level}\) \| `{re.escape(path)}` \| .* \| `gfx/interface/illustrations/"
+                                      rf"space_race/fleet_banner_\w+\.dds` \|$")
+                tracked = subprocess.run(["git", "-C", REPO, "ls-files", "--error-unmatch", path], capture_output=True)
+                self.assertEqual(tracked.returncode, 0, f"{path} is not in the repository")
+
+
+class FleetCardTest(unittest.TestCase):
+    """A fleet in Space Fleets is a card (owner, 2026-11-14): a head that is
+    always shown, a track in transit, and a body the card's own flag rolls up."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.row = _type_body(cls.gui, "te_sr_fleet_row")
+        rows = _read(os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui"))
+        cls.rows = re.findall(r"te_sr_fleet_row = \{.*?\n\t\t\}\n", rows, re.S)
+
+    def test_the_card_is_framed_and_as_wide_as_the_column(self):
+        self.assertIn("minimumsize = { 480 -1 }", self.row)
+        self.assertIn("using = entry_bg_simple", self.row)
+        # each line of cells fits the card's 468 (480 less the margin of 6 either side)
+        for type_name, count in (("te_sr_fl_role_cell", 5), ("te_sr_fl_gauge", 4), ("te_sr_posture_choice", 4)):
+            with self.subTest(cell=type_name):
+                width = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, type_name)).group(1))
+                self.assertEqual(self.row.count(f"{type_name} = {{"), count)
+                self.assertLessEqual(count * width + (count - 1) * 4, 468)
+
+    def test_each_card_rolls_up_on_its_own_flag(self):
+        self.assertEqual(len(self.rows), 9)
+        body = self.row[self.row.index('block "fl_body_visible"'):]
+        for inside in ("te_sr_fl_role_cell", "te_sr_fl_gauge", 'block "fl_orders_visible"', 'block "fl_combat_visible"'):
+            self.assertIn(inside, body)
+        head = self.row[:self.row.index('block "fl_transit_visible"')]
+        for block in ("fl_number", "fl_where", "fl_strength_brief", "fl_drive", "fl_roll_up", "fl_roll_down"):
+            self.assertIn(f'block "{block}"', head)
+        rolled = head[head.index('block "fl_rolled_visible"'):]
+        self.assertLess(rolled.index('block "fl_strength_brief"'), rolled.index('block "fl_roll_down"'))
+        for n, row in enumerate(self.rows, 1):
+            flag = f"sr_panel_fleet_{n}_closed"   # open until closed, as the sections' flags say
+            exists = f"GetVariableSystem.Exists('{flag}')"
+            with self.subTest(slot=n):
+                self.assertEqual(set(re.findall(r"GetVariableSystem\.\w+\('(\w+)'\)", row)) - {"te_popup"}, {flag})
+                self.assertEqual(row.count(f"onclick = \"[GetVariableSystem.Toggle('{flag}')]\""), 2)
+                # one bare test, on the slot that holds the rolled-up strength and the roll-down button
+                self.assertEqual(row.count(exists) - row.count(f"Not( {exists} )"), 1)
+                for block, shown in (("fl_body_visible", f"Not( {exists} )"), ("fl_roll_up", f"Not( {exists} )"),
+                                     ("fl_rolled_visible", exists)):
+                    override = row[row.index(f'blockoverride "{block}" {{'):]
+                    self.assertIn(f'visible = "[{shown}]"', override[:override.index("}")], block)
+
+    def test_each_reading_is_a_bar_of_a_share(self):
+        display = _read(os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
+        for n, row in enumerate(self.rows, 1):
+            for name in ("strength", "dv", "supply", "marines", "transit"):
+                value = f"sr_disp_fl_{n}_{name}_frac"
+                with self.subTest(value=value):
+                    self.assertIn(f"value = \"[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('{value}') )]\"", row)
+                    body = display[display.index(f"\n{value} = {{"):]
+                    body = body[:body.index("\n}\n")]
+                    self.assertIn("\tmin = 0\n\tmax = 1", body)
+                    self.assertRegex(body, r"limit = \{ [^{}]*> 0 \}")   # never a division by nothing
+
+    def test_a_role_is_lit_with_ships_and_dimmed_without(self):
+        cell = _type_body(self.gui, "te_sr_fl_role_cell")
+        icons = re.findall(r"\ticon = \{(.*?)\n\t\t\}", cell, re.S)
+        self.assertEqual(len(icons), 2)
+        lit, dim = icons
+        for icon in icons:
+            self.assertIn('block "rc_icon" {}', icon)
+        self.assertIn('block "rc_lit" {}', lit)
+        self.assertNotIn("alpha", lit)
+        self.assertIn('block "rc_dim" {}', dim)
+        self.assertIn("alpha = 0.3", dim)
+        for n, row in enumerate(self.rows, 1):
+            for role in ("war", "rapid", "siege", "carrier", "tender"):
+                has = (f"GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_{role}_value'), "
+                       "'(CFixedPoint)1' )")
+                with self.subTest(slot=n, role=role):
+                    self.assertIn(f'blockoverride "fl_role_{role}_lit" {{\n\t\t\t\tvisible = "[{has}]"', row)
+                    self.assertIn(f'blockoverride "fl_role_{role}_dim" {{\n\t\t\t\tvisible = "[Not( {has} )]"', row)
+            self.assertEqual(row.count(f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"'), 2)   # the cells, and the head's figure
+
+    def test_each_cell_and_button_wears_its_own_icon(self):
+        pairs, icon = [], None
+        for line in self.row.splitlines():
+            m = re.search(rf'texture = "{re.escape(SR_ICONS)}((?:role|posture|order)_\w+\.dds)"', line)
+            if m:
+                icon = m.group(1)
+                continue
+            m = re.search(r'(text = "je_space_race_widget_fl_\w+")', line)
+            if m and icon:
+                pairs.append((m.group(1), icon))
+                icon = None
+        self.assertEqual(pairs[:len(FLEET_CARD_ICONS)], list(FLEET_CARD_ICONS))
+        # Seize and Destroy share a button: each icon and word on the order's own block
+        seize = self.row[self.row.index("order_seize.dds"):]
+        self.assertLess(seize.index('block "fl_destroy_off_visible"'), seize.index("order_destroy.dds"))
+        self.assertEqual(self.row.count('block "fl_destroy_off_visible"'), 2)
+        self.assertEqual(self.row.count('block "fl_destroy_on_visible"'), 2)
+        self.assertIn(f'texture = "{SR_ICONS}fleet.dds"', self.row)
+        self.assertIn(f'texture = "{SR_ICONS}track_ship.dds"', self.row)
+
+    def test_the_pictograms_are_as_the_script_draws_them(self):
+        """The drawn set is committed as gen_space_fleet_pictograms.py writes it."""
+        tracked = subprocess.run(["git", "-C", REPO, "ls-files", f"{SR_ICONS}fleet.dds"],
+                                 capture_output=True, text=True, check=True).stdout.split()
+        if not tracked or not os.path.exists(os.path.join(REPO, SR_ICONS, "fleet.dds")):
+            self.skipTest("this checkout has no gfx/ (CI's main job)")
+        check = subprocess.run([sys.executable, os.path.join(REPO, "scripts", "image_pipeline", "gen_space_fleet_pictograms.py"),
+                                "--check"], capture_output=True, text=True)
+        self.assertEqual(check.returncode, 0, check.stdout)
 
 
 class DisplayValuesTest(unittest.TestCase):

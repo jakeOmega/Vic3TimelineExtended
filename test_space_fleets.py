@@ -3161,9 +3161,10 @@ class PostureRowTest(unittest.TestCase):
         # The button and the lit look share one slot, each with the label.
         choice = self.gui[self.gui.index("type te_sr_posture_choice = widget"):]
         choice = choice[:choice.index("\n\t}\n") + 3]
-        self.assertIn("size = { 104 22 }", choice)
+        self.assertIn("size = { 114 46 }", choice)   # its icon over its word (the fleet cards)
         self.assertIn("using = selected_tabs", choice)
         self.assertEqual(choice.count('block "pc_label"'), 2)
+        self.assertEqual(choice.count('block "pc_icon"'), 2)
         # The posture line keeps the combat line's gate (at Earth, only while a
         # lunar world may be closed in on).
         combat = row_type[row_type.index('block "fl_combat_visible"'):]
