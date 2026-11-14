@@ -139,6 +139,17 @@ Invalid left side during comparison 'var'
 
 `je_free_state` is shown while inactive (`is_shown_when_inactive`: a monarchy, `scramble_for_africa_complete`, no `free_state_created`), and its `status_desc` compares `var:free_state_international_opinion` with 90 and 45, a variable only the entry's own activation sets. So every frame the journal draws the inactive entry logs these three lines at each of the three `triggered_desc`s. In the owner's 1910 game (2026-11-03) it was 13,720 lines in 18 seconds with the journal open, enough to rotate all six error.log generations. The mod doesn't override the file. Vanilla bug; cosmetic, apart from the log volume.
 
+### `common/journal_entries/00_negotiation_quests_je.txt:973` — `je_negotiate_sol`'s timeout reads the interest group's promise variable with no guard
+- stack: vanilla only
+
+```
+Failed to fetch variable for 'promise_quest_degree' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+```
+
+The timeout of `je_negotiate_sol` (an interest group's promise to raise the standard of living, from the Iberian negotiation events) adds two and a half years when `scope:ig.var:promise_quest_degree = 4`, with a bare `=` and no `has_variable`. The variable is set on the interest group by vanilla's negotiation event (events/iberia_events/negotiation_events, in its `immediate`) and removed by vanilla's own promise clean-up (common/scripted_effects/04_negotiation_scripted_effects), so a timeout read after the clean-up, or for an interest group that never had it, logs these three lines; which of the two it was is not traced. 2026-11-13: five sets in four seconds of a 1945 game (7 and 8 February 1946), while the game ran. The mod has no file at this path and names neither the entry, the variable nor the promise effects anywhere. Vanilla bug; the timeout then takes its base seven and a half years.
+
 ### `common/journal_entries/00_communism.txt`, `events/communism.txt`, `events/election_events/*.txt`, `common/political_movements/02_cultural_movement.txt` — `leader = { ... }` without `has_leader` guard
 - stack: vanilla only
 
