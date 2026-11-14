@@ -7,8 +7,8 @@ four and Limit Foreign-Currency Borrowing) clearer to players, abstracting their
 effects where that helps but staying faithful to each policy. Two PRs: the first
 changes only what the player reads, the second the mechanics.
 
-**Built** in jakeOmega/Vic3TimelineExtended#1800 (PR 1) and the PR that
-followed it (PR 2), as written here. Two things the build added: the panel's
+**Built** in jakeOmega/Vic3TimelineExtended#1800 (PR 1) and
+jakeOmega/Vic3TimelineExtended#1807 (PR 2), as written here. Two things the build added: the panel's
 text is in its neutral voice ("On this currency", "the country's"), since the
 banking panel can show another country; and the label is "On this currency"
 throughout. How it works now: `docs/systems/mod_systems/banking_cycle.md`
