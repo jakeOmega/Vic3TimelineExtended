@@ -230,7 +230,7 @@ nuclear_loose.5 = {
 	type = country_event
 	placement = scope:nd_loose_state
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_city_destruction.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

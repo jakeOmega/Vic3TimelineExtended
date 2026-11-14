@@ -235,7 +235,7 @@ movement_events_te.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance_shared.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

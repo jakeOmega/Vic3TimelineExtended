@@ -54,6 +54,16 @@ class RegistryMatchesEventFilesTests(unittest.TestCase):
             "`python3 scripts/image_pipeline/event_image_prompts.py --validate` "
             "prints the full report.")
 
+    def test_every_shown_picture_has_a_prompt_entry(self):
+        self.assertEqual(
+            self.report["unregistered"]["unregistered_picture"], [],
+            "These events show a picture under gfx/event_pictures/ that has no entry "
+            "in event_image_prompts.IMAGES, so nothing records where it came from. "
+            "Eighteen such pictures turned out to be stock or press photographs "
+            "(#1658). Add an entry and draw the picture with generate_event_images.py, "
+            "or point the event at a picture that has one (contact_sheet.py --window "
+            "to choose), and list the event under it.")
+
 
 class PhaseUpdateTests(unittest.TestCase):
     """generate_event_images._update_event_file and _build_event_to_texture."""

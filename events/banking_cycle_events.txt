@@ -5725,7 +5725,7 @@ banking_cycle_events.59 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/financial_fraud_exposed.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 

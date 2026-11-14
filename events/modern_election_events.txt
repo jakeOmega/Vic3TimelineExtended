@@ -2859,7 +2859,7 @@ modern_election_events.31 = {
 	desc = modern_election_events.31.d
 	flavor = modern_election_events.31.f
 
-	event_image = { texture = "gfx/event_pictures/genetic_engineering.dds" }
+	event_image = { texture = "gfx/event_pictures/enhanced_candidate_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -3230,7 +3230,7 @@ modern_election_events.35 = {
 	desc = modern_election_events.35.d
 	flavor = modern_election_events.35.f
 
-	event_image = { texture = "gfx/event_pictures/automation_factory.dds" }
+	event_image = { texture = "gfx/event_pictures/automation_displacement.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
