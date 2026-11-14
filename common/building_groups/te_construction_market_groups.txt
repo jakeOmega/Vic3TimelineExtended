@@ -10,7 +10,9 @@ te_construction_market_bg = {
 	#stateregion_max_level = yes
 	# Meant to fill a site in a week. No effect measured (2026-11-13,
 	# docs/testing/ai-economy-playtest.md): a site hires a tenth of a level's
-	# jobs a week, the base game's DEFAULT_MAX_HIRING_RATE, all the same.
+	# jobs a week, the base game's DEFAULT_MAX_HIRING_RATE, all the same. What
+	# fills a market site is te_construction_market_crew_modifier, which cuts
+	# its jobs to that first tenth.
 	min_hiring_rate = 1.0
 	max_hiring_rate = 1.0
 	is_government_funded = yes

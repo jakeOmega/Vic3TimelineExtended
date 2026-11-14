@@ -3008,6 +3008,7 @@
  te_clade_parity_none_desc:0 "Under $law_clade_citizenship$ or $law_prescribed_form$, [concept_acceptance] without a shared heritage trait is raised to the highest heritage figure in force, so heritage ranks no [concept_pop] above another."
  te_clade_parity_trait_desc:0 "Under $law_clade_citizenship$ or $law_prescribed_form$, [concept_acceptance] from a shared heritage trait is raised to the highest heritage figure in force, so heritage ranks no [concept_pop] above another."
  te_construction_market_capacity_modifier_desc:0 "Applies the effects of this construction-focused modifier."
+ te_construction_market_crew_modifier_desc:0 "The $te_construction_market_site$ here has hired its crew and keeps no more jobs than that, so it works at full strength from its first hire."
  te_construction_market_private_share_modifier_desc:0 "Adjusts the share of construction handled by the private sector versus public investment."
  te_construction_market_site_desc:0 "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method."
  te_continuous_vote:0 "Continuous Vote"

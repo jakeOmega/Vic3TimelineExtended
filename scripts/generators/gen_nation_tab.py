@@ -281,6 +281,7 @@ NOT_ON_COUNTRY = {
     "modifier_grid_station_*": "the grid transfer station's building",
     "te_demog_um_nexus_*": "the Mind Upload Nexus's building",
     "te_construction_market_capacity_modifier": "construction sites",
+    "te_construction_market_crew_modifier": "states with a construction site",
 }
 
 # The sections' lists by group (owner, 2026-11-03). Where These Come From's

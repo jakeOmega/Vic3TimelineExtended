@@ -7440,6 +7440,7 @@
  te_cm_tt_tech_3:0 "$television$ is researched."
  te_construction_market_bg:0 "Construction Sites"
  te_construction_market_capacity_modifier:0 "Construction Expansion"
+ te_construction_market_crew_modifier:0 "Construction Site Crew"
  te_construction_market_private_share_modifier:0 "Private-Public Construction Share"
  te_construction_market_site:0 "Construction Site"
  te_covert_notification_group:0 "Counterintelligence"

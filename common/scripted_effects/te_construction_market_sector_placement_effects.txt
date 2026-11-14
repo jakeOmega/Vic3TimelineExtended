@@ -7,7 +7,11 @@
 # can_build_government accept this create_building in a market game (see
 # common/buildings/te_construction_market_site.txt). A caller that already
 # raised it (te_construction_market_country_update_sites) keeps it raised.
+# A new site has no crew: whatever an earlier site left on the state goes
+# first, so this one starts with its ten jobs and can hire its laborer
+# (te_construction_market_site_crew).
 te_construction_market_place_site = {
+	te_construction_market_clear_crew = yes
 	if = {
 		limit = {
 			has_global_variable = te_cm_placing_site
@@ -32,12 +36,13 @@ te_construction_market_place_site = {
 
 # Country scope, market games (te_construction_market_on_weekly_pulse). Sites
 # can be downsized, because direct games need that, so the player or the AI can
-# remove a market site. Capacity only needs one staffed site (the pulse spreads
-# the week's purchase over whichever remain), so this only restores the last one,
-# in the capital. It runs after the pulse has sized the sites, so the
-# replacement hires (at a rate of 1.0) before it is first sized; every site is
-# sized as full (te_construction_market_site_throughput), so the order no
-# longer costs anything either way. A country that has lost
+# remove a market site. Capacity only needs one crewed site (the pulse spreads
+# the week's purchase over whichever have a crew), so this only restores the
+# last one, in the capital. It runs after the pulse has sized the sites; the
+# replacement takes its laborer in the week and is counted and sized at the
+# next pulse (te_construction_market_site_crew). A state whose site was
+# downsized away keeps the crew's mark until a site stands there again
+# (te_construction_market_place_site clears it). A country that has lost
 # every state stays alive while its war goes on, with no capital to place in.
 te_construction_market_ensure_site = {
 	if = {
@@ -94,6 +99,7 @@ te_construction_market_state_on_start_market = {
 			}
 			capital = {
 				remove_building = te_construction_market_site
+				te_construction_market_clear_crew = yes
 			}
 		}
 	}
@@ -129,6 +135,7 @@ te_construction_market_state_on_end_market = {
 			}
 		}
 		remove_building = te_construction_market_site
+		te_construction_market_clear_crew = yes
 	}
 	owner = {
 		if = {
