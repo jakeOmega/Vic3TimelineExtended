@@ -387,10 +387,12 @@ te_monetary_update_union = {
 	}
 
 	# --- the LEADER'S seigniorage, from tier 2 ------------------------------
-	# Pounds a week off the GDP that uses this money (the adopters'; at tier 5
-	# everything anchored on it), re-derived every pulse and stepped like every
-	# other scaled modifier. The value is zero for everyone who does not lead a
-	# tier-2 bloc with a currency it can issue and somebody using it, so the
+	# Pounds a week: a share of the leader's own GDP, by tier, times the
+	# currency's reach (te_mon_union_reach: how large the economies using this
+	# money are beside the leader's own; the adopters', and at tier 5 everything
+	# anchored on it). Re-derived every pulse and stepped like every other
+	# scaled modifier. Reach is zero for everyone who does not lead a tier-2
+	# bloc with a currency it can issue and somebody using it, so the
 	# else-branch of te_monetary_apply_fx_one takes the modifier off by itself.
 	#
 	# THESE CALLS COME AFTER te_mon_union_q_state IS WRITTEN, and must:
@@ -403,13 +405,13 @@ te_monetary_update_union = {
 	}
 
 	# --- [2026-11-14] the ISSUER'S premium cut and its central bank ---------
-	# Cyclical points off for every 5% of world GDP anchored on its money, and
-	# more banking interventions in force at once. Both zero for everyone who
-	# is not the issuer of a currency somebody has adopted, and the points zero
-	# under Unregulated Banking as well, so each modifier comes off the pulse
-	# its condition fails. An intervention budget this leaves overdrawn is
-	# worked off by the banking entry's own monthly pulse, one tool a month
-	# (banking_crash_check_overdrawn_interventions).
+	# Cyclical points off, by tier, times the same reach as the seigniorage;
+	# and more banking interventions in force at once for the issuer of a
+	# currency a member has adopted (te_mon_union_is_issuer), under any banking
+	# law but Unregulated Banking. Each value is zero the pulse its condition
+	# fails, so its modifier comes off then. An intervention budget this leaves
+	# overdrawn is worked off by the banking entry's own monthly pulse, one
+	# tool a month (banking_crash_check_overdrawn_interventions).
 	set_variable = { name = te_mon_union_issuer_cut_pts value = te_mon_union_issuer_cut_value }
 	set_variable = { name = te_mon_union_issuer_bank_pts value = te_mon_union_issuer_bank_value }
 

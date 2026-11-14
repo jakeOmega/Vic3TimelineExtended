@@ -8599,8 +8599,8 @@ te_mon_union_reserve = {
 }
 
 # MANAGED, scaled; on a LEADER from tier 2. multiplier = pounds a week
-# (te_mon_union_seigniorage_applied): a share, rising by tier, of the GDP that
-# uses this country's money (te_mon_union_seigniorage_value). The exorbitant
+# (te_mon_union_seigniorage_applied): a share of its own GDP, rising by tier,
+# times its currency's reach (te_mon_union_seigniorage_value). The exorbitant
 # privilege: everybody else holds balances in it, and issuing them is free. A
 # flat country_minting_add for the reason te_mon_board_seigniorage gives — a
 # _mult would scale the leader's own base and transfer nothing from anybody.
@@ -8609,8 +8609,9 @@ te_mon_union_seigniorage = {
 	country_minting_add = 1
 }
 
-# MANAGED, scaled; on the ISSUER (te_mon_union_is_issuer). multiplier = pp
-# (te_mon_union_issuer_cut_applied). Cyclical on purpose: the reserve-currency
+# MANAGED, scaled; on a LEADER from tier 2, beside the seigniorage and on the
+# same reach. multiplier = pp (te_mon_union_issuer_cut_applied). Cyclical on
+# purpose: the reserve-currency
 # cut in te_mon_arrangement_standing is credit standing, which a mature leader's
 # floor swallows, and what the union costs the leader (te_mon_arrangement_provider)
 # is cyclical. Reaches the premium a month late, like every modifier-borne term.

@@ -1003,6 +1003,27 @@ te_mon_union_state = {
 }
 
 
+# What the Monetary Union row's tooltip adds for the leader of a common
+# currency (2026-11-14): how many members have adopted and its currency's
+# reach, the share of its tier's seigniorage and premium cut it is paid.
+# Nothing for anybody else: the second key is empty.
+te_mon_union_issuer_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+		}
+		localization_key = banking_dash_mon_union_issuer_note
+	}
+	text = {
+		localization_key = banking_dash_mon_union_issuer_note_none
+	}
+}
+
+
 # A bloc member's place in its leader's Monetary Union rows (GUI audit
 # BNK-13), evaluated on the member: the leader's view of te_mon_union_state.
 # "Would refuse" is te_monetary_discover_union's own test for its refusers

@@ -169,36 +169,98 @@ te_mon_union_reserve_standing_cut = { value = 0.25 }
 # pulse by te_monetary_update_union, which steps its managed modifier; each is 0
 # for everybody who does not qualify, so the modifier comes off the same pulse.
 
+# --- REACH: how far the currency goes beyond the leader's own economy ---------
+# The two money terms below, seigniorage and the premium cut, are each a
+# tier's figure times REACH, a number from 0 toward 1:
+#
+#     reach = base / ( base + 15% of the leader's own GDP )
+#
+# THE BASE is the GDP that uses the leader's money. Below tier 5 the adopters'
+# (te_mon_union_adopter_gdp_m, summed by the leader's discovery). At tier 5
+# everything anchored on it, te_mon_anchored_gdp_m, WHICH COUNTS EVERY CHOSEN
+# ANCHOR: treaty peggers (kind 1) as well as union adopters (kind 2).
+# Deliberate, and unchanged (§0.11 ruling T4): a reserve currency is held by
+# everybody who ties their money to it, not only by the bloc, and it is the
+# base the reserve-currency standing cut uses, so the terms cannot disagree
+# about how widely the money is held.
+#
+# WHY A SHARE OF THE LEADER'S OWN ECONOMY, AND WHY IT SATURATES. In three of the
+# owner's saves (§0.14) a bloc's members come to 1-7% of the leader's GDP in a
+# typical bloc and 35-57% in a large one, and a leader is anything from 1% to
+# 90% of the world. A rate on the adopters' GDP that paid a typical leader a
+# few percent of its income would pay the large bloc's a second treasury; a
+# share of WORLD GDP (the old tier-5 base, and the reserve-currency cut's)
+# pays a 2%-of-the-world leader nothing whatever its bloc does. Reach is half
+# at adopters worth 15% of the leader's GDP, 29% at a typical bloc's 6%, 77%
+# at 50%, and never reaches 1: every adopter adds something, the first ones
+# most, and no union is worth more than the tier's figure.
+te_mon_union_reach_half_share = { value = 0.15 }
+
+# The base, in millions of GDP.
+te_mon_union_currency_base_m = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_union_adopter_gdp_m }
+		value = var:te_mon_union_adopter_gdp_m
+	}
+	# [tier 5] The world's balances: whoever is anchored, in the bloc or out of
+	# it. The adopters are in that sum already; whichever is larger, so a
+	# global pass a month behind the discovery cannot shrink the base.
+	if = {
+		limit = {
+			te_mon_bloc_union_tier_5 = yes
+			has_variable = te_mon_anchored_gdp_m
+			has_variable = te_mon_union_adopter_gdp_m
+			var:te_mon_anchored_gdp_m > var:te_mon_union_adopter_gdp_m
+		}
+		value = var:te_mon_anchored_gdp_m
+	}
+	min = 0
+}
+
+# 0 to under 1. Zero for everybody who does not lead a bloc at tier 2 or above
+# with a currency it can issue (a dial, fiat or digital money): no adopter test
+# of its own, because the base is one. Below tier 5 it is the adopters' GDP,
+# zero with none; at tier 5 a treaty pegger alone still counts, as it did for
+# the old seigniorage.
+te_mon_union_reach = {
+	value = 0
+	if = {
+		limit = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+			te_mon_can_lead_union = yes
+			te_mon_union_currency_base_m > 0
+		}
+		value = te_mon_union_currency_base_m
+		divide = {
+			value = te_mon_world_rate_weight
+			multiply = te_mon_union_reach_half_share
+			add = te_mon_union_currency_base_m
+			min = 0.001
+		}
+		min = 0
+		max = 1
+	}
+}
+
 # --- Seigniorage, from tier 2 ------------------------------------------------
-# A share of the GDP that uses the leader's money, a year: 0.5% at tier 2 rising
-# half a point a tier to 2% at tier 5. Until 2026-11-14 it was tier 5 only, the
+# Percent of the LEADER'S OWN GDP a year at full reach, by tier: 0.5 / 0.75 /
+# 1.0 / 1.5. A government collects about a fifth of GDP, so at a typical bloc's
+# reach of 0.29 tier 5 is worth about 2% of the leader's income, and no union
+# however large more than about 7%. Until 2026-11-14 it was tier 5 only, the
 # share of world GDP anchored x 2000 and capped at 1000 pounds a week: the
-# owner's Singapore, leading a tier-5 union of 164 members in 1957 on a weekly
+# owner's Singapore, leading a tier-5 union of 153 members in 1957 on a weekly
 # income of 821 million, minted 98 pounds.
 #
-# THE BASE. Below tier 5 the adopters' GDP (te_mon_union_adopter_gdp_m, summed
-# by the leader's discovery). At tier 5 everything anchored on its money,
-# te_mon_anchored_gdp_m, WHICH COUNTS EVERY CHOSEN ANCHOR: treaty peggers
-# (kind 1) as well as union adopters (kind 2). Deliberate, and unchanged (§0.11
-# ruling T4): a reserve currency is held by everybody who ties their money to
-# it, not only by the bloc, and it is the base the reserve-currency cut and the
-# issuer's cut below use, so the three terms cannot disagree about how widely
-# the money is held.
-#
-# CAPPED AT THE LEADER'S OWN GDP: a small leader cannot mint against an economy
-# many times its own (the mirror of the cost side's clamp on member GDP over the
-# leader's). At the cap tier 5 pays 2% of the leader's own GDP a year, about a
-# twelfth of what a government collects; a typical bloc is well under it.
-#
-# Sizing (the owner's save, and the exploit cases): docs/systems/
+# Sizing against the save, and the exploit cases: docs/systems/
 # monetary_policy_design.md §0.14.
 te_mon_union_seigniorage_pct_2 = { value = 0.5 }
-te_mon_union_seigniorage_pct_3 = { value = 1.0 }
-te_mon_union_seigniorage_pct_4 = { value = 1.5 }
-te_mon_union_seigniorage_pct_5 = { value = 2.0 }
+te_mon_union_seigniorage_pct_3 = { value = 0.75 }
+te_mon_union_seigniorage_pct_4 = { value = 1.0 }
+te_mon_union_seigniorage_pct_5 = { value = 1.5 }
 
-# Percent of the base a year, by the bloc's tier. Tiers do not stack, so each
-# branch is the whole figure, highest tier first.
+# Tiers do not stack, so each branch is the whole figure, highest tier first.
 te_mon_union_seigniorage_pct = {
 	value = 0
 	if = {
@@ -222,44 +284,13 @@ te_mon_union_seigniorage_pct = {
 # Pounds a WEEK that 1% a year of one MILLION of GDP comes to: 10,000 / 52.
 te_mon_union_seigniorage_week_per_pct_million = { value = 192.31 }
 
-# The base, in millions of GDP, capped at the leader's own.
-te_mon_union_seigniorage_base_m = {
-	value = 0
-	if = {
-		limit = { has_variable = te_mon_union_adopter_gdp_m }
-		value = var:te_mon_union_adopter_gdp_m
-	}
-	# [tier 5] The world's balances: whoever is anchored, in the bloc or out of
-	# it. The adopters are in that sum already; whichever is larger, so a
-	# global pass a month behind the discovery cannot shrink the base.
-	if = {
-		limit = {
-			te_mon_bloc_union_tier_5 = yes
-			has_variable = te_mon_anchored_gdp_m
-			has_variable = te_mon_union_adopter_gdp_m
-			var:te_mon_anchored_gdp_m > var:te_mon_union_adopter_gdp_m
-		}
-		value = var:te_mon_anchored_gdp_m
-	}
-	min = 0
-	max = te_mon_world_rate_weight
-}
-
-# No adopter test of its own: the base is one. Below tier 5 it is the adopters'
-# GDP, zero with none; at tier 5 a treaty pegger alone still pays, as it did.
+# Pounds a week: own GDP (millions) x reach x the tier's percent x the above.
 te_mon_union_seigniorage_value = {
-	value = 0
-	if = {
-		limit = {
-			is_power_bloc_leader = yes
-			te_mon_bloc_union_tier_2_plus = yes
-			te_mon_can_lead_union = yes
-		}
-		value = te_mon_union_seigniorage_base_m
-		multiply = te_mon_union_seigniorage_pct
-		multiply = te_mon_union_seigniorage_week_per_pct_million
-		min = 0
-	}
+	value = te_mon_world_rate_weight
+	multiply = te_mon_union_reach
+	multiply = te_mon_union_seigniorage_pct
+	multiply = te_mon_union_seigniorage_week_per_pct_million
+	min = 0
 }
 
 # How far the figure must move before the modifier is rewritten: 1% of itself,
@@ -281,89 +312,51 @@ te_mon_union_seigniorage_step_neg = {
 }
 
 # --- The issuer's risk-premium cut, from tier 2 ------------------------------
-# pp of CYCLICAL premium off, for every 5% of world GDP anchored on the leader's
-# money (te_mon_reserve_currency_step_share: the reserve-currency cut's own
-# step and base), deepening by tier, to a cap.
+# pp of CYCLICAL premium off at full reach, by tier: 0.5 / 0.75 / 1.0 / 1.5.
+# What a point is worth depends on the debt it is paid on: 2.6 million a week
+# to Singapore in the 1957 save (a third of a percent of its income, on a debt
+# of 13% of GDP) and 4.4% of its income to that game's Germany (debt 82% of
+# GDP). So the ladder stops at 1.5: a rounding error to a leader that hardly
+# borrows, and a tenth of the interest bill of one that borrows to the hilt.
 #
 # CYCLICAL, NOT STANDING, AND THAT IS THE POINT. The reserve-currency cut
 # (te_mon_reserve_currency_cut) is credit standing, and standing is floored
 # (te_mon_standing_floor: 0.5pp, 0.05 for a country with central bank
 # independence and the two late technologies). A mature great power, which is
 # who leads a bloc, sits on that floor already: Singapore's 0.098pp of
-# reserve-currency standing in the 1957 save bought nothing, while the 0.169pp
-# it paid for its members was cyclical and bit in full. This term is added after
-# the floor, like the cost it answers. The standing cut stays as it was, for a
-# treaty anchor and for a leader above its floor.
-#
-# THE RATE DEEPENS, NOT ONLY THE CAP: at 0.1pp a step the old caps never bound
-# (the whole of Singapore's bloc adopting is 18% of world GDP, 0.36pp).
-te_mon_union_issuer_cut_per_step_2 = { value = 0.1 }
-te_mon_union_issuer_cut_per_step_3 = { value = 0.15 }
-te_mon_union_issuer_cut_per_step_4 = { value = 0.2 }
-te_mon_union_issuer_cut_per_step_5 = { value = 0.3 }
+# reserve-currency standing bought nothing, while the 0.169pp it paid for its
+# members was cyclical and bit in full. This term is added after the floor,
+# like the cost it answers. The standing cut stays as it was, for a treaty
+# anchor and for a leader above its floor.
+te_mon_union_issuer_cut_max_2 = { value = 0.5 }
+te_mon_union_issuer_cut_max_3 = { value = 0.75 }
+te_mon_union_issuer_cut_max_4 = { value = 1.0 }
+te_mon_union_issuer_cut_max_5 = { value = 1.5 }
 
-te_mon_union_issuer_cut_cap_2 = { value = 0.5 }
-te_mon_union_issuer_cut_cap_3 = { value = 0.75 }
-te_mon_union_issuer_cut_cap_4 = { value = 1.0 }
-te_mon_union_issuer_cut_cap_5 = { value = 1.5 }
-
-te_mon_union_issuer_cut_per_step = {
+te_mon_union_issuer_cut_max = {
 	value = 0
 	if = {
 		limit = { te_mon_bloc_union_tier_5 = yes }
-		value = te_mon_union_issuer_cut_per_step_5
+		value = te_mon_union_issuer_cut_max_5
 	}
 	else_if = {
 		limit = { te_mon_bloc_union_tier_4_plus = yes }
-		value = te_mon_union_issuer_cut_per_step_4
+		value = te_mon_union_issuer_cut_max_4
 	}
 	else_if = {
 		limit = { te_mon_bloc_union_tier_3_plus = yes }
-		value = te_mon_union_issuer_cut_per_step_3
+		value = te_mon_union_issuer_cut_max_3
 	}
 	else_if = {
 		limit = { te_mon_bloc_union_tier_2_plus = yes }
-		value = te_mon_union_issuer_cut_per_step_2
-	}
-}
-
-te_mon_union_issuer_cut_cap = {
-	value = 0
-	if = {
-		limit = { te_mon_bloc_union_tier_5 = yes }
-		value = te_mon_union_issuer_cut_cap_5
-	}
-	else_if = {
-		limit = { te_mon_bloc_union_tier_4_plus = yes }
-		value = te_mon_union_issuer_cut_cap_4
-	}
-	else_if = {
-		limit = { te_mon_bloc_union_tier_3_plus = yes }
-		value = te_mon_union_issuer_cut_cap_3
-	}
-	else_if = {
-		limit = { te_mon_bloc_union_tier_2_plus = yes }
-		value = te_mon_union_issuer_cut_cap_2
+		value = te_mon_union_issuer_cut_max_2
 	}
 }
 
 te_mon_union_issuer_cut_value = {
-	value = 0
-	if = {
-		limit = {
-			te_mon_union_is_issuer = yes
-			has_variable = te_mon_anchored_gdp_m
-			var:te_mon_anchored_gdp_m > 0
-			has_global_variable = te_mon_world_gdp_m
-			global_var:te_mon_world_gdp_m > 0
-		}
-		value = var:te_mon_anchored_gdp_m
-		divide = global_var:te_mon_world_gdp_m
-		divide = te_mon_reserve_currency_step_share
-		multiply = te_mon_union_issuer_cut_per_step
-		min = 0
-		max = te_mon_union_issuer_cut_cap
-	}
+	value = te_mon_union_issuer_cut_max
+	multiply = te_mon_union_reach
+	min = 0
 }
 
 # --- The issuer's central bank: more tools in force at once ------------------
@@ -625,8 +618,9 @@ te_mon_union_seigniorage_display = {
 	}
 }
 
-# [2026-11-14] What the issuer's discovery counted and what its last pulse
-# applied, for the dashboard's Monetary Union row and te_debug_monetary.10.
+# [2026-11-14] The issuer's two figures on the dashboard's Monetary Union row
+# (banking_dash_mon_union_issuer_note): how many members have adopted, from its
+# last discovery, and its currency's reach as a percentage, live.
 te_mon_union_adopters_display = {
 	value = 0
 	if = {
@@ -635,26 +629,7 @@ te_mon_union_adopters_display = {
 	}
 }
 
-te_mon_union_issuer_cut_display = {
-	value = 0
-	if = {
-		limit = { has_variable = te_mon_union_issuer_cut_pts }
-		value = var:te_mon_union_issuer_cut_pts
-	}
-}
-
-te_mon_union_issuer_bank_display = {
-	value = 0
-	if = {
-		limit = { has_variable = te_mon_union_issuer_bank_pts }
-		value = var:te_mon_union_issuer_bank_pts
-	}
-}
-
-te_mon_union_credit_display = {
-	value = 0
-	if = {
-		limit = { has_variable = te_mon_union_credit_pts }
-		value = var:te_mon_union_credit_pts
-	}
+te_mon_union_reach_pct_display = {
+	value = te_mon_union_reach
+	multiply = 100
 }
