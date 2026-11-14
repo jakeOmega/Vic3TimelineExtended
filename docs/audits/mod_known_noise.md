@@ -118,6 +118,7 @@ Principle principle_sacred_civics_
 `REPLACE:principle_group_sacred_civics` swaps the vanilla group's members for the mod's `principle_sacred_civics_N_mod` variants; the vanilla `principle_sacred_civics_N` entries stay in the database groupless and log once each per launch. Group-less principles are unpickable → harmless. Tracked at `docs/audits/open_issues.md#l15-vanilla-principles-orphaned-by-replaceprinciple_group-overrides`.
 
 ### `country_law_manager.cpp:464` — deliberate historical law seeds lacking unlock tech (1.13.9 validation)
+- source: `country_law_manager.cpp:474`
 - source: `country_law_manager.cpp:464`
 - source: `country_law_manager.cpp:462`
 - tracked: `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`
