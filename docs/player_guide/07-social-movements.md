@@ -12,9 +12,10 @@ movements carried by events run either way.
 
 ## Movement journal entries at a glance
 
-All six sit in the journal's Domestic Affairs group, except the Post-Scarcity
-Transition (Development). Decentralized countries never get them. The laws are
-described in [The mod's new laws](06-politics.md#the-mods-new-laws).
+Five sit in the journal's Rights and Society section; the Post-Scarcity
+Transition is in Timeline Extended Systems. Decentralized countries never get
+them. The laws are described in
+[The mod's new laws](06-politics.md#the-mods-new-laws).
 
 | Journal entry | Appears with | Succeeds when | Fails when | Time limit |
 |---|---|---|---|---|

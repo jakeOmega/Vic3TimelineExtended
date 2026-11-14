@@ -7,7 +7,9 @@ a set of systems that run alongside the base game: a banking cycle with monetary
 policy, a construction market, climate change, decolonization, nuclear weapons,
 a United Nations, a space race, cultural and covert competition between powers,
 and social movements. Most of these systems have their own journal entry, and
-most can be switched off with a game rule.
+most can be switched off with a game rule. The journal lists the systems'
+entries together in a section of their own, Timeline Extended Systems, and the
+social movements' debates in another, Rights and Society.
 
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
