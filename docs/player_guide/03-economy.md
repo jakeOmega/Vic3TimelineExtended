@@ -494,7 +494,7 @@ subsidized: your government pays whatever a station's wages and upkeep cost
 beyond what it earns. That is about their whole cost, give or take a little
 while a grid is settling and prices are off the grid's.
 
-Two things join grids that don't touch:
+Three things join grids that don't touch:
 
 - With Clean Energy Technologies, you can build an HVDC Undersea
 Interconnector in a coastal state that has a station, built or queued: one
@@ -515,6 +515,12 @@ Organizations) joins both countries' stations where they border, and their
 cables across the sea. It can be signed between two countries that share a
 border or a Sea Node, or whose cables already reach each other, which shows
 up to a month after both are laid. The two can be in one market or in two.
+- A power bloc that holds Market Unification IV or V, or Internal Trade IV or
+V, joins its members' grids the same way without the agreement, from the
+first monthly balancing after it takes the principle. The link ends at the
+next balancing after a member leaves or the bloc gives the principle up, so
+an agreement between two members is still worth signing if you mean to keep
+the link. Members at war with each other aren't joined.
 
 A grid that joins two markets sends power across the border from the market
 with more to spare to the one with less. Because Grid Power's price is fixed,
@@ -540,8 +546,9 @@ The Power Grids tab of the Timeline Extended window opens once you research
 Electrical Capacitors. Its overview counts your stations and how many are on
 a grid, the grids they are on, the Electricity your stations send and receive
 a week, your transmission efficiency, and your Grid Interconnection Agreements,
-with the countries whose undersea cables reach yours but have no agreement with
-you. Generation shows how much Electricity your power plants made a week, by
+with the countries whose undersea cables reach yours but aren't joined to you.
+Under the boxes, Bloc partners counts the members of your bloc joined to you
+through its principle that you have no agreement with. Generation shows how much Electricity your power plants made a week, by
 kind of plant (coal, oil, hydro, nuclear, renewables, fusion and space solar),
 each with its share of the total, counted at the start of each month; power
 your stations received from a grid isn't counted. A card for each grid, named
@@ -562,8 +569,9 @@ once a building there switches to one. The AI builds stations in every market
 area where it makes Electricity: it starts in a state with power plants and
 queues a station in one more bordering state each month, larger states first.
 An AI country that makes none builds one beside the station of a partner under
-a Grid Interconnection Agreement, so build yours on the border if you mean to
-sell it power. The AI builds no station that would have nothing to join: a
+a Grid Interconnection Agreement, or of a member of its bloc when the bloc's
+principle joins their grids, so build yours on the border if you mean to sell
+it power. The AI builds no station that would have nothing to join: a
 one-state country builds one only once it has an agreement with a neighbor.
 
 ## Tariffs for all goods at once

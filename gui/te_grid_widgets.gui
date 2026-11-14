@@ -185,7 +185,8 @@ types te_grid_widget_types
 	}
 
 	### The overview: Stations and Grids, Sent and Received, Efficiency and
-	### Agreements (rule 4). Each box's hover says what it counts.
+	### Agreements (rule 4), then Bloc partners while there are any. Each box's
+	### hover says what it counts.
 	type te_grid_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -302,6 +303,24 @@ types te_grid_widget_types
 							text = "te_grid_ov_agreements_fig"
 						}
 					}
+				}
+				### Bloc partners (2026-11-14; rule 7: shown only while there
+				### are any): the other members of the country's power bloc it
+				### has no agreement with, while the bloc's principle joins
+				### their grids (te_grid_tab_bloc_partners_disp). A line of its
+				### own, since the Agreements box's three lines are full and
+				### the bloc's name can be long (it wraps). The text's own
+				### selection keeps GetPowerBloc unread outside a bloc.
+				textbox = {
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp'), '(CFixedPoint)0' )]"
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					autoresize = yes
+					multiline = yes
+					align = left|nobaseline
+					using = te_grid_fontsize_row
+					tooltip = "te_grid_ov_bloc_tt"
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp'), '(CFixedPoint)0' ), 'te_grid_ov_bloc', 'te_grid_ov_bloc_none' )]"
 				}
 			}
 		}

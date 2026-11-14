@@ -6,7 +6,8 @@
 # adoption, peaceful_annexation, greenest_grass_campaign, extend_influence,
 # diplomatic_alignment, joining the UN and development aid. Read by the
 # corresponding scripted_buttons / decrees / treaty articles, except the five
-# monetary-union markers at the end, which only label the principle's tooltip.
+# monetary-union markers and the power grid marker near the end, which only
+# label the principle's tooltip.
 
 power_bloc_leader_can_force_cultural_acceptance_bool = {
 	color = neutral
@@ -197,6 +198,20 @@ power_bloc_banking_union_bool = {
 }
 
 power_bloc_reserve_currency_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+# Power grids (2026-11-14): Market Unification IV and V and Internal Trade IV
+# and V join the members' power grids as a Grid Interconnection Agreement would.
+# The marker only labels the principle's tooltip; script reads the tier through
+# has_principle (te_grid_bloc_links_grids, power_grid_triggers.txt), and
+# TE_SELF_CHECK grid_bloc_link compares the two reads.
+power_bloc_grid_interconnection_bool = {
 	color = good
 	boolean = yes
 	game_data = {

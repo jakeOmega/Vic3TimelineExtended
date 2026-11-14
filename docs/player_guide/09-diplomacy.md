@@ -413,7 +413,8 @@ technology.
 
 ### Principles that unlock articles and actions
 
-Several principles give your bloc an article, action or decree.
+Several principles give your bloc an article, action or decree, or do what an
+article would.
 
 | Principle | Unlocks |
 |---|---|
@@ -431,6 +432,7 @@ Several principles give your bloc an article, action or decree.
 | Cultural Unity V | Enforce Cultural Adoption: a subject replaces its primary cultures with yours |
 | Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |
+| Market Unification IV and V, Internal Trade IV and V | Members' power grids join as under a Grid Interconnection Agreement; see [Power grids](03-economy.md#power-grids) |
 
 ### Bloc summits
 

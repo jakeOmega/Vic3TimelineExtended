@@ -29,6 +29,8 @@
  power_bloc_can_use_join_united_nations_bool:0 "Leader Can Require UN Membership"
  power_bloc_can_use_join_united_nations_bool_desc:0 "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can add the Require UN Membership article to treaties, binding another country into the United Nations."
  power_bloc_fiscal_backstop_bool:0 "The leader is lender of last resort to every adopter, and their overvaluation premium is halved"
+ power_bloc_grid_interconnection_bool:0 "Members' Power Grids Interconnect"
+ power_bloc_grid_interconnection_bool_desc:0 "Members' $building_grid_transfer_station$s join where they border, and their undersea cables where either one's range reaches the other, as under a $grid_interconnection_agreement$."
  power_bloc_leader_can_force_cultural_acceptance_bool:0 "Leader Can Force Cultural Acceptance"
  power_bloc_leader_can_force_cultural_acceptance_bool_desc:0 "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to add the leader's [concept_primary_cultures] to their primary cultures."
  power_bloc_leader_can_force_cultural_adoption_bool:0 "Leader Can Force Cultural Adoption"
