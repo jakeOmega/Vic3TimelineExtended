@@ -125,7 +125,7 @@ Each fleet in Space Fleets is a card (`te_sr_fleet_row`; owner, 2026-11-14): its
 |---|---|---|
 | A card's emblem (24 px, in the head's inset box) | a gold shield badge, a silver chevron band across it under a small silver star | `fleet.dds` |
 | Warships (24 px, lit with any, 30% with none, as every role) | the Locations warship (`warship.dds`) in silver: dark grey, it sank into the card's ground at 24 px | `role_war.dds` |
-| Rapid response | a slim silver dart of an interceptor, its swept fins tipped in blue | `role_rapid.dds` |
+| Rapid response | a slim steel-blue dart of an interceptor, its swept fins tipped in yellow | `role_rapid.dds` |
 | Siege ships | a bronze armored gunship built around one huge grey cannon barrel | `role_siege.dds` |
 | Assault carriers | a wide grey hull with three open hangar bays lit orange | `role_carrier.dds` |
 | Tenders | an orange propellant tank in grey bands, a docking probe at its nose | `role_tender.dds` |
@@ -141,9 +141,9 @@ Each fleet in Space Fleets is a card (`te_sr_fleet_row`; owner, 2026-11-14): its
 | Destroy (in Seize's place while the order is to destroy) | a burst (drawn) | `order_destroy.dds` |
 | The transit track's marker (18 px, on the bar at the share of the leg flown) | a filled dart (drawn) | `track_ship.dds` |
 
-The five roles sit side by side, lit or at 30%, so each has a silhouette and a color of its own: the silver warship, a silver dart, a bronze hull behind one gun, a grey box with orange bays, an orange tank. Four of the list's subjects changed, each for a reason the pipeline's notes already give (`icon_prompts.py`'s docstring):
+The five roles sit side by side, lit or at 30%, so each has a silhouette and a color of its own: the silver warship, a steel-blue dart, a bronze hull behind one gun, a grey box with orange bays, an orange tank. Four of the list's subjects changed, each for a reason the pipeline's notes already give (`icon_prompts.py`'s docstring):
 
-- **Rapid response** was to trail a long blue exhaust. A glow cuts out to a grey blob, so the interceptor has none; its blue is on its fins and its nozzle.
+- **Rapid response** was to trail a long blue exhaust. A glow cuts out to a grey blob, so the interceptor has none. Asked for in silver it came out near white, the warship's color, so its hull is steel-blue.
 - **Siege ships** were to be dark grey, the warship's color; the hull is bronze, and the candidate with the most bulk was picked, since a long ship seen from the side is a sliver at 24 px.
 - **Assault carriers** were a flat deck with two landers lifting off. The landers were specks and the deck came out seen from the bow, a grey wedge; three lit hangar bays read at 24 px.
 - **Tenders** were a white sphere in a girder frame. White loses its body in the cut-out and a girder frame is hairlines, so the tank is orange in thick grey bands.
@@ -187,12 +187,12 @@ A picture heads Space Fleets (`te_sr_fleet_banner`, 480 × 110; owner, 2026-11-1
 
 | Drive (`sr_drive_level`) | Shows | File |
 |---|---|---|
-| Chemical (0) | five white winged rocket warships in a line in low orbit, the Earth's blue edge and its cloud below them | `fleet_banner_chemical.dds` |
+| Chemical (0) | two dark rocket warships on long orange flames over the night side of the Earth, city lights below them | `fleet_banner_chemical.dds` |
 | Fusion (1) | three long dark warships under way in echelon, each on a ring-shaped engine with a blue-white fusion flame, an orbital yard falling behind at the left | `fleet_banner_fusion.dds` |
-| Fusion torch (2) | a squadron of needle-thin warships under hard burn, each ahead of a long white torch plume that runs off the picture, Jupiter behind them | `fleet_banner_torch.dds` |
+| Fusion torch (2) | three silver warships in a level line on white exhaust that runs off the picture, Jupiter a small disc at the right | `fleet_banner_torch.dds` |
 | Antimatter (3) | two sleek dark warships, each throwing a thin violet beam from a ring-shaped nozzle, closing on a ringed planet | `fleet_banner_antimatter.dds` |
 
-The banners are the registry's `space_banner` category. Each is rendered wide (1792 × 416) and written at 960 × 220, twice the slot and exactly its shape, so the game has nothing to crop and the scene is composed for the shape: the ships sit in a band across the middle. Both sides are multiples of 4, which block compression needs.
+The exhaust carries the drive (owner, 2026-11-14): orange for chemical, blue for fusion, white for the torch, violet for antimatter. The first chemical and torch pictures were redone for it: white shuttles over a blue Earth with no flame, and plumes run back in a steep perspective that read as odd depth. The banners are the registry's `space_banner` category. Each is rendered wide (1792 × 416) and written at 960 × 220, twice the slot and exactly its shape, so the game has nothing to crop and the scene is composed for the shape: the ships sit in a band across the middle. Both sides are multiples of 4, which block compression needs.
 
 ## Kept as they are
 

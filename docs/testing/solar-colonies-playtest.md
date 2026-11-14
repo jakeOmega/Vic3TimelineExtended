@@ -913,7 +913,7 @@ lists the art. Needs Full Colonies and at least two fleets (`event te_debug_spac
    months), and the roll-up arrow at the right edge. Nothing overlaps and no label ends in "...".
 2. **Ships by role.** Five cells: Warships, Rapid, Siege, Carriers, Tenders, each with its icon, its count beside it
    and its word beneath. A role the fleet has none of shows its icon faint and a 0. Hovering any cell gives the
-   fleet's ships, each role of its full number. The icons are painted (the silver warship, a pale dart, a bronze
+   fleet's ships, each role of its full number. The icons are painted (the silver warship, a steel-blue dart, a bronze
    gunship behind one big gun, a grey carrier with three orange bays, an orange tank): can the five be told apart at
    24 px, lit and faint?
 3. **The bars.** Strength, km/s, Supply and Marines, each a caption, a bar and "now/full" under it. A fleet fresh from
@@ -934,10 +934,11 @@ lists the art. Needs Full Colonies and at least two fleets (`event te_debug_spac
    painted icons at 16 px?
 7. **The banner.** A picture 480 × 110 sits under the Space Fleets header, above the cards. Each is painted at the
    slot's own shape (960 × 220), so it should fill the slot with nothing squashed, tiled or cut off. It is the
-   chemical-drive picture at first (white rocket warships in a line over the Earth's edge), and changes once Fusion
-   Power (three dark ships on blue-white ring engines), Compact Fusion Reactors (needle ships ahead of long white
-   plumes, Jupiter behind) and antimatter drives (dark ships on violet beams, a ringed planet ahead) are ours, the
-   same step as Colony Fleets' Drive line. Is each still sharp at that size, with its ships clear of the slot's edges?
+   chemical-drive picture at first (dark rocket warships on orange flames over the night-side Earth), and changes once
+   Fusion Power (three dark ships on blue-white ring engines), Compact Fusion Reactors (silver ships on white exhaust,
+   Jupiter small at the right) and antimatter drives (dark ships on violet beams, a ringed planet ahead) are ours, the
+   same step as Colony Fleets' Drive line. The exhaust's color says the drive: orange, blue, white, violet. Is each
+   still sharp at that size, with its ships clear of the slot's edges?
 8. **A card's world.** Left of where a fleet is, the head shows that location's world at 24 px: Earth Orbit the
    Earth in its gold ring, Mars the red planet, and so on out to the Kuiper Belt's dwarf planet. A fleet in
    transit shows the world it is bound for. Exactly one shows at a time.

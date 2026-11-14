@@ -138,6 +138,11 @@ defaults (September 2026, ~350 icons):
   drawn at an angle, with the most bulk, reads best; a dark grey one sinks into the
   panel's dark ground and is gone when the panel fades it (the Warships role is the
   warship in silver).
+- In a wide picture, white spacecraft over the Earth draw space shuttles, two seeds
+  in four with hull lettering, and are lost against bright cloud at half size; a
+  planet asked for "small in the distance behind" the ships came out large, with a
+  second one beside it. Ask for dark hulls on a dark ground, and for the planet as
+  "the small disc of" it at an edge (Space Fleets' banners, 2026-11-14).
 - Fire loses its reds to the folder's grade: an explosion came out salmon, weaker
   at 20 px than the drawn red burst it replaced. On a drawn red disc it reads.
 When both candidates miss, change the subject. When the idea is right and the
@@ -2357,15 +2362,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "fleet_other": {"subject": "a plain bare steel-grey heraldic shield badge with a thick raised rim and "
                                    "nothing on its face",
                         "seed": 1, "now": f"{_GI}/space_race_icons/fleet_other.dds"},
-        # No exhaust: a glow cuts out to a grey blob.
-        "role_rapid": {"subject": "a slim silver arrowhead-shaped interceptor spacecraft seen from the side, a "
-                                  "needle nose, two sharply swept-back fins with blue tips and one big blue engine "
-                                  "nozzle at the back",
-                       "seed": 0, "now": f"{_GI}/space_race_icons/role_rapid.dds"},
-        "role_rapid_v2": {"subject": "a slim arrowhead-shaped interceptor spacecraft seen from the side, its hull dark "
-                                     "steel-blue metal, a needle nose, two sharply swept-back fins with yellow tips and "
-                                     "one big engine nozzle at the back",
-                          "seed": None, "now": f"{_GI}/space_race_icons/role_rapid.dds"},
+        # No exhaust: a glow cuts out to a grey blob. Steel-blue: asked for in silver (round 1, raws
+        # role_rapid_r1) the dart came out near white, pale at 24 px and the silver warship's colour.
+        "role_rapid": {"subject": "a slim arrowhead-shaped interceptor spacecraft seen from the side, its hull dark "
+                                  "steel-blue metal, a needle nose, two sharply swept-back fins with yellow tips and "
+                                  "one big engine nozzle at the back",
+                       "seed": 3, "now": f"{_GI}/space_race_icons/role_rapid.dds"},
         "role_siege": {"subject": "a stubby heavy dark bronze armoured gunship spacecraft seen from the side, built "
                                   "around one enormous thick grey cannon barrel that runs along its whole length "
                                   "and sticks far out past its nose",
@@ -2392,55 +2394,34 @@ ICONS: dict[str, dict[str, dict]] = {
                            "seed": 0, "now": f"{_GI}/production_method_icons/pm_earth_orbit.dds"},
     },
     # Space Fleets' banner: a fleet of the day for each drive our program flies on, on event pictures
-    # until now. Each keeps its ships in a band across the middle: the picture is 4.4 to 1.
+    # until now. Each keeps its ships in a band across the middle: the picture is 4.4 to 1. The
+    # exhaust carries the drive (owner, 2026-11-14): orange, blue, white, violet.
     "space_banner": {
+        # Round 1 (raws fleet_banner_chemical_r1) asked for white rocket warships over the Earth's
+        # blue edge and drew space shuttles and pods with no flame, blue the only colour. Dark hulls
+        # over the night side, so the orange flames carry the picture.
         "fleet_banner_chemical": {
-            "subject": "a line of five stubby white-and-grey chemical rocket warships in low orbit seen from the "
-                       "side, each with a blunt nose, short fins, a gun turret on its back and a short bright orange "
-                       "engine flame, plain unmarked hulls, the curved blue edge of the Earth along the bottom and "
-                       "black starry space above",
-            "seed": 0, "now": "gfx/event_pictures/orbital_arms_race.dds"},
-        "fleet_banner_chemical_v2": {
             "subject": "a squadron of four armed military rocket spacecraft in low orbit seen from the side, flying "
                        "from left to right, each a dark grey cylindrical rocket stage with no wings, gun turrets "
                        "and missile pods along its hull and a cluster of engine bells at the stern trailing a long "
                        "bright orange flame that lights its hull, plain unmarked hulls, the dark night side of the "
                        "Earth with scattered warm city lights curving along the bottom, black starry space above",
-            "seed": None, "now": "gfx/event_pictures/orbital_arms_race.dds"},
-        "fleet_banner_chemical_v3": {
-            "subject": "three heavy grey armoured space cruisers of the near future in low orbit seen from the "
-                       "side, flying from left to right, each built of cylindrical rocket fuel tanks and boxy "
-                       "modules bolted together, bristling with gun turrets and radar dishes, big rocket engine "
-                       "bells at the stern trailing long bright orange flames that light their hulls, plain "
-                       "unmarked hulls, the dark curve of the night side of the Earth below them with one thin line "
-                       "of orange dawn along its edge, black starry space above",
-            "seed": None, "now": "gfx/event_pictures/orbital_arms_race.dds"},
-        "fleet_banner_torch_v2": {
-            "subject": "three needle-thin silver warships seen exactly from the side, flying level from left to "
-                       "right one behind another, each trailing a long straight brilliant pure white exhaust plume "
-                       "back to the left edge of the picture, the small banded disc of the planet Jupiter far away "
-                       "in the black starry sky above them",
-            "seed": None, "now": "gfx/event_pictures/interstellar_probe_departure.dds"},
-        "fleet_banner_torch_v3": {
-            "subject": "a squadron of four slender dart-shaped silver warships seen from the side, flying from "
-                       "left to right in a level staggered line, their engines blazing brilliant white with long "
-                       "straight pure white exhaust trails streaming behind them, black starry space, the small "
-                       "banded disc of the planet Jupiter far in the distance at the upper right",
-            "seed": None, "now": "gfx/event_pictures/interstellar_probe_departure.dds"},
+            "seed": 2, "now": "gfx/event_pictures/orbital_arms_race.dds"},
         "fleet_banner_fusion": {
             "subject": "three long slender warships built of open girder trusses, each with big ring-shaped "
                        "radiators around its middle and a blue-white fusion engine flame, sailing in a line away "
                        "from a large orbital shipyard of girders and docking arms at the left, black starry space "
                        "behind",
             "seed": 0, "now": "gfx/event_pictures/orbital_battlestation_construction.dds"},
-        # s0 is retouched: it drew a second, smaller gas giant beside Jupiter, pasted over with the
-        # starfield next to it (raw in ~/flux_runs/originals/space_banner/).
+        # Round 1 (raws fleet_banner_torch_r1) ran its plumes back in steep perspective past a large
+        # Jupiter, which read as odd depth, and "Jupiter small in the distance behind them" drew a
+        # second gas giant. Seen flat from the side, Jupiter a small disc at the edge.
         "fleet_banner_torch": {
-            "subject": "a squadron of four needle-thin silver warships in a staggered line under hard "
-                       "acceleration, each ahead of a very long straight brilliant white exhaust plume streaking "
-                       "across the picture, the planet Jupiter small in the distance behind them, black starry "
-                       "space",
-            "seed": 0, "now": "gfx/event_pictures/interstellar_probe_departure.dds"},
+            "subject": "a squadron of four slender dart-shaped silver warships seen from the side, flying from "
+                       "left to right in a level staggered line, their engines blazing brilliant white with long "
+                       "straight pure white exhaust trails streaming behind them, black starry space, the small "
+                       "banded disc of the planet Jupiter far in the distance at the upper right",
+            "seed": 1, "now": "gfx/event_pictures/interstellar_probe_departure.dds"},
         "fleet_banner_antimatter": {
             "subject": "three sleek dark angular warships flying in formation, each with a ring-shaped magnetic "
                        "engine nozzle at the back throwing a long thin violet-white beam, heading toward a large "
