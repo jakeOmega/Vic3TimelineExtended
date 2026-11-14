@@ -2,9 +2,10 @@
 
 Five of the eight charts draw figures with no fixed top: Births and Deaths, Net Migration, Life Expectancy, Children
 per Woman and Median Age. Each one's axis is the largest figure its samples hold, rounded up to a round number and
-never under the axis the chart had while it was fixed (te_demog_history_axes, at each census). The bars and the axis
-label read one script value, te_demog_hist_<axis>_axis_shown, which falls back to the floor on a save whose census
-hasn't set the variable. Life expectancy's axis is the older one (test_demographics_life_tail.py holds its 10,000 cap).
+never under a small minimum, so the chart fits its figures in any era (te_demog_history_axes, at each census). The
+bars and the axis label read one script value, te_demog_hist_<axis>_axis_shown, which falls back to the fixed axis
+the chart had before on a save whose census hasn't set the variable. Life expectancy's axis is the older one
+(test_demographics_life_tail.py holds its 10,000 cap).
 The other three charts (the causes' shares, the Gini, Wealth Concentration) have fixed tops and keep their axes."""
 
 import re
@@ -20,15 +21,16 @@ GUI = ROOT / "gui" / "te_demographics_widgets.gui"
 GENERATED = ROOT / "gui" / "te_history_charts_generated.gui"
 CIVIL_WAR = ROOT / "common" / "scripted_effects" / "te_history_civil_war_effects.txt"
 
-# axis -> (the chart's id in gen_te_history_charts.CHARTS, the samples' variables it spans, its floor: the axis the
-# chart had while it was fixed)
+# axis -> (the chart's id in gen_te_history_charts.CHARTS, the samples' variables it spans, its small minimum)
 AXES = {
-    "bd": ("demog_births_deaths", ("te_dg_h_cbr", "te_dg_h_cdr"), 60),
-    "mig": ("demog_migration", ("te_dg_h_mig",), 20),
-    "e0": ("demog_e0", ("te_dg_h_e0",), 100),
-    "tfr": ("demog_tfr", ("te_dg_h_tfr",), 8),
-    "median": ("demog_median", ("te_dg_h_median",), 60),
+    "bd": ("demog_births_deaths", ("te_dg_h_cbr", "te_dg_h_cdr"), 10),
+    "mig": ("demog_migration", ("te_dg_h_mig",), 2),
+    "e0": ("demog_e0", ("te_dg_h_e0",), 10),
+    "tfr": ("demog_tfr", ("te_dg_h_tfr",), 2),
+    "median": ("demog_median", ("te_dg_h_median",), 10),
 }
+# the fixed axes the charts had before: what a save draws on until its census sets its axes
+UNSET = {"bd": 60, "mig": 20, "e0": 100, "tfr": 8, "median": 60}
 # the charts whose figures cannot pass their axis: shares of a whole, an index from 0 to 1, a percentage
 FIXED = {"demog_causes": "1", "demog_gini": "1", "demog_wc": "100"}
 
@@ -73,12 +75,22 @@ def _axes(samples, truncate=True):
 class TestAxesScript(unittest.TestCase):
     """te_demog_history_axes, run over a list of samples in the engine's fixed point."""
 
-    def test_no_sample_passes_a_floor(self):
-        # 1836's figures, and a country with no figures at all: every axis is the one the chart had
+    def test_no_figure_leaves_the_minimum(self):
+        # a country with no figures at all, and one whose figures are all tiny: every axis is its small minimum
+        tiny = [{"te_dg_h_cbr": 0.4, "te_dg_h_cdr": 0.0, "te_dg_h_mig": -0.03, "te_dg_h_e0": 0.5,
+                 "te_dg_h_tfr": 0.2, "te_dg_h_median": 3.0}]
+        for samples in (tiny, [{}], []):
+            self.assertEqual(_axes(samples), {axis: float(low) for axis, (_, _, low) in AXES.items()})
+
+    def test_the_axes_fit_each_era(self):
+        """The owner's two cases: the charts fit 1836's figures and a late game's, which the fixed axes did neither of
+        (life expectancy of 37 on 0 to 100, 1.3 children per woman on 0 to 8, a median age of 61 on 0 to 60)."""
         early = [{"te_dg_h_cbr": 38.2, "te_dg_h_cdr": 31.0, "te_dg_h_mig": -1.4, "te_dg_h_e0": 36.9,
                   "te_dg_h_tfr": 5.31, "te_dg_h_median": 21.7}]
-        for samples in (early, [{}], []):
-            self.assertEqual(_axes(samples), {axis: float(floor) for axis, (_, _, floor) in AXES.items()})
+        self.assertEqual(_axes(early), {"bd": 40.0, "mig": 2.0, "e0": 40.0, "tfr": 6.0, "median": 25.0})
+        late = [{"te_dg_h_cbr": 9.1, "te_dg_h_cdr": 6.4, "te_dg_h_mig": 3.2, "te_dg_h_e0": 123.4,
+                 "te_dg_h_tfr": 1.31, "te_dg_h_median": 61.3}]
+        self.assertEqual(_axes(late), {"bd": 10.0, "mig": 4.0, "e0": 130.0, "tfr": 2.0, "median": 70.0})
 
     def test_an_axis_reaches_its_largest_sample(self):
         # the owner's case: life expectancy of 120 takes the axis to 120 at least
@@ -87,15 +99,17 @@ class TestAxesScript(unittest.TestCase):
         got = _axes(samples)
         self.assertEqual(got["e0"], 130.0)
         self.assertEqual(got["median"], 70.0)
-        self.assertEqual((got["bd"], got["mig"], got["tfr"]), (60.0, 20.0, 8.0))   # no figure of theirs: the floors
+        self.assertEqual((got["bd"], got["mig"], got["tfr"]), (10.0, 2.0, 2.0))   # no figure of theirs: the minimums
 
     def test_every_sample_fits_and_the_axis_is_close(self):
-        """Whatever the largest figure, the axis holds it, is a round number, and stands at most a quarter over it."""
-        for top in (8.01, 9.0, 19.99, 20.0, 20.01, 33.3, 50.0, 50.01, 60.0, 61.0, 100.0, 100.01, 149.9, 200.0,
-                    200.01, 499.0, 500.01, 1708.9, 2000.0, 2000.01, 4999.0, 5000.01, 9000.01, 123456.7):
-            got = _axes([{"te_dg_h_tfr": top}, {"te_dg_h_tfr": 1.2}])["tfr"]
+        """Whatever the largest figure, the axis holds it, is a whole round number, and stands at most a quarter over
+        it from 4 up (below 4 the step of 1 is coarser, and under the minimum the axis is the minimum)."""
+        for top in (0.01, 1.31, 2.0, 2.01, 3.99, 4.0, 4.01, 8.01, 9.0, 19.99, 20.0, 20.01, 33.3, 50.0, 50.01, 60.0,
+                    61.0, 100.0, 100.01, 149.9, 200.0, 200.01, 499.0, 500.01, 1708.9, 2000.0, 2000.01, 4999.0,
+                    5000.01, 9000.01, 123456.7):
+            got = _axes([{"te_dg_h_tfr": top}, {"te_dg_h_tfr": 0.9}])["tfr"]
             self.assertGreaterEqual(got, top, top)
-            self.assertLessEqual(got, top * 1.25, top)
+            self.assertLessEqual(got, top * 1.25 if top >= 4 else max(2.0, top + 1), top)
             self.assertEqual(got, float(int(got)), top)
             step = next(s for limit, s in ((20, 1), (50, 5), (200, 10), (500, 50), (2000, 100), (5000, 500),
                                            (float("inf"), 1000)) if top <= limit)
@@ -105,10 +119,12 @@ class TestAxesScript(unittest.TestCase):
         # a war year's deaths lift the axis the births are drawn on too
         self.assertEqual(_axes([{"te_dg_h_cbr": 30.0, "te_dg_h_cdr": 20.0}, {"te_dg_h_cbr": 12.0, "te_dg_h_cdr": 84.5}])["bd"], 90.0)
         self.assertEqual(_axes([{"te_dg_h_cbr": 71.0, "te_dg_h_cdr": 20.0}])["bd"], 80.0)
+        self.assertEqual(_axes([{"te_dg_h_cbr": 9.1, "te_dg_h_cdr": 11.2}])["bd"], 12.0)
 
     def test_net_migration_is_sized_either_way(self):
         self.assertEqual(_axes([{"te_dg_h_mig": 4.0}, {"te_dg_h_mig": -33.3}])["mig"], 35.0)
         self.assertEqual(_axes([{"te_dg_h_mig": 41.0}, {"te_dg_h_mig": -33.3}])["mig"], 45.0)
+        self.assertEqual(_axes([{"te_dg_h_mig": 0.4}, {"te_dg_h_mig": -2.6}])["mig"], 3.0)
 
     def test_life_expectancy_stops_where_its_bars_do(self):
         self.assertEqual(_axes([{"te_dg_h_e0": 99000.0}])["e0"], 10000.0)
@@ -118,7 +134,7 @@ class TestAxesScript(unittest.TestCase):
     def test_an_axis_falls_when_its_year_leaves_the_store(self):
         spike = [{"te_dg_h_cdr": 310.0}] + [{"te_dg_h_cdr": 14.0}] * 5
         self.assertEqual(_axes(spike)["bd"], 350.0)
-        self.assertEqual(_axes(spike[1:])["bd"], 60.0)
+        self.assertEqual(_axes(spike[1:])["bd"], 14.0)
 
     def test_a_sample_without_the_figure_is_skipped(self):
         # a seed's sample holds no rates: read as absent, never as a zero (and never as a missing variable)
@@ -145,20 +161,25 @@ class TestAxesWiring(unittest.TestCase):
             self.assertEqual(axes.count(f"te_demog_history_axis_set = {{ AXIS = {axis} }}"), 1, axis)
         self.assertEqual(axes.count("te_demog_history_axis_take"), sum(len(v) for _, v, _ in AXES.values()))
 
-    def test_the_shown_value_falls_back_to_the_floor(self):
+    def test_an_unset_axis_is_the_old_fixed_one(self):
+        """A save from before holds no variable until its census: its charts draw on the axes they had, which hold its
+        figures. The small minimums would cut most of its bars off."""
         eng = _Engine({})
-        for axis, (_, _, floor) in AXES.items():
+        for axis, (_, _, low) in AXES.items():
             value = eng._tree(eng.values, f"te_demog_hist_{axis}_axis_shown")
             eng.vars.pop(f"te_dg_h_{axis}_max", None)
-            self.assertEqual(eng.value(value), floor, axis)      # a save from before: no variable until its census
-            eng.vars[f"te_dg_h_{axis}_max"] = 250.0
-            self.assertEqual(eng.value(value), 250.0, axis)
+            self.assertEqual(eng.value(value), UNSET[axis], axis)
+            self.assertGreater(UNSET[axis], low, axis)
+            eng.vars[f"te_dg_h_{axis}_max"] = 15.0
+            self.assertEqual(eng.value(value), 15.0, axis)       # once set, the axis may be under the old one
 
-    def test_the_floors_are_the_fixed_axes(self):
+    def test_the_minimums_and_the_unset_axes(self):
         values = _text(DISPLAY_VALUES)
-        for axis, (_, _, floor) in AXES.items():
+        for axis, (_, _, low) in AXES.items():
             if axis != "e0":                                     # life expectancy's is generated (te_demog_k_e0_axis_min)
-                self.assertIn(f"te_demog_hist_{axis}_axis_min = {{ value = {floor} }}", values)
+                self.assertIn(f"te_demog_hist_{axis}_axis_min = {{ value = {low} }}", values)
+            self.assertIn(f"te_demog_hist_{axis}_axis_unset = {{ value = {UNSET[axis]} }}", values)
+        self.assertEqual(_Engine({}).number("te_demog_k_e0_axis_min"), AXES["e0"][2])
 
 
 class TestChartsReadTheAxis(unittest.TestCase):

@@ -72,23 +72,32 @@ te_demog_trend_e0 = {
 }
 
 # ----------------------------------------------------------------------------
-# The history charts' axes (owner, 2026-11-14: a chart's axis spans the values it shows). Five charts' figures have no
-# fixed top, so each one's axis is the largest figure its samples hold, rounded up to a round number and never under
-# the floor below, which is the axis the chart had while it was fixed (te_demog_history_axes, at each census, stores
-# it as te_dg_h_<axis>_max). The chart's bars and its axis label read te_demog_hist_<axis>_axis_shown.
+# The history charts' axes (owner, 2026-11-14: a chart's axis spans the values it shows, and fits them, with a small
+# minimum). Five charts' figures have no fixed top, so each one's axis is the largest figure its samples hold, rounded
+# up to a round number and never under the small minimum below (te_demog_history_axes, at each census, stores it as
+# te_dg_h_<axis>_max). The chart's bars and its axis label read te_demog_hist_<axis>_axis_shown.
 # ----------------------------------------------------------------------------
 
-# The floors. Births and Deaths and Net Migration are per 1,000 people a year; Net Migration's is the axis's reach
-# each way from its zero line. Life expectancy's is te_demog_k_e0_axis_min (100, generated).
-te_demog_hist_bd_axis_min = { value = 60 }
-te_demog_hist_mig_axis_min = { value = 20 }
-te_demog_hist_tfr_axis_min = { value = 8 }
-te_demog_hist_median_axis_min = { value = 60 }
+# The minimums: what the axis is when every figure is smaller, so a chart of near-zero figures doesn't draw its noise
+# at full height. Births and Deaths and Net Migration are per 1,000 people a year; Net Migration's is the axis's reach
+# each way from its zero line. Life expectancy's is te_demog_k_e0_axis_min (10, generated).
+te_demog_hist_bd_axis_min = { value = 10 }
+te_demog_hist_mig_axis_min = { value = 2 }
+te_demog_hist_tfr_axis_min = { value = 2 }
+te_demog_hist_median_axis_min = { value = 10 }
 
-# Country scope: a chart's axis, or its floor on a save whose census hasn't set it yet, so the chart never reads a
-# missing variable (life expectancy's since 2026-10-20; that one stops at 10,000, where its bars do).
+# The axes of a save whose census hasn't set them yet: the fixed axes the charts had before, which hold its figures
+# as they did then. The minimums above would cut most of its bars off for up to a year.
+te_demog_hist_bd_axis_unset = { value = 60 }
+te_demog_hist_mig_axis_unset = { value = 20 }
+te_demog_hist_e0_axis_unset = { value = 100 }
+te_demog_hist_tfr_axis_unset = { value = 8 }
+te_demog_hist_median_axis_unset = { value = 60 }
+
+# Country scope: a chart's axis, or the old fixed one on a save whose census hasn't set it yet, so the chart never
+# reads a missing variable (life expectancy's since 2026-10-20; that one stops at 10,000, where its bars do).
 te_demog_hist_bd_axis_shown = {
-	value = te_demog_hist_bd_axis_min
+	value = te_demog_hist_bd_axis_unset
 	if = {
 		limit = { has_variable = te_dg_h_bd_max }
 		value = var:te_dg_h_bd_max
@@ -96,7 +105,7 @@ te_demog_hist_bd_axis_shown = {
 }
 
 te_demog_hist_mig_axis_shown = {
-	value = te_demog_hist_mig_axis_min
+	value = te_demog_hist_mig_axis_unset
 	if = {
 		limit = { has_variable = te_dg_h_mig_max }
 		value = var:te_dg_h_mig_max
@@ -104,7 +113,7 @@ te_demog_hist_mig_axis_shown = {
 }
 
 te_demog_hist_e0_axis_shown = {
-	value = te_demog_k_e0_axis_min
+	value = te_demog_hist_e0_axis_unset
 	if = {
 		limit = { has_variable = te_dg_h_e0_max }
 		value = var:te_dg_h_e0_max
@@ -112,7 +121,7 @@ te_demog_hist_e0_axis_shown = {
 }
 
 te_demog_hist_tfr_axis_shown = {
-	value = te_demog_hist_tfr_axis_min
+	value = te_demog_hist_tfr_axis_unset
 	if = {
 		limit = { has_variable = te_dg_h_tfr_max }
 		value = var:te_dg_h_tfr_max
@@ -120,7 +129,7 @@ te_demog_hist_tfr_axis_shown = {
 }
 
 te_demog_hist_median_axis_shown = {
-	value = te_demog_hist_median_axis_min
+	value = te_demog_hist_median_axis_unset
 	if = {
 		limit = { has_variable = te_dg_h_median_max }
 		value = var:te_dg_h_median_max

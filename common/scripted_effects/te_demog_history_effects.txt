@@ -305,18 +305,20 @@ te_demog_history_sort = {
 }
 
 # Scope: the country, after its samples are stored (te_demog_history_record; life expectancy's since the life table's
-# open last interval, 2026-10-20, the other four since 2026-11-14, owner: a chart's axis spans the values it shows).
+# open last interval, 2026-10-20, the other four since 2026-11-14, owner: a chart's axis spans the values it shows,
+# and fits them, with a small minimum).
 # The axes of the five charts whose figures have no fixed top, te_dg_h_<axis>_max on the country:
 #   bd      Births and Deaths: the larger of the two rates (te_dg_h_cbr, te_dg_h_cdr)
 #   mig     Net Migration: the rate's size either way (te_dg_h_mig), the axis's reach above and below the line
 #   e0      Life Expectancy (te_dg_h_e0), at most te_demog_k_e0_shown_max (10,000), where a bar stops
 #   tfr     Children per Woman (te_dg_h_tfr)
 #   median  Median Age (te_dg_h_median)
-# Each is the largest figure its samples hold, at least the chart's own floor (te_demog_hist_<axis>_axis_min in
-# te_demog_display_values.txt; te_demog_k_e0_axis_min for life expectancy), the axis the chart had while it was fixed,
-# and rounded up to a round number (te_demog_history_axis_set), since the chart prints it as the axis's label. Read
-# over every sample, so an axis falls again once the years that raised it leave the chart. One pass for all five. The
-# charts read te_demog_hist_<axis>_axis_shown, never the variables: an old save holds none until its next census.
+# Each is the largest figure its samples hold, at least the chart's small minimum (te_demog_hist_<axis>_axis_min in
+# te_demog_display_values.txt, 2 or 10; te_demog_k_e0_axis_min for life expectancy), and rounded up to a round number
+# (te_demog_history_axis_set), since the chart prints it as the axis's label. Read over every sample, so an axis
+# falls again once the years that raised it leave the chart. One pass for all five. The charts read
+# te_demog_hist_<axis>_axis_shown, never the variables: an old save holds none until its next census, and draws on
+# the fixed axes the charts had before (te_demog_hist_<axis>_axis_unset).
 # Wealth Concentration (0 to 100), the Gini (0 to 1) and the causes' shares have fixed tops and keep their axes.
 te_demog_history_axes = {
 	set_local_variable = { name = te_dg_hax_bd value = te_demog_hist_bd_axis_min }
@@ -362,8 +364,9 @@ te_demog_history_axis_take = {
 
 # Scope: the country, inside te_demog_history_axes. Stores the local te_dg_hax_$AXIS$ as te_dg_h_$AXIS$_max, rounded
 # up to the next multiple of a step that grows with the figure: 1 to 20, 5 to 50, 10 to 200, 50 to 500, 100 to 2,000,
-# 500 to 5,000 and 1,000 past that, so the axis's label is a round number and the axis stands at most a quarter over
-# its tallest bar. A figure already on a step keeps it (60 stays 60).
+# 500 to 5,000 and 1,000 past that, so the axis's label is a whole round number and the axis stands at most a quarter
+# over its tallest bar once that is 4 or more (below 4 the step of 1 is coarser: 1.3 children per woman draw on an
+# axis of 2). A figure already on a step keeps it (60 stays 60).
 te_demog_history_axis_set = {
 	if = {
 		limit = { local_var:te_dg_hax_$AXIS$ <= 20 }

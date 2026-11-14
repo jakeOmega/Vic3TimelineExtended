@@ -3,7 +3,7 @@
 The life tables sum person-years over the age groups, which end at 145-149; the survivors at 150 now live on at the death
 rate past 150 (demographics_model.tail_years, te_demog_lt_tail), in e0 and e65 alone. The panel shows e0 and e65 as they
 are up to 10,000 years and "over 10,000" past that; the stored figures stay exact. The Life Expectancy chart's axis runs to
-the largest figure its samples hold, 100 to 10,000, and a bar stops at 10,000. demographics-playtest.md has the in-game
+the largest figure its samples hold, 10 to 10,000, and a bar stops at 10,000. demographics-playtest.md has the in-game
 checks."""
 
 import re
@@ -207,7 +207,7 @@ class TestE0DisplayCap(unittest.TestCase):
 
 
 class TestE0ChartAxis(unittest.TestCase):
-    """The Life Expectancy chart: its axis te_dg_h_e0_max (100 to 10,000, the largest sample), a bar stopping at 10,000."""
+    """The Life Expectancy chart: its axis te_dg_h_e0_max (10 to 10,000, the largest sample), a bar stopping at 10,000."""
 
     def test_the_bars_read_the_axis_and_stop_at_the_cap(self):
         # the chart is its generated wrapper's (gen_te_history_charts.py)
@@ -224,7 +224,10 @@ class TestE0ChartAxis(unittest.TestCase):
     def test_the_axis_falls_back_where_no_census_has_set_it(self):
         eng = _Engine({})
         value = eng._tree(eng.values, "te_demog_hist_e0_axis_shown")
-        self.assertEqual(eng.value(value), P.E0_AXIS_MIN)          # a save from before: no te_dg_h_e0_max
+        # a save from before holds no te_dg_h_e0_max: the chart's old fixed axis, not the small minimum
+        self.assertEqual(eng.value(value), eng.number("te_demog_hist_e0_axis_unset"))
+        self.assertEqual(eng.number("te_demog_hist_e0_axis_unset"), 100)
+        self.assertLess(P.E0_AXIS_MIN, 100)
         eng.vars["te_dg_h_e0_max"] = 1708.9
         self.assertEqual(eng.value(value), 1708.9)
 

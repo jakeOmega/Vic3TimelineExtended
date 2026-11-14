@@ -2286,7 +2286,7 @@ types te_history_charts_generated_types
 							skip_initial_animation = yes
 							alwaystransparent = yes
 							color = { 0.42 0.70 0.48 1.0 }
-							### the axis runs to the year with the most births or deaths, 60 at least (te_demog_hist_bd_axis_shown); the
+							### the axis runs to the year with the most births or deaths, 10 at least (te_demog_hist_bd_axis_shown); the
 							### floor is 1% of the axis, as 0.6 was of 60
 							value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_bd_axis_shown'), '(CFixedPoint)0.01' ), ScriptContainer.GetVariableValue('te_dg_h_cbr') ) )]"
 							min = 0
@@ -2571,7 +2571,7 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_signed = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_mig')]"
-					### the axis runs as far each way as the year with the largest net move, 20 at least
+					### the axis runs as far each way as the year with the largest net move, 2 at least
 					### (te_demog_hist_mig_axis_shown); the cap is 5% of the axis, as 1 was of 20
 					blockoverride "positive_values" {
 						min = 0
@@ -2846,7 +2846,7 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_e0')]"
-					### the axis runs to the largest figure the samples hold, 100 to 10,000 (te_demog_hist_e0_axis_shown, which the
+					### the axis runs to the largest figure the samples hold, 10 to 10,000 (te_demog_hist_e0_axis_shown, which the
 					### axis's label prints), and a bar stops at 10,000; the cap is 4% of the axis, as 4 was of 100
 					blockoverride "values" {
 						min = 0
@@ -3077,7 +3077,7 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_tfr')]"
-					### the axis runs to the largest figure the samples hold, 8 at least (te_demog_hist_tfr_axis_shown);
+					### the axis runs to the largest figure the samples hold, 2 at least (te_demog_hist_tfr_axis_shown);
 					### the cap is 4% of the axis, as 0.32 was of 8
 					blockoverride "values" {
 						min = 0
@@ -3308,7 +3308,7 @@ types te_history_charts_generated_types
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable('te_dg_h_median')]"
-					### the axis runs to the largest figure the samples hold, 60 at least (te_demog_hist_median_axis_shown);
+					### the axis runs to the largest figure the samples hold, 10 at least (te_demog_hist_median_axis_shown);
 					### the cap is 4% of the axis, as 2.4 was of 60
 					blockoverride "values" {
 						min = 0
