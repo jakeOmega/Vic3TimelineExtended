@@ -3,10 +3,11 @@
 workshop_screenshots.py - Annotate in-game screenshots for the Steam Workshop page.
 
 Each image gets a header (the system's name, large and centered, with a
-one-line pitch under it), gold frames with numbered badges on the features it
-shows, short captions, and optionally a stat card with a headline count. Then
-it is saved as a JPEG under Steam's 2 MB limit. The text and coordinates of
-each image live in workshop_screenshot_specs.py (format in its docstring).
+one-line pitch under it). Where the shot needs pointing at, it also gets gold
+frames on the features it shows, a few short captions, or a stat card with a
+headline count. Then it is saved as a JPEG under Steam's 2 MB limit. The text
+and coordinates of each image live in workshop_screenshot_specs.py (format in
+its docstring).
 
 Owner preferences (2026-11-06):
 - The header is read first; the callouts come second.
@@ -16,6 +17,15 @@ Owner preferences (2026-11-06):
   count, not per-item callouts.
 - Never highlight art: the event pictures are AI-generated.
 - Counts come from the mod files, not the Workshop description.
+
+And on 2026-11-13, of the first set (two to five callouts on twelve of the
+thirteen images): "A few are fine, but sometimes the image speaks for itself
+and the annotations are more noise than anything. The header and styling are
+good though." So an image may have no callouts, a dense panel keeps a few
+(workshop_screenshot_specs.py says which), and a lone caption carries no
+number. And of frames left on a shot with their captions removed: "I don't
+think the frames without the annotations make sense." A frame always has a
+caption; a callout without one is a spec error.
 
 Usage:
     python3 scripts/image_pipeline/workshop_screenshots.py --src <screenshot dir>
@@ -118,8 +128,9 @@ class Canvas:
         self.head = self.header_layout()
         self.band_h = round(self.head["h"])
         self.col_w = round(spec.get("column", 0))
-        self.W, self.H = im.width + self.col_w, im.height + self.band_h
-        self.ox, self.oy = 0, self.band_h
+        self.margin = round(spec.get("margin", 0))  # blank canvas at each side of a narrow shot
+        self.W, self.H = im.width + 2 * self.margin + self.col_w, im.height + self.band_h
+        self.ox, self.oy = self.margin, self.band_h
         self.base = Image.new("RGB", (self.W, self.H), COLUMN)
         self.base.paste(im, (self.ox, self.oy))
         self.ov = Image.new("RGBA", (self.W * SS, self.H * SS), (0, 0, 0, 0))
@@ -206,24 +217,28 @@ class Canvas:
                        outline=GOLD_HI + (255,), width=round(s(3)))
         self.d.text((s(x), s(y + 1 * u)), str(n), font=font("Bold", s(34 * u)), fill=CREAM, anchor="mm")
 
-    def caption_size(self, title, body, width):
+    def caption_size(self, title, body, width, numbered=True):
+        """Wrapped title and body lines and the box height; a number takes 14 u of the width."""
         u = self.u
         pad = 20 * u
+        if numbered:
+            width -= 14 * u
         tl = wrap(self.measure, title, font("Bold", 44 * u), width - 2 * pad)
         bl = wrap(self.measure, body, font("Medium", 36 * u), width - 2 * pad) if body else []
         h = pad * 2 + len(tl) * 50 * u + (8 * u if bl else 0) + len(bl) * 42 * u
         return tl, bl, h
 
-    def caption(self, x, y, width, title, body, n):
-        """A caption box with its number on the left edge."""
+    def caption(self, x, y, width, title, body, n=None):
+        """A caption box, with its number on the left edge when it has one."""
         u, s = self.u, self.s
-        shift = 14 * u
-        tl, bl, h = self.caption_size(title, body, width - shift)
+        shift = 14 * u if n is not None else 0
+        tl, bl, h = self.caption_size(title, body, width, numbered=n is not None)
         pad = 20 * u
         self.d.rounded_rectangle([s(x + 4), s(y + 5), s(x + width + 4), s(y + h + 5)], radius=s(12), fill=(0, 0, 0, 110))
         self.d.rounded_rectangle([s(x), s(y), s(x + width), s(y + h)], radius=s(12), fill=PANEL,
                                  outline=GOLD + (255,), width=s(3))
-        self.badge(x, y + pad + 25 * u, n)
+        if n is not None:
+            self.badge(x, y + pad + 25 * u, n)
         tx, ty = x + pad + shift, y + pad
         for line in tl:
             self.d.text((s(tx), s(ty)), line, font=font("Bold", s(44 * u)), fill=GOLD_HI + (255,))
@@ -319,8 +334,11 @@ def render(spec, shot: Image.Image) -> Image.Image:
     cv = Canvas(spec, shot)
     cv.band()
     u = cv.u
+    callouts = reading_order(spec.get("callouts", []))
+    # Captions are numbered only when there are two or more: a lone "1" points at nothing else.
+    numbered = len(callouts) > 1
     items = []
-    for n, co in enumerate(reading_order(spec.get("callouts", [])), 1):
+    for n, co in enumerate(callouts, 1):
         if "box" in co:
             x0, y0 = cv.c(co["box"][0], co["box"][1])
             x1, y1 = cv.c(co["box"][2], co["box"][3])
@@ -340,8 +358,8 @@ def render(spec, shot: Image.Image) -> Image.Image:
         else:  # the column added to the right of the screenshot
             width = cv.col_w - 2 * round(28 * u) - 14 * u
             pos = [cv.W - cv.col_w + 42 * u, None]
-        h = cv.caption_size(co["title"], co.get("body", ""), width - 14 * u)[2]
-        items.append(dict(co=co, n=n, tgt=tgt, width=width, pos=pos, h=h))
+        h = cv.caption_size(co["title"], co.get("body", ""), width, numbered)[2]
+        items.append(dict(co=co, n=n if numbered else None, tgt=tgt, width=width, pos=pos, h=h))
 
     col = [it for it in items if it["pos"][1] is None]
     if col:
@@ -362,7 +380,7 @@ def render(spec, shot: Image.Image) -> Image.Image:
     for it in items:
         cv.caption(*it["pos"], it["width"], it["co"]["title"], it["co"].get("body", ""), it["n"])
     for it in items:
-        if "box" in it["co"] and it["co"].get("badge", True):
+        if "box" in it["co"] and it["co"].get("badge", True) and it["n"] is not None:
             cv.badge(*anchor_on_box(it["tgt"], it["co"].get("badge_at", "tl")), it["n"])
     for st in spec.get("stats", []):
         cv.stat(**st)
