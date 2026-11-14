@@ -92,6 +92,18 @@ Triage read gui.log by `grep`, so eight lines a launch looked new at every read:
 
 `Script location: common/scripted_effects/05_russia_scripted_effects.txt:846` named no `set_state_owner`, though the error was one: line 846 of the file is an `add_primary_culture`. The effect it sat in, `create_independent_national_state_in_russia`, opens at file line 717, and the `set_state_owner = c:CAU` the message describes is file line 862, the 129th non-blank, non-comment line after the definition (846 = 717 + 129). The same count gave the stack's other frame, line 1195, exactly, in an effect with no blank lines. Event, journal entry and AI strategy files give file lines. The profiler labels scripted effects the same way (`docs/audits/late_game_performance.md`). So for a scripted effect or trigger frame: find the definition above the logged line, then count code lines from it.
 
+### `gui.log` is written a buffer at a time, not at quit, and only the process list says the game has gone (2026-11-13)
+
+`gui.log` sat at 4,096 bytes from the launch, cut off in the middle of a line (`Loading Font F`), was 7,566 bytes at 23:04 with the game running, and did not grow when the game quit at 23:30. So "it has grown past its first buffer" is no sign of a quit, and neither is the report's "still running" line, which only means some log was written in the last minute: a paused game writes nothing. From WSL, `tasklist.exe | grep -i victoria3` is the test (check that `tasklist.exe` itself answered before reading "no match" as "gone"). The report leaves a log's cut-off last entry out and names it under the header (`CUT OFF`).
+
+### While the owner plays, copy the logs every five minutes and each autosave as it is written (2026-11-13)
+
+A check-in every half hour fires only when no turn is running, and a triage turn can run for an hour. `debug.log` filled five generations in the first ninety seconds of a launch, and the autosaves, one a game quarter, rotate through `autosave.v3` to `autosave_4.v3` in about twenty minutes of play. A background loop keyed on the process list (snapshot with `log_triage.py --out`, copy any autosave newer than the launch, exit with a last copy when the game is gone) lost nothing over two sessions, and its exit is the notice that the game has quit. Read each copy afterwards with `--snapshot` from the worktree, so that lines registered since stop coming back as new.
+
+### A launch that ran a branch build logs errors `main` never had (2026-11-13)
+
+Two findings of one morning launch were not `main`'s: a `filter` error at line numbers that fit neither `main`'s file nor its predecessor's, and an engine-built key for a building `main` handled differently. The launch was a QA run of an unmerged branch. The tells: line numbers that do not match `main`'s file at that commit; a load-time error absent from every later launch whose `error.log` is whole; and a deploy dry run that copies nothing, which says the game folder is `main` now and nothing about then. Close such a finding on the later launches, not on a fix you can point to.
+
 ## Mod, vanilla or third party
 
 ### A path in neither the mod nor vanilla is a third-party Workshop mod (2026-05-02)
@@ -357,6 +369,10 @@ A `debug_log` string with a bad accessor is dropped whole, and the only trace is
 
 The playtest doc explained a missing verdict as "the state changed hands within the week", and nobody had looked further. In the 1.15 observer game four checks printed `START` and nothing more, and the variable each verdict removes was still on its state in the 1849 autosave (`save_country_probe.py --states --var '^te_inh_pr_chk_before$'`: Malta, armed in January 1836). The October 1.14.5 saves held the same variables on the same states. What those checks shared was a verdict that was a state event triggered with `days = 7`; the country events delayed the same way had read OK. `workforce_lines_net` arms in every game, so its silence alone ruled out bad luck. A `sed` that prints `time status name date` per `TE_SELF_CHECK` line shows the unmatched STARTs at a glance. `test_delayed_state_events.py` now fails on a new delayed state event; the probe `delayed_state_event` tests the engine fact.
 
+### A BROKEN ratio is explained by a table of the save's records by age, not by the line (2026-11-13)
+
+`construction_site_delivery` read 0.42, and on the next build exactly 2.00. Neither number says why. Every Construction Site's level, staffing and start date, read from the autosaves and tabulated by weeks since the site was placed, did: 119 of 168 young sites held as many laborers as they were weeks old (a hiring limit, not a lack of takers), and on the next build ten of twelve sites a week after their cut held two laborers on one job (a hire that arrives after the cut). When a verdict is a ratio over many buildings, tabulate them by age before reading the script again; three saves a quarter apart also showed which sites lived long enough to matter. A state's crew variables came from `save_country_probe.py --states --var`, and a `debug_log` in state scope does print `[THIS.Var('x').GetValue|0]`.
+
 ## When the log is silent or says too little: read the save
 
 ### A raw loc key in the UI never shows up in any log — go straight to the key family, not the logs (2026-09-25)
@@ -392,6 +408,10 @@ Six ticks of the observer game read four Grand Monument losses from `TE_MONUMENT
 ### A load-time burst whose size matches a count in the save is one line per record (2026-11-09)
 
 Two registered classes were 44% of a session's lines, and one entry had said for a week that its vanilla attribution was unchecked. At one save load: 897 `Failed to read key reference: : , near line: 1" in file: ""` lines, 897 `Adding trigger after PostInitAndValidate` and 1,794 `Adding effect …`. The save held exactly 897 records of concluded journal entries, each with a key field the engine writes empty (token `0x551f`), and 875 of them were vanilla entries (`je_government_petition`, `je_krakatoa`, copied to every revolt country), so the burst is vanilla's and grows with the game's length. To find what a save holds N of: count its empty string values by the token before them (`re.finditer(rb"\x01\x00\x0f\x00\x00\x00", gamestate)`, the two bytes before each hit, with `read_gamestate` from check_save_history_order.py), then decode around one hit with `save_country_probe.tokens`. A count that fits the burst exactly, at several loads (201, 847, 897 as the game went on), is the attribution.
+
+### A building's stored throughput and its modifier's multiplier are from different moments (2026-11-14)
+
+A Russian site's throughput field read 125.7 in a save where its capacity modifier's multiplier gives 115.9, and it looked like a second throughput modifier. Across three saves the two agree exactly wherever the purchase and the sites had not changed (Singapore in all three), and differ by −14% to +37% with either sign elsewhere. Before reading a gap between two fields of one record as an effect, find a record where nothing changed between the moments they were written.
 
 ## Crashes
 
