@@ -695,12 +695,13 @@ IMAGES = {
         "prompt": "Two rival heads of state shaking hands across a table in a neutral country's elegant conference room. Flags of both nations and the host. Advisors watching cautiously.",
         "style": "oil painting, dramatic light, political tension",
         "events": ["international_relations_events.3", "nuclear_crisis.3"],
-        "reframed": "shift 0.2",
     },
     "space_rivalry_celebration": {
         "prompt": "A 1960s living room where a family watches a rival nation's rocket launch on a black-and-white television set. The father stands with arms crossed, jaw set. The mother watches with concern. Children sit on the floor, mesmerized. Through the window, a suburban neighborhood at dusk. The sting of being second.",
         "style": "oil painting, social realism, mid-century light",
         "events": ["international_relations_events.7"],
+        # The mirror brought FLUX's signature from the bottom right (under the
+        # panel) to the bottom left; it was painted out with the fabric beside it.
         "reframed": "mirror",
     },
     "trade_war_sanctions": {
@@ -2325,7 +2326,6 @@ IMAGES = {
         "prompt": "Leader delivering a wartime broadcast in a formal office while civilians listen on radios.",
         "style": "oil painting, dramatic shadows, military painting",
         "events": ["world_war_events.5"],
-        "reframed": "shift 0.2",
     },
     "home_front_factory": {
         "prompt": "Packed wartime factory with workers assembling shells and engines under bright industrial lamps.",
