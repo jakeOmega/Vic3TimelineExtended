@@ -1389,6 +1389,8 @@ MT_FERTILITY = 0.10
 # range (survivors at a radix of 100,000 x 100,000 / q). The old-age threshold still reads the table to 150.
 LT_TAIL_RATE_MIN = 1.0
 # The panel shows life expectancy as it is up to this and "over" it past (owner, 2026-10-20); the stored figure stays
-# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this.
+# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this. The
+# minimum was 100, the chart's fixed axis, until 2026-11-14 (owner: the charts fit their figures, with a small
+# minimum); a save whose census hasn't set the axis still draws on 100 (te_demog_hist_e0_axis_unset).
 E0_SHOWN_MAX = 10000
-E0_AXIS_MIN = 100
+E0_AXIS_MIN = 10
