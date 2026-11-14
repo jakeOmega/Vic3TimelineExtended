@@ -1,8 +1,9 @@
 """Which journal section each of the mod's journal entries sits in.
 
-The mod has two journal entry groups of its own (common/journal_entry_groups/00_a_te_journal_entry_groups.txt,
-owner, 2026-11-14): Timeline Extended Systems, every entry the player works through with its own panel, tab, bar
-or buttons, and Rights and Society, the social debates. The rest keep a vanilla group. A new entry has to be
+The mod has two journal entry groups of its own (common/journal_entry_groups/00_a_te_journal_entry_groups.txt):
+Timeline Extended Systems, every entry the player works through with its own panel, tab, bar or buttons (the
+owner's ask, which leaves out the narrative entries), and Rights and Society, the social debates (the
+classification of that rule, PR #1797). The rest keep a vanilla group. A new entry has to be
 placed on purpose, so this pins the members of each group and the entries left outside them.
 
 - Every entry the mod defines or replaces names a group that exists (the engine says nothing about a missing one).

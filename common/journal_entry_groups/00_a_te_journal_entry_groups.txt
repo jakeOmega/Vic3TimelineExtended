@@ -1,7 +1,9 @@
-﻿# The mod's own journal entry groups: two sections of the journal (owner, 2026-11-14).
-# Timeline Extended Systems holds every entry the player works through with its own
-# panel, tab, bar or buttons; Rights and Society holds the social debates. Everything
-# else, and every vanilla entry the mod replaces or injects into, keeps its group.
+﻿# The mod's own journal entry groups: two sections of the journal. The owner asked for
+# Timeline Extended Systems as a section of its own, leaving out the narrative entries
+# such as the rights debates; it holds every entry the player works through with its own
+# panel, tab, bar or buttons. Rights and Society, the social debates, is the second
+# section, from the classification of that rule (PR #1797). Everything else, and every
+# vanilla entry the mod replaces or injects into, keeps its group.
 # test_journal_entry_groups.py pins who is in each, so a new entry is placed on purpose.
 #
 # The fields (vanilla 1.15, <game>/common/journal_entry_groups/00_journal_entries.txt):
