@@ -115,16 +115,16 @@ The mod contains AI-generated event images, icons, and some flavor text. Hand-wr
 
 ## Draft for the next release
 
-Not yet published (proposed 2026-11-14). Six images from `workshop_composites.py` stand in for the title, the at-a-glance list, the systems' paragraphs and the technology paragraph, and the text that only repeated them is gone: the megastructures sentence (the eras image and the at-a-glance card have them), the game-rules bullet (the opening line and Compatibility say it) and the counts. What the images can't carry stays as text: the systems' names, for search and for a reader whose images don't load, and everything no image covers. Against the player guide, the text gains what the description never named: the 2136 end date, the Map Room, formable countries and city-states, reunification, culture merges and bloc summits, and the World War gets a line of its own. Other changes from the published text: Victoria 3 1.15.1, a State Pictures line, state pictures in the AI disclosure, American spelling, and the Laws paragraph names law groups the system cards don't already cover.
+Not yet published (proposed 2026-11-14). Six images from `workshop_composites.py` stand in for the title, the at-a-glance list, the systems' paragraphs and the technology paragraph, and the text that only repeated them is gone: the megastructures sentence (the eras image and the at-a-glance card have them), the game-rules bullet (the opening line and Compatibility say it) and the counts. What the images can't carry stays as text: everything no image covers, and the systems' names, for search and for a reader whose images don't load. The names are a sentence that leads into the cards, grouped by where each system acts; a bare list under the cards read as a repeat of them (owner, 2026-11-14). Against the player guide, the text gains what the description never named: the Map Room, formable countries and city-states, reunification, culture merges and bloc summits, and the World War gets a line of its own. It gives no end year (owner, 2026-11-14). Other changes from the published text: Victoria 3 1.15.1, a State Pictures line, state pictures in the AI disclosure, American spelling, and the Laws paragraph names law groups the system cards don't already cover.
 
-With a five-character tag it is 4,987 characters counting each line break as two, so about 3,000 are free. Before publishing: render the images into `docs/workshop/`, commit them, tag, and put the tag in place of each `<tag>` (seven: six images and the guide link). `desc_hero_eras` is a hero with no pictures in it, for `desc_hero_ages`. Moving only the hero, the at-a-glance card and the eras into images saved nothing on the 1.3.1 text (8,124, over the limit): the systems' paragraphs are where the characters are.
+With a five-character tag it is 5,051 characters counting each line break as two, so about 2,900 are free. Before publishing: render the images into `docs/workshop/`, commit them, tag, and put the tag in place of each `<tag>` (seven: six images and the guide link). `desc_hero_eras` is a hero with no pictures in it, for `desc_hero_ages`. Moving only the hero, the at-a-glance card and the eras into images saved nothing on the 1.3.1 text (8,124, over the limit): the systems' paragraphs are where the characters are.
 
 ```bbcode
 [b]Updated for Victoria 3: 1.15.1.[/b]
 
 [img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_hero_ages.jpg[/img]
 
-[i]Extend Victoria 3 past 1936 into the modern era and a speculative future: a campaign now runs to 2136. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
+[i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
 
 [b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/<tag>/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
 
@@ -135,10 +135,11 @@ With a five-character tag it is 4,987 characters counting each line break as two
 [*]English, plus machine-translated German and Spanish; English fallback for other languages
 [/list]
 
+Nineteen systems run alongside the base game. In the economy: banking and monetary policy, free market construction, power grids, and a legislated tax code. Between nations: the United Nations, the global commons, decolonization, cultural hegemony, covert warfare, nuclear weapons, a modern military, global warming, and the space race. Within them: demographics, healthcare and biotechnology, courts and judiciary, social movements, internal resettlement, and grand monuments and archaeology.
+
 [img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_systems_1.jpg[/img]
 [img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_systems_2.jpg[/img]
 [img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_systems_3.jpg[/img]
-[i]Above: Banking and Monetary Policy, Space Race, Global Warming, Demographics, United Nations, Global Commons, Nuclear Weapons, Decolonization, Covert Warfare, Cultural Hegemony, Modern Military, Social Movements, Free Market Construction, Power Grids, Courts and Judiciary, Grand Monuments and Archaeology, Legislated Tax Code (experimental), Healthcare and Biotechnology, Internal Resettlement.[/i]
 
 [h1]More ways to shape your country[/h1]
 
