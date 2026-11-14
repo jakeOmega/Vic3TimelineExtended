@@ -50,8 +50,9 @@ profit of its financial districts, manor houses and company headquarters.
 
 A map of figures shows how states differ now, not how the world has moved: its
 colors run from the fifth lowest state in the world to the fifth highest, the
-few beyond each end at its colors' limits, and the button's tooltip gives that
-range. The range is measured when you pick a map and again each month. A map
+few beyond each end at its colors' limits, unless Map Options (below) sets
+another area or trim. The button's tooltip gives the range and what it was
+measured over. The range is measured when you pick a map and again each month. A map
 with a meaningful middle keeps it: Fertility is cream at replacement, Natural
 Change, Net Migration and Population Growth at none, Sex Balance at even and the
 comfort maps at no penalty, and each side's colors run to the world's extreme on that side.
@@ -89,6 +90,28 @@ that cause took at least half as many deaths as the leader. Leading Cause,
 Birth Rate, Death Rate, Natural Change, Net Migration and War Dead need a
 state's first full census year, and Population Growth its second yearly count,
 so they start gray.
+
+Map Options, below the groups, changes where the Map Room draws its maps and
+how a map of figures measures its range. Its header shows what is set, and
+the page says so at the top while anything is off its default.
+
+| Option | Settings | What it does |
+|---|---|---|
+| Area | World, Continent, Market, Power Bloc, Country | Limits every map to one continent, your market, your power bloc or your own country. States outside turn slate and show no figure, and a map of figures runs its colors over the states inside. |
+| Outliers | Trim 4 Each End, Keep All, Trim 5% | Sets how many states each end of a range leaves out: four, none, or 5% of the states with a figure. |
+
+Limit GDP per Capita to Europe and its colors run from Europe's poorest state
+to its richest, so you see how Europe's states differ where the world map
+shows them all as rich. Continent starts on the one your capital stands in,
+and each continent's tooltip lists its strategic regions: the Middle East and
+Siberia count as Asia, Mexico and the Caribbean as North America. Market,
+Power Bloc and Country follow your country, a month behind at most; if you
+leave your bloc, the area goes back to the world. In an area smaller than the
+world, Trim 4 Each End leaves out at most a tenth of the area's states at each
+end. Outliers does nothing to a map of categories or on a fixed scale, such as
+Leading Cause or City Rank, and its buttons are grayed there. The options
+apply to the Map Room only: a system's own journal entry draws its map over
+the whole world whatever you set here.
 
 Those nine systems' tabs, and Demographics', have a map button left of the
 "?" that opens the Map Room on their map. Seven of the nine (all but Ocean
