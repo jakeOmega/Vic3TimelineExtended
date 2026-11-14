@@ -2,7 +2,8 @@
 # Timeline Extended Systems as a section of its own, leaving out the narrative entries
 # such as the rights debates; it holds every entry the player works through with its own
 # panel, tab, bar or buttons. Rights and Society, the social debates, is the second
-# section, from the classification of that rule (PR #1797). Everything else, and every
+# section, from the classification of that rule (PR #1797); the owner put the
+# Post-Scarcity Transition there too ("I'd put it in society"). Everything else, and every
 # vanilla entry the mod replaces or injects into, keeps its group.
 # test_journal_entry_groups.py pins who is in each, so a new entry is placed on purpose.
 #
@@ -36,9 +37,9 @@
 
 # Every system: Banking, the Tax Code, the Strategic Reserve, Global Warming and World
 # Climate, the Space Race, Nuclear Weapons, the United Nations, Covert Warfare, Cultural
-# Hegemony, the Colonial Empire, Monuments, Heir Education, the Post-Scarcity Transition
-# and the culture merges (gen_culture_merges.py). The picture is vanilla's Development:
-# an engine hall, the machinery a country runs.
+# Hegemony, the Colonial Empire, Monuments, Heir Education and the culture merges
+# (gen_culture_merges.py). The picture is vanilla's Development: an engine hall, the
+# machinery a country runs.
 je_group_te_systems = {
 	context = country
 	illustration = "gfx/interface/illustrations/journal/je_group_illu_technology.dds"
@@ -46,9 +47,9 @@ je_group_te_systems = {
 }
 
 # The debates: the Civil Rights Movement, Digital Rights & Surveillance, the Human
-# Augmentation and Morphological Freedom debates and the Mental Health Crisis. The
-# picture is vanilla's Domestic Affairs, a chamber in uproar, which their pages showed
-# before.
+# Augmentation and Morphological Freedom debates and the Mental Health Crisis; and the
+# Post-Scarcity Transition (the owner's placement). The picture is vanilla's Domestic
+# Affairs, a chamber in uproar, which the debates' pages showed before.
 je_group_te_rights_and_society = {
 	context = country
 	illustration = "gfx/interface/illustrations/journal/je_group_illu_internal_affairs.dds"

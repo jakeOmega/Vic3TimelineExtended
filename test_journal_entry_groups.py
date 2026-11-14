@@ -3,7 +3,8 @@
 The mod has two journal entry groups of its own (common/journal_entry_groups/00_a_te_journal_entry_groups.txt):
 Timeline Extended Systems, every entry the player works through with its own panel, tab, bar or buttons (the
 owner's ask, which leaves out the narrative entries), and Rights and Society, the social debates (the
-classification of that rule, PR #1797). The rest keep a vanilla group. A new entry has to be
+classification of that rule, PR #1797) and the Post-Scarcity Transition (the owner's placement). The rest keep a
+vanilla group. A new entry has to be
 placed on purpose, so this pins the members of each group and the entries left outside them.
 
 - Every entry the mod defines or replaces names a group that exists (the engine says nothing about a missing one).
@@ -61,7 +62,6 @@ SYSTEM_ENTRIES = frozenset({
     "je_colonial_empire",
     "je_grand_monuments",
     "je_heir_education",
-    "je_post_scarcity",
 })
 RIGHTS_ENTRIES = frozenset({
     "je_civil_rights",
@@ -69,6 +69,7 @@ RIGHTS_ENTRIES = frozenset({
     "je_human_augmentation",
     "je_morphological_freedom",
     "je_mental_health_crisis",
+    "je_post_scarcity",  # the owner: "I'd put it in society"
 })
 # The mod's own entries that stay in a vanilla group: The Gathering Storm, State Collapse and Create New Religion,
 # and the Map Room, which is contextless and listed in no journal.
@@ -173,7 +174,7 @@ class JournalEntryGroupTest(unittest.TestCase):
 
     def test_counts(self):
         self.assertEqual(len(SYSTEM_ENTRIES | merge_entries()), len(SYSTEM_ENTRIES) + len(cfg.MERGES))
-        self.assertEqual((len(SYSTEM_ENTRIES), len(RIGHTS_ENTRIES), len(OUTSIDE)), (21, 5, 4))
+        self.assertEqual((len(SYSTEM_ENTRIES), len(RIGHTS_ENTRIES), len(OUTSIDE)), (20, 6, 4))
 
 
 if __name__ == "__main__":
