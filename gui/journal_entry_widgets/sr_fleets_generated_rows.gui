@@ -2227,7 +2227,7 @@ types sr_fleets_generated_rows_types
 				tooltip = "sr_loc_name_earth"
 			}
 			blockoverride "loc_icon" {
-				texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
+				texture = "gfx/interface/icons/space_race_icons/location_earth.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]"

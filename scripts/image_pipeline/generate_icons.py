@@ -520,8 +520,8 @@ def stage_compose(cat: str, only: set[str], work: Path) -> None:
 
 
 def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) -> None:
-    from icon_render import (Composer, backdrop_sheet, panel_preview, review_sheet, strip_sheet, vanilla_folder,
-                             vanilla_icons_dir)
+    from icon_render import (Composer, backdrop_sheet, banner_sheet, panel_preview, review_sheet, strip_sheet,
+                             vanilla_folder, vanilla_icons_dir)
     from PIL import Image
 
     current = current_icons(cat)
@@ -556,6 +556,8 @@ def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) ->
         dest = out / f"{cat}_{i // SHEET_ROWS + 1:02d}.png"
         if spec["mode"] == "strip":
             strip_sheet(rows[i:i + SHEET_ROWS], vanilla_folder(spec) / "institution_image_mask.dds", dest)
+        elif spec["mode"] == "banner":
+            banner_sheet(rows[i:i + SHEET_ROWS], dest)
         else:
             # A folder new to the mod (un_icons) has no vanilla files to show beside it.
             review_sheet(rows[i:i + SHEET_ROWS], spec.get("neighbours", spec["folder"]), dest)
