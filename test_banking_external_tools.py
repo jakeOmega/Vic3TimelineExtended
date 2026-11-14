@@ -685,7 +685,7 @@ class DisplayModifierTest(unittest.TestCase):
 
 
 class OnYourCurrencyTest(unittest.TestCase):
-    """Each exchange tool's dashboard tooltip has an "On your currency" line
+    """Each exchange tool's dashboard tooltip has an "On this currency" line
     (2026-11-14, docs/superpowers/specs/2026-11-14-external-currency-tools-design.md)
     whose figures are display values: the pulse's own formula with the tool's
     factor taken out or put in. Each "with the tool" figure is held to what the
@@ -720,7 +720,7 @@ class OnYourCurrencyTest(unittest.TestCase):
                         for key, _, body in self.custom['banking_ext_now_' + custom] if key == 'text']
                 self.assertTrue(keys)
                 for key in keys:
-                    self.assertTrue(self.loc[key].startswith('#title On your currency:#! '), key)
+                    self.assertTrue(self.loc[key].startswith('#title On this currency:#! '), key)
                 # The last branch takes everything else: it has no trigger.
                 last = [body for key, _, body in self.custom['banking_ext_now_' + custom] if key == 'text'][-1]
                 self.assertNotIn('trigger', [k for k, _, _ in last])

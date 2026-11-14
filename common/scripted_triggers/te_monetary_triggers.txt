@@ -901,7 +901,7 @@ te_mon_fx_is_devalued = {
 # Is the index held at par, so it can add no weak-currency premium
 # (te_mon_premium_fx)? Metal that is neither anchored (an anchored index is the
 # anchor's, te_monetary_update_fx's first branch) nor devalued. The
-# "On your currency" line of Limit Foreign-Currency Borrowing reads it
+# "On this currency" line of Limit Foreign-Currency Borrowing reads it
 # (banking_ext_now_fx_borrowing).
 te_mon_fx_pinned_at_par = {
 	te_mon_is_metallic = yes

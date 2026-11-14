@@ -459,8 +459,9 @@ Rate Index heads for instead (see
 [The exchange-rate index and capital controls](#the-exchange-rate-index-and-capital-controls)).
 On Commodity Money no rate of yours moves money across the border, so Capital
 Controls and Restrict Speculative Inflows do nothing there beyond their
-modifiers. Each tool's tooltip has an "On your currency" line that says what it
-does on yours, with the figure it changes now and with the tool.
+modifiers. Each tool's tooltip has an "On this currency" line that says what it
+does on the currency you have, with the figure it changes now and with the
+tool.
 
 | Intervention | What you gain | What you pay or give up |
 |---|---|---|

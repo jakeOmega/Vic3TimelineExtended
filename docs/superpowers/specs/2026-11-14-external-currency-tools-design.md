@@ -85,7 +85,7 @@ No change to any script value, trigger or effect a pulse runs.
 - **Descriptions** (`CB_*_DESC`, which the buttons and the modifiers share): the
   promise first, in words true on every currency, then the cost. What differs by
   currency moves out of them.
-- **"On your currency:"**, a new line in each tool's dashboard tooltip
+- **"On this currency:"**, a new line in each tool's dashboard tooltip
   (`banking_dash_tt_cb_*`), right under the description. A custom localization
   per tool (`banking_ext_now_<tool>`, `common/customizable_localization/banking_dash_custom_loc.txt`)
   picks the branch for the player's currency and gives the figure the tool

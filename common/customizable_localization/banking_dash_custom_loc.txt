@@ -869,7 +869,7 @@ te_mon_fx_controls_note = {
 
 
 # ----------------------------------------------------------------------------
-# External & Currency: "On your currency" (2026-11-14)
+# External & Currency: "On this currency" (2026-11-14)
 # ----------------------------------------------------------------------------
 # The line under each exchange tool's description in its dashboard tooltip
 # (banking_dash_tt_cb_*): what the tool does to this country's currency now,

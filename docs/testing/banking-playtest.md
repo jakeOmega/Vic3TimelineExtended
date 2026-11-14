@@ -385,14 +385,14 @@ decaying ones come back at the share of their term left, read off a ladder of li
 
 ## External & Currency: one promise each, on every currency (2026-11-14, PR 1)
 
-The five exchange tools' tooltips gained an "On your currency" line under the description, picked by the country's
+The five exchange tools' tooltips gained an "On this currency" line under the description, picked by the country's
 currency (`banking_ext_now_*` in `banking_dash_custom_loc.txt`) and printing live figures (`banking_ext_disp_*` in
 `banking_external_values.txt`). Capital Controls (Outflows) is now Capital Controls and Sterilize Capital Inflows is
 Sterilization. Nothing a pulse runs changed. Design: `docs/superpowers/specs/2026-11-14-external-currency-tools-design.md`.
 
 1. **The line renders, on each currency.** Hover each of the five rows (Enable and active) as a country on a convertible
    Gold Standard with a national bank, as one on Fiat Money with a national bank, and as one on Commodity Money. Each
-   tooltip shows "On your currency:" between the description and "Requires:", with figures, not raw `[...]` calls or
+   tooltip shows "On this currency:" between the description and "Requires:", with figures, not raw `[...]` calls or
    keys. Gold: Capital Controls and Restrict Speculative Inflows give the World Rate Gap, and it matches the dashboard's
    World Rate Gap row while controls are off (a quarter of it while on). Fiat: the two give the rate term, and with
    neither tool on their first figure matches "The real rate against the world's" in the Exchange Rate tooltip. Commodity Money: both

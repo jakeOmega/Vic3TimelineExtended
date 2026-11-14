@@ -157,7 +157,7 @@ banking_external_surrender_purchase_display = {
 	}
 }
 
-# --- "On your currency": what each tool changes, for the dashboard ----------
+# --- "On this currency": what each tool changes, for the dashboard ----------
 # The line under each exchange tool's description in its dashboard tooltip
 # (banking_ext_now_* in banking_dash_custom_loc.txt) gives the figure the tool
 # changes on this country's currency, without the tool and with it, everything
