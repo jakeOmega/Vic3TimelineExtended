@@ -1784,3 +1784,27 @@ table: `cause_deaths_estimate` (the sweep's natural deaths against the independe
    deaths per 1,000 in the panel against the year before: the same to the first decimal.
 4. **A seed** (any rule that runs the census). Console option c, which re-seeds the country's census, then the
    country's pyramid: the same shape as before the re-seed, the bars from 85 up no shorter or longer by eye.
+
+## The Healthcare principles in the census (2026-11-14)
+
+The Healthcare power bloc ladder carries census inputs and a discount on the Family Policy measures' money upkeep
+(`docs/systems/mod_systems/demographics.md`, "The Healthcare principles"). Offline: `test_healthcare_principles.py`
+pins the ladder and `test_demographics_measures.py` the discount. No self-check was added: script-read state types
+already sit in principles' `member_modifier` and `institution_modifier` (Cultural Plurality V), and script reads a
+country type off a principle too (`country_cultural_pull_add`, Cultural Hegemony's pull).
+
+1. **The tooltips** (any rule). A Healthcare tier's tooltip lists Health Care Access and Mortality with one decimal
+   (0.5% at tiers I and II, 1.5% at V), a level of the Ministry of Health. The three health laws' own lines read with
+   one decimal too (3.0%, 6.0%, 10.0%); if they read wrong, set `decimals = 0` back on `state_health_care_access_add`
+   and `state_demog_absorbed_mortality_mult` and make the ladder's steps whole percents.
+2. **Access** (Full). In a bloc with Healthcare, a member's incorporated state under a health law: the Causes of Death
+   section's Health Care Access heads for 40% + the law's line + the principle's, each times the Ministry of Health's
+   level, and closes on it faster from tier II (`TE_DEMOG_MODS`' `diff=` higher by 0.05, 0.10 from tier IV). If access
+   doesn't move, a principle's `institution_modifier` doesn't reach a state's read of a script-only type: carry access
+   flat in `member_modifier` instead (2.5, 5 and 7.5 points).
+3. **Outside Full** (Display only or Disabled). The same state's mortality tooltip lists Laws and Institutions lower
+   by the principle's absorbed line within a month of the bloc taking the principle.
+4. **Family Policy** (Full). With Child Allowance running in a member of a tier III bloc, the row's running cost is
+   10% under what it reads outside the bloc, and the budget's Family Policy row follows at the next yearly pulse.
+5. **Malaria** (any rule). A member without Malaria Prevention owning a malarial state at tier III: the state's Local
+   Climate tooltip shows its malaria part eased by a quarter; under Full its infection hover's Malaria line shrinks.

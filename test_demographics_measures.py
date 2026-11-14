@@ -83,6 +83,7 @@ BIRTH_LIMIT_ONE = {
     "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
     "country_authority_cost_add": 400}
 MONEY = {"child_allowance": 0.005, "family_housing": 0.0025, "parental_leave": 0.003, "free_contraception": 0.001}
+UPKEEP_READ = "modifier:country_family_policy_upkeep_mult"   # the Healthcare principles' discount (2026-11-14)
 NEW_TYPES = ("state_desired_fertility_mult", "state_urban_fertility_relief_add", "state_means_literacy_add",
              "state_maternal_mortality_mult", "state_birth_limit_relief_add", "state_sex_ratio_at_birth_add")
 
@@ -105,7 +106,8 @@ class _MeasureEngine(_Engine):
 
     def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None, others=()):
         super().__init__({"te_history_month_index": _date(year, month), "gdp": 52_000_000.0,
-                          "capital.te_demog_women_rate": 0.5, "authority": 1000.0, **(fixtures or {})},
+                          "capital.te_demog_women_rate": 0.5, "authority": 1000.0,
+                          UPKEEP_READ: 0.0, **(fixtures or {})},
                          triggers={"te_demog_effects_run": full, "is_ai": False, **(triggers or {})})
         self.effects.update(_raw_blocks([MS_EFFECTS]))
         self.values.update(_raw_blocks([MS_VALUES]))
@@ -621,6 +623,27 @@ class TestUpkeep(unittest.TestCase):
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_parental_leave"), gdp * 0.003 * 0.6 / 52, places=2)
         eng.exists.clear()
         self.assertEqual(eng.sv("te_demog_ms_cost_parental_leave"), 0)
+
+    def test_family_policy_upkeep_scales_the_four_money_upkeeps(self):
+        """The Healthcare principles' Family Policy Upkeep (owner, 2026-11-14): each money upkeep x (1 + it), at least
+        0; the authority upkeeps read no part of it."""
+        gdp = 52_000_000.0
+        eng = _MeasureEngine(fixtures={"gdp": gdp})
+        eng.vars.update(te_dg_young_share=0.15, te_dg_urban_share=0.8)
+        plain = {m: eng.sv(f"te_demog_ms_cost_{m}") for m in MONEY}
+        self.assertEqual(set(plain), set(re.findall(r"(?m)^te_demog_ms_cost_(\w+) = \{", _text(MS_VALUES))))
+        eng.fixtures[UPKEEP_READ] = -0.3
+        for m, cost in plain.items():
+            self.assertGreater(cost, 0, m)
+            self.assertAlmostEqual(eng.sv(f"te_demog_ms_cost_{m}"), cost * 0.7, places=2, msg=m)
+        eng.fixtures[UPKEEP_READ] = -1.5
+        for m in plain:
+            self.assertEqual(eng.sv(f"te_demog_ms_cost_{m}"), 0, m)
+        values = re.sub(r"#[^\n]*", "", _text(MS_VALUES))
+        self.assertEqual(values.count("multiply = te_demog_ms_upkeep_factor"), len(MONEY))
+        self.assertEqual(values.count(UPKEEP_READ), 1)
+        for name in re.findall(r"(?m)^(te_demog_ms_authority_\w+) = ", values):
+            self.assertNotIn("upkeep", _block(values, name), name)
 
     def test_the_cost_modifier_takes_the_cost(self):
         eng = _MeasureEngine(law=FP, fixtures={"gdp": 52_000_000.0}).press("free_contraception")

@@ -388,7 +388,7 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Multilateral Institutions | Intergovernmental Organizations | Diplomatic reputation and UN alignment; at tiers IV and V members can't fight each other. |
 | Global Security | Nuclear Weapons | Less radicalism and turmoil in members, more maneuvers for the leader. |
 | Education | Nothing | Cheaper schools, education access, technology spread. |
-| Healthcare | Pharmaceuticals | Cheaper health ministries, recovery and birth rate. |
+| Healthcare | Pharmaceuticals | Cheaper health ministries and unit recovery. With each Ministry of Health level, more health care access under Demographics' Full setting and lower mortality without it. Higher tiers add faster spread of medicine, malaria control, cheaper family policy measures and, at tier V, a faster fall in the price of longevity care. |
 | Welfare | Nothing | Welfare payments, lower living-standard expectations. |
 | Cultural Unity | Nothing | Faster assimilation and homeland change. |
 | Cultural Plurality | Nothing | Cultural acceptance, migration, technology spread. |

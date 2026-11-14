@@ -118,7 +118,8 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             old = self.before[path].decode("utf-8-sig").split("\n")
             new = self.after[path].decode("utf-8-sig").split("\n")
             rest = [line[len(TAG):] if line.startswith(TAG) else line for line in new]
-            rest = [line for line in rest if line.strip() != "always = no"]
+            if path.name == "te_demog_triggers.txt":   # the gates' file: no other file gains the line, and the
+                rest = [line for line in rest if line.strip() != "always = no"]   # principles file holds its own
             self.assertEqual(rest, old, path.relative_to(self.root))
 
     def _entry_lines(self, text, name):
