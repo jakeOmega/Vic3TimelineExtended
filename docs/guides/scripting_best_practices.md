@@ -3578,6 +3578,14 @@ form_decolonized_country = {
 
 ROOT after the call is the caller's root, not the new country. A helper moved out of `on_created` that used `ROOT` for the new country must save `THIS` at its top and use that instead (`apply_decolonization_path` saves `scope:decolonized_new_country`).
 
+## An event fired from a journal entry's outcome reads the scopes the outcome saved
+
+A `trigger_event` in an outcome's `effect` (or `effect_all_involved`) hands the event every scope the effect saved before the call, so the event can read one it never saves. Vanilla relies on it: `je_german_unification`'s success outcome (`00_german_unification.txt`) saves `german_unifier_candidate` inside a `hidden_effect` in its plain `effect` and fires `german_unification.5`, which reads it and never saves it; `01_ryukyu_rivalry.txt` does the same from `effect_all_involved` for `ryukyu_rivalry.5` (`victor_scope`, `loser_scope`; 1.15.1). So to widen what a vanilla event finds without overriding the event, a `REPLACE` of the entry can save the event's scopes first, in a `hidden_effect` before the `trigger_event`; where the event's own search finds something it saves over them, and where it finds nothing it leaves them be. `te_vanilla_war_nursing.txt` does this for `nursing_events.4`, whose search knows only Field Hospitals (2026-11-14; in game unread, `docs/testing/war-wounded-playtest.md`).
+
+## `army_mobilization_option_fraction` has no value form: add shares with a ladder of literal pairs
+
+The trigger reads one option's share of the army's battalions and nothing reads it as a number (1.15.1 `triggers.log`, `event_targets.log`). Where options exclude each other per formation (each one's `possible` rules out the others, as in the medic-support group), their shares have one denominator and add exactly, so "A and B together at 20% or more" is an `OR` of rungs `AND = { A >= 0.19 B >= 0.01 }` … `AND = { A >= 0.01 B >= 0.19 }` beside each option alone at 0.20. In 1% steps, a sum of 21% always passes, one under 20% never does, and one between can fall between rungs. Keep each option alone outside the `custom_tooltip` that hides the rungs: its native line prints the current share. `te_army_has_field_hospitals_or_better_share` (`te_war_nursing_triggers.txt`) is the pattern, and `test_war_wounded_medics.py` checks that its rungs add up. Options in a group that doesn't exclude (special weapons, reconnaissance) can overlap on a formation, and their shares can't be added this way.
+
 ## `create_dynamic_country` Runs in `scope = none`
 
 Per engine docs, `create_dynamic_country` has `scopes = ["none"]`. That means **`owner`, `THIS`, and bare identifiers do not resolve to the surrounding scope chain** — they silently produce null. All parameter values must be one of:

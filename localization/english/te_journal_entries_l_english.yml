@@ -3623,6 +3623,7 @@
  je_united_nations:0 "[SelectLocalization(GetPlayer.IsValid,'un_org_name_ingame','un_org_name_un')]"
  je_united_nations_invalid_conclusion_desc:0 "The $concept_journal_entry$ ended when the United Nations game rule was switched off, and the organization with it"
  je_united_nations_reason:0 "An intergovernmental organization promoting international cooperation. Its members gain diplomatic benefits that grow with [concept_un_authority], and the institution is as strong as the world's powers make it. How the UN Works, above, explains the rest."
+ je_war_nursing_combined_medic_share_tt:0 "Together, $mobilization_option_field_hospitals$ and $mobilization_option_medevac_helicopters$ are used by at least 20% of [Concept('concept_battalion','$concept_battalions|q$')] (add the two shares above)"
  je_world_climate:0 "World Climate"
  je_world_climate_reason:0 "Every country shares one climate. Once the world is 0.1 °C warmer than before industry, each carries $global_warming$ at the world's temperature: a lower standard of living, higher mortality, poorer farms, and harsher floods, droughts, heatwaves and wildfires. A state between the tropics takes more of the harm, through $global_warming_tropics$, and one 55° or more from the equator less, through $global_warming_high_latitudes$. What you do about it is in the Global Warming entry."
  je_world_war:0 "The Gathering Storm"
