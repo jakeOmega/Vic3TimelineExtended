@@ -11,7 +11,11 @@ How a release is cut, from `main` to the Workshop and GitHub. 1.1.9 (2026-10-18)
 
 ## 2. What ships
 
-From 1.2.0 a release ships `main` as it stands, the Demographics census included (owner, 2026-10-26). Set `.metadata/metadata.json`'s version on `main`, write the notes to `docs/releases/<version>.md` (Markdown, one bullet per area; the Workshop's change notes take the same bullets as a BBCode `[list]`), merge, and release the merged commit.
+From 1.2.0 a release ships `main` as it stands, the Demographics census included (owner, 2026-10-26). Set `.metadata/metadata.json`'s version on `main`, write the notes to `docs/releases/<version>.md` (Markdown, one bullet per area; the Workshop's change notes take the same bullets as a BBCode `[list]`, and 1.3.2's 7,000 characters fit), merge, and release the merged commit.
+
+The same PR carries the Workshop description (`docs/audits/steam_workshop_description.md`): its six images, redrawn into `docs/workshop/` (`scripts/image_pipeline/workshop_composites.py --out docs/workshop --preview desc_hero_ages desc_at_a_glance desc_eras desc_systems`; their figures are counted from the mod files when they are drawn, so draw them last and don't commit the `_630` previews), and the version in its seven links, the guide's and the six images'. The links are GitHub raw links at the tag, so the images must be in the commit that is tagged.
+
+Write the notes from what the release changes against the last tag, not from the PR titles: where two PRs moved the same thing, give the end state, and leave out a fault that was introduced and fixed between the two tags (1.3.2: the Space Elevator's sites went to a latitude rule and back, and the United Nations of Earth's great-power test broke and was mended, neither of which a 1.3.1 player ever saw). `git diff <last tag>..origin/main -- docs/player_guide/*.md` gives the figures as the guide states them now. A PR whose guide line reads "no player-facing change" can still be a fix a player sees, so pick the PRs by whether they touch `common/`, `events/`, `gui/`, `localization/` or `gfx/`.
 
 A release that must ship without the census (1.1.8 was one) goes out on a branch that is never merged back:
 
@@ -34,4 +38,4 @@ Expected on such a branch, by design: `organize_loc.py --check` wants to move th
    git tag <version> && git push origin <version>
    gh release create <version> --title <version> --notes-file docs/releases/<version>.md
    ```
-3. Workshop description: point the player guide link at the tag (`.../tree/<version>/docs/player_guide/README.md`), so it shows the guide that shipped, and keep the text under Steam's 8,000-character limit. Record it in `docs/audits/steam_workshop_description.md`. Redraw the description's images first (`scripts/image_pipeline/workshop_composites.py --preview`): their figures are counted when they are drawn, so an old upload can be out of date.
+3. Workshop description: paste the block from `docs/audits/steam_workshop_description.md` once the tag is pushed. Its guide link and its six image links point at the tag (`.../tree/<version>/docs/player_guide/README.md`, `raw.githubusercontent.com/.../<version>/docs/workshop/<image>.jpg`), so they show the guide and the images that shipped, and show nothing before the tag exists. Keep the text under Steam's 8,000-character limit.
