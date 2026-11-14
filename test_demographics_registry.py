@@ -630,6 +630,8 @@ class _Engine:
                 acc = min(acc, self.value(arg))
             elif key == "floor":
                 acc = float(math.floor(acc))
+            elif key == "ceiling":
+                acc = float(math.ceil(acc))
             elif key == "modulo":
                 acc = math.fmod(acc, self.value(arg))
             else:

@@ -1784,3 +1784,35 @@ table: `cause_deaths_estimate` (the sweep's natural deaths against the independe
    deaths per 1,000 in the panel against the year before: the same to the first decimal.
 4. **A seed** (any rule that runs the census). Console option c, which re-seeds the country's census, then the
    country's pyramid: the same shape as before the re-seed, the bars from 85 up no shorter or longer by eye.
+
+## The history charts' axes follow their figures (2026-11-14)
+
+Five history charts had fixed axes (Births and Deaths 0 to 60, Net Migration ±20, Children per Woman 0 to 8, Median Age
+0 to 60) or a label that did not follow its axis (Life Expectancy's bars rescaled past 100 while its label still read
+100). Each axis is now the largest figure the chart's samples hold, rounded up and never under the old axis, and the
+label prints it (`te_demog_history_axes`; `docs/systems/mod_systems/demographics.md`, "The history charts' axes span what
+they show"). Offline: `test_demographics_chart_axes.py`.
+
+No self-check was added: the script's pieces are each in use elsewhere (`ceiling = yes` after a divide in the Strategic
+Reserve's steppers, an expression for a progressbar's `min` in vanilla's market panel, a script value printed by
+`raw_text` in the Solar System rows). What only the game shows is how the charts read.
+
+1. **Nothing moves before a figure passes its old axis** (Full or Display only, a new 1836 game, two censuses). The
+   five charts look as they did, with the labels 60, +20 and -20, 100, 8 and 60, at both sizes (the panel's and the
+   full-screen viewer's).
+2. **A late game past the old axes** (a save where life expectancy is over 100, or a median age over 60). After one
+   census the Life Expectancy chart's label reads a round number at or above its tallest bar (130 for 123.4), no bar
+   is cut off at the top, and Median Age's does the same. The other three charts keep their fixed labels (100%, 1, 100).
+3. **Net Migration's lower half.** In a save with a year of net emigration past 20 per 1,000 (a small country in a
+   famine or losing a war), the bars below the line hang from the zero line to their length against the new axis, the
+   label below reads the same number as the label above with a minus, and a positive year still draws nothing below
+   the line. This is the one bar whose `min` is an expression. With no such year to hand, check the ordinary case: a
+   year of net emigration draws below the line as it did.
+4. **An old save.** Loaded before its first census under this version, the charts draw on their old axes
+   (`te_demog_hist_<axis>_axis_shown` gives the floor), `debug.log` has no variable-not-found line for
+   `te_dg_h_*_max` with the History section open, and within a year each tracked country's axes are set.
+5. **Another country's charts** (the Census Data window's Demographics tab, a country with a longer life than the
+   player's). Its charts draw on its own axes, not the player's.
+6. **One extreme year** (my call: one axis for all three ranges). A war year whose deaths pass 60 per 1,000 lifts the
+   Births and Deaths axis for as long as that year is in the store, in the 5-year and 20-year views too, where the year
+   itself may be out of sight. The owner judges whether that reads well, against an axis for each range.

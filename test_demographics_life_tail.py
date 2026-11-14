@@ -229,14 +229,21 @@ class TestE0ChartAxis(unittest.TestCase):
         self.assertEqual(eng.value(value), 1708.9)
 
     def test_the_store_sets_the_axis_after_the_samples(self):
+        # the five axes are set together (test_demographics_chart_axes.py runs them); life expectancy's alone has a top
         text = _text(HISTORY_EFFECTS)
         record = _block(text, "te_demog_history_record")
-        self.assertGreater(record.index("te_demog_history_e0_axis = yes"), record.index("te_demog_history_markers = yes"))
-        axis = _block(text, "te_demog_history_e0_axis")
-        self.assertIn("set_local_variable = { name = te_dg_h_ax value = te_demog_k_e0_axis_min }", axis)
-        self.assertIn("variable = te_dg_hist", axis)
-        self.assertIn("max = te_demog_k_e0_shown_max", axis)
+        self.assertGreater(record.index("te_demog_history_axes = yes"), record.index("te_demog_history_markers = yes"))
+        axes = _block(text, "te_demog_history_axes")
+        self.assertIn("set_local_variable = { name = te_dg_hax_e0 value = te_demog_k_e0_axis_min }", axes)
+        self.assertIn("variable = te_dg_hist", axes)
+        self.assertIn("te_demog_history_axis_take = { AXIS = e0 VAR = te_dg_h_e0 }", axes)
+        cap = "value = { value = local_var:te_dg_hax_e0 max = te_demog_k_e0_shown_max }"
+        self.assertLess(axes.index(cap), axes.index("te_demog_history_axis_set = { AXIS = e0 }"))
 
+    def test_the_label_prints_the_axis(self):
+        (chart,) = [c for c in history_charts(_text(GUI)) if 'text = "te_demog_hist_e0_title"' in c]
+        self.assertIn("raw_text = \"[Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')|0]\"", chart)
+        self.assertNotIn('raw_text = "100"', chart)
 
 if __name__ == "__main__":
     unittest.main()

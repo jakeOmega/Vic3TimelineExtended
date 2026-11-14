@@ -71,14 +71,59 @@ te_demog_trend_e0 = {
 	}
 }
 
-# Country scope: the Life Expectancy chart's axis, te_dg_h_e0_max (the largest sample, 100 to 10,000; set at each census
-# by te_demog_history_e0_axis since 2026-10-20), or the axis's minimum on a save whose census hasn't set it yet, so the
-# chart never reads a missing variable.
+# ----------------------------------------------------------------------------
+# The history charts' axes (owner, 2026-11-14: a chart's axis spans the values it shows). Five charts' figures have no
+# fixed top, so each one's axis is the largest figure its samples hold, rounded up to a round number and never under
+# the floor below, which is the axis the chart had while it was fixed (te_demog_history_axes, at each census, stores
+# it as te_dg_h_<axis>_max). The chart's bars and its axis label read te_demog_hist_<axis>_axis_shown.
+# ----------------------------------------------------------------------------
+
+# The floors. Births and Deaths and Net Migration are per 1,000 people a year; Net Migration's is the axis's reach
+# each way from its zero line. Life expectancy's is te_demog_k_e0_axis_min (100, generated).
+te_demog_hist_bd_axis_min = { value = 60 }
+te_demog_hist_mig_axis_min = { value = 20 }
+te_demog_hist_tfr_axis_min = { value = 8 }
+te_demog_hist_median_axis_min = { value = 60 }
+
+# Country scope: a chart's axis, or its floor on a save whose census hasn't set it yet, so the chart never reads a
+# missing variable (life expectancy's since 2026-10-20; that one stops at 10,000, where its bars do).
+te_demog_hist_bd_axis_shown = {
+	value = te_demog_hist_bd_axis_min
+	if = {
+		limit = { has_variable = te_dg_h_bd_max }
+		value = var:te_dg_h_bd_max
+	}
+}
+
+te_demog_hist_mig_axis_shown = {
+	value = te_demog_hist_mig_axis_min
+	if = {
+		limit = { has_variable = te_dg_h_mig_max }
+		value = var:te_dg_h_mig_max
+	}
+}
+
 te_demog_hist_e0_axis_shown = {
 	value = te_demog_k_e0_axis_min
 	if = {
 		limit = { has_variable = te_dg_h_e0_max }
 		value = var:te_dg_h_e0_max
+	}
+}
+
+te_demog_hist_tfr_axis_shown = {
+	value = te_demog_hist_tfr_axis_min
+	if = {
+		limit = { has_variable = te_dg_h_tfr_max }
+		value = var:te_dg_h_tfr_max
+	}
+}
+
+te_demog_hist_median_axis_shown = {
+	value = te_demog_hist_median_axis_min
+	if = {
+		limit = { has_variable = te_dg_h_median_max }
+		value = var:te_dg_h_median_max
 	}
 }
 

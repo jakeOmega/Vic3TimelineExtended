@@ -2331,7 +2331,7 @@ def tail_values(o):
     o("# The life tables' death rate past 150 is at least this, per 100,000 (te_demog_lt_tail; demographics_model.tail_years).")
     o(f"te_demog_k_lt_tail_rate_min = {{ value = {lit(P.LT_TAIL_RATE_MIN)} }}")
     o("# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first, at most the second, where")
-    o("# the panel's figures read over (te_demog_history_e0_axis; the GUI's comparisons hold the same 10,000).")
+    o("# the panel's figures read over (te_demog_history_axes; the GUI's comparisons hold the same 10,000).")
     o(f"te_demog_k_e0_axis_min = {{ value = {lit(P.E0_AXIS_MIN)} }}")
     o(f"te_demog_k_e0_shown_max = {{ value = {lit(P.E0_SHOWN_MAX)} }}")
 
