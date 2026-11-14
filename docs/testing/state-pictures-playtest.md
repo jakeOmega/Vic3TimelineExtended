@@ -16,7 +16,8 @@ with the commit that fixed it.
   - `event te_debug_state_picture.1` runs the pass at once in every state and logs a `TE_STATE_PICTURE debug:` line
     for each of your states: `size=` (1 town, 2 city, 3 metropolis, 4 megacity, 0 no walk yet), `city_people=`,
     the largest-city figure it came from, and `oil=` and `coal=` (1 where the state is tagged oil country or a
-    colliery).
+    colliery). It measures the world's average standard of living afresh first, and each line's `world=` is the
+    figure the state's means were judged against.
   - `event te_debug_state_picture.2` makes your capital read as a metropolis whatever its people, so the metropolis
     painting and a weight's read of the variable can be checked without a city over the floor. The next pass (yearly,
     or `.1`) puts the size back.
@@ -28,6 +29,8 @@ with the commit that fixed it.
 |---|---|---|
 | `TE_SELF_CHECK OK state_picture_oil` | once a game: the first state the yearly pass tagged oil country, with `oil_levels=` (its Oil Rig levels, 10 or more) no larger than `all_levels=` (all its levels but subsistence) and at least a twentieth of it. The line also carries `mine_levels=` and `coal_levels=`: where the state has coal, `mine_levels` should be at least `coal_levels`; 0 beside coal means the mining group test misses the mod's mines and every state with 10 coal levels reads as a colliery | The walk takes `level` for a building's levels inside `every_scope_building` and its locals for sums that outlive the walk. BROKEN means one doesn't: read the oil field off the rigs' level in the weight (`any_scope_building = { is_building_type = building_oil_rig level >= 40 }`), which gives up the share |
 | `TE_SELF_CHECK OK state_picture_size` | once a game: the first state the yearly pass stored at metropolis or larger, with `city_people=` (its largest city) no larger than `state_people=` (the state) | The pass takes `te_dg_urban` for a head count on `state_population`'s scale. BROKEN means it isn't: rescale the floors in `te_state_picture_values.txt` by the two figures' ratio, or read the size from `state_population` and `te_dg_urban_share` instead |
+| `TE_SELF_CHECK OK state_picture_world` | once a game: the first measure of the world's average standard of living (the first state judged after a country's first city technology, or `event te_debug_state_picture.1`), with `year=` a game year, `people_thousands=` the world's people over 1,000, and `world_sol=` between `least=` and `greatest=`, which differ | BROKEN with a year under 1836: `value = year` doesn't read the date in a script value; write it `value = 0 add = year`, as `te_demog_year` does. No people, or `least=` equal to `greatest=`: the reads inside `every_state` aren't the state it is at, or its locals don't carry; walk `every_country = { every_scope_state = { … } }` from the measuring state instead, or sum into global variables. An average outside the two: the sums; read them with `GetGlobalVariable` in a console log |
+| `TE_SELF_CHECK OK state_picture_world_year` | once a game: the second measure, with `gap=1`, a calendar year after the first | `gap=0`: the guard (`te_state_picture_world_year < te_state_picture_year`) passes every time, so the world is walked at every state's pulse: add a 330-day global flag beside the year, as the culture merges' census has. `gap=2` or more: a year with no state judged (every owner without its first city technology), or the guard holds a year too long: compare the stored year with a local set to `year`, the culture merges' form |
 
 ## The pilot (2026-11-10)
 
@@ -136,7 +139,7 @@ owner and run `event te_debug_state_picture.1` (or wait a year; growth needs sev
 |---|---|---|
 | **Heavy industry.** A city state where heavy industry is a quarter of the building levels. | Furnaces and chimneys in the rung's period, not the region's street. | The street: the tag isn't stored (the walk's `bg_heavy_industry` test), or 25% is too high for your games. |
 | **Resort.** A state with a large Tourism Industry (2% of its levels, 10 or more). | A beach resort. It is a seaside picture whatever the state: an inland resort state will show a beach. | A beach in a state where tourism is a sideline: raise the share. An inland beach that grates: the picture wants a coast condition. |
-| **Boomtown and declining.** After several game years, compare a fast-growing city state (heavy immigration) with one losing people. | Cranes and half-built blocks in the first; shut works and empty streets in the second. Neither after a single year's jump or a conquest. | Boomtowns everywhere, or none: the 3% and −1% are provisional. A boomtown right after a border change: the province check. |
+| **Boomtown and declining.** After several game years, compare a fast-growing city state (heavy immigration) with one losing people. | Cranes and half-built blocks in the first; shut works and empty streets in the second. Neither after a single year's jump or a conquest. | Boomtowns everywhere, or none: the 5% (3% until 2026-11-14) and −1% are provisional. A boomtown right after a border change: the province check. |
 | **Divided.** A metropolis with very high inequality (Gini 0.85 on the Demographics map mode). | Shacks under towers behind a wall. | Most metropolises divided: raise the floor. |
 | **Two at once.** A smog-bound boomtown; a declining heavy-industry city. | The boomtown; the declining city (the higher digit). | |
 | **The debug event's line.** `event te_debug_state_picture.1`, then `debug.log`. | Each of your states' lines ends with `character=` (6 boomtown, 5 declining, 4 divided, 2 heavy industry, 1 resort, 0 none) and `growth=` (the smoothed yearly rate, in percent). | |
@@ -150,7 +153,7 @@ painted, so they can be checked from the log.
 | Check | Expect | If it fails |
 |---|---|---|
 | **The reads.** After Art Deco Architecture, `event te_debug_state_picture.1` as any country, then `debug.log`. | Each of your states' lines ends with `means=` (1 poor, 2 ordinary, 3 affluent), `rundown=` (0 or 1), `sol=` (the state's standard of living, as its panel shows) and `short=` (how far that sits under what its people expect). | `sol=0` everywhere or a load error naming `average_sol` or `average_expected_sol`: a state doesn't read one of them in a script value. Use the Demographics walk's `te_dg_sol` for the first and the owner's figure for the second. |
-| **The floors.** In a save, compare `sol=` with `means=` for states of an owner on each city rung. | Poor under 12, 14, 18, 26, 35 by rung; affluent from 20, 22, 28, 36, 45. | |
+| ~~**The floors.** In a save, compare `sol=` with `means=` for states of an owner on each city rung.~~ | ~~Poor under 12, 14, 18, 26, 35 by rung; affluent from 20, 22, 28, 36, 45.~~ Replaced 2026-11-14 by floors relative to the world's average: "Means against the world" below. | |
 | **How many are run-down.** In a late save, count `rundown=1`. | A minority: states that have lost ground. | Most states of a welfare state run-down: the laws' floor under expectations is what `short=` is measuring. Raise the margin (2), or take the owner's floor out of the figure. |
 
 ## Size and prosperity variants (2026-11-11)
@@ -188,3 +191,19 @@ state has its figures (its `overlay=` names the kind of picture each state shows
 | **Kept past a floor.** A state whose `city_people=` is between 900,000 and 1,000,000 and that shows the metropolis; a poor state whose `sol=` is just above its floor. | "stays one down to 900K", "stays poor until …", not a figure on the wrong side of the floor. | |
 | **The overlays still play.** Watch a city banner of each family and a farm banner for a few seconds. | The same birds and mist, leaves, dust or shimmer as before this change: each picture plays a copy of its old overlay under another name. | Nothing moving: the copies in `gfx/models/particles/te_state_picture_overlays_generated.asset` aren't loaded (`error.log`, `terrain.cpp` or `entity`). The probe saw the picture but couldn't watch the animation. |
 | **A metropolis on its land.** An owner with Modern Tools or Rural Electrification and no Art Deco Architecture, holding a metropolis whose state shows a harbor or a farm. | "Its largest city, about … people, is a metropolis, but city pictures start with Art Deco Architecture." | |
+
+## Means against the world, and a 5% boomtown (2026-11-14)
+
+Poor and affluent are now the world's average standard of living times a ratio, 0.5 and 2 (the owner: "the world
+average +/- a percentage (double and half?)"), where they were fixed floors by city rung; the world's figure is every
+state's weighted by its people, measured once a calendar year. A boomtown needs a smoothed 5% a year, where it needed
+3%. Load a late save, research Art Deco Architecture as the owner if it lacks it, and run
+`event te_debug_state_picture.1`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The world's figure.** The debug lines' `world=`. | One figure on every line, about the population-weighted mean of the `sol=` figures: between 14 and 42 in the saves read (1932 to 2054), higher than most states' own, since the large states live better. `means=1` where `sol=` is under half of it, `means=3` from double it. | `world=0` on every line: the measure didn't run or found no people (the self-check lines above say which). Figures that differ between lines: each state measured its own (the year guard). |
+| **How many are poor and affluent.** The debug lines cover your own states only, so save a late game a year after the change and count every state's `te_sp_means` (1 and 3) with `scripts/analysis/save_country_probe.py <save> --states --var '^te_sp_means$'`. | From the saves read before the change: 4% to 41% poor and 0.4% to 9% affluent. The pull request's table gives the shares four nearer pairs of ratios tag. | Almost no affluent street anywhere: the owner picks a nearer pair from the table and edits `te_state_picture_k_affluent_ratio` (and `te_state_picture_k_poor_ratio`), one line each. |
+| **The hover.** Hover the banner of a poor state and of an affluent one. | "… against a world average of 23.1: under 11.6, 50% of the world's, the line for a poor street.", with the debug line's `world=` and a floor that is that times the ratio. A state just past a floor: "stays poor until …" with the floor plus half a point. | A floor that isn't the figure times the ratio: the floor reads something other than the state's stored `te_sp_world`. |
+| **A new year.** Play past 1 January, then run `.1` again. | `world=` changes a little (by under a point in the saves read). `debug.log` has `TE_SELF_CHECK OK state_picture_world_year … gap=1` once a second year has been measured. | |
+| **Boomtowns at 5%.** The same save: count the states holding `te_sp_boom` (`--var '^te_sp_boom$'`). | Fewer than before: in the owner's Singapore game 14 or 15 cities stood at a smoothed 5% or more, against 30 to 39 at 3%. Steady growth of exactly 5% never makes one; 6% a year takes nine years. | None at all in a fast-growing world: the floor is too high for the smoothing; lower it, or take more than a fifth of each year (`te_state_picture_k_growth_new`). |

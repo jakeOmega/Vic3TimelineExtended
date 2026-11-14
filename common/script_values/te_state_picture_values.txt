@@ -60,15 +60,19 @@ te_state_picture_k_resort_levels_keep = {
 }
 # Growth: the state's people against a year before, as a rate, held within a tenth either way
 # (a conquest or a migration wave is not a trend) and smoothed: each year's rate counts for
-# te_state_picture_k_growth_new of the stored figure, so growth of 5% a year makes a boomtown in
-# its fifth year and a fall of 2% a year a declining city in its fourth. A boomtown is a city whose smoothed rate is at least
-# te_state_picture_k_boom a year, a declining city one at te_state_picture_k_decline or below.
-# Provisional: in the 1940 save 54 of 346 cities grew 3% in the one year and 73 fell 1%; the
-# smoothed figure will pass fewer.
+# te_state_picture_k_growth_new of the stored figure, so after n years of a steady rate r the
+# stored figure is r x (1 - 0.8^n). It nears r from below and never reaches it: steady growth of
+# exactly 5% a year never makes a boomtown. 6% a year makes one in its ninth year (4.99% after
+# eight), 7% in its sixth, 8% in its fifth and the 10% cap in its fourth; a fall of 2% a year makes
+# a declining city in its fourth. A boomtown is a city whose smoothed rate is at least
+# te_state_picture_k_boom a year (the owner, 2026-11-14: "~5%/year"; it was 3%), a declining city
+# one at te_state_picture_k_decline or below. In the owner's Singapore game (saves of 1947, 1949
+# and 1957) 30 to 39 of 336 to 403 cities stood at a smoothed 3% or more, 18 to 24 at 4% and 14 or
+# 15 at 5%. Declining is provisional: in the 1940 save 73 of 346 cities fell 1% in the one year.
 te_state_picture_k_growth_new = { value = 0.2 }
 te_state_picture_k_growth_cap = { value = 0.1 }
-te_state_picture_k_boom = { value = 0.03 }
-te_state_picture_k_boom_keep = { value = 0.025 }
+te_state_picture_k_boom = { value = 0.05 }
+te_state_picture_k_boom_keep = { value = 0.045 }
 te_state_picture_k_decline = { value = -0.01 }
 te_state_picture_k_decline_keep = { value = -0.005 }
 # A divided city: a metropolis with a Gini of at least this. Provisional: in the 1940 save the
@@ -76,13 +80,8 @@ te_state_picture_k_decline_keep = { value = -0.005 }
 te_state_picture_k_divided = { value = 0.85 }
 te_state_picture_k_divided_keep = { value = 0.83 }
 
-# Means: the state's standard of living (average_sol) against two floors that rise with the
-# time. The owner's first-pass figures by era (2026-11-11), poor below the first and affluent
-# from the second:
-#   era 6: 12, 20   era 7: 14, 22   era 8: 18, 28   era 9: 22, 32
-#   era 10: 26, 36  era 11: 30, 40  era 12: 35, 45  era 13: 40, 60
-# A state is judged by the era of the city rung its owner is on, since that is the street its
-# picture shows: rung 1 is era 6, rung 2 era 7, rung 3 era 8, rung 4 era 10, rung 5 era 12.
+# The rung of the city ladder the owner is on, 0 before its first city technology, when a state has
+# no means and no upkeep tag.
 te_state_picture_city_rung = {
 	value = 0
 	owner = {
@@ -93,22 +92,38 @@ te_state_picture_city_rung = {
 		if = { limit = { has_technology_researched = vactrains } add = 1 }
 	}
 }
+
+# Means: the state's standard of living (average_sol) against the world's (the owner, 2026-11-14:
+# "the world average +/- a percentage"; until then fixed floors by city rung, which in the owner's
+# Singapore game tagged 88% of states poor, its AI owners being on rungs 3 and 4 by the 1940s). The
+# world's figure is every state's average_sol weighted by its people, measured once a calendar year
+# (te_state_picture_world_measure); each state keeps the figure it was judged against (te_sp_world),
+# so its hover gives the floors its picture stands on. Poor while under te_state_picture_k_poor_ratio
+# of it, affluent from te_state_picture_k_affluent_ratio of it. The owner floated double and half.
+# In eight saves of 1932 to 2054 those tag 4% to 41% of states poor and 0.4% to 9% affluent
+# (1.3% to 1.7% in the three of the Singapore game, which also held the old tags); the pairs 1.75
+# and 0.57, 1.5 and 0.67, 1.33 and 0.75, 1.25 and 0.8 tag more on both sides (the table is in the
+# pull request that made the change). Each ratio is one line.
+te_state_picture_k_affluent_ratio = { value = 2 }
+te_state_picture_k_poor_ratio = { value = 0.5 }
+# The world's average the state was judged against, 0 before its first judgement.
+te_state_picture_hover_world = {
+	value = 0
+	if = { limit = { has_variable = te_sp_world } value = var:te_sp_world }
+}
 te_state_picture_poor_floor = {
-	value = 12
-	if = { limit = { te_state_picture_city_rung >= 5 } value = 35 }
-	else_if = { limit = { te_state_picture_city_rung >= 4 } value = 26 }
-	else_if = { limit = { te_state_picture_city_rung >= 3 } value = 18 }
-	else_if = { limit = { te_state_picture_city_rung >= 2 } value = 14 }
+	value = te_state_picture_hover_world
+	multiply = te_state_picture_k_poor_ratio
 }
 te_state_picture_affluent_floor = {
-	value = 20
-	if = { limit = { te_state_picture_city_rung >= 5 } value = 45 }
-	else_if = { limit = { te_state_picture_city_rung >= 4 } value = 36 }
-	else_if = { limit = { te_state_picture_city_rung >= 3 } value = 28 }
-	else_if = { limit = { te_state_picture_city_rung >= 2 } value = 22 }
+	value = te_state_picture_hover_world
+	multiply = te_state_picture_k_affluent_ratio
 }
 # A state leaves poor, or affluent, only this far past the floor, so one at a floor doesn't change
-# picture each year.
+# picture each year: half a point of standard of living at any floor, the owner's figure for the
+# fixed floors. The floors now move with the world's figure too, which rose 0.3 to 0.8 a point a
+# year between saves of one game; the keep is not meant to absorb that: a state the world
+# outgrows should change picture.
 te_state_picture_k_means_keep = { value = 0.5 }
 te_state_picture_poor_floor_keep = {
 	value = te_state_picture_poor_floor
@@ -119,6 +134,33 @@ te_state_picture_affluent_floor_keep = {
 	subtract = te_state_picture_k_means_keep
 }
 te_state_picture_sol = { value = average_sol }
+
+# The world's measure (te_state_picture_world_measure). The year, the year the world was last
+# measured (0 before the first measure) and its average standard of living (0 before it).
+te_state_picture_year = { value = year }
+te_state_picture_world_year = {
+	value = 0
+	if = { limit = { has_global_variable = te_sp_world_year } value = global_var:te_sp_world_year }
+}
+te_state_picture_world_sol = {
+	value = 0
+	if = { limit = { has_global_variable = te_sp_world_sol } value = global_var:te_sp_world_sol }
+}
+# Inside the walk's every_state: the state's people in thousands, and those times its standard of
+# living. Counting in thousands before the product keeps the largest state's product (some 10^8
+# people at a standard of 40 is 4 x 10^6) far under 9 x 10^8, where even a naive fixed-point
+# multiply holds; the world's sum fits either way (8 x 10^10 unscaled in a 1957 save of 3.5
+# billion people, against a ceiling near 9 x 10^13).
+te_state_picture_world_people = {
+	value = state_population
+	divide = 1000
+}
+te_state_picture_world_people_sol = {
+	value = state_population
+	divide = 1000
+	multiply = average_sol
+}
+
 # Upkeep: how far the standard of living sits under what the state's people expect
 # (average_expected_sol, which the mod's Standard of Living Expectations system moves). Run-down
 # from te_state_picture_k_rundown under, until within te_state_picture_k_rundown_keep.
