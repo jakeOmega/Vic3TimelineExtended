@@ -1465,7 +1465,7 @@ class LocTest(unittest.TestCase):
     def test_the_league_name_wraps_to_two_lines(self):
         """Under Early Unlock, before the age of Intergovernmental
         Organizations, the United Nations tab reads "League of Nations"
-        (un_org_name): three words, one more than the rule above allows and a
+        (un_ov_league_sgui): three words, one more than the rule above allows and a
         character longer than vanilla's longest. At fontsize_min it packs into
         two lines ("League of" / "Nations"), as a two-word name does, and no
         word is longer than "Nations"; the play-test checks it in game

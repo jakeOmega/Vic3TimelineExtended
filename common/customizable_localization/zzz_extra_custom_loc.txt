@@ -216,28 +216,3 @@ te_nuke_defense_orbital = {
 		localization_key = nuke_line_empty
 	}
 }
-
-# The organization's name: "League of Nations" while it is the early unlock's
-# league (un_league_stage: Early Unlock, and no country has had
-# Intergovernmental Organizations yet), "United Nations" otherwise, so Late
-# Unlock and every save past the age read as before. Name-only: the titles a
-# player meets first (je_united_nations, which the Timeline Extended and
-# National Info tabs and the founding control splice, and un_events.1's title
-# by its own triggered_desc); body text keeps "United Nations" and "UN".
-# Reached through GetPlayer, as te_banking_cycle_title is: the trigger reads
-# only a game rule and a global variable, so any country scope gives the same
-# answer. je_united_nations guards the call with GetPlayer.IsValid
-# (un_org_name_ingame), since the tab header also draws for an observer.
-un_org_name = {
-	type = country
-	random_valid = no
-
-	text = {
-		trigger = { un_league_stage = yes }
-		localization_key = un_org_name_league
-	}
-	text = {
-		trigger = { always = yes }
-		localization_key = un_org_name_un
-	}
-}

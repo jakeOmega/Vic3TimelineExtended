@@ -12332,8 +12332,8 @@
   "es": "La $concept_journal_entry$ terminó con nuestras naciones unidas en una #b unión#! más amplia"
  },
  "je_united_nations": {
-  "en": "United Nations",
-  "es": "Naciones Unidas"
+  "en": "[SelectLocalization(GetPlayer.IsValid,'un_org_name_ingame','un_org_name_un')]",
+  "es": "[SelectLocalization(GetPlayer.IsValid,'un_org_name_ingame','un_org_name_un')]"
  },
  "je_united_nations_invalid_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended when the United Nations game rule was switched off, and the organization with it",

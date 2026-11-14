@@ -13,6 +13,7 @@ Run: python3 -m pytest test_rule_unlock_settings.py
 """
 
 import re
+import sys
 import unittest
 from pathlib import Path
 
@@ -462,12 +463,15 @@ class UnitedNationsEarlyUnlockTest(unittest.TestCase):
         self.assertIn("$intergovernmental_organizations$", rules["setting_united_nations_enabled_desc"])
 
 
-UN_CUSTOM_LOC = ROOT / "common/customizable_localization/zzz_extra_custom_loc.txt"
-UN_EVENTS = ROOT / "events/un_events.txt"
 EXTRA_MESSAGES = ROOT / "common/messages/extra_messages.txt"
 UN_CHAMBER_SGUIS = ROOT / "common/scripted_guis/un_chamber_sguis.txt"
 UN_OVERVIEW_GUI = ROOT / "gui/journal_entry_widgets/un_overview_widget.gui"
+UN_EVENTS = ROOT / "events/un_events.txt"
+CUSTOM_LOC = ROOT / "common/customizable_localization"
 LOC_DIR = ROOT / "localization/english"
+NAME = "[SelectLocalization(GetPlayer.IsValid,'un_org_name_ingame','un_org_name_un')]"
+LEAGUE_SGUI = ("[SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( GuiScope.SetRoot( "
+               "GetPlayer.MakeScope ).End ), 'un_org_name_league', 'un_org_name_un' )]")
 
 
 def all_loc():
@@ -477,14 +481,18 @@ def all_loc():
     return out
 
 
-def splice(text, keys, plain):
-    """`text` with each `$key$` expanded from `keys`, a key in `plain` read as that fixed text instead."""
-    def one(m):
-        key = m.group(1)
-        if key in plain:
-            return plain[key]
-        return splice(keys[key], keys, plain) if key in keys else m.group(0)
-    return re.sub(r"\$(\w+)\$", one, text)
+def render(text, keys, league, player=True, depth=0):
+    """`text` as the engine would show it: `$key$` splices expanded, and the two selections of the organization's
+    name taken as the game would, with a player (`GetPlayer.IsValid`) and with un_ov_league_sgui shown or not."""
+    assert depth < 10, text
+    text = re.sub(r"\$(\w+)\$", lambda m: render(keys[m.group(1)], keys, league, player, depth + 1)
+                  if m.group(1) in keys else m.group(0), text)
+    choices = {NAME: "un_org_name_ingame" if player else "un_org_name_un",
+               LEAGUE_SGUI: "un_org_name_league" if league else "un_org_name_un"}
+    for markup, key in choices.items():
+        if markup in text:
+            text = text.replace(markup, render(keys[key], keys, league, player, depth + 1))
+    return text
 
 
 class UnitedNationsLeagueNameTest(unittest.TestCase):
@@ -494,39 +502,53 @@ class UnitedNationsLeagueNameTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.loc = all_loc()
+        cls.splicing = sorted(k for k, v in cls.loc.items() if "$je_united_nations$" in v)
 
-    def test_the_name_is_the_league_only_in_the_league_stage(self):
-        body = words(braced(code(UN_CUSTOM_LOC), r"^un_org_name = \{"))
-        self.assertEqual(body, "type = country random_valid = no "
-                               "text = { trigger = { un_league_stage = yes } localization_key = un_org_name_league } "
-                               "text = { trigger = { always = yes } localization_key = un_org_name_un }")
-        self.assertEqual(self.loc["un_org_name_league"], "League of Nations")
-        self.assertEqual(self.loc["un_org_name_un"], "United Nations")
-        self.assertEqual(self.loc["un_org_name_ingame"], "[GetPlayer.GetCustom('un_org_name')]")
-
-    def test_the_title_is_guarded_and_falls_back_to_the_united_nations(self):
-        # No player (an observer's National Info, a loading screen): the plain name, never a GetCustom.
-        self.assertEqual(self.loc["je_united_nations"],
-                         "[SelectLocalization(GetPlayer.IsValid,'un_org_name_ingame','un_org_name_un')]")
-
-    def test_outside_the_league_every_switched_name_reads_as_before(self):
-        # Today's text, with je_united_nations read as its fallback (un_org_name_un).
-        plain = {"je_united_nations": self.loc["un_org_name_un"]}
-        before = {
-            "je_united_nations": "United Nations",
-            "te_window_tab_united_nations": "United Nations",
-            "te_window_tab_united_nations_locked_tt": r"#b United Nations#!\nNot open yet. It opens once:\n",
-            "je_un_act_found_label": "Found the United Nations",
-        }
-        for key, text in before.items():
-            with self.subTest(key=key):
-                self.assertEqual(splice(f"${key}$", self.loc, plain), text)
-
-    def test_the_founding_control_reads_the_league_stage(self):
-        # "Found the League of Nations" is wider than the button, so the label is a short key picked in the GUI.
+    def test_the_name_is_picked_by_the_league_scripted_gui(self):
         sgui = words(braced(code(UN_CHAMBER_SGUIS), r"^un_ov_league_sgui = \{"))
         self.assertEqual(sgui, "scope = country is_shown = { un_league_stage = yes } "
                                "ai_is_valid = { always = no } is_valid = { always = no } effect = { }")
+        # The player guard outside, the scripted GUI inside: no customizable localization, so no GetCustom.
+        self.assertEqual(self.loc["je_united_nations"], NAME)
+        self.assertEqual(self.loc["un_org_name_ingame"], LEAGUE_SGUI)
+        self.assertEqual(self.loc["un_org_name_league"], "League of Nations")
+        self.assertEqual(self.loc["un_org_name_un"], "United Nations")
+        for path in CUSTOM_LOC.glob("*.txt"):
+            self.assertNotIn("un_org_name", read(path), path)
+
+    def test_outside_the_league_every_switched_name_reads_as_before(self):
+        # The real chain with un_ov_league_sgui not shown (Late Unlock, Disabled, or past un_igo_age), with a player
+        # and without one: each reads what it read before the League.
+        self.assertGreaterEqual(len(self.splicing), 5, self.splicing)
+        exact = {
+            "je_united_nations": "United Nations",
+            "te_window_tab_united_nations": "United Nations",
+            "te_window_tab_united_nations_locked_tt": r"#b United Nations#!\nNot open yet. It opens once:\n",
+            "je_un_ov_status_no_un": "#v There is no United Nations.#! None has been founded, or the last one was "
+                                     "dissolved.",
+            "je_un_act_found_label": "Found the United Nations",
+        }
+        for player in (True, False):
+            for key in sorted(set(self.splicing) | set(exact) | {"je_united_nations"}):
+                with self.subTest(key=key, player=player):
+                    shown = render(f"${key}$", self.loc, league=False, player=player)
+                    self.assertNotIn("un_org_name", shown)
+                    self.assertNotIn("League", shown)
+                    if key in exact:
+                        self.assertEqual(shown, exact[key])
+                    else:
+                        before = self.loc[key].replace("$je_united_nations$", "United Nations")
+                        self.assertEqual(shown, render(before, self.loc, league=False, player=player))
+
+    def test_in_the_league_the_spliced_names_read_the_league(self):
+        for key in self.splicing + ["je_united_nations", "te_window_tab_united_nations"]:
+            with self.subTest(key=key):
+                self.assertIn("League of Nations", render(f"${key}$", self.loc, league=True))
+                # An observer has no player: the plain name, and no scripted GUI read on a missing player.
+                self.assertNotIn("League", render(f"${key}$", self.loc, league=True, player=False))
+
+    def test_the_founding_control_reads_the_league_stage(self):
+        # "Found the League of Nations" is wider than the button, so the label is a short key picked in the GUI.
         scope = "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End"
         self.assertIn(f"'je_un_act_convene_label', SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( "
                       f"{scope} ), 'je_un_act_found_league_label', 'je_un_act_found_label' ) )",
@@ -534,27 +556,63 @@ class UnitedNationsLeagueNameTest(unittest.TestCase):
         self.assertEqual(self.loc["je_un_act_found_label"], "Found the United Nations")
         self.assertEqual(self.loc["je_un_act_found_league_label"], "Found the League")
 
-    def test_the_founding_event_title_reads_the_league_stage(self):
+    def test_the_charter_event_keeps_its_title(self):
+        # Its text says the United Nations and its Charter throughout, so its title doesn't switch.
         event = braced(code(UN_EVENTS), r"^un_events\.1 = \{")
-        title = words(braced(event, r"^\ttitle = \{"))
-        self.assertEqual(title, "first_valid = { triggered_desc = { trigger = { un_league_stage = yes } "
-                                "desc = un_events.1.t_league } desc = un_events.1.t }")
+        self.assertIn("title = un_events.1.t\n", event)
         self.assertEqual(self.loc["un_events.1.t"], "The United Nations Charter")
-        self.assertIn("League of Nations", self.loc["un_events.1.t_league"])
 
-    def test_the_league_is_told_once_when_it_becomes_the_united_nations(self):
+    def test_the_age_is_marked_whatever_the_rule(self):
+        # A game whose rule was Disabled or Late when the age came finds the mark if switched to Early later.
+        pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
+        self.assertIn("if = { limit = { NOT = { has_global_variable = un_igo_age } any_country = { "
+                      "has_technology_researched = intergovernmental_organizations } } if = { limit = { "
+                      "un_league_stage = yes", pulse)
+
+    def test_the_league_is_told_once_when_it_takes_the_name(self):
         pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
         notice = ("if = { limit = { un_league_stage = yes has_global_variable = un_founded } every_country = { "
                   "limit = { OR = { je:je_united_nations ?= { has_modifier = un_member_modifier } is_player = yes } } "
-                  "post_notification = un_league_refounded_notice } } set_global_variable = un_igo_age")
+                  "post_notification = un_league_becomes_un_notice } } set_global_variable = un_igo_age")
         # Inside the block that sets the mark, so it runs only the month the mark is set, and before the mark,
-        # while un_league_stage still holds.
+        # while un_league_stage still holds. un_league_stage asks the early flag, so Late and Disabled never send it.
         self.assertIn("any_country = { has_technology_researched = intergovernmental_organizations } } " + notice,
                       pulse)
-        self.assertEqual(pulse.count("un_league_refounded_notice"), 1)
-        self.assertRegex(code(EXTRA_MESSAGES), r"(?m)^un_league_refounded_notice = \{")
+        self.assertEqual(pulse.count("un_league_becomes_un_notice"), 1)
+        self.assertRegex(code(EXTRA_MESSAGES), r"(?m)^un_league_becomes_un_notice = \{")
         for suffix in ("name", "desc", "tooltip"):
-            self.assertIn(f"notification_un_league_refounded_notice_{suffix}", self.loc)
+            self.assertIn(f"notification_un_league_becomes_un_notice_{suffix}", self.loc)
+        self.assertNotIn("refounded", self.loc["notification_un_league_becomes_un_notice_desc"])
+
+
+class UnitedNationsLeagueTranslationTest(unittest.TestCase):
+    """German and Spanish keep today's name for the United Nations: je_united_nations's records follow its markup,
+    and un_org_name_un carries the memory's existing translation (the League's keys wait for the owner's pass)."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / "scripts" / "i18n"))
+        import translate_loc
+        cls.t = translate_loc
+        cls.loc = all_loc()
+
+    def test_the_name_is_translated_and_not_stale(self):
+        for language, field, name in (("german", "de", "Vereinte Nationen"), ("spanish", "es", "Naciones Unidas")):
+            overlay = self.t.load_overlay(language)
+            with self.subTest(language=language):
+                tm = overlay.tm
+                self.assertEqual(tm["je_united_nations"]["en"], self.loc["je_united_nations"])
+                self.assertEqual(tm["je_united_nations"][field], self.loc["je_united_nations"])
+                self.assertEqual(tm["un_org_name_un"]["en"], self.loc["un_org_name_un"])
+                self.assertEqual(tm["un_org_name_un"][field], name)
+                self.assertEqual(tm["concept_united_nations_system"][field], name)
+                shipped = {k: overlay.value(k, v) for k, v in self.loc.items()}
+                for key in ("je_united_nations", "te_window_tab_united_nations"):
+                    self.assertEqual(render(f"${key}$", shipped, league=False), name, key)
+                for key in ("je_un_ov_status_no_un", "te_diplomacy_un_open_journal_tt", "un_unlock_tt"):
+                    shown = render(f"${key}$", shipped, league=False)
+                    self.assertIn(name, shown, key)
+                    self.assertNotIn("United Nations", shown, key)
 
 
 # --- Cultural Hegemony ---------------------------------------------------------------------------------------------

@@ -15,9 +15,10 @@ Multilateral Alliances (era 4) instead, as the League of Nations was founded,
 and the entry appears with that technology. Until some country has researched
 Intergovernmental Organizations, its charter can't be reformed (see [UN charter
 reforms](#un-charter-reforms)), so it stays at Established or below; the months
-toward a reform still count. Until then the journal entry, its tabs, the
-founding control and the charter event call it the League of Nations; the month
-the technology arrives it becomes the United Nations, and its members are told.
+toward a reform still count. Until then the journal entry, its Timeline
+Extended tab, the UN panels' header and the founding control call it the League
+of Nations; the month the technology arrives it takes the name United Nations,
+and its members are told.
 Everything else is unchanged. Switching the rule from early to late leaves a
 founded organization standing.
 

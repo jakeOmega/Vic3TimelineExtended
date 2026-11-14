@@ -95,16 +95,12 @@ class WidthTest(unittest.TestCase):
         v = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", v)
         v = re.sub(r"\[(concept_\w+)\]", lambda m: self.shown(m.group(1), depth + 1), v)
 
+        # A choice at its longest; the organization's name (un_org_name_*)
+        # at its longest reading, the League's.
         def choice(m):
             keys = re.findall(r"'((?:je|un_org_name)_\w+)'", m.group(0))
             return max((self.shown(k, depth + 1) for k in keys), key=len)
         v = re.sub(r"\[SelectLocalization\(.*?\)\]", choice, v)
-        # The organization's name at its longest reading (un_org_name: the
-        # League under Early Unlock, before the age of IGOs).
-        org = "[GetPlayer.GetCustom('un_org_name')]"
-        if org in v:
-            v = v.replace(org, max((self.shown(k, depth + 1) for k in ("un_org_name_league", "un_org_name_un")),
-                                   key=len))
         v = re.sub(r"\[[^\[\]]*\]", NUMBER, v)
         v = re.sub(r"#[A-Za-z_]+(?:;\S*)? ", "", v).replace("#!", "")
         # An inline icon (@money!) is about two characters wide.

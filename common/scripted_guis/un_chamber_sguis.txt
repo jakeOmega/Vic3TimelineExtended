@@ -233,9 +233,12 @@ un_ov_refounding_sgui = {
 	effect = { }
 }
 
-# The Found button's label under Early Unlock before the age of
-# Intergovernmental Organizations: "Found the League" (un_league_stage, as the
-# entry's title, un_org_name). The full name doesn't fit the button.
+# The early unlock's league (un_league_stage): the organisation's name. Read
+# by un_org_name_ingame, which je_united_nations names behind a
+# GetPlayer.IsValid guard (so the entry's title, the Timeline Extended tab and
+# the UN tab's header read "League of Nations"), and by the Found button's
+# label ("Found the League": the full name doesn't fit the button). Globals
+# only (gotcha #22).
 un_ov_league_sgui = {
 	scope = country
 	is_shown = {

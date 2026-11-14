@@ -33,18 +33,7 @@ un_events.1 = {
 
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
-	# The early unlock's league (un_league_stage) signs a covenant; the
-	# organisation keeps the name until the age of Intergovernmental
-	# Organizations (un_org_name, zzz_extra_custom_loc.txt).
-	title = {
-		first_valid = {
-			triggered_desc = {
-				trigger = { un_league_stage = yes }
-				desc = un_events.1.t_league
-			}
-			desc = un_events.1.t
-		}
-	}
+	title = un_events.1.t
 	# The organisation already exists when this arrives: it is the founder's
 	# invitation (un_charter_invitations, which saves scope:un_charter_founder),
 	# sent after un_found_button or a founding conference (a refounding after a
