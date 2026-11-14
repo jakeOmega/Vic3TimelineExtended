@@ -3499,7 +3499,7 @@ def render_display() -> str:
                 "}"]
     out += ["",
             "# Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,",
-            "# the year it lands."]
+            "# the share of its flight behind it, the year it lands."]
     for n in range(1, FLEET_SLOTS + 1):
         out += [f"sr_disp_cf_slot_{n} = {{",
                 "\tvalue = 0",
@@ -3509,6 +3509,19 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = sr_cf_{n}_arrive }} value = var:sr_cf_{n}_arrive subtract = te_history_month_index }}",
                 "\tmin = 0",
+                "}",
+                # the share of its flight behind it (the slot's track)
+                f"sr_disp_cf_slot_{n}_frac = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ has_variable = sr_cf_{n}_arrive has_variable = sr_cf_{n}_depart }}",
+                "\t\tvalue = te_history_month_index",
+                f"\t\tsubtract = var:sr_cf_{n}_depart",
+                "\t\t# a lunar fleet lands the month it leaves: never a division by nothing",
+                f"\t\tdivide = {{ value = var:sr_cf_{n}_arrive subtract = var:sr_cf_{n}_depart min = 1 }}",
+                "\t}",
+                "\tmin = 0",
+                "\tmax = 1",
                 "}",
                 f"sr_disp_cf_slot_{n}_year = {{",
                 "\tvalue = 0",
@@ -4048,6 +4061,7 @@ def _slot_row(n: int) -> list[str]:
     out = ["\t\tte_sr_cf_slot_row = {"]
     out += _override("slot_visible", f'visible = "[{_eq(f"sr_disp_cf_slot_{n}", 1)}]"')
     out += _override("slot_name", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_cf_slot_{n}_name')]\"")
+    out += _override("slot_frac", f'value = "[FixedPointToFloat( {_sv(f"sr_disp_cf_slot_{n}_frac")} )]"')
     out += _override("slot_eta", f'text = "je_space_race_widget_cf_slot_{n}_eta"')
     return out + ["\t\t}"]
 

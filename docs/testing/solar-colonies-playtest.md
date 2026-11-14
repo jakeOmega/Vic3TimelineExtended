@@ -933,3 +933,29 @@ lists the art. Needs Full Colonies and at least two fleets (`event te_debug_spac
    drives are ours (the same step as Colony Fleets' Drive line). All four are placeholders; note which crops badly.
    If `fittype = centercrop` squashes or tiles the picture instead of cropping it, the fallback is a 480 × 110 crop
    of each saved as its own texture.
+8. **A card's world.** Left of where a fleet is, the head shows that location's world at 24 px: Earth Orbit the
+   Earth-and-satellite stand-in, Mars the red planet, and so on out to the Kuiper Belt's dwarf planet. A fleet in
+   transit shows the world it is bound for. Exactly one shows at a time.
+
+## Space Command's cells, the Locations strip and the colony fleets' track (2026-11-14)
+
+The same review. Space Command's four readings are overview cells, Locations is a strip, and each colony fleet in
+flight has a track.
+
+1. **Space Command.** Four boxes, two to a row, each with its icon in an inset: Built a month (Space Command's
+   building), Fleet strength (the warship), Upkeep (the colonist with a wrench) and Reserve (the lander on its pad).
+   Each keeps the hover its row had. Pause: Built a month reads Paused in the same box, with the paused hover, and
+   nothing moves. Under them Launch, Auto and Pause as before; then the build mix, five buttons with a role's sign
+   over "Warship 1" and so on, in one line that fits. A click still steps the weight 0 to 3.
+2. **Locations.** One strip, 476 wide: a narrow column of three small icons (the gold emblem, the grey shield, the
+   warship; hover each for Ours, Others, Inbound), then nine columns, Earth Orbit to the Kuiper Belt, each under
+   its world's icon (the name on hover). Down a column: our strength, the strongest other power's flag, every other
+   power's strength, the inbound "count·months", and a status icon. The three caption icons sit level with their
+   lines. The flag sits centred in its column; a column with no other power there shows no flag and a 0.
+3. **Statuses.** With a fleet standing off an enemy's colonies, that column's foot shows the cream Stand off sign
+   (hover: Blockading); as the one blockaded, the same sign in red (Blockaded). A battle month shows the red burst;
+   interdiction the barred circle, cream for ours and red against us. Earth's column shows the Earth hovers.
+4. **Colony fleets.** Each fleet in flight in Colony Fleets shows, between its world and its landing, a short bar
+   with the ship on it, filling from launch to landing. A lunar fleet lands the month it leaves and never shows. A
+   fleet launched before this build has its departure month stored already, so its bar is right from the first
+   month. The world's name and "in N months (year)" both still fit.

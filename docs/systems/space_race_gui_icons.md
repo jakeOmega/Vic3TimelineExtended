@@ -1,6 +1,6 @@
 # Space Race GUI: Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws 58 icons of its own, including three pie layers, ten for the kinds of world in Our Colonies, thirteen on a colony's page and the seventeen pictograms of the fleet cards. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws 62 icons of its own, including three pie layers, ten for the kinds of world in Our Colonies, thirteen on a colony's page and the twenty-one pictograms of the fleet cards and Locations. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file, and each tile and module row on a colony's page to its own. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
 
@@ -142,6 +142,35 @@ Each fleet in Space Fleets is a card (`te_sr_fleet_row`; owner, 2026-11-14): its
 | The transit track's marker (18 px, on the bar at the share of the leg flown) | a filled dart | keep | `track_ship.dds` |
 
 The roll-up and roll-down buttons at the right of a card's head are vanilla's `generic_icons/up_up.dds` (the module queue's move-up, already kept) and `generic_icons/down_down.dds`, in vanilla's round action button.
+
+## Locations and a card's world (2026-11-14)
+
+Locations is a strip (`te_sr_location_cell`, a column per location from Earth outward; owner, 2026-11-14), and a fleet card's head shows the world of where the fleet is, or is bound. Both take a location's icon from `LOCATION_ICONS` in `scripts/generators/gen_space_fleets.py`: the kind-of-world icons above, by the worlds found there, at 30 px in the strip and 24 px on a card.
+
+| Location | Icon | File |
+|---|---|---|
+| Earth Orbit | **placeholder**: the Earth-orbit production method's embossed Earth and satellite. To paint: a blue-and-white Earth, a thin gold orbit ring around it; proposed `gfx/interface/icons/space_race_icons/location_earth.dds` | `gfx/interface/icons/production_method_icons/pm_earth_orbit.dds` |
+| Mercury & Venus | Venus | `colony_venus.dds` |
+| Mars | Mars | `colony_mars.dds` |
+| Asteroid Belt | the asteroid | `colony_asteroid.dds` |
+| Jupiter | the Jovian moon before its giant | `colony_jovian.dds` |
+| Saturn | the Saturnian moon's ringed world | `colony_saturnian.dds` |
+| Uranus | the Uranian moon | `colony_uranian.dds` |
+| Neptune | the Neptunian moon | `colony_neptunian.dds` |
+| Kuiper Belt | the dwarf planet | `colony_dwarf.dds` |
+
+Swapping Earth Orbit's in is one path in `LOCATION_ICONS`, one in `te_sr_fleet_row` and `EARTH_ORBIT_PLACEHOLDER` in `test_space_race_layout.py`.
+
+The strip's captions and statuses are icons with their word on hover (`te_sr_location_captions`, `te_sr_location_cell`). Ours is the card's emblem (`fleet.dds`), the warships on their way the warship (`warship.dds`), and a status of ours wears its posture's sign (`posture_standoff.dds` for Blockading, `posture_interdict.dds` for Interdicting). The rest are drawn by the same script as the cards' (`gen_space_fleet_pictograms.py`):
+
+| Where | Drawn now | To paint | File |
+|---|---|---|---|
+| The others' line (18 px, left of every other power's strength) | the emblem's shield, bare, in grey | a plain steel shield badge | `fleet_other.dds` |
+| Battle (20 px) | the burst, red | two crossed red beams over a small explosion | `status_battle.dds` |
+| Blockaded, Earth Blockaded | the Stand off sign, red | keep: the enemy's posture in red | `status_blockaded.dds` |
+| Interdicted | the Interdict sign, red | keep | `status_interdicted.dds` |
+
+Space Command's four overview cells use art the panel already has: Space Command's building icon (Built a month), the warship (Fleet strength), the colonist with a wrench (`page_crews.dds`, Upkeep) and the Spaceport's lander on its pad (`module_port.dds`, Reserve). The build mix's five buttons wear the cards' role icons.
 
 ## Space Fleets: the banner (2026-11-14, placeholders)
 

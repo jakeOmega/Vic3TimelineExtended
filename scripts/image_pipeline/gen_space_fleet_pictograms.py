@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Draw the Space Fleets cards' pictograms (space_race_widget.gui, te_sr_fleet_row).
+"""Draw the Space Fleets cards' and Locations' pictograms (space_race_widget.gui,
+te_sr_fleet_row and te_sr_location_cell).
 
 The fleet cards (owner, 2026-11-14) show a fleet's ship roles, postures and
-orders as icons. These are the first set: flat line pictograms, drawn here
+orders as icons, and Locations a location's status. These are the first set: flat line pictograms, drawn here
 rather than rendered, so the layout can be judged in game with art of its own
 (gui_style_guide.md rule 10). Painted replacements go through the icon
 pipeline (icon_prompts.py, category `space`) under the same file names; the
@@ -37,6 +38,8 @@ SCALE = 8                      # drawn at 24 x 8 x (64 / 24) = 512 px, then down
 UNIT = SIZE * SCALE / 24
 CREAM = (233, 226, 207, 255)   # the panel's text
 GOLD = (210, 176, 106, 255)    # the fleet's emblem
+GREY = (170, 162, 143, 255)    # another power's fleets (Locations)
+RED = (226, 104, 92, 255)      # a status that is bad for us (Locations)
 WIDTH = 1.9                    # stroke, in grid units
 
 
@@ -85,6 +88,11 @@ def fleet(c):          # the emblem: a shield with two chevrons
     c.line((12, 3), (20, 6.5), (20, 13), (17.5, 18), (12, 21.5), (6.5, 18), (4, 13), (4, 6.5), closed=True)
     c.line((8, 12.5), (12, 9), (16, 12.5))
     c.line((8, 16.5), (12, 13), (16, 16.5))
+
+
+def fleet_other(c):    # another power's: the shield, bare
+    c.line((12, 3), (20, 6.5), (20, 13), (17.5, 18), (12, 21.5), (6.5, 18), (4, 13), (4, 6.5), closed=True)
+    c.line((8, 12), (16, 12))
 
 
 def role_war(c):       # a hull with a bridge
@@ -199,6 +207,11 @@ ICONS = {
     "order_go": (order_go, CREAM), "order_transfer": (order_transfer, CREAM), "order_land": (order_land, CREAM),
     "order_embark": (order_embark, CREAM), "order_seize": (order_seize, CREAM), "order_destroy": (order_destroy, CREAM),
     "track_ship": (track_ship, CREAM),
+    # Locations: the others' caption, and the statuses that are bad for us in
+    # red (ours wear the posture's own cream sign).
+    "fleet_other": (fleet_other, GREY),
+    "status_battle": (order_destroy, RED), "status_blockaded": (posture_standoff, RED),
+    "status_interdicted": (posture_interdict, RED),
 }
 
 

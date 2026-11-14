@@ -581,12 +581,7 @@ CELLS = {
     "a destination's Choose and Chosen (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_dp_choose"'),
         r"je_space_race_widget_dp_(choose|chosen)"),
-    **{f"the locations' {col} column head (te_sr_location_header_row)": (
-        ("te_sr_location_header_row", f'text = "je_space_race_widget_loc_col_{col}"'), f"je_space_race_widget_loc_col_{col}")
-       for col in ("where", "ours", "others", "inbound", "status")},
-    "a location's status (te_sr_location_row)": (
-        ("te_sr_location_row", 'text = "je_space_race_widget_loc_status_blockading"'),
-        r"je_space_race_widget_loc_status_\w+"),
+    # Locations is a strip of icons and figures (owner, 2026-11-14): its captions and statuses are hovers.
     "a colony's defense status (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_def_status_calm"'),
         r"je_space_race_widget_def_status_(calm|blockaded|assault|interdicted)"),
@@ -632,9 +627,12 @@ CELLS = {
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),
-    "the build mix, Launch, Auto and Pause (te_sr_sc_mix_button)": (
+    "Launch, Auto and Pause (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off|pause|resume|resuming)"),
+        r"je_space_race_widget_sc_(launch|auto_on|auto_off|pause|resume|resuming)"),
+    "the build mix, a role's word and weight under its icon (te_sr_sc_role_button)": (
+        ("te_sr_sc_role_button", 'block "mix_label"'),
+        r"je_space_race_widget_sc_mix_(war|rapid|siege|carrier|tender)"),
     # Dismantling (owner, 2026-10-31): a module level coming down, under its name.
     "a module coming down on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'text = "je_space_race_widget_mod_coming_down"'),
@@ -873,7 +871,7 @@ class FigureBudgetTest(unittest.TestCase):
         self._check("te_sr_fl_gauge", self.GAUGE)
         self._check("te_sr_fl_role_cell", self.ROLE)
         self._check("te_sr_xf_role_row", self.TRANSFER)
-        self._check("te_sr_location_row", self.LOCATION)
+        self._check("te_sr_location_cell", self.LOCATION)
 
     def test_the_destination_popup(self):
         self._check("te_sr_dest_slot", self.DEST_FLEET)

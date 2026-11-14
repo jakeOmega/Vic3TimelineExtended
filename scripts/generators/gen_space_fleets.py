@@ -1913,6 +1913,7 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_months_left  months until it lands",
            "#   sr_disp_fl_<n>_refit_left   months of its refit left",
            "#   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination",
+           "#   sr_disp_fl_<n>_place        the code of the location it is at, or is bound for (the card's world icon)",
            "#   sr_disp_fl_<n>_strength_frac, _dv_frac, _supply_frac, _marines_frac  the card's bars:",
            "#                               each reading as a share of its full, 0 to 1",
            "#   sr_disp_fl_<n>_transit_frac the share of its leg flown so far (the transit track)",
@@ -1962,6 +1963,12 @@ def render_display() -> str:
                 f"sr_disp_fl_{n}_target = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'target')} }} value = var:{var(n, 'target')} }}",
+                "}"]
+        # The card's world icon: the location it is at, else the one it is bound for.
+        out += [f"sr_disp_fl_{n}_place = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = {var(n, 'loc')} }} value = var:{var(n, 'loc')} }}",
+                f"\telse_if = {{ limit = {{ has_variable = {var(n, 'dest')} }} value = var:{var(n, 'dest')} }}",
                 "}"]
         # The card's bars (owner, 2026-11-14): each reading as a share of its
         # full, 0 to 1, and the leg flown so far.
@@ -2297,6 +2304,19 @@ def _button(name: str, sgui: str, n: int) -> list[str]:
 
 
 NUMERALS = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
+# A location's world, in Locations and at the head of a fleet's card: the
+# colonies' kind-of-world icons, by the worlds found there. Earth Orbit has
+# none of its own yet: the Earth-orbit production method's icon stands in
+# (space_race_gui_icons.md, "Locations"). te_sr_fleet_row's nine literal
+# textures are these (test_space_race_layout.py holds the two equal).
+_SR_ICONS = "gfx/interface/icons/space_race_icons"
+LOCATION_ICONS = {
+    "earth": "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds",
+    "inner": f"{_SR_ICONS}/colony_venus.dds", "mars": f"{_SR_ICONS}/colony_mars.dds",
+    "asteroids": f"{_SR_ICONS}/colony_asteroid.dds", "jupiter": f"{_SR_ICONS}/colony_jovian.dds",
+    "saturn": f"{_SR_ICONS}/colony_saturnian.dds", "uranus": f"{_SR_ICONS}/colony_uranian.dds",
+    "neptune": f"{_SR_ICONS}/colony_neptunian.dds", "kuiper": f"{_SR_ICONS}/colony_dwarf.dds",
+}
 
 
 def _frac(name: str) -> str:
@@ -2321,6 +2341,8 @@ def _fleet_row(n: int) -> list[str]:
     # rolled up (its ships on hover, as each role cell), and the two buttons
     # that roll the card up and down, one shown.
     out += _override("fl_number", f'raw_text = "{NUMERALS[n - 1]}"')
+    for lc in LOCATIONS:
+        out += _override(f"fl_place_{lc.key}", f'visible = "[{_eq(f"sr_disp_fl_{n}_place", lc.code)}]"')
     out += _override("fl_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
     out += _override("fl_roll_up", f'visible = "[Not( {closed} )]"', toggle)
     out += _override("fl_rolled_visible", f'visible = "[{closed}]"')
@@ -2397,8 +2419,9 @@ def _fleet_row(n: int) -> list[str]:
 
 def _location_row(lc: glw.Location) -> list[str]:
     k = lc.key
-    out = ["\t\tte_sr_location_row = {"]
-    out += _override("loc_name", f'text = "sr_loc_name_{k}"')
+    out = ["\t\tte_sr_location_cell = {"]
+    out += _override("loc_name", f'tooltip = "sr_loc_name_{k}"')
+    out += _override("loc_icon", f'texture = "{LOCATION_ICONS[k]}"')
     out += _override("loc_ours", f'raw_text = "[{_sv(f"sr_disp_loc_ours_{k}")}|0]"')
     out += _override("loc_flag_visible", f'visible = "[{_eq(f"sr_disp_loc_flag_{k}", 1)}]"')
     out += _override("loc_context", f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ls_cap_{k}').GetState]\"")
@@ -2661,7 +2684,7 @@ def render_gui() -> str:
            "### gen_space_fleets (slice 6 design § 16). The row types are in",
            "### space_race_widget.gui: te_sr_fleet_row (Space Fleets, a card per slot,",
            "### rolled up and down on its own client-side flag, sr_panel_fleet_<n>_closed) and",
-           "### te_sr_location_row (Locations, one per location). Each value is a display",
+           "### te_sr_location_cell (Locations, a column per location). Each value is a display",
            "### value of sr_fleets_display_generated.txt; the scripted GUIs are in",
            "### sr_fleet_sguis.txt and take the slot as scope:op. Then the popups'",
            "### bodies: Transfer's (te_sr_xfer_popup_body), the destination's",
@@ -2678,10 +2701,12 @@ def render_gui() -> str:
     for n in range(1, SLOTS + 1):
         out += [""] + _fleet_row(n)
     out += ["\t}", "",
-            "\ttype te_sr_location_rows = flowcontainer {",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 2"]
+            "\t### Locations, a strip: the captions' column, then a column per location,",
+            "\t### from Earth outward.",
+            "\ttype te_sr_location_cells = flowcontainer {",
+            "\t\tdirection = horizontal",
+            "",
+            "\t\tte_sr_location_captions = {}"]
     for lc in LOCATIONS:
         out += [""] + _location_row(lc)
     out += ["\t}", "",

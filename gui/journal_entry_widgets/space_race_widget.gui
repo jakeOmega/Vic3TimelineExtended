@@ -4672,9 +4672,11 @@ types space_race_widget_types
 	}
 
 	### One fleet slot in Colony Fleets: the colonization entry's icon, the world
-	### it is bound for (sr_cf_slot_<n>_name, generated custom loc) and when it
-	### lands. 24 + 180 + 236 + 2 × 4 spacing + 2 × 4 margin = 456. Instances in
-	### te_sr_cf_slot_rows (sr_sites_generated_rows.gui), one per slot.
+	### it is bound for (sr_cf_slot_<n>_name, generated custom loc), the leg
+	### flown so far as a bar with the ship on it (sr_disp_cf_slot_<n>_frac, as a
+	### space fleet's track) and when it lands. 24 + 150 + 92 + 188 + 3 × 4
+	### spacing + 2 × 4 margin = 474. Instances in te_sr_cf_slot_rows
+	### (sr_sites_generated_rows.gui), one per slot.
 	type te_sr_cf_slot_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -4693,13 +4695,13 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 180 24 }
+			size = { 150 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 180
+				max_width = 150
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
@@ -4707,13 +4709,46 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 236 24 }
+			size = { 92 18 }
+			parentanchor = vcenter
+
+			default_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "values" {
+					block "slot_frac" {}
+					min = 0
+					max = 1
+				}
+				blockoverride "on_top_of_the_progressbar" {
+					progressbar = {
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						size = { 100% 100% }
+						skip_initial_animation = yes
+						direction = horizontal
+						block "slot_frac" {}
+						min = 0
+						max = 1
+						marker = {
+							icon = {
+								size = { 18 18 }
+								parentanchor = vcenter
+								widgetanchor = center
+								texture = "gfx/interface/icons/space_race_icons/track_ship.dds"
+							}
+						}
+					}
+				}
+			}
+		}
+		widget = {
+			size = { 188 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 236
+				max_width = 188
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
@@ -5280,8 +5315,8 @@ types space_race_widget_types
 	}
 
 	### One fleet slot in Space Fleets, as a card (owner, 2026-11-14). Its head
-	### is always shown: the fleet's emblem and number, where it is (or
-	### "→ Mars" in transit), its drive (or its refit's months) and the button
+	### is always shown: the fleet's emblem and number, the world of where it is
+	### and its name (or "→ Mars" in transit), its drive (or its refit's months) and the button
 	### that rolls the card up or down (the flag sr_panel_fleet_<n>_closed, so
 	### a card starts open); rolled up, the head also gives its strength. In
 	### transit, a track under the head: the leg flown so far, the ship on it,
@@ -5292,8 +5327,8 @@ types space_race_widget_types
 	### hover), Go, Transfer (its popup, te_sr_xfer_popup), Land, Embark; and
 	### from 6b its posture's four buttons (UI pass design § 7), then its target
 	### world (it opens the target popup) and Seize / Destroy. The card is 480
-	### wide with a margin of 6, so each line has 468: the head 30 + 40 + 150 +
-	### 96 + 122 + 4 × 4 = 454; the track 200 + 4 + 264 = 468; the orders
+	### wide with a margin of 6, so each line has 468: the head 30 + 40 + 24 + 130 +
+	### 96 + 122 + 5 × 4 = 462; the track 200 + 4 + 264 = 468; the orders
 	### 108 + 80 + 98 + 2 × 80 + 4 × 4 = 462; target and Seize 190 + 98 + 4 =
 	### 292. Instances in te_sr_fleet_rows (sr_fleets_generated_rows.gui), one
 	### per slot; the scripted GUIs are sr_fleet_sguis.txt's, scope:op the slot
@@ -5344,14 +5379,76 @@ types space_race_widget_types
 					block "fl_number" {}
 				}
 			}
+			### The world of the location it is at, or is bound for: one slot, the
+			### nine taking turns (sr_disp_fl_<n>_place; the locations' icons, as
+			### Locations draws them).
 			widget = {
-				size = { 150 30 }
+				size = { 24 30 }
+				parentanchor = vcenter
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
+					block "fl_place_earth" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+					block "fl_place_inner" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+					block "fl_place_mars" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+					block "fl_place_asteroids" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+					block "fl_place_jupiter" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+					block "fl_place_saturn" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+					block "fl_place_uranus" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+					block "fl_place_neptune" {}
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+					block "fl_place_kuiper" {}
+				}
+			}
+			widget = {
+				size = { 130 30 }
 				parentanchor = vcenter
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 150
+					max_width = 130
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
@@ -6820,263 +6917,217 @@ types space_race_widget_types
 		}
 	}
 
-	### The column heads above the Locations rows.
-	type te_sr_location_header_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-		margin = { 4 1 }
-
-		textbox = {
-			size = { 140 20 }
-			align = left|nobaseline
-			using = te_sr_fontsize_row
-			elide = right
-			text = "je_space_race_widget_loc_col_where"
-		}
-		textbox = {
-			size = { 56 20 }
-			align = left|nobaseline
-			using = te_sr_fontsize_row
-			elide = right
-			text = "je_space_race_widget_loc_col_ours"
-		}
-		textbox = {
-			size = { 79 20 }
-			align = left|nobaseline
-			using = te_sr_fontsize_row
-			elide = right
-			text = "je_space_race_widget_loc_col_others"
-			tooltip = "je_space_race_widget_loc_others_tt"
-		}
-		textbox = {
-			size = { 66 20 }
-			align = left|nobaseline
-			using = te_sr_fontsize_row
-			elide = right
-			text = "je_space_race_widget_loc_col_inbound"
-			tooltip = "je_space_race_widget_loc_inbound_tt"
-		}
-		textbox = {
-			size = { 113 20 }
-			align = left|nobaseline
-			using = te_sr_fontsize_row
-			elide = right
-			text = "je_space_race_widget_loc_col_status"
-		}
-	}
-
-	### One location in Locations: its name, our strength there, the strongest
-	### other power's flag (its capital stored on the viewer, sr_ls_cap_<loc>,
-	### gotcha #15) and every other power's strength there, exact (fleets in
-	### space are seen), the fleets on their way ("count·months", highlighted
-	### when the first is ours; marked with Space Command's icon, so warships
-	### don't wear the colony fleets' rocket: audit SPC-16), and from 6b its status (a battle this month, our
-	### colonies there blockaded, our blockade of an enemy's; from 6c, our
-	### colonies interdicted, our interdiction). 140 + 56 + 79 + 66 + 113 +
-	### 4 × 4 + 2 × 4 = 478, in the column. Instances in te_sr_location_rows
-	### (sr_fleets_generated_rows.gui).
-	type te_sr_location_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-		margin = { 4 1 }
+	### Locations is a strip (owner, 2026-11-14): the nine locations from Earth
+	### outward, a column each (te_sr_location_cell), under their worlds' icons;
+	### this column, at their left, says what each line is, as an icon with its
+	### word on hover: ours (the fleet's emblem), the strongest other power's
+	### (its flag, then the bare shield beside every other power's strength) and
+	### the warships on their way (the warship, audit SPC-16). The cells' heights
+	### are te_sr_location_cell's, line for line.
+	type te_sr_location_captions = flowcontainer {
+		direction = vertical
 
 		widget = {
-			size = { 140 24 }
-			parentanchor = vcenter
+			size = { 26 34 }
+		}
+		widget = {
+			size = { 26 22 }
+			tooltip = "je_space_race_widget_loc_col_ours"
 
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 140
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				block "loc_name" {}
+			icon = {
+				size = { 18 18 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/fleet.dds"
 			}
 		}
 		widget = {
-			size = { 56 24 }
-			parentanchor = vcenter
+			size = { 26 26 }
+		}
+		widget = {
+			size = { 26 22 }
+			tooltip = "je_space_race_widget_loc_others_tt"
+
+			icon = {
+				size = { 18 18 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/fleet_other.dds"
+			}
+		}
+		widget = {
+			size = { 26 22 }
+			tooltip = "je_space_race_widget_loc_inbound_tt"
+
+			icon = {
+				size = { 18 18 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/warship.dds"
+			}
+		}
+		widget = {
+			size = { 26 24 }
+		}
+	}
+
+	### One location in Locations, a column of the strip: its world's icon (its
+	### name on hover), our strength there, the strongest other power's flag
+	### (its capital stored on the viewer, sr_ls_cap_<loc>, gotcha #15) over
+	### every other power's strength there, exact (fleets in space are seen),
+	### the fleets on their way ("count·months", highlighted when the first is
+	### ours), and from 6b its status as an icon, red where it is bad for us (a
+	### battle this month, our colonies there blockaded, our blockade of an
+	### enemy's; from 6c, our colonies interdicted, our interdiction; 6d, Earth's
+	### own), each with its hover. 50 wide: 26 + 9 × 50 = 476, in the column.
+	### Instances in te_sr_location_cells (sr_fleets_generated_rows.gui).
+	type te_sr_location_cell = flowcontainer {
+		direction = vertical
+
+		widget = {
+			size = { 50 34 }
+			block "loc_name" {}
+
+			icon = {
+				size = { 30 30 }
+				parentanchor = center
+				block "loc_icon" {}
+			}
+		}
+		widget = {
+			size = { 50 22 }
 
 			textbox = {
-				parentanchor = left|vcenter
+				parentanchor = center
 				autoresize = yes
-				max_width = 56
-				align = left|nobaseline
-				using = te_sr_fontsize_row
+				max_width = 50
+				align = center|nobaseline
+				using = te_sr_fontsize_overview
 				elide = right
 				default_format = "#v"
 				block "loc_ours" {}
 			}
 		}
 		widget = {
-			size = { 79 24 }
-			parentanchor = vcenter
+			size = { 50 26 }
 
 			flowcontainer = {
-				parentanchor = left|vcenter
-				direction = horizontal
-				spacing = 4
+				parentanchor = center
 				ignoreinvisible = yes
+				block "loc_flag_visible" {}
 
 				flowcontainer = {
 					ignoreinvisible = yes
-					block "loc_flag_visible" {}
+					block "loc_context" {}
 
-					flowcontainer = {
-						ignoreinvisible = yes
-						block "loc_context" {}
+					widget = {
+						size = { 28 24 }
 
-						widget = {
-							size = { 28 24 }
-							parentanchor = vcenter
-
-							tiny_flag = {
-								parentanchor = center
-								datacontext = "[State.GetCountry]"
-							}
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[State.GetCountry]"
 						}
 					}
-				}
-				textbox = {
-					parentanchor = vcenter
-					autoresize = yes
-					max_width = 47
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					block "loc_others" {}
 				}
 			}
 		}
 		widget = {
-			size = { 66 24 }
-			parentanchor = vcenter
+			size = { 50 22 }
+
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				max_width = 50
+				align = center|nobaseline
+				using = te_sr_fontsize_overview
+				elide = right
+				block "loc_others" {}
+			}
+		}
+		widget = {
+			size = { 50 22 }
 
 			flowcontainer = {
-				direction = horizontal
-				spacing = 2
+				parentanchor = center
 				ignoreinvisible = yes
-				parentanchor = left|vcenter
 				block "loc_inbound" {}
 
-				icon = {
-					size = { 16 16 }
-					parentanchor = vcenter
-					texture = "gfx/interface/icons/space_race_icons/warship.dds"
-				}
 				textbox = {
-					parentanchor = vcenter
 					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
+					max_width = 50
+					align = center|nobaseline
+					using = te_sr_fontsize_overview
 					elide = right
 					default_format = "#v"
 					block "loc_inbound_ours" {}
 				}
 				textbox = {
-					parentanchor = vcenter
 					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
+					max_width = 50
+					align = center|nobaseline
+					using = te_sr_fontsize_overview
 					elide = right
 					block "loc_inbound_rival" {}
 				}
 			}
 		}
 		widget = {
-			size = { 113 24 }
-			parentanchor = vcenter
+			size = { 50 24 }
 
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/status_battle.dds"
 				tooltip = "je_space_race_widget_loc_battle_tt"
-				text = "je_space_race_widget_loc_status_battle"
 				block "loc_battle_visible" {}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/status_blockaded.dds"
 				tooltip = "je_space_race_widget_loc_blockaded_tt"
-				text = "je_space_race_widget_loc_status_blockaded"
 				block "loc_blockaded_visible" {}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/posture_standoff.dds"
 				tooltip = "je_space_race_widget_loc_blockading_tt"
-				text = "je_space_race_widget_loc_status_blockading"
 				block "loc_blockading_visible" {}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/status_interdicted.dds"
 				tooltip = "je_space_race_widget_loc_interdicted_tt"
-				text = "je_space_race_widget_loc_status_interdicted"
 				block "loc_interdicted_visible" {}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/posture_interdict.dds"
 				tooltip = "je_space_race_widget_loc_interdicting_tt"
-				text = "je_space_race_widget_loc_status_interdicting"
 				block "loc_interdicting_visible" {}
 			}
-			### 6d: Earth's own blockade, ours or an enemy's.
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/status_blockaded.dds"
 				tooltip = "je_space_race_widget_loc_earth_blockaded_tt"
-				text = "je_space_race_widget_loc_status_earth_blockaded"
 				block "loc_earth_blockaded_visible" {}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 113
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				texture = "gfx/interface/icons/space_race_icons/posture_standoff.dds"
 				tooltip = "je_space_race_widget_loc_earth_blockading_tt"
-				text = "je_space_race_widget_loc_status_earth_blockading"
 				block "loc_earth_blockading_visible" {}
 			}
 		}
 	}
 
-	### Space Command (Full Colonies; slice 6 design § 5): what it builds a month
-	### and its levels, the fleets' strength and its upkeep, the reserve with
-	### Launch, Auto and Pause / Resume / Resuming (sr_sc_pause_sgui; owner, 2026-10-31),
-	### then the build mix, five buttons each stepping a role's weight 0 → 3
+	### Space Command (Full Colonies; slice 6 design § 5): four overview cells
+	### (what it builds a month, the fleets' strength, its upkeep and the
+	### reserve), then Launch, Auto and Pause / Resume / Resuming
+	### (sr_sc_pause_sgui; owner, 2026-10-31), then the build mix, five buttons
+	### (te_sr_sc_role_button) each stepping a role's weight 0 → 3
 	### (sr_sc_mix_sgui, scope:op the role). Open by default; the flag is
 	### sr_panel_space_command_closed.
 	type te_sr_sc_mix_button = button {
@@ -7087,6 +7138,33 @@ types space_race_widget_types
 
 		textbox = {
 			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 86
+			elide = right
+			using = te_sr_fontsize_row
+			block "mix_label" {}
+		}
+	}
+
+	### A role in the build mix: its icon (the fleet cards') over its word and
+	### weight; a click steps the weight 0 → 3 (sr_sc_mix_sgui, scope:op the
+	### role). Five to the line: 5 × 92 + 4 × 4 = 476.
+	type te_sr_sc_role_button = button {
+		using = default_button_action
+		size = { 92 46 }
+		parentanchor = vcenter
+		block "mix_button" {}
+
+		icon = {
+			size = { 20 20 }
+			position = { 0 3 }
+			parentanchor = top|hcenter
+			block "mix_icon" {}
+		}
+		textbox = {
+			position = { 0 23 }
+			parentanchor = top|hcenter
 			align = center|nobaseline
 			autoresize = yes
 			max_width = 86
@@ -7132,54 +7210,112 @@ types space_race_widget_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_launch_site_lost'), '(CFixedPoint)1' )]"
 				text = "je_space_race_widget_sc_site_lost_note"
 			}
-			te_sr_value_row = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]"
-				tooltip = "je_space_race_widget_sc_rate_tt"
-				blockoverride "row_label" {
-					text = "je_space_race_widget_sc_rate_label"
+			### The four readings as overview cells, two to a row (style guide rule 4;
+			### owner, 2026-11-14): Banking's cell, each with its icon in an inset box,
+			### its caption and its figure, the breakdown on hover. Built a month
+			### reads Paused while construction is paused (owner, 2026-10-31), also
+			### while a resume waits for the next step (which builds nothing): one
+			### slot, the two cells taking turns, each with its own hover.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+
+				widget = {
+					size = { 238 70 }
+
+					te_banking_ov_cell = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]"
+						tooltip = "je_space_race_widget_sc_rate_tt"
+						blockoverride "caption" {
+							text = "je_space_race_widget_ovc_sc_rate_cap"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_space_race_widget_ovc_sc_rate_word"
+							}
+						}
+					}
+					te_banking_ov_cell = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
+						tooltip = "je_space_race_widget_sc_rate_paused_tt"
+						blockoverride "caption" {
+							text = "je_space_race_widget_ovc_sc_rate_cap"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_space_race_widget_ovc_sc_rate_word_paused"
+							}
+						}
+					}
 				}
-				blockoverride "row_value" {
-					text = "je_space_race_widget_sc_rate_figure"
+				te_banking_ov_cell = {
+					tooltip = "je_space_race_widget_sc_strength_tt"
+					blockoverride "caption" {
+						text = "je_space_race_widget_ovc_sc_strength_cap"
+					}
+					blockoverride "icons" {
+						icon = {
+							size = { 100% 100% }
+							texture = "gfx/interface/icons/space_race_icons/warship.dds"
+						}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "je_space_race_widget_ovc_sc_strength_word"
+						}
+					}
 				}
 			}
-			### Paused (owner, 2026-10-31): the same row, reading Paused, also while a
-			### resume waits for the next step (which builds nothing).
-			te_sr_value_row = {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
-				tooltip = "je_space_race_widget_sc_rate_paused_tt"
-				blockoverride "row_label" {
-					text = "je_space_race_widget_sc_rate_label"
+			### Upkeep, and 6d's ground reserve (design § 15), over Launch and its toggle.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+
+				te_banking_ov_cell = {
+					tooltip = "je_space_race_widget_sc_upkeep_tt"
+					blockoverride "caption" {
+						text = "je_space_race_widget_ovc_sc_upkeep_cap"
+					}
+					blockoverride "icons" {
+						icon = {
+							size = { 100% 100% }
+							texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
+						}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "je_space_race_widget_ovc_sc_upkeep_word"
+						}
+					}
 				}
-				blockoverride "row_value" {
-					text = "je_space_race_widget_sc_rate_paused"
-				}
-			}
-			te_sr_value_row = {
-				tooltip = "je_space_race_widget_sc_strength_tt"
-				blockoverride "row_label" {
-					text = "je_space_race_widget_sc_strength_label"
-				}
-				blockoverride "row_value" {
-					text = "je_space_race_widget_sc_strength_figure"
-				}
-			}
-			te_sr_value_row = {
-				tooltip = "je_space_race_widget_sc_upkeep_tt"
-				blockoverride "row_label" {
-					text = "je_space_race_widget_sc_upkeep_label"
-				}
-				blockoverride "row_value" {
-					text = "je_space_race_widget_sc_upkeep_figure"
-				}
-			}
-			### 6d: the ground reserve (design § 15), Launch and its toggle.
-			te_sr_value_row = {
-				tooltip = "je_space_race_widget_sc_reserve_tt"
-				blockoverride "row_label" {
-					text = "je_space_race_widget_sc_reserve_label"
-				}
-				blockoverride "row_value" {
-					text = "je_space_race_widget_sc_reserve_figure"
+				te_banking_ov_cell = {
+					tooltip = "je_space_race_widget_sc_reserve_tt"
+					blockoverride "caption" {
+						text = "je_space_race_widget_ovc_sc_reserve_cap"
+					}
+					blockoverride "icons" {
+						icon = {
+							size = { 100% 100% }
+							texture = "gfx/interface/icons/space_race_icons/module_port.dds"
+						}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "je_space_race_widget_ovc_sc_reserve_word"
+						}
+					}
 				}
 			}
 			flowcontainer = {
@@ -7263,53 +7399,67 @@ types space_race_widget_types
 			flowcontainer = {
 				direction = horizontal
 				spacing = 4
-				margin = { 4 1 }
 
-				te_sr_sc_mix_button = {
+				te_sr_sc_role_button = {
 					blockoverride "mix_button" {
 						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 					}
+					blockoverride "mix_icon" {
+						texture = "gfx/interface/icons/space_race_icons/role_war.dds"
+					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_mix_war"
 					}
 				}
-				te_sr_sc_mix_button = {
+				te_sr_sc_role_button = {
 					blockoverride "mix_button" {
 						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 					}
+					blockoverride "mix_icon" {
+						texture = "gfx/interface/icons/space_race_icons/role_rapid.dds"
+					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_mix_rapid"
 					}
 				}
-				te_sr_sc_mix_button = {
+				te_sr_sc_role_button = {
 					blockoverride "mix_button" {
 						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 					}
+					blockoverride "mix_icon" {
+						texture = "gfx/interface/icons/space_race_icons/role_siege.dds"
+					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_mix_siege"
 					}
 				}
-				te_sr_sc_mix_button = {
+				te_sr_sc_role_button = {
 					blockoverride "mix_button" {
 						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 					}
+					blockoverride "mix_icon" {
+						texture = "gfx/interface/icons/space_race_icons/role_carrier.dds"
+					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_mix_carrier"
 					}
 				}
-				te_sr_sc_mix_button = {
+				te_sr_sc_role_button = {
 					blockoverride "mix_button" {
 						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+					}
+					blockoverride "mix_icon" {
+						texture = "gfx/interface/icons/space_race_icons/role_tender.dds"
 					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_mix_tender"
@@ -7430,8 +7580,7 @@ types space_race_widget_types
 		te_sr_panel = {
 			visible = "[Not(GetVariableSystem.Exists('sr_panel_locations_closed'))]"
 
-			te_sr_location_header_row = {}
-			te_sr_location_rows = {}
+			te_sr_location_cells = {}
 		}
 	}
 

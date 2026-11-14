@@ -6,6 +6,7 @@
 #   sr_disp_fl_<n>_months_left  months until it lands
 #   sr_disp_fl_<n>_refit_left   months of its refit left
 #   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination
+#   sr_disp_fl_<n>_place        the code of the location it is at, or is bound for (the card's world icon)
 #   sr_disp_fl_<n>_strength_frac, _dv_frac, _supply_frac, _marines_frac  the card's bars:
 #                               each reading as a share of its full, 0 to 1
 #   sr_disp_fl_<n>_transit_frac the share of its leg flown so far (the transit track)
@@ -70,6 +71,11 @@ sr_disp_fl_1_pick = {
 sr_disp_fl_1_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_target } value = var:sr_fl_1_target }
+}
+sr_disp_fl_1_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_loc } value = var:sr_fl_1_loc }
+	else_if = { limit = { has_variable = sr_fl_1_dest } value = var:sr_fl_1_dest }
 }
 sr_disp_fl_1_strength_frac = {
 	value = 0
@@ -171,6 +177,11 @@ sr_disp_fl_2_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_target } value = var:sr_fl_2_target }
 }
+sr_disp_fl_2_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_2_loc } value = var:sr_fl_2_loc }
+	else_if = { limit = { has_variable = sr_fl_2_dest } value = var:sr_fl_2_dest }
+}
 sr_disp_fl_2_strength_frac = {
 	value = 0
 	if = { limit = { sr_fl_2_strength_full > 0 } value = sr_fl_2_strength divide = sr_fl_2_strength_full }
@@ -270,6 +281,11 @@ sr_disp_fl_3_pick = {
 sr_disp_fl_3_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_target } value = var:sr_fl_3_target }
+}
+sr_disp_fl_3_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_3_loc } value = var:sr_fl_3_loc }
+	else_if = { limit = { has_variable = sr_fl_3_dest } value = var:sr_fl_3_dest }
 }
 sr_disp_fl_3_strength_frac = {
 	value = 0
@@ -371,6 +387,11 @@ sr_disp_fl_4_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_target } value = var:sr_fl_4_target }
 }
+sr_disp_fl_4_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_4_loc } value = var:sr_fl_4_loc }
+	else_if = { limit = { has_variable = sr_fl_4_dest } value = var:sr_fl_4_dest }
+}
 sr_disp_fl_4_strength_frac = {
 	value = 0
 	if = { limit = { sr_fl_4_strength_full > 0 } value = sr_fl_4_strength divide = sr_fl_4_strength_full }
@@ -470,6 +491,11 @@ sr_disp_fl_5_pick = {
 sr_disp_fl_5_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_target } value = var:sr_fl_5_target }
+}
+sr_disp_fl_5_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_5_loc } value = var:sr_fl_5_loc }
+	else_if = { limit = { has_variable = sr_fl_5_dest } value = var:sr_fl_5_dest }
 }
 sr_disp_fl_5_strength_frac = {
 	value = 0
@@ -571,6 +597,11 @@ sr_disp_fl_6_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_target } value = var:sr_fl_6_target }
 }
+sr_disp_fl_6_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_6_loc } value = var:sr_fl_6_loc }
+	else_if = { limit = { has_variable = sr_fl_6_dest } value = var:sr_fl_6_dest }
+}
 sr_disp_fl_6_strength_frac = {
 	value = 0
 	if = { limit = { sr_fl_6_strength_full > 0 } value = sr_fl_6_strength divide = sr_fl_6_strength_full }
@@ -670,6 +701,11 @@ sr_disp_fl_7_pick = {
 sr_disp_fl_7_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_target } value = var:sr_fl_7_target }
+}
+sr_disp_fl_7_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_7_loc } value = var:sr_fl_7_loc }
+	else_if = { limit = { has_variable = sr_fl_7_dest } value = var:sr_fl_7_dest }
 }
 sr_disp_fl_7_strength_frac = {
 	value = 0
@@ -771,6 +807,11 @@ sr_disp_fl_8_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_target } value = var:sr_fl_8_target }
 }
+sr_disp_fl_8_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_8_loc } value = var:sr_fl_8_loc }
+	else_if = { limit = { has_variable = sr_fl_8_dest } value = var:sr_fl_8_dest }
+}
 sr_disp_fl_8_strength_frac = {
 	value = 0
 	if = { limit = { sr_fl_8_strength_full > 0 } value = sr_fl_8_strength divide = sr_fl_8_strength_full }
@@ -870,6 +911,11 @@ sr_disp_fl_9_pick = {
 sr_disp_fl_9_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_target } value = var:sr_fl_9_target }
+}
+sr_disp_fl_9_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_9_loc } value = var:sr_fl_9_loc }
+	else_if = { limit = { has_variable = sr_fl_9_dest } value = var:sr_fl_9_dest }
 }
 sr_disp_fl_9_strength_frac = {
 	value = 0

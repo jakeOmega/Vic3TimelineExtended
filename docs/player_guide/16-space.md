@@ -1213,7 +1213,7 @@ holds a colony, and
 set its posture to Interdict; the target button picks which country's site.
 While none of that country's fleets is stationed or standing off there, its
 colonies at that location are blockaded as an enemy's would be, and its
-Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,
+Locations strip shows the red Interdicted sign there. Nobody fires. If its fleet holds orbit there,
 the two fleets face each other and nothing is blockaded; firing on it needs a
 war.
 
@@ -1234,7 +1234,7 @@ is blockaded when a fleet of a country at war with you is at Earth and none of
 yours is. While it is, nothing of yours leaves Earth: no colony fleet (a full
 bar waits), no module shipment (modules are still made, and wait at Earth), no
 settlers and no fleet. Your colonies on the Moon are blockaded, and none of
-your colonies has contact from home, so their autonomy counts the months. Your Locations row for Earth reads Blockaded,
+your colonies has contact from home, so their autonomy counts the months. Locations shows the red Blockaded sign at Earth,
 Space Command shows a red note, and you are told which country holds your
 orbit. Your batteries and your Orbital Battlestation fire on the blockaders but
 don't lift the blockade: only a fleet of yours at Earth does.

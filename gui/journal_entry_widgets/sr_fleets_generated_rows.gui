@@ -3,7 +3,7 @@
 ### gen_space_fleets (slice 6 design § 16). The row types are in
 ### space_race_widget.gui: te_sr_fleet_row (Space Fleets, a card per slot,
 ### rolled up and down on its own client-side flag, sr_panel_fleet_<n>_closed) and
-### te_sr_location_row (Locations, one per location). Each value is a display
+### te_sr_location_cell (Locations, a column per location). Each value is a display
 ### value of sr_fleets_display_generated.txt; the scripted GUIs are in
 ### sr_fleet_sguis.txt and take the slot as scope:op. Then the popups'
 ### bodies: Transfer's (te_sr_xfer_popup_body), the destination's
@@ -24,6 +24,33 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "fl_number" {
 				raw_text = "I"
+			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_place'), '(CFixedPoint)9' )]"
 			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_1_where_name')]"
@@ -242,6 +269,33 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_number" {
 				raw_text = "II"
 			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_place'), '(CFixedPoint)9' )]"
+			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_2_where_name')]"
 			}
@@ -458,6 +512,33 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "fl_number" {
 				raw_text = "III"
+			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_place'), '(CFixedPoint)9' )]"
 			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_3_where_name')]"
@@ -676,6 +757,33 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_number" {
 				raw_text = "IV"
 			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_place'), '(CFixedPoint)9' )]"
+			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_4_where_name')]"
 			}
@@ -892,6 +1000,33 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "fl_number" {
 				raw_text = "V"
+			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_place'), '(CFixedPoint)9' )]"
 			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_5_where_name')]"
@@ -1110,6 +1245,33 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_number" {
 				raw_text = "VI"
 			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_place'), '(CFixedPoint)9' )]"
+			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_6_where_name')]"
 			}
@@ -1326,6 +1488,33 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "fl_number" {
 				raw_text = "VII"
+			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_place'), '(CFixedPoint)9' )]"
 			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_7_where_name')]"
@@ -1544,6 +1733,33 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_number" {
 				raw_text = "VIII"
 			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_place'), '(CFixedPoint)9' )]"
+			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_8_where_name')]"
 			}
@@ -1761,6 +1977,33 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_number" {
 				raw_text = "IX"
 			}
+			blockoverride "fl_place_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fl_place_inner" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fl_place_mars" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fl_place_asteroids" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)4' )]"
+			}
+			blockoverride "fl_place_jupiter" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "fl_place_saturn" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "fl_place_uranus" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)7' )]"
+			}
+			blockoverride "fl_place_neptune" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)8' )]"
+			}
+			blockoverride "fl_place_kuiper" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_place'), '(CFixedPoint)9' )]"
+			}
 			blockoverride "fl_where" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_9_where_name')]"
 			}
@@ -1972,14 +2215,19 @@ types sr_fleets_generated_rows_types
 		}
 	}
 
-	type te_sr_location_rows = flowcontainer {
-		direction = vertical
-		ignoreinvisible = yes
-		spacing = 2
+	### Locations, a strip: the captions' column, then a column per location,
+	### from Earth outward.
+	type te_sr_location_cells = flowcontainer {
+		direction = horizontal
 
-		te_sr_location_row = {
+		te_sr_location_captions = {}
+
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_earth"
+				tooltip = "sr_loc_name_earth"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]"
@@ -2027,9 +2275,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_inner"
+				tooltip = "sr_loc_name_inner"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_inner')|0]"
@@ -2077,9 +2328,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_mars"
+				tooltip = "sr_loc_name_mars"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_mars')|0]"
@@ -2127,9 +2381,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_asteroids"
+				tooltip = "sr_loc_name_asteroids"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_asteroids')|0]"
@@ -2177,9 +2434,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_jupiter"
+				tooltip = "sr_loc_name_jupiter"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_jupiter')|0]"
@@ -2227,9 +2487,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_saturn"
+				tooltip = "sr_loc_name_saturn"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_saturn')|0]"
@@ -2277,9 +2540,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_uranus"
+				tooltip = "sr_loc_name_uranus"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_uranus')|0]"
@@ -2327,9 +2593,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_neptune"
+				tooltip = "sr_loc_name_neptune"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_neptune')|0]"
@@ -2377,9 +2646,12 @@ types sr_fleets_generated_rows_types
 			}
 		}
 
-		te_sr_location_row = {
+		te_sr_location_cell = {
 			blockoverride "loc_name" {
-				text = "sr_loc_name_kuiper"
+				tooltip = "sr_loc_name_kuiper"
+			}
+			blockoverride "loc_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
 			}
 			blockoverride "loc_ours" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_kuiper')|0]"
