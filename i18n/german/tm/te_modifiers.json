@@ -383,6 +383,14 @@
   "en": "How readily a people who nearly all read take up family limitation, stopping at the family size they want by methods older than any modern one. A state church slows it; a secular state speeds it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "de": "Wie bereitwillig ein Volk, in dem fast alle lesen können, die Familienbegrenzung annimmt und bei der gewünschten Familiengröße haltmacht, mit Methoden, die älter sind als jede moderne. Eine Staatskirche bremst sie; ein säkularer Staat beschleunigt sie. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
+ "country_family_policy_upkeep_mult": {
+  "en": "Family Policy Upkeep[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Unterhalt der Familienpolitik[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_family_policy_upkeep_mult_desc": {
+  "en": "The money upkeep of the Family Policy measures that cost money: $te_demog_ms_child_allowance$, $te_demog_ms_family_housing$, $te_demog_ms_parental_leave$ and $te_demog_ms_free_contraception$. A running measure's upkeep follows a change at the country's next yearly count. Used by the Family Policy section of the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Geldkosten für den Unterhalt der Maßnahmen der Familienpolitik, die Geld kosten: $te_demog_ms_child_allowance$, $te_demog_ms_family_housing$, $te_demog_ms_parental_leave$ und $te_demog_ms_free_contraception$. Der Unterhalt einer laufenden Maßnahme folgt einer Änderung bei der nächsten jährlichen Zählung des Landes. Wird vom Abschnitt „Familienpolitik“ auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "country_finance_momentum_monthly_add": {
   "en": "Monthly [concept_banking_momentum]",
   "de": "Monatliche [concept_banking_momentum]"
@@ -5560,8 +5568,8 @@
   "de": "Zugang zur Gesundheitsversorgung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_health_care_access_add_desc": {
-  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, and a health law adds more with each level of its institution. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
-  "de": "Wie viele Menschen einen Arzt, eine Krankenschwester oder ein Krankenhaus erreichen können. Medizin rettet nur so weit Leben, wie sie ankommt. Märkte und Wohltätigkeit schaffen überall etwas Zugang, und ein Gesundheitsgesetz fügt mit jeder Stufe seiner Institution mehr hinzu. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, a health law adds more with each level of its institution, and a [concept_power_bloc]'s Healthcare principle a little more with each level. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viele Menschen einen Arzt, eine Krankenschwester oder ein Krankenhaus erreichen können. Medizin rettet nur so weit Leben, wie sie ankommt. Märkte und Wohltätigkeit schaffen überall etwas Zugang, ein Gesundheitsgesetz fügt mit jeder Stufe seiner Institution mehr hinzu, und das Prinzip „Gesundheitswesen“ eines [Concept('concept_power_bloc', 'Machtblocks')] mit jeder Stufe noch etwas mehr. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_homeland_change_speed_mult": {
   "en": "[concept_homeland] Change Speed",
@@ -5704,8 +5712,8 @@
   "de": "Verbreitung der Medizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_medical_diffusion_add_desc": {
-  "en": "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications, medical training and the World Health Organization add more. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
-  "de": "Wie schnell neue Medizin jeden Staat erreicht: der Anteil der Lücke zwischen seinem [concept_health_care_access] samt Behandlungen und dem Stand, auf den sie zusteuern, der sich bei jeder jährlichen Zählung schließt. Überall 10%; Kommunikation, medizinische Ausbildung und die Weltgesundheitsorganisation erhöhen ihn. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+  "en": "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications, medical training, the World Health Organization and a [concept_power_bloc]'s Healthcare principle add more. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie schnell neue Medizin jeden Staat erreicht: der Anteil der Lücke zwischen seinem [concept_health_care_access] samt Behandlungen und dem Stand, auf den sie zusteuern, der sich bei jeder jährlichen Zählung schließt. Überall 10%; Kommunikation, medizinische Ausbildung, die Weltgesundheitsorganisation und das Prinzip „Gesundheitswesen“ eines [Concept('concept_power_bloc', 'Machtblocks')] erhöhen ihn. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_metro_share_add": {
   "en": "Metropolitan Share Target[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
