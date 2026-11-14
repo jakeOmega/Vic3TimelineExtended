@@ -102,8 +102,8 @@ te_state_picture_city_rung = {
 # of it, affluent from te_state_picture_k_affluent_ratio of it. The owner floated double and half.
 # In eight saves of 1932 to 2054 those tag 4% to 41% of states poor and 0.4% to 9% affluent
 # (1.3% to 1.7% in the three of the Singapore game, which also held the old tags); the pairs 1.75
-# and 0.57, 1.5 and 0.67, 1.33 and 0.75, 1.25 and 0.8 tag more on both sides (the table is in the
-# pull request that made the change). Each ratio is one line.
+# and 0.57, 1.5 and 0.67, 1.33 and 0.75, 1.25 and 0.8 tag more on both sides (the table is in pull
+# request #1799). Each ratio is one line.
 te_state_picture_k_affluent_ratio = { value = 2 }
 te_state_picture_k_poor_ratio = { value = 0.5 }
 # The world's average the state was judged against, 0 before its first judgement.
