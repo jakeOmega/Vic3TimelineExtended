@@ -736,9 +736,12 @@ te_direct_construction_switch_self_check = {
 	every_country = {
 		every_scope_state = {
 			if = {
+				# The variable, not has_modifier: the switch has just taken the
+				# modifier off in this same effect, where has_modifier still
+				# sees it (te_construction_market_remove_crew_cut).
 				limit = {
 					te_free_market_construction_off = yes
-					has_modifier = te_construction_market_crew_modifier
+					has_variable = te_cm_site_crew_cut
 				}
 				change_global_variable = {
 					name = te_dc_check_stale

@@ -61,10 +61,7 @@ te_construction_market_country_update_sites = {
 			}
 		}
 		capital = {
-			create_building = {
-				building = te_construction_market_site
-				level = 1
-			}
+			te_construction_market_place_site = yes
 		}
 	}
 	remove_global_variable = te_cm_placing_site
@@ -77,7 +74,11 @@ te_construction_market_country_update_data = {
 	te_construction_market_country_update_private_share = yes
 	# Before the crews and the sizing: it reads last week's sizing.
 	te_cm_site_delivery_selfcheck = yes
+	# The crew pass reads a site's staffing off it only in the weekly pulse,
+	# not when a purchase button sizes the sites (te_construction_market_site_crew).
+	set_variable = te_cm_weekly_pass
 	te_construction_market_apply_per_site_modifier = yes
+	remove_variable = te_cm_weekly_pass
 	# After them: it stores this week's.
 	te_cm_site_delivery_selfcheck_arm = yes
 }
@@ -102,6 +103,7 @@ te_construction_market_country_update_private_share = {
 # crewed sites (te_construction_market_sector_placement_values.txt, which says
 # why). A site without a crew gets none: it has no laborer yet, and counted
 # with the others it would thin their share now and add to it once it hired.
+# A site the crew pass has cut but not yet counted (settling) gets -100%.
 #
 # The multiplier goes through a country variable, read as owner.var:, because
 # of how the engine treats the slot (docs/guides/scripting_best_practices.md,
@@ -129,7 +131,14 @@ te_construction_market_apply_per_site_modifier = {
 		limit = {
 			is_building_type = te_construction_market_site
 		}
-		remove_modifier = te_construction_market_capacity_modifier
+		# Guarded: a site without a crew carries none, and removing a
+		# modifier that is not there logs an error each time.
+		if = {
+			limit = {
+				has_modifier = te_construction_market_capacity_modifier
+			}
+			remove_modifier = te_construction_market_capacity_modifier
+		}
 		if = {
 			limit = {
 				state = {
@@ -141,6 +150,19 @@ te_construction_market_apply_per_site_modifier = {
 				multiplier = owner.var:te_cm_capacity_mult
 			}
 		}
+		# Waiting to be counted, and perhaps holding more laborers than jobs:
+		# no throughput at all, so that it delivers nothing meanwhile.
+		else_if = {
+			limit = {
+				state = {
+					has_variable = te_cm_site_crew_settling
+				}
+			}
+			add_modifier = {
+				name = te_construction_market_capacity_modifier
+				multiplier = -1
+			}
+		}
 	}
 }
 
@@ -150,38 +172,74 @@ te_construction_market_apply_per_site_modifier = {
 # rates say, so a site left at its ten laborer jobs a level needs ten weeks to
 # fill, and most sites are gone before that (docs/testing/
 # ai-economy-playtest.md, "First verdict"). So, as the Free Market Construction
-# mod does: once a site has its first week's hires, one laborer a level, its
-# state takes te_construction_market_crew_modifier, which cuts the group's jobs
-# there by 90%, to that one laborer. The site is then fully staffed, and its
-# state is marked (var:te_cm_site_crew), which is what the sizing counts. A
-# building has no variables of its own, and has_modifier does not see a
-# modifier added in the same effect, hence the state variable.
+# mod does: once a site has a laborer, its state takes
+# te_construction_market_crew_modifier, which cuts the group's jobs there by
+# 90%, to the one laborer a level a site hires in its first week. The site is
+# then fully staffed. The engine lets go any laborers above that (owner,
+# 2026-11-13), which a save from before this rule has on every site.
 #
-#   no laborer             the cut and the mark go (te_construction_market_clear_crew):
+# What the sizing counts is the mark on the site's state, var:te_cm_site_crew
+# (a building has no variables). The rule for the mark: a site is counted, and
+# carries the purchase, only at 105% staffed or less, so that no site ever
+# delivers a multiple of its share while it holds more laborers than jobs. All
+# of this pass's state sits in state variables, never in has_modifier, which
+# does not see a modifier added or removed earlier in the same effect:
+#   te_cm_site_crew           the mark. 1 = cut at exactly its first hires, the
+#                             crew self-check still to read it; 2 = cut;
+#                             3 = counted without the cut (see nocut).
+#   te_cm_site_crew_cut       the state carries the modifier.
+#   te_cm_site_crew_settling  not counted yet: waiting for a weekly pass to find
+#                             it at 105% or less. 1 = the surplus self-check
+#                             reads it; 2 = it does not.
+#   te_cm_site_crew_nocut     the engine did not let this site's surplus go, so
+#                             it is not cut again while it holds more than its
+#                             first hires.
+#   te_cm_site_crew_fresh     five days from any change to the cut: nothing is
+#                             read off the site until a later weekly pass.
+#
+#   no laborer             everything goes (te_construction_market_clear_crew):
 #                          ten jobs again, so it can hire one next week. A cut
 #                          site whose laborer left would otherwise hold one job
 #                          and a hiring limit of a tenth of a laborer.
-#   up to 15% staffed,     its first hires: cut, mark 1. te_cm_site_crew_fresh
-#   no mark                keeps the self-check below from reading it the same
-#                          week.
-#   more than that,        a site from before this rule (a save made before
-#   no mark                2026-11-13), or one that hired twice before a pulse:
-#                          marked 3 and NOT cut. Cutting it would leave up to
-#                          ten laborers on one job, and until the engine let
-#                          the others go the site would deliver ten times its
-#                          share. It keeps its ten jobs and fills at one a week.
-#   marked, over 100%      the same guard after the cut: the cut goes, mark 3.
+#   no mark, under 11%     its first week's hires, a tenth of its jobs: cut and
+#   staffed                marked at once. The cut leaves exactly as many jobs
+#                          as it has laborers.
+#   no mark, more          a site from before this rule, or one that hired
+#                          twice before a pass: cut, and settling. It holds
+#                          more laborers than the cut leaves jobs, so it is not
+#                          counted until a weekly pass, at least five days on,
+#                          finds the surplus gone.
+#   settling               at such a pass: 105% or less, marked. Still over and
+#                          cut: the engine has not let them go, so the cut
+#                          comes off, nocut is set, and it waits again; it is
+#                          then marked 3 once it is at 105% or less on its ten
+#                          jobs. Over and not cut (a direct game's staff on a
+#                          market site): it waits.
+#   marked, over 105%      the mark goes and it settles again. Checked before
+#                          the sizing, so it is not sized that week.
+#   marked 3, under 11%    down to its first hires: the cut is safe again.
+#
+# The reads (the two self-checks and the settling verdict) are made only from
+# the weekly pulse (owner.var:te_cm_weekly_pass), not from the purchase
+# buttons, which can run this a day after a cut.
 #
 # TE_SELF_CHECK construction_site_crew (docs/testing/ai-economy-playtest.md),
-# once a game: the first site cut at a tenth of its jobs is read at a later
-# pulse, at least five days on.
-#   OK      90% staffed or more: the state's modifier cut the site's jobs to
-#           its first hires.
+# once a game: the first level-1 site cut while it held exactly one laborer of
+# ten, read at a later weekly pass.
+#   OK      90% to 105% staffed: the state's modifier cut the site's jobs to
+#           its laborer.
 #   BROKEN  25% or less: the jobs were not cut (it went on hiring one in ten a
-#           week), so sites fill in ten weeks as before, counted as crewed from
-#           their first laborer, and a country gets a fraction of its purchase.
-#   A site in between (several levels, some laborers gone) decides nothing; the
-#   next site cut is read instead.
+#           week), so sites fill in ten weeks as before, counted from their
+#           first laborer, and a country gets a fraction of its purchase.
+#   Anything else decides nothing; the next such site is read instead.
+#
+# TE_SELF_CHECK construction_site_surplus, once a game: the first site cut
+# while it held 15% to 75% of its jobs (two to seven laborers of ten), read at
+# a later weekly pass.
+#   OK      90% to 105% staffed: the engine let the surplus go within the week.
+#   BROKEN  over 105%: it did not. Such sites lose the cut and keep their jobs.
+#   A site under 90% decides nothing: with the cut not taking it reads there
+#   too, and the crew check is the one that says so.
 te_construction_market_site_crew = {
 	if = {
 		limit = {
@@ -190,26 +248,133 @@ te_construction_market_site_crew = {
 		if = {
 			limit = {
 				state = {
-					NOT = { has_variable = te_cm_site_crew }
+					has_variable = te_cm_site_crew_settling
 				}
 			}
 			if = {
 				limit = {
-					occupancy <= 0.15
+					owner = {
+						has_variable = te_cm_weekly_pass
+					}
+					state = {
+						NOT = { has_variable = te_cm_site_crew_fresh }
+					}
 				}
-				state = {
+				if = {
+					limit = {
+						occupancy <= 1.05
+					}
 					if = {
 						limit = {
-							NOT = { has_modifier = te_construction_market_crew_modifier }
+							NOT = { has_global_variable = te_cm_site_surplus_check_done }
+							occupancy >= 0.9
+							state = {
+								var:te_cm_site_crew_settling ?= 1
+								has_variable = te_cm_site_crew_cut
+							}
 						}
-						add_modifier = {
-							name = te_construction_market_crew_modifier
+						set_global_variable = {
+							name = te_cm_site_surplus_check_done
+							value = yes
+						}
+						owner = {
+							debug_log = "TE_SELF_CHECK OK construction_site_surplus country=[THIS.GetCountry.GetTagName] (a Construction Site cut while it held two to seven laborers of ten is fully staffed and no more at a later weekly pass: the engine let the surplus go)"
 						}
 					}
-					set_variable = {
-						name = te_cm_site_crew
-						value = 1
+					state = {
+						remove_variable = te_cm_site_crew_settling
+						if = {
+							limit = {
+								has_variable = te_cm_site_crew_nocut
+							}
+							set_variable = {
+								name = te_cm_site_crew
+								value = 3
+							}
+						}
+						else = {
+							set_variable = {
+								name = te_cm_site_crew
+								value = 2
+							}
+						}
 					}
+				}
+				else_if = {
+					limit = {
+						state = {
+							has_variable = te_cm_site_crew_cut
+						}
+					}
+					if = {
+						limit = {
+							NOT = { has_global_variable = te_cm_site_surplus_check_done }
+							state = {
+								var:te_cm_site_crew_settling ?= 1
+							}
+						}
+						set_global_variable = {
+							name = te_cm_site_surplus_check_done
+							value = yes
+						}
+						owner = {
+							debug_log = "TE_SELF_CHECK BROKEN construction_site_surplus country=[THIS.GetCountry.GetTagName] (a Construction Site cut while it held two to seven laborers of ten is still over 105 percent staffed at a later weekly pass: the engine did not let the surplus go, so such sites lose the cut and keep their jobs)"
+						}
+					}
+					state = {
+						te_construction_market_remove_crew_cut = yes
+						set_variable = {
+							name = te_cm_site_crew_nocut
+							value = 1
+						}
+						set_variable = {
+							name = te_cm_site_crew_settling
+							value = 2
+						}
+						set_variable = {
+							name = te_cm_site_crew_fresh
+							value = 1
+							days = 5
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				state = {
+					NOT = { has_variable = te_cm_site_crew }
+				}
+			}
+			# In both branches the staffing is read before the cut goes on:
+			# whether occupancy follows the cut within this effect is not known.
+			if = {
+				limit = {
+					occupancy < 0.11
+				}
+				# Exactly one laborer of ten: the crew self-check's site.
+				if = {
+					limit = {
+						occupancy >= 0.09
+						level < 2
+					}
+					state = {
+						set_variable = {
+							name = te_cm_site_crew
+							value = 1
+						}
+					}
+				}
+				else = {
+					state = {
+						set_variable = {
+							name = te_cm_site_crew
+							value = 2
+						}
+					}
+				}
+				state = {
+					te_construction_market_add_crew_cut = yes
 					set_variable = {
 						name = te_cm_site_crew_fresh
 						value = 1
@@ -218,68 +383,115 @@ te_construction_market_site_crew = {
 				}
 			}
 			else = {
+				# Two to seven laborers of ten: the surplus self-check's site.
+				if = {
+					limit = {
+						occupancy > 0.15
+						occupancy <= 0.75
+					}
+					state = {
+						set_variable = {
+							name = te_cm_site_crew_settling
+							value = 1
+						}
+					}
+				}
+				else = {
+					state = {
+						set_variable = {
+							name = te_cm_site_crew_settling
+							value = 2
+						}
+					}
+				}
 				state = {
+					te_construction_market_add_crew_cut = yes
 					set_variable = {
-						name = te_cm_site_crew
-						value = 3
+						name = te_cm_site_crew_fresh
+						value = 1
+						days = 5
 					}
 				}
 			}
 		}
-		else = {
-			if = {
-				limit = {
-					state = {
-						var:te_cm_site_crew ?= 1
-						NOT = { has_variable = te_cm_site_crew_fresh }
-					}
+		else_if = {
+			limit = {
+				occupancy > 1.05
+			}
+			state = {
+				remove_variable = te_cm_site_crew
+				set_variable = {
+					name = te_cm_site_crew_settling
+					value = 2
 				}
-				if = {
-					limit = {
-						NOT = { has_global_variable = te_cm_site_crew_check_done }
-						occupancy >= 0.9
-					}
-					set_global_variable = {
-						name = te_cm_site_crew_check_done
-						value = yes
-					}
-					owner = {
-						debug_log = "TE_SELF_CHECK OK construction_site_crew country=[THIS.GetCountry.GetTagName] (a Construction Site cut to its first week's hires reads fully staffed at a later pulse: the state's employee modifier cut its jobs)"
-					}
+				set_variable = {
+					name = te_cm_site_crew_fresh
+					value = 1
+					days = 5
 				}
-				else_if = {
-					limit = {
-						NOT = { has_global_variable = te_cm_site_crew_check_done }
-						occupancy <= 0.25
-					}
-					set_global_variable = {
-						name = te_cm_site_crew_check_done
-						value = yes
-					}
-					owner = {
-						debug_log = "TE_SELF_CHECK BROKEN construction_site_crew country=[THIS.GetCountry.GetTagName] (a Construction Site cut to its first week's hires still reads a quarter staffed or less at a later pulse: the state's employee modifier did not cut its jobs)"
-					}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_variable = te_cm_weekly_pass
 				}
 				state = {
-					set_variable = {
-						name = te_cm_site_crew
-						value = 2
-					}
+					var:te_cm_site_crew ?= 1
+					NOT = { has_variable = te_cm_site_crew_fresh }
 				}
 			}
 			if = {
 				limit = {
-					occupancy > 1.05
-					state = {
-						has_modifier = te_construction_market_crew_modifier
-					}
+					NOT = { has_global_variable = te_cm_site_crew_check_done }
+					occupancy >= 0.9
 				}
+				set_global_variable = {
+					name = te_cm_site_crew_check_done
+					value = yes
+				}
+				owner = {
+					debug_log = "TE_SELF_CHECK OK construction_site_crew country=[THIS.GetCountry.GetTagName] (a Construction Site cut at one laborer of ten is fully staffed and no more at a later weekly pass: the state's employee modifier cut its jobs)"
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_global_variable = te_cm_site_crew_check_done }
+					occupancy <= 0.25
+				}
+				set_global_variable = {
+					name = te_cm_site_crew_check_done
+					value = yes
+				}
+				owner = {
+					debug_log = "TE_SELF_CHECK BROKEN construction_site_crew country=[THIS.GetCountry.GetTagName] (a Construction Site cut at one laborer of ten is a quarter staffed or less at a later weekly pass: the state's employee modifier did not cut its jobs)"
+				}
+			}
+			state = {
+				set_variable = {
+					name = te_cm_site_crew
+					value = 2
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				occupancy < 0.11
 				state = {
-					remove_modifier = te_construction_market_crew_modifier
-					set_variable = {
-						name = te_cm_site_crew
-						value = 3
-					}
+					var:te_cm_site_crew ?= 3
+				}
+			}
+			state = {
+				remove_variable = te_cm_site_crew_nocut
+				te_construction_market_add_crew_cut = yes
+				set_variable = {
+					name = te_cm_site_crew
+					value = 2
+				}
+				set_variable = {
+					name = te_cm_site_crew_fresh
+					value = 1
+					days = 5
 				}
 			}
 		}
@@ -291,22 +503,56 @@ te_construction_market_site_crew = {
 	}
 }
 
+# State scope. The modifier and the variable that says it is there go on and
+# come off together, so that nothing has to ask has_modifier.
+te_construction_market_add_crew_cut = {
+	if = {
+		limit = {
+			NOT = { has_variable = te_cm_site_crew_cut }
+		}
+		add_modifier = {
+			name = te_construction_market_crew_modifier
+		}
+		set_variable = {
+			name = te_cm_site_crew_cut
+			value = 1
+		}
+	}
+}
+
+te_construction_market_remove_crew_cut = {
+	if = {
+		limit = {
+			has_variable = te_cm_site_crew_cut
+		}
+		remove_modifier = te_construction_market_crew_modifier
+		remove_variable = te_cm_site_crew_cut
+	}
+}
+
 # State scope. The state's Construction Site has no crew: none is there, it is
 # new, or its laborers have gone. Called wherever a market site is placed or
 # removed, and for every state when a game switches to direct construction,
 # where the cut would run a sector on a tenth of its workers.
 te_construction_market_clear_crew = {
-	if = {
-		limit = {
-			has_modifier = te_construction_market_crew_modifier
-		}
-		remove_modifier = te_construction_market_crew_modifier
-	}
+	te_construction_market_remove_crew_cut = yes
 	if = {
 		limit = {
 			has_variable = te_cm_site_crew
 		}
 		remove_variable = te_cm_site_crew
+	}
+	if = {
+		limit = {
+			has_variable = te_cm_site_crew_settling
+		}
+		remove_variable = te_cm_site_crew_settling
+	}
+	if = {
+		limit = {
+			has_variable = te_cm_site_crew_nocut
+		}
+		remove_variable = te_cm_site_crew_nocut
 	}
 	if = {
 		limit = {
@@ -327,26 +573,33 @@ te_construction_market_clear_crew = {
 #        (var:te_cm_chk_levels).
 #   Read (te_cm_site_delivery_selfcheck, before next week's crews and sizing,
 #        so the modifier read is last week's sizing): if the crewed levels are
-#        what they were, compare the construction the country's sites deliver
+#        what they were and every crewed site is at least 90% staffed, compare
+#        the construction the country's sites deliver
 #        (modifier:country_construction_add, which in a market game the sites
 #        give; 40 leaves room for a few points from anywhere else) with the
-#        stored purchase. Fewer or more crewed levels (a crewed site went with
-#        its construction, or lost its laborer) decide nothing: the country
-#        arms again and reads the week after.
-#          OK      within a quarter of it: the crewed sites deliver what was
-#                  bought, which is what the sizing assumes.
+#        stored purchase. A week in which a crewed site went with its
+#        construction, or one is short of laborers (its laborer left, or it is
+#        an uncut site still filling), decides nothing: the country arms again
+#        and reads the week after. The marks are last week's here, since the
+#        crew pass has not run yet.
+#          OK      within a quarter of it: fully staffed crewed sites deliver
+#                  what was bought, which is what the sizing assumes.
 #          BROKEN  anything else. Far above: the sites are sized past the
-#                  purchase. Far below: a crewed site is not fully staffed (the
-#                  crew self-check says whether the cut took), or the levels'
-#                  sum or the throughput is not what the values say.
+#                  purchase. Far below: the levels' sum or the throughput is
+#                  not what the values say, or the sites are short of the
+#                  construction good (a shortage cuts their throughput).
+# Whether a site is fully staffed is the crew check's question, not this one's.
 # The first version (#1770) read whether a new site had filled within a week,
 # and read BROKEN in its first game (Russia, 42%); its marker
 # (te_cm_site_delivery_check_done) is not this one's, so a game that had that
 # verdict gets this check too.
 #
-# TE_SELF_CHECK construction_site_unstaffed, once a game: an AI country with a
-# purchase of 40 or more and a Construction Site finds no site with a crew at
-# four weekly sizings running.
+# TE_SELF_CHECK construction_site_unstaffed, once a game, and only while the
+# delivery check above has given no verdict: an AI country with a purchase of
+# 40 or more and a Construction Site finds no site with a crew at four weekly
+# sizings running. It speaks for the case in which the delivery check stays
+# silent because no country's sites ever get a crew. One country whose sites
+# do not hire, in a game where others' do, gets no line.
 #          BROKEN  its sites are not hiring at all (so nothing is delivered),
 #                  or its only site moved to a new state in each of those
 #                  weeks. The play-test row says how to tell them apart.
@@ -360,6 +613,15 @@ te_cm_site_delivery_selfcheck = {
 					NOT = { has_global_variable = te_cm_site_crew_delivery_check_done }
 					is_ai = yes
 					te_construction_market_site_levels = var:te_cm_chk_levels
+					NOT = {
+						any_scope_building = {
+							is_building_type = te_construction_market_site
+							occupancy < 0.9
+							state = {
+								has_variable = te_cm_site_crew
+							}
+						}
+					}
 				}
 				set_global_variable = { name = te_cm_site_crew_delivery_check_done value = yes }
 				set_variable = { name = te_cm_chk_delivered value = modifier:country_construction_add }

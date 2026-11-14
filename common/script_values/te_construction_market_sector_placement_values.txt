@@ -20,7 +20,10 @@
 # to that one (te_construction_market_crew_modifier). So the crewed sites
 # together deliver the purchase. A site still waiting for its first laborer
 # gets no throughput and is not counted, so it neither thins the others' share
-# nor adds to it once it hires.
+# nor adds to it once it hires. A site cut while it held more laborers than
+# the cut leaves jobs for (every site of a save from before this rule) is not
+# counted either, and delivers nothing, until a weekly pass finds the surplus
+# gone: a site is only ever counted at 105% staffed or less.
 #
 # They never deliver more than the purchase, which is the failure to avoid: the
 # government queue spends whatever the sites deliver, at the treasury's cost.
