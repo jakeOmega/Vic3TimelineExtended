@@ -118,7 +118,7 @@ covert_election_interference_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -308,7 +308,7 @@ covert_financial_subversion_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -492,7 +492,7 @@ covert_infrastructure_sabotage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -664,7 +664,7 @@ covert_comms_disruption_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -851,7 +851,7 @@ covert_industrial_espionage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1028,7 +1028,7 @@ covert_military_espionage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1194,7 +1194,7 @@ covert_influence_campaign_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		is_power_bloc_leader = yes
 	}
 
@@ -1384,7 +1384,7 @@ covert_ideological_subversion_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1581,7 +1581,7 @@ covert_destabilization_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1779,7 +1779,7 @@ covert_regime_change_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1976,7 +1976,7 @@ covert_nuclear_sabotage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2180,7 +2180,7 @@ covert_space_espionage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2349,7 +2349,7 @@ covert_cultivate_assets_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2532,7 +2532,7 @@ covert_secure_material_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		has_game_rule = nuclear_weapons_enabled
 	}
 
@@ -2718,7 +2718,7 @@ covert_counterintel_support_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2879,7 +2879,7 @@ covert_incite_autonomy_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		sr_colonies_contested_enabled = yes
 	}
 
@@ -3069,7 +3069,7 @@ covert_sabotage_colony_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		sr_colonies_contested_enabled = yes
 	}
 
@@ -3270,7 +3270,7 @@ covert_survey_defences_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		sr_colonies_full_enabled = yes
 	}
 

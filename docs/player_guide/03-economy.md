@@ -190,8 +190,8 @@ level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
 point your queues spend. Construction Sites are built from the Development tab
 of the production lens or from the state view.
-Every country also gets Base Construction, 5 points a week, so a country without
-any sites can still build its first one. If you change the rule in a running
+Every country also gets Base Construction, 10 points a week (the base game's
+maximum), so a country without any sites can still build its first one. If you change the rule in a running
 game, your Construction Sectors become Construction Sites of the same level
 within a day, and the other way when you switch it back. Either way the levels
 end up owned by the government, whoever owned them before. The construction panel
@@ -252,6 +252,10 @@ point requires in a rich country, by two parts multiplied together:
   new value each year, so the price follows your hiring over a few years rather
   than at once.
 
+The two multiply, and the result moves by at most a tenth of itself from one
+year to the next, up or down. A country whose share steps sees its construction
+price follow over several years.
+
 A rich country with workers to spare builds cheaply until it has put them to
 work. One at full employment pays the whole GDP part, which keeps it from
 building faster than its population can staff. The scaling applies to every use
@@ -262,11 +266,15 @@ modifiers, so another modifier that cuts construction costs by 20% still cuts
 raises the cost of the materials your construction uses instead.
 
 It is also a catch-up mechanic: a poor country, with many peasants and a low
-GDP per capita, builds cheaply. The
+GDP per capita, builds cheaply. With the Small-Economy Construction game rule
+on, a small economy also pays less for construction and for construction
+maintenance: a tenth of the price with almost no GDP, rising in a straight line
+to the full price at a GDP of 10 million. The rule is off by default. The
 [Nation tab](01-introduction.md#the-nation-tab) shows the current scaling, and
 below it any excess private construction in force. Its tooltip gives the cost of
-a point as factors: the GDP part, the share that applies, your peasants and
-unemployed, and your other construction-cost modifiers.
+a point as factors: the scaling in force and where it is heading, the GDP
+part, the share that applies, your peasants and unemployed, and your other
+construction-cost modifiers.
 
 ### Excess private construction
 

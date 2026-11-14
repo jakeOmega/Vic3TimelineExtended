@@ -13,7 +13,7 @@
 # a state stays until the new owner's next recalc, at most a year, or until a
 # construction ends there. That costs a site's wages, not capacity, since the
 # purchase is split over however many sites there are
-# (te_construction_market_per_site). In a 1931 game the world walk cost about
+# (te_construction_market_site_throughput). In a 1931 game the world walk cost about
 # 20 ms a call, on the main thread: 152 calls and 3 s in 30 days, mostly from
 # on_revolution_start (docs/audits/late_game_performance.md).
 te_construction_market_country_update_sites = {
@@ -57,8 +57,12 @@ te_construction_market_country_update_sites = {
 }
 
 
+# Country scope, the weekly pulse only (the purchase buttons call
+# te_construction_market_apply_per_site_modifier themselves).
 te_construction_market_country_update_data = {
 	te_construction_market_country_update_private_share = yes
+	# Before the sites are sized: it reads last week's sizing.
+	te_cm_site_delivery_selfcheck = yes
 	te_construction_market_apply_per_site_modifier = yes
 }
 
@@ -72,68 +76,177 @@ te_construction_market_country_update_private_share = {
 }
 
 
+# Country scope, the weekly pulse: size the country's Construction Sites for
+# the week's purchase. Every site gets te_construction_market_capacity_modifier
+# (building_throughput_add = 1) at the same multiplier,
+# te_construction_market_site_throughput: the purchase over the country's site
+# levels, every site taken to be fully staffed
+# (te_construction_market_sector_placement_values.txt, which says why staffing
+# is not read and a site is never sized at ten times its share any more).
+#
+# The multiplier goes through a country variable, read as owner.var:, because
+# of how the engine treats the slot (docs/guides/scripting_best_practices.md,
+# "Scope Chain Issues with add_modifier + Script Values"):
+#   - inside every_scope_building it is evaluated in the outer (country)
+#     scope, not the building's;
+#   - the engine keeps the EXPRESSION with the modifier and evaluates it again
+#     on later ticks, so the variable must outlive this effect. Nothing clears
+#     it: the next pulse overwrites it.
+# Until 2026-11-13 the variable was written once per site, with that site's own
+# value, so between pulses every site could re-read the last site's. One value
+# for all the sites leaves nothing to leak.
 te_construction_market_apply_per_site_modifier = {
-	# Per-site capacity modifier (te_construction_market_capacity_modifier
-	# = `building_throughput_add = 1`), scaled by the staffing-adjusted
-	# per-site target.
-	#
-	# Why the country-variable handoff: `add_modifier = { multiplier = X }`
-	# inside `every_scope_building` evaluates X in the OUTER (country)
-	# scope, not the building scope of the iteration. The compensator
-	# in te_construction_market_employment_adjusted_per_site reads
-	# `occupancy`, which is undefined at country scope — the else branch
-	# fires (multiply 10), modifier inflates to +1000%+.
-	#
-	# Several attempted workarounds (save_temporary_scope_value_as,
-	# save_temporary_scope_as + scope:X.<script_value>, set_variable on
-	# building + scope:X.var:Y) all silently fell back to multiplier=1.
-	# Buildings appear not to support variables; saved-scope traversal
-	# only works for value-triggers, not script values.
-	#
-	# Working pattern: write the building-scope-evaluated value into a
-	# country variable (via `owner = { set_variable { value = prev.<script_value> } }`),
-	# then have add_modifier read `owner.var:te_cm_capacity_mult`. The
-	# country-scope variable lookup works even from add_modifier's
-	# outer-scope evaluation context.
-	#
-	# The variable MUST persist past this effect. The engine stores the
-	# `multiplier` EXPRESSION with the modifier and re-evaluates it on
-	# later ticks (decay / tooltip / recalculation), not just at add time.
-	# A `remove_variable` at the end of this effect therefore makes every
-	# later re-evaluation read `'none'` (`jomini_scriptvalue.cpp` spam,
-	# per-site scaling silently lost) until the next weekly pulse
-	# re-applies it. Nothing needs cleaning up: the next call simply
-	# overwrites the variable. See the "Variables backing
-	# `add_modifier { multiplier = ... }` must persist beyond the call
-	# site" bullet in docs/guides/scripting_best_practices.md.
-	#
-	# Multi-site caveat: one country variable is shared across all of the
-	# country's sites, so between pulses every site's modifier re-evaluates
-	# against the LAST site's value. That is pre-existing and unchanged by
-	# the persistence fix (before it, those re-evaluations returned
-	# `'none'`, which is strictly worse). A per-site redesign is separate
-	# work and is deliberately not attempted here.
-	#
-	# Clear at start each call so a stale value never leaks across ticks
-	# or partial iterations. Harmless for the persistence rule above: it is
-	# re-set before `add_modifier` in the same block.
-	remove_variable = te_cm_capacity_mult
+	set_variable = {
+		name = te_cm_capacity_mult
+		value = te_construction_market_site_throughput
+	}
 	every_scope_building = {
 		limit = {
 			is_building_type = te_construction_market_site
 		}
 		remove_modifier = te_construction_market_capacity_modifier
-		# Compute in building scope (prev = this building), write to
-		# country variable on the owner.
-		owner = {
-			set_variable = {
-				name = te_cm_capacity_mult
-				value = prev.te_construction_market_employment_adjusted_per_site
-			}
-		}
 		add_modifier = {
 			name = te_construction_market_capacity_modifier
 			multiplier = owner.var:te_cm_capacity_mult
+		}
+	}
+}
+
+# TE_SELF_CHECK construction_site_delivery (docs/testing/ai-economy-playtest.md,
+# "Construction Sites deliver the purchase"). Once a game, in two steps, from
+# the weekly pulse before the sites are sized, so the modifier read is last
+# week's sizing. AI countries only: their purchase changes only in the pulse,
+# after the sizing, while a player's buttons size the sites again mid-week for
+# a new purchase, which would make the stored one the wrong yardstick.
+#   Arm: a country about to size a site that has not hired yet (under 10%
+#        staffed) for a purchase of at least 40 points stores the purchase
+#        (var:te_cm_chk_target). That is the case that used to deliver ten times
+#        the purchase once the site had hired.
+#   Read, a week later: unless a site is again under 10% staffed (another new
+#        one), compare the construction the country's sites deliver
+#        (modifier:country_construction_add, which in a market game the sites
+#        give; 40 leaves room for a few points from anywhere else) with the
+#        stored purchase.
+#          OK      within a quarter of it: the new site hired in its first week
+#                  and the sites together deliver what was bought. That is what
+#                  the sizing assumes (it reads no staffing).
+#          BROKEN  anything else. Far above: a site is sized past its share.
+#                  Far below: a site has not filled a week after it was placed
+#                  (its hiring rate of 1.0 and its job attractiveness are not
+#                  holding it), or the levels' sum or the throughput is not
+#                  what the values say.
+#        A week with another unstaffed site decides nothing: the country arms
+#        again and reads the week after.
+#
+# TE_SELF_CHECK construction_site_unstaffed. A site that never hires would have
+# the read above put off every week, for good, with no line at all: the very
+# failure the sizing rests on not happening. So the weeks running in which an
+# armed country finds a site under 10% staffed again are counted
+# (var:te_cm_chk_skips), and the fourth writes, once a game:
+#          BROKEN  a site under 10% staffed at four weekly sizings running: a
+#                  site that is not hiring (so its share of the purchase is
+#                  never delivered), or a new site placed each of four weeks.
+#                  The play-test row says how to tell them apart.
+#        It also ends the delivery check for the game: it has had its answer.
+te_cm_site_delivery_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_site_delivery_check_done }
+		}
+		if = {
+			limit = { has_variable = te_cm_chk_target }
+			if = {
+				limit = {
+					is_ai = yes
+					any_scope_building = {
+						is_building_type = te_construction_market_site
+					}
+					NOT = {
+						any_scope_building = {
+							is_building_type = te_construction_market_site
+							occupancy < 0.1
+						}
+					}
+				}
+				set_global_variable = { name = te_cm_site_delivery_check_done value = yes }
+				set_variable = { name = te_cm_chk_delivered value = modifier:country_construction_add }
+				set_variable = {
+					name = te_cm_chk_ratio
+					value = {
+						value = var:te_cm_chk_delivered
+						divide = var:te_cm_chk_target
+					}
+				}
+				if = {
+					limit = {
+						var:te_cm_chk_ratio >= 0.75
+						var:te_cm_chk_ratio <= 1.25
+					}
+					debug_log = "TE_SELF_CHECK OK construction_site_delivery country=[THIS.GetCountry.GetTagName] bought=[THIS.Var('te_cm_chk_target').GetValue|1] delivered=[THIS.Var('te_cm_chk_delivered').GetValue|1] ratio=[THIS.Var('te_cm_chk_ratio').GetValue|2]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN construction_site_delivery country=[THIS.GetCountry.GetTagName] bought=[THIS.Var('te_cm_chk_target').GetValue|1] delivered=[THIS.Var('te_cm_chk_delivered').GetValue|1] ratio=[THIS.Var('te_cm_chk_ratio').GetValue|2]"
+				}
+				remove_variable = te_cm_chk_delivered
+				remove_variable = te_cm_chk_ratio
+				if = {
+					limit = { has_variable = te_cm_chk_skips }
+					remove_variable = te_cm_chk_skips
+				}
+			}
+			else_if = {
+				limit = {
+					is_ai = yes
+					any_scope_building = {
+						is_building_type = te_construction_market_site
+						occupancy < 0.1
+					}
+				}
+				if = {
+					limit = { NOT = { has_variable = te_cm_chk_skips } }
+					set_variable = { name = te_cm_chk_skips value = 0 }
+				}
+				change_variable = { name = te_cm_chk_skips add = 1 }
+				if = {
+					limit = { var:te_cm_chk_skips >= 4 }
+					set_global_variable = { name = te_cm_site_delivery_check_done value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN construction_site_unstaffed country=[THIS.GetCountry.GetTagName] weeks=[THIS.Var('te_cm_chk_skips').GetValue|0] bought=[THIS.Var('te_cm_chk_target').GetValue|1] (a Construction Site under 10 percent staffed at four weekly sizings running: a site that is not hiring, or a new site placed each week)"
+					debug_log_scopes = yes
+					remove_variable = te_cm_chk_skips
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_cm_chk_skips }
+				remove_variable = te_cm_chk_skips
+			}
+			remove_variable = te_cm_chk_target
+		}
+		# Not armed last week: the weeks no longer run on.
+		else_if = {
+			limit = { has_variable = te_cm_chk_skips }
+			remove_variable = te_cm_chk_skips
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_cm_site_delivery_check_done }
+				is_ai = yes
+				te_construction_market_total_use_target >= 40
+				any_scope_building = {
+					is_building_type = te_construction_market_site
+					occupancy < 0.1
+				}
+			}
+			set_variable = { name = te_cm_chk_target value = te_construction_market_total_use_target }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_variable = te_cm_chk_target }
+			remove_variable = te_cm_chk_target
+		}
+		if = {
+			limit = { has_variable = te_cm_chk_skips }
+			remove_variable = te_cm_chk_skips
 		}
 	}
 }

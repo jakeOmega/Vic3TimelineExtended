@@ -205,7 +205,7 @@ types un_overview_widget_types
 									datacontext = "[GetScriptedGui('un_act_found_sgui')]"
 								}
 								blockoverride "act_label" {
-									text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', 'je_un_act_found_label' )]"
+									text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_found_league_label', 'je_un_act_found_label' ) )]"
 								}
 							}
 							un_act_control = {

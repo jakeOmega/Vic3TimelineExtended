@@ -2040,7 +2040,7 @@ cultural_hegemony.17 = {
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): te_debug_ch_stage_hegemon_event sets every condition before the call (console only)
 		has_journal_entry = je_cultural_hegemony
 		has_technology_researched = mass_media
 		exists = global_var:ch_rank_1
@@ -2163,7 +2163,7 @@ cultural_hegemony.18 = {
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): te_debug_ch_stage_follower_events sets every condition before the call (console only)
 		has_journal_entry = je_cultural_hegemony
 		has_technology_researched = mass_media
 		ch_trails_hegemon = yes
@@ -2275,7 +2275,7 @@ cultural_hegemony.19 = {
 	duration = 3
 	cooldown = { days = normal_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: queued only for a country whose census is the leader's previous model just after the leader changed model; cancels if the change is undone within the fortnight
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_model_census
 		has_global_variable = ch_rank_1_ideology_prev
@@ -2355,7 +2355,7 @@ cultural_hegemony.20 = {
 	duration = 3
 	cooldown = { days = normal_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: ch_domino_source is set just before the call, on a country whose census differs from the leader's model; cancels if it switches within the fortnight
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_domino_source
 		exists = var:ch_domino_source

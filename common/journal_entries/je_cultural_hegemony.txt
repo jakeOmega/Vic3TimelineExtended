@@ -26,10 +26,10 @@ je_cultural_hegemony = {
 	# mid-game, from the screen that changes country; an active entry ends through its
 	# invalid outcome on the rule.
 	disable_evaluation = {
-		NOT = { has_game_rule = cultural_hegemony_enabled }
+		NOT = { te_cultural_hegemony_on = yes }
 	}
 	is_shown_when_inactive = {
-		has_game_rule = cultural_hegemony_enabled
+		te_cultural_hegemony_on = yes
 	}
 
 	possible = {
@@ -197,6 +197,16 @@ je_cultural_hegemony = {
 			limit = { NOT = { has_variable = ch_program_funding_level } }
 			set_variable = { name = ch_program_funding_level value = 0 }
 		}
+		# Opened under the early unlock before the late gate: marked, so that a
+		# switch to the late unlock closes the entry until the late gate (the
+		# invalid outcome below). Cleared by the pulse once the gate is met.
+		if = {
+			limit = {
+				te_cultural_hegemony_early = yes
+				NOT = { ch_late_gate_met = yes }
+			}
+			set_variable = ch_opened_early
+		}
 
 		# Variables are already populated by on_actions before JE activates.
 		# Initialize any that might not exist (safety fallback).
@@ -216,20 +226,49 @@ je_cultural_hegemony = {
 	# its next update and takes the modifiers along. The programmes shut down as
 	# on losing the Ministry of Culture, and the hegemon's model pressure comes
 	# off our movements, since its yearly refresh has stopped.
+	# Also the early unlock switched to the late one while an entry opened
+	# early (ch_opened_early) is still short of the late gate: the same
+	# teardown, and ch_monthly_pulse_on_action adds the entry back once the
+	# gate is met (ch_reopen_at_gate).
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_cultural_hegemony_invalid_conclusion_desc
 		trigger = {
-			NOT = { has_game_rule = cultural_hegemony_enabled }
+			OR = {
+				NOT = { te_cultural_hegemony_on = yes }
+				AND = {
+					has_variable = ch_opened_early
+					NOT = { te_cultural_hegemony_early = yes }
+					NOT = { ch_late_gate_met = yes }
+				}
+			}
 		}
 		effect = {
 			ch_shut_down_programmes = yes
 			ch_remove_hegemon_model_pressure = yes
+			if = {
+				limit = { te_cultural_hegemony_on = yes }
+				set_variable = ch_reopen_at_gate
+			}
+			if = {
+				limit = { has_variable = ch_opened_early }
+				remove_variable = ch_opened_early
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
+			# An entry opened early has met the late gate: no longer one a switch
+			# to the late unlock would close.
+			if = {
+				limit = {
+					has_variable = ch_opened_early
+					ch_late_gate_met = yes
+				}
+				remove_variable = ch_opened_early
+			}
+
 			# Losing the Ministry of Culture shuts every cultural programme down.
 			if = {
 				limit = { NOT = { has_law = law_type:law_ministry_of_culture } }

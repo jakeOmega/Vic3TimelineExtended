@@ -737,7 +737,7 @@ decolonization_events.5 = {
 
 	# The overture must still stand three days on: a colony annexed or
 	# collapsed in the meantime has proposed nothing we could answer.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: scope:former_colony is saved and alive when .60 answers; cancels if it is annexed in the three days
 		exists = scope:former_colony
 		scope:former_colony = { is_country_alive = yes }
 	}
@@ -808,7 +808,7 @@ decolonization_events.6 = {
 	# The claim must still stand three days on: a claimant annexed or
 	# collapsed in the meantime is owed nothing, and option A reads the sum
 	# it named (var:decol_reparations_claim, set by .61).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .61 saves scope:reparations_claimant and sets decol_reparations_claim before its options run; cancels if the claimant dies in the three days
 		exists = scope:reparations_claimant
 		scope:reparations_claimant = {
 			is_country_alive = yes
@@ -3273,8 +3273,8 @@ decolonization_events.21 = {
 # decol_iw_aftermath_bloody (decolonization_war_effects.txt) gave it. Both set
 # them directly on a country the player did not hold a moment before, so
 # without this nothing said why the laws had changed (owner report,
-# 2026-11-10). Fired a day later by those two effects only, so the modifier
-# its text is chosen by is in place. The option changes nothing: it lists what
+# 2026-11-10). Fired a day later by those two effects only, through the
+# hidden .82 (#1596), so the modifier its text is chosen by is in place. The option changes nothing: it lists what
 # is already in force.
 # Scope: the new country; scope:decolonizing_parent is the former ruler.
 decolonization_events.22 = {
@@ -3371,6 +3371,37 @@ decolonization_events.22 = {
 				activate_law = law_type:law_minority_rights_indifference
 			}
 		}
+	}
+}
+
+# ============================================================================
+# DELAYED RELAYS (#1596)
+# A delayed trigger_event seems to drop its event when the event's trigger is
+# false on the day it is queued (scripting_best_practices.md § "A Delayed
+# `trigger_event` Re-Checks Its Trigger When It Fires"). Two popups are queued
+# on such a day, so each waits in a hidden event with no trigger that opens it
+# when due; the popup's own trigger decides then. Saved scopes ride along.
+# ============================================================================
+
+# The Nationalization Question's week (.15): a new country's GDP and foreign
+# ownership, which .15's trigger reads, are not in place the day it is formed.
+decolonization_events.81 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = decolonization_events.15 }
+	}
+}
+
+# What the Empire Left's day (.22): its trigger reads the legacy modifier the
+# sender adds in the same block.
+decolonization_events.82 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = decolonization_events.22 }
 	}
 }
 
@@ -4261,7 +4292,7 @@ decolonization_events.62 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: truce_proposer is saved just before the call and is not at war with the recipient; cancels if a war starts in the three days
 		exists = scope:truce_proposer
 		scope:truce_proposer = { is_country_alive = yes }
 		NOT = { has_war_with = scope:truce_proposer }
@@ -4335,7 +4366,7 @@ decolonization_events.63 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: truce_proposer is saved just before the call and is not at war with the recipient; cancels if a war starts in the three days
 		exists = scope:truce_proposer
 		scope:truce_proposer = { is_country_alive = yes }
 		NOT = { has_war_with = scope:truce_proposer }
@@ -5520,7 +5551,7 @@ decolonization_events.73 = {
 			if = {
 				limit = { is_country_alive = yes }
 				decol_iw_aftermath_bloody = yes
-				trigger_event = { id = decolonization_events.15 days = 7 }
+				trigger_event = { id = decolonization_events.81 days = 7 }
 			}
 		}
 	}
@@ -5545,7 +5576,7 @@ decolonization_events.74 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: decol_iw_war_begins runs only once the rebels are at war with the metropole (decol_iw_slot_at_war); cancels if the war ends in the three days
 		scope:decol_iw_gp_rebels ?= {
 			is_country_alive = yes
 			has_war_with = scope:decol_iw_gp_metropole
@@ -5844,7 +5875,7 @@ decolonization_events.76 = {
 				limit = { is_country_alive = yes }
 				save_scope_as = decolonized_new_country
 				decol_path_legacy = yes
-				trigger_event = { id = decolonization_events.15 days = 7 }
+				trigger_event = { id = decolonization_events.81 days = 7 }
 			}
 		}
 		remove_variable = decolonization_path_round_table
@@ -5894,7 +5925,7 @@ decolonization_events.79 = {
 	duration = 3
 
 	# A great power arms one colonial power at a time.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: decol_iw_war_begins runs only once the rebels are at war with the metropole, and a pro-colonial power is not at war with it; cancels if that changes in the three days
 		scope:decol_iw_gp_rebels ?= {
 			is_country_alive = yes
 			has_war_with = scope:decol_iw_gp_metropole

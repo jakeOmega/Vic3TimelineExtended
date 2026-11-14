@@ -3217,7 +3217,7 @@ class PolicyTests(unittest.TestCase):
                 self.assertIn(key, loc(), key)
         # Cultural Promotion raises pull with Cultural Hegemony on, prestige with it off (spec § 4.3).
         culture = squash(block(sguis, "gm_policy_culture_sgui"))
-        self.assertIn("if = { limit = { has_game_rule = cultural_hegemony_enabled } custom_tooltip = "
+        self.assertIn("if = { limit = { te_cultural_hegemony_on = yes } custom_tooltip = "
                       "{ text = gm_policy_culture_effect_tt gm_policy_set = { P = culture } } } else = "
                       "{ custom_tooltip = { text = gm_policy_culture_prestige_effect_tt gm_policy_set = "
                       "{ P = culture } } }", culture)
@@ -3328,9 +3328,9 @@ class PolicyTests(unittest.TestCase):
         # With the rule on, prestige never moves by policy; with it off, pull never does (plan Review Focus 5).
         culture = squash(block(self.values, "gm_policy_factor_culture"))
         prestige = squash(block(self.values, "gm_policy_factor_prestige"))
-        self.assertIn("has_game_rule = cultural_hegemony_enabled", culture)
+        self.assertIn("te_cultural_hegemony_on = yes", culture)
         self.assertNotIn("NOT = { has_game_rule", culture)
-        self.assertIn("NOT = { has_game_rule = cultural_hegemony_enabled }", prestige)
+        self.assertIn("NOT = { te_cultural_hegemony_on = yes }", prestige)
         totals = squash(block(read(EFFECTS), "gm_compute_totals"))
         self.assertIn("gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige_standing }", totals)
         self.assertIn("gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture_standing }", totals)

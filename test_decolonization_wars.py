@@ -186,7 +186,7 @@ class DeferralTests(unittest.TestCase):
         self.assertIn("decol_path_contagion = yes", path)
         # .15 only for a country that is not fighting us.
         self.assertRegex(path, r"NOT = \{ scope:decolonizing_parent \?= \{ has_variable = decol_iw_forming \} \}\s*\}"
-                               r"\s*trigger_event = \{ id = decolonization_events\.15 days = 7 \}")
+                               r"\s*trigger_event = \{ id = decolonization_events\.81 days = 7 \}")
         self.assertIn("decol_mark_former_colony", _def(DECOL, "decol_path_legacy"))
 
     def test_the_fight_sets_and_clears_the_flag_around_the_release(self):
@@ -205,7 +205,7 @@ class DeferralTests(unittest.TestCase):
                 self.assertIn(line, bloody)
         lost = _def(EVENTS, "decolonization_events.73")
         self.assertIn("decol_iw_aftermath_bloody = yes", lost)
-        self.assertIn("trigger_event = { id = decolonization_events.15 days = 7 }", lost)
+        self.assertIn("trigger_event = { id = decolonization_events.81 days = 7 }", lost)  # opens .15 (#1596)
 
 
 class RecordTests(unittest.TestCase):

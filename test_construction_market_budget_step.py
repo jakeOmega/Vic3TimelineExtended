@@ -172,6 +172,10 @@ class Env:
 R = 0.999  # PRICE_RANGE
 F = 4.0    # BUY_SELL_DIFF_AT_MAX_FACTOR
 SERVICES_PRICE = 1000.0
+# construction_cost_small_economy_min_factor (extra_script_values.txt), the floor of one plus the scaling.
+SMALL_ECONOMY_MIN_FACTOR = float(re.search(
+    r"^construction_cost_small_economy_min_factor\s*=\s*([\d.]+)",
+    (ROOT / "common/script_values/extra_script_values.txt").read_text(encoding="utf-8-sig"), re.M).group(1))
 
 
 def price_factor(buy, sell):
@@ -196,7 +200,9 @@ class State:
 
     @property
     def goods_per_point(self):
-        return max(1.0, 1.0 + self.scaling)
+        # The script's floor: the small-economy rule's minimum factor (te_small_economy_construction_rule), under
+        # which the scaling can be negative.
+        return max(SMALL_ECONOMY_MIN_FACTOR, 1.0 + self.scaling)
 
     def use(self):
         return 0.0 if self.paused else min(self.quantity, self.cap)
@@ -210,6 +216,7 @@ class State:
             "market_goods_buy_orders": self.buy(),
             "market_goods_sell_orders": self.sell,
             "construction_cost_scaling_mult": self.scaling,
+            "construction_cost_small_economy_min_factor": SMALL_ECONOMY_MIN_FACTOR,
             "construction_queue_num_queued_government_levels": self.cap,
             "modifier:country_max_weekly_construction_progress_add": 1.0,
             "this.market.mg:construction.market_goods_pricier": pricier,

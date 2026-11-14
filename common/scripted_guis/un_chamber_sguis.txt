@@ -233,6 +233,22 @@ un_ov_refounding_sgui = {
 	effect = { }
 }
 
+# The early unlock's league (un_league_stage): the organisation's name. Read
+# by un_org_name_ingame, which je_united_nations names behind a
+# GetPlayer.IsValid guard (so the entry's title, the Timeline Extended tab and
+# the UN tab's header read "League of Nations"), and by the Found button's
+# label ("Found the League": the full name doesn't fit the button). Globals
+# only (gotcha #22).
+un_ov_league_sgui = {
+	scope = country
+	is_shown = {
+		un_league_stage = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Scope-free gate: a resolution is in session. The General Assembly shows its
 # tally, delegations and ballot, or, when this is false, the proposals.
 un_session_open_sgui = {

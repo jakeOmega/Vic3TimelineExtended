@@ -27,3 +27,42 @@ te_construction_market_recalc_events.2 = {
 		te_construction_market_country_setup = yes
 	}
 }
+
+# Construction Cost Scaling at game start (te_cc_game_start, from on_game_started_after_lobby): the small-economy
+# rule's factor for this country, from the first day. A country event so that the modifier's multiplier resolves
+# against the country (ROOT is none in the on_action). No trigger: it also queues itself a week on for a country
+# whose GDP reads 0, and a delayed event with a false trigger is dropped (#1596).
+te_construction_market_recalc_events.3 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_cc_game_start_country = yes
+	}
+}
+
+# Construction Cost Scaling after free_market_construction_rule was switched in a running game
+# (te_direct_construction_switch_cost_scaling): the new model's modifier for this country. A country event so that
+# the modifier's multiplier resolves against the country: the switch runs in one country's pulse event, whose
+# ROOT every country's add_modifier would otherwise read.
+te_construction_market_recalc_events.4 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_cc_apply_scaling = yes
+	}
+}
+
+# The small-economy rule's game-start self-check, two days after the modifier was set (te_cc_small_start_selfcheck
+# queues it; te_construction_cost_effects.txt): the verdict reads the modifier, which is not visible in the effect
+# that set it. No trigger: a delayed event whose trigger is false when queued is dropped (#1596), and the verdict
+# decides on the day.
+te_construction_market_recalc_events.5 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_cc_small_start_verdict = yes
+	}
+}

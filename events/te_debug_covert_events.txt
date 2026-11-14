@@ -17,7 +17,7 @@
 # on the defender, and the funding-0 cascade that stands several operations
 # down at once.
 #
-# Requires the covert_warfare_enabled game rule and an active je_covert_warfare
+# Requires Covert Warfare on (either unlock) and an active je_covert_warfare
 # (its `possible` wants one operation slot above your rank's baseline).
 # ============================================================================
 namespace = te_debug_covert

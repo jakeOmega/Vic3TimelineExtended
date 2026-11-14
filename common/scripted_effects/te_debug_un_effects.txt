@@ -53,7 +53,7 @@ te_debug_un_seat_member = {
 		# the engine activates that copy itself. So this adds only for a country
 		# the engine left without a record.
 		limit = {
-			has_game_rule = united_nations_enabled
+			te_united_nations_on = yes
 			NOT = { has_journal_entry = je_united_nations }
 			NOT = { has_inactive_journal_entry = je_united_nations }
 		}

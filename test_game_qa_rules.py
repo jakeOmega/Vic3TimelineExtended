@@ -118,6 +118,40 @@ class LastAppliedTest(RulesTestCase):
         self.assertEqual(rules.last_applied(self.user), [])
 
 
+class LobbyDiffersTest(unittest.TestCase):
+    """#1767: where the save's setting and the last lobby's differ, a rule setting's apply_modifier reads the lobby's."""
+
+    TABLE = {"tax": {"default": "tax_off", "settings": ["tax_off", "tax_light"]},
+             "fantasy": {"default": "allow", "settings": ["allow", "deny"]},
+             "merges": {"default": "merges_off", "settings": ["merges_off", "merges_on"]}}
+
+    def test_each_rule_whose_settings_differ_is_named_with_both(self):
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off", "merges_on"], ["tax_light", "deny", "merges_off"],
+                                             self.TABLE),
+                         [{"rule": "merges", "save": "merges_on", "last_applied": "merges_off"},
+                          {"rule": "tax", "save": "tax_off", "last_applied": "tax_light"}])
+
+    def test_agreement_and_an_unknown_setting_are_left_out(self):
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off", "gone_setting"], ["deny", "tax_off", "other"],
+                                             self.TABLE), [])
+        # No last-applied list at all: nothing to compare.
+        self.assertEqual(rules.lobby_differs(["deny"], [], self.TABLE), [])
+
+    def test_a_rule_one_list_lacks_is_compared_at_its_default_and_says_so(self):
+        # Whether LastAppliedRules lists a setting left at its default is not recorded, and a preset written
+        # before a mod added a rule cannot name it: the game falls back to the default, so the comparison does.
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off"], ["deny", "merges_on"], self.TABLE),
+                         [{"rule": "merges", "save": "merges_off", "last_applied": "merges_on",
+                           "assumed_default": "save"}])
+        self.assertEqual(rules.lobby_differs(["deny", "tax_light"], ["deny"], self.TABLE),
+                         [{"rule": "tax", "save": "tax_light", "last_applied": "tax_off",
+                           "assumed_default": "last_applied"}])
+        # At the default on the side that names it: no difference. A rule with no default is left out.
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off"], ["deny"], self.TABLE), [])
+        table = dict(self.TABLE, tax={"default": None, "settings": ["tax_off", "tax_light"]})
+        self.assertEqual(rules.lobby_differs(["deny", "tax_light"], ["deny"], table), [])
+
+
 class RuleTableTest(RulesTestCase):
     def test_a_rule_is_a_top_level_block_and_a_setting_a_block_inside_it(self):
         found = rules.rules_in(RULE_FILE)

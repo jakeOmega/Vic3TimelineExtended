@@ -3453,7 +3453,7 @@ class TestCustodyLosingAndWatching(unittest.TestCase):
         self.assertIn("nd_cw_notify_world = yes", start)
         notify = block(self.ce, "nd_cw_notify_world")
         self.assertIn("nd_cw_would_watch = {", notify)
-        self.assertIn("id = nuclear_custody.6 days = 7", notify)
+        self.assertIn("id = nuclear_custody.13 days = 7", notify)  # the relay that opens .6 (#1596)
         # Stored on the observer for the delayed event, not passed as scopes.
         self.assertIn("name = nd_cwr_origin", notify)
         self.assertIn("name = nd_cwr_rebel", notify)
@@ -3498,7 +3498,7 @@ class TestBudapestPath(unittest.TestCase):
 
     def test_the_first_to_press_schedules_one_offer(self):
         press = block(self.ce, "nd_bp_press")
-        self.assertIn("id = nuclear_custody.11 days = 30", press)
+        self.assertIn("id = nuclear_custody.14 days = 30", press)  # the relay that opens .11 (#1596)
         self.assertIn("add_to_variable_list = { name = nd_bp_guarantors target = ROOT }", press)
         self.assertIn("nd_bp_press = yes", option_body(self.ev, "nuclear_custody.10.a"))
 

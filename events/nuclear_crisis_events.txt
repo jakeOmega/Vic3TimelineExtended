@@ -72,7 +72,7 @@ nuclear_crisis.1 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_crisis_send_event_in_transit sets the token from the crisis just opened, so it matches when queued; cancels a message whose crisis closed in transit
 		nd_crisis_event_matches = yes
 	}
 
@@ -1732,7 +1732,7 @@ nuclear_crisis.100 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): nd_init_posture reaches this only for an armed country (every human caller tests nd_is_armed first); a filter
 		nd_is_armed = yes
 	}
 

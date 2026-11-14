@@ -52,6 +52,8 @@ te_jud_monthly = {
 		te_jud_challenge_monthly = yes
 		# Phase 3: amendments whose conditions lapsed.
 		te_jud_amendment_upkeep = yes
+		# The delayed-event self-checks (#1596), once a game.
+		te_jud_dt_probe_start = yes
 	}
 }
 
