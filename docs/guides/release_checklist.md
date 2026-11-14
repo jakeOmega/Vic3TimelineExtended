@@ -11,7 +11,7 @@ How a release is cut, from `main` to the Workshop and GitHub. 1.1.9 (2026-10-18)
 
 ## 2. What ships
 
-From 1.2.0 a release ships `main` as it stands, the Demographics census included (owner, 2026-10-26). Set `.metadata/metadata.json`'s version on `main`, write the notes to `docs/releases/<version>.md` (Markdown, one bullet per area; the Workshop's change notes take the same bullets as a BBCode `[list]`, and 1.3.2's 7,000 characters fit), merge, and release the merged commit.
+From 1.2.0 a release ships `main` as it stands, the Demographics census included (owner, 2026-10-26). Set `.metadata/metadata.json`'s version on `main`, write the notes to `docs/releases/<version>.md` (Markdown, one bullet per area; the Workshop's change notes take the same bullets as a BBCode `[list]`; 1.3.0's 6,181 characters fit, the longest uploaded so far), merge, and release the merged commit.
 
 The same PR carries the Workshop description (`docs/audits/steam_workshop_description.md`): its six images, redrawn into `docs/workshop/` (`scripts/image_pipeline/workshop_composites.py --out docs/workshop --preview desc_hero_ages desc_at_a_glance desc_eras desc_systems`; their figures are counted from the mod files when they are drawn, so draw them last and don't commit the `_630` previews), and the version in its seven links, the guide's and the six images'. The links are GitHub raw links at the tag, so the images must be in the commit that is tagged.
 
