@@ -1,7 +1,7 @@
 """The Power Grids tab of the Timeline Extended window and a Grid Transfer
 Station's building panel section (gui/te_grid_widgets.gui): every fixed-width
-cell fits its longest text at its font, the tab's structure (four sections,
-the full-screen columns), what it reads (the grid record of
+cell fits its longest text at its font, the tab's structure (three sections,
+National Generation in the overview's frame, the full-screen columns), what it reads (the grid record of
 te_grid_record_effect, through guarded script values and the country's and
 hubs' lists), its gates and checklist, every key defined, and the Generation
 panel's table of what each power plant method makes (GenerationTableTest).
@@ -255,6 +255,8 @@ class StructureTest(unittest.TestCase):
         self.assertIn("te_grid_mix_panel = {}", frame)
         self.assertLess(frame.index("te_grid_ov_bloc_tt"), frame.index("te_grid_mix_panel = {}"))
         self.assertNotIn("te_grid_panel = {", _type_body(self.gui, "te_grid_mix_panel"))
+        # The frame stacks the boxes and National Generation, not side by side.
+        self.assertIn("direction = vertical", _type_body(self.gui, "te_grid_panel"))
         self.assertIn("GetVariableSystem.Set('te_popup', 'help_power_grids')", body)
         self.assertIn('blockoverride "tab_open_journal" {}', body)
         self.assertIn("te_window_power_grids_tab_sgui", body[body.index('blockoverride "tab_gate"'):])
