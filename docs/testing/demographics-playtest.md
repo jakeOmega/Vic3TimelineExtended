@@ -1808,3 +1808,6 @@ country type off a principle too (`country_cultural_pull_add`, Cultural Hegemony
    10% under what it reads outside the bloc, and the budget's Family Policy row follows at the next yearly pulse.
 5. **Malaria** (any rule). A member without Malaria Prevention owning a malarial state at tier III: the state's Local
    Climate tooltip shows its malaria part eased by a quarter; under Full its infection hover's Malaria line shrinks.
+6. **Healthcare Aid** (Full, then Disabled). A recipient's state heads for 10 points more Health Care Access, with no
+   health system too, and its mortality tooltip shows no line from the article; with the rule off, Laws and
+   Institutions is 5% lower, as the article's own line was.

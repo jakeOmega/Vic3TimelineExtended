@@ -838,7 +838,7 @@ DEATH_CAUSE_TAGS = {
         "crop_failure_modifier", "water_crisis_rationing_modifier", "tropical_disease_spread_modifier",
         "tropical_disease_research_modifier", "tropical_disease_public_health_modifier", "un_mission_aid_state_modifier",
         "un_humanitarian_aid_received_modifier", "un_aid_received_modifier", "un_food_reserve_relief_state_modifier",
-        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl", "healthcare_aid",
+        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl",
         "company_pfizer", "company_biontech", "pm_pfizer_rd_campus", "pm_biontech_mainz_campus",
     ),
     # chronic illness and old age: pollution, the climate's heat, drugs and addiction, radiation, care of the old

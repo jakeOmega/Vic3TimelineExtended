@@ -435,7 +435,7 @@ education_aid = {
 # ---------------------------------
 # TREATY ARTICLE: healthcare_aid
 # ---------------------------------
-# This article allows a country to provide healthcare support, improving mortality and SoL.
+# This article allows a country to provide healthcare support: health care access, the spread of medicine and SoL.
 # It is based on the original 'healthcare_aid' diplomatic action.
 healthcare_aid = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/healthcare_aid.dds"
@@ -451,10 +451,15 @@ healthcare_aid = {
 		country_institution_cost_institution_health_system_mult = 0.1
 	}
 
+	# The recipient (owner, 2026-11-14; docs/systems/mod_systems/demographics.md, "The Healthcare principles"): the
+	# Healthcare principles' pair, flat, so it reaches a country with no health system. Under Full the census reads
+	# Health Care Access (40% + it) and Spread of Medicine and drops the absorbed mortality line; outside Full the moved
+	# lines' pair applies that line as the -5% mortality the article always gave (te_demog_lines_refresh).
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200
-		state_mortality_mult = -0.05
-		state_death_cause_inf_mult = -0.05
+		state_health_care_access_add = 0.1
+		state_medical_diffusion_add = 0.1
+		state_demog_absorbed_mortality_mult = -0.05
 		state_standard_of_living_add = 1
 	}
 
