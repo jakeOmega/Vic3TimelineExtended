@@ -869,6 +869,117 @@ te_mon_fx_controls_note = {
 
 
 # ----------------------------------------------------------------------------
+# External & Currency: "On your currency" (2026-11-14)
+# ----------------------------------------------------------------------------
+# The line under each exchange tool's description in its dashboard tooltip
+# (banking_dash_tt_cb_*): what the tool does to this country's currency now,
+# with the figure it changes, from the banking_ext_disp_* values in
+# banking_external_values.txt. The same tool acts on gold on the gold standard
+# and on the exchange rate on a floating currency, so the branch is the
+# currency's. Design: docs/superpowers/specs/2026-11-14-external-currency-tools-design.md.
+
+banking_ext_now_capital_controls = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_full_system = no }
+		localization_key = banking_ext_now_capital_controls_simplified
+	}
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_capital_controls_gold
+	}
+	text = {
+		trigger = { te_mon_has_anchor_peg = yes }
+		localization_key = banking_ext_now_capital_controls_treaty_peg
+	}
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_capital_controls_float
+	}
+	text = {
+		localization_key = banking_ext_now_capital_controls_none
+	}
+}
+
+# Restrict Speculative Inflows needs a dial, so an anchored country never sees
+# it; the fall-through is commodity money.
+banking_ext_now_restrict_inflows = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_restrict_inflows_gold
+	}
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_restrict_inflows_float
+	}
+	text = {
+		localization_key = banking_ext_now_restrict_inflows_none
+	}
+}
+
+banking_ext_now_sterilize_inflows = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_gold_flows = yes
+			te_mon_gold_flow_signed > 0
+		}
+		localization_key = banking_ext_now_sterilize_inflows_gold_in
+	}
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_sterilize_inflows_gold_quiet
+	}
+	text = {
+		localization_key = banking_ext_now_sterilize_inflows_off_gold
+	}
+}
+
+banking_ext_now_fx_surrender = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_fx_surrender_gold
+	}
+	text = {
+		localization_key = banking_ext_now_fx_surrender_off_gold
+	}
+}
+
+banking_ext_now_foreign_borrowing_limits = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_fx_pinned_at_par = yes }
+		localization_key = banking_ext_now_foreign_borrowing_limits_metal
+	}
+	text = {
+		trigger = { banking_ext_disp_fx_weak_points > 0 }
+		localization_key = banking_ext_now_foreign_borrowing_limits_weak
+	}
+	text = {
+		localization_key = banking_ext_now_foreign_borrowing_limits_par
+	}
+}
+
+
+# ----------------------------------------------------------------------------
 # Phase 5 — the Monetary Anchor row (§15A.1)
 # ----------------------------------------------------------------------------
 # One question: what, if anything, is this country's money tied to? The three

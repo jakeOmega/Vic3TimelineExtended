@@ -228,12 +228,12 @@ seen in game. No self-check line: every new script piece reuses a pattern the mo
 list, a weekly counter, display-only static modifiers), and what is new is GUI rendering, which no script can log.
 
 35. **Greyed external tools say why.** With a tool unaffordable or out of season (Emergency Import Financing outside a
-    crisis, Sterilize Capital Inflows off gold), its Enable tooltip lists phrased conditions with ticks ("A financial
+    crisis, Sterilization off gold), its Enable tooltip lists phrased conditions with ticks ("A financial
     crisis is under way: …", "Your treasury can pay this month's cost") and no raw names
     (`te_mon_in_financial_crisis`, `banking_external_export_share > 0`), and no always-ticked availability line.
     *Fallback if a bare trigger still prints:* the engine renders a `hidden_trigger` too; wrap it in a
     `custom_tooltip` with a key instead.
-36. **Monthly work prints as modifier lines.** The tooltips of Open-Market Operations, Capital Controls (Outflows)
+36. **Monthly work prints as modifier lines.** The tooltips of Open-Market Operations, Capital Controls
     and the five External & Currency tools show "Each month:" over coloured lines ("Pull of the Rate Gap −75%",
     "Treasury Cost, of Annual GDP +0.01%"); Monetise Deficit's buttons show "Each step, while it runs:" and the mandate
     buttons "for each step looser:" the same way. *Fallback if `GetStaticModifier(...).GetDesc` renders empty in an
@@ -257,7 +257,7 @@ list, a weekly counter, display-only static modifiers), and what is new is GUI r
     `JournalEntry.GetCountry.GetPowerBloc` as a datacontext over `PowerBloc.GetMembers`. *Fallback if a name or flag
     is blank:* print the rows from a scripted GUI's `ExecuteTooltip` in fixed slots, as the Cultural Hegemony board
     does (`gui_modding_guide.md` gotcha #15).
-41. **The two bills are weekly expenses (owner, 2026-10-27).** With Sterilize Capital Inflows or Emergency Import
+41. **The two bills are weekly expenses (owner, 2026-10-27).** With Sterilization or Emergency Import
     Financing on, Government Expenses rise by a quarter of the month's cost (the tool's "Weekly cost" line), the
     Breakdown lists it under Banking with the bill modifier in its sources, and the treasury takes no monthly lump.
     Disable the tool, or change economic system: the expense goes the same week. A month the treasury cannot cover
@@ -382,3 +382,28 @@ decaying ones come back at the share of their term left, read off a ladder of li
    the full value. Full value or near 0: a literal `multiplier` on an `is_decaying` add is not read as a starting
    strength; read `cr_rebuild_outcome_modifier`'s civil-rights modifiers on the same winner, which rest on the same
    reading.
+
+## External & Currency: one promise each, on every currency (2026-11-14, PR 1)
+
+The five exchange tools' tooltips gained an "On your currency" line under the description, picked by the country's
+currency (`banking_ext_now_*` in `banking_dash_custom_loc.txt`) and printing live figures (`banking_ext_disp_*` in
+`banking_external_values.txt`). Capital Controls (Outflows) is now Capital Controls and Sterilize Capital Inflows is
+Sterilization. Nothing a pulse runs changed. Design: `docs/superpowers/specs/2026-11-14-external-currency-tools-design.md`.
+
+1. **The line renders, on each currency.** Hover each of the five rows (Enable and active) as a country on a convertible
+   Gold Standard with a national bank, as one on Fiat Money with a national bank, and as one on Commodity Money. Each
+   tooltip shows "On your currency:" between the description and "Requires:", with figures, not raw `[...]` calls or
+   keys. Gold: Capital Controls and Restrict Speculative Inflows give the World Rate Gap, and it matches the dashboard's
+   World Rate Gap row while controls are off (a quarter of it while on). Fiat: the two give the rate term, and with
+   neither tool on their first figure matches "The real rate against the world's" in the Exchange Rate tooltip. Commodity Money: both
+   say nothing moves. *If a line is blank:* the custom loc's trigger fails in the tooltip's scope; check that
+   `[Country.GetCustom('te_mon_fx_controls_note')]` renders in the Exchange Rate tooltip, which uses the same scope.
+2. **Sterilization's figures.** On gold with gold arriving (a policy rate above the World Rate), Sterilization's line
+   gives two price-pressure figures, the second a quarter of the first; with the rate below the world's it says no gold
+   is coming in.
+3. **Limit Foreign-Currency Borrowing below par.** On Fiat Money with the index below 100, the line gives the points
+   below par, the premium they add (0.05 a point) and what is left after protection; with the limits on for a year the
+   second figure is about three quarters of the first. On gold it says the currency stays at par.
+4. **The new names.** Capital Controls' row, its End button and the modifier on the entry read "Capital Controls";
+   Sterilization's read "Sterilization" and its weekly bill "Sterilization Bill"; an option of
+   `minor_events_timelineextended.7` adds "Targeted Capital Controls".
