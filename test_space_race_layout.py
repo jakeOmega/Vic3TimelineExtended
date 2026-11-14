@@ -10,6 +10,7 @@ guarded and follow the single derivation sites they mirror.
 """
 import functools
 import glob
+import importlib.util
 import os
 import re
 import subprocess
@@ -1406,6 +1407,8 @@ class FleetCardTest(unittest.TestCase):
         """The orders and the transit marker are signs, drawn by the script; the
         emblems, the roles, the postures and Locations' statuses are painted
         (icon_prompts.py). A file with both sources would be written twice."""
+        if importlib.util.find_spec("PIL") is None:
+            self.skipTest("Pillow is not installed (CI): the drawing script imports it")
         from scripts.image_pipeline import gen_space_fleet_pictograms as drawn
         from scripts.image_pipeline import icon_prompts
         painted = {key for cat in ("space", "space_state") for key in icon_prompts.ICONS[cat]}
