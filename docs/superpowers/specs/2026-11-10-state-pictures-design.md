@@ -273,8 +273,8 @@ country-era value the mod doesn't have. The pass stores `te_sp_means` (1 poor, 3
 ordinary), and a state leaves a level only half a point past its floor.
 
 *Superseded 2026-11-14:* the floors are now relative to the world of the day after all, the world's average
-standard of living (weighted by people, measured once a year) times 0.5 for poor and 2 for affluent (the owner:
-"the world average +/- a percentage (double and half?)"). The fixed floors above tagged 88% of states poor in the
+standard of living (the plain average of states, each counted once, measured once a year) times 0.5 for poor and
+1.6 for affluent (the owner: "the world average +/- a percentage", then the two ratios picked from #1799's table). The fixed floors above tagged 88% of states poor in the
 owner's Singapore game, whose AI owners stood on rungs 3 and 4 by the 1940s. As built: the system doc.
 
 **Upkeep** is relative: `average_sol` minus `average_expected_sol`, the game's own measure of whether people
