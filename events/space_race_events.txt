@@ -4254,7 +4254,7 @@ space_race_events.80 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/astronaut_candidate_training.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -4333,7 +4333,7 @@ space_race_events.81 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_race.dds" }
+	event_image = { texture = "gfx/event_pictures/deep_space_probe_encounter.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -4445,7 +4445,7 @@ space_race_events.83 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }	# interim until mars_orbit_station is drawn
+	event_image = { texture = "gfx/event_pictures/mars_orbit_station.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

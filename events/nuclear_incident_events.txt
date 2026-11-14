@@ -447,7 +447,7 @@ nuclear_incident.4 = {
 			has_variable = nd_last_launch_kind
 			var:nd_last_launch_kind = 1
 		}
-		texture = "gfx/event_pictures/mushroom_cloud_distant.dds"
+		texture = "gfx/event_pictures/nuclear_city_destruction.dds"
 	}
 	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
 
@@ -1307,7 +1307,7 @@ nuclear_incident.30 = {
 		}
 		texture = "gfx/event_pictures/nuclear_fallout_contamination.dds"
 	}
-	event_image = { texture = "gfx/event_pictures/nuclear_leak.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_warhead_depot.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
