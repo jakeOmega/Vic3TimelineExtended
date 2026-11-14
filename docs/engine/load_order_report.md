@@ -17,7 +17,7 @@ in phases. Every tool built on ModState sees ModState's value (#1191).
 | Group | Keys |
 |---|---|
 | Differences (ModState holds a value the engine doesn't load) | 0 |
-| Model unsure | 0 |
+| Model unsure | 1 |
 | Undetermined without the game files | 111 |
 | Not compared | 0 |
 | Vanilla's own files | not checked |
@@ -56,7 +56,17 @@ ModState agrees with the engine under one reading of something the
 load-order model doesn't know and differs under another, or the value rests
 on a rule nobody has read in game. Not a finding until a probe settles it.
 
-_None._
+### `common/game_rules` `free_construction`
+
+- Definitions: vanilla (its file isn't in the snapshot); `common/game_rules/00_a_te_free_construction.txt:22` (bare)
+- ModState holds: the definition at `common/game_rules/00_a_te_free_construction.txt:22`
+- Depends on: `bare_duplicate` (LOAD_ORDER_MODEL entry `bare_duplicate_other`)
+- If bare_duplicate is first_wins: the engine reads the definition at `common/game_rules/00_a_te_free_construction.txt:22` (agrees with ModState)
+  - `common/game_rules/00_a_te_free_construction.txt:22` (bare): creates the entry
+  - vanilla's entry (bare): dropped, the key already exists
+- If bare_duplicate is last_wins: the engine reads vanilla's entry (differs)
+  - `common/game_rules/00_a_te_free_construction.txt:22` (bare): creates the entry
+  - vanilla's entry (bare): read later, takes the key's place
 
 ## Undetermined without the game files
 
@@ -126,4 +136,4 @@ restates vanilla's, it is dead script in a first-wins folder.
 - `common/history`: history blocks are effects that all run; ModState doesn't parse them.
 - `common/named_colors`: entries sit inside a wrapper block every file repeats; ModState doesn't parse it.
 - `common/on_actions`: an on_action's event lists add up across files, and ModState keeps one file's.
-- Folders ModState doesn't parse: `common/ai_strategies`, `common/coat_of_arms/coat_of_arms`, `common/combat_unit_experience_levels`, `common/country_creation`, `common/country_definitions`, `common/customizable_localization`, `common/dynamic_country_names`, `common/dynamic_treaty_names`, `common/flag_definitions`, `common/game_rules`, `common/geographic_regions`, `common/political_lobby_appeasement`, `common/political_movement_pop_support`, `common/power_bloc_names`, `common/scripted_rules`, `common/state_traits`, `common/technology/eras`, `common/war_goal_types`.
+- Folders ModState doesn't parse: `common/ai_strategies`, `common/coat_of_arms/coat_of_arms`, `common/combat_unit_experience_levels`, `common/country_creation`, `common/country_definitions`, `common/customizable_localization`, `common/dynamic_country_names`, `common/dynamic_treaty_names`, `common/flag_definitions`, `common/geographic_regions`, `common/political_lobby_appeasement`, `common/political_movement_pop_support`, `common/power_bloc_names`, `common/scripted_rules`, `common/state_traits`, `common/technology/eras`, `common/war_goal_types`.

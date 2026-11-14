@@ -214,6 +214,11 @@ turn a default system off.
 | Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Light Tax Code*: the taxation laws stay and set each tax's range; within it you set each tax directly from the Tax Code tab, your heaviest tax sets the tax level, and interest groups react to each change. AI countries keep choosing their tax level. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](05-tax-code.md) |
 | Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](06-politics.md) |
 
+The base game's Base Construction Capacity rule shows one setting, No Effect.
+The mod removes the base construction that rule scales to GDP, and the Free
+Market Construction rule decides what replaces it ([Economy and
+construction](03-economy.md)).
+
 ## Reading the Budget breakdown
 
 The Budget panel's Breakdown tab, also the Timeline Extended window's Budget
