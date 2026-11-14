@@ -348,6 +348,15 @@ class RoundTripTests(unittest.TestCase):
         self.assertIn("=== COUNTRY NAME FORMS ===", text)
         self.assertIn("# PREVIOUS TRANSLATION: Alt", text)
 
+    def test_refresh_no_vanilla_needs_no_game(self):
+        # A cloud container has no game install: --no-vanilla must not read it.
+        def no_game(language):
+            raise AssertionError("refresh --no-vanilla read the base game's loc")
+        with mock.patch.object(t, "VanillaTerms", no_game):
+            t.cmd_refresh(mock.Mock(language="german", field="de", chunks=["names-001"], no_vanilla=True))
+        with open(os.path.join(self.dirs[1], "chunks", "names-001.txt"), encoding="utf-8") as fh:
+            self.assertNotIn("VANILLA TERMS", fh.read())
+
 
 class RespellTests(unittest.TestCase):
     """respell keeps a translation whose English changed only to American
