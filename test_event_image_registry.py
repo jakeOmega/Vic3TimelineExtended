@@ -59,8 +59,8 @@ class RegistryMatchesEventFilesTests(unittest.TestCase):
             self.report["unregistered"]["unregistered_picture"], [],
             "These events show a picture under gfx/event_pictures/ that has no entry "
             "in event_image_prompts.IMAGES, so nothing records where it came from. "
-            "Eighteen such pictures turned out to be stock or press photographs "
-            "(#1658). Add an entry and draw the picture with generate_event_images.py, "
+            "Most of the eighteen found in #1658 looked like stock or press "
+            "photographs. Add an entry and draw the picture with generate_event_images.py, "
             "or point the event at a picture that has one (contact_sheet.py --window "
             "to choose), and list the event under it.")
 

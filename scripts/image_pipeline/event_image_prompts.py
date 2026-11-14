@@ -2393,7 +2393,8 @@ IMAGES = {
     # source; most were stock or press photographs (app logos, the real UN
     # chambers, a real parade, a maker's name on a robot). Events that an
     # existing picture fits were moved to it; these were drawn for the rest.
-    # The first eleven keep the old file names, so their events are unchanged.
+    # The first eleven keep the old file names, so the events that stay with
+    # them need no change.
     # =========================================================================
     "climate_awareness": {
         "prompt": "At the left of the frame, a meteorologist in a cardigan with rolled sleeves stands alone at the low parapet of a weather office's flat roof at dawn, holding a glass thermometer up to the light; a tall wind vane on a thin mast rises behind him. Below the roof a dry brown plain with dead trees stretches away; the right of the frame is the plain fading into an orange heat haze under a pale sky.",
@@ -2505,10 +2506,11 @@ def check(arts=None, on_disk=None) -> dict:
                   running phase 3 if the image was just generated
       unregistered["unregistered_picture"]
                   a visible event showing a mod picture that has no entry here, so
-                  nothing records where the picture came from. Eighteen such
-                  pictures were stock or press photographs (#1658): draw the
-                  picture through the pipeline, or point the event at one that has
-                  an entry
+                  nothing records where the picture came from. Most of the
+                  eighteen found in #1658 looked like stock or press photographs:
+                  draw the picture through the pipeline, or point the event at
+                  one that has an entry. A plain texture outside
+                  gfx/event_pictures/ lands here too, listed by its path
     Information:
       pending       images with no .dds yet, and the events waiting for them
       unregistered  the other visible events the registry does not list, by what
@@ -2550,7 +2552,8 @@ def check(arts=None, on_disk=None) -> dict:
         elif art.picture in IMAGES:
             report["unregistered"]["registered_picture"].append((eid, art.picture))
         else:
-            report["unregistered"]["unregistered_picture"].append((eid, art.picture))
+            report["unregistered"]["unregistered_picture"].append(
+                (eid, art.picture or art.blocks[0]["texture"]))
     return report
 
 
