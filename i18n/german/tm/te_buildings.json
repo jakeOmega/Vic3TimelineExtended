@@ -2540,8 +2540,8 @@
   "de": "Sumitomo-Mine Besshi"
  },
  "building_sumitomo_besshi_mine_desc": {
-  "en": "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.",
-  "de": "Die Kupfermine und Hütte von Besshi, die industrielle Wiege des Sumitomo-Zaibatsu."
+  "en": "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo [glossary_zaibatsu].",
+  "de": "Die Kupfermine und Hütte von Besshi, die industrielle Wiege des Sumitomo-[glossary_zaibatsu]."
  },
  "building_sunhwaguk_seoul_tobacco_factory": {
   "en": "Sunhwaguk Seoul Tobacco Factory",

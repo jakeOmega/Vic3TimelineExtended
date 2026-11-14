@@ -51,17 +51,33 @@
   "en": "Imperial Collapse Aftershock",
   "de": "Nachbeben des imperialen Zusammenbruchs"
  },
+ "colonial_collapse_subject_unrest_modifier_desc": {
+  "en": "The colonial empire this country belonged to has collapsed: its [concept_colonial_stability] ran out.",
+  "de": "Das Kolonialreich, dem dieses Land angehörte, ist zusammengebrochen: Seine [concept_colonial_stability] ist erschöpft."
+ },
  "colonial_overlord_collapsing_subject_ld_modifier": {
   "en": "Subject on the Brink",
   "de": "Klientelland am Abgrund"
+ },
+ "colonial_overlord_collapsing_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Collapsing: its [concept_colonial_stability] is below 20. This lasts while it stays there.",
+  "de": "Das Kolonialreich, dem dieses Land angehört, befindet sich im Zustand „Kollabierend“: Seine [concept_colonial_stability] liegt unter 20. Das gilt, solange sie dort bleibt."
  },
  "colonial_overlord_crumbling_subject_ld_modifier": {
   "en": "Defiant Colonial Subject",
   "de": "Trotziges koloniales Klientelland"
  },
+ "colonial_overlord_crumbling_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Crumbling: its [concept_colonial_stability] is below 40. This lasts while it stays there.",
+  "de": "Das Kolonialreich, dem dieses Land angehört, befindet sich im Zustand „Zerfallend“: Seine [concept_colonial_stability] liegt unter 40. Das gilt, solange sie dort bleibt."
+ },
  "colonial_overlord_strained_subject_ld_modifier": {
   "en": "Restless Colonial Subject",
   "de": "Unruhiges koloniales Klientelland"
+ },
+ "colonial_overlord_strained_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Strained: its [concept_colonial_stability] is below 65. This lasts while it stays there.",
+  "de": "Das Kolonialreich, dem dieses Land angehört, befindet sich im Zustand „Angespannt“: Seine [concept_colonial_stability] liegt unter 65. Das gilt, solange sie dort bleibt."
  },
  "concept_colonial_subject_desc": {
   "en": "A [concept_subject] of ours, or of one of our subjects, that counts as colonial: every colony and chartered company, and a protectorate separated from its overlord's capital by sea whose people share no [concept_heritage_trait] with ours. Each one keeps the Colonial Empire [concept_journal_entry] running. A colony raised to a dominion no longer counts.",

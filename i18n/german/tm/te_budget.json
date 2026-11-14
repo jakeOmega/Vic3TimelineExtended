@@ -47,6 +47,14 @@
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
   "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Reaktion auf Drogenknappheit aufführen kann."
  },
+ "country_te_budget_expense_energy_industry_add": {
+  "en": "Breakdown: Energy and Industry Programs",
+  "de": "Aufschlüsselung: Programme für Energie und Industrie"
+ },
+ "country_te_budget_expense_energy_industry_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Energy and Industry Programs.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter „Programme für Energie und Industrie“ aufführen kann."
+ },
  "country_te_budget_expense_family_add": {
   "en": "Breakdown: Family Policy",
   "de": "Aufschlüsselung: Familienpolitik"
@@ -462,6 +470,14 @@
  "te_budget_chart_source_expense_drugs_tt": {
   "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]",
   "de": "#b Reaktion auf Drogenknappheit#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]"
+ },
+ "te_budget_chart_source_expense_energy_industry": {
+  "en": "Energy and Industry Programs",
+  "de": "Programme für Energie und Industrie"
+ },
+ "te_budget_chart_source_expense_energy_industry_tt": {
+  "en": "#b Energy and Industry Programs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_energy_industry')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_energy_industry_add')]",
+  "de": "#b Programme für Energie und Industrie#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_energy_industry')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_energy_industry_add')]"
  },
  "te_budget_chart_source_expense_family": {
   "en": "Family Policy",
