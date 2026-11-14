@@ -118,6 +118,14 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
 * ``common/government_types/zz_te_culture_merge_government_types.txt``: ``REPLACE`` copies of the vanilla government
   types whose culture test names every core culture of a merge (``ledger.restated_government_types``: the Kaiser
   family, the American forms), the merged culture added (``restate_with_result``), so the ruler keeps the title.
+* The notices (2026-11-14): who else is told of a merge's start, a culture's switch and its completion
+  (``docs/systems/mod_systems/culture_merges.md`` § The Notices). The triggers file gains ``te_cmg_<m>_involves`` (a
+  culture of the merge is a primary culture here, or a state here is a homeland of one: ``involving_cultures``); the
+  effects file ``te_cmg_<m>_tell``, which ``te_cmg_dominance_all`` runs at the end of a merge's pass when a culture
+  switched in it, and a ``te_cm_tell_start`` call at the end of each ``te_cmg_start_<m>``. The loc file gains
+  ``te_cmg_<m>_core_names`` and ``common/customizable_localization/te_culture_merges_generated_custom_loc.txt`` the
+  culture-typed ``te_cm_core_names`` that picks it by result (``render_custom_loc``), so one generic text names the
+  cultures a merge folds into its result.
 * The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
   complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
   starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
@@ -178,6 +186,7 @@ DEFINITIONS_OUT = Path("common/country_definitions/zz_te_culture_merge_definitio
 # (scripting_best_practices.md, Load Order, fact 3).
 VANILLA_TRIGGERS_OUT = Path("common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt")
 GOVERNMENT_TYPES_OUT = Path("common/government_types/zz_te_culture_merge_government_types.txt")
+CUSTOM_LOC_OUT = Path("common/customizable_localization/te_culture_merges_generated_custom_loc.txt")
 LOC_CATEGORY = "CULTURE_MERGES_GENERATED"
 
 SNAPSHOT_DIR = "vanilla_parsed"
@@ -1330,6 +1339,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None,
                     with out.block("AND"):
                         out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
                         out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+        _write_involves(out, merge)
         waits = core_waits(merge)
         out.line()
         if waits:
@@ -1375,6 +1385,34 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None,
                     out.line("ROOT.state_region = { is_homeland = global_var:te_cm_switched_%s }" % culture)
     _write_dead_primary_triggers(out, merges, holds)
     return out.text()
+
+
+def involving_cultures(merge: cfg.Merge) -> list[str]:
+    """The cultures that make a country one the merge reaches when one is a primary culture there: every slot culture,
+    core and optional, every alternative of a slot, and the result. No culture further down a chain: a lower merge's
+    part reaches a higher merge through the lower result, which its switch makes a primary culture and a homeland
+    wherever the part was one (te_cm_monthly_switched_culture, te_cm_switch_part)."""
+    cultures = slot_cultures(merge)
+    return cultures if merge.result in cultures else cultures + [merge.result]
+
+
+def _write_involves(out: "_Script", merge: cfg.Merge) -> None:
+    """``te_cmg_<m>_involves``, country scope: the notices' test of whether the merge reaches this country."""
+    key = merge.key
+    out.line()
+    out.line("# Country scope. Does the %s merge reach this country? One of its primary cultures is a culture of the merge (a" % key)
+    out.line("# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a")
+    out.line("# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,")
+    out.line("# te_cmg_%s_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries." % key)
+    with out.block("te_cmg_%s_involves" % key):
+        with out.block("OR"):
+            for culture in involving_cultures(merge):
+                out.line("country_has_primary_culture = cu:%s" % culture)
+            with out.block("any_scope_state"):
+                with out.block("state_region"):
+                    with out.block("OR"):
+                        for culture in slot_cultures(merge):
+                            out.line("is_homeland = cu:%s" % culture)
 
 
 def _write_dead_primary_triggers(out: "_Script", merges: tuple[cfg.Merge, ...], holds: dict[str, ledger.Holds]) -> None:
@@ -1482,6 +1520,7 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
     if result_can_switch(merge, merges):
         out.line("# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a")
         out.line("# primary culture again. The button's can_start says so too; this is the guard behind it.")
+    out.line("# Last, every other human country hears of the start (te_cm_tell_start).")
     with out.block("te_cmg_start_%s" % key):
         with out.block("if"):
             if result_can_switch(merge, merges):
@@ -1495,6 +1534,7 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
                 # can_start held, so the milestone did: latch it, as the census would.
                 out.line("set_variable = { name = %s value = 1 }" % gate_latch(merge))
             out.line("te_cmg_%s_join_ready = yes" % key)
+            out.line("te_cm_tell_start = { MERGE = %s RESULT = %s }" % (key, merge.result))
     out.line()
     out.line("# Country scope: the tail of te_cmg_census_%s_country, run after the part gates are fresh." % key)
     out.line("# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,")
@@ -1869,6 +1909,9 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
     out.line("# the census's figures, no walk of its own), then the switch of each part at or over te_cm_switch_share. Only for a")
     out.line("# merge whose starter is alive (a dead one's census wasn't taken) and whose own result has not switched into a higher")
     out.line("# merge's (R33). Debug targets call it on its own.")
+    out.line("# The notices: te_cm_switch_part marks each culture that switches in a merge's pass (te_cm_tl_<c>, te_cm_tl_any) and a")
+    out.line("# completion (te_cm_tl_done), in locals reset at the start of the pass, and once the pass is over te_cmg_<m>_tell tells")
+    out.line("# the other human countries, so a pass that switches a country's culture and completes the merge sends it one event.")
     with out.block("te_cmg_dominance_all"):
         for merge in merges:
             key = merge.key
@@ -1878,6 +1921,10 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                         out.line(line)
                     out.line("NOT = { te_cmg_%s_starter_gone = yes }" % key)
                     out.line("NOT = { %s }" % _result_switched(merge))
+                out.line("set_local_variable = { name = te_cm_tl_any value = 0 }")
+                out.line("set_local_variable = { name = te_cm_tl_done value = 0 }")
+                for culture in _joinable_slot_cultures(merge):
+                    out.line("set_local_variable = { name = te_cm_tl_%s value = 0 }" % culture)
                 for culture in _joinable_slot_cultures(merge):
                     with out.block("if"):
                         with out.block("limit"):
@@ -1885,6 +1932,54 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                             out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
                         out.line("te_cm_census_dominance = { MERGE = %s CULTURE = %s }" % (key, culture))
                         out.line("te_cm_switch_part = { MERGE = %s CULTURE = %s RESULT = %s }" % (key, culture, merge.result))
+                with out.block("if"):
+                    out.line("limit = { local_var:te_cm_tl_any = 1 }")
+                    out.line("te_cmg_%s_tell = yes" % key)
+
+    # ---- the notices of a switch and of a completion ----
+    out.line()
+    out.line("# Any scope, one per merge: te_cmg_dominance_all runs it at the end of the merge's pass when a culture switched in it.")
+    out.line("# Every human country but the starter (which has te_culture_merge.1 and its journal entry) is told, from the locals")
+    out.line("# the pass set:")
+    out.line("# - The merge completed in this pass (te_cm_tl_done): a country the merge reaches (te_cmg_<m>_involves) gets")
+    out.line("#   te_culture_merge.4, naming the first of its own cultures that switched in the same pass if one did (one event,")
+    out.line("#   not two); any other country a feed notice.")
+    out.line("# - Otherwise: a country tied to a culture that switched (te_cm_tied_to: a primary culture, or a homeland it holds)")
+    out.line("#   gets te_culture_merge.3 for each such culture. A country the switch doesn't touch hears nothing.")
+    out.line("# The branches of each event's text are decided here, as saved scopes (te_cm_ev_note_part), not when it is read: the")
+    out.line("# monthly upkeep can take the switched culture off the primary cultures before the player opens the event.")
+    for merge in merges:
+        key = merge.key
+        told = _joinable_slot_cultures(merge)
+        out.line()
+        with out.block("te_cmg_%s_tell" % key):
+            out.line("global_var:te_cm_starter_%s = { save_scope_as = te_cm_ev_starter }" % key)
+            out.line("cu:%s = { save_scope_as = te_cm_ev_result }" % merge.result)
+            with out.block("every_country"):
+                with out.block("limit"):
+                    out.line("is_ai = no")
+                    out.line("NOT = { this = scope:te_cm_ev_starter }")
+                with out.block("if"):
+                    out.line("limit = { local_var:te_cm_tl_done = 1 }")
+                    with out.block("if"):
+                        out.line("limit = { te_cmg_%s_involves = yes }" % key)
+                        out.line("te_cm_ev_clear_part = yes")
+                        for index, culture in enumerate(told):
+                            with out.block("if" if index == 0 else "else_if"):
+                                with out.block("limit"):
+                                    out.line("local_var:te_cm_tl_%s = 1" % culture)
+                                    out.line("te_cm_tied_to = { CULTURE = %s }" % culture)
+                                out.line("te_cm_ev_note_part = { CULTURE = %s }" % culture)
+                        out.line("te_cm_tell_complete = yes")
+                    with out.block("else"):
+                        out.line("post_notification = te_cm_merge_complete_notice")
+                with out.block("else"):
+                    for culture in told:
+                        with out.block("if"):
+                            with out.block("limit"):
+                                out.line("local_var:te_cm_tl_%s = 1" % culture)
+                                out.line("te_cm_tied_to = { CULTURE = %s }" % culture)
+                            out.line("te_cm_tell_switch = { CULTURE = %s }" % culture)
 
     # ---- the monthly upkeep ----
     out.line()
@@ -2889,6 +2984,9 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
         # merge's result is one of its core cultures, and it doesn't switch into itself.
         out["te_cmg_%s_done_core_tt" % key] = "%s pops have all switched to %s." % (
             _part_labels([p for p in merge.core if p.cultures[0] != merge.result]), result)
+        # The cultures the merge folds into its result, for the notices' "to merge <these> into <result>"
+        # (te_cm_core_names, the generated custom loc keyed on the result).
+        out[core_names_key(merge)] = _part_labels([p for p in merge.core if p.cultures[0] != merge.result])
         out[entry + "_complete_conclusion_desc"] = (
             "The merge is complete. %s is the national culture across the sphere, and the cultures it brought in are one people." % result
         )
@@ -2944,10 +3042,45 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
                 "No country has %s open, or the merge has already waited %s years for it to end."
                 % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0"))
             )
+    out[CORE_NAMES_FALLBACK] = "its constituent cultures"
     for text_key, text in out.items():
         if '"' in text or "\n" in text:
             raise ValueError("%s: a loc text can't hold a quote mark or a newline" % text_key)
     return out
+
+
+CORE_NAMES = "te_cm_core_names"
+CORE_NAMES_FALLBACK = "te_cmg_core_names_none"
+
+
+def core_names_key(merge: cfg.Merge) -> str:
+    return "te_cmg_%s_core_names" % merge.key
+
+
+def render_custom_loc(merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """``te_cm_core_names``, a culture-typed custom loc: called on a merge's result culture, it gives the core cultures
+    the merge folds into it (``$north_german$ and $south_german$``), so one generic event or notice can say "to merge
+    <these> into <result>" for any merge (the notices, events/te_culture_merge_events.txt). Vanilla calls its demonyms
+    the same way (``[SCOPE.sCulture('x').GetCustom('getPluralDemonym')]``). Every merge's result is its own, so the
+    result names the merge; the last text, with no trigger, is the fallback for any other culture."""
+    merges = cfg.MERGES if merges is None else merges
+    results = [m.result for m in merges]
+    if len(set(results)) != len(results):
+        raise ValueError("two merges share a result, which then can't name its merge")
+    out = _Script()
+    out.line(HEADER)
+    out.line("# Culture scope = a merge's result: the core cultures the merge folds into it, for the culture merge notices.")
+    out.line()
+    with out.block(CORE_NAMES):
+        out.line("type = culture")
+        out.line("random_valid = no")
+        for merge in merges:
+            with out.block("text"):
+                out.line("trigger = { cu:%s ?= this }" % merge.result)
+                out.line("localization_key = %s" % core_names_key(merge))
+        with out.block("text"):
+            out.line("localization_key = %s" % CORE_NAMES_FALLBACK)
+    return out.text()
 
 
 def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
@@ -2969,6 +3102,7 @@ def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
         DEFINITIONS_OUT: render_definitions(),
         VANILLA_TRIGGERS_OUT: render_vanilla_triggers(),
         GOVERNMENT_TYPES_OUT: render_government_types(),
+        CUSTOM_LOC_OUT: render_custom_loc(),
     }
 
 
